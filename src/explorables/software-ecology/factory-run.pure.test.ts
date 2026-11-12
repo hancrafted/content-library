@@ -72,6 +72,18 @@ describe('edge cases', () => {
     expect(spiral.m.t).toBe(0);
   });
 
+  it('stops on the step a tour names and stays there, whatever the speed', () => {
+    // ARRANGE
+    const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
+    const stop = run.k + 25;
+    // ACT
+    run.stopAt = stop;
+    for (let i = 0; i < 120; i++) run.advance(1 / 60, 10);
+    // ASSERT
+    expect(run.k).toBe(stop);
+    expect(run.arrived).toBe(true);
+  });
+
   it('falls back to the first factory preset for an unknown id', () => {
     // ARRANGE
     const fallback = 'ideal';

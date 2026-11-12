@@ -2,29 +2,11 @@
  * The Explorable's own words, as `software-ecology.config.yml` and its German twin hold them (FE-012 §1), and the
  * slices each part receives. A Slide overrides any of them through the server entry's `words` prop.
  */
+import type { ToolbarWords } from './toolbar-words.types';
+import type { TourWords } from './tour-words.types';
 
-export interface ToolbarWords {
-  readonly label: string;
-  readonly states: string;
-  readonly useCase: string;
-  readonly fromFile: string;
-  readonly speed: string;
-  readonly pause: string;
-  readonly speedN: string;
-  readonly speedTips: Readonly<Record<string, string>>;
-  readonly clear: string;
-  readonly clearTip: string;
-  readonly day: string;
-  readonly week: string;
-  readonly warming: string;
-  readonly clockTip: string;
-  readonly mechanics: string;
-  readonly mechs: Readonly<Record<'rework' | 'churn' | 'complaints', { readonly label: string; readonly tip: string }>>;
-  readonly model: string;
-  readonly modelTip: string;
-  readonly more: string;
-  readonly moreTip: string;
-}
+export type { ToolbarWords } from './toolbar-words.types';
+export type { TourCheckWords, TourWords } from './tour-words.types';
 
 /** The Model popover. */
 export interface ModelWords {
@@ -234,6 +216,7 @@ export interface CartoonWords {
 
 export interface Words {
   readonly toolbar: ToolbarWords;
+  readonly tour: TourWords;
   readonly stage: StageWords;
   readonly card: CardWords;
   readonly customer: CustomerWords;

@@ -2,7 +2,15 @@
  * A use case's words in one locale, with the role catalog's as the fallback: a center's title, a belt's label and its
  * sent-back words, the Customer, a preset's name. As the reference build's `W` and `roleWords`, without a global locale.
  */
-import type { Bundle, CatalogWords, CenterDef, Locale, RoleWords, UseCaseWords } from './software-ecology.types';
+import type {
+  Bundle,
+  CatalogWords,
+  CenterDef,
+  Locale,
+  RoleWords,
+  ScenarioWords,
+  UseCaseWords,
+} from './software-ecology.types';
 
 export interface WordsIn {
   readonly B: Bundle;
@@ -42,3 +50,7 @@ export const titlesOf = (x: WordsIn): Record<string, string> => ({
 
 /** What the Customer does, for its Roles card. */
 export const customerJob = (x: WordsIn): string => own(x).customer?.job ?? roleWords(x, 'customer').job ?? '';
+
+/** A state's "what to watch" line and tour captions: the use case's own, else the catalog's. */
+export const scenarioWords = (x: WordsIn, id: string): ScenarioWords =>
+  own(x).scenarios?.[id] ?? x.catalog.scenarios?.[id] ?? {};

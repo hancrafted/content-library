@@ -1579,3 +1579,158 @@
     transition: none;
   }
 }
+
+/* ---------- the Scenarios menu, the Tour button and the guided tour (design-ADR 0024 §10; reference build Q107, Q111) ---------- */
+.stateMenu[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.stateTour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stateTour .ico {
+  width: 14px;
+  height: 14px;
+}
+.stateTour:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.modified {
+  align-self: center;
+  padding: 0 4px;
+}
+.scn {
+  width: min(440px, 92vw);
+  gap: 4px;
+  padding: 8px;
+  max-height: 70vh;
+  overflow: auto;
+}
+.scnRow {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+.scnRow > :global(*):not(.scnI) {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.scnI {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.scnI:hover {
+  background: var(--muted);
+}
+.scnI[aria-checked='true'] {
+  background: var(--fg-8);
+  box-shadow: inset 3px 0 0 var(--foreground);
+}
+.scnTour {
+  color: var(--primary);
+}
+.watch {
+  margin: 0;
+  color: var(--foreground);
+  min-height: 1.2em;
+}
+.watch:empty {
+  display: none;
+}
+.card[data-toured='true'] {
+  box-shadow: 0 0 0 3px var(--primary);
+  border-color: var(--primary);
+}
+.tourbox {
+  position: absolute;
+  z-index: 30;
+  box-sizing: border-box;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--foreground);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 18px 40px -20px var(--fg-45);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tourbox[data-side='below']::before,
+.tourbox[data-side='above']::before {
+  content: '';
+  position: absolute;
+  left: var(--tail, 50%);
+  width: 12px;
+  height: 12px;
+  background: var(--card);
+  border: 1px solid var(--foreground);
+  rotate: 45deg;
+  translate: -50% 0;
+}
+.tourbox[data-side='below']::before {
+  top: -7px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.tourbox[data-side='above']::before {
+  bottom: -7px;
+  border-left: 0;
+  border-top: 0;
+}
+.tourChecks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tourChecks [data-ok='true'] {
+  color: var(--success);
+}
+.tourChecks [data-ok='false'] {
+  color: var(--destructive);
+}
+.tourBtns {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 6px;
+  align-items: center;
+}
+.ghostBtn {
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  min-height: 34px;
+}
+.ghostBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.tbtnSolid {
+  background: var(--foreground);
+  color: var(--background);
+}
+.tbtnSolid:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+.tbtnSolid:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

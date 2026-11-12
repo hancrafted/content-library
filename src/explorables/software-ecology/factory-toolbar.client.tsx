@@ -7,6 +7,7 @@ import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
 import { ModelMenu, type ModelMenuProps } from './model-menu';
 import { MoreMenu, type MoreMenuProps } from './more-menu';
+import { ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Mechanic } from './software-ecology.types';
@@ -32,6 +33,16 @@ export interface ToolbarProps {
   readonly clock: string;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
+  /** Every state off the row, for the Scenarios menu, and the markers a Slide places beside its entries. */
+  readonly scenarios: readonly ScenarioChoice[];
+  readonly scenarioMarkers?: Readonly<Partial<Record<string, ReactNode>>>;
+  /** The state has a tour; a tour is on. */
+  readonly canTour: boolean;
+  readonly touring: boolean;
+  readonly onTour: () => void;
+  /** The state's "what to watch" line. */
+  readonly watch: string;
+  readonly modified: boolean;
   readonly mech: Readonly<Record<Mechanic, boolean>>;
   readonly onMech: (k: Mechanic) => void;
   readonly model: ModelMenuProps;
@@ -40,7 +51,20 @@ export interface ToolbarProps {
 
 const MECHS: readonly Mechanic[] = ['rework', 'churn', 'complaints'];
 
-function States(p: Pick<ToolbarProps, 'words' | 'states' | 'preset' | 'onPreset' | 'statesTarget' | 'statesMarker'>) {
+type MenuId = 'scenarios' | 'model' | 'more' | null;
+type Opener = (id: Exclude<MenuId, null>) => (on: boolean) => void;
+
+/** "modified": a dial was turned after the state was picked. */
+function Modified({ words }: { words: ToolbarWords }) {
+  return (
+    <span className={`${styles.modified} text-caption text-muted-foreground`} data-tip={words.modifiedTip}>
+      {words.modified}
+    </span>
+  );
+}
+
+/** Swing, Roles, Ideal and Realistic; the Scenarios menu with the rest; Tour; "modified" once a dial was turned. */
+function States(p: ToolbarProps & { open: MenuId; opener: Opener }) {
   return (
     <div className={`${styles.states} relative`} role="group" aria-label={p.words.states} {...p.statesTarget}>
       {p.states.map((s) => (
@@ -54,6 +78,17 @@ function States(p: Pick<ToolbarProps, 'words' | 'states' | 'preset' | 'onPreset'
           {s.name}
         </button>
       ))}
+      <ScenariosMenu
+        words={p.words}
+        scenarios={p.scenarios}
+        preset={p.preset}
+        markers={p.scenarioMarkers}
+        open={p.open === 'scenarios'}
+        onOpen={p.opener('scenarios')}
+        onPick={p.onPreset}
+      />
+      <TourButton {...p} />
+      {p.modified ? <Modified words={p.words} /> : null}
       {p.statesMarker}
     </div>
   );
@@ -130,15 +165,12 @@ function Mechs(p: Pick<ToolbarProps, 'words' | 'mech' | 'onMech'>) {
   );
 }
 
-type MenuId = 'model' | 'more' | null;
-
 /** A close never undoes the other menu's open: the outside click that opens one closes only the other. */
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
 
-/** The Model and ⋮ menus: one open at a time. */
-function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'>) {
-  const [open, setOpen] = useState<MenuId>(null);
-  const opener = (id: Exclude<MenuId, null>) => (on: boolean) => setOpen((cur) => nextMenu(cur, id, on)),
+/** The Model and ⋮ menus. */
+function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'> & { open: MenuId; opener: Opener }) {
+  const { open, opener } = p,
     w = p.words;
   return (
     <>
@@ -168,22 +200,32 @@ function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'>) {
 }
 
 /**
- * The toolbar (design-ADR 0024 §16): the states and the use case; what bad work does downstream, speed, Clear and the
+ * The toolbar (design-ADR 0024 §16): the states, the Scenarios menu, Tour and the use case; what bad work does downstream, speed, Clear and the
  * day clock, the Model menu and the ⋮ menu.
  */
 export function FactoryToolbar(p: ToolbarProps) {
+  // the Scenarios, Model and ⋮ menus: one open at a time
+  const [open, setOpen] = useState<MenuId>(null);
+  const opener: Opener = (id) => (on) => setOpen((cur) => nextMenu(cur, id, on));
   return (
     <div className={styles.toolbar} role="toolbar" aria-label={p.words.label}>
       <div className={styles.tbRow}>
-        <States {...p} />
+        <States {...p} open={open} opener={opener} />
         <UseCase {...p} />
       </div>
       <div className={`${styles.tbRow} ${styles.tbTools}`}>
         <Mechs {...p} />
         <Speed {...p} />
-        <Menus {...p} />
+        <Menus {...p} open={open} opener={opener} />
       </div>
       <p className={`${styles.usecaseSub} m-0 text-caption text-muted-foreground`}>{p.sub}</p>
+      <p className={`${styles.watch} text-caption`} aria-live="polite">
+        {p.watch ? (
+          <>
+            <span className="text-muted-foreground">{p.words.watch}</span> {p.watch}
+          </>
+        ) : null}
+      </p>
     </div>
   );
 }

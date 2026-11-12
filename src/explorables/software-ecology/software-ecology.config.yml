@@ -35,6 +35,52 @@ toolbar:
   modelTip: Ideal to Realistic, where AI works, AI quality, strength of each mechanic
   more: 'More: belt motion, pile-up, theme'
   moreTip: Belt motion, pile-up, theme
+  scenarios: Scenarios
+  scenariosLabel: Scenarios
+  tourSteps: '{n}-step tour'
+  tour: Tour
+  tourTip: 'A guided tour of this scenario: set the dials, run to a week, pause, read what to look at'
+  watch: 'What to watch:'
+  modified: modified
+  modifiedTip: A dial was turned after picking this state; pick it again to reset
+tour:
+  label: Guided tour
+  step: '· step {i} of {n} · week {w}'
+  settling: Settling the line first…
+  running: 'Running to week {w}… week {n}'
+  checksLabel: What the checks expect here
+  holds: 'Holds:'
+  fails: 'Does not hold:'
+  close: Close
+  back: Back
+  next: Next
+  finish: Finish
+  checks:
+    check: '{measure}: {test} — {value}'
+    customer:
+      output: Output relative to ideal
+      sat: Share of customers satisfied
+      headroom: Demand the line could serve, times today’s
+      leadDays: Lead time in working days
+      bugsPerWeek: Complaints a week
+      own: Own tickets shipped a week
+      backlog: Jobs waiting at all work centers
+    center:
+      weeksWaiting: '{title}, weeks of work waiting'
+      busy: '{title}, share of time busy'
+      bugShare: '{title}, share of busy time on complaints'
+      backlog: '{title}, jobs waiting'
+      done: '{title}, jobs finished a week'
+      rework: '{title}, share of its work that came back'
+      rush: '{title}, effectiveness points lost to rushing'
+    test:
+      gt: 'over {k}'
+      lt: 'under {k}'
+      gte: 'at least {k}'
+      lte: 'at most {k}'
+      range: '{lo} to {hi}'
+      rises: rising
+      falls: falling
 stage:
   label: The factory
   note: Illustrative model, not measured

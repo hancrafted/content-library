@@ -33,6 +33,52 @@ toolbar:
   modelTip: Ideal bis Realistisch, wo KI arbeitet, KI-Qualität, Stärke jedes Mechanismus
   more: 'Mehr: Bandbewegung, Stau, Farbschema'
   moreTip: Bandbewegung, Stau, Farbschema
+  scenarios: Szenarien
+  scenariosLabel: Szenarien
+  tourSteps: 'Tour in {n} Schritten'
+  tour: Tour
+  tourTip: 'Eine geführte Tour durch dieses Szenario: Regler setzen, bis zu einer Woche laufen lassen, anhalten, lesen, worauf es ankommt'
+  watch: 'Worauf achten:'
+  modified: geändert
+  modifiedTip: Nach der Wahl dieses Zustands wurde ein Regler gedreht; wählt ihn erneut, um zurückzusetzen
+tour:
+  label: Geführte Tour
+  step: '· Schritt {i} von {n} · Woche {w}'
+  settling: Die Linie läuft erst warm …
+  running: 'Läuft bis Woche {w} … Woche {n}'
+  checksLabel: Was die Prüfungen hier erwarten
+  holds: 'Erfüllt:'
+  fails: 'Nicht erfüllt:'
+  close: Schließen
+  back: Zurück
+  next: Weiter
+  finish: Fertig
+  checks:
+    check: '{measure}: {test} — {value}'
+    customer:
+      output: Ausstoß im Verhältnis zum Ideal
+      sat: Anteil zufriedener Kunden
+      headroom: Nachfrage, die die Linie bedienen könnte, mal der heutigen
+      leadDays: Durchlaufzeit in Arbeitstagen
+      bugsPerWeek: Beschwerden pro Woche
+      own: Eigene Tickets ausgeliefert pro Woche
+      backlog: Wartende Aufträge an allen Arbeitsplätzen
+    center:
+      weeksWaiting: '{title}, Wochen Arbeit in der Warteschlange'
+      busy: '{title}, Anteil der Zeit beschäftigt'
+      bugShare: '{title}, Anteil der Arbeitszeit für Beschwerden'
+      backlog: '{title}, wartende Aufträge'
+      done: '{title}, erledigte Aufträge pro Woche'
+      rework: '{title}, Anteil der Arbeit, die zurückkam'
+      rush: '{title}, Punkte Wirksamkeit, die durch Hetze verloren gehen'
+    test:
+      gt: 'über {k}'
+      lt: 'unter {k}'
+      gte: 'mindestens {k}'
+      lte: 'höchstens {k}'
+      range: '{lo} bis {hi}'
+      rises: steigend
+      falls: fallend
 stage:
   label: Die Fabrik
   note: Illustratives Modell, nicht gemessen

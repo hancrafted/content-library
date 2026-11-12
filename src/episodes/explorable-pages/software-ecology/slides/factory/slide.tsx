@@ -23,7 +23,8 @@ const SALESFORCE_STATE_OF_SALES = {
 /**
  * The Play Section's page Slide: the whole software ecology Explorable (master basic-page, no motion of its own). Its
  * Speaker notes sit on what they explain: the belts, quality assurance's rack and its passing-unread sign, the product
- * manager and analyst, the state row (where the Fix the orders first scenario joins, #543) and the Sales card.
+ * manager and analyst, the Fix the orders first entry of the Scenarios menu (its target the state row) and the Sales
+ * card.
  */
 export const factory = slide({
   slug: 'factory',
@@ -62,7 +63,7 @@ export const factory = slide({
           'qa:unread': <Marker note="review-skipped" placement="beside" />,
           'pm:card': <Marker note="pm-accountability" placement="beside" />,
           'ba:card': <Marker note="pm-accountability" placement="beside" />,
-          states: <Marker note="muddy-instructions" placement="beside" />,
+          'scenario:fix-orders': <Marker note="muddy-instructions" placement="beside" />,
           'sales:card': <Marker note="sales-billing-inference" placement="beside" />,
         }}
       />

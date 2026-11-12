@@ -19,6 +19,8 @@ export interface CustomerCardProps {
   readonly label?: string;
   /** Its dashboard is open. */
   readonly open?: boolean;
+  /** A tour caption points at it. */
+  readonly toured?: boolean;
 }
 
 /** The twelve release cells, newest first: good or bad, a complaint marked. */
@@ -92,28 +94,20 @@ function Head({ title, marker }: { readonly title: string; readonly marker?: Rea
 }
 
 /** The Customer on the floor (design-ADR 0024 §14): its last twelve releases, output against Ideal, and its readouts. */
-export const CustomerCardView = memo(function CustomerCardView({
-  box,
-  title,
-  r,
-  words: w,
-  marker,
-  target,
-  label,
-  open,
-}: CustomerCardProps) {
+export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardProps) {
+  const { r, words: w } = p;
   return (
     <div
       className={`${styles.card} text-caption`}
       data-kind="customer"
       data-id="customer"
-      {...openerProps(label, open)}
+      {...openerProps(p.label, p.open, p.toured)}
       data-unhappy={r.sat < 0.6}
       data-full={r.headroom < 1}
-      style={boxStyle(box)}
-      {...target}
+      style={boxStyle(p.box)}
+      {...p.target}
     >
-      <Head title={title} marker={marker} />
+      <Head title={p.title} marker={p.marker} />
       <div className={`${styles.body} ${styles.bodyCust}`}>
         <Output r={r} words={w} />
         <Readouts r={r} words={w} />

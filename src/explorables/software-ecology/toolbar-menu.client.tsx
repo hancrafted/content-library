@@ -13,7 +13,8 @@ import styles from './software-ecology.module.css';
 export interface ToolbarMenuProps {
   readonly open: boolean;
   readonly onOpen: (open: boolean) => void;
-  readonly icon: string;
+  /** Its glyph; the Scenarios button has none. */
+  readonly icon?: string;
   /** The button's visible text; without it the button is an icon with `aria-label`. */
   readonly text?: string;
   readonly ariaLabel?: string;
@@ -22,6 +23,10 @@ export interface ToolbarMenuProps {
   readonly label: string;
   /** The ⋮ menu: aligned to the button's right edge. */
   readonly end?: boolean;
+  /** The Scenarios menu: a state-row button, pressed while one of its states is on, its entries a menu. */
+  readonly state?: { readonly pressed: boolean };
+  /** Extra classes on the menu box. */
+  readonly menuClass?: string;
   readonly children: ReactNode;
 }
 
@@ -49,21 +54,34 @@ function useDismiss(p: ToolbarMenuProps, anchor: RefObject<HTMLDivElement | null
   return btn;
 }
 
+const buttonClass = (p: ToolbarMenuProps) =>
+  p.state ? `${styles.state} ${styles.stateMenu} text-caption font-medium` : `${styles.tbtn} text-caption`;
+
+/** The button's glyph and text, and the ▾ after a text. */
+function MenuFace(p: ToolbarMenuProps) {
+  return (
+    <>
+      {p.icon ? <Glyph name={p.icon} className={styles.ico} /> : null}
+      {p.text ? <span className={p.state ? undefined : styles.tbtnLabel}>{p.text}</span> : null}
+      {p.text ? <span aria-hidden="true">▾</span> : null}
+    </>
+  );
+}
+
 function MenuButton(p: ToolbarMenuProps & { btn: RefObject<HTMLButtonElement | null>; menuId: string }) {
   return (
     <button
       ref={p.btn}
       type="button"
-      className={`${styles.tbtn} text-caption`}
+      className={buttonClass(p)}
       aria-expanded={p.open}
       aria-controls={p.menuId}
+      aria-pressed={p.state?.pressed}
       aria-label={p.ariaLabel}
-      data-tip={p.tip}
+      data-tip={p.tip || undefined}
       onClick={() => p.onOpen(!p.open)}
     >
-      <Glyph name={p.icon} className={styles.ico} />
-      {p.text ? <span className={styles.tbtnLabel}>{p.text}</span> : null}
-      {p.text ? <span aria-hidden="true">▾</span> : null}
+      <MenuFace {...p} />
     </button>
   );
 }
@@ -73,12 +91,12 @@ export function ToolbarMenu(p: ToolbarMenuProps) {
     anchor = useRef<HTMLDivElement>(null);
   const btn = useDismiss(p, anchor);
   return (
-    <div ref={anchor} className={`${styles.tgroup} ${styles.menuAnchor}`}>
+    <div ref={anchor} className={p.state ? styles.menuAnchor : `${styles.tgroup} ${styles.menuAnchor}`}>
       <MenuButton {...p} btn={btn} menuId={id} />
       <div
         id={id}
-        className={`${styles.menu} ${p.end ? styles.menuEnd : ''} text-caption shadow-md`}
-        role="group"
+        className={`${styles.menu} ${p.end ? styles.menuEnd : ''} ${p.menuClass ?? ''} text-caption shadow-md`}
+        role={p.state ? 'menu' : 'group'}
         aria-label={p.label}
         hidden={!p.open}
       >

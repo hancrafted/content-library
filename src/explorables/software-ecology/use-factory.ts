@@ -32,6 +32,8 @@ export interface FactoryView {
   readonly canvas: RefObject<HTMLCanvasElement | null>;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly controls: FactoryControls;
+  /** Reduced motion: one steady frame, no frame loop. */
+  readonly reduced: boolean;
   /** Places the floor on the stage and paints one frame now: after a switch into the factory view. */
   repaint(): void;
 }
@@ -64,6 +66,8 @@ interface Live {
   readonly pile: PileStyle;
   /** The dashboards on show, read with every readout. */
   readonly watch: readonly string[];
+  /** Called after every frame's advance: a tour step stops here. */
+  readonly onFrame?: (run: FactoryRun) => void;
 }
 
 /** Reads the run into React: the readouts, and the dashboards on show; charts only when asked. */
@@ -119,6 +123,7 @@ function useLoop(x: {
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60;
       last = now;
       if ((live.current.flowing || run.warming) && run.advance(dt, live.current.speed)) painter.attach();
+      live.current.onFrame?.(run);
       paint({ v, painter, at: drawAt(run, { live: live.current, reduced: false, now }) });
       slow += dt;
       if (slow > READ_SECS) {
@@ -161,6 +166,7 @@ export function useFactory(x: {
   flowing?: boolean;
   /** Work centers (or `customer`) whose dashboards are on show. */
   watch?: readonly string[];
+  onFrame?: (run: FactoryRun) => void;
 }): FactoryView {
   const v = useViews(),
     { stage, canvas, floor } = v;
@@ -179,15 +185,21 @@ export function useFactory(x: {
     paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
   }, [run, painter, v, reduced, live]);
   useRecolor(painter, repaint);
-  return { run, layout, snap, stage, canvas, floor, controls, repaint };
+  return { run, layout, snap, stage, canvas, floor, controls, reduced, repaint };
 }
 
 const NONE: readonly string[] = [];
 
-const liveOf = (x: { flowing?: boolean; words: FactoryWords; pile?: PileStyle }) => ({
+const liveOf = (x: {
+  flowing?: boolean;
+  words: FactoryWords;
+  pile?: PileStyle;
+  onFrame?: (run: FactoryRun) => void;
+}) => ({
   flowing: x.flowing ?? true,
   words: x.words,
   pile: x.pile ?? 'heap',
+  onFrame: x.onFrame,
 });
 
 function useViews() {

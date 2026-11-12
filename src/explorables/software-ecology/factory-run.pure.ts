@@ -44,6 +44,8 @@ export class FactoryRun {
   readonly preset: Preset;
   warmLeft = 0;
   dropped = 0;
+  /** A tour step's model step: time never runs past it (the page and the headless runner stop on the same step). */
+  stopAt: number | null = null;
   private acc = 0;
 
   constructor(o: RunOptions) {
@@ -58,6 +60,16 @@ export class FactoryRun {
     return this.warmLeft > 0;
   }
 
+  /** Model steps run so far. */
+  get k(): number {
+    return Math.round(this.m.t / DTW);
+  }
+
+  /** The run stands on its tour step. */
+  get arrived(): boolean {
+    return this.stopAt !== null && !this.warming && this.k >= this.stopAt;
+  }
+
   /** Warms the rest at once. */
   finishWarm() {
     for (; this.warmLeft > 0; this.warmLeft--) step(this.m);
@@ -70,6 +82,23 @@ export class FactoryRun {
     this.acc = 0;
   }
 
+  /** Runs the steps the accumulated time allows, at most MAX_STEPS, never past `stopAt`. */
+  private stepDue() {
+    const stop = this.stopAt ?? Infinity;
+    for (let n = 0; this.acc >= DTW && n < MAX_STEPS && this.k < stop; n++) {
+      step(this.m);
+      this.acc -= DTW;
+    }
+    if (this.k >= stop) this.acc = 0;
+  }
+
+  /** Runs at once to model step `k`: a tour's Back, or a tour step under reduced motion. */
+  runTo(k: number) {
+    this.finishWarm();
+    while (this.k < k) step(this.m);
+    this.acc = 0;
+  }
+
   /** Advances by `dt` real seconds at `speed`; returns true when warm-up just ended. */
   advance(dt: number, speed: number): boolean {
     if (this.warming) {
@@ -77,11 +106,7 @@ export class FactoryRun {
       return !this.warming;
     }
     this.acc += dt * speed * SPEED_1X;
-    let n = 0;
-    for (; this.acc >= DTW && n < MAX_STEPS; n++) {
-      step(this.m);
-      this.acc -= DTW;
-    }
+    this.stepDue();
     if (this.acc >= DTW) {
       this.dropped = Math.min(5, this.dropped + 1);
       this.acc = 0;

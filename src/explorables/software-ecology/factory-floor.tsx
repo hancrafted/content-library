@@ -74,6 +74,8 @@ export interface FloorProps {
   readonly onCard: (id: string, shift: boolean) => void;
   /** The card whose dashboard is open. */
   readonly open?: string | null;
+  /** The card a tour caption points at. */
+  readonly toured?: string;
 }
 
 const labelOf = (words: Words, kind: 'role' | 'customer', title: string) =>
@@ -94,6 +96,7 @@ function CustomerStation(p: FloorProps) {
         target: p.spots.targets?.customer,
         marker: p.spots.markers?.customer,
         open: p.open === 'customer',
+        toured: p.toured === 'customer',
       }}
     />
   );
@@ -118,6 +121,7 @@ function StationCards(p: FloorProps) {
             r: p.f.snap.stations[c.id] as Snapshot['stations'][string],
             words: p.words.card,
             open: p.open === c.id,
+            toured: p.toured === c.id,
           }}
         />
       ))}

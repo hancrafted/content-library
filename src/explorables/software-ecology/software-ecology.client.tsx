@@ -2,30 +2,31 @@
 
 import { useTheme } from '@/shared/hooks/use-theme';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
-import { fillTemplate } from '@/shared/lib/template.pure';
-import { useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
-import { BeltLabelsView, BeltsView } from './belts-view';
+import { useRef, useState, type ReactNode, type RefObject } from 'react';
 import { DockView } from './dock-view';
 import { Controls } from './factory-controls';
-import { Floor, type SpotProps, type Spots } from './factory-floor';
+import { type Spots } from './factory-floor';
 import { presetOf } from './factory-run.pure.ts';
-import type { Choice } from './factory-toolbar.client';
+import { Stage } from './factory-stage';
+import { tourCard } from './factory-tour.pure.ts';
 import { OpenDashboard } from './open-dashboard';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import { LegendView, StatusLineView } from './stage-foot-view';
-import { beltsOf, cardsOf, rateText } from './stage-parts.pure.ts';
-import { presetName, titlesOf, useCaseName, useCaseSub, type WordsIn } from './use-case-words.pure.ts';
+import { TourPanel, tourClockText } from './tour-panel';
+import { scenarioWords, useCaseSub } from './use-case-words.pure.ts';
+import { useChoices, type Choices } from './use-choices.ts';
 import { useDashboard } from './use-dashboard.ts';
 import { useDisplay } from './use-display.ts';
-import { useFactory, type FactoryView, type FactoryWords } from './use-factory.ts';
+import { useFactory, type FactoryView } from './use-factory.ts';
 import { useMorph } from './use-morph.ts';
+import { useTour, useTourState, type TourActions } from './use-tour.ts';
 
 /**
  * Context targets and markers a Slide places, by spot: `<id>:card`, `<id>:rack` and `<id>:<sign kind>` on a work
- * center, `customer`, `belts` (the whole belt layer, targets only), `belt:<key>` (a marker on that belt's label place)
- * and `states` (the state row).
+ * center, `customer`, `belts` (the whole belt layer, targets only), `belt:<key>` (a marker on that belt's label place),
+ * `states` (the state row) and `scenario:<id>` (a marker beside that entry of the Scenarios menu).
  */
 export type { Spots };
 
@@ -40,85 +41,11 @@ export interface SoftwareEcologyClientProps {
   readonly markers?: Spots<ReactNode>;
 }
 
-/** The states on the toolbar's row; the Scenarios menu holds the rest (#543). */
-const MAIN_STATES = ['swing', 'roles', 'ideal', 'realistic'];
-
 /** A preset's view; Swing falls back to Roles for a use case without the cartoon. */
 const viewOf = (B: Bundle, preset: string): ViewId => {
   const v = presetOf(B, preset).view ?? 'factory';
   return v === 'swing' && !B.data.panels ? 'roles' : v;
 };
-
-function useStageParts(f: FactoryView, x: { w: WordsIn; words: Words }) {
-  const { run, layout, snap } = f;
-  const cards = useMemo(() => cardsOf(run.m, x.w), [run, x.w]);
-  const belts = useMemo(
-    () => beltsOf({ m: run.m, layout, w: x.w, stage: x.words.stage }),
-    [run, layout, x.w, x.words.stage],
-  );
-  const retOn = Object.fromEntries(Object.entries(snap.belts).map(([k, b]) => [k, b.retOn]));
-  const labels = belts.map((b) => ({
-    key: b.key,
-    at: b.at,
-    label: b.label,
-    rate: rateText(b, snap.belts[b.key], x.words.stage),
-  }));
-  return { cards, belts, retOn, labels };
-}
-
-interface StageProps {
-  readonly f: FactoryView;
-  readonly words: Words;
-  readonly w: WordsIn;
-  readonly spots: SpotProps;
-  readonly view: ViewId;
-  readonly viewEl: RefObject<HTMLDivElement | null>;
-  readonly wrap: RefObject<HTMLElement | null>;
-  readonly open: string | null;
-  readonly beltMotion: boolean;
-  readonly onCard: (id: string, shift: boolean) => void;
-}
-
-function Stage(p: StageProps) {
-  const { cards, belts, retOn, labels } = useStageParts(p.f, p);
-  return (
-    <section ref={p.wrap} className={styles.viewWrap} data-view={p.view} aria-label={p.words.stage.label}>
-      <p className={`${styles.stageNote} text-caption`}>{p.words.stage.note}</p>
-      <div
-        ref={p.viewEl}
-        className={styles.view}
-        data-view={p.view}
-        data-paused={p.f.controls.speed === 0}
-        data-belts-move={p.beltMotion}
-      >
-        <div ref={p.f.stage} className={styles.stage} {...p.spots.targets?.belts}>
-          <BeltsView layout={p.f.layout} retOn={retOn} />
-          <canvas ref={p.f.canvas} aria-hidden="true" />
-          <BeltLabelsView layout={p.f.layout} labels={labels} />
-        </div>
-        <Floor {...p} cards={cards} belts={belts} />
-      </div>
-    </section>
-  );
-}
-
-function useWords(p: SoftwareEcologyClientProps, B: Bundle) {
-  const w = useMemo<WordsIn>(() => ({ B, locale: p.locale, catalog: p.catalog }), [B, p.locale, p.catalog]);
-  const fw = useMemo<FactoryWords>(
-    () => ({ warming: (day, of) => fillTemplate(p.words.stage.warming, { day, of }), blocked: p.words.stage.blocked }),
-    [p.words.stage],
-  );
-  const states = useMemo<Choice[]>(
-    () =>
-      B.data.presets.filter((x) => MAIN_STATES.includes(x.id)).map((x) => ({ id: x.id, name: presetName(w, x.id) })),
-    [B, w],
-  );
-  const useCases = useMemo<Choice[]>(
-    () => p.bundles.map((b) => ({ id: b.data.id, name: useCaseName({ ...w, B: b }) })),
-    [p.bundles, w],
-  );
-  return { w, fw, states, useCases, titles: useMemo(() => titlesOf(w), [w]) };
-}
 
 function Below({ f, words, titles }: { f: FactoryView; words: Words; titles: Readonly<Record<string, string>> }) {
   return (
@@ -150,13 +77,42 @@ function useShow(x: {
 
 type Parts = ReturnType<typeof useParts>;
 
+/** The markers a Slide places beside Scenarios menu entries, by scenario id. */
+const scenarioSpots = (markers: Spots<ReactNode> | undefined): Spots<ReactNode> =>
+  Object.fromEntries(
+    Object.entries(markers ?? {})
+      .filter(([k]) => k.startsWith('scenario:'))
+      .map(([k, v]) => [k.slice('scenario:'.length), v]),
+  );
+
+type Handlers = ReturnType<typeof useHandlers>;
+
+/** The state row's Scenarios menu, Tour and watch line, and the tour's clock. */
+const tourRowOf = (t: {
+  p: SoftwareEcologyClientProps;
+  x: Parts;
+  f: FactoryView;
+  words: Choices;
+  tour: TourActions;
+  h: Handlers;
+}) => {
+  const preset = t.f.controls.preset;
+  return {
+    scenarios: t.words.scenarios,
+    scenarioMarkers: scenarioSpots(t.p.markers),
+    watch: scenarioWords(t.words.w, preset).watch ?? '',
+    tour: { can: !!presetOf(t.x.B, preset).tour?.length, on: !!t.tour.tour, start: t.h.onTour },
+    tourClock: tourClockText(t.tour, t.p.words),
+  };
+};
+
 function Toolbar(t: {
   p: SoftwareEcologyClientProps;
   x: Parts;
   f: FactoryView;
-  words: ReturnType<typeof useWords>;
-  onPreset: (id: string) => void;
-  onUseCase: (id: string) => void;
+  words: Choices;
+  tour: TourActions;
+  h: Handlers;
 }) {
   const { p, x, words } = t;
   return (
@@ -170,10 +126,12 @@ function Toolbar(t: {
       sub={useCaseSub(words.w)}
       titles={words.titles}
       display={x.display}
-      onUseCase={t.onUseCase}
-      onPreset={t.onPreset}
+      onUseCase={t.h.onUseCase}
+      onPreset={t.h.onPreset}
+      onClear={t.h.onClear}
       statesTarget={p.targets?.states}
       statesMarker={p.markers?.states}
+      {...tourRowOf(t)}
     />
   );
 }
@@ -208,26 +166,65 @@ const stageOf = (x: Parts) => ({
   beltMotion: x.display.beltMotion,
 });
 
-/** The software ecology factory with its toolbar, stage, dashboards, status line, legend and At the Customer panel. */
+/** What the toolbar and the cards do: a state, a tour, a use case, Clear and a card click. */
+function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
+  const { B, dash, view } = x;
+  const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
+  return {
+    onPreset: (id: string) => {
+      dash.dismiss();
+      tour.end();
+      show(viewOf(B, id));
+      f.controls.setPreset(id);
+    },
+    onTour: () => {
+      const id = f.controls.preset;
+      dash.dismiss();
+      show(viewOf(B, id));
+      tour.start(id);
+    },
+    onUseCase: (id: string) => (dash.dismiss(), tour.end(), x.setUseCase(id)),
+    onClear: () => (tour.end(), f.controls.clear()),
+    // a card in Swing or Roles opens the factory; in the factory it opens or closes its dashboard (shift: #544)
+    onCard: (id: string) => (view === 'factory' ? dash.toggle(id) : show('factory')),
+  };
+}
+
+/** The factory's run and its tour, in step: the tour pauses the run's frames on each step's week. */
+function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices) {
+  const ts = useTourState();
+  const f = useFactory({
+    B: x.B,
+    preset: p.preset,
+    words: words.fw,
+    flowing: x.view === 'factory',
+    onFrame: ts.onFrame,
+    ...watchOf(x),
+  });
+  return { f, tour: useTour(x.B, f, ts) };
+}
+
+/** The software ecology factory with its toolbar, stage, dashboards, tour, status line, legend and At the Customer panel. */
 export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
   const x = useParts(p),
-    { B, view, dash } = x;
-  const words = useWords(p, B);
-  const f = useFactory({ B, preset: p.preset, words: words.fw, flowing: view === 'factory', ...watchOf(x) });
-  const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
-  const onPreset = (id: string) => {
-    dash.dismiss();
-    show(viewOf(B, id));
-    f.controls.setPreset(id);
-  };
-  const onUseCase = (id: string) => (dash.dismiss(), x.setUseCase(id));
-  // a card in Swing or Roles opens the factory; in the factory it opens or closes its dashboard (shift: #544)
-  const onCard = (id: string) => (view === 'factory' ? dash.toggle(id) : show('factory'));
+    words = useChoices(p, x.B);
+  const { f, tour } = useFactoryTour(p, x, words);
+  const h = useHandlers(x, f, tour);
+  const t = { words: p.words, w: words.w, titles: words.titles, locale: p.locale };
   return (
     <div className={styles.root}>
-      <Toolbar p={p} x={x} f={f} words={words} onPreset={onPreset} onUseCase={onUseCase} />
-      <Stage f={f} words={p.words} w={words.w} spots={p} {...stageOf(x)} onCard={onCard} />
-      <OpenDashboard f={f} dash={dash} words={p.words} w={words.w} wrap={x.wrap} />
+      <Toolbar p={p} x={x} f={f} words={words} tour={tour} h={h} />
+      <Stage
+        f={f}
+        words={p.words}
+        w={words.w}
+        spots={p}
+        {...stageOf(x)}
+        onCard={h.onCard}
+        toured={tour.tour ? tourCard(tour.tour) : undefined}
+        overlay={<TourPanel tour={tour} {...t} floor={f.floor} wrap={x.wrap} />}
+      />
+      <OpenDashboard f={f} dash={x.dash} words={p.words} w={words.w} wrap={x.wrap} />
       <Below f={f} words={p.words} titles={words.titles} />
     </div>
   );

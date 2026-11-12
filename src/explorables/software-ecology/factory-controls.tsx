@@ -5,6 +5,7 @@ import { aiChoicesOf, withMech, type AiChoice } from './factory-settings.pure.ts
 import { FactoryToolbar, type Choice } from './factory-toolbar.client';
 import type { ModelMenuProps } from './model-menu';
 import type { Snapshot } from './run-snapshot.pure.ts';
+import type { ScenarioChoice } from './scenario-menu';
 import type { Words } from './software-ecology-words.types';
 import type { Bundle } from './software-ecology.types';
 import type { Display } from './use-display.ts';
@@ -29,6 +30,14 @@ export interface ControlsProps {
   readonly onPreset: (id: string) => void;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
+  readonly scenarios: readonly ScenarioChoice[];
+  readonly scenarioMarkers?: Readonly<Partial<Record<string, ReactNode>>>;
+  readonly watch: string;
+  readonly tour: { readonly can: boolean; readonly on: boolean; readonly start: () => void };
+  /** While a tour runs, its clock ("Week 8 · Day 1") in place of the day. */
+  readonly tourClock?: string;
+  /** Clear ends a tour first. */
+  readonly onClear: () => void;
 }
 
 const clockOf = (snap: Snapshot, w: Words): string =>
@@ -56,6 +65,17 @@ const modelOf = (p: ControlsProps): ModelMenuProps => {
   };
 };
 
+/** The state row's Scenarios menu, Tour and "modified", and the watch line. */
+const stateRowOf = (p: ControlsProps) => ({
+  scenarios: p.scenarios,
+  scenarioMarkers: p.scenarioMarkers,
+  canTour: p.tour.can,
+  touring: p.tour.on,
+  onTour: p.tour.start,
+  watch: p.watch,
+  modified: p.f.controls.modified,
+});
+
 export function Controls(p: ControlsProps) {
   const c = p.f.controls;
   return (
@@ -70,10 +90,11 @@ export function Controls(p: ControlsProps) {
       sub={p.sub}
       speed={c.speed}
       onSpeed={c.setSpeed}
-      onClear={c.clear}
-      clock={clockOf(p.f.snap, p.words)}
+      onClear={p.onClear}
+      clock={p.tourClock ?? clockOf(p.f.snap, p.words)}
       statesTarget={p.statesTarget}
       statesMarker={p.statesMarker}
+      {...stateRowOf(p)}
       mech={c.settings.mech}
       onMech={(k) => c.setSettings(withMech(c.settings, k))}
       model={modelOf(p)}

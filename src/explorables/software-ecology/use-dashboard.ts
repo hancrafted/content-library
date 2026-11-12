@@ -1,7 +1,7 @@
 /*
  * Which dashboard is open, and whether the dashboards explain their charts (design-ADR 0024 §17), as the reference
  * build's `cardClick`, `closePopover` and help button keep them: a click on a card opens its dashboard and a second
- * click closes it; Escape closes it once no menu is open (a menu stops Escape first); closing hands focus back to the
+ * click closes it; Escape closes it once no menu and no tour is open (they stop Escape first); closing hands focus back to the
  * card. Transient state (FE-001 §1): a reload loses only an open popover.
  */
 import { useCallback, useEffect, useMemo, useState, type RefObject } from 'react';
@@ -37,8 +37,9 @@ export function useDashboard(within: RefObject<HTMLElement | null>): DashboardSt
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close();
     };
-    document.addEventListener('keydown', key);
-    return () => document.removeEventListener('keydown', key);
+    // on the window, after the document: a menu (capture) and a tour (bubble) hear Escape first and stop it
+    window.addEventListener('keydown', key);
+    return () => window.removeEventListener('keydown', key);
   }, [open, close]);
   const watch = useMemo(() => (open ? [open] : []), [open]);
   return {
