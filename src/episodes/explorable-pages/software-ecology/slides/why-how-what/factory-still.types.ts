@@ -24,6 +24,8 @@ export interface StillStation {
   readonly inspection: boolean;
   readonly ai: boolean;
   readonly waiting: number;
+  /** Weeks of work waiting at the current pace. */
+  readonly weeks: number;
   /** 0 under a week of work waiting, 1 (amber) from one week, 2 (red) from two. */
   readonly level: number;
   /** The rack's slots from the bottom, at most six. */

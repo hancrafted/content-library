@@ -3,34 +3,44 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
 import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
+import { scenarioLastStep } from '@/explorables/software-ecology/scenario-last-step';
+import type { CustomerReadout, StationReadout } from '@/explorables/software-ecology/stage-readouts.pure';
 import { FactoryPreview } from './factory-preview';
-import { rackOf, satisfactionOf, type Release } from './factory-preview.pure';
+import { rackOf, type Release } from './factory-preview.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /*
- * The model's readouts at the AI unbalanced tour's step 3, week 20, as the prototype shows them (Spec Option 0a): an
- * illustrative model, not measured, and labelled so on the preview. The Play Section pins the same readouts as
- * `expect:` claims on that tour step, so the hero never claims what the model does not show.
+ * The model's readouts at the AI unbalanced tour's step 3, week 20, read from the same headless run the Why How What
+ * stills draw (`factoryStillState`), so the hero never claims what the model does not show: an illustrative model, not
+ * measured, and labelled so on the preview. The Play Section pins the same readouts as `expect:` claims on that step.
  */
-const READOUTS = {
-  /** Output relative to Ideal: `customer.output`. */
-  output: 0.53,
-  /** Quality assurance's weeks of work waiting: `qa.weeksWaiting`. */
-  qaWeeksWaiting: 10.04,
-  /** The last twelve releases, oldest first: eight good, four bad, so 67 % satisfied. */
-  releases: ['good', 'good', 'bad', 'good', 'good', 'bad', 'good', 'bad', 'good', 'good', 'bad', 'good'] as Release[],
-} as const;
 
-/** The main path a request rides, left to right, and each work center's backlog at that step. */
+/** The main path a request rides, left to right: the preview's key, the work center's id and what marks it. */
 const CENTERS = [
-  { key: 'sales', waiting: 1 },
-  { key: 'product', waiting: 2 },
-  { key: 'analyst', waiting: 1 },
-  { key: 'engineer', waiting: 1, ai: true },
-  { key: 'qa', waiting: 223, full: true, inspection: true },
-  { key: 'operations', waiting: 0 },
+  { key: 'sales', id: 'sales' },
+  { key: 'product', id: 'pm' },
+  { key: 'analyst', id: 'ba' },
+  { key: 'engineer', id: 'eng', ai: true },
+  { key: 'qa', id: 'qa', inspection: true },
+  { key: 'operations', id: 'ops' },
 ] as const;
+
+/** The scenario the hero shows: the AI unbalanced tour's last step. */
+const USE_CASE = 'tire';
+const SCENARIO = 'ai-unbalanced';
+
+/** The readings at that step: the Customer, each station by id, and the Customer's releases oldest first. */
+function readoutsOf() {
+  const snap = scenarioLastStep(USE_CASE, SCENARIO).f.read({});
+  const customer: CustomerReadout = snap.customer;
+  const releases = customer.releases
+    .filter((release) => release !== null)
+    .map((release): Release => (release.good ? 'good' : 'bad'))
+    .reverse();
+  const station = (id: string): StationReadout | undefined => snap.stations[id];
+  return { customer, releases, station };
+}
 
 /**
  * The Title slide's hero Scene for the Software ecology page (the record's `title`): its own headline and lede, the
@@ -56,10 +66,11 @@ export const hero = slide({
   content: ({ t, locale, slideHref }) => {
     const number = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
     const percent = new Intl.NumberFormat(locale, { style: 'percent' });
-    const weeks = Math.round(READOUTS.qaWeeksWaiting);
-    const output = t('preview.output', { value: number.format(READOUTS.output) });
-    const satisfied = percent.format(satisfactionOf(READOUTS.releases));
-    const qa = CENTERS.find(({ key }) => key === 'qa');
+    const { customer, releases, station } = readoutsOf();
+    const qa = station('qa');
+    const weeks = Math.round(qa?.weeks ?? 0);
+    const output = t('preview.output', { value: number.format(customer.output) });
+    const satisfied = percent.format(customer.sat);
     return (
       <ExplorableHero
         layers={{ Frame: SlideFrame }}
@@ -84,10 +95,12 @@ export const hero = slide({
                 label: t('preview.customer'),
                 output,
                 satisfied: t('preview.satisfied', { value: satisfied }),
-                releases: READOUTS.releases,
+                releases,
               }}
-              centers={CENTERS.map((center) => ({
+              centers={CENTERS.map(({ id, ...center }) => ({
                 ...center,
+                waiting: station(id)?.waiting ?? 0,
+                full: (station(id)?.level ?? 0) === 2,
                 label:
                   center.key === 'qa'
                     ? t('preview.waiting', { center: t('preview.centers.qa'), weeks })
