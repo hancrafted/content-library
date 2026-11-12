@@ -221,7 +221,7 @@ const decayCustomer = (m: Factory, dt: number, fdec: number): void => {
   m.outRate *= odec;
   m.rel = [m.rel[0] * odec, m.rel[1] * odec];
   m.compl *= odec;
-  m.complK = [m.complK[0] * odec, m.complK[1] * odec];
+  m.complK = { spec: m.complK.spec * odec, code: m.complK.code * odec };
   m.arrRate *= fdec;
   m.fu *= fdec;
   m.req *= fdec;

@@ -3,6 +3,7 @@
  * counters at day 0, sized for its settings. Model-internal: `createFactory` wraps it; the model's own tests reach it
  * through `buildFactory`, its internal seam.
  */
+import { perKind } from './defect.pure.ts';
 import {
   asCustomer,
   beltsOf,
@@ -70,7 +71,7 @@ const counters = () => ({
   arrRate: 0,
   rel: [0, 0] as [number, number],
   compl: 0,
-  complK: [0, 0] as [number, number],
+  complK: perKind(),
   fu: 0,
   req: 0,
   wip: 0,

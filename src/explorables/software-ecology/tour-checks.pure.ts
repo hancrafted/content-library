@@ -5,7 +5,8 @@
  * The use-case file keeps the code form (`qa.weeksWaiting: ">2"`); the tour never shows it.
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { parseTest, type Check } from './factory-scenario.pure.ts';
+import type { Check } from './factory-scenario.pure.ts';
+import { parseTest } from './scenario-tests.pure.ts';
 import type { TourCheckWords } from './software-ecology-words.types';
 import type { Locale } from './software-ecology.types';
 

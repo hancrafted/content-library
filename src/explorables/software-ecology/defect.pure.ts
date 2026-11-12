@@ -5,6 +5,9 @@ import type { BadChances, Defect, KindChances } from './defect.types';
 
 export const DEFECTS: readonly Defect[] = ['spec', 'code'];
 
+/** No defect of either kind yet: a count per kind. */
+export const perKind = (): Record<Defect, number> => ({ spec: 0, code: 0 });
+
 const isKinded = (raw: BadChances): raw is Readonly<Partial<Record<Defect, Readonly<Record<string, number>>>>> =>
   Object.entries(raw).every(([k, v]) => (DEFECTS as readonly string[]).includes(k) && typeof v === 'object');
 

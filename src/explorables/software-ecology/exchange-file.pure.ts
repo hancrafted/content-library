@@ -169,7 +169,7 @@ export const exchangeDoc = (B: Bundle, page: PageState, catalogs: Catalogs): Doc
   const used = [...new Set(['customer', ...B.data.centers.map((c) => c.role)])];
   const data: Doc = {};
   for (const k of DATA_KEYS) if (uc[k] !== undefined) data[k] = clone(uc[k]);
-  data.mechanics = { ...page.s.strength };
+  data.mechanics = { ...page.s.strength, ...page.s.consts };
   return {
     schema: SCHEMA_ID,
     ...data,

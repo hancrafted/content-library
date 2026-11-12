@@ -3,8 +3,9 @@
  * reference build's validate(), messages and order unchanged.
  */
 import { SPEEDS } from './factory-dials.pure.ts';
-import { validKey, validTest } from './factory-scenario.pure.ts';
+import { validKey } from './factory-model.pure.ts';
 import { OWN_RATE_MAX } from './own-work.types.ts';
+import { validTest } from './scenario-tests.pure.ts';
 import {
   absentOr,
   apply,
@@ -14,7 +15,7 @@ import {
   isMap,
   isNum,
   isWord,
-  listOf,
+  itemsOf,
   mapOf,
   oneOf,
   type Map_,
@@ -130,7 +131,7 @@ const presetShape = (at: At, E: Sink): void => {
 };
 
 export const presetProblems = (presets: unknown, x: { E: Sink; ids: Set<string> }): void => {
-  listOf(presets).forEach((raw, i) => {
+  itemsOf(presets).forEach((raw, i) => {
     const p = `presets[${i}]`;
     if (typeof mapOf(raw).id !== 'string') x.E(`${p}.id: a word`);
     if (!isMap(raw)) return;

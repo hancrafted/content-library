@@ -4,8 +4,14 @@
  * judges a scenario's beats across seeds with the judge the tests use (design-ADR 0024 §12, §20). `npm run
  * ecology:sim` (tools/ecology/sim.ts) is its shell.
  */
-import { DEFAULT_SEED } from './factory-model.pure.ts';
-import { judgeScenario, type BeatVerdict, type ScenarioVerdict, type SeedCheck } from './factory-scenario.pure.ts';
+import {
+  judgeScenario,
+  SEEDS,
+  seedsFrom,
+  type BeatVerdict,
+  type ScenarioVerdict,
+  type SeedCheck,
+} from './factory-scenario.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { bundleOf, readCatalog, readConfig } from './use-case-file.ts';
 
@@ -28,7 +34,6 @@ export interface SimRun {
 }
 
 const USAGE = 'usage: npm run ecology:sim -- <use-case> <scenario> [--seed n | --seeds n] [--json]';
-const DEFAULT_SEEDS = 10;
 
 /** Reads a file of this Explorable's folder by name (`tire.yml`); the shell hands it in, reading from disk. */
 export type ReadFile = (name: string) => string;
@@ -56,10 +61,11 @@ const count = (flag: string, v: string | undefined): number => {
   return Number(v);
 };
 
-type Pick_ = { seed: number } | { seeds: number } | Record<string, never>;
+/** The seeds a flag picks: one seed, or a number of them in a row. */
+type SeedPick = { seed: number } | { seeds: number };
 
 /** One flag of the rest of the arguments: what it sets, and how many arguments it took. */
-const flagOf = (a: string | undefined, v: string | undefined): { json?: true; pick?: Pick_; took: number } => {
+const flagOf = (a: string | undefined, v: string | undefined): { json?: true; pick?: SeedPick; took: number } => {
   if (a === '--json') return { json: true, took: 1 };
   if (a === '--seed') return { pick: { seed: count(a, v) }, took: 2 };
   if (a === '--seeds') return { pick: { seeds: count(a, v) }, took: 2 };
@@ -81,8 +87,8 @@ export const parseSimArgs = (argv: readonly string[]): SimOptions => {
   return opts;
 };
 
-const seedsOf = (o: SimOptions): number[] =>
-  o.seed !== undefined ? [o.seed] : Array.from({ length: o.seeds ?? DEFAULT_SEEDS }, (_, k) => DEFAULT_SEED + k);
+const seedsOf = (o: SimOptions): readonly number[] =>
+  o.seed !== undefined ? [o.seed] : o.seeds !== undefined ? seedsFrom(o.seeds) : SEEDS;
 
 const nameOf = (B: Bundle, read: ReadFile, id: string): string => {
   const catalog = readConfig<{ presets?: Record<string, string> }>(fileOf(read, 'roles.words.yml'));

@@ -2,10 +2,11 @@
  * The traffic solve (design-ADR 0024 §4): the expected flows at given settings, the traffic equations of
  * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
  */
-import { DEFECTS } from './defect.pure.ts';
-import { constOf, custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
+import { perKind } from './defect.pure.ts';
+import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { NF_, trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
+import { constOf } from './mechanics.pure.ts';
 import type { Settings } from './software-ecology.types';
 
 export interface SolveResult {
@@ -49,10 +50,10 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     churn: Math.max(1, mechOf(s, 'churn') || 1),
     complOn,
     mixW: sum(Object.values(cu.mix)) || 1,
-    badP: DEFECTS.map((k) => (complOn ? sum(Object.values(cu.bad[k])) : 0)) as [number, number],
+    badP: { spec: complOn ? sum(Object.values(cu.bad.spec)) : 0, code: complOn ? sum(Object.values(cu.bad.code)) : 0 },
     srcs: productCo(s) ? m.srcs.map((x) => ({ n: x.n, rate: ownOf(x, { s, mode: cu.mode }).rate })) : [],
     worst: opts.worst,
-    k: {
+    consts: {
       inspect: constOf(s, 'inspect'),
       redo: constOf(s, 'redo'),
       keepExtra: constOf(s, 'keepExtra'),
@@ -71,7 +72,7 @@ const fresh = (m: Factory, F: Float64Array[]): Pass => ({
   own: 0,
   relG: 0,
   relB: 0,
-  relBK: [0, 0],
+  relBK: perKind(),
   fu: 0,
 });
 
@@ -139,6 +140,6 @@ export const solve = (m: Factory, s: Settings, opts: { worst?: boolean; rush?: b
     gain: req > 0 ? p.fu / req : 0,
     converged,
     headroom: 1 / maxRho,
-    sat: rels > 0 ? Math.max(0, p.relG - p.relBK[0] * ctx.badP[0] - p.relBK[1] * ctx.badP[1]) / rels : 1,
+    sat: rels > 0 ? Math.max(0, p.relG - p.relBK.spec * ctx.badP.spec - p.relBK.code * ctx.badP.code) / rels : 1,
   };
 };

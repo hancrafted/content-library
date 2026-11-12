@@ -1,7 +1,7 @@
 // The factory model's shapes (design-ADR 0024 §1–§5): its network, work centers, belts, servers and documents.
 import type { Job, Run, Token } from './factory-docs.pure.ts';
 import type { Ring, Streams } from './factory-random.pure.ts';
-import type { Arrivals, Bundle, CenterDef, Cust, Dials, RoleDef, Settings } from './software-ecology.types';
+import type { Arrivals, Bundle, CenterDef, Cust, Defect, Dials, RoleDef, Settings } from './software-ecology.types';
 export type { Streams } from './factory-random.pure.ts';
 
 export { Job, Run, Token } from './factory-docs.pure.ts';
@@ -88,8 +88,8 @@ export interface FactoryNode extends Streams {
   readonly def: NodeDef;
   readonly role: RoleDef;
   readonly roleId: string;
-  /** The defect kind it makes, 0 spec or 1 code: the center's `origin`, else its role's. */
-  readonly origin: number;
+  /** The defect kind it makes: the center's `origin`, else its role's. */
+  readonly origin: Defect;
   readonly ins: Belt[];
   readonly outs: Belt[];
   spawns: SpawnRule[];
@@ -198,7 +198,7 @@ export interface Factory {
   rel: [number, number];
   compl: number;
   /** Complaints a week by defect kind: change requests (spec) and bugs (code). */
-  complK: [number, number];
+  complK: Record<Defect, number>;
   fu: number;
   req: number;
   wip: number;

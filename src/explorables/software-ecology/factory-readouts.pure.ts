@@ -40,8 +40,8 @@ export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) =>
   sat: (m) => satRate(m),
   headroom: (m) => solve(m, m.s).headroom,
   leadDays: (m) => (m.mainRate > 0.05 ? (m.wipAvg / m.mainRate) * DAYS : 0),
-  bugsPerWeek: (m) => m.complK[1],
-  changesPerWeek: (m) => m.complK[0],
+  bugsPerWeek: (m) => m.complK.code,
+  changesPerWeek: (m) => m.complK.spec,
   own: (m) => m.ownRate,
   backlog: (m) => backlogOf(m),
 };

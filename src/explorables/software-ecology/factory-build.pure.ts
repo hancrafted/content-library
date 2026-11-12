@@ -59,7 +59,7 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   def: { ...spec.def, x: spec.def.at[0], y: spec.def.at[1], kind: spec.kind },
   role: spec.role,
   roleId: spec.kind === 'role' ? (spec.def.role ?? '') : 'customer',
-  origin: (spec.def.origin ?? spec.role.origin) === 'spec' ? 0 : 1,
+  origin: (spec.def.origin ?? spec.role.origin) === 'spec' ? 'spec' : 'code',
   ins: [],
   outs: [],
   spawns: [],

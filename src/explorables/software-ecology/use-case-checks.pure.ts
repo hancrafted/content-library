@@ -19,7 +19,8 @@ export const isXY = (v: unknown): boolean => Array.isArray(v) && v.length === 2 
 export const isMap = (v: unknown): v is Map_ => !!v && typeof v === 'object' && !Array.isArray(v);
 export const isWord = (v: unknown): v is string => typeof v === 'string' && /^[\w-]+$/.test(v);
 export const mapOf = (v: unknown): Map_ => (isMap(v) ? v : {});
-export const listOf = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
+/** A list in the file, or none: what to walk when a key may be missing or not a list. */
+export const itemsOf = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 export const oneOf = (v: unknown, allowed: readonly string[]): boolean => allowed.includes(v as string);
 /** Whether a value is left out, or else passes the test. */
 export const absentOr = (v: unknown, ok: (v: unknown) => boolean): boolean => v === undefined || ok(v);
@@ -36,7 +37,7 @@ export const centerIdsOf = (doc: Map_, E: Sink): Set<string> => {
   const ids = new Set(['customer']),
     centerIds = new Set<string>();
   if (!Array.isArray(doc.centers) || !doc.centers.length) E('centers: a list of work centers');
-  listOf(doc.centers).forEach((c, i) => {
+  itemsOf(doc.centers).forEach((c, i) => {
     const id = mapOf(c).id;
     if (!isWord(id)) return E(`centers[${i}].id: a word`);
     if (ids.has(id))
@@ -206,7 +207,7 @@ export const CENTER: readonly Rule<CenterAt>[] = [
 ];
 
 export const FIRST_SPAWN: Rule<CenterAt> = ({ c, p }) => {
-  const spawns = listOf(c.spawns),
+  const spawns = itemsOf(c.spawns),
     f = mapOf(spawns[0]);
   if (!spawns.length) return `${p}.spawns: what a finished job creates, e.g. [{ to: ops, n: 1 }]`;
   return isMap(spawns[0]) && f.choose === undefined && f.n === undefined

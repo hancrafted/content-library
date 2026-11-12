@@ -3,14 +3,14 @@
  * job, rolls its result as work starts (so the station can stamp it as the job ends), and on finishing sends it back,
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
-import { DEFECTS } from './defect.pure.ts';
 import type { Defect } from './defect.types';
-import { catches, catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
+import { catches, catchOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
 import { countOf, pickBelt } from './factory-routing.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, Job, Server, SpawnRule } from './factory.types';
+import { constOf } from './mechanics.pure.ts';
 
 const pickCenter = (sv: Server): FactoryNode | null => {
   if (sv.nodes.length === 1) return sv.nodes[0].L ? sv.nodes[0] : null;
@@ -44,12 +44,12 @@ interface Judged {
   readonly elig: boolean;
   readonly t: number;
   /** The station's catch of the arriving kind. */
-  readonly p: number;
+  readonly chance: number;
 }
 
 /** An inspection sends bad work back, but passes more of it unread as its backlog fills. */
 const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
-  const p0 = x.elig ? x.p : 0,
+  const p0 = x.elig ? x.chance : 0,
     k = Math.max(0, 1 - constOf(m.s, 'pressure') * firstOf(n.def.stampUnderPressure, 0.8) * n.press),
     r = n.rr();
   const bounce = r < p0 * k;
@@ -62,7 +62,7 @@ const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
 
 /** A plain work center sends bad input back by chance; kept, it multiplies (churn) and takes longer. */
 const keepOrSendBack = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
-  if (x.elig && n.rr() < x.p) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
+  if (x.elig && n.rr() < x.chance) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
   const c = mechOf(m.s, 'churn');
   if (c > 1) n.sign.churn = x.t;
   return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + constOf(m.s, 'keepExtra') };
@@ -79,10 +79,10 @@ const countBad = (m: Factory, n: FactoryNode, x: { kind: Defect; bounce: boolean
 const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdict => {
   const J = (n.server as Server).J;
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
-  const kind = DEFECTS[kindOf(J.fl, x.e.from.origin)] ?? 'code',
+  const kind = kindOf(J.fl, x.e.from.origin),
     elig = x.e.returns && J.b < constOf(m.s, 'maxBounces'),
-    p = catchOf(m.s, { n, d: m.dc[n.idx] }, kind);
-  const v = n.def.inspection ? inspect(m, n, { elig, t: x.t, p }) : keepOrSendBack(m, n, { elig, t: x.t, p });
+    chance = catchOf(m.s, { n, d: m.dc[n.idx] }, kind);
+  const v = n.def.inspection ? inspect(m, n, { elig, t: x.t, chance }) : keepOrSendBack(m, n, { elig, t: x.t, chance });
   countBad(m, n, { kind, bounce: v.bounce });
   return v;
 };

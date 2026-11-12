@@ -1,7 +1,6 @@
 /*
  * The tests a scenario's `expect:` and `settles:` hold its readings to (design-ADR 0024 §10): ">2", "<0.5", ">=1",
- * "<=3", "0.9–1.1" (en dash or hyphen), "rises" or "falls" (against the beat before). factory-scenario.pure.ts
- * re-exports them.
+ * "<=3", "0.9–1.1" (en dash or hyphen), "rises" or "falls" (against the beat before).
  */
 
 export type Comparison = '>' | '<' | '>=' | '<=';

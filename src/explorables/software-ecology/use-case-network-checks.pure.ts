@@ -2,7 +2,7 @@
  * What a use-case file's work centers, spawns, routes, sources and mechanics must hold (schema
  * software-ecology-factory/5), ported from the reference build's validate(), messages and order unchanged.
  */
-import { MECH_KEYS, MECH_RANGE } from './factory-dials.pure.ts';
+import { MECH_KEYS, MECH_RANGE } from './mechanics.pure.ts';
 import { OWN_RATE_MAX } from './own-work.types.ts';
 import type { MechKey } from './software-ecology.types';
 import {
@@ -17,7 +17,7 @@ import {
   isMap,
   isNum,
   isXY,
-  listOf,
+  itemsOf,
   mapOf,
   oneOf,
   ROLE,
@@ -62,21 +62,21 @@ const spawnProblems = (sp: unknown, at: Omit<SpawnAt, 'sp'>, E: Sink): void => {
 };
 
 const centerProblems = (doc: Map_, x: { ids: Set<string>; roles: Set<string> }, E: Sink): void => {
-  listOf(doc.centers).forEach((raw, i) => {
+  itemsOf(doc.centers).forEach((raw, i) => {
     const c = mapOf(raw),
       p = `centers[${i}]`;
     if (typeof c.id !== 'string') return;
     apply([...CENTER, FIRST_SPAWN], { c, p, roles: x.roles }, E);
-    listOf(c.spawns).forEach((sp, j) =>
+    itemsOf(c.spawns).forEach((sp, j) =>
       spawnProblems(sp, { q: `${p}.spawns[${j}]`, ids: x.ids, self: c.id as string }, E),
     );
   });
 };
 
 const shipsToCustomer = (doc: Map_): boolean =>
-  listOf(doc.centers).some((c) =>
-    listOf(mapOf(c).spawns).some(
-      (sp) => mapOf(sp).to === 'customer' || listOf(mapOf(sp).choose).some((ch) => mapOf(ch).to === 'customer'),
+  itemsOf(doc.centers).some((c) =>
+    itemsOf(mapOf(c).spawns).some(
+      (sp) => mapOf(sp).to === 'customer' || itemsOf(mapOf(sp).choose).some((ch) => mapOf(ch).to === 'customer'),
     ),
   );
 
@@ -119,7 +119,7 @@ const mechanicProblem = (k: string, v: unknown): string | false => {
 
 const sourceProblems = (doc: Map_, ids: Set<string>, E: Sink): void => {
   if (doc.sources !== undefined && !Array.isArray(doc.sources)) E('sources: a list of { id, at, rate }');
-  listOf(doc.sources).forEach((s, i) => apply(SOURCE, { s: mapOf(s), i, ids }, E));
+  itemsOf(doc.sources).forEach((s, i) => apply(SOURCE, { s: mapOf(s), i, ids }, E));
   if (!absentOr(doc.bottleneck, (v) => ids.has(v as string)))
     E('bottleneck: the work center that is the bottleneck at Realistic');
   for (const [k, v] of Object.entries(mapOf(doc.mechanics))) {
