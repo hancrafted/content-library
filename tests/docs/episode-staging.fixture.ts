@@ -219,22 +219,26 @@ export function commitsWithTrailer(job: string): number {
  * A staging folder's Dossier as write-dossier and then write-voice-script
  * committed it, found by the `Agent: <job>` trailer of their commits. The
  * trailer exists since #107. A folder whose Run has not committed both yet has
- * nothing to compare (undefined). But when no commit in the whole history
- * carries a trailer, the history is unreadable (a shallow clone), so this
- * throws rather than let the Voice script check pass on nothing.
+ * nothing to compare (undefined), and neither has one whose latest
+ * write-dossier commit is not behind its latest write-voice-script commit: a
+ * reopened write-dossier waits for its write-voice-script pass. But when no
+ * commit in the whole history carries a trailer, the history is unreadable (a
+ * shallow clone), so this throws rather than let the Voice script check pass
+ * on nothing.
  */
 export function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
   const file = `${folder}/dossier.md`;
+  const git = (args: string[]): string => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
   const at = (job: string): string | undefined => {
-    const hash = execFileSync('git', ['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file], {
-      cwd: ROOT,
-      encoding: 'utf8',
-    }).trim();
-    if (hash !== '') return execFileSync('git', ['show', `${hash}:${file}`], { cwd: ROOT, encoding: 'utf8' });
+    const hash = git(['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file]).trim();
+    if (hash !== '') return hash;
     if (commitsWithTrailer(job) === 0)
       throw new Error(`no commit in the history carries "Agent: ${job}": shallow clone?`);
     return undefined;
   };
-  const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
-  return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
+  const [draftHash, voicedHash] = [at('write-dossier'), at('write-voice-script')];
+  if (draftHash === undefined || voicedHash === undefined) return undefined;
+  const voicePending = git(['rev-list', '-1', `${voicedHash}..${draftHash}`]).trim() !== '';
+  if (voicePending) return undefined;
+  return { draft: git(['show', `${draftHash}:${file}`]), voiced: git(['show', `${voicedHash}:${file}`]) };
 }
