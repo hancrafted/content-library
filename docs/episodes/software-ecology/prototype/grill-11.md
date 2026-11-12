@@ -40,3 +40,17 @@ Q214: 1
 7. **Scenario 1, "Bug Spiral with AI Acceleration"** (Q202, Q203), from In theory: clean line; AI at Engineering at about 70 % effectiveness; quality assurance overwhelmed, passing work unread; AI at quality assurance, trusted; Operations stalls; AI at Operations, output at or above demand with satisfaction under 0.6 and bugs a week rising.
 8. **Scenario 2, "Clear Requirements, Then AI"** (Q207, Q211, Q212), from In practice with Analysis and Product manager at 75 %: high rework, change requests and bugs; AI at Engineering and quality assurance ships bad things faster; Analysis and Product manager to 95 %, rework falls, then the piles drain; AI everywhere, output and headroom rise while satisfaction holds.
 9. **Reports** in `.scratch/software-ecology/eval/run-NN.md` (Q206).
+
+## Review round (after slices 1–9)
+
+Q215: 1
+Q216: ok
+Q217: ok
+Q218: ok
+Q219: ok
+
+10. **The hero and Why · How · What settings** live in `tire.yml` as a preset kept off the Scenarios menu (`menu: false`, id `still`), not inline in TSX (Q215, ADR §8).
+11. **The still keeps its point** (Q216): its preset carries its own `expect:` (Customer satisfaction below 0.5, quality assurance's pile far past its rack), tuned by the eval agent; the still shows the settled numbers.
+12. **Claim tours are checked in `test:build`** across seeds with the same judge as `ecology:sim` (Q217).
+13. **Clear Requirements beats 1 and 3** read `ba.rework` (`>0.15`, then `falls`) in place of `eng.rework` (Q218).
+14. **`<center>.unread`** counts only the defect kinds that station can catch (Q219).

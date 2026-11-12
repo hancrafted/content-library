@@ -33,7 +33,7 @@ function useStates(B: Bundle, w: WordsIn) {
   const scenarios = useMemo<ScenarioChoice[]>(
     () =>
       B.data.presets
-        .filter((x) => !MAIN_STATES.includes(x.id))
+        .filter((x) => !MAIN_STATES.includes(x.id) && x.menu !== false)
         .map((x) => ({
           id: x.id,
           name: presetName(w, x.id),

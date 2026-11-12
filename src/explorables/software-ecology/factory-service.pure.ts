@@ -4,7 +4,8 @@
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
 import { DEFECTS } from './defect.pure.ts';
-import { catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
+import type { Defect } from './defect.types';
+import { catches, catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
@@ -67,15 +68,22 @@ const keepOrSendBack = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + constOf(m.s, 'keepExtra') };
 };
 
+/** Counts a bad input for the unread share: only of the kinds this station's catch can catch (grill 11 Q219). */
+const countBad = (m: Factory, n: FactoryNode, x: { kind: Defect; bounce: boolean }): void => {
+  if (!catches(m.s, n, x.kind)) return;
+  n.rate.badIn += BUMP;
+  if (!x.bounce) n.rate.badPass += BUMP;
+};
+
 /** What a work center does with the job it starts: work on it as it is, send it back, or keep a bad input. */
 const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdict => {
   const J = (n.server as Server).J;
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
-  const elig = x.e.returns && J.b < constOf(m.s, 'maxBounces'),
-    p = catchOf(m.s, { n, d: m.dc[n.idx] }, DEFECTS[kindOf(J.fl, x.e.from.origin)] ?? 'code');
+  const kind = DEFECTS[kindOf(J.fl, x.e.from.origin)] ?? 'code',
+    elig = x.e.returns && J.b < constOf(m.s, 'maxBounces'),
+    p = catchOf(m.s, { n, d: m.dc[n.idx] }, kind);
   const v = n.def.inspection ? inspect(m, n, { elig, t: x.t, p }) : keepOrSendBack(m, n, { elig, t: x.t, p });
-  n.rate.badIn += BUMP;
-  if (!v.bounce) n.rate.badPass += BUMP;
+  countBad(m, n, { kind, bounce: v.bounce });
   return v;
 };
 

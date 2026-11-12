@@ -117,6 +117,18 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('refuses a menu flag that is not true or false', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const presets = doc.presets as Record<string, unknown>[];
+    presets[2] = { id: 'ideal', menu: 'hidden' };
+    const expected = ['presets[2].menu: true or false (false keeps the state off the Scenarios menu)'];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses a settles range that trends and a claim that names no words key', () => {
     // ARRANGE
     const doc = tireDoc();

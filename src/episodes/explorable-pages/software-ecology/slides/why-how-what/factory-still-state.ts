@@ -1,6 +1,6 @@
 /*
- * The stills' state: the software ecology Explorable's own model, run headless at build time to week 20 of In practice
- * with AI at Engineering (PLAY), with the shipped seed, the use case's layout and its words in the page locale. A retuned
+ * The stills' state: the software ecology Explorable's own model, run headless at build time through the use case's
+ * `still` state (In practice, then AI at Engineering), with the shipped seed, the use case's layout and its words in the page locale. A retuned
  * model redraws them on the next build. It reads the model through its handle only
  * (design-ADR 0024 §1): the Snapshot, the Topology and the Floor.
  */
@@ -38,14 +38,8 @@ import { roleWords, type WordsIn } from '@/explorables/software-ecology/use-case
 import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './factory-still.types';
 
 const USE_CASE = 'tire';
-/**
- * What the stills show: In practice, AI at Engineering from week 4 writing two pull requests per task, run to week 20.
- * The AI-unbalanced tour this was, before the eval grill deleted the scenarios: the same settings, the same numbers.
- */
-const PLAY = {
-  start: 'realistic',
-  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
-} as const;
+/** What the stills show: the use case's `still` state, off the Scenarios menu (tire.yml, grill 11 Q215). */
+const STILL = 'still';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
 
@@ -78,8 +72,8 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
   return out;
 };
 
-/** The model after PLAY: warmed, then each step's dials set and run to its week. */
-const runToLastStep = () => scenarioLastStep(USE_CASE, PLAY);
+/** The model after the still's check: warmed, then its dials set and run to its week. */
+const runToLastStep = () => scenarioLastStep(USE_CASE, STILL);
 
 type Run = ReturnType<typeof runToLastStep>;
 interface Read {
