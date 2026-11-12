@@ -13,6 +13,8 @@ const read = (name: string): string => readFileSync(new URL(name, FOLDER), 'utf8
 /** The use cases that ship, written out. */
 const USE_CASES = ['tire', 'gate', 'teams'] as const;
 const SEEDS = 10;
+/** Ten seeds of a six-beat tour take several seconds; a closed spiral piles more work to simulate. */
+const TOUR_TIMEOUT_MS = 60_000;
 
 const claimTours = USE_CASES.flatMap((useCase) =>
   loadUseCase(useCase, read)
@@ -26,11 +28,15 @@ describe('claim tours across seeds', () => {
     expect(claimTours.map(([u, p]) => `${u}/${p}`)).toEqual(expected);
   });
 
-  it.each(claimTours)('%s %s: every beat holds on 8 of 10 seeds within 6 to 9 weeks', (useCase, scenario) => {
-    const run = simulate({ useCase, scenario, seeds: SEEDS }, read);
-    const failing = run.verdict.beats
-      .filter((b) => !b.ok)
-      .map((b) => `beat ${b.i + 1}: ${b.passed} of ${b.of} seeds${b.lengthOk ? '' : `, ${b.length} weeks`}`);
-    expect(failing).toEqual([]);
-  });
+  it.each(claimTours)(
+    '%s %s: every beat holds on 8 of 10 seeds within 6 to 9 weeks',
+    (useCase, scenario) => {
+      const run = simulate({ useCase, scenario, seeds: SEEDS }, read);
+      const failing = run.verdict.beats
+        .filter((b) => !b.ok)
+        .map((b) => `beat ${b.i + 1}: ${b.passed} of ${b.of} seeds${b.lengthOk ? '' : `, ${b.length} weeks`}`);
+      expect(failing).toEqual([]);
+    },
+    TOUR_TIMEOUT_MS,
+  );
 });
