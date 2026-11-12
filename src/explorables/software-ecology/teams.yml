@@ -10,6 +10,9 @@ sources: # Product company (Model): own tickets a week
   - { id: leads, at: sales, rate: 1 }
   - { id: debt, at: engA, rate: 1 }
 bottleneck: plat
+# Starting backlogs in weeks of work, loaded after the warm-up and scaled by the state's reality (see tire.yml); `display`: pile (heap, stack or drift), beltMotion.
+backlog: { plat: 3 }
+display: { pile: heap, beltMotion: false }
 centers:
   - { id: sales, role: sales, at: [400, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }] }
   - {
@@ -63,7 +66,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
       check:
         {
-          run: 12,
+          run: 80,
           expect:
             {
               customer.output: '0.85–1.15',

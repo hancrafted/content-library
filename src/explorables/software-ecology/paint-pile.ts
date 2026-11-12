@@ -9,11 +9,11 @@ import type { Pt } from './factory-paths.pure.ts';
 import { mix, mulberry } from './factory-random.pure.ts';
 import type { Frame } from './paint-belts.ts';
 import { runKind } from './paint-station.ts';
+import type { PileStyle } from './software-ecology.types';
 import { RACK } from './stage-readouts.pure.ts';
 
 export const PILE_MAX = 12;
-/** How a pile-up looks; a later ticket may let the viewer pick one. */
-export type PileStyle = 'heap' | 'stack' | 'drift';
+export type { PileStyle };
 
 interface Item {
   readonly u: number;

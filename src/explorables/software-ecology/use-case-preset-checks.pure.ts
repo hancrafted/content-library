@@ -7,7 +7,9 @@ import { validKey, validTest } from './factory-scenario.pure.ts';
 import {
   absentOr,
   apply,
+  backlogProblems,
   customerProblems,
+  displayProblems,
   isMap,
   isNum,
   listOf,
@@ -100,6 +102,8 @@ const PRESET_TAIL: readonly Rule<At>[] = [
 
 const presetShape = (at: At, E: Sink): void => {
   apply(PRESET, at, E);
+  backlogProblems(at.x.backlog, { p: `${at.p}.backlog`, ids: at.ids }, E);
+  displayProblems(at.x.display, `${at.p}.display`, E);
   for (const id of unknownIds(at.x.dials, at.ids)) E(`${at.p}.dials.${id}: no such work center`);
   if (at.x.customer !== undefined)
     customerProblems(at.x.customer, { p: `${at.p}.customer`, ids: at.ids, full: false }, E);
@@ -124,6 +128,7 @@ const STATE: readonly Rule<At>[] = [
     !absentOr(x.speed, (v) => (SPEEDS as readonly number[]).includes(v as number)) &&
     `state.speed: one of ${SPEEDS.join(', ')} (0 is pause)`,
   ({ x }) => !absentOr(x.beltMotion, (v) => typeof v === 'boolean') && 'state.beltMotion: true or false',
+  ({ x }) => !absentOr(x.pile, (v) => oneOf(v, ['heap', 'stack', 'drift'])) && 'state.pile: heap, stack or drift',
   ({ x }) => !absentOr(x.company, (v) => oneOf(v, ['service', 'product'])) && 'state.company: service or product',
   ({ x }) =>
     !absentOr(x.aiQuality, (v) => oneOf(v, ['worse', 'same', 'better'])) && 'state.aiQuality: worse, same or better',

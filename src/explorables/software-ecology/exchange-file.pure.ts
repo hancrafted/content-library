@@ -5,7 +5,16 @@
  */
 import { stringifyExchange } from './exchange-writer.pure.ts';
 import { custOf } from './factory-dials.pure.ts';
-import type { Bundle, CatalogWords, Locale, Over, RoleWords, Settings, ViewId } from './software-ecology.types';
+import type {
+  Bundle,
+  CatalogWords,
+  Locale,
+  Over,
+  PileStyle,
+  RoleWords,
+  Settings,
+  ViewId,
+} from './software-ecology.types';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';
 
@@ -22,6 +31,7 @@ export interface PageState {
   readonly view: ViewId;
   readonly speed: number;
   readonly beltMotion: boolean;
+  readonly pile: PileStyle;
   readonly compare: readonly string[];
   readonly overlays: Overlays;
   readonly s: Settings;
@@ -36,6 +46,8 @@ const DATA_KEYS = [
   'company',
   'sources',
   'bottleneck',
+  'backlog',
+  'display',
   'centers',
   'routes',
   'presets',
@@ -53,6 +65,10 @@ const NOTES: Readonly<Record<string, string>> = {
     'service: only the Customer asks for work; product: roles also write tickets of their own (sources). Also a toggle in Model.',
   '#sources':
     "Product company only: own tickets a week, written into a work center's backlog and handed on like a request ({ id, at, rate }). They scale with that center's AI extra tasks.",
+  '#backlog':
+    "Starting backlogs, in weeks of work (weeks times the work center's Ideal capacity), put in when a state loads after its warm-up; Realistic starts full, Ideal clear, in between scales. A preset may carry its own.",
+  '#display':
+    'What every state shows unless it says its own: pile (heap, stack or drift) past the rack, beltMotion (belts moving). The Settings reset returns to these.',
   bottleneck: 'the work center near 85 % busy at Realistic; every other is sized to at most 70 %',
   '#centers':
     'Work centers: id, role (see roles), at: [x, y], realistic: [efficiency, effectiveness] at Model = Realistic, spawns: what a finished job creates ({ to, n }, { to, p } or choose: [{ to, w }]; to: customer ships; the first spawn carries the request on). Optional: service: exponential, buffer: n (senders wait when it is full), inspection: true with stampUnderPressure (0 to 2), person: (one person runs several centers), dials.',
@@ -62,7 +78,7 @@ const NOTES: Readonly<Record<string, string>> = {
     'States. The roles state, Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory (a retired swing reads as roles). reality: 0 (Ideal) to 100 (Realistic). ai: all, off or a list of center ids. dials: per-center overrides (efficiency, effectiveness, fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer. start: clear or warm. speed. tour: steps { set, run (weeks from the start), card, expect }; check: one step. expect: { "<customer or center>.<measure>": test }, e.g. { qa.weeksWaiting: ">2", customer.output: "0.9–1.1" }.',
   '#roles': 'Roles used here. fan: tasks handed on per task; aiSize: how much longer an AI document takes to read.',
   '#state':
-    'What the page shows right now. speed: 0 pause, 1, 2, 5, 10 or 20. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
+    'What the page shows right now. speed: 0 pause, 1, 2, 5, 10 or 20. beltMotion, pile: how the factory is drawn now. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
   '#i18n': 'Words per locale. Titles of centers default to their role title.',
 };
 
@@ -108,6 +124,7 @@ const stateOf = (B: Bundle, page: PageState): Doc => {
     aiQuality: s.aiq,
     speed: page.speed,
     beltMotion: page.beltMotion,
+    pile: page.pile,
     mechanics: { ...s.mech },
     customer: { rate: cu.rate, arrivals: cu.mode, mix: { ...cu.mix }, good: { ...cu.good }, bad: { ...cu.bad } },
     compare: [...page.compare],

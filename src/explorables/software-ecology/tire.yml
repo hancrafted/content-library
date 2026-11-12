@@ -17,6 +17,12 @@ sources: # Product company: own tickets a week, written into a role's backlog an
   - { id: leads, at: sales, rate: 1 } # leads: Sales to the product manager
   - { id: debt, at: eng, rate: 1 } # tech debt: the engineer to quality assurance
 bottleneck: eng # at Realistic this center runs near 85 % busy; every other at most 70 % (Q121)
+# Starting backlogs, in weeks of work (weeks times the work center's Ideal capacity), put in when a state loads after its
+# warm-up; Realistic starts full, a state at reality 0 (Ideal) starts clear, in between scales. A preset may carry its own
+# `backlog`. The model stays stable, so the piles drain.
+backlog: { qa: 3, eng: 2, ba: 2 }
+# What every state shows unless it says its own `display`: pile (heap, stack or drift) past the rack, beltMotion (belts moving).
+display: { pile: heap, beltMotion: false }
 # A work center: id, role from the catalog, position, its dials at Realistic [efficiency, effectiveness],
 # and spawns: what one finished job creates downstream ({ to, n }, { to, p } or choose: [{ to, w }]); the first one carries the request.
 # Optional: service: exponential (default normal), buffer: n (the sender blocks when it is full),
@@ -56,7 +62,7 @@ routes:
 # States. Roles (its name in the words), Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory.
 # reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
 # fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or
-# warm (the default: 60 weeks settled). speed: 1, 2, 5, 10 or 20.
+# warm (the default: 60 weeks settled). speed: 1, 2, 5, 10 or 20. backlog, display: this state's own, over the file's.
 # tour: steps, each { set (dials, customer, ai, reality), run: weeks from the start, card: where the caption points, expect };
 # check: one step without a caption. expect: { "<customer or center>.<measure>": test }, judged headless by factory-scenario.pure.test.ts.
 presets:
@@ -84,7 +90,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
       check:
         {
-          run: 12,
+          run: 80,
           expect:
             {
               customer.output: '0.85–1.15',
@@ -99,20 +105,20 @@ presets:
     reality: 100
     customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
     tour:
-      - { run: 6, card: eng, expect: { customer.output: '0.85–1.15', eng.weeksWaiting: '<1' } }
+      - { run: 6, card: eng, expect: { customer.output: '>1.15', eng.weeksWaiting: '>1.5' } } # the seeded piles drain: output above demand, a queue at the bottleneck
       - {
           set: { dials: { eng: { efficiency: 200 } } },
-          run: 16,
+          run: 22,
           card: eng,
           expect: { customer.output: '0.85–1.15', eng.weeksWaiting: '<0.2' },
         }
-      - { run: 24, card: customer, expect: { customer.output: '0.85–1.15', customer.headroom: '>1.3' } }
+      - { run: 30, card: customer, expect: { customer.output: '0.85–1.15', customer.headroom: '>1.3' } }
   - id: ai-unbalanced
     view: factory
     reality: 100
     customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
     tour:
-      - { run: 4, card: eng, expect: { customer.output: '0.85–1.15', qa.weeksWaiting: '<0.5' } }
+      - { run: 4, card: eng, expect: { customer.output: '>1.15', qa.weeksWaiting: '>2' } } # the seeded piles drain: QA holds the biggest pile
       - {
           set: { ai: [eng], dials: { eng: { aiExtra: 2 } } },
           run: 8,
@@ -136,14 +142,14 @@ presets:
     reality: 100
     customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
     tour:
-      - { run: 4, card: customer, expect: { customer.output: '0.85–1.15', customer.headroom: '1.05–1.2' } }
+      - { run: 4, card: customer, expect: { customer.output: '>1.15', customer.headroom: '1.05–1.2' } } # the seeded piles drain: output above demand
       - {
           set: { ai: all },
           run: 12,
           card: customer,
-          expect: { customer.output: '0.9–1.25', customer.leadDays: falls, customer.headroom: '>2' },
+          expect: { customer.output: '>1.5', customer.leadDays: falls, customer.headroom: '>2' },
         }
-      - { run: 20, card: eng, expect: { customer.leadDays: '<4', eng.weeksWaiting: '<0.2', qa.weeksWaiting: '<0.2' } }
+      - { run: 32, card: eng, expect: { customer.leadDays: '<4', eng.weeksWaiting: '<0.2', qa.weeksWaiting: '<0.2' } }
   - id: ai-balanced
     view: factory
     reality: 100
@@ -151,10 +157,10 @@ presets:
     customer: { rate: 20, mix: { sales: 25, pm: 45, support: 30 }, good: { pm: 0.3 }, bad: { support: 0.6 } }
     dials: { support: { aiSpeed: 3 }, eng: { aiSpeed: 3 }, qa: { aiSpeed: 3 } } # balanced: a little more AI speed-up where the load is highest; 1x extra tasks everywhere
     tour:
-      - { run: 4, card: customer, expect: { customer.output: '2.2–2.8' } }
+      - { run: 4, card: customer, expect: { customer.output: '>2.8' } } # the seeded piles drain: output above the 2.5 demand
       - { run: 12, card: qa, expect: { customer.sat: '>0.9', qa.weeksWaiting: '<0.5' } }
       - {
-          run: 20,
+          run: 32,
           card: customer,
           expect: { customer.output: '2.2–2.8', customer.sat: '0.9–1', customer.headroom: '>1' },
         }
@@ -195,7 +201,7 @@ presets:
     customer: { rate: 11, mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
     dials: { support: { efficiency: 130 } }
     tour:
-      - { run: 10, card: eng, expect: { eng.weeksWaiting: '>1.5', qa.weeksWaiting: '<0.5' } }
+      - { run: 10, card: eng, expect: { eng.weeksWaiting: '>1.5', qa.weeksWaiting: '>1' } } # QA starts with a pile of its own
       - {
           set: { dials: { eng: { efficiency: 200 } } },
           run: 22,

@@ -4,7 +4,7 @@
  * header's switch (feedback 08), so it is no setting here.
  */
 import { useState } from 'react';
-import type { PileStyle } from './paint-pile.ts';
+import type { PileStyle } from './software-ecology.types';
 
 export interface Display {
   readonly beltMotion: boolean;

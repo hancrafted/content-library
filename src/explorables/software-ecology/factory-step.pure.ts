@@ -129,7 +129,7 @@ const deliveries = (m: Factory, t1: number): void => {
 };
 
 /** Weeks of work waiting: amber from one week, red from two, with a gap so it never blinks. */
-const level = (lvl: number, w: number): number => {
+export const level = (lvl: number, w: number): number => {
   if (lvl === 0) return w >= AMBER ? 1 : 0;
   if (lvl === 1) return w >= RED ? 2 : w < AMBER * 0.85 ? 0 : 1;
   return w < RED * 0.9 ? 1 : 2;

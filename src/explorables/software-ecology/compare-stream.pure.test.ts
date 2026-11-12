@@ -76,7 +76,7 @@ describe('success cases', () => {
   it('reads quality assurance at AI compare as the stream shows it: a full rack of AI-made work, busy all the time', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ai-compare', now: true });
-    const [waiting, weeks, busy, done, shown] = [714, 32.5, 100, 17.8, 10];
+    const [waiting, weeks, busy, done, shown] = [778, 35.6, 100, 17.8, 10];
     const goodAi = { good: true, ai: true, warn: false };
     // ACT
     const col = run.read({ stream: ['qa'] }).columns.qa;

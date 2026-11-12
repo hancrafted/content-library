@@ -10,6 +10,7 @@ import { DTW } from './factory-dials.pure.ts';
 import { floorOf } from './factory-floor-reads.pure.ts';
 import { buildFactory, DEFAULT_SEED } from './factory-network.pure.ts';
 import type { Floor, FloorEvent, FloorListener, Topology } from './factory-reads.types';
+import { seedBacklog } from './factory-seed.pure.ts';
 import { stability } from './factory-sizing.pure.ts';
 import { snapshotOf, type ReadOptions, type Snapshot } from './factory-snapshot.pure.ts';
 import { step } from './factory-step.pure.ts';
@@ -42,6 +43,8 @@ export interface FactoryHandle {
   /** Replaces the settings; the next step reads them. Pass a new object: a read solves again on a new one. */
   set(s: Settings): void;
   read(o?: ReadOptions): Snapshot;
+  /** Puts weeks of work, at each named work center's Ideal capacity, into its backlog now: a state that starts loaded. */
+  pile(weeks: Readonly<Record<string, number>>): void;
   /** One listener at a time; null stops listening. */
   listen(fn: FloorListener | null): void;
   /** The stability check at the given settings, the use case's Realistic by default. */
@@ -68,6 +71,7 @@ export const createFactory = (useCase: Bundle, settings: Settings, seed: number 
       m.s = s;
     },
     read: (o) => snapshotOf(m, o),
+    pile: (weeks) => seedBacklog(m, weeks),
     listen: (fn) => {
       m.hook = fn && ((what, n, at) => fn(what as FloorEvent, stationOf(n), at));
     },

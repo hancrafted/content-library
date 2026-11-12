@@ -97,6 +97,38 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('refuses a starting backlog on a work center that is not there, and a pile-up style that is not one', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), backlog: { qa: 3, nobody: 1, eng: 20 }, display: { pile: 'mound', beltMotion: 'yes' } };
+    const expected = [
+      'backlog.nobody: no such work center',
+      'backlog.eng: weeks of work waiting, 0 to 12',
+      'display.pile: heap, stack, drift',
+      'display.beltMotion: true or false',
+    ];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a state whose own backlog or display is broken, and a saved pile-up style that is not one', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const presets = doc.presets as Record<string, unknown>[];
+    presets[1] = { id: 'ideal', backlog: { qa: -1 }, display: { pile: 'x' } };
+    const expected = [
+      'presets[1].backlog.qa: weeks of work waiting, 0 to 12',
+      'presets[1].display.pile: heap, stack, drift',
+    ];
+    // ACT
+    const seen = problems(doc);
+    const saved = problems({ ...tireDoc(), i18n: { en: { name: 'x' } }, state: { pile: 'x' } }, true);
+    // ASSERT
+    expect(seen).toEqual(expected);
+    expect(saved).toEqual(['state.pile: heap, stack or drift']);
+  });
+
   it('refuses an exchange file without an English name', () => {
     // ARRANGE
     const text = stringify({ ...tireDoc(), i18n: { de: { name: 'Reifenschaukel' } } });

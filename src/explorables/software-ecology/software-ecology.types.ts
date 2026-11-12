@@ -13,6 +13,8 @@ export type Arrivals = 'steady' | 'random';
 export type AiQuality = 'worse' | 'same' | 'better';
 /** Where AI works: nowhere, everywhere, or at the listed work centers. */
 export type AiSet = 'off' | 'all' | readonly string[];
+/** How a pile-up looks past the rack: a tumbling heap, a leaning stack or scattered drift. */
+export type PileStyle = 'heap' | 'stack' | 'drift';
 export type Mechanic = 'rework' | 'churn' | 'complaints';
 export type Strength = 'rework' | 'churn';
 
@@ -87,6 +89,12 @@ export interface TourStep {
   readonly expect?: Readonly<Record<string, string>>;
 }
 
+/** What a state shows by default: the pile-up style and whether the belts move. */
+export interface Display {
+  readonly pile?: PileStyle;
+  readonly beltMotion?: boolean;
+}
+
 export interface Preset {
   readonly id: string;
   readonly view?: ViewId;
@@ -97,6 +105,9 @@ export interface Preset {
   readonly customer?: CustomerPatch;
   readonly start?: 'clear' | 'warm';
   readonly speed?: number;
+  /** Weeks of work waiting per work center when the state loads, over the file's `backlog`. */
+  readonly backlog?: Readonly<Record<string, number>>;
+  readonly display?: Display;
   readonly tour?: readonly TourStep[];
   readonly check?: TourStep;
 }
@@ -134,6 +145,10 @@ export interface UseCaseData {
   readonly company?: Company;
   readonly sources?: readonly Source[];
   readonly bottleneck?: string;
+  /** Weeks of work waiting per work center when a state loads at Realistic (scaled by its reality). */
+  readonly backlog?: Readonly<Record<string, number>>;
+  /** The pile-up style and belt motion states start with. */
+  readonly display?: Display;
   readonly centers: readonly CenterDef[];
   readonly routes?: Readonly<Record<string, Route>>;
   readonly presets: readonly Preset[];

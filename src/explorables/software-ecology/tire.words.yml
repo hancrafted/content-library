@@ -21,13 +21,13 @@ scenarios:
   speed-up:
     watch: Make the engineer twice as fast. Watch the Customer card – does more ship?
     steps:
-      - At Realistic the engineer is the busiest work center, about 85 % busy. Next, it gets twice as fast.
+      - At Realistic the engineer is the busiest work center, about 85 % busy, and the loaded start has a pile waiting there. Next, it gets twice as fast.
       - Twice as fast, and nothing waits at the engineer any more. Look at the Customer card next.
       - 'The Customer gets the same output as before. The engineer was not holding anything up – the Customer only asks for so much. What grew is room: the line could now serve more demand.'
   ai-unbalanced:
     watch: AI on the engineer only, writing twice the pull requests. Watch quality assurance.
     steps:
-      - Realistic, without AI. Quality assurance keeps up. Next, the engineer gets AI that writes two pull requests per task.
+      - Realistic, without AI. The start is loaded and quality assurance holds the biggest pile, draining it. Next, the engineer gets AI that writes two pull requests per task.
       - The engineer is faster than ever, and quality assurance now gets twice the pull requests to read. Its rack fills.
       - Quality assurance has weeks of work waiting, and the Customer gets about half of what it asked for. Faster at one station made the whole line slower.
   ai-compare:
@@ -39,13 +39,13 @@ scenarios:
   ai-everywhere:
     watch: AI on every station, at the demand the line is sized for. Watch the lead time on the Customer card.
     steps:
-      - Realistic, without AI. Note the lead time on the Customer card.
-      - AI everywhere. The Customer gets the same output – it only asks for so much – but the lead time falls, and the line could serve more than twice the demand.
+      - Realistic, without AI. The start is loaded, so the piles drain and output runs above demand. Note the lead time on the Customer card.
+      - AI everywhere. The piles drain fast, the lead time falls, and the line could serve more than twice the demand.
       - Nothing waits anywhere. AI made room, not output; the room is worth something only if more demand comes.
   ai-balanced:
     watch: Two and a half times the demand, with AI on every station. Watch satisfaction stay high.
     steps:
-      - The Customer asks two and a half times as much, and gets it.
+      - The Customer asks two and a half times as much, and gets it – at first even more, while the piles drain.
       - Quality assurance keeps up, because AI there makes room for the extra work from upstream.
       - About 95 % satisfied at two and a half times the output. Balanced AI scales the whole line, not one station.
   bug-spiral:
@@ -64,6 +64,6 @@ scenarios:
   move-bottleneck:
     watch: Eleven requests a week. Make the bottleneck faster and watch where the work waits next.
     steps:
-      - The engineer is the bottleneck, with weeks of work waiting. Next, it gets twice as fast.
+      - The engineer is the bottleneck, with weeks of work waiting; quality assurance has a pile of its own. Next, it gets twice as fast.
       - The engineer has nothing waiting – quality assurance has it now. The bottleneck moved downstream.
       - Quality assurance twice as fast too. The lead time falls; the next bottleneck is wherever the work waits now.

@@ -15,6 +15,7 @@ import type {
   Locale,
   Mechanic,
   Over,
+  PileStyle,
   Preset,
   RoleDef,
   Settings,
@@ -22,6 +23,7 @@ import type {
   UseCaseWords,
   ViewId,
 } from './software-ecology.types';
+import { displayOf } from './start-backlog.pure.ts';
 
 /** What an exchange file's `state` may hold; the schema checked each value it holds. */
 export interface SavedState {
@@ -33,6 +35,7 @@ export interface SavedState {
   readonly aiQuality?: Settings['aiq'];
   readonly speed?: number;
   readonly beltMotion?: boolean;
+  readonly pile?: PileStyle;
   readonly mechanics?: Partial<Record<Mechanic, boolean>>;
   readonly customer?: CustomerPatch;
   readonly compare?: readonly string[];
@@ -137,16 +140,21 @@ const settingsOf = (B: Bundle, st: SavedState): Settings => {
 const defined = (o: Readonly<Record<string, unknown>>) =>
   Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
 
-const pageOf = (B: Bundle, st: SavedState): PageState => ({
-  view: 'factory',
-  speed: DEFAULT_SPEED,
-  ...defined({ view: st.view, speed: st.speed }),
-  preset: settingsOf(B, st).preset,
-  beltMotion: !!st.beltMotion,
-  compare: (st.compare ?? []).slice(0, 3),
-  overlays: { ...NO_OVERLAYS, ...st.overlays },
-  s: settingsOf(B, st),
-});
+const pageOf = (B: Bundle, st: SavedState): PageState => {
+  const s = settingsOf(B, st),
+    d = displayOf(B, presetOf(B, s.preset));
+  return {
+    view: 'factory',
+    speed: DEFAULT_SPEED,
+    ...defined({ view: st.view, speed: st.speed }),
+    preset: s.preset,
+    beltMotion: st.beltMotion ?? d.beltMotion,
+    pile: st.pile ?? d.pile,
+    compare: (st.compare ?? []).slice(0, 3),
+    overlays: { ...NO_OVERLAYS, ...st.overlays },
+    s,
+  };
+};
 
 /** Checks a schema-valid exchange file for stability, then loads it or refuses it with the path to fix. */
 export const loadExchange = (

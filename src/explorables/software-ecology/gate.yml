@@ -10,6 +10,9 @@ sources: # Product company (Model): own tickets a week
   - { id: leads, at: sales, rate: 1 }
   - { id: debt, at: e2, rate: 1 }
 bottleneck: lrev # the lead: one person, two work centers
+# Starting backlogs in weeks of work, loaded after the warm-up and scaled by the state's reality (see tire.yml); `display`: pile (heap, stack or drift), beltMotion.
+backlog: { lrev: 3 }
+display: { pile: heap, beltMotion: false }
 roles: # AI profile overrides for this use case
   eng: { aiSize: 1.5 } # an AI-made pull request takes the lead half as long again to review
 centers:
@@ -62,7 +65,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
       check:
         {
-          run: 12,
+          run: 80,
           expect:
             {
               customer.output: '0.85–1.15',
@@ -79,7 +82,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
       dials: { e2: { efficiency: 200 } },
       check:
-        { run: 16, expect: { customer.output: '0.85–1.15', e2.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
+        { run: 70, expect: { customer.output: '0.85–1.15', e2.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
     }
   - {
       id: ai-unbalanced,
