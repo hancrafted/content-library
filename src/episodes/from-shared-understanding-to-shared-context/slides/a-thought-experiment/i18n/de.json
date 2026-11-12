@@ -1,0 +1,20 @@
+{
+  "title": "Ein Gedankenexperiment",
+  "label": "Zehnmal so viele Würfe, verstreut neben dem Bullseye",
+  "ai": "KI",
+  "moreThrows": "10× die Würfe",
+  "voiceScript": {
+    "segments": {
+      "imagine-your-organization-as-a-line": {
+        "title": "Stell Dir Deine Organisation als Fließband vor",
+        "keywords": "",
+        "script": "KI baut Dir nicht die richtige Schaukel, aber sie kann Dir die falsche zehnmal schneller bauen. Stell Dir Deine eigene Organisation als Fließband vor: Dokumente wandern von einem Arbeitsplatz zum nächsten, hier eine Anfrage, dort ein Entwurf, am Ende ein fertiges Ergebnis. Das Bild kennst Du schon. Jeder hier im Raum kennt den alten Cartoon, in dem der Kunde eine Reifenschaukel bestellt und ein Gewirr aus Seilen bekommt, weil jede Station ihre eigene Version dessen gebaut hat, was der Kunde wollte."
+      },
+      "where-this-is-going": {
+        "title": "Wohin es geht",
+        "keywords": "",
+        "script": "Bevor wir starten, hier der Weg. Zuerst geben wir jeder Station am Band eine KI und schauen, was passiert. Dann sehen wir uns an, was Du der KI übergibst, denn das entscheidet über das Ergebnis. Und zum Schluss siehst Du, wie ein KI-Interview diese Übergabe für Dich baut, damit Du sie nicht allein schreiben musst."
+      }
+    }
+  }
+}

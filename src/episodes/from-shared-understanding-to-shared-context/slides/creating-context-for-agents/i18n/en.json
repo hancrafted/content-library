@@ -1,0 +1,22 @@
+{
+  "title": "Creating context for agents",
+  "label": "Each interview round moves the cluster closer to the bull",
+  "round1": "Round 1",
+  "round2": "Round 2",
+  "round3": "Round 3",
+  "spec": "→ the spec",
+  "voiceScript": {
+    "segments": {
+      "the-pain": {
+        "title": "The pain",
+        "keywords": "",
+        "script": "Creating precise, accurate context that stays free of rot feels like a lot of work. Who has time to write that for every task? Most of us will skip it, and then we are back at the tire swing."
+      },
+      "the-claim": {
+        "title": "The claim",
+        "keywords": "",
+        "script": "So here is the claim: let the AI do the interviewing, and you do the answering. You are good at knowing what you want when someone asks you the right question. You are less good at writing it all down unprompted."
+      }
+    }
+  }
+}

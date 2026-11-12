@@ -1,0 +1,36 @@
+/*
+ * The Title slide side by side (Han's feedback, option 2): from `xl` the board sits in the right column beside the
+ * shared header, and on this Slide alone the header narrows to the left column, so the headline wraps before the board.
+ * Below `xl` the board stacks under the header. Widths only: colour, size and weight stay with their tokens.
+ */
+/*
+ * Defined on the Title slide from the Foreground's width (the viewport less both insets), so the board and its sibling
+ * header compute the same length: a percentage would resolve against each one's own containing block.
+ */
+:global([data-slot='title-slide']):has(.beside) {
+  --hero-foreground: calc(100vw - var(--inset-l) - var(--inset-r));
+  --hero-board-width: min(calc(var(--hero-foreground) * 0.44), 34rem);
+}
+
+@media (width >= 80rem) {
+  .beside {
+    position: absolute;
+    inset-block: 0;
+    right: var(--inset-r);
+    width: var(--hero-board-width);
+    margin-top: 0;
+    padding-block: 0;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .beside > * {
+    pointer-events: auto;
+  }
+
+  :global([data-slot='title-slide']):has(.beside) :global([data-slot='slide-header']) {
+    max-width: calc(var(--hero-foreground) - var(--hero-board-width) - 3rem);
+    /* The board no longer stacks under the header, so the header centres in the Slide as the board does. */
+    margin-block: auto;
+  }
+}

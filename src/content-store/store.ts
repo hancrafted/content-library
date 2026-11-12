@@ -16,6 +16,7 @@ import { EXPLORABLE_PAGE_RECORDS, EXPLORABLE_SLUGS } from './explorable-page-reg
 import { FEATURED } from './featured';
 import { GUIDE_RECORDS } from './guide-registry.generated';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
+import { playlist as cyberforumAkademieHandsOnAgenticWorkflowsPlaylist } from './playlists/cyberforum-akademie-hands-on-agentic-workflows';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { playlist as introHitlWorkflowsPlaylist } from './playlists/intro-hitl-workflows';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
@@ -49,6 +50,7 @@ const EXPLORABLE_PAGES: readonly ExplorablePageInput[] = Object.values(EXPLORABL
 const GUIDES: readonly GuideInput[] = Object.values(GUIDE_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
+  cyberforumAkademieHandsOnAgenticWorkflowsPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
   introHitlWorkflowsPlaylist,
 ];

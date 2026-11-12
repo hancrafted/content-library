@@ -1,0 +1,30 @@
+{
+  "title": "What the AI actually sees",
+  "caption": "The AI works from the window: <b>what it must know about your task, it only knows if it is in the window.</b>",
+  "window": "Context window",
+  "notes": {
+    "the-window-has-an-attention-budget": {
+      "header": "The window has an attention budget",
+      "description": "Anthropic says recall decreases as the number of tokens in the window increases, so context has diminishing marginal returns and an attention budget [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Callback",
+        "keywords": "",
+        "script": "If you saw the context window Episode, you have met the context window before. What the AI knows about your task is what sits in the window, and that window is like a desk that fills up with every message."
+      },
+      "not-your-mind": {
+        "title": "Not your mind",
+        "keywords": "",
+        "script": "The AI cannot read your mind. It works from what is in the window. What it must know about your task, it only knows if it is in the window."
+      }
+    }
+  }
+}

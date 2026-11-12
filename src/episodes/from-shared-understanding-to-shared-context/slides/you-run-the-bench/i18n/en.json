@@ -1,0 +1,60 @@
+{
+  "title": "You run the bench",
+  "caption": "You set up the bench, decide what the AI may fetch and steer when it drifts; <b>the AI works with what you hand it.</b>",
+  "drawing": "A person at the bench hands parts to the AI worker",
+  "you": "You",
+  "ai": "AI worker",
+  "onBench": {
+    "label": "On the bench:",
+    "text": "the work order, sheet version 3, four wrenches"
+  },
+  "heldBack": {
+    "label": "Held back:",
+    "text": "sheet version 1, the catalog of every model"
+  },
+  "yours": {
+    "label": "Your job",
+    "items": {
+      "bench": { "title": "What lands on the bench", "hint": "Brief it like a new colleague on day one." },
+      "heading": { "title": "Where the work is heading", "hint": "Steer when it drifts." }
+    }
+  },
+  "notYours": {
+    "label": "Not your job",
+    "text": "How the worker does it inside."
+  },
+  "stat": {
+    "label": "More is not safer",
+    "alone": "Asked to follow one rule, the AI does it <figure>99%</figure> of the time",
+    "together": "Asked to follow 19 at once: <figure>85%</figure>",
+    "detail": "Repeating things the AI can find on its own did not help either."
+  },
+  "notes": {
+    "more-is-not-safer": {
+      "header": "More is not safer",
+      "description": "stating all requirements at once lowered compliance (98.7% for one requirement alone against 85.0% for gpt-4o with 19) [1], and repository context files that restated discoverable information did not generally improve coding-agent success [2].",
+      "sources": {
+        "written-requirements-reduce-variance": {
+          "title": "content-library research, Why do explicit written requirements reduce the variation in LLM output?"
+        },
+        "gloaguen-evaluating-agents-md": {
+          "title": "Gloaguen, Mündler-Sasahara, Müller, Raychev, Vechev, Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (v3, 2026-09-29)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "human-manages-the-context": {
+        "title": "Human manages the context",
+        "keywords": "",
+        "script": "You run the bench. You manage what goes on it and what the AI may fetch, and you steer it in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?"
+      },
+      "not-how-the-ai-works-inside": {
+        "title": "Not how the AI works inside",
+        "keywords": "",
+        "script": "The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge. So what does a bench look like when it goes bad?"
+      }
+    }
+  }
+}

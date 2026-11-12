@@ -1,0 +1,58 @@
+{
+  "title": "Statischer und dynamischer Kontext",
+  "caption": "Statisch wird vor der Schicht eingerichtet, dynamisch kommt währenddessen dazu: <b>Beides landet auf derselben Werkbank.</b>",
+  "before": {
+    "time": "07:00",
+    "label": "Vor der Schicht",
+    "kind": "Statisch",
+    "drawing": "Die Werkbank vor der Schicht"
+  },
+  "during": {
+    "time": "10:30",
+    "label": "Während der Schicht",
+    "kind": "Dynamisch",
+    "drawing": "Die Werkbank während der Schicht"
+  },
+  "rows": {
+    "before": {
+      "memory": { "thing": "Die angepinnte Arbeitsanweisung", "name": "Memory-Dateien" },
+      "system": { "thing": "Die festen Regeln", "name": "System-Prompt" },
+      "initial": { "thing": "Der erste Arbeitsauftrag", "name": "Erster Prompt" }
+    },
+    "during": {
+      "retrieval": { "thing": "Teile aus dem Lager geholt", "name": "Retrieval" },
+      "web": { "thing": "Ein Anruf beim Lieferanten", "name": "Websuche" },
+      "folder": { "thing": "Die Mappe zum aktuellen Auftrag", "name": "Projektordner" }
+    }
+  },
+  "notes": {
+    "dynamic-means-loaded-at-run-time": {
+      "header": "Dynamisch heißt: zur Laufzeit geladen",
+      "description": "Agenten halten leichte Verweise wie Dateipfade und Links bereit und laden Daten erst zur Laufzeit mit Werkzeugen in den Kontext, statt alles vorab zu laden [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "before-the-shift": {
+        "title": "Vor der Schicht",
+        "keywords": "",
+        "script": "Statischer Kontext ist alles, was Du einrichtest, bevor die Arbeit beginnt. Stell Dir die Werkbank vor der Schicht vor: die Arbeitsanweisung, die festen Regeln und der erste Arbeitsauftrag. Für einen Agenten heißt das: Memory-Dateien, System-Prompts und Dein erster Prompt."
+      },
+      "during-the-shift": {
+        "title": "Während der Schicht",
+        "keywords": "",
+        "script": "Dynamischer Kontext ist das, was während der Schicht dazukommt. Jemand holt Teile aus dem Lager, ruft einen Lieferanten an, öffnet die Mappe zum aktuellen Auftrag. Für einen Agenten heißt das: Retrieval, Websuche und Dein Projektordner, die er sich selbst holt, während er arbeitet."
+      },
+      "why-it-matters": {
+        "title": "Warum das wichtig ist",
+        "keywords": "",
+        "script": "Warum ist der Unterschied wichtig? Weil beides auf derselben Werkbank landet. Die KI kann die Anweisung, die Du geschrieben hast, nicht von der Kiste unterscheiden, die jemand abgestellt hat. Die Werkbank muss also halten, egal, auf welchem Weg etwas ankommt. Den statischen Teil schreibst Du selbst, also kannst Du ihn prüfen. Dynamisches Material kommt ungebeten, also prüfe, was es mitbringt."
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Was mit KI passiert",
+  "heading": "Was passiert, wenn jede Station KI bekommt",
+  "caption": "Jede Station arbeitet schneller, und die Dokumente <b>stauen sich dort, wo die Arbeit geprüft wird</b>.",
+  "locator": {
+    "title": "Das Band",
+    "label": "Wo der Zoom sitzt: Prüfung, zwischen KI-Stationen"
+  },
+  "stations": {
+    "sales": "Vertrieb",
+    "design": "Entwurf",
+    "build": "Bau",
+    "review": "Prüfung",
+    "delivery": "Versand"
+  },
+  "arriving": {
+    "title": "Was von den KI-Stationen ankommt",
+    "tasks": "+21 %",
+    "tasksLabel": "erledigte Aufgaben",
+    "size": "+154 %",
+    "sizeLabel": "größer, jedes einzelne"
+  },
+  "pile": "Zum Beispiel 28 Dokumente, die sich vor der Prüfung stauen",
+  "review": {
+    "title": "Prüfung",
+    "figure": "+91 %",
+    "label": "<marker>Zeit pro Prüfung</marker>",
+    "waiting": "z. B. 28 warten"
+  },
+  "out": "Raus: kein Gewinn für das Unternehmen",
+  "scope": "Teams mit hoher KI-Nutzung, 2025. Die beim Erstellen gesparte Zeit <spent>geht ins Prüfen</spent>; die Verschiebung zur Prüfung ist gemessen; dass die Ursache weiter vorn liegt, ist <inferred>nur gefolgert</inferred>.",
+  "notes": {
+    "measured-the-load-moves-to-review": {
+      "header": "Gemessen: Die Last wandert zur Prüfung",
+      "description": "In Teams mit hoher KI-Nutzung erledigten Entwickler 21 % mehr Aufgaben und führten 98 % mehr Pull Requests zusammen; gleichzeitig stieg die Prüfzeit um 91 % und die Pull Requests wurden um 154 % größer. Einen deutlichen Gewinn auf Unternehmensebene findet der Bericht nicht [1].",
+      "sources": {
+        "faros-ai-productivity-paradox-2025": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23. Juli 2025)"
+        }
+      }
+    },
+    "engineers-say-the-same": {
+      "header": "Entwickler sagen dasselbe",
+      "description": "Entwickler bei Google berichten, dass die beim Erstellen gesparte Zeit ins Prüfen und Absichern fließt; DORA liest das als Arbeit, die von den Autoren zu den Prüfenden wandert [1].",
+      "sources": {
+        "dora-balancing-ai-tensions": {
+          "title": "DORA, Balancing AI tensions"
+        }
+      }
+    },
+    "what-is-measured-and-what-is-inferred": {
+      "header": "Was gemessen ist und was gefolgert",
+      "description": "Die Verschiebung zur Prüfung ist gemessen; die Verschiebung zur Spezifikation ist daraus gefolgert, denn keine Quelle zeigt, dass unklare Spezifikationen die durch KI beschleunigte Arbeit bremsen. Die Daten sind korrelativ, stammen von einem Anbieter, sind selbst berichtet und betreffen Softwareteams [1].",
+      "sources": {
+        "faros-ai-productivity-paradox-2025": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23. Juli 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-station-faster": {
+        "title": "Jede Station schneller",
+        "keywords": "",
+        "script": "Geben wir also jeder Station eine KI. Jede arbeitet schneller, das klingt nach einer guten Nachricht. Aber das Band war immer nur so schnell wie seine langsamste Station, und diese Station kommt mit dem, was ankommt, nicht mehr hinterher. Genau das zeigen Studien an Softwareteams gerade."
+      },
+      "moving-bottleneck": {
+        "title": "Der wandernde Engpass",
+        "keywords": "",
+        "script": "Lange Zeit war das Herstellen selbst der langsame Teil, denn ein Mensch schafft nur so viel an einem Tag, und dieses Tempo hat alles danach bestimmt. KI nimmt diese Grenze weg. Die Kosten sind nicht verschwunden, sie sind zur nächsten Station gewandert, und dort wachsen sie weiter."
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "title": "Rasante Entwicklung der KI-Disziplinen",
+  "caption": "Jede Stufe läuft auf demselben Sprachmodell; was sich ändert, ist der Zugang und wie viel Arbeit es übernimmt.",
+  "notes": {
+    "prompting": {
+      "header": "Prompting, 2022–23",
+      "description": "ChatGPT startete am 30. November 2022 als Modell, das im Gespräch antwortet [1]. Prompting heißt, Anweisungen so zu schreiben, dass das Modell verlässlich liefert, was man braucht [2]. Dass daraus 2022–23 eine Disziplin wurde, ist meine Lesart dieser Daten.",
+      "sources": {
+        "openai-introducing-chatgpt": { "title": "OpenAI, Introducing ChatGPT" },
+        "openai-prompt-engineering": { "title": "OpenAI, Prompt-Engineering-Leitfaden" }
+      }
+    },
+    "agents": {
+      "header": "Agenten, 2024–25",
+      "description": "Anthropic definierte Agenten im Dezember 2024 als Sprachmodelle, die ihre Werkzeuge selbst steuern [1], und brachte im Februar 2025 Claude Code als erstes agentisches Coding-Werkzeug heraus [2]. In der Forschung nutzten Modelle schon ab Ende 2022 Werkzeuge; 2024–25 wurden Agenten zum Alltagswerkzeug.",
+      "sources": {
+        "anthropic-effective-agents": { "title": "Anthropic, Building effective agents" },
+        "anthropic-claude-code": { "title": "Anthropic, Claude 3.7 Sonnet and Claude Code" }
+      }
+    },
+    "workflows": {
+      "header": "Workflows, 2024–25",
+      "description": "LangGraph erschien im Januar 2024, um Agentenschritte als Graph zu bauen, dessen Aufbau weiter Menschen festlegen [1]. Im Dezember 2024 nannte Anthropic das einen Workflow: Modell- und Werkzeugschritte auf einem vorab festgelegten Pfad [2].",
+      "sources": {
+        "langchain-langgraph": { "title": "LangChain, LangGraph" },
+        "anthropic-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    },
+    "factory": {
+      "header": "Factory, ab 2026",
+      "description": "Dan Shapiro beschrieb im Januar 2026 die „Dark Factory“: eine Blackbox, die aus Anforderungen Software macht [1]. Im Februar 2026 veröffentlichte StrongDM seine Software Factory, in der kein Mensch Code schreibt oder prüft [2]. Der Begriff ist jung und noch nicht gesetzt.",
+      "sources": {
+        "shapiro-five-levels": { "title": "Shapiro, The Five Levels: from Spicy Autocomplete to the Dark Factory" },
+        "strongdm-software-factory": { "title": "StrongDM, Software Factory" }
+      }
+    }
+  }
+}

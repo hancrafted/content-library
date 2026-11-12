@@ -19,6 +19,7 @@ const PUBLISHED_SLUGS = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
+  'from-shared-understanding-to-shared-context',
 ];
 const DRAFT_SLUGS: readonly string[] = [];
 const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };

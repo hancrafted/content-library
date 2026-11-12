@@ -1,0 +1,85 @@
+{
+  "title": "Keeping the bench clean",
+  "caption": "One cleanup per mess, and <b>sometimes the cleanest fix is a clean bench.</b>",
+  "framing": "Four fixes, paired as in the IBM Technology video",
+  "others": "Other fixes exist too",
+  "fixes": {
+    "validate": {
+      "mess": "A wrong fact stuck in",
+      "verb": "Validate",
+      "how": "Check the sheet against a real bike",
+      "before": "A wrong screw size on the instruction sheet",
+      "after": "The sheet checked against a real bike"
+    },
+    "compact": {
+      "mess": "Too much that does not belong",
+      "verb": "Compact",
+      "how": "Replace the binder with a one-page summary",
+      "before": "A binder of every bike model, for one bike",
+      "after": "A binder replaced by a one-page summary"
+    },
+    "curate": {
+      "mess": "Too many similar tools",
+      "verb": "Curate",
+      "how": "Keep only the wrenches the job needs",
+      "before": "Fifty near-identical wrenches",
+      "after": "Only the wrenches the job needs"
+    },
+    "prune": {
+      "mess": "Two instructions that disagree",
+      "verb": "Prune",
+      "how": "Pull the old sheets down",
+      "before": "Old and new instruction sheets pinned up side by side",
+      "after": "The old sheet pulled down, the new one pinned"
+    }
+  },
+  "fresh": {
+    "label": "The cleanest fix",
+    "text": "Start at a clean bench: open a fresh chat and bring only the result, not the whole history.",
+    "old": "Long chat, leftovers and all",
+    "new": "Fresh chat with the result"
+  },
+  "notes": {
+    "the-videos-framing": {
+      "header": "The video's framing",
+      "description": "the IBM Technology video pairs each mode with one fix: validate, compact, curate, prune. Its closing line says all four fixes work by throwing something away [1].",
+      "sources": {
+        "ibm-context-engineering-failure-modes": {
+          "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
+        }
+      }
+    },
+    "breunig-lists-other-fixes": {
+      "header": "Breunig lists other fixes",
+      "description": "his companion post names six: RAG, tool loadout, context quarantine, pruning, summarization and offloading. Picking fewer than 30 tools improved selection accuracy up to threefold [1].",
+      "sources": {
+        "breunig-how-to-fix-your-context": {
+          "title": "Drew Breunig, How to Fix Your Context"
+        }
+      }
+    },
+    "one-fix-per-mode-is-a-simplification": {
+      "header": "One fix per mode is a simplification",
+      "description": "compaction can launder a bad fact into a clean summary, so it does not repair poisoning; that a fresh window is the thread behind compact and prune is inference, and Anthropic warns overly aggressive compaction loses subtle but critical context [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-cleanups": {
+        "title": "Four cleanups",
+        "keywords": "",
+        "script": "There are four cleanups, one for each mess. Validate: check the sheet against a real bike. Compact: replace the binder with a one-page summary. Curate: keep only the wrenches the job needs. Prune: pull the old sheets down."
+      },
+      "fresh-chat": {
+        "title": "Fresh chat",
+        "keywords": "",
+        "script": "Sometimes the cleanest fix is a clean bench. Start a fresh chat and bring only the result, not the whole history. That is the second actionable, and I come back to it in the last Section."
+      }
+    }
+  }
+}

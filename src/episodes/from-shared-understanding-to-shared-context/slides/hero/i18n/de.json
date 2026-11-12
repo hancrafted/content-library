@@ -1,0 +1,9 @@
+{
+  "caption": "KI wirft jeden Pfeil schneller. <b>Wo sie landen, entscheidet das, was Du der KI (dem Agenten) übergibst</b>, und ein KI-Interview schärft dieses Ziel mit Dir.",
+  "label": "Ein Arbeitsauftrag setzt das Ziel; KI beschleunigt den Wurf; jedes Dokument landet im Bullseye",
+  "handover": "Was Du der KI\n(dem Agenten)\nübergibst",
+  "aim": "setzt das Ziel",
+  "ai": "KI",
+  "speed": "jeder Wurf schneller",
+  "intent": "Die Absicht"
+}

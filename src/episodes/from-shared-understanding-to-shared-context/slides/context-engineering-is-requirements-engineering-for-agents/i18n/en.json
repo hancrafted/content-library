@@ -1,0 +1,114 @@
+{
+  "title": "Context engineering is requirements engineering for agents",
+  "caption": "Google’s definition: context engineering is “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.”",
+  "definitionCard": {
+    "heading": "Read as a requirement",
+    "codebase": {
+      "term": "Codebase",
+      "everyday": "the materials you already have"
+    },
+    "architecture": {
+      "term": "Architecture",
+      "everyday": "how the parts fit together"
+    },
+    "conventions": {
+      "term": "Conventions",
+      "everyday": "the house rules"
+    },
+    "intent": {
+      "term": "Intent",
+      "everyday": "the goal"
+    }
+  },
+  "customer": {
+    "label": "Customer wants",
+    "text": "a city bike to ride to work, by Friday",
+    "same": "Same four outcomes as the dartboard"
+  },
+  "window": "Context window",
+  "outcomes": {
+    "both": {
+      "label": "Precise and accurate",
+      "order": "“City bike, 54 cm frame, 7-speed hub, black, ready Friday.”",
+      "verdict": "Nothing to ask, nothing to guess."
+    },
+    "precise": {
+      "label": "Precise, not accurate",
+      "order": "“Road bike, 58 cm carbon frame, 22 speeds, ready Friday.”",
+      "verdict": "Clear, but the customer wanted a city bike."
+    },
+    "accurate": {
+      "label": "Accurate, not precise",
+      "order": "“A comfortable bike for getting to work.”",
+      "verdict": "Right idea, ten questions left."
+    },
+    "neither": {
+      "label": "Neither",
+      "order": "“Something sporty, you know what I mean.”",
+      "verdict": "Vague and off target."
+    }
+  },
+  "quote": "Anthropic: aim for “the smallest possible set of high-signal tokens” <definition>that maximize the chance of the outcome you want</definition>.",
+  "limits": "<proposal>A parallel researchers propose</proposal>; unlike a spec, <stops>the window is a budget that changes while the agent works</stops>.",
+  "notes": {
+    "googles-definition": {
+      "header": "Google’s definition",
+      "description": "Three Google authors define context engineering as “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent”, and list six kinds of context: instructions, knowledge, memory, examples, tools and guardrails. It is a practitioner whitepaper, not a study: it frames the term and does not test the parallel to requirements [1].",
+      "sources": {
+        "osmani-new-sdlc": {
+          "title": "Osmani, Saboo, Kartakis (Google), The New SDLC With Vibe Coding: From ad-hoc prompting to Agentic Engineering"
+        }
+      }
+    },
+    "the-definition": {
+      "header": "The definition",
+      "description": "Anthropic defines context engineering as curating and maintaining the optimal set of tokens during inference, guided by \"the smallest possible set of high-signal tokens\" that maximize the chance of the desired outcome [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "input-quality-tracks-output-quality": {
+      "header": "Input quality tracks output quality",
+      "description": "in a randomized experiment with 30 novices, training in requirement-oriented prompting beat conventional prompt-engineering training (20% against 1% gains), and the authors report input-requirement quality correlates with output quality. It is a small trip-advisor chatbot study, not coding agents [1].",
+      "sources": {
+        "ma-requirement-driven-llm-use": {
+          "title": "Ma, Peng, Yang, Shen, Koedinger, Wu, What Should We Engineer in Prompts? Training Humans in Requirement-Driven LLM Use"
+        }
+      }
+    },
+    "a-proposal-not-a-finding": {
+      "header": "A proposal, not a finding",
+      "description": "researchers draw the parallel explicitly, but no source measured it; the sentence that both disciplines share a job is an inference [1].",
+      "sources": {
+        "chen-promptware-engineering": {
+          "title": "Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software Engineering for Prompt-Enabled Systems"
+        }
+      }
+    },
+    "where-the-parallel-stops": {
+      "header": "Where the parallel stops",
+      "description": "a requirements document gains from completeness while a context window is a finite budget that can lose from it, and context changes during a run instead of being signed off once [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-definition": {
+        "title": "The definition",
+        "keywords": "",
+        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. That was written for software, but the logic is the same. Let me translate that from engineering into the workshop. The codebase is the materials you already have. The architecture is how the parts fit together. The conventions are the house rules. And the intent is the goal. Materials, how it fits, house rules, the goal: that is what a good requirement has always said. So what you add to the context window decides whether the agent has the precision and accuracy to work towards, and that is why we call it requirements engineering for agents."
+      },
+      "same-four-outcomes": {
+        "title": "Same four outcomes",
+        "keywords": "",
+        "script": "Remember the dartboard with its four outcomes? It is the same dartboard, with the same four outcomes, but a different object. Your requirement document is now a context window, and it can land precise, accurate, both or neither."
+      }
+    }
+  }
+}

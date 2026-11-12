@@ -1,0 +1,74 @@
+{
+  "title": "Meta-Prompting",
+  "caption": "Eine eigene Sitzung schreibt den Kontext für Dich: Die KI fragt, Du antwortest, und die Werkbank bekommt <b>einen sauberen Arbeitsauftrag</b>.",
+  "office": {
+    "label": "Planungsbüro · eigener Chat",
+    "exchange": {
+      "q1": "Was muss vor dem Frühlingsansturm fertig sein?",
+      "a1": "Jedes Leihrad gewartet und 40 Reparaturtermine gebucht.",
+      "q2": "Wer bucht die Termine, und wie?",
+      "a2": "Der Empfang, per Telefon und vor Ort."
+    },
+    "you": "<b>Du</b> antwortest nur. Kein Prompt, den Du von null schreiben musst.",
+    "answerBetter": "Du antwortest besser, als Du schreibst",
+    "residue": "Bleibt im Büro: Fragen, halbe Ideen, Entwürfe"
+  },
+  "handOff": {
+    "label": "Frischer Chat",
+    "note": "nur der Arbeitsauftrag geht hinüber"
+  },
+  "workOrder": {
+    "title": "Arbeitsauftrag · Frühjahrs-Servicewoche",
+    "rows": {
+      "goal": { "term": "Ziel", "value": "Leihflotte gewartet, 40 Termine gebucht" },
+      "who": { "term": "Wer", "value": "Empfang bucht, zwei Mechaniker" },
+      "must": { "term": "Muss", "value": "Bremsen und Reifen an jedem Rad" },
+      "done": { "term": "Fertig, wenn", "value": "Kalender voll bis 1. März" }
+    },
+    "source": "Aus Deinen Antworten geschrieben"
+  },
+  "bench": {
+    "label": "Das Band · Fahrradwerkbank",
+    "drawing": "Die Fahrradwerkbank, nur mit dem Arbeitsauftrag darauf",
+    "worker": "Der KI-Arbeiter startet mit einer Seite, nicht mit dem ganzen Gespräch."
+  },
+  "notes": {
+    "users-answer-better-than-they-write": {
+      "header": "Antworten gelingt besser als Schreiben",
+      "description": "wenn ein Modell Präferenzen mit offenen Fragen erhebt, sind die Antworten der Nutzer oft aussagekräftiger als Prompts, die sie allein geschrieben haben, und die Nutzer empfinden es als weniger aufwendig [1].",
+      "sources": {
+        "li-eliciting-human-preferences": {
+          "title": "Li et al., Eliciting Human Preferences with Language Models"
+        }
+      }
+    },
+    "prompts-generated-from-requirements": {
+      "header": "Prompts aus Anforderungen erzeugt",
+      "description": "REprompt baut einen Multi-Agenten-Prompt-Optimierer nach Prinzipien des Requirements Engineering; der Abstract berichtet eine wirksame Optimierung ohne Zahlen, und es ist ein früher Preprint [1].",
+      "sources": {
+        "shi-reprompt": {
+          "title": "Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "separate-session": {
+        "title": "Eigene Sitzung",
+        "keywords": "",
+        "script": "Meta-Prompting heißt: Ein KI-Chat schreibt den Auftrag für einen anderen. Die eigene Sitzung erstellt den Kontext für Dich, und der soll aussagekräftig sein: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht."
+      },
+      "fresh-chat-clean-work-order": {
+        "title": "Frischer Chat, sauberer Arbeitsauftrag",
+        "keywords": "",
+        "script": "Dann nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Die Werkbank ist der Ort, an dem der Kontext der KI liegt, und sie bekommt einen sauberen Arbeitsauftrag, nicht das ganze Gespräch, das zu ihm geführt hat."
+      },
+      "why-a-separate-office": {
+        "title": "Warum ein eigenes Büro",
+        "keywords": "",
+        "script": "Warum ein eigenes Büro? Weil der Planungschat voller Fragen, halber Ideen und Entwürfe ist, und in der Sprache der Werkbank ist das Context Rot. Der Arbeitsauftrag ist es nicht. Also halte Büro und Werkbank getrennt."
+      }
+    }
+  }
+}
