@@ -16,6 +16,9 @@ sources: # Product company: own tickets a week (rate), written into a role's bac
   - { id: roadmap, at: pm, rate: 2 } # roadmap items: the product manager to the analyst
   - { id: leads, at: sales, rate: 1 } # leads: Sales to the product manager
   - { id: debt, at: eng, rate: 1 } # tech debt: the engineer to quality assurance
+# Role profiles this use case says differently from the catalog: aiCatch, how much of quality assurance's catch holds
+# while AI reviews (trusted AI review lets bad code through).
+roles: { qa: { aiCatch: 0.4 } }
 bottleneck: eng # at Realistic this center runs near 85 % busy; every other at most 70 % (Q121)
 # Starting backlogs, in weeks of work (weeks times the work center's Ideal capacity), put in when a state loads after its
 # warm-up; Realistic starts full, a state at reality 0 (Ideal) starts clear, in between scales. A preset may carry its own
@@ -111,3 +114,79 @@ presets:
             },
         },
     }
+  # Eval scenarios (grill 11, design-ADR 0024 §20). Each beat runs 6 to 9 weeks and names Han's claim (tire.words.yml);
+  # its expect and settles ranges are proposals awaiting his approval (.scratch/software-ecology/eval/scenarios.md).
+  - id: ai-spiral
+    view: factory
+    reality: 0
+    customer: { bad: { spec: { pm: 0.5 }, code: { support: 0.5 } } }
+    tour:
+      - {
+          run: 7,
+          card: customer,
+          claim: clean-line,
+          expect: { customer.output: '0.95–1.05', qa.weeksWaiting: '<0.2', customer.bugsPerWeek: '<0.2' },
+        }
+      - {
+          set: { ai: [eng], dials: { eng: { effectiveness: 70 } } },
+          run: 14,
+          card: qa,
+          claim: eng-floods-qa,
+          expect: { eng.weeksWaiting: '<0.3', qa.weeksWaiting: rises, eng.rework: rises },
+        }
+      - {
+          run: 21,
+          card: support,
+          claim: qa-lets-through,
+          expect: { qa.unread: rises, customer.bugsPerWeek: rises, support.weeksWaiting: rises },
+        }
+      - {
+          set: { ai: [eng, qa] },
+          run: 28,
+          card: ops,
+          claim: ai-review-trusted,
+          expect: { qa.weeksWaiting: falls, customer.bugsPerWeek: rises, ops.weeksWaiting: rises },
+        }
+      - { run: 35, card: ops, claim: ops-stalls, expect: { ops.stall: '>0.2', customer.leadDays: rises } }
+      - {
+          set: { ai: [eng, qa, ops] },
+          run: 42,
+          card: customer,
+          claim: ai-fixes-pipeline,
+          expect: { customer.output: '>0.95', customer.sat: '<0.6', customer.bugsPerWeek: rises },
+          settles: { eng.weeksWaiting: '>2' },
+        }
+  - id: clear-requirements
+    view: factory
+    reality: 100
+    dials: { ba: { effectiveness: 75 }, pm: { effectiveness: 75 } }
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { spec: { pm: 0.5 }, code: { support: 0.5 } } }
+    tour:
+      - {
+          run: 7,
+          card: eng,
+          claim: average-requirements,
+          expect: { eng.rework: '>0.15', qa.rework: '>0.1', customer.changesPerWeek: '>0.5' },
+        }
+      - {
+          set: { ai: [eng, qa] },
+          run: 14,
+          card: pm,
+          claim: bad-things-faster,
+          expect: { customer.output: rises, customer.changesPerWeek: rises, pm.weeksWaiting: rises },
+        }
+      - {
+          set: { dials: { ba: { effectiveness: 95 }, pm: { effectiveness: 95 } } },
+          run: 21,
+          card: eng,
+          claim: clear-requirements,
+          expect: { eng.rework: falls, customer.changesPerWeek: falls },
+          settles: { eng.weeksWaiting: '<0.5', qa.weeksWaiting: '<0.5' },
+        }
+      - {
+          set: { ai: all },
+          run: 28,
+          card: customer,
+          claim: ai-accelerates,
+          expect: { customer.headroom: rises, customer.leadDays: falls, customer.sat: '>0.9' },
+        }

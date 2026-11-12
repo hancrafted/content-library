@@ -62,7 +62,7 @@ export const factory = slide({
           'qa:unread': <Marker note="review-skipped" placement="beside" />,
           'pm:card': <Marker note="pm-accountability" placement="beside" />,
           'ba:card': <Marker note="pm-accountability" placement="beside" />,
-          'scenario:fix-orders': <Marker note="muddy-instructions" placement="beside" />,
+          'scenario:clear-requirements': <Marker note="muddy-instructions" placement="beside" />,
           'sales:card': <Marker note="sales-billing-inference" placement="beside" />,
         }}
       />

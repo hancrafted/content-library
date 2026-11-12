@@ -7,6 +7,7 @@ import type {
   CatalogWords,
   CenterDef,
   Locale,
+  Preset,
   RoleWords,
   ScenarioWords,
   UseCaseWords,
@@ -54,3 +55,11 @@ export const customerJob = (x: WordsIn): string => own(x).customer?.job ?? roleW
 /** A state's "what to watch" line and tour captions: the use case's own, else the catalog's. */
 export const scenarioWords = (x: WordsIn, id: string): ScenarioWords =>
   own(x).scenarios?.[id] ?? x.catalog.scenarios?.[id] ?? {};
+
+/** A beat's caption: the scenario's caption line for it, else Han's claim the beat names, else nothing. */
+const claimOf = (p: Preset, i: number): string => p.tour?.[i]?.claim ?? '';
+export const beatCaption = (x: WordsIn, p: Preset, i: number): string => {
+  const w = scenarioWords(x, p.id),
+    line = w.steps?.[i];
+  return line ?? w.claims?.[claimOf(p, i)] ?? '';
+};

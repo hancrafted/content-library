@@ -14,3 +14,24 @@ belts:
   qa-ops: { label: tested change, back: does not deploy }
   ops-customer: { label: release }
 customer: { title: Customer, job: Sends requests and receives releases and answers }
+presets:
+  ai-spiral: Bug Spiral with AI Acceleration
+  clear-requirements: Clear Requirements, Then AI
+# Scenarios: a "what to watch" line and Han's claim per beat, by the key a tour step's `claim:` names (tire.yml).
+scenarios:
+  ai-spiral:
+    watch: AI speeds up one station after another, and the bugs find their way back.
+    claims:
+      clean-line: 'The line runs clean: nothing waits, the Customer gets what they ask for.'
+      eng-floods-qa: Engineering produces massive amounts of code; the bottleneck moves downstream to quality assurance, which sends more back.
+      qa-lets-through: Quality assurance can't cope and lets work through unread; bugs reach the Customer and come back through Support to Engineering.
+      ai-review-trusted: 'Review is offloaded to AI and simply trusted: quality assurance clears, but more bugs slip through and the pressure moves to Operations.'
+      ops-stalls: 'Operations stalls: the pipeline runs too slowly and lead time grows.'
+      ai-fixes-pipeline: "AI fixes the pipeline and we're suddenly shipping faster: more and worse software reaches the Customer."
+  clear-requirements:
+    watch: Good requirements were always important; with AI, bad requirements mean shipping bad things faster.
+    claims:
+      average-requirements: 'Average requirements: tickets go back from Engineering to Analysis and from quality assurance to Engineering; shipped features bring change requests to the Product manager and bugs to Support.'
+      bad-things-faster: With AI, bad requirements mean shipping bad things faster.
+      clear-requirements: 'Clear requirements: rework falls first, then the clogging downstream dissolves.'
+      ai-accelerates: On a clear line, AI accelerates.

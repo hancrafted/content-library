@@ -57,6 +57,26 @@ describe('success cases', () => {
     expect(german).toEqual(english);
   });
 
+  it.each([
+    ['tire', tire, tireWords],
+    ['gate', gate, gateWords],
+    ['teams', teams, teamsWords],
+  ])('gives every claim a shipped %s tour names its words', (_id, text, en) => {
+    // ARRANGE
+    const data = parse(text) as { presets: { id: string; tour?: { claim?: string }[] }[] };
+    const words = parse(en) as { scenarios?: Record<string, { claims?: Record<string, string> }> };
+    const none: string[] = [];
+    // ACT
+    const missing = data.presets.flatMap((p) =>
+      (p.tour ?? [])
+        .map((st) => st.claim)
+        .filter((c): c is string => !!c && !words.scenarios?.[p.id]?.claims?.[c])
+        .map((c) => `${p.id}.${c}`),
+    );
+    // ASSERT
+    expect(missing).toEqual(none);
+  });
+
   it('splits an exchange file into its use case, its words per locale and its saved state', () => {
     // ARRANGE
     const words = { en: { name: 'Tire swing' }, de: { name: 'Reifenschaukel' } };
