@@ -96,8 +96,8 @@ const AI_AT_ENG = { ai: ['eng'], dials: { eng: { aiExtra: 2 } } } as const;
 
 /**
  * The states judged on the default seed alone: every check, and every tour without a claim. A tour whose beats carry
- * Han's claims is judged across seeds by `npm run ecology:sim` and the ecology-eval skill (design-ADR 0024 §20), where a
- * beat passes on 8 of 10 seeds, so one seed may fail it.
+ * Han's claims is judged across ten seeds in `npm run test:build` (tests/post-build/ecology-scenarios.build.test.ts), by
+ * the judge `npm run ecology:sim` runs (design-ADR 0024 §12), where a beat passes on 8 of 10 seeds, so one seed may fail it.
  */
 const SCENARIOS = BUILTIN.flatMap((id) =>
   builtinBundle(id)

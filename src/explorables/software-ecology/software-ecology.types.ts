@@ -82,6 +82,8 @@ export interface Preset {
   readonly customer?: CustomerPatch;
   readonly start?: 'clear' | 'warm';
   readonly speed?: number;
+  /** false keeps the state off the Scenarios menu: a state a Slide reads by id (design-ADR 0024 §10). */
+  readonly menu?: boolean;
   /** Weeks of work waiting per work center when the state loads, over the file's `backlog`. */
   readonly backlog?: Readonly<Record<string, number>>;
   readonly display?: Display;

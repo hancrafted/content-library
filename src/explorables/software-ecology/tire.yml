@@ -76,7 +76,7 @@ routes:
 # States. Roles (its name in the words), Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory.
 # reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
 # fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or
-# warm (the default: 60 weeks settled). speed: 1, 2, 5, 10 or 20. backlog, display: this state's own, over the file's.
+# warm (the default: 60 weeks settled). menu: false keeps a state off the Scenarios menu. speed: 1, 2, 5, 10 or 20. backlog, display: this state's own, over the file's.
 # tour: steps, each { set (dials, customer, ai, reality), run: weeks from the start, card: where the caption points, expect };
 # check: one step without a caption. expect: { "<customer or center>.<measure>": test }, judged headless by factory-scenario.pure.test.ts.
 presets:
@@ -114,6 +114,20 @@ presets:
             },
         },
     }
+  # The hero's and the Why · How · What stills' state (grill 11 Q215, Q216): In practice, then AI at Engineering writing
+  # two pull requests a task, run to week 20. Off the Scenarios menu (menu: false); the Slides read it by id, and its
+  # check keeps their point: the Customer unhappy, quality assurance's pile far past its rack.
+  - id: still
+    view: factory
+    reality: 100
+    menu: false
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { spec: { pm: 0.5 }, code: { support: 0.9 } } }
+    check:
+      {
+        set: { ai: [eng], dials: { eng: { aiExtra: 2, effectiveness: 55 } } },
+        run: 20,
+        expect: { customer.sat: '<0.5', qa.backlog: '>200' },
+      }
   # Eval scenarios (grill 11, design-ADR 0024 §20). Each beat runs 6 to 9 weeks and names Han's claim (tire.words.yml);
   # its expect and settles ranges are proposals awaiting his approval (.scratch/software-ecology/eval/scenarios.md).
   - id: ai-spiral
@@ -166,7 +180,7 @@ presets:
           run: 7,
           card: eng,
           claim: average-requirements,
-          expect: { eng.rework: '>0.15', qa.rework: '>0.1', customer.changesPerWeek: '>0.5' },
+          expect: { ba.rework: '>0.15', qa.rework: '>0.1', customer.changesPerWeek: '>0.5' },
         }
       - {
           set: { ai: [eng, qa] },
@@ -180,7 +194,7 @@ presets:
           run: 21,
           card: eng,
           claim: clear-requirements,
-          expect: { eng.rework: falls, customer.changesPerWeek: falls },
+          expect: { ba.rework: falls, customer.changesPerWeek: falls },
           settles: { eng.weeksWaiting: '<0.5', qa.weeksWaiting: '<0.5' },
         }
       - {

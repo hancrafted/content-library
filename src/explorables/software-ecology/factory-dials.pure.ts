@@ -116,7 +116,7 @@ export const dials = (n: FactoryNode, s: Settings): Dials => {
 };
 
 export const mechOf = (s: Settings, k: Strength): number => (s.mech[k] ? (s.strength[k] ?? 0) : 0);
-const baseCatch = (s: Settings, n: FactoryNode, kind: Defect): number => {
+const baseCatch = (s: Pick<Settings, 'strength'>, n: FactoryNode, kind: Defect): number => {
   const r = s.strength.rework ?? 0;
   if (n.def.catch) return n.def.catch[kind] ?? 0;
   return n.def.inspection ? Math.min(0.95, r * constOf(s, 'inspect')) : r;
@@ -131,6 +131,9 @@ export const catchOf = (s: Settings, at: { n: FactoryNode; d: Dials }, kind: Def
   const p = baseCatch(s, at.n, kind);
   return at.d.ai ? p * (at.n.role.aiCatch ?? 1) : p;
 };
+/** Whether a station's `catch` can catch a kind at all, whatever AI and the rework toggle do: its unread share counts only these. */
+export const catches = (s: Pick<Settings, 'strength'>, n: FactoryNode, kind: Defect): boolean =>
+  baseCatch(s, n, kind) > 0;
 /** Jobs a week at size 1. */
 /** The share of speed a stalled station loses now: its `stall` once enough work waits, none while AI works there. */
 export const stallOf = (n: FactoryNode, d: Dials): number => {

@@ -112,6 +112,9 @@ const PRESET_TAIL: readonly Rule<At>[] = [
   ({ x, p }) =>
     !absentOr(x.start, (v) => oneOf(v, ['clear', 'warm'])) && `${p}.start: clear (day 0) or warm (60 weeks settled)`,
   ({ x, p }) => !absentOr(x.speed, speedOk) && `${p}.speed: 1, 2, 5, 10 or 20`,
+  ({ x, p }) =>
+    !absentOr(x.menu, (v) => typeof v === 'boolean') &&
+    `${p}.menu: true or false (false keeps the state off the Scenarios menu)`,
   ({ x, p }) => x.tour !== undefined && x.check !== undefined && `${p}: a tour or a check, not both`,
   ({ x, p }) => !absentOr(x.tour, tourOk) && `${p}.tour: 1 to 6 steps`,
 ];

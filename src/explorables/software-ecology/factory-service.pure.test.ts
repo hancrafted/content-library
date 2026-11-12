@@ -126,6 +126,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads nothing unread at a station whose catch leaves the arriving kind out', () => {
+    // ARRANGE
+    const B = builtinBundle('tire');
+    // ACT
+    const m = readAt(B, { ...PERFECT, ba: 60 });
+    // ASSERT
+    expect(m['qa.unread']).toBe(0);
+  });
+
   it('reads nothing unread where no bad work arrives', () => {
     // ARRANGE
     const B = withRole('qa', { aiCatch: 0.3 });

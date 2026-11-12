@@ -15,7 +15,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /*
- * The model's readouts at week 20 of In practice with AI at Engineering (PLAY), read from the same headless run the Why How What
+ * The model's readouts of the `still` state (In practice, then AI at Engineering to week 20), read from the same headless run the Why How What
  * stills draw (`factoryStillState`), so the hero never claims what the model does not show: an illustrative model, not
  * measured, and labelled so on the preview.
  */
@@ -31,18 +31,12 @@ const CENTERS = [
 ] as const;
 
 const USE_CASE = 'tire';
-/**
- * What the hero shows, as the Why How What stills do: In practice, AI at Engineering from week 4 writing two pull requests per task, run to week 20.
- * The AI-unbalanced tour this was, before the eval grill deleted the scenarios: the same settings, the same numbers.
- */
-const PLAY = {
-  start: 'realistic',
-  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
-} as const;
+/** What the hero shows, as the Why How What stills do: the use case's `still` state (tire.yml, grill 11 Q215). */
+const STILL = 'still';
 
 /** The readings at that step: the Customer, each station by id, and the Customer's releases oldest first. */
 function readoutsOf() {
-  const snap = scenarioLastStep(USE_CASE, PLAY).f.read({});
+  const snap = scenarioLastStep(USE_CASE, STILL).f.read({});
   const customer: CustomerReadout = snap.customer;
   const releases = customer.releases
     .filter((release) => release !== null)
