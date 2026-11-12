@@ -80,6 +80,7 @@ tour:
       rework: '{title}: {test} der Arbeit kam zurück'
       rush: '{title}: {test} Punkte Wirksamkeit durch Hetze verloren'
       unread: '{title}: {test} der ankommenden schlechten Arbeit unmarkiert weitergegeben'
+      stall: '{title}: {test} seines Tempos durch Stillstand verloren'
     trend: '{measure}, {test}'
     customerTrend:
       output: 'Ausstoß im Verhältnis zum Ideal'
@@ -99,6 +100,7 @@ tour:
       rework: '{title}: Anteil der Arbeit, die zurückkam'
       rush: '{title}: Punkte Wirksamkeit, die durch Hetze verloren gehen'
       unread: '{title}: Anteil der ankommenden schlechten Arbeit, unmarkiert weitergegeben'
+      stall: '{title}: Anteil seines Tempos, durch Stillstand verloren'
     test:
       gt: 'über {k}'
       lt: 'unter {k}'

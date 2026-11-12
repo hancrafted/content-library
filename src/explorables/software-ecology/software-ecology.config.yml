@@ -82,6 +82,7 @@ tour:
       rework: '{title}: {test} of its work sent back'
       rush: '{title}: {test} effectiveness points lost to rushing'
       unread: '{title}: {test} of bad work arriving passed unflagged'
+      stall: '{title}: {test} of its speed lost to a stall'
     trend: '{measure}, {test}'
     customerTrend:
       output: 'Output relative to ideal'
@@ -101,6 +102,7 @@ tour:
       rework: '{title}: share of its work sent back'
       rush: '{title}: effectiveness points lost to rushing'
       unread: '{title}: share of bad work arriving passed unflagged'
+      stall: '{title}: share of its speed lost to a stall'
     test:
       gt: 'over {k}'
       lt: 'under {k}'

@@ -52,6 +52,8 @@ export interface CenterDef {
   readonly catch?: Catch;
   /** The kind of defect it makes; its role's by default. */
   readonly origin?: Defect;
+  /** Once `at` weeks of work wait, it loses the share `slow` of its speed; AI at the station removes the stall. */
+  readonly stall?: { readonly at: number; readonly slow: number };
 }
 
 export interface CustomerDef {

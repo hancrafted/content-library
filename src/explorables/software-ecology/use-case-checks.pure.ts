@@ -200,6 +200,9 @@ export const CENTER: readonly Rule<CenterAt>[] = [
     `${p}.stampUnderPressure: 0 to 2, on an inspection only`,
   ({ c, p }) => !absentOr(c.catch, catchOk) && `${p}.catch: { spec, code }, each the chance to send it back, 0 to 1`,
   ({ c, p }) => !absentOr(c.origin, (v) => oneOf(v, DEFECT_KEYS)) && `${p}.origin: spec or code`,
+  ({ c, p }) =>
+    !absentOr(c.stall, (v) => isMap(v) && isNum(v.at, 0, 50) && isNum(v.slow, 0, 0.95)) &&
+    `${p}.stall: { at: weeks of work waiting 0 to 50, slow: the share of speed lost, 0 to 0.95 }`,
 ];
 
 export const FIRST_SPAWN: Rule<CenterAt> = ({ c, p }) => {

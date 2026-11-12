@@ -11,7 +11,14 @@ import { builtinBundle } from './use-case-data.ts';
  */
 const SEED = 11;
 const WEEKS = 40;
-const MEASURES = ['customer.changesPerWeek', 'customer.bugsPerWeek', 'ba.rework', 'eng.rework', 'qa.unread'];
+const MEASURES = [
+  'customer.changesPerWeek',
+  'customer.bugsPerWeek',
+  'ba.rework',
+  'eng.rework',
+  'qa.unread',
+  'ops.stall',
+];
 
 /** Tire swing with one work center's fields changed. */
 const changed = (id: string, patch: Partial<CenterDef>): Bundle => {
@@ -86,6 +93,16 @@ describe('success cases', () => {
     // ASSERT
     expect(a['qa.unread']).toBeGreaterThan(b['qa.unread'] ?? 0);
   });
+
+  it('slows a stalled station by its share once its weeks waiting reach the mark', () => {
+    // ARRANGE
+    const slow = 0.5;
+    const B = changed('ops', { stall: { at: 0, slow } });
+    // ACT
+    const m = readAt(B, PERFECT);
+    // ASSERT
+    expect(m['ops.stall']).toBe(slow);
+  });
 });
 
 describe('failure cases', () => {
@@ -96,6 +113,15 @@ describe('failure cases', () => {
     const m = readAt(B, { ...PERFECT, ba: 60 });
     // ASSERT
     expect(m['ba.rework']).toBe(0);
+  });
+
+  it('removes the stall while AI works at the station', () => {
+    // ARRANGE
+    const B = changed('ops', { stall: { at: 0, slow: 0.5 } });
+    // ACT
+    const m = readAt(B, PERFECT, ['ops']);
+    // ASSERT
+    expect(m['ops.stall']).toBe(0);
   });
 });
 
@@ -126,5 +152,14 @@ describe('edge cases', () => {
     const [a, b] = [readAt(low, { ...PERFECT, ba: 60 }), readAt(high, { ...PERFECT, ba: 60 })];
     // ASSERT
     expect(b['ba.rework']).toBeGreaterThan(a['ba.rework'] ?? 0);
+  });
+
+  it('loses no speed while the work waiting stays below the mark', () => {
+    // ARRANGE
+    const B = changed('ops', { stall: { at: 40, slow: 0.5 } });
+    // ACT
+    const m = readAt(B, PERFECT);
+    // ASSERT
+    expect(m['ops.stall']).toBe(0);
   });
 });

@@ -28,7 +28,8 @@ display: { pile: heap, beltMotion: false }
 # Optional: service: exponential (default normal), buffer: n (the sender blocks when it is full),
 # inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai },
 # catch: { spec, code } (the chance it sends a bad input of that defect kind back, over mechanics.rework; a kind left out
-# passes), origin: spec or code (the defect kind it makes, over its role's).
+# passes), origin: spec or code (the defect kind it makes, over its role's), stall: { at, slow } (once `at` weeks of work
+# wait it loses the share `slow` of its speed: the pipeline stalls; AI at the station removes it).
 centers:
   - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
   - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
@@ -51,7 +52,14 @@ centers:
       realistic: [88, 98],
       spawns: [{ to: ops, n: 1 }],
     }
-  - { id: ops, role: ops, at: [1200, 160], realistic: [88, 98], spawns: [{ to: customer, n: 1 }] }
+  - {
+      id: ops,
+      role: ops,
+      at: [1200, 160],
+      realistic: [88, 98],
+      stall: { at: 2, slow: 0.4 },
+      spawns: [{ to: customer, n: 1 }],
+    }
 # Routes of the belts, keyed from-to: out / in (port: left, right, top, bottom), via (corners), xm (elbow x), over (crosses on a bridge).
 routes:
   customer-sales: { xm: 266 }

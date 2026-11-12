@@ -78,7 +78,7 @@ export const stationOf = (n: FactoryNode, x: { m: Factory; s: Settings }): Stati
   piling: n.L > RACK,
   level: n.lvl,
   bugShare: n.u.busy > 0.02 ? n.u.fail / n.u.busy : 0,
-  rework: Math.round(CENTER_MEASURES.rework(n) * 100) / 100,
+  rework: Math.round(CENTER_MEASURES.rework(n, x.m) * 100) / 100,
   signs: Object.fromEntries(SIGNS.map((k) => [k, signOn(n, k, x)])) as Record<SignKind, boolean>,
 });
 

@@ -132,6 +132,11 @@ export const catchOf = (s: Settings, at: { n: FactoryNode; d: Dials }, kind: Def
   return at.d.ai ? p * (at.n.role.aiCatch ?? 1) : p;
 };
 /** Jobs a week at size 1. */
+/** The share of speed a stalled station loses now: its `stall` once enough work waits, none while AI works there. */
+export const stallOf = (n: FactoryNode, d: Dials): number => {
+  const st = n.def.stall;
+  return st && !d.ai && n.Ws >= st.at ? st.slow : 0;
+};
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>
   RUSH_MAX * Math.max(0, Math.min(1, (n.Ws - RUSH_FROM) / (RUSH_TO - RUSH_FROM)));
