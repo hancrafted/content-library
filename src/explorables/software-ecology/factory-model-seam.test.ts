@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /*
@@ -9,6 +9,10 @@ import { describe, expect, it } from 'vitest';
  * internal seam (`buildFactory`).
  */
 const DIR = import.meta.dirname;
+/** Where else the model is drawn: the software ecology page's Slides, whose stills read it through the same handle. */
+const SLIDES = join(DIR, '../../episodes/explorable-pages/software-ecology');
+/** How a module names one of the Explorable's own: relative from inside it, by its alias path from a Slide. */
+const OWN = String.raw`(?:\./|@/explorables/software-ecology/)`;
 
 /** The model: its interface module and what only it (and its own tests) may reach. */
 const MODEL = new Set([
@@ -58,13 +62,17 @@ const INTERNAL = [
 const NETWORK_READS = ['Q', 'dials', 'speedOf', 'rushOf', 'effvNow', 'aiOn', 'srcRate'];
 
 const internalImports = (src: string): string[] =>
-  [...src.matchAll(/from '\.\/([\w.-]+?)(?:\.pure)?(?:\.ts)?'/g)]
+  [...src.matchAll(new RegExp(String.raw`from '${OWN}([\w.-]+?)(?:\.pure)?(?:\.ts)?'`, 'g'))]
     .map((m) => m[1] ?? '')
     .filter((name) => INTERNAL.includes(name))
     .map((name) => `imports ${name}`);
 
 const dialsNames = (src: string): string[] =>
-  [...src.matchAll(/import\s+(?:type\s+)?\{([^}]*)\}\s+from '\.\/factory-dials\.pure\.ts'/g)]
+  [
+    ...src.matchAll(
+      new RegExp(String.raw`import\s+(?:type\s+)?\{([^}]*)\}\s+from '${OWN}factory-dials\.pure(?:\.ts)?'`, 'g'),
+    ),
+  ]
     .flatMap((m) => (m[1] ?? '').split(','))
     .map((x) => x.trim().replace(/^type\s+/, ''))
     .filter((name) => NETWORK_READS.includes(name))
@@ -78,13 +86,19 @@ const breachesOf = (src: string): string[] => [
   ...(/\.m\.|\brun\.m\b|\.hook\s*=/.test(src) ? ['reaches into the network'] : []),
 ];
 
-const outside = () =>
-  readdirSync(DIR)
+/** Every source file outside the model, by its path from the Explorable's folder: its own, then the Slides'. */
+const outside = () => [
+  ...readdirSync(DIR)
     .filter((f) => /\.tsx?$/.test(f) && !/\.test\.ts$/.test(f) && !MODEL.has(f))
-    .sort();
+    .sort(),
+  ...readdirSync(SLIDES, { recursive: true, encoding: 'utf8' })
+    .filter((f) => /\.tsx?$/.test(f) && !/\.test\.ts$/.test(f))
+    .sort()
+    .map((f) => relative(DIR, join(SLIDES, f))),
+];
 
 describe('success cases', () => {
-  it('finds no module outside the model that reaches the network past the handle', () => {
+  it('finds no module outside the model, the page Slides included, that reaches the network past the handle', () => {
     // ARRANGE
     const files = outside();
     const none: string[] = [];
@@ -92,6 +106,9 @@ describe('success cases', () => {
     const breaches = files.flatMap((f) => breachesOf(readFileSync(join(DIR, f), 'utf8')).map((b) => `${f}: ${b}`));
     // ASSERT
     expect(files.length).toBeGreaterThan(MODEL.size);
+    expect(files).toContain(
+      '../../episodes/explorable-pages/software-ecology/slides/why-how-what/factory-still-state.ts',
+    );
     expect(breaches).toEqual(none);
   });
 });
@@ -105,6 +122,19 @@ describe('failure cases', () => {
       'this.m.hook = this.hear;',
     ].join('\n');
     const expected = ['imports factory-flow', 'imports dials from factory-dials', 'reaches into the network'];
+    // ACT
+    const breaches = breachesOf(src);
+    // ASSERT
+    expect(breaches).toEqual(expected);
+  });
+
+  it('names a Slide still that imports the flow and the dials by their alias path', () => {
+    // ARRANGE
+    const src = [
+      "import { COMPL } from '@/explorables/software-ecology/factory-flow.pure';",
+      "import { speedOf } from '@/explorables/software-ecology/factory-dials.pure';",
+    ].join('\n');
+    const expected = ['imports factory-flow', 'imports speedOf from factory-dials'];
     // ACT
     const breaches = breachesOf(src);
     // ASSERT

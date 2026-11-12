@@ -5,7 +5,6 @@
  * reaches with Tour, and a retuned model redraws them on the next build. It reads the model through its handle only
  * (design-ADR 0024 §1): the Snapshot, the Topology and the Floor.
  */
-import { DTW } from '@/explorables/software-ecology/factory-dials.pure';
 import {
   boxOf,
   layoutFactory,
@@ -22,7 +21,8 @@ import type {
   Snapshot,
 } from '@/explorables/software-ecology/factory-model.pure';
 import { at, type Path } from '@/explorables/software-ecology/factory-paths.pure';
-import { scenarioStart, settingsAfter, stepsOf, stepsTo } from '@/explorables/software-ecology/factory-scenario.pure';
+import { playSteps, scenarioStart, stepsOf } from '@/explorables/software-ecology/factory-scenario.pure';
+import { GAP } from '@/explorables/software-ecology/paint-belts';
 import { RACK_W, rackX, SLOT, slotY } from '@/explorables/software-ecology/paint-station';
 import {
   builtinBundles,
@@ -47,8 +47,6 @@ const USE_CASE = 'tire';
 const SCENARIO = 'ai-unbalanced';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
-/** Closer documents of the same kind on a belt merge, as the painter merges them. */
-const GAP = 13;
 /** The states the Explorable's toolbar shows on its row, in its order; the Scenarios menu holds the rest. */
 const ROW_STATES = ['swing', 'roles', 'ideal', 'realistic'] as const;
 
@@ -72,6 +70,7 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
       span = doc.t1 - doc.t0 || 1,
       s = Math.min(1, Math.max(0, (t - doc.t0) / span)) * path.L,
       marks = marksOf(doc);
+    // Closer documents of the same kind merge, as the painter merges them.
     if (out.some((o, j) => Math.abs((along[j] ?? 0) - s) < GAP && sameKind(o, marks))) continue;
     const p = at(path, s);
     out.push({ x: p[0], y: p[1], ...marks });
@@ -86,15 +85,9 @@ function runToLastStep() {
   const preset = B?.data.presets.find((p) => p.id === SCENARIO);
   if (!B || !preset) throw new Error(`The ${USE_CASE} use case has no ${SCENARIO} scenario.`);
   const f = scenarioStart(B, preset),
-    k0 = Math.round(f.weeks / DTW),
     steps = stepsOf(preset);
-  let k = k0;
-  for (const st of steps) {
-    f.set(settingsAfter(st.set, B, f.settings));
-    const kk = k0 + stepsTo(st.run);
-    f.step((kk - k) * DTW);
-    k = Math.max(k, kk);
-  }
+  // Draining the steps plays them: each sets its dials and runs to its week.
+  Array.from(playSteps(f, B, steps));
   return { B, preset, f, week: steps.at(-1)?.run ?? 0, last: steps.length - 1 };
 }
 

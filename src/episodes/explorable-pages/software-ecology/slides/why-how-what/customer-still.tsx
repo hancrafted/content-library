@@ -1,3 +1,4 @@
+import { leadTimeText } from '@/explorables/software-ecology/customer-card-view';
 import type { Release } from '@/explorables/software-ecology/stage-readouts.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import type { FactoryStillState } from './factory-still-state';
@@ -36,7 +37,7 @@ function rowsOf(state: FactoryStillState, f: Formats): [string, string][] {
     w = state.words.customer;
   return [
     [w.satisfied, f.percent.format(c.sat)],
-    [w.leadTime, fillTemplate(w.days, { n: f.number.format(Math.round(c.leadDays ?? 0)) })],
+    [w.leadTime, leadTimeText(c.leadDays, w)],
     [w.couldServe, fillTemplate(w.demand, { n: f.number.format(c.headroom) })],
     [w.bugs, f.number.format(c.bugs)],
   ];

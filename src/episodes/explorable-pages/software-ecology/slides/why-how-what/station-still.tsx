@@ -1,8 +1,7 @@
+import { RACK } from '@/explorables/software-ecology/stage-readouts.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import type { StillDoc, StillStation } from './factory-still-state';
 import { Doc, GlyphAt, type Formats } from './still-parts';
-
-const RACK_SLOTS = 6;
 
 /** Where a station's waiting count shows its weeks of work: red from two weeks, amber from one, plain below. */
 const LEVEL_CLASS = ['fill-muted-foreground', 'fill-(--warning) font-semibold', 'fill-destructive font-semibold'];
@@ -10,22 +9,22 @@ const LEVEL_CLASS = ['fill-muted-foreground', 'fill-(--warning) font-semibold', 
 const cardClass = (s: StillStation, ringed: boolean) => {
   if (s.ai) return 'fill-ai/10 stroke-ai';
   if (ringed) return 'fill-card stroke-foreground';
-  return s.waiting > RACK_SLOTS ? 'fill-card stroke-destructive' : 'fill-card stroke-border';
+  return s.waiting > RACK ? 'fill-card stroke-destructive' : 'fill-card stroke-border';
 };
 
 /** The rack of six slots at the card's left, filled from the bottom; a full rack's top slot red. */
 function Rack({ s }: { s: StillStation }) {
-  const full = s.waiting > RACK_SLOTS,
+  const full = s.waiting > RACK,
     { x, w, topY, slot } = s.rackAt;
   return (
     <g>
-      {Array.from({ length: RACK_SLOTS }, (_, i) => {
-        const top = full && i === RACK_SLOTS - 1;
+      {Array.from({ length: RACK }, (_, i) => {
+        const top = full && i === RACK - 1;
         return (
           <rect
             key={i}
             x={x - w / 2}
-            y={topY + (RACK_SLOTS - 1 - i) * slot - slot / 2}
+            y={topY + (RACK - 1 - i) * slot - slot / 2}
             width={w}
             height={slot}
             strokeWidth={top ? 1.6 : 0.8}
@@ -42,10 +41,10 @@ function Rack({ s }: { s: StillStation }) {
 
 /** A full rack's surplus, "+n", over the rack. */
 function Overflow({ s, template, f }: { s: StillStation; template: string; f: Formats }) {
-  if (s.waiting <= RACK_SLOTS) return null;
+  if (s.waiting <= RACK) return null;
   return (
     <text x={s.rackAt.x - s.rackAt.w / 2} y={s.box[1] - 10} className="fill-destructive text-caption font-semibold">
-      {fillTemplate(template, { n: f.number.format(s.waiting - RACK_SLOTS) })}
+      {fillTemplate(template, { n: f.number.format(s.waiting - RACK) })}
     </text>
   );
 }
