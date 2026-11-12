@@ -54,7 +54,7 @@ export interface RunOptions {
   readonly s?: Settings;
 }
 
-/** Where a tour step aims the run: the model step it stops on, and its sample steps (the judge's `sampleSteps`). */
+/** Where a tour step aims the run: the model step it stops on, and the Sampler that reads its sample steps (the judge's). */
 export interface Aim {
   readonly at: number;
   readonly sampling: Sampler | null;
