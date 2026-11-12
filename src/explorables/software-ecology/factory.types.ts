@@ -22,6 +22,9 @@ export interface Rates {
   back: number;
   rwIn: number;
   unread: number;
+  /** Bad inputs a week it judged, and those it passed on unflagged. */
+  badIn: number;
+  badPass: number;
   out: [number, number];
   compl: number;
 }

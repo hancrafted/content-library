@@ -70,7 +70,7 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   muQ93: 1,
   idealJobs: 0,
   ...streams(seed, idx + 1),
-  rate: { done: 0, arr: 0, back: 0, rwIn: 0, unread: 0, out: [0, 0], compl: 0 },
+  rate: { done: 0, arr: 0, back: 0, rwIn: 0, unread: 0, badIn: 0, badPass: 0, out: [0, 0], compl: 0 },
   u: { busy: 0, starved: 0, blocked: 0, fail: 0 },
   Lavg: 0,
   Ws: 0,

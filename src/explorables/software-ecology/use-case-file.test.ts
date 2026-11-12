@@ -88,7 +88,7 @@ describe('failure cases', () => {
     const presets = doc.presets as Record<string, unknown>[];
     presets[2] = { id: 'ideal', check: { run: 12, expect: { 'qa.speed': 'lots' } } };
     const expected = [
-      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>',
+      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread>',
       'presets[2].check.expect.qa.speed: a test such as ">2", "<0.5", "0.9–1.1", rises or falls',
     ];
     // ACT
@@ -127,6 +127,16 @@ describe('failure cases', () => {
     ];
     // ACT
     const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses an AI review profile outside 0 to 1', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), roles: { qa: { aiCatch: 1.4 } } };
+    const expected = ['roles.qa.aiCatch: 0 to 1, how much of its catch holds while AI checks'];
+    // ACT
+    const seen = problems(doc);
     // ASSERT
     expect(seen).toEqual(expected);
   });

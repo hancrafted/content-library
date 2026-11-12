@@ -116,16 +116,20 @@ export const dials = (n: FactoryNode, s: Settings): Dials => {
 };
 
 export const mechOf = (s: Settings, k: Strength): number => (s.mech[k] ? (s.strength[k] ?? 0) : 0);
+const baseCatch = (s: Settings, n: FactoryNode, kind: Defect): number => {
+  const r = s.strength.rework ?? 0;
+  if (n.def.catch) return n.def.catch[kind] ?? 0;
+  return n.def.inspection ? Math.min(0.95, r * constOf(s, 'inspect')) : r;
+};
 /**
  * A station's chance to send back a bad input of one kind: its `catch` for that kind when it has one, else the rework
- * strength (an inspection's times `inspect`); nothing while the rework toggle is off (design-ADR 0024 §5).
+ * strength (an inspection's times `inspect`), times the role's `aiCatch` while AI is on there; nothing while the rework
+ * toggle is off (design-ADR 0024 §5, §6).
  */
 export const catchOf = (s: Settings, at: { n: FactoryNode; d: Dials }, kind: Defect): number => {
   if (!s.mech.rework) return 0;
-  const c = at.n.def.catch,
-    r = s.strength.rework ?? 0;
-  if (c) return c[kind] ?? 0;
-  return at.n.def.inspection ? Math.min(0.95, r * constOf(s, 'inspect')) : r;
+  const p = baseCatch(s, at.n, kind);
+  return at.d.ai ? p * (at.n.role.aiCatch ?? 1) : p;
 };
 /** Jobs a week at size 1. */
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);

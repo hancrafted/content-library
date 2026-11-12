@@ -32,7 +32,7 @@ export const satRate = (m: Factory): number => {
 
 export type CustomerMeasure =
   'output' | 'sat' | 'headroom' | 'leadDays' | 'bugsPerWeek' | 'changesPerWeek' | 'own' | 'backlog';
-export type CenterMeasure = 'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush';
+export type CenterMeasure = 'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush' | 'unread';
 
 export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) => number>> = {
   output: (m) => (m.idealOut ? m.outRate / m.idealOut : 0),
@@ -53,6 +53,7 @@ export const CENTER_MEASURES: Readonly<Record<CenterMeasure, (n: FactoryNode) =>
   done: (n) => n.rate.done,
   rework: (n) => (n.rate.arr > 0.05 ? n.rate.rwIn / n.rate.arr : 0),
   rush: (n) => rushOf(n),
+  unread: (n) => (n.rate.badIn > 0.05 ? n.rate.badPass / n.rate.badIn : 0),
 };
 
 /** A hash of the whole state, for the determinism check. */

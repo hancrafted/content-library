@@ -165,13 +165,10 @@ interface Decay {
   readonly sampleNow: boolean;
 }
 
+const DECAYING = ['done', 'arr', 'back', 'rwIn', 'unread', 'badIn', 'badPass'] as const;
 const decayRates = (n: FactoryNode, fdec: number): void => {
   const r_ = n.rate;
-  r_.done *= fdec;
-  r_.arr *= fdec;
-  r_.back *= fdec;
-  r_.rwIn *= fdec;
-  r_.unread *= fdec;
+  for (const k of DECAYING) r_[k] *= fdec;
   r_.out[0] *= fdec;
   r_.out[1] *= fdec;
 };
