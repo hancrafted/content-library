@@ -103,6 +103,17 @@ Suits a non-technical audience meeting AI at work: a production line is a pictur
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Iceberg
+
+Suits an Episode whose argument runs from what everyone sees to what few look at: depth shows how far below the visible part a Slide sits.
+
+- Four zones from the top, each labelled in plain words with the ocean term beneath: Above water (Surface), Waterline (Sunlit), Below (Twilight), The deep (Abyss). Each Section sits in one zone; its Slides take that zone's background, and light fades with depth.
+- A depth ruler holds one tile per Section. A Section's first Slide shows the whole ruler: the view moves down and the Section's tile lights up. Every other Slide carries a slim rail at its edge with that tile lit.
+- The Episode's scene is drawn inside its zone. The iceberg is the frame, never a second analogy.
+- Motion is descent, once per Section; after that only the scene moves, and nothing loops at rest.
+- `primary` marks the one thing to look at; the meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+- Zone backgrounds are Slide-local colours that keep text contrast at every depth, in light and dark.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.
