@@ -1986,3 +1986,14 @@
     padding: 0;
   }
 }
+
+/*
+ * A phone shrinks the Swing and Roles cells below one long word ("Documentation", "acceptance"): the words then break
+ * inside their card instead of pushing the page wider than the viewport. At desktop widths every word fits, unchanged.
+ */
+.cartoon :is(.tag, .chip, .cardTitle, .job, .cap),
+.cartoon :is(.tagRow, .headLg, .headText) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
