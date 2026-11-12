@@ -88,7 +88,7 @@ describe('failure cases', () => {
     const presets = doc.presets as Record<string, unknown>[];
     presets[2] = { id: 'ideal', check: { run: 12, expect: { 'qa.speed': 'lots' } } };
     const expected = [
-      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>',
+      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>',
       'presets[2].check.expect.qa.speed: a test such as ">2", "<0.5", "0.9–1.1", rises or falls',
     ];
     // ACT
@@ -111,6 +111,33 @@ describe('failure cases', () => {
     ];
     // ACT
     const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a catch outside 0 to 1, or for a defect kind that does not exist', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c, i) =>
+      i === 4 ? { ...c, catch: { spec: 1.5 }, origin: 'design' } : c,
+    );
+    const expected = [
+      'centers[4].catch: { spec, code }, each the chance to send it back, 0 to 1',
+      'centers[4].origin: spec or code',
+    ];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a bad release chance kept by a defect kind that does not exist', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const customer = { ...(doc.customer as object), bad: { spec: { pm: 0.5 }, design: { pm: 0.1 } } };
+    const expected = ['customer.bad.design: spec or code, the defect kind a bad release comes back by'];
+    // ACT
+    const seen = problems({ ...doc, customer });
     // ASSERT
     expect(seen).toEqual(expected);
   });

@@ -3,6 +3,7 @@
  * AI, the Customer at given settings, and the settings a preset starts from. Values are the reference build's,
  * illustrative, not measured.
  */
+import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type {
   AiQuality,
@@ -12,6 +13,7 @@ import type {
   CenterDials,
   Constant,
   Cust,
+  Defect,
   Dials,
   MechKey,
   Over,
@@ -114,6 +116,17 @@ export const dials = (n: FactoryNode, s: Settings): Dials => {
 };
 
 export const mechOf = (s: Settings, k: Strength): number => (s.mech[k] ? (s.strength[k] ?? 0) : 0);
+/**
+ * A station's chance to send back a bad input of one kind: its `catch` for that kind when it has one, else the rework
+ * strength (an inspection's times `inspect`); nothing while the rework toggle is off (design-ADR 0024 §5).
+ */
+export const catchOf = (s: Settings, at: { n: FactoryNode; d: Dials }, kind: Defect): number => {
+  if (!s.mech.rework) return 0;
+  const c = at.n.def.catch,
+    r = s.strength.rework ?? 0;
+  if (c) return c[kind] ?? 0;
+  return at.n.def.inspection ? Math.min(0.95, r * constOf(s, 'inspect')) : r;
+};
 /** Jobs a week at size 1. */
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>
@@ -151,7 +164,7 @@ export const custOf = (m: Pick<Factory, 'B'>, s: Settings): Cust => {
     mode: firstOf<Cust['mode']>(c.mode, base.arrivals, s.reality > 0 ? 'random' : 'steady'),
     mix: firstOf(c.mix, { ...base.mix }),
     good: firstOf(c.good, { ...firstOf(base.good, {}) }),
-    bad: firstOf(c.bad, { ...firstOf(base.bad, {}) }),
+    bad: c.bad ? copyKinds(c.bad) : kindChancesOf(base.bad),
   };
 };
 
@@ -196,7 +209,7 @@ export const presetSettings = (B: Bundle, p: Preset): Pick<Settings, 'preset' | 
     mode: firstOf<Cust['mode']>(pc.arrivals, base.arrivals, reality > 0 ? 'random' : 'steady'),
     mix: { ...firstOf(pc.mix, base.mix) },
     good: { ...firstOf(pc.good, base.good, {}) },
-    bad: { ...firstOf(pc.bad, base.bad, {}) },
+    bad: kindChancesOf(firstOf(pc.bad, base.bad, {})),
   };
   return { preset: p.id, reality, ai: firstOf<AiSet>(p.ai, 'off'), over: overOf(p), cust };
 };

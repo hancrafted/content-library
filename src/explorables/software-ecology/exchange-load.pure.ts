@@ -3,6 +3,7 @@
  * stability for each company the file can run as, refuse it with the path to fix, or turn it into a bundle and the page
  * state it was saved from. The rushing and worst-case warnings come back for Upload to show (Q122).
  */
+import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { displayOf } from './display-defaults.pure.ts';
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
 import { startSettings } from './factory-dials.pure.ts';
@@ -111,7 +112,7 @@ const custFrom = (base: Cust, c: CustomerPatch = {}): Cust => ({
   mode: c.arrivals || base.mode,
   mix: { ...(c.mix || base.mix) },
   good: { ...(c.good || base.good) },
-  bad: { ...(c.bad || base.bad) },
+  bad: c.bad ? kindChancesOf(c.bad) : copyKinds(base.bad),
 });
 
 const overFrom = (centers: SavedState['centers']): Settings['over'] =>

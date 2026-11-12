@@ -3,7 +3,9 @@
  * job, rolls its result as work starts (so the station can stamp it as the job ends), and on finishing sends it back,
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
-import { constOf, CV, effvNow, firstOf, mechOf, Q, speedOf } from './factory-dials.pure.ts';
+import { DEFECTS } from './defect.pure.ts';
+import { catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf } from './factory-dials.pure.ts';
+import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
 import { countOf, pickBelt } from './factory-routing.pure.ts';
@@ -37,9 +39,16 @@ interface Verdict {
 }
 const AS_IS: Verdict = { bounce: false, churn: 1, grow: 1 };
 
+interface Judged {
+  readonly elig: boolean;
+  readonly t: number;
+  /** The station's catch of the arriving kind. */
+  readonly p: number;
+}
+
 /** An inspection sends bad work back, but passes more of it unread as its backlog fills. */
-const inspect = (m: Factory, n: FactoryNode, x: { elig: boolean; t: number }): Verdict => {
-  const p0 = x.elig ? Math.min(0.95, mechOf(m.s, 'rework') * constOf(m.s, 'inspect')) : 0,
+const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
+  const p0 = x.elig ? x.p : 0,
     k = Math.max(0, 1 - constOf(m.s, 'pressure') * firstOf(n.def.stampUnderPressure, 0.8) * n.press),
     r = n.rr();
   const bounce = r < p0 * k;
@@ -51,8 +60,8 @@ const inspect = (m: Factory, n: FactoryNode, x: { elig: boolean; t: number }): V
 };
 
 /** A plain work center sends bad input back by chance; kept, it multiplies (churn) and takes longer. */
-const keepOrSendBack = (m: Factory, n: FactoryNode, x: { elig: boolean; t: number }): Verdict => {
-  if (x.elig && n.rr() < mechOf(m.s, 'rework')) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
+const keepOrSendBack = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
+  if (x.elig && n.rr() < x.p) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
   const c = mechOf(m.s, 'churn');
   if (c > 1) n.sign.churn = x.t;
   return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + constOf(m.s, 'keepExtra') };
@@ -62,8 +71,9 @@ const keepOrSendBack = (m: Factory, n: FactoryNode, x: { elig: boolean; t: numbe
 const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdict => {
   const J = (n.server as Server).J;
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
-  const elig = x.e.returns && J.b < constOf(m.s, 'maxBounces');
-  return n.def.inspection ? inspect(m, n, { elig, t: x.t }) : keepOrSendBack(m, n, { elig, t: x.t });
+  const elig = x.e.returns && J.b < constOf(m.s, 'maxBounces'),
+    p = catchOf(m.s, { n, d: m.dc[n.idx] }, DEFECTS[kindOf(J.fl, x.e.from.origin)] ?? 'code');
+  return n.def.inspection ? inspect(m, n, { elig, t: x.t, p }) : keepOrSendBack(m, n, { elig, t: x.t, p });
 };
 
 /** The result is rolled when work starts, so the station can stamp it as the job ends. */
@@ -101,12 +111,14 @@ interface Hand {
   readonly fl: number;
   readonly main: number;
   readonly ai: number;
+  /** The defect flag of what it hands on bad: a kept bad input's kind, else the center's own. */
+  readonly kind: number;
 }
 
 /** The first spawn's first document carries the request on, with the result rolled at the start. */
 const carryOn = (m: Factory, h: Hand, e: Belt): void => {
   const n = h.sv.n as FactoryNode;
-  send(m, e, { c: 1, q: h.sv.preQ, ai: h.ai, fl: h.fl | h.main, b: 0, t0: h.t });
+  send(m, e, { c: 1, q: h.sv.preQ, ai: h.ai, fl: h.fl | h.main | (h.sv.preQ === Q.BAD ? h.kind : 0), b: 0, t0: h.t });
   n.rate.out[h.sv.preQ] += BUMP;
 };
 
@@ -116,7 +128,7 @@ const besides = (m: Factory, h: Hand, x: { e: Belt; k: number }): void => {
     { e, k } = x;
   const g = h.qIn === Q.GOOD ? binom(n.rq, k, effvNow(n, h.d)) : 0;
   send(m, e, { c: g, q: Q.GOOD, ai: h.ai, fl: h.fl, b: 0, t0: h.t });
-  send(m, e, { c: k - g, q: Q.BAD, ai: h.ai, fl: h.fl, b: 0, t0: h.t });
+  send(m, e, { c: k - g, q: Q.BAD, ai: h.ai, fl: h.fl | h.kind, b: 0, t0: h.t });
   n.rate.out[1] += g * BUMP;
   n.rate.out[0] += (k - g) * BUMP;
 };
@@ -146,8 +158,15 @@ const bounceBack = (m: Factory, sv: Server, t: number): void => {
 const redone = (m: Factory, sv: Server, x: { t: number; ai: number }): void => {
   const n = sv.n as FactoryNode,
     J = sv.J;
-  send(m, m.edges[J.e], { c: 1, q: sv.preQ, ai: x.ai, fl: J.fl & (FAIL | MAIN | OWN), b: J.b, t0: x.t });
+  const fl = (J.fl & (FAIL | MAIN | OWN)) | (sv.preQ === Q.BAD ? kindBit(n.origin) : 0);
+  send(m, m.edges[J.e], { c: 1, q: sv.preQ, ai: x.ai, fl, b: J.b, t0: x.t });
   n.rate.out[sv.preQ] += BUMP;
+};
+
+/** The defect flag of what a center hands on bad: a kept bad input's first cause, else its own kind. */
+const badKind = (m: Factory, n: FactoryNode, qIn: number): number => {
+  const J = (n.server as Server).J;
+  return kindBit(qIn === Q.BAD ? kindOf(J.fl, m.edges[J.e].from.origin) : n.origin);
 };
 
 const finish = (m: Factory, sv: Server, t: number): boolean => {
@@ -161,7 +180,8 @@ const finish = (m: Factory, sv: Server, t: number): boolean => {
   m.hook?.('done', n);
   const ai = d.ai ? 1 : 0;
   if (J.fl & REDO) return (redone(m, sv, { t, ai }), true);
-  const h: Hand = { sv, d, t, ai, qIn: J.fl & FROM_SRC ? Q.GOOD : J.q, fl: J.fl & FAIL, main: J.fl & (MAIN | OWN) };
+  const qIn = J.fl & FROM_SRC ? Q.GOOD : J.q;
+  const h: Hand = { sv, d, t, ai, qIn, fl: J.fl & FAIL, main: J.fl & (MAIN | OWN), kind: badKind(m, n, qIn) };
   n.spawns.forEach((sp, j) => handOn(m, h, { sp, j }));
   return true;
 };

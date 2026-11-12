@@ -4,6 +4,7 @@
  * alone, so the run reads them on its next step. Ported from the reference build's `applyPreset`, `renderModel` and
  * `wireDashboard`/`wireCustomer` handlers.
  */
+import { copyKinds } from './defect.pure.ts';
 import { MECH_DEFAULTS, presetSettings, startSettings } from './factory-dials.pure.ts';
 import type {
   AiQuality,
@@ -11,6 +12,7 @@ import type {
   Bundle,
   Company,
   Cust,
+  Defect,
   Mechanic,
   Over,
   OwnSet,
@@ -78,13 +80,19 @@ export const withCompany = (s: Settings, company: Company): Settings => ({ ...s,
 export type CustomerChange =
   | { readonly kind: 'rate'; readonly v: number }
   | { readonly kind: 'mode'; readonly v: Cust['mode'] }
-  | { readonly kind: 'mix' | 'good' | 'bad'; readonly to: string; readonly v: number };
+  | { readonly kind: 'mix'; readonly to: string; readonly v: number }
+  | { readonly kind: 'good'; readonly to: string; readonly v: number }
+  | { readonly kind: 'bad'; readonly defect: Defect; readonly to: string; readonly v: number };
 
 /** Follow-up chances stay below this in total, so the requests settle. */
 const FOLLOW_MAX = 0.95;
 
-const chance = (c: Cust, x: { kind: 'good' | 'bad'; to: string; v: number }): number => {
-  const others = Object.entries(c[x.kind])
+type Chance = Extract<CustomerChange, { kind: 'good' | 'bad' }>;
+/** The follow-up chances a change sets one of. */
+const listOf = (c: Cust, x: Chance): Record<string, number> => (x.kind === 'bad' ? c.bad[x.defect] : c.good);
+
+const chance = (c: Cust, x: Chance): number => {
+  const others = Object.entries(listOf(c, x))
     .filter(([t]) => t !== x.to)
     .reduce((a, [, v]) => a + v, 0);
   return Math.min(x.v, FOLLOW_MAX - others);
@@ -92,11 +100,11 @@ const chance = (c: Cust, x: { kind: 'good' | 'bad'; to: string; v: number }): nu
 
 /** The Customer at `cu` (its values now) with one change; a follow-up chance is capped so all stay below 0.95. */
 export const withCustomer = (s: Settings, cu: Cust, x: CustomerChange): Settings => {
-  const c: Cust = { ...cu, mix: { ...cu.mix }, good: { ...cu.good }, bad: { ...cu.bad } };
+  const c: Cust = { ...cu, mix: { ...cu.mix }, good: { ...cu.good }, bad: copyKinds(cu.bad) };
   if (x.kind === 'rate') c.rate = x.v;
   else if (x.kind === 'mode') c.mode = x.v;
   else if (x.kind === 'mix') c.mix[x.to] = x.v;
-  else c[x.kind][x.to] = chance(c, { kind: x.kind, to: x.to, v: x.v });
+  else listOf(c, x)[x.to] = chance(c, x);
   return { ...s, cust: c };
 };
 

@@ -66,13 +66,16 @@ describe('success cases', () => {
 
   it('marks the waiting own tickets with the lightbulb through the floor', () => {
     // ARRANGE
-    const weeks = 20;
+    const [weeks, looks] = [20, 10];
     const f = createFactory(B, product(), SEED);
     f.step(weeks);
     // ACT
-    const marks = f.floor.stations.flatMap((st) =>
-      Array.from({ length: st.queue.n }, (_, i) => st.queue.at(i)).map((r) => ({ id: st.node.id, own: r.own })),
-    );
+    const marks = Array.from({ length: looks }, () => {
+      f.step(1);
+      return f.floor.stations.flatMap((st) =>
+        Array.from({ length: st.queue.n }, (_, i) => st.queue.at(i)).map((r) => ({ id: st.node.id, own: r.own })),
+      );
+    }).flat();
     // ASSERT
     expect(marks.filter((x) => x.own && SOURCE_NODES.includes(x.id)).length).toBeGreaterThan(0);
   });

@@ -3,6 +3,7 @@
  * one belt per from-to pair the Customer or a spawn rule names, loops found by depth-first search, spawn rules resolved
  * to belts, one server per work center or per person. It knows who hands work to whom, never where anything is drawn.
  */
+import { kindChancesOf, kindTargets } from './defect.pure.ts';
 import { HANDOFF } from './factory-dials.pure.ts';
 import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
@@ -20,7 +21,8 @@ export interface Pair {
 const custTargets = (uc: UseCaseData): string[] => {
   const t = new Set<string>();
   for (const c of [uc.customer, ...uc.presets.map((p) => p.customer ?? {})])
-    for (const k of ['mix', 'good', 'bad'] as const) for (const to of Object.keys(c[k] ?? {})) t.add(to);
+    for (const to of [...Object.keys(c.mix ?? {}), ...Object.keys(c.good ?? {}), ...kindTargets(kindChancesOf(c.bad))])
+      t.add(to);
   return [...t];
 };
 
@@ -57,6 +59,7 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   def: { ...spec.def, x: spec.def.at[0], y: spec.def.at[1], kind: spec.kind },
   role: spec.role,
   roleId: spec.kind === 'role' ? (spec.def.role ?? '') : 'customer',
+  origin: (spec.def.origin ?? spec.role.origin) === 'spec' ? 0 : 1,
   ins: [],
   outs: [],
   spawns: [],
@@ -85,7 +88,7 @@ export const asCustomer = (n: FactoryNode): CustomerNode =>
     rateSeen: -1,
     modeSeen: '',
     mixCur: {},
-    acc: [{}, {}] as [Record<string, number>, Record<string, number>],
+    acc: [{}, {}, {}] as CustomerNode['acc'],
   });
 
 export const makeBelt = (p: Pair, i: number, net: { nodes: Map<string, FactoryNode>; B: Bundle }): Belt => {

@@ -2,6 +2,7 @@
  * A tour step's `set` applied to the settings (design-ADR 0024 §10): dials per center, the Customer, where AI works, the
  * reality. factory-scenario.pure.ts re-exports it.
  */
+import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { custOf, firstOf } from './factory-dials.pure.ts';
 import type { Bundle, Cust, Over, Settings, StepSet } from './software-ecology.types';
 
@@ -26,7 +27,7 @@ const setCustomer = (c: NonNullable<StepSet['customer']>, cu: Cust): Cust => ({
   ...cu,
   mix: { ...firstOf(c.mix, cu.mix) },
   good: { ...firstOf(c.good, cu.good) },
-  bad: { ...firstOf(c.bad, cu.bad) },
+  bad: c.bad ? kindChancesOf(c.bad) : copyKinds(cu.bad),
   ...(c.rate !== undefined ? { rate: c.rate } : {}),
   ...(c.arrivals ? { mode: c.arrivals } : {}),
 });

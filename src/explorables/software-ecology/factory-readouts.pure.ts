@@ -30,7 +30,8 @@ export const satRate = (m: Factory): number => {
   return t > 0.05 ? Math.max(0, m.rel[1] - m.compl) / t : 1;
 };
 
-export type CustomerMeasure = 'output' | 'sat' | 'headroom' | 'leadDays' | 'bugsPerWeek' | 'own' | 'backlog';
+export type CustomerMeasure =
+  'output' | 'sat' | 'headroom' | 'leadDays' | 'bugsPerWeek' | 'changesPerWeek' | 'own' | 'backlog';
 export type CenterMeasure = 'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush';
 
 export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) => number>> = {
@@ -38,7 +39,8 @@ export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) =>
   sat: (m) => satRate(m),
   headroom: (m) => solve(m, m.s).headroom,
   leadDays: (m) => (m.mainRate > 0.05 ? (m.wipAvg / m.mainRate) * DAYS : 0),
-  bugsPerWeek: (m) => m.compl,
+  bugsPerWeek: (m) => m.complK[1],
+  changesPerWeek: (m) => m.complK[0],
   own: (m) => m.ownRate,
   backlog: (m) => backlogOf(m),
 };

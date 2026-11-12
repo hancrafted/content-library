@@ -67,7 +67,8 @@ tour:
       sat: 'Anteil zufriedener Kunden: {test}'
       headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen: {test}'
       leadDays: 'Durchlaufzeit in Arbeitstagen: {test}'
-      bugsPerWeek: 'Beschwerden pro Woche: {test}'
+      bugsPerWeek: 'Fehlermeldungen pro Woche: {test}'
+      changesPerWeek: 'Änderungswünsche pro Woche: {test}'
       own: 'Eigene Tickets ausgeliefert pro Woche: {test}'
       backlog: 'Wartende Aufträge an allen Arbeitsplätzen: {test}'
     center:
@@ -84,7 +85,8 @@ tour:
       sat: 'Anteil zufriedener Kunden'
       headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen'
       leadDays: 'Durchlaufzeit in Arbeitstagen'
-      bugsPerWeek: 'Beschwerden pro Woche'
+      bugsPerWeek: 'Fehlermeldungen pro Woche'
+      changesPerWeek: 'Änderungswünsche pro Woche'
       own: 'Eigene Tickets ausgeliefert pro Woche'
       backlog: 'Wartende Aufträge an allen Arbeitsplätzen'
     centerTrend:
@@ -346,9 +348,10 @@ custDash:
   mix: Anfragemix
   mixTip: 'Wohin neue Anfragen gehen: neue Kunden zum Vertrieb, Feature- und Änderungswünsche zum Produktmanagement, Bugs und Supporttickets zum Support.'
   follow: Ein Release bringt eine neue Anfrage
-  followTip: 'Jedes Release kann sofort eine neue Anfrage bringen. Ein gutes Release bringt einen Änderungswunsch, ein schlechtes eine Beschwerde (einen Bug oder eine Supportanfrage, mit der roten Warnung markiert). Zusammen unter 1 gehalten, damit sich die Anfragen einpendeln.'
+  followTip: 'Jedes Release kann sofort eine neue Anfrage bringen. Ein gutes Release bringt eine neue Anfrage, ein schlechtes eine Beschwerde nach seinem Fehler, mit der roten Warnung markiert: das Falsche gebaut kommt als Änderungswunsch zurück, ein Bug als Fehlermeldung. Zusammen unter 1 gehalten, damit sich die Anfragen einpendeln.'
   good: 'Gut · {title}'
-  bad: 'Schlecht · {title}'
+  spec: 'Das Falsche · {title}'
+  code: 'Fehler · {title}'
   complaint: (Beschwerde)
   sizedFor: Ideal bemisst jeden Arbeitsplatz für diese Rate.
   times: '{k}× die Rate, für die Ideal bemessen ist.'

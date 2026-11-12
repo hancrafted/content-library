@@ -70,6 +70,7 @@ const counters = () => ({
   arrRate: 0,
   rel: [0, 0] as [number, number],
   compl: 0,
+  complK: [0, 0] as [number, number],
   fu: 0,
   req: 0,
   wip: 0,

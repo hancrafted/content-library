@@ -7,10 +7,12 @@ import { Glyph } from './factory-glyph-view';
 import type { CustomerChange } from './factory-settings.pure.ts';
 import type { CustDashWords, DashWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
+import type { Defect } from './software-ecology.types';
 
 /*
  * The Customer's dashboard (design-ADR 0024 §2): how many requests a week, steady or random, where they go, and the
- * chance a good or a bad release brings a new request at once. Every change goes up through `onChange`.
+ * chance a good release, or a bad one by its defect kind, brings a new request at once. Every change goes up through
+ * `onChange`.
  */
 
 export interface CustomerDashboardProps {
@@ -26,7 +28,17 @@ export interface CustomerDashboardProps {
   readonly onClose?: () => void;
 }
 
-type Kind = 'mix' | 'good' | 'bad';
+/** A row's list: the mix, a good release's follow-ups, or a bad release's of one defect kind. */
+type Kind = 'mix' | 'good' | Defect;
+
+const listOf = (p: CustomerDashboardProps, kind: Kind): Readonly<Record<string, number>> =>
+  kind === 'mix' || kind === 'good' ? p.r.cust[kind] : p.r.cust.bad[kind];
+
+const changeOf = (kind: Kind, to: string, v: number): CustomerChange =>
+  kind === 'mix' || kind === 'good' ? { kind, to, v } : { kind: 'bad', defect: kind, to, v };
+
+const controlOf = (kind: Kind, to: string): string =>
+  kind === 'mix' || kind === 'good' ? `customer.${kind}.${to}` : `customer.bad.${kind}.${to}`;
 
 interface ChanceRow {
   readonly label: string;
@@ -38,7 +50,7 @@ interface ChanceRow {
 /** A mix weight shows its share; a follow-up its chance, capped so the chances never pass 95 %. */
 const chanceRow = (p: CustomerDashboardProps, kind: Kind, to: string): ChanceRow => {
   const c = p.r.cust,
-    v = c[kind][to] ?? 0,
+    v = listOf(p, kind)[to] ?? 0,
     title = p.titles[to] ?? to;
   if (kind === 'mix') {
     const mw = Object.values(c.mix).reduce((a, b) => a + b, 0) || 1;
@@ -52,17 +64,20 @@ function Chance(p: CustomerDashboardProps & { kind: Kind; to: string }) {
   return (
     <label className={styles.mrow}>
       <span className={styles.tipL}>
-        {row.label} {p.kind === 'bad' ? <span className="text-muted-foreground">{p.words.complaint}</span> : null}
+        {row.label}{' '}
+        {p.kind === 'spec' || p.kind === 'code' ? (
+          <span className="text-muted-foreground">{p.words.complaint}</span>
+        ) : null}
       </span>
       <input
         type="range"
         className={styles.range}
-        data-control={`customer.${p.kind}.${p.to}`}
+        data-control={controlOf(p.kind, p.to)}
         min={0}
         max={row.max}
         step={row.step}
-        value={p.r.cust[p.kind][p.to] ?? 0}
-        onChange={(e) => p.onChange({ kind: p.kind, to: p.to, v: Number(e.target.value) })}
+        value={listOf(p, p.kind)[p.to] ?? 0}
+        onChange={(e) => p.onChange(changeOf(p.kind, p.to, Number(e.target.value)))}
       />
       <b className="font-semibold">{row.shown}</b>
     </label>
@@ -169,8 +184,8 @@ export function CustomerDashboard(p: CustomerDashboardProps) {
         {p.r.good.map((to) => (
           <Chance key={`g${to}`} {...p} kind="good" to={to} />
         ))}
-        {p.r.bad.map((to) => (
-          <Chance key={`b${to}`} {...p} kind="bad" to={to} />
+        {p.r.bad.map((b) => (
+          <Chance key={`${b.defect}${b.to}`} {...p} kind={b.defect} to={b.to} />
         ))}
       </fieldset>
       <Note r={p.r} words={w} />

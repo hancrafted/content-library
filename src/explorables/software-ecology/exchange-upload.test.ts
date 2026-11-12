@@ -98,7 +98,7 @@ describe('success cases', () => {
 
   it('warns, as the reference build does, which work centers would be over capacity while rushing and in the worst case', () => {
     // ARRANGE
-    const warn = { rush: ['support', 'eng'], worst: ['support'] };
+    const warn = { rush: ['eng', 'support'], worst: ['support'] };
     // ACT
     const up = uploadExchange(tireText(), 'a.yaml');
     // ASSERT
@@ -111,8 +111,8 @@ describe('failure cases', () => {
     // ARRANGE
     const text = edited((doc) => void (centerOf(doc, 'eng').realistic = [40, 91]));
     const problems = [
-      'centers[4].realistic: eng: Realistic needs 2.18× its Ideal capacity (at most 1.5×) (as a service provider); raise its efficiency or lower what reaches it',
-      'centers[4].realistic: eng: Realistic needs 2.23× its Ideal capacity (at most 1.5×) (as a product company); raise its efficiency or lower what reaches it',
+      'centers[4].realistic: eng: Realistic needs 2.05× its Ideal capacity (at most 1.5×) (as a service provider); raise its efficiency or lower what reaches it',
+      'centers[4].realistic: eng: Realistic needs 2.11× its Ideal capacity (at most 1.5×) (as a product company); raise its efficiency or lower what reaches it',
     ];
     // ACT
     const up = uploadExchange(text, 'r.yaml');

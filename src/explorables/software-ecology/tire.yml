@@ -7,7 +7,7 @@ mechanics: # strength of each mechanic while its toolbar toggle is on
   churn: 1.2 # bad input that is kept: it hands on this many times the documents (1 to 4)
 # One Customer: sends requests, receives what ships. These are the Ideal values; presets override them.
 # mix: where requests go (weights). good / bad: the chance a good or bad release brings a new request, and where it goes;
-# a bad release's request is a complaint. releases: the work centers whose shipments are releases (the rest are answers).
+# a bad release's request is a complaint, per defect kind in bad: { spec: {…}, code: {…} } (one map: both kinds). releases: the work centers whose shipments are releases (the rest are answers).
 customer:
   { at: [115, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
 # company: service (only the Customer asks) or product (roles also write tickets of their own: the sources below).
@@ -26,7 +26,9 @@ display: { pile: heap, beltMotion: false }
 # A work center: id, role from the catalog, position, its dials at Realistic [efficiency, effectiveness],
 # and spawns: what one finished job creates downstream ({ to, n }, { to, p } or choose: [{ to, w }]); the first one carries the request.
 # Optional: service: exponential (default normal), buffer: n (the sender blocks when it is full),
-# inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai }.
+# inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai },
+# catch: { spec, code } (the chance it sends a bad input of that defect kind back, over mechanics.rework; a kind left out
+# passes), origin: spec or code (the defect kind it makes, over its role's).
 centers:
   - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
   - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
@@ -38,13 +40,14 @@ centers:
       spawns: [{ choose: [{ to: eng, w: 0.4 }, { to: customer, w: 0.6 }] }],
     }
   - { id: ba, role: ba, at: [810, 160], realistic: [88, 93], spawns: [{ to: eng, n: 1 }] }
-  - { id: eng, role: eng, at: [810, 580], realistic: [88, 91], spawns: [{ to: qa, n: 1 }] }
+  - { id: eng, role: eng, at: [810, 580], realistic: [88, 91], catch: { spec: 0.6 }, spawns: [{ to: qa, n: 1 }] }
   - {
       id: qa,
       role: qa,
       at: [1200, 580],
       inspection: true,
       stampUnderPressure: 0.8,
+      catch: { code: 0.95 },
       realistic: [88, 98],
       spawns: [{ to: ops, n: 1 }],
     }
@@ -87,7 +90,7 @@ presets:
       id: realistic,
       view: factory,
       reality: 100,
-      customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
+      customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { spec: { pm: 0.5 }, code: { support: 0.5 } } },
       check:
         {
           run: 80,

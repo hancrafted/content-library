@@ -4,9 +4,11 @@
  * data only, so a Server Component hands a bundle to the client as it is (FE-006 §4).
  */
 
+import type { BadChances, Catch, Defect, KindChances } from './defect.types';
 import type { Arrivals, OwnSet, Source } from './own-work.types';
 import type { AiSet, CenterDials, Chances, CustomerPatch, TourStep } from './scenario.types';
 
+export type { BadChances, Catch, Defect, KindChances } from './defect.types';
 export type { Arrivals, OwnSet, Source } from './own-work.types';
 export type { AiSet, CenterDials, Chances, CustomerPatch, StepSet, TourStep } from './scenario.types';
 export type XY = readonly [number, number];
@@ -46,6 +48,10 @@ export interface CenterDef {
   readonly buffer?: number;
   readonly dials?: CenterDials;
   readonly enabled?: readonly string[];
+  /** Per defect kind, the chance it sends a bad input back, over `mechanics.rework`. */
+  readonly catch?: Catch;
+  /** The kind of defect it makes; its role's by default. */
+  readonly origin?: Defect;
 }
 
 export interface CustomerDef {
@@ -54,7 +60,7 @@ export interface CustomerDef {
   readonly arrivals?: Arrivals;
   readonly mix: Chances;
   readonly good?: Chances;
-  readonly bad?: Chances;
+  readonly bad?: BadChances;
   readonly releases?: readonly string[];
 }
 
@@ -95,6 +101,8 @@ export interface RoleDef {
   readonly icon?: string;
   readonly fan: number;
   readonly aiSize?: number;
+  /** The kind of defect the role makes: `spec` up to Analysis, `code` from Engineering on. */
+  readonly origin?: Defect;
 }
 
 /** The master data of one use case. */
@@ -172,7 +180,7 @@ export interface Cust {
   mode: Arrivals;
   mix: Record<string, number>;
   good: Record<string, number>;
-  bad: Record<string, number>;
+  bad: KindChances;
 }
 
 /** Everything the model reads from the controls: the prototype's settings `S`, without the page's own state. */

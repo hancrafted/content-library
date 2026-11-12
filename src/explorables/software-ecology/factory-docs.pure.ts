@@ -5,14 +5,21 @@
  */
 
 /** Job flags: a request straight from the Customer, to be redone, a complaint, failure demand, on its way back, the
- * document that carries a request on, a ticket of the company's own. Model-internal: readers use the named marks. */
+ * document that carries a request on, a ticket of the company's own, and a bad document's defect kind (spec or code).
+ * Model-internal: readers use the named marks. */
 export const FROM_SRC = 1,
   REDO = 2,
   COMPL = 4,
   FAIL = 8,
   SENT = 16,
   MAIN = 32,
-  OWN = 64;
+  OWN = 64,
+  SPEC = 128,
+  CODE = 256;
+/** The flag of a defect kind, 0 spec or 1 code. */
+export const kindBit = (k: number): number => SPEC << k;
+/** A bad document's defect kind from its flags, 0 spec or 1 code; `fallback` when it carries none. */
+export const kindOf = (fl: number, fallback: number): number => (fl & CODE ? 1 : fl & SPEC ? 0 : fallback);
 
 /** Quality of a document. */
 export const Q = { BAD: 0, GOOD: 1 } as const;

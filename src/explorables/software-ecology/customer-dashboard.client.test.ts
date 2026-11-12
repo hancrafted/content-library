@@ -45,7 +45,14 @@ const customer = () => {
 describe('success cases', () => {
   it("names the Customer dashboard's controls customer.<field>", () => {
     // ARRANGE
-    const expected = ['customer.rate', 'customer.arrivals.steady', 'customer.arrivals.random', 'customer.close'];
+    const expected = [
+      'customer.rate',
+      'customer.arrivals.steady',
+      'customer.arrivals.random',
+      'customer.bad.spec.pm',
+      'customer.bad.code.support',
+      'customer.close',
+    ];
     // ACT
     const found = new Set(controlsOf(customer()).map((c) => c.control));
     // ASSERT
