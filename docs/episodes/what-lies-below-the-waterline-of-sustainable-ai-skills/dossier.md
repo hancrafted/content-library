@@ -61,7 +61,7 @@ master: grid-1x1 · motion: local
 
 AI statement, the headline caption: "A skill hands the AI your proven procedure on demand." Analogy caption, smaller and beside the picture: "The pilot pulls one card from the dive manual when the dive needs it."
 
-One wide view of the control room: the pilot at the console, the manual open at its index, the expedition brief on the wall, and the robot on its cable through the window. Three callouts, each with the AI term as its label and the scene's word in smaller type beneath it: "skill description" (index entry), "skill" (procedure card) and "project instructions" (expedition brief). One card slides out of the manual on its own. The Spec offers Options for this Slide (comic, cutaway illustration), as Han expects a new kind of visual here.
+One wide view of the control room: the pilot at the console, the manual open at its index, the expedition brief on the wall, and the robot on its cable through the window. Three callouts, each with the AI term as its label and the scene's word in smaller type beneath it, numbered in the order the Voice script names them: "Skill" (procedure card), "Description" (index line) and "Project instructions" (expedition brief). One card slides out of the manual on its own. The Spec offers Options for this Slide (comic, cutaway illustration), as Han expects a new kind of visual here.
 
 #### Speaker notes
 
@@ -87,9 +87,9 @@ One wide view of the control room: the pilot at the console, the manual open at 
 
 master: grid-1x1 · motion: none
 
-AI statement, the headline caption: "A skill is a written procedure with a name and a note on when to use it." Analogy caption, smaller and beside the picture: "A procedure card: title and use-when line on the front, steps on the back, extras in the sleeve."
+AI statement, the headline caption: "A skill is a written procedure with a name and a description of what it does and when to use it." Analogy caption, smaller and beside the picture: "A procedure card: title and use-when line on the front, steps on the back, extras in the sleeve."
 
-One card in a clear sleeve, each part labelled with its AI term first and the scene's word beneath. Front: "name and description" (the title and the "use when" line). Back: "instructions" (the numbered steps). Sleeve: "supporting files" (a species guide, a sample label and an arm preset). Coding-agent view: the same card beside its folder, each part linked to `SKILL.md`, `references/`, `assets/` and `scripts/`.
+One card in a clear sleeve, each part labelled with its AI term first and the scene's word beneath. Front: "name and description" (the title and the "use when" line). Back: "instructions" (the numbered steps). Sleeve: "supporting files" (a species guide, a label template and an arm preset). Coding-agent view: the same card beside its folder, each part linked to `SKILL.md`, `references/`, `assets/` and `scripts/`.
 
 #### Speaker notes
 
@@ -105,7 +105,7 @@ One card in a clear sleeve, each part labelled with its AI term first and the sc
 #### Voice script
 
 1. **Name and use-when** — A skill starts with a name and a description, one line saying when to use it. That line matters more than it looks, because it is the first thing the model sees and, as you'll hear in a minute, often the only thing. On our card it is the title and the "use when" line on the front.
-2. **Steps on the back** — Then come the instructions, the procedure itself as numbered steps, on the back of the card. Next to them a skill can carry supporting files that its steps reach for, like a species guide, a sample label or an arm preset tucked into the card's sleeve. So a skill is a procedure, plus the material that procedure needs.
+2. **Steps on the back** — Then come the instructions, the procedure itself as numbered steps, on the back of the card. Next to them a skill can carry supporting files that its steps reach for, like a species guide, a label template or an arm preset tucked into the card's sleeve. So a skill is a procedure, plus the material that procedure needs.
 3. **For developers** — If you work with a coding agent, switch to the coding-agent view, where each of these parts is a file you can open and edit. If you don't, you can ignore that view completely.
 
 ### Three levels of loading {#three-levels-of-loading}
@@ -174,7 +174,7 @@ The context window Explorable with a Preset in the scene's words. Each entry is 
 
 master: three-column · motion: none
 
-AI statement, the headline caption: "Instructions are always loaded, skills load on demand, and connectors reach into other systems." Analogy caption, smaller and beside the picture: "Your notebook, the wall, the manual and the cable."
+AI statement, the headline caption: "Personal and project instructions are always loaded, skills load on demand, and connectors reach into other systems." Analogy caption, smaller and beside the picture: "Your notebook, the wall, the manual and the cable."
 
 Four things in the control room, each led by its AI label and a small static or dynamic tag linking back to the Slide on dynamic context, with the scene's object as the picture: personal instructions, static, which travel to any project (your standing orders in your notebook, which travel to any ship); project instructions, static (the expedition brief on the wall); skills, dynamic (the manual at the console); and a connector, its tools listed up front and its results on demand (the cable to the sonar and the lab database). Coding-agent view: `~/.claude/CLAUDE.md`, `AGENTS.md`, `SKILL.md` and an MCP server. If the connector reads as too much in the render, the Slide falls back to three things.
 
@@ -302,7 +302,7 @@ master: grid-1x2 · motion: local
 
 AI statement, the headline caption: "Turn a run that worked into a skill: from your own notes, or by asking the AI to write it up." Analogy caption, smaller and beside the picture: "Your logbook pages, or the pilot's evening interview about today's good dive."
 
-Two paths into one skill, each headed by its AI label. Left, "From your own notes": your logbook pages from earlier dives. Right, "The AI interviews you, then writes the skill": today's dive went well, so before evening the pilot interviews you about it (why that depth, why that order, what would have counted as failure), then writes the card while he still knows. A callout: "Asking the AI to interview you works here too." Coding-agent view: asking the agent to turn this conversation into a skill. Both sources fold into one card.
+Two paths into one skill, each headed by its AI label. Left, "From your own notes": your logbook pages from earlier dives. Right, "From an AI interview": today's dive went well, so before evening the pilot interviews you about it (why that depth, why that order, what would have counted as failure), then writes the card while he still knows. A callout: "Asking the AI to interview you works here too." Coding-agent view: asking the agent to turn this conversation into a skill. Both sources fold into one card.
 
 #### Speaker notes
 
@@ -332,7 +332,7 @@ Two paths into one skill, each headed by its AI label. Left, "From your own note
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "At the start the AI sees only each skill's name and description, so the description must promise what's inside." Analogy caption, smaller and beside the picture: "From the pilot's chair: the index is open, every card behind it closed."
+AI statement, the headline caption: "Name and description are the AI's only clue to what a skill holds, so the description must promise what's inside." Analogy caption, smaller and beside the picture: "From the pilot's chair: the index is open, every card behind it closed."
 
 The manual from the pilot's view: the index readable and labelled "loaded: name and description", every card behind it closed, greyed out and labelled "not loaded yet". Two descriptions side by side: a vague "Samples" and a clear "Take a sediment sample at a new site". A small callout names information scent, from Xerox PARC research. Coding-agent view: the name and description lines of a `SKILL.md`. The clear entry lights up as the dive's task appears.
 
@@ -441,7 +441,7 @@ One piece of knowledge, today's site depth, with three possible homes, each led 
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "A good skill does one job, and keeps project details out when it has to work in more than one project." Analogy caption, smaller and beside the picture: "At site 7 the seabed lies at 120 m; the card still says 40."
+AI statement, the headline caption: "A good skill does one job, and a project detail written into it ties it to one project." Analogy caption, smaller and beside the picture: "At site 7 the seabed lies at 120 m; the card still says 40."
 
 Two halves, each headed by its AI label. Left, "Several jobs in one skill": an overstuffed card, "Sample, film, log and clean up". Right, "A project detail written into the skill": a sampling card with "descend to 40 m" scribbled in for site 4; at the next site the seabed lies at 120 m and the robot hangs uselessly at 40. One callout, labelled "Code design heuristics, applied to skills by analogy", names cohesion and coupling, the Single Responsibility Principle, and Clean Code's "Do One Thing" and "One Level of Abstraction per Function"; it closes with Google's rule of thumb for skills: "If you cannot describe what the skill does in one sentence, it is two skills." The robot stops short, far above the seabed.
 
@@ -509,7 +509,7 @@ master: grid-1x2 · motion: local
 
 AI statement, the headline caption: "Project details can stay beside the skill, in files it reads when it runs." Analogy caption, smaller and beside the picture: "Same card, any site: this time the robot reaches the seabed at 120 m."
 
-The previous mistake, fixed. The skill's step, labelled "points to the project context", now says "descend to the depth in today's dive plan", and a line runs from that step to a project file the skill reads when it runs, drawn as today's dive plan pinned on the wall: "Site 4: 40 m. Site 7: 120 m." Coding-agent view: the step pointing to a project file such as `CONTEXT.md`. This time the robot reaches the seabed at 120 m.
+The previous mistake, fixed. The skill's step, labelled "Points to a project file", now says "descend to the depth in today's dive plan", and a line runs from that step to a project file the skill reads when it runs, drawn as today's dive plan pinned on the wall: "Site 4: 40 m. Site 7: 120 m." Coding-agent view: the step pointing to a project file such as `CONTEXT.md`. This time the robot reaches the seabed at 120 m.
 
 #### Speaker notes
 
@@ -529,9 +529,9 @@ The previous mistake, fixed. The skill's step, labelled "points to the project c
 
 master: grid-2x2 · motion: local
 
-AI statement, the headline caption: "Who uses a skill, and where, decides what goes inside it and how much care it needs." Analogy caption, smaller and beside the picture: "One card moves from your notebook to the fleet manual."
+AI statement, the headline caption: "Who uses a skill, and where, decides what goes inside it and how much care it needs." Analogy caption, smaller and beside the picture: "One card moves from your notebook to the fleet manual; project cards stay in the expedition binder."
 
-A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisational words: personal or shared skill, and general use or project-specific. Each square leads with its AI text, a small expedition picture beneath it. Personal and project-specific: details written straight into the skill, least upkeep. Personal and general: details kept beside, your own toolkit. Shared and project-specific: details can live in its supporting files, owned by the project team. Shared and general: details beside, with an owner, a version and evals. One card moves from your notebook to the fleet manual, labelled "personal skill" then "shared skill", losing its scribbled details and gaining an owner tag.
+A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisational words: personal or shared skill, and general use or project-specific. Each square leads with its AI text, a small expedition picture beneath it. Personal and project-specific: details written into the skill, least upkeep. Personal and general: details kept beside the skill, your own toolkit. Shared and project-specific: details kept in its supporting files, owned by the project team. Shared and general: details kept beside, with an owner, a version and evals; owned, versioned and tested. One card moves from your notebook to the fleet manual, labelled "personal skill" then "shared skill", losing its scribbled details and gaining an owner tag.
 
 #### Speaker notes
 
@@ -558,7 +558,7 @@ master: three-column · motion: local
 
 AI statement, the headline caption: "The interview stays the same; what each run settles about your project is written beside it, for the next run to read." The analogy appears only as the small key in the corner.
 
-The only Slide outside the control room, a showcase on the real files. Three parts, left to right: the real `SKILL.md` of grill-me with the interview steps highlighted as the procedure; grill-with-docs, which runs the same interview skill and adds domain modelling; and the files it writes beside itself, `GLOSSARY.md` and decision records, with an arrow back to the next run reading them. A small key in the corner maps them to the card and the expedition brief. A closing line: a skill can also run other skills (grill-me runs grilling; grill-with-docs runs grilling and domain-modeling), with no settled name for it yet. `GLOSSARY.md` gains a new term after a session.
+The only Slide outside the control room, a showcase on the real files. Three parts, left to right: the real `SKILL.md` of grill-me with the interview steps highlighted as the procedure; grill-with-docs, which runs the same interview skill and adds domain modelling; and the files it writes beside itself, `GLOSSARY.md` and decision records, with an arrow back to the next run reading them. A small key in the corner maps them to the card and today's dive plan. A closing line: a skill can also run other skills (grill-me runs grilling; grill-with-docs runs grilling and domain-modeling), with no settled name for it yet. `GLOSSARY.md` gains a new term after a session.
 
 #### Speaker notes
 
@@ -732,7 +732,7 @@ A reveal panel, led by its AI statement, "Every AI model has this condition, and
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "Remove skills nobody uses, so the right one stays easy to find." Analogy caption, smaller and beside the picture: "Cards the dive log never mentions go into the archive box."
+AI statement, the headline caption: "Retire skills nobody uses, so the right one stays easy to find." Analogy caption, smaller and beside the picture: "Cards the dive log never mentions go into the archive box."
 
 The skill index, drawn as the fleet manual's index, next to the season's dive log. Skills no task used are greyed out, labelled "unused this season", and go into an archive box marked with their retirement date. The index left behind is short again, the one entry you need easy to spot, a callback to the earlier buried entry. The unused cards slide into the archive box and the index closes up.
 
