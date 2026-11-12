@@ -22,7 +22,7 @@
     }
   },
   "still": {
-    "label": "The Tire swing factory in the AI-unbalanced scenario at week {week}: AI at Engineering, quality assurance with {waiting} waiting, the Customer at {output} of ideal",
+    "label": "The Tire swing factory in practice, AI at Engineering only, at week {week}: AI at Engineering, quality assurance with {waiting} waiting, the Customer at {output} of ideal",
     "at": "AI unbalanced, week {week}",
     "overflow": "+{n}",
     "aiExtra": "{n} pull requests per task",
@@ -30,7 +30,7 @@
   },
   "stills": {
     "dashboard": {
-      "label": "The Analysis dashboard at week {week} of the AI-unbalanced scenario",
+      "label": "The Analysis dashboard at week {week}, AI at Engineering only",
       "aiLeavesIt": "· AI leaves it",
       "people": "People",
       "tools": "Tools & artefacts",

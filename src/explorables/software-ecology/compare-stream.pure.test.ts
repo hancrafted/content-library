@@ -8,9 +8,9 @@ import {
   streamOf,
   togglePicking,
 } from './compare-stream.pure.ts';
-import { idealSettings } from './factory-dials.pure.ts';
+import { idealSettings, startSettings } from './factory-dials.pure.ts';
 import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
-import { FactoryRun } from './factory-run.pure.ts';
+import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const tire = () => createFactory(builtinBundle('tire'), idealSettings('service'), DEFAULT_SEED).topology;
@@ -73,9 +73,11 @@ describe('success cases', () => {
     expect(turnedOff).toEqual(closedCompare());
   });
 
-  it('reads quality assurance at AI compare as the stream shows it: a full rack of AI-made work, busy all the time', () => {
+  it('reads quality assurance with AI at Engineering, warmed, as the stream shows it: a full rack of AI-made work, busy all the time', () => {
     // ARRANGE
-    const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ai-compare', now: true });
+    const B = builtinBundle('tire');
+    const s = { ...startSettings(B, presetOf(B, 'realistic')), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
+    const run = new FactoryRun({ B, preset: 'realistic', now: true, s });
     const [waiting, weeks, busy, done, shown] = [778, 35.6, 100, 17.8, 10];
     const goodAi = { good: true, ai: true, warn: false };
     // ACT
@@ -92,13 +94,13 @@ describe('success cases', () => {
     // ARRANGE
     const picked = pickCompare(closedCompare(), 'eng');
     const shown = { picking: false, open: true, ids: ['eng'], note: null };
-    const aiCompare = { picking: false, open: true, ids: ['ba', 'eng', 'qa'], note: null };
+    const fromPicks = { picking: false, open: true, ids: ['ba', 'eng', 'qa'], note: null };
     // ACT
     const opened = openCompare(picked);
     const fromPreset = presetCompare(['ba', 'eng', 'qa']);
     // ASSERT
     expect(opened).toEqual(shown);
-    expect(fromPreset).toEqual(aiCompare);
+    expect(fromPreset).toEqual(fromPicks);
   });
 });
 

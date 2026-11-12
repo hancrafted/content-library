@@ -1,8 +1,7 @@
 /*
- * The stills' state: the software ecology Explorable's own model, run headless at build time to the AI-unbalanced
- * tour's last step (week 20), with the shipped seed, the use case's layout and its words in the page locale. The
- * Explorable's tour and its headless checks stop on the same model step, so the stills show the very state a viewer
- * reaches with Tour, and a retuned model redraws them on the next build. It reads the model through its handle only
+ * The stills' state: the software ecology Explorable's own model, run headless at build time to week 20 of In practice
+ * with AI at Engineering (PLAY), with the shipped seed, the use case's layout and its words in the page locale. A retuned
+ * model redraws them on the next build. It reads the model through its handle only
  * (design-ADR 0024 §1): the Snapshot, the Topology and the Floor.
  */
 import {
@@ -39,7 +38,14 @@ import { roleWords, type WordsIn } from '@/explorables/software-ecology/use-case
 import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './factory-still.types';
 
 const USE_CASE = 'tire';
-const SCENARIO = 'ai-unbalanced';
+/**
+ * What the stills show: In practice, AI at Engineering from week 4 writing two pull requests per task, run to week 20.
+ * The AI-unbalanced tour this was, before the eval grill deleted the scenarios: the same settings, the same numbers.
+ */
+const PLAY = {
+  start: 'realistic',
+  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
+} as const;
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
 
@@ -72,8 +78,8 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
   return out;
 };
 
-/** The model at the scenario's last tour step: warmed, then each step's dials set and run to its week. */
-const runToLastStep = () => scenarioLastStep(USE_CASE, SCENARIO);
+/** The model after PLAY: warmed, then each step's dials set and run to its week. */
+const runToLastStep = () => scenarioLastStep(USE_CASE, PLAY);
 
 type Run = ReturnType<typeof runToLastStep>;
 interface Read {

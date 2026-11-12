@@ -11,6 +11,11 @@ import { titlesOf } from './use-case-words.pure.ts';
 
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
+/** In practice with AI at Engineering writing twice the work, run to week 20. */
+const AI_AT_ENG = {
+  start: 'realistic',
+  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
+};
 const noop = () => undefined;
 
 const controlsOf = (html: string) =>
@@ -19,7 +24,7 @@ const controlsOf = (html: string) =>
     .map((el) => ({ tag: el.tagName, control: el.attribs['data-control'], label: el.attribs['aria-label'] ?? '' }));
 
 const customer = () => {
-  const { f, B } = scenarioLastStep('tire', 'ai-unbalanced');
+  const { f, B } = scenarioLastStep('tire', AI_AT_ENG);
   const snap = f.read({ watch: ['customer'] });
   const words = wordsFor('en');
   return renderToStaticMarkup(

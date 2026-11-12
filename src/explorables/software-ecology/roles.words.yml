@@ -70,17 +70,3 @@ presets:
   roles: Who does what
   ideal: In theory
   realistic: In practice
-  ai-unbalanced: AI, unbalanced
-  ai-compare: AI compare
-  ai-balanced: AI, balanced
-  speed-up: Speed up one team
-  ai-everywhere: AI everywhere
-  bug-spiral: Bug spiral
-  fix-orders: Fix the orders first
-  move-bottleneck: Move the bottleneck
-# A scenario's "what to watch" line, shared by every use case unless the use case says its own (tours live in the use case).
-scenarios:
-  speed-up:
-    watch: Make one team twice as fast. Watch the Customer card – does more ship?
-  ai-unbalanced:
-    watch: AI at Engineering only, writing twice the pull requests. Watch the review pile up.
