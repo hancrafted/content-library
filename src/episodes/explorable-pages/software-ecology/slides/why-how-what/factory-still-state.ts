@@ -48,7 +48,7 @@ const SCENARIO = 'ai-unbalanced';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
 /** The states the Explorable's toolbar shows on its row, in its order; the Scenarios menu holds the rest. */
-const ROW_STATES = ['swing', 'roles', 'ideal', 'realistic'] as const;
+const ROW_STATES = ['roles', 'ideal', 'realistic'] as const;
 
 export type * from './factory-still.types';
 

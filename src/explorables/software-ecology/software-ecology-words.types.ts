@@ -4,15 +4,15 @@
  */
 import type { CompareWords } from './compare-words.types';
 import type { ExchangeWords } from './exchange-words.types';
-import type { ToolbarWords } from './toolbar-words.types';
+import type { SettingsWords, ToolbarWords } from './toolbar-words.types';
 import type { TourWords } from './tour-words.types';
 
 export type { CompareWords } from './compare-words.types';
 export type { ExchangeWords } from './exchange-words.types';
-export type { ToolbarWords } from './toolbar-words.types';
+export type { SettingsWords, ToolbarWords } from './toolbar-words.types';
 export type { TourCheckWords, TourWords } from './tour-words.types';
 
-/** The Model popover. */
+/** The Settings popover's Model column. */
 export interface ModelWords {
   readonly label: string;
   readonly reality: string;
@@ -35,12 +35,11 @@ export interface ModelWords {
   readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'rework' | 'churn' | 'reset', string>>;
 }
 
-/** The ⋮ menu. */
+/** The Settings popover's Display column. */
 export interface MoreWords {
   readonly label: string;
   readonly beltMotion: string;
   readonly beltMotionNote: string;
-  readonly dark: string;
   readonly pile: string;
   readonly pileLabel: string;
   readonly piles: Readonly<Record<'heap' | 'stack' | 'drift', { readonly name: string; readonly note: string }>>;
@@ -207,19 +206,20 @@ export interface DockWords {
   readonly complaints: string;
 }
 
-/** Swing and Roles: the cartoon's captions by panel id, and the words around the panels. */
+/** The roles state: the cartoon's captions by panel id, and the words around the panels. */
 export interface CartoonWords {
   readonly captions: Readonly<Record<string, string>>;
   readonly blank: string;
   /** "{role} · not a work center here", on a tile. */
   readonly notHere: string;
   readonly artefacts: string;
-  /** Why a tile is no work center, in Roles, by panel id. */
+  /** Why a tile is no work center, by panel id. */
   readonly jobs: Readonly<Record<string, string>>;
 }
 
 export interface Words {
   readonly toolbar: ToolbarWords;
+  readonly settings: SettingsWords;
   readonly tour: TourWords;
   readonly stage: StageWords;
   readonly card: CardWords;

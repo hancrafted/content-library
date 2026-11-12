@@ -19,19 +19,39 @@ describe('success cases', () => {
     expect(html).toContain(note);
   });
 
-  it('opens on Swing: the cartoon panels at their work centers and the tiles for Documentation, Billing and the wanted swing', () => {
+  it('opens on Tire swing 2.0: each department with its job, its cartoon panel and the quote under it, and the three tiles', () => {
     // ARRANGE
     const cartoon = wordsFor('en').cartoon;
-    const shown = [cartoon.captions.explained, cartoon.captions.eng, cartoon.captions.doc, cartoon.captions.needed];
-    const swing = 'data-card-view="swing"';
+    const quotes = [cartoon.captions.explained, cartoon.captions.eng, cartoon.captions.doc, cartoon.captions.needed];
+    const shown = ['Tire swing 2.0', 'Engineering', 'Turns the spec into code', 'Analysis', 'ADR'];
     // ACT
     const html = render({ locale: 'en' });
     // ASSERT
+    for (const t of quotes) expect(html).toContain(`>${t}</figcaption>`);
     for (const t of shown) expect(html).toContain(`>${t}<`);
-    expect(html).toContain(swing);
+    expect(html).toContain('aria-pressed="true">Tire swing 2.0<');
+    expect(html).not.toContain('data-card-view="swing"');
   });
 
-  it('shows each role’s job and artefacts in Roles, and why Documentation is no work center', () => {
+  it('labels the roles state Roles on a use case without the cartoon', () => {
+    // ARRANGE
+    const label = 'aria-pressed="true">Roles<';
+    // ACT
+    const html = render({ locale: 'en', useCase: 'gate' });
+    // ASSERT
+    expect(html).toContain(label);
+  });
+
+  it('opens a Slide still naming swing on the roles state', () => {
+    // ARRANGE
+    const label = 'aria-pressed="true">Reifenschaukel 2.0<';
+    // ACT
+    const html = render({ locale: 'de', preset: 'swing' });
+    // ASSERT
+    expect(html).toContain(label);
+  });
+
+  it('shows each role’s job and artefacts in the roles state, and why Documentation is no work center', () => {
     // ARRANGE
     const job = 'Turns the spec into code';
     const artefact = 'pull request';

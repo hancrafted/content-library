@@ -11,7 +11,7 @@ const factoryOf = (id: string) => {
 
 describe('success cases', () => {
   it('puts the tire swing Customer in the first column and each work center in its factory column and row', () => {
-    // ARRANGE (the reference build's grid columns and rows, read from flow.html in Swing)
+    // ARRANGE (the reference build's grid columns and rows, read from flow.html in its cartoon view)
     const m = factoryOf('tire');
     const size = { cols: 4, rows: 3 };
     const cells = {
@@ -31,7 +31,7 @@ describe('success cases', () => {
     expect(g.at).toEqual(cells);
   });
 
-  it('fills the empty cells with Documentation and Billing, and puts what the customer really needed under the Customer in Swing', () => {
+  it('fills the empty cells with Documentation and Billing, and puts what the customer really needed under the Customer in the roles state', () => {
     // ARRANGE
     const m = factoryOf('tire');
     const expected = [
@@ -40,7 +40,7 @@ describe('success cases', () => {
       { id: 'needed', at: [1, 3] },
     ];
     // ACT
-    const tiles = tilesOf(m, 'swing');
+    const tiles = tilesOf(m);
     // ASSERT
     expect(tiles).toEqual(expected);
   });
@@ -51,30 +51,20 @@ describe('failure cases', () => {
     // ARRANGE
     const m = factoryOf('gate');
     // ACT
-    const tiles = tilesOf(m, 'swing');
+    const tiles = tilesOf(m);
     // ASSERT
     expect(tiles).toEqual([]);
   });
 });
 
 describe('edge cases', () => {
-  it('leaves what the customer really needed out of Roles', () => {
+  it('keeps quality assurance, which has no cartoon panel, at its factory cell', () => {
     // ARRANGE
     const m = factoryOf('tire');
-    const expected = ['doc', 'billing'];
-    // ACT
-    const ids = tilesOf(m, 'roles').map((t) => t.id);
-    // ASSERT
-    expect(ids).toEqual(expected);
-  });
-
-  it('gives quality assurance no cartoon panel, so it sits out Swing', () => {
-    // ARRANGE
-    const m = factoryOf('tire');
-    const out = ['qa'];
+    const at = [4, 3];
     // ACT
     const g = gridOf(m);
     // ASSERT
-    expect(g.outOfSwing).toEqual(out);
+    expect(g.at.qa).toEqual(at);
   });
 });

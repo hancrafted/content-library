@@ -6,7 +6,8 @@
 
 export type XY = readonly [number, number];
 export type Locale = 'en' | 'de';
-export type ViewId = 'swing' | 'roles' | 'factory';
+/** The roles state (Swing and Roles merged in feedback 08) or the factory. */
+export type ViewId = 'roles' | 'factory';
 export type Company = 'service' | 'product';
 export type Arrivals = 'steady' | 'random';
 export type AiQuality = 'worse' | 'same' | 'better';

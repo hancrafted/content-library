@@ -37,9 +37,41 @@ export const exchangeSchema = (catalog: readonly string[]) => schemaOf({ catalog
 
 const read = (text: string): unknown => parse(text) as unknown;
 
+/** Swing and Roles merged into the roles state (feedback 08): the retired `swing` id or view reads as `roles`. */
+const RETIRED = 'swing';
+const ROLES_STATE = 'roles';
+const unretired = (v: unknown): unknown => (v === RETIRED ? ROLES_STATE : v);
+
+/** A preset or saved state with `swing` in its id or view, as the roles state. */
+const renamed = (x: Doc): Doc => ({
+  ...x,
+  ...('id' in x ? { id: unretired(x.id) } : {}),
+  ...('preset' in x ? { preset: unretired(x.preset) } : {}),
+  ...('view' in x ? { view: unretired(x.view) } : {}),
+});
+
+/** The presets with `swing` read as `roles`, the first of the same id kept. */
+const presetsOf = (presets: unknown): unknown => {
+  if (!Array.isArray(presets)) return presets;
+  const seen = new Set<unknown>();
+  return presets
+    .map((x) => (isMap(x) ? renamed(x) : x))
+    .filter((x) => !isMap(x) || (seen.has(x.id) ? false : (seen.add(x.id), true)));
+};
+
+/** A document of schema /5 with every retired name read as today's. */
+const current = (doc: unknown): unknown =>
+  isMap(doc)
+    ? {
+        ...doc,
+        ...('presets' in doc ? { presets: presetsOf(doc.presets) } : {}),
+        ...(isMap(doc.state) ? { state: renamed(doc.state) } : {}),
+      }
+    : doc;
+
 /** A shipped use-case file; a broken one throws, naming every problem, so the build fails. */
 export const readUseCase = (text: string, catalog: readonly string[]): UseCaseData => {
-  const doc = read(text),
+  const doc = current(read(text)),
     r = useCaseSchema(catalog).safeParse(doc);
   if (!r.success)
     throw new Error(`A shipped use-case file is broken:\n${r.error.issues.map((i) => i.message).join('\n')}`);
@@ -64,7 +96,7 @@ export const readExchange = (
 ): { readonly ok: Exchange } | { readonly problems: readonly string[] } | { readonly unread: string } => {
   let doc: unknown;
   try {
-    doc = read(text);
+    doc = current(read(text));
   } catch (e) {
     return { unread: (e as Error).message.split('\n')[0] ?? '' };
   }

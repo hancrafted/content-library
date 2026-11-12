@@ -5,7 +5,7 @@
  * frame must show the settled model. Reached only through `useFactory`.
  */
 import { useState } from 'react';
-import { DEFAULT_SPEED, FactoryRun, presetOf } from './factory-run.pure.ts';
+import { FactoryRun, presetOf, startSpeedOf } from './factory-run.pure.ts';
 import { pageSettings, useCaseSettings } from './factory-settings.pure.ts';
 import type { Bundle, Settings } from './software-ecology.types';
 
@@ -92,7 +92,7 @@ const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls =
 
 export function useRun(x: { B: Bundle; preset: string; reduced: boolean }) {
   const [st, setSt] = useState(() => fresh(x.B, x.preset, { s: pageSettings(x.B, presetOf(x.B, x.preset), null) }));
-  const [speed, setSpeed] = useState(() => presetOf(x.B, x.preset).speed ?? DEFAULT_SPEED);
+  const [speed, setSpeed] = useState(() => startSpeedOf(x.B, x.preset));
   const [, seen] = useState<Settings | null>(null);
   const [modified, setModified] = useState(false);
   let cur = st;

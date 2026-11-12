@@ -8,6 +8,11 @@ export interface ToolbarWords {
   readonly speed: string;
   readonly pause: string;
   readonly speedN: string;
+  /** The speed menu's button, "Speed: {n}×", and its tooltip. */
+  readonly speedMenu: string;
+  readonly speedMenuTip: string;
+  /** Pause's name while paused. */
+  readonly play: string;
   readonly speedTips: Readonly<Record<string, string>>;
   readonly clear: string;
   readonly clearTip: string;
@@ -15,21 +20,26 @@ export interface ToolbarWords {
   readonly week: string;
   readonly warming: string;
   readonly clockTip: string;
-  readonly mechanics: string;
   readonly mechs: Readonly<Record<'rework' | 'churn' | 'complaints', { readonly label: string; readonly tip: string }>>;
-  readonly model: string;
-  readonly modelTip: string;
-  readonly more: string;
-  readonly moreTip: string;
   /** The Scenarios menu: its button, its name, and each entry's "{n}-step tour". */
   readonly scenarios: string;
   readonly scenariosLabel: string;
   readonly tourSteps: string;
   readonly tour: string;
   readonly tourTip: string;
-  /** The muted lead of the state's "what to watch" line. */
-  readonly watch: string;
-  /** Beside the state row once a dial was turned after picking a state. */
+  /** The dot on the active state once a dial was turned after picking it. */
   readonly modified: string;
   readonly modifiedTip: string;
+}
+
+/** The Settings popover: its button, its three columns and the file at its foot (feature guide, Interaction 3). */
+export interface SettingsWords {
+  readonly button: string;
+  readonly tip: string;
+  readonly label: string;
+  readonly model: string;
+  readonly mechanics: string;
+  readonly mechanicsNote: string;
+  readonly display: string;
+  readonly file: string;
 }

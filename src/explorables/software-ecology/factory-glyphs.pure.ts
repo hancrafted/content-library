@@ -54,5 +54,5 @@ export const ICON: Readonly<Record<string, string>> = {
   ok: '<circle cx="12" cy="12" r="9" /><path d="M8 12.5l2.7 2.7L16 10" />',
   dot: '<circle cx="12" cy="12" r="5" />',
   clear: '<path d="M4 4v6h6" /><path d="M4.5 15a8 8 0 1 0 1.9-8.3L4 10" />',
-  kebab: '<circle cx="12" cy="5" r="1.4" /><circle cx="12" cy="12" r="1.4" /><circle cx="12" cy="19" r="1.4" />',
+  factory: '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17z" /><path d="M7 17h2M12 17h2" />',
 };

@@ -4,8 +4,9 @@ import type { ReactNode } from 'react';
 import type { CompareWidgetProps } from './compare-widget';
 import type { ExchangeButtonsProps } from './exchange-buttons';
 import type { Snapshot } from './factory-model.pure.ts';
-import { aiChoicesOf, withMech, type AiChoice } from './factory-settings.pure.ts';
+import { aiChoicesOf, type AiChoice } from './factory-settings.pure.ts';
 import { FactoryToolbar, type Choice } from './factory-toolbar.client';
+import type { MechanicsMenuProps } from './mechanics-menu.client';
 import type { ModelMenuProps } from './model-menu.client';
 import type { ScenarioChoice } from './scenario-menu';
 import type { Words } from './software-ecology-words.types';
@@ -14,8 +15,9 @@ import type { Display } from './use-display.ts';
 import type { FactoryView } from './use-factory.ts';
 
 /*
- * The toolbar wired to the run: the state row, the use case, mechanics, compare mode, speed, the Model and the ⋮ menu. Every
- * setting goes through the run's controls; the display choices through `Display`.
+ * The toolbar wired to the run: the state row, compare mode, speed, the use case and the Settings popover (its Model,
+ * Mechanics and Display columns and the file). Every setting goes through the run's controls; the display choices
+ * through `Display`.
  */
 
 export interface ControlsProps {
@@ -34,7 +36,6 @@ export interface ControlsProps {
   readonly statesMarker?: ReactNode;
   readonly scenarios: readonly ScenarioChoice[];
   readonly scenarioMarkers?: Readonly<Partial<Record<string, ReactNode>>>;
-  readonly watch: string;
   readonly tour: { readonly can: boolean; readonly on: boolean; readonly start: () => void };
   /** While a tour runs, its clock ("Week 8 · Day 1") in place of the day. */
   readonly tourClock?: string;
@@ -62,21 +63,26 @@ const modelOf = (p: ControlsProps): ModelMenuProps => {
     B: p.B,
     settings: c.settings,
     words: p.words.model,
-    mechs: p.words.toolbar.mechs,
     aiChoices: aiChoices(p),
     onSettings: c.setSettings,
     onReset: () => p.onPreset(c.preset),
   };
 };
 
-/** The state row's Scenarios menu, Tour and "modified", and the watch line. */
+const mechanicsOf = (p: ControlsProps): MechanicsMenuProps => ({
+  settings: p.f.controls.settings,
+  mechs: p.words.toolbar.mechs,
+  tips: p.words.model.tips,
+  onSettings: p.f.controls.setSettings,
+});
+
+/** The state row's Scenarios menu, Tour and the modified dot. */
 const stateRowOf = (p: ControlsProps) => ({
   scenarios: p.scenarios,
   scenarioMarkers: p.scenarioMarkers,
   canTour: p.tour.can,
   touring: p.tour.on,
   onTour: p.tour.start,
-  watch: p.watch,
   modified: p.f.controls.modified,
 });
 
@@ -85,6 +91,7 @@ export function Controls(p: ControlsProps) {
   return (
     <FactoryToolbar
       words={p.words.toolbar}
+      settingsWords={p.words.settings}
       states={p.states}
       preset={c.preset}
       onPreset={p.onPreset}
@@ -99,10 +106,9 @@ export function Controls(p: ControlsProps) {
       statesTarget={p.statesTarget}
       statesMarker={p.statesMarker}
       {...stateRowOf(p)}
-      mech={c.settings.mech}
-      onMech={(k) => c.setSettings(withMech(c.settings, k))}
       model={modelOf(p)}
-      more={{ ...p.display, words: p.words.more }}
+      mechanics={mechanicsOf(p)}
+      display={{ ...p.display, words: p.words.more }}
       compare={p.compare}
       exchange={p.exchange}
     />

@@ -17,7 +17,8 @@ import {
   type Sink,
 } from './use-case-checks.pure.ts';
 
-export const VIEWS = ['swing', 'roles', 'factory'];
+/** `swing` is retired: `use-case-file.ts` reads it as `roles` before these checks run. */
+export const VIEWS = ['roles', 'factory'];
 export const SPEEDS = [0, 1, 2, 5, 10];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =

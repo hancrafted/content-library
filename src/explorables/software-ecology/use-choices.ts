@@ -15,7 +15,7 @@ import type { FactoryWords } from './use-factory.ts';
 /** The states on the toolbar's row; the Scenarios menu holds the rest. */
 const BUILT_IN = 'built in';
 
-export const MAIN_STATES = ['swing', 'roles', 'ideal', 'realistic'];
+export const MAIN_STATES = ['roles', 'ideal', 'realistic'];
 
 export interface ChoicesIn {
   readonly bundles: readonly Bundle[];

@@ -9,6 +9,9 @@ toolbar:
   speed: Speed
   pause: Pause
   speedN: 'Speed {n}×'
+  speedMenu: 'Speed: {n}×'
+  speedMenuTip: How fast simulated time runs
+  play: Play
   speedTips:
     '1': '1×: a working day takes about 3 seconds'
     '2': '2×: a working day takes about 1.6 seconds'
@@ -20,7 +23,6 @@ toolbar:
   week: 'Week {w} · Day {d}'
   warming: Warming up
   clockTip: Simulated time in working days; every handoff takes a quarter day
-  mechanics: What bad work does downstream
   mechs:
     rework:
       label: Rework
@@ -31,18 +33,23 @@ toolbar:
     complaints:
       label: Complaints
       tip: 'Customer complaints: a bad release may bring a complaint, a bug or support request marked with the red warning: work that adds no value. The Customer’s grid marks it; its chance is on the Customer card.'
-  model: Model
-  modelTip: Ideal to Realistic, where AI works, AI quality, strength of each mechanic
-  more: 'More: belt motion, pile-up, theme'
-  moreTip: Belt motion, pile-up, theme
   scenarios: Scenarios
   scenariosLabel: Scenarios
   tourSteps: '{n}-step tour'
   tour: Tour
   tourTip: 'A guided tour of this scenario: set the dials, run to a week, pause, read what to look at'
-  watch: 'What to watch:'
   modified: modified
   modifiedTip: A dial was turned after picking this state; pick it again to reset
+# The Settings popover: one button at the toolbar's end, three columns and the file at its foot.
+settings:
+  button: Settings
+  tip: 'Settings: the model, what bad work does downstream, how the factory is drawn, and the file'
+  label: Settings
+  model: Model
+  mechanics: Mechanics
+  mechanicsNote: What bad work does downstream
+  display: Display
+  file: File
 tour:
   label: Guided tour
   step: '· step {i} of {n} · week {w}'
@@ -178,7 +185,7 @@ dock:
     asked: What the customer asked for
   note: 'Output counts fulfilled requests only: never the extra documents, rework or answers to complaints.'
   complaints: 'About {n} complaints a week come back: failure demand, not new value.'
-# Swing and Roles: the tire swing cartoon's panel captions by panel id, and the words around them.
+# The roles state: the tire swing cartoon's panel captions by panel id, and the words around them.
 cartoon:
   captions:
     explained: How the customer explained it
@@ -200,7 +207,7 @@ cartoon:
 # The Model popover: the whole factory's settings, each with a tooltip saying what it does.
 model:
   label: Model settings
-  reality: Model
+  reality: Realism
   ideal: Ideal
   realistic: Realistic
   realityText: 'Realistic {n} %'
@@ -225,12 +232,11 @@ model:
     rework: Chance a work center sends a bad document back on the return belt. It goes to the front of the sender’s backlog and costs time twice.
     churn: 'When bad input is kept, the center hands on this many times its usual documents: it guesses, and writes more.'
     reset: Undo every change made since you picked the state.
-# The ⋮ menu: how the factory is drawn.
+# The Settings popover's Display column: how the factory is drawn.
 more:
   label: Display settings
   beltMotion: Belt motion
   beltMotionNote: The belts' slats move. Off is calmer; the documents still travel.
-  dark: Dark theme
   pile: Pile-up past the rack
   pileLabel: Pile-up animation
   piles:

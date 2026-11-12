@@ -3,9 +3,10 @@ import { COMPARE_MAX, type CompareState } from './compare-stream.pure.ts';
 import { Glyph } from './factory-glyph-view';
 import type { CompareWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
- * Compare mode on the toolbar's second row (design-ADR 0024 §17), as the reference build's `renderCompareWidget`
+ * Compare mode on the toolbar (design-ADR 0024 §17), an icon button since feedback 08, as the reference build's `renderCompareWidget`
  * draws it: the Compare toggle; while picking or comparing, three slots (a picked work center's glyph removes it),
  * then Show, or Exit once the stream is shown; and the hint beside it. Every change goes up through a callback.
  */
@@ -70,16 +71,17 @@ export function CompareWidget(p: CompareWidgetProps) {
   const { state: c, words: w } = p;
   return (
     <div className={styles.tgroup}>
-      <button
-        type="button"
-        className={`${styles.tbtn} text-caption`}
-        aria-pressed={c.picking || c.open}
-        data-tip={w.tip}
-        onClick={p.onToggle}
-      >
-        <Glyph name="compare" className={styles.ico} />
-        <span className={styles.tbtnLabel}>{w.button}</span>
-      </button>
+      <ToolTip tip={w.tip}>
+        <button
+          type="button"
+          className={`${styles.tbtn} text-caption`}
+          aria-pressed={c.picking || c.open}
+          aria-label={w.button}
+          onClick={p.onToggle}
+        >
+          <Glyph name="compare" className={styles.ico} />
+        </button>
+      </ToolTip>
       {c.picking || c.open ? (
         <>
           <Slots {...p} />

@@ -1,22 +1,19 @@
 /*
- * Swing and Roles keep every card at its factory place (design-ADR 0024 §13): the Customer in the first column, each
+ * The roles state keeps every card at its factory place (design-ADR 0024 §13): the Customer in the first column, each
  * work center in the grid cell of its factory column and row, and the cartoon panels that are no work center here
  * (Documentation, Billing, what the customer really needed) in the empty cells. Ported from the reference build's
  * `gridOf` and `renderTiles`; cells are 1-based [column, row].
  */
-import { CUSTOMER_PANEL, PANELS, panelFor } from './cartoon-panels.pure.ts';
+import { CUSTOMER_PANEL, PANELS } from './cartoon-panels.pure.ts';
 import type { Topology } from './factory-model.pure.ts';
 
 export type Cell = readonly [number, number];
-export type GridView = 'swing' | 'roles';
 
 export interface Grid {
   readonly cols: number;
   readonly rows: number;
   /** Each node's cell, the Customer's included. */
   readonly at: Readonly<Record<string, Cell>>;
-  /** Work centers with no cartoon panel: they sit out Swing, their cell left empty. */
-  readonly outOfSwing: readonly string[];
 }
 
 export interface Tile {
@@ -41,7 +38,6 @@ export function gridOf(m: GridFactory): Grid {
     cols: xs.length + 1,
     rows: ys.length,
     at,
-    outOfSwing: m.B.data.panels ? m.centers.filter((n) => !panelFor(n)).map((n) => n.id) : [],
   };
 }
 
@@ -49,8 +45,8 @@ export function gridOf(m: GridFactory): Grid {
 const extraPanels = (m: GridFactory) =>
   m.B.data.panels ? PANELS.filter((p) => p !== CUSTOMER_PANEL && (p.target || !p.node || !m.nodes.has(p.node))) : [];
 
-/** The tiles a view shows and their cells: the closing panel under the Customer (Swing only), the rest in free cells. */
-export function tilesOf(m: GridFactory, view: GridView): Tile[] {
+/** The tiles and their cells: the closing panel under the Customer, the rest in free cells. */
+export function tilesOf(m: GridFactory): Tile[] {
   const g = gridOf(m),
     used = new Set(Object.values(g.at).map((c) => c.join(','))),
     free: Cell[] = [];
@@ -61,8 +57,5 @@ export function tilesOf(m: GridFactory, view: GridView): Tile[] {
     const i = want ? free.findIndex((c) => c[0] === want[0] && c[1] === want[1]) : -1;
     return free.splice(i >= 0 ? i : 0, 1)[0] as Cell;
   };
-  return extraPanels(m).flatMap((p) => {
-    const at = take(p.target ? [1, Math.min(g.rows, custRow + 1)] : null);
-    return view === 'swing' || !p.target ? [{ id: p.id, at }] : [];
-  });
+  return extraPanels(m).map((p) => ({ id: p.id, at: take(p.target ? [1, Math.min(g.rows, custRow + 1)] : null) }));
 }

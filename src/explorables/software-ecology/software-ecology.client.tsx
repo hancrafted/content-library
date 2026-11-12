@@ -1,6 +1,5 @@
 'use client';
 
-import { useTheme } from '@/shared/hooks/use-theme';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { useCallback, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { drawCompare } from './compare-live.ts';
@@ -17,7 +16,7 @@ import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import { BelowView } from './stage-foot-view';
 import { tourClockText, TourPanel } from './tour-panel';
-import { scenarioWords, useCaseName, useCaseSub } from './use-case-words.pure.ts';
+import { useCaseName, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
 import { useCompare, useWatch } from './use-compare.ts';
 import { useDashboard } from './use-dashboard.ts';
@@ -47,11 +46,8 @@ export interface SoftwareEcologyClientProps {
   readonly markers?: Spots<ReactNode>;
 }
 
-/** A preset's view; Swing falls back to Roles for a use case without the cartoon. */
-const viewOf = (B: Bundle, preset: string): ViewId => {
-  const v = presetOf(B, preset).view ?? 'factory';
-  return v === 'swing' && !B.data.panels ? 'roles' : v;
-};
+/** A preset's view. */
+const viewOf = (B: Bundle, preset: string): ViewId => presetOf(B, preset).view ?? 'factory';
 
 /** The morph from one view into the next: the boxes are read before the switch, played after it. */
 function useShow(x: {
@@ -90,13 +86,12 @@ interface ToolbarIn {
   readonly io: ExchangeActions;
 }
 
-/** The state row's Scenarios menu, Tour and watch line, and the tour's clock. */
+/** The state row's Scenarios menu and Tour, and the tour's clock. */
 const tourRowOf = (t: ToolbarIn) => {
   const preset = t.f.controls.preset;
   return {
     scenarios: t.words.scenarios,
     scenarioMarkers: scenarioSpots(t.p.markers),
-    watch: scenarioWords(t.words.w, preset).watch ?? '',
     tour: { can: !!presetOf(t.x.B, preset).tour?.length, on: !!t.tour.tour, start: t.h.onTour },
     tourClock: tourClockText(t.tour, t.p.words),
   };
@@ -132,8 +127,7 @@ function useParts(p: SoftwareEcologyClientProps) {
   const uploads = useUploads(p.bundles),
     { bundles } = uploads;
   const B = bundles.find((b) => b.data.id === useCase) ?? (bundles[0] as Bundle);
-  const [chosen, setChosen] = useState<ViewId>(() => viewOf(B, p.preset));
-  const view: ViewId = chosen === 'swing' && !B.data.panels ? 'roles' : chosen;
+  const [view, setChosen] = useState<ViewId>(() => viewOf(B, p.preset));
   const wrap = useRef<HTMLElement>(null),
     viewEl = useRef<HTMLDivElement>(null),
     streamRoot = useRef<HTMLElement>(null);
@@ -150,7 +144,7 @@ function useParts(p: SoftwareEcologyClientProps) {
     wrap,
     viewEl,
     dash: useDashboard(wrap),
-    display: useDisplay(useTheme()),
+    display: useDisplay(),
   };
 }
 

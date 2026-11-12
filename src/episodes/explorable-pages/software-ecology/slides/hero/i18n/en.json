@@ -26,8 +26,8 @@
     "centers": {
       "sales": "Sales",
       "product": "Product",
-      "analyst": "Analyst",
-      "engineer": "Engineer",
+      "analyst": "Analysis",
+      "engineer": "Engineering",
       "qa": "QA",
       "operations": "Operations"
     }

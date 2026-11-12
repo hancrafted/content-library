@@ -13,15 +13,15 @@ roles:
     tasks: [qualifiziert Leads, schreibt das Angebot, verhandelt Konditionen]
     ai: [entwirft Angebote, fasst Gespräche als Notizen zusammen, schreibt Anforderungen für Produkt und Analyse]
   pm:
-    title: Produktmanagerin
+    title: Produktmanagement
     job: Macht aus dem Abschluss einen Auftrag
     artefacts: [Auftrag, Roadmap-Eintrag, Abnahmekriterien]
     tasks: [befragt Kunden, priorisiert, schreibt den Auftrag]
     ai: [entwirft Aufträge aus Interviewnotizen, bündelt Kundenfeedback]
   ba:
-    title: Analyse & Architektur
+    title: Analyse
     job: Macht aus dem Auftrag eine Spezifikation
-    artefacts: [Spezifikation, Architekturentscheidung, Datenmodell]
+    artefacts: [Spezifikation, ADR, Design, Datenmodell]
     tasks: [modelliert die Fachlichkeit, entscheidet die Architektur, schreibt die Spezifikation]
     ai: [entwirft Spezifikationen, entwirft Architekturoptionen, prüft die Spezifikation gegen den Auftrag]
   doc:
@@ -31,7 +31,7 @@ roles:
     tasks: [liest die Änderung, schreibt und pflegt Seiten, prüft Screenshots]
     ai: [erzeugt Hilfeseiten aus der Änderung, erzeugt Release Notes, übersetzt]
   eng:
-    title: Entwickler
+    title: Entwicklung
     job: Macht aus der Spezifikation Code
     artefacts: [Pull Request, Tests, Codeänderung]
     tasks: [entwirft die Änderung, schreibt Code und Tests, arbeitet Review-Kommentare ein]
@@ -61,13 +61,12 @@ roles:
     tasks: [teilt Aufträge in Aufgaben, prüft jede Änderung, coacht]
     ai: [zerlegt einen Auftrag in Aufgaben, fasst einen Pull Request fürs Review zusammen]
   qa:
-    title: Plattform & QA
-    job: Testet, integriert und liefert die Arbeit beider Teams
-    artefacts: [Testbericht, Release]
-    tasks: [führt die Prüfungen aus, integriert, liefert]
+    title: Qualitätssicherung
+    job: Testet jede Änderung, bevor sie ausgeliefert wird
+    artefacts: [Testbericht, getestete Änderung]
+    tasks: [führt die Prüfungen aus, testet die Änderung, gibt sie frei oder schickt sie zurück]
     ai: [erzeugt Testpläne, schreibt Deploy-Skripte]
 presets:
-  swing: Schaukel
   roles: Rollen
   ideal: Ideal
   realistic: Realistisch

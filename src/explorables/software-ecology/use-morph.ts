@@ -1,8 +1,8 @@
 /*
- * Switching Swing, Roles and the factory moves every card from its old box to its new one (design-ADR 0024 §13), as
+ * Switching the roles state and the factory moves every card from its old box to its new one (design-ADR 0024 §13), as
  * the reference build's `setView` does: the boxes are read just before the switch, and after it each card plays from
  * its old box to its new one over 560 ms while the belts stay hidden, then fade in. The floor is placed on the stage
- * (factory) or left in the grid (Swing, Roles) before the new boxes are read. Reduced motion switches at once.
+ * (factory) or left in the grid (the roles state) before the new boxes are read. Reduced motion switches at once.
  */
 import { useCallback, useLayoutEffect, useRef, type RefObject } from 'react';
 

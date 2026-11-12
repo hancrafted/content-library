@@ -4,9 +4,9 @@ import { Glyph } from './factory-glyph-view';
 import styles from './software-ecology.module.css';
 
 /*
- * Swing and Roles (design-ADR 0024 §13): a work center's cartoon panel and its artefacts, a Roles card with its glyph
- * and job, and the tiles for the cartoon panels that are no work center here. Ported from the reference build's
- * `cardSwing`, `cardRole` and `cardTile`; props only, so the Swing view renders on the server.
+ * The roles state (design-ADR 0024 §13): a work center's department, its job, its cartoon panel with the cartoon's
+ * quote under it, and its artefacts; and the tiles for the cartoon panels that are no work center here. Swing and Roles
+ * merged into this one card (feedback 08). Props only, so the roles state renders on the server.
  */
 
 /** Documentation's panel: the cartoon's empty frame. */
@@ -22,20 +22,13 @@ function BlankFrame({ blank }: { readonly blank: string }) {
 }
 
 interface PanelArtProps {
-  readonly panel?: CartoonPanel;
+  readonly panel: CartoonPanel;
   readonly caption: string;
   readonly blank: string;
-  readonly icon: string;
 }
 
-/** A cartoon panel's drawing, or a large glyph for a work center the cartoon leaves out. */
-export function PanelArt({ panel, caption, blank, icon }: PanelArtProps) {
-  if (!panel)
-    return (
-      <div className={styles.noArt}>
-        <Glyph name={icon} className={styles.glyLg} />
-      </div>
-    );
+/** A cartoon panel's drawing. */
+function PanelArt({ panel, caption, blank }: PanelArtProps) {
   return (
     <svg viewBox="0 0 160 110" className={styles.art} role="img" aria-label={caption}>
       {panel.blank ? (
@@ -70,7 +63,7 @@ export interface CartoonCardProps {
   readonly panel?: CartoonPanel;
   /** The panel's caption. */
   readonly caption?: string;
-  /** What the role does, for Roles. */
+  /** What the role does. */
   readonly job: string;
   readonly artefacts: readonly string[];
   readonly words: { readonly artefacts: string; readonly blank: string };
@@ -78,22 +71,20 @@ export interface CartoonCardProps {
   readonly marker?: ReactNode;
 }
 
-/** Swing: the panel, its caption, the role's tag and its artefacts. */
-export function SwingCardView(p: CartoonCardProps) {
+/** The quote under a panel: the cartoon's caption, as a figure's. */
+function Quoted(p: { readonly panel: CartoonPanel; readonly caption: string; readonly blank: string }) {
   return (
-    <>
-      <PanelArt panel={p.panel} caption={p.caption ?? p.title} blank={p.words.blank} icon={p.icon} />
-      <p className={`${styles.cap} text-caption`}>{p.caption ?? p.title}</p>
-      <span className={styles.tagRow}>
-        <span className={`${styles.tag} text-caption`}>{p.title}</span>
-        {p.marker}
-      </span>
-      <Artefacts label={p.words.artefacts} items={p.artefacts} />
-    </>
+    <figure className={styles.panelFig}>
+      <PanelArt panel={p.panel} caption={p.caption} blank={p.blank} />
+      <figcaption className={`${styles.cap} text-caption`}>{p.caption}</figcaption>
+    </figure>
   );
 }
 
-/** Roles: glyph, title and job above the panel, then the artefacts. */
+/**
+ * The roles state: glyph, department and job, the cartoon panel with its quote under it, then the artefacts. A work
+ * center the cartoon leaves out, and every one in a use case without the cartoon, shows no image.
+ */
 export function RoleCardView(p: CartoonCardProps) {
   return (
     <>
@@ -105,7 +96,7 @@ export function RoleCardView(p: CartoonCardProps) {
         </div>
         {p.marker}
       </div>
-      <PanelArt panel={p.panel} caption={p.caption ?? p.title} blank={p.words.blank} icon={p.icon} />
+      {p.panel ? <Quoted panel={p.panel} caption={p.caption ?? p.title} blank={p.words.blank} /> : null}
       <Artefacts label={p.words.artefacts} items={p.artefacts} />
     </>
   );
@@ -116,11 +107,10 @@ export interface TileProps {
   readonly caption: string;
   /** "Documentation · not a work center here", or the Customer's title on the closing panel. */
   readonly tag: string;
-  /** Why it is no work center, shown in Roles. */
+  /** Why it is no work center. */
   readonly job?: string;
   readonly blank: string;
   readonly cell: readonly [number, number];
-  readonly view: 'swing' | 'role';
 }
 
 /** A cartoon panel that is no work center here, filling an empty cell; decorative. */
@@ -128,17 +118,16 @@ export function TileView(p: TileProps) {
   return (
     <div
       className={styles.cartoon}
-      data-card-view={p.view}
+      data-card-view="role"
       data-tile={p.panel.target ? 'target' : 'extra'}
       style={{ gridColumn: p.cell[0], gridRow: p.cell[1] }}
       aria-hidden="true"
     >
-      <PanelArt panel={p.panel} caption={p.caption} blank={p.blank} icon="" />
-      <p className={`${styles.cap} text-caption`}>{p.caption}</p>
       <span className={`${styles.tag} text-caption`} data-tone={p.panel.target ? 'primary' : 'muted'}>
         {p.tag}
       </span>
-      {p.view === 'role' && p.job ? <p className={`${styles.job} text-caption`}>{p.job}</p> : null}
+      {p.job ? <p className={`${styles.job} text-caption`}>{p.job}</p> : null}
+      <Quoted panel={p.panel} caption={p.caption} blank={p.blank} />
     </div>
   );
 }

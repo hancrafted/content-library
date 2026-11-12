@@ -53,14 +53,13 @@ routes:
   qa-ops: { out: top, in: bottom }
   ops-customer: { out: top, in: top, via: [[1216, 36], [90, 36]] }
   support-customer: { out: bottom, in: bottom, via: [[436, 668], [90, 668]] }
-# States. Swing, Roles, Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: swing | roles | factory.
+# States. Roles (its name in the words), Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory.
 # reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
 # fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or
 # warm (the default: 60 weeks settled). speed: 1, 2, 5 or 10.
 # tour: steps, each { set (dials, customer, ai, reality), run: weeks from the start, card: where the caption points, expect };
 # check: one step without a caption. expect: { "<customer or center>.<measure>": test }, judged headless by factory-scenario.pure.test.ts.
 presets:
-  - { id: swing, view: swing }
   - { id: roles, view: roles }
   - {
       id: ideal,

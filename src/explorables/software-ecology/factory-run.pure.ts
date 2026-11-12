@@ -17,10 +17,11 @@ import {
 } from './factory-model.pure.ts';
 import type { Bundle, Preset, Settings } from './software-ecology.types';
 
-/** Weeks a real second at 1×; 5× (the default) plays a working day in about 0.6 s. */
+/** Weeks a real second at 1×; 5× plays a working day in about 0.6 s. */
 export const SPEED_1X = 1 / 16;
 export const SPEEDS = [0, 1, 2, 5, 10] as const;
-export const DEFAULT_SPEED = 5;
+/** The page starts at 1× (feedback 08); a tour runs at 10× between its steps. */
+export const DEFAULT_SPEED = 1;
 /** Model steps a frame at most; beyond that the frame drops time. */
 export const MAX_STEPS = 40;
 /** Warm-up steps a frame. */
@@ -29,10 +30,15 @@ const WARM_STEPS = Math.round(WARM_WEEKS / DTW);
 
 export const presetOf = (B: Bundle, id: string): Preset => {
   const ps = B.data.presets;
+  // Swing and Roles merged into the roles state (feedback 08): a link or a Slide still naming swing opens it
+  if (id === 'swing') id = 'roles';
   const p = ps.find((x) => x.id === id) ?? ps.find((x) => x.view === 'factory') ?? ps[0];
   if (!p) throw new Error(`use case ${B.data.id} has no presets`);
   return p;
 };
+
+/** The speed a state starts at: its own, else the page's 1×. */
+export const startSpeedOf = (B: Bundle, id: string): number => presetOf(B, id).speed ?? DEFAULT_SPEED;
 
 export interface RunOptions {
   readonly B: Bundle;

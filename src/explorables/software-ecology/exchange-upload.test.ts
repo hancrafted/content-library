@@ -110,10 +110,10 @@ describe('edge cases', () => {
     expect(up).toMatchObject(unread);
   });
 
-  it('opens a file without a saved state on its first preset, in the factory view at 5×', () => {
+  it('opens a file without a saved state on its first preset, in the factory view at 1×', () => {
     // ARRANGE
     const text = edited((doc) => void delete doc.state);
-    const page = { preset: 'swing', view: 'factory', speed: 5, beltMotion: false, compare: [] };
+    const page = { preset: 'roles', view: 'factory', speed: 1, beltMotion: false, compare: [] };
     // ACT
     const up = uploadExchange(text, 'n.yaml');
     // ASSERT
