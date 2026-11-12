@@ -78,7 +78,7 @@ describe('success cases', () => {
     const B = builtinBundle('tire');
     const s = { ...startSettings(B, presetOf(B, 'realistic')), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
     const run = new FactoryRun({ B, preset: 'realistic', now: true, s });
-    const [waiting, weeks, busy, done, shown] = [768, 35.2, 100, 18.1, 10];
+    const [waiting, weeks, busy, done, shown] = [792, 36.3, 100, 17.75, 10];
     const goodAi = { good: true, ai: true, warn: false };
     // ACT
     const col = run.read({ stream: ['qa'] }).columns.qa;

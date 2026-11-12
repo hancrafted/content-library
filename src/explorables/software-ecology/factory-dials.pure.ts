@@ -115,6 +115,12 @@ export const stallOf = (n: FactoryNode, d: Dials): number => {
   const st = n.def.stall;
   return st && !d.ai && n.Ws >= st.at ? st.slow : 0;
 };
+/**
+ * How hard a filling backlog bites at a station, for a strength such as an inspection's `stampUnderPressure` or a
+ * pass-on's `underPressure`: `mechanics.pressure` times the strength times its pressure, capped at 1 (design-ADR 0024 §5).
+ */
+export const pressureOf = (s: Settings, n: FactoryNode, strength: number): number =>
+  Math.min(1, constOf(s, 'pressure') * strength * n.press);
 /** Jobs a week at size 1. */
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>

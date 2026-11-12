@@ -54,3 +54,16 @@ Q219: ok
 12. **Claim tours are checked in `test:build`** across seeds with the same judge as `ecology:sim` (Q217).
 13. **Clear Requirements beats 1 and 3** read `ba.rework` (`>0.15`, then `falls`) in place of `eng.rework` (Q218).
 14. **`<center>.unread`** counts only the defect kinds that station can catch (Q219).
+
+## Eval round 1 (after `run-01.md`)
+
+Q220: i want full circle, support is drowning and passes the bugs or change requests back to engineering.
+Q221: ok
+Q222: ok
+Q223: ok
+Q224: ok
+
+15. **Full circle** (Q220): a drowning Support stops answering and passes its tickets, bugs and change requests alike, on to Engineering; the share it passes on rises with its pressure. Bug Spiral beat 6 keeps `settles eng.weeksWaiting >2`, so the spiral closes at Engineering.
+16. Bug Spiral beat 6 checks satisfaction `<0.65` (Q221). Clear Requirements beat 1 reads `eng.rework >0.1` in place of `qa.rework` (Q222).
+17. The tuned numbers stand (Q223): quality assurance `aiCatch` 0.1, Operations `stall: { at: 6, slow: 0.4 }`, In practice Engineering catching spec 0.6, bad spec to the Product manager 0.5, bad code to Support 0.5.
+18. A tour's checks on the page use the same 2-week means as the headless judge (Q224).

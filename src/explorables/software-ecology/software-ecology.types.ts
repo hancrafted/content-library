@@ -54,6 +54,11 @@ export interface CenterDef {
   readonly origin?: Defect;
   /** Once `at` weeks of work wait, it loses the share `slow` of its speed; AI at the station removes the stall. */
   readonly stall?: { readonly at: number; readonly slow: number };
+  /**
+   * Pass-on under pressure: the share of its finished tickets it passes to `to` instead of answering rises with its
+   * backlog, by the same pressure term as an inspection's `stampUnderPressure`, up to all of them.
+   */
+  readonly escalate?: { readonly to: string; readonly underPressure: number };
 }
 
 export interface CustomerDef {

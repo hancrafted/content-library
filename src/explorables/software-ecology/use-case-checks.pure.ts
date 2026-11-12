@@ -182,6 +182,19 @@ export interface CenterAt {
 const realisticOk = (re: unknown): boolean =>
   Array.isArray(re) && re.length === 2 && isNum(re[0], 10, 1000) && isNum(re[1], 5, 100);
 
+/** The work centers a center's spawns hand work to (the Customer left out). */
+const handsTo = (c: Map_): string[] =>
+  itemsOf(c.spawns).flatMap((sp) => {
+    const m = mapOf(sp);
+    return [m.to, ...itemsOf(m.choose).map((ch) => mapOf(ch).to)].filter(
+      (to): to is string => typeof to === 'string' && to !== 'customer',
+    );
+  });
+const escalateOk =
+  (c: Map_) =>
+  (v: unknown): boolean =>
+    isMap(v) && handsTo(c).includes(v.to as string) && isNum(v.underPressure, 0, 2);
+
 export const CENTER: readonly Rule<CenterAt>[] = [
   ({ c, p, roles }) =>
     !roles.has(c.role as string) && `${p}.role: unknown role "${String(c.role)}" (one of ${[...roles].join(', ')})`,
@@ -204,6 +217,9 @@ export const CENTER: readonly Rule<CenterAt>[] = [
   ({ c, p }) =>
     !absentOr(c.stall, (v) => isMap(v) && isNum(v.at, 0, 50) && isNum(v.slow, 0, 0.95)) &&
     `${p}.stall: { at: weeks of work waiting 0 to 50, slow: the share of speed lost, 0 to 0.95 }`,
+  ({ c, p }) =>
+    !absentOr(c.escalate, escalateOk(c)) &&
+    `${p}.escalate: { to: a work center it hands work to, underPressure: 0 to 2 }`,
 ];
 
 export const FIRST_SPAWN: Rule<CenterAt> = ({ c, p }) => {

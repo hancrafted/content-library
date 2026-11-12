@@ -178,6 +178,19 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('refuses a pass-on to a work center it does not hand work to, or past 2 under pressure', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c) =>
+      c.id === 'support' ? { ...c, escalate: { to: 'ops', underPressure: 3 } } : c,
+    );
+    const expected = ['centers[2].escalate: { to: a work center it hands work to, underPressure: 0 to 2 }'];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses an AI review profile outside 0 to 1', () => {
     // ARRANGE
     const doc = { ...tireDoc(), roles: { qa: { aiCatch: 1.4 } } };

@@ -5,8 +5,8 @@ import type { Bundle, Preset, TourStep } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
 /*
- * Every `expect:` of every scenario step, run on the model alone with the default seed: the value each measure reads
- * must equal, to two decimals, with no starting backlogs, what the reference build (docs/episodes/software-ecology/prototype/flow.html) read in
+ * Every `expect:` of every scenario step, run on the model alone with the default seed and read once at the step's end:
+ * the value each measure reads must equal, to two decimals, with no starting backlogs and no pass-on under pressure, what the reference build (docs/episodes/software-ecology/prototype/flow.html) read in
  * its headless run, checks7c.out.txt rows 1–88. [use case, preset, step (1-based; a check is step 1), measure, value]
  */
 const REFERENCE: readonly (readonly [string, string, number, string, string])[] = [
@@ -41,12 +41,15 @@ const REFERENCE_WEEKS: Readonly<Record<string, readonly number[]>> = {
   'gate/realistic': [12],
   'teams/realistic': [12],
 };
-/** The use case as the reference build had it: no starting backlogs (feedback 09 added them on top of the model). */
+/**
+ * The use case as the reference build had it: no starting backlogs (feedback 09 added them on top of the model) and no
+ * pass-on under pressure (grill 11 Q220).
+ */
 const withoutKey = <T extends object>(o: T, key: string): T =>
   Object.fromEntries(Object.entries(o).filter(([k]) => k !== key)) as T;
 const unloaded = (useCase: string): Bundle => {
   const B = builtinBundle(useCase);
-  const data = withoutKey(B.data, 'backlog');
+  const data = { ...withoutKey(B.data, 'backlog'), centers: B.data.centers.map((c) => withoutKey(c, 'escalate')) };
   const at = (p: Preset, i: number, run: number): number => REFERENCE_WEEKS[`${useCase}/${p.id}`]?.[i] ?? run;
   const weeks = (p: Preset): Preset => {
     const rest = withoutKey(p, 'backlog');
