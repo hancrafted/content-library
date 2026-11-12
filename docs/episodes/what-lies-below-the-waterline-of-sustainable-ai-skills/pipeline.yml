@@ -52,7 +52,7 @@
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
-status: draft
+status: approved
 template: 64495fb
 dev_port: 4000
 spec_port: 4001
@@ -82,16 +82,13 @@ jobs:
   - id: categorize-research
     stage: setup
     intent: >-
-      Name one research folder per research question of the Brief, in its
-      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
-      categories: pick the category each question belongs to, or, when none
-      fits, add a new category there with its meaning. Number each folder with
-      the next free number of its category, counting every research folder in
-      docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing
-      research folder answers the question, reuse its category and number. Write the
-      question's subject, not the Episode, in 20-40 characters of kebab case.
-      Return the names, each beside its question, and any category you added
-      with why no existing one fits.
+      Name one research folder per research question of the Brief, in its order, as `<category>-<####>__<question-slug>`
+      by GLOSSARY.md's Research categories: pick the category each question belongs to, or, when none fits, add a new
+      category there with its meaning. Number each folder with the next free number of its category, counting every
+      research folder in docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing research folder
+      answers the question, reuse its category and number. Write the question's subject, not the Episode, in 20-40
+      characters of kebab case. Return the names, each beside its question, and any category you added with why no
+      existing one fits.
     needs: [brief-grill]
     isolation: worktree
     outputs: []
@@ -130,32 +127,11 @@ jobs:
           ]
         model: inherit
 
-  # Runs `npm run convert-reference` once per file the Brief lists under
-  # References: a script, so no reviewer. A run with no References drops it.
-  - id: convert-references
-    stage: setup
-    needs: [brief-grill]
-    before: [mh-query]
-    outputs: [docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md]
-    checks: [mh, vitest]
-    retries: 1
-    agents:
-      - type: implementor
-        skills: []
-        references:
-          [
-            references/convert-references.md,
-            docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md,
-          ]
-        model: inherit
-        session: orchestrator
-
   # Wants convert-references rather than needing it: a missing conversion tool
   # leaves the design references out instead of blocking the Episode.
   - id: customize-pipeline
     stage: setup
     needs: [retrieval]
-    wants: [convert-references]
     outputs: [docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/pipeline.yml]
     checks: [vitest]
     retries: 0
@@ -169,31 +145,309 @@ jobs:
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
         model: inherit
         session: orchestrator
-
-  # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
-  - id: write-research
+  - id: write-research-software-design-principles-origins
     stage: research
-    needs: [customize-pipeline]
+    intent: 'Answer Research question 1 of the Brief, written fresh into
+      research/SWE-0004__software-design-principles-origins/research.md: "Why do the established software engineering
+      principles behind Sections 3 to 8 hold (the rule of three from Fowler''s Refactoring, credited to Don Roberts, as a
+      rule against premature abstraction; YAGNI and Knuth on premature optimisation; cohesion and coupling; Cunningham''s
+      technical debt; Lehman''s laws), as each one''s original source words it?"'
+    needs:
+      - customize-pipeline
     isolation: worktree
-    foreach: docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md#research-jobs
-    before: [mh-query]
-    outputs: [docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/*/research.md]
-    checks: [mh, vitest, sources]
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/SWE-0004__software-design-principles-origins/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
     retries: 2
     agents:
       - type: implementor
-        skills: [research, writing-for-agents]
+        skills:
+          - research
+          - writing-for-agents
         references:
-          [
-            references/write-research.md,
-            docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md,
-            docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md,
-          ]
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
         model: sonnet
       - type: reviewer
         skills: []
-        references: [references/write-research.md]
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-information-scent-and-ia-principles
+    stage: research
+    intent: 'Answer Research question 2 of the Brief, written fresh into
+      research/UX-0005__information-scent-and-ia-principles/research.md: "Why do the UX and information architecture
+      principles behind Sections 3 to 8 hold (information scent from Xerox PARC; Hick''s law; Rosenfeld and Morville''s
+      information architecture), as each one''s original source words it?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/UX-0005__information-scent-and-ia-principles/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-skill-and-instruction-loading-by-app
+    stage: research
+    intent: 'Answer Research question 3 of the Brief, written fresh into
+      research/LLM-0027__skill-and-instruction-loading-by-app/research.md: "Why do skills, personal instructions,
+      project instructions and connectors load and get invoked the way they do across Claude, ChatGPT, Codex, Gemini and
+      Copilot, and what does each app call them?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0027__skill-and-instruction-loading-by-app/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-agent-skill-authoring-guidance
+    stage: research
+    intent: 'Answer Research question 4 of the Brief, written fresh into
+      research/LLM-0028__agent-skill-authoring-guidance/research.md: "Why do the agentskills.io standard and
+      Anthropic''s authoring guidance recommend writing skills the way they do (descriptions with "not for" lines,
+      contents lists for long reference files, references one level deep)?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0028__agent-skill-authoring-guidance/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-skills-effect-on-agent-evals
+    stage: research
+    intent: 'Answer Research question 5 of the Brief, written fresh into
+      research/LLM-0029__skills-effect-on-agent-evals/research.md: "Why do skills help or hurt agent results, per
+      Vercel''s numbers (56% of skills left unused, a short `AGENTS.md` index beating discovered skills, a skill scoring
+      below no skill) and any newer evals?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0029__skills-effect-on-agent-evals/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-shared-skill-ownership-and-review
+    stage: research
+    intent: 'Answer Research question 6 of the Brief, written fresh into
+      research/ORG-0002__shared-skill-ownership-and-review/research.md: "Why do organisations tier, own and review
+      shared skills the way they do today, treating them like knowledge articles with an owner and a review date?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/ORG-0002__shared-skill-ownership-and-review/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-skill-scope-and-context-placement
+    stage: research
+    intent: 'Answer Research question 7 of the Brief, written fresh into
+      research/AIE-0022__skill-scope-and-context-placement/research.md: "Why does a skill''s audience and scope
+      (personal or shared, general or project-specific) decide where its context lives and how much care it needs, and
+      does any framework support such a matrix?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/AIE-0022__skill-scope-and-context-placement/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-people-practices-that-work-for-ai
+    stage: research
+    intent: 'Answer Research question 8 of the Brief, written fresh into
+      research/AIE-0023__people-practices-that-work-for-ai/research.md: "Why does "what works for people also works for
+      AI" hold as a rule of thumb, and where does it break?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/AIE-0023__people-practices-that-work-for-ai/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+          - docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+  - id: write-research-procedural-memory-without-recall
+    stage: research
+    intent: 'Answer Research question 9 of the Brief, written fresh into
+      research/COG-0002__procedural-memory-without-recall/research.md: "Why could people with amnesia like patient H.M.
+      learn new movements without remembering the lessons, and how far does that picture hold for a model?"'
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/COG-0002__procedural-memory-without-recall/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
         rubric: references/write-research.md#rubric
         model: opus
 
@@ -202,7 +456,16 @@ jobs:
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    wants:
+      - write-research-software-design-principles-origins
+      - write-research-information-scent-and-ia-principles
+      - write-research-skill-and-instruction-loading-by-app
+      - write-research-agent-skill-authoring-guidance
+      - write-research-skills-effect-on-agent-evals
+      - write-research-shared-skill-ownership-and-review
+      - write-research-skill-scope-and-context-placement
+      - write-research-people-practices-that-work-for-ai
+      - write-research-procedural-memory-without-recall
     before: [mh-query]
     outputs: [docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/dossier.md]
     checks: [mh, vitest]
@@ -214,11 +477,20 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research-plan.md
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/*/research.md
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/SWE-0004__software-design-principles-origins/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/UX-0005__information-scent-and-ia-principles/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0027__skill-and-instruction-loading-by-app/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0028__agent-skill-authoring-guidance/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/LLM-0029__skills-effect-on-agent-evals/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/ORG-0002__shared-skill-ownership-and-review/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/AIE-0022__skill-scope-and-context-placement/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/AIE-0023__people-practices-that-work-for-ai/research.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/research/COG-0002__procedural-memory-without-recall/research.md
+          - docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
           - docs/profile/mental-model-guide.md
+          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
         model: inherit
       - type: reviewer
         skills: []
@@ -286,7 +558,8 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md
+          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
+          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -299,7 +572,8 @@ jobs:
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md
+          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
+          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -332,29 +606,40 @@ jobs:
         rubric: references/implement-episode-init.md#rubric
         model: opus
         session: orchestrator
-
-  # One job per Section, the h3s under the Brief's Slides, in parallel: each
-  # builds its Slides at its own placement marker.
-  - id: implement-section
+  - id: implement-iceberg-style
     stage: build
-    needs: [implement-episode-init]
+    intent: 'Build the Iceberg style this Episode first uses, before any Section: the reusable zone token set in
+      slide-shared/ (one CSS variable per zone, light and dark values, a Slide only names its zone), the shared depth
+      ruler and slim left rail component (one tile per Section, plain zone label with the ocean term beneath), and a new
+      `bubbles` ink profile for the Section-title descent, per the Iceberg style in docs/design/design-guide.md,
+      docs/features/slide-transitions.md and the approved Spec. Han tunes the zone colours after seeing them render, so
+      each zone is one token.'
+    needs:
+      - implement-episode-init
     isolation: worktree
-    foreach: docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/brief.md#slides
     outputs: []
-    checks: [verify, build, test:build, impeccable, visual-check]
+    checks:
+      - verify
+      - build
+      - test:build
+      - visual-check
     retries: 2
     agents:
       - type: implementor
-        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
         agent: archgate:developer
         references:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md
+          - docs/design/design-guide.md
+          - docs/features/slide-transitions.md
         model: opus
-      # code-review spawns its own subagents, so the reviewer runs in the
-      # orchestrator's session; its subagents give the fresh eyes.
       - type: reviewer
         skills:
           - code-review
@@ -367,14 +652,384 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
-          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/reference/*/design-reference.md
+          - docs/design/design-guide.md
+          - docs/features/slide-transitions.md
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
+    port: 4002
+  - id: implement-section-a-thought-experiment
+    stage: build
+    intent: Build Section 1 of 8, "A thought experiment", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4003
+  - id: implement-section-what-a-skill-is
+    stage: build
+    intent: Build Section 2 of 8, "What a skill is", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4004
+  - id: implement-section-when-to-write-one
+    stage: build
+    intent: Build Section 3 of 8, "When to write one", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4005
+  - id: implement-section-the-label
+    stage: build
+    intent: Build Section 4 of 8, "The label", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4006
+  - id: implement-section-what-goes-inside
+    stage: build
+    intent: Build Section 5 of 8, "What goes inside", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4007
+  - id: implement-section-what-stays-beside
+    stage: build
+    intent: Build Section 6 of 8, "What stays beside", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4008
+  - id: implement-section-sharing-it
+    stage: build
+    intent: Build Section 7 of 8, "Sharing it", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4009
+  - id: implement-section-keeping-it-alive
+    stage: build
+    intent: Build Section 8 of 8, "Keeping it alive", of the Brief's Slides, at its placement marker.
+    needs:
+      - implement-episode-init
+      - implement-iceberg-style
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4010
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      - implement-section-a-thought-experiment
+      - implement-section-what-a-skill-is
+      - implement-section-when-to-write-one
+      - implement-section-the-label
+      - implement-section-what-goes-inside
+      - implement-section-what-stays-beside
+      - implement-section-sharing-it
+      - implement-section-keeping-it-alive
     outputs: []
     checks: []
     retries: 0
