@@ -1,0 +1,82 @@
+PASS  1 Ideal 200 weeks · tire
+      largest backlog in weeks 100-200: 1 (≤ 3); shipped 1.000× the ideal rate (1.00 ± 0.03)
+PASS  1 Ideal 200 weeks · gate
+      largest backlog in weeks 100-200: 1 (≤ 3); shipped 1.000× the ideal rate (1.00 ± 0.03)
+PASS  1 Ideal 200 weeks · teams
+      largest backlog in weeks 100-200: 1 (≤ 3); shipped 1.000× the ideal rate (1.00 ± 0.03)
+PASS  1 Ideal 200 weeks · tender
+      largest backlog in weeks 100-200: 2 (≤ 3); shipped 1.000× the ideal rate (1.00 ± 0.03)
+PASS  11a Realistic stable (batch means, 20 seeds) · tire
+      all backlogs: batches 1-4 mean 12.11 jobs, batch 5 mean 11.15, band ±2.26; bottleneck eng: 2.87 vs 2.34, band ±0.98
+PASS  11a Realistic stable (batch means, 20 seeds) · gate
+      all backlogs: batches 1-4 mean 14.84 jobs, batch 5 mean 14.65, band ±4.67; bottleneck lrev: 3.22 vs 3.20, band ±2.07
+PASS  11a Realistic stable (batch means, 20 seeds) · teams
+      all backlogs: batches 1-4 mean 11.88 jobs, batch 5 mean 10.37, band ±1.90; bottleneck plat: 2.66 vs 2.16, band ±0.96
+PASS  11a Realistic stable (batch means, 20 seeds) · tender
+      all backlogs: batches 1-4 mean 12.34 jobs, batch 5 mean 10.72, band ±2.79; bottleneck site: 3.92 vs 3.52, band ±2.02
+PASS  11b Congestion drains after Ideal · tire
+      5 weeks of AI at eng with ba at 200 %: peak 3.9 weeks of work at ops; Ideal brings every center to ≤ 1 week in 13.5 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 8.3 weeks of work at ops; Ideal alone takes 32 weeks; Ideal with ops at 1000 % takes 0 weeks.
+PASS  11b Congestion drains after Ideal · gate
+      5 weeks of AI at e1, e2, e3 with lspec at 200 %: peak 0.8 weeks of work at lrev; Ideal brings every center to ≤ 1 week in 0 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 2.1 weeks of work at lrev; Ideal alone takes 10 weeks; Ideal with lrev at 1000 % takes 14 weeks.
+PASS  11b Congestion drains after Ideal · teams
+      5 weeks of AI at engA, engB with anA, engB, pm at 200 %: peak 5.3 weeks of work at plat; Ideal brings every center to ≤ 1 week in 20.5 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 16.6 weeks of work at plat; Ideal alone takes 52 weeks; Ideal with plat at 1000 % takes 0.5 weeks.
+PASS  11b Congestion drains after Ideal · tender
+      5 weeks of AI at est with  at 200 %: peak 3.9 weeks of work at bidl; Ideal brings every center to ≤ 1 week in 12 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 9.7 weeks of work at bidl; Ideal alone takes 32 weeks; Ideal with bidl at 1000 % takes 35 weeks.
+PASS  11c ρ < 1 at Realistic · tire
+      nominal: sales 0.81, pm 0.82, ba 0.81, eng 0.89, ops 0.81, billing 0.81, doc 0.82, support 0.82; bottleneck eng 0.89 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case warnings: none
+PASS  11c ρ < 1 at Realistic · gate
+      nominal: sales 0.81, pm 0.82, e1 0.82, e2 0.82, e3 0.82, ops 0.82, person lead 0.92; bottleneck lrev 0.92 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case warnings: none
+PASS  11c ρ < 1 at Realistic · teams
+      nominal: sales 0.81, pm 0.82, anA 0.82, engA 0.82, engB 0.81, plat 0.90, support 0.81; bottleneck plat 0.90 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case warnings: none
+PASS  11c ρ < 1 at Realistic · tender
+      nominal: est 0.81, bidl 0.81, pl 0.81, prep 0.81, site 0.90, sub 0.82, acc 0.82, cbill 0.81; bottleneck site 0.90 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case warnings: none
+PASS  11c A file over capacity is refused
+      tire with eng at 60 % efficiency: ["eng: load 1.40 of capacity at Realistic"]
+PASS  11d Conservation across dial changes
+      created 1609 = done 1520 + waiting 4 + on belts 78 + in work 7 (gap 0)
+      created 4069 = done 3174 + waiting 640 + on belts 248 + in work 7 (gap 0)
+      created 9102 = done 6832 + waiting 2026 + on belts 238 + in work 6 (gap 0)
+PASS  11e Clear starts empty at week 0
+      after build: week 0, created 0, waiting 0, on belts 0, in work 0
+PASS  11f ai-unbalanced band · tire
+      dock 1.00-1.04× ideal over 5 seeds (0.9-1.2); satisfied 80-82 %; over capacity: ops 1.96, doc 1.24
+PASS  11f ai-balanced band · tire
+      dock 2.30-2.30× ideal over 5 seeds (2-3); satisfied 100-100 % (95 ± 5); max ρ 0.70 (sales)
+PASS  11f ai-unbalanced band · gate
+      dock 1.00-1.08× ideal over 5 seeds (0.9-1.2); satisfied 80-84 %; over capacity: ops 1.44, lead 1.84
+PASS  11f ai-balanced band · gate
+      dock 2.50-2.50× ideal over 5 seeds (2-3); satisfied 100-100 % (95 ± 5); max ρ 0.83 (ops)
+PASS  11f ai-unbalanced band · teams
+      dock 0.97-1.03× ideal over 5 seeds (0.9-1.2); satisfied 80-88 %; over capacity: plat 2.48
+PASS  11f ai-balanced band · teams
+      dock 2.92-2.92× ideal over 5 seeds (2-3); satisfied 100-100 % (95 ± 5); max ρ 0.79 (anA)
+PASS  11f ai-unbalanced band · tender
+      dock 1.03-1.11× ideal over 5 seeds (0.9-1.2); satisfied 83-88 %; over capacity: bidl 1.94, pl 1.63, prep 1.63, site 1.80, sub 1.64, acc 1.63, cbill 1.51
+PASS  11f ai-balanced band · tender
+      dock 2.44-2.44× ideal over 5 seeds (2-3); satisfied 100-100 % (95 ± 5); max ρ 0.78 (sub)
+PASS  3 AI upstream floods downstream · tire
+      backlog grows 5.8 jobs a week, linear fit R² 0.996 (> 0.95); output of eng 1.54× Realistic (> 1.25); dock 1.04× ideal (flat)
+PASS  3 AI upstream floods downstream · gate
+      backlog grows 3.6 jobs a week, linear fit R² 0.993 (> 0.95); output of e1, e2, e3 1.72× Realistic (> 1.25); dock 1.07× ideal (flat)
+PASS  3 AI upstream floods downstream · teams
+      backlog grows 9.2 jobs a week, linear fit R² 0.997 (> 0.95); output of engA, engB 2.45× Realistic (> 1.25); dock 0.98× ideal (flat)
+PASS  3 AI upstream floods downstream · tender
+      backlog grows 5.5 jobs a week, linear fit R² 0.989 (> 0.95); output of est 2.75× Realistic (> 1.25); dock 1.10× ideal (flat)
+PASS  5 Bottleneck shift · tire
+      AI unbalanced: ops the bottleneck (19.4 weeks of work at ops); 30 weeks after raising it to 1000 %: ops 0.0 weeks of work; largest backlog now doc (17.0 weeks, downstream); dock 0.97× → 1.30× ideal
+PASS  5 Bottleneck shift · gate
+      AI unbalanced: lspec + lrev the bottleneck (4.7 weeks of work at lrev); 30 weeks after raising it to 1000 %: lspec 0.0, lrev 0.0 weeks of work; largest backlog now ops (32.1 weeks, downstream); dock 1.11× → 1.23× ideal
+PASS  5 Bottleneck shift · teams
+      AI unbalanced: plat the bottleneck (32.6 weeks of work at plat); 30 weeks after raising it to 1000 %: plat 0.0 weeks of work; largest backlog now support (0.3 weeks); dock 1.03× → 1.84× ideal
+PASS  5 Bottleneck shift · tender
+      AI unbalanced: bidl the bottleneck (25.1 weeks of work at bidl); 30 weeks after raising it to 1000 %: bidl 0.0 weeks of work; largest backlog now pl (43.2 weeks, downstream); dock 1.14× → 1.18× ideal
+PASS  6 Determinism
+      seed 42: cf13f508 and cf13f508; seed 43: ff0ca555
+PASS  6 Separate streams
+      orders in transit after 5 weeks, with support requests Random vs Steady: identical true
+
+all passed

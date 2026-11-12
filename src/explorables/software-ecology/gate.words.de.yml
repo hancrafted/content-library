@@ -1,0 +1,23 @@
+name: Gatekeeper-Lead
+sub: Ein Tech Lead schreibt jede Spezifikation und prüft jede Änderung. Eine Person, zwei Stationen. Ohne Support gehen Fehler- und Supportanfragen an den Betrieb.
+centers:
+  lspec: { title: Lead · Spezifikation }
+  e1: { title: Entwicklung 1 }
+  e2: { title: Entwicklung 2 }
+  e3: { title: Entwicklung 3 }
+  lrev: { title: Lead · Review }
+belts:
+  customer-sales: { label: Neukunde }
+  customer-pm: { label: Feature- oder Änderungswunsch }
+  customer-ops: { label: Fehler- oder Supportticket }
+  sales-pm: { label: Abschluss }
+  pm-lspec: { label: Briefing, back: offene Fragen }
+  lspec-e1: { label: Aufgabe, back: Rückfrage }
+  lspec-e2: { label: Aufgabe, back: Rückfrage }
+  lspec-e3: { label: Aufgabe, back: Rückfrage }
+  e1-lrev: { label: Pull Request, back: Änderungen angefordert }
+  e2-lrev: { label: Pull Request, back: Änderungen angefordert }
+  e3-lrev: { label: Pull Request, back: Änderungen angefordert }
+  lrev-ops: { label: freigegebene Änderung, back: lässt sich nicht ausrollen }
+  ops-customer: { label: Release oder Antwort }
+customer: { title: Kunde, job: Schickt Anfragen und bekommt Releases }

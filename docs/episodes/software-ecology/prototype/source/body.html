@@ -1,0 +1,68 @@
+<main class="page" id="app">
+  <header class="head">
+    <p class="eyebrow text-caption">Software ecology · Play</p>
+    <h1 class="title">Play</h1>
+    <p class="lede text-body">The Customer on the left sends requests (and, in a product company, roles write tickets of their own); documents ride the belts from work center to work center, every handoff in a quarter of a working day, and wait in each station’s rack. Releases go back to the Customer along the top. Start in Ideal, then let reality in.</p>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Factory controls">
+    <div class="tb-row">
+      <div class="states" role="group" aria-label="States" id="states"></div>
+      <div class="usecase">
+        <label class="text-caption muted" for="usecase">Use case</label>
+        <select class="select" id="usecase"></select>
+      </div>
+    </div>
+    <div class="tb-row tb-row--tools">
+      <div class="tgroup" role="group" aria-label="What bad work does downstream" id="mechs"></div>
+      <div class="tgroup compare-w" id="compare-w"></div>
+      <div class="tgroup" role="group" aria-label="Speed" id="speed"></div>
+      <div class="tgroup menu-anchor">
+        <button type="button" class="tbtn" id="model-btn" aria-expanded="false" aria-controls="model" data-tip="Ideal to Realistic, where AI works, AI quality, strength of each mechanic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12" /><circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></svg><span class="tbtn__l">Model</span><span aria-hidden="true">▾</span></button>
+        <div class="menu" id="model" hidden role="group" aria-label="Model settings"></div>
+      </div>
+      <div class="tgroup">
+        <button type="button" class="tbtn" id="download" data-tip="Download the current state as one YAML file"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5" /><path d="M4 20h16" /></svg><span class="tbtn__l">Download YAML</span></button>
+        <button type="button" class="tbtn" id="upload" data-tip="Load a YAML file (or drop it anywhere on the page)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5" /><path d="M4 20h16" /></svg><span class="tbtn__l">Upload</span></button>
+        <input type="file" id="upload-file" accept=".yaml,.yml,text/yaml,application/yaml" hidden />
+      </div>
+      <div class="tgroup menu-anchor menu-anchor--end">
+        <button type="button" class="tbtn" id="more-btn" aria-expanded="false" aria-controls="more" aria-label="More: belt motion, pile-up, theme" data-tip="Belt motion, pile-up Options, theme"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="5" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="12" cy="19" r="1.8" /></svg></button>
+        <div class="menu menu--end" id="more" hidden role="group" aria-label="Display settings">
+          <button type="button" role="switch" class="mswitch" id="belt-motion" aria-checked="false"><span class="switch__track" aria-hidden="true"></span><span><b>Belt motion</b><span class="muted">The belts' slats move. Off is calmer; the documents still travel.</span></span></button>
+          <button type="button" role="switch" class="mswitch" id="theme" aria-checked="false"><span class="switch__track" aria-hidden="true"></span><span><b>Dark theme</b></span></button>
+          <div id="more-opts" class="more-opts"></div>
+          <a class="ghost-btn" href="#proto">Prototype notes</a>
+        </div>
+      </div>
+    </div>
+    <p class="text-caption muted usecase-sub" id="usecase-sub"></p>
+    <p class="watch" id="watch" aria-live="polite"></p>
+  </div>
+  <div class="io-msg" id="io-msg" aria-live="polite" hidden></div>
+
+  <section class="view-wrap" id="view-wrap" aria-label="The factory">
+    <p class="stage-note text-caption">Illustrative model, not measured</p>
+    <div class="view" id="view" data-view="factory">
+      <div class="stage" id="stage"></div>
+      <div class="floor" id="floor"></div>
+    </div>
+    <section class="compare" id="compare" hidden aria-label="Compare work centers"></section>
+    <div class="popover" id="popover" role="dialog" hidden></div>
+    <div class="tourbox" id="tourbox" role="dialog" aria-label="Guided tour" hidden></div>
+    <div class="drop-hint" aria-hidden="true">Drop a YAML file to run the factory from it</div>
+  </section>
+
+  <div class="stage-foot">
+    <p class="status" id="status" aria-live="polite"></p>
+    <div class="legend" id="legend" aria-label="Legend"></div>
+  </div>
+
+  <div class="below">
+    <aside class="dock-panel" id="dockp" aria-label="At the Customer"></aside>
+    <div class="proto" id="proto">
+      <p class="proto__tag">Prototype only · what round 7 built</p>
+      <div class="opts" id="opts"></div>
+    </div>
+  </div>
+</main>

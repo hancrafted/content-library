@@ -1,0 +1,85 @@
+# Rollenkatalog, Deutsch.
+roles:
+  customer:
+    title: Kunde
+    job: Bestellt, was er braucht, und bekommt, was ausgeliefert wird
+    artefacts: [Auftrag, Anfrage, Reklamation]
+    tasks: [erklärt den Bedarf, nimmt die Lieferung ab, bezahlt die Rechnung]
+    ai: [schreibt die Anfrage mit einem Assistenten, vergleicht Angebote]
+  sales:
+    title: Vertrieb
+    job: Macht aus Leads Abschlüsse
+    artefacts: [Abschluss, zugesagter Umfang, Vertrag & Preise]
+    tasks: [qualifiziert Leads, schreibt das Angebot, verhandelt Konditionen]
+    ai: [entwirft Angebote, fasst Gespräche als Notizen zusammen, schreibt Anforderungen für Produkt und Analyse]
+  pm:
+    title: Produktmanagement
+    job: Macht aus dem Abschluss einen Auftrag
+    artefacts: [Auftrag, Roadmap-Eintrag, Abnahmekriterien]
+    tasks: [befragt Kunden, priorisiert, schreibt den Auftrag]
+    ai: [entwirft Aufträge aus Interviewnotizen, bündelt Kundenfeedback]
+  ba:
+    title: Analyse
+    job: Macht aus dem Auftrag eine Spezifikation
+    artefacts: [Spezifikation, ADR, Design, Datenmodell]
+    tasks: [modelliert die Fachlichkeit, entscheidet die Architektur, schreibt die Spezifikation]
+    ai: [entwirft Spezifikationen, entwirft Architekturoptionen, prüft die Spezifikation gegen den Auftrag]
+  doc:
+    title: Dokumentation
+    job: Schreibt, was Nutzer lesen
+    artefacts: [Hilfeseiten, Release Notes, Tutorials]
+    tasks: [liest die Änderung, schreibt und pflegt Seiten, prüft Screenshots]
+    ai: [erzeugt Hilfeseiten aus der Änderung, erzeugt Release Notes, übersetzt]
+  eng:
+    title: Entwicklung
+    job: Macht aus der Spezifikation Code
+    artefacts: [Pull Request, Tests, Codeänderung]
+    tasks: [entwirft die Änderung, schreibt Code und Tests, arbeitet Review-Kommentare ein]
+    ai: [entwirft die Codeänderung, schreibt Tests, erklärt alten Code]
+  ops:
+    title: Betrieb
+    job: Prüft, liefert und betreibt das Release
+    artefacts: [Code-Review, Release, Änderungsprotokoll]
+    tasks: [prüft die Änderung, deployt, beobachtet Alarme]
+    ai: [fasst einen Pull Request fürs Review zusammen, schreibt Deploy-Skripte, sortiert Alarme]
+  billing:
+    title: Abrechnung
+    job: Rechnet ab, was genutzt und vereinbart wurde
+    artefacts: [Rechnung, Nutzungsbericht]
+    tasks: [gleicht die Nutzung ab, stellt Rechnungen, klärt Streitfälle]
+    ai: [entwirft Rechnungen, gleicht die Nutzung ab]
+  support:
+    title: Support
+    job: Antwortet, wenn es hakt
+    artefacts: [Antwort, Ticket, Fehlermeldung]
+    tasks: [sortiert Tickets, antwortet Kunden, meldet Fehler]
+    ai: [entwirft Antworten, sortiert Tickets, findet die Hilfeseite]
+  lead:
+    title: Tech Lead
+    job: Teilt die Arbeit auf und prüft jede Änderung
+    artefacts: [Aufgabenschnitt, Review]
+    tasks: [teilt Aufträge in Aufgaben, prüft jede Änderung, coacht]
+    ai: [zerlegt einen Auftrag in Aufgaben, fasst einen Pull Request fürs Review zusammen]
+  qa:
+    title: Qualitätssicherung
+    job: Testet jede Änderung, bevor sie ausgeliefert wird
+    artefacts: [Testbericht, getestete Änderung]
+    tasks: [führt die Prüfungen aus, testet die Änderung, gibt sie frei oder schickt sie zurück]
+    ai: [erzeugt Testpläne, schreibt Deploy-Skripte]
+presets:
+  roles: Wer macht was
+  ideal: In der Theorie
+  realistic: In der Praxis
+  ai-unbalanced: KI, unausgewogen
+  ai-compare: KI im Vergleich
+  ai-balanced: KI, ausgewogen
+  speed-up: Ein Team beschleunigen
+  ai-everywhere: KI überall
+  bug-spiral: Fehlerspirale
+  fix-orders: Erst die Aufträge klären
+  move-bottleneck: Den Engpass verschieben
+scenarios:
+  speed-up:
+    watch: Ein Team doppelt so schnell. Achte auf die Kundenkarte – kommt mehr an?
+  ai-unbalanced:
+    watch: KI nur in der Entwicklung, die doppelt so viele Pull Requests schreiben. Achte auf den Stau im Review.

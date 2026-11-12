@@ -1,0 +1,392 @@
+# The software ecology Explorable's own words (FE-012 §1): the toolbar, the stage, the cards, the Customer card and the
+# At the Customer panel. A use case's words (its centers, belts and scenarios) live in its own words pair; the German
+# twin of this file holds the same keys. `{name}` placeholders are filled by fillTemplate.
+toolbar:
+  label: Factory controls
+  states: States
+  useCase: Use case
+  fromFile: (from file)
+  speed: Speed
+  pause: Pause
+  speedMenu: 'Speed: {n}×'
+  speedMenuTip: How fast simulated time runs
+  play: Play
+  speedTips:
+    '1': '1×: a working day takes about 6 seconds'
+    '2': '2×: a working day takes about 3 seconds'
+    '5': '5×: a working day takes about 1.3 seconds'
+    '10': '10×: a working day takes about 0.6 seconds'
+    '20': '20×: a working day takes about 0.3 seconds'
+  clear: Clear
+  clearTip: 'Clear: an empty factory at day 0 with the current settings, to watch it fill'
+  day: 'Day {n}'
+  week: 'Week {w} · Day {d}'
+  warming: Warming up
+  mechs:
+    rework:
+      label: Rework
+      tip: 'Rework: a work center sends bad input back on its return belt, to the front of the sender’s backlog, and it is done again. Sign at the station: the arrow.'
+    churn:
+      label: Churn
+      tip: 'Churn: bad input that is kept multiplies; the center hands on more documents than usual, and the work takes longer. Sign at the station: the fan.'
+    complaints:
+      label: Complaints
+      tip: 'Customer complaints: a bad release may bring a complaint, a bug or support request marked with the red warning: work that adds no value. The Customer’s grid marks it; its chance is on the Customer card.'
+  scenarios: Scenarios
+  scenariosLabel: Scenarios
+  tourSteps: '{n}-step tour'
+  tour: Tour
+  tourTip: 'A guided tour of this scenario: set the dials, run to a week, pause, read what to look at'
+  modified: modified
+  modifiedTip: A dial was turned after picking this state; pick it again to reset
+# The Settings popover: one button at the toolbar's end; a header, two columns and Reset and the file at its foot.
+settings:
+  button: Settings
+  tip: 'Settings: the model, what bad work does downstream, how the factory is drawn, and the file'
+  label: Settings
+  model: Model
+  mechanics: Mechanics
+  mechanicsNote: What bad work does downstream
+  display: Display
+  close: Close
+  help: 'About {name}'
+tour:
+  label: Guided tour
+  step: '· step {i} of {n} · week {w}'
+  settling: Settling the line first…
+  running: 'Running to week {w}… week {n}'
+  checksLabel: What the checks expect here
+  holds: 'Holds:'
+  fails: 'Does not hold:'
+  close: Close
+  back: Back
+  next: Next
+  finish: Finish
+  checks:
+    check: '{measure} — {value}'
+    customer:
+      output: 'Output relative to ideal: {test}'
+      sat: 'Share of customers satisfied: {test}'
+      headroom: 'Demand the line could serve, times today’s: {test}'
+      leadDays: 'Lead time in working days: {test}'
+      bugsPerWeek: 'Complaints a week: {test}'
+      own: 'Own tickets shipped a week: {test}'
+      backlog: 'Jobs waiting at all work centers: {test}'
+    center:
+      weeksWaiting: '{title}: {test} weeks of work waiting'
+      busy: '{title}: busy {test} of the time'
+      bugShare: '{title}: {test} of busy time on complaints'
+      backlog: '{title}: {test} jobs waiting'
+      done: '{title}: {test} jobs finished a week'
+      rework: '{title}: {test} of its work sent back'
+      rush: '{title}: {test} effectiveness points lost to rushing'
+    trend: '{measure}, {test}'
+    customerTrend:
+      output: 'Output relative to ideal'
+      sat: 'Share of customers satisfied'
+      headroom: 'Demand the line could serve, times today’s'
+      leadDays: 'Lead time in working days'
+      bugsPerWeek: 'Complaints a week'
+      own: 'Own tickets shipped a week'
+      backlog: 'Jobs waiting at all work centers'
+    centerTrend:
+      weeksWaiting: '{title}: weeks of work waiting'
+      busy: '{title}: share of time busy'
+      bugShare: '{title}: share of busy time on complaints'
+      backlog: '{title}: jobs waiting'
+      done: '{title}: jobs finished a week'
+      rework: '{title}: share of its work sent back'
+      rush: '{title}: effectiveness points lost to rushing'
+    test:
+      gt: 'over {k}'
+      lt: 'under {k}'
+      gte: 'at least {k}'
+      lte: 'at most {k}'
+      range: '{lo} to {hi}'
+      rises: rising
+      falls: falling
+stage:
+  label: The factory
+  note: Illustrative model, not measured
+  warming: 'Warming up · day {day} of {of}'
+  blocked: blocked
+  aWeek: '{n} a week'
+  sentBack: sent back
+  back: '↩ {n} {what}'
+  status:
+    warming: 'Settling the line: {weeks} simulated weeks, then it runs live.'
+    calm: 'A simplified organization in Ideal: every handoff is good and nothing piles up. We all know reality is messier.'
+    bottleneck: Bottleneck
+    busiest: Busiest
+    waiting: '{title}, {weeks} weeks of work waiting'
+    growing: 'growing by about {n} jobs a week; raise its efficiency, or send less its way'
+    clearsWeek: 'clears in about a week at this pace; raising its efficiency clears it faster'
+    clearsWeeks: 'clears in about {n} weeks at this pace; raising its efficiency clears it faster'
+    also: 'also {titles}'
+    coping: 'Busy but coping: no work center has a week of work waiting'
+    sentBack: 'sent back a week'
+    behind: 'this device is behind: time runs slower than the speed says'
+  legend:
+    label: Legend
+    good: good
+    bad: bad
+    warn: complaint or rework
+    ai: AI-made
+    pile: past six waiting, the rack’s top slot turns red and work piles up at the belt end
+    merged: '×n: documents riding together'
+    handoff: every handoff takes a quarter day
+card:
+  waiting: waiting
+  onBugs: '{n} % on bugs'
+  openDashboard: '{title}: open its dashboard'
+  openSettings: '{title}: open its settings'
+  inspection: 'Inspection: reviews the work it receives'
+  signs:
+    rework: 'Rework: this center sent bad work back'
+    churn: 'Churn: it kept bad input and made more documents from it'
+    unread: 'Passing unread: its queue is so full that bad work goes through unchecked'
+    complaint: A customer complaint arrived here
+customer:
+  lastReleases: The last 20 releases
+  ofIdeal: of ideal
+  outputTip: 'Output: fulfilled requests a week, relative to ideal'
+  satisfied: Satisfied
+  satTip: 'Customer satisfaction: good releases minus complaints, out of the last 20'
+  leadTime: Lead time
+  leadTip: 'Lead time: working days from a request to its release, over about six weeks (Little’s law: requests in the line ÷ requests finished a week).'
+  couldServe: Could serve
+  headroomTip: How many times today’s demand the line could serve before its most loaded work center is full (from the expected flows at these settings).
+  bugs: Bugs a week
+  bugsTip: 'Bugs reported a week: complaints after bad releases. Each is failure demand: work that adds no value.'
+  own: Own, a week
+  ownTip: 'Product company: tickets the company writes itself (roadmap, leads, tech debt) that shipped, a week. Counted apart from the Customer’s requests; both share the same backlogs.'
+  rateTip: How many requests the Customer sends a week. Ideal sizes every work center for the file’s rate; more than that fills the line.
+  aWeek: '{n} a week'
+  days: '{n} days'
+  demand: '{n}× demand'
+  steady: steady
+  random: random
+dock:
+  label: At the Customer
+  eyebrow: At the Customer · the last 20 releases
+  grid: '{good} of the last 20 releases good, {complaints} brought complaints'
+  output: Output relative to ideal
+  sub: '{relative}: about {n} requests fulfilled a week'
+  same: About as much as in Ideal
+  half: About half of Ideal
+  third: About a third of Ideal
+  times: '{k}× Ideal'
+  satisfaction: Customer satisfaction
+  satNote: good releases minus complaints, out of the last 20
+  verdicts:
+    moreUnhappier: More output, an unhappier customer
+    unhappy: The customer is unhappy
+    fewer: Fewer requests fulfilled than the customer asked for
+    asked: What the customer asked for
+  note: 'Output counts fulfilled requests only: never the extra documents, rework or answers to complaints.'
+  complaints: 'About {n} complaints a week come back: failure demand, not new value.'
+# The roles state: the tire swing cartoon's panel captions by panel id, and the words around them.
+cartoon:
+  captions:
+    explained: How the customer explained it
+    pm: How the project leader understood it
+    ba: How the analyst designed it
+    eng: How the programmer wrote it
+    sales: How the business consultant described it
+    doc: How the project was documented
+    ops: What operations installed
+    billing: How the customer was billed
+    support: How it was supported
+    needed: What the customer really needed
+  blank: (blank)
+  notHere: '{role} · not a work center here'
+  artefacts: Artefacts
+  jobs:
+    doc: 'Too broad for one role: everyone writes documentation.'
+    billing: 'Too narrow for a work center: billing follows the deal.'
+# The Settings popover's Model column: the whole factory's settings, each with a tooltip saying what it does.
+model:
+  reality: Realism
+  ideal: Ideal
+  realistic: Realistic
+  realityText: 'Realistic {n} %'
+  ai: AI
+  off: 'Off'
+  everywhere: Everywhere
+  company: Company
+  service: Service provider
+  product: Product company
+  aiq: AI quality effect
+  worse: Worse
+  same: Same
+  better: Better
+  note: 'The Customer’s rate, request mix and follow-up chances sit on its card: click the Customer on the left.'
+  reset: Reset to default
+  tips:
+    reality: 'From Ideal to Realistic: lowers every work center’s efficiency and effectiveness toward its realistic values. More bad documents go out, get sent back or multiply; the bottleneck runs near 90 % busy.'
+    ai: 'Where AI works: those centers run faster (2.5× unless a dashboard says otherwise) and may write extra tasks; AI-made documents take the next center a little longer to read. Set the speed-up and extra tasks per work center on its dashboard.'
+    company: 'Service provider: only the Customer asks for work. Product company: Product management also writes roadmap items, Sales brings leads and Engineering writes tech debt tickets. They share the same backlogs; every center is sized again so Ideal stays 70 % busy.'
+    aiq: 'What AI does to the chance a document leaves good: Worse lowers it by 15 points, Better raises it by 15. Same leaves it.'
+    reset: 'Back to what the use-case file defines for this state: its settings, speed and display.'
+# The Settings popover's Display column: how the factory is drawn.
+display:
+  beltMotion: Belt motion
+  beltMotionNote: The belts' slats move. Off is calmer; the documents still travel.
+  pile: Pile-up past the rack
+  pileTip: How documents pile up past a full rack. Hover a style to see how it looks.
+  piles:
+    heap:
+      name: Tumbling heap
+      note: documents drop onto a heap at the belt end and settle at an angle
+    stack:
+      name: Leaning stack
+      note: a stack of sheets grows up from the belt end, leaning and swaying a little
+    drift:
+      name: Scattered drift
+      note: documents scatter around the belt end and jiggle, like a drift against a wall
+# A work center's dashboard: a monitor, its dials folded away in Settings.
+dash:
+  own:
+    title: Own work
+    tip: 'Tickets this department writes for itself, not for a customer: a roadmap, leads, tech debt. They join the same queue as customer requests, first in, first out. Only a Product company has them; a Service provider turns them all off.'
+    help: 'About {name}'
+    rate: Tickets per week
+    rateTip: 'How many own tickets this department writes a week, 0 to 50. 0 switches it off. The file’s rate is where it starts; Reset to default restores it.'
+    perWeek: '{n} a week'
+    arrivals: Arrivals
+    arrivalsTip: 'Steady: one ticket every 1/rate of a week, evenly. Random: the same on average, but they bunch up and thin out, as real tickets do.'
+    steady: Steady
+    random: Random
+    emit: Emit task
+    emitTip: Adds one own ticket to this work center's backlog now
+  help: Explain the charts
+  close: Close
+  closeTip: Close (Esc)
+  ai: AI
+  aiTip: AI speeds this center up (2.5× unless you change it below) and may make it write extra tasks; AI-made documents take the next center a little longer to read. Its quality effect is set in Model.
+  lightTip: 'Green: keeping up. Amber: a week of work or more waiting, a lot of work coming back, passing bad work unread, or mostly waiting for work. Red: two weeks of work or more waiting, or blocked.'
+  status: 'Status {level}: {signals}'
+  levels:
+    red: red
+    amber: amber
+    green: green
+  signals:
+    backing: 'Blocked: finished work cannot leave, the next center is full'
+    bottleneck: 'Bottleneck: {n} weeks of work waiting'
+    overloaded: 'Busy: {n} weeks of work waiting'
+    rework: 'Rework-heavy: {n} % of its work comes back'
+    unread: 'Passing unread: bad work goes through unchecked'
+    starved: 'Starved: mostly waiting for work'
+    ok: Keeping up
+  grows: 'Its backlog grows by about {n} jobs a week. Raise its efficiency, or send less its way.'
+  clearsWeek: At this pace its backlog clears in about a week. Raising its efficiency clears it faster.
+  clearsWeeks: 'At this pace its backlog clears in about {n} weeks. Raising its efficiency clears it faster.'
+  trends:
+    out:
+      title: Output
+      unit: a week
+      help: Jobs finished a week. The dashed line is Ideal.
+    good:
+      title: Outcome
+      unit: '% good'
+      help: Share of what it hands on that is good. The dashed line is 100 %.
+    wait:
+      title: Waiting
+      unit: weeks of work
+      help: 'Weeks of work waiting: the backlog divided by what this center finishes in a week. Amber from one week, red from two.'
+  settings: Settings
+  withAi: '{set} → {eff} with AI'
+  rows:
+    eff:
+      label: Efficiency
+      sub: · output
+      help: 'Efficiency is output: how fast this center finishes a document, 10 % to 1000 %. Faster only helps if work is waiting for it; then the bottleneck moves downstream.'
+    effv:
+      label: Effectiveness
+      sub: · outcome
+      help: 'Effectiveness is outcome: the chance a document leaves good, given the conditions here (time, tools, clear input).'
+    fan:
+      label: Tasks handed on per task
+      sub: ''
+      help: 'Tasks handed on per task: every document is a task, so this is how many tasks one finished task creates downstream. More tasks mean more work at the next center.'
+    aiSpeed:
+      label: AI speed-up
+      sub: ''
+      help: 'AI speed-up: how much faster this center works with AI, 1× to 5×.'
+    aiExtra:
+      label: AI extra tasks
+      sub: · per task
+      help: 'Extra tasks per task with AI: 1× hands on what it would anyway; 2× hands on twice the tasks (more pull requests, more documents) for the next center.'
+  flows: How it flows
+  flowsSub: for the queueing-minded
+  busy: busy
+  blocked: blocked
+  starved: waiting for work
+  util: 'Busy {busy}, blocked {blocked}, waiting for work {starved}'
+  throughput: Throughput
+  throughputNote: jobs it finishes a week
+  arriving: Arriving
+  arrivingNote: jobs that reach it a week
+  capacity: Capacity
+  capacityNote: jobs it could finish a week
+  backlog: Average backlog
+  backlogNote: jobs waiting, over two weeks
+  lead: Lead time
+  leadWeeks: '{n} wk'
+  leadPending: 'shown once the backlog is steady (Little’s law: backlog ÷ throughput)'
+  leadNote: 'how long a job waits and is worked on here (Little’s law: backlog ÷ throughput)'
+  artefacts: Artefacts
+  tasks: Tasks
+  withAiHere: With AI here
+# The Customer's dashboard: how many requests, how they arrive, where they go and what a release brings back.
+custDash:
+  requests: Requests a week
+  arrivals: Arrivals
+  modeTip: 'Steady: one request every 1/rate. Random: the same rate on average, but requests come in bursts and gaps (a Poisson process), the way real requests arrive.'
+  steady: Steady
+  random: Random
+  mix: Request mix
+  mixTip: 'Where new requests go: new customers to Sales, feature and change requests to Product management, bugs and support tickets to Support.'
+  follow: A release brings a new request
+  followTip: 'Each release may bring a new request at once. A good release brings a change request; a bad one a complaint (a bug or support request, marked with the red warning). Kept below 1 in total, so the requests settle.'
+  good: 'Good · {title}'
+  bad: 'Bad · {title}'
+  complaint: (complaint)
+  sizedFor: Ideal sizes every work center for this rate.
+  times: '{k}× the rate Ideal is sized for.'
+  gain: 'Follow-ups: about {g} new requests per request{off}.'
+  off: ' (complaints are off in the toolbar)'
+compare:
+  label: Compare work centers
+  button: Compare
+  tip: 'Compare: pick up to three work centers (or shift-click them)'
+  slots: Picked work centers
+  remove: 'Remove {title}'
+  removeFrom: 'Remove {title} from compare'
+  show: Show
+  exit: Exit
+  pick: Click work centers on the line.
+  max: 'Three at most: remove one by clicking its slot.'
+  title: 'Compare · {n} work centers in flow order'
+  titleOne: 'Compare · 1 work center in flow order'
+  exitStream: Exit compare
+  strip: Overview of the whole line; compared work centers are marked
+  gap: '+{n} stations'
+  gapOne: '+1 station'
+  gapLabel: '{n} work centers between'
+  aWeek: '{n} a week'
+  note: '{waiting} waiting · {weeks} weeks of work · busy {busy} % · {done} done a week'
+# Download YAML and Upload: the exchange file's buttons, the drop hint and the message under the toolbar.
+exchange:
+  download: Download YAML
+  downloadTip: Download the current state as one YAML file
+  upload: Upload
+  uploadTip: Load a YAML file (or drop it anywhere on the page)
+  drop: Drop a YAML file to run the factory from it
+  downloaded: 'Downloaded {file}: the current state of {name}. Edit it and drop it back here.'
+  unread: 'Could not read {file}: {reason}'
+  broken: '{file} was not loaded. Fix these and drop it again:'
+  unstable: '{file} was not loaded: at Realistic some work would pile up without end.'
+  loaded: 'Loaded {file}: {centers} work centers and the Customer, {belts} belts from their spawn rules. The factory now runs from this file.'
+  rush: ' Note: if every work center rushed (3+ weeks of work waiting), {who} would be over capacity.'
+  worst: ' If every inspection also passed bad work unread: {who}.'

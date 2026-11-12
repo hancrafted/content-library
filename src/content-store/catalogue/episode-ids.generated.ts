@@ -36,7 +36,12 @@ export const TEMPLATE_SLUGS = [
 ] as const;
 
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at `/explorables/<slug>/`. */
-export const EXPLORABLE_PAGE_SLUGS = ['ai-capability', 'context-window', 'human-in-the-loop'] as const;
+export const EXPLORABLE_PAGE_SLUGS = [
+  'ai-capability',
+  'context-window',
+  'human-in-the-loop',
+  'software-ecology',
+] as const;
 
 /** Every Guide, by slug: a step-by-step page served at `/guides/<slug>/`, no Episode (design-ADR 0019, #450). */
 export const GUIDE_SLUGS = ['setup-ai-agent-and-starter-folder'] as const;
