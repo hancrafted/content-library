@@ -208,14 +208,14 @@ jobs:
     stage: research
     intent: >-
       Research the question "Why does more context make models worse: context rot and IBM's four failure modes, building on Context Engineering for AI Agents: 4 Failure Modes to Avoid (https://www.youtube.com/watch?v=BwXremQ-i6I)?" into
-      docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0023__context-rot-four-failure-modes/research.md
+      docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0026__context-rot-four-failure-modes/research.md
       by references/write-research.md. docs/llm-wiki/research/LLM/LLM-0022__context-rot-from-muddy-context/research.md and docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md are partial matches: cite them as Sources and add the four failure modes, poisoning, distraction, confusion and clash, which neither names.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
     outputs:
       [
-        docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0023__context-rot-four-failure-modes/research.md,
+        docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0026__context-rot-four-failure-modes/research.md,
       ]
     checks: [mh, vitest, sources]
     retries: 2
@@ -259,7 +259,7 @@ jobs:
           - docs/episodes/from-shared-understanding-to-shared-context/research-plan.md
           - docs/episodes/from-shared-understanding-to-shared-context/research/SWE-0003__requirements-outweigh-execution/research.md
           - docs/episodes/from-shared-understanding-to-shared-context/research/AIE-0021__context-engineering-as-requirements/research.md
-          - docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0023__context-rot-four-failure-modes/research.md
+          - docs/episodes/from-shared-understanding-to-shared-context/research/LLM-0026__context-rot-four-failure-modes/research.md
           - docs/llm-wiki/research/AIE/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md
           - docs/llm-wiki/research/AIE/AIE-0009__clarifying-questions-before-task/research.md
           - docs/profile/storytelling-guide.md
