@@ -71,6 +71,7 @@ const centerDash = (p: CenterIn, x: { n: TopoNode; r: DashboardReadout }): WorkC
     onDial: (k: DialKey, v: number) => c.setSettings(withOver(c.settings, p.id, { [k]: v })),
     onAi: (on) => c.setSettings(withOver(c.settings, p.id, { ai: on })),
     onOwn: (id, patch) => c.setSettings(withOwn(c.settings, id, patch)),
+    onEmit: () => c.emit(p.id),
     onHelp: p.dash.toggleHelp,
     onClose: p.closable === false ? undefined : p.dash.close,
     marker: p.markers?.[`${p.id}:card`],

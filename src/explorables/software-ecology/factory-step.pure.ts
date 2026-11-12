@@ -84,6 +84,15 @@ const requests = (m: Factory, t0: number, t1: number): void => {
   }
 };
 
+/** One own ticket, written into its role's backlog and announced to the floor; it draws nothing. */
+const arrive = (m: Factory, src: TicketSource, wk: number): void => {
+  m.created++;
+  m.wip++;
+  src.n.rate.arr += BUMP;
+  pushBack(src.n, new Run({ q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN | OWN, e: -1, b: 0, wk, c: 1 }));
+  m.hook?.('own', src.n);
+};
+
 /** One source's own tickets up to t1, written into its role's backlog. */
 const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): void => {
   const n = src.n,
@@ -95,13 +104,15 @@ const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): 
     src.modeSeen = mode;
     src.next = rs > 0 ? x.t0 + nextGap(src, mode, rs) : Infinity;
   }
-  for (; src.next <= x.t1; src.next += nextGap(src, mode, rs)) {
-    m.created++;
-    m.wip++;
-    n.rate.arr += BUMP;
-    pushBack(n, new Run({ q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN | OWN, e: -1, b: 0, wk: Math.floor(src.next), c: 1 }));
-    m.hook?.('own', n);
-  }
+  for (; src.next <= x.t1; src.next += nextGap(src, mode, rs)) arrive(m, src, Math.floor(src.next));
+};
+
+/** One own ticket now, as a scheduled one; false for no source or Service provider. Draws nothing, moves no clock. */
+export const emitOwn = (m: Factory, id: string): boolean => {
+  const src = productCo(m.s) ? m.srcs.find((x) => x.n.id === id) : undefined;
+  if (!src) return false;
+  arrive(m, src, Math.floor(m.t));
+  return true;
 };
 
 /** Own tickets (Product company): each source at its own rate and arrivals, its own random stream. */

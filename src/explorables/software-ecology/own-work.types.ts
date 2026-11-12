@@ -35,4 +35,6 @@ export interface OwnWorkWords {
   readonly arrivalsTip: string;
   readonly steady: string;
   readonly random: string;
+  readonly emit: string;
+  readonly emitTip: string;
 }

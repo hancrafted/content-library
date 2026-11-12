@@ -255,6 +255,8 @@ dash:
     arrivalsTip: 'Gleichmäßig: ein Ticket alle 1/Rate einer Woche, im festen Takt. Zufällig: im Schnitt gleich viele, aber mal gehäuft, mal dünn, wie echte Tickets.'
     steady: Gleichmäßig
     random: Zufällig
+    emit: Aufgabe auslösen
+    emitTip: Legt jetzt ein eigenes Ticket in den Rückstau dieses Arbeitsplatzes
   help: Diagramme erklären
   close: Schließen
   closeTip: Schließen (Esc)
