@@ -97,6 +97,24 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('refuses a settles range that trends and a claim that names no words key', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const presets = doc.presets as Record<string, unknown>[];
+    presets[2] = {
+      id: 'ideal',
+      tour: [{ run: 6, claim: 'a claim in words', settles: { 'qa.weeksWaiting': 'rises' } }],
+    };
+    const expected = [
+      'presets[2].tour[0].claim: a words key, such as clean-line',
+      'presets[2].tour[0].settles.qa.weeksWaiting: a bound or a range such as ">2" or "0.9–1.1"; settles has no beat before it',
+    ];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses a starting backlog on a work center that is not there, and a pile-up style that is not one', () => {
     // ARRANGE
     const doc = { ...tireDoc(), backlog: { qa: 3, nobody: 1, eng: 20 }, display: { pile: 'mound', beltMotion: 'yes' } };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { judge, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
-import type { Bundle, Preset } from './software-ecology.types';
+import { judge, judgeScenario, needOf, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
+import type { Bundle, Preset, TourStep } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
 /*
@@ -156,6 +156,15 @@ const valueOf = (r: Reading): string | undefined =>
     [r.step - 1]?.checks.find((c) => c.key === r.key)
     ?.v.toFixed(2);
 
+/** Tire swing with one more scenario: Realistic, then the given beats. */
+const withTour = (tour: readonly TourStep[]): Bundle => {
+  const B = builtinBundle('tire');
+  const p: Preset = { id: 'probe', view: 'factory', reality: 100, tour };
+  return { ...B, data: { ...B.data, presets: [...B.data.presets, p] } };
+};
+const SEEDS = [1, 2, 3];
+const AI_AT_ENG = { ai: ['eng'], dials: { eng: { aiExtra: 2 } } } as const;
+
 const SCENARIOS = BUILTIN.flatMap((id) =>
   builtinBundle(id)
     .data.presets.filter((p) => p.tour ?? p.check)
@@ -182,9 +191,62 @@ describe('success cases', () => {
     // ASSERT
     expect(failed).toEqual(failing);
   });
+
+  it('passes a beat on every seed when the means of its last two weeks hold', () => {
+    // ARRANGE
+    const B = builtinBundle('tire');
+    const expected = { passed: SEEDS.length, ok: true };
+    // ACT
+    const [beat] = judgeScenario(B, 'ideal', { seeds: SEEDS }).beats;
+    // ASSERT
+    expect({ passed: beat?.passed, ok: beat?.ok }).toEqual(expected);
+  });
+
+  it('judges rises against the same seed’s mean in the beat before', () => {
+    // ARRANGE
+    const B = withTour([
+      { run: 6, expect: { 'qa.weeksWaiting': '>0' } },
+      { set: AI_AT_ENG, run: 14, expect: { 'qa.weeksWaiting': 'rises' } },
+    ]);
+    const expected = SEEDS.length;
+    // ACT
+    const second = judgeScenario(B, 'probe', { seeds: SEEDS }).beats[1];
+    // ASSERT
+    expect(second?.passed).toBe(expected);
+  });
+
+  it('checks settles after the beat’s settings run 40 weeks more', () => {
+    // ARRANGE
+    const B = withTour([{ set: AI_AT_ENG, run: 6, settles: { 'qa.weeksWaiting': '>8' } }]);
+    const pile = 8;
+    // ACT
+    const check = judgeScenario(B, 'probe', { seeds: SEEDS }).beats[0]?.checks.find((c) => c.kind === 'settles');
+    // ASSERT
+    expect(Math.min(...(check?.means ?? []))).toBeGreaterThan(pile);
+  });
 });
 
 describe('failure cases', () => {
+  it('fails a beat whose claim holds on no seed', () => {
+    // ARRANGE
+    const B = withTour([{ run: 6, expect: { 'customer.output': '>5' } }]);
+    const expected = { passed: 0, ok: false };
+    // ACT
+    const [beat] = judgeScenario(B, 'probe', { seeds: SEEDS }).beats;
+    // ASSERT
+    expect({ passed: beat?.passed, ok: beat?.ok }).toEqual(expected);
+  });
+
+  it('fails a beat with a claim that runs longer than nine weeks, even when its checks hold', () => {
+    // ARRANGE
+    const B = withTour([{ run: 12, claim: 'clean', expect: { 'customer.output': '>0' } }]);
+    const expected = { passed: SEEDS.length, ok: false };
+    // ACT
+    const [beat] = judgeScenario(B, 'probe', { seeds: SEEDS }).beats;
+    // ASSERT
+    expect({ passed: beat?.passed, ok: beat?.ok }).toEqual(expected);
+  });
+
   it('judges a value outside its range as failing', () => {
     // ARRANGE
     const value = 1.2;
@@ -197,6 +259,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('needs 8 of 10 seeds, and every seed of a single one', () => {
+    // ARRANGE
+    const expected = [8, 1, 3];
+    // ACT
+    const need = [10, 1, 3].map(needOf);
+    // ASSERT
+    expect(need).toEqual(expected);
+  });
+
   it('names only scenarios the files still have, with as many steps as the reference build ran', () => {
     // ARRANGE
     const refs = Object.entries(REFERENCE_WEEKS);
