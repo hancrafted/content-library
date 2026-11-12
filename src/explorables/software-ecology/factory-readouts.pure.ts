@@ -1,7 +1,7 @@
 /*
  * Readouts of the factory model (design-ADR 0024 §1, §10): the measures a scenario's `expect:` names, the traffic light of a work center, conservation and a state hash for the checks.
  */
-import { DAYS, rushOf } from './factory-dials.pure.ts';
+import { DAYS, dials, rushOf, stallOf } from './factory-dials.pure.ts';
 import { solve } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 
@@ -32,7 +32,8 @@ export const satRate = (m: Factory): number => {
 
 export type CustomerMeasure =
   'output' | 'sat' | 'headroom' | 'leadDays' | 'bugsPerWeek' | 'changesPerWeek' | 'own' | 'backlog';
-export type CenterMeasure = 'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush' | 'unread';
+export type CenterMeasure =
+  'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush' | 'unread' | 'stall';
 
 export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) => number>> = {
   output: (m) => (m.idealOut ? m.outRate / m.idealOut : 0),
@@ -45,7 +46,7 @@ export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) =>
   backlog: (m) => backlogOf(m),
 };
 
-export const CENTER_MEASURES: Readonly<Record<CenterMeasure, (n: FactoryNode) => number>> = {
+export const CENTER_MEASURES: Readonly<Record<CenterMeasure, (n: FactoryNode, m: Factory) => number>> = {
   weeksWaiting: (n) => n.Ws,
   busy: (n) => n.u.busy,
   bugShare: (n) => (n.u.busy > 0.02 ? n.u.fail / n.u.busy : 0),
@@ -53,6 +54,7 @@ export const CENTER_MEASURES: Readonly<Record<CenterMeasure, (n: FactoryNode) =>
   done: (n) => n.rate.done,
   rework: (n) => (n.rate.arr > 0.05 ? n.rate.rwIn / n.rate.arr : 0),
   rush: (n) => rushOf(n),
+  stall: (n, m) => stallOf(n, dials(n, m.s)),
   unread: (n) => (n.rate.badIn > 0.05 ? n.rate.badPass / n.rate.badIn : 0),
 };
 

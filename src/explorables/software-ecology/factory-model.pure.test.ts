@@ -109,7 +109,7 @@ describe('success cases', () => {
     // ARRANGE
     const B = builtinBundle('tire');
     const f = createFactory(B, { ...endState(B, 'realistic'), ai: ['eng'], over: { eng: { aiExtra: 2 } } });
-    const expected = { before: { id: 'qa', weeks: '16.9' }, after: { id: 'ops', weeks: '35.4' }, qa: '0.0' };
+    const expected = { before: { id: 'qa', weeks: '16.9' }, after: { id: 'ops', weeks: '43.9' }, qa: '0.0' };
     // ACT
     f.step(30);
     const before = worst(f);

@@ -88,7 +88,7 @@ describe('failure cases', () => {
     const presets = doc.presets as Record<string, unknown>[];
     presets[2] = { id: 'ideal', check: { run: 12, expect: { 'qa.speed': 'lots' } } };
     const expected = [
-      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread>',
+      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread|stall>',
       'presets[2].check.expect.qa.speed: a test such as ">2", "<0.5", "0.9–1.1", rises or falls',
     ];
     // ACT
@@ -124,6 +124,21 @@ describe('failure cases', () => {
     const expected = [
       'centers[4].catch: { spec, code }, each the chance to send it back, 0 to 1',
       'centers[4].origin: spec or code',
+    ];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a stall without a mark in weeks or with a share of 1 or more', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c, i) =>
+      i === 6 ? { ...c, stall: { at: -1, slow: 1 } } : c,
+    );
+    const expected = [
+      'centers[6].stall: { at: weeks of work waiting 0 to 50, slow: the share of speed lost, 0 to 0.95 }',
     ];
     // ACT
     const seen = problems({ ...doc, centers });

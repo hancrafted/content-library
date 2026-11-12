@@ -4,7 +4,7 @@
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
 import { DEFECTS } from './defect.pure.ts';
-import { catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf } from './factory-dials.pure.ts';
+import { catchOf, constOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
@@ -99,7 +99,7 @@ const startJob = (m: Factory, sv: Server, x: { n: FactoryNode; t: number }): voi
   sv.churn = v.churn;
   sv.busy = true;
   sv.start = t;
-  sv.end = t + serviceTime(m, n, size / speedOf(n, d));
+  sv.end = t + serviceTime(m, n, size / (speedOf(n, d) * (1 - stallOf(n, d))));
   m.hook?.('start', n);
 };
 
