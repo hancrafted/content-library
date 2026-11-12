@@ -4,7 +4,7 @@
  * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
-import { stepSampled, type Sampling, type Values } from './beat-means.pure.ts';
+import { type Sampler, type Values } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
@@ -57,7 +57,7 @@ export interface RunOptions {
 /** Where a tour step aims the run: the model step it stops on, and its sample steps (the judge's `sampleSteps`). */
 export interface Aim {
   readonly at: number;
-  readonly sampling: Sampling | null;
+  readonly sampling: Sampler | null;
 }
 
 export class FactoryRun {
@@ -127,7 +127,12 @@ export class FactoryRun {
 
   /** The readings taken on the tour step's sample steps so far. */
   get sampled(): readonly Values[] {
-    return this.aimed?.sampling?.got ?? [];
+    return this.aimed?.sampling?.readings ?? [];
+  }
+
+  /** The mean of the readings taken on the tour step's sample steps so far. */
+  sampledMean(): Values {
+    return this.aimed?.sampling?.mean() ?? {};
   }
 
   /** The run stands on its tour step. */
@@ -160,7 +165,10 @@ export class FactoryRun {
   }
 
   private steps(n: number) {
-    stepSampled(this.f, { k: this.k, n, s: this.aimed?.sampling ?? null });
+    const k = this.k,
+      s = this.aimed?.sampling;
+    if (s) s.run(this.f, { k, n });
+    else if (n > 0) this.f.step(n * DTW);
   }
 
   /** Warms the rest at once. */

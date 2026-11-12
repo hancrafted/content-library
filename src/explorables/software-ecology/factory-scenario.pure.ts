@@ -7,7 +7,7 @@
  * CUSTOMER_MEASURES and CENTER_MEASURES; test ">2", "<0.5", ">=1", "<=3", "0.9–1.1" (en dash or hyphen), "rises" or
  * "falls" (against the step before).
  */
-import { meanOf, sampleSteps, stepSampled, stepsTo, type Values, WINDOW } from './beat-means.pure.ts';
+import { createSampler, stepsTo, type Values, WINDOW } from './beat-means.pure.ts';
 import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
@@ -85,9 +85,9 @@ export const needOf = (seeds: number): number => (seeds < 5 ? seeds : Math.ceil(
 const runAveraged = (f: FactoryHandle, x: { weeks: number; window: number }, keys: readonly string[]): Values => {
   const start = stepsTo(f.weeks),
     end = start + stepsTo(x.weeks),
-    s = { at: sampleSteps({ start, end, window: x.window }), keys, got: [] };
-  stepSampled(f, { k: start, n: end - start, s });
-  return meanOf(keys, s.got);
+    s = createSampler({ start, end, window: x.window, keys });
+  s.run(f, { k: start, n: end - start });
+  return s.mean();
 };
 
 /** One seed's readings of one beat: the means at its end, and those SETTLE_WEEKS later when it has `settles:`. */

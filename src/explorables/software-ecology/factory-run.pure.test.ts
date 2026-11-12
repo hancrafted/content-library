@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createSampler, stepsTo } from './beat-means.pure.ts';
 import { DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
@@ -106,11 +107,10 @@ describe('edge cases', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
     const k0 = run.k,
-      at = [k0 + 5, k0 + 10],
-      stop = k0 + 10,
+      stop = k0 + (2 * stepsTo(1)) / 8,
       readings = 2;
     // ACT
-    run.aim({ at: stop, sampling: { at, keys: ['customer.output'], got: [] } });
+    run.aim({ at: stop, sampling: createSampler({ start: k0, end: stop, keys: ['customer.output'] }) });
     run.runTo(stop);
     const got = run.sampled.length;
     run.aim(null);
