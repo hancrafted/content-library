@@ -16,12 +16,20 @@ import { ToolTip } from './toolbar-tip.client';
  * between its steps and gives the viewer's speed back when it ends.
  */
 
+/** The clock's numbers: a tour has a week and a day, a free run only a day; none while the line warms. */
+export interface ClockAt {
+  readonly week?: number;
+  readonly day?: number;
+}
+
 export interface TimeControlsProps {
   readonly words: ToolbarWords;
   readonly speed: number;
   readonly onSpeed: (n: number) => void;
   readonly onClear: () => void;
   readonly clock: string;
+  /** The clock as numbers, for the eval read-outs: the tour's week and day, else the working day. */
+  readonly clockAt: ClockAt;
   /** The speed menu is open; the toolbar keeps one menu open at a time. */
   readonly open: boolean;
   readonly onOpen: (open: boolean) => void;
@@ -46,6 +54,7 @@ function PauseButton(p: TimeControlsProps & { resume: number }) {
         type="button"
         className={`${styles.tbtn} text-caption`}
         aria-label={name}
+        data-control="toolbar.pause"
         onClick={() => p.onSpeed(paused ? p.resume : 0)}
       >
         <Glyph name={paused ? 'play' : 'pause'} className={styles.ico} />
@@ -61,6 +70,7 @@ function SpeedItems(p: TimeControlsProps & { resume: number }) {
       type="button"
       role="menuitemradio"
       className={`${styles.scnI} text-caption`}
+      data-control={`toolbar.speed.${v}`}
       aria-checked={p.resume === v}
       onClick={() => {
         p.onOpen(false);
@@ -79,6 +89,7 @@ function SpeedMenu(p: TimeControlsProps & { resume: number }) {
     <ToolbarMenu
       open={p.open}
       onOpen={p.onOpen}
+      control="toolbar.speed"
       face={<MenuFace text={`${p.resume}×`} />}
       ariaLabel={fillTemplate(w.speedMenu, { n: p.resume })}
       tip={w.speedMenuTip}
@@ -100,11 +111,23 @@ export function TimeControls(p: TimeControlsProps) {
       <PauseButton {...p} resume={resume} />
       <SpeedMenu {...p} resume={resume} />
       <ToolTip tip={w.clearTip}>
-        <button type="button" className={`${styles.tbtn} text-caption`} aria-label={w.clear} onClick={p.onClear}>
+        <button
+          type="button"
+          className={`${styles.tbtn} text-caption`}
+          aria-label={w.clear}
+          data-control="toolbar.clear"
+          onClick={p.onClear}
+        >
           <Glyph name="clear" className={styles.ico} />
         </button>
       </ToolTip>
-      <span className={`${styles.clock} text-caption font-semibold`}>{p.clock}</span>
+      <span
+        className={`${styles.clock} text-caption font-semibold`}
+        data-readout-week={p.clockAt.week}
+        data-readout-day={p.clockAt.day}
+      >
+        {p.clock}
+      </span>
     </div>
   );
 }

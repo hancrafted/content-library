@@ -19,7 +19,7 @@ export interface PreviewCustomer {
   readonly label: string;
   readonly output: string;
   readonly satisfied: string;
-  /** The last twenty releases, oldest first, filling a 4×5 grid. */
+  /** The last twenty releases, oldest first, filling a grid of 4 rows by 5 columns. */
   readonly releases: readonly Release[];
 }
 
@@ -166,15 +166,15 @@ function Customer({ customer }: { customer: PreviewCustomer }) {
       {customer.releases.map((release, index) => (
         <rect
           key={index}
-          x={16 + (index % 4) * 12}
-          y={50 + Math.floor(index / 4) * 12}
+          x={16 + (index % 5) * 12}
+          y={50 + Math.floor(index / 5) * 12}
           width="9"
           height="9"
           rx="2"
           className={release === 'bad' ? 'fill-destructive/70' : 'fill-foreground/15'}
         />
       ))}
-      <text x="92" y="68" textAnchor="end" className="fill-primary text-caption font-semibold">
+      <text x="92" y="112" textAnchor="end" className="fill-primary text-caption font-semibold">
         {customer.output}
       </text>
       <text x="16" y="129" className="fill-primary text-caption font-semibold">

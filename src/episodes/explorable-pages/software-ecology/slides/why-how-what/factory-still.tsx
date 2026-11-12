@@ -6,7 +6,7 @@ import { Doc, formatsOf, type Formats } from './still-parts';
 
 /** A numbered pin on the still: the note of the same number explains what it points at. */
 export interface Pin {
-  readonly n: 1 | 2 | 3;
+  readonly n: 1 | 2;
   readonly at: 'qa' | 'ba';
 }
 

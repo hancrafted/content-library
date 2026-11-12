@@ -15,6 +15,9 @@ export interface Colors {
   readonly aiFill: string;
   readonly good: string;
   readonly warn: string;
+  /** The lightbulb of own work: its yellow and its darker outline. */
+  readonly bulb: string;
+  readonly bulbEdge: string;
   readonly dull: string;
   readonly border: string;
   readonly destr: string;

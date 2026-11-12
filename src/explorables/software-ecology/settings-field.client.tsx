@@ -21,11 +21,11 @@ const helpName = (template: string, name: string) => template.replace('{name}', 
 const ICON = 16;
 
 /** The (?) icon: a button, so the keyboard reaches it and its tooltip opens on focus. */
-export function HelpTip(p: { readonly name: string; readonly tip: string }) {
+export function HelpTip(p: { readonly name: string; readonly tip: string; readonly control: string }) {
   const template = useContext(HelpName);
   return (
     <ToolTip tip={p.tip}>
-      <button type="button" className={styles.helpBtn} aria-label={helpName(template, p.name)}>
+      <button type="button" className={styles.helpBtn} aria-label={helpName(template, p.name)} data-control={p.control}>
         <CircleHelp size={ICON} aria-hidden="true" />
       </button>
     </ToolTip>
@@ -50,6 +50,8 @@ export function Value(p: { readonly labelId: string; readonly children: ReactNod
 
 export interface FieldProps {
   readonly label: string;
+  /** The field's eval hook (`settings.<field>`); its help is `<control>.help`. */
+  readonly control: string;
   readonly tip: string;
   /** What sits at the end of the label line: a value, a switch. */
   readonly trailing?: Trailing;
@@ -65,7 +67,7 @@ export function Field(p: FieldProps) {
         <span id={id} className={`${styles.fieldLabel} text-caption font-medium`}>
           {p.label}
         </span>
-        <HelpTip name={p.label} tip={p.tip} />
+        <HelpTip name={p.label} tip={p.tip} control={`${p.control}.help`} />
         {p.trailing ? <span className={styles.fieldEnd}>{trailingOf(p.trailing, id)}</span> : null}
       </div>
       {p.children?.(id)}
@@ -75,6 +77,7 @@ export function Field(p: FieldProps) {
 
 /** An on/off switch named by the label beside it. */
 export function SwitchControl(p: {
+  readonly control: string;
   readonly on: boolean;
   readonly labelId: string;
   readonly onFlip: (on: boolean) => void;
@@ -83,6 +86,7 @@ export function SwitchControl(p: {
     <button
       type="button"
       role="switch"
+      data-control={p.control}
       className={styles.fswitch}
       aria-checked={p.on}
       aria-labelledby={p.labelId}
@@ -96,6 +100,7 @@ export function SwitchControl(p: {
 /** A switch as a whole field: its label, help and the switch on one line. */
 export function SwitchField(p: {
   readonly label: string;
+  readonly control: string;
   readonly tip: string;
   readonly on: boolean;
   readonly onFlip: (on: boolean) => void;
@@ -109,10 +114,10 @@ export function SwitchField(p: {
         <span id={id} className={`${styles.fieldLabel} text-caption font-medium`}>
           {p.label}
         </span>
-        <HelpTip name={p.label} tip={p.tip} />
+        <HelpTip name={p.label} tip={p.tip} control={`${p.control}.help`} />
         <span className={styles.fieldEnd}>
           {p.value ? trailingOf(p.value, id) : null}
-          <SwitchControl on={p.on} labelId={id} onFlip={p.onFlip} />
+          <SwitchControl control={p.control} on={p.on} labelId={id} onFlip={p.onFlip} />
         </span>
       </div>
       {p.children?.(id)}
@@ -122,7 +127,15 @@ export function SwitchField(p: {
 
 export interface SegmentedProps<T extends string> {
   readonly labelId: string;
-  readonly items: readonly { readonly id: T; readonly label: string; readonly tip?: string }[];
+  /** The group's eval hook; each choice is `<control>.<id>`. */
+  readonly control: string;
+  readonly items: readonly {
+    readonly id: T;
+    readonly label: string;
+    readonly tip?: string;
+    /** The eval hook's value when it differs from the id (`ai:all` is `all`). */
+    readonly hook?: string;
+  }[];
   readonly on: string;
   readonly onPick: (id: T) => void;
   /** The AI choices are drawn in the AI colour. */
@@ -135,7 +148,13 @@ export function Segmented<T extends string>(p: SegmentedProps<T>) {
     <div className={styles.segFull} role="group" aria-labelledby={p.labelId} data-tone={p.ai ? 'ai' : undefined}>
       {p.items.map((x) => (
         <ToolTip key={x.id} tip={x.tip ?? ''}>
-          <button type="button" className="text-caption" aria-pressed={x.id === p.on} onClick={() => p.onPick(x.id)}>
+          <button
+            type="button"
+            className="text-caption"
+            data-control={`${p.control}.${x.hook ?? x.id}`}
+            aria-pressed={x.id === p.on}
+            onClick={() => p.onPick(x.id)}
+          >
             {x.label}
           </button>
         </ToolTip>
@@ -147,6 +166,7 @@ export function Segmented<T extends string>(p: SegmentedProps<T>) {
 /** A slider full width, named by the label; its value shows on the label line. */
 export function SliderControl(p: {
   readonly labelId: string;
+  readonly control: string;
   readonly min: number;
   readonly max: number;
   readonly step: number;
@@ -158,6 +178,7 @@ export function SliderControl(p: {
   return (
     <input
       type="range"
+      data-control={p.control}
       id={controlIdOf(p.labelId)}
       className={styles.fslider}
       aria-labelledby={p.labelId}

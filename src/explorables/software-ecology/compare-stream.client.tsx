@@ -180,7 +180,12 @@ function Top({ n, p }: { n: number; p: CompareStreamProps }) {
   return (
     <div className={styles.cmpTop}>
       <p className="m-0 text-body font-semibold">{n === 1 ? p.words.titleOne : fillTemplate(p.words.title, { n })}</p>
-      <button type="button" className={`${styles.tbtn} ${styles.tbtnSolid} text-caption`} onClick={p.onExit}>
+      <button
+        type="button"
+        className={`${styles.tbtn} ${styles.tbtnSolid} text-caption`}
+        data-control="compare.exit-stream"
+        onClick={p.onExit}
+      >
         {p.words.exitStream}
       </button>
     </div>

@@ -13,13 +13,13 @@ const cellClass = (r: Release | null) => {
   return r.good ? 'fill-(--success)/35' : 'fill-destructive/40';
 };
 
-/** The last twelve releases as a 3 × 4 grid: good, bad, and a red warning on one that brought a complaint. */
+/** The last twenty releases as a grid of 4 rows by 5 columns: good, bad, and a red warning on one that brought a complaint. */
 function Releases({ releases, x, y }: { releases: readonly (Release | null)[]; x: number; y: number }) {
   return (
     <g>
       {releases.map((r, i) => {
-        const cx = x + (i % 3) * CELL,
-          cy = y + Math.floor(i / 3) * CELL;
+        const cx = x + (i % 5) * CELL,
+          cy = y + Math.floor(i / 5) * CELL;
         return (
           <g key={i}>
             <rect x={cx} y={cy} width="14" height="14" rx="3" className={cellClass(r)} />

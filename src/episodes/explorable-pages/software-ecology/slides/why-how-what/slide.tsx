@@ -8,7 +8,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PinNote } from './pin-note';
 import { PinNumber } from './pin-number';
-import { ToolbarStill } from './toolbar-still';
 
 const DORA_2025 = { slug: 'dora-2025', url: 'https://dora.dev/research/2025/dora-report/' };
 const MENDEZ_NAMING_THE_PAIN = { slug: 'mendez-naming-the-pain', url: 'https://arxiv.org/abs/1611.10288' };
@@ -23,8 +22,7 @@ const FRAME = 'flex flex-col gap-3 rounded-xl border border-border bg-muted p-4 
 
 /**
  * The page's one text Slide (Spec Option 2b, which overrules `master: grid-1x3`): one annotated still of the factory at
- * the AI-unbalanced tour's last step, its toolbar above it and the Analysis dashboard under it, beside three numbered
- * notes, Why, How and What, whose numbers match the still's pins. The stills read the Explorable's own model at that
+ * the AI-unbalanced tour's last step, the Analysis dashboard under it, beside three notes, Why, How and What; Why and What are numbered and match the still's pins (How points at no part of the still). The stills read the Explorable's own model at that
  * step at build time (`factory-still-state.ts`), so they show the state a viewer reaches with Tour. Below `md` the
  * notes stack Why first and the dashboard drops under them. No motion of its own.
  */
@@ -55,22 +53,13 @@ export const whyHowWhat = slide({
       <SlideFrame>
         <div className="mt-8 flex flex-col gap-8">
           <figure className={FRAME}>
-            <ToolbarStill
-              states={state.toolbar.states}
-              scenarios={state.words.toolbar.scenarios}
-              tour={state.words.toolbar.tour}
-              speed={state.toolbar.speed}
-              clock={state.toolbar.clock}
-              useCase={state.toolbar.useCase}
-              pin={<PinNumber n={2} />}
-            />
             <div className="rounded-lg bg-card/60 p-2">
               <FactoryStill
                 state={state}
                 locale={locale}
                 pins={[
                   { n: 1, at: 'qa' },
-                  { n: 3, at: 'ba' },
+                  { n: 2, at: 'ba' },
                 ]}
                 words={{
                   label: t('still.label', {
@@ -94,7 +83,7 @@ export const whyHowWhat = slide({
               aria-label={t('stills.dashboard.label', { week: state.week })}
             >
               <p className="flex items-center gap-2">
-                <PinNumber n={3} />
+                <PinNumber n={2} />
                 <span className="text-caption text-muted-foreground">{t('still.openHint')}</span>
               </p>
               <DashboardStill
@@ -136,14 +125,13 @@ export const whyHowWhat = slide({
                 targetProps={target('why')}
               />
               <PinNote
-                n={2}
                 slug="how"
                 word={t('words.how')}
                 title={t('columns.how.title')}
                 caption={t('columns.how.caption')}
               />
               <PinNote
-                n={3}
+                n={2}
                 slug="what"
                 word={t('words.what')}
                 title={t('columns.what.title')}

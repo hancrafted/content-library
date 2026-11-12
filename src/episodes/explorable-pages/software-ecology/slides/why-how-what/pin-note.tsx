@@ -3,7 +3,8 @@ import { useId, type ReactNode } from 'react';
 import { PinNumber } from './pin-number';
 
 export interface PinNoteProps {
-  readonly n: number;
+  /** The pin's number; a note that points at no part of the still has none. */
+  readonly n?: number;
   readonly slug: 'why' | 'how' | 'what';
   readonly word: string;
   readonly title: string;
@@ -22,7 +23,7 @@ export function PinNote({ n, slug, word, title, caption, targetProps }: PinNoteP
       className="focus-group__item card-hover card-hover--raise flex flex-col gap-2 rounded-xl p-2"
     >
       <p className="flex items-center gap-2">
-        <PinNumber n={n} />
+        {n !== undefined && <PinNumber n={n} />}
         <span className="text-caption font-semibold text-muted-foreground uppercase">{word}</span>
       </p>
       <h4 id={id} className="text-body font-semibold text-balance text-foreground">

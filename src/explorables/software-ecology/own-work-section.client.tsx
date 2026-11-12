@@ -16,6 +16,8 @@ import { ToolTip } from './toolbar-tip.client';
  */
 
 export interface OwnWorkSectionProps {
+  /** The work center's id, for the eval hooks `node.<id>.own.*`. */
+  readonly node: string;
   readonly own: readonly OwnReadout[];
   readonly words: OwnWorkWords;
   readonly onChange: (id: string, patch: OwnSet) => void;
@@ -24,6 +26,8 @@ export interface OwnWorkSectionProps {
 }
 
 interface SourceProps {
+  /** The work center's id, for the eval hooks `node.<id>.own.*`. */
+  readonly node: string;
   readonly x: OwnReadout;
   readonly words: OwnWorkWords;
   readonly onChange: OwnWorkSectionProps['onChange'];
@@ -33,10 +37,16 @@ function RateField(p: SourceProps) {
   const { x, words: w } = p,
     shown = fillTemplate(w.perWeek, { n: x.now.rate });
   return (
-    <Field label={w.rate} tip={w.rateTip} trailing={(id) => <Value labelId={id}>{shown}</Value>}>
+    <Field
+      label={w.rate}
+      control={`node.${p.node}.own.rate`}
+      tip={w.rateTip}
+      trailing={(id) => <Value labelId={id}>{shown}</Value>}
+    >
       {(id) => (
         <SliderControl
           labelId={id}
+          control={`node.${p.node}.own.rate`}
           min={0}
           max={OWN_RATE_MAX}
           step={0.5}
@@ -52,10 +62,11 @@ function RateField(p: SourceProps) {
 function ArrivalsField(p: SourceProps) {
   const w = p.words;
   return (
-    <Field label={w.arrivals} tip={w.arrivalsTip}>
+    <Field label={w.arrivals} control={`node.${p.node}.own.arrivals`} tip={w.arrivalsTip}>
       {(id) => (
         <Segmented
           labelId={id}
+          control={`node.${p.node}.own.arrivals`}
           items={[
             { id: 'steady', label: w.steady },
             { id: 'random', label: w.random },
@@ -69,13 +80,14 @@ function ArrivalsField(p: SourceProps) {
 }
 
 /** One own ticket now, like a scheduled arrival: an action, not a setting. */
-function EmitButton(p: { readonly words: OwnWorkWords; readonly onEmit: () => void }) {
+function EmitButton(p: { readonly node: string; readonly words: OwnWorkWords; readonly onEmit: () => void }) {
   return (
     <ToolTip tip={p.words.emitTip}>
       <button
         type="button"
         className={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
         onClick={p.onEmit}
+        data-control={`node.${p.node}.emit`}
         data-emit-own
       >
         <Lightbulb size={16} aria-hidden="true" />
@@ -95,15 +107,15 @@ export function OwnWorkSection(p: OwnWorkSectionProps) {
           <p id={id} className="m-0 text-caption font-semibold">
             {p.words.title}
           </p>
-          <HelpTip name={p.words.title} tip={p.words.tip} />
+          <HelpTip name={p.words.title} tip={p.words.tip} control={`node.${p.node}.own.help`} />
         </div>
         {p.own.map((x) => (
           <Fragment key={x.id}>
-            <RateField x={x} words={p.words} onChange={p.onChange} />
-            <ArrivalsField x={x} words={p.words} onChange={p.onChange} />
+            <RateField node={p.node} x={x} words={p.words} onChange={p.onChange} />
+            <ArrivalsField node={p.node} x={x} words={p.words} onChange={p.onChange} />
           </Fragment>
         ))}
-        <EmitButton words={p.words} onEmit={p.onEmit} />
+        <EmitButton node={p.node} words={p.words} onEmit={p.onEmit} />
       </section>
     </HelpNameProvider>
   );

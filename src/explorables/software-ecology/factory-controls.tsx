@@ -11,6 +11,7 @@ import type { ModelMenuProps } from './model-menu.client';
 import type { ScenarioChoice } from './scenario-menu';
 import type { Words } from './software-ecology-words.types';
 import type { Bundle } from './software-ecology.types';
+import type { ClockAt } from './time-controls.client';
 import type { Display } from './use-display.ts';
 import type { FactoryView } from './use-factory.ts';
 
@@ -41,6 +42,8 @@ export interface ControlsProps {
   readonly tour: { readonly can: boolean; readonly on: boolean; readonly start: () => void };
   /** While a tour runs, its clock ("Week 8 · Day 1") in place of the day. */
   readonly tourClock?: string;
+  /** The same clock as numbers, for the eval read-outs. */
+  readonly tourClockAt?: ClockAt;
   /** Clear ends a tour first. */
   readonly onClear: () => void;
   readonly compare: CompareWidgetProps;
@@ -104,6 +107,7 @@ export function Controls(p: ControlsProps) {
       onSpeed={c.setSpeed}
       onClear={p.onClear}
       clock={p.tourClock ?? clockOf(p.f.snap, p.words)}
+      clockAt={p.tourClockAt ?? { day: p.f.snap.warming ? undefined : p.f.snap.day }}
       statesTarget={p.statesTarget}
       statesMarker={p.statesMarker}
       {...stateRowOf(p)}

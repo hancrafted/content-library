@@ -22,7 +22,7 @@ export interface CustomerCardProps {
   readonly toured?: boolean;
 }
 
-/** The shelf grid's size as CSS custom properties: `SHELF_COLS` across. */
+/** The shelf grid's size as CSS custom properties: `SHELF_ROWS` down, `SHELF_COLS` across. */
 export const shelfGrid = {
   '--shelf-cols': SHELF_COLS,
   '--shelf-rows': SHELF_ROWS,
@@ -106,9 +106,13 @@ export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardPr
       className={`${styles.card} text-caption`}
       data-kind="customer"
       data-id="customer"
+      data-control="node.customer"
       {...openerProps(p.label, p.open, p.toured)}
       data-unhappy={r.sat < 0.6}
       data-full={r.headroom < 1}
+      data-readout-output={r.output.toFixed(2)}
+      data-readout-satisfied={r.sat.toFixed(2)}
+      data-readout-lead-days={r.leadDays === null ? undefined : r.leadDays.toFixed(1)}
       style={boxStyle(p.box)}
       {...p.target}
     >

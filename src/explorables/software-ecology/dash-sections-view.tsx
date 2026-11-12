@@ -83,28 +83,42 @@ function FlowRow({ label, value, note }: { label: string; value: string; note: s
   );
 }
 
-export function DashFlows({ r, words: w }: { readonly r: DashboardReadout; readonly words: DashWords }) {
+function FlowList({ r, words: w }: { readonly r: DashboardReadout; readonly words: DashWords }) {
   const f = r.flows;
   return (
+    <ul className={`${styles.flowsList} text-caption`}>
+      <FlowRow label={w.throughput} value={num(f.done)} note={w.throughputNote} />
+      <FlowRow label={w.arriving} value={num(f.arriving)} note={w.arrivingNote} />
+      <FlowRow label={w.capacity} value={num(f.capacity)} note={w.capacityNote} />
+      <FlowRow label={w.backlog} value={num(f.backlog)} note={w.backlogNote} />
+      <FlowRow
+        label={w.lead}
+        value={f.lead === null ? '–' : fillTemplate(w.leadWeeks, { n: num(f.lead) })}
+        note={f.lead === null ? w.leadPending : w.leadNote}
+      />
+    </ul>
+  );
+}
+
+export function DashFlows({
+  id,
+  r,
+  words: w,
+}: {
+  readonly id: string;
+  readonly r: DashboardReadout;
+  readonly words: DashWords;
+}) {
+  return (
     <details className={styles.settings}>
-      <summary className="text-caption font-medium">
+      <summary className="text-caption font-medium" data-control={`node.${id}.flows`}>
         <Glyph name="fast" className={styles.ico} />
         <span>{w.flows}</span>
         <span className={`${styles.settingsSum} text-muted-foreground`}>{w.flowsSub}</span>
       </summary>
       <div className={styles.flowsBody}>
         <Util r={r} words={w} />
-        <ul className={`${styles.flowsList} text-caption`}>
-          <FlowRow label={w.throughput} value={num(f.done)} note={w.throughputNote} />
-          <FlowRow label={w.arriving} value={num(f.arriving)} note={w.arrivingNote} />
-          <FlowRow label={w.capacity} value={num(f.capacity)} note={w.capacityNote} />
-          <FlowRow label={w.backlog} value={num(f.backlog)} note={w.backlogNote} />
-          <FlowRow
-            label={w.lead}
-            value={f.lead === null ? '–' : fillTemplate(w.leadWeeks, { n: num(f.lead) })}
-            note={f.lead === null ? w.leadPending : w.leadNote}
-          />
-        </ul>
+        <FlowList r={r} words={w} />
       </div>
     </details>
   );

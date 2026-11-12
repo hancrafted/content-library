@@ -28,10 +28,16 @@ function Reality(p: ModelMenuProps) {
     r = p.settings.reality,
     text = r ? fillTemplate(w.realityText, { n: r }) : w.ideal;
   return (
-    <Field label={w.reality} tip={w.tips.reality} trailing={(l) => <Value labelId={l}>{text}</Value>}>
+    <Field
+      label={w.reality}
+      control="settings.realism"
+      tip={w.tips.reality}
+      trailing={(l) => <Value labelId={l}>{text}</Value>}
+    >
       {(l) => (
         <SliderControl
           labelId={l}
+          control="settings.realism"
           min={0}
           max={100}
           step={5}
@@ -46,14 +52,16 @@ function Reality(p: ModelMenuProps) {
 
 function Ai(p: ModelMenuProps) {
   const w = p.words,
-    items = p.aiChoices.map((c) => ({ id: c.id, label: c.label }));
+    items = p.aiChoices.map((c) => ({ id: c.id, label: c.label, hook: c.id.replace(/^ai:/, '') }));
   const pick = (id: string) => {
     const c = p.aiChoices.find((x) => x.id === id);
     if (c) p.onSettings(withAi(p.settings, c.ai));
   };
   return (
-    <Field label={w.ai} tip={w.tips.ai}>
-      {(l) => <Segmented labelId={l} items={items} on={aiKeyOf(p.B, p.settings)} ai onPick={pick} />}
+    <Field label={w.ai} control="settings.ai" tip={w.tips.ai}>
+      {(l) => (
+        <Segmented labelId={l} control="settings.ai" items={items} on={aiKeyOf(p.B, p.settings)} ai onPick={pick} />
+      )}
     </Field>
   );
 }
@@ -69,8 +77,8 @@ function CompanyRow(p: ModelMenuProps) {
     if (c !== p.settings.company) p.onSettings(withCompany(p.settings, c));
   };
   return (
-    <Field label={w.company} tip={w.tips.company}>
-      {(l) => <Segmented labelId={l} items={items} on={p.settings.company} onPick={pick} />}
+    <Field label={w.company} control="settings.company" tip={w.tips.company}>
+      {(l) => <Segmented labelId={l} control="settings.company" items={items} on={p.settings.company} onPick={pick} />}
     </Field>
   );
 }
@@ -79,9 +87,15 @@ function Aiq(p: ModelMenuProps) {
   const w = p.words,
     items = (['worse', 'same', 'better'] as AiQuality[]).map((id) => ({ id, label: w[id] }));
   return (
-    <Field label={w.aiq} tip={w.tips.aiq}>
+    <Field label={w.aiq} control="settings.ai-quality" tip={w.tips.aiq}>
       {(l) => (
-        <Segmented labelId={l} items={items} on={p.settings.aiq} onPick={(q) => p.onSettings(withAiq(p.settings, q))} />
+        <Segmented
+          labelId={l}
+          control="settings.ai-quality"
+          items={items}
+          on={p.settings.aiq}
+          onPick={(q) => p.onSettings(withAiq(p.settings, q))}
+        />
       )}
     </Field>
   );
