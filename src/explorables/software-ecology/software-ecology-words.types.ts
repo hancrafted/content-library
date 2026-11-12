@@ -111,7 +111,10 @@ export interface CustDashWords {
   readonly follow: string;
   readonly followTip: string;
   readonly good: string;
-  readonly bad: string;
+  /** A bad release of a spec defect: the wrong thing was built. */
+  readonly spec: string;
+  /** A bad release of a code defect: a bug. */
+  readonly code: string;
   readonly complaint: string;
   readonly sizedFor: string;
   readonly times: string;

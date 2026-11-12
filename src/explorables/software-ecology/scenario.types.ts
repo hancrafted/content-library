@@ -2,6 +2,7 @@
  * A scenario's shapes in a use-case file (design-ADR 0024 §10): a tour step, its `set`, and the Customer it changes.
  * Plain data; software-ecology.types.ts re-exports them.
  */
+import type { BadChances } from './defect.types';
 import type { Arrivals } from './own-work.types';
 
 /** Where AI works: nowhere, everywhere, or at the listed work centers. */
@@ -25,7 +26,7 @@ export interface CustomerPatch {
   readonly arrivals?: Arrivals;
   readonly mix?: Chances;
   readonly good?: Chances;
-  readonly bad?: Chances;
+  readonly bad?: BadChances;
 }
 
 /** A tour step's `set`: dials per center, the Customer, where AI works, the reality. */

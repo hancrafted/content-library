@@ -69,7 +69,8 @@ tour:
       sat: 'Share of customers satisfied: {test}'
       headroom: 'Demand the line could serve, times today’s: {test}'
       leadDays: 'Lead time in working days: {test}'
-      bugsPerWeek: 'Complaints a week: {test}'
+      bugsPerWeek: 'Bugs a week: {test}'
+      changesPerWeek: 'Change requests a week: {test}'
       own: 'Own tickets shipped a week: {test}'
       backlog: 'Jobs waiting at all work centers: {test}'
     center:
@@ -86,7 +87,8 @@ tour:
       sat: 'Share of customers satisfied'
       headroom: 'Demand the line could serve, times today’s'
       leadDays: 'Lead time in working days'
-      bugsPerWeek: 'Complaints a week'
+      bugsPerWeek: 'Bugs a week'
+      changesPerWeek: 'Change requests a week'
       own: 'Own tickets shipped a week'
       backlog: 'Jobs waiting at all work centers'
     centerTrend:
@@ -348,9 +350,10 @@ custDash:
   mix: Request mix
   mixTip: 'Where new requests go: new customers to Sales, feature and change requests to Product management, bugs and support tickets to Support.'
   follow: A release brings a new request
-  followTip: 'Each release may bring a new request at once. A good release brings a change request; a bad one a complaint (a bug or support request, marked with the red warning). Kept below 1 in total, so the requests settle.'
+  followTip: 'Each release may bring a new request at once. A good release brings a new request; a bad one a complaint by its defect, marked with the red warning: the wrong thing built comes back as a change request, a bug as a bug report. Kept below 1 in total, so the requests settle.'
   good: 'Good · {title}'
-  bad: 'Bad · {title}'
+  spec: 'Wrong thing · {title}'
+  code: 'Bug · {title}'
   complaint: (complaint)
   sizedFor: Ideal sizes every work center for this rate.
   times: '{k}× the rate Ideal is sized for.'

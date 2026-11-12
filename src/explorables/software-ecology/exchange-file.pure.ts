@@ -3,6 +3,7 @@
  * data keys, the roles it uses, `state` and every language under `i18n`. Ported from the reference build's `exportDoc`,
  * so the file reads as flow.html's and survives Upload and Download byte for byte.
  */
+import { badOut } from './defect.pure.ts';
 import { stringifyExchange } from './exchange-writer.pure.ts';
 import { custOf } from './factory-dials.pure.ts';
 import type {
@@ -58,9 +59,9 @@ const NOTES: Readonly<Record<string, string>> = {
   '#schema':
     'Software ecology factory. Edit any value, save, and drop the file back on the page to run the factory from it. A file is refused if any work center would be over capacity at Realistic.',
   '#mechanics':
-    'While its toolbar toggle is on: rework = chance bad input is sent back (0 to 1); churn = how many times the documents a center hands on when it keeps bad input (1 to 4). Complaints take their chance from customer.bad.',
+    'While its toolbar toggle is on: rework = chance bad input is sent back (0 to 1); churn = how many times the documents a center hands on when it keeps bad input (1 to 4). A station’s catch overrides rework per defect kind; complaints take their chance from customer.bad.',
   '#customer':
-    'The one Customer, source and sink. rate: requests a week; Ideal sizes every work center for it. arrivals: steady or random (default: steady in Ideal, random otherwise). mix: where requests go, as weights. good / bad: the chance a good or bad release brings a new request, and where it goes (a bad release brings a complaint); each set adds up to less than 1. releases: the work centers whose shipments are releases (the rest are answers).',
+    'The one Customer, source and sink. rate: requests a week; Ideal sizes every work center for it. arrivals: steady or random (default: steady in Ideal, random otherwise). mix: where requests go, as weights. good / bad: the chance a good or bad release brings a new request, and where it goes (a bad release brings a complaint, per defect kind in bad: { spec: {…}, code: {…} }, or one map for both); each set adds up to less than 1. releases: the work centers whose shipments are releases (the rest are answers).',
   company:
     'service: only the Customer asks for work; product: roles also write tickets of their own (sources). Also a toggle in Model.',
   '#sources':
@@ -71,7 +72,7 @@ const NOTES: Readonly<Record<string, string>> = {
     'What every state shows unless it says its own: pile (heap, stack or drift) past the rack, beltMotion (belts moving). The Settings reset returns to these.',
   bottleneck: 'the work center near 85 % busy at Realistic; every other is sized to at most 70 %',
   '#centers':
-    'Work centers: id, role (see roles), at: [x, y], realistic: [efficiency, effectiveness] at Model = Realistic, spawns: what a finished job creates ({ to, n }, { to, p } or choose: [{ to, w }]; to: customer ships; the first spawn carries the request on). Optional: service: exponential, buffer: n (senders wait when it is full), inspection: true with stampUnderPressure (0 to 2), person: (one person runs several centers), dials.',
+    'Work centers: id, role (see roles), at: [x, y], realistic: [efficiency, effectiveness] at Model = Realistic, spawns: what a finished job creates ({ to, n }, { to, p } or choose: [{ to, w }]; to: customer ships; the first spawn carries the request on). Optional: service: exponential, buffer: n (senders wait when it is full), inspection: true with stampUnderPressure (0 to 2), person: (one person runs several centers), dials, catch: { spec, code } (the chance it sends a bad input of that defect kind back, over rework; a kind left out passes), origin: spec or code (the defect kind it makes, over its role’s).',
   '#routes':
     'Belt routes, keyed from-to: out and in (port: left, right, top, bottom), via (corners), xm (elbow x), over (crosses on a bridge). The belts themselves come from the spawns and the Customer. Every handoff takes a quarter working day, whatever the length.',
   '#presets':
@@ -138,7 +139,7 @@ const stateOf = (B: Bundle, page: PageState): Doc => {
     beltMotion: page.beltMotion,
     pile: page.pile,
     mechanics: { ...s.mech },
-    customer: { rate: cu.rate, arrivals: cu.mode, mix: { ...cu.mix }, good: { ...cu.good }, bad: { ...cu.bad } },
+    customer: { rate: cu.rate, arrivals: cu.mode, mix: { ...cu.mix }, good: { ...cu.good }, bad: badOut(cu.bad) },
     compare: [...page.compare],
     centers: centersOut(s.over),
     overlays: { ...page.overlays },

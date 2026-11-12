@@ -1,28 +1,33 @@
 /*
  * One pass of the traffic equations (design-ADR 0024 §4), which factory-solve.pure.ts iterates to a fixed point. A flow
- * cell holds documents a week by quality (bad 0, good 1), failure demand (0, 1), times sent back (0..2) and what the
- * document carries (0 nothing, 1 a customer request, 2 an own ticket). The loops run in the reference build's order, so
- * every sum adds in the same order and the numbers match to the last bit.
+ * cell holds documents a week by a bad document's defect kind (0 spec, 1 code; a good one is 0), quality (bad 0, good 1),
+ * failure demand (0, 1), times sent back (0..2) and what the document carries (0 nothing, 1 a customer request, 2 an own
+ * ticket). The loops run in the reference build's order, kind outermost, so a run without bad work adds in the same order
+ * and the numbers match to the last bit.
  */
-import { srcRate } from './factory-dials.pure.ts';
+import { DEFECTS } from './defect.pure.ts';
+import { catchOf, srcRate } from './factory-dials.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, TicketSource } from './factory.types';
-import type { Cust } from './software-ecology.types';
+import type { Cust, Settings } from './software-ecology.types';
 
-export const NF_ = 36;
+export const NF_ = 72;
 
 export interface Cell {
+  readonly k?: number;
   readonly q: number;
   readonly f: number;
   readonly b: number;
   readonly mn: number;
 }
 /** The index of a flow cell. */
-export const fi = (c: Cell): number => ((c.q * 2 + c.f) * 3 + c.b) * 3 + c.mn;
+export const fi = (c: Cell): number => (c.k ?? 0) * 36 + ((c.q * 2 + c.f) * 3 + c.b) * 3 + c.mn;
 
-type Indexed = Cell & { readonly i: number };
+type Indexed = Cell & { readonly k: number; readonly i: number };
 const cells = (mns: readonly number[]): Indexed[] =>
-  [0, 1].flatMap((q) =>
-    [0, 1].flatMap((f) => [0, 1, 2].flatMap((b) => mns.map((mn) => ({ q, f, b, mn, i: fi({ q, f, b, mn }) })))),
+  [0, 1].flatMap((k) =>
+    [0, 1].flatMap((q) =>
+      [0, 1].flatMap((f) => [0, 1, 2].flatMap((b) => mns.map((mn) => ({ k, q, f, b, mn, i: fi({ k, q, f, b, mn }) })))),
+    ),
   );
 const ALL = cells([0, 1, 2]);
 const CARRYING = cells([1, 2]);
@@ -35,13 +40,15 @@ const COMPLAINT = fi({ q: 1, f: 1, b: 0, mn: 1 });
 /** What a pass reads: the model, each center's dials, the Customer, the mechanics' strengths. */
 export interface Ctx {
   readonly m: Factory;
+  readonly s: Settings;
   readonly D: (Dials | null)[];
   readonly cu: Cust;
   readonly rework: number;
   readonly churn: number;
   readonly complOn: boolean;
   readonly mixW: number;
-  readonly badP: number;
+  /** The chance a bad release brings a complaint, per defect kind. */
+  readonly badP: readonly [number, number];
   readonly srcs: readonly Pick<TicketSource, 'n' | 'rate'>[];
   readonly worst: boolean;
   /** The file's constants (design-ADR 0024 §5). */
@@ -64,6 +71,8 @@ export interface Pass {
   own: number;
   relG: number;
   relB: number;
+  /** Bad releases per defect kind. */
+  relBK: [number, number];
   fu: number;
 }
 
@@ -75,6 +84,8 @@ interface Flow {
   readonly f: number;
   readonly mn: number;
   readonly mult: number;
+  /** The defect kind of the bad documents it hands on. */
+  readonly k: number;
 }
 
 const dialsOf = (ctx: Ctx, n: FactoryNode): Dials => ctx.D[n.idx] as Dials;
@@ -91,7 +102,10 @@ const received = (p: Pass, x: { e: Belt; c: Indexed; r: number }): void => {
   if (fulfilled) addFulfilled(p, c.mn, r);
   if (!x.e.release) return;
   if (c.q) p.relG += r;
-  else p.relB += r;
+  else {
+    p.relB += r;
+    p.relBK[c.k] += r;
+  }
 };
 
 /** What reached the Customer: fulfilled requests, own tickets, good and bad releases. */
@@ -113,10 +127,12 @@ const customerOut = (ctx: Ctx, p: Pass): void => {
     p.fu += p.relG * x;
   }
   if (!ctx.complOn) return;
-  for (const [to, x] of Object.entries(cu.bad)) {
-    belt(to)[COMPLAINT] += p.relB * x;
-    p.fu += p.relB * x;
-  }
+  DEFECTS.forEach((kind, k) => {
+    for (const [to, x] of Object.entries(cu.bad[kind])) {
+      belt(to)[COMPLAINT] += p.relBK[k] * x;
+      p.fu += p.relBK[k] * x;
+    }
+  });
 };
 
 /** Where one spawn rule sends a node's work: [belt index, share, whether it is a choice]. */
@@ -130,9 +146,9 @@ const spawnTo = (p: Pass, w: Flow, x: { ei: number; share: number; main: number;
     rest = Math.max(0, docs - x.main),
     A = p.NF[x.ei];
   A[fi({ q: 1, f: w.f, b: 0, mn: w.mn })] += x.main * x.gq;
-  A[fi({ q: 0, f: w.f, b: 0, mn: w.mn })] += x.main * (1 - x.gq);
+  A[fi({ k: w.k, q: 0, f: w.f, b: 0, mn: w.mn })] += x.main * (1 - x.gq);
   A[fi({ q: 1, f: w.f, b: 0, mn: 0 })] += rest * x.gq;
-  A[fi({ q: 0, f: w.f, b: 0, mn: 0 })] += rest * (1 - x.gq);
+  A[fi({ k: w.k, q: 0, f: w.f, b: 0, mn: 0 })] += rest * (1 - x.gq);
 };
 
 const spawnOut = (p: Pass, w: Flow): void => {
@@ -153,7 +169,7 @@ const ownTickets = (ctx: Ctx, p: Pass): void => {
       r = srcRate(src.rate, d);
     p.load[n.idx] += r;
     p.jobs[n.idx] += r;
-    spawnOut(p, { n, d, r, qIn: 1, f: 0, mn: 2, mult: d.fanEff });
+    spawnOut(p, { n, d, r, qIn: 1, f: 0, mn: 2, mult: d.fanEff, k: n.origin });
   }
 };
 
@@ -166,11 +182,11 @@ interface Arrival {
   readonly r: number;
 }
 
-/** The share of bad documents arriving on a belt that are sent back. */
+/** The share of bad documents arriving on a belt that are sent back: the station's catch of their kind. */
 const backShare = (ctx: Ctx, a: Arrival): number => {
   if (!(a.e.returns && a.c.b < ctx.k.maxBounces)) return 0;
-  if (!a.n.def.inspection) return ctx.rework;
-  return ctx.worst ? 0 : Math.min(0.95, ctx.rework * ctx.k.inspect);
+  if (a.n.def.inspection && ctx.worst) return 0;
+  return catchOf(ctx.s, { n: a.n, d: a.d }, DEFECTS[a.c.k] ?? 'code');
 };
 
 /** Bad documents arriving: some sent back, the rest kept and worked on longer (an inspection: as long as good ones). */
@@ -182,14 +198,14 @@ const arriveBad = (ctx: Ctx, p: Pass, a: Arrival): void => {
   if (Bk) p.R[e.i][c.f * 9 + Math.min(2, c.b + 1) * 3 + c.mn] += Bk;
   const insp = !!n.def.inspection;
   p.load[n.idx] += insp ? kept * sz : kept * sz * (1 + ctx.k.keepExtra);
-  spawnOut(p, { n, d, r: kept, qIn: 0, f: c.f, mn: c.mn, mult: insp ? d.fanEff : d.fanEff * ctx.churn });
+  spawnOut(p, { n, d, r: kept, qIn: 0, f: c.f, mn: c.mn, mult: insp ? d.fanEff : d.fanEff * ctx.churn, k: c.k });
 };
 
 const arrive = (ctx: Ctx, p: Pass, a: Arrival): void => {
   p.jobs[a.n.idx] += a.r;
   if (a.c.q !== 1 && a.e.kind !== 'src') return arriveBad(ctx, p, a);
   p.load[a.n.idx] += a.r * a.sz;
-  spawnOut(p, { n: a.n, d: a.d, r: a.r, qIn: 1, f: a.c.f, mn: a.c.mn, mult: a.d.fanEff });
+  spawnOut(p, { n: a.n, d: a.d, r: a.r, qIn: 1, f: a.c.f, mn: a.c.mn, mult: a.d.fanEff, k: a.n.origin });
 };
 
 const beltIn = (ctx: Ctx, p: Pass, x: { n: FactoryNode; e: Belt }): void => {
@@ -213,7 +229,7 @@ const redoFlows = (ctx: Ctx, p: Pass): void => {
       p.load[sn.idx] += r;
       p.jobs[sn.idx] += r;
       p.NF[e.i][fi({ ...c, q: 1 })] += r * g;
-      p.NF[e.i][fi({ ...c, q: 0 })] += r * (1 - g);
+      p.NF[e.i][fi({ ...c, k: sn.origin, q: 0 })] += r * (1 - g);
     }
 };
 

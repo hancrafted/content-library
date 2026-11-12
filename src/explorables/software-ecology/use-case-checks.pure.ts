@@ -86,6 +86,7 @@ export const ROLE: readonly Rule<RoleAt>[] = [
   ({ k, raw }) =>
     mapOf(raw).aiFan !== undefined &&
     `roles.${k}.aiFan: retired in schema /5; set AI per work center (dials aiSpeed, aiExtra)`,
+  ({ k, raw }) => !absentOr(mapOf(raw).origin, (v) => oneOf(v, DEFECT_KEYS)) && `roles.${k}.origin: spec or code`,
   ({ k, raw }) => {
     const icon = mapOf(raw).icon;
     return (
@@ -126,6 +127,21 @@ const chanceProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink
   if (sum >= 1) E(`${at.p}: the chances add up to ${sum}; keep them below 1, or the follow-up requests never end`);
 };
 
+const DEFECT_KEYS: readonly string[] = ['spec', 'code'];
+const isKinded = (v: unknown): v is Map_ => isMap(v) && Object.keys(v).some((k) => DEFECT_KEYS.includes(k));
+
+/** `customer.bad`: one map of chances for every defect kind, or one per kind, `{ spec: {…}, code: {…} }`. */
+const badProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink): void => {
+  if (!isKinded(v)) return chanceProblems(v, at, E);
+  for (const [k, c] of Object.entries(v))
+    if (DEFECT_KEYS.includes(k)) chanceProblems(c, { ...at, p: `${at.p}.${k}` }, E);
+    else E(`${at.p}.${k}: spec or code, the defect kind a bad release comes back by`);
+};
+
+/** A station's `catch`: per defect kind, the chance it sends a bad input back. */
+const catchOk = (v: unknown): boolean =>
+  isMap(v) && Object.entries(v).every(([k, c]) => DEFECT_KEYS.includes(k) && isNum(c, 0, 1));
+
 const CUSTOMER: readonly Rule<CustAt>[] = [
   (x) => x.full && !isXY(x.cu.at) && `${x.p}.at: a position [x, y]`,
   (x) => (x.full || x.cu.rate !== undefined) && !isNum(x.cu.rate, 0, 200) && `${x.p}.rate: requests a week, 0 to 200`,
@@ -140,8 +156,8 @@ export const customerProblems = (cu: unknown, at: Omit<CustAt, 'cu'>, E: Sink): 
   const x = { ...at, cu };
   apply(CUSTOMER, x, E);
   if (x.full || cu.mix !== undefined) mixProblems(x, E);
-  for (const k of ['good', 'bad'])
-    if (cu[k] !== undefined) chanceProblems(cu[k], { p: `${at.p}.${k}`, ids: at.ids }, E);
+  if (cu.good !== undefined) chanceProblems(cu.good, { p: `${at.p}.good`, ids: at.ids }, E);
+  if (cu.bad !== undefined) badProblems(cu.bad, { p: `${at.p}.bad`, ids: at.ids }, E);
   if (!absentOr(cu.releases, (v) => releasesOk(v, at.ids)))
     E(`${at.p}.releases: a list of work centers whose shipments are releases`);
 };
@@ -179,6 +195,8 @@ export const CENTER: readonly Rule<CenterAt>[] = [
   ({ c, p }) =>
     !absentOr(c.stampUnderPressure, (v) => !!c.inspection && isNum(v, 0, 2)) &&
     `${p}.stampUnderPressure: 0 to 2, on an inspection only`,
+  ({ c, p }) => !absentOr(c.catch, catchOk) && `${p}.catch: { spec, code }, each the chance to send it back, 0 to 1`,
+  ({ c, p }) => !absentOr(c.origin, (v) => oneOf(v, DEFECT_KEYS)) && `${p}.origin: spec or code`,
 ];
 
 export const FIRST_SPAWN: Rule<CenterAt> = ({ c, p }) => {

@@ -85,6 +85,8 @@ export interface FactoryNode extends Streams {
   readonly def: NodeDef;
   readonly role: RoleDef;
   readonly roleId: string;
+  /** The defect kind it makes, 0 spec or 1 code: the center's `origin`, else its role's. */
+  readonly origin: number;
   readonly ins: Belt[];
   readonly outs: Belt[];
   spawns: SpawnRule[];
@@ -112,7 +114,8 @@ export interface CustomerNode extends FactoryNode {
   rateSeen: number;
   modeSeen: string;
   mixCur: Record<string, number>;
-  acc: [Record<string, number>, Record<string, number>];
+  /** Turns of the follow-ups in Ideal: a bad release's of a spec defect, a good release's, a bad release's of a code defect. */
+  acc: [Record<string, number>, Record<string, number>, Record<string, number>];
 }
 
 export type BeltKind = 'src' | 'ship' | 'role';
@@ -191,6 +194,8 @@ export interface Factory {
   arrRate: number;
   rel: [number, number];
   compl: number;
+  /** Complaints a week by defect kind: change requests (spec) and bugs (code). */
+  complK: [number, number];
   fu: number;
   req: number;
   wip: number;

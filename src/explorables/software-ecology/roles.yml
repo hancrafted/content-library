@@ -1,15 +1,16 @@
 # Role catalog: master data shared by every use case. Words live in roles.words.yml / roles.words.de.yml.
 # icon: glyph name. fan: documents a role hands on per job in balance.
 # AI is set per work center (aiSpeed, aiExtra); aiSize: how much longer an AI-made document takes the next role to read.
+# origin: the kind of defect the role makes (spec up to Analysis, code from Engineering on); a work center may override it.
 roles:
-  customer: { icon: customer, fan: 1, aiSize: 1 }
-  sales: { icon: sales, fan: 1, aiSize: 1.2 }
-  pm: { icon: pm, fan: 1, aiSize: 1.2 }
-  ba: { icon: ba, fan: 1, aiSize: 1.2 }
-  doc: { icon: doc, fan: 2, aiSize: 1 }
-  eng: { icon: eng, fan: 1, aiSize: 1.2 }
-  ops: { icon: ops, fan: 1, aiSize: 1.2 }
-  billing: { icon: billing, fan: 1, aiSize: 1 }
-  support: { icon: support, fan: 1, aiSize: 1.2 }
-  lead: { icon: lead, fan: 1, aiSize: 1.2 }
-  qa: { icon: qa, fan: 1, aiSize: 1.2 }
+  customer: { icon: customer, fan: 1, aiSize: 1, origin: spec }
+  sales: { icon: sales, fan: 1, aiSize: 1.2, origin: spec }
+  pm: { icon: pm, fan: 1, aiSize: 1.2, origin: spec }
+  ba: { icon: ba, fan: 1, aiSize: 1.2, origin: spec }
+  doc: { icon: doc, fan: 2, aiSize: 1, origin: code }
+  eng: { icon: eng, fan: 1, aiSize: 1.2, origin: code }
+  ops: { icon: ops, fan: 1, aiSize: 1.2, origin: code }
+  billing: { icon: billing, fan: 1, aiSize: 1, origin: code }
+  support: { icon: support, fan: 1, aiSize: 1.2, origin: spec }
+  lead: { icon: lead, fan: 1, aiSize: 1.2, origin: spec }
+  qa: { icon: qa, fan: 1, aiSize: 1.2, origin: code }
