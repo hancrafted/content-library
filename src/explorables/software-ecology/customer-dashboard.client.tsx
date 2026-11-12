@@ -37,14 +37,19 @@ interface RowKind {
   readonly change: (to: string, v: number) => CustomerChange;
   readonly control: (to: string) => string;
 }
+const listRow = (kind: 'mix' | 'good'): RowKind => ({
+  list: (c) => c[kind],
+  change: (to, v) => ({ kind, to, v }),
+  control: (to) => `customer.${kind}.${to}`,
+});
 const badRow = (defect: Defect): RowKind => ({
   list: (c) => c.bad[defect],
   change: (to, v) => ({ kind: 'bad', defect, to, v }),
   control: (to) => `customer.bad.${defect}.${to}`,
 });
 const ROWS: Readonly<Record<Kind, RowKind>> = {
-  mix: { list: (c) => c.mix, change: (to, v) => ({ kind: 'mix', to, v }), control: (to) => `customer.mix.${to}` },
-  good: { list: (c) => c.good, change: (to, v) => ({ kind: 'good', to, v }), control: (to) => `customer.good.${to}` },
+  mix: listRow('mix'),
+  good: listRow('good'),
   spec: badRow('spec'),
   code: badRow('code'),
 };

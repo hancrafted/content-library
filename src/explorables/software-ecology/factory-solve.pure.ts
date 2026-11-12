@@ -2,12 +2,12 @@
  * The traffic solve (design-ADR 0024 §4): the expected flows at given settings, the traffic equations of
  * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
  */
-import { perKind } from './defect.pure.ts';
+import { DEFECTS, perKind } from './defect.pure.ts';
 import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { NF_, trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
-import type { Settings } from './software-ecology.types';
+import type { Cust, Defect, Settings } from './software-ecology.types';
 
 export interface SolveResult {
   readonly F: Float64Array[];
@@ -33,6 +33,13 @@ const sum = (xs: Iterable<number>): number => {
   return a;
 };
 
+/** Each defect kind's total chance that a bad release comes back; none while complaints are off. */
+const badChances = (cu: Cust, complOn: boolean): Record<Defect, number> => {
+  const p = perKind();
+  if (complOn) for (const k of DEFECTS) p[k] = sum(Object.values(cu.bad[k]));
+  return p;
+};
+
 const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean }): Ctx => {
   const cu = custOf(m, s),
     complOn = !!s.mech.complaints;
@@ -50,7 +57,7 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     churn: Math.max(1, mechOf(s, 'churn') || 1),
     complOn,
     mixW: sum(Object.values(cu.mix)) || 1,
-    badP: { spec: complOn ? sum(Object.values(cu.bad.spec)) : 0, code: complOn ? sum(Object.values(cu.bad.code)) : 0 },
+    badP: badChances(cu, complOn),
     srcs: productCo(s) ? m.srcs.map((x) => ({ n: x.n, rate: ownOf(x, { s, mode: cu.mode }).rate })) : [],
     worst: opts.worst,
     consts: {

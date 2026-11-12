@@ -95,11 +95,29 @@ describe('edge cases', () => {
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
     const stop = run.k + 25;
     // ACT
-    run.stopAt = stop;
+    run.aim({ at: stop, sampling: null });
     for (let i = 0; i < 120; i++) run.advance(1 / 60, 10);
     // ASSERT
     expect(run.k).toBe(stop);
     expect(run.arrived).toBe(true);
+  });
+
+  it('reads on the sample steps a tour step aims it at, and runs free once the aim is cleared', () => {
+    // ARRANGE
+    const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
+    const k0 = run.k,
+      at = [k0 + 5, k0 + 10],
+      stop = k0 + 10,
+      readings = 2;
+    // ACT
+    run.aim({ at: stop, sampling: { at, keys: ['customer.output'], got: [] } });
+    run.runTo(stop);
+    const got = run.sampled.length;
+    run.aim(null);
+    // ASSERT
+    expect(got).toBe(readings);
+    expect(run.stopAt).toBeNull();
+    expect(run.sampled).toEqual([]);
   });
 
   it('falls back to the first factory preset for an unknown id', () => {

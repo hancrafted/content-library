@@ -131,14 +131,17 @@ const countOutput = (m: Factory, x: Token): void => {
   }
 };
 
+/** The Customer's turns in Ideal (`acc`) a follow-up takes: a bad release's by its defect kind, or a good release's. */
+const TURNS: Readonly<Record<Defect | 'good', number>> = { spec: 0, good: 1, code: 2 };
+
 /** A bad release comes back by its defect kind: a change request (spec) or a bug (code). */
 const complaintTo = (m: Factory, k: Defect): Belt | null =>
-  m.s.mech.complaints ? followUp(m, m.cs.bad[k], k === 'code' ? 2 : 0) : null;
+  m.s.mech.complaints ? followUp(m, m.cs.bad[k], TURNS[k]) : null;
 
 const release = (m: Factory, x: Token): void => {
   const k = kindOf(x.fl, 'code');
   m.rel[x.q] += 1 / TAU_OUT;
-  const fe = x.q === Q.GOOD ? followUp(m, m.cs.good, 1) : complaintTo(m, k);
+  const fe = x.q === Q.GOOD ? followUp(m, m.cs.good, TURNS.good) : complaintTo(m, k);
   const compl = !!fe && x.q === Q.BAD;
   m.shelf.push({ q: x.q, ai: x.ai, compl });
   if (!fe) return;

@@ -14,7 +14,7 @@ const SAMPLES_A_WEEK = 8;
 /** Each measure's value by its key. */
 export type Values = Readonly<Record<string, number>>;
 
-/** Model steps in `weeks`. */
+/** Weeks from the scenario start to model steps: the page and the runner stop on the same step. */
 export const stepsTo = (weeks: number): number => Math.round(weeks / DTW);
 
 /**
@@ -32,6 +32,35 @@ export const sampleSteps = (x: { start: number; end: number; window?: number }):
     out.push(x.end - w + done);
   }
   return out;
+};
+
+/** A beat's sample steps, the measures it reads and the readings taken so far. */
+export interface Sampling {
+  readonly at: readonly number[];
+  readonly keys: readonly string[];
+  readonly got: Values[];
+}
+
+/** The model a sampling reads: stepped in weeks, read by measure. */
+interface Sampled {
+  step(weeks: number): void;
+  read(o: { measures: readonly string[] }): { readonly measures: Values };
+}
+
+/**
+ * Steps a model `n` model steps on from step `k`, stopping on each of the sampling's steps it reaches to read its
+ * measures: the one stepper the headless judge and the page's run share, so both read on the same steps.
+ */
+export const stepSampled = (f: Sampled, x: { k: number; n: number; s: Sampling | null }): void => {
+  const { s } = x,
+    stop = x.k + x.n;
+  let k = x.k;
+  for (let next = s?.at[s.got.length]; s && next !== undefined && next <= stop; next = s.at[s.got.length]) {
+    if (next > k) f.step((next - k) * DTW);
+    k = Math.max(k, next);
+    s.got.push({ ...f.read({ measures: s.keys }).measures });
+  }
+  if (stop > k) f.step((stop - k) * DTW);
 };
 
 /** A beat's reading: the mean of each measure over its samples; 0 for a beat with none. */

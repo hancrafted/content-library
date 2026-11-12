@@ -28,7 +28,7 @@ import type {
  * the use case.
  */
 export const pageSettings = (B: Bundle, p: Preset, prev: Settings | null): Settings =>
-  prev ? { ...prev, ...presetSettings(B, p) } : { ...startSettings(B, p), ...fileMechanics(B) };
+  prev ? { ...prev, ...presetSettings(B, p) } : startSettings(B, p);
 
 /** The settings a new use case starts from: its own company and strengths; AI quality and mechanics kept. */
 export const useCaseSettings = (B: Bundle, p: Preset, prev: Settings): Settings => ({
