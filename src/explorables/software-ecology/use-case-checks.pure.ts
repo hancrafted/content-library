@@ -47,6 +47,26 @@ export const centerIdsOf = (doc: Map_, E: Sink): Set<string> => {
   return centerIds;
 };
 
+const PILES = ['heap', 'stack', 'drift'];
+
+/** A map of work center id to weeks of work waiting at the start (0 to 12), as `backlog` holds it. */
+export const backlogProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink): void => {
+  if (v === undefined) return;
+  if (!isMap(v)) return E(`${at.p}: a map { <center id>: weeks of work waiting, 0 to 12 }`);
+  for (const [id, w] of Object.entries(v)) {
+    if (!at.ids.has(id)) E(`${at.p}.${id}: no such work center`);
+    else if (!isNum(w, 0, 12)) E(`${at.p}.${id}: weeks of work waiting, 0 to 12`);
+  }
+};
+
+/** A `display` map: the pile-up style and belt motion a state starts with. */
+export const displayProblems = (v: unknown, p: string, E: Sink): void => {
+  if (v === undefined) return;
+  if (!isMap(v)) return E(`${p}: a map { pile, beltMotion }`);
+  if (!absentOr(v.pile, (x) => oneOf(x, PILES))) E(`${p}.pile: ${PILES.join(', ')}`);
+  if (!absentOr(v.beltMotion, (x) => typeof x === 'boolean')) E(`${p}.beltMotion: true or false`);
+};
+
 export const TOP: readonly Rule<Map_>[] = [
   (d) => !absentOr(d.schema, (v) => v === SCHEMA_ID) && `schema: ${SCHEMA_ID} (this file says ${String(d.schema)})`,
   (d) => !isWord(d.id) && 'id: a word such as tire',

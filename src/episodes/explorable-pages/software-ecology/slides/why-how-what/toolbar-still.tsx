@@ -1,4 +1,5 @@
 import { Glyph } from '@/explorables/software-ecology/factory-glyph-view';
+import { STEP_MARKS } from '@/explorables/software-ecology/step-marks.pure';
 import { ContextIcon } from '@/shared/components/ui/context-icon';
 import type { ReactNode } from 'react';
 
@@ -25,13 +26,16 @@ const PICKED = 'bg-foreground font-semibold text-background';
 const GROUP = 'inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2 py-0.5';
 const ICON = 'size-3.5 text-muted-foreground';
 
-/** The roles state, Ideal and Realistic as one segmented group; Scenarios picked; Tour running; the marker. */
+/** The three numbered steps as one segmented group; Scenarios picked; Tour running; the marker. */
 function StateRow({ states, scenarios, tour }: Pick<ToolbarStillProps, 'states' | 'scenarios' | 'tour'>) {
   return (
     <>
       <span className={`${PILL} ${LINE} gap-2.5 px-3`}>
-        {states.map((state) => (
-          <span key={state}>{state}</span>
+        {states.map((state, i) => (
+          <span key={state}>
+            <span className="mr-1">{STEP_MARKS[i]}</span>
+            {state}
+          </span>
         ))}
       </span>
       <span className={`${PILL} ${PICKED}`}>

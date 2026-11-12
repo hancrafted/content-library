@@ -101,7 +101,7 @@ function RackSpot({ targets, markers }: Pick<StationCardProps, 'targets' | 'mark
   );
 }
 
-function Head(p: Pick<StationCardProps, 'icon' | 'title' | 'inspection' | 'words' | 'markers'>) {
+function Head(p: Pick<StationCardProps, 'icon' | 'title' | 'inspection' | 'words'>) {
   return (
     <div className={styles.head}>
       <Glyph name={p.icon} className={styles.gly} />
@@ -111,7 +111,6 @@ function Head(p: Pick<StationCardProps, 'icon' | 'title' | 'inspection' | 'words
           <Glyph name="qa" className={styles.ico} />
         </span>
       ) : null}
-      {p.markers?.card}
     </div>
   );
 }

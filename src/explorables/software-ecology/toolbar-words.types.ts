@@ -30,7 +30,7 @@ export interface ToolbarWords {
   readonly modifiedTip: string;
 }
 
-/** The Settings popover: its button, its three columns and the file at its foot (feature guide, Interaction 3). */
+/** The Settings popover: its button, its header, two columns and the foot (feature guide, Interaction 3). */
 export interface SettingsWords {
   readonly button: string;
   readonly tip: string;
@@ -39,5 +39,8 @@ export interface SettingsWords {
   readonly mechanics: string;
   readonly mechanicsNote: string;
   readonly display: string;
-  readonly file: string;
+  /** The close button's name and tooltip. */
+  readonly close: string;
+  /** A help icon's accessible name; `{name}` is the label it explains. */
+  readonly help: string;
 }

@@ -11,6 +11,7 @@ import { presetOf, type FactoryRun } from './factory-run.pure.ts';
 import { Stage } from './factory-stage.client';
 import { tourCard } from './factory-tour.pure.ts';
 import { OpenDashboard } from './open-dashboard.client';
+import { dismissOverlays, resetToDefault } from './reset-state.ts';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
@@ -19,12 +20,12 @@ import { tourClockText, TourPanel } from './tour-panel';
 import { useCaseName, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
 import { useCompare, useWatch } from './use-compare.ts';
+import { useCrossfade } from './use-crossfade.ts';
 import { useDashboard } from './use-dashboard.ts';
 import { useDisplay } from './use-display.ts';
 import { useExchangeWiring, useUploads } from './use-exchange-wiring.ts';
 import type { ExchangeActions } from './use-exchange.ts';
 import { useFactory, type FactoryView } from './use-factory.ts';
-import { useMorph } from './use-morph.ts';
 import { useTour, useTourState, type TourActions } from './use-tour.ts';
 
 /**
@@ -49,17 +50,16 @@ export interface SoftwareEcologyClientProps {
 /** A preset's view. */
 const viewOf = (B: Bundle, preset: string): ViewId => presetOf(B, preset).view ?? 'factory';
 
-/** The morph from one view into the next: the boxes are read before the switch, played after it. */
+/** The cross-fade from one view into the next: the old fades out, the new fades in, no card flies. */
 function useShow(x: {
   view: ViewId;
   f: FactoryView;
   viewEl: RefObject<HTMLDivElement | null>;
   set: (v: ViewId) => void;
 }) {
-  const { begin } = useMorph({ view: x.view, viewEl: x.viewEl, floor: x.f.floor, place: x.f.repaint });
+  const { switchTo } = useCrossfade({ view: x.view, viewEl: x.viewEl, floor: x.f.floor, place: x.f.repaint });
   return (next: ViewId) => {
-    if (next !== x.view) begin();
-    x.set(next);
+    if (next !== x.view) switchTo(() => x.set(next));
   };
 }
 
@@ -113,6 +113,7 @@ function Toolbar(t: ToolbarIn) {
       onUseCase={t.h.onUseCase}
       onPreset={t.h.onPreset}
       onClear={t.h.onClear}
+      onReset={t.h.onReset}
       statesTarget={p.targets?.states}
       statesMarker={p.markers?.states}
       compare={compareWidgetOf({ ...x, words: p.words, f: t.f, titles: words.titles })}
@@ -144,7 +145,7 @@ function useParts(p: SoftwareEcologyClientProps) {
     wrap,
     viewEl,
     dash: useDashboard(wrap),
-    display: useDisplay(),
+    display: useDisplay(B, p.preset),
   };
 }
 
@@ -164,8 +165,7 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
   const apply = (bundle: typeof B, id: string) => compare.reset(presetOf(bundle, id).compare);
   return {
     onPreset: (id: string) => {
-      dash.dismiss();
-      tour.end();
+      dismissOverlays(x, { tour });
       show(viewOf(B, id));
       apply(B, id);
       f.controls.setPreset(id);
@@ -177,9 +177,14 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
       apply(B, id);
       tour.start(id);
     },
-    onUseCase: (id: string) => (dash.dismiss(), tour.end(), apply(x.bundleOf(id), f.controls.preset), x.setUseCase(id)),
+    onReset: resetToDefault(x, { f, tour, show, apply, viewOf }),
+    onUseCase: (id: string) => {
+      dismissOverlays(x, { tour });
+      apply(x.bundleOf(id), f.controls.preset);
+      x.setUseCase(id);
+    },
     onClear: () => (tour.end(), f.controls.clear()),
-    onCard: cardClick(x, { f, show }),
+    onCard: cardClick(x, { f }),
   };
 }
 
@@ -226,7 +231,7 @@ export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
         stream={x.compare.stream.length ? <Stream words={p.words} x={x} f={f} w={words.w} /> : undefined}
         overlay={<TourPanel tour={tour} {...t} floor={f.floor} wrap={x.wrap} stream={x.compare.stream.join()} />}
       />
-      <OpenDashboard f={f} dash={x.dash} words={p.words} w={words.w} wrap={x.wrap} />
+      <OpenDashboard f={f} dash={x.dash} words={p.words} w={words.w} wrap={x.wrap} markers={p.markers} />
       <BelowView snap={f.snap} words={p.words} titles={words.titles} />
     </div>
   );

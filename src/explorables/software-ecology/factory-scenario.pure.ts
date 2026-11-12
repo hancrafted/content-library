@@ -10,6 +10,7 @@
 import { custOf, DTW, firstOf, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import type { Bundle, Cust, Over, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
+import { startBacklogOf } from './start-backlog.pure.ts';
 
 export { validKey } from './factory-model.pure.ts';
 
@@ -109,10 +110,12 @@ export const settingsAfter = (set: StepSet | undefined, B: Bundle, now: Settings
   return s;
 };
 
-/** The model a preset starts from: built at its settings, warmed 60 weeks unless it starts clear. */
+/** The model a preset starts from: built at its settings, warmed 60 weeks unless it starts clear, then loaded with the state's starting backlogs. */
 export const scenarioStart = (B: Bundle, p: Preset, seed: number = DEFAULT_SEED): FactoryHandle => {
   const f = createFactory(B, startSettings(B, p), seed);
-  if (p.start !== 'clear') f.step(WARM_WEEKS);
+  if (p.start === 'clear') return f;
+  f.step(WARM_WEEKS);
+  f.pile(startBacklogOf(B, p, f.settings.reality));
   return f;
 };
 

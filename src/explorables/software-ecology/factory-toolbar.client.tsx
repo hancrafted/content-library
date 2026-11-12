@@ -9,9 +9,10 @@ import { Glyph } from './factory-glyph-view';
 import type { MechanicsMenuProps } from './mechanics-menu.client';
 import type { ModelMenuProps } from './model-menu.client';
 import { ScenarioNotes, ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
-import { SettingsMenu } from './settings-menu';
+import { SettingsMenu } from './settings-menu.client';
 import type { SettingsWords, ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
+import { STEP_MARKS } from './step-marks.pure';
 import { TimeControls } from './time-controls.client';
 import { ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
@@ -66,7 +67,17 @@ interface MenuState {
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
 
 /** One state button; the active one carries a dot once a dial was turned after picking it. */
-function StateButton(p: { s: Choice; on: boolean; modified: boolean; words: ToolbarWords; onPick: () => void }) {
+
+interface StateButtonProps {
+  readonly s: Choice;
+  readonly n: number;
+  readonly on: boolean;
+  readonly modified: boolean;
+  readonly words: ToolbarWords;
+  readonly onPick: () => void;
+}
+
+function StateButton(p: StateButtonProps) {
   const dotted = p.on && p.modified;
   return (
     <ToolTip tip={dotted ? p.words.modifiedTip : ''}>
@@ -76,6 +87,9 @@ function StateButton(p: { s: Choice; on: boolean; modified: boolean; words: Tool
         aria-pressed={p.on}
         onClick={p.onPick}
       >
+        <span className={`${styles.stepNo} text-caption`} aria-hidden="true">
+          {STEP_MARKS[p.n - 1]}
+        </span>
         {p.s.name}
         {dotted ? (
           <>
@@ -88,15 +102,16 @@ function StateButton(p: { s: Choice; on: boolean; modified: boolean; words: Tool
   );
 }
 
-/** The roles state, Ideal and Realistic as one segmented group; the Scenarios menu; Tour; the markers a Slide places. */
+/** The three steps, Who does what, In theory and In practice, numbered, as one segmented group; the Scenarios menu; Tour; the markers a Slide places. */
 function States(p: ToolbarProps & MenuState) {
   return (
     <div className={styles.states} role="group" aria-label={p.words.states} {...p.statesTarget}>
       <span className={styles.stateSeg}>
-        {p.states.map((s) => (
+        {p.states.map((s, i) => (
           <StateButton
             key={s.id}
             s={s}
+            n={i + 1}
             on={p.preset === s.id}
             modified={p.modified}
             words={p.words}
@@ -142,7 +157,7 @@ function UseCase(p: Pick<ToolbarProps, 'words' | 'useCases' | 'useCase' | 'onUse
   );
 }
 
-/** The one Settings button and its popover: Model · Mechanics · Display, and File at the foot. */
+/** The one Settings button and its popover: Model, Mechanics and Display in two columns, Reset and the file at the foot. */
 function Settings(p: ToolbarProps & MenuState) {
   const w = p.settingsWords;
   return (
@@ -157,7 +172,16 @@ function Settings(p: ToolbarProps & MenuState) {
       role="dialog"
       placement="window"
     >
-      <SettingsMenu words={w} model={p.model} mechanics={p.mechanics} display={p.display} exchange={p.exchange} />
+      {(close) => (
+        <SettingsMenu
+          words={w}
+          model={p.model}
+          mechanics={p.mechanics}
+          display={p.display}
+          exchange={p.exchange}
+          onClose={close}
+        />
+      )}
     </ToolbarMenu>
   );
 }

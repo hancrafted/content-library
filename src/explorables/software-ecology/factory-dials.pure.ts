@@ -19,6 +19,8 @@ import type {
 
 /** One model step, in weeks. */
 export const DTW = 1 / 480;
+/** The speeds the page offers, 0 is pause; the schema and the speed menu read this list. */
+export const SPEEDS = [0, 1, 2, 5, 10, 20] as const;
 /** Working days a week, for the clock. */
 export const DAYS = 5;
 /** Every handoff takes a quarter working day, whatever the belt length. */

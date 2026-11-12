@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -20,7 +20,7 @@ describe('success cases', () => {
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'realistic', now: false });
     const frames = Math.ceil(WARM_WEEKS / DTW / WARM_CHUNK);
     const second = 1,
-      speed = 5,
+      speed = 10,
       expected = WARM_WEEKS + second * speed * SPEED_1X,
       digits = 2;
     // ACT
@@ -49,6 +49,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('plays 1× at 1/32 week a real second, with the speeds 1, 2, 5, 10 and 20 and pause', () => {
+    // ARRANGE
+    const perSecond = 1 / 32,
+      speeds = [0, 1, 2, 5, 10, 20];
+    // ACT
+    const seen = { x1: SPEED_1X, all: [...SPEEDS] };
+    // ASSERT
+    expect(seen).toEqual({ x1: perSecond, all: speeds });
+  });
+
   it('starts from the settings it is given, so Clear keeps a dial the viewer turned', () => {
     // ARRANGE
     const B = builtinBundle('tire');
@@ -106,7 +116,7 @@ describe('edge cases', () => {
     // ARRANGE
     const B = builtinBundle('tire');
     const viewer = 1,
-      spiral = 10;
+      spiral = 20;
     // ACT
     const atRoles = startSpeedOf(B, 'roles'),
       atSpiral = startSpeedOf(B, 'bug-spiral');

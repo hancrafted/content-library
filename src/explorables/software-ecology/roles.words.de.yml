@@ -67,9 +67,9 @@ roles:
     tasks: [führt die Prüfungen aus, testet die Änderung, gibt sie frei oder schickt sie zurück]
     ai: [erzeugt Testpläne, schreibt Deploy-Skripte]
 presets:
-  roles: Rollen
-  ideal: Ideal
-  realistic: Realistisch
+  roles: Wer macht was
+  ideal: In der Theorie
+  realistic: In der Praxis
   ai-unbalanced: KI, unausgewogen
   ai-compare: KI im Vergleich
   ai-balanced: KI, ausgewogen

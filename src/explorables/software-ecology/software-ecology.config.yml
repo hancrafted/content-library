@@ -12,10 +12,11 @@ toolbar:
   speedMenuTip: How fast simulated time runs
   play: Play
   speedTips:
-    '1': '1×: a working day takes about 3 seconds'
-    '2': '2×: a working day takes about 1.6 seconds'
-    '5': '5×: a working day takes about 0.6 seconds'
-    '10': '10×: a working day takes about 0.3 seconds'
+    '1': '1×: a working day takes about 6 seconds'
+    '2': '2×: a working day takes about 3 seconds'
+    '5': '5×: a working day takes about 1.3 seconds'
+    '10': '10×: a working day takes about 0.6 seconds'
+    '20': '20×: a working day takes about 0.3 seconds'
   clear: Clear
   clearTip: 'Clear: an empty factory at day 0 with the current settings, to watch it fill'
   day: 'Day {n}'
@@ -38,7 +39,7 @@ toolbar:
   tourTip: 'A guided tour of this scenario: set the dials, run to a week, pause, read what to look at'
   modified: modified
   modifiedTip: A dial was turned after picking this state; pick it again to reset
-# The Settings popover: one button at the toolbar's end, three columns and the file at its foot.
+# The Settings popover: one button at the toolbar's end; a header, two columns and Reset and the file at its foot.
 settings:
   button: Settings
   tip: 'Settings: the model, what bad work does downstream, how the factory is drawn, and the file'
@@ -47,7 +48,8 @@ settings:
   mechanics: Mechanics
   mechanicsNote: What bad work does downstream
   display: Display
-  file: File
+  close: Close
+  help: 'About {name}'
 tour:
   label: Guided tour
   step: '· step {i} of {n} · week {w}'
@@ -219,21 +221,19 @@ model:
   same: Same
   better: Better
   note: 'The Customer’s rate, request mix and follow-up chances sit on its card: click the Customer on the left.'
-  reset: Back to the state
+  reset: Reset to default
   tips:
     reality: 'From Ideal to Realistic: lowers every work center’s efficiency and effectiveness toward its realistic values. More bad documents go out, get sent back or multiply; the bottleneck runs near 90 % busy.'
     ai: 'Where AI works: those centers run faster (2.5× unless a dashboard says otherwise) and may write extra tasks; AI-made documents take the next center a little longer to read. Set the speed-up and extra tasks per work center on its dashboard.'
     company: 'Service provider: only the Customer asks for work. Product company: the product manager also writes roadmap items, Sales brings leads and the engineer writes tech debt tickets. They share the same backlogs; every center is sized again so Ideal stays 70 % busy.'
     aiq: 'What AI does to the chance a document leaves good: Worse lowers it by 15 points, Better raises it by 15. Same leaves it.'
-    rework: Chance a work center sends a bad document back on the return belt. It goes to the front of the sender’s backlog and costs time twice.
-    churn: 'When bad input is kept, the center hands on this many times its usual documents: it guesses, and writes more.'
-    reset: Undo every change made since you picked the state.
+    reset: 'Back to what the use-case file defines for this state: its settings, speed and display.'
 # The Settings popover's Display column: how the factory is drawn.
 display:
   beltMotion: Belt motion
   beltMotionNote: The belts' slats move. Off is calmer; the documents still travel.
   pile: Pile-up past the rack
-  pileLabel: Pile-up animation
+  pileTip: How documents pile up past a full rack. Hover a style to see how it looks.
   piles:
     heap:
       name: Tumbling heap

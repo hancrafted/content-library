@@ -9,6 +9,12 @@ import styles from './software-ecology.module.css';
  * merged into this one card (feedback 08). Props only, so the roles state renders on the server.
  */
 
+/** A card's cell: its column, and the three grid rows (head, panel, artefacts) of its row, shared with its neighbours. */
+export const rowsAt = (cell: readonly [number, number]) => ({
+  gridColumn: cell[0],
+  gridRow: `${(cell[1] - 1) * 3 + 1} / span 3`,
+});
+
 /** Documentation's panel: the cartoon's empty frame. */
 function BlankFrame({ blank }: { readonly blank: string }) {
   return (
@@ -71,12 +77,25 @@ export interface CartoonCardProps {
   readonly marker?: ReactNode;
 }
 
-/** The quote under a panel: the cartoon's caption, as a figure's. */
-function Quoted(p: { readonly panel: CartoonPanel; readonly caption: string; readonly blank: string }) {
+/** The quote under a panel: the cartoon's caption, as a figure's, with a Slide's Context marker at the end of the line. */
+function Quoted(p: {
+  readonly panel: CartoonPanel;
+  readonly caption: string;
+  readonly blank: string;
+  readonly marker?: ReactNode;
+}) {
   return (
     <figure className={styles.panelFig}>
       <PanelArt panel={p.panel} caption={p.caption} blank={p.blank} />
-      <figcaption className={`${styles.cap} text-caption`}>{p.caption}</figcaption>
+      <figcaption className={`${styles.cap} text-caption`}>
+        {p.caption}
+        {p.marker ? (
+          <>
+            {' '}
+            <span className={styles.capMark}>{p.marker}</span>
+          </>
+        ) : null}
+      </figcaption>
     </figure>
   );
 }
@@ -86,18 +105,32 @@ function Quoted(p: { readonly panel: CartoonPanel; readonly caption: string; rea
  * center the cartoon leaves out, and every one in a use case without the cartoon, shows no image.
  */
 export function RoleCardView(p: CartoonCardProps) {
+  // three rows the grid lines up across a row of cards: head, panel, artefacts; a card with no panel puts its marker on the job line
   return (
     <>
       <div className={styles.headLg}>
         <Glyph name={p.icon} className={styles.glyMd} />
         <div className={styles.headText}>
           <p className={`${styles.cardTitle} text-body font-semibold`}>{p.title}</p>
-          <p className={`${styles.job} text-caption`}>{p.job}</p>
+          <p className={`${styles.job} text-caption`}>
+            {p.job}
+            {p.panel || !p.marker ? null : (
+              <>
+                {' '}
+                <span className={styles.capMark}>{p.marker}</span>
+              </>
+            )}
+          </p>
         </div>
-        {p.marker}
       </div>
-      {p.panel ? <Quoted panel={p.panel} caption={p.caption ?? p.title} blank={p.words.blank} /> : null}
-      <Artefacts label={p.words.artefacts} items={p.artefacts} />
+      <div>
+        {p.panel ? (
+          <Quoted panel={p.panel} caption={p.caption ?? p.title} blank={p.words.blank} marker={p.marker} />
+        ) : null}
+      </div>
+      <div className={styles.artSlot}>
+        <Artefacts label={p.words.artefacts} items={p.artefacts} />
+      </div>
     </>
   );
 }
@@ -120,14 +153,21 @@ export function TileView(p: TileProps) {
       className={styles.cartoon}
       data-card-view="role"
       data-tile={p.panel.target ? 'target' : 'extra'}
-      style={{ gridColumn: p.cell[0], gridRow: p.cell[1] }}
+      style={rowsAt(p.cell)}
       aria-hidden="true"
     >
-      <span className={`${styles.tag} text-caption`} data-tone={p.panel.target ? 'primary' : 'muted'}>
-        {p.tag}
-      </span>
-      {p.job ? <p className={`${styles.job} text-caption`}>{p.job}</p> : null}
-      <Quoted panel={p.panel} caption={p.caption} blank={p.blank} />
+      <div className={styles.headLg}>
+        <div className={styles.headText}>
+          <span className={`${styles.tag} text-caption`} data-tone={p.panel.target ? 'primary' : 'muted'}>
+            {p.tag}
+          </span>
+          {p.job ? <p className={`${styles.job} text-caption`}>{p.job}</p> : null}
+        </div>
+      </div>
+      <div>
+        <Quoted panel={p.panel} caption={p.caption} blank={p.blank} />
+      </div>
+      <div className={styles.artSlot} />
     </div>
   );
 }

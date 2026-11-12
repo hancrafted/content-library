@@ -11,6 +11,8 @@ import type { Arrivals, Settings } from './software-ecology.types';
 export const SIGN_HOLD = 1.5;
 /** The rack holds six; past six the top slot turns red and work piles up. */
 export const RACK = 6;
+/** A station's waiting band at its worst: red, from two weeks of work waiting (`StationReadout.level`). */
+export const LEVEL_RED = 2;
 
 export type SignKind = 'rework' | 'churn' | 'unread' | 'complaint';
 
@@ -139,7 +141,7 @@ export const statusOf = (m: Factory, x: { s: Settings; warming: boolean; dropped
   const first = hot[0];
   return {
     kind: 'busy',
-    hot: hot.map((n) => ({ id: n.id, red: n.lvl === 2, weeks: n.Ws })),
+    hot: hot.map((n) => ({ id: n.id, red: n.lvl === LEVEL_RED, weeks: n.Ws })),
     drain: first ? drainOf(first, x.s) : null,
     back: Math.round(m.centers.reduce((a, n) => a + n.rate.back, 0)),
     behind: x.dropped > 0.5,

@@ -1,6 +1,6 @@
 /*
  * The guided tour on the page (design-ADR 0024 §10), as the reference build's tour runs it: Tour starts the current
- * scenario from the file's own settings at 10×, each step stops on its model step and pauses there; Next goes on, Back
+ * scenario from the file's own settings at 20×, each step stops on its model step and pauses there; Next goes on, Back
  * replays at once, Close and Finish give back the viewer's speed. Escape closes it once no menu is open, before a
  * dashboard. Under reduced motion every step reaches its week at once. A run changed elsewhere (a state, Clear, a new
  * use case) ends the tour. Transient state (FE-001 §1).
@@ -86,7 +86,7 @@ interface Ctx {
   readonly active: TourRun | null;
 }
 
-/** Shows a tour step: at once under reduced motion, else at 10× until its week, then paused. */
+/** Shows a tour step: at once under reduced motion, else at 20× until its week, then paused. */
 const show = ({ f, s }: Ctx, x: TourRun) => {
   const tour = f.reduced ? settleTour(x.run, x.tour) : x.tour;
   s.set({ run: x.run, tour });

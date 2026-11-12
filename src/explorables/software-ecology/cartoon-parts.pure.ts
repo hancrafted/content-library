@@ -1,5 +1,5 @@
 /*
- * The roles state in words, once a run: every node's card at its grid cell (the cartoon panel, caption, job and
+ * The roles state in words, once a run: every node's card that has a grid cell (the tire swing's cartoon order; Quality assurance has none) (the cartoon panel, caption, job and
  * artefacts) and the tiles that fill the empty cells. The grid itself is `factory-grid.pure.ts`.
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
@@ -52,11 +52,13 @@ const cardOf = (x: { topo: Topology; w: WordsIn; words: CartoonWords; id: string
 /** Every node in flow order, the Customer first, as a roles-state card. */
 export const cartoonCardsOf = (m: Topology, w: WordsIn, words: CartoonWords): CartoonCardPart[] => {
   const g = gridOf(m);
-  return m.order.map((id) => ({
-    id,
-    cell: g.at[id] ?? [1, 1],
-    ...cardOf({ topo: m, w, words, id }),
-  }));
+  return m.order
+    .filter((id) => g.at[id])
+    .map((id) => ({
+      id,
+      cell: g.at[id] as Cell,
+      ...cardOf({ topo: m, w, words, id }),
+    }));
 };
 
 /** The tiles: Documentation, Billing and what the customer really needed. */

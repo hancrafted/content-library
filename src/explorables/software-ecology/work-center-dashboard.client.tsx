@@ -1,7 +1,7 @@
 'use client';
 
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
 import { dialRowsOf, num, type DialKey, type DialRow } from './dash-rows.pure.ts';
 import { DashFlows, DashHighlights, DashTrends } from './dash-sections-view';
 import { posToEff, type DashboardReadout, type Signal } from './dashboard-readouts.pure.ts';
@@ -31,11 +31,28 @@ export interface WorkCenterDashboardProps {
   readonly onHelp: () => void;
   /** A close button, in the popover. */
   readonly onClose?: () => void;
+  /** A Slide's Context marker for this work center: the station card carries none, so it sits here. */
+  readonly marker?: ReactNode;
 }
 
 const signalText = (s: Signal, w: DashWords) => fillTemplate(w.signals[s.kind], { n: s.n.toFixed(1) });
 
 const SIGN_ICON = { green: 'ok', red: 'complaint', amber: 'dot' } as const;
+
+/** The role's job, with a Slide's Context marker at the end of the line: the station card carries none. */
+function Job(p: { readonly role: RoleWords; readonly marker?: ReactNode }) {
+  return (
+    <p className={`${styles.dashJob} m-0 text-caption text-muted-foreground`}>
+      {p.role.job}
+      {p.marker ? (
+        <>
+          {' '}
+          <span className={styles.capMark}>{p.marker}</span>
+        </>
+      ) : null}
+    </p>
+  );
+}
 
 function Head(p: WorkCenterDashboardProps) {
   const w = p.words;
@@ -50,7 +67,7 @@ function Head(p: WorkCenterDashboardProps) {
         <h3 id={p.titleId} className="m-0 text-body font-semibold">
           {p.title}
         </h3>
-        <p className={`${styles.dashJob} m-0 text-caption text-muted-foreground`}>{p.role.job}</p>
+        <Job role={p.role} marker={p.marker} />
       </div>
       <span className={styles.light} data-level={p.r.light} role="img" aria-label={status} data-tip={w.lightTip}>
         <i data-l="red" />

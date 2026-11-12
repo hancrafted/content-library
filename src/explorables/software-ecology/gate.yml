@@ -1,52 +1,55 @@
 # Gatekeeper lead: one tech lead writes every spec and reviews every change (schema software-ecology-factory/5).
 id: gate
-layout: { width: 1520, height: 700, top: 0 }
+layout: { width: 1540, height: 700, top: 0 }
 mechanics: { rework: 0.4, churn: 1.2 }
 # Without Support, bug and support requests go to Operations.
-customer: { at: [90, 370], rate: 8, mix: { sales: 30, pm: 50, ops: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
+customer: { at: [115, 370], rate: 8, mix: { sales: 30, pm: 50, ops: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
 company: service
 sources: # Product company (Model): own tickets a week
   - { id: roadmap, at: pm, rate: 2 }
   - { id: leads, at: sales, rate: 1 }
   - { id: debt, at: e2, rate: 1 }
 bottleneck: lrev # the lead: one person, two work centers
+# Starting backlogs in weeks of work, loaded after the warm-up and scaled by the state's reality (see tire.yml); `display`: pile (heap, stack or drift), beltMotion.
+backlog: { lrev: 3 }
+display: { pile: heap, beltMotion: false }
 roles: # AI profile overrides for this use case
   eng: { aiSize: 1.5 } # an AI-made pull request takes the lead half as long again to review
 centers:
-  - { id: sales, role: sales, at: [400, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }] }
-  - { id: pm, role: pm, at: [400, 370], realistic: [88, 94], spawns: [{ to: lspec, n: 1 }] }
+  - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }] }
+  - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: lspec, n: 1 }] }
   - {
       id: lspec,
       role: lead,
-      at: [710, 370],
+      at: [730, 370],
       person: lead,
       realistic: [76, 93],
       spawns: [{ choose: [{ to: e1, w: 1 }, { to: e2, w: 1 }, { to: e3, w: 1 }] }],
     }
-  - { id: e1, role: eng, at: [1020, 160], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
-  - { id: e2, role: eng, at: [1020, 370], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
-  - { id: e3, role: eng, at: [1020, 580], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
+  - { id: e1, role: eng, at: [1040, 160], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
+  - { id: e2, role: eng, at: [1040, 370], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
+  - { id: e3, role: eng, at: [1040, 580], realistic: [94, 91], spawns: [{ to: lrev, n: 1 }] }
   - {
       id: lrev,
       role: lead,
-      at: [1330, 370],
+      at: [1350, 370],
       person: lead,
       inspection: true,
       stampUnderPressure: 0.8,
       realistic: [76, 98],
       spawns: [{ to: ops, n: 1 }],
     }
-  - { id: ops, role: ops, at: [1330, 160], realistic: [89, 98], spawns: [{ to: customer, n: 1 }] }
+  - { id: ops, role: ops, at: [1350, 160], realistic: [89, 98], spawns: [{ to: customer, n: 1 }] }
 routes:
-  customer-sales: { xm: 215 }
+  customer-sales: { xm: 266 }
   sales-pm: { out: bottom, in: top }
-  lspec-e1: { xm: 865 }
-  lspec-e3: { xm: 865 }
-  e1-lrev: { xm: 1175 }
-  e3-lrev: { xm: 1175 }
+  lspec-e1: { xm: 885 }
+  lspec-e3: { xm: 885 }
+  e1-lrev: { xm: 1195 }
+  e3-lrev: { xm: 1195 }
   lrev-ops: { out: top, in: bottom }
-  ops-customer: { out: top, in: top, via: [[1366, 36], [90, 36]] }
-  customer-ops: { out: bottom, via: [[90, 668], [1485, 668], [1485, 160]] }
+  ops-customer: { out: top, in: top, via: [[1375, 36], [115, 36]] }
+  customer-ops: { out: bottom, via: [[115, 668], [1505, 668], [1505, 160]] }
 presets:
   - { id: roles, view: roles }
   - {
@@ -62,7 +65,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
       check:
         {
-          run: 12,
+          run: 80,
           expect:
             {
               customer.output: '0.85–1.15',
@@ -79,7 +82,7 @@ presets:
       customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
       dials: { e2: { efficiency: 200 } },
       check:
-        { run: 16, expect: { customer.output: '0.85–1.15', e2.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
+        { run: 70, expect: { customer.output: '0.85–1.15', e2.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
     }
   - {
       id: ai-unbalanced,

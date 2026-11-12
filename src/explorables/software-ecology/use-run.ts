@@ -19,6 +19,8 @@ export interface FactoryControls {
   /** A live change: the run reads `next` from its next step on. */
   setSettings(next: Settings): void;
   clear(): void;
+  /** Reset to default: the settings and speed the use-case file defines for the active state; the modified dot goes. */
+  reset(d: { readonly s: Settings; readonly speed: number }): void;
   /** A dial was turned since the state was picked (feature guide, Interaction 1). */
   readonly modified: boolean;
   /** Shows a run made elsewhere: a tour's start, or its Back. */
@@ -61,6 +63,15 @@ const loadWith =
     x.setSt(fresh(B, o.preset, { s: o.s }));
   };
 
+/** Reset to default: the file's settings and speed for the active state; the modified dot goes. */
+const resetWith =
+  (x: Setters, at: { B: Bundle; id: string }): FactoryControls['reset'] =>
+  (d) => {
+    x.setSpeed(d.speed);
+    x.setModified(false);
+    x.setSt(fresh(at.B, at.id, { s: d.s }));
+  };
+
 const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls => {
   const { run, B } = cur;
   return {
@@ -81,6 +92,7 @@ const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls =
       run.set(next);
       x.seen(next);
     },
+    reset: resetWith(x, { B, id: run.preset.id }),
     clear: () => x.setSt(fresh(B, run.preset.id, { s: run.settings, clear: true })),
     adopt: (next) => {
       x.setModified(false);

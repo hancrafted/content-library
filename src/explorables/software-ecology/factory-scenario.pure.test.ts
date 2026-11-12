@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { judge, runScenario, type ScenarioRow } from './factory-scenario.pure.ts';
+import { judge, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
+import type { Bundle, Preset } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
 /*
  * Every `expect:` of every scenario step, run on the model alone with the default seed: the value each measure reads
- * must equal, to two decimals, what the reference build (docs/episodes/software-ecology/prototype/flow.html) read in
+ * must equal, to two decimals, with no starting backlogs, what the reference build (docs/episodes/software-ecology/prototype/flow.html) read in
  * its headless run, checks7c.out.txt rows 1–88. [use case, preset, step (1-based; a check is step 1), measure, value]
  */
 const REFERENCE: readonly (readonly [string, string, number, string, string])[] = [
@@ -100,11 +101,41 @@ const REFERENCE: readonly (readonly [string, string, number, string, string])[] 
   ['teams', 'ai-unbalanced', 1, 'customer.headroom', '0.42'],
 ];
 
+/** The weeks the reference build's steps ran to; feedback 09 moved some later, so the seeded piles have drained. */
+const REFERENCE_WEEKS: Readonly<Record<string, readonly number[]>> = {
+  'tire/realistic': [12],
+  'tire/speed-up': [6, 16, 24],
+  'tire/ai-everywhere': [4, 12, 20],
+  'tire/ai-balanced': [4, 12, 20],
+  'gate/realistic': [12],
+  'gate/speed-up': [16],
+  'teams/realistic': [12],
+};
+/** The use case as the reference build had it: no starting backlogs (feedback 09 added them on top of the model). */
+const withoutKey = <T extends object>(o: T, key: string): T =>
+  Object.fromEntries(Object.entries(o).filter(([k]) => k !== key)) as T;
+const unloaded = (useCase: string): Bundle => {
+  const B = builtinBundle(useCase);
+  const data = withoutKey(B.data, 'backlog');
+  const at = (p: Preset, i: number, run: number): number => REFERENCE_WEEKS[`${useCase}/${p.id}`]?.[i] ?? run;
+  const weeks = (p: Preset): Preset => {
+    const rest = withoutKey(p, 'backlog');
+    if (rest.tour) return { ...rest, tour: rest.tour.map((st, i) => ({ ...st, run: at(p, i, st.run) })) };
+    return rest.check ? { ...rest, check: { ...rest.check, run: at(p, 0, rest.check.run) } } : rest;
+  };
+  return { ...B, data: { ...data, presets: B.data.presets.map(weeks) } };
+};
 const runs = new Map<string, ScenarioRow[]>();
 const rowsOf = (useCase: string, preset: string): ScenarioRow[] => {
   const k = `${useCase}/${preset}`;
-  if (!runs.has(k)) runs.set(k, runScenario(builtinBundle(useCase), preset));
+  if (!runs.has(k)) runs.set(k, runScenario(unloaded(useCase), preset));
   return runs.get(k) as ScenarioRow[];
+};
+const loadedRows = new Map<string, ScenarioRow[]>();
+const loadedRowsOf = (useCase: string, preset: string): ScenarioRow[] => {
+  const k = `${useCase}/${preset}`;
+  if (!loadedRows.has(k)) loadedRows.set(k, runScenario(builtinBundle(useCase), preset));
+  return loadedRows.get(k) as ScenarioRow[];
 };
 interface Reading {
   readonly useCase: string;
@@ -145,7 +176,7 @@ describe('success cases', () => {
     // ARRANGE
     const failing: string[] = [];
     // ACT
-    const failed = rowsOf(useCase, preset).flatMap((r) =>
+    const failed = loadedRowsOf(useCase, preset).flatMap((r) =>
       r.checks.filter((c) => !c.ok).map((c) => `step ${r.i + 1} ${c.key} ${c.test} = ${c.v}`),
     );
     // ASSERT
@@ -166,6 +197,19 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('names only scenarios the files still have, with as many steps as the reference build ran', () => {
+    // ARRANGE
+    const refs = Object.entries(REFERENCE_WEEKS);
+    // ACT
+    const stepCounts = refs.map(([k, weeks]) => {
+      const [useCase = '', preset = ''] = k.split('/');
+      const p = builtinBundle(useCase).data.presets.find((x) => x.id === preset);
+      return { key: k, steps: p ? stepsOf(p).length : -1, ran: weeks.length };
+    });
+    // ASSERT
+    expect(stepCounts.filter((c) => c.steps !== c.ran)).toEqual([]);
+  });
+
   it('judges rises as failing on the first step, which has nothing before it', () => {
     // ARRANGE
     const value = 3;

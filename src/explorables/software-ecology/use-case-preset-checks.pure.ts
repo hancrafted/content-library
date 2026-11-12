@@ -2,11 +2,14 @@
  * What a use-case file's presets, tours and saved state must hold (schema software-ecology-factory/5), ported from the
  * reference build's validate(), messages and order unchanged.
  */
+import { SPEEDS } from './factory-dials.pure.ts';
 import { validKey, validTest } from './factory-scenario.pure.ts';
 import {
   absentOr,
   apply,
+  backlogProblems,
   customerProblems,
+  displayProblems,
   isMap,
   isNum,
   listOf,
@@ -25,7 +28,6 @@ export const unretired = <T>(v: T): T | typeof ROLES_STATE => (v === RETIRED_STA
 
 /** `swing` is retired: `use-case-file.ts` reads it as `roles` (`unretired`) before these checks run. */
 export const VIEWS = [ROLES_STATE, 'factory'];
-export const SPEEDS = [0, 1, 2, 5, 10];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =
   'customer.<output|sat|headroom|leadDays|bugsPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>';
@@ -82,7 +84,7 @@ const stepsOf = (p: Map_, at: string): [unknown, string][] => {
 };
 
 const tourOk = (v: unknown): boolean => Array.isArray(v) && v.length >= 1 && v.length <= 6;
-const speedOk = (v: unknown): boolean => SPEEDS.includes(v as number) && (v as number) > 0;
+const speedOk = (v: unknown): boolean => (SPEEDS as readonly number[]).includes(v as number) && (v as number) > 0;
 
 const PRESET: readonly Rule<At>[] = [
   ({ x, p }) => !!x.view && !oneOf(x.view, VIEWS) && `${p}.view: one of ${VIEWS.join(', ')}`,
@@ -93,13 +95,15 @@ const PRESET: readonly Rule<At>[] = [
 const PRESET_TAIL: readonly Rule<At>[] = [
   ({ x, p }) =>
     !absentOr(x.start, (v) => oneOf(v, ['clear', 'warm'])) && `${p}.start: clear (day 0) or warm (60 weeks settled)`,
-  ({ x, p }) => !absentOr(x.speed, speedOk) && `${p}.speed: 1, 2, 5 or 10`,
+  ({ x, p }) => !absentOr(x.speed, speedOk) && `${p}.speed: 1, 2, 5, 10 or 20`,
   ({ x, p }) => x.tour !== undefined && x.check !== undefined && `${p}: a tour or a check, not both`,
   ({ x, p }) => !absentOr(x.tour, tourOk) && `${p}.tour: 1 to 6 steps`,
 ];
 
 const presetShape = (at: At, E: Sink): void => {
   apply(PRESET, at, E);
+  backlogProblems(at.x.backlog, { p: `${at.p}.backlog`, ids: at.ids }, E);
+  displayProblems(at.x.display, `${at.p}.display`, E);
   for (const id of unknownIds(at.x.dials, at.ids)) E(`${at.p}.dials.${id}: no such work center`);
   if (at.x.customer !== undefined)
     customerProblems(at.x.customer, { p: `${at.p}.customer`, ids: at.ids, full: false }, E);
@@ -121,8 +125,10 @@ const STATE: readonly Rule<At>[] = [
   ({ x }) => !absentOr(x.view, (v) => oneOf(v, VIEWS)) && `state.view: one of ${VIEWS.join(', ')}`,
   ({ x }) => !absentOr(x.reality, (v) => isNum(v, 0, 100)) && 'state.reality: 0 to 100',
   ({ x }) =>
-    !absentOr(x.speed, (v) => SPEEDS.includes(v as number)) && `state.speed: one of ${SPEEDS.join(', ')} (0 is pause)`,
+    !absentOr(x.speed, (v) => (SPEEDS as readonly number[]).includes(v as number)) &&
+    `state.speed: one of ${SPEEDS.join(', ')} (0 is pause)`,
   ({ x }) => !absentOr(x.beltMotion, (v) => typeof v === 'boolean') && 'state.beltMotion: true or false',
+  ({ x }) => !absentOr(x.pile, (v) => oneOf(v, ['heap', 'stack', 'drift'])) && 'state.pile: heap, stack or drift',
   ({ x }) => !absentOr(x.company, (v) => oneOf(v, ['service', 'product'])) && 'state.company: service or product',
   ({ x }) =>
     !absentOr(x.aiQuality, (v) => oneOf(v, ['worse', 'same', 'better'])) && 'state.aiQuality: worse, same or better',

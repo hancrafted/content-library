@@ -32,6 +32,8 @@ export interface ControlsProps {
   readonly display: Display;
   readonly onUseCase: (id: string) => void;
   readonly onPreset: (id: string) => void;
+  /** Reset to default: the active state as its use-case file defines it. */
+  readonly onReset: () => void;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
   readonly scenarios: readonly ScenarioChoice[];
@@ -65,14 +67,13 @@ const modelOf = (p: ControlsProps): ModelMenuProps => {
     words: p.words.model,
     aiChoices: aiChoices(p),
     onSettings: c.setSettings,
-    onReset: () => p.onPreset(c.preset),
+    onReset: p.onReset,
   };
 };
 
 const mechanicsOf = (p: ControlsProps): MechanicsMenuProps => ({
   settings: p.f.controls.settings,
   mechs: p.words.toolbar.mechs,
-  tips: p.words.model.tips,
   onSettings: p.f.controls.setSettings,
 });
 

@@ -7,9 +7,11 @@ import type { Strength } from './software-ecology.types';
 import {
   absentOr,
   apply,
+  backlogProblems,
   CENTER,
   centerIdsOf,
   customerProblems,
+  displayProblems,
   FIRST_SPAWN,
   isMap,
   isNum,
@@ -135,5 +137,7 @@ export const dataProblems = (doc: Map_, x: { E: Sink; catalog: readonly string[]
   centerProblems(doc, { ids, roles }, E);
   networkProblems(doc, E);
   sourceProblems(doc, ids, E);
+  backlogProblems(doc.backlog, { p: 'backlog', ids }, E);
+  displayProblems(doc.display, 'display', E);
   return ids;
 };

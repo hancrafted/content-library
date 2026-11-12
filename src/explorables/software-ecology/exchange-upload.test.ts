@@ -19,6 +19,7 @@ const busyPage = (): PageState => {
     view: 'factory',
     speed: 10,
     beltMotion: true,
+    pile: 'drift',
     compare: ['eng', 'qa'],
     overlays: { follow: false, isolate: false },
     s: { ...s, aiq: 'worse', over: { ...s.over, ops: { eff: 140, ai: true } } },
@@ -54,13 +55,35 @@ describe('success cases', () => {
       kind: 'loaded',
       centers: 7,
       belts: 12,
-      page: { preset: 'ai-unbalanced', speed: 10, beltMotion: true, compare: ['eng', 'qa'], s: { aiq: 'worse' } },
+      page: {
+        preset: 'ai-unbalanced',
+        speed: 10,
+        beltMotion: true,
+        pile: 'drift',
+        compare: ['eng', 'qa'],
+        s: { aiq: 'worse' },
+      },
       bundle: { source: 'a.yaml' },
     };
     // ACT
     const up = uploadExchange(tireText(), 'a.yaml');
     // ASSERT
     expect(up).toMatchObject(expected);
+  });
+
+  it('keeps the file-defined backlog and display defaults, and the pile-up style the page showed', () => {
+    // ARRANGE
+    const doc = parse(tireText()) as { backlog: unknown; display: unknown; state: { pile: string } };
+    const expected = { backlog: { qa: 3, eng: 2, ba: 2 }, display: { pile: 'heap', beltMotion: false }, pile: 'drift' };
+    // ACT
+    const up = uploadExchange(tireText(), 'a.yaml');
+    // ASSERT
+    expect({ backlog: doc.backlog, display: doc.display, pile: doc.state.pile }).toEqual(expected);
+    expect(up).toMatchObject({
+      kind: 'loaded',
+      page: { pile: 'drift' },
+      bundle: { data: { backlog: expected.backlog } },
+    });
   });
 
   it('warns, as the reference build does, which work centers would be over capacity while rushing and in the worst case', () => {

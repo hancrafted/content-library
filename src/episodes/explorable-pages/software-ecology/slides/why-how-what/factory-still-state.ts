@@ -21,16 +21,11 @@ import type {
   Snapshot,
 } from '@/explorables/software-ecology/factory-model.pure';
 import { at, type Path } from '@/explorables/software-ecology/factory-paths.pure';
-import { playSteps, scenarioStart, stepsOf } from '@/explorables/software-ecology/factory-scenario.pure';
 import { TOUR_SPEED } from '@/explorables/software-ecology/factory-tour.pure';
 import { GAP } from '@/explorables/software-ecology/paint-belts';
 import { RACK_W, rackX, SLOT, slotY } from '@/explorables/software-ecology/paint-station';
-import {
-  builtinBundles,
-  catalogWordsFor,
-  localeOf,
-  wordsFor,
-} from '@/explorables/software-ecology/software-ecology-data';
+import { scenarioLastStep } from '@/explorables/software-ecology/scenario-last-step';
+import { catalogWordsFor, localeOf, wordsFor } from '@/explorables/software-ecology/software-ecology-data';
 import type { Words } from '@/explorables/software-ecology/software-ecology-words.types';
 import type { Locale } from '@/explorables/software-ecology/software-ecology.types';
 import {
@@ -88,16 +83,7 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
 };
 
 /** The model at the scenario's last tour step: warmed, then each step's dials set and run to its week. */
-function runToLastStep() {
-  const B = builtinBundles().find((b) => b.data.id === USE_CASE);
-  const preset = B?.data.presets.find((p) => p.id === SCENARIO);
-  if (!B || !preset) throw new Error(`The ${USE_CASE} use case has no ${SCENARIO} scenario.`);
-  const f = scenarioStart(B, preset),
-    steps = stepsOf(preset);
-  // Draining the steps plays them: each sets its dials and runs to its week.
-  Array.from(playSteps(f, B, steps));
-  return { B, preset, f, week: steps.at(-1)?.run ?? 0, last: steps.length - 1 };
-}
+const runToLastStep = () => scenarioLastStep(USE_CASE, SCENARIO);
 
 type Run = ReturnType<typeof runToLastStep>;
 interface Read {
@@ -164,6 +150,7 @@ function stationOf(x: Read, c: CardPart): StillStation {
     ...c,
     ai: r.ai,
     waiting: r.waiting,
+    weeks: r.weeks,
     level: r.level,
     rack: rackOf(n),
     rackAt: { x: rackX(def), w: RACK_W, topY: slotY(def, RACK - 1), slot: SLOT },

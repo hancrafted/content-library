@@ -48,6 +48,7 @@ const pageOf = (x: ExchangeParts, f: FactoryView): PageState => ({
   view: x.view,
   speed: f.controls.speed,
   beltMotion: x.display.beltMotion,
+  pile: x.display.pile,
   compare: x.compare.state.ids,
   overlays: x.uploads.overlays,
   s: f.controls.settings,
@@ -64,6 +65,7 @@ const loadInto = (x: ExchangeParts, y: { f: FactoryView; tour: TourActions }) =>
   x.setChosen(page.view);
   x.compare.reset(page.compare);
   x.display.onBeltMotion(page.beltMotion);
+  x.display.onPile(page.pile);
   y.f.controls.load(bundle, { preset: page.preset, s: page.s, speed: page.speed });
 };
 

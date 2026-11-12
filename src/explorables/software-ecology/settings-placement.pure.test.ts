@@ -6,9 +6,9 @@ const LAPTOP = { width: 1440, height: 900 };
 const BUTTON = { left: 1180, top: 120, width: 36, height: 36 };
 
 describe('success cases', () => {
-  it('opens 720 wide under the Settings button, its right edge on the button’s', () => {
+  it('opens 760 wide under the Settings button, its right edge on the button’s', () => {
     // ARRANGE
-    const expected = { x: 496, y: 162, width: 720, maxHeight: 730 };
+    const expected = { x: 456, y: 162, width: 760, maxHeight: 730 };
     // ACT
     const place = placeSettings({ button: BUTTON, view: LAPTOP });
     // ASSERT
@@ -20,7 +20,7 @@ describe('failure cases', () => {
   it('slides right to stay 8 px inside the window when the button sits near the left edge', () => {
     // ARRANGE
     const button = { ...BUTTON, left: 200 };
-    const expected = { x: 8, width: 720 };
+    const expected = { x: 8, width: 760 };
     // ACT
     const place = placeSettings({ button, view: LAPTOP });
     // ASSERT

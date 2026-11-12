@@ -24,6 +24,8 @@ export interface StillStation {
   readonly inspection: boolean;
   readonly ai: boolean;
   readonly waiting: number;
+  /** Weeks of work waiting at the current pace. */
+  readonly weeks: number;
   /** 0 under a week of work waiting, 1 (amber) from one week, 2 (red) from two. */
   readonly level: number;
   /** The rack's slots from the bottom, at most six. */
@@ -74,7 +76,7 @@ export interface FactoryStillState {
     readonly states: readonly string[];
     readonly scenario: string;
     readonly caption: string;
-    /** The speed menu's face, the speed Play resumes at: "10×". */
+    /** The speed menu's face, the speed Play resumes at: "20×". */
     readonly speed: string;
     /** The tour's clock: "Week 20 · Day 1". */
     readonly clock: string;

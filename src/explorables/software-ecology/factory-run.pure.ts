@@ -16,12 +16,12 @@ import {
   type Topology,
 } from './factory-model.pure.ts';
 import type { Bundle, Preset, Settings } from './software-ecology.types';
+import { startBacklogOf } from './start-backlog.pure.ts';
 import { unretired } from './use-case-preset-checks.pure.ts';
 
-/** Weeks a real second at 1×; 5× plays a working day in about 0.6 s. */
-export const SPEED_1X = 1 / 16;
-export const SPEEDS = [0, 1, 2, 5, 10] as const;
-/** The page starts at 1× (feedback 08); a tour runs at 10× between its steps. */
+/** Weeks a real second at 1×; 10× plays a working day in about 0.6 s. */
+export const SPEED_1X = 1 / 32;
+/** The page starts at 1× (feedback 08); a tour runs at 20× between its steps. */
 export const DEFAULT_SPEED = 1;
 /** Model steps a frame at most; beyond that the frame drops time. */
 export const MAX_STEPS = 40;
@@ -61,13 +61,20 @@ export class FactoryRun {
   stopAt: number | null = null;
   private acc = 0;
   private readonly f: FactoryHandle;
+  private readonly bundle: Bundle;
 
   constructor(o: RunOptions) {
+    this.bundle = o.B;
     this.preset = presetOf(o.B, o.preset);
     this.f = createFactory(o.B, o.s ?? startSettings(o.B, this.preset), o.seed ?? DEFAULT_SEED);
     if (o.clear || this.preset.start === 'clear') return;
     this.warmLeft = WARM_STEPS;
     if (o.now) this.finishWarm();
+  }
+
+  /** The warm-up is over: a state that starts loaded gets its backlogs now, so the first frame shows them. */
+  private loaded() {
+    this.f.pile(startBacklogOf(this.bundle, this.preset, this.f.settings.reality));
   }
 
   get warming(): boolean {
@@ -129,8 +136,10 @@ export class FactoryRun {
 
   /** Warms the rest at once. */
   finishWarm() {
+    if (!this.warming) return;
     this.steps(this.warmLeft);
     this.warmLeft = 0;
+    this.loaded();
   }
 
   private warmChunk() {
@@ -138,6 +147,7 @@ export class FactoryRun {
     this.steps(n);
     this.warmLeft -= n;
     this.acc = 0;
+    if (!this.warming) this.loaded();
   }
 
   /** Runs the steps the accumulated time allows, at most MAX_STEPS, never past `stopAt`. */

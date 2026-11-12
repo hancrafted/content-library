@@ -1,5 +1,5 @@
 /*
- * A guided tour on the page (design-ADR 0024 §10): a scenario's steps, each setting its dials, running at 10× to its
+ * A guided tour on the page (design-ADR 0024 §10): a scenario's steps, each setting its dials, running at 20× to its
  * week and pausing there with its caption and its checks. It starts from the file's own settings, warmed as the
  * headless runner warms, and stops on the very model step `runScenario` reads, so both read the same values; Back
  * replays from the start at once, with the same seed and the same steps. Ported from the reference build's
@@ -10,8 +10,8 @@ import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { judge, settingsAfter, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 
-/** A tour runs at 10× between its steps (Q118). */
-export const TOUR_SPEED = 10;
+/** A tour runs at 20× between its steps (Q118; 10× before the 1× was halved, so the pace is the same). */
+export const TOUR_SPEED = 20;
 
 export interface Tour {
   readonly preset: Preset;

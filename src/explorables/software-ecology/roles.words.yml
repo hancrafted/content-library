@@ -67,9 +67,9 @@ roles:
     tasks: [runs the checks, tests the change, passes or sends it back]
     ai: [generates test plans, writes deploy scripts]
 presets:
-  roles: Roles
-  ideal: Ideal
-  realistic: Realistic
+  roles: Who does what
+  ideal: In theory
+  realistic: In practice
   ai-unbalanced: AI, unbalanced
   ai-compare: AI compare
   ai-balanced: AI, balanced
