@@ -1,7 +1,7 @@
 {
   "title": "Warum, wie und was",
   "heading": "Warum · Wie · Was",
-  "caption": "KI beschleunigt die Arbeit, also wandert der Druck ins Spezifizieren und Prüfen: warum das zählt, wie Du es ausprobierst und was jeder Arbeitsplatz zeigt.",
+  "caption": "Was Adam Benders Vortrag über Software-Ökologie sagt, wie Du ihn hier ausprobierst und was jeder Arbeitsplatz zeigt.",
   "words": {
     "why": "Warum",
     "how": "Wie",
@@ -9,16 +9,16 @@
   },
   "columns": {
     "why": {
-      "title": "KI an einem Arbeitsplatz überflutet die nächste Inspektion.",
-      "caption": "<amplifies>KI verstärkt, was die Organisation schon ist</amplifies>. Mit KI nur beim Entwickler staut sich die Qualitätssicherung, und beim Kunden kommt weit weniger an. <pain>Unvollständige Anforderungen waren schon immer das meistgenannte Problem</pain>, und sie kommen als Nacharbeit zurück; klare Anforderungen, gute Aufträge, senken den Druck."
+      "title": "Beschleunige einen Teil, und der Druck wandert.",
+      "caption": "In <talk>Software Engineering at the Tipping Point</talk> beschreibt Adam Bender ein Unternehmen als sozio-technisches Ökosystem: Menschen, Kultur und Werkzeuge, die das bauen, was die Organisation belohnt. <amplifies>KI verstärkt, was schon da ist</amplifies>: schnellerer Code heißt mehr zu bauen, zu prüfen und zu testen, und die Prüfung wird zum Engpass. <pain>Unklare Anforderungen</pain> kommen später als Nacharbeit zurück."
     },
     "how": {
-      "title": "Ideal, Realistisch, dann die Tour eines Szenarios.",
-      "caption": "Erst Ideal, dann Realistisch; die Tour jedes Szenarios stellt die Regler und läuft bis zur entscheidenden Woche; ein Klick auf einen Arbeitsplatz öffnet sein Dashboard."
+      "title": "Frag nach dem Warum und dem Was-wäre-wenn.",
+      "caption": "Benders Werkzeuge: auf die Nachbarn schauen, auf Kapazität, Rückkopplungen und Engpässe, nie auf einen Knoten allein. Hier: geh durch Wer macht was, In der Theorie und In der Praxis, lass die Tour eines Szenarios laufen und klicke auf einen Arbeitsplatz, um zu sehen, was er weitergibt."
     },
     "what": {
-      "title": "Jeder Arbeitsplatz hat zwei Regler.",
-      "caption": "Effizienz ist Output, wie viel er ausgibt; Effektivität ist Outcome, wie viel davon gut ist. KI hebt das Erste und lässt das Zweite, wie es ist. <hard>Spezifizieren war schon immer der schwierige Teil</hard>, und <people>jeder Arbeitsplatz besteht aus Menschen und Werkzeugen</people>."
+      "title": "Ein Wald, kein Baum.",
+      "caption": "Jeder Arbeitsplatz besteht aus <people>Menschen und Werkzeugen</people>, mit zwei Reglern: Effizienz ist Output, Effektivität ist Outcome. KI hebt das Erste und lässt das Zweite, wie es ist. <hard>Spezifizieren war schon immer der schwierige Teil</hard>."
     }
   },
   "still": {
@@ -83,7 +83,7 @@
       }
     },
     "incomplete-requirements": {
-      "header": "Unvollständige Anforderungen sind das meistgenannte Problem",
+      "header": "Unklare Anforderungen sind das meistgenannte Problem",
       "description": "48 % von 228 Unternehmen nannten unvollständige oder verdeckte Anforderungen ihr häufigstes Anforderungsproblem, mit Nacharbeit nach der Umsetzung unter den berichteten Folgen. Eine Umfrage mit Selbstauskunft; Häufigkeit sind keine Kosten [1] (SWE-0002).",
       "sources": {
         "mendez-naming-the-pain": {

@@ -1,7 +1,7 @@
 {
   "title": "Why, how and what",
   "heading": "Why · How · What",
-  "caption": "AI speeds the work up, so the pressure moves into specifying and review: why that matters, how to play it, and what every work center shows.",
+  "caption": "What Adam Bender's talk on software ecology says, how to play it here, and what each work center shows.",
   "words": {
     "why": "Why",
     "how": "How",
@@ -9,16 +9,16 @@
   },
   "columns": {
     "why": {
-      "title": "AI at one work center floods the next inspection.",
-      "caption": "<amplifies>AI amplifies what the organization already is</amplifies>. With AI at the engineer alone, quality assurance piles up and the Customer gets far less. <pain>Incomplete requirements were always the most named pain</pain>, and they come back as rework; clear requirements, good orders, lower the pressure."
+      "title": "Speed up one part, and the pressure travels.",
+      "caption": "In <talk>Software Engineering at the Tipping Point</talk>, Adam Bender describes a company as a socio-technical ecosystem: people, culture and tools that build what the organization rewards. <amplifies>AI amplifies what is already there</amplifies>: faster code means more to build, review and test, and review becomes the bottleneck. <pain>Unclear requirements</pain> come back later as rework."
     },
     "how": {
-      "title": "Ideal, Realistic, then a scenario's tour.",
-      "caption": "Ideal, then Realistic; each scenario's tour sets the dials and runs to the week that matters; a click on a work center opens its dashboard."
+      "title": "Ask why and what if.",
+      "caption": "Bender's tools: look at the neighbours, capacity, feedback loops and bottlenecks, never one node alone. Here: step through Who does what, In theory and In practice, run a scenario's tour, and click a work center to see what it hands on."
     },
     "what": {
-      "title": "Every work center has two dials.",
-      "caption": "Efficiency is output, how much it puts out; effectiveness is outcome, how much of it is good. AI raises the first and leaves the second alone. <hard>Specifying was always the hard part</hard>, and <people>every work center is people and tools</people>."
+      "title": "A forest, not a tree.",
+      "caption": "Each work center is <people>people and tools</people>, with two dials: efficiency is output, effectiveness is outcome. AI raises the first and leaves the second alone. <hard>Specifying was always the hard part</hard>."
     }
   },
   "still": {
@@ -83,7 +83,7 @@
       }
     },
     "incomplete-requirements": {
-      "header": "Incomplete requirements are the most named pain",
+      "header": "Unclear requirements are the most named pain",
       "description": "48% of 228 companies named incomplete or hidden requirements their most frequent requirements problem, with rework after implementation among the reported effects. Self-reported survey; frequency is not cost [1] (SWE-0002).",
       "sources": {
         "mendez-naming-the-pain": {
