@@ -1,6 +1,6 @@
 /*
  * A tour step's `set` applied to the settings (design-ADR 0024 §10): dials per center, the Customer, where AI works, the
- * reality. factory-scenario.pure.ts re-exports it.
+ * reality.
  */
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { custOf, firstOf } from './factory-dials.pure.ts';

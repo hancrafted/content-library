@@ -7,7 +7,8 @@
  */
 import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
-import { judge, settingsAfter, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
+import { settingsAfter, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
+import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 
 /** A tour runs at 20× between its steps (Q118; 10× before the 1× was halved, so the pace is the same). */

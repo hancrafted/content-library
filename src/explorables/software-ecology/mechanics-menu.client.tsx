@@ -1,7 +1,7 @@
 'use client';
 
-import { MECH_DEFAULTS, MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
 import { withMech, withStrength } from './factory-settings.pure.ts';
+import { STRENGTH_RANGE, strengthDefault, STRENGTHS } from './mechanics.pure.ts';
 import { SliderControl, SwitchField, Value } from './settings-field.client';
 import type { ToolbarWords } from './software-ecology-words.types';
 import type { Mechanic, Settings, Strength } from './software-ecology.types';
@@ -24,7 +24,7 @@ const isStrength = (k: Mechanic): k is Strength => (STRENGTHS as readonly string
 function MechField(p: MechanicsMenuProps & { k: Mechanic }) {
   const k = p.k,
     on = p.settings.mech[k],
-    now = isStrength(k) ? { ...MECH_DEFAULTS(), ...p.settings.strength }[k] : 0;
+    now = isStrength(k) ? (p.settings.strength[k] ?? strengthDefault(k)) : 0;
   return (
     <SwitchField
       label={p.mechs[k].label}
@@ -39,8 +39,8 @@ function MechField(p: MechanicsMenuProps & { k: Mechanic }) {
           <SliderControl
             labelId={l}
             control={`settings.${k}.strength`}
-            min={MECH_RANGE[k][0]}
-            max={MECH_RANGE[k][1]}
+            min={STRENGTH_RANGE[k][0]}
+            max={STRENGTH_RANGE[k][1]}
             step={0.1}
             value={now}
             disabled={!on}

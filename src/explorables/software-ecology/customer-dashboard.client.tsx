@@ -31,14 +31,23 @@ export interface CustomerDashboardProps {
 /** A row's list: the mix, a good release's follow-ups, or a bad release's of one defect kind. */
 type Kind = 'mix' | 'good' | Defect;
 
-const listOf = (p: CustomerDashboardProps, kind: Kind): Readonly<Record<string, number>> =>
-  kind === 'mix' || kind === 'good' ? p.r.cust[kind] : p.r.cust.bad[kind];
-
-const changeOf = (kind: Kind, to: string, v: number): CustomerChange =>
-  kind === 'mix' || kind === 'good' ? { kind, to, v } : { kind: 'bad', defect: kind, to, v };
-
-const controlOf = (kind: Kind, to: string): string =>
-  kind === 'mix' || kind === 'good' ? `customer.${kind}.${to}` : `customer.bad.${kind}.${to}`;
+/** Per row kind: the chances it shows, the change a slider sends up and the slider's eval hook. */
+interface RowKind {
+  readonly list: (c: Readout['cust']) => Readonly<Record<string, number>>;
+  readonly change: (to: string, v: number) => CustomerChange;
+  readonly control: (to: string) => string;
+}
+const badRow = (defect: Defect): RowKind => ({
+  list: (c) => c.bad[defect],
+  change: (to, v) => ({ kind: 'bad', defect, to, v }),
+  control: (to) => `customer.bad.${defect}.${to}`,
+});
+const ROWS: Readonly<Record<Kind, RowKind>> = {
+  mix: { list: (c) => c.mix, change: (to, v) => ({ kind: 'mix', to, v }), control: (to) => `customer.mix.${to}` },
+  good: { list: (c) => c.good, change: (to, v) => ({ kind: 'good', to, v }), control: (to) => `customer.good.${to}` },
+  spec: badRow('spec'),
+  code: badRow('code'),
+};
 
 interface ChanceRow {
   readonly label: string;
@@ -50,7 +59,7 @@ interface ChanceRow {
 /** A mix weight shows its share; a follow-up its chance, capped so the chances never pass 95 %. */
 const chanceRow = (p: CustomerDashboardProps, kind: Kind, to: string): ChanceRow => {
   const c = p.r.cust,
-    v = listOf(p, kind)[to] ?? 0,
+    v = ROWS[kind].list(c)[to] ?? 0,
     title = p.titles[to] ?? to;
   if (kind === 'mix') {
     const mw = Object.values(c.mix).reduce((a, b) => a + b, 0) || 1;
@@ -72,12 +81,12 @@ function Chance(p: CustomerDashboardProps & { kind: Kind; to: string }) {
       <input
         type="range"
         className={styles.range}
-        data-control={controlOf(p.kind, p.to)}
+        data-control={ROWS[p.kind].control(p.to)}
         min={0}
         max={row.max}
         step={row.step}
-        value={listOf(p, p.kind)[p.to] ?? 0}
-        onChange={(e) => p.onChange(changeOf(p.kind, p.to, Number(e.target.value)))}
+        value={ROWS[p.kind].list(p.r.cust)[p.to] ?? 0}
+        onChange={(e) => p.onChange(ROWS[p.kind].change(p.to, Number(e.target.value)))}
       />
       <b className="font-semibold">{row.shown}</b>
     </label>

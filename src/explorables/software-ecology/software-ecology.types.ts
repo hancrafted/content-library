@@ -201,8 +201,10 @@ export interface Settings {
   own: Record<string, OwnSet>;
   cust: Cust | null;
   mech: Record<Mechanic, boolean>;
-  /** The mechanics' strengths and constants (the file's, then the page's sliders). */
-  strength: Partial<Record<MechKey, number>>;
+  /** The mechanics' strengths: the file's, then the page's sliders. */
+  strength: Partial<Record<Strength, number>>;
+  /** The model's constants: the file's, no control shows them (design-ADR 0024 §5). */
+  consts: Partial<Record<Constant, number>>;
 }
 
 /** The role catalog's words in one locale: per role, and the names of the presets and scenarios every use case shares. */

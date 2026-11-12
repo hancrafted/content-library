@@ -5,7 +5,8 @@
  * `wireDashboard`/`wireCustomer` handlers.
  */
 import { copyKinds } from './defect.pure.ts';
-import { MECH_DEFAULTS, presetSettings, startSettings } from './factory-dials.pure.ts';
+import { presetSettings, startSettings } from './factory-dials.pure.ts';
+import { fileMechanics } from './mechanics.pure.ts';
 import type {
   AiQuality,
   AiSet,
@@ -27,15 +28,13 @@ import type {
  * the use case.
  */
 export const pageSettings = (B: Bundle, p: Preset, prev: Settings | null): Settings =>
-  prev
-    ? { ...prev, ...presetSettings(B, p) }
-    : { ...startSettings(B, p), strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) } };
+  prev ? { ...prev, ...presetSettings(B, p) } : { ...startSettings(B, p), ...fileMechanics(B) };
 
 /** The settings a new use case starts from: its own company and strengths; AI quality and mechanics kept. */
 export const useCaseSettings = (B: Bundle, p: Preset, prev: Settings): Settings => ({
   ...pageSettings(B, p, prev),
   company: B.data.company ?? 'service',
-  strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) },
+  ...fileMechanics(B),
 });
 
 const mapOver = (over: Settings['over'], drop: readonly (keyof Over)[]): Settings['over'] =>
@@ -89,10 +88,10 @@ const FOLLOW_MAX = 0.95;
 
 type Chance = Extract<CustomerChange, { kind: 'good' | 'bad' }>;
 /** The follow-up chances a change sets one of. */
-const listOf = (c: Cust, x: Chance): Record<string, number> => (x.kind === 'bad' ? c.bad[x.defect] : c.good);
+const followUpsOf = (c: Cust, x: Chance): Record<string, number> => (x.kind === 'bad' ? c.bad[x.defect] : c.good);
 
 const chance = (c: Cust, x: Chance): number => {
-  const others = Object.entries(listOf(c, x))
+  const others = Object.entries(followUpsOf(c, x))
     .filter(([t]) => t !== x.to)
     .reduce((a, [, v]) => a + v, 0);
   return Math.min(x.v, FOLLOW_MAX - others);
@@ -104,7 +103,7 @@ export const withCustomer = (s: Settings, cu: Cust, x: CustomerChange): Settings
   if (x.kind === 'rate') c.rate = x.v;
   else if (x.kind === 'mode') c.mode = x.v;
   else if (x.kind === 'mix') c.mix[x.to] = x.v;
-  else listOf(c, x)[x.to] = chance(c, x);
+  else followUpsOf(c, x)[x.to] = chance(c, x);
   return { ...s, cust: c };
 };
 

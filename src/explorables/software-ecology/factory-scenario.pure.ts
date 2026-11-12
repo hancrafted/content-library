@@ -14,10 +14,6 @@ import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
 import { startBacklogOf } from './start-backlog.pure.ts';
 
-export { validKey } from './factory-model.pure.ts';
-export { applySet } from './scenario-set.pure.ts';
-export { judge, parseTest, validTest } from './scenario-tests.pure.ts';
-
 /** The steps of a preset: its tour, or its check as one step. */
 export const stepsOf = (p: Preset): readonly TourStep[] => (p.tour ? p.tour : p.check ? [p.check] : []);
 /** Weeks from the scenario start to model steps: the page and the runner stop on the same step. */
@@ -65,30 +61,6 @@ export function* playSteps(f: FactoryHandle, B: Bundle, steps: readonly TourStep
   }
 }
 
-/** Runs every step of one preset headless, with a fixed seed: one row per step, each expect judged. */
-export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {}): ScenarioRow[] => {
-  const p = B.data.presets.find((x) => x.id === id);
-  if (!p) throw new Error(`no preset ${id}`);
-  const f = scenarioStart(B, p, opts.seed),
-    steps = stepsOf(p);
-  const keys = [...new Set(steps.flatMap((st) => Object.keys(st.expect ?? {})))];
-  const rows: ScenarioRow[] = [];
-  let prev: Record<string, number> = {};
-  for (const st of playSteps(f, B, steps)) {
-    const vals = f.read({ measures: keys }).measures as Record<string, number>;
-    const checks = Object.entries(st.expect ?? {}).map(([key, test]) => ({
-      key,
-      test,
-      v: vals[key],
-      prev: prev[key],
-      ok: judge(vals[key], test, prev[key]),
-    }));
-    prev = vals;
-    rows.push({ i: rows.length, week: st.run, checks });
-  }
-  return rows;
-};
-
 /*
  * Judging across seeds (design-ADR 0024 §12): the model stays stochastic, so one seed's reading proves little. A beat's
  * reading is the mean of each measure over its last WINDOW weeks; `rises` and `falls` compare those means with the
@@ -105,20 +77,24 @@ const SAMPLES_A_WEEK = 8;
 export const SETTLE_WEEKS = 40;
 /** A beat with a claim runs this many weeks: 10 to 15 s at 20×. */
 export const BEAT_WEEKS = [6, 9] as const;
+/** The first `n` seeds in a row from the shipped one: the seeds a run of `n` is judged on. */
+export const seedsFrom = (n: number): number[] => Array.from({ length: n }, (_, k) => DEFAULT_SEED + k);
+
 /** The seeds a scenario is judged on by default: ten in a row from the shipped one. */
-export const SEEDS = Array.from({ length: 10 }, (_, k) => DEFAULT_SEED + k);
+export const SEEDS = seedsFrom(10);
 
 /** Seeds a beat must pass on: 8 of 10, and every seed of fewer than five. */
 export const needOf = (seeds: number): number => (seeds < 5 ? seeds : Math.ceil(seeds * 0.8));
 
 type Values = Record<string, number>;
 
-/** Runs a started model `weeks` on, averaging the measures over the last WINDOW weeks of it. */
-const runAveraged = (f: FactoryHandle, weeks: number, keys: readonly string[]): Values => {
-  const k = stepsTo(weeks),
-    w = Math.min(k, stepsTo(WINDOW)),
+/** Runs a started model `weeks` on, averaging the measures over the last `window` weeks of it; 0 reads its end once. */
+const runAveraged = (f: FactoryHandle, x: { weeks: number; window: number }, keys: readonly string[]): Values => {
+  const k = stepsTo(x.weeks),
+    w = Math.min(k, stepsTo(x.window)),
     every = Math.max(1, Math.round(1 / SAMPLES_A_WEEK / DTW));
   f.step((k - w) * DTW);
+  if (!w) return { ...f.read({ measures: keys }).measures };
   const sum: Values = Object.fromEntries(keys.map((x) => [x, 0]));
   let n = 0;
   for (let done = 0; done < w;) {
@@ -150,20 +126,21 @@ const playTo = (B: Bundle, p: Preset, x: { seed: number; upTo: number }): Factor
   return f;
 };
 
-/** Every beat of a preset on one seed, read as means. */
-export const readBeats = (B: Bundle, p: Preset, seed: number): BeatReading[] => {
+/** Every beat of a preset on one seed, read as means over the last `window` weeks of each (WINDOW unless told). */
+export const readBeats = (B: Bundle, p: Preset, x: { seed: number; window?: number }): BeatReading[] => {
   const steps = stepsOf(p),
     keys = keysIn(steps, 'expect'),
     settleKeys = keysIn(steps, 'settles'),
-    f = scenarioStart(B, p, seed);
+    window = x.window ?? WINDOW,
+    f = scenarioStart(B, p, x.seed);
   let last = 0;
   return steps.map((st, i) => {
     f.set(settingsAfter(st.set, B, f.settings));
-    const values = runAveraged(f, st.run - last, keys);
+    const values = runAveraged(f, { weeks: st.run - last, window }, keys);
     last = st.run;
     if (!st.settles) return { values, settled: null };
-    const g = playTo(B, p, { seed, upTo: i });
-    return { values, settled: runAveraged(g, SETTLE_WEEKS, settleKeys) };
+    const g = playTo(B, p, { seed: x.seed, upTo: i });
+    return { values, settled: runAveraged(g, { weeks: SETTLE_WEEKS, window }, settleKeys) };
   });
 };
 
@@ -212,13 +189,17 @@ const checksOf = (st: TourStep, x: { i: number; runs: readonly BeatReading[][] }
   ];
 };
 
-/** Judges every beat of a preset across seeds. */
-export const judgeScenario = (B: Bundle, id: string, opts: { seeds?: readonly number[] } = {}): ScenarioVerdict => {
+/** Judges every beat of a preset across seeds; `window` 0 reads each beat's end once, as the page's tour does. */
+export const judgeScenario = (
+  B: Bundle,
+  id: string,
+  opts: { seeds?: readonly number[]; window?: number } = {},
+): ScenarioVerdict => {
   const p = B.data.presets.find((x) => x.id === id);
   if (!p) throw new Error(`no preset ${id}`);
   const seeds = opts.seeds ?? SEEDS,
     need = needOf(seeds.length),
-    runs = seeds.map((seed) => readBeats(B, p, seed));
+    runs = seeds.map((seed) => readBeats(B, p, { seed, window: opts.window }));
   const beats = stepsOf(p).map((st, i, all): BeatVerdict => {
     const checks = checksOf(st, { i, runs }),
       length = st.run - (all[i - 1]?.run ?? 0),
@@ -238,3 +219,16 @@ export const judgeScenario = (B: Bundle, id: string, opts: { seeds?: readonly nu
   });
   return { id, seeds, need, beats, ok: beats.every((b) => b.ok) };
 };
+
+/**
+ * Every step of one preset on one seed, each read once at its end, as the page's tour reads it: one row per step,
+ * each expect judged. The seed judge with one seed and no window.
+ */
+export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {}): ScenarioRow[] =>
+  judgeScenario(B, id, { seeds: [opts.seed ?? DEFAULT_SEED], window: 0 }).beats.map((b) => ({
+    i: b.i,
+    week: b.week,
+    checks: b.checks
+      .filter((c) => c.kind === 'expect')
+      .map((c) => ({ key: c.key, test: c.test, v: c.means[0] ?? NaN, prev: c.prev[0], ok: c.held[0] ?? false })),
+  }));

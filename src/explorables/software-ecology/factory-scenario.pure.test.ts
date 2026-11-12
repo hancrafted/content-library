@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { judge, judgeScenario, needOf, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
+import { judgeScenario, needOf, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
+import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset, TourStep } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
