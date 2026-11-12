@@ -4,7 +4,7 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T16:22:59Z
+  at: 2026-11-12T17:45:14Z
 locale: en
 brief: ./brief.md
 verified:
@@ -12,6 +12,8 @@ verified:
     at: 2026-11-12T16:12:31Z
   - by: process:markdown-harness
     at: 2026-11-12T16:22:59Z
+  - by: process:markdown-harness
+    at: 2026-11-12T17:45:14Z
 ---
 
 # What lies below the waterline of sustainable AI skills {#waterline-of-sustainable-ai-skills}
@@ -85,6 +87,8 @@ Caption: "A skill is a written procedure with a name and a note on when to use i
 2. **Names differ by app** — Claude, ChatGPT and Codex say "Skills", GitHub Copilot says "agent skills", and the Gemini app is replacing Gems with skills on 17 December 2026 [3]. Whether the Gemini app's skills are `SKILL.md` folders is not stated in the pages read; it is verified for Gemini CLI only [4].
    - sources: [3] Google, About the transition from Gems to skills (Gemini Apps Help) — https://support.google.com/gemini/answer/18560919?hl=en
    - sources: [4] Google, Agent Skills in Gemini CLI — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/skills.md
+3. **The "use when" line is the routing line** — Google's Day 3 whitepaper calls the description "your routing algorithm" [5]. This is Google's framing of how a skill is chosen, not a measurement of how often it routes correctly.
+   - sources: [5] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
 
 #### Voice script
 
@@ -102,14 +106,18 @@ Caption: "The AI reads only the index until a task needs more." The manual shown
 
 #### Speaker notes
 
-1. **Three levels, stated by the standard** — the Agent Skills standard names metadata (name and description, about 100 tokens) loaded at startup for all skills, the `SKILL.md` body when the skill is activated, and files in `scripts/`, `references/` or `assets/` only when required [1]. Anthropic states the same three levels [2].
+1. **Three levels, stated by the standard** — the Agent Skills standard names metadata (name and description, about 100 tokens) loaded at startup for all skills, the `SKILL.md` body when the skill is activated, and files in `scripts/`, `references/` or `assets/` only when required [1]. Anthropic states the same three levels [2]. Google's Day 3 whitepaper states them too: "1. Metadata (name + description) is always in the agent's context. 2. SKILL.md body is loaded only when the skill triggers. 3. Bundled resources are loaded strictly as needed" [6]. That is Google's description of the design, not a test that it works.
    - sources: [1] Agent Skills, Specification — https://agentskills.io/specification
    - sources: [2] Anthropic, Agent Skills (Claude Platform docs) — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+   - sources: [6] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
 2. **Other apps load in stages too** — Codex lists name, description and file path first and reads the full instructions when it decides to use a skill [3]; Gemini CLI documents metadata first, body on activation [4]. For apps whose pages were not read, the three-level claim is inferred from the shared format.
    - sources: [3] OpenAI, Build skills (Codex docs) — https://learn.chatgpt.com/docs/build-skills
    - sources: [4] Google, Agent Skills in Gemini CLI — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/skills.md
-3. **Scripts: documented for Claude only** — Claude runs scripts through bash and "only their output enters context" [5]. The other vendors' pages read say bundled scripts exist but do not say what that does to context, so keep this claim to Claude.
+3. **Scripts: documented for Claude only** — Claude runs scripts through bash and "only their output enters context" [5]. The other vendors' pages read say bundled scripts exist but do not say what that does to context, so keep this claim to Claude. Google's Day 3 whitepaper adds one line, that scripts "execute without ever polluting the token window" [7]; treat it as Google's statement, not as documented behaviour in other apps.
    - sources: [5] Anthropic, Agent Skills (Claude Platform docs) — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+   - sources: [7] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+4. **What the index costs** — Day 3 calls the metadata cost "tiny" but recurring: it is paid "on every turn" [8]. That is Google's claim; the size of the index comes from the standard's figure of about 100 tokens per skill in note 1, not from Day 3.
+   - sources: [8] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
 
 #### Voice script
 
@@ -127,13 +135,16 @@ Caption: "What's always loaded is static; a skill loads on demand, so it is dyna
 
 #### Speaker notes
 
-1. **Static and dynamic, as Google defines them** — static context is always loaded: system instructions, rule files (AGENTS.md, CLAUDE.md, GEMINI.md), global memory and persona definitions; dynamic context is loaded on demand: skill instructions triggered by task matching, tool results, retrieved documents and windowed session history [1].
-   - sources: [1] Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, PDF copy) — https://rocketedge.com/wp-content/uploads/2026/06/Day_1_v3.pdf
-2. **"Static" is a rule of thumb** — instructions are not strictly static. Claude Code `.claude/rules/` files with `paths` load only when matching files open [2], Gemini CLI loads further `GEMINI.md` files just in time when a tool touches a directory [3], and Copilot path-specific instructions apply by file match [4]. By default, a skill's name and description are always loaded too, unless the skill is set to user-only invocation [5].
-   - sources: [2] Anthropic, How Claude remembers your project (Claude Code docs) — https://code.claude.com/docs/en/memory
-   - sources: [3] Google, Provide context with GEMINI.md files (Gemini CLI docs) — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/gemini-md.md
-   - sources: [4] GitHub, Adding repository custom instructions for GitHub Copilot — https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions
-   - sources: [5] Anthropic, Extend Claude with skills (Claude Code docs) — https://code.claude.com/docs/en/skills
+1. **Static and dynamic, as Google defines them** — static context is always loaded: system instructions, rule files (AGENTS.md, CLAUDE.md, GEMINI.md), global memory and persona definitions; dynamic context is loaded on demand: skill instructions triggered by task matching, tool results, retrieved documents and windowed session history [1]. This is Google's vendor framing of the vendors' own mechanics, not a measured result.
+   - sources: [1] Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding
+2. **Why Google separates them** — Day 1 says static context "is expensive because every token is present in every interaction, regardless of relevance", and that too much of it "wastes tokens and dilutes signals" while too little "means the agent forgets critical rules" [2]. Day 3 repeats the split for the two files: "From one side AGENTS.md is always loaded within the project; Skills load on demand." [3]
+   - sources: [2] Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding
+   - sources: [3] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+3. **"Static" is a rule of thumb** — instructions are not strictly static. Claude Code `.claude/rules/` files with `paths` load only when matching files open [4], Gemini CLI loads further `GEMINI.md` files just in time when a tool touches a directory [5], and Copilot path-specific instructions apply by file match [6]. By default, a skill's name and description are always loaded too, unless the skill is set to user-only invocation [7].
+   - sources: [4] Anthropic, How Claude remembers your project (Claude Code docs) — https://code.claude.com/docs/en/memory
+   - sources: [5] Google, Provide context with GEMINI.md files (Gemini CLI docs) — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/gemini-md.md
+   - sources: [6] GitHub, Adding repository custom instructions for GitHub Copilot — https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions
+   - sources: [7] Anthropic, Extend Claude with skills (Claude Code docs) — https://code.claude.com/docs/en/skills
 
 #### Voice script
 
@@ -151,7 +162,7 @@ Caption: "Instructions are always loaded, skills load on demand, and connectors 
 
 #### Speaker notes
 
-1. **Instructions are always loaded, skills are not** — Claude Code reads CLAUDE.md "at the start of every session" and loads a skill "on demand" [1]. Codex, Gemini CLI and GitHub Copilot document the same split for their instruction files and skills [2].
+1. **Instructions are always loaded, skills are not** — Claude Code reads CLAUDE.md "at the start of every session" and loads a skill "on demand" [1]. Codex, Gemini CLI and GitHub Copilot document the same split for their instruction files and skills [2]. ChatGPT custom and project instructions were not read, and whether the Gemini app loads its instructions at the start of each session is unverified, so the split is not confirmed for those two apps.
    - sources: [1] Anthropic, Extend Claude Code (Claude Code docs) — https://code.claude.com/docs/en/features-overview
    - sources: [2] GitHub, Adding agent skills for GitHub Copilot CLI — https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills
 2. **Names in chat apps** — Claude calls them Instructions, project instructions and Connectors [3]; ChatGPT now says "apps (formerly connectors)" [4]; the Gemini app says "Instructions for Gemini" and "Connected Apps" [5].
@@ -161,6 +172,9 @@ Caption: "Instructions are always loaded, skills load on demand, and connectors 
 3. **Connectors reach, skills know how** — connectors are Model Context Protocol (MCP) servers that add tools and data, not guidance [6]. Anthropic describes MCP as the connection and a skill as the knowledge of how to use it [7].
    - sources: [6] GitHub, About Model Context Protocol (MCP) (Copilot docs) — https://docs.github.com/en/copilot/concepts/context/mcp
    - sources: [7] Anthropic, Extend Claude Code (Claude Code docs) — https://code.claude.com/docs/en/features-overview
+4. **Skill vs. AGENTS.md, as Google puts it** — Day 3 has a "Skill vs. AGENTS.md" passage: "From one side AGENTS.md is always loaded within the project; Skills load on demand. The cleanest setups use both." It advises keeping AGENTS.md tight and, if needed, using it as a router into the skills library "with a short catalog at the bottom that tells the agent what's available" [8]. Day 1 calls always-loaded rule files static context [9]. Both are Google's vendor guidance on how to split the two, not evidence that the split works.
+   - sources: [8] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+   - sources: [9] Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding
 
 #### Voice script
 
@@ -185,8 +199,11 @@ Caption: "You call a skill by name, or the AI picks it from its description." Th
    - sources: [4] GitHub, Adding agent skills for GitHub Copilot CLI — https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills
 2. **Picking by description** — otherwise the model matches the task to the description. Gemini CLI adds a step: the model asks to activate a skill and the user consents before it is injected [5].
    - sources: [5] Google, Agent Skills in Gemini CLI — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/skills.md
-3. **What the 56% measures** — "In 56% of eval cases, the skill was never invoked": the documentation skill in Vercel's default configuration for Next.js 16 APIs, not all skills in general [6]. Explicit instructions to use it raised invocation to 95% or more, and the pass rate from 53% to 79% [6]. One vendor's eval, no named model, no replication, so treat it as an illustration.
+3. **What the 56% measures** — "In 56% of eval cases, the skill was never invoked": the documentation skill in Vercel's default configuration for Next.js 16 APIs, not all skills in general [6]. Explicit instructions to use it raised invocation to 95% or more, and the pass rate from 53% to 79% [6]. In the default configuration the skill tied the no-skill baseline overall at 53% [6]. One vendor's eval, no named model, no replication, so treat it as an illustration.
    - sources: [6] Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals — https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
+4. **Google's Day 3 restates Vercel, with two misreadings** — it writes "a 56% non-invocation rate for skills expected to activate consistently" [7]. That turns one Next.js docs skill into skills in general, and calls Vercel's eval suite a "production analysis". It also says "a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%" [7]. In Vercel's post that is the default skill against the baseline on the test sub-score alone, not a stripped skill, and overall pass rates were equal at 53% [8]. Vercel's own wording wins. Day 3 is Google's vendor guidance on how to use skills, not evidence that skills go unused.
+   - sources: [7] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+   - sources: [8] Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals — https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 
 #### Voice script
 
@@ -264,6 +281,8 @@ Caption: "Turn a run that worked into a skill: from your own notes, or by asking
    - sources: [1] Agent Skills, Best practices for skill creators — https://agentskills.io/skill-creation/best-practices
 2. **The agent can interview you** — Anthropic's skill-creator checks the current conversation for a workflow the user wants to capture, extracts answers from it first, then interviews the user to fill gaps [2].
    - sources: [2] Anthropic, skill-creator SKILL.md — https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md
+3. **Google's route: run it without a skill first** — Day 3 suggests asking your most experienced practitioner to "narrate three workflows they do regularly", picking the most repeated one, running the prompts without any skill loaded, and drafting a SKILL.md from the transcript. It closes with "Resist the urge to let an LLM generate fifty skills on day one." [3] This agrees with the standard's advice to extract from a real run. It is Google's vendor guidance, not a measured result.
+   - sources: [3] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
 
 #### Voice script
 
@@ -314,14 +333,16 @@ Caption: "Describe when to use a skill, in the words someone would actually say.
    - sources: [2] Anthropic, Skill authoring best practices — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 2. **Write in the user's words** — "Use imperative phrasing", "Focus on user intent, not implementation", and "Err on the side of being pushy. Explicitly list contexts where the skill applies" [3].
    - sources: [3] Agent Skills, Optimizing skill descriptions — https://agentskills.io/skill-creation/optimizing-descriptions
-3. **The "not for" half is not in the sources** — none of the sources read recommends a "not for" clause in a description. Over-triggering is handled by testing near-miss queries that share keywords but need something different, which "test whether the description is precise, not just broad" [4]. Writing the line is an author's reading of that advice.
+3. **The "not for" half is Google's advice alone** — the standard and Anthropic recommend no "not for" clause in a description. Over-triggering is handled there by testing near-miss queries that share keywords but need something different, which "test whether the description is precise, not just broad" [4].
    - sources: [4] Agent Skills, Optimizing skill descriptions — https://agentskills.io/skill-creation/optimizing-descriptions
+4. **Where the clause comes from** — Google's Day 3 whitepaper writes "explicitly state what it is not for", gives the example "Do NOT use for employee shift scheduling or financial accounting", and its checklist says "Include **when NOT to use** to prevent over-triggering" [5]. It calls the description "your routing algorithm. It is the only thing the model sees to decide whether to load the Agent Skill" and asks to "be pushy if the model under-triggers". It gives no measurement that the clause helps, so it is Google's vendor guidance, a choice between sources.
+   - sources: [5] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
 
 #### Voice script
 
 1. **Two labels** — Here are two labels for the same card. The first names the content, "Sediment sampling procedure, steps 1 to 9", and the second names the moment, "Use when we reach a new site and need a sample from the seabed". One says what is inside, the other says when you need it, and that is your second step: write the description as the moment you'd need it.
 2. **Your request** — Now it is the day of the dive and you say, "Grab some mud here before we move on." Follow the line on the screen. Nothing in "steps 1 to 9" sounds like mud, but "a sample from the seabed" does, so write the label in the words you would actually say.
-3. **A habit of mine** — Last, the closing line of the moment label: "Not for water samples or filming." That is a habit of mine, not something I can point to in the guidance. It tells the pilot where the card stops, so it doesn't turn up for a job it cannot do.
+3. **The closing line** — Last, the closing line of the moment label: "Not for water samples or filming." It tells the pilot where the card stops, so it doesn't turn up for a job it cannot do. Treat it as a choice and not a rule: the notes say who recommends it, and that nobody has measured it.
 
 ### More cards, harder choice {#more-cards-harder-choice}
 
@@ -383,16 +404,18 @@ Caption: "Where you put each piece of knowledge decides how well, how widely and
 
 master: grid-1x2 · motion: local
 
-Caption: "A good skill does one job and isn't tied to any one project." Two halves. Left: an overstuffed card, "Sample, film, log and clean up". Right: a sampling card with "descend to 40 m" scribbled in for site 4; at the next site the seabed lies at 120 m and the robot hangs uselessly at 40. A callout names cohesion and coupling. The robot stops short, far above the seabed.
+Caption: "A good skill does one job and isn't tied to any one project." Two halves. Left: an overstuffed card, "Sample, film, log and clean up". Right: a sampling card with "descend to 40 m" scribbled in for site 4; at the next site the seabed lies at 120 m and the robot hangs uselessly at 40. A callout names cohesion and coupling and gives Google's rule of thumb: "If you cannot describe what the skill does in one sentence, it is two skills." The robot stops short, far above the seabed.
 
 #### Speaker notes
 
 1. **Coupling and cohesion, as first written** — "The fewer and simpler the connections between modules, the easier it is to understand each module without reference to other modules"; "Binding is the measure of the cohesiveness of a module", with functional binding the strongest [1].
    - sources: [1] Stevens, Myers and Constantine, Structured design — https://doi.org/10.1147/sj.132.0115
-2. **A coherent unit of work** — the standard says a skill should "encapsulate a coherent unit of work that composes well with other skills"; too narrow forces several to load, too broad is hard to activate precisely [2]. The "if you can't describe it in one sentence, it is two skills" test appears in none of the pages read; do not attribute it to the standard.
+2. **A coherent unit of work** — the standard says a skill should "encapsulate a coherent unit of work that composes well with other skills"; too narrow forces several to load, too broad is hard to activate precisely [2]. The "if you can't describe it in one sentence, it is two skills" test is not in the standard; do not attribute it to it.
    - sources: [2] Agent Skills, Best practices for skill creators — https://agentskills.io/skill-creation/best-practices
-3. **Hard-coded details can override the task** — in a benchmark of 98 public skills, a generic workflow template made the agent write files to `.github/workflows/` when the task required `ci/`; the authors advise abstract guidance over templates with hard-coded paths [3]. It is one worked example, not a test of this picture.
-   - sources: [3] Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering? — https://arxiv.org/abs/2603.15401
+3. **The one-sentence test is Google's** — Day 3 states it in its five rules: "One skill, one job. If you cannot describe what the skill does in one sentence, it is two skills. Decompose before writing." [3] This is Google's vendor guidance; the whitepaper gives no measurement that the test improves results.
+   - sources: [3] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+4. **Hard-coded details can override the task** — in a benchmark of 98 public skills, a generic workflow template made the agent write files to `.github/workflows/` when the task required `ci/`; the authors advise abstract guidance over templates with hard-coded paths [4]. It is one worked example, not a test of this picture.
+   - sources: [4] Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering? — https://arxiv.org/abs/2603.15401
 
 #### Voice script
 
@@ -565,15 +588,20 @@ Caption: "Test a skill by running the same task with and without it, because a b
 
 #### Speaker notes
 
-1. **Below no skill: SkillsBench, not Vercel** — skills written by the agent itself land 8.1 to 11.5 points below the no-skill baseline on all three configurations tested [1]. In Vercel's eval the skill tied the baseline at 53%; only sub-scores dipped (lint 89% against 95%) [2]. Do not attribute "below no skill" to Vercel's headline.
+1. **Below no skill: SkillsBench, not Vercel** — skills written by the agent itself land 8.1 to 11.5 points below the no-skill baseline on all three configurations tested [1]. In Vercel's eval the skill tied the baseline at 53%; only sub-scores dipped (lint 89% against 95%, test 58% against 63%) [2]. Do not attribute "below no skill" to Vercel's headline.
    - sources: [1] Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks — https://arxiv.org/abs/2602.12670
    - sources: [2] Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals — https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 2. **Bad skills can hurt, many do nothing** — of 98 public skills, 92 showed no statistically significant effect, and harmful ones lost up to 17.0 points by anchoring the agent on their own templates [3]. Curated skills raised the average pass rate from 33.9% to 50.5% [4].
    - sources: [3] Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering? — https://arxiv.org/abs/2603.15401
    - sources: [4] Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks — https://arxiv.org/abs/2602.12670
-3. **Test the label too** — the trigger set in the standard is "about 20 queries: 8-10 that should trigger and 8-10 that shouldn't", each run about 3 times [5]. Anthropic's guide says to build scenarios and compare against a no-skill baseline [6]. "Three and three" is not in either.
+3. **Test the label too** — the trigger set in the standard is "about 20 queries: 8-10 that should trigger and 8-10 that shouldn't", each run about 3 times [5]. Anthropic's guide says to build scenarios and compare against a no-skill baseline [6]. "Three and three" is in neither.
    - sources: [5] Agent Skills, Optimizing skill descriptions — https://agentskills.io/skill-creation/optimizing-descriptions
    - sources: [6] Anthropic, Skill authoring best practices — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+4. **Google sizes trigger tests differently, twice** — Day 3 says a description must pass checks "to hit the industry-standard 90% trigger accuracy rate", the first being "You must write 3 positive and 3 negative triggers", with no source for the rate. Elsewhere it says "Write three eval cases (two positive, one negative) before drafting the body" [7]. Its own counts disagree, it is Google's vendor guidance, and none of it is measured.
+   - sources: [7] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+5. **Google's reading of Vercel is wrong on one figure** — Day 3 says "a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%" [7]. In Vercel's post that is the default skill against the baseline on the test sub-score alone, and overall they tied at 53% [8]. Vercel's wording wins, and SkillsBench in the first note, not Day 3, is the evidence for skills scoring below no skill.
+   - sources: [7] Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle) — https://www.kaggle.com/whitepaper-agent-skills
+   - sources: [8] Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals — https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 
 #### Voice script
 
