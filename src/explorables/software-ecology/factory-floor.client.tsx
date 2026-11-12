@@ -11,6 +11,7 @@ import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { ViewId } from './software-ecology.types';
 import { customerCardOf, type BeltPart, type CardPart } from './stage-parts.pure.ts';
+import { StationSigns } from './station-signs.client';
 import type { WordsIn } from './use-case-words.pure.ts';
 import type { FactoryView } from './use-factory.ts';
 import { WorkCenterCard } from './work-center-card';
@@ -37,32 +38,18 @@ export interface SpotProps {
   readonly markers?: Spots<ReactNode>;
 }
 
-/** Each card's own spots, once per run, so a memoised card redraws only when its readout changes. */
+/** Each card's own Context targets, once per run, so a memoised card redraws only when its readout changes. */
 const useCardSpots = (cards: readonly CardPart[], spots: SpotProps) =>
   useMemo(
-    () =>
-      Object.fromEntries(
-        cards.map((c) => [
-          c.id,
-          { targets: spotsFor(spots.targets, `${c.id}:`), markers: spotsFor(spots.markers, `${c.id}:`) },
-        ]),
-      ),
-    [cards, spots.targets, spots.markers],
+    () => Object.fromEntries(cards.map((c) => [c.id, { targets: spotsFor(spots.targets, `${c.id}:`) }])),
+    [cards, spots.targets],
   );
 
+/** A belt's Context target, where its label sits; the floor draws no marker (feedback 10). */
 function BeltSpots({ belts, spots }: { belts: readonly BeltPart[]; spots: SpotProps }) {
   return belts.map((b) => {
-    const m = spots.markers?.[`belt:${b.key}`];
-    return m ? (
-      <span
-        key={b.key}
-        className={styles.beltSpot}
-        style={{ left: b.at.x, top: b.at.y }}
-        {...spots.targets?.[`belt:${b.key}`]}
-      >
-        {m}
-      </span>
-    ) : null;
+    const t = spots.targets?.[`belt:${b.key}`];
+    return t ? <span key={b.key} className={styles.beltSpot} style={{ left: b.at.x, top: b.at.y }} {...t} /> : null;
   });
 }
 
@@ -98,7 +85,6 @@ function CustomerStation(p: FloorProps) {
         r: p.f.snap.customer,
         words: p.words.customer,
         target: p.spots.targets?.customer,
-        marker: p.spots.markers?.customer,
         open: p.open === 'customer',
         toured: p.toured === 'customer',
       }}
@@ -123,6 +109,7 @@ function StationCards(p: FloorProps) {
             ...c,
             ...own[c.id],
             r: p.f.snap.stations[c.id] as Snapshot['stations'][string],
+            Signs: StationSigns,
             words: p.words.card,
             open: p.open === c.id,
             toured: p.toured === c.id,

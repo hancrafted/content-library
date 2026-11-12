@@ -4,6 +4,7 @@
  * so React re-renders only what changed; the words are the parts' own.
  */
 import { DAYS, Q, custOf, dials, speedOf } from './factory-dials.pure.ts';
+import { SHELF } from './factory-flow.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type { Arrivals, Settings } from './software-ecology.types';
 
@@ -30,20 +31,20 @@ export interface StationReadout {
   readonly signs: Readonly<Record<SignKind, boolean>>;
 }
 
-/** One of the last twelve releases: good or bad, and whether it brought a complaint. */
+/** One of the last twenty releases: good or bad, and whether it brought a complaint. */
 export interface Release {
   readonly good: boolean;
   readonly complaint: boolean;
 }
 
 export interface CustomerReadout {
-  /** The last twelve releases, newest first; null for an empty cell. */
+  /** The last twenty releases, newest first; null for an empty cell. */
   readonly releases: readonly (Release | null)[];
   /** Fulfilled requests a week relative to Ideal. */
   readonly output: number;
   /** Fulfilled requests a week. */
   readonly rate: number;
-  /** Good releases minus complaints, out of the last twelve. */
+  /** Good releases minus complaints, out of the last twenty. */
   readonly sat: number;
   /** Working days from request to release; null until requests flow. */
   readonly leadDays: number | null;
@@ -73,7 +74,7 @@ export const stationOf = (n: FactoryNode, x: { m: Factory; s: Settings }): Stati
   signs: Object.fromEntries(SIGNS.map((k) => [k, signOn(n, k, x)])) as Record<SignKind, boolean>,
 });
 
-/** Satisfaction over the last twelve releases: good ones minus complaints. */
+/** Satisfaction over the last twenty releases: good ones minus complaints. */
 export const shelfSat = (m: Pick<Factory, 'shelf'>): number => {
   const g = m.shelf.filter((r) => r.q === Q.GOOD).length,
     c = m.shelf.filter((r) => r.compl).length;
@@ -81,7 +82,7 @@ export const shelfSat = (m: Pick<Factory, 'shelf'>): number => {
 };
 
 export const releasesOf = (m: Pick<Factory, 'shelf'>): (Release | null)[] =>
-  Array.from({ length: 12 }, (_, i) => {
+  Array.from({ length: SHELF }, (_, i) => {
     const r = m.shelf[m.shelf.length - 1 - i];
     return r ? { good: r.q === Q.GOOD, complaint: r.compl } : null;
   });

@@ -4,14 +4,17 @@
  * closer than GAP merge into one sprite with "×n". A document leaving a station shrinks from its in-work size over the
  * stretch inside the card. Ported from the reference build's `drawBelt`.
  */
-import { badge, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
+import { badge, DOC_H, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
+import { BELT_W, RETURN_W } from './factory-layout.pure.ts';
 import type { FloorDoc, FloorList } from './factory-model.pure.ts';
 import { at, type Path } from './factory-paths.pure.ts';
 
 /** A handoff animates this long on screen at any speed; the model keeps the quarter day. */
 export const HANDOFF_SECS = 0.6;
 /** A drawn document takes this much belt; closer ones of the same kind merge. */
-export const GAP = 13;
+export const GAP = 16;
+/** A travelling document is this share of its belt's width tall (feedback 10). */
+export const BELT_FILL = 0.9;
 /** Drawn documents at most; the rest are not drawn. */
 export const MAX_SPRITES = 600;
 /** The document in work, relative to one on a belt. */
@@ -88,12 +91,15 @@ export interface Lane {
 
 const MERGE = new Float64Array(16);
 
+/** A travelling document's size, as a share of a sprite cell: `BELT_FILL` of the belt, or of the return lane. */
+export const beltScale = (back: boolean): number => (BELT_FILL * (back ? RETURN_W : BELT_W)) / DOC_H;
+
 const sprite = (f: Frame, lane: Lane, x: { k: number; s: number; cnt: number }) => {
   const p = at(lane.path, x.s);
-  const grow = x.s < lane.inner && !lane.back ? WORK_S - (WORK_S - 1) * (x.s / lane.inner) : 1,
-    sz = (lane.back ? 0.8 : 1) * SPR * grow;
+  const base = beltScale(lane.back),
+    sz = SPR * (x.s < lane.inner && !lane.back ? WORK_S - (WORK_S - base) * (x.s / lane.inner) : base);
   f.c.drawImage(f.sheet, x.k * f.px, 0, f.px, f.px, p[0] - sz / 2, p[1] - sz / 2, sz, sz);
-  if (x.cnt > 1) badge(f.c, f.C, { x: p[0] + 4, y: p[1] - 7, n: x.cnt });
+  if (x.cnt > 1) badge(f.c, f.C, { x: p[0] + 5, y: p[1] - 12, n: x.cnt });
   f.sprites++;
 };
 

@@ -68,6 +68,9 @@ const DW = 9,
   DH = 11.5,
   DF = 3;
 
+/** A drawn document's height in sprite units, at `s: 1.05` on a sprite cell: what `makeSheet` draws. */
+export const DOC_H = DH * 1.05;
+
 const sheetPath = (c: Ctx) => {
   c.beginPath();
   c.moveTo(-DW / 2, -DH / 2);

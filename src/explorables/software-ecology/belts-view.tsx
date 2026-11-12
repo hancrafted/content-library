@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import type { LabelPlace } from './factory-labels.pure.ts';
-import { offsetD, RET, type BeltLayout, type FactoryLayout } from './factory-layout.pure.ts';
+import { BELT_W, offsetD, RET, RETURN_W, type BeltLayout, type FactoryLayout } from './factory-layout.pure.ts';
 import styles from './software-ecology.module.css';
 
 /*
@@ -9,8 +9,7 @@ import styles from './software-ecology.module.css';
  * the reference build's `beltSvg` and `renderFactory`.
  */
 
-const BW = 22,
-  SW = BW - 4;
+const SW = BELT_W - 4;
 
 function Lanes({ belts, retOn }: { belts: readonly BeltLayout[]; retOn: Readonly<Record<string, boolean>> }) {
   return (
@@ -19,7 +18,7 @@ function Lanes({ belts, retOn }: { belts: readonly BeltLayout[]; retOn: Readonly
         const d = offsetD(b.path, RET);
         return (
           <g key={b.key} className={styles.ret} data-on={!!retOn[b.key]}>
-            <path d={d} className={styles.beltRail} strokeWidth="13" />
+            <path d={d} className={styles.beltRail} strokeWidth={RETURN_W} />
             <path d={d} className={styles.beltSurface} strokeWidth="10" />
             <path d={d} className={styles.beltSlats} strokeWidth="8" data-back="true" />
           </g>
@@ -34,7 +33,7 @@ function Belts({ belts, retOn }: { belts: readonly BeltLayout[]; retOn: Readonly
     <>
       <Lanes belts={belts.filter((b) => b.returns)} retOn={retOn} />
       {belts.map((b) => (
-        <path key={`r${b.key}`} d={b.path.d} className={styles.beltRail} strokeWidth={BW + 2} />
+        <path key={`r${b.key}`} d={b.path.d} className={styles.beltRail} strokeWidth={BELT_W + 2} />
       ))}
       {belts.map((b) => (
         <path key={`s${b.key}`} d={b.path.d} className={styles.beltSurface} strokeWidth={SW} />

@@ -145,11 +145,11 @@ card:
     unread: 'Ungelesen durchgewinkt: Die Warteschlange ist so voll, dass schlechte Arbeit ungeprüft durchgeht'
     complaint: Hier ist eine Kundenreklamation angekommen
 customer:
-  lastReleases: Die letzten 12 Releases
+  lastReleases: Die letzten 20 Releases
   ofIdeal: vom Ideal
   outputTip: 'Output: erfüllte Anfragen pro Woche, im Verhältnis zum Ideal'
   satisfied: Zufrieden
-  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 12'
+  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 20'
   leadTime: Durchlaufzeit
   leadTip: 'Durchlaufzeit: Arbeitstage von einer Anfrage bis zu ihrem Release, über etwa sechs Wochen (Littles Gesetz: Anfragen in der Linie ÷ erledigte Anfragen pro Woche).'
   couldServe: Könnte bedienen
@@ -166,8 +166,8 @@ customer:
   random: zufällig
 dock:
   label: Beim Kunden
-  eyebrow: Beim Kunden · die letzten 12 Releases
-  grid: '{good} der letzten 12 Releases gut, {complaints} brachten Reklamationen'
+  eyebrow: Beim Kunden · die letzten 20 Releases
+  grid: '{good} der letzten 20 Releases gut, {complaints} brachten Reklamationen'
   output: Output im Verhältnis zum Ideal
   sub: '{relative}: etwa {n} erfüllte Anfragen pro Woche'
   same: Etwa so viel wie im Ideal
@@ -175,7 +175,7 @@ dock:
   third: Etwa ein Drittel des Ideals
   times: '{k}× Ideal'
   satisfaction: Kundenzufriedenheit
-  satNote: gute Releases minus Reklamationen, von den letzten 12
+  satNote: gute Releases minus Reklamationen, von den letzten 20
   verdicts:
     moreUnhappier: Mehr Output, ein unzufriedenerer Kunde
     unhappy: Der Kunde ist unzufrieden

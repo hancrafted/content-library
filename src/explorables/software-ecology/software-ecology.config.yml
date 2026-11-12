@@ -147,11 +147,11 @@ card:
     unread: 'Passing unread: its queue is so full that bad work goes through unchecked'
     complaint: A customer complaint arrived here
 customer:
-  lastReleases: The last 12 releases
+  lastReleases: The last 20 releases
   ofIdeal: of ideal
   outputTip: 'Output: fulfilled requests a week, relative to ideal'
   satisfied: Satisfied
-  satTip: 'Customer satisfaction: good releases minus complaints, out of the last 12'
+  satTip: 'Customer satisfaction: good releases minus complaints, out of the last 20'
   leadTime: Lead time
   leadTip: 'Lead time: working days from a request to its release, over about six weeks (Little’s law: requests in the line ÷ requests finished a week).'
   couldServe: Could serve
@@ -168,8 +168,8 @@ customer:
   random: random
 dock:
   label: At the Customer
-  eyebrow: At the Customer · the last 12 releases
-  grid: '{good} of the last 12 releases good, {complaints} brought complaints'
+  eyebrow: At the Customer · the last 20 releases
+  grid: '{good} of the last 20 releases good, {complaints} brought complaints'
   output: Output relative to ideal
   sub: '{relative}: about {n} requests fulfilled a week'
   same: About as much as in Ideal
@@ -177,7 +177,7 @@ dock:
   third: About a third of Ideal
   times: '{k}× Ideal'
   satisfaction: Customer satisfaction
-  satNote: good releases minus complaints, out of the last 12
+  satNote: good releases minus complaints, out of the last 20
   verdicts:
     moreUnhappier: More output, an unhappier customer
     unhappy: The customer is unhappy

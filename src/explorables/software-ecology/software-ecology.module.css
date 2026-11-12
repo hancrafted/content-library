@@ -476,6 +476,7 @@
 .sign[data-on='true'] {
   opacity: 1;
   transform: none;
+  pointer-events: auto;
 }
 .turbo {
   position: absolute;
@@ -536,14 +537,14 @@
   gap: 6px;
   align-items: center;
 }
-.grid12 {
+.grid20 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   gap: 3px;
   height: 80px;
 }
-.grid12 i,
+.grid20 i,
 .dockGrid i {
   border-radius: 2px;
   border: 1px solid var(--fg-12);
@@ -552,15 +553,15 @@
   place-items: center;
   color: var(--destructive);
 }
-.grid12 i[data-q='good'],
+.grid20 i[data-q='good'],
 .dockGrid i[data-q='good'] {
   background: var(--good-tint);
 }
-.grid12 i[data-q='bad'],
+.grid20 i[data-q='bad'],
 .dockGrid i[data-q='bad'] {
   background: var(--bad-tint);
 }
-.grid12 .ico {
+.grid20 .ico {
   width: 10px;
   height: 10px;
   stroke-width: 2.4;
@@ -672,7 +673,7 @@
 }
 .dockGrid {
   display: grid;
-  grid-template-columns: repeat(3, 34px);
+  grid-template-columns: repeat(4, 34px);
   grid-auto-rows: 26px;
   gap: 4px;
 }
@@ -795,16 +796,11 @@
   bottom: 0;
   width: 50px;
 }
-.spotMarker {
-  position: absolute;
-  top: 0;
-  right: calc(100% + 2px);
-  display: flex;
-  pointer-events: auto;
-}
 .beltSpot {
   position: absolute;
-  pointer-events: auto;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
   translate: -50% -50%;
 }
 

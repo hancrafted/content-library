@@ -37,7 +37,7 @@ function Satisfaction({ sat, w }: { sat: number; w: DockWords }) {
   );
 }
 
-/** At the Customer, below the stage (design-ADR 0024 §14): the last twelve releases, output against Ideal, satisfaction and the verdict. */
+/** At the Customer, below the stage (design-ADR 0024 §14): the last twenty releases, output against Ideal, satisfaction and the verdict. */
 export const DockView = memo(function DockView({
   r,
   words: w,
