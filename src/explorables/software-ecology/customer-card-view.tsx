@@ -1,11 +1,11 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { memo, type ReactNode } from 'react';
+import { memo, type CSSProperties } from 'react';
 import { Glyph } from './factory-glyph-view';
 import type { Snapshot } from './factory-model.pure.ts';
 import type { CustomerWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import type { Release } from './stage-readouts.pure.ts';
+import { SHELF_COLS, SHELF_ROWS, type Release } from './stage-readouts.pure.ts';
 import { boxStyle, openerProps, type Box } from './station-card-view';
 
 export interface CustomerCardProps {
@@ -13,7 +13,6 @@ export interface CustomerCardProps {
   readonly title: string;
   readonly r: Snapshot['customer'];
   readonly words: CustomerWords;
-  readonly marker?: ReactNode;
   readonly target?: TargetProps;
   /** "{title}: open its settings", the card's name as a button. */
   readonly label?: string;
@@ -23,7 +22,13 @@ export interface CustomerCardProps {
   readonly toured?: boolean;
 }
 
-/** The twelve release cells, newest first: good or bad, a complaint marked. */
+/** The shelf grid's size as CSS custom properties: `SHELF_COLS` across. */
+export const shelfGrid = {
+  '--shelf-cols': SHELF_COLS,
+  '--shelf-rows': SHELF_ROWS,
+} as CSSProperties;
+
+/** The twenty release cells, newest first: good or bad, a complaint marked. */
 export function ReleaseCells({ releases }: { readonly releases: readonly (Release | null)[] }) {
   return releases.map((s, i) => (
     <i key={i} data-q={s ? (s.good ? 'good' : 'bad') : undefined}>
@@ -64,7 +69,7 @@ function Readouts({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
 function Output({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
   return (
     <div className={styles.custRow}>
-      <div className={styles.grid12} role="img" aria-label={w.lastReleases}>
+      <div className={styles.grid20} style={shelfGrid} role="img" aria-label={w.lastReleases}>
         <ReleaseCells releases={r.releases} />
       </div>
       <div className={styles.rel} data-tip={w.outputTip}>
@@ -84,17 +89,16 @@ function Demand({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
   );
 }
 
-function Head({ title, marker }: { readonly title: string; readonly marker?: ReactNode }) {
+function Head({ title }: { readonly title: string }) {
   return (
     <div className={styles.head}>
       <Glyph name="customer" className={styles.gly} />
       <span className={`${styles.title} font-semibold`}>{title}</span>
-      {marker}
     </div>
   );
 }
 
-/** The Customer on the floor (design-ADR 0024 §14): its last twelve releases, output against Ideal, and its readouts. */
+/** The Customer on the floor (design-ADR 0024 §14): its last twenty releases, output against Ideal, and its readouts. */
 export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardProps) {
   const { r, words: w } = p;
   return (
@@ -108,7 +112,7 @@ export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardPr
       style={boxStyle(p.box)}
       {...p.target}
     >
-      <Head title={p.title} marker={p.marker} />
+      <Head title={p.title} />
       <div className={`${styles.body} ${styles.bodyCust}`}>
         <Output r={r} words={w} />
         <Readouts r={r} words={w} />

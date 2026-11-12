@@ -10,6 +10,9 @@ import type { Belt, Doc, Factory, FactoryNode, Job } from './factory.types';
 export { FAIL, FROM_SRC, MAIN, OWN, REDO } from './factory-docs.pure.ts';
 export const BUMP = 1 / TAU;
 
+/** The releases the Customer keeps in view: the card's grid, and what satisfaction is measured over. */
+export const SHELF = 20;
+
 const same = (r: Run, x: Run): boolean => r.q === x.q && r.ai === x.ai && r.fl === x.fl && r.e === x.e && r.b === x.b;
 
 /** Joins the last run when it holds the same jobs from the same week; else a new run at the back. */
@@ -150,12 +153,16 @@ const toCustomer = (m: Factory, e: Belt, x: Token): void => {
     countOutput(m, x);
     if (e.release) release(m, x);
   }
-  if (m.shelf.length > 12) m.shelf.splice(0, m.shelf.length - 12);
+  if (m.shelf.length > SHELF) m.shelf.splice(0, m.shelf.length - SHELF);
 };
 
 export const deliver = (m: Factory, e: Belt, x: Token): void => {
   const B_ = e.to;
-  if (B_.kind === 'customer') return toCustomer(m, e, x);
+  if (B_.kind === 'customer') {
+    toCustomer(m, e, x);
+    m.hook?.('arrive', B_, { belt: e, x });
+    return;
+  }
   B_.rate.arr += x.c * BUMP;
   if (x.fl & COMPL) B_.sign.complaint = m.t;
   const run = new Run({ q: x.q, ai: x.ai, fl: x.fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c });

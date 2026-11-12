@@ -4,6 +4,7 @@
  */
 import { SPEEDS } from './factory-dials.pure.ts';
 import { validKey, validTest } from './factory-scenario.pure.ts';
+import { OWN_RATE_MAX } from './own-work.types';
 import {
   absentOr,
   apply,
@@ -142,9 +143,23 @@ const stateCenters = (st: Map_, ids: Set<string>, E: Sink): void => {
 };
 
 /** The saved state of an exchange file. */
-export const stateProblems = (state: unknown, x: { E: Sink; ids: Set<string> }): void => {
+const stateSources = (st: Map_, sources: Set<string>, E: Sink): void => {
+  if (!absentOr(st.sources, isMap)) E('state.sources: a map { <source id>: { rate, arrivals } }');
+  for (const [id, o] of Object.entries(mapOf(st.sources))) {
+    const p = `state.sources.${id}`;
+    if (!sources.has(id)) E(`${p}: no such source`);
+    else if (!isMap(o)) E(`${p}: a map { rate, arrivals }`);
+    else {
+      if (!absentOr(o.rate, (v) => isNum(v, 0, OWN_RATE_MAX))) E(`${p}.rate: tickets a week, 0 to ${OWN_RATE_MAX}`);
+      if (!absentOr(o.arrivals, (v) => oneOf(v, ['steady', 'random']))) E(`${p}.arrivals: steady or random`);
+    }
+  }
+};
+
+export const stateProblems = (state: unknown, x: { E: Sink; ids: Set<string>; sources?: Set<string> }): void => {
   const st = mapOf(state),
     { E, ids } = x;
+  stateSources(st, x.sources ?? new Set(), E);
   apply(STATE, { x: st, p: 'state', ids }, E);
   for (const [k, v] of Object.entries(mapOf(st.mechanics)))
     if (!MECHS.includes(k) || typeof v !== 'boolean') E(`state.mechanics.${k}: true or false`);

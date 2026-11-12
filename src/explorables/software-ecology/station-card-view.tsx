@@ -1,6 +1,6 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { memo, type ReactNode } from 'react';
+import { memo, type ComponentType } from 'react';
 import { Glyph } from './factory-glyph-view';
 import type { CardWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
@@ -27,6 +27,9 @@ export const openerProps = (label: string | undefined, open: boolean | undefined
       }
     : { 'data-open': open, 'data-toured': toured || undefined };
 
+/** What the signs above a station card need. */
+export type SignsProps = Pick<StationCardProps, 'signs' | 'r' | 'words' | 'targets'>;
+
 export interface StationCardProps {
   readonly id: string;
   readonly box: Box;
@@ -36,10 +39,14 @@ export interface StationCardProps {
   /** The signs this station can show, in order. */
   readonly signs: readonly SignKind[];
   readonly r: StationReadout;
+  /**
+   * The signs above the card, a client leaf the floor passes in: each sign carries the site's tooltip (a `*-view` file
+   * renders on the server and holds no hook, FE-006). A component, not an element, so the memoised card stays still.
+   */
+  readonly Signs: ComponentType<SignsProps>;
   readonly words: CardWords;
-  /** Context targets and markers by spot: `card`, `rack`, or a sign's kind. */
+  /** Context targets by spot: `card`, `rack`, or a sign's kind. The floor carries no Context marker (feedback 10). */
   readonly targets?: Readonly<Partial<Record<string, TargetProps>>>;
-  readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
   /** "{title}: open its dashboard", the card's name as a button; the floor handles the click. */
   readonly label?: string;
   /** Its dashboard is open. */
@@ -63,42 +70,9 @@ function Status({ r, words }: Pick<StationCardProps, 'r' | 'words'>) {
   );
 }
 
-function Signs({
-  signs,
-  r,
-  words,
-  targets,
-  markers,
-}: Pick<StationCardProps, 'signs' | 'r' | 'words' | 'targets' | 'markers'>) {
-  const marked = signs.filter((k) => markers?.[k]);
-  return (
-    <div className={styles.signs}>
-      {signs.map((k) => (
-        <span
-          key={k}
-          className={styles.sign}
-          data-sign={k}
-          data-on={r.signs[k]}
-          data-tip={words.signs[k]}
-          aria-label={words.signs[k]}
-          {...targets?.[k]}
-        >
-          <Glyph name={k} className={styles.ico} />
-        </span>
-      ))}
-      {marked.length ? <span className={styles.spotMarker}>{marked.map((k) => markers?.[k])}</span> : null}
-    </div>
-  );
-}
-
-/** The rack's place on the card, for a Context target or marker; the canvas draws the rack itself. */
-function RackSpot({ targets, markers }: Pick<StationCardProps, 'targets' | 'markers'>) {
-  if (!targets?.rack && !markers?.rack) return null;
-  return (
-    <div className={styles.rackSpot} {...targets?.rack}>
-      {markers?.rack}
-    </div>
-  );
+/** The rack's place on the card, for a Context target; the canvas draws the rack itself. */
+function RackSpot({ targets }: Pick<StationCardProps, 'targets'>) {
+  return targets?.rack ? <div className={styles.rackSpot} {...targets.rack} /> : null;
 }
 
 function Head(p: Pick<StationCardProps, 'icon' | 'title' | 'inspection' | 'words'>) {
@@ -143,11 +117,11 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       {...p.targets?.card}
     >
       <Head {...p} />
-      <RackSpot targets={p.targets} markers={p.markers} />
+      <RackSpot targets={p.targets} />
       <div className={styles.body}>
         <Status r={p.r} words={p.words} />
       </div>
-      <Signs signs={p.signs} r={p.r} words={p.words} targets={p.targets} markers={p.markers} />
+      <p.Signs signs={p.signs} r={p.r} words={p.words} targets={p.targets} />
       <Turbo />
     </div>
   );

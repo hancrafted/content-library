@@ -1,7 +1,7 @@
 {
   "title": "Play",
   "heading": "The tire swing factory",
-  "caption": "AI unbalanced: seven roles and one Customer as a factory, AI at the engineer, quality assurance’s rack full and the Customer getting far less than they ask for.",
+  "caption": "A company is an ecosystem of people, roles and tools, wired by handoffs. Change one part and watch the pressure travel through the rest, all the way to the Customer.",
   "voiceScript": {
     "segments": {
       "you-know-this-cartoon": {
@@ -11,8 +11,8 @@
       },
       "the-factory-runs-live": {
         "title": "The factory runs live",
-        "keywords": "runs live, Tire swing 2.0, factory, AI on, Customer",
-        "script": "This one runs live, so nothing here rests on my word. It starts on Tire swing 2.0, every department with its panel of the cartoon, steps into the factory, and then AI goes on. Every document on the belts is a task, the requests come from the Customer on the left, and the releases go back to the Customer. Watch what the Customer gets."
+        "keywords": "runs live, Who does what, In theory, In practice, factory, AI on, Customer",
+        "script": "This one runs live, so nothing here rests on my word. It starts on Who does what, every department with its panel of the cartoon, steps into the factory through In theory and In practice, and then AI goes on. Every document on the belts is a task, the requests come from the Customer on the left, and the releases go back to the Customer. Watch what the Customer gets."
       },
       "map-your-team": {
         "title": "Map your team",

@@ -44,6 +44,7 @@ const sources = (B: Bundle, nodes: Map<string, FactoryNode>, seed: number): Tick
     id: x.id,
     n: nodes.get(x.at) as FactoryNode,
     rate: x.rate,
+    arrivals: x.arrivals,
     next: Infinity,
     seen: -1,
     modeSeen: '',

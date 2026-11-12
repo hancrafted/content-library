@@ -4,7 +4,7 @@
  * second. It pauses outside the active Slide (the Slide mount's `data-zone`, FE-009), on a hidden page and under
  * reduced motion, where it warms at once and shows one steady frame. Reached only from the Explorable's client leaf.
  */
-import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
 import type { Snapshot } from './factory-model.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
@@ -12,6 +12,7 @@ import { SPEED_1X, type FactoryRun } from './factory-run.pure.ts';
 import type { PileStyle } from './paint-pile.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
+import { useReadouts, type Read } from './use-readouts.ts';
 import { useRecolor } from './use-recolor.ts';
 import { useRun, type FactoryControls } from './use-run.ts';
 
@@ -74,9 +75,6 @@ interface Live {
   /** Called after every painted frame: the compare stream draws its live parts here. */
   readonly onDraw?: (run: FactoryRun, speed: number) => void;
 }
-
-/** Reads the run into React: the readouts, and the dashboards on show; charts only when asked. */
-type Read = (run: FactoryRun, charts?: boolean) => void;
 
 const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number }): DrawAt => {
   const w = run.warmProgress;
@@ -162,18 +160,6 @@ function useLive(now: Live): RefObject<Live> {
     live.current = now;
   });
   return live;
-}
-
-/** The readouts in React state, and the one way to refresh them; a new watch list reads at once. */
-function useReadouts(run: FactoryRun, live: RefObject<Live>, watchKey: string) {
-  const [snap, setSnap] = useState(() => run.read());
-  const read = useCallback<Read>(
-    (r, charts = true) =>
-      setSnap((prev) => r.read({ watch: live.current.watch, stream: live.current.stream, charts, prev })),
-    [live],
-  );
-  useEffect(() => read(run), [read, run, watchKey]);
-  return { snap, read };
 }
 
 export interface FactoryOptions {

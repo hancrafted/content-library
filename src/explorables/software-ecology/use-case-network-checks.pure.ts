@@ -3,6 +3,7 @@
  * software-ecology-factory/5), ported from the reference build's validate(), messages and order unchanged.
  */
 import { MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
+import { OWN_RATE_MAX } from './own-work.types';
 import type { Strength } from './software-ecology.types';
 import {
   absentOr,
@@ -104,7 +105,9 @@ interface SourceAt {
 const SOURCE: readonly Rule<SourceAt>[] = [
   ({ s, i }) => typeof s.id !== 'string' && `sources[${i}].id: a word`,
   ({ s, i, ids }) => !ids.has(s.at as string) && `sources[${i}].at: the work center that writes these tickets`,
-  ({ s, i }) => !isNum(s.rate, 0, 50) && `sources[${i}].rate: tickets a week, 0 to 50`,
+  ({ s, i }) => !isNum(s.rate, 0, OWN_RATE_MAX) && `sources[${i}].rate: tickets a week, 0 to ${OWN_RATE_MAX}`,
+  ({ s, i }) =>
+    !absentOr(s.arrivals, (v) => v === 'steady' || v === 'random') && `sources[${i}].arrivals: steady or random`,
 ];
 
 const mechanicProblem = (k: string, v: unknown): string | false => {

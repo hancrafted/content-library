@@ -12,7 +12,7 @@ customer:
   { at: [115, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
 # company: service (only the Customer asks) or product (roles also write tickets of their own: the sources below).
 company: product
-sources: # Product company: own tickets a week, written into a role's backlog and handed on like a request
+sources: # Product company: own tickets a week (rate), written into a role's backlog and handed on like a request; optional arrivals: steady | random (the state's own by default). Each one is also set on its role's dashboard under Own work.
   - { id: roadmap, at: pm, rate: 2 } # roadmap items: the product manager to the analyst
   - { id: leads, at: sales, rate: 1 } # leads: Sales to the product manager
   - { id: debt, at: eng, rate: 1 } # tech debt: the engineer to quality assurance

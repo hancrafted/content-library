@@ -19,6 +19,9 @@ export const HALF = 110,
   HEAD = 28;
 /** The document in work sits at x+WX, centred right of the rack; top and bottom ports sit on that line. */
 export const WX = 25;
+/** A belt's width with its rails, and a return lane's, in layout units: the stage draws them, documents ride them. */
+export const BELT_W = 22,
+  RETURN_W = 13;
 export const CUST_W = 107,
   CUST_TOP = 128,
   CUST_BOT = 128;

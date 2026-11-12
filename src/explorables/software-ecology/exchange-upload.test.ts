@@ -3,6 +3,7 @@ import { parse, stringify } from 'yaml';
 import { exportExchange, type PageState } from './exchange-file.pure.ts';
 import { uploadExchange } from './exchange-upload.ts';
 import { startSettings } from './factory-dials.pure.ts';
+import { withOwn } from './factory-settings.pure.ts';
 import { catalogWordsFor } from './software-ecology-data.ts';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -121,6 +122,24 @@ describe('failure cases', () => {
     // ASSERT
     expect(up).toEqual({ kind: 'broken', problems });
   });
+
+  it('refuses a saved own-work source that the file does not have, and a rate out of range', () => {
+    // ARRANGE
+    const tooMany = 99;
+    const unknownProblem = 'state.sources.nope: no such source';
+    const rangeProblem = 'state.sources.roadmap.rate: tickets a week, 0 to 50';
+    const page = busyPage();
+    const text = exportExchange(
+      builtinBundle('tire'),
+      { ...page, s: withOwn(page.s, 'roadmap', { rate: 4 }) },
+      CATALOGS,
+    ).replace('roadmap: { rate: 4 }', `nope: { rate: ${tooMany} }\n    roadmap: { rate: ${tooMany} }`);
+    // ACT
+    const up = uploadExchange(text, 'bad.yaml');
+    // ASSERT
+    expect(up.kind).toBe('broken');
+    expect(up.kind === 'broken' && up.problems).toEqual([unknownProblem, rangeProblem]);
+  });
 });
 
 describe('edge cases', () => {
@@ -141,5 +160,21 @@ describe('edge cases', () => {
     const up = uploadExchange(text, 'n.yaml');
     // ASSERT
     expect(up).toMatchObject({ kind: 'loaded', page });
+  });
+  it('carries own-work rates and arrivals through Download and Upload, and writes the same file again', () => {
+    // ARRANGE
+    const rate = 4;
+    const page = busyPage();
+    const own = { roadmap: { rate, arrivals: 'steady' }, debt: { rate: 0 } };
+    const sourcesBlock = `  sources:\n    roadmap: { rate: ${rate}, arrivals: steady }\n    debt: { rate: 0 }\n`;
+    const set = withOwn(withOwn(page.s, 'roadmap', own.roadmap as never), 'debt', own.debt);
+    const text = exportExchange(builtinBundle('tire'), { ...page, s: set }, CATALOGS);
+    // ACT
+    const up = uploadExchange(text, 'own.yaml');
+    const again = up.kind === 'loaded' ? exportExchange(up.bundle, up.page, CATALOGS) : '';
+    // ASSERT
+    expect(up.kind === 'loaded' && up.page.s.own).toEqual(own);
+    expect(again).toEqual(text);
+    expect(text).toContain(sourcesBlock);
   });
 });

@@ -19,7 +19,7 @@ export interface PreviewCustomer {
   readonly label: string;
   readonly output: string;
   readonly satisfied: string;
-  /** The last twelve releases, oldest first, filling a 3×4 grid. */
+  /** The last twenty releases, oldest first, filling a 4×5 grid. */
   readonly releases: readonly Release[];
 }
 
@@ -166,8 +166,8 @@ function Customer({ customer }: { customer: PreviewCustomer }) {
       {customer.releases.map((release, index) => (
         <rect
           key={index}
-          x={16 + (index % 3) * 12}
-          y={50 + Math.floor(index / 3) * 12}
+          x={16 + (index % 4) * 12}
+          y={50 + Math.floor(index / 4) * 12}
           width="9"
           height="9"
           rx="2"

@@ -6,7 +6,7 @@
 import { parse } from 'yaml';
 import { z } from 'zod';
 import type { Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';
-import { isMap } from './use-case-checks.pure.ts';
+import { isMap, listOf, mapOf } from './use-case-checks.pure.ts';
 import { dataProblems } from './use-case-network-checks.pure.ts';
 import { presetProblems, stateProblems, unretired } from './use-case-preset-checks.pure.ts';
 
@@ -19,7 +19,7 @@ const problemsOf = (doc: unknown, x: { catalog: readonly string[]; exchange: boo
   const ids = dataProblems(doc, { E, catalog: x.catalog });
   presetProblems(doc.presets, { E, ids });
   if (!x.exchange) return out;
-  stateProblems(doc.state, { E, ids });
+  stateProblems(doc.state, { E, ids, sources: new Set(listOf(doc.sources).map((s) => String(mapOf(s).id))) });
   const en = isMap(doc.i18n) && isMap(doc.i18n.en) ? doc.i18n.en : {};
   if (typeof en.name !== 'string') E('i18n.en.name: the use case name in English');
   return out;

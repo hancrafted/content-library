@@ -1,7 +1,7 @@
 // The factory model's shapes (design-ADR 0024 §1–§5): its network, work centers, belts, servers and documents.
 import type { Job, Run, Token } from './factory-docs.pure.ts';
 import type { Ring, Streams } from './factory-random.pure.ts';
-import type { Bundle, CenterDef, Cust, Dials, RoleDef, Settings } from './software-ecology.types';
+import type { Arrivals, Bundle, CenterDef, Cust, Dials, RoleDef, Settings } from './software-ecology.types';
 export type { Streams } from './factory-random.pure.ts';
 
 export { Job, Run, Token } from './factory-docs.pure.ts';
@@ -144,6 +144,7 @@ export interface TicketSource extends Streams {
   readonly id: string;
   readonly n: FactoryNode;
   readonly rate: number;
+  readonly arrivals?: Arrivals;
   next: number;
   seen: number;
   modeSeen: string;

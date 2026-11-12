@@ -27,9 +27,9 @@ describe('success cases', () => {
     );
   });
 
-  it('shows the Customer at 0.6× of ideal, 17 % satisfied and 75 days lead time', () => {
+  it('shows the Customer at 0.6× of ideal, 40 % satisfied and 75 days lead time', () => {
     // ARRANGE
-    const expected = { output: 0.6, sat: 0.17, leadDays: 75, releases: 12 };
+    const expected = { output: 0.6, sat: 0.4, leadDays: 75, releases: 20 };
     const tenths = (x: number) => Math.round(x * 10) / 10;
     const hundredths = (x: number) => Math.round(x * 100) / 100;
     // ACT

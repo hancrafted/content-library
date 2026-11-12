@@ -8,6 +8,7 @@ import {
   custOf,
   dials,
   DTW,
+  ownOf,
   productCo,
   Q,
   RED,
@@ -84,10 +85,11 @@ const requests = (m: Factory, t0: number, t1: number): void => {
 };
 
 /** One source's own tickets up to t1, written into its role's backlog. */
-const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number; mode: Arrivals }): void => {
+const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): void => {
   const n = src.n,
-    rs = srcRate(src.rate, m.dc[n.idx]),
-    mode = x.mode;
+    own = ownOf(src, { s: m.s, mode: m.cs.mode }),
+    rs = srcRate(own.rate, m.dc[n.idx]),
+    mode = own.arrivals;
   if (rs !== src.seen || mode !== src.modeSeen) {
     src.seen = rs;
     src.modeSeen = mode;
@@ -102,10 +104,10 @@ const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number; mod
   }
 };
 
-/** Own tickets (Product company): steady in Ideal, random otherwise, as the Customer's requests arrive. */
+/** Own tickets (Product company): each source at its own rate and arrivals, its own random stream. */
 const ownTickets = (m: Factory, t0: number, t1: number): void => {
   if (!productCo(m.s)) return;
-  for (const src of m.srcs) tickets(m, src, { t0, t1, mode: m.cs.mode });
+  for (const src of m.srcs) tickets(m, src, { t0, t1 });
 };
 
 /** Belts: deliver what has arrived. */

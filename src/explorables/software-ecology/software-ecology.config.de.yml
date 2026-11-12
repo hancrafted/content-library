@@ -145,11 +145,11 @@ card:
     unread: 'Ungelesen durchgewinkt: Die Warteschlange ist so voll, dass schlechte Arbeit ungeprüft durchgeht'
     complaint: Hier ist eine Kundenreklamation angekommen
 customer:
-  lastReleases: Die letzten 12 Releases
+  lastReleases: Die letzten 20 Releases
   ofIdeal: vom Ideal
   outputTip: 'Output: erfüllte Anfragen pro Woche, im Verhältnis zum Ideal'
   satisfied: Zufrieden
-  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 12'
+  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 20'
   leadTime: Durchlaufzeit
   leadTip: 'Durchlaufzeit: Arbeitstage von einer Anfrage bis zu ihrem Release, über etwa sechs Wochen (Littles Gesetz: Anfragen in der Linie ÷ erledigte Anfragen pro Woche).'
   couldServe: Könnte bedienen
@@ -166,8 +166,8 @@ customer:
   random: zufällig
 dock:
   label: Beim Kunden
-  eyebrow: Beim Kunden · die letzten 12 Releases
-  grid: '{good} der letzten 12 Releases gut, {complaints} brachten Reklamationen'
+  eyebrow: Beim Kunden · die letzten 20 Releases
+  grid: '{good} der letzten 20 Releases gut, {complaints} brachten Reklamationen'
   output: Output im Verhältnis zum Ideal
   sub: '{relative}: etwa {n} erfüllte Anfragen pro Woche'
   same: Etwa so viel wie im Ideal
@@ -175,7 +175,7 @@ dock:
   third: Etwa ein Drittel des Ideals
   times: '{k}× Ideal'
   satisfaction: Kundenzufriedenheit
-  satNote: gute Releases minus Reklamationen, von den letzten 12
+  satNote: gute Releases minus Reklamationen, von den letzten 20
   verdicts:
     moreUnhappier: Mehr Output, ein unzufriedenerer Kunde
     unhappy: Der Kunde ist unzufrieden
@@ -244,6 +244,17 @@ display:
       note: Dokumente verstreuen sich um das Bandende und zittern, wie eine Schneewehe an einer Wand
 # Das Dashboard eines Arbeitsplatzes: ein Monitor, die Regler in den Einstellungen verstaut.
 dash:
+  own:
+    title: Eigene Arbeit
+    tip: 'Tickets, die diese Rolle sich selbst schreibt, nicht für einen Kunden: eine Roadmap, Leads, technische Schulden. Sie reihen sich in dieselbe Warteschlange ein wie Kundenanfragen, wer zuerst kommt, wird zuerst bearbeitet. Nur ein Produktunternehmen hat sie; ein Dienstleister schaltet sie alle ab.'
+    help: 'Über {name}'
+    rate: Tickets pro Woche
+    rateTip: 'Wie viele eigene Tickets diese Rolle pro Woche schreibt, 0 bis 50. 0 schaltet sie ab. Der Wert der Datei ist der Startwert; „Auf Standard zurücksetzen“ stellt ihn wieder her.'
+    perWeek: '{n} pro Woche'
+    arrivals: Eintreffen
+    arrivalsTip: 'Gleichmäßig: ein Ticket alle 1/Rate einer Woche, im festen Takt. Zufällig: im Schnitt gleich viele, aber mal gehäuft, mal dünn, wie echte Tickets.'
+    steady: Gleichmäßig
+    random: Zufällig
   help: Diagramme erklären
   close: Schließen
   closeTip: Schließen (Esc)

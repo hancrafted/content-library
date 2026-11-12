@@ -13,6 +13,7 @@ import type {
   Cust,
   Mechanic,
   Over,
+  OwnSet,
   Preset,
   Settings,
   Strength,
@@ -65,6 +66,12 @@ export const withStrength = (s: Settings, k: Strength, v: number): Settings => (
   strength: { ...s.strength, [k]: v },
 });
 export const withAiq = (s: Settings, aiq: AiQuality): Settings => ({ ...s, aiq });
+/** One source's own work, from its dashboard: tickets a week or Steady and Random. Product company only reads it. */
+export const withOwn = (s: Settings, id: string, patch: OwnSet): Settings => ({
+  ...s,
+  own: { ...s.own, [id]: { ...s.own[id], ...patch } },
+});
+
 export const withCompany = (s: Settings, company: Company): Settings => ({ ...s, company });
 
 /** One change on the Customer's dashboard. */

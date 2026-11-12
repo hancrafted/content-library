@@ -1,6 +1,6 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { memo } from 'react';
-import { ReleaseCells } from './customer-card-view';
+import { ReleaseCells, shelfGrid } from './customer-card-view';
 import type { Snapshot } from './factory-model.pure.ts';
 import type { DockWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
@@ -15,7 +15,12 @@ function Grid({ r, w }: { r: Snapshot['customer']; w: DockWords }) {
   const good = r.releases.filter((s) => s?.good).length,
     complaints = r.releases.filter((s) => s?.complaint).length;
   return (
-    <div className={styles.dockGrid} role="img" aria-label={fillTemplate(w.grid, { good, complaints })}>
+    <div
+      className={styles.dockGrid}
+      style={shelfGrid}
+      role="img"
+      aria-label={fillTemplate(w.grid, { good, complaints })}
+    >
       <ReleaseCells releases={r.releases} />
     </div>
   );
@@ -37,7 +42,7 @@ function Satisfaction({ sat, w }: { sat: number; w: DockWords }) {
   );
 }
 
-/** At the Customer, below the stage (design-ADR 0024 §14): the last twelve releases, output against Ideal, satisfaction and the verdict. */
+/** At the Customer, below the stage (design-ADR 0024 §14): the last twenty releases, output against Ideal, satisfaction and the verdict. */
 export const DockView = memo(function DockView({
   r,
   words: w,

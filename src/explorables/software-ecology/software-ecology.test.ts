@@ -89,7 +89,7 @@ describe('success cases', () => {
     expect(html).toContain(german.toolbar.warming);
   });
 
-  it('places a Slide’s Context target and marker on the spot it names', () => {
+  it('places a Slide’s Context target on the spot it names, and draws no marker on the floor', () => {
     // ARRANGE
     const target = { 'data-target': 'qa-rack' };
     const marker = 'MARKER-QA-UNREAD';
@@ -102,7 +102,7 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(html).toContain('data-target="qa-rack"');
-    expect(html).toContain(marker);
+    expect(html).not.toContain(marker);
   });
 });
 

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { SHELF } from './factory-flow.pure.ts';
 import type { FactoryHandle } from './factory-model.pure.ts';
 import { scenarioStart, settingsAfter } from './factory-scenario.pure.ts';
 import { relativeOf, verdictOf } from './stage-readouts.pure.ts';
@@ -74,10 +75,10 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows twelve empty release cells, full satisfaction and no lead time on a cleared factory at day 0', () => {
+  it('shows twenty (SHELF) empty release cells, full satisfaction and no lead time on a cleared factory at day 0', () => {
     // ARRANGE
     const m = at('bug-spiral');
-    const empty = Array.from({ length: 12 }, () => null);
+    const empty = Array.from({ length: SHELF }, () => null);
     // ACT
     const c = m.read().customer;
     // ASSERT

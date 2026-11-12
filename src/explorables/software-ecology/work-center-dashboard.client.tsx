@@ -6,9 +6,10 @@ import { dialRowsOf, num, type DialKey, type DialRow } from './dash-rows.pure.ts
 import { DashFlows, DashHighlights, DashTrends } from './dash-sections-view';
 import { posToEff, type DashboardReadout, type Signal } from './dashboard-readouts.pure.ts';
 import { Glyph } from './factory-glyph-view';
+import { OwnWorkSection } from './own-work-section.client';
 import type { DashWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import type { RoleWords } from './software-ecology.types';
+import type { OwnSet, RoleWords } from './software-ecology.types';
 
 /*
  * A work center's dashboard (design-ADR 0024 §17): a monitor with its traffic light, signals and three trends; only
@@ -28,6 +29,8 @@ export interface WorkCenterDashboardProps {
   readonly titleId?: string;
   readonly onDial: (k: DialKey, v: number) => void;
   readonly onAi: (on: boolean) => void;
+  /** One own-work source changed: its tickets a week or its arrivals. */
+  readonly onOwn: (id: string, patch: OwnSet) => void;
   readonly onHelp: () => void;
   /** A close button, in the popover. */
   readonly onClose?: () => void;
@@ -203,6 +206,7 @@ export function WorkCenterDashboard(p: WorkCenterDashboardProps) {
       <Drain r={p.r} words={p.words} />
       <DashTrends r={p.r} words={p.words} />
       <Settings {...p} />
+      <OwnWorkSection own={p.r.own} words={p.words.own} onChange={p.onOwn} />
       <DashFlows r={p.r} words={p.words} />
       <DashHighlights role={p.role} words={p.words} />
     </div>
