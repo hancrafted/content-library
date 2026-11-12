@@ -61,7 +61,7 @@ const unloaded = (useCase: string): Bundle => {
 const runs = new Map<string, ScenarioRow[]>();
 const rowsOf = (useCase: string, preset: string): ScenarioRow[] => {
   const k = `${useCase}/${preset}`;
-  if (!runs.has(k)) runs.set(k, runScenario(unloaded(useCase), preset));
+  if (!runs.has(k)) runs.set(k, runScenario(unloaded(useCase), preset, { window: 0 }));
   return runs.get(k) as ScenarioRow[];
 };
 const loadedRows = new Map<string, ScenarioRow[]>();
