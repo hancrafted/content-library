@@ -1,0 +1,1436 @@
+{
+  "table_of_contents": [
+    {
+      "title": "Vibe Coding Agent\nSecurity and \nEvaluation",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [32.25191688537598, 129.2237548828125],
+        [562.4811859130859, 129.2237548828125],
+        [562.4811859130859, 324.1637878417969],
+        [32.25191688537598, 324.1637878417969]
+      ]
+    },
+    {
+      "title": "Acknowledgements",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [68.3668270111084, 129.85076522827148],
+        [207.57261657714844, 129.85076522827148],
+        [207.57261657714844, 149.4857177734375],
+        [68.3668270111084, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Table of contents",
+      "heading_level": null,
+      "page_id": 2,
+      "polygon": [
+        [68.86160659790039, 129.31781005859375],
+        [225.8147964477539, 129.31781005859375],
+        [225.8147964477539, 157.829833984375],
+        [68.86160659790039, 157.829833984375]
+      ]
+    },
+    {
+      "title": "Table of contents",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [68.9377269744873, 129.31781005859375],
+        [225.8070831298828, 129.31781005859375],
+        [225.8070831298828, 157.829833984375],
+        [68.9377269744873, 157.829833984375]
+      ]
+    },
+    {
+      "title": "Table of contents",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [68.11365509033203, 129.31781005859375],
+        [226.6893768310547, 129.31781005859375],
+        [226.6893768310547, 157.829833984375],
+        [68.11365509033203, 157.829833984375]
+      ]
+    },
+    {
+      "title": "Introduction",
+      "heading_level": null,
+      "page_id": 5,
+      "polygon": [
+        [69.11638641357422, 395.9997253417969],
+        [216.89412689208984, 395.9997253417969],
+        [216.89412689208984, 425.9757080078125],
+        [69.11638641357422, 425.9757080078125]
+      ]
+    },
+    {
+      "title": "Security: The Evolution to Secure \nAgentic Development",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [68.83879280090332, 505.4898681640625],
+        [456.82330322265625, 505.4898681640625],
+        [456.82330322265625, 561.4578857421875],
+        [68.83879280090332, 561.4578857421875]
+      ]
+    },
+    {
+      "title": "The Foundation: The 7-Pillar Agent Security Architecture",
+      "heading_level": null,
+      "page_id": 8,
+      "polygon": [
+        [68.9358959197998, 545.2427673339844],
+        [507.3443298339844, 545.2427673339844],
+        [507.3443298339844, 567.1858978271484],
+        [68.9358959197998, 567.1858978271484]
+      ]
+    },
+    {
+      "title": "Sandboxes and Supply Chain Defence (Pillars 1 & 4)",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [69.09282302856445, 131.1108741760254],
+        [461.142333984375, 131.1108741760254],
+        [461.142333984375, 151.98382568359375],
+        [69.09282302856445, 151.98382568359375]
+      ]
+    },
+    {
+      "title": "Ephemeral Sandboxing and State Management",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [68.94049072265625, 348.15621185302734],
+        [386.7978515625, 348.15621185302734],
+        [386.7978515625, 367.4137878417969],
+        [68.94049072265625, 367.4137878417969]
+      ]
+    },
+    {
+      "title": "Mitigating Hallucinated Packages",
+      "heading_level": null,
+      "page_id": 13,
+      "polygon": [
+        [68.68033218383789, 129.6357421875],
+        [296.71240997314453, 129.6357421875],
+        [296.71240997314453, 149.4857177734375],
+        [68.68033218383789, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Egress Governance and Non-Interactive Access",
+      "heading_level": null,
+      "page_id": 13,
+      "polygon": [
+        [69.09324073791504, 471.9972381591797],
+        [394.88868713378906, 471.9972381591797],
+        [394.88868713378906, 491.48577880859375],
+        [69.09324073791504, 491.48577880859375]
+      ]
+    },
+    {
+      "title": "Vibe-Coding Specifics: Securing Application Logic (Pillar 4)",
+      "heading_level": null,
+      "page_id": 14,
+      "polygon": [
+        [68.84021186828613, 466.9508514404297],
+        [525.9185485839844, 466.9508514404297],
+        [525.9185485839844, 489.1858825683594],
+        [68.84021186828613, 489.1858825683594]
+      ]
+    },
+    {
+      "title": "Application Vulnerabilities",
+      "heading_level": null,
+      "page_id": 15,
+      "polygon": [
+        [68.74649047851562, 130.24920272827148],
+        [249.0069580078125, 130.24920272827148],
+        [249.0069580078125, 149.4857177734375],
+        [68.74649047851562, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Reconciling IDE Friction with CI/CD Enforcement",
+      "heading_level": null,
+      "page_id": 15,
+      "polygon": [
+        [69.40421676635742, 453.9130554199219],
+        [400.9274139404297, 453.9130554199219],
+        [400.9274139404297, 473.48577880859375],
+        [69.40421676635742, 473.48577880859375]
+      ]
+    },
+    {
+      "title": "MCP Spoofing and Contextual Authorisation",
+      "heading_level": null,
+      "page_id": 16,
+      "polygon": [
+        [68.88945007324219, 216.9561309814453],
+        [369.31297302246094, 216.9561309814453],
+        [369.31297302246094, 236.61590576171875],
+        [68.88945007324219, 236.61590576171875]
+      ]
+    },
+    {
+      "title": "Identity, Trust & High-Stakes Actions (Pillar 5)",
+      "heading_level": null,
+      "page_id": 17,
+      "polygon": [
+        [69.08614540100098, 215.50991821289062],
+        [420.5629577636719, 215.50991821289062],
+        [420.5629577636719, 237.1859130859375],
+        [69.08614540100098, 237.1859130859375]
+      ]
+    },
+    {
+      "title": "The Confused Deputy and Delegated vs. Agentic Identity",
+      "heading_level": null,
+      "page_id": 17,
+      "polygon": [
+        [68.94340896606445, 378.7944030761719],
+        [456.22242736816406, 378.7944030761719],
+        [456.22242736816406, 398.6158447265625],
+        [68.94340896606445, 398.6158447265625]
+      ]
+    },
+    {
+      "title": "Zero Ambient Authority and JIT Downscoping",
+      "heading_level": null,
+      "page_id": 18,
+      "polygon": [
+        [68.93230247497559, 130.20350646972656],
+        [380.5216827392578, 130.20350646972656],
+        [380.5216827392578, 149.4857177734375],
+        [68.93230247497559, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Elicitation, MFA Challenges, and the \"Vibe Diff\"",
+      "heading_level": null,
+      "page_id": 18,
+      "polygon": [
+        [69.17655944824219, 399.8616027832031],
+        [387.0676574707031, 399.8616027832031],
+        [387.0676574707031, 419.4857482910156],
+        [69.17655944824219, 419.4857482910156]
+      ]
+    },
+    {
+      "title": "Red, Blue, and Green Security Teaming (Pillar 6)",
+      "heading_level": null,
+      "page_id": 19,
+      "polygon": [
+        [68.87776565551758, 440.1478271484375],
+        [436.06837463378906, 440.1478271484375],
+        [436.06837463378906, 462.1858825683594],
+        [68.87776565551758, 462.1858825683594]
+      ]
+    },
+    {
+      "title": "Invisible Payloads and Repository Poisoning",
+      "heading_level": null,
+      "page_id": 20,
+      "polygon": [
+        [68.95333099365234, 130.21641540527344],
+        [366.5024185180664, 130.21641540527344],
+        [366.5024185180664, 149.4857177734375],
+        [68.95333099365234, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "The Red Team (Agent Attacker): Injecting Adversarial Vibes",
+      "heading_level": null,
+      "page_id": 20,
+      "polygon": [
+        [68.99363708496094, 327.90545654296875],
+        [468.5273895263672, 327.90545654296875],
+        [468.5273895263672, 347.4857482910156],
+        [68.99363708496094, 347.4857482910156]
+      ]
+    },
+    {
+      "title": "The Blue Team (Agent Defender): Behavioural Analytics",
+      "heading_level": null,
+      "page_id": 21,
+      "polygon": [
+        [68.9871654510498, 130.15438842773438],
+        [443.9304656982422, 130.15438842773438],
+        [443.9304656982422, 149.4857177734375],
+        [68.9871654510498, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "The Green Team (Agent Fixer): Quarantine and Auto-Refactoring",
+      "heading_level": null,
+      "page_id": 21,
+      "polygon": [
+        [69.2571029663086, 381.5196762084961],
+        [508.2828369140625, 381.5196762084961],
+        [508.2828369140625, 401.48577880859375],
+        [69.2571029663086, 401.48577880859375]
+      ]
+    },
+    {
+      "title": "Integrating the Triad and Enforcing Small Batch Sizes",
+      "heading_level": null,
+      "page_id": 22,
+      "polygon": [
+        [68.96770477294922, 130.20236206054688],
+        [427.66163635253906, 130.20236206054688],
+        [427.66163635253906, 149.4857177734375],
+        [68.96770477294922, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Observability: Auditing the Agent's Mind (Pillar 6 & 7)",
+      "heading_level": null,
+      "page_id": 23,
+      "polygon": [
+        [69.27069282531738, 130.43907165527344],
+        [479.1204071044922, 130.43907165527344],
+        [479.1204071044922, 151.98382568359375],
+        [69.27069282531738, 151.98382568359375]
+      ]
+    },
+    {
+      "title": "Tracing the \"Vibe Trajectory\" and Content Scanning",
+      "heading_level": null,
+      "page_id": 23,
+      "polygon": [
+        [69.24234580993652, 383.8561477661133],
+        [419.16407775878906, 383.8561477661133],
+        [419.16407775878906, 403.41375732421875],
+        [69.24234580993652, 403.41375732421875]
+      ]
+    },
+    {
+      "title": "Measuring Intent Drift and Trust Decay",
+      "heading_level": null,
+      "page_id": 24,
+      "polygon": [
+        [68.73059463500977, 130.37997436523438],
+        [332.8933639526367, 130.37997436523438],
+        [332.8933639526367, 149.4857177734375],
+        [68.73059463500977, 149.4857177734375]
+      ]
+    },
+    {
+      "title": "Checkpoints and Stateful Circuit Breakers",
+      "heading_level": null,
+      "page_id": 24,
+      "polygon": [
+        [69.30257034301758, 381.9521942138672],
+        [355.0771179199219, 381.9521942138672],
+        [355.0771179199219, 401.48577880859375],
+        [69.30257034301758, 401.48577880859375]
+      ]
+    },
+    {
+      "title": "Security Recap",
+      "heading_level": null,
+      "page_id": 25,
+      "polygon": [
+        [69.05122947692871, 131.45969009399414],
+        [188.83971405029297, 131.45969009399414],
+        [188.83971405029297, 151.98382568359375],
+        [69.05122947692871, 151.98382568359375]
+      ]
+    },
+    {
+      "title": "Evaluation: Orchestrating Quality in \nIntent-Driven Agentic Systems",
+      "heading_level": null,
+      "page_id": 26,
+      "polygon": [
+        [69.3644027709961, 307.4898376464844],
+        [488.8607177734375, 307.4898376464844],
+        [488.8607177734375, 363.4578857421875],
+        [69.3644027709961, 363.4578857421875]
+      ]
+    },
+    {
+      "title": "Why evaluating vibe coding agents is different",
+      "heading_level": null,
+      "page_id": 27,
+      "polygon": [
+        [69.03011512756348, 519.8418731689453],
+        [428.78553771972656, 519.8418731689453],
+        [428.78553771972656, 541.2538909912109],
+        [69.03011512756348, 541.2538909912109]
+      ]
+    },
+    {
+      "title": "What to Evaluate",
+      "heading_level": null,
+      "page_id": 28,
+      "polygon": [
+        [68.24989700317383, 530.7967529296875],
+        [203.08204650878906, 530.7967529296875],
+        [203.08204650878906, 552.1858978271484],
+        [68.24989700317383, 552.1858978271484]
+      ]
+    },
+    {
+      "title": "",
+      "heading_level": null,
+      "page_id": 29,
+      "polygon": [
+        [319.99781799316406, 152.4785041809082],
+        [409.4702911376953, 152.4785041809082],
+        [409.4702911376953, 166.2744255065918],
+        [319.99781799316406, 166.2744255065918]
+      ]
+    },
+    {
+      "title": "",
+      "heading_level": null,
+      "page_id": 29,
+      "polygon": [
+        [111.93032455444336, 152.50939178466797],
+        [230.68444061279297, 152.50939178466797],
+        [230.68444061279297, 166.69866943359375],
+        [111.93032455444336, 166.69866943359375]
+      ]
+    },
+    {
+      "title": "",
+      "heading_level": null,
+      "page_id": 29,
+      "polygon": [
+        [108.34944534301758, 343.2422332763672],
+        [287.4857482910156, 343.2422332763672],
+        [287.4857482910156, 356.44274139404297],
+        [108.34944534301758, 356.44274139404297]
+      ]
+    },
+    {
+      "title": "How to evaluate",
+      "heading_level": null,
+      "page_id": 30,
+      "polygon": [
+        [68.55565452575684, 477.43272399902344],
+        [196.8508071899414, 477.43272399902344],
+        [196.8508071899414, 498.1858825683594],
+        [68.55565452575684, 498.1858825683594]
+      ]
+    },
+    {
+      "title": "Standardised Benchmarks & Kaggle Agent Exams",
+      "heading_level": null,
+      "page_id": 33,
+      "polygon": [
+        [68.92195129394531, 128.92988204956055],
+        [339.6722717285156, 128.92988204956055],
+        [339.6722717285156, 147.784912109375],
+        [68.92195129394531, 147.784912109375]
+      ]
+    },
+    {
+      "title": "Observability: The Prerequisite for Evaluation",
+      "heading_level": null,
+      "page_id": 34,
+      "polygon": [
+        [69.39042663574219, 130.84991455078125],
+        [422.9505157470703, 130.84991455078125],
+        [422.9505157470703, 151.98382568359375],
+        [69.39042663574219, 151.98382568359375]
+      ]
+    },
+    {
+      "title": "Applied tips for vibe-coding agent evaluation",
+      "heading_level": null,
+      "page_id": 34,
+      "polygon": [
+        [68.75233840942383, 481.98170471191406],
+        [423.8367614746094, 481.98170471191406],
+        [423.8367614746094, 502.9837951660156],
+        [68.75233840942383, 502.9837951660156]
+      ]
+    },
+    {
+      "title": "Use the session prefix as the intent rubric",
+      "heading_level": null,
+      "page_id": 34,
+      "polygon": [
+        [68.56683540344238, 521.2356262207031],
+        [297.8865509033203, 521.2356262207031],
+        [297.8865509033203, 539.5827789306641],
+        [68.56683540344238, 539.5827789306641]
+      ]
+    },
+    {
+      "title": "Judge the rendered artifact, not the code.",
+      "heading_level": null,
+      "page_id": 35,
+      "polygon": [
+        [69.29314041137695, 441.74908447265625],
+        [300.70977783203125, 441.74908447265625],
+        [300.70977783203125, 459.78485107421875],
+        [69.29314041137695, 459.78485107421875]
+      ]
+    },
+    {
+      "title": "Python",
+      "heading_level": null,
+      "page_id": 35,
+      "polygon": [
+        [80.93647956848145, 141.64645385742188],
+        [123.7990951538086, 141.64645385742188],
+        [123.7990951538086, 159.6234130859375],
+        [80.93647956848145, 159.6234130859375]
+      ]
+    },
+    {
+      "title": "Evaluate session convergence, not turn-level accuracy.",
+      "heading_level": null,
+      "page_id": 36,
+      "polygon": [
+        [69.0168571472168, 397.8672637939453],
+        [371.5843505859375, 397.8672637939453],
+        [371.5843505859375, 415.78485107421875],
+        [69.0168571472168, 415.78485107421875]
+      ]
+    },
+    {
+      "title": "Python",
+      "heading_level": null,
+      "page_id": 36,
+      "polygon": [
+        [80.91275596618652, 141.9275665283203],
+        [123.89293670654297, 141.9275665283203],
+        [123.89293670654297, 159.6234130859375],
+        [80.91275596618652, 159.6234130859375]
+      ]
+    },
+    {
+      "title": "Mine user corrections as labeled failure data.",
+      "heading_level": null,
+      "page_id": 37,
+      "polygon": [
+        [68.8139419555664, 392.42889404296875],
+        [316.9611511230469, 392.42889404296875],
+        [316.9611511230469, 409.8529052734375],
+        [68.8139419555664, 409.8529052734375]
+      ]
+    },
+    {
+      "title": "Python",
+      "heading_level": null,
+      "page_id": 37,
+      "polygon": [
+        [80.84262084960938, 141.75977325439453],
+        [123.93152618408203, 141.75977325439453],
+        [123.93152618408203, 159.6234130859375],
+        [80.84262084960938, 159.6234130859375]
+      ]
+    },
+    {
+      "title": "Python",
+      "heading_level": null,
+      "page_id": 38,
+      "polygon": [
+        [80.63243293762207, 142.0670928955078],
+        [124.12566375732422, 142.0670928955078],
+        [124.12566375732422, 159.6234130859375],
+        [80.63243293762207, 159.6234130859375]
+      ]
+    },
+    {
+      "title": "Conclusion",
+      "heading_level": null,
+      "page_id": 39,
+      "polygon": [
+        [68.97819328308105, 131.99969482421875],
+        [200.38829040527344, 131.99969482421875],
+        [200.38829040527344, 161.9757080078125],
+        [68.97819328308105, 161.9757080078125]
+      ]
+    },
+    {
+      "title": "Endnotes",
+      "heading_level": null,
+      "page_id": 40,
+      "polygon": [
+        [69.14293670654297, 131.11826705932617],
+        [136.78754425048828, 131.11826705932617],
+        [136.78754425048828, 149.4857177734375],
+        [69.14293670654297, 149.4857177734375]
+      ]
+    }
+  ],
+  "page_stats": [
+    {
+      "page_id": 0,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 9],
+        ["Line", 5],
+        ["SectionHeader", 1],
+        ["Text", 1],
+        ["Picture", 1],
+        ["PageFooter", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 1,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 25],
+        ["Line", 12],
+        ["Text", 9],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Picture", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 2,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 61],
+        ["Line", 16],
+        ["SectionHeader", 1],
+        ["TableOfContents", 1],
+        ["Picture", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 3,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 61],
+        ["Line", 16],
+        ["SectionHeader", 1],
+        ["TableOfContents", 1],
+        ["Picture", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 4,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 11],
+        ["Line", 4],
+        ["SectionHeader", 1],
+        ["TableOfContents", 1],
+        ["Picture", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 5,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 34],
+        ["Line", 16],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 6,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 63],
+        ["Line", 25],
+        ["Text", 4],
+        ["PageFooter", 2],
+        ["ListItem", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 7,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 49],
+        ["Line", 23],
+        ["Text", 4],
+        ["PageFooter", 2],
+        ["PageHeader", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 8,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 24],
+        ["Line", 12],
+        ["Text", 3],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Diagram", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 9,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 59],
+        ["Line", 26],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["ListItem", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 10,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 70],
+        ["Line", 29],
+        ["ListItem", 4],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 11,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 52],
+        ["Line", 24],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["Text", 1],
+        ["ListItem", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 12,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 43],
+        ["Line", 21],
+        ["Text", 3],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 13,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 48],
+        ["Line", 23],
+        ["Text", 3],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 14,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 47],
+        ["Line", 23],
+        ["Text", 4],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 15,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 47],
+        ["Line", 23],
+        ["Text", 5],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 16,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 51],
+        ["Line", 25],
+        ["Text", 5],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 17,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 47],
+        ["Line", 22],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 18,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 49],
+        ["Line", 23],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 19,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 53],
+        ["Line", 23],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["ListItem", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 20,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 41],
+        ["Line", 20],
+        ["Text", 3],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 21,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 51],
+        ["Line", 24],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 22,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 57],
+        ["Line", 24],
+        ["Text", 3],
+        ["ListItem", 3],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["ListGroup", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 23,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 53],
+        ["Line", 23],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 24,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 49],
+        ["Line", 22],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 25,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 67],
+        ["Line", 26],
+        ["ListItem", 5],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Text", 1],
+        ["ListGroup", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 26,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 49],
+        ["Line", 21],
+        ["Text", 5],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 27,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 23],
+        ["Line", 11],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Diagram", 1],
+        ["Caption", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 28,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 68],
+        ["Line", 26],
+        ["Text", 3],
+        ["ListItem", 3],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 29,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 36],
+        ["Line", 12],
+        ["Text", 4],
+        ["SectionHeader", 3],
+        ["ListGroup", 3],
+        ["ListItem", 3],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Caption", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 30,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 59],
+        ["Line", 22],
+        ["ListItem", 4],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 31,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 45],
+        ["Line", 14],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Table", 1],
+        ["Caption", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 32,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 61],
+        ["Line", 26],
+        ["Text", 5],
+        ["PageFooter", 2],
+        ["PageHeader", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 33,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 64],
+        ["Line", 28],
+        ["ListItem", 3],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Text", 1],
+        ["ListGroup", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 34,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 63],
+        ["Line", 24],
+        ["SectionHeader", 3],
+        ["ListItem", 3],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["ListGroup", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 35,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 50],
+        ["Line", 24],
+        ["SectionHeader", 2],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Caption", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 36,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 45],
+        ["Line", 22],
+        ["SectionHeader", 2],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["Caption", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 37,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 39],
+        ["Line", 19],
+        ["Text", 4],
+        ["SectionHeader", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 38,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 33],
+        ["Line", 16],
+        ["Text", 2],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Caption", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 39,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 46],
+        ["Line", 21],
+        ["Text", 4],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["Reference", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 40,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        ["Span", 41],
+        ["Line", 14],
+        ["ListItem", 6],
+        ["PageFooter", 2],
+        ["PageHeader", 1],
+        ["SectionHeader", 1],
+        ["ListGroup", 1]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    }
+  ],
+  "debug_data_path": "debug_data/Day 4 - Vibe Coding Agent Security and Evaluation"
+}

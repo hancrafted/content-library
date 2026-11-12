@@ -95,7 +95,8 @@ function refuse(input: PromotionInput, index: Map<string, Section>): void {
 
 /** The moves that bring every staged research folder into the llm-wiki, and the index that lists them. */
 export function promoteResearch(input: PromotionInput): { moves: ResearchMove[]; index: string } {
-  const { preamble, sections } = parseIndex(input.index);
+  const [researchIndex, raw] = input.index.split(/\n*(?=^## Raw$)/m);
+  const { preamble, sections } = parseIndex(researchIndex);
   refuse(input, sections);
   const names = researchCategoryNames(input.glossary);
   const folders = Object.keys(input.research).sort();
@@ -107,6 +108,6 @@ export function promoteResearch(input: PromotionInput): { moves: ResearchMove[];
   }
   return {
     moves: folders.map((folder) => ({ folder, to: `research/${categoryOf(folder)}/${folder}` })),
-    index: render(preamble, sections),
+    index: [render(preamble, sections), raw].filter(Boolean).join('\n'),
   };
 }

@@ -159,6 +159,18 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it('ignores entries under ## Raw when checking the llm-wiki research index', () => {
+    // ARRANGE
+    const index = ['## Research', '', RECALL_ENTRY, '', '## Raw', '', '- [Book](<raw/book.pdf>) — A raw pdf.', ''].join(
+      '\n',
+    );
+    const files = { [RECALL]: research("'Recall is U-shaped.'") };
+    // ACT
+    const findings = checkResearchIndex(index, files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('finds nothing in a runs CSV whose header is exact, with rows below it', () => {
     // ARRANGE
     const csv = [
