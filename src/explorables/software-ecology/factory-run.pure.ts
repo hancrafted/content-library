@@ -4,7 +4,7 @@
  * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
-import type { Values } from './beat-means.pure.ts';
+import { stepSampled, type Sampling, type Values } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
@@ -54,21 +54,17 @@ export interface RunOptions {
   readonly s?: Settings;
 }
 
-/** A tour step's sample steps (the judge's `sampleSteps`), the measures it reads and the readings taken so far. */
-export interface Sampling {
-  readonly at: readonly number[];
-  readonly keys: readonly string[];
-  readonly got: Values[];
+/** Where a tour step aims the run: the model step it stops on, and its sample steps (the judge's `sampleSteps`). */
+export interface Aim {
+  readonly at: number;
+  readonly sampling: Sampling | null;
 }
 
 export class FactoryRun {
   readonly preset: Preset;
   warmLeft = 0;
   dropped = 0;
-  /** A tour step's model step: time never runs past it (the page and the headless runner stop on the same step). */
-  stopAt: number | null = null;
-  /** A tour step's readings: time stops on each of its sample steps to read them, as the headless judge does. */
-  sampling: Sampling | null = null;
+  private aimed: Aim | null = null;
   private acc = 0;
   private readonly f: FactoryHandle;
   private readonly bundle: Bundle;
@@ -116,6 +112,24 @@ export class FactoryRun {
     return Math.round(this.f.weeks / DTW);
   }
 
+  /**
+   * Aims the run at a tour step: time never runs past `at` (the page and the headless runner stop on the same step) and
+   * stops on each sample step to read it, as the headless judge does; null frees the run.
+   */
+  aim(to: Aim | null) {
+    this.aimed = to;
+  }
+
+  /** The tour step's model step, or null while the run runs free. */
+  get stopAt(): number | null {
+    return this.aimed?.at ?? null;
+  }
+
+  /** The readings taken on the tour step's sample steps so far. */
+  get sampled(): readonly Values[] {
+    return this.aimed?.sampling?.got ?? [];
+  }
+
   /** The run stands on its tour step. */
   get arrived(): boolean {
     return this.stopAt !== null && !this.warming && this.k >= this.stopAt;
@@ -146,15 +160,7 @@ export class FactoryRun {
   }
 
   private steps(n: number) {
-    let left = n;
-    const s = this.sampling;
-    for (let next = s?.at[s.got.length]; s && next !== undefined && next <= this.k + left; next = s.at[s.got.length]) {
-      const by = Math.max(0, next - this.k);
-      if (by) this.f.step(by * DTW);
-      left -= by;
-      s.got.push({ ...this.f.read({ measures: s.keys }).measures });
-    }
-    if (left > 0) this.f.step(left * DTW);
+    stepSampled(this.f, { k: this.k, n, s: this.aimed?.sampling ?? null });
   }
 
   /** Warms the rest at once. */

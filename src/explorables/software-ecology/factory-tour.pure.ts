@@ -1,15 +1,15 @@
 /*
  * A guided tour on the page (design-ADR 0024 §10): a scenario's steps, each setting its dials, running at 20× to its
  * week and pausing there with its caption and its checks. It starts from the file's own settings, warmed as the
- * headless runner warms, and reads on the very model steps `runScenario` reads (the mean over a step's last 2 weeks,
- * `sampleSteps` and `meanOf`), so both read the same values; Back
+ * headless runner warms, and reads on the very model steps `runScenario` reads (the mean over a step's last WINDOW
+ * weeks (`beat-means.pure.ts`), `sampleSteps` and `meanOf`), so both read the same values; Back
  * replays from the start at once, with the same seed and the same steps. Ported from the reference build's
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
-import { meanOf, sampleSteps } from './beat-means.pure.ts';
+import { meanOf, sampleSteps, stepsTo } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
-import { settingsAfter, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
+import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 
@@ -41,24 +41,26 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
 
 /**
  * Sets the run to stop on step `i`'s week and to read on its sample steps, the headless judge's: a step's reading is
- * the mean over its last 2 weeks (grill 11 Q224).
+ * the mean over its last WINDOW weeks (grill 11 Q224).
  */
 const aim = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
   const steps = stepsOf(x.p),
     st = steps[x.i] as (typeof steps)[number];
   run.set(settingsAfter(st.set, run.topology.B, run.settings));
   const end = x.t0k + stepsTo(st.run);
-  run.stopAt = end;
-  run.sampling = {
-    at: sampleSteps({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end }),
-    keys: keysOf(x.p),
-    got: [],
-  };
+  run.aim({
+    at: end,
+    sampling: {
+      at: sampleSteps({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end }),
+      keys: keysOf(x.p),
+      got: [],
+    },
+  });
 };
 
 /** The step's reading: the mean of what the run read on its sample steps. */
 const readMean = (run: FactoryRun, p: Preset): Record<string, number> => ({
-  ...meanOf(keysOf(p), run.sampling?.got ?? []),
+  ...meanOf(keysOf(p), run.sampled),
 });
 
 /** Applies the step's dials and sets the run to stop on its week. */
@@ -71,7 +73,6 @@ const go = (run: FactoryRun, t: Tour): Tour => {
 const arrive = (run: FactoryRun, t: Tour): Tour => {
   const vals = [...t.vals];
   vals[t.i] = readMean(run, t.preset);
-  run.sampling = null;
   return { ...t, vals, phase: 'show' };
 };
 
@@ -105,8 +106,7 @@ export const settleTour = (run: FactoryRun, t: Tour): Tour => {
 /** On to the next step; null after the last, the run free to go on at the viewer's speed. */
 export const nextTour = (run: FactoryRun, t: Tour): Tour | null => {
   if (t.i >= stepsOf(t.preset).length - 1) {
-    run.stopAt = null;
-    run.sampling = null;
+    run.aim(null);
     return null;
   }
   return go(run, { ...t, i: t.i + 1 });
@@ -126,8 +126,7 @@ export const backTour = (B: Bundle, t: Tour): TourRun => {
       run.runTo(t0k + stepsTo(st.run));
       vals[j] = readMean(run, p);
     });
-  run.sampling = null;
-  run.stopAt = run.k;
+  run.aim({ at: run.k, sampling: null });
   return { run, tour: { ...t, i: idx, phase: 'show', t0k, vals } };
 };
 

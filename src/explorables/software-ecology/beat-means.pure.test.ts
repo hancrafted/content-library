@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { meanOf, sampleSteps, stepsTo } from './beat-means.pure.ts';
+import { meanOf, sampleSteps, stepSampled, stepsTo, type Sampling } from './beat-means.pure.ts';
+import { DTW } from './factory-dials.pure.ts';
 
 /*
  * A beat's reading (design-ADR 0024 §12, grill 11 Q224): the steps the headless judge and the page's tour both read
@@ -7,6 +8,19 @@ import { meanOf, sampleSteps, stepsTo } from './beat-means.pure.ts';
  */
 const WEEK = stepsTo(1);
 const EIGHTH = WEEK / 8;
+
+/** A stand-in model: its clock in steps, and one measure that reads the step it stands on. */
+const clockModel = () => {
+  const m = {
+    k: 0,
+    step: (weeks: number) => {
+      m.k += Math.round(weeks / DTW);
+    },
+    read: () => ({ measures: { 'x.step': m.k } }),
+  };
+  return m;
+};
+const sampling = (at: number[]): Sampling => ({ at, keys: ['x.step'], got: [] });
 
 describe('success cases', () => {
   it('reads a beat eight times a week over its last two weeks, the last on its end', () => {
@@ -35,9 +49,31 @@ describe('success cases', () => {
     expect(mean['qa.weeksWaiting']).toBe(expected['qa.weeksWaiting']);
     expect(mean['customer.sat']).toBeCloseTo(expected['customer.sat']);
   });
+
+  it('steps a model on, reading on each sample step it passes, and runs the rest unread', () => {
+    // ARRANGE
+    const m = clockModel(),
+      s = sampling([3, 5]),
+      n = 9;
+    const expected = { k: n, got: [{ 'x.step': 3 }, { 'x.step': 5 }] };
+    // ACT
+    stepSampled(m, { k: 0, n, s });
+    // ASSERT
+    expect({ k: m.k, got: s.got }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('steps on without reading when there is no sampling', () => {
+    // ARRANGE
+    const m = clockModel(),
+      n = 4;
+    // ACT
+    stepSampled(m, { k: 0, n, s: null });
+    // ASSERT
+    expect(m.k).toBe(n);
+  });
+
   it('reads nothing for a measure no sample carries, and 0 with no samples', () => {
     // ARRANGE
     const expected = { 'ops.stall': 0 };
@@ -50,6 +86,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('stops on a sample step past the run and leaves it for the next run', () => {
+    // ARRANGE
+    const m = clockModel(),
+      s = sampling([2, 6]),
+      n = 4;
+    const expected = { k: n, got: [{ 'x.step': 2 }] };
+    // ACT
+    stepSampled(m, { k: 0, n, s });
+    // ASSERT
+    expect({ k: m.k, got: s.got }).toEqual(expected);
+  });
+
   it('reads a beat shorter than the window over all of it', () => {
     // ARRANGE
     const end = WEEK;
