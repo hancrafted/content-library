@@ -33,9 +33,9 @@ display: { pile: heap, beltMotion: false }
 # catch: { spec, code } (the chance it sends a bad input of that defect kind back, over mechanics.rework; a kind left out
 # passes), origin: spec or code (the defect kind it makes, over its role's), stall: { at, slow } (once `at` weeks of work
 # wait it loses the share `slow` of its speed: the pipeline stalls; AI at the station removes it), escalate: { to, underPressure }
-# (pass-on under pressure: once it is drowning, from 2 weeks of work waiting where its pile turns red, the share of
-# the tickets it takes up that it passes to `to` unanswered rises by the same term as stampUnderPressure, up to all of them;
-# below that it answers everything; Support drowning passes bugs on to Engineering).
+# (pass-on under pressure: once its pile turns red it passes a share of the tickets it takes up to `to` unanswered,
+# rising with its pile, at underPressure's strength, up to all of them; below that it answers everything; where it starts
+# and how fast it rises: design-ADR 0024 §5. Support drowning passes bugs on to Engineering).
 centers:
   - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
   - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
