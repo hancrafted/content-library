@@ -3,7 +3,7 @@
  * software-ecology-factory/5), ported from the reference build's validate(), messages and order unchanged.
  */
 import { MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
-import { OWN_RATE_MAX } from './own-work.types';
+import { OWN_RATE_MAX } from './own-work.types.ts';
 import type { Strength } from './software-ecology.types';
 import {
   absentOr,
