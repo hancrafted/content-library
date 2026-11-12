@@ -37,7 +37,7 @@ verified:
 
 master: grid-bento · motion: local
 
-AI statement, the headline caption: "Every conversation with AI starts from zero on how you work." Analogy caption, smaller and beside the picture: "Your pilot is the AI model: ten years of skill, no memory of yesterday."
+AI statement, the headline caption: "Unless you write it down, every new conversation with AI starts from zero on how you work." Analogy caption, smaller and beside the picture: "Your pilot is the AI model: ten years of skill, no memory of yesterday."
 
 A comic strip in low poly, the control room as the scene. First panel: a framed photo on the control-room wall, you and the pilot across ten years of expeditions, with a small tag on the pilot reading "AI model", so the viewer knows from the first panel who he stands for. Then three mornings, each in its own panel: the pilot greets you with a speech bubble, "Nice to meet you", you explain the sediment sample again, and the robot sits idle on deck. The strip ends on "What would you do?" beside an empty procedure card, left untagged so the question stays open. Panels appear one after another, nothing loops at rest, and under reduced motion all panels show at once. The Slide keeps only the question and the empty card, so it works without the live chat.
 
@@ -65,7 +65,7 @@ One wide view of the control room: the pilot at the console, the manual open at 
 
 #### Speaker notes
 
-1. **A skill spares you the repeat** — Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations [1]. When a request matches a skill's description, Claude reads `SKILL.md` and only then does that content enter the context [1].
+1. **A skill spares you the repeat** — Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations [1]. When a request matches a skill's description, Claude reads `SKILL.md` and only then does that content enter the context [1]. Calling a skill by name loads it too, as the Slide on two ways to call a skill shows.
    - sources: [1] Anthropic, Agent Skills overview — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 
 #### Voice script
@@ -96,7 +96,7 @@ One card in a clear sleeve, each part labelled with its AI term first and the sc
 1. **What a skill is made of** — a skill is a folder with a required `SKILL.md` (a name and a description, then the instructions) and optional `scripts/`, `references/` and `assets/` folders [1]. ChatGPT describes the same three parts in its own words: a name and description, workflow steps and supporting materials [2].
    - sources: [1] Agent Skills, Specification — https://agentskills.io/specification
    - sources: [2] OpenAI Academy, Skills — https://academy.openai.com/public/clubs/work-users-ynjqu/resources/skills
-2. **Names differ by app** — Claude, ChatGPT and Codex say "Skills", GitHub Copilot says "agent skills", and the Gemini app is replacing Gems with skills on 17 December 2026 [3]. Whether the Gemini app's skills are `SKILL.md` folders is not stated in the pages read; it is verified for Gemini CLI only [4].
+2. **Names differ by app** — Claude, ChatGPT and Codex say "Skills", GitHub Copilot says "agent skills", and the Gemini app turns Gems into skills for personal accounts on 17 December 2026 [3]. Whether the Gemini app's skills are `SKILL.md` folders is not stated in the pages read; it is verified for Gemini CLI only [4].
    - sources: [3] Google, About the transition from Gems to skills (Gemini Apps Help) — https://support.google.com/gemini/answer/18560919?hl=en
    - sources: [4] Google, Agent Skills in Gemini CLI — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/skills.md
 3. **The description is the routing line** — Google's Day 3 whitepaper calls the description "your routing algorithm" [5]. This is Google's framing of how a skill is chosen, not a measurement of how often it routes correctly.
@@ -176,7 +176,7 @@ master: three-column · motion: none
 
 AI statement, the headline caption: "Instructions are always loaded, skills load on demand, and connectors reach into other systems." Analogy caption, smaller and beside the picture: "Your notebook, the wall, the manual and the cable."
 
-Four things in the control room, each led by its AI label and a small static or dynamic tag linking back to the Slide on dynamic context, with the scene's object as the picture: personal instructions, static, which travel to any project (your standing orders in your notebook, which travel to any ship); project instructions, static (the expedition brief on the wall); skills, dynamic (the manual at the console); and a connector, dynamic (the cable to the sonar and the lab database). Coding-agent view: `~/.claude/CLAUDE.md`, `AGENTS.md`, `SKILL.md` and an MCP server. If the connector reads as too much in the render, the Slide falls back to three things.
+Four things in the control room, each led by its AI label and a small static or dynamic tag linking back to the Slide on dynamic context, with the scene's object as the picture: personal instructions, static, which travel to any project (your standing orders in your notebook, which travel to any ship); project instructions, static (the expedition brief on the wall); skills, dynamic (the manual at the console); and a connector, its tools listed up front and its results on demand (the cable to the sonar and the lab database). Coding-agent view: `~/.claude/CLAUDE.md`, `AGENTS.md`, `SKILL.md` and an MCP server. If the connector reads as too much in the render, the Slide falls back to three things.
 
 #### Speaker notes
 
@@ -197,7 +197,7 @@ Four things in the control room, each led by its AI label and a small static or 
 #### Voice script
 
 1. **Four things in the room** — Four things shape what the model knows, and they do four different jobs: personal instructions, project instructions, skills and connectors. In the control room they are your notebook, the expedition brief on the wall, the manual at the console, and the cable to the sonar and the lab database.
-2. **Read the tags** — Take them one at a time. Personal instructions are static, and they follow you into every project, as your notebook comes with you onto any ship. Project instructions are static too, but only inside this one project. Skills are dynamic, because one arrives when a task needs it, and a connector is dynamic as well, because it brings data from another system into the context window while you work. That is the split from the last Slide, now with names.
+2. **Read the tags** — Take them one at a time. Personal instructions are static, and they follow you into every project, as your notebook comes with you onto any ship. Project instructions are static too, but only inside this one project. Skills are dynamic, because one arrives when a task needs it, and a connector's results are dynamic too, because they arrive from another system while you work; the connector also lets the model act in that system. That is the split from the last Slide, now with names.
 3. **Your words may differ** — Your app may use other words for these four, so match the job, not the word. And if you work with a coding agent, the other view shows the files: your personal instructions file, AGENTS.md for the project, a SKILL.md for each skill, and a server for each connector.
 
 ### Two ways to call a skill {#two-ways-to-call-a-skill}
@@ -228,7 +228,7 @@ The control room split in two, each half headed by its AI label. Left, "Called b
 #### Voice script
 
 1. **By name** — There are two ways a skill gets used. The first is the simple one: you call it by name, the way you would tell the pilot "Sediment sample, please", and the model opens that skill. No guessing involved.
-2. **By description** — In the second you say nothing about the skill. The model reads the descriptions while it works and decides for itself that this task needs one. Its only clue is the description you wrote, so if the description is poor, the skill stays unused, however good its instructions are.
+2. **By description** — In the second you say nothing about the skill. The model reads the descriptions while it works and decides for itself that this task needs one. Its only clues are the name and description you wrote, so if the description is poor, the skill stays unused, however good its instructions are.
 3. **Unused is real** — And skills going unused is not a theory: it has been measured, though only in one vendor's test of one documentation skill, so hold the finding loosely. The question it should leave you with, in front of every skill you write, is whether the model would ever pick it.
 
 ## When to write one {#when-to-write-one}
@@ -284,6 +284,9 @@ A manual stuffed with thin cards, several stamped "never tested". Beside it, the
 2. **Skills nobody needs yet: YAGNI, and what it does not cover** — "Always implement things when you actually need them, never when you just foresee that you need them" [2]. Fowler counts four costs of a presumptive feature (build, delay, carry, repair) and says YAGNI does not apply to effort to make software easier to modify [3].
    - sources: [2] Jeffries, You're NOT gonna need it! — https://ronjeffries.com/xprog/articles/practices/pracnotneed/
    - sources: [3] Fowler, Yagni — https://martinfowler.com/bliki/Yagni.html
+3. **A crowded skill index costs the AI too** — by default every skill's description is loaded on every turn, unless the skill is user-only, and Claude Code and Codex cap or shorten the skill listing, so a crowded index can shorten or drop descriptions [4][5].
+   - sources: [4] Anthropic, Extend Claude with skills (Claude Code docs) — https://code.claude.com/docs/en/skills
+   - sources: [5] OpenAI, Build skills (Codex docs) — https://learn.chatgpt.com/docs/build-skills
 
 #### Voice script
 
@@ -352,9 +355,9 @@ The manual from the pilot's view: the index readable and labelled "loaded: name 
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "Describe when to use a skill, in the words someone would actually say." Analogy caption, smaller and beside the picture: "Two index lines for the same card; only one matches what the captain says."
+AI statement, the headline caption: "Say what a skill does and when to use it, in the words someone would actually say." Analogy caption, smaller and beside the picture: "Two index lines for the same card; only one matches what the captain says."
 
-Two descriptions for the same skill, each headed by its AI label. "Describes the content": "Sediment sampling procedure, steps 1 to 9". "Describes the moment", in two halves: "Use when we reach a new site and need a sample from the seabed." and a closing "Not for water samples or filming." Above them, your request on the day: "Grab some mud here before we move on." Only the moment description matches it. A line is drawn from your request to the moment description.
+Two descriptions for the same skill, each headed by its AI label. "Describes the content": "SOP-07: corer handling, steps 1 to 9". "Describes the moment", in two halves: "Takes a sediment core. Use when we reach a new site and need a sample from the seabed." and a closing "Not for water samples or filming." Above them, your request on the day: "Grab some mud here before we move on." Only the moment description says when it is needed; the content line says nothing about it. A line is drawn from your request to the moment description.
 
 #### Speaker notes
 
@@ -370,8 +373,8 @@ Two descriptions for the same skill, each headed by its AI label. "Describes the
 
 #### Voice script
 
-1. **Two labels** — Here are two descriptions for the same skill. The first names the content, "Sediment sampling procedure, steps 1 to 9", and the second names the moment, "Use when we reach a new site and need a sample from the seabed". One says what is inside, the other says when you need it, and that is your second step: write the description as the moment you'd need it.
-2. **Your request** — Now it is the day of the dive and you type, "Grab some mud here before we move on." Nothing in "steps 1 to 9" sounds like mud, but "a sample from the seabed" does, so only the moment description matches. Write it in the words you would actually say.
+1. **Two labels** — Here are two descriptions for the same skill. The first names the content, "SOP-07: corer handling, steps 1 to 9", and the second says what the skill does and names the moment, "Takes a sediment core. Use when we reach a new site and need a sample from the seabed". One says only what is inside, the other also says when you need it, and that is your second step: write the description as the moment you'd need it.
+2. **Your request** — Now it is the day of the dive and you type, "Grab some mud here before we move on." Nothing in "SOP-07, steps 1 to 9" tells the model when it is needed, but "a sample from the seabed" does, so only the moment description matches. Write it in the words you would actually say.
 3. **The closing line** — Last, the moment description can end on a second half: "Not for water samples or filming." It tells the model where the skill stops, so it does not open it for a job it cannot do. Treat that half as a choice and not a rule, because not every guide recommends it.
 
 ### More skills, harder choice {#more-skills-harder-choice}
@@ -380,16 +383,16 @@ Two descriptions for the same skill, each headed by its AI label. "Describes the
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "The more skills look alike, the less often the right one gets picked." Analogy caption, smaller and beside the picture: "Near-twin cards leave the pilot guessing; the list on the wall settles it."
+AI statement, the headline caption: "Skills that look alike leave the AI guessing; a short list in the project instructions takes the guess away." Analogy caption, smaller and beside the picture: "Near-twin cards leave the pilot guessing; the list on the wall settles it."
 
-A skill index crowded with near-twins ("Sample", "Take sample", "Seabed sample v2") and a question mark over the console. Beside it, the project instructions, labelled as such and drawn as the expedition brief on the wall, carry a short list: "On this expedition, use these three cards." One callout names Hick's law as a finding about people; another gives Vercel's test, where a short index in `AGENTS.md` beat skills left to be found. The twins fade back and one line on the wall list lights up.
+A skill index crowded with near-twins ("Sample", "Take sample", "Seabed sample v2") and a question mark over the console. Beside it, the project instructions, labelled as such and drawn as the expedition brief on the wall, carry a short list: "On this expedition, use these three cards." One callout names Hick's law as a finding about people; another gives Vercel's test, where a line in `AGENTS.md` telling the agent to use its skill raised the pass rate from 53% to 79%. The twins fade back and one line on the wall list lights up.
 
 #### Speaker notes
 
 1. **Choosing among many skills: Hick and Hyman, a finding about people** — Hick applied information theory to choice-reaction-time experiments with up to ten alternatives [1]. Hyman reports that reaction time rises linearly with the amount of information in the choice [2]. That a longer list makes an AI choose worse is an inference, not a measured result.
    - sources: [1] Hick, On the Rate of Gain of Information (Quarterly Journal of Experimental Psychology, 1952) — https://doi.org/10.1080/17470215208416600
    - sources: [2] Hyman, Stimulus Information as a Determinant of Reaction Time (Journal of Experimental Psychology, 1953) — https://doi.org/10.1037/h0056940
-2. **An AGENTS.md index beat skills: Vercel's test** — a compressed docs index of about 8KB in `AGENTS.md` reached a 100% pass rate against 53% for the skill by default. Vercel's working theory: no decision point, and skills load only when invoked [3]. It is a docs index for one framework, not a procedure.
+2. **An AGENTS.md index beat skills: Vercel's test** — a line in `AGENTS.md` telling the agent to use its skill raised the pass rate from 53% to 79%, and the skill was opened in 95% or more of cases [3]. A compressed docs index of about 8KB in `AGENTS.md`, replacing the skill, reached 100%. Vercel's working theory: no decision point, and skills load only when invoked [3]. It is one docs skill for one framework, not a procedure.
    - sources: [3] Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals — https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 3. **Skills too broad or too narrow** — the standard warns that skills "scoped too broadly become hard to activate precisely", while too narrow forces several to load [4]. No source measures lookalike skills lowering the pick rate directly.
    - sources: [4] Agent Skills, Best practices for skill creators — https://agentskills.io/skill-creation/best-practices
@@ -438,7 +441,7 @@ One piece of knowledge, today's site depth, with three possible homes, each led 
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "A good skill does one job and isn't tied to any one project." Analogy caption, smaller and beside the picture: "At site 7 the seabed lies at 120 m; the card still says 40."
+AI statement, the headline caption: "A good skill does one job, and keeps project details out when it has to work in more than one project." Analogy caption, smaller and beside the picture: "At site 7 the seabed lies at 120 m; the card still says 40."
 
 Two halves, each headed by its AI label. Left, "Several jobs in one skill": an overstuffed card, "Sample, film, log and clean up". Right, "A project detail written into the skill": a sampling card with "descend to 40 m" scribbled in for site 4; at the next site the seabed lies at 120 m and the robot hangs uselessly at 40. One callout, labelled "Code design heuristics, applied to skills by analogy", names cohesion and coupling, the Single Responsibility Principle, and Clean Code's "Do One Thing" and "One Level of Abstraction per Function"; it closes with Google's rule of thumb for skills: "If you cannot describe what the skill does in one sentence, it is two skills." The robot stops short, far above the seabed.
 
@@ -528,7 +531,7 @@ master: grid-2x2 · motion: local
 
 AI statement, the headline caption: "Who uses a skill, and where, decides what goes inside it and how much care it needs." Analogy caption, smaller and beside the picture: "One card moves from your notebook to the fleet manual."
 
-A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisational words: personal or shared skill, and general use or project-specific. Each square leads with its AI text, a small expedition picture beneath it. Personal and project-specific: details written straight into the skill, no upkeep. Personal and general: details kept beside, your own toolkit. Shared and project-specific: details can live in its supporting files, owned by the project team. Shared and general: details beside, with an owner, a version and evals. One card moves from your notebook to the fleet manual, labelled "personal skill" then "shared skill", losing its scribbled details and gaining an owner tag.
+A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisational words: personal or shared skill, and general use or project-specific. Each square leads with its AI text, a small expedition picture beneath it. Personal and project-specific: details written straight into the skill, least upkeep. Personal and general: details kept beside, your own toolkit. Shared and project-specific: details can live in its supporting files, owned by the project team. Shared and general: details beside, with an owner, a version and evals. One card moves from your notebook to the fleet manual, labelled "personal skill" then "shared skill", losing its scribbled details and gaining an owner tag.
 
 #### Speaker notes
 
@@ -544,7 +547,7 @@ A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisatio
 #### Voice script
 
 1. **Two questions** — Here is a decision tool, and it asks two questions. Who uses the skill, only you or others too? And where, in any project or in one in particular?
-2. **Four squares** — Four squares come out of that. Personal and project-specific: write the details straight in, there is no upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner.
+2. **Four squares** — Four squares come out of that. Personal and project-specific: write the details straight in, it needs the least upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner.
 3. **A rule of thumb** — This matrix is a rule of thumb, and the label is mine. It is how I think about it, so try it on your own skills and tell me where it breaks.
 
 ### How grill-me and grill-with-docs work {#how-grill-me-and-grill-with-docs-work}
@@ -553,9 +556,9 @@ A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisatio
 
 master: three-column · motion: local
 
-AI statement, the headline caption: "The interview stays the same; what it learns about your project is written beside it for the next run." The analogy appears only as the small key in the corner.
+AI statement, the headline caption: "The interview stays the same; what each run settles about your project is written beside it, for the next run to read." The analogy appears only as the small key in the corner.
 
-The only Slide outside the control room, a showcase on the real files. Three parts, left to right: the real `SKILL.md` of grill-me with the interview steps highlighted as the procedure; grill-with-docs, which uses grill-me and adds domain modelling; and the files it writes beside itself, `GLOSSARY.md` and decision records, with an arrow back to the next run reading them. A small key in the corner maps them to the card and the expedition brief. A closing line: a skill can also run other skills, with no settled name for it yet. `GLOSSARY.md` gains a new term after a session.
+The only Slide outside the control room, a showcase on the real files. Three parts, left to right: the real `SKILL.md` of grill-me with the interview steps highlighted as the procedure; grill-with-docs, which runs the same interview skill and adds domain modelling; and the files it writes beside itself, `GLOSSARY.md` and decision records, with an arrow back to the next run reading them. A small key in the corner maps them to the card and the expedition brief. A closing line: a skill can also run other skills (grill-me runs grilling; grill-with-docs runs grilling and domain-modeling), with no settled name for it yet. `GLOSSARY.md` gains a new term after a session.
 
 #### Speaker notes
 
@@ -566,8 +569,8 @@ The only Slide outside the control room, a showcase on the real files. Three par
 #### Voice script
 
 1. **The interview is the card** — Let me show you inside and beside together, on real files instead of the dive. This is grill-me, a skill I use, and its steps are an interview, which is the procedure. It stays the same every time.
-2. **Follow the arrow** — Next to it is grill-with-docs, which uses grill-me and adds domain modelling. While it runs it writes files beside itself, a glossary and decision records, and the next run reads them before it asks anything. The skill stays the same, and what it learned about your project waits beside it.
-3. **Skills can run skills** — One last thing: a skill can also run other skills, the way grill-with-docs runs grill-me. There is no settled name for that yet, and I'll leave it there.
+2. **Follow the arrow** — Next to it is grill-with-docs, which runs the same interview and adds domain modelling. While it runs it writes files beside itself, a glossary and decision records, and the next run checks your words against them. The skill stays the same, and what it learned about your project waits beside it.
+3. **Skills can run skills** — One last thing: a skill can also run other skills: grill-me runs one called grilling, and grill-with-docs runs grilling and domain-modeling. There is no settled name for that yet, and I'll leave it there.
 
 ## Sharing it {#sharing-it}
 
@@ -582,7 +585,7 @@ The only Slide outside the control room, a showcase on the real files. Three par
 
 master: grid-1x2 · motion: local
 
-AI statement, the headline caption: "A shared skill needs what any company knowledge article needs: an owner, a version and a review date." Analogy caption, smaller and beside the picture: "Your notebook card, and the same card in the institute's fleet manual."
+AI statement, the headline caption: "A shared skill needs an owner, a version and a review date, as Anthropic's enterprise guidance asks for every skill." Analogy caption, smaller and beside the picture: "Your notebook card, and the same card in the institute's fleet manual, like a company knowledge article."
 
 Two copies of the same skill, each headed by its AI label. Left, "Personal skill": your notebook card, with no header. Right, "Shared skill": the same card in the institute's fleet manual, with a control block: owner, version 1.3, next review in March. A small note: personal skills skip this until you share them. The control block is stamped on as the card moves into the fleet manual.
 
@@ -608,7 +611,7 @@ Two copies of the same skill, each headed by its AI label. Left, "Personal skill
 
 master: grid-2x2 · motion: local
 
-AI statement, the headline caption: "Shared, general skills need rules for who adds, checks and removes them, and most organisations are still working those out." Analogy caption, smaller and beside the picture: "The fleet manual's front page."
+AI statement, the headline caption: "Shared, general skills need rules for who adds, checks and removes them, and there is no settled practice yet." Analogy caption, smaller and beside the picture: "The fleet manual's front page."
 
 The earlier matrix returns and the view zooms into the shared, general square. Inside it, the front page of the shared skill library, drawn as the fleet manual, lists what a skill needs beyond the control block, each line led by its AI term: who may add one; its tier, who it reaches (fleet, ship or expedition in the scene); its token cost; which models and agents it works with (which robots); and a retirement date. One corner stays dark and unlabelled, for the questions nobody has settled yet.
 
@@ -639,7 +642,7 @@ master: grid-1x2 · motion: local
 
 AI statement, the headline caption: "Test a skill by running the same task with and without it, because a bad skill can do worse than none." Analogy caption, smaller and beside the picture: "Two test dives in shallow water, the same task each time."
 
-Two eval runs side by side, the same task each time, labelled "Without the skill" and "With the skill", each with a scorecard; the picture is two test dives in shallow water, the pilot working without the card on the left and with it on the right. Below, a small check for the description: a few requests that should trigger the skill and a few that should not, including near-misses. A callout: "In one benchmark, skills the AI wrote for itself scored below having no skill." The two scores fill in, one after the other.
+Two eval runs side by side, the same task each time, labelled "Without the skill" and "With the skill", each with a scorecard; the picture is two test dives in shallow water, the pilot working without the card on the left and with it on the right. Below, a small check for the description: a few requests that should trigger the skill and a few that should not, including near-misses. A callout: "In one benchmark, skills an AI wrote for itself before solving the task, with no good run behind them, scored below having no skill." The two scores fill in, one after the other.
 
 #### Speaker notes
 
@@ -649,7 +652,7 @@ Two eval runs side by side, the same task each time, labelled "Without the skill
 2. **Bad skills can hurt, many do nothing** — of 98 public skills, 92 showed no statistically significant effect, and harmful ones lost up to 17.0 points by anchoring the agent on their own templates [3]. Curated skills raised the average pass rate from 33.9% to 50.5% [4].
    - sources: [3] Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering? — https://arxiv.org/abs/2603.15401
    - sources: [4] Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks — https://arxiv.org/abs/2602.12670
-3. **Test the skill's description too** — the trigger set in the standard is "about 20 queries: 8-10 that should trigger and 8-10 that shouldn't", each run about 3 times [5]. Anthropic's guide says to build scenarios and compare against a no-skill baseline [6]. "Three and three" is in neither.
+3. **Test the skill's description too** — the trigger set in the agentskills.io guide to descriptions is "about 20 queries: 8-10 that should trigger and 8-10 that shouldn't", each run about 3 times [5]. Anthropic's guide says to build scenarios and compare against a no-skill baseline [6]. "Three and three" is in neither.
    - sources: [5] Agent Skills, Optimizing skill descriptions — https://agentskills.io/skill-creation/optimizing-descriptions
    - sources: [6] Anthropic, Skill authoring best practices — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 4. **Trigger tests in Google's Day 3: two sizes** — Day 3 says a description must pass checks "to hit the industry-standard 90% trigger accuracy rate", the first being "You must write 3 positive and 3 negative triggers", with no source for the rate. Elsewhere it says "Write three eval cases (two positive, one negative) before drafting the body" [7]. Its own counts disagree, it is Google's vendor guidance, and none of it is measured.
@@ -700,7 +703,7 @@ master: grid-1x2 · motion: local
 
 AI statement, the headline caption: "A model update changes who reads your skill, so a skill that worked yesterday can behave differently today." Analogy caption, smaller and beside the picture: "Same card, two dives, two depths."
 
-A reveal panel, led by its AI statement, "Every AI model has this condition, and each AI provider trains its own", drawn as pilot schools, every pilot with the same condition. Two panels follow, each headed by its AI label. "Model update": your pilot returns from his school's new course, same name and same card, but "descend slowly" now gives a different dive. "Different model": a pilot from another school reads the same card in their own way. A callout names Lehman's laws, that software in use has to keep changing or it gets worse; here the world around the skill moves. The same card goes into two dives that end at different depths.
+A reveal panel, led by its AI statement, "Every AI model has this condition, and each AI provider trains its own", drawn as pilot schools, every pilot with the same condition. Two panels follow, each headed by its AI label. "Model update": your pilot returns from his school's new course, same name and same card, but "descend slowly" now gives a different dive. "Different model or agent": a colleague runs your skill in another app or agent, even on the same model, and it reads the same words its own way; in the scene, a pilot from another school reads the same card in their own way. A callout names Lehman's laws, that software in use has to keep changing or it gets worse; here the world around the skill moves. The same card goes into two dives that end at different depths.
 
 #### Speaker notes
 
@@ -714,6 +717,8 @@ A reveal panel, led by its AI statement, "Every AI model has this condition, and
 3. **The model's memory and patient H.M.: an analogy that breaks at the skill** — H.M. learned mirror drawing and kept it across 3 days while remembering none of the sessions [6], because skills are stored by a memory system outside the damaged region [7]. For a model this maps only as analogy: trained weights fit the skill side, but a skill file is read as text, which makes it closer to a declarative note. That mapping is inference; Milner 1962 was read only through Squire's account.
    - sources: [6] Squire, The Legacy of Patient H.M. for Neuroscience — https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/
    - sources: [7] Squire, Conscious and Unconscious Memory Systems — https://pmc.ncbi.nlm.nih.gov/articles/PMC4355270/
+4. **The agent changes the skill too, even on the same model** — in a benchmark of 98 public skills, 40 change sign between two harnesses running the same model, and the authors advise evaluating a skill "with the model, agent, and repositories in which it will be deployed" [8].
+   - sources: [8] Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering? — https://arxiv.org/abs/2603.15401
 
 #### Voice script
 
