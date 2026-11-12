@@ -428,7 +428,7 @@ One piece of knowledge, today's site depth, with three possible homes, each led 
 
 1. **A home for each fact** — Take one piece of knowledge: today's site depth. It needs a home, and you have to pick one. Choosing where each piece lives is called information architecture, and you do it whether or not you name it.
 2. **Three costs** — A home costs you in three ways. Performance asks whether it will actually be read at the moment he needs it, reusability asks how many sites the card still fits, and token cost asks what it takes to load it into the window each time.
-3. **Two homes** — Look at the two homes on screen. Inside the card the depth is always there, but it fits one site. On the expedition brief it fits every site, but it has to be looked up. Neither is right in general, so it depends on how many sites you will dive.
+3. **Three homes** — Look at the two homes on screen. Inside the card the depth is always there, but it fits one site. On the expedition brief it fits every site, but it has to be looked up. Neither is right in general, so it depends on how many sites you will dive.
 
 ### One skill, one job {#one-skill-one-job}
 
