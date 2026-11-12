@@ -6,7 +6,9 @@ toolbar:
   fromFile: (aus Datei)
   speed: Tempo
   pause: Pause
-  speedN: 'Tempo {n}×'
+  speedMenu: 'Tempo: {n}×'
+  speedMenuTip: Wie schnell die simulierte Zeit läuft
+  play: Abspielen
   speedTips:
     '1': '1×: ein Arbeitstag dauert etwa 3 Sekunden'
     '2': '2×: ein Arbeitstag dauert etwa 1,6 Sekunden'
@@ -17,8 +19,6 @@ toolbar:
   day: 'Tag {n}'
   week: 'Woche {w} · Tag {d}'
   warming: Läuft warm
-  clockTip: Simulierte Zeit in Arbeitstagen; jede Übergabe dauert einen Vierteltag
-  mechanics: Was schlechte Arbeit weiter unten anrichtet
   mechs:
     rework:
       label: Nacharbeit
@@ -29,18 +29,23 @@ toolbar:
     complaints:
       label: Beschwerden
       tip: 'Kundenbeschwerden: ein schlechtes Release kann eine Beschwerde bringen, einen Bug oder eine Supportanfrage mit der roten Warnung: Arbeit, die keinen Wert schafft. Das Raster des Kunden markiert sie; ihre Wahrscheinlichkeit steht auf der Kundenkarte.'
-  model: Modell
-  modelTip: Ideal bis Realistisch, wo KI arbeitet, KI-Qualität, Stärke jedes Mechanismus
-  more: 'Mehr: Bandbewegung, Stau, Farbschema'
-  moreTip: Bandbewegung, Stau, Farbschema
   scenarios: Szenarien
   scenariosLabel: Szenarien
   tourSteps: 'Tour in {n} Schritten'
   tour: Tour
   tourTip: 'Eine geführte Tour durch dieses Szenario: Regler setzen, bis zu einer Woche laufen lassen, anhalten, lesen, worauf es ankommt'
-  watch: 'Worauf achten:'
   modified: geändert
   modifiedTip: Nach der Wahl dieses Zustands wurde ein Regler gedreht; wählt ihn erneut, um zurückzusetzen
+# Das Einstellungs-Popover: ein Knopf am Ende der Leiste, drei Spalten und die Datei am Fuß.
+settings:
+  button: Einstellungen
+  tip: 'Einstellungen: das Modell, was schlechte Arbeit weiter unten anrichtet, wie die Fabrik gezeichnet wird, und die Datei'
+  label: Einstellungen
+  model: Modell
+  mechanics: Mechanismen
+  mechanicsNote: Was schlechte Arbeit weiter unten anrichtet
+  display: Anzeige
+  file: Datei
 tour:
   label: Geführte Tour
   step: '· Schritt {i} von {n} · Woche {w}'
@@ -176,7 +181,7 @@ dock:
     asked: Was der Kunde wollte
   note: 'Output zählt nur erfüllte Anfragen: nie die zusätzlichen Dokumente, Nacharbeit oder Antworten auf Reklamationen.'
   complaints: 'Etwa {n} Reklamationen pro Woche kommen zurück: Fehlernachfrage, kein neuer Wert.'
-# Swing und Rollen: die Bildunterschriften des Reifenschaukel-Cartoons nach Panel-ID und die Wörter drumherum.
+# Der Rollen-Zustand: die Bildunterschriften des Reifenschaukel-Cartoons nach Panel-ID und die Wörter drumherum.
 cartoon:
   captions:
     explained: Wie der Kunde es erklärt hat
@@ -195,10 +200,9 @@ cartoon:
   jobs:
     doc: 'Zu breit für eine Rolle: Dokumentation schreiben alle.'
     billing: 'Zu eng für einen Arbeitsplatz: Die Abrechnung folgt dem Abschluss.'
-# Das Modell-Popover: die Einstellungen der ganzen Fabrik, jede mit einem Tooltip, was sie bewirkt.
+# Die Spalte Modell im Einstellungs-Popover: die Einstellungen der ganzen Fabrik, jede mit einem Tooltip, was sie bewirkt.
 model:
-  label: Modelleinstellungen
-  reality: Modell
+  reality: Realitätsnähe
   ideal: Ideal
   realistic: Realistisch
   realityText: 'Realistisch {n} %'
@@ -212,7 +216,6 @@ model:
   worse: Schlechter
   same: Gleich
   better: Besser
-  strengths: Stärke jedes Mechanismus
   note: 'Rate, Anfragemix und Folgewahrscheinlichkeiten des Kunden stehen auf seiner Karte: klickt links auf den Kunden.'
   reset: Zurück zum Zustand
   tips:
@@ -223,12 +226,10 @@ model:
     rework: Chance, dass ein Arbeitsplatz ein schlechtes Dokument über das Rückband zurückschickt. Es landet vorn im Rückstand des Absenders und kostet zweimal Zeit.
     churn: 'Wird schlechter Input behalten, gibt der Arbeitsplatz so viel Mal seine üblichen Dokumente weiter: er rät und schreibt mehr.'
     reset: Macht jede Änderung rückgängig, seit Ihr den Zustand gewählt habt.
-# Das ⋮-Menü: wie die Fabrik gezeichnet wird.
-more:
-  label: Anzeigeeinstellungen
+# Die Spalte Anzeige im Einstellungs-Popover: wie die Fabrik gezeichnet wird.
+display:
   beltMotion: Bandbewegung
   beltMotionNote: Die Lamellen der Bänder bewegen sich. Aus ist ruhiger; die Dokumente wandern trotzdem.
-  dark: Dunkles Farbschema
   pile: Stau hinter dem Regal
   pileLabel: Animation des Staus
   piles:

@@ -1,6 +1,6 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { KeyboardEvent, MouseEvent } from 'react';
-import { RoleCardView, SwingCardView, type CartoonCardProps } from './cartoon-card-view';
+import { RoleCardView, type CartoonCardProps } from './cartoon-card-view';
 import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
 import { CustomerDashboard, type CustomerDashboardProps } from './customer-dashboard.client';
 import styles from './software-ecology.module.css';
@@ -8,13 +8,13 @@ import { StationCardView, type StationCardProps } from './station-card-view';
 import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-center-dashboard.client';
 
 /*
- * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the cartoon
- * (`swing`), the role (`role`), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
+ * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the role with its
+ * cartoon panel (`role`), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
  * and the compare stream's columns show. Every floor view keeps the card's id on its root, so the parent can morph one
  * view's box into the next.
  */
 
-export type CardView = 'swing' | 'role' | 'station' | 'dashboard';
+type CardView = 'role' | 'station' | 'dashboard';
 
 interface Opens {
   readonly id: string;
@@ -26,11 +26,9 @@ interface Opens {
 
 export type WorkCenterCardProps =
   | (Opens & {
-      readonly cardView: 'swing' | 'role';
+      readonly cardView: 'role';
       readonly kind: 'role' | 'customer';
       readonly cell: readonly [number, number];
-      /** A work center the cartoon leaves out sits out Swing; its cell stays empty. */
-      readonly hidden?: boolean;
       /** A Slide's Context target on the card. */
       readonly target?: TargetProps;
       /** Targets the station places on its rack or a sign; here they cover the card, so a note still lights it. */
@@ -48,7 +46,7 @@ const keyOpen = (p: Opens) => (e: KeyboardEvent) => {
   p.onOpen?.(p.id, e.shiftKey);
 };
 
-type PanelProps = Extract<WorkCenterCardProps, { cardView: 'station' | 'dashboard' }>;
+type PanelProps = Extract<WorkCenterCardProps, { cardView: Exclude<CardView, 'role'> }>;
 
 /** The views that are not on the cartoon grid: the station on the line and the dashboard. */
 function Panel(p: PanelProps) {
@@ -69,7 +67,6 @@ export function WorkCenterCard(p: WorkCenterCardProps) {
       data-card-view={p.cardView}
       data-id={p.id}
       data-kind={p.kind}
-      hidden={p.hidden}
       style={{ gridColumn: p.cell[0], gridRow: p.cell[1] }}
       role="button"
       tabIndex={0}
@@ -78,7 +75,7 @@ export function WorkCenterCard(p: WorkCenterCardProps) {
       onKeyDown={keyOpen(p)}
       {...p.target}
     >
-      {p.cardView === 'swing' ? <SwingCardView {...p.cartoon} /> : <RoleCardView {...p.cartoon} />}
+      <RoleCardView {...p.cartoon} />
       {p.stationTargets?.map((t) => (
         <span key={t['data-target']} className={styles.spotFill} {...t} />
       ))}

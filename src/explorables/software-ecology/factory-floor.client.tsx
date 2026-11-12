@@ -13,11 +13,11 @@ import type { ViewId } from './software-ecology.types';
 import { customerCardOf, type BeltPart, type CardPart } from './stage-parts.pure.ts';
 import type { WordsIn } from './use-case-words.pure.ts';
 import type { FactoryView } from './use-factory.ts';
-import { WorkCenterCard, type CardView } from './work-center-card';
+import { WorkCenterCard } from './work-center-card';
 
 /*
- * The floor of the stage, the cards' layer: in the factory every work center as a station on the line, in Swing and
- * Roles every card at its factory cell with the cartoon tiles in the empty ones (design-ADR 0024 §13). Rendered by
+ * The floor of the stage, the cards' layer: in the factory every work center as a station on the line, in the roles
+ * state every card at its factory cell with the cartoon tiles in the empty ones (design-ADR 0024 §13). Rendered by
  * the client parent; a card click goes up through `onCard`.
  */
 
@@ -142,21 +142,19 @@ const stationTargets = (spots: SpotProps, id: string): TargetProps[] =>
 /** A card's own spot: the Customer's, or `<id>:card`. */
 const cardSpot = (c: CartoonCardPart) => (c.kind === 'customer' ? 'customer' : `${c.id}:card`);
 
-/** Swing and Roles: every card at its factory cell, the cartoon tiles in the empty ones. */
-function CartoonCards(p: FloorProps & { view: 'swing' | 'roles' }) {
+/** The roles state: every card at its factory cell, the cartoon tiles in the empty ones. */
+function CartoonCards(p: FloorProps) {
   const m = p.f.run.topology,
     words = p.words.cartoon;
   const cards = useMemo(() => cartoonCardsOf(m, p.w, words), [m, p.w, words]);
-  const tiles = useMemo(() => tilePartsOf(m, p.view, { w: p.w, words }), [m, p.view, p.w, words]);
-  const cardView: CardView = p.view === 'swing' ? 'swing' : 'role';
+  const tiles = useMemo(() => tilePartsOf(m, { w: p.w, words }), [m, p.w, words]);
   return (
     <>
       {cards.map((c) => (
         <WorkCenterCard
           key={c.id}
           {...c}
-          cardView={cardView}
-          hidden={cardView === 'swing' && c.outOfSwing}
+          cardView="role"
           label={labelOf(p.words, c.kind, c.title)}
           target={p.spots.targets?.[cardSpot(c)]}
           stationTargets={stationTargets(p.spots, c.id)}
@@ -165,7 +163,7 @@ function CartoonCards(p: FloorProps & { view: 'swing' | 'roles' }) {
         />
       ))}
       {tiles.map((t) => (
-        <TileView key={t.id} {...t} blank={words.blank} view={cardView} />
+        <TileView key={t.id} {...t} blank={words.blank} />
       ))}
     </>
   );
@@ -202,7 +200,7 @@ export function Floor(p: FloorProps & { view: ViewId }) {
       }
       {...(p.view === 'factory' ? floorHandlers(p) : {})}
     >
-      {p.view === 'factory' ? <StationCards {...p} /> : <CartoonCards {...p} view={p.view} />}
+      {p.view === 'factory' ? <StationCards {...p} /> : <CartoonCards {...p} />}
     </div>
   );
 }

@@ -3,13 +3,14 @@ import type { KeyboardEvent, ReactNode } from 'react';
 import { Glyph } from './factory-glyph-view';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import { ToolbarMenu } from './toolbar-menu.client';
+import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
  * The Scenarios menu's entries (feature guide, Interaction 2), as the reference build's `renderStates` lists them:
  * every state off the toolbar's row, each with its name, its "what to watch" line and, with a tour, its length. Arrow
  * keys move between the entries. Beside it, the Tour button and, for each Context marker a Slide places on a scenario
- * (spot `scenario:<id>`), that scenario's name and the marker on the state row, visible at rest.
+ * (spot `scenario:<id>`), the marker alone, its tooltip naming the scenario (feedback 08).
  */
 
 export interface ScenarioChoice {
@@ -74,39 +75,39 @@ export function ScenariosMenu(
   },
 ) {
   if (!p.scenarios.length) return null;
+  const pick = (id: string) => {
+    p.onOpen(false);
+    p.onPick(id);
+  };
   return (
     <ToolbarMenu
       open={p.open}
       onOpen={p.onOpen}
-      text={p.words.scenarios}
+      face={<MenuFace text={p.words.scenarios} />}
+      buttonClass={`${styles.state} ${styles.stateMenu} text-caption font-medium`}
       tip=""
       label={p.words.scenariosLabel}
-      state={{ pressed: p.scenarios.some((s) => s.id === p.preset) }}
+      pressed={p.scenarios.some((s) => s.id === p.preset)}
+      role="menu"
       menuClass={styles.scn}
     >
-      <ScenarioMenu
-        {...p}
-        tourSteps={p.words.tourSteps}
-        onPick={(id) => {
-          p.onOpen(false);
-          p.onPick(id);
-        }}
-      />
+      <ScenarioMenu {...p} tourSteps={p.words.tourSteps} onPick={pick} />
     </ToolbarMenu>
   );
 }
 
-/** Each scenario a Slide places a Context marker on, by name and with its marker, muted beside the Tour button. */
+/** Each Context marker a Slide places on a scenario, an icon beside the Tour button, its tooltip the scenario's name. */
 export function ScenarioNotes(p: {
   readonly scenarios: readonly ScenarioChoice[];
   readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
 }) {
   return p.scenarios.map((s) =>
     p.markers?.[s.id] ? (
-      <span key={s.id} className="inline-flex items-center gap-1 text-caption text-muted-foreground">
-        {s.name}
-        {p.markers[s.id]}
-      </span>
+      <ToolTip key={s.id} tip={s.name}>
+        <span className={styles.markerHost} data-scenario-marker={s.id}>
+          {p.markers[s.id]}
+        </span>
+      </ToolTip>
     ) : null,
   );
 }
@@ -119,16 +120,19 @@ export function TourButton(p: {
   readonly onTour: () => void;
 }) {
   return (
-    <button
-      type="button"
-      className={`${styles.state} ${styles.stateTour} text-caption font-medium`}
-      disabled={!p.canTour}
-      aria-pressed={p.touring}
-      data-tip={p.words.tourTip}
-      onClick={p.onTour}
-    >
-      <Glyph name="play" className={styles.ico} />
-      <span>{p.words.tour}</span>
-    </button>
+    <ToolTip tip={p.words.tourTip}>
+      <button
+        type="button"
+        className={`${styles.state} ${styles.stateTour} text-caption font-medium`}
+        aria-disabled={!p.canTour}
+        aria-pressed={p.touring}
+        onClick={() => {
+          if (p.canTour) p.onTour();
+        }}
+      >
+        <Glyph name="play" className={styles.ico} />
+        <span>{p.words.tour}</span>
+      </button>
+    </ToolTip>
   );
 }

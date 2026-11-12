@@ -1,9 +1,9 @@
 name: Two teams, one platform
 sub: Product feeds two teams; team B works without a spec; both ship through one platform team.
 centers:
-  anA: { title: Analyst · team A }
-  engA: { title: Engineers · team A }
-  engB: { title: Engineers · team B }
+  anA: { title: Analysis · team A }
+  engA: { title: Engineering · team A }
+  engB: { title: Engineering · team B }
   plat: { title: Platform & QA }
 belts:
   customer-sales: { label: new customer }

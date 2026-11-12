@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';
 import { isMap } from './use-case-checks.pure.ts';
 import { dataProblems } from './use-case-network-checks.pure.ts';
-import { presetProblems, stateProblems } from './use-case-preset-checks.pure.ts';
+import { presetProblems, stateProblems, unretired } from './use-case-preset-checks.pure.ts';
 
 type Doc = Record<string, unknown>;
 
@@ -37,9 +37,41 @@ export const exchangeSchema = (catalog: readonly string[]) => schemaOf({ catalog
 
 const read = (text: string): unknown => parse(text) as unknown;
 
+/** A preset or saved state with `swing` in its id or view, as the roles state. */
+const renamed = (x: Doc): Doc => ({
+  ...x,
+  ...('id' in x ? { id: unretired(x.id) } : {}),
+  ...('preset' in x ? { preset: unretired(x.preset) } : {}),
+  ...('view' in x ? { view: unretired(x.view) } : {}),
+});
+
+/** The presets with `swing` read as `roles`, the first of the same id kept. */
+const presetsOf = (presets: unknown): unknown => {
+  if (!Array.isArray(presets)) return presets;
+  const seen = new Set<unknown>();
+  return presets
+    .map((x) => (isMap(x) ? renamed(x) : x))
+    .filter((x) => {
+      if (!isMap(x)) return true;
+      if (seen.has(x.id)) return false;
+      seen.add(x.id);
+      return true;
+    });
+};
+
+/** A document of schema /5 with every retired name read as today's. */
+const current = (doc: unknown): unknown =>
+  isMap(doc)
+    ? {
+        ...doc,
+        ...('presets' in doc ? { presets: presetsOf(doc.presets) } : {}),
+        ...(isMap(doc.state) ? { state: renamed(doc.state) } : {}),
+      }
+    : doc;
+
 /** A shipped use-case file; a broken one throws, naming every problem, so the build fails. */
 export const readUseCase = (text: string, catalog: readonly string[]): UseCaseData => {
-  const doc = read(text),
+  const doc = current(read(text)),
     r = useCaseSchema(catalog).safeParse(doc);
   if (!r.success)
     throw new Error(`A shipped use-case file is broken:\n${r.error.issues.map((i) => i.message).join('\n')}`);
@@ -64,7 +96,7 @@ export const readExchange = (
 ): { readonly ok: Exchange } | { readonly problems: readonly string[] } | { readonly unread: string } => {
   let doc: unknown;
   try {
-    doc = read(text);
+    doc = current(read(text));
   } catch (e) {
     return { unread: (e as Error).message.split('\n')[0] ?? '' };
   }

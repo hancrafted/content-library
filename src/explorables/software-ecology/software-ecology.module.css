@@ -25,11 +25,12 @@
   --belt: color-mix(in oklab, var(--foreground) 10%, var(--card));
 }
 
-/* ---------- toolbar ---------- */
+/* ---------- toolbar: one row at laptop width (feedback 08), wrapping below it ---------- */
 .toolbar {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 6px;
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
@@ -44,27 +45,58 @@
     background: var(--background);
   }
 }
-.tbRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  align-items: center;
-  justify-content: space-between;
-}
-.tbTools {
-  justify-content: flex-start;
-}
 .states {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
+}
+/* the roles state, Ideal and Realistic as one segmented group */
+.stateSeg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+}
+.stateSeg .state {
+  border: 0;
+  min-height: 32px;
+  padding: 4px 10px;
+  background: transparent;
+  white-space: nowrap;
+}
+/* a dial was turned after picking the state */
+.modDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--warning);
+  vertical-align: middle;
+}
+.markerHost {
+  display: inline-flex;
+  align-items: center;
+}
+/* the use case and Settings keep to the row's end */
+.tbEnd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
 }
 .state {
   border: 1px solid var(--border);
   background: var(--card);
   border-radius: 999px;
-  padding: 6px 14px;
-  min-height: 36px;
+  padding: 6px 10px;
+  min-height: 38px;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     background 160ms var(--ease),
@@ -79,25 +111,28 @@
   border-color: var(--foreground);
 }
 .usecase {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   min-width: 0;
-}
-.usecaseSub {
-  max-width: 60rem;
+  padding-left: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--muted-foreground);
 }
 .select {
   appearance: none;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 10px;
-  background: var(--card);
-  color: inherit;
-  padding: 8px 36px 8px 12px;
+  background-color: var(--card);
+  color: var(--foreground);
+  padding: 6px 30px 6px 6px;
   cursor: pointer;
   min-height: 36px;
   min-width: 0;
-  max-width: 100%;
+  max-width: 10rem;
+  text-overflow: ellipsis;
   background-image:
     linear-gradient(45deg, transparent 50%, var(--foreground) 50%),
     linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
@@ -110,8 +145,8 @@
 .tgroup {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px;
+  gap: 2px;
+  padding: 2px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--card);
@@ -126,7 +161,7 @@
   border-radius: 9px;
   min-height: 36px;
   min-width: 36px;
-  padding: 4px 10px;
+  padding: 4px 8px;
   cursor: pointer;
   color: var(--muted-foreground);
   justify-content: center;
@@ -143,18 +178,22 @@
   color: var(--background);
 }
 .speed {
+  gap: 4px;
   padding: 4px 8px;
   font-variant-numeric: tabular-nums;
 }
-@media (max-width: 760px) {
-  .tbtnLabel {
-    display: none;
-  }
+/* a lone toolbar button with its own frame: Settings, and the file buttons */
+.tbtnLine {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 12px;
+  min-height: 38px;
+  min-width: 38px;
 }
 .clock {
   font-variant-numeric: tabular-nums;
-  padding: 0 10px;
-  min-width: 9.5rem;
+  padding: 0 6px;
+  min-width: 6.75rem;
   color: var(--foreground);
   white-space: nowrap;
 }
@@ -234,7 +273,7 @@
   pointer-events: none;
   z-index: 2;
 }
-/* Swing and Roles: the factory's grid, the Customer in the first column */
+/* The roles state: the factory's grid, the Customer in the first column */
 .view:not([data-view='factory']) .floor {
   position: relative;
   pointer-events: auto;
@@ -759,7 +798,7 @@
   outline-offset: 2px;
 }
 
-/* ---------- Swing and Roles: the cartoon cards and tiles ---------- */
+/* ---------- The roles state: the cartoon cards and tiles ---------- */
 .cartoon {
   position: relative;
   box-sizing: border-box;
@@ -782,13 +821,10 @@
   border-radius: inherit;
   pointer-events: none;
 }
-.cartoon[hidden] {
-  display: none;
-}
 .cartoon[data-tile] {
   cursor: default;
 }
-.cartoon[data-tile='target'][data-card-view='swing'] {
+.cartoon[data-tile='target'] {
   border: 2px solid var(--primary);
 }
 .art {
@@ -811,26 +847,20 @@
 .art [data-art='muted'] {
   fill: var(--muted);
 }
-.noArt {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 160 / 110;
-  background: var(--muted);
-  border-radius: 8px;
-  color: var(--muted-foreground);
+/* the panel and the cartoon's quote under it */
+.panelFig {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
 }
-.cartoon[data-card-view='role'] .art,
-.cartoon[data-card-view='role'] .noArt {
+.cartoon .art {
   max-height: 110px;
 }
 .glyMd {
   width: 28px;
   height: 28px;
   flex: none;
-}
-.glyLg {
-  width: 56px;
-  height: 56px;
 }
 .cap,
 .job,
@@ -855,11 +885,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tagRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: auto;
+/* a department's name wraps on its roles-state card rather than losing its end */
+.cartoon .cardTitle {
+  white-space: normal;
 }
 .tag {
   display: inline-flex;
@@ -868,10 +896,6 @@
   padding: 3px 8px;
   background: var(--muted);
   color: var(--ink-quiet);
-  margin-top: auto;
-}
-.tagRow .tag {
-  margin-top: 0;
 }
 .tag[data-tone='primary'] {
   background: var(--primary);
@@ -920,9 +944,6 @@
 .card[data-open='true'] {
   border-color: var(--foreground);
   box-shadow: 0 0 0 2px var(--foreground);
-}
-.mech[aria-pressed='false'] .ico {
-  opacity: 0.55;
 }
 .tbtn[aria-expanded='true'] {
   background: var(--foreground);
@@ -1055,10 +1076,68 @@
 .menu[hidden] {
   display: none;
 }
-.menuEnd {
-  left: auto;
-  right: 0;
-  width: min(360px, 92vw);
+/* the speed menu: four choices, each with how long a working day takes */
+.speedMenu {
+  width: min(300px, 92vw);
+  gap: 2px;
+  padding: 6px;
+}
+/* the Settings popover: fixed to the window and placed by settings-placement.pure.ts, so it stays inside it */
+.menuSettings {
+  position: fixed;
+  overflow: auto;
+  overscroll-behavior: contain;
+  z-index: 45;
+  gap: 14px;
+}
+.setCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+@media (max-width: 760px) {
+  .setCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.setCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.setCol .mrow {
+  gap: 4px 8px;
+}
+.setCol .mrow > label,
+.setCol .mrow > span:first-child {
+  min-width: 0;
+  flex-basis: 100%;
+}
+
+.setH {
+  color: var(--muted-foreground);
+}
+.mechRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mechRow .mrow {
+  padding-left: 48px;
+}
+.setFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.fileRow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 .mrow {
   display: flex;
@@ -1439,6 +1518,11 @@
   align-items: center;
   gap: 4px;
 }
+.setCol .mrow .range {
+  flex: 1 1 3rem;
+  min-width: 3rem;
+  width: auto;
+}
 .step .range {
   width: 100%;
 }
@@ -1607,13 +1691,9 @@
   width: 14px;
   height: 14px;
 }
-.stateTour:disabled {
+.stateTour[aria-disabled='true'] {
   opacity: 0.4;
   cursor: default;
-}
-.modified {
-  align-self: center;
-  padding: 0 4px;
 }
 .scn {
   width: min(440px, 92vw);
@@ -1643,14 +1723,6 @@
 }
 .scnTour {
   color: var(--primary);
-}
-.watch {
-  margin: 0;
-  color: var(--foreground);
-  min-height: 1.2em;
-}
-.watch:empty {
-  display: none;
 }
 .card[data-toured='true'] {
   box-shadow: 0 0 0 3px var(--primary);
@@ -2029,11 +2101,11 @@
 }
 
 /*
- * A phone shrinks the Swing and Roles cells below one long word ("Documentation", "acceptance"): the words then break
+ * A phone shrinks the roles state's cells below one long word ("Documentation", "acceptance"): the words then break
  * inside their card instead of pushing the page wider than the viewport. At desktop widths every word fits, unchanged.
  */
 .cartoon :is(.tag, .chip, .cardTitle, .job, .cap),
-.cartoon :is(.tagRow, .headLg, .headText) {
+.cartoon :is(.headLg, .headText) {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;

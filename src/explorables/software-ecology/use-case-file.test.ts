@@ -14,7 +14,7 @@ import tireWordsDe from './tire.words.de.yml';
 import tireWords from './tire.words.yml';
 import tire from './tire.yml';
 import { CATALOG } from './use-case-data.ts';
-import { exchangeSchema, readExchange, useCaseSchema } from './use-case-file.ts';
+import { exchangeSchema, readExchange, readUseCase, useCaseSchema } from './use-case-file.ts';
 
 const ROLES = Object.keys(CATALOG);
 const SHIPPED = { tire, gate, teams };
@@ -131,5 +131,32 @@ describe('edge cases', () => {
     const seen = problems(doc);
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+
+  it('loads the retired swing state as the roles state, once, from a shipped file', () => {
+    // ARRANGE
+    const doc = {
+      ...tireDoc(),
+      presets: [{ id: 'swing', view: 'swing' }, { id: 'roles', view: 'roles' }, { id: 'ideal' }],
+    };
+    const expected = [{ id: 'roles', view: 'roles' }, { id: 'ideal' }];
+    // ACT
+    const data = readUseCase(stringify(doc), ROLES);
+    // ASSERT
+    expect(data.presets).toEqual(expected);
+  });
+
+  it('loads an exchange file saved on swing as the roles state', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), presets: [{ id: 'swing', view: 'swing' }, { id: 'ideal' }] };
+    const text = stringify({ ...doc, i18n: { en: { name: 'Tire swing' } }, state: { preset: 'swing', view: 'swing' } });
+    const expected = {
+      data: { presets: [{ id: 'roles', view: 'roles' }, { id: 'ideal' }] },
+      state: { preset: 'roles', view: 'roles' },
+    };
+    // ACT
+    const r = readExchange(text, ROLES);
+    // ASSERT
+    expect(r).toMatchObject({ ok: expected });
   });
 });

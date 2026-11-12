@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
-import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, WARM_CHUNK } from './factory-run.pure.ts';
+import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 describe('success cases', () => {
@@ -91,5 +91,27 @@ describe('edge cases', () => {
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'nope', now: false });
     // ASSERT
     expect(run.preset.id).toBe(fallback);
+  });
+
+  it('opens the retired swing state as the roles state', () => {
+    // ARRANGE
+    const B = builtinBundle('tire');
+    // ACT
+    const p = presetOf(B, 'swing');
+    // ASSERT
+    expect(p).toMatchObject({ id: 'roles', view: 'roles' });
+  });
+
+  it('starts the page at 1×, unless the state names its own speed', () => {
+    // ARRANGE
+    const B = builtinBundle('tire');
+    const viewer = 1,
+      spiral = 10;
+    // ACT
+    const atRoles = startSpeedOf(B, 'roles'),
+      atSpiral = startSpeedOf(B, 'bug-spiral');
+    // ASSERT
+    expect(atRoles).toBe(viewer);
+    expect(atSpiral).toBe(spiral);
   });
 });

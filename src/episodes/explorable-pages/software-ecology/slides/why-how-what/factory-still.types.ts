@@ -69,11 +69,17 @@ export interface FactoryStillState {
     readonly role: RoleWords;
     readonly r: DashboardReadout;
   };
+  /** The live toolbar's row at the step: paused, at the tour's speed, on the tour's clock (feedback 08). */
   readonly toolbar: {
     readonly states: readonly string[];
     readonly scenario: string;
-    readonly watch: string;
     readonly caption: string;
+    /** The speed menu's face, the speed Play resumes at: "10×". */
+    readonly speed: string;
+    /** The tour's clock: "Week 20 · Day 1". */
+    readonly clock: string;
+    /** The use case picker's name. */
+    readonly useCase: string;
   };
   /** The Explorable's own words, for the labels the stills share with it. */
   readonly words: Words;

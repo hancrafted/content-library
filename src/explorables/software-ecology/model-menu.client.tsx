@@ -2,31 +2,22 @@
 
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, type ReactNode } from 'react';
-import { MECH_DEFAULTS, MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
-import {
-  aiKeyOf,
-  withAi,
-  withAiq,
-  withCompany,
-  withReality,
-  withStrength,
-  type AiChoice,
-} from './factory-settings.pure.ts';
-import type { ModelWords, ToolbarWords } from './software-ecology-words.types';
+import { aiKeyOf, withAi, withAiq, withCompany, withReality, type AiChoice } from './factory-settings.pure.ts';
+import type { ModelWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { AiQuality, Bundle, Company, Settings } from './software-ecology.types';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
- * The Model popover (design-ADR 0024 §16): Ideal to Realistic, where AI works, the company, the AI quality effect, the
- * strength of each mechanic, and Back to the state. Ported from the reference build's `renderModel`; each control
- * writes new settings up through `onSettings`.
+ * The Settings popover's Model column (feature guide, Interaction 3): Ideal to Realistic, where AI works, the company,
+ * the AI quality effect, and Back to the state. Ported from the reference build's `renderModel`; each control writes
+ * new settings up through `onSettings`. The mechanics' strengths sit in the Mechanics column.
  */
 
 export interface ModelMenuProps {
   readonly B: Bundle;
   readonly settings: Settings;
   readonly words: ModelWords;
-  readonly mechs: ToolbarWords['mechs'];
   /** Off, each preset's AI set (titled), everywhere. */
   readonly aiChoices: readonly AiChoice[];
   readonly onSettings: (s: Settings) => void;
@@ -65,9 +56,11 @@ function Reality(p: ModelMenuProps) {
     r = p.settings.reality;
   return (
     <div className={styles.mrow}>
-      <label htmlFor={id} className={styles.tipL} data-tip={w.tips.reality}>
-        {w.reality}
-      </label>
+      <ToolTip tip={w.tips.reality}>
+        <label htmlFor={id} className={styles.tipL}>
+          {w.reality}
+        </label>
+      </ToolTip>
       <span className="text-muted-foreground">{w.ideal}</span>
       <input
         type="range"
@@ -89,9 +82,11 @@ function Row(p: { label: string; tip: string; children: (labelId: string) => Rea
   const id = useId();
   return (
     <div className={styles.mrow}>
-      <span id={id} className={styles.tipL} data-tip={p.tip}>
-        {p.label}
-      </span>
+      <ToolTip tip={p.tip}>
+        <span id={id} className={styles.tipL}>
+          {p.label}
+        </span>
+      </ToolTip>
       {p.children(id)}
     </div>
   );
@@ -140,34 +135,6 @@ function Aiq(p: ModelMenuProps) {
   );
 }
 
-function Strengths(p: ModelMenuProps) {
-  const id = useId(),
-    now = { ...MECH_DEFAULTS(), ...p.settings.strength };
-  return (
-    <fieldset className={styles.mfs}>
-      <legend>{p.words.strengths}</legend>
-      {STRENGTHS.map((k) => (
-        <div key={k} className={styles.mrow}>
-          <label htmlFor={`${id}-${k}`} className={styles.tipL} data-tip={p.words.tips[k]}>
-            {p.mechs[k].label}
-          </label>
-          <input
-            type="range"
-            className={styles.range}
-            id={`${id}-${k}`}
-            min={MECH_RANGE[k][0]}
-            max={MECH_RANGE[k][1]}
-            step={0.1}
-            value={now[k]}
-            onChange={(e) => p.onSettings(withStrength(p.settings, k, Number(e.target.value)))}
-          />
-          <b className="font-semibold">{now[k].toFixed(1)}</b>
-        </div>
-      ))}
-    </fieldset>
-  );
-}
-
 export function ModelMenu(p: ModelMenuProps) {
   return (
     <>
@@ -175,17 +142,13 @@ export function ModelMenu(p: ModelMenuProps) {
       <Ai {...p} />
       <CompanyRow {...p} />
       <Aiq {...p} />
-      <Strengths {...p} />
       <p className="m-0 text-caption text-muted-foreground">{p.words.note}</p>
       <div className={styles.mrow}>
-        <button
-          type="button"
-          className={`${styles.ghostBtn} text-caption`}
-          data-tip={p.words.tips.reset}
-          onClick={p.onReset}
-        >
-          {p.words.reset}
-        </button>
+        <ToolTip tip={p.words.tips.reset}>
+          <button type="button" className={`${styles.ghostBtn} text-caption`} onClick={p.onReset}>
+            {p.words.reset}
+          </button>
+        </ToolTip>
       </div>
     </>
   );

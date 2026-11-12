@@ -2,9 +2,9 @@ name: Gatekeeper lead
 sub: One tech lead writes every spec and reviews every change. One person, two work centers. Without Support, bug and support requests go to Operations.
 centers:
   lspec: { title: Lead · specs }
-  e1: { title: Engineer 1 }
-  e2: { title: Engineer 2 }
-  e3: { title: Engineer 3 }
+  e1: { title: Engineering 1 }
+  e2: { title: Engineering 2 }
+  e3: { title: Engineering 3 }
   lrev: { title: Lead · review }
 belts:
   customer-sales: { label: new customer }

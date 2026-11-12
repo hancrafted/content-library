@@ -6,7 +6,7 @@
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
 import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
-import { presetOf } from './factory-run.pure.ts';
+import { DEFAULT_SPEED, presetOf } from './factory-run.pure.ts';
 import type {
   Bundle,
   Company,
@@ -60,7 +60,6 @@ export type Upload =
       readonly warn: { readonly rush: readonly string[]; readonly worst: readonly string[] };
     };
 
-const DEFAULT_SPEED = 5;
 const OVER_IN = Object.fromEntries(Object.entries(OVER_OUT).map(([a, b]) => [b, a])) as Record<string, keyof Over>;
 
 const bundleOf = (ex: ExchangeIn, x: { name: string; catalog: Readonly<Record<string, RoleDef>> }): Bundle => {

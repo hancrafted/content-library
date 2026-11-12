@@ -2,9 +2,9 @@ name: Gatekeeper-Lead
 sub: Ein Tech Lead schreibt jede Spezifikation und prüft jede Änderung. Eine Person, zwei Stationen. Ohne Support gehen Fehler- und Supportanfragen an den Betrieb.
 centers:
   lspec: { title: Lead · Spezifikation }
-  e1: { title: Entwickler 1 }
-  e2: { title: Entwickler 2 }
-  e3: { title: Entwickler 3 }
+  e1: { title: Entwicklung 1 }
+  e2: { title: Entwicklung 2 }
+  e3: { title: Entwicklung 3 }
   lrev: { title: Lead · Review }
 belts:
   customer-sales: { label: Neukunde }

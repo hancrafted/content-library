@@ -13,15 +13,15 @@ roles:
     tasks: [qualifies leads, writes the offer, negotiates terms]
     ai: [drafts proposals, summarises calls into deal notes, writes requirements for the product manager and analyst]
   pm:
-    title: Product manager
+    title: Product management
     job: Turns the deal into a brief
     artefacts: [brief, roadmap item, acceptance criteria]
     tasks: [interviews customers, prioritises, writes the brief]
     ai: [drafts briefs from interview notes, clusters customer feedback]
   ba:
-    title: Analyst & architect
+    title: Analysis
     job: Turns the brief into a spec
-    artefacts: [spec, architecture decision, data model]
+    artefacts: [spec, ADR, design, data model]
     tasks: [models the domain, decides the architecture, writes the spec]
     ai: [drafts specs, drafts architecture options, checks the spec against the brief]
   doc:
@@ -31,7 +31,7 @@ roles:
     tasks: [reads the change, writes and updates pages, reviews screenshots]
     ai: [generates help pages from the change, generates release notes, translates]
   eng:
-    title: Engineer
+    title: Engineering
     job: Turns the spec into code
     artefacts: [pull request, tests, code change]
     tasks: [designs the change, writes code and tests, fixes review comments]
@@ -67,7 +67,6 @@ roles:
     tasks: [runs the checks, tests the change, passes or sends it back]
     ai: [generates test plans, writes deploy scripts]
 presets:
-  swing: Swing
   roles: Roles
   ideal: Ideal
   realistic: Realistic

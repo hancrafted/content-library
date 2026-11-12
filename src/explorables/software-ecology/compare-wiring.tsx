@@ -57,7 +57,7 @@ const picks = (x: CompareParts, f: FactoryView, x2: { id: string; shift: boolean
 };
 
 /**
- * A card click, as the reference build's `cardClick`: in Swing or Roles it opens the factory; in the factory a pick
+ * A card click, as the reference build's `cardClick`: in the roles state it opens the factory; in the factory a pick
  * (see `picks`), else, outside compare mode, its dashboard opens or closes.
  */
 export const cardClick =

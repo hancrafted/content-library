@@ -17,7 +17,14 @@ import {
   type Sink,
 } from './use-case-checks.pure.ts';
 
-export const VIEWS = ['swing', 'roles', 'factory'];
+/** Swing and Roles merged into the roles state (feedback 08); `swing` is the retired id and view. */
+export const RETIRED_STATE = 'swing';
+export const ROLES_STATE = 'roles';
+/** An id or view naming the retired `swing`, as the roles state; anything else as it is. */
+export const unretired = <T>(v: T): T | typeof ROLES_STATE => (v === RETIRED_STATE ? ROLES_STATE : v);
+
+/** `swing` is retired: `use-case-file.ts` reads it as `roles` (`unretired`) before these checks run. */
+export const VIEWS = [ROLES_STATE, 'factory'];
 export const SPEEDS = [0, 1, 2, 5, 10];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =

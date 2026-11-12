@@ -60,7 +60,7 @@ const paint = (x: { v: Pick<FactoryView, 'stage' | 'canvas' | 'floor'>; painter:
 type Painted = Pick<FactoryView, 'stage' | 'canvas' | 'floor'>;
 type DrawAt = Parameters<FactoryPainter['draw']>[1];
 interface Live {
-  /** The factory view is shown: time runs. In Swing and Roles only the warm-up runs, as in the reference build. */
+  /** The factory view is shown: time runs. In the roles state only the warm-up runs, as in the reference build. */
   readonly flowing: boolean;
   readonly speed: number;
   readonly words: FactoryWords;
@@ -181,7 +181,7 @@ export interface FactoryOptions {
   readonly preset: string;
   readonly words: FactoryWords;
   readonly pile?: PileStyle;
-  /** False in Swing and Roles: the model only finishes warming. */
+  /** False in the roles state: the model only finishes warming. */
   readonly flowing?: boolean;
   /** Work centers (or `customer`) whose dashboards are on show. */
   readonly watch?: readonly string[];
