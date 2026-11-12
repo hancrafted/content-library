@@ -5,7 +5,7 @@ description: Tune a software-ecology scenario's YAML numbers until each beat's c
 
 # Ecology eval
 
-A scenario is a tour of beats in a use-case file (`src/explorables/software-ecology/<use-case>.yml`). Each beat carries Han's **claim** (a words key under `scenarios.<id>.claims` in `<use-case>.words.yml`) and the `expect:` and `settles:` ranges that make it checkable. The eval makes every claim hold by tuning the file's numbers. The rules are design-ADR 0024 §20; the claims and first ranges come from `.scratch/software-ecology/eval/scenarios.md`.
+A scenario is a tour of beats in a use-case file (`src/explorables/software-ecology/<use-case>.yml`). Each beat carries Han's **claim** (a words key under `scenarios.<id>.claims` in `<use-case>.words.yml`) and the `expect:` and `settles:` ranges that make it checkable. The eval makes every claim hold by tuning the file's numbers. The rules are design-ADR 0024 §20. The use-case file holds the ranges and the words file the claims: these two are the source, and run reports stay in `.scratch/software-ecology/eval/`.
 
 ## The contract
 
@@ -16,7 +16,7 @@ A scenario is a tour of beats in a use-case file (`src/explorables/software-ecol
 
 ## 1. Read the scenario
 
-Read the scenario's tour in the YAML, its claims in the English words, and its row in `scenarios.md`. For each beat, write down what the claim needs the model to show and which readings carry it.
+Read the scenario's tour and its ranges in the YAML, and its claims in the English words file. For each beat, write down what the claim needs the model to show and which readings carry it.
 _Done when_ every beat has its claim, its checks and the readings that move them.
 
 ## 2. Tune headless
