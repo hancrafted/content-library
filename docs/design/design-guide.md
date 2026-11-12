@@ -107,12 +107,14 @@ Suits a non-technical audience meeting AI at work: a production line is a pictur
 
 Suits an Episode whose argument runs from what everyone sees to what few look at: depth shows how far below the visible part a Slide sits.
 
-- Four zones from the top, each labelled in plain words with the ocean term beneath: Above water (Surface), Waterline (Sunlit), Below (Twilight), The deep (Abyss). Each Section sits in one zone; its Slides take that zone's background, and light fades with depth.
-- A depth ruler holds one tile per Section. A Section's first Slide shows the whole ruler: the view moves down and the Section's tile lights up. Every other Slide carries a slim rail at its edge with that tile lit.
-- The Episode's scene is drawn inside its zone. The iceberg is the frame, never a second analogy.
+- Five zones from the top, each labelled in plain words with the ocean term beneath: Surface, Sunlit, Twilight, Midnight, Abyss. Each Section sits in one zone, and its Slides take that zone's background.
+- Light fades with depth in shades of blue: the title Slide is the bright, white-sky Surface, and each Section dives deeper until the last is fully dark. The order holds in light and dark mode, each zone with its own light and dark value.
+- Zone colours are design tokens behind CSS variables, so the gradient is tuned by changing one value per zone, never per Slide.
+- A depth ruler holds one tile per Section, on bands for the zones. A Section Title shows the whole ruler: the view moves down and the Section's tile lights up. Every page Slide carries a slim rail at its left edge with that tile lit.
+- The Episode's scene is drawn flat, in a 2D side view, inside its zone. The iceberg is the frame, never a second analogy.
 - Motion is descent, once per Section; after that only the scene moves, and nothing loops at rest.
 - `primary` marks the one thing to look at; the meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
-- Zone backgrounds are Slide-local colours that keep text contrast at every depth, in light and dark.
+- Text keeps its contrast at every depth.
 
 ## Like this
 

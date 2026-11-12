@@ -4,10 +4,10 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T10:13:10Z
+  at: 2026-11-12T11:00:00Z
 verified:
   - by: process:markdown-harness
-    at: 2026-11-12T10:20:00Z
+    at: 2026-11-12T11:05:00Z
 ---
 
 # What lies below the waterline of sustainable AI skills
@@ -50,12 +50,12 @@ A skill is a packing binder on the shelf of a factory's packing station. The AI 
 
 - Two layers: the default view shows skills in a chat app, in its words (personal instructions, project instructions, connectors); an optional coding-agent view (Claude Code, Codex) has copy-pastable commands and the technical detail (`~/.claude/CLAUDE.md`, `AGENTS.md`, `SKILL.md`, slash commands), switched per Slide to suit the workshop, like the views of the context window Explorable.
 - Not a law: keeping procedure apart from project context is shown as a design decision with trade-offs (performance, reusability, token cost), never as a rule.
-- Timeless roots: every principle in Sections 3 to 7 is cited from established engineering, information architecture or UX sources, not tool trends.
+- Timeless roots: every principle in Sections 3 to 8 is cited from established engineering, information architecture or UX sources, not tool trends.
 - One scene: every Slide's picture is the packing station, except Slide 19, which shows the real grill-me files with the binder only as a small key.
 
 ## Slides
 
-### Starting from zero
+### A thought experiment
 
 1. **A new temp every morning** — carries the Hook as a thought experiment, copied from the new-hire Slide of "onboard-ai-every-time" and keeping its role-switch label: a capable temp who has never seen your station arrives each morning, so you explain the same procedure daily; what would you do? Write it down. _Visual:_ the same packing instructions handed over on five mornings to five temps from the agency; Above water zone.
 2. **The packing station's answer: a shelf of binders** — sets the picture the Episode returns to: spine label, binder, packing slip. _Visual:_ a packing station with a shelf of labelled binders, a packing slip on the bench, the tape sealer and the label printer.
@@ -80,31 +80,34 @@ A skill is a packing binder on the shelf of a factory's packing station. The AI 
 12. **Name the moment, not the content** — describe when to use the skill, in the words someone would actually type. _Visual:_ two spines side by side, a content label against a moment label. _Research:_ 1
 13. **More binders, harder choice** — Hick's law: overlapping labels compete, skills go unused, and a short index in the project instructions helps. _Visual:_ near-identical spines on a crowded shelf, a short index added to the station's wall chart. _Research:_ 1, 3
 
-### Inside or beside
+### What goes inside
 
 14. **What goes where is information architecture** — organisation, labels and navigation decide performance, reusability and token cost. _Visual:_ the station's shelf with three dials for performance, reusability and tokens. _Research:_ 1
 15. **One binder, one job** — cohesion and coupling: one skill does one thing well, tied loosely to any one project; one customer's details written into the binder work once and break every other order. _Visual:_ the gift note "Happy 40th, Anna" written into the binder, turning up in every parcel after it. _Research:_ 1
 16. **Inside the binder** — procedure on top, domain knowledge in references, templates in assets, fixed steps in scripts, each loaded only when needed. _Visual:_ binder tabs for procedure, references, templates and scripts. _Research:_ 2
+
+### What stays beside
+
 17. **Beside the binder** — the packing slip: project files the skill reads when it runs, kept outside it. _Visual:_ the binder on the bench beside the packing slip and the customer's folder.
 18. **Who uses it, and where** — the decision tool: just you or shared, one project or many; only you in one project bakes context in and skips governance, shared across projects keeps context out and gets an owner and evals. _Visual:_ a 2×2 matrix with binders placed in each square, readable at rest.
 19. **How grill-me and grill-with-docs work** — showcase of inside and beside together, on the real files: grill-me is the procedure, the interview format; grill-with-docs adds domain modelling, writing a glossary and decision records beside it for future runs to read. _Visual:_ grill-me's real SKILL.md, grill-with-docs writing GLOSSARY.md and decision records beside it, and the next run reading them; a small binder key in the corner.
 
+### Sharing it
+
+20. **Shared skills are knowledge articles** — an owner, a version and a review date; personal skills skip this until you promote one. _Visual:_ a binder cover with a document-control stamp. _Research:_ 1, 4
+21. **Who owns the binders** — governance: tiers from universal to product-specific, each with an owner and a review, like document control in a plant; still work in progress for most organisations. _Visual:_ tiered shelves with owner tags, in The deep zone. _Research:_ 4
+22. **Does the binder make things better?** — evals: run the job with and without the skill, because a bad skill can score below no skill at all. _Visual:_ two packing runs side by side, with and without the binder, and their scores. _Research:_ 3
+
 ### Keeping it alive
 
-20. **Every skill is a loan** — technical debt: writing a skill is quick, and you pay interest in maintenance. _Visual:_ a binder carrying a running interest tag. _Research:_ 1
-21. **The plant changes, the binder doesn't** — Lehman's laws: a model update or a new environment is a new temp reading an old binder, with results you can't predict. _Visual:_ the same binder at a new packing line with new machines. _Research:_ 1
-22. **Shared skills are knowledge articles** — an owner, a version and a review date; personal skills skip this until you promote one. _Visual:_ a binder cover with a document-control stamp. _Research:_ 1, 4
-23. **Retire binders** — delete skills nobody uses, so the shelf stays easy to choose from. _Visual:_ unused binders going into an archive box.
-
-### Governance and evals
-
-24. **Who owns the binders** — governance: tiers from universal to product-specific, each with an owner and a review, like document control in a plant; still work in progress for most organisations. _Visual:_ tiered shelves with owner tags, in The deep zone. _Research:_ 4
-25. **Does the binder make things better?** — evals: run the job with and without the skill, because a bad skill can score below no skill at all. _Visual:_ two packing runs side by side, with and without the binder, and their scores. _Research:_ 3
-26. **The whole iceberg** — lands the Learning goal: from the third-time signal near the surface to governance in the deep, back to the Red thread. _Visual:_ the full depth ruler, each Section's takeaway at its depth.
+23. **Every skill is a loan** — technical debt: writing a skill is quick, and you pay interest in maintenance. _Visual:_ a binder carrying a running interest tag. _Research:_ 1
+24. **The plant changes, the binder doesn't** — Lehman's laws: a model update or a new environment is a new temp reading an old binder, with results you can't predict. _Visual:_ the same binder at a new packing line with new machines. _Research:_ 1
+25. **Retire binders** — delete skills nobody uses, so the shelf stays easy to choose from. _Visual:_ unused binders going into an archive box.
+26. **The whole iceberg** — lands the Learning goal: from the third-time signal near the surface to upkeep in the Abyss, back to the Red thread. _Visual:_ the full depth ruler, each Section's takeaway at its depth, looking back up from the Abyss.
 
 ## Research questions
 
-1. Why do the established principles behind Sections 3 to 7 hold (rule of three, YAGNI and premature optimisation, information scent, Hick's law, information architecture, cohesion and coupling, technical debt, Lehman's laws, knowledge articles), and what is each one's source and wording?
+1. Why do the established principles behind Sections 3 to 8 hold (rule of three, YAGNI and premature optimisation, information scent, Hick's law, information architecture, cohesion and coupling, technical debt, Lehman's laws, knowledge articles), and what is each one's source and wording?
 2. Why do skills, personal instructions, project instructions and connectors load and get invoked the way they do across Claude, ChatGPT, Codex, Gemini and Copilot, what does each app call them, checked against the agentskills.io standard?
 3. Why do skills help or hurt agent results, per Vercel's numbers and any newer evals?
 4. Why do organisations tier, own and review shared skills the way they do today?
