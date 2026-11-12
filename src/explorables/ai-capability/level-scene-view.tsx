@@ -42,7 +42,7 @@ export function LevelSceneView(props: {
       <div className="flex flex-col overflow-hidden rounded-2xl border border-(--tone)/30 bg-(--tone)/5">
         <div className="relative h-40 overflow-hidden">
           {level === 'workflows' && <WorkflowSceneView frame={frame} words={words} />}
-          {level === 'factory' && <FactorySceneView frame={frame} words={words} />}
+          {level === 'factory' && <FactorySceneView frame={frame} label={words.factory} />}
           {(level === 'prompting' || level === 'agents') && <ChatSceneView frame={frame} words={words} />}
         </div>
         <p className="mt-auto border-t border-(--tone)/20 px-3 py-1.5 text-caption text-muted-foreground">

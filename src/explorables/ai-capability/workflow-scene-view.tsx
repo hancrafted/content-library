@@ -66,8 +66,8 @@ export function WorkflowSceneView({ frame, words }: { readonly frame: Frame; rea
           y1={AT[from][1]}
           x2={AT[to][0]}
           y2={AT[to][1]}
-          className="stroke-border"
-          strokeWidth="1.5"
+          className="stroke-muted-foreground"
+          strokeWidth="2.5"
         />
       ))}
       {NODES.map((node) => (

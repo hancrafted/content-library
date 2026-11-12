@@ -2,7 +2,7 @@ import { LEVELS, type Level } from './scene-frames.pure';
 
 /*
  * The geometry of the two layer rows, AI disciplines and Oversight. An item spans the Levels from one edge to another;
- * a position runs from 0 (the start of Prompting) to 4 (the end of Factory). Wide, a row draws each span across the
+ * a position runs from 0 (the start of Chat) to 4 (the end of Factory). Wide, a row draws each span across the
  * four columns; narrow, each Level's card draws its slice of it. Views only place what this module computes.
  */
 

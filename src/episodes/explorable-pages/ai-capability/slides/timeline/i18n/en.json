@@ -1,6 +1,6 @@
 {
   "title": "The timeline",
-  "caption": "Four Levels on one language model, from prompting in 2022–23 to the factory emerging in 2026.",
+  "caption": "Four Levels on one language model, from chat in 2022–23 to the factory emerging in 2026.",
   "readme": {
     "heading": "Read me",
     "labels": {
@@ -9,13 +9,13 @@
       "notice": "What to notice"
     },
     "shows": "Four Levels on one language model, each with its card, a scene and its wire down to the model. Explain is on; the toolbar adds rows that tell the same timeline from other angles: the effort each Level asks you to manage, its productivity increase, how many people work at it, the AI disciplines it adds, and where a person sits in its oversight.",
-    "tryit": "Switch on AI disciplines, then Oversight. Hover a card for its definition, click it for its source. Move the mouse onto a Level to play its scene; click a Level card or the model band for its definition. On a phone, swipe from Level to Level.",
+    "tryit": "Switch on AI disciplines, then Oversight. Click a card to open the definitions behind it, each from the page that gives it. Move the mouse onto a Level to play its scene; click a Level card or the model band for its definition. On a phone, swipe from Level to Level.",
     "notice": "The productivity increases are hypotheses; the measured line under each says what studies found, and no study has measured a workflow or a factory yet. Each adoption number counts a different population, so the four do not add up to one curve. Every discipline stays once added: a factory still needs prompts."
   },
   "notes": {
     "timeline": {
       "header": "Where the years and definitions come from",
-      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured productivity comes from research LLM-0019, the adoption numbers from LLM-0025, the AI disciplines from LLM-0023 and the oversight modes from LLM-0024."
+      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for chat, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured productivity comes from research LLM-0019, the adoption numbers from LLM-0025, the AI disciplines from LLM-0023 and the oversight modes from LLM-0024."
     },
     "oversight-origin": {
       "header": "Where in, on and out of the loop come from",

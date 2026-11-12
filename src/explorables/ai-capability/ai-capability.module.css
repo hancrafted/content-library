@@ -199,12 +199,20 @@
   }
 }
 
-/* The factory: one request slides in, one result slides out. */
+/* The factory: one request slides in, one result slides out, smoke rises while it works. */
 .enter {
   animation: feed 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .leave {
   animation: ship 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.running .smoke {
+  animation: smoke 2.4s ease-out infinite;
+}
+.smoke {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 @keyframes feed {
   0% {
@@ -234,6 +242,17 @@
     opacity: 0;
   }
 }
+@keyframes smoke {
+  from {
+    transform: translateY(0) scale(0.6);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(-14px) scale(1.4);
+    opacity: 0;
+  }
+}
+
 /* The next token the model is about to pick, blinking. */
 .next {
   animation: blink 1s steps(2) infinite;
@@ -278,6 +297,7 @@
   .pop,
   .enter,
   .leave,
+  .running .smoke,
   .next,
   .gloss .tip,
   .load {
@@ -295,6 +315,11 @@
  * Narrow, it spans the width and its chips share it; from 48rem it fits its content.
  */
 .toolbar {
+  position: sticky;
+  /* Under the floating site header's band, over the cards that scroll beneath. */
+  top: calc(var(--header-block) + 0.25rem);
+  z-index: 20;
+  box-shadow: 0 0.35rem 0.6rem -0.4rem color-mix(in oklab, var(--foreground) 25%, transparent);
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -400,16 +425,30 @@
 .layerRow {
   gap: 0.25rem;
 }
+/* One lane per item: the eight tracks again, so the card sits on its half-Levels and its panel spans the row. */
 .lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.lane {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   column-gap: 0.5rem;
-  row-gap: 0.4rem;
+  row-gap: 0.3rem;
+}
+.lane > ul {
+  grid-column: 1 / -1;
 }
 .slices {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+.slice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 .layerCard {
   container-type: inline-size;
@@ -426,23 +465,29 @@
   cursor: pointer;
   transition:
     border-color 150ms ease-out,
-    box-shadow 150ms ease-out,
-    transform 150ms ease-out;
+    box-shadow 150ms ease-out;
+}
+.layerCard:hover,
+.layerCard[aria-expanded='true'] {
+  border-color: var(--hue);
+}
+.layerCard[aria-expanded='true'] {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--hue) 30%, transparent);
 }
 .layerCard.emerging {
   border-style: dashed;
 }
-.layerCard[data-on='true'],
-.layerCard[aria-pressed='true'] {
-  border-color: var(--hue);
-  box-shadow: 0 0 0 2px color-mix(in oklch, var(--hue) 30%, transparent);
-}
-.layerCard[data-on='true'] {
-  transform: translateY(-1px);
-}
 .layerCard:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+/* The disclosure caret points down while the card is open, right while it is closed. */
+.caret {
+  flex: none;
+  transition: transform 150ms ease-out;
+}
+.layerCard[aria-expanded='false'] .caret {
+  transform: rotate(-90deg);
 }
 /* A card too narrow for its drawing beside its words stacks them, and drops its one-liner. */
 .cardBody {
@@ -463,10 +508,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .layerCard {
+  .layerCard,
+  .caret {
     transition: none;
-  }
-  .layerCard[data-on='true'] {
-    transform: none;
   }
 }

@@ -39,12 +39,8 @@ export interface SceneWords {
   readonly loop: string;
   readonly loopDone: string;
   readonly agent: string;
-  /** What the factory scene shows, said to assistive tech, and the names of its four stages. */
+  /** What the factory scene shows, said to assistive tech. */
   readonly factory: string;
-  readonly spec: string;
-  readonly build: string;
-  readonly test: string;
-  readonly release: string;
 }
 
 /** The two layer rows: one item each per span the config lists. */
@@ -53,25 +49,25 @@ export type DisciplineId = 'prompt' | 'context' | 'harness' | 'loop' | 'graph';
 export type OversightId = 'hitl' | 'hotl' | 'hootl';
 export type LayerItemId = DisciplineId | OversightId;
 
-/** A layer item's words: its name, a one-line meaning on its card, and its definition. */
+/** One definition of a layer item: who gives it, what it says and the page it comes from. */
+export interface LayerDefinition {
+  readonly by: string;
+  readonly text: string;
+  readonly title: string;
+  readonly url: string;
+}
+
+/** A layer item's words: its name, a one-line meaning on its card, and the definitions shown when it is opened. */
 export interface LayerItemWords {
   readonly name: string;
   readonly line: string;
-  readonly definition: string;
-  /** A discipline cites its own source. */
-  readonly sourceLabel?: string;
-  readonly sourceUrl?: string;
-  /** An oversight mode quotes the source the term comes from. */
-  readonly quote?: string;
+  readonly definitions: readonly LayerDefinition[];
 }
 
-/** A layer row's words: the hint shown before a card is lit, and its items. Oversight names the origin of its terms. */
+/** A layer row's words: the hint under it and its items. */
 export interface LayerWords {
   readonly hint: string;
   readonly items: Readonly<Partial<Record<LayerItemId, LayerItemWords>>>;
-  readonly origin?: string;
-  readonly sourceLabel?: string;
-  readonly sourceUrl?: string;
 }
 
 /** Where a layer item sits: its span between two Level edges, its tone and, for a fading one, its strength stops. */
