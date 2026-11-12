@@ -10,19 +10,18 @@ const factoryOf = (id: string) => {
 };
 
 describe('success cases', () => {
-  it('puts the tire swing Customer in the first column and each work center in its factory column and row', () => {
-    // ARRANGE (the reference build's grid columns and rows, read from flow.html in its cartoon view)
+  it('lays the tire swing out as ten cards in two rows of five, in the cartoon order, the Customer first', () => {
+    // ARRANGE (the cartoon: Customer, Product management, Analysis, Engineering, Sales / Documentation, Operations, Billing, Support, what the customer needed)
     const m = factoryOf('tire');
-    const size = { cols: 4, rows: 3 };
+    const size = { cols: 5, rows: 2 };
     const cells = {
-      customer: [1, 2],
-      sales: [2, 1],
-      pm: [2, 2],
-      support: [2, 3],
+      customer: [1, 1],
+      pm: [2, 1],
       ba: [3, 1],
-      eng: [3, 3],
-      qa: [4, 3],
-      ops: [4, 1],
+      eng: [4, 1],
+      sales: [5, 1],
+      ops: [2, 2],
+      support: [4, 2],
     };
     // ACT
     const g = gridOf(m);
@@ -31,18 +30,29 @@ describe('success cases', () => {
     expect(g.at).toEqual(cells);
   });
 
-  it('fills the empty cells with Documentation and Billing, and puts what the customer really needed under the Customer in the roles state', () => {
+  it('fills the cartoon cells that are no work center with Documentation, Billing and what the customer really needed', () => {
     // ARRANGE
     const m = factoryOf('tire');
     const expected = [
-      { id: 'doc', at: [3, 2] },
-      { id: 'billing', at: [4, 2] },
-      { id: 'needed', at: [1, 3] },
+      { id: 'doc', at: [1, 2] },
+      { id: 'billing', at: [3, 2] },
+      { id: 'needed', at: [5, 2] },
     ];
     // ACT
     const tiles = tilesOf(m);
     // ASSERT
     expect(tiles).toEqual(expected);
+  });
+
+  it('keeps a use case without the cartoon at its factory columns and rows', () => {
+    // ARRANGE
+    const m = factoryOf('gate');
+    // ACT
+    const g = gridOf(m);
+    // ASSERT
+    expect(g.at.customer).toEqual([1, expect.any(Number)]);
+    expect(Object.values(g.at).every((c) => c[0] >= 1 && c[1] >= 1)).toBe(true);
+    expect(Object.keys(g.at)).toContain('lspec');
   });
 });
 
@@ -58,13 +68,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps quality assurance, which has no cartoon panel, at its factory cell', () => {
+  it('leaves quality assurance, which has no cartoon panel, out of the tire swing roles view', () => {
     // ARRANGE
     const m = factoryOf('tire');
-    const at = [4, 3];
     // ACT
     const g = gridOf(m);
     // ASSERT
-    expect(g.at.qa).toEqual(at);
+    expect(g.at.qa).toBeUndefined();
   });
 });

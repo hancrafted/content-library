@@ -9,13 +9,17 @@ import type { Route } from './software-ecology.types';
 
 export { offsetD, type Path, type Pt } from './factory-paths.pure.ts';
 
-/** A station card spans x±HALF, y-TOP..y+BOT; belts run at y. */
+/**
+ * A station card spans x±HALF, y-TOP..y+BOT; belts run at y. The title row is HEAD high across the full width; under
+ * it the rack stands on the left and the document in work sits centred in the rest, so y is the middle of that area.
+ */
 export const HALF = 110,
-  TOP = 48,
-  BOT = 44;
-/** The document in work sits at x+WX; top and bottom ports sit on that line. */
-export const WX = 36;
-export const CUST_W = 82,
+  TOP = 71,
+  BOT = 43,
+  HEAD = 28;
+/** The document in work sits at x+WX, centred right of the rack; top and bottom ports sit on that line. */
+export const WX = 25;
+export const CUST_W = 107,
   CUST_TOP = 128,
   CUST_BOT = 128;
 /** A belt runs at least this far straight out of and into a station. */

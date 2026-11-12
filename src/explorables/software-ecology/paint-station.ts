@@ -1,12 +1,12 @@
 /*
  * What a station shows on the canvas, kept in step with the model (design-ADR 0024 §14): the rack of six slots on
- * the left, filling from the bottom, and the document in work. Documents slide in from the belt, down the rack, into
+ * the left beneath the title row, filling from the bottom, and the document in work. Documents slide in from the belt, down the rack, into
  * work and out onto the next belt; nothing appears or vanishes abruptly. The floor's events (the handle's `listen`)
  * report arrivals, starts and ends; each frame eases every document toward its place. Ported from the reference build's `visHook`, `landAll` and
  * `settle`.
  */
 import { spriteIdx } from './doc-sprites.ts';
-import { BOT, HALF, TOP, workAt, type FactoryLayout } from './factory-layout.pure.ts';
+import { BOT, HALF, HEAD, TOP, workAt, type FactoryLayout } from './factory-layout.pure.ts';
 import type {
   DocMarks,
   FloorBelt,
@@ -22,7 +22,8 @@ import { RACK } from './stage-readouts.pure.ts';
 
 export const RACK_W = 44,
   RACK_PAD = 5;
-export const SLOT = (TOP + BOT - 2 * RACK_PAD) / RACK;
+/** Six slots from the title row's foot to the card's bottom, a pad of RACK_PAD each side. */
+export const SLOT = (TOP + BOT - HEAD - 2 * RACK_PAD) / RACK;
 /** A document in the rack, relative to one on a belt. */
 export const RACK_S = 1.15;
 

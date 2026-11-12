@@ -41,8 +41,8 @@ describe('success cases', () => {
     // ARRANGE
     const { layout } = layoutOf('tire');
     const straight = [
-      [900, 580],
-      [1070, 580],
+      [920, 580],
+      [1090, 580],
     ];
     // ACT
     const belt = layout.belts['eng-qa']!;
@@ -56,10 +56,10 @@ describe('failure cases', () => {
     // ARRANGE
     const { layout } = layoutOf('tire');
     const elbowed = [
-      [510, 370],
-      [560, 370],
-      [560, 160],
-      [680, 160],
+      [530, 370],
+      [580, 370],
+      [580, 160],
+      [700, 160],
     ];
     // ACT
     const belt = layout.belts['pm-ba']!;
@@ -69,11 +69,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('starts a station belt at the document in work, inside the card, 74 units before its port', () => {
+  it('starts a station belt at the document in work, inside the card, 85 units before its port', () => {
     // ARRANGE
     const { layout } = layoutOf('tire');
-    const inner = 74,
-      work = [826, 580];
+    const inner = 85,
+      work = [835, 580];
     // ACT
     const belt = layout.belts['eng-qa']!;
     // ASSERT
@@ -84,7 +84,7 @@ describe('edge cases', () => {
   it('keeps a corner on another belt square and rounds the free one, on the Customer’s belt to Sales', () => {
     // ARRANGE
     const { layout } = layoutOf('tire');
-    const squareThenRound = 'M172 370 L215 370 L215 174 Q215 160 229 160 L290 160';
+    const squareThenRound = 'M222 370 L266 370 L266 174 Q266 160 280 160 L310 160';
     // ACT
     const d = layout.belts['customer-sales']!.path.d;
     // ASSERT
@@ -94,7 +94,7 @@ describe('edge cases', () => {
   it('places a junction plate where one belt’s corner lies on another belt', () => {
     // ARRANGE
     const { layout } = layoutOf('tire');
-    const plate = '215,370';
+    const plate = '266,370';
     // ACT
     const plates = layout.plates.map((p) => p.join(','));
     // ASSERT

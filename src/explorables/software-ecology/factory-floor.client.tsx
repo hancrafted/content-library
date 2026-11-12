@@ -142,6 +142,15 @@ const stationTargets = (spots: SpotProps, id: string): TargetProps[] =>
 /** A card's own spot: the Customer's, or `<id>:card`. */
 const cardSpot = (c: CartoonCardPart) => (c.kind === 'customer' ? 'customer' : `${c.id}:card`);
 
+/** The Context targets of a work center the roles state does not draw (Quality assurance): hidden, so each still resolves once. */
+function HiddenTargets({ ids, spots }: { ids: readonly string[]; spots: SpotProps }) {
+  return ids.flatMap((id) =>
+    [spots.targets?.[`${id}:card`], ...stationTargets(spots, id)].flatMap((t) =>
+      t ? [<span key={t['data-target']} hidden {...t} />] : [],
+    ),
+  );
+}
+
 /** The roles state: every card at its factory cell, the cartoon tiles in the empty ones. */
 function CartoonCards(p: FloorProps) {
   const m = p.f.run.topology,
@@ -155,13 +164,12 @@ function CartoonCards(p: FloorProps) {
           key={c.id}
           {...c}
           cardView="role"
-          label={labelOf(p.words, c.kind, c.title)}
           target={p.spots.targets?.[cardSpot(c)]}
           stationTargets={stationTargets(p.spots, c.id)}
-          onOpen={p.onCard}
           cartoon={{ ...c, words, marker: p.spots.markers?.[cardSpot(c)] }}
         />
       ))}
+      <HiddenTargets ids={m.order.filter((id) => !cards.some((c) => c.id === id))} spots={p.spots} />
       {tiles.map((t) => (
         <TileView key={t.id} {...t} blank={words.blank} />
       ))}
@@ -188,7 +196,7 @@ const floorHandlers = (p: FloorProps) => ({
 
 export function Floor(p: FloorProps & { view: ViewId }) {
   const { layout, run } = p.f;
-  const cols = useMemo(() => gridOf(run.topology).cols, [run]);
+  const { cols, rows } = useMemo(() => gridOf(run.topology), [run]);
   return (
     <div
       ref={p.f.floor}
@@ -196,7 +204,7 @@ export function Floor(p: FloorProps & { view: ViewId }) {
       style={
         p.view === 'factory'
           ? { width: layout.width, height: layout.height }
-          : ({ '--cols': String(cols) } as CSSProperties)
+          : ({ '--cols': String(cols), '--rows': String(rows) } as CSSProperties)
       }
       {...(p.view === 'factory' ? floorHandlers(p) : {})}
     >

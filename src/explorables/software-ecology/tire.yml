@@ -1,7 +1,7 @@
 # Tire swing: master data for one use case (schema software-ecology-factory/5). Words live in tire.words.yml / tire.words.de.yml.
 id: tire
 panels: true # the tire swing cartoon exists for this use case
-layout: { width: 1400, height: 700, top: 0 }
+layout: { width: 1420, height: 700, top: 0 }
 mechanics: # strength of each mechanic while its toolbar toggle is on
   rework: 0.4 # chance a work center sends bad input back (0 to 1)
   churn: 1.2 # bad input that is kept: it hands on this many times the documents (1 to 4)
@@ -9,7 +9,7 @@ mechanics: # strength of each mechanic while its toolbar toggle is on
 # mix: where requests go (weights). good / bad: the chance a good or bad release brings a new request, and where it goes;
 # a bad release's request is a complaint. releases: the work centers whose shipments are releases (the rest are answers).
 customer:
-  { at: [90, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
+  { at: [115, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
 # company: service (only the Customer asks) or product (roles also write tickets of their own: the sources below).
 company: product
 sources: # Product company: own tickets a week, written into a role's backlog and handed on like a request
@@ -28,37 +28,37 @@ display: { pile: heap, beltMotion: false }
 # Optional: service: exponential (default normal), buffer: n (the sender blocks when it is full),
 # inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai }.
 centers:
-  - { id: sales, role: sales, at: [400, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
-  - { id: pm, role: pm, at: [400, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
+  - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
+  - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
   - {
       id: support,
       role: support,
-      at: [400, 580],
+      at: [420, 580],
       realistic: [90, 95],
       spawns: [{ choose: [{ to: eng, w: 0.4 }, { to: customer, w: 0.6 }] }],
     }
-  - { id: ba, role: ba, at: [790, 160], realistic: [88, 93], spawns: [{ to: eng, n: 1 }] }
-  - { id: eng, role: eng, at: [790, 580], realistic: [88, 91], spawns: [{ to: qa, n: 1 }] }
+  - { id: ba, role: ba, at: [810, 160], realistic: [88, 93], spawns: [{ to: eng, n: 1 }] }
+  - { id: eng, role: eng, at: [810, 580], realistic: [88, 91], spawns: [{ to: qa, n: 1 }] }
   - {
       id: qa,
       role: qa,
-      at: [1180, 580],
+      at: [1200, 580],
       inspection: true,
       stampUnderPressure: 0.8,
       realistic: [88, 98],
       spawns: [{ to: ops, n: 1 }],
     }
-  - { id: ops, role: ops, at: [1180, 160], realistic: [88, 98], spawns: [{ to: customer, n: 1 }] }
+  - { id: ops, role: ops, at: [1200, 160], realistic: [88, 98], spawns: [{ to: customer, n: 1 }] }
 # Routes of the belts, keyed from-to: out / in (port: left, right, top, bottom), via (corners), xm (elbow x), over (crosses on a bridge).
 routes:
-  customer-sales: { xm: 215 }
-  customer-support: { xm: 215 }
+  customer-sales: { xm: 266 }
+  customer-support: { xm: 266 }
   sales-pm: { out: bottom, in: top }
-  pm-ba: { xm: 560 }
+  pm-ba: { xm: 580 }
   ba-eng: { out: bottom, in: top }
   qa-ops: { out: top, in: bottom }
-  ops-customer: { out: top, in: top, via: [[1216, 36], [90, 36]] }
-  support-customer: { out: bottom, in: bottom, via: [[436, 668], [90, 668]] }
+  ops-customer: { out: top, in: top, via: [[1225, 36], [115, 36]] }
+  support-customer: { out: bottom, in: bottom, via: [[445, 668], [115, 668]] }
 # States. Roles (its name in the words), Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory.
 # reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
 # fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or

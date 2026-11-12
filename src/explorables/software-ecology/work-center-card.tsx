@@ -1,6 +1,5 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
-import type { KeyboardEvent, MouseEvent } from 'react';
-import { RoleCardView, type CartoonCardProps } from './cartoon-card-view';
+import { RoleCardView, rowsAt, type CartoonCardProps } from './cartoon-card-view';
 import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
 import { CustomerDashboard, type CustomerDashboardProps } from './customer-dashboard.client';
 import styles from './software-ecology.module.css';
@@ -9,7 +8,7 @@ import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-cente
 
 /*
  * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the role with its
- * cartoon panel (`role`), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
+ * cartoon panel (`role`, not clickable since feedback 09), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
  * and the compare stream's columns show. Every floor view keeps the card's id on its root, so the parent can morph one
  * view's box into the next.
  */
@@ -25,8 +24,9 @@ interface Opens {
 }
 
 export type WorkCenterCardProps =
-  | (Opens & {
+  | {
       readonly cardView: 'role';
+      readonly id: string;
       readonly kind: 'role' | 'customer';
       readonly cell: readonly [number, number];
       /** A Slide's Context target on the card. */
@@ -34,17 +34,11 @@ export type WorkCenterCardProps =
       /** Targets the station places on its rack or a sign; here they cover the card, so a note still lights it. */
       readonly stationTargets?: readonly TargetProps[];
       readonly cartoon: CartoonCardProps;
-    })
+    }
   | (Opens & { readonly cardView: 'station'; readonly kind: 'role'; readonly station: StationCardProps })
   | (Opens & { readonly cardView: 'station'; readonly kind: 'customer'; readonly customer: CustomerCardProps })
   | { readonly cardView: 'dashboard'; readonly kind: 'role'; readonly dashboard: WorkCenterDashboardProps }
   | { readonly cardView: 'dashboard'; readonly kind: 'customer'; readonly dashboard: CustomerDashboardProps };
-
-const keyOpen = (p: Opens) => (e: KeyboardEvent) => {
-  if (e.key !== 'Enter' && e.key !== ' ') return;
-  e.preventDefault();
-  p.onOpen?.(p.id, e.shiftKey);
-};
 
 type PanelProps = Extract<WorkCenterCardProps, { cardView: Exclude<CardView, 'role'> }>;
 
@@ -67,12 +61,7 @@ export function WorkCenterCard(p: WorkCenterCardProps) {
       data-card-view={p.cardView}
       data-id={p.id}
       data-kind={p.kind}
-      style={{ gridColumn: p.cell[0], gridRow: p.cell[1] }}
-      role="button"
-      tabIndex={0}
-      aria-label={p.label}
-      onClick={(e: MouseEvent) => p.onOpen?.(p.id, e.shiftKey)}
-      onKeyDown={keyOpen(p)}
+      style={rowsAt(p.cell)}
       {...p.target}
     >
       <RoleCardView {...p.cartoon} />

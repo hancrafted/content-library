@@ -57,13 +57,13 @@ const picks = (x: CompareParts, f: FactoryView, x2: { id: string; shift: boolean
 };
 
 /**
- * A card click, as the reference build's `cardClick`: in the roles state it opens the factory; in the factory a pick
- * (see `picks`), else, outside compare mode, its dashboard opens or closes.
+ * A card click in the factory, as the reference build's `cardClick`: a pick (see `picks`), else, outside compare mode,
+ * its dashboard opens or closes. The roles state's cards are not clickable (feedback 09).
  */
 export const cardClick =
-  (x: CompareParts, x2: { f: FactoryView; show: (v: ViewId) => void }) =>
+  (x: CompareParts, x2: { f: FactoryView }) =>
   (id: string, shift: boolean): void => {
-    if (x.view !== 'factory') return x2.show('factory');
+    if (x.view !== 'factory') return;
     if (!picks(x, x2.f, { id, shift }) && !x.compare.state.picking) x.dash.toggle(id);
   };
 
