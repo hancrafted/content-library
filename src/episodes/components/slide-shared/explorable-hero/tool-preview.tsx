@@ -38,7 +38,9 @@ export function ToolPreview({
     >
       <div className="mb-3.5 flex items-center justify-between gap-2" aria-hidden="true">
         <Heading title={title} note={note} />
-        {tag && <span className="rounded-full bg-muted px-2.5 py-0.5 font-semibold">{tag}</span>}
+        {tag && (
+          <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 whitespace-nowrap font-semibold">{tag}</span>
+        )}
       </div>
       <div aria-hidden="true">{children}</div>
     </div>

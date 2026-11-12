@@ -11,6 +11,8 @@
   --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--card));
   --rail: color-mix(in oklab, var(--foreground) 22%, var(--muted));
   --belt: color-mix(in oklab, var(--foreground) 6%, var(--card));
+  /* quiet ink for small text on a muted fill: muted-foreground alone falls below 4.5:1 on --muted and --fg-8 */
+  --ink-quiet: color-mix(in oklab, var(--muted-foreground) 65%, var(--foreground));
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -175,7 +177,7 @@
   top: 8px;
   right: 16px;
   margin: 0;
-  color: var(--muted-foreground);
+  color: var(--ink-quiet);
   font-style: italic;
 }
 .view {
@@ -852,9 +854,9 @@
   display: inline-flex;
   width: fit-content;
   border-radius: 999px;
-  padding: 0 8px;
+  padding: 3px 8px;
   background: var(--muted);
-  color: var(--muted-foreground);
+  color: var(--ink-quiet);
   margin-top: auto;
 }
 .tagRow .tag {
