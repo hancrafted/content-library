@@ -39,7 +39,7 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 Then close the Job with its summary, log the Gate's `start` for `draft brief`, and open the Spec for the user:
 
-1. Run `npm run episode:spec-assemble -- <slug>`: the Spec holds the Brief as Slide cards and a Brief card (Format, Audience, Style, Learning goal, Actionables, Hook, Red thread, Analogy, Constraints, Research questions), each heading with a note field keyed `brief--<heading-slug>`.
+1. Run `npm run episode:spec-assemble -- <slug>`: the Spec holds the Brief as Slide cards and a Brief card with every Brief heading but Slides, Threads, Episode Design Reference and Open ideas, each with a note field keyed `brief--<heading-slug>`.
 2. Open `http://localhost:<spec_port>` in the user's browser (`open <url>`) and print the URL; `spec_port` is in `pipeline.yml`.
 3. Stop. The user saves notes on the page; each lands as a `brief--<heading-slug>` item in `feedback/<NN>/feedback.md`. Write each note verbatim into `brief.md` under that heading, commit with `Gate: draft brief`, and re-run `episode:spec-assemble`.
 4. The user approves in chat, never on the page. Then run `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` and commit it with `Gate: approved brief` and an `Agent: brief-grill` trailer; `verified` stays `human:han`. Re-assembling now renders the Brief card read-only.

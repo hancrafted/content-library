@@ -6,7 +6,10 @@
 import { gateTier } from './staging-file.pure.ts';
 import { bodyLines } from './staging-markdown.pure.ts';
 
-/** The Brief headings the card shows, in the Brief template's order, so Han reviews every creative decision. */
+/**
+ * The Brief headings the card shows, in the Brief template's order. Slides have their own cards; Threads (its `###`
+ * subheadings end `under()`'s read), Episode Design Reference and Open ideas stay off the card.
+ */
 export const BRIEF_HEADINGS = [
   'Format',
   'Audience',

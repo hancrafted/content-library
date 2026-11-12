@@ -167,6 +167,11 @@ Attention is a budget, so spend it.
 
 A desk that only fits one stack.
 
+- The desk is the window.
+- The stack is the paste.
+
+The desk never grows.
+
 ## Learning goal
 
 Know the budget.
@@ -345,6 +350,8 @@ describe('success cases', () => {
   it('shows every Brief heading Han reviews, in Brief order, with a note field each, keyed brief--<heading-slug>', () => {
     // ARRANGE
     const brief = CARD_BRIEF;
+    const actionable = 'Trim pastes.';
+    const analogyEnd = 'The desk never grows.';
     // ACT
     const $ = page({ ...BASE, brief });
     // ASSERT
@@ -376,8 +383,8 @@ describe('success cases', () => {
       'note:brief--constraints',
       'note:brief--research-questions',
     ]);
-    expect($('[data-spec="brief-card"]').text()).toContain('Trim pastes.');
-    expect($('[data-spec="brief-card"]').text()).toContain('A desk that only fits one stack.');
+    expect($('[data-spec="brief-card"]').text()).toContain(actionable);
+    expect($('[data-spec="brief-card"]').text()).toContain(analogyEnd);
   });
 
   it('is read-only once the Brief is approved: the text stays, the note fields go', () => {
