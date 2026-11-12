@@ -4,7 +4,7 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T17:45:14Z
+  at: 2026-11-12T17:52:18Z
 locale: en
 brief: ./brief.md
 verified:
@@ -14,6 +14,8 @@ verified:
     at: 2026-11-12T16:22:59Z
   - by: process:markdown-harness
     at: 2026-11-12T17:45:14Z
+  - by: process:markdown-harness
+    at: 2026-11-12T17:52:18Z
 ---
 
 # What lies below the waterline of sustainable AI skills {#waterline-of-sustainable-ai-skills}
@@ -209,7 +211,7 @@ Caption: "You call a skill by name, or the AI picks it from its description." Th
 
 1. **By name** — There are two ways to bring a card into the dive. The first is the simple one: on the left you say its name, "Sediment sample, please", and he takes it out of the manual. No guessing involved.
 2. **By description** — On the right you say nothing. He scans the index while the dive runs and decides for himself that this task needs a card. His only clue is the line you wrote on it, so if the label is poor, the card stays in the manual, however good the steps are.
-3. **Unused is real** — Now read the line under the picture. Much of the time, the manual stayed on the shelf. I'd hold that loosely, but it should make you ask, in front of every card you write, whether the pilot would ever pull it.
+3. **Unused is real** — Now read the line under the picture. It comes from one test of one kind of card, so I'd hold it loosely, but it should make you ask, in front of every card you write, whether the pilot would ever pull it.
 
 ## When to write one {#when-to-write-one}
 
