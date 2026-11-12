@@ -37,6 +37,23 @@ const customerRequests = (s: Settings): number => {
   return n;
 };
 
+/** Runs half the weeks, emits at `id` (when given), runs the rest: the own tickets and requests heard, and the waiting own tickets. */
+const emitRun = (s: Settings, id: string | null) => {
+  const f = createFactory(B, s, SEED),
+    heard = { own: [] as string[], request: 0 };
+  f.listen((what, n) => {
+    if (what === 'own' && n) heard.own.push(n.node.id);
+    if (what === 'request') heard.request++;
+  });
+  f.step(WEEKS / 2);
+  const emitted = id ? f.emit(id) : false,
+    waiting = (at: string) => {
+      const st = f.floor.station(at);
+      return Array.from({ length: st?.queue.n ?? 0 }, (_, i) => st?.queue.at(i)).filter((r) => r?.own).length;
+    };
+  return { f, heard, emitted, waiting };
+};
+
 describe('success cases', () => {
   it('writes own tickets only at the work centers the file gives a source', () => {
     // ARRANGE
@@ -58,6 +75,45 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(marks.filter((x) => x.own && SOURCE_NODES.includes(x.id)).length).toBeGreaterThan(0);
+  });
+
+  it('emits one own ticket at once, marked as own work, and announces it to the floor', () => {
+    // ARRANGE
+    const s = (B.data.sources ?? []).reduce((x, src) => withOwn(x, src.id, { rate: 0 }), product());
+    // ACT
+    const { heard, emitted, waiting } = emitRun(s, 'pm');
+    // ASSERT
+    expect(emitted).toBe(true);
+    expect(heard.own).toEqual(['pm']);
+    expect(waiting('pm')).toBeGreaterThanOrEqual(1);
+  });
+
+  it('draws no random number: requests and scheduled own tickets stay the same, plus the one emitted', () => {
+    // ARRANGE
+    const s = withOwn(product(), 'roadmap', { arrivals: 'random', rate: 6 });
+    const plain = emitRun(s, null);
+    const emitting = emitRun(s, 'pm');
+    // ACT
+    plain.f.step(WEEKS / 2);
+    emitting.f.step(WEEKS / 2);
+    // ASSERT
+    expect(emitting.heard.request).toBe(plain.heard.request);
+    expect(emitting.heard.own.length).toBe(plain.heard.own.length + 1);
+    expect(emitting.heard.own.filter((x) => x === 'pm').length).toBe(
+      plain.heard.own.filter((x) => x === 'pm').length + 1,
+    );
+    expect(emitting.heard.own.filter((x) => x !== 'pm')).toEqual(plain.heard.own.filter((x) => x !== 'pm'));
+  });
+
+  it('keeps every document accounted for after the emitted ticket moves on once time runs', () => {
+    // ARRANGE
+    const s = withOwn(product(), 'roadmap', { rate: 0 });
+    const { f } = emitRun(s, 'pm');
+    // ACT
+    f.step(WEEKS);
+    const audit = f.read({ audit: true }).audit as { gap: number };
+    // ASSERT
+    expect(audit.gap).toBe(0);
   });
 
   it('changes the arrivals when the rate changes, and stops them at zero', () => {
@@ -109,6 +165,26 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses to emit at a work center without a source, at the Customer, and under Service provider', () => {
+    // ARRANGE
+    const noSource = 'customer';
+    const withSource = createFactory(B, product(), SEED);
+    const service = createFactory(B, withCompany(product(), 'service'), SEED);
+    const sinkless = (withSource.topology.centers.map((c) => c.id) as string[]).find(
+      (id) => !SOURCE_NODES.includes(id),
+    );
+    // ACT
+    const results = [
+      withSource.emit(noSource),
+      withSource.emit('nobody'),
+      sinkless ? withSource.emit(sinkless) : false,
+      service.emit(SOURCE_NODES[0] as string),
+    ];
+    // ASSERT
+    expect(results).toEqual([false, false, false, false]);
+    expect(withSource.floor.stations.every((st) => !st.queue.n)).toBe(true);
+  });
+
   it('writes no own work under Service provider, and again under Product company at the rates the visitor set', () => {
     // ARRANGE
     const rate = 5;

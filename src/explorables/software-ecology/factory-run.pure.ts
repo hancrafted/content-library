@@ -116,6 +116,11 @@ export class FactoryRun {
     this.f.set(s);
   }
 
+  /** One own ticket arrives now at the work center; false when it has no source or the company is a Service provider. */
+  emit(id: string): boolean {
+    return this.f.emit(id);
+  }
+
   listen(fn: FloorListener | null) {
     this.f.listen(fn);
   }

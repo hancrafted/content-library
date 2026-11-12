@@ -257,6 +257,8 @@ dash:
     arrivalsTip: 'Steady: one ticket every 1/rate of a week, evenly. Random: the same on average, but they bunch up and thin out, as real tickets do.'
     steady: Steady
     random: Random
+    emit: Emit task
+    emitTip: Adds one own ticket to this work center's backlog now
   help: Explain the charts
   close: Close
   closeTip: Close (Esc)

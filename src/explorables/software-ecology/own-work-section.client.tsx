@@ -1,11 +1,13 @@
 'use client';
 
 import { fillTemplate } from '@/shared/lib/template.pure';
+import { Lightbulb } from 'lucide-react';
 import { Fragment, useId } from 'react';
 import type { OwnReadout } from './dashboard-readouts.pure.ts';
 import { OWN_RATE_MAX, type OwnSet, type OwnWorkWords } from './own-work.types';
 import { Field, HelpNameProvider, HelpTip, Segmented, SliderControl, Value } from './settings-field.client';
 import styles from './software-ecology.module.css';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
  * A work center's own work (design-ADR 0024 §2, §17; feedback 10): for a node the file gives a source, the tickets it
@@ -17,6 +19,8 @@ export interface OwnWorkSectionProps {
   readonly own: readonly OwnReadout[];
   readonly words: OwnWorkWords;
   readonly onChange: (id: string, patch: OwnSet) => void;
+  /** Emit one own ticket at this work center now. */
+  readonly onEmit: () => void;
 }
 
 interface SourceProps {
@@ -64,6 +68,23 @@ function ArrivalsField(p: SourceProps) {
   );
 }
 
+/** One own ticket now, like a scheduled arrival: an action, not a setting. */
+function EmitButton(p: { readonly words: OwnWorkWords; readonly onEmit: () => void }) {
+  return (
+    <ToolTip tip={p.words.emitTip}>
+      <button
+        type="button"
+        className={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
+        onClick={p.onEmit}
+        data-emit-own
+      >
+        <Lightbulb size={16} aria-hidden="true" />
+        <span>{p.words.emit}</span>
+      </button>
+    </ToolTip>
+  );
+}
+
 export function OwnWorkSection(p: OwnWorkSectionProps) {
   const id = useId();
   if (!p.own.length) return null;
@@ -82,6 +103,7 @@ export function OwnWorkSection(p: OwnWorkSectionProps) {
             <ArrivalsField x={x} words={p.words} onChange={p.onChange} />
           </Fragment>
         ))}
+        <EmitButton words={p.words} onEmit={p.onEmit} />
       </section>
     </HelpNameProvider>
   );

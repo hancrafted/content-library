@@ -18,6 +18,8 @@ export interface FactoryControls {
   setSpeed(n: number): void;
   /** A live change: the run reads `next` from its next step on. */
   setSettings(next: Settings): void;
+  /** Emits one own ticket at a work center now: an action, so it neither marks the state modified nor is saved. */
+  emit(id: string): void;
   clear(): void;
   /** Reset to default: the settings and speed the use-case file defines for the active state; the modified dot goes. */
   reset(d: { readonly s: Settings; readonly speed: number }): void;
@@ -93,6 +95,7 @@ const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls =
       x.seen(next);
     },
     reset: resetWith(x, { B, id: run.preset.id }),
+    emit: (id) => void run.emit(id),
     clear: () => x.setSt(fresh(B, run.preset.id, { s: run.settings, clear: true })),
     adopt: (next) => {
       x.setModified(false);

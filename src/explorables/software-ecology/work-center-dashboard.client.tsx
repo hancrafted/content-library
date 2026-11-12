@@ -31,6 +31,8 @@ export interface WorkCenterDashboardProps {
   readonly onAi: (on: boolean) => void;
   /** One own-work source changed: its tickets a week or its arrivals. */
   readonly onOwn: (id: string, patch: OwnSet) => void;
+  /** Emit one own ticket at this work center now. */
+  readonly onEmit: () => void;
   readonly onHelp: () => void;
   /** A close button, in the popover. */
   readonly onClose?: () => void;
@@ -206,7 +208,7 @@ export function WorkCenterDashboard(p: WorkCenterDashboardProps) {
       <Drain r={p.r} words={p.words} />
       <DashTrends r={p.r} words={p.words} />
       <Settings {...p} />
-      <OwnWorkSection own={p.r.own} words={p.words.own} onChange={p.onOwn} />
+      <OwnWorkSection own={p.r.own} words={p.words.own} onChange={p.onOwn} onEmit={p.onEmit} />
       <DashFlows r={p.r} words={p.words} />
       <DashHighlights role={p.role} words={p.words} />
     </div>

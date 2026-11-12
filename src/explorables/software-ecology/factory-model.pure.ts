@@ -13,7 +13,7 @@ import type { Floor, FloorEvent, FloorListener, Topology } from './factory-reads
 import { seedBacklog } from './factory-seed.pure.ts';
 import { stability } from './factory-sizing.pure.ts';
 import { snapshotOf, type ReadOptions, type Snapshot } from './factory-snapshot.pure.ts';
-import { step } from './factory-step.pure.ts';
+import { emitOwn, step } from './factory-step.pure.ts';
 import type { Bundle, Settings } from './software-ecology.types';
 
 export type { DocMarks } from './factory-docs.pure.ts';
@@ -45,6 +45,11 @@ export interface FactoryHandle {
   read(o?: ReadOptions): Snapshot;
   /** Puts weeks of work, at each named work center's Ideal capacity, into its backlog now: a state that starts loaded. */
   pile(weeks: Readonly<Record<string, number>>): void;
+  /**
+   * Adds one own ticket to the work center's backlog now, like a scheduled own-work arrival; false when it has no
+   * source or the company is a Service provider. It draws no random number and changes no setting.
+   */
+  emit(id: string): boolean;
   /** One listener at a time; null stops listening. */
   listen(fn: FloorListener | null): void;
   /** The stability check at the given settings, the use case's Realistic by default. */
@@ -72,6 +77,7 @@ export const createFactory = (useCase: Bundle, settings: Settings, seed: number 
     },
     read: (o) => snapshotOf(m, o),
     pile: (weeks) => seedBacklog(m, weeks),
+    emit: (id) => emitOwn(m, id),
     listen: (fn) => {
       m.hook = fn && ((what, n, at) => fn(what as FloorEvent, stationOf(n), at));
     },

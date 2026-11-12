@@ -224,4 +224,8 @@ const withRead = (base: FactoryControls, reread: () => void): FactoryControls =>
     base.setSettings(n);
     reread();
   },
+  emit: (id) => {
+    base.emit(id);
+    reread();
+  },
 });
