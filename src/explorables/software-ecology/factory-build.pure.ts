@@ -4,6 +4,7 @@
  * to belts, one server per work center or per person. It knows who hands work to whom, never where anything is drawn.
  */
 import { HANDOFF } from './factory-dials.pure.ts';
+import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
 import type { Belt, BeltKind, CustomerNode, FactoryNode, NodeKind, Server, SpawnRule } from './factory.types';
 import type { Bundle, CenterDef, RoleDef, UseCaseData } from './software-ecology.types';
@@ -152,7 +153,7 @@ const newServer = (id: string): Server => ({
   busy: false,
   blocked: false,
   n: null,
-  J: { q: 1, ai: 0, fl: 0, e: 0, b: 0 },
+  J: new Job(),
   start: 0,
   end: 0,
   bounce: false,

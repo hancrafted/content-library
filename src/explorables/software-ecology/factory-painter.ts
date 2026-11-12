@@ -1,13 +1,14 @@
 /*
  * The factory's canvas (design-ADR 0024 §14): documents on belts, racks, pile-ups and the document in work, in one
  * canvas over the SVG belts. The floor fits the stage (contain), centred; the canvas runs at up to twice the device
- * pixels. Colours are read from the tokens and re-read when the theme changes. Ported from the reference build's
+ * pixels. Colours are read from the tokens and re-read when the theme changes. It reads the model only through the
+ * handle's Floor and hears it through `listen`; it never writes into the model. Ported from the reference build's
  * `measure` and `draw`.
  */
 import { label, makeSheet, readColors, type Colors, type Ctx } from './doc-sprites.ts';
 import type { BeltLayout, FactoryLayout, Pt } from './factory-layout.pure.ts';
-import type { Belt, Factory, FactoryNode } from './factory.types';
-import { drawRiders, type Frame, type Lane, type Riders } from './paint-belts.ts';
+import type { Floor, FloorBelt, FloorListener, FloorStation } from './factory-model.pure.ts';
+import { drawRiders, ScreenTimes, type Frame, type Lane, type Rider, type Riders } from './paint-belts.ts';
 import { drawPile, pileFor, type Pile, type PileStyle } from './paint-pile.ts';
 import { drawRack, drawWork } from './paint-rack.ts';
 import { settle, Stations, type Landing } from './paint-station.ts';
@@ -38,7 +39,7 @@ export interface DrawIn {
 const SHEET_PX = 15 * 2;
 const EASE_SECS = 0.07;
 
-const lanesFor = (e: Belt, b: BeltLayout): readonly [Lane, Lane] => {
+const lanesFor = (e: FloorBelt, b: BeltLayout): readonly [Lane, Lane] => {
   const top = e.from.kind === 'role' && (b.corners[0] as Pt)[1] < e.from.def.y - 1;
   return [
     { path: b.vis, inner: b.inner, hideIn: top ? b.inner : -1, back: false },
@@ -51,7 +52,7 @@ class Single implements Riders {
   get n() {
     return this.l ? 1 : 0;
   }
-  at() {
+  at(): Rider {
     return this.l as Landing;
   }
 }
@@ -59,27 +60,28 @@ class Single implements Riders {
 export class FactoryPainter {
   readonly clock = { now: 0, reduced: false };
   readonly stations: Stations;
+  private readonly screen = new ScreenTimes();
   private C: Colors | null = null;
   private sheet: HTMLCanvasElement | null = null;
   private px = 0;
   private fit: Fit = { k: 1, ox: 0, oy: 0 };
   private dpr = 1;
   private last = 0;
-  private readonly piles = new Map<FactoryNode, Pile | null>();
+  private readonly piles = new Map<FloorStation, Pile | null>();
   private readonly one = new Single();
   private readonly lanes = new Map<string, readonly [Lane, Lane]>();
 
   constructor(
-    private readonly m: Factory,
+    private readonly floor: Floor,
     private readonly layout: FactoryLayout,
   ) {
-    this.stations = new Stations(layout, this.clock);
-    for (const e of m.edges) this.lanes.set(e.key, lanesFor(e, layout.belts[e.key] as BeltLayout));
+    this.stations = new Stations(layout, this.clock, this.screen);
+    for (const e of floor.belts) this.lanes.set(e.key, lanesFor(e, layout.belts[e.key] as BeltLayout));
   }
 
-  /** Starts listening to the model, once it is warm: documents land from now on. */
-  attach() {
-    this.m.hook = this.stations.hook;
+  /** What the painter hears from the floor once the line is warm: documents land from then on. */
+  get listener(): FloorListener {
+    return this.stations.hear;
   }
 
   /** Re-reads the colours, for a theme change. */
@@ -119,8 +121,8 @@ export class FactoryPainter {
     return l;
   }
 
-  private pileOf(n: FactoryNode): Pile | null {
-    if (!this.piles.has(n)) this.piles.set(n, pileFor(n, this.m.seed));
+  private pileOf(n: FloorStation): Pile | null {
+    if (!this.piles.has(n)) this.piles.set(n, pileFor(n, this.floor.seed));
     return this.piles.get(n) ?? null;
   }
 
@@ -128,12 +130,8 @@ export class FactoryPainter {
     return (this.layout.belts[P.e.key] as BeltLayout).path.pts;
   }
 
-  private aiAt(n: FactoryNode): boolean {
-    return !!this.m.dc[n.idx]?.ai;
-  }
-
   private belts(f: Frame) {
-    for (const e of this.m.edges) {
+    for (const e of this.floor.belts) {
       const [fwd, back] = this.lanesOf(e.key);
       drawRiders(f, fwd, e.fwd);
       if (e.back.n) drawRiders(f, back, e.back);
@@ -146,13 +144,13 @@ export class FactoryPainter {
 
   private centers(f: Frame, x: { dt: number; at: DrawIn }) {
     const ease = x.at.warming ? 1 : 1 - Math.exp(-x.dt / EASE_SECS);
-    for (const n of this.m.centers) {
+    for (const n of this.floor.stations) {
       const v = this.stations.of(n),
         P = this.pileOf(n);
       settle(n, v, ease);
       if (P) drawPile(f, n, { P, pts: this.endOf(P), dt: x.dt, style: x.at.pile });
       drawRack(f, n, v);
-      drawWork(f, n, { v, at: { ai: this.aiAt(n), secsPerWeek: x.at.secsPerWeek, blocked: x.at.blocked } });
+      drawWork(f, n, { v, at: { ai: n.ai, secsPerWeek: x.at.secsPerWeek, blocked: x.at.blocked } });
     }
   }
 
@@ -178,8 +176,9 @@ export class FactoryPainter {
       sheet: this.sheet as HTMLCanvasElement,
       px: this.px,
       now: at.now,
-      tr: this.m.t,
+      tr: this.floor.t,
       reduced: at.reduced,
+      screen: this.screen,
       sprites: 0,
     };
     this.stations.landAll();

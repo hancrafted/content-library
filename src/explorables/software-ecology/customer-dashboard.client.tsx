@@ -1,3 +1,5 @@
+'use client';
+
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId } from 'react';
 import type { CustomerDashboard as Readout } from './dashboard-readouts.pure.ts';

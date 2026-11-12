@@ -5,9 +5,8 @@
  */
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
 import { startSettings } from './factory-dials.pure.ts';
-import { buildFactory } from './factory-model.pure.ts';
+import { createFactory } from './factory-model.pure.ts';
 import { presetOf } from './factory-run.pure.ts';
-import { stability } from './factory-sizing.pure.ts';
 import type {
   Bundle,
   Company,
@@ -89,12 +88,12 @@ const checked = (B: Bundle) => {
     p = presetOf(B, B.data.presets[0]?.id ?? 'ideal');
   const out = { refuse: [] as string[], warn: [] as string[], belts: 0 };
   for (const co of cos) {
-    const m = buildFactory(B, { s: { ...startSettings(B, p), company: co } }),
-      r = stability(m);
+    const f = createFactory(B, { ...startSettings(B, p), company: co }),
+      r = f.check();
     const tag = cos.length > 1 ? ` (as a ${co === 'product' ? 'product company' : 'service provider'})` : '';
     out.refuse.push(...r.refuse.map((x) => x + tag));
     out.warn.push(...r.warn);
-    out.belts = m.edges.length;
+    out.belts = f.topology.edges.length;
   }
   return out;
 };

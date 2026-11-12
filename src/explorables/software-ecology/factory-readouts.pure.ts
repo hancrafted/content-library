@@ -1,11 +1,9 @@
 /*
- * Readouts of the factory model (design-ADR 0024 §1, §10): the measures a scenario's `expect:` names, the Snapshot the
- * cards read, the traffic light of a work center, conservation and a state hash for the checks.
+ * Readouts of the factory model (design-ADR 0024 §1, §10): the measures a scenario's `expect:` names, the traffic light of a work center, conservation and a state hash for the checks.
  */
-import { DAYS, dials, rushOf, speedOf } from './factory-dials.pure.ts';
+import { DAYS, rushOf } from './factory-dials.pure.ts';
 import { solve } from './factory-solve.pure.ts';
-import type { Factory, FactoryNode, Server } from './factory.types';
-import type { Settings } from './software-ecology.types';
+import type { Factory, FactoryNode } from './factory.types';
 
 export const backlogOf = (m: Factory): number => m.centers.reduce((a, n) => a + n.L, 0);
 const inWork = (m: Factory): number => m.servers.reduce((a, sv) => a + (sv.busy || sv.blocked ? 1 : 0), 0);
@@ -26,7 +24,6 @@ export const conservation = (m: Factory) => {
   };
 };
 
-export const weeksOfWork = (n: FactoryNode, s: Settings): number => n.L / speedOf(n, dials(n, s));
 /** Satisfaction over the averaged releases: good ones minus complaints, out of all. */
 export const satRate = (m: Factory): number => {
   const t = m.rel[0] + m.rel[1];
@@ -67,54 +64,4 @@ export const stateHash = (m: Factory): string => {
   for (const e of m.edges) [e.inT, e.backT].forEach(add);
   for (const sv of m.servers) add(sv.end);
   return h.toString(16);
-};
-
-export interface CenterSnapshot {
-  readonly id: string;
-  readonly backlog: number;
-  readonly weeksWaiting: number;
-  readonly rush: number;
-  readonly busy: number;
-  readonly inWork: boolean;
-  /** 0 keeping up, 1 amber from a week of work waiting, 2 red from two. */
-  readonly level: number;
-}
-
-/** What the cards read: every work center, the belts' documents in transit and the Customer's measures. */
-export interface Snapshot {
-  readonly week: number;
-  readonly centers: readonly CenterSnapshot[];
-  readonly transit: Readonly<Record<string, number>>;
-  readonly customer: Readonly<Record<Exclude<CustomerMeasure, 'headroom'>, number>>;
-}
-
-const centerOf = (n: FactoryNode): CenterSnapshot => {
-  const sv = n.server as Server;
-  return {
-    id: n.id,
-    backlog: n.L,
-    weeksWaiting: n.Ws,
-    rush: rushOf(n),
-    busy: n.u.busy,
-    inWork: sv.n === n && (sv.busy || sv.blocked),
-    level: n.lvl,
-  };
-};
-
-/** The Snapshot; headroom needs a traffic solve, so it is read apart, through CUSTOMER_MEASURES. */
-export const readout = (m: Factory): Snapshot => {
-  const c = CUSTOMER_MEASURES;
-  return {
-    week: m.t,
-    centers: m.centers.map(centerOf),
-    transit: Object.fromEntries(m.edges.map((e) => [e.key, e.inT + e.backT])),
-    customer: {
-      output: c.output(m),
-      sat: c.sat(m),
-      leadDays: c.leadDays(m),
-      bugsPerWeek: c.bugsPerWeek(m),
-      own: c.own(m),
-      backlog: c.backlog(m),
-    },
-  };
 };

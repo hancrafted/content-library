@@ -1,3 +1,5 @@
+'use client';
+
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId } from 'react';
 import { dialRowsOf, num, type DialKey, type DialRow } from './dash-rows.pure.ts';

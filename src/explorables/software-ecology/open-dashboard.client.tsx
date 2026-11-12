@@ -1,3 +1,5 @@
+'use client';
+
 import { useId, type RefObject } from 'react';
 import type { DialKey } from './dash-rows.pure.ts';
 import { DashPopover } from './dashboard-popover.client';
@@ -50,7 +52,7 @@ export function CenterPanel(
   p: Pick<OpenDashboardProps, 'f' | 'dash' | 'words' | 'w'> & { id: string; titleId?: string; closable?: boolean },
 ) {
   const r = p.f.snap.dashboards[p.id],
-    n = p.f.run.m.nodes.get(p.id),
+    n = p.f.run.topology.nodes.get(p.id),
     c = p.f.controls;
   if (!r || !n) return null;
   return (

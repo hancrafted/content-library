@@ -11,7 +11,7 @@ describe('success cases', () => {
     // ACT
     const run = new FactoryRun({ B, preset: 'ideal', now: true });
     // ASSERT
-    expect(run.m.t).toBeCloseTo(WARM_WEEKS, digits);
+    expect(run.weeks).toBeCloseTo(WARM_WEEKS, digits);
     expect(run.warming).toBe(false);
   });
 
@@ -29,7 +29,7 @@ describe('success cases', () => {
     for (let i = 0; i < 60; i++) run.advance(second / 60, speed);
     // ASSERT
     expect(ended).toBe(true);
-    expect(run.m.t).toBeCloseTo(expected, digits);
+    expect(run.weeks).toBeCloseTo(expected, digits);
   });
 });
 
@@ -37,13 +37,13 @@ describe('failure cases', () => {
   it('drops time instead of spiralling when a frame is late', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
-    const t0 = run.m.t,
+    const t0 = run.weeks,
       longest = MAX_STEPS * DTW,
       digits = 6;
     // ACT
     run.advance(10, 10);
     // ASSERT
-    expect(run.m.t - t0).toBeCloseTo(longest, digits);
+    expect(run.weeks - t0).toBeCloseTo(longest, digits);
     expect(run.dropped).toBeGreaterThan(0);
   });
 });
@@ -57,8 +57,8 @@ describe('edge cases', () => {
     // ACT
     const run = new FactoryRun({ B, preset: 'ideal', now: false, clear: true, s: turned });
     // ASSERT
-    expect(run.m.s.over.qa?.eff).toBe(eff);
-    expect(run.m.t).toBe(0);
+    expect(run.settings.over.qa?.eff).toBe(eff);
+    expect(run.weeks).toBe(0);
   });
 
   it('starts empty at day 0 on Clear and on a preset that starts clear', () => {
@@ -68,8 +68,8 @@ describe('edge cases', () => {
     const cleared = new FactoryRun({ B, preset: 'ideal', now: true, clear: true });
     const spiral = new FactoryRun({ B, preset: 'bug-spiral', now: true });
     // ASSERT
-    expect(cleared.m.t).toBe(0);
-    expect(spiral.m.t).toBe(0);
+    expect(cleared.weeks).toBe(0);
+    expect(spiral.weeks).toBe(0);
   });
 
   it('stops on the step a tour names and stays there, whatever the speed', () => {

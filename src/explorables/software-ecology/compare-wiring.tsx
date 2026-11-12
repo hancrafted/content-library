@@ -1,8 +1,7 @@
 import type { RefObject } from 'react';
-import { useMemo } from 'react';
-import { CompareStream } from './compare-stream';
+import { CompareStream } from './compare-stream.client';
 import type { CompareWidgetProps } from './compare-widget';
-import { CenterPanel } from './open-dashboard';
+import { CenterPanel } from './open-dashboard.client';
 import type { Words } from './software-ecology-words.types';
 import type { ViewId } from './software-ecology.types';
 import type { WordsIn } from './use-case-words.pure.ts';
@@ -23,13 +22,6 @@ export interface CompareParts {
   readonly streamRoot: RefObject<HTMLElement | null>;
 }
 
-/** The dashboards on show: the open popover's, and the compare stream's columns. */
-export function useWatch(dash: DashboardState, compare: CompareActions): readonly string[] {
-  const { watch } = dash,
-    { stream } = compare;
-  return useMemo(() => (stream.length ? [...watch, ...stream] : watch), [watch, stream]);
-}
-
 /** The compare widget on the toolbar's second row: its picks as slots. */
 export const compareWidgetOf = (x: {
   words: Words;
@@ -40,7 +32,7 @@ export const compareWidgetOf = (x: {
 }): CompareWidgetProps => {
   const c = x.compare,
     icon = (id: string) => {
-      const n = x.f.run.m.nodes.get(id);
+      const n = x.f.run.topology.nodes.get(id);
       return n ? (n.role.icon ?? n.roleId) : id;
     };
   return {
@@ -58,7 +50,7 @@ export const compareWidgetOf = (x: {
 const picks = (x: CompareParts, f: FactoryView, x2: { id: string; shift: boolean }): boolean => {
   const c = x.compare,
     picking = c.state.picking;
-  if (!(picking || x2.shift) || f.run.m.nodes.get(x2.id)?.kind !== 'role') return false;
+  if (!(picking || x2.shift) || f.run.topology.nodes.get(x2.id)?.kind !== 'role') return false;
   if (!picking) x.dash.dismiss();
   c.pick(x2.id);
   return true;
@@ -79,7 +71,7 @@ export const cardClick =
 export function Stream({ words, x, f, w }: { words: Words; x: CompareParts; f: FactoryView; w: WordsIn }) {
   return (
     <CompareStream
-      m={f.run.m}
+      topo={f.run.topology}
       layout={f.layout}
       ids={x.compare.stream}
       w={w}

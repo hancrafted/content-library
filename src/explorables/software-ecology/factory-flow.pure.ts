@@ -3,18 +3,11 @@
  * per week; documents in transit are pooled tokens, each a count of identical documents, and every handoff takes the
  * same quarter day. A delivery to the Customer counts output, releases and follow-up requests.
  */
-import { MAX_TOKENS, Q, TAU, TAU_OUT } from './factory-dials.pure.ts';
-import type { Belt, Doc, Factory, FactoryNode, Job, Run, Token } from './factory.types';
+import { MAX_TOKENS, TAU, TAU_OUT } from './factory-dials.pure.ts';
+import { COMPL, FAIL, FROM_SRC, MAIN, OWN, Q, REDO, Run, SENT, Token } from './factory-docs.pure.ts';
+import type { Belt, Doc, Factory, FactoryNode, Job } from './factory.types';
 
-/** Job flags: a request straight from the Customer, to be redone, a complaint, failure demand, on its way back, the
- * document that carries a request on, a ticket of the company's own. */
-export const FROM_SRC = 1,
-  REDO = 2,
-  COMPL = 4,
-  FAIL = 8,
-  SENT = 16,
-  MAIN = 32,
-  OWN = 64;
+export { FAIL, FROM_SRC, MAIN, OWN, REDO } from './factory-docs.pure.ts';
 export const BUMP = 1 / TAU;
 
 const same = (r: Run, x: Run): boolean => r.q === x.q && r.ai === x.ai && r.fl === x.fl && r.e === x.e && r.b === x.b;
@@ -55,7 +48,7 @@ export const popJob = (n: FactoryNode, J: Job): void => {
 };
 
 const token = (m: Factory, x: Doc, T: number): Token => {
-  const t = m.pool.pop() ?? ({} as Token);
+  const t = m.pool.pop() ?? new Token();
   t.c = x.c;
   t.q = x.q;
   t.ai = x.ai;
@@ -63,7 +56,6 @@ const token = (m: Factory, x: Doc, T: number): Token => {
   t.b = x.b;
   t.t0 = x.t0;
   t.t1 = x.t0 + T;
-  t.vr = 0;
   return t;
 };
 
@@ -166,11 +158,11 @@ export const deliver = (m: Factory, e: Belt, x: Token): void => {
   if (B_.kind === 'customer') return toCustomer(m, e, x);
   B_.rate.arr += x.c * BUMP;
   if (x.fl & COMPL) B_.sign.complaint = m.t;
-  const run: Run = { q: x.q, ai: x.ai, fl: x.fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c };
+  const run = new Run({ q: x.q, ai: x.ai, fl: x.fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c });
   // Q114 A: complaint-born work handed on by another center (a bug ticket from Support) jumps the line
   if (x.fl & FAIL && e.from.kind === 'role') pushFront(B_, run);
   else pushBack(B_, run);
-  m.hook?.('arrive', B_, { e, x });
+  m.hook?.('arrive', B_, { belt: e, x });
 };
 
 export const deliverBack = (m: Factory, e: Belt, x: Token): void => {
@@ -178,6 +170,6 @@ export const deliverBack = (m: Factory, e: Belt, x: Token): void => {
   A.rate.arr += BUMP;
   A.rate.rwIn += BUMP;
   const fl = REDO | (x.fl & (FAIL | MAIN | OWN));
-  pushFront(A, { q: Q.BAD, ai: x.ai, fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c });
-  m.hook?.('front', A, { e, x });
+  pushFront(A, new Run({ q: Q.BAD, ai: x.ai, fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c }));
+  m.hook?.('front', A, { belt: e, x });
 };

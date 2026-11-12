@@ -1,8 +1,6 @@
 import { useMemo, useState } from 'react';
 import { NO_OVERLAYS, type Overlays, type PageState } from './exchange-file.pure.ts';
-import type { ExchangeMessage } from './exchange-message.pure.ts';
 import type { ExchangeWords } from './exchange-words.types';
-import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import type { CompareActions } from './use-compare.ts';
 import type { DashboardState } from './use-dashboard.ts';
@@ -84,21 +82,4 @@ export function useExchangeWiring(
     current: () => ({ B: x.B, name: y.name, page: pageOf(x, y.f) }),
     onLoad: loadInto(x, y),
   });
-}
-
-/** The message under the toolbar after Download or Upload; a refusal lists its reasons. */
-export function ExchangeMessageView({ message }: { message: ExchangeMessage | null }) {
-  // always in the page, so a screen reader hears the first message too
-  return (
-    <div className={`${styles.ioMsg} text-caption`} data-bad={!!message?.bad} aria-live="polite" hidden={!message}>
-      {message?.text}
-      {message?.list.length ? (
-        <ul>
-          {message.list.map((m, i) => (
-            <li key={`${i}:${m}`}>{m}</li>
-          ))}
-        </ul>
-      ) : null}
-    </div>
-  );
 }

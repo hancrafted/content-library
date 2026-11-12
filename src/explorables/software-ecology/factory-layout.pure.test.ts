@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { idealSettings } from './factory-dials.pure.ts';
-import { MIN_RUN, beltSegments, layoutFactory } from './factory-layout.pure.ts';
-import { DEFAULT_SEED, buildFactory } from './factory-model.pure.ts';
+import { beltSegments, layoutFactory, MIN_RUN } from './factory-layout.pure.ts';
+import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const layoutOf = (id: string) => {
   const B = builtinBundle(id);
-  const m = buildFactory(B, { s: idealSettings(B.data.company ?? 'service'), seed: DEFAULT_SEED });
+  const m = createFactory(B, idealSettings(B.data.company ?? 'service'), DEFAULT_SEED).topology;
   return { m, layout: layoutFactory(m) };
 };
 

@@ -1,40 +1,10 @@
 // The factory model's shapes (design-ADR 0024 §1–§5): its network, work centers, belts, servers and documents.
+import type { Job, Run, Token } from './factory-docs.pure.ts';
 import type { Ring, Streams } from './factory-random.pure.ts';
-import type { Bundle, CenterDef, Cust, RoleDef, Settings } from './software-ecology.types';
+import type { Bundle, CenterDef, Cust, Dials, RoleDef, Settings } from './software-ecology.types';
 export type { Streams } from './factory-random.pure.ts';
 
-/** A run of identical jobs waiting at a work center, from one week. */
-export interface Run {
-  q: number;
-  ai: number;
-  fl: number;
-  e: number;
-  b: number;
-  wk: number;
-  c: number;
-}
-
-/** The job a server works on: quality, AI-made, flags, the belt it came on, times sent back. */
-export interface Job {
-  q: number;
-  ai: number;
-  fl: number;
-  e: number;
-  b: number;
-}
-
-/** A token on a belt: a count of identical documents, sent at t0, arriving at t1. */
-export interface Token {
-  c: number;
-  q: number;
-  ai: number;
-  fl: number;
-  b: number;
-  t0: number;
-  t1: number;
-  /** When the painter first drew it, in real time; 0 until then. */
-  vr: number;
-}
+export { Job, Run, Token } from './factory-docs.pure.ts';
 
 /** The documents a send puts on a belt. */
 export interface Doc {
@@ -179,22 +149,10 @@ export interface TicketSource extends Streams {
   modeSeen: string;
 }
 
-/** A work center's dials at the current settings. */
-export interface Dials {
-  readonly eff: number;
-  readonly effv: number;
-  readonly base: number;
-  readonly ai: boolean;
-  readonly fan: number;
-  readonly aiSpeed: number;
-  readonly aiExtra: number;
-  readonly fanEff: number;
-  readonly effEff: number;
-  readonly en: readonly string[];
-}
+export type { Dials } from './software-ecology.types';
 
 /** What the painter hears: a request, an arrival, a job started or done; `at` names the belt and the token or time. */
-export type Hook = (what: string, n: FactoryNode, at?: { readonly e: Belt; readonly x: Token | number }) => void;
+export type Hook = (what: string, n: FactoryNode, at?: { readonly belt: Belt; readonly x: Token | number }) => void;
 
 export interface ShelfItem {
   readonly q: number;

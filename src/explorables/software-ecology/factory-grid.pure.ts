@@ -5,7 +5,7 @@
  * `gridOf` and `renderTiles`; cells are 1-based [column, row].
  */
 import { CUSTOMER_PANEL, PANELS, panelFor } from './cartoon-panels.pure.ts';
-import type { Factory } from './factory.types';
+import type { Topology } from './factory-model.pure.ts';
 
 export type Cell = readonly [number, number];
 export type GridView = 'swing' | 'roles';
@@ -25,7 +25,7 @@ export interface Tile {
   readonly at: Cell;
 }
 
-type GridFactory = Pick<Factory, 'cust' | 'centers' | 'nodes'> & {
+type GridFactory = Pick<Topology, 'cust' | 'centers' | 'nodes'> & {
   readonly B: { readonly data: { panels?: boolean } };
 };
 

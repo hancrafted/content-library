@@ -3,13 +3,14 @@
  * AI, the Customer at given settings, and the settings a preset starts from. Values are the reference build's,
  * illustrative, not measured.
  */
-import type { Dials, Factory, FactoryNode } from './factory.types';
+import type { Factory, FactoryNode } from './factory.types';
 import type {
   AiQuality,
   AiSet,
   Bundle,
   CenterDials,
   Cust,
+  Dials,
   Over,
   Preset,
   Settings,
@@ -46,7 +47,7 @@ export const RED = 2;
 /** A rework lane shows above 0.3 sent back a week, hides below 0.1. */
 export const RET_SHOW = 0.3;
 export const RET_HIDE = 0.1;
-export const Q = { BAD: 0, GOOD: 1 } as const;
+export { Q } from './factory-docs.pure.ts';
 
 /** Rushing (Q114 B): effectiveness drops linearly from RUSH_FROM to RUSH_TO weeks of work waiting, by up to RUSH_MAX. */
 export const RUSH_MAX = 15;

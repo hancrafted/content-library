@@ -5,7 +5,7 @@
  * stretch inside the card. Ported from the reference build's `drawBelt`.
  */
 import { badge, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
-import { COMPL } from './factory-flow.pure.ts';
+import type { FloorDoc, FloorList } from './factory-model.pure.ts';
 import { at, type Path } from './factory-paths.pure.ts';
 
 /** A handoff animates this long on screen at any speed; the model keeps the quarter day. */
@@ -28,36 +28,54 @@ export interface Frame {
   /** Model time drawn, in weeks. */
   readonly tr: number;
   readonly reduced: boolean;
+  /** When each document was first drawn: the painter's own screen time. */
+  readonly screen: ScreenTimes;
   sprites: number;
 }
 
-/** Something riding a belt: a model token (t0, t1) or a landing that has a kind already. */
-export interface Rider {
+/** A document the model delivered while its handoff still plays on screen: its kind is known, its screen time its own. */
+export interface Landed {
   readonly c: number;
-  readonly q?: number;
-  readonly ai?: number;
-  readonly fl?: number;
-  readonly k?: number;
-  readonly t0?: number;
-  readonly t1?: number;
-  vr: number;
+  readonly k: number;
+  readonly vr: number;
 }
 
-export interface Riders {
-  readonly n: number;
-  at(i: number): Rider;
+/** Something riding a belt: a document on the floor, or one that has landed but still plays its handoff. */
+export type Rider = FloorDoc | Landed;
+export type Riders = FloorList<Rider>;
+
+const isLanded = (x: Rider): x is Landed => 'k' in x;
+
+/**
+ * When each document on the floor was first drawn, in real ms. The model pools its documents, so one sent again (at
+ * another `t0`) starts afresh; a merged one keeps its time.
+ */
+export class ScreenTimes {
+  private readonly seen = new WeakMap<FloorDoc, { t0: number; vr: number }>();
+
+  /** The document's first-drawn time, set to `now` on first sight. */
+  of(x: FloorDoc, now: number): number {
+    const e = this.seen.get(x);
+    if (e && e.t0 === x.t0) return e.vr;
+    if (e) Object.assign(e, { t0: x.t0, vr: now });
+    else this.seen.set(x, { t0: x.t0, vr: now });
+    return now;
+  }
+
+  /** The first-drawn time if it was drawn, else 0. */
+  peek(x: FloorDoc): number {
+    const e = this.seen.get(x);
+    return e && e.t0 === x.t0 ? e.vr : 0;
+  }
 }
 
 /** How far along its handoff a rider is, 0 to 1. */
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
-const steady = (x: Rider, tr: number): number => {
-  const t0 = x.t0 ?? 0;
-  return clamp01((tr - t0) / ((x.t1 ?? 1) - t0));
-};
+const steady = (x: Rider, tr: number): number => (isLanded(x) ? 1 : clamp01((tr - x.t0) / (x.t1 - x.t0)));
 const progress = (x: Rider, f: Frame): number => {
   if (f.reduced) return steady(x, f.tr);
-  if (!x.vr) x.vr = f.now;
-  return Math.min(1, (f.now - x.vr) / (HANDOFF_SECS * 1000));
+  const vr = isLanded(x) ? x.vr : f.screen.of(x, f.now);
+  return Math.min(1, (f.now - vr) / (HANDOFF_SECS * 1000));
 };
 
 /** How a belt is drawn: its path, the stretch inside the sender's card, the stretch hidden under a top port. */
@@ -91,8 +109,11 @@ const flush = (f: Frame, lane: Lane) => {
   }
 };
 
-const kindOf = (x: Rider, back: boolean): number =>
-  x.k ?? spriteIdx(back ? 0 : (x.q ?? 1), x.ai ?? 0, back || ((x.fl ?? 0) & COMPL) !== 0);
+/** A document's sprite: a sent-back one is drawn bad with its warning; a complaint carries its mark. */
+export const docKind = (x: FloorDoc, back: boolean): number =>
+  back ? spriteIdx(0, x.ai, true) : spriteIdx(x.good ? 1 : 0, x.ai, x.complaint);
+
+const kindOf = (x: Rider, back: boolean): number => (isLanded(x) ? x.k : docKind(x, back));
 
 /** Draws a belt's riders, newest first from the start of the belt, merging neighbours of one kind. */
 export const drawRiders = (f: Frame, lane: Lane, list: Riders) => {

@@ -213,3 +213,17 @@ export interface CatalogWords {
   readonly presets: Readonly<Record<string, string>>;
   readonly scenarios?: Readonly<Record<string, ScenarioWords>>;
 }
+
+/** A work center's dials at the current settings. */
+export interface Dials {
+  readonly eff: number;
+  readonly effv: number;
+  readonly base: number;
+  readonly ai: boolean;
+  readonly fan: number;
+  readonly aiSpeed: number;
+  readonly aiExtra: number;
+  readonly fanEff: number;
+  readonly effEff: number;
+  readonly en: readonly string[];
+}

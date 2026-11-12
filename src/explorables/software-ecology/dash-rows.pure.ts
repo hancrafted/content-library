@@ -5,7 +5,7 @@
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { effToPos } from './dashboard-readouts.pure.ts';
-import type { Dials } from './factory.types';
+import type { Dials } from './software-ecology.types';
 
 export type DialKey = 'eff' | 'effv' | 'fan' | 'aiSpeed' | 'aiExtra';
 

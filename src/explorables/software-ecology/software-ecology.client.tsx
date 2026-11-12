@@ -4,14 +4,14 @@ import { useTheme } from '@/shared/hooks/use-theme';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { useCallback, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { drawCompare } from './compare-live.ts';
-import { cardClick, compareWidgetOf, Stream, useWatch } from './compare-wiring';
-import { ExchangeMessageView, useExchangeWiring, useUploads } from './exchange-wiring';
+import { cardClick, compareWidgetOf, Stream } from './compare-wiring';
+import { ExchangeMessageView } from './exchange-message-view';
 import { Controls } from './factory-controls';
-import { type Spots } from './factory-floor';
+import { type Spots } from './factory-floor.client';
 import { presetOf, type FactoryRun } from './factory-run.pure.ts';
-import { Stage } from './factory-stage';
+import { Stage } from './factory-stage.client';
 import { tourCard } from './factory-tour.pure.ts';
-import { OpenDashboard } from './open-dashboard';
+import { OpenDashboard } from './open-dashboard.client';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
@@ -19,9 +19,10 @@ import { BelowView } from './stage-foot-view';
 import { tourClockText, TourPanel } from './tour-panel';
 import { scenarioWords, useCaseName, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
-import { useCompare } from './use-compare.ts';
+import { useCompare, useWatch } from './use-compare.ts';
 import { useDashboard } from './use-dashboard.ts';
 import { useDisplay } from './use-display.ts';
+import { useExchangeWiring, useUploads } from './use-exchange-wiring.ts';
 import type { ExchangeActions } from './use-exchange.ts';
 import { useFactory, type FactoryView } from './use-factory.ts';
 import { useMorph } from './use-morph.ts';
@@ -192,7 +193,7 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
 function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices) {
   const ts = useTourState(),
     root = x.streamRoot;
-  const onDraw = useCallback((run: FactoryRun, speed: number) => drawCompare(root.current, run, speed), [root]);
+  const onDraw = useCallback((run: FactoryRun, speed: number) => drawCompare(root.current, run.floor, speed), [root]);
   const f = useFactory({
     B: x.B,
     preset: p.preset,

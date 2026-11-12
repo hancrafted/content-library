@@ -5,8 +5,7 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { placeLabels, type LabelPlace } from './factory-labels.pure.ts';
 import { boxOf, type FactoryLayout } from './factory-layout.pure.ts';
-import type { Factory, FactoryNode } from './factory.types';
-import type { BeltReadout } from './run-snapshot.pure.ts';
+import type { BeltReadout, TopoNode, Topology } from './factory-model.pure.ts';
 import type { StageWords } from './software-ecology-words.types';
 import type { SignKind } from './stage-readouts.pure.ts';
 import { beltWords, centerTitle, customerTitle, type WordsIn } from './use-case-words.pure.ts';
@@ -28,17 +27,19 @@ export interface BeltPart {
 }
 
 /** Centers a complaint can reach: named in the Customer's or any preset's `bad` chances. */
-const complaintsTo = (m: Factory): Set<string> =>
+const complaintsTo = (topo: Topology): Set<string> =>
   new Set(
-    [m.B.data.customer, ...m.B.data.presets.map((p) => p.customer ?? {})].flatMap((c) => Object.keys(c.bad ?? {})),
+    [topo.B.data.customer, ...topo.B.data.presets.map((p) => p.customer ?? {})].flatMap((c) =>
+      Object.keys(c.bad ?? {}),
+    ),
   );
 
-const signsOf = (n: FactoryNode, compl: Set<string>): SignKind[] =>
+const signsOf = (n: TopoNode, compl: Set<string>): SignKind[] =>
   (['rework', 'churn', 'unread', 'complaint'] as const).filter(
     (k) => (k !== 'unread' || !!n.def.inspection) && (k !== 'complaint' || compl.has(n.id)),
   );
 
-export const cardsOf = (m: Factory, w: WordsIn): CardPart[] => {
+export const cardsOf = (m: Topology, w: WordsIn): CardPart[] => {
   const compl = complaintsTo(m);
   return m.centers.map((n) => ({
     id: n.id,
@@ -50,14 +51,14 @@ export const cardsOf = (m: Factory, w: WordsIn): CardPart[] => {
   }));
 };
 
-export const customerCardOf = (m: Factory, w: WordsIn) => ({ box: boxOf(m.cust.def), title: customerTitle(w) });
+export const customerCardOf = (m: Topology, w: WordsIn) => ({ box: boxOf(m.cust.def), title: customerTitle(w) });
 
-export const beltsOf = (x: { m: Factory; layout: FactoryLayout; w: WordsIn; stage: StageWords }): BeltPart[] => {
+export const beltsOf = (x: { topo: Topology; layout: FactoryLayout; w: WordsIn; stage: StageWords }): BeltPart[] => {
   const words = Object.fromEntries(x.layout.order.map((k) => [k, beltWords(x.w, k, x.stage.sentBack)]));
   const text = (k: string) => `${words[k]?.label ?? ''} · 12 a week · ↩ ${words[k]?.back ?? ''}`;
   const at = placeLabels(
     x.layout,
-    [...x.m.nodes.values()].map((n) => n.def),
+    [...x.topo.nodes.values()].map((n) => n.def),
     text,
   );
   return x.layout.order.map((k) => ({

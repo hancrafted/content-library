@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { custOf, dials } from './factory-dials.pure.ts';
-import { buildFactory } from './factory-model.pure.ts';
+import { custOf } from './factory-dials.pure.ts';
+import { createFactory } from './factory-model.pure.ts';
 import { presetOf } from './factory-run.pure.ts';
 import {
   aiChoicesOf,
@@ -31,13 +31,11 @@ describe('success cases', () => {
 
   it('shows a dashboard dial as set and with AI: efficiency 100 % runs at 250 % with AI on', () => {
     // ARRANGE
-    const m = buildFactory(B, { s: at('ideal') });
-    const eng = m.nodes.get('eng');
-    if (!eng) throw new Error('no engineer');
+    const s = withOver(at('ideal'), 'eng', { ai: true });
     const setAndEffective = [100, 250];
     // ACT
-    const s = withOver(at('ideal'), 'eng', { ai: true });
-    const d = dials(eng, s);
+    const d = createFactory(B, s).read({ watch: ['eng'] }).dashboards.eng?.dials;
+    if (!d) throw new Error('no engineer');
     // ASSERT
     expect([d.eff, d.effEff]).toEqual(setAndEffective);
   });
@@ -59,7 +57,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('caps a follow-up chance so that together they stay below 0.95', () => {
     // ARRANGE
-    const m = buildFactory(B, { s: at('realistic') });
+    const m = { B };
     const [sales, asked, capped] = [0.5, 0.9, 0.45];
     const s0 = withCustomer(at('realistic'), custOf(m, at('realistic')), { kind: 'good', to: 'sales', v: sales });
     // ACT

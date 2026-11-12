@@ -40,7 +40,7 @@ const fresh = (B: Bundle, preset: string, o: { s: Settings; clear?: boolean }): 
 /** On a new use case: the same state if it has one, its own company and strengths. */
 const forUseCase = (B: Bundle, was: RunState): RunState => {
   const p = presetOf(B, was.run.preset.id);
-  return fresh(B, p.id, { s: useCaseSettings(B, p, was.run.m.s) });
+  return fresh(B, p.id, { s: useCaseSettings(B, p, was.run.settings) });
 };
 
 interface Setters {
@@ -66,22 +66,22 @@ const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls =
   return {
     preset: run.preset.id,
     speed,
-    settings: run.m.s,
+    settings: run.settings,
     modified: x.modified,
     setPreset: (id) => {
       const p = presetOf(B, id);
       if (p.speed) x.setSpeed(p.speed);
       x.setModified(false);
-      x.setSt(fresh(B, p.id, { s: pageSettings(B, p, run.m.s) }));
+      x.setSt(fresh(B, p.id, { s: pageSettings(B, p, run.settings) }));
     },
     setSpeed: x.setSpeed,
     setSettings: (next) => {
       x.setModified(true);
-      if (x.reduced || next.company !== run.m.s.company) return x.setSt(fresh(B, run.preset.id, { s: next }));
-      run.m.s = next;
+      if (x.reduced || next.company !== run.settings.company) return x.setSt(fresh(B, run.preset.id, { s: next }));
+      run.set(next);
       x.seen(next);
     },
-    clear: () => x.setSt(fresh(B, run.preset.id, { s: run.m.s, clear: true })),
+    clear: () => x.setSt(fresh(B, run.preset.id, { s: run.settings, clear: true })),
     adopt: (next) => {
       x.setModified(false);
       x.setSt({ B, run: next });

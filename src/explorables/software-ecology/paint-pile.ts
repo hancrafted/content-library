@@ -4,9 +4,9 @@
  * Sprites grow with the weeks of work waiting, twelve at most. Ported from the reference build's `pileOf` and `drawPile`.
  */
 import { SPR } from './doc-sprites.ts';
+import type { FloorBelt, FloorStation } from './factory-model.pure.ts';
 import type { Pt } from './factory-paths.pure.ts';
 import { mix, mulberry } from './factory-random.pure.ts';
-import type { Belt, FactoryNode } from './factory.types';
 import type { Frame } from './paint-belts.ts';
 import { runKind } from './paint-station.ts';
 import { RACK } from './stage-readouts.pure.ts';
@@ -23,27 +23,27 @@ interface Item {
   t: number;
 }
 export interface Pile {
-  readonly e: Belt;
+  readonly e: FloorBelt;
   readonly lean: number;
   readonly items: Item[];
   shown: number;
 }
 
 /** A station's pile, seeded by the model's seed and the station. */
-export const pileFor = (n: FactoryNode, seed: number): Pile | null => {
+export const pileFor = (n: FloorStation, seed: number): Pile | null => {
   const e = n.ins.slice().sort((a, b) => b.rate - a.rate || a.i - b.i)[0];
   if (!e) return null;
-  const r = mulberry(mix(seed, 9000 + n.idx));
+  const r = mulberry(mix(seed, 9000 + n.node.idx));
   const items = Array.from({ length: PILE_MAX }, () => ({ u: r(), w: r(), z: r(), ph: r() * Math.PI * 2, t: 0 }));
   return { e, lean: (r() - 0.5) * 0.5, items, shown: 0 };
 };
 
 /** The kinds of what waits past the rack, `k` at most. */
-const kindsPast = (n: FactoryNode, k: number): number[] => {
+const kindsPast = (n: FloorStation, k: number): number[] => {
   const kinds: number[] = [];
   let skip = RACK;
-  for (let ri = 0; ri < n.runs.n && kinds.length < k; ri++) {
-    const r = n.runs.at(ri),
+  for (let ri = 0; ri < n.queue.n && kinds.length < k; ri++) {
+    const r = n.queue.at(ri),
       kd = runKind(r);
     const take = Math.max(0, r.c - skip);
     skip = Math.max(0, skip - r.c);
@@ -116,11 +116,11 @@ export const beltEnd = (pts: readonly Pt[]): { end: Pt; dx: number; dy: number }
 /** Draws a station's pile-up; `dt` in seconds since the last frame. */
 export const drawPile = (
   f: Frame,
-  n: FactoryNode,
+  n: FloorStation,
   x: { P: Pile; pts: readonly Pt[]; dt: number; style: PileStyle },
 ) => {
   const P = x.P,
-    want = n.L > RACK ? Math.min(PILE_MAX, Math.max(1, Math.ceil(n.Ws * 3))) : 0;
+    want = n.waiting > RACK ? Math.min(PILE_MAX, Math.max(1, Math.ceil(n.weeksWaiting * 3))) : 0;
   P.shown += (want - P.shown) * Math.min(1, x.dt * 4);
   const k = Math.round(P.shown);
   for (let i = k; i < PILE_MAX; i++) (P.items[i] as Item).t = 0;

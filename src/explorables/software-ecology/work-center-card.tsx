@@ -2,10 +2,10 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { RoleCardView, SwingCardView, type CartoonCardProps } from './cartoon-card-view';
 import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
-import { CustomerDashboard, type CustomerDashboardProps } from './customer-dashboard';
+import { CustomerDashboard, type CustomerDashboardProps } from './customer-dashboard.client';
 import styles from './software-ecology.module.css';
 import { StationCardView, type StationCardProps } from './station-card-view';
-import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-center-dashboard';
+import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-center-dashboard.client';
 
 /*
  * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the cartoon

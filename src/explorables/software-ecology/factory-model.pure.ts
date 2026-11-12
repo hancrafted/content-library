@@ -1,130 +1,79 @@
 /*
  * The factory model (design-ADR 0024 §1): a seeded, time-stepped open queueing network behind a small interface.
- * `buildFactory` makes the network from a use case and sizes it; `createFactory` wraps it as step / set / read, and the
- * painter reads the network itself, read-only. It knows who hands work to whom, never where anything is drawn.
+ * `createFactory(useCase, settings, seed)` returns the one handle the run, the hooks, the painter and every readout
+ * use: `step(weeks)`, `set(settings)` and `read(): Snapshot`, plus three typed reads — the network's fixed shape
+ * (`topology`), the documents on the floor with named marks (`floor`) and what happens to them (`listen`). Nothing
+ * outside the model holds the network itself, writes into it or reads its flags; `factory-model-seam.test.ts` keeps
+ * it so. It knows who hands work to whom, never where anything is drawn.
  */
-import {
-  asCustomer,
-  beltsOf,
-  flowOrder,
-  makeBelt,
-  makeNode,
-  makeServers,
-  markLoops,
-  resolveSpawns,
-} from './factory-build.pure.ts';
-import { custOf, DTW } from './factory-dials.pure.ts';
-import { streams } from './factory-random.pure.ts';
-import { readout, type Snapshot } from './factory-readouts.pure.ts';
-import { size } from './factory-sizing.pure.ts';
+import { DTW } from './factory-dials.pure.ts';
+import { floorOf } from './factory-floor-reads.pure.ts';
+import { buildFactory, DEFAULT_SEED } from './factory-network.pure.ts';
+import type { Floor, FloorEvent, FloorListener, Topology } from './factory-reads.types';
+import { stability } from './factory-sizing.pure.ts';
+import { snapshotOf, type ReadOptions, type Snapshot } from './factory-snapshot.pure.ts';
 import { step } from './factory-step.pure.ts';
-import type { Belt, Factory, FactoryNode, TicketSource } from './factory.types';
-import type { Bundle, RoleDef, Settings } from './software-ecology.types';
+import type { Bundle, Settings } from './software-ecology.types';
 
-export const DEFAULT_SEED = 20261111;
+export type { DocMarks } from './factory-docs.pure.ts';
+export type * from './factory-reads.types';
+export type { Audit, BeltReadout, ReadOptions, Snapshot } from './factory-snapshot.pure.ts';
+export type { NodeDef } from './factory.types';
+/** Whether a key names a measure `read({ measures })` can read. */
+export { validKey } from './factory-measures.pure.ts';
+/** The model's internal seam, for its own tests: the network itself. */
+export { buildFactory, DEFAULT_SEED } from './factory-network.pure.ts';
 
-const network = (B: Bundle, seed: number) => {
-  const uc = B.data,
-    nodes = new Map<string, FactoryNode>();
-  const cust = asCustomer(
-    makeNode({ def: { ...uc.customer, id: 'customer' }, kind: 'customer', role: B.roles.customer as RoleDef }, 0, seed),
-  );
-  nodes.set('customer', cust);
-  uc.centers.forEach((c, i) =>
-    nodes.set(c.id, makeNode({ def: c, kind: 'role', role: B.roles[c.role] as RoleDef }, i + 1, seed)),
-  );
-  const edges = beltsOf(uc).map((p, i) => makeBelt(p, i, { nodes, B }));
-  markLoops(nodes.values(), cust, edges);
-  const byKey = new Map(edges.map((e) => [e.key, e]));
-  for (const c of uc.centers) (nodes.get(c.id) as FactoryNode).spawns = resolveSpawns(c, (k) => byKey.get(k) as Belt);
-  cust.edgeTo = new Map(cust.outs.map((e) => [e.to.id, e]));
-  return { nodes, edges, cust };
-};
-
-const sources = (B: Bundle, nodes: Map<string, FactoryNode>, seed: number): TicketSource[] =>
-  (B.data.sources ?? []).map((x, i) => ({
-    id: x.id,
-    n: nodes.get(x.at) as FactoryNode,
-    rate: x.rate,
-    next: Infinity,
-    seen: -1,
-    modeSeen: '',
-    ...streams(seed, 200 + i),
-  }));
-
-/** The clock, counters and averages of a model at day 0. */
-const counters = () => ({
-  pool: [] as Factory['pool'],
-  t: 0,
-  sampleAt: 0,
-  tokens: 0,
-  overflow: 0,
-  shelf: [] as Factory['shelf'],
-  created: 0,
-  consumed: 0,
-  dc: [] as Factory['dc'],
-  hook: null as Factory['hook'],
-  outRate: 0,
-  outN: 0,
-  ownRate: 0,
-  ownN: 0,
-  arrRate: 0,
-  rel: [0, 0] as [number, number],
-  compl: 0,
-  fu: 0,
-  req: 0,
-  wip: 0,
-  wipAvg: 0,
-  mainRate: 0,
-  idealOut: 0,
-  idealOwn: 0,
-  idealReq: 0,
-});
-
-/** Builds the network of a use case at the given settings, sized, empty at day 0. */
-export const buildFactory = (B: Bundle, opts: { s: Settings; seed?: number }): Factory => {
-  const seed = opts.seed ?? DEFAULT_SEED,
-    { nodes, edges, cust } = network(B, seed);
-  const centers = [...nodes.values()].filter((n) => n.kind === 'role');
-  const m: Factory = {
-    B,
-    seed,
-    s: opts.s,
-    nodes,
-    edges,
-    cust,
-    servers: makeServers(centers),
-    order: flowOrder(nodes, edges, cust),
-    srcs: sources(B, nodes, seed),
-    centers,
-    ...counters(),
-    cs: custOf({ B }, opts.s),
-  };
-  size(m);
-  return m;
-};
-
-export interface FactoryHandle {
-  /** The network, read-only for the painter. */
-  readonly model: Factory;
-  /** Advances the model by whole steps covering `weeks`. */
-  step(weeks: number): void;
-  /** Replaces the settings; the next step reads them. */
-  set(s: Settings): void;
-  read(): Snapshot;
+/** What the stability check refuses or warns about at these settings (design-ADR 0024 §1, §12). */
+export interface Check {
+  readonly refuse: readonly string[];
+  readonly warn: readonly string[];
 }
 
-/** The model's interface: step(weeks), set(settings), read(). */
-export const createFactory = (B: Bundle, opts: { s: Settings; seed?: number }): FactoryHandle => {
-  const m = buildFactory(B, opts);
+export interface FactoryHandle {
+  readonly topology: Topology;
+  readonly floor: Floor;
+  /** The settings the next step reads. */
+  readonly settings: Settings;
+  /** Model time, in weeks. */
+  readonly weeks: number;
+  /** Advances the model by whole steps covering `weeks`. */
+  step(weeks: number): void;
+  /** Replaces the settings; the next step reads them. Pass a new object: a read solves again on a new one. */
+  set(s: Settings): void;
+  read(o?: ReadOptions): Snapshot;
+  /** One listener at a time; null stops listening. */
+  listen(fn: FloorListener | null): void;
+  /** The stability check at the given settings, the use case's Realistic by default. */
+  check(s?: Settings): Check;
+}
+
+/** The model's interface: `createFactory(useCase, settings, seed)` → step, set, read and the typed reads. */
+export const createFactory = (useCase: Bundle, settings: Settings, seed: number = DEFAULT_SEED): FactoryHandle => {
+  const m = buildFactory(useCase, settings, seed),
+    { floor, stationOf } = floorOf(m);
   return {
-    model: m,
+    topology: m,
+    floor,
+    get settings() {
+      return m.s;
+    },
+    get weeks() {
+      return m.t;
+    },
     step: (weeks) => {
       for (let i = 0, n = Math.round(weeks / DTW); i < n; i++) step(m);
     },
     set: (s) => {
       m.s = s;
     },
-    read: () => readout(m),
+    read: (o) => snapshotOf(m, o),
+    listen: (fn) => {
+      m.hook = fn && ((what, n, at) => fn(what as FloorEvent, stationOf(n), at));
+    },
+    check: (s) => stability(m, s),
   };
 };
+
+/** Settings to hand `set`: a deep copy, so a change made to it never reaches the settings the model reads now. */
+export const copySettings = (s: Settings): Settings => structuredClone(s);

@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DTW } from './factory-dials.pure.ts';
-import { applySet, scenarioStart } from './factory-scenario.pure.ts';
-import { step } from './factory-step.pure.ts';
-import { customerOf, relativeOf, stationOf, statusOf, verdictOf } from './stage-readouts.pure.ts';
+import type { FactoryHandle } from './factory-model.pure.ts';
+import { scenarioStart, settingsAfter } from './factory-scenario.pure.ts';
+import { relativeOf, verdictOf } from './stage-readouts.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const SEED = 20261111;
@@ -11,8 +10,12 @@ const at = (preset: string) => {
     p = B.data.presets.find((x) => x.id === preset)!;
   return scenarioStart(B, p, SEED);
 };
-const run = (m: ReturnType<typeof at>, weeks: number) => {
-  for (let i = 0, n = Math.round(weeks / DTW); i < n; i++) step(m);
+/** AI at the engineer writing twice the work, eight weeks on: AI unbalanced's step 2. */
+const flooded = (): FactoryHandle => {
+  const f = at('ai-unbalanced');
+  f.set(settingsAfter({ ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, builtinBundle('tire'), f.settings));
+  f.step(8);
+  return f;
 };
 
 describe('success cases', () => {
@@ -21,31 +24,27 @@ describe('success cases', () => {
     const m = at('ideal');
     const calm = { kind: 'calm' };
     // ACT
-    const status = statusOf(m, { s: m.s, warming: false, dropped: 0 });
+    const status = m.read().status;
     // ASSERT
     expect(status).toEqual(calm);
   });
 
   it('names quality assurance first when AI at the engineer floods it (AI unbalanced, week 8)', () => {
     // ARRANGE
-    const m = at('ai-unbalanced');
-    applySet({ ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, m, m.s);
-    run(m, 8);
+    const m = flooded();
     const first = 'qa';
     // ACT
-    const status = statusOf(m, { s: m.s, warming: false, dropped: 0 });
+    const status = m.read().status;
     // ASSERT
     expect(status.kind === 'busy' && status.hot[0]).toMatchObject({ id: first, red: true });
   });
 
   it('marks quality assurance as piling and the engineer as AI at the same step', () => {
     // ARRANGE
-    const m = at('ai-unbalanced');
-    applySet({ ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, m, m.s);
-    run(m, 8);
+    const m = flooded();
     // ACT
-    const qa = stationOf(m.nodes.get('qa')!, { m, s: m.s });
-    const eng = stationOf(m.nodes.get('eng')!, { m, s: m.s });
+    const { qa, eng } = m.read().stations;
+    if (!qa || !eng) throw new Error('no qa or eng');
     // ASSERT
     expect([qa.piling, eng.ai, qa.ai]).toEqual([true, true, false]);
   });
@@ -57,7 +56,7 @@ describe('failure cases', () => {
     const m = at('realistic');
     const warming = { kind: 'warming' };
     // ACT
-    const status = statusOf(m, { s: m.s, warming: true, dropped: 0 });
+    const status = m.read({ warming: { day: 1, of: 300 } }).status;
     // ASSERT
     expect(status).toEqual(warming);
   });
@@ -80,7 +79,7 @@ describe('edge cases', () => {
     const m = at('bug-spiral');
     const empty = Array.from({ length: 12 }, () => null);
     // ACT
-    const c = customerOf(m, m.s);
+    const c = m.read().customer;
     // ASSERT
     expect([c.releases, c.sat, c.leadDays]).toEqual([empty, 1, null]);
   });

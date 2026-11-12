@@ -3,7 +3,7 @@ import { Fragment, memo, type ReactNode } from 'react';
 import { DocGlyph } from './doc-glyph-view';
 import { DockView } from './dock-view';
 import { WARM_WEEKS } from './factory-dials.pure.ts';
-import type { Snapshot } from './run-snapshot.pure.ts';
+import type { Snapshot } from './factory-model.pure.ts';
 import type { LegendWords, StatusWords, Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Status } from './stage-readouts.pure.ts';

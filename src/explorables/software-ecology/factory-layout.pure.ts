@@ -3,8 +3,8 @@
  * plates, the sampled belt paths, the rework lanes and the label places. The model knows who hands work to whom; this
  * module knows where. Ported from the reference build's geometry, numbers unchanged (layout units).
  */
+import type { NodeDef, TopoBelt, Topology } from './factory-model.pure.ts';
 import { keyOf, offsetPts, sample, type Path, type Pt } from './factory-paths.pure.ts';
-import type { Belt, Factory, NodeDef } from './factory.types';
 import type { Route } from './software-ecology.types';
 
 export { offsetD, type Path, type Pt } from './factory-paths.pure.ts';
@@ -107,7 +107,7 @@ export interface BeltLayout {
   readonly retPts: readonly Pt[];
 }
 
-const beltLayout = (e: Belt, c: readonly Pt[], J: ReadonlyMap<string, Pt>): BeltLayout => {
+const beltLayout = (e: TopoBelt, c: readonly Pt[], J: ReadonlyMap<string, Pt>): BeltLayout => {
   const path = sample(c, J);
   const w0 = e.from.kind === 'role' ? [workAt(e.from.def)] : [];
   const off = offsetPts(path, RET);
@@ -135,7 +135,7 @@ export interface FactoryLayout {
   readonly plates: readonly Pt[];
 }
 
-export const layoutFactory = (m: Pick<Factory, 'B' | 'edges'>): FactoryLayout => {
+export const layoutFactory = (m: Pick<Topology, 'B' | 'edges'>): FactoryLayout => {
   const routes = m.B.data.routes ?? {},
     all = m.edges.map((e) => corners(routes[e.key] ?? {}, e.from.def, e.to.def));
   const J = junctions(all);

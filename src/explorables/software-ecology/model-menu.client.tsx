@@ -1,3 +1,5 @@
+'use client';
+
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, type ReactNode } from 'react';
 import { MECH_DEFAULTS, MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';

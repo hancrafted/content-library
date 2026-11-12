@@ -1,7 +1,9 @@
+'use client';
+
 import type { ReactNode, RefObject } from 'react';
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import { BeltLabelsView, BeltsView } from './belts-view';
-import { Floor, type SpotProps } from './factory-floor';
+import { Floor, type SpotProps } from './factory-floor.client';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { ViewId } from './software-ecology.types';
@@ -16,9 +18,9 @@ import type { FactoryView } from './use-factory.ts';
 
 function useStageParts(f: FactoryView, x: { w: WordsIn; words: Words }) {
   const { run, layout, snap } = f;
-  const cards = useMemo(() => cardsOf(run.m, x.w), [run, x.w]);
+  const cards = useMemo(() => cardsOf(run.topology, x.w), [run, x.w]);
   const belts = useMemo(
-    () => beltsOf({ m: run.m, layout, w: x.w, stage: x.words.stage }),
+    () => beltsOf({ topo: run.topology, layout, w: x.w, stage: x.words.stage }),
     [run, layout, x.w, x.words.stage],
   );
   const retOn = Object.fromEntries(Object.entries(snap.belts).map(([k, b]) => [k, b.retOn]));

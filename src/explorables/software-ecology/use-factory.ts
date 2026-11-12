@@ -6,10 +6,10 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
+import type { Snapshot } from './factory-model.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
 import { SPEED_1X, type FactoryRun } from './factory-run.pure.ts';
 import type { PileStyle } from './paint-pile.ts';
-import { snapshotOf, snapshotWarm, type Snapshot } from './run-snapshot.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
 import { useRecolor } from './use-recolor.ts';
@@ -79,7 +79,7 @@ interface Live {
 type Read = (run: FactoryRun, charts?: boolean) => void;
 
 const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number }): DrawAt => {
-  const w = snapshotWarm(run);
+  const w = run.warmProgress;
   return {
     now: x.now,
     reduced: x.reduced,
@@ -117,7 +117,7 @@ function useStill(x: {
   useEffect(() => {
     if (playing) return;
     if (reduced || document.hidden) run.finishWarm();
-    if (!run.warming) painter.attach();
+    if (!run.warming) run.listen(painter.listener);
     show({ run, painter, v, live: live.current, reduced, now: performance.now() });
     read(run);
   }, [playing, reduced, run, painter, v, live, read]);
@@ -135,12 +135,12 @@ function useLoop(x: {
   const { run, painter, v, live, playing, read } = x;
   useEffect(() => {
     if (!playing) return;
-    if (!run.warming) painter.attach();
+    if (!run.warming) run.listen(painter.listener);
     let [raf, last, slow, ticks] = [0, 0, 0, 0];
     const tick = (now: number) => {
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60;
       last = now;
-      if ((live.current.flowing || run.warming) && run.advance(dt, live.current.speed)) painter.attach();
+      if ((live.current.flowing || run.warming) && run.advance(dt, live.current.speed)) run.listen(painter.listener);
       live.current.onFrame?.(run);
       show({ run, painter, v, live: live.current, reduced: false, now });
       slow += dt;
@@ -166,10 +166,10 @@ function useLive(now: Live): RefObject<Live> {
 
 /** The readouts in React state, and the one way to refresh them; a new watch list reads at once. */
 function useReadouts(run: FactoryRun, live: RefObject<Live>, watchKey: string) {
-  const [snap, setSnap] = useState(() => snapshotOf(run));
+  const [snap, setSnap] = useState(() => run.read());
   const read = useCallback<Read>(
     (r, charts = true) =>
-      setSnap((prev) => snapshotOf(r, { watch: live.current.watch, stream: live.current.stream, charts, prev })),
+      setSnap((prev) => r.read({ watch: live.current.watch, stream: live.current.stream, charts, prev })),
     [live],
   );
   useEffect(() => read(run), [read, run, watchKey]);
@@ -199,13 +199,13 @@ export function useFactory(x: FactoryOptions): FactoryView {
   const { run, controls: base } = useRun({ B: x.B, preset: x.preset, reduced });
   const live = useLive({ ...liveOf(x), speed: base.speed });
   const { snap, read } = useReadouts(run, live, `${x.watch?.join()}|${x.stream?.join()}`);
-  const layout = useMemo(() => layoutFactory(run.m), [run]);
-  const painter = useMemo(() => new FactoryPainter(run.m, layout), [run, layout]);
+  const layout = useMemo(() => layoutFactory(run.topology), [run]);
+  const painter = useMemo(() => new FactoryPainter(run.floor, layout), [run, layout]);
   const controls = withRead(base, () => read(run));
   useStill({ run, painter, v, live, playing, reduced, read });
   useLoop({ run, painter, v, live, playing, read });
   const repaint = useCallback(() => {
-    if (!run.warming) painter.attach();
+    if (!run.warming) run.listen(painter.listener);
     show({ run, painter, v, live: live.current, reduced, now: performance.now() });
   }, [run, painter, v, reduced, live]);
   useRecolor(painter, repaint);

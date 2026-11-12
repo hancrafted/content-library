@@ -7,7 +7,7 @@ import { CompareWidget, type CompareWidgetProps } from './compare-widget';
 import { ExchangeButtons, type ExchangeButtonsProps } from './exchange-buttons';
 import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
-import { ModelMenu, type ModelMenuProps } from './model-menu';
+import { ModelMenu, type ModelMenuProps } from './model-menu.client';
 import { MoreMenu, type MoreMenuProps } from './more-menu';
 import { ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
 import type { ToolbarWords } from './software-ecology-words.types';

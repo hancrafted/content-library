@@ -7,7 +7,7 @@
  */
 import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
-import { applySet, judge, metric, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
+import { judge, settingsAfter, stepsOf, stepsTo, type Check } from './factory-scenario.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 
 /** A tour runs at 10× between its steps (Q118). */
@@ -34,8 +34,9 @@ export interface TourRun {
 
 const keysOf = (p: Preset): string[] => [...new Set(stepsOf(p).flatMap((st) => Object.keys(st.expect ?? {})))];
 
-const readAll = (run: FactoryRun, p: Preset): Record<string, number> =>
-  Object.fromEntries(keysOf(p).map((k) => [k, metric(run.m, k)]));
+const readAll = (run: FactoryRun, p: Preset): Record<string, number> => ({
+  ...run.read({ measures: keysOf(p) }).measures,
+});
 
 const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
 
@@ -43,7 +44,7 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
 const go = (run: FactoryRun, t: Tour): Tour => {
   const t0k = t.t0k ?? run.k,
     st = stepOf(t);
-  applySet(st.set, run.m, run.m.s);
+  run.set(settingsAfter(st.set, run.topology.B, run.settings));
   run.stopAt = t0k + stepsTo(st.run);
   return { ...t, t0k, phase: 'run' };
 };
@@ -100,7 +101,7 @@ export const backTour = (B: Bundle, t: Tour): TourRun => {
   stepsOf(p)
     .slice(0, idx + 1)
     .forEach((st, j) => {
-      applySet(st.set, run.m, run.m.s);
+      run.set(settingsAfter(st.set, B, run.settings));
       run.runTo(t0k + stepsTo(st.run));
       vals[j] = readAll(run, p);
     });

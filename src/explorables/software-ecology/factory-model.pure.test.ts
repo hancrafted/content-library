@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { realisticSettings, startSettings } from './factory-dials.pure.ts';
-import { buildFactory, createFactory } from './factory-model.pure.ts';
-import { conservation, stateHash, weeksOfWork } from './factory-readouts.pure.ts';
+import { buildFactory, createFactory, type Audit, type FactoryHandle } from './factory-model.pure.ts';
 import { applySet } from './factory-scenario.pure.ts';
 import { RHO_BN, RHO_OTHER, stability } from './factory-sizing.pure.ts';
 import { solve } from './factory-solve.pure.ts';
-import type { Factory, FactoryNode, Hook } from './factory.types';
 import type { Bundle, Settings } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -18,8 +16,15 @@ const settingsOf = (B: Bundle, preset: string): Settings =>
 
 const realistic = (seed?: number) => {
   const B = builtinBundle('tire');
-  return createFactory(B, { s: settingsOf(B, 'realistic'), seed });
+  return createFactory(B, settingsOf(B, 'realistic'), seed);
 };
+
+/** Conservation as a read of the handle gives it, without the hash. */
+const conservation = (f: FactoryHandle): Omit<Audit, 'hash'> => {
+  const a = f.read({ audit: true }).audit as Audit;
+  return { created: a.created, consumed: a.consumed, backlog: a.backlog, transit: a.transit, work: a.work, gap: a.gap };
+};
+const stateHash = (f: FactoryHandle): string => (f.read({ audit: true }).audit as Audit).hash;
 
 /** A preset's settings with every `set` of its tour folded in: the scenario's end state. */
 const endState = (B: Bundle, preset: string): Settings => {
@@ -30,9 +35,9 @@ const endState = (B: Bundle, preset: string): Settings => {
 };
 
 /** The work center with the most weeks of work waiting, and how many. */
-const worst = (m: Factory): { id: string; weeks: string } => {
-  const n = m.centers.reduce((a: FactoryNode, x) => (weeksOfWork(x, m.s) > weeksOfWork(a, m.s) ? x : a));
-  return { id: n.id, weeks: weeksOfWork(n, m.s).toFixed(1) };
+const worst = (f: FactoryHandle): { id: string; weeks: string } => {
+  const n = Object.values(f.read().stations).reduce((a, x) => (x.weeks > a.weeks ? x : a));
+  return { id: n.id, weeks: n.weeks.toFixed(1) };
 };
 
 describe('success cases', () => {
@@ -44,7 +49,7 @@ describe('success cases', () => {
     const hashes = [42, 42, 43].map((seed) => {
       const f = realistic(seed);
       f.step(weeks);
-      return stateHash(f.model);
+      return stateHash(f);
     });
     // ASSERT
     expect(hashes).toEqual(expected);
@@ -53,7 +58,7 @@ describe('success cases', () => {
   it('conserves every document across mid-run dial changes, as counted by the reference build', () => {
     // ARRANGE
     const f = realistic();
-    const s = f.model.s;
+    const s = f.settings;
     const expected = [
       { created: 1951, consumed: 1928, backlog: 13, transit: 4, work: 6, gap: 0 },
       { created: 2585, consumed: 2555, backlog: 26, transit: 1, work: 3, gap: 0 },
@@ -61,7 +66,7 @@ describe('success cases', () => {
     ];
     // ACT
     f.step(20);
-    const a = conservation(f.model);
+    const a = conservation(f);
     f.set({
       ...s,
       ai: 'all',
@@ -74,10 +79,10 @@ describe('success cases', () => {
       },
     });
     f.step(7.37);
-    const b = conservation(f.model);
-    f.set({ ...f.model.s, reality: 0, mech: { rework: false, churn: true, complaints: false } });
+    const b = conservation(f);
+    f.set({ ...f.settings, reality: 0, mech: { rework: false, churn: true, complaints: false } });
     f.step(13.1);
-    const c = conservation(f.model);
+    const c = conservation(f);
     // ASSERT
     expect([a, b, c]).toEqual(expected);
   });
@@ -85,7 +90,7 @@ describe('success cases', () => {
   it('sizes tire for Realistic: the bottleneck at most 85 % busy, every other center at most 70 %', () => {
     // ARRANGE
     const B = builtinBundle('tire');
-    const m = buildFactory(B, { s: { ...settingsOf(B, 'realistic'), company: 'service' } });
+    const m = buildFactory(B, { ...settingsOf(B, 'realistic'), company: 'service' });
     const bottleneck = RHO_BN + 1e-6;
     const others = RHO_OTHER + 1e-6;
     // ACT
@@ -103,16 +108,16 @@ describe('success cases', () => {
   it('moves the bottleneck downstream when tire AI unbalanced raises quality assurance to 1000 %', () => {
     // ARRANGE
     const B = builtinBundle('tire');
-    const f = createFactory(B, { s: endState(B, 'ai-unbalanced') });
+    const f = createFactory(B, endState(B, 'ai-unbalanced'));
     const expected = { before: { id: 'qa', weeks: '16.8' }, after: { id: 'ops', weeks: '36.5' }, qa: '0.0' };
     // ACT
     f.step(30);
-    const before = worst(f.model);
+    const before = worst(f);
     f.step(10);
-    f.set({ ...f.model.s, over: { ...f.model.s.over, qa: { ...f.model.s.over.qa, eff: 1000 } } });
+    f.set({ ...f.settings, over: { ...f.settings.over, qa: { ...f.settings.over.qa, eff: 1000 } } });
     f.step(30);
-    const after = worst(f.model);
-    const qa = weeksOfWork(f.model.nodes.get('qa') as FactoryNode, f.model.s).toFixed(1);
+    const after = worst(f);
+    const qa = f.read().stations.qa?.weeks.toFixed(1);
     // ASSERT
     expect({ before, after, qa }).toEqual(expected);
   });
@@ -120,17 +125,17 @@ describe('success cases', () => {
   it('drains a congestion within a week once the dials go back to Ideal (two teams, AI at both engineering teams)', () => {
     // ARRANGE
     const B = builtinBundle('teams');
-    const f = createFactory(B, { s: endState(B, 'realistic') });
+    const f = createFactory(B, endState(B, 'realistic'));
     const ideal = startSettings(B, B.data.presets.find((p) => p.id === 'ideal') as Bundle['data']['presets'][number]);
     const upstream = { anA: { eff: 200 }, engB: { eff: 200 }, pm: { eff: 200 }, support: { eff: 200 } };
     const expected = { peak: { id: 'plat', weeks: '1.8' }, weeksToDrain: 1 };
     // ACT
     f.step(60);
-    f.set({ ...f.model.s, ai: ['engA', 'engB'], over: upstream });
+    f.set({ ...f.settings, ai: ['engA', 'engB'], over: upstream });
     f.step(15);
-    const peak = worst(f.model);
+    const peak = worst(f);
     f.set({
-      ...f.model.s,
+      ...f.settings,
       preset: ideal.preset,
       reality: ideal.reality,
       ai: ideal.ai,
@@ -138,7 +143,7 @@ describe('success cases', () => {
       cust: ideal.cust,
     });
     let weeksToDrain = 0;
-    const most = () => Math.max(...f.model.centers.map((n) => weeksOfWork(n, f.model.s)));
+    const most = () => Math.max(...Object.values(f.read().stations).map((n) => n.weeks));
     while (most() > 1 && weeksToDrain < 400) {
       f.step(1);
       weeksToDrain++;
@@ -154,7 +159,7 @@ describe('success cases', () => {
     const refused = ['tire', 'gate', 'teams'].flatMap((id) =>
       (['service', 'product'] as const).flatMap((company) => {
         const B = builtinBundle(id);
-        return stability(buildFactory(B, { s: { ...settingsOf(B, 'ideal'), company } })).refuse;
+        return createFactory(B, { ...settingsOf(B, 'ideal'), company }).check().refuse;
       }),
     );
     // ASSERT
@@ -175,7 +180,7 @@ describe('failure cases', () => {
     };
     const expected = ['support: Realistic needs 2.11× its Ideal capacity (at most 1.5×)'];
     // ACT
-    const m = buildFactory(B, { s: { ...settingsOf(B, 'ideal'), company: 'service' } });
+    const m = buildFactory(B, { ...settingsOf(B, 'ideal'), company: 'service' });
     const refused = stability(m).refuse.filter((t) => t.includes('Ideal capacity'));
     // ASSERT
     expect(refused).toEqual(expected);
@@ -187,7 +192,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = { created: 0, consumed: 0, backlog: 0, transit: 0, work: 0, gap: 0 };
     // ACT
-    const c = conservation(realistic().model);
+    const c = conservation(realistic());
     // ASSERT
     expect(c).toEqual(expected);
   });
@@ -197,7 +202,7 @@ describe('edge cases', () => {
     const belts = 12;
     const quarterDay = [0.05];
     // ACT
-    const m = realistic().model;
+    const m = buildFactory(builtinBundle('tire'), settingsOf(builtinBundle('tire'), 'realistic'));
     const times = [...new Set(m.edges.map((e) => e.T))];
     // ASSERT
     expect(m.edges).toHaveLength(belts);
@@ -210,13 +215,12 @@ describe('edge cases', () => {
     const run = (rework: boolean) => {
       const f = realistic(9);
       const seen: string[] = [];
-      const hook: Hook = (what, _n, at) => {
-        if (what === 'request') seen.push(`${at?.e.i}@${(at?.x as number).toFixed(6)}`);
-      };
-      f.model.hook = hook;
-      f.set({ ...f.model.s, mech: { ...f.model.s.mech, rework } });
+      f.listen((what, _station, at) => {
+        if (what === 'request') seen.push(`${at?.belt.i}@${(at?.x as number).toFixed(6)}`);
+      });
+      f.set({ ...f.settings, mech: { ...f.settings.mech, rework } });
       f.step(weeks);
-      return { seen: seen.join(','), hash: stateHash(f.model) };
+      return { seen: seen.join(','), hash: stateHash(f) };
     };
     // ACT
     const on = run(true);

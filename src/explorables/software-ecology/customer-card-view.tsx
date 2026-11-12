@@ -2,7 +2,7 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { memo, type ReactNode } from 'react';
 import { Glyph } from './factory-glyph-view';
-import type { Snapshot } from './run-snapshot.pure.ts';
+import type { Snapshot } from './factory-model.pure.ts';
 import type { CustomerWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Release } from './stage-readouts.pure.ts';

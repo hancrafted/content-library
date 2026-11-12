@@ -13,6 +13,7 @@ import {
   togglePicking,
   type CompareState,
 } from './compare-stream.pure.ts';
+import type { DashboardState } from './use-dashboard.ts';
 
 export interface CompareActions {
   readonly state: CompareState;
@@ -61,4 +62,11 @@ export function useCompare(initial: readonly string[] | undefined): CompareActio
     exit: leave,
     reset: (next) => set(presetCompare(next)),
   };
+}
+
+/** The dashboards on show: the open popover's, and the compare stream's columns. */
+export function useWatch(dash: DashboardState, compare: CompareActions): readonly string[] {
+  const { watch } = dash,
+    { stream } = compare;
+  return useMemo(() => (stream.length ? [...watch, ...stream] : watch), [watch, stream]);
 }

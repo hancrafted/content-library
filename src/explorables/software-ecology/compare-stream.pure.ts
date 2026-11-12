@@ -4,9 +4,7 @@
  * columns in flow order, a belt between neighbours, a gap counting the stations skipped otherwise. The compare set is
  * transient state the client parent owns (FE-001 §1). No DOM.
  */
-import { Q } from './factory-dials.pure.ts';
-import { COMPL, REDO } from './factory-flow.pure.ts';
-import type { Factory, FactoryNode } from './factory.types';
+import type { Topology } from './factory-model.pure.ts';
 
 export const COMPARE_MAX = 3;
 
@@ -58,10 +56,10 @@ export type StreamPart =
   /** The work centers in flow order between two columns no belt joins. */
   | { readonly kind: 'gap'; readonly skipped: number };
 
-const isCenter = (m: Pick<Factory, 'nodes'>, id: string) => m.nodes.get(id)?.kind === 'role';
+const isCenter = (m: Pick<Topology, 'nodes'>, id: string) => m.nodes.get(id)?.kind === 'role';
 
 /** The picked work centers in flow order, with a belt or a gap between each two. */
-export const streamOf = (m: Pick<Factory, 'nodes' | 'order' | 'edges'>, ids: readonly string[]): StreamPart[] => {
+export const streamOf = (m: Pick<Topology, 'nodes' | 'order' | 'edges'>, ids: readonly string[]): StreamPart[] => {
   const cols = m.order.filter((id) => ids.includes(id) && isCenter(m, id));
   return cols.flatMap((id, i): StreamPart[] => {
     if (i === 0) return [{ kind: 'column', id }];
@@ -71,46 +69,3 @@ export const streamOf = (m: Pick<Factory, 'nodes' | 'order' | 'edges'>, ids: rea
     return [e ? { kind: 'belt', key: e.key } : { kind: 'gap', skipped }, { kind: 'column', id }];
   });
 };
-
-/** A document as a chip in the stream: its quality, AI-made, a warning for rework or a complaint. */
-export interface Chip {
-  readonly good: boolean;
-  readonly ai: boolean;
-  readonly warn: boolean;
-}
-
-/** What a column's station shows besides its signs: the backlog as chips, and its plain numbers. */
-export interface ColumnReadout {
-  /** The front of the backlog, at most ten chips. */
-  readonly queue: readonly Chip[];
-  /** Waiting beyond the chips, the "+n". */
-  readonly more: number;
-  readonly waiting: number;
-  /** Weeks of work waiting. */
-  readonly weeks: number;
-  /** Busy, in percent. */
-  readonly busy: number;
-  /** Done a week. */
-  readonly done: number;
-}
-
-const QUEUE_SHOWN = 10;
-
-const queueOf = (n: FactoryNode): Chip[] => {
-  const out: Chip[] = [];
-  for (let i = 0; i < n.runs.n && out.length < QUEUE_SHOWN; i++) {
-    const r = n.runs.at(i),
-      chip = { good: !(r.fl & COMPL) && r.q === Q.GOOD, ai: !!r.ai, warn: (r.fl & (REDO | COMPL)) !== 0 };
-    for (let j = 0; j < r.c && out.length < QUEUE_SHOWN; j++) out.push(chip);
-  }
-  return out;
-};
-
-export const columnOf = (n: FactoryNode): ColumnReadout => ({
-  queue: queueOf(n),
-  more: Math.max(0, n.L - QUEUE_SHOWN),
-  waiting: n.L,
-  weeks: n.Ws,
-  busy: Math.round(n.u.busy * 100),
-  done: n.rate.done,
-});

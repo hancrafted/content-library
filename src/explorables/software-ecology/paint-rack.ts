@@ -4,9 +4,7 @@
  * good or bad as it ends; it never restarts within a job. Ported from the reference build's `drawRack` and `drawWork`.
  */
 import { drawDoc, label, SPR } from './doc-sprites.ts';
-import { Q } from './factory-dials.pure.ts';
-import { COMPL, FROM_SRC, REDO } from './factory-flow.pure.ts';
-import type { FactoryNode, Server } from './factory.types';
+import type { FloorStation, FloorWork } from './factory-model.pure.ts';
 import type { Frame } from './paint-belts.ts';
 import { RACK_W, rackX, SLOT, slotY, type Sprite, type StationVis } from './paint-station.ts';
 import { RACK } from './stage-readouts.pure.ts';
@@ -22,12 +20,13 @@ const blit = (f: Frame, d: Pick<Sprite, 'k' | 'x' | 'y' | 's'>, alpha: number) =
   f.c.drawImage(f.sheet, d.k * f.px, 0, f.px, f.px, d.x - sz / 2, d.y - sz / 2, sz, sz);
 };
 
-const frame = (f: Frame, n: FactoryNode, over: boolean) => {
+const frame = (f: Frame, n: FloorStation, over: boolean) => {
   const c = f.c,
-    x = rackX(n),
+    d = n.node.def,
+    x = rackX(d),
     hw = RACK_W / 2,
-    top = slotY(n, RACK - 1) - SLOT / 2,
-    bot = slotY(n, 0) + SLOT / 2;
+    top = slotY(d, RACK - 1) - SLOT / 2,
+    bot = slotY(d, 0) + SLOT / 2;
   c.lineWidth = 0.8;
   c.strokeStyle = f.C.border;
   if (over) {
@@ -40,7 +39,7 @@ const frame = (f: Frame, n: FactoryNode, over: boolean) => {
   c.lineTo(x + hw, bot);
   c.lineTo(x + hw, top);
   for (let i = 1; i < RACK; i++) {
-    const yy = slotY(n, i) + SLOT / 2;
+    const yy = slotY(d, i) + SLOT / 2;
     c.moveTo(x - hw, yy);
     c.lineTo(x + hw, yy);
   }
@@ -52,15 +51,15 @@ const frame = (f: Frame, n: FactoryNode, over: boolean) => {
 };
 
 /** The rack: its slots, the ones leaving and the ones waiting. */
-export const drawRack = (f: Frame, n: FactoryNode, v: StationVis) => {
-  frame(f, n, n.L > RACK);
+export const drawRack = (f: Frame, n: FloorStation, v: StationVis) => {
+  frame(f, n, n.waiting > RACK);
   for (const g of v.ghosts) blit(f, g, Math.max(0, g.life));
   for (const d of v.q) blit(f, d, d.a);
   f.c.globalAlpha = 1;
 };
 
 /** How far a job is done, 0 to 1, at model time `t`. */
-export const progressOf = (sv: Pick<Server, 'busy' | 'blocked' | 'start' | 'end'>, t: number): number => {
+export const progressOf = (sv: Pick<FloorWork, 'busy' | 'blocked' | 'start' | 'end'>, t: number): number => {
   if (!sv.busy) return sv.blocked ? 1 : 0;
   const p = (t - sv.start) / Math.max(1e-9, sv.end - sv.start);
   return p < 0 ? 0 : p > 1 ? 1 : p;
@@ -102,23 +101,19 @@ export interface WorkAt {
   readonly blocked: string;
 }
 
-const kindOfJob = (sv: Server, ai: boolean) => ({
-  q: sv.J.fl & (COMPL | FROM_SRC) ? Q.GOOD : sv.J.q,
+/** The document in work: a request straight from the Customer or a complaint is drawn good until it is stamped. */
+const kindOfJob = (sv: FloorWork, ai: boolean) => ({
+  q: sv.doc.complaint || sv.doc.fromCustomer || sv.doc.good ? 1 : 0,
   ai,
-  warn: sv.bounce || (sv.J.fl & (COMPL | REDO)) !== 0,
+  warn: sv.bounce || sv.doc.complaint || sv.doc.redo,
 });
 
-const working = (n: FactoryNode): Server | null => {
-  const sv = n.server;
-  return sv && sv.n === n && (sv.busy || sv.blocked) ? sv : null;
-};
-
-const steadyFill = (sv: Server, secsPerWeek: number): boolean =>
+const steadyFill = (sv: FloorWork, secsPerWeek: number): boolean =>
   secsPerWeek > 0 && (sv.end - sv.start) * secsPerWeek < STEADY_SECS;
 
 /** The document in work: filling, stamped as it ends, or held with "blocked". */
-export const drawWork = (f: Frame, n: FactoryNode, x: { v: StationVis; at: WorkAt }) => {
-  const sv = working(n),
+export const drawWork = (f: Frame, n: FloorStation, x: { v: StationVis; at: WorkAt }) => {
+  const sv = n.work,
     w = x.v.work;
   if (!sv || !w) return;
   const d = kindOfJob(sv, x.at.ai),
@@ -136,5 +131,5 @@ export const drawWork = (f: Frame, n: FactoryNode, x: { v: StationVis; at: WorkA
   }
   const pr = progressOf(sv, f.tr);
   drawDoc(p, { ...pos, fill: pr }, d);
-  if (pr > STAMP_FROM) stamp(f, w, { good: sv.preQ === Q.GOOD && !sv.bounce, p: pr });
+  if (pr > STAMP_FROM) stamp(f, w, { good: sv.stampGood, p: pr });
 };

@@ -18,6 +18,7 @@ import {
   TAU,
   TAU_OUT,
 } from './factory-dials.pure.ts';
+import { Run } from './factory-docs.pure.ts';
 import { BUMP, deliver, deliverBack, FAIL, FROM_SRC, MAIN, OWN, pushBack, send } from './factory-flow.pure.ts';
 import { expo } from './factory-random.pure.ts';
 import { runServer } from './factory-service.pure.ts';
@@ -76,7 +77,7 @@ const requests = (m: Factory, t0: number, t1: number): void => {
       send(m, e, { c: 1, q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN, b: 0, t0: c.next });
       m.wip++;
       m.req += BUMP;
-      m.hook?.('request', c, { e, x: c.next });
+      m.hook?.('request', c, { belt: e, x: c.next });
     }
     c.next += nextGap(c, cu.mode, r);
   }
@@ -96,7 +97,7 @@ const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number; mod
     m.created++;
     m.wip++;
     n.rate.arr += BUMP;
-    pushBack(n, { q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN | OWN, e: -1, b: 0, wk: Math.floor(src.next), c: 1 });
+    pushBack(n, new Run({ q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN | OWN, e: -1, b: 0, wk: Math.floor(src.next), c: 1 }));
     m.hook?.('own', n);
   }
 };
@@ -233,8 +234,4 @@ export const step = (m: Factory, dt = DTW): void => {
   for (const n of m.centers) average(m, n, { fdec, a, sampleNow });
   decayBelts(m, fdec);
   decayCustomer(m, dt, fdec);
-};
-
-export const warm = (m: Factory, weeks: number): void => {
-  for (let i = 0, n = Math.round(weeks / DTW); i < n; i++) step(m);
 };

@@ -8,30 +8,10 @@
  * "falls" (against the step before).
  */
 import { custOf, DTW, firstOf, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
-import { buildFactory } from './factory-model.pure.ts';
-import {
-  CENTER_MEASURES,
-  CUSTOMER_MEASURES,
-  type CenterMeasure,
-  type CustomerMeasure,
-} from './factory-readouts.pure.ts';
-import { step, warm } from './factory-step.pure.ts';
-import type { Factory } from './factory.types';
+import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import type { Bundle, Cust, Over, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
 
-/** The value of one measure, `customer.output` or `qa.weeksWaiting`. */
-export const metric = (m: Factory, key: string): number => {
-  const [who, what] = key.split('.');
-  if (who === 'customer') {
-    const f = CUSTOMER_MEASURES[what as CustomerMeasure];
-    if (!f) throw new Error(`unknown measure ${key}`);
-    return f(m);
-  }
-  const n = m.nodes.get(who),
-    f = CENTER_MEASURES[what as CenterMeasure];
-  if (!n || n.kind !== 'role' || !f) throw new Error(`unknown measure ${key}`);
-  return f(n);
-};
+export { validKey } from './factory-model.pure.ts';
 
 export type Comparison = '>' | '<' | '>=' | '<=';
 /** A test, parsed: a comparison with a bound, a range, or a trend against the step before. */
@@ -68,10 +48,6 @@ export const judge = (v: number, test: string, prev?: number): boolean => {
 };
 
 export const validTest = (t: string): boolean => parseTest(t) !== null;
-export const validKey = (key: string, centerIds: ReadonlySet<string>): boolean => {
-  const [who, what] = String(key).split('.');
-  return who === 'customer' ? what in CUSTOMER_MEASURES : centerIds.has(who) && what in CENTER_MEASURES;
-};
 
 const SET_IN: Readonly<Record<string, keyof Over>> = {
   efficiency: 'eff',
@@ -100,7 +76,7 @@ const setCustomer = (c: NonNullable<StepSet['customer']>, cu: Cust): Cust => ({
 });
 
 /** Applies a step's `set` to the settings in place: dials per center, the Customer, where AI works, the reality. */
-export const applySet = (set: StepSet | undefined, m: Pick<Factory, 'B'>, s: Settings): void => {
+export const applySet = (set: StepSet | undefined, m: { readonly B: Bundle }, s: Settings): void => {
   if (!set) return;
   if (set.reality !== undefined) s.reality = set.reality;
   if (set.ai !== undefined) s.ai = Array.isArray(set.ai) ? [...set.ai] : set.ai;
@@ -126,27 +102,36 @@ export interface ScenarioRow {
   readonly checks: readonly Check[];
 }
 
+/** The settings after a step's `set`: a copy, handed to the model whole. */
+export const settingsAfter = (set: StepSet | undefined, B: Bundle, now: Settings): Settings => {
+  const s = copySettings(now);
+  applySet(set, { B }, s);
+  return s;
+};
+
 /** The model a preset starts from: built at its settings, warmed 60 weeks unless it starts clear. */
-export const scenarioStart = (B: Bundle, p: Preset, seed?: number): Factory => {
-  const m = buildFactory(B, { s: startSettings(B, p), seed });
-  if (p.start !== 'clear') warm(m, WARM_WEEKS);
-  return m;
+export const scenarioStart = (B: Bundle, p: Preset, seed: number = DEFAULT_SEED): FactoryHandle => {
+  const f = createFactory(B, startSettings(B, p), seed);
+  if (p.start !== 'clear') f.step(WARM_WEEKS);
+  return f;
 };
 
 /** Runs every step of one preset headless, with a fixed seed: one row per step, each expect judged. */
 export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {}): ScenarioRow[] => {
   const p = B.data.presets.find((x) => x.id === id);
   if (!p) throw new Error(`no preset ${id}`);
-  const m = scenarioStart(B, p, opts.seed),
-    k0 = Math.round(m.t / DTW),
+  const f = scenarioStart(B, p, opts.seed),
+    k0 = Math.round(f.weeks / DTW),
     steps = stepsOf(p);
   const keys = [...new Set(steps.flatMap((st) => Object.keys(st.expect ?? {})))];
   let prev: Record<string, number> = {},
     k = k0;
   return steps.map((st, i) => {
-    applySet(st.set, m, m.s);
-    for (const kk = k0 + stepsTo(st.run); k < kk; k++) step(m);
-    const vals = Object.fromEntries(keys.map((key) => [key, metric(m, key)]));
+    f.set(settingsAfter(st.set, B, f.settings));
+    const kk = k0 + stepsTo(st.run);
+    f.step((kk - k) * DTW);
+    k = Math.max(k, kk);
+    const vals = f.read({ measures: keys }).measures as Record<string, number>;
     const checks = Object.entries(st.expect ?? {}).map(([key, test]) => ({
       key,
       test,

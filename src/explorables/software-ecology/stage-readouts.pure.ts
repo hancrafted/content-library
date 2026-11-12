@@ -17,6 +17,8 @@ export type SignKind = 'rework' | 'churn' | 'unread' | 'complaint';
 export interface StationReadout {
   readonly id: string;
   readonly waiting: number;
+  /** Weeks of work waiting now, at the current pace. */
+  readonly weeks: number;
   readonly ai: boolean;
   readonly piling: boolean;
   /** Weeks of work waiting as a band: 0 under a week, 1 (amber) from one, 2 (red) from two. */
@@ -61,6 +63,7 @@ const SIGNS: readonly SignKind[] = ['rework', 'churn', 'unread', 'complaint'];
 export const stationOf = (n: FactoryNode, x: { m: Factory; s: Settings }): StationReadout => ({
   id: n.id,
   waiting: n.L,
+  weeks: n.L / speedOf(n, dials(n, x.s)),
   ai: dials(n, x.s).ai,
   piling: n.L > RACK,
   level: n.lvl,
@@ -152,3 +155,47 @@ export const verdictOf = (output: number, sat: number): Verdict =>
 export type Relative = { readonly kind: 'same' | 'half' | 'third' } | { readonly kind: 'times'; readonly k: number };
 export const relativeOf = (k: number): Relative =>
   k > 0.9 && k < 1.1 ? { kind: 'same' } : k < 0.6 ? { kind: k < 0.4 ? 'third' : 'half' } : { kind: 'times', k };
+
+/** A document as a chip in the stream: its quality, AI-made, a warning for rework or a complaint. */
+export interface Chip {
+  readonly good: boolean;
+  readonly ai: boolean;
+  readonly warn: boolean;
+}
+
+/** What a column's station shows besides its signs: the backlog as chips, and its plain numbers. */
+export interface ColumnReadout {
+  /** The front of the backlog, at most ten chips. */
+  readonly queue: readonly Chip[];
+  /** Waiting beyond the chips, the "+n". */
+  readonly more: number;
+  readonly waiting: number;
+  /** Weeks of work waiting. */
+  readonly weeks: number;
+  /** Busy, in percent. */
+  readonly busy: number;
+  /** Done a week. */
+  readonly done: number;
+}
+
+const QUEUE_SHOWN = 10;
+
+const queueOf = (n: FactoryNode): Chip[] => {
+  const out: Chip[] = [];
+  for (let i = 0; i < n.runs.n && out.length < QUEUE_SHOWN; i++) {
+    const r = n.runs.at(i),
+      chip = { good: !r.complaint && r.good, ai: !!r.ai, warn: r.redo || r.complaint };
+    for (let j = 0; j < r.c && out.length < QUEUE_SHOWN; j++) out.push(chip);
+  }
+  return out;
+};
+
+/** A compare column's station: the front of its backlog as chips, and its plain numbers. */
+export const columnOf = (n: FactoryNode): ColumnReadout => ({
+  queue: queueOf(n),
+  more: Math.max(0, n.L - QUEUE_SHOWN),
+  waiting: n.L,
+  weeks: n.Ws,
+  busy: Math.round(n.u.busy * 100),
+  done: n.rate.done,
+});

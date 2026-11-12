@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   closedCompare,
-  columnOf,
   openCompare,
   pickCompare,
   presetCompare,
@@ -10,12 +9,11 @@ import {
   togglePicking,
 } from './compare-stream.pure.ts';
 import { idealSettings } from './factory-dials.pure.ts';
-import { DEFAULT_SEED, buildFactory } from './factory-model.pure.ts';
+import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
 import { FactoryRun } from './factory-run.pure.ts';
-import type { FactoryNode } from './factory.types';
 import { builtinBundle } from './use-case-data.ts';
 
-const tire = () => buildFactory(builtinBundle('tire'), { s: idealSettings('service'), seed: DEFAULT_SEED });
+const tire = () => createFactory(builtinBundle('tire'), idealSettings('service'), DEFAULT_SEED).topology;
 
 describe('success cases', () => {
   it('orders the AI compare picks by the flow and joins neighbours by their live belt', () => {
@@ -78,11 +76,10 @@ describe('success cases', () => {
   it('reads quality assurance at AI compare as the stream shows it: a full rack of AI-made work, busy all the time', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ai-compare', now: true });
-    const qa = run.m.nodes.get('qa') as FactoryNode;
     const [waiting, weeks, busy, done, shown] = [714, 32.5, 100, 17.8, 10];
     const goodAi = { good: true, ai: true, warn: false };
     // ACT
-    const col = columnOf(qa);
+    const col = run.read({ stream: ['qa'] }).columns.qa;
     // ASSERT
     expect(col).toMatchObject({ waiting, busy, more: waiting - shown });
     expect(col.weeks).toBeCloseTo(weeks, 1);

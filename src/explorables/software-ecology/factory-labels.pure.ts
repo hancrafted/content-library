@@ -4,7 +4,7 @@
  * are the same in every locale's length.
  */
 import { boxOf, type FactoryLayout, type Pt } from './factory-layout.pure.ts';
-import type { NodeDef } from './factory.types';
+import type { NodeDef } from './factory-model.pure.ts';
 
 type Box = readonly [number, number, number, number];
 

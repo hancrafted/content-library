@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { dashboardOf, effToPos, posToEff, sparkPaths } from './dashboard-readouts.pure.ts';
+import { effToPos, posToEff, sparkPaths, type DashboardReadout } from './dashboard-readouts.pure.ts';
 import { FactoryRun } from './factory-run.pure.ts';
-import type { FactoryNode } from './factory.types';
 import { builtinBundle } from './use-case-data.ts';
 
 const warmed = (preset: string) => new FactoryRun({ B: builtinBundle('tire'), preset, now: true });
-const node = (run: FactoryRun, id: string): FactoryNode => {
-  const n = run.m.nodes.get(id);
-  if (!n) throw new Error(`no ${id}`);
-  return n;
+/** A work center's dashboard, as a read of the run gives it. */
+const dashboardOf = (run: FactoryRun, id: string): DashboardReadout => {
+  const d = run.read({ watch: [id] }).dashboards[id];
+  if (!d) throw new Error(`no ${id}`);
+  return d;
 };
 
 describe('success cases', () => {
@@ -17,7 +17,7 @@ describe('success cases', () => {
     const run = warmed('ai-compare');
     const redFrom = 2;
     // ACT
-    const d = dashboardOf(node(run, 'qa'), run.m.s);
+    const d = dashboardOf(run, 'qa');
     // ASSERT
     expect(d.light).toBe('red');
     expect(d.signals[0]).toMatchObject({ kind: 'bottleneck', level: 'red' });
@@ -30,7 +30,7 @@ describe('success cases', () => {
     const run = warmed('ai-compare');
     const [set, effective] = [88, 220];
     // ACT
-    const d = dashboardOf(node(run, 'eng'), run.m.s);
+    const d = dashboardOf(run, 'eng');
     // ASSERT
     expect(d.dials.ai).toBe(true);
     expect([d.dials.eff, d.dials.effEff]).toEqual([set, effective]);
@@ -54,7 +54,7 @@ describe('failure cases', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true, clear: true });
     // ACT
-    const d = dashboardOf(node(run, 'qa'), run.m.s);
+    const d = dashboardOf(run, 'qa');
     // ASSERT
     expect(d.flows.lead).toBeNull();
   });
@@ -78,7 +78,7 @@ describe('edge cases', () => {
     // ARRANGE
     const run = warmed('ideal');
     // ACT
-    const d = dashboardOf(node(run, 'sales'), run.m.s);
+    const d = dashboardOf(run, 'sales');
     // ASSERT
     expect(d.light).toBe('green');
     expect(d.signals.map((s) => s.kind)).toEqual(['ok']);

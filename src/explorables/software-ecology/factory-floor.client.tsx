@@ -1,10 +1,12 @@
+'use client';
+
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { TileView } from './cartoon-card-view';
 import { cartoonCardsOf, tilePartsOf, type CartoonCardPart } from './cartoon-parts.pure.ts';
 import { gridOf } from './factory-grid.pure.ts';
-import type { Snapshot } from './run-snapshot.pure.ts';
+import type { Snapshot } from './factory-model.pure.ts';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { ViewId } from './software-ecology.types';
@@ -84,7 +86,7 @@ const labelOf = (words: Words, kind: 'role' | 'customer', title: string) =>
   fillTemplate(kind === 'customer' ? words.card.openSettings : words.card.openDashboard, { title });
 
 function CustomerStation(p: FloorProps) {
-  const cust = customerCardOf(p.f.run.m, p.w);
+  const cust = customerCardOf(p.f.run.topology, p.w);
   return (
     <WorkCenterCard
       cardView="station"
@@ -142,7 +144,7 @@ const cardSpot = (c: CartoonCardPart) => (c.kind === 'customer' ? 'customer' : `
 
 /** Swing and Roles: every card at its factory cell, the cartoon tiles in the empty ones. */
 function CartoonCards(p: FloorProps & { view: 'swing' | 'roles' }) {
-  const m = p.f.run.m,
+  const m = p.f.run.topology,
     words = p.words.cartoon;
   const cards = useMemo(() => cartoonCardsOf(m, p.w, words), [m, p.w, words]);
   const tiles = useMemo(() => tilePartsOf(m, p.view, { w: p.w, words }), [m, p.view, p.w, words]);
@@ -188,7 +190,7 @@ const floorHandlers = (p: FloorProps) => ({
 
 export function Floor(p: FloorProps & { view: ViewId }) {
   const { layout, run } = p.f;
-  const cols = useMemo(() => gridOf(run.m).cols, [run]);
+  const cols = useMemo(() => gridOf(run.topology).cols, [run]);
   return (
     <div
       ref={p.f.floor}

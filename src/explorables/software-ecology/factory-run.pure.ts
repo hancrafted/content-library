@@ -1,13 +1,20 @@
 /*
  * One run of the factory in time (design-ADR 0024 §14): a model built from a use case and a preset, warmed 60 weeks
  * in chunks behind "Warming up" unless the preset starts clear, then driven by real time at the chosen speed. A late
- * frame drops time instead of spiralling. No DOM: the hook drives it and the painter draws it. Ported from the
- * reference build's `rebuild`, `clearFactory` and `frame`.
+ * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
+ * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
-import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
-import { buildFactory } from './factory-model.pure.ts';
-import { step } from './factory-step.pure.ts';
-import type { Factory } from './factory.types';
+import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import {
+  createFactory,
+  DEFAULT_SEED,
+  type FactoryHandle,
+  type Floor,
+  type FloorListener,
+  type ReadOptions,
+  type Snapshot,
+  type Topology,
+} from './factory-model.pure.ts';
 import type { Bundle, Preset, Settings } from './software-ecology.types';
 
 /** Weeks a real second at 1×; 5× (the default) plays a working day in about 0.6 s. */
@@ -40,17 +47,17 @@ export interface RunOptions {
 }
 
 export class FactoryRun {
-  readonly m: Factory;
   readonly preset: Preset;
   warmLeft = 0;
   dropped = 0;
   /** A tour step's model step: time never runs past it (the page and the headless runner stop on the same step). */
   stopAt: number | null = null;
   private acc = 0;
+  private readonly f: FactoryHandle;
 
   constructor(o: RunOptions) {
     this.preset = presetOf(o.B, o.preset);
-    this.m = buildFactory(o.B, { s: o.s ?? startSettings(o.B, this.preset), seed: o.seed });
+    this.f = createFactory(o.B, o.s ?? startSettings(o.B, this.preset), o.seed ?? DEFAULT_SEED);
     if (o.clear || this.preset.start === 'clear') return;
     this.warmLeft = WARM_STEPS;
     if (o.now) this.finishWarm();
@@ -60,9 +67,29 @@ export class FactoryRun {
     return this.warmLeft > 0;
   }
 
+  /** The network's fixed shape, for the layout and the cards. */
+  get topology(): Topology {
+    return this.f.topology;
+  }
+
+  /** The documents on the floor, for the painter. */
+  get floor(): Floor {
+    return this.f.floor;
+  }
+
+  /** The settings the model reads now. */
+  get settings(): Settings {
+    return this.f.settings;
+  }
+
+  /** Model time, in weeks. */
+  get weeks(): number {
+    return this.f.weeks;
+  }
+
   /** Model steps run so far. */
   get k(): number {
-    return Math.round(this.m.t / DTW);
+    return Math.round(this.f.weeks / DTW);
   }
 
   /** The run stands on its tour step. */
@@ -70,32 +97,56 @@ export class FactoryRun {
     return this.stopAt !== null && !this.warming && this.k >= this.stopAt;
   }
 
+  /** New settings, read from the next step on. */
+  set(s: Settings) {
+    this.f.set(s);
+  }
+
+  listen(fn: FloorListener | null) {
+    this.f.listen(fn);
+  }
+
+  /** Warm-up progress in days, or null once the line runs. */
+  get warmProgress(): Snapshot['warming'] {
+    return this.warming ? { day: Math.floor(this.f.weeks * DAYS), of: WARM_WEEKS * DAYS } : null;
+  }
+
+  /** The Snapshot, with the run's warm-up and lag for the status line. */
+  read(o: ReadOptions = {}): Snapshot {
+    return this.f.read({ ...o, warming: this.warmProgress, dropped: this.dropped });
+  }
+
+  private steps(n: number) {
+    if (n > 0) this.f.step(n * DTW);
+  }
+
   /** Warms the rest at once. */
   finishWarm() {
-    for (; this.warmLeft > 0; this.warmLeft--) step(this.m);
+    this.steps(this.warmLeft);
+    this.warmLeft = 0;
   }
 
   private warmChunk() {
     const n = Math.min(WARM_CHUNK, this.warmLeft);
-    for (let i = 0; i < n; i++) step(this.m);
+    this.steps(n);
     this.warmLeft -= n;
     this.acc = 0;
   }
 
   /** Runs the steps the accumulated time allows, at most MAX_STEPS, never past `stopAt`. */
   private stepDue() {
-    const stop = this.stopAt ?? Infinity;
-    for (let n = 0; this.acc >= DTW && n < MAX_STEPS && this.k < stop; n++) {
-      step(this.m);
-      this.acc -= DTW;
-    }
+    const stop = this.stopAt ?? Infinity,
+      room = stop - this.k;
+    let n = 0;
+    for (; this.acc >= DTW && n < MAX_STEPS && n < room; n++) this.acc -= DTW;
+    this.steps(n);
     if (this.k >= stop) this.acc = 0;
   }
 
   /** Runs at once to model step `k`: a tour's Back, or a tour step under reduced motion. */
   runTo(k: number) {
     this.finishWarm();
-    while (this.k < k) step(this.m);
+    this.steps(k - this.k);
     this.acc = 0;
   }
 

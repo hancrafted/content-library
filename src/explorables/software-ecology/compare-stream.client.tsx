@@ -1,15 +1,17 @@
+'use client';
+
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, type CSSProperties, type ReactNode, type RefObject } from 'react';
-import { streamOf, type ColumnReadout, type StreamPart } from './compare-stream.pure.ts';
+import { streamOf, type StreamPart } from './compare-stream.pure.ts';
 import { num } from './dash-rows.pure.ts';
 import { DocGlyph } from './doc-glyph-view';
 import { Glyph } from './factory-glyph-view';
 import { boxOf, type BeltLayout, type FactoryLayout } from './factory-layout.pure.ts';
-import type { Factory, FactoryNode } from './factory.types';
+import type { TopoNode, Topology } from './factory-model.pure.ts';
 import type { CardWords, CompareWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { cardsOf, type CardPart } from './stage-parts.pure.ts';
-import type { StationReadout } from './stage-readouts.pure.ts';
+import type { ColumnReadout, StationReadout } from './stage-readouts.pure.ts';
 import { beltWords, type WordsIn } from './use-case-words.pure.ts';
 
 /*
@@ -21,7 +23,7 @@ import { beltWords, type WordsIn } from './use-case-words.pure.ts';
  */
 
 export interface CompareStreamProps {
-  readonly m: Factory;
+  readonly topo: Topology;
   readonly layout: FactoryLayout;
   readonly ids: readonly string[];
   readonly w: WordsIn;
@@ -41,10 +43,10 @@ export interface CompareStreamProps {
 const STRIP_TEXT = 'scale(1.86)';
 const NODE_HEAD = 18;
 
-type StripProps = Pick<CompareStreamProps, 'm' | 'layout' | 'ids' | 'stations' | 'words'> & { titles: Titles };
+type StripProps = Pick<CompareStreamProps, 'topo' | 'layout' | 'ids' | 'stations' | 'words'> & { titles: Titles };
 
 /** One node of the strip: its box, and its title while it is compared; amber while it backs up two weeks. */
-function StripNode({ n, p }: { n: FactoryNode; p: StripProps }) {
+function StripNode({ n, p }: { n: TopoNode; p: StripProps }) {
   const [x, y, w, h] = boxOf(n.def),
     on = p.ids.includes(n.id);
   return (
@@ -70,7 +72,7 @@ function Strip(p: StripProps) {
       {l.order.map((k) => (
         <path key={k} d={(l.belts[k] as BeltLayout).path.d} className={styles.stripBelt} />
       ))}
-      {[...p.m.nodes.values()].map((n) => (
+      {[...p.topo.nodes.values()].map((n) => (
         <StripNode key={n.id} n={n} p={p} />
       ))}
     </svg>
@@ -186,8 +188,8 @@ function Top({ n, p }: { n: number; p: CompareStreamProps }) {
 }
 
 export function CompareStream(p: CompareStreamProps) {
-  const parts = useMemo(() => streamOf(p.m, p.ids), [p.m, p.ids]);
-  const cards = useMemo(() => Object.fromEntries(cardsOf(p.m, p.w).map((c) => [c.id, c])), [p.m, p.w]);
+  const parts = useMemo(() => streamOf(p.topo, p.ids), [p.topo, p.ids]);
+  const cards = useMemo(() => Object.fromEntries(cardsOf(p.topo, p.w).map((c) => [c.id, c])), [p.topo, p.w]);
   const n = parts.filter((x) => x.kind === 'column').length;
   return (
     <section ref={p.root} className={styles.compare} aria-label={p.words.label}>
