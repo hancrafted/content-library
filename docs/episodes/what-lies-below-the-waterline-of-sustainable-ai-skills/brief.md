@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-11-12T15:21:00Z
+  - by: human:han
+    at: 2026-11-12T15:21:24Z
 ---
 
 # What lies below the waterline of sustainable AI skills
