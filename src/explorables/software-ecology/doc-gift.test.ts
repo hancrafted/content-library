@@ -31,7 +31,11 @@ const extentOf = (at: { x: number; y: number }) => {
     },
   } as unknown as Ctx;
   bulb(c, COLORS, at);
-  return { y: (Math.min(...ys) + Math.max(...ys)) / 2, x: (Math.min(...xs) + Math.max(...xs)) / 2 };
+  return {
+    y: (Math.min(...ys) + Math.max(...ys)) / 2,
+    x: (Math.min(...xs) + Math.max(...xs)) / 2,
+    box: { top: Math.min(...ys), bottom: Math.max(...ys), left: Math.min(...xs), right: Math.max(...xs) },
+  };
 };
 
 const ROUND = 100;
@@ -61,12 +65,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps the bulb inside the sheet, which is 11.5 units high', () => {
+  it('keeps the whole bulb and its base inside the sheet, which is 9 units wide and 11.5 high', () => {
     // ARRANGE
-    const sheetHalf = 5.75;
+    const sheet = { top: -5.75, bottom: 5.75, left: -4.5, right: 4.5 };
     // ACT
-    const centre = extentOf(BULB_AT);
+    const { box } = extentOf(BULB_AT);
     // ASSERT
-    expect(Math.abs(centre.y)).toBeLessThan(sheetHalf);
+    expect(box.top).toBeGreaterThan(sheet.top);
+    expect(box.bottom).toBeLessThan(sheet.bottom);
+    expect(box.left).toBeGreaterThan(sheet.left);
+    expect(box.right).toBeLessThan(sheet.right);
   });
 });

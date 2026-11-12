@@ -1,7 +1,15 @@
 'use client';
 
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { aiKeyOf, withAi, withAiq, withCompany, withReality, type AiChoice } from './factory-settings.pure.ts';
+import {
+  aiHookOf,
+  aiKeyOf,
+  withAi,
+  withAiq,
+  withCompany,
+  withReality,
+  type AiChoice,
+} from './factory-settings.pure.ts';
 import { Field, Segmented, SliderControl, Value } from './settings-field.client';
 import type { ModelWords } from './software-ecology-words.types';
 import type { AiQuality, Bundle, Company, Settings } from './software-ecology.types';
@@ -52,7 +60,7 @@ function Reality(p: ModelMenuProps) {
 
 function Ai(p: ModelMenuProps) {
   const w = p.words,
-    items = p.aiChoices.map((c) => ({ id: c.id, label: c.label, hook: c.id.replace(/^ai:/, '') }));
+    items = p.aiChoices.map((c) => ({ id: c.id, label: c.label, hook: aiHookOf(c) }));
   const pick = (id: string) => {
     const c = p.aiChoices.find((x) => x.id === id);
     if (c) p.onSettings(withAi(p.settings, c.ai));

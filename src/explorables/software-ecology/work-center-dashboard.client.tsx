@@ -19,8 +19,10 @@ import type { OwnSet, RoleWords } from './software-ecology.types';
  */
 
 export interface WorkCenterDashboardProps {
-  /** The work center's id: the eval hooks read `node.<id>.<field>` (design-ADR 0024 §14). */
+  /** The work center's id. */
   readonly id: string;
+  /** The eval hooks' root: `node` in the popover, `compare` in a compare column, so each hook is on the page once (design-ADR 0024 §14). */
+  readonly scope?: 'node' | 'compare';
   readonly title: string;
   readonly icon: string;
   readonly role: RoleWords;
@@ -41,6 +43,9 @@ export interface WorkCenterDashboardProps {
   /** A Slide's Context marker for this work center: the station card carries none, so it sits here. */
   readonly marker?: ReactNode;
 }
+
+/** The eval hooks' prefix of this dashboard: `<scope>.<id>`. */
+const hookOf = (p: Pick<WorkCenterDashboardProps, 'id' | 'scope'>) => `${p.scope ?? 'node'}.${p.id}`;
 
 const signalText = (s: Signal, w: DashWords) => fillTemplate(w.signals[s.kind], { n: s.n.toFixed(1) });
 
@@ -96,7 +101,7 @@ function AiSwitch(p: WorkCenterDashboardProps) {
       role="switch"
       className={`${styles.switch} text-caption font-semibold`}
       aria-checked={d.ai}
-      data-control={`node.${p.id}.ai`}
+      data-control={`${hookOf(p)}.ai`}
       data-tip={p.words.aiTip}
       onClick={() => p.onAi(!d.ai)}
     >
@@ -115,7 +120,7 @@ function HeadButtons(p: WorkCenterDashboardProps) {
         className={styles.iconBtn}
         aria-pressed={p.help}
         aria-label={w.help}
-        data-control={`node.${p.id}.help`}
+        data-control={`${hookOf(p)}.help`}
         data-tip={w.help}
         onClick={p.onHelp}
       >
@@ -126,7 +131,7 @@ function HeadButtons(p: WorkCenterDashboardProps) {
           type="button"
           className={styles.iconBtn}
           aria-label={w.close}
-          data-control={`node.${p.id}.close`}
+          data-control={`${hookOf(p)}.close`}
           data-tip={w.closeTip}
           onClick={p.onClose}
         >
@@ -182,7 +187,7 @@ function Row({ row, p, id }: { row: DialRow; p: WorkCenterDashboardProps; id: st
         type="range"
         className={styles.range}
         id={`${id}-${row.key}`}
-        data-control={`node.${p.id}.${CONTROL[row.key]}`}
+        data-control={`${hookOf(p)}.${CONTROL[row.key]}`}
         min={row.min}
         max={row.max}
         step={row.step}
@@ -205,7 +210,7 @@ function Settings(p: WorkCenterDashboardProps) {
   const sum = [by('eff'), by('effv'), by('fan')].filter(Boolean).join(' · ');
   return (
     <details className={styles.settings}>
-      <summary className="text-caption font-medium" data-control={`node.${p.id}.settings`}>
+      <summary className="text-caption font-medium" data-control={`${hookOf(p)}.settings`}>
         <Glyph name="model" className={styles.ico} />
         <span>{p.words.settings}</span>
         <span className={`${styles.settingsSum} text-muted-foreground`}>{sum}</span>
@@ -229,8 +234,8 @@ export function WorkCenterDashboard(p: WorkCenterDashboardProps) {
       <Drain r={p.r} words={p.words} />
       <DashTrends r={p.r} words={p.words} />
       <Settings {...p} />
-      <OwnWorkSection node={p.id} own={p.r.own} words={p.words.own} onChange={p.onOwn} onEmit={p.onEmit} />
-      <DashFlows id={p.id} r={p.r} words={p.words} />
+      <OwnWorkSection node={hookOf(p)} own={p.r.own} words={p.words.own} onChange={p.onOwn} onEmit={p.onEmit} />
+      <DashFlows id={hookOf(p)} r={p.r} words={p.words} />
       <DashHighlights role={p.role} words={p.words} />
     </div>
   );

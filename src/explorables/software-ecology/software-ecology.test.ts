@@ -1,3 +1,4 @@
+import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -10,6 +11,19 @@ const render = (props: Parameters<typeof SoftwareEcology>[0]): string =>
 /** A pressed step button whose text is `name`, after its number badge. */
 const pressed = (name: string): RegExp =>
   new RegExp(`aria-pressed="true"[^>]*><span[^>]*>[①②③]</span>${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`);
+
+/*
+ * Eval hooks of the whole page (design-ADR 0024 §14, feature guide "Eval hooks"): every interactive control of the
+ * toolbar, the closed menus, the Settings popover and the cards names itself in a unique, stable `data-control`, and the
+ * cards write their read-outs as plain `data-readout-*` values.
+ */
+const INTERACTIVE =
+  'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
+
+const controlsOf = (html: string) =>
+  load(`<body>${html}</body>`)(INTERACTIVE)
+    .toArray()
+    .map((el) => ({ tag: el.tagName, control: el.attribs['data-control'], label: el.attribs['aria-label'] ?? '' }));
 
 describe('success cases', () => {
   it('renders the factory with its toolbar, every work center and the Customer in English', () => {
@@ -104,6 +118,98 @@ describe('success cases', () => {
     expect(html).toContain('data-target="qa-rack"');
     expect(html).not.toContain(marker);
   });
+
+  it('gives every control of the toolbar, its menus, the Settings popover and the cards a data-control', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const missing = controlsOf(render({ locale: 'en', preset: 'realistic' }))
+      .filter((c) => !c.control)
+      .map((c) => `${c.tag} ${c.label}`);
+    // ASSERT
+    expect(missing).toEqual(expected);
+  });
+
+  it('names the toolbar, Settings and node controls by the documented scheme', () => {
+    // ARRANGE
+    const expected = [
+      'toolbar.state.ideal',
+      'toolbar.scenarios',
+      'toolbar.scenario.ai-unbalanced',
+      'toolbar.tour',
+      'toolbar.compare',
+      'toolbar.pause',
+      'toolbar.speed',
+      'toolbar.speed.20',
+      'toolbar.clear',
+      'toolbar.use-case',
+      'toolbar.settings',
+      'settings.realism',
+      'settings.realism.help',
+      'settings.model.help',
+      'settings.mechanics.help',
+      'settings.ai.all',
+      'settings.ai.off',
+      'settings.ai.eng',
+      'settings.ai-quality.same',
+      'settings.rework',
+      'settings.rework.strength',
+      'settings.belt-motion',
+      'settings.pile.heap',
+      'settings.reset',
+      'settings.download',
+      'settings.upload',
+      'settings.upload.file',
+      'settings.close',
+      'node.eng',
+      'node.eng.sign.rework',
+    ];
+    // ACT
+    const found = new Set(controlsOf(render({ locale: 'en', preset: 'realistic' })).map((c) => c.control));
+    // ASSERT
+    expect(expected.filter((c) => !found.has(c))).toEqual([]);
+  });
+
+  it('writes the Customer and each station read-out as plain values on the card', () => {
+    // ARRANGE
+    const expected = {
+      customer: ['data-readout-output', 'data-readout-satisfied', 'data-readout-headroom', 'data-readout-bugs-week'],
+      station: ['data-readout-waiting', 'data-readout-weeks-waiting', 'data-readout-rework'],
+    };
+    // ACT
+    const $ = load(render({ locale: 'en', preset: 'realistic' }));
+    const attrs = (control: string) =>
+      Object.keys($(`[data-control="${control}"]`).first().attr() ?? {}).filter((a) => a.startsWith('data-readout'));
+    // ASSERT
+    expect({
+      customer: expected.customer.filter((a) => attrs('node.customer').includes(a)),
+      station: expected.station.filter((a) => attrs('node.qa').includes(a)),
+    }).toEqual(expected);
+  });
+
+  it('writes the read-outs rounded: the Customer headroom and bugs a week to one decimal, rework to two', () => {
+    // ARRANGE
+    const oneDecimal = /^\d+\.\d$/;
+    const twoDecimals = /^\d+\.\d\d$/;
+    // ACT
+    const $ = load(render({ locale: 'en', preset: 'realistic' }));
+    const customer = $('[data-control="node.customer"]').first();
+    const qa = $('[data-control="node.qa"]').first();
+    // ASSERT
+    expect(customer.attr('data-readout-headroom')).toMatch(oneDecimal);
+    expect(customer.attr('data-readout-bugs-week')).toMatch(oneDecimal);
+    expect(qa.attr('data-readout-rework')).toMatch(twoDecimals);
+  });
+
+  it('writes the card flags an eval reads: piling and AI on a station', () => {
+    // ARRANGE
+    const expected = ['data-piling', 'data-ai'];
+    // ACT
+    const $ = load(render({ locale: 'en', preset: 'realistic' }));
+    const attrs = Object.keys($('[data-control="node.qa"]').first().attr() ?? {});
+    // ASSERT
+    expect(expected.filter((a) => !attrs.includes(a))).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {
@@ -138,6 +244,16 @@ describe('failure cases', () => {
     const html = render({ locale: 'fr' });
     // ASSERT
     expect(html).toContain(english.stage.note);
+  });
+
+  it('has no two controls with the same data-control on one page', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const names = controlsOf(render({ locale: 'en', preset: 'realistic' })).map((c) => c.control);
+    const twice = names.filter((n, i) => names.indexOf(n) !== i);
+    // ASSERT
+    expect(twice).toEqual(expected);
   });
 });
 

@@ -16,7 +16,7 @@ import { ToolTip } from './toolbar-tip.client';
  */
 
 export interface OwnWorkSectionProps {
-  /** The work center's id, for the eval hooks `node.<id>.own.*`. */
+  /** The dashboard's eval hook prefix (`node.<id>` or `compare.<id>`), for `<prefix>.own.*`. */
   readonly node: string;
   readonly own: readonly OwnReadout[];
   readonly words: OwnWorkWords;
@@ -26,7 +26,7 @@ export interface OwnWorkSectionProps {
 }
 
 interface SourceProps {
-  /** The work center's id, for the eval hooks `node.<id>.own.*`. */
+  /** The dashboard's eval hook prefix (`node.<id>` or `compare.<id>`), for `<prefix>.own.*`. */
   readonly node: string;
   readonly x: OwnReadout;
   readonly words: OwnWorkWords;
@@ -39,14 +39,14 @@ function RateField(p: SourceProps) {
   return (
     <Field
       label={w.rate}
-      control={`node.${p.node}.own.rate`}
+      control={`${p.node}.own.rate`}
       tip={w.rateTip}
       trailing={(id) => <Value labelId={id}>{shown}</Value>}
     >
       {(id) => (
         <SliderControl
           labelId={id}
-          control={`node.${p.node}.own.rate`}
+          control={`${p.node}.own.rate`}
           min={0}
           max={OWN_RATE_MAX}
           step={0.5}
@@ -62,11 +62,11 @@ function RateField(p: SourceProps) {
 function ArrivalsField(p: SourceProps) {
   const w = p.words;
   return (
-    <Field label={w.arrivals} control={`node.${p.node}.own.arrivals`} tip={w.arrivalsTip}>
+    <Field label={w.arrivals} control={`${p.node}.own.arrivals`} tip={w.arrivalsTip}>
       {(id) => (
         <Segmented
           labelId={id}
-          control={`node.${p.node}.own.arrivals`}
+          control={`${p.node}.own.arrivals`}
           items={[
             { id: 'steady', label: w.steady },
             { id: 'random', label: w.random },
@@ -87,7 +87,7 @@ function EmitButton(p: { readonly node: string; readonly words: OwnWorkWords; re
         type="button"
         className={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
         onClick={p.onEmit}
-        data-control={`node.${p.node}.emit`}
+        data-control={`${p.node}.emit`}
         data-emit-own
       >
         <Lightbulb size={16} aria-hidden="true" />
@@ -107,7 +107,7 @@ export function OwnWorkSection(p: OwnWorkSectionProps) {
           <p id={id} className="m-0 text-caption font-semibold">
             {p.words.title}
           </p>
-          <HelpTip name={p.words.title} tip={p.words.tip} control={`node.${p.node}.own.help`} />
+          <HelpTip name={p.words.title} tip={p.words.tip} control={`${p.node}.own.help`} />
         </div>
         {p.own.map((x) => (
           <Fragment key={x.id}>

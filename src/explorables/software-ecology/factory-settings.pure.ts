@@ -118,6 +118,10 @@ export const aiChoicesOf = (B: Bundle, title: (id: string) => string): AiChoice[
   return [{ id: 'off', ai: 'off', label: '' }, ...sets, { id: 'ai:all', ai: 'all', label: '' }];
 };
 
+/** An AI choice's eval hook (`settings.ai.<hook>`): `off`, `all`, or the work centers' ids sorted and dash-joined (`eng-qa`). */
+export const aiHookOf = (c: Pick<AiChoice, 'ai'>): string =>
+  typeof c.ai === 'string' ? c.ai : [...c.ai].sort().join('-');
+
 const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every((x) => b.includes(x));
 
 /** The AI choice in effect, or '' for a set no preset names. */

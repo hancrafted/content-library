@@ -112,6 +112,8 @@ export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardPr
       data-full={r.headroom < 1}
       data-readout-output={r.output.toFixed(2)}
       data-readout-satisfied={r.sat.toFixed(2)}
+      data-readout-headroom={r.headroom.toFixed(1)}
+      data-readout-bugs-week={r.bugs.toFixed(1)}
       data-readout-lead-days={r.leadDays === null ? undefined : r.leadDays.toFixed(1)}
       style={boxStyle(p.box)}
       {...p.target}

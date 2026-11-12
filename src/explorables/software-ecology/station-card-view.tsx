@@ -115,6 +115,7 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       data-control={`node.${p.id}`}
       data-readout-waiting={p.r.waiting}
       data-readout-weeks-waiting={p.r.weeks.toFixed(1)}
+      data-readout-rework={p.r.rework.toFixed(2)}
       data-picked={p.picked || undefined}
       style={boxStyle(p.box)}
       {...p.targets?.card}

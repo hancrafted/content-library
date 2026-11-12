@@ -111,7 +111,7 @@ export function DashFlows({
 }) {
   return (
     <details className={styles.settings}>
-      <summary className="text-caption font-medium" data-control={`node.${id}.flows`}>
+      <summary className="text-caption font-medium" data-control={`${id}.flows`}>
         <Glyph name="fast" className={styles.ico} />
         <span>{w.flows}</span>
         <span className={`${styles.settingsSum} text-muted-foreground`}>{w.flowsSub}</span>
