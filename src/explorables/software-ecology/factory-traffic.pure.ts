@@ -8,6 +8,7 @@
 import { DEFECTS } from './defect.pure.ts';
 import { catchOf, srcRate } from './factory-dials.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, TicketSource } from './factory.types';
+import { firstSpawn } from './first-spawn.pure.ts';
 import type { Cust, Defect, Settings } from './software-ecology.types';
 
 export const NF_ = 72;
@@ -157,9 +158,10 @@ const spawnTo = (p: Pass, w: Flow, x: { ei: number; share: number; main: number;
 
 const spawnOut = (p: Pass, w: Flow): void => {
   const gq = w.qIn ? w.d.effv / 100 : 0;
-  w.n.spawns.forEach((sp, j) => {
+  const first = firstSpawn(w.n.spawns);
+  w.n.spawns.forEach((sp) => {
     for (const [ei, share, ch] of targets(sp)) {
-      const main = w.mn && j === 0 ? (ch ? w.r * share : w.r) : 0;
+      const main = w.mn && sp === first ? (ch ? w.r * share : w.r) : 0;
       spawnTo(p, w, { ei, share, main, gq });
     }
   });

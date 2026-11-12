@@ -19,8 +19,9 @@ import {
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
-import { countOf, firstSpawn, passesOn, pickBelt, type Pick } from './factory-routing.pure.ts';
+import { countOf, passesOn, pickBelt, type Pick } from './factory-routing.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, Job, Server, SpawnRule } from './factory.types';
+import { firstSpawn } from './first-spawn.pure.ts';
 import { constOf } from './mechanics.pure.ts';
 
 const pickCenter = (sv: Server): FactoryNode | null => {
@@ -174,7 +175,7 @@ const handOn = (m: Factory, h: Hand, x: { sp: SpawnRule }): void => {
   if (!base) return;
   const k = countOf(n, x.sp, { f: base * h.d.fanEff * h.sv.churn, steady });
   if (!k) return;
-  const first = x.sp === firstSpawn(n) ? 1 : 0; // the first spawn carries the job itself on
+  const first = x.sp === firstSpawn(n.spawns) ? 1 : 0; // the first spawn carries the job itself on
   if (first) carryOn(m, h, e);
   if (k - first) besides(m, h, { e, k: k - first });
 };
@@ -229,11 +230,10 @@ const settle = (m: Factory, sv: Server, x: { t: number; t1: number }): number | 
   }
   if (!sv.busy) return x.t;
   if (sv.end > x.t1) return null;
-  const t = sv.end;
-  sv.blocked = !finish(m, sv, t);
+  sv.blocked = !finish(m, sv, sv.end);
   if (sv.blocked) return null;
   sv.busy = false;
-  return t;
+  return sv.end;
 };
 
 /** Runs one server from t0 to t1: finishes what ends inside, starts the next job, blocks when the next buffer is full. */

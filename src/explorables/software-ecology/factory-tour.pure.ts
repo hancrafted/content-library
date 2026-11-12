@@ -43,7 +43,7 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
  * Sets the run to stop on step `i`'s week and to read on its sample steps, the headless judge's: a step's reading is
  * the mean over its last WINDOW weeks (grill 11 Q224).
  */
-const aim = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
+const aimAtStep = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
   const steps = stepsOf(x.p),
     st = steps[x.i] as (typeof steps)[number];
   run.set(settingsAfter(st.set, run.topology.B, run.settings));
@@ -66,7 +66,7 @@ const readMean = (run: FactoryRun, p: Preset): Record<string, number> => ({
 /** Applies the step's dials and sets the run to stop on its week. */
 const go = (run: FactoryRun, t: Tour): Tour => {
   const t0k = t.t0k ?? run.k;
-  aim(run, { p: t.preset, i: t.i, t0k });
+  aimAtStep(run, { p: t.preset, i: t.i, t0k });
   return { ...t, t0k, phase: 'run' };
 };
 
@@ -122,7 +122,7 @@ export const backTour = (B: Bundle, t: Tour): TourRun => {
   stepsOf(p)
     .slice(0, idx + 1)
     .forEach((st, j) => {
-      aim(run, { p, i: j, t0k });
+      aimAtStep(run, { p, i: j, t0k });
       run.runTo(t0k + stepsTo(st.run));
       vals[j] = readMean(run, p);
     });

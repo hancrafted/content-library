@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { RED } from './factory-dials.pure.ts';
-import { firstSpawn, passesOn } from './factory-routing.pure.ts';
+import { passesOn } from './factory-routing.pure.ts';
 import type { Belt, FactoryNode, SpawnRule } from './factory.types';
+import { constOf } from './mechanics.pure.ts';
 import type { Settings } from './software-ecology.types';
 
 /*
@@ -33,8 +34,8 @@ const station = (weeks: number, x: { under?: number; roll?: number } = {}) => {
 const takeUp = (s: Settings, n: FactoryNode, times: number): boolean[] =>
   Array.from({ length: times }, () => passesOn(s, n));
 
-/** Weeks of work waiting where the pass-on share is `share` at strength 1 (mechanics.pressure 1.4). */
-const weeksFor = (share: number): number => RED + (share / 1.4) * RED;
+/** Weeks of work waiting where the pass-on share is `share` at strength 1, `mechanics.pressure` at its default. */
+const weeksFor = (share: number): number => RED + (share / constOf(IDEAL, 'pressure')) * RED;
 
 describe('success cases', () => {
   it('takes turns in Ideal: every other ticket at a share of a half', () => {
@@ -56,13 +57,15 @@ describe('success cases', () => {
     expect(passed).toEqual([true, false]);
   });
 
-  it('names the first spawn, the one a pass-on rides', () => {
+  it('passes on by the first spawn only: a pass-on on a later spawn never fires', () => {
     // ARRANGE
-    const { n } = station(0, { under: 1 });
+    const { n, draws } = station(RED * 10);
+    n.spawns.push({ e: BELT, n: 1, pass: { e: BELT, under: 1 } });
     // ACT
-    const first = firstSpawn(n);
+    const passed = takeUp(REALISTIC, n, 3);
     // ASSERT
-    expect(first).toBe(n.spawns[0]);
+    expect(passed).toEqual([false, false, false]);
+    expect(draws.n).toBe(0);
   });
 });
 

@@ -34,11 +34,14 @@ export const sampleSteps = (x: { start: number; end: number; window?: number }):
   return out;
 };
 
+/** A list that `stepSampled` appends to in place: a sampling is filled once, as its run reaches each sample step. */
+type FilledInPlace<T> = T[];
+
 /** A beat's sample steps, the measures it reads and the readings taken so far. */
 export interface Sampling {
   readonly at: readonly number[];
   readonly keys: readonly string[];
-  readonly got: Values[];
+  readonly got: FilledInPlace<Values>;
 }
 
 /** The model a sampling reads: stepped in weeks, read by measure. */
@@ -49,7 +52,7 @@ interface Sampled {
 
 /**
  * Steps a model `n` model steps on from step `k`, stopping on each of the sampling's steps it reaches to read its
- * measures: the one stepper the headless judge and the page's run share, so both read on the same steps.
+ * measures and append them to `s.got`: the one stepper the headless judge and the page's run share, so both read on the same steps.
  */
 export const stepSampled = (f: Sampled, x: { k: number; n: number; s: Sampling | null }): void => {
   const { s } = x,

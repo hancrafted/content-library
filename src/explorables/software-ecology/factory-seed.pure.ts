@@ -2,7 +2,7 @@
  * A loaded start for the factory model (feedback 09): weeks of work put into work centers' backlogs at once, as the
  * requests they would be had the Customer sent them. Model-internal: `createFactory`'s handle exposes it as `pile`.
  */
-import { Q, RED, speedOf } from './factory-dials.pure.ts';
+import { pressAt, Q, speedOf } from './factory-dials.pure.ts';
 import { Run } from './factory-docs.pure.ts';
 import { FROM_SRC, MAIN, pushBack } from './factory-flow.pure.ts';
 import { level } from './factory-step.pure.ts';
@@ -13,7 +13,7 @@ const showPile = (m: Factory, n: FactoryNode, w: number): void => {
   const d = m.dc[n.idx];
   n.Lavg = n.L;
   n.Ws = d ? n.L / speedOf(n, d) : w;
-  n.press = Math.min(1, n.Ws / RED);
+  n.press = pressAt(n.Ws);
   n.lvl = level(n.lvl, n.Ws);
 };
 

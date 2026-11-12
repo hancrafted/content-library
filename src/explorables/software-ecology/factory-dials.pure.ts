@@ -119,17 +119,22 @@ export const stallOf = (n: FactoryNode, d: Dials): number => {
 const bite = (s: Pick<Settings, 'consts'>, strength: number, press: number): number =>
   Math.min(1, constOf(s, 'pressure') * strength * press);
 /**
+ * A pile's pressure, 0 to 1: its weeks of work waiting over RED, full where the pile turns red. The one pressure source:
+ * the model keeps it as `n.press`, and pass-on measures it from the red mark.
+ */
+export const pressAt = (weeks: number): number => Math.min(1, Math.max(0, weeks) / RED);
+/**
  * How hard a filling backlog bites at an inspection, for its `stampUnderPressure`: the pressure term over the station's
- * pressure, its weeks of work waiting over RED (design-ADR 0024 §5).
+ * pressure (design-ADR 0024 §5).
  */
 export const pressureOf = (s: Settings, n: FactoryNode, strength: number): number => bite(s, strength, n.press);
 /**
- * The share of the tickets a station takes up that it passes on unanswered, for its `escalate.underPressure`: none until
- * it drowns, its pile red at RED weeks of work waiting; past that the same pressure term, its pressure measured from RED
- * (full at twice RED), up to all of them (design-ADR 0024 §5, grill 11 Q227).
+ * The share of the tickets a station takes up that it passes on unanswered, for its `escalate.underPressure`: the same
+ * pressure term over its pressure measured from RED, so none until its pile turns red (design-ADR 0024 §5, grill 11 Q227,
+ * Q231).
  */
 export const passShareOf = (s: Settings, n: FactoryNode, strength: number): number =>
-  bite(s, strength, Math.min(1, Math.max(0, n.Ws - RED) / RED));
+  bite(s, strength, pressAt(n.Ws - RED));
 /** Jobs a week at size 1. */
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>

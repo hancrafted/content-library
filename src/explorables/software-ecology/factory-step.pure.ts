@@ -9,6 +9,7 @@ import {
   dials,
   DTW,
   ownOf,
+  pressAt,
   productCo,
   Q,
   RED,
@@ -198,7 +199,7 @@ const average = (m: Factory, n: FactoryNode, k: Decay): void => {
   u.starved += (x.starved - u.starved) * g;
   n.Lavg += (n.L - n.Lavg) * g;
   n.Ws += (n.L / speedOf(n, m.dc[n.idx]) - n.Ws) * k.a;
-  n.press = Math.min(1, n.Ws / RED);
+  n.press = pressAt(n.Ws);
   n.lvl = level(n.lvl, n.Ws);
   if (k.sampleNow) sample(n);
 };
