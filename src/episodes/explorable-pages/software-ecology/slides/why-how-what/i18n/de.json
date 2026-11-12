@@ -1,0 +1,113 @@
+{
+  "title": "Warum, wie und was",
+  "heading": "Warum · Wie · Was",
+  "caption": "KI beschleunigt die Arbeit, also wandert der Druck ins Spezifizieren und Prüfen: warum das zählt, wie Du es ausprobierst und was jeder Arbeitsplatz zeigt.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "KI an einem Arbeitsplatz überflutet die nächste Inspektion.",
+      "caption": "<amplifies>KI verstärkt, was die Organisation schon ist</amplifies>. Mit KI nur beim Entwickler staut sich die Qualitätssicherung, und beim Kunden kommt die Hälfte an. <pain>Unvollständige Anforderungen waren schon immer das meistgenannte Problem</pain>, und sie kommen als Nacharbeit zurück; klare Anforderungen, gute Aufträge, senken den Druck."
+    },
+    "how": {
+      "title": "Ideal, Realistisch, dann die Tour eines Szenarios.",
+      "caption": "Erst Ideal, dann Realistisch; die Tour jedes Szenarios stellt die Regler und läuft bis zur entscheidenden Woche; ein Klick auf einen Arbeitsplatz öffnet sein Dashboard."
+    },
+    "what": {
+      "title": "Jeder Arbeitsplatz hat zwei Regler.",
+      "caption": "Effizienz ist Output, wie viel er ausgibt; Effektivität ist Outcome, wie viel davon gut ist. KI hebt das Erste und lässt das Zweite, wie es ist. <hard>Spezifizieren war schon immer der schwierige Teil</hard>, und <people>jeder Arbeitsplatz besteht aus Menschen und Werkzeugen</people>."
+    }
+  },
+  "still": {
+    "label": "Die Reifenschaukel-Fabrik im Szenario KI unausgewogen in Woche {week}: KI beim Entwickler, in der Qualitätssicherung warten {waiting}, der Kunde bei {output} des Ideals",
+    "at": "KI unausgewogen, Woche {week}",
+    "overflow": "+{n}",
+    "aiExtra": "{n} Pull Requests pro Aufgabe",
+    "openHint": "ein Klick auf den Analysten öffnet sein Dashboard"
+  },
+  "stills": {
+    "dashboard": {
+      "label": "Das Dashboard des Analysten in Woche {week} des Szenarios KI unausgewogen",
+      "aiLeavesIt": "· KI lässt sie",
+      "people": "Menschen",
+      "tools": "Werkzeuge & Artefakte",
+      "withAiHere": "Mit KI hier",
+      "light": "Ampel: {level}"
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "why-you-may-leave-it": {
+        "title": "Warum Ihr hier aufhören dürft",
+        "keywords": "Kurzfassung, warum, wie, was",
+        "script": "Wer es ausprobiert hat, hat das Bild schon, deshalb hier nur die Kurzfassung. Eine Folie zeigt, warum es wichtig ist, wie man es bedient und was es zeigt."
+      },
+      "why-the-problem-is-the-system": {
+        "title": "Warum: Das Problem ist das System",
+        "keywords": "unklare Anforderungen, niemand schuld, Prüfung, Nachbarn, Spezifizieren, Hypothese",
+        "script": "Unklare Anforderungen waren schon immer teuer, und niemand in der Kette war schuld daran. KI beschleunigt die Ausführung, also staut sich die Arbeit bei der Prüfung, und mein Bild ist, dass sie sich auf die Nachbarn ausbreitet. Der nächste Teil ist meine Hypothese: Der Aufwand wandert auch ins Spezifizieren, weil das schon immer der schwierige Teil war, und gemessen hat das noch niemand."
+      },
+      "clear-orders-lower-it": {
+        "title": "Klare Aufträge senken ihn",
+        "keywords": "klare Anforderungen, gute Aufträge, etwas, das es wert ist",
+        "script": "Klare Anforderungen sind gute Aufträge für die Fabrik. KI bewegt alles, was Ihr hineingebt, schneller, also gebt ihr etwas, das es wert ist, bewegt zu werden."
+      },
+      "how-play-it": {
+        "title": "Wie: Probiert es aus",
+        "keywords": "Ideal, Realistisch, Szenario, geführte Tour, Regler, Dashboard",
+        "script": "Es beginnt in Ideal, dann Realistisch, und jedes Szenario hat eine geführte Tour, die die Regler stellt und bis zur entscheidenden Woche läuft; ein Klick auf einen Arbeitsplatz öffnet sein Dashboard."
+      },
+      "what-two-dials-everywhere": {
+        "title": "Was: Überall zwei Regler",
+        "keywords": "Effizienz, Effektivität, KI hebt das Erste, Prüfung, Druck",
+        "script": "Jeder Arbeitsplatz hat Effizienz, wie viel er ausgibt, und Effektivität, wie viel davon gut ist. KI hebt das Erste und lässt das Zweite, wie es ist. Die Prüfung bleibt so schnell, wie sie war, und genau dort baut sich der Druck auf."
+      },
+      "take-it-back-to-monday": {
+        "title": "Nehmt es mit in den Montag",
+        "keywords": "Team abbilden, Prüfschritt prüfen, Anforderung schreiben, Prozessverantwortliche",
+        "script": "Bildet Euer Team ab, prüft den Prüfschritt, bevor Ihr irgendetwas beschleunigt, und schreibt die Anforderung für jemand Neues. Wer diesen Prozess verantwortet, weiß, wo der Druck zuerst ankommt."
+      }
+    }
+  },
+  "notes": {
+    "ai-amplifies": {
+      "header": "KI verstärkt, was da ist",
+      "description": "KI wirkt vor allem als Verstärker der vorhandenen Stärken und Schwächen einer Organisation, und den größten Ertrag bringt das zugrunde liegende System der Organisation, nicht die Werkzeuge [1] (AIE-0018).",
+      "sources": {
+        "dora-2025": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (Übersichtsseite)"
+        }
+      }
+    },
+    "incomplete-requirements": {
+      "header": "Unvollständige Anforderungen sind das meistgenannte Problem",
+      "description": "48 % von 228 Unternehmen nannten unvollständige oder verdeckte Anforderungen ihr häufigstes Anforderungsproblem, mit Nacharbeit nach der Umsetzung unter den berichteten Folgen. Eine Umfrage mit Selbstauskunft; Häufigkeit sind keine Kosten [1] (SWE-0002).",
+      "sources": {
+        "mendez-naming-the-pain": {
+          "title": "Méndez Fernández et al., Naming the Pain in Requirements Engineering: Contemporary Problems, Causes, and Effects in Practice"
+        }
+      }
+    },
+    "specifying-is-hard": {
+      "header": "Spezifizieren ist der schwierige Teil (Schluss)",
+      "description": "Genau festzulegen, was gebaut werden soll, ist der schwierigste einzelne Teil der Softwareentwicklung. Dass KI den gesparten Aufwand ins Spezifizieren verlagert, ist ein Schluss daraus und aus den Befunden zur Prüfung; keine Quelle misst einen steigenden Spezifikationsaufwand [1] (AIE-0018, AIE-0020).",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accident in Software Engineering"
+        }
+      }
+    },
+    "people-and-technology": {
+      "header": "Ein Arbeitsplatz ist Menschen und Technik",
+      "description": "Ein soziotechnisches System besteht aus Menschen und Technik, und die Struktur einer Organisation prägt, was sie baut. Die Definitionen gibt der Vortragende sinngemäß wieder [1] (SWE-0001).",
+      "sources": {
+        "bender-tipping-point": {
+          "title": "Adam Bender, Software Engineering at the Tipping Point (Konferenzvortrag, Transkript)"
+        }
+      }
+    }
+  }
+}

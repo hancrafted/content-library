@@ -1,12 +1,3 @@
 {
-  "title": "Why, how and what",
-  "voiceScript": {
-    "segments": {
-      "why-you-may-leave-it": {
-        "title": "Why you may leave it",
-        "keywords": "short version, why, how, what",
-        "script": "If you played it, you already have the picture, so this is the short version. One slide covers why it matters, how to use it and what it shows."
-      }
-    }
-  }
+  "title": "Why, how and what"
 }

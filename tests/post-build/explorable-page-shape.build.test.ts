@@ -12,8 +12,12 @@ const SHAPED = EXPORTED_EPISODE_SHAPED_PAGES.filter(
   ({ folder }) => folder.startsWith('explorable-pages/') || folder === 'templates/explorable-page',
 );
 const COLUMNS = ['why', 'how', 'what'];
-/** The AI disciplines page cites the evidence behind its hero's "20x" headline in one more note. */
-const CLAIM_NOTE_PAGE = 'ai-capability';
+/**
+ * Notes past one a column: the AI disciplines page cites the evidence behind its hero's "20x" headline in one more; the
+ * software ecology page's Why and What each cite two sources in a note of their own, and its How column, which makes
+ * no sourced claim, none (its approved Spec, Option 2b).
+ */
+const EXTRA_NOTES: Readonly<Record<string, number>> = { 'ai-capability': 1, 'software-ecology': 1 };
 /**
  * Pages whose hero rear is the two glow layers alone, with no drift canvas: the software ecology hero has no drift
  * story, its motif lives in the factory preview (its approved Spec, Title-slide Option 0a's build notes).
@@ -49,7 +53,7 @@ describe('explorable page shape', () => {
     it('shows Why, How and What on #about, each column with a Speaker note that cites a source', () => {
       // ARRANGE
       const $ = exportedPage(url);
-      const noteCount = COLUMNS.length + (slug === CLAIM_NOTE_PAGE ? 1 : 0);
+      const noteCount = COLUMNS.length + (EXTRA_NOTES[slug] ?? 0);
       // ACT
       const columns = $('#about [data-column]')
         .toArray()
