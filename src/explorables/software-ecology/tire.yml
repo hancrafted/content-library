@@ -18,7 +18,7 @@ sources: # Product company: own tickets a week (rate), written into a role's bac
   - { id: debt, at: eng, rate: 1 } # tech debt: the engineer to quality assurance
 # Role profiles this use case says differently from the catalog: aiCatch, how much of quality assurance's catch holds
 # while AI reviews (trusted AI review lets bad code through).
-roles: { qa: { aiCatch: 0.4 } }
+roles: { qa: { aiCatch: 0.1 } }
 bottleneck: eng # at Realistic this center runs near 85 % busy; every other at most 70 % (Q121)
 # Starting backlogs, in weeks of work (weeks times the work center's Ideal capacity), put in when a state loads after its
 # warm-up; Realistic starts full, a state at reality 0 (Ideal) starts clear, in between scales. A preset may carry its own
@@ -60,7 +60,7 @@ centers:
       role: ops,
       at: [1200, 160],
       realistic: [88, 98],
-      stall: { at: 2, slow: 0.4 },
+      stall: { at: 6, slow: 0.4 },
       spawns: [{ to: customer, n: 1 }],
     }
 # Routes of the belts, keyed from-to: out / in (port: left, right, top, bottom), via (corners), xm (elbow x), over (crosses on a bridge).
@@ -133,7 +133,8 @@ presets:
   - id: ai-spiral
     view: factory
     reality: 0
-    customer: { bad: { spec: { pm: 0.5 }, code: { support: 0.5 } } }
+    customer: { bad: { spec: { pm: 0.5 }, code: { support: 0.9 } } }
+    dials: { support: { efficiency: 80 } }
     tour:
       - {
           run: 7,
@@ -142,7 +143,7 @@ presets:
           expect: { customer.output: '0.95–1.05', qa.weeksWaiting: '<0.2', customer.bugsPerWeek: '<0.2' },
         }
       - {
-          set: { ai: [eng], dials: { eng: { effectiveness: 70 } } },
+          set: { ai: [eng], dials: { eng: { effectiveness: 70, aiExtra: 2 } } },
           run: 14,
           card: qa,
           claim: eng-floods-qa,
@@ -163,7 +164,7 @@ presets:
         }
       - { run: 35, card: ops, claim: ops-stalls, expect: { ops.stall: '>0.2', customer.leadDays: rises } }
       - {
-          set: { ai: [eng, qa, ops] },
+          set: { ai: [eng, qa, ops], dials: { ops: { aiSpeed: 5 } } },
           run: 42,
           card: customer,
           claim: ai-fixes-pipeline,
@@ -173,25 +174,32 @@ presets:
   - id: clear-requirements
     view: factory
     reality: 100
-    dials: { ba: { effectiveness: 75 }, pm: { effectiveness: 75 } }
-    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { spec: { pm: 0.5 }, code: { support: 0.5 } } }
+    dials:
+      {
+        ba: { effectiveness: 75 },
+        pm: { effectiveness: 75 },
+        eng: { effectiveness: 100 },
+        ops: { efficiency: 200, effectiveness: 100 },
+        sales: { effectiveness: 100 },
+      }
+    customer: { rate: 9, mix: { sales: 25, pm: 45, support: 30 }, bad: { spec: { pm: 0.85 }, code: { support: 0.5 } } }
     tour:
       - {
-          run: 7,
+          run: 9,
           card: eng,
           claim: average-requirements,
           expect: { ba.rework: '>0.15', qa.rework: '>0.1', customer.changesPerWeek: '>0.5' },
         }
       - {
           set: { ai: [eng, qa] },
-          run: 14,
+          run: 15,
           card: pm,
           claim: bad-things-faster,
           expect: { customer.output: rises, customer.changesPerWeek: rises, pm.weeksWaiting: rises },
         }
       - {
           set: { dials: { ba: { effectiveness: 95 }, pm: { effectiveness: 95 } } },
-          run: 21,
+          run: 24,
           card: eng,
           claim: clear-requirements,
           expect: { ba.rework: falls, customer.changesPerWeek: falls },
@@ -199,7 +207,7 @@ presets:
         }
       - {
           set: { ai: all },
-          run: 28,
+          run: 33,
           card: customer,
           claim: ai-accelerates,
           expect: { customer.headroom: rises, customer.leadDays: falls, customer.sat: '>0.9' },
