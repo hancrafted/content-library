@@ -22,7 +22,7 @@ export const stepsTo = (weeks: number): number => Math.round(weeks / DTW);
  * last `window` weeks (WINDOW unless told), the last on `end`; a beat shorter than the window is read over all of it,
  * and a window of 0 reads `end` once.
  */
-export const sampleSteps = (x: { start: number; end: number; window?: number }): number[] => {
+const sampleSteps = (x: { start: number; end: number; window?: number }): number[] => {
   const w = Math.min(x.end - x.start, stepsTo(x.window ?? WINDOW)),
     every = Math.max(1, Math.round(1 / SAMPLES_A_WEEK / DTW));
   if (w <= 0) return [x.end];
@@ -34,40 +34,49 @@ export const sampleSteps = (x: { start: number; end: number; window?: number }):
   return out;
 };
 
-/** A list that `stepSampled` appends to in place: a sampling is filled once, as its run reaches each sample step. */
-type FilledInPlace<T> = T[];
-
-/** A beat's sample steps, the measures it reads and the readings taken so far. */
-export interface Sampling {
-  readonly at: readonly number[];
-  readonly keys: readonly string[];
-  readonly got: FilledInPlace<Values>;
-}
-
-/** The model a sampling reads: stepped in weeks, read by measure. */
+/** The model a Sampler reads: stepped in weeks, read by measure. */
 interface Sampled {
   step(weeks: number): void;
   read(o: { measures: readonly string[] }): { readonly measures: Values };
 }
 
-/**
- * Steps a model `n` model steps on from step `k`, stopping on each of the sampling's steps it reaches to read its
- * measures and append them to `s.got`: the one stepper the headless judge and the page's run share, so both read on the same steps.
- */
-export const stepSampled = (f: Sampled, x: { k: number; n: number; s: Sampling | null }): void => {
-  const { s } = x,
-    stop = x.k + x.n;
-  let k = x.k;
-  for (let next = s?.at[s.got.length]; s && next !== undefined && next <= stop; next = s.at[s.got.length]) {
-    if (next > k) f.step((next - k) * DTW);
-    k = Math.max(k, next);
-    s.got.push({ ...f.read({ measures: s.keys }).measures });
-  }
-  if (stop > k) f.step((stop - k) * DTW);
+/** A beat's readings: it steps a model and reads it on the beat's sample steps, then gives their mean. */
+export interface Sampler {
+  /**
+   * Steps a model `n` model steps on from step `k`, stopping on each sample step it reaches to read the measures: the
+   * one stepper the headless judge and the page's run share, so both read on the same steps.
+   */
+  run(f: Sampled, x: { k: number; n: number }): void;
+  /** The beat's reading: the mean of each measure over the readings so far; 0 for a measure with none. */
+  mean(): Values;
+  /** The readings taken so far, one per sample step reached. */
+  readonly readings: readonly Values[];
+}
+
+/** A Sampler for the beat that runs from step `start` to step `end`, reading `keys` (`window` weeks, WINDOW unless told). */
+export const createSampler = (x: { start: number; end: number; window?: number; keys: readonly string[] }): Sampler => {
+  const at = sampleSteps(x),
+    got: Values[] = [];
+  return {
+    run(f, r) {
+      const stop = r.k + r.n;
+      let k = r.k;
+      for (let next = at[got.length]; next !== undefined && next <= stop; next = at[got.length]) {
+        if (next > k) f.step((next - k) * DTW);
+        k = Math.max(k, next);
+        got.push({ ...f.read({ measures: x.keys }).measures });
+      }
+      if (stop > k) f.step((stop - k) * DTW);
+    },
+    mean: () => meanOf(x.keys, got),
+    get readings() {
+      return got;
+    },
+  };
 };
 
 /** A beat's reading: the mean of each measure over its samples; 0 for a beat with none. */
-export const meanOf = (keys: readonly string[], samples: readonly Values[]): Values =>
+const meanOf = (keys: readonly string[], samples: readonly Values[]): Values =>
   Object.fromEntries(
     keys.map((k) => [k, samples.length ? samples.reduce((a, v) => a + (v[k] ?? 0), 0) / samples.length : 0]),
   );

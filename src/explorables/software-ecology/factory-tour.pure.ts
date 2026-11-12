@@ -2,11 +2,11 @@
  * A guided tour on the page (design-ADR 0024 §10): a scenario's steps, each setting its dials, running at 20× to its
  * week and pausing there with its caption and its checks. It starts from the file's own settings, warmed as the
  * headless runner warms, and reads on the very model steps `runScenario` reads (the mean over a step's last WINDOW
- * weeks (`beat-means.pure.ts`), `sampleSteps` and `meanOf`), so both read the same values; Back
+ * weeks (`beat-means.pure.ts`), `createSampler`), so both read the same values; Back
  * replays from the start at once, with the same seed and the same steps. Ported from the reference build's
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
-import { meanOf, sampleSteps, stepsTo } from './beat-means.pure.ts';
+import { createSampler, stepsTo } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
@@ -50,18 +50,12 @@ const aimAtStep = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) =>
   const end = x.t0k + stepsTo(st.run);
   run.aim({
     at: end,
-    sampling: {
-      at: sampleSteps({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end }),
-      keys: keysOf(x.p),
-      got: [],
-    },
+    sampling: createSampler({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end, keys: keysOf(x.p) }),
   });
 };
 
 /** The step's reading: the mean of what the run read on its sample steps. */
-const readMean = (run: FactoryRun, p: Preset): Record<string, number> => ({
-  ...meanOf(keysOf(p), run.sampled),
-});
+const readMean = (run: FactoryRun): Record<string, number> => ({ ...run.sampledMean() });
 
 /** Applies the step's dials and sets the run to stop on its week. */
 const go = (run: FactoryRun, t: Tour): Tour => {
@@ -72,7 +66,7 @@ const go = (run: FactoryRun, t: Tour): Tour => {
 
 const arrive = (run: FactoryRun, t: Tour): Tour => {
   const vals = [...t.vals];
-  vals[t.i] = readMean(run, t.preset);
+  vals[t.i] = readMean(run);
   return { ...t, vals, phase: 'show' };
 };
 
@@ -124,7 +118,7 @@ export const backTour = (B: Bundle, t: Tour): TourRun => {
     .forEach((st, j) => {
       aimAtStep(run, { p, i: j, t0k });
       run.runTo(t0k + stepsTo(st.run));
-      vals[j] = readMean(run, p);
+      vals[j] = readMean(run);
     });
   run.aim({ at: run.k, sampling: null });
   return { run, tour: { ...t, i: idx, phase: 'show', t0k, vals } };
