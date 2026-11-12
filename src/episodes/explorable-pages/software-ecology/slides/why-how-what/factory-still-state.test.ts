@@ -17,9 +17,9 @@ describe('success cases', () => {
     expect({ week: still.week, ai: still.stations.filter((s) => s.ai).map((s) => s.id) }).toEqual(expected);
   });
 
-  it('shows quality assurance with 554 waiting, past two weeks of work, its rack full', () => {
+  it('shows quality assurance with 562 waiting, past two weeks of work, its rack full', () => {
     // ARRANGE
-    const expected = { waiting: 554, level: 2, rack: 6, inspection: true };
+    const expected = { waiting: 562, level: 2, rack: 6, inspection: true };
     // ACT
     const qa = factoryStillState('en').stations.find((s) => s.id === 'qa');
     // ASSERT
@@ -28,9 +28,9 @@ describe('success cases', () => {
     );
   });
 
-  it('shows the Customer at 0.4× of ideal, 10 % satisfied and 106 days lead time', () => {
+  it('shows the Customer at 0.5× of ideal, 40 % satisfied and 107 days lead time', () => {
     // ARRANGE
-    const expected = { output: 0.4, sat: 0.1, leadDays: 106, releases: 20 };
+    const expected = { output: 0.5, sat: 0.4, leadDays: 107, releases: 20 };
     const tenths = (x: number) => Math.round(x * 10) / 10;
     const hundredths = (x: number) => Math.round(x * 100) / 100;
     // ACT
@@ -45,9 +45,9 @@ describe('success cases', () => {
     expect(read).toEqual(expected);
   });
 
-  it("reads the analyst's dashboard: keeping up, 14 a week, 92 % good, AI off", () => {
+  it("reads the analyst's dashboard: keeping up, 13 a week, 91 % good, AI off", () => {
     // ARRANGE
-    const expected = { light: 'green', out: 14, good: 92, ai: false };
+    const expected = { light: 'green', out: 13, good: 91, ai: false };
     // ACT
     const { dashboard } = factoryStillState('en');
     // ASSERT

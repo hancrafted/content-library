@@ -2,7 +2,7 @@
  * Where a finished job's spawns go (design-ADR 0024 §3): Ideal routes steadily (a chance spawn every so often, a choice
  * in turn), Realistic rolls the dice; how many documents each hands on; and whether a ticket is passed on under pressure.
  */
-import { pressureOf } from './factory-dials.pure.ts';
+import { passShareOf } from './factory-dials.pure.ts';
 import type { Belt, ChooseRule, FactoryNode, SpawnRule } from './factory.types';
 import type { Settings } from './software-ecology.types';
 
@@ -67,16 +67,18 @@ const passByShare = (n: FactoryNode, sp: SpawnRule, x: { share: number; steady: 
   return true;
 };
 
+/** A station's first spawn: the one its `escalate` resolves onto, and the belt a ticket passed on rides from. */
+export const firstSpawn = (n: FactoryNode): SpawnRule | undefined => n.spawns[0];
+
 /**
- * Pass-on under pressure (design-ADR 0024 §5, grill 11 Q220): whether a station with `escalate` passes the ticket it
- * takes up on to `escalate.to` unanswered, at a share that rises with its pressure (`pressureOf`, the same term as an
- * inspection's `stampUnderPressure`), up to all of them. Nothing is drawn while no work waits, so its routing is
- * unchanged then.
+ * Pass-on under pressure (design-ADR 0024 §5, grill 11 Q220, Q227): whether a station with `escalate` passes the ticket
+ * it takes up on to `escalate.to` unanswered, at the share `passShareOf` gives: none until its pile turns red, then
+ * rising with its pressure up to all of them. Below the mark nothing is drawn, so its routing is unchanged there.
  */
 export const passesOn = (s: Settings, n: FactoryNode): boolean => {
-  const sp = n.spawns[0];
+  const sp = firstSpawn(n);
   if (!sp?.pass) return false;
-  return passByShare(n, sp, { share: pressureOf(s, n, sp.pass.under), steady: s.reality === 0 });
+  return passByShare(n, sp, { share: passShareOf(s, n, sp.pass.under), steady: s.reality === 0 });
 };
 
 /** How many documents a spawn hands on: whole ones, and a fraction carried over (Ideal) or rolled (Realistic). */

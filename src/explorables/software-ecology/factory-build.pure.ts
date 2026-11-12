@@ -139,19 +139,21 @@ export const markLoops = (nodes: Iterable<FactoryNode>, cust: FactoryNode, edges
   for (const e of edges) e.returns = e.kind === 'role' && !e.loop;
 };
 
-/** Spawn rules, resolved to belts. */
-export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] =>
-  c.spawns.map((sp, j) => {
-    const pass =
-      j === 0 && c.escalate ? { pass: { e: edgeOf(`${c.id}-${c.escalate.to}`), under: c.escalate.underPressure } } : {};
-    return sp.choose
-      ? {
-          choose: sp.choose.map((ch) => ({ e: edgeOf(`${c.id}-${ch.to}`), w: ch.w ?? 1 })),
-          W: sp.choose.reduce((a, ch) => a + (ch.w ?? 1), 0),
-          ...pass,
-        }
-      : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p, ...pass };
-  });
+/** One spawn rule, resolved to belts. */
+const resolveSpawn = (c: CenterDef, sp: CenterDef['spawns'][number], edgeOf: (k: string) => Belt): SpawnRule =>
+  sp.choose
+    ? {
+        choose: sp.choose.map((ch) => ({ e: edgeOf(`${c.id}-${ch.to}`), w: ch.w ?? 1 })),
+        W: sp.choose.reduce((a, ch) => a + (ch.w ?? 1), 0),
+      }
+    : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p };
+
+/** Spawn rules, resolved to belts; a center's `escalate` rides on its first spawn (`firstSpawn`). */
+export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] => {
+  const [first, ...rest] = c.spawns.map((sp) => resolveSpawn(c, sp, edgeOf));
+  if (!first || !c.escalate) return first ? [first, ...rest] : [];
+  return [{ ...first, pass: { e: edgeOf(`${c.id}-${c.escalate.to}`), under: c.escalate.underPressure } }, ...rest];
+};
 
 const newServer = (id: string): Server => ({
   id,

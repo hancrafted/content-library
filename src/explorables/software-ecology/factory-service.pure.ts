@@ -19,7 +19,7 @@ import {
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
-import { countOf, passesOn, pickBelt, type Pick } from './factory-routing.pure.ts';
+import { countOf, firstSpawn, passesOn, pickBelt, type Pick } from './factory-routing.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, Job, Server, SpawnRule } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 
@@ -161,20 +161,20 @@ const besides = (m: Factory, h: Hand, x: { e: Belt; k: number }): void => {
   n.rate.out[0] += (k - g) * BUMP;
 };
 
-/** Where a spawn goes: the pass-on belt for a ticket passed on unanswered, else as the spawn routes it. */
-const beltFor = (h: Hand, x: { sp: SpawnRule; j: number; steady: boolean }): Pick => {
-  const pass = x.j === 0 && h.sv.pass ? x.sp.pass : undefined;
+/** Where a spawn goes: the pass-on belt (only the first spawn has one) for a ticket passed on, else as it routes. */
+const beltFor = (h: Hand, x: { sp: SpawnRule; steady: boolean }): Pick => {
+  const pass = h.sv.pass ? x.sp.pass : undefined;
   return pass ? { e: pass.e, base: 1 } : pickBelt(h.sv.n as FactoryNode, x.sp, x.steady);
 };
 
-const handOn = (m: Factory, h: Hand, x: { sp: SpawnRule; j: number }): void => {
+const handOn = (m: Factory, h: Hand, x: { sp: SpawnRule }): void => {
   const n = h.sv.n as FactoryNode,
     steady = m.s.reality === 0;
-  const { e, base } = beltFor(h, { ...x, steady });
+  const { e, base } = beltFor(h, { sp: x.sp, steady });
   if (!base) return;
   const k = countOf(n, x.sp, { f: base * h.d.fanEff * h.sv.churn, steady });
   if (!k) return;
-  const first = x.j === 0 ? 1 : 0;
+  const first = x.sp === firstSpawn(n) ? 1 : 0; // the first spawn carries the job itself on
   if (first) carryOn(m, h, e);
   if (k - first) besides(m, h, { e, k: k - first });
 };
@@ -216,7 +216,7 @@ const finish = (m: Factory, sv: Server, t: number): boolean => {
   if (J.fl & REDO) return (redone(m, sv, { t, ai }), true);
   const qIn = J.fl & FROM_SRC ? Q.GOOD : J.q;
   const h: Hand = { sv, d, t, ai, qIn, fl: J.fl & FAIL, main: J.fl & (MAIN | OWN), kind: badKind(m, n, qIn) };
-  n.spawns.forEach((sp, j) => handOn(m, h, { sp, j }));
+  n.spawns.forEach((sp) => handOn(m, h, { sp }));
   return true;
 };
 
