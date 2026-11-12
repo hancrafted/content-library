@@ -4,7 +4,7 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T20:12:29Z
+  at: 2026-11-12T20:28:05Z
 locale: en
 brief: ./brief.md
 verified:
@@ -18,6 +18,8 @@ verified:
     at: 2026-11-12T17:52:18Z
   - by: process:markdown-harness
     at: 2026-11-12T20:12:29Z
+  - by: process:markdown-harness
+    at: 2026-11-12T20:28:05Z
 ---
 
 # What lies below the waterline of sustainable AI skills {#waterline-of-sustainable-ai-skills}
@@ -26,8 +28,8 @@ verified:
 
 #### Voice script
 
-1. **You are the captain** — Imagine you are the captain of a coastal research expedition. Your pilot has worked with you for ten years and is the best you know, and he steers a diving robot on a cable from the control room on deck, while you decide where the expedition goes next.
-2. **One settled condition** — He has one condition, and it never changes. He forms no new memories overnight, but he keeps everything he ever learnt as a pilot, every rule of the trade. Stay the captain for the next few minutes, and hold on to that thought.
+1. **You are the captain** — Imagine you work with an AI model that is brilliant at its job, the most capable colleague you have. I will give it a picture, because we need one all the way down: you are the captain of a coastal research expedition, and the model is your pilot of ten years, who steers a diving robot on a cable from the control room on deck while you decide where the expedition goes next.
+2. **One settled condition** — Your pilot has one condition, and it never changes. He forms no new memories overnight, but he keeps everything he ever learnt as a pilot, every rule of the trade. That is an AI model: what it learnt in training stays, and what you told it in yesterday's conversation is gone.
 
 ### An AI model that forgets every morning {#an-ai-model-that-forgets-every-morning}
 
@@ -47,9 +49,9 @@ A comic strip in low poly, the control room as the scene. First panel: a framed 
 
 #### Voice script
 
-1. **Three mornings** — So tomorrow morning he greets you with "Nice to meet you". You explain how to take the sediment sample, step by step, and the robot waits on deck while you talk. The morning after, the same greeting and the same explanation, and by the third morning you could recite it in your sleep.
-2. **The hook** — That is what working with AI feels like today. You've explained this to the AI a hundred times. It has heard it once.
-3. **What would you do** — So here is my question, captain, and I would like your honest answer: if you were stuck with this pilot for a whole season, what would you do? If you're with me in a workshop, type it into the chat now. If you're watching the recording, pause here, look at that empty card and answer out loud. I'll come back to it.
+1. **Three mornings** — So the next morning you open a new conversation, and the model knows nothing of yesterday. In our picture the pilot greets you with "Nice to meet you", you explain how to take the sediment sample step by step, and the robot waits on deck while you talk. The morning after, it is the same greeting and the same explanation, and by the third morning you could recite it in your sleep.
+2. **The hook** — That is what working with AI feels like today, because every conversation starts from zero on how you work. You've explained this to the AI a hundred times. It has heard it once.
+3. **What would you do** — So here is my question, and I would like your honest answer: if you worked with this model for a whole season, what would you do about it? If you're with me in a workshop, type it into the chat now. If you're watching the recording, pause here and answer out loud. I'll come back to it.
 
 ### A skill hands the AI your procedure {#a-skill-hands-the-ai-your-procedure}
 
@@ -68,16 +70,16 @@ One wide view of the control room: the pilot at the console, the manual open at 
 
 #### Voice script
 
-1. **The answer** — Most people land on the same idea within a minute: write it down. Put the procedure on a card, keep the cards in a manual at the console, and he reads the right card each morning instead of you explaining it again. That is all a skill is, and the rest of this Episode is about doing it well.
-2. **Three things to remember** — Hold on to three things in this picture, because we return to them all the way down. The index entry is one line in the manual that tells him what a card is for, the procedure card is the card itself, and the expedition brief on the wall holds what is true for this expedition.
-3. **The card slides out** — Watch the card. He doesn't read the whole manual, one card comes out when the dive needs it, and (pause) that is the picture for everything that follows.
+1. **The answer** — Most people land on the same idea within a minute: write it down. Write the procedure once, keep it where the model can find it, and let the model read it when the task comes up, instead of you explaining it again every morning. That is a skill, and in our picture it is a procedure card in the dive manual at the console. The rest of this Episode is about doing it well.
+2. **Three things to remember** — Hold on to three terms, because we return to them all the way down. The skill is the procedure itself, the card. Its description is the one line that tells the model what the skill is for, an entry in the manual's index. And the project instructions hold what is true for this one project, the expedition brief on the wall.
+3. **The card slides out** — And here is the part that matters most: the model does not read every skill you have. It reads the descriptions, and it opens one skill when the task needs it, the way one card comes out of the manual when the dive needs it. (pause) That is the picture for everything that follows.
 
 ## What a skill is {#what-a-skill-is}
 
 #### Voice script
 
-1. **Surface first** — We are still at the surface, so before we ask when to write a skill, let's look at what is actually on a card. I'll use the words your chat app uses, and if you work with a coding agent, there's a second view on some Slides that shows you the files behind each part.
-2. **The mechanics, plainly** — Even inside our story I want to be exact about how loading works, because everything later depends on it. So the labels beside the picture are plain, and they say what really happens, not what the story says.
+1. **Surface first** — We are still at the surface, so before we ask when to write a skill, let's see what a skill is made of. I'll use the words your chat app uses, and if you work with a coding agent, some Slides have a second view that shows you the files behind each part.
+2. **The mechanics, plainly** — I want to be exact about how a skill gets loaded, because everything later depends on it. So I say first what the AI really does, and use the dive only to make it easier to picture.
 
 ### A skill is a written procedure {#a-skill-is-a-written-procedure}
 
@@ -102,9 +104,9 @@ One card in a clear sleeve, each part labelled with its AI term first and the sc
 
 #### Voice script
 
-1. **Name and use-when** — Look at the front of the card. There's a title, and under it one line saying when to use it. That line matters more than it looks, because it is the first thing the pilot sees and, as you'll see in a minute, often the only thing.
-2. **Steps on the back** — On the back are the numbered steps, the procedure itself. And tucked into the sleeve are the extras those steps can reach for: a species guide, a sample label, an arm preset. So a card is a procedure, plus the material that procedure needs.
-3. **For developers** — If you work with a coding agent, switch to the other view. The same card now sits beside a folder, and a line runs from each part of the card to the file behind it. If you don't, you can ignore that view completely.
+1. **Name and use-when** — A skill starts with a name and a description, one line saying when to use it. That line matters more than it looks, because it is the first thing the model sees and, as you'll hear in a minute, often the only thing. On our card it is the title and the "use when" line on the front.
+2. **Steps on the back** — Then come the instructions, the procedure itself as numbered steps, on the back of the card. Next to them a skill can carry supporting files that its steps reach for, like a species guide, a sample label or an arm preset tucked into the card's sleeve. So a skill is a procedure, plus the material that procedure needs.
+3. **For developers** — If you work with a coding agent, switch to the coding-agent view, where each of these parts is a file you can open and edit. If you don't, you can ignore that view completely.
 
 ### Three levels of loading {#three-levels-of-loading}
 
@@ -133,9 +135,9 @@ The manual shown in three steps, each led by a plain factual label: "Always load
 
 #### Voice script
 
-1. **Step one** — Start at the first step and follow the light with me. This is level one, and the label reads: always loaded, every skill's name and description. So even with a hundred cards in the manual, all he carries around is the index.
-2. **Step two** — Now the light moves down to level two: loaded when the skill is used. Only when a task matches does he pull that card and read its main instructions, and not a moment before.
-3. **Step three** — Level three is the bottom step: loaded only if needed. Those are the extras in the sleeve, the ones he opens only when a step sends him there. Read the small note under this step, and I keep the exact claims in the notes beside this Slide, because they differ a little from app to app.
+1. **Step one** — The model loads a skill in three levels. Level one is always loaded: every skill's name and description. So even with a hundred skills installed, all the model carries into every conversation is that short index, the index page of the manual.
+2. **Step two** — Level two is loaded when the skill is used. Only when a task matches a description does the model read that skill's main instructions, and not a moment before, the way the pilot pulls one card.
+3. **Step three** — Level three is loaded only if needed: the references, templates and scripts, the extras in the sleeve, which the model opens only when a step sends it there. The exact behaviour differs a little from app to app, so I keep the precise claims in the notes beside this Slide.
 
 ### Skills are dynamic context {#skills-are-dynamic-context}
 
@@ -162,9 +164,9 @@ The context window Explorable with a Preset in the scene's words. Each entry is 
 
 #### Voice script
 
-1. **Back to the window** — Some of you have seen the context window Explorable, where we looked at everything the AI holds in its head at once. This is the same window, now in the words of our dive.
-2. **The standing part** — Start with what is always there before the dive begins: your standing orders in the notebook, the expedition brief on the wall and the manual's index. Those are static, so they are in the window whatever the task turns out to be.
-3. **Filling as you dive** — Then the dive begins and the window fills with the card he pulled, the camera frames, the sonar readings and the sample logs. That part is dynamic, and a skill belongs to it, whether you call the card at the start or he picks it halfway through. "Static" has exceptions, so take it as a rule of thumb, and the exceptions are in the notes.
+1. **Back to the window** — Some of you have seen the context window Explorable, where we looked at everything the model holds in its head at once. This is the same context window, and now we place skills in it.
+2. **The standing part** — Start with what is there before any task begins: your personal instructions, your project instructions and the skill index, which on our ship are your standing orders, the expedition brief and the manual's index. That part is static, so it sits in the window whatever the task turns out to be.
+3. **Filling as you dive** — Then the task begins and the window fills up: the skill the model opened, and the tool results it gets back, the camera frames, sonar readings and sample logs of the dive. That part is dynamic, and a skill belongs to it, whether you call it at the start or the model picks it halfway through. Static has exceptions, so take the split as a rule of thumb.
 
 ### Instructions, skills and connectors {#instructions-skills-and-connectors}
 
@@ -194,9 +196,9 @@ Four things in the control room, each led by its AI label and a small static or 
 
 #### Voice script
 
-1. **Four things in the room** — There are four things in this control room, and they do four different jobs. Your standing orders in your notebook, the expedition brief on the wall, the manual at the console, and the cable to the sonar and the lab database.
-2. **Read the tags** — Take them one at a time and read the small tag on each. Your notebook is static: whatever ship you board, those orders come with you. The wall is static too, but only for this expedition. The manual is dynamic, because a card arrives when it's needed, and the cable carries the sonar readings and the database into the window. That is the link back to the last Slide.
-3. **Your words may differ** — Your app may use different words for these four things, so match the picture, not the word. And if you work with a coding agent, the other view shows the files: the notebook, the wall and the manual each have one, and the cable is a server.
+1. **Four things in the room** — Four things shape what the model knows, and they do four different jobs: personal instructions, project instructions, skills and connectors. In the control room they are your notebook, the expedition brief on the wall, the manual at the console, and the cable to the sonar and the lab database.
+2. **Read the tags** — Take them one at a time. Personal instructions are static, and they follow you into every project, as your notebook comes with you onto any ship. Project instructions are static too, but only inside this one project. Skills are dynamic, because one arrives when a task needs it, and a connector is dynamic as well, because it brings data from another system into the context window while you work. That is the split from the last Slide, now with names.
+3. **Your words may differ** — Your app may use other words for these four, so match the job, not the word. And if you work with a coding agent, the other view shows the files: your personal instructions file, AGENTS.md for the project, a SKILL.md for each skill, and a server for each connector.
 
 ### Two ways to call a skill {#two-ways-to-call-a-skill}
 
@@ -225,17 +227,17 @@ The control room split in two, each half headed by its AI label. Left, "Called b
 
 #### Voice script
 
-1. **By name** — There are two ways to bring a card into the dive. The first is the simple one: on the left you say its name, "Sediment sample, please", and he takes it out of the manual. No guessing involved.
-2. **By description** — On the right you say nothing. He scans the index while the dive runs and decides for himself that this task needs a card. His only clue is the line you wrote on it, so if the label is poor, the card stays in the manual, however good the steps are.
-3. **Unused is real** — Now read the line under the picture. It comes from one test of one kind of card, so I'd hold it loosely, but it should make you ask, in front of every card you write, whether the pilot would ever pull it.
+1. **By name** — There are two ways a skill gets used. The first is the simple one: you call it by name, the way you would tell the pilot "Sediment sample, please", and the model opens that skill. No guessing involved.
+2. **By description** — In the second you say nothing about the skill. The model reads the descriptions while it works and decides for itself that this task needs one. Its only clue is the description you wrote, so if the description is poor, the skill stays unused, however good its instructions are.
+3. **Unused is real** — And skills going unused is not a theory: it has been measured, though only in one vendor's test of one documentation skill, so hold the finding loosely. The question it should leave you with, in front of every skill you write, is whether the model would ever pick it.
 
 ## When to write one {#when-to-write-one}
 
 #### Voice script
 
-1. **Sunlight** — We are one level down, in the sunlit zone. Here we decide two things: when a task deserves a card at all, and how to label it so the pilot actually picks it.
+1. **Sunlight** — We are one level down, in the sunlit zone. Here we decide two things: when a task deserves a skill at all, and how to describe it so the model actually picks it.
 2. **Borrowed principles** — From here on I borrow principles from engineering, information architecture and UX, and they all lean on one idea: what works for people also works for AI. I say that as a strong rule of thumb, not as a law.
-3. **Why a rule of thumb** — It holds because the pilot acts only on what you hand him, like a newcomer on his first day. It is only a rule of thumb because there are places where it breaks, and I've put those in the notes on the next Slide for you to read.
+3. **Why a rule of thumb** — It holds because the model acts only on what you hand it, like a capable newcomer on their first day. It is only a rule of thumb because there are places where it breaks, and I've put those in the notes on the next Slide for you to read.
 
 ### The third time is the signal {#the-third-time-is-the-signal}
 
@@ -261,9 +263,9 @@ A callback to the first Slide's comic, in three panels, each headed by what happ
 
 #### Voice script
 
-1. **Three tries** — So when does a task become a card? Think about what you learn each time you explain it. The first time you find out what is needed at all, the second time you tighten it, and by the third time you can tell what a good result looks like, which is the moment you know what you would be writing down.
-2. **Not only repetition** — But counting is not enough. If you cannot check whether the result was good, you are not capturing a procedure, you are copying a habit, and the card will repeat your habit with great confidence.
-3. **Did you know** — Software engineers found this the same way, and I like that it is older than any AI tool. Look at the small callout: it is the rule of three from Fowler's Refactoring. I'll leave the exact wording in the notes, because the point here is only that people arrived at it the same way.
+1. **Three tries** — So when does a task become a skill? Think about what you learn each time you explain it to the model. The first time you find out what is needed at all, the second time you tighten it, and by the third time you can tell what a good result looks like, which is the moment you know what you would be writing down.
+2. **Not only repetition** — But counting is not enough. If you cannot check whether the result was good, you are not capturing a procedure, you are copying a habit, and the skill will repeat your habit with great confidence.
+3. **Did you know** — Software engineers arrived at this the same way, long before any AI tool: they call it the rule of three, from Fowler's Refactoring, a rule against generalising too early. I'll leave the exact wording in the notes, because the point here is only that people got there first.
 
 ### Not every repeat deserves a skill {#not-every-repeat-deserves-a-skill}
 
@@ -285,9 +287,9 @@ A manual stuffed with thin cards, several stamped "never tested". Beside it, the
 
 #### Voice script
 
-1. **Too early** — Now the opposite danger. If you write the card after the first run, you freeze a guess, and a procedure nobody has proven now sits in the manual with the authority of a card.
-2. **A thin card has a price** — Look at the manual on screen, stuffed with thin cards and several stamped "never tested". Every quick card is one more entry to keep right and one more line in the index, until the one you need is buried in the middle.
-3. **Three questions** — So before you write a card, ask three questions. Does the task repeat, does it have rules, and does a mistake cost something? If the answer is no to all three, leave it in the chat. This check is mine, a practical filter I use, not a published test.
+1. **Too early** — Now the opposite danger. If you write the skill after the first run, you freeze a guess, and a procedure nobody has proven now carries the authority of a skill.
+2. **A thin card has a price** — And every quick skill has a price. It is one more thing to keep right and one more description in the index the model reads every time, so picture a manual stuffed with thin cards, several of them never tested, until the one you need is buried in the middle.
+3. **Three questions** — So before you write a skill, ask three questions. Does the task repeat, does it have rules, and does a mistake cost something? If the answer is no to all three, leave it in the chat. This check is mine, a practical filter I use, not a published test.
 
 ### Write it from a good run {#write-it-from-a-good-run}
 
@@ -310,16 +312,16 @@ Two paths into one skill, each headed by its AI label. Left, "From your own note
 
 #### Voice script
 
-1. **Two starting points** — Say it's the third time and you are ready to write. There are two good places to start: your own notes, like the logbook pages from earlier dives, or a run that has just gone well, today's dive, while it is fresh.
-2. **Capture the why** — With the fresh run, let the pilot interview you before you write anything: why that depth, why that order, what would have counted as failure. You want the card to hold your intent and not only the steps, because steps without the why break the first time the situation changes.
-3. **While he still knows** — Then write the card the same evening, in the same conversation, while he still knows how the dive went. Tomorrow morning he will have forgotten it, and that is the condition we started with. If you work with a coding agent, the other view shows the same move: ask the agent to turn this conversation into a skill.
+1. **Two starting points** — Say it is the third time and you are ready to write the skill. There are two good places to start: your own notes from earlier runs, the logbook pages of earlier dives, or a run with the AI that has just gone well, today's dive, while it is fresh.
+2. **Capture the why** — With the fresh run, ask the AI to interview you before it writes anything: why that depth, why that order, what would have counted as failure. You want the skill to hold your intent and not only the steps, because steps without the why break the first time the situation changes.
+3. **While he still knows** — Then let it write the skill in the same conversation, while the whole run is still in its context window. Tomorrow it will have forgotten, and that is the condition we started with. So that is your first step: pick one task you've explained three times, and turn a good run of it into a skill. In a coding agent, that is one sentence: ask it to turn this conversation into a skill.
 
 ## The description {#the-description}
 
 #### Voice script
 
-1. **The label decides** — We are still in sunlight, and this is the part most people skip. A card nobody picks helps nobody, so the label matters more than the steps.
-2. **Name, description** — A label has two lines, the name and the description. That is all the index shows, and it is all he has to decide with.
+1. **The label decides** — We are still in sunlight, and this is the part most people skip. A skill the model never picks helps nobody, so the description matters more than the instructions.
+2. **Name, description** — Before the model opens a skill, it sees two lines: the name and the description. That is all the index holds, and it is all the model has to decide with.
 
 ### The description is all the AI sees {#the-description-is-all-the-ai-sees}
 
@@ -340,9 +342,9 @@ The manual from the pilot's view: the index readable and labelled "loaded: name 
 
 #### Voice script
 
-1. **The pilot's view** — Sit in his chair for a second. The index is open in front of you and every card behind it is closed and greyed out, so you cannot peek inside. All you have is what is written on the label.
-2. **Two entries** — Look at two entries for the same card: "Samples", and "Take a sediment sample at a new site". A task comes in, because we've reached a new site. Which one would you pull?
-3. **Scent** — Researchers call this information scent, the cue on a label that tells you whether it leads where you want to go. So your job is to make the label smell like the task it serves.
+1. **The pilot's view** — Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. All it can go on is what the description says.
+2. **Two entries** — Take two descriptions for the same skill: "Samples", and "Take a sediment sample at a new site". A task comes in, because we have just reached a new site. Which one would you open?
+3. **Scent** — Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. It is a finding about people, and I am borrowing it for the model. So your job is to make the description smell like the task it serves.
 
 ### Name the moment, not the content {#name-the-moment-not-the-content}
 
@@ -368,9 +370,9 @@ Two descriptions for the same skill, each headed by its AI label. "Describes the
 
 #### Voice script
 
-1. **Two labels** — Here are two labels for the same card. The first names the content, "Sediment sampling procedure, steps 1 to 9", and the second names the moment, "Use when we reach a new site and need a sample from the seabed". One says what is inside, the other says when you need it, and that is your second step: write the description as the moment you'd need it.
-2. **Your request** — Now it is the day of the dive and you say, "Grab some mud here before we move on." Follow the line on the screen. Nothing in "steps 1 to 9" sounds like mud, but "a sample from the seabed" does, so write the label in the words you would actually say.
-3. **The closing line** — Last, the closing line of the moment label: "Not for water samples or filming." It tells the pilot where the card stops, so it doesn't turn up for a job it cannot do. Treat it as a choice and not a rule: the notes say who recommends it, and that nobody has measured it.
+1. **Two labels** — Here are two descriptions for the same skill. The first names the content, "Sediment sampling procedure, steps 1 to 9", and the second names the moment, "Use when we reach a new site and need a sample from the seabed". One says what is inside, the other says when you need it, and that is your second step: write the description as the moment you'd need it.
+2. **Your request** — Now it is the day of the dive and you type, "Grab some mud here before we move on." Nothing in "steps 1 to 9" sounds like mud, but "a sample from the seabed" does, so only the moment description matches. Write it in the words you would actually say.
+3. **The closing line** — Last, the moment description can end on a second half: "Not for water samples or filming." It tells the model where the skill stops, so it does not open it for a job it cannot do. Treat that half as a choice and not a rule, because not every guide recommends it.
 
 ### More skills, harder choice {#more-skills-harder-choice}
 
@@ -394,16 +396,16 @@ A skill index crowded with near-twins ("Sample", "Take sample", "Seabed sample v
 
 #### Voice script
 
-1. **Near-twins** — Now see what happens when the manual fills up. "Sample", "Take sample", "Seabed sample v2": three cards that sound alike, and a pilot at the console with a question mark over his head. He has to guess, and you made him do it.
-2. **A short list on the wall** — The fix is cheap. Write a short list in the expedition brief on the wall: "On this expedition, use these three cards." The wall is in view for the whole dive, so he doesn't have to decide from a crowded index. Watch the twins fade and one line on the list light up.
-3. **Hick's law** — Two callouts sit beside the picture, and I keep their details in the notes. What I want you to take from this Slide is the wall list: it is short, and it is always in view.
+1. **Near-twins** — Now see what happens when the skills pile up. "Sample", "Take sample", "Seabed sample v2": three skills whose descriptions sound alike, and a model that has to guess between them. It guesses, and you made it do so.
+2. **A short list on the wall** — The fix is cheap: a short list in your project instructions, AGENTS.md if you work with a coding agent, that says "In this project, use these three skills." Project instructions are always loaded, so the model no longer has to choose from a crowded index. On our ship, that is a list on the wall.
+3. **Hick's law** — People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. It is a finding about people, and I am borrowing it for the model. What I want you to take from this Slide is the short list: it is short, and it is always loaded.
 
 ## What goes inside {#what-goes-inside}
 
 #### Voice script
 
-1. **Twilight** — Deeper now, into the twilight zone, where the light is dim. The card is written and labelled, and the question is what goes on it and what stays off.
-2. **A decision, not a law** — I want to be careful with the word rule here. Keeping procedure apart from project details is a design decision with trade-offs on both sides, so I'll show you the trade-offs and you decide.
+1. **Twilight** — Deeper now, into the twilight zone, where the light is dim. The skill is written and described, and the question is what goes into it and what stays out.
+2. **A decision, not a law** — I want to be careful with the word rule here. Keeping the procedure apart from project details is a design decision with trade-offs on both sides, so I'll show you the trade-offs and you decide.
 
 ### What goes where is information architecture {#what-goes-where-is-information-architecture}
 
@@ -426,9 +428,9 @@ One piece of knowledge, today's site depth, with three possible homes, each led 
 
 #### Voice script
 
-1. **A home for each fact** — Take one piece of knowledge: today's site depth. It needs a home, and you have to pick one. Choosing where each piece lives is called information architecture, and you do it whether or not you name it.
-2. **Three costs** — A home costs you in three ways. Performance asks whether it will actually be read at the moment he needs it, reusability asks how many sites the card still fits, and token cost asks what it takes to load it into the window each time.
-3. **Three homes** — Look at the two homes on screen. Inside the card the depth is always there, but it fits one site. On the expedition brief it fits every site, but it has to be looked up. Neither is right in general, so it depends on how many sites you will dive.
+1. **A home for each fact** — Take one piece of project knowledge, something that changes from one project to the next, like the depth of today's dive site. It needs a home, and you have to pick one. Choosing where each piece of knowledge lives is called information architecture, and you do it whether or not you name it.
+2. **Three costs** — Every home costs you in three ways. Performance asks whether the model actually reads it at the moment it needs it, reusability asks how many projects the skill still fits, and token cost asks how much of the context window it fills, and how often.
+3. **Three homes** — There are three homes for it. Inside the skill, it arrives every time the skill runs, but now the skill fits only this project. In your project instructions, it sits in the context window on every task, whether the task needs it or not, and the skill stays free for any project. In a project file the skill reads, it is loaded only at the step that needs it, and the skill fits every project. None is right in general, so it depends on how many projects the skill will serve.
 
 ### One skill, one job {#one-skill-one-job}
 
@@ -458,9 +460,9 @@ Two halves, each headed by its AI label. Left, "Several jobs in one skill": an o
 
 #### Voice script
 
-1. **Overstuffed** — Start with the left half: one card that samples, films, logs and cleans up. Ask which job it is. When one card does four things you cannot label it, and he cannot pick it for any of them.
-2. **Scribbled in** — On the right is a sampling card with "descend to 40 metres" scribbled in for site 4. It was true at site 4. At site 7 the seabed lies at 120, and the robot hangs uselessly at 40 while he follows the card perfectly. (pause) The card was right and the dive was wrong.
-3. **Cohesion and coupling** — Engineers have two words for these two mistakes, and they are in the callout. Cohesion asks whether a card does one job, and coupling asks whether it is tied to one place. Look at the robot hanging at 40 metres: that is coupling.
+1. **Overstuffed** — Start with a skill that samples, films, logs and cleans up. Ask which job it is. When one skill does four things, you cannot describe it so that it matches any one task, so the model has a hard time picking it for the right one.
+2. **Scribbled in** — Now a sampling skill with one project detail written into it: "descend to 40 metres", true at site 4. At site 7 the seabed lies at 120, and the robot hangs uselessly at 40 while the model follows the skill perfectly. (pause) The skill was followed to the letter, and the dive still failed.
+3. **Cohesion and coupling** — Engineers have two words for these two mistakes. Cohesion asks whether a piece of work does one job, and coupling asks whether it is tied to one place. The first skill lacks cohesion, and the 40 metres written into the second is coupling. Code design has more names for the same idea, and for a skill it comes down to this: one job, and no ties to one project.
 
 ### Inside the skill {#inside-the-skill}
 
@@ -485,16 +487,16 @@ The skill's instructions as numbered steps, each supporting file led by its AI l
 
 #### Voice script
 
-1. **Extras by step** — So what can safely live inside? Domain knowledge, kept in the sleeve and tied to the step that needs it. Step three, lower the arm, points to the arm preset. Step four, identify what you collected, points to the species guide, and step six, label the sample, points to the label template.
-2. **The long step** — Look at the step that has grown long. When the steps swell, move the next paragraph into the sleeve and leave a pointer, so the card stays short enough to take in at a glance.
-3. **Contents first** — Now watch step four: the species guide slides out, and it opens on its contents page first. Do that with your own long extras too, so skimming the top is enough to know what else is inside.
+1. **Extras by step** — So what can safely live inside a skill? Domain knowledge, kept in supporting files and tied to the step that needs it. Step three, lower the arm, runs a script, the arm preset. Step four, identify what you collected, reads a reference file, the species guide, and step six, label the sample, fills in a template.
+2. **The long step** — When one step's instructions grow long, move the next paragraph into a reference file and leave a pointer in the step, so the instructions stay short enough for the model to take in at once.
+3. **Contents first** — And start every long reference file with a contents list, because the model may only skim the top. When step four opens the species guide, its contents page alone tells the model what else is inside.
 
 ## What stays beside {#what-stays-beside}
 
 #### Voice script
 
-1. **Beside, not inside** — Now the other home: details that stay outside the card, in files it reads when it runs. Inside goes the procedure, and beside goes whatever changes from one expedition to the next.
-2. **Where it gets shared** — Who uses the card decides how much care it needs. A card for your own use can be loose, and a card a colleague runs needs more, which sets up the next Section.
+1. **Beside, not inside** — Now the other home: project details that stay outside the skill, in project files it reads when it runs. The procedure goes inside, and whatever changes from one project to the next stays beside.
+2. **Where it gets shared** — And who uses the skill decides how much care it needs. A skill for your own use can be loose, and a skill a colleague runs needs more, which sets up the next Section.
 
 ### Beside the skill {#beside-the-skill}
 
@@ -514,9 +516,9 @@ The previous mistake, fixed. The skill's step, labelled "points to the project c
 
 #### Voice script
 
-1. **The card points** — Here is the mistake from before, fixed. The card no longer says 40 metres, it says "descend to the depth in today's dive plan", and a line runs from that step to the expedition brief on the wall: site 4, 40 metres, site 7, 120 metres.
-2. **Same card, any site** — Replay site 7. It is the same card with no edit, and this time the robot reaches the seabed at 120 metres. The procedure stayed put and the site details lived on the wall, which is your third step in miniature: decide where the project details live.
-3. **For developers** — In the coding-agent view the step points to a project file, say CONTEXT.md, and reads it when the step runs. For everyone else, the dive plan on the wall is the same thing.
+1. **The card points** — Here is the mistake from before, fixed. The skill no longer says 40 metres. Its step says "descend to the depth in today's dive plan", and that dive plan is a project file the skill reads when the step runs: site 4, 40 metres, site 7, 120 metres.
+2. **Same card, any site** — Replay site 7. It is the same skill with no edit, and this time the robot reaches the seabed at 120 metres. The procedure stayed put and the site details lived in the project file, which is your third step in miniature: decide where the project details live.
+3. **For developers** — In the coding-agent view the step names a project file, say CONTEXT.md, and the agent reads it when that step runs. For everyone else, it is any document in your project that the skill tells the model to read.
 
 ### Who uses it, and where {#who-uses-it-and-where}
 
@@ -541,9 +543,9 @@ A simple 2x2, readable at rest and labelled "rule of thumb". Axes in organisatio
 
 #### Voice script
 
-1. **Two questions** — Here is the decision tool, and it asks two questions. Who uses the card, only you or others too? And where, any project or one in particular?
-2. **Four squares** — Four squares come out of that. Personal and project-specific: write the details straight in, there is no upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its extras, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. Watch one card travel from your notebook to the fleet manual, losing its scribbled details and gaining an owner tag.
-3. **A rule of thumb** — Read the label on the matrix: rule of thumb. That label is mine, and I mean it: this is how I think about it, so try it on your own cards and tell me where it breaks.
+1. **Two questions** — Here is a decision tool, and it asks two questions. Who uses the skill, only you or others too? And where, in any project or in one in particular?
+2. **Four squares** — Four squares come out of that. Personal and project-specific: write the details straight in, there is no upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner.
+3. **A rule of thumb** — This matrix is a rule of thumb, and the label is mine. It is how I think about it, so try it on your own skills and tell me where it breaks.
 
 ### How grill-me and grill-with-docs work {#how-grill-me-and-grill-with-docs-work}
 
@@ -563,16 +565,16 @@ The only Slide outside the control room, a showcase on the real files. Three par
 
 #### Voice script
 
-1. **The interview is the card** — Let me show you inside and beside together on real files, the only Slide outside the control room. This is the actual file of grill-me, a skill I use, and the highlighted steps are the interview, which is the procedure. It stays the same every time.
-2. **Follow the arrow** — Next to it is grill-with-docs, which uses grill-me and adds domain modelling. On the right are the files it writes beside itself, a glossary and decision records, and the arrow leads back to the next run, which reads them before it asks anything. The card stays the same, and what it learned about your project waits beside it.
-3. **Skills can run skills** — One last thing, in the corner: a skill can also run other skills. There is no settled name for that yet, and I'll leave it there.
+1. **The interview is the card** — Let me show you inside and beside together, on real files instead of the dive. This is grill-me, a skill I use, and its steps are an interview, which is the procedure. It stays the same every time.
+2. **Follow the arrow** — Next to it is grill-with-docs, which uses grill-me and adds domain modelling. While it runs it writes files beside itself, a glossary and decision records, and the next run reads them before it asks anything. The skill stays the same, and what it learned about your project waits beside it.
+3. **Skills can run skills** — One last thing: a skill can also run other skills, the way grill-with-docs runs grill-me. There is no settled name for that yet, and I'll leave it there.
 
 ## Sharing it {#sharing-it}
 
 #### Voice script
 
-1. **Midnight** — Now we are in deep water, the midnight zone. Everything so far was for you, so what changes when a colleague reads your card?
-2. **Three jobs** — Three jobs wait down here. Give the card an owner and a version, decide who looks after the fleet manual, and test that the card actually helps.
+1. **Midnight** — Now we are in deep water, the midnight zone. Everything so far was for you, so what changes when a colleague runs your skill?
+2. **Three jobs** — Three jobs wait down here. Give the skill an owner and a version, decide who looks after the shared library, and test that the skill actually helps.
 
 ### Shared skills are knowledge articles {#shared-skills-are-knowledge-articles}
 
@@ -596,9 +598,9 @@ Two copies of the same skill, each headed by its AI label. Left, "Personal skill
 
 #### Voice script
 
-1. **Your notebook** — On the left is your notebook card, and it has no header at all. That is fine while it is only yours, because you know who wrote it, when you last used it, and who fixes it when it breaks.
-2. **Into the fleet manual** — Now watch it move into the institute's fleet manual, where a control block is stamped on: an owner, a version, 1.3 here, and a review in March. It is the same card, now with what any company knowledge article has, and your personal cards can skip this until you share them.
-3. **Why** — Why bother? Because once it is shared, one author's edit changes what everyone's pilot does on their dives, and nobody knows whom to ask when one goes wrong. That is your third step: before you share a card, decide where the project details live, and give it an owner.
+1. **Your notebook** — A personal skill has no header at all, like a card in your own notebook. That is fine while it is only yours, because you know who wrote it, when you last used it, and who fixes it when it breaks.
+2. **Into the fleet manual** — Once you share it into your team's skill library, the fleet manual on our ship, it needs what any company knowledge article has: an owner, a version, and a date for its next review. It is the same skill with a control block on top, and your personal skills can skip this until you share them.
+3. **Why** — Why bother? Because once it is shared, one author's edit changes what the model does for everyone who runs it, and nobody knows whom to ask when it goes wrong. That is your third step: before you share a skill, decide where the project details live, and give it an owner.
 
 ### Who owns the shared skill library {#who-owns-the-shared-skill-library}
 
@@ -625,9 +627,9 @@ The earlier matrix returns and the view zooms into the shared, general square. I
 
 #### Voice script
 
-1. **Back to the square** — Remember the matrix? Come back to the shared, general square and zoom in. This is the kind of card the most people rely on, so it is where care matters most.
-2. **What the front page needs** — The front page of the fleet manual lists what a card needs beyond that control block: who may add one, which tier it sits in, fleet, ship or expedition, what it costs to load, which robots it works with, and when it retires. Each line is a question somebody has to answer before the card goes in.
-3. **The dark corner** — And then there is the corner we left dark, for questions nobody has settled yet. I want to be plain with you: I do not have the answers there, and I don't think many organisations do yet. If you have worked it out in yours, I would like to hear how.
+1. **Back to the square** — Come back to the matrix, to the shared, general square. That is the kind of skill the most people rely on, so it is where care matters most.
+2. **What the front page needs** — A shared library needs rules beyond the owner and the version: who may add a skill, which tier it sits in and so whom it reaches, what it costs to load, which models and agents it works with, and when it retires. Each is a question somebody has to answer before the skill goes in.
+3. **The dark corner** — And then there are the questions nobody has settled yet. I want to be plain with you: I do not have the answers there, and I don't think many organisations do yet. If you have worked it out in yours, I would like to hear how.
 
 ### Does the skill make things better? {#does-the-skill-make-things-better}
 
@@ -658,15 +660,15 @@ Two eval runs side by side, the same task each time, labelled "Without the skill
 
 #### Voice script
 
-1. **Same task twice** — How do you know a card helps? Run the same task twice in shallow water, once without the card and once with it, and compare the scorecards. Don't trust your feeling about it, because feeling useful and being useful are not the same thing.
-2. **The callout** — (pause) Read the callout for yourself, and take a moment with it. It is the reason the scorecard exists, and the details are in the notes.
-3. **Test the label** — Test the label too. Take a few requests that should pull the card and a few that should not, and be sure to include near-misses, the ones that sound like the card but need something else. Those show you whether the pilot reaches for it at the right moment.
+1. **Same task twice** — How do you know a skill helps? Run the same task twice, once without the skill and once with it, and compare the results, like two test dives in shallow water. Don't trust your feeling about it, because feeling useful and being useful are not the same thing.
+2. **The callout** — (pause) And this test matters more than it sounds, because a skill is not automatically a gain. A bad skill can leave the model worse off than no skill at all, which is the whole reason the comparison exists.
+3. **Test the label** — Test the description too. Take a few requests that should trigger the skill and a few that should not, and include near-misses, the ones that sound like the skill but need something else. Those show you whether the model reaches for it at the right moment.
 
 ## Keeping it alive {#keeping-it-alive}
 
 #### Voice script
 
-1. **The Abyss** — This is the deepest zone, the abyss, months later. Writing the card was quick, and keeping it right is the work.
+1. **The Abyss** — This is the deepest zone, the abyss, months later. Writing the skill was quick, and keeping it right is the work.
 2. **Nobody sees it** — Most people stop at the first good run, and the part below it gets little attention, which is why I want to spend three Slides here.
 
 ### Every skill is a loan {#every-skill-is-a-loan}
@@ -686,9 +688,9 @@ One skill with a running tag, like a loan statement, each entry a small cost tha
 
 #### Voice script
 
-1. **Quick to write** — A card takes five minutes to write. That is the loan: you get the speed now.
-2. **A running tab** — Then the statements arrive, one line at a time. The site list changed, a new robot arm arrived, and an index line now overlaps another card. None of them is a disaster, and each is a small cost that piles up. Engineers call it technical debt, Ward Cunningham's phrase, in the callout.
-3. **Owning thirty** — Writing thirty cards is easy. Owning thirty is the hard part, because the cost was never in writing the card, it is in keeping it right, month after month.
+1. **Quick to write** — A skill takes five minutes to write. That is the loan: you get the speed now.
+2. **A running tab** — Then the statements arrive, one line at a time. The project details changed, a new tool arrived, and a description now overlaps another skill's. None of them is a disaster, and each is a small cost that piles up. Engineers call it technical debt, Ward Cunningham's phrase.
+3. **Owning thirty** — Writing thirty skills is easy. Owning thirty is the hard part, because the cost was never in writing the skill, it is in keeping it right, month after month.
 
 ### The model changes, the skill doesn't {#the-model-changes-the-skill-doesn-t}
 
@@ -715,9 +717,9 @@ A reveal panel, led by its AI statement, "Every AI model has this condition, and
 
 #### Voice script
 
-1. **Not the only pilot** — Now I owe you something. I told you a story about a pilot, and here is where I let it open up. Your pilot is not the only one: every pilot has this condition, and pilots are trained at schools, one school per AI provider. You have been the captain of an AI the whole time.
-2. **Update and switch** — Two things can happen to your card. First the update: your pilot returns from his school's new course, with the same name and the same card, but "descend slowly" now gives a different dive. Second the switch: a pilot from another school reads the same card in their own way. Watch the same card go into two dives that end at different depths, because the card didn't change and the reader did. The callout names Lehman's laws.
-3. **Hand over the verdict** — So here is my question to you: which of your cards would you re-check after the next model update? If you own one, would you trust it to behave the same way tomorrow?
+1. **Not the only pilot** — There is one more thing that changes under your skill, and you do not control it: the model that reads it. Every AI model has the condition we started with, and each AI provider trains its own, the way each pilot school trains its own pilots. So the reader of your skill is never fixed.
+2. **Update and switch** — Two things can change the reader. A model update: your provider ships a new version, your skill keeps the same words, but an instruction like "descend slowly" now gives a different dive. A different model: a colleague runs your skill in another app, and that model reads the same words its own way. The skill did not change, the reader did, and engineers saw this long ago in software: what is in use has to keep changing, or it gets worse.
+3. **Hand over the verdict** — So here is my question to you: which of your skills would you re-check after the next model update? If you own one, would you trust it to behave the same way tomorrow?
 
 ### Retire skills {#retire-skills}
 
@@ -737,9 +739,9 @@ The skill index, drawn as the fleet manual's index, next to the season's dive lo
 
 #### Voice script
 
-1. **Read the log** — Last job: retire cards. Put the fleet manual's index next to the season's dive log and look at which cards the dives actually used.
-2. **The archive box** — The cards the log never mentions turn grey and slide into an archive box. Look at its date stamp: every card leaves with a retirement date.
-3. **Short index again** — And look at the index left behind: short again, with the one you need easy to spot. Remember the entry that was buried in the middle a few Slides ago? It is back in view.
+1. **Read the log** — Last job: retire skills. Put your list of skills next to what your work actually used this season, the dive log on our ship, and see which skills no task ever opened.
+2. **The archive box** — Those skills go into an archive, each with the date it was retired, so the decision is written down and nobody wonders later where a skill went.
+3. **Short index again** — And the index left behind is short again, with the one you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the model can pick it.
 
 ### The whole iceberg {#the-whole-iceberg}
 
@@ -761,4 +763,4 @@ The full depth ruler from the Surface to the Abyss, each Section's takeaway writ
 
 1. **Three steps** — Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write its description as the moment you would need it. Three: before you share it, decide where the project details live, and give it an owner.
 2. **The honest caveat** — I want to be honest about the deep end. Governance, review and retirement are the part I am least sure about, and I am still learning there too. If you find something that works, tell me.
-3. **Your first card** — The robot is back on deck and the manual lies open with a short index. If you want a low-key start, take the task you explained last week and turn its best run into your first card. Thank you.
+3. **Your first card** — We are back on deck, with a short index. If you want a low-key start, take the task you explained last week and turn its best run into your first skill. Thank you.
