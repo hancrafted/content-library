@@ -4,12 +4,14 @@
  * data only, so a Server Component hands a bundle to the client as it is (FE-006 §4).
  */
 
+import type { Arrivals, OwnSet, Source } from './own-work.types';
+
+export type { Arrivals, OwnSet, Source } from './own-work.types';
 export type XY = readonly [number, number];
 export type Locale = 'en' | 'de';
 /** The roles state (Swing and Roles merged in feedback 08) or the factory. */
 export type ViewId = 'roles' | 'factory';
 export type Company = 'service' | 'product';
-export type Arrivals = 'steady' | 'random';
 export type AiQuality = 'worse' | 'same' | 'better';
 /** Where AI works: nowhere, everywhere, or at the listed work centers. */
 export type AiSet = 'off' | 'all' | readonly string[];
@@ -121,12 +123,6 @@ export interface Route {
   readonly over?: boolean;
 }
 
-export interface Source {
-  readonly id: string;
-  readonly at: string;
-  readonly rate: number;
-}
-
 /** A role's master data in the catalog: its glyph, documents handed on per job, how much longer an AI-made one reads. */
 export interface RoleDef {
   readonly icon?: string;
@@ -218,6 +214,8 @@ export interface Settings {
   aiq: AiQuality;
   company: Company;
   over: Record<string, Over>;
+  /** Own-work settings by source id (Product company); the file's values where unset. */
+  own: Record<string, OwnSet>;
   cust: Cust | null;
   mech: Record<Mechanic, boolean>;
   strength: Partial<Record<Strength, number>>;

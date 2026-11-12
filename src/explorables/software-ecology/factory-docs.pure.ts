@@ -28,6 +28,8 @@ export interface DocMarks {
   readonly redo: boolean;
   /** A request straight from the Customer or an own ticket: not yet worked on. */
   readonly fromCustomer: boolean;
+  /** A ticket of the company's own, or the document that carries it on: it wears a lightbulb. */
+  readonly own: boolean;
 }
 
 /** Quality, AI-made and flags, with the marks read from them. */
@@ -46,6 +48,9 @@ abstract class Marked implements DocMarks {
   }
   get fromCustomer(): boolean {
     return (this.fl & FROM_SRC) !== 0;
+  }
+  get own(): boolean {
+    return (this.fl & OWN) !== 0;
   }
 }
 

@@ -8,7 +8,16 @@
 import { label, makeSheet, readColors, type Colors, type Ctx } from './doc-sprites.ts';
 import type { BeltLayout, FactoryLayout, Pt } from './factory-layout.pure.ts';
 import type { Floor, FloorBelt, FloorListener, FloorStation } from './factory-model.pure.ts';
-import { drawRiders, ScreenTimes, type Frame, type Lane, type Rider, type Riders } from './paint-belts.ts';
+import {
+  drawRiders,
+  HANDOFF_SECS,
+  RELEASE_SECS,
+  ScreenTimes,
+  type Frame,
+  type Lane,
+  type Rider,
+  type Riders,
+} from './paint-belts.ts';
 import { drawPile, pileFor, type Pile, type PileStyle } from './paint-pile.ts';
 import { drawRack, drawWork } from './paint-rack.ts';
 import { settle, Stations, type Landing } from './paint-station.ts';
@@ -42,8 +51,15 @@ const EASE_SECS = 0.07;
 const lanesFor = (e: FloorBelt, b: BeltLayout): readonly [Lane, Lane] => {
   const top = e.from.kind === 'role' && (b.corners[0] as Pt)[1] < e.from.def.y - 1;
   return [
-    { path: b.vis, inner: b.inner, hideIn: top ? b.inner : -1, back: false },
-    { path: b.retVis, inner: 0, hideIn: -1, back: true },
+    {
+      path: b.vis,
+      inner: b.inner,
+      hideIn: top ? b.inner : -1,
+      back: false,
+      secs: e.release ? RELEASE_SECS : HANDOFF_SECS,
+      gift: e.release,
+    },
+    { path: b.retVis, inner: 0, hideIn: -1, back: true, secs: HANDOFF_SECS, gift: false },
   ];
 };
 
@@ -147,7 +163,7 @@ export class FactoryPainter {
     for (const n of this.floor.stations) {
       const v = this.stations.of(n),
         P = this.pileOf(n);
-      settle(n, v, ease);
+      settle(n, v, { ease, now: x.at.now });
       if (P) drawPile(f, n, { P, pts: this.endOf(P), dt: x.dt, style: x.at.pile });
       drawRack(f, n, v);
       drawWork(f, n, { v, at: { ai: n.ai, secsPerWeek: x.at.secsPerWeek, blocked: x.at.blocked } });

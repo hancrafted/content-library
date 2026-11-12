@@ -64,7 +64,7 @@ const NOTES: Readonly<Record<string, string>> = {
   company:
     'service: only the Customer asks for work; product: roles also write tickets of their own (sources). Also a toggle in Model.',
   '#sources':
-    "Product company only: own tickets a week, written into a work center's backlog and handed on like a request ({ id, at, rate }). They scale with that center's AI extra tasks.",
+    "Product company only: own tickets a week, written into a work center's backlog and handed on like a request ({ id, at, rate }). They scale with that center's AI extra tasks. arrivals (steady or random) is optional; what a visitor sets on a dashboard is kept under state.sources, by id.",
   '#backlog':
     "Starting backlogs, in weeks of work (weeks times the work center's Ideal capacity), put in when a state loads after its warm-up; Realistic starts full, Ideal clear, in between scales. A preset may carry its own.",
   '#display':
@@ -112,6 +112,18 @@ const centersOut = (over: Settings['over']): Doc => {
   return out;
 };
 
+/** The own-work settings the visitor set, by source id: `rate` and `arrivals`; nothing when none is set. */
+const ownOut = (own: Settings['own']): Doc => {
+  const out: Doc = {};
+  for (const [id, o] of Object.entries(own)) {
+    const c: Doc = {};
+    if (o.rate !== undefined) c.rate = o.rate;
+    if (o.mode !== undefined) c.arrivals = o.mode;
+    if (Object.keys(c).length) out[id] = c;
+  }
+  return Object.keys(out).length ? { sources: out } : {};
+};
+
 const stateOf = (B: Bundle, page: PageState): Doc => {
   const s = page.s,
     cu = custOf({ B }, s);
@@ -130,6 +142,7 @@ const stateOf = (B: Bundle, page: PageState): Doc => {
     compare: [...page.compare],
     centers: centersOut(s.over),
     overlays: { ...page.overlays },
+    ...ownOut(s.own),
   };
 };
 

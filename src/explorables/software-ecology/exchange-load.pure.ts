@@ -9,6 +9,7 @@ import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
 import { DEFAULT_SPEED, presetOf } from './factory-run.pure.ts';
 import type {
+  Arrivals,
   Bundle,
   Company,
   Cust,
@@ -16,6 +17,7 @@ import type {
   Locale,
   Mechanic,
   Over,
+  OwnSet,
   PileStyle,
   Preset,
   RoleDef,
@@ -40,6 +42,7 @@ export interface SavedState {
   readonly customer?: CustomerPatch;
   readonly compare?: readonly string[];
   readonly centers?: Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+  readonly sources?: Readonly<Record<string, { readonly rate?: number; readonly arrivals?: Arrivals }>>;
   readonly overlays?: Partial<Overlays>;
 }
 
@@ -119,6 +122,11 @@ const overFrom = (centers: SavedState['centers']): Settings['over'] =>
     ]),
   );
 
+const ownFrom = (sources: SavedState['sources']): Settings['own'] =>
+  Object.fromEntries(
+    Object.entries(sources ?? {}).map(([id, o]) => [id, defined({ rate: o.rate, mode: o.arrivals }) as OwnSet]),
+  );
+
 /** The settings the file was saved at, over its preset's (the first one when it names none). */
 const settingsOf = (B: Bundle, st: SavedState): Settings => {
   const s = startSettings(B, presetOf(B, st.preset ?? (B.data.presets[0] as Preset).id));
@@ -132,6 +140,7 @@ const settingsOf = (B: Bundle, st: SavedState): Settings => {
     preset: st.preset ?? s.preset,
     mech: { ...s.mech, ...st.mechanics },
     over: overFrom(st.centers),
+    own: ownFrom(st.sources),
     cust: custFrom(s.cust as Cust, st.customer),
   };
 };

@@ -14,7 +14,7 @@ Binding:
 - [FE-012-explorables](../../../.archgate/adrs/FE-012-explorables.md)
 - the Explorable floor in [README.md](README.md)
 
-This guide holds the product design, from Han's voice session of 2026-11-10 and the prototype rounds and grills of 2026-11-11.
+This guide holds the product design, from Han's voice session of 2026-11-10 and the prototype rounds and grills of 2026-11-11. Feedback 10 (2026-11-12, `docs/episodes/software-ecology/prototype/feedback-10.md` and its grill `grill-10.md`, questions 166 to 177) added gift-box releases, own-work lightbulbs and the Own work dashboard section.
 
 ## Premises
 
@@ -73,6 +73,7 @@ Each use case is one use-case file plus its words pair. Every use case outside s
 4. **Work-center dashboard:** a click on a work center opens its dashboard as a popover anchored to it. It holds:
    - a traffic light and its signals, and trend charts of output, outcome and queue
    - an AI toggle; a collapsed Settings section of sliders, each showing its set and effective value: efficiency (10 % to 1000 %), effectiveness, tasks handed on per task, and, while AI is on, AI's speed-up and extra tasks
+   - an "Own work" section for a work center the file gives a source, shown under Product company only: tickets a week (0 allowed) and Steady or Random, starting at the file's values; changing it marks the state modified, Reset to default restores it, Service provider turns all own work off and Product company restores what was set; Download and Upload keep it under `state.sources`
    - a collapsed "How it flows" section with utilisation, throughput, backlog and lead time in plain words
    - the role's classic artefacts and execution tasks
    - what AI does there, to inspire the audience about their own department (e.g. sales turns leads into deals and requirements for the product manager and analyst)
@@ -83,7 +84,7 @@ Each use case is one use-case file plus its words pair. Every use case outside s
 ## Visuals
 
 1. **At rest, only the essentials:** belts, work centers (glyph and title) and moving documents. Queue trays, counts and damage signs appear under pressure or on hover, with a gap between the show and hide thresholds so nothing flickers.
-2. **Documents** (90 % of the belt's width tall while they travel, feedback 10) are good or bad: a plain document is good, a red minus marks bad, a red warning marks a complaint or rework, and AI-made documents have an orange border, a light orange fill and a star. A station card has a full-width glyph and title row and no Context marker (it lives on the station's dashboard). Beneath, a rack of six slots on the left holds the waiting work, the document in work is centred in the rest and fills and is stamped good or bad, and "n waiting" sits at the bottom right. The Customer card is 30 % wider in the factory; documents slide in and shrink out, never popping. When a belt is full, documents with the same marks merge into one with a "×n" badge.
+2. **Documents** (90 % of the belt's width tall while they travel, feedback 10) are good or bad: a plain document is good, a red minus marks bad, a red warning marks a complaint or rework, and AI-made documents have an orange border, a light orange fill and a star. A station card has a full-width glyph and title row and no Context marker (it lives on the station's dashboard). Beneath, a rack of six slots on the left holds the waiting work, the document in work is centred in the rest and fills and is stamped good or bad, and "n waiting" sits at the bottom right. The Customer card is 30 % wider in the factory; documents slide in and shrink out, never popping. A release to the Customer is a gift box (1.5 times a document, a red bug when bad, AI marks kept) and its handoff takes 1.2 s on screen; answers stay documents. Own work wears a lightbulb mark, and each own ticket pops out of its station's glyph and drops into its rack slot in 0.4 s without a belt (at once under reduced motion). When a belt is full, documents with the same marks merge into one with a "×n" badge.
 3. **AI drawing:** a turbo on the belt, and a faster `ai`-tinted progress ring with a soft pulse inside the station.
 4. **Damage signs:**
    - rework: a document rides a separate return belt back

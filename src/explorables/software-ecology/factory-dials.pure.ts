@@ -7,6 +7,7 @@ import type { Factory, FactoryNode } from './factory.types';
 import type {
   AiQuality,
   AiSet,
+  Arrivals,
   Bundle,
   CenterDials,
   Cust,
@@ -107,6 +108,14 @@ export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100
 export const rushOf = (n: FactoryNode): number =>
   RUSH_MAX * Math.max(0, Math.min(1, (n.Ws - RUSH_FROM) / (RUSH_TO - RUSH_FROM)));
 export const effvNow = (n: FactoryNode, d: Dials): number => Math.max(5, d.effv - rushOf(n)) / 100;
+/** A source's tickets a week and its arrivals at these settings: the dashboard's, else the file's, else the state's. */
+export const ownOf = (
+  src: { readonly id: string; readonly rate: number; readonly arrivals?: Arrivals },
+  x: { readonly s: Pick<Settings, 'own'>; readonly mode: Arrivals },
+): { rate: number; mode: Arrivals } => {
+  const o = x.s.own[src.id] ?? {};
+  return { rate: firstOf(o.rate, src.rate), mode: firstOf<Arrivals>(o.mode, src.arrivals, x.mode) };
+};
 /** Own tickets scale with the role's AI extra tasks. */
 export const srcRate = (rate: number, d: Dials): number => rate * (d.ai ? d.aiExtra : 1);
 export const productCo = (s: Settings): boolean => s.company === 'product';
@@ -131,6 +140,7 @@ export const idealSettings = (company: Settings['company']): Settings => ({
   ai: 'off',
   aiq: 'same',
   over: {},
+  own: {},
   cust: null,
   mech: { rework: true, churn: true, complaints: true },
   strength: {},

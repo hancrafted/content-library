@@ -42,7 +42,7 @@ export interface Ctx {
   readonly complOn: boolean;
   readonly mixW: number;
   readonly badP: number;
-  readonly srcs: readonly TicketSource[];
+  readonly srcs: readonly Pick<TicketSource, 'n' | 'rate'>[];
   readonly worst: boolean;
 }
 

@@ -1654,6 +1654,14 @@
   margin-left: auto;
   font-variant-numeric: tabular-nums;
 }
+.ownWork {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
 .steps {
   display: flex;
   flex-direction: column;

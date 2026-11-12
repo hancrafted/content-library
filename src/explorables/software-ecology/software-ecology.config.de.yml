@@ -244,6 +244,17 @@ display:
       note: Dokumente verstreuen sich um das Bandende und zittern, wie eine Schneewehe an einer Wand
 # Das Dashboard eines Arbeitsplatzes: ein Monitor, die Regler in den Einstellungen verstaut.
 dash:
+  own:
+    title: Eigene Arbeit
+    tip: 'Tickets, die diese Rolle sich selbst schreibt, nicht für einen Kunden: eine Roadmap, Leads, technische Schulden. Sie reihen sich in dieselbe Warteschlange ein wie Kundenanfragen, wer zuerst kommt, wird zuerst bearbeitet. Nur ein Produktunternehmen hat sie; ein Dienstleister schaltet sie alle ab.'
+    help: 'Über {name}'
+    rate: Tickets pro Woche
+    rateTip: 'Wie viele eigene Tickets diese Rolle pro Woche schreibt, 0 bis 10. 0 schaltet sie ab. Der Wert der Datei ist der Startwert; „Auf Standard zurücksetzen“ stellt ihn wieder her.'
+    perWeek: '{n} pro Woche'
+    arrivals: Eintreffen
+    arrivalsTip: 'Gleichmäßig: ein Ticket alle 1/Rate einer Woche, im festen Takt. Zufällig: im Schnitt gleich viele, aber mal gehäuft, mal dünn, wie echte Tickets.'
+    steady: Gleichmäßig
+    random: Zufällig
   help: Diagramme erklären
   close: Schließen
   closeTip: Schließen (Esc)

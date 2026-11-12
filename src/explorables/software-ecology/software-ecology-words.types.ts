@@ -4,6 +4,7 @@
  */
 import type { CompareWords } from './compare-words.types';
 import type { ExchangeWords } from './exchange-words.types';
+import type { OwnWorkWords } from './own-work.types';
 import type { SettingsWords, ToolbarWords } from './toolbar-words.types';
 import type { TourWords } from './tour-words.types';
 
@@ -56,6 +57,7 @@ interface RowWords {
 
 /** A work center's dashboard. */
 export interface DashWords {
+  readonly own: OwnWorkWords;
   readonly help: string;
   readonly close: string;
   readonly closeTip: string;

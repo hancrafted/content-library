@@ -5,7 +5,7 @@ import type { DialKey } from './dash-rows.pure.ts';
 import { DashPopover } from './dashboard-popover.client';
 import type { DashboardReadout } from './dashboard-readouts.pure.ts';
 import type { TopoNode } from './factory-model.pure.ts';
-import { withCustomer, withOver } from './factory-settings.pure.ts';
+import { withCustomer, withOver, withOwn } from './factory-settings.pure.ts';
 import type { Words } from './software-ecology-words.types';
 import { centerTitle, customerJob, customerTitle, roleWords, titlesOf, type WordsIn } from './use-case-words.pure.ts';
 import type { DashboardState } from './use-dashboard.ts';
@@ -70,6 +70,7 @@ const centerDash = (p: CenterIn, x: { n: TopoNode; r: DashboardReadout }): WorkC
     titleId: p.titleId,
     onDial: (k: DialKey, v: number) => c.setSettings(withOver(c.settings, p.id, { [k]: v })),
     onAi: (on) => c.setSettings(withOver(c.settings, p.id, { ai: on })),
+    onOwn: (id, patch) => c.setSettings(withOwn(c.settings, id, patch)),
     onHelp: p.dash.toggleHelp,
     onClose: p.closable === false ? undefined : p.dash.close,
     marker: p.markers?.[`${p.id}:card`],

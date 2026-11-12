@@ -158,7 +158,11 @@ const toCustomer = (m: Factory, e: Belt, x: Token): void => {
 
 export const deliver = (m: Factory, e: Belt, x: Token): void => {
   const B_ = e.to;
-  if (B_.kind === 'customer') return toCustomer(m, e, x);
+  if (B_.kind === 'customer') {
+    toCustomer(m, e, x);
+    m.hook?.('arrive', B_, { belt: e, x });
+    return;
+  }
   B_.rate.arr += x.c * BUMP;
   if (x.fl & COMPL) B_.sign.complaint = m.t;
   const run = new Run({ q: x.q, ai: x.ai, fl: x.fl, e: e.i, b: x.b, wk: Math.floor(x.t1), c: x.c });

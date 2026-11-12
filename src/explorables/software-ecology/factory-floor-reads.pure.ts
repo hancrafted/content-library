@@ -18,7 +18,7 @@ class Station implements FloorStation {
     end: 0,
     bounce: false,
     stampGood: false,
-    doc: { ai: 0, good: true, complaint: false, redo: false, fromCustomer: false },
+    doc: { ai: 0, good: true, complaint: false, redo: false, fromCustomer: false, own: false },
   };
   constructor(
     private readonly n: FactoryNode,

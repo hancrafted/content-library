@@ -7,6 +7,7 @@
 import {
   customerDashboardOf,
   dashboardOf,
+  ownReadoutsOf,
   type CustomerDashboard,
   type DashboardReadout,
 } from './dashboard-readouts.pure.ts';
@@ -109,7 +110,7 @@ const dashboardsOf = (m: Factory, o: ReadOptions): Snapshot['dashboards'] =>
     (o.watch ?? []).flatMap((id) => {
       const n = m.nodes.get(id);
       if (!n || n.kind !== 'role') return [];
-      const d = dashboardOf(n, m.s);
+      const d = dashboardOf(n, m.s, ownReadoutsOf(m, n, m.s));
       return [[id, o.charts === false ? keepTrends(d, o.prev?.dashboards[id]) : d]];
     }),
   );

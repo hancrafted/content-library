@@ -106,6 +106,7 @@ const kindOfJob = (sv: FloorWork, ai: boolean) => ({
   q: sv.doc.complaint || sv.doc.fromCustomer || sv.doc.good ? 1 : 0,
   ai,
   warn: sv.bounce || sv.doc.complaint || sv.doc.redo,
+  own: sv.doc.own,
 });
 
 const steadyFill = (sv: FloorWork, secsPerWeek: number): boolean =>
