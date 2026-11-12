@@ -165,6 +165,22 @@ describe('success cases', () => {
     // ASSERT
     expect(refused).toEqual(none);
   });
+
+  it('sends nothing back when the file sets mechanics.maxBounces to 0, and rework as before at its default', () => {
+    // ARRANGE
+    const tire = builtinBundle('tire');
+    const none: Bundle = { ...tire, data: { ...tire.data, mechanics: { ...tire.data.mechanics, maxBounces: 0 } } };
+    const read = (B: Bundle) => {
+      const f = createFactory(B, settingsOf(B, 'realistic'));
+      f.step(30);
+      return f.read({ measures: ['eng.rework'] }).measures['eng.rework'];
+    };
+    // ACT
+    const [atDefault, atZero] = [read(tire), read(none)];
+    // ASSERT
+    expect(atDefault).toBeGreaterThan(0);
+    expect(atZero).toBe(0);
+  });
 });
 
 describe('failure cases', () => {

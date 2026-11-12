@@ -87,6 +87,15 @@ describe('success cases', () => {
     });
   });
 
+  it('writes every mechanics constant into the file, each at its default', () => {
+    // ARRANGE
+    const expected = { rework: 0.4, churn: 1.2, inspect: 2.4, redo: 0.3, keepExtra: 0.3, maxBounces: 2, pressure: 1.4 };
+    // ACT
+    const doc = parse(tireText()) as { mechanics: unknown };
+    // ASSERT
+    expect(doc.mechanics).toEqual(expected);
+  });
+
   it('warns, as the reference build does, which work centers would be over capacity while rushing and in the worst case', () => {
     // ARRANGE
     const warn = { rush: ['support', 'eng'], worst: ['support'] };

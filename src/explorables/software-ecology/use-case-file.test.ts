@@ -115,6 +115,16 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('refuses a mechanics constant out of its range, naming the range', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), mechanics: { rework: 0.4, inspect: 9, maxBounces: 3 } };
+    const expected = ['mechanics.inspect: 1 to 5', 'mechanics.maxBounces: 0 to 2'];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses a starting backlog on a work center that is not there, and a pile-up style that is not one', () => {
     // ARRANGE
     const doc = { ...tireDoc(), backlog: { qa: 3, nobody: 1, eng: 20 }, display: { pile: 'mound', beltMotion: 'yes' } };

@@ -3,7 +3,7 @@
  * job, rolls its result as work starts (so the station can stamp it as the job ends), and on finishing sends it back,
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
-import { CV, effvNow, EXTRA, firstOf, INSPECT, mechOf, Q, speedOf } from './factory-dials.pure.ts';
+import { constOf, CV, effvNow, firstOf, mechOf, Q, speedOf } from './factory-dials.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
 import { countOf, pickBelt } from './factory-routing.pure.ts';
@@ -32,37 +32,37 @@ const serviceTime = (m: Factory, n: FactoryNode, mean: number): number => {
 interface Verdict {
   readonly bounce: boolean;
   readonly churn: number;
-  /** What the job's size is multiplied by: 0.3 to send it back, 1 + EXTRA to keep and fix a bad input. */
+  /** What the job's size is multiplied by: `redo` to send it back, 1 + `keepExtra` to keep and fix a bad input. */
   readonly grow: number;
 }
 const AS_IS: Verdict = { bounce: false, churn: 1, grow: 1 };
 
 /** An inspection sends bad work back, but passes more of it unread as its backlog fills. */
 const inspect = (m: Factory, n: FactoryNode, x: { elig: boolean; t: number }): Verdict => {
-  const p0 = x.elig ? Math.min(0.95, mechOf(m.s, 'rework') * INSPECT) : 0,
-    k = Math.max(0, 1 - 1.4 * firstOf(n.def.stampUnderPressure, 0.8) * n.press),
+  const p0 = x.elig ? Math.min(0.95, mechOf(m.s, 'rework') * constOf(m.s, 'inspect')) : 0,
+    k = Math.max(0, 1 - constOf(m.s, 'pressure') * firstOf(n.def.stampUnderPressure, 0.8) * n.press),
     r = n.rr();
   const bounce = r < p0 * k;
   if (!bounce && r < p0) {
     n.rate.unread += BUMP;
     n.sign.unread = x.t;
   }
-  return bounce ? { ...AS_IS, bounce, grow: 0.3 } : AS_IS;
+  return bounce ? { ...AS_IS, bounce, grow: constOf(m.s, 'redo') } : AS_IS;
 };
 
 /** A plain work center sends bad input back by chance; kept, it multiplies (churn) and takes longer. */
 const keepOrSendBack = (m: Factory, n: FactoryNode, x: { elig: boolean; t: number }): Verdict => {
-  if (x.elig && n.rr() < mechOf(m.s, 'rework')) return { bounce: true, churn: 1, grow: 0.3 };
+  if (x.elig && n.rr() < mechOf(m.s, 'rework')) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
   const c = mechOf(m.s, 'churn');
   if (c > 1) n.sign.churn = x.t;
-  return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + EXTRA };
+  return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + constOf(m.s, 'keepExtra') };
 };
 
 /** What a work center does with the job it starts: work on it as it is, send it back, or keep a bad input. */
 const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdict => {
   const J = (n.server as Server).J;
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
-  const elig = x.e.returns && J.b < 2;
+  const elig = x.e.returns && J.b < constOf(m.s, 'maxBounces');
   return n.def.inspection ? inspect(m, n, { elig, t: x.t }) : keepOrSendBack(m, n, { elig, t: x.t });
 };
 

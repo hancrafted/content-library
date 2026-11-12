@@ -10,8 +10,10 @@ import type {
   Arrivals,
   Bundle,
   CenterDials,
+  Constant,
   Cust,
   Dials,
+  MechKey,
   Over,
   OwnSet,
   Preset,
@@ -35,10 +37,6 @@ export const RHO_IDEAL = 0.7;
 export const AI_SPEED = 2.5;
 /** Service times vary by 30 % (normal), unless the file says exponential. */
 export const CV = 0.3;
-/** A bad input that is kept takes 30 % longer. */
-export const EXTRA = 0.3;
-/** An inspection catches bad work this many times as often as a plain work center. */
-export const INSPECT = 2.4;
 /** Rates are averaged over about two weeks. */
 export const TAU = 2;
 /** The Customer's output and satisfaction over about six weeks. */
@@ -58,16 +56,28 @@ export const RUSH_MAX = 15;
 export const RUSH_FROM = 1;
 export const RUSH_TO = 3;
 
-/** A mechanic's strength range in the file, and its default. */
-export const MECH_RANGE: Readonly<Record<Strength, readonly [number, number, number]>> = {
+/**
+ * Each `mechanics` key's range in the file, and its default: the strengths a toolbar toggle switches, then the
+ * constants (design-ADR 0024 §5) — an inspection's catch over a plain station's, a sent-back job's size, the extra
+ * work of a kept bad input, the times a document may be sent back (the traffic solve tracks at most 2), and how hard a
+ * filling backlog makes an inspection pass bad work unread.
+ */
+export const MECH_RANGE: Readonly<Record<MechKey, readonly [number, number, number]>> = {
   rework: [0, 1, 0.4],
   churn: [1, 4, 1.2],
+  inspect: [1, 5, 2.4],
+  redo: [0.1, 1, 0.3],
+  keepExtra: [0, 2, 0.3],
+  maxBounces: [0, 2, 2],
+  pressure: [0, 3, 1.4],
 };
-export const STRENGTHS = Object.keys(MECH_RANGE) as Strength[];
-export const MECH_DEFAULTS = (): Record<Strength, number> => ({
-  rework: MECH_RANGE.rework[2],
-  churn: MECH_RANGE.churn[2],
-});
+/** The mechanics with a strength slider on the page. */
+export const STRENGTHS: readonly Strength[] = ['rework', 'churn'];
+export const MECH_KEYS = Object.keys(MECH_RANGE) as MechKey[];
+export const MECH_DEFAULTS = (): Record<MechKey, number> =>
+  Object.fromEntries(MECH_KEYS.map((k) => [k, MECH_RANGE[k][2]])) as Record<MechKey, number>;
+/** A constant at these settings: the file's (carried in `strength`), else its default. */
+export const constOf = (s: Pick<Settings, 'strength'>, k: Constant): number => s.strength[k] ?? MECH_RANGE[k][2];
 
 const AI_QUALITY: Readonly<Record<AiQuality, number>> = { worse: -15, same: 0, better: 15 };
 const ALL_DIALS = ['efficiency', 'effectiveness', 'fanout', 'ai'];
