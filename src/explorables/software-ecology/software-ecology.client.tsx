@@ -31,7 +31,7 @@ import { useTour, useTourState, type TourActions } from './use-tour.ts';
 /**
  * Context targets and markers a Slide places, by spot: `<id>:card`, `<id>:rack` and `<id>:<sign kind>` on a work
  * center, `customer`, `belts` (the whole belt layer, targets only), `belt:<key>` (a marker on that belt's label place),
- * `states` (the state row) and `scenario:<id>` (a marker beside that entry of the Scenarios menu).
+ * `states` (the state row) and `scenario:<id>` (that scenario's name and a marker on the state row).
  */
 export type { Spots };
 

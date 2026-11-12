@@ -7,9 +7,9 @@ import { ToolbarMenu } from './toolbar-menu.client';
 
 /*
  * The Scenarios menu's entries (feature guide, Interaction 2), as the reference build's `renderStates` lists them:
- * every state off the toolbar's row, each with its name, its "what to watch" line and, with a tour, its length. A
- * Slide may place a Context marker beside an entry (spot `scenario:<id>`). Arrow keys move between the entries. Beside
- * it, the Tour button.
+ * every state off the toolbar's row, each with its name, its "what to watch" line and, with a tour, its length. Arrow
+ * keys move between the entries. Beside it, the Tour button and, for each Context marker a Slide places on a scenario
+ * (spot `scenario:<id>`), that scenario's name and the marker on the state row, visible at rest.
  */
 
 export interface ScenarioChoice {
@@ -25,7 +25,6 @@ export interface ScenarioMenuProps {
   readonly preset: string;
   /** "{n}-step tour" */
   readonly tourSteps: string;
-  readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
   readonly onPick: (id: string) => void;
 }
 
@@ -49,20 +48,18 @@ export function ScenarioMenu(p: ScenarioMenuProps) {
   return (
     <div className="contents" onKeyDown={moveFocus}>
       {p.scenarios.map((s) => (
-        <div key={s.id} className={styles.scnRow}>
-          <button
-            type="button"
-            className={`${styles.scnI} text-caption`}
-            role="menuitemradio"
-            aria-checked={p.preset === s.id}
-            onClick={() => p.onPick(s.id)}
-          >
-            <b className="font-semibold">{s.name}</b>
-            <span className="text-muted-foreground">{s.watch}</span>
-            {s.steps ? <span className={styles.scnTour}>{fillTemplate(p.tourSteps, { n: s.steps })}</span> : null}
-          </button>
-          {p.markers?.[s.id]}
-        </div>
+        <button
+          key={s.id}
+          type="button"
+          className={`${styles.scnI} text-caption`}
+          role="menuitemradio"
+          aria-checked={p.preset === s.id}
+          onClick={() => p.onPick(s.id)}
+        >
+          <b className="font-semibold">{s.name}</b>
+          <span className="text-muted-foreground">{s.watch}</span>
+          {s.steps ? <span className={styles.scnTour}>{fillTemplate(p.tourSteps, { n: s.steps })}</span> : null}
+        </button>
       ))}
     </div>
   );
@@ -96,6 +93,21 @@ export function ScenariosMenu(
         }}
       />
     </ToolbarMenu>
+  );
+}
+
+/** Each scenario a Slide places a Context marker on, by name and with its marker, muted beside the Tour button. */
+export function ScenarioNotes(p: {
+  readonly scenarios: readonly ScenarioChoice[];
+  readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
+}) {
+  return p.scenarios.map((s) =>
+    p.markers?.[s.id] ? (
+      <span key={s.id} className="inline-flex items-center gap-1 text-caption text-muted-foreground">
+        {s.name}
+        {p.markers[s.id]}
+      </span>
+    ) : null,
   );
 }
 

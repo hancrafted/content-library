@@ -56,23 +56,40 @@ tour:
   next: Next
   finish: Finish
   checks:
-    check: '{measure}: {test} — {value}'
+    check: '{measure} — {value}'
     customer:
-      output: Output relative to ideal
-      sat: Share of customers satisfied
-      headroom: Demand the line could serve, times today’s
-      leadDays: Lead time in working days
-      bugsPerWeek: Complaints a week
-      own: Own tickets shipped a week
-      backlog: Jobs waiting at all work centers
+      output: 'Output relative to ideal: {test}'
+      sat: 'Share of customers satisfied: {test}'
+      headroom: 'Demand the line could serve, times today’s: {test}'
+      leadDays: 'Lead time in working days: {test}'
+      bugsPerWeek: 'Complaints a week: {test}'
+      own: 'Own tickets shipped a week: {test}'
+      backlog: 'Jobs waiting at all work centers: {test}'
     center:
-      weeksWaiting: '{title}, weeks of work waiting'
-      busy: '{title}, share of time busy'
-      bugShare: '{title}, share of busy time on complaints'
-      backlog: '{title}, jobs waiting'
-      done: '{title}, jobs finished a week'
-      rework: '{title}, share of its work that came back'
-      rush: '{title}, effectiveness points lost to rushing'
+      weeksWaiting: '{title}: {test} weeks of work waiting'
+      busy: '{title}: busy {test} of the time'
+      bugShare: '{title}: {test} of busy time on complaints'
+      backlog: '{title}: {test} jobs waiting'
+      done: '{title}: {test} jobs finished a week'
+      rework: '{title}: {test} of its work sent back'
+      rush: '{title}: {test} effectiveness points lost to rushing'
+    trend: '{measure}, {test}'
+    customerTrend:
+      output: 'Output relative to ideal'
+      sat: 'Share of customers satisfied'
+      headroom: 'Demand the line could serve, times today’s'
+      leadDays: 'Lead time in working days'
+      bugsPerWeek: 'Complaints a week'
+      own: 'Own tickets shipped a week'
+      backlog: 'Jobs waiting at all work centers'
+    centerTrend:
+      weeksWaiting: '{title}: weeks of work waiting'
+      busy: '{title}: share of time busy'
+      bugShare: '{title}: share of busy time on complaints'
+      backlog: '{title}: jobs waiting'
+      done: '{title}: jobs finished a week'
+      rework: '{title}: share of its work sent back'
+      rush: '{title}: effectiveness points lost to rushing'
     test:
       gt: 'over {k}'
       lt: 'under {k}'

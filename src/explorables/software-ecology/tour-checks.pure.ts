@@ -1,6 +1,7 @@
 /*
- * A tour's checks in plain words (design-ADR 0024 §10): "Quality assurance, weeks of work waiting: over 2 — 2.33",
- * a translated label per measure and per test, filled with the work center's title, the bound and the model's value.
+ * A tour's checks in plain words (design-ADR 0024 §10): "Quality assurance: over 2 weeks of work waiting — 2.3", a
+ * translated label per measure holding the test, filled with the work center's title, the bound and the model's value
+ * at one decimal.
  * The use-case file keeps the code form (`qa.weeksWaiting: ">2"`); the tour never shows it.
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
@@ -17,7 +18,10 @@ export interface CheckWordsIn {
 
 const bound = (k: number, locale: Locale) => new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(k);
 const value = (v: number, locale: Locale) =>
-  new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+  new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(v);
+
+/** A measure with no label of its own: its name, then the test. */
+const BARE = '{name}: {test}';
 
 const OP_KEY = { '>': 'gt', '<': 'lt', '>=': 'gte', '<=': 'lte' } as const;
 
@@ -30,21 +34,29 @@ const testText = (test: string, x: CheckWordsIn): string => {
   return w[t.kind];
 };
 
-const centerText = (who: string, what: string, x: CheckWordsIn): string => {
-  const title = x.titles[who] ?? who,
-    label = x.words.center[what];
-  return label ? fillTemplate(label, { title }) : title;
+const isTrend = (test: string): boolean => {
+  const kind = parseTest(test)?.kind;
+  return kind === 'rises' || kind === 'falls';
 };
 
-const measureText = (key: string, x: CheckWordsIn): string => {
-  const [who = '', what = ''] = key.split('.');
-  return who === 'customer' ? (x.words.customer[what] ?? x.titles.customer ?? '') : centerText(who, what, x);
+/** The labels for a bound ("Quality assurance: over 2 weeks of work waiting") or a trend ("…: weeks of work waiting"). */
+const labelsOf = (who: string, trend: boolean, w: TourCheckWords) => {
+  const customer = who === 'customer';
+  if (trend) return customer ? w.customerTrend : w.centerTrend;
+  return customer ? w.customer : w.center;
+};
+
+/** The measure with its test in place; a trend follows the measure: "Lead time in working days, falling". */
+const measureText = (c: Check, x: CheckWordsIn): string => {
+  const [who = '', what = ''] = c.key.split('.'),
+    trend = isTrend(c.test),
+    name = x.titles[who] ?? who,
+    label = labelsOf(who, trend, x.words)[what] ?? (trend ? '{name}' : BARE),
+    test = testText(c.test, x),
+    text = fillTemplate(label, { title: name, name, test });
+  return trend ? fillTemplate(x.words.trend, { measure: text, test }) : text;
 };
 
 /** One check as the tour shows it. */
 export const checkText = (c: Check, x: CheckWordsIn): string =>
-  fillTemplate(x.words.check, {
-    measure: measureText(c.key, x),
-    test: testText(c.test, x),
-    value: value(c.v, x.locale),
-  });
+  fillTemplate(x.words.check, { measure: measureText(c, x), value: value(c.v, x.locale) });

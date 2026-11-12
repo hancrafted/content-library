@@ -9,7 +9,7 @@ import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
 import { ModelMenu, type ModelMenuProps } from './model-menu.client';
 import { MoreMenu, type MoreMenuProps } from './more-menu';
-import { ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
+import { ScenarioNotes, ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Mechanic } from './software-ecology.types';
@@ -69,7 +69,7 @@ function Modified({ words }: { words: ToolbarWords }) {
   );
 }
 
-/** Swing, Roles, Ideal and Realistic; the Scenarios menu with the rest; Tour; "modified" once a dial was turned. */
+/** Swing, Roles, Ideal and Realistic; the Scenarios menu with the rest; Tour; the scenarios a Slide marks; "modified". */
 function States(p: ToolbarProps & { open: MenuId; opener: Opener }) {
   return (
     <div className={`${styles.states} relative`} role="group" aria-label={p.words.states} {...p.statesTarget}>
@@ -88,12 +88,12 @@ function States(p: ToolbarProps & { open: MenuId; opener: Opener }) {
         words={p.words}
         scenarios={p.scenarios}
         preset={p.preset}
-        markers={p.scenarioMarkers}
         open={p.open === 'scenarios'}
         onOpen={p.opener('scenarios')}
         onPick={p.onPreset}
       />
       <TourButton {...p} />
+      <ScenarioNotes scenarios={p.scenarios} markers={p.scenarioMarkers} />
       {p.modified ? <Modified words={p.words} /> : null}
       {p.statesMarker}
     </div>

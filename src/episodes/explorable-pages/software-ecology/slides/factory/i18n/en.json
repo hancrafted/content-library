@@ -1,5 +1,7 @@
 {
-  "title": "The tire swing factory",
+  "title": "Play",
+  "heading": "The tire swing factory",
+  "caption": "AI unbalanced, week 8: seven roles and one Customer as a factory, AI at the engineer, quality assurance’s rack full and the Customer at 0.9× of ideal.",
   "voiceScript": {
     "segments": {
       "you-know-this-cartoon": {

@@ -33,6 +33,17 @@
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
+/* sticky under the site header, as the reference build's toolbar is under the page top; below the header (z 50) and
+   the Context drawer (z 40), which both draw over it. A phone keeps it in the flow: wrapped, it is taller than half
+   the screen. */
+@media (min-width: 768px) {
+  .toolbar {
+    position: sticky;
+    top: calc(var(--header-block) + 0.5rem);
+    z-index: 30;
+    background: var(--background);
+  }
+}
 .tbRow {
   display: flex;
   flex-wrap: wrap;
@@ -1611,16 +1622,6 @@
   max-height: 70vh;
   overflow: auto;
 }
-.scnRow {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-}
-.scnRow > :global(*):not(.scnI) {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
 .scnI {
   flex: 1;
   display: grid;
@@ -1773,10 +1774,11 @@
 .cmpNote:empty {
   display: none;
 }
-/* the stream replaces the floor; the stage grows to hold its columns */
-.viewWrap[data-compare='true'] {
-  height: auto;
+/* the stream replaces the floor in the same fixed stage (80vh, as the reference build's); what is taller scrolls inside */
+.viewWrap[data-compare='true'] > .compare {
+  flex: 1;
   min-height: 0;
+  overflow: auto;
 }
 .compare {
   display: flex;

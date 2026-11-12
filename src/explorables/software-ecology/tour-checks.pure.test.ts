@@ -12,7 +12,7 @@ describe('success cases', () => {
   it('reads a work center’s bound in plain words with the model’s value', () => {
     // ARRANGE
     const check = { key: 'qa.weeksWaiting', test: '>2', v: 2.3349, ok: true };
-    const expected = 'Quality assurance, weeks of work waiting: over 2 — 2.33';
+    const expected = 'Quality assurance: over 2 weeks of work waiting — 2.3';
     // ACT
     const text = checkText(check, en);
     // ASSERT
@@ -23,7 +23,7 @@ describe('success cases', () => {
     // ARRANGE
     const range = { key: 'customer.output', test: '0.85–1.15', v: 1.09, ok: true };
     const trend = { key: 'customer.leadDays', test: 'falls', v: 2.79, prev: 2.9, ok: true };
-    const expected = ['Output relative to ideal: 0.85 to 1.15 — 1.09', 'Lead time in working days: falling — 2.79'];
+    const expected = ['Output relative to ideal: 0.85 to 1.15 — 1.1', 'Lead time in working days, falling — 2.8'];
     // ACT
     const texts = [checkText(range, en), checkText(trend, en)];
     // ASSERT
@@ -33,7 +33,7 @@ describe('success cases', () => {
   it('reads German words and German decimals', () => {
     // ARRANGE
     const check = { key: 'qa.weeksWaiting', test: '>2.5', v: 2.3349, ok: false };
-    const expected = 'Qualitätssicherung, Wochen Arbeit in der Warteschlange: über 2,5 — 2,33';
+    const expected = 'Qualitätssicherung: über 2,5 Wochen Arbeit in der Warteschlange — 2,3';
     // ACT
     const text = checkText(check, de);
     // ASSERT
@@ -51,13 +51,33 @@ describe('failure cases', () => {
     // ASSERT
     expect(text).not.toContain(code);
   });
+
+  it('names the work center and the bound for a measure with no label', () => {
+    // ARRANGE
+    const check = { key: 'qa.nope', test: '>2', v: 1, ok: false };
+    const expected = 'Quality assurance: over 2 — 1.0';
+    // ACT
+    const text = checkText(check, en);
+    // ASSERT
+    expect(text).toBe(expected);
+  });
 });
 
 describe('edge cases', () => {
+  it('reads a work center’s trend after its measure, never in the bound’s place', () => {
+    // ARRANGE
+    const check = { key: 'eng.rework', test: 'falls', v: 0.06, prev: 0.2, ok: true };
+    const expected = 'Engineer: share of its work sent back, falling — 0.1';
+    // ACT
+    const text = checkText(check, en);
+    // ASSERT
+    expect(text).toBe(expected);
+  });
+
   it('names a work center by its id when it has no title', () => {
     // ARRANGE
     const check = { key: 'ops.busy', test: '<=0.9', v: 0.5, ok: true };
-    const expected = 'ops, share of time busy: at most 0.9 — 0.50';
+    const expected = 'ops: busy at most 0.9 of the time — 0.5';
     // ACT
     const text = checkText(check, en);
     // ASSERT

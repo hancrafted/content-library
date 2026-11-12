@@ -54,23 +54,40 @@ tour:
   next: Weiter
   finish: Fertig
   checks:
-    check: '{measure}: {test} — {value}'
+    check: '{measure} — {value}'
     customer:
-      output: Ausstoß im Verhältnis zum Ideal
-      sat: Anteil zufriedener Kunden
-      headroom: Nachfrage, die die Linie bedienen könnte, mal der heutigen
-      leadDays: Durchlaufzeit in Arbeitstagen
-      bugsPerWeek: Beschwerden pro Woche
-      own: Eigene Tickets ausgeliefert pro Woche
-      backlog: Wartende Aufträge an allen Arbeitsplätzen
+      output: 'Ausstoß im Verhältnis zum Ideal: {test}'
+      sat: 'Anteil zufriedener Kunden: {test}'
+      headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen: {test}'
+      leadDays: 'Durchlaufzeit in Arbeitstagen: {test}'
+      bugsPerWeek: 'Beschwerden pro Woche: {test}'
+      own: 'Eigene Tickets ausgeliefert pro Woche: {test}'
+      backlog: 'Wartende Aufträge an allen Arbeitsplätzen: {test}'
     center:
-      weeksWaiting: '{title}, Wochen Arbeit in der Warteschlange'
-      busy: '{title}, Anteil der Zeit beschäftigt'
-      bugShare: '{title}, Anteil der Arbeitszeit für Beschwerden'
-      backlog: '{title}, wartende Aufträge'
-      done: '{title}, erledigte Aufträge pro Woche'
-      rework: '{title}, Anteil der Arbeit, die zurückkam'
-      rush: '{title}, Punkte Wirksamkeit, die durch Hetze verloren gehen'
+      weeksWaiting: '{title}: {test} Wochen Arbeit in der Warteschlange'
+      busy: '{title}: {test} der Zeit beschäftigt'
+      bugShare: '{title}: {test} der Arbeitszeit für Beschwerden'
+      backlog: '{title}: {test} wartende Aufträge'
+      done: '{title}: {test} erledigte Aufträge pro Woche'
+      rework: '{title}: {test} der Arbeit kam zurück'
+      rush: '{title}: {test} Punkte Wirksamkeit durch Hetze verloren'
+    trend: '{measure}, {test}'
+    customerTrend:
+      output: 'Ausstoß im Verhältnis zum Ideal'
+      sat: 'Anteil zufriedener Kunden'
+      headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen'
+      leadDays: 'Durchlaufzeit in Arbeitstagen'
+      bugsPerWeek: 'Beschwerden pro Woche'
+      own: 'Eigene Tickets ausgeliefert pro Woche'
+      backlog: 'Wartende Aufträge an allen Arbeitsplätzen'
+    centerTrend:
+      weeksWaiting: '{title}: Wochen Arbeit in der Warteschlange'
+      busy: '{title}: Anteil der Zeit beschäftigt'
+      bugShare: '{title}: Anteil der Arbeitszeit für Beschwerden'
+      backlog: '{title}: wartende Aufträge'
+      done: '{title}: erledigte Aufträge pro Woche'
+      rework: '{title}: Anteil der Arbeit, die zurückkam'
+      rush: '{title}: Punkte Wirksamkeit, die durch Hetze verloren gehen'
     test:
       gt: 'über {k}'
       lt: 'unter {k}'

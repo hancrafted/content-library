@@ -2,11 +2,17 @@
 
 /** A tour's checks in plain words: one label per measure, one per test, joined by `check`. */
 export interface TourCheckWords {
-  /** "{measure}: {test} — {value}" */
+  /** "{measure} — {value}" */
   readonly check: string;
+  /** Each with `{test}`, the bound in words. */
   readonly customer: Readonly<Record<string, string>>;
-  /** Each with `{title}`, the work center's. */
+  /** Each with `{title}`, the work center's, and `{test}`. */
   readonly center: Readonly<Record<string, string>>;
+  /** A trend after its measure: "{measure}, {test}". */
+  readonly trend: string;
+  /** The measures again, named without a bound, for a trend. */
+  readonly customerTrend: Readonly<Record<string, string>>;
+  readonly centerTrend: Readonly<Record<string, string>>;
   readonly test: Readonly<Record<'gt' | 'lt' | 'gte' | 'lte' | 'range' | 'rises' | 'falls', string>>;
 }
 
