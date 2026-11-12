@@ -94,9 +94,14 @@ const withTour = (tour: readonly TourStep[]): Bundle => {
 const SEEDS = [1, 2, 3];
 const AI_AT_ENG = { ai: ['eng'], dials: { eng: { aiExtra: 2 } } } as const;
 
+/**
+ * The states judged on the default seed alone: every check, and every tour without a claim. A tour whose beats carry
+ * Han's claims is judged across seeds by `npm run ecology:sim` and the ecology-eval skill (design-ADR 0024 §20), where a
+ * beat passes on 8 of 10 seeds, so one seed may fail it.
+ */
 const SCENARIOS = BUILTIN.flatMap((id) =>
   builtinBundle(id)
-    .data.presets.filter((p) => p.tour ?? p.check)
+    .data.presets.filter((p) => p.check ?? (p.tour && !p.tour.some((st) => st.claim)))
     .map((p) => [id, p.id] as const),
 );
 

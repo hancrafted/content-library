@@ -14,3 +14,24 @@ belts:
   qa-ops: { label: getestete Änderung, back: lässt sich nicht ausrollen }
   ops-customer: { label: Release }
 customer: { title: Kunde, job: Schickt Anfragen und bekommt Releases und Antworten }
+presets:
+  ai-spiral: Fehlerspirale mit KI-Beschleunigung
+  clear-requirements: Klare Anforderungen, dann KI
+# Szenarien: eine Zeile „worauf achten“ und Hans Aussage je Schritt, unter dem Schlüssel, den `claim:` eines Tourschritts nennt (tire.yml).
+scenarios:
+  ai-spiral:
+    watch: KI beschleunigt eine Station nach der anderen, und die Fehler finden ihren Weg zurück.
+    claims:
+      clean-line: 'Die Linie läuft sauber: Nichts wartet, der Kunde bekommt, was er anfragt.'
+      eng-floods-qa: Die Entwicklung produziert massenhaft Code; der Engpass wandert nach hinten zur Qualitätssicherung, die mehr zurückschickt.
+      qa-lets-through: Die Qualitätssicherung kommt nicht mehr hinterher und lässt Arbeit ungelesen durch; Fehler erreichen den Kunden und kommen über den Support zur Entwicklung zurück.
+      ai-review-trusted: 'Das Review geht an die KI und ihr wird einfach vertraut: Die Qualitätssicherung wird leer, aber mehr Fehler rutschen durch und der Druck wandert zum Betrieb.'
+      ops-stalls: 'Der Betrieb stockt: Die Pipeline läuft zu langsam und die Durchlaufzeit wächst.'
+      ai-fixes-pipeline: 'KI repariert die Pipeline, und plötzlich liefern wir schneller: mehr und schlechtere Software erreicht den Kunden.'
+  clear-requirements:
+    watch: Gute Anforderungen waren schon immer wichtig; mit KI heißen schlechte Anforderungen, schneller Schlechtes zu liefern.
+    claims:
+      average-requirements: 'Durchschnittliche Anforderungen: Tickets gehen von der Entwicklung zur Analyse zurück und von der Qualitätssicherung zur Entwicklung; ausgelieferte Funktionen bringen Änderungswünsche zum Produktmanagement und Fehlermeldungen zum Support.'
+      bad-things-faster: Mit KI heißen schlechte Anforderungen, schneller Schlechtes zu liefern.
+      clear-requirements: 'Klare Anforderungen: Zuerst sinkt die Nacharbeit, dann löst sich der Stau weiter hinten auf.'
+      ai-accelerates: Auf einer klaren Linie beschleunigt KI.

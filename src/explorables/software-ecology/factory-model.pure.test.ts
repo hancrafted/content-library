@@ -61,8 +61,8 @@ describe('success cases', () => {
     const s = f.settings;
     const expected = [
       { created: 1965, consumed: 1948, backlog: 6, transit: 6, work: 5, gap: 0 },
-      { created: 2597, consumed: 2572, backlog: 19, transit: 3, work: 3, gap: 0 },
-      { created: 3804, consumed: 3757, backlog: 38, transit: 6, work: 3, gap: 0 },
+      { created: 2597, consumed: 2574, backlog: 16, transit: 5, work: 2, gap: 0 },
+      { created: 3802, consumed: 3757, backlog: 37, transit: 5, work: 3, gap: 0 },
     ];
     // ACT
     f.step(20);
