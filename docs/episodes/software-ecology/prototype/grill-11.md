@@ -93,3 +93,9 @@ Q233: ok
 25. Pass-on ramps: nothing below 2 weeks waiting, a share rising to all at 4 weeks (Q231).
 26. Two pins accepted where Support drowns on top of In practice: Operations 43.7 weeks after quality assurance at 1000 %, the compare stream's quality assurance 785 waiting (Q232).
 27. In practice's 8 of 10 seeds on output stands (Q233).
+
+## Eval round 4 (after `run-04.md`)
+
+Q234: ok
+
+28. Clear Requirements beat 2 checks `customer.output: '>1.3'` in place of `rises`: AI ships faster, whatever the seed's level before it (Q234).
