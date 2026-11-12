@@ -2,9 +2,11 @@
  * The Explorable's own words, as `software-ecology.config.yml` and its German twin hold them (FE-012 §1), and the
  * slices each part receives. A Slide overrides any of them through the server entry's `words` prop.
  */
+import type { CompareWords } from './compare-words.types';
 import type { ToolbarWords } from './toolbar-words.types';
 import type { TourWords } from './tour-words.types';
 
+export type { CompareWords } from './compare-words.types';
 export type { ToolbarWords } from './toolbar-words.types';
 export type { TourCheckWords, TourWords } from './tour-words.types';
 
@@ -226,6 +228,7 @@ export interface Words {
   readonly more: MoreWords;
   readonly dash: DashWords;
   readonly custDash: CustDashWords;
+  readonly compare: CompareWords;
 }
 
 /** Any word of the Explorable, key by key: what a Slide says differently. */

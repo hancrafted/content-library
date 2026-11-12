@@ -76,6 +76,8 @@ export interface FloorProps {
   readonly open?: string | null;
   /** The card a tour caption points at. */
   readonly toured?: string;
+  /** The work centers picked for the compare stream. */
+  readonly picked?: readonly string[];
 }
 
 const labelOf = (words: Words, kind: 'role' | 'customer', title: string) =>
@@ -122,6 +124,7 @@ function StationCards(p: FloorProps) {
             words: p.words.card,
             open: p.open === c.id,
             toured: p.toured === c.id,
+            picked: p.picked?.includes(c.id),
           }}
         />
       ))}

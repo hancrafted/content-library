@@ -11,8 +11,8 @@ import type { RoleWords } from './software-ecology.types';
 /*
  * A work center's dashboard (design-ADR 0024 §17): a monitor with its traffic light, signals and three trends; only
  * the AI switch sits on it, the dials fold away in Settings, the queueing measures in "How it flows", and the role's
- * artefacts, tasks and what AI does there close it. `WorkCenterCard`'s `dashboard` view; the popover and, later, the
- * compare stream show it. Every change goes up through a callback.
+ * artefacts, tasks and what AI does there close it. `WorkCenterCard`'s `dashboard` view; the popover and the compare
+ * stream's columns show it. Every change goes up through a callback.
  */
 
 export interface WorkCenterDashboardProps {
@@ -48,7 +48,7 @@ function Head(p: WorkCenterDashboardProps) {
         <h3 id={p.titleId} className="m-0 text-body font-semibold">
           {p.title}
         </h3>
-        <p className="m-0 text-caption text-muted-foreground">{p.role.job}</p>
+        <p className={`${styles.dashJob} m-0 text-caption text-muted-foreground`}>{p.role.job}</p>
       </div>
       <span className={styles.light} data-level={p.r.light} role="img" aria-label={status} data-tip={w.lightTip}>
         <i data-l="red" />

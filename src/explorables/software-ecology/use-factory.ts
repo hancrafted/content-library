@@ -12,6 +12,7 @@ import type { PileStyle } from './paint-pile.ts';
 import { snapshotOf, snapshotWarm, type Snapshot } from './run-snapshot.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
+import { useRecolor } from './use-recolor.ts';
 import { useRun, type FactoryControls } from './use-run.ts';
 
 export type { FactoryControls };
@@ -66,8 +67,12 @@ interface Live {
   readonly pile: PileStyle;
   /** The dashboards on show, read with every readout. */
   readonly watch: readonly string[];
+  /** The work centers in the compare stream, read with every readout. */
+  readonly stream: readonly string[];
   /** Called after every frame's advance: a tour step stops here. */
   readonly onFrame?: (run: FactoryRun) => void;
+  /** Called after every painted frame: the compare stream draws its live parts here. */
+  readonly onDraw?: (run: FactoryRun, speed: number) => void;
 }
 
 /** Reads the run into React: the readouts, and the dashboards on show; charts only when asked. */
@@ -85,6 +90,19 @@ const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number 
   };
 };
 
+/** Paints one frame and lets the compare stream draw its live parts. */
+const show = (x: {
+  run: FactoryRun;
+  painter: FactoryPainter;
+  v: Painted;
+  live: Live;
+  reduced: boolean;
+  now: number;
+}) => {
+  paint({ v: x.v, painter: x.painter, at: drawAt(x.run, x) });
+  x.live.onDraw?.(x.run, x.live.speed);
+};
+
 /** Outside the active Slide or under reduced motion: one steady frame, warmed at once when it must be still. */
 function useStill(x: {
   run: FactoryRun;
@@ -100,7 +118,7 @@ function useStill(x: {
     if (playing) return;
     if (reduced || document.hidden) run.finishWarm();
     if (!run.warming) painter.attach();
-    paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
+    show({ run, painter, v, live: live.current, reduced, now: performance.now() });
     read(run);
   }, [playing, reduced, run, painter, v, live, read]);
 }
@@ -124,7 +142,7 @@ function useLoop(x: {
       last = now;
       if ((live.current.flowing || run.warming) && run.advance(dt, live.current.speed)) painter.attach();
       live.current.onFrame?.(run);
-      paint({ v, painter, at: drawAt(run, { live: live.current, reduced: false, now }) });
+      show({ run, painter, v, live: live.current, reduced: false, now });
       slow += dt;
       if (slow > READ_SECS) {
         slow = 0;
@@ -150,31 +168,37 @@ function useLive(now: Live): RefObject<Live> {
 function useReadouts(run: FactoryRun, live: RefObject<Live>, watchKey: string) {
   const [snap, setSnap] = useState(() => snapshotOf(run));
   const read = useCallback<Read>(
-    (r, charts = true) => setSnap((prev) => snapshotOf(r, { watch: live.current.watch, charts, prev })),
+    (r, charts = true) =>
+      setSnap((prev) => snapshotOf(r, { watch: live.current.watch, stream: live.current.stream, charts, prev })),
     [live],
   );
   useEffect(() => read(run), [read, run, watchKey]);
   return { snap, read };
 }
 
-export function useFactory(x: {
-  B: Bundle;
-  preset: string;
-  words: FactoryWords;
-  pile?: PileStyle;
+export interface FactoryOptions {
+  readonly B: Bundle;
+  readonly preset: string;
+  readonly words: FactoryWords;
+  readonly pile?: PileStyle;
   /** False in Swing and Roles: the model only finishes warming. */
-  flowing?: boolean;
+  readonly flowing?: boolean;
   /** Work centers (or `customer`) whose dashboards are on show. */
-  watch?: readonly string[];
-  onFrame?: (run: FactoryRun) => void;
-}): FactoryView {
+  readonly watch?: readonly string[];
+  /** Work centers in the compare stream. */
+  readonly stream?: readonly string[];
+  readonly onFrame?: (run: FactoryRun) => void;
+  /** After every painted frame: the compare stream draws its live parts. */
+  readonly onDraw?: (run: FactoryRun, speed: number) => void;
+}
+
+export function useFactory(x: FactoryOptions): FactoryView {
   const v = useViews(),
     { stage, canvas, floor } = v;
   const { playing, reduced } = usePlaying(stage);
   const { run, controls: base } = useRun({ B: x.B, preset: x.preset, reduced });
-  const watch = x.watch ?? NONE;
-  const live = useLive({ ...liveOf(x), speed: base.speed, watch });
-  const { snap, read } = useReadouts(run, live, watch.join());
+  const live = useLive({ ...liveOf(x), speed: base.speed });
+  const { snap, read } = useReadouts(run, live, `${x.watch?.join()}|${x.stream?.join()}`);
   const layout = useMemo(() => layoutFactory(run.m), [run]);
   const painter = useMemo(() => new FactoryPainter(run.m, layout), [run, layout]);
   const controls = withRead(base, () => read(run));
@@ -182,7 +206,7 @@ export function useFactory(x: {
   useLoop({ run, painter, v, live, playing, read });
   const repaint = useCallback(() => {
     if (!run.warming) painter.attach();
-    paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
+    show({ run, painter, v, live: live.current, reduced, now: performance.now() });
   }, [run, painter, v, reduced, live]);
   useRecolor(painter, repaint);
   return { run, layout, snap, stage, canvas, floor, controls, reduced, repaint };
@@ -190,16 +214,14 @@ export function useFactory(x: {
 
 const NONE: readonly string[] = [];
 
-const liveOf = (x: {
-  flowing?: boolean;
-  words: FactoryWords;
-  pile?: PileStyle;
-  onFrame?: (run: FactoryRun) => void;
-}) => ({
+const liveOf = (x: FactoryOptions) => ({
+  watch: x.watch ?? NONE,
+  stream: x.stream ?? NONE,
   flowing: x.flowing ?? true,
   words: x.words,
   pile: x.pile ?? 'heap',
   onFrame: x.onFrame,
+  onDraw: x.onDraw,
 });
 
 function useViews() {
@@ -217,19 +239,3 @@ const withRead = (base: FactoryControls, reread: () => void): FactoryControls =>
     reread();
   },
 });
-
-/** Re-reads the token colours when the theme flips, and repaints. */
-function useRecolor(painter: FactoryPainter, repaint: () => void) {
-  const again = useRef(repaint);
-  useEffect(() => {
-    again.current = repaint;
-  });
-  useEffect(() => {
-    const mo = new MutationObserver(() => {
-      painter.recolor();
-      again.current();
-    });
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => mo.disconnect();
-  }, [painter]);
-}

@@ -19,6 +19,8 @@ export interface TourPanelProps {
   readonly locale: Locale;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly wrap: RefObject<HTMLElement | null>;
+  /** The compare stream's columns, while it is shown. */
+  readonly stream?: string;
 }
 
 const runningText = (run: FactoryRun, t: Tour, words: Words): string | null => {
@@ -49,6 +51,7 @@ export function TourPanel(p: TourPanelProps) {
       card={tourCard(t)}
       floor={p.floor}
       wrap={p.wrap}
+      stream={p.stream}
       canBack={t.i > 0}
       last={t.i >= n - 1}
       onClose={p.tour.end}

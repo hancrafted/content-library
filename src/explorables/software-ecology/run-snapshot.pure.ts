@@ -3,6 +3,7 @@
  * every station, the Customer card, each belt's rates and rework lane, and the status line. Plain data, so React
  * redraws only the parts whose slice changed.
  */
+import { columnOf, type ColumnReadout } from './compare-stream.pure.ts';
 import {
   customerDashboardOf,
   dashboardOf,
@@ -36,10 +37,12 @@ export interface Snapshot {
   readonly customer: CustomerReadout & { readonly headroom: number };
   readonly belts: Readonly<Record<string, BeltReadout>>;
   readonly status: Status;
-  /** The dashboards on show (an open popover; later the compare stream), by work center. */
+  /** The dashboards on show (an open popover, the compare stream's columns), by work center. */
   readonly dashboards: Readonly<Record<string, DashboardReadout>>;
   /** The Customer's dashboard while it is open. */
   readonly customerDash: CustomerDashboard | null;
+  /** The compare stream's stations, by work center, while it is shown. */
+  readonly columns: Readonly<Record<string, ColumnReadout>>;
 }
 
 /** What else a read covers: the dashboards on show, and whether their charts are redrawn this time. */
@@ -48,6 +51,8 @@ export interface ReadOptions {
   /** Charts redraw at half the readouts' rate; otherwise the last read's trends stay. */
   readonly charts?: boolean;
   readonly prev?: Snapshot;
+  /** The work centers in the compare stream. */
+  readonly stream?: readonly string[];
 }
 
 /** The headroom from the expected flows, solved again only when the settings change (a control writes new ones). */
@@ -82,6 +87,14 @@ const dashboardsOf = (run: FactoryRun, o: ReadOptions): Snapshot['dashboards'] =
     }),
   );
 
+const columnsOf = (run: FactoryRun, ids: readonly string[] = []): Snapshot['columns'] =>
+  Object.fromEntries(
+    ids.flatMap((id) => {
+      const n = run.m.nodes.get(id);
+      return n && n.kind === 'role' ? [[id, columnOf(n)]] : [];
+    }),
+  );
+
 /** Warm-up progress in days, or null once the line runs. */
 export const snapshotWarm = (run: FactoryRun): Snapshot['warming'] =>
   run.warming ? { day: Math.floor(run.m.t * DAYS), of: WARM_WEEKS * DAYS } : null;
@@ -99,5 +112,6 @@ export const snapshotOf = (run: FactoryRun, o: ReadOptions = {}): Snapshot => {
     status: statusOf(m, { s, warming, dropped: run.dropped }),
     dashboards: dashboardsOf(run, o),
     customerDash: o.watch?.includes('customer') ? customerDashboardOf(m, { s, gain: solvedOf(run).gain }) : null,
+    columns: columnsOf(run, o.stream),
   };
 };

@@ -10,7 +10,7 @@ import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-cente
 /*
  * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the cartoon
  * (`swing`), the role (`role`), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
- * shows and, later, the compare stream. Every floor view keeps the card's id on its root, so the parent can morph one
+ * and the compare stream's columns show. Every floor view keeps the card's id on its root, so the parent can morph one
  * view's box into the next.
  */
 

@@ -323,3 +323,23 @@ custDash:
   times: '{k}× die Rate, für die Ideal bemessen ist.'
   gain: 'Folgeanfragen: etwa {g} neue Anfragen pro Anfrage{off}.'
   off: ' (Beschwerden sind in der Werkzeugleiste aus)'
+compare:
+  label: Arbeitsplätze vergleichen
+  button: Vergleichen
+  tip: 'Vergleichen: bis zu drei Arbeitsplätze wählen (oder mit Umschalt anklicken)'
+  slots: Gewählte Arbeitsplätze
+  remove: '{title} entfernen'
+  removeFrom: '{title} aus dem Vergleich entfernen'
+  show: Zeigen
+  exit: Beenden
+  pick: Klickt Arbeitsplätze auf der Linie an.
+  max: 'Höchstens drei: entfernt einen, indem Ihr seinen Platz anklickt.'
+  title: 'Vergleich · {n} Arbeitsplätze in Flussrichtung'
+  titleOne: 'Vergleich · 1 Arbeitsplatz in Flussrichtung'
+  exitStream: Vergleich beenden
+  strip: Überblick über die ganze Linie; die verglichenen Arbeitsplätze sind markiert
+  gap: '+{n} Stationen'
+  gapOne: '+1 Station'
+  gapLabel: '{n} Arbeitsplätze dazwischen'
+  aWeek: '{n} pro Woche'
+  note: '{waiting} warten · {weeks} Wochen Arbeit · {busy} % ausgelastet · {done} erledigt pro Woche'

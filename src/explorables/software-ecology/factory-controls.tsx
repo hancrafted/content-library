@@ -1,6 +1,7 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import type { ReactNode } from 'react';
+import type { CompareWidgetProps } from './compare-widget';
 import { aiChoicesOf, withMech, type AiChoice } from './factory-settings.pure.ts';
 import { FactoryToolbar, type Choice } from './factory-toolbar.client';
 import type { ModelMenuProps } from './model-menu';
@@ -12,7 +13,7 @@ import type { Display } from './use-display.ts';
 import type { FactoryView } from './use-factory.ts';
 
 /*
- * The toolbar wired to the run: the state row, the use case, mechanics, speed, the Model and the ⋮ menu. Every
+ * The toolbar wired to the run: the state row, the use case, mechanics, compare mode, speed, the Model and the ⋮ menu. Every
  * setting goes through the run's controls; the display choices through `Display`.
  */
 
@@ -38,6 +39,7 @@ export interface ControlsProps {
   readonly tourClock?: string;
   /** Clear ends a tour first. */
   readonly onClear: () => void;
+  readonly compare: CompareWidgetProps;
 }
 
 const clockOf = (snap: Snapshot, w: Words): string =>
@@ -99,6 +101,7 @@ export function Controls(p: ControlsProps) {
       onMech={(k) => c.setSettings(withMech(c.settings, k))}
       model={modelOf(p)}
       more={{ ...p.display, words: p.words.more }}
+      compare={p.compare}
     />
   );
 }

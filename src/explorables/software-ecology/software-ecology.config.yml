@@ -325,3 +325,23 @@ custDash:
   times: '{k}× the rate Ideal is sized for.'
   gain: 'Follow-ups: about {g} new requests per request{off}.'
   off: ' (complaints are off in the toolbar)'
+compare:
+  label: Compare work centers
+  button: Compare
+  tip: 'Compare: pick up to three work centers (or shift-click them)'
+  slots: Picked work centers
+  remove: 'Remove {title}'
+  removeFrom: 'Remove {title} from compare'
+  show: Show
+  exit: Exit
+  pick: Click work centers on the line.
+  max: 'Three at most: remove one by clicking its slot.'
+  title: 'Compare · {n} work centers in flow order'
+  titleOne: 'Compare · 1 work center in flow order'
+  exitStream: Exit compare
+  strip: Overview of the whole line; compared work centers are marked
+  gap: '+{n} stations'
+  gapOne: '+1 station'
+  gapLabel: '{n} work centers between'
+  aWeek: '{n} a week'
+  note: '{waiting} waiting · {weeks} weeks of work · busy {busy} % · {done} done a week'

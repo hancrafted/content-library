@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject } from 'react';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { BeltLabelsView, BeltsView } from './belts-view';
 import { Floor, type SpotProps } from './factory-floor';
 import type { Words } from './software-ecology-words.types';
@@ -11,7 +11,7 @@ import type { FactoryView } from './use-factory.ts';
 
 /*
  * The stage: the belts and their labels, the canvas the painter draws on, the floor of cards and, over it, the tour's
- * caption box. Rendered by the client parent.
+ * caption box; while the compare stream is shown, the stream in place of the floor. Rendered by the client parent.
  */
 
 function useStageParts(f: FactoryView, x: { w: WordsIn; words: Words }) {
@@ -44,14 +44,35 @@ export interface StageProps {
   readonly onCard: (id: string, shift: boolean) => void;
   /** The card a tour caption points at. */
   readonly toured?: string;
+  /** The work centers picked for the compare stream. */
+  readonly picked?: readonly string[];
+  /** The compare stream; while it is shown, the floor is hidden. */
+  readonly stream?: ReactNode;
   /** The tour's caption box, on the stage. */
   readonly overlay?: ReactNode;
 }
 
+/** Back from the compare stream, the hidden floor is placed and painted at once, also while the run is paused. */
+function useRepaintOnReturn(comparing: boolean, repaint: () => void) {
+  const was = useRef(comparing);
+  useLayoutEffect(() => {
+    if (was.current && !comparing) repaint();
+    was.current = comparing;
+  }, [comparing, repaint]);
+}
+
+const wrapAttrs = (p: StageProps, comparing: boolean) => ({
+  'data-view': p.view,
+  'data-compare': comparing,
+  'aria-label': p.words.stage.label,
+});
+
 export function Stage(p: StageProps) {
   const { cards, belts, retOn, labels } = useStageParts(p.f, p);
+  const comparing = !!p.stream;
+  useRepaintOnReturn(comparing, p.f.repaint);
   return (
-    <section ref={p.wrap} className={styles.viewWrap} data-view={p.view} aria-label={p.words.stage.label}>
+    <section ref={p.wrap} className={styles.viewWrap} {...wrapAttrs(p, comparing)}>
       <p className={`${styles.stageNote} text-caption`}>{p.words.stage.note}</p>
       <div
         ref={p.viewEl}
@@ -59,6 +80,7 @@ export function Stage(p: StageProps) {
         data-view={p.view}
         data-paused={p.f.controls.speed === 0}
         data-belts-move={p.beltMotion}
+        hidden={comparing}
       >
         <div ref={p.f.stage} className={styles.stage} {...p.spots.targets?.belts}>
           <BeltsView layout={p.f.layout} retOn={retOn} />
@@ -67,6 +89,7 @@ export function Stage(p: StageProps) {
         </div>
         <Floor {...p} cards={cards} belts={belts} />
       </div>
+      {p.stream}
       {p.overlay}
     </section>
   );

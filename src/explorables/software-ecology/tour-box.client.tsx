@@ -10,7 +10,7 @@ import { placeTour, type TourPlace } from './tour-placement.pure.ts';
  * The guided tour's caption box (design-ADR 0024 §10), as the reference build's `renderTour` draws it: the scenario's
  * name with its step and week, "Running to week 8…" while it runs, then the step's caption and its checks in plain
  * words, and Close, Back and Next (Finish on the last step). It sits on the stage at the step's card, below it or
- * above, and follows it on any resize.
+ * above, and follows it on any resize; while the compare stream is shown, at the card's column (`[data-col]`).
  */
 
 export interface TourCheckRow {
@@ -30,6 +30,8 @@ export interface TourBoxProps {
   readonly card?: string;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly wrap: RefObject<HTMLElement | null>;
+  /** Changes when the compare stream opens, closes or changes its columns, so the box finds its card again. */
+  readonly stream?: string;
   readonly canBack: boolean;
   readonly last: boolean;
   readonly onClose: () => void;
@@ -42,6 +44,13 @@ const rectOf = (el: Element): Rect => {
   return { left: r.left, top: r.top, width: r.width, height: r.height };
 };
 
+/** The card's column in the compare stream, else its card on the floor; none while it is not shown. */
+const cardOf = (id: string, x: { wrap: HTMLElement; floor: HTMLElement | null }): Rect | null => {
+  const el = x.wrap.querySelector(`[data-col="${id}"]`) ?? x.floor?.querySelector(`[data-id="${id}"]`);
+  const r = el ? rectOf(el) : null;
+  return r && r.width && r.height ? r : null;
+};
+
 function usePlace(p: TourBoxProps, box: RefObject<HTMLDivElement | null>) {
   const [place, setPlace] = useState<TourPlace | null>(null);
   useLayoutEffect(() => {
@@ -49,15 +58,15 @@ function usePlace(p: TourBoxProps, box: RefObject<HTMLDivElement | null>) {
       wrap = p.wrap.current;
     if (!el || !wrap) return;
     const again = () => {
-      const card = p.card ? p.floor.current?.querySelector(`[data-id="${p.card}"]`) : null;
-      setPlace(placeTour({ card: card ? rectOf(card) : null, wrap: rectOf(wrap), box: { height: el.offsetHeight } }));
+      const card = p.card ? cardOf(p.card, { wrap, floor: p.floor.current }) : null;
+      setPlace(placeTour({ card, wrap: rectOf(wrap), box: { height: el.offsetHeight } }));
     };
     again();
     const ro = new ResizeObserver(again);
     ro.observe(el);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [p.card, p.floor, p.wrap, box]);
+  }, [p.card, p.floor, p.wrap, p.stream, box]);
   return place;
 }
 

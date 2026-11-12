@@ -2,11 +2,13 @@
 
 import { useTheme } from '@/shared/hooks/use-theme';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
-import { useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useCallback, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { drawCompare } from './compare-live.ts';
+import { cardClick, compareWidgetOf, Stream, useWatch } from './compare-wiring';
 import { DockView } from './dock-view';
 import { Controls } from './factory-controls';
 import { type Spots } from './factory-floor';
-import { presetOf } from './factory-run.pure.ts';
+import { presetOf, type FactoryRun } from './factory-run.pure.ts';
 import { Stage } from './factory-stage';
 import { tourCard } from './factory-tour.pure.ts';
 import { OpenDashboard } from './open-dashboard';
@@ -14,9 +16,10 @@ import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import { LegendView, StatusLineView } from './stage-foot-view';
-import { TourPanel, tourClockText } from './tour-panel';
+import { tourClockText, TourPanel } from './tour-panel';
 import { scenarioWords, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
+import { useCompare } from './use-compare.ts';
 import { useDashboard } from './use-dashboard.ts';
 import { useDisplay } from './use-display.ts';
 import { useFactory, type FactoryView } from './use-factory.ts';
@@ -131,6 +134,7 @@ function Toolbar(t: {
       onClear={t.h.onClear}
       statesTarget={p.targets?.states}
       statesMarker={p.markers?.states}
+      compare={compareWidgetOf({ ...x, words: p.words, f: t.f, titles: words.titles })}
       {...tourRowOf(t)}
     />
   );
@@ -142,8 +146,12 @@ function useParts(p: SoftwareEcologyClientProps) {
   const [chosen, setChosen] = useState<ViewId>(() => viewOf(B, p.preset));
   const view: ViewId = chosen === 'swing' && !B.data.panels ? 'roles' : chosen;
   const wrap = useRef<HTMLElement>(null),
-    viewEl = useRef<HTMLDivElement>(null);
+    viewEl = useRef<HTMLDivElement>(null),
+    streamRoot = useRef<HTMLElement>(null);
   return {
+    bundleOf: (id: string) => p.bundles.find((b) => b.data.id === id) ?? B,
+    streamRoot,
+    compare: useCompare(presetOf(B, p.preset).compare),
     useCase,
     setUseCase,
     B,
@@ -156,8 +164,6 @@ function useParts(p: SoftwareEcologyClientProps) {
   };
 }
 
-const watchOf = (x: Parts) => ({ watch: x.dash.watch, pile: x.display.pile });
-
 const stageOf = (x: Parts) => ({
   view: x.view,
   viewEl: x.viewEl,
@@ -168,38 +174,46 @@ const stageOf = (x: Parts) => ({
 
 /** What the toolbar and the cards do: a state, a tour, a use case, Clear and a card click. */
 function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
-  const { B, dash, view } = x;
+  const { B, dash, view, compare } = x;
   const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
+  // a state applies its own `compare`: a preset like AI compare opens the stream directly
+  const apply = (bundle: typeof B, id: string) => compare.reset(presetOf(bundle, id).compare);
   return {
     onPreset: (id: string) => {
       dash.dismiss();
       tour.end();
       show(viewOf(B, id));
+      apply(B, id);
       f.controls.setPreset(id);
     },
     onTour: () => {
       const id = f.controls.preset;
       dash.dismiss();
       show(viewOf(B, id));
+      apply(B, id);
       tour.start(id);
     },
-    onUseCase: (id: string) => (dash.dismiss(), tour.end(), x.setUseCase(id)),
+    onUseCase: (id: string) => (dash.dismiss(), tour.end(), apply(x.bundleOf(id), f.controls.preset), x.setUseCase(id)),
     onClear: () => (tour.end(), f.controls.clear()),
-    // a card in Swing or Roles opens the factory; in the factory it opens or closes its dashboard (shift: #544)
-    onCard: (id: string) => (view === 'factory' ? dash.toggle(id) : show('factory')),
+    onCard: cardClick(x, { f, show }),
   };
 }
 
 /** The factory's run and its tour, in step: the tour pauses the run's frames on each step's week. */
 function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices) {
-  const ts = useTourState();
+  const ts = useTourState(),
+    root = x.streamRoot;
+  const onDraw = useCallback((run: FactoryRun, speed: number) => drawCompare(root.current, run, speed), [root]);
   const f = useFactory({
     B: x.B,
     preset: p.preset,
     words: words.fw,
     flowing: x.view === 'factory',
     onFrame: ts.onFrame,
-    ...watchOf(x),
+    onDraw,
+    watch: useWatch(x.dash, x.compare),
+    stream: x.compare.stream,
+    pile: x.display.pile,
   });
   return { f, tour: useTour(x.B, f, ts) };
 }
@@ -221,8 +235,10 @@ export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
         spots={p}
         {...stageOf(x)}
         onCard={h.onCard}
+        picked={x.compare.state.open ? undefined : x.compare.state.ids}
         toured={tour.tour ? tourCard(tour.tour) : undefined}
-        overlay={<TourPanel tour={tour} {...t} floor={f.floor} wrap={x.wrap} />}
+        stream={x.compare.stream.length ? <Stream words={p.words} x={x} f={f} w={words.w} /> : undefined}
+        overlay={<TourPanel tour={tour} {...t} floor={f.floor} wrap={x.wrap} stream={x.compare.stream.join()} />}
       />
       <OpenDashboard f={f} dash={x.dash} words={p.words} w={words.w} wrap={x.wrap} />
       <Below f={f} words={p.words} titles={words.titles} />

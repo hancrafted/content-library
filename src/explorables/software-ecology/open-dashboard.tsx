@@ -45,7 +45,10 @@ function CustomerPanel(p: OpenDashboardProps & { titleId: string }) {
   );
 }
 
-function CenterPanel(p: OpenDashboardProps & { id: string; titleId: string }) {
+/** A work center's dashboard: in the popover with its close button, in a compare column without (`closable` false). */
+export function CenterPanel(
+  p: Pick<OpenDashboardProps, 'f' | 'dash' | 'words' | 'w'> & { id: string; titleId?: string; closable?: boolean },
+) {
   const r = p.f.snap.dashboards[p.id],
     n = p.f.run.m.nodes.get(p.id),
     c = p.f.controls;
@@ -65,7 +68,7 @@ function CenterPanel(p: OpenDashboardProps & { id: string; titleId: string }) {
         onDial: (k: DialKey, v: number) => c.setSettings(withOver(c.settings, p.id, { [k]: v })),
         onAi: (on) => c.setSettings(withOver(c.settings, p.id, { ai: on })),
         onHelp: p.dash.toggleHelp,
-        onClose: p.dash.close,
+        onClose: p.closable === false ? undefined : p.dash.close,
       }}
     />
   );

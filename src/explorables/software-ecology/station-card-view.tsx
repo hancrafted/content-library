@@ -46,6 +46,8 @@ export interface StationCardProps {
   readonly open?: boolean;
   /** A tour caption points at it. */
   readonly toured?: boolean;
+  /** Picked for the compare stream. */
+  readonly picked?: boolean;
 }
 
 function Status({ r, words }: Pick<StationCardProps, 'r' | 'words'>) {
@@ -137,6 +139,7 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       {...openerProps(p.label, p.open, p.toured)}
       data-ai={p.r.ai}
       data-piling={p.r.piling}
+      data-picked={p.picked || undefined}
       style={boxStyle(p.box)}
       {...p.targets?.card}
     >

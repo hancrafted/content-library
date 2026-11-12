@@ -1734,3 +1734,255 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ---------- #544: compare mode and the compare stream, as the reference build's `.slots` and `.compare` ---------- */
+.card[data-picked='true'] {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--fg-25);
+}
+.slots {
+  display: inline-flex;
+  gap: 4px;
+}
+.slot {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--foreground);
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  padding: 0;
+}
+.slot .gly {
+  width: 18px;
+  height: 18px;
+}
+.slotEmpty {
+  border: 1px dashed var(--fg-25);
+  cursor: default;
+}
+.cmpNote {
+  color: var(--warning);
+  padding: 0 6px;
+}
+.cmpNote:empty {
+  display: none;
+}
+/* the stream replaces the floor; the stage grows to hold its columns */
+.viewWrap[data-compare='true'] {
+  height: auto;
+  min-height: 0;
+}
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cmpTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.strip {
+  width: 100%;
+  height: 170px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.stripBelt {
+  fill: none;
+  stroke: var(--rail);
+  stroke-width: 8;
+  stroke-linejoin: round;
+}
+.stripN rect {
+  fill: var(--card);
+  stroke: var(--fg-25);
+  stroke-width: 2;
+}
+.stripN[data-on='true'] rect {
+  stroke: var(--foreground);
+  stroke-width: 6;
+}
+.stripN[data-hot='true'] rect {
+  fill: var(--warn-15);
+  stroke: var(--warning);
+}
+.stripN text {
+  fill: var(--foreground);
+}
+.cmpCols {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.ccol {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 44px;
+  gap: 4px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  flex: none;
+  width: 54px;
+}
+.gapBelt {
+  width: 96px;
+  padding-top: 34px;
+}
+.gbelt {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--belt);
+  border-top: 3px solid var(--rail);
+  border-bottom: 3px solid var(--rail);
+  overflow: hidden;
+}
+.gbelt > i {
+  position: absolute;
+  top: 50%;
+  translate: -50% -50%;
+  width: 13px;
+  height: 15px;
+  background: center / contain no-repeat;
+}
+.gapRate {
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+.gapL {
+  white-space: normal;
+  text-align: center;
+}
+.gapArrow {
+  width: 14px;
+  height: 14px;
+}
+.colDash {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.colDash .dashHead {
+  flex-wrap: wrap;
+}
+.colDash .dashT {
+  min-width: 9rem;
+}
+.colDash .dashJob {
+  display: none;
+}
+.cs {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.csHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.csSigns {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.csLine {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  height: 44px;
+  background: var(--belt);
+  border-top: 3px solid var(--rail);
+  border-bottom: 3px solid var(--rail);
+}
+.csQueue {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 2px;
+  padding: 0 6px;
+  overflow: hidden;
+  align-items: center;
+}
+.csQueue .docicon {
+  width: 15px;
+  height: 17px;
+  flex: none;
+}
+.csQueue b {
+  color: var(--muted-foreground);
+}
+.csBox {
+  position: relative;
+  height: 54px;
+  border: 1.5px solid var(--fg-25);
+  border-radius: 8px;
+  background: var(--card);
+  display: grid;
+  place-items: center;
+}
+.ring {
+  --p: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--foreground) calc(var(--p) * 1turn), var(--fg-12) 0);
+  position: relative;
+  visibility: hidden;
+}
+.ring::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--card);
+}
+.ring[data-ai='true'] {
+  background: conic-gradient(var(--ai) calc(var(--p) * 1turn), var(--fg-12) 0);
+}
+.dchip {
+  display: inline-block;
+  width: 15px;
+  height: 17px;
+  flex: none;
+  background: center / contain no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.csNote {
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 760px) {
+  .cmpCols {
+    flex-direction: column;
+  }
+  .gap {
+    flex-direction: row;
+    width: auto;
+    padding: 0;
+  }
+}

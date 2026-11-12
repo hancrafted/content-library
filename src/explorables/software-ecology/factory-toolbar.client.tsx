@@ -3,6 +3,7 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, useState, type ReactNode } from 'react';
+import { CompareWidget, type CompareWidgetProps } from './compare-widget';
 import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
 import { ModelMenu, type ModelMenuProps } from './model-menu';
@@ -47,6 +48,8 @@ export interface ToolbarProps {
   readonly onMech: (k: Mechanic) => void;
   readonly model: ModelMenuProps;
   readonly more: MoreMenuProps;
+  /** Compare mode: the toggle, the picked slots, Show and Exit. */
+  readonly compare: CompareWidgetProps;
 }
 
 const MECHS: readonly Mechanic[] = ['rework', 'churn', 'complaints'];
@@ -200,8 +203,8 @@ function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'> & { open: MenuI
 }
 
 /**
- * The toolbar (design-ADR 0024 §16): the states, the Scenarios menu, Tour and the use case; what bad work does downstream, speed, Clear and the
- * day clock, the Model menu and the ⋮ menu.
+ * The toolbar (design-ADR 0024 §16): the states, the Scenarios menu, Tour and the use case; what bad work does downstream,
+ * compare mode, speed, Clear and the day clock, the Model menu and the ⋮ menu.
  */
 export function FactoryToolbar(p: ToolbarProps) {
   // the Scenarios, Model and ⋮ menus: one open at a time
@@ -215,6 +218,7 @@ export function FactoryToolbar(p: ToolbarProps) {
       </div>
       <div className={`${styles.tbRow} ${styles.tbTools}`}>
         <Mechs {...p} />
+        <CompareWidget {...p.compare} />
         <Speed {...p} />
         <Menus {...p} open={open} opener={opener} />
       </div>
