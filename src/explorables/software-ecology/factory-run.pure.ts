@@ -4,6 +4,7 @@
  * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
+import type { Values } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
@@ -53,12 +54,21 @@ export interface RunOptions {
   readonly s?: Settings;
 }
 
+/** A tour step's sample steps (the judge's `sampleSteps`), the measures it reads and the readings taken so far. */
+export interface Sampling {
+  readonly at: readonly number[];
+  readonly keys: readonly string[];
+  readonly got: Values[];
+}
+
 export class FactoryRun {
   readonly preset: Preset;
   warmLeft = 0;
   dropped = 0;
   /** A tour step's model step: time never runs past it (the page and the headless runner stop on the same step). */
   stopAt: number | null = null;
+  /** A tour step's readings: time stops on each of its sample steps to read them, as the headless judge does. */
+  sampling: Sampling | null = null;
   private acc = 0;
   private readonly f: FactoryHandle;
   private readonly bundle: Bundle;
@@ -136,7 +146,15 @@ export class FactoryRun {
   }
 
   private steps(n: number) {
-    if (n > 0) this.f.step(n * DTW);
+    let left = n;
+    const s = this.sampling;
+    for (let next = s?.at[s.got.length]; s && next !== undefined && next <= this.k + left; next = s.at[s.got.length]) {
+      const by = Math.max(0, next - this.k);
+      if (by) this.f.step(by * DTW);
+      left -= by;
+      s.got.push({ ...this.f.read({ measures: s.keys }).measures });
+    }
+    if (left > 0) this.f.step(left * DTW);
   }
 
   /** Warms the rest at once. */
