@@ -57,16 +57,16 @@ export interface Exchange {
   readonly state: Doc;
 }
 
-/** An exchange file, split into its use case, its words per locale and its saved state, or its problems. */
+/** An exchange file, split into its use case, its words per locale and its saved state; its problems; or why it is no YAML. */
 export const readExchange = (
   text: string,
   catalog: readonly string[],
-): { readonly ok: Exchange } | { readonly problems: readonly string[] } => {
+): { readonly ok: Exchange } | { readonly problems: readonly string[] } | { readonly unread: string } => {
   let doc: unknown;
   try {
     doc = read(text);
   } catch (e) {
-    return { problems: [`The file is not YAML: ${(e as Error).message.split('\n')[0]}`] };
+    return { unread: (e as Error).message.split('\n')[0] ?? '' };
   }
   const r = exchangeSchema(catalog).safeParse(doc);
   if (!r.success) return { problems: r.error.issues.map((i) => i.message) };

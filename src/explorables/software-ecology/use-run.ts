@@ -23,6 +23,8 @@ export interface FactoryControls {
   readonly modified: boolean;
   /** Shows a run made elsewhere: a tour's start, or its Back. */
   adopt(run: FactoryRun): void;
+  /** A new run from an uploaded file: its use case, its state, the settings and speed it was saved at. */
+  load(B: Bundle, x: { readonly preset: string; readonly s: Settings; readonly speed: number }): void;
 }
 
 interface RunState {
@@ -50,6 +52,15 @@ interface Setters {
   readonly reduced: boolean;
 }
 
+/** A run from an uploaded file, at the speed it was saved at. */
+const loadWith =
+  (x: Setters): FactoryControls['load'] =>
+  (B, o) => {
+    x.setModified(false);
+    x.setSpeed(o.speed);
+    x.setSt(fresh(B, o.preset, { s: o.s }));
+  };
+
 const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls => {
   const { run, B } = cur;
   return {
@@ -75,6 +86,7 @@ const controlsOf = (cur: RunState, speed: number, x: Setters): FactoryControls =
       x.setModified(false);
       x.setSt({ B, run: next });
     },
+    load: loadWith(x),
   };
 };
 

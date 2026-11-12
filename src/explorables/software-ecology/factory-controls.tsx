@@ -2,6 +2,7 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import type { ReactNode } from 'react';
 import type { CompareWidgetProps } from './compare-widget';
+import type { ExchangeButtonsProps } from './exchange-buttons';
 import { aiChoicesOf, withMech, type AiChoice } from './factory-settings.pure.ts';
 import { FactoryToolbar, type Choice } from './factory-toolbar.client';
 import type { ModelMenuProps } from './model-menu';
@@ -40,6 +41,7 @@ export interface ControlsProps {
   /** Clear ends a tour first. */
   readonly onClear: () => void;
   readonly compare: CompareWidgetProps;
+  readonly exchange: ExchangeButtonsProps;
 }
 
 const clockOf = (snap: Snapshot, w: Words): string =>
@@ -102,6 +104,7 @@ export function Controls(p: ControlsProps) {
       model={modelOf(p)}
       more={{ ...p.display, words: p.words.more }}
       compare={p.compare}
+      exchange={p.exchange}
     />
   );
 }

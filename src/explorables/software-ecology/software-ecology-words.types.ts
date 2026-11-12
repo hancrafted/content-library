@@ -3,10 +3,12 @@
  * slices each part receives. A Slide overrides any of them through the server entry's `words` prop.
  */
 import type { CompareWords } from './compare-words.types';
+import type { ExchangeWords } from './exchange-words.types';
 import type { ToolbarWords } from './toolbar-words.types';
 import type { TourWords } from './tour-words.types';
 
 export type { CompareWords } from './compare-words.types';
+export type { ExchangeWords } from './exchange-words.types';
 export type { ToolbarWords } from './toolbar-words.types';
 export type { TourCheckWords, TourWords } from './tour-words.types';
 
@@ -229,6 +231,7 @@ export interface Words {
   readonly dash: DashWords;
   readonly custDash: CustDashWords;
   readonly compare: CompareWords;
+  readonly exchange: ExchangeWords;
 }
 
 /** Any word of the Explorable, key by key: what a Slide says differently. */

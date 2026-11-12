@@ -13,6 +13,8 @@ import { presetName, scenarioWords, titlesOf, useCaseName, type WordsIn } from '
 import type { FactoryWords } from './use-factory.ts';
 
 /** The states on the toolbar's row; the Scenarios menu holds the rest. */
+const BUILT_IN = 'built in';
+
 export const MAIN_STATES = ['swing', 'roles', 'ideal', 'realistic'];
 
 export interface ChoicesIn {
@@ -50,8 +52,13 @@ export function useChoices(p: ChoicesIn, B: Bundle) {
     [p.words.stage],
   );
   const useCases = useMemo<Choice[]>(
-    () => p.bundles.map((b) => ({ id: b.data.id, name: useCaseName({ ...w, B: b }) })),
-    [p.bundles, w],
+    () =>
+      p.bundles.map((b) => ({
+        id: b.data.id,
+        // an uploaded use case says so, as the reference build's picker does
+        name: useCaseName({ ...w, B: b }) + (b.source === BUILT_IN ? '' : ` ${p.words.toolbar.fromFile}`),
+      })),
+    [p.bundles, w, p.words.toolbar.fromFile],
   );
   return { w, fw, ...useStates(B, w), useCases, titles: useMemo(() => titlesOf(w), [w]) };
 }

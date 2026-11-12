@@ -91,6 +91,9 @@ export function Stage(p: StageProps) {
       </div>
       {p.stream}
       {p.overlay}
+      <div className={`${styles.dropHint} font-semibold`} aria-hidden="true">
+        {p.words.exchange.drop}
+      </div>
     </section>
   );
 }

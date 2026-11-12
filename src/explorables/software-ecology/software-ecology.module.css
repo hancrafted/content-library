@@ -1987,6 +1987,39 @@
   }
 }
 
+/* ---------- Download YAML and Upload: the message under the toolbar, the drop hint over the stage ---------- */
+.ioMsg {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px 14px;
+  overflow-wrap: anywhere;
+}
+.ioMsg[data-bad='true'] {
+  border-left-color: var(--destructive);
+}
+.ioMsg[hidden] {
+  display: none;
+}
+.ioMsg ul {
+  margin: 6px 0 0 18px;
+  list-style: disc;
+}
+.dropHint {
+  display: none;
+}
+.root[data-dropping='true'] .dropHint {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  border: 2px dashed var(--foreground);
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--background) 85%, transparent);
+}
+
 /*
  * A phone shrinks the Swing and Roles cells below one long word ("Documentation", "acceptance"): the words then break
  * inside their card instead of pushing the page wider than the viewport. At desktop widths every word fits, unchanged.

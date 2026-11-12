@@ -5,7 +5,7 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { useCallback, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { drawCompare } from './compare-live.ts';
 import { cardClick, compareWidgetOf, Stream, useWatch } from './compare-wiring';
-import { DockView } from './dock-view';
+import { ExchangeMessageView, useExchangeWiring, useUploads } from './exchange-wiring';
 import { Controls } from './factory-controls';
 import { type Spots } from './factory-floor';
 import { presetOf, type FactoryRun } from './factory-run.pure.ts';
@@ -15,13 +15,14 @@ import { OpenDashboard } from './open-dashboard';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
-import { LegendView, StatusLineView } from './stage-foot-view';
+import { BelowView } from './stage-foot-view';
 import { tourClockText, TourPanel } from './tour-panel';
-import { scenarioWords, useCaseSub } from './use-case-words.pure.ts';
+import { scenarioWords, useCaseName, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
 import { useCompare } from './use-compare.ts';
 import { useDashboard } from './use-dashboard.ts';
 import { useDisplay } from './use-display.ts';
+import type { ExchangeActions } from './use-exchange.ts';
 import { useFactory, type FactoryView } from './use-factory.ts';
 import { useMorph } from './use-morph.ts';
 import { useTour, useTourState, type TourActions } from './use-tour.ts';
@@ -39,7 +40,8 @@ export interface SoftwareEcologyClientProps {
   readonly preset: string;
   readonly locale: Locale;
   readonly words: Words;
-  readonly catalog: CatalogWords;
+  /** The role catalog's words in both locales: the page's own, and every language the exchange file carries. */
+  readonly catalogs: Readonly<Record<Locale, CatalogWords>>;
   readonly targets?: Spots<TargetProps>;
   readonly markers?: Spots<ReactNode>;
 }
@@ -49,20 +51,6 @@ const viewOf = (B: Bundle, preset: string): ViewId => {
   const v = presetOf(B, preset).view ?? 'factory';
   return v === 'swing' && !B.data.panels ? 'roles' : v;
 };
-
-function Below({ f, words, titles }: { f: FactoryView; words: Words; titles: Readonly<Record<string, string>> }) {
-  return (
-    <>
-      <div className={styles.foot}>
-        <StatusLineView status={f.snap.status} words={words.stage.status} titles={titles} />
-        <LegendView words={words.stage.legend} />
-      </div>
-      <div className={styles.below}>
-        <DockView r={f.snap.customer} words={words.dock} />
-      </div>
-    </>
-  );
-}
 
 /** The morph from one view into the next: the boxes are read before the switch, played after it. */
 function useShow(x: {
@@ -90,15 +78,19 @@ const scenarioSpots = (markers: Spots<ReactNode> | undefined): Spots<ReactNode> 
 
 type Handlers = ReturnType<typeof useHandlers>;
 
+/** What the toolbar is wired to: the parent's parts, the run, the choices, the tour, the handlers and the exchange file. */
+interface ToolbarIn {
+  readonly p: SoftwareEcologyClientProps;
+  readonly x: Parts;
+  readonly f: FactoryView;
+  readonly words: Choices;
+  readonly tour: TourActions;
+  readonly h: Handlers;
+  readonly io: ExchangeActions;
+}
+
 /** The state row's Scenarios menu, Tour and watch line, and the tour's clock. */
-const tourRowOf = (t: {
-  p: SoftwareEcologyClientProps;
-  x: Parts;
-  f: FactoryView;
-  words: Choices;
-  tour: TourActions;
-  h: Handlers;
-}) => {
+const tourRowOf = (t: ToolbarIn) => {
   const preset = t.f.controls.preset;
   return {
     scenarios: t.words.scenarios,
@@ -109,14 +101,7 @@ const tourRowOf = (t: {
   };
 };
 
-function Toolbar(t: {
-  p: SoftwareEcologyClientProps;
-  x: Parts;
-  f: FactoryView;
-  words: Choices;
-  tour: TourActions;
-  h: Handlers;
-}) {
+function Toolbar(t: ToolbarIn) {
   const { p, x, words } = t;
   return (
     <Controls
@@ -135,6 +120,7 @@ function Toolbar(t: {
       statesTarget={p.targets?.states}
       statesMarker={p.markers?.states}
       compare={compareWidgetOf({ ...x, words: p.words, f: t.f, titles: words.titles })}
+      exchange={{ words: p.words.exchange, onDownload: t.io.download, onFile: t.io.upload }}
       {...tourRowOf(t)}
     />
   );
@@ -142,14 +128,17 @@ function Toolbar(t: {
 
 function useParts(p: SoftwareEcologyClientProps) {
   const [useCase, setUseCase] = useState(p.useCase);
-  const B = p.bundles.find((b) => b.data.id === useCase) ?? (p.bundles[0] as Bundle);
+  const uploads = useUploads(p.bundles),
+    { bundles } = uploads;
+  const B = bundles.find((b) => b.data.id === useCase) ?? (bundles[0] as Bundle);
   const [chosen, setChosen] = useState<ViewId>(() => viewOf(B, p.preset));
   const view: ViewId = chosen === 'swing' && !B.data.panels ? 'roles' : chosen;
   const wrap = useRef<HTMLElement>(null),
     viewEl = useRef<HTMLDivElement>(null),
     streamRoot = useRef<HTMLElement>(null);
   return {
-    bundleOf: (id: string) => p.bundles.find((b) => b.data.id === id) ?? B,
+    uploads,
+    bundleOf: (id: string) => bundles.find((b) => b.data.id === id) ?? B,
     streamRoot,
     compare: useCompare(presetOf(B, p.preset).compare),
     useCase,
@@ -221,13 +210,15 @@ function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices)
 /** The software ecology factory with its toolbar, stage, dashboards, tour, status line, legend and At the Customer panel. */
 export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
   const x = useParts(p),
-    words = useChoices(p, x.B);
+    words = useChoices({ ...p, bundles: x.uploads.bundles, catalog: p.catalogs[p.locale] }, x.B);
   const { f, tour } = useFactoryTour(p, x, words);
   const h = useHandlers(x, f, tour);
+  const io = useExchangeWiring(x, { f, tour, p, name: useCaseName(words.w) });
   const t = { words: p.words, w: words.w, titles: words.titles, locale: p.locale };
   return (
-    <div className={styles.root}>
-      <Toolbar p={p} x={x} f={f} words={words} tour={tour} h={h} />
+    <div className={styles.root} data-dropping={io.dropping}>
+      <Toolbar p={p} x={x} f={f} words={words} tour={tour} h={h} io={io} />
+      <ExchangeMessageView message={io.message} />
       <Stage
         f={f}
         words={p.words}
@@ -241,7 +232,7 @@ export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
         overlay={<TourPanel tour={tour} {...t} floor={f.floor} wrap={x.wrap} stream={x.compare.stream.join()} />}
       />
       <OpenDashboard f={f} dash={x.dash} words={p.words} w={words.w} wrap={x.wrap} />
-      <Below f={f} words={p.words} titles={words.titles} />
+      <BelowView snap={f.snap} words={p.words} titles={words.titles} />
     </div>
   );
 }

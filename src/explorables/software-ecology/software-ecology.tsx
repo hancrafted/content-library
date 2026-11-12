@@ -42,7 +42,7 @@ export function SoftwareEcology({
         preset={preset}
         locale={lc}
         words={wordsFor(lc, words)}
-        catalog={catalogWordsFor(lc)}
+        catalogs={{ en: catalogWordsFor('en'), de: catalogWordsFor('de') }}
         targets={targets}
         markers={markers}
       />

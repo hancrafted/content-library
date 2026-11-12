@@ -345,3 +345,17 @@ compare:
   gapLabel: '{n} work centers between'
   aWeek: '{n} a week'
   note: '{waiting} waiting · {weeks} weeks of work · busy {busy} % · {done} done a week'
+# Download YAML and Upload: the exchange file's buttons, the drop hint and the message under the toolbar.
+exchange:
+  download: Download YAML
+  downloadTip: Download the current state as one YAML file
+  upload: Upload
+  uploadTip: Load a YAML file (or drop it anywhere on the page)
+  drop: Drop a YAML file to run the factory from it
+  downloaded: 'Downloaded {file}: the current state of {name}. Edit it and drop it back here.'
+  unread: 'Could not read {file}: {reason}'
+  broken: '{file} was not loaded. Fix these and drop it again:'
+  unstable: '{file} was not loaded: at Realistic some work would pile up without end.'
+  loaded: 'Loaded {file}: {centers} work centers and the Customer, {belts} belts from their spawn rules. The factory now runs from this file.'
+  rush: ' Note: if every work center rushed (3+ weeks of work waiting), {who} would be over capacity.'
+  worst: ' If every inspection also passed bad work unread: {who}.'

@@ -343,3 +343,17 @@ compare:
   gapLabel: '{n} Arbeitsplätze dazwischen'
   aWeek: '{n} pro Woche'
   note: '{waiting} warten · {weeks} Wochen Arbeit · {busy} % ausgelastet · {done} erledigt pro Woche'
+# YAML herunterladen und Hochladen: die Knöpfe der Austauschdatei, der Hinweis beim Ablegen und die Meldung unter der Werkzeugleiste.
+exchange:
+  download: YAML herunterladen
+  downloadTip: Den aktuellen Zustand als eine YAML-Datei herunterladen
+  upload: Hochladen
+  uploadTip: Eine YAML-Datei laden (oder irgendwo auf der Seite ablegen)
+  drop: Legt eine YAML-Datei ab, um die Fabrik damit laufen zu lassen
+  downloaded: '{file} heruntergeladen: der aktuelle Zustand von {name}. Bearbeitet sie und legt sie hier wieder ab.'
+  unread: '{file} ließ sich nicht lesen: {reason}'
+  broken: '{file} wurde nicht geladen. Behebt diese Punkte und legt die Datei erneut ab:'
+  unstable: '{file} wurde nicht geladen: Bei Realistisch würde sich Arbeit ohne Ende stauen.'
+  loaded: '{file} geladen: {centers} Arbeitsplätze und der Kunde, {belts} Bänder aus ihren Regeln. Die Fabrik läuft jetzt mit dieser Datei.'
+  rush: ' Hinweis: Wenn jeder Arbeitsplatz hetzte (3+ Wochen Arbeit wartend), wären {who} überlastet.'
+  worst: ' Wenn außerdem jede Prüfung schlechte Arbeit ungelesen durchwinkte: {who}.'

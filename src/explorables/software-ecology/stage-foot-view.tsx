@@ -1,8 +1,10 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { Fragment, memo, type ReactNode } from 'react';
 import { DocGlyph } from './doc-glyph-view';
+import { DockView } from './dock-view';
 import { WARM_WEEKS } from './factory-dials.pure.ts';
-import type { LegendWords, StatusWords } from './software-ecology-words.types';
+import type { Snapshot } from './run-snapshot.pure.ts';
+import type { LegendWords, StatusWords, Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Status } from './stage-readouts.pure.ts';
 
@@ -100,5 +102,24 @@ export function LegendView({ words: w }: { readonly words: LegendWords }) {
       <span>{w.merged}</span>
       <span>{w.handoff}</span>
     </div>
+  );
+}
+
+/** Under the stage: the status line and the legend, then the At the Customer panel. */
+export function BelowView(p: {
+  readonly snap: Snapshot;
+  readonly words: Words;
+  readonly titles: Readonly<Record<string, string>>;
+}) {
+  return (
+    <>
+      <div className={styles.foot}>
+        <StatusLineView status={p.snap.status} words={p.words.stage.status} titles={p.titles} />
+        <LegendView words={p.words.stage.legend} />
+      </div>
+      <div className={styles.below}>
+        <DockView r={p.snap.customer} words={p.words.dock} />
+      </div>
+    </>
   );
 }

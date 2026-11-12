@@ -4,6 +4,7 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, useState, type ReactNode } from 'react';
 import { CompareWidget, type CompareWidgetProps } from './compare-widget';
+import { ExchangeButtons, type ExchangeButtonsProps } from './exchange-buttons';
 import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
 import { ModelMenu, type ModelMenuProps } from './model-menu';
@@ -50,6 +51,8 @@ export interface ToolbarProps {
   readonly more: MoreMenuProps;
   /** Compare mode: the toggle, the picked slots, Show and Exit. */
   readonly compare: CompareWidgetProps;
+  /** Download YAML and Upload. */
+  readonly exchange: ExchangeButtonsProps;
 }
 
 const MECHS: readonly Mechanic[] = ['rework', 'churn', 'complaints'];
@@ -171,8 +174,8 @@ function Mechs(p: Pick<ToolbarProps, 'words' | 'mech' | 'onMech'>) {
 /** A close never undoes the other menu's open: the outside click that opens one closes only the other. */
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
 
-/** The Model and ⋮ menus. */
-function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'> & { open: MenuId; opener: Opener }) {
+/** The Model menu, Download YAML and Upload, and the ⋮ menu. */
+function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more' | 'exchange'> & { open: MenuId; opener: Opener }) {
   const { open, opener } = p,
     w = p.words;
   return (
@@ -187,6 +190,7 @@ function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'> & { open: MenuI
       >
         <ModelMenu {...p.model} />
       </ToolbarMenu>
+      <ExchangeButtons {...p.exchange} />
       <ToolbarMenu
         open={open === 'more'}
         onOpen={opener('more')}
