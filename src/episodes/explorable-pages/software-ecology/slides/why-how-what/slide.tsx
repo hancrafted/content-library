@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { externalHref } from '@/shared/lib/external-link.pure';
 import { DashboardStill } from './dashboard-still';
 import { FactoryStill } from './factory-still';
 import { factoryStillState } from './factory-still-state';
@@ -119,6 +120,16 @@ export const whyHowWhat = slide({
                 word={t('words.why')}
                 title={t('columns.why.title')}
                 caption={t.rich('columns.why.caption', {
+                  talk: (chunks) => (
+                    <a
+                      href={externalHref(BENDER_TIPPING_POINT.url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="italic underline underline-offset-2"
+                    >
+                      {chunks}
+                    </a>
+                  ),
                   amplifies: marker('ai-amplifies'),
                   pain: marker('incomplete-requirements'),
                 })}
