@@ -1,6 +1,6 @@
 {
   "title": "Die Zeitleiste",
-  "caption": "Vier Stufen auf einem Sprachmodell, vom Prompting 2022–23 bis zur Factory, die 2026 entsteht.",
+  "caption": "Vier Stufen auf einem Sprachmodell, vom Chat 2022–23 bis zur Factory, die 2026 entsteht.",
   "readme": {
     "heading": "Lies mich",
     "labels": {
@@ -9,13 +9,13 @@
       "notice": "Worauf Du achtest"
     },
     "shows": "Vier Stufen auf einem Sprachmodell, jede mit ihrer Karte, einer Szene und ihrer Leitung zum Modell. Erklären ist an; die Werkzeugleiste blendet Zeilen ein, die dieselbe Zeitleiste aus anderen Blickwinkeln erzählen: welchen Führungsaufwand jede Stufe verlangt, ihre Produktivitätssteigerung, wie viele Menschen auf ihr arbeiten, welche KI-Disziplinen sie hinzufügt und wo ein Mensch in ihrer Aufsicht sitzt.",
-    "tryit": "Schalte KI-Disziplinen ein, dann Aufsicht. Fahr über eine Karte für ihre Definition, klick sie für ihre Quelle. Fahr mit der Maus auf eine Stufe, um ihre Szene abzuspielen; klick eine Stufenkarte oder das Modellband für ihre Definition. Auf dem Handy wischst Du von Stufe zu Stufe.",
+    "tryit": "Schalte KI-Disziplinen ein, dann Aufsicht. Klick eine Karte an, um die Definitionen dahinter zu öffnen, jede von der Seite, die sie gibt. Fahr mit der Maus auf eine Stufe, um ihre Szene abzuspielen; klick eine Stufenkarte oder das Modellband für ihre Definition. Auf dem Handy wischst Du von Stufe zu Stufe.",
     "notice": "Die Produktivitätssteigerungen sind Hypothesen; die gemessene Zeile darunter sagt, was Studien fanden, und für Workflows und Factory gibt es noch keine Studie. Jede Verbreitungszahl zählt eine andere Gruppe, die vier ergeben also keine gemeinsame Kurve. Jede Disziplin bleibt, wenn sie einmal dazukommt: Auch eine Factory braucht Prompts."
   },
   "notes": {
     "timeline": {
       "header": "Woher Jahre und Definitionen kommen",
-      "description": "Jedes Jahr, jede Definition und jede Quelle auf den Karten stammt aus der Recherche LLM-0018, die jede Disziplin über ihre Primärquelle datiert: der Start von ChatGPT für Prompting, Anthropics Agentendefinition und Claude Code für Agenten, LangGraph für Workflows sowie Dan Shapiros fünf Stufen und StrongDM für die Factory. Die gemessene Produktivität stammt aus der Recherche LLM-0019, die Verbreitungszahlen aus LLM-0025, die KI-Disziplinen aus LLM-0023 und die Aufsichtsformen aus LLM-0024."
+      "description": "Jedes Jahr, jede Definition und jede Quelle auf den Karten stammt aus der Recherche LLM-0018, die jede Disziplin über ihre Primärquelle datiert: der Start von ChatGPT für den Chat, Anthropics Agentendefinition und Claude Code für Agenten, LangGraph für Workflows sowie Dan Shapiros fünf Stufen und StrongDM für die Factory. Die gemessene Produktivität stammt aus der Recherche LLM-0019, die Verbreitungszahlen aus LLM-0025, die KI-Disziplinen aus LLM-0023 und die Aufsichtsformen aus LLM-0024."
     },
     "oversight-origin": {
       "header": "Woher in, on und out of the loop kommen",

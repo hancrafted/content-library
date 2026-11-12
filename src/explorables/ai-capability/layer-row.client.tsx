@@ -3,16 +3,16 @@
 import { memo, type CSSProperties } from 'react';
 import styles from './ai-capability.module.css';
 import type { LayerItemId, LayerItemWords, LayerRow, LayerSpan, LayerWords } from './ai-capability.types';
-import { LayerDetailView, LayerFlowView, type LayerDetailLabels } from './layer-row-view';
+import { LayerFlowView, LayerPanelView, type LayerDetailLabels } from './layer-row-view';
 import { Hypothesis } from './row-cells-view';
 import { LEVELS, type Level } from './scene-frames.pure';
 import { fadeStops, sliceOf, type Range } from './spans.pure';
 
 /*
- * The two layer rows, AI disciplines and Oversight, in one look: each item a card spanning the Level edges it covers,
- * one lane per item, with a mini workflow, its name and a one-liner. Hover or focus lights a card, a click pins its
- * definition and source under the row. Wide, the row spans the four columns; narrow, each Level's card shows its slice.
- * The parent owns the lit and pinned items (FE-012 §4.2); a card only gets its `on` and `pinned` booleans.
+ * The two layer rows, AI disciplines and Oversight, in one look: each item a collapsible card spanning the Level edges
+ * it covers, one lane per item, with a mini workflow, its name and a one-liner. A click opens the card to the
+ * definitions of the item and the pages they come from. Wide, the row spans the four columns; narrow, each Level's card
+ * shows its slice. The parent owns which cards are open (FE-012 §4.1); a card only gets its `open` boolean.
  */
 
 /** A layer item with its span on the four Levels, worked out once. */
@@ -20,15 +20,13 @@ export interface PlacedSpan extends LayerSpan {
   readonly range: Range;
 }
 
-/** What one layer row hands its cards: the items, their words, which is lit and pinned, and the callbacks. */
+/** What one layer row hands its cards: the items, their words, which are open, and the callback. */
 export interface LayerRowProps {
   readonly row: LayerRow;
   readonly spans: readonly PlacedSpan[];
   readonly words: LayerWords;
-  readonly lit: LayerItemId | null;
-  readonly pinned: LayerItemId | null;
-  readonly onLight: (row: LayerRow, id: LayerItemId | null) => void;
-  readonly onPin: (row: LayerRow, id: LayerItemId) => void;
+  readonly open: readonly LayerItemId[];
+  readonly onToggle: (id: LayerItemId) => void;
   readonly labels: LayerDetailLabels;
   /** The tag a row's claims carry: Oversight's placement is a hypothesis; none for a row backed by its sources. */
   readonly hypothesis: string | null;
@@ -76,99 +74,87 @@ function CardFace({
   );
 }
 
-/** Hover and focus light a card, leaving puts the light out, a click pins it. */
-const handlers = ({ row, span, onLight, onPin }: Pick<CardProps, 'row' | 'span' | 'onLight' | 'onPin'>) => ({
-  onPointerEnter: () => onLight(row, span.id),
-  onPointerLeave: () => onLight(row, null),
-  onFocus: () => onLight(row, span.id),
-  onBlur: () => onLight(row, null),
-  onClick: () => onPin(row, span.id),
-});
-
 /** A card's place and tint: on its tracks when wide, indented by its offset when narrow. */
-function cardStyle(props: CardProps): CSSProperties {
+function cardStyle(props: ItemProps): CSSProperties {
   const shown: Range = [props.shownFrom, props.shownTo];
   const at = props.offset === undefined ? tracks(shown) : { marginLeft: `${props.offset * INDENT}%` };
   return { ...at, ...tint(props.span, shown) };
 }
 
-/** What a layer card takes. */
-interface CardProps {
-  readonly row: LayerRow;
+/** What a layer item takes: its card, and the panel under it while it is open. */
+interface ItemProps {
   readonly span: PlacedSpan;
   readonly words: LayerItemWords;
-  readonly on: boolean;
-  readonly pinned: boolean;
+  readonly open: boolean;
   /** The drawn part of the span, on the 0 to 4 axis; wide, it is the whole span on its tracks. */
   readonly shownFrom: number;
   readonly shownTo: number;
   /** Narrow, how far into the Level's card the slice starts, in percent; wide, none. */
   readonly offset?: number;
   readonly continues?: boolean;
-  readonly emerging: string;
-  readonly onLight: LayerRowProps['onLight'];
-  readonly onPin: LayerRowProps['onPin'];
+  readonly panelId: string;
+  readonly labels: LayerDetailLabels;
+  readonly onToggle: LayerRowProps['onToggle'];
 }
 
-/** One layer card: lit while hovered or focused, pinned by a click; memoised, so a hover redraws only what flipped. */
-const LayerCard = memo(function LayerCard(props: CardProps) {
-  const { span } = props;
+/** One collapsible layer item: its card, a button that opens it, and the definitions under it; memoised. */
+const LayerItem = memo(function LayerItem(props: ItemProps) {
+  const { span, open } = props;
   return (
-    <button
-      type="button"
-      data-layer-item={span.id}
-      data-on={props.on}
-      aria-pressed={props.pinned}
-      {...handlers(props)}
-      style={cardStyle(props)}
-      className={`${styles[span.tone]} ${styles.layerCard} ${span.emerging ? styles.emerging : ''}`}
-    >
-      <span className={styles.cardBody}>
-        <CardFace span={span} words={props.words} emerging={props.emerging} />
-      </span>
-      {props.continues ? (
-        <span aria-hidden="true" className="ml-auto self-center text-body text-(--hue)">
-          ›
+    <div className={`${styles[span.tone]} ${props.offset === undefined ? styles.lane : styles.slice}`}>
+      <button
+        type="button"
+        data-layer-item={span.id}
+        aria-expanded={open}
+        aria-controls={open ? props.panelId : undefined}
+        onClick={() => props.onToggle(span.id)}
+        style={cardStyle(props)}
+        className={`${styles.layerCard} ${span.emerging ? styles.emerging : ''}`}
+      >
+        <span className={styles.cardBody}>
+          <CardFace span={span} words={props.words} emerging={props.labels.emerging} />
         </span>
-      ) : null}
-    </button>
+        {props.continues ? (
+          <span aria-hidden="true" className="ml-auto self-center text-body text-(--hue)">
+            ›
+          </span>
+        ) : null}
+        <span aria-hidden="true" className={`${styles.caret} self-center text-body text-(--hue)`}>
+          ▾
+        </span>
+      </button>
+      {open ? <LayerPanelView id={props.panelId} item={props.words} labels={props.labels} /> : null}
+    </div>
   );
 });
 
-/** What every card of a row shares, and its own `on` and `pinned`: the props a card takes but its place. */
-const cardOf = (props: LayerRowProps, span: PlacedSpan, words: LayerItemWords) => ({
-  row: props.row,
+/** An item's span with its words. */
+interface Entry {
+  readonly span: PlacedSpan;
+  readonly words: LayerItemWords;
+}
+
+/** What every item of a row shares, and its own `open`: the props an item takes but its place. */
+const itemOf = (props: LayerRowProps, { span, words }: Entry, where: string) => ({
   span,
   words,
-  on: props.lit === span.id,
-  pinned: props.pinned === span.id,
-  emerging: props.labels.emerging,
-  onLight: props.onLight,
-  onPin: props.onPin,
+  open: props.open.includes(span.id),
+  panelId: `${where}-${span.id}`,
+  labels: props.labels,
+  onToggle: props.onToggle,
 });
 
-/** Whether the shown card's discipline is still emerging. */
-const emergingOf = (spans: readonly PlacedSpan[], id: LayerItemId | null) =>
-  spans.find((each) => each.id === id)?.emerging === true;
-
-/** The line under a row: the lit card's definition, else the pinned one's with its source, else the hint. */
-function Detail(props: LayerRowProps) {
-  const shown = props.lit ?? props.pinned;
+/** The line under a row: its hypothesis tag, if it has one, and its hint. */
+function Hint(props: LayerRowProps) {
   return (
-    <div aria-live="polite" className="flex flex-wrap items-baseline gap-2 px-1 pt-1">
+    <div className="flex flex-wrap items-baseline gap-2 px-1 pt-1">
       {props.hypothesis === null ? null : <Hypothesis>{props.hypothesis}</Hypothesis>}
-      <LayerDetailView
-        row={props.words}
-        item={shown === null ? null : (props.words.items[shown] ?? null)}
-        emerging={emergingOf(props.spans, shown)}
-        pinned={shown !== null && shown === props.pinned}
-        labels={props.labels}
-      />
+      <p className="text-caption text-muted-foreground">{props.words.hint}</p>
     </div>
   );
 }
 
-/** A layer row in a wide container: one lane per item across the four columns, the line under it. */
+/** A layer row in a wide container: one lane per item across the four columns, the hint under it. */
 export function LayerRowWide(props: LayerRowProps & { readonly line: number }) {
   return (
     <li
@@ -181,16 +167,16 @@ export function LayerRowWide(props: LayerRowProps & { readonly line: number }) {
           const words = props.words.items[span.id];
           if (words === undefined) return null;
           return (
-            <LayerCard
+            <LayerItem
               key={span.id}
-              {...cardOf(props, span, words)}
+              {...itemOf(props, { span, words }, 'wide')}
               shownFrom={span.range[0]}
               shownTo={span.range[1]}
             />
           );
         })}
       </div>
-      <Detail {...props} />
+      <Hint {...props} />
     </li>
   );
 }
@@ -205,9 +191,9 @@ export function LayerSlices(props: LayerRowProps & { readonly level: Level }) {
         if (slice === null || words === undefined) return null;
         const at = LEVELS.indexOf(props.level);
         return (
-          <LayerCard
+          <LayerItem
             key={span.id}
-            {...cardOf(props, span, words)}
+            {...itemOf(props, { span, words }, props.level)}
             continues={slice.continues}
             shownFrom={at + slice.left / 100}
             shownTo={at + (slice.left + slice.width) / 100}
@@ -215,7 +201,7 @@ export function LayerSlices(props: LayerRowProps & { readonly level: Level }) {
           />
         );
       })}
-      <Detail {...props} />
+      <Hint {...props} />
     </div>
   );
 }

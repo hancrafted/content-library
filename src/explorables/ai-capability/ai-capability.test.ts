@@ -60,20 +60,61 @@ describe('success cases', () => {
     for (const word of hidden) expect(html).not.toContain(word);
   });
 
-  it('draws the Factory as a lifecycle with people at its gates', () => {
+  it('draws the Factory as a building with a question mark, its inside never opened', () => {
     // ARRANGE
-    const lifecycle = 'Lifecycle';
-    const gates = 'people approve the spec and the release';
+    const scene = 'A factory with a question mark on it';
+    const interface_ = 'Lifecycle';
     // ACT
     const html = render({ preset: 'timeline', locale: 'en' });
     // ASSERT
-    expect(html).toContain(lifecycle);
-    expect(html).toContain(gates);
+    expect(html).toContain(scene);
+    expect(html).toContain(interface_);
+  });
+
+  it('stacks each layer row from the bottom up, Prompt under Graph and HITL under HOOTL', () => {
+    // ARRANGE
+    const { layers } = aiCapabilityData('en');
+    const disciplines = ['graph', 'loop', 'harness', 'context', 'prompt'];
+    const oversight = ['hootl', 'hotl', 'hitl'];
+    // ACT
+    const order = (row: 'disciplines' | 'oversight') => layers[row].map((item) => item.id);
+    // ASSERT
+    expect(order('disciplines')).toEqual(disciplines);
+    expect(order('oversight')).toEqual(oversight);
+  });
+
+  it('runs every layer item to the end of the Factory, HOOTL from the middle of Workflows', () => {
+    // ARRANGE
+    const { layers } = aiCapabilityData('en');
+    const end = { level: 'factory', at: 'end' };
+    const hootlStart = { level: 'workflows', at: 'mid' };
+    // ACT
+    const ends = Object.values(layers).flatMap((items) => items.map((item) => item.to));
+    const hootl = layers.oversight.find((item) => item.id === 'hootl');
+    // ASSERT
+    for (const each of ends) expect(each).toEqual(end);
+    expect(hootl?.from).toEqual(hootlStart);
+  });
+
+  it('gives every layer item at least one definition with a named source page', () => {
+    // ARRANGE
+    const { words } = aiCapabilityData('en');
+    // ACT
+    const items = Object.values(words.layers).flatMap((row) => Object.values(row.items));
+    // ASSERT
+    expect(items.length).toBeGreaterThan(0);
+    for (const item of items) {
+      expect(item?.definitions.length).toBeGreaterThan(0);
+      for (const each of item?.definitions ?? []) {
+        expect(each.url).toMatch(/^https:\/\//);
+        expect(each.by).not.toBe('');
+      }
+    }
   });
 
   it('shows the four Levels in order and the model under them', () => {
     // ARRANGE
-    const order = ['Prompting', 'Agenten', 'Workflows', 'Factory?'];
+    const order = ['Chat', 'Agenten', 'Workflows', 'Factory?'];
     const model = 'Large Language Model (LLM)';
     // ACT
     const html = render({ preset: 'timeline', locale: 'de' });
@@ -99,7 +140,7 @@ describe('success cases', () => {
   it('lets a Slide say a word differently, key by key, keeping the other defaults', () => {
     // ARRANGE
     const said = 'Rows';
-    const kept = 'Prompting';
+    const kept = 'Chat';
     // ACT
     const html = render({ preset: 'timeline', locale: 'en', words: { rows: { label: said } } });
     // ASSERT

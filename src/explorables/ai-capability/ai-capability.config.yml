@@ -14,14 +14,10 @@ productivity:
   agents: { claimed: [2, 3], measured: [0.8, 1.2] }
   workflows: { claimed: [5, 10] }
   factory: { claimed: [10, 30] }
-# The two layer rows: each item spans from one Level edge (start, mid, end) to another; Oversight's fade along their
-# span (stops: [where 0–1 along it, strength 0–1]). Tone is a global token: info, accent or muted.
+# The two layer rows, each a stack that builds from the bottom up: each item spans from one Level edge (start, mid, end) to
+# another. Tone is a global token: info, accent or muted.
 layers:
   disciplines:
-    - { id: prompt, tone: info, from: { level: prompting, at: start }, to: { level: factory, at: end } }
-    - { id: context, tone: info, from: { level: prompting, at: mid }, to: { level: factory, at: end } }
-    - { id: harness, tone: accent, from: { level: agents, at: mid }, to: { level: factory, at: end } }
-    - { id: loop, tone: accent, emerging: true, from: { level: agents, at: mid }, to: { level: factory, at: end } }
     - {
         id: graph,
         tone: accent,
@@ -29,22 +25,14 @@ layers:
         from: { level: workflows, at: start },
         to: { level: factory, at: end },
       }
+    - { id: loop, tone: accent, emerging: true, from: { level: agents, at: mid }, to: { level: factory, at: end } }
+    - { id: harness, tone: accent, from: { level: agents, at: mid }, to: { level: factory, at: end } }
+    - { id: context, tone: info, from: { level: prompting, at: mid }, to: { level: factory, at: end } }
+    - { id: prompt, tone: info, from: { level: prompting, at: start }, to: { level: factory, at: end } }
   oversight:
-    - id: hitl
-      tone: info
-      from: { level: agents, at: start }
-      to: { level: factory, at: mid }
-      stops: [[0, 0.75], [0.45, 1], [1, 0.12]]
-    - id: hotl
-      tone: accent
-      from: { level: agents, at: mid }
-      to: { level: factory, at: mid }
-      stops: [[0, 0.3], [0.5, 1], [1, 0.5]]
-    - id: hootl
-      tone: muted
-      from: { level: factory, at: start }
-      to: { level: factory, at: end }
-      stops: [[0, 0.35], [1, 1]]
+    - { id: hootl, tone: muted, from: { level: workflows, at: mid }, to: { level: factory, at: end } }
+    - { id: hotl, tone: accent, from: { level: agents, at: mid }, to: { level: factory, at: end } }
+    - { id: hitl, tone: info, from: { level: agents, at: start }, to: { level: factory, at: end } }
 words:
   definition: Definition
   flip: 'Click: definition'
@@ -72,7 +60,7 @@ words:
   levels:
     prompting:
       year: 2022–23
-      name: Prompting
+      name: Chat
       line: You write, the AI answers. The entry point.
       scale: a task
       productivity: '1.5–2×'
@@ -84,7 +72,7 @@ words:
         source: Gallup, May 2026
       interface: Chat
       interfaceHint: 'a conversation: you write, it answers, message by message'
-      definition: Prompting is writing effective instructions so the model reliably gives you what you need.
+      definition: 'Chat is a conversation with the model: you write instructions, it answers, message by message.'
       sourceLabel: OpenAI, prompt engineering guide
       sourceUrl: https://developers.openai.com/api/docs/guides/prompt-engineering
     agents:
@@ -148,11 +136,7 @@ words:
     loop: Loop
     loopDone: done
     agent: Agent
-    factory: 'A lifecycle: requests go in, agents build and test, people approve the spec and the release, results come out'
-    spec: spec
-    build: build
-    test: test
-    release: release
+    factory: A factory with a question mark on it, requests going in and results coming out
   llm:
     kicker: The foundation, under every stage
     name: Large language model (LLM)
@@ -166,56 +150,116 @@ words:
     tokens: [New, tech, nology, brings, new, dis, cipl, ines]
   layers:
     disciplines:
-      hint: 'Hover or tap a card: each Level adds a discipline. Click it for its definition and source.'
+      hint: 'Click a card to open its definitions and where they come from.'
       items:
         prompt:
-          name: Prompt engineering
-          line: You write the instruction.
-          definition: Steering a model with the words you give it, without changing the model itself.
-          sourceLabel: Weng, Prompt Engineering (2023)
-          sourceUrl: https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/
+          name: 'Prompt engineering'
+          line: 'You write the instruction.'
+          definitions:
+            - by: 'Anthropic'
+              text: '“methods for writing and organizing LLM instructions for optimal outcomes”'
+              title: 'Effective context engineering for AI agents (2025)'
+              url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+            - by: 'OpenAI'
+              text: '“the process of writing effective instructions for a model”'
+              title: 'Prompt engineering guide'
+              url: https://developers.openai.com/api/docs/guides/prompt-engineering
+            - by: 'IBM'
+              text: '“A prompt engineer designs, tests and refines prompts to optimize the performance of generative AI models.”'
+              title: 'What is prompt engineering?'
+              url: https://www.ibm.com/think/topics/prompt-engineering
         context:
-          name: Context engineering
-          line: You choose what the model sees.
-          definition: Curating and maintaining the best set of tokens the model sees while it works.
-          sourceLabel: Anthropic, Effective context engineering for AI agents (2025)
-          sourceUrl: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+          name: 'Context engineering'
+          line: 'You choose what the model sees.'
+          definitions:
+            - by: 'Anthropic'
+              text: '“the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference”'
+              title: 'Effective context engineering for AI agents (2025)'
+              url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+            - by: 'LangChain'
+              text: '“building dynamic systems to provide the right information and tools in the right format”'
+              title: 'The rise of context engineering (2025)'
+              url: https://www.langchain.com/blog/the-rise-of-context-engineering
+            - by: 'IBM'
+              text: '“the practice of deliberately designing, structuring and optimizing the context provided to a large language model (LLM)”'
+              title: 'What is context engineering?'
+              url: https://www.ibm.com/think/topics/context-engineering
         harness:
-          name: Harness engineering
-          line: You build the tools and rules around it.
-          definition: Building everything around the model, its tools, rules and checks, so an agent never repeats a mistake.
-          sourceLabel: Böckeler, Harness engineering, martinfowler.com (2026)
-          sourceUrl: https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html
+          name: 'Harness engineering'
+          line: 'You build the tools and rules around it.'
+          definitions:
+            - by: 'Martin Fowler, Böckeler'
+              text: '“The term harness has emerged as a shorthand to mean everything in an AI agent except the model itself.”'
+              title: 'Harness engineering for coding agent users (2026)'
+              url: https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html
         loop:
-          name: Loop engineering
-          line: You design the loop, not each prompt.
-          definition: 'Replacing yourself as the person who prompts the agent: you design the system that does it instead.'
-          sourceLabel: Osmani, Loop engineering (2026)
-          sourceUrl: https://addyosmani.com/blog/loop-engineering/
+          name: 'Loop engineering'
+          line: 'You design the loop, not each prompt.'
+          definitions:
+            - by: 'IBM'
+              text: '“the practice of designing agentic workflows, or loops, that iteratively guide AI agents toward completing user-defined goals”'
+              title: 'What is loop engineering? (2026)'
+              url: https://www.ibm.com/think/topics/loop-engineering
+            - by: 'Addy Osmani'
+              text: '“Loop engineering is replacing yourself as the person who prompts the agent. You design the system that does it instead.”'
+              title: 'Loop engineering (2026)'
+              url: https://addyosmani.com/blog/loop-engineering/
         graph:
-          name: Graph engineering
-          line: You lay the work out as nodes and edges.
-          definition: Laying agent work out as explicit nodes, edges and state; LangChain calls it the latest name for a well-established approach.
-          sourceLabel: Turing Post, Is graph engineering real? (2026)
-          sourceUrl: https://www.turingpost.com/p/is-graph-engineering-real-why-everyone-is-talking-about-it
+          name: 'Graph engineering'
+          line: 'You lay the work out as nodes and edges.'
+          definitions:
+            - by: 'LangChain'
+              text: '“the latest name for a well established approach to building reliable agents”'
+              title: '3 years of graph engineering with LangGraph (2026)'
+              url: https://www.langchain.com/blog/3-years-of-graph-engineering-with-langgraph
     oversight:
-      hint: 'Hover or tap a card: where a person sits in the workflow. Click it for the meaning and where the term comes from.'
-      origin: The terms come from the debate on weapon autonomy.
-      sourceLabel: Human Rights Watch and Harvard IHRC, Losing Humanity (2012)
-      sourceUrl: https://www.hrw.org/report/2012/11/19/losing-humanity/case-against-killer-robots
+      hint: 'Click a card to open its definitions. Each mode builds on the one before it.'
       items:
         hitl:
-          name: HITL · Human in the loop
-          line: A person approves every step.
-          definition: A person must approve each action before the system takes it.
-          quote: Robots that can select targets and deliver force only with a human command.
+          name: 'HITL · Human in the loop'
+          line: 'A person approves every step.'
+          definitions:
+            - by: 'Human Rights Watch'
+              text: '“Robots that can select targets and deliver force only with a human command”'
+              title: 'Losing Humanity (2012), where the term comes from'
+              url: https://www.hrw.org/report/2012/11/19/losing-humanity/case-against-killer-robots
+            - by: 'IBM'
+              text: '“a human actively participates in the operation, supervision or decision-making of an automated or AI-driven system”'
+              title: 'What is human in the loop (HITL)?'
+              url: https://www.ibm.com/think/topics/human-in-the-loop
+            - by: 'AWS'
+              text: '“Human in the loop is where a person actively reviews tasks before any action occurs.”'
+              title: 'What is human in the loop?'
+              url: https://aws.amazon.com/what-is/human-in-the-loop/
+            - by: 'Microsoft'
+              text: '“Human-in-the-Loop (HITL) is a pattern where the agent requests user approval before executing certain operations.”'
+              title: 'Human-in-the-loop with AG-UI'
+              url: https://learn.microsoft.com/en-us/agent-framework/integrations/ag-ui/human-in-the-loop
         hotl:
-          name: HOTL · Human on the loop
-          line: A person watches and can stop it.
-          definition: A person watches the system act and can override it.
-          quote: …under the oversight of a human operator who can override the robots’ actions.
+          name: 'HOTL · Human on the loop'
+          line: 'A person watches and can stop it.'
+          definitions:
+            - by: 'Human Rights Watch'
+              text: '“Robots that can select targets and deliver force under the oversight of a human operator who can override the robots’ actions”'
+              title: 'Losing Humanity (2012), where the term comes from'
+              url: https://www.hrw.org/report/2012/11/19/losing-humanity/case-against-killer-robots
+            - by: 'AWS'
+              text: '“Human on the loop is where humans are involved in monitoring the system, but don’t have to approve every decision”'
+              title: 'What is human in the loop?'
+              url: https://aws.amazon.com/what-is/human-in-the-loop/
+            - by: 'Anthropic, on oversight'
+              text: '“effective oversight doesn’t require approving every action but being in a position to intervene when it matters.”'
+              title: 'Measuring AI agent autonomy in practice (2026)'
+              url: https://www.anthropic.com/research/measuring-agent-autonomy
         hootl:
-          name: HOOTL · Human out of the loop
-          line: No person in the run.
-          definition: The system acts without any human input or interaction.
-          quote: …without any human input or interaction.
+          name: 'HOOTL · Human out of the loop'
+          line: 'No person in the run.'
+          definitions:
+            - by: 'Human Rights Watch'
+              text: '“Robots that are capable of selecting targets and delivering force without any human input or interaction”'
+              title: 'Losing Humanity (2012), where the term comes from'
+              url: https://www.hrw.org/report/2012/11/19/losing-humanity/case-against-killer-robots
+            - by: 'Anthropic, on agents'
+              text: '“Once the task is clear, agents plan and operate independently”'
+              title: 'Building effective agents (2024)'
+              url: https://www.anthropic.com/engineering/building-effective-agents

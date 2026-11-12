@@ -6,9 +6,8 @@ import type { LayerRowProps, PlacedSpan } from './layer-row.client';
 import { spanRange } from './spans.pure';
 
 /*
- * The layer rows' state, held by the timeline's parent (FE-012 §4.2): which card is lit, which is pinned per row, and
- * each row's slice of it, the same object while nothing in it changes, so a memoised card redraws only when its `on`
- * or `pinned` flips.
+ * The layer rows' state, held by the timeline's parent (FE-012 §4.1): which cards are open, and each row's slice of it,
+ * the same object while nothing in it changes, so a memoised card redraws only when its `open` flips.
  */
 
 export const LAYER_ROWS: readonly LayerRow[] = ['disciplines', 'oversight'];
@@ -22,29 +21,20 @@ const HYPOTHESIS: LayerRow = 'oversight';
 
 type LayerLight = ReturnType<typeof useLayerLight>;
 type Placed = Readonly<Record<LayerRow, readonly PlacedSpan[]>>;
-/** What every row of the two shares: the words, the labels and the callbacks. */
-type Shared = Pick<LayerRowProps, 'labels' | 'onLight' | 'onPin'> & { readonly words: AiCapabilityWords };
+/** What every row of the two shares: the words, the labels and the callback. */
+type Shared = Pick<LayerRowProps, 'labels' | 'onToggle'> & { readonly words: AiCapabilityWords };
 
-/** The layer rows' brushing: the card hovered or focused, and per row the card a click pinned. */
+/** The layer rows' disclosure: which cards are open, each on its own. */
 export function useLayerLight() {
-  const [lit, setLit] = useState<{ readonly row: LayerRow; readonly id: LayerItemId } | null>(null);
-  const [pinned, setPinned] = useState<Readonly<Record<LayerRow, LayerItemId | null>>>({
-    disciplines: null,
-    oversight: null,
-  });
-  const onLight = useCallback(
-    (row: LayerRow, id: LayerItemId | null) =>
-      setLit((now) => (id !== null ? { row, id } : now?.row === row ? null : now)),
+  const [open, setOpen] = useState<readonly LayerItemId[]>([]);
+  const onToggle = useCallback(
+    (id: LayerItemId) => setOpen((now) => (now.includes(id) ? now.filter((each) => each !== id) : [...now, id])),
     [],
   );
-  const onPin = useCallback(
-    (row: LayerRow, id: LayerItemId) => setPinned((now) => ({ ...now, [row]: now[row] === id ? null : id })),
-    [],
-  );
-  return useMemo(() => ({ lit, pinned, onLight, onPin }), [lit, pinned, onLight, onPin]);
+  return useMemo(() => ({ open, onToggle }), [open, onToggle]);
 }
 
-/** One layer row's slice of the state: its spans, its words, which card is lit and pinned, and the callbacks. */
+/** One layer row's slice of the state: its spans, its words, which cards are open, and the callback. */
 const rowSlice = (
   row: LayerRow,
   { shared, placed, layer }: { readonly shared: Shared; readonly placed: Placed; readonly layer: LayerLight },
@@ -52,10 +42,8 @@ const rowSlice = (
   row,
   spans: placed[row],
   words: shared.words.layers[row],
-  lit: layer.lit?.row === row ? layer.lit.id : null,
-  pinned: layer.pinned[row],
-  onLight: shared.onLight,
-  onPin: shared.onPin,
+  open: layer.open,
+  onToggle: shared.onToggle,
   labels: shared.labels,
   hypothesis: row === HYPOTHESIS ? shared.words.hypothesis : null,
 });
@@ -70,12 +58,9 @@ export function useLayerRows(
     () => ({ disciplines: place(layers.disciplines), oversight: place(layers.oversight) }),
     [layers],
   );
-  const labels = useMemo(
-    () => ({ source: words.source, newTab: words.newTab, emerging: words.emerging }),
-    [words.source, words.newTab, words.emerging],
-  );
+  const labels = useMemo(() => ({ newTab: words.newTab, emerging: words.emerging }), [words.newTab, words.emerging]);
   return useMemo(() => {
-    const shared = { words, labels, onLight: layer.onLight, onPin: layer.onPin };
+    const shared = { words, labels, onToggle: layer.onToggle };
     return {
       disciplines: rowSlice('disciplines', { shared, placed, layer }),
       oversight: rowSlice('oversight', { shared, placed, layer }),

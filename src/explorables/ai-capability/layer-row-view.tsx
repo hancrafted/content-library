@@ -1,10 +1,10 @@
 import { externalHref } from '@/shared/lib/external-link.pure';
 import type { ReactNode } from 'react';
-import type { LayerItemId, LayerItemWords, LayerWords } from './ai-capability.types';
+import type { LayerDefinition, LayerItemId, LayerItemWords } from './ai-capability.types';
 
 /*
- * The two layer rows' pure parts: the mini workflow each card draws, and the line under a row that names the lit card
- * (pure views). One vocabulary for both rows: boxes are steps, the part an item acts on is drawn in the card's tone
+ * The two layer rows' pure parts: the mini workflow each card draws, and the definitions an opened card shows (pure
+ * views). One vocabulary for both rows: boxes are steps, the part an item acts on is drawn in the card's tone
  * (`currentColor`), the rest muted. The cards themselves and their state live in layer-row.client.tsx.
  */
 
@@ -176,75 +176,46 @@ export function LayerFlowView({ id }: { readonly id: LayerItemId }) {
   );
 }
 
-/** The labels the line under a layer row shares with the cards. */
+/** The labels the opened cards share. */
 export interface LayerDetailLabels {
-  readonly source: string;
   readonly newTab: string;
   readonly emerging: string;
 }
 
-/** The source a pinned card cites, opening in a new tab. */
-function SourceLink(props: { readonly url: string; readonly label: string; readonly labels: LayerDetailLabels }) {
+/** One definition: who gives it, what it says, and a link to the page, opening in a new tab. */
+function Definition({ each, labels }: { readonly each: LayerDefinition; readonly labels: LayerDetailLabels }) {
   return (
-    <a
-      href={externalHref(props.url)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="w-fit font-semibold underline underline-offset-2"
-    >
-      {props.labels.source}: {props.label}
-      <span aria-hidden="true"> ↗</span>
-      <span className="sr-only"> ({props.labels.newTab})</span>
-    </a>
+    <li className="flex flex-col gap-0.5 border-l-3 border-(--hue) pl-3">
+      <span>
+        <span className="font-semibold">{each.by}</span>
+        <span className="text-muted-foreground"> · </span>
+        {each.text}
+      </span>
+      <a
+        href={externalHref(each.url)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-fit text-muted-foreground underline underline-offset-2"
+      >
+        {each.title}
+        <span aria-hidden="true"> ↗</span>
+        <span className="sr-only"> ({labels.newTab})</span>
+      </a>
+    </li>
   );
 }
 
-/** What a pinned card adds: the quote its term comes from, for an oversight mode, and its source. */
-function Pinned({
-  row,
-  item,
-  labels,
-}: {
-  readonly row: LayerWords;
+/** The opened part of a layer card: each definition of the item, with the page it comes from (a pure view). */
+export function LayerPanelView(props: {
+  readonly id: string;
   readonly item: LayerItemWords;
   readonly labels: LayerDetailLabels;
 }) {
-  const url = item.sourceUrl ?? row.sourceUrl;
-  const label = item.sourceLabel ?? row.sourceLabel;
   return (
-    <>
-      {item.quote ? (
-        <blockquote className="border-l-3 border-(--ai) bg-muted px-3 py-1">
-          “{item.quote}” <span className="text-muted-foreground">{row.origin}</span>
-        </blockquote>
-      ) : null}
-      {url && label ? <SourceLink url={url} label={label} labels={labels} /> : null}
-    </>
-  );
-}
-
-/**
- * The line under a layer row: the hint while no card is lit; the lit card's name and definition while one is hovered;
- * and, once a card is clicked, its source too, or for an oversight mode the quote its term comes from.
- */
-export function LayerDetailView(props: {
-  readonly row: LayerWords;
-  readonly item: LayerItemWords | null;
-  readonly emerging: boolean;
-  readonly pinned: boolean;
-  readonly labels: LayerDetailLabels;
-}) {
-  const { row, item, labels } = props;
-  if (item === null) return <p className="text-caption text-muted-foreground">{row.hint}</p>;
-  return (
-    <div className="flex flex-col gap-1 text-caption">
-      <p>
-        <span className="font-semibold">{item.name}</span>
-        {props.emerging ? <span className="ml-2 text-muted-foreground italic">{labels.emerging}</span> : null}
-        <span className="text-muted-foreground"> · </span>
-        {item.definition}
-      </p>
-      {props.pinned ? <Pinned row={row} item={item} labels={labels} /> : null}
-    </div>
+    <ul id={props.id} aria-label={props.item.name} className="flex flex-col gap-2 px-3 py-1 text-caption">
+      {props.item.definitions.map((each) => (
+        <Definition key={each.by} each={each} labels={props.labels} />
+      ))}
+    </ul>
   );
 }
