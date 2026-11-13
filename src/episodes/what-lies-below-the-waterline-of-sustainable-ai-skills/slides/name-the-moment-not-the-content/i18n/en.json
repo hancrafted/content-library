@@ -1,0 +1,97 @@
+{
+  "title": "Name the trigger, not the content",
+  "caption": "Say what a skill does and when to use it, in the words someone would actually say.",
+  "analogy": "Two index lines for the same card; only one matches what the captain says.",
+  "request": {
+    "who": "Your request, on the day of the dive",
+    "text": "“Grab some <match>mud</match> <match>here</match> before we move on.”",
+    "codingWho": "Your prompt to the coding agent",
+    "coding": "Grab some <match>mud</match> <match>here</match> before we move on."
+  },
+  "match": {
+    "pairs": "by meaning: mud → seabed, here → new site"
+  },
+  "index": {
+    "title": "Skill index",
+    "note": "Two descriptions for the same skill; the AI sees only these lines.",
+    "skill": "Collect sediment sample"
+  },
+  "content": {
+    "tag": "Describes the content",
+    "verdict": "says nothing about when",
+    "text": "SOP-07: corer handling, steps 1 to 9"
+  },
+  "moment": {
+    "tag": "Describes the moment",
+    "verdict": "matches",
+    "use": "Takes a sediment core. Use when we reach a <match>new site</match> and need a <match>sample from the seabed</match>.",
+    "notFor": "Not for water samples or filming.",
+    "notForTag": "· optional: only Google's guide recommends it"
+  },
+  "coding": {
+    "title": "What the agent loads first",
+    "note": "Two drafts of <code>collect-sediment-sample/SKILL.md</code>: its front matter.",
+    "hedge": "The “not for” line is optional: only Google's guide recommends it"
+  },
+  "step": "Second step: write its description as the moment you'd need it.",
+  "footer": {
+    "story": "In the story:",
+    "chat": "A description says what the skill does and when to use it; Claude chooses among potentially 100+ skills by it",
+    "coding": "The standard: a description “Should describe both what the skill does and when to use it”; Anthropic adds specific triggers and contexts"
+  },
+  "alt": {
+    "scene": "The control room. Left, the captain stands and gestures; the pilot sits at the console facing the skill index on the wall."
+  },
+  "notes": {
+    "a-description-says-what-and-when": {
+      "header": "A description says what and when",
+      "description": "the standard says a description \"Should describe both what the skill does and when to use it\" and include keywords that help agents identify relevant tasks [1]. Anthropic adds specific triggers and contexts, because Claude chooses among potentially 100+ skills by it [2].",
+      "sources": {
+        "agent-skills-specification": { "title": "Agent Skills, Specification" },
+        "anthropic-skill-authoring-best-practices": { "title": "Anthropic, Skill authoring best practices" }
+      }
+    },
+    "write-the-description-in-the-users-words": {
+      "header": "Write the description in the user's words",
+      "description": "\"Use imperative phrasing\", \"Focus on user intent, not implementation\", and \"Err on the side of being pushy. Explicitly list contexts where the skill applies\" [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "not-for-lines-googles-advice-alone": {
+      "header": "\"Not for\" lines in a description: Google's advice alone",
+      "description": "the standard and Anthropic recommend no \"not for\" clause in a description. Over-triggering is handled there by testing near-miss queries that share keywords but need something different, which \"test whether the description is precise, not just broad\" [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "the-not-for-clause-in-googles-day-3": {
+      "header": "The \"not for\" clause in Google's Day 3",
+      "description": "Google's Day 3 whitepaper writes \"explicitly state what it is not for\", gives the example \"Do NOT use for employee shift scheduling or financial accounting\", and its checklist says \"Include when NOT to use to prevent over-triggering\" [1]. It calls the description \"your routing algorithm. It is the only thing the model sees to decide whether to load the Agent Skill\" and asks to \"be pushy if the model under-triggers\". It gives no measurement that the clause helps, so it is Google's vendor guidance, a choice between sources.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-labels": {
+        "title": "Two labels",
+        "keywords": "",
+        "script": "Here are two descriptions for the same skill. The first names the content, \"SOP-07: corer handling, steps 1 to 9\", and the second says what the skill does and names the moment, \"Takes a sediment core. Use when we reach a new site and need a sample from the seabed\". One says only what is inside, the other names the trigger, when you need it, and that is your second step: write the description as the moment you'd need it."
+      },
+      "your-request": {
+        "title": "Your request",
+        "keywords": "",
+        "script": "Now it is the day of the dive and you type, \"Grab some mud here before we move on.\" Nothing in \"SOP-07, steps 1 to 9\" tells the model when it is needed, but \"a sample from the seabed\" does, so only the moment description matches. Write it in the words you would actually say."
+      },
+      "the-closing-line": {
+        "title": "The closing line",
+        "keywords": "",
+        "script": "Last, the moment description can end on a second half: \"Not for water samples or filming.\" It tells the model where the skill stops, so it does not open it for a job it cannot do. Treat that half as a choice and not a rule, and test whether it helps your skill."
+      }
+    }
+  }
+}

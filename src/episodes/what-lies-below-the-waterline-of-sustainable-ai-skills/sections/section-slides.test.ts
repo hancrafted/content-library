@@ -67,7 +67,7 @@ describe('success cases', () => {
 
   it('holds each Section in its own placement marker, its section slide alone', () => {
     // ARRANGE
-    const expected = [1, 1, 1, 1, 1, 1, 1, 1];
+    const expected = [1, 1, 1, 4, 1, 1, 1, 1];
     // ACT
     const actual = SECTIONS.map((section) => section.length);
     // ASSERT

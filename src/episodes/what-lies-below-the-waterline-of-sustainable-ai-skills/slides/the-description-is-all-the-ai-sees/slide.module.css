@@ -1,0 +1,136 @@
+/*
+ * "The description is the trigger" (Option 11a): the room's own scenery and its one emphasis motion. No raw colour
+ * (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and `--overlay` as
+ * black, fixed across themes, the zone's `--zone-sunlit` and `--zone-surface` for the sea and sky through the window,
+ * `--bulb` for the reading light; `--primary` marks the one entry to look at. Dark mode only retunes the mixes.
+ */
+
+.room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
+  );
+  --frame: color-mix(
+    in oklab,
+    var(--brand-accent) 30%,
+    color-mix(in oklab, var(--on-brand-accent) 40%, var(--overlay))
+  );
+  --shut: color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay));
+  --shut-shade: color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay));
+  --cone: color-mix(in oklab, var(--bulb) 30%, transparent);
+  --buoy: color-mix(in oklab, var(--brand-accent) 80%, var(--overlay));
+}
+
+:global(.dark) .room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
+  );
+  --frame: color-mix(
+    in oklab,
+    var(--brand-accent) 25%,
+    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
+  );
+  --shut: color-mix(in oklab, var(--on-brand-accent) 48%, var(--overlay));
+  --shut-shade: color-mix(in oklab, var(--on-brand-accent) 38%, var(--overlay));
+  --cone: color-mix(in oklab, var(--bulb) 18%, transparent);
+  --buoy: color-mix(in oklab, var(--brand-accent) 70%, var(--overlay));
+}
+
+.floor [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+}
+
+.floor [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.floor [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+.window [data-tone='frame'] {
+  fill: var(--frame);
+  stroke: var(--frame);
+}
+
+.window [data-tone='sky'] {
+  fill: var(--zone-surface);
+}
+
+.window [data-tone='sea'] {
+  fill: var(--zone-sunlit);
+}
+
+.window [data-tone='buoy'],
+.window [data-tone='flag'] {
+  fill: var(--buoy);
+}
+
+.window [data-tone='pole'] {
+  stroke: var(--frame);
+}
+
+.shut [data-tone='shut'] {
+  fill: var(--shut);
+}
+
+.shut [data-tone='shut-shade'] {
+  fill: var(--shut-shade);
+}
+
+.cone {
+  fill: var(--cone);
+}
+
+/*
+ * The one emphasis motion: once the captain's bubble has popped in, the clear index entry fills from paper to primary
+ * and the clear description card takes its ring. The base rules are the lit rest state, which reduced motion and a
+ * still frame show; nothing loops.
+ */
+.lit {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.ringed {
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .lit {
+    animation: light-up 600ms ease-out 1200ms both;
+  }
+
+  :global([data-zone='active']) .ringed {
+    animation: ring-in 400ms ease-out 1700ms both;
+  }
+}
+
+@keyframes light-up {
+  from {
+    background: var(--card);
+    color: var(--card-foreground);
+  }
+}
+
+@keyframes ring-in {
+  from {
+    outline-color: transparent;
+  }
+}
