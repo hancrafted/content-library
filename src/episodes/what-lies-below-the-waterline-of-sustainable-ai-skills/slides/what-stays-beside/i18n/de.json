@@ -1,0 +1,26 @@
+{
+  "title": "Welcher Kontext daneben bleibt",
+  "zone": "Dämmerzone",
+  "file": "Projektdatei",
+  "aiStatement": "Projektdetails bleiben neben dem Skill",
+  "sites": {
+    "site4": "Ort 4: 40 m",
+    "site7": "Ort 7: 120 m"
+  },
+  "analogy": "Dieselbe Karte an jedem Ort: Der heutige Tauchplan sagt 120 m.",
+  "agent": "Der Schritt liest beim Ausführen eine Projektdatei, etwa CONTEXT.md",
+  "voiceScript": {
+    "segments": {
+      "beside-not-inside": {
+        "title": "Daneben, nicht darin",
+        "keywords": "",
+        "script": "Jetzt das andere Zuhause: Projektdetails, die außerhalb des Skills bleiben, in Projektdateien, die er beim Ausführen liest. Das Vorgehen gehört hinein, und was sich von Projekt zu Projekt ändert, bleibt daneben."
+      },
+      "where-it-gets-shared": {
+        "title": "Wo er geteilt wird",
+        "keywords": "",
+        "script": "Und wer den Skill nutzt, entscheidet, wie viel Pflege er braucht. Ein Skill nur für Dich darf locker sein, ein Skill, den eine Kollegin ausführt, braucht mehr. Damit sind wir beim nächsten Abschnitt."
+      }
+    }
+  }
+}

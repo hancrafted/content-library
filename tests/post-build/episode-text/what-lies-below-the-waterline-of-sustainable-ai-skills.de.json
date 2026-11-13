@@ -1,0 +1,95 @@
+{
+  "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt · hancrafted",
+  "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
+  "toc": "Episoden Inhalt einklappen Was unter der Wasserlinie nachhaltiger KI-Skills liegt 1 Ein Gedankenexperiment 2 Was ein Skill ist 3 Wann Du einen schreibst 4 Die Beschreibung 5 Welcher Kontext hineingehört 6 Welcher Kontext daneben bleibt 7 Ihn teilen 8 Ihn am Leben halten Inhalt öffnen : Inhalt Episoden Was unter der Wasserlinie nachhaltiger KI-Skills liegt 1 Ein Gedankenexperiment 2 Was ein Skill ist 3 Wann Du einen schreibst 4 Die Beschreibung 5 Welcher Kontext hineingehört 6 Welcher Kontext daneben bleibt 7 Ihn teilen 8 Ihn am Leben halten",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt. Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone 0–200 m, Epipelagial Dämmerzone 200–1.000 m, Mesopelagial Mitternachtszone 1.000–4.000 m, Bathypelagial Abyssal 4.000–6.000 m, Abyssopelagial; der Hadal-Graben reicht weiter bis etwa 11 km Du bist hier · Oberfläche Coding-Agent · die Dateien dahinter SKILL.md Name, Beschreibung, Anweisungen references/ scripts/ assets/ Begleitdateien eine Projektdatei, etwa CONTEXT.md Projektdetails, gelesen, wenn der Skill läuft"
+    },
+    {
+      "id": "a-thought-experiment",
+      "text": "Ein Gedankenexperiment Oberfläche KI-Modell Solange Du es nicht aufschreibst, fängt jedes Gespräch mit KI bei null an Dein Pilot ist das KI-Modell: zehn Jahre Können, keine Erinnerung an gestern. Jede Session beginnt mit einem frischen Kontextfenster"
+    },
+    {
+      "id": "what-a-skill-is",
+      "text": "Was ein Skill ist Oberfläche Ein Skill ist ein Name, eine Beschreibung und Anweisungen Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte. SKILL.md, dazu scripts/ references/ assets/"
+    },
+    {
+      "id": "when-to-write-one",
+      "text": "Wann Du einen schreibst Sonnenlichtzone Beim dritten Mal schreibst Du den Skill auf 1. 2. 3. Was für Menschen funktioniert, funktioniert auch für KI : eine starke Faustregel, kein Gesetz. Die Probe erklären, verfeinern, die Karte schreiben. Bitte den Agenten, aus diesem Gespräch einen Skill zu machen"
+    },
+    {
+      "id": "the-label",
+      "text": "Die Beschreibung Sonnenlichtzone Die Beschreibung ist alles, was die KI sieht „Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Das Register ist offen, jede Karte dahinter geschlossen. SKILL.md: Name und Beschreibung laden zuerst"
+    },
+    {
+      "id": "what-goes-inside",
+      "text": "Welcher Kontext hineingehört Dämmerzone Fachwissen gehört hinein, an den Schritt gebunden, der es braucht Arm-Voreinstellung Artenführer Die Karte in ihrer Hülle: jedes Extra an seinen Schritt gebunden. references/ und assets/ laden, wenn ein Schritt sie braucht"
+    },
+    {
+      "id": "what-stays-beside",
+      "text": "Welcher Kontext daneben bleibt Dämmerzone Projektdatei Projektdetails bleiben neben dem Skill Ort 4: 40 m Ort 7: 120 m Dieselbe Karte an jedem Ort: Der heutige Tauchplan sagt 120 m. Der Schritt liest beim Ausführen eine Projektdatei, etwa CONTEXT.md"
+    },
+    {
+      "id": "sharing-it",
+      "text": "Ihn teilen Mitternachtszone Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum Owner: Laborteam · v1.3 · Prüfung im März Die Karte im Flottenhandbuch des Instituts. metadata: Owner, Version, Prüfdatum"
+    },
+    {
+      "id": "keeping-it-alive",
+      "text": "Ihn am Leben halten Abyssal Einen Skill richtig zu halten, kostet Dich jeden Monat etwas + Projektdetails geändert + Ein neues Werkzeug kam dazu + Eine Beschreibung überschneidet sich mit einem anderen Skill Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit. In beiden Ansichten gleich: Der Zettel ist die Pflege"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment Keine Sprechernotizen für diese Folie." },
+    { "id": "what-a-skill-is", "text": "Was ein Skill ist Keine Sprechernotizen für diese Folie." },
+    { "id": "when-to-write-one", "text": "Wann Du einen schreibst Keine Sprechernotizen für diese Folie." },
+    { "id": "the-label", "text": "Die Beschreibung Keine Sprechernotizen für diese Folie." },
+    { "id": "what-goes-inside", "text": "Welcher Kontext hineingehört Keine Sprechernotizen für diese Folie." },
+    { "id": "what-stays-beside", "text": "Welcher Kontext daneben bleibt Keine Sprechernotizen für diese Folie." },
+    { "id": "sharing-it", "text": "Ihn teilen Keine Sprechernotizen für diese Folie." },
+    { "id": "keeping-it-alive", "text": "Ihn am Leben halten Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "a-thought-experiment",
+      "text": "Ein Gedankenexperiment 0:00 – 0:36 Du bist der Kapitän Stell Dir vor, Du arbeitest mit einem KI-Modell, das in seinem Fach brillant ist, der fähigste Kollege, den Du hast. Ich gebe dem ein Bild, weil wir eines bis ganz nach unten brauchen: Du bist Kapitän eines Forschungsprojekts an der Küste, und das Modell ist Dein Pilot, seit zehn Jahren an Deiner Seite. Er steuert vom Kontrollraum an Deck einen Tauchroboter am Kabel, während Du entscheidest, wohin das Projekt als Nächstes geht. 0:36 – 1:04 Eine feste Eigenschaft Dein Pilot hat eine Eigenschaft, und die ändert sich nie. Über Nacht bildet er keine neuen Erinnerungen, aber alles, was er je als Pilot gelernt hat, behält er, jede Regel seines Handwerks. Genau so ist ein KI-Modell: Was es im Training gelernt hat, bleibt, und was Du ihm gestern im Gespräch gesagt hast, ist weg."
+    },
+    {
+      "id": "what-a-skill-is",
+      "text": "Was ein Skill ist 0:00 – 0:25 Erst die Oberfläche Wir sind noch an der Oberfläche. Bevor wir fragen, wann sich ein Skill lohnt, schauen wir uns an, woraus ein Skill besteht. Ich nehme die Wörter, die Deine Chat-App benutzt, und wenn Du mit einem Coding-Agenten arbeitest, haben manche Slides eine zweite Ansicht mit den Dateien hinter jedem Teil. 0:25 – 0:43 Die Mechanik, ganz nüchtern Wie ein Skill geladen wird, will ich genau sagen, denn alles Spätere hängt daran. Deshalb sage ich zuerst, was die KI wirklich tut, und nehme den Tauchgang nur als Bild, damit man es sich leichter vorstellen kann."
+    },
+    {
+      "id": "when-to-write-one",
+      "text": "Wann Du einen schreibst 0:00 – 0:16 Sonnenlicht Wir sind eine Ebene tiefer, in der Sonnenlichtzone. Hier entscheiden wir zwei Dinge: wann eine Aufgabe überhaupt einen Skill verdient, und wie Du ihn beschreibst, damit das Modell ihn auch wirklich auswählt. 0:16 – 0:34 Geliehene Prinzipien Ab hier leihe ich mir Prinzipien aus Engineering, Informationsarchitektur und UX, und alle stützen sich auf eine Idee: Was für Menschen funktioniert, funktioniert auch für KI. Das sage ich als starke Faustregel, nicht als Gesetz. 0:34 – 0:55 Warum eine Faustregel Sie trägt, weil das Modell nur mit dem arbeitet, was Du ihm gibst, wie eine fähige neue Kollegin an ihrem ersten Tag. Eine Faustregel ist es, weil sie an manchen Stellen bricht. Die stehen in den Notizen zur nächsten Slide, zum Nachlesen."
+    },
+    {
+      "id": "the-label",
+      "text": "Die Beschreibung 0:00 – 0:16 Das Etikett entscheidet Wir sind noch im Sonnenlicht, und das ist der Teil, den die meisten überspringen. Ein Skill, den das Modell nie auswählt, hilft niemandem. Deshalb zählt die Beschreibung mehr als die Anweisungen. 0:16 – 0:30 Name, Beschreibung Bevor das Modell einen Skill öffnet, sieht es zwei Zeilen: den Namen und die Beschreibung. Mehr steht nicht im Register, und mehr hat das Modell nicht, um zu entscheiden."
+    },
+    {
+      "id": "what-goes-inside",
+      "text": "Welcher Kontext hineingehört 0:00 – 0:14 Dämmerung Jetzt tiefer, in die Dämmerzone, wo das Licht schwach wird. Der Skill ist geschrieben und beschrieben, und die Frage ist, welcher Kontext hineingehört und welcher daneben bleibt. 0:14 – 0:30 Eine Entscheidung, kein Gesetz Mit dem Wort Regel bin ich hier vorsichtig. Das Vorgehen von den Projektdetails zu trennen, ist eine Designentscheidung mit Vor- und Nachteilen auf beiden Seiten. Ich zeige Dir die Abwägungen, und Du entscheidest."
+    },
+    {
+      "id": "what-stays-beside",
+      "text": "Welcher Kontext daneben bleibt 0:00 – 0:16 Daneben, nicht darin Jetzt das andere Zuhause: Projektdetails, die außerhalb des Skills bleiben, in Projektdateien, die er beim Ausführen liest. Das Vorgehen gehört hinein, und was sich von Projekt zu Projekt ändert, bleibt daneben. 0:16 – 0:32 Wo er geteilt wird Und wer den Skill nutzt, entscheidet, wie viel Pflege er braucht. Ein Skill nur für Dich darf locker sein, ein Skill, den eine Kollegin ausführt, braucht mehr. Damit sind wir beim nächsten Abschnitt."
+    },
+    {
+      "id": "sharing-it",
+      "text": "Ihn teilen 0:00 – 0:12 Mitternacht Jetzt sind wir in tiefem Wasser, in der Mitternachtszone. Alles bisher war für Dich. Was ändert sich, wenn eine Kollegin Deinen Skill ausführt? 0:12 – 0:26 Drei Aufgaben Hier unten warten drei Aufgaben. Gib dem Skill einen Owner und eine Version, kläre, wer sich um die gemeinsame Bibliothek kümmert, und teste, ob der Skill wirklich hilft."
+    },
+    {
+      "id": "keeping-it-alive",
+      "text": "Ihn am Leben halten 0:00 – 0:12 Die Tiefsee Das ist die tiefste Zone, die Tiefsee, Monate später. Den Skill zu schreiben, ging schnell, ihn richtig zu halten, ist die eigentliche Arbeit. 0:12 – 0:23 Niemand sieht es Die meisten hören beim ersten guten Lauf auf, und der Teil darunter bekommt wenig Aufmerksamkeit. Deshalb will ich hier drei Slides lang bleiben."
+    }
+  ]
+}

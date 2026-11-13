@@ -1,0 +1,25 @@
+{
+  "label": "Ein Forschungsschiff an der Wasserlinie hat seinen Tauchroboter am Kabel vom A-Rahmen herabgelassen; er hängt knapp über dem Wasser, seine Lampe leuchtet nach unten. Dahinter ein Eisberg, der größte Teil unter der Wasserlinie, über den Meereszonen bis hinab in die Tiefsee.",
+  "youAreHere": "Du bist hier · Oberfläche",
+  "zones": {
+    "surface": { "label": "Oberfläche", "ocean": "die Meeresoberfläche und die Luft darüber" },
+    "sunlit": { "label": "Sonnenlichtzone", "ocean": "0–200 m, Epipelagial" },
+    "twilight": { "label": "Dämmerzone", "ocean": "200–1.000 m, Mesopelagial" },
+    "midnight": { "label": "Mitternachtszone", "ocean": "1.000–4.000 m, Bathypelagial" },
+    "abyss": {
+      "label": "Abyssal",
+      "ocean": "4.000–6.000 m, Abyssopelagial; der Hadal-Graben reicht weiter bis etwa 11 km"
+    }
+  },
+  "agent": {
+    "heading": "Coding-Agent · die Dateien dahinter",
+    "files": {
+      "skill": { "name": "SKILL.md", "role": "Name, Beschreibung, Anweisungen" },
+      "folders": { "name": "references/ scripts/ assets/", "role": "Begleitdateien" },
+      "project": {
+        "name": "eine Projektdatei, etwa CONTEXT.md",
+        "role": "Projektdetails, gelesen, wenn der Skill läuft"
+      }
+    }
+  }
+}

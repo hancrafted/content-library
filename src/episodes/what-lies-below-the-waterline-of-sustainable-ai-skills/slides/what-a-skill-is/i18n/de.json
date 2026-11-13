@@ -1,0 +1,21 @@
+{
+  "title": "Was ein Skill ist",
+  "zone": "Oberfläche",
+  "aiStatement": "Ein Skill ist ein Name, eine Beschreibung und Anweisungen",
+  "analogy": "Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte.",
+  "agent": "SKILL.md, dazu scripts/ references/ assets/",
+  "voiceScript": {
+    "segments": {
+      "surface-first": {
+        "title": "Erst die Oberfläche",
+        "keywords": "",
+        "script": "Wir sind noch an der Oberfläche. Bevor wir fragen, wann sich ein Skill lohnt, schauen wir uns an, woraus ein Skill besteht. Ich nehme die Wörter, die Deine Chat-App benutzt, und wenn Du mit einem Coding-Agenten arbeitest, haben manche Slides eine zweite Ansicht mit den Dateien hinter jedem Teil."
+      },
+      "the-mechanics-plainly": {
+        "title": "Die Mechanik, ganz nüchtern",
+        "keywords": "",
+        "script": "Wie ein Skill geladen wird, will ich genau sagen, denn alles Spätere hängt daran. Deshalb sage ich zuerst, was die KI wirklich tut, und nehme den Tauchgang nur als Bild, damit man es sich leichter vorstellen kann."
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "What context goes inside",
+  "zone": "Twilight",
+  "aiStatement": "Domain knowledge goes inside, tied to the step that needs it",
+  "extras": {
+    "armPreset": "arm preset",
+    "speciesGuide": "species guide"
+  },
+  "analogy": "The card in its sleeve: each extra tied to its step.",
+  "agent": "references/ and assets/ load when a step needs them",
+  "voiceScript": {
+    "segments": {
+      "twilight": {
+        "title": "Twilight",
+        "keywords": "",
+        "script": "Deeper now, into the twilight zone, where the light is dim. The skill is written and described, and the question is what context goes into it and what stays beside it."
+      },
+      "a-decision-not-a-law": {
+        "title": "A decision, not a law",
+        "keywords": "",
+        "script": "I want to be careful with the word rule here. Keeping the procedure apart from project details is a design decision with trade-offs on both sides, so I'll show you the trade-offs and you decide."
+      }
+    }
+  }
+}

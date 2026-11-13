@@ -1,0 +1,26 @@
+{
+  "title": "Keeping it alive",
+  "zone": "Abyss",
+  "aiStatement": "Keeping a skill right costs you every month",
+  "entries": {
+    "details": "+ Project details changed",
+    "tool": "+ A new tool arrived",
+    "overlap": "+ A description overlaps another skill"
+  },
+  "analogy": "A card with a running tag, like a loan statement.",
+  "agent": "Same in both views: the tag is the upkeep",
+  "voiceScript": {
+    "segments": {
+      "the-abyss": {
+        "title": "The Abyss",
+        "keywords": "",
+        "script": "This is the deepest zone, the abyss, months later. Writing the skill was quick, and keeping it right is the work."
+      },
+      "nobody-sees-it": {
+        "title": "Nobody sees it",
+        "keywords": "",
+        "script": "Most people stop at the first good run, and the part below it gets little attention, which is why I want to spend three Slides here."
+      }
+    }
+  }
+}

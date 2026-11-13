@@ -1,0 +1,22 @@
+{
+  "title": "Ihn teilen",
+  "zone": "Mitternachtszone",
+  "aiStatement": "Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum",
+  "owner": "Owner: Laborteam · v1.3 · Prüfung im März",
+  "analogy": "Die Karte im Flottenhandbuch des Instituts.",
+  "agent": "metadata: Owner, Version, Prüfdatum",
+  "voiceScript": {
+    "segments": {
+      "midnight": {
+        "title": "Mitternacht",
+        "keywords": "",
+        "script": "Jetzt sind wir in tiefem Wasser, in der Mitternachtszone. Alles bisher war für Dich. Was ändert sich, wenn eine Kollegin Deinen Skill ausführt?"
+      },
+      "three-jobs": {
+        "title": "Drei Aufgaben",
+        "keywords": "",
+        "script": "Hier unten warten drei Aufgaben. Gib dem Skill einen Owner und eine Version, kläre, wer sich um die gemeinsame Bibliothek kümmert, und teste, ob der Skill wirklich hilft."
+      }
+    }
+  }
+}

@@ -34,6 +34,7 @@ import { explorablePageTemplate as explorablePage } from '@/episodes/templates/e
 import { grids } from '@/episodes/templates/grids/episode';
 import { timelines } from '@/episodes/templates/timelines/episode';
 import { workshopTemplate } from '@/episodes/templates/workshop-template/episode';
+import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 
 /** Every Episode's composition by id, so a record's slug must be its folder's name. */
 export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { readonly slug: EpisodeSlugOf<I> } } = {
@@ -61,6 +62,7 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,
+  'what-lies-below-the-waterline-of-sustainable-ai-skills': whatLiesBelowTheWaterlineOfSustainableAiSkills,
 };
 
 /** Every Template's Slides by slug: composed like an Episode, rendered by the same container, but no Episode. */

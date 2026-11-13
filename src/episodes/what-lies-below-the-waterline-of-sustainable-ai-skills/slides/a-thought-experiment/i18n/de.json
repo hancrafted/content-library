@@ -1,0 +1,22 @@
+{
+  "title": "Ein Gedankenexperiment",
+  "zone": "Oberfläche",
+  "tag": "KI-Modell",
+  "aiStatement": "Solange Du es nicht aufschreibst, fängt jedes Gespräch mit KI bei null an",
+  "analogy": "Dein Pilot ist das KI-Modell: zehn Jahre Können, keine Erinnerung an gestern.",
+  "agent": "Jede Session beginnt mit einem frischen Kontextfenster",
+  "voiceScript": {
+    "segments": {
+      "you-are-the-captain": {
+        "title": "Du bist der Kapitän",
+        "keywords": "",
+        "script": "Stell Dir vor, Du arbeitest mit einem KI-Modell, das in seinem Fach brillant ist, der fähigste Kollege, den Du hast. Ich gebe dem ein Bild, weil wir eines bis ganz nach unten brauchen: Du bist Kapitän eines Forschungsprojekts an der Küste, und das Modell ist Dein Pilot, seit zehn Jahren an Deiner Seite. Er steuert vom Kontrollraum an Deck einen Tauchroboter am Kabel, während Du entscheidest, wohin das Projekt als Nächstes geht."
+      },
+      "one-settled-condition": {
+        "title": "Eine feste Eigenschaft",
+        "keywords": "",
+        "script": "Dein Pilot hat eine Eigenschaft, und die ändert sich nie. Über Nacht bildet er keine neuen Erinnerungen, aber alles, was er je als Pilot gelernt hat, behält er, jede Regel seines Handwerks. Genau so ist ein KI-Modell: Was es im Training gelernt hat, bleibt, und was Du ihm gestern im Gespräch gesagt hast, ist weg."
+      }
+    }
+  }
+}

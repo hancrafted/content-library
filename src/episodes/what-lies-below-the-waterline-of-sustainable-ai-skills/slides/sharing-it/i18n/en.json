@@ -1,0 +1,22 @@
+{
+  "title": "Sharing it",
+  "zone": "Midnight",
+  "aiStatement": "A shared skill needs an owner, a version, a review date",
+  "owner": "Owner: Lab team · v1.3 · review March",
+  "analogy": "The card in the institute's fleet manual.",
+  "agent": "metadata: owner, version, review date",
+  "voiceScript": {
+    "segments": {
+      "midnight": {
+        "title": "Midnight",
+        "keywords": "",
+        "script": "Now we are in deep water, the midnight zone. Everything so far was for you, so what changes when a colleague runs your skill?"
+      },
+      "three-jobs": {
+        "title": "Three jobs",
+        "keywords": "",
+        "script": "Three jobs wait down here. Give the skill an owner and a version, decide who looks after the shared library, and test that the skill actually helps."
+      }
+    }
+  }
+}

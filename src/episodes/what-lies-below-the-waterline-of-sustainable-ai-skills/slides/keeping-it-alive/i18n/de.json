@@ -1,0 +1,26 @@
+{
+  "title": "Ihn am Leben halten",
+  "zone": "Abyssal",
+  "aiStatement": "Einen Skill richtig zu halten, kostet Dich jeden Monat etwas",
+  "entries": {
+    "details": "+ Projektdetails geändert",
+    "tool": "+ Ein neues Werkzeug kam dazu",
+    "overlap": "+ Eine Beschreibung überschneidet sich mit einem anderen Skill"
+  },
+  "analogy": "Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit.",
+  "agent": "In beiden Ansichten gleich: Der Zettel ist die Pflege",
+  "voiceScript": {
+    "segments": {
+      "the-abyss": {
+        "title": "Die Tiefsee",
+        "keywords": "",
+        "script": "Das ist die tiefste Zone, die Tiefsee, Monate später. Den Skill zu schreiben, ging schnell, ihn richtig zu halten, ist die eigentliche Arbeit."
+      },
+      "nobody-sees-it": {
+        "title": "Niemand sieht es",
+        "keywords": "",
+        "script": "Die meisten hören beim ersten guten Lauf auf, und der Teil darunter bekommt wenig Aufmerksamkeit. Deshalb will ich hier drei Slides lang bleiben."
+      }
+    }
+  }
+}

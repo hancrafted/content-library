@@ -1,0 +1,22 @@
+{
+  "title": "Die Beschreibung",
+  "zone": "Sonnenlichtzone",
+  "aiStatement": "Die Beschreibung ist alles, was die KI sieht",
+  "description": "„Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“",
+  "analogy": "Das Register ist offen, jede Karte dahinter geschlossen.",
+  "agent": "SKILL.md: Name und Beschreibung laden zuerst",
+  "voiceScript": {
+    "segments": {
+      "the-label-decides": {
+        "title": "Das Etikett entscheidet",
+        "keywords": "",
+        "script": "Wir sind noch im Sonnenlicht, und das ist der Teil, den die meisten überspringen. Ein Skill, den das Modell nie auswählt, hilft niemandem. Deshalb zählt die Beschreibung mehr als die Anweisungen."
+      },
+      "name-description": {
+        "title": "Name, Beschreibung",
+        "keywords": "",
+        "script": "Bevor das Modell einen Skill öffnet, sieht es zwei Zeilen: den Namen und die Beschreibung. Mehr steht nicht im Register, und mehr hat das Modell nicht, um zu entscheiden."
+      }
+    }
+  }
+}

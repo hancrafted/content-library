@@ -1,0 +1,19 @@
+{
+  "label": "A research ship on the waterline has lowered its diving robot on a cable from the A-frame to hang just above the water, its lamp shining down; beyond it an iceberg, most of its mass below the waterline, above the sea zones down to the abyss.",
+  "youAreHere": "you are here · Surface",
+  "zones": {
+    "surface": { "label": "Surface", "ocean": "the sea surface and the air above it" },
+    "sunlit": { "label": "Sunlit", "ocean": "0–200 m, epipelagic" },
+    "twilight": { "label": "Twilight", "ocean": "200–1,000 m, mesopelagic" },
+    "midnight": { "label": "Midnight", "ocean": "1,000–4,000 m, bathypelagic" },
+    "abyss": { "label": "Abyss", "ocean": "4,000–6,000 m, abyssopelagic; the hadal trench goes on to about 11 km" }
+  },
+  "agent": {
+    "heading": "Coding agent · the files behind it",
+    "files": {
+      "skill": { "name": "SKILL.md", "role": "name, description, instructions" },
+      "folders": { "name": "references/ scripts/ assets/", "role": "supporting files" },
+      "project": { "name": "a project file, such as CONTEXT.md", "role": "project details, read when the skill runs" }
+    }
+  }
+}
