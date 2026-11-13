@@ -50,19 +50,33 @@
         gap: 32px;
         padding: 24px 32px;
       }
+      .layout[data-nav='collapsed'] {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout[data-nav='collapsed'] nav {
+        display: none;
+      }
       nav {
         position: sticky;
         top: 16px;
         align-self: start;
       }
       section[data-item] {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        column-gap: 24px;
         margin-bottom: 40px;
-        padding: 24px;
+        padding: 24px 16px;
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 8px;
       }
-      section[data-item] > svg {
+      @media (max-width: 900px) {
+        section[data-item] {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      section[data-item] .main > svg {
         position: sticky;
         top: 0;
         z-index: 1;
@@ -81,6 +95,21 @@
       }
       article[data-recommended='true'] {
         border-color: var(--accent);
+      }
+      label.pick {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        margin: 8px 0;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      label.pick:has(input:checked) {
+        border-color: var(--accent);
+        font-weight: 600;
       }
       .label {
         color: var(--muted);
@@ -144,9 +173,10 @@
     <header>
       <h1>Cache layer</h1>
       <p>Decide where cached responses live. Mode: decide. Revision 1.</p>
+      <button type="button" id="nav-toggle" aria-expanded="true" aria-controls="item-nav">Hide navigation</button>
     </header>
-    <div class="layout">
-      <nav aria-label="Items">
+    <div class="layout" data-nav="open">
+      <nav id="item-nav" aria-label="Items">
         <ol>
           <li><a href="#item-store">1. Cache store</a></li>
           <li><a href="#item-expiry">2. Expiry</a></li>
@@ -155,66 +185,74 @@
       </nav>
       <main>
         <section id="item-store" data-item="store" data-fidelity="diagram" data-depth="simple">
-          <h2>1. Where should cached responses live?</h2>
-          <p>Door: one-way. Effort: medium. Rung: diagram, enough because the decision is about data flow, not UI.</p>
-          <script type="text/x-mermaid" data-diagram="store-flow">
-            flowchart LR
-              Client --> Cache --> Service
-          </script>
-          <svg viewBox="0 0 360 60" role="img" aria-label="Client to cache to service">
-            <rect x="2" y="15" width="90" height="30" />
-            <text x="20" y="35">Client</text>
-            <line x1="92" y1="30" x2="135" y2="30" />
-            <rect x="135" y="15" width="90" height="30" />
-            <text x="155" y="35">Cache</text>
-            <line x1="225" y1="30" x2="268" y2="30" />
-            <rect x="268" y="15" width="90" height="30" />
-            <text x="282" y="35">Service</text>
-          </svg>
-          <p class="label">Evidence: the service answers in 800 ms at p95 (load test, 2026-10-02).</p>
-          <div class="options">
-            <article data-option="memory" data-recommended="true">
-              <h3>A. In process memory (recommended)</h3>
-              <p>What changes for you: no new service to run; caches reset on deploy.</p>
-              <p>Why recommended: the evidence shows one instance, so a shared store buys nothing yet.</p>
-              <label><input type="radio" name="store" value="memory" /> Pick A</label>
-              <label for="c-store-memory">Comment on A</label>
-              <textarea id="c-store-memory"></textarea>
-            </article>
-            <article data-option="redis" data-recommended="false">
-              <h3>B. Shared Redis</h3>
-              <p>What changes for you: one more service to operate; caches survive deploys.</p>
-              <label><input type="radio" name="store" value="redis" /> Pick B</label>
-              <label for="c-store-redis">Comment on B</label>
-              <textarea id="c-store-redis"></textarea>
-            </article>
+          <div class="main">
+            <h2>1. Where should cached responses live?</h2>
+            <p>Door: one-way. Effort: medium. Rung: diagram, enough because the decision is about data flow, not UI.</p>
+            <script type="text/x-mermaid" data-diagram="store-flow">
+              flowchart LR
+                Client --> Cache --> Service
+            </script>
+            <svg viewBox="0 0 360 60" role="img" aria-label="Client to cache to service" data-design-width="1920">
+              <rect x="2" y="15" width="90" height="30" />
+              <text x="20" y="35">Client</text>
+              <line x1="92" y1="30" x2="135" y2="30" />
+              <rect x="135" y="15" width="90" height="30" />
+              <text x="155" y="35">Cache</text>
+              <line x1="225" y1="30" x2="268" y2="30" />
+              <rect x="268" y="15" width="90" height="30" />
+              <text x="282" y="35">Service</text>
+            </svg>
+            <p class="label">Evidence: the service answers in 800 ms at p95 (load test, 2026-10-02).</p>
           </div>
-          <label for="c-store">Comment on this item</label>
-          <textarea id="c-store"></textarea>
-          <button type="button" data-reset>
-            <span aria-hidden="true">↺</span> Reset this item's picks and comments
-          </button>
+          <div class="rail">
+            <div class="options">
+              <article data-option="memory" data-recommended="true">
+                <h3>A. In process memory (recommended)</h3>
+                <p>What changes for you: no new service to run; caches reset on deploy.</p>
+                <p>Why recommended: the evidence shows one instance, so a shared store buys nothing yet.</p>
+                <label class="pick"><input type="radio" name="store" value="memory" /> Pick A</label>
+                <label for="c-store-memory">Comment on A</label>
+                <textarea id="c-store-memory"></textarea>
+              </article>
+              <article data-option="redis" data-recommended="false">
+                <h3>B. Shared Redis</h3>
+                <p>What changes for you: one more service to operate; caches survive deploys.</p>
+                <label class="pick"><input type="radio" name="store" value="redis" /> Pick B</label>
+                <label for="c-store-redis">Comment on B</label>
+                <textarea id="c-store-redis"></textarea>
+              </article>
+            </div>
+            <label for="c-store">Comment on this item</label>
+            <textarea id="c-store"></textarea>
+            <button type="button" data-reset>
+              <span aria-hidden="true">↺</span> Reset this item's picks and comments
+            </button>
+          </div>
         </section>
         <section id="item-expiry" data-item="expiry" data-fidelity="diagram" data-depth="both">
-          <h2>2. Should entries expire after five minutes?</h2>
-          <p>Door: two-way. Effort: small. Rung: diagram, enough because the choice is yes or no.</p>
-          <p class="label">Agent proposal: five minutes matches the upstream data refresh. Unknown: peak traffic.</p>
-          <button type="button" data-depth-toggle aria-expanded="false" aria-controls="expiry-detail">
-            Show detail
-          </button>
-          <div id="expiry-detail" hidden>
-            <p>Reference: the upstream feed publishes every five minutes (<code>docs/feed.md</code>).</p>
+          <div class="main">
+            <h2>2. Should entries expire after five minutes?</h2>
+            <p>Door: two-way. Effort: small. Rung: diagram, enough because the choice is yes or no.</p>
+            <p class="label">Agent proposal: five minutes matches the upstream data refresh. Unknown: peak traffic.</p>
+            <button type="button" data-depth-toggle aria-expanded="false" aria-controls="expiry-detail">
+              Show detail
+            </button>
+            <div id="expiry-detail" hidden>
+              <p>Reference: the upstream feed publishes every five minutes (<code>docs/feed.md</code>).</p>
+            </div>
           </div>
-          <fieldset>
-            <legend>Expire after five minutes?</legend>
-            <label><input type="radio" name="expiry" value="yes" /> Yes</label>
-            <label><input type="radio" name="expiry" value="no" /> No</label>
-          </fieldset>
-          <label for="c-expiry">Comment on this item</label>
-          <textarea id="c-expiry"></textarea>
-          <button type="button" data-reset>
-            <span aria-hidden="true">↺</span> Reset this item's picks and comments
-          </button>
+          <div class="rail">
+            <fieldset>
+              <legend>Expire after five minutes?</legend>
+              <label><input type="radio" name="expiry" value="yes" /> Yes</label>
+              <label><input type="radio" name="expiry" value="no" /> No</label>
+            </fieldset>
+            <label for="c-expiry">Comment on this item</label>
+            <textarea id="c-expiry"></textarea>
+            <button type="button" data-reset>
+              <span aria-hidden="true">↺</span> Reset this item's picks and comments
+            </button>
+          </div>
         </section>
         <section id="approve" aria-labelledby="approve-title">
           <div data-reflection>
@@ -255,6 +293,13 @@
       </main>
     </div>
     <script>
+      document.getElementById('nav-toggle').addEventListener('click', (event) => {
+        const layout = document.querySelector('.layout');
+        const collapse = layout.dataset.nav === 'open';
+        layout.dataset.nav = collapse ? 'collapsed' : 'open';
+        event.currentTarget.setAttribute('aria-expanded', String(!collapse));
+        event.currentTarget.textContent = collapse ? 'Show navigation' : 'Hide navigation';
+      });
       for (const toggle of document.querySelectorAll('[data-depth-toggle]')) {
         toggle.addEventListener('click', () => {
           const detail = document.getElementById(toggle.getAttribute('aria-controls'));
@@ -287,7 +332,7 @@
           return [...document.querySelectorAll('[data-item]')].map((item) => ({
             item: item.dataset.item,
             response: item.querySelector('input[type="radio"]:checked')?.value ?? 'skipped',
-            comment: text(item.querySelector(':scope > textarea')),
+            comment: text(item.querySelector(':scope > .rail > textarea')),
             options: [...item.querySelectorAll('[data-option]')].map((option) => ({
               option: option.dataset.option,
               comment: text(option.querySelector('textarea')),

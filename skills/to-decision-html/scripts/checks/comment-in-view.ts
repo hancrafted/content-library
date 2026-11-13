@@ -28,17 +28,7 @@ const COMMENT = Array.from({ length: 12 }, (_, line) => `Zeile ${line + 1}: die 
 /** Runs in the page: the field's facts and its visual's box. */
 function measure(kit: Kit, { selector, index }: { selector: string; index: number }): Field {
   const field = document.querySelectorAll(selector)[index];
-  const area = (element: Element) => element.getBoundingClientRect().width * element.getBoundingClientRect().height;
-  const largest = (scope: Element | null) => {
-    const marked = [...(scope?.querySelectorAll('[data-visual]') ?? [])];
-    // An icon inside a button or label is a control's glyph, not the visual under discussion.
-    const drawn = [...(scope?.querySelectorAll('svg, img, canvas, video, iframe') ?? [])].filter(
-      (element) => !element.closest('button, label'),
-    );
-    const candidates = (marked.length > 0 ? marked : drawn).filter((element) => area(element) > 0);
-    return candidates.sort((a, b) => area(b) - area(a))[0] ?? null;
-  };
-  const visual = largest(field.closest('[data-option]')) ?? largest(field.closest('[data-item]'));
+  const visual = kit.largestVisual(field.closest('[data-option]')) ?? kit.largestVisual(field.closest('[data-item]'));
   return { facts: kit.facts(field), visual: (visual?.getBoundingClientRect().toJSON() as Rect | undefined) ?? null };
 }
 
