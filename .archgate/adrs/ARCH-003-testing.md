@@ -57,7 +57,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
 6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
 7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
-8. **DO** move a test the nightly budget lists into `*.slow.test.ts`, or make it faster — `factory-tour.pure.slow.test.ts` plays every shipped tour frame by frame. (Decision 4.4)
+8. **DO** move a test the nightly budget lists into `*.slow.test.ts`, or make it faster — a tour played frame by frame, a check that walks every staging folder. (Decision 4.4)
 9. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 10. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
 
@@ -99,8 +99,8 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`. Browser-test support remains available if a suite is reintroduced.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
-3. **Test config:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); the slow lane lists its rerun triggers.
-4. **Nightly workflow:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
+3. **Test lanes:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); pre-push runs the slow tests a branch affects.
+4. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
 5. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
 
 **Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow test reads from disk is a rerun trigger.

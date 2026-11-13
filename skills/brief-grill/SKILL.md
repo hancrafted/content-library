@@ -59,7 +59,7 @@ _Done when_ every intent passes or the user has answered its question.
 ## Writing the Brief (Claude Code)
 
 1. Write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ (`status: draft`, and `generated` naming you and the current UTC time). Under `/new-episode`, write it in the Episode's worktree.
-2. Run `npm run check:docs` and `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging` until both are clean, then append the machine entry `{ by: process:markdown-harness, at: <now UTC> }` to `verified` (a list; create it when the Brief has none). Rewriting the Brief later moves `generated.at` forward and re-opens the gate. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
+2. Run `npm run check:docs` and the staging checks, `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging` until both are clean, then append the machine entry `{ by: process:markdown-harness, at: <now UTC> }` to `verified` (a list; create it when the Brief has none). Rewriting the Brief later moves `generated.at` forward and re-opens the gate. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
 3. Commit the checked Brief through the `commit` skill with the trailer `Gate: draft brief`, before the user edits it, so their edits stay visible as a diff.
 4. Hand the Brief to the user. Only the user approves, by running `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md`, which appends their `verified` entry; that commit carries `Gate: approved brief`.
 
