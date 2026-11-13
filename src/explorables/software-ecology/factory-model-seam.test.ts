@@ -114,9 +114,7 @@ describe('success cases', () => {
     const breaches = files.flatMap((f) => breachesOf(readFileSync(join(DIR, f), 'utf8')).map((b) => `${f}: ${b}`));
     // ASSERT
     expect(files.length).toBeGreaterThan(MODEL.size);
-    expect(files).toContain(
-      '../../episodes/explorable-pages/software-ecology/slides/why-how-what/factory-still-state.ts',
-    );
+    expect(files).toContain('../../episodes/explorable-pages/software-ecology/slides/why-how-what/slide.tsx');
     expect(breaches).toEqual(none);
   });
 });

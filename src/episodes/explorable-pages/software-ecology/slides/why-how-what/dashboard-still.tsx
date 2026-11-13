@@ -1,7 +1,7 @@
 import type { Level } from '@/explorables/software-ecology/dashboard-readouts.pure';
 import { GLYPH } from '@/explorables/software-ecology/factory-glyphs.pure';
+import type { FactoryStillState } from '@/explorables/software-ecology/stills.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import type { FactoryStillState } from './factory-still-state';
 
 export interface DashboardStillWords {
   /** "· AI leaves it", after the effectiveness the AI switch does not change. */

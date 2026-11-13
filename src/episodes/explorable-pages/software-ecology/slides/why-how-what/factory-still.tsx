@@ -1,6 +1,6 @@
+import type { FactoryStillState } from '@/explorables/software-ecology/stills.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { CustomerStill } from './customer-still';
-import type { FactoryStillState } from './factory-still-state';
 import { Pile, Station, Turbo } from './station-still';
 import { Doc, formatsOf, type Formats } from './still-parts';
 
@@ -145,7 +145,7 @@ function Stations(p: { state: FactoryStillState; pins: readonly Pin[]; overflow:
 
 /**
  * The software ecology factory at one moment, drawn from the Explorable's own model, layout and words
- * (`factoryStillState`): every belt with the documents riding it, each work center with its rack and the document in
+ * (`stillOf`): every belt with the documents riding it, each work center with its rack and the document in
  * work, the rework lanes that carry work back, the pile-up past a full rack, the Customer card, and numbered pins.
  * Static and server-rendered; its `label` names the picture.
  */

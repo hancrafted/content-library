@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { factoryStillState } from './factory-still-state';
+import { stillOf } from './stills.pure';
 
 /*
  * The stills read the Explorable's own model through the use case's `still` state: week 20 of In practice with AI at
@@ -12,7 +12,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { week: 20, ai: ['eng'] };
     // ACT
-    const still = factoryStillState('en');
+    const still = stillOf('tire', 'still', 'en');
     // ASSERT
     expect({ week: still.week, ai: still.stations.filter((s) => s.ai).map((s) => s.id) }).toEqual(expected);
   });
@@ -21,7 +21,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { waiting: 562, level: 2, rack: 6, inspection: true };
     // ACT
-    const qa = factoryStillState('en').stations.find((s) => s.id === 'qa');
+    const qa = stillOf('tire', 'still', 'en').stations.find((s) => s.id === 'qa');
     // ASSERT
     expect({ waiting: qa?.waiting, level: qa?.level, rack: qa?.rack.length, inspection: qa?.inspection }).toEqual(
       expected,
@@ -34,7 +34,7 @@ describe('success cases', () => {
     const tenths = (x: number) => Math.round(x * 10) / 10;
     const hundredths = (x: number) => Math.round(x * 100) / 100;
     // ACT
-    const { customer } = factoryStillState('en');
+    const { customer } = stillOf('tire', 'still', 'en');
     const read = {
       output: tenths(customer.output),
       sat: hundredths(customer.sat),
@@ -49,7 +49,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { light: 'green', out: 13, good: 91, ai: false };
     // ACT
-    const { dashboard } = factoryStillState('en');
+    const { dashboard } = stillOf('tire', 'still', 'en');
     // ASSERT
     expect({
       light: dashboard.r.light,
@@ -63,7 +63,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = ['Quality assurance', 'Qualitätssicherung'];
     // ACT
-    const titles = (['en', 'de'] as const).map((l) => factoryStillState(l).stations.find((s) => s.id === 'qa')?.title);
+    const titles = (['en', 'de'] as const).map(
+      (l) => stillOf('tire', 'still', l).stations.find((s) => s.id === 'qa')?.title,
+    );
     // ASSERT
     expect(titles).toEqual(expected);
   });
@@ -74,7 +76,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = 'Quality assurance';
     // ACT
-    const title = factoryStillState('fr').stations.find((s) => s.id === 'qa')?.title;
+    const title = stillOf('tire', 'still', 'fr').stations.find((s) => s.id === 'qa')?.title;
     // ASSERT
     expect(title).toBe(expected);
   });
@@ -83,7 +85,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('draws every document on a belt within the floor', () => {
     // ARRANGE
-    const still = factoryStillState('en');
+    const still = stillOf('tire', 'still', 'en');
     // ACT
     const outside = still.belts
       .flatMap((b) => b.docs)

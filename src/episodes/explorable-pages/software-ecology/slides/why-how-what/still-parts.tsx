@@ -1,6 +1,6 @@
 import { DocIcon } from '@/explorables/software-ecology/doc-icon-view';
 import { GLYPH, ICON } from '@/explorables/software-ecology/factory-glyphs.pure';
-import type { StillDoc } from './factory-still-state';
+import type { StillDoc } from '@/explorables/software-ecology/stills.pure';
 
 /** A belt document is 12 × 15 units; the still centres it on its point. */
 const DOC = { w: 12, h: 15 };
