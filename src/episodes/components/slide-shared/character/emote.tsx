@@ -150,7 +150,7 @@ function SpeechBubble({ words, mood, facing }: BubbleProps) {
   const { x, bottom, tip, base } = BUBBLE_PLACE[mood && THOUGHT_MOODS.has(mood) ? 'beside' : 'plain'];
   const [near, far, point] = [base[0] * side, base[1] * side, `${tip[0] * side},${tip[1]}`];
   return (
-    <g data-says-bubble className={styles.pop}>
+    <g data-says-bubble data-motion="emote" className={styles.pop}>
       <g transform={`translate(${x * side} ${bottom}) scale(${BUBBLE.scale})`}>
         <Words words={words} side={side} />
       </g>
@@ -169,7 +169,7 @@ function SpeechBubble({ words, mood, facing }: BubbleProps) {
 function EmoteMark({ mood, facing }: { readonly mood: Mood; readonly facing: EmoteProps['facing'] }) {
   const mirror = sideOf(facing) === -1 && mood !== 'confused';
   return (
-    <g data-emote-mark={MARK[mood]} className={styles.pop}>
+    <g data-emote-mark={MARK[mood]} data-motion="emote" className={styles.pop}>
       <g transform={mirror ? 'scale(-1 1)' : undefined}>{MARKS[mood]()}</g>
     </g>
   );

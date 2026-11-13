@@ -9,6 +9,12 @@ import { Console, type ConsoleProps } from './console';
  * first screen by passing children, clipped to the glass.
  */
 
+const SCREEN_SLOT = '[data-slot="screen"]';
+const SLOT = '[data-slot]';
+const SCREEN = '[data-screen]';
+const TRACE = '[data-tone="screen-glow"]';
+const MUG = '[data-mug]';
+
 const draw = (props: ConsoleProps) =>
   load(renderToStaticMarkup(createElement('svg', null, createElement(Console, props))), { xml: true });
 
@@ -19,22 +25,23 @@ describe('success cases', () => {
     const expected = { slot: { x: '26', y: '-40', width: '93.6', height: '32' }, content: 1, traces: 1 };
     // ACT
     const $ = draw({ width: 260, children: content });
-    const slot = $('[data-slot="screen"]');
-    // ASSERT
-    expect({
+    const slot = $(SCREEN_SLOT);
+    const seen = {
       slot: { x: slot.attr('x'), y: slot.attr('y'), width: slot.attr('width'), height: slot.attr('height') },
       content: slot.find('[data-skill-file]').length,
-      traces: $('[data-tone="screen-glow"]').filter((_, el) => $(el).closest('[data-screen]').length > 0).length,
-    }).toEqual(expected);
+      traces: $(TRACE).filter((_, el) => $(el).closest(SCREEN).length > 0).length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 
   it('stands the asked number of mugs on the desk', () => {
     // ARRANGE
     const mugs = 2;
     // ACT
-    const $ = draw({ width: 120, mugs });
+    const standing = draw({ width: 120, mugs })(MUG).length;
     // ASSERT
-    expect($('[data-mug]')).toHaveLength(mugs);
+    expect(standing).toBe(mugs);
   });
 });
 
@@ -55,11 +62,8 @@ describe('edge cases', () => {
     const expected = { slots: 0, traces: 2, mugs: 0 };
     // ACT
     const $ = draw({ width: 200 });
+    const seen = { slots: $(SLOT).length, traces: $(`${SCREEN} ${TRACE}`).length, mugs: $(MUG).length };
     // ASSERT
-    expect({
-      slots: $('[data-slot]').length,
-      traces: $('[data-screen] [data-tone="screen-glow"]').length,
-      mugs: $('[data-mug]').length,
-    }).toEqual(expected);
+    expect(seen).toEqual(expected);
   });
 });

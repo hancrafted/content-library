@@ -50,26 +50,26 @@ describe('success cases', () => {
     // ACT
     const seen = cases.map(({ name, preset, pose }) => {
       const drawing = drawFigure(preset, pose);
-      const top = Math.min(...everyPoint(drawing).map(([, y]) => y));
       return {
-        name,
-        pose,
-        missing: required.filter((id) => !partIds(drawing).includes(id)),
-        aboveTop: drawing.anchor.y <= top,
+        label: `${name} ${pose}`,
+        ids: partIds(drawing),
+        anchorY: drawing.anchor.y,
+        top: Math.min(...everyPoint(drawing).map(([, y]) => y)),
       };
     });
     // ASSERT
-    expect(seen).toEqual(cases.map(({ name, pose }) => ({ name, pose, missing: [], aboveTop: true })));
+    for (const { label, ids, anchorY, top } of seen) {
+      expect(ids, label).toEqual(expect.arrayContaining(required));
+      expect(anchorY, label).toBeLessThanOrEqual(top);
+    }
   });
 
   it('seats the figure on a chair only in the sit pose', () => {
     // ARRANGE
-    const expected = POSES.map((pose) => ({ pose, chair: pose === 'sit', seatedLegs: pose === 'sit' }));
+    const expected = { chair: ['sit'], seatedLegs: ['sit'] };
     // ACT
-    const seen = POSES.map((pose) => {
-      const ids = partIds(drawFigure(officer, pose));
-      return { pose, chair: ids.includes('chair'), seatedLegs: ids.includes('thigh') };
-    });
+    const posesWith = (id: string) => POSES.filter((pose) => partIds(drawFigure(officer, pose)).includes(id));
+    const seen = { chair: posesWith('chair'), seatedLegs: posesWith('thigh') };
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -104,12 +104,13 @@ describe('success cases', () => {
   it('carries the prop at the side standing, holds it forward, and puts it away when the hands are busy', () => {
     // ARRANGE
     const torsoFront = 16;
-    const expected = { stand: true, hold: true, point: false, steer: false, sit: false, holdAhead: true };
+    const expected = ['stand', 'hold'];
     // ACT
-    const shows = Object.fromEntries(POSES.map((pose) => [pose, partIds(drawFigure(flyer, pose)).includes('prop')]));
-    const holdAhead = Math.min(...xs(drawFigure(flyer, 'hold'), 'prop')) > torsoFront;
+    const carrying = POSES.filter((pose) => partIds(drawFigure(flyer, pose)).includes('prop'));
+    const heldFrom = Math.min(...xs(drawFigure(flyer, 'hold'), 'prop'));
     // ASSERT
-    expect({ ...shows, holdAhead }).toEqual(expected);
+    expect(carrying).toEqual(expected);
+    expect(heldFrom).toBeGreaterThan(torsoFront);
   });
 
   it('pins one ai tag on an AI agent and none on a human, in every pose', () => {
@@ -143,10 +144,12 @@ describe('success cases', () => {
     // ARRANGE
     const faceOf = (mood?: (typeof MOODS)[number]) =>
       JSON.stringify(['brow', 'eye', 'mouth'].map((id) => part(drawFigure(officer, 'stand', mood), id)));
+    const moods = ['no mood', ...MOODS];
     // ACT
-    const faces = new Set([faceOf(), ...MOODS.map(faceOf)]);
+    const faces = [faceOf(), ...MOODS.map(faceOf)];
+    const sharingAFace = moods.filter((_, index) => faces.indexOf(faces[index]) !== index);
     // ASSERT
-    expect(faces.size).toBe(MOODS.length + 1);
+    expect(sharingAFace).toEqual([]);
   });
 });
 
@@ -154,30 +157,34 @@ describe('failure cases', () => {
   it('refuses a pose the body plan does not know', () => {
     // ARRANGE
     const pose = 'cartwheel' as (typeof POSES)[number];
+    const expected = /cartwheel/;
     // ACT
     const draw = () => drawFigure(officer, pose);
     // ASSERT
-    expect(draw).toThrow(/cartwheel/);
+    expect(draw).toThrow(expected);
   });
 
   it('refuses a mood outside the closed set', () => {
     // ARRANGE
     const mood = 'grumpy' as (typeof MOODS)[number];
+    const expected = /grumpy/;
     // ACT
     const draw = () => drawFigure(officer, 'stand', mood);
     // ASSERT
-    expect(draw).toThrow(/grumpy/);
+    expect(draw).toThrow(expected);
   });
 });
 
 describe('edge cases', () => {
   it('holds out an open hand when the preset carries nothing', () => {
     // ARRANGE
-    const expected = { prop: false, hand: true };
+    const prop = 'prop';
+    const hand = 'front-hand';
     // ACT
     const ids = partIds(drawFigure(officer, 'hold'));
     // ASSERT
-    expect({ prop: ids.includes('prop'), hand: ids.includes('front-hand') }).toEqual(expected);
+    expect(ids).not.toContain(prop);
+    expect(ids).toContain(hand);
   });
 
   it('keeps long hair falling behind the shoulders under a cap', () => {

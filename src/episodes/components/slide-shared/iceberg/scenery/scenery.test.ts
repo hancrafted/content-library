@@ -1,23 +1,26 @@
 import { load } from 'cheerio';
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import { createElement, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Iceberg } from './iceberg';
 import { Bubbles, FishSchool, Jellies, Whale } from './sea-life';
-import { LightRays, Seabed } from './seabed';
+import { LightRays } from './seabed';
 import { Clouds, SunMoon } from './sky';
 
 /*
  * The scenery parts `ZoneScene` draws: the iceberg by part, the sea life with its one ambient loop each, the sky's
  * clouds and its sun and moon, the seabed and the light rays. Rendered to static markup, as a Scene's server render
- * does, and read by their `data-*` hooks.
+ * does, and read by their `data-*` hooks. That every tone they paint has a colour is checked against the CSS on disk,
+ * in scenery.slow.test.ts.
  */
 
 const render = (element: ReactElement) => load(renderToStaticMarkup(createElement('svg', null, element)));
 
-const SCENERY_CSS = readFileSync(path.join(import.meta.dirname, 'scenery.module.css'), 'utf8');
+const TIP = '[data-iceberg-tip]';
+const KEEL = '[data-iceberg-keel]';
+const GLOW = '[data-iceberg-glow]';
+const MOTION = '[data-motion]';
+const AMBIENT = '[data-motion="ambient"]';
 
 describe('success cases', () => {
   it('draws the tip, the keel and the waterline glow for the whole iceberg, on the waterline', () => {
@@ -25,20 +28,21 @@ describe('success cases', () => {
     const expected = { tip: 1, keel: 1, glow: 1, transform: 'translate(900 400) scale(1)' };
     // ACT
     const $ = render(createElement(Iceberg, { x: 900, waterline: 400 }));
-    // ASSERT
-    expect({
-      tip: $('[data-iceberg-tip]').length,
-      keel: $('[data-iceberg-keel]').length,
-      glow: $('[data-iceberg-glow]').length,
+    const seen = {
+      tip: $(TIP).length,
+      keel: $(KEEL).length,
+      glow: $(GLOW).length,
       transform: $('[data-iceberg]').attr('transform'),
-    }).toEqual(expected);
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 
   it('marks each creature loop as ambient, so a check finds every moving part', () => {
     // ARRANGE
     const expected = { school: 1, jellies: 2, whale: 1, bubbles: 7, clouds: 3 };
     // ACT
-    const count = (element: ReactElement) => render(element)('[data-motion="ambient"]').length;
+    const count = (element: ReactElement) => render(element)(AMBIENT).length;
     const seen = {
       school: count(createElement(FishSchool, { x: 0, y: 0 })),
       jellies: count(createElement(Jellies, { x: 0, y: 0 })),
@@ -55,8 +59,9 @@ describe('success cases', () => {
     const expected = { day: 1, night: 1 };
     // ACT
     const $ = render(createElement(SunMoon, { x: 1000, y: 120 }));
+    const seen = { day: $('[data-sky-day]').length, night: $('[data-sky-night]').length };
     // ASSERT
-    expect({ day: $('[data-sky-day]').length, night: $('[data-sky-night]').length }).toEqual(expected);
+    expect(seen).toEqual(expected);
   });
 
   it('draws as many light rays as asked, none of them moving', () => {
@@ -64,8 +69,9 @@ describe('success cases', () => {
     const expected = { rays: 4, moving: 0 };
     // ACT
     const $ = render(createElement(LightRays, { x: 120, y: 400, count: 4 }));
+    const seen = { rays: $('[data-ray]').length, moving: $(MOTION).length };
     // ASSERT
-    expect({ rays: $('[data-ray]').length, moving: $('[data-motion]').length }).toEqual(expected);
+    expect(seen).toEqual(expected);
   });
 });
 
@@ -86,21 +92,18 @@ describe('edge cases', () => {
     const expected = { tip: 0, glow: 0, keel: 'scale(1 1.4)' };
     // ACT
     const $ = render(createElement(Iceberg, { part: 'keel', x: 0, waterline: 0, depthScale: 1.4 }));
+    const seen = { tip: $(TIP).length, glow: $(GLOW).length, keel: $(KEEL).attr('transform') };
     // ASSERT
-    expect({
-      tip: $('[data-iceberg-tip]').length,
-      glow: $('[data-iceberg-glow]').length,
-      keel: $('[data-iceberg-keel]').attr('transform'),
-    }).toEqual(expected);
+    expect(seen).toEqual(expected);
   });
 
   it('never moves the iceberg: it carries no motion hook', () => {
     // ARRANGE
     const expected = 0;
     // ACT
-    const $ = render(createElement(Iceberg, { x: 0, waterline: 0 }));
+    const moving = render(createElement(Iceberg, { x: 0, waterline: 0 }))(MOTION).length;
     // ASSERT
-    expect($('[data-motion]').length).toBe(expected);
+    expect(moving).toBe(expected);
   });
 
   it('places explicit fish where the Scene says, ignoring count and seed', () => {
@@ -109,41 +112,10 @@ describe('edge cases', () => {
     const expected = ['translate(10 -4) scale(-2 2)'];
     // ACT
     const $ = render(createElement(FishSchool, { x: 0, y: 0, at, count: 9, scale: 2, flip: true }));
+    const placed = $('[data-fish]')
+      .toArray()
+      .map((fish) => $(fish).attr('transform'));
     // ASSERT
-    expect(
-      $('[data-fish]')
-        .toArray()
-        .map((fish) => $(fish).attr('transform')),
-    ).toEqual(expected);
-  });
-
-  it('gives every tone a part paints a colour in the scenery palette', () => {
-    // ARRANGE
-    const $ = load(
-      [
-        createElement(Iceberg, { x: 0, waterline: 0 }),
-        createElement(FishSchool, { x: 0, y: 0 }),
-        createElement(Jellies, { x: 0, y: 0 }),
-        createElement(Whale, { x: 0, y: 0 }),
-        createElement(Bubbles, { x: 0, y: 0 }),
-        createElement(Clouds, {}),
-        createElement(SunMoon, { x: 0, y: 0 }),
-        createElement(Seabed, { y: 0 }),
-        createElement(LightRays, { x: 0, y: 0 }),
-      ]
-        .map((element) => renderToStaticMarkup(createElement('svg', null, element)))
-        .join(''),
-    );
-    const tones = [
-      ...new Set(
-        $('[data-tone]')
-          .toArray()
-          .map((node) => $(node).attr('data-tone')),
-      ),
-    ];
-    // ACT
-    const unpainted = tones.filter((tone) => !SCENERY_CSS.includes(`[data-tone='${tone}'] {`));
-    // ASSERT
-    expect(unpainted).toEqual([]);
+    expect(placed).toEqual(expected);
   });
 });

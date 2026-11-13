@@ -10,20 +10,16 @@ import { captain, pilot } from './cast';
 describe('success cases', () => {
   it('draws the captain and the pilot in every pose', () => {
     // ARRANGE
-    const expected = POSES.flatMap((pose) => [
-      { who: 'captain', pose, face: true },
-      { who: 'pilot', pose, face: true },
-    ]);
-    // ACT
-    const seen = POSES.flatMap((pose) =>
-      Object.entries({ captain, pilot }).map(([who, preset]) => ({
-        who,
-        pose,
-        face: partIds(drawFigure(preset, pose)).includes('face'),
-      })),
+    const face = 'face';
+    const drawings = POSES.flatMap((pose) =>
+      Object.entries({ captain, pilot }).map(([who, preset]) => ({ who, pose, preset })),
     );
+    // ACT
+    const missingFace = drawings
+      .filter(({ preset, pose }) => !partIds(drawFigure(preset, pose)).includes(face))
+      .map(({ who, pose }) => `${who} ${pose}`);
     // ASSERT
-    expect(seen).toEqual(expected);
+    expect(missingFace).toEqual([]);
   });
 });
 

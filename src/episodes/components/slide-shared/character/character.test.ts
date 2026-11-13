@@ -79,10 +79,11 @@ describe('failure cases', () => {
   it('refuses a motion it does not know', () => {
     // ARRANGE
     const motion = 'moonwalk' as CharacterProps['motion'];
+    const expected = /moonwalk/;
     // ACT
     const draw = () => render({ preset: aiAgent, motion });
     // ASSERT
-    expect(draw).toThrow(/moonwalk/);
+    expect(draw).toThrow(expected);
   });
 });
 

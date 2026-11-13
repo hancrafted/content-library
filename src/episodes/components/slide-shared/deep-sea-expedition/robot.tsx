@@ -71,7 +71,7 @@ function Head({ mood, says, motion, flip }: Pick<RobotProps, 'mood' | 'says' | '
   const head = robotHead(flip === true);
   return (
     <g data-head={`${head.x},${head.y}`} data-after={motion} className={styles.emote}>
-      <Emote mood={mood} says={says} at={head} />
+      <Emote mood={mood} says={says} at={head} facing={flip ? 'left' : 'right'} />
     </g>
   );
 }

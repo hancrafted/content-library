@@ -4,8 +4,8 @@
  * (both fixed across themes), `--info` for the blue machinery, `--brand-accent` for the boot-top stripe, `--bulb` to
  * warm the white deck house. Dark mode only retunes the mixes. `--machine` stays the robot's meaning, never paint here.
  *
- * The rock is the Surface zone's ambient loop (design-ADR 0025, Motion §5): it runs only while the Slide is active,
- * rests level, and reduced motion removes it.
+ * The rock is the Surface zone's ambient loop (design-ADR 0025, Motion §5): `Ship` sets `.rock` only when its Slide
+ * passes `rock`; it runs only while the Slide is active, rests level, and reduced motion removes it.
  */
 
 .ship {

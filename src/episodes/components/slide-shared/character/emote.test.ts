@@ -21,6 +21,9 @@ const emote = (props: EmoteProps) => {
     bubbleCount: $('[data-says]').length,
     lineBreaks: $('[data-says] br').length,
     bubbleAt: $('[data-says-bubble] > g').attr('transform'),
+    motions: $('[data-motion]')
+      .toArray()
+      .map((part) => $(part).attr('data-motion')),
     $,
   };
 };
@@ -56,9 +59,17 @@ describe('success cases', () => {
     // ASSERT
     expect({ bubble, lineBreaks }).toEqual({ bubble: says, lineBreaks: 0 });
   });
-});
 
-describe('failure cases', () => {
+  it('marks the mark and the bubble as emote motion, so the Scene can tell when each pop has ended', () => {
+    // ARRANGE
+    const props = { mood: 'surprised', says: 'A whale!', at: { x: 0, y: 0 } } as const;
+    const expected = ['emote', 'emote'];
+    // ACT
+    const { motions } = emote(props);
+    // ASSERT
+    expect(motions).toEqual(expected);
+  });
+
   it('keeps a facing-left bubble off the back of the head: it rises on the left', () => {
     // ARRANGE
     const props = { says: 'Same as yesterday?', at: { x: 0, y: 0 }, facing: 'left' } as const;
@@ -68,7 +79,9 @@ describe('failure cases', () => {
     // ASSERT
     expect(bubbleAt).toBe(expected);
   });
+});
 
+describe('failure cases', () => {
   it('draws nothing when the actor has neither a mood nor words', () => {
     // ARRANGE
     const props = { at: { x: 0, y: 0 } };

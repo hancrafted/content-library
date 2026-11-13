@@ -20,6 +20,7 @@ const draw = (props: RobotProps) => {
     head: $('[data-head]').attr('data-head'),
     flip: $('[data-robot-body]').attr('transform'),
     mood: $('[data-robot]').attr('data-mood'),
+    bubbleAt: $('[data-says-bubble] > g').attr('transform'),
   };
 };
 
@@ -89,6 +90,15 @@ describe('edge cases', () => {
     const { flip, head } = draw({ flip: true, says: 'Where am I?' });
     // ASSERT
     expect({ flip, head }).toEqual(expected);
+  });
+
+  it('raises its speech bubble on the left when it faces left, as a flipped Character does', () => {
+    // ARRANGE
+    const expected = 'translate(-10 -14) scale(0.5)';
+    // ACT
+    const { bubbleAt } = draw({ flip: true, says: 'Where am I?' });
+    // ASSERT
+    expect(bubbleAt).toBe(expected);
   });
 
   it('places no head anchor when it neither feels nor speaks', () => {

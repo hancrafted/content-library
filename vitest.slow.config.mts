@@ -9,7 +9,9 @@ const ROOT = import.meta.dirname;
 
 /**
  * What reruns the whole lane: the files the slow tests read from disk rather than import
- * (tests/docs/episode-staging.slow.test.ts and its fixture), the lane's own config and the installed packages.
+ * (tests/docs/episode-staging.slow.test.ts and its fixture; the scenery palette that
+ * src/episodes/components/slide-shared/iceberg/scenery/scenery.slow.test.ts reads), the lane's own config and the
+ * installed packages.
  */
 const TRIGGERS = [
   'vitest.slow.config.mts',
@@ -23,6 +25,7 @@ const TRIGGERS = [
   'src/episodes/components/slide-shared/motions/**',
   'src/episodes/templates/*/slides/**',
   'markdown-harness.config.yaml',
+  'src/episodes/components/slide-shared/iceberg/scenery/scenery.module.css',
 ];
 
 export default defineConfig({

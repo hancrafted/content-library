@@ -58,7 +58,7 @@ export function WaterlineEcho({ zone, zoneLabel, robotAt, section, ...card }: Wa
       <div className="mt-auto flex items-end gap-3">
         <EchoCard {...card} />
         <div className="flex-1" />
-        {/* filled by implement-scene-cast: <Robot /> at this depth, on its cable from the ship (and <Ship /> on the Surface). */}
+        {/* filled by implement-scene-cast: <Robot /> at this depth, on its cable from the ship (and <Ship rock /> on the Surface). */}
         <div data-slot="robot" data-robot-at={robotAt} aria-hidden="true" className="size-16 shrink-0" />
         <RulerSlot section={section} />
       </div>

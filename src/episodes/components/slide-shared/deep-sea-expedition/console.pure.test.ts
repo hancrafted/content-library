@@ -68,9 +68,10 @@ describe('failure cases', () => {
   it('refuses more mugs than the desk holds', () => {
     // ARRANGE
     const width = 82;
+    const oneTooMany = 6;
     const expected = /at most/;
     // ACT
-    const lay = () => consoleLayout({ width, mugs: maxMugs(width) + 1 });
+    const lay = () => consoleLayout({ width, mugs: oneTooMany });
     // ASSERT
     expect(lay).toThrow(expected);
   });
@@ -93,13 +94,14 @@ describe('edge cases', () => {
     expect({ seat: layout.seat, glass: layout.screens.map(({ glass }) => glass) }).toEqual(expected);
   });
 
-  it('fits exactly as many mugs as it says it holds', () => {
+  it('fits exactly as many mugs as it says it holds, three on the narrowest desk', () => {
     // ARRANGE
     const width = MIN_CONSOLE_WIDTH;
-    const most = maxMugs(width);
+    const most = 3;
+    const expected = { held: most, placed: most };
     // ACT
-    const layout = consoleLayout({ width, mugs: most });
+    const seen = { held: maxMugs(width), placed: consoleLayout({ width, mugs: most }).mugs.length };
     // ASSERT
-    expect(layout.mugs).toHaveLength(most);
+    expect(seen).toEqual(expected);
   });
 });

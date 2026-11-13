@@ -6,7 +6,8 @@ import { Ship, type ShipProps } from './ship';
 
 /*
  * The research ship: an SVG group a Scene places in its own `<svg>`. It draws no people; the Scene passes them in as
- * bridge and deck figures, painted between the ship's layers. Its rock is the one ambient loop.
+ * bridge and deck figures, painted between the ship's layers. Its rock is opt-in: a Surface Slide asks for it, so a
+ * ship placed anywhere else stays still.
  */
 
 const draw = (props: ShipProps) => load(renderToStaticMarkup(createElement('svg', null, createElement(Ship, props))));
@@ -16,6 +17,14 @@ const paintOrder = (props: ShipProps) => {
   return $('[data-layer], [data-slot]')
     .toArray()
     .map((el) => $(el).attr('data-layer') ?? `slot:${$(el).attr('data-slot')}`);
+};
+
+const MOTION = '[data-motion]';
+const motions = (props: ShipProps) => {
+  const $ = draw(props);
+  return $(MOTION)
+    .toArray()
+    .map((el) => $(el).attr('data-motion'));
 };
 
 describe('success cases', () => {
@@ -29,20 +38,37 @@ describe('success cases', () => {
     expect(order).toEqual(expected);
   });
 
-  it('marks its rock as the ambient loop and places itself by the transform', () => {
+  it('rocks when the Surface Slide asks for it, marking the rock as the ambient loop', () => {
+    // ARRANGE
+    const expected = ['ambient'];
+    // ACT
+    const seen = motions({ rock: true });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('places itself by the transform', () => {
     // ARRANGE
     const transform = 'translate(400 200) scale(0.8)';
-    const expected = { motion: 'ambient', transform };
     // ACT
-    const $ = draw({ transform });
+    const placed = draw({ transform })('[data-ship]').attr('transform');
     // ASSERT
-    expect({ motion: $('[data-motion]').attr('data-motion'), transform: $('[data-ship]').attr('transform') }).toEqual(
-      expected,
-    );
+    expect(placed).toBe(transform);
   });
 });
 
 describe('failure cases', () => {
+  it('stays still when the Slide does not ask for the rock, so a ship outside the Surface never rocks', () => {
+    // ARRANGE
+    const props = { transform: 'translate(400 200)' };
+    // ACT
+    const seen = motions(props);
+    // ASSERT
+    expect(seen).toEqual([]);
+  });
+});
+
+describe('edge cases', () => {
   it('draws no crew slot when the Scene passes no figures', () => {
     // ARRANGE
     const expected = ['hull', 'superstructure', 'rail'];
@@ -51,28 +77,17 @@ describe('failure cases', () => {
     // ASSERT
     expect(order).toEqual(expected);
   });
-});
 
-describe('edge cases', () => {
   it('marks a flipped ship and mirrors its hull to the left of amidships', () => {
     // ARRANGE
-    const sternPoint = (props: ShipProps) => draw(props)('[data-layer="hull"] polygon').first().attr('points');
-    const expected = sternPoint({})
-      ?.split(' ')
-      .map((pair) => {
-        const [x, y] = pair.split(',').map(Number);
-        return `${-x},${y}`;
-      })
-      .join(' ');
+    const expected = { flip: '', points: '144,-26 -150,-34 -178,-40 -160,-22 126,-14' };
     // ACT
     const $ = draw({ flip: true });
-    // ASSERT
-    expect({
+    const seen = {
       flip: $('[data-ship]').attr('data-flip'),
       points: $('[data-layer="hull"] polygon').first().attr('points'),
-    }).toEqual({
-      flip: '',
-      points: expected,
-    });
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 });
