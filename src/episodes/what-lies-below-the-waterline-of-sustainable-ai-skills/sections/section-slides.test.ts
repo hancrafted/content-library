@@ -11,8 +11,8 @@ import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 /*
  * The section slides of "What lies below the waterline of sustainable AI skills", as the approved Spec gives them: one
  * per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one
- * echo of picked Title-slide Option 0a: the Section's card at its zone's depth. The scenery, the robot and the depth
- * ruler are slots the later Build jobs fill (design-ADR-0025).
+ * echo of picked Title-slide Option 0a: the Section's card at its zone's depth, drawn by ZoneScene with the robot on
+ * its cable and the whole depth ruler, the Section's tile lit (design-ADR-0025).
  */
 
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
@@ -78,7 +78,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = ['surface', 'surface', 'sunlit', 'sunlit', 'twilight', 'twilight', 'midnight', 'abyss'];
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-echo]').attr('data-zone'));
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-scene]').attr('data-depth-zone'));
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -103,9 +103,9 @@ describe('success cases', () => {
 
   it('carries the grounding line on When to write one alone', () => {
     // ARRANGE
-    const expected = ['when-to-write-one'];
+    const expected = [0, 0, 1, 0, 0, 0, 0, 0];
     // ACT
-    const actual = OPENERS.map(({ slug }) => slug).filter((slug) => sceneOf(slug)('[data-grounding]').length > 0);
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-grounding]').length);
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -114,24 +114,22 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('declares no Speaker note on a section slide, since the picked Option shows no Context marker', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => 0);
+    const expected = [0, 0, 0, 0, 0, 0, 0, 0];
     // ACT
     const actual = OPENERS.map((slide) => slide.notes.length);
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('draws no figure or scenery itself, leaving one slot each for the scene, the robot and the ruler', () => {
+  it('lights only its own Section on the ruler, never a neighbour', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => ({ scene: 1, robot: 1, ruler: 1 }));
+    const expected = [['0'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7']];
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      return {
-        scene: $('[data-slot="zone-scene"]').length,
-        robot: $('[data-slot="robot"]').length,
-        ruler: $('[data-slot="depth-ruler"]').length,
-      };
+      return $('[data-tile][data-lit]')
+        .toArray()
+        .map((tile) => $(tile).attr('data-section'));
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -141,21 +139,84 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('scripts every German section slide segment by segment, as English does', () => {
     // ARRANGE
-    const expected = OPENERS.map((slide) => slide.segments.length);
+    const expected = [
+      ['Du bist der Kapitän', 'Eine feste Eigenschaft'],
+      ['Erst die Oberfläche', 'Die Mechanik, ganz nüchtern'],
+      ['Sonnenlicht', 'Geliehene Prinzipien', 'Warum eine Faustregel'],
+      ['Das Etikett entscheidet', 'Name, Beschreibung'],
+      ['Dämmerung', 'Eine Entscheidung, kein Gesetz'],
+      ['Daneben, nicht darin', 'Wo er geteilt wird'],
+      ['Mitternacht', 'Drei Aufgaben'],
+      ['Die Tiefsee', 'Niemand sieht es'],
+    ];
     // ACT
-    const actual = OPENERS.map((slide) => scriptOf(slide, 'de').segments.filter((title) => Boolean(title)).length);
+    const actual = OPENERS.map((slide) => scriptOf(slide, 'de').segments);
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('keeps the coding-agent line on each card, hidden until the page switches to that view', () => {
+  it('keeps both view lines on each card, the analogy for Chat app and the file line for Coding agent', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => ({ chat: 1, coding: 1, hidden: true }));
+    const expected = [
+      {
+        chat: ['Your pilot is the AI model: ten years of skill, no memory of yesterday.'],
+        coding: ['Each session begins with a fresh context window'],
+      },
+      {
+        chat: ['A procedure card: title, use-when line, steps.'],
+        coding: ['SKILL.md, plus scripts/ references/ assets/'],
+      },
+      {
+        chat: ['Explain the sample, refine it, write the card.'],
+        coding: ['Ask the agent to turn this conversation into a skill'],
+      },
+      {
+        chat: ['The index is open, every card behind it closed.'],
+        coding: ['SKILL.md: name and description load first'],
+      },
+      {
+        chat: ['The card in its sleeve: each extra tied to its step.'],
+        coding: ['references/ and assets/ load when a step needs them'],
+      },
+      {
+        chat: ["Same card, any site: today's dive plan says 120 m."],
+        coding: ['The step reads a project file, such as CONTEXT.md, when it runs'],
+      },
+      { chat: ["The card in the institute's fleet manual."], coding: ['metadata: owner, version, review date'] },
+      {
+        chat: ['A card with a running tag, like a loan statement.'],
+        coding: ['Same in both views: the tag is the upkeep'],
+      },
+    ];
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      const coding = $('[data-view="coding"]');
-      return { chat: $('[data-view="chat"]').length, coding: coding.length, hidden: coding.hasClass('hidden') };
+      const lines = (view: string) =>
+        $(`[data-view="${view}"]`)
+          .toArray()
+          .map((line) => $(line).text());
+      return { chat: lines('chat'), coding: lines('coding') };
+    });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('names the five zones on every ruler by their ocean terms, read from each Slide in its own words', () => {
+    // ARRANGE
+    const terms = [
+      'the sea surface and the air above it',
+      'epipelagic',
+      'mesopelagic',
+      'bathypelagic',
+      'abyssopelagic',
+    ];
+    const expected = [terms, terms, terms, terms, terms, terms, terms, terms];
+    // ACT
+    const actual = OPENERS.map(({ slug }) => {
+      const $ = sceneOf(slug);
+      return $('[data-ocean-term]')
+        .toArray()
+        .map((term) => $(term).text());
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -174,7 +235,7 @@ describe('edge cases', () => {
       'Abyssal',
     ];
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-zone-label]').text());
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-echo-zone]').text());
     // ASSERT
     expect(actual).toEqual(expected);
   });

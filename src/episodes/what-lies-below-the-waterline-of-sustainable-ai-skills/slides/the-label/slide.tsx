@@ -1,5 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
+import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -8,12 +10,13 @@ import en from './i18n/en.json';
 export const theLabel = slide({
   slug: 'the-label',
   messages: { en, de },
+  presentation: atDepth(3, 'section'),
   segments: [{ slug: 'the-label-decides' }, { slug: 'name-description' }],
   content: ({ t }) => (
     <SlideFrame>
       <WaterlineEcho
-        zone="sunlit"
-        zoneLabel={t('zone')}
+        zones={zoneWordsFrom((key) => t(key))}
+        rulerLabel={t('ruler')}
         robotAt="hanging"
         section={3}
         wide

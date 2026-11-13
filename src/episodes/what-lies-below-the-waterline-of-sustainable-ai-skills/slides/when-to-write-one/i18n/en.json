@@ -1,6 +1,33 @@
 {
   "title": "When to write one",
-  "zone": "Sunlit",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, When to write one lit",
   "aiStatement": "The third time, write the skill down",
   "steps": {
     "first": "1st",

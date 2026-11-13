@@ -1,5 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
+import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -8,12 +10,13 @@ import en from './i18n/en.json';
 export const whenToWriteOne = slide({
   slug: 'when-to-write-one',
   messages: { en, de },
+  presentation: atDepth(2, 'section'),
   segments: [{ slug: 'sunlight' }, { slug: 'borrowed-principles' }, { slug: 'why-a-rule-of-thumb' }],
   content: ({ t }) => (
     <SlideFrame>
       <WaterlineEcho
-        zone="sunlit"
-        zoneLabel={t('zone')}
+        zones={zoneWordsFrom((key) => t(key))}
+        rulerLabel={t('ruler')}
         robotAt="hanging"
         section={2}
         wide

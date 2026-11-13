@@ -1,0 +1,35 @@
+/*
+ * `ZoneScene`'s water and sky (design-ADR 0025, Colour tokens): the Scene sets `--zone` and `--water` from each
+ * zone's one global token (`zoneToken` in `ruler.pure.ts`, the one zone-to-token mapping), `--zone-<zone>` in
+ * `globals.css`, light and dark there, so Han tunes a zone once. Facets mix it toward white for the lit side.
+ * No raw colour here and no meaning colour: `machine`, `human` and `ai` stay for their meanings.
+ *
+ * Motion: the scenery parts carry their own ambient loops; this pauses every one of them while the document is hidden,
+ * which the Scene's client leaf reports as `data-document="hidden"` (CSS alone cannot see a background tab).
+ */
+
+.sky {
+  --band: var(--zone);
+}
+
+.water {
+  --band: var(--water);
+}
+
+.sky [data-tone],
+.water [data-tone] {
+  fill: var(--band);
+  stroke: var(--band);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.sky [data-tone='sea-lit'],
+.water [data-tone='sea-lit'] {
+  fill: color-mix(in oklab, var(--band) 92%, var(--on-brand-accent));
+  stroke: color-mix(in oklab, var(--band) 92%, var(--on-brand-accent));
+}
+
+.scene[data-document='hidden'] :global([data-motion='ambient']) {
+  animation-play-state: paused;
+}

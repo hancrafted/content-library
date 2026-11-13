@@ -1,5 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
+import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -8,12 +10,13 @@ import en from './i18n/en.json';
 export const whatASkillIs = slide({
   slug: 'what-a-skill-is',
   messages: { en, de },
+  presentation: atDepth(1, 'section'),
   segments: [{ slug: 'surface-first' }, { slug: 'the-mechanics-plainly' }],
   content: ({ t }) => (
     <SlideFrame>
       <WaterlineEcho
-        zone="surface"
-        zoneLabel={t('zone')}
+        zones={zoneWordsFrom((key) => t(key))}
+        rulerLabel={t('ruler')}
         robotAt="surface"
         section={1}
         statement={t('aiStatement')}

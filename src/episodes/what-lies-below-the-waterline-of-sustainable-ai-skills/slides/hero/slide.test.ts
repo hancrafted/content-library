@@ -9,7 +9,7 @@ import { hero } from './slide';
 /*
  * The Title slide's hero Scene, picked Option 0a: the research ship on the waterline has lowered its diving robot to
  * hang just above the water, where the ruler marks the Surface. Read as the Title slide renders it, with no Section
- * placed beside it. The scenery and figures are slots the later Build jobs fill (design-ADR-0025).
+ * placed beside it. The scenery comes from ZoneScene, the ship, crew and robot from the cast (design-ADR-0025).
  */
 
 const sceneOf = (locale: Locale) =>
@@ -42,37 +42,61 @@ describe('success cases', () => {
     expect(pills).toEqual(expected);
   });
 
-  it('names the five zones on the ruler from the Surface down, the Surface lit', () => {
+  it('names the five zones on the ruler from the Surface down, the first Section lit on the Surface', () => {
     // ARRANGE
-    const expected = { zones: ['Surface', 'Sunlit', 'Twilight', 'Midnight', 'Abyss'], lit: 'Surface' };
+    const expected = {
+      zones: ['Surface', 'Sunlit', 'Twilight', 'Midnight', 'Abyss'],
+      litBand: 'surface',
+      litSection: '0',
+    };
     // ACT
     const $ = sceneOf('en');
-    const zones = $('[data-ruler-zone]')
+    const zones = $('[data-ruler-zone] [data-zone-label]')
       .toArray()
-      .map((zone) => $(zone).find('[data-zone-name]').text());
-    const lit = $('[data-ruler-zone][data-lit] [data-zone-name]').text();
+      .map((zone) => $(zone).text());
+    const lit = $('[data-tile][data-lit]');
+    const seen = {
+      zones,
+      litBand: lit.closest('[data-ruler-zone]').attr('data-ruler-zone'),
+      litSection: lit.attr('data-section'),
+    };
     // ASSERT
-    expect({ zones, lit }).toEqual(expected);
+    expect(seen).toEqual(expected);
+  });
+
+  it('draws the Surface with the ship on the waterline, its crew on the bridge and the robot on its cable', () => {
+    // ARRANGE
+    const expected = { zone: 'surface', ship: 1, crew: 2, robot: 1, iceberg: 'whole' };
+    // ACT
+    const $ = sceneOf('en');
+    const seen = {
+      zone: $('[data-scene]').attr('data-depth-zone'),
+      ship: $('[data-ship]').length,
+      crew: $('[data-ship] [data-slot="bridge"] > g').length,
+      robot: $('[data-robot]').length,
+      iceberg: $('[data-iceberg]').attr('data-iceberg'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
-  it('draws no ship, robot or scenery itself, leaving one slot for the dive scene', () => {
+  it('rocks the ship, the Surface loop, and nothing else of the cast', () => {
     // ARRANGE
-    const expected = { scene: 1, svgPaths: 0 };
+    const expected = 1;
     // ACT
-    const $ = sceneOf('en');
-    const actual = { scene: $('[data-slot="dive-scene"]').length, svgPaths: $('path, polygon').length };
+    const rocking = sceneOf('en')('[data-ship] [data-motion="ambient"]').length;
     // ASSERT
-    expect(actual).toEqual(expected);
+    expect(rocking).toBe(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('keeps the coding-agent inset of the three files hidden until the page switches to that view', () => {
+  it('holds the coding-agent inset of the three files, shown only in that view', () => {
     // ARRANGE
     const expected = {
-      hidden: true,
+      view: 'coding',
       files: ['SKILL.md', 'references/ scripts/ assets/', 'a project file, such as CONTEXT.md'],
     };
     // ACT
@@ -83,7 +107,19 @@ describe('edge cases', () => {
       .toArray()
       .map((file) => $(file).text());
     // ASSERT
-    expect({ hidden: inset.hasClass('hidden'), files }).toEqual(expected);
+    expect({ view: inset.attr('data-view'), files }).toEqual(expected);
+  });
+
+  it('holds the page one view switch, Chat app first', () => {
+    // ARRANGE
+    const expected = ['Chat app', 'Coding agent'];
+    // ACT
+    const $ = sceneOf('en');
+    const options = $('[data-view-toggle] button')
+      .toArray()
+      .map((button) => $(button).text());
+    // ASSERT
+    expect(options).toEqual(expected);
   });
 
   it('marks the Surface in German too', () => {
