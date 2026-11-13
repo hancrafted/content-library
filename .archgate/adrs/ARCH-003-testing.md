@@ -24,7 +24,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ### 2. Suite structure
 
-1. In every test under `src/` and every browser test, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. (📜 Rule: `suite-three-blocks`)
+1. In every test under `src/` and every browser test, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. A `*.slow.test.ts` and its fast sibling test one subject: the pair holds the three between them. (📜 Rule: `suite-three-blocks`)
 2. `describe` MUST NOT nest past two levels; a test MUST NOT sit at file top level.
 
 ### 3. Test-body structure
@@ -38,6 +38,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
 2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build. Playwright remains available for interactive inspection and visual checks.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
+4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. Every commit pays for the fast suite, so it holds only tests that cost well under a second.
 
 ### 5. Browser tests wait on the page
 
@@ -56,8 +57,9 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
 6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
 7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
-8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
-9. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
+8. **DO** move a test the nightly budget lists into `*.slow.test.ts`, or make it faster — a tour played frame by frame, a check that walks every staging folder. (Decision 4.4)
+9. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
+10. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
 
 ### Don'ts
 
@@ -84,6 +86,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 - **Collaborator substitution requires hand-written stand-ins.** In-file test doubles are more verbose than `vi.spyOn`, trading brevity for transparency.
 - **Built-output tests run late.** A `*.build.test.ts` fails on the pull request, not at commit; browser behaviour is checked manually.
+- **Slow tests run later still.** A `*.slow.test.ts` fails at push, or the next night when the change it missed was not its trigger; never at commit or on the pull request.
 - **Animations carry a contract.** Every animating element a browser test waits on reports `data-motion`; a missing `settled` hangs the test until its timeout.
 
 ### Risks
@@ -96,10 +99,11 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`. Browser-test support remains available if a suite is reintroduced.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
-3. **Test config:** the fast suite excludes `*.build.test.ts` (§4.2).
-4. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
+3. **Test lanes:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); pre-push runs the slow tests a branch affects.
+4. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
+5. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
 
-**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
+**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow test reads from disk is a rerun trigger.
 
 **Exceptions:** amend this record; never an inline suppression.
 
