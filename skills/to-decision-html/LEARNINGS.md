@@ -19,7 +19,7 @@ Commit the entry on its own with `/commit`, so it can be cherry-picked to `main`
 
 1. **Picking an Option meant hunting for a radio button.** Han reviewed an `/improve-codebase-architecture` round: "picking an option requires finding the radio to click in a card among a sea of text. That should be more intuitive."
    - **Evidence:** session `5d29bb73-a311-444f-aeda-75218d59632b`, 2026-11-13, `.scratch/software-ecology/architecture/worth-exploring.html`: 17 items, 28 Options, 27 radio buttons, each inside a text-heavy Option card. `SKILL.md` step 4 says "Viewing an Option and picking it are separate actions" without saying how a pick should look.
-   - **Proposed fix:** step 5 makes the pick a large, labelled target that is obvious at a glance, such as a "Pick A / B / C" segmented control at the head of the item, or the whole Option card as a toggle with a visible picked state. The grader checks that each pick control has a target of at least 44 × 44 px and a visible label.
+   - **Proposed fix:** step 5 makes the pick a large, labelled target (the `pick-target` check measures 44 × 44 px and a visible label). Still open: the target is obvious at a glance, which only review judges, such as a "Pick A / B / C" segmented control at the head of the item, or the whole Option card as a toggle with a visible picked state.
 
 2. **Too much text.** Han: "too much text."
    - **Evidence:** same session and page: 3,092 words of visible text across 17 items. 10 items had a depth toggle, yet the simple view still read as prose.
@@ -31,11 +31,3 @@ Commit the entry on its own with `/commit`, so it can be cherry-picked to `main`
      - Step 3 says an item leads at the level the reader decides at. When the decision is about code, the simple view names the principle or pattern each Option applies, its benefit, its cost and its impact, with a before-and-after diagram. The detailed layer teaches the principle (what it means, where it comes from, why it helps here) and then gives the files affected.
      - The Software architecture row changes to match.
      - The skill stays free of domain knowledge: the caller supplies the principles, and the skill only demands that the page lead with them.
-
-4. **A Slide preview stayed small on a wide screen.** Han: "for slide preview, the content area needs to be able to grow up to full HD width" when the screen allows it, such as an ultrawide.
-   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: 28 items. At 2560 × 1440 the main column stops at 1192 px, 47% of the viewport, and the page sits centred with about 540 px empty on each side, so no Slide preview can grow past 1192 px.
-   - **Proposed fix:** step 4 now lets a visual with a caller-named design size grow to it. Still open: the grader measures the widest visual at 2560 × 1440.
-
-5. **Collapsing the navigation left a dead column, and a laptop had no room for the rail.** Han: on a laptop, toggling the navigation out "left a whitespace column of ca. 100px". A laptop should still leave over about 1000 px for the content, so the sticky decision and feedback rail fits on its right.
-   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`. At 1440 × 900 with the navigation collapsed, items start at x = 120, leaving a 120 px empty column. At that width the Option card spans the main column (1096 px) instead of sitting in a rail beside the content.
-   - **Proposed fix:** step 4 now has a collapsed navigation give back its width and keeps 1000 px of content beside the rail at 1440 px. Still open: the grader checks both at 1440 × 900 with the navigation collapsed.
