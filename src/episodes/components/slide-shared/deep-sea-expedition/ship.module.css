@@ -1,0 +1,160 @@
+/*
+ * The research ship's facet tones, light from the upper left. No raw colour lives outside a Slide folder (FE-011), so
+ * every tone is mixed from global tokens that carry no meaning: `--on-brand-accent` as white and `--overlay` as black
+ * (both fixed across themes), `--info` for the blue machinery, `--brand-accent` for the boot-top stripe, `--bulb` to
+ * warm the white deck house. Dark mode only retunes the mixes. `--machine` stays the robot's meaning, never paint here.
+ *
+ * The rock is the Surface zone's ambient loop (design-ADR 0025, Motion §5): it runs only while the Slide is active,
+ * rests level, and reduced motion removes it.
+ */
+
+.ship {
+  --ship-hull-lit: color-mix(
+    in oklab,
+    var(--info) 20%,
+    color-mix(in oklab, var(--on-brand-accent) 52%, var(--overlay))
+  );
+  --ship-hull: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 38%, var(--overlay)));
+  --ship-hull-shade: color-mix(
+    in oklab,
+    var(--info) 20%,
+    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
+  );
+  --ship-stripe: color-mix(in oklab, var(--brand-accent) 85%, var(--overlay));
+  --ship-house-lit: color-mix(in oklab, var(--bulb) 3%, var(--on-brand-accent));
+  --ship-house: color-mix(in oklab, var(--bulb) 6%, color-mix(in oklab, var(--on-brand-accent) 92%, var(--overlay)));
+  --ship-house-shade: color-mix(
+    in oklab,
+    var(--bulb) 10%,
+    color-mix(in oklab, var(--on-brand-accent) 80%, var(--overlay))
+  );
+  --ship-glass: color-mix(in oklab, var(--info) 33%, color-mix(in oklab, var(--on-brand-accent) 23%, var(--overlay)));
+  --ship-glass-glint: color-mix(
+    in oklab,
+    var(--info) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 92%, var(--overlay))
+  );
+  --ship-machine-glint: color-mix(in oklab, var(--info) 45%, var(--on-brand-accent));
+  --ship-machine-lit: color-mix(in oklab, var(--info) 78%, var(--on-brand-accent));
+  --ship-machine: color-mix(in oklab, var(--info) 84%, var(--on-brand-accent));
+  --ship-machine-shade: color-mix(in oklab, var(--info) 68%, var(--overlay));
+}
+
+:global(.dark) .ship {
+  --ship-hull-lit: color-mix(
+    in oklab,
+    var(--info) 25%,
+    color-mix(in oklab, var(--on-brand-accent) 41%, var(--overlay))
+  );
+  --ship-hull: color-mix(in oklab, var(--info) 25%, color-mix(in oklab, var(--on-brand-accent) 27%, var(--overlay)));
+  --ship-hull-shade: color-mix(
+    in oklab,
+    var(--info) 25%,
+    color-mix(in oklab, var(--on-brand-accent) 15%, var(--overlay))
+  );
+  --ship-stripe: color-mix(in oklab, var(--brand-accent) 78%, var(--overlay));
+  --ship-house-lit: color-mix(
+    in oklab,
+    var(--bulb) 3%,
+    color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay))
+  );
+  --ship-house: color-mix(in oklab, var(--bulb) 5%, color-mix(in oklab, var(--on-brand-accent) 78%, var(--overlay)));
+  --ship-house-shade: color-mix(
+    in oklab,
+    var(--bulb) 8%,
+    color-mix(in oklab, var(--on-brand-accent) 66%, var(--overlay))
+  );
+  --ship-glass: color-mix(in oklab, var(--info) 28%, var(--overlay));
+  --ship-glass-glint: color-mix(
+    in oklab,
+    var(--info) 60%,
+    color-mix(in oklab, var(--on-brand-accent) 48%, var(--overlay))
+  );
+  --ship-machine-glint: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
+  --ship-machine-lit: color-mix(in oklab, var(--info) 88%, var(--on-brand-accent));
+  --ship-machine: color-mix(in oklab, var(--info) 92%, var(--overlay));
+  --ship-machine-shade: color-mix(in oklab, var(--info) 62%, var(--overlay));
+}
+
+.hull-lit {
+  fill: var(--ship-hull-lit);
+}
+
+.hull {
+  fill: var(--ship-hull);
+}
+
+.hull-shade {
+  fill: var(--ship-hull-shade);
+}
+
+.stripe {
+  fill: var(--ship-stripe);
+}
+
+.house-lit {
+  fill: var(--ship-house-lit);
+}
+
+.house {
+  fill: var(--ship-house);
+}
+
+.house-shade {
+  fill: var(--ship-house-shade);
+}
+
+.glass {
+  fill: var(--ship-glass);
+}
+
+.glass-glint {
+  fill: var(--ship-glass-glint);
+}
+
+.machine-glint {
+  fill: var(--ship-machine-glint);
+}
+
+.machine-lit {
+  fill: var(--ship-machine-lit);
+}
+
+.machine {
+  fill: var(--ship-machine);
+}
+
+.machine-shade {
+  fill: var(--ship-machine-shade);
+}
+
+/* The rock pivots on the ship's origin, the waterline amidships, and rests level. */
+.rock {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+:global([data-zone='active']) .rock {
+  animation: ship-rock 9s ease-in-out infinite;
+}
+
+@keyframes ship-rock {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(1.2deg) translateY(-1px);
+  }
+
+  75% {
+    transform: rotate(-1.2deg) translateY(1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global([data-zone='active']) .rock {
+    animation: none;
+  }
+}
