@@ -65,11 +65,20 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('holds each Section in its own placement marker, its section slide alone', () => {
+  it("opens each Section's placement marker with its section slide, its page Slides after it", () => {
     // ARRANGE
-    const expected = [1, 1, 1, 1, 1, 1, 1, 1];
+    const expected = [
+      'a-thought-experiment',
+      'what-a-skill-is',
+      'when-to-write-one',
+      'the-label',
+      'what-goes-inside',
+      'what-stays-beside',
+      'sharing-it',
+      'keeping-it-alive',
+    ];
     // ACT
-    const actual = SECTIONS.map((section) => section.length);
+    const actual = SECTIONS.map(([opener]) => opener.slug);
     // ASSERT
     expect(actual).toEqual(expected);
   });

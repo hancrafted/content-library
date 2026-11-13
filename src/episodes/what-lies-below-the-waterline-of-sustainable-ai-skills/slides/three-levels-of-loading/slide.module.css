@@ -1,0 +1,133 @@
+/*
+ * The Slide's token file: the control room's wall, floor, shelf, cards and the lamp's light, mixed from global tokens
+ * so both themes follow (FE-011). `--machine`, `--human` and `--ai` stay for their meanings.
+ *
+ * Motion (`motion: local`, one emphasis): a soft light moves left to right in loading order, the halo on the shelf with
+ * card 1, then on the propped card with card 2, then the ceiling lamp switches on over the sleeve and card 3 keeps its
+ * ring. It plays once when the Slide's mount turns `[data-zone='active']`; the rest state is the end state, so reduced
+ * motion shows the lamp on and card 3 ringed.
+ */
+
+.scene {
+  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
+  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
+  --floor: color-mix(in oklab, var(--info) 10%, color-mix(in oklab, var(--muted-foreground) 55%, var(--muted)));
+  --floor-lit: color-mix(in oklab, var(--floor) 80%, var(--card));
+  --frame: color-mix(in oklab, var(--brand-accent) 35%, var(--muted-foreground));
+  --wood: color-mix(in oklab, var(--brand-accent) 45%, var(--muted-foreground));
+  --wood-shade: color-mix(in oklab, var(--wood) 75%, var(--foreground));
+  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
+  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
+  --ink: color-mix(in oklab, var(--muted-foreground) 70%, var(--paper));
+  --tab-a: color-mix(in oklab, var(--info) 70%, var(--card));
+  --tab-b: var(--bulb);
+  --tab-c: color-mix(in oklab, var(--success) 70%, var(--card));
+  --halo: color-mix(in oklab, var(--bulb) 40%, transparent);
+  --beam: color-mix(in oklab, var(--bulb) 32%, transparent);
+  --lamp: var(--bulb);
+  --lamp-shade: color-mix(in oklab, var(--info) 70%, var(--card));
+  --sleeve: color-mix(in oklab, var(--info) 18%, transparent);
+  --sleeve-edge: color-mix(in oklab, var(--info) 45%, transparent);
+  --guide: color-mix(in oklab, var(--info) 55%, var(--success));
+  --preset-arm: color-mix(in oklab, var(--foreground) 60%, var(--info));
+}
+
+.wall [data-tone='sea'] {
+  fill: var(--room-wall);
+  stroke: var(--room-wall);
+  stroke-width: 0.6;
+}
+
+.wall [data-tone='sea-lit'] {
+  fill: var(--room-wall-lit);
+  stroke: var(--room-wall-lit);
+  stroke-width: 0.6;
+}
+
+.halo,
+.beam {
+  pointer-events: none;
+}
+
+.halo {
+  opacity: 0;
+}
+
+.level {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.level[data-level='extras'] {
+  outline-color: var(--primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .halo[data-halo='index'] {
+    animation: halo-pass 1400ms ease-in-out 200ms both;
+  }
+
+  :global([data-zone='active']) .halo[data-halo='card'] {
+    animation: halo-pass 1400ms ease-in-out 1400ms both;
+  }
+
+  :global([data-zone='active']) .beam {
+    animation: lamp-on 600ms ease-out 2600ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='index'] {
+    animation: ring-pass 1400ms ease-in-out 200ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='card'] {
+    animation: ring-pass 1400ms ease-in-out 1400ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='extras'] {
+    animation: ring-on 600ms ease-out 2600ms both;
+  }
+}
+
+@keyframes halo-pass {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  35%,
+  65% {
+    opacity: 1;
+  }
+}
+
+@keyframes lamp-on {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ring-pass {
+  0%,
+  100% {
+    outline-color: transparent;
+  }
+
+  35%,
+  65% {
+    outline-color: var(--primary);
+  }
+}
+
+@keyframes ring-on {
+  from {
+    outline-color: transparent;
+  }
+
+  to {
+    outline-color: var(--primary);
+  }
+}

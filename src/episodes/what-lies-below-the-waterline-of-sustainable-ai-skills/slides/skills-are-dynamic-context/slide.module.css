@@ -1,0 +1,67 @@
+/*
+ * The Slide's token file: the control room at the end of the dive, its desk and what lands on it, and the context
+ * window's rows, mixed from global tokens so both themes follow (FE-011). `--machine` colours only the robot, as the
+ * cast draws it; the pilot is the cast's own.
+ *
+ * Motion (`motion: local`, one emphasis): each object lands on the desk (`Travel`) as its block stacks onto the window:
+ * the card, the frames, the sonar strip, the sample log. It plays once when the Slide's mount turns
+ * `[data-zone='active']`; the rest state is the end state, so reduced motion shows everything placed. Nothing loops.
+ */
+
+.scene {
+  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
+  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
+  --floor: color-mix(in oklab, var(--info) 10%, color-mix(in oklab, var(--muted-foreground) 55%, var(--muted)));
+  --floor-lit: color-mix(in oklab, var(--floor) 80%, var(--card));
+  --frame: color-mix(in oklab, var(--brand-accent) 35%, var(--muted-foreground));
+  --wood: color-mix(in oklab, var(--brand-accent) 45%, var(--muted-foreground));
+  --wood-shade: color-mix(in oklab, var(--wood) 75%, var(--foreground));
+  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
+  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
+  --ink: color-mix(in oklab, var(--muted-foreground) 70%, var(--paper));
+  --tab-a: color-mix(in oklab, var(--info) 70%, var(--card));
+  --tab-b: var(--bulb);
+  --tab-c: color-mix(in oklab, var(--success) 70%, var(--card));
+  --desk: color-mix(in oklab, var(--brand-accent) 40%, var(--muted-foreground));
+  --desk-shade: color-mix(in oklab, var(--desk) 70%, var(--foreground));
+  --seabed: color-mix(in oklab, var(--brand-accent) 25%, var(--muted-foreground));
+  --ping: color-mix(in oklab, var(--info) 50%, var(--card));
+  --pin: var(--brand-accent);
+  --recorder: color-mix(in oklab, var(--info) 75%, var(--card));
+  --trace: var(--foreground);
+  --photo: color-mix(in oklab, var(--info) 55%, var(--card));
+}
+
+.wall [data-tone='sea'] {
+  fill: var(--room-wall);
+  stroke: var(--room-wall);
+  stroke-width: 0.6;
+}
+
+.wall [data-tone='sea-lit'] {
+  fill: var(--room-wall-lit);
+  stroke: var(--room-wall-lit);
+  stroke-width: 0.6;
+}
+
+.arrive {
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .arrive {
+    animation: stack-on 700ms cubic-bezier(0.33, 0, 0.2, 1) var(--arrive-delay) both;
+  }
+}
+
+@keyframes stack-on {
+  from {
+    opacity: 0;
+    translate: 0 -1rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

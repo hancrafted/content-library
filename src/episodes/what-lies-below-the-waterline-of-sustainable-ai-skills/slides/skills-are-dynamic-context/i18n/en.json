@@ -1,0 +1,143 @@
+{
+  "title": "Skills are static and dynamic context",
+  "caption": "What's always loaded is static; a skill loads on demand, so it is dynamic.",
+  "analogy": {
+    "label": "In the story:",
+    "text": "Before the dive: your orders, the brief and the index. During it: the card and everything the robot sends up."
+  },
+  "art": {
+    "brief": "Project brief",
+    "index": "Index",
+    "cardTitle": "Collect sediment sample",
+    "pills": {
+      "feed": "camera feed",
+      "orders": "standing orders",
+      "index": "manual's index",
+      "card": "pulled card",
+      "frames": "frames",
+      "sonar": "sonar",
+      "logs": "logs"
+    }
+  },
+  "window": {
+    "heading": "The context window, top to bottom",
+    "label": "The context window at the end of the dive, top to bottom",
+    "rows": {
+      "system": {
+        "term": "System prompt",
+        "chat": "hidden starting instructions",
+        "coding": "system prompt, tool schemas"
+      },
+      "skills": {
+        "term": "Skills",
+        "chat": "the manual's index",
+        "coding": "name and description of every SKILL.md"
+      },
+      "memory": {
+        "term": "Memory files",
+        "chat": "your standing orders and the project brief",
+        "coding": "AGENTS.md (CLAUDE.md in Claude Code)"
+      },
+      "instructions": {
+        "term": "Skill instructions",
+        "chat": "the pulled card",
+        "coding": "SKILL.md body"
+      },
+      "frames": {
+        "term": "Tool results",
+        "chat": "camera frames",
+        "coding": "file contents"
+      },
+      "sonar": {
+        "term": "Tool results",
+        "chat": "sonar readings",
+        "coding": "Bash output"
+      },
+      "logs": {
+        "term": "Tool results",
+        "chat": "sample logs",
+        "coding": "MCP replies"
+      }
+    },
+    "free": "Free space"
+  },
+  "static": {
+    "label": "Static",
+    "text": "always loaded, in every interaction"
+  },
+  "dynamic": {
+    "label": "Dynamic",
+    "text": "loaded on demand, as the task goes on"
+  },
+  "footer": {
+    "chat": "A skill is dynamic whether you call it at the start or the AI picks it mid-task.",
+    "ruleOfThumb": "Static has exceptions, so take the split as a rule of thumb.",
+    "codingLead": "Called or picked, still dynamic:",
+    "coding": "<code>/collect-sediment-sample</code> at the start of a message in Claude Code, or the agent picks the skill mid-task; either way its <code>SKILL.md</code> body enters the window on demand.",
+    "exceptionsLead": "Exceptions:",
+    "exceptions": "<code>.claude/rules/</code> files with <code>paths</code> load only when matching files open; Gemini CLI loads further <code>GEMINI.md</code> files just in time; a skill set to user-only invocation keeps even its name and description out."
+  },
+  "alt": {
+    "room": "The control room at the end of the dive. On the wall: the live camera feed from the robot at the seabed, the project brief and the manual on its shelf with its index page facing out. At the desk the pilot sits; on the desk his notebook of standing orders, and everything that arrived during the dive: the pulled procedure card, Collect sediment sample, propped and lit; printed camera frames; a sonar strip; and a sample log on a clipboard."
+  },
+  "notes": {
+    "static-and-dynamic-as-google-defines-them": {
+      "header": "Static and dynamic, as Google defines them",
+      "description": "Static context is always loaded: system instructions, rule files (AGENTS.md, CLAUDE.md, GEMINI.md), global memory and persona definitions; dynamic context is loaded on demand: skill instructions triggered by task matching, tool results, retrieved documents and windowed session history [1]. This is Google's vendor framing of the vendors' own mechanics, not a measured result.",
+      "sources": {
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "why-static-and-dynamic-context-are-kept-apart": {
+      "header": "Why static and dynamic context are kept apart",
+      "description": "Day 1 says static context “is expensive because every token is present in every interaction, regardless of relevance”, and that too much of it “wastes tokens and dilutes signals” while too little “means the agent forgets critical rules” [1]. Day 3 repeats the split for the two files: “From one side AGENTS.md is always loaded within the project; Skills load on demand.” [2]",
+      "sources": {
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "static-instructions-are-a-rule-of-thumb": {
+      "header": "Static instructions are a rule of thumb",
+      "description": "Instructions are not strictly static. Claude Code .claude/rules/ files with paths load only when matching files open [1], Gemini CLI loads further GEMINI.md files just in time when a tool touches a directory [2], and Copilot path-specific instructions apply by file match [3]. By default, a skill's name and description are always loaded too, unless the skill is set to user-only invocation [4].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project (Claude Code docs)"
+        },
+        "google-gemini-cli-gemini-md": {
+          "title": "Google, Provide context with GEMINI.md files (Gemini CLI docs)"
+        },
+        "github-copilot-repository-instructions": {
+          "title": "GitHub, Adding repository custom instructions for GitHub Copilot"
+        },
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-window": {
+        "title": "Back to the window",
+        "keywords": "",
+        "script": "Some of you have seen the context window Explorable, where we looked at everything the model holds in its head at once. This is the same context window, and now we place skills in it."
+      },
+      "the-standing-part": {
+        "title": "The standing part",
+        "keywords": "",
+        "script": "Start with what is there before any task begins, in the order the Explorable shows it: the system prompt, the skills, meaning the name and description of every skill, and the memory files, meaning your instructions in AGENTS.md. On our ship that is the standing rules, the manual's index, and your standing orders and the project brief. That part is static, so it sits in the window whatever the task turns out to be."
+      },
+      "filling-as-you-dive": {
+        "title": "Filling as you dive",
+        "keywords": "",
+        "script": "Then the task begins and the window fills up: the skill the model opened, and the tool results it gets back, the camera frames, sonar readings and sample logs of the dive. That part is dynamic, and a skill's instructions belong to it, whether you call the skill at the start or the model picks it halfway through. So a skill sits on both sides of the line: its name and description are static, and the skill itself is dynamic."
+      }
+    }
+  }
+}

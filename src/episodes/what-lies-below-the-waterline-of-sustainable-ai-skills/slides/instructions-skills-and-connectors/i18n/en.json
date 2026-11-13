@@ -1,0 +1,144 @@
+{
+  "title": "Instructions, skills and connectors",
+  "caption": "Personal and project instructions are always loaded, skills load on demand, and connectors reach into other systems.",
+  "analogy": {
+    "label": "In the story:",
+    "text": "Your notebook, the wall, the manual and the cable."
+  },
+  "listLabel": "Instructions, skills and connectors",
+  "tags": {
+    "static": "static",
+    "dynamic": "dynamic"
+  },
+  "things": {
+    "personal": {
+      "term": "Personal instructions",
+      "scope": "follow you into every project",
+      "scene": "your notebook: standing orders that come onto any ship",
+      "panel": "your notebook",
+      "alt": "Cartoon panel 1 of 4: Your notebook, in the captain's hand.",
+      "coding": {
+        "lead": "read at the start of every session, in every project",
+        "code": "# Standing orders\n- Label samples in metric units."
+      }
+    },
+    "project": {
+      "term": "Project instructions",
+      "scope": "only inside this one project",
+      "scene": "the project brief on the wall",
+      "panel": "the brief on the wall",
+      "alt": "Cartoon panel 2 of 4: The project brief on the wall.",
+      "coding": {
+        "lead": "the project instructions file the agent reads, always loaded; CLAUDE.md in Claude Code",
+        "code": "# Project brief\n…\n## Skills\n- collect-sediment-sample\n- measure-water-column"
+      }
+    },
+    "skills": {
+      "term": "Skills",
+      "scope": "one arrives when a task needs it",
+      "scene": "the manual at the console",
+      "panel": "the manual at the console",
+      "alt": "Cartoon panel 3 of 4: The manual at the console.",
+      "coding": {
+        "lead": "front matter always loaded · body on demand",
+        "code": "---\nname: collect-sediment-sample\ndescription: Use when we reach a new site and need a sample from the seabed.\n---\n1. Hold the robot 2 m above the seabed."
+      }
+    },
+    "connectors": {
+      "term": "Connectors",
+      "scope": "reach into other systems; tools listed up front, results on demand",
+      "scene": "the cable to the sonar and the lab database",
+      "panel": "the cable to the sonar and lab",
+      "alt": "Cartoon panel 4 of 4: The cable to the sonar and the lab database.",
+      "coding": {
+        "lead": "adds tools and data, not guidance",
+        "path": "an MCP server",
+        "code": "two MCP servers, named after the scene\nsonar\nlab-database"
+      }
+    }
+  },
+  "art": {
+    "brief": "Project brief",
+    "labDatabase": "lab database",
+    "sonar": "sonar"
+  },
+  "footer": {
+    "chat": "Names differ by app: ChatGPT says apps; Gemini, Connected Apps.",
+    "coding": "Google's Day 3 advice: keep AGENTS.md tight, with a short catalog of skills at the bottom; “The cleanest setups use both.”"
+  },
+  "alt": {
+    "room": "The control room in side view. Left: you, the captain, holding your notebook. On the wall: the project brief. At the console: the pilot, with the manual standing on the console. A cable runs from the console along the floor and through the bulkhead, up to the lab database in the next room and down into the sea to the sonar."
+  },
+  "notes": {
+    "instructions-are-always-loaded-skills-are-not": {
+      "header": "Instructions are always loaded, skills are not",
+      "description": "Claude Code reads CLAUDE.md “at the start of every session” and loads a skill “on demand” [1]. Codex, Gemini CLI and GitHub Copilot document the same split for their instruction files and skills [2]. ChatGPT custom and project instructions were not read, and whether the Gemini app loads its instructions at the start of each session is unverified, so the split is not confirmed for those two apps.",
+      "sources": {
+        "anthropic-claude-code-features": {
+          "title": "Anthropic, Extend Claude Code (Claude Code docs)"
+        },
+        "github-copilot-cli-skills": {
+          "title": "GitHub, Adding agent skills for GitHub Copilot CLI"
+        }
+      }
+    },
+    "names-in-chat-apps": {
+      "header": "Names in chat apps",
+      "description": "Claude calls them Instructions, project instructions and Connectors [1]; ChatGPT now says “apps (formerly connectors)” [2]; the Gemini app says “Instructions for Gemini” and “Connected Apps” [3].",
+      "sources": {
+        "anthropic-personalization-features": {
+          "title": "Anthropic, Understanding Claude's personalization features (Help Center)"
+        },
+        "openai-academy-skills": {
+          "title": "OpenAI Academy, Skills"
+        },
+        "google-gemini-apps-workflows": {
+          "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)"
+        }
+      }
+    },
+    "connectors-reach-skills-know-how": {
+      "header": "Connectors reach, skills know how",
+      "description": "Connectors are Model Context Protocol (MCP) servers that add tools and data, not guidance [1]. Anthropic describes MCP as the connection and a skill as the knowledge of how to use it [2].",
+      "sources": {
+        "github-copilot-mcp": {
+          "title": "GitHub, About Model Context Protocol (MCP) (Copilot docs)"
+        },
+        "anthropic-claude-code-features": {
+          "title": "Anthropic, Extend Claude Code (Claude Code docs)"
+        }
+      }
+    },
+    "skill-vs-agents-md-as-google-puts-it": {
+      "header": "Skill vs. AGENTS.md, as Google puts it",
+      "description": "Day 3 has a “Skill vs. AGENTS.md” passage: “From one side AGENTS.md is always loaded within the project; Skills load on demand. The cleanest setups use both.” It advises keeping AGENTS.md tight and, if needed, using it as a router into the skills library “with a short catalog at the bottom that tells the agent what's available” [1]. Day 1 calls always-loaded rule files static context [2]. Both are Google's vendor guidance on how to split the two, not evidence that the split works.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-things-in-the-room": {
+        "title": "Four things in the room",
+        "keywords": "",
+        "script": "Four things shape what the model knows, and they do four different jobs: personal instructions, project instructions, skills and connectors. In the control room they are your notebook, the project brief on the wall, the manual at the console, and the cable to the sonar and the lab database."
+      },
+      "read-the-tags": {
+        "title": "Read the tags",
+        "keywords": "",
+        "script": "Take them one at a time. Personal instructions are static, and they follow you into every project, as your notebook comes with you onto any ship. Project instructions are static too, but only inside this one project. Skills are dynamic, because one arrives when a task needs it, and a connector's results are dynamic too, because they arrive from another system while you work; the connector also lets the model act in that system. That is the split from the last Slide, now with names."
+      },
+      "your-words-may-differ": {
+        "title": "Your words may differ",
+        "keywords": "",
+        "script": "Your app may use other words for these four, so match the job, not the word. And if you work with a coding agent, the other view shows the files: your personal instructions file, AGENTS.md for the project, a SKILL.md for each skill, and a server for each connector."
+      }
+    }
+  }
+}

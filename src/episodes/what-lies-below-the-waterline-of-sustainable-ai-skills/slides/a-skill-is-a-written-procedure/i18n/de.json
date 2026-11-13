@@ -1,0 +1,105 @@
+{
+  "title": "Ein Skill ist ein Ordner mit Anweisungen",
+  "caption": "“Skills are folders that include instructions, scripts, and resources that Claude can load when needed.”",
+  "quoteSource": "Anthropic, Introducing Agent Skills (claude.com/blog/skills)",
+  "analogy": {
+    "label": "In der Geschichte:",
+    "text": "Eine Verfahrenskarte: Titel und Wann-Zeile im Kopf, Schritte im Hauptteil, Extras in der Hülle."
+  },
+  "card": {
+    "label": "Verfahrenskarte 7 · Kopf",
+    "title": "Sedimentprobe nehmen",
+    "useWhenLead": "Nutzen, wenn",
+    "useWhen": "wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen.",
+    "backLabel": "Hauptteil · die Schritte",
+    "steps": {
+      "0": "Den Roboter 2 m über dem Meeresboden halten.",
+      "1": "Die Kamera auf losen Schlamm prüfen.",
+      "2": "Den Arm absenken.",
+      "3": "Bestimmen, was Du gesammelt hast.",
+      "4": "Das Kernrohr verschließen.",
+      "5": "Die Probe beschriften."
+    }
+  },
+  "extras": { "guide": "Artenführer", "label": "Etikettvorlage", "preset": "Arm-Preset" },
+  "alone": "SKILL.md allein",
+  "folder": "Der Ordner: optionale Zusatzdateien daneben",
+  "labels": {
+    "parts": "Die zwei Teile von SKILL.md",
+    "nameDescription": { "term": "Name und Beschreibung", "scene": "Kopf der Karte: der Titel und die Wann-Zeile" },
+    "instructions": { "term": "Anweisungen", "scene": "Hauptteil der Karte: die nummerierten Schritte" }
+  },
+  "coding": {
+    "oneFile": "eine Datei",
+    "frontmatter": "Frontmatter",
+    "body": "Hauptteil von SKILL.md",
+    "description": "Nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen."
+  },
+  "supporting": {
+    "title": "Zusatzdateien",
+    "optional": "optional",
+    "list": "Optionale Zusatzdateien",
+    "kinds": { "guide": "Referenz", "label": "Vorlage", "preset": "Skript" },
+    "reach": "Die Schritte greifen nur darauf zu, wenn sie sie brauchen.",
+    "standard": "der Agent-Skills-Standard: das Ordnerformat vollständig",
+    "newTab": "(öffnet in einem neuen Tab)"
+  },
+  "routing": "Google nennt die Beschreibung „your routing algorithm“.",
+  "appNames": "Claude, ChatGPT und Codex sagen „Skills“, GitHub Copilot „agent skills“; die Gemini-App macht am 17. Dezember 2026 für private Konten aus Gems Skills.",
+  "alt": {
+    "scene": "Ein durchgehendes Klemmbrett an der Wand des Kontrollraums: eine Verfahrenskarte in einer durchsichtigen Hülle. Kopf: Sedimentprobe nehmen, nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen. Hauptteil: sechs nummerierte Schritte. In der Tasche der Hülle: ein Artenführer, eine Etikettvorlage und ein Arm-Preset."
+  },
+  "notes": {
+    "what-a-skill-is-made-of": {
+      "header": "Woraus ein Skill besteht",
+      "description": "Ein Skill ist ein Ordner mit einer Pflichtdatei SKILL.md (ein Name und eine Beschreibung, dann die Anweisungen) und den optionalen Ordnern scripts/, references/ und assets/ [1]. ChatGPT beschreibt dieselben drei Teile mit eigenen Worten: Name und Beschreibung, Arbeitsschritte und Begleitmaterial [2].",
+      "sources": {
+        "agent-skills-specification": { "title": "Agent Skills, Specification" },
+        "openai-academy-skills": { "title": "OpenAI Academy, Skills" }
+      }
+    },
+    "names-differ-by-app": {
+      "header": "Jede App nennt es anders",
+      "description": "Claude, ChatGPT und Codex sagen „Skills“, GitHub Copilot sagt „agent skills“, und die Gemini-App macht am 17. Dezember 2026 für private Konten aus Gems Skills [1]. Ob die Skills der Gemini-App SKILL.md-Ordner sind, steht in den gelesenen Seiten nicht; belegt ist das nur für Gemini CLI [2].",
+      "sources": {
+        "google-gems-to-skills": { "title": "Google, About the transition from Gems to skills (Gemini Apps Help)" },
+        "google-gemini-cli-skills": { "title": "Google, Agent Skills in Gemini CLI" }
+      }
+    },
+    "the-description-is-the-routing-line": {
+      "header": "Die Beschreibung ist die Weiche",
+      "description": "Googles Day-3-Whitepaper nennt die Beschreibung „your routing algorithm“ [1]. Das ist Googles Sicht darauf, wie ein Skill gewählt wird, keine Messung, wie oft die Wahl stimmt.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "anthropics-definition-of-a-skill": {
+      "header": "Anthropics Definition eines Skills",
+      "description": "Anthropic definiert Skills als „folders that include instructions, scripts, and resources that Claude can load when needed“ [1]. Die Slide zitiert den Satz wörtlich und auf Englisch; „Claude“ ist darin Anthropics Produkt, und der Agent-Skills-Standard (Notiz 1) veröffentlicht dasselbe Ordnerformat für andere Agenten.",
+      "sources": {
+        "anthropic-introducing-agent-skills": { "title": "Anthropic, Introducing Agent Skills" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "name-and-use-when": {
+        "title": "Name und Wann-Zeile",
+        "keywords": "",
+        "script": "Ein Skill ist ein Ordner mit Anweisungen, und die Firma, die Skills eingeführt hat, sagt das fast genau so. Im Ordner liegt eine Datei, ohne die er nicht auskommt, und diese Datei beginnt mit einem Namen und einer Beschreibung, einer Zeile, wann man ihn nutzt. Diese Zeile ist wichtiger, als sie aussieht, denn sie ist das Erste, was das Modell sieht, und, wie Du gleich hörst, oft das Einzige. Auf unserer Karte sind das der Titel und die Zeile „Nutzen, wenn“ im Kopf."
+      },
+      "steps-in-the-body": {
+        "title": "Schritte im Hauptteil",
+        "keywords": "",
+        "script": "Dann kommen die Anweisungen, das Verfahren selbst als nummerierte Schritte, im Hauptteil der Karte. Neben dieser Datei kann ein Skill optionale Zusatzdateien mitbringen, nach denen seine Schritte greifen, etwa einen Artenführer, eine Etikettvorlage oder ein Arm-Preset, eingesteckt in die Hülle der Karte. Ein Skill ist also ein Verfahren plus das Material, das dieses Verfahren braucht."
+      },
+      "for-developers": {
+        "title": "Für Entwickler",
+        "keywords": "",
+        "script": "Wenn Du mit einem Coding-Agenten arbeitest, schalte auf die Coding-Agent-Ansicht um. Dort heißen die zwei Teile der Datei Frontmatter und Hauptteil von SKILL.md, und Du kannst beide öffnen und bearbeiten. Wenn nicht, kannst Du diese Ansicht ganz ignorieren."
+      }
+    }
+  }
+}
