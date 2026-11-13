@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { realisticSettings, startSettings } from './factory-dials.pure.ts';
 import { buildFactory, createFactory, type Audit, type FactoryHandle } from './factory-model.pure.ts';
 import { RHO_BN, RHO_OTHER, stability } from './factory-sizing.pure.ts';
 import { solve } from './factory-solve.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
 import type { Bundle, Settings } from './software-ecology.types';
+import { realisticSettings, startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 /*

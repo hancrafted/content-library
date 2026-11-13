@@ -5,10 +5,11 @@
  * for Realistic alone would need more than SIZE_MAX times a center's Ideal capacity (Q115), or when a load reaches
  * capacity at Realistic; full rushing and the worst case only warn.
  */
-import { idealSettings, realisticSettings, RHO_IDEAL, RUSH_TO } from './factory-dials.pure.ts';
+import { RHO_IDEAL, RUSH_TO } from './factory-dials.pure.ts';
 import { solve, type SolveResult } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type { Settings } from './software-ecology.types';
+import { idealSettings, realisticSettings } from './start-settings.pure.ts';
 
 export const RHO_REAL = 0.9;
 export const RHO_BN = 0.85;

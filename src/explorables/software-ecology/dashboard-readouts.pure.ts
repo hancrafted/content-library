@@ -5,11 +5,12 @@
  * reference build's `signals`, `leadTime`, `drainText`, `sparkline` and `syncDashboard`.
  */
 import { DEFECTS, kindChancesOf } from './defect.pure.ts';
-import { AMBER, custOf, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
+import { AMBER, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
 import type { Dials, Factory, FactoryNode } from './factory.types';
 import type { OwnSet } from './own-work.types';
 import type { Cust, Defect, Settings } from './software-ecology.types';
 import { drainOf } from './stage-readouts.pure.ts';
+import { custOf } from './start-settings.pure.ts';
 
 export type Level = 'red' | 'amber' | 'green';
 export type SignalKind = 'backing' | 'bottleneck' | 'overloaded' | 'rework' | 'unread' | 'starved' | 'ok';

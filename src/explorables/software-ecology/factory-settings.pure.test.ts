@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { custOf } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
 import { presetOf } from './factory-run.pure.ts';
 import {
@@ -13,6 +12,7 @@ import {
   withReality,
 } from './factory-settings.pure.ts';
 import type { Preset } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const B = builtinBundle('tire');

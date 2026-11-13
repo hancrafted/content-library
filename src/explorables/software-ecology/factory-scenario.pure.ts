@@ -8,12 +8,13 @@
  * "falls" (against the step before).
  */
 import { createSampler, stepsTo, type Values, WINDOW } from './beat-means.pure.ts';
-import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DTW, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
 import { startBacklogOf } from './start-backlog.pure.ts';
+import { startSettings } from './start-settings.pure.ts';
 
 /** The steps of a preset: its tour, or its check as one step. */
 export const stepsOf = (p: Preset): readonly TourStep[] => (p.tour ? p.tour : p.check ? [p.check] : []);

@@ -5,7 +5,7 @@
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
 import { type Sampler, type Values } from './beat-means.pure.ts';
-import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DAYS, DTW, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
   DEFAULT_SEED,
@@ -18,6 +18,7 @@ import {
 } from './factory-model.pure.ts';
 import type { Bundle, Preset, Settings } from './software-ecology.types';
 import { startBacklogOf } from './start-backlog.pure.ts';
+import { startSettings } from './start-settings.pure.ts';
 import { unretired } from './use-case-preset-checks.pure.ts';
 
 /** Weeks a real second at 1×; 10× plays a working day in about 0.6 s. */

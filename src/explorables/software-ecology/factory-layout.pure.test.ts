@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { idealSettings } from './factory-dials.pure.ts';
 import { beltSegments, layoutFactory, MIN_RUN } from './factory-layout.pure.ts';
 import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
+import { idealSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const layoutOf = (id: string) => {

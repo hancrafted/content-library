@@ -3,11 +3,12 @@
  * work, signs and AI, the Customer card, the belts' rates, the status line and the At the Customer panel. Plain data,
  * so React re-renders only what changed; the words are the parts' own.
  */
-import { DAYS, Q, custOf, dials, speedOf } from './factory-dials.pure.ts';
+import { DAYS, Q, dials, speedOf } from './factory-dials.pure.ts';
 import { SHELF } from './factory-flow.pure.ts';
 import { CENTER_MEASURES } from './factory-readouts.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type { Arrivals, Settings } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 /** The release shelf is drawn this many cells down (4 rows); its columns follow from SHELF (5 across). */
 export const SHELF_ROWS = 4;

@@ -4,7 +4,6 @@
  * build's, so the same seed gives the same run.
  */
 import {
-  custOf,
   dials,
   DTW,
   ownOf,
@@ -24,6 +23,7 @@ import { runServer } from './factory-service.pure.ts';
 import { waitState } from './factory-wait.pure.ts';
 import type { Belt, Factory, FactoryNode, Streams, TicketSource } from './factory.types';
 import type { Arrivals, Cust } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 const nextGap = (c: Streams, mode: Arrivals, r: number): number => (mode === 'steady' ? 1 / r : expo(c.ra, 1 / r));
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { effToPos, posToEff, sparkPaths, type DashboardReadout } from './dashboard-readouts.pure.ts';
-import { startSettings } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
+import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const warmed = (preset: string) => new FactoryRun({ B: builtinBundle('tire'), preset, now: true });

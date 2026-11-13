@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { idealSettings } from './factory-dials.pure.ts';
 import { gridOf, tilesOf } from './factory-grid.pure.ts';
 import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
+import { idealSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const factoryOf = (id: string) => {

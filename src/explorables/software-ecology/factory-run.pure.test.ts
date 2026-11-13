@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DTW, SPEEDS, WARM_WEEKS } from './factory-dials.pure.ts';
 import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 /** Tire swing with one more state: from day 0, at 20×, as a scenario may start. */

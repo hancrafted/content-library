@@ -7,11 +7,12 @@
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
+import { DAYS, DTW } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 
 /** A tour runs at 20× between its steps (Q118; 10× before the 1× was halved, so the pace is the same). */
 export const TOUR_SPEED = 20;

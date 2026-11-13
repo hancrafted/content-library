@@ -3,12 +3,13 @@
  * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
  */
 import { DEFECTS, perKind } from './defect.pure.ts';
-import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
+import { dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
 import { NF_ } from './flow-cells.pure.ts';
 import { constOf } from './mechanics.pure.ts';
 import type { Cust, Defect, Settings } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 export interface SolveResult {
   readonly F: Float64Array[];

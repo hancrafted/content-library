@@ -5,7 +5,6 @@
  */
 import { badOut } from './defect.pure.ts';
 import { stringifyExchange } from './exchange-writer.pure.ts';
-import { custOf } from './factory-dials.pure.ts';
 import type {
   Bundle,
   CatalogWords,
@@ -16,6 +15,7 @@ import type {
   Settings,
   ViewId,
 } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';
 

@@ -6,7 +6,6 @@
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { displayOf } from './display-defaults.pure.ts';
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
-import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
 import { DEFAULT_SPEED, presetOf } from './factory-run.pure.ts';
 import type {
@@ -27,6 +26,7 @@ import type {
   UseCaseWords,
   ViewId,
 } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 
 /** What an exchange file's `state` may hold; the schema checked each value it holds. */
 export interface SavedState {
