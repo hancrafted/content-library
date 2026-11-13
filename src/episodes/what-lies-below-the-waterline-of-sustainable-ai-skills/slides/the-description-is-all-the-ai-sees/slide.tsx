@@ -78,7 +78,7 @@ export const theDescriptionIsAllTheAiSees = slide({
                 kind={kind}
                 label={t(`descriptions.${kind}.label`)}
                 tag={t(`descriptions.${kind}.tag`)}
-                text={t(`descriptions.${kind}.text`)}
+                text={t('descriptions.quoted', { text: t(`descriptions.${kind}.text`) })}
                 coding={{ path: SKILL_PATH, name: FOCAL, description: t(`descriptions.${kind}.coding`) }}
               />
             ))}

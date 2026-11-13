@@ -27,6 +27,7 @@
   },
   "question": "Two descriptions for the same skill. Which one would you open?",
   "descriptions": {
+    "quoted": "“{text}”",
     "vague": {
       "label": "Vague description",
       "tag": "stays shut",

@@ -12,6 +12,7 @@ export interface DescriptionCardProps {
   readonly kind: 'vague' | 'clear';
   readonly label: string;
   readonly tag: string;
+  /** The description in the quotation marks of its locale. */
   readonly text: string;
   /** The same description as the front matter of the skill's file, for the Coding agent view. */
   readonly coding: SkillFile;
@@ -54,7 +55,7 @@ export function DescriptionCard({ kind, label, tag, text, coding }: DescriptionC
         <span className={cn(clear && 'rounded-full bg-primary px-2.5 py-0.5 text-primary-foreground')}>{tag}</span>
       </p>
       <InView view="chat" as="p" className={cn('text-body font-semibold', !clear && 'text-muted-foreground')}>
-        “{text}”
+        {text}
       </InView>
       <FrontMatter file={coding} clear={clear} />
     </article>
