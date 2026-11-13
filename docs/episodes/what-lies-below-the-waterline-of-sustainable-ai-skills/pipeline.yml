@@ -608,15 +608,15 @@ jobs:
         session: orchestrator
   - id: implement-iceberg-style
     stage: build
-    intent: "Build the Iceberg style this Episode first uses, before any Section: the reusable zone token set in
-      slide-shared/ (one CSS variable per zone, light and dark values, a Slide only names its zone), the shared depth
+    intent: "Build the Iceberg style this Episode first uses, before any Section: the reusable zone token set as five
+      global tokens in globals.css, --zone-surface to --zone-abyss, each with a .dark value (a Slide only names its zone), the shared depth
       ruler and slim left rail component (one tile per Section, plain zone label with the ocean term beneath), and a new
       `bubbles` ink profile for the Section-title descent, per the Iceberg style in docs/design/design-guide.md,
       docs/features/slide-transitions.md and the approved Spec. Han tunes the zone colours after seeing them render, so
       each zone is one token. Also, by docs/adr/0025-scene-figures-are-deep-modules.md: ZoneScene (sky with sun in light
       and moon in dark, sea, rays, seabed, iceberg and the zone's one ambient loop, drawing the sea life and iceberg that
       implement-scene-cast writes), Travel, the zone label's popover (metres and scientific name on hover, focus or tap),
-      and the Episode's page-level Chat app / Coding agent toggle held in the URL as ?view=coding."
+      the client leaf in ZoneScene that sets data-motion=settled on the Scene once its once-animations end, and the Episode's page-level Chat app / Coding agent toggle held in the URL as ?view=coding."
     needs:
       - implement-episode-init
       - implement-scene-cast

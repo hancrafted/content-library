@@ -10,7 +10,7 @@ The Iceberg Episode `what-lies-below-the-waterline-of-sustainable-ai-skills` dra
 
 ## Human acceptance
 
-Han chose these decisions in the architecture grill of the Episode Run (`/new-episode`, branch `episode/what-lies-below-the-waterline-of-sustainable-ai-skills`) on 2026-11-13, questions 1 to 22, run with `/codebase-design`, after approving the Spec's design for implementation. He answered each question, left each "Decided without asking" line uncontested, and confirmed the shared understanding with "yes". The questions and answers are in `.scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/grill-architecture.md`.
+Han chose these decisions in the architecture grill of the Episode Run (`/new-episode`, branch `episode/what-lies-below-the-waterline-of-sustainable-ai-skills`) on 2026-11-13, questions 1 to 24, run with `/codebase-design` (23 and 24 on colour, after a figure agent hit FE-011), after approving the Spec's design for implementation. He answered each question, left each "Decided without asking" line uncontested, and confirmed the shared understanding with "yes". The questions and answers are in `.scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/grill-architecture.md`.
 
 ## Decision
 
@@ -39,12 +39,17 @@ A Slide's Scene reads:
 </ZoneScene>
 ```
 
-1. **A figure is a server component rendering inline SVG.** It ships no client JavaScript; every colour is a slide-local custom property with a `.dark` value, never a `globals.css` name (FE-011-design-tokens).
+1. **A figure is a server component rendering inline SVG.** It ships no client JavaScript. Its colours are mixed with `color-mix()` from global tokens in its own CSS module, as `note-tints` does, never raw colours: shared parts reach every Episode that reuses them, so FE-011-design-tokens keeps raw colours out of `slide-shared/` (Q23). Meaning colours appear only for their meanings: `ai` on the `aiAgent` badge, nowhere in scenery.
 2. **`ZoneScene` is deep.** One `zone` prop draws that zone's scenery; retuning a zone is one edit that all its Slides follow. The Surface sky draws both sun and moon and `.dark` swaps them in CSS, the pattern of the landing hero (`src/page-assembly/landing/promotion-window.tsx`), copied, since an Episode does not import page assembly.
 3. **A preset varies appearance only:** build, skin tone, hair, headwear, outfit, one held prop, and `kind`. Poses and moods belong to `Character`, so any preset takes any pose. `kind: 'ai'` draws the `ai` meaning colour as one badge, so an AI agent reads as a colleague, the amnesiac freelancer, not a robot.
 4. **The actor contract** is `mood`, `says` and a head anchor where the emote sits. `Character` and `Robot` both implement it. `mood` is one of a closed set (`confused`, `surprised`, `happy`, `thinking`, `blank`); `says` is text from the Slide's `i18n/` (FE-003-localization), never a preset field.
 5. **`poses.pure.ts`** maps preset, pose and mood to the visible parts and is tested for every preset × pose (ARCH-003-testing). The drawing itself is judged by Han in the cast gallery.
 6. **In this Episode the robot is the AI.** `aiAgent` exists in `character/shared-presets.ts` and is shown in the gallery as the third preset that proves `Character` outside the crew; the Slides do not use it.
+
+### Colour tokens
+
+1. **Zone colours** are five global tokens in `globals.css`, `--zone-surface` to `--zone-abyss`, each with a `.dark` value, so Han tunes each zone once in the token editor.
+2. **Scenery colours** stay mixed from global tokens. If the cast gallery shows neighbouring figures too alike, a small set of scenery tokens is promoted to `globals.css` (`--ice`, `--deep`, `--seabed`, `--creature`), each with a dark value, and the figures mix from those (Q24), following FE-011's own mitigation.
 
 ### Motion
 
@@ -53,7 +58,7 @@ A Slide's Scene reads:
 3. **Choreography:** movement across the Scene is `Travel`, because positions belong to the Slide; movement inside a figure is its `motion` prop, because only the figure knows its parts. A Slide never targets a figure's internal parts.
 4. **Emotes** pop in once after their figure's motion and stay visible: meaning is never behind hover or a click.
 5. **Ambient loops:** one slow loop per zone, scenery only, drawn by `ZoneScene` (Surface: wind on the clouds and the ship's rock; Sunlit: a fish school; Twilight: jellies; Midnight: the whale; Abyss: bubbles). Each pauses outside `active` and while the document is hidden. The cast never loops; the iceberg never moves.
-6. **Reduced motion:** every figure's rest state is its end state, so `prefers-reduced-motion: reduce` only removes animations. Each animated figure reports `data-motion="settled"` at its end (ARCH-003-testing §5).
+6. **Reduced motion:** every figure's rest state is its end state, so `prefers-reduced-motion: reduce` only removes animations. Figures are server components and cannot set attributes, so they mark each animated part `data-motion="<name>"`; one client leaf in `ZoneScene` listens for the Scene's `animationend` events and sets `data-motion="settled"` on the Scene once every once-animation has ended (ambient loops excluded), which browser checks wait on (ARCH-003-testing §5). An emote reads `--emote-delay`, set by its figure, so it pops in after the figure's motion.
 
 ### Interaction
 
