@@ -6,7 +6,7 @@ stale_after: 2027-04-28T00:00:00Z
 
 # AI capability Explorable
 
-Read before placing, changing or testing the AI capability timeline (`src/explorables/ai-capability/`). Its visual Spec, the reviewed target design with per-item feedback, is [`ai-capability.spec.html`](ai-capability.spec.html): open it in a browser, and update it in place with `/to-html-spec` before changing the design. Binding rules: [FE-012 Explorables](../../../.archgate/adrs/FE-012-explorables.md), [FE-006](../../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind.
+Read before placing, changing or testing the AI capability timeline (`src/explorables/ai-capability/`). Its visual Spec, the reviewed target design with per-item feedback, is [`ai-capability.spec.html`](ai-capability.spec.html): open it in a browser, and update it in place with `/to-decision-html` before changing the design. Binding rules: [FE-012 Explorables](../../../.archgate/adrs/FE-012-explorables.md), [FE-006](../../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind.
 
 ## What it shows
 
