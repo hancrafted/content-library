@@ -6,8 +6,39 @@
  */
 import { checkFragment, fragmentSlides, pickBox } from './episode-spec-fragment.pure.ts';
 
-/** The width the Spec is reviewed at, and so the width every Option is rendered and measured at. */
-export const WIDTH = 1440;
+/** One render preset of the Spec calibration: the viewport an Option is rendered and measured at. */
+export interface Preset {
+  name: string;
+  width: number;
+  height: number;
+}
+
+/** The height of a preset the calibration gives only a width: inspect-page's own default viewport height. */
+const DEFAULT_HEIGHT = 800;
+
+/** A preset's size as the report names it: `390px` for a width-only preset, `1080×1920` for a vertical one. */
+function sizeOf({ width, height }: Preset): string {
+  return height === DEFAULT_HEIGHT ? `${width}px` : `${width}×${height}`;
+}
+
+/**
+ * The render presets in the Spec calibration's "Render presets" table, in table order. A row is a backticked preset
+ * name and a size, either `<width> px wide` or `<width> × <height>`. The calibration is the one source: the toolbar
+ * and this command both follow it. Throws when the section holds no preset, so a moved heading fails loud.
+ */
+export function readPresets(calibration: string): Preset[] {
+  const section = /^## Render presets\n([\s\S]*?)(?=^## |(?![\s\S]))/m.exec(calibration)?.[1] ?? '';
+  const presets = [...section.matchAll(/^\|\s*`([a-z]+)`\s*\|\s*(\d+)\s*(?:px wide|×\s*(\d+))/gm)].map(
+    ([, name = '', width = '', height]): Preset => ({
+      name,
+      width: Number(width),
+      height: height === undefined ? DEFAULT_HEIGHT : Number(height),
+    }),
+  );
+  if (presets.length === 0)
+    throw new Error('The Spec calibration has no "Render presets" table of `name` | size rows.');
+  return presets;
+}
 
 /** Marks each element of an Option that runs past the Option's box, by `data-overflow`, once the page has laid out. */
 const OVERFLOW_SCRIPT = `<script>
@@ -70,8 +101,8 @@ export interface Rendered {
   overflow: number;
 }
 
-/** Renders one Option by id; throws when it cannot. */
-export type Render = (id: string) => Rendered;
+/** Renders one Option by id at one preset; throws when it cannot. */
+export type Render = (id: string, preset: Preset) => Rendered;
 
 /** The slug whose Slide holds an Option: the nearest slide marker above its figure. */
 function slideOf(fragment: string, id: string): string {
@@ -79,29 +110,37 @@ function slideOf(fragment: string, id: string): string {
   return [...before.matchAll(/<!-- slide: ([a-z0-9-]+) -->/g)].at(-1)?.[1] ?? '';
 }
 
-/** What overflow measuring says about an Option, as a violation when it overflows. */
-function overflowViolation(fragment: string, id: string, count: number): string[] {
+/** What overflow measuring says about an Option at a preset, as a violation when it overflows. */
+function overflowViolation(fragment: string, at: { id: string; preset: Preset }, count: number): string[] {
+  const { id, preset } = at;
   if (count === 0) return [];
   const plural = count === 1 ? '' : 's';
   return [
-    `Option ${id} of {#${slideOf(fragment, id)}} has text running past its box at ${WIDTH}px (${count} element${plural}): shorten it or let it wrap.`,
+    `Option ${id} of {#${slideOf(fragment, id)}} has text running past its box at ${preset.name} ${sizeOf(preset)} (${count} element${plural}): shorten it or let it wrap.`,
   ];
 }
 
 /**
  * What the command prints for a fragment: one `✖` line per contract or overflow violation, then one `screenshot`
- * line per rendered Option. Every Option is rendered, violations or not; `failed` on any violation.
+ * line per rendered Option and preset. Every Option is rendered at every preset, violations or not; `failed` on any
+ * violation.
  */
-export function previewReport(fragment: string, render: Render): { lines: string[]; failed: boolean } {
+export function previewReport(
+  fragment: string,
+  presets: Preset[],
+  render: Render,
+): { lines: string[]; failed: boolean } {
   const violations = checkFragment(fragment);
   const shots: string[] = [];
   for (const id of optionIds(fragment)) {
-    try {
-      const rendered = render(id);
-      shots.push(`screenshot ${id} ${rendered.path}`);
-      violations.push(...overflowViolation(fragment, id, rendered.overflow));
-    } catch (error) {
-      violations.push(`Option ${id} could not be rendered: ${(error as Error).message}`);
+    for (const preset of presets) {
+      try {
+        const rendered = render(id, preset);
+        shots.push(`screenshot ${id} ${preset.name} ${rendered.path}`);
+        violations.push(...overflowViolation(fragment, { id, preset }, rendered.overflow));
+      } catch (error) {
+        violations.push(`Option ${id} could not be rendered at ${preset.name}: ${(error as Error).message}`);
+      }
     }
   }
   return { lines: [...violations.map((line) => `✖ ${line}`), ...shots], failed: violations.length > 0 };
