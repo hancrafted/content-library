@@ -4,7 +4,7 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T20:28:05Z
+  at: 2026-11-13T18:46:16Z
 locale: en
 brief: ./brief.md
 verified:
@@ -20,6 +20,8 @@ verified:
     at: 2026-11-12T20:12:29Z
   - by: process:markdown-harness
     at: 2026-11-12T20:28:05Z
+  - by: process:markdown-harness
+    at: 2026-11-13T18:46:16Z
 ---
 
 # What lies below the waterline of sustainable AI skills {#waterline-of-sustainable-ai-skills}
@@ -106,8 +108,8 @@ Two visuals. First, `SKILL.md` alone, as one procedure card on a clipboard drawn
 
 #### Voice script
 
-1. **Name and use-when** — Anthropic defines skills as folders that include instructions, scripts and resources that Claude can load when needed, so a skill is a folder of instructions. The folder's one required file starts with a name and a description, one line saying when to use it. That line matters more than it looks, because it is the first thing the model sees and, as you'll hear in a minute, often the only thing. On our card it is the title and the "use when" line in the head.
-2. **Steps in the body** — Then come the instructions, the procedure itself as numbered steps, in the body of the card. Beside that file a skill can carry optional supporting files that its steps reach for, like a species guide, a label template or an arm preset; the second picture shows that folder, and the link leads to the open standard behind it. So a skill is a procedure, plus the material that procedure needs.
+1. **Name and use-when** — A skill is a folder of instructions, and the company that introduced skills says so in almost those words. The folder holds one file it cannot do without, and that file starts with a name and a description, one line saying when to use it. That line matters more than it looks, because it is the first thing the model sees and, as you'll hear in a minute, often the only thing. On our card it is the title and the "use when" line in the head.
+2. **Steps in the body** — Then come the instructions, the procedure itself as numbered steps, in the body of the card. Beside that file a skill can carry optional supporting files that its steps reach for, like a species guide, a label template or an arm preset tucked into the card's sleeve. So a skill is a procedure, plus the material that procedure needs.
 3. **For developers** — If you work with a coding agent, switch to the coding-agent view, where the two parts of the file are called its frontmatter and the body of SKILL.md, and you can open and edit each. If you don't, you can ignore that view completely.
 
 ### How AI discovers and reads a skill {#three-levels-of-loading}
@@ -141,8 +143,8 @@ The concept first, as a card above the example: Nielsen Norman Group's definitio
 
 #### Voice script
 
-1. **The concept** — This idea has a name, progressive disclosure: show the least first, and open more only when the task needs it. A skill is the example, and it has three loading levels.
-2. **Step one** — Level one is always loaded: every skill's name and description. So even with a hundred skills installed, all the model carries into every conversation is that short index, the index page of the manual.
+1. **The concept** — So how does the model find a skill, and how much of it does it read? Interface designers met the same problem long before AI: a screen that shows every option at once overwhelms the person using it, so you show the basics first and open the rest when someone needs it. They call it progressive disclosure, and a skill is loaded the same way, in three levels.
+2. **Step one** — Level one is how the model discovers a skill, and it is always loaded: every skill's name and description. So even with a hundred skills installed, all the model carries into every conversation is that short index, the index page of the manual.
 3. **Step two** — Level two is loaded when the skill is used. Only when a task matches a description does the model read that skill's main instructions, and not a moment before, the way the pilot pulls one card.
 4. **Step three** — Level three is loaded only if needed: the references, templates and scripts, the extras in the sleeve, which the model opens only when a step sends it there. The exact behaviour differs a little from app to app, so I keep the precise claims in the notes beside this Slide.
 
@@ -173,7 +175,7 @@ The context window Explorable with a Preset in the scene's words, in the Explora
 
 1. **Back to the window** — Some of you have seen the context window Explorable, where we looked at everything the model holds in its head at once. This is the same context window, and now we place skills in it.
 2. **The standing part** — Start with what is there before any task begins, in the order the Explorable shows it: the system prompt, the skills, meaning the name and description of every skill, and the memory files, meaning your instructions in AGENTS.md. On our ship that is the standing rules, the manual's index, and your standing orders and the project brief. That part is static, so it sits in the window whatever the task turns out to be.
-3. **Filling as you dive** — Then the task begins and the window fills up: the skill the model opened, and the tool results it gets back, the camera frames, sonar readings and sample logs of the dive. That part is dynamic, and a skill belongs to it, whether you call it at the start or the model picks it halfway through. Static has exceptions, so take the split as a rule of thumb.
+3. **Filling as you dive** — Then the task begins and the window fills up: the skill the model opened, and the tool results it gets back, the camera frames, sonar readings and sample logs of the dive. That part is dynamic, and a skill's instructions belong to it, whether you call the skill at the start or the model picks it halfway through. So a skill sits on both sides of the line: its name and description are static, and the skill itself is dynamic.
 
 ### Instructions, skills and connectors {#instructions-skills-and-connectors}
 
@@ -300,7 +302,7 @@ A manual stuffed with thin cards, several stamped "never tested". Beside it, the
 #### Voice script
 
 1. **Too early** — Now the opposite danger. If you write the skill after the first run, you freeze a guess, and a procedure nobody has proven now carries the authority of a skill.
-2. **A thin card has a price** — And every quick skill has a price. It is one more thing to keep right and one more description in the index the model reads every time, so picture a manual stuffed with thin cards, several of them never tested, until the one you need is buried in the middle.
+2. **A thin card has a price** — And every quick skill has a price. It is one more thing to keep right and one more line in an index that only grows, so picture a manual stuffed with thin cards, several of them never tested, until the one you need is buried in the middle.
 3. **Three questions** — So before you write a skill, ask three questions. Does the task repeat, does it have rules, and does a mistake cost something? If the answer is no to all three, leave it in the chat. This check is mine, a practical filter I use, not a published test.
 
 ### Write it from a good run {#write-it-from-a-good-run}
@@ -354,9 +356,9 @@ The manual from the pilot's view: the index readable and labelled "loaded: name 
 
 #### Voice script
 
-1. **The pilot's view** — Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. All it can go on is what the description says.
+1. **The pilot's view** — Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. So unless you call the skill by name, the description is the trigger: it decides whether the model picks the skill on its own.
 2. **Two entries** — Take two descriptions for the same skill: "Samples", and "Take a sediment sample at a new site". A task comes in, because we have just reached a new site. Which one would you open?
-3. **Scent** — Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. It is a finding about people, and I am borrowing it for the model. So your job is to make the description smell like the task it serves.
+3. **Scent** — Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They found it in people, and I am lending it to the model. So your job is to make the description smell like the task it serves, because that scent is what pulls the trigger.
 
 ### Name the trigger, not the content {#name-the-moment-not-the-content}
 
@@ -382,9 +384,9 @@ Two descriptions for the same skill, each headed by its AI label. "Describes the
 
 #### Voice script
 
-1. **Two labels** — Here are two descriptions for the same skill. The first names the content, "SOP-07: corer handling, steps 1 to 9", and the second says what the skill does and names the moment, "Takes a sediment core. Use when we reach a new site and need a sample from the seabed". One says only what is inside, the other also says when you need it, and that is your second step: write the description as the moment you'd need it.
+1. **Two labels** — Here are two descriptions for the same skill. The first names the content, "SOP-07: corer handling, steps 1 to 9", and the second says what the skill does and names the moment, "Takes a sediment core. Use when we reach a new site and need a sample from the seabed". One says only what is inside, the other names the trigger, when you need it, and that is your second step: write the description as the moment you'd need it.
 2. **Your request** — Now it is the day of the dive and you type, "Grab some mud here before we move on." Nothing in "SOP-07, steps 1 to 9" tells the model when it is needed, but "a sample from the seabed" does, so only the moment description matches. Write it in the words you would actually say.
-3. **The closing line** — Last, the moment description can end on a second half: "Not for water samples or filming." It tells the model where the skill stops, so it does not open it for a job it cannot do. Treat that half as a choice and not a rule, because not every guide recommends it.
+3. **The closing line** — Last, the moment description can end on a second half: "Not for water samples or filming." It tells the model where the skill stops, so it does not open it for a job it cannot do. Treat that half as a choice and not a rule, and test whether it helps your skill.
 
 ### More skills, harder choice {#more-skills-harder-choice}
 
@@ -412,14 +414,14 @@ A skill index crowded with near-twins ("Sample", "Take sample", "Seabed sample v
 
 1. **Near-twins** — Now see what happens when the skills pile up. "Sample", "Take sample", "Seabed sample v2": three skills whose descriptions sound alike, and a model that has to guess between them. It guesses, and you made it do so.
 2. **A short list on the wall** — The fix is cheap: a short list in your project instructions, AGENTS.md if you work with a coding agent, that says "In this project, use these three skills." Project instructions are always loaded, so the model no longer has to choose from a crowded index. On our ship, that is a list on the wall.
-3. **Hick's law** — People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. It is a finding about people, and I am borrowing it for the model. What I want you to take from this Slide is the short list: it is short, and it is always loaded.
-4. **Name it as an action** — One more habit keeps the index tidy: name each skill as an action, in lowercase words joined by hyphens, like collect-sediment-sample. Anthropic's best practices say names use lowercase letters, numbers and hyphens, and that consistent patterns across your skills make them easier to find.
+3. **Hick's law** — People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. I am lending it to the model, so hold it as a picture, not a measurement. What I want you to take from this Slide is the short list: it is short, and it is always loaded.
+4. **Name it as an action** — One more habit keeps the index tidy: name each skill as an action, in lowercase words joined by hyphens, like collect-sediment-sample. A name that says what the skill does tells the model, and you, what it is for before anyone reads the description, and when every name follows the same pattern, a near-twin stands out before it gets written.
 
 ## What context goes inside {#what-goes-inside}
 
 #### Voice script
 
-1. **Twilight** — Deeper now, into the twilight zone, where the light is dim. The skill is written and described, and the question is what goes into it and what stays out.
+1. **Twilight** — Deeper now, into the twilight zone, where the light is dim. The skill is written and described, and the question is what context goes into it and what stays beside it.
 2. **A decision, not a law** — I want to be careful with the word rule here. Keeping the procedure apart from project details is a design decision with trade-offs on both sides, so I'll show you the trade-offs and you decide.
 
 ### What context goes where {#what-goes-where-is-information-architecture}
@@ -445,7 +447,7 @@ One piece of knowledge, today's site depth, with three possible homes, each led 
 
 #### Voice script
 
-1. **A home for each fact** — Take one piece of project knowledge, something that changes from one project to the next, like the depth of today's dive site. It needs a home, and you have to pick one. Choosing where each piece of knowledge lives is information architecture, which Nielsen Norman Group defines as the practice of structuring and organizing content, and you do it whether or not you name it.
+1. **A home for each fact** — Take one piece of project knowledge, something that changes from one project to the next, like the depth of today's dive site. It needs a home, and you have to pick one. Choosing where each piece of context lives is information architecture, the same craft that decides where things go on a well-built website, and you practise it whether or not you call it that.
 2. **Three costs** — Every home costs you in three ways. Performance asks whether the model actually reads it at the moment it needs it, reusability asks how many projects the skill still fits, and token cost asks how much of the context window it fills, and how often.
 3. **Three homes** — There are three homes for it. Inside the skill, it arrives every time the skill runs, but now the skill fits only this project. In your project instructions, it sits in the context window on every task, whether the task needs it or not, and the skill stays free for any project. In a project file the skill reads, it is loaded only at the step that needs it, and the skill fits every project. None is right in general, so it depends on how many projects the skill will serve.
 
@@ -730,7 +732,7 @@ A reveal panel, led by its AI statement, "Every AI model has this condition, and
 #### Voice script
 
 1. **Not the only pilot** — There is one more thing that changes under your skill, and you do not control it: the model that reads it. Every AI model has the condition we started with, and each AI provider trains its own, the way each pilot school trains its own pilots. So the reader of your skill is never fixed.
-2. **Update and switch** — Two things can change the reader. A model update: your provider ships a new version, your skill keeps the same words, but an instruction like "descend slowly" now gives a different dive. A different model: a colleague runs your skill in another app, and that model reads the same words its own way. The skill did not change, the reader did, and engineers saw this long ago in software: what is in use has to keep changing, or it gets worse.
+2. **Update and switch** — Two things can change the reader. A model update: your provider ships a new version, your skill keeps the same words, but an instruction like "descend slowly" now gives a different dive. A different model or agent: a colleague runs your skill in another app, and it reads the same words its own way. The skill did not change, the reader did, and engineers saw this long ago in software: what is in use has to keep changing, or it gets worse.
 3. **Hand over the verdict** — So here is my question to you: which of your skills would you re-check after the next model update? If you own one, would you trust it to behave the same way tomorrow?
 
 ### Retire skills {#retire-skills}
