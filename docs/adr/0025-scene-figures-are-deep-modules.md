@@ -62,7 +62,7 @@ A Slide's Scene reads:
 
 ### Interaction
 
-1. **View switch:** one page-level Chat app / Coding agent toggle, held in the URL as `?view=coding`, so a shared link opens in its view (FE-001-state-management).
+1. **View switch:** one page-level Chat app / Coding agent toggle, held in memory as transient state, opening on Chat app (FE-001-state-management). Q8 chose `?view=coding`; FE-001 §1.2 forbids query-param state and the hash holds the active Slide, so Han chose memory on 2026-11-13 over a preference, a `/coding` path or an FE-001 exception. Its state sits behind one seam, so persisting it is one change.
 2. **Zone label:** the plain zone name stays visible; a button opens a popover with the depth in metres and the scientific name, on hover, focus or tap.
 
 ### Build
@@ -79,7 +79,7 @@ The Build job `implement-scene-cast` writes these figures before any Section use
 - **Choreography in the figure** grows the figure with every Slide; **in the Slide's CSS** couples 21 Slides to the robot's SVG structure.
 - **Emotes as Slide-positioned parts** make each Slide guess the head; **moods as poses** multiply poses by moods.
 - **A Replay button per Slide** was review machinery; **scroll-linked motion** ties the scene to how fast the presenter scrolls.
-- **A per-Slide view switch** means 27 clicks; **`localStorage`** hides the view from a shared link.
+- **A per-Slide view switch** means 27 clicks. **`?view=coding`** breaks FE-001 §1.2; **a preference** and **a `/coding` path** were offered and not chosen.
 - **A hover-only tooltip** reaches neither keyboard nor touch.
 
 The cost:
