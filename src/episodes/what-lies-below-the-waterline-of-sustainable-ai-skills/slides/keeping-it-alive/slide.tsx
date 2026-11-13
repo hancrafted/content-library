@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
@@ -11,10 +12,10 @@ export const keepingItAlive = slide({
   messages: { en, de },
   presentation: atDepth(7, 'section'),
   segments: [{ slug: 'the-abyss' }, { slug: 'nobody-sees-it' }],
-  content: ({ t, locale }) => (
+  content: ({ t }) => (
     <SlideFrame>
       <WaterlineEcho
-        zones={(locale === 'de' ? de : en).zones}
+        zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
         robotAt="seabed"
         section={7}

@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/utils';
-import type { ReactNode } from 'react';
-import type { Zone } from './ruler.pure';
+import type { CSSProperties, ReactNode } from 'react';
+import { zoneToken, type Zone } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Iceberg } from './scenery/iceberg';
 import { depthScaleForKeel } from './scenery/scenery.pure';
@@ -24,8 +24,6 @@ export interface ZoneSceneProps {
   readonly zone: Zone;
   /** Another part of the iceberg than the zone's own (`whole` on the Surface, `keel` in Sunlit, none deeper). */
   readonly iceberg?: SceneIceberg;
-  /** False drops the zone's creature and its loop, where the Spec keeps creatures off a Slide. */
-  readonly ambient?: boolean;
   /** Words for the picture; without them it is decoration, hidden from assistive tech. */
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
@@ -55,7 +53,8 @@ function Life({ life }: { readonly life: SceneLife }) {
       return <Whale x={360} y={420} scale={1.1} />;
     case 'bubbles':
       return <Bubbles x={220} y={560} count={9} scale={1.5} />;
-    default:
+    case 'wind':
+      // The Surface's wind lives in its clouds, which the sky draws.
       return null;
   }
 }
@@ -92,10 +91,15 @@ function Ground({ sky }: { readonly sky: boolean }) {
  * zone is one token (`--zone-<zone>` in `globals.css`) every Slide in it follows. The drawing fills the Scene's box
  * from the bottom (`slice`), so the waterline and the seabed stay in view at any width.
  */
-export function ZoneScene({ zone, iceberg, ambient, label, children, overlay, className }: ZoneSceneProps) {
-  const parts = zoneSceneParts({ zone, iceberg, ambient });
+export function ZoneScene({ zone, iceberg, label, children, overlay, className }: ZoneSceneProps) {
+  const parts = zoneSceneParts({ zone, iceberg });
+  const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water) } as CSSProperties;
   return (
-    <SceneMotionRoot zone={zone} className={cn(styles.scene, 'relative isolate overflow-hidden', className)}>
+    <SceneMotionRoot
+      zone={zone}
+      style={tokens}
+      className={cn(styles.scene, 'relative isolate overflow-hidden', className)}
+    >
       <svg
         viewBox={`0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`}
         preserveAspectRatio="xMidYMax slice"

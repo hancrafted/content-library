@@ -10,6 +10,7 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { DepthRuler } from '@/episodes/components/slide-shared/iceberg/depth-ruler';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { SURFACE_WATERLINE, ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
 import { WATERLINE_SECTIONS } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -67,7 +68,7 @@ function Dive() {
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
-  content: ({ t, locale }) => {
+  content: ({ t }) => {
     const files = [
       { name: t('agent.files.skill.name'), role: t('agent.files.skill.role') },
       { name: t('agent.files.folders.name'), role: t('agent.files.folders.role') },
@@ -91,7 +92,7 @@ export const hero = slide({
                 <DepthRuler
                   sections={WATERLINE_SECTIONS}
                   lit={0}
-                  zones={(locale === 'de' ? de : en).zones}
+                  zones={zoneWordsFrom((key) => t(key))}
                   label={t('ruler')}
                   descend={false}
                   className="absolute top-[30%] left-4 w-52 max-sm:hidden"

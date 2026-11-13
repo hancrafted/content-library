@@ -4,19 +4,11 @@ import { usePopoverPlacement } from '@/shared/hooks/use-popover-placement';
 import { popoverBox, type PopoverRules } from '@/shared/lib/popover-placement.pure';
 import { useCallback, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
+import type { ZoneLabelWords } from './zone-words.pure';
 
 const SLOT = 'zone-label-popover';
 
 const RULES: PopoverRules = { maxWidth: 256, gap: 8, minRoom: 96 };
-
-export interface ZoneLabelWords {
-  /** The plain zone name, always visible: `Twilight`. */
-  readonly name: string;
-  /** Its depth in metres: `200–1,000 m`. */
-  readonly metres: string;
-  /** Its scientific name: `mesopelagic`. */
-  readonly science: string;
-}
 
 /** Why the popover is open: a press keeps it until the next press or Esc; hover and focus only while they last. */
 type OpenBy = 'press' | 'hover' | 'focus';

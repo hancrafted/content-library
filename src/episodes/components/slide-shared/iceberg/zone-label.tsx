@@ -1,6 +1,5 @@
-import { ZoneLabelButton, type ZoneLabelWords } from './zone-label.client';
-
-export type { ZoneLabelWords } from './zone-label.client';
+import { ZoneLabelButton } from './zone-label.client';
+import type { ZoneLabelWords } from './zone-words.pure';
 
 /**
  * A zone's label (design-ADR 0025, Interaction 2): the plain name stays visible, a button whose popover gives the

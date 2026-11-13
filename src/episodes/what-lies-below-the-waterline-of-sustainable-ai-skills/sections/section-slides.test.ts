@@ -114,7 +114,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('declares no Speaker note on a section slide, since the picked Option shows no Context marker', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => 0);
+    const expected = [0, 0, 0, 0, 0, 0, 0, 0];
     // ACT
     const actual = OPENERS.map((slide) => slide.notes.length);
     // ASSERT
@@ -155,17 +155,68 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('keeps both view lines on each card, each marked with its view for the page switch', () => {
+  it('keeps both view lines on each card, the analogy for Chat app and the file line for Coding agent', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => ({ chat: ['chat'], coding: ['coding'] }));
+    const expected = [
+      {
+        chat: ['Your pilot is the AI model: ten years of skill, no memory of yesterday.'],
+        coding: ['Each session begins with a fresh context window'],
+      },
+      {
+        chat: ['A procedure card: title, use-when line, steps.'],
+        coding: ['SKILL.md, plus scripts/ references/ assets/'],
+      },
+      {
+        chat: ['Explain the sample, refine it, write the card.'],
+        coding: ['Ask the agent to turn this conversation into a skill'],
+      },
+      {
+        chat: ['The index is open, every card behind it closed.'],
+        coding: ['SKILL.md: name and description load first'],
+      },
+      {
+        chat: ['The card in its sleeve: each extra tied to its step.'],
+        coding: ['references/ and assets/ load when a step needs them'],
+      },
+      {
+        chat: ["Same card, any site: today's dive plan says 120 m."],
+        coding: ['The step reads a project file, such as CONTEXT.md, when it runs'],
+      },
+      { chat: ["The card in the institute's fleet manual."], coding: ['metadata: owner, version, review date'] },
+      {
+        chat: ['A card with a running tag, like a loan statement.'],
+        coding: ['Same in both views: the tag is the upkeep'],
+      },
+    ];
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      const views = (view: string) =>
+      const lines = (view: string) =>
         $(`[data-view="${view}"]`)
           .toArray()
-          .map((line) => $(line).attr('data-view'));
-      return { chat: views('chat'), coding: views('coding') };
+          .map((line) => $(line).text());
+      return { chat: lines('chat'), coding: lines('coding') };
+    });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('names the five zones on every ruler by their ocean terms, read from each Slide in its own words', () => {
+    // ARRANGE
+    const terms = [
+      'the sea surface and the air above it',
+      'epipelagic',
+      'mesopelagic',
+      'bathypelagic',
+      'abyssopelagic',
+    ];
+    const expected = [terms, terms, terms, terms, terms, terms, terms, terms];
+    // ACT
+    const actual = OPENERS.map(({ slug }) => {
+      const $ = sceneOf(slug);
+      return $('[data-ocean-term]')
+        .toArray()
+        .map((term) => $(term).text());
     });
     // ASSERT
     expect(actual).toEqual(expected);

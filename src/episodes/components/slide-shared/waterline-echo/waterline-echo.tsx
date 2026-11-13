@@ -5,7 +5,7 @@ import { Robot } from '../deep-sea-expedition/robot';
 import { Ship } from '../deep-sea-expedition/ship';
 import { shipAnchors } from '../deep-sea-expedition/ship.pure';
 import { DepthRuler, type ZoneWords } from '../iceberg/depth-ruler';
-import type { Zone } from '../iceberg/ruler.pure';
+import { zoneOf, type Zone } from '../iceberg/ruler.pure';
 import { ZoneCard } from '../iceberg/zone-card';
 import { SURFACE_WATERLINE, ZoneScene } from '../iceberg/zone-scene';
 import { WATERLINE_SECTIONS } from './depth';
@@ -85,17 +85,16 @@ function Dive({ at, surface }: { readonly at: RobotAt; readonly surface: boolean
 /**
  * A section slide's echo of the Hero motif of "What lies below the waterline of sustainable AI skills" (picked
  * Title-slide Option 0a): the zone's Scene, the robot sunk to the Section's depth, the Section's card leading with its
- * AI statement, and the whole depth ruler with the Section's tile lit. Shared because all eight section slides draw it.
+ * AI statement, and the whole depth ruler with the Section's tile lit; on a phone the ruler gives way to the thin rail
+ * the section slide's presentation draws. Shared because all eight section slides draw it.
  * Both view lines render; the page-level view switch shows one.
  */
 export function WaterlineEcho({ section, zones, rulerLabel, robotAt, ...card }: WaterlineEchoProps) {
-  const zone = WATERLINE_SECTIONS[section];
-  if (zone === undefined) throw new Error(`No Section ${section} of ${WATERLINE_SECTIONS.length}.`);
+  const zone = zoneOf(WATERLINE_SECTIONS, section);
   return (
     <div data-echo data-section={section} className="relative isolate">
       <ZoneScene
         zone={zone}
-        ambient={false}
         className="flex min-h-96 flex-col gap-3 rounded-2xl p-5"
         overlay={<EchoOverlay zone={zone} section={section} zones={zones} rulerLabel={rulerLabel} card={card} />}
       >
@@ -129,7 +128,7 @@ function EchoOverlay({
           lit={section}
           zones={zones}
           label={rulerLabel}
-          className="w-60 shrink-0"
+          className="w-60 shrink-0 max-md:hidden"
         />
       </div>
     </>

@@ -1,13 +1,16 @@
 'use client';
 
 import { useSlideZone } from '@/episodes/hooks/use-slide-zone';
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import type { Zone } from './ruler.pure';
 import { onceAnimations, sceneMotionIn, type SceneMotion } from './scene-motion.pure';
 
 interface SceneMotionProps {
   readonly className?: string;
   /** The Iceberg zone the Scene draws, a hook for its CSS; not the mount's `data-zone`. */
-  readonly zone: string;
+  readonly zone: Zone;
+  /** The zone's colour tokens, set by `ZoneScene`. */
+  readonly style?: CSSProperties;
   readonly children: ReactNode;
 }
 
@@ -59,7 +62,7 @@ function useDocumentHidden() {
  * `playing` or `settled` for browser checks, and `data-document="hidden"` so the zone's CSS pauses every ambient
  * loop in a background tab. Figures stay server components; this leaf only reads the animations they start.
  */
-export function SceneMotionRoot({ className, zone, children }: SceneMotionProps) {
+export function SceneMotionRoot({ className, zone, style, children }: SceneMotionProps) {
   const scene = useRef<HTMLDivElement>(null);
   const motion = useSettle(scene, sceneMotionIn(useSlideZone()));
   const hidden = useDocumentHidden();
@@ -70,6 +73,7 @@ export function SceneMotionRoot({ className, zone, children }: SceneMotionProps)
       data-depth-zone={zone}
       data-motion={motion}
       data-document={hidden ? 'hidden' : undefined}
+      style={style}
       className={className}
     >
       {children}

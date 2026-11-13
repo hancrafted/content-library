@@ -1,21 +1,27 @@
 /*
- * The depth ruler and the slim rail (design guide, Iceberg). Each band and rail tile takes its zone's one global token,
- * `--zone-<zone>`; the lit tile is the one focal mark, `primary`. Text keeps the Slide's own foreground, which the zone
- * presentation turns light on the dark zones.
+ * The depth ruler and the slim rail (design guide, Iceberg). Each band and rail tile reads `--zone`, which the
+ * component sets from the zone's one global token (`zoneToken` in `ruler.pure.ts`, the one zone-to-token mapping);
+ * `data-dark` marks a zone dark in both themes (`isDarkZone`), whose text turns light. The lit tile is the one focal
+ * mark, `primary`.
  *
- * Motion: the descent, once per Section, under the Slide mount's `[data-zone='active']`: the view moves down to its
- * band and the Section's tile lights. The base rules are the rest state, so reduced motion shows the ruler arrived.
+ * Motion: the descent, once per Section, under the Slide mount's `[data-zone='active']`. The view, a frame one band
+ * tall, travels down from the Surface band by `--descent` bands to the Section's band, then the Section's tile lights.
+ * The bands are equal rows, so the travel is `--descent` times one band and its gap, whatever the words in it. The base
+ * rules are the rest state, so reduced motion shows the ruler arrived: the frame on the band, the tile lit.
  */
 
 .ruler {
+  --band-gap: 2px;
+  --descent-duration: calc(500ms + var(--descent, 0) * 350ms);
+  position: relative;
   overflow: hidden;
   border-radius: var(--radius-md);
 }
 
-.view {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.bands {
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: var(--band-gap);
 }
 
 .band {
@@ -23,36 +29,12 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.375rem 0.625rem;
-  background: color-mix(in oklab, var(--band-zone) 80%, transparent);
-}
-
-.band[data-ruler-zone='surface'] {
-  --band-zone: var(--zone-surface);
-}
-
-.band[data-ruler-zone='sunlit'] {
-  --band-zone: var(--zone-sunlit);
-}
-
-.band[data-ruler-zone='twilight'] {
-  --band-zone: var(--zone-twilight);
-}
-
-.band[data-ruler-zone='midnight'] {
-  --band-zone: var(--zone-midnight);
-  color: var(--on-brand-accent);
-}
-
-.band[data-ruler-zone='abyss'] {
-  --band-zone: var(--zone-abyss);
-  color: var(--on-brand-accent);
-}
-
-/* The light bands keep dark text in light mode and light text in dark mode: the page foreground of each theme. */
-.band[data-ruler-zone='surface'],
-.band[data-ruler-zone='sunlit'],
-.band[data-ruler-zone='twilight'] {
+  background: color-mix(in oklab, var(--zone) 80%, transparent);
   color: var(--card-foreground);
+}
+
+.band[data-dark] {
+  color: var(--on-brand-accent);
 }
 
 .label {
@@ -91,6 +73,17 @@
   box-shadow: 0 0 0 2px var(--background);
 }
 
+/* The view: one band tall, on the Section's band. Five equal rows and four gaps fill the ruler. */
+.view {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--descent, 0) * (100% + var(--band-gap)) / 5);
+  height: calc((100% - 4 * var(--band-gap)) / 5);
+  border: 2px solid var(--foreground);
+  border-radius: var(--radius-md);
+  pointer-events: none;
+}
+
 .rail {
   /* In the Slide's rear Backdrop, just left of its Foreground's inset edge. */
   position: absolute;
@@ -107,26 +100,7 @@
   height: 1.75rem;
   border-radius: 2px;
   border: 1px solid color-mix(in oklab, var(--foreground) 20%, transparent);
-}
-
-.railTile[data-rail-zone='surface'] {
-  background: var(--zone-surface);
-}
-
-.railTile[data-rail-zone='sunlit'] {
-  background: var(--zone-sunlit);
-}
-
-.railTile[data-rail-zone='twilight'] {
-  background: var(--zone-twilight);
-}
-
-.railTile[data-rail-zone='midnight'] {
-  background: var(--zone-midnight);
-}
-
-.railTile[data-rail-zone='abyss'] {
-  background: var(--zone-abyss);
+  background: var(--zone);
 }
 
 .railTile.lit {
@@ -134,21 +108,41 @@
   border-color: var(--background);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  :global([data-zone='active']) .ruler[data-motion='descent'] .view {
-    animation: ruler-descent 1400ms cubic-bezier(0.45, 0, 0.2, 1) both;
+/* On a phone the rail is a thin coloured strip at the left edge, clear of the Foreground's 1rem inset. */
+@media (width < 48rem) {
+  .rail {
+    left: 0.25rem;
+    width: 5px;
+    gap: 2px;
   }
 
-  :global([data-zone='active']) .ruler[data-motion='descent'] .tile.lit {
-    animation: ruler-light 500ms ease-out 1200ms both;
+  .railTile {
+    height: 1.25rem;
+    border: 0;
+    border-radius: 1px;
   }
 }
 
-/* Descending, the view moves down past the shallower bands, so the ruler's content rises into its rest place. */
+@media (width >= 48rem) {
+  .phoneOnly {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .ruler[data-motion='descent'] .view {
+    animation: ruler-descent var(--descent-duration) cubic-bezier(0.45, 0, 0.2, 1) both;
+  }
+
+  :global([data-zone='active']) .ruler[data-motion='descent'] .tile.lit {
+    animation: ruler-light 500ms ease-out var(--descent-duration) both;
+  }
+}
+
+/* The view starts on the Surface band, `--descent` bands above its rest place, and travels down to it. */
 @keyframes ruler-descent {
   from {
-    translate: 0 3rem;
-    opacity: 0.4;
+    translate: 0 calc(var(--descent, 0) * -1 * (100% + var(--band-gap)));
   }
 }
 

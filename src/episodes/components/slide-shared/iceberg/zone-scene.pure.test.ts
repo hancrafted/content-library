@@ -10,11 +10,11 @@ describe('success cases', () => {
   it('draws each zone with its own scenery and its one ambient loop, from the Surface down', () => {
     // ARRANGE
     const expected = [
-      { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind' },
-      { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish' },
-      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies' },
-      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale' },
-      { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles' },
+      { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind', water: 'sunlit' },
+      { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish', water: 'sunlit' },
+      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies', water: 'twilight' },
+      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale', water: 'midnight' },
+      { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles', water: 'abyss' },
     ];
     // ACT
     const parts = (['surface', 'sunlit', 'twilight', 'midnight', 'abyss'] as const).map((zone) =>
@@ -47,21 +47,31 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('lets a Slide show another part of the iceberg and drop the loop where its Scene wants calm water', () => {
+  it('lets a Slide show another part of the iceberg, and keeps the zone loop with it', () => {
     // ARRANGE
-    const expected = { sky: false, rays: true, seabed: false, iceberg: 'tip', life: 'none' };
+    const expected = { sky: false, rays: true, seabed: false, iceberg: 'tip', life: 'fish', water: 'sunlit' };
     // ACT
-    const parts = zoneSceneParts({ zone: 'sunlit', iceberg: 'tip', ambient: false });
+    const parts = zoneSceneParts({ zone: 'sunlit', iceberg: 'tip' });
     // ASSERT
     expect(parts).toEqual(expected);
   });
 
-  it('cuts the same water for the same seed, so a Slide never redraws differently', () => {
+  it('cuts the same water for seed 7 every time: the grid outer corners fixed, its one inner corner nudged', () => {
     // ARRANGE
-    const expected = seaFacets({ width: 300, height: 120, cell: 60, seed: 7 }).map(({ points }) => points);
+    // Two by two cells of 100: the only inner corner, at (100, 100), moves by seed 7 to (70.7, 73.7).
+    const expected = [
+      { points: '0,0 100,0 0,100', tone: 'sea-lit' },
+      { points: '100,0 70.7,73.7 0,100', tone: 'sea' },
+      { points: '100,0 200,0 70.7,73.7', tone: 'sea-lit' },
+      { points: '200,0 200,100 70.7,73.7', tone: 'sea' },
+      { points: '0,100 70.7,73.7 0,200', tone: 'sea-lit' },
+      { points: '70.7,73.7 100,200 0,200', tone: 'sea' },
+      { points: '70.7,73.7 200,100 100,200', tone: 'sea-lit' },
+      { points: '200,100 200,200 100,200', tone: 'sea' },
+    ];
     // ACT
-    const again = seaFacets({ width: 300, height: 120, cell: 60, seed: 7 }).map(({ points }) => points);
+    const facets = seaFacets({ width: 200, height: 200, cell: 100, seed: 7 });
     // ASSERT
-    expect(again).toEqual(expected);
+    expect(facets).toEqual(expected);
   });
 });

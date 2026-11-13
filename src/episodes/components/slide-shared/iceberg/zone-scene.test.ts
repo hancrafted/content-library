@@ -95,12 +95,25 @@ describe('edge cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('keeps calm water where a Slide drops the zone loop', () => {
+  it('always draws the zone loop: the Sunlit fish school, even beside a Slide figure', () => {
     // ARRANGE
-    const expected = 0;
+    const expected = { fish: 1, figure: 1 };
     // ACT
-    const fish = render({ zone: 'sunlit', ambient: false })('[data-fish-school]').length;
+    const $ = render({ zone: 'sunlit', children: createElement('g', { 'data-figure': '' }) });
+    const seen = { fish: $('[data-fish-school]').length, figure: $('[data-figure]').length };
     // ASSERT
-    expect(fish).toBe(expected);
+    expect(seen).toEqual(expected);
+  });
+
+  it('colours its sky and water from the zone tokens: the Surface water is the top of the Sunlit zone', () => {
+    // ARRANGE
+    const expected = [
+      '--zone:var(--zone-surface);--water:var(--zone-sunlit)',
+      '--zone:var(--zone-abyss);--water:var(--zone-abyss)',
+    ];
+    // ACT
+    const seen = (['surface', 'abyss'] as const).map((zone) => render({ zone })(SCENE).attr('style'));
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 });

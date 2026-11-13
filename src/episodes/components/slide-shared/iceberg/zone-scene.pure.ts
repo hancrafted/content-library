@@ -9,7 +9,7 @@ import { seededRandom, toPoints, type IcebergPart } from './scenery/scenery.pure
 export type SceneIceberg = IcebergPart | 'none';
 
 /** The zone's one ambient loop: the Surface's wind, the Sunlit fish, the Twilight jellies, the whale, the bubbles. */
-export type SceneLife = 'wind' | 'fish' | 'jellies' | 'whale' | 'bubbles' | 'none';
+export type SceneLife = 'wind' | 'fish' | 'jellies' | 'whale' | 'bubbles';
 
 export interface ZoneSceneParts {
   /** The Surface sky with its clouds, sun and moon, above the waterline. */
@@ -19,31 +19,28 @@ export interface ZoneSceneParts {
   readonly seabed: boolean;
   readonly iceberg: SceneIceberg;
   readonly life: SceneLife;
+  /** The zone whose colour the water takes: the Surface's water is the top of the Sunlit zone. */
+  readonly water: Zone;
 }
 
 const DEFAULTS: Record<Zone, ZoneSceneParts> = {
-  surface: { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind' },
-  sunlit: { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish' },
-  twilight: { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies' },
-  midnight: { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale' },
-  abyss: { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles' },
+  surface: { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind', water: 'sunlit' },
+  sunlit: { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish', water: 'sunlit' },
+  twilight: { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies', water: 'twilight' },
+  midnight: { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale', water: 'midnight' },
+  abyss: { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles', water: 'abyss' },
 };
 
 export interface ZoneSceneChoice {
   readonly zone: Zone;
   /** Another part of the iceberg than the zone's own, or `none`. */
   readonly iceberg?: SceneIceberg;
-  /**
-   * False drops the zone's ambient loop, where the Spec keeps creatures off a Slide whose subject is not depth. The
-   * Surface's wind stays with its clouds.
-   */
-  readonly ambient?: boolean;
 }
 
-/** The scenery a zone draws, with a Slide's choice of iceberg part and loop. */
-export function zoneSceneParts({ zone, iceberg, ambient = true }: ZoneSceneChoice): ZoneSceneParts {
+/** The scenery a zone draws, its one ambient loop always among it, with a Slide's choice of iceberg part. */
+export function zoneSceneParts({ zone, iceberg }: ZoneSceneChoice): ZoneSceneParts {
   const own = DEFAULTS[zone];
-  return { ...own, iceberg: iceberg ?? own.iceberg, life: ambient || own.sky ? own.life : 'none' };
+  return { ...own, iceberg: iceberg ?? own.iceberg };
 }
 
 /** One triangle of faceted water, lit when it faces the upper left. */
