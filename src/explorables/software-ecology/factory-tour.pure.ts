@@ -111,7 +111,7 @@ export const nextTour = (run: FactoryRun, t: Tour): Tour | null => {
 export const backTour = (B: Bundle, t: Tour): TourRun => {
   const idx = Math.max(0, t.i - 1),
     p = t.preset;
-  const run = new FactoryRun({ B, preset: p.id, now: true, s: startSettings(B, p) });
+  const run = new FactoryRun({ B, preset: p.id, now: true });
   const t0k = run.k,
     vals: Record<string, number>[] = [];
   stepsOf(p)

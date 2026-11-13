@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createSampler, stepsTo } from './beat-means.pure.ts';
 import { DTW, SPEEDS, WARM_WEEKS } from './factory-dials.pure.ts';
 import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
+import { scenarioStart } from './factory-scenario.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
@@ -150,5 +151,27 @@ describe('edge cases', () => {
     // ASSERT
     expect(atRoles).toBe(viewer);
     expect(atSpiral).toBe(spiral);
+  });
+
+  it.each([
+    ['ai-spiral', 1],
+    ['ai-spiral', 7],
+    ['clear-requirements', 1],
+    ['clear-requirements', 7],
+    ['realistic', 3],
+  ])("starts the page's %s state, seed %i, as the judge's scenarioStart does", (id, seed) => {
+    // ARRANGE
+    const B = builtinBundle('tire'),
+      p = presetOf(B, id);
+    const frames = Math.ceil(WARM_WEEKS / DTW / WARM_CHUNK),
+      digits = 6;
+    // ACT
+    const run = new FactoryRun({ B, preset: id, now: false, seed });
+    for (let i = 0; i < frames; i++) run.advance(0, 1);
+    const judged = scenarioStart(B, p, seed);
+    // ASSERT
+    expect(run.warming).toBe(false);
+    expect(run.weeks).toBeCloseTo(judged.weeks, digits);
+    expect(run.read({ audit: true }).audit).toEqual(judged.read({ audit: true }).audit);
   });
 });
