@@ -14,6 +14,7 @@ import {
 } from './factory-scenario.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { bundleOf, readCatalog, readConfig } from './use-case-file.ts';
+import { textFileNames, type UseCaseTexts } from './use-case-texts.pure.ts';
 
 /** What to run: a use case, one of its scenarios, and one seed or a number of seeds in a row from the shipped one. */
 export interface SimOptions {
@@ -46,15 +47,16 @@ const fileOf = (read: ReadFile, name: string): string => {
   }
 };
 
-/** A shipped use case, its files read by `read`. */
-export const loadUseCase = (id: string, read: ReadFile): Bundle => {
+/** A shipped use case's texts, its files read by `read`. */
+export const readTexts = (id: string, read: ReadFile): UseCaseTexts => {
   if (!/^[\w-]+$/.test(id)) throw new Error(`no use case ${id}`);
-  const text = (suffix: string) => fileOf(read, `${id}${suffix}`);
-  return bundleOf(
-    { data: text('.yml'), en: text('.words.yml'), de: text('.words.de.yml') },
-    readCatalog(fileOf(read, 'roles.yml')),
-  );
+  const names = textFileNames(id);
+  return { data: fileOf(read, names.data), en: fileOf(read, names.en), de: fileOf(read, names.de) };
 };
+
+/** A shipped use case, its files read by `read`. */
+export const loadUseCase = (id: string, read: ReadFile): Bundle =>
+  bundleOf(readTexts(id, read), readCatalog(fileOf(read, 'roles.yml')));
 
 const count = (flag: string, v: string | undefined): number => {
   if (!v || !/^\d+$/.test(v) || Number(v) < 1) throw new Error(`${flag} needs a whole number from 1\n${USAGE}`);
