@@ -103,7 +103,7 @@ _Done when_ every item clears the bar for its mode.
 
 ## 4. Lay out the page
 
-A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A `<nav>` links to every item and stays visible while the page scrolls; collapsed, it gives back all of its width, leaving only the page gutter. Build for laptop (1440 px) and landscape tablet (1024 px): the page never scrolls sideways, and no box clips or spills its text. On a laptop with the navigation collapsed, the content keeps at least 1000 px with the rail beside it: the Options sit in a rail to the right of the visual, and no empty column wider than the 48 px gutter remains at the left. The page **grows** with the screen: a visual with a design size the caller names (a 1920 × 1080 Slide) widens up to that size, so the content column's cap is the widest design size, not a reading width.
+A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A `<nav>` links to every item and stays visible while the page scrolls; collapsed, it gives back all of its width, leaving only the page gutter. Build for laptop (1440 px) and landscape tablet (1024 px): the page never scrolls sideways, and no box clips or spills its text. On a laptop with the navigation collapsed, the content keeps at least 1000 px with the rail beside it: the Options sit in a rail to the right of the visual, and no empty column wider than the 48 px gutter remains at the left. The page **grows** with the screen: a visual with a design size the caller names (a 1920 × 1080 frame) widens up to that size, so the content column's cap is the widest design size, not a reading width.
 
 While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the item's decision and visual sticky in the main column, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. A sticky top toolbar holds the page-wide reviewer tools: the theme, and the render presets the caller names (such as desktop, laptop, tablet, mobile), each re-rendering every preview at that size at once. An item adds its own tools, such as state or motion controls, where it needs them. One circle at the bottom right, split into a to-top and a to-bottom half, each with its own accessible name, moves through a long page.
 
@@ -154,12 +154,14 @@ The page carries these attributes; everything else on it is yours to shape.
 - Once in `decide`: `data-next-action` on the block holding the `<select>` or radio inputs that choose the action; `data-reset-all` on Reset all.
 - Once in `explain`: `data-questions` on the Questions? block, holding the editable `<textarea>` for the reader's questions.
 - Optional: `data-visual` on the visual a comment is about, and on a laptop the content column the grader measures: put it on the box that fills the column. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item.
-- Optional: `data-design-width`, a positive integer of CSS px, on a visual with a design size, such as `1920` on a Slide preview. At 2560 × 1440 the grader expects it at least as wide as the smaller of that size and the screen less the navigation (if still shown), the rail and three 48 px gutters.
+- Optional: `data-design-width`, a positive integer of CSS px, on a visual with a design size, such as `1920` on a preview. At 2560 × 1440 the grader expects it at least as wide as the smaller of that size and the screen less the navigation (if still shown), the rail and three 48 px gutters.
 
-### Grade and hand over
+### Hand over
 
-Run the grader only on what is already installed: from this skill's folder, run `node scripts/grade-page.ts <page.html>`. When it cannot resolve a package or a browser, name it unavailable and go on, installing and fetching nothing for it (`npx` included). It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review. Then run the [verification](references/verification.md) checks the grader cannot make.
+Open the page with the platform's opener, then print three lines: the page's absolute path and its mode; the feedback file's name or the caller's destination; and how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session. A person who wants to check the page follows [verification](references/verification.md).
 
-Open the page with the platform's opener, then print three lines: the page's absolute path and its mode; the feedback file's name or the caller's destination; and how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session.
+_Done when_ the page is inlined, the person has it open and has those three lines.
 
-_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and those three lines.
+## Evaluation
+
+The evaluation process grades the skill; a use of the skill delivers its page ungraded. When this skill changes, run the grader (`node scripts/grade-page.ts <page.html>`), the fixture proof (`npm run decision-html:prove`) and the evals. The grader proves mechanics, not taste: whether a page looks right and explains well stays with human review.
