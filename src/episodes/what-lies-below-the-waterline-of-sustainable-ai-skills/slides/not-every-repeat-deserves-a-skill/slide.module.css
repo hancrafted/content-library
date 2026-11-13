@@ -1,0 +1,53 @@
+/*
+ * The Slide's one emphasis motion (Spec Option 9a): the index grows line by line until it runs off the page, each
+ * stamp landing on its line, the needed entry ending up seventh, buried; then it fills primary with its "needed" tag.
+ * Played once when the Slide's mount turns `[data-zone='active']`. The base rules are the end state, so a still frame
+ * and reduced motion show the full list.
+ */
+
+.index {
+  --grow-step: 140ms;
+  --grow-total: calc(17 * var(--grow-step));
+}
+
+/* The sheet fades out at its foot, as if it ran on past the stage; only the mask's alpha counts, not its colour. */
+.sheet {
+  mask-image: linear-gradient(to bottom, var(--foreground) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .index .entry {
+    animation: grow 300ms ease-out calc(var(--line) * var(--grow-step)) both;
+  }
+
+  :global([data-zone='active']) .index .stamp {
+    animation: land 260ms cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--line) * var(--grow-step) + 200ms) both;
+  }
+
+  :global([data-zone='active']) .index .needed {
+    animation:
+      grow 300ms ease-out calc(var(--line) * var(--grow-step)) both,
+      find 500ms ease-out calc(var(--grow-total) + 300ms) both;
+  }
+}
+
+@keyframes grow {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@keyframes land {
+  from {
+    opacity: 0;
+    scale: 1.8;
+  }
+}
+
+@keyframes find {
+  from {
+    background-color: transparent;
+    color: var(--foreground);
+  }
+}

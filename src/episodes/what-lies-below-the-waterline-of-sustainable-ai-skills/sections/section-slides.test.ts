@@ -65,11 +65,11 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('holds each Section in its own placement marker, its section slide alone', () => {
+  it('opens each placement marker with its section slide, descending into its zone', () => {
     // ARRANGE
-    const expected = [1, 1, 1, 1, 1, 1, 1, 1];
+    const expected = ['bubbles', 'bubbles', 'bubbles', 'bubbles', 'bubbles', 'bubbles', 'bubbles', 'bubbles'];
     // ACT
-    const actual = SECTIONS.map((section) => section.length);
+    const actual = OPENERS.map((slide) => slide.presentation?.enter?.effect);
     // ASSERT
     expect(actual).toEqual(expected);
   });

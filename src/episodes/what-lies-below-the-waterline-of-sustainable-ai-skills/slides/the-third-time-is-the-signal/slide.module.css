@@ -1,0 +1,43 @@
+/*
+ * The Slide's one emphasis motion (Spec Option 8a): the first Slide's empty card fills with steps, line by line, on the
+ * third panel's card, ending on the green good-result line; in the Coding agent view the same lines type into SKILL.md.
+ * It plays when the Slide's mount turns `[data-zone='active']` and again when the third panel is hovered or focused
+ * (a second, identical keyframes name restarts it). The base rule is the filled end state, so a still frame and
+ * reduced motion show the card written.
+ */
+
+.fill {
+  --fill-step: 260ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .fill .line {
+    animation: write 380ms ease-out calc(var(--line) * var(--fill-step) + 400ms) both;
+  }
+
+  :global([data-zone='active']) .fill:is(:hover, :focus-within) .line {
+    animation-name: write-again;
+  }
+}
+
+@keyframes write {
+  from {
+    opacity: 0;
+    translate: -0.5rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes write-again {
+  from {
+    opacity: 0;
+    translate: -0.5rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

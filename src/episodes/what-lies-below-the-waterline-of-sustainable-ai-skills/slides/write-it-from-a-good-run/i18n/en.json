@@ -1,0 +1,149 @@
+{
+  "title": "Write it from a good run",
+  "caption": "Turn a run that worked into a skill: from your own notes, or by asking the AI to write it up.",
+  "lane": {
+    "interview": "From an AI interview",
+    "interviewSub": "one day, from the run to the skill",
+    "label": "One day: the run, the interview, the skill, the next morning"
+  },
+  "day": {
+    "0": {
+      "step": "<marker>A run that worked</marker>",
+      "time": "today's dive went well",
+      "ai": "You did the task with the AI, giving context and corrections along the way.",
+      "coding": "A session in the coding agent, not a guess from general knowledge."
+    },
+    "1": {
+      "step": "<marker>The AI interviews you</marker>",
+      "time": "before evening, the pilot asks",
+      "ai": "It asks for your intent, not only the steps.",
+      "questions": {
+        "depth": "Why that depth?",
+        "order": "Why that order?",
+        "failure": "What would have counted as failure?"
+      }
+    },
+    "2": {
+      "step": "The AI writes the skill",
+      "time": "he writes the card while he still knows",
+      "ai": "In the same conversation, while the whole run is still in its context window.",
+      "chat": "The skill it writes, below.",
+      "coding": "The <code>SKILL.md</code> it writes, below."
+    },
+    "3": {
+      "step": "The next conversation starts fresh",
+      "time": "next morning he has forgotten the dive; the card hangs on the wall",
+      "ai": "The run is forgotten. The skill is not.",
+      "greeting": "Nice to meet you.",
+      "coding": "A new session opens with an empty context window; <code>collect-sediment-sample/SKILL.md</code> is still on disk."
+    }
+  },
+  "coding": {
+    "request": "Turn this conversation into a skill.",
+    "readsFirst": "With Anthropic's skill-creator, it reads the conversation first, then asks:",
+    "asks": "Why that depth? Why that order?"
+  },
+  "art": {
+    "depth": "2 m",
+    "full": "context window: full",
+    "empty": "context window: empty"
+  },
+  "alt": {
+    "run": "Morning, under water: the robot hangs on its cable 2 m above the seabed, lamp on.",
+    "interview": "Afternoon in the control room: the pilot turns from his console and asks the captain why; the captain answers.",
+    "evening": "Evening: the sun sets in the window; the pilot sits at the console and writes the procedure card while today's dive is still in his head.",
+    "nextMorning": "Next morning: the card hangs pinned to the wall; the pilot greets the captain as a stranger.",
+    "logbook": "Logbook pages from earlier dives, dated 12, 19 and 26 March."
+  },
+  "logbook": {
+    "first": "12 Mar",
+    "second": "19 Mar",
+    "third": "26 Mar"
+  },
+  "notesLane": {
+    "heading": "From your own notes",
+    "story": "your logbook pages from earlier dives",
+    "text": "Notes from earlier runs, written up into the same skill.",
+    "coding": "Or run the task with no skill loaded, then <marker>draft a <code>SKILL.md</code> from the transcript</marker>."
+  },
+  "tip": "Asking the AI to interview you works here too.",
+  "skill": {
+    "label": "Skill",
+    "title": "Collect sediment sample",
+    "steps": {
+      "hold": {
+        "text": "Hold the robot 2 m above the seabed.",
+        "why": "Why: closer, the thrusters stir up the mud."
+      },
+      "lower": {
+        "text": "Lower the arm slowly, push the corer in."
+      },
+      "label": {
+        "text": "Label the core before storing.",
+        "why": "Why: unlabelled cores get mixed up."
+      }
+    },
+    "failedIf": "Failed if: core under 30 cm, or no depth logged.",
+    "file": {
+      "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+      "hold": "1. Hold 2 m above the seabed.",
+      "holdWhy": "Why: closer stirs up the mud.",
+      "lower": "2. Lower the arm, push the corer in.",
+      "label": "3. Label the core before storing.",
+      "failedIf": "Failed if: core under 30 cm, or no depth logged."
+    }
+  },
+  "firstStep": "First step: pick one task you've explained three times, and turn a good run of it into a skill.",
+  "story": {
+    "label": "In the story:",
+    "analogy": "Your logbook pages, or the pilot's evening interview about today's good dive."
+  },
+  "notes": {
+    "write-the-skill-from-a-real-run": {
+      "header": "Write the skill from a real run",
+      "description": "the standard advises: \"Complete a real task in conversation with an agent, providing context, corrections, and preferences along the way. Then extract the reusable pattern into a skill.\" A skill an LLM writes from general knowledge alone yields \"vague, generic procedures\" [1].",
+      "sources": {
+        "agentskills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        }
+      }
+    },
+    "the-agent-can-interview-you": {
+      "header": "The agent can interview you",
+      "description": "Anthropic's skill-creator checks the current conversation for a workflow the user wants to capture, extracts answers from it first, then interviews the user to fill gaps [1].",
+      "sources": {
+        "anthropic-skill-creator": {
+          "title": "Anthropic, skill-creator SKILL.md"
+        }
+      }
+    },
+    "googles-route": {
+      "header": "Run the task without a skill first: Google's route",
+      "description": "Day 3 suggests asking your most experienced practitioner to \"narrate three workflows they do regularly\", picking the most repeated one, running the prompts without any skill loaded, and drafting a SKILL.md from the transcript. It closes with \"Resist the urge to let an LLM generate fifty skills on day one.\" [1] This agrees with the standard's advice to extract from a real run. It is Google's vendor guidance, not a measured result.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-starting-points": {
+        "title": "Two starting points",
+        "keywords": "",
+        "script": "Say it is the third time and you are ready to write the skill. There are two good places to start: your own notes from earlier runs, the logbook pages of earlier dives, or a run with the AI that has just gone well, today's dive, while it is fresh."
+      },
+      "capture-the-why": {
+        "title": "Capture the why",
+        "keywords": "",
+        "script": "With the fresh run, ask the AI to interview you before it writes anything: why that depth, why that order, what would have counted as failure. You want the skill to hold your intent and not only the steps, because steps without the why break the first time the situation changes."
+      },
+      "while-he-still-knows": {
+        "title": "While he still knows",
+        "keywords": "",
+        "script": "Then let it write the skill in the same conversation, while the whole run is still in its context window. Tomorrow it will have forgotten, and that is the condition we started with. So that is your first step: pick one task you've explained three times, and turn a good run of it into a skill. In a coding agent, that is one sentence: ask it to turn this conversation into a skill."
+      }
+    }
+  }
+}
