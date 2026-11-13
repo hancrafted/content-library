@@ -62,8 +62,9 @@ A Slide's Scene reads:
 
 ### Interaction
 
-1. **View switch:** one page-level Chat app / Coding agent toggle, held in memory as transient state, opening on Chat app (FE-001-state-management). Q8 chose `?view=coding`; FE-001 §1.2 forbids query-param state and the hash holds the active Slide, so Han chose memory on 2026-11-13 over a preference, a `/coding` path or an FE-001 exception. Its state sits behind one seam, so persisting it is one change.
+1. **View switch:** one Chat app / Coding agent toggle in the Episode page's sticky top bar, reachable on every Slide, held in memory as transient state, opening on Chat app (FE-001-state-management). Q8 chose `?view=coding`; FE-001 §1.2 forbids query-param state and the hash holds the active Slide, so Han chose memory on 2026-11-13 over a preference, a `/coding` path or an FE-001 exception. Its state sits behind one seam, so persisting it is one change.
 2. **Zone label:** the plain zone name stays visible; a button opens a popover with the depth in metres and the scientific name, on hover, focus or tap.
+3. **Phones:** below `md` the full ruler and its labels hide, and a thin coloured rail at the left edge keeps the depth readable (Han, 2026-11-13).
 
 ### Build
 
