@@ -47,6 +47,8 @@ function meta({ verified }: Meta = {}): string {
 
 interface OptionShape {
   recommended?: boolean;
+  /** `data-recommended` as the generated template writes it, `"true"` or `"false"`, not the bare attribute. */
+  explicitMark?: boolean;
   picked?: boolean;
   /** Whether the pick checkbox carries `checked`; a picked Option's does, as the contract demands. */
   checked?: boolean;
@@ -66,13 +68,19 @@ const OPTION_DEFAULTS = {
   after: '',
 };
 
+/** The `data-recommended` attribute of an Option: bare, or `"true"`/`"false"` when the shape asks for the explicit form. */
+function recommendedMark(recommended: boolean, explicit: boolean | undefined): string {
+  if (explicit === true) return ` data-recommended="${recommended}"`;
+  return recommended ? ' data-recommended' : '';
+}
+
 function option(slug: string, id: string, shape: OptionShape = {}): string {
-  const { recommended, picked, checked, mock, caption, notes, after } = {
+  const { recommended, explicitMark, picked, checked, mock, caption, notes, after } = {
     ...OPTION_DEFAULTS,
     checked: shape.picked,
     ...shape,
   };
-  const flags = [recommended ? ' data-recommended' : '', picked ? ' data-picked' : ''].join('');
+  const flags = [recommendedMark(recommended, explicitMark), picked ? ' data-picked' : ''].join('');
   const tick = checked === true ? ' checked' : '';
   const figcaption = caption === null ? '' : `<figcaption><b>${id}</b> ${caption}</figcaption>`;
   const buildNotes = notes === null ? '' : `<div data-spec="build-notes">${notes}</div>`;
@@ -244,6 +252,18 @@ describe('failure cases', () => {
     [
       'a Slide with no recommended Option',
       { slides: [slide('spent', 1, { options: [option('spent', '1a'), option('spent', '1b')] }), slide('middle', 2)] },
+      'The Slide {#spent} marks 0 Options recommended: mark exactly one with data-recommended.',
+    ],
+    [
+      'a Slide whose Options are all marked data-recommended="false"',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { explicitMark: true }), option('spent', '1b', { explicitMark: true })],
+          }),
+          slide('middle', 2),
+        ],
+      },
       'The Slide {#spent} marks 0 Options recommended: mark exactly one with data-recommended.',
     ],
     [
@@ -667,6 +687,21 @@ describe('edge cases', () => {
       'spec/spec.html': spec({
         slides: [slide('spent', 1, { options: [marked, option('spent', '1b')] }), slide('middle', 2)],
       }),
+    });
+    // ACT
+    const findings = checkSpec(files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts data-recommended as "true" and "false", the page contract form, beside the bare attribute', () => {
+    // ARRANGE
+    const explicit = [
+      option('spent', '1a', { recommended: true, explicitMark: true }),
+      option('spent', '1b', { explicitMark: true }),
+    ];
+    const files = folder({
+      'spec/spec.html': spec({ slides: [slide('spent', 1, { options: explicit }), slide('middle', 2)] }),
     });
     // ACT
     const findings = checkSpec(files);

@@ -110,6 +110,15 @@ export interface OptionCount {
 
 const PAGE_SLIDE_OPTIONS: OptionCount = { min: 2, max: 3, words: 'two or three' };
 
+/**
+ * Whether an Option is marked recommended: `data-recommended` as a bare attribute or `"true"` (the page contract's
+ * form), not absent and not `"false"`. The five Specs assembled before the template was generated use the bare form.
+ */
+export function isRecommended(figure: Selection): boolean {
+  const mark = figure.attr('data-recommended');
+  return mark !== undefined && mark !== 'false';
+}
+
 /** The count, ids, recommended mark and picked mark of a Slide's Options. */
 export function checkOptionMarks(
   figures: readonly Selection[],
@@ -118,7 +127,7 @@ export function checkOptionMarks(
 ): string[] {
   const ids = figures.map((figure) => figure.attr('data-option') ?? '');
   const expectedIds = ids.map((_, index) => `${number}${LETTERS[index] ?? '?'}`);
-  const recommended = figures.filter((figure) => figure.is('[data-recommended]')).length;
+  const recommended = figures.filter(isRecommended).length;
   const picked = figures.filter((figure) => figure.is('[data-picked]')).length;
   const count = figures.length;
   const countFits = count >= wanted.min && count <= wanted.max;

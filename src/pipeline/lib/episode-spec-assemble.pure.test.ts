@@ -321,11 +321,11 @@ describe('success cases', () => {
     expect($('#spent-attention h3').text()).toBe('Spent attention');
   });
 
-  it('clones the Option template per fragment Option: its id, recommendation, mock, caption and pick slot', () => {
+  it('clones the Option template per fragment Option: its id, recommendation as true or false, mock, caption and pick slot', () => {
     // ARRANGE
     const expected = [
-      ['1a', ''],
-      ['1b', undefined],
+      ['1a', 'true'],
+      ['1b', 'false'],
     ];
     // ACT
     const $ = page(FULL);

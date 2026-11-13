@@ -1,13 +1,13 @@
 /*
  * The Spec's items and Options cloned from the Spec template (design-ADR 0011): an item is a Slide or the Title
  * slide, an Option one of the designers' fragment figures. Each is filled into its `<template>`'s slots and given the
- * attributes of the page contract: `data-item` and `data-fidelity` on an item, `data-option`, `data-recommended` and
- * `data-picked` on an Option, the pick checkbox's name, value and `checked`.
+ * attributes of the page contract: `data-item` and `data-fidelity` on an item, `data-option`, `data-recommended` (`true` or
+ * `false`) and `data-picked` on an Option, the pick checkbox's name, value and `checked`.
  */
 
 import { load } from 'cheerio';
 import { escape } from './episode-spec-assemble-words.pure.ts';
-import { type Selection } from './episode-spec-slide.pure.ts';
+import { isRecommended, type Selection } from './episode-spec-slide.pure.ts';
 import { cloned } from './episode-spec-template.pure.ts';
 
 /** The fidelity every Spec item is drawn at (the Spec calibration): a real-content mock. */
@@ -52,8 +52,7 @@ function optionMarkup(
     const kept = Object.entries(figure.attr() ?? {}).filter(([name]) => !OWN_ATTRIBUTES.test(name));
     root.attr(Object.fromEntries(kept));
     root.attr('data-option', id);
-    if (figure.is('[data-recommended]')) root.attr('data-recommended', '');
-    else root.removeAttr('data-recommended');
+    root.attr('data-recommended', String(isRecommended(figure)));
     if (locked) root.attr('data-picked', '');
   });
 }

@@ -70,6 +70,8 @@ function referenceList(images: readonly string[]): string {
  */
 const TABS_SCRIPT = `
 addEventListener('DOMContentLoaded', () => {
+  // Recommended is a bare attribute or "true" (the Specs before the generated template), never "false".
+  const recommended = (figure) => figure.hasAttribute('data-recommended') && figure.getAttribute('data-recommended') !== 'false';
   for (const options of document.querySelectorAll('.spec-options')) {
     const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
     const tabs = document.createElement('div');
@@ -90,7 +92,7 @@ addEventListener('DOMContentLoaded', () => {
       mark.className = 'spec-picked';
       mark.textContent = figure.hasAttribute('data-picked') ? '✓' : '';
       button.append(mark);
-      if (figure.hasAttribute('data-recommended')) {
+      if (recommended(figure)) {
         const flag = document.createElement('span');
         flag.className = 'spec-badge';
         flag.textContent = 'Recommended';
@@ -103,7 +105,7 @@ addEventListener('DOMContentLoaded', () => {
     options.classList.add('is-tabbed');
     show(
       figures.find((f) => f.hasAttribute('data-picked')) ??
-        figures.find((f) => f.hasAttribute('data-recommended')) ??
+        figures.find(recommended) ??
         figures[0],
     );
   }
