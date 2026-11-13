@@ -3,8 +3,9 @@
  * reality.
  */
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
-import { custOf, firstOf } from './factory-dials.pure.ts';
+import { firstOf } from './factory-dials.pure.ts';
 import type { Bundle, Cust, Over, Settings, StepSet } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 const SET_IN: Readonly<Record<string, keyof Over>> = {
   efficiency: 'eff',

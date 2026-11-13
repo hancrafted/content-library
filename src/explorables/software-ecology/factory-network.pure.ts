@@ -14,11 +14,11 @@ import {
   markLoops,
   resolveSpawns,
 } from './factory-build.pure.ts';
-import { custOf } from './factory-dials.pure.ts';
 import { streams } from './factory-random.pure.ts';
 import { size } from './factory-sizing.pure.ts';
 import type { Belt, Factory, FactoryNode, TicketSource } from './factory.types';
 import type { Bundle, RoleDef, Settings } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 export const DEFAULT_SEED = 20261111;
 

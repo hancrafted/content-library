@@ -1,8 +1,8 @@
-/* The stills' state as plain data: what `factoryStillState` reads from the Explorable's model for the stills to draw. */
-import type { DashboardReadout } from '@/explorables/software-ecology/dashboard-readouts.pure';
-import type { Words } from '@/explorables/software-ecology/software-ecology-words.types';
-import type { RoleWords } from '@/explorables/software-ecology/software-ecology.types';
-import type { CustomerReadout } from '@/explorables/software-ecology/stage-readouts.pure';
+/* The stills' state as plain data: what `stillOf` reads from the Explorable's model for the stills to draw. */
+import type { DashboardReadout } from './dashboard-readouts.pure';
+import type { Words } from './software-ecology-words.types';
+import type { RoleWords } from './software-ecology.types';
+import type { CustomerReadout } from './stage-readouts.pure';
 
 export type Box = readonly [number, number, number, number];
 

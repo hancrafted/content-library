@@ -1,6 +1,6 @@
 import { RACK } from '@/explorables/software-ecology/stage-readouts.pure';
+import type { StillDoc, StillStation } from '@/explorables/software-ecology/stills.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import type { StillDoc, StillStation } from './factory-still-state';
 import { Doc, GlyphAt, type Formats } from './still-parts';
 
 /** Where a station's waiting count shows its weeks of work: red from two weeks, amber from one, plain below. */

@@ -8,15 +8,14 @@
  * "falls" (against the step before).
  */
 import { createSampler, stepsTo, type Values, WINDOW } from './beat-means.pure.ts';
-import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { type Beat, beatsOf, beatsOfSteps, stepsOf } from './factory-beats.pure.ts';
+import { DTW, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
 import { startBacklogOf } from './start-backlog.pure.ts';
-
-/** The steps of a preset: its tour, or its check as one step. */
-export const stepsOf = (p: Preset): readonly TourStep[] => (p.tour ? p.tour : p.check ? [p.check] : []);
+import { startSettings } from './start-settings.pure.ts';
 
 export interface Check {
   readonly key: string;
@@ -49,14 +48,12 @@ export const scenarioStart = (B: Bundle, p: Preset, seed: number = DEFAULT_SEED)
 
 /** Plays a started model through `steps`: each sets its dials, then runs to its week; yields after each. */
 export function* playSteps(f: FactoryHandle, B: Bundle, steps: readonly TourStep[]): Generator<TourStep> {
-  const k0 = Math.round(f.weeks / DTW);
-  let k = k0;
-  for (const st of steps) {
-    f.set(settingsAfter(st.set, B, f.settings));
-    const kk = k0 + stepsTo(st.run);
-    f.step((kk - k) * DTW);
-    k = Math.max(k, kk);
-    yield st;
+  let k = stepsTo(f.weeks);
+  for (const b of beatsOfSteps(steps, k)) {
+    f.set(settingsAfter(b.set, B, f.settings));
+    f.step((b.end - k) * DTW);
+    k = Math.max(k, b.end);
+    yield b.step;
   }
 }
 
@@ -82,11 +79,9 @@ export const SEEDS = seedsFrom(10);
 export const needOf = (seeds: number): number => (seeds < 5 ? seeds : Math.ceil(seeds * 0.8));
 
 /** Runs a started model `weeks` on and reads the mean of the measures on the beat's sample steps. */
-const runAveraged = (f: FactoryHandle, x: { weeks: number; window: number }, keys: readonly string[]): Values => {
-  const start = stepsTo(f.weeks),
-    end = start + stepsTo(x.weeks),
-    s = createSampler({ start, end, window: x.window, keys });
-  s.run(f, { k: start, n: end - start });
+const runAveraged = (f: FactoryHandle, b: Pick<Beat, 'start' | 'end' | 'keys'>, window: number): Values => {
+  const s = createSampler({ start: b.start, end: b.end, window, keys: b.keys });
+  s.run(f, { k: b.start, n: b.end - b.start });
   return s.mean();
 };
 
@@ -110,19 +105,16 @@ const playTo = (B: Bundle, p: Preset, x: { seed: number; upTo: number }): Factor
 
 /** Every beat of a preset on one seed, read as means over the last `window` weeks of each (WINDOW unless told). */
 export const readBeats = (B: Bundle, p: Preset, x: { seed: number; window?: number }): BeatReading[] => {
-  const steps = stepsOf(p),
-    keys = keysIn(steps, 'expect'),
-    settleKeys = keysIn(steps, 'settles'),
+  const settleKeys = keysIn(stepsOf(p), 'settles'),
     window = x.window ?? WINDOW,
     f = scenarioStart(B, p, x.seed);
-  let last = 0;
-  return steps.map((st, i) => {
-    f.set(settingsAfter(st.set, B, f.settings));
-    const values = runAveraged(f, { weeks: st.run - last, window }, keys);
-    last = st.run;
-    if (!st.settles) return { values, settled: null };
-    const g = playTo(B, p, { seed: x.seed, upTo: i });
-    return { values, settled: runAveraged(g, { weeks: SETTLE_WEEKS, window }, settleKeys) };
+  return beatsOf(p, stepsTo(f.weeks)).map((b) => {
+    f.set(settingsAfter(b.set, B, f.settings));
+    const values = runAveraged(f, b, window);
+    if (!b.step.settles) return { values, settled: null };
+    const g = playTo(B, p, { seed: x.seed, upTo: b.i }),
+      start = stepsTo(g.weeks);
+    return { values, settled: runAveraged(g, { start, end: start + stepsTo(SETTLE_WEEKS), keys: settleKeys }, window) };
   });
 };
 

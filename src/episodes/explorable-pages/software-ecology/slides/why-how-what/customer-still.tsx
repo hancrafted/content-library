@@ -1,7 +1,7 @@
 import { leadTimeText } from '@/explorables/software-ecology/customer-card-view';
 import type { Release } from '@/explorables/software-ecology/stage-readouts.pure';
+import type { FactoryStillState } from '@/explorables/software-ecology/stills.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import type { FactoryStillState } from './factory-still-state';
 import { GlyphAt, type Formats } from './still-parts';
 
 const CELL = 18;

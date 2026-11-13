@@ -7,11 +7,13 @@
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';
+import { beatsOf, stepsOf, type Beat } from './factory-beats.pure.ts';
+import { DAYS, DTW } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
-import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
+import { settingsAfter, type Check } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 
 /** A tour runs at 20× between its steps (Q118; 10× before the 1× was halved, so the pace is the same). */
 export const TOUR_SPEED = 20;
@@ -35,8 +37,6 @@ export interface TourRun {
   readonly tour: Tour;
 }
 
-const keysOf = (p: Preset): string[] => [...new Set(stepsOf(p).flatMap((st) => Object.keys(st.expect ?? {})))];
-
 const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
 
 /**
@@ -44,14 +44,9 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
  * the mean over its last WINDOW weeks (grill 11 Q224).
  */
 const aimAtStep = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
-  const steps = stepsOf(x.p),
-    st = steps[x.i] as (typeof steps)[number];
-  run.set(settingsAfter(st.set, run.topology.B, run.settings));
-  const end = x.t0k + stepsTo(st.run);
-  run.aim({
-    at: end,
-    sampling: createSampler({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end, keys: keysOf(x.p) }),
-  });
+  const b = beatsOf(x.p, x.t0k)[x.i] as Beat;
+  run.set(settingsAfter(b.set, run.topology.B, run.settings));
+  run.aim({ at: b.end, sampling: createSampler(b) });
 };
 
 /** The step's reading: the mean of what the run read on its sample steps. */
@@ -110,7 +105,7 @@ export const nextTour = (run: FactoryRun, t: Tour): Tour | null => {
 export const backTour = (B: Bundle, t: Tour): TourRun => {
   const idx = Math.max(0, t.i - 1),
     p = t.preset;
-  const run = new FactoryRun({ B, preset: p.id, now: true, s: startSettings(B, p) });
+  const run = new FactoryRun({ B, preset: p.id, now: true });
   const t0k = run.k,
     vals: Record<string, number>[] = [];
   stepsOf(p)

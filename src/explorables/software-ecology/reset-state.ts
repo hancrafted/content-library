@@ -3,7 +3,7 @@
  * tour first. Reset then shows the state's own view and compare mode, as picking it does, and restores the state as its
  * use-case file defines it: settings, speed, belt motion and pile-up style.
  */
-import type { Bundle, PileStyle, ViewId } from './software-ecology.types';
+import type { Bundle, PileStyle } from './software-ecology.types';
 import { defaultsOf } from './state-defaults.pure.ts';
 import type { FactoryView } from './use-factory.ts';
 
@@ -18,12 +18,8 @@ interface Page {
 interface StateActions {
   readonly f: FactoryView;
   readonly tour: { end(): void };
-  /** Show a view. */
-  readonly show: (v: ViewId) => void;
-  /** The view a state of a bundle opens in. */
-  readonly viewOf: (B: Bundle, id: string) => ViewId;
-  /** Apply the state's compare mode. */
-  readonly apply: (b: Bundle, id: string) => void;
+  /** Enter a state of a bundle: show its view, then apply its compare mode. */
+  readonly enter: (b: Bundle, id: string) => void;
 }
 
 /** Closes the dashboard and the tour: the start of every change of state or use case. */
@@ -37,8 +33,7 @@ export const resetToDefault = (page: Page, acts: StateActions) => (): void => {
   const id = acts.f.controls.preset,
     defaults = defaultsOf(page.B, id);
   dismissOverlays(page, acts);
-  acts.show(acts.viewOf(page.B, id));
-  acts.apply(page.B, id);
+  acts.enter(page.B, id);
   page.display.onBeltMotion(defaults.beltMotion);
   page.display.onPile(defaults.pile);
   acts.f.controls.reset(defaults);

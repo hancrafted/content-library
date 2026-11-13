@@ -14,11 +14,12 @@ import tireWordsDe from './tire.words.de.yml';
 import tireWords from './tire.words.yml';
 import tire from './tire.yml';
 import { bundleOf, readCatalog } from './use-case-file.ts';
+import type { UseCaseTexts } from './use-case-texts.pure.ts';
 
 export const BUILTIN = ['tire', 'gate', 'teams'] as const;
 export type BuiltinId = (typeof BUILTIN)[number];
 
-const SOURCES: Readonly<Record<BuiltinId, { data: string; en: string; de: string }>> = {
+const SOURCES: Readonly<Record<BuiltinId, UseCaseTexts>> = {
   tire: { data: tire, en: tireWords, de: tireWordsDe },
   gate: { data: gate, en: gateWords, de: gateWordsDe },
   teams: { data: teams, en: teamsWords, de: teamsWordsDe },

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
 import type { Bundle, CenterDef, RoleDef, Settings } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 /*

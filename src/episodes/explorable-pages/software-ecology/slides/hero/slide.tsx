@@ -16,7 +16,7 @@ import en from './i18n/en.json';
 
 /*
  * The model's readouts of the `still` state (In practice, then AI at Engineering to week 20), read from the same headless run the Why How What
- * stills draw (`factoryStillState`), so the hero never claims what the model does not show: an illustrative model, not
+ * stills draw (`stillOf`), so the hero never claims what the model does not show: an illustrative model, not
  * measured, and labelled so on the preview.
  */
 

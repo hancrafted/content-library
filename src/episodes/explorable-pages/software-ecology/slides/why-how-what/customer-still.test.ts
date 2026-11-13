@@ -1,9 +1,9 @@
+import { stillOf } from '@/explorables/software-ecology/stills.pure';
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { CustomerStill } from './customer-still';
-import { factoryStillState } from './factory-still-state';
 import { formatsOf } from './still-parts';
 
 /*
@@ -11,7 +11,7 @@ import { formatsOf } from './still-parts';
  * reads it (one decimal below ten days, whole days above), so a viewer comparing the two sees one number.
  */
 const readouts = (leadDays: number | null) => {
-  const state = factoryStillState('en');
+  const state = stillOf('tire', 'still', 'en');
   const html = renderToStaticMarkup(
     createElement(
       'svg',

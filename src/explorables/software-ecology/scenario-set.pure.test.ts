@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { startSettings } from './factory-dials.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
 import type { Preset, Settings } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 /* A tour step's `set` applied to the settings (design-ADR 0024 §10). */

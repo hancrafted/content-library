@@ -3,7 +3,8 @@
  * warms it, then each step of its tour or check set and run to its week, with the shipped seed. The hero preview and
  * the Why · How · What stills read the `still` state, kept off the Scenarios menu, so their numbers are the model's own.
  */
-import { playSteps, scenarioStart, stepsOf } from './factory-scenario.pure.ts';
+import { stepsOf } from './factory-beats.pure.ts';
+import { playSteps, scenarioStart } from './factory-scenario.pure.ts';
 import { builtinBundles } from './software-ecology-data';
 
 const RUNS = new Map<string, ReturnType<typeof run>>();

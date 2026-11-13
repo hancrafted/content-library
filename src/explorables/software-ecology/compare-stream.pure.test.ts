@@ -8,9 +8,9 @@ import {
   streamOf,
   togglePicking,
 } from './compare-stream.pure.ts';
-import { idealSettings, startSettings } from './factory-dials.pure.ts';
 import { createFactory, DEFAULT_SEED } from './factory-model.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
+import { idealSettings, startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const tire = () => createFactory(builtinBundle('tire'), idealSettings('service'), DEFAULT_SEED).topology;

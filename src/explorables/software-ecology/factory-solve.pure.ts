@@ -3,11 +3,13 @@
  * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
  */
 import { DEFECTS, perKind } from './defect.pure.ts';
-import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
-import { NF_, trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
+import { dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
+import { trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
+import { NF_ } from './flow-cells.pure.ts';
 import { constOf } from './mechanics.pure.ts';
 import type { Cust, Defect, Settings } from './software-ecology.types';
+import { custOf } from './start-settings.pure.ts';
 
 export interface SolveResult {
   readonly F: Float64Array[];
@@ -53,7 +55,6 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     s,
     D,
     cu,
-    rework: mechOf(s, 'rework'),
     churn: Math.max(1, mechOf(s, 'churn') || 1),
     complOn,
     mixW: sum(Object.values(cu.mix)) || 1,
@@ -61,7 +62,6 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     srcs: productCo(s) ? m.srcs.map((x) => ({ n: x.n, rate: ownOf(x, { s, mode: cu.mode }).rate })) : [],
     worst: opts.worst,
     consts: {
-      inspect: constOf(s, 'inspect'),
       redo: constOf(s, 'redo'),
       keepExtra: constOf(s, 'keepExtra'),
       maxBounces: constOf(s, 'maxBounces'),

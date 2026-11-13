@@ -4,46 +4,24 @@
  * model redraws them on the next build. It reads the model through its handle only
  * (design-ADR 0024 §1): the Snapshot, the Topology and the Floor.
  */
-import {
-  boxOf,
-  layoutFactory,
-  offsetD,
-  RET,
-  workAt,
-  type FactoryLayout,
-} from '@/explorables/software-ecology/factory-layout.pure';
-import type {
-  DocMarks,
-  FloorDoc,
-  FloorList,
-  FloorStation,
-  Snapshot,
-} from '@/explorables/software-ecology/factory-model.pure';
-import { at, type Path } from '@/explorables/software-ecology/factory-paths.pure';
-import { GAP } from '@/explorables/software-ecology/paint-belts';
-import { RACK_W, rackX, SLOT, slotY } from '@/explorables/software-ecology/paint-station';
-import { scenarioLastStep } from '@/explorables/software-ecology/scenario-last-step';
-import { catalogWordsFor, localeOf, wordsFor } from '@/explorables/software-ecology/software-ecology-data';
-import type { Words } from '@/explorables/software-ecology/software-ecology-words.types';
-import type { Locale } from '@/explorables/software-ecology/software-ecology.types';
-import {
-  beltsOf,
-  cardsOf,
-  customerCardOf,
-  type BeltPart,
-  type CardPart,
-} from '@/explorables/software-ecology/stage-parts.pure';
-import { RACK } from '@/explorables/software-ecology/stage-readouts.pure';
-import { roleWords, type WordsIn } from '@/explorables/software-ecology/use-case-words.pure';
-import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './factory-still.types';
+import { boxOf, layoutFactory, offsetD, RET, workAt, type FactoryLayout } from './factory-layout.pure';
+import type { DocMarks, FloorDoc, FloorList, FloorStation, Snapshot } from './factory-model.pure';
+import { at, type Path } from './factory-paths.pure';
+import { GAP } from './paint-belts';
+import { RACK_W, rackX, SLOT, slotY } from './paint-station';
+import { scenarioLastStep } from './scenario-last-step';
+import { catalogWordsFor, localeOf, wordsFor } from './software-ecology-data';
+import type { Words } from './software-ecology-words.types';
+import type { Locale } from './software-ecology.types';
+import { beltsOf, cardsOf, customerCardOf, type BeltPart, type CardPart } from './stage-parts.pure';
+import { RACK } from './stage-readouts.pure';
+import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './stills.types';
+import { roleWords, type WordsIn } from './use-case-words.pure';
 
-const USE_CASE = 'tire';
-/** What the stills show: the use case's `still` state, off the Scenarios menu (tire.yml, grill 11 Q215). */
-const STILL = 'still';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
 
-export type * from './factory-still.types';
+export type * from './stills.types';
 
 const marksOf = (d: DocMarks): Omit<StillDoc, 'x' | 'y'> => ({
   good: d.good,
@@ -63,7 +41,8 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
       span = doc.t1 - doc.t0 || 1,
       s = Math.min(1, Math.max(0, (t - doc.t0) / span)) * path.L,
       marks = marksOf(doc);
-    // Closer documents of the same kind merge, as the painter merges them.
+    // Closer documents of the same kind merge within the painter's GAP; the painter buckets by GAP on a canvas, so this
+    // is its rule on plain data, not a call into it (its drawing buffer cannot return the positions).
     if (out.some((o, j) => Math.abs((along[j] ?? 0) - s) < GAP && sameKind(o, marks))) continue;
     const p = at(path, s);
     out.push({ x: p[0], y: p[1], ...marks });
@@ -72,10 +51,7 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
   return out;
 };
 
-/** The model after the still's check: warmed, then its dials set and run to its week. */
-const runToLastStep = () => scenarioLastStep(USE_CASE, STILL);
-
-type Run = ReturnType<typeof runToLastStep>;
+type Run = ReturnType<typeof scenarioLastStep>;
 interface Read {
   readonly run: Run;
   readonly w: WordsIn;
@@ -186,16 +162,18 @@ function build(run: Run, lc: Locale): FactoryStillState {
   };
 }
 
-const CACHE = new Map<Locale, FactoryStillState>();
-let RUN: Run | null = null;
+const CACHE = new Map<string, FactoryStillState>();
 
-/** The stills' state in a locale: the model runs once a build, its words are read per locale. */
-export function factoryStillState(locale: string): FactoryStillState {
-  const lc = localeOf(locale);
-  const hit = CACHE.get(lc);
+/**
+ * The stills' state for a use case's state in a locale (the Slides ask for `tire`'s `still`, off the Scenarios menu:
+ * tire.yml, grill 11 Q215): the model runs once a build, its words are read per locale.
+ */
+export function stillOf(useCase: string, state: string, locale: string): FactoryStillState {
+  const lc = localeOf(locale),
+    key = `${useCase}/${state}/${lc}`;
+  const hit = CACHE.get(key);
   if (hit) return hit;
-  RUN ??= runToLastStep();
-  const state = build(RUN, lc);
-  CACHE.set(lc, state);
-  return state;
+  const made = build(scenarioLastStep(useCase, state), lc);
+  CACHE.set(key, made);
+  return made;
 }

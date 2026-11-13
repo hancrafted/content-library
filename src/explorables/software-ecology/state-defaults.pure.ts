@@ -3,9 +3,9 @@
  * use-case file defines. Every setting of a state is definable in the file, so the reset reads the file and nothing else.
  */
 import { displayOf } from './display-defaults.pure.ts';
-import { startSettings } from './factory-dials.pure.ts';
 import { presetOf, startSpeedOf } from './factory-run.pure.ts';
 import type { Bundle, PileStyle, Settings } from './software-ecology.types';
+import { startSettings } from './start-settings.pure.ts';
 
 export interface StateDefaults {
   readonly s: Settings;

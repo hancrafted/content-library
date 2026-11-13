@@ -30,6 +30,7 @@ const MODEL = new Set([
   'factory-sizing.pure.ts',
   'factory-solve.pure.ts',
   'factory-traffic.pure.ts',
+  'flow-cells.pure.ts',
   'factory-routing.pure.ts',
   'factory-readouts.pure.ts',
   'factory-measures.pure.ts',
@@ -37,6 +38,8 @@ const MODEL = new Set([
   'stage-readouts.pure.ts',
   'dashboard-readouts.pure.ts',
   'factory-dials.pure.ts',
+  'start-settings.pure.ts',
+  'factory-beats.pure.ts',
   'factory.types.ts',
   'factory-random.pure.ts',
 ]);
@@ -55,6 +58,7 @@ const INTERNAL = [
   'factory-sizing',
   'factory-solve',
   'factory-traffic',
+  'flow-cells',
   'factory-routing',
   'factory-readouts',
   'factory-measures',
@@ -110,9 +114,7 @@ describe('success cases', () => {
     const breaches = files.flatMap((f) => breachesOf(readFileSync(join(DIR, f), 'utf8')).map((b) => `${f}: ${b}`));
     // ASSERT
     expect(files.length).toBeGreaterThan(MODEL.size);
-    expect(files).toContain(
-      '../../episodes/explorable-pages/software-ecology/slides/why-how-what/factory-still-state.ts',
-    );
+    expect(files).toContain('../../episodes/explorable-pages/software-ecology/slides/why-how-what/slide.tsx');
     expect(breaches).toEqual(none);
   });
 });

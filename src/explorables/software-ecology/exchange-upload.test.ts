@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { parse, stringify } from 'yaml';
 import { exportExchange, type PageState } from './exchange-file.pure.ts';
 import { uploadExchange } from './exchange-upload.ts';
-import { startSettings } from './factory-dials.pure.ts';
 import { withOwn } from './factory-settings.pure.ts';
 import { catalogWordsFor } from './software-ecology-data.ts';
+import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };

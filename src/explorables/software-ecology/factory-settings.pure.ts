@@ -5,7 +5,6 @@
  * `wireDashboard`/`wireCustomer` handlers.
  */
 import { copyKinds } from './defect.pure.ts';
-import { presetSettings, startSettings } from './factory-dials.pure.ts';
 import { fileMechanics } from './mechanics.pure.ts';
 import type {
   AiQuality,
@@ -21,6 +20,7 @@ import type {
   Settings,
   Strength,
 } from './software-ecology.types';
+import { presetSettings, startSettings } from './start-settings.pure.ts';
 
 /**
  * The settings a state sets on the page: the preset's reality, AI, dials and Customer. Company, AI quality, mechanics
