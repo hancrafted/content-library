@@ -6,7 +6,7 @@ A designer of the `write-spec` job designs two or three **Options** per page Sli
 
 Point, never paste: read each file yourself.
 
-- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library at the repo's pinned `3.15.0`. This file names the Slide's design size, 1920 × 1080, and its render presets: desktop (1920 px), laptop (1440 px), tablet (1024 px), mobile (390 px) and vertical Shorts (1080 × 1920).
+- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec template and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library at the repo's pinned `3.15.0`. The [Spec calibration](spec-calibration.md) holds the Slide's design size and its render presets.
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
 - Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
@@ -20,7 +20,7 @@ Point, never paste: read each file yourself.
 
 ## The mock is the Slide
 
-The user judges each Option from its mock alone, on a stage that grows with the screen up to the Slide's 1920 px, at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
+The user judges each Option from its mock alone, on a stage that grows with the screen up to the Slide's design size ([Spec calibration](spec-calibration.md#page)), at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
 
 - **Real content.** A page Slide's shared Slide header (the Eyebrow with its Section title and `n / N` in `text-caption` uppercase, the title at `text-subheading`, the caption at `text-body` close under it), then every note, label, number, axis and arrow the Slide shows, in final English. A mock of a board shows every note with its words and amount; a chart shows its bars or curve at their real proportions.
 - **Composition.** One focal point carried by `primary` and by size; a clear reading order; generous spacing. The Slide fills the stage the way a slide fills a screen, never a small diagram in a corner.
@@ -29,13 +29,13 @@ The user judges each Option from its mock alone, on a stage that grows with the 
 - **Context markers.** Every fact whose Speaker note carries a source shows a Context marker beside it: `(💬)` after the phrase in text, or in the corner or beside the label of a card, column or chart ([`write-spec.md`](write-spec.md#what-an-option-settles) gives the markup; the sample's `1a` shows one of each).
 - **Hover and motion.** Hover that helps the user point while presenting is live, by the shared hover classes; emphasis motion shows as its end state. Entrance is the wrapper's, never the Option's ([`write-spec.md`](write-spec.md#what-an-option-settles)).
 
-A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, run `npm run episode:spec-preview -- <your fragment file>`: it renders every Option in the Spec frame at each render preset of the [Spec calibration](spec-calibration.md#render-presets) (desktop 1920, laptop 1440, tablet 1024, mobile 390 and vertical Shorts 1080 × 1920 px), runs the Spec contract and measures text overflow. It prints one `✖` line per violation, an overflow naming its Option and preset, and one `screenshot` line per Option and preset, and exits 1 on any violation. Fix every line and rerun; you return only on exit 0. Then read the laptop screenshot of each mock and fix what reads as a wireframe; read another preset's only where it reported overflow.
+A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, run `npm run episode:spec-preview -- <your fragment file>`: it renders every Option in the Spec template's page at each render preset of the [Spec calibration](spec-calibration.md#render-presets), runs the Spec contract and measures text overflow. It prints one `✖` line per violation (an overflow names its Option and preset), one `⚠` line per overflow that only reports and one `screenshot` line per Option and preset, and exits 1 on any `✖`. The calibration's table marks the presets where overflow fails; at the others it reports and does not fail, so read each `⚠` and fix what a viewer would see. Fix every `✖` and rerun; you return only on exit 0. Then read the laptop screenshot of each mock and fix what reads as a wireframe; read another preset's only where it reported overflow.
 
 ## The markup rules
 
 - Options of one Slide are true alternatives: they differ in layout, visual metaphor or chart type.
 - Classes only from the tokens in `src/app/globals.css` and standard Tailwind utilities: `bg-card`, `bg-muted`, `bg-primary`, `bg-warning/25`, `text-heading`, `text-muted-foreground`, `grid-cols-12`, `col-span-5`, `w-1/4`, `rotate-1`, `shadow-md`. No arbitrary values (`grid-cols-[…]`, `w-[16%]`, `left-[67%]`): the staging test refuses them. No inline `style`, no hex.
-- The Spec frame paints each `data-spec="mock"` element's own background, so a coloured ground (`bg-foreground`, `bg-primary`) goes on an element inside the mock.
+- The Spec template paints each `data-spec="mock"` element's own background, so a coloured ground (`bg-foreground`, `bg-primary`) goes on an element inside the mock.
 - The figcaption: `<b><id></b>`, the Option's reason in one line, and its build cost: Slide library entry as is, Master slide copy, or Scene.
 - The build notes: whether the Dossier's `master:` and `motion:` are kept or overruled, an overruled one with its reason; the parts, tokens, props (a TypeScript shape per part) and i18n keys, so the mock maps onto the code; and per Context marker the Speaker note it opens. A part the Visual language already specifies is named and pointed to, never restated.
 - FE-009: no fixed height, no clipping, Foreground clear of the chrome. FE-007 §5: imports it allows only.

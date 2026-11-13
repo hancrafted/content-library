@@ -1,8 +1,9 @@
 // `npm run episode:spec-preview -- <fragment.html>`: a designer sees and checks its own mock as the user will. It wraps the
-// fragment in the Spec frame at the Spec's exact width, compiles design.css for it, runs the Spec contract rules the
-// staging test runs, renders every Option at every render preset of the Spec calibration through `npm run
-// inspect-page` and measures text overflow. Always renders; prints one `✖` line per violation (an overflow names its
-// Option and preset) and one `screenshot` line per Option and preset; exits 1 on any violation.
+// fragment in the Spec template's page, set to each render preset the way the page's toolbar sets it, compiles
+// design.css for it, runs the Spec contract rules the staging test runs, renders every Option at every render preset
+// of the Spec calibration through `npm run inspect-page` and measures text overflow. Always renders; prints one `✖`
+// line per violation (an overflow names its Option and preset, and fails only at the presets the calibration marks),
+// one `⚠` line per overflow that only reports and one `screenshot` line per Option and preset; exits 1 on any `✖`.
 // The renders run a few at a time against inspect-page's one shared browser: each is a short node process.
 
 import { spawn } from 'node:child_process';
@@ -11,24 +12,26 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
 import {
-  optionIds,
   previewPage,
   previewReport,
   readPresets,
-  type Preset,
+  shotName,
+  shotsOf,
+  viewportOf,
   type Rendered,
+  type Shot,
 } from '../../../src/pipeline/lib/spec-preview.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
-interface Shot {
+interface InspectJson {
   image: { path: string };
   probes: { count: number }[];
 }
 
 /** The screenshot path and overflow count in inspect-page's JSON for one Option. */
 function readShot(json: string): Rendered {
-  const [entry] = JSON.parse(json) as [Shot];
+  const [entry] = JSON.parse(json) as [InspectJson];
   return { path: entry.image.path, overflow: entry.probes.reduce((sum, probe) => sum + probe.count, 0) };
 }
 
@@ -36,12 +39,12 @@ function readShot(json: string): Rendered {
 const PARALLEL = 4;
 
 /** One Option at one preset through inspect-page: its screenshot path and how many elements overflow it. */
-function inspect(url: string, at: { id: string; preset: Preset }, out: string): Promise<Rendered> {
-  const { id, preset } = at;
+function inspect(url: string, { id, preset }: Shot, out: string): Promise<Rendered> {
+  const stage = `.spec-stage[data-option="${id}"]`;
   const args = [
     path.join(ROOT, 'skills/visual-check/scripts/inspect-page.ts'),
-    ...['--url', url, '--width', String(preset.width), '--height', String(preset.height)],
-    ...['--clip', `[data-option="${id}"]`, '--out', out, '--probe', `[data-option="${id}"] [data-overflow]`],
+    ...['--url', url, '--width', String(viewportOf(preset).width), '--height', String(viewportOf(preset).height)],
+    ...['--clip', stage, '--out', out, '--probe', `${stage} [data-overflow]`],
   ];
   return new Promise((resolve, reject) => {
     const child = spawn('node', args, { cwd: ROOT });
@@ -82,26 +85,23 @@ const fragment = readFileSync(fragmentFile, 'utf8');
 const dir = fragmentFile.replace(/\.html$/, '') + '.preview';
 mkdirSync(dir, { recursive: true });
 
-const frame = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-template.html'), 'utf8');
-writeFileSync(path.join(dir, 'index.html'), previewPage(frame, fragment));
+const template = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-template.html'), 'utf8');
+const presets = readPresets(readFileSync(path.join(ROOT, 'skills/new-episode/references/spec-calibration.md'), 'utf8'));
+// One page per preset: the preset is set on `<html>`, as the page's toolbar sets it.
+for (const preset of presets)
+  writeFileSync(path.join(dir, `index.${preset.name}.html`), previewPage(template, fragment, preset));
 await buildDesignCss(dir);
 
-const url = `file://${path.join(dir, 'index.html')}`;
-const presets = readPresets(readFileSync(path.join(ROOT, 'skills/new-episode/references/spec-calibration.md'), 'utf8'));
-const pairs = optionIds(fragment).flatMap((id) => presets.map((preset) => ({ id, preset })));
+const shots = shotsOf(fragment, presets);
+const url = (shot: Shot) => `file://${path.join(dir, `index.${shot.preset.name}.html`)}`;
 const settled = await settleAll(
-  pairs.map(
-    ({ id, preset }) =>
-      () =>
-        inspect(url, { id, preset }, path.join(dir, `${id}-${preset.name}.png`)),
-  ),
+  shots.map((shot) => () => inspect(url(shot), shot, path.join(dir, `${shotName(shot)}.png`))),
 );
-const renders = new Map(pairs.map(({ id, preset }, index) => [`${id}@${preset.name}`, settled[index]!]));
-const report = previewReport(fragment, presets, (id, preset) => {
-  const result = renders.get(`${id}@${preset.name}`)!;
-  if (result.status === 'rejected') throw result.reason as Error;
-  return result.value;
+const outcomes = shots.map((shot, index) => {
+  const result = settled[index]!;
+  return { shot, result: result.status === 'fulfilled' ? result.value : (result.reason as Error) };
 });
+const report = previewReport(fragment, outcomes);
 for (const line of report.lines) console.log(line);
-console.log(url);
+console.log(dir);
 process.exit(report.failed ? 1 : 0);

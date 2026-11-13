@@ -225,6 +225,15 @@ _Avoid_: Phase, step
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
 
+**Spec template**: the page every Spec is built from, `skills/new-episode/assets/spec-template.html`: a page frame with the review form and two templates, an item and an Option, that the assembler fills. The `to-decision-html` skill generates it from the Spec calibration, and a Spec never edits it.
+_Avoid_: Spec frame, Spec layout
+
+**Spec calibration**: the one file of what every Spec shares, `skills/new-episode/references/spec-calibration.md`: the design size, the render presets, the template's slots, the attributes the assembler sets, the save format and the Next actions. It is the skill's only input from the Episode side.
+_Avoid_: Spec settings, Spec config
+
+**Next action**: what Han chooses at the Spec Gate when he saves a review, `redesign` or `approve`, saved as the round's `next` line. `redesign` starts a new Attempt for the Slides without exactly one pick; `approve` needs exactly one pick on every Slide.
+_Avoid_: Decision, verdict
+
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
 _Avoid_: Iteration, round
 
