@@ -30,6 +30,8 @@ export interface JudgeRecord {
   readonly cli: 'claude' | 'gemini';
   readonly judgeModel: string | null;
   readonly readerModel: string | null;
+  /** The reference grader's model; absent for a case without a reference. */
+  readonly referenceModel?: string | null;
   /** True when the judge's family differs from the executor's. */
   readonly crossFamily: boolean;
   /** The self-preference risk when judge and executor share a family; null otherwise. */

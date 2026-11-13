@@ -1,8 +1,8 @@
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CASES, hashProblems, keyProblems, loadCase, qualityKeys, readManifest } from './cases.ts';
+import { CASES, hashProblems, keyProblems, loadCase, qualityKeys, readManifest, referenceOf } from './cases.ts';
 
 const HASH_OF_FROZEN = '9c45da1b799a603c167323bd7ed4f52034ec28ea5e04373045a9c11f1ddc5446';
 
@@ -51,10 +51,21 @@ describe('frozen eval cases', () => {
           prompt: 'ticket/prompt.md',
           inputs: ['ticket/issue.md', 'ticket/calibration.md'],
         },
+        {
+          id: 'architecture-round',
+          mode: 'decide',
+          prompt: 'architecture-round/prompt.md',
+          inputs: [
+            'architecture-round/decisions.md',
+            'architecture-round/review-engine.html',
+            'architecture-round/review-explorable.html',
+            'architecture-round/calibration.md',
+          ],
+        },
       ];
 
       // ACT
-      const loaded = ['after-grill', 'ticket']
+      const loaded = ['after-grill', 'ticket', 'architecture-round']
         .map(loadCase)
         .map(({ id, mode, prompt, inputs }) => ({ id, mode, prompt, inputs }));
 
@@ -62,12 +73,12 @@ describe('frozen eval cases', () => {
       expect(loaded).toEqual(expected);
     });
 
-    it('asks prototype fidelity of every ink item, and no single rung of the other cases', () => {
+    it('asks prototype fidelity of every ink item, diagram of every architecture-round item, and no single rung of the others', () => {
       // ARRANGE
-      const expected = [{ fidelity: 'prototype' }, {}, {}];
+      const expected = [{ fidelity: 'prototype' }, {}, {}, { fidelity: 'diagram' }];
 
       // ACT
-      const asked = ['ink', 'after-grill', 'ticket'].map((id) => loadCase(id).asked);
+      const asked = ['ink', 'after-grill', 'ticket', 'architecture-round'].map((id) => loadCase(id).asked);
 
       // ASSERT
       expect(asked).toEqual(expected);
@@ -81,8 +92,20 @@ describe('frozen eval cases', () => {
       const problems = keyed.flatMap((entry) => keyProblems(CASES, loadCase(entry.id), qualityKeys(entry.id)!));
 
       // ASSERT
-      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket']);
+      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket', 'architecture-round']);
       expect(problems).toEqual([]);
+    });
+    it('gives architecture-round its frozen reference page, and the other three cases none', () => {
+      // ARRANGE
+      const ids = ['ink', 'after-grill', 'ticket', 'architecture-round'];
+      const expected = [null, null, null, 'architecture-round/reference.html'];
+
+      // ACT
+      const references = ids.map(referenceOf);
+
+      // ASSERT
+      expect(references).toEqual(expected);
+      expect(existsSync(path.join(CASES, references[3]!))).toBe(true);
     });
   });
 

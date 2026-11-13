@@ -83,6 +83,41 @@
         "ticket/checklist.json": "b7eb398475b20339042ac6fe702a4e7dc6dd96a03008d6adadf95a44f85e9fc1",
         "ticket/probe.json": "e77773890dfd6677c4d3f3cf8ba720b203f333c9246c7c7fa16cf401f789712f"
       }
+    },
+    {
+      "id": "architecture-round",
+      "kind": "frozen-decisions",
+      "mode": "decide",
+      "source": {
+        "session": "5d29bb73-a311-444f-aeda-75218d59632b",
+        "title": "software-ecology architecture round",
+        "repository": "hancrafted/content-library",
+        "branch": "feat/ecology-eval",
+        "turns": "Han asked the agent to work through the Worth-exploring items of two architecture reviews and present its decisions with to-decision-html (2026-11-13).",
+        "copy": "decisions.md renders the agent's decision data verbatim from the session's generator script (gen-decisions.mjs): every item, Option, recommendation, evidence line, before, after and detail. review-engine.html and review-explorable.html are the two review reports byte for byte.",
+        "omitted": "The code on feat/ecology-eval; the paths and line numbers in decisions.md are its only evidence. Revision 1 of the page and Han's review of it, which shaped calibration.md and checklist.json.",
+        "reference": "reference.html is worth-exploring-b.html, the rebuild Han judged great (2026-11-13), built from the same decisions with the skill as of PR #553. Runs never see it."
+      },
+      "prompt": "architecture-round/prompt.md",
+      "attachments": [
+        "architecture-round/decisions.md",
+        "architecture-round/review-engine.html",
+        "architecture-round/review-explorable.html"
+      ],
+      "calibration": "architecture-round/calibration.md",
+      "checklist": "architecture-round/checklist.json",
+      "probe": "architecture-round/probe.json",
+      "reference": "architecture-round/reference.html",
+      "hashes": {
+        "architecture-round/prompt.md": "b4b949a2e04a0bfbb38b0ba98fe6068087175ce0e64c375a0f8ef5fd5f714750",
+        "architecture-round/decisions.md": "7a29f2d37e6e0b8e4fbb5c8829fea8be67905b185aedbb8648e2521333833fe3",
+        "architecture-round/review-engine.html": "cf9ae2e59192e9acf73eb766aaba45e9bf50eecd32e2e30dfe158f7eb3d9e1a0",
+        "architecture-round/review-explorable.html": "e15b68e5784da4154ad61bf82a930335ebe98202481bedc04b74f1608637a748",
+        "architecture-round/calibration.md": "985423815e226f4d89e784fa52a14e0395c95bc25d9359a9e6a1f8457d8562ff",
+        "architecture-round/checklist.json": "ff1e147355fe84ccf92dfe00a3452796743c0d24b85f607be0a4cb400198f43b",
+        "architecture-round/probe.json": "5c5439257666a5067b10caa6a6542d2fa3cb7eca68ffe31dadf8af7e49b692d7",
+        "architecture-round/reference.html": "356b7ad155b4d921ef7d32cc5d38a1ca02dd8532deccfa49cc2fbbfe30b7d114"
+      }
     }
   ]
 }

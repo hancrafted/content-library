@@ -5,6 +5,7 @@ import path from 'node:path';
 import { loadChecks } from '../../scripts/grader/registry.ts';
 import { launch } from '../../scripts/grader/run.ts';
 import { gradeRun, type RunRecord } from './grade-run.ts';
+import { referencesFor } from './reference.ts';
 import { aggregateAndView } from './skill-creator.ts';
 
 export const SKILL = path.resolve(import.meta.dirname, '../..');
@@ -31,13 +32,15 @@ export function nextFolder(kind: 'iteration' | 'sweep'): string {
 }
 
 export async function gradeAll(dirs: readonly string[]): Promise<void> {
-  const graders = { browser: await launch(), checks: await loadChecks() };
+  const browser = await launch();
+  const graders = { browser, checks: await loadChecks(), references: referencesFor(browser) };
   try {
     for (const dir of dirs) {
       const { summary } = await gradeRun(graders, dir);
       console.log(`graded ${path.relative(WORKSPACE, dir)}: ${summary.passed}/${summary.total}`);
     }
   } finally {
+    graders.references.close();
     await graders.browser.close();
   }
 }

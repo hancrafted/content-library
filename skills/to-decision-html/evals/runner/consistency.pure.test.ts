@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { consistency, consistencyNotes, consistencyTable, type BenchmarkRun } from './consistency.pure.ts';
+import {
+  consistency,
+  consistencyNotes,
+  consistencyTable,
+  referenceNotes,
+  type BenchmarkRun,
+} from './consistency.pure.ts';
 
 interface Fixture {
   readonly arm: string;
@@ -124,6 +130,71 @@ describe('consistency across repeated runs', () => {
       // ASSERT
       expect(rows[0].assertions).toEqual([{ text: 'export', passed: 1, pass_k: null }]);
       expect(consistencyNotes(rows, 3)).toEqual(expected);
+    });
+  });
+});
+
+describe('vs-reference pass rate', () => {
+  const graded = (name: string, fixture: Pick<Fixture, 'arm' | 'number' | 'passed'>): BenchmarkRun => ({
+    ...run({ ...fixture, rate: 1 }),
+    eval_id: name === 'architecture-round' ? 4 : 1,
+    eval_name: name,
+  });
+
+  describe('success cases', () => {
+    it('gives each case with a reference its vs-reference pass rate per arm, summed over runs', () => {
+      // ARRANGE
+      const runs = [
+        graded('architecture-round', {
+          arm: 'with_skill',
+          number: 1,
+          passed: {
+            'vs-reference overall: Which page?': true,
+            'vs-reference scannable: Can?': false,
+            'judge bar decision': true,
+          },
+        }),
+        graded('architecture-round', {
+          arm: 'with_skill',
+          number: 2,
+          passed: {
+            'vs-reference overall: Which page?': true,
+            'vs-reference scannable: Can?': true,
+          },
+        }),
+        graded('architecture-round', {
+          arm: 'without_skill',
+          number: 1,
+          passed: {
+            'vs-reference overall: Which page?': false,
+            'vs-reference scannable: Can?': false,
+          },
+        }),
+        graded('ink', { arm: 'with_skill', number: 1, passed: { 'judge bar decision': true } }),
+      ];
+      const expected = [
+        'architecture-round · with_skill: vs-reference 3 of 4 items not worse than the reference (75%) over 2 runs',
+        'architecture-round · without_skill: vs-reference 0 of 2 items not worse than the reference (0%) over 1 run',
+      ];
+
+      // ACT
+      const notes = referenceNotes(runs);
+
+      // ASSERT
+      expect(notes).toEqual(expected);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('says nothing when no run was graded against a reference', () => {
+      // ARRANGE
+      const runs = [graded('ink', { arm: 'with_skill', number: 1, passed: { 'judge bar decision': true } })];
+
+      // ACT
+      const notes = referenceNotes(runs);
+
+      // ASSERT
+      expect(notes).toEqual([]);
     });
   });
 });
