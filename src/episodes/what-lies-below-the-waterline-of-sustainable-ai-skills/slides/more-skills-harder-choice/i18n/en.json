@@ -1,0 +1,128 @@
+{
+  "title": "More skills, harder choice",
+  "caption": "Skills that look alike leave the AI guessing; a short list in the project instructions takes the guess away.",
+  "analogy": "Near-twin cards leave the pilot guessing; the list on the wall settles it.",
+  "index": {
+    "label": "Skill index: 8 skills, each by name and description",
+    "labelCoding": ".claude/skills/*/SKILL.md name + description",
+    "cards": {
+      "sample": "Sample",
+      "collect-water-sample": "Collect water sample",
+      "take-sample": "Take sample",
+      "collect-sediment-sample": "Collect sediment sample",
+      "film-transect": "Film a transect",
+      "seabed-sample-v2": "Seabed sample v2",
+      "log-dive": "Log the dive",
+      "collect-mud-sample": "Collect mud sample"
+    }
+  },
+  "wall": {
+    "title": "Project instructions",
+    "lead": "In this project, use these three skills:",
+    "pill": "Project instructions, always loaded",
+    "pillCoding": "AGENTS.md or CLAUDE.md"
+  },
+  "terms": {
+    "label": "Where the choice is made",
+    "index": {
+      "term": "Skill index",
+      "scene": "the manual's index",
+      "kind": "name and description of every skill",
+      "line": "Near-twins sound alike, so the AI has to guess between them.",
+      "more": " … 8 in all"
+    },
+    "instructions": {
+      "term": "Project instructions",
+      "scene": "the project brief on the wall",
+      "kind": "always loaded; CLAUDE.md in Claude Code, AGENTS.md elsewhere",
+      "line": "A short list there says which three skills to use, so there is no crowded choice."
+    }
+  },
+  "evidence": "Evidence",
+  "hick": {
+    "title": "Hick's law, a finding about people",
+    "text": "People take longer to choose as the information in the choice grows.",
+    "source": "Hick 1952, Hyman 1953: choice-reaction experiments in people. That a longer list makes an AI choose worse is an inference, not a measured result."
+  },
+  "vercel": {
+    "title": "Vercel's agent evals: pass rate",
+    "rows": {
+      "default": "The skill, by default",
+      "agents-md-line": "+ a line in <code>AGENTS.md</code> telling the agent to use its skill"
+    },
+    "note": "With the line, the skill was opened in 95%+ of cases. One docs skill, one framework. A docs index replacing the skill reached 100%."
+  },
+  "naming": {
+    "rule": "Name it as an action, lowercase words joined by hyphens",
+    "source": "<b>Anthropic</b>'s skill-authoring best practices: names use lowercase letters, numbers and hyphens only; action-oriented names such as <code>process-pdfs</code> and <code>analyze-spreadsheets</code> are listed as acceptable (the gerund, <code>processing-pdfs</code>, is preferred), and patterns should stay consistent across a collection."
+  },
+  "footer": {
+    "story": "In the story:"
+  },
+  "alt": {
+    "room": "The control room. Above the console hangs the skill index, eight cards, four of them near-twins drawn dashed and lighter. The pilot sits at the console under a question mark. On the wall to the right the project brief lists three skills; its first line, Collect sediment sample, is lit, and a line runs from it to that one card in the index."
+  },
+  "notes": {
+    "choosing-among-many-skills-hick-and-hyman": {
+      "header": "Choosing among many skills: Hick and Hyman, a finding about people",
+      "description": "Hick applied information theory to choice-reaction-time experiments with up to ten alternatives [1]. Hyman reports that reaction time rises linearly with the amount of information in the choice [2]. That a longer list makes an AI choose worse is an inference, not a measured result.",
+      "sources": {
+        "hick-rate-of-gain-of-information": {
+          "title": "Hick, On the Rate of Gain of Information (Quarterly Journal of Experimental Psychology, 1952)"
+        },
+        "hyman-stimulus-information": {
+          "title": "Hyman, Stimulus Information as a Determinant of Reaction Time (Journal of Experimental Psychology, 1953)"
+        }
+      }
+    },
+    "agents-md-index-beat-skills-vercels-test": {
+      "header": "An AGENTS.md index beat skills: Vercel's test",
+      "description": "a line in AGENTS.md telling the agent to use its skill raised the pass rate from 53% to 79%, and the skill was opened in 95% or more of cases [1]. A compressed docs index of about 8KB in AGENTS.md, replacing the skill, reached 100%. Vercel's working theory: no decision point, and skills load only when invoked [1]. It is one docs skill for one framework, not a procedure.",
+      "sources": {
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "skills-too-broad-or-too-narrow": {
+      "header": "Skills too broad or too narrow",
+      "description": "the standard warns that skills \"scoped too broadly become hard to activate precisely\", while too narrow forces several to load [1]. No source measures lookalike skills lowering the pick rate directly.",
+      "sources": {
+        "agent-skills-best-practices": { "title": "Agent Skills, Best practices for skill creators" }
+      }
+    },
+    "name-each-skill-as-an-action": {
+      "header": "Name each skill as an action",
+      "description": "Anthropic's skill-authoring best practices say a skill's name uses lowercase letters, numbers and hyphens only, prefer the gerund form (processing-pdfs) and list action-oriented names such as process-pdfs and analyze-spreadsheets as an acceptable alternative; they advise against inconsistent patterns within a skill collection [1]. This Episode names its skills in the action form, collect-sediment-sample.",
+      "sources": {
+        "anthropic-skill-authoring-best-practices": {
+          "title": "Anthropic, Skill authoring best practices (Claude Platform docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "near-twins": {
+        "title": "Near-twins",
+        "keywords": "",
+        "script": "Now see what happens when the skills pile up. \"Sample\", \"Take sample\", \"Seabed sample v2\": three skills whose descriptions sound alike, and a model that has to guess between them. It guesses, and you made it do so."
+      },
+      "a-short-list-on-the-wall": {
+        "title": "A short list on the wall",
+        "keywords": "",
+        "script": "The fix is cheap: a short list in your project instructions, AGENTS.md if you work with a coding agent, that says \"In this project, use these three skills.\" Project instructions are always loaded, so the model no longer has to choose from a crowded index. On our ship, that is a list on the wall."
+      },
+      "hicks-law": {
+        "title": "Hick's law",
+        "keywords": "",
+        "script": "People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. I am lending it to the model, so hold it as a picture, not a measurement. What I want you to take from this Slide is the short list: it is short, and it is always loaded."
+      },
+      "name-it-as-an-action": {
+        "title": "Name it as an action",
+        "keywords": "",
+        "script": "One more habit keeps the index tidy: name each skill as an action, in lowercase words joined by hyphens, like collect-sediment-sample. A name that says what the skill does tells the model, and you, what it is for before anyone reads the description, and when every name follows the same pattern, a near-twin stands out before it gets written."
+      }
+    }
+  }
+}
