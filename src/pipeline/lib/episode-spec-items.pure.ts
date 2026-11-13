@@ -8,7 +8,7 @@
 import { load } from 'cheerio';
 import { escape } from './episode-spec-assemble-words.pure.ts';
 import { isRecommended, type Selection } from './episode-spec-slide.pure.ts';
-import { cloned } from './episode-spec-template.pure.ts';
+import { filledMarkup } from './episode-spec-template.pure.ts';
 
 /** The fidelity every Spec item is drawn at (the Spec calibration): a real-content mock. */
 const FIDELITY = 'mock';
@@ -48,7 +48,7 @@ function optionMarkup(
     box.attr({ name: `pick:${slug}`, value: id });
     if (locked) box.attr('checked', '');
   };
-  return cloned(template, { stage, caption, 'build-notes': notes, id: escape(id), pick }, (root) => {
+  return filledMarkup(template, { stage, caption, 'build-notes': notes, id: escape(id), pick }, (root) => {
     const kept = Object.entries(figure.attr() ?? {}).filter(([name]) => !OWN_ATTRIBUTES.test(name));
     root.attr(Object.fromEntries(kept));
     root.attr('data-option', id);
@@ -57,8 +57,8 @@ function optionMarkup(
   });
 }
 
-/** One Slide's fragment: its slug, its Option markup, the template to clone and the Option its feedback locked. */
-interface OptionsOf {
+/** What one Slide's Options are cloned from: its slug, its fragment's Option markup, the template and the locked Option. */
+interface OptionsSource {
   slug: string;
   html: string;
   template: string;
@@ -66,7 +66,7 @@ interface OptionsOf {
 }
 
 /** One Slide's Options cloned from the Option template, the locked Option marked picked and ticked. */
-export function optionsMarkup({ slug, html, template, locked }: OptionsOf): string {
+export function optionsMarkup({ slug, html, template, locked }: OptionsSource): string {
   const $ = load(html, null, false);
   const figures = $('figure[data-spec="option"]')
     .toArray()
@@ -81,7 +81,8 @@ export function optionsMarkup({ slug, html, template, locked }: OptionsOf): stri
 export interface Item {
   id: string;
   role: 'slide' | 'title-slide';
-  number: number;
+  /** The Slide's number; the Title slide has none and reads 0. */
+  number?: number;
   title: string;
   purpose?: string;
   words?: string;
@@ -95,15 +96,15 @@ export function itemMarkup(item: Item, template: string): string {
   const note = (field: Selection) =>
     void field.attr({ name, placeholder: item.notePlaceholder, 'aria-label': item.notePlaceholder });
   const slots = {
-    number: item.role === 'slide' ? String(item.number) : '0',
+    number: String(item.number ?? 0),
     title: item.title,
     purpose: item.purpose,
     words: item.words,
     options: item.options,
     note: item.options === undefined ? undefined : note,
   };
-  return cloned(template, slots, (root) => {
+  return filledMarkup(template, slots, (root) => {
     root.attr({ 'data-spec': item.role, id: item.id, 'data-item': item.id, 'data-fidelity': FIDELITY });
-    if (item.role === 'slide') root.attr('data-number', String(item.number));
+    if (item.number !== undefined) root.attr('data-number', String(item.number));
   });
 }

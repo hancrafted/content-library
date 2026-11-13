@@ -62,8 +62,8 @@ function locksOf(rounds: readonly string[]): Map<string, string> {
   return locks;
 }
 
-/** What the Options of a page come from: the designers' fragments by Slide slug, Han's locked picks and the template. */
-interface Parts {
+/** What the items of a page come from: the designers' fragments by Slide slug, Han's locked picks and the template. */
+interface SlideSources {
   fragments: Map<string, string>;
   locks: Map<string, string>;
   templates: Templates;
@@ -79,7 +79,7 @@ function slideWords(slide: SourceSlide): string {
   });
 }
 
-function slideMarkup(slide: SourceSlide, number: number, { fragments, locks, templates }: Parts): string {
+function slideMarkup(slide: SourceSlide, number: number, { fragments, locks, templates }: SlideSources): string {
   const html = fragments.get(slide.slug);
   const locked = locks.get(slide.slug);
   const options =
@@ -101,12 +101,11 @@ function slideMarkup(slide: SourceSlide, number: number, { fragments, locks, tem
 const TITLE_PURPOSE =
   'Each Option is a set: the Title slide, which sets the Hero motif, and under it the section slide of every Section, which echoes the motif and brings in its own Section. Picking an Option picks the set.';
 
-function titleArticle(html: string, { locks, templates }: Parts): string {
+function titleArticle(html: string, { locks, templates }: SlideSources): string {
   const locked = locks.get(TITLE_ANCHOR);
   const item = {
     id: TITLE_ANCHOR,
     role: 'title-slide' as const,
-    number: 0,
     title: 'Title slide and section slides',
     purpose: TITLE_PURPOSE,
     options: optionsMarkup({ slug: TITLE_ANCHOR, html, template: templates.option, locked }),
@@ -153,7 +152,7 @@ function intro(inputs: SpecInputs, source: Source): string {
 const LEDE =
   'Each Slide shows its words as tabs above its Options, which are tabs too: open each, pick one, and dictate a note where it should change. Save at the bottom when done.';
 
-function sectionsMarkup(source: Source, parts: Parts): string {
+function sectionsMarkup(source: Source, sources: SlideSources): string {
   let number = 0;
   return source.sections
     .map(
@@ -163,7 +162,7 @@ function sectionsMarkup(source: Source, parts: Parts): string {
 <h2>${inline(section.title)}</h2>
 ${voiceList(section.voice)}
 </div>
-${section.slides.map((slide) => slideMarkup(slide, ++number, parts)).join('\n')}
+${section.slides.map((slide) => slideMarkup(slide, ++number, sources)).join('\n')}
 </section>`,
     )
     .join('\n');
@@ -187,9 +186,9 @@ function fragmentsBySlug(files: readonly string[]): Map<string, string> {
 }
 
 /** What fills the page frame's slots: the title, meta block, outline, masthead, intro cards and every item. */
-function frameSlots(inputs: SpecInputs, source: Source, parts: Parts): Record<string, Slot> {
-  const titleOptions = parts.fragments.get(TITLE_ANCHOR);
-  const title = titleOptions === undefined ? '' : titleArticle(titleOptions, parts);
+function frameSlots(inputs: SpecInputs, source: Source, sources: SlideSources): Record<string, Slot> {
+  const titleOptions = sources.fragments.get(TITLE_ANCHOR);
+  const title = titleOptions === undefined ? '' : titleArticle(titleOptions, sources);
   const count = source.sections.reduce((sum, { slides }) => sum + slides.length, 0);
   return {
     'page-title': (element) => void element.text(`Spec · ${source.title}`),
@@ -202,7 +201,7 @@ function frameSlots(inputs: SpecInputs, source: Source, parts: Parts): Record<st
     },
     lede: LEDE,
     intro: intro(inputs, source),
-    items: `${title}\n${sectionsMarkup(source, parts)}`,
+    items: `${title}\n${sectionsMarkup(source, sources)}`,
   };
 }
 
@@ -216,8 +215,8 @@ export function assembleSpec(inputs: SpecInputs): string {
   const $ = load(inputs.template);
   const templates = { item: templateOf($, 'item'), option: templateOf($, 'option') };
   $('template').remove();
-  const parts = { fragments: fragmentsBySlug(inputs.fragments ?? []), locks: locksOf(rounds), templates };
-  fillIn($, frameSlots(inputs, source, parts));
+  const sources = { fragments: fragmentsBySlug(inputs.fragments ?? []), locks: locksOf(rounds), templates };
+  fillIn($, frameSlots(inputs, source, sources));
   // The Gate round: the draft after n saved feedback rounds is round n + 1.
   const pageId = source.slug ?? dossierSlug(source.title);
   $('html').attr({ 'data-page-id': pageId, 'data-revision': String(rounds.length + 1) });

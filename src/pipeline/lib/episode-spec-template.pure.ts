@@ -34,10 +34,10 @@ export function fillIn($: CheerioAPI, slots: Readonly<Record<string, Slot>>): vo
 }
 
 /** A markup fragment with its slots filled; its one root element is handed to `finish` for attributes, then printed. */
-export function cloned(
+export function filledMarkup(
   markup: string,
   slots: Readonly<Record<string, Slot>>,
-  finish: (root: Selection) => void = () => undefined,
+  finish: (root: Selection) => void,
 ): string {
   const $ = load(markup, null, false);
   fillIn($, slots);
