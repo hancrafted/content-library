@@ -5,7 +5,13 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { appendFileSync, existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
-import { consistency, consistencyNotes, consistencyTable, type BenchmarkRun } from './consistency.pure.ts';
+import {
+  consistency,
+  consistencyNotes,
+  consistencyTable,
+  referenceNotes,
+  type BenchmarkRun,
+} from './consistency.pure.ts';
 import { withPageLinks, type PageLinks } from './review-links.pure.ts';
 
 const PLUGINS = path.join(homedir(), '.claude', 'plugins', 'cache');
@@ -68,7 +74,7 @@ function addConsistency(benchmarkFile: string): string {
   const rows = consistency(benchmark.runs, PASS_K);
   const augmented = {
     ...benchmark,
-    notes: [...benchmark.notes, ...consistencyNotes(rows, PASS_K)],
+    notes: [...benchmark.notes, ...consistencyNotes(rows, PASS_K), ...referenceNotes(benchmark.runs)],
     consistency: { k: PASS_K, cases: rows },
   };
   writeFileSync(benchmarkFile, `${JSON.stringify(augmented, null, 2)}\n`);

@@ -15,6 +15,7 @@ import {
 } from './grading.pure.ts';
 import { isolationProblems } from './isolation.pure.ts';
 import { gradeQuality } from './quality.ts';
+import type { References } from './reference.ts';
 import { runFacts, type ToolCall } from './transcript.pure.ts';
 
 /** What the runner records about a run before grading; run.json. */
@@ -46,6 +47,8 @@ function pagesOf(pages: string): string[] {
 interface Graders {
   readonly browser: Browser;
   readonly checks: readonly Check[];
+  /** The reference views of each case, rendered once and shared by the runs of one grading pass. */
+  readonly references: References;
 }
 
 /** What grading reads from a run folder, each file read once. */
@@ -87,6 +90,7 @@ async function expectationsOf(graders: Graders, run: RunFiles) {
   // page's own </script> would end it early, so it shows the page only as screenshots.
   const quality = await gradeQuality({
     browser: graders.browser,
+    references: graders.references,
     page: run.pages[0],
     runDir: run.runDir,
     record: run.record,

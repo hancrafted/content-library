@@ -1,8 +1,8 @@
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CASES, hashProblems, keyProblems, loadCase, qualityKeys, readManifest } from './cases.ts';
+import { CASES, hashProblems, keyProblems, loadCase, qualityKeys, readManifest, referenceOf } from './cases.ts';
 
 const HASH_OF_FROZEN = '9c45da1b799a603c167323bd7ed4f52034ec28ea5e04373045a9c11f1ddc5446';
 
@@ -94,6 +94,18 @@ describe('frozen eval cases', () => {
       // ASSERT
       expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket', 'architecture-round']);
       expect(problems).toEqual([]);
+    });
+    it('gives architecture-round its frozen reference page, and the other three cases none', () => {
+      // ARRANGE
+      const ids = ['ink', 'after-grill', 'ticket', 'architecture-round'];
+      const expected = [null, null, null, 'architecture-round/reference.html'];
+
+      // ACT
+      const references = ids.map(referenceOf);
+
+      // ASSERT
+      expect(references).toEqual(expected);
+      expect(existsSync(path.join(CASES, references[3]!))).toBe(true);
     });
   });
 

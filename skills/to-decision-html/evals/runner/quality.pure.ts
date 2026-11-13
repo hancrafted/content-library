@@ -16,7 +16,8 @@ export const VIEW_FILES = {
   text: { file: 'page.txt', about: "the page's visible text, with its detail opened" },
 } as const;
 
-const aboutFile = (file: string) =>
+/** What a view file shows, in a sentence that completes "the file holds ...". */
+export const aboutFile = (file: string) =>
   Object.values(VIEW_FILES).find((view) => view.file === file)?.about ?? 'part of the page';
 
 /** Fills a prompt template's `{{name}}` slots, `{{files}}` with the file list; an unfilled slot throws. */

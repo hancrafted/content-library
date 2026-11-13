@@ -88,6 +88,29 @@ export function consistencyNotes(rows: readonly CaseArmConsistency[], k: number)
   });
 }
 
+const VS_REFERENCE = 'vs-reference ';
+
+/**
+ * One line per case and arm graded against a reference page: the `vs-reference` items passed, summed over the runs.
+ * An item passes when the run is not worse than the reference in both orders.
+ */
+export function referenceNotes(runs: readonly BenchmarkRun[]): string[] {
+  const groups = new Map<string, BenchmarkRun[]>();
+  for (const run of runs) {
+    if (!run.expectations.some(({ text }) => text.startsWith(VS_REFERENCE))) continue;
+    const key = `${run.eval_id}\0${run.configuration}`;
+    groups.set(key, [...(groups.get(key) ?? []), run]);
+  }
+  return [...groups.values()]
+    .sort((a, b) => a[0].eval_id - b[0].eval_id || a[0].configuration.localeCompare(b[0].configuration))
+    .map((group) => {
+      const items = group.flatMap((run) => run.expectations.filter(({ text }) => text.startsWith(VS_REFERENCE)));
+      const passed = items.filter((item) => item.passed).length;
+      const n = group.length;
+      return `${group[0].eval_name ?? group[0].eval_id} · ${group[0].configuration}: vs-reference ${passed} of ${items.length} items not worse than the reference (${percent(passed / items.length)}) over ${n} run${n === 1 ? '' : 's'}`;
+    });
+}
+
 /** The per-assertion pass^k table appended to benchmark.md. */
 export function consistencyTable(rows: readonly CaseArmConsistency[], k: number): string {
   const lines = rows.flatMap(({ case: id, arm, runs, assertions }) =>

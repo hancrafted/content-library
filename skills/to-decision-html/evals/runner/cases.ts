@@ -21,6 +21,8 @@ interface ManifestCase {
   /** The judge's case items and the reader probe with its answer key; grading files the run never sees. */
   readonly checklist?: string;
   readonly probe?: string;
+  /** A page a person judged good, frozen beside the case; the reference grader compares runs with it. Runs never see it. */
+  readonly reference?: string;
   readonly hashes: Readonly<Record<string, string>>;
 }
 
@@ -72,6 +74,13 @@ export function loadCase(id: string): EvalCase {
 export function atFidelity(evalCase: EvalCase, rung: FidelityRung): EvalCase {
   const calibration = atRung(readFileSync(path.join(CASES, evalCase.calibration), 'utf8'), rung);
   return { ...evalCase, asked: askedOf(calibration), rewrites: { [evalCase.calibration]: calibration } };
+}
+
+/** The case's frozen reference page, relative to CASES; null when it has none. */
+export function referenceOf(id: string): string | null {
+  const entry = readManifest().cases.find((candidate) => candidate.id === id);
+  if (entry === undefined) throw new Error(`no eval case "${id}"`);
+  return entry.reference ?? null;
 }
 
 /** What the judge and the reader probe ask about a case's page: checklist.json's items and probe.json's questions. */
