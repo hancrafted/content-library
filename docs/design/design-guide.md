@@ -112,7 +112,7 @@ Suits an Episode whose argument runs from what everyone sees to what few look at
 - Zone colours are design tokens behind CSS variables, so the gradient is tuned by changing one value per zone, never per Slide.
 - A depth ruler holds one tile per Section, on bands for the zones. A Section Title shows the whole ruler: the view moves down and the Section's tile lights up. Every page Slide carries a slim rail at its left edge with that tile lit.
 - The Episode's scene is drawn flat, in a 2D side view, inside its zone. The iceberg is the frame, never a second analogy.
-- Motion is descent, once per Section; after that only the scene moves, and nothing loops at rest.
+- Motion is descent, once per Section; after that only the scene moves. Nothing loops at rest except one slow ambient loop per zone, in its scenery only (Surface: wind and the ship's rock; Sunlit: fish; Twilight: jellies; Midnight: the whale; Abyss: bubbles), paused off the active Slide and under reduced motion. The cast never loops. The modules and motion rules: `docs/adr/0025-scene-figures-are-deep-modules.md`.
 - `primary` marks the one thing to look at; the meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 - Text keeps its contrast at every depth.
 

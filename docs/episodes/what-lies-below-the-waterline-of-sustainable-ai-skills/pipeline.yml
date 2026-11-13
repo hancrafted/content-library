@@ -608,14 +608,18 @@ jobs:
         session: orchestrator
   - id: implement-iceberg-style
     stage: build
-    intent: 'Build the Iceberg style this Episode first uses, before any Section: the reusable zone token set in
+    intent: "Build the Iceberg style this Episode first uses, before any Section: the reusable zone token set in
       slide-shared/ (one CSS variable per zone, light and dark values, a Slide only names its zone), the shared depth
       ruler and slim left rail component (one tile per Section, plain zone label with the ocean term beneath), and a new
       `bubbles` ink profile for the Section-title descent, per the Iceberg style in docs/design/design-guide.md,
       docs/features/slide-transitions.md and the approved Spec. Han tunes the zone colours after seeing them render, so
-      each zone is one token.'
+      each zone is one token. Also, by docs/adr/0025-scene-figures-are-deep-modules.md: ZoneScene (sky with sun in light
+      and moon in dark, sea, rays, seabed, iceberg and the zone's one ambient loop, drawing the sea life and iceberg that
+      implement-scene-cast writes), Travel, the zone label's popover (metres and scientific name on hover, focus or tap),
+      and the Episode's page-level Chat app / Coding agent toggle held in the URL as ?view=coding."
     needs:
       - implement-episode-init
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -658,12 +662,60 @@ jobs:
         model: opus
         session: orchestrator
     port: 4002
+  - id: implement-scene-cast
+    stage: build
+    intent: "Build the scene figures by docs/adr/0025-scene-figures-are-deep-modules.md before any Section uses them:
+      the setting-free `character/` module (Character, poses.pure.ts with tests, emote and says bubble, shared preset
+      aiAgent), the `deep-sea-expedition/` cast (cast.ts captain and pilot presets, Robot, Ship, Console) and the sea
+      life and iceberg ZoneScene draws, under src/episodes/components/slide-shared/. Spawn four Opus subagents at medium
+      effort in parallel (Character with its three presets; Robot; Ship and Console; sea life and iceberg), each owning
+      its files, developing the approved Spec's low-poly figures. Then one Sonnet subagent builds the cast gallery with
+      /to-decision-html at .scratch/<slug>/cast/gallery.html, rendering the real components to static markup in every
+      preset, pose and mood, light and dark, beside the Spec's low-poly figure, its Save writing
+      .scratch/<slug>/cast/feedback.md. Stop for Han's picks; redraw what he does not pick; the job ends ok only when
+      every figure has his pick. Fable redraws are decided by Han after the first gallery."
+    needs:
+      - implement-episode-init
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - codebase-design
+          - to-decision-html
+          - visual-check
+          - commit
+        references:
+          - docs/adr/0025-scene-figures-are-deep-modules.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html
+          - docs/design/design-guide.md
+          - docs/features/slide-transitions.md
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+        references:
+          - docs/adr/0025-scene-figures-are-deep-modules.md
+          - docs/design/design-guide.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    port: 4012
   - id: implement-section-a-thought-experiment
     stage: build
-    intent: Build Section 1 of 8, "A thought experiment", of the Brief's Slides, at its placement marker.
+    intent: Build Section 1 of 8, "A thought experiment", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -705,10 +757,11 @@ jobs:
     port: 4003
   - id: implement-section-what-a-skill-is
     stage: build
-    intent: Build Section 2 of 8, "What a skill is", of the Brief's Slides, at its placement marker.
+    intent: Build Section 2 of 8, "What a skill is", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -750,10 +803,11 @@ jobs:
     port: 4004
   - id: implement-section-when-to-write-one
     stage: build
-    intent: Build Section 3 of 8, "When to write one", of the Brief's Slides, at its placement marker.
+    intent: Build Section 3 of 8, "When to write one", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -795,10 +849,11 @@ jobs:
     port: 4005
   - id: implement-section-the-label
     stage: build
-    intent: Build Section 4 of 8, "The label", of the Brief's Slides, at its placement marker.
+    intent: Build Section 4 of 8, "The label", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -840,10 +895,11 @@ jobs:
     port: 4006
   - id: implement-section-what-goes-inside
     stage: build
-    intent: Build Section 5 of 8, "What goes inside", of the Brief's Slides, at its placement marker.
+    intent: Build Section 5 of 8, "What goes inside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -885,10 +941,11 @@ jobs:
     port: 4007
   - id: implement-section-what-stays-beside
     stage: build
-    intent: Build Section 6 of 8, "What stays beside", of the Brief's Slides, at its placement marker.
+    intent: Build Section 6 of 8, "What stays beside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -930,10 +987,11 @@ jobs:
     port: 4008
   - id: implement-section-sharing-it
     stage: build
-    intent: Build Section 7 of 8, "Sharing it", of the Brief's Slides, at its placement marker.
+    intent: Build Section 7 of 8, "Sharing it", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
@@ -975,10 +1033,11 @@ jobs:
     port: 4009
   - id: implement-section-keeping-it-alive
     stage: build
-    intent: Build Section 8 of 8, "Keeping it alive", of the Brief's Slides, at its placement marker.
+    intent: Build Section 8 of 8, "Keeping it alive", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
+      - implement-scene-cast
     isolation: worktree
     outputs: []
     checks:
