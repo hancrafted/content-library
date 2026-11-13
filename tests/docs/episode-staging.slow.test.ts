@@ -1,6 +1,5 @@
 import { checkPipeline } from '@/pipeline/lib/episode-pipeline.pure';
 import { checkStagingFolder } from '@/pipeline/lib/episode-staging.pure';
-import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
@@ -8,7 +7,6 @@ import {
   perRunPipelines,
   pipelineContext,
   readFolder,
-  REVIEW_ASSET,
   stagingFolders,
 } from './episode-staging.fixture.ts';
 
@@ -22,11 +20,10 @@ describe('success cases', () => {
   it('finds no disagreement between the files of any staging folder or the sample Episode', () => {
     // ARRANGE
     const names = knownVisuals();
-    const asset = readFileSync(REVIEW_ASSET, 'utf8');
     const folders = Object.entries(stagingFolders());
     // ACT
     const findings = folders.flatMap(([where, folder]) =>
-      checkStagingFolder(readFolder(folder), names, asset).map((finding) => ({
+      checkStagingFolder(readFolder(folder), names).map((finding) => ({
         ...finding,
         file: `${where}/${finding.file}`,
       })),

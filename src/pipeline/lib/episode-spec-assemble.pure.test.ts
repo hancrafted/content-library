@@ -9,21 +9,48 @@ import { appendMetaVerified } from './staging-file.pure';
  * the Spec contract do, by role attributes, never by the helpers inside the module.
  */
 
-const FRAME = `<!doctype html>
-<html lang="en">
+/** A slotted Spec template: a page frame with the slots the assembler fills, the review form and two <template>s. */
+const TEMPLATE = `<!doctype html>
+<html lang="en" data-mode="decide">
   <head>
     <meta charset="utf-8" />
-    <title>Spec · Template</title>
+    <title data-slot="page-title">Spec · Template</title>
     <style>body{}</style>
+    <script type="application/json" id="spec-meta" data-slot="meta"></script>
   </head>
+  <body>
+    <div class="spec-shell">
+      <nav class="spec-outline" aria-label="Slides" data-slot="outline"></nav>
+      <main class="spec-page">
+        <header class="spec-masthead">
+          <p class="spec-kicker" data-slot="kicker"></p>
+          <h1 data-slot="heading"></h1>
+          <p data-slot="lede"></p>
+        </header>
+        <div class="spec-intro" data-slot="intro"></div>
+        <div data-slot="items"></div>
+      </main>
+    </div>
+    <form id="spec-review" method="post"><button type="submit">Save review</button></form>
+    <template data-template="item">
+      <article data-spec="slide" data-fidelity data-depth="simple">
+        <header class="spec-slide-head"><span class="spec-number" data-slot="number"></span><h3 data-slot="title"></h3></header>
+        <p class="spec-purpose" data-slot="purpose"></p>
+        <div data-slot="words"></div>
+        <div class="spec-options" data-slot="options"></div>
+        <textarea class="spec-note" form="spec-review" data-slot="note"></textarea>
+      </article>
+    </template>
+    <template data-template="option">
+      <figure data-spec="option" data-option data-recommended>
+        <div data-slot="stage"></div>
+        <figcaption data-slot="caption"></figcaption>
+        <details class="spec-build"><summary>Build notes</summary><div data-slot="build-notes"></div></details>
+        <label class="spec-pick"><input type="checkbox" form="spec-review" data-slot="pick" /> Pick <b data-slot="id"></b></label>
+      </figure>
+    </template>
+  </body>
 </html>
-`;
-
-const REVIEW_ASSET = `<!-- spec-review:start -->
-<form id="spec-review" method="post">
-  <button type="submit">Save review</button>
-</form>
-<!-- spec-review:end -->
 `;
 
 const BRIEF = `---
@@ -141,8 +168,7 @@ const FRAGMENTS = [
 ];
 
 const BASE = {
-  frame: FRAME,
-  reviewAsset: REVIEW_ASSET,
+  template: TEMPLATE,
   generated: { by: 'process:spec-assemble', at: '2026-10-12T12:00:00Z' },
 };
 const CARD_BRIEF = BRIEF.replace(
@@ -257,7 +283,7 @@ describe('success cases', () => {
     expect(slide.find('input[type="checkbox"][form="spec-review"][name="pick:spent-attention"]')).toHaveLength(
       optionIds.length,
     );
-    expect(slide.find('details.spec-build > [data-spec="build-notes"]')).toHaveLength(optionIds.length);
+    expect(slide.find('details.spec-build [data-spec="build-notes"]')).toHaveLength(optionIds.length);
     expect(slide.find('textarea[form="spec-review"][name="note:spent-attention"]')).toHaveLength(1);
     expect($('#visual-language textarea[name="note:visual-language"]')).toHaveLength(1);
     expect($('#episode-page').text()).toContain('Route.');
@@ -278,6 +304,83 @@ describe('success cases', () => {
     expect(title.find('input[name="pick:top"]')).toHaveLength(options);
     expect(html.indexOf('id="top"')).toBeLessThan(html.indexOf('data-spec="section"'));
     expect($('.spec-outline a[href="#top"]')).toHaveLength(1);
+  });
+
+  it('clones the item template once per Slide, Title slide included, with its item attributes set', () => {
+    // ARRANGE
+    const items = ['top', 'spent-attention', 'the-quiet-middle', 'trim-the-paste'];
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect(ids($, '[data-item]', 'data-item')).toEqual(items);
+    expect(ids($, '[data-item]', 'data-fidelity')).toEqual(items.map(() => 'mock'));
+    expect($('article#spent-attention').attr('data-item')).toBe('spent-attention');
+    expect($('article#top').attr('data-spec')).toBe('title-slide');
+    expect($('article#top').attr('data-number')).toBeUndefined();
+    expect($('#spent-attention .spec-number').text()).toBe('1');
+    expect($('#spent-attention h3').text()).toBe('Spent attention');
+  });
+
+  it('clones the Option template per fragment Option: its id, recommendation, mock, caption and pick slot', () => {
+    // ARRANGE
+    const expected = [
+      ['1a', ''],
+      ['1b', undefined],
+    ];
+    // ACT
+    const $ = page(FULL);
+    const options = $('#spent-attention figure[data-spec="option"]');
+    // ASSERT
+    expect(
+      options.map((_, figure) => [[$(figure).attr('data-option'), $(figure).attr('data-recommended')]]).get(),
+    ).toEqual(expected);
+    expect(options.first().find('[data-spec="mock"]').text()).toBe('Mock 1a');
+    expect(options.first().find('figcaption').text()).toBe('1a A reason. Build cost: Scene.');
+    expect(options.first().find('.spec-pick b').text()).toBe('1a');
+    expect(options.first().find('input[name="pick:spent-attention"]').attr('value')).toBe('1a');
+  });
+
+  it('keeps the echoes of a Title-slide Option in its stage', () => {
+    // ARRANGE
+    const echoes = ['why-it-forgets', 'spend-it-well'];
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect(ids($, '#top figure[data-option="0a"] [data-spec="echo"]', 'data-section')).toEqual(echoes);
+  });
+
+  it('sets data-revision to the Gate round: one past the feedback rounds saved so far', () => {
+    // ARRANGE
+    const round = (n: number) => feedback(n, '- `top` · design — picked: 0a');
+    // ACT
+    const revisions = [[], [round(1)], [round(1), round(2)]].map((rounds) =>
+      page({ ...FULL, feedback: rounds })('html').attr('data-revision'),
+    );
+    // ASSERT
+    expect(revisions).toEqual(['1', '2', '3']);
+  });
+
+  it('leaves no template, slot marker or placeholder behind in the page', () => {
+    // ARRANGE
+    const html = assembleSpec(FULL);
+    // ACT
+    const $ = load(html);
+    // ASSERT
+    expect($('template')).toHaveLength(0);
+    expect($('[data-slot]')).toHaveLength(0);
+    expect($('[data-item=""], [data-option=""]')).toHaveLength(0);
+  });
+
+  it('drops the Option and note slots of a Slide that has no Options yet, but keeps its item attributes', () => {
+    // ARRANGE
+    const expected = { item: 'spent-attention', fidelity: 'mock' };
+    // ACT
+    const $ = page(BRIEF_ONLY);
+    const slide = $('#spent-attention');
+    // ASSERT
+    expect(slide.find('.spec-options, .spec-note')).toHaveLength(0);
+    expect(slide.find('.spec-purpose').text()).toContain('the window fills');
+    expect({ item: slide.attr('data-item'), fidelity: slide.attr('data-fidelity') }).toEqual(expected);
   });
 
   it('locks a Slide with exactly one pick: data-picked on the Option, checked on its box alone', () => {
@@ -345,7 +448,7 @@ describe('success cases', () => {
     const pages = [assembleSpec(FULL), assembleSpec({ ...FULL, feedback: [round] })];
     // ACT
     const findings = pages.flatMap((html) =>
-      checkSpec({ 'spec/spec.html': html, 'dossier.md': DOSSIER }, REVIEW_ASSET).map(({ message }) => message),
+      checkSpec({ 'spec/spec.html': html, 'dossier.md': DOSSIER }).map(({ message }) => message),
     );
     // ASSERT
     expect(findings).toEqual([]);
@@ -415,6 +518,24 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses a template with a slot the assembler does not fill, naming it', () => {
+    // ARRANGE
+    const template = TEMPLATE.replace('data-slot="lede"', 'data-slot="ledger"');
+    // ACT
+    const run = () => assembleSpec({ ...FULL, template });
+    // ASSERT
+    expect(run).toThrow(/"ledger"/);
+  });
+
+  it('refuses a template without its item or Option template', () => {
+    // ARRANGE
+    const template = TEMPLATE.replace('data-template="option"', 'data-template="choice"');
+    // ACT
+    const run = () => assembleSpec({ ...FULL, template });
+    // ASSERT
+    expect(run).toThrow(/"option"/);
+  });
+
   it('refuses once the existing Spec is approved', () => {
     // ARRANGE
     const approved = appendMetaVerified(assembleSpec(FULL), { by: 'human:han', at: '2026-10-12T14:00:00Z' });

@@ -48,7 +48,7 @@ const fragment = readFileSync(fragmentFile, 'utf8');
 const dir = fragmentFile.replace(/\.html$/, '') + '.preview';
 mkdirSync(dir, { recursive: true });
 
-const frame = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-frame.html'), 'utf8');
+const frame = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-template.html'), 'utf8');
 writeFileSync(path.join(dir, 'index.html'), previewPage(frame, fragment));
 await buildDesignCss(dir);
 

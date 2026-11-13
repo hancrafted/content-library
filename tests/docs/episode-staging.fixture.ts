@@ -16,8 +16,6 @@ export const RUNS_CSV = path.join(EPISODES, 'runs.csv');
 export const SKILL_FOLDERS = [path.join(ROOT, '.agents/skills'), path.join(ROOT, 'skills')];
 export const SKILL_FOLDER = 'skills/new-episode';
 export const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
-/** The review form every Spec page inlines. */
-export const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.html');
 
 /*
  * Files the template reads that later tickets create: #86 the llm-wiki index,
@@ -26,8 +24,13 @@ export const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.ht
  * lands: a test fails until you do.
  */
 export const PENDING: readonly string[] = [];
-/** Files of retired jobs, which a frozen per-run pipeline may still name (scaffold-pipeline, retired by #229). */
-export const RETIRED: readonly string[] = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
+/** Files a frozen per-run pipeline may still name: of retired jobs (scaffold-pipeline, #229) or replaced assets. */
+export const RETIRED: readonly string[] = [
+  `${SKILL_FOLDER}/references/scaffold-pipeline.md`,
+  // The Spec template replaced these two assets (#562); an approved per-run pipeline keeps the reads it was approved with.
+  `${SKILL_FOLDER}/assets/spec-frame.html`,
+  `${SKILL_FOLDER}/assets/spec-review.html`,
+];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 export function readFolder(folder: string): Record<string, string> {

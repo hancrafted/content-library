@@ -32,8 +32,8 @@ function checkSet(figure: Selection, sections: readonly string[]): string[] {
     .map((echo) => echo.attribs['data-section'] ?? '');
   return [
     ...unless(
-      figure.children('[data-spec="mock"]').length > 0,
-      `${where} has no mock of the Title slide: a <div data-spec="mock"> directly in its figure.`,
+      figure.find('[data-spec="mock"]').not('[data-spec="echo"] [data-spec="mock"]').length > 0,
+      `${where} has no mock of the Title slide: a <div data-spec="mock"> in its figure, beside the echoes.`,
     ),
     ...unless(
       echoes.join() === sections.join(),
