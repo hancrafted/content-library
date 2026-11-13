@@ -47,3 +47,7 @@ Commit the entry on its own with `/commit`, so it can be cherry-picked to `main`
 7. **No place for feedback on the page as a whole.** Han: "we need a general feedback text area."
    - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: all 125 text fields belong to an item or an Option. None takes a comment on the page as a whole.
    - **Proposed fix:** `references/feedback-contract.md` adds one page-level comment field beside the Next action, carried in the reply's `json` block as a top-level `comment`, and cleared by Reset all.
+
+8. **Rendering could not be switched between devices.** Han, as a wish: "ideally there is a sticky top toolbar that can let the user configure the rendering like desktop, laptop, tablet, mobile, vertical shorts."
+   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: preview controls, where present, sit inside single items. No page-wide control renders every preview at another device size.
+   - **Proposed fix:** step 4 adds a sticky top toolbar whose render presets, the caller names, apply to every preview on the page at once. The skill stays free of domain knowledge: `/new-episode`'s Spec designer supplies the Episode's presets, desktop, laptop, tablet, mobile and vertical Shorts (1080 × 1920).
