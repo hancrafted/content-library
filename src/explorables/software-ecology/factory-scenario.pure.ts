@@ -17,8 +17,6 @@ import type { Bundle, Preset, Settings, StepSet, TourStep } from './software-eco
 import { startBacklogOf } from './start-backlog.pure.ts';
 import { startSettings } from './start-settings.pure.ts';
 
-export { stepsOf };
-
 export interface Check {
   readonly key: string;
   readonly test: string;

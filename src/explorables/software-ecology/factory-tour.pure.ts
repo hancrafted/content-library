@@ -7,10 +7,10 @@
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { beatsOf } from './factory-beats.pure.ts';
+import { beatsOf, stepsOf, type Beat } from './factory-beats.pure.ts';
 import { DAYS, DTW } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
-import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
+import { settingsAfter, type Check } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
@@ -44,7 +44,7 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
  * the mean over its last WINDOW weeks (grill 11 Q224).
  */
 const aimAtStep = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
-  const b = beatsOf(x.p, x.t0k)[x.i] as ReturnType<typeof beatsOf>[number];
+  const b = beatsOf(x.p, x.t0k)[x.i] as Beat;
   run.set(settingsAfter(b.set, run.topology.B, run.settings));
   run.aim({ at: b.end, sampling: createSampler(b) });
 };

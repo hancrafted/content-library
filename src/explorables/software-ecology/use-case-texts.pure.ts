@@ -18,8 +18,14 @@ export const TEXT_SUFFIX: Readonly<Record<keyof UseCaseTexts, string>> = {
 };
 
 /** The names of a use case's files in this Explorable's folder. */
-export const textFileNames = (id: string): UseCaseTexts => ({
-  data: `${id}${TEXT_SUFFIX.data}`,
-  en: `${id}${TEXT_SUFFIX.en}`,
-  de: `${id}${TEXT_SUFFIX.de}`,
+export const textFileNames = (id: string): UseCaseTexts => mapTexts((suffix) => `${id}${suffix}`, TEXT_SUFFIX);
+
+/** Each text of `texts` through `f`. */
+export const mapTexts = <T, U>(
+  f: (t: T) => U,
+  texts: Readonly<Record<keyof UseCaseTexts, T>>,
+): Record<keyof UseCaseTexts, U> => ({
+  data: f(texts.data),
+  en: f(texts.en),
+  de: f(texts.de),
 });

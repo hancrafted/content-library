@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { textFileNames } from './use-case-texts.pure.ts';
+import { mapTexts, textFileNames } from './use-case-texts.pure.ts';
 
 describe('success cases', () => {
   it('names a use case’s data file and its words file per locale', () => {
@@ -9,6 +9,16 @@ describe('success cases', () => {
     const names = textFileNames('tire');
     // ASSERT
     expect(names).toEqual(expected);
+  });
+
+  it('maps every text of a use case through one function', () => {
+    // ARRANGE
+    const texts = { data: 'd', en: 'e', de: 'g' };
+    const expected = { data: 'D', en: 'E', de: 'G' };
+    // ACT
+    const mapped = mapTexts((t) => t.toUpperCase(), texts);
+    // ASSERT
+    expect(mapped).toEqual(expected);
   });
 });
 

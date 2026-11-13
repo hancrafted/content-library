@@ -4,7 +4,7 @@
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo } from 'react';
-import { stepsOf } from './factory-scenario.pure.ts';
+import { stepsOf } from './factory-beats.pure.ts';
 import type { Choice } from './factory-toolbar.client';
 import type { ScenarioChoice } from './scenario-menu';
 import type { Words } from './software-ecology-words.types';

@@ -14,7 +14,7 @@ import {
 } from './factory-scenario.pure.ts';
 import type { Bundle, CatalogWords } from './software-ecology.types';
 import { bundleOf, readCatalog, readConfig } from './use-case-file.ts';
-import { textFileNames, type UseCaseTexts } from './use-case-texts.pure.ts';
+import { mapTexts, textFileNames, type UseCaseTexts } from './use-case-texts.pure.ts';
 import { presetName, scenarioWords, type WordsIn } from './use-case-words.pure.ts';
 
 /** What to run: a use case, one of its scenarios, and one seed or a number of seeds in a row from the shipped one. */
@@ -51,8 +51,7 @@ const fileOf = (read: ReadFile, name: string): string => {
 /** A shipped use case's texts, its files read by `read`. */
 export const readTexts = (id: string, read: ReadFile): UseCaseTexts => {
   if (!/^[\w-]+$/.test(id)) throw new Error(`no use case ${id}`);
-  const names = textFileNames(id);
-  return { data: fileOf(read, names.data), en: fileOf(read, names.en), de: fileOf(read, names.de) };
+  return mapTexts((name) => fileOf(read, name), textFileNames(id));
 };
 
 /** A shipped use case, its files read by `read`. */
