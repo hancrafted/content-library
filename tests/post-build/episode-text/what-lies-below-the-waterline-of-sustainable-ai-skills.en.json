@@ -1,7 +1,7 @@
 {
   "title": "What lies below the waterline of sustainable AI skills · hancrafted",
   "description": "When a task you keep explaining should become a skill, how to write its description as the moment you'd need it, what goes into the skill and what stays in project context, and what a shared skill needs to stay right: an owner, a version, tests and a retirement date.",
-  "toc": "Episodes Collapse contents What lies below the waterline of sustainable AI skills 1 A thought experiment 2 What a skill is 3 When to write one 4 The description 5 What context goes inside 6 What context stays beside 7 Sharing it 8 Keeping it alive Open contents : Contents Episodes What lies below the waterline of sustainable AI skills 1 A thought experiment 2 What a skill is 3 When to write one 4 The description 5 What context goes inside 6 What context stays beside 7 Sharing it 8 Keeping it alive",
+  "toc": "Episodes Collapse contents What lies below the waterline of sustainable AI skills 1 A thought experiment An AI model that forgets every morning A skill hands the AI your procedure 2 What a skill is 3 When to write one 4 The description 5 What context goes inside 6 What context stays beside 7 Sharing it 8 Keeping it alive Open contents : Contents Episodes What lies below the waterline of sustainable AI skills 1 A thought experiment An AI model that forgets every morning A skill hands the AI your procedure 2 What a skill is 3 When to write one 4 The description 5 What context goes inside 6 What context stays beside 7 Sharing it 8 Keeping it alive",
   "slides": [
     {
       "id": "top",
@@ -10,6 +10,14 @@
     {
       "id": "a-thought-experiment",
       "text": "A thought experiment Surface AI model Unless you write it down, every conversation with AI starts from zero Your pilot is the AI model: ten years of skill, no memory of yesterday. Each session begins with a fresh context window Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+    },
+    {
+      "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+      "text": "A thought experiment (1/2) Page 1 of 2 An AI model that forgets every morning Unless you write it down, every new conversation with AI starts from zero on how you work. On the control-room wall The AI model: keeps what it learnt in training AI model Ten years of projects with the best pilot you know. Day 1 · 07:00 Session 1 · fresh context window Nice to meet you. The sediment sample: first, hold 2 m above the seabed… Day 2 · 07:00 Session 2 · fresh context window Nice to meet you. The sediment sample, again: first, hold 2 m… Day 3 · 07:00 Session 3 · fresh context window Nice to meet you. Collect sediment sample. Step one… Day 4, before he wakes up What would you do? You've explained this to the AI a hundred times. It has heard it once. Procedure card Title: Use when: 1 . 2 . 3 . 4 . In the story: Your pilot is the AI model: ten years of skill, no memory of yesterday. Claude Code: each session begins with a fresh context window; only written files carry knowledge across."
+    },
+    {
+      "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+      "text": "A thought experiment (2/2) Page 2 of 2 A skill hands the AI your procedure When a request matches its description, or you call it by name, the AI reads that one skill into the context. Grab some mud here before we move on. 1 1 · Skill procedure card 2 2 · Description index line 3 3 · Project instructions project brief 1 · Skill Collect sediment sample Hold the robot 2 m above the seabed Find a flat patch on camera Push the corer in, seal, lift Your proven procedure. It enters the context when a request matches its description, or when you call it by name. ( ) collect-sediment-sample/SKILL.md # Collect sediment sample 1. Hold the robot 2 m above the seabed 2. Find a flat patch on camera 3. Push the corer in, seal, lift Claude reads SKILL.md when a request matches the description, and only then does it enter the context. ( ) 2 · Description Collect sediment sample Takes a sediment core. Use when we reach a new site and need a sample from the seabed. One line that tells the AI what the skill is for. collect-sediment-sample/SKILL.md --- name: collect-sediment-sample description: Takes a sediment core. Use when we reach a new site and need a sample from the seabed. --- The name and description at the top of the file. 3 · Project instructions Coastal shelf survey Sites 1 to 7 Samples go to the lab database What is true for this project, loaded in every conversation. AGENTS.md # Coastal shelf survey - Sites 1 to 7 - Samples go to the lab database The project instructions file the agent reads, CLAUDE.md in Claude Code. In the story: The pilot pulls one card from the dive manual when the dive needs it."
     },
     {
       "id": "what-a-skill-is",
@@ -46,6 +54,14 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     { "id": "a-thought-experiment", "text": "A thought experiment No speaker notes for this Slide." },
+    {
+      "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+      "text": "An AI model that forgets every morning Each AI conversation starts fresh: Mollick's forgetful coworker Ethan Mollick advises treating AI \"like an infinitely patient new coworker who forgets everything you tell them each new conversation\" 1 . Claude Code sessions each begin \"with a fresh context window\" and only written files carry knowledge across 2 . \"Amnesiac\" is the Episode's word, not Mollick's. Sources (2) Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024) ( opens in a new tab ) oneusefulthing.org Anthropic, How Claude remembers your project ( opens in a new tab ) code.claude.com"
+    },
+    {
+      "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+      "text": "A skill hands the AI your procedure A skill spares you the repeat Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations 1 . When a request matches a skill's description, Claude reads SKILL.md and only then does that content enter the context 1 . Calling a skill by name loads it too, as the Slide on two ways to call a skill shows. Sources (1) Anthropic, Agent Skills overview ( opens in a new tab ) platform.claude.com"
+    },
     { "id": "what-a-skill-is", "text": "What a skill is No speaker notes for this Slide." },
     { "id": "when-to-write-one", "text": "When to write one No speaker notes for this Slide." },
     { "id": "the-label", "text": "The description No speaker notes for this Slide." },
@@ -62,6 +78,14 @@
     {
       "id": "a-thought-experiment",
       "text": "A thought experiment 0:00 – 0:31 You are the captain Imagine you work with an AI model that is brilliant at its job, the most capable colleague you have. I will give it a picture, because we need one all the way down: you are the captain of a coastal research project, and the model is your pilot of ten years, who steers a diving robot on a cable from the control room on deck while you decide where the project goes next. 0:31 – 0:53 One settled condition Your pilot has one condition, and it never changes. He forms no new memories overnight, but he keeps everything he ever learnt as a pilot, every rule of the trade. That is an AI model: what it learnt in training stays, and what you told it in yesterday's conversation is gone."
+    },
+    {
+      "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+      "text": "An AI model that forgets every morning 0:00 – 0:31 Three mornings So the next morning you open a new conversation, and the model knows nothing of yesterday. In our picture the pilot greets you with \"Nice to meet you\", you explain how to take the sediment sample step by step, and the robot waits on deck while you talk. The morning after, it is the same greeting and the same explanation, and by the third morning you could recite it in your sleep. 0:31 – 0:45 The hook That is what working with AI feels like today, because every conversation starts from zero on how you work. You've explained this to the AI a hundred times. It has heard it once. 0:45 – 1:09 What would you do So here is my question, and I would like your honest answer: if you worked with this model for a whole season, what would you do about it? If you're with me in a workshop, type it into the chat now. If you're watching the recording, pause here and answer out loud. I'll come back to it."
+    },
+    {
+      "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+      "text": "A skill hands the AI your procedure 0:00 – 0:32 The answer Most people land on the same idea within a minute: write it down. Write the procedure once, keep it where the model can find it, and let the model read it when the task comes up, instead of you explaining it again every morning. That is a skill, and in our picture it is a procedure card in the dive manual at the console. The rest of this Episode is about doing it well. 0:32 – 0:58 Three things to remember Hold on to three terms, because we return to them all the way down. The skill is the procedure itself, the card. Its description is the one line that tells the model what the skill is for, an entry in the manual's index. And the project instructions hold what is true for this one project, the project brief on the wall. 0:58 – 1:21 The card slides out And here is the part that matters most: the model does not read every skill you have. It reads the descriptions, and it opens one skill when the task needs it, the way one card comes out of the manual when the dive needs it. (pause) That is the picture for everything that follows."
     },
     {
       "id": "what-a-skill-is",

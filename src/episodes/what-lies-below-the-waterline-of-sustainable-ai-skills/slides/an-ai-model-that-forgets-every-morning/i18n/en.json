@@ -1,0 +1,80 @@
+{
+  "title": "An AI model that forgets every morning",
+  "caption": "Unless you write it down, every new conversation with AI starts from zero on how you work.",
+  "strip": "Comic strip, five panels",
+  "photo": {
+    "label": "On the control-room wall",
+    "codingLabel": "The AI model: keeps what it learnt in training",
+    "caption": "Ten years of projects with the best pilot you know."
+  },
+  "aiTag": "AI model",
+  "days": {
+    "d1": {
+      "label": "Day 1 · 07:00",
+      "sessionLabel": "Session 1 · fresh context window",
+      "captainLine": "The sediment sample: first, hold 2 m above the seabed…"
+    },
+    "d2": {
+      "label": "Day 2 · 07:00",
+      "sessionLabel": "Session 2 · fresh context window",
+      "captainLine": "The sediment sample, again: first, hold 2 m…"
+    },
+    "d3": {
+      "label": "Day 3 · 07:00",
+      "sessionLabel": "Session 3 · fresh context window",
+      "captainLine": "Collect sediment sample. Step one…"
+    }
+  },
+  "greeting": "Nice to meet you.",
+  "questionDay": "Day 4, before he wakes up",
+  "question": "What would you do?",
+  "questionBody": "You've explained this to the AI a hundred times. It has heard it once.",
+  "card": {
+    "label": "Procedure card",
+    "title": "Title:",
+    "useWhen": "Use when:",
+    "steps": "Blank steps to fill in"
+  },
+  "analogyLead": "In the story:",
+  "analogy": "Your pilot is the AI model: ten years of skill, no memory of yesterday.",
+  "agent": {
+    "caption": "Claude Code: each session begins with a fresh context window; only written files carry knowledge across."
+  },
+  "alt": {
+    "photo": "A framed photo on the control-room wall: you and the pilot on the deck of the research ship, ten years of projects; the pilot is tagged AI model.",
+    "morning": "Day {day}, 07:00 in the control room: the captain explains the sediment sample, the pilot turns from his console and greets her as a stranger; through the window the robot sits idle on deck. {mugs, plural, one {# coffee mug} other {# coffee mugs}} on the console."
+  },
+  "notes": {
+    "each-ai-conversation-starts-fresh": {
+      "header": "Each AI conversation starts fresh: Mollick's forgetful coworker",
+      "description": "Ethan Mollick advises treating AI \"like an infinitely patient new coworker who forgets everything you tell them each new conversation\" [1]. Claude Code sessions each begin \"with a fresh context window\" and only written files carry knowledge across [2]. \"Amnesiac\" is the Episode's word, not Mollick's.",
+      "sources": {
+        "mollick-good-enough-prompting": {
+          "title": "Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024)"
+        },
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-mornings": {
+        "title": "Three mornings",
+        "keywords": "",
+        "script": "So the next morning you open a new conversation, and the model knows nothing of yesterday. In our picture the pilot greets you with \"Nice to meet you\", you explain how to take the sediment sample step by step, and the robot waits on deck while you talk. The morning after, it is the same greeting and the same explanation, and by the third morning you could recite it in your sleep."
+      },
+      "the-hook": {
+        "title": "The hook",
+        "keywords": "",
+        "script": "That is what working with AI feels like today, because every conversation starts from zero on how you work. You've explained this to the AI a hundred times. It has heard it once."
+      },
+      "what-would-you-do": {
+        "title": "What would you do",
+        "keywords": "",
+        "script": "So here is my question, and I would like your honest answer: if you worked with this model for a whole season, what would you do about it? If you're with me in a workshop, type it into the chat now. If you're watching the recording, pause here and answer out loud. I'll come back to it."
+      }
+    }
+  }
+}
