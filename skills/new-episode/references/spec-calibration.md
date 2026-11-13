@@ -72,4 +72,12 @@ Preset `redesign`. A round saved with no `next` line is the one case to ask in c
 
 ## Regenerating the template
 
-The template is hand-written for now. Regenerating it from this calibration with `to-decision-html` around the sample Episode, with the freshness test that points here, is the follow-up [#565](https://github.com/hancrafted/content-library/issues/565).
+A test (`tests/docs/spec-template-fresh.test.ts`) fails when `to-decision-html` or this file has changed since the template was generated. The template records a hash of its sources in `<meta name="spec-template-source-hash">`; the hash covers the skill's `SKILL.md`, every file under the skill's `references/` and this file without this section. Regenerate the template, then record the new hash:
+
+1. Run `/to-decision-html` in mode `decide` with this calibration as the caller's inputs and the Slides of [the sample Episode](../assets/sample-episode/brief.md) as the items, each with two or three Options at fidelity `mock`. The caller owns the frame: the skill writes the page frame, the two `<template>`s and their slots from [Template and slots](#template-and-slots).
+2. Write the result to `assets/spec-template.html`. Keep every `data-slot` and `data-template` name this file lists, and the review form's fields from [Saving the review](#saving-the-review).
+3. Run `npm run episode:spec-template-hash` and write its output as the `content` of `<meta name="spec-template-source-hash">` in the template's `<head>`.
+4. Reassemble the sample Spec, `assets/sample-episode/spec/spec.html`, from the new template with `npm run episode:spec-assemble`.
+5. Run `npm run verify`, then commit the template and the sample Spec together.
+
+Never copy a hash in without step 1: the hash states that the template was generated from these sources.

@@ -49,6 +49,7 @@
     "episode:spec": "node skills/new-episode/scripts/spec.ts",
     "episode:spec-assemble": "node skills/new-episode/scripts/spec-assemble.ts",
     "episode:spec-preview": "node skills/new-episode/scripts/spec-preview.ts",
+    "episode:spec-template-hash": "node skills/new-episode/scripts/spec-template-hash.ts",
     "episode:archive": "node skills/episode-promote/scripts/archive.ts",
     "episode:text": "node skills/episode-promote/scripts/episode-text.ts",
     "episode:harvest": "node skills/episode-promote/scripts/harvest-report.ts",
