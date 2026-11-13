@@ -102,6 +102,44 @@ describe('success cases', () => {
     expect(result).toEqual({ kind: 'saved', file: 'feedback/02/feedback.md', text: expected });
   });
 
+  it('writes the general comment as a page item and the Next action as a gate item, after the Visual language note', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+      ['note:visual-language', 'More accent.'],
+      ['note:page', 'Too many\nbars overall.'],
+      ['next', 'redesign'],
+    ];
+    const expected = [
+      ...header(1),
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: 2b',
+      '- `visual-language` · design — More accent.',
+      '- `page` · design — Too many bars overall.',
+      '- `next` · gate — redesign',
+      '',
+    ].join('\n');
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+  });
+
+  it('approves when every Slide, the Title slide included, has a pick', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+      ['next', 'approve'],
+    ];
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
+    // ASSERT
+    expect(result.kind === 'saved' ? result.text : '').toContain('- `next` · gate — approve\n');
+  });
+
   it('numbers the next round one past the highest round folder', () => {
     // ARRANGE
     const folders = ['01', '03', '02', 'notes.txt'];
@@ -167,6 +205,44 @@ describe('failure cases', () => {
       faults: [
         { slide: 'quiet', message: 'Slide 2 "quiet" has no pick and no note: tick an Option or say what to try.' },
       ],
+    };
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('refuses approve while Slides have no pick, naming every one of them, a note or not', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:spent', '1a'],
+      ['note:quiet', 'Try a heat strip.'],
+      ['note:top', 'Something else.'],
+      ['next', 'approve'],
+    ];
+    const expected = {
+      kind: 'rejected',
+      faults: [
+        { slide: 'top', message: 'The Title slide has no pick: pick an Option before you approve.' },
+        { slide: 'quiet', message: 'Slide 2 "quiet" has no pick: pick an Option before you approve.' },
+      ],
+    };
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('refuses a Next action that is neither redesign nor approve', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+      ['next', 'ship'],
+    ];
+    const expected = {
+      kind: 'rejected',
+      faults: [{ slide: 'next', message: 'The Next action "ship" is neither redesign nor approve.' }],
     };
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });

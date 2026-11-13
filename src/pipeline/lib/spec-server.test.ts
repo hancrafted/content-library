@@ -78,6 +78,24 @@ describe('success cases', () => {
     expect(saved).toContain('- `brief--style` · design — Sober, please.\n');
   });
 
+  it('saves the general comment and the Next action as page and next items of the round', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2a'],
+      ['note:page', 'Calmer overall.'],
+      ['next', 'approve'],
+    ];
+    const expectedTail = '- `page` · design — Calmer overall.\n- `next` · gate — approve\n';
+    // ACT
+    await post(base, fields);
+    const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
+    // ASSERT
+    expect(saved).toContain(expectedTail);
+  });
+
   it('serves the Spec page at the root', async () => {
     // ARRANGE
     const { base } = await serve();
@@ -209,6 +227,28 @@ describe('failure cases', () => {
     ];
     const expectedStatus = 400;
     const expectedFault = 'Slide 2 "quiet" has no pick and no note';
+    // ACT
+    const response = await post(base, fields);
+    const body = await response.text();
+    const after = feedbackFolders(folder);
+    // ASSERT
+    expect(response.status).toBe(expectedStatus);
+    expect(body).toContain(expectedFault);
+    expect(after).toEqual(before);
+  });
+
+  it('answers approve while a Slide has no pick with 400 naming the Slide, and writes nothing', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const before = feedbackFolders(folder);
+    const fields: [string, string][] = [
+      ['pick:top', '0b'],
+      ['pick:spent', '1b'],
+      ['note:quiet', 'Try something else.'],
+      ['next', 'approve'],
+    ];
+    const expectedStatus = 400;
+    const expectedFault = 'Slide 2 "quiet" has no pick: pick an Option before you approve.';
     // ACT
     const response = await post(base, fields);
     const body = await response.text();

@@ -38,6 +38,11 @@ function pad(round: number): string {
 }
 
 const VISUAL_LANGUAGE = 'visual-language';
+/** The general comment on the Spec as a whole, `note:page`, and the field that carries the Next action. */
+const PAGE = 'page';
+const NEXT = 'next';
+/** What happens after the Gate; the `next` item carries one of these. */
+const NEXT_ACTIONS: readonly string[] = ['redesign', 'approve'];
 const FIELD = /^(pick|note):(.+)$/;
 const ROUND_FOLDER = /^\d+$/;
 
@@ -71,22 +76,37 @@ function reviewedSlides({ slides, titleSlide }: Review): Reviewed[] {
   ];
 }
 
-/** The faults that refuse the round: picks and notes for Slides the Spec lacks, unknown Options, a Slide left blank. */
-function faultsOf(review: Review, picks: (slug: string) => string[], note: (slug: string) => string): Fault[] {
+/** What the posted form says: the picks and note per field slug, and the Next action if one was posted. */
+interface Posted {
+  picks: (slug: string) => string[];
+  note: (slug: string) => string;
+  next: string | undefined;
+}
+
+/** The faults of one reviewed Slide: an unknown Option, no pick under approve, or no pick and no note. */
+function slideFaults({ slug, options, where }: Reviewed, { picks, note, next }: Posted): Fault[] {
+  const unknown = picks(slug).filter((pick) => !options.includes(pick));
+  if (unknown.length > 0) return unknown.map((pick) => ({ slide: slug, message: `${where} has no Option ${pick}.` }));
+  if (next === 'approve' && picks(slug).length === 0)
+    return [{ slide: slug, message: `${where} has no pick: pick an Option before you approve.` }];
+  if (picks(slug).length === 0 && note(slug) === '')
+    return [{ slide: slug, message: `${where} has no pick and no note: tick an Option or say what to try.` }];
+  return [];
+}
+
+/** The faults that refuse the round: a Next action unknown, Slides lacking picks or notes, unknown Options, strays. */
+function faultsOf(review: Review, posted: Posted): Fault[] {
   const reviewed = reviewedSlides(review);
-  const known = new Set([VISUAL_LANGUAGE, ...(review.brief ?? []), ...reviewed.map(({ slug }) => slug)]);
+  const known = new Set([VISUAL_LANGUAGE, PAGE, ...(review.brief ?? []), ...reviewed.map(({ slug }) => slug)]);
   const strays = [
     ...new Set(review.fields.flatMap(([name]) => FIELD.exec(name)?.[2] ?? []).filter((slug) => !known.has(slug))),
   ];
+  const { next } = posted;
   return [
-    ...reviewed.flatMap(({ slug, options, where }): Fault[] => {
-      const unknown = picks(slug).filter((pick) => !options.includes(pick));
-      if (unknown.length > 0)
-        return unknown.map((pick) => ({ slide: slug, message: `${where} has no Option ${pick}.` }));
-      if (picks(slug).length === 0 && note(slug) === '')
-        return [{ slide: slug, message: `${where} has no pick and no note: tick an Option or say what to try.` }];
-      return [];
-    }),
+    ...(next === undefined || NEXT_ACTIONS.includes(next)
+      ? []
+      : [{ slide: NEXT, message: `The Next action "${next}" is neither redesign nor approve.` }]),
+    ...reviewed.flatMap((slide) => slideFaults(slide, posted)),
     ...strays.map((slug) => ({
       slide: slug,
       message: `The Spec has no Slide "${slug}": reload the page and review again.`,
@@ -121,7 +141,8 @@ export function reviewToFeedback(review: Review): ReviewResult {
   const values = (name: string) => fields.filter(([key]) => key === name).map(([, value]) => value);
   const picks = (slug: string) => [...new Set(values(`pick:${slug}`))];
   const note = (slug: string) => oneLine(values(`note:${slug}`).join(' '));
-  const faults = faultsOf(review, picks, note);
+  const next = values(NEXT).at(-1);
+  const faults = faultsOf(review, { picks, note, next });
   if (faults.length > 0) return { kind: 'rejected', faults };
   const withNote = (item: string, text: string) => (text === '' ? item : `${item} — ${text}`);
   const items = reviewedSlides(review).map(({ slug, anchor }) => {
@@ -135,6 +156,8 @@ export function reviewToFeedback(review: Review): ReviewResult {
     items.push(`- \`${key}\` · design — ${note(key)}`);
   const visualLanguage = note(VISUAL_LANGUAGE);
   if (visualLanguage !== '') items.push(`- \`${VISUAL_LANGUAGE}\` · design — ${visualLanguage}`);
+  if (note(PAGE) !== '') items.push(`- \`${PAGE}\` · design — ${note(PAGE)}`);
+  if (next !== undefined) items.push(`- \`${NEXT}\` · gate — ${next}`);
   const text = feedbackText(round, now, items);
   return { kind: 'saved', file: `feedback/${pad(round)}/feedback.md`, text };
 }
