@@ -31,3 +31,7 @@ Commit the entry on its own with `/commit`, so it can be cherry-picked to `main`
      - Step 3 says an item leads at the level the reader decides at. When the decision is about code, the simple view names the principle or pattern each Option applies, its benefit, its cost and its impact, with a before-and-after diagram. The detailed layer teaches the principle (what it means, where it comes from, why it helps here) and then gives the files affected.
      - The Software architecture row changes to match.
      - The skill stays free of domain knowledge: the caller supplies the principles, and the skill only demands that the page lead with them.
+
+4. **A Slide preview stayed small on a wide screen.** Han: "for slide preview, the content area needs to be able to grow up to full HD width" when the screen allows it, such as an ultrawide.
+   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: 28 items. At 2560 × 1440 the main column stops at 1192 px, 47% of the viewport, and the page sits centred with about 540 px empty on each side, so no Slide preview can grow past 1192 px.
+   - **Proposed fix:** step 4 lets a visual with a design size, which the caller names (a Slide at 1920 × 1080), grow to that width when the viewport allows it: the main column's cap is the widest design size plus the rail, not a fixed reading width. The grader measures the widest visual at 2560 × 1440.
