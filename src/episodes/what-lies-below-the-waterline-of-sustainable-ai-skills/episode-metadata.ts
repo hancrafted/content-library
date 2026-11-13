@@ -6,6 +6,5 @@ export const episodeMetadata = {
   status: 'upcoming',
   visibility: 'public',
   format: 'foundations',
-  // needs-human: the Brief names no Tag; context-engineering is the nearest one in the closed vocabulary.
   tags: ['context-engineering'],
 } as const satisfies EpisodeInput;
