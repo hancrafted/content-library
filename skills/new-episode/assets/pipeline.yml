@@ -254,8 +254,7 @@ jobs:
         references:
           - references/write-spec.md
           - references/spec-designer.md
-          - assets/spec-frame.html
-          - assets/spec-review.html
+          - references/spec-calibration.md
           - assets/sample-episode/spec/spec.html
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
