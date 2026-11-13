@@ -11,6 +11,10 @@ A **decision page** is one standalone HTML file. In mode `decide` a person decid
 
 When the caller owns both the frame (the page, its layout and controls) and the feedback (its format, rounds and approval), write content only: the items, their Options and visuals, built by steps 1 to 3 in the caller's markup and at the fidelity it names, handed back where it says. The caller's frame takes the place of steps 4 to 7.
 
+## Feedback on the skill
+
+When the person faults how a page works rather than what it says (picking, amount of text, framing, layout, controls), add a lesson to [LEARNINGS.md](LEARNINGS.md) as it describes, then revise the page as usual.
+
 ## 1. Gather the inputs
 
 The caller supplies the domain. Take each input from the caller first:
