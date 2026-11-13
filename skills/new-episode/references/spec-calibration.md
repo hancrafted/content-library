@@ -18,15 +18,15 @@ What every Episode's Spec shares. [`to-decision-html`](../../to-decision-html/SK
 
 ## Render presets
 
-The device toolbar re-renders every mock at one of these; `fit` is the full column.
+The device toolbar re-renders every mock at one of these; `fit` is the full column. `npm run episode:spec-preview` renders each designer Option at every preset, sets the preset on the page as the toolbar does, and reads this table. Text running past a mock's box fails the preview at a preset marked `fails` and is only reported at one marked `reports`.
 
-| Preset    | Size                   |
-| --------- | ---------------------- |
-| `desktop` | 1920 px wide           |
-| `laptop`  | 1440 px wide           |
-| `tablet`  | 1024 px wide           |
-| `mobile`  | 390 px wide            |
-| `shorts`  | 1080 × 1920 (vertical) |
+| Preset    | Size                   | Overflow  |
+| --------- | ---------------------- | --------- |
+| `desktop` | 1920 px wide           | `fails`   |
+| `laptop`  | 1440 px wide           | `fails`   |
+| `tablet`  | 1024 px wide           | `reports` |
+| `mobile`  | 390 px wide            | `reports` |
+| `shorts`  | 1080 × 1920 (vertical) | `reports` |
 
 ## Template and slots
 
@@ -39,10 +39,10 @@ The template is a page frame plus two `<template>` elements. The assembler (`npm
 | `<template data-template="option">` | `stage`, `caption`, `build-notes`, `pick`, `id`                                |
 
 - **Item.** One per Slide and one for the Title slide, whose `stage` holds each Option's mock and its `ol[data-spec="echoes"]`. The assembler sets `data-spec` (`slide` or `title-slide`), `id` and `data-item` to the Slide slug (`top` for the Title slide), `data-fidelity="mock"` and, on a Slide, `data-number`. The `note` slot is a `<textarea>`: the assembler sets its `name` (`note:<slug>`) and placeholder.
-- **Option.** One per fragment Option. The assembler sets `data-option` and `data-recommended` from the fragment, `"true"` for a bare or `"true"` attribute and `"false"` for an absent or `"false"` one (the page contract's form), `data-picked` on the locked Option, and on the `pick` checkbox `name="pick:<slug>"`, the Option id as `value` and `checked` when locked. `stage` takes the fragment's mock, `caption` its figcaption, `build-notes` its build notes. The template puts `data-visual` and `data-design-width="1920"` on the `stage` element, so a mock widens to the design size.
+- **Option.** One per fragment Option. The assembler sets `data-option` from the fragment and `data-recommended` as `"true"` for a bare or `"true"` fragment attribute and `"false"` for an absent or `"false"` one: the form the skill's page contract reads, where the fragment's own bare attribute is not carried over, `data-picked` on the locked Option, and on the `pick` checkbox `name="pick:<slug>"`, the Option id as `value` and `checked` when locked. `stage` takes the fragment's mock, `caption` its figcaption, `build-notes` its build notes. The template puts `data-visual` and `data-design-width="1920"` on the `stage` element, so a mock widens to the design size.
 - **Frame.** `data-revision` and `data-page-id` on `<html>`. The review form (`#spec-review`) holds the general comment `note:page`, the Next action `next` and Save; every pick and note field outside it joins it by `form="spec-review"`.
 - **Fragments.** The designers' format is the one in [`spec-designer.md`](spec-designer.md#the-markup-rules); the assembler reads it unchanged.
-- **Outside the slots.** The outline, intro cards and Section bands are built by the assembler as markup, placed in the `outline`, `intro` and `items` slots.
+- **Outside the slots.** The outline, intro cards and Section bands are built by the assembler as markup, placed in the `outline`, `intro` and `items` slots. The intro cards (Brief, Style, Visual language, Episode page) are one row of `<details>`, closed by default; the outline links each, and a link opens its card. A note field inside a closed card still posts.
 
 ## Saving the review
 
@@ -57,7 +57,7 @@ The template is a page frame plus two `<template>` elements. The assembler (`npm
 | `note:page`            | The general comment on the Spec as a whole                                     |
 | `next`                 | The Next action                                                                |
 
-The server writes the next `feedback/<NN>/feedback.md` (`via: spec`) and answers `303` to `/?saved=<NN>`; a refused review answers `400` and writes nothing. The lines are ``- `top` · design — picked: 0b``, ``- `<section>--<slide>` · design — picked: 3b | 4a, 4c | none — <note>``, ``- `visual-language` · design — <note>``, ``- `page` · design — <note>`` and ``- `next` · gate — redesign|approve``. The server refuses `approve` while a Slide has no pick, naming it.
+The server writes the next `feedback/<NN>/feedback.md` (`via: spec`) and answers `303` to `/?saved=<NN>`; a refused review answers `400` and writes nothing. The lines are ``- `top` · design — picked: 0b``, ``- `<section>--<slide>` · design — picked: 3b | 4a, 4c | none — <note>``, ``- `visual-language` · design — <note>``, ``- `page` · design — <note>`` and ``- `next` · gate — redesign|approve``. The server refuses `approve` while any Slide has no pick or more than one, naming each Slide and why; the page checks the same before it posts.
 
 ## Next actions
 
@@ -74,7 +74,7 @@ Preset `redesign`. A round saved with no `next` line is the one case to ask in c
 
 ## Regenerating the template
 
-A test (`tests/docs/spec-template-fresh.test.ts`) fails when `to-decision-html` or this file has changed since the template was generated. The template records a hash of its sources in `<meta name="spec-template-source-hash">`; the hash covers the skill's `SKILL.md`, every file under the skill's `references/` and this file without this section. Regenerate the template, then record the new hash:
+A slow test (`tests/docs/spec-template-fresh.slow.test.ts`, run by `npm run test:slow`) fails when `to-decision-html` or this file has changed since the template was generated. The template records a hash of its sources in `<meta name="spec-template-source-hash">`; the hash covers the skill's `SKILL.md`, every file under the skill's `references/` and this file without this section. Regenerate the template, then record the new hash:
 
 1. Invoke the Skill tool with `to-decision-html`, mode `decide`, with this calibration as the caller's inputs and the Slides of [the sample Episode](../assets/sample-episode/brief.md) as the items, each with two or three Options at fidelity `mock`. When the session does not list the skill (a worktree made after the session began), read its `SKILL.md` and `references/` and follow them. Here the template is the frame, so the caller does not own it: the skill's steps 4 to 6 write the page frame, the review form and the layout of an item and of an Option, and step 7 inlines and verifies by hand, with no grader. Its items and Options become the two `<template>`s with the slots from [Template and slots](#template-and-slots), and the assembler fills them.
 2. Write the result to `assets/spec-template.html`. Keep every `data-slot` and `data-template` name this file lists, and the review form's fields from [Saving the review](#saving-the-review). The checks read the assembled page, so keep `figcaption` a direct child of the Option's `figure`, the pick `<input type="checkbox" form="spec-review">` inside it and the note `<textarea>` with `form="spec-review"`.

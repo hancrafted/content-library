@@ -309,6 +309,51 @@ describe('success cases', () => {
     expect($('.spec-outline a[href="#top"]')).toHaveLength(1);
   });
 
+  it('puts the context cards in one row of collapsibles, closed by default, each holding its own heading and body', () => {
+    // ARRANGE
+    const cards = ['brief', 'style', 'visual-language', 'episode-page'];
+    const headings = ['Brief', 'Style', 'Visual language', 'Episode page'];
+    // ACT
+    const $ = page({ ...FULL, brief: CARD_BRIEF });
+    const row = $('.spec-intro');
+    // ASSERT
+    expect(
+      row
+        .children('section')
+        .map((_, card) => $(card).attr('id'))
+        .get(),
+    ).toEqual(cards);
+    expect(row.find('details').length).toBe(cards.length);
+    expect(row.find('details[open]')).toHaveLength(0);
+    expect(
+      row
+        .find('summary h2')
+        .map((_, heading) => $(heading).text())
+        .get(),
+    ).toEqual(headings);
+  });
+
+  it('keeps the Visual language note field inside its collapsible, tied to the review form', () => {
+    // ARRANGE
+    const selector = '#visual-language details textarea[form="spec-review"][name="note:visual-language"]';
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect($(selector)).toHaveLength(1);
+  });
+
+  it('links each context card from the outline, so a link opens the card it names', () => {
+    // ARRANGE
+    const links = ['#brief', '#style', '#visual-language', '#episode-page'];
+    // ACT
+    const $ = page({ ...FULL, brief: CARD_BRIEF });
+    const hrefs = $('.spec-outline a')
+      .map((_, link) => $(link).attr('href'))
+      .get();
+    // ASSERT
+    expect(hrefs.slice(0, links.length)).toEqual(links);
+  });
+
   it('clones the item template once per Slide, Title slide included, with its item attributes set', () => {
     // ARRANGE
     const items = ['top', 'spent-attention', 'the-quiet-middle', 'trim-the-paste'];

@@ -14,6 +14,7 @@ import {
   type Prompt,
   type SlidePage,
 } from './archive-staging.pure.ts';
+import type { Selection } from './episode-spec-slide.pure.ts';
 
 export interface ArchiveInput {
   /** The Staging folder, repo-relative, as the Spec's build notes name it: `docs/episodes/<folder>`. */
@@ -63,54 +64,41 @@ function referenceList(images: readonly string[]): string {
   return archiveSection('references', 'Design references', figures);
 }
 
+/** Recommended is a bare attribute or "true" (the Specs before the generated template), never "false". */
+function isRecommended(figure: Selection): boolean {
+  const value = figure.attr('data-recommended');
+  return value !== undefined && value !== 'false';
+}
+
 /**
- * The Spec's Option tabs, rebuilt for a page with no review form: an Option's ✓ comes from \`data-picked\`, and a
- * Slide opens on its picked Option, else its recommended one, else its first. Without the script every Option shows,
- * stacked.
+ * The Spec's Options, tabbed for a page with no review form and no script: a radio input and label per Option ahead
+ * of the figures, and the stylesheet's `:checked` rules show one figure. A tab carries the Option's id, its ✓ when
+ * the Spec marks it picked and its Recommended flag, once; a Slide opens on its picked Option, else its recommended
+ * one, else its first.
  */
-const TABS_SCRIPT = `
-addEventListener('DOMContentLoaded', () => {
-  // Recommended is a bare attribute or "true" (the Specs before the generated template), never "false".
-  const recommended = (figure) => figure.hasAttribute('data-recommended') && figure.getAttribute('data-recommended') !== 'false';
-  for (const options of document.querySelectorAll('.spec-options')) {
-    const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
-    const tabs = document.createElement('div');
-    tabs.className = 'spec-tabs';
-    tabs.setAttribute('role', 'tablist');
-    const show = (figure) => {
-      for (const other of figures) other.toggleAttribute('data-active', other === figure);
-      for (const button of tabs.children)
-        button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
-    };
-    for (const figure of figures) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.setAttribute('role', 'tab');
-      button.dataset.option = figure.dataset.option;
-      button.textContent = 'Option ' + figure.dataset.option;
-      const mark = document.createElement('span');
-      mark.className = 'spec-picked';
-      mark.textContent = figure.hasAttribute('data-picked') ? '✓' : '';
-      button.append(mark);
-      if (recommended(figure)) {
-        const flag = document.createElement('span');
-        flag.className = 'spec-badge';
-        flag.textContent = 'Recommended';
-        button.append(flag);
-      }
-      button.addEventListener('click', () => show(figure));
-      tabs.append(button);
-    }
-    options.before(tabs);
-    options.classList.add('is-tabbed');
-    show(
-      figures.find((f) => f.hasAttribute('data-picked')) ??
-        figures.find(recommended) ??
-        figures[0],
-    );
-  }
-});
-`;
+function tabbedOptions(article: string): string {
+  const $ = load(article, null, false);
+  $('.spec-options').each((_, element) => {
+    const options = $(element);
+    const group = `options-${options.closest('[id]').attr('id') ?? 'slide'}`;
+    const figures = options.children('[data-spec="option"]').toArray();
+    if (figures.length === 0) return;
+    const opening =
+      figures.find((figure) => $(figure).is('[data-picked]')) ??
+      figures.find((figure) => isRecommended($(figure) as Selection)) ??
+      figures[0];
+    const tabs = figures.map((figure) => {
+      const id = $(figure).attr('data-option') ?? '';
+      const checked = figure === opening ? ' checked' : '';
+      const picked = $(figure).is('[data-picked]') ? '<span class="spec-picked">✓</span>' : '';
+      const flag = isRecommended($(figure) as Selection) ? '<span class="spec-badge">Recommended</span>' : '';
+      return `<input type="radio" name="${group}" id="${group}-${id}" value="${id}"${checked} />\n<label for="${group}-${id}">Option ${escapeHtml(id)}${picked}${flag}</label>`;
+    });
+    options.prepend(tabs.join('\n'));
+    options.addClass('is-tabbed');
+  });
+  return $.html();
+}
 
 interface EpisodeContext {
   title: string;
@@ -122,7 +110,7 @@ interface EpisodeContext {
 
 /** One Slide on the Episode page: the Spec's article, then its references, feedback and prompts. */
 function slideBlock(slide: SlidePage, context: EpisodeContext): { html: string; images: string[] } {
-  const article = slide.article.replaceAll(`${context.staging}/reference/`, 'reference/');
+  const article = tabbedOptions(slide.article.replaceAll(`${context.staging}/reference/`, 'reference/'));
   const images = citedImages(article);
   const anchor = slide.section === undefined ? slide.slug : `${slide.section}--${slide.slug}`;
   const parts = [
@@ -175,7 +163,7 @@ interface EpisodePage {
   references: string[];
 }
 
-/** The Episode's one page: the masthead, then each group's Slides, the Spec's styles and the tabs script in the head. */
+/** The Episode's one page: the masthead, then each group's Slides, the Spec's styles and the archive's own in the head. */
 function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: EpisodeContext): EpisodePage {
   const references = new Set<string>();
   const grouped = groups($, slides);
@@ -194,7 +182,7 @@ function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: Episo
     .toArray()
     .map((style) => $.html(style))
     .join('\n');
-  const head = `${specStyles}\n<style>${context.style}</style>\n<link rel="stylesheet" href="design.css" />\n<script>${TABS_SCRIPT}</script>`;
+  const head = `${specStyles}\n<style>${context.style}</style>\n<link rel="stylesheet" href="design.css" />`;
   return { html: htmlPage({ title: context.title, head }, body), references: [...references].sort() };
 }
 

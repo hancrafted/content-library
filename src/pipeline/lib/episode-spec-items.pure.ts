@@ -1,8 +1,7 @@
 /*
  * The Spec's items and Options cloned from the Spec template (design-ADR 0011): an item is a Slide or the Title
  * slide, an Option one of the designers' fragment figures. Each is filled into its `<template>`'s slots and given the
- * attributes of the page contract: `data-item` and `data-fidelity` on an item, `data-option`, `data-recommended` (`true` or
- * `false`) and `data-picked` on an Option, the pick checkbox's name, value and `checked`.
+ * attributes the Spec calibration lists (`skills/new-episode/references/spec-calibration.md`, "Template and slots").
  */
 
 import { load } from 'cheerio';

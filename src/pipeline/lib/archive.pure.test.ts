@@ -180,32 +180,98 @@ describe('success cases', () => {
       ).toEqual(section.slides);
     });
 
-    it('drops the review form, the picks, the notes and the words, and tabs the Options with one script of its own', () => {
+    it('drops the review form, the picks, the notes, the words and the Option card heads, and carries no script', () => {
       // ARRANGE
       const dropped = [
         'form',
         '.spec-pick',
         '.spec-note',
+        '.spec-card-head',
         '[data-panel="voice-script"]',
         '[data-panel="speaker-notes"]',
         '.spec-words > input',
         '.spec-words > label',
         '#spec-meta',
       ];
-      const specScripts = ['/* option tabs */', '/* review form */'];
 
       // ACT
       const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
       const found = dropped.filter((selector) => $(selector).length > 0);
-      const scripts = $('script')
-        .map((_, script) => $(script).html() ?? '')
-        .get();
-      const carried = specScripts.filter((text) => scripts.some((script) => script.includes(text)));
 
       // ASSERT
       expect(found).toEqual([]);
-      expect(scripts).toHaveLength(1);
-      expect(carried).toEqual([]);
+      expect($('script')).toHaveLength(0);
+    });
+
+    it('tabs the Options of a Slide with a radio and a label each, open on the picked Option, with no script', () => {
+      // ARRANGE
+      const labels = ['Option 1a', 'Option 1b'];
+      const [opening, ids] = ['1b', ['1a', '1b']];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const tabs = $('[data-archive-slide="watch-cash"] .spec-options.is-tabbed');
+
+      // ASSERT
+      expect(
+        tabs
+          .children('label')
+          .map((_, label) =>
+            $(label)
+              .text()
+              .replace(/[✓]|Recommended/g, ''),
+          )
+          .get(),
+      ).toEqual(labels);
+      expect(
+        tabs
+          .children('input[type="radio"]')
+          .map((_, input) => $(input).attr('value'))
+          .get(),
+      ).toEqual(ids);
+      expect(tabs.children('input[checked]').attr('value')).toBe(opening);
+    });
+
+    it('opens a Slide on its recommended Option when the Spec marks none picked', () => {
+      // ARRANGE
+      const spec = INPUT.spec.replace(/ data-picked/g, '');
+      const recommended = '1a';
+
+      // ACT
+      const $ = page(designArchive({ ...INPUT, spec }).pages, 'cash-first/index.html');
+      const tabs = $('[data-archive-slide="watch-cash"] .spec-options');
+
+      // ASSERT
+      expect(tabs.children('input[checked]').attr('value')).toBe(recommended);
+    });
+
+    it('shows Recommended once per Option: on its tab, never again on the Option beneath it', () => {
+      // ARRANGE
+      const badgesPerTab = [1, 0];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const options = $('[data-archive-slide="watch-cash"] .spec-options');
+      const counts = options.children('label').map((_, label) => $(label).find('.spec-badge').length);
+
+      // ASSERT
+      expect(counts.get()).toEqual(badgesPerTab);
+      expect(options.find('figure .spec-badge')).toHaveLength(0);
+    });
+
+    it('treats data-recommended="false" of the generated template as not recommended', () => {
+      // ARRANGE
+      const spec = INPUT.spec.replace(
+        'data-option="1a" data-recommended>',
+        'data-option="1a" data-recommended="false">',
+      );
+
+      // ACT
+      const $ = page(designArchive({ ...INPUT, spec }).pages, 'cash-first/index.html');
+      const badges = $('[data-archive-slide="watch-cash"] .spec-options > label .spec-badge');
+
+      // ASSERT
+      expect(badges).toHaveLength(0);
     });
   });
 

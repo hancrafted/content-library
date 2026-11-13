@@ -77,3 +77,8 @@ export function wordTabs(slug: string, panels: Record<(typeof TABS)[number][0], 
   );
   return `<div class="spec-words">\n${[...radios, ...cards].join('\n')}\n</div>`;
 }
+
+/** A context card's content as a collapsible, closed by default: its heading is the summary, `body` the rest. */
+export function collapsible(heading: string, body: string): string {
+  return `<details>\n<summary><h2>${heading}</h2></summary>\n<div class="spec-card-body">\n${body}\n</div>\n</details>`;
+}

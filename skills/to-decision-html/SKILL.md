@@ -107,11 +107,13 @@ A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A
 
 While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the item's decision and visual sticky in the main column, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. A sticky top toolbar holds the page-wide reviewer tools: the theme, and the render presets the caller names (such as desktop, laptop, tablet, mobile), each re-rendering every preview at that size at once. An item adds its own tools, such as state or motion controls, where it needs them. One circle at the bottom right, split into a to-top and a to-bottom half, each with its own accessible name, moves through a long page.
 
+Context the reader consults rather than decides on, such as background cards ahead of the items, sits in one row of collapsibles, closed by default and opening in place, so the first decision starts high on the page. A field inside a closed collapsible still submits with the form, and a link to its anchor opens it.
+
 Follow the caller's design guidance; without it, use a restrained, readable style on design tokens with light and dark themes.
 
 Every field and button has an accessible name, every control shows a visible focus indicator, and text reaches WCAG AA contrast (4.5:1, or 3:1 for large text) in both themes. Under `prefers-reduced-motion: reduce`, nothing animates, moves by transition or scrolls smoothly.
 
-_Done when_ every item's visual stays at least half in view beside its comment fields at both widths, the content keeps 1000 px beside the rail on a laptop with the navigation collapsed, a visual with a design size reaches it on a 2560 px screen, and every control is labelled, shows focus and reads at AA contrast in both themes.
+_Done when_ every item's visual stays at least half in view beside its comment fields at both widths, the first item's heading starts within the first screen of a laptop with the background cards closed, the content keeps 1000 px beside the rail on a laptop with the navigation collapsed, a visual with a design size reaches it on a 2560 px screen, and every control is labelled, shows focus and reads at AA contrast in both themes.
 
 ## 5. Add the mode's controls
 
