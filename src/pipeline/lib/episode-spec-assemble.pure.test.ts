@@ -147,7 +147,32 @@ const BASE = {
 };
 const CARD_BRIEF = BRIEF.replace(
   '## Style',
-  `## Learning goal
+  `## Format
+
+Short, five minutes.
+
+## Audience
+
+Office workers who paste whole documents.
+
+## Hook
+
+The AI forgot your first line.
+
+## Red thread
+
+Attention is a budget, so spend it.
+
+## Analogy
+
+A desk that only fits one stack.
+
+- The desk is the window.
+- The stack is the paste.
+
+The desk never grows.
+
+## Learning goal
 
 Know the budget.
 
@@ -322,9 +347,11 @@ describe('success cases', () => {
     expect(meta).toMatchObject({ type: 'spec', status: 'draft', generated: BASE.generated, brief: '../brief.md' });
   });
 
-  it('shows the five Brief headings with a note field each, keyed brief--<heading-slug>', () => {
+  it('shows every Brief heading Han reviews, in Brief order, with a note field each, keyed brief--<heading-slug>', () => {
     // ARRANGE
     const brief = CARD_BRIEF;
+    const actionable = 'Trim pastes.';
+    const analogyEnd = 'The desk never grows.';
     // ACT
     const $ = page({ ...BASE, brief });
     // ASSERT
@@ -332,15 +359,32 @@ describe('success cases', () => {
       $('[data-spec="brief-card"] h3')
         .map((_, h) => $(h).text())
         .get(),
-    ).toEqual(['Learning goal', 'Actionables', 'Research questions', 'Style', 'Constraints']);
+    ).toEqual([
+      'Format',
+      'Audience',
+      'Style',
+      'Learning goal',
+      'Actionables',
+      'Hook',
+      'Red thread',
+      'Analogy',
+      'Constraints',
+      'Research questions',
+    ]);
     expect(ids($, '[data-spec="brief-card"] textarea', 'name')).toEqual([
+      'note:brief--format',
+      'note:brief--audience',
+      'note:brief--style',
       'note:brief--learning-goal',
       'note:brief--actionables',
-      'note:brief--research-questions',
-      'note:brief--style',
+      'note:brief--hook',
+      'note:brief--red-thread',
+      'note:brief--analogy',
       'note:brief--constraints',
+      'note:brief--research-questions',
     ]);
-    expect($('[data-spec="brief-card"]').text()).toContain('Trim pastes.');
+    expect($('[data-spec="brief-card"]').text()).toContain(actionable);
+    expect($('[data-spec="brief-card"]').text()).toContain(analogyEnd);
   });
 
   it('is read-only once the Brief is approved: the text stays, the note fields go', () => {

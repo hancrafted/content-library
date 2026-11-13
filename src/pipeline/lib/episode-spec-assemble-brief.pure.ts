@@ -39,7 +39,7 @@ function briefEntry({ heading, key, lines }: BriefCardEntry, approved: boolean):
   return `<div data-spec="brief-entry" id="${key}">\n<h3>${escape(heading)}</h3>\n${briefLines(lines)}${note}\n</div>`;
 }
 
-/** The Brief card: the Brief's goals with a note field each, read-only once the Brief is approved. */
+/** The Brief card: the Brief's headings with a note field each, read-only once the Brief is approved. */
 export function briefCardMarkup(brief: string): string {
   const { entries, approved } = briefCard(brief);
   if (entries.length === 0) return '';
