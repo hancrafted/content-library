@@ -4,8 +4,9 @@
  */
 import { DEFECTS, perKind } from './defect.pure.ts';
 import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
-import { NF_, trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
+import { trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
+import { NF_ } from './flow-cells.pure.ts';
 import { constOf } from './mechanics.pure.ts';
 import type { Cust, Defect, Settings } from './software-ecology.types';
 

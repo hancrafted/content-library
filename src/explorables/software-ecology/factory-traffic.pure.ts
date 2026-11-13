@@ -9,32 +9,9 @@ import { DEFECTS } from './defect.pure.ts';
 import { catchOf, srcRate } from './factory-dials.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, TicketSource } from './factory.types';
 import { firstSpawn } from './first-spawn.pure.ts';
+import { cells, fi, type Indexed } from './flow-cells.pure.ts';
 import type { Cust, Defect, Settings } from './software-ecology.types';
 
-export const NF_ = 72;
-/** The cells of one defect kind: the first half of a belt's cells is spec, the second code. */
-const KIND_CELLS = NF_ / 2;
-
-export interface Cell {
-  /** A bad document's defect kind; a good one has none. */
-  readonly kind?: Defect;
-  readonly q: number;
-  readonly f: number;
-  readonly b: number;
-  readonly mn: number;
-}
-/** The index of a flow cell. */
-export const fi = (c: Cell): number => (c.kind === 'code' ? KIND_CELLS : 0) + ((c.q * 2 + c.f) * 3 + c.b) * 3 + c.mn;
-
-type Indexed = Cell & { readonly kind: Defect; readonly i: number };
-const cells = (mns: readonly number[]): Indexed[] =>
-  DEFECTS.flatMap((kind) =>
-    [0, 1].flatMap((q) =>
-      [0, 1].flatMap((f) =>
-        [0, 1, 2].flatMap((b) => mns.map((mn) => ({ kind, q, f, b, mn, i: fi({ kind, q, f, b, mn }) }))),
-      ),
-    ),
-  );
 const ALL = cells([0, 1, 2]);
 const CARRYING = cells([1, 2]);
 const REDO = [0, 1].flatMap((f) =>
