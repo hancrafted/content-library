@@ -4,21 +4,27 @@
  * data only, so a Server Component hands a bundle to the client as it is (FE-006 §4).
  */
 
+import type { BadChances, Catch, Defect, KindChances } from './defect.types';
 import type { Arrivals, OwnSet, Source } from './own-work.types';
+import type { AiSet, CenterDials, Chances, CustomerPatch, TourStep } from './scenario.types';
 
+export type { BadChances, Catch, Defect, KindChances } from './defect.types';
 export type { Arrivals, OwnSet, Source } from './own-work.types';
+export type { AiSet, CenterDials, Chances, CustomerPatch, StepSet, TourStep } from './scenario.types';
 export type XY = readonly [number, number];
 export type Locale = 'en' | 'de';
 /** The roles state (Swing and Roles merged in feedback 08) or the factory. */
 export type ViewId = 'roles' | 'factory';
 export type Company = 'service' | 'product';
 export type AiQuality = 'worse' | 'same' | 'better';
-/** Where AI works: nowhere, everywhere, or at the listed work centers. */
-export type AiSet = 'off' | 'all' | readonly string[];
 /** How a pile-up looks past the rack: a tumbling heap, a leaning stack or scattered drift. */
 export type PileStyle = 'heap' | 'stack' | 'drift';
 export type Mechanic = 'rework' | 'churn' | 'complaints';
 export type Strength = 'rework' | 'churn';
+/** The model's constants a use-case file may tune (design-ADR 0024 §5): no switch and no slider, each with a default. */
+export type Constant = 'inspect' | 'redo' | 'keepExtra' | 'maxBounces' | 'pressure';
+/** Everything under a file's `mechanics`: the strengths and the constants. */
+export type MechKey = Strength | Constant;
 
 /** What a finished job creates downstream: `{ to, n }`, `{ to, p }` or `{ choose: [{ to, w }] }`. */
 export interface Spawn {
@@ -26,16 +32,6 @@ export interface Spawn {
   readonly n?: number;
   readonly p?: number;
   readonly choose?: readonly { readonly to: string; readonly w?: number }[];
-}
-
-/** A work center's dial defaults in the file, or a preset's overrides of them. */
-export interface CenterDials {
-  readonly efficiency?: number;
-  readonly effectiveness?: number;
-  readonly fanout?: number;
-  readonly ai?: boolean;
-  readonly aiSpeed?: number;
-  readonly aiExtra?: number;
 }
 
 export interface CenterDef {
@@ -52,9 +48,19 @@ export interface CenterDef {
   readonly buffer?: number;
   readonly dials?: CenterDials;
   readonly enabled?: readonly string[];
+  /** Per defect kind, the chance it sends a bad input back, over `mechanics.rework`. */
+  readonly catch?: Catch;
+  /** The kind of defect it makes; its role's by default. */
+  readonly origin?: Defect;
+  /** Once `at` weeks of work wait, it loses the share `slow` of its speed; AI at the station removes the stall. */
+  readonly stall?: { readonly at: number; readonly slow: number };
+  /**
+   * Pass-on under pressure: once it is drowning, its pile red, it passes a share of the tickets it takes up to `to`
+   * unanswered, rising with its pile up to all of them; below that it answers every one. The share is `passShareOf`
+   * (design-ADR 0024 §5, grill 11 Q227, Q231).
+   */
+  readonly escalate?: { readonly to: string; readonly underPressure: number };
 }
-
-export type Chances = Readonly<Record<string, number>>;
 
 export interface CustomerDef {
   readonly at: XY;
@@ -62,33 +68,8 @@ export interface CustomerDef {
   readonly arrivals?: Arrivals;
   readonly mix: Chances;
   readonly good?: Chances;
-  readonly bad?: Chances;
+  readonly bad?: BadChances;
   readonly releases?: readonly string[];
-}
-
-/** A preset's or a tour step's changes to the Customer. */
-export interface CustomerPatch {
-  readonly rate?: number;
-  readonly arrivals?: Arrivals;
-  readonly mix?: Chances;
-  readonly good?: Chances;
-  readonly bad?: Chances;
-}
-
-/** A tour step's `set`: dials per center, the Customer, where AI works, the reality. */
-export interface StepSet {
-  readonly dials?: Readonly<Record<string, CenterDials>>;
-  readonly customer?: CustomerPatch;
-  readonly ai?: AiSet;
-  readonly reality?: number;
-}
-
-/** One step of a tour, or a check: settings, the week it runs to, the card its caption points at, its claims. */
-export interface TourStep {
-  readonly set?: StepSet;
-  readonly run: number;
-  readonly card?: string;
-  readonly expect?: Readonly<Record<string, string>>;
 }
 
 /** What a state shows by default: the pile-up style and whether the belts move. */
@@ -107,6 +88,8 @@ export interface Preset {
   readonly customer?: CustomerPatch;
   readonly start?: 'clear' | 'warm';
   readonly speed?: number;
+  /** false keeps the state off the Scenarios menu: a state a Slide reads by id (design-ADR 0024 §10). */
+  readonly menu?: boolean;
   /** Weeks of work waiting per work center when the state loads, over the file's `backlog`. */
   readonly backlog?: Readonly<Record<string, number>>;
   readonly display?: Display;
@@ -128,6 +111,10 @@ export interface RoleDef {
   readonly icon?: string;
   readonly fan: number;
   readonly aiSize?: number;
+  /** The kind of defect the role makes: `spec` up to Analysis, `code` from Engineering on. */
+  readonly origin?: Defect;
+  /** How much of its catch holds while AI does its checking, 0 to 1 (1 by default): AI review that is simply trusted. */
+  readonly aiCatch?: number;
 }
 
 /** The master data of one use case. */
@@ -136,7 +123,7 @@ export interface UseCaseData {
   readonly id: string;
   readonly panels?: boolean;
   readonly layout: { readonly width: number; readonly height: number; readonly top?: number };
-  readonly mechanics?: Partial<Record<Strength, number>>;
+  readonly mechanics?: Partial<Record<MechKey, number>>;
   readonly customer: CustomerDef;
   readonly company?: Company;
   readonly sources?: readonly Source[];
@@ -163,6 +150,8 @@ export interface RoleWords {
 export interface ScenarioWords {
   readonly watch?: string;
   readonly steps?: readonly string[];
+  /** Han's claims, by the key a beat's `claim:` names. */
+  readonly claims?: Readonly<Record<string, string>>;
 }
 
 /** A use case's words in one locale: names, belt labels, scenario captions, and any role words it says differently. */
@@ -203,7 +192,7 @@ export interface Cust {
   mode: Arrivals;
   mix: Record<string, number>;
   good: Record<string, number>;
-  bad: Record<string, number>;
+  bad: KindChances;
 }
 
 /** Everything the model reads from the controls: the prototype's settings `S`, without the page's own state. */
@@ -218,7 +207,10 @@ export interface Settings {
   own: Record<string, OwnSet>;
   cust: Cust | null;
   mech: Record<Mechanic, boolean>;
+  /** The mechanics' strengths: the file's, then the page's sliders. */
   strength: Partial<Record<Strength, number>>;
+  /** The model's constants: the file's, no control shows them (design-ADR 0024 §5). */
+  consts: Partial<Record<Constant, number>>;
 }
 
 /** The role catalog's words in one locale: per role, and the names of the presets and scenarios every use case shares. */

@@ -3,7 +3,9 @@
  * AI, the Customer at given settings, and the settings a preset starts from. Values are the reference build's,
  * illustrative, not measured.
  */
+import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
+import { constOf, fileMechanics } from './mechanics.pure.ts';
 import type {
   AiQuality,
   AiSet,
@@ -11,6 +13,7 @@ import type {
   Bundle,
   CenterDials,
   Cust,
+  Defect,
   Dials,
   Over,
   OwnSet,
@@ -35,10 +38,6 @@ export const RHO_IDEAL = 0.7;
 export const AI_SPEED = 2.5;
 /** Service times vary by 30 % (normal), unless the file says exponential. */
 export const CV = 0.3;
-/** A bad input that is kept takes 30 % longer. */
-export const EXTRA = 0.3;
-/** An inspection catches bad work this many times as often as a plain work center. */
-export const INSPECT = 2.4;
 /** Rates are averaged over about two weeks. */
 export const TAU = 2;
 /** The Customer's output and satisfaction over about six weeks. */
@@ -57,17 +56,6 @@ export { Q } from './factory-docs.pure.ts';
 export const RUSH_MAX = 15;
 export const RUSH_FROM = 1;
 export const RUSH_TO = 3;
-
-/** A mechanic's strength range in the file, and its default. */
-export const MECH_RANGE: Readonly<Record<Strength, readonly [number, number, number]>> = {
-  rework: [0, 1, 0.4],
-  churn: [1, 4, 1.2],
-};
-export const STRENGTHS = Object.keys(MECH_RANGE) as Strength[];
-export const MECH_DEFAULTS = (): Record<Strength, number> => ({
-  rework: MECH_RANGE.rework[2],
-  churn: MECH_RANGE.churn[2],
-});
 
 const AI_QUALITY: Readonly<Record<AiQuality, number>> = { worse: -15, same: 0, better: 15 };
 const ALL_DIALS = ['efficiency', 'effectiveness', 'fanout', 'ai'];
@@ -104,6 +92,49 @@ export const dials = (n: FactoryNode, s: Settings): Dials => {
 };
 
 export const mechOf = (s: Settings, k: Strength): number => (s.mech[k] ? (s.strength[k] ?? 0) : 0);
+const baseCatch = (s: Pick<Settings, 'strength' | 'consts'>, n: FactoryNode, kind: Defect): number => {
+  const r = s.strength.rework ?? 0;
+  if (n.def.catch) return n.def.catch[kind] ?? 0;
+  return n.def.inspection ? Math.min(0.95, r * constOf(s, 'inspect')) : r;
+};
+/**
+ * A station's chance to send back a bad input of one kind: its `catch` for that kind when it has one, else the rework
+ * strength (an inspection's times `inspect`), times the role's `aiCatch` while AI is on there; nothing while the rework
+ * toggle is off (design-ADR 0024 §5, §6).
+ */
+export const catchOf = (s: Settings, at: { n: FactoryNode; d: Dials }, kind: Defect): number => {
+  if (!s.mech.rework) return 0;
+  const p = baseCatch(s, at.n, kind);
+  return at.d.ai ? p * (at.n.role.aiCatch ?? 1) : p;
+};
+/** Whether a station's `catch` can catch a kind at all, whatever AI and the rework toggle do: its unread share counts only these. */
+export const catches = (s: Pick<Settings, 'strength' | 'consts'>, n: FactoryNode, kind: Defect): boolean =>
+  baseCatch(s, n, kind) > 0;
+/** The share of speed a stalled station loses now: its `stall` once enough work waits, none while AI works there. */
+export const stallOf = (n: FactoryNode, d: Dials): number => {
+  const st = n.def.stall;
+  return st && !d.ai && n.Ws >= st.at ? st.slow : 0;
+};
+/** `mechanics.pressure` times a strength times a pressure from 0 to 1, capped at 1. */
+const bite = (s: Pick<Settings, 'consts'>, strength: number, press: number): number =>
+  Math.min(1, constOf(s, 'pressure') * strength * press);
+/**
+ * A pile's pressure, 0 to 1: its weeks of work waiting over RED, full where the pile turns red. The one pressure source:
+ * `pressureOf` reads it from `n.Ws`, and pass-on measures it from the red mark.
+ */
+export const pressAt = (weeks: number): number => Math.min(1, Math.max(0, weeks) / RED);
+/**
+ * How hard a filling backlog bites at an inspection, for its `stampUnderPressure`: the pressure term over the station's
+ * pressure (design-ADR 0024 §5).
+ */
+export const pressureOf = (s: Settings, n: FactoryNode, strength: number): number => bite(s, strength, pressAt(n.Ws));
+/**
+ * The share of the tickets a station takes up that it passes on unanswered, for its `escalate.underPressure`: the same
+ * pressure term over its pressure measured from RED, so none until its pile turns red (design-ADR 0024 §5, grill 11 Q227,
+ * Q231).
+ */
+export const passShareOf = (s: Settings, n: FactoryNode, strength: number): number =>
+  bite(s, strength, pressAt(n.Ws - RED));
 /** Jobs a week at size 1. */
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>
@@ -141,7 +172,7 @@ export const custOf = (m: Pick<Factory, 'B'>, s: Settings): Cust => {
     mode: firstOf<Cust['mode']>(c.mode, base.arrivals, s.reality > 0 ? 'random' : 'steady'),
     mix: firstOf(c.mix, { ...base.mix }),
     good: firstOf(c.good, { ...firstOf(base.good, {}) }),
-    bad: firstOf(c.bad, { ...firstOf(base.bad, {}) }),
+    bad: c.bad ? copyKinds(c.bad) : kindChancesOf(base.bad),
   };
 };
 
@@ -156,6 +187,7 @@ export const idealSettings = (company: Settings['company']): Settings => ({
   cust: null,
   mech: { rework: true, churn: true, complaints: true },
   strength: {},
+  consts: {},
   company,
 });
 
@@ -186,7 +218,7 @@ export const presetSettings = (B: Bundle, p: Preset): Pick<Settings, 'preset' | 
     mode: firstOf<Cust['mode']>(pc.arrivals, base.arrivals, reality > 0 ? 'random' : 'steady'),
     mix: { ...firstOf(pc.mix, base.mix) },
     good: { ...firstOf(pc.good, base.good, {}) },
-    bad: { ...firstOf(pc.bad, base.bad, {}) },
+    bad: kindChancesOf(firstOf(pc.bad, base.bad, {})),
   };
   return { preset: p.id, reality, ai: firstOf<AiSet>(p.ai, 'off'), over: overOf(p), cust };
 };
@@ -200,13 +232,13 @@ export const realisticSettings = (B: Bundle, company: Settings['company']): Sett
     reality: 100,
     ai: 'off',
     over: {},
-    strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) },
+    ...fileMechanics(B),
   };
 };
 
 /** The settings a preset starts from, the way the page applies them. */
 export const startSettings = (B: Bundle, p: Preset): Settings => ({
   ...idealSettings(B.data.company ?? 'service'),
-  strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) },
+  ...fileMechanics(B),
   ...presetSettings(B, p),
 });

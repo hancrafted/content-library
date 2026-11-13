@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { effToPos, posToEff, sparkPaths, type DashboardReadout } from './dashboard-readouts.pure.ts';
-import { FactoryRun } from './factory-run.pure.ts';
+import { startSettings } from './factory-dials.pure.ts';
+import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const warmed = (preset: string) => new FactoryRun({ B: builtinBundle('tire'), preset, now: true });
+/** In practice with AI at Engineering writing twice the work, warmed with it: the AI compare scenario's start. */
+const aiAtEngineering = () => {
+  const B = builtinBundle('tire');
+  const s = { ...startSettings(B, presetOf(B, 'realistic')), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
+  return new FactoryRun({ B, preset: 'realistic', now: true, s });
+};
 /** A work center's dashboard, as a read of the run gives it. */
 const dashboardOf = (run: FactoryRun, id: string): DashboardReadout => {
   const d = run.read({ watch: [id] }).dashboards[id];
@@ -12,9 +19,9 @@ const dashboardOf = (run: FactoryRun, id: string): DashboardReadout => {
 };
 
 describe('success cases', () => {
-  it('lights quality assurance red at AI compare: a bottleneck, its backlog growing, with weeks of work waiting', () => {
+  it('lights quality assurance red with AI at Engineering: a bottleneck, its backlog growing, with weeks of work waiting', () => {
     // ARRANGE
-    const run = warmed('ai-compare');
+    const run = aiAtEngineering();
     const redFrom = 2;
     // ACT
     const d = dashboardOf(run, 'qa');
@@ -25,9 +32,9 @@ describe('success cases', () => {
     expect(d.drain?.kind).toBe('grow');
   });
 
-  it('reads the engineer at AI compare as set and with AI: 88 % efficiency runs at 220 %', () => {
+  it('reads the engineer with AI at Engineering as set and with AI: 88 % efficiency runs at 220 %', () => {
     // ARRANGE
-    const run = warmed('ai-compare');
+    const run = aiAtEngineering();
     const [set, effective] = [88, 220];
     // ACT
     const d = dashboardOf(run, 'eng');

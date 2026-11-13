@@ -70,16 +70,3 @@ presets:
   roles: Wer macht was
   ideal: In der Theorie
   realistic: In der Praxis
-  ai-unbalanced: KI, unausgewogen
-  ai-compare: KI im Vergleich
-  ai-balanced: KI, ausgewogen
-  speed-up: Ein Team beschleunigen
-  ai-everywhere: KI überall
-  bug-spiral: Fehlerspirale
-  fix-orders: Erst die Aufträge klären
-  move-bottleneck: Den Engpass verschieben
-scenarios:
-  speed-up:
-    watch: Ein Team doppelt so schnell. Achte auf die Kundenkarte – kommt mehr an?
-  ai-unbalanced:
-    watch: KI nur in der Entwicklung, die doppelt so viele Pull Requests schreiben. Achte auf den Stau im Review.

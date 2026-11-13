@@ -9,12 +9,12 @@ import { builtinBundle } from './use-case-data.ts';
 
 const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };
 
-/** Tire swing at AI, unbalanced, a dial turned and two work centers in the stream: a state with something in every key. */
+/** Tire swing in practice, AI at Engineering, dials turned and two work centers in the stream: something in every key. */
 const busyPage = (): PageState => {
   const B = builtinBundle('tire');
-  const p = B.data.presets.find((x) => x.id === 'ai-unbalanced');
-  if (!p) throw new Error('tire has no ai-unbalanced preset');
-  const s = startSettings(B, p);
+  const p = B.data.presets.find((x) => x.id === 'realistic');
+  if (!p) throw new Error('tire has no realistic preset');
+  const s = { ...startSettings(B, p), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
   return {
     preset: p.id,
     view: 'factory',
@@ -57,7 +57,7 @@ describe('success cases', () => {
       centers: 7,
       belts: 12,
       page: {
-        preset: 'ai-unbalanced',
+        preset: 'realistic',
         speed: 10,
         beltMotion: true,
         pile: 'drift',
@@ -87,9 +87,18 @@ describe('success cases', () => {
     });
   });
 
+  it('writes every mechanics constant into the file, each at its default', () => {
+    // ARRANGE
+    const expected = { rework: 0.4, churn: 1.2, inspect: 2.4, redo: 0.3, keepExtra: 0.3, maxBounces: 2, pressure: 1.4 };
+    // ACT
+    const doc = parse(tireText()) as { mechanics: unknown };
+    // ASSERT
+    expect(doc.mechanics).toEqual(expected);
+  });
+
   it('warns, as the reference build does, which work centers would be over capacity while rushing and in the worst case', () => {
     // ARRANGE
-    const warn = { rush: ['support', 'eng'], worst: ['support'] };
+    const warn = { rush: ['eng', 'support'], worst: ['support'] };
     // ACT
     const up = uploadExchange(tireText(), 'a.yaml');
     // ASSERT
@@ -102,8 +111,8 @@ describe('failure cases', () => {
     // ARRANGE
     const text = edited((doc) => void (centerOf(doc, 'eng').realistic = [40, 91]));
     const problems = [
-      'centers[4].realistic: eng: Realistic needs 2.18× its Ideal capacity (at most 1.5×) (as a service provider); raise its efficiency or lower what reaches it',
-      'centers[4].realistic: eng: Realistic needs 2.23× its Ideal capacity (at most 1.5×) (as a product company); raise its efficiency or lower what reaches it',
+      'centers[4].realistic: eng: Realistic needs 2.05× its Ideal capacity (at most 1.5×) (as a service provider); raise its efficiency or lower what reaches it',
+      'centers[4].realistic: eng: Realistic needs 2.11× its Ideal capacity (at most 1.5×) (as a product company); raise its efficiency or lower what reaches it',
     ];
     // ACT
     const up = uploadExchange(text, 'r.yaml');

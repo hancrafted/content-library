@@ -11,9 +11,9 @@ const at = (preset: string) => {
     p = B.data.presets.find((x) => x.id === preset)!;
   return scenarioStart(B, p, SEED);
 };
-/** AI at the engineer writing twice the work, eight weeks on: AI unbalanced's step 2. */
+/** In practice, AI at the engineer writing twice the work, eight weeks on. */
 const flooded = (): FactoryHandle => {
-  const f = at('ai-unbalanced');
+  const f = at('realistic');
   f.set(settingsAfter({ ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, builtinBundle('tire'), f.settings));
   f.step(8);
   return f;
@@ -86,7 +86,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('shows twenty (SHELF) empty release cells, full satisfaction and no lead time on a cleared factory at day 0', () => {
     // ARRANGE
-    const m = at('bug-spiral');
+    const m = scenarioStart(builtinBundle('tire'), { id: 'cleared', reality: 100, start: 'clear' }, SEED);
     const empty = Array.from({ length: SHELF }, () => null);
     // ACT
     const c = m.read().customer;

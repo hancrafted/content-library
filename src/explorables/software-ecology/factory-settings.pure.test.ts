@@ -12,6 +12,7 @@ import {
   withOver,
   withReality,
 } from './factory-settings.pure.ts';
+import type { Preset } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
 const B = builtinBundle('tire');
@@ -41,12 +42,14 @@ describe('success cases', () => {
     expect([d.eff, d.effEff]).toEqual(setAndEffective);
   });
 
-  it('offers AI off, every set a preset names and everywhere, and names the one in effect', () => {
+  it('offers AI off, every set a preset or a tour step names and everywhere, and names the one in effect', () => {
     // ARRANGE
     const titles = { eng: 'Engineer', support: 'Support', qa: 'Quality assurance' };
+    const toured: Preset = { id: 'toured', tour: [{ run: 6 }, { set: { ai: ['eng'] }, run: 12 }] };
+    const withTour = { ...B, data: { ...B.data, presets: [...B.data.presets, toured] } };
     // ACT
-    const choices = aiChoicesOf(B, (id) => titles[id as keyof typeof titles] ?? id);
-    const key = aiKeyOf(B, withAi(at('ideal'), ['eng']));
+    const choices = aiChoicesOf(withTour, (id) => titles[id as keyof typeof titles] ?? id);
+    const key = aiKeyOf(withTour, withAi(at('ideal'), ['eng']));
     // ASSERT
     expect(choices[0]?.id).toBe('off');
     expect(choices.at(-1)?.id).toBe('ai:all');

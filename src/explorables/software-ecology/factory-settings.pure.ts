@@ -4,13 +4,16 @@
  * alone, so the run reads them on its next step. Ported from the reference build's `applyPreset`, `renderModel` and
  * `wireDashboard`/`wireCustomer` handlers.
  */
-import { MECH_DEFAULTS, presetSettings, startSettings } from './factory-dials.pure.ts';
+import { copyKinds } from './defect.pure.ts';
+import { presetSettings, startSettings } from './factory-dials.pure.ts';
+import { fileMechanics } from './mechanics.pure.ts';
 import type {
   AiQuality,
   AiSet,
   Bundle,
   Company,
   Cust,
+  Defect,
   Mechanic,
   Over,
   OwnSet,
@@ -25,15 +28,13 @@ import type {
  * the use case.
  */
 export const pageSettings = (B: Bundle, p: Preset, prev: Settings | null): Settings =>
-  prev
-    ? { ...prev, ...presetSettings(B, p) }
-    : { ...startSettings(B, p), strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) } };
+  prev ? { ...prev, ...presetSettings(B, p) } : startSettings(B, p);
 
 /** The settings a new use case starts from: its own company and strengths; AI quality and mechanics kept. */
 export const useCaseSettings = (B: Bundle, p: Preset, prev: Settings): Settings => ({
   ...pageSettings(B, p, prev),
   company: B.data.company ?? 'service',
-  strength: { ...MECH_DEFAULTS(), ...(B.data.mechanics ?? {}) },
+  ...fileMechanics(B),
 });
 
 const mapOver = (over: Settings['over'], drop: readonly (keyof Over)[]): Settings['over'] =>
@@ -78,13 +79,19 @@ export const withCompany = (s: Settings, company: Company): Settings => ({ ...s,
 export type CustomerChange =
   | { readonly kind: 'rate'; readonly v: number }
   | { readonly kind: 'mode'; readonly v: Cust['mode'] }
-  | { readonly kind: 'mix' | 'good' | 'bad'; readonly to: string; readonly v: number };
+  | { readonly kind: 'mix'; readonly to: string; readonly v: number }
+  | { readonly kind: 'good'; readonly to: string; readonly v: number }
+  | { readonly kind: 'bad'; readonly defect: Defect; readonly to: string; readonly v: number };
 
 /** Follow-up chances stay below this in total, so the requests settle. */
 const FOLLOW_MAX = 0.95;
 
-const chance = (c: Cust, x: { kind: 'good' | 'bad'; to: string; v: number }): number => {
-  const others = Object.entries(c[x.kind])
+type Chance = Extract<CustomerChange, { kind: 'good' | 'bad' }>;
+/** The follow-up chances a change sets one of. */
+const followUpsOf = (c: Cust, x: Chance): Record<string, number> => (x.kind === 'bad' ? c.bad[x.defect] : c.good);
+
+const chance = (c: Cust, x: Chance): number => {
+  const others = Object.entries(followUpsOf(c, x))
     .filter(([t]) => t !== x.to)
     .reduce((a, [, v]) => a + v, 0);
   return Math.min(x.v, FOLLOW_MAX - others);
@@ -92,11 +99,11 @@ const chance = (c: Cust, x: { kind: 'good' | 'bad'; to: string; v: number }): nu
 
 /** The Customer at `cu` (its values now) with one change; a follow-up chance is capped so all stay below 0.95. */
 export const withCustomer = (s: Settings, cu: Cust, x: CustomerChange): Settings => {
-  const c: Cust = { ...cu, mix: { ...cu.mix }, good: { ...cu.good }, bad: { ...cu.bad } };
+  const c: Cust = { ...cu, mix: { ...cu.mix }, good: { ...cu.good }, bad: copyKinds(cu.bad) };
   if (x.kind === 'rate') c.rate = x.v;
   else if (x.kind === 'mode') c.mode = x.v;
   else if (x.kind === 'mix') c.mix[x.to] = x.v;
-  else c[x.kind][x.to] = chance(c, { kind: x.kind, to: x.to, v: x.v });
+  else followUpsOf(c, x)[x.to] = chance(c, x);
   return { ...s, cust: c };
 };
 
@@ -106,14 +113,18 @@ export interface AiChoice {
   readonly label: string;
 }
 
-/** The Model's AI choices: off, each set of work centers a preset names, everywhere. `label` is filled by the caller for off and everywhere. */
+/** Every list of work centers a preset or one of its tour steps puts AI at, in file order. */
+const aiListsOf = (B: Bundle): (readonly string[])[] =>
+  B.data.presets.flatMap((p) => [p.ai, ...(p.tour ?? []).map((st) => st.set?.ai)]).filter((x) => Array.isArray(x));
+
+/** The Model's AI choices: off, each set of work centers a preset or a tour step names, everywhere. `label` is filled by the caller for off and everywhere. */
 export const aiChoicesOf = (B: Bundle, title: (id: string) => string): AiChoice[] => {
   const seen = new Set<string>(),
     sets: AiChoice[] = [];
-  for (const p of B.data.presets) {
-    if (!Array.isArray(p.ai) || seen.has(p.ai.join())) continue;
-    seen.add(p.ai.join());
-    sets.push({ id: `ai:${p.ai.join(',')}`, ai: [...p.ai], label: p.ai.map(title).join(', ') });
+  for (const ai of aiListsOf(B)) {
+    if (seen.has(ai.join())) continue;
+    seen.add(ai.join());
+    sets.push({ id: `ai:${ai.join(',')}`, ai: [...ai], label: ai.map(title).join(', ') });
   }
   return [{ id: 'off', ai: 'off', label: '' }, ...sets, { id: 'ai:all', ai: 'all', label: '' }];
 };
@@ -128,7 +139,7 @@ const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.l
 export const aiKeyOf = (B: Bundle, s: Settings): string => {
   if (s.ai === 'off') return 'off';
   if (s.ai === 'all') return 'ai:all';
-  const cur = s.ai;
-  const p = B.data.presets.find((x) => Array.isArray(x.ai) && sameSet(x.ai, cur));
-  return p && Array.isArray(p.ai) ? `ai:${p.ai.join(',')}` : '';
+  const cur = s.ai,
+    found = aiListsOf(B).find((x) => sameSet(x, cur));
+  return found ? `ai:${found.join(',')}` : '';
 };

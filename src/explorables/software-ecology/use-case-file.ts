@@ -5,8 +5,8 @@
  */
 import { parse } from 'yaml';
 import { z } from 'zod';
-import type { Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';
-import { isMap, listOf, mapOf } from './use-case-checks.pure.ts';
+import type { Bundle, Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';
+import { isMap, itemsOf, mapOf } from './use-case-checks.pure.ts';
 import { dataProblems } from './use-case-network-checks.pure.ts';
 import { presetProblems, stateProblems, unretired } from './use-case-preset-checks.pure.ts';
 
@@ -19,7 +19,7 @@ const problemsOf = (doc: unknown, x: { catalog: readonly string[]; exchange: boo
   const ids = dataProblems(doc, { E, catalog: x.catalog });
   presetProblems(doc.presets, { E, ids });
   if (!x.exchange) return out;
-  stateProblems(doc.state, { E, ids, sources: new Set(listOf(doc.sources).map((s) => String(mapOf(s).id))) });
+  stateProblems(doc.state, { E, ids, sources: new Set(itemsOf(doc.sources).map((s) => String(mapOf(s).id))) });
   const en = isMap(doc.i18n) && isMap(doc.i18n.en) ? doc.i18n.en : {};
   if (typeof en.name !== 'string') E('i18n.en.name: the use case name in English');
   return out;
@@ -82,6 +82,30 @@ export const readWords = (text: string): UseCaseWords => (read(text) ?? {}) as U
 /** The role catalog's master data. */
 export const readCatalog = (text: string): Readonly<Record<string, RoleDef>> =>
   (read(text) as { roles: Record<string, RoleDef> }).roles;
+
+/** The catalog with a use case's role overrides on top. */
+export const rolesOf = (
+  catalog: Readonly<Record<string, RoleDef>>,
+  data: UseCaseData,
+): Readonly<Record<string, RoleDef>> => {
+  const out: Record<string, RoleDef> = { ...catalog };
+  for (const [k, v] of Object.entries(data.roles ?? {})) out[k] = { ...catalog[k], ...v } as RoleDef;
+  return out;
+};
+
+/** A shipped use case from its texts: the master data, its words in both locales, and the role catalog. */
+export const bundleOf = (
+  texts: { readonly data: string; readonly en: string; readonly de: string },
+  catalog: Readonly<Record<string, RoleDef>>,
+): Bundle => {
+  const data = readUseCase(texts.data, Object.keys(catalog));
+  return {
+    data,
+    roles: rolesOf(catalog, data),
+    words: { en: readWords(texts.en), de: readWords(texts.de) },
+    source: 'built in',
+  };
+};
 
 export interface Exchange {
   readonly data: UseCaseData;

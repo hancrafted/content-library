@@ -4,6 +4,7 @@
  * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
+import { type Sampler, type Values } from './beat-means.pure.ts';
 import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
@@ -53,12 +54,17 @@ export interface RunOptions {
   readonly s?: Settings;
 }
 
+/** Where a tour step aims the run: the model step it stops on, and the Sampler that reads its sample steps (the judge's). */
+export interface Aim {
+  readonly at: number;
+  readonly sampling: Sampler | null;
+}
+
 export class FactoryRun {
   readonly preset: Preset;
   warmLeft = 0;
   dropped = 0;
-  /** A tour step's model step: time never runs past it (the page and the headless runner stop on the same step). */
-  stopAt: number | null = null;
+  private aimed: Aim | null = null;
   private acc = 0;
   private readonly f: FactoryHandle;
   private readonly bundle: Bundle;
@@ -106,6 +112,29 @@ export class FactoryRun {
     return Math.round(this.f.weeks / DTW);
   }
 
+  /**
+   * Aims the run at a tour step: time never runs past `at` (the page and the headless runner stop on the same step) and
+   * stops on each sample step to read it, as the headless judge does; null frees the run.
+   */
+  aim(to: Aim | null) {
+    this.aimed = to;
+  }
+
+  /** The tour step's model step, or null while the run runs free. */
+  get stopAt(): number | null {
+    return this.aimed?.at ?? null;
+  }
+
+  /** The readings taken on the tour step's sample steps so far. */
+  get sampled(): readonly Values[] {
+    return this.aimed?.sampling?.readings ?? [];
+  }
+
+  /** The mean of the readings taken on the tour step's sample steps so far. */
+  sampledMean(): Values {
+    return this.aimed?.sampling?.mean() ?? {};
+  }
+
   /** The run stands on its tour step. */
   get arrived(): boolean {
     return this.stopAt !== null && !this.warming && this.k >= this.stopAt;
@@ -136,7 +165,10 @@ export class FactoryRun {
   }
 
   private steps(n: number) {
-    if (n > 0) this.f.step(n * DTW);
+    const k = this.k,
+      s = this.aimed?.sampling;
+    if (s) s.run(this.f, { k, n });
+    else if (n > 0) this.f.step(n * DTW);
   }
 
   /** Warms the rest at once. */

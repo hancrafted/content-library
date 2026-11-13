@@ -75,21 +75,3 @@ presets:
             },
         },
     }
-  - {
-      id: speed-up,
-      view: factory,
-      reality: 100,
-      customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
-      dials: { e2: { efficiency: 200 } },
-      check:
-        { run: 70, expect: { customer.output: '0.85–1.15', e2.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
-    }
-  - {
-      id: ai-unbalanced,
-      view: factory,
-      reality: 100,
-      ai: [e1, e2, e3],
-      dials: { e1: { aiExtra: 2 }, e2: { aiExtra: 2 }, e3: { aiExtra: 2 } },
-      customer: { mix: { sales: 25, pm: 45, ops: 30 }, bad: { ops: 0.6 } },
-      check: { run: 16, expect: { customer.output: '0.35–0.75', lrev.weeksWaiting: '>3', customer.headroom: '<0.7' } },
-    }

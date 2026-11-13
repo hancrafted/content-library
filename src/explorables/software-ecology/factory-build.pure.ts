@@ -3,10 +3,12 @@
  * one belt per from-to pair the Customer or a spawn rule names, loops found by depth-first search, spawn rules resolved
  * to belts, one server per work center or per person. It knows who hands work to whom, never where anything is drawn.
  */
+import { kindChancesOf, kindTargets } from './defect.pure.ts';
 import { HANDOFF } from './factory-dials.pure.ts';
 import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
 import type { Belt, BeltKind, CustomerNode, FactoryNode, NodeKind, Server, SpawnRule } from './factory.types';
+import { firstSpawn } from './first-spawn.pure.ts';
 import type { Bundle, CenterDef, RoleDef, UseCaseData } from './software-ecology.types';
 
 export interface Pair {
@@ -20,7 +22,8 @@ export interface Pair {
 const custTargets = (uc: UseCaseData): string[] => {
   const t = new Set<string>();
   for (const c of [uc.customer, ...uc.presets.map((p) => p.customer ?? {})])
-    for (const k of ['mix', 'good', 'bad'] as const) for (const to of Object.keys(c[k] ?? {})) t.add(to);
+    for (const to of [...Object.keys(c.mix ?? {}), ...Object.keys(c.good ?? {}), ...kindTargets(kindChancesOf(c.bad))])
+      t.add(to);
   return [...t];
 };
 
@@ -57,6 +60,7 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   def: { ...spec.def, x: spec.def.at[0], y: spec.def.at[1], kind: spec.kind },
   role: spec.role,
   roleId: spec.kind === 'role' ? (spec.def.role ?? '') : 'customer',
+  origin: (spec.def.origin ?? spec.role.origin) === 'spec' ? 'spec' : 'code',
   ins: [],
   outs: [],
   spawns: [],
@@ -67,12 +71,11 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   muQ93: 1,
   idealJobs: 0,
   ...streams(seed, idx + 1),
-  rate: { done: 0, arr: 0, back: 0, rwIn: 0, unread: 0, out: [0, 0], compl: 0 },
+  rate: { done: 0, arr: 0, back: 0, rwIn: 0, unread: 0, badIn: 0, badPass: 0, out: [0, 0], compl: 0 },
   u: { busy: 0, starved: 0, blocked: 0, fail: 0 },
   Lavg: 0,
   Ws: 0,
   lvl: 0,
-  press: 0,
   sign: { rework: -99, churn: -99, unread: -99, complaint: -99 },
   hist: { out: [], good: [], wait: [], L: [] },
   server: null,
@@ -85,7 +88,7 @@ export const asCustomer = (n: FactoryNode): CustomerNode =>
     rateSeen: -1,
     modeSeen: '',
     mixCur: {},
-    acc: [{}, {}] as [Record<string, number>, Record<string, number>],
+    acc: [{}, {}, {}] as CustomerNode['acc'],
   });
 
 export const makeBelt = (p: Pair, i: number, net: { nodes: Map<string, FactoryNode>; B: Bundle }): Belt => {
@@ -136,16 +139,25 @@ export const markLoops = (nodes: Iterable<FactoryNode>, cust: FactoryNode, edges
   for (const e of edges) e.returns = e.kind === 'role' && !e.loop;
 };
 
-/** Spawn rules, resolved to belts. */
-export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] =>
-  c.spawns.map((sp) =>
-    sp.choose
-      ? {
-          choose: sp.choose.map((ch) => ({ e: edgeOf(`${c.id}-${ch.to}`), w: ch.w ?? 1 })),
-          W: sp.choose.reduce((a, ch) => a + (ch.w ?? 1), 0),
-        }
-      : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p },
+/** One spawn rule, resolved to belts. */
+const resolveSpawn = (c: CenterDef, sp: CenterDef['spawns'][number], edgeOf: (k: string) => Belt): SpawnRule =>
+  sp.choose
+    ? {
+        choose: sp.choose.map((ch) => ({ e: edgeOf(`${c.id}-${ch.to}`), w: ch.w ?? 1 })),
+        W: sp.choose.reduce((a, ch) => a + (ch.w ?? 1), 0),
+      }
+    : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p };
+
+/** Spawn rules, resolved to belts; a center's `escalate` rides on its first spawn. */
+export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] => {
+  const spawns = c.spawns.map((sp) => resolveSpawn(c, sp, edgeOf)),
+    first = firstSpawn(spawns),
+    esc = c.escalate;
+  if (!esc) return spawns;
+  return spawns.map((sp) =>
+    sp === first ? { ...sp, pass: { e: edgeOf(`${c.id}-${esc.to}`), under: esc.underPressure } } : sp,
   );
+};
 
 const newServer = (id: string): Server => ({
   id,
@@ -159,6 +171,7 @@ const newServer = (id: string): Server => ({
   bounce: false,
   churn: 1,
   preQ: 1,
+  pass: false,
 });
 
 /** Servers: one per work center, or one per person who runs several. */

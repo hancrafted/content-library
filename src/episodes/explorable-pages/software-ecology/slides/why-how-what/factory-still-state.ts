@@ -1,8 +1,7 @@
 /*
- * The stills' state: the software ecology Explorable's own model, run headless at build time to the AI-unbalanced
- * tour's last step (week 20), with the shipped seed, the use case's layout and its words in the page locale. The
- * Explorable's tour and its headless checks stop on the same model step, so the stills show the very state a viewer
- * reaches with Tour, and a retuned model redraws them on the next build. It reads the model through its handle only
+ * The stills' state: the software ecology Explorable's own model, run headless at build time through the use case's
+ * `still` state (In practice, then AI at Engineering), with the shipped seed, the use case's layout and its words in the page locale. A retuned
+ * model redraws them on the next build. It reads the model through its handle only
  * (design-ADR 0024 §1): the Snapshot, the Topology and the Floor.
  */
 import {
@@ -39,7 +38,8 @@ import { roleWords, type WordsIn } from '@/explorables/software-ecology/use-case
 import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './factory-still.types';
 
 const USE_CASE = 'tire';
-const SCENARIO = 'ai-unbalanced';
+/** What the stills show: the use case's `still` state, off the Scenarios menu (tire.yml, grill 11 Q215). */
+const STILL = 'still';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
 
@@ -72,8 +72,8 @@ const docsOn = (list: FloorList<FloorDoc>, path: Path, t: number): StillDoc[] =>
   return out;
 };
 
-/** The model at the scenario's last tour step: warmed, then each step's dials set and run to its week. */
-const runToLastStep = () => scenarioLastStep(USE_CASE, SCENARIO);
+/** The model after the still's check: warmed, then its dials set and run to its week. */
+const runToLastStep = () => scenarioLastStep(USE_CASE, STILL);
 
 type Run = ReturnType<typeof runToLastStep>;
 interface Read {

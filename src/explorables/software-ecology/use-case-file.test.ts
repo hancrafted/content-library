@@ -57,6 +57,26 @@ describe('success cases', () => {
     expect(german).toEqual(english);
   });
 
+  it.each([
+    ['tire', tire, tireWords],
+    ['gate', gate, gateWords],
+    ['teams', teams, teamsWords],
+  ])('gives every claim a shipped %s tour names its words', (_id, text, en) => {
+    // ARRANGE
+    const data = parse(text) as { presets: { id: string; tour?: { claim?: string }[] }[] };
+    const words = parse(en) as { scenarios?: Record<string, { claims?: Record<string, string> }> };
+    const none: string[] = [];
+    // ACT
+    const missing = data.presets.flatMap((p) =>
+      (p.tour ?? [])
+        .map((st) => st.claim)
+        .filter((c): c is string => !!c && !words.scenarios?.[p.id]?.claims?.[c])
+        .map((c) => `${p.id}.${c}`),
+    );
+    // ASSERT
+    expect(missing).toEqual(none);
+  });
+
   it('splits an exchange file into its use case, its words per locale and its saved state', () => {
     // ARRANGE
     const words = { en: { name: 'Tire swing' }, de: { name: 'Reifenschaukel' } };
@@ -88,9 +108,114 @@ describe('failure cases', () => {
     const presets = doc.presets as Record<string, unknown>[];
     presets[2] = { id: 'ideal', check: { run: 12, expect: { 'qa.speed': 'lots' } } };
     const expected = [
-      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>',
+      'presets[2].check.expect.qa.speed: customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread|stall>',
       'presets[2].check.expect.qa.speed: a test such as ">2", "<0.5", "0.9–1.1", rises or falls',
     ];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a menu flag that is not true or false', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const presets = doc.presets as Record<string, unknown>[];
+    presets[2] = { id: 'ideal', menu: 'hidden' };
+    const expected = ['presets[2].menu: true or false (false keeps the state off the Scenarios menu)'];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a settles range that trends and a claim that names no words key', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const presets = doc.presets as Record<string, unknown>[];
+    presets[2] = {
+      id: 'ideal',
+      tour: [{ run: 6, claim: 'a claim in words', settles: { 'qa.weeksWaiting': 'rises' } }],
+    };
+    const expected = [
+      'presets[2].tour[0].claim: a words key, such as clean-line',
+      'presets[2].tour[0].settles.qa.weeksWaiting: a bound or a range such as ">2" or "0.9–1.1"; settles has no beat before it',
+    ];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a catch outside 0 to 1, or for a defect kind that does not exist', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c, i) =>
+      i === 4 ? { ...c, catch: { spec: 1.5 }, origin: 'design' } : c,
+    );
+    const expected = [
+      'centers[4].catch: { spec, code }, each the chance to send it back, 0 to 1',
+      'centers[4].origin: spec or code',
+    ];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a stall without a mark in weeks or with a share of 1 or more', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c, i) =>
+      i === 6 ? { ...c, stall: { at: -1, slow: 1 } } : c,
+    );
+    const expected = [
+      'centers[6].stall: { at: weeks of work waiting 0 to 50, slow: the share of speed lost, 0 to 0.95 }',
+    ];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a pass-on to a work center it does not hand work to, or past 2 under pressure', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const centers = (doc.centers as Record<string, unknown>[]).map((c) =>
+      c.id === 'support' ? { ...c, escalate: { to: 'ops', underPressure: 3 } } : c,
+    );
+    const expected = ['centers[2].escalate: { to: a work center it hands work to, underPressure: 0 to 2 }'];
+    // ACT
+    const seen = problems({ ...doc, centers });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses an AI review profile outside 0 to 1', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), roles: { qa: { aiCatch: 1.4 } } };
+    const expected = ['roles.qa.aiCatch: 0 to 1, how much of its catch holds while AI checks'];
+    // ACT
+    const seen = problems(doc);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a bad release chance kept by a defect kind that does not exist', () => {
+    // ARRANGE
+    const doc = tireDoc();
+    const customer = { ...(doc.customer as object), bad: { spec: { pm: 0.5 }, design: { pm: 0.1 } } };
+    const expected = ['customer.bad.design: spec or code, the defect kind a bad release comes back by'];
+    // ACT
+    const seen = problems({ ...doc, customer });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('refuses a mechanics constant out of its range, naming the range', () => {
+    // ARRANGE
+    const doc = { ...tireDoc(), mechanics: { rework: 0.4, inspect: 9, maxBounces: 3 } };
+    const expected = ['mechanics.inspect: 1 to 5', 'mechanics.maxBounces: 0 to 2'];
     // ACT
     const seen = problems(doc);
     // ASSERT

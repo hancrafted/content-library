@@ -3,6 +3,7 @@
  * label and where it sits. Computed once a run; the readouts that change come from the snapshot.
  */
 import { fillTemplate } from '@/shared/lib/template.pure';
+import { kindChancesOf, kindTargets } from './defect.pure.ts';
 import { placeLabels, type LabelPlace } from './factory-labels.pure.ts';
 import { boxOf, type FactoryLayout } from './factory-layout.pure.ts';
 import type { BeltReadout, TopoNode, Topology } from './factory-model.pure.ts';
@@ -30,7 +31,7 @@ export interface BeltPart {
 const complaintsTo = (topo: Topology): Set<string> =>
   new Set(
     [topo.B.data.customer, ...topo.B.data.presets.map((p) => p.customer ?? {})].flatMap((c) =>
-      Object.keys(c.bad ?? {}),
+      kindTargets(kindChancesOf(c.bad)),
     ),
   );
 

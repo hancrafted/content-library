@@ -3,8 +3,9 @@
  * reference build's validate(), messages and order unchanged.
  */
 import { SPEEDS } from './factory-dials.pure.ts';
-import { validKey, validTest } from './factory-scenario.pure.ts';
-import { OWN_RATE_MAX } from './own-work.types';
+import { validKey } from './factory-model.pure.ts';
+import { OWN_RATE_MAX } from './own-work.types.ts';
+import { validTest } from './scenario-tests.pure.ts';
 import {
   absentOr,
   apply,
@@ -13,7 +14,8 @@ import {
   displayProblems,
   isMap,
   isNum,
-  listOf,
+  isWord,
+  itemsOf,
   mapOf,
   oneOf,
   type Map_,
@@ -31,7 +33,7 @@ export const unretired = <T>(v: T): T | typeof ROLES_STATE => (v === RETIRED_STA
 export const VIEWS = [ROLES_STATE, 'factory'];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =
-  'customer.<output|sat|headroom|leadDays|bugsPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>';
+  'customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread|stall>';
 
 const aiOk = (ids: Set<string>) => (ai: unknown) =>
   ai === 'all' || ai === 'off' || (Array.isArray(ai) && ai.every((x) => ids.has(x as string)));
@@ -67,6 +69,19 @@ const expectProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
   }
 };
 
+const settlesOk = (t: unknown): boolean => validTest(String(t)) && !['rises', 'falls'].includes(String(t).trim());
+
+/** Han's claim, a words key, and `settles:`, a bound or range read 40 weeks after the beat. */
+const claimProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
+  if (!absentOr(st.claim, isWord)) E(`${at.p}.claim: a words key, such as clean-line`);
+  if (!absentOr(st.settles, isMap)) E(`${at.p}.settles: a map { "qa.weeksWaiting": "<0.5" }`);
+  for (const [k, t] of Object.entries(mapOf(st.settles))) {
+    if (!validKey(k, at.ids)) E(`${at.p}.settles.${k}: ${EXPECT_KEYS}`);
+    if (!settlesOk(t))
+      E(`${at.p}.settles.${k}: a bound or a range such as ">2" or "0.9–1.1"; settles has no beat before it`);
+  }
+};
+
 /** One tour step or check; returns the week it runs to when valid, else the week before. */
 const stepProblems = (raw: unknown, at: Omit<At, 'x'> & { last: number }, E: Sink): number => {
   if (!isMap(raw)) return (E(`${at.p}: a map { set, run, card, expect }`), at.last);
@@ -76,6 +91,7 @@ const stepProblems = (raw: unknown, at: Omit<At, 'x'> & { last: number }, E: Sin
     E(`${at.p}.card: customer or a work center`);
   if (raw.set !== undefined) setProblems(raw.set, at, E);
   expectProblems(raw, at, E);
+  claimProblems(raw, at, E);
   return runs ? (raw.run as number) : at.last;
 };
 
@@ -97,6 +113,9 @@ const PRESET_TAIL: readonly Rule<At>[] = [
   ({ x, p }) =>
     !absentOr(x.start, (v) => oneOf(v, ['clear', 'warm'])) && `${p}.start: clear (day 0) or warm (60 weeks settled)`,
   ({ x, p }) => !absentOr(x.speed, speedOk) && `${p}.speed: 1, 2, 5, 10 or 20`,
+  ({ x, p }) =>
+    !absentOr(x.menu, (v) => typeof v === 'boolean') &&
+    `${p}.menu: true or false (false keeps the state off the Scenarios menu)`,
   ({ x, p }) => x.tour !== undefined && x.check !== undefined && `${p}: a tour or a check, not both`,
   ({ x, p }) => !absentOr(x.tour, tourOk) && `${p}.tour: 1 to 6 steps`,
 ];
@@ -112,7 +131,7 @@ const presetShape = (at: At, E: Sink): void => {
 };
 
 export const presetProblems = (presets: unknown, x: { E: Sink; ids: Set<string> }): void => {
-  listOf(presets).forEach((raw, i) => {
+  itemsOf(presets).forEach((raw, i) => {
     const p = `presets[${i}]`;
     if (typeof mapOf(raw).id !== 'string') x.E(`${p}.id: a word`);
     if (!isMap(raw)) return;

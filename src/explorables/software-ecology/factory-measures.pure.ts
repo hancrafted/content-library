@@ -22,7 +22,7 @@ export const metric = (m: Factory, key: string): number => {
   const n = m.nodes.get(who ?? ''),
     f = CENTER_MEASURES[what as CenterMeasure];
   if (!n || n.kind !== 'role' || !f) throw new Error(`unknown measure ${key}`);
-  return f(n);
+  return f(n, m);
 };
 
 /** A key names a measure: `customer.<measure>`, or a work center of `centerIds` and its measure. */

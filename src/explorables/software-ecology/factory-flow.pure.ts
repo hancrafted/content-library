@@ -3,8 +3,9 @@
  * per week; documents in transit are pooled tokens, each a count of identical documents, and every handoff takes the
  * same quarter day. A delivery to the Customer counts output, releases and follow-up requests.
  */
+import type { Defect } from './defect.types';
 import { MAX_TOKENS, TAU, TAU_OUT } from './factory-dials.pure.ts';
-import { COMPL, FAIL, FROM_SRC, MAIN, OWN, Q, REDO, Run, SENT, Token } from './factory-docs.pure.ts';
+import { COMPL, FAIL, FROM_SRC, kindOf, MAIN, OWN, Q, REDO, Run, SENT, Token } from './factory-docs.pure.ts';
 import type { Belt, Doc, Factory, FactoryNode, Job } from './factory.types';
 
 export { FAIL, FROM_SRC, MAIN, OWN, REDO } from './factory-docs.pure.ts';
@@ -130,17 +131,26 @@ const countOutput = (m: Factory, x: Token): void => {
   }
 };
 
+/** The Customer's turns in Ideal (`acc`) a follow-up takes: a bad release's by its defect kind, or a good release's. */
+const TURNS: Readonly<Record<Defect | 'good', number>> = { spec: 0, good: 1, code: 2 };
+
+/** A bad release comes back by its defect kind: a change request (spec) or a bug (code). */
+const complaintTo = (m: Factory, k: Defect): Belt | null =>
+  m.s.mech.complaints ? followUp(m, m.cs.bad[k], TURNS[k]) : null;
+
 const release = (m: Factory, x: Token): void => {
-  const cu = m.cs;
+  const k = kindOf(x.fl, 'code');
   m.rel[x.q] += 1 / TAU_OUT;
-  const fe = x.q === Q.GOOD ? followUp(m, cu.good, 1) : m.s.mech.complaints ? followUp(m, cu.bad, 0) : null;
+  const fe = x.q === Q.GOOD ? followUp(m, m.cs.good, TURNS.good) : complaintTo(m, k);
   const compl = !!fe && x.q === Q.BAD;
   m.shelf.push({ q: x.q, ai: x.ai, compl });
   if (!fe) return;
   send(m, fe, { c: 1, q: Q.GOOD, ai: 0, fl: FROM_SRC | MAIN | (compl ? COMPL | FAIL : 0), b: 0, t0: x.t1 });
   m.wip++;
   m.fu += BUMP;
-  if (compl) m.compl += 1 / TAU_OUT;
+  if (!compl) return;
+  m.compl += 1 / TAU_OUT;
+  m.complK[k] += 1 / TAU_OUT;
 };
 
 const toCustomer = (m: Factory, e: Belt, x: Token): void => {

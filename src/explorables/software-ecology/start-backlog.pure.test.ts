@@ -153,7 +153,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('seeds nothing on a state that starts clear, or at Ideal', () => {
     // ARRANGE
-    const spiral = presetOf(tire, 'bug-spiral'),
+    const spiral: Preset = { id: 'spiral', reality: FULL, start: 'clear' },
       none = {};
     // ACT
     const clear = startBacklogOf(tire, spiral, FULL),
@@ -185,9 +185,10 @@ describe('edge cases', () => {
       data: {
         ...tire.data,
         display: { pile: 'stack' as const, beltMotion: true },
-        presets: tire.data.presets.map((p) =>
-          p.id === 'speed-up' ? { ...p, display: { pile: 'drift' as const }, speed: 5 } : p,
-        ),
+        presets: [
+          ...tire.data.presets,
+          { id: 'faster', view: 'factory' as const, reality: FULL, display: { pile: 'drift' as const }, speed: 5 },
+        ],
       },
     };
     const page = { speed: 1, beltMotion: true, pile: 'stack', s: { preset: 'realistic', reality: FULL } };
@@ -195,7 +196,7 @@ describe('edge cases', () => {
       plain = { pile: 'heap', beltMotion: false };
     // ACT
     const real = defaultsOf(B, 'realistic'),
-      faster = defaultsOf(B, 'speed-up'),
+      faster = defaultsOf(B, 'faster'),
       roles = defaultsOf(B, 'roles');
     const idealDisplay = displayOf(tire, presetOf(tire, 'ideal')),
       rolesReality = roles.s.reality,

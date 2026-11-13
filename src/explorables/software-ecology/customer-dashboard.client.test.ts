@@ -11,6 +11,8 @@ import { titlesOf } from './use-case-words.pure.ts';
 
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
+/** The stills' state: In practice, then AI at Engineering writing twice the work, run to week 20. */
+const STILL = 'still';
 const noop = () => undefined;
 
 const controlsOf = (html: string) =>
@@ -19,7 +21,7 @@ const controlsOf = (html: string) =>
     .map((el) => ({ tag: el.tagName, control: el.attribs['data-control'], label: el.attribs['aria-label'] ?? '' }));
 
 const customer = () => {
-  const { f, B } = scenarioLastStep('tire', 'ai-unbalanced');
+  const { f, B } = scenarioLastStep('tire', STILL);
   const snap = f.read({ watch: ['customer'] });
   const words = wordsFor('en');
   return renderToStaticMarkup(
@@ -40,7 +42,14 @@ const customer = () => {
 describe('success cases', () => {
   it("names the Customer dashboard's controls customer.<field>", () => {
     // ARRANGE
-    const expected = ['customer.rate', 'customer.arrivals.steady', 'customer.arrivals.random', 'customer.close'];
+    const expected = [
+      'customer.rate',
+      'customer.arrivals.steady',
+      'customer.arrivals.random',
+      'customer.bad.spec.pm',
+      'customer.bad.code.support',
+      'customer.close',
+    ];
     // ACT
     const found = new Set(controlsOf(customer()).map((c) => c.control));
     // ASSERT

@@ -22,7 +22,7 @@
     }
   },
   "still": {
-    "label": "Die Reifenschaukel-Fabrik im Szenario KI unausgewogen in Woche {week}: KI in der Entwicklung, in der Qualitätssicherung warten {waiting}, der Kunde bei {output} des Ideals",
+    "label": "Die Reifenschaukel-Fabrik in der Praxis, KI nur in der Entwicklung, in Woche {week}: KI in der Entwicklung, in der Qualitätssicherung warten {waiting}, der Kunde bei {output} des Ideals",
     "at": "KI unausgewogen, Woche {week}",
     "overflow": "+{n}",
     "aiExtra": "{n} Pull Requests pro Aufgabe",
@@ -30,7 +30,7 @@
   },
   "stills": {
     "dashboard": {
-      "label": "Das Dashboard der Analyse in Woche {week} des Szenarios KI unausgewogen",
+      "label": "Das Dashboard der Analyse in Woche {week}, KI nur in der Entwicklung",
       "aiLeavesIt": "· KI lässt sie",
       "people": "Menschen",
       "tools": "Werkzeuge & Artefakte",

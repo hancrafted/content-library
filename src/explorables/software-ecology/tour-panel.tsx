@@ -6,7 +6,7 @@ import type { Words } from './software-ecology-words.types';
 import type { Locale } from './software-ecology.types';
 import { TourBox } from './tour-box.client';
 import { checkText } from './tour-checks.pure.ts';
-import { presetName, scenarioWords, type WordsIn } from './use-case-words.pure.ts';
+import { beatCaption, presetName, type WordsIn } from './use-case-words.pure.ts';
 import type { TourActions } from './use-tour.ts';
 
 /* The tour's words for its caption box and the clock, from the tour on show and its run. */
@@ -52,7 +52,7 @@ export function TourPanel(p: TourPanelProps) {
       name={presetName(p.w, t.preset.id)}
       head={fillTemplate(p.words.tour.step, { i: t.i + 1, n, w: tourWeekOf(t) })}
       running={runningText(run, t, p.words)}
-      caption={scenarioWords(p.w, t.preset.id).steps?.[t.i] ?? ''}
+      caption={beatCaption(p.w, t.preset, t.i)}
       checks={tourChecks(t).map((c) => ({ text: checkText(c, checks), ok: c.ok }))}
       card={tourCard(t)}
       floor={p.floor}

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { realisticSettings, startSettings } from './factory-dials.pure.ts';
 import { buildFactory, createFactory, type Audit, type FactoryHandle } from './factory-model.pure.ts';
-import { applySet } from './factory-scenario.pure.ts';
 import { RHO_BN, RHO_OTHER, stability } from './factory-sizing.pure.ts';
 import { solve } from './factory-solve.pure.ts';
+import { applySet } from './scenario-set.pure.ts';
 import type { Bundle, Settings } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -44,7 +44,7 @@ describe('success cases', () => {
   it('gives the same state for the same seed, and the reference build’s hashes after 100 weeks of tire Realistic', () => {
     // ARRANGE
     const weeks = 100;
-    const expected = ['3e925c92', '3e925c92', '2cecdd05'];
+    const expected = ['173452ef', '173452ef', '4415a63f'];
     // ACT
     const hashes = [42, 42, 43].map((seed) => {
       const f = realistic(seed);
@@ -60,9 +60,9 @@ describe('success cases', () => {
     const f = realistic();
     const s = f.settings;
     const expected = [
-      { created: 1951, consumed: 1928, backlog: 13, transit: 4, work: 6, gap: 0 },
-      { created: 2585, consumed: 2555, backlog: 26, transit: 1, work: 3, gap: 0 },
-      { created: 3790, consumed: 3742, backlog: 40, transit: 5, work: 3, gap: 0 },
+      { created: 1965, consumed: 1948, backlog: 6, transit: 6, work: 5, gap: 0 },
+      { created: 2594, consumed: 2570, backlog: 18, transit: 3, work: 3, gap: 0 },
+      { created: 3799, consumed: 3753, backlog: 38, transit: 5, work: 3, gap: 0 },
     ];
     // ACT
     f.step(20);
@@ -105,11 +105,11 @@ describe('success cases', () => {
     expect(rest).toBeLessThanOrEqual(others);
   });
 
-  it('moves the bottleneck downstream when tire AI unbalanced raises quality assurance to 1000 %', () => {
-    // ARRANGE
+  it('moves the bottleneck downstream when tire in practice, AI at Engineering, raises quality assurance to 1000 %', () => {
+    // ARRANGE: after the raise its flood's bugs drown Support, which passes some on to Engineering (grill 11 Q227)
     const B = builtinBundle('tire');
-    const f = createFactory(B, endState(B, 'ai-unbalanced'));
-    const expected = { before: { id: 'qa', weeks: '16.8' }, after: { id: 'ops', weeks: '36.5' }, qa: '0.0' };
+    const f = createFactory(B, { ...endState(B, 'realistic'), ai: ['eng'], over: { eng: { aiExtra: 2 } } });
+    const expected = { before: { id: 'qa', weeks: '16.9' }, after: { id: 'ops', weeks: '43.7' }, qa: '0.0' };
     // ACT
     f.step(30);
     const before = worst(f);
@@ -165,6 +165,22 @@ describe('success cases', () => {
     // ASSERT
     expect(refused).toEqual(none);
   });
+
+  it('sends nothing back when the file sets mechanics.maxBounces to 0, and rework as before at its default', () => {
+    // ARRANGE
+    const tire = builtinBundle('tire');
+    const none: Bundle = { ...tire, data: { ...tire.data, mechanics: { ...tire.data.mechanics, maxBounces: 0 } } };
+    const read = (B: Bundle) => {
+      const f = createFactory(B, settingsOf(B, 'realistic'));
+      f.step(30);
+      return f.read({ measures: ['eng.rework'] }).measures['eng.rework'];
+    };
+    // ACT
+    const [atDefault, atZero] = [read(tire), read(none)];
+    // ASSERT
+    expect(atDefault).toBeGreaterThan(0);
+    expect(atZero).toBe(0);
+  });
 });
 
 describe('failure cases', () => {
@@ -178,7 +194,7 @@ describe('failure cases', () => {
         centers: tire.data.centers.map((c) => (c.id === 'support' ? { ...c, realistic: [60, 95] as const } : c)),
       },
     };
-    const expected = ['support: Realistic needs 2.11× its Ideal capacity (at most 1.5×)'];
+    const expected = ['support: Realistic needs 2.08× its Ideal capacity (at most 1.5×)'];
     // ACT
     const m = buildFactory(B, { ...settingsOf(B, 'ideal'), company: 'service' });
     const refused = stability(m).refuse.filter((t) => t.includes('Ideal capacity'));

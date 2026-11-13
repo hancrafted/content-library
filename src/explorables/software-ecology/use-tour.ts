@@ -95,7 +95,7 @@ const show = ({ f, s }: Ctx, x: TourRun) => {
 
 const endOf = (x: Ctx) => () => {
   if (!x.active) return;
-  x.active.run.stopAt = null;
+  x.active.run.aim(null);
   x.s.set(null);
   x.f.controls.setSpeed(x.active.tour.userSpeed);
 };

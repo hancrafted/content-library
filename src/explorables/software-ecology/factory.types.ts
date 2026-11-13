@@ -1,7 +1,7 @@
 // The factory model's shapes (design-ADR 0024 §1–§5): its network, work centers, belts, servers and documents.
 import type { Job, Run, Token } from './factory-docs.pure.ts';
 import type { Ring, Streams } from './factory-random.pure.ts';
-import type { Arrivals, Bundle, CenterDef, Cust, Dials, RoleDef, Settings } from './software-ecology.types';
+import type { Arrivals, Bundle, CenterDef, Cust, Defect, Dials, RoleDef, Settings } from './software-ecology.types';
 export type { Streams } from './factory-random.pure.ts';
 
 export { Job, Run, Token } from './factory-docs.pure.ts';
@@ -22,6 +22,9 @@ export interface Rates {
   back: number;
   rwIn: number;
   unread: number;
+  /** Bad inputs a week it judged, and those it passed on unflagged. */
+  badIn: number;
+  badPass: number;
   out: [number, number];
   compl: number;
 }
@@ -61,6 +64,9 @@ export interface SpawnRule {
   readonly p?: number;
   acc?: number;
   facc?: number;
+  /** The first spawn's pass-on under pressure: the belt to `escalate.to` and its strength; `pacc` its Ideal turns. */
+  readonly pass?: { readonly e: Belt; readonly under: number };
+  pacc?: number;
 }
 
 export interface Server {
@@ -75,6 +81,8 @@ export interface Server {
   bounce: boolean;
   churn: number;
   preQ: number;
+  /** Whether the job in work is passed on unanswered under pressure (a station's `escalate`). */
+  pass: boolean;
 }
 
 /** A work center, or the Customer. */
@@ -85,6 +93,8 @@ export interface FactoryNode extends Streams {
   readonly def: NodeDef;
   readonly role: RoleDef;
   readonly roleId: string;
+  /** The defect kind it makes: the center's `origin`, else its role's. */
+  readonly origin: Defect;
   readonly ins: Belt[];
   readonly outs: Belt[];
   spawns: SpawnRule[];
@@ -99,7 +109,6 @@ export interface FactoryNode extends Streams {
   Lavg: number;
   Ws: number;
   lvl: number;
-  press: number;
   readonly sign: Signs;
   readonly hist: History;
   server: Server | null;
@@ -112,7 +121,8 @@ export interface CustomerNode extends FactoryNode {
   rateSeen: number;
   modeSeen: string;
   mixCur: Record<string, number>;
-  acc: [Record<string, number>, Record<string, number>];
+  /** Turns of the follow-ups in Ideal: a bad release's of a spec defect, a good release's, a bad release's of a code defect. */
+  acc: [Record<string, number>, Record<string, number>, Record<string, number>];
 }
 
 export type BeltKind = 'src' | 'ship' | 'role';
@@ -191,6 +201,8 @@ export interface Factory {
   arrRate: number;
   rel: [number, number];
   compl: number;
+  /** Complaints a week by defect kind: change requests (spec) and bugs (code). */
+  complK: Record<Defect, number>;
   fu: number;
   req: number;
   wip: number;

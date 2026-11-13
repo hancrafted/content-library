@@ -4,10 +4,11 @@
  * reads its settings and the follow-ups a request brings. Plain data the views turn into words; ported from the
  * reference build's `signals`, `leadTime`, `drainText`, `sparkline` and `syncDashboard`.
  */
+import { DEFECTS, kindChancesOf } from './defect.pure.ts';
 import { AMBER, custOf, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
 import type { Dials, Factory, FactoryNode } from './factory.types';
 import type { OwnSet } from './own-work.types';
-import type { Cust, Settings } from './software-ecology.types';
+import type { Cust, Defect, Settings } from './software-ecology.types';
 import { drainOf } from './stage-readouts.pure.ts';
 
 export type Level = 'red' | 'amber' | 'green';
@@ -181,17 +182,29 @@ export interface CustomerDashboard {
   readonly max: number;
   readonly mix: readonly string[];
   readonly good: readonly string[];
-  readonly bad: readonly string[];
+  /** Each defect kind with a center a bad release of it can send a complaint to. */
+  readonly bad: readonly { readonly defect: Defect; readonly to: string }[];
   /** New requests one request brings, from the expected flows. */
   readonly gain: number;
   readonly complaints: boolean;
 }
 
 /** The work centers the Customer sends to that its file or a preset gives a `kind` value. */
-const targetsOf = (m: Factory, cu: Cust, kind: 'mix' | 'good' | 'bad'): string[] =>
+const targetsOf = (m: Factory, cu: Cust, kind: 'mix' | 'good'): string[] =>
   m.cust.outs
     .map((e) => e.to.id)
     .filter((to) => to in cu[kind] || m.B.data.presets.some((p) => p.customer?.[kind] && to in p.customer[kind]));
+
+/** Per defect kind, the work centers a bad release's complaint can reach, at the settings or in a preset. */
+const badTargetsOf = (m: Factory, cu: Cust): { defect: Defect; to: string }[] => {
+  const files = m.B.data.presets.map((p) => kindChancesOf(p.customer?.bad));
+  return DEFECTS.flatMap((defect) =>
+    m.cust.outs
+      .map((e) => e.to.id)
+      .filter((to) => to in cu.bad[defect] || files.some((k) => to in k[defect]))
+      .map((to) => ({ defect, to })),
+  );
+};
 
 /** The Customer's dashboard at `s`; `gain` comes from the expected flows, solved once per settings. */
 export const customerDashboardOf = (m: Factory, x: { s: Settings; gain: number }): CustomerDashboard => {
@@ -204,7 +217,7 @@ export const customerDashboardOf = (m: Factory, x: { s: Settings; gain: number }
     max: Math.max(30, Math.ceil(base * 4)),
     mix: targetsOf(m, cu, 'mix'),
     good: targetsOf(m, cu, 'good'),
-    bad: targetsOf(m, cu, 'bad'),
+    bad: badTargetsOf(m, cu),
     gain: x.gain,
     complaints: s.mech.complaints,
   };
