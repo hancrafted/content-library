@@ -35,6 +35,31 @@ describe('success cases', () => {
     // ASSERT
     expect(opts).toEqual(expected);
   });
+
+  it('takes a name and a claim the use case lacks from the catalog, as the page does', () => {
+    // ARRANGE
+    const catalog = [
+      'roles: {}',
+      'presets:',
+      '  ai-spiral: Catalog name',
+      'scenarios:',
+      '  ai-spiral:',
+      '    claims:',
+      '      clean-line: Catalog claim',
+      '',
+    ].join('\n');
+    const bare = (name: string): string => {
+      if (name === 'roles.words.yml') return catalog;
+      if (name !== 'tire.words.yml') return read(name);
+      return read(name)
+        .split('\nscenarios:')[0]!
+        .replace(/^ +ai-spiral: .*\n/m, '');
+    };
+    // ACT
+    const run = simulate({ useCase: 'tire', scenario: 'ai-spiral', seed: 1 }, bare);
+    // ASSERT
+    expect({ name: run.name, claim: run.claims[0] }).toEqual({ name: 'Catalog name', claim: 'Catalog claim' });
+  });
 });
 
 describe('failure cases', () => {

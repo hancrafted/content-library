@@ -12,9 +12,10 @@ import {
   type ScenarioVerdict,
   type SeedCheck,
 } from './factory-scenario.pure.ts';
-import type { Bundle } from './software-ecology.types';
+import type { Bundle, CatalogWords } from './software-ecology.types';
 import { bundleOf, readCatalog, readConfig } from './use-case-file.ts';
 import { textFileNames, type UseCaseTexts } from './use-case-texts.pure.ts';
+import { presetName, scenarioWords, type WordsIn } from './use-case-words.pure.ts';
 
 /** What to run: a use case, one of its scenarios, and one seed or a number of seeds in a row from the shipped one. */
 export interface SimOptions {
@@ -92,20 +93,20 @@ export const parseSimArgs = (argv: readonly string[]): SimOptions => {
 const seedsOf = (o: SimOptions): readonly number[] =>
   o.seed !== undefined ? [o.seed] : o.seeds !== undefined ? seedsFrom(o.seeds) : SEEDS;
 
-const nameOf = (B: Bundle, read: ReadFile, id: string): string => {
-  const catalog = readConfig<{ presets?: Record<string, string> }>(fileOf(read, 'roles.words.yml'));
-  return B.words.en.presets?.[id] ?? catalog.presets?.[id] ?? id;
-};
-
-/** Judges the scenario on its seeds, the use case's files read by `read`. */
+/** Judges the scenario on its seeds, the use case's files read by `read`; names and claims go through the page's words module. */
 export const simulate = (o: SimOptions, read: ReadFile): SimRun => {
   const B = loadUseCase(o.useCase, read),
+    words: WordsIn = {
+      B,
+      locale: 'en',
+      catalog: readConfig<CatalogWords>(fileOf(read, 'roles.words.yml')),
+    },
     verdict = judgeScenario(B, o.scenario, { seeds: seedsOf(o) }),
-    claims = B.words.en.scenarios?.[o.scenario]?.claims ?? {};
+    claims = scenarioWords(words, o.scenario).claims ?? {};
   return {
     useCase: o.useCase,
     scenario: o.scenario,
-    name: nameOf(B, read, o.scenario),
+    name: presetName(words, o.scenario),
     claims: verdict.beats.map((b) => (b.claim ? (claims[b.claim] ?? b.claim) : null)),
     verdict,
   };
