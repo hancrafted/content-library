@@ -164,21 +164,21 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
   const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
   // a state applies its own `compare`: a preset like AI compare opens the stream directly
   const apply = (bundle: typeof B, id: string) => compare.reset(presetOf(bundle, id).compare);
+  // entering a state: its own view, then its own compare mode
+  const enter = (bundle: typeof B, id: string) => (show(viewOf(bundle, id)), apply(bundle, id));
   return {
     onPreset: (id: string) => {
       dismissOverlays(x, { tour });
-      show(viewOf(B, id));
-      apply(B, id);
+      enter(B, id);
       f.controls.setPreset(id);
     },
     onTour: () => {
       const id = f.controls.preset;
       dash.dismiss();
-      show(viewOf(B, id));
-      apply(B, id);
+      enter(B, id);
       tour.start(id);
     },
-    onReset: resetToDefault(x, { f, tour, show, apply, viewOf }),
+    onReset: resetToDefault(x, { f, tour, enter }),
     onUseCase: (id: string) => {
       dismissOverlays(x, { tour });
       apply(x.bundleOf(id), f.controls.preset);
