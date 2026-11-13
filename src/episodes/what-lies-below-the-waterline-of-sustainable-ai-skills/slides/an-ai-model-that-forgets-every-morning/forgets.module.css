@@ -1,0 +1,65 @@
+/*
+ * Slide token file of "An AI model that forgets every morning" (FE-011 §2): the control room's low-poly wall, floor and
+ * window frame, mixed from global tokens so they follow light and dark with no raw colour, and the strip's one motion.
+ * No meaning colour here: `ai` marks only the pilot's tag, `human` and `machine` nothing on this Slide.
+ */
+
+.room {
+  --room: color-mix(in oklab, var(--muted) 82%, var(--zone-surface));
+  --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
+  --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));
+  --floor: color-mix(in oklab, var(--muted-foreground) 55%, var(--room));
+  --floor-shade: color-mix(in oklab, var(--floor) 80%, var(--foreground));
+  --frame: color-mix(in oklab, var(--foreground) 70%, var(--room));
+}
+
+.room [data-tone='room'] {
+  fill: var(--room);
+}
+
+.room [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+
+.room [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
+
+.room [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.room [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+.room [data-tone='frame'] {
+  fill: none;
+  stroke: var(--frame);
+}
+
+/*
+ * The strip's one emphasis motion (Spec Option 1a): the panels appear one after another, each `--panel-delay` after the
+ * Slide turns active. The base rule is the rest state, so a still frame and reduced motion show every panel at once.
+ * Each morning's speech bubbles read `--emote-delay` from here, so they pop in after their own panel.
+ */
+.panel {
+  --emote-delay: calc(var(--panel-delay, 0ms) + 450ms);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .panel {
+    animation: panel-in 420ms cubic-bezier(0.33, 0, 0.2, 1) var(--panel-delay, 0ms) both;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

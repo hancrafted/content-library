@@ -1,0 +1,84 @@
+/*
+ * Slide token file of "A skill hands the AI your procedure" (FE-011 §2): the cut-open control room, the dive manual,
+ * the procedure card and the project brief, mixed from global tokens so they follow light and dark with no raw colour.
+ * `primary` marks the one thing to look at, the skill; no meaning colour on scenery.
+ */
+
+.cutaway {
+  --room: color-mix(in oklab, var(--muted) 82%, var(--zone-surface));
+  --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
+  --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));
+  --floor: color-mix(in oklab, var(--muted-foreground) 55%, var(--room));
+  --cut: color-mix(in oklab, var(--foreground) 70%, var(--room));
+  --paper: var(--card);
+  --paper-rule: color-mix(in oklab, var(--muted-foreground) 60%, var(--card));
+  --paper-ink: var(--foreground);
+  --cover: color-mix(in oklab, var(--foreground) 55%, var(--primary));
+}
+
+.cutaway [data-tone='room'] {
+  fill: var(--room);
+}
+
+.cutaway [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+
+.cutaway [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
+
+.cutaway [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.cutaway [data-tone='cut'] {
+  fill: none;
+  stroke: var(--cut);
+}
+
+.cutaway [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper-ink);
+}
+
+.cutaway [data-tone='rule'] {
+  stroke: var(--paper-rule);
+}
+
+.cutaway [data-tone='cover'] {
+  fill: var(--cover);
+}
+
+.cutaway [data-tone='leader'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+.cutaway [data-tone='leader-focal'] {
+  fill: none;
+  stroke: var(--primary);
+}
+
+/*
+ * The Slide's one emphasis motion (Spec Option 2a): the card slides out of the manual (`Travel`), then its pill and
+ * leader appear last. The base rule is the rest state, so a still frame and reduced motion show both at once.
+ */
+.late {
+  transform-box: fill-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .late {
+    animation: late-in 360ms ease-out var(--late-delay, 0ms) both;
+  }
+}
+
+@keyframes late-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
