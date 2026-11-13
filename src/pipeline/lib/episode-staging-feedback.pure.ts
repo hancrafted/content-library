@@ -17,13 +17,16 @@ const FEEDBACK_ITEM = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · (content|implementa
 /*
  * A Spec review (`via: spec`) has its own item form: per page Slide, and for the Title slide whose Options carry
  * the section slides, its picks, a pick of none needing a note, and one optional `visual-language` item carrying
- * the Visual language note alone, and `brief--<heading-slug>` items, one note each on a Brief card heading.
+ * the Visual language note alone, and `brief--<heading-slug>` items, one note each on a Brief card heading. Two
+ * items speak for the Spec as a whole: `page`, the general comment, and `next`, the action after the Gate.
  */
 const SPEC_SLIDE_ITEM = new RegExp(
   `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none — \\S.*|\\d+[a-z](?:, \\d+[a-z])*(?: — \\S.*)?)$`,
 );
 const SPEC_BRIEF_ITEM = new RegExp(`^- \`(${BRIEF_KEYS.join('|')})\` · design — \\S.*$`);
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
+const SPEC_PAGE_ITEM = /^- `page` · design — (?!picked:)\S.*$/;
+const SPEC_NEXT_ITEM = /^- `next` · gate — (?:redesign|approve)$/;
 
 /**
  * The anchors feedback items may name beside `top`: the page Slides, `<section>--<slide>`, and the Sections, whose
@@ -44,11 +47,17 @@ function unknownAnchor(anchor: string, { anchors, sections, source }: FeedbackAn
 }
 
 function checkSpecFeedbackLine(line: string, anchors: FeedbackAnchors): string[] {
-  if (SPEC_VISUAL_LANGUAGE_ITEM.test(line) || SPEC_BRIEF_ITEM.test(line)) return [];
+  if (
+    SPEC_VISUAL_LANGUAGE_ITEM.test(line) ||
+    SPEC_BRIEF_ITEM.test(line) ||
+    SPEC_PAGE_ITEM.test(line) ||
+    SPEC_NEXT_ITEM.test(line)
+  )
+    return [];
   const item = SPEC_SLIDE_ITEM.exec(line);
   if (item === null)
     return [
-      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note": "${line}".`,
+      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note" or "- \`page\` · design — note" or "- \`next\` · gate — redesign|approve": "${line}".`,
     ];
   return unknownAnchor(item[1], anchors);
 }

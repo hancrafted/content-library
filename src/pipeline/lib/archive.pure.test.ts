@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
+import { feedbackItems } from './archive-staging.pure.ts';
 import { EVENTS, FEEDBACK, SPEC } from './archive.fixture.ts';
 import { designArchive } from './archive.pure.ts';
 
@@ -205,6 +206,44 @@ describe('success cases', () => {
       expect(found).toEqual([]);
       expect(scripts).toHaveLength(1);
       expect(carried).toEqual([]);
+    });
+  });
+
+  describe('Spec feedback with the page and next lines', () => {
+    it('reads the page and next items of a round beside its Slide items, each labelled with its round', () => {
+      // ARRANGE
+      const files = {
+        'feedback/02/feedback.md': [
+          '# Feedback round 2',
+          '',
+          '- `why-cash--watch-cash` · design — picked: 1b',
+          '- `page` · design — Calmer overall.',
+          '- `next` · gate — redesign',
+        ].join('\n'),
+      };
+      const expected = [
+        { anchor: 'why-cash--watch-cash', round: 2, text: 'design — picked: 1b' },
+        { anchor: 'page', round: 2, text: 'design — Calmer overall.' },
+        { anchor: 'next', round: 2, text: 'gate — redesign' },
+      ];
+      // ACT
+      const items = feedbackItems(files);
+      // ASSERT
+      expect(items).toEqual(expected);
+    });
+
+    it('files the page and next items under no Slide of the archive page', () => {
+      // ARRANGE
+      const feedback = {
+        ...FEEDBACK,
+        'feedback/03/feedback.md':
+          '# Feedback round 3\n\n- `page` · design — Calmer overall.\n- `next` · gate — approve\n',
+      };
+      // ACT
+      const $ = page(designArchive({ ...INPUT, feedback }).pages, 'cash-first/index.html');
+      const text = $('[data-archive="feedback"]').text();
+      // ASSERT
+      expect(text).not.toContain('Calmer overall.');
     });
   });
 });

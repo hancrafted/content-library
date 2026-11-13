@@ -128,6 +128,9 @@ describe('success cases', () => {
         '- `why--spent` · design — picked: none — Try a heat strip.',
         '- `top` · design — picked: 0b — Fuel the rocket in fewer steps.',
         '- `visual-language` · design — More accent.',
+        '- `page` · design — Calmer overall.',
+        '- `next` · gate — redesign',
+        '- `next` · gate — approve',
         '- `brief--learning-goal` · design — Sharper goal.',
         '- `brief--research-questions` · design — Add one on cost.',
       ]),
@@ -667,6 +670,20 @@ describe('edge cases', () => {
       'feedback/02/feedback.md': feedback('app', ['- `visual-language` · content — More accent.']),
     });
     const expectedFiles = [FEEDBACK_PATH, 'feedback/02/feedback.md'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
+    // ASSERT
+    expect(findings.map(({ file }) => file)).toEqual(expectedFiles);
+  });
+
+  it('takes the page and next items only in a Spec review, the next item only as redesign or approve', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', ['- `next` · gate — ship', '- `next` · design — approve']),
+      'feedback/02/feedback.md': feedback('app', ['- `page` · design — Calmer overall.']),
+      'feedback/03/feedback.md': feedback('spec', ['- `page` · design — picked: 1a — Calmer.']),
+    });
+    const expectedFiles = [FEEDBACK_PATH, FEEDBACK_PATH, 'feedback/02/feedback.md', 'feedback/03/feedback.md'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
     // ASSERT

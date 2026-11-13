@@ -296,6 +296,21 @@ describe('success cases', () => {
     expect($('#the-quiet-middle figure[data-picked]')).toHaveLength(0);
   });
 
+  it('keeps its locks across a round that carries the page and next lines', () => {
+    // ARRANGE
+    const round = feedback(
+      1,
+      '- `why-it-forgets--spent-attention` · design — picked: 1b',
+      '- `page` · design — Calmer overall.',
+      '- `next` · gate — redesign',
+    );
+    // ACT
+    const $ = page({ ...FULL, feedback: [round] });
+    // ASSERT
+    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe('1b');
+    expect($('figure[data-picked]')).toHaveLength(1);
+  });
+
   it('lets a later round override an earlier one and keeps earlier locks the later round omits', () => {
     // ARRANGE
     const first = feedback(
