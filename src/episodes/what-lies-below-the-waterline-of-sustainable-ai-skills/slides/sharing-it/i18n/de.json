@@ -1,6 +1,33 @@
 {
   "title": "Ihn teilen",
-  "zone": "Mitternachtszone",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Ihn teilen hervorgehoben",
   "aiStatement": "Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum",
   "owner": "Owner: Laborteam · v1.3 · Prüfung im März",
   "analogy": "Die Karte im Flottenhandbuch des Instituts.",

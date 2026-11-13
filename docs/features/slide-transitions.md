@@ -10,7 +10,7 @@ stale_after: 2026-11-18T00:00:00Z
 
 ## Named transition interface
 
-`Slide.presentation.enter` and `.leave` each accept `{ effect, className?, style? }`. `effect` names `liquid`, `paper`, `glitch`, `goo`, `dither` or `wave`; `style` accepts custom properties only. `className` supplies a self-contained transition CSS module scope, including any local token definitions and `.dark` variants its settings reference. It must not depend on the declaring Scene's ancestry or override structural positioning, stacking or interaction rules.
+`Slide.presentation.enter` and `.leave` each accept `{ effect, className?, style? }`. `effect` names `liquid`, `paper`, `glitch`, `goo`, `dither`, `wave` or `bubbles` (the Iceberg style's Section-title descent); `style` accepts custom properties only. `className` supplies a self-contained transition CSS module scope, including any local token definitions and `.dark` variants its settings reference. It must not depend on the declaring Scene's ancestry or override structural positioning, stacking or interaction rules.
 
 `EpisodeComposition.transitionPrecedence` is `'enter'` by default, optionally `'leave'`. `recordContent()` resolves adjacent declarations in one linear pass into `EpisodeContent.transitions`, keyed by outgoing wrapper id. Each resolved entry retains `id`, `outgoing`, `incoming`, `declaration`, `targetSurface` and optional incoming `targetStyle`. An absent declaration produces no renderer; geometry still exists.
 
@@ -20,12 +20,12 @@ The shared `InkCanvas` and `INK_PROFILES` preserve the existing named filter, bl
 
 Rendering-only mappings:
 
-| Variable                            | Unit / default                                                                                       | Meaning                                                          |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `--slide-transition-height`         | CSS length, `100svh`                                                                                 | Trailing rendering extent, capped at the outgoing wrapper height |
-| `--slide-transition-bleed`          | CSS length; liquid `300px`, paper `120px`, glitch `200px`, goo `250px`, dither `100px`, wave `180px` | Filter overscan around the ink canvas                            |
-| `--slide-transition-opacity`        | number, `1`                                                                                          | Local effect opacity                                             |
-| `--slide-transition-target-surface` | live incoming surface token                                                                          | Destination colour on the nested target scope                    |
+| Variable                            | Unit / default                                                                                                        | Meaning                                                          |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `--slide-transition-height`         | CSS length, `100svh`                                                                                                  | Trailing rendering extent, capped at the outgoing wrapper height |
+| `--slide-transition-bleed`          | CSS length; liquid `300px`, paper `120px`, glitch `200px`, goo `250px`, dither `100px`, wave `180px`, bubbles `220px` | Filter overscan around the ink canvas                            |
+| `--slide-transition-opacity`        | number, `1`                                                                                                           | Local effect opacity                                             |
+| `--slide-transition-target-surface` | live incoming surface token                                                                                           | Destination colour on the nested target scope                    |
 
 Range offsets below are calculation inputs, not rendering dimensions. A controlled editor changes them on `[data-transition-edge]` and dispatches `surface-clock-refresh` on the Episode root. The Grids reference's `grid-1x2` enter `wave` wins over its neighbour's leave `paper`, carrying a portable `-64px` start setting; its outgoing leave `goo` targets the next normal surface. Neither choice implies inversion or decoration.
 

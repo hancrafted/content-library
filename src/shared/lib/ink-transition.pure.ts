@@ -6,6 +6,8 @@ export const INK_PROFILES = {
   goo: { bleed: 250, knee: 0.15 },
   dither: { bleed: 100, knee: 0.08 },
   wave: { bleed: 180, knee: 0.12 },
+  /** The Iceberg style's Section-title descent: the next zone rises through a froth of bubbles. */
+  bubbles: { bleed: 220, knee: 0.12 },
 } as const;
 
 export function inkScale(variant: keyof typeof INK_PROFILES, progress: number) {

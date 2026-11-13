@@ -1,4 +1,4 @@
-export type TransitionStyle = 'liquid' | 'paper' | 'glitch' | 'goo' | 'dither' | 'wave';
+export type TransitionStyle = 'liquid' | 'paper' | 'glitch' | 'goo' | 'dither' | 'wave' | 'bubbles';
 
 function LiquidFilter({ id }: { id: string }) {
   return (
@@ -119,6 +119,28 @@ function WaveFilter({ id }: { id: string }) {
   );
 }
 
+/**
+ * Rising bubbles: a fine, round noise pushes the edge about, a blur and a steep alpha threshold pinch it into round
+ * blobs, so the incoming zone climbs as a froth that leaves bubbles above its edge (the Iceberg style's descent).
+ */
+function BubblesFilter({ id }: { id: string }) {
+  return (
+    <filter id={id} x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.03" numOctaves={2} seed={17} result="noise" />
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="noise"
+        scale={190}
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="displaced"
+      />
+      <feGaussianBlur in="displaced" stdDeviation={9} result="blurred" />
+      <feColorMatrix in="blurred" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+    </filter>
+  );
+}
+
 const FILTERS = {
   liquid: LiquidFilter,
   paper: PaperFilter,
@@ -126,6 +148,7 @@ const FILTERS = {
   goo: GooFilter,
   dither: DitherFilter,
   wave: WaveFilter,
+  bubbles: BubblesFilter,
 };
 
 export function InkFilterDefinition({ style, id = `ink-edge-${style}` }: { style: TransitionStyle; id?: string }) {

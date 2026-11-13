@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -8,12 +9,13 @@ import en from './i18n/en.json';
 export const sharingIt = slide({
   slug: 'sharing-it',
   messages: { en, de },
+  presentation: atDepth(6, 'section'),
   segments: [{ slug: 'midnight' }, { slug: 'three-jobs' }],
-  content: ({ t }) => (
+  content: ({ t, locale }) => (
     <SlideFrame>
       <WaterlineEcho
-        zone="midnight"
-        zoneLabel={t('zone')}
+        zones={(locale === 'de' ? de : en).zones}
+        rulerLabel={t('ruler')}
         robotAt="hanging"
         section={6}
         wide

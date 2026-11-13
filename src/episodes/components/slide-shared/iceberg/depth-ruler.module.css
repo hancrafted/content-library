@@ -1,0 +1,161 @@
+/*
+ * The depth ruler and the slim rail (design guide, Iceberg). Each band and rail tile takes its zone's one global token,
+ * `--zone-<zone>`; the lit tile is the one focal mark, `primary`. Text keeps the Slide's own foreground, which the zone
+ * presentation turns light on the dark zones.
+ *
+ * Motion: the descent, once per Section, under the Slide mount's `[data-zone='active']`: the view moves down to its
+ * band and the Section's tile lights. The base rules are the rest state, so reduced motion shows the ruler arrived.
+ */
+
+.ruler {
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.band {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.375rem 0.625rem;
+  background: color-mix(in oklab, var(--band-zone) 80%, transparent);
+}
+
+.band[data-ruler-zone='surface'] {
+  --band-zone: var(--zone-surface);
+}
+
+.band[data-ruler-zone='sunlit'] {
+  --band-zone: var(--zone-sunlit);
+}
+
+.band[data-ruler-zone='twilight'] {
+  --band-zone: var(--zone-twilight);
+}
+
+.band[data-ruler-zone='midnight'] {
+  --band-zone: var(--zone-midnight);
+  color: var(--on-brand-accent);
+}
+
+.band[data-ruler-zone='abyss'] {
+  --band-zone: var(--zone-abyss);
+  color: var(--on-brand-accent);
+}
+
+/* The light bands keep dark text in light mode and light text in dark mode: the page foreground of each theme. */
+.band[data-ruler-zone='surface'],
+.band[data-ruler-zone='sunlit'],
+.band[data-ruler-zone='twilight'] {
+  color: var(--card-foreground);
+}
+
+.label {
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+  border-radius: 2px;
+  touch-action: manipulation;
+}
+
+.label:hover,
+.label[aria-expanded='true'] {
+  text-decoration-style: solid;
+}
+
+.label:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.tile {
+  display: block;
+  width: 1.25rem;
+  height: 0.5rem;
+  border-radius: 2px;
+  background: currentcolor;
+  opacity: 0.45;
+}
+
+.tile.lit {
+  width: 2rem;
+  height: 0.75rem;
+  background: var(--primary);
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.rail {
+  /* In the Slide's rear Backdrop, just left of its Foreground's inset edge. */
+  position: absolute;
+  top: 6rem;
+  left: max(0.5rem, calc(var(--inset-l, 1rem) - 1.75rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 0.625rem;
+}
+
+.railTile {
+  display: block;
+  height: 1.75rem;
+  border-radius: 2px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 20%, transparent);
+}
+
+.railTile[data-rail-zone='surface'] {
+  background: var(--zone-surface);
+}
+
+.railTile[data-rail-zone='sunlit'] {
+  background: var(--zone-sunlit);
+}
+
+.railTile[data-rail-zone='twilight'] {
+  background: var(--zone-twilight);
+}
+
+.railTile[data-rail-zone='midnight'] {
+  background: var(--zone-midnight);
+}
+
+.railTile[data-rail-zone='abyss'] {
+  background: var(--zone-abyss);
+}
+
+.railTile.lit {
+  background: var(--primary);
+  border-color: var(--background);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .ruler[data-motion='descent'] .view {
+    animation: ruler-descent 1400ms cubic-bezier(0.45, 0, 0.2, 1) both;
+  }
+
+  :global([data-zone='active']) .ruler[data-motion='descent'] .tile.lit {
+    animation: ruler-light 500ms ease-out 1200ms both;
+  }
+}
+
+/* Descending, the view moves down past the shallower bands, so the ruler's content rises into its rest place. */
+@keyframes ruler-descent {
+  from {
+    translate: 0 3rem;
+    opacity: 0.4;
+  }
+}
+
+@keyframes ruler-light {
+  from {
+    background: currentcolor;
+    opacity: 0.45;
+    scale: 0.6 1;
+  }
+}

@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo/waterline-echo';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -8,12 +9,13 @@ import en from './i18n/en.json';
 export const whatGoesInside = slide({
   slug: 'what-goes-inside',
   messages: { en, de },
+  presentation: atDepth(4, 'section'),
   segments: [{ slug: 'twilight' }, { slug: 'a-decision-not-a-law' }],
-  content: ({ t }) => (
+  content: ({ t, locale }) => (
     <SlideFrame>
       <WaterlineEcho
-        zone="twilight"
-        zoneLabel={t('zone')}
+        zones={(locale === 'de' ? de : en).zones}
+        rulerLabel={t('ruler')}
         robotAt="hanging"
         section={4}
         wide

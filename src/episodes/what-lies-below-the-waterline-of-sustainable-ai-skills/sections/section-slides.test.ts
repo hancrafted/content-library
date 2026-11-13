@@ -11,8 +11,8 @@ import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 /*
  * The section slides of "What lies below the waterline of sustainable AI skills", as the approved Spec gives them: one
  * per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one
- * echo of picked Title-slide Option 0a: the Section's card at its zone's depth. The scenery, the robot and the depth
- * ruler are slots the later Build jobs fill (design-ADR-0025).
+ * echo of picked Title-slide Option 0a: the Section's card at its zone's depth, drawn by ZoneScene with the robot on
+ * its cable and the whole depth ruler, the Section's tile lit (design-ADR-0025).
  */
 
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
@@ -78,7 +78,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = ['surface', 'surface', 'sunlit', 'sunlit', 'twilight', 'twilight', 'midnight', 'abyss'];
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-echo]').attr('data-zone'));
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-scene]').attr('data-depth-zone'));
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -103,9 +103,9 @@ describe('success cases', () => {
 
   it('carries the grounding line on When to write one alone', () => {
     // ARRANGE
-    const expected = ['when-to-write-one'];
+    const expected = [0, 0, 1, 0, 0, 0, 0, 0];
     // ACT
-    const actual = OPENERS.map(({ slug }) => slug).filter((slug) => sceneOf(slug)('[data-grounding]').length > 0);
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-grounding]').length);
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -121,17 +121,15 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws no figure or scenery itself, leaving one slot each for the scene, the robot and the ruler', () => {
+  it('lights only its own Section on the ruler, never a neighbour', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => ({ scene: 1, robot: 1, ruler: 1 }));
+    const expected = [['0'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7']];
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      return {
-        scene: $('[data-slot="zone-scene"]').length,
-        robot: $('[data-slot="robot"]').length,
-        ruler: $('[data-slot="depth-ruler"]').length,
-      };
+      return $('[data-tile][data-lit]')
+        .toArray()
+        .map((tile) => $(tile).attr('data-section'));
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -141,21 +139,33 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('scripts every German section slide segment by segment, as English does', () => {
     // ARRANGE
-    const expected = OPENERS.map((slide) => slide.segments.length);
+    const expected = [
+      ['Du bist der Kapitän', 'Eine feste Eigenschaft'],
+      ['Erst die Oberfläche', 'Die Mechanik, ganz nüchtern'],
+      ['Sonnenlicht', 'Geliehene Prinzipien', 'Warum eine Faustregel'],
+      ['Das Etikett entscheidet', 'Name, Beschreibung'],
+      ['Dämmerung', 'Eine Entscheidung, kein Gesetz'],
+      ['Daneben, nicht darin', 'Wo er geteilt wird'],
+      ['Mitternacht', 'Drei Aufgaben'],
+      ['Die Tiefsee', 'Niemand sieht es'],
+    ];
     // ACT
-    const actual = OPENERS.map((slide) => scriptOf(slide, 'de').segments.filter((title) => Boolean(title)).length);
+    const actual = OPENERS.map((slide) => scriptOf(slide, 'de').segments);
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('keeps the coding-agent line on each card, hidden until the page switches to that view', () => {
+  it('keeps both view lines on each card, each marked with its view for the page switch', () => {
     // ARRANGE
-    const expected = OPENERS.map(() => ({ chat: 1, coding: 1, hidden: true }));
+    const expected = OPENERS.map(() => ({ chat: ['chat'], coding: ['coding'] }));
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      const coding = $('[data-view="coding"]');
-      return { chat: $('[data-view="chat"]').length, coding: coding.length, hidden: coding.hasClass('hidden') };
+      const views = (view: string) =>
+        $(`[data-view="${view}"]`)
+          .toArray()
+          .map((line) => $(line).attr('data-view'));
+      return { chat: views('chat'), coding: views('coding') };
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -174,7 +184,7 @@ describe('edge cases', () => {
       'Abyssal',
     ];
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-zone-label]').text());
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-echo-zone]').text());
     // ASSERT
     expect(actual).toEqual(expected);
   });
