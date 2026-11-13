@@ -27,7 +27,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Chrome tools: load with `ToolSearch` `select:mcp__claude-in-chrome__…`; regex tool search cannot see them. `list_connected_browsers` returning `[]` means the extension is signed out: ask the user to re-auth. Several browsers and none selected: ask, then `select_browser`. Still blocked: `visual-check`.
 - Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 
-- `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`. Keep the vitest configs split — `verify` must stay fast and must not require a build. There is no automated browser suite or nightly browser job; Playwright remains available for interactive inspection and visual checks.
+- `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`. `*.slow.test.ts` takes seconds and runs in `npm run test:slow`: at pre-push for what the branch changed, and nightly (ARCH-003-testing §4.4). Keep the vitest configs split — `verify` must stay fast and must not require a build. There is no automated browser suite or nightly browser job; Playwright remains available for interactive inspection and visual checks.
 
 ## Audiences and locales
 

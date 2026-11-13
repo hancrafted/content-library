@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { stepsOf } from './factory-beats.pure.ts';
+import { AI_AT_ENG, SEEDS, withTour } from './factory-scenario.fixture.ts';
 import { judgeScenario, needOf, runScenario, type ScenarioRow } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
-import type { Bundle, Preset, TourStep } from './software-ecology.types';
+import type { Bundle, Preset } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
 /*
@@ -90,15 +91,6 @@ const valueOf = (r: Reading): string | undefined =>
     [r.step - 1]?.checks.find((c) => c.key === r.key)
     ?.v.toFixed(2);
 
-/** Tire swing with one more scenario: Realistic, then the given beats. */
-const withTour = (tour: readonly TourStep[]): Bundle => {
-  const B = builtinBundle('tire');
-  const p: Preset = { id: 'probe', view: 'factory', reality: 100, tour };
-  return { ...B, data: { ...B.data, presets: [...B.data.presets, p] } };
-};
-const SEEDS = [1, 2, 3];
-const AI_AT_ENG = { ai: ['eng'], dials: { eng: { aiExtra: 2 } } } as const;
-
 /**
  * The states judged on the default seed alone: every check, and every tour without a claim. A tour whose beats carry
  * Han's claims is judged across ten seeds in `npm run test:build` (tests/post-build/ecology-scenarios.build.test.ts), by
@@ -152,16 +144,6 @@ describe('success cases', () => {
     const second = judgeScenario(B, 'probe', { seeds: SEEDS }).beats[1];
     // ASSERT
     expect(second?.passed).toBe(expected);
-  });
-
-  it('checks settles after the beat’s settings run 40 weeks more', () => {
-    // ARRANGE
-    const B = withTour([{ set: AI_AT_ENG, run: 6, settles: { 'qa.weeksWaiting': '>8' } }]);
-    const pile = 8;
-    // ACT
-    const check = judgeScenario(B, 'probe', { seeds: SEEDS }).beats[0]?.checks.find((c) => c.kind === 'settles');
-    // ASSERT
-    expect(Math.min(...(check?.means ?? []))).toBeGreaterThan(pile);
   });
 });
 

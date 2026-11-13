@@ -5,7 +5,7 @@ description: Run an Episode pipeline from an approved Brief to a served Episode 
 
 # New Episode
 
-You are the **orchestrator**: one Claude Code session that runs an Episode's per-run pipeline as a todo list, running each agent a job names as a subagent or, where its `session` says so, in this session. Every artifact sits in the staging folder `docs/episodes/<slug>/`; its shape is governed by markdown-harness, its agreement with the other files by `tests/docs/episode-staging.test.ts`, its meaning by a reviewer. Terms are in `GLOSSARY.md` under _Episode production_; the staging model is design-ADR `docs/adr/0004-episode-content-is-staged-then-promoted.md`.
+You are the **orchestrator**: one Claude Code session that runs an Episode's per-run pipeline as a todo list, running each agent a job names as a subagent or, where its `session` says so, in this session. Every artifact sits in the staging folder `docs/episodes/<slug>/`; its shape is governed by markdown-harness, its agreement with the other files by `tests/docs/episode-staging.test.ts` and its slow half `episode-staging.slow.test.ts`, its meaning by a reviewer. Terms are in `GLOSSARY.md` under _Episode production_; the staging model is design-ADR `docs/adr/0004-episode-content-is-staged-then-promoted.md`.
 
 Paths below are relative to the repo root, except `references/` and `assets/`, which sit in this skill's folder. The sample Episode in `assets/sample-episode/` shows every staging file in a governed, finished form; read a file there before writing its first real counterpart.
 
@@ -51,7 +51,7 @@ Start only when all of these hold; otherwise name each one that fails to the use
 1. `brief.md` is approved: its `verified` list holds a `human:han` entry at or after `generated.at` (`npm run episode:status` reads the same rule; an edit after approval re-opens it).
 2. `pipeline.yml` has the top-level `status: approved`.
 3. `npm run check:docs` is clean.
-4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the pipeline's schema and stages, one research job per item under retrieval's `### Research jobs`, and that no approved Brief keeps a `Not settled.` section.
+4. `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging` passes. It checks the pipeline's schema and stages, one research job per item under retrieval's `### Research jobs`, and that no approved Brief keeps a `Not settled.` section.
 
 Then run `npm run episode:status -- <slug>` and write the todo list from its output: one todo per job that is not `done`, in its order. It reads each job's state from `pipeline.yml` and the latest job span per job id in `events.jsonl`, so the list never rests on memory. A `warn` line names a finished agent or orchestrator-session Job that did not invoke a skill its `skills` lists: tell it to, or note it in the Attempt's summary. An approved pipeline has no `foreach`: customize-pipeline expanded each into named jobs.
 
@@ -99,7 +99,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
    | check          | command                                                                                                                                                                                                                                                         |
    | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | `mh`           | `npm run check:docs`                                                                                                                                                                                                                                            |
-   | `vitest`       | `npx vitest run tests/docs/episode-staging.test.ts`                                                                                                                                                                                                             |
+   | `vitest`       | `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging`                                                                                                                                                       |
    | `sources`      | `npm run check:sources -- <research.md…>`: every source URL of the job's research files; exit 1 only when one is `dead`, and `unverifiable` links go to the reviewer as `needs human`                                                                           |
    | `impeccable`   | with `npm run preview` serving `out/`, `DO_NOT_TRACK=1 npx --yes impeccable@4.5.2 detect --json http://localhost:4300/episode/<slug>` and the `/de/` URL: a rendered scan, limited to the rules `.impeccable/config.json` leaves on; exit 2 is a failed attempt |
    | `verify`       | `npm run verify`                                                                                                                                                                                                                                                |

@@ -97,6 +97,47 @@ describe('suite-three-blocks', () => {
     expect(violations.map((v) => v.message)).toEqual([expect.stringMatching(/'edge cases' appears twice/)]);
   });
 
+  it('passes a slow file holding one block when it and its fast sibling hold all three between them', async () => {
+    // ARRANGE
+    const fast = [block('success cases'), block('edge cases')].join('\n');
+    const slow = block('failure cases');
+    const { ctx, violations } = makeCtx({
+      'src/shared/lib/thing.pure.test.ts': fast,
+      'src/shared/lib/thing.pure.slow.test.ts': slow,
+    });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('fails a slow file without a fast sibling, naming the blocks it lacks', async () => {
+    // ARRANGE
+    const slowFile = 'src/shared/lib/thing.pure.slow.test.ts';
+    const { ctx, violations } = makeCtx({ [slowFile]: block('success cases') });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([
+      expect.objectContaining({
+        file: slowFile,
+        message: expect.stringMatching(/no top-level describe 'failure cases', 'edge cases'/),
+      }),
+    ]);
+  });
+
+  it('fails a slow file with a fourth top-level name, even beside a full fast sibling', async () => {
+    // ARRANGE
+    const { ctx, violations } = makeCtx({
+      'src/shared/lib/thing.pure.test.ts': SUITE,
+      'src/shared/lib/thing.pure.slow.test.ts': block('slow tours'),
+    });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations.map((v) => v.message)).toEqual([expect.stringMatching(/'slow tours' is not one of/)]);
+  });
+
   it('fails a file with one subject-named suite', async () => {
     // ARRANGE
     const source = block('SlideWrapper');

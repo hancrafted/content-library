@@ -27,7 +27,8 @@ _Done when_ every beat has its claim, its checks and the readings that move them
 Loop: run, find the first failing beat, change the one or two numbers that move its failing reading, run again. Fix beats in order: a later beat's `rises` reads against the beat before it, so a change upstream moves every check after it. `--seed n` replays one seed when a single outlier needs explaining. Record every change you keep, since the report carries the diff (`git diff -- <use-case>.yml`). After each kept change, run `--seeds 10` on In theory (`ideal`) and In practice (`realistic`) too: they must keep passing.
 
 Stop when every beat passes, or when you can show that one cannot: the readings across the numbers you tried, and the model or range change it would need.
-_Done when_ the sim prints `PASS: every beat holds`, or each failing beat has its evidence.
+Then run `npm run test:slow -- src/explorables/software-ecology`: it plays every shipped tour frame by frame against the headless runner, which no commit check does.
+_Done when_ the sim prints `PASS: every beat holds` and `test:slow` passes, or each failing beat has its evidence.
 
 ## 3. Play it in the browser
 
