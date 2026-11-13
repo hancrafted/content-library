@@ -239,11 +239,12 @@ describe('success cases', () => {
         'feedback/03/feedback.md':
           '# Feedback round 3\n\n- `page` · design — Calmer overall.\n- `next` · gate — approve\n',
       };
+      const pageNote = 'Calmer overall.';
       // ACT
       const $ = page(designArchive({ ...INPUT, feedback }).pages, 'cash-first/index.html');
       const text = $('[data-archive="feedback"]').text();
       // ASSERT
-      expect(text).not.toContain('Calmer overall.');
+      expect(text).not.toContain(pageNote);
     });
   });
 });

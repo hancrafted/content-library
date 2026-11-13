@@ -6,7 +6,8 @@ import { describe, expect, it } from 'vitest';
 /*
  * The committed Spec template against the skill and the calibration it records a hash of. A change to
  * `skills/to-decision-html` or to the Spec calibration fails here until the template is regenerated and its hash
- * recorded (grilling Q8 of #556). It reads a handful of small files, so it stays in the fast suite.
+ * recorded (grilling Q8 of #556). It reads the live repo from disk, so it is a slow test (ARCH-003-testing §4.4):
+ * `src/pipeline/lib/episode-spec-template-fresh.pure.test.ts` holds the fast half.
  */
 
 describe('success cases', () => {
@@ -37,8 +38,9 @@ describe('edge cases', () => {
     const expected = ['SKILL.md', 'references/diagrams.md', 'references/feedback-contract.md'];
     // ACT
     const files = Object.keys(readTemplateSources().skill);
+    const outside = files.filter((file) => file !== 'SKILL.md' && !file.startsWith('references/'));
     // ASSERT
     expect(files).toEqual(expect.arrayContaining(expected));
-    expect(files.every((file) => file === 'SKILL.md' || file.startsWith('references/'))).toBe(true);
+    expect(outside).toEqual([]);
   });
 });

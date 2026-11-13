@@ -8,11 +8,14 @@ import { reviewToFeedback } from '../../src/pipeline/lib/spec-feedback.pure.ts';
 /*
  * A Spec review round carrying the `page` and `next` lines, as the review form saves it, against the markdown-harness
  * `feedback` rule: the rule governs the file's frontmatter and h1, so a round the server writes must keep passing it.
+ * It spawns `mh check` over the live config, so it is a slow test (ARCH-003-testing §4.4); the config is a rerun
+ * trigger in `vitest.slow.config.mts`.
  */
 
 const ROOT = path.join(__dirname, '../..');
 const MH = path.join(ROOT, 'node_modules/@hancrafted/markdown-harness/dist/packages/cli/cli.js');
 const NOW = new Date('2026-10-15T10:40:05Z');
+const NEXT_LINE = '- `next` · gate — redesign';
 
 function savedRound(): string {
   const result = reviewToFeedback({
@@ -59,7 +62,7 @@ describe('a Spec feedback round with the page and next lines', () => {
       // ACT
       const result = checkAsFeedback(round);
       // ASSERT
-      expect(round).toContain('- `next` · gate — redesign');
+      expect(round).toContain(NEXT_LINE);
       expect(result).toEqual(clean);
     });
   });

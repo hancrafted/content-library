@@ -167,6 +167,9 @@ const FRAGMENTS = [
   `<!-- slide: trim-the-paste -->${option('3a', true)}${option('3b')}`,
 ];
 
+/** The fidelity the Spec calibration gives every item. */
+const FIDELITY = 'mock';
+
 const BASE = {
   template: TEMPLATE,
   generated: { by: 'process:spec-assemble', at: '2026-10-12T12:00:00Z' },
@@ -309,16 +312,21 @@ describe('success cases', () => {
   it('clones the item template once per Slide, Title slide included, with its item attributes set', () => {
     // ARRANGE
     const items = ['top', 'spent-attention', 'the-quiet-middle', 'trim-the-paste'];
+    const [titleSlide, slide] = items as [string, string];
+    const fidelities = items.map(() => FIDELITY);
+    const slideNumber = '1';
+    const slideTitle = 'Spent attention';
+    const titleRole = 'title-slide';
     // ACT
     const $ = page(FULL);
     // ASSERT
     expect(ids($, '[data-item]', 'data-item')).toEqual(items);
-    expect(ids($, '[data-item]', 'data-fidelity')).toEqual(items.map(() => 'mock'));
-    expect($('article#spent-attention').attr('data-item')).toBe('spent-attention');
-    expect($('article#top').attr('data-spec')).toBe('title-slide');
-    expect($('article#top').attr('data-number')).toBeUndefined();
-    expect($('#spent-attention .spec-number').text()).toBe('1');
-    expect($('#spent-attention h3').text()).toBe('Spent attention');
+    expect(ids($, '[data-item]', 'data-fidelity')).toEqual(fidelities);
+    expect($(`article#${slide}`).attr('data-item')).toBe(slide);
+    expect($(`article#${titleSlide}`).attr('data-spec')).toBe(titleRole);
+    expect($(`article#${titleSlide}`).attr('data-number')).toBeUndefined();
+    expect($(`#${slide} .spec-number`).text()).toBe(slideNumber);
+    expect($(`#${slide} h3`).text()).toBe(slideTitle);
   });
 
   it('clones the Option template per fragment Option: its id, recommendation as true or false, mock, caption and pick slot', () => {
@@ -327,6 +335,7 @@ describe('success cases', () => {
       ['1a', 'true'],
       ['1b', 'false'],
     ];
+    const first = { id: '1a', mock: 'Mock 1a', caption: '1a A reason. Build cost: Scene.' };
     // ACT
     const $ = page(FULL);
     const options = $('#spent-attention figure[data-spec="option"]');
@@ -334,10 +343,10 @@ describe('success cases', () => {
     expect(
       options.map((_, figure) => [[$(figure).attr('data-option'), $(figure).attr('data-recommended')]]).get(),
     ).toEqual(expected);
-    expect(options.first().find('[data-spec="mock"]').text()).toBe('Mock 1a');
-    expect(options.first().find('figcaption').text()).toBe('1a A reason. Build cost: Scene.');
-    expect(options.first().find('.spec-pick b').text()).toBe('1a');
-    expect(options.first().find('input[name="pick:spent-attention"]').attr('value')).toBe('1a');
+    expect(options.first().find('[data-spec="mock"]').text()).toBe(first.mock);
+    expect(options.first().find('figcaption').text()).toBe(first.caption);
+    expect(options.first().find('.spec-pick b').text()).toBe(first.id);
+    expect(options.first().find('input[name="pick:spent-attention"]').attr('value')).toBe(first.id);
   });
 
   it('keeps the echoes of a Title-slide Option in its stage', () => {
@@ -353,11 +362,12 @@ describe('success cases', () => {
     // ARRANGE
     const round = (n: number) => feedback(n, '- `top` · design — picked: 0a');
     // ACT
+    const expected = ['1', '2', '3'];
     const revisions = [[], [round(1)], [round(1), round(2)]].map((rounds) =>
       page({ ...FULL, feedback: rounds })('html').attr('data-revision'),
     );
     // ASSERT
-    expect(revisions).toEqual(['1', '2', '3']);
+    expect(revisions).toEqual(expected);
   });
 
   it('leaves no template, slot marker or placeholder behind in the page', () => {
@@ -373,13 +383,14 @@ describe('success cases', () => {
 
   it('drops the Option and note slots of a Slide that has no Options yet, but keeps its item attributes', () => {
     // ARRANGE
-    const expected = { item: 'spent-attention', fidelity: 'mock' };
+    const expected = { item: 'spent-attention', fidelity: FIDELITY };
+    const purpose = 'the window fills';
     // ACT
     const $ = page(BRIEF_ONLY);
     const slide = $('#spent-attention');
     // ASSERT
     expect(slide.find('.spec-options, .spec-note')).toHaveLength(0);
-    expect(slide.find('.spec-purpose').text()).toContain('the window fills');
+    expect(slide.find('.spec-purpose').text()).toContain(purpose);
     expect({ item: slide.attr('data-item'), fidelity: slide.attr('data-fidelity') }).toEqual(expected);
   });
 
@@ -390,12 +401,13 @@ describe('success cases', () => {
       '- `top` · design — picked: 0b',
       '- `why-it-forgets--spent-attention` · design — picked: 1b — tighter',
     );
+    const [slidePick, titlePick] = ['1b', '0b'];
     // ACT
     const $ = page({ ...FULL, feedback: [round] });
     // ASSERT
-    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe('1b');
-    expect($('#spent-attention input[type="checkbox"][checked]').attr('value')).toBe('1b');
-    expect($('#top figure[data-picked]').attr('data-option')).toBe('0b');
+    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe(slidePick);
+    expect($('#spent-attention input[type="checkbox"][checked]').attr('value')).toBe(slidePick);
+    expect($('#top figure[data-picked]').attr('data-option')).toBe(titlePick);
     expect($('#the-quiet-middle figure[data-picked]')).toHaveLength(0);
   });
 
@@ -407,10 +419,11 @@ describe('success cases', () => {
       '- `page` · design — Calmer overall.',
       '- `next` · gate — redesign',
     );
+    const slidePick = '1b';
     // ACT
     const $ = page({ ...FULL, feedback: [round] });
     // ASSERT
-    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe('1b');
+    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe(slidePick);
     expect($('figure[data-picked]')).toHaveLength(1);
   });
 
@@ -520,20 +533,22 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('refuses a template with a slot the assembler does not fill, naming it', () => {
     // ARRANGE
-    const template = TEMPLATE.replace('data-slot="lede"', 'data-slot="ledger"');
+    const slot = 'ledger';
+    const template = TEMPLATE.replace('data-slot="lede"', `data-slot="${slot}"`);
     // ACT
     const run = () => assembleSpec({ ...FULL, template });
     // ASSERT
-    expect(run).toThrow(/"ledger"/);
+    expect(run).toThrow(`"${slot}"`);
   });
 
   it('refuses a template without its item or Option template', () => {
     // ARRANGE
-    const template = TEMPLATE.replace('data-template="option"', 'data-template="choice"');
+    const missing = 'option';
+    const template = TEMPLATE.replace(`data-template="${missing}"`, 'data-template="choice"');
     // ACT
     const run = () => assembleSpec({ ...FULL, template });
     // ASSERT
-    expect(run).toThrow(/"option"/);
+    expect(run).toThrow(`"${missing}"`);
   });
 
   it('refuses once the existing Spec is approved', () => {

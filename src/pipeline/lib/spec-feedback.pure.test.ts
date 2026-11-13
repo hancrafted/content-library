@@ -15,6 +15,9 @@ const SLIDES: readonly SpecSlide[] = [
 const TITLE = ['0a', '0b', '0c'];
 const NOW = new Date('2026-10-15T10:40:05.123Z');
 
+/** The path of a round's file under the Episode folder. */
+const roundFile = (round: number) => `feedback/${String(round).padStart(2, '0')}/feedback.md`;
+
 function header(round: number): string[] {
   return [
     '---',
@@ -69,7 +72,7 @@ describe('success cases', () => {
     ];
     const expected = {
       kind: 'saved',
-      file: 'feedback/01/feedback.md',
+      file: roundFile(1),
       text: [...header(1), '- `why--spent` · design — picked: 1a', '- `why--quiet` · design — picked: 2b', ''].join(
         '\n',
       ),
@@ -89,17 +92,18 @@ describe('success cases', () => {
       ['note:quiet', 'None fit:\r\n  try a heat strip.'],
       ['note:visual-language', 'More accent.'],
     ];
+    const round = 2;
     const expected = [
-      ...header(2),
+      ...header(round),
       '- `why--spent` · design — picked: 1a, 1b — Combine the bar of 1a with the turns of 1b.',
       '- `why--quiet` · design — picked: none — None fit: try a heat strip.',
       '- `visual-language` · design — More accent.',
       '',
     ].join('\n');
     // ACT
-    const result = reviewToFeedback({ fields, slides: SLIDES, round: 2, now: NOW });
+    const result = reviewToFeedback({ fields, slides: SLIDES, round, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/02/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: roundFile(round), text: expected });
   });
 
   it('writes the general comment as a page item and the Next action as a gate item, after the Visual language note', () => {
@@ -123,7 +127,7 @@ describe('success cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: roundFile(1), text: expected });
   });
 
   it('approves when every Slide, the Title slide included, has a pick', () => {
@@ -134,10 +138,11 @@ describe('success cases', () => {
       ['pick:quiet', '2b'],
       ['next', 'approve'],
     ];
+    const nextLine = '- `next` · gate — approve\n';
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
     // ASSERT
-    expect(result.kind === 'saved' ? result.text : '').toContain('- `next` · gate — approve\n');
+    expect(result.kind === 'saved' ? result.text : '').toContain(nextLine);
   });
 
   it('numbers the next round one past the highest round folder', () => {
@@ -168,7 +173,7 @@ describe('success cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: roundFile(1), text: expected });
   });
 });
 
@@ -226,6 +231,25 @@ describe('failure cases', () => {
         { slide: 'top', message: 'The Title slide has no pick: pick an Option before you approve.' },
         { slide: 'quiet', message: 'Slide 2 "quiet" has no pick: pick an Option before you approve.' },
       ],
+    };
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('refuses approve while a Slide has more than one pick, naming it and how many it has', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:spent', '1b'],
+      ['pick:quiet', '2b'],
+      ['next', 'approve'],
+    ];
+    const expected = {
+      kind: 'rejected',
+      faults: [{ slide: 'spent', message: 'Slide 1 "spent" has 2 picks: keep exactly one before you approve.' }],
     };
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
@@ -340,6 +364,6 @@ describe('edge cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: roundFile(1), text: expected });
   });
 });

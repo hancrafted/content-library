@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { previewReport, readPresets, type Preset, type Render } from './spec-preview.pure.ts';
 
@@ -7,7 +5,7 @@ import { previewReport, readPresets, type Preset, type Render } from './spec-pre
  * What `npm run episode:spec-preview` reports for a fragment, given the render presets and a renderer: the Spec contract
  * violations, an overflow line per Option and preset that runs past its box, one screenshot line per rendered Option and
  * preset, and whether it fails. The presets come from the Spec calibration's table.
- * A hand-written renderer stands in for the browser; `skills/new-episode/scripts/spec-preview.browser.test.ts` drives the real one.
+ * A hand-written renderer stands in for the browser. The checked-in calibration is read in `spec-preview.pure.slow.test.ts`.
  */
 
 const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
@@ -146,15 +144,5 @@ describe('edge cases', () => {
     const read = () => readPresets(calibration);
     // ASSERT
     expect(read).toThrow(/Render presets/);
-  });
-
-  it('reads the checked-in calibration as the five presets the toolbar offers', () => {
-    // ARRANGE
-    const file = path.join(import.meta.dirname, '../../../skills/new-episode/references/spec-calibration.md');
-    const expected = ['desktop 1920x800', 'laptop 1440x800', 'tablet 1024x800', 'mobile 390x800', 'shorts 1080x1920'];
-    // ACT
-    const presets = readPresets(readFileSync(file, 'utf8'));
-    // ASSERT
-    expect(presets.map(({ name, width, height }) => `${name} ${width}x${height}`)).toEqual(expected);
   });
 });
