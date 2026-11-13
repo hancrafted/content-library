@@ -24,8 +24,10 @@ export interface Views {
  */
 function pick(page: Page): Promise<boolean> {
   return page.evaluate(() => {
-    // A reviewer tool names what it changes with aria-controls and picks nothing (checks/explain-controls.ts).
-    const controls = ':is(input[type="radio"], input[type="checkbox"], select):not([aria-controls])';
+    // A pick is a radio, checkbox, select or toggle button (aria-pressed). A reviewer tool names what it changes with
+    // aria-controls and picks nothing (checks/explain-controls.ts).
+    const controls =
+      ':is(input[type="radio"], input[type="checkbox"], select, button[aria-pressed]):not([aria-controls])';
     const item = [...document.querySelectorAll('[data-item]')].find((candidate) => candidate.querySelector(controls));
     if (item === undefined) return false;
     const control =

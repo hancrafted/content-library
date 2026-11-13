@@ -51,10 +51,21 @@ describe('frozen eval cases', () => {
           prompt: 'ticket/prompt.md',
           inputs: ['ticket/issue.md', 'ticket/calibration.md'],
         },
+        {
+          id: 'architecture-round',
+          mode: 'decide',
+          prompt: 'architecture-round/prompt.md',
+          inputs: [
+            'architecture-round/decisions.md',
+            'architecture-round/review-engine.html',
+            'architecture-round/review-explorable.html',
+            'architecture-round/calibration.md',
+          ],
+        },
       ];
 
       // ACT
-      const loaded = ['after-grill', 'ticket']
+      const loaded = ['after-grill', 'ticket', 'architecture-round']
         .map(loadCase)
         .map(({ id, mode, prompt, inputs }) => ({ id, mode, prompt, inputs }));
 
@@ -62,12 +73,12 @@ describe('frozen eval cases', () => {
       expect(loaded).toEqual(expected);
     });
 
-    it('asks prototype fidelity of every ink item, and no single rung of the other cases', () => {
+    it('asks prototype fidelity of every ink item, diagram of every architecture-round item, and no single rung of the others', () => {
       // ARRANGE
-      const expected = [{ fidelity: 'prototype' }, {}, {}];
+      const expected = [{ fidelity: 'prototype' }, {}, {}, { fidelity: 'diagram' }];
 
       // ACT
-      const asked = ['ink', 'after-grill', 'ticket'].map((id) => loadCase(id).asked);
+      const asked = ['ink', 'after-grill', 'ticket', 'architecture-round'].map((id) => loadCase(id).asked);
 
       // ASSERT
       expect(asked).toEqual(expected);
@@ -81,7 +92,7 @@ describe('frozen eval cases', () => {
       const problems = keyed.flatMap((entry) => keyProblems(CASES, loadCase(entry.id), qualityKeys(entry.id)!));
 
       // ASSERT
-      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket']);
+      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket', 'architecture-round']);
       expect(problems).toEqual([]);
     });
   });

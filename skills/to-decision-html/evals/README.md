@@ -102,14 +102,17 @@ A run that lacks an assertion, for example because its judge failed, counts as f
 
 ## Cases
 
-| Case          | Mode      | Input                                                                              |
-| ------------- | --------- | ---------------------------------------------------------------------------------- |
-| `ink`         | `decide`  | A reconstructed handoff comparing three interaction approaches, at prototype rung. |
-| `after-grill` | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.           |
-| `ticket`      | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it.    |
+| Case                 | Mode      | Input                                                                                                      |
+| -------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `ink`                | `decide`  | A reconstructed handoff comparing three interaction approaches, at prototype rung.                         |
+| `after-grill`        | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.                                   |
+| `ticket`             | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it.                            |
+| `architecture-round` | `decide`  | Ten code-level decisions from an architecture round, for a reader who judges principles, benefit and cost. |
 
 `cases/manifest.json` lists each case's prompt, attachments, mode, calibration answers, `checklist` and `probe`, its provenance, and the sha256 of every frozen file. A run refuses a case whose hashes no longer match, and `runner/cases.test.ts` fails on it in the fast suite. A run sees the prompt, attachments and calibration answers, never the checklist or probe.
 
 A case's `checklist.json` holds 3 to 5 `items`, each `{ "id", "question", "source" }`, where the question is answerable yes or no from the page. Its `probe.json` holds `questions`, each `{ "id", "question", "choices": { "a": "…" }, "answer": ["a"], "source" }`; `unknown` is offered on every question, so no choice takes that id. A `source` is `{ "file", "quote" }`: a verbatim quote from the prompt, an attachment or the calibration answers, because a key comes from what the run itself sees and never from a generated page. `runner/cases.test.ts` checks every key's source and choices.
+
+A case may name a `reference`: a page a person judged good, frozen beside the case and never shown to a run. `architecture-round/reference.html` scored 32 of 34 when graded as a run (2026-11-13), missing the rung named per item and one Option framed as a principle.
 
 To change a case, freeze a new one. Append it to the manifest: a case's eval id is its position there, and earlier iterations keep theirs. A case without a mode and `calibration.md` cannot run headless.
