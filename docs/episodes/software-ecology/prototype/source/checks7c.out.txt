@@ -1,0 +1,163 @@
+ #   result use   preset          step   week measure               test       = value
+  1  pass  tire  ideal           check  wk 12  customer.output        0.95–1.05  = 1.02
+  2  pass  tire  ideal           check  wk 12  customer.headroom      1.35–1.5   = 1.46
+  3  pass  tire  ideal           check  wk 12  customer.leadDays      <5         = 2.85
+  4  pass  tire  ideal           check  wk 12  eng.weeksWaiting       <0.2       = 0.00
+  5  pass  tire  ideal           check  wk 12  qa.weeksWaiting        <0.2       = 0.00
+           tire ideal: 86 ms
+  6  pass  tire  realistic       check  wk 12  customer.output        0.85–1.15  = 1.03
+  7  pass  tire  realistic       check  wk 12  customer.sat           >0.85      = 0.98
+  8  pass  tire  realistic       check  wk 12  customer.headroom      1.05–1.2   = 1.18
+  9  pass  tire  realistic       check  wk 12  support.weeksWaiting   <2         = 0.33
+           tire realistic: 87 ms
+ 10  pass  tire  speed-up        step 1 wk  6  customer.output        0.85–1.15  = 1.09
+ 11  pass  tire  speed-up        step 1 wk  6  eng.weeksWaiting       <1         = 0.05
+ 12  pass  tire  speed-up        step 2 wk 16  customer.output        0.85–1.15  = 1.02
+ 13  pass  tire  speed-up        step 2 wk 16  eng.weeksWaiting       <0.2       = 0.00
+ 14  pass  tire  speed-up        step 3 wk 24  customer.output        0.85–1.15  = 0.94
+ 15  pass  tire  speed-up        step 3 wk 24  customer.headroom      >1.3       = 1.43
+           tire speed-up: 49 ms
+ 16  pass  tire  ai-unbalanced   step 1 wk  4  customer.output        0.85–1.15  = 1.09
+ 17  pass  tire  ai-unbalanced   step 1 wk  4  qa.weeksWaiting        <0.5       = 0.01
+ 18  pass  tire  ai-unbalanced   step 2 wk  8  qa.weeksWaiting        >2         = 2.33
+ 19  pass  tire  ai-unbalanced   step 2 wk  8  customer.headroom      <0.6       = 0.55
+ 20  pass  tire  ai-unbalanced   step 3 wk 20  customer.output        0.4–0.75   = 0.53
+ 21  pass  tire  ai-unbalanced   step 3 wk 20  qa.weeksWaiting        >8         = 10.04
+           tire ai-unbalanced: 83 ms
+ 22  pass  tire  ai-compare      step 1 wk  2  eng.weeksWaiting       <0.2       = 0.00
+ 23  pass  tire  ai-compare      step 1 wk  2  qa.weeksWaiting        >20        = 33.64
+ 24  pass  tire  ai-compare      step 2 wk  8  customer.output        0.3–0.6    = 0.51
+ 25  pass  tire  ai-compare      step 3 wk 16  qa.weeksWaiting        rises      = 42.36 (before 36.36)
+           tire ai-compare: 63 ms
+ 26  pass  tire  ai-everywhere   step 1 wk  4  customer.output        0.85–1.15  = 1.09
+ 27  pass  tire  ai-everywhere   step 1 wk  4  customer.headroom      1.05–1.2   = 1.18
+ 28  pass  tire  ai-everywhere   step 2 wk 12  customer.output        0.9–1.25   = 1.15
+ 29  pass  tire  ai-everywhere   step 2 wk 12  customer.leadDays      falls      = 2.79 (before 4.21)
+ 30  pass  tire  ai-everywhere   step 2 wk 12  customer.headroom      >2         = 2.53
+ 31  pass  tire  ai-everywhere   step 3 wk 20  customer.leadDays      <4         = 2.45
+ 32  pass  tire  ai-everywhere   step 3 wk 20  eng.weeksWaiting       <0.2       = 0.00
+ 33  pass  tire  ai-everywhere   step 3 wk 20  qa.weeksWaiting        <0.2       = 0.00
+           tire ai-everywhere: 74 ms
+ 34  pass  tire  ai-balanced     step 1 wk  4  customer.output        2.2–2.8    = 2.50
+ 35  pass  tire  ai-balanced     step 2 wk 12  customer.sat           >0.9       = 0.93
+ 36  pass  tire  ai-balanced     step 2 wk 12  qa.weeksWaiting        <0.5       = 0.00
+ 37  pass  tire  ai-balanced     step 3 wk 20  customer.output        2.2–2.8    = 2.40
+ 38  pass  tire  ai-balanced     step 3 wk 20  customer.sat           0.9–1      = 0.93
+ 39  pass  tire  ai-balanced     step 3 wk 20  customer.headroom      >1         = 1.33
+           tire ai-balanced: 71 ms
+ 40  pass  tire  bug-spiral      step 1 wk  8  customer.output        0.4–0.8    = 0.57
+ 41  pass  tire  bug-spiral      step 1 wk  8  customer.bugsPerWeek   >0.3       = 0.53
+ 42  pass  tire  bug-spiral      step 2 wk 20  eng.weeksWaiting       >1.5       = 2.61
+ 43  pass  tire  bug-spiral      step 2 wk 20  eng.rush               >10        = 12.06
+ 44  pass  tire  bug-spiral      step 3 wk 40  eng.weeksWaiting       rises      = 3.53 (before 2.61)
+ 45  pass  tire  bug-spiral      step 3 wk 40  customer.leadDays      rises      = 26.79 (before 16.14)
+ 46  pass  tire  bug-spiral      step 3 wk 40  customer.output        <0.85      = 0.62
+ 47  pass  tire  bug-spiral      step 4 wk 80  customer.output        0.6–0.85   = 0.68
+ 48  pass  tire  bug-spiral      step 4 wk 80  customer.leadDays      rises      = 62.80 (before 26.79)
+ 49  pass  tire  bug-spiral      step 4 wk 80  eng.weeksWaiting       >8         = 8.98
+           tire bug-spiral: 50 ms
+ 50  pass  tire  fix-orders      step 1 wk  6  eng.rework             >0.15      = 0.19
+ 51  pass  tire  fix-orders      step 1 wk  6  customer.headroom      <1         = 0.96
+ 52  pass  tire  fix-orders      step 2 wk 20  eng.rework             falls      = 0.13 (before 0.19)
+ 53  pass  tire  fix-orders      step 2 wk 20  customer.headroom      >1         = 1.13
+ 54  pass  tire  fix-orders      step 3 wk 36  eng.weeksWaiting       falls      = 0.30 (before 0.85)
+ 55  pass  tire  fix-orders      step 3 wk 36  customer.leadDays      falls      = 4.89 (before 8.43)
+           tire fix-orders: 26 ms
+ 56  pass  tire  move-bottleneck step 1 wk 10  eng.weeksWaiting       >1.5       = 7.25
+ 57  pass  tire  move-bottleneck step 1 wk 10  qa.weeksWaiting        <0.5       = 0.00
+ 58  pass  tire  move-bottleneck step 2 wk 22  eng.weeksWaiting       <0.2       = 0.00
+ 59  pass  tire  move-bottleneck step 2 wk 22  qa.weeksWaiting        >1         = 4.41
+ 60  pass  tire  move-bottleneck step 3 wk 34  qa.weeksWaiting        <0.2       = 0.00
+ 61  pass  tire  move-bottleneck step 3 wk 34  customer.leadDays      falls      = 25.90 (before 35.60)
+ 62  pass  tire  move-bottleneck step 3 wk 34  customer.headroom      >1         = 1.14
+           tire move-bottleneck: 52 ms
+ 63  pass  gate  ideal           check  wk 12  customer.output        0.95–1.05  = 1.01
+ 64  pass  gate  ideal           check  wk 12  customer.headroom      1.35–1.5   = 1.43
+ 65  pass  gate  ideal           check  wk 12  lrev.weeksWaiting      <0.2       = 0.00
+           gate ideal: 73 ms
+ 66  pass  gate  realistic       check  wk 12  customer.output        0.85–1.15  = 1.02
+ 67  pass  gate  realistic       check  wk 12  customer.sat           >0.85      = 0.93
+ 68  pass  gate  realistic       check  wk 12  customer.headroom      1.05–1.2   = 1.18
+ 69  pass  gate  realistic       check  wk 12  lrev.weeksWaiting      <1         = 0.08
+           gate realistic: 47 ms
+ 70  pass  gate  speed-up        check  wk 16  customer.output        0.85–1.15  = 1.00
+ 71  pass  gate  speed-up        check  wk 16  e2.weeksWaiting        <0.2       = 0.00
+ 72  pass  gate  speed-up        check  wk 16  customer.headroom      1.05–1.2   = 1.18
+           gate speed-up: 47 ms
+ 73  pass  gate  ai-unbalanced   check  wk 16  customer.output        0.35–0.75  = 0.51
+ 74  pass  gate  ai-unbalanced   check  wk 16  lrev.weeksWaiting      >3         = 7.98
+ 75  pass  gate  ai-unbalanced   check  wk 16  customer.headroom      <0.7       = 0.59
+           gate ai-unbalanced: 44 ms
+ 76  pass  teams ideal           check  wk 12  customer.output        0.95–1.05  = 1.01
+ 77  pass  teams ideal           check  wk 12  customer.headroom      1.35–1.5   = 1.43
+ 78  pass  teams ideal           check  wk 12  plat.weeksWaiting      <0.2       = 0.01
+           teams ideal: 35 ms
+ 79  pass  teams realistic       check  wk 12  customer.output        0.85–1.15  = 1.04
+ 80  pass  teams realistic       check  wk 12  customer.sat           >0.85      = 0.98
+ 81  pass  teams realistic       check  wk 12  customer.headroom      1.05–1.2   = 1.18
+ 82  pass  teams realistic       check  wk 12  plat.weeksWaiting      <1.5       = 0.25
+           teams realistic: 36 ms
+ 83  pass  teams speed-up        check  wk 16  customer.output        0.85–1.15  = 1.05
+ 84  pass  teams speed-up        check  wk 16  engB.weeksWaiting      <0.2       = 0.01
+ 85  pass  teams speed-up        check  wk 16  customer.headroom      1.05–1.2   = 1.18
+           teams speed-up: 36 ms
+ 86  pass  teams ai-unbalanced   check  wk 16  customer.output        0.3–0.7    = 0.34
+ 87  pass  teams ai-unbalanced   check  wk 16  plat.weeksWaiting      >10        = 66.65
+ 88  pass  teams ai-unbalanced   check  wk 16  customer.headroom      <0.6       = 0.42
+           teams ai-unbalanced: 37 ms
+
+Model checks
+ 89  pass  Ideal + AI everywhere (service): out 1.00× (AI off 1.00×), backlog 0 jobs, lead 2.4 d vs 3.6 d
+ 90  pass  Ideal + AI everywhere (product): out 1.00× (AI off 1.00×), backlog 0 jobs, lead 2.0 d vs 2.9 d
+ 91  pass  Q108 Product company Ideal at most 70 % busy (Q121: centers sized up for Realistic run lower): sales 0.68 pm 0.65 support 0.37 ba 0.63 eng 0.65 qa 0.60 ops 0.63
+ 92  pass  Q93/Q121 sizing tire service: Realistic bottleneck eng ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.70
+ 93  pass  Q93/Q121 sizing tire product: Realistic bottleneck eng ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.68
+ 94  pass  Q93/Q121 sizing gate service: Realistic bottleneck lrev ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.70
+ 95  pass  Q93/Q121 sizing gate product: Realistic bottleneck lrev ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.69
+ 96  pass  Q93/Q121 sizing teams service: Realistic bottleneck plat ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.70
+ 97  pass  Q93/Q121 sizing teams product: Realistic bottleneck plat ρ 0.85 (≤ 0.85), others max 0.70 (≤ 0.7), Ideal max ρ 0.69
+ 98  pass  Q110 own tickets scale with AI extra tasks: own shipped a week 4.00 → 6.00 with PM AI 2× extra (roadmap 2 → 4 a week)
+ 99  pass  Q115 oversized center refused (service): support: Realistic needs 2.11× its Ideal capacity (at most 1.5×)
+100  pass  Q115 oversized center refused (product): support: Realistic needs 2.20× its Ideal capacity (at most 1.5×)
+101  pass  Q115 built-in tire accepted (service): Q93 sizing at most 1.41× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.81×; rush warnings 2
+102  pass  Q115 built-in tire accepted (product): Q93 sizing at most 1.47× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.89×; rush warnings 2
+103  pass  Q115 built-in gate accepted (service): Q93 sizing at most 1.00× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.17×; rush warnings 0
+104  pass  Q115 built-in gate accepted (product): Q93 sizing at most 1.03× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.21×; rush warnings 0
+105  pass  Q115 built-in teams accepted (service): Q93 sizing at most 1.42× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.83×; rush warnings 0
+106  pass  Q115 built-in teams accepted (product): Q93 sizing at most 1.47× Ideal capacity (≤ 1.5); with the Q121 margin the line has up to 1.90×; rush warnings 1
+107  pass  Q114 B stability accounts for rushing: eng ρ nominal 0.85 → rushing 1.20; worst case support ρ 0.81 without rush → 1.28 with
+108  pass  Determinism (bug spiral twice): identical
+109  pass  0 Fixed handoff time · tire: 12 belts, every one 0.25 working days; belt lengths 118 to 1397 layout units, so documents ride 11.8× faster on the longest
+110  pass  0 Fixed handoff time · gate: 13 belts, every one 0.25 working days; belt lengths 90 to 2102 layout units, so documents ride 23.4× faster on the longest
+111  pass  0 Fixed handoff time · teams: 13 belts, every one 0.25 working days; belt lengths 90 to 1547 layout units, so documents ride 17.2× faster on the longest
+112  pass  1 Ideal 200 weeks · tire: largest backlog in weeks 100-200: 3 (≤ 3); fulfilled 1.000× the ideal rate of 10.76 requests a week (1.00 ± 0.03); satisfied 100 %
+113  pass  1 Ideal 200 weeks · gate: largest backlog in weeks 100-200: 1 (≤ 3); fulfilled 1.000× the ideal rate of 10.00 requests a week (1.00 ± 0.03); satisfied 100 %
+114  pass  1 Ideal 200 weeks · teams: largest backlog in weeks 100-200: 1 (≤ 3); fulfilled 1.000× the ideal rate of 9.76 requests a week (1.00 ± 0.03); satisfied 100 %
+115  pass  1b Realistic output below ideal · tire: fulfilled requests: traffic solve 0.94× ideal; simulated mean 0.94× over 10 seeds (< 1), single 40-week windows 0.84-1.03×; documents reaching the Customer 15.5 a week against 10.0 fulfilled requests: extra documents, rework and answers to complaints are not output
+116  pass  1b Realistic output below ideal · gate: fulfilled requests: traffic solve 0.96× ideal; simulated mean 0.95× over 10 seeds (< 1), single 40-week windows 0.88-1.05×; documents reaching the Customer 10.8 a week against 10.2 fulfilled requests: extra documents, rework and answers to complaints are not output
+117  pass  1b Realistic output below ideal · teams: fulfilled requests: traffic solve 0.95× ideal; simulated mean 0.93× over 10 seeds (< 1), single 40-week windows 0.86-1.01×; documents reaching the Customer 12.3 a week against 9.5 fulfilled requests: extra documents, rework and answers to complaints are not output
+118  pass  11b Congestion drains after Ideal · tire: 5 weeks of AI at eng with support, ba at 200 %: peak 0.1 weeks of work at pm; Ideal brings every center to ≤ 1 week in 0 weeks (≤ 30). For the hint: after 15 weeks of the same, 0.0 weeks of work at sales; Ideal alone takes 0 weeks; Ideal with sales at 1000 % takes 0 weeks.
+119  pass  11b Congestion drains after Ideal · gate: 5 weeks of AI at e1, e2, e3 with lspec at 200 %: peak 0.2 weeks of work at lrev; Ideal brings every center to ≤ 1 week in 0 weeks (≤ 30). For the hint: after 15 weeks of the same, 0.1 weeks of work at e1; Ideal alone takes 0 weeks; Ideal with e1 at 1000 % takes 0 weeks.
+120  pass  11b Congestion drains after Ideal · teams: 5 weeks of AI at engA, engB with anA, engB, pm, support at 200 %: peak 0.8 weeks of work at plat; Ideal brings every center to ≤ 1 week in 0 weeks (≤ 30). For the hint: after 15 weeks of the same, 1.8 weeks of work at plat; Ideal alone takes 1 weeks; Ideal with plat at 1000 % takes 0 weeks.
+121  pass  11g Follow-up loop under 1 · tire: follow-up requests per request: ideal 0.257, realistic 0.262, speed-up 0.262, ai-unbalanced 0.280, ai-compare 0.280, ai-everywhere 0.262, ai-balanced 0.311, bug-spiral 0.275, fix-orders 0.253, move-bottleneck 0.242
+122  pass  11g Follow-up loop under 1 · gate: follow-up requests per request: ideal 0.200, realistic 0.213, speed-up 0.213, ai-unbalanced 0.213
+123  pass  11g Follow-up loop under 1 · teams: follow-up requests per request: ideal 0.180, realistic 0.179, speed-up 0.179, ai-unbalanced 0.179
+124  pass  11g A file whose follow-ups never settle is refused: ["customer.good: the chances add up to 1.1; keep them below 1, or the follow-up requests never end"]
+125  pass  11d Conservation across dial changes: created 1951 = received or done 1928 + waiting 13 + on belts 4 + in work 6 (gap 0) created 2585 = received or done 2555 + waiting 26 + on belts 1 + in work 3 (gap 0) created 3790 = received or done 3742 + waiting 40 + on belts 5 + in work 3 (gap 0)
+126  pass  11e Clear starts empty at day 0: after build: day 0, created 0, waiting 0, on belts 0, in work 0
+127  pass  3 AI upstream floods downstream · tire: backlog grows 11.8 jobs a week, linear fit R² 0.994 (> 0.95); documents out of eng 1.95× Realistic (reported, not judged since Q121); fulfilled requests 0.45× ideal against Realistic's 1.00× (no gain)
+128  pass  3 AI upstream floods downstream · gate: backlog grows 4.2 jobs a week, linear fit R² 0.990 (> 0.95); documents out of e1, e2, e3 1.08× Realistic (reported, not judged since Q121); fulfilled requests 0.49× ideal against Realistic's 1.02× (no gain)
+129  pass  3 AI upstream floods downstream · teams: backlog grows 11.5 jobs a week, linear fit R² 0.998 (> 0.95); documents out of engA, engB 1.37× Realistic (reported, not judged since Q121); fulfilled requests 0.32× ideal against Realistic's 0.98× (no gain)
+130  pass  5 Bottleneck shift · tire: AI unbalanced: qa the bottleneck (16.8 weeks of work at qa); 30 weeks after raising it to 1000 %: qa 0.0 weeks of work; largest backlog now ops (36.5 weeks, downstream); fulfilled 0.49× → 0.61× ideal
+131  pass  5 Bottleneck shift · gate: AI unbalanced: lspec + lrev the bottleneck (3.2 weeks of work at lrev); 30 weeks after raising it to 1000 %: lspec 0.0, lrev 0.0 weeks of work; largest backlog now ops (22.1 weeks, downstream); fulfilled 0.51× → 0.62× ideal
+132  pass  5 Bottleneck shift · teams: AI unbalanced: plat the bottleneck (23.4 weeks of work at plat); 30 weeks after raising it to 1000 %: plat 0.0 weeks of work; largest backlog now anA (0.7 weeks); fulfilled 0.36× → 1.10× ideal
+133  pass  6 Determinism: seed 42: 3e925c92 and 3e925c92; seed 43: 2cecdd05
+134  pass  6 Separate streams: 163 Customer requests over 20 weeks, with rework on vs off: identical times and targets true; the rest of the state differs true
+135  pass  Q121 Realistic coping over 300 weeks · tire service: largest weeks of work waiting at week 300 over 10 seeds: 1.31 at eng (≤ 2); per seed 0.2 0.6 0.2 1.1 1.3 0.0 1.0 0.2 0.2 0.2
+136  pass  Q121 Realistic coping over 300 weeks · tire product: largest weeks of work waiting at week 300 over 10 seeds: 0.62 at support (≤ 2); per seed 0.0 0.2 0.1 0.6 0.3 0.1 0.3 0.0 0.1 0.1
+137  pass  Q121 Realistic coping over 300 weeks · gate service: largest weeks of work waiting at week 300 over 10 seeds: 1.07 at e1 (≤ 2); per seed 0.4 0.6 0.9 0.5 0.8 1.1 0.8 0.3 0.4 0.3
+138  pass  Q121 Realistic coping over 300 weeks · gate product: largest weeks of work waiting at week 300 over 10 seeds: 1.05 at e1 (≤ 2); per seed 0.1 0.4 0.2 0.5 0.4 0.1 1.0 0.1 0.4 0.3
+139  pass  Q121 Realistic coping over 300 weeks · teams service: largest weeks of work waiting at week 300 over 10 seeds: 0.95 at plat (≤ 2); per seed 0.4 0.5 0.2 0.9 1.0 0.2 0.6 0.2 0.4 0.2
+140  pass  Q121 Realistic coping over 300 weeks · teams product: largest weeks of work waiting at week 300 over 10 seeds: 1.13 at support (≤ 2); per seed 0.1 0.2 0.5 1.1 0.2 0.1 0.8 0.7 0.0 0.1
+
+140 of 140 pass

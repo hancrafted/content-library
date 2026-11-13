@@ -1,0 +1,63 @@
+{
+  "title": "Du führst die Werkbank",
+  "caption": "Du richtest die Werkbank ein, bestimmst, was die KI sich holen darf, und lenkst nach, wenn sie abdriftet; <b>die KI arbeitet mit dem, was Du ihr reichst.</b>",
+  "drawing": "Eine Person an der Werkbank reicht dem KI-Arbeiter Teile",
+  "you": "Du",
+  "ai": "KI-Arbeiter",
+  "onBench": {
+    "label": "Auf der Werkbank:",
+    "text": "der Auftrag, Anweisung Version 3, vier Schraubenschlüssel"
+  },
+  "heldBack": {
+    "label": "Zurückgehalten:",
+    "text": "Anweisung Version 1, der Katalog aller Modelle"
+  },
+  "yours": {
+    "label": "Deine Aufgabe",
+    "items": {
+      "bench": {
+        "title": "Was auf der Werkbank landet",
+        "hint": "Weise sie ein wie eine neue Kollegin am ersten Tag."
+      },
+      "heading": { "title": "Wohin die Arbeit geht", "hint": "Lenk nach, wenn sie abdriftet." }
+    }
+  },
+  "notYours": {
+    "label": "Nicht Deine Aufgabe",
+    "text": "Wie der Arbeiter es innen erledigt."
+  },
+  "stat": {
+    "label": "Mehr ist nicht sicherer",
+    "alone": "Soll die KI eine Regel befolgen, tut sie es zu <figure>99 %</figure>",
+    "together": "Sollen es 19 auf einmal sein: <figure>85 %</figure>",
+    "detail": "Zu wiederholen, was die KI selbst finden kann, half auch nicht."
+  },
+  "notes": {
+    "more-is-not-safer": {
+      "header": "Mehr ist nicht sicherer",
+      "description": "alle Anforderungen auf einmal zu nennen senkte die Einhaltung (98,7 % für eine Anforderung allein gegen 85,0 % bei gpt-4o mit 19) [1], und Kontextdateien im Repository, die auffindbare Informationen nur wiederholten, verbesserten den Erfolg von Coding-Agenten im Allgemeinen nicht [2].",
+      "sources": {
+        "written-requirements-reduce-variance": {
+          "title": "content-library research, Why do explicit written requirements reduce the variation in LLM output?"
+        },
+        "gloaguen-evaluating-agents-md": {
+          "title": "Gloaguen, Mündler-Sasahara, Müller, Raychev, Vechev, Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (v3, 2026-09-29)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "human-manages-the-context": {
+        "title": "Der Mensch steuert den Kontext",
+        "keywords": "",
+        "script": "Du führst die Werkbank. Du bestimmst, was darauf landet und was die KI sich holen darf, und Du lenkst sie in die richtige Richtung. Stell Dir die KI wie eine neue Kollegin vor: Wie würdest Du sie an ihrem ersten Tag einweisen, und womit würdest Du sie gar nicht erst belasten?"
+      },
+      "not-how-the-ai-works-inside": {
+        "title": "Nicht, wie die KI innen arbeitet",
+        "keywords": "",
+        "script": "Der Mensch steuert zwei Dinge: was auf der Werkbank landet und wohin die Arbeit geht. Was im Inneren des Arbeiters passiert, ist nicht Deine Aufgabe. Deshalb kannst Du das heute lernen, ohne technisches Wissen. Wie sieht also eine Werkbank aus, die kippt?"
+      }
+    }
+  }
+}

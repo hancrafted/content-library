@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { StepDone } from '@/episodes/components/slide-shared/guide-step/step-done.client';
 import { PermissionAsk, TitleTerminal } from '@/episodes/components/slide-shared/title-terminal/title-terminal';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -12,9 +13,12 @@ export const yourFirstSkill = slide({
   content: ({ t }) => (
     <SlideFrame>
       <div className="flex max-w-xl flex-col gap-6">
-        <p className="self-start rounded-full border border-border bg-card px-3 py-1 text-caption text-muted-foreground">
-          {t('steps')}
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="self-start rounded-full border border-border bg-card px-3 py-1 text-caption text-muted-foreground">
+            {t('steps')}
+          </p>
+          <StepDone label={t('stepDone')} />
+        </div>
         <TitleTerminal title={t('window')} size="section" ai>
           <span className="block text-primary">&gt; /hancrafted-check-setup</span>
           <PermissionAsk question={t('question')} yes={t('yes')} />

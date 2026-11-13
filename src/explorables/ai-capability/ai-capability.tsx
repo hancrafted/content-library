@@ -3,11 +3,11 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import { aiCapabilityData, mergeWords } from './ai-capability-data';
 import { AiCapabilityClient } from './ai-capability.client';
-import type { AiCapabilityPresetId, WordsOverride } from './ai-capability.types';
+import type { AiCapabilityPresetId, LayerRow, WordsOverride } from './ai-capability.types';
 import type { Level } from './scene-frames.pure';
 
 /*
- * The levels timeline, an Explorable: Prompting, Agents, Workflows and the Factory on one language
+ * The levels timeline, an Explorable: Chat, Agents, Workflows and the Factory on one language
  * model, each with the scale it compares to, the interface it reaches the model through and a scene that plays it. A
  * Slide names a Preset and may override any word (FE-012); the client parent is the one interactive leaf.
  */
@@ -19,11 +19,13 @@ export interface AiCapabilityProps {
   readonly words?: WordsOverride;
   /** The `data-target` a Speaker note lights, per level column. */
   readonly targets?: Partial<Record<Level, TargetProps>>;
+  /** The `data-target` a Speaker note lights, per layer row: the Oversight row's origin note. */
+  readonly rowTargets?: Partial<Record<LayerRow, TargetProps>>;
   /** A Slide's context marker, placed on a level's card. */
   readonly markers?: Partial<Record<Level, ReactNode>>;
 }
 
-export function AiCapability({ preset, locale, words, targets, markers }: AiCapabilityProps) {
+export function AiCapability({ preset, locale, words, targets, rowTargets, markers }: AiCapabilityProps) {
   const data = aiCapabilityData(locale);
   const chosen = data.presets[preset];
   if (chosen === undefined) throw new Error(`ai-capability: unknown Preset "${preset}"`);
@@ -32,8 +34,10 @@ export function AiCapability({ preset, locale, words, targets, markers }: AiCapa
       <AiCapabilityClient
         preset={chosen}
         words={mergeWords(data.words, words)}
-        ceilings={data.ceilings}
+        productivity={data.productivity}
+        layers={data.layers}
         targets={targets}
+        rowTargets={rowTargets}
         markers={markers}
       />
       <ExploreItLink slug="ai-capability" />

@@ -1,0 +1,113 @@
+{
+  "title": "Why, how and what",
+  "heading": "Why · How · What",
+  "caption": "What Adam Bender's talk on software ecology says, how to play it here, and what each work center shows.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "Speed up one part, and the pressure travels.",
+      "caption": "In <talk>Software Engineering at the Tipping Point</talk>, Adam Bender describes a company as a socio-technical ecosystem: people, culture and tools that build what the organization rewards. <amplifies>AI amplifies what is already there</amplifies>: faster code means more to build, review and test, and review becomes the bottleneck. <pain>Unclear requirements</pain> come back later as rework."
+    },
+    "how": {
+      "title": "Ask why and what if.",
+      "caption": "Bender's tools: look at the neighbours, capacity, feedback loops and bottlenecks, never one node alone. Here: step through Who does what, In theory and In practice, run a scenario's tour, and click a work center to see what it hands on."
+    },
+    "what": {
+      "title": "A forest, not a tree.",
+      "caption": "Each work center is <people>people and tools</people>, with two dials: efficiency is output, effectiveness is outcome. AI raises the first and leaves the second alone. <hard>Specifying was always the hard part</hard>."
+    }
+  },
+  "still": {
+    "label": "The Tire swing factory in practice, AI at Engineering only, at week {week}: AI at Engineering, quality assurance with {waiting} waiting, the Customer at {output} of ideal",
+    "at": "AI unbalanced, week {week}",
+    "overflow": "+{n}",
+    "aiExtra": "{n} pull requests per task",
+    "openHint": "a click on Analysis opens its dashboard"
+  },
+  "stills": {
+    "dashboard": {
+      "label": "The Analysis dashboard at week {week}, AI at Engineering only",
+      "aiLeavesIt": "· AI leaves it",
+      "people": "People",
+      "tools": "Tools & artefacts",
+      "withAiHere": "With AI here",
+      "light": "Traffic light: {level}"
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "why-you-may-leave-it": {
+        "title": "Why you may leave it",
+        "keywords": "short version, why, how, what",
+        "script": "If you played it, you already have the picture, so this is the short version. One slide covers why it matters, how to use it and what it shows."
+      },
+      "why-the-problem-is-the-system": {
+        "title": "Why: the problem is the system",
+        "keywords": "unclear requirements, nobody to blame, review, neighbours, specifying, hypothesis",
+        "script": "Unclear requirements were always expensive, and nobody in the chain was to blame for that. AI speeds execution up, so the work piles up at review, and my picture is that it spreads to the neighbours. This next part is my hypothesis: the effort moves into specifying too, because that was always the hard part, and nobody has measured it yet."
+      },
+      "clear-orders-lower-it": {
+        "title": "Clear orders lower it",
+        "keywords": "clear requirements, good orders, feed it something worth moving",
+        "script": "Clear requirements are good orders for the factory. AI moves whatever you feed it, faster, so feed it something worth moving."
+      },
+      "how-play-it": {
+        "title": "How: play it",
+        "keywords": "Ideal, Realistic, scenario, guided tour, dials, dashboard",
+        "script": "It starts in Ideal, then Realistic, and every scenario has a guided tour that sets the dials and runs to the week that matters; a click on any work center opens its dashboard."
+      },
+      "what-two-dials-everywhere": {
+        "title": "What: two dials everywhere",
+        "keywords": "efficiency, effectiveness, AI raises the first, review, pressure",
+        "script": "Every work center has efficiency, how much it puts out, and effectiveness, how much of it is good. AI raises the first and leaves the second alone. Review stays as fast as it was, so that is where the pressure builds."
+      },
+      "take-it-back-to-monday": {
+        "title": "Take it back to Monday",
+        "keywords": "map your team, check the review step, write the requirement, process owner",
+        "script": "Map your team, check the review step before you speed anything up, and write the requirement for someone new. Whoever owns that process knows where the pressure lands first."
+      }
+    }
+  },
+  "notes": {
+    "ai-amplifies": {
+      "header": "AI amplifies what is there",
+      "description": "AI's primary role is as an amplifier of an organization's existing strengths and weaknesses, and the greatest returns come from the underlying organizational system rather than the tools [1] (AIE-0018).",
+      "sources": {
+        "dora-2025": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (overview page)"
+        }
+      }
+    },
+    "incomplete-requirements": {
+      "header": "Unclear requirements are the most named pain",
+      "description": "48% of 228 companies named incomplete or hidden requirements their most frequent requirements problem, with rework after implementation among the reported effects. Self-reported survey; frequency is not cost [1] (SWE-0002).",
+      "sources": {
+        "mendez-naming-the-pain": {
+          "title": "Méndez Fernández et al., Naming the Pain in Requirements Engineering: Contemporary Problems, Causes, and Effects in Practice"
+        }
+      }
+    },
+    "specifying-is-hard": {
+      "header": "Specifying is the hard part (inference)",
+      "description": "Deciding precisely what to build is the hardest single part of building software. That AI moves the saved effort into specifying is an inference from this and the review findings; no source measures specification effort rising [1] (AIE-0018, AIE-0020).",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accident in Software Engineering"
+        }
+      }
+    },
+    "people-and-technology": {
+      "header": "A work center is people and technology",
+      "description": "A socio-technical system is a system made of people and technology, and an organization's structure shapes what it builds. The definitions are the speaker's paraphrase [1] (SWE-0001).",
+      "sources": {
+        "bender-tipping-point": {
+          "title": "Adam Bender, Software Engineering at the Tipping Point (conference talk, transcript)"
+        }
+      }
+    }
+  }
+}

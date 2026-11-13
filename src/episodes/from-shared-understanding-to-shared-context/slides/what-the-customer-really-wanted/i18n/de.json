@@ -1,0 +1,64 @@
+{
+  "title": "Was der Kunde wirklich wollte",
+  "caption": "KI baut nicht die richtige Schaukel, aber sie kann <b>die falsche zehnmal schneller bauen</b>.",
+  "cartoonLabel": "Das hat hier jeder schon erlebt",
+  "cartoon": {
+    "label": "Der Reifenschaukel-Cartoon",
+    "explained": "Wie der Kunde es erklärt hat",
+    "understood": "Wie der Vertrieb es verstanden hat",
+    "built": "Wie es gebaut wurde",
+    "wanted": "Was der Kunde wirklich wollte"
+  },
+  "balanced": {
+    "title": "Wenn Deine Organisation so arbeiten würde",
+    "rate": "10 Dokumente rein · 10 raus",
+    "line": "Ausgeglichenes Band"
+  },
+  "reality": {
+    "title": "<marker>Wie es wirklich läuft</marker>",
+    "rate": "10 Dokumente rein · nur 4 raus",
+    "line": "Band aus dem Gleichgewicht: Dokumente stauen sich vor Entwurf und Prüfung"
+  },
+  "stations": {
+    "sales": "Vertrieb",
+    "design": "Entwurf",
+    "build": "Bau",
+    "review": "Prüfung",
+    "delivery": "Versand"
+  },
+  "dials": {
+    "efficiency": "Effizienz",
+    "effectiveness": "Effektivität",
+    "multiplication": "Vervielfachung"
+  },
+  "notes": {
+    "why-the-line-gets-out-of-balance": {
+      "header": "Warum das Band aus dem Gleichgewicht gerät",
+      "description": "Laut der Übersichtsseite zum DORA-Bericht 2025 wirkt KI vor allem als Verstärker: Sie vergrößert die Stärken und Schwächen, die eine Organisation schon hat. Den größten Ertrag bringt der Blick auf das System der Organisation, nicht auf die Werkzeuge. Das ist eine Übersichtsseite; den Berichtstext selbst haben wir nicht gelesen [1].",
+      "sources": {
+        "dora-2025-overview": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (Übersichtsseite)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-hook": {
+        "title": "Der Aufhänger",
+        "keywords": "",
+        "script": "Das ist der Satz von eben: zehn falsche Schaukeln, schneller gebaut. Behalte ihn im Kopf, denn der Rest dieser Episode handelt davon, warum er stimmt und was Du dagegen tust."
+      },
+      "cartoon-to-balanced-line": {
+        "title": "Vom Cartoon zum ausgeglichenen Band",
+        "keywords": "",
+        "script": "Stell Dir jetzt vor, der Cartoon wird zu einem echten Fließband. Die Arbeit kommt in gleichmäßigem Takt herein, jede Station hält mit der nächsten Schritt, der Ausstoß ist stetig und die Qualität hoch. Wenn Deine Organisation so arbeiten würde, bräuchtest Du diese Episode nicht."
+      },
+      "reality": {
+        "title": "Die Wirklichkeit",
+        "keywords": "",
+        "script": "Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Effizienz, Effektivität und Vervielfachung sind die drei Regler an diesem Band: Dreh sie alle hoch, und das Band hört auf zu fließen. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
+      }
+    }
+  }
+}

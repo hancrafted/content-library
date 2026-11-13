@@ -1,0 +1,30 @@
+{
+  "title": "Was die KI wirklich sieht",
+  "caption": "Die KI arbeitet mit dem Fenster: <b>Was sie über Deine Aufgabe wissen muss, weiß sie nur, wenn es im Fenster steht.</b>",
+  "window": "Kontextfenster",
+  "notes": {
+    "the-window-has-an-attention-budget": {
+      "header": "Das Fenster hat ein Aufmerksamkeitsbudget",
+      "description": "Laut Anthropic sinkt die Erinnerungsleistung, je mehr Tokens im Fenster stehen; jeder weitere Kontext bringt also weniger, und das Modell hat ein begrenztes Aufmerksamkeitsbudget [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Rückblick",
+        "keywords": "",
+        "script": "Wenn Du die Episode zum Kontextfenster gesehen hast, kennst Du das Kontextfenster schon. Was die KI über Deine Aufgabe weiß, ist das, was im Fenster steht, und dieses Fenster ist wie ein Schreibtisch, der sich mit jeder Nachricht füllt."
+      },
+      "not-your-mind": {
+        "title": "Nicht Deine Gedanken",
+        "keywords": "",
+        "script": "Die KI kann keine Gedanken lesen. Sie arbeitet mit dem, was im Fenster steht. Was sie über Deine Aufgabe wissen muss, weiß sie nur, wenn es im Fenster steht."
+      }
+    }
+  }
+}

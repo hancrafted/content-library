@@ -199,5 +199,20 @@ describe('edge cases', () => {
       // ASSERT
       expect(promoted).toEqual({ moves: [], index: INDEX });
     });
+
+    it('preserves a trailing ## Raw section after the promoted categories', () => {
+      // ARRANGE
+      const rawSection = '## Raw\n\n### Books\n\n- [Book](<raw/book.pdf>) — A raw pdf.\n';
+      const index = `${INDEX}\n${rawSection}`;
+      const folder = 'AIE-0002__task-decomposition-improves';
+      const staged = { [folder]: research('Why decompose?', 'Decompose it.') };
+
+      // ACT
+      const promoted = promote(staged, index);
+
+      // ASSERT
+      expect(promoted.index.endsWith(`\n\n${rawSection}`)).toBe(true);
+      expect(promoted.index).toContain(`- [Why decompose?](research/AIE/${folder}/research.md) — Decompose it.`);
+    });
   });
 });

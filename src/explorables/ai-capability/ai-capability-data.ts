@@ -5,7 +5,9 @@ import type {
   AiCapabilityPreset,
   AiCapabilityPresetId,
   AiCapabilityWords,
-  Ceiling,
+  LayerRow,
+  LayerSpan,
+  Productivity,
   WordsOverride,
 } from './ai-capability.types';
 import type { Level } from './scene-frames.pure';
@@ -18,8 +20,10 @@ import type { Level } from './scene-frames.pure';
 export interface AiCapabilityData {
   readonly presets: Readonly<Record<AiCapabilityPresetId, AiCapabilityPreset>>;
   readonly words: AiCapabilityWords;
-  /** The numbers behind the Ceiling row, per Level: the same in both locales. */
-  readonly ceilings: Readonly<Record<Level, Ceiling>>;
+  /** The numbers behind the Productivity increase row, per Level: the same in both locales. */
+  readonly productivity: Readonly<Record<Level, Productivity>>;
+  /** Where each item of the two layer rows spans: the same in both locales. */
+  readonly layers: Readonly<Record<LayerRow, readonly LayerSpan[]>>;
 }
 
 export type AiCapabilityLocale = 'en' | 'de';

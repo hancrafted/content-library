@@ -16,9 +16,11 @@ export const EPISODE_IDS = [
   '2026-11-04-intro-hitl-workflows__ai-gives-you-more-work',
   '2026-11-04-intro-hitl-workflows__intro',
   '2026-11-04-intro-hitl-workflows__onboard-ai-every-time',
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro',
   'ai-attention-span',
   'ai-gives-you-more-work',
   'ai-token-economy',
+  'from-shared-understanding-to-shared-context',
   'maintaining-markdown-for-ai',
   'never-too-early-sales',
   'onboard-ai-every-time',
@@ -34,7 +36,12 @@ export const TEMPLATE_SLUGS = [
 ] as const;
 
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at `/explorables/<slug>/`. */
-export const EXPLORABLE_PAGE_SLUGS = ['ai-capability', 'context-window', 'human-in-the-loop'] as const;
+export const EXPLORABLE_PAGE_SLUGS = [
+  'ai-capability',
+  'context-window',
+  'human-in-the-loop',
+  'software-ecology',
+] as const;
 
 /** Every Guide, by slug: a step-by-step page served at `/guides/<slug>/`, no Episode (design-ADR 0019, #450). */
 export const GUIDE_SLUGS = ['setup-ai-agent-and-starter-folder'] as const;

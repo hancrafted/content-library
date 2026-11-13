@@ -10,7 +10,7 @@ import { TicksContext, useTicks } from './ticks.client';
 /** One step of the checklist, its words already in the viewer's language. */
 export interface ChecklistStep {
   readonly n: StepNumber;
-  readonly section: string;
+  /** The step's name: its Section's title, word for word, so the checklist and the Sections read as the same steps. */
   readonly title: string;
   /** The label of each box of this step, by box id. */
   readonly boxes: Readonly<Partial<Record<BoxId, string>>>;
@@ -102,10 +102,7 @@ function StepItem({ step, ticked, start, toggle }: StepItemProps) {
         >
           {step.n}
         </span>
-        <span className="flex flex-col">
-          <span className="text-caption tracking-wide text-muted-foreground uppercase">{step.section}</span>
-          <span className="text-body font-semibold">{step.title}</span>
-        </span>
+        <span className="text-body font-semibold">{step.title}</span>
       </p>
       <BoxList step={step} ticked={ticked} toggle={toggle} />
     </li>

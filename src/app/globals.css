@@ -34,6 +34,9 @@
   --machine: oklch(0.58 0.16 242);
   --human: oklch(0.55 0.18 290);
   --ai: oklch(0.6 0.14 62);
+  /* Own work's lightbulb: a clear yellow (#FACC15) with a darker golden outline, on the card paper. Not a mix of --warning: that is amber (hue 65 to 80) and in light a dark brown (L 0.52), and mixing toward white only dulls its chroma, so it never reads as a bright yellow at hue 95. */
+  --bulb: oklch(0.86 0.18 95);
+  --bulb-edge: oklch(0.6 0.15 85);
   /* Tag colours, one per Tag (design-ADR Tags replace Topics): a card's icon, ink and wash. Each reads 4.5:1 on the page. */
   --tag-context-engineering: oklch(0.5 0.134 242.749);
   --tag-agentic-ai: oklch(0.491 0.27 292.581);
@@ -107,6 +110,8 @@
   --machine: oklch(0.72 0.14 235);
   --human: oklch(0.68 0.16 280);
   --ai: oklch(0.72 0.14 62);
+  --bulb: oklch(0.87 0.18 95);
+  --bulb-edge: oklch(0.62 0.15 85);
   --tag-context-engineering: oklch(0.746 0.16 232.661);
   --tag-agentic-ai: oklch(0.702 0.183 293.541);
   --tag-markdown: oklch(0.712 0.194 13.428);

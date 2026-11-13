@@ -1,0 +1,2277 @@
+/*
+ * The factory's stage, cards, toolbar and readouts, ported from the reference build's stylesheet (design-ADR 0024).
+ * Colours are tokens and mixes of tokens; sizes and weights come from the type roles in the markup (FE-011).
+ */
+.root {
+  --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --good-tint: color-mix(in oklab, var(--success) 22%, var(--card));
+  --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--card));
+  --rail: color-mix(in oklab, var(--foreground) 22%, var(--muted));
+  --belt: color-mix(in oklab, var(--foreground) 6%, var(--card));
+  /* quiet ink for small text on a muted fill: muted-foreground alone falls below 4.5:1 on --muted and --fg-8 */
+  --ink-quiet: color-mix(in oklab, var(--muted-foreground) 65%, var(--foreground));
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+:global(.dark) .root {
+  --good-tint: color-mix(in oklab, var(--success) 22%, var(--foreground));
+  --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--foreground));
+  --belt: color-mix(in oklab, var(--foreground) 10%, var(--card));
+}
+
+/* ---------- toolbar: one row at laptop width (feedback 08), wrapping below it ---------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 6px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+/* sticky under the site header, as the reference build's toolbar is under the page top; below the header (z 50) and
+   the Context drawer (z 40), which both draw over it, and above the tour caption box (z 30), so a toolbar menu opens
+   over the caption. A phone keeps it in the flow: wrapped, it is taller than half the screen. */
+@media (min-width: 768px) {
+  .toolbar {
+    position: sticky;
+    top: calc(var(--header-block) + 0.5rem);
+    z-index: 35;
+    background: var(--background);
+  }
+}
+.states {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+/* the three steps, Who does what, In theory and In practice, as one segmented group */
+.stateSeg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+}
+@media (max-width: 480px) {
+  /* a long step name wraps the steps inside their frame rather than running off a phone */
+  .stateSeg {
+    flex-wrap: wrap;
+    max-width: 100%;
+    border-radius: 18px;
+  }
+}
+.stateSeg .state {
+  border: 0;
+  min-height: 32px;
+  padding: 4px 6px;
+  background: transparent;
+  white-space: nowrap;
+}
+/* the step's number, a circled digit before its name */
+.stepNo {
+  margin-right: 4px;
+}
+/* a dial was turned after picking the state */
+.modDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--warning);
+  vertical-align: middle;
+}
+.markerHost {
+  display: inline-flex;
+  align-items: center;
+}
+/* the use case and Settings keep to the row's end */
+.tbEnd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+.state {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 6px 8px;
+  min-height: 38px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 160ms var(--ease),
+    border-color 160ms var(--ease);
+}
+.state:hover {
+  border-color: var(--fg-45);
+}
+.state[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+.usecase {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding-left: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--muted-foreground);
+}
+.select {
+  appearance: none;
+  border: 0;
+  border-radius: 10px;
+  background-color: var(--card);
+  color: var(--foreground);
+  padding: 6px 30px 6px 6px;
+  cursor: pointer;
+  min-height: 36px;
+  min-width: 0;
+  max-width: 8.5rem;
+  text-overflow: ellipsis;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--foreground) 50%),
+    linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+.tgroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  flex-wrap: wrap;
+}
+.tbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  border-radius: 9px;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  justify-content: center;
+  transition:
+    background 140ms var(--ease),
+    color 140ms var(--ease);
+}
+.tbtn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.tbtn[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.speed {
+  gap: 4px;
+  padding: 4px 8px;
+  font-variant-numeric: tabular-nums;
+}
+/* the time controls sit close together: one row at laptop width */
+.tgroup .tbtn {
+  min-width: 32px;
+  padding: 4px 6px;
+}
+/* a lone toolbar button with its own frame: Settings, and the file buttons */
+.tbtnLine {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 12px;
+  min-height: 38px;
+  min-width: 38px;
+}
+.clock {
+  font-variant-numeric: tabular-nums;
+  padding: 0 6px;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.gly {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ---------- the floor ---------- */
+.viewWrap {
+  position: relative;
+  border-radius: 16px;
+  background: var(--muted);
+  padding: 28px 12px 12px;
+}
+/* the factory fills the viewport below the toolbar: about 80vh, the layout scaled to fit */
+.viewWrap[data-view='factory'] {
+  height: 80vh;
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+.stageNote {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  margin: 0;
+  color: var(--ink-quiet);
+  font-style: italic;
+}
+.view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: opacity 260ms var(--ease);
+}
+.view:not([data-view='factory']) .stage {
+  display: none;
+}
+.stage > svg,
+.stage > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.stage > canvas {
+  pointer-events: none;
+  z-index: 3;
+}
+.stage > .overlay {
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+}
+.floor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  z-index: 2;
+}
+/* The roles state: the factory's grid, the Customer in the first column */
+.view:not([data-view='factory']) .floor {
+  position: relative;
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
+  /* three lines per card row (head, panel, artefacts), in the one proportion for every row: all ten cards share one
+     height, each panel starts at one y and the artefacts sit at the bottom. Each card is a subgrid over its lines. */
+  grid-template-rows: repeat(var(--rows, 2), minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 0.9fr));
+  column-gap: 14px;
+  row-gap: 0;
+  z-index: 1;
+}
+@media (max-width: 1000px) {
+  .view:not([data-view='factory']) .floor {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .view:not([data-view='factory']) .floor > * {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+}
+
+.beltRail {
+  fill: none;
+  stroke: var(--rail);
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+.beltSurface {
+  fill: none;
+  stroke: var(--belt);
+  stroke-linejoin: round;
+}
+.beltSlats {
+  fill: none;
+  stroke: var(--fg-8);
+  stroke-dasharray: 1.6 10.4;
+  stroke-linejoin: round;
+}
+.plate {
+  fill: var(--rail);
+}
+.ret {
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.ret[data-on='true'] {
+  opacity: 1;
+}
+.edgeHit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 20;
+  pointer-events: stroke;
+  cursor: help;
+}
+.elabel {
+  opacity: 0;
+  transition: opacity 180ms var(--ease);
+  pointer-events: none;
+}
+.edgeHit:hover + .elabel {
+  opacity: 1;
+}
+.elabelBg {
+  fill: var(--card);
+  stroke: var(--border);
+}
+.elabelTx {
+  fill: var(--foreground);
+}
+.elabelRate {
+  fill: var(--muted-foreground);
+}
+
+/* ---------- work center cards ---------- */
+.card {
+  box-sizing: border-box;
+  position: absolute;
+  pointer-events: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  border: 1px solid var(--fg-25);
+  border-radius: 12px;
+  background: var(--card);
+  transition:
+    border-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+.card[data-ai='true'] {
+  background: color-mix(in oklab, var(--ai) 4%, var(--card));
+  border-color: var(--ai);
+}
+.head {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  min-width: 0;
+  padding: 0 7px;
+  gap: 5px;
+  border-bottom: 1px solid var(--fg-12);
+  background: var(--card);
+  border-radius: 11px 11px 0 0;
+}
+.title {
+  line-height: 1.1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.insp {
+  display: inline-grid;
+  margin-left: auto;
+  color: var(--muted-foreground);
+}
+.insp .ico {
+  width: 13px;
+  height: 13px;
+}
+.body {
+  flex: 1;
+  position: relative;
+}
+.card[data-kind='role'] .body {
+  margin-left: 50px;
+}
+.status {
+  position: absolute;
+  bottom: 3px;
+  left: 4px;
+  right: 6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.15;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.status b {
+  color: var(--foreground);
+}
+.card[data-piling='true'] .status,
+.card[data-piling='true'] .status b {
+  color: var(--destructive);
+}
+.bugs {
+  color: var(--destructive);
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.signs {
+  position: absolute;
+  right: -6px;
+  top: -23px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+}
+.sign {
+  padding: 0;
+  cursor: help;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--destructive);
+  color: var(--destructive);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 220ms var(--ease),
+    transform 220ms var(--ease);
+}
+.sign .ico {
+  width: 12px;
+  height: 12px;
+}
+.sign[data-on='true'] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.turbo {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  color: var(--ai);
+  width: 30px;
+  height: 14px;
+  left: calc(100% + 6px);
+  top: 13px;
+  overflow: hidden;
+}
+.turbo svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.card[data-ai='true'] .turbo {
+  display: block;
+}
+.chev {
+  animation: chev 0.5s linear infinite;
+}
+.view[data-paused='true'] .chev {
+  animation-play-state: paused;
+}
+@keyframes chev {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* the Customer card */
+.card[data-kind='customer'] {
+  background: color-mix(in oklab, var(--success) 8%, var(--card));
+}
+.card[data-kind='customer'] .head {
+  justify-content: center;
+}
+.bodyCust {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 9px;
+  color: var(--muted-foreground);
+}
+.custRow {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.grid20 {
+  display: grid;
+  grid-template-columns: repeat(var(--shelf-cols), 1fr);
+  grid-template-rows: repeat(var(--shelf-rows), 1fr);
+  gap: 3px;
+  height: 80px;
+}
+.grid20 i,
+.dockGrid i {
+  border-radius: 2px;
+  border: 1px solid var(--fg-12);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--destructive);
+}
+.grid20 i[data-q='good'],
+.dockGrid i[data-q='good'] {
+  background: var(--good-tint);
+}
+.grid20 i[data-q='bad'],
+.dockGrid i[data-q='bad'] {
+  background: var(--bad-tint);
+}
+.grid20 .ico {
+  width: 10px;
+  height: 10px;
+  stroke-width: 2.4;
+}
+.rel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.05;
+}
+.rel b {
+  font-variant-numeric: tabular-nums;
+}
+.sat {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 4px;
+  white-space: nowrap;
+}
+.sat b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.card[data-unhappy='true'] .sat[data-r='sat'] b,
+.card[data-full='true'] .sat[data-r='head'] b {
+  color: var(--destructive);
+}
+.dials {
+  margin: 0;
+  text-align: center;
+  border-top: 1px solid var(--fg-12);
+  padding-top: 5px;
+}
+.dials b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- below the stage ---------- */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 24px;
+  align-items: center;
+  padding: 0 4px;
+}
+.statusLine {
+  margin: 0;
+  min-height: 1.6em;
+}
+.statusLine[data-calm='true'] {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+  color: var(--muted-foreground);
+}
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.docicon {
+  width: 18px;
+  height: 21px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .below {
+    grid-template-columns: 1fr;
+  }
+}
+.dock {
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dock p {
+  margin: 0;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+.dockRow {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.dockGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--shelf-cols), 34px);
+  grid-auto-rows: 26px;
+  gap: 4px;
+}
+.dockGrid .ico {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+}
+.dockOut {
+  flex: 1;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dockK {
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-heading);
+}
+.dockSub {
+  color: var(--muted-foreground);
+}
+.dockSat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dockSatHead {
+  display: flex;
+  justify-content: space-between;
+}
+.dockSatHead b {
+  font-variant-numeric: tabular-nums;
+}
+.satbar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bad-tint);
+  overflow: hidden;
+}
+.satbar i {
+  display: block;
+  height: 100%;
+  background: var(--success);
+  border-radius: 999px;
+  transition: width 400ms var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chev {
+    animation: none;
+  }
+}
+
+/* the legend's documents: the canvas's colours (doc-sprites.ts) */
+.root {
+  --doc-paper: var(--card);
+  --doc-edge: color-mix(in oklab, var(--foreground) 45%, var(--card));
+}
+:global(.dark) .root {
+  --doc-paper: color-mix(in oklab, var(--foreground) 92%, var(--background));
+  --doc-edge: color-mix(in oklab, var(--background) 60%, var(--foreground));
+}
+.dSheet {
+  fill: var(--doc-paper);
+  stroke: var(--doc-edge);
+}
+.dAiSheet {
+  fill: color-mix(in oklab, var(--ai) 20%, var(--doc-paper));
+  stroke: var(--ai);
+}
+.dFold {
+  fill: none;
+  stroke: var(--doc-edge);
+}
+.dPaper {
+  fill: var(--doc-paper);
+}
+.dDestr {
+  fill: var(--destructive);
+}
+.dAi {
+  fill: var(--ai);
+}
+
+/* tooltips: hover or keyboard focus, as the reference build shows them */
+.root [data-tip] {
+  position: relative;
+}
+.root [data-tip]:is(:hover, :focus-visible)::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  translate: -50% 0;
+  z-index: 40;
+  width: max-content;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+  box-shadow: 0 6px 18px -8px var(--fg-45);
+}
+.card [data-tip]:is(:hover, :focus-visible)::after {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+/* Context spots a Slide may mark: the rack's place on a card, a sign, a belt's label */
+.rackSpot {
+  position: absolute;
+  left: 0;
+  top: 28px;
+  bottom: 0;
+  width: 50px;
+}
+.beltSpot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  translate: -50% -50%;
+}
+
+.root :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---------- The roles state: the cartoon cards and tiles ---------- */
+.cartoon {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  transform-origin: 0 0;
+  transition: opacity 260ms var(--ease);
+}
+/* in the roles grid a card spans three lines of the floor and lays its head, panel and artefacts on them */
+.view:not([data-view='factory']) .floor > .cartoon {
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: 8px;
+  margin-bottom: 14px;
+  align-content: stretch;
+}
+.artSlot {
+  align-self: end;
+}
+/* a station's rack or sign target, spread over its cartoon card */
+.spotFill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.cartoon[data-tile] {
+  cursor: default;
+}
+.cartoon[data-tile='target'] {
+  border: 2px solid var(--primary);
+}
+.art {
+  width: 100%;
+  height: auto;
+  color: var(--foreground);
+}
+.art [data-art='stroke'] {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.art [data-blank] {
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+  opacity: 0.4;
+}
+.art [data-art='muted'] {
+  fill: var(--muted);
+}
+/* the panel and the cartoon's quote under it */
+.panelFig {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+}
+.cartoon .art {
+  max-height: 110px;
+}
+.capMark {
+  display: inline-flex;
+  vertical-align: middle;
+}
+.glyMd {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+.cap,
+.job,
+.hlH,
+.cardTitle {
+  margin: 0;
+}
+.job {
+  color: var(--muted-foreground);
+}
+.headLg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+.headText {
+  min-width: 0;
+}
+.cardTitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* a department's name wraps on its roles-state card rather than losing its end */
+.cartoon .cardTitle {
+  white-space: normal;
+}
+.tag {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: var(--muted);
+  color: var(--ink-quiet);
+}
+.tag[data-tone='primary'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tag[data-tone='muted'] {
+  background: var(--fg-8);
+}
+.hl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hlH {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: var(--muted);
+  color: var(--foreground);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cartoon,
+  .stage {
+    transition: none;
+  }
+}
+
+/* ---------- #542: open cards, mechanics, belt motion ---------- */
+.card[role='button'] {
+  cursor: pointer;
+}
+.card[role='button']:hover {
+  border-color: var(--foreground);
+}
+.card[data-open='true'] {
+  border-color: var(--foreground);
+  box-shadow: 0 0 0 2px var(--foreground);
+}
+.tbtn[aria-expanded='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.view[data-belts-move='true'] .beltSlats {
+  animation: slats var(--belt-dur, 0.19s) linear infinite;
+}
+.view[data-belts-move='true'] .beltSlats[data-back='true'] {
+  animation-direction: reverse;
+}
+.view[data-paused='true'] .beltSlats {
+  animation-play-state: paused;
+}
+@keyframes slats {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+/* ---------- the popover and the toolbar menus: they share the factory's tints, and the popover lives outside .root ---------- */
+.root,
+.popover,
+.menu {
+  --warn-15: color-mix(in oklab, var(--warning) 15%, transparent);
+  --ai-12: color-mix(in oklab, var(--ai) 12%, transparent);
+  --bad-14: color-mix(in oklab, var(--destructive) 14%, transparent);
+}
+.popover {
+  --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  position: fixed;
+  z-index: 20;
+  pointer-events: auto;
+  box-sizing: border-box;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  max-height: min(78vh, 720px);
+  overflow: auto;
+  line-height: 1.4;
+}
+.popover:focus {
+  outline: none;
+}
+.popover::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  rotate: 45deg;
+}
+.popover[data-side='right']::before {
+  left: -8px;
+  top: calc(var(--tail) - 7px);
+  border-right: 0;
+  border-top: 0;
+}
+.popover[data-side='left']::before {
+  right: -8px;
+  top: calc(var(--tail) - 7px);
+  border-left: 0;
+  border-bottom: 0;
+}
+.popover[data-side='above']::before {
+  bottom: -8px;
+  left: calc(var(--tail) - 7px);
+  border-left: 0;
+  border-top: 0;
+}
+.popover[data-side='below']::before {
+  top: -8px;
+  left: calc(var(--tail) - 7px);
+  border-right: 0;
+  border-bottom: 0;
+}
+/* tooltips inside the popover: it is portaled outside .root */
+.popover [data-tip] {
+  position: relative;
+}
+.popover [data-tip]:is(:hover, :focus-visible)::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  translate: -50% 0;
+  z-index: 40;
+  width: max-content;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+}
+.popover :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.menuAnchor {
+  position: relative;
+}
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 35;
+  width: min(420px, 92vw);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.menu[hidden] {
+  display: none;
+}
+/* the speed menu: four choices, each with how long a working day takes */
+.speedMenu {
+  width: min(300px, 92vw);
+  gap: 2px;
+  padding: 6px;
+}
+/* the Settings popover: fixed to the window and placed by settings-placement.pure.ts, so it stays inside it */
+.menuSettings {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 45;
+}
+/* the Settings popover (feedback 09): a header, two columns of form fields, and the foot */
+.menuSettings {
+  padding: 0;
+  gap: 0;
+}
+.setHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  padding: 4px 8px 4px 16px;
+  border-bottom: 1px solid var(--border);
+}
+/* only the body scrolls: the header and the foot stay in view */
+.setCols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.setCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.setCol + .setCol {
+  border-left: 1px solid var(--border);
+}
+.setSec {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px 10px;
+}
+.setSec + .setSec {
+  border-top: 1px solid var(--border);
+}
+.setSecHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.setFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  gap: 8px 12px;
+  padding: 6px 16px;
+  border-top: 1px solid var(--border);
+}
+.fileRow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* below 800 px the columns stack, one rule between them */
+@media (max-width: 800px) {
+  .setCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .setCol + .setCol {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* one form field: the label and its (?) help on a line, the control full width beneath */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+}
+.fieldLabel {
+  color: var(--foreground);
+}
+.fieldEnd {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.helpBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: help;
+  flex: none;
+}
+.helpBtn:hover {
+  color: var(--foreground);
+  background: var(--muted);
+}
+.fslider {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin: 6px 0;
+  border-radius: 999px;
+  background: var(--fg-25);
+  cursor: pointer;
+}
+.fslider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.fslider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.fslider:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.fswitch {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  flex: none;
+}
+.fswitchTrack {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--fg-45);
+  position: relative;
+  transition: background 160ms;
+}
+.fswitchTrack::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--card);
+  transition: translate 160ms var(--ease);
+  box-shadow: 0 1px 2px var(--fg-25);
+}
+.fswitch[aria-checked='true'] .fswitchTrack {
+  background: var(--foreground);
+}
+.fswitch[aria-checked='true'] .fswitchTrack::after {
+  translate: 16px 0;
+}
+.segFull {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+.segFull button {
+  border: 0;
+  background: transparent;
+  border-radius: 10px;
+  padding: 2px 8px;
+  min-height: 28px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  text-align: center;
+  line-height: 1.2;
+}
+.segFull button:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.segFull button[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.segFull[data-tone='ai'] button[aria-pressed='true'] {
+  background: var(--ai);
+  color: var(--card);
+}
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mrow > label,
+.mrow > span:first-child {
+  min-width: 7.5rem;
+  color: var(--muted-foreground);
+}
+.mrow .range {
+  flex: 1;
+  min-width: 120px;
+}
+.mrow b {
+  font-variant-numeric: tabular-nums;
+}
+.mfs {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px 10px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mfs legend {
+  padding: 0 4px;
+  color: var(--muted-foreground);
+}
+.tipL {
+  text-decoration: underline dotted var(--fg-45);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+.range {
+  appearance: none;
+  width: 160px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border);
+  cursor: pointer;
+}
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  padding: 2px;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  min-height: 32px;
+}
+.seg button[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.ghostBtn {
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  min-height: 34px;
+  padding: 0;
+}
+.iconBtn {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  flex: none;
+}
+.iconBtn:hover {
+  background: var(--muted);
+}
+.iconBtn[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px 4px 6px;
+  background: transparent;
+  text-align: left;
+  min-height: 34px;
+  flex: none;
+}
+.switchTrack {
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  flex: none;
+  transition: background 160ms;
+}
+.switchTrack::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--card);
+  transition: translate 160ms var(--ease);
+  box-shadow: 0 1px 2px var(--fg-25);
+}
+.switch[aria-checked='true'] {
+  border-color: var(--ai);
+  background: var(--ai-12);
+  color: var(--ai);
+}
+.switch[aria-checked='true'] .switchTrack {
+  background: var(--ai);
+}
+.switch[aria-checked='true'] .switchTrack::after {
+  translate: 14px 0;
+}
+
+/* ---------- a dashboard: a monitor ---------- */
+.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dash[data-kind='customer'] {
+  gap: 14px;
+  min-width: 300px;
+}
+.dashHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dashT {
+  flex: 1;
+  min-width: 0;
+}
+.light {
+  display: inline-flex;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: var(--muted);
+  flex: none;
+}
+.light i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fg-12);
+}
+.light[data-level='red'] [data-l='red'] {
+  background: var(--destructive);
+}
+.light[data-level='amber'] [data-l='amber'] {
+  background: var(--warning);
+}
+.light[data-level='green'] [data-l='green'] {
+  background: var(--success);
+}
+.sigs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sig {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 2px 10px 2px 6px;
+  background: var(--muted);
+}
+.sig .ico {
+  width: 14px;
+  height: 14px;
+}
+.sig[data-level='green'] .ico {
+  color: var(--success);
+}
+.sig[data-level='amber'] {
+  background: var(--warn-15);
+}
+.sig[data-level='amber'] .ico {
+  color: var(--warning);
+}
+.sig[data-level='red'] {
+  background: var(--bad-14);
+}
+.sig[data-level='red'] .ico {
+  color: var(--destructive);
+}
+.drain {
+  margin: -6px 0 0;
+}
+.trends {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 8px 6px;
+  margin: 0;
+  min-width: 0;
+}
+.trend figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.trend figcaption b {
+  font-variant-numeric: tabular-nums;
+}
+.trendT {
+  width: 100%;
+  cursor: help;
+}
+.trend svg {
+  width: 100%;
+  height: 36px;
+  display: block;
+  overflow: visible;
+}
+.trendLine {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+.trendArea {
+  fill: var(--fg-8);
+  stroke: none;
+}
+.trendRef {
+  fill: none;
+  stroke: var(--fg-45);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+.trend[data-level='1'] .trendLine {
+  stroke: var(--warning);
+}
+.trend[data-level='1'] .trendArea {
+  fill: var(--warn-15);
+}
+.trend[data-level='2'] .trendLine {
+  stroke: var(--destructive);
+}
+.trend[data-level='2'] .trendArea {
+  fill: var(--bad-14);
+}
+.settings {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.settings summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  min-height: 36px;
+  cursor: pointer;
+  list-style: none;
+}
+.settings summary::-webkit-details-marker {
+  display: none;
+}
+.settings summary::after {
+  content: '▾';
+  margin-left: 4px;
+  color: var(--muted-foreground);
+}
+.settings[open] summary::after {
+  content: '▴';
+}
+.settings summary .ico {
+  width: 16px;
+  height: 16px;
+}
+.settingsSum {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+.ownWork {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 10px 10px;
+}
+.step {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(90px, 1fr) 10rem;
+  align-items: center;
+  gap: 4px;
+}
+.setCol .mrow .range {
+  flex: 1 1 3rem;
+  min-width: 3rem;
+  width: auto;
+}
+.step .range {
+  width: 100%;
+}
+.step .help {
+  grid-column: 1 / -1;
+}
+.stepL[data-tip] {
+  cursor: help;
+}
+.step[data-ai='true'] .stepL {
+  color: var(--ai);
+}
+.stepV {
+  min-width: 4.2rem;
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.help {
+  display: none;
+  margin: 0;
+  color: var(--muted-foreground);
+}
+.dash[data-help='true'] .help {
+  display: block;
+}
+.flowsBody {
+  padding: 4px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.util {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fg-8);
+}
+.util i,
+.utilLegend i {
+  display: block;
+  height: 100%;
+}
+.utilLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.utilLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.utilLegend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.utilLegend b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.util [data-u='busy'],
+.utilLegend [data-u='busy'] {
+  background: var(--foreground);
+}
+/* blocked reads warning, not destructive: red is kept for two weeks of work waiting (the Spec's token rule) */
+.util [data-u='blocked'],
+.utilLegend [data-u='blocked'] {
+  background: var(--warning);
+}
+.util [data-u='starved'],
+.utilLegend [data-u='starved'] {
+  background: var(--fg-25);
+}
+.flowsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.flowsList li {
+  display: grid;
+  grid-template-columns: 8.5rem 3.6rem 1fr;
+  gap: 6px;
+  align-items: baseline;
+}
+.flowsList b {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.dashHl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.popover .dashHl {
+  grid-template-columns: 1fr 1fr;
+}
+.popover .dashHl .hl:first-child {
+  grid-column: 1 / -1;
+}
+.hlList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hlList li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.hlList li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--fg-45);
+  flex: none;
+  translate: 0 -2px;
+}
+.hlList[data-ai='true'] li::before {
+  background: var(--ai);
+}
+@media (max-width: 560px) {
+  .popover .dashHl {
+    grid-template-columns: 1fr;
+  }
+  .trends {
+    gap: 6px;
+  }
+  .step {
+    grid-template-columns: 1fr minmax(90px, 1.4fr) auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .view[data-belts-move='true'] .beltSlats {
+    animation: none;
+  }
+  .switchTrack,
+  .switchTrack::after {
+    transition: none;
+  }
+}
+
+/* ---------- the Scenarios menu, the Tour button and the guided tour (design-ADR 0024 §10; reference build Q107, Q111) ---------- */
+.stateMenu[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.stateTour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stateTour .ico {
+  width: 14px;
+  height: 14px;
+}
+.stateTour[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: default;
+}
+.scn {
+  width: min(440px, 92vw);
+  gap: 4px;
+  padding: 8px;
+  max-height: 70vh;
+  overflow: auto;
+}
+.scnI {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.scnI:hover {
+  background: var(--muted);
+}
+.scnI[aria-checked='true'] {
+  background: var(--fg-8);
+  box-shadow: inset 3px 0 0 var(--foreground);
+}
+.scnTour {
+  color: var(--primary);
+}
+.card[data-toured='true'] {
+  box-shadow: 0 0 0 3px var(--primary);
+  border-color: var(--primary);
+}
+.tourbox {
+  position: absolute;
+  z-index: 30;
+  box-sizing: border-box;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--foreground);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 18px 40px -20px var(--fg-45);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tourbox[data-side='below']::before,
+.tourbox[data-side='above']::before {
+  content: '';
+  position: absolute;
+  left: var(--tail, 50%);
+  width: 12px;
+  height: 12px;
+  background: var(--card);
+  border: 1px solid var(--foreground);
+  rotate: 45deg;
+  translate: -50% 0;
+}
+.tourbox[data-side='below']::before {
+  top: -7px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.tourbox[data-side='above']::before {
+  bottom: -7px;
+  border-left: 0;
+  border-top: 0;
+}
+.tourChecks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tourChecks [data-ok='true'] {
+  color: var(--success);
+}
+.tourChecks [data-ok='false'] {
+  color: var(--destructive);
+}
+.tourBtns {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 6px;
+  align-items: center;
+}
+.ghostBtn {
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  min-height: 34px;
+}
+.ghostBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.tbtnSolid {
+  background: var(--foreground);
+  color: var(--background);
+}
+.tbtnSolid:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+.tbtnSolid:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- #544: compare mode and the compare stream, as the reference build's `.slots` and `.compare` ---------- */
+.card[data-picked='true'] {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--fg-25);
+}
+.slots {
+  display: inline-flex;
+  gap: 4px;
+}
+.slot {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--foreground);
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  padding: 0;
+}
+.slot .gly {
+  width: 18px;
+  height: 18px;
+}
+.slotEmpty {
+  border: 1px dashed var(--fg-25);
+  cursor: default;
+}
+.cmpNote {
+  color: var(--warning);
+  padding: 0 6px;
+}
+.cmpNote:empty {
+  display: none;
+}
+/* the stream replaces the floor in the same fixed stage (80vh, as the reference build's); what is taller scrolls inside */
+.viewWrap[data-compare='true'] > .compare {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+/* in the fixed stage the stream's parts keep their own heights (the strip its 170px) and the stream scrolls instead */
+.viewWrap[data-compare='true'] > .compare > * {
+  flex-shrink: 0;
+}
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cmpTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.strip {
+  width: 100%;
+  height: 170px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.stripBelt {
+  fill: none;
+  stroke: var(--rail);
+  stroke-width: 8;
+  stroke-linejoin: round;
+}
+.stripN rect {
+  fill: var(--card);
+  stroke: var(--fg-25);
+  stroke-width: 2;
+}
+.stripN[data-on='true'] rect {
+  stroke: var(--foreground);
+  stroke-width: 6;
+}
+.stripN[data-hot='true'] rect {
+  fill: var(--warn-15);
+  stroke: var(--warning);
+}
+.stripN text {
+  fill: var(--foreground);
+}
+.cmpCols {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.ccol {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 44px;
+  gap: 4px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  flex: none;
+  width: 54px;
+}
+.gapBelt {
+  width: 96px;
+  padding-top: 34px;
+}
+.gbelt {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--belt);
+  border-top: 3px solid var(--rail);
+  border-bottom: 3px solid var(--rail);
+  overflow: hidden;
+}
+.gbelt > i {
+  position: absolute;
+  top: 50%;
+  translate: -50% -50%;
+  width: 13px;
+  height: 15px;
+  background: center / contain no-repeat;
+}
+.gapRate {
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+.gapL {
+  white-space: normal;
+  text-align: center;
+}
+.gapArrow {
+  width: 14px;
+  height: 14px;
+}
+.colDash {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.colDash .dashHead {
+  flex-wrap: wrap;
+}
+.colDash .dashT {
+  min-width: 9rem;
+}
+.colDash .dashJob {
+  display: none;
+}
+.cs {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.csHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.csSigns {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.csLine {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  height: 44px;
+  background: var(--belt);
+  border-top: 3px solid var(--rail);
+  border-bottom: 3px solid var(--rail);
+}
+.csQueue {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 2px;
+  padding: 0 6px;
+  overflow: hidden;
+  align-items: center;
+}
+.csQueue .docicon {
+  width: 15px;
+  height: 17px;
+  flex: none;
+}
+.csQueue b {
+  color: var(--muted-foreground);
+}
+.csBox {
+  position: relative;
+  height: 54px;
+  border: 1.5px solid var(--fg-25);
+  border-radius: 8px;
+  background: var(--card);
+  display: grid;
+  place-items: center;
+}
+.ring {
+  --p: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--foreground) calc(var(--p) * 1turn), var(--fg-12) 0);
+  position: relative;
+  visibility: hidden;
+}
+.ring::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--card);
+}
+.ring[data-ai='true'] {
+  background: conic-gradient(var(--ai) calc(var(--p) * 1turn), var(--fg-12) 0);
+}
+.dchip {
+  display: inline-block;
+  width: 15px;
+  height: 17px;
+  flex: none;
+  background: center / contain no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.csNote {
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 760px) {
+  .cmpCols {
+    flex-direction: column;
+  }
+  .gap {
+    flex-direction: row;
+    width: auto;
+    padding: 0;
+  }
+}
+
+/* ---------- Download YAML and Upload: the message under the toolbar, the drop hint over the stage ---------- */
+.ioMsg {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px 14px;
+  overflow-wrap: anywhere;
+}
+.ioMsg[data-bad='true'] {
+  border-left-color: var(--destructive);
+}
+.ioMsg[hidden] {
+  display: none;
+}
+.ioMsg ul {
+  margin: 6px 0 0 18px;
+  list-style: disc;
+}
+.dropHint {
+  display: none;
+}
+.root[data-dropping='true'] .dropHint {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  border: 2px dashed var(--foreground);
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--background) 85%, transparent);
+}
+
+/*
+ * A phone shrinks the roles state's cells below one long word ("Documentation", "acceptance"): the words then break
+ * inside their card instead of pushing the page wider than the viewport. At desktop widths every word fits, unchanged.
+ */
+.cartoon :is(.tag, .chip, .cardTitle, .job, .cap),
+.cartoon :is(.headLg, .headText) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fswitchTrack,
+  .fswitchTrack::after {
+    transition: none;
+  }
+}

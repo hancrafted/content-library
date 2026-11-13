@@ -1,6 +1,6 @@
 {
   "title": "What you're looking at",
-  "caption": "Five parts, nothing more. Point at one to see what it does: <b>you can't break anything here.</b>",
+  "caption": "Five parts, nothing more. Point at one to see what it does: <b>looking around and closing the window break nothing.</b>",
   "toolbar": {
     "os": "Your computer",
     "agent": "AI agent"
@@ -35,11 +35,11 @@
     },
     "close": {
       "name": "Close button",
-      "explanation": "Closing the window ends everything in it. Nothing you try here can break your computer, and closing the window is always the way out."
+      "explanation": "Closing the window ends everything in it, and closing it is always the way out."
     }
   },
   "safe": {
-    "title": "You can't break anything here",
+    "title": "Looking around and closing the window break nothing",
     "text": "Closing the window ends it. To leave, close the window like any other."
   },
   "notes": {
@@ -66,9 +66,9 @@
         "script": "Point at any part, or tap it, and a short explanation appears. If you prefer, use Next and Previous and walk through them one by one. The prompt says it is ready, the cursor shows where your typing lands, and the answer comes back right under your command."
       },
       "you-cant-break-it": {
-        "title": "You can't break it",
+        "title": "Looking around breaks nothing",
         "keywords": "",
-        "script": "Here is the part I would like you to remember: you cannot break anything by looking around in here. If you ever feel lost, close the window, and everything in it ends. Open a new one whenever you like."
+        "script": "Here is the part I would like you to remember: looking around in here and closing the window break nothing. If you ever feel lost, close the window, and everything in it ends. Open a new one whenever you like."
       }
     }
   },

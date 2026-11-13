@@ -18,9 +18,9 @@
     },
     "windows": {
       "label": "Windows",
-      "line": "<b>On Windows:</b> press the <kbd>Windows</kbd> key, type <b>PowerShell</b>, press <kbd>Enter</kbd>.",
-      "query": "PowerShell",
-      "result": "Windows PowerShell",
+      "line": "<b>On Windows:</b> press the <kbd>Windows</kbd> key, type <b>Terminal</b>, press <kbd>Enter</kbd>. On Windows 10, type <b>PowerShell</b> instead.",
+      "query": "Terminal",
+      "result": "Terminal",
       "resultKind": "App",
       "window": "Windows PowerShell",
       "output": "Windows PowerShell",
@@ -96,7 +96,7 @@
       "one-window-one-cursor": {
         "title": "One window, one cursor",
         "keywords": "",
-        "script": "Pick your system in the toolbar, then open Terminal on a Mac, PowerShell on Windows, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you."
+        "script": "Pick your system in the toolbar, then open Terminal on a Mac, Terminal on Windows 11 or PowerShell on Windows 10, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you."
       },
       "stuck-paste-it": {
         "title": "Stuck? Paste it",

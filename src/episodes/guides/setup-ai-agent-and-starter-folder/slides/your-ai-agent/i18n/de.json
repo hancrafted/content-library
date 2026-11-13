@@ -3,6 +3,7 @@
   "caption": "Der KI-Agent, der darin wohnt.",
   "ready": "✻ Dein KI-Agent ist bereit",
   "steps": "Schritt 2",
+  "stepDone": "Erledigt, nicht noch einmal nötig",
   "window": "Terminal",
   "prompt": "~ %",
   "hint": "Angemeldet · schreib eine Nachricht",

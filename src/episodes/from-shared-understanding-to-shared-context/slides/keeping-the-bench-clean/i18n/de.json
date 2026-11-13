@@ -1,0 +1,85 @@
+{
+  "title": "Die Werkbank sauber halten",
+  "caption": "Eine Aufräumaktion pro Chaos, und <b>manchmal ist die sauberste Lösung eine saubere Werkbank.</b>",
+  "framing": "Vier Lösungen, gepaart wie im Video von IBM Technology",
+  "others": "Es gibt auch andere Lösungen",
+  "fixes": {
+    "validate": {
+      "mess": "Ein falscher Fakt, der hängen bleibt",
+      "verb": "Gegenprüfen",
+      "how": "Die Anweisung an einem echten Rad gegenprüfen",
+      "before": "Eine falsche Schraubengröße in der Arbeitsanweisung",
+      "after": "Die Anweisung, an einem echten Rad gegengeprüft"
+    },
+    "compact": {
+      "mess": "Zu viel, was nicht hierher gehört",
+      "verb": "Verdichten",
+      "how": "Den Ordner durch eine einseitige Zusammenfassung ersetzen",
+      "before": "Ein Ordner mit jedem Radmodell, für ein Rad",
+      "after": "Ein Ordner, ersetzt durch eine einseitige Zusammenfassung"
+    },
+    "curate": {
+      "mess": "Zu viele ähnliche Werkzeuge",
+      "verb": "Auswählen",
+      "how": "Nur die Schraubenschlüssel behalten, die der Auftrag braucht",
+      "before": "Fünfzig fast gleiche Schraubenschlüssel",
+      "after": "Nur die Schraubenschlüssel, die der Auftrag braucht"
+    },
+    "prune": {
+      "mess": "Zwei Anweisungen, die sich widersprechen",
+      "verb": "Ausmisten",
+      "how": "Die alten Anweisungen abhängen",
+      "before": "Alte und neue Anweisung hängen nebeneinander",
+      "after": "Die alte Anweisung abgehängt, die neue hängt"
+    }
+  },
+  "fresh": {
+    "label": "Die sauberste Lösung",
+    "text": "Fang an einer sauberen Werkbank an: Öffne einen frischen Chat und nimm nur das Ergebnis mit, nicht die ganze Vorgeschichte.",
+    "old": "Langer Chat, mitsamt Resten",
+    "new": "Frischer Chat mit dem Ergebnis"
+  },
+  "notes": {
+    "the-videos-framing": {
+      "header": "Die Einteilung im Video",
+      "description": "das Video von IBM Technology ordnet jeder Art eine Lösung zu: gegenprüfen, verdichten, auswählen, ausmisten. Sein Schlusssatz: Alle vier Lösungen wirken, indem sie etwas wegwerfen [1].",
+      "sources": {
+        "ibm-context-engineering-failure-modes": {
+          "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
+        }
+      }
+    },
+    "breunig-lists-other-fixes": {
+      "header": "Breunig nennt weitere Lösungen",
+      "description": "sein Begleitbeitrag nennt sechs: RAG, Tool Loadout, Context Quarantine, Pruning, Summarization und Offloading. Weniger als 30 Werkzeuge auszuwählen verbesserte die Treffsicherheit bei der Werkzeugwahl bis auf das Dreifache [1].",
+      "sources": {
+        "breunig-how-to-fix-your-context": {
+          "title": "Drew Breunig, How to Fix Your Context"
+        }
+      }
+    },
+    "one-fix-per-mode-is-a-simplification": {
+      "header": "Eine Lösung pro Art ist vereinfacht",
+      "description": "Verdichten kann einen falschen Fakt in eine saubere Zusammenfassung waschen und repariert Poisoning deshalb nicht; dass ein frisches Fenster der gemeinsame Kern von Verdichten und Ausmisten ist, ist eine Schlussfolgerung, und Anthropic warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verliert [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-cleanups": {
+        "title": "Vier Aufräumaktionen",
+        "keywords": "",
+        "script": "Es gibt vier Aufräumaktionen, eine für jedes Chaos. Gegenprüfen: die Anweisung an einem echten Rad kontrollieren. Verdichten: den Ordner durch eine einseitige Zusammenfassung ersetzen. Auswählen: nur die Schraubenschlüssel behalten, die der Auftrag braucht. Ausmisten: die alten Anweisungen abhängen."
+      },
+      "fresh-chat": {
+        "title": "Frischer Chat",
+        "keywords": "",
+        "script": "Manchmal ist die sauberste Lösung eine saubere Werkbank. Starte einen frischen Chat und nimm nur das Ergebnis mit, nicht die ganze Vorgeschichte. Das ist die zweite Handlungsempfehlung, und darauf komme ich im letzten Abschnitt zurück."
+      }
+    }
+  }
+}

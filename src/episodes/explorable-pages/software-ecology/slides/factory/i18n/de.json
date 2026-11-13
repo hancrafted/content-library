@@ -1,0 +1,95 @@
+{
+  "title": "Ausprobieren",
+  "heading": "Ein Unternehmen ist ein Ökosystem",
+  "caption": "Ein Unternehmen ist ein Ökosystem aus Menschen, Rollen und Werkzeugen, verbunden durch Übergaben. Ändere einen Teil und sieh, wie der Druck durch den Rest wandert, bis zum Kunden.",
+  "voiceScript": {
+    "segments": {
+      "you-know-this-cartoon": {
+        "title": "Ihr kennt diesen Cartoon",
+        "keywords": "Reifenschaukel, Stille Post, keine Schuldigen, zehnmal schneller",
+        "script": "Ihr kennt alle diesen Cartoon. Zehn Bilder, und in jedem versteht eine andere Rolle etwas anderes, sodass die Schaukel am Ende nichts mit der zu tun hat, die der Kunde wollte. Niemand darin handelt böswillig: Es ist Stille Post, eine Absicht, die nie gut ausgesprochen wurde, wird bei jeder Übergabe neu übersetzt. Der Fehler liegt also im System. Mit KI wird die falsche Schaukel zehnmal schneller gebaut."
+      },
+      "the-factory-runs-live": {
+        "title": "Die Fabrik läuft live",
+        "keywords": "läuft live, Wer macht was, In der Theorie, In der Praxis, Fabrik, KI an, Kunde",
+        "script": "Das hier läuft live, Ihr müsst mir also nichts glauben. Es beginnt bei „Wer macht was“, jede Abteilung mit ihrem Bild aus dem Cartoon, geht über „In der Theorie“ und „In der Praxis“ in die Fabrik, und dann wird KI eingeschaltet. Jedes Dokument auf den Bändern ist eine Aufgabe, die Anfragen kommen vom Kunden links, und die Releases gehen zurück zum Kunden. Achtet darauf, was beim Kunden ankommt."
+      },
+      "map-your-team": {
+        "title": "Bildet euer Team ab",
+        "keywords": "euer eigenes Team, Arbeitsplatz ist eine Rolle, Band ist eine Übergabe, langsamste Prüfung, Inspektion",
+        "script": "Schaut euch die Fabrik an, als wäre sie euer eigenes Team: Jeder Arbeitsplatz ist eine Rolle, jedes Band eine Übergabe. Sucht den langsamsten Prüfschritt, die Inspektion, denn dort staut sich die Arbeit zuerst."
+      },
+      "check-the-inspection-before-the-turbo": {
+        "title": "Erst die Prüfung, dann der Turbo",
+        "keywords": "KI an einem Arbeitsplatz, Inspektion danach, Prüfschritt, Nachbarn, Druck",
+        "script": "Schaltet jetzt KI an einem Arbeitsplatz ein. Er ist schneller geworden, die Inspektion danach aber nicht. Fragt euch also, ob dieser Prüfschritt mehr schafft. Achtet auf die Nachbarn, nicht nur auf den Arbeitsplatz selbst. Mein Bild ist: Der Druck bleibt nicht dort, wo ihr die KI einsetzt."
+      },
+      "fix-the-orders-first": {
+        "title": "Erst die Aufträge klären",
+        "keywords": "Effektivität der Analyse, unklare Anforderungen, schlechte Arbeit, Nacharbeit, Beschwerden, Anforderung klar schreiben",
+        "script": "Senkt jetzt die Effektivität der Analyse. Unklare Anforderungen werden zu schlechter Arbeit, und KI trägt diese schlechte Arbeit schneller als zuvor zu jedem Arbeitsplatz danach, bis sie als Nacharbeit und Beschwerden zurückkommt. Schreibt die Anforderung also so klar, dass jemand Neues danach handeln könnte. Das ist meine Hypothese: Dieser Schritt senkt den Druck, statt ihn nur zu verschieben."
+      },
+      "what-the-customer-got": {
+        "title": "Was beim Kunden ankam",
+        "keywords": "Kundenkarte, Releases, zufrieden, Zusammenfassung, noch früh, keine Messung",
+        "script": "Auf der Kundenkarte kommen die Releases zurück: was der Kunde bekommen hat und wie zufrieden er ist. In den meisten Teams sieht ein Arbeitsplatz aus wie diese Inspektion. Zusammengefasst: Bildet das Team ab, prüft die Inspektion vor dem Turbo, schreibt die Anforderung klar. Das ist eine Sichtweise und noch früh, keine Messung eures Teams. Das Explorable ist hier, wann immer ihr es wieder laufen lassen wollt."
+      }
+    }
+  },
+  "notes": {
+    "pressure-travels": {
+      "header": "Druck wandert entlang der Verbindungen",
+      "description": "Eine Änderung an einem Arbeitsplatz, etwa schnelleres Schreiben von Code, erreicht seine Nachbarn: mehr Code zu prüfen, zu bauen, zu testen und auszuliefern. Der Vortrag bietet das als Szenario an, nicht als Messung [1] (SWE-0001).",
+      "sources": {
+        "bender-tipping-point": {
+          "title": "Adam Bender, Software Engineering at the Tipping Point (Konferenzvortrag, Transkript)"
+        }
+      }
+    },
+    "review-load": {
+      "header": "Die Last landet beim Review",
+      "description": "In Teams mit hoher KI-Nutzung stiegen die gemergten Pull Requests um 98 %, die Review-Zeit um 91 % und die Größe der Pull Requests um 154 %, ohne signifikanten Gewinn auf Unternehmensebene. Telemetrie eines Anbieters und ein Zusammenhang, keine Studie mit Kontrollgruppe [1] (AIE-0018).",
+      "sources": {
+        "faros-productivity-paradox": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23. Juli 2025)"
+        }
+      }
+    },
+    "review-skipped": {
+      "header": "Das Review kann entfallen",
+      "description": "In einem Schreibexperiment gaben 68 % der Fachleute mit einem Chatbot dessen erste Ausgabe unverändert ab. Es war eine kurze Online-Aufgabe; für Arbeit, für die jemand verantwortlich ist, gilt das vielleicht nicht [1] (AIE-0019).",
+      "sources": {
+        "noy-zhang-productivity": {
+          "title": "Noy und Zhang, Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence"
+        }
+      }
+    },
+    "pm-accountability": {
+      "header": "Produktmanager behalten die Verantwortung",
+      "description": "Sie zögern, Spezifikationen abzugeben, und sagen, dass sie für KI-geschriebene Ergebnisse weiter verantwortlich sind; ihr Aufwand verlagert sich also aufs Prüfen. Ein Unternehmen, Selbstauskunft [1] (AIE-0019).",
+      "sources": {
+        "ulloa-pm-delegation": {
+          "title": "Ulloa et al., Product Manager Practices for Delegating Work to Generative AI: „Accountability must not be delegated to non-human actors“"
+        }
+      }
+    },
+    "muddy-instructions": {
+      "header": "Unklare Anweisungen kosten Genauigkeit",
+      "description": "Anweisungen, die über mehrere Runden unvollständig ankommen, senkten die Genauigkeit über die getesteten Modelle um durchschnittlich 39 %. Dass eine klare Anforderung das mindert, ist ein Schluss; keine Quelle testet es als Eingriff [1] (LLM-0022).",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "sales-billing-inference": {
+      "header": "Die Karten von Vertrieb und Abrechnung sind ein Schluss",
+      "description": "Vertriebler verbringen 30 % ihrer Woche mit Verkaufen, laut einer Umfrage eines Anbieters, die nichts über wachsende Prüfarbeit sagt. Keine Quelle misst die Wirkung von KI auf die Abrechnung; der Text der Vertriebs- und Abrechnungskarten wendet das allgemeine Muster an und ist kein Beleg [1] (AIE-0019, AIE-0020).",
+      "sources": {
+        "salesforce-state-of-sales": {
+          "title": "Salesforce, State of Sales, 6. Ausgabe"
+        }
+      }
+    }
+  }
+}

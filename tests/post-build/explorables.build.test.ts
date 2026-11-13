@@ -1,4 +1,4 @@
-// Post-build check of the Explorable pages (spec #404): three public, indexed pages at /explorables/<slug>/ in both
+// Post-build check of the Explorable pages (spec #404): the public, indexed pages at /explorables/<slug>/ in both
 // locales, each an Episode-shaped page; the overview that lists them; the redirects that keep the old
 // /explorable-explanations/ links working.
 
@@ -11,8 +11,8 @@ import { exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exporte
 
 const basePath = resolveBasePath();
 
-/** The three Explorable pages and their URLs, written out: the spec's table is the expectation. */
-const SLUGS = ['context-window', 'human-in-the-loop', 'ai-capability'] as const;
+/** The Explorable pages and their URLs, written out: the spec's table, plus software ecology, is the expectation. */
+const SLUGS = ['context-window', 'human-in-the-loop', 'ai-capability', 'software-ecology'] as const;
 const PAGES = SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({
     slug,
@@ -68,7 +68,8 @@ describe.each(PAGES)('retained presentation at $url', ({ url }) => {
     const expectedEntrance = 'title-departure';
     // ACT
     const edge = title.children('[data-transition-edge]');
-    const rear = title.children().filter((_, node) => $(node).find('[data-hero-motion]').length > 0);
+    // The rear story: the drift canvas, or on a glow-only hero (software ecology) its two glow layers.
+    const rear = title.children().filter((_, node) => $(node).find('[data-hero-motion], .hero-glow').length > 0);
     // ASSERT
     expect(edge.attr('data-transition-edge')).toBe(expectedEdge);
     expect(edge.attr('data-transition-effect')).toBe(expectedEffect);
@@ -89,6 +90,7 @@ describe('the Explorables overview', () => {
       ['ai-capability', 'cumulative-orchestration'],
       ['context-window', 'intention-capacity'],
       ['human-in-the-loop', 'review-funnel'],
+      ['software-ecology', 'review-funnel'],
     ];
     // ACT
     const cards = $('[data-explorable-card][data-card-visual-position="top"]').toArray();
@@ -103,7 +105,7 @@ describe('the Explorables overview', () => {
     expect($('[data-explorable-card] canvas, [data-explorable-card] [data-drift-still]').length).toBe(0);
   });
 
-  it.each(LOCALES)('lists the three Explorable pages, each linking to its page, for %s', (locale) => {
+  it.each(LOCALES)('lists every Explorable page, each linking to its page, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));
     const expected = SLUGS.map((slug) => `${basePath}${localizePath(`/explorables/${slug}`, locale)}/`).sort();
@@ -116,7 +118,7 @@ describe('the Explorables overview', () => {
     expect(hrefs).toEqual(expected);
   });
 
-  it.each(LOCALES)('is in the sitemap with its three pages, for %s', (locale) => {
+  it.each(LOCALES)('is in the sitemap with every page, for %s', (locale) => {
     // ARRANGE
     const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
     const urls = [ROUTES.explorables, ...SLUGS.map((slug) => `/explorables/${slug}`)].map(

@@ -2,6 +2,7 @@
   "title": "Dein Terminal",
   "caption": "Dein neuer bester Freund.",
   "steps": "Schritt 1",
+  "stepDone": "Erledigt, nicht noch einmal nötig",
   "window": "Terminal",
   "prompt": "~ %",
   "voiceScript": {

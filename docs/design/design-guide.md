@@ -92,6 +92,17 @@ Suits Episodes that ground an idea in history the viewer knows: a museum wall re
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Factory
+
+Suits a non-technical audience meeting AI at work: a production line is a picture they already know from everyday life, so documents moving between stations make an organisation's work visible.
+
+- A production line carries the Slide: work centres, transfer belts, storages and queues, with a document icon as the unit that moves.
+- One line, redrawn on every Slide it fits; a single station is zoomed in when the Slide is about one worker's inputs.
+- Everyday production-line pictures only, no manufacturing jargon.
+- Motion is flow: documents move, pile up at a bottleneck or stand still; nothing loops at rest.
+- `primary` marks the one thing to look at.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.

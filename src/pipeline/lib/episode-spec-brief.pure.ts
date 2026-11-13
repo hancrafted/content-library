@@ -6,8 +6,22 @@
 import { gateTier } from './staging-file.pure.ts';
 import { bodyLines } from './staging-markdown.pure.ts';
 
-/** The Brief headings the card shows, in card order. */
-export const BRIEF_HEADINGS = ['Learning goal', 'Actionables', 'Research questions', 'Style', 'Constraints'] as const;
+/**
+ * The Brief headings the card shows, in the Brief template's order. Slides have their own cards; Threads (its `###`
+ * subheadings end `under()`'s read), Episode Design Reference and Open ideas stay off the card.
+ */
+export const BRIEF_HEADINGS = [
+  'Format',
+  'Audience',
+  'Style',
+  'Learning goal',
+  'Actionables',
+  'Hook',
+  'Red thread',
+  'Analogy',
+  'Constraints',
+  'Research questions',
+] as const;
 
 export const BRIEF_KEY_PREFIX = 'brief--';
 

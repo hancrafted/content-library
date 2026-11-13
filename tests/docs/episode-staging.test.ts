@@ -128,7 +128,10 @@ function researchFolders(): string[] {
     // A draft keeps write-research's foreach glob; only a named folder is a planned one.
     .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
     .map((output) => path.dirname(output));
-  return [...onDisk, ...planned];
+  // A planned staging folder that Promotion already moved into the llm-wiki, under the same name, is that wiki folder.
+  const promoted = new Set(llmWiki.map((folder) => path.basename(folder)));
+  const unpromoted = planned.filter((folder) => !promoted.has(path.basename(folder)));
+  return [...onDisk, ...unpromoted];
 }
 
 /** The template's staging folder: `<slug>` stands for the Episode a tailored copy names. */

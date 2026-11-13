@@ -18,9 +18,9 @@
     },
     "windows": {
       "label": "Windows",
-      "line": "<b>Unter Windows:</b> Drück die <kbd>Windows</kbd>-Taste, tipp <b>PowerShell</b>, drück <kbd>Enter</kbd>.",
-      "query": "PowerShell",
-      "result": "Windows PowerShell",
+      "line": "<b>Unter Windows:</b> Drück die <kbd>Windows</kbd>-Taste, tipp <b>Terminal</b>, drück <kbd>Enter</kbd>. Unter Windows 10 tippst Du stattdessen <b>PowerShell</b>.",
+      "query": "Terminal",
+      "result": "Terminal",
       "resultKind": "App",
       "window": "Windows PowerShell",
       "output": "Windows PowerShell",
@@ -96,7 +96,7 @@
       "one-window-one-cursor": {
         "title": "Ein Fenster, ein Cursor",
         "keywords": "",
-        "script": "Wähl oben Dein System, dann öffne das Terminal auf dem Mac, PowerShell unter Windows oder das Terminal unter Linux. Dafür reichen eine Tastenkombination und ein paar Buchstaben. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich."
+        "script": "Wähl oben Dein System, dann öffne das Terminal auf dem Mac, das Terminal unter Windows 11 oder PowerShell unter Windows 10, oder das Terminal unter Linux. Dafür reichen eine Tastenkombination und ein paar Buchstaben. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich."
       },
       "stuck-paste-it": {
         "title": "Hängst Du fest? Füg es ein",

@@ -1,0 +1,23 @@
+name: Gatekeeper lead
+sub: One tech lead writes every spec and reviews every change. One person, two work centers. Without Support, bug and support requests go to Operations.
+centers:
+  lspec: { title: Lead · specs }
+  e1: { title: Engineering 1 }
+  e2: { title: Engineering 2 }
+  e3: { title: Engineering 3 }
+  lrev: { title: Lead · review }
+belts:
+  customer-sales: { label: new customer }
+  customer-pm: { label: feature or change request }
+  customer-ops: { label: bug or support ticket }
+  sales-pm: { label: deal }
+  pm-lspec: { label: brief, back: open questions }
+  lspec-e1: { label: task, back: clarification }
+  lspec-e2: { label: task, back: clarification }
+  lspec-e3: { label: task, back: clarification }
+  e1-lrev: { label: pull request, back: changes requested }
+  e2-lrev: { label: pull request, back: changes requested }
+  e3-lrev: { label: pull request, back: changes requested }
+  lrev-ops: { label: approved change, back: does not deploy }
+  ops-customer: { label: release or answer }
+customer: { title: Customer, job: Sends requests and receives releases }

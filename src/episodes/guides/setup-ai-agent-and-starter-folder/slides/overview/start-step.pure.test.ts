@@ -15,11 +15,11 @@ describe('success cases', () => {
     expect(result).toEqual(expected);
   });
 
-  it('names step 3 once both AI agent boxes are ticked too', () => {
+  it('names step 3 once the AI agent is installed, because logging in happens in the folder', () => {
     // ARRANGE
     const expected = { step: 3, allDone: false };
     // ACT
-    const result = startStep(ids('terminal-open', 'agent-installed', 'agent-logged-in'));
+    const result = startStep(ids('terminal-open', 'agent-installed'));
     // ASSERT
     expect(result).toEqual(expected);
   });
@@ -35,11 +35,11 @@ describe('failure cases', () => {
     expect(result).toEqual(expected);
   });
 
-  it('stays at step 2 while one of its two boxes is open', () => {
+  it('stays at step 3 while logging in is still open', () => {
     // ARRANGE
-    const expected = 2;
+    const expected = 3;
     // ACT
-    const result = startStep(ids('terminal-open', 'agent-installed')).step;
+    const result = startStep(ids('terminal-open', 'agent-installed', 'folder-unzipped', 'agent-in-folder')).step;
     // ASSERT
     expect(result).toBe(expected);
   });
@@ -66,9 +66,9 @@ describe('edge cases', () => {
 
   it('reports a step as done only when all its boxes are ticked', () => {
     // ARRANGE
-    const ticked = ids('agent-installed');
+    const ticked = ids('folder-unzipped', 'agent-in-folder');
     // ACT
-    const done = [isStepDone(2, ticked), isStepDone(2, ids('agent-installed', 'agent-logged-in'))];
+    const done = [isStepDone(3, ticked), isStepDone(3, ids('folder-unzipped', 'agent-in-folder', 'agent-logged-in'))];
     // ASSERT
     expect(done).toEqual([false, true]);
   });

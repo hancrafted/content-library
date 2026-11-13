@@ -1,0 +1,22 @@
+{
+  "title": "Kontext für Agenten erstellen",
+  "label": "Jede Interviewrunde rückt die Gruppe näher ans Bullseye",
+  "round1": "Runde 1",
+  "round2": "Runde 2",
+  "round3": "Runde 3",
+  "spec": "→ die Spec",
+  "voiceScript": {
+    "segments": {
+      "the-pain": {
+        "title": "Der Schmerz",
+        "keywords": "",
+        "script": "Präzisen, genauen Kontext zu erstellen, der nicht verrottet, fühlt sich nach viel Arbeit an. Wer hat Zeit, das für jede Aufgabe zu schreiben? Die meisten von uns lassen es weg, und dann stehen wir wieder bei der Reifenschaukel."
+      },
+      "the-claim": {
+        "title": "Die These",
+        "keywords": "",
+        "script": "Deshalb die These: Lass die KI fragen, und Du antwortest. Du weißt gut, was Du willst, wenn Dir jemand die richtige Frage stellt. Weniger gut bist Du darin, alles ungefragt aufzuschreiben."
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "title": "BRIEF",
+  "caption": "Die fünf Schritte aus der Freelancer-Episode, und <b>die heutige Session zeigt drei davon: R, I und F</b>.",
+  "callback": {
+    "chip": "Freelancer · KI · Tag 1",
+    "episode": "Rückblick: Onboarde die KI jedes Mal"
+  },
+  "movesLabel": "Die fünf BRIEF-Schritte, auf die heutige Session übertragen",
+  "todayLabel": "Heute:",
+  "notToday": "Nicht heute",
+  "moves": {
+    "break": {
+      "letter": "B",
+      "move": "Zerlege es"
+    },
+    "requirements": {
+      "letter": "R",
+      "move": "Anforderungen zuerst",
+      "today": "Kontext ist die Anforderung, also kommt er vor der Arbeit"
+    },
+    "interview": {
+      "letter": "I",
+      "move": "Interview mit KI",
+      "today": "das Grillen, in Runden von Fragen"
+    },
+    "evaluate": {
+      "letter": "E",
+      "move": "Prüfe jeden Schritt"
+    },
+    "fresh": {
+      "letter": "F",
+      "move": "Frischer Chat",
+      "today": "nimm die Spec in einen neuen Chat mit, nicht in den langen"
+    }
+  },
+  "notes": {
+    "why-a-fresh-chat": {
+      "header": "Warum ein frischer Chat",
+      "description": "Anthropic beschreibt Compaction als Zusammenfassen des Inhalts und Neustart eines Kontextfensters mit dieser Zusammenfassung, warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verlieren kann, und empfiehlt Sub-Agenten mit sauberen Fenstern, die eine verdichtete Zusammenfassung zurückgeben [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Rückblick",
+        "keywords": "",
+        "script": "Vielleicht hast Du die Freelancer-Episode gesehen. Du hast einen Freelancer eingestellt, der schnell, belesen und unermüdlich ist und der nach jedem Gespräch alles vergisst. Also musst Du diesen Freelancer jedes einzelne Mal einarbeiten, und genau das erledigt das KI-Interview für Dich."
+      },
+      "map-to-today": {
+        "title": "Übertragen auf heute",
+        "keywords": "",
+        "script": "Hier sind die fünf Buchstaben, und die heutige Session zeigt drei davon. R steht für Anforderungen zuerst. I ist das Interview, das Grillen. F ist der frische Chat. B, zerlege es, und E, prüfe jeden Schritt, bleiben auf der Liste, sind heute aber nicht der Schwerpunkt."
+      },
+      "close": {
+        "title": "Abschluss",
+        "keywords": "",
+        "script": "Das Zweite zum Mitnehmen also: Nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Zusammengefasst: Das Band läuft nur so gut wie das, was bei ihm ankommt, Kontext ist die Anforderung, die Werkbank muss sauber bleiben, und das Interview baut ihn für Dich. Ich kann nicht versprechen, dass es zu jeder Aufgabe passt, und bei alldem stehen wir noch am Anfang. Wenn Du es ausprobierst, würde ich gern hören, wie es gelaufen ist. Danke."
+      }
+    }
+  }
+}

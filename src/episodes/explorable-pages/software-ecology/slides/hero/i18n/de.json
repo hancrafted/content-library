@@ -1,0 +1,35 @@
+{
+  "heading": "Wohin KI den Druck in Deinem Team schiebt",
+  "caption": "Was der Kunde wirklich wollte: die KI-Ausgabe.",
+  "tryIt": "Ausprobieren",
+  "why": "Warum es wichtig ist",
+  "share": {
+    "title": "Zeig es Deinem Team",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "text": "Zeig es auf dem Bildschirm, bevor Du eine Rolle beschleunigst: Schau zuerst, ob die Prüfung danach mitkommt."
+  },
+  "motion": {
+    "pause": "Hintergrundanimation pausieren",
+    "play": "Hintergrundanimation abspielen",
+    "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
+  },
+  "preview": {
+    "label": "Stilisierte Vorschau des Explorables Software-Ökosystem, ein illustratives Modell, nicht gemessen: KI in der Entwicklung schiebt KI-gemachte Arbeit in die Qualitätssicherung, deren Regal mit {weeks} Wochen wartender Arbeit voll ist, während der Betrieb leerläuft und der Kunde {output} Ausstoß bei {satisfied} Zufriedenheit bekommt.",
+    "title": "Software-Ökosystem · KI unausgewogen, Woche 20",
+    "tag": "KI in der Entwicklung",
+    "illustrative": "Illustratives Modell, nicht gemessen",
+    "customer": "Kunde",
+    "output": "{value}×",
+    "satisfied": "{value} zufrieden",
+    "waiting": "{center} · {weeks} Wochen",
+    "centers": {
+      "sales": "Vertrieb",
+      "product": "Produkt",
+      "analyst": "Analyse",
+      "engineer": "Entwicklung",
+      "qa": "QS",
+      "operations": "Betrieb"
+    }
+  }
+}

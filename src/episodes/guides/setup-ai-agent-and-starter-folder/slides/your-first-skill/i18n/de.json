@@ -4,6 +4,7 @@
   "question": "Do you want to proceed?",
   "yes": "Yes",
   "steps": "Schritt 4",
+  "stepDone": "Erledigt, nicht noch einmal nötig",
   "window": "Terminal",
   "voiceScript": {
     "segments": {

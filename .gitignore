@@ -46,3 +46,6 @@ playwright-report/
 
 # playwright-cli: session snapshots and logs.
 .playwright-cli/
+
+# docs/llm-wiki/raw
+docs/llm-wiki/raw/private

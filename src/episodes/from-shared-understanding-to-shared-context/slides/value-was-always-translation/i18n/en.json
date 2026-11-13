@@ -1,0 +1,55 @@
+{
+  "title": "Value was always translation",
+  "caption": "A product, a service or a lecture: each <b>translates what a person wanted</b> into something that solves the actual problem.",
+  "intent": {
+    "index": "01",
+    "label": "What a person wanted",
+    "who": "The customer",
+    "quote": "“I want to get to work without arriving sweaty.”",
+    "statement": "One intent."
+  },
+  "results": {
+    "index": "02",
+    "label": "What it was translated into",
+    "statement": "Three translations.",
+    "items": {
+      "product": { "kind": "Product", "name": "E-bike" },
+      "service": { "kind": "Service", "name": "Bike lease with a shower at the office" },
+      "lecture": { "kind": "Lecture", "name": "Cycling to work in a suit" }
+    }
+  },
+  "notes": {
+    "the-hard-part-is-the-concept": {
+      "header": "The hard part is the concept",
+      "description": "Brooks argues the hard part of building software is deciding what to build, the conceptual construct, and not the labor of representing it in code; an error in the concept cripples the result and is hardest to rectify later [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    },
+    "how-strong-the-evidence-is": {
+      "header": "How strong the evidence is",
+      "description": "this is one author's argument from experience, written in 1986 about human-built software. No source compares requirements and execution on the same projects, and that it holds when an AI builds is an inference [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-effort-is-a-translation": {
+        "title": "Every effort is a translation",
+        "keywords": "",
+        "script": "Whatever you make, a product, a service or a lecture, you are doing the same thing: you translate what a human wanted into something that solves the actual problem. The product is only the last form of that intent."
+      },
+      "a-translation-layer": {
+        "title": "A translation layer",
+        "keywords": "",
+        "script": "Take the commuter. His wish is “don’t arrive sweaty.” Someone has to turn that wish into a bike with a motor, or a lease with a shower at the office, or a talk on cycling to work in a suit. That turning is the work. The hard part is deciding what to build, not building it. That is my hypothesis from experience, not a measurement."
+      }
+    }
+  }
+}

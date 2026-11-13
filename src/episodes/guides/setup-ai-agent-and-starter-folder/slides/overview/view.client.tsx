@@ -1,8 +1,9 @@
 'use client';
 
+import { parseReadyFlags, type ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 import { useEffect, useState } from 'react';
 import { ViewBody, type ViewBodyProps } from './readiness';
-import { parseReadyFlags, viewFor, type ReadyFlags } from './ready-state.pure';
+import { viewFor } from './ready-state.pure';
 import { TicksContext, useTicks } from './ticks.client';
 
 const NO_FLAGS: ReadyFlags = { skills: undefined, localSetup: undefined };

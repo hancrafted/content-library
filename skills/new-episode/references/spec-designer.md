@@ -6,7 +6,7 @@ A designer of the `write-spec` job designs two or three **Options** per page Sli
 
 Point, never paste: read each file yourself.
 
-- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library at the repo's pinned `3.15.0`.
+- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library at the repo's pinned `3.15.0`. This file names the Slide's design size, 1920 × 1080, and its render presets: desktop (1920 px), laptop (1440 px), tablet (1024 px), mobile (390 px) and vertical Shorts (1080 × 1920).
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
 - Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
@@ -20,7 +20,7 @@ Point, never paste: read each file yourself.
 
 ## The mock is the Slide
 
-The user judges each Option from its mock alone, on a stage the full width of the page (about 1200px) at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
+The user judges each Option from its mock alone, on a stage that grows with the screen up to the Slide's 1920 px, at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
 
 - **Real content.** A page Slide's shared Slide header (the Eyebrow with its Section title and `n / N` in `text-caption` uppercase, the title at `text-subheading`, the caption at `text-body` close under it), then every note, label, number, axis and arrow the Slide shows, in final English. A mock of a board shows every note with its words and amount; a chart shows its bars or curve at their real proportions.
 - **Composition.** One focal point carried by `primary` and by size; a clear reading order; generous spacing. The Slide fills the stage the way a slide fills a screen, never a small diagram in a corner.

@@ -1,0 +1,22 @@
+name: Zwei Teams, eine Plattform
+sub: Das Produktmanagement versorgt zwei Teams; Team B arbeitet ohne Spezifikation; beide liefern über ein Plattformteam aus.
+centers:
+  anA: { title: Analyse · Team A }
+  engA: { title: Entwicklung · Team A }
+  engB: { title: Entwicklung · Team B }
+  plat: { title: Plattform }
+belts:
+  customer-sales: { label: Neukunde }
+  customer-pm: { label: Feature- oder Änderungswunsch }
+  customer-support: { label: Fehler- oder Supportticket }
+  sales-pm: { label: Abschluss }
+  pm-anA: { label: Briefing, back: offene Fragen }
+  pm-engB: { label: Briefing, back: wie war das gemeint? }
+  support-engB: { label: Fehlerbericht, back: nicht reproduzierbar }
+  support-customer: { label: Antwort }
+  anA-engA: { label: Spezifikation, back: Rückfrage }
+  engB-engA: { label: API-Anfrage }
+  engA-plat: { label: Pull Request, back: Prüfung fehlgeschlagen }
+  engB-plat: { label: Pull Request, back: Prüfung fehlgeschlagen }
+  plat-customer: { label: Release }
+customer: { title: Kunde, job: Schickt Anfragen und bekommt Releases und Antworten }

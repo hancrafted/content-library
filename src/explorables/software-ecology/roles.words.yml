@@ -1,0 +1,72 @@
+# Role catalog words, English. Per role: its classic artefacts, the execution tasks, and what AI does there.
+roles:
+  customer:
+    title: Customer
+    job: Orders what they need and receives what ships
+    artefacts: [order, request, complaint]
+    tasks: [explains the need, accepts the delivery, pays the invoice]
+    ai: [writes the request with an assistant, compares offers]
+  sales:
+    title: Sales
+    job: Turns leads into deals
+    artefacts: [deal, promised scope, contract & price terms]
+    tasks: [qualifies leads, writes the offer, negotiates terms]
+    ai: [drafts proposals, summarises calls into deal notes, writes requirements for Product management and Analysis]
+  pm:
+    title: Product management
+    job: Turns the deal into a brief
+    artefacts: [brief, roadmap item, acceptance criteria]
+    tasks: [interviews customers, prioritises, writes the brief]
+    ai: [drafts briefs from interview notes, clusters customer feedback]
+  ba:
+    title: Analysis
+    job: Turns the brief into a spec
+    artefacts: [spec, ADR, design, data model]
+    tasks: [models the domain, decides the architecture, writes the spec]
+    ai: [drafts specs, drafts architecture options, checks the spec against the brief]
+  doc:
+    title: Documentation
+    job: Writes what users will read
+    artefacts: [help pages, release notes, tutorials]
+    tasks: [reads the change, writes and updates pages, reviews screenshots]
+    ai: [generates help pages from the change, generates release notes, translates]
+  eng:
+    title: Engineering
+    job: Turns the spec into code
+    artefacts: [pull request, tests, code change]
+    tasks: [designs the change, writes code and tests, fixes review comments]
+    ai: [drafts the code change, writes tests, explains old code]
+  ops:
+    title: Operations
+    job: Reviews, ships and runs the release
+    artefacts: [code review, release, change log]
+    tasks: [reviews the change, deploys, watches alerts]
+    ai: [summarises a pull request for review, writes deploy scripts, triages alerts]
+  billing:
+    title: Billing
+    job: Bills what was used and agreed
+    artefacts: [invoice, usage report]
+    tasks: [reconciles usage, issues invoices, settles disputes]
+    ai: [drafts invoices, reconciles usage]
+  support:
+    title: Support
+    job: Answers when it breaks
+    artefacts: [answer, ticket, bug report]
+    tasks: [triages tickets, answers customers, reports bugs]
+    ai: [drafts answers, triages tickets, finds the help page]
+  lead:
+    title: Tech lead
+    job: Splits the work and reviews every change
+    artefacts: [task breakdown, review]
+    tasks: [splits briefs into tasks, reviews every change, coaches]
+    ai: [breaks a brief into tasks, summarises a pull request for review]
+  qa:
+    title: Quality assurance
+    job: Tests every change before it ships
+    artefacts: [test report, tested change]
+    tasks: [runs the checks, tests the change, passes or sends it back]
+    ai: [generates test plans, writes deploy scripts]
+presets:
+  roles: Who does what
+  ideal: In theory
+  realistic: In practice

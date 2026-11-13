@@ -1,0 +1,55 @@
+{
+  "title": "Wert war immer Übersetzung",
+  "caption": "Ein Produkt, eine Dienstleistung oder ein Vortrag: Jedes <b>übersetzt, was ein Mensch wollte</b>, in etwas, das das eigentliche Problem löst.",
+  "intent": {
+    "index": "01",
+    "label": "Was ein Mensch wollte",
+    "who": "Der Kunde",
+    "quote": "„Ich will zur Arbeit kommen, ohne verschwitzt anzukommen.“",
+    "statement": "Eine Absicht."
+  },
+  "results": {
+    "index": "02",
+    "label": "Worin sie übersetzt wurde",
+    "statement": "Drei Übersetzungen.",
+    "items": {
+      "product": { "kind": "Produkt", "name": "E-Bike" },
+      "service": { "kind": "Dienstleistung", "name": "Bike-Leasing mit Dusche im Büro" },
+      "lecture": { "kind": "Vortrag", "name": "Im Anzug mit dem Rad zur Arbeit" }
+    }
+  },
+  "notes": {
+    "the-hard-part-is-the-concept": {
+      "header": "Schwer ist das Konzept",
+      "description": "Brooks hält das Schwere an Software für die Entscheidung, was gebaut wird, das gedankliche Konstrukt, nicht die Arbeit, es in Code darzustellen. Ein Fehler im Konzept verdirbt das Ergebnis und lässt sich später am schwersten beheben [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    },
+    "how-strong-the-evidence-is": {
+      "header": "Wie belastbar das ist",
+      "description": "Das ist das Argument eines einzelnen Autors aus Erfahrung, 1986 über von Menschen gebaute Software geschrieben. Keine Quelle vergleicht Anforderungen und Umsetzung an denselben Projekten, und dass es auch gilt, wenn eine KI baut, ist ein Schluss [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-effort-is-a-translation": {
+        "title": "Jede Arbeit ist eine Übersetzung",
+        "keywords": "",
+        "script": "Was auch immer Du machst, ein Produkt, eine Dienstleistung oder einen Vortrag, Du tust immer dasselbe: Du übersetzt, was ein Mensch wollte, in etwas, das das eigentliche Problem löst. Das Produkt ist nur die letzte Form dieser Absicht."
+      },
+      "a-translation-layer": {
+        "title": "Eine Übersetzungsschicht",
+        "keywords": "",
+        "script": "Nimm den Pendler. Sein Wunsch ist: nicht verschwitzt ankommen. Jemand muss diesen Wunsch in ein Rad mit Motor übersetzen, oder in ein Leasing mit Dusche im Büro, oder in einen Vortrag darüber, wie man im Anzug mit dem Rad zur Arbeit kommt. Dieses Übersetzen ist die Arbeit. Schwer ist, zu entscheiden, was gebaut wird, nicht, es zu bauen. Das ist meine Hypothese aus Erfahrung, keine Messung."
+      }
+    }
+  }
+}

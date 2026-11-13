@@ -13,7 +13,7 @@
     },
     "how": {
       "title": "Each layer adds one thing to the same model.",
-      "caption": "<marker>Prompting writes instructions; an agent directs its own tool use in a loop; a workflow chains steps along a path fixed in advance.</marker>"
+      "caption": "<marker>A chat is you writing instructions and the model answering; an agent directs its own tool use in a loop; a workflow chains steps along a path fixed in advance.</marker>"
     },
     "what": {
       "title": "Four Levels on one timeline, from 2022 to 2026.",
@@ -35,7 +35,7 @@
     },
     "why": {
       "header": "The words are not settled",
-      "description": "Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label [1], and its definitions differ in how much human review remains [2] (research LLM-0018).",
+      "description": "Chat, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label [1], and its definitions differ in how much human review remains [2] (research LLM-0018).",
       "sources": {
         "strongdm-software-factory": {
           "title": "StrongDM, The Software Factory"

@@ -1,6 +1,6 @@
 {
   "title": "The timeline",
-  "caption": "Four Levels on one language model, from prompting in 2022–23 to the factory emerging in 2026.",
+  "caption": "Four Levels on one language model, from chat in 2022–23 to the factory emerging in 2026.",
   "readme": {
     "heading": "Read me",
     "labels": {
@@ -8,14 +8,18 @@
       "tryit": "What to try",
       "notice": "What to notice"
     },
-    "shows": "Four Levels on one language model, each with its card, a scene and its wire down to the model. The toolbar adds rows that tell the same timeline from other angles: the role each Level compares to, its productivity ceiling, and the mismatch between how most people use AI and what leaders expect.",
-    "tryit": "Switch on Ceiling, then Mismatch. Move the mouse onto a Level to play its scene; click a card or the model band for its definition and source. On a phone, swipe from Level to Level.",
-    "notice": "The claimed ceilings are hypotheses; the measured line under each says what studies found, and no study has measured a workflow or a factory yet. The 20× promise sits far right of where most people work."
+    "shows": "Four Levels on one language model, each with its card, a scene and its wire down to the model. Explain is on; the toolbar adds rows that tell the same timeline from other angles: the effort each Level asks you to manage, its productivity increase, how many people work at it, the AI disciplines it adds, and where a person sits in its oversight.",
+    "tryit": "Switch on AI disciplines, then Oversight. Click a card to open the definitions behind it, each from the page that gives it. Move the mouse onto a Level to play its scene; click a Level card or the model band for its definition. On a phone, swipe from Level to Level.",
+    "notice": "The productivity increases are hypotheses; the measured line under each says what studies found, and no study has measured a workflow or a factory yet. Each adoption number counts a different population, so the four do not add up to one curve. Every discipline stays once added: a factory still needs prompts."
   },
   "notes": {
     "timeline": {
       "header": "Where the years and definitions come from",
-      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured ceilings come from research LLM-0019, the mismatch evidence from LLM-0020."
+      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for chat, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured productivity comes from research LLM-0019, the adoption numbers from LLM-0025, the AI disciplines from LLM-0023 and the oversight modes from LLM-0024."
+    },
+    "oversight-origin": {
+      "header": "Where in, on and out of the loop come from",
+      "description": "The three oversight terms come from the debate on weapon autonomy, not from software. Human Rights Watch and Harvard's International Human Rights Clinic set them out in Losing Humanity (2012): human-in-the-loop weapons select and engage targets only with a human command; human-on-the-loop weapons do so under a human operator who can override their actions; human-out-of-the-loop weapons do so without any human input or interaction. Where each mode sits on the timeline is a hypothesis (research LLM-0024)."
     }
   }
 }

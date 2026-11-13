@@ -1,0 +1,2699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Software ecology flow</title>
+<!-- Prototype of the software ecology Explorable's Play slide, Option 1a "Documents" (feedback-01.md).
+     Built by scratchpad proto/build.mjs from style.css, body.html, app.js; design.css is the Spec's compiled site tokens, inlined. -->
+<style>
+/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --spacing: 0.25rem;
+    --container-3xl: 48rem;
+    --leading-snug: 1.375;
+    --radius-lg: 0.5rem;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-ai: var(--ai);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  .visible {
+    visibility: visible;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .relative {
+    position: relative;
+  }
+  .sticky {
+    position: sticky;
+  }
+  .inset-0 {
+    inset: 0px;
+  }
+  .col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+  .col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+  .col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+  .col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+  .col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+  .col-span-8 {
+    grid-column: span 8 / span 8;
+  }
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-auto {
+    margin-top: auto;
+  }
+  .mr-1 {
+    margin-right: var(--spacing);
+  }
+  .ml-auto {
+    margin-left: auto;
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline {
+    display: inline;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .size-3 {
+    width: calc(var(--spacing) * 3);
+    height: calc(var(--spacing) * 3);
+  }
+  .size-4 {
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
+  }
+  .size-10 {
+    width: calc(var(--spacing) * 10);
+    height: calc(var(--spacing) * 10);
+  }
+  .size-12 {
+    width: calc(var(--spacing) * 12);
+    height: calc(var(--spacing) * 12);
+  }
+  .size-14 {
+    width: calc(var(--spacing) * 14);
+    height: calc(var(--spacing) * 14);
+  }
+  .size-full {
+    width: 100%;
+    height: 100%;
+  }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
+  }
+  .h-3 {
+    height: calc(var(--spacing) * 3);
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
+  .h-auto {
+    height: auto;
+  }
+  .w-1\/3 {
+    width: calc(1 / 3 * 100%);
+  }
+  .w-3 {
+    width: calc(var(--spacing) * 3);
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
+  }
+  .w-11\/12 {
+    width: calc(11 / 12 * 100%);
+  }
+  .w-20 {
+    width: calc(var(--spacing) * 20);
+  }
+  .w-fit {
+    width: fit-content;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-3xl {
+    max-width: var(--container-3xl);
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-baseline {
+    align-items: baseline;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .items-stretch {
+    align-items: stretch;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-1 {
+    gap: var(--spacing);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .gap-x-6 {
+    column-gap: calc(var(--spacing) * 6);
+  }
+  .gap-y-2 {
+    row-gap: calc(var(--spacing) * 2);
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-md {
+    border-radius: calc(var(--radius) - 2px);
+  }
+  .rounded-xl {
+    border-radius: calc(var(--radius) + 4px);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-2 {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+  }
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+  .border-ai\/40 {
+    border-color: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--ai) 40%, transparent);
+    }
+  }
+  .border-border {
+    border-color: var(--border);
+  }
+  .border-foreground {
+    border-color: var(--foreground);
+  }
+  .border-muted-foreground\/70 {
+    border-color: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--muted-foreground) 70%, transparent);
+    }
+  }
+  .border-primary {
+    border-color: var(--primary);
+  }
+  .border-warning {
+    border-color: var(--warning);
+  }
+  .bg-ai {
+    background-color: var(--ai);
+  }
+  .bg-ai\/10 {
+    background-color: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--ai) 10%, transparent);
+    }
+  }
+  .bg-background {
+    background-color: var(--background);
+  }
+  .bg-card {
+    background-color: var(--card);
+  }
+  .bg-card\/60 {
+    background-color: var(--card);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--card) 60%, transparent);
+    }
+  }
+  .bg-info\/40 {
+    background-color: var(--info);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--info) 40%, transparent);
+    }
+  }
+  .bg-info\/80 {
+    background-color: var(--info);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--info) 80%, transparent);
+    }
+  }
+  .bg-muted {
+    background-color: var(--muted);
+  }
+  .bg-muted-foreground {
+    background-color: var(--muted-foreground);
+  }
+  .bg-primary {
+    background-color: var(--primary);
+  }
+  .bg-primary-foreground {
+    background-color: var(--primary-foreground);
+  }
+  .bg-primary-foreground\/25 {
+    background-color: var(--primary-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--primary-foreground) 25%, transparent);
+    }
+  }
+  .bg-warning {
+    background-color: var(--warning);
+  }
+  .bg-warning\/15 {
+    background-color: var(--warning);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--warning) 15%, transparent);
+    }
+  }
+  .fill-ai {
+    fill: var(--ai);
+  }
+  .fill-ai\/10 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 10%, transparent);
+    }
+  }
+  .fill-ai\/15 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 15%, transparent);
+    }
+  }
+  .fill-ai\/40 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 40%, transparent);
+    }
+  }
+  .fill-ai\/70 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 70%, transparent);
+    }
+  }
+  .fill-background {
+    fill: var(--background);
+  }
+  .fill-background\/70 {
+    fill: var(--background);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--background) 70%, transparent);
+    }
+  }
+  .fill-card {
+    fill: var(--card);
+  }
+  .fill-foreground {
+    fill: var(--foreground);
+  }
+  .fill-foreground\/25 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 25%, transparent);
+    }
+  }
+  .fill-foreground\/50 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 50%, transparent);
+    }
+  }
+  .fill-foreground\/60 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 60%, transparent);
+    }
+  }
+  .fill-human {
+    fill: var(--human);
+  }
+  .fill-muted {
+    fill: var(--muted);
+  }
+  .fill-muted-foreground {
+    fill: var(--muted-foreground);
+  }
+  .fill-muted-foreground\/40 {
+    fill: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--muted-foreground) 40%, transparent);
+    }
+  }
+  .fill-none {
+    fill: none;
+  }
+  .fill-primary {
+    fill: var(--primary);
+  }
+  .fill-primary\/15 {
+    fill: var(--primary);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--primary) 15%, transparent);
+    }
+  }
+  .fill-warning {
+    fill: var(--warning);
+  }
+  .fill-warning-foreground {
+    fill: var(--warning-foreground);
+  }
+  .stroke-ai {
+    stroke: var(--ai);
+  }
+  .stroke-border {
+    stroke: var(--border);
+  }
+  .stroke-card {
+    stroke: var(--card);
+  }
+  .stroke-current {
+    stroke: currentcolor;
+  }
+  .stroke-foreground {
+    stroke: var(--foreground);
+  }
+  .stroke-foreground\/15 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 15%, transparent);
+    }
+  }
+  .stroke-foreground\/20 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 20%, transparent);
+    }
+  }
+  .stroke-foreground\/25 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 25%, transparent);
+    }
+  }
+  .stroke-foreground\/30 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 30%, transparent);
+    }
+  }
+  .stroke-foreground\/35 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 35%, transparent);
+    }
+  }
+  .stroke-foreground\/45 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 45%, transparent);
+    }
+  }
+  .stroke-foreground\/50 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 50%, transparent);
+    }
+  }
+  .stroke-foreground\/60 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 60%, transparent);
+    }
+  }
+  .stroke-muted-foreground {
+    stroke: var(--muted-foreground);
+  }
+  .stroke-muted-foreground\/60 {
+    stroke: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--muted-foreground) 60%, transparent);
+    }
+  }
+  .stroke-primary {
+    stroke: var(--primary);
+  }
+  .stroke-primary-foreground {
+    stroke: var(--primary-foreground);
+  }
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .p-10 {
+    padding: calc(var(--spacing) * 10);
+  }
+  .px-1 {
+    padding-inline: var(--spacing);
+  }
+  .px-2 {
+    padding-inline: calc(var(--spacing) * 2);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .py-1 {
+    padding-block: var(--spacing);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .py-5 {
+    padding-block: calc(var(--spacing) * 5);
+  }
+  .pt-2 {
+    padding-top: calc(var(--spacing) * 2);
+  }
+  .pt-3 {
+    padding-top: calc(var(--spacing) * 3);
+  }
+  .text-left {
+    text-align: left;
+  }
+  .align-middle {
+    vertical-align: middle;
+  }
+  .text-subheading {
+    font-size: var(--size-subheading);
+    line-height: var(--tw-leading, var(--leading-subheading));
+    letter-spacing: var(--tw-tracking, var(--tracking-heading));
+  }
+  .text-body {
+    font-size: var(--size-body);
+    line-height: var(--tw-leading, var(--leading-body));
+  }
+  .text-caption {
+    font-size: var(--size-caption);
+    line-height: var(--tw-leading, var(--leading-caption));
+  }
+  .leading-snug {
+    --tw-leading: var(--leading-snug);
+    line-height: var(--leading-snug);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--weight-semibold);
+    font-weight: var(--weight-semibold);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
+  .text-card {
+    color: var(--card);
+  }
+  .text-human {
+    color: var(--human);
+  }
+  .text-machine {
+    color: var(--machine);
+  }
+  .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
+  .text-primary {
+    color: var(--primary);
+  }
+  .text-primary-foreground {
+    color: var(--primary-foreground);
+  }
+  .text-warning {
+    color: var(--warning);
+  }
+  .text-warning-foreground {
+    color: var(--warning-foreground);
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .opacity-60 {
+    opacity: 60%;
+  }
+  .shadow-inner {
+    --tw-shadow: inset 0 2px 4px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-sm {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+}
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --header: oklch(0.985 0.002 247.8);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.5 0.13 150);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.52 0.12 65);
+  --warning-foreground: oklch(0.985 0 0);
+  --info: oklch(0.5 0.15 245);
+  --info-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.97 0 0);
+  --section-band: oklch(0.955 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.55 0.18 290);
+  --secondary-foreground: oklch(0.985 0 0);
+  --machine: oklch(0.58 0.16 242);
+  --human: oklch(0.55 0.18 290);
+  --ai: oklch(0.6 0.14 62);
+  --tag-context-engineering: oklch(0.5 0.134 242.749);
+  --tag-agentic-ai: oklch(0.491 0.27 292.581);
+  --tag-markdown: oklch(0.514 0.222 16.935);
+  --tag-cost: oklch(0.555 0.163 48.998);
+  --tag-sales: oklch(0.508 0.118 165.612);
+  --tag-agentic-workflow: oklch(0.205 0 0);
+  --tag-overview: oklch(0.205 0 0);
+  --brand-accent: oklch(0.636 0.171 41.8);
+  --on-brand-accent: oklch(1 0 0);
+  --selected: oklch(0.4 0 0);
+  --selected-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --highlight-target: oklch(0.5 0.19 260);
+  --youtube: oklch(0.628 0.258 29.2);
+  --overlay: oklch(0 0 0);
+  --drawer-width: 26rem;
+  --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
+  --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
+  --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
+  --size-body: 1rem;
+  --size-caption: 0.875rem;
+  --space-header: 1rem;
+  --space-header-tight: calc(var(--space-header) / 2);
+  --leading-hero: 1.05;
+  --leading-heading: 1.1;
+  --leading-subheading: 1.15;
+  --leading-body: 1.6;
+  --leading-caption: 1.5;
+  --tracking-heading: -0.02em;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --header: oklch(0.205 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.145 0 0);
+  --success: oklch(0.78 0.16 150);
+  --success-foreground: oklch(0.145 0 0);
+  --warning: oklch(0.82 0.15 80);
+  --warning-foreground: oklch(0.145 0 0);
+  --info: oklch(0.78 0.12 240);
+  --info-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.269 0 0);
+  --section-band: oklch(0.19 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.68 0.16 280);
+  --secondary-foreground: oklch(0.145 0 0);
+  --machine: oklch(0.72 0.14 235);
+  --human: oklch(0.68 0.16 280);
+  --ai: oklch(0.72 0.14 62);
+  --tag-context-engineering: oklch(0.746 0.16 232.661);
+  --tag-agentic-ai: oklch(0.702 0.183 293.541);
+  --tag-markdown: oklch(0.712 0.194 13.428);
+  --tag-cost: oklch(0.828 0.189 84.429);
+  --tag-sales: oklch(0.765 0.177 163.223);
+  --tag-agentic-workflow: oklch(0.922 0 0);
+  --tag-overview: oklch(0.922 0 0);
+  --brand-accent: oklch(0.732 0.146 50.4);
+  --on-brand-accent: oklch(1 0 0);
+  --selected: oklch(0.8 0 0);
+  --selected-foreground: oklch(0.2 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --highlight-target: oklch(0.75 0.14 260);
+  --youtube: oklch(0.68 0.23 29.2);
+  --overlay: oklch(0 0 0);
+}
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+    @supports (color: color-mix(in lab, red, red)) {
+      outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+    }
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+@media screen {
+  [data-context-active],
+  [data-context-pinned] {
+    border-radius: 0.375rem;
+    background-color: var(--highlight-target);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--highlight-target) 14%, transparent);
+    }
+  }
+  [data-context-active]:not([data-note-target]) {
+    box-shadow: 0 0 0 0.25rem var(--highlight-target);
+    @supports (color: color-mix(in lab, red, red)) {
+      box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--highlight-target) 14%, transparent);
+    }
+  }
+}
+@media print {
+  [data-slot='context'],
+  [data-slot='context'] [data-context-panel] {
+    position: static !important;
+    visibility: visible !important;
+    transform: none !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    break-before: page;
+  }
+  [data-slot='context'] [role='tabpanel'],
+  [data-slot='context'] [data-context-for] {
+    display: block !important;
+  }
+  [data-slot='context'] {
+    grid-column: 1 / -1;
+  }
+  [data-slot='context'] details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+  [data-slot='context-trigger'],
+  [data-slot='context-scrim'],
+  [data-slot='slide-backdrop'] {
+    display: none !important;
+  }
+}
+@layer components {
+  .card-hover {
+    transition: translate 200ms ease-out,
+      box-shadow 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+  .card-hover--raise:is(:hover, :focus-visible, :focus-within) {
+    --tw-translate-y: calc(var(--spacing) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .card-hover--outline:is(:hover, :focus-visible, :focus-within) {
+    border-color: var(--brand-accent);
+  }
+  .focus-group__item {
+    transition: opacity 200ms ease-out;
+  }
+  .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :has(:focus-visible)))
+    .focus-group__item:not(:hover, :focus-visible, :has(:focus-visible)) {
+    opacity: 0.4;
+  }
+  .hover-reveal__detail {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .hover-reveal:is(:hover, :focus-visible, :focus-within) .hover-reveal__detail {
+    opacity: 1;
+  }
+  @media (hover: none), print {
+    .hover-reveal__detail {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover,
+    .focus-group__item,
+    .hover-reveal__detail {
+      transition: none;
+    }
+  }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  .js [data-entry='pending'] > [data-slot='slide-header'],
+  .js [data-entry='pending'] > [data-slot='slide-scene'] > * {
+    opacity: 0;
+  }
+  [data-entry='entering'] > [data-slot='slide-scene'] > * {
+    animation: slide-rise 400ms ease-out backwards;
+  }
+  [data-entry='entering'] > [data-slot='slide-scene'] > [data-slot='slide-backdrop'],
+  [data-entry='entering'] > [data-entrance='fade'] {
+    animation: slide-fade 400ms ease-out backwards;
+  }
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char] {
+    position: relative;
+    animation: slide-fade 1ms step-end var(--d) backwards;
+  }
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char]::after {
+    content: '';
+    position: absolute;
+    top: 0.1em;
+    bottom: 0.1em;
+    left: 100%;
+    width: 0.08em;
+    min-width: 2px;
+    background: currentColor;
+    visibility: hidden;
+    animation: slide-caret-on var(--h) step-end var(--d),
+      slide-caret-blink 530ms step-end infinite;
+  }
+}
+@keyframes slide-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-view-fade='on'] {
+    animation: slide-fade 250ms ease-out;
+  }
+}
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-caret-on {
+  from,
+  to {
+    visibility: visible;
+  }
+}
+@keyframes slide-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes hero-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(16px, -12px) scale(1.04);
+  }
+}
+@keyframes hero-drift-alt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-14px, 14px) scale(1.05);
+  }
+}
+@keyframes s2-flow-travel {
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes s2-breathe-primary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+@keyframes s2-breathe-secondary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--secondary) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--secondary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--secondary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--secondary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--secondary) 35%, transparent);
+  }
+}
+@keyframes s2-breathe-accent {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  50% {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+@keyframes deck-unsettled {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1.02);
+  }
+  75% {
+    opacity: 0.95;
+    transform: rotate(1.5deg) scale(0.99);
+  }
+}
+@keyframes venn-ai-running {
+  0%,
+  100% {
+    stroke-opacity: 0.45;
+  }
+  50% {
+    stroke-opacity: 1;
+  }
+}
+@keyframes venn-ai-running-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.s2-arrow-group {
+  transition: opacity 300ms ease,
+    filter 300ms ease;
+}
+.s2-flow-dash {
+  opacity: 0;
+  stroke-width: 4;
+  stroke-dasharray: 9 23;
+  stroke-linecap: round;
+  transition: opacity 400ms ease;
+}
+.s2-arrows-active .s2-arrow-group.is-active .s2-flow-dash {
+  opacity: 0.95;
+  animation: s2-flow-travel 1.15s linear infinite;
+}
+.hero-glow {
+  background: radial-gradient(
+    55% 55% at 22% 18%,
+    currentColor 0%,
+    currentColor 45%,
+    transparent 72%
+  );
+  @supports (color: color-mix(in lab, red, red)) {
+    background: radial-gradient(
+    55% 55% at 22% 18%,
+    color-mix(in oklab, currentColor 26%, transparent) 0%,
+    color-mix(in oklab, currentColor 8%, transparent) 45%,
+    transparent 72%
+  );
+  }
+  animation: hero-drift 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.hero-glow--accent {
+  background: radial-gradient(
+    50% 50% at 82% 30%,
+    currentColor 0%,
+    currentColor 48%,
+    transparent 74%
+  );
+  @supports (color: color-mix(in lab, red, red)) {
+    background: radial-gradient(
+    50% 50% at 82% 30%,
+    color-mix(in oklab, currentColor 22%, transparent) 0%,
+    color-mix(in oklab, currentColor 7%, transparent) 48%,
+    transparent 74%
+  );
+  }
+  animation: hero-drift-alt 34s ease-in-out infinite alternate;
+}
+.deck-unsettled {
+  animation: deck-unsettled 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .hero-glow--accent,
+  .deck-unsettled,
+  .s2-flow-dash {
+    animation: none !important;
+  }
+  .s2-flow-dash {
+    opacity: 0 !important;
+  }
+}
+:root,
+.dark {
+  --tone-paper: var(--primary);
+  --tone-ink: var(--primary-foreground);
+  --header-block: 4.75rem;
+}
+[data-tone='inverse'],
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --foreground: var(--tone-ink);
+  --muted-foreground: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted-foreground: color-mix(in oklab, var(--tone-ink) 85%, transparent);
+  }
+  --header: var(--tone-paper);
+  --accent: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent: color-mix(in oklab, var(--tone-ink) 14%, transparent);
+  }
+  --accent-foreground: var(--tone-ink);
+  --border: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --border: color-mix(in oklab, var(--tone-ink) 22%, transparent);
+  }
+  --primary: var(--tone-ink);
+  --primary-foreground: var(--tone-paper);
+  color: var(--tone-ink);
+}
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --background: var(--tone-paper);
+  --muted: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
+  }
+  background-color: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--tone-paper) 88%, transparent);
+  }
+  --selected: var(--tone-ink);
+  --selected-foreground: var(--tone-paper);
+}
+[data-tone='inverse'][data-slot='title-slide'] {
+  padding-top: calc(var(--header-block) + 1rem);
+}
+[data-tone='inverse'] [data-slot='slide-header'] h1 {
+  max-width: 16ch;
+}
+[data-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+  max-width: 40rem;
+}
+[data-tone='inverse'] [data-tone-flip] {
+  --foreground: var(--tone-paper);
+  --muted-foreground: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
+  }
+  --accent: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
+  }
+  --accent-foreground: var(--tone-paper);
+  --border: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
+  }
+  --primary: var(--tone-paper);
+  --primary-foreground: var(--tone-ink);
+  color: var(--tone-paper);
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+    }
+  }
+}
+
+</style>
+<style>
+/* Prototype styles. Every colour is a design.css token; alphas are color-mix over tokens. */
+:root {
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --warn-15: color-mix(in oklab, var(--warning) 15%, transparent);
+  --ai-12: color-mix(in oklab, var(--ai) 12%, transparent);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html { background: var(--background); }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+button, select, input { font: inherit; color: inherit; }
+.muted { color: var(--muted-foreground); }
+.page { max-width: 1280px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+@media (max-width: 720px) { .page { padding: 24px 16px 48px; } }
+
+.head { display: flex; flex-direction: column; gap: 8px; }
+.head__row { display: flex; justify-content: space-between; align-items: center; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
+.title { font-size: var(--size-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-heading); font-weight: var(--weight-semibold); }
+.lede { max-width: 46rem; }
+.theme-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: var(--size-caption); cursor: pointer; }
+
+/* ---------- toolbar ---------- */
+.toolbar { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 24px; align-items: stretch; }
+@media (max-width: 900px) { .toolbar { grid-template-columns: 1fr; } }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.step { display: flex; flex-direction: column; gap: 8px; padding: 8px; text-align: left; border-radius: 12px; border: 1px solid var(--border); background: var(--card); cursor: pointer; transition: border-color 160ms var(--ease), box-shadow 160ms var(--ease), translate 160ms var(--ease); }
+.step:hover:not([aria-disabled='true']) { translate: 0 -2px; box-shadow: 0 6px 14px -6px var(--fg-25); }
+.step[aria-pressed='true'] { border-color: var(--foreground); box-shadow: 0 6px 16px -8px var(--fg-45); }
+.step[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; }
+.step svg { width: 100%; height: auto; border-radius: 8px; background: var(--muted); }
+.step__label { font-weight: var(--weight-semibold); padding: 0 4px; }
+.step__sub { padding: 0 4px; }
+.usecase { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.select { appearance: none; border: 1px solid var(--border); border-radius: 10px; background: var(--card); padding: 10px 40px 10px 14px; font-weight: var(--weight-semibold); cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--foreground) 50%), linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* ---------- controls bar ---------- */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding: 4px 4px 0; }
+.ctl { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; max-width: 100%; }
+.ctl__name { font-size: var(--size-caption); color: var(--muted-foreground); }
+.range { -webkit-appearance: none; appearance: none; width: 160px; height: 4px; border-radius: 999px; background: var(--border); cursor: pointer; }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--card); border: 2px solid var(--foreground); }
+.range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 2px solid var(--foreground); }
+.range--ai::-webkit-slider-thumb { border-color: var(--ai); }
+.ctl__val { font-size: var(--size-caption); font-weight: var(--weight-semibold); min-width: 5.5em; }
+.seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; border: 1px solid var(--border); border-radius: 18px; background: var(--card); padding: 2px; }
+.seg button { border: 0; background: transparent; border-radius: 999px; padding: 4px 12px; font-size: var(--size-caption); cursor: pointer; color: var(--muted-foreground); min-height: 32px; }
+.seg button[aria-pressed='true'] { background: var(--foreground); color: var(--background); }
+.seg--ai button[aria-pressed='true'] { background: var(--ai); color: var(--card); }
+.chip-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 14px; min-height: 34px; font-size: var(--size-caption); cursor: pointer; }
+.chip-btn[aria-pressed='true'] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.ghost-btn { border: 0; background: transparent; font-size: var(--size-caption); color: var(--muted-foreground); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 34px; }
+
+/* ---------- stage ---------- */
+.graph { display: flex; flex-direction: column; gap: 14px; }
+.stage-wrap { border-radius: 16px; background: var(--muted); padding: 28px 20px 18px; }
+.stage { position: relative; }
+.stage > svg, .stage > canvas { display: block; width: 100%; height: auto; }
+.stage > canvas, .stage > .overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage > canvas { pointer-events: none; }
+.overlay { overflow: visible; }
+
+.pipe-wall { fill: none; stroke: color-mix(in oklab, var(--foreground) 13%, var(--muted)); stroke-linecap: round; stroke-linejoin: round; }
+.pipe-glass { fill: none; stroke: var(--card); stroke-linecap: round; stroke-linejoin: round; }
+
+/* nodes */
+.node { cursor: pointer; outline: none; transition: opacity 220ms var(--ease); }
+.node__hit { fill: transparent; }
+.node__disc { fill: var(--card); stroke: var(--border); stroke-width: 1.5; transition: stroke 200ms; }
+.node__glyph { fill: none; stroke: var(--foreground); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.node__title { fill: var(--foreground); font-size: 13px; font-weight: var(--weight-semibold); }
+.node__ring { fill: none; stroke: var(--ring); stroke-width: 2; opacity: 0; }
+.node:focus-visible .node__ring { opacity: 1; }
+.node:hover .node__disc, .node.is-selected .node__disc { stroke: var(--foreground); }
+.node.is-selected .node__disc { stroke-width: 2.5; }
+.flange { fill: var(--fg-12); opacity: 0; transition: opacity 220ms; }
+
+/* progressive disclosure: valve, count, leak only under pressure or on hover/focus/selection */
+.reveal { opacity: 0; transition: opacity 260ms var(--ease); pointer-events: none; }
+.node:is(:hover, :focus-visible, .is-selected, .is-pressure) .reveal,
+.node:is(:hover, :focus-visible, .is-selected, .is-pressure) .flange { opacity: 1; }
+.valve__gate { fill: var(--human); transition: fill 200ms; }
+.valve__stem { fill: none; stroke: var(--fg-45); stroke-width: 2.2; }
+.valve__wheel { fill: var(--card); stroke: var(--fg-45); stroke-width: 2; }
+.node.is-hot .valve__gate { fill: var(--warning); }
+.badge__bg { fill: var(--card); stroke: var(--border); stroke-width: 1.2; }
+.badge__tx { fill: var(--foreground); font-size: 12px; font-weight: var(--weight-semibold); }
+.node.is-hot .badge__bg { fill: var(--warning); stroke: var(--warning); }
+.node.is-hot .badge__tx { fill: var(--warning-foreground); }
+
+/* the AI pump */
+.pump { display: none; }
+.node.is-ai .pump { display: inline; }
+.pump__band, .pump__motor, .pump__hub { fill: var(--ai); }
+.pump__house { fill: var(--card); stroke: var(--ai); stroke-width: 2.6; }
+.pump__blades { fill: none; stroke: var(--ai); stroke-width: 2; stroke-linecap: round; }
+.pump__label { fill: var(--card); font-size: 10px; font-weight: var(--weight-semibold); }
+.node.is-ai .node__disc { stroke: var(--ai); }
+
+/* hover a node: the rest steps back */
+.overlay:has(.node:is(:hover, :focus-visible)) .node:not(:hover, :focus-visible, .is-twin) { opacity: 0.45; }
+.node.is-twin .node__disc { stroke: var(--foreground); stroke-dasharray: 3 3; }
+.node.is-twin .node__title { fill: var(--muted-foreground); font-style: italic; }
+
+/* isolation */
+.stage.is-isolating .node { opacity: 1; }
+.node.is-off { opacity: 0.32 !important; }
+.node.is-off .node__disc { stroke-dasharray: 3 3; }
+.stage.is-isolating .node:not(.is-off) .node__disc { stroke: var(--foreground); stroke-width: 2.2; }
+
+/* edges: labels on hover/focus only */
+.edge-hit { fill: none; stroke: transparent; stroke-width: 22; pointer-events: stroke; cursor: help; outline: none; }
+.elabel { opacity: 0; transition: opacity 200ms var(--ease); pointer-events: none; }
+.elabel.is-on { opacity: 1; }
+.elabel__bg { fill: var(--card); stroke: var(--border); }
+.elabel__tx { fill: var(--foreground); font-size: 12px; }
+.elabel__rate { fill: var(--muted-foreground); font-size: 12px; }
+.person-link { fill: none; stroke: var(--fg-25); stroke-width: 1.5; stroke-dasharray: 3 5; opacity: 0; transition: opacity 220ms; }
+.person-link.is-on { opacity: 1; }
+.person-tx { fill: var(--muted-foreground); font-size: 12px; opacity: 0; transition: opacity 220ms; }
+.person-tx.is-on { opacity: 1; }
+
+.cust__disc { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+.cust__disc--tap { stroke: var(--primary); }
+.cust__tx { fill: var(--foreground); font-size: 13px; font-weight: var(--weight-semibold); }
+.cust__sub { fill: var(--muted-foreground); font-size: 12px; }
+.tap__metal { fill: var(--fg-45); }
+.tap__spout-wall { fill: none; stroke: var(--fg-25); stroke-linecap: round; stroke-linejoin: round; }
+.tap__spout { fill: none; stroke: var(--card); stroke-linecap: round; stroke-linejoin: round; }
+.intake__box { fill: var(--card); stroke: var(--fg-25); stroke-width: 2; }
+.intake__line { fill: none; stroke: var(--muted-foreground); stroke-width: 2; stroke-linecap: round; }
+
+.stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; align-items: center; padding: 0 4px; }
+.status { font-size: var(--size-body); }
+.status b { font-weight: var(--weight-semibold); }
+.status--calm { color: var(--muted-foreground); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; font-size: var(--size-caption); color: var(--muted-foreground); }
+.legend__item { display: inline-flex; align-items: center; gap: 6px; }
+.docicon { width: 16px; height: 20px; display: inline-block; vertical-align: middle; }
+
+/* ---------- card + tap ---------- */
+.below { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+@media (max-width: 900px) { .below { grid-template-columns: 1fr; } }
+.card { border: 1px solid var(--border); background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 8px 24px -16px var(--fg-45); }
+.card--empty { box-shadow: none; background: transparent; border-style: dashed; justify-content: center; color: var(--muted-foreground); min-height: 200px; }
+.card__head { display: flex; align-items: center; gap: 14px; }
+.card__head svg { width: 48px; height: 48px; flex: none; }
+.card__title { font-weight: var(--weight-semibold); }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px; font-size: var(--size-caption); font-weight: var(--weight-semibold); background: var(--muted); color: var(--muted-foreground); white-space: nowrap; }
+.chip--warn { background: var(--warn-15); color: var(--warning); }
+.chip--ai { background: var(--ai-12); color: var(--ai); }
+.icon-btn { border: 0; background: transparent; border-radius: 999px; width: 36px; height: 36px; display: inline-grid; place-items: center; color: var(--muted-foreground); cursor: pointer; }
+.icon-btn:hover { background: var(--muted); }
+.icon-btn svg { width: 16px; height: 16px; }
+.card__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+@media (max-width: 640px) { .card__grid { grid-template-columns: 1fr; } }
+.dial { display: flex; flex-direction: column; gap: 6px; }
+.dial__row { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--size-caption); }
+.dial .range { width: 100%; }
+.dial__help { font-size: var(--size-caption); color: var(--muted-foreground); }
+.switch { display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: transparent; text-align: left; width: 100%; }
+.switch__track { width: 38px; height: 22px; border-radius: 999px; background: var(--border); position: relative; flex: none; transition: background 160ms; }
+.switch__track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--card); transition: translate 160ms var(--ease); box-shadow: 0 1px 2px var(--fg-25); }
+.switch[aria-checked='true'] { border-color: var(--ai); background: var(--ai-12); }
+.switch[aria-checked='true'] .switch__track { background: var(--ai); }
+.switch[aria-checked='true'] .switch__track::after { translate: 16px 0; }
+.ai-uses { display: flex; flex-direction: column; gap: 6px; font-size: var(--size-caption); }
+.ai-uses li { display: flex; gap: 8px; align-items: baseline; }
+.ai-uses li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--ai); flex: none; translate: 0 -1px; }
+.ai-uses--off li::before { background: var(--border); }
+.readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.readout { display: flex; flex-direction: column; }
+.readout__n { font-size: 1.75rem; line-height: 1.1; font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums; }
+.readout__n.is-warn { color: var(--warning); }
+.readout__l { font-size: var(--size-caption); color: var(--muted-foreground); }
+.mix { display: flex; flex-direction: column; gap: 6px; }
+.mix__bar { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: var(--border); }
+.mix__bar i { display: block; height: 100%; }
+.mix__good { background: var(--foreground); }
+.mix__avg { background: var(--muted-foreground); }
+.mix__bad { background: var(--border); }
+.mix__keys { display: flex; gap: 14px; font-size: var(--size-caption); color: var(--muted-foreground); flex-wrap: wrap; }
+.mix__keys span { display: inline-flex; align-items: center; gap: 4px; }
+.mix__keys b { color: var(--foreground); font-variant-numeric: tabular-nums; }
+.sep { border: 0; border-top: 1px solid var(--border); }
+
+.tap-panel { border-radius: 14px; background: var(--primary); color: var(--primary-foreground); padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.tap-panel .eyebrow { color: inherit; opacity: 0.75; }
+.tap-panel__n { font-size: 2.25rem; line-height: 1.05; font-weight: var(--weight-semibold); letter-spacing: var(--tracking-heading); font-variant-numeric: tabular-nums; }
+.tap-panel svg.art { width: 100%; max-width: 260px; height: auto; color: var(--primary-foreground); }
+.tap-panel__cap { font-weight: var(--weight-semibold); }
+.tap-mix { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: color-mix(in oklab, var(--primary-foreground) 20%, transparent); }
+.tap-mix i { display: block; height: 100%; }
+.tap-mix .g { background: var(--primary-foreground); }
+.tap-mix .a { background: color-mix(in oklab, var(--primary-foreground) 55%, transparent); }
+.tap-keys { display: flex; gap: 12px; font-size: var(--size-caption); flex-wrap: wrap; opacity: 0.9; font-variant-numeric: tabular-nums; }
+
+/* prototype-only strip */
+.proto { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; border-top: 1px dashed var(--border); padding-top: 16px; font-size: var(--size-caption); color: var(--muted-foreground); }
+.proto__tag { text-transform: uppercase; letter-spacing: 0.06em; font-weight: var(--weight-semibold); }
+.proto .seg button { display: inline-flex; align-items: center; gap: 6px; }
+.proto__why { flex-basis: 100%; max-width: 60rem; }
+
+/* swing + roles */
+.panel-box { border-radius: 16px; background: var(--muted); padding: 24px; }
+.panels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.panels li { display: flex; flex-direction: column; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+.panels li.is-target { border: 2px solid var(--primary); }
+.panels svg { width: 100%; height: auto; }
+.tag { display: inline-flex; width: fit-content; border-radius: 999px; padding: 0 8px; background: var(--muted); color: var(--muted-foreground); font-size: var(--size-caption); margin-top: auto; }
+.tag--primary { background: var(--primary); color: var(--primary-foreground); }
+.roles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .roles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.roles li { display: flex; flex-direction: column; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.roles svg { width: 52px; height: 52px; }
+.roles__cap { border-top: 1px solid var(--border); padding-top: 8px; margin-top: auto; }
+.art-stroke { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.art-muted { fill: var(--muted); }
+.art-primary { stroke: var(--primary); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .node, .elabel, .step, .switch__track::after { transition: none; }
+}
+
+</style>
+</head>
+<body>
+<main class="page" id="app">
+  <header class="head">
+    <div class="head__row">
+      <p class="eyebrow text-caption">Software ecology · Play</p>
+      <button type="button" class="theme-btn" id="theme" aria-pressed="false">Dark</button>
+    </div>
+    <h1 class="title">Play</h1>
+    <p class="lede text-body">Send work through an organization, from the customer's request to what comes out of the tap. Start in balance, then let reality in.</p>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Software ecology controls">
+    <div class="steps" role="group" aria-label="Step" id="steps"></div>
+    <div class="usecase">
+      <label class="text-caption muted" for="usecase">Use case</label>
+      <select class="select" id="usecase"></select>
+      <p class="text-caption muted" id="usecase-sub"></p>
+    </div>
+  </div>
+
+  <section data-panel="swing" hidden class="panel-box" aria-label="The tire swing cartoon">
+    <ol class="panels" id="panels"></ol>
+  </section>
+
+  <section data-panel="roles" hidden class="panel-box" aria-label="Roles">
+    <p class="text-caption muted" style="margin-bottom:16px" id="roles-lede"></p>
+    <ul class="roles" id="roles"></ul>
+  </section>
+
+  <section data-panel="graph" class="graph" aria-label="Pipeline">
+    <div class="controls" id="controls">
+      <div class="ctl">
+        <label class="ctl__name" for="reality">Reality</label>
+        <span class="text-caption muted" aria-hidden="true">Ideal</span>
+        <input type="range" class="range" id="reality" min="0" max="100" step="5" value="0" aria-describedby="reality-val" />
+        <span class="text-caption muted" aria-hidden="true">Messy</span>
+      </div>
+      <div class="ctl">
+        <span class="ctl__name" id="ai-name">AI</span>
+        <div class="seg seg--ai" role="group" aria-labelledby="ai-name" id="ai-preset">
+          <button type="button" data-ai="off" aria-pressed="true">Off</button>
+          <button type="button" data-ai="eng" aria-pressed="false">Engineering only</button>
+          <button type="button" data-ai="all" aria-pressed="false">Every role</button>
+        </div>
+      </div>
+      <button type="button" class="chip-btn" id="isolate" aria-pressed="false">Isolate roles</button>
+      <button type="button" class="ghost-btn" id="reset">Back to balance</button>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage"></div>
+    </div>
+
+    <div class="stage-foot">
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="legend" id="legend" aria-label="Legend"></div>
+    </div>
+
+    <div class="below">
+      <section class="card card--empty" id="card" aria-live="polite"></section>
+      <aside class="tap-panel" id="tap" aria-label="At the tap"></aside>
+    </div>
+
+    <div class="proto" id="proto">
+      <span class="proto__tag">Prototype only</span>
+      <span id="enc-name">Document quality drawn as</span>
+      <div class="seg" role="group" aria-labelledby="enc-name" id="enc"></div>
+      <p class="proto__why" id="enc-why"></p>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = 'http://www.w3.org/2000/svg';
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  // ---------- Tunables (illustrative, not measured) ----------
+  const WEEK = 4;          // simulated seconds per week
+  const DT = 1 / 60;       // fixed simulation step: same inputs, same picture
+  const V = 62;            // document speed in viewBox units per second
+  const GAP = 20;          // min spacing between documents entering a pipe
+  const QGAP = 4.2;        // spacing of documents stacked in a queue
+  const UTIL = 0.75;       // in balance, every role runs at 75 % of its capacity
+  const AI_SPEED = 2.5;    // an AI role finishes work 2.5x faster ...
+  const MAX_DOCS = 460;    // ... and writes ROLE.vol x as many handoffs
+  const PENALTY = [1.7, 1.3, 1];   // a bad / average input costs more work downstream
+  const HALF = 46, VALVE_DX = 30, PUMP_DX = -24, R = 14;
+  const Q = { BAD: 0, AVG: 1, GOOD: 2 };
+
+  // ---------- Glyphs (24-unit box) ----------
+  const GLYPH = {
+    customer: '<circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />',
+    sales: '<path d="M3 12l9-9h8v8l-9 9z" /><circle cx="16" cy="8" r="1.5" />',
+    pm: '<path d="M5 21V4" /><path d="M5 4h12l-2.5 4 2.5 4H5" />',
+    ba: '<path d="M12 4L5 21" /><path d="M12 4l7 17" /><path d="M7.5 15h9" /><circle cx="12" cy="4" r="1.6" />',
+    doc: '<path d="M6 3h9l4 4v14H6z" /><path d="M9 11h7M9 15h7M9 7h4" />',
+    eng: '<path d="M8 7l-5 5 5 5" /><path d="M16 7l5 5-5 5" /><path d="M14 4l-4 16" />',
+    ops: '<rect x="4" y="4" width="16" height="6" rx="1.5" /><rect x="4" y="14" width="16" height="6" rx="1.5" /><path d="M8 7h.01M8 17h.01" />',
+    billing: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" /><path d="M9 8h6M9 12h6M9 16h3" />',
+    support: '<path d="M4 15v-3a8 8 0 0 1 16 0v3" /><rect x="3" y="14" width="4" height="6" rx="1.5" /><rect x="17" y="14" width="4" height="6" rx="1.5" />',
+    lead: '<circle cx="12" cy="9" r="3.6" /><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" /><path d="M8.5 3.6L12 1.8l3.5 1.8" />',
+    qa: '<path d="M12 3l7 3v5c0 5-3.2 8.4-7 10-3.8-1.6-7-5-7-10V6z" /><path d="M8.5 12l2.5 2.5 4.5-5" />',
+  };
+
+  // ---------- Roles: words and what AI does there ----------
+  const ROLE = {
+    sales: { title: 'Sales', job: 'Sells what the customer asked for', ai: ['Drafts proposals', 'Summarises calls into deal notes'], vol: 1.2 },
+    pm: { title: 'Product manager', job: 'Turns the deal into a brief', ai: ['Drafts specs from interview notes', 'Clusters customer feedback'], vol: 1.3 },
+    ba: { title: 'Analyst & architect', job: 'Turns the brief into a spec', ai: ['Drafts architecture options', 'Turns a brief into a first spec'], vol: 1.3 },
+    doc: { title: 'Documentation', job: 'Writes what users will read', ai: ['Generates release notes', 'Drafts help pages from the change'], vol: 1.8 },
+    eng: { title: 'Engineer', job: 'Turns the spec into code', ai: ['Drafts the code change', 'Writes tests'], vol: 1.5 },
+    ops: { title: 'Operations', job: 'Ships and runs the release', ai: ['Writes deploy scripts', 'Triages alerts'], vol: 1.1 },
+    billing: { title: 'Billing', job: 'Bills what was used', ai: ['Drafts invoices', 'Reconciles usage'], vol: 1.0 },
+    support: { title: 'Support', job: 'Answers when it breaks', ai: ['Drafts answers', 'Triages tickets'], vol: 1.2 },
+    lead: { title: 'Tech lead', job: 'Splits the work and reviews every change', ai: ['Breaks a brief into tasks', 'Summarises a pull request for review'], vol: 1.2 },
+    qa: { title: 'Platform & QA', job: 'Tests, merges and ships both teams’ work', ai: ['Generates test plans', 'Writes deploy scripts'], vol: 1.1 },
+  };
+
+  // ---------- Use cases: one tidy org, two messier ones ----------
+  // Edge: [from, to, artefact, share (handoffs per finished job), route options]
+  // bounce: [P(bad sent back), P(average sent back)], along the pipe it came in on.
+  const USE_CASES = [
+    {
+      id: 'tire', name: 'Tire swing', sub: 'A tidy org: eight roles, every handoff goes one way.', panels: true, intake: 6, vb: [1150, 412], y: 250,
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 168, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 318, y: 250, buffer: 6 },
+        { id: 'ba', role: 'ba', x: 484, y: 120, buffer: 6 },
+        { id: 'doc', role: 'doc', x: 484, y: 380, buffer: 6 },
+        { id: 'eng', role: 'eng', x: 640, y: 120, buffer: 8 },
+        { id: 'ops', role: 'ops', x: 846, y: 120, buffer: 6 },
+        { id: 'support', role: 'support', x: 700, y: 380, buffer: 6 },
+        { id: 'billing', role: 'billing', x: 1000, y: 120, buffer: 5 },
+        { id: 'tap', kind: 'sink', x: 1076, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal'], ['pm', 'ba', 'brief', 1, { xm: 392 }], ['pm', 'doc', 'release notes', 0.5, { xm: 392 }],
+        ['ba', 'eng', 'spec'], ['eng', 'ops', 'pull request'], ['doc', 'support', 'help pages'], ['ops', 'billing', 'usage', 0.5],
+        ['ops', 'tap', 'release', 1, { xm: 920 }], ['billing', 'tap', 'invoice', 1, { down: true }], ['support', 'tap', 'answers', 1, { down: true }],
+      ],
+      messy: { sales: [90, 85], pm: [85, 65], ba: [75, 60], doc: [55, 70], eng: [58, 70], ops: [80, 85], support: [65, 80], billing: [90, 90] },
+    },
+    {
+      id: 'gate', name: 'Gatekeeper lead', sub: 'One tech lead writes every spec and reviews every change; bad work bounces back.', intake: 6, vb: [1150, 412], y: 250,
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 150, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 284, y: 250, buffer: 6 },
+        { id: 'lspec', role: 'lead', title: 'Lead · specs', x: 432, y: 250, buffer: 8, person: 'lead', bounce: [0, 0] },
+        { id: 'e1', role: 'eng', title: 'Engineer 1', x: 610, y: 110, buffer: 5, bounce: [0.6, 0] },
+        { id: 'e2', role: 'eng', title: 'Engineer 2', x: 610, y: 250, buffer: 5, bounce: [0.6, 0] },
+        { id: 'e3', role: 'eng', title: 'Engineer 3', x: 610, y: 390, buffer: 5, bounce: [0.6, 0] },
+        { id: 'lrev', role: 'lead', title: 'Lead · review', x: 790, y: 250, buffer: 8, person: 'lead', bounce: [0.85, 0.35] },
+        { id: 'ops', role: 'ops', x: 950, y: 250, buffer: 6 },
+        { id: 'tap', kind: 'sink', x: 1076, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal'], ['pm', 'lspec', 'brief'],
+        ['lspec', 'e1', 'task', 1 / 3, { xm: 528 }], ['lspec', 'e2', 'task', 1 / 3], ['lspec', 'e3', 'task', 1 / 3, { xm: 528 }],
+        ['e1', 'lrev', 'pull request', 1, { xm: 700 }], ['e2', 'lrev', 'pull request'], ['e3', 'lrev', 'pull request', 1, { xm: 700 }],
+        ['lrev', 'ops', 'approved change'], ['ops', 'tap', 'release'],
+      ],
+      messy: { sales: [90, 85], pm: [80, 65], lspec: [70, 60], e1: [80, 70], e2: [65, 60], e3: [85, 75], lrev: [65, 80], ops: [85, 85] },
+    },
+    {
+      id: 'teams', name: 'Two teams, one platform', sub: 'Product feeds two teams; one skips the spec, both share a platform team, bugs come back.', intake: 6, vb: [1150, 412], y: 250,
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 150, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 290, y: 250, buffer: 6 },
+        { id: 'anA', role: 'ba', title: 'Analyst · team A', x: 460, y: 120, buffer: 6 },
+        { id: 'engA', role: 'eng', title: 'Engineers · team A', x: 676, y: 120, buffer: 6, bounce: [0.5, 0] },
+        { id: 'engB', role: 'eng', title: 'Engineers · team B', x: 520, y: 380, buffer: 6 },
+        { id: 'plat', role: 'qa', x: 834, y: 250, buffer: 7, bounce: [0.75, 0.25] },
+        { id: 'support', role: 'support', x: 960, y: 380, buffer: 6, bounce: [0.6, 0] },
+        { id: 'tap', kind: 'sink', x: 1076, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal'],
+        ['pm', 'anA', 'brief', 0.5, { xm: 380 }], ['pm', 'engB', 'brief', 0.5, { xm: 380 }],
+        ['anA', 'engA', 'spec'], ['engB', 'engA', 'API request', 0.35, { xm: 600 }],
+        ['engA', 'plat', 'pull request', 1, { xm: 760 }], ['engB', 'plat', 'pull request', 1, { xm: 760 }],
+        ['plat', 'tap', 'release'], ['plat', 'support', 'release notes', 0.5, { xm: 896 }], ['support', 'tap', 'answers', 1, { down: true }],
+      ],
+      messy: { sales: [90, 80], pm: [80, 62], anA: [75, 70], engA: [65, 72], engB: [80, 50], plat: [60, 80], support: [70, 85] },
+    },
+  ];
+
+  // ---------- Cartoon panels (tire swing only) ----------
+  const CROWN = '<path d="M8 38 C0 28 8 12 22 15 C26 3 46 1 52 11 C64 7 74 17 68 29 C74 39 60 47 50 41 C42 49 24 49 18 43 C10 47 4 43 8 38 Z" class="art-muted" stroke-width="1.8" />';
+  const tree = (branch = true) => `<path d="M8 104 H152" opacity=".3" /><path d="M24 104 C27 86 23 64 27 40" /><path d="M36 104 C33 86 37 64 35 40" />${branch ? '<path d="M40 30 C64 22 100 20 146 19" stroke-width="3.2" />' : '<path d="M40 30 C52 26 58 25 64 24" stroke-width="3.2" />'}${CROWN}`;
+  const tire = (cx, cy, cls = '') => `<ellipse cx="${cx}" cy="${cy}" rx="15" ry="6" class="${cls}" stroke-width="5" />`;
+  const PANELS = [
+    { cap: 'How the customer explained it', role: 'Customer', art: `<path d="M74 19 V44 M104 18 V44" /><path d="M66 44 H112" /><path d="M74 44 V60 M104 44 V60" /><path d="M66 60 H112" /><path d="M74 60 V76 M104 60 V76" /><path d="M66 76 H112" />` },
+    { cap: 'How the project leader understood it', role: 'Product manager', node: 'pm', art: `<path d="M86 18 V62" /><path d="M32 62 H100" stroke-width="4" /><path d="M32 54 V70" />` },
+    { cap: 'How the analyst designed it', role: 'Analyst & architect', node: 'ba', art: `<path d="M18 70 L42 64" stroke-width="1.6" stroke-dasharray="3 3" /><path d="M112 20 L114 104 M126 19 L124 104" /><path d="M76 21 V70 M98 20 V70" />${tire(87, 72)}` },
+    { cap: 'How the programmer wrote it', role: 'Engineer', node: 'eng', art: `<path d="M76 19 V52 M100 18 V48" /><path d="M72 58 l6 -6 M96 52 l6 -4" stroke-dasharray="3 3" />${tire(88, 96)}` },
+    { cap: 'How the business consultant described it', role: 'Sales', node: 'sales', art: `<path d="M72 19 V54 M106 18 V54" /><path d="M64 54 H114 V74 H64 Z" /><path d="M64 54 C60 44 70 40 72 54 M114 54 C118 44 108 40 106 54" /><path d="M70 74 V82 M108 74 V82" />` },
+    { cap: 'How the project was documented', role: 'Documentation', node: 'doc', blank: true, art: '' },
+    { cap: 'What operations installed', role: 'Operations', node: 'ops', art: `<path d="M78 19 V58 M98 18 V58" /><rect x="66" y="58" width="44" height="12" rx="6" /><path d="M72 64 h0.1 M104 64 h0.1" stroke-width="3" />` },
+    { cap: 'How the customer was billed', role: 'Billing', node: 'billing', art: `<path d="M88 18 V60" />${tire(88, 66)}<path d="M104 30 L128 30 L134 40 L128 50 L104 50 Z" /><path d="M114 35 V45 M118 36 c-4 -2 -8 0 -4 4 c4 2 0 6 -4 4" stroke-width="1.6" />` },
+    { cap: 'How it was supported', role: 'Support', node: 'support', broken: true, art: `<path d="M64 24 L112 76" stroke-width="3.2" /><path d="M62 18 l6 4 -4 4 6 4" stroke-width="1.4" /><path d="M100 64 V82" />${tire(100, 88)}` },
+    { cap: 'What the customer really needed', role: 'Customer', target: true, art: `<path d="M88 18 V62" />${tire(88, 70)}` },
+  ];
+  const panelArt = (p) => p.blank
+    ? `<rect x="10" y="10" width="140" height="94" rx="6" class="art-stroke" stroke-width="1.5" stroke-dasharray="5 5" opacity=".4" /><text x="80" y="62" text-anchor="middle" fill="currentColor" opacity=".6" font-size="13">(blank)</text>`
+    : `<g class="art-stroke">${tree(!p.broken)}${p.art}</g>`;
+
+  // ---------- Quality encodings (prototype switch) ----------
+  const ENCODINGS = [
+    { id: 'lines', key: 'A', name: 'Lines', why: 'A · Lines: a good handoff is a complete page (three full lines, crisp edge); an average one is missing text; a bad one is crumpled with a scribble. Honest metaphor, but it needs a close look: at pipe speed the three states blur.' },
+    { id: 'stamp', key: 'B', name: 'Stamp', why: 'B · Stamp: a tick, a dash or a cross on the sheet. Reads exactly when you stop to look and suits a legend, but marks read as a verdict someone gave, and three tiny symbols at 60 fps turn into noise.' },
+    { id: 'tone', key: 'C', name: 'Tone', why: 'C · Tone (recommended): crisp white, grey, smudged dark grey with a blot. Luminance, not hue, so it survives colour blindness and greyscale projectors; it reads in peripheral vision while the documents move; and it is Han’s own words: “only white documents circulating”.' },
+  ];
+  let enc = 'tone';
+
+  // ---------- Geometry ----------
+  const inX = (n) => (n.kind === 'sink' ? n.x : n.x - HALF);
+  const outX = (n) => (n.kind === 'source' ? n.x + 24 : n.x + HALF);
+  const anchorX = (n) => (n.kind === 'source' ? n.x + 24 : n.kind === 'sink' ? n.x : n.x + VALVE_DX);
+
+  function corners(e, A, B) {
+    const ay = A.y, by = B.y, ox = outX(A), ix = inX(B);
+    if (e.opt.down) return [[ox, ay], [B.x, ay], [B.x, by]];
+    if (ay === by) return [[ox, ay], [ix, by]];
+    const xm = e.opt.xm ?? (ox + ix) / 2;
+    return [[ox, ay], [xm, ay], [xm, by], [ix, by]];
+  }
+  // A dense polyline through orthogonal corners rounded with radius R, plus its SVG path.
+  function sample(pts) {
+    const out = [];
+    let d = `M${pts[0][0]} ${pts[0][1]}`;
+    const push = (x, y) => { const l = out[out.length - 1]; if (!l || Math.hypot(l[0] - x, l[1] - y) > 0.01) out.push([x, y]); };
+    push(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+      const next = pts[i + 1];
+      let ex = x1, ey = y1;
+      if (next) {
+        const l1 = Math.hypot(x1 - x0, y1 - y0), l2 = Math.hypot(next[0] - x1, next[1] - y1);
+        const r = Math.min(R, l1 / 2, l2 / 2);
+        ex = x1 - ((x1 - x0) / l1) * r; ey = y1 - ((y1 - y0) / l1) * r;
+        const fx = x1 + ((next[0] - x1) / l2) * r, fy = y1 + ((next[1] - y1) / l2) * r;
+        line(ex, ey); d += ` L${ex} ${ey} Q${x1} ${y1} ${fx} ${fy}`;
+        for (let k = 1; k <= 8; k++) { const t = k / 8, u = 1 - t; push(u * u * ex + 2 * u * t * x1 + t * t * fx, u * u * ey + 2 * u * t * y1 + t * t * fy); }
+        pts[i] = [fx, fy]; // continue from the end of the curve
+      } else { line(ex, ey); d += ` L${ex} ${ey}`; }
+    }
+    function line(x, y) { const l = out[out.length - 1]; const n = Math.max(1, Math.ceil(Math.hypot(x - l[0], y - l[1]) / 3)); for (let k = 1; k <= n; k++) push(l[0] + ((x - l[0]) * k) / n, l[1] + ((y - l[1]) * k) / n); }
+    const cum = [0];
+    for (let i = 1; i < out.length; i++) cum.push(cum[i - 1] + Math.hypot(out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]));
+    return { pts: out, cum, L: cum[cum.length - 1], d };
+  }
+  function longestRun(cs) {
+    let best = null;
+    for (let i = 1; i < cs.length; i++) {
+      const [x0, y0] = cs[i - 1], [x1, y1] = cs[i], l = Math.hypot(x1 - x0, y1 - y0) * (y0 === y1 ? 1.6 : 1);
+      if (!best || l > best.l) best = { l, mid: [(x0 + x1) / 2, (y0 + y1) / 2], vertical: x0 === x1 };
+    }
+    return best;
+  }
+  function at(path, s) {
+    const { pts, cum, L } = path;
+    s = Math.max(0, Math.min(L, s));
+    let lo = 0, hi = cum.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] <= s) lo = m; else hi = m; }
+    const seg = cum[hi] - cum[lo] || 1, t = (s - cum[lo]) / seg;
+    return [pts[lo][0] + (pts[hi][0] - pts[lo][0]) * t, pts[lo][1] + (pts[hi][1] - pts[lo][1]) * t];
+  }
+
+  // ---------- PRNG ----------
+  const mulberry = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+
+  // ---------- Settings (what the controls set) ----------
+  const S = { uc: USE_CASES[0], step: 'pipeline', reality: 0, ai: 'off', isolate: false, selected: null, over: {} };
+  // S.over[nodeId] = { eff, effv, ai, on } : per-node overrides from the card or isolation
+
+  // ---------- Model ----------
+  let M = null; // the running world
+  function build(uc) {
+    const nodes = new Map();
+    for (const n of uc.nodes) nodes.set(n.id, {
+      def: n, id: n.id, kind: n.kind || 'role', role: n.role ? ROLE[n.role] : null,
+      title: n.title || (n.role ? ROLE[n.role].title : ''), job: n.job || (n.role ? ROLE[n.role].job : ''),
+      buffer: n.buffer || 6, ins: [], outs: [], queue: [], acc: [],
+      rate: { done: 0, leak: 0, bounce: 0, out: [0, 0, 0] }, press: 0, lastLeak: -9, cap: 1,
+    });
+    const edges = uc.edges.map(([from, to, label, share = 1, opt = {}], i) => {
+      const A = nodes.get(from), B = nodes.get(to);
+      const e = { i, id: `${from}-${to}`, from: A, to: B, label, share, opt };
+      const cs = corners(e, A.def, B.def).map((p) => p.slice());
+      e.corners = cs.map((p) => p.slice());
+      e.visual = sample(cs.map((p) => p.slice()));
+      const full = [[anchorX(A.def), A.def.y], ...cs];
+      if (B.kind !== 'sink') full.push([anchorX(B.def), B.def.y]);
+      e.path = sample(full);
+      e.rate = 0; e.outbox = []; e.lastDoc = null;
+      A.outs.push(e); B.ins.push(e);
+      return e;
+    });
+    // Size capacities from the balanced inflow: one pass in topological order.
+    const inflow = new Map([...nodes.keys()].map((k) => [k, 0]));
+    const src = [...nodes.values()].find((n) => n.kind === 'source');
+    inflow.set(src.id, uc.intake / WEEK);
+    const order = []; const seen = new Set();
+    const visit = (n) => { if (seen.has(n.id)) return; seen.add(n.id); for (const e of n.outs) visit(e.to); order.unshift(n); };
+    visit(src);
+    for (const n of order) for (const e of n.outs) inflow.set(e.to.id, inflow.get(e.to.id) + inflow.get(n.id) * e.share);
+    const personLoad = {};
+    for (const n of nodes.values()) if (n.def.person) personLoad[n.def.person] = (personLoad[n.def.person] || 0) + inflow.get(n.id);
+    for (const n of nodes.values()) {
+      n.inflow = inflow.get(n.id);
+      n.server = n.def.person || n.id;
+      n.cap = (n.def.person ? personLoad[n.def.person] : n.inflow) / UTIL; // jobs per second at efficiency 100 %
+      n.acc = n.outs.map(() => 0);
+    }
+    const servers = {};
+    for (const n of nodes.values()) if (n.kind === 'role') (servers[n.server] ||= { busy: null, nodes: [] }).nodes.push(n);
+    return { uc, nodes, edges, src, servers, docs: [], drops: [], drips: [], t: 0, rng: mulberry(20261111), srcAcc: 0.6, tap: [0, 0, 0], tapRate: 0, spin: 0 };
+  }
+
+  const roles = () => [...M.nodes.values()].filter((n) => n.kind === 'role');
+  const isEng = (n) => n.def.role === 'eng';
+  // Effective dials for a node: Reality slider -> per-node overrides -> isolation.
+  function dials(n) {
+    const o = S.over[n.id] || {};
+    const m = S.uc.messy[n.id] || [100, 100];
+    const k = S.reality / 100;
+    let eff = o.eff ?? Math.round(100 + (m[0] - 100) * k);
+    let effv = o.effv ?? Math.round(100 + (m[1] - 100) * k);
+    let ai = o.ai ?? (S.ai === 'all' || (S.ai === 'eng' && isEng(n)));
+    const on = !S.isolate || !!o.on;
+    return { eff, effv, ai: on && ai, on };
+  }
+
+  function roll(effv) {
+    const r = M.rng(), q = effv / 100;
+    if (r < q) return Q.GOOD;
+    return r < q + (1 - q) * 0.55 ? Q.AVG : Q.BAD;
+  }
+  const decay = (x, dt, tau = 2 * WEEK) => x * Math.exp(-dt / tau);
+  const bump = (tau = 2 * WEEK) => 1 / tau;
+
+  function emit(n, doc, d) {
+    // A finished job leaves on every outgoing pipe by its share; an AI role writes vol x as many.
+    const vol = d.ai ? n.role.vol : 1;
+    n.outs.forEach((e, i) => {
+      n.acc[i] += e.share * vol;
+      while (n.acc[i] >= 1 - 1e-9) {
+        n.acc[i] -= 1;
+        const q = d.on ? Math.min(doc.rework ? Q.GOOD : doc.q, roll(d.effv)) : doc.q;
+        if (e.outbox.length > 10) { leakAt(n, e, q, d.ai); continue; }
+        e.outbox.push({ q, ai: d.ai || (!d.on && doc.ai) });
+        if (d.on) n.rate.out[q] += bump();
+      }
+    });
+  }
+  function leakAt(n, e, q, ai) {
+    const [x, y] = at(e.path, 2);
+    M.drops.push({ x, y: y + 8, vx: (M.rng() - 0.3) * 14, vy: 6, rot: 0, vr: (M.rng() - 0.5) * 3, life: 1, q, ai });
+    n.rate.leak += bump(); n.lastLeak = M.t;
+  }
+
+  function arrive(n, doc) {
+    const d = dials(n);
+    if (n.kind === 'sink') {
+      M.tap[doc.q] += bump(); M.tapRate += bump();
+      M.drips.push({ q: doc.q, ai: doc.ai, life: 1 });
+      return false;
+    }
+    if (!d.on) { emit(n, doc, d); return false; } // bypassed: passes through untouched
+    if (n.queue.length >= n.buffer) {
+      M.drops.push({ x: doc.x, y: doc.y + 8, vx: (M.rng() - 0.3) * 16, vy: 4, rot: doc.tilt, vr: (M.rng() - 0.5) * 3, life: 1, q: doc.q, ai: doc.ai });
+      n.rate.leak += bump(); n.lastLeak = M.t;
+      return false;
+    }
+    n.queue.push(doc);
+    return true;
+  }
+
+  function serve(dt) {
+    for (const sv of Object.values(M.servers)) {
+      if (sv.busy) {
+        const b = sv.busy; b.left -= dt;
+        if (b.left <= 0) {
+          const n = b.node, doc = b.doc, d = dials(n);
+          sv.busy = null;
+          if (b.bounce) {
+            // sent back along the pipe it came in on, to whoever sent it
+            doc.rev = true; doc.e = b.edge; doc.s = b.edge.path.L - 2; doc.bounces = (doc.bounces || 0) + 1;
+            n.rate.bounce += bump(); M.docs.push(doc);
+          } else { n.rate.done += bump(); emit(n, doc, d); }
+        }
+      }
+      if (!sv.busy) {
+        let pick = null;
+        for (const n of sv.nodes) if (n.queue.length && dials(n).on && (!pick || n.queue.length / n.buffer > pick.queue.length / pick.buffer)) pick = n;
+        if (pick) {
+          const doc = pick.queue.shift(), d = dials(pick);
+          const speed = pick.cap * (d.eff / 100) * (d.ai ? AI_SPEED : 1);
+          const b = pick.def.bounce || [0, 0];
+          const pBounce = doc.rework || doc.bounces >= 2 || !doc.edge || doc.edge.from.kind !== 'role' || !dials(doc.edge.from).on ? 0 : doc.q === Q.BAD ? b[0] : doc.q === Q.AVG ? b[1] : 0;
+          const bounce = pBounce > 0 && M.rng() < pBounce;
+          const work = (1 / speed) * (doc.rework ? 1 : PENALTY[doc.q]);
+          sv.busy = { node: pick, doc, left: bounce ? work * 0.35 : work, total: work, bounce, edge: doc.edge };
+        }
+      }
+    }
+  }
+
+  function step(dt) {
+    M.t += dt;
+    // intake: the customer's requests, slightly irregular but seeded
+    M.srcAcc += (M.uc.intake / WEEK) * dt * (0.8 + 0.4 * M.rng());
+    if (M.srcAcc >= 1) { M.srcAcc -= 1; for (const e of M.src.outs) e.outbox.push({ q: Q.GOOD, ai: false }); }
+    // release from outboxes with spacing
+    for (const e of M.edges) {
+      if (!e.outbox.length) continue;
+      if (e.lastDoc && !e.lastDoc.gone && e.lastDoc.e === e && !e.lastDoc.rev && e.lastDoc.s < GAP) continue;
+      if (M.docs.length >= MAX_DOCS) continue;
+      const o = e.outbox.shift();
+      const doc = { e, edge: e, s: 0, q: o.q, ai: o.ai, tilt: (M.rng() - 0.5) * 0.4, x: 0, y: 0 };
+      M.docs.push(doc); e.lastDoc = doc; e.rate += bump();
+    }
+    // move
+    for (let i = M.docs.length - 1; i >= 0; i--) {
+      const doc = M.docs[i], e = doc.e, v = V * (doc.ai ? 1.5 : 1) * dt;
+      if (doc.rev) {
+        doc.s -= v * 1.2;
+        [doc.x, doc.y] = at(e.path, doc.s);
+        if (doc.s <= 0) {
+          M.docs.splice(i, 1); doc.gone = true; doc.rev = false; doc.rework = true;
+          const A = e.from; doc.edge = null;
+          if (A.queue.length < A.buffer) A.queue.unshift(doc); else { M.drops.push({ x: doc.x, y: doc.y + 8, vx: 4, vy: 4, rot: 0, vr: 1, life: 1, q: doc.q, ai: doc.ai }); A.rate.leak += bump(); A.lastLeak = M.t; }
+        }
+        continue;
+      }
+      const B = e.to;
+      const tail = B.kind === 'sink' || !dials(B).on ? e.path.L : e.path.L - (B.queue.length + 1) * QGAP;
+      doc.s += v;
+      [doc.x, doc.y] = at(e.path, Math.min(doc.s, e.path.L));
+      if (doc.s >= tail - 0.5) {
+        M.docs.splice(i, 1); doc.gone = true;
+        const kept = arrive(B, doc);
+        if (kept) doc.edge = e;
+      }
+    }
+    // a role switched off mid-queue lets its queue through untouched
+    for (const n of M.nodes.values()) if (n.kind === 'role' && n.queue.length && !dials(n).on) { const d = dials(n); while (n.queue.length) emit(n, n.queue.shift(), d); }
+    serve(dt);
+    // falling leaks and tap drips
+    for (let i = M.drops.length - 1; i >= 0; i--) { const d = M.drops[i]; d.vy += 110 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.rot += d.vr * dt; d.life -= dt / 1.5; if (d.life <= 0) M.drops.splice(i, 1); }
+    for (let i = M.drips.length - 1; i >= 0; i--) { M.drips[i].life -= dt / 0.9; if (M.drips[i].life <= 0) M.drips.splice(i, 1); }
+    // rates decay
+    for (const n of M.nodes.values()) {
+      const r = n.rate; r.done = decay(r.done, dt); r.leak = decay(r.leak, dt); r.bounce = decay(r.bounce, dt); r.out = r.out.map((x) => decay(x, dt));
+      n.press += ((n.queue.length + (isServing(n) ? 1 : 0)) / n.buffer - n.press) * Math.min(1, dt * 2.5);
+    }
+    for (const e of M.edges) e.rate = decay(e.rate, dt);
+    M.tap = M.tap.map((x) => decay(x, dt)); M.tapRate = decay(M.tapRate, dt);
+  }
+  const isServing = (n) => { const b = M.servers[n.server]?.busy; return !!b && b.node === n; };
+  const perWeek = (r) => r * WEEK;
+
+  // ---------- Stage DOM (structure in SVG, flow in canvas) ----------
+  const stage = $('#stage');
+  let canvas, ctx, overlay, nodeEls = new Map(), edgeEls = [], impellers = [];
+  const glyphG = (name, cx, cy, r, cls = 'node__disc') => {
+    const s = (r * 1.15) / 24;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" class="${cls}" /><g transform="translate(${cx - 12 * s} ${cy - 12 * s}) scale(${s})" class="node__glyph">${GLYPH[name]}</g>`;
+  };
+  function pumpSvg(n) {
+    const cx = n.def.x + PUMP_DX, cy = n.def.y, r = 14;
+    const blades = Array.from({ length: 6 }, (_, i) => {
+      const a = (i * Math.PI) / 3;
+      const p = (k, rr) => `${(cx + Math.cos(a + k) * rr).toFixed(1)} ${(cy + Math.sin(a + k) * rr).toFixed(1)}`;
+      return `M${p(0, 3)} Q${p(0.12, r - 6)} ${p(0.75, r - 5)}`;
+    }).join(' ');
+    return `<g class="pump" aria-hidden="true"><rect x="${cx - r - 6}" y="${cy - 14}" width="5" height="28" rx="2" class="pump__band" /><rect x="${cx + r + 1}" y="${cy - 14}" width="5" height="28" rx="2" class="pump__band" />
+      <rect x="${cx - 15}" y="${cy + r + 2}" width="30" height="15" rx="4" class="pump__motor" /><text x="${cx}" y="${cy + r + 13.5}" text-anchor="middle" class="pump__label">AI</text>
+      <circle cx="${cx}" cy="${cy}" r="${r}" class="pump__house" /><g class="pump__imp" data-cx="${cx}" data-cy="${cy}"><path d="${blades}" class="pump__blades" /><circle cx="${cx}" cy="${cy}" r="2.6" class="pump__hub" /></g></g>`;
+  }
+  function valveSvg(n) {
+    const vx = n.def.x + VALVE_DX, y = n.def.y;
+    return `<g class="reveal valve" aria-hidden="true"><path d="M${vx} ${y + 12} V${y + 21}" class="valve__stem" /><circle cx="${vx}" cy="${y + 27}" r="6" class="valve__wheel" />
+      <path d="M${vx - 7} ${y - 13} H${vx + 7} L${vx + 1.8} ${y - 3} H${vx - 1.8} Z M${vx - 7} ${y + 13} H${vx + 7} L${vx + 1.8} ${y + 3} H${vx - 1.8} Z" class="valve__gate" /></g>
+      <g class="reveal badge" aria-hidden="true"><rect x="${vx + 9}" y="${y + 17}" width="28" height="19" rx="9.5" class="badge__bg" /><text x="${vx + 23}" y="${y + 30.5}" text-anchor="middle" class="badge__tx" data-q>0</text></g>`;
+  }
+
+  function renderStage() {
+    const uc = S.uc, [W, H] = uc.vb, Y0 = uc.y0 ?? 26;
+    nodeEls = new Map(); edgeEls = [];
+    const ns = [...M.nodes.values()];
+    // all walls first, then all glass, so joints between pipes stay seamless
+    const ds = [...M.edges.map((e) => e.visual.d), ...ns.filter((n) => n.kind === 'role').map((n) => `M${inX(n.def)} ${n.def.y} H${outX(n.def)}`)];
+    const base = ds.map((d) => `<path d="${d}" class="pipe-wall" stroke-width="22" />`).join('') + ds.map((d) => `<path d="${d}" class="pipe-glass" stroke-width="16" />`).join('');
+    const src = M.src.def, sink = ns.find((n) => n.kind === 'sink').def;
+    const fp = `M${sink.x} ${sink.y} H${sink.x + 22} Q${sink.x + 36} ${sink.y} ${sink.x + 36} ${sink.y + 14} V${sink.y + 24}`;
+    const ends = `<g aria-hidden="true">${glyphG('customer', src.x, src.y - 62, 17, 'cust__disc')}<text x="${src.x}" y="${src.y - 32}" text-anchor="middle" class="cust__tx">Customer</text>
+      <rect x="${src.x - 24}" y="${src.y - 19}" width="48" height="38" rx="9" class="intake__box" /><path d="M${src.x - 14} ${src.y - 5} h26 M${src.x - 14} ${src.y + 5} h18" class="intake__line" /><text x="${src.x}" y="${src.y + 40}" text-anchor="middle" class="cust__sub">intake</text>
+      <path d="${fp}" class="tap__spout-wall" stroke-width="20" /><path d="${fp}" class="tap__spout" stroke-width="14" /><rect x="${sink.x + 12}" y="${sink.y - 22}" width="18" height="7" rx="2" class="tap__metal" /><path d="M${sink.x + 21} ${sink.y - 15} V${sink.y - 10}" stroke-width="3" class="valve__stem" />
+      ${glyphG('customer', sink.x + 36, sink.y + 100, 17, 'cust__disc cust__disc--tap')}<text x="${sink.x + 36}" y="${sink.y + 138}" text-anchor="middle" class="cust__tx">Customer</text><text x="${sink.x + 36}" y="${sink.y + 155}" text-anchor="middle" class="cust__sub">tap</text></g>`;
+
+    const hits = M.edges.map((e) => `<path d="${e.visual.d}" class="edge-hit" data-edge="${e.i}" aria-hidden="true" />`).join('');
+    // Place each label on a straight run of its pipe, clear of glyphs, titles, valves and earlier labels.
+    const boxes = [];
+    for (const n of ns) {
+      const { x, y } = n.def;
+      if (n.kind === 'role') boxes.push([x - 58, y - 84, x + 58, y - 22], [x + 18, y + 8, x + 66, y + 40]);
+      else if (n.kind === 'source') boxes.push([x - 34, y - 84, x + 34, y + 48]);
+      else boxes.push([x - 4, y - 30, x + 70, y + 160]);
+    }
+    const hit = (b) => boxes.some((o) => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+    const place = (e) => {
+      const w = e.label.length * 6.6 + 64, cands = [];
+      const cs = e.corners;
+      const runs = [];
+      for (let i = 1; i < cs.length; i++) runs.push([cs[i - 1], cs[i]]);
+      runs.sort((a, b) => Math.hypot(b[1][0] - b[0][0], b[1][1] - b[0][1]) - Math.hypot(a[1][0] - a[0][0], a[1][1] - a[0][1]));
+      for (const [[x0, y0], [x1, y1]] of runs) {
+        const mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+        if (y0 === y1) for (const f of [0.5, 0.3, 0.7]) { const xx = x0 + (x1 - x0) * f; cands.push({ x: xx, y: my + 28, a: 'middle', b: [xx - w / 2, my + 16, xx + w / 2, my + 40] }, { x: xx, y: my - 26, a: 'middle', b: [xx - w / 2, my - 38, xx + w / 2, my - 14] }); }
+        else for (const f of [0.5, 0.3, 0.7, 0.2, 0.8]) { const yy = y0 + (y1 - y0) * f; cands.push({ x: mx + 16, y: yy, a: 'start', b: [mx + 12, yy - 12, mx + 16 + w, yy + 12] }, { x: mx - 16, y: yy, a: 'end', b: [mx - 16 - w, yy - 12, mx - 12, yy + 12] }); }
+      }
+      const c = cands.find((k) => !hit(k.b)) || cands[0];
+      boxes.push(c.b);
+      return c;
+    };
+    const labels = M.edges.map((e) => {
+      const c = place(e), x = c.x, y = c.y, vertical = c.a !== 'middle';
+      return `<g class="elabel" data-elabel="${e.i}" data-x="${x}" data-y="${y}" data-anchor="${c.a}"><rect class="elabel__bg" rx="11" height="22" /><text class="elabel__tx" y="${y + 4}"></text></g>`;
+    }).join('');
+    const nodesSvg = ns.filter((n) => n.kind === 'role').map((n) => {
+      const { x, y } = n.def;
+      return `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.title)}: open card" aria-description="Receives ${esc(n.ins.map((e) => e.label).join(', '))}; hands on ${esc(n.outs.map((e) => e.label).join(', '))}">
+        <rect x="${x - 54}" y="${y - 86}" width="108" height="112" class="node__hit" />
+        <rect x="${inX(n.def) - 2.5}" y="${y - 15}" width="5" height="30" rx="2" class="flange" /><rect x="${outX(n.def) - 2.5}" y="${y - 15}" width="5" height="30" rx="2" class="flange" />
+        ${valveSvg(n)}${pumpSvg(n)}
+        <circle cx="${x}" cy="${y - 62}" r="22" class="node__ring" />${glyphG(n.def.role === 'qa' ? 'qa' : n.def.role, x, y - 62, 17)}
+        <text x="${x}" y="${y - 30}" text-anchor="middle" class="node__title">${esc(n.title)}</text></g>`;
+    }).join('');
+    const ties = '';
+
+    stage.innerHTML = `<svg viewBox="0 ${Y0} ${W} ${H}" aria-hidden="true">${base}</svg><canvas aria-hidden="true"></canvas>
+      <svg viewBox="0 ${Y0} ${W} ${H}" class="overlay" role="group" aria-label="${esc(uc.name)} pipeline: roles as pipes between the customer's intake and tap">${ends}${hits}${ties}<g>${nodesSvg}</g>${labels}</svg>`;
+    canvas = $('canvas', stage); ctx = canvas.getContext('2d'); overlay = $('.overlay', stage);
+    for (const g of $$('.node', overlay)) nodeEls.set(g.dataset.node, g);
+    edgeEls = $$('.elabel', overlay);
+    impellers = $$('.pump__imp', overlay).map((g) => ({ g, cx: g.dataset.cx, cy: g.dataset.cy, node: g.closest('.node').dataset.node }));
+    wireStage();
+    measure();
+  }
+
+  function showEdgeLabel(i, on) {
+    const g = edgeEls[i]; if (!g) return;
+    g.classList.toggle('is-on', on);
+    if (!on) return;
+    const e = M.edges[i];
+    const t = $('text', g), x = Number(g.dataset.x), y = Number(g.dataset.y), anchor = g.dataset.anchor;
+    const rate = Math.round(perWeek(e.rate));
+    t.innerHTML = `${esc(e.label)}<tspan class="elabel__rate"> · ${rate} a week</tspan>`;
+    const w = t.getComputedTextLength() + 22;
+    const x0 = anchor === 'start' ? x : anchor === 'end' ? x - w : x - w / 2;
+    t.setAttribute('x', x0 + 11);
+    const r = $('rect', g); r.setAttribute('x', x0); r.setAttribute('y', y - 11); r.setAttribute('width', w);
+  }
+  let hoverNode = null;
+  function nodeHover(id, on) {
+    hoverNode = on ? id : null;
+    const n = M.nodes.get(id);
+    for (const e of [...n.ins, ...n.outs]) showEdgeLabel(e.i, on);
+    // one person holding two roles: the twin stays lit and says so
+    if (n.def.person) for (const t of M.nodes.values()) if (t !== n && t.def.person === n.def.person) {
+      const g = nodeEls.get(t.id); g.classList.toggle('is-twin', on);
+      $('.node__title', g).textContent = on ? 'same person' : t.title;
+    }
+  }
+  function wireStage() {
+    for (const [id, g] of nodeEls) {
+      const act = () => nodeClick(id);
+      g.addEventListener('click', act);
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); act(); } });
+      g.addEventListener('pointerenter', () => nodeHover(id, true));
+      g.addEventListener('pointerleave', () => nodeHover(id, false));
+      g.addEventListener('focus', () => nodeHover(id, true));
+      g.addEventListener('blur', () => nodeHover(id, false));
+    }
+    for (const h of $$('.edge-hit', overlay)) {
+      const i = Number(h.dataset.edge);
+      for (const [ev, on] of [['pointerenter', true], ['pointerleave', false]]) h.addEventListener(ev, () => showEdgeLabel(i, on));
+    }
+  }
+
+  function nodeClick(id) {
+    if (S.isolate) {
+      const o = (S.over[id] ||= {}); o.on = !o.on;
+      S.selected = id;
+      changed();
+      return;
+    }
+    S.selected = S.selected === id ? null : id;
+    renderCard(); syncNodes();
+  }
+
+  // ---------- Canvas drawing ----------
+  let C = {};
+  const readColors = () => {
+    const cs = getComputedStyle(document.documentElement);
+    const g = (n) => cs.getPropertyValue(n).trim();
+    const dark = document.documentElement.classList.contains('dark');
+    // A document is paper in both themes: light sheet, dark ink; smudge darkens it.
+    C = { ink: dark ? g('--background') : g('--foreground'), dull: g('--muted-foreground'), card: dark ? g('--foreground') : g('--card'), ai: g('--ai'), warn: g('--warning'),
+      smudge: dark ? g('--muted') : g('--muted-foreground'), edge: dark ? g('--muted-foreground') : g('--foreground') };
+  };
+  let K = 1, OX = 0, OY = 0, DPR = 1;
+  function measure() {
+    if (!canvas) return false;
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 2) return false;
+    DPR = window.devicePixelRatio || 1;
+    const W = Math.round(r.width * DPR), H = Math.round(r.height * DPR);
+    if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+    K = r.width / S.uc.vb[0]; OX = 0; OY = -(S.uc.y0 ?? 26) * K;
+    return true;
+  }
+
+  // One document icon, in any of the three quality encodings.
+  function drawDoc(c, x, y, rot, s, q, ai, alpha = 1, e = enc) {
+    const w = 10 * s, h = 13 * s, f = 3.4 * s;
+    c.save(); c.translate(x, y); c.rotate(rot); c.globalAlpha = alpha; c.lineJoin = 'round'; c.lineCap = 'round';
+    const outline = () => { c.beginPath(); c.moveTo(-w / 2, -h / 2); c.lineTo(w / 2 - f, -h / 2); c.lineTo(w / 2, -h / 2 + f); c.lineTo(w / 2, h / 2); c.lineTo(-w / 2, h / 2); c.closePath(); };
+    const crumple = () => { c.beginPath(); c.moveTo(-w / 2, -h / 2); c.lineTo(-w / 6, -h / 2 + 1.2 * s); c.lineTo(w / 2 - f, -h / 2); c.lineTo(w / 2, -h / 2 + f); c.lineTo(w / 2 - 1.2 * s, 0); c.lineTo(w / 2, h / 2); c.lineTo(0, h / 2 - 1.3 * s); c.lineTo(-w / 2, h / 2); c.lineTo(-w / 2 + 1.1 * s, 0); c.closePath(); };
+    const stroke = ai ? C.ai : q === Q.GOOD ? C.ink : C.dull;
+    const lines = (n, a, last = 1) => { c.globalAlpha = alpha * a; c.lineWidth = 0.85 * s; c.beginPath(); for (let k = 0; k < n; k++) { const yy = -h / 2 + (4.4 + k * 2.8) * s; const end = k === n - 1 ? -w / 2 + 2 * s + (w - 4 * s) * last : w / 2 - (k === 0 ? 4.4 : 2) * s; c.moveTo(-w / 2 + 2 * s, yy); c.lineTo(end, yy); } c.stroke(); c.globalAlpha = alpha; };
+    c.lineWidth = (ai ? 1.4 : 0.9) * s;
+    if (e === 'tone') {
+      if (q === Q.BAD) { c.fillStyle = C.smudge; c.globalAlpha = alpha * 0.35; c.beginPath(); c.ellipse(-2.4 * s, 1 * s, w * 0.72, h * 0.44, 0.3, 0, Math.PI * 2); c.fill(); c.globalAlpha = alpha; }
+      outline(); c.fillStyle = C.card; c.fill();
+      if (q !== Q.GOOD) { c.fillStyle = C.smudge; c.globalAlpha = alpha * (q === Q.AVG ? 0.4 : 0.8); c.fill(); c.globalAlpha = alpha; }
+      c.strokeStyle = stroke; outline(); c.stroke();
+      c.strokeStyle = q === Q.BAD ? C.card : stroke; lines(3, q === Q.GOOD ? 0.6 : q === Q.AVG ? 0.45 : 0.5);
+    } else if (e === 'lines') {
+      (q === Q.BAD ? crumple : outline)(); c.fillStyle = C.card; c.fill(); c.strokeStyle = stroke; c.stroke();
+      c.strokeStyle = q === Q.GOOD ? C.ink : C.dull;
+      if (q === Q.GOOD) lines(3, 0.75);
+      else if (q === Q.AVG) lines(2, 0.7, 0.35);
+      else { c.globalAlpha = alpha * 0.8; c.lineWidth = 0.9 * s; c.beginPath(); c.moveTo(-w / 2 + 2 * s, 0); c.quadraticCurveTo(-1 * s, -3 * s, 0, 0); c.quadraticCurveTo(1 * s, 3 * s, w / 2 - 2 * s, -1 * s); c.stroke(); c.globalAlpha = alpha; }
+    } else {
+      outline(); c.fillStyle = C.card; c.fill(); c.strokeStyle = stroke; c.stroke();
+      c.strokeStyle = C.ink; c.lineWidth = 1.5 * s; c.beginPath();
+      const cy = 1.2 * s;
+      if (q === Q.GOOD) { c.moveTo(-2.6 * s, cy); c.lineTo(-0.6 * s, cy + 2 * s); c.lineTo(2.8 * s, cy - 2.4 * s); }
+      else if (q === Q.AVG) { c.strokeStyle = C.dull; c.moveTo(-2.4 * s, cy); c.lineTo(2.4 * s, cy); }
+      else { c.moveTo(-2.3 * s, cy - 2.3 * s); c.lineTo(2.3 * s, cy + 2.3 * s); c.moveTo(2.3 * s, cy - 2.3 * s); c.lineTo(-2.3 * s, cy + 2.3 * s); }
+      c.stroke();
+    }
+    if (e === 'stamp' || e === 'lines' || q === Q.GOOD || e === 'tone') { /* dog-ear */ c.globalAlpha = alpha; c.lineWidth = (ai ? 1.2 : 0.8) * s; c.strokeStyle = stroke; if (!(e === 'lines' && q === Q.BAD)) { c.beginPath(); c.moveTo(w / 2 - f, -h / 2); c.lineTo(w / 2 - f, -h / 2 + f); c.lineTo(w / 2, -h / 2 + f); c.stroke(); } }
+    c.restore(); c.globalAlpha = 1;
+  }
+  // A queued document seen edge-on: a sliver, so a queue of ten stays short.
+  function drawSliver(c, x, y, q, ai) {
+    c.save(); c.translate(x, y);
+    c.beginPath(); c.rect(-1.4, -7, 2.8, 14);
+    c.fillStyle = C.card; c.fill();
+    if (enc === 'tone' && q !== Q.GOOD) { c.fillStyle = C.smudge; c.globalAlpha = q === Q.AVG ? 0.35 : 0.8; c.fill(); c.globalAlpha = 1; }
+    c.lineWidth = 0.8; c.strokeStyle = ai ? C.ai : q === Q.GOOD ? C.ink : C.dull; c.stroke();
+    c.restore();
+  }
+
+  function draw() {
+    if (!measure()) return;
+    const c = ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, canvas.width, canvas.height);
+    c.setTransform(DPR * K, 0, 0, DPR * K, DPR * OX, DPR * OY);
+    for (const d of M.docs) {
+      const off = d.rev ? -4 : 0;
+      drawDoc(c, d.x, d.y + off, d.rev ? -0.35 : d.tilt * 0.3, 1.1, d.q, d.ai, 1);
+    }
+    for (const n of M.nodes.values()) {
+      if (n.kind !== 'role') continue;
+      const vx = n.def.x + VALVE_DX, y = n.def.y;
+      const sv = M.servers[n.server], b = sv && sv.busy && sv.busy.node === n ? sv.busy : null;
+      n.queue.forEach((d, i) => drawSliver(c, vx - (i + 1) * QGAP - 4, y, d.q, d.ai));
+      if (b) drawDoc(c, vx - 2, y, 0, 1.1, b.doc.q, b.doc.ai, 1);
+    }
+    for (const d of M.drops) drawDoc(c, d.x, d.y, d.rot, 1, d.q, d.ai, Math.max(0, d.life) * 0.85);
+    const sink = [...M.nodes.values()].find((n) => n.kind === 'sink').def;
+    for (const d of M.drips) drawDoc(c, sink.x + 36, sink.y + 30 + (1 - d.life) * 34, 0, 0.8, d.q, d.ai, Math.max(0, d.life));
+  }
+
+  // ---------- Per-frame DOM sync (cheap; text at 4 Hz) ----------
+  function syncNodes() {
+    for (const [id, g] of nodeEls) {
+      const n = M.nodes.get(id), d = dials(n);
+      const leaking = M.t - n.lastLeak < 1.5;
+      const pressure = d.on && (n.press >= 0.5 || leaking);
+      g.classList.toggle('is-pressure', pressure);
+      g.classList.toggle('is-hot', d.on && (n.press >= 0.85 || leaking));
+      g.classList.toggle('is-ai', d.ai);
+      g.classList.toggle('is-off', S.isolate && !d.on);
+      g.classList.toggle('is-selected', S.selected === id && !S.isolate);
+      g.setAttribute('aria-label', S.isolate ? `${n.title}: ${d.on ? 'on' : 'off'}, press to switch` : `${n.title}: open card`);
+      if (S.isolate) g.setAttribute('aria-pressed', String(d.on)); else g.removeAttribute('aria-pressed');
+      $('[data-q]', g).textContent = String(n.queue.length + (isServing(n) ? 1 : 0));
+    }
+    stage.classList.toggle('is-isolating', S.isolate);
+  }
+  function spin(dt) {
+    M.spin += dt;
+    for (const im of impellers) {
+      const n = M.nodes.get(im.node);
+      if (!dials(n).ai) continue;
+      im.a = ((im.a || 0) + dt * 360 * 1.4) % 360;
+      im.g.setAttribute('transform', `rotate(${im.a.toFixed(1)} ${im.cx} ${im.cy})`);
+    }
+  }
+
+  // ---------- Status, legend, card, tap ----------
+  const isBalanced = () => S.reality === 0 && S.ai === 'off' && !S.isolate && Object.values(S.over).every((o) => Object.keys(o).length === 0);
+  function renderStatus() {
+    const el = $('#status');
+    if (isBalanced()) { el.className = 'status status--calm'; el.textContent = 'A simplified organization in balance: every handoff is good and nothing piles up. Reality is messier.'; return; }
+    el.className = 'status';
+    const rs = roles();
+    const backed = rs.filter((n) => dials(n).on && n.press >= 0.6).length;
+    const lost = Math.round(perWeek(rs.reduce((a, n) => a + n.rate.leak, 0)));
+    const back = Math.round(perWeek(rs.reduce((a, n) => a + n.rate.bounce, 0)));
+    const parts = [];
+    if (S.isolate) parts.push(`<b>Isolation:</b> ${rs.filter((n) => dials(n).on).length} of ${rs.length} roles on; off roles pass work through untouched. Click a role to switch it.`);
+    parts.push(`<b>${backed}</b> ${backed === 1 ? 'role' : 'roles'} backed up`, `<b>${lost}</b> handoffs lost a week`);
+    if (back) parts.push(`<b>${back}</b> sent back a week`);
+    el.innerHTML = parts.join(' · ');
+  }
+
+  function iconCanvas(q, ai = false, e = enc) {
+    const cv = document.createElement('canvas');
+    const dpr = window.devicePixelRatio || 1;
+    cv.width = 16 * dpr; cv.height = 20 * dpr; cv.className = 'docicon'; cv.setAttribute('aria-hidden', 'true');
+    const c = cv.getContext('2d'); c.scale(dpr, dpr); drawDoc(c, 8, 10, 0, 1.2, q, ai, 1, e);
+    return cv;
+  }
+  function renderLegend() {
+    const el = $('#legend'); el.innerHTML = '';
+    const item = (cv, text) => { const s = document.createElement('span'); s.className = 'legend__item'; s.append(cv, text); el.append(s); };
+    item(iconCanvas(Q.GOOD), 'good'); item(iconCanvas(Q.AVG), 'average'); item(iconCanvas(Q.BAD), 'bad'); item(iconCanvas(Q.GOOD, true), 'written with AI');
+    const hint = document.createElement('span'); hint.textContent = 'Hover a role or pipe for detail'; el.append(hint);
+  }
+
+  let cardTimer = 0;
+  function renderCard() {
+    const el = $('#card');
+    const n = S.selected && M.nodes.get(S.selected);
+    if (!n) { el.className = 'card card--empty'; el.innerHTML = `<p>${S.isolate ? 'Isolation is on: click roles to switch them on or off.' : 'Click a role to open its card: its two dials, its AI switch and what is stuck there.'}</p>`; return; }
+    const d = dials(n);
+    el.className = 'card';
+    el.innerHTML = `<header class="card__head">
+        <svg viewBox="0 0 48 48" aria-hidden="true">${glyphG(n.def.role === 'qa' ? 'qa' : n.def.role, 24, 24, 21)}</svg>
+        <div><h2 class="card__title text-body">${esc(n.title)}</h2><p class="text-caption muted">${esc(n.job)}</p></div>
+        <span class="chip" data-r="chip" style="margin-left:auto"></span>
+        <button type="button" class="icon-btn" data-r="close" aria-label="Close card"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></button>
+      </header>
+      <div class="card__grid">
+        <div class="dial">
+          <div class="dial__row"><label for="d-eff">Efficiency <span class="muted">· output</span></label><b data-r="eff">${d.eff} %</b></div>
+          <input type="range" class="range" id="d-eff" min="20" max="100" step="5" value="${d.eff}" />
+          <p class="dial__help" data-r="effhelp"></p>
+        </div>
+        <div class="dial">
+          <div class="dial__row"><label for="d-effv">Effectiveness <span class="muted">· outcome</span></label><b data-r="effv">${d.effv} %</b></div>
+          <input type="range" class="range" id="d-effv" min="20" max="100" step="5" value="${d.effv}" />
+          <p class="dial__help">Chance a handoff leaves this role good. Garbage in stays garbage out.</p>
+        </div>
+      </div>
+      <div class="card__grid">
+        <div class="readouts">
+          <div class="readout"><span class="readout__n" data-r="wait">0</span><span class="readout__l">waiting</span></div>
+          <div class="readout"><span class="readout__n" data-r="done">0</span><span class="readout__l">done a week</span></div>
+          <div class="readout"><span class="readout__n" data-r="leak">0</span><span class="readout__l" data-r="leakl">lost a week</span></div>
+        </div>
+        <div class="mix"><span class="text-caption muted">What it hands on</span><div class="mix__bar" data-r="bar"><i class="mix__good"></i><i class="mix__avg"></i><i class="mix__bad"></i></div><div class="mix__keys" data-r="keys"></div></div>
+      </div>
+      <hr class="sep" />
+      <div class="card__grid">
+        <button type="button" role="switch" class="switch" data-r="ai" aria-checked="${d.ai}" ${d.on ? '' : 'disabled'}><span class="switch__track" aria-hidden="true"></span><span><b class="text-body">AI at this role</b><br /><span class="text-caption muted">${AI_SPEED}× faster, ${n.role.vol}× the handoffs, same quality</span></span></button>
+        <div><p class="text-caption muted" style="margin-bottom:6px">Where AI helps here</p><ul class="ai-uses ${d.ai ? '' : 'ai-uses--off'}" data-r="uses">${n.role.ai.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>
+      </div>`;
+    const r = (k) => $(`[data-r="${k}"]`, el);
+    r('close').addEventListener('click', () => { S.selected = null; renderCard(); syncNodes(); nodeEls.get(n.id)?.focus(); });
+    const setOver = (k, v) => { (S.over[n.id] ||= {})[k] = v; changed(false); };
+    $('#d-eff', el).addEventListener('input', (ev) => { setOver('eff', Number(ev.target.value)); r('eff').textContent = `${ev.target.value} %`; });
+    $('#d-effv', el).addEventListener('input', (ev) => { setOver('effv', Number(ev.target.value)); r('effv').textContent = `${ev.target.value} %`; });
+    r('ai').addEventListener('click', () => { const on = !dials(n).ai; setOver('ai', on); r('ai').setAttribute('aria-checked', String(on)); r('uses').classList.toggle('ai-uses--off', !on); });
+    updateCard();
+  }
+  function updateCard() {
+    const el = $('#card'); const n = S.selected && M.nodes.get(S.selected);
+    if (!n || el.classList.contains('card--empty')) return;
+    const r = (k) => $(`[data-r="${k}"]`, el), d = dials(n);
+    const wait = n.queue.length + (isServing(n) ? 1 : 0), leak = Math.round(perWeek(n.rate.leak)), back = Math.round(perWeek(n.rate.bounce));
+    r('wait').textContent = `${wait}/${n.buffer}`; r('wait').classList.toggle('is-warn', wait / n.buffer >= 0.85);
+    r('done').textContent = Math.round(perWeek(n.rate.done));
+    r('leak').textContent = back ? `${leak} · ${back}` : leak; r('leak').classList.toggle('is-warn', leak > 0);
+    r('leakl').textContent = back ? 'lost · sent back a week' : 'lost a week';
+    const capW = perWeek(n.cap * (d.eff / 100) * (d.ai ? AI_SPEED : 1)) / (n.def.person ? 2 : 1);
+    r('effhelp').textContent = `Can finish about ${Math.round(capW)} a week${n.def.person ? ' (one person, shared with their other role)' : ''}; ${Math.round(perWeek(n.inflow))} arrive in balance.`;
+    const out = n.rate.out, tot = out[0] + out[1] + out[2] || 1;
+    const [b, a, g] = out.map((x) => x / tot);
+    const bar = $$('i', r('bar')); bar[0].style.width = `${g * 100}%`; bar[1].style.width = `${a * 100}%`; bar[2].style.width = `${b * 100}%`;
+    const keys = r('keys'); keys.innerHTML = '';
+    for (const [q, v, l] of [[Q.GOOD, g, 'good'], [Q.AVG, a, 'average'], [Q.BAD, b, 'bad']]) { const s = document.createElement('span'); s.append(iconCanvas(q)); s.insertAdjacentHTML('beforeend', `<b>${Math.round(v * 100)} %</b> ${l}`); keys.append(s); }
+    const chip = r('chip');
+    const leaking = M.t - n.lastLeak < 1.5;
+    const [txt, cls] = !d.on ? ['Off', ''] : leaking ? ['Leaking', 'chip--warn'] : n.press >= 0.6 ? ['Backed up', 'chip--warn'] : d.ai ? ['AI on · keeping up', 'chip--ai'] : n.press < 0.12 && perWeek(n.rate.done) < perWeek(n.inflow) * 0.6 ? ['Starved', ''] : ['Keeping up', ''];
+    chip.textContent = txt; chip.className = `chip ${cls}`;
+  }
+
+  // Which swing comes out: good enough at the tap, the swing; else the panel of the weakest role.
+  function renderTap() {
+    const el = $('#tap');
+    const tot = M.tap[0] + M.tap[1] + M.tap[2] || 1e-9;
+    const g = M.tap[2] / tot, a = M.tap[1] / tot, b = M.tap[0] / tot;
+    const n = Math.round(perWeek(M.tapRate));
+    let panel = PANELS[9], cap = 'The tire swing the customer asked for';
+    if (g < 0.75) {
+      const rs = roles().filter((r) => dials(r).on);
+      const worst = rs.reduce((w, r) => (!w || dials(r).effv < dials(w).effv ? r : w), null);
+      const byRole = S.uc.panels ? PANELS.find((p) => p.node === worst?.id) : null;
+      panel = byRole || PANELS[3]; cap = `A wrong swing: ${panel.cap.charAt(0).toLowerCase()}${panel.cap.slice(1)}`;
+    }
+    el.innerHTML = `<p class="eyebrow text-caption">At the tap</p>
+      <p class="tap-panel__n">${n} handoffs a week</p>
+      <svg viewBox="0 0 160 110" class="art" role="img" aria-label="${esc(cap)}">${panelArt(panel)}</svg>
+      <p class="tap-panel__cap">${esc(cap)}</p>
+      <div class="tap-mix" aria-hidden="true"><i class="g" style="width:${g * 100}%"></i><i class="a" style="width:${a * 100}%"></i></div>
+      <p class="tap-keys"><span>${Math.round(g * 100)} % good</span><span>${Math.round(a * 100)} % average</span><span>${Math.round(b * 100)} % bad</span></p>
+      <p class="text-caption" style="opacity:.8">Three good handoffs in four bring out the swing the customer asked for.</p>`;
+  }
+
+  // ---------- Steps, use cases, swing and roles views ----------
+  const THUMB = {
+    swing: Array.from({ length: 10 }, (_, i) => {
+      const x = 6 + (i % 5) * 30, y = 6 + Math.floor(i / 5) * 28, t = i === 9;
+      return `<rect x="${x}" y="${y}" width="26" height="24" rx="3" fill="var(--card)" stroke="${t ? 'var(--primary)' : 'var(--border)'}" /><path d="M${x + 5} ${y + 21} V${y + 5} H${x + 22} M${x + 15} ${y + 5} V${y + 13}" fill="none" stroke="var(--muted-foreground)" stroke-width="1.2" /><ellipse cx="${x + 15}" cy="${y + 15}" rx="3.5" ry="1.6" fill="none" stroke="${t ? 'var(--primary)' : 'var(--muted-foreground)'}" stroke-width="1.4" />`;
+    }).join(''),
+    roles: Array.from({ length: 8 }, (_, i) => { const x = 20 + (i % 4) * 38, y = 18 + Math.floor(i / 4) * 26; return `<circle cx="${x}" cy="${y}" r="9" fill="var(--card)" stroke="var(--border)" stroke-width="1.2" /><circle cx="${x}" cy="${y}" r="2.5" fill="var(--muted-foreground)" />`; }).join(''),
+    pipeline: `<path d="M6 32 H154" fill="none" stroke="var(--border)" stroke-width="10" stroke-linecap="round" /><path d="M6 32 H154" fill="none" stroke="var(--card)" stroke-width="7" stroke-linecap="round" />${[34, 80, 126].map((x) => `<circle cx="${x}" cy="16" r="5" fill="var(--card)" stroke="var(--muted-foreground)" stroke-width="1" />`).join('')}${[18, 52, 66, 98, 112, 140].map((x) => `<rect x="${x}" y="29" width="5" height="6" rx="1" fill="var(--card)" stroke="var(--foreground)" stroke-width=".8" />`).join('')}`,
+  };
+  const STEPS = [
+    { id: 'swing', label: '1 · Swing', sub: 'Ten cartoon panels' },
+    { id: 'roles', label: '2 · Roles', sub: 'Who does the work' },
+    { id: 'pipeline', label: '3 · Pipeline', sub: 'Work flowing through' },
+  ];
+  function renderSteps() {
+    $('#steps').innerHTML = STEPS.map((s) => {
+      const dis = s.id === 'swing' && !S.uc.panels;
+      return `<button type="button" class="step" data-step="${s.id}" aria-pressed="${S.step === s.id}" ${dis ? 'aria-disabled="true" title="Only the tire swing has cartoon panels"' : ''}>
+        <svg viewBox="0 0 160 62" aria-hidden="true">${THUMB[s.id]}</svg><span class="step__label">${s.label}</span><span class="step__sub text-caption muted">${s.sub}</span></button>`;
+    }).join('');
+    for (const b of $$('[data-step]')) b.addEventListener('click', () => { if (b.getAttribute('aria-disabled') === 'true') return; S.step = b.dataset.step; applyStep(); });
+  }
+  function applyStep() {
+    for (const b of $$('[data-step]')) b.setAttribute('aria-pressed', String(b.dataset.step === S.step));
+    const panel = S.step === 'pipeline' ? 'graph' : S.step;
+    for (const p of $$('[data-panel]')) p.hidden = p.dataset.panel !== panel;
+    if (panel === 'graph') { measure(); draw(); start(); }
+  }
+  function renderViews() {
+    $('#panels').innerHTML = PANELS.map((p) => `<li class="${p.target ? 'is-target' : ''}"><svg viewBox="0 0 160 110" role="img" aria-label="${esc(p.cap)}">${panelArt(p)}</svg><p class="text-caption" style="font-weight:600">${esc(p.cap)}</p><span class="tag ${p.target ? 'tag--primary' : ''}">${esc(p.role)}</span></li>`).join('');
+    $('#roles-lede').textContent = `${S.uc.name}: the customer stands at both ends, the intake on the left and the tap on the right. ${roles().length} roles sit between.`;
+    $('#roles').innerHTML = roles().map((n) => {
+      const p = S.uc.panels ? PANELS.find((x) => x.node === n.id) : null;
+      return `<li><svg viewBox="0 0 52 52" aria-hidden="true">${glyphG(n.def.role === 'qa' ? 'qa' : n.def.role, 26, 26, 23)}</svg><div><p class="text-body" style="font-weight:600">${esc(n.title)}</p><p class="text-caption muted">${esc(n.job)}</p></div>${p ? `<p class="roles__cap text-caption muted">${esc(p.cap)}</p>` : ''}</li>`;
+    }).join('');
+  }
+  function renderUseCases() {
+    const sel = $('#usecase');
+    sel.innerHTML = USE_CASES.map((u) => `<option value="${u.id}">${esc(u.name)}</option>`).join('');
+    sel.value = S.uc.id;
+    sel.addEventListener('change', () => {
+      S.uc = USE_CASES.find((u) => u.id === sel.value); S.over = {}; S.selected = null;
+      if (S.step === 'swing' && !S.uc.panels) S.step = 'roles';
+      boot();
+    });
+  }
+  function renderEnc() {
+    $('#enc').innerHTML = ENCODINGS.map((e) => `<button type="button" data-enc="${e.id}" aria-pressed="${enc === e.id}">${e.key} · ${e.name}${e.id === 'tone' ? ' (recommended)' : ''}</button>`).join('');
+    for (const b of $$('[data-enc]')) {
+      b.prepend(iconCanvas(Q.GOOD, false, b.dataset.enc), iconCanvas(Q.AVG, false, b.dataset.enc), iconCanvas(Q.BAD, false, b.dataset.enc));
+      b.addEventListener('click', () => { enc = b.dataset.enc; renderEnc(); renderLegend(); renderCard(); draw(); });
+    }
+    $('#enc-why').textContent = ENCODINGS.find((e) => e.id === enc).why;
+  }
+
+  // ---------- Controls ----------
+  function syncControls() {
+    $('#reality').value = S.reality;
+    $('#reality').setAttribute('aria-valuetext', S.reality === 0 ? 'Ideal' : `Messy ${S.reality} %`);
+    for (const b of $$('[data-ai]')) b.setAttribute('aria-pressed', String(b.dataset.ai === S.ai));
+    $('#isolate').setAttribute('aria-pressed', String(S.isolate));
+  }
+  function wireControls() {
+    $('#reality').addEventListener('input', (e) => {
+      S.reality = Number(e.target.value);
+      for (const o of Object.values(S.over)) { delete o.eff; delete o.effv; } // the slider sets every role
+      changed();
+    });
+    for (const b of $$('[data-ai]')) b.addEventListener('click', () => { S.ai = b.dataset.ai; for (const o of Object.values(S.over)) delete o.ai; changed(); });
+    $('#isolate').addEventListener('click', () => {
+      S.isolate = !S.isolate;
+      for (const o of Object.values(S.over)) delete o.on;
+      changed();
+    });
+    $('#reset').addEventListener('click', () => { S.reality = 0; S.ai = 'off'; S.isolate = false; S.over = {}; S.selected = null; boot(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.selected) { const id = S.selected; S.selected = null; renderCard(); syncNodes(); nodeEls.get(id)?.focus(); } });
+    const tb = $('#theme');
+    const setTheme = (dark) => { document.documentElement.classList.toggle('dark', dark); tb.setAttribute('aria-pressed', String(dark)); tb.textContent = dark ? 'Light' : 'Dark'; readColors(); renderLegend(); renderEnc(); draw(); };
+    tb.addEventListener('click', () => setTheme(!document.documentElement.classList.contains('dark')));
+    if (matchMedia('(prefers-color-scheme: dark)').matches) setTheme(true);
+  }
+
+  // A control changed: live in motion; under reduced motion, re-run from the seed so the still frame is the steady state.
+  function changed(full = true) {
+    syncControls();
+    if (reduce.matches) { M = build(S.uc); warm(60); }
+    syncNodes(); renderStatus();
+    if (full) renderCard();
+    draw(); start();
+  }
+  function warm(seconds) { for (let i = 0, n = Math.round(seconds / DT); i < n; i++) step(DT); }
+
+  // ---------- Loop: fixed-step simulation, 60 fps paint, paused off-screen ----------
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let running = false, last = 0, acc = 0, slow = 0, visible = true;
+  function frame(now) {
+    const dt = last ? Math.min(0.1, (now - last) / 1000) : DT; last = now;
+    acc += dt;
+    while (acc >= DT) { step(DT); acc -= DT; }
+    spin(dt); draw();
+    slow += dt;
+    if (slow > 0.25) { slow = 0; syncNodes(); updateCard(); renderStatus(); renderTap(); if (hoverNode) nodeHover(hoverNode, true); }
+    if (visible && !reduce.matches && S.step === 'pipeline' && !document.hidden) requestAnimationFrame(frame); else { running = false; last = 0; }
+  }
+  function start() {
+    if (reduce.matches || S.step !== 'pipeline') { draw(); renderTap(); syncNodes(); return; }
+    if (running || !visible) return;
+    running = true; requestAnimationFrame(frame);
+  }
+  const io = new IntersectionObserver((es) => { visible = es[0].isIntersecting; start(); });
+  new ResizeObserver(() => { draw(); }).observe(stage);
+  document.addEventListener('visibilitychange', start);
+  reduce.addEventListener('change', start);
+
+  function boot() {
+    M = build(S.uc);
+    $('#usecase-sub').textContent = S.uc.sub;
+    renderStage(); renderSteps(); renderViews(); syncControls();
+    warm(60);
+    syncNodes(); renderStatus(); renderCard(); renderTap(); renderLegend();
+    applyStep(); draw(); start();
+  }
+
+  readColors();
+  renderUseCases(); wireControls(); renderEnc();
+  boot();
+  io.observe(stage);
+  window.__eco = { S, get M() { return M; }, dials, perWeek,
+    probe(ucId, reality, ai, secs = 90) {
+      const keep = { uc: S.uc, reality: S.reality, ai: S.ai, over: S.over, isolate: S.isolate }, keepM = M;
+      Object.assign(S, { uc: USE_CASES.find((u) => u.id === ucId), reality, ai, over: {}, isolate: false });
+      M = build(S.uc); warm(secs);
+      const rs = roles();
+      const out = { tap: +perWeek(M.tapRate).toFixed(1), good: Math.round((M.tap[2] / (M.tap[0] + M.tap[1] + M.tap[2])) * 100), docs: M.docs.length,
+        lost: +perWeek(rs.reduce((a, n) => a + n.rate.leak, 0)).toFixed(1), back: +perWeek(rs.reduce((a, n) => a + n.rate.bounce, 0)).toFixed(1),
+        hot: rs.filter((n) => n.press >= 0.6).map((n) => n.id + ':' + n.queue.length + '/' + n.buffer).join(' ') };
+      Object.assign(S, keep); M = keepM; return out;
+    } };
+})();
+
+</script>
+</body>
+</html>

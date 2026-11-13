@@ -1,0 +1,64 @@
+{
+  "title": "What the customer really wanted",
+  "caption": "AI doesn’t build the right swing, but it can build the <b>wrong one ten times faster</b>.",
+  "cartoonLabel": "Everyone here has lived this",
+  "cartoon": {
+    "label": "The tire swing cartoon",
+    "explained": "How the customer explained it",
+    "understood": "How sales understood it",
+    "built": "How it was built",
+    "wanted": "What the customer really wanted"
+  },
+  "balanced": {
+    "title": "If your organization worked like this",
+    "rate": "10 documents in · 10 out",
+    "line": "Balanced line"
+  },
+  "reality": {
+    "title": "<marker>How it really works</marker>",
+    "rate": "10 documents in · only 4 out",
+    "line": "Line out of balance: documents queue in front of Design and Review"
+  },
+  "stations": {
+    "sales": "Sales",
+    "design": "Design",
+    "build": "Build",
+    "review": "Review",
+    "delivery": "Delivery"
+  },
+  "dials": {
+    "efficiency": "Efficiency",
+    "effectiveness": "Effectiveness",
+    "multiplication": "Multiplication"
+  },
+  "notes": {
+    "why-the-line-gets-out-of-balance": {
+      "header": "Why the line gets out of balance",
+      "description": "DORA's 2025 report overview says AI's primary role is as an amplifier, magnifying an organization's existing strengths and weaknesses, and that the greatest returns come from a focus on the organizational system rather than the tools. It is an overview page; the report text was not read [1].",
+      "sources": {
+        "dora-2025-overview": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (overview page)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-hook": {
+        "title": "The Hook",
+        "keywords": "",
+        "script": "That is the sentence from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it."
+      },
+      "cartoon-to-balanced-line": {
+        "title": "Cartoon to balanced line",
+        "keywords": "",
+        "script": "Now picture the cartoon turning into a real factory line. Input comes in at a constant rate, every station keeps pace with the next, the output is steady and the quality is high. If this was how your organization worked, you would not need this Episode."
+      },
+      "reality": {
+        "title": "Reality",
+        "keywords": "",
+        "script": "But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. Efficiency, effectiveness and multiplication are the three dials on this line: turn them all up, and the line stops flowing. So look at the line you work in and ask yourself: which station is yours?"
+      }
+    }
+  }
+}

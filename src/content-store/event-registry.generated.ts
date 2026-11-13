@@ -4,6 +4,7 @@ import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import { event as _20261023AxelAgenticWorkflow } from './events/2026-10-23-axel-agentic-workflow';
 import { event as _20261028CyberforumAkademieIntroAgenticWorkflow } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 import { event as _20261104IntroHitlWorkflows } from './events/2026-11-04-intro-hitl-workflows';
+import { event as _20261116CyberforumAkademieHandsOnAgenticWorkflows } from './events/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows';
 import type { EventInput } from './schemas/event.schema';
 
 /** Every Event record by slug, so a key and its record's slug must match. */
@@ -11,4 +12,5 @@ export const EVENT_RECORDS = {
   '2026-10-23-axel-agentic-workflow': _20261023AxelAgenticWorkflow,
   '2026-10-28-cyberforum-akademie-intro-agentic-workflow': _20261028CyberforumAkademieIntroAgenticWorkflow,
   '2026-11-04-intro-hitl-workflows': _20261104IntroHitlWorkflows,
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows': _20261116CyberforumAkademieHandsOnAgenticWorkflows,
 } as const satisfies { readonly [S in EventSlug]: EventInput & { readonly slug: S } };

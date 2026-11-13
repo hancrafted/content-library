@@ -141,7 +141,7 @@ describe('success cases', () => {
   it('reports a brief-- item for a heading the Brief card lacks, or without a note', () => {
     // ARRANGE
     const files = folder({
-      [FEEDBACK_PATH]: feedback('spec', ['- `brief--hook` · design — Louder.', '- `brief--style` · design —']),
+      [FEEDBACK_PATH]: feedback('spec', ['- `brief--open-ideas` · design — Louder.', '- `brief--style` · design —']),
     });
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
@@ -152,6 +152,18 @@ describe('success cases', () => {
   it('finds nothing when the llm-wiki index lists each research file once with its description', () => {
     // ARRANGE
     const index = ['# Research', '', RECALL_ENTRY, ''].join('\n');
+    const files = { [RECALL]: research("'Recall is U-shaped.'") };
+    // ACT
+    const findings = checkResearchIndex(index, files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('ignores entries under ## Raw when checking the llm-wiki research index', () => {
+    // ARRANGE
+    const index = ['## Research', '', RECALL_ENTRY, '', '## Raw', '', '- [Book](<raw/book.pdf>) — A raw pdf.', ''].join(
+      '\n',
+    );
     const files = { [RECALL]: research("'Recall is U-shaped.'") };
     // ACT
     const findings = checkResearchIndex(index, files);

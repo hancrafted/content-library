@@ -1,0 +1,397 @@
+# Die eigenen Wörter des Software-Ökologie-Explorables (FE-012 §1), dieselben Schlüssel wie software-ecology.config.yml.
+toolbar:
+  label: Steuerung der Fabrik
+  states: Zustände
+  useCase: Anwendungsfall
+  fromFile: (aus Datei)
+  speed: Tempo
+  pause: Pause
+  speedMenu: 'Tempo: {n}×'
+  speedMenuTip: Wie schnell die simulierte Zeit läuft
+  play: Abspielen
+  speedTips:
+    '1': '1×: ein Arbeitstag dauert etwa 6 Sekunden'
+    '2': '2×: ein Arbeitstag dauert etwa 3 Sekunden'
+    '5': '5×: ein Arbeitstag dauert etwa 1,3 Sekunden'
+    '10': '10×: ein Arbeitstag dauert etwa 0,6 Sekunden'
+    '20': '20×: ein Arbeitstag dauert etwa 0,3 Sekunden'
+  clear: Leeren
+  clearTip: 'Leeren: eine leere Fabrik an Tag 0 mit den aktuellen Einstellungen, damit Ihr zuseht, wie sie sich füllt'
+  day: 'Tag {n}'
+  week: 'Woche {w} · Tag {d}'
+  warming: Läuft warm
+  mechs:
+    rework:
+      label: Nacharbeit
+      tip: 'Nacharbeit: ein Arbeitsplatz schickt schlechten Input über sein Rückband zurück, nach vorn in den Rückstand des Absenders, und er wird noch einmal gemacht. Zeichen an der Station: der Pfeil.'
+    churn:
+      label: Wucherung
+      tip: 'Wucherung: behaltener schlechter Input vervielfacht sich; der Arbeitsplatz gibt mehr Dokumente weiter als sonst, und die Arbeit dauert länger. Zeichen an der Station: der Fächer.'
+    complaints:
+      label: Beschwerden
+      tip: 'Kundenbeschwerden: ein schlechtes Release kann eine Beschwerde bringen, einen Bug oder eine Supportanfrage mit der roten Warnung: Arbeit, die keinen Wert schafft. Das Raster des Kunden markiert sie; ihre Wahrscheinlichkeit steht auf der Kundenkarte.'
+  scenarios: Szenarien
+  scenariosLabel: Szenarien
+  tourSteps: 'Tour in {n} Schritten'
+  tour: Tour
+  tourTip: 'Eine geführte Tour durch dieses Szenario: Regler setzen, bis zu einer Woche laufen lassen, anhalten, lesen, worauf es ankommt'
+  modified: geändert
+  modifiedTip: Nach der Wahl dieses Zustands wurde ein Regler gedreht; wählt ihn erneut, um zurückzusetzen
+# Das Einstellungs-Popover: ein Knopf am Ende der Leiste, Kopf, zwei Spalten, am Fuß Zurücksetzen und die Datei.
+settings:
+  button: Einstellungen
+  tip: 'Einstellungen: das Modell, was schlechte Arbeit weiter unten anrichtet, wie die Fabrik gezeichnet wird, und die Datei'
+  label: Einstellungen
+  model: Modell
+  mechanics: Mechanismen
+  mechanicsNote: Was schlechte Arbeit weiter unten anrichtet
+  display: Anzeige
+  close: Schließen
+  help: 'Hilfe zu {name}'
+tour:
+  label: Geführte Tour
+  step: '· Schritt {i} von {n} · Woche {w}'
+  settling: Die Linie läuft erst warm …
+  running: 'Läuft bis Woche {w} … Woche {n}'
+  checksLabel: Was die Prüfungen hier erwarten
+  holds: 'Erfüllt:'
+  fails: 'Nicht erfüllt:'
+  close: Schließen
+  back: Zurück
+  next: Weiter
+  finish: Fertig
+  checks:
+    check: '{measure} — {value}'
+    customer:
+      output: 'Ausstoß im Verhältnis zum Ideal: {test}'
+      sat: 'Anteil zufriedener Kunden: {test}'
+      headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen: {test}'
+      leadDays: 'Durchlaufzeit in Arbeitstagen: {test}'
+      bugsPerWeek: 'Fehlermeldungen pro Woche: {test}'
+      changesPerWeek: 'Änderungswünsche pro Woche: {test}'
+      own: 'Eigene Tickets ausgeliefert pro Woche: {test}'
+      backlog: 'Wartende Aufträge an allen Arbeitsplätzen: {test}'
+    center:
+      weeksWaiting: '{title}: {test} Wochen Arbeit in der Warteschlange'
+      busy: '{title}: {test} der Zeit beschäftigt'
+      bugShare: '{title}: {test} der Arbeitszeit für Beschwerden'
+      backlog: '{title}: {test} wartende Aufträge'
+      done: '{title}: {test} erledigte Aufträge pro Woche'
+      rework: '{title}: {test} der Arbeit kam zurück'
+      rush: '{title}: {test} Punkte Wirksamkeit durch Hetze verloren'
+      unread: '{title}: {test} der ankommenden schlechten Arbeit unmarkiert weitergegeben'
+      stall: '{title}: {test} seines Tempos durch Stillstand verloren'
+    trend: '{measure}, {test}'
+    customerTrend:
+      output: 'Ausstoß im Verhältnis zum Ideal'
+      sat: 'Anteil zufriedener Kunden'
+      headroom: 'Nachfrage, die die Linie bedienen könnte, mal der heutigen'
+      leadDays: 'Durchlaufzeit in Arbeitstagen'
+      bugsPerWeek: 'Fehlermeldungen pro Woche'
+      changesPerWeek: 'Änderungswünsche pro Woche'
+      own: 'Eigene Tickets ausgeliefert pro Woche'
+      backlog: 'Wartende Aufträge an allen Arbeitsplätzen'
+    centerTrend:
+      weeksWaiting: '{title}: Wochen Arbeit in der Warteschlange'
+      busy: '{title}: Anteil der Zeit beschäftigt'
+      bugShare: '{title}: Anteil der Arbeitszeit für Beschwerden'
+      backlog: '{title}: wartende Aufträge'
+      done: '{title}: erledigte Aufträge pro Woche'
+      rework: '{title}: Anteil der Arbeit, die zurückkam'
+      rush: '{title}: Punkte Wirksamkeit, die durch Hetze verloren gehen'
+      unread: '{title}: Anteil der ankommenden schlechten Arbeit, unmarkiert weitergegeben'
+      stall: '{title}: Anteil seines Tempos, durch Stillstand verloren'
+    test:
+      gt: 'über {k}'
+      lt: 'unter {k}'
+      gte: 'mindestens {k}'
+      lte: 'höchstens {k}'
+      range: '{lo} bis {hi}'
+      rises: steigend
+      falls: fallend
+stage:
+  label: Die Fabrik
+  note: Illustratives Modell, nicht gemessen
+  warming: 'Läuft warm · Tag {day} von {of}'
+  blocked: blockiert
+  aWeek: '{n} pro Woche'
+  sentBack: zurückgeschickt
+  back: '↩ {n} {what}'
+  status:
+    warming: 'Die Linie spielt sich ein: {weeks} simulierte Wochen, dann läuft sie live.'
+    calm: 'Eine vereinfachte Organisation im Ideal: Jede Übergabe ist gut, und nichts staut sich. Wir alle wissen, dass die Wirklichkeit unordentlicher ist.'
+    bottleneck: Engpass
+    busiest: Am stärksten ausgelastet
+    waiting: '{title}, {weeks} Wochen Arbeit warten'
+    growing: 'wächst um etwa {n} Aufgaben pro Woche; erhöht die Effizienz oder schickt weniger dorthin'
+    clearsWeek: 'in etwa einer Woche abgebaut bei diesem Tempo; mehr Effizienz baut ihn schneller ab'
+    clearsWeeks: 'in etwa {n} Wochen abgebaut bei diesem Tempo; mehr Effizienz baut ihn schneller ab'
+    also: 'außerdem {titles}'
+    coping: 'Ausgelastet, aber es reicht: Bei keinem Arbeitsplatz wartet eine Woche Arbeit'
+    sentBack: 'pro Woche zurückgeschickt'
+    behind: 'dieses Gerät kommt nicht hinterher: Die Zeit läuft langsamer, als das Tempo sagt'
+  legend:
+    label: Legende
+    good: gut
+    bad: schlecht
+    warn: Reklamation oder Nacharbeit
+    ai: von KI erstellt
+    pile: ab sechs Wartenden wird das oberste Fach rot, und die Arbeit staut sich am Bandende
+    merged: '×n: Dokumente, die zusammen fahren'
+    handoff: jede Übergabe dauert einen Vierteltag
+card:
+  waiting: warten
+  onBugs: '{n} % für Fehler'
+  openDashboard: '{title}: Dashboard öffnen'
+  openSettings: '{title}: Einstellungen öffnen'
+  inspection: 'Prüfung: prüft die Arbeit, die ankommt'
+  signs:
+    rework: 'Nacharbeit: Dieser Arbeitsplatz hat schlechte Arbeit zurückgeschickt'
+    churn: 'Wildwuchs: Er hat schlechte Eingaben behalten und mehr Dokumente daraus gemacht'
+    unread: 'Ungelesen durchgewinkt: Die Warteschlange ist so voll, dass schlechte Arbeit ungeprüft durchgeht'
+    complaint: Hier ist eine Kundenreklamation angekommen
+customer:
+  lastReleases: Die letzten 20 Releases
+  ofIdeal: vom Ideal
+  outputTip: 'Output: erfüllte Anfragen pro Woche, im Verhältnis zum Ideal'
+  satisfied: Zufrieden
+  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 20'
+  leadTime: Durchlaufzeit
+  leadTip: 'Durchlaufzeit: Arbeitstage von einer Anfrage bis zu ihrem Release, über etwa sechs Wochen (Littles Gesetz: Anfragen in der Linie ÷ erledigte Anfragen pro Woche).'
+  couldServe: Könnte bedienen
+  headroomTip: Wie oft die heutige Nachfrage die Linie bedienen könnte, bevor ihr am stärksten belasteter Arbeitsplatz voll ist (aus den erwarteten Flüssen bei diesen Einstellungen).
+  bugs: Fehler pro Woche
+  bugsTip: 'Gemeldete Fehler pro Woche: Reklamationen nach schlechten Releases. Jede ist Fehlernachfrage: Arbeit ohne Mehrwert.'
+  own: Eigene, pro Woche
+  ownTip: 'Produktfirma: Tickets, die die Firma selbst schreibt (Roadmap, Leads, technische Schulden) und die ausgeliefert wurden, pro Woche. Getrennt von den Anfragen des Kunden gezählt; beide teilen sich dieselben Backlogs.'
+  rateTip: Wie viele Anfragen der Kunde pro Woche schickt. Das Ideal bemisst jeden Arbeitsplatz für die Rate der Datei; mehr füllt die Linie.
+  aWeek: '{n} pro Woche'
+  days: '{n} Tage'
+  demand: '{n}× Bedarf'
+  steady: gleichmäßig
+  random: zufällig
+dock:
+  label: Beim Kunden
+  eyebrow: Beim Kunden · die letzten 20 Releases
+  grid: '{good} der letzten 20 Releases gut, {complaints} brachten Reklamationen'
+  output: Output im Verhältnis zum Ideal
+  sub: '{relative}: etwa {n} erfüllte Anfragen pro Woche'
+  same: Etwa so viel wie im Ideal
+  half: Etwa die Hälfte des Ideals
+  third: Etwa ein Drittel des Ideals
+  times: '{k}× Ideal'
+  satisfaction: Kundenzufriedenheit
+  satNote: gute Releases minus Reklamationen, von den letzten 20
+  verdicts:
+    moreUnhappier: Mehr Output, ein unzufriedenerer Kunde
+    unhappy: Der Kunde ist unzufrieden
+    fewer: Weniger Anfragen erfüllt, als der Kunde wollte
+    asked: Was der Kunde wollte
+  note: 'Output zählt nur erfüllte Anfragen: nie die zusätzlichen Dokumente, Nacharbeit oder Antworten auf Reklamationen.'
+  complaints: 'Etwa {n} Reklamationen pro Woche kommen zurück: Fehlernachfrage, kein neuer Wert.'
+# Der Rollen-Zustand: die Bildunterschriften des Reifenschaukel-Cartoons nach Panel-ID und die Wörter drumherum.
+cartoon:
+  captions:
+    explained: Wie der Kunde es erklärt hat
+    pm: Wie der Projektleiter es verstanden hat
+    ba: Wie der Analytiker es entworfen hat
+    eng: Wie der Programmierer es geschrieben hat
+    sales: Wie der Unternehmensberater es beschrieben hat
+    doc: Wie das Projekt dokumentiert wurde
+    ops: Was der Betrieb installiert hat
+    billing: Wie es dem Kunden in Rechnung gestellt wurde
+    support: Wie es betreut wurde
+    needed: Was der Kunde wirklich gebraucht hätte
+  blank: (leer)
+  notHere: '{role} · hier kein Arbeitsplatz'
+  artefacts: Artefakte
+  jobs:
+    doc: 'Zu breit für eine Rolle: Dokumentation schreiben alle.'
+    billing: 'Zu eng für einen Arbeitsplatz: Die Abrechnung folgt dem Abschluss.'
+# Die Spalte Modell im Einstellungs-Popover: die Einstellungen der ganzen Fabrik, jede mit einem Tooltip, was sie bewirkt.
+model:
+  reality: Realitätsnähe
+  ideal: Ideal
+  realistic: Realistisch
+  realityText: 'Realistisch {n} %'
+  ai: KI
+  off: Aus
+  everywhere: Überall
+  company: Unternehmen
+  service: Dienstleister
+  product: Produktunternehmen
+  aiq: Qualitätseffekt der KI
+  worse: Schlechter
+  same: Gleich
+  better: Besser
+  note: 'Rate, Anfragemix und Folgewahrscheinlichkeiten des Kunden stehen auf seiner Karte: klickt links auf den Kunden.'
+  reset: Auf Standard zurücksetzen
+  tips:
+    reality: 'Von Ideal zu Realistisch: senkt Effizienz und Effektivität jedes Arbeitsplatzes auf seine realistischen Werte. Mehr schlechte Dokumente gehen hinaus, werden zurückgeschickt oder vervielfachen sich; der Engpass läuft nahe 90 % ausgelastet.'
+    ai: 'Wo KI arbeitet: diese Arbeitsplätze laufen schneller (2,5×, solange ein Dashboard nichts anderes sagt) und schreiben vielleicht zusätzliche Aufgaben; KI-Dokumente brauchen am nächsten Arbeitsplatz etwas länger zum Lesen. Beschleunigung und Zusatzaufgaben stellt Ihr pro Arbeitsplatz in seinem Dashboard ein.'
+    company: 'Dienstleister: nur der Kunde fragt Arbeit an. Produktunternehmen: das Produktmanagement schreibt zusätzlich Roadmap-Punkte, der Vertrieb bringt Leads und die Entwicklung schreibt Tickets zu technischen Schulden. Sie teilen dieselben Rückstände; jeder Arbeitsplatz wird neu bemessen, damit Ideal bei 70 % Auslastung bleibt.'
+    aiq: 'Was KI mit der Chance macht, dass ein Dokument gut hinausgeht: Schlechter senkt sie um 15 Punkte, Besser hebt sie um 15. Gleich lässt sie.'
+    reset: 'Zurück zu dem, was die Anwendungsfall-Datei für diesen Zustand festlegt: Einstellungen, Tempo und Anzeige.'
+# Die Spalte Anzeige im Einstellungs-Popover: wie die Fabrik gezeichnet wird.
+display:
+  beltMotion: Bandbewegung
+  beltMotionNote: Die Lamellen der Bänder bewegen sich. Aus ist ruhiger; die Dokumente wandern trotzdem.
+  pile: Stau hinter dem Regal
+  pileTip: 'Wie sich Dokumente hinter einem vollen Regal stauen. Fahrt über einen Stil, um ihn zu sehen.'
+  piles:
+    heap:
+      name: Kippender Haufen
+      note: Dokumente fallen am Bandende auf einen Haufen und kommen schräg zur Ruhe
+    stack:
+      name: Schiefer Stapel
+      note: ein Blattstapel wächst am Bandende in die Höhe, neigt sich und schwankt ein wenig
+    drift:
+      name: Verwehung
+      note: Dokumente verstreuen sich um das Bandende und zittern, wie eine Schneewehe an einer Wand
+# Das Dashboard eines Arbeitsplatzes: ein Monitor, die Regler in den Einstellungen verstaut.
+dash:
+  own:
+    title: Eigene Arbeit
+    tip: 'Tickets, die diese Abteilung sich selbst schreibt, nicht für einen Kunden: eine Roadmap, Leads, technische Schulden. Sie reihen sich in dieselbe Warteschlange ein wie Kundenanfragen, wer zuerst kommt, wird zuerst bearbeitet. Nur ein Produktunternehmen hat sie; ein Dienstleister schaltet sie alle ab.'
+    help: 'Über {name}'
+    rate: Tickets pro Woche
+    rateTip: 'Wie viele eigene Tickets diese Abteilung pro Woche schreibt, 0 bis 50. 0 schaltet sie ab. Der Wert der Datei ist der Startwert; „Auf Standard zurücksetzen“ stellt ihn wieder her.'
+    perWeek: '{n} pro Woche'
+    arrivals: Eintreffen
+    arrivalsTip: 'Gleichmäßig: ein Ticket alle 1/Rate einer Woche, im festen Takt. Zufällig: im Schnitt gleich viele, aber mal gehäuft, mal dünn, wie echte Tickets.'
+    steady: Gleichmäßig
+    random: Zufällig
+    emit: Aufgabe auslösen
+    emitTip: Legt jetzt ein eigenes Ticket in den Rückstau dieses Arbeitsplatzes
+  help: Diagramme erklären
+  close: Schließen
+  closeTip: Schließen (Esc)
+  ai: KI
+  aiTip: KI beschleunigt diesen Arbeitsplatz (2,5×, solange Ihr es unten nicht ändert) und lässt ihn vielleicht Zusatzaufgaben schreiben; KI-Dokumente brauchen am nächsten Arbeitsplatz etwas länger zum Lesen. Ihren Qualitätseffekt stellt Ihr im Modell ein.
+  lightTip: 'Grün: kommt hinterher. Gelb: eine Woche Arbeit oder mehr wartet, viel Arbeit kommt zurück, schlechte Arbeit geht ungelesen durch, oder er wartet meist auf Arbeit. Rot: zwei Wochen Arbeit oder mehr warten, oder er ist blockiert.'
+  status: 'Status {level}: {signals}'
+  levels:
+    red: rot
+    amber: gelb
+    green: grün
+  signals:
+    backing: 'Blockiert: fertige Arbeit kommt nicht weg, der nächste Arbeitsplatz ist voll'
+    bottleneck: 'Engpass: {n} Wochen Arbeit warten'
+    overloaded: 'Ausgelastet: {n} Wochen Arbeit warten'
+    rework: 'Viel Nacharbeit: {n} % seiner Arbeit kommen zurück'
+    unread: 'Ungelesen durchgewinkt: schlechte Arbeit geht ungeprüft durch'
+    starved: 'Leerlauf: wartet meist auf Arbeit'
+    ok: Kommt hinterher
+  grows: 'Sein Rückstand wächst um etwa {n} Aufträge pro Woche. Hebt seine Effizienz oder schickt ihm weniger.'
+  clearsWeek: In diesem Tempo ist sein Rückstand in etwa einer Woche abgebaut. Mehr Effizienz baut ihn schneller ab.
+  clearsWeeks: 'In diesem Tempo ist sein Rückstand in etwa {n} Wochen abgebaut. Mehr Effizienz baut ihn schneller ab.'
+  trends:
+    out:
+      title: Ausstoß
+      unit: pro Woche
+      help: Erledigte Aufträge pro Woche. Die gestrichelte Linie ist Ideal.
+    good:
+      title: Ergebnis
+      unit: '% gut'
+      help: Anteil dessen, was er weitergibt, der gut ist. Die gestrichelte Linie ist 100 %.
+    wait:
+      title: Wartet
+      unit: Wochen Arbeit
+      help: 'Wochen Arbeit, die warten: der Rückstand geteilt durch das, was dieser Arbeitsplatz in einer Woche schafft. Gelb ab einer Woche, rot ab zwei.'
+  settings: Einstellungen
+  withAi: '{set} → {eff} mit KI'
+  rows:
+    eff:
+      label: Effizienz
+      sub: · Ausstoß
+      help: 'Effizienz ist Ausstoß: wie schnell dieser Arbeitsplatz ein Dokument fertigstellt, 10 % bis 1000 %. Schneller hilft nur, wenn Arbeit auf ihn wartet; dann wandert der Engpass weiter.'
+    effv:
+      label: Effektivität
+      sub: · Ergebnis
+      help: 'Effektivität ist Ergebnis: die Chance, dass ein Dokument gut hinausgeht, unter den Bedingungen hier (Zeit, Werkzeuge, klarer Input).'
+    fan:
+      label: Weitergegebene Aufgaben pro Aufgabe
+      sub: ''
+      help: 'Weitergegebene Aufgaben pro Aufgabe: jedes Dokument ist eine Aufgabe, also sind das die Aufgaben, die eine erledigte Aufgabe weiter unten erzeugt. Mehr Aufgaben heißt mehr Arbeit am nächsten Arbeitsplatz.'
+    aiSpeed:
+      label: KI-Beschleunigung
+      sub: ''
+      help: 'KI-Beschleunigung: wie viel schneller dieser Arbeitsplatz mit KI arbeitet, 1× bis 5×.'
+    aiExtra:
+      label: KI-Zusatzaufgaben
+      sub: · pro Aufgabe
+      help: 'Zusatzaufgaben pro Aufgabe mit KI: 1× gibt weiter, was er ohnehin weitergäbe; 2× gibt doppelt so viele Aufgaben weiter (mehr Pull Requests, mehr Dokumente) an den nächsten Arbeitsplatz.'
+  flows: Wie es fließt
+  flowsSub: für Warteschlangen-Interessierte
+  busy: beschäftigt
+  blocked: blockiert
+  starved: wartet auf Arbeit
+  util: 'Beschäftigt {busy}, blockiert {blocked}, wartet auf Arbeit {starved}'
+  throughput: Durchsatz
+  throughputNote: Aufträge, die er pro Woche erledigt
+  arriving: Zugang
+  arrivingNote: Aufträge, die pro Woche bei ihm ankommen
+  capacity: Kapazität
+  capacityNote: Aufträge, die er pro Woche erledigen könnte
+  backlog: Mittlerer Rückstand
+  backlogNote: wartende Aufträge, über zwei Wochen
+  lead: Durchlaufzeit
+  leadWeeks: '{n} Wo.'
+  leadPending: 'erscheint, sobald der Rückstand stabil ist (Littles Gesetz: Rückstand ÷ Durchsatz)'
+  leadNote: 'wie lange ein Auftrag hier wartet und bearbeitet wird (Littles Gesetz: Rückstand ÷ Durchsatz)'
+  artefacts: Artefakte
+  tasks: Aufgaben
+  withAiHere: Mit KI hier
+# Das Dashboard des Kunden: wie viele Anfragen, wie sie ankommen, wohin sie gehen und was ein Release zurückbringt.
+custDash:
+  requests: Anfragen pro Woche
+  arrivals: Eingang
+  modeTip: 'Gleichmäßig: eine Anfrage alle 1/Rate. Zufällig: im Mittel dieselbe Rate, aber Anfragen kommen in Schüben und Lücken (ein Poisson-Prozess), so wie echte Anfragen ankommen.'
+  steady: Gleichmäßig
+  random: Zufällig
+  mix: Anfragemix
+  mixTip: 'Wohin neue Anfragen gehen: neue Kunden zum Vertrieb, Feature- und Änderungswünsche zum Produktmanagement, Bugs und Supporttickets zum Support.'
+  follow: Ein Release bringt eine neue Anfrage
+  followTip: 'Jedes Release kann sofort eine neue Anfrage bringen. Ein gutes Release bringt eine neue Anfrage, ein schlechtes eine Beschwerde nach seinem Fehler, mit der roten Warnung markiert: das Falsche gebaut kommt als Änderungswunsch zurück, ein Bug als Fehlermeldung. Zusammen unter 1 gehalten, damit sich die Anfragen einpendeln.'
+  good: 'Gut · {title}'
+  spec: 'Das Falsche · {title}'
+  code: 'Fehler · {title}'
+  complaint: (Beschwerde)
+  sizedFor: Ideal bemisst jeden Arbeitsplatz für diese Rate.
+  times: '{k}× die Rate, für die Ideal bemessen ist.'
+  gain: 'Folgeanfragen: etwa {g} neue Anfragen pro Anfrage{off}.'
+  off: ' (Beschwerden sind in der Werkzeugleiste aus)'
+compare:
+  label: Arbeitsplätze vergleichen
+  button: Vergleichen
+  tip: 'Vergleichen: bis zu drei Arbeitsplätze wählen (oder mit Umschalt anklicken)'
+  slots: Gewählte Arbeitsplätze
+  remove: '{title} entfernen'
+  removeFrom: '{title} aus dem Vergleich entfernen'
+  show: Zeigen
+  exit: Beenden
+  pick: Klickt Arbeitsplätze auf der Linie an.
+  max: 'Höchstens drei: entfernt einen, indem Ihr seinen Platz anklickt.'
+  title: 'Vergleich · {n} Arbeitsplätze in Flussrichtung'
+  titleOne: 'Vergleich · 1 Arbeitsplatz in Flussrichtung'
+  exitStream: Vergleich beenden
+  strip: Überblick über die ganze Linie; die verglichenen Arbeitsplätze sind markiert
+  gap: '+{n} Stationen'
+  gapOne: '+1 Station'
+  gapLabel: '{n} Arbeitsplätze dazwischen'
+  aWeek: '{n} pro Woche'
+  note: '{waiting} warten · {weeks} Wochen Arbeit · {busy} % ausgelastet · {done} erledigt pro Woche'
+# YAML herunterladen und Hochladen: die Knöpfe der Austauschdatei, der Hinweis beim Ablegen und die Meldung unter der Werkzeugleiste.
+exchange:
+  download: YAML herunterladen
+  downloadTip: Den aktuellen Zustand als eine YAML-Datei herunterladen
+  upload: Hochladen
+  uploadTip: Eine YAML-Datei laden (oder irgendwo auf der Seite ablegen)
+  drop: Legt eine YAML-Datei ab, um die Fabrik damit laufen zu lassen
+  downloaded: '{file} heruntergeladen: der aktuelle Zustand von {name}. Bearbeitet sie und legt sie hier wieder ab.'
+  unread: '{file} ließ sich nicht lesen: {reason}'
+  broken: '{file} wurde nicht geladen. Behebt diese Punkte und legt die Datei erneut ab:'
+  unstable: '{file} wurde nicht geladen: Bei Realistisch würde sich Arbeit ohne Ende stauen.'
+  loaded: '{file} geladen: {centers} Arbeitsplätze und der Kunde, {belts} Bänder aus ihren Regeln. Die Fabrik läuft jetzt mit dieser Datei.'
+  rush: ' Hinweis: Wenn jeder Arbeitsplatz hetzte (3+ Wochen Arbeit wartend), wären {who} überlastet.'
+  worst: ' Wenn außerdem jede Prüfung schlechte Arbeit ungelesen durchwinkte: {who}.'

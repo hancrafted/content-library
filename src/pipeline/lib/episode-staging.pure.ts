@@ -201,10 +201,13 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
  */
 export function checkResearchIndex(index: string | undefined, research: Readonly<Record<string, string>>): Finding[] {
   if (index === undefined) return [];
-  const entries = index.split('\n').flatMap((line) => {
-    const match = INDEX_ENTRY.exec(line);
-    return match === null ? [] : [{ file: match[1], description: match[2] }];
-  });
+  const entries = index
+    .split(/^## Raw$/m)[0]
+    .split('\n')
+    .flatMap((line) => {
+      const match = INDEX_ENTRY.exec(line);
+      return match === null ? [] : [{ file: match[1], description: match[2] }];
+    });
   const finding = (file: string, message: string): Finding => ({ kind: 'research-index', file, message });
   const perFile = Object.entries(research).flatMap(([file, markdown]) => {
     const listed = entries.filter((entry) => entry.file === file);
