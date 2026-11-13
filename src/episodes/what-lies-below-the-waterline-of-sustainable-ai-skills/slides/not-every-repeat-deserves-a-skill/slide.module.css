@@ -1,13 +1,12 @@
 /*
  * The Slide's one emphasis motion (Spec Option 9a): the index grows line by line until it runs off the page, each
- * stamp landing on its line, the needed entry ending up seventh, buried; then it fills primary with its "needed" tag.
- * Played once when the Slide's mount turns `[data-zone='active']`. The base rules are the end state, so a still frame
- * and reduced motion show the full list.
+ * stamp landing on its line, the needed entry ending up seventh, buried; then, once all `--entries` (set inline from
+ * the list) have grown, it fills primary with its "needed" tag. Played once when the Slide's mount turns
+ * `[data-zone='active']`. The base rules are the end state, so a still frame and reduced motion show the full list.
  */
 
 .index {
   --grow-step: 140ms;
-  --grow-total: calc(17 * var(--grow-step));
 }
 
 /* The sheet fades out at its foot, as if it ran on past the stage; only the mask's alpha counts, not its colour. */
@@ -27,7 +26,7 @@
   :global([data-zone='active']) .index .needed {
     animation:
       grow 300ms ease-out calc(var(--line) * var(--grow-step)) both,
-      find 500ms ease-out calc(var(--grow-total) + 300ms) both;
+      find 500ms ease-out calc(var(--entries) * var(--grow-step) + 300ms) both;
   }
 }
 

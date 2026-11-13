@@ -13,15 +13,9 @@
   --floor: color-mix(in oklab, var(--info) 26%, color-mix(in oklab, var(--on-brand-accent) 52%, var(--overlay)));
   --frame: color-mix(in oklab, var(--bulb) 45%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
   --sky-day: var(--zone-surface);
-  --sky-dusk: color-mix(in oklab, var(--bulb) 70%, var(--destructive));
-  --sky-dawn: color-mix(in oklab, var(--bulb) 45%, var(--on-brand-accent));
-  --sun: color-mix(in oklab, var(--bulb) 80%, var(--on-brand-accent));
   --sea: var(--zone-sunlit);
   --clock-face: var(--on-brand-accent);
   --clock-ink: color-mix(in oklab, var(--info) 30%, var(--overlay));
-  --paper: var(--on-brand-accent);
-  --paper-ink: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay)));
-  --pin: var(--primary);
 }
 
 :global(.dark) .room {
@@ -32,7 +26,6 @@
   --floor: color-mix(in oklab, var(--info) 30%, color-mix(in oklab, var(--on-brand-accent) 10%, var(--overlay)));
   --frame: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay)));
   --clock-face: color-mix(in oklab, var(--on-brand-accent) 80%, var(--overlay));
-  --paper: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
 }
 
 .room [data-tone] {
@@ -73,18 +66,6 @@
   fill: var(--sky-day);
 }
 
-.skyDusk {
-  fill: var(--sky-dusk);
-}
-
-.skyDawn {
-  fill: var(--sky-dawn);
-}
-
-.sun {
-  fill: var(--sun);
-}
-
 .sea {
   fill: var(--sea);
 }
@@ -99,19 +80,4 @@
   stroke: var(--clock-ink);
   stroke-width: 1.2;
   stroke-linecap: round;
-}
-
-.paper {
-  fill: var(--paper);
-  stroke: var(--paper-ink);
-  stroke-width: 0.6;
-}
-
-.paperLine {
-  stroke: var(--paper-ink);
-  stroke-width: 0.8;
-}
-
-.pin {
-  fill: var(--pin);
 }

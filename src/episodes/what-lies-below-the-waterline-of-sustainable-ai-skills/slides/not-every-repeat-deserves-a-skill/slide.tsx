@@ -73,6 +73,7 @@ export const notEveryRepeatDeservesASkill = slide({
         </div>
         <ZoneCard
           data-index
+          style={{ '--entries': ENTRIES.length } as CSSProperties}
           className={cn(
             styles.index,
             styles.sheet,
