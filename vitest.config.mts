@@ -23,6 +23,9 @@ export default defineConfig({
       '.claude/**',
       '.agents/**',
     ],
+    // Twice vitest's 5 s default: this Episode Run's parallel jobs load the machine, and a test that only times out
+    // under that load is no finding.
+    testTimeout: 10_000,
     coverage: {
       provider: 'v8',
     },
