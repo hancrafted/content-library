@@ -53,7 +53,6 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     s,
     D,
     cu,
-    rework: mechOf(s, 'rework'),
     churn: Math.max(1, mechOf(s, 'churn') || 1),
     complOn,
     mixW: sum(Object.values(cu.mix)) || 1,
@@ -61,7 +60,6 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     srcs: productCo(s) ? m.srcs.map((x) => ({ n: x.n, rate: ownOf(x, { s, mode: cu.mode }).rate })) : [],
     worst: opts.worst,
     consts: {
-      inspect: constOf(s, 'inspect'),
       redo: constOf(s, 'redo'),
       keepExtra: constOf(s, 'keepExtra'),
       maxBounces: constOf(s, 'maxBounces'),

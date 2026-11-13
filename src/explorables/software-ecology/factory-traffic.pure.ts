@@ -49,7 +49,6 @@ export interface Ctx {
   readonly s: Settings;
   readonly D: (Dials | null)[];
   readonly cu: Cust;
-  readonly rework: number;
   readonly churn: number;
   readonly complOn: boolean;
   readonly mixW: number;
@@ -59,7 +58,6 @@ export interface Ctx {
   readonly worst: boolean;
   /** The file's constants (design-ADR 0024 §5). */
   readonly consts: {
-    readonly inspect: number;
     readonly redo: number;
     readonly keepExtra: number;
     readonly maxBounces: number;
