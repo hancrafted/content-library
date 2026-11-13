@@ -59,7 +59,7 @@ A comic strip in low poly, the control room as the scene. First panel: a framed 
 
 master: grid-1x1 · motion: local
 
-AI statement, the headline caption: "A skill hands the AI your proven procedure on demand." Analogy caption, smaller and beside the picture: "The pilot pulls one card from the dive manual when the dive needs it."
+AI statement, the headline caption: "When a request matches its description, or you call it by name, the AI reads that one skill into the context." Analogy caption, smaller and beside the picture: "The pilot pulls one card from the dive manual when the dive needs it."
 
 One wide view of the control room: the pilot at the console, the manual open at its index, the expedition brief on the wall, and the robot on its cable through the window. Three callouts, each with the AI term as its label and the scene's word in smaller type beneath it, numbered in the order the Voice script names them: "Skill" (procedure card), "Description" (index line) and "Project instructions" (expedition brief). One card slides out of the manual on its own. The Spec offers Options for this Slide (comic, cutaway illustration), as Han expects a new kind of visual here.
 
@@ -87,7 +87,7 @@ One wide view of the control room: the pilot at the console, the manual open at 
 
 master: grid-1x1 · motion: none
 
-AI statement, the headline caption: "A skill is a written procedure with a name and a description of what it does and when to use it." Analogy caption, smaller and beside the picture: "A procedure card: title and use-when line on the front, steps on the back, extras in the sleeve."
+AI statement, the headline caption: "Every skill has three parts: a name and description, its instructions, and optional supporting files." Analogy caption, smaller and beside the picture: "A procedure card: title and use-when line on the front, steps on the back, extras in the sleeve."
 
 One card in a clear sleeve, each part labelled with its AI term first and the scene's word beneath. Front: "name and description" (the title and the "use when" line). Back: "instructions" (the numbered steps). Sleeve: "supporting files" (a species guide, a label template and an arm preset). Coding-agent view: the same card beside its folder, each part linked to `SKILL.md`, `references/`, `assets/` and `scripts/`.
 
@@ -212,11 +212,13 @@ The control room split in two, each half headed by its AI label. Left, "Called b
 
 #### Speaker notes
 
-1. **Calling a skill by name differs by app** — Claude Code runs `/skill-name` at the start of a message [1]; Codex uses `$` or `/skills` [2]; ChatGPT and the Gemini app use `@` [3]; Copilot CLI uses a slash before the name [4]. "Slash command" is Claude Code and Copilot CLI wording; "by name" holds for all.
+1. **Calling a skill by name differs by app** — Claude Code runs `/skill-name` at the start of a message [1]; Codex uses `$` or `/skills` [2]; ChatGPT and the Gemini app use `@` [3]; Copilot CLI uses a slash before the name [4]. Gemini's own help pages disagree on `/` versus `@` for the Gemini app [9][10], so the Slide shows `@` and the note keeps `/`. "Slash command" is Claude Code and Copilot CLI wording; "by name" holds for all.
    - sources: [1] Anthropic, Extend Claude with skills (Claude Code docs) — https://code.claude.com/docs/en/skills
    - sources: [2] OpenAI, Build skills (Codex docs) — https://learn.chatgpt.com/docs/build-skills
    - sources: [3] OpenAI Academy, Skills — https://academy.openai.com/public/clubs/work-users-ynjqu/resources/skills
    - sources: [4] GitHub, Adding agent skills for GitHub Copilot CLI — https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills
+   - sources: [9] Google, Manage your tasks and workflows in Gemini Apps (Help) — https://support.google.com/gemini/answer/17094507?hl=en
+   - sources: [10] Google, About the transition from Gems to skills (Gemini Apps Help) — https://support.google.com/gemini/answer/18560919?hl=en
 2. **The model picks a skill by its description** — otherwise the model matches the task to the description. Gemini CLI adds a step: the model asks to activate a skill and the user consents before it is injected [5].
    - sources: [5] Google, Agent Skills in Gemini CLI — https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/cli/skills.md
 3. **Skills left unused: what the 56% measures** — "In 56% of eval cases, the skill was never invoked": the documentation skill in Vercel's default configuration for Next.js 16 APIs, not all skills in general [6]. Explicit instructions to use it raised invocation to 95% or more, and the pass rate from 53% to 79% [6]. In the default configuration the skill tied the no-skill baseline overall at 53% [6]. One vendor's eval, no named model, no replication, so treat it as an illustration.
@@ -245,7 +247,7 @@ The control room split in two, each half headed by its AI label. Left, "Called b
 
 master: grid-1x3 · motion: local
 
-AI statement, the headline caption: "The third time, and you know what a good result looks like, is the signal to write a skill." Analogy caption, smaller and beside the picture: "Explain the sample, refine it, write the card."
+AI statement, the headline caption: "Write a skill the third time, once you know what a good result looks like." Analogy caption, smaller and beside the picture: "Explain the sample, refine it, write the card."
 
 A callback to the first Slide's comic, in three panels, each headed by what happens with the AI: "1st time: you learn what's needed" (explaining the sediment sample), "2nd time: you refine it" (refining it), "3rd time: you write the skill" (writing the card). The first Slide's empty card fills with steps. A small callout at the end: "Did you know? This matches the rule of three from Fowler's Refactoring", a software engineering rule against generalising too early.
 
