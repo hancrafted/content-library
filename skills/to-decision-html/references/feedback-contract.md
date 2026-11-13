@@ -6,6 +6,7 @@ The reviewer's feedback reaches the creating agent through the clipboard or a do
 
 - **Copy prompt** (`data-copy-prompt`) and **Save** (`data-save`) sit together, each with an icon and a visible label. In `decide` they sit beside the Next action; in `explain`, in the Questions? block.
 - A **reply composer** beside them shows the prompt as selectable text and rebuilds it on every edit, after `html-effectiveness` `unknowns/03-design-directions.html`. Credit it in a page comment: Apache-2.0, Copyright 2026 Anthropic PBC.
+- `decide` adds a **general comment**, one `<textarea>` beside the Next action for feedback on the page as a whole; in `explain` the Questions? field plays that part.
 - `decide` adds **Reset all** (`data-reset-all`) and a reset per item (`data-reset`, inside its item), each with a reset icon and a label naming what it clears.
 - One `role="status"` line reports every outcome.
 
@@ -15,7 +16,7 @@ Copy prompt and Save carry the same text. It holds, in order:
 
 1. A heading naming the page id, revision and mode.
 2. The receiving agent's instructions: save the text verbatim to the destination; stop when the page's `data-revision` differs; sending it accepts the Next action it names.
-3. A fenced `json` block written with `JSON.stringify`: the page's id, revision, mode and absolute path; the destination; the Next action, its instructions, and the approved revision or `null`; then each item's response (`skipped` when untouched), its comment and every Option's comment, unselected Options included. `explain` carries the reader's questions in place of responses.
+3. A fenced `json` block written with `JSON.stringify`: the page's id, revision, mode and absolute path; the destination; the Next action, its instructions, and the approved revision or `null`; the general comment; then each item's response (`skipped` when untouched), its comment and every Option's comment, unselected Options included. `explain` carries the reader's questions in place of responses.
 
 Comments enter exactly as typed. Text the agent preset keeps its `(recommended by agent)` mark, apart from the reviewer's words.
 

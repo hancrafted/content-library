@@ -34,20 +34,8 @@ Commit the entry on its own with `/commit`, so it can be cherry-picked to `main`
 
 4. **A Slide preview stayed small on a wide screen.** Han: "for slide preview, the content area needs to be able to grow up to full HD width" when the screen allows it, such as an ultrawide.
    - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: 28 items. At 2560 × 1440 the main column stops at 1192 px, 47% of the viewport, and the page sits centred with about 540 px empty on each side, so no Slide preview can grow past 1192 px.
-   - **Proposed fix:** step 4 lets a visual with a design size, which the caller names (a Slide at 1920 × 1080), grow to that width when the viewport allows it: the main column's cap is the widest design size plus the rail, not a fixed reading width. The grader measures the widest visual at 2560 × 1440.
+   - **Proposed fix:** step 4 now lets a visual with a caller-named design size grow to it. Still open: the grader measures the widest visual at 2560 × 1440.
 
 5. **Collapsing the navigation left a dead column, and a laptop had no room for the rail.** Han: on a laptop, toggling the navigation out "left a whitespace column of ca. 100px". A laptop should still leave over about 1000 px for the content, so the sticky decision and feedback rail fits on its right.
    - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`. At 1440 × 900 with the navigation collapsed, items start at x = 120, leaving a 120 px empty column. At that width the Option card spans the main column (1096 px) instead of sitting in a rail beside the content.
-   - **Proposed fix:** step 4 says a collapsed navigation gives back all of its width, with only the page gutter left. At laptop width (1440 px) the content keeps at least 1000 px with the sticky rail beside it. The grader checks both at 1440 × 900 with the navigation collapsed.
-
-6. **No quick way to the top or bottom of a long page.** Han asked for a scroll-to-top and scroll-to-bottom button floating at the bottom right, for example one circle split into a top half and a bottom half.
-   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: 28 items and 125 text fields on one long page, with no control that jumps to the top or the bottom.
-   - **Proposed fix:** step 4 adds a floating button at the bottom right, one circle split into "to top" and "to bottom", each half with its own accessible name. Under `prefers-reduced-motion: reduce` it jumps without smooth scrolling.
-
-7. **No place for feedback on the page as a whole.** Han: "we need a general feedback text area."
-   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: all 125 text fields belong to an item or an Option. None takes a comment on the page as a whole.
-   - **Proposed fix:** `references/feedback-contract.md` adds one page-level comment field beside the Next action, carried in the reply's `json` block as a top-level `comment`, and cleared by Reset all.
-
-8. **Rendering could not be switched between devices.** Han, as a wish: "ideally there is a sticky top toolbar that can let the user configure the rendering like desktop, laptop, tablet, mobile, vertical shorts."
-   - **Evidence:** session `131efde1-89ad-4ae0-addb-29ed117700b3`, 2026-11-13, a `/new-episode` Spec, `docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html`: preview controls, where present, sit inside single items. No page-wide control renders every preview at another device size.
-   - **Proposed fix:** step 4 adds a sticky top toolbar whose render presets, the caller names, apply to every preview on the page at once. The skill stays free of domain knowledge: `/new-episode`'s Spec designer supplies the Episode's presets, desktop, laptop, tablet, mobile and vertical Shorts (1080 × 1920).
+   - **Proposed fix:** step 4 now has a collapsed navigation give back its width and keeps 1000 px of content beside the rail at 1440 px. Still open: the grader checks both at 1440 × 900 with the navigation collapsed.
