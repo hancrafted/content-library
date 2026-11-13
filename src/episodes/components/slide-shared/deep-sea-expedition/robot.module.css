@@ -1,0 +1,206 @@
+/*
+ * The diving robot's facet tones and its motions. Every tone derives from a global token through color-mix: the hull
+ * from `info` (the robot is the AI by its role in the story, never by the `machine` or `ai` meaning colours), the lamp
+ * and beam from `bulb`, lights and darks from `on-brand-accent` and `overlay`. Dark mode remixes them.
+ *
+ * Motion plays once under the Slide mount's `[data-zone='active']`, with `both` fill. The base rules are the end
+ * state, so reduced motion simply never starts an animation. Moving across the Scene is `Travel`'s job, not this.
+ */
+
+.figure {
+  --robot-spark: var(--on-brand-accent);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, var(--on-brand-accent));
+  --robot-lit: color-mix(in oklab, var(--info) 75%, var(--on-brand-accent));
+  --robot-mid: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 72%, var(--overlay));
+  --robot-dark: color-mix(in oklab, var(--info) 38%, var(--overlay));
+  --robot-glass: color-mix(in oklab, var(--info) 50%, var(--overlay));
+  --robot-glass-glint: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
+  --robot-lens: var(--bulb);
+  --robot-beam: color-mix(in oklab, var(--bulb) 38%, transparent);
+  --robot-beam-core: color-mix(in oklab, var(--bulb) 52%, transparent);
+}
+
+:global(.dark) .figure {
+  --robot-glint: color-mix(in oklab, var(--info) 62%, var(--on-brand-accent));
+  --robot-lit: color-mix(in oklab, var(--info) 86%, var(--on-brand-accent));
+  --robot-shade: color-mix(in oklab, var(--info) 62%, var(--overlay));
+  --robot-dark: color-mix(in oklab, var(--info) 30%, var(--overlay));
+  --robot-glass: color-mix(in oklab, var(--info) 38%, var(--overlay));
+  --robot-glass-glint: color-mix(in oklab, var(--info) 75%, var(--on-brand-accent));
+  --robot-beam: color-mix(in oklab, var(--bulb) 22%, transparent);
+  --robot-beam-core: color-mix(in oklab, var(--bulb) 34%, transparent);
+}
+
+/* A hairline in the facet's own colour closes the seams between neighbouring facets. */
+.facet {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.spark {
+  fill: var(--robot-spark);
+  stroke: var(--robot-spark);
+}
+
+.glint {
+  fill: var(--robot-glint);
+  stroke: var(--robot-glint);
+}
+
+.lit {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.mid {
+  fill: var(--robot-mid);
+  stroke: var(--robot-mid);
+}
+
+.shade {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.dark {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.glass {
+  fill: var(--robot-glass);
+  stroke: var(--robot-glass);
+}
+
+.glassGlint {
+  fill: var(--robot-glass-glint);
+  stroke: var(--robot-glass-glint);
+}
+
+.lensLit {
+  fill: var(--robot-lens);
+  stroke: var(--robot-lens);
+}
+
+.lensOff {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.beamCone {
+  fill: var(--robot-beam);
+}
+
+.beamCore {
+  fill: var(--robot-beam-core);
+}
+
+/* The beam turns about the lamp: its group's origin is the lens. */
+.beam {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* The emote pops in after the robot's own motion; Emote reads this delay. */
+.emote {
+  --emote-delay: 0ms;
+}
+
+.emote[data-after='beam-on'] {
+  --emote-delay: 900ms;
+}
+
+.emote[data-after='scan'] {
+  --emote-delay: 2400ms;
+}
+
+.emote[data-after='dive'] {
+  --emote-delay: 1400ms;
+}
+
+.emote[data-after='surface'] {
+  --emote-delay: 1600ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .beamOn {
+    animation: robot-beam-on 900ms ease-out both;
+  }
+
+  :global([data-zone='active']) .scan {
+    animation: robot-scan 2400ms ease-in-out both;
+  }
+
+  :global([data-zone='active']) .dive {
+    animation: robot-dive 1400ms ease-out both;
+  }
+
+  :global([data-zone='active']) .surface {
+    animation: robot-surface 1600ms ease-out both;
+  }
+}
+
+@keyframes robot-beam-on {
+  0% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0.6;
+  }
+
+  40% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes robot-scan {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  35% {
+    transform: rotate(-16deg);
+  }
+
+  75% {
+    transform: rotate(12deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes robot-dive {
+  0% {
+    transform: translateY(-16px);
+  }
+
+  60% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes robot-surface {
+  0% {
+    transform: translateY(18px);
+  }
+
+  65% {
+    transform: translateY(-3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

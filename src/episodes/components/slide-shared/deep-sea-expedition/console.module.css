@@ -1,0 +1,92 @@
+/*
+ * The control-room console's facet tones, light from the upper left. No raw colour lives outside a Slide folder
+ * (FE-011), so every tone is mixed from global tokens that carry no meaning: `--on-brand-accent` as white and
+ * `--overlay` as black (both fixed across themes), `--info` for the blue machinery and the screen glow, `--bulb` to warm
+ * the mugs, `--brand-accent` for the coffee. Dark mode only retunes the mixes. `--machine` stays the robot's meaning.
+ */
+
+.console {
+  --console-machine-glint: color-mix(in oklab, var(--info) 45%, var(--on-brand-accent));
+  --console-machine-lit: color-mix(in oklab, var(--info) 78%, var(--on-brand-accent));
+  --console-machine: color-mix(in oklab, var(--info) 84%, var(--on-brand-accent));
+  --console-machine-shade: color-mix(in oklab, var(--info) 68%, var(--overlay));
+  --console-machine-dark: color-mix(
+    in oklab,
+    var(--info) 8%,
+    color-mix(in oklab, var(--on-brand-accent) 26%, var(--overlay))
+  );
+  --console-screen: color-mix(
+    in oklab,
+    var(--info) 30%,
+    color-mix(in oklab, var(--on-brand-accent) 17%, var(--overlay))
+  );
+  --console-screen-glow: color-mix(in oklab, var(--info) 40%, var(--on-brand-accent));
+  --console-house-lit: color-mix(in oklab, var(--bulb) 3%, var(--on-brand-accent));
+  --console-house: color-mix(in oklab, var(--bulb) 6%, color-mix(in oklab, var(--on-brand-accent) 92%, var(--overlay)));
+  --console-coffee: color-mix(in oklab, var(--brand-accent) 45%, var(--overlay));
+}
+
+:global(.dark) .console {
+  --console-machine-glint: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
+  --console-machine-lit: color-mix(in oklab, var(--info) 88%, var(--on-brand-accent));
+  --console-machine: color-mix(in oklab, var(--info) 92%, var(--overlay));
+  --console-machine-shade: color-mix(in oklab, var(--info) 62%, var(--overlay));
+  --console-machine-dark: color-mix(
+    in oklab,
+    var(--info) 8%,
+    color-mix(in oklab, var(--on-brand-accent) 20%, var(--overlay))
+  );
+  --console-screen: color-mix(
+    in oklab,
+    var(--info) 20%,
+    color-mix(in oklab, var(--on-brand-accent) 3%, var(--overlay))
+  );
+  --console-screen-glow: color-mix(in oklab, var(--info) 70%, var(--on-brand-accent));
+  --console-house-lit: color-mix(
+    in oklab,
+    var(--bulb) 3%,
+    color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay))
+  );
+  --console-house: color-mix(in oklab, var(--bulb) 5%, color-mix(in oklab, var(--on-brand-accent) 78%, var(--overlay)));
+  --console-coffee: color-mix(in oklab, var(--brand-accent) 42%, var(--overlay));
+}
+
+.machine-glint {
+  fill: var(--console-machine-glint);
+}
+
+.machine-lit {
+  fill: var(--console-machine-lit);
+}
+
+.machine {
+  fill: var(--console-machine);
+}
+
+.machine-shade {
+  fill: var(--console-machine-shade);
+}
+
+.machine-dark {
+  fill: var(--console-machine-dark);
+}
+
+.screen {
+  fill: var(--console-screen);
+}
+
+.screen-glow {
+  fill: var(--console-screen-glow);
+}
+
+.house-lit {
+  fill: var(--console-house-lit);
+}
+
+.house {
+  fill: var(--console-house);
+}
+
+.coffee {
+  fill: var(--console-coffee);
+}
