@@ -7,6 +7,7 @@
  * `startTour`, `tourGo`, `tourArrived`, `tourReplay` and `fmtTourClock`. No DOM: the hook drives it.
  */
 import { createSampler, stepsTo } from './beat-means.pure.ts';
+import { beatsOf } from './factory-beats.pure.ts';
 import { DAYS, DTW } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { settingsAfter, stepsOf, type Check } from './factory-scenario.pure.ts';
@@ -36,8 +37,6 @@ export interface TourRun {
   readonly tour: Tour;
 }
 
-const keysOf = (p: Preset): string[] => [...new Set(stepsOf(p).flatMap((st) => Object.keys(st.expect ?? {})))];
-
 const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
 
 /**
@@ -45,14 +44,9 @@ const stepOf = (t: Tour) => stepsOf(t.preset)[t.i];
  * the mean over its last WINDOW weeks (grill 11 Q224).
  */
 const aimAtStep = (run: FactoryRun, x: { p: Preset; i: number; t0k: number }) => {
-  const steps = stepsOf(x.p),
-    st = steps[x.i] as (typeof steps)[number];
-  run.set(settingsAfter(st.set, run.topology.B, run.settings));
-  const end = x.t0k + stepsTo(st.run);
-  run.aim({
-    at: end,
-    sampling: createSampler({ start: x.t0k + stepsTo(steps[x.i - 1]?.run ?? 0), end, keys: keysOf(x.p) }),
-  });
+  const b = beatsOf(x.p, x.t0k)[x.i] as ReturnType<typeof beatsOf>[number];
+  run.set(settingsAfter(b.set, run.topology.B, run.settings));
+  run.aim({ at: b.end, sampling: createSampler(b) });
 };
 
 /** The step's reading: the mean of what the run read on its sample steps. */

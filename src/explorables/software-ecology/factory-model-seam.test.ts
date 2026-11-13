@@ -39,6 +39,7 @@ const MODEL = new Set([
   'dashboard-readouts.pure.ts',
   'factory-dials.pure.ts',
   'start-settings.pure.ts',
+  'factory-beats.pure.ts',
   'factory.types.ts',
   'factory-random.pure.ts',
 ]);
