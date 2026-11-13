@@ -48,13 +48,13 @@ _Done when_ the page has a mode and every item a depth and rung, each confirmed 
 
 Order items by consequence, most consequential first. For each item:
 
-1. **Decision.** State it in one sentence, then what changes for the reader: under each Option in `decide`, overall in `explain`.
-2. **Evidence.** Assemble the bundle: examples, visuals, context and references. Label every statement as evidence (with its source), agent proposal or unknown. A research question is not a finding. Explain technical meaning in plain words and keep the precise detail beside it.
+1. **Decision.** State it in one sentence at the reader's **altitude**, the level they judge it at, then what changes for them: under each Option in `decide`, overall in `explain`. A decision made in code but judged by its effect names, per Option, the principle or pattern it applies (decoupling, high cohesion, a SOLID principle, a design pattern), its benefit, its cost and its impact; symbols and files sit in the detailed layer.
+2. **Evidence.** Assemble the bundle: examples, visuals, context and references. Label every statement as evidence (with its source), agent proposal or unknown. A research question is not a finding. Explain technical meaning in plain words and keep the precise detail in the detailed layer.
 3. **Rendering.** Choose it from the table, at a rung of the fidelity ladder.
 
 | Decision                 | Rendering that helps a person judge it                                                                                      |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| Software architecture    | Before/after dependency, sequence, UML or ER diagrams; the responsibilities that move and the files affected.               |
+| Software architecture    | Before/after dependency, sequence, UML or ER diagrams of the structure the principle changes; files affected in the detail. |
 | Information architecture | Before/after folder trees, naming examples, navigation maps or content relationships.                                       |
 | UI or visual design      | Real-content mocks at useful widths, compared at a scale where hierarchy and density can be judged.                         |
 | UX or animation          | Live states and transitions; pointer and keyboard controls, replay, and reduced-motion behaviour where relevant.            |
@@ -71,6 +71,8 @@ Show before and after for every change, fixes included. The before comes from ev
 ### Depth
 
 Each item has a depth, set per item like its rung. The simple view alone clears the confidence bar; the detailed layer adds what a reader needs to verify the item, never the decision itself.
+
+The simple view is **scannable**: the decision in one sentence, the visual, and per Option at most three short lines (what it does, its benefit, its cost), plus the reason on the recommended one. Evidence, door and effort show as short labels; each evidence label names its source, and the detailed layer quotes it. Everything longer belongs in the detailed layer, which **teaches**: for a principle, what it means, where it comes from and why it helps here, then the precise detail and references.
 
 | Depth      | The item shows                                                                                      | Choose it when                                                               |
 | ---------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -103,7 +105,7 @@ _Done when_ every item clears the bar for its mode.
 
 A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A `<nav>` links to every item and stays visible while the page scrolls. Build for desktop (1440 px) and landscape tablet (1024 px): the page never scrolls sideways, and no box clips or spills its text.
 
-While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the visual centred, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. Add reviewer tools, such as preview width, theme, state or motion controls, where an item needs them.
+While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the item's decision and visual sticky in the main column, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. Add reviewer tools, such as preview width, theme, state or motion controls, where an item needs them.
 
 Follow the caller's design guidance; without it, use a restrained, readable style on design tokens with light and dark themes.
 
@@ -118,6 +120,7 @@ Both modes carry one reflection block of open questions through lenses the items
 **`decide`**
 
 - Each item takes the response that fits it: boolean, single choice or multiple choice, behaving as the [feedback contract](references/feedback-contract.md#responses-resets-and-drafts) says.
+- The pick is the item's most visible control, found without reading: one large, labelled target per Option, such as a segmented control at the item's head or a Pick button on each Option card, with an unmistakable picked state.
 - Every item with Options marks exactly one recommended, with its reason. The reviewer still makes the pick.
 - Each item shows its door (one-way or two-way) and effort.
 - Comments sit on each item and on each Option, unselected Options included.
