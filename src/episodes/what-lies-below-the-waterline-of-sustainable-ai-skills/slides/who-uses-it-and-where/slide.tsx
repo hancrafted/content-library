@@ -124,7 +124,9 @@ export const whoUsesItAndWhere = slide({
       pg: (
         <>
           <PlanLead className={styles.art} />
-          <p className="absolute top-[22%] left-[69%] text-caption font-semibold text-card-foreground">{t('plan')}</p>
+          <p className={cn(styles.art, styles.paperInk, 'absolute top-[22%] left-[69%] text-caption font-semibold')}>
+            {t('plan')}
+          </p>
         </>
       ),
       sg: (
