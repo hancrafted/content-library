@@ -27,6 +27,8 @@ export const at = (x: number, y: number) => ({
 export const PROPPED = { x: 610, y: 196, width: 160, height: 100 } as const;
 /** The console where the Spec's stands, desk top to floor. */
 const CONSOLE = { x: 560, y: 297, width: 173, scale: 1.5 } as const;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 16;
 
 /** One row of the drawing: its tone, its outline, and the motion hook it carries, if any. */
 type Facet = readonly string[];
@@ -55,7 +57,7 @@ function PilotAtConsole() {
   return (
     <g transform={`translate(${CONSOLE.x} ${CONSOLE.y}) scale(${CONSOLE.scale})`}>
       <Console width={CONSOLE.width} />
-      <g transform={`translate(${seat.x} ${seat.y})`}>
+      <g transform={`translate(${seat.x + PILOT_REACH} ${seat.y})`}>
         <Character preset={pilot} pose="sit" />
       </g>
     </g>

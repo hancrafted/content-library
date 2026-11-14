@@ -177,8 +177,9 @@ export const threeLevelsOfLoading = slide({
               <Badge n={2} x={PROPPED.x - 4} y={PROPPED.y - 4} />
               <Badge n={3} x={850} y={216} />
               <div
-                style={{ ...at(PROPPED.x, PROPPED.y), width: `${(PROPPED.width / SCENE_WIDTH) * 100}%` }}
-                className="absolute hidden flex-col gap-0.5 px-2 pt-3 text-caption leading-tight whitespace-nowrap text-foreground @3xl:flex"
+                data-propped-words
+                style={{ ...at(PROPPED.x, PROPPED.y), minWidth: `${(PROPPED.width / SCENE_WIDTH) * 100}%` }}
+                className="absolute hidden w-max flex-col gap-0.5 rounded-sm bg-card px-2 pt-3 pb-2 text-caption leading-tight whitespace-nowrap text-card-foreground @3xl:flex"
               >
                 <span className="font-semibold">{t('art.cardTitle')}</span>
                 <span>{t('art.cardSteps.0')}</span>
