@@ -99,10 +99,12 @@ const MARKS: Record<Mood, () => React.ReactElement> = {
 };
 
 /**
- * The speech bubble's box, drawn at half the figure's scale so caption-role text keeps a readable size beside a figure
- * that a Scene scales up (the Spec draws figures at 1.4 to 2.3): about 110 by 90 figure units, the text bottom-aligned.
+ * The speech bubble's box, in figure units: caption-role text drawn one figure unit per pixel, so it reads at Slide
+ * size where a Scene draws its figures at room scale (orchestrator decision 10; at half scale it read at about 6 px).
+ * 220 by 180 units, the text bottom-aligned, wrapping at about 28 characters. A close-up Scene, whose figures are drawn
+ * several times larger, turns the words down by setting `--says-scale` (default 1) in its own CSS module.
  */
-const BUBBLE = { width: 220, height: 180, scale: 0.5 } as const;
+const BUBBLE = { width: 220, height: 180 } as const;
 
 /**
  * Where the bubble sits, facing right: beside the head, or past a thought cloud with its tail from the head's front, so
@@ -151,8 +153,10 @@ function SpeechBubble({ words, mood, facing }: BubbleProps) {
   const [near, far, point] = [base[0] * side, base[1] * side, `${tip[0] * side},${tip[1]}`];
   return (
     <g data-says-bubble data-motion="emote" className={styles.pop}>
-      <g transform={`translate(${x * side} ${bottom}) scale(${BUBBLE.scale})`}>
-        <Words words={words} side={side} />
+      <g transform={`translate(${x * side} ${bottom})`}>
+        <g className={styles.saysScale}>
+          <Words words={words} side={side} />
+        </g>
       </g>
       <polygon points={`${point} ${near},${bottom - 1.5} ${far},${bottom - 1.5}`} className="fill-card" />
       <polyline

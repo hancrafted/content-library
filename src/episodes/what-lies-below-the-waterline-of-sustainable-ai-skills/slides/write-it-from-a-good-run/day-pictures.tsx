@@ -10,6 +10,7 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { ControlRoom, FLOOR, PinnedCard, ROOM_HEIGHT, ROOM_WIDTH, type RoomTime } from './control-room';
+import styles from './slide.module.css';
 
 const CONSOLE = { x: 200, width: 92 } as const;
 const CAPTAIN_X = 50;
@@ -77,7 +78,7 @@ export function RoomPicture({ panel, label, greeting }: RoomPictureProps) {
       role="img"
       aria-label={label}
       data-room-panel={panel}
-      className="block h-auto w-full"
+      className={`block h-auto w-full ${styles.roomPicture}`}
     >
       <ControlRoom time={time}>
         {card && <PinnedCard x={96} y={20} />}

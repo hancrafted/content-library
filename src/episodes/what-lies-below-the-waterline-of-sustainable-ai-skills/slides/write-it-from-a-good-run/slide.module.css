@@ -56,3 +56,8 @@
     scale: 0 1;
   }
 }
+
+/* The next morning's greeting rises past the pilot's empty thought, near the room's left wall: turned down to fit it. */
+.roomPicture {
+  --says-scale: 0.9;
+}

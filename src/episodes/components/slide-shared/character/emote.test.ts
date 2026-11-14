@@ -21,6 +21,7 @@ const emote = (props: EmoteProps) => {
     bubbleCount: $('[data-says]').length,
     lineBreaks: $('[data-says] br').length,
     bubbleAt: $('[data-says-bubble] > g').attr('transform'),
+    bubbleScaled: $('[data-says-bubble] > g > g').attr('class'),
     motions: $('[data-motion]')
       .toArray()
       .map((part) => $(part).attr('data-motion')),
@@ -73,11 +74,21 @@ describe('success cases', () => {
   it('keeps a facing-left bubble off the back of the head: it rises on the left', () => {
     // ARRANGE
     const props = { says: 'Same as yesterday?', at: { x: 0, y: 0 }, facing: 'left' } as const;
-    const expected = 'translate(-10 -14) scale(0.5)';
+    const expected = 'translate(-10 -14)';
     // ACT
     const { bubbleAt } = emote(props);
     // ASSERT
     expect(bubbleAt).toBe(expected);
+  });
+
+  it('draws the words at the figure scale a Scene can turn down with --says-scale, so a close-up keeps its bubble', () => {
+    // ARRANGE
+    const props = { says: 'Nice to meet you.', at: { x: 0, y: 0 } };
+    const expected = 'saysScale';
+    // ACT
+    const { bubbleScaled } = emote(props);
+    // ASSERT
+    expect(bubbleScaled).toContain(expected);
   });
 });
 
@@ -96,7 +107,7 @@ describe('edge cases', () => {
   it('shows a thought and words together, the bubble past the thought cloud so they never overlap', () => {
     // ARRANGE
     const props = { mood: 'thinking', says: 'Hm.', at: { x: 0, y: 0 } } as const;
-    const expected = { marks: ['thought-dots'], bubbleCount: 1, bubbleAt: 'translate(34 -6) scale(0.5)' };
+    const expected = { marks: ['thought-dots'], bubbleCount: 1, bubbleAt: 'translate(34 -6)' };
     // ACT
     const { marks, bubbleCount, bubbleAt } = emote(props);
     // ASSERT

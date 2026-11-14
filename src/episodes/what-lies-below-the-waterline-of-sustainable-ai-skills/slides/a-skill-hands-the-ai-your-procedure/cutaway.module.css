@@ -5,6 +5,8 @@
  */
 
 .cutaway {
+  /* The captain's line rises near the Scene's top edge: the shared bubble is turned down a little to stay inside. */
+  --says-scale: 0.85;
   --room: color-mix(in oklab, var(--muted) 82%, var(--zone-surface));
   --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
   --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));

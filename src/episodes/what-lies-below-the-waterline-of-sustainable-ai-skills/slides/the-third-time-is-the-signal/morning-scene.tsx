@@ -7,6 +7,7 @@ import {
   consoleLayout,
 } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { ControlRoom, FLOOR, ROOM_HEIGHT, ROOM_WIDTH } from './control-room';
+import styles from './slide.module.css';
 
 export type Day = 1 | 2 | 3;
 
@@ -41,7 +42,7 @@ export function MorningScene({ day, label, says }: MorningSceneProps) {
       role="img"
       aria-label={label}
       data-morning={day}
-      className="block h-auto w-full"
+      className={`block h-auto w-full ${styles.morning}`}
     >
       <ControlRoom>
         <Console width={CONSOLE.width} mugs={day} transform={`translate(${CONSOLE.x} ${deskTop})`} />
