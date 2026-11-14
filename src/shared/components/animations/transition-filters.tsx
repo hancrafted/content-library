@@ -120,23 +120,25 @@ function WaveFilter({ id }: { id: string }) {
 }
 
 /**
- * Rising bubbles: a fine, round noise pushes the edge about, a blur and a steep alpha threshold pinch it into round
- * blobs, so the incoming zone climbs as a froth that leaves bubbles above its edge (the Iceberg style's descent).
+ * The `bubbles` water line: a long, low swell only, so the incoming surface rises as calm water rather than a wavy
+ * ink edge. The bubbles themselves are separate round shapes (`BubbleRise`), rising above this line.
  */
 function BubblesFilter({ id }: { id: string }) {
   return (
     <filter id={id} x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.03" numOctaves={2} seed={17} result="noise" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.002" numOctaves={1} seed={17} result="noise" />
       <feDisplacementMap
         in="SourceGraphic"
         in2="noise"
-        scale={190}
+        scale={28}
         xChannelSelector="R"
         yChannelSelector="G"
         result="displaced"
       />
-      <feGaussianBlur in="displaced" stdDeviation={9} result="blurred" />
-      <feColorMatrix in="blurred" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+      <feGaussianBlur in="displaced" stdDeviation={0.8} result="presmooth" />
+      <feComponentTransfer in="presmooth">
+        <feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1" />
+      </feComponentTransfer>
     </filter>
   );
 }

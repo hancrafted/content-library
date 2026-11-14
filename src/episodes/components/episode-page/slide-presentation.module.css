@@ -12,6 +12,7 @@
   --slide-transition-bleed: initial;
   --slide-transition-height: 100svh;
   --slide-transition-opacity: 1;
+  --slide-transition-bubble: initial;
 }
 
 .edge {

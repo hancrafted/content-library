@@ -17,7 +17,11 @@ export type ZoneStyle = Readonly<Record<`--${string}`, string>> & { readonly '--
 /** What a Slide passes as its `presentation` (design-ADR 0022's optional configuration), built from its zone alone. */
 export interface ZonePresentation {
   readonly style: ZoneStyle;
-  readonly enter?: { readonly effect: 'bubbles' };
+  /** The descent's bubbles, tinted by the zone the section slide descends into: depth marked in scenery, not surface. */
+  readonly enter?: {
+    readonly effect: 'bubbles';
+    readonly style: Readonly<Record<'--slide-transition-bubble', string>>;
+  };
   readonly rear: ReactNode;
   /** The rail reads on phones too: there it is the only depth mark (design guide, Iceberg). */
   readonly rearMobile: true;
@@ -54,6 +58,11 @@ export function zonePresentation({ sections, section, kind }: ZonePresentationIn
   const style = zoneSurface(zone);
   const rear = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
   return kind === 'section'
-    ? { style, enter: { effect: 'bubbles' }, rear, rearMobile: true }
+    ? {
+        style,
+        enter: { effect: 'bubbles', style: { '--slide-transition-bubble': zoneToken(zone) } },
+        rear,
+        rearMobile: true,
+      }
     : { style, rear, rearMobile: true };
 }

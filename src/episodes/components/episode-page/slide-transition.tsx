@@ -1,3 +1,4 @@
+import { BubbleRise } from '@/shared/components/animations/bubble-rise';
 import { InkCanvas } from '@/shared/components/animations/ink-canvas';
 import { InkFilterDefinition } from '@/shared/components/animations/transition-filters';
 import { INK_PROFILES } from '@/shared/lib/ink-transition.pure';
@@ -31,6 +32,7 @@ export function SlideTransition({ edge }: { edge: ResolvedSlideTransition }) {
             bleed={`var(--slide-transition-bleed, ${INK_PROFILES[declaration.effect].bleed}px)`}
             controlled
           />
+          {declaration.effect === 'bubbles' && <BubbleRise />}
         </div>
       </div>
     </SlideIdentity>

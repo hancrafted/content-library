@@ -56,10 +56,10 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('descends into a section slide through bubbles, its rail kept to phones where the whole ruler is hidden', () => {
+  it('descends into a section slide through bubbles tinted by its zone, its rail kept to phones where the whole ruler is hidden', () => {
     // ARRANGE
     const expected = {
-      enter: { effect: 'bubbles' },
+      enter: { effect: 'bubbles', style: { '--slide-transition-bubble': 'var(--zone-sunlit)' } },
       surface: undefined,
       rail: { rails: 1, phoneOnly: '', lit: ['2'] },
     };
