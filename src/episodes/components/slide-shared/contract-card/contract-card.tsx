@@ -10,7 +10,9 @@ import type { ReactNode } from 'react';
  * Two variants, told apart by their props:
  * - the terms variant (`terms`, `receives`, `delivers`, `checkedBy`): `size: 'full'` (the default) draws a `bg-primary`
  *   header strip with an optional `tag` and the `how` below the lines; `size: 'compact'` draws a primary-outlined card
- *   small enough to pin to a seam on a board, with neither.
+ *   small enough to pin to a seam on a board, with neither; `size: 'note'` draws the smallest card, set under a board
+ *   note, its terms inline, an optional label and `how`, and filled with `primary` where the Scene leads the eye.
+ *   A card that names no `receives` leaves its Receives line out.
  * - the check variant (`checks`, `marks`): the contract read back against a result, each line ticked when it passed
  *   and crossed when it failed.
  */
@@ -27,19 +29,32 @@ interface ContractCardBase {
   readonly heading: string;
 }
 
-export interface ContractTermsProps extends ContractCardBase {
+/** The lines every terms card agrees to. */
+interface ContractLines {
   readonly terms: ContractTerms;
-  /** What the task receives; a `<b>` run sets off a definition. */
-  readonly receives: ReactNode;
+  /** What the task receives; a `<b>` run sets off a definition. Without it the card has no Receives line. */
+  readonly receives?: ReactNode;
   readonly delivers: ReactNode;
   readonly checkedBy: ReactNode;
-  readonly size?: 'full' | 'compact';
-  /** The full card's label at the strip's right end, such as "The seam". */
-  readonly tag?: string;
-  /** The full card's how, left to the task, below the lines behind a dashed rule. */
+  /** The how, left to the task, below the lines. */
   readonly how?: ReactNode;
   /** A node set beside a term, such as a Context marker. */
   readonly termMarkers?: Partial<Record<keyof ContractTerms, ReactNode>>;
+}
+
+export interface ContractTermsProps extends ContractCardBase, ContractLines {
+  readonly size?: 'full' | 'compact';
+  /** The full card's label at the strip's right end, such as "The seam". */
+  readonly tag?: string;
+}
+
+/** The note card: the smallest terms card, set under a board note. */
+export interface ContractNoteProps extends ContractLines {
+  readonly size: 'note';
+  /** A label over the lines, such as the seam it sits on: "Plan → Requirements". */
+  readonly heading?: string;
+  /** The card the Scene leads the eye to: the Slide's one `primary` fill. */
+  readonly filled?: boolean;
 }
 
 /** One line of a contract read back against a result. */
@@ -54,15 +69,18 @@ export interface ContractChecksProps extends ContractCardBase {
   readonly marks: { readonly passed: string; readonly failed: string };
 }
 
-export type ContractCardProps = ContractTermsProps | ContractChecksProps;
+export type ContractCardProps = ContractTermsProps | ContractNoteProps | ContractChecksProps;
 
 const TERM_KEYS = ['receives', 'delivers', 'checkedBy'] as const;
+
+/** The terms a card draws: each one it was given a line for. */
+const keysOf = (lines: ContractLines) => TERM_KEYS.filter((key) => lines[key] !== undefined);
 
 /** The full card's three rows, a term beside what the task agrees to under it. */
 function FullTerms(props: ContractTermsProps) {
   return (
     <dl className="flex flex-col divide-y divide-border px-5">
-      {TERM_KEYS.map((key) => (
+      {keysOf(props).map((key) => (
         <div key={key} className="grid grid-cols-4 gap-4 py-3">
           <dt
             data-contract-term
@@ -84,7 +102,7 @@ function FullTerms(props: ContractTermsProps) {
 function CompactTerms(props: ContractTermsProps) {
   return (
     <dl className="grid grid-cols-3 gap-x-3 gap-y-1.5 text-caption">
-      {TERM_KEYS.map((key) => (
+      {keysOf(props).map((key) => (
         <div key={key} className="contents">
           <dt data-contract-term className="font-semibold">
             {props.terms[key]}
@@ -152,6 +170,42 @@ function FullCard(props: ContractTermsProps) {
   );
 }
 
+/** The note card's look: `primary` filled where the Scene leads the eye, else a plain outlined card. */
+const noteLookOf = (filled: boolean) =>
+  filled
+    ? { card: 'bg-primary text-primary-foreground shadow-md', muted: 'text-primary-foreground' }
+    : { card: 'border border-border bg-card', muted: 'text-muted-foreground' };
+
+/** The note card: an optional label, each term inline before its line, the checked-by line and the how muted. */
+function NoteCard(props: ContractNoteProps) {
+  const look = noteLookOf(props.filled === true);
+  return (
+    <div data-contract className={cn('flex flex-col gap-0.5 rounded-md p-2 text-caption', look.card)}>
+      {props.heading !== undefined && (
+        <p data-contract-label className="font-semibold">
+          {props.heading}
+        </p>
+      )}
+      <dl className="flex flex-col gap-0.5">
+        {keysOf(props).map((key) => (
+          <div key={key} className={cn(key === 'checkedBy' && look.muted)}>
+            <dt data-contract-term className="inline font-semibold">
+              {props.terms[key]}
+              {props.termMarkers?.[key]}
+            </dt>{' '}
+            <dd className="inline">{props[key]}</dd>
+          </div>
+        ))}
+      </dl>
+      {props.how !== undefined && (
+        <p data-contract-how className={look.muted}>
+          {props.how}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function ChecksCard({ heading, checks, marks }: ContractChecksProps) {
   return (
     <div data-contract className="flex flex-1 flex-col overflow-hidden rounded-lg bg-card shadow-md">
@@ -181,5 +235,6 @@ function ChecksCard({ heading, checks, marks }: ContractChecksProps) {
  */
 export function ContractCard(props: ContractCardProps) {
   if ('checks' in props) return <ChecksCard {...props} />;
+  if (props.size === 'note') return <NoteCard {...props} />;
   return props.size === 'compact' ? <CompactCard {...props} /> : <FullCard {...props} />;
 }

@@ -1,0 +1,116 @@
+{
+  "title": "Designed AI first",
+  "caption": "Start from the goal’s outcome, put a <b>contract on every milestone</b>, and cut the seams that produce nothing anyone can review.",
+  "before": {
+    "label": "Before · the committee’s draft, 16 steps",
+    "columns": {
+      "venue": "Venue scouting · 14",
+      "catering": "Catering · 1",
+      "travel": "Travel · 1"
+    },
+    "note": "shaped by the org chart"
+  },
+  "after": {
+    "label": "After · redrawn from the goal: 5 notes, a contract on every arrow"
+  },
+  "terms": {
+    "receives": "Receives",
+    "delivers": "Delivers",
+    "checkedBy": "Checked:"
+  },
+  "doers": {
+    "agent": "agent",
+    "person": "person"
+  },
+  "board": {
+    "travel": {
+      "text": "Travel + guest info, merged",
+      "delivers": "route, times, accessible bus, warm clothes for 6 °C",
+      "checkedBy": "info against the venue"
+    },
+    "venue": {
+      "text": "Venue: alpine hut, step-free",
+      "delivers": "address, step-free entry",
+      "checkedBy": "<marker>a person, at a checkpoint</marker>"
+    },
+    "food": {
+      "text": "Food & drinks for 200",
+      "receives": "31 vegetarian: no meat, fish or eggs",
+      "delivers": "dinner for 200 at 19:00",
+      "checkedBy": "the menu against the definition",
+      "how": "How: the kitchen’s choice"
+    },
+    "activities": {
+      "text": "Activities everyone can join",
+      "delivers": "a programme for all 200, step-free",
+      "checkedBy": "against the goal"
+    },
+    "shuttle": {
+      "text": "Shuttle back after the open bar",
+      "delivers": "everyone home, nobody drives",
+      "checkedBy": "shuttle list against guests"
+    }
+  },
+  "tips": {
+    "outcome": "<b>Start at the outcome.</b> Roles say who is free; the outcome says what is needed.",
+    "contract": "<b>A contract on every milestone</b>, <marker>the inside left free</marker>.",
+    "seams": "<b>Cut seams.</b> <marker>Merge steps that produce nothing reviewable</marker>."
+  },
+  "payoff": "You didn’t need more meetings. You needed contracts.",
+  "notes": {
+    "checkpoints-in-the-path": {
+      "header": "Checkpoints in the path",
+      "description": "Anthropic's agent guidance has agents pause for human feedback at checkpoints or when encountering blockers [1].",
+      "sources": {
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        }
+      }
+    },
+    "contract-first-decomposition": {
+      "header": "Contract-first decomposition",
+      "description": "a delegation framework makes delegation contingent on the outcome having precise verification, and splits a subtask further when its output is too costly or subjective to verify [1].",
+      "sources": {
+        "tomasev-intelligent-delegation": {
+          "title": "Tomašev, Franklin, Osindero (Google DeepMind), Intelligent AI Delegation"
+        }
+      }
+    },
+    "vague-handoffs-duplicate-work": {
+      "header": "Vague handoffs duplicate work",
+      "description": "Anthropic's research system produced duplicated work and gaps until each subagent had an objective, an output format, tool guidance and clear task boundaries [1].",
+      "sources": {
+        "anthropic-multi-agent-research": {
+          "title": "Anthropic, How we built our multi-agent research system"
+        }
+      }
+    }
+  },
+  "goalLabel": "Goal",
+  "goal": "20 June: everyone celebrates together and gets home safely",
+  "outcome": "Outcome: 200 guests from 5 offices, all home safe",
+  "voiceScript": {
+    "segments": {
+      "start-at-the-outcome": {
+        "title": "Start at the outcome",
+        "keywords": "",
+        "script": "Here are three tips for a lean workflow, and the first is to start from the goal and its measurable outcome, not from today's roles. The roles tell you who is available, and the outcome tells you what is needed."
+      },
+      "contract-on-every-milestone": {
+        "title": "Contract on every milestone",
+        "keywords": "",
+        "script": "The second is to put a contract on every milestone and leave the inside of each step free. You decide what must arrive and how it is checked, and the person or the agent decides the rest."
+      },
+      "cut-seams": {
+        "title": "Cut seams",
+        "keywords": "",
+        "script": "The third is to cut seams. Every seam is a place where a gap can hide, so merge the steps that produce nothing anyone can review."
+      },
+      "not-more-meetings": {
+        "title": "Not more meetings",
+        "keywords": "",
+        "script": "Remember the question from the first Slide? One answer was to get them talking, to hold more meetings. You did not need more meetings, you needed contracts."
+      }
+    }
+  }
+}

@@ -112,7 +112,10 @@ function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: C
   );
 }
 
-/** A repeated stage's head: its name, then its BRIEF letters where the Slide draws them, like every other stage. */
+/**
+ * A repeated stage's head: its name, then its BRIEF letters where the Slide draws them, like every other stage, and the
+ * Slide's marker under them.
+ */
 function BranchesHead({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: StageSlot }) {
   return (
     <div data-stage-head="" className="flex min-h-[50px] flex-col gap-1.5 px-3 pt-[13px] pb-2">
@@ -122,6 +125,7 @@ function BranchesHead({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: 
           <MoveCircles moves={stage.moves} label={ctx.words.moveLabel} />
         </div>
       )}
+      {slot.marker !== undefined && <div className="flex flex-wrap items-center gap-x-2 gap-y-1">{slot.marker}</div>}
     </div>
   );
 }

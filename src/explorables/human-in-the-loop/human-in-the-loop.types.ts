@@ -145,6 +145,8 @@ export interface StageSlot {
   readonly popover?: PopoverCopy;
   /** Beside the stage name, e.g. a Context marker. */
   readonly aside?: ReactNode;
+  /** After the stage card's checked mark and gate, or under a repeated stage's name, e.g. a pin the Slide's legend names. */
+  readonly marker?: ReactNode;
   /** The Slide's `target(name)` for a Speaker note aimed at the stage. */
   readonly target?: TargetProps;
   /** The accessible name of the stage's list of jobs, where it differs from `DiagramSlots.jobsLabel`. */
