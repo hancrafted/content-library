@@ -28,9 +28,9 @@ The first call installs `chrome-headless-shell` into the git-ignored `.cache/ins
 
 ## Frame time
 
-Smoothness is judged by frame time, not by eye: `scripts/frame-sampler.js` samples requestAnimationFrame deltas during a Slide transition or an ambient loop and returns `{ frames, slowFrames, slowShare, p95 }`; slow is over 16.7 ms, and the 60 fps target allows at most 5% slow. Measure the built export (`npm run preview`), never `next dev`.
+Smoothness is judged by dropped frames, not by eye: `scripts/frame-sampler.js` samples requestAnimationFrame deltas during a Slide transition or an ambient loop and returns `{ frames, droppedFrames, droppedShare, p95 }`. A frame over 25 ms is dropped; jitter around 16.7 ms is not. The bar: at normal speed at most 5% dropped, at 4× CPU no worse than `main`. Measure the built export (`npm run preview`), never `next dev`.
 
-- From the shell, with the CPU slowed through `Emulation.setCPUThrottlingRate`: `npm run frame-sample -- --url <url> --transition <outgoing Slide id> [--ambient <Slide id>] --cpu 1,4 [--theme dark --width 375 --height 812]`. It drives Playwright's Chromium headless; headless deltas jitter around 16.7 ms, so read `slowShare` beside `frames` and `p95`.
+- From the shell, with the CPU slowed through `Emulation.setCPUThrottlingRate`: `npm run frame-sample -- --url <url> --transition <outgoing Slide id> [--ambient <Slide id>] --cpu 1,4 [--theme dark --width 375 --height 812]`. It drives Playwright's Chromium headless.
 - In the user's Chrome: paste the file's contents with claude-in-chrome's javascript tool, then `await sampleFrames({ transition: '<outgoing Slide id>' })`, or `{ ms: 3000 }` alone for an ambient loop. The tab must be in front: a background tab fires no frame.
 - Compare against `main` in paired runs, back to back: other agents' builds load the machine and move the absolute numbers.
 

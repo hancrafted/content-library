@@ -1,26 +1,26 @@
 // Frame-time sampler: paste this file into a page (claude-in-chrome's javascript tool, or `frame-sample.ts`), then
 // `await sampleFrames({ ... })`. It records requestAnimationFrame deltas while an ambient loop plays, or while it
-// scrolls the page through a Slide transition, and returns { frames, slowFrames, slowShare, p95 }. Plain JavaScript
+// scrolls the page through a Slide transition, and returns { frames, droppedFrames, droppedShare, p95 }. Plain JavaScript
 // with no imports, so it runs pasted as is. See ../SKILL.md, "Frame time".
 
-/** A frame slower than this misses 60 fps. */
-const FRAME_BUDGET_MS = 16.7;
+/** A frame slower than this was dropped: at 60 fps it took two vsyncs or more. Jitter around 16.7 ms is not. */
+const DROPPED_MS = 25;
 
 /**
- * Frame statistics from rAF deltas in milliseconds: how many frames, how many missed the budget, their share
- * (rounded to 0.001) and the 95th-percentile delta (nearest rank, rounded to 0.1 ms).
+ * Frame statistics from rAF deltas in milliseconds: how many frames, how many were dropped (over `threshold`), their
+ * share (rounded to 0.001) and the 95th-percentile delta (nearest rank, rounded to 0.1 ms).
  * @param {readonly number[]} deltas
- * @param {number} [budget]
+ * @param {number} [threshold]
  */
-function frameStats(deltas, budget = FRAME_BUDGET_MS) {
-  if (deltas.length === 0) return { frames: 0, slowFrames: 0, slowShare: 0, p95: 0 };
+function frameStats(deltas, threshold = DROPPED_MS) {
+  if (deltas.length === 0) return { frames: 0, droppedFrames: 0, droppedShare: 0, p95: 0 };
   const sorted = [...deltas].sort((a, b) => a - b);
-  const slowFrames = deltas.filter((delta) => delta > budget).length;
+  const droppedFrames = deltas.filter((delta) => delta > threshold).length;
   const rank = Math.ceil(0.95 * sorted.length) - 1;
   return {
     frames: deltas.length,
-    slowFrames,
-    slowShare: Math.round((slowFrames / deltas.length) * 1000) / 1000,
+    droppedFrames,
+    droppedShare: Math.round((droppedFrames / deltas.length) * 1000) / 1000,
     p95: Math.round(sorted[rank] * 10) / 10,
   };
 }
@@ -41,9 +41,9 @@ function transitionRange(outgoing) {
  * Samples frames for `ms` milliseconds. With `transition` (an outgoing Slide id) or `scroll` ({ from, to } in page
  * pixels) it scrolls linearly through that range while sampling; without either it only watches, for ambient loops.
  * Bring the tab to the front first: a background tab fires no rAF.
- * @param {{ ms?: number, transition?: string, scroll?: { from: number, to: number }, budget?: number }} [options]
+ * @param {{ ms?: number, transition?: string, scroll?: { from: number, to: number }, threshold?: number }} [options]
  */
-async function sampleFrames({ ms = 3000, transition, scroll, budget } = {}) {
+async function sampleFrames({ ms = 3000, transition, scroll, threshold } = {}) {
   const range = transition ? transitionRange(transition) : scroll;
   if (range) window.scrollTo(0, range.from);
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -62,7 +62,7 @@ async function sampleFrames({ ms = 3000, transition, scroll, budget } = {}) {
     };
     requestAnimationFrame(tick);
   });
-  return frameStats(deltas, budget);
+  return frameStats(deltas, threshold);
 }
 
 globalThis.frameStats = frameStats;

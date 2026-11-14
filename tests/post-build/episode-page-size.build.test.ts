@@ -1,6 +1,6 @@
-// The Iceberg Episode's page weight (feedback-2 grill, decision 18 "Load"): its exported HTML, scenery and Slide
-// transitions inlined, stays no larger than 6.5 MB. MB here is 2^20 bytes: on 2026-11-14 `main` exported
-// 6,550,886 bytes, which Han read as "today's 6.5 MB", so the decimal reading would fail the page it was taken from.
+// The Iceberg Episode's page weight (feedback-2 grill, decisions 18 and 31 "Load"): its exported HTML, scenery and
+// Slide transitions inlined, in each locale, stays no larger than `main` exported it on 2026-11-14 (2e5abc74), in
+// bytes. The budgets are hand-written: lowering one is a reviewed choice, raising one is Han's.
 
 import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -8,27 +8,29 @@ import { describe, expect, it } from 'vitest';
 import { exportedFile, OUT_DIR } from './exported-pages';
 
 const ICEBERG = '/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/';
-const MEGABYTE = 1024 * 1024;
-const BUDGET_BYTES = 6.5 * MEGABYTE;
+const BUDGETS = [
+  { locale: 'en', url: ICEBERG, maxBytes: 6_550_886 },
+  { locale: 'de', url: `/de${ICEBERG}`, maxBytes: 6_721_752 },
+] as const;
 
 const pageFile = (url: string) => join(OUT_DIR, exportedFile(url));
 
 describe('success cases', () => {
-  it('exports the Iceberg Episode page in no more than 6.5 MB of HTML', () => {
+  it.each(BUDGETS)('exports the $locale Iceberg Episode page no larger than on main', ({ url, maxBytes }) => {
     // ARRANGE
-    const file = pageFile(ICEBERG);
+    const file = pageFile(url);
     // ACT
     const bytes = statSync(file).size;
-    console.info(`Iceberg Episode page: ${bytes} bytes of ${BUDGET_BYTES}`);
+    console.info(`Iceberg Episode page ${url}: ${bytes} bytes of ${maxBytes}`);
     // ASSERT
-    expect(bytes).toBeLessThanOrEqual(BUDGET_BYTES);
+    expect(bytes).toBeLessThanOrEqual(maxBytes);
   });
 });
 
 describe('failure cases', () => {
-  it('finds the page in the export, so a missing file cannot pass as zero bytes', () => {
+  it.each(BUDGETS)('finds the $locale page in the export, so a missing file cannot pass as zero bytes', ({ url }) => {
     // ARRANGE
-    const file = pageFile(ICEBERG);
+    const file = pageFile(url);
     // ACT
     const exists = existsSync(file);
     // ASSERT
@@ -37,12 +39,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('measures a real page, not an empty shell, so the budget guards something', () => {
+  it('measures real pages, not empty shells, so the budgets guard something', () => {
     // ARRANGE
-    const atLeast = MEGABYTE;
+    const atLeast = 1_000_000;
     // ACT
-    const bytes = statSync(pageFile(ICEBERG)).size;
+    const smallest = Math.min(...BUDGETS.map(({ url }) => statSync(pageFile(url)).size));
     // ASSERT
-    expect(bytes).toBeGreaterThan(atLeast);
+    expect(smallest).toBeGreaterThan(atLeast);
   });
 });
