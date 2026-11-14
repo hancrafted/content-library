@@ -50,7 +50,7 @@ export interface ZoneSceneProps {
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
   readonly children?: ReactNode;
-  /** HTML over the drawing, such as a card or the depth ruler, inside the Scene so its motion settles with it. */
+  /** HTML over the drawing, such as a card or the depth gauge, inside the Scene so its motion settles with it. */
   readonly overlay?: ReactNode;
   readonly className?: string;
 }

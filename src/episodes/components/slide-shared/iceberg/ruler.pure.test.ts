@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { isDarkZone, rulerBands, zoneOf, ZONES, zoneToken, type Zone } from './ruler.pure';
 
 /*
- * The depth ruler's layout: the five zone bands from the Surface down, each holding one tile per Section that sits in
- * it, the one Section lit. A Slide names its Section; the ruler finds its band.
+ * The depth rail's layout: the five zone bands from the Surface down, each holding one tile per Section that sits in
+ * it, the one Section lit. A Slide names its Section; the rail finds its band.
  */
 
 const WATERLINE_SECTIONS: readonly Zone[] = [
