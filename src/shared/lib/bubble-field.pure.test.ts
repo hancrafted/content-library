@@ -11,28 +11,29 @@ describe('success cases', () => {
   it('lays out the same separate bubbles every time, spread across the width', () => {
     // ARRANGE
     const count = 14;
-    const expected = { count, distinctLefts: count, inside: true };
+    const expected = { count, distinctLefts: count, outside: [], again: [] };
     // ACT
     const field = bubbleField(count);
     const again = bubbleField(count);
     const seen = {
       count: field.length,
       distinctLefts: new Set(field.map(({ x }) => x.toFixed(1))).size,
-      inside: field.every(({ x }) => x >= 2 && x <= 98),
+      outside: field.filter(({ x }) => x < 2 || x > 98),
+      again: again.filter((bubble, at) => JSON.stringify(bubble) !== JSON.stringify(field[at])),
     };
     // ASSERT
     expect(seen).toEqual(expected);
-    expect(again).toEqual(field);
   });
 
   it('lets every bubble rise from below the bottom past the top as progress runs from 0 to 1', () => {
     // ARRANGE
-    const expected = { belowAtStart: true, pastTopAtEnd: true };
+    const exit = 1.2;
+    const expected = { notBelowAtStart: [], shortOfTheTopAtEnd: [] };
     // ACT
     const field = bubbleField(20);
     const seen = {
-      belowAtStart: field.every(({ start }) => start >= 0 && start < 1),
-      pastTopAtEnd: field.every(({ start, rise }) => (1 - start) * rise >= 1.2),
+      notBelowAtStart: field.filter(({ start }) => start < 0 || start >= 1),
+      shortOfTheTopAtEnd: field.filter(({ start, rise }) => (1 - start) * rise < exit),
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -53,14 +54,11 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('draws bubbles of several sizes between a small and a large one, never a single size', () => {
     // ARRANGE
-    const smallest = 10;
-    const largest = 44;
-    const kinds = 4;
+    const expected = { kinds: [10, 12, 14, 16, 18, 22, 24, 28, 34, 40, 44] };
     // ACT
     const sizes = bubbleField(14).map(({ size }) => size);
+    const seen = { kinds: [...new Set(sizes)].sort((a, b) => a - b) };
     // ASSERT
-    expect(new Set(sizes).size).toBeGreaterThanOrEqual(kinds);
-    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(smallest);
-    expect(Math.max(...sizes)).toBeLessThanOrEqual(largest);
+    expect(seen).toEqual(expected);
   });
 });
