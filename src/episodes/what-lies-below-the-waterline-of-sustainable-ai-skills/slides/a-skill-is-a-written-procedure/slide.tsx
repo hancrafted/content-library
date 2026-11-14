@@ -126,7 +126,7 @@ export const aSkillIsAWrittenProcedure = slide({
     const steps = STEP_KEYS.map((key) => t(`card.steps.${key}`));
     const extras = { guide: t('extras.guide'), label: t('extras.label'), preset: t('extras.preset') };
     return (
-      <SlideFrame className="@container mt-6 flex flex-col gap-6">
+      <SlideFrame className="@container mt-1 flex flex-col gap-6">
         <p data-quote-source className="text-caption font-semibold text-muted-foreground">
           {t('quoteSource')}
         </p>
