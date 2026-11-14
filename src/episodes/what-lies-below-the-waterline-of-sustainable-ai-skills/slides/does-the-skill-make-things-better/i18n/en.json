@@ -51,14 +51,14 @@
   },
   "requests": {
     "should": {
-      "0": "Take a sediment sample at Site 7.",
-      "1": "Get a seabed sample here.",
-      "2": "New site: sample the sediment."
+      "siteSample": "Take a sediment sample at Site 7.",
+      "seabedSample": "Get a seabed sample here.",
+      "newSite": "New site: sample the sediment."
     },
     "shouldNot": {
-      "0": "Film the seabed at Site 7.",
-      "1": "Log yesterday's dive.",
-      "2": "Sample the water column here."
+      "filmSeabed": "Film the seabed at Site 7.",
+      "logDive": "Log yesterday's dive.",
+      "waterColumn": "Sample the water column here."
     }
   },
   "callout": {

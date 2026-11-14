@@ -44,6 +44,8 @@
  * Each morning's speech bubbles read `--emote-delay` from here, so they pop in after their own panel.
  */
 .panel {
+  /* A comic close-up: the crew is drawn at 4.4 to 5 times room scale, so the shared bubble's words are turned down. */
+  --says-scale: 0.5;
   --emote-delay: calc(var(--panel-delay, 0ms) + 450ms);
 }
 

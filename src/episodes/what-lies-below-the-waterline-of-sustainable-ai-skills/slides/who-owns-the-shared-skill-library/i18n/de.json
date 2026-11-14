@@ -8,6 +8,7 @@
     "shared": "Geteilt · auch andere",
     "general": "Allgemein · in jedem Projekt",
     "care": "Sorgfalt",
+    "careLevel": "Sorgfalt 4 von 4",
     "chat": {
       "title": "Details daneben, mit Owner, Version und Evals",
       "sub": "Mit Owner, versioniert und getestet"
@@ -83,14 +84,18 @@
         "anthropic-provision-and-manage-skills": {
           "title": "Anthropic, Provision and manage skills for your organization"
         },
-        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
       }
     },
     "token-cost-and-model-fit-are-per-skill-facts": {
       "header": "Tokenkosten und Modellpassung gelten pro Skill",
       "description": "Ein geladener Skill kostet wiederkehrend Tokens [1], und was ein Skill wert ist, hängt vom Modell und vom Harness ab, in dem er läuft [2].",
       "sources": {
-        "claude-code-skills": { "title": "Anthropic, Extend Claude with skills (Claude Code documentation)" },
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
+        },
         "swe-skills-bench": {
           "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
         }
@@ -100,7 +105,9 @@
       "header": "„Noch nicht geklärt“ ist eine Einschätzung",
       "description": "Anthropics Leitfaden für Unternehmen nennt, was pro Skill festzuhalten ist (Zweck, Owner, Version, Evaluationsstatus), und berichtet nicht, wie viele Organisationen das tun [1]; die ungeklärte Ecke ist also die Einschätzung der Episode, keine gemessene Aussage.",
       "sources": {
-        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
       }
     }
   },

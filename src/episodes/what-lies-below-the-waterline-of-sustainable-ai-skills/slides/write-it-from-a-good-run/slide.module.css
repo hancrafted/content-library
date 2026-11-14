@@ -56,3 +56,34 @@
     scale: 0 1;
   }
 }
+
+/* The next morning's greeting rises past the pilot's empty thought, near the room's left wall: turned down to fit it. */
+.roomPicture {
+  --says-scale: 0.9;
+}
+
+/* The written card pinned to the control-room wall: paper from theme-stable white and black, its pin `--primary`. */
+.pinnedCard {
+  --paper: var(--on-brand-accent);
+  --paper-ink: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay)));
+  --pin: var(--primary);
+}
+
+:global(.dark) .pinnedCard {
+  --paper: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
+}
+
+.paper {
+  fill: var(--paper);
+  stroke: var(--paper-ink);
+  stroke-width: 0.6;
+}
+
+.paperLine {
+  stroke: var(--paper-ink);
+  stroke-width: 0.8;
+}
+
+.pin {
+  fill: var(--pin);
+}

@@ -7,13 +7,13 @@
     "label": "Ein Tag: der Durchlauf, das Interview, der Skill, der nächste Morgen"
   },
   "day": {
-    "0": {
+    "run": {
       "step": "<marker>Ein gelungener Durchlauf</marker>",
       "time": "der heutige Tauchgang lief gut",
       "ai": "Du hast die Aufgabe mit der KI erledigt und unterwegs Kontext und Korrekturen gegeben.",
       "coding": "Eine Sitzung im Coding-Agent, keine Vermutung aus Allgemeinwissen."
     },
-    "1": {
+    "interview": {
       "step": "<marker>Die KI interviewt Dich</marker>",
       "time": "vor dem Abend fragt der Pilot",
       "ai": "Sie fragt nach Deiner Absicht, nicht nur nach den Schritten.",
@@ -23,14 +23,14 @@
         "failure": "Was hätte als Fehlschlag gegolten?"
       }
     },
-    "2": {
+    "evening": {
       "step": "Die KI schreibt den Skill",
       "time": "er schreibt die Karte, solange er es noch weiß",
       "ai": "Im selben Gespräch, solange der ganze Durchlauf noch in ihrem Kontextfenster steht.",
       "chat": "Den Skill, den sie schreibt, siehst Du unten.",
       "coding": "Die <code>SKILL.md</code>, die sie schreibt, siehst Du unten."
     },
-    "3": {
+    "nextMorning": {
       "step": "Das nächste Gespräch beginnt neu",
       "time": "am nächsten Morgen hat er den Tauchgang vergessen; die Karte hängt an der Wand",
       "ai": "Der Durchlauf ist vergessen. Der Skill nicht.",

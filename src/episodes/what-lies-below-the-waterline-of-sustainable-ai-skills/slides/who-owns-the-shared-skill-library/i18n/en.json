@@ -8,6 +8,7 @@
     "shared": "Shared · others too",
     "general": "General use · used in any project",
     "care": "care",
+    "careLevel": "care 4 of 4",
     "chat": {
       "title": "Details kept beside, with an owner, a version and evals",
       "sub": "Owned, versioned and tested"
@@ -83,14 +84,18 @@
         "anthropic-provision-and-manage-skills": {
           "title": "Anthropic, Provision and manage skills for your organization"
         },
-        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
       }
     },
     "token-cost-and-model-fit-are-per-skill-facts": {
       "header": "Token cost and model fit are per-skill facts",
       "description": "a loaded skill is a recurring token cost [1], and a skill's value depends on the model and harness it runs in [2].",
       "sources": {
-        "claude-code-skills": { "title": "Anthropic, Extend Claude with skills (Claude Code documentation)" },
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
+        },
         "swe-skills-bench": {
           "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
         }
@@ -100,7 +105,9 @@
       "header": "Skill governance \"still being worked out\" is a judgement",
       "description": "Anthropic's enterprise guidance lists what to track per skill (purpose, owner, version, evaluation status) and does not report how many organisations do so [1], so the unsettled corner is the Episode's judgement, not a measured claim.",
       "sources": {
-        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
       }
     }
   },

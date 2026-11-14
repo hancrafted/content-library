@@ -94,7 +94,7 @@ describe('edge cases', () => {
 
   it('raises its speech bubble on the left when it faces left, as a flipped Character does', () => {
     // ARRANGE
-    const expected = 'translate(-10 -14) scale(0.5)';
+    const expected = 'translate(-10 -14)';
     // ACT
     const { bubbleAt } = draw({ flip: true, says: 'Where am I?' });
     // ASSERT

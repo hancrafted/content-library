@@ -2,13 +2,13 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { Words, type ViewWords } from '@/episodes/components/slide-shared/agent-view/view-words';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import styles from './slide.module.css';
+import styles from './skill-scope-matrix.module.css';
 import { SquarePicture, type PictureKind } from './square-picture';
 
 export type SquareId = 'pp' | 'pg' | 'sp' | 'sg';
 export type Care = 1 | 2 | 3 | 4;
 
-interface Axis {
+export interface Axis {
   readonly label: ReactNode;
   readonly hint: string;
   /** The `data-target` a note explains this head by, when one does. */
@@ -138,7 +138,8 @@ function Trip() {
 /**
  * The skill scope matrix of Option 18a: who uses a skill down the side, where across the top, each square leading
  * with where its details live, a small project picture beneath, and a primary tint that steps with care so the
- * diagonal reads before any word. The squares are a focus group, so the presenter can point at one.
+ * diagonal reads before any word. The squares are a focus group, so the presenter can point at one. The words and
+ * the pictures' extras come from the Slide that shows it; `SkillScopeSquare` shows one square of it on a later Slide.
  */
 export function SkillScopeMatrix({ label, care, who, where, squares }: SkillScopeMatrixProps) {
   const square = (id: SquareId) => {
@@ -162,6 +163,57 @@ export function SkillScopeMatrix({ label, care, who, where, squares }: SkillScop
       {square('sp')}
       {square('sg')}
       <Trip />
+    </div>
+  );
+}
+
+/** The matrix's squares, row by row: personal on top, shared below; project-specific left, general right. */
+const ORDER: readonly SquareId[] = ['pp', 'pg', 'sp', 'sg'];
+
+/** The 2×2 locator: where the shown square sits on the matrix, the other three dimmed. */
+function Locator({ at, label }: { readonly at: SquareId; readonly label: string }) {
+  return (
+    <span role="img" aria-label={label} className="grid size-8 shrink-0 grid-cols-2 gap-0.5">
+      {ORDER.map((id) => (
+        <span
+          key={id}
+          data-locator={id}
+          data-focal={id === at ? '' : undefined}
+          className={cn('rounded-xs', id === at ? 'bg-primary' : 'bg-foreground/35')}
+        />
+      ))}
+    </span>
+  );
+}
+
+export interface SkillScopeSquareProps {
+  /** The line leading back to the Slide that shows the whole matrix. */
+  readonly back: string;
+  /** The locator's words for assistive tech: which square of the matrix this is. */
+  readonly locator: string;
+  readonly care: string;
+  /** The square's row and column, as the matrix's heads name them. */
+  readonly axes: { readonly who: string; readonly where: string };
+  readonly square: Square;
+  readonly className?: string;
+}
+
+/**
+ * One square of the skill scope matrix, cropped out for a later Slide that comes back to it: the same square card, a
+ * 2×2 locator naming where it sits, and its row and column above it.
+ */
+export function SkillScopeSquare({ back, locator, care, axes, square, className }: SkillScopeSquareProps) {
+  return (
+    <div data-matrix className={cn('flex flex-col gap-3', className)}>
+      <p className="flex items-center gap-3 text-caption">
+        <Locator at={square.id} label={locator} />
+        <span>{back}</span>
+      </p>
+      <p className="flex flex-wrap justify-between gap-x-3 text-caption text-muted-foreground">
+        <span>{axes.who}</span>
+        <span>{axes.where}</span>
+      </p>
+      <SquareCard square={square} care={care} />
     </div>
   );
 }

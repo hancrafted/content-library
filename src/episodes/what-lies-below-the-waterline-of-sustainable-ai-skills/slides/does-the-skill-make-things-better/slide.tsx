@@ -36,12 +36,12 @@ const CHECKS = [
   { slug: 'core', without: true, with: false },
 ] as const;
 const RUNS = ['without', 'with'] as const;
-const SHOULD = ['0', '1', '2'] as const;
+const SHOULD = ['siteSample', 'seabedSample', 'newSite'] as const;
 /** The requests that should not trigger the skill; the last sounds like it and needs something else. */
 const SHOULD_NOT = [
-  { key: '0', nearMiss: false },
-  { key: '1', nearMiss: false },
-  { key: '2', nearMiss: true },
+  { key: 'filmSeabed', nearMiss: false },
+  { key: 'logDive', nearMiss: false },
+  { key: 'waterColumn', nearMiss: true },
 ] as const;
 const SKILL = 'collect-sediment-sample';
 

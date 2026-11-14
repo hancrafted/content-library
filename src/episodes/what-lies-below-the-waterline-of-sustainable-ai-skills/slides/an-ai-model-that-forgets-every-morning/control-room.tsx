@@ -20,7 +20,7 @@ import styles from './forgets.module.css';
 /** The window onto the stern deck, in the Scene's units. */
 const WINDOW = { x: 620, y: 70, width: 440, height: 240 } as const;
 const FLOOR_Y = 770;
-/** One scale for the crew and the console: a comic close-up, large enough that the speech bubbles read. */
+/** One scale for the crew and the console: a comic close-up; its CSS module turns the speech bubbles down to match. */
 const CREW_SCALE = 4.4;
 const CONSOLE_WIDTH = 90;
 const CONSOLE_X = 864;

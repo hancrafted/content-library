@@ -7,13 +7,13 @@
     "label": "One day: the run, the interview, the skill, the next morning"
   },
   "day": {
-    "0": {
+    "run": {
       "step": "<marker>A run that worked</marker>",
       "time": "today's dive went well",
       "ai": "You did the task with the AI, giving context and corrections along the way.",
       "coding": "A session in the coding agent, not a guess from general knowledge."
     },
-    "1": {
+    "interview": {
       "step": "<marker>The AI interviews you</marker>",
       "time": "before evening, the pilot asks",
       "ai": "It asks for your intent, not only the steps.",
@@ -23,14 +23,14 @@
         "failure": "What would have counted as failure?"
       }
     },
-    "2": {
+    "evening": {
       "step": "The AI writes the skill",
       "time": "he writes the card while he still knows",
       "ai": "In the same conversation, while the whole run is still in its context window.",
       "chat": "The skill it writes, below.",
       "coding": "The <code>SKILL.md</code> it writes, below."
     },
-    "3": {
+    "nextMorning": {
       "step": "The next conversation starts fresh",
       "time": "next morning he has forgotten the dive; the card hangs on the wall",
       "ai": "The run is forgotten. The skill is not.",

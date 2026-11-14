@@ -26,3 +26,11 @@
     translate: 0 0;
   }
 }
+
+/*
+ * Two speakers share each 300-unit panel, so the shared bubble's words are turned down until both bubbles fit side by
+ * side inside it.
+ */
+.morning {
+  --says-scale: 0.5;
+}

@@ -56,18 +56,18 @@ export const writeItFromAGoodRun = slide({
       >
         <DayPanel
           n={1}
-          step={t.rich('day.0.step', { marker: marker('write-the-skill-from-a-real-run') })}
-          time={t('day.0.time')}
-          ai={t('day.0.ai')}
+          step={t.rich('day.run.step', { marker: marker('write-the-skill-from-a-real-run') })}
+          time={t('day.run.time')}
+          ai={t('day.run.ai')}
           marked={target('run')}
           picture={<RunPicture label={t('alt.run')} depth={t('art.depth')} />}
-          coding={<p className="text-muted-foreground">{t('day.0.coding')}</p>}
+          coding={<p className="text-muted-foreground">{t('day.run.coding')}</p>}
         />
         <DayPanel
           n={2}
-          step={t.rich('day.1.step', { marker: marker('the-agent-can-interview-you') })}
-          time={t('day.1.time')}
-          ai={t('day.1.ai')}
+          step={t.rich('day.interview.step', { marker: marker('the-agent-can-interview-you') })}
+          time={t('day.interview.time')}
+          ai={t('day.interview.ai')}
           picture={<RoomPicture panel="interview" label={t('alt.interview')} />}
           chat={QUESTIONS.map((question) => (
             <p
@@ -75,7 +75,7 @@ export const writeItFromAGoodRun = slide({
               data-question
               className="rounded-md border-2 border-ai px-2 py-0.5 text-caption font-medium"
             >
-              {t(`day.1.questions.${question}`)}
+              {t(`day.interview.questions.${question}`)}
             </p>
           ))}
           coding={
@@ -89,30 +89,30 @@ export const writeItFromAGoodRun = slide({
         <DayPanel
           n={3}
           focal
-          step={t('day.2.step')}
-          time={t('day.2.time')}
-          ai={t('day.2.ai')}
+          step={t('day.evening.step')}
+          time={t('day.evening.time')}
+          ai={t('day.evening.ai')}
           picture={
             <>
               <RoomPicture panel="writing" label={t('alt.evening')} />
               <ContextGauge label={t('art.full')} state="full" />
             </>
           }
-          chat={<p className="text-caption font-semibold">{t('day.2.chat')}</p>}
-          coding={<p className="font-semibold">{t.rich('day.2.coding')}</p>}
+          chat={<p className="text-caption font-semibold">{t('day.evening.chat')}</p>}
+          coding={<p className="font-semibold">{t.rich('day.evening.coding')}</p>}
         />
         <DayPanel
           n={4}
-          step={t('day.3.step')}
-          time={t('day.3.time')}
-          ai={t('day.3.ai')}
+          step={t('day.nextMorning.step')}
+          time={t('day.nextMorning.time')}
+          ai={t('day.nextMorning.ai')}
           picture={
             <>
-              <RoomPicture panel="next-morning" label={t('alt.nextMorning')} greeting={t('day.3.greeting')} />
+              <RoomPicture panel="next-morning" label={t('alt.nextMorning')} greeting={t('day.nextMorning.greeting')} />
               <ContextGauge label={t('art.empty')} state="empty" />
             </>
           }
-          coding={<p className="text-muted-foreground">{t.rich('day.3.coding')}</p>}
+          coding={<p className="text-muted-foreground">{t.rich('day.nextMorning.coding')}</p>}
         />
       </ol>
       <div className="grid items-start gap-4 @5xl:grid-cols-4">

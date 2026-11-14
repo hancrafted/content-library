@@ -3,12 +3,12 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { SkillScopeSquare } from '@/episodes/components/slide-shared/skill-scope-matrix/skill-scope-matrix';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import { FrontPage } from './front-page';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { ScopeSquare } from './scope-square';
 import styles from './slide.module.css';
 
 const PROVISION = {
@@ -117,15 +117,23 @@ export const whoOwnsTheSharedSkillLibrary = slide({
         className={cn(styles.scene, 'rounded-2xl p-4 shadow-md @xl:p-6')}
         overlay={
           <div className="grid gap-4 @5xl:grid-cols-[minmax(0,30%)_minmax(0,7%)_minmax(0,1fr)] @5xl:gap-0">
-            <ScopeSquare
+            <SkillScopeSquare
               className="max-w-sm @5xl:max-w-none @5xl:self-start"
               back={t('matrix.back')}
               locator={t('matrix.locator')}
-              axes={{ shared: t('matrix.shared'), general: t('matrix.general') }}
               care={t('matrix.care')}
-              chat={{ title: t('matrix.chat.title'), sub: t('matrix.chat.sub') }}
-              coding={{ title: t('matrix.coding.title'), sub: t('matrix.coding.sub') }}
-              pill={{ chat: t('matrix.pill'), coding: t('matrix.pillCoding') }}
+              axes={{ who: t('matrix.shared'), where: t('matrix.general') }}
+              square={{
+                id: 'sg',
+                care: 4,
+                careLabel: t('matrix.careLevel'),
+                head: t('matrix.chat.title'),
+                sub: t('matrix.chat.sub'),
+                coding: { head: t('matrix.coding.title'), sub: t('matrix.coding.sub') },
+                picture: 'fleet',
+                label: { chat: t('matrix.pill'), coding: t('matrix.pillCoding') },
+                focus: true,
+              }}
             />
             <ZoomBeam />
             <FrontPage
