@@ -3,7 +3,6 @@ import type { ComponentType, CSSProperties, ReactNode } from 'react';
 import { DepthGauge } from './depth-gauge';
 import styles from './hero-depth-scene.module.css';
 import { HERO_DEPTH, heroBleed, heroDepthBands, heroIceberg } from './hero-depth.pure';
-import { zoneToken } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Clouds } from './scenery/clouds';
 import { FishSchool } from './scenery/fish-school';
@@ -16,6 +15,7 @@ import { Band } from './zone-scene';
 import sceneStyles from './zone-scene.module.css';
 import { seaFacets, WATER_CELL } from './zone-scene.pure';
 import type { ZoneWords } from './zone-words.pure';
+import { zoneToken } from './zones.pure';
 
 const { width, height, waterline } = HERO_DEPTH;
 const BANDS = heroDepthBands(HERO_DEPTH);

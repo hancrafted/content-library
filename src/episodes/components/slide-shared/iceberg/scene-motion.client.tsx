@@ -2,8 +2,8 @@
 
 import { useSlideZone } from '@/episodes/hooks/use-slide-zone';
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
-import type { Zone } from './ruler.pure';
 import { onceAnimations, sceneMotionIn, type SceneMotion } from './scene-motion.pure';
+import type { Zone } from './zones.pure';
 
 interface SceneMotionProps {
   readonly className?: string;

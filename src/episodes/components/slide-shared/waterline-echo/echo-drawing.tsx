@@ -1,14 +1,14 @@
 import { Robot } from '../deep-sea-expedition/robot';
 import { Ship } from '../deep-sea-expedition/ship';
 import { shipAnchors } from '../deep-sea-expedition/ship.pure';
-import type { Zone } from '../iceberg/ruler.pure';
 import { SURFACE_WATERLINE, ZoneScene } from '../iceberg/zone-scene';
+import type { Zone } from '../iceberg/zones.pure';
 
 /** Where the robot sits in a section slide's scene: on deck, just over the water, on its cable, or on the seabed. */
 export type RobotAt = 'deck' | 'surface' | 'hanging' | 'seabed';
 
 const SHIP_X = 760;
-/** Below the Surface the robot hangs mid-Scene, under the Slide's heading and clear of its card and ruler. */
+/** Below the Surface the robot hangs mid-Scene, under the Slide's heading and clear of its card and depth gauge. */
 const DIVE_X = 600;
 const DEPTH: Record<'hanging' | 'seabed', number> = { hanging: 470, seabed: 600 };
 const ROBOT_SCALE = 1.8;

@@ -1,8 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
-import type { Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
+import type { Zone } from '@/episodes/components/slide-shared/iceberg/zones.pure';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';

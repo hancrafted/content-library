@@ -1,9 +1,9 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { FigureGallery, Specimen } from '@/episodes/components/slide-shared/figure-gallery/figure-gallery';
+import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/bubbles';
 import { FishSchool } from '@/episodes/components/slide-shared/iceberg/scenery/fish-school';
 import { Jellies } from '@/episodes/components/slide-shared/iceberg/scenery/jellies';
 import { Lanternfish } from '@/episodes/components/slide-shared/iceberg/scenery/lanternfish';
-import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/sea-life';
 import { LightRays, Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { Siphonophore } from '@/episodes/components/slide-shared/iceberg/scenery/siphonophore';
 import { Whale } from '@/episodes/components/slide-shared/iceberg/scenery/whale';

@@ -2,7 +2,7 @@
   "title": "Meeresleben",
   "caption": "Jede Tiefe hat ihre eigene ruhige Hintergrundbewegung",
   "intro": "Fische schwingen in der Lichtzone, Quallen schweben in der Dämmerzone, ein Wal gleitet in der Mitternachtszone und Blasen steigen im Abyss auf. Die Abschnittstitel der Dämmerzone ergänzen einen Laternenfischschwarm und eine Staatsqualle. Jede Blase ist die gemeinsame facettierte PolyBubble, hier einzeln in ihren drei Umrissen. Vergleiche einen zweiten Fischschwarm und danach den ruhenden Meeresboden und die Lichtstrahlen.",
-  "contract": "Importiere jedes Tier aus seiner eigenen Datei in slide-shared/iceberg/scenery (fish-school, jellies, whale, lanternfish, siphonophore), Bubbles aus sea-life sowie Seabed oder LightRays aus seabed; PolyBubble kommt aus src/shared/components/core-components/poly-bubble und wird von ihrem Host bewegt. Das JSDoc jedes Tiers legt Props, Rahmen, Hooks und Tokens fest. Anzahl und Seed erzeugen reproduzierbare Gruppen; explizite Positionen ersetzen sie. Hintergrundschleifen stoppen außerhalb der aktiven Slide und bei reduzierter Bewegung.",
+  "contract": "Importiere jedes Tier aus seiner eigenen Datei in slide-shared/iceberg/scenery (fish-school, jellies, whale, lanternfish, siphonophore), Bubbles aus bubbles sowie Seabed oder LightRays aus seabed; PolyBubble kommt aus src/shared/components/core-components/poly-bubble und wird von ihrem Host bewegt. Das JSDoc jedes Tiers legt Props, Rahmen, Hooks und Tokens fest. Anzahl und Seed erzeugen reproduzierbare Gruppen; explizite Positionen ersetzen sie. Hintergrundschleifen stoppen außerhalb der aktiven Slide und bei reduzierter Bewegung.",
   "pause": "Bewegung pausieren",
   "resume": "Bewegung fortsetzen",
   "replay": "Beispiele wiederholen",

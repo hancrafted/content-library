@@ -2,8 +2,8 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import type { Zone } from './ruler.pure';
 import { zonePresentation, zoneTitlePresentation } from './zone-presentation';
+import type { Zone } from './zones.pure';
 
 /*
  * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): the bubbles into a section

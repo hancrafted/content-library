@@ -1,6 +1,6 @@
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import type { Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
 import { depthBands, WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
+import type { Zone } from '@/episodes/components/slide-shared/iceberg/zones.pure';
 
 /*
  * Where the robot rises in "The whole iceberg" (Option 26a), in the whole depth's units: straight up under the

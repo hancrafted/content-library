@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { DepthRail } from './depth-rail';
-import { isDarkZone, zoneOf, zoneToken, type Zone } from './ruler.pure';
+import { isDarkZone, zoneOf, zoneToken, type Zone } from './zones.pure';
 
 export interface ZonePresentationInput {
   /** The zone each of the Episode's Sections sits in, in order. */

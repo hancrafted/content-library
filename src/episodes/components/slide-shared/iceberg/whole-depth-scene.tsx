@@ -1,6 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
-import { zoneToken } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Clouds } from './scenery/clouds';
 import { FlatSky, LitWaterline } from './scenery/flat-sky';
@@ -11,6 +10,7 @@ import { SunMoon } from './scenery/sun-moon';
 import { Band, type ZoneSceneProps } from './zone-scene';
 import styles from './zone-scene.module.css';
 import { depthBands, seaFacets, WATER_CELL, WHOLE_DEPTH } from './zone-scene.pure';
+import { zoneToken } from './zones.pure';
 
 /** The whole depth's water under the waterline: its own facets, four bands deep; the Surface is the sky above. */
 const WHOLE_BANDS = depthBands()

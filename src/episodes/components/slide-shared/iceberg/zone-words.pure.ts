@@ -3,7 +3,7 @@
  * scientific name. A plain `slide-shared` part owns no words (FE-012 §3.1), so a Slide reads them from its own
  * `i18n/` under `zones.<zone>.<word>`, through its `t`, and hands the part plain strings.
  */
-import { ZONES, type Zone } from './ruler.pure';
+import { ZONES, type Zone } from './zones.pure';
 
 /** One zone's words. */
 export interface ZoneLabelWords {

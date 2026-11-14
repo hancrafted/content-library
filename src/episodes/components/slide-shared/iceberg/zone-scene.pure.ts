@@ -2,8 +2,8 @@
  * What `ZoneScene` draws for the zone a Slide names (design-ADR 0025): one zone, one set of scenery and one slow
  * ambient loop, so retuning a zone is one edit every Slide in it follows. Deterministic, as the scenery parts are.
  */
-import { ZONES, type Zone } from './ruler.pure';
 import { seededRandom, toPoints, type IcebergPart } from './scenery/scenery.pure';
+import { ZONES, type Zone } from './zones.pure';
 
 /** The iceberg's part in a Scene, or none. */
 export type SceneIceberg = IcebergPart | 'none';

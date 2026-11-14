@@ -5,8 +5,8 @@
  * on past both sides for screens wider than the drawing. The Sunlit band is deep enough for an iceberg keel twice its
  * tip that ends a fifth into the Twilight zone.
  */
-import { ZONES, type Zone } from './ruler.pure';
 import { type IcebergPlacement, placeIceberg } from './scenery/iceberg-placement.pure';
+import { ZONES, type Zone } from './zones.pure';
 
 /** The zones under the waterline. */
 export type UnderwaterZone = Exclude<Zone, 'surface'>;
