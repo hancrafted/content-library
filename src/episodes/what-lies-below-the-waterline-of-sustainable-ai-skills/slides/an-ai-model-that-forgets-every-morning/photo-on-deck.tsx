@@ -3,7 +3,7 @@ import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expe
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import { SCENE_HEIGHT, SCENE_WIDTH, SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 
 /*
  * The framed photo's picture (Spec Option 1a, first panel): you and the pilot side by side on the research ship's deck,
@@ -12,7 +12,7 @@ import { SCENE_HEIGHT, SCENE_WIDTH, SURFACE_WATERLINE } from '@/episodes/compone
 
 /** The whole ship in the photo, as the Spec framed it: masthead to keel inside the picture. */
 const SHIP_X = 600;
-const SHIP_SCALE = 2.2;
+const SHIP_SCALE = 2.9;
 /** The crew stand larger than the ship's scale gives them, as in the Spec's photo, so they read as the subject. */
 const CREW_SCALE = 0.72;
 const ROBOT_SCALE = 0.55;
@@ -20,17 +20,9 @@ const ROBOT_SCALE = 0.55;
 const ROBOT_HEIGHT = 59;
 /** The pilot stands this far forward of the captain on deck, in the ship's units. */
 const PILOT_STEP = 40;
-/** The figure's height above its feet, in its own units, where the tag sits. */
-const HEAD_HEIGHT = 112;
 
 const ANCHORS = shipAnchors();
 const { aft } = ANCHORS.deck;
-
-/** Where the pilot's head is in the photo, as a share of the Scene's width and height: the "AI model" tag sits there. */
-export const PILOT_HEAD = {
-  left: (SHIP_X + (aft.x + PILOT_STEP) * SHIP_SCALE) / SCENE_WIDTH,
-  top: (SURFACE_WATERLINE + (aft.y - HEAD_HEIGHT * CREW_SCALE) * SHIP_SCALE) / SCENE_HEIGHT,
-} as const;
 
 /** The research ship with the captain and the pilot on its stern deck, the robot in its cradle. */
 export function PhotoOnDeck() {
