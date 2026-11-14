@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt. Ein Forschungsschiff an der Wasserlinie hat seinen Tauchroboter am Kabel vom A-Rahmen herabgelassen; er hängt knapp über dem Wasser, seine Lampe leuchtet nach unten. Dahinter ein Eisberg, der größte Teil unter der Wasserlinie, über den Meereszonen bis hinab in die Tiefsee. Oberfläche Sonnenlichtzone Dämmerzone Mitternachtszone Abyssal Du bist hier · Oberfläche Chat-App Coding-Agent Coding-Agent · die Dateien dahinter SKILL.md Name, Beschreibung, Anweisungen references/ scripts/ assets/ Begleitdateien eine Projektdatei, etwa CONTEXT.md Projektdetails, gelesen, wenn der Skill läuft"
+      "text": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt Ein Forschungsschiff an der Wasserlinie hat seinen Tauchroboter am Kabel vom A-Rahmen herabgelassen; er hängt knapp über dem Wasser, seine Lampe leuchtet nach unten. Dahinter ein Eisberg, der größte Teil unter der Wasserlinie, über den Meereszonen bis hinab in die Tiefsee. Oberfläche die Meeresoberfläche und die Luft darüber Du bist hier · Oberfläche Chat-App Coding-Agent Coding-Agent · die Dateien dahinter SKILL.md Name, Beschreibung, Anweisungen references/ scripts/ assets/ Begleitdateien eine Projektdatei, etwa CONTEXT.md Projektdetails, gelesen, wenn der Skill läuft"
     },
     {
       "id": "a-thought-experiment",
-      "text": "Ein Gedankenexperiment Oberfläche KI-Modell Solange Du es nicht aufschreibst, fängt jedes Gespräch mit KI bei null an Dein Pilot ist das KI-Modell: zehn Jahre Können, keine Erinnerung an gestern. Jede Session beginnt mit einem frischen Kontextfenster Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Ein Gedankenexperiment Oberfläche KI-Modell Solange Du es nicht aufschreibst, fängt jedes Gespräch mit KI bei null an Dein Pilot ist das KI-Modell: zehn Jahre Können, keine Erinnerung an gestern. Jede Session beginnt mit einem frischen Kontextfenster Oberfläche die Meeresoberfläche und die Luft darüber"
     },
     {
       "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
@@ -21,7 +21,7 @@
     },
     {
       "id": "what-a-skill-is",
-      "text": "Was ein Skill ist Oberfläche Ein Skill ist ein Name, eine Beschreibung und Anweisungen Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte. SKILL.md, dazu scripts/ references/ assets/ Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Was ein Skill ist Oberfläche Ein Skill ist ein Name, eine Beschreibung und Anweisungen Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte. SKILL.md, dazu scripts/ references/ assets/ Oberfläche die Meeresoberfläche und die Luft darüber"
     },
     {
       "id": "what-a-skill-is--a-skill-is-a-written-procedure",
@@ -45,7 +45,7 @@
     },
     {
       "id": "when-to-write-one",
-      "text": "Wann Du einen schreibst Sonnenlichtzone Beim dritten Mal schreibst Du den Skill auf 1. 2. 3. Was für Menschen funktioniert, funktioniert auch für KI : eine starke Faustregel, kein Gesetz. Die Probe erklären, verfeinern, die Karte schreiben. Bitte den Agenten, aus diesem Gespräch einen Skill zu machen Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Wann Du einen schreibst Sonnenlichtzone Beim dritten Mal schreibst Du den Skill auf 1. 2. 3. Was für Menschen funktioniert, funktioniert auch für KI : eine starke Faustregel, kein Gesetz. Die Probe erklären, verfeinern, die Karte schreiben. Bitte den Agenten, aus diesem Gespräch einen Skill zu machen Sonnenlichtzone Epipelagial"
     },
     {
       "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -61,7 +61,7 @@
     },
     {
       "id": "the-label",
-      "text": "Die Beschreibung Sonnenlichtzone Die Beschreibung ist alles, was die KI sieht „Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Das Register ist offen, jede Karte dahinter geschlossen. SKILL.md: Name und Beschreibung laden zuerst Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Die Beschreibung Sonnenlichtzone Die Beschreibung ist alles, was die KI sieht „Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Das Register ist offen, jede Karte dahinter geschlossen. SKILL.md: Name und Beschreibung laden zuerst Sonnenlichtzone Epipelagial"
     },
     {
       "id": "the-label--the-description-is-all-the-ai-sees",
@@ -77,7 +77,7 @@
     },
     {
       "id": "what-goes-inside",
-      "text": "Welcher Kontext hineingehört Dämmerzone Fachwissen gehört hinein, an den Schritt gebunden, der es braucht Arm-Voreinstellung Artenführer Die Karte in ihrer Hülle: jedes Extra an seinen Schritt gebunden. references/ und assets/ laden, wenn ein Schritt sie braucht Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Welcher Kontext hineingehört Dämmerzone Fachwissen gehört hinein, an den Schritt gebunden, der es braucht Arm-Voreinstellung Artenführer Die Karte in ihrer Hülle: jedes Extra an seinen Schritt gebunden. references/ und assets/ laden, wenn ein Schritt sie braucht Dämmerzone Mesopelagial"
     },
     {
       "id": "what-goes-inside--what-goes-where-is-information-architecture",
@@ -93,7 +93,7 @@
     },
     {
       "id": "what-stays-beside",
-      "text": "Welcher Kontext daneben bleibt Dämmerzone Projektdatei Projektdetails bleiben neben dem Skill Ort 4: 40 m Ort 7: 120 m Dieselbe Karte an jedem Ort: Der heutige Tauchplan sagt 120 m. Der Schritt liest beim Ausführen eine Projektdatei, etwa CONTEXT.md Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Welcher Kontext daneben bleibt Dämmerzone Projektdatei Projektdetails bleiben neben dem Skill Ort 4: 40 m Ort 7: 120 m Dieselbe Karte an jedem Ort: Der heutige Tauchplan sagt 120 m. Der Schritt liest beim Ausführen eine Projektdatei, etwa CONTEXT.md Dämmerzone Mesopelagial"
     },
     {
       "id": "what-stays-beside--beside-the-skill",
@@ -109,7 +109,7 @@
     },
     {
       "id": "sharing-it",
-      "text": "Ihn teilen Mitternachtszone Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum Owner: Laborteam · v1.3 · Prüfung im März Die Karte im Flottenhandbuch des Instituts. metadata: Owner, Version, Prüfdatum Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Ihn teilen Mitternachtszone Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum Owner: Laborteam · v1.3 · Prüfung im März Die Karte im Flottenhandbuch des Instituts. metadata: Owner, Version, Prüfdatum Mitternachtszone Bathypelagial"
     },
     {
       "id": "sharing-it--shared-skills-are-knowledge-articles",
@@ -125,7 +125,7 @@
     },
     {
       "id": "keeping-it-alive",
-      "text": "Ihn am Leben halten Abyssal Einen Skill richtig zu halten, kostet Dich jeden Monat etwas + Projektdetails geändert + Ein neues Werkzeug kam dazu + Eine Beschreibung überschneidet sich mit einem anderen Skill Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit. In beiden Ansichten gleich: Der Zettel ist die Pflege Oberfläche die Meeresoberfläche und die Luft darüber Sonnenlichtzone Epipelagial Dämmerzone Mesopelagial Mitternachtszone Bathypelagial Abyssal Abyssopelagial"
+      "text": "Ihn am Leben halten Abyssal Einen Skill richtig zu halten, kostet Dich jeden Monat etwas + Projektdetails geändert + Ein neues Werkzeug kam dazu + Eine Beschreibung überschneidet sich mit einem anderen Skill Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit. In beiden Ansichten gleich: Der Zettel ist die Pflege Abyssal Abyssopelagial"
     },
     {
       "id": "keeping-it-alive--every-skill-is-a-loan",

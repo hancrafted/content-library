@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "What lies below the waterline of sustainable AI skills Every conversation with AI starts from zero on how you work. A skill hands it your proven procedure on demand, and where you keep the project details, inside the skill or beside it, decides how reusable it is. A research ship on the waterline has lowered its diving robot on a cable from the A-frame to hang just above the water, its lamp shining down; beyond it an iceberg, most of its mass below the waterline, above the sea zones down to the abyss. Surface Sunlit Twilight Midnight Abyss you are here · Surface Chat app Coding agent Coding agent · the files behind it SKILL.md name, description, instructions references/ scripts/ assets/ supporting files a project file, such as CONTEXT.md project details, read when the skill runs"
+      "text": "What lies below the waterline of sustainable AI skills A research ship on the waterline has lowered its diving robot on a cable from the A-frame to hang just above the water, its lamp shining down; beyond it an iceberg, most of its mass below the waterline, above the sea zones down to the abyss. Surface the sea surface and the air above it you are here · Surface Chat app Coding agent Coding agent · the files behind it SKILL.md name, description, instructions references/ scripts/ assets/ supporting files a project file, such as CONTEXT.md project details, read when the skill runs"
     },
     {
       "id": "a-thought-experiment",
-      "text": "A thought experiment Surface AI model Unless you write it down, every conversation with AI starts from zero Your pilot is the AI model: ten years of skill, no memory of yesterday. Each session begins with a fresh context window Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "A thought experiment Surface AI model Unless you write it down, every conversation with AI starts from zero Your pilot is the AI model: ten years of skill, no memory of yesterday. Each session begins with a fresh context window Surface the sea surface and the air above it"
     },
     {
       "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
@@ -21,7 +21,7 @@
     },
     {
       "id": "what-a-skill-is",
-      "text": "What a skill is Surface A skill is a name, a description and instructions A procedure card: title, use-when line, steps. SKILL.md, plus scripts/ references/ assets/ Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "What a skill is Surface A skill is a name, a description and instructions A procedure card: title, use-when line, steps. SKILL.md, plus scripts/ references/ assets/ Surface the sea surface and the air above it"
     },
     {
       "id": "what-a-skill-is--a-skill-is-a-written-procedure",
@@ -45,7 +45,7 @@
     },
     {
       "id": "when-to-write-one",
-      "text": "When to write one Sunlit The third time, write the skill down 1st 2nd 3rd What works for people also works for AI : a strong rule of thumb, not a law. Explain the sample, refine it, write the card. Ask the agent to turn this conversation into a skill Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "When to write one Sunlit The third time, write the skill down 1st 2nd 3rd What works for people also works for AI : a strong rule of thumb, not a law. Explain the sample, refine it, write the card. Ask the agent to turn this conversation into a skill Sunlit epipelagic"
     },
     {
       "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -61,7 +61,7 @@
     },
     {
       "id": "the-label",
-      "text": "The description Sunlit The description is all the AI sees “Use when we reach a new site and need a sample from the seabed.” The index is open, every card behind it closed. SKILL.md: name and description load first Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "The description Sunlit The description is all the AI sees “Use when we reach a new site and need a sample from the seabed.” The index is open, every card behind it closed. SKILL.md: name and description load first Sunlit epipelagic"
     },
     {
       "id": "the-label--the-description-is-all-the-ai-sees",
@@ -77,7 +77,7 @@
     },
     {
       "id": "what-goes-inside",
-      "text": "What context goes inside Twilight Domain knowledge goes inside, tied to the step that needs it arm preset species guide The card in its sleeve: each extra tied to its step. references/ and assets/ load when a step needs them Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "What context goes inside Twilight Domain knowledge goes inside, tied to the step that needs it arm preset species guide The card in its sleeve: each extra tied to its step. references/ and assets/ load when a step needs them Twilight mesopelagic"
     },
     {
       "id": "what-goes-inside--what-goes-where-is-information-architecture",
@@ -93,7 +93,7 @@
     },
     {
       "id": "what-stays-beside",
-      "text": "What context stays beside Twilight project file Project details stay beside the skill Site 4: 40 m Site 7: 120 m Same card, any site: today's dive plan says 120 m. The step reads a project file, such as CONTEXT.md, when it runs Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "What context stays beside Twilight project file Project details stay beside the skill Site 4: 40 m Site 7: 120 m Same card, any site: today's dive plan says 120 m. The step reads a project file, such as CONTEXT.md, when it runs Twilight mesopelagic"
     },
     {
       "id": "what-stays-beside--beside-the-skill",
@@ -109,7 +109,7 @@
     },
     {
       "id": "sharing-it",
-      "text": "Sharing it Midnight A shared skill needs an owner, a version, a review date Owner: Lab team · v1.3 · review March The card in the institute's fleet manual. metadata: owner, version, review date Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "Sharing it Midnight A shared skill needs an owner, a version, a review date Owner: Lab team · v1.3 · review March The card in the institute's fleet manual. metadata: owner, version, review date Midnight bathypelagic"
     },
     {
       "id": "sharing-it--shared-skills-are-knowledge-articles",
@@ -125,7 +125,7 @@
     },
     {
       "id": "keeping-it-alive",
-      "text": "Keeping it alive Abyss Keeping a skill right costs you every month + Project details changed + A new tool arrived + A description overlaps another skill A card with a running tag, like a loan statement. Same in both views: the tag is the upkeep Surface the sea surface and the air above it Sunlit epipelagic Twilight mesopelagic Midnight bathypelagic Abyss abyssopelagic"
+      "text": "Keeping it alive Abyss Keeping a skill right costs you every month + Project details changed + A new tool arrived + A description overlaps another skill A card with a running tag, like a loan statement. Same in both views: the tag is the upkeep Abyss abyssopelagic"
     },
     {
       "id": "keeping-it-alive--every-skill-is-a-loan",
