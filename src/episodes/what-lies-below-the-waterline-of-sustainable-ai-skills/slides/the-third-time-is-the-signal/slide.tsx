@@ -38,15 +38,31 @@ const STEPS = ['hold', 'camera', 'lower', 'identify', 'seal', 'label'] as const;
 interface PanelProps {
   readonly heading: string;
   readonly focal?: boolean;
-  readonly chatPicture: ReactNode;
-  readonly codingPicture: ReactNode;
+  readonly picture: ReactNode;
+  /** What the captain and the pilot say, over the picture in the Chat app view only. */
+  readonly says: { readonly captain: string; readonly pilot: string };
   readonly chip: string;
   readonly chat: ReactNode;
   readonly coding: ReactNode;
 }
 
+/** A speech bubble over the panel's picture, its tail by the speaker's head: the captain's left, the pilot's right. */
+function Speech({ who, children }: { readonly who: 'captain' | 'pilot'; readonly children: string }) {
+  return (
+    <p
+      data-says={who}
+      className={cn(
+        'absolute max-w-[48%] rounded-2xl border-2 bg-card px-2.5 py-1 text-caption font-medium text-card-foreground',
+        who === 'captain' ? 'top-2 left-2 rounded-bl-none border-human' : 'top-[22%] right-2 rounded-br-none border-ai',
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
 /** One comic panel: its AI head, the morning's picture, and the card row; the view switch swaps words, never the art. */
-function ComicPanel({ heading, focal, chatPicture, codingPicture, chip, chat, coding }: PanelProps) {
+function ComicPanel({ heading, focal, picture, says, chip, chat, coding }: PanelProps) {
   return (
     <li
       data-panel
@@ -67,11 +83,12 @@ function ComicPanel({ heading, focal, chatPicture, codingPicture, chip, chat, co
         {heading}
       </p>
       <div className="relative">
+        {picture}
         <InView view="chat" as="div">
-          {chatPicture}
+          <Speech who="captain">{says.captain}</Speech>
+          <Speech who="pilot">{says.pilot}</Speech>
         </InView>
         <InView view="coding" as="div">
-          {codingPicture}
           <p
             data-session-chip
             className="absolute bottom-3 left-3 rounded-full bg-foreground px-3 py-1 font-mono text-caption font-semibold text-background"
@@ -110,13 +127,6 @@ export const theThirdTimeIsTheSignal = slide({
   segments: [{ slug: 'three-tries' }, { slug: 'not-only-repetition' }, { slug: 'did-you-know' }],
   content: ({ t, marker, target }) => {
     const kind = t('card.kind');
-    const picture = (panel: (typeof PANELS)[number], day: Day, speech: boolean) => (
-      <MorningScene
-        day={day}
-        label={t(`panels.${panel}.alt`)}
-        says={speech ? { captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) } : undefined}
-      />
-    );
     const terminal = (session: 'first' | 'second') => (
       <AgentTerminal
         title={t(`terminal.${session}.title`)}
@@ -195,8 +205,8 @@ export const theThirdTimeIsTheSignal = slide({
               key={panel}
               heading={t(`panels.${panel}.heading`)}
               focal={panel === 'third'}
-              chatPicture={picture(panel, (index + 1) as Day, true)}
-              codingPicture={picture(panel, (index + 1) as Day, false)}
+              picture={<MorningScene day={(index + 1) as Day} label={t(`panels.${panel}.alt`)} />}
+              says={{ captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) }}
               chip={t(`panels.${panel}.sessionChip`)}
               chat={cards[panel].chat}
               coding={cards[panel].coding}

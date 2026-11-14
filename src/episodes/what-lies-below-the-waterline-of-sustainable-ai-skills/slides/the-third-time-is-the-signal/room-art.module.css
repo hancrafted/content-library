@@ -1,0 +1,211 @@
+/*
+ * The control room's own tones, lifted from Spec Option 8a (feedback 3, decision 46): the faceted wall and floor,
+ * the window onto the deck with its sky, clouds, sea and A-frame, the wall clock, and the written card the captain holds
+ * out on day 3. Raw colours live only here, each with its dark value from the Spec (FE-011); dark mode is tuned later.
+ */
+
+.art {
+  --art-sky-1: oklch(0.76 0.08 240);
+  --art-sky-2: oklch(0.8 0.07 236);
+  --art-sky-3: oklch(0.845 0.058 230);
+  --art-sky-4: oklch(0.885 0.045 222);
+  --art-cloud-lit: oklch(0.995 0.004 230);
+  --art-cloud-shade: oklch(0.91 0.03 240);
+  --art-sea-surface-lit: oklch(0.74 0.09 212);
+  --art-sea-surface: oklch(0.69 0.1 218);
+  --art-hull-lit: oklch(0.52 0.03 250);
+  --art-hull: oklch(0.4 0.03 255);
+  --art-house-lit: oklch(0.985 0.005 90);
+  --art-house: oklch(0.92 0.012 85);
+  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-cloth-dark: oklch(0.22 0.02 265);
+  --art-room-lit: oklch(0.95 0.012 230);
+  --art-room: oklch(0.905 0.018 234);
+  --art-room-shade: oklch(0.86 0.024 238);
+  --art-floor-lit: oklch(0.72 0.025 240);
+  --art-floor: oklch(0.66 0.028 244);
+  --art-frame-lit: oklch(0.62 0.07 60);
+  --art-frame-shade: oklch(0.44 0.05 55);
+  --art-pane-glint: oklch(1 0 0 / 0.35);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper: oklch(0.972 0.009 88);
+  --art-paper-edge: oklch(0.86 0.02 80);
+}
+
+:global(.dark) .art {
+  --art-sky-1: oklch(0.24 0.05 268);
+  --art-sky-2: oklch(0.28 0.055 264);
+  --art-sky-3: oklch(0.32 0.055 258);
+  --art-sky-4: oklch(0.37 0.055 250);
+  --art-cloud-lit: oklch(0.47 0.045 255);
+  --art-cloud-shade: oklch(0.39 0.045 260);
+  --art-sea-surface-lit: oklch(0.44 0.075 222);
+  --art-sea-surface: oklch(0.405 0.078 226);
+  --art-hull-lit: oklch(0.5 0.03 250);
+  --art-hull: oklch(0.4 0.03 255);
+  --art-house-lit: oklch(0.86 0.008 90);
+  --art-house: oklch(0.78 0.012 85);
+  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-cloth-dark: oklch(0.2 0.02 265);
+  --art-room-lit: oklch(0.36 0.025 250);
+  --art-room: oklch(0.32 0.025 253);
+  --art-room-shade: oklch(0.285 0.025 256);
+  --art-floor-lit: oklch(0.25 0.02 255);
+  --art-floor: oklch(0.22 0.02 258);
+  --art-frame-lit: oklch(0.5 0.06 60);
+  --art-frame-shade: oklch(0.36 0.045 55);
+  --art-pane-glint: oklch(1 0 0 / 0.18);
+  --art-paper-lit: oklch(0.43 0.02 250);
+  --art-paper: oklch(0.39 0.02 252);
+  --art-paper-edge: oklch(0.29 0.02 258);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--art-room-shade);
+  stroke: var(--art-room-shade);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--art-room-lit);
+  stroke: var(--art-room-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--art-room);
+  stroke: var(--art-room);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--art-floor);
+  stroke: var(--art-floor);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--art-floor-lit);
+  stroke: var(--art-floor-lit);
+}
+
+.art [data-tone='frame-lit'] {
+  fill: var(--art-frame-lit);
+  stroke: var(--art-frame-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--art-frame-shade);
+  stroke: var(--art-frame-shade);
+}
+
+.art [data-tone='sky-1'] {
+  fill: var(--art-sky-1);
+  stroke: var(--art-sky-1);
+}
+
+.art [data-tone='sky-2'] {
+  fill: var(--art-sky-2);
+  stroke: var(--art-sky-2);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--art-sky-3);
+  stroke: var(--art-sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--art-sky-4);
+  stroke: var(--art-sky-4);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--art-cloud-lit);
+  stroke: var(--art-cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--art-cloud-shade);
+  stroke: var(--art-cloud-shade);
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--art-sea-surface-lit);
+  stroke: var(--art-sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--art-sea-surface);
+  stroke: var(--art-sea-surface);
+}
+
+.art [data-tone='hull-lit'] {
+  fill: var(--art-hull-lit);
+  stroke: var(--art-hull-lit);
+}
+
+.art [data-tone='hull'] {
+  fill: var(--art-hull);
+  stroke: var(--art-hull);
+}
+
+.art [data-tone='robot-shade'] {
+  fill: var(--art-robot-shade);
+  stroke: var(--art-robot-shade);
+}
+
+.art [data-tone='robot-lit'] {
+  fill: var(--art-robot-lit);
+  stroke: var(--art-robot-lit);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--art-pane-glint);
+  stroke: none;
+}
+
+.art [data-tone='house-lit'] {
+  fill: var(--art-house-lit);
+  stroke: var(--art-house-lit);
+}
+
+.art [data-tone='house'] {
+  fill: var(--art-house);
+  stroke: var(--art-house);
+}
+
+.art [data-tone='cloth-dark'] {
+  fill: var(--art-cloth-dark);
+  stroke: var(--art-cloth-dark);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--art-paper-edge);
+  stroke: var(--art-paper-edge);
+}
+
+/* The A-frame's cable over the side: the robot is in the water below. */
+.cable {
+  stroke-width: 1.4;
+}
+
+/* The ruled lines written on the day-3 card, in the primary ink the Spec writes them in. */
+.cardLines {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
