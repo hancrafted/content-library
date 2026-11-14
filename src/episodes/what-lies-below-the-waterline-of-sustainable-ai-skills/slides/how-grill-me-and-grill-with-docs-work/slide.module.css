@@ -1,17 +1,122 @@
 /*
- * "grill-with-docs keeps context beside the skill" (Option 19b): the faceted paper of the sheets, the arrows, the
- * read-back current and the one emphasis motion. No raw colour (FE-011): paper warms `--card` with `--bulb`; the
- * procedure tiles deepen it; the "runs" arrows mix `--zone-twilight` toward `--on-brand-accent`; `--primary` is the
- * current and the new glossary row, the one focal fill.
+ * Slide token file of "grill-with-docs keeps context beside the skill" (FE-011 §2): the sheets' faceted paper, the
+ * read-back current and its bubbles, the light shafts and the seabed in the approved Spec Option 19b's own tones
+ * (feedback 3, decision 46), then the arrows, the step tiles and the one emphasis motion. Dark values are the Spec's;
+ * dark mode is tuned later (decision 32). `--primary` is the new glossary row, the one focal fill.
  */
 
+.art {
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.972 0.009 88);
+  --paper-shade: oklch(0.935 0.014 84);
+  --paper-edge: oklch(0.86 0.02 80);
+  --drop: oklch(0.3 0.04 255 / 0.2);
+  --current-lit: oklch(0.97 0.05 200 / 0.85);
+  --current: oklch(0.88 0.08 205 / 0.7);
+  --bubble: oklch(0.95 0.04 210 / 0.45);
+  --glint: oklch(1 0 0);
+  --ray: oklch(0.97 0.06 200 / 0.18);
+  --bed-lit: oklch(0.42 0.04 70);
+  --bed: oklch(0.34 0.035 60);
+  --bed-shade: oklch(0.27 0.03 50);
+}
+
+:global(.dark) .art {
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper: oklch(0.39 0.02 252);
+  --paper-shade: oklch(0.35 0.02 255);
+  --paper-edge: oklch(0.29 0.02 258);
+  --drop: oklch(0.1 0.02 260 / 0.45);
+  --current-lit: oklch(0.86 0.08 200 / 0.7);
+  --current: oklch(0.7 0.09 205 / 0.55);
+  --bubble: oklch(0.8 0.05 210 / 0.35);
+  --glint: oklch(0.98 0.01 230);
+  --ray: oklch(0.8 0.08 200 / 0.12);
+  --bed-lit: oklch(0.36 0.035 70);
+  --bed: oklch(0.29 0.03 60);
+  --bed-shade: oklch(0.23 0.025 50);
+}
+
+/* Each opaque facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--paper-edge);
+  stroke: var(--paper-edge);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--bed-lit);
+  stroke: var(--bed-lit);
+}
+
+.art [data-tone='bed'] {
+  fill: var(--bed);
+  stroke: var(--bed);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--bed-shade);
+  stroke: var(--bed-shade);
+}
+
+/* The see-through tones, unstroked: the drop, the current, the bubbles and the light shafts. */
+.art [data-tone='drop'] {
+  fill: var(--drop);
+  stroke: none;
+}
+
+.art [data-tone='current-lit'] {
+  fill: var(--current-lit);
+  stroke: none;
+}
+
+.art [data-tone='current'] {
+  fill: var(--current);
+  stroke: none;
+}
+
+.art [data-tone='bubble'] {
+  fill: var(--bubble);
+  stroke: none;
+}
+
+.art [data-tone='ray'] {
+  fill: var(--ray);
+  stroke: none;
+}
+
+/* The sheets' words read on the Spec's light paper. */
 .paper {
-  background: color-mix(in oklab, var(--card) 94%, var(--bulb));
   color: var(--card-foreground);
 }
 
+/* The procedure tiles: highlighted on the paper, as the Spec marks them. */
 .step {
-  background: color-mix(in oklab, var(--card) 78%, var(--bulb));
+  background: color-mix(in oklab, var(--warning) 25%, transparent);
 }
 
 /* The procedure lines of the Coding agent view, highlighted as a reader marks them. */
@@ -22,11 +127,6 @@
 .arrow {
   stroke: color-mix(in oklab, var(--zone-twilight) 30%, var(--on-brand-accent));
   fill: color-mix(in oklab, var(--zone-twilight) 30%, var(--on-brand-accent));
-}
-
-.current {
-  stroke: var(--primary);
-  fill: var(--primary);
 }
 
 .newTerm {
@@ -55,10 +155,8 @@
 
 @keyframes carry {
   from {
-    clip-path: inset(100% 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
+    opacity: 0;
+    translate: 0 1.5rem;
   }
 }
 
