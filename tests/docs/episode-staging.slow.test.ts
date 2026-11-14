@@ -12,7 +12,7 @@ import {
 
 /*
  * The slow half of episode-staging.test.ts: every staging folder's files checked against each other, and every
- * per-run pipeline checked against the repo, one `mh query` a path (seconds each). They read docs/episodes/ and
+ * per-run pipeline checked against the repo, its outputs answered by one batched `mh query`. They read docs/episodes/ and
  * skills/ from disk, so the slow lane reruns them whenever those change (ARCH-003-testing §4).
  */
 
