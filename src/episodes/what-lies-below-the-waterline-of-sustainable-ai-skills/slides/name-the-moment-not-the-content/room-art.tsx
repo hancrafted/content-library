@@ -1,5 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import styles from './slide.module.css';
+import { ART_SCALE, ART_TOP } from './speech.pure';
 
 /*
  * The drawing lifted from the approved Spec's Option 12a (feedback 3, decision 46): the control room's faceted walls
@@ -10,10 +11,6 @@ import styles from './slide.module.css';
 
 /** One facet: its tone, the token that fills it, and its outline. */
 type Facet = readonly [tone: string, d: string];
-
-/** How the Spec's 1000 by 640 room fills the Scene's 1200 by 800 space: widened to 1200, its floor at the bottom. */
-export const ART_SCALE = 1.2;
-export const ART_TOP = 800 - 640 * ART_SCALE;
 
 const ROOM: readonly Facet[] = [
   ['room', 'M1000 331.8L924 442.7L864.4 278.5ZM924 442.7L702.8 454.3L864.4 278.5ZM608.3 107.6L734 195.1L530.6 250.8Z'],

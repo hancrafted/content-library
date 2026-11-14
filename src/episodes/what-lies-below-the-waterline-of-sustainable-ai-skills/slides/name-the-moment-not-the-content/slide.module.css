@@ -146,3 +146,16 @@
     opacity: 0;
   }
 }
+
+/*
+ * The captain drawn once per view, as `InView` does for words: the other view's drawing hides. The crew stands at room
+ * scale, 2.3 times the figure, so the shared bubble turns its words down (`REQUEST_SAYS_SCALE`) to read at caption size.
+ */
+.inView {
+  --says-scale: 0.5;
+}
+
+:global(html:not([data-agent-view='coding'])) .inView[data-view='coding'],
+:global(html[data-agent-view='coding']) .inView[data-view='chat'] {
+  display: none;
+}
