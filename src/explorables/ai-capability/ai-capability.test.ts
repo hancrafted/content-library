@@ -197,4 +197,37 @@ describe('edge cases', () => {
     expect(html).toContain(target);
     expect(html).toContain(marker);
   });
+
+  it('opens the Agents card back face up on the agents Preset, lit, the other cards front up', () => {
+    // ARRANGE
+    const turned = ['false', 'true', 'false', 'false'];
+    const lit = 'data-level="agents" data-on="true"';
+    // ACT
+    const html = render({ preset: 'agents', locale: 'en' });
+    const flips = [...html.matchAll(/data-flipped="(true|false)"/g)].map(([, state]) => state).slice(0, LEVELS.length);
+    // ASSERT
+    expect(flips).toEqual(turned);
+    expect(html).toContain(lit);
+  });
+
+  it("shows a Slide's card marker on the back face too, and its source marker beside the back's source line", () => {
+    // ARRANGE
+    const card = '<i data-test-marker="card"></i>';
+    const source = '<i data-test-marker="source"></i>';
+    const onBothFaces = 2;
+    const sourceLabel = 'Source: Anthropic, Building effective agents (2024)';
+    // ACT
+    const html = render({
+      preset: 'agents',
+      locale: 'en',
+      markers: { agents: createElement('i', { 'data-test-marker': 'card' }) },
+      sourceMarkers: { agents: createElement('i', { 'data-test-marker': 'source' }) },
+    });
+    const cards = html.split(card).length - 1;
+    const paragraphs = html.match(/<p[^>]*>(?:(?!<\/p>).)*<\/p>/g) ?? [];
+    const sourceLine = paragraphs.find((each) => each.includes(source));
+    // ASSERT
+    expect(cards).toBe(onBothFaces);
+    expect(sourceLine).toContain(sourceLabel);
+  });
 });

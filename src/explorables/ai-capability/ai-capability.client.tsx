@@ -32,6 +32,7 @@ export interface AiCapabilityClientProps {
   /** The `data-target` a Speaker note lights, per layer row: on its chip, which is there whether the row is shown or not. */
   readonly rowTargets?: Partial<Record<LayerRow, TargetProps>>;
   readonly markers?: Partial<Record<Level, ReactNode>>;
+  readonly sourceMarkers?: Partial<Record<Level, ReactNode>>;
 }
 
 /** The four Levels on one rail, which runs from the first column's centre to the last one's in a wide container. */
@@ -84,7 +85,9 @@ function useTimeline(root: RefObject<HTMLDivElement | null>, preset: AiCapabilit
   const carousel = useCarousel(list);
   const [hovered, setHovered] = useState<Level | null>(null);
   const [shown, setShown] = useState<readonly Row[]>(OPENING_ROWS);
-  const [flipped, setFlipped] = useState<Partial<Record<Turnable, boolean>>>({});
+  const [flipped, setFlipped] = useState<Partial<Record<Turnable, boolean>>>(() =>
+    preset.turned ? { [preset.turned]: true } : {},
+  );
   const lit = hovered ?? preset.lit;
   const { frames, playAll, playOne, playing } = useScenePlayer(root, preset.autoplay, hovered);
   useSwipePlays(carousel, playOne);
@@ -140,7 +143,7 @@ function Levels(
     readonly layerRows: Readonly<Record<LayerRow, LayerRowProps>>;
   },
 ) {
-  const { words, productivity, targets, markers, state, layerRows } = props;
+  const { words, productivity, targets, markers, sourceMarkers, state, layerRows } = props;
   const { lit, playing, frames, flipped, shown } = state;
   return (
     <Rail list={state.list} rows={gridRows(shown)}>
@@ -151,7 +154,7 @@ function Levels(
           {...{ words: words.levels[each], scenes: words.scenes, labels: props.labels, rowLabels: props.rowLabels }}
           {...{ frame: frames[each], on: lit === each, dimmed: lit !== null && lit !== each, moving: playing === each }}
           {...{ flipped: flipped[each] ?? false, onLight: state.setHovered, onFlip: state.onFlip }}
-          {...{ target: targets?.[each], marker: markers?.[each] }}
+          {...{ target: targets?.[each], marker: markers?.[each], sourceMarker: sourceMarkers?.[each] }}
           {...{ shown, productivity: productivity[each], layers: layerRows }}
         />
       ))}

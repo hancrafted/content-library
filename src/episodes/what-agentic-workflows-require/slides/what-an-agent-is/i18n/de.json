@@ -1,0 +1,50 @@
+{
+  "title": "Was ein Agent ist",
+  "caption": "Ein Agent ist ein Sprachmodell, das <b>Werkzeuge in einer Schleife nutzt</b> und selbst entscheidet, wie es ein Ziel erreicht.",
+  "explorable": {
+    "levels": {
+      "agents": {
+        "definition": "Agenten sind Systeme, in denen LLMs ihre eigenen Abläufe und ihre Werkzeugnutzung dynamisch steuern und selbst bestimmen, wie sie Aufgaben erledigen.",
+        "sourceLabel": "Anthropic, Building effective agents (2024)"
+      }
+    },
+    "scenes": {
+      "prompt": "Entwirf die Einladung zum Sommerfest in 3 Zeilen.",
+      "agentPrompt": "Plane die Anreise zum Sommerfest.",
+      "tool2": "Züge suchen",
+      "agentAnswer": "5 Verbindungen, schnellste zuerst."
+    }
+  },
+  "notes": {
+    "anthropic-definition": {
+      "header": "Die Definition von Anthropic",
+      "description": "Agenten sind Systeme, in denen LLMs ihre eigenen Abläufe und ihre Werkzeugnutzung dynamisch steuern und selbst bestimmen, wie sie Aufgaben erledigen [1].",
+      "sources": {
+        "anthropic-building-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    },
+    "shorter-form": {
+      "header": "Eine kürzere Form",
+      "description": "„Ein LLM-Agent führt Werkzeuge in einer Schleife aus, um ein Ziel zu erreichen“, mit einer Abbruchbedingung [1].",
+      "sources": {
+        "willison-agent-definition": {
+          "title": "Willison, I think \u201cagent\u201d may finally have a widely enough agreed upon definition"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "model-tools-loop": {
+        "title": "Modell, Werkzeuge, Schleife",
+        "keywords": "",
+        "script": "Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht. Er ist keine einzelne Chat-Antwort, die Du liest und dann weitergehst, er ist eine Schleife aus Handeln, auf das Ergebnis schauen und wieder Handeln, bis er glaubt, fertig zu sein."
+      },
+      "steers-its-own-steps": {
+        "title": "Steuert seine eigenen Schritte",
+        "keywords": "",
+        "script": "Wenn Du bisher nur ein Chat-Werkzeug genutzt hast, ist das der Wechsel. Im Chat steuerst Du jeden Schritt selbst, weil Du jede Antwort liest und entscheidest, was Du als Nächstes fragst. Ein Agent steuert seine eigenen Schritte, also kannst Du nicht davon ausgehen, dass er die Schritte geht, die Du gegangen wärst. Deshalb geht es im Rest dieser Episode darum, was Du um ihn herum aufsetzen musst."
+      }
+    }
+  }
+}

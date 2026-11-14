@@ -178,15 +178,6 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('holds only its section slide in each placement marker, leaving the page Slides to the Section jobs', () => {
-    // ARRANGE
-    const expected = [1, 1, 1, 1, 1];
-    // ACT
-    const actual = SECTIONS.map((section) => section.length);
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
-
   it('marks no seam as failed outside A thought experiment', () => {
     // ARRANGE
     const expected = [1, 0, 0, 0, 0];

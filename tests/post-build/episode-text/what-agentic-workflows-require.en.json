@@ -1,7 +1,7 @@
 {
   "title": "What agentic workflows require of people and organisations · hancrafted",
   "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-  "toc": "Episodes Collapse contents What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation Open contents : Contents Episodes What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation",
+  "toc": "Episodes Collapse contents What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is What an agent is What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation Open contents : Contents Episodes What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is What an agent is What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation",
   "slides": [
     {
       "id": "top",
@@ -14,6 +14,14 @@
     {
       "id": "what-an-agentic-workflow-is",
       "text": "What an agentic workflow is Two terms to stand on: an agent, then an agentic workflow. Activities Travel Food & drinks Venue Food & drinks 31 vegetarian Venue kitchen You design the seam"
+    },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agent-is",
+      "text": "What an agentic workflow is (1/2) Page 1 of 2 What an agent is An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. Explain Managing effort Productivity increase Adoption AI disciplines Oversight ▶ Play all 2022–23 Chat You write, the AI answers. The entry point. Click: definition Definition : Chat is a conversation with the model: you write instructions, it answers, message by message. Source : OpenAI, prompt engineering guide ↗ ( opens in a new tab ) Draft the party invitation in 3 lines. Sure: 1. … 2. … 3. … Chat a conversation: you write, it answers, message by message 2024–25 Agents The AI uses tools and works in a loop. Click: definition Definition : Agents are systems where LLMs dynamically direct their own processes and tool usage, keeping control over how they accomplish tasks. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) done Plan the party trip. Open the web Search trains 5 routes, fastest first. Harness the software around it: permissions, tools and a loop until done 2024–26 Workflows Several agents, step by step, to a plan. Click: definition Definition : A workflow chains model and tool steps along a path fixed in advance. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) Flowchart a graph of agents with a human in or on the loop 2026 → · emerging Factory? Agents run the lifecycle, spec to release. People pass the gates. Click: definition Definition : A factory runs the whole development lifecycle with agents, from specification to release; people set the goals and pass its gates. Source : Shapiro, The Five Levels (2026) ↗ ( opens in a new tab ) ? Lifecycle requests in, agents at every stage, people at the gates ‹ › Large language model (LLM) The foundation, under every stage It predicts, token A token is a piece of a word, such as \"special\" + \"ist\". Models read and write text in tokens. by token, which word piece most likely comes next, learnt from vast amounts of training text. ChatGPT, Copilot, Claude. Click: definition New tech nology brings ? Definition : A large language model is an AI model trained on vast amounts of text that continues text token by token and is steered by text alone. Source : Brown et al. 2020, Language Models are Few-Shot Learners ↗ ( opens in a new tab ) Explore it →"
+    },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+      "text": "What an agentic workflow is (2/2) Page 2 of 2 What an agentic workflow is A structured process in which AI agents make decisions, take actions and coordinate tasks, with minimal human intervention. You design the path; the agent steers inside its task. You design this the stages, their order, what each hands over, where you sign off Use case : Plan a summer party Stages Jobs Practice it for Plan Plan → a plan of epics Get interviewed, then a short plan of epics Practice it for Requirements Requirements → tickets you signed off Grill one epic, then sign off its tickets checked You sign off Practice it for Research Research → research, a source per number Research 1 Research 2 One fresh chat per ticket Practice it for Page Page → one page: the party plan Gather it, then one page to sign off You sign off Explore it → → a plan of epics → tickets you signed off → research, a source per number → one page: the party plan The agent steers this Agent You set its task: research each ticket in its own fresh chat, with web search and a source for every number. How it gets there is its own call. Search the web → Compare 3 venues → Note a source per number until it thinks it is done “Minimal human intervention” Here you sign off twice. How minimal, and for which task? The next Section answers it."
     },
     {
       "id": "how-far-you-step-out",
@@ -35,6 +43,14 @@
     },
     { "id": "a-thought-experiment", "text": "A thought experiment No speaker notes for this Slide." },
     { "id": "what-an-agentic-workflow-is", "text": "What an agentic workflow is No speaker notes for this Slide." },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agent-is",
+      "text": "What an agent is Anthropic's definition Agents are systems where LLMs dynamically direct their own processes and tool usage, keeping control over how they accomplish tasks 1 . Sources (1) Anthropic, Building effective agents ( opens in a new tab ) anthropic.com A shorter form “An LLM agent runs tools in a loop to achieve a goal”, with a stopping condition 1 . Sources (1) Willison, I think “agent” may finally have a widely enough agreed upon definition ( opens in a new tab ) simonwillison.net"
+    },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+      "text": "What an agentic workflow is IBM's wording “Agentic workflows are AI-driven processes where autonomous AI agents make decisions, take actions and coordinate tasks with minimal human intervention.” 1 Sources (1) Gutowska and Stryker (IBM), What are Agentic Workflows? ( opens in a new tab ) ibm.com Salesforce's wording “Agentic workflows are structured processes where AI agents make decisions, solve problems, and perform tasks with minimal human input.” The word “structured” is Salesforce's; “coordinate tasks” is IBM's. The Slide's sentence merges the two and belongs to neither vendor 1 . Sources (1) Salesforce, What Are Agentic Workflows? ( opens in a new tab ) salesforce.com Why the vendors stress autonomy Both sell agent platforms and praise reduced oversight; that this explains their wording is an inference, the pages give no reason 1 . Sources (1) Gutowska and Stryker (IBM), What are Agentic Workflows? ( opens in a new tab ) ibm.com Two levels of control Anthropic draws the line at who controls the steps: workflows are orchestrated through predefined code paths, agents direct their own process. Applying “you design the path, the agent steers inside its task” to a team's process is an inference 1 . Sources (1) Anthropic, Building effective agents ( opens in a new tab ) anthropic.com Autonomy as a degree Ng prefers to call systems agent-like to different degrees, with a gray zone, over a binary 1 . Sources (1) Andrew Ng, The Batch issue 253 (letter on agentic workflows) ( opens in a new tab ) deeplearning.ai"
+    },
     { "id": "how-far-you-step-out", "text": "How far you step out No speaker notes for this Slide." },
     {
       "id": "what-it-requires-of-each-person",
@@ -57,6 +73,14 @@
     {
       "id": "what-an-agentic-workflow-is",
       "text": "What an agentic workflow is 0:00 – 0:12 Name the thing Before we fix the board, we need two terms to stand on. What is an agent, and what makes a workflow agentic? Term first, then the board."
+    },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agent-is",
+      "text": "What an agent is 0:00 – 0:23 Model, tools, loop An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done. 0:23 – 0:52 Steers its own steps If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. That is the reason the rest of this Episode is about what you must set up around it."
+    },
+    {
+      "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+      "text": "What an agentic workflow is 0:00 – 0:15 The definition An agentic workflow is a process in which agents, not people, take the decisions and do the tasks, within a structure you set. The exact wording and where it comes from are in the Speaker notes. 0:15 – 0:35 Two levels Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away. 0:35 – 0:48 Minimal, how minimal Notice the phrase minimal human intervention, because it carries a lot of weight and says very little. How minimal, and for which task? That is what the next Section answers."
     },
     {
       "id": "how-far-you-step-out",

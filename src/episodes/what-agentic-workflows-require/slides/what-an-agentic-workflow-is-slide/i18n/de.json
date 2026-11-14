@@ -1,0 +1,88 @@
+{
+  "title": "Was ein agentischer Workflow ist",
+  "caption": "Ein strukturierter Prozess, in dem KI-Agenten Entscheidungen treffen, Aktionen ausführen und Aufgaben koordinieren, mit minimalem menschlichem Eingreifen. <b>Du gestaltest den Weg; der Agent steuert innerhalb seiner Aufgabe.</b>",
+  "design": {
+    "label": "Das gestaltest Du",
+    "hint": "die Stufen, ihre Reihenfolge, was jede übergibt, wo Du freigibst"
+  },
+  "diagramLabel": "Ein Sommerfest planen, in vier Stufen",
+  "gate": "Du gibst frei",
+  "handoffsLabel": "Was jede Stufe übergibt",
+  "handoffs": {
+    "plan": "ein Plan aus Epics",
+    "requirements": "Tickets, die Du freigegeben hast",
+    "research": "Recherche, eine Quelle pro Zahl",
+    "page": "eine Seite: der Plan fürs Fest"
+  },
+  "steers": {
+    "label": "Das steuert der Agent",
+    "task": "Du legst seine Aufgabe fest: {task} Wie er dorthin kommt, entscheidet er selbst.",
+    "steps": {
+      "search": "Im Web suchen",
+      "compare": "3 Locations vergleichen",
+      "source": "Eine Quelle pro Zahl notieren"
+    },
+    "done": "bis er glaubt, fertig zu sein"
+  },
+  "agent": "Agent",
+  "minimal": {
+    "term": "„Minimales menschliches Eingreifen“",
+    "question": "Hier gibst Du zweimal frei. Wie minimal, und für welche Aufgabe? Das beantwortet der nächste Abschnitt."
+  },
+  "notes": {
+    "ibm-wording": {
+      "header": "Die Formulierung von IBM",
+      "description": "„Agentic workflows are AI-driven processes where autonomous AI agents make decisions, take actions and coordinate tasks with minimal human intervention.“ Auf Deutsch: Agentische Workflows sind KI-gesteuerte Prozesse, in denen autonome KI-Agenten Entscheidungen treffen, Aktionen ausführen und Aufgaben koordinieren, mit minimalem menschlichem Eingreifen [1].",
+      "sources": {
+        "ibm-agentic-workflows": { "title": "Gutowska and Stryker (IBM), What are Agentic Workflows?" }
+      }
+    },
+    "salesforce-wording": {
+      "header": "Die Formulierung von Salesforce",
+      "description": "„Agentic workflows are structured processes where AI agents make decisions, solve problems, and perform tasks with minimal human input.“ Das Wort „strukturiert“ stammt von Salesforce, „Aufgaben koordinieren“ von IBM. Der Satz der Folie verbindet beide und gehört keinem der beiden Anbieter [1].",
+      "sources": {
+        "salesforce-agentic-workflows": { "title": "Salesforce, What Are Agentic Workflows?" }
+      }
+    },
+    "why-vendors-stress-autonomy": {
+      "header": "Warum die Anbieter Autonomie betonen",
+      "description": "Beide verkaufen Agenten-Plattformen und loben weniger Aufsicht; dass das ihre Formulierung erklärt, ist eine Schlussfolgerung, die Seiten nennen keinen Grund [1].",
+      "sources": {
+        "ibm-agentic-workflows": { "title": "Gutowska and Stryker (IBM), What are Agentic Workflows?" }
+      }
+    },
+    "two-levels-of-control": {
+      "header": "Zwei Ebenen der Kontrolle",
+      "description": "Anthropic zieht die Grenze daran, wer die Schritte steuert: Workflows laufen über vorab festgelegte Codepfade, Agenten steuern ihren Ablauf selbst. „Du gestaltest den Weg, der Agent steuert innerhalb seiner Aufgabe“ auf den Prozess eines Teams anzuwenden, ist eine Schlussfolgerung [1].",
+      "sources": {
+        "anthropic-building-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    },
+    "autonomy-as-a-degree": {
+      "header": "Autonomie als Abstufung",
+      "description": "Ng nennt Systeme lieber in unterschiedlichem Grad agentenhaft, mit einer Grauzone, statt in zwei Lager zu teilen [1].",
+      "sources": {
+        "ng-the-batch-253": { "title": "Andrew Ng, The Batch issue 253 (letter on agentic workflows)" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-definition": {
+        "title": "Die Definition",
+        "keywords": "",
+        "script": "Ein agentischer Workflow ist ein Prozess, in dem Agenten, nicht Menschen, die Entscheidungen treffen und die Aufgaben erledigen, innerhalb einer Struktur, die Du festlegst. Den genauen Wortlaut und woher er stammt, findest Du in den Speaker Notes."
+      },
+      "two-levels": {
+        "title": "Zwei Ebenen",
+        "keywords": "",
+        "script": "Lies es als zwei Ebenen. Auf der ersten Ebene gestaltest Du den Weg, also die Aufgaben und was jede Aufgabe an die nächste übergibt. Auf der zweiten Ebene steuert der Agent innerhalb seiner eigenen Aufgabe, und das ist der Teil, den Du abgibst."
+      },
+      "minimal-how-minimal": {
+        "title": "Minimal, wie minimal",
+        "keywords": "",
+        "script": "Achte auf die Wendung minimales menschliches Eingreifen, denn sie trägt viel Gewicht und sagt sehr wenig. Wie minimal, und für welche Aufgabe? Das beantwortet der nächste Abschnitt."
+      }
+    }
+  }
+}
