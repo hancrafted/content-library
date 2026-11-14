@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { depthBands, seaFacets, TITLE_LIFE_AT, visibleSpan, WATER_CELL, zoneSceneParts } from './zone-scene.pure';
+import {
+  depthBands,
+  seaFacets,
+  TITLE_LIFE_AT,
+  TITLE_LOOP_AT,
+  visibleSpan,
+  WATER_CELL,
+  zoneSceneParts,
+} from './zone-scene.pure';
 
 /*
  * What `ZoneScene` draws for a zone: the one prop a Slide names decides the sky, the rays, the seabed, the iceberg's
@@ -82,6 +90,28 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(outside).toEqual([]);
+  });
+
+  it('keeps the Abyss title bubbles in view on a phone and clear of the table of contents on a desktop', () => {
+    // ARRANGE
+    const boxes = [
+      { width: 375, height: 700 },
+      { width: 375, height: 812 },
+      { width: 375, height: 900 },
+      { width: 1440, height: 900 },
+      { width: 1920, height: 1080 },
+    ];
+    // The table of contents floats over the left fifth of a desktop Slide.
+    const tocClear = 1200 / 5;
+    const { x, halfWidth, scale } = TITLE_LOOP_AT.bubbles;
+    const column = { left: x - halfWidth * scale, right: x + halfWidth * scale };
+    // ACT
+    const hidden = boxes.filter((box) => {
+      const view = visibleSpan(box);
+      return column.left < Math.max(view.left, tocClear) || column.right > view.right;
+    });
+    // ASSERT
+    expect(hidden).toEqual([]);
   });
 });
 

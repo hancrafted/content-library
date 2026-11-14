@@ -56,6 +56,17 @@ export const TITLE_LIFE_AT: Readonly<
   siphonophore: { x: 720, y: 180, scale: 1.3, halfWidth: 20 },
 };
 
+/**
+ * Where a Section title draws its zone's loop instead of the page Slides' place, in the same terms as `TITLE_LIFE_AT`.
+ * A section slide's Scene runs full-bleed under the table of contents, which hides the Abyss bubbles' page place at
+ * the left: on the title they rise right of the robot's cable at 600, inside the middle a phone shows.
+ */
+export const TITLE_LOOP_AT: Readonly<
+  Record<'bubbles', { readonly x: number; readonly y: number; readonly scale: number; readonly halfWidth: number }>
+> = {
+  bubbles: { x: 680, y: 560, scale: 1.5, halfWidth: 32 },
+};
+
 /** The Scene's drawing space; `ZoneScene` fills its box from the bottom centre (`xMidYMax slice`). */
 const SCENE = { width: 1200, height: 800 } as const;
 
