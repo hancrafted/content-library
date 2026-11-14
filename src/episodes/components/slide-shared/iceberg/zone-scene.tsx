@@ -41,7 +41,8 @@ export interface ZoneSceneProps {
   readonly className?: string;
 }
 
-function Band({ facets, band }: { readonly facets: readonly SeaFacet[]; readonly band: 'sky' | 'water' }) {
+/** One band of faceted sky or water, filled from the Scene's `--zone` or `--water`. */
+export function Band({ facets, band }: { readonly facets: readonly SeaFacet[]; readonly band: 'sky' | 'water' }) {
   return (
     <g data-band={band} className={styles[band]}>
       {facets.map(({ points, tone }) => (

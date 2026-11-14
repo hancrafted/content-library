@@ -1,0 +1,90 @@
+/*
+ * The Title slide's hero overlay (`HeroDepthScene`): HTML over the full-bleed drawing, placed in the drawing's own
+ * units. The drawing fills the Slide from the bottom (`xMidYMax slice`), so one scale maps it: the larger of the box's
+ * width and height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so
+ * `cq` units read that box: a point (x, y) sits at `50cqw + (x - width / 2) * scale` across and
+ * `100cqh - (height - y) * scale` down. The ruler's labels take the zone's ink: dark on the light zones, light on the
+ * two zones dark in both themes.
+ */
+
+.overlay {
+  --hero-scale: max(calc(100cqw / var(--hero-width)), calc(100cqh / var(--hero-height)));
+
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  pointer-events: none;
+}
+
+.overlay > * {
+  pointer-events: auto;
+}
+
+.ruler {
+  pointer-events: none;
+}
+
+.zone {
+  position: absolute;
+  left: max(1rem, 3cqw);
+  top: calc(100cqh - (var(--hero-height) - var(--at-y)) * var(--hero-scale));
+  translate: 0 -50%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--foreground);
+  pointer-events: auto;
+}
+
+.zone[data-dark] {
+  color: var(--on-brand-accent);
+}
+
+.tile {
+  display: block;
+  width: 0.875rem;
+  height: 0.25rem;
+  border-radius: 2px;
+  background: currentcolor;
+  opacity: 0.55;
+}
+
+.zone[data-lit] .tile {
+  width: 1.75rem;
+  height: 0.4rem;
+  background: var(--primary);
+  opacity: 1;
+}
+
+.label {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+  border-radius: 2px;
+  touch-action: manipulation;
+}
+
+.label:hover,
+.label[aria-expanded='true'] {
+  text-decoration-style: solid;
+}
+
+.label:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.marker {
+  position: absolute;
+  left: calc(50cqw + (var(--at-x) - var(--hero-width) / 2) * var(--hero-scale));
+  top: calc(100cqh - (var(--hero-height) - var(--at-y)) * var(--hero-scale));
+  translate: -50% 0;
+  white-space: nowrap;
+}
+
+/* On a phone the ruler's words do not fit beside the drawing; the pill still marks the Surface. */
+@media (width < 48rem) {
+  .ruler {
+    display: none;
+  }
+}

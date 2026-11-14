@@ -9,7 +9,9 @@ import { hero } from './slide';
 /*
  * The Title slide's hero Scene, picked Option 0a: the research ship on the waterline has lowered its diving robot to
  * hang just above the water, where the ruler marks the Surface. Read as the Title slide renders it, with no Section
- * placed beside it. The scenery comes from ZoneScene, the ship, crew and robot from the cast (design-ADR-0025).
+ * placed beside it. The whole depth is one full-bleed drawing in the Backdrop, so the title and lede sit in its sky
+ * (Han's feedback 1); the ruler, the pill and the view switch stay reader content over it. The scenery comes from
+ * the Iceberg style, the ship, crew and robot from the cast (design-ADR-0025).
  */
 
 const sceneOf = (locale: Locale) =>
@@ -42,23 +44,38 @@ describe('success cases', () => {
     expect(pills).toEqual(expected);
   });
 
-  it('names the five zones on the ruler from the Surface down, the first Section lit on the Surface', () => {
+  it('names the five zones on the ruler down the left, from the Surface down, the Surface lit', () => {
     // ARRANGE
     const expected = {
       zones: ['Surface', 'Sunlit', 'Twilight', 'Midnight', 'Abyss'],
-      litBand: 'surface',
-      litSection: '0',
+      lit: ['surface'],
     };
     // ACT
     const $ = sceneOf('en');
-    const zones = $('[data-ruler-zone] [data-zone-label]')
-      .toArray()
-      .map((zone) => $(zone).text());
-    const lit = $('[data-tile][data-lit]');
     const seen = {
-      zones,
-      litBand: lit.closest('[data-ruler-zone]').attr('data-ruler-zone'),
-      litSection: lit.attr('data-section'),
+      zones: $('[data-hero-ruler] [data-ruler-zone] [data-zone-label]')
+        .toArray()
+        .map((zone) => $(zone).text()),
+      lit: $('[data-hero-ruler] [data-ruler-zone][data-lit]')
+        .toArray()
+        .map((zone) => $(zone).attr('data-ruler-zone')),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('draws the whole depth full-bleed in the Backdrop and keeps every word a reader needs out of it', () => {
+    // ARRANGE
+    const expected = { drawings: 1, wordsInBackdrop: 0, ruler: 1, pill: 1, described: 1 };
+    // ACT
+    const $ = sceneOf('en');
+    const backdrop = $('[data-slot="slide-backdrop"]');
+    const seen = {
+      drawings: backdrop.find('svg[data-hero-depth]').length,
+      wordsInBackdrop: backdrop.find('[data-hero-ruler], [data-you-are-here], [data-view-toggle], p, button').length,
+      ruler: $('[data-hero-overlay] [data-hero-ruler]').length,
+      pill: $('[data-hero-overlay] [data-you-are-here]').length,
+      described: $('[data-hero-overlay] [data-hero-label]').length,
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -66,7 +83,7 @@ describe('success cases', () => {
 
   it('draws the Surface with the ship on the waterline, its crew on the bridge and the robot on its cable', () => {
     // ARRANGE
-    const expected = { zone: 'surface', ship: 1, crew: 2, robot: 1, iceberg: 'whole' };
+    const expected = { zone: 'surface', ship: 1, crew: 2, robot: 1, iceberg: 'whole', zones: 4 };
     // ACT
     const $ = sceneOf('en');
     const seen = {
@@ -75,6 +92,7 @@ describe('success cases', () => {
       crew: $('[data-ship] [data-slot="bridge"] > g').length,
       robot: $('[data-robot]').length,
       iceberg: $('[data-iceberg]').attr('data-iceberg'),
+      zones: $('[data-depth-band]').length,
     };
     // ASSERT
     expect(seen).toEqual(expected);
