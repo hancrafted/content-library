@@ -1,0 +1,151 @@
+/*
+ * The library's own tones, lifted from Spec Option 21a (feedback 3, decision 46): the Abyss band, the zoom beam's halo,
+ * the binder's green covers, index tabs, faceted page and rings (the rings in the machine's tones, as the Spec draws
+ * them), the dark corner's three facets and the light ink written on it. Raw colours live only here, each with its dark
+ * value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours meet
+ * without a seam; the translucent ones are not, so they do not double at their edges.
+ */
+
+.art {
+  --art-ink-deep: oklch(0.975 0.01 230);
+  --art-sea-abyss: oklch(0.205 0.042 270);
+  --art-sea-abyss-lit: oklch(0.24 0.05 268);
+  --art-halo: oklch(0.97 0.08 200 / 0.2);
+  --art-halo-core: oklch(0.98 0.08 200 / 0.32);
+  --art-drop: oklch(0.12 0.04 265 / 0.35);
+  --art-book-lit: oklch(0.6 0.1 150);
+  --art-book: oklch(0.5 0.1 155);
+  --art-tab-a: oklch(0.74 0.09 212);
+  --art-tab-b: oklch(0.89 0.13 92);
+  --art-tab-c: oklch(0.72 0.1 252);
+  --art-paper: oklch(0.965 0.01 88);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper-shade: oklch(0.915 0.016 80);
+  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-dark-1: oklch(0.2 0.04 270);
+  --art-dark-3: oklch(0.13 0.025 274);
+  --art-dark-2: oklch(0.16 0.03 272);
+}
+
+:global(.dark) .art {
+  --art-ink-deep: oklch(0.975 0.01 230);
+  --art-sea-abyss: oklch(0.145 0.024 270);
+  --art-sea-abyss-lit: oklch(0.17 0.03 268);
+  --art-halo: oklch(0.9 0.1 200 / 0.12);
+  --art-halo-core: oklch(0.92 0.1 200 / 0.2);
+  --art-drop: oklch(0.05 0.02 265 / 0.5);
+  --art-book-lit: oklch(0.52 0.09 150);
+  --art-book: oklch(0.43 0.09 155);
+  --art-tab-a: oklch(0.6 0.08 218);
+  --art-tab-b: oklch(0.78 0.12 92);
+  --art-tab-c: oklch(0.58 0.1 255);
+  --art-paper: oklch(0.86 0.012 88);
+  --art-paper-lit: oklch(0.9 0.008 90);
+  --art-paper-shade: oklch(0.79 0.018 80);
+  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-dark-1: oklch(0.13 0.03 270);
+  --art-dark-3: oklch(0.08 0.015 274);
+  --art-dark-2: oklch(0.1 0.02 272);
+}
+
+.art [data-tone='sea-abyss'] {
+  fill: var(--art-sea-abyss);
+  stroke: var(--art-sea-abyss);
+}
+
+.art [data-tone='sea-abyss-lit'] {
+  fill: var(--art-sea-abyss-lit);
+  stroke: var(--art-sea-abyss-lit);
+}
+
+.art [data-tone='halo'] {
+  fill: var(--art-halo);
+  stroke: none;
+}
+
+.art [data-tone='halo-core'] {
+  fill: var(--art-halo-core);
+  stroke: none;
+}
+
+.art [data-tone='drop'] {
+  fill: var(--art-drop);
+  stroke: none;
+}
+
+.art [data-tone='book-lit'] {
+  fill: var(--art-book-lit);
+  stroke: var(--art-book-lit);
+}
+
+.art [data-tone='book'] {
+  fill: var(--art-book);
+  stroke: var(--art-book);
+}
+
+.art [data-tone='tab-a'] {
+  fill: var(--art-tab-a);
+  stroke: var(--art-tab-a);
+}
+
+.art [data-tone='tab-b'] {
+  fill: var(--art-tab-b);
+  stroke: var(--art-tab-b);
+}
+
+.art [data-tone='tab-c'] {
+  fill: var(--art-tab-c);
+  stroke: var(--art-tab-c);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--art-paper-shade);
+  stroke: var(--art-paper-shade);
+}
+
+.art [data-tone='robot-lit'] {
+  fill: var(--art-robot-lit);
+  stroke: var(--art-robot-lit);
+}
+
+.art [data-tone='robot-shade'] {
+  fill: var(--art-robot-shade);
+  stroke: var(--art-robot-shade);
+}
+
+.art [data-tone='dark-1'] {
+  fill: var(--art-dark-1);
+  stroke: var(--art-dark-1);
+}
+
+.art [data-tone='dark-3'] {
+  fill: var(--art-dark-3);
+  stroke: var(--art-dark-3);
+}
+
+.art [data-tone='dark-2'] {
+  fill: var(--art-dark-2);
+  stroke: var(--art-dark-2);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* The ink written on the dark corner. */
+.cornerInk {
+  color: var(--art-ink-deep);
+}
