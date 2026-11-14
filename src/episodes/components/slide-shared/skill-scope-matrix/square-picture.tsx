@@ -1,7 +1,7 @@
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
-import styles from './slide.module.css';
+import styles from './skill-scope-matrix.module.css';
 
 export type PictureKind = 'notebook' | 'toolkit' | 'binder' | 'fleet';
 
@@ -105,7 +105,7 @@ export interface SquarePictureProps {
 
 /**
  * The small project picture under a square's words (Option 18a): one drawing per square, its labels over it. Too
- * narrow for its labels' corners, the picture stacks them in flow over the drawing instead (`slide.module.css`).
+ * narrow for its labels' corners, the picture stacks them in flow over the drawing instead (its CSS module).
  */
 export function SquarePicture({ kind, children }: SquarePictureProps) {
   return (

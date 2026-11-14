@@ -1,7 +1,7 @@
 /*
- * "Who owns the shared skill library" (Option 21a): the binder, the zoom beam, the square's picture and the dark corner.
+ * "Who owns the shared skill library" (Option 21a): the binder, the zoom beam and the dark corner.
  * No raw colour (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and
- * `--overlay` as black, with the zone tokens for sea and sky and `--bulb` for the binder's green; the robot keeps the
+ * `--overlay` as black, with `--zone-midnight` and `--zone-abyss` and `--bulb` for the binder's green; the robot keeps the
  * shared figure's own colours. Dark mode only retunes the mixes.
  */
 
@@ -42,49 +42,6 @@
 
 .cable {
   stroke: var(--cable);
-}
-
-.picture {
-  --sky: var(--zone-surface);
-  --sea-lit: var(--zone-sunlit);
-  --sea: var(--zone-twilight);
-  --book: var(--binder, var(--zone-midnight));
-  --book-shade: color-mix(in oklab, var(--book) 70%, var(--overlay));
-  --paper: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
-  --hull: color-mix(in oklab, var(--zone-abyss) 85%, var(--on-brand-accent));
-  --house: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-surface));
-}
-
-.picture [data-tone='sky'] {
-  fill: var(--sky);
-}
-
-.picture [data-tone='sea-lit'] {
-  fill: var(--sea-lit);
-}
-
-.picture [data-tone='sea'] {
-  fill: var(--sea);
-}
-
-.picture [data-tone='book'] {
-  fill: var(--book);
-}
-
-.picture [data-tone='book-shade'] {
-  fill: var(--book-shade);
-}
-
-.picture [data-tone='paper'] {
-  fill: var(--paper);
-}
-
-.picture [data-tone='hull'] {
-  fill: var(--hull);
-}
-
-.picture [data-tone='house'] {
-  fill: var(--house);
 }
 
 /*

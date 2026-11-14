@@ -1,14 +1,18 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
+import {
+  SkillScopeMatrix,
+  type Care,
+  type SquareId,
+} from '@/episodes/components/slide-shared/skill-scope-matrix/skill-scope-matrix';
+import type { PictureKind } from '@/episodes/components/slide-shared/skill-scope-matrix/square-picture';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { SkillScopeMatrix, type Care, type SquareId } from './scope-matrix';
 import styles from './slide.module.css';
-import type { PictureKind } from './square-picture';
 
 const CLAUDE_SKILLS = { slug: 'claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 const CODEX_SKILLS = { slug: 'codex-build-skills', url: 'https://learn.chatgpt.com/docs/build-skills' };

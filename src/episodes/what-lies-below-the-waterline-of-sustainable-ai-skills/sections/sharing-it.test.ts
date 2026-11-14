@@ -240,16 +240,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('rings the shared, general square alone on the matrix, never a neighbour', () => {
+  it('shows Slide 18’s shared, general square alone, its locator lighting that square, never a neighbour', () => {
     // ARRANGE
-    const expected = { focal: ['shared-general'], dimmed: ['personal-project', 'personal-general', 'shared-project'] };
+    const expected = { focal: ['sg'], dimmed: ['pp', 'pg', 'sp'], shown: ['sg'] };
     // ACT
     const $ = sceneOf('who-owns-the-shared-skill-library');
-    const squares = (selector: string) =>
+    const cells = (selector: string) =>
       $(selector)
         .toArray()
-        .map((square) => $(square).attr('data-square'));
-    const actual = { focal: squares('[data-square][data-focal]'), dimmed: squares('[data-square]:not([data-focal])') };
+        .map((cell) => $(cell).attr('data-locator'));
+    const actual = {
+      focal: cells('[data-locator][data-focal]'),
+      dimmed: cells('[data-locator]:not([data-focal])'),
+      shown: $('[data-matrix] [data-square][data-focus]')
+        .toArray()
+        .map((square) => $(square).attr('data-square')),
+    };
     // ASSERT
     expect(actual).toEqual(expected);
   });
