@@ -12,6 +12,8 @@ const CREW_SCALE = 1.7;
 const CONSOLE_WIDTH = 200;
 const CONSOLE_X = 281;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 
 /**
  * The control room with a crowded index (Option 13a): the pilot sits at the console under a question mark, guessing
@@ -25,7 +27,7 @@ export function ControlRoom() {
       <g transform={`translate(0 ${FLOOR}) scale(${CREW_SCALE})`}>
         <g transform={`translate(${CONSOLE_X} ${-70})`}>
           <Console width={CONSOLE_WIDTH} mugs={1} />
-          <g transform={`translate(${SEAT.x} ${SEAT.y})`}>
+          <g transform={`translate(${SEAT.x + PILOT_REACH} ${SEAT.y})`}>
             <Character preset={pilot} pose="sit" mood="confused" />
           </g>
         </g>
