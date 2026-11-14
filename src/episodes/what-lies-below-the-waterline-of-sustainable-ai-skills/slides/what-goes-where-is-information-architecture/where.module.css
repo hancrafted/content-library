@@ -1,0 +1,141 @@
+/*
+ * Slide token file of "What context goes where" (FE-011 §2): the control room's wall and floor, the papers on it and
+ * the note that travels, all mixed from global tokens so they follow light and dark with no raw colour. `primary`
+ * marks only the one focal thing, the verdict line (in slide.tsx); no meaning colour on scenery.
+ */
+
+.room {
+  --room: color-mix(in oklab, var(--muted) 78%, var(--zone-twilight));
+  --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
+  --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));
+  --floor: color-mix(in oklab, var(--muted-foreground) 55%, var(--room));
+  --floor-shade: color-mix(in oklab, var(--floor) 82%, var(--foreground));
+  --paper: var(--card);
+  --paper-lit: color-mix(in oklab, var(--card) 80%, var(--muted));
+  --paper-rule: color-mix(in oklab, var(--muted-foreground) 55%, var(--card));
+  --paper-ink: var(--card-foreground);
+  --paper-soft: color-mix(in oklab, var(--card-foreground) 62%, var(--card));
+  --drop: color-mix(in oklab, var(--overlay) 16%, transparent);
+  --board: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
+  --board-lit: color-mix(in oklab, var(--board) 80%, var(--card));
+  --clip: color-mix(in oklab, var(--foreground) 70%, var(--muted-foreground));
+  --note: color-mix(in oklab, var(--bulb) 70%, var(--card));
+  --note-edge: var(--bulb-edge);
+  --note-ink: var(--overlay);
+}
+
+.room [data-tone='room'] {
+  fill: var(--room);
+}
+
+.room [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+
+.room [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
+
+.room [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.room [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+.room [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.room [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+}
+
+.room [data-tone='card-band'] {
+  fill: var(--clip);
+}
+
+.room [data-tone='drop'] {
+  fill: var(--drop);
+}
+
+.room [data-tone='rule'] {
+  stroke: var(--paper-rule);
+}
+
+.room [data-tone='slot'] {
+  fill: none;
+  stroke: var(--paper-soft);
+  stroke-dasharray: 8 6;
+}
+
+.room [data-tone='pin'] {
+  fill: var(--brand-accent);
+}
+
+.room [data-tone='board'] {
+  fill: var(--board);
+}
+
+.room [data-tone='board-lit'] {
+  fill: var(--board-lit);
+}
+
+.room [data-tone='clip'] {
+  fill: var(--clip);
+}
+
+.room [data-tone='note'] {
+  fill: var(--note);
+  stroke: var(--note-edge);
+}
+
+.room [data-tone='arrow'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+.room [data-tone='arrow-head'] {
+  fill: var(--foreground);
+}
+
+.room [data-tone='pin-dot'] {
+  fill: var(--foreground);
+}
+
+.room [data-ink='ink'] {
+  fill: var(--paper-ink);
+}
+
+.room [data-depth-note] {
+  fill: var(--note-ink);
+}
+
+.room [data-ink='soft'] {
+  fill: var(--paper-soft);
+}
+
+.room [data-ink='pin'] {
+  fill: var(--background);
+}
+
+/*
+ * The verdict lights once the note has arrived (Spec Option 14a). The base rule is the rest state, lit, so a still
+ * frame and reduced motion show it at once.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .late {
+    animation: light-up 480ms ease-out var(--late-delay, 0ms) both;
+  }
+}
+
+@keyframes light-up {
+  from {
+    opacity: 0.35;
+    border-color: var(--border);
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "title": "Im Skill",
+  "caption": "Fachwissen kann im Skill liegen, getrennt von den Schritten, bis ein Schritt es braucht.",
+  "disclosure": {
+    "lead": "Das ist schrittweise Offenlegung:",
+    "text": "<marker>Die KI öffnet jede Zusatzdatei erst, wenn ein Schritt sie braucht.</marker>"
+  },
+  "columns": {
+    "instructions": "Anweisungen",
+    "files": "Zusatzdateien"
+  },
+  "key": {
+    "domain": {
+      "term": "Fachwissen:",
+      "text": "gilt in jedem Projekt, etwa ein Artenführer."
+    },
+    "project": {
+      "term": "Projektdetails:",
+      "text": "gelten für eines, etwa die Tiefe von heute."
+    }
+  },
+  "card": {
+    "label": "Die Anweisungen des Skills",
+    "title": "Sedimentprobe nehmen"
+  },
+  "steps": {
+    "s1": "Den Roboter 2 m über dem Meeresboden halten.",
+    "s2": "Die Kamera auf lockeres Sediment prüfen.",
+    "s3": "Den Arm absenken.",
+    "s4": "Bestimmen, was Du gesammelt hast.",
+    "s5": "Das Kernrohr verschließen.",
+    "s6": "Die Probe beschriften."
+  },
+  "long": {
+    "text": "Erst den Rand abwischen und den Ring der Kappe auf Sand prüfen.",
+    "more": "…12 weitere Zeilen"
+  },
+  "pointers": {
+    "s3": "Die Arm-Voreinstellung ausführen.",
+    "s4": "Den Artenführer lesen, zuerst sein Inhaltsverzeichnis.",
+    "s6": "Die Etikettvorlage ausfüllen."
+  },
+  "files": {
+    "arm": {
+      "kind": "Skript",
+      "name": "Arm-Voreinstellung",
+      "hint": "führt eine feste Bewegung aus"
+    },
+    "guide": {
+      "kind": "Referenzdatei",
+      "name": "Artenführer",
+      "hint": "öffnet beim Inhaltsverzeichnis"
+    },
+    "label": {
+      "kind": "Vorlage",
+      "name": "Etikettvorlage",
+      "hint": "in Schritt 6 ausgefüllt"
+    }
+  },
+  "guide": {
+    "contents": "Inhalt",
+    "chapters": {
+      "corals": "1 Korallen",
+      "sponges": "2 Schwämme",
+      "worms": "3 Würmer und Röhren",
+      "crustaceans": "4 Krebstiere",
+      "unknown": "5 Unbekannte Funde"
+    },
+    "page": "S. {page}"
+  },
+  "rules": {
+    "head": "Zwei Regeln für lange Dateien",
+    "contents": "<marker>Lange Referenzdateien beginnen mit einem Inhaltsverzeichnis, weil die KI vielleicht nur den Anfang liest.</marker>",
+    "long": "<marker>Werden die Anweisungen lang, verschieb den nächsten Absatz in eine Referenzdatei.</marker>"
+  },
+  "tree": "<marker>Der Ordner des Skills, jede Datei eine Ebene unter SKILL.md</marker>",
+  "notes": {
+    "move-detail-out-of-skill-md-and-say-when-to-read-it": {
+      "header": "Details aus der SKILL.md auslagern und sagen, wann man sie liest",
+      "description": "„Keep your main SKILL.md under 500 lines. Move detailed reference material to separate files“ [1]. Entscheidend ist, dem Agenten zu sagen, wann er welche Datei lädt, etwa „Read references/api-errors.md if the API returns a non-200 status code“ [2].",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        }
+      }
+    },
+    "long-reference-files-start-with-a-contents-list": {
+      "header": "Lange Referenzdateien beginnen mit einem Inhaltsverzeichnis",
+      "description": "„For reference files longer than 100 lines, include a table of contents at the top. This ensures Claude can see the full scope of available information even when previewing with partial reads“ [1]. Das ist Anthropics Beschreibung von Claudes Verhalten; keine Quelle misst seine Wirkung.",
+      "sources": {
+        "anthropic-skill-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        }
+      }
+    },
+    "references-stay-one-level-deep": {
+      "header": "Verweise bleiben eine Ebene tief",
+      "description": "Claude „might partially read files when they're referenced from other referenced files“, mit Befehlen wie head -100, deshalb bleiben Verweise eine Ebene unter der SKILL.md [1]. Der Standard nennt die Regel ohne den Grund [2].",
+      "sources": {
+        "anthropic-skill-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        },
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        }
+      }
+    },
+    "progressive-disclosure-as-anthropic-names-it": {
+      "header": "Schrittweise Offenlegung, wie Anthropic sie nennt",
+      "description": "Laut Anthropics Dokumentation „allows progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront“ das dateibasierte Design [1]. Zusatzdateien, die erst beim Schritt geöffnet werden, der sie braucht, folgen derselben Idee wie die drei Ladestufen.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        }
+      }
+    }
+  },
+  "footer": {
+    "lead": "In der Geschichte:",
+    "chat": "<marker>Die Karte in ihrer Hülle: jedes Extra an den Schritt gebunden, der es nutzt.</marker>",
+    "codingLead": "Im Coding-Agenten:",
+    "coding": "<marker>Die SKILL.md verweist auf jede Datei eine Ebene tief, in scripts/, references/ und assets/.</marker>"
+  },
+  "alt": {
+    "scene": "Die Ablaufkarte in ihrer Hülle an der Wand des Kontrollraums: sechs Schritte, Schritt 4 hervorgehoben. Schritt 3 verweist auf ein Skript, die Arm-Voreinstellung; Schritt 4 auf eine Referenzdatei, den Artenführer, der aus der Hülle geglitten ist und beim Inhaltsverzeichnis offen liegt; Schritt 6 auf eine Vorlage, die Etikettvorlage. Schritt 5 wird lang und verweist auf die Regel für lange Anweisungen."
+  },
+  "voiceScript": {
+    "segments": {
+      "extras-by-step": {
+        "title": "Extras nach Schritt",
+        "keywords": "",
+        "script": "Was kann also ohne Risiko in einem Skill liegen? Fachwissen, abgelegt in Zusatzdateien und an den Schritt gebunden, der es braucht. Schritt drei, den Arm absenken, führt ein Skript aus, die Arm-Voreinstellung. Schritt vier, bestimmen, was Du gesammelt hast, liest eine Referenzdatei, den Artenführer, und Schritt sechs, die Probe beschriften, füllt eine Vorlage aus."
+      },
+      "the-long-step": {
+        "title": "Der lange Schritt",
+        "keywords": "",
+        "script": "Werden die Anweisungen eines Schritts lang, verschieb den nächsten Absatz in eine Referenzdatei und lass im Schritt einen Verweis stehen, damit die Anweisungen kurz genug bleiben, dass das Modell sie auf einmal erfasst."
+      },
+      "contents-first": {
+        "title": "Inhaltsverzeichnis zuerst",
+        "keywords": "",
+        "script": "Und beginne jede lange Referenzdatei mit einem Inhaltsverzeichnis, weil das Modell vielleicht nur den Anfang überfliegt. Wenn Schritt vier den Artenführer öffnet, sagt dem Modell schon sein Inhaltsverzeichnis, was sonst noch darin steht."
+      }
+    }
+  }
+}

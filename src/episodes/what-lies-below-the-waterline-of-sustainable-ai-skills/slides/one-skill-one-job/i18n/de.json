@@ -1,0 +1,77 @@
+{
+  "title": "Ein Projektdetail bindet einen Skill an ein Projekt",
+  "caption": "Ein Projektdetail, das in einen Skill geschrieben ist, bindet ihn an genau dieses Projekt.",
+  "sites": {
+    "four": "Platz 4",
+    "seven": "Platz 7"
+  },
+  "sameSkill": "derselbe Skill, zwei Tauchgänge",
+  "short": "80 m zu kurz",
+  "depth": "{metres} m",
+  "card": {
+    "title": "Sedimentprobe nehmen",
+    "steps": {
+      "s1": "1. Arm und Rohre prüfen",
+      "s2": "2. auf 40 m abtauchen",
+      "s3": "3. Arm absenken",
+      "s4": "4. Fund bestimmen"
+    },
+    "scribble": "Platz 4"
+  },
+  "mistakes": {
+    "coupling": {
+      "term": "Kopplung",
+      "question": "an einen Ort gebunden?",
+      "head": "Ein Projektdetail im Skill",
+      "text": "<marker>Richtig an Platz 4, falsch an Platz 7: Die KI folgt dem Skill aufs Wort, und der Tauchgang scheitert trotzdem.</marker>",
+      "coding": {
+        "head": "Ein fest eingetragener Pfad im Skill",
+        "text": "<marker>In einem Benchmark mit 98 öffentlichen Skills ließ eine Workflow-Vorlage den Agenten nach <code>.github/workflows/</code> schreiben, obwohl die Aufgabe <code>ci/</code> verlangte.</marker>"
+      }
+    }
+  },
+  "pointer": {
+    "lead": "Schon gewusst?",
+    "head": "Im Code gibt es ein Wort dafür: Kopplung.",
+    "text": "<marker>Je weniger und einfacher die Verbindungen zwischen Modulen, desto leichter versteht man jedes einzelne (Stevens, Myers und Constantine, 1974). Geschrieben für Code-Module, per Analogie auf Skills übertragen.</marker>"
+  },
+  "analogyLead": "In der Geschichte:",
+  "analogy": "An Platz 7 liegt der Meeresboden bei 120 m; auf der Karte steht noch 40.",
+  "alt": {
+    "dives": "Eine Skill-Karte über zwei Tauchgängen. An Platz 4 erreicht der Roboter den Meeresboden bei 40 m. An Platz 7 liegt der Meeresboden bei 120 m, und der Roboter, der derselben Karte folgt, hängt bei 40 m, 80 m zu kurz."
+  },
+  "notes": {
+    "coupling-as-first-written": {
+      "header": "Kopplung, wie sie zuerst beschrieben wurde",
+      "description": "„The fewer and simpler the connections between modules, the easier it is to understand each module without reference to other modules“ [1]. Es ist ein Designprinzip für Code-Module, per Analogie auf Skills übertragen.",
+      "sources": {
+        "structured-design": {
+          "title": "Stevens, Myers und Constantine, Structured design"
+        }
+      }
+    },
+    "project-details-hard-coded-into-a-skill-can-override-the-task": {
+      "header": "Fest eingetragene Projektdetails in einem Skill können die Aufgabe übersteuern",
+      "description": "In einem Benchmark mit 98 öffentlichen Skills ließ eine allgemeine Workflow-Vorlage den Agenten Dateien nach .github/workflows/ schreiben, obwohl die Aufgabe ci/ verlangte; die Autoren raten zu abstrakten Hinweisen statt Vorlagen mit fest eingetragenen Pfaden [1]. Es ist ein durchgerechnetes Beispiel, kein Test dieses Bildes.",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "scribbled-in": {
+        "title": "Hineingekritzelt",
+        "keywords": "",
+        "script": "Nimm einen Skill zur Probenahme, in den ein Projektdetail geschrieben ist: „auf 40 Meter abtauchen“, richtig an Platz 4. An Platz 7 liegt der Meeresboden bei 120, und der Roboter hängt nutzlos bei 40, während das Modell dem Skill perfekt folgt. (Pause) Der Skill wurde aufs Wort befolgt, und der Tauchgang ist trotzdem gescheitert."
+      },
+      "coupling": {
+        "title": "Kopplung",
+        "keywords": "",
+        "script": "Ingenieure haben ein Wort für diesen Fehler: Kopplung. Die 40 Meter im Skill binden ihn an einen Ort. Für einen Skill heißt das: Halte Projektdetails heraus, damit der Skill an kein einzelnes Projekt gebunden ist."
+      }
+    }
+  }
+}

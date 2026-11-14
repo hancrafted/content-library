@@ -1,0 +1,102 @@
+/*
+ * Slide token file of "A project detail couples a skill to one project" (FE-011 §2): the ruler, the cables, the
+ * leaders, the bracket and the labels over the water, mixed from global tokens so they follow light and dark with no
+ * raw colour. `primary` is only the coupling card's ring (in slide.tsx); no meaning colour on scenery.
+ */
+
+.dives {
+  --tag: var(--card);
+  --tag-ink: var(--card-foreground);
+  --tick: var(--card);
+  --cable: color-mix(in oklab, var(--foreground) 70%, var(--card));
+  --leader: var(--card-foreground);
+  /* The shelf's rock, mixed as the shared seabed mixes its own, so the two read as one floor. */
+  --rock: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
+  --rock-lit: color-mix(in oklab, var(--rock) 80%, var(--on-brand-accent));
+  --rock-shade: color-mix(in oklab, var(--rock) 80%, var(--overlay));
+}
+
+:global(.dark) .dives {
+  --rock: color-mix(in oklab, var(--bulb) 25%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
+}
+
+/* Labels keep a readable size: the drawing scales down with its column, so a narrow column scales its labels up. */
+.tag {
+  scale: var(--tag-scale, 1.5);
+}
+
+@container (width < 48rem) {
+  .dives {
+    --tag-scale: 2.6;
+  }
+}
+
+.dives [data-tone='rock'] {
+  fill: var(--rock);
+}
+
+.dives [data-tone='rock-lit'] {
+  fill: var(--rock-lit);
+}
+
+.dives [data-tone='rock-shade'] {
+  fill: var(--rock-shade);
+}
+
+.dives [data-tone='tag'] {
+  fill: var(--tag);
+}
+
+.dives [data-ink='tag'] {
+  fill: var(--tag-ink);
+}
+
+.dives [data-tone='tick'] {
+  stroke: var(--tick);
+}
+
+.dives [data-tone='cable'] {
+  stroke: var(--cable);
+}
+
+.dives [data-tone='leader'] {
+  stroke: var(--leader);
+  opacity: 0.6;
+}
+
+.dives [data-tone='bracket'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+/* The project detail scribbled into the card, in the bulb's yellow highlighter, in either view. */
+.card {
+  --scribble: color-mix(in oklab, var(--bulb) 55%, var(--card));
+}
+
+.scribble {
+  background: var(--scribble);
+}
+
+.scribbleCode {
+  background: color-mix(in oklab, var(--bulb) 35%, transparent);
+}
+
+/*
+ * The bracket draws once the robots have stopped (Spec Option 15b). The base rule is the rest state, so a still frame
+ * and reduced motion show it at once.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .late {
+    animation: late-in 420ms ease-out var(--late-delay, 0ms) both;
+  }
+}
+
+@keyframes late-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
