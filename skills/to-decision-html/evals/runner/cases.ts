@@ -8,7 +8,7 @@ import { asMode, type Asked, type FidelityRung, type Mode } from '../../scripts/
 import { askedOf, atRung } from './calibration.pure.ts';
 import type { CaseItem } from './judge.pure.ts';
 import { UNKNOWN, type ProbeQuestion } from './probe.pure.ts';
-import type { Source } from './quality.pure.ts';
+import type { Ruling, Source } from './quality.pure.ts';
 
 export const CASES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../cases');
 
@@ -103,18 +103,44 @@ export function qualityKeys(id: string): QualityKeys | null {
   };
 }
 
+/** The case's quotes of a person's rulings: provenance only, so a run never sees it. */
+const ROUNDS = 'rounds.md';
+
+/** A checklist holds one item per rule the person set; a page held to a long list of rules, like episode-spec, needs more than 5. */
+const MIN_ITEMS = 3;
+const MAX_ITEMS = 12;
+
+/** Where a case's inputs are: its folder under `dir`, and the file names a run sees. */
+interface Inputs {
+  readonly dir: string;
+  readonly folder: string;
+  readonly seen: ReadonlySet<string>;
+}
+
+/** One problem when a key's source is not text the run sees (or, for a ruling, text in rounds.md). */
+function sourceProblems({ dir, folder, seen }: Inputs, label: string, source: Source | Ruling): string[] {
+  if ('session' in source) {
+    const rounds = path.join(dir, folder, ROUNDS);
+    if (!existsSync(rounds)) return [`${label} cites a ruling, but ${ROUNDS} is missing`];
+    return readFileSync(rounds, 'utf8').includes(source.quote)
+      ? []
+      : [`${label} quotes text not in ${ROUNDS}: "${source.quote}"`];
+  }
+  const { file, quote } = source;
+  if (!seen.has(file)) return [`${label} quotes ${file}, which the run never sees`];
+  const text = readFileSync(path.join(dir, folder, file), 'utf8');
+  return text.includes(quote) ? [] : [`${label} quotes text not in ${file}: "${quote}"`];
+}
+
 /**
  * A key must come from what the run itself sees (its prompt, attachments and calibration answers), quoted verbatim,
- * never from a generated page or a provenance-only file. One problem per key that does not.
+ * never from a generated page or a provenance-only file; a checklist item may instead cite a ruling. One problem per
+ * key that does not.
  */
 export function keyProblems(dir: string, evalCase: EvalCase, { checklist, probe }: QualityKeys): string[] {
   const folder = path.dirname(evalCase.prompt);
   const seen = new Set([evalCase.prompt, ...evalCase.inputs].map((file) => path.basename(file)));
-  const sourced = (label: string, { file, quote }: Source): string[] => {
-    if (!seen.has(file)) return [`${label} quotes ${file}, which the run never sees`];
-    const text = readFileSync(path.join(dir, folder, file), 'utf8');
-    return text.includes(quote) ? [] : [`${label} quotes text not in ${file}: "${quote}"`];
-  };
+  const sourced = (label: string, source: Source | Ruling) => sourceProblems({ dir, folder, seen }, label, source);
   const keyed = ({ id, choices, answer }: ProbeQuestion): string[] => {
     if (answer.length === 0) return [`probe ${id} has no key`];
     if (UNKNOWN in choices) return [`probe ${id} offers "${UNKNOWN}", which every question already offers`];
@@ -123,9 +149,9 @@ export function keyProblems(dir: string, evalCase: EvalCase, { checklist, probe 
       .map((choice) => `probe ${id} keys ${choice}, which is not one of its choices`);
   };
   return [
-    ...(checklist.length >= 3 && checklist.length <= 5
+    ...(checklist.length >= MIN_ITEMS && checklist.length <= MAX_ITEMS
       ? []
-      : [`checklist has ${checklist.length} items; a case has 3 to 5`]),
+      : [`checklist has ${checklist.length} items; a case has ${MIN_ITEMS} to ${MAX_ITEMS}`]),
     ...checklist.flatMap((item) => sourced(`checklist ${item.id}`, item.source)),
     ...probe.flatMap((question) => [...sourced(`probe ${question.id}`, question.source), ...keyed(question)]),
   ];
