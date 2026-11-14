@@ -101,6 +101,23 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
+  it("runs each section slide's ambient loops in its Slide's zone scope, though the drawing sits behind the mount", () => {
+    // ARRANGE
+    const expected = OPENERS.map(() => ({ scope: 'near', unscoped: 0 }));
+    // ACT
+    const actual = OPENERS.map((slide) => {
+      const $ = rearOf(slide);
+      return {
+        scope: $('[data-scene]').attr('data-zone'),
+        unscoped: $('[data-motion="ambient"]')
+          .toArray()
+          .filter((part) => $(part).closest('[data-zone]').length === 0).length,
+      };
+    });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('leads each card with its AI statement, as the echoes of Option 0a do', () => {
     // ARRANGE
     const expected = [
