@@ -1,7 +1,7 @@
 /*
  * The Slide's token file: the control-room wall, the clipboard, its papers, the sleeve and the extras in its pocket,
  * lifted from the approved Spec's Option 3a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011;
- * dark mode is tuned later). `--machine` colours the clip, the arm preset and the console's edge, as the Spec does;
+ * dark mode is tuned later). `--info` colours the clip, the arm preset and the console's edge, as the Spec's machine blue;
  * `primary` marks the use-when line.
  */
 
@@ -9,9 +9,9 @@
   --room-shade: oklch(0.86 0.024 238);
   --room: oklch(0.905 0.018 234);
   --room-lit: oklch(0.95 0.012 230);
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
   --robot-dark: oklch(0.28 0.02 260);
   --drop: oklch(0.3 0.04 255 / 0.2);
   --paper-lit: oklch(0.995 0.004 90);
@@ -24,7 +24,7 @@
   --fish-lit: oklch(0.89 0.13 92);
   --fish-shade: oklch(0.76 0.14 76);
   --string: oklch(0.58 0.06 60);
-  --robot-glint: color-mix(in oklab, var(--machine) 45%, oklch(1 0 0));
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
   --lamp: oklch(0.97 0.1 95);
   --sleeve-glint: oklch(1 0 0 / 0.6);
   --sleeve: oklch(0.95 0.03 215 / 0.34);
@@ -35,9 +35,9 @@
   --room-shade: oklch(0.285 0.025 256);
   --room: oklch(0.32 0.025 253);
   --room-lit: oklch(0.36 0.025 250);
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
   --robot-dark: oklch(0.22 0.02 260);
   --drop: oklch(0.1 0.02 260 / 0.45);
   --paper-lit: oklch(0.43 0.02 250);
@@ -50,7 +50,7 @@
   --fish-lit: oklch(0.82 0.12 92);
   --fish-shade: oklch(0.68 0.13 76);
   --string: oklch(0.5 0.05 60);
-  --robot-glint: color-mix(in oklab, var(--machine) 55%, oklch(1 0 0));
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
   --lamp: oklch(0.97 0.11 95);
   --sleeve-glint: oklch(1 0 0 / 0.2);
   --sleeve: oklch(0.7 0.05 225 / 0.16);

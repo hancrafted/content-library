@@ -94,9 +94,9 @@ export const AFTER_BOX = '676 30 300 402';
 
 /** The clipboard's clip, the before sheet's, which the log's repeats: its box is 136, 10 to 204, 50. */
 export const CLIP: readonly Facet[] = [
-  ['robot-shade', 'M136 28L204 28L200 50L140 50Z'],
-  ['robot-lit', 'M136 28L174 28L162 50L140 50Z'],
-  ['robot-dark', 'M148 12L154 12L158 30L152 30ZM186 12L192 12L188 30L182 30ZM148 10L192 10L192 14L148 14Z'],
+  ['clip-shade', 'M136 28L204 28L200 50L140 50Z'],
+  ['clip-lit', 'M136 28L174 28L162 50L140 50Z'],
+  ['clip-dark', 'M148 12L154 12L158 30L152 30ZM186 12L192 12L188 30L182 30ZM148 10L192 10L192 14L148 14Z'],
 ];
 export const CLIP_BOX = '136 10 68 40';
 

@@ -1,7 +1,7 @@
 /*
  * The Slide's token file: the control room lifted from the approved Spec's Option 4b (feedback 3, decision 46), its
  * wall, floor, window, shelf, cards, side table and the lamp's light, with the Spec's own light and dark values (FE-011;
- * dark mode is tuned later). `--machine` colours only the arm preset, as the Spec does; `--human` and `--ai` stay for
+ * dark mode is tuned later). `--info` colours only the arm preset, as the shared robot's hull; `--human` and `--ai` stay for
  * their meanings.
  *
  * Motion (`motion: local`, one emphasis): a soft light moves left to right in loading order, the halo on the shelf with
@@ -38,13 +38,13 @@
   --tab-c: oklch(0.72 0.1 252);
   --shelf: oklch(0.55 0.06 58);
   --robot-dark: oklch(0.28 0.02 260);
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
   --beam: oklch(0.98 0.12 95 / 0.45);
   --sea-twilight-lit: oklch(0.48 0.11 250);
   --paper-rule: oklch(0.8 0.03 240);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
-  --robot: var(--machine);
-  --robot-glint: color-mix(in oklab, var(--machine) 45%, oklch(1 0 0));
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot: var(--info);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
   --sleeve: oklch(0.93 0.03 215 / 0.55);
   --sleeve-edge: oklch(0.99 0.01 215 / 0.8);
   --lamp: oklch(0.97 0.1 95);
@@ -78,13 +78,13 @@
   --tab-c: oklch(0.58 0.1 255);
   --shelf: oklch(0.42 0.05 58);
   --robot-dark: oklch(0.22 0.02 260);
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
   --beam: oklch(0.95 0.1 95 / 0.24);
   --sea-twilight-lit: oklch(0.3 0.065 254);
   --paper-rule: oklch(0.64 0.03 240);
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
-  --robot: var(--machine);
-  --robot-glint: color-mix(in oklab, var(--machine) 55%, oklch(1 0 0));
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot: var(--info);
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
   --sleeve: oklch(0.8 0.04 215 / 0.45);
   --sleeve-edge: oklch(0.92 0.02 215 / 0.6);
   --lamp: oklch(0.97 0.11 95);

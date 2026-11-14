@@ -2,7 +2,7 @@
  * "Every skill is a loan" (Option 23b): the statement hung on the robot's cable over the Abyss. The tones are the
  * approved Spec's own (feedback 3, decision 46): the drawing's facet tokens on `.art`, which `sea-art.tsx` lifts, and
  * the words, glass, paper and cable on `.stage`. Dark values are the Spec's dark ones, tuned later with dark mode
- * (feedback 2, decision 32). The robot's tones mix `--machine`, as the shared robot's do.
+ * (feedback 2, decision 32). The robot's tones mix `--info`, as the shared robot's do.
  */
 
 .stage {
@@ -48,10 +48,10 @@
   --paper-shade: oklch(0.9 0.016 80);
   --paper-rule: oklch(0.74 0.03 245);
   --pin: oklch(0.62 0.18 28);
-  --robot-glint: color-mix(in oklab, var(--machine) 45%, oklch(1 0 0));
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
   --robot-dark: oklch(0.28 0.02 260);
   --glint: oklch(1 0 0);
   --block-lit: oklch(0.9 0.02 230);
@@ -79,10 +79,10 @@
   --paper-shade: oklch(0.74 0.018 80);
   --paper-rule: oklch(0.6 0.03 245);
   --pin: oklch(0.6 0.16 28);
-  --robot-glint: color-mix(in oklab, var(--machine) 55%, oklch(1 0 0));
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
   --robot-dark: oklch(0.22 0.02 260);
   --glint: oklch(0.98 0.01 230);
   --block-lit: oklch(0.8 0.02 230);

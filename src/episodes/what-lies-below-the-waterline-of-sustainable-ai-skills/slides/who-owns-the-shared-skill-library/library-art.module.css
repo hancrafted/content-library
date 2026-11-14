@@ -1,7 +1,7 @@
 /*
  * The library's own tones, lifted from Spec Option 21a (feedback 3, decision 46): the Abyss band, the zoom beam's halo,
- * the binder's green covers, index tabs, faceted page and rings (the rings in the machine's tones, as the Spec draws
- * them), the dark corner's three facets and the light ink written on it. Raw colours live only here, each with its dark
+ * the binder's green covers, index tabs, faceted page and rings (the rings in steel,
+ * mixed from a neutral token), the dark corner's three facets and the light ink written on it. Raw colours live only here, each with its dark
  * value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours meet
  * without a seam; the translucent ones are not, so they do not double at their edges.
  */
@@ -21,8 +21,8 @@
   --art-paper: oklch(0.965 0.01 88);
   --art-paper-lit: oklch(0.995 0.004 90);
   --art-paper-shade: oklch(0.915 0.016 80);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-ring-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-ring-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-dark-1: oklch(0.2 0.04 270);
   --art-dark-3: oklch(0.13 0.025 274);
   --art-dark-2: oklch(0.16 0.03 272);
@@ -43,8 +43,8 @@
   --art-paper: oklch(0.86 0.012 88);
   --art-paper-lit: oklch(0.9 0.008 90);
   --art-paper-shade: oklch(0.79 0.018 80);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-ring-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-ring-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-dark-1: oklch(0.13 0.03 270);
   --art-dark-3: oklch(0.08 0.015 274);
   --art-dark-2: oklch(0.1 0.02 272);
@@ -115,14 +115,14 @@
   stroke: var(--art-paper-shade);
 }
 
-.art [data-tone='robot-lit'] {
-  fill: var(--art-robot-lit);
-  stroke: var(--art-robot-lit);
+.art [data-tone='ring-lit'] {
+  fill: var(--art-ring-lit);
+  stroke: var(--art-ring-lit);
 }
 
-.art [data-tone='robot-shade'] {
-  fill: var(--art-robot-shade);
-  stroke: var(--art-robot-shade);
+.art [data-tone='ring-shade'] {
+  fill: var(--art-ring-shade);
+  stroke: var(--art-ring-shade);
 }
 
 .art [data-tone='dark-1'] {

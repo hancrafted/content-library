@@ -1,7 +1,7 @@
 /*
  * The Slide's token file: the control room at the end of the dive, lifted from the approved Spec's Option 5b (feedback
  * 3, decision 46), its wall, floor, camera feed, desk and what lands on it, with the Spec's own light and dark values
- * (FE-011; dark mode is tuned later). `--machine` colours only the robot's things, as the Spec does; the pilot is the
+ * (FE-011; dark mode is tuned later). `--info` colours only the robot's things, as the shared robot's hull; the pilot is the
  * cast's own.
  *
  * Motion (`motion: local`, one emphasis): each object lands on the desk (`Travel`) as its block stacks onto the window:
@@ -15,9 +15,9 @@
   --room-lit: oklch(0.95 0.012 230);
   --floor: oklch(0.66 0.028 244);
   --floor-lit: oklch(0.72 0.025 240);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --robot: var(--machine);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
   --sea-sunlit-lit: oklch(0.62 0.11 228);
   --sea-sunlit: oklch(0.575 0.115 234);
   --sea-twilight-lit: oklch(0.48 0.11 250);
@@ -56,9 +56,9 @@
   --room-lit: oklch(0.36 0.025 250);
   --floor: oklch(0.22 0.02 258);
   --floor-lit: oklch(0.25 0.02 255);
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --robot: var(--machine);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
   --sea-sunlit-lit: oklch(0.37 0.075 236);
   --sea-sunlit: oklch(0.34 0.075 240);
   --sea-twilight-lit: oklch(0.3 0.065 254);

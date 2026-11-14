@@ -17,8 +17,8 @@
   --art-hull: oklch(0.4 0.03 255);
   --art-house-lit: oklch(0.985 0.005 90);
   --art-house: oklch(0.92 0.012 85);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-steel-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-steel-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-cloth-dark: oklch(0.22 0.02 265);
   --art-room-lit: oklch(0.95 0.012 230);
   --art-room: oklch(0.905 0.018 234);
@@ -46,8 +46,8 @@
   --art-hull: oklch(0.4 0.03 255);
   --art-house-lit: oklch(0.86 0.008 90);
   --art-house: oklch(0.78 0.012 85);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-steel-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-steel-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-cloth-dark: oklch(0.2 0.02 265);
   --art-room-lit: oklch(0.36 0.025 250);
   --art-room: oklch(0.32 0.025 253);
@@ -152,14 +152,14 @@
   stroke: var(--art-hull);
 }
 
-.art [data-tone='robot-shade'] {
-  fill: var(--art-robot-shade);
-  stroke: var(--art-robot-shade);
+.art [data-tone='steel-shade'] {
+  fill: var(--art-steel-shade);
+  stroke: var(--art-steel-shade);
 }
 
-.art [data-tone='robot-lit'] {
-  fill: var(--art-robot-lit);
-  stroke: var(--art-robot-lit);
+.art [data-tone='steel-lit'] {
+  fill: var(--art-steel-lit);
+  stroke: var(--art-steel-lit);
 }
 
 .art [data-tone='pane-glint'] {

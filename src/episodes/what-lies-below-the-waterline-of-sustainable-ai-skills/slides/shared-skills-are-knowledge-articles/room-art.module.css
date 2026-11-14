@@ -1,7 +1,7 @@
 /*
  * The control room's own tones, lifted from Spec Option 20b (feedback 3, decision 46): the faceted wall and floor, the
  * porthole onto the Midnight water, the shelf of manuals, and the fleet manual's green covers, faceted page, binder
- * rings and lectern post (the post in the machine's tones, as the Spec draws it). Raw colours live only here, each with
+ * rings and lectern post (the post in steel, mixed from a neutral token). Raw colours live only here, each with
  * its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours
  * meet without a seam; the translucent ones are not, so they do not double at their edges.
  */
@@ -27,8 +27,8 @@
   --art-spine-b: oklch(0.62 0.12 85);
   --art-spine-c: oklch(0.5 0.09 252);
   --art-book-lit: oklch(0.6 0.1 150);
-  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
-  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
+  --art-post-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
+  --art-post-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
   --art-book-shade: oklch(0.4 0.09 160);
   --art-paper: oklch(0.972 0.009 88);
   --art-paper-shade: oklch(0.935 0.014 84);
@@ -58,8 +58,8 @@
   --art-spine-b: oklch(0.55 0.11 85);
   --art-spine-c: oklch(0.42 0.08 254);
   --art-book-lit: oklch(0.52 0.09 150);
-  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
-  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
+  --art-post-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
+  --art-post-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
   --art-book-shade: oklch(0.34 0.08 160);
   --art-paper: oklch(0.86 0.012 88);
   --art-paper-shade: oklch(0.8 0.016 84);
@@ -168,14 +168,14 @@
   stroke: var(--art-book-lit);
 }
 
-.art [data-tone='robot-shade'] {
-  fill: var(--art-robot-shade);
-  stroke: var(--art-robot-shade);
+.art [data-tone='post-shade'] {
+  fill: var(--art-post-shade);
+  stroke: var(--art-post-shade);
 }
 
-.art [data-tone='robot-lit'] {
-  fill: var(--art-robot-lit);
-  stroke: var(--art-robot-lit);
+.art [data-tone='post-lit'] {
+  fill: var(--art-post-lit);
+  stroke: var(--art-post-lit);
 }
 
 .art [data-tone='book-shade'] {

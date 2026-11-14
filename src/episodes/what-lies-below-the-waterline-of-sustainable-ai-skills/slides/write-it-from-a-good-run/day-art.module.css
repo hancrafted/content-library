@@ -1,7 +1,7 @@
 /*
  * The day's own tones, lifted from Spec Option 10b (feedback 3, decision 46): the dive's sky, sea, light rays and seabed,
  * the control room's wall and floor, its window at afternoon, dusk and dawn, the card being written at the console, the
- * wall clock and the card pinned up the next morning. Raw colours live only here, each with its dark value from the
+ * wall clock (its rim steel, from a neutral token) and the card pinned up the next morning. Raw colours live only here, each with its dark value from the
  * Spec (FE-011); dark mode is tuned later.
  */
 
@@ -25,8 +25,8 @@
   --art-bubble: oklch(0.95 0.04 210 / 0.45);
   --art-house-lit: oklch(0.985 0.005 90);
   --art-house: oklch(0.92 0.012 85);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-cloth-dark: oklch(0.22 0.02 265);
   --art-room-lit: oklch(0.95 0.012 230);
   --art-room: oklch(0.905 0.018 234);
@@ -76,8 +76,8 @@
   --art-bubble: oklch(0.8 0.05 210 / 0.35);
   --art-house-lit: oklch(0.86 0.008 90);
   --art-house: oklch(0.78 0.012 85);
-  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-cloth-dark: oklch(0.2 0.02 265);
   --art-room-lit: oklch(0.36 0.025 250);
   --art-room: oklch(0.32 0.025 253);

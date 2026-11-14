@@ -27,8 +27,8 @@ export type ArtTone =
   | 'spine-b'
   | 'spine-c'
   | 'book-lit'
-  | 'robot-shade'
-  | 'robot-lit'
+  | 'post-shade'
+  | 'post-lit'
   | 'book-shade'
   | 'paper'
   | 'paper-shade'
@@ -146,8 +146,8 @@ export const SHELF: readonly ArtFacet[] = [
 
 /** The fleet manual on its lectern: the post, the green covers, the faceted page and the binder rings. */
 export const MANUAL: readonly ArtFacet[] = [
-  ['robot-shade', 'M520 486L560 486L572 400L508 400Z'],
-  ['robot-lit', 'M520 486L540 486L544 400L508 400Z'],
+  ['post-shade', 'M520 486L560 486L572 400L508 400Z'],
+  ['post-lit', 'M520 486L540 486L544 400L508 400Z'],
   ['drop', 'M392 196L776 196L776 438L392 438Z'],
   ['book-shade', 'M592.5 420L479.8 347.3L611.5 347.4ZM686.6 254.7L760 307.6L611.5 347.4Z'],
   ['book-lit', 'M579.1 182L686.6 254.7L611.5 347.4Z'],

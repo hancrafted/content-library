@@ -1,13 +1,13 @@
 /*
  * The control room's own tones, lifted from Spec Option 9a (feedback 3, decision 46): the faceted wall behind the
- * whole stage, the stuffed binder with its card tabs and red stamps, the index sheet's paper and clip, and the check
+ * whole stage, the stuffed binder with its card tabs and red stamps, the index sheet's paper and steel clip (mixed from a neutral token), and the check
  * card's paper and pin. Raw colours live only here, each with its dark value from the Spec (FE-011); dark mode is tuned
  * later.
  */
 
 .art {
-  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-robot-dark: oklch(0.28 0.02 260);
   --art-room-lit: oklch(0.95 0.012 230);
   --art-room: oklch(0.905 0.018 234);
@@ -28,8 +28,8 @@
 }
 
 :global(.dark) .art {
-  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-robot-dark: oklch(0.22 0.02 260);
   --art-room-lit: oklch(0.36 0.025 250);
   --art-room: oklch(0.32 0.025 253);
