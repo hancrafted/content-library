@@ -2,8 +2,13 @@
 .spec-kicker a {
   color: inherit;
 }
-.spec-words > [data-panel='visual-idea'] {
-  display: block;
+/* The Visual idea leads each Slide, ahead of its Options, in the rail the Spec lays out. */
+.spec-rail {
+  display: flex;
+  flex-direction: column;
+}
+.spec-words {
+  order: -1;
 }
 [data-archive-slide] {
   margin-bottom: 4rem;

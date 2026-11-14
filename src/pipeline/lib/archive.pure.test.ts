@@ -113,7 +113,7 @@ describe('success cases', () => {
       expect(prompts('top')).toEqual([title]);
     });
 
-    it('shows the Visual idea untabbed and lists the design references the Slide cites, archive-relative', () => {
+    it('shows the Visual idea in its collapsible, open, and lists the design references the Slide cites, archive-relative', () => {
       // ARRANGE
       const visualIdea = 'A board of month columns.';
       const images = ['reference/deck/pages/page-03.jpg', 'reference/deck/pages/page-08.jpg'];
@@ -125,6 +125,7 @@ describe('success cases', () => {
 
       // ASSERT
       expect(slide.find('.spec-words > [data-panel="visual-idea"] [data-spec="visual-idea"]').text()).toBe(visualIdea);
+      expect(slide.find('.spec-words > details[data-panel="visual-idea"]').is('[open]')).toBe(true);
       expect(
         slide
           .find('[data-archive="references"] img')
@@ -191,8 +192,6 @@ describe('success cases', () => {
         '.spec-showing',
         '[data-panel="voice-script"]',
         '[data-panel="speaker-notes"]',
-        '.spec-words > input',
-        '.spec-words > label',
         '#spec-meta',
       ];
 

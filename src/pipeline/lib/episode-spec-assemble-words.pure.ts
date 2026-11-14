@@ -1,6 +1,6 @@
 /*
  * The Spec's words as markup (design-ADR 0011): the Dossier's Voice script, Speaker notes with their citations in
- * full and Visual idea, and the CSS-only tabs that hold them on a Slide. Escapes everything it prints.
+ * full and Visual idea, and the collapsibles that hold them in a Slide's rail. Escapes everything it prints.
  */
 
 import { type Item } from './episode-spec-source.pure.ts';
@@ -57,25 +57,21 @@ export function visualPanel(paragraphs: readonly string[]): string {
     .join('\n');
 }
 
-const TABS = [
+const PANELS = [
   ['visual-idea', 'Visual idea'],
   ['voice-script', 'Voice script'],
   ['speaker-notes', 'Speaker notes'],
 ] as const;
 
-/** A Slide's words as CSS-only tabs, each panel only when its words exist. */
-export function wordTabs(slug: string, panels: Record<(typeof TABS)[number][0], string>): string {
-  const shown = TABS.filter(([name]) => panels[name] !== '');
+/** A Slide's words as collapsibles, closed by default, each only when its words exist. */
+export function wordPanels(panels: Record<(typeof PANELS)[number][0], string>): string {
+  const shown = PANELS.filter(([name]) => panels[name] !== '');
   if (shown.length === 0) return '';
-  const radios = shown.map(
-    ([name, label], at) =>
-      `<input type="radio" name="words:${slug}" id="${slug}--${name}" value="${name}"${at === 0 ? ' checked' : ''} />\n<label for="${slug}--${name}">${label}</label>`,
-  );
-  const cards = shown.map(
+  const details = shown.map(
     ([name, label]) =>
-      `<div class="spec-card spec-panel" data-panel="${name}">\n<h4>${label}</h4>\n${panels[name]}\n</div>`,
+      `<details class="spec-panel" data-panel="${name}">\n<summary>${label}</summary>\n<div class="spec-panel-body">\n${panels[name]}\n</div>\n</details>`,
   );
-  return `<div class="spec-words">\n${[...radios, ...cards].join('\n')}\n</div>`;
+  return `<div class="spec-words">\n${details.join('\n')}\n</div>`;
 }
 
 /** A context card's content as a collapsible, closed by default: its heading is the summary, `body` the rest. */

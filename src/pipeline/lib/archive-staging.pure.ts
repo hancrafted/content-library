@@ -24,7 +24,7 @@ export interface SlidePage {
  * What the archive drops from a Spec article: the review controls (the rail's bar and status line, the picks and the
  * notes) and each Option's card head (its title, Recommended and Locked flags and View button, which the tab of the
  * archive carries once), which wrote feedback that already landed, and the Voice script and Speaker notes, whose
- * words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual idea stays, alone, so its tab goes too.
+ * words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual idea stays, alone and open.
  */
 const REVIEW_ONLY = [
   '.spec-card-head',
@@ -33,8 +33,6 @@ const REVIEW_ONLY = [
   '.spec-pick',
   '.spec-note',
   '.spec-words > [data-panel]:not([data-panel="visual-idea"])',
-  '.spec-words > input',
-  '.spec-words > label',
 ].join(', ');
 
 export function slidePages($: CheerioAPI): SlidePage[] {
@@ -61,6 +59,7 @@ export function slidePages($: CheerioAPI): SlidePage[] {
 function archivedArticle($: CheerioAPI, element: Parameters<CheerioAPI>[0]): string {
   const article = $(element).clone();
   article.find(REVIEW_ONLY).remove();
+  article.find('.spec-words > [data-panel="visual-idea"]').attr('open', '');
   return $.html(article);
 }
 

@@ -275,6 +275,29 @@ describe('success cases', () => {
     expect(slide.find('[data-spec="visual-idea"]').text()).toBe('A bar that fills with blocks.');
   });
 
+  it("puts a Slide's words in collapsibles closed by default, one per kind that exists, and no tabs", () => {
+    // ARRANGE
+    const kinds = ['visual-idea', 'voice-script', 'speaker-notes'];
+    const labels = ['Visual idea', 'Voice script', 'Speaker notes'];
+    // ACT
+    const $ = page(WITH_DOSSIER);
+    const panels = $('#spent-attention .spec-words > details');
+    // ASSERT
+    expect(ids($, '#spent-attention .spec-words > details', 'data-panel')).toEqual(kinds);
+    expect(panels.map((_, panel) => $(panel).children('summary').text().trim()).get()).toEqual(labels);
+    expect(panels.filter('[open]')).toHaveLength(0);
+    expect($('#spent-attention .spec-words input[type="radio"], #spent-attention .spec-words label')).toHaveLength(0);
+  });
+
+  it('shows only the Visual idea collapsible for a Slide the Dossier has not reached', () => {
+    // ARRANGE
+    const kinds = ['visual-idea'];
+    // ACT
+    const $ = page(BRIEF_ONLY);
+    // ASSERT
+    expect(ids($, '#spent-attention .spec-words > details', 'data-panel')).toEqual(kinds);
+  });
+
   it('adds Options with pick boxes, wrapped build notes and a note field once fragments exist', () => {
     // ARRANGE
     const optionIds = ['1a', '1b'];

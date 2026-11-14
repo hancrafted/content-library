@@ -23,16 +23,10 @@ export const SPEC = `<!doctype html><html><head><title>Spec</title><style>.spec-
   <article data-spec="slide" id="watch-cash">
     <header class="spec-slide-head"><span class="spec-number">1</span><h3>Watch cash</h3></header>
     <div class="spec-words">
-      <input type="radio" name="words:watch-cash" id="watch-cash--visual-idea" value="visual-idea" checked />
-      <label for="watch-cash--visual-idea">Visual idea</label>
-      <input type="radio" name="words:watch-cash" id="watch-cash--voice-script" value="voice-script" />
-      <label for="watch-cash--voice-script">Voice script</label>
-      <input type="radio" name="words:watch-cash" id="watch-cash--speaker-notes" value="speaker-notes" />
-      <label for="watch-cash--speaker-notes">Speaker notes</label>
-      <div class="spec-card spec-panel" data-panel="visual-idea"><h4>Visual idea</h4><p data-spec="visual-idea">A board of month columns.</p>
-        <p>Design reference: reference/deck/design-reference.md#page-3</p></div>
-      <div class="spec-card spec-panel" data-panel="voice-script"><ol data-spec="voice-script"><li>Spoken words</li></ol></div>
-      <div class="spec-card spec-panel" data-panel="speaker-notes"><ol data-spec="speaker-notes"><li>A sourced fact</li></ol></div>
+      <details class="spec-panel" data-panel="visual-idea"><summary>Visual idea</summary><div class="spec-panel-body"><p data-spec="visual-idea">A board of month columns.</p>
+        <p>Design reference: reference/deck/design-reference.md#page-3</p></div></details>
+      <details class="spec-panel" data-panel="voice-script"><summary>Voice script</summary><div class="spec-panel-body"><ol data-spec="voice-script"><li>Spoken words</li></ol></div></details>
+      <details class="spec-panel" data-panel="speaker-notes"><summary>Speaker notes</summary><div class="spec-panel-body"><ol data-spec="speaker-notes"><li>A sourced fact</li></ol></div></details>
     </div>
     <div class="spec-bar"><div class="spec-pickbar"></div><button type="button" class="spec-details-toggle">Show details</button><button type="button" class="spec-reset" data-reset>Reset</button></div>
     <p class="spec-showing" role="status"></p>
@@ -49,9 +43,7 @@ export const SPEC = `<!doctype html><html><head><title>Spec</title><style>.spec-
   <article data-spec="slide" id="cash-left">
     <header class="spec-slide-head"><span class="spec-number">2</span><h3>Cash left</h3></header>
     <div class="spec-words">
-      <input type="radio" name="words:cash-left" id="cash-left--visual-idea" value="visual-idea" checked />
-      <label for="cash-left--visual-idea">Visual idea</label>
-      <div class="spec-card spec-panel" data-panel="visual-idea"><p data-spec="visual-idea">One falling line.</p></div>
+      <details class="spec-panel" data-panel="visual-idea"><summary>Visual idea</summary><div class="spec-panel-body"><p data-spec="visual-idea">One falling line.</p></div></details>
     </div>
     <div class="spec-options">
     <figure data-spec="option" data-option="2a" data-picked><div data-spec="mock">Line A</div></figure>

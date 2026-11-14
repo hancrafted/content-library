@@ -16,7 +16,7 @@ import {
   notesList,
   visualPanel,
   voiceList,
-  wordTabs,
+  wordPanels,
 } from './episode-spec-assemble-words.pure.ts';
 import { fragmentSlides } from './episode-spec-fragment.pure.ts';
 import { itemMarkup, optionsMarkup, type Templates } from './episode-spec-items.pure.ts';
@@ -77,7 +77,7 @@ interface SlideSources {
 type SourceSlide = Source['sections'][number]['slides'][number];
 
 function slideWords(slide: SourceSlide): string {
-  return wordTabs(slide.slug, {
+  return wordPanels({
     'visual-idea': visualPanel(slide.visual),
     'voice-script': voiceList(slide.voice),
     'speaker-notes': slide.notes === undefined ? '' : notesList(slide.notes),
@@ -169,7 +169,7 @@ function outline(source: Source, hasTitle: boolean, cards: readonly IntroCard[])
 }
 
 const LEDE =
-  'Each Slide shows its words as tabs above its Options, which are tabs too: open each, pick one, and dictate a note where it should change. Save at the bottom when done.';
+  'Each Slide shows its Options as a visual with a pick bar beside it: pick one, open its details to compare, and dictate a note where it should change. Its words sit in the rail, closed. Save at the bottom when done.';
 
 function sectionsMarkup(source: Source, sources: SlideSources): string {
   let number = 0;
