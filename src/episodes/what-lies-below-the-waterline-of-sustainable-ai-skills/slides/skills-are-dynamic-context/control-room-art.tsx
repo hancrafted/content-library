@@ -3,8 +3,22 @@ import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/ca
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
-import type { ReactNode } from 'react';
-import { ControlRoom } from './room';
+import { useId, type ReactNode } from 'react';
+import art from './room-art.json';
+import styles from './slide.module.css';
+
+/*
+ * The control room at the end of the dive, lifted facet by facet from the approved Spec's Option 5b (feedback 3,
+ * decision 46): `room-art.json` holds its drawing as rows of tone and outline, in the Spec's 720 by 560 units and its
+ * paint order. The Scene's box keeps that ratio, so the room fills it, scaled to the Scene's height and centred; every
+ * place below is in the Spec's units. The Spec's own pilot and robot are left out: the shared cast and Robot stand in
+ * their place.
+ */
+
+/** The room's size in the Spec's units; the Scene's box keeps its ratio. */
+export const ROOM = { width: 720, height: 560 } as const;
+const SCALE = SCENE_HEIGHT / ROOM.height;
+const LEFT = (SCENE_WIDTH - ROOM.width * SCALE) / 2;
 
 /** The order things arrive in during the dive: the card first, then what the robot sends up. */
 export const ARRIVALS = ['card', 'frames', 'sonar', 'logs'] as const;
@@ -13,71 +27,28 @@ export type Arrival = (typeof ARRIVALS)[number];
 export const ARRIVAL_DELAY: Readonly<Record<Arrival, number>> = { card: 200, frames: 900, sonar: 1600, logs: 2300 };
 const ARRIVAL_MS = 700;
 
-/** Where an overlay word sits over the drawing, in the Scene's 1200 by 800 units. */
+/** Where an overlay word sits over the room, in the Spec's units, as percentages of the visible box. */
 export const at = (x: number, y: number) => ({
-  left: `${(x / SCENE_WIDTH) * 100}%`,
-  top: `${(y / SCENE_HEIGHT) * 100}%`,
+  left: `${(x / ROOM.width) * 100}%`,
+  top: `${(y / ROOM.height) * 100}%`,
 });
 
-const FEED = { x: 50, y: 50, width: 580, height: 330 } as const;
-const DESK_TOP = 560;
-const FLOOR = 720;
-export const CARD = { x: 470, y: 420, width: 220, height: 140 } as const;
+/** The pulled card propped on the desk, its title the overlay's. */
+export const CARD = { x: 280, y: 258, width: 168, height: 94 } as const;
+/** Where the robot hangs on its tether in the camera feed, the tether's end; the floor the pilot's chair stands on. */
+const ROBOT = { x: 206, y: 144, scale: 1.15 } as const;
+const PILOT = { x: 124, y: 486, scale: 1.5 } as const;
+/** The wall screen's glass, which the feed's drawing and the robot's beam stay inside. */
+const SCREEN = { x: 36, y: 34, width: 368, height: 212 } as const;
 
-/** The robot at the seabed on the wall screen's live feed: the twilight water shows through, with the sediment below. */
-function CameraFeed() {
-  const bed = FEED.y + FEED.height - 50;
-  return (
-    <g data-camera-feed>
-      <polygon
-        points={`${FEED.x},${bed + 10} ${FEED.x + 200},${bed - 6} ${FEED.x + 420},${bed + 8} ${FEED.x + FEED.width},${bed - 4} ${FEED.x + FEED.width},${FEED.y + FEED.height} ${FEED.x},${FEED.y + FEED.height}`}
-        className="fill-(--seabed)"
-      />
-      {[40, 70, 100].map((r) => (
-        <path
-          key={r}
-          d={`M${330 - r} ${bed - 20 + r / 3} Q330 ${bed + r / 2} ${330 + r} ${bed - 20 + r / 3}`}
-          strokeWidth={4}
-          className="fill-none stroke-(--ping)"
-        />
-      ))}
-      <line x1={330} y1={FEED.y} x2={330} y2={bed - 140} strokeWidth={3} className="stroke-(--frame)" />
-      <g transform={`translate(330 ${bed - 140}) scale(1.6)`}>
-        <Robot aim="down" lamp />
-      </g>
-    </g>
-  );
-}
+type Facet = readonly string[];
 
-/** The project brief pinned on the wall, its words the overlay's. */
-function WallBrief() {
+/** A part of the drawing, its facets in the Spec's paint order. */
+function Facets({ part, facets }: { readonly part: string; readonly facets: readonly Facet[] }) {
   return (
-    <g data-wall-brief>
-      <rect x={706} y={76} width={170} height={250} className="fill-(--paper-shade)" />
-      <rect x={700} y={70} width={170} height={250} className="fill-(--paper)" />
-      {[150, 180, 210, 240, 270].map((y) => (
-        <rect key={y} x={720} y={y} width={120} height={5} className="fill-(--ink)" />
-      ))}
-      <rect x={778} y={60} width={14} height={16} className="fill-(--pin)" />
-    </g>
-  );
-}
-
-/** The manual on its small shelf, its index page turned out. */
-function ManualShelf() {
-  const tabs = ['fill-(--tab-a)', 'fill-(--tab-b)', 'fill-(--tab-c)'] as const;
-  return (
-    <g data-manual-shelf>
-      <rect x={920} y={320} width={220} height={14} className="fill-(--wood)" />
-      {[0, 1, 2, 3].map((n) => (
-        <g key={n}>
-          <rect x={930 + n * 30} y={170} width={24} height={150} className="fill-(--paper-shade)" />
-          <rect x={934 + n * 30} y={160} width={12} height={12} className={tabs[n % 3]} />
-        </g>
-      ))}
-      <rect x={1052} y={160} width={80} height={160} className="fill-(--paper)" />
-      {[200, 225, 250, 275].map((y, n) => (
-        <rect key={y} x={1062} y={y} width={10} height={10} className={tabs[n % 3]} />
+    <g data-part={part}>
+      {facets.map(([tone, d], index) => (
+        <path key={index} data-lp={tone} d={d} />
       ))}
     </g>
   );
@@ -92,28 +63,24 @@ function Lands({ arrival, children }: { readonly arrival: Arrival; readonly chil
   );
 }
 
-/** What the robot sends up later: the sonar trace on its recorder, then the logs on their clipboard. */
-function Readings() {
+/**
+ * The wall screen's live feed: sunlit water over twilight water with light rays, a seabed of sediment and stones, the
+ * robot on its tether with its lamp on the bed, its sonar rings, a core marker, a few fish and a jelly. The glass clips
+ * it, the beam too; its `clipPath` id comes from `useId`, so a copied Slide repeats none.
+ */
+function CameraFeed() {
+  const clip = useId();
   return (
-    <>
-      <Lands arrival="sonar">
-        <rect x={860} y={510} width={90} height={50} className="fill-(--recorder)" />
-        <rect x={878} y={440} width={54} height={72} className="fill-(--paper)" />
-        <polyline
-          points="884,490 894,470 902,500 910,460 918,488 926,476"
-          strokeWidth={3}
-          className="fill-none stroke-(--trace)"
-        />
-      </Lands>
-      <Lands arrival="logs">
-        <rect x={985} y={440} width={100} height={120} className="fill-(--wood)" />
-        <rect x={995} y={455} width={80} height={98} className="fill-(--paper)" />
-        <rect x={1015} y={432} width={40} height={14} className="fill-(--wood-shade)" />
-        {[475, 495, 515, 535].map((y) => (
-          <rect key={y} x={1005} y={y} width={56} height={4} className="fill-(--ink)" />
-        ))}
-      </Lands>
-    </>
+    <g data-camera-feed clipPath={`url(#${clip})`}>
+      <clipPath id={clip}>
+        <rect {...SCREEN} />
+      </clipPath>
+      <Facets part="feed-water" facets={art.feedWater} />
+      <g transform={`translate(${ROBOT.x} ${ROBOT.y}) scale(${ROBOT.scale})`}>
+        <Robot aim="down" lamp />
+      </g>
+      <Facets part="feed-life" facets={art.feedLife} />
+    </g>
   );
 }
 
@@ -122,40 +89,38 @@ function Arrivals() {
   return (
     <>
       <Lands arrival="card">
-        <rect x={CARD.x + 6} y={CARD.y + 6} width={CARD.width} height={CARD.height} className="fill-(--paper-shade)" />
-        <rect x={CARD.x} y={CARD.y} width={CARD.width} height={CARD.height} className="fill-(--paper)" />
-        <rect x={CARD.x} y={CARD.y} width={CARD.width} height={8} className="fill-(--tab-a)" />
+        <Facets part="card" facets={art.card} />
       </Lands>
       <Lands arrival="frames">
-        <rect x={720} y={505} width={80} height={55} className="fill-(--paper)" />
-        <rect x={727} y={511} width={66} height={43} className="fill-(--photo)" />
-        <rect x={745} y={490} width={80} height={55} className="fill-(--paper)" />
-        <rect x={752} y={496} width={66} height={43} className="fill-(--photo)" />
+        <Facets part="frames" facets={art.frames} />
       </Lands>
-      <Readings />
+      <Lands arrival="sonar">
+        <Facets part="sonar" facets={art.sonar} />
+      </Lands>
+      <Lands arrival="logs">
+        <Facets part="logs" facets={art.logs} />
+      </Lands>
     </>
   );
 }
 
 /**
  * The control room at the end of the dive, as one drawing inside `ZoneScene`: the wall screen with the robot's live
- * feed, where the twilight water shows; the project brief and the manual on the wall; the pilot at the desk with his
- * notebook; and, landing one after another, everything the dive brought in.
+ * feed; the project brief and the manual on the wall; the pilot at the desk with his notebook; and, landing one after
+ * another, everything the dive brought in.
  */
 export function ControlRoomArt() {
   return (
-    <>
-      <ControlRoom floor={FLOOR} openings={[{ ...FEED, framed: true }]} />
+    <g transform={`translate(${LEFT} 0) scale(${SCALE})`} className={styles.art}>
+      <Facets part="room" facets={art.room} />
       <CameraFeed />
-      <WallBrief />
-      <ManualShelf />
-      <rect x={330} y={DESK_TOP} width={850} height={18} className="fill-(--desk)" />
-      <rect x={350} y={DESK_TOP + 18} width={810} height={FLOOR - DESK_TOP - 18} className="fill-(--desk-shade)" />
-      <g transform={`translate(240 ${FLOOR}) scale(2.2)`}>
+      <Facets part="wall" facets={art.wall} />
+      <Facets part="desk" facets={art.desk} />
+      <g transform={`translate(${PILOT.x} ${PILOT.y}) scale(${PILOT.scale})`}>
         <Character preset={pilot} pose="sit" />
       </g>
-      <polygon points="360,560 450,560 444,540 366,540" className="fill-(--tab-a)" />
+      <Facets part="notebook" facets={art.notebook} />
       <Arrivals />
-    </>
+    </g>
   );
 }
