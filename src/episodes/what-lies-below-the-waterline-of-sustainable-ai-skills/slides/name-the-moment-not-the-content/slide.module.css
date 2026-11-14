@@ -1,47 +1,103 @@
 /*
- * "Name the trigger, not the content" (Option 12a): the room's floor and the one emphasis motion. No raw colour
- * (FE-011): the floor mixes `--zone-sunlit` with `--on-brand-accent` (white) and `--overlay` (black), both fixed
- * across themes; `--primary` marks the match. Dark mode only retunes the mixes.
+ * "Name the trigger, not the content" (Option 12a): the room's tones and the one emphasis motion. The tones are the
+ * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
+ * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). The sheet's clip mixes the
+ * Spec's blue as raw values, so it carries no machine meaning; `--primary` marks the match.
  */
 
-.room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
-  );
+.art {
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --floor-lit: oklch(0.72 0.025 240);
+  --floor: oklch(0.66 0.028 244);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.972 0.009 88);
+  --paper-shade: oklch(0.935 0.014 84);
+  --paper-edge: oklch(0.86 0.02 80);
+  --clip-dark: oklch(0.28 0.02 260);
+  --clip-lit: color-mix(in oklab, oklch(0.58 0.16 242) 78%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, oklch(0.58 0.16 242) 68%, oklch(0.22 0.06 270));
 }
 
-:global(.dark) .room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
-  );
+:global(.dark) .art {
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --floor-lit: oklch(0.25 0.02 255);
+  --floor: oklch(0.22 0.02 258);
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper: oklch(0.39 0.02 252);
+  --paper-shade: oklch(0.35 0.02 255);
+  --paper-edge: oklch(0.29 0.02 258);
+  --clip-dark: oklch(0.22 0.02 260);
+  --clip-lit: color-mix(in oklab, oklch(0.72 0.14 235) 82%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, oklch(0.72 0.14 235) 62%, oklch(0.2 0.05 270));
 }
 
-.floor [data-tone='floor-lit'] {
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--room-lit);
+  stroke: var(--room-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--room);
+  stroke: var(--room);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--room-shade);
+  stroke: var(--room-shade);
+}
+
+.art [data-tone='floor-lit'] {
   fill: var(--floor-lit);
+  stroke: var(--floor-lit);
 }
 
-.floor [data-tone='floor'] {
+.art [data-tone='floor'] {
   fill: var(--floor);
+  stroke: var(--floor);
 }
 
-.floor [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--paper-edge);
+  stroke: var(--paper-edge);
+}
+
+.art [data-tone='clip-dark'] {
+  fill: var(--clip-dark);
+  stroke: var(--clip-dark);
+}
+
+.art [data-tone='clip-lit'] {
+  fill: var(--clip-lit);
+  stroke: var(--clip-lit);
+}
+
+.art [data-tone='clip-shade'] {
+  fill: var(--clip-shade);
+  stroke: var(--clip-shade);
 }
 
 /*
