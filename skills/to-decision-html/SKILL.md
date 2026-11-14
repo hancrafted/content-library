@@ -190,4 +190,4 @@ _Done when_ the page is inlined, the person has it open and has those three line
 
 ## Evaluation
 
-The evaluation process grades the skill; a use of the skill delivers its page ungraded. When this skill changes, run the grader (`node scripts/grade-page.ts <page.html>`), the fixture proof (`npm run decision-html:prove`) and the [evals](evals/README.md). The grader proves mechanics, not taste: whether a page looks right and explains well stays with human review.
+The evaluation process grades the skill; a use of the skill delivers its page ungraded. When this skill changes, run the grader (`node scripts/grade-page.ts <page.html>`), the fixture proof (`npm run decision-html:prove`) and the evals. The grader proves mechanics, not taste: whether a page looks right and explains well stays with human review.
