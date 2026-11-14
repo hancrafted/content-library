@@ -12,7 +12,7 @@ Check the delivered HTML, with networking disabled, at desktop and landscape-tab
 | Select, deselect and reset       | Boolean, single/multiple choice and per-item reset behave as declared; untouched items export as skipped.                                                          |
 | Use preview tools while editing  | Focus and text are retained, and the useful subject of the visual, not merely an edge, stays visible while commenting.                                             |
 | Reload with a draft              | Choices and item/Option comments survive; other decision pages and evaluation arms do not inherit them.                                                            |
-| Raise `data-revision` and reload | Responses start unanswered and the approval is gone; the earlier revision's feedback shows read-only.                                                              |
+| Raise `data-revision` and reload | Each item starts on its default, not on the earlier revision's draft, and the approval is gone; the earlier revision's feedback shows read-only.                   |
 | Export all response states       | The handoff names the page id, revision and destination, keeps every comment, marks untouched items skipped and keeps agent-preset text apart from the reviewer's. |
 | Block or corrupt draft storage   | Editing and handoff still work, with a truthful recovery warning.                                                                                                  |
 

@@ -1,9 +1,9 @@
 /*
  * The Spec's Brief card markup (design-ADR 0011): the Brief's headings as paragraphs and lists, a note field each,
- * read-only once the Brief is approved.
+ * read-only once the Brief is approved. Like every context card it is a collapsible, closed by default.
  */
 
-import { escape, inline } from './episode-spec-assemble-words.pure.ts';
+import { collapsible, escape, inline } from './episode-spec-assemble-words.pure.ts';
 import { briefCard, type BriefCardEntry } from './episode-spec-brief.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
 import { ORDERED_MARKER } from './episode-spec-source.pure.ts';
@@ -43,7 +43,6 @@ function briefEntry({ heading, key, lines }: BriefCardEntry, approved: boolean):
 export function briefCardMarkup(brief: string): string {
   const { entries, approved } = briefCard(brief);
   if (entries.length === 0) return '';
-  return `<section id="brief" data-spec="brief-card"${approved ? ' data-locked' : ''} class="spec-card">\n<h2>Brief</h2>\n${entries
-    .map((entry) => briefEntry(entry, approved))
-    .join('\n')}\n</section>`;
+  const body = entries.map((entry) => briefEntry(entry, approved)).join('\n');
+  return `<section id="brief" data-spec="brief-card"${approved ? ' data-locked' : ''} class="spec-card">\n${collapsible('Brief', body)}\n</section>`;
 }

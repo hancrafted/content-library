@@ -8,12 +8,6 @@ import { appendMetaVerified } from './staging-file.pure';
  * one rule of the Spec contract.
  */
 
-const REVIEW_ASSET = `<!-- spec-review:start -->
-<form id="spec-review" method="post">
-  <button type="submit">Save review</button>
-</form>
-<!-- spec-review:end -->`;
-
 const DOSSIER = `---
 type: dossier
 ---
@@ -53,8 +47,10 @@ function meta({ verified }: Meta = {}): string {
 
 interface OptionShape {
   recommended?: boolean;
+  /** `data-recommended` as the generated template writes it, `"true"` or `"false"`, not the bare attribute. */
+  explicitMark?: boolean;
   picked?: boolean;
-  /** Whether the pick checkbox carries `checked`; a picked Option's does, as the contract demands. */
+  /** Whether the pick checkbox carries `checked`; a picked Option's does, and so does a recommended one's, the default pick. */
   checked?: boolean;
   mock?: string;
   caption?: string | null;
@@ -72,13 +68,19 @@ const OPTION_DEFAULTS = {
   after: '',
 };
 
+/** The `data-recommended` attribute of an Option: bare, or `"true"`/`"false"` when the shape asks for the explicit form. */
+function recommendedMark(recommended: boolean, explicit: boolean | undefined): string {
+  if (explicit === true) return ` data-recommended="${recommended}"`;
+  return recommended ? ' data-recommended' : '';
+}
+
 function option(slug: string, id: string, shape: OptionShape = {}): string {
-  const { recommended, picked, checked, mock, caption, notes, after } = {
+  const { recommended, explicitMark, picked, checked, mock, caption, notes, after } = {
     ...OPTION_DEFAULTS,
-    checked: shape.picked,
+    checked: shape.picked ?? shape.recommended,
     ...shape,
   };
-  const flags = [recommended ? ' data-recommended' : '', picked ? ' data-picked' : ''].join('');
+  const flags = [recommendedMark(recommended, explicitMark), picked ? ' data-picked' : ''].join('');
   const tick = checked === true ? ' checked' : '';
   const figcaption = caption === null ? '' : `<figcaption><b>${id}</b> ${caption}</figcaption>`;
   const buildNotes = notes === null ? '' : `<div data-spec="build-notes">${notes}</div>`;
@@ -150,7 +152,7 @@ interface SpecShape {
   meta?: string;
   slides?: string[];
   title?: string;
-  asset?: string;
+  tail?: string;
 }
 
 function spec(shape: SpecShape = {}): string {
@@ -174,7 +176,7 @@ ${shape.title ?? titleSlide()}
 <section data-spec="section" id="why"><h2>Why it forgets</h2>
 ${slides.join('\n')}
 </section>
-${shape.asset ?? REVIEW_ASSET}
+${shape.tail ?? ''}
 </body>
 </html>
 `;
@@ -193,7 +195,7 @@ describe('success cases', () => {
     // ARRANGE
     const files = folder();
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -250,6 +252,18 @@ describe('failure cases', () => {
     [
       'a Slide with no recommended Option',
       { slides: [slide('spent', 1, { options: [option('spent', '1a'), option('spent', '1b')] }), slide('middle', 2)] },
+      'The Slide {#spent} marks 0 Options recommended: mark exactly one with data-recommended.',
+    ],
+    [
+      'a Slide whose Options are all marked data-recommended="false"',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { explicitMark: true }), option('spent', '1b', { explicitMark: true })],
+          }),
+          slide('middle', 2),
+        ],
+      },
       'The Slide {#spent} marks 0 Options recommended: mark exactly one with data-recommended.',
     ],
     [
@@ -401,16 +415,6 @@ describe('failure cases', () => {
       'The meta block lacks "title", "status", "generated", "locale", "brief".',
     ],
     [
-      'a missing review asset',
-      { asset: '' },
-      'The Spec does not inline the review asset from skills/new-episode/assets/spec-review.html, between its <!-- spec-review:start --> and <!-- spec-review:end --> markers.',
-    ],
-    [
-      'an edited review asset',
-      { asset: REVIEW_ASSET.replace('Save review', 'Save') },
-      'The Spec does not inline the review asset from skills/new-episode/assets/spec-review.html, between its <!-- spec-review:start --> and <!-- spec-review:end --> markers.',
-    ],
-    [
       'an Option without its pick checkbox',
       {
         slides: [
@@ -461,7 +465,7 @@ describe('failure cases', () => {
       'Option 1a of {#spent} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.',
     ],
     [
-      'an unpicked Option whose checkbox is ticked',
+      'an unpicked Option whose checkbox is ticked while another is the recommendation',
       {
         slides: [
           slide('spent', 1, {
@@ -470,13 +474,40 @@ describe('failure cases', () => {
           slide('middle', 2),
         ],
       },
-      'Option 1b of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option.',
+      'Option 1b of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option, or the recommended one while the Slide has none.',
+    ],
+    [
+      'a recommended Option whose checkbox is not ticked while its Slide has no picked Option',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { recommended: true, checked: false }), option('spent', '1b')],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} is recommended and its Slide has no picked Option, but its checkbox lacks checked: the pick defaults to the recommendation.',
+    ],
+    [
+      'a recommended Option ticked beside the picked one',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [
+              option('spent', '1a', { recommended: true, picked: false, checked: true }),
+              option('spent', '1b', { picked: true }),
+            ],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option, or the recommended one while the Slide has none.',
     ],
   ] satisfies [string, SpecShape, string][])('names %s', (_name, shape, expected) => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': spec(shape) });
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual([expected]);
   });
@@ -489,7 +520,7 @@ describe('failure cases', () => {
       'The Spec Slide {#quiet} is no Slide in the Dossier: its id must be the Dossier h3 slug.',
     ];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -520,7 +551,7 @@ describe('failure cases', () => {
           TITLE_OPTIONS[2].replace(/<div data-spec="mock"[^>]*><div[^>]*><\/div><\/div>/, ''),
         ]),
       },
-      'Option 0c of {#top} has no mock of the Title slide: a <div data-spec="mock"> directly in its figure.',
+      'Option 0c of {#top} has no mock of the Title slide: a <div data-spec="mock"> in its figure, beside the echoes.',
     ],
     [
       'a hex colour in a section slide of a Title-slide Option',
@@ -540,7 +571,7 @@ describe('failure cases', () => {
     ],
     [
       'a Title slide after the first Section',
-      { title: '', asset: `${titleSlide()}\n${REVIEW_ASSET}` },
+      { title: '', tail: titleSlide() },
       'The Title slide {#top} comes after the Section {#why}: put it before the first Section.',
     ],
     [
@@ -552,7 +583,7 @@ describe('failure cases', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': spec(shape) });
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toContain(expected);
   });
@@ -572,7 +603,7 @@ describe('failure cases', () => {
       'Option 1b of {#spent} has a Context marker for "Attention is finite", which is no Speaker note of the Slide: name the note by its title in data-note.',
     ];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -582,7 +613,7 @@ describe('failure cases', () => {
     const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }) };
     const expected = ['The Title slide {#top} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -594,7 +625,7 @@ describe('failure cases', () => {
     };
     const expected = ['The Slide {#middle} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -609,8 +640,8 @@ describe('failure cases', () => {
     };
     // ACT
     const found = {
-      before: messages(checkSpec({ 'spec/spec.html': unapproved }, REVIEW_ASSET)),
-      after: messages(checkSpec({ 'spec/spec.html': approved }, REVIEW_ASSET)),
+      before: messages(checkSpec({ 'spec/spec.html': unapproved })),
+      after: messages(checkSpec({ 'spec/spec.html': approved })),
     };
     // ASSERT
     expect(found).toEqual(expected);
@@ -629,17 +660,17 @@ describe('failure cases', () => {
       'dossier.md still sits beside the approved Spec: the Spec is the only source now, so delete it in the approval commit.',
     ];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
 
   it('names the Spec file and the spec kind in every finding', () => {
     // ARRANGE
-    const files = folder({ 'spec/spec.html': spec({ asset: '' }) });
+    const files = folder({ 'spec/spec.html': spec({ meta: '' }) });
     const expected = [{ kind: 'spec', file: 'spec/spec.html' }];
     // ACT
-    const found = checkSpec(files, REVIEW_ASSET).map(({ kind, file }) => ({ kind, file }));
+    const found = checkSpec(files).map(({ kind, file }) => ({ kind, file }));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -650,21 +681,20 @@ describe('edge cases', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': bareSpec() });
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET, 'early');
+    const findings = checkSpec(files, 'early');
     // ASSERT
     expect(findings).toEqual([]);
   });
 
-  it('still holds the meta block, the review asset and the Dossier agreement', () => {
+  it('still holds the meta block and the Dossier agreement', () => {
     // ARRANGE
-    const files = folder({ 'spec/spec.html': bareSpec({ meta: '', asset: '', slides: [bare('spent', 1)] }) });
+    const files = folder({ 'spec/spec.html': bareSpec({ meta: '', slides: [bare('spent', 1)] }) });
     // ACT
-    const expectedFindings = 3;
-    const found = messages(checkSpec(files, REVIEW_ASSET, 'early'));
+    const expectedFindings = 2;
+    const found = messages(checkSpec(files, 'early'));
     // ASSERT
     expect(found).toHaveLength(expectedFindings);
     expect(found.join('\n')).toContain('no meta block');
-    expect(found.join('\n')).toContain('does not inline the review asset');
     expect(found.join('\n')).toContain('Dossier Slide {#middle}');
   });
 
@@ -672,7 +702,7 @@ describe('edge cases', () => {
     // ARRANGE
     const files = { 'dossier.md': DOSSIER };
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -686,7 +716,22 @@ describe('edge cases', () => {
       }),
     });
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts data-recommended as "true" and "false", the page contract form, beside the bare attribute', () => {
+    // ARRANGE
+    const explicit = [
+      option('spent', '1a', { recommended: true, explicitMark: true }),
+      option('spent', '1b', { explicitMark: true }),
+    ];
+    const files = folder({
+      'spec/spec.html': spec({ slides: [slide('spent', 1, { options: explicit }), slide('middle', 2)] }),
+    });
+    // ACT
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -697,7 +742,7 @@ describe('edge cases', () => {
       'spec/spec.html': spec({ slides: [slide('spent', 1, { options: SPENT_3 }), picked('middle', 2)] }),
     });
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -712,7 +757,7 @@ describe('edge cases', () => {
       }),
     };
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -722,20 +767,7 @@ describe('edge cases', () => {
     const stale = meta({ verified: [{ by: 'human:han', at: '2026-10-12T11:00:00Z' }] });
     const files = folder({ 'spec/spec.html': spec({ meta: stale }) });
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
-    // ASSERT
-    expect(findings).toEqual([]);
-  });
-
-  it('accepts the review asset reformatted, whitespace and line breaks aside', () => {
-    // ARRANGE
-    const reformatted = REVIEW_ASSET.replace(
-      '<form id="spec-review" method="post">',
-      '<form\n    id="spec-review"\n    method="post"\n  >',
-    ).replace('<button type="submit">Save review</button>', '<button type="submit">\n    Save review\n  </button>');
-    const files = folder({ 'spec/spec.html': spec({ asset: reformatted }) });
-    // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -745,7 +777,7 @@ describe('edge cases', () => {
     const chrome = '<style>.page { color: #222; width: calc(100% - 2rem); }</style><div class="max-w-[72rem]"></div>';
     const files = folder({ 'spec/spec.html': spec().replace('</body>', `${chrome}</body>`) });
     // ACT
-    const findings = checkSpec(files, REVIEW_ASSET);
+    const findings = checkSpec(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -759,7 +791,7 @@ describe('edge cases', () => {
     const files = folder({ 'spec/spec.html': html });
     const expected = ['A Voice script item of {#episode-page} has no <strong> title: "No title."'];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -775,7 +807,7 @@ describe('edge cases', () => {
       'The Spec Section {#forgets} is no Section in the Dossier: its id must be the Dossier h2 slug.',
     ];
     // ACT
-    const found = messages(checkSpec(files, REVIEW_ASSET));
+    const found = messages(checkSpec(files));
     // ASSERT
     expect(found).toEqual(expected);
   });

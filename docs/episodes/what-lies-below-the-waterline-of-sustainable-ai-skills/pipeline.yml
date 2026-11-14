@@ -490,7 +490,7 @@ jobs:
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
           - docs/profile/mental-model-guide.md
-          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
         model: inherit
       - type: reviewer
         skills: []
@@ -558,8 +558,8 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
-          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -572,8 +572,8 @@ jobs:
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
-          - .scratch/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-slides.md
+          - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/handoff-spec-corrections.md
         rubric: references/write-spec.md#rubric
         model: opus
 

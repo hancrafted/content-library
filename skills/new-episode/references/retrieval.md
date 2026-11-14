@@ -17,7 +17,7 @@ For each item under the Brief's `Research questions`, beside the folder name `ca
 
 When `docs/llm-wiki/index.md` does not exist yet, every question is `new`; say so in the summary.
 
-Write the plan by its rule (`npx mh query docs/episodes/<slug>/research-plan.md`). Its `## Research jobs` holds one item per `refresh` or `new` question, in the Brief's order; its `## Reuse` holds one `Question <n>: reuse <path>` item per reused question:
+Write the plan by its rule (`npx mh query --intents docs/episodes/<slug>/research-plan.md`). Its `## Research jobs` holds one item per `refresh` or `new` question, in the Brief's order; its `## Reuse` holds one `Question <n>: reuse <path>` item per reused question:
 
 ```markdown
 - new: AIE-0007__why-recall-degrades-with-position, question 1.

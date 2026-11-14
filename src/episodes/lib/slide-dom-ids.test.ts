@@ -52,9 +52,9 @@ function scene({ page, slide }: PlacedSlide) {
   }).content;
 }
 
-/** Every `id="..."` in rendered markup, in document order. */
+/** Every `id="..."` in rendered markup, in document order; `data-id` and the like are not DOM ids. */
 function idsOf(html: string): string[] {
-  return [...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => id);
+  return [...html.matchAll(/(?<![\w-])id="([^"]+)"/g)].map(([, id]) => id);
 }
 
 /** The ids that appear more than once. */

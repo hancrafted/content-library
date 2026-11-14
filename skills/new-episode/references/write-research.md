@@ -4,7 +4,7 @@ Output: `docs/episodes/<slug>/research/<category>-<####>__<question-slug>/resear
 
 ## Prompt
 
-Answer one research question from the Brief with the `research` skill. Its method holds; the file's location and shape are the `research` rule's: `npx mh query` on [the sample](../assets/sample-episode/research/AIE-0000__why-recall-degrades-with-position/research.md) prints the intent of every field and heading.
+Answer one research question from the Brief with the `research` skill. Its method holds; the file's location and shape are the `research` rule's: `npx mh query --intents` on [the sample](../assets/sample-episode/research/AIE-0000__why-recall-degrades-with-position/research.md) prints the intent of every field and heading.
 
 - Frontmatter follows OKF v0.2: `generated: { by, at }`, a placeholder until the orchestrator's `approve.ts --stamp <producer>/<version>` (for example `claude-code/opus-5.5`) overwrites it with the clock time; never type a timestamp. The user's edit sets `by` to `human:han`.
 - `title` is the h1 verbatim: the staging test fails when they differ.

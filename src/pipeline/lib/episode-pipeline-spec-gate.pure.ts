@@ -3,7 +3,8 @@
  * Spec page and holds its Gate, write-voice-script has no Gate of its own, the
  * retired write-design-spec is gone, Build's init job waits for the Spec, and
  * no job after the Gate reads the Dossier, which the Gate deletes.
- * Each rule asks only about the jobs a pipeline holds. Called by the schema
+ * write-spec reads the Spec calibration, which replaced the old Spec frame and review asset. Each rule asks only
+ * about the jobs a pipeline holds. Called by the schema
  * check for the template and every draft per-run pipeline; an approved per-run
  * pipeline keeps the stage it was approved with, so a Run in flight is not
  * migrated.
@@ -65,8 +66,32 @@ function checkStageJobs(byId: ReadonlyMap<string, Job>, staging: string): string
   ];
 }
 
+/** What every Spec shares, read by write-spec in place of the Spec frame and the review asset the Spec template replaced. */
+const CALIBRATION = 'references/spec-calibration.md';
+const RETIRED_ASSETS = ['assets/spec-frame.html', 'assets/spec-review.html'];
+
+/** write-spec reads the Spec calibration and none of the assets the Spec template replaced. */
+function checkSpecReads(spec: Job | undefined, reads: ReadonlyMap<string, readonly string[]>): string[] {
+  if (spec === undefined) return [];
+  const paths = (reads.get(spec.id) ?? []).map((path) => path.split('#')[0]);
+  return [
+    ...unless(
+      paths.includes(CALIBRATION),
+      `Job "write-spec" does not read ${CALIBRATION}; the Spec calibration holds what every Spec shares (design-ADR-0011).`,
+    ),
+    ...RETIRED_ASSETS.filter((asset) => paths.includes(asset)).map(
+      (asset) =>
+        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (design-ADR-0011).`,
+    ),
+  ];
+}
+
 export function checkSpecGate(jobs: readonly Job[], scope: SpecGateScope): string[] {
   if (scope.expanded) return [];
   const byId = new Map(jobs.map((job) => [job.id, job]));
-  return [...checkStageJobs(byId, scope.staging), ...dossierReadersAfterGate(jobs, byId, scope)];
+  return [
+    ...checkStageJobs(byId, scope.staging),
+    ...checkSpecReads(byId.get('write-spec'), scope.reads),
+    ...dossierReadersAfterGate(jobs, byId, scope),
+  ];
 }

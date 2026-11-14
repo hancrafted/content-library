@@ -21,7 +21,6 @@ import {
   pipelineContext,
   readFolder,
   researchFolders,
-  REVIEW_ASSET,
   ROOT,
   rubricsWithoutHeading,
   RUNS_CSV,
@@ -213,32 +212,13 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
-  it('rejects a sample Spec that drops the review asset, so the real asset is what the check compares', () => {
-    // ARRANGE
-    const sample = readFolder(SAMPLE);
-    const spec = sample['spec/spec.html'].replace('<!-- spec-review:start -->', '');
-    const expectedKinds = ['spec'];
-    // ACT
-    const findings = checkStagingFolder(
-      { ...sample, 'spec/spec.html': spec },
-      knownVisuals(),
-      readFileSync(REVIEW_ASSET, 'utf8'),
-    );
-    // ASSERT
-    expect(findings.map(({ kind }) => kind)).toEqual(expectedKinds);
-  });
-
   it('rejects a Visual master that is neither a frame component nor a slide-master Slide in the repo', () => {
     // ARRANGE
     const sample = readFolder(SAMPLE);
     const dossier = sample['dossier.md'].replace('master: three-column', 'master: four-column');
     const expectedKinds = ['visual'];
     // ACT
-    const findings = checkStagingFolder(
-      { ...sample, 'dossier.md': dossier },
-      knownVisuals(),
-      readFileSync(REVIEW_ASSET, 'utf8'),
-    );
+    const findings = checkStagingFolder({ ...sample, 'dossier.md': dossier }, knownVisuals());
     // ASSERT
     expect(findings.map(({ kind }) => kind)).toEqual(expectedKinds);
   });

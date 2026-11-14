@@ -14,7 +14,7 @@ Write the story the Dossier plans. In every `#### Voice script` block, replace e
 - Speak what the Speaker notes leave out: a fact a Speaker note carries is not repeated in the paragraph.
 - Write in the user's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
 
-The shape is the `staging-dossier` and `staging-dossier-body` rules': `npx mh query` on [the sample Dossier](../assets/sample-episode/dossier.md) prints every intent.
+The shape is the `staging-dossier` and `staging-dossier-body` rules': `npx mh query --intents` on [the sample Dossier](../assets/sample-episode/dossier.md) prints every intent.
 
 ## Done when
 

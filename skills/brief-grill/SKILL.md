@@ -52,14 +52,14 @@ _Done when_ every required heading holds the user's choice. Where the user stops
 
 ### 4. Self-check
 
-Run `npx mh query` on the Brief's path (in voice, read the `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml`), and judge every heading against its intent: its `Fail if` lines are the test. Put each fail to the user as a question while they are still here, and write down their answer verbatim: their answer is the only fix.
+Run `npx mh query --intents` on the Brief's path (in voice, read the `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml`), and judge every heading against its intent: its `Fail if` lines are the test. Put each fail to the user as a question while they are still here, and write down their answer verbatim: their answer is the only fix.
 
 _Done when_ every intent passes or the user has answered its question.
 
 ## Writing the Brief (Claude Code)
 
-1. Write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ (`status: draft`, and `generated` naming you and the current UTC time). Under `/new-episode`, write it in the Episode's worktree.
-2. Run `npm run check:docs` and the staging checks, `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging` until both are clean, then append the machine entry `{ by: process:markdown-harness, at: <now UTC> }` to `verified` (a list; create it when the Brief has none). Rewriting the Brief later moves `generated.at` forward and re-opens the gate. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
+1. Read `npx mh query --intents docs/episodes/<slug>/brief.md` first: it prints the intent of every field and heading. Then write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ (`status: draft`, and `generated` naming you and the current UTC time). Under `/new-episode`, write it in the Episode's worktree.
+2. Run `npm run check:docs` and the staging checks, `npx vitest run tests/docs/episode-staging.test.ts && npm run -s test:slow -- tests/docs/episode-staging` until both are clean, then append the machine entry `{ by: process:markdown-harness, at: <now UTC> }` to `verified` (a list; create it when the Brief has none). Rewriting the Brief later moves `generated.at` forward and re-opens the gate.
 3. Commit the checked Brief through the `commit` skill with the trailer `Gate: draft brief`, before the user edits it, so their edits stay visible as a diff.
 4. Hand the Brief to the user. Only the user approves, by running `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md`, which appends their `verified` entry; that commit carries `Gate: approved brief`.
 

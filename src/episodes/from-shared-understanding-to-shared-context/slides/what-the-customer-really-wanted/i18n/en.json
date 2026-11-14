@@ -1,36 +1,6 @@
 {
   "title": "What the customer really wanted",
   "caption": "AI doesn’t build the right swing, but it can build the <b>wrong one ten times faster</b>.",
-  "cartoonLabel": "Everyone here has lived this",
-  "cartoon": {
-    "label": "The tire swing cartoon",
-    "explained": "How the customer explained it",
-    "understood": "How sales understood it",
-    "built": "How it was built",
-    "wanted": "What the customer really wanted"
-  },
-  "balanced": {
-    "title": "If your organization worked like this",
-    "rate": "10 documents in · 10 out",
-    "line": "Balanced line"
-  },
-  "reality": {
-    "title": "<marker>How it really works</marker>",
-    "rate": "10 documents in · only 4 out",
-    "line": "Line out of balance: documents queue in front of Design and Review"
-  },
-  "stations": {
-    "sales": "Sales",
-    "design": "Design",
-    "build": "Build",
-    "review": "Review",
-    "delivery": "Delivery"
-  },
-  "dials": {
-    "efficiency": "Efficiency",
-    "effectiveness": "Effectiveness",
-    "multiplication": "Multiplication"
-  },
   "notes": {
     "why-the-line-gets-out-of-balance": {
       "header": "Why the line gets out of balance",

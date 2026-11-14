@@ -62,13 +62,9 @@ function checkTokens($: CheerioAPI, figure: Selection, where: string): string[] 
   ];
 }
 
-export function checkOption($: CheerioAPI, figure: Selection, slug: string): string[] {
+export function checkOption($: CheerioAPI, figure: Selection, slide: SlideMarks): string[] {
   const id = figure.attr('data-option') ?? '';
-  const where = `Option ${id} of {#${slug}}`;
-  const checkboxes = figure
-    .find(`input[type="checkbox"][form="${FORM}"][name="pick:${slug}"]`)
-    .toArray()
-    .filter((element) => $(element).attr('value') === id);
+  const where = `Option ${id} of {#${slide.slug}}`;
   return [
     ...unless(
       figure.find('figcaption').text().includes(id),
@@ -78,27 +74,72 @@ export function checkOption($: CheerioAPI, figure: Selection, slug: string): str
       figure.find('[data-spec="build-notes"]').text().trim() !== '',
       `${where} has no build notes: a <div data-spec="build-notes"> with the parts, tokens, props and i18n keys.`,
     ),
+    ...checkPickBox($, figure, { ...slide, id, where }),
+    ...checkTokens($, figure, where),
+  ];
+}
+
+/** An Option has exactly one pick checkbox, ticked as its marks ask. */
+function checkPickBox($: CheerioAPI, figure: Selection, { slug, slidePicked, id, where }: OptionName): string[] {
+  const checkboxes = figure
+    .find(`input[type="checkbox"][form="${FORM}"][name="pick:${slug}"]`)
+    .toArray()
+    .filter((element) => $(element).attr('value') === id);
+  return [
     ...unless(
       checkboxes.length === 1,
       `${where} has no <input type="checkbox" form="${FORM}" name="pick:${slug}" value="${id}">.`,
     ),
     ...checkTicked(
-      figure.is('[data-picked]'),
+      { picked: figure.is('[data-picked]'), recommended: isRecommended(figure), slidePicked },
       checkboxes.some((element) => $(element).is('[checked]')),
       where,
     ),
-    ...checkTokens($, figure, where),
   ];
 }
 
-/** A picked Option's checkbox comes ticked and no other does, so a review round needs nothing on a locked Slide. */
-function checkTicked(isPicked: boolean, isTicked: boolean, where: string): string[] {
-  if (isPicked === isTicked) return [];
-  return isPicked
-    ? [
-        `${where} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.`,
-      ]
-    : [`${where} is not picked, but its checkbox is checked: tick only the data-picked Option.`];
+/** Whether any Option of a Slide is marked picked, which decides where its default tick sits. */
+export function anyPicked(figures: readonly Selection[]): boolean {
+  return figures.some((figure) => figure.is('[data-picked]'));
+}
+
+/** What an Option's checks read of its Slide: its slug and whether any Option of it is marked picked. */
+interface SlideMarks {
+  slug: string;
+  slidePicked: boolean;
+}
+
+/** An Option's id and how a finding names it, with its Slide's marks. */
+interface OptionName extends SlideMarks {
+  id: string;
+  where: string;
+}
+
+/** What an Option's mark says about its pick checkbox: picked, recommended, and whether its Slide has a picked one. */
+interface TickMarks extends Pick<SlideMarks, 'slidePicked'> {
+  picked: boolean;
+  recommended: boolean;
+}
+
+/**
+ * A picked Option's checkbox comes ticked, so a review round needs nothing on a locked Slide. While no Option of the
+ * Slide is picked, the recommended Option's comes ticked instead: the pick defaults to the recommendation, and no
+ * other checkbox is ticked.
+ */
+function checkTicked({ picked, recommended, slidePicked }: TickMarks, isTicked: boolean, where: string): string[] {
+  const expected = picked || (recommended && !slidePicked);
+  if (expected === isTicked) return [];
+  if (picked)
+    return [
+      `${where} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.`,
+    ];
+  if (expected)
+    return [
+      `${where} is recommended and its Slide has no picked Option, but its checkbox lacks checked: the pick defaults to the recommendation.`,
+    ];
+  return [
+    `${where} is not picked, but its checkbox is checked: tick only the data-picked Option, or the recommended one while the Slide has none.`,
+  ];
 }
 
 /** How many Options a Slide carries, and how a finding says it. */
@@ -110,6 +151,15 @@ export interface OptionCount {
 
 const PAGE_SLIDE_OPTIONS: OptionCount = { min: 2, max: 3, words: 'two or three' };
 
+/**
+ * Whether an Option is marked recommended: `data-recommended` as a bare attribute or `"true"` (the page contract's
+ * form), not absent and not `"false"`. The five Specs assembled before the template was generated use the bare form.
+ */
+export function isRecommended(figure: Selection): boolean {
+  const mark = figure.attr('data-recommended');
+  return mark !== undefined && mark !== 'false';
+}
+
 /** The count, ids, recommended mark and picked mark of a Slide's Options. */
 export function checkOptionMarks(
   figures: readonly Selection[],
@@ -118,7 +168,7 @@ export function checkOptionMarks(
 ): string[] {
   const ids = figures.map((figure) => figure.attr('data-option') ?? '');
   const expectedIds = ids.map((_, index) => `${number}${LETTERS[index] ?? '?'}`);
-  const recommended = figures.filter((figure) => figure.is('[data-recommended]')).length;
+  const recommended = figures.filter(isRecommended).length;
   const picked = figures.filter((figure) => figure.is('[data-picked]')).length;
   const count = figures.length;
   const countFits = count >= wanted.min && count <= wanted.max;
@@ -182,7 +232,7 @@ export function checkSlide({ $, approved }: SpecPage, element: Element, at: numb
       count: PAGE_SLIDE_OPTIONS,
     }),
     ...figures.flatMap((figure) => [
-      ...checkOption($, figure, slug),
+      ...checkOption($, figure, { slug, slidePicked: anyPicked(figures) }),
       ...checkMarkers(figure, slug, noteTitles($, slide)),
     ]),
     ...unless(

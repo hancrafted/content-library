@@ -5,10 +5,12 @@
  *
  * - a JSON meta block, `<script type="application/json" id="spec-meta">`, the
  *   frontmatter equivalent, whose `verified` list carries Han's approval;
- * - the review asset `skills/new-episode/assets/spec-review.html` inlined
- *   between its markers, and the fields its form posts: per Option a checkbox
- *   `pick:<slug>` valued by the Option id, per Slide a note `note:<slug>`, and
- *   one `note:visual-language`, each tied to the form by `form="spec-review"`;
+ * - the fields the review form posts: per Option a checkbox `pick:<slug>`
+ *   valued by the Option id, per Slide a note `note:<slug>`, and one
+ *   `note:visual-language`, each tied to the form by `form="spec-review"`. The
+ *   form itself comes from the Spec template (assets/spec-template.html), which
+ *   the assembler fills, so no page is held to a copy of it: a Spec assembled
+ *   before the form moved into the template stays valid;
  * - one `<section data-spec="section" id>` per Dossier h2 and one
  *   `<article data-spec="slide" id data-number>` per Dossier h3, slugged alike,
  *   until the Gate deletes the Dossier and the Spec's own Slides are the list;
@@ -34,10 +36,6 @@ import { metaBlockText, metaGateTier } from './staging-file.pure.ts';
 import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
 const DOSSIER_FILE = 'dossier.md';
-/** Where the review asset lives, as a finding names it. */
-const REVIEW_ASSET_FILE = 'skills/new-episode/assets/spec-review.html';
-const ASSET_START = '<!-- spec-review:start -->';
-const ASSET_END = '<!-- spec-review:end -->';
 const META_FIELDS = ['type', 'title', 'status', 'generated', 'locale', 'brief'];
 
 function checkMeta(text: string | undefined): string[] {
@@ -53,24 +51,6 @@ function checkMeta(text: string | undefined): string[] {
   const missing = META_FIELDS.filter((field) => meta[field] === undefined);
   if (missing.length > 0) return [`The meta block lacks "${missing.join('", "')}".`];
   return unless(meta.type === 'spec', `The meta block's type is ${JSON.stringify(meta.type)}, not "spec".`);
-}
-
-/** Markup with its whitespace collapsed and dropped beside tags, so a reformatted copy still compares equal. */
-function normalized(markup: string): string {
-  return markup
-    .replace(/\s+/g, ' ')
-    .replace(/\s*([<>])\s*/g, '$1')
-    .trim();
-}
-
-function checkAsset(html: string, asset: string): string[] {
-  const start = html.indexOf(ASSET_START);
-  const end = start === -1 ? -1 : html.indexOf(ASSET_END, start);
-  const inlined = end === -1 ? '' : html.slice(start, end + ASSET_END.length);
-  return unless(
-    inlined !== '' && normalized(inlined) === normalized(asset),
-    `The Spec does not inline the review asset from ${REVIEW_ASSET_FILE}, between its ${ASSET_START} and ${ASSET_END} markers.`,
-  );
 }
 
 function dossierSlugs(dossier: string, level: number): string[] {
@@ -141,14 +121,9 @@ export function specStage(html: string): SpecStage {
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
- * maps a path relative to the folder to its text; `reviewAsset` is the text of
- * the shared review asset the page must inline.
+ * maps a path relative to the folder to its text.
  */
-export function checkSpec(
-  files: Readonly<Record<string, string>>,
-  reviewAsset: string,
-  stage: SpecStage = 'options',
-): Finding[] {
+export function checkSpec(files: Readonly<Record<string, string>>, stage: SpecStage = 'options'): Finding[] {
   const html = files[SPEC_FILE];
   if (html === undefined) return [];
   const $ = load(html);
@@ -157,7 +132,6 @@ export function checkSpec(
   const dossier = files[DOSSIER_FILE];
   const messages = [
     ...checkMeta(meta),
-    ...checkAsset(html, reviewAsset),
     ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
     ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
   ];

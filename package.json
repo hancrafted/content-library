@@ -50,6 +50,7 @@
     "episode:spec": "node skills/new-episode/scripts/spec.ts",
     "episode:spec-assemble": "node skills/new-episode/scripts/spec-assemble.ts",
     "episode:spec-preview": "node skills/new-episode/scripts/spec-preview.ts",
+    "episode:spec-template-hash": "node skills/new-episode/scripts/spec-template-hash.ts",
     "episode:archive": "node skills/episode-promote/scripts/archive.ts",
     "episode:text": "node skills/episode-promote/scripts/episode-text.ts",
     "episode:harvest": "node skills/episode-promote/scripts/harvest-report.ts",
@@ -61,7 +62,7 @@
   },
   "devDependencies": {
     "@eslint/js": "~10.0.1",
-    "@hancrafted/markdown-harness": "~0.0.6",
+    "@hancrafted/markdown-harness": "~0.0.7",
     "@next/eslint-plugin-next": "~16.4.2",
     "@playwright/test": "~1.64.1",
     "@tailwindcss/postcss": "~4.3.3",

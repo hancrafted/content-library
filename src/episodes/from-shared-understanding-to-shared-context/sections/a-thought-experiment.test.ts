@@ -120,20 +120,11 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws Slide 1 as the cartoon poster answered by the balanced line and the real one with its dials', () => {
+  it('plays Slide 1 as the software ecology Explorable, with its note targeting the belts', () => {
     // ARRANGE
-    const expected = { cartoon: 4, lines: 2, dials: 3, queued: 9, markers: ['why-the-line-gets-out-of-balance'] };
+    const expected = true;
     // ACT
-    const $ = sceneOf('what-the-customer-really-wanted');
-    const actual = {
-      cartoon: $('[data-cartoon-card]').length,
-      lines: $('ol:has([data-station])').length,
-      dials: $('[data-dial]').length,
-      queued: $('[data-queued]').length,
-      markers: $(MARKER)
-        .toArray()
-        .map((marker) => $(marker).attr('data-context-ref')),
-    };
+    const actual = sceneOf('what-the-customer-really-wanted')('[data-target="belts"]').length > 0;
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -200,13 +191,13 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('gives Slide 1 no flow trigger, since its picked Option overrules the motion to none', () => {
+  it('leaves no static tire swing poster on Slide 1, since the Explorable opens on the cartoon', () => {
     // ARRANGE
     const expected = 0;
     // ACT
-    const triggers = sceneOf('what-the-customer-really-wanted')('[data-play], [role="group"][tabindex]').length;
+    const actual = sceneOf('what-the-customer-really-wanted')('[data-cartoon-card] [data-dial]').length;
     // ASSERT
-    expect(triggers).toBe(expected);
+    expect(actual).toBe(expected);
   });
 });
 

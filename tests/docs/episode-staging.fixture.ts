@@ -16,8 +16,6 @@ export const RUNS_CSV = path.join(EPISODES, 'runs.csv');
 export const SKILL_FOLDERS = [path.join(ROOT, '.agents/skills'), path.join(ROOT, 'skills')];
 export const SKILL_FOLDER = 'skills/new-episode';
 export const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
-/** The review form every Spec page inlines. */
-export const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.html');
 
 /*
  * Files the template reads that later tickets create: #86 the llm-wiki index,
@@ -26,8 +24,13 @@ export const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.ht
  * lands: a test fails until you do.
  */
 export const PENDING: readonly string[] = [];
-/** Files of retired jobs, which a frozen per-run pipeline may still name (scaffold-pipeline, retired by #229). */
-export const RETIRED: readonly string[] = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
+/** Files a frozen per-run pipeline may still name: of retired jobs (scaffold-pipeline, #229) or replaced assets. */
+export const RETIRED: readonly string[] = [
+  `${SKILL_FOLDER}/references/scaffold-pipeline.md`,
+  // The Spec template replaced these two assets (#562); an approved per-run pipeline keeps the reads it was approved with.
+  `${SKILL_FOLDER}/assets/spec-frame.html`,
+  `${SKILL_FOLDER}/assets/spec-review.html`,
+];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 export function readFolder(folder: string): Record<string, string> {
@@ -102,9 +105,7 @@ export function researchFolders(): string[] {
   const staging = Object.values(stagingFolders()).flatMap((folder) => subfolders(path.join(folder, 'research')));
   const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
   const onDisk = [...staging, ...llmWiki].map((folder) => path.relative(ROOT, folder));
-  const planned = Object.values(perRunPipelines())
-    .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
-    .flatMap(({ outputs }) => outputs ?? [])
+  const planned = outputsOf(Object.values(perRunPipelines()))
     // A draft keeps write-research's foreach glob; only a named folder is a planned one.
     .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
     .map((output) => path.dirname(output));
@@ -120,17 +121,22 @@ export const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 /** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
 export const governance = new Map<string, boolean>();
 
-/** Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. */
+/** Every output the pipelines' jobs name, in order. */
+const outputsOf = (yamls: readonly string[]): string[] =>
+  yamls.flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs.flatMap((job) => job.outputs ?? []));
+
+/**
+ * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. The first
+ * lookup batches every markdown output the template and per-run pipelines name; only a path outside them spawns again.
+ */
 export function governed(file: string): boolean {
-  const known = governance.get(file);
-  if (known !== undefined) return known;
-  const output = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', file], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  });
-  const answer = (JSON.parse(output) as { result: { governance: string } }).result.governance === 'governed';
-  governance.set(file, answer);
-  return answer;
+  if (governance.has(file)) return governance.get(file) === true;
+  const yamls = governance.size === 0 ? [readFileSync(TEMPLATE, 'utf8'), ...Object.values(perRunPipelines())] : [];
+  const files = [...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md'))])];
+  const answer = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', '--batch', ...files], { cwd: ROOT });
+  const { results } = (JSON.parse(String(answer)) as { result: { results: { governance: string }[] } }).result;
+  files.forEach((each, at) => governance.set(each, results[at].governance === 'governed'));
+  return governance.get(file) === true;
 }
 
 /**
