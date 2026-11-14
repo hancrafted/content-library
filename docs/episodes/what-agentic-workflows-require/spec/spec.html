@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-mode="decide" data-page-id="everyone-delivered-nothing-added-up" data-revision="2">
+<html lang="en" data-mode="decide" data-page-id="everyone-delivered-nothing-added-up" data-revision="3">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -3242,7 +3242,7 @@
         "status": "draft",
         "generated": {
           "by": "process:spec-assemble",
-          "at": "2026-11-14T15:25:50Z"
+          "at": "2026-11-14T20:13:24Z"
         },
         "locale": "en",
         "brief": "../brief.md"
@@ -11884,7 +11884,7 @@
                   </div>
                   <p class="spec-showing" role="status"></p>
                   <div class="spec-options">
-                    <figure data-spec="option" data-option="4a" data-recommended="true">
+                    <figure data-spec="option" data-option="4a" data-recommended="true" data-picked="">
                       <div class="spec-stage" data-visual="" data-design-width="1920">
                         <div data-spec="mock" class="flex flex-col gap-5 bg-background p-10">
                           <div>
@@ -13631,13 +13631,7 @@
                         <button type="button" class="spec-view" aria-pressed="false">View</button>
                       </div>
                       <label class="spec-pick">
-                        <input
-                          type="checkbox"
-                          form="spec-review"
-                          name="pick:in-on-or-out-of-the-loop"
-                          value="5a"
-                          checked=""
-                        />
+                        <input type="checkbox" form="spec-review" name="pick:in-on-or-out-of-the-loop" value="5a" />
                         <span class="spec-pick-word">Pick Option </span><span>5a</span>
                         <span class="spec-star" role="img" aria-label="recommended" title="Recommended" hidden=""
                           >★</span
@@ -13688,7 +13682,7 @@
                         </div>
                       </details>
                     </figure>
-                    <figure data-spec="option" data-option="5b" data-recommended="false">
+                    <figure data-spec="option" data-option="5b" data-recommended="false" data-picked="">
                       <div class="spec-stage" data-visual="" data-design-width="1920">
                         <div data-spec="mock" class="flex flex-col gap-10 bg-background p-16">
                           <div class="flex flex-col gap-4">
@@ -13965,7 +13959,13 @@
                         <button type="button" class="spec-view" aria-pressed="false">View</button>
                       </div>
                       <label class="spec-pick">
-                        <input type="checkbox" form="spec-review" name="pick:in-on-or-out-of-the-loop" value="5b" />
+                        <input
+                          type="checkbox"
+                          form="spec-review"
+                          name="pick:in-on-or-out-of-the-loop"
+                          value="5b"
+                          checked=""
+                        />
                         <span class="spec-pick-word">Pick Option </span><span>5b</span>
                         <span class="spec-star" role="img" aria-label="recommended" title="Recommended" hidden=""
                           >★</span
@@ -20917,7 +20917,7 @@
                         </div>
                       </details>
                     </figure>
-                    <figure data-spec="option" data-option="13c" data-recommended="true">
+                    <figure data-spec="option" data-option="13c" data-recommended="true" data-picked="">
                       <div class="spec-stage" data-visual="" data-design-width="1920">
                         <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                           <div>
@@ -21228,11 +21228,13 @@
                             full width in its own look, <code>view="stages"</code>, Chat level, Demo mode on. The
                             summer-party Workflow stands in until the quiz Workflow is authored separately; the title
                             and caption already speak of the quiz, and the Slide swaps the <code>workflow</code> prop
-                            when it lands. The Slide's <code>diagram</code> slot carries what the Explorable does not
-                            draw itself: the in/on pill on each stage (stage <code>marker</code>), the three contract
-                            cards (stage <code>after</code>) and the pins (a <code>marker</code> on the Plan level, the
-                            first contract, the goal pill and the Page stage's checked mark). The goal pill and the
-                            legend are the Slide's own: <code>StepLegend</code> (<code
+                            when it lands. Han's round-2 note: this build is temporary; the Slide moves to the
+                            human-in-the-loop Workflow Explorable's quiz Workflow once it is built. The Slide's
+                            <code>diagram</code> slot carries what the Explorable does not draw itself: the in/on pill
+                            on each stage (stage <code>marker</code>), the three contract cards (stage
+                            <code>after</code>) and the pins (a <code>marker</code> on the Plan level, the first
+                            contract, the goal pill and the Page stage's checked mark). The goal pill and the legend are
+                            the Slide's own: <code>StepLegend</code> (<code
                               >{ steps: { slug: string; pin: 1 | 2 | 3 | 4; lead: string; text: string }[] }</code
                             >), pins as <code>bg-foreground text-background</code> discs like 11b, as
                             <code>focus-group__item</code>s so Han can point at one step at a time. The four steps are
