@@ -1,9 +1,9 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { FigureGallery, Specimen } from '@/episodes/components/slide-shared/figure-gallery/figure-gallery';
+import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/bubbles';
 import { FishSchool } from '@/episodes/components/slide-shared/iceberg/scenery/fish-school';
 import { Jellies } from '@/episodes/components/slide-shared/iceberg/scenery/jellies';
 import { Lanternfish } from '@/episodes/components/slide-shared/iceberg/scenery/lanternfish';
-import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/sea-life';
 import { LightRays, Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { Siphonophore } from '@/episodes/components/slide-shared/iceberg/scenery/siphonophore';
 import { Whale } from '@/episodes/components/slide-shared/iceberg/scenery/whale';
@@ -14,7 +14,8 @@ import en from './i18n/en.json';
 /*
  * The sea life in the gallery, to judge each creature on its own before it meets a Slide. `PolyBubble`
  * (src/shared/components/core-components/poly-bubble/) is the one faceted bubble both the Abyss bubbles and the `bubbles` transition
- * draw, so it stands here on its own at each of its three outlines.
+ * draw, so it stands here on its own at each of its three outlines. Each Specimen's `code` is the JSX it renders,
+ * word for word, so a reader can copy it.
  */
 export const seaLife = slide({
   slug: 'sea-life',
@@ -34,7 +35,7 @@ export const seaLife = slide({
         code="<FishSchool x={0} y={0} count={11} seed={1} />"
         viewBox="-180 -110 360 220"
       >
-        <FishSchool x={0} y={0} />
+        <FishSchool x={0} y={0} count={11} seed={1} />
       </Specimen>
       <Specimen
         variant="left"
@@ -64,7 +65,7 @@ export const seaLife = slide({
         code="<Lanternfish x={0} y={0} count={9} seed={3} />"
         viewBox="-180 -110 360 220"
       >
-        <Lanternfish x={0} y={0} />
+        <Lanternfish x={0} y={0} count={9} seed={3} />
       </Specimen>
       <Specimen
         variant="siphonophore"
@@ -74,7 +75,7 @@ export const seaLife = slide({
         code="<Siphonophore x={0} y={-110} segments={9} />"
         viewBox="-120 -125 240 250"
       >
-        <Siphonophore x={0} y={-110} />
+        <Siphonophore x={0} y={-110} segments={9} />
       </Specimen>
       <Specimen
         variant="whale"
@@ -94,14 +95,16 @@ export const seaLife = slide({
         code="<Bubbles x={0} y={0} count={7} />"
         viewBox="-80 -150 160 300"
       >
-        <Bubbles x={0} y={0} />
+        <Bubbles x={0} y={0} count={7} />
       </Specimen>
       <Specimen
         variant="poly-bubble"
         label={t('variants.polyBubble')}
         usage={t('usage')}
         zone="abyss"
-        code="<PolyBubble sides={7} x={-40} y={-40} size={80} />"
+        code={
+          '<PolyBubble sides={6} x={-140} y={-40} size={80} />\n<PolyBubble sides={7} x={-40} y={-40} size={80} />\n<PolyBubble sides={8} x={60} y={-40} size={80} />'
+        }
         viewBox="-150 -60 300 120"
       >
         <PolyBubble sides={6} x={-140} y={-40} size={80} />
@@ -116,7 +119,7 @@ export const seaLife = slide({
         code="<Seabed y={100} width={1200} />"
         viewBox="0 0 1200 300"
       >
-        <Seabed y={100} />
+        <Seabed y={100} width={1200} />
       </Specimen>
       <Specimen
         variant="rays"
@@ -126,7 +129,7 @@ export const seaLife = slide({
         code="<LightRays x={0} y={0} count={5} />"
         viewBox="-30 0 450 240"
       >
-        <LightRays x={0} y={0} />
+        <LightRays x={0} y={0} count={5} />
       </Specimen>
     </FigureGallery>
   ),

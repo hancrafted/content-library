@@ -1,10 +1,10 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './depth-gauge.module.css';
-import { ZONES, zoneToken, type Zone } from './ruler.pure';
 import { ZoneCard } from './zone-card';
 import { ZoneLabel } from './zone-label';
 import type { ZoneLabelWords } from './zone-words.pure';
+import { ZONES, zoneToken, type Zone } from './zones.pure';
 
 export interface DepthGaugeProps {
   /** The zone the Slide sits in: its segment is marked and its name shown. */

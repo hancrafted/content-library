@@ -3,9 +3,9 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { InView } from '../agent-view/in-view';
 import { DepthGauge } from '../iceberg/depth-gauge';
-import { zoneOf, type Zone } from '../iceberg/ruler.pure';
 import { ZoneCard } from '../iceberg/zone-card';
 import type { ZoneWords } from '../iceberg/zone-words.pure';
+import { zoneOf, type Zone } from '../iceberg/zones.pure';
 import { WATERLINE_SECTIONS } from './depth';
 
 export interface WaterlineEchoProps {

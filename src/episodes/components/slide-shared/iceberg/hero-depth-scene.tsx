@@ -2,10 +2,9 @@ import { cn } from '@/shared/lib/utils';
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
 import { DepthGauge } from './depth-gauge';
 import styles from './hero-depth-scene.module.css';
-import { HERO_DEPTH, heroBleed, heroDepthBands, heroIceberg } from './hero-depth.pure';
-import { zoneToken } from './ruler.pure';
+import { HERO_DEPTH, heroBleed, heroIceberg, heroWater } from './hero-depth.pure';
 import { SceneMotionRoot } from './scene-motion.client';
-import { Clouds } from './scenery/clouds';
+import { type CloudAt, Clouds } from './scenery/clouds';
 import { FishSchool } from './scenery/fish-school';
 import { FlatSky, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
@@ -14,40 +13,46 @@ import { SunMoon } from './scenery/sun-moon';
 import { Whale } from './scenery/whale';
 import { Band } from './zone-scene';
 import sceneStyles from './zone-scene.module.css';
-import { seaFacets, WATER_CELL } from './zone-scene.pure';
 import type { ZoneWords } from './zone-words.pure';
+import { zoneToken } from './zones.pure';
 
 const { width, height, waterline } = HERO_DEPTH;
-const BANDS = heroDepthBands(HERO_DEPTH);
 /** Sky and water run a drawing's width past each side, for a screen wider than the drawing. */
 const BLEED = heroBleed(HERO_DEPTH);
-const WATER = BANDS.slice(1).map((band, depth) => ({
-  ...band,
-  facets: seaFacets({ width: BLEED.width, height: band.bottom - band.top, cell: WATER_CELL, seed: 5 + depth * 6 }),
-}));
+/** Each underwater band: faceted across the drawing, flat across the bleed (decision 8). */
+const WATER = heroWater(HERO_DEPTH);
 /** The sun under the header bar and above the title, near enough the middle that a phone still shows it. */
 const SUN = { x: 850, y: 200, r: 34 } as const;
-/** Clouds kept to the right and low on the left, so the title reads on open sky; heights above the waterline. */
-const CLOUDS = [
-  { x: 1090, y: 290, scale: 0.9, shape: 0 },
-  { x: 160, y: waterline - 50, scale: 0.85, shape: 0 },
-  { x: 560, y: waterline - 150, scale: 0.55, shape: 1 },
-] as const;
+/**
+ * The sky's clouds in the three drifting layers the Section titles' sky has (decision 9), kept to the right and low on
+ * the left so the title reads on open sky, clear of the sun, the ship and the berg; heights above the waterline.
+ */
+const CLOUDS: readonly CloudAt[] = [
+  { x: 980, y: 120, scale: 0.4, shape: 1, layer: 'far' },
+  { x: 300, y: waterline - 200, scale: 0.38, shape: 0, layer: 'far' },
+  { x: 560, y: waterline - 150, scale: 0.55, shape: 1, layer: 'mid' },
+  { x: 1140, y: waterline - 290, scale: 0.6, shape: 0, layer: 'mid' },
+  { x: 1090, y: 290, scale: 0.9, shape: 0, layer: 'near' },
+  { x: 160, y: waterline - 50, scale: 0.85, shape: 0, layer: 'near' },
+];
 /** The one iceberg placement: body in the Sunlit band, keel touching the Twilight band, keel twice the tip. */
 const BERG = heroIceberg(HERO_DEPTH);
 /** The fish in the Sunlit zone, the whale in the Twilight. */
 const FISH = { x: 790, y: waterline + 62 } as const;
 const WHALE = { x: 560, y: waterline + 265, scale: 0.7 } as const;
 
-/** Each zone's water under the waterline, in its own colour, bleeding past both sides. */
+/** Each zone's water under the waterline, in its own colour: flat past both sides, low poly across the drawing. */
 function Water() {
-  return WATER.map(({ zone, top, facets }) => (
+  return WATER.map(({ zone, top, bottom, facets, bleed }) => (
     <g
       key={zone}
       data-depth-band={zone}
-      transform={`translate(${BLEED.left} ${top})`}
+      transform={`translate(0 ${top})`}
       style={{ '--water': zoneToken(zone) } as CSSProperties}
     >
+      <g className={sceneStyles.water} data-water-bleed>
+        <rect data-tone="sea" x={bleed.left} y={0} width={bleed.width} height={bottom - top} />
+      </g>
       <Band facets={facets} />
     </g>
   ));

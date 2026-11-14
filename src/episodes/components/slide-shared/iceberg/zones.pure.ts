@@ -29,22 +29,22 @@ export function zoneOf(sections: readonly Zone[], section: number): Zone {
 }
 
 /** One Section's tile on the rail; `lit` only on the Section the Slide belongs to. */
-export interface RulerTile {
+export interface RailTile {
   readonly section: number;
   readonly lit?: true;
 }
 
 /** One zone's band and the tiles of the Sections that sit in it, from the top. */
-export interface RulerBand {
+export interface RailBand {
   readonly zone: Zone;
-  readonly tiles: readonly RulerTile[];
+  readonly tiles: readonly RailTile[];
 }
 
 /**
  * The rail's five bands, each Section's tile on its zone's band and the Section `lit` lit. Sections only go down:
  * an Episode's descent never climbs back towards the Surface.
  */
-export function rulerBands(sections: readonly Zone[], lit: number): readonly RulerBand[] {
+export function railBands(sections: readonly Zone[], lit: number): readonly RailBand[] {
   zoneOf(sections, lit);
   sections.forEach((zone, index) => {
     const above = sections[index - 1];

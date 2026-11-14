@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HERO_DEPTH, heroBleed, heroDepthBands, heroIceberg } from './hero-depth.pure';
+import { HERO_DEPTH, heroBleed, heroDepthBands, heroIceberg, heroWater } from './hero-depth.pure';
 import { KEEL_DEPTH } from './scenery/iceberg-placement.pure';
 
 /*
@@ -35,6 +35,17 @@ describe('success cases', () => {
     expect(keel).toBeCloseTo(expected.keel);
     expect(keel - HERO_DEPTH.waterline).toBeGreaterThanOrEqual(expected.deepEnough);
   });
+
+  it('facets the water under the waterline about half as densely as before feedback 2: 40 triangles, not 72', () => {
+    // ARRANGE
+    // Before: four bands of nine cells of 140 across the 1200-wide drawing, two triangles a cell, 72 in all. Now five
+    // cells of the shared water cell (240) per band.
+    const expected = 40;
+    // ACT
+    const triangles = heroWater(HERO_DEPTH).reduce((sum, band) => sum + band.facets.length, 0);
+    // ASSERT
+    expect(triangles).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -67,5 +78,26 @@ describe('edge cases', () => {
     const bleed = heroBleed(HERO_DEPTH);
     // ASSERT
     expect(bleed).toEqual(expected);
+  });
+
+  it('keeps the facets to the drawing and lays each band flat across the bleed beside it', () => {
+    // ARRANGE
+    const drawing = { left: 0, right: 1200 };
+    const expected = { outside: [], bleed: [{ left: -1200, width: 3600 }] };
+    // ACT
+    const bands = heroWater(HERO_DEPTH);
+    const outside = bands.flatMap(({ facets }) =>
+      facets.flatMap(({ points }) =>
+        points
+          .split(' ')
+          .map((pair) => Number(pair.split(',')[0]))
+          .filter((x) => x < drawing.left || x > drawing.right),
+      ),
+    );
+    const bleed = [...new Set(bands.map(({ bleed: { left, width } }) => JSON.stringify({ left, width })))].map((span) =>
+      JSON.parse(span),
+    );
+    // ASSERT
+    expect({ outside, bleed }).toEqual(expected);
   });
 });

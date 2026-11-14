@@ -2,8 +2,8 @@
  * What `ZoneScene` draws for the zone a Slide names (design-ADR 0025): one zone, one set of scenery and one slow
  * ambient loop, so retuning a zone is one edit every Slide in it follows. Deterministic, as the scenery parts are.
  */
-import { ZONES, type Zone } from './ruler.pure';
 import { seededRandom, toPoints, type IcebergPart } from './scenery/scenery.pure';
+import { ZONES, type Zone } from './zones.pure';
 
 /** The iceberg's part in a Scene, or none. */
 export type SceneIceberg = IcebergPart | 'none';
@@ -47,10 +47,17 @@ export interface ZoneSceneChoice {
 /** The Twilight zone feels empty on its Section titles (feedback 2, decision 11): they add a school and a colony. */
 const TITLE_LIFE: Partial<Record<Zone, readonly TitleLife[]>> = { twilight: ['lanternfish', 'siphonophore'] };
 
-/** Where `ZoneScene` draws each title creature, in its 1200 by 800 space, with half its drawn width at size 1. */
-export const TITLE_LIFE_AT: Readonly<
-  Record<TitleLife, { readonly x: number; readonly y: number; readonly scale: number; readonly halfWidth: number }>
-> = {
+/** Where a Section title draws a group in `ZoneScene`'s 1200 by 800 space, and half its drawn width at size 1. */
+export interface TitlePlacement {
+  readonly x: number;
+  readonly y: number;
+  readonly scale: number;
+  /** Measures the group's span for the in-view checks; the creature itself does not take it. */
+  readonly halfWidth: number;
+}
+
+/** Where `ZoneScene` draws each title creature. */
+export const TITLE_LIFE_AT: Readonly<Record<TitleLife, TitlePlacement>> = {
   lanternfish: { x: 860, y: 610, scale: 1.5, halfWidth: 135 },
   // Right of the robot's cable at 600 and inside the middle a phone shows, so it stays in view at 375 px (decision 38).
   siphonophore: { x: 720, y: 180, scale: 1.3, halfWidth: 20 },
@@ -61,9 +68,7 @@ export const TITLE_LIFE_AT: Readonly<
  * A section slide's Scene runs full-bleed under the table of contents, which hides the Abyss bubbles' page place at
  * the left: on the title they rise right of the robot's cable at 600, inside the middle a phone shows.
  */
-export const TITLE_LOOP_AT: Readonly<
-  Record<'bubbles', { readonly x: number; readonly y: number; readonly scale: number; readonly halfWidth: number }>
-> = {
+export const TITLE_LOOP_AT: Readonly<Record<'bubbles', TitlePlacement>> = {
   bubbles: { x: 680, y: 560, scale: 1.5, halfWidth: 32 },
 };
 

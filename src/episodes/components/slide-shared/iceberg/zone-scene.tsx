@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { zoneToken, type Zone } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
+import { Bubbles } from './scenery/bubbles';
 import { Clouds } from './scenery/clouds';
 import { FishSchool } from './scenery/fish-school';
 import { FlatSky, FlatWater, LitWaterline } from './scenery/flat-sky';
@@ -9,7 +9,6 @@ import { Iceberg } from './scenery/iceberg';
 import { placeIceberg } from './scenery/iceberg-placement.pure';
 import { Jellies } from './scenery/jellies';
 import { Lanternfish } from './scenery/lanternfish';
-import { Bubbles } from './scenery/sea-life';
 import { LightRays, Seabed } from './scenery/seabed';
 import { Siphonophore } from './scenery/siphonophore';
 import { SunMoon } from './scenery/sun-moon';
@@ -26,6 +25,7 @@ import {
   type SeaFacet,
   type TitleLife,
 } from './zone-scene.pure';
+import { zoneToken, type Zone } from './zones.pure';
 
 /** Every Scene draws in one space, 1200 by 800, so a Slide places its figures in the same numbers at every zone. */
 export const SCENE_WIDTH = 1200;
@@ -116,9 +116,21 @@ function Loop({ life, sectionTitle }: { readonly life: SceneLife; readonly secti
 function TitleCreature({ life }: { readonly life: TitleLife }) {
   switch (life) {
     case 'lanternfish':
-      return <Lanternfish {...TITLE_LIFE_AT.lanternfish} />;
+      return (
+        <Lanternfish
+          x={TITLE_LIFE_AT.lanternfish.x}
+          y={TITLE_LIFE_AT.lanternfish.y}
+          scale={TITLE_LIFE_AT.lanternfish.scale}
+        />
+      );
     case 'siphonophore':
-      return <Siphonophore {...TITLE_LIFE_AT.siphonophore} />;
+      return (
+        <Siphonophore
+          x={TITLE_LIFE_AT.siphonophore.x}
+          y={TITLE_LIFE_AT.siphonophore.y}
+          scale={TITLE_LIFE_AT.siphonophore.scale}
+        />
+      );
   }
 }
 

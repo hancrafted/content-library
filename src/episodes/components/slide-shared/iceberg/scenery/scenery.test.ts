@@ -2,11 +2,11 @@ import { load } from 'cheerio';
 import { createElement, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { Bubbles } from './bubbles';
 import { Clouds } from './clouds';
 import { FishSchool } from './fish-school';
 import { Iceberg } from './iceberg';
 import { Jellies } from './jellies';
-import { Bubbles } from './sea-life';
 import { LightRays } from './seabed';
 import { SunMoon } from './sun-moon';
 import { Whale } from './whale';
@@ -67,6 +67,28 @@ describe('success cases', () => {
       drawn: $('[data-bubbles] [data-poly-bubble]').length,
       ambient: $('[data-poly-bubble][data-motion="ambient"]').length,
       ownShapes: $('[data-bubbles] [data-tone]').length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('places each Abyss bubble like every creature group: the group at its centre, each bubble at its own size times the group scale', () => {
+    // ARRANGE
+    const at = [
+      { x: 10, y: -20, s: 0.5 },
+      { x: -6, y: 30, s: 1 },
+    ];
+    const expected = {
+      group: 'translate(680 560)',
+      bubbles: ['translate(10 -20) scale(0.75 0.75)', 'translate(-6 30) scale(1.5 1.5)'],
+    };
+    // ACT
+    const $ = render(createElement(Bubbles, { x: 680, y: 560, at, scale: 1.5 }));
+    const seen = {
+      group: $('[data-bubbles]').attr('transform'),
+      bubbles: $('[data-bubbles] > g')
+        .map((_, member) => $(member).attr('transform'))
+        .get(),
     };
     // ASSERT
     expect(seen).toEqual(expected);

@@ -95,6 +95,32 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it("drifts the sky's clouds in three layers, far, mid and near, as the Section titles' sky does (decision 9)", () => {
+    // ARRANGE
+    const expected = ['far', 'mid', 'near'];
+    // ACT
+    const $ = sceneOf('en');
+    const layers = [
+      ...new Set(
+        $('[data-hero-depth] [data-cloud]')
+          .toArray()
+          .map((cloud) => $(cloud).attr('data-cloud-layer')),
+      ),
+    ].sort();
+    // ASSERT
+    expect(layers).toEqual(expected);
+  });
+
+  it('draws the water under the waterline in 40 triangles, about half the 72 before feedback 2 (decision 8)', () => {
+    // ARRANGE
+    const expected = 40;
+    // ACT
+    const $ = sceneOf('en');
+    const triangles = $('[data-depth-band] [data-band="water"] polygon').length;
+    // ASSERT
+    expect(triangles).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {

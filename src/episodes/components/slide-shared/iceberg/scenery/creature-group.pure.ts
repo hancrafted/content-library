@@ -20,7 +20,11 @@ export interface GroupProps {
   readonly flip?: boolean;
 }
 
-/** One member's place in its group as an SVG `transform`, mirrored when the group faces left. */
+/**
+ * One member's place in its group as an SVG `transform`, mirrored when the group faces left. Refuses a group scale of
+ * zero or less: `flip` is the one way a group mirrors.
+ */
 export function placeTransform(p: Placement, scale: number, flip = false): string {
+  if (!(scale > 0)) throw new Error(`A creature group needs a positive group scale, got ${scale}.`);
   return `translate(${p.x} ${p.y}) scale(${(flip ? -1 : 1) * p.s * scale} ${p.s * scale})`;
 }

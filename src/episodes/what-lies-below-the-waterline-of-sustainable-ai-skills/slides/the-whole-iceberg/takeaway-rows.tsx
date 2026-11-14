@@ -1,5 +1,5 @@
-import { isDarkZone, zoneToken, type Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
 import { depthBands, WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
+import { isDarkZone, zoneToken, type Zone } from '@/episodes/components/slide-shared/iceberg/zones.pure';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './iceberg.module.css';

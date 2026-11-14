@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isDarkZone, rulerBands, zoneOf, ZONES, zoneToken, type Zone } from './ruler.pure';
+import { isDarkZone, railBands, zoneOf, ZONES, zoneToken, type Zone } from './zones.pure';
 
 /*
  * The depth rail's layout: the five zone bands from the Surface down, each holding one tile per Section that sits in
@@ -28,7 +28,7 @@ describe('success cases', () => {
       { zone: 'abyss', tiles: [{ section: 7 }] },
     ];
     // ACT
-    const bands = rulerBands(WATERLINE_SECTIONS, 2);
+    const bands = railBands(WATERLINE_SECTIONS, 2);
     // ASSERT
     expect(bands).toEqual(expected);
   });
@@ -64,7 +64,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = /Section 8 of 8/;
     // ACT
-    const draw = () => rulerBands(WATERLINE_SECTIONS, 8);
+    const draw = () => railBands(WATERLINE_SECTIONS, 8);
     // ASSERT
     expect(draw).toThrow(expected);
   });
@@ -73,7 +73,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = /deeper/;
     // ACT
-    const draw = () => rulerBands(['sunlit', 'surface'], 0);
+    const draw = () => railBands(['sunlit', 'surface'], 0);
     // ASSERT
     expect(draw).toThrow(expected);
   });
@@ -90,7 +90,7 @@ describe('edge cases', () => {
       { zone: 'abyss', tiles: [{ section: 1 }] },
     ];
     // ACT
-    const bands = rulerBands(['surface', 'abyss'], 0);
+    const bands = railBands(['surface', 'abyss'], 0);
     // ASSERT
     expect(bands).toEqual(expected);
   });

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { Bubbles } from './sea-life';
+import { Bubbles } from './bubbles';
 import { LightRays, Seabed } from './seabed';
 
 /*

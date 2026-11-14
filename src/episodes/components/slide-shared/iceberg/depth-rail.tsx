@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './depth-rail.module.css';
-import { rulerBands, zoneToken, type Zone } from './ruler.pure';
+import { railBands, zoneToken, type Zone } from './zones.pure';
 
 export interface DepthRailProps {
   /** The zone each of the Episode's Sections sits in, in order. */
@@ -18,7 +18,7 @@ export interface DepthRailProps {
  * Decoration the table of contents already says in words, so it is wordless and hidden from assistive tech.
  */
 export function DepthRail({ sections, lit, phoneOnly = false }: DepthRailProps) {
-  const tiles = rulerBands(sections, lit).flatMap(({ zone, tiles: own }) => own.map((tile) => ({ zone, ...tile })));
+  const tiles = railBands(sections, lit).flatMap(({ zone, tiles: own }) => own.map((tile) => ({ zone, ...tile })));
   return (
     <div
       data-depth-rail

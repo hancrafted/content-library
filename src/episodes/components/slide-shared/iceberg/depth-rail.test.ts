@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DepthRail } from './depth-rail';
-import type { Zone } from './ruler.pure';
+import type { Zone } from './zones.pure';
 
 /*
  * The slim rail every page Slide carries at its left edge, and a section slide on phones (design guide, Iceberg): one
