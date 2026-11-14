@@ -12,7 +12,9 @@ const SIZE = { width: 240, height: 200, floor: 196 } as const;
 const FLOOR = SIZE.floor;
 const CONSOLE = { x: 96, width: 140 } as const;
 /** The Spec's binder, about 130 stage units wide, brought down to the corner's console. */
-const BINDER = { x: 168, scale: 0.46 } as const;
+const BINDER = { x: 168, scale: 0.6 } as const;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 
 /**
  * The control-room corner of Slide 9: the pilot at his console with the stuffed binder on the desk. The pilot and the
@@ -25,7 +27,7 @@ export function ConsoleCorner({ label }: { readonly label: string }) {
   return (
     <svg viewBox={`0 0 ${SIZE.width} ${SIZE.height}`} role="img" aria-label={label} className="block h-auto w-full">
       <Console width={CONSOLE.width} screens={1} transform={`translate(${CONSOLE.x} ${deskTop})`} />
-      <g transform={`translate(${CONSOLE.x + seat.x} ${FLOOR})`}>
+      <g transform={`translate(${CONSOLE.x + seat.x + PILOT_REACH} ${FLOOR})`}>
         <Character preset={pilot} pose="sit" mood="confused" />
       </g>
       <StuffedBinder x={BINDER.x} y={deskTop} scale={BINDER.scale} />
