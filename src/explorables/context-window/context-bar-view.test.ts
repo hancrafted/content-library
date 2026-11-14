@@ -67,6 +67,49 @@ describe('success cases', () => {
     expect($('[aria-hidden="true"]')).toHaveLength(expected.hidden);
     expect($('[data-crossed]')).toHaveLength(expected.crossed);
   });
+
+  it("splits a labelled bar into parts: a line between them, each part's aside beside exactly its rows", () => {
+    // ARRANGE
+    const props = {
+      orientation: 'vertical' as const,
+      labels: ['A', 'B', 'C'],
+      free: 'Free',
+      parts: [
+        { rows: 2, aside: 'Static' },
+        { rows: 1, aside: 'Dynamic' },
+      ],
+    };
+    const expected = {
+      rows: ['A', 'B', 'line', 'C', 'Free'],
+      asides: [
+        { text: 'Static', rows: '--from:1;--to:3' },
+        { text: 'Dynamic', rows: '--from:4;--to:5' },
+      ],
+    };
+    // ACT
+    const $ = render(props);
+    const rows = $('[role="list"]')
+      .children()
+      .map((_, el) => ($(el).is('[data-split]') ? 'line' : $(el).text()))
+      .get();
+    const asides = $('[data-aside]')
+      .map((_, el) => ({ text: $(el).text(), rows: ($(el).attr('style') ?? '').replace(/ /g, '') }))
+      .get();
+    // ASSERT
+    expect({ rows, asides }).toEqual(expected);
+  });
+
+  it('sizes each row of a labelled bar by its share of the window, the line by its own height', () => {
+    // ARRANGE
+    const props = { orientation: 'vertical' as const, labels: ['A', 'B', 'C'], parts: [{ rows: 1 }, { rows: 2 }] };
+    const expected =
+      'minmax(min-content, 0.5fr) auto minmax(min-content, 0.25fr) minmax(min-content, 0.05fr) minmax(min-content, 0.2fr)';
+    // ACT
+    const $ = render(props);
+    const tracks = $('[data-listed]').css('grid-template-rows');
+    // ASSERT
+    expect(tracks).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -78,6 +121,16 @@ describe('failure cases', () => {
     // ASSERT
     expect($('button, a, input, [tabindex]')).toHaveLength(expected);
   });
+
+  it('refuses parts that do not hold every block of the bar', () => {
+    // ARRANGE
+    const props = { orientation: 'vertical' as const, labels: ['A', 'B', 'C'], parts: [{ rows: 2 }] };
+    const expected = 'context bar: its parts hold 2 rows, but it has 3 blocks';
+    // ACT
+    const draw = () => render(props);
+    // ASSERT
+    expect(draw).toThrow(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -88,5 +141,18 @@ describe('edge cases', () => {
     const $ = render({ buffer: 0 });
     // ASSERT
     expect($('[aria-hidden="true"]')).toHaveLength(expected);
+  });
+
+  it('draws one part with no line and no aside when a labelled bar is not split', () => {
+    // ARRANGE
+    const expected = { lines: 0, asides: 0, rows: 4 };
+    // ACT
+    const $ = render({ orientation: 'vertical', labels: ['A', 'B', 'C'], free: 'Free' });
+    // ASSERT
+    expect({
+      lines: $('[data-split]').length,
+      asides: $('[data-aside]').length,
+      rows: $('[role="listitem"]').length,
+    }).toEqual(expected);
   });
 });

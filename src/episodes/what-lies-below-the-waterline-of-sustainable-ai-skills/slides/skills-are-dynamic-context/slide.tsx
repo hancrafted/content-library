@@ -27,6 +27,8 @@ const CLAUDE_SKILLS = { slug: 'anthropic-claude-code-skills', url: 'https://code
 /** The window's blocks top to bottom, as the Explorable's `waterline-dive` bar holds them: static, then dynamic. */
 const ROWS = ['system', 'skills', 'memory', 'instructions', 'frames', 'sonar', 'logs'] as const;
 type Row = (typeof ROWS)[number];
+/** The window's static part: system prompt, skill index and memory; the rest is dynamic. */
+const STATIC_ROWS = ROWS.indexOf('instructions');
 /** Each dynamic block stacks onto the window on the beat its object lands on the desk (slide.module.css). */
 const ARRIVAL_BEATS = Object.fromEntries(
   ARRIVALS.map((arrival) => [`--arrive-${arrival}`, `${ARRIVAL_DELAY[arrival]}ms`]),
@@ -59,11 +61,30 @@ function BlockWords(props: { readonly term: string; readonly chat: string; reado
   );
 }
 
-/** A bracket beside one part of the window, naming it static or dynamic. */
-function Bracket({ label, children }: { readonly label: ReactNode; readonly children: ReactNode }) {
+/** A bracket beside one part of the window, naming it static or dynamic, as tall as the part's rows. */
+function Bracket({
+  label,
+  children,
+  dynamic = false,
+  ...rest
+}: {
+  readonly label: ReactNode;
+  readonly children: ReactNode;
+  readonly dynamic?: boolean;
+  /** The `data-target` a Speaker note lights, from the kit's `target(…)`. */
+  readonly 'data-target'?: string;
+}) {
   return (
-    <div className="flex flex-col gap-1 border-l-4 border-foreground pl-3 text-caption">
-      <p className="flex items-center gap-1 text-body font-semibold">{label}</p>
+    <div
+      {...rest}
+      className={cn(
+        'flex flex-col gap-1 border-l-4 pl-3 text-caption',
+        dynamic ? 'border-primary' : 'border-foreground',
+      )}
+    >
+      <p data-bracket-label className="flex items-center gap-1 text-body font-semibold">
+        {label}
+      </p>
       <div className="text-muted-foreground">{children}</div>
     </div>
   );
@@ -140,36 +161,43 @@ export const skillsAreDynamicContext = slide({
           >
             <ControlRoomArt />
           </ZoneScene>
-          <section
-            aria-label={t('window.label')}
-            style={ARRIVAL_BEATS}
-            className={cn(styles.window, 'grid grid-cols-[minmax(0,1fr)_8rem] gap-x-4')}
-          >
+          <section aria-label={t('window.label')} style={ARRIVAL_BEATS} className={cn(styles.window, 'flex flex-col')}>
             <ContextBarsPreset
               preset="waterline-dive"
               locale={locale}
               orientation="vertical"
               labels={ROWS.map(words)}
               free={t('window.free')}
+              parts={[
+                {
+                  rows: STATIC_ROWS,
+                  aside: (
+                    <Bracket
+                      {...target('static')}
+                      label={
+                        <>
+                          {t('static.label')}
+                          <Marker note="static-and-dynamic-as-google-defines-them" placement="beside" />
+                        </>
+                      }
+                    >
+                      <p {...target('always-loaded')} className="flex items-center gap-1">
+                        {t('static.text')}
+                        <Marker note="why-static-and-dynamic-context-are-kept-apart" placement="beside" />
+                      </p>
+                    </Bracket>
+                  ),
+                },
+                {
+                  rows: ROWS.length - STATIC_ROWS,
+                  aside: (
+                    <Bracket dynamic label={t('dynamic.label')}>
+                      {t('dynamic.text')}
+                    </Bracket>
+                  ),
+                },
+              ]}
             />
-            <div className="flex flex-col justify-between gap-6 pt-8">
-              <div {...target('static')}>
-                <Bracket
-                  label={
-                    <>
-                      {t('static.label')}
-                      <Marker note="static-and-dynamic-as-google-defines-them" placement="beside" />
-                    </>
-                  }
-                >
-                  <p {...target('always-loaded')} className="flex items-center gap-1">
-                    {t('static.text')}
-                    <Marker note="why-static-and-dynamic-context-are-kept-apart" placement="beside" />
-                  </p>
-                </Bracket>
-              </div>
-              <Bracket label={t('dynamic.label')}>{t('dynamic.text')}</Bracket>
-            </div>
           </section>
         </div>
         <footer className="grid gap-4 border-t pt-4 text-caption @3xl:grid-cols-[7fr_5fr]">

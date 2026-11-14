@@ -150,7 +150,7 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it("draws the context window as the Explorable's waterline-dive bar, upright, static on top and the skill body ringed", () => {
+  it("draws the context window as the Explorable's waterline-dive bar, upright, a line and a bracket between static and dynamic", () => {
     // ARRANGE
     const expected = {
       orientation: 'vertical',
@@ -158,6 +158,7 @@ describe('success cases', () => {
         'System prompt',
         'Skills',
         'Memory files',
+        'line',
         'Skill instructions',
         'Tool results',
         'Tool results',
@@ -165,19 +166,30 @@ describe('success cases', () => {
         'Free space',
       ],
       ringed: 'Skill instructions',
+      brackets: [
+        { label: 'Static', rows: '--from:1;--to:4' },
+        { label: 'Dynamic', rows: '--from:5;--to:9' },
+      ],
     };
     // ACT
     const $ = sceneOf('skills-are-dynamic-context');
     const bar = $('[data-bars="waterline-dive"] [data-orientation]');
     const rows = bar
-      .children('[role="listitem"]')
+      .children('[role="listitem"], [data-split]')
       .toArray()
-      .map((row) => $(row).find('[data-term]').text() || $(row).text());
+      .map((row) => ($(row).is('[data-split]') ? 'line' : $(row).find('[data-term]').text() || $(row).text()));
+    const brackets = $('[data-bars="waterline-dive"] [data-aside]')
+      .toArray()
+      .map((aside) => ({
+        label: $(aside).find('[data-bracket-label]').text(),
+        rows: ($(aside).attr('style') ?? '').replace(/ /g, ''),
+      }));
     // ASSERT
     expect({
       orientation: bar.attr('data-orientation'),
       rows,
       ringed: bar.find('[data-ring] [data-term]').text(),
+      brackets,
     }).toEqual(expected);
   });
 

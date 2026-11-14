@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ContextBarView, type BarOrientation } from './context-bar-view';
+import { ContextBarView, type BarOrientation, type BarPart } from './context-bar-view';
 import { barModel } from './context-bars.pure';
 import { percentText, shortTokens } from './context-format.pure';
 import { fill } from './context-view';
@@ -15,6 +15,8 @@ export interface BarsLayout {
   /** A Slide's words for each block of every bar, in block order (see `ContextBarView`). */
   readonly labels?: readonly ReactNode[];
   readonly free?: ReactNode;
+  /** How each labelled bar splits into parts, with what stands beside each (see `ContextBarView`). */
+  readonly parts?: readonly BarPart[];
 }
 
 interface Props extends BarsLayout {
@@ -24,7 +26,7 @@ interface Props extends BarsLayout {
   readonly locale: string;
 }
 
-interface FigureProps extends Pick<Props, 'words' | 'locale' | 'orientation' | 'labels' | 'free'> {
+interface FigureProps extends Pick<Props, 'words' | 'locale' | 'orientation' | 'labels' | 'free' | 'parts'> {
   readonly bar: MiniBar;
   readonly chat: Chat | undefined;
   readonly window: MiniPreset['window'];
@@ -44,7 +46,7 @@ function smartZoneLines(window: MiniPreset['window'], used: number) {
 }
 
 function Figure(props: FigureProps) {
-  const { bar, chat, window, words, orientation = 'horizontal', labels, free } = props;
+  const { bar, chat, window, words, orientation = 'horizontal', labels, free, parts } = props;
   const model = barModel(bar, chat, window);
   const text = figureText(props, model.used);
   const lines = smartZoneLines(window, model.used);
@@ -58,6 +60,7 @@ function Figure(props: FigureProps) {
         orientation={orientation}
         labels={labels}
         free={free}
+        parts={parts}
         total={model.total}
         blocks={model.blocks}
         buffer={window.bufferTokens}
