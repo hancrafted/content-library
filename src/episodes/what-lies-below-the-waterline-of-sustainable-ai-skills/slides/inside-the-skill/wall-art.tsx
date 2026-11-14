@@ -2,16 +2,17 @@ import styles from './inside.module.css';
 
 /*
  * The control-room wall behind the card, lifted from Spec Option 16a (feedback 3, decision 46): the wall in many
- * facets lit from the upper left, and the console's lit edge along its foot. The Option draws it in a 1000 by 690 box;
- * here it fills `ZoneScene`'s 1200 by 800 space, which the Scene crops to its box. Tones live in the Slide token file.
+ * facets lit from the upper left. The Option draws it in a 1000 by 690 box; here it fills `ZoneScene`'s 1200 by 800
+ * space, which the Scene crops to its box. The console's edge along the foot is `ConsoleEdge`, a thin strip of fixed
+ * height: drawn here, the Scene's crop scaled it up to a heavy band on tall Scenes. Tones live in the Slide token file.
  */
 
 const SCALE_X = 1200 / 1000;
 const SCALE_Y = 800 / 698;
 
-type Tone = 'room' | 'room-lit' | 'room-shade' | 'robot-lit' | 'robot';
+type Tone = 'room' | 'room-lit' | 'room-shade';
 
-/** The Option's facets, merged per tone and drawn in this order: wall, its lit and shaded planes, the console edge. */
+/** The Option's facets, merged per tone and drawn in this order: wall, its lit and shaded planes. */
 const FACETS: readonly (readonly [Tone, string])[] = [
   [
     'room',
@@ -25,8 +26,6 @@ const FACETS: readonly (readonly [Tone, string])[] = [
     'room-shade',
     'M909.5 240.8L1000 330.9L865.4 353.1ZM1000 330.9L1000 445.6L865.4 353.1ZM257.1 690L172.4 542.2L305.8 573.7ZM794.7 588.9L853.7 476.6L1000 590.4ZM1000 445.6L853.7 476.6L865.4 353.1ZM350.3 690L257.1 690L305.8 573.7ZM510.6 587.4L350.3 690L305.8 573.7ZM122.3 690L172.4 542.2L257.1 690ZM278.5 454L417.5 483L305.8 573.7ZM909.5 240.8L1000 256.2L1000 330.9ZM1000 109.3L1000 256.2L909.5 240.8ZM1000 109.3L886 96.5L1000 0ZM673.6 451.7L794.7 588.9L660.1 580.8ZM673.6 451.7L853.7 476.6L794.7 588.9ZM653.7 315.4L673.6 451.7L512.6 398ZM673.6 451.7L653.7 315.4L865.4 353.1ZM853.7 476.6L673.6 451.7L865.4 353.1ZM673.6 451.7L510.6 587.4L512.6 398ZM510.6 587.4L673.6 451.7L660.1 580.8ZM0 205.1L0 132.2L81.4 109.9ZM278.5 454L343.3 351.9L417.5 483ZM417.5 483L343.3 351.9L512.6 398Z',
   ],
-  ['robot-lit', 'M0 668L1000 668L1000 675L0 675ZM0 675L350 675L250 698L0 698Z'],
-  ['robot', 'M0 675L1000 675L1000 698L0 698Z'],
 ];
 
 /** The wall, as the Scene's only drawing; the card and its files lie over it as HTML. */
@@ -39,5 +38,16 @@ export function WallArt() {
         ))}
       </g>
     </g>
+  );
+}
+
+/** The console's edge along the Scene's foot, as the Option draws it: a lit rim over the console, lit at the left. */
+export function ConsoleEdge() {
+  return (
+    <span
+      aria-hidden
+      data-console-edge
+      className={`${styles.consoleEdge} pointer-events-none absolute inset-x-0 bottom-0 h-2.5`}
+    />
   );
 }
