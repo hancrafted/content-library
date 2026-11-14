@@ -1,144 +1,24 @@
 /*
- * "Shared skills are knowledge articles" (Option 20b): the control room's own scenery and its one emphasis motion. No
- * raw colour (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and
- * `--overlay` as black, fixed across themes, with the zone's `--zone-midnight` for the room's cast, `--bulb` and
- * `--brand-accent` for the manuals' covers; `--primary` draws the reach to the AIs. Dark mode only retunes the mixes.
+ * "Shared skills are knowledge articles" (Option 20b): the reach to the AIs and the one emphasis motion. The room's
+ * own tones are `room-art.module.css`, lifted from the Spec. The reach is drawn in the Spec's lead blue, its one raw
+ * colour, with the Spec's dark value (FE-011).
  */
 
-.room {
-  --wall-white: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-midnight));
-  --room: color-mix(in oklab, var(--wall-white) 88%, var(--overlay));
-  --room-lit: color-mix(in oklab, var(--wall-white) 96%, var(--overlay));
-  --room-shade: color-mix(in oklab, var(--wall-white) 82%, var(--overlay));
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-midnight) 30%,
-    color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay))
-  );
-  --floor: color-mix(
-    in oklab,
-    var(--zone-midnight) 30%,
-    color-mix(in oklab, var(--on-brand-accent) 52%, var(--overlay))
-  );
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-midnight) 30%,
-    color-mix(in oklab, var(--on-brand-accent) 42%, var(--overlay))
-  );
-  --frame: color-mix(
-    in oklab,
-    var(--brand-accent) 35%,
-    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
-  );
-  --shelf: color-mix(
-    in oklab,
-    var(--brand-accent) 55%,
-    color-mix(in oklab, var(--on-brand-accent) 40%, var(--overlay))
-  );
-  --shelf-shade: color-mix(in oklab, var(--shelf) 70%, var(--overlay));
-  --spine-a: color-mix(in oklab, var(--zone-midnight) 70%, var(--bulb));
-  --spine-b: color-mix(in oklab, var(--brand-accent) 70%, var(--overlay));
-  --spine-c: color-mix(in oklab, var(--zone-twilight) 75%, var(--overlay));
-  --book: color-mix(in oklab, color-mix(in oklab, var(--zone-midnight) 60%, var(--bulb)) 80%, var(--overlay));
-  --book-lit: color-mix(in oklab, var(--zone-midnight) 55%, var(--bulb));
-  --page: color-mix(in oklab, var(--on-brand-accent) 96%, var(--bulb));
-  --lectern: color-mix(in oklab, var(--zone-twilight) 80%, var(--overlay));
+.reach {
+  --reach-lead: oklch(0.62 0.17 255);
 }
 
-:global(.dark) .room {
-  --wall-white: color-mix(in oklab, var(--on-brand-accent) 40%, var(--zone-midnight));
-  --room: color-mix(in oklab, var(--wall-white) 70%, var(--overlay));
-  --room-lit: color-mix(in oklab, var(--wall-white) 80%, var(--overlay));
-  --room-shade: color-mix(in oklab, var(--wall-white) 62%, var(--overlay));
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-midnight) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
-  );
-  --floor: color-mix(
-    in oklab,
-    var(--zone-midnight) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay))
-  );
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-midnight) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
-  );
-  --page: color-mix(in oklab, var(--on-brand-accent) 82%, var(--bulb));
-}
-
-.room [data-tone='room'] {
-  fill: var(--room);
-}
-
-.room [data-tone='room-lit'] {
-  fill: var(--room-lit);
-}
-
-.room [data-tone='room-shade'] {
-  fill: var(--room-shade);
-}
-
-.room [data-tone='frame'] {
-  stroke: var(--frame);
-}
-
-.room [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-}
-
-.room [data-tone='floor'] {
-  fill: var(--floor);
-}
-
-.room [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
-}
-
-.room [data-tone='shelf'] {
-  fill: var(--shelf);
-}
-
-.room [data-tone='shelf-shade'] {
-  fill: var(--shelf-shade);
-}
-
-.room [data-tone='spine-a'] {
-  fill: var(--spine-a);
-}
-
-.room [data-tone='spine-b'] {
-  fill: var(--spine-b);
-}
-
-.room [data-tone='spine-c'] {
-  fill: var(--spine-c);
-}
-
-.room [data-tone='book'] {
-  fill: var(--book);
-}
-
-.room [data-tone='book-lit'] {
-  fill: var(--book-lit);
-}
-
-.room [data-tone='page'] {
-  fill: var(--page);
-}
-
-.room [data-tone='lectern'] {
-  fill: var(--lectern);
+:global(.dark) .reach {
+  --reach-lead: oklch(0.72 0.14 250);
 }
 
 .reachLine {
   fill: none;
-  stroke: var(--primary);
+  stroke: var(--reach-lead);
 }
 
 .reachDot {
-  fill: var(--primary);
+  fill: var(--reach-lead);
 }
 
 /*
