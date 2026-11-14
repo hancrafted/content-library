@@ -8,7 +8,7 @@ stale_after: 2027-01-13T00:00:00Z
 
 Read before publishing an Episode: the step that turns an Upcoming Episode with a page into a Published Episode. Han triggers it when the video is live, or asks an agent to run it. Promotion does not do it, and the two happen in either order.
 
-Until then the Episode is Upcoming: its page is built and served at `/episodes/<slug>` and `/de/episodes/<slug>`, reachable by URL alone, `noindex`, and its overview card is unlinked and reads its copy from its own `i18n/`. No shared link to one of its Slides exists, so its anchors are not yet bound.
+Until then the Episode is Upcoming: its page is built and served at `/episodes/<slug>` and `/de/episodes/<slug>`, reachable by URL alone and `noindex`. Its overview card reads its copy from its own `i18n/` and shows on `/episodes` only under `next dev` and on a pull request's preview, linked there (`docs/features/hosting.md`); a production build leaves it out. No shared link to one of its Slides exists, so its anchors are not yet bound.
 
 ## Steps
 
