@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { INK_PROFILES, inkScale } from './ink-transition.pure';
+import { INK_PROFILES, inkScale, inkTransform } from './ink-transition.pure';
 
 /*
  * The ink's progress curve per named effect: a quick jump to the profile's knee in the first 2% of progress, so the
  * edge shows at once, then a straight run to full. The `bubbles` profile carries the Iceberg style's Section-title
- * descent.
+ * descent; its water rises by translation, so the crest riding on it keeps its shape, while every other effect
+ * scales its ink up from the bottom.
  */
 
 describe('success cases', () => {
@@ -25,6 +26,15 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it('raises the bubbles water by translation and scales every other ink', () => {
+    // ARRANGE
+    const expected = ['translateY(88%)', 'scaleY(0.12)', 'translateY(0%)'];
+    // ACT
+    const seen = [inkTransform('bubbles', 0.02), inkTransform('wave', 0.02), inkTransform('bubbles', 1)];
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -35,6 +45,15 @@ describe('failure cases', () => {
     const scale = inkScale('bubbles', 0);
     // ASSERT
     expect(scale).toBe(expected);
+  });
+
+  it('keeps the bubbles water wholly below the host before the edge has moved', () => {
+    // ARRANGE
+    const expected = 'translateY(100%)';
+    // ACT
+    const transform = inkTransform('bubbles', 0);
+    // ASSERT
+    expect(transform).toBe(expected);
   });
 });
 

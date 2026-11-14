@@ -14,3 +14,13 @@ export function inkScale(variant: keyof typeof INK_PROFILES, progress: number) {
   const { knee } = INK_PROFILES[variant];
   return progress < 0.02 ? (progress / 0.02) * knee : knee + ((progress - 0.02) / 0.98) * (1 - knee);
 }
+
+/** Effects whose water rises by translation, so a crest drawn on its top edge keeps its shape. */
+const TRANSLATED = new Set<keyof typeof INK_PROFILES>(['bubbles']);
+
+/** The ink's CSS transform at `progress`: a bottom-origin scale, or for `bubbles` a rise from wholly below the host. */
+export function inkTransform(variant: keyof typeof INK_PROFILES, progress: number) {
+  const scale = inkScale(variant, progress);
+  if (!TRANSLATED.has(variant)) return `scaleY(${scale})`;
+  return `translateY(${Math.round((1 - scale) * 100_000) / 1000}%)`;
+}

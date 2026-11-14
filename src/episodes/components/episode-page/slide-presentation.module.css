@@ -37,6 +37,11 @@
   transform: scaleY(0);
 }
 
+/* The `bubbles` water rises by translation, so its crest keeps its shape: it waits wholly below the host. */
+.edge [data-ink-scale][data-wave-front] {
+  transform: translateY(100%);
+}
+
 .edge *,
 .edge {
   pointer-events: none !important;
