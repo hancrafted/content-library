@@ -171,6 +171,25 @@ describe('frozen eval cases', () => {
       expect(problems).toEqual(expected);
     });
 
+    it("names a ruling whose quote is not in the case's rounds.md", () => {
+      // ARRANGE
+      const episodeSpec = loadCase('episode-spec');
+      const keys = qualityKeys('episode-spec')!;
+      const [first, ...rest] = keys.checklist;
+      const unquoted = 'a sentence Han never said';
+      const broken = {
+        checklist: [{ ...first, source: { session: 'd4eeec02', round: 1, quote: unquoted } }, ...rest],
+        probe: keys.probe,
+      };
+      const expected = [`checklist ${first.id} quotes text not in rounds.md: "${unquoted}"`];
+
+      // ACT
+      const problems = keyProblems(CASES, episodeSpec, broken);
+
+      // ASSERT
+      expect(problems).toEqual(expected);
+    });
+
     it('names an answer key outside its choices, and a checklist of the wrong size', () => {
       // ARRANGE
       const ink = loadCase('ink');

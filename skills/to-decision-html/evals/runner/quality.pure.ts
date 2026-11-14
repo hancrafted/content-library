@@ -8,6 +8,16 @@ export interface Source {
   readonly quote: string;
 }
 
+/**
+ * A checklist item's source when it is a rule a person set in a session rather than text a run sees: the session, the
+ * feedback round and a verbatim quote of the person's words, held in the case's `rounds.md`, which a run never sees.
+ */
+export interface Ruling {
+  readonly session: string;
+  readonly round: number;
+  readonly quote: string;
+}
+
 /** What the judge and the reader see of a page: three screenshots and its text, named as they are in their folder. */
 export const VIEW_FILES = {
   load: { file: '1-load.png', about: 'the page as it opens, at desktop width' },

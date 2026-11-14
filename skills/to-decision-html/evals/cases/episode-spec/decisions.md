@@ -50,9 +50,9 @@ A household budget: rent is the system prompt, groceries are the task, and every
 1. Why does a language model's recall of an instruction degrade with its position in a long context?
 2. Why does starting a fresh session restore instruction following that a long session lost?
 
-## Context cards
+## Other context
 
-Style, the Visual language (`visual-language.html`) and the Episode page (`episode-page.html`) are the other context cards. The Visual language takes a note from the reviewer.
+The Visual language (`visual-language.html`) and the Episode page (`episode-page.html`) come as attached fragments. The reviewer may leave a note on the Visual language.
 
 ## Episode
 
