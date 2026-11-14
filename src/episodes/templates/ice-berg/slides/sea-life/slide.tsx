@@ -51,7 +51,7 @@ export const seaLife = slide({
         usage={t('usage')}
         zone="midnight"
         code="<Whale x={0} y={0} />"
-        viewBox="-120 -80 300 160"
+        viewBox="-220 -100 440 220"
       >
         <Whale x={0} y={0} />
       </Specimen>
