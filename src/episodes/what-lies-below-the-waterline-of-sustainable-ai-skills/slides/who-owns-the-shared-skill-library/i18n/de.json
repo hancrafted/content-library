@@ -1,0 +1,126 @@
+{
+  "title": "Wem die geteilte Skill-Bibliothek gehört",
+  "caption": "Geteilte, allgemeine Skills brauchen Regeln, wer sie hinzufügt, prüft und entfernt, und eine feste Praxis gibt es dafür noch nicht.",
+  "analogy": "Die Titelseite des Flottenhandbuchs. Flotte, Schiff und Projekt sind die Stufen; die Roboter sind die Modelle und Agenten.",
+  "matrix": {
+    "back": "Zurück zu Folie 18: Wer ihn nutzt, und wo",
+    "locator": "Das Feld geteilt und allgemein in der Matrix von Folie 18",
+    "shared": "Geteilt · auch andere",
+    "general": "Allgemein · in jedem Projekt",
+    "care": "Sorgfalt",
+    "chat": {
+      "title": "Details daneben, mit Owner, Version und Evals",
+      "sub": "Mit Owner, versioniert und getestet"
+    },
+    "coding": {
+      "title": "Ein Plugin oder verwaltete Einstellungen",
+      "sub": "Erreicht ein ganzes Team: Owner, Version und Evals, bevor er ausgeliefert wird."
+    },
+    "pill": "das Flottenhandbuch",
+    "pillCoding": "ein Plugin"
+  },
+  "page": {
+    "label": "Titelseite der geteilten Skill-Bibliothek",
+    "scope": "Geteilt, allgemein",
+    "title": "Bevor ein Skill hineinkommt, über Owner und Version hinaus"
+  },
+  "rows": {
+    "add": {
+      "term": "Wer ihn hinzufügen darf",
+      "chat": "Die Bibliothek der Organisation steht auf „Requires review“, „Open“ oder „Off“; eine prüfende Person gibt eine feste Version frei.",
+      "coding": "Wer ins Repository mergen darf; bei Plugins wählen Admins, welche Marktplätze und Plugins erlaubt und aktiv sind."
+    },
+    "tier": {
+      "term": "Wen er erreicht (seine Stufe)",
+      "scene": "Flotte, Schiff oder Projekt",
+      "chat": "Persönlich, geteilt, Plugin oder organisationsweit; auf der obersten Stufe fügen nur Owner hinzu oder entfernen.",
+      "coding": "<code>~/.claude/skills/</code> du, in jedem Projekt · <code>.claude/skills/</code> das Repository · ein Plugin oder verwaltete Einstellungen: ein ganzes Team."
+    },
+    "cost": {
+      "term": "Was das Laden kostet",
+      "chat": "Ein geladener Skill kostet bei jedem Lauf wieder Tokens.",
+      "coding": "Die geladene <code>SKILL.md</code> bleibt im Kontextfenster: Tokenkosten, die wiederkehren."
+    },
+    "models": {
+      "term": "Mit welchen Modellen und Agenten er funktioniert",
+      "scene": "welche Roboter",
+      "chat": "Was ein Skill wert ist, hängt vom Modell und vom Agenten ab, in dem er läuft.",
+      "coding": "Im Agenten getestet, an den er ausgeliefert wird: dasselbe Modell in einem anderen Harness kann die Wirkung eines Skills umkehren."
+    },
+    "retire": {
+      "term": "Wann er in Rente geht",
+      "chat": "Außer Dienst stellen, wenn seine Evals immer wieder scheitern oder sein Ablauf wegfällt.",
+      "coding": "Produktive Skills auf eine Version festlegen; außer Dienst stellen, wenn Evals dauerhaft scheitern."
+    }
+  },
+  "inset": {
+    "heading": "<code>SKILL.md</code>, seine <code>metadata</code>-Map",
+    "note": "Das Agent-Skills-Format hat kein Owner-Feld; diese Schlüssel sind eine Konvention."
+  },
+  "darkCorner": "Noch nicht geklärt: bisher keine gemeinsame Praxis.",
+  "footer": {
+    "story": "In der Geschichte:",
+    "chat": "Flotte, Schiff und Projekt sind Wörter dieser Episode, keine Herstellerbegriffe: Hersteller stufen Skills nach Publikum und Risiko, nicht danach, wie allgemein der Inhalt ist.",
+    "coding": "Codex trennt Skill-Ordner im Repository von denen der Nutzer genauso wie Claude Code."
+  },
+  "alt": {
+    "scene": "Wasser der Mitternachtszone, der Roboter hängt mit leuchtender Lampe an seinem Kabel. Links das Feld geteilt und allgemein aus der Skill-Matrix von Folie 18, umrandet, mit einer kleinen Karte, die zeigt, wo es unter den vier liegt. Ein Lichtkegel öffnet dieses Feld zur Titelseite der geteilten Skill-Bibliothek, gezeichnet als Flottenhandbuch im Ordner: wer einen Skill hinzufügen darf, wen er erreicht, was das Laden kostet, mit welchen Modellen und Agenten er funktioniert und wann er in Rente geht. Die untere Ecke der Seite ist dunkel: noch nicht geklärt."
+  },
+  "notes": {
+    "shared-skills-are-tiered-by-audience": {
+      "header": "Geteilte Skills sind nach Publikum gestuft",
+      "description": "Anthropics Stufen in claude.ai: persönliche Skills, mit einzelnen Personen geteilte Skills, in einem Plugin gebündelte Gruppen-Skills und organisationsweite Skills, die nur Owner hinzufügen oder entfernen können [1]. „Flotte, Schiff, Projekt“ sind Wörter der Episode, keine Herstellerbegriffe; Hersteller stufen nach Publikum und Risiko, nicht danach, wie allgemein der Inhalt ist.",
+      "sources": {
+        "anthropic-provision-and-manage-skills": {
+          "title": "Anthropic, Provision and manage skills for your organization"
+        }
+      }
+    },
+    "who-adds-reviews-and-removes-shared-skills": {
+      "header": "Wer geteilte Skills hinzufügt, prüft und entfernt",
+      "description": "Die Bibliothek der Organisation bietet „Requires review“, „Open“ und „Off“; eine prüfende Person gibt „a fixed version“ frei, und Nutzer bleiben darauf, bis eine neue freigegeben ist [1]. Anthropic rät, produktive Skills auf eine Version festzulegen und Skills außer Dienst zu stellen, deren Evaluationen dauerhaft scheitern oder deren Ablauf wegfällt [2].",
+      "sources": {
+        "anthropic-provision-and-manage-skills": {
+          "title": "Anthropic, Provision and manage skills for your organization"
+        },
+        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+      }
+    },
+    "token-cost-and-model-fit-are-per-skill-facts": {
+      "header": "Tokenkosten und Modellpassung gelten pro Skill",
+      "description": "Ein geladener Skill kostet wiederkehrend Tokens [1], und was ein Skill wert ist, hängt vom Modell und vom Harness ab, in dem er läuft [2].",
+      "sources": {
+        "claude-code-skills": { "title": "Anthropic, Extend Claude with skills (Claude Code documentation)" },
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    },
+    "skill-governance-still-being-worked-out-is-a-judgement": {
+      "header": "„Noch nicht geklärt“ ist eine Einschätzung",
+      "description": "Anthropics Leitfaden für Unternehmen nennt, was pro Skill festzuhalten ist (Zweck, Owner, Version, Evaluationsstatus), und berichtet nicht, wie viele Organisationen das tun [1]; die ungeklärte Ecke ist also die Einschätzung der Episode, keine gemessene Aussage.",
+      "sources": {
+        "anthropic-skills-for-enterprise": { "title": "Anthropic, Skills for enterprise" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-square": {
+        "title": "Zurück zum Feld",
+        "keywords": "",
+        "script": "Komm zurück zur Matrix, zum Feld geteilt und allgemein. Auf diese Art Skill verlassen sich die meisten Menschen, also zählt hier die Sorgfalt am meisten."
+      },
+      "what-the-front-page-needs": {
+        "title": "Was die Titelseite braucht",
+        "keywords": "",
+        "script": "Eine geteilte Bibliothek braucht Regeln über Owner und Version hinaus: wer einen Skill hinzufügen darf, auf welcher Stufe er liegt und wen er damit erreicht, was das Laden kostet, mit welchen Modellen und Agenten er funktioniert und wann er in Rente geht. Jede dieser Fragen muss jemand beantworten, bevor der Skill hineinkommt."
+      },
+      "the-dark-corner": {
+        "title": "Die dunkle Ecke",
+        "keywords": "",
+        "script": "Und dann gibt es die Fragen, die noch niemand geklärt hat. Ich will ehrlich zu dir sein: Dort habe ich die Antworten nicht, und ich glaube, viele Organisationen haben sie auch noch nicht. Wenn du es bei euch gelöst hast, würde ich gern hören, wie."
+      }
+    }
+  }
+}
