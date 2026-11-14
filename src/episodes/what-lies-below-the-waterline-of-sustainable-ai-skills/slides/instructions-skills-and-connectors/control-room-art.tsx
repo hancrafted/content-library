@@ -49,6 +49,8 @@ const place = ({ x, y, scale }: Place) => `translate(${x} ${y}) scale(${scale})`
 /** The captain's place, the hand meeting the Spec's notebook; the console's, where the Spec's stands, at the cast's scale. */
 const CAPTAIN: Place = { x: 167, y: FLOOR, scale: 2.5 };
 const CONSOLE = { x: 560, y: 300, width: 135, scale: 2 } as const;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 /** The Spec's desk top is lower than the shared Console's at the cast's scale; the manual stands on the shared one. */
 const MANUAL_LIFT = CONSOLE.y - 362;
 
@@ -69,7 +71,7 @@ function PilotAtConsole({ width, ...at }: Place & { readonly width: number }) {
   return (
     <g transform={place(at)}>
       <Console width={width} />
-      <g transform={`translate(${seat.x} ${seat.y})`}>
+      <g transform={`translate(${seat.x + PILOT_REACH} ${seat.y})`}>
         <Character preset={pilot} pose="sit" />
       </g>
     </g>
