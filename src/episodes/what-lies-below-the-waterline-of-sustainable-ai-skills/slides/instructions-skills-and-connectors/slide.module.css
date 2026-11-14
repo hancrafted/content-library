@@ -1,7 +1,7 @@
 /*
  * The Slide's token file: the control room, the next room, the bulkhead, the cable and the four things it shows, lifted
  * from the approved Spec's Option 6a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011; dark
- * mode is tuned later). `--machine` colours the rack and the sonar drone, as the Spec does; the cast draws its own.
+ * mode is tuned later). `--info` colours the rack and the sonar drone, and the captain's navy, as the shared figures' do; the cast draws its own.
  * `motion: none`: the speaker walks the four tags one at a time.
  */
 
@@ -38,14 +38,14 @@
   --bulk-lit: oklch(0.56 0.03 250);
   --bulk-shade: oklch(0.36 0.03 258);
   --bulk: oklch(0.46 0.03 254);
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
   --screen: oklch(0.27 0.04 245);
   --rack-led: oklch(0.82 0.16 150);
   --robot-dark: oklch(0.28 0.02 260);
   --ping: oklch(0.95 0.08 200 / 0.55);
-  --robot-glint: color-mix(in oklab, var(--machine) 45%, oklch(1 0 0));
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
   --cable: oklch(0.3 0.02 260);
   --cable-lit: oklch(0.46 0.03 255);
   --drop: oklch(0.3 0.04 255 / 0.18);
@@ -57,8 +57,8 @@
   --tab-c: oklch(0.72 0.1 252);
   --tab-b: oklch(0.89 0.13 92);
   --pin: oklch(0.6 0.18 28);
-  --captain-shade: color-mix(in oklab, var(--human) 66%, oklch(0.24 0.07 268));
-  --captain: var(--human);
+  --captain-shade: color-mix(in oklab, var(--info) 46%, oklch(0.24 0.02 260));
+  --captain: color-mix(in oklab, var(--info) 62%, oklch(0.24 0.02 260));
   --cloth-dark: oklch(0.22 0.02 265);
   --book-lit: oklch(0.6 0.1 150);
   --book: oklch(0.5 0.1 155);
@@ -98,14 +98,14 @@
   --bulk-lit: oklch(0.42 0.025 250);
   --bulk-shade: oklch(0.26 0.025 258);
   --bulk: oklch(0.34 0.025 254);
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
   --screen: oklch(0.18 0.03 245);
   --rack-led: oklch(0.78 0.16 150);
   --robot-dark: oklch(0.22 0.02 260);
   --ping: oklch(0.85 0.1 200 / 0.4);
-  --robot-glint: color-mix(in oklab, var(--machine) 55%, oklch(1 0 0));
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
   --cable: oklch(0.18 0.015 260);
   --cable-lit: oklch(0.32 0.02 255);
   --drop: oklch(0.1 0.02 260 / 0.4);
@@ -117,8 +117,8 @@
   --tab-c: oklch(0.58 0.1 255);
   --tab-b: oklch(0.78 0.12 92);
   --pin: oklch(0.58 0.16 28);
-  --captain-shade: color-mix(in oklab, var(--human) 62%, oklch(0.22 0.07 268));
-  --captain: var(--human);
+  --captain-shade: color-mix(in oklab, var(--info) 42%, oklch(0.22 0.02 260));
+  --captain: color-mix(in oklab, var(--info) 62%, oklch(0.24 0.02 260));
   --cloth-dark: oklch(0.2 0.02 265);
   --book-lit: oklch(0.52 0.09 150);
   --book: oklch(0.43 0.09 155);

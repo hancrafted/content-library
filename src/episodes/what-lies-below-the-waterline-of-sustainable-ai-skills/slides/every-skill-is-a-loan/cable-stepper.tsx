@@ -1,6 +1,7 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import { keyedLines } from './code-lines.pure';
@@ -78,7 +79,7 @@ function CableEnd({ label }: { readonly label: string }) {
     <svg viewBox="-55 -40 140 150" role="img" aria-label={label} className="relative z-10 w-24 shrink-0">
       <line x1={0} y1={-40} x2={0} y2={0} className={styles.robotCable} />
       <g transform="scale(1.1)">
-        <Robot aim="down" />
+        <Robot state={robotAt('every-skill-is-a-loan').state} aim="down" />
       </g>
     </svg>
   );

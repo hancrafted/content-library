@@ -3,6 +3,7 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { atSpec, Facets, SHALLOWS, SHALLOWS_ASPECT, ShallowsArt } from './shallows-art';
 import { BUBBLES, CARD, NO_CARD, SHALLOWS_FACETS, SILT } from './shallows-facets';
@@ -88,7 +89,7 @@ export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
       <Ship transform={`translate(${SHIP_X} ${SHALLOWS.waterline}) scale(${SHIP_SCALE})`} />
       {withSkill ? <Gauge label={gauge} top={robotTop + ROBOT_HEIGHT} /> : null}
       <g transform={`translate(${CABLE_X} ${robotTop}) scale(${ROBOT_SCALE})${withSkill ? '' : ' rotate(-8)'}`}>
-        <Robot aim="down" />
+        <Robot state={robotAt('does-the-skill-make-things-better').state} aim="down" />
       </g>
       <ShallowsArt>
         <Facets facets={withSkill ? BUBBLES : SILT} />

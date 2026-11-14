@@ -2,7 +2,7 @@
  * "Retire skills" (Option 25b): the control room at night, its porthole onto the Abyss, the archive crate and the one
  * emphasis motion. The drawing's tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens on
  * `.art` for the facets `room-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode
- * (feedback 2, decision 32). The rivets take the Spec's robot glint, which mixes `--machine`. `--primary` marks the one
+ * (feedback 2, decision 32). The rivets and the clipboard's clip are steel, mixed from `--muted-foreground`, never a meaning colour. `--primary` marks the one
  * line you need.
  */
 
@@ -38,10 +38,10 @@
   --pin: color-mix(in oklab, var(--primary) 80%, oklch(1 0 0));
   --retired: oklch(0.82 0.015 82);
   --retired-lit: oklch(0.9 0.01 85);
-  --rivet: color-mix(in oklab, var(--machine) 45%, oklch(1 0 0));
-  --robot-dark: oklch(0.28 0.02 260);
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --rivet: color-mix(in oklab, var(--muted-foreground) 45%, oklch(1 0 0));
+  --clip-dark: oklch(0.28 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --sea-abyss: oklch(0.205 0.042 270);
   --sea-abyss-lit: oklch(0.24 0.05 268);
   --sea-midnight: oklch(0.31 0.072 265);
@@ -71,10 +71,10 @@
   --pin: color-mix(in oklab, var(--primary) 80%, oklch(0.2 0 0));
   --retired: oklch(0.55 0.012 82);
   --retired-lit: oklch(0.62 0.01 85);
-  --rivet: color-mix(in oklab, var(--machine) 55%, oklch(1 0 0));
-  --robot-dark: oklch(0.22 0.02 260);
-  --robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --rivet: color-mix(in oklab, var(--muted-foreground) 55%, oklch(1 0 0));
+  --clip-dark: oklch(0.22 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --sea-abyss: oklch(0.145 0.024 270);
   --sea-abyss-lit: oklch(0.17 0.03 268);
   --sea-midnight: oklch(0.205 0.042 266);
@@ -197,19 +197,19 @@
   stroke: var(--rivet);
 }
 
-.art [data-tone='robot-dark'] {
-  fill: var(--robot-dark);
-  stroke: var(--robot-dark);
+.art [data-tone='clip-dark'] {
+  fill: var(--clip-dark);
+  stroke: var(--clip-dark);
 }
 
-.art [data-tone='robot-lit'] {
-  fill: var(--robot-lit);
-  stroke: var(--robot-lit);
+.art [data-tone='clip-lit'] {
+  fill: var(--clip-lit);
+  stroke: var(--clip-lit);
 }
 
-.art [data-tone='robot-shade'] {
-  fill: var(--robot-shade);
-  stroke: var(--robot-shade);
+.art [data-tone='clip-shade'] {
+  fill: var(--clip-shade);
+  stroke: var(--clip-shade);
 }
 
 .art [data-tone='sea-abyss'] {

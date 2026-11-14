@@ -3,6 +3,7 @@ import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/ca
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { useId, type ReactNode } from 'react';
 import art from './room-art.json';
 import styles from './slide.module.css';
@@ -77,7 +78,7 @@ function CameraFeed() {
       </clipPath>
       <Facets part="feed-water" facets={art.feedWater} />
       <g transform={`translate(${ROBOT.x} ${ROBOT.y}) scale(${ROBOT.scale})`}>
-        <Robot aim="down" lamp />
+        <Robot state={robotAt('skills-are-dynamic-context').state} aim="down" lamp />
       </g>
       <Facets part="feed-life" facets={art.feedLife} />
     </g>

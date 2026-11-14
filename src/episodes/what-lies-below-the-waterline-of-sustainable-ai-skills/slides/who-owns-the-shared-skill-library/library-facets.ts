@@ -20,8 +20,8 @@ export type ArtTone =
   | 'paper'
   | 'paper-lit'
   | 'paper-shade'
-  | 'robot-lit'
-  | 'robot-shade'
+  | 'ring-lit'
+  | 'ring-shade'
   | 'dark-1'
   | 'dark-3'
   | 'dark-2';
@@ -102,18 +102,18 @@ export const BINDER: readonly ArtFacet[] = [
   ['paper', 'M534 91L419 133L465 18Z'],
   ['paper-lit', 'M419 133L522 241L418 313Z'],
   ['paper', 'M298 177L419 133L418 313Z'],
-  ['robot-lit', 'M10 70L34 68L36 79L12 81Z'],
-  ['robot-shade', 'M12 76L36 74L36 79L12 81Z'],
-  ['robot-lit', 'M10 164L34 162L36 173L12 175Z'],
-  ['robot-shade', 'M12 170L36 168L36 173L12 175Z'],
-  ['robot-lit', 'M10 258L34 256L36 267L12 269Z'],
-  ['robot-shade', 'M12 264L36 262L36 267L12 269Z'],
-  ['robot-lit', 'M10 352L34 350L36 361L12 363Z'],
-  ['robot-shade', 'M12 358L36 356L36 361L12 363Z'],
-  ['robot-lit', 'M10 446L34 444L36 455L12 457Z'],
-  ['robot-shade', 'M12 452L36 450L36 455L12 457Z'],
-  ['robot-lit', 'M10 540L34 538L36 549L12 551Z'],
-  ['robot-shade', 'M12 546L36 544L36 549L12 551Z'],
+  ['ring-lit', 'M10 70L34 68L36 79L12 81Z'],
+  ['ring-shade', 'M12 76L36 74L36 79L12 81Z'],
+  ['ring-lit', 'M10 164L34 162L36 173L12 175Z'],
+  ['ring-shade', 'M12 170L36 168L36 173L12 175Z'],
+  ['ring-lit', 'M10 258L34 256L36 267L12 269Z'],
+  ['ring-shade', 'M12 264L36 262L36 267L12 269Z'],
+  ['ring-lit', 'M10 352L34 350L36 361L12 363Z'],
+  ['ring-shade', 'M12 358L36 356L36 361L12 363Z'],
+  ['ring-lit', 'M10 446L34 444L36 455L12 457Z'],
+  ['ring-shade', 'M12 452L36 450L36 455L12 457Z'],
+  ['ring-lit', 'M10 540L34 538L36 549L12 551Z'],
+  ['ring-shade', 'M12 546L36 544L36 549L12 551Z'],
 ];
 
 /** The page's lower corner, left dark in three faceted tones: 240 by 200 units. */

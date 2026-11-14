@@ -3,6 +3,7 @@ import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/shi
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { DESCENT_MS, LATE_DELAY } from './motion';
 import styles from './one-job.module.css';
 import { depthY, sceneX, WaterColumnArt } from './water-column-art';
@@ -113,7 +114,12 @@ function Dive({ x, reaches }: { readonly x: number; readonly reaches: boolean })
       <line x1={tip.x} y1={tip.y} x2={tip.x} y2={ROBOT_TOP} strokeWidth={3} data-tone="cable" />
       <Travel from={DESCENT_FROM} duration={DESCENT_MS}>
         <g transform={`translate(${tip.x} ${ROBOT_TOP}) scale(${ROBOT_SCALE})`}>
-          <Robot motion="dive" aim="down" mood={reaches ? 'happy' : 'confused'} />
+          <Robot
+            state={robotAt('one-skill-one-job').state}
+            motion="dive"
+            aim="down"
+            mood={reaches ? 'happy' : 'confused'}
+          />
         </g>
         {reaches ? <Check x={tip.x + 66} y={ROBOT_TOP + 40} /> : <Bubbles x={tip.x + 36} y={ROBOT_TOP - 30} />}
       </Travel>

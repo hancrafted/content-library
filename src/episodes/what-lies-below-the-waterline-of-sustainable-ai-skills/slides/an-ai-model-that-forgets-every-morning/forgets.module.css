@@ -15,8 +15,8 @@
   --frame-shade: oklch(0.44 0.05 55);
   --nail: oklch(0.28 0.02 260);
   --pane-glint: oklch(1 0 0 / 0.35);
-  --clock-rim-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
-  --clock-rim: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --clock-rim-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --clock-rim: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --clock-face-lit: oklch(0.985 0.005 90);
   --clock-face: oklch(0.92 0.012 85);
   --clock-hand: oklch(0.22 0.02 265);
@@ -32,8 +32,8 @@
   --frame-shade: oklch(0.36 0.045 55);
   --nail: oklch(0.22 0.02 260);
   --pane-glint: oklch(1 0 0 / 0.18);
-  --clock-rim-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
-  --clock-rim: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --clock-rim-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --clock-rim: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --clock-face-lit: oklch(0.86 0.008 90);
   --clock-face: oklch(0.78 0.012 85);
   --clock-hand: oklch(0.2 0.02 265);

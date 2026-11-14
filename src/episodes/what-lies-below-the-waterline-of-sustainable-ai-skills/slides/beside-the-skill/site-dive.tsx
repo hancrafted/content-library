@@ -8,6 +8,7 @@ import {
   SURFACE_WATERLINE,
   ZoneScene,
 } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { useId, type CSSProperties, type ReactNode } from 'react';
 import { DiveWater } from './dive-art';
@@ -179,7 +180,7 @@ function Descent({ at: g }: { readonly at: DiveGeometry }) {
             strokeWidth={2.5}
           />
           <g transform={`translate(${CABLE_X} ${g.robotTop}) scale(${ROBOT_SCALE})`}>
-            <Robot aim="down" />
+            <Robot state={robotAt('beside-the-skill').state} aim="down" />
           </g>
         </Travel>
       </g>

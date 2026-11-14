@@ -6,6 +6,7 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { WholeDepthScene } from '@/episodes/components/slide-shared/iceberg/whole-depth-scene';
 import { WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './iceberg.module.css';
 import { ManualArt, TrailBubbles } from './index-art';
@@ -81,7 +82,7 @@ function RisingRobot() {
       />
       <Travel from={`0 ${(RISE / WHOLE_DEPTH.height) * 100}%`} duration={RISE_MS} delay={RISE_DELAY_MS}>
         <g transform={`translate(${TRAIL_X} ${ROBOT_REST_Y}) scale(${ROBOT_SCALE})`}>
-          <Robot lamp={false} />
+          <Robot state={robotAt('the-whole-iceberg').state} lamp={false} />
         </g>
       </Travel>
     </>

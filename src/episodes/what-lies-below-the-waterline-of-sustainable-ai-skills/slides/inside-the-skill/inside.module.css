@@ -1,7 +1,7 @@
 /*
  * Slide token file of "Inside the skill" (FE-011 §2): the control-room wall, the paper card in its clear sleeve, the
  * species guide's book and the file objects, in the tones of Spec Option 16a (feedback 3, decision 46), each with its
- * dark value from the Option; the machine tones mix the global `--machine`. `primary` marks only the lit step 4, its
+ * dark value from the Option; the machine tones mix the global `--info`, as the shared robot's hull. `primary` marks only the lit step 4, its
  * arrow, and the species guide's ring and pill; no meaning colour on scenery.
  */
 
@@ -25,10 +25,10 @@
   --fish-shade: oklch(0.76 0.14 76);
   --robot-dark: oklch(0.28 0.02 260);
   --lamp: oklch(0.97 0.1 95);
-  --robot-glint: color-mix(in oklab, var(--machine) 45%, var(--card));
-  --robot-lit: color-mix(in oklab, var(--machine) 78%, var(--card));
-  --robot: var(--machine);
-  --robot-shade: color-mix(in oklab, var(--machine) 68%, var(--foreground));
+  --robot-glint: color-mix(in oklab, var(--info) 45%, var(--card));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, var(--card));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, var(--foreground));
 }
 
 :global(.dark) .scene {

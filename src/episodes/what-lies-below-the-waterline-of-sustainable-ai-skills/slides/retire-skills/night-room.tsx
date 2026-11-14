@@ -3,6 +3,7 @@ import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/ca
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { useId } from 'react';
 import { PORTHOLE } from './crate-facets';
 import styles from './retire.module.css';
@@ -27,7 +28,7 @@ function PortholeRobot() {
         className={styles.cable}
       />
       <g transform={`translate(${PORTHOLE.x} ${PORTHOLE.y - 12}) scale(0.5)`}>
-        <Robot aim="down" />
+        <Robot state={robotAt('retire-skills').state} aim="down" />
       </g>
     </g>
   );

@@ -5,6 +5,7 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { SkillScopeSquare } from '@/episodes/components/slide-shared/skill-scope-matrix/skill-scope-matrix';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { FrontPage } from './front-page';
 import de from './i18n/de.json';
@@ -57,7 +58,7 @@ function DepthMarker() {
       <AbyssBand />
       <line x1={70} y1={0} x2={70} y2={660} strokeWidth={3} className={styles.cable} />
       <g transform="translate(70 660) scale(1.4)">
-        <Robot aim="ahead" />
+        <Robot state={robotAt('who-owns-the-shared-skill-library').state} aim="ahead" />
       </g>
     </g>
   );
