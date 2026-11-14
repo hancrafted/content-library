@@ -98,7 +98,7 @@ function slideMarkup(slide: SourceSlide, number: number, { fragments, locks, tem
     purpose,
     words: slideWords(slide),
     options,
-    notePlaceholder: `Note on Slide ${number}`,
+    notePlaceholder: `Comment on Slide ${number} (optional)`,
   };
   return itemMarkup(item, templates.item);
 }
@@ -114,7 +114,7 @@ function titleArticle(html: string, { locks, templates }: SlideSources): string 
     title: 'Title slide and section slides',
     purpose: TITLE_PURPOSE,
     options: optionsMarkup({ slug: TITLE_ANCHOR, html, template: templates.option, locked }),
-    notePlaceholder: 'Note on the Title slide and section slides',
+    notePlaceholder: 'Comment on the Title slide and section slides (optional)',
   };
   return itemMarkup(item, templates.item);
 }

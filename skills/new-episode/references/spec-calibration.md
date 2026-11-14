@@ -10,7 +10,7 @@ What every Episode's Spec shares. [`to-decision-html`](../../to-decision-html/SK
 | Fidelity      | `mock`, a real-content mock of the Slide (`data-fidelity="mock"` on every item)                                                                                                                                          |
 | Design size   | 1920 × 1080: a mock is a Slide frame that grows to 1920 px on a wide screen                                                                                                                                              |
 | Audience      | Han, who judges each Slide's design and picks an Option per Slide                                                                                                                                                        |
-| Feedback      | The local review server (below): the page posts the form to it; it has no download, Copy prompt, handoff or Reset all, because a reset would unlock a locked Slide                                                       |
+| Feedback      | The local review server (below): the page posts the form to it. It has a Copy as prompt button (below) but no download, handoff or Reset all, because a reset would unlock a locked Slide                                |
 | Reflection    | _Before you approve_ lists these lenses, answered in the general comment: accessibility (contrast, focus, motion), the German text length, what each pick costs to build, what a Slide's Option copies from a shared one |
 | Template file | `assets/spec-template.html`                                                                                                                                                                                              |
 | Revision      | `data-revision` on `<html>` is the Gate round: one past the feedback rounds saved so far                                                                                                                                 |
@@ -42,7 +42,8 @@ The template is a page frame plus two `<template>` elements. The assembler (`npm
 
 - **Item.** One per Slide and one for the Title slide, whose `stage` holds each Option's mock and its `ol[data-spec="echoes"]`. The assembler sets `data-spec` (`slide` or `title-slide`), `id` and `data-item` to the Slide slug (`top` for the Title slide), `data-fidelity="mock"` and, on a Slide, `data-number`. The `note` slot is a `<textarea>` of 4 rows: the assembler sets its `name` (`note:<slug>`) and placeholder. The `words` slot is in the rail below the comment: one `<details data-panel="visual-idea|voice-script|speaker-notes">` per kind the Slide has words for, closed by default, in a `div.spec-words`.
 - **Option.** One per fragment Option. The assembler sets `data-option` from the fragment and `data-recommended` as `"true"` for a bare or `"true"` fragment attribute and `"false"` for an absent or `"false"` one: the form the skill's page contract reads, where the fragment's own bare attribute is not carried over, `data-picked` on the locked Option, and on the `pick` checkbox `name="pick:<slug>"`, the Option id as `value` and `checked` when locked. `stage` takes the fragment's mock, `caption` its figcaption, `build-notes` its build notes. The template puts `data-visual` and `data-design-width="1920"` on the `stage` element, so a mock widens to the design size.
-- **Rail.** The pick bar, Show details toggle and Reset of the item's rail are the template's own, with no slot: its script moves each Option's `pick` label into the bar, one pick at a time, so in the assembled markup the checkbox stays inside its Option, where the checks read it. Reset is disabled on a locked Slide.
+- **Rail.** The pick bar, Show details toggle and Reset of the item's rail are the template's own, with no slot: its script moves each Option's `pick` label into the bar, one pick at a time, so in the assembled markup the checkbox stays inside its Option, where the checks read it, and adds a last **Redesign** segment, which has no name and posts no value. Selecting Redesign clears the Slide's pick; Reset returns to the default pick. Both are disabled on a locked Slide.
+- **Default pick.** The assembler ticks the recommended Option's `pick` checkbox on a Slide with no lock, so the page and a form posted without script start on the recommendation. A lock ticks the locked Option instead, and a draft saved in the browser overrides both. The draft key carries a version, so a draft from before the default is not restored as Redesign.
 - **Toolbar.** The skill's `assets/toolbar.html`, copied in with the [Render presets](#render-presets) rows as its presets data; the page's `<nav>` is `data-page-nav`. `spec-preview` leaves out whatever is `[data-toolbar]`.
 - **Frame.** `data-revision` and `data-page-id` on `<html>`. The review form (`#spec-review`) holds the general comment `note:page`, the Next action `next` and Save; every pick and note field outside it joins it by `form="spec-review"`.
 - **Fragments.** The designers' format is the one in [`spec-designer.md`](spec-designer.md#the-markup-rules); the assembler reads it unchanged.
@@ -55,20 +56,24 @@ The template is a page frame plus two `<template>` elements. The assembler (`npm
 | Field                  | Carries                                                                        |
 | ---------------------- | ------------------------------------------------------------------------------ |
 | `pick:<slug>`          | One per ticked Option, valued by the Option id; `pick:top` for the Title slide |
-| `note:<slug>`          | The note on a Slide; required while it has no pick                             |
+| `note:<slug>`          | The note on a Slide; optional, a Slide set to Redesign needs none              |
 | `note:visual-language` | The note on the Visual language                                                |
 | `note:brief--<slug>`   | The note on a Brief heading, while the Brief is not approved                   |
 | `note:page`            | The general comment on the Spec as a whole                                     |
 | `next`                 | The Next action                                                                |
 
-The server writes the next `feedback/<NN>/feedback.md` (`via: spec`) and answers `303` to `/?saved=<NN>`; a refused review answers `400` and writes nothing. The lines are ``- `top` · design — picked: 0b``, ``- `<section>--<slide>` · design — picked: 3b | 4a, 4c | none — <note>``, ``- `visual-language` · design — <note>``, ``- `page` · design — <note>`` and ``- `next` · gate — redesign|approve``. The server refuses `approve` while any Slide has no pick or more than one, naming each Slide and why; the page checks the same before it posts.
+The server writes the next `feedback/<NN>/feedback.md` (`via: spec`) and answers `303` to `/?saved=<NN>`; a refused review answers `400` and writes nothing. The lines are ``- `top` · design — picked: 0b``, ``- `<section>--<slide>` · design — picked: 3b | 4a, 4c | none — <note>`` (`none` is Redesign, the note optional), ``- `visual-language` · design — <note>``, ``- `page` · design — <note>`` and ``- `next` · gate — redesign|approve``. The server refuses `approve` while any Slide is set to Redesign or has more than one pick, naming each Slide and why; the page checks the same before it posts or copies.
+
+### Copy as prompt
+
+The review panel has a Copy as prompt button (`data-copy-prompt`), and the toolbar a second one that runs the same copy. It puts one lead line, `Spec feedback for "<Episode title>", round <N> (feedback/<NN>/feedback.md):`, then the lines the server would write for the posted fields, on the clipboard, and says "Copied" in the review's status line. It works with the server stopped, and the template's `feedbackLines` function is the only formatter on the page. A test runs that function beside `reviewToFeedback` on the same fields, so the page and the server cannot drift.
 
 ## Next actions
 
-| Action     | The orchestrator then                                                                                            |
-| ---------- | ---------------------------------------------------------------------------------------------------------------- |
-| `redesign` | Starts a new Attempt for the Slides with zero or several picks ([Spec Gate](write-spec.md#the-spec-gate) step 4) |
-| `approve`  | Tells Han the Spec is theirs to approve ([Spec Gate](write-spec.md#the-spec-gate) step 5)                        |
+| Action     | The orchestrator then                                                                                                  |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `redesign` | Starts a new Attempt for the Slides set to Redesign (`picked: none`) ([Spec Gate](write-spec.md#the-spec-gate) step 4) |
+| `approve`  | Tells Han the Spec is theirs to approve ([Spec Gate](write-spec.md#the-spec-gate) step 5)                              |
 
 Preset `redesign`. A round saved with no `next` line is the one case to ask in chat.
 

@@ -107,18 +107,18 @@ A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A
 
 While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. Take this arrangement unless another keeps visual and comment in view together better: the item's decision and visual sticky in the main column, a sticky right-hand rail beside it, and a collapsible left navigation to win back width. The rail holds, top to bottom:
 
-- **Row 1:** the pick bar (step 5), a "Show details" toggle button (`aria-expanded`) and the item's Reset.
+- **Row 1:** the pick bar (step 5), with its Redesign segment last, a "Show details" toggle button (`aria-expanded`) and the item's Reset.
 - **The Option cards**, under row 1 and collapsed until Show details. A card keeps its description, its build notes and a View button, shows Recommended once, and leaves picking to the pick bar.
 - **Row 2:** the item's comment, a `<textarea>` of 4 rows by default.
 - **Supporting text**, below the comment: text the reader consults about an item rather than decides on (its background, rationale or the words behind it) sits in the rail as collapsibles, closed by default, so the visual leads the main column.
 
-A sticky top toolbar holds the page-wide reviewer tools in **one row** at every width from 1024 px up; below that it scrolls sideways inside itself, never wraps, and the page never scrolls sideways. Copy [the toolbar asset](assets/toolbar.html) into the page rather than writing your own: its comment says where each of its three blocks goes. It carries the outline dropdown, one segmented bar of the render presets the caller names (such as desktop, laptop, tablet, mobile; one selection that re-renders every preview at that size at once), the theme switch and a reserved slot at the end for more tools. Supply the presets as the asset's JSON data. A preset's label is its name only; its size sits in the tooltip and the accessible name ("Laptop, 1440 px"). Add a new tool to the reserved slot, never a second row. An item adds its own tools, such as state or motion controls, where it needs them.
+A sticky top toolbar holds the page-wide reviewer tools in **one row** at every width from 1024 px up; below that it scrolls sideways inside itself, never wraps, and the page never scrolls sideways. Copy [the toolbar asset](assets/toolbar.html) into the page rather than writing your own: its comment says where each of its three blocks goes. It carries the outline dropdown, one segmented bar of the render presets the caller names (such as desktop, laptop, tablet, mobile; one selection that re-renders every preview at that size at once), the theme switch and a reserved slot at the end for more tools. Supply the presets as the asset's JSON data. A preset's label is its name only; its size sits in the tooltip and the accessible name ("Laptop, 1440 px"). Add a new tool to the reserved slot, never a second row. A Copy as prompt button belongs there too when it fits the row: it runs the review panel's copy, and only the panel's button carries `data-copy-prompt`. An item adds its own tools, such as state or motion controls, where it needs them.
 
 A preset with both a width and a height has a **fixed design size**, such as a vertical 1080 × 1920 frame. The asset's script sets `--preview-width`, `--preview-height` and `--preview-scale` on `<html>`, plus `data-preview-fixed`. The page keeps the visual's layout at the design size and scales it down uniformly with `transform: scale(var(--preview-scale))`, with a negative margin that returns the room the unscaled box would take. It never reflows the content at a narrow width. The scale makes the whole frame fit the viewport: its height is `100vh` less the toolbar's height and a 16 px margin above and below, and its width follows from the aspect ratio. With the item's top under the toolbar, the frame is visible without scrolling.
 
 One small circle at the bottom right, 48 px across, moves through a long page: its upper half scrolls to the top and its lower half to the bottom. Each half shows only a caret icon, as inline SVG with no text, keeps its own accessible name ("Scroll to top", "Scroll to bottom") and a visible focus ring, and is at least 24 × 24 px (the WCAG 2.2 target size minimum).
 
-The page-wide review (the general comment, **Before you approve**, the Next action and Save) is one panel at the bottom of the page. It spans the full content width, under the rail's column too, and leaves no empty column beside it. Inside it, use the width: the reflection lenses in a row, then the comment beside the Next action and Save, stacked below 832 px.
+The page-wide review (the general comment, **Before you approve**, the Next action, Copy as prompt and Save) is one panel at the bottom of the page. It spans the full content width, under the rail's column too, and leaves no empty column beside it. Inside it, use the width: the reflection lenses in a row, then the comment beside the Next action and Save, stacked below 832 px.
 
 Context the reader consults rather than decides on, such as background cards ahead of the items, sits in one row of collapsibles, closed by default and opening in place, so the first decision starts high on the page. A field inside a closed collapsible still submits with the form, and a link to its anchor opens it.
 
@@ -141,10 +141,13 @@ Both modes carry one reflection block of open questions through lenses the items
 **`decide`**
 
 - Each item takes the response that fits it: boolean, single choice or multiple choice, behaving as the [feedback contract](references/feedback-contract.md#responses-resets-and-drafts) says.
-- The pick is the item's most visible control, found without reading: a segmented **pick bar** in row 1 of the item's rail, one segment per Option, single selection, with an unmistakable picked state. Each segment is at least 44 × 44 px and shows a text label; an `aria-label` alone is not shown. The recommended Option's segment carries a star icon whose accessible name includes "recommended".
+- The pick is the item's most visible control, found without reading: a segmented **pick bar** in row 1 of the item's rail, one segment per Option and a last **Redesign** segment, single selection across all of them, with an unmistakable picked state. Each segment is at least 44 × 44 px and shows a text label (Redesign reads "↻ Redesign"); an `aria-label` alone is not shown. The recommended Option's segment carries a star icon whose accessible name includes "recommended".
+- **The pick starts on the recommendation.** The recommended Option's pick input comes `checked` in the markup, so the default works without script and is sent with the form; a caller's lock or a saved draft overrides it. An item with no recommendation starts with no pick. Reviewers who agree with a recommendation do nothing.
+- **Redesign** is the explicit way to ask for new Options: selecting it clears the item's pick, and it posts no pick value of its own. The page shows it as the item's response, and the feedback carries it as `redesign`.
+- A comment is optional everywhere: it is never needed to pick an Option, to leave the recommendation, or to choose Redesign.
 - Picking shows the picked Option. Viewing an Option without picking it stays possible from its details: the View button on its card shows it on the visual and leaves the pick as it was.
-- Reset, beside the pick bar, clears the item's pick and not its comment. It is disabled on an item the caller has locked.
-- Every item with Options marks exactly one recommended, with its reason. The reviewer still makes the pick.
+- Reset, beside the pick bar, returns the item to its default (the recommendation, or the caller's lock) and not its comment. It is disabled on an item the caller has locked, and so is Redesign.
+- Every item with Options marks exactly one recommended, with its reason.
 - Each item shows its door (one-way or two-way) and effort.
 - Comments sit on each item and on each Option, unselected Options included, plus one general comment on the page as a whole, beside the Next action.
 - The reflection block, **Before you approve**, sits above the Next action, through lenses such as security, operations, information architecture and accessibility.
@@ -156,7 +159,7 @@ _Done when_ every item carries its mode's controls, and the page holds its mode'
 
 ## 6. Hand back the feedback
 
-Apply the [feedback contract](references/feedback-contract.md): Copy prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server.
+Apply the [feedback contract](references/feedback-contract.md): Copy as prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server. Every decision page has a Copy as prompt button, also one whose feedback is posted to the caller's server.
 
 _Done when_ the page names its [feedback file](references/feedback-contract.md#save) or the caller's destination.
 
@@ -173,7 +176,7 @@ The page carries these attributes; everything else on it is yours to shape.
 - Each Option, inside its item: `data-option`, a stable id unique in its item; `data-recommended`, `true` or `false`.
 - Each `<script type="text/x-mermaid">`: `data-diagram`, a unique name; the script holds the diagram's source.
 - Each `both` item's depth toggle: `data-depth-toggle`, exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.
-- Once per page: `data-reflection` on the reflection block, in `decide` above the Next action; `data-copy-prompt` on Copy prompt; `data-save` on Save, which downloads the feedback file.
+- Once per page: `data-reflection` on the reflection block, in `decide` above the Next action; `data-copy-prompt` on Copy as prompt; `data-save` on Save, which downloads the feedback file.
 - Once in `decide`: `data-next-action` on the block holding the `<select>` or radio inputs that choose the action; `data-reset-all` on Reset all.
 - Once in `explain`: `data-questions` on the Questions? block, holding the editable `<textarea>` for the reader's questions.
 - Optional: `data-visual` on the visual a comment is about, and on a laptop the content column the grader measures: put it on the box that fills the column. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item.
@@ -181,7 +184,7 @@ The page carries these attributes; everything else on it is yours to shape.
 
 ### Hand over
 
-Open the page with the platform's opener, then print three lines: the page's absolute path and its mode; the feedback file's name or the caller's destination; and how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session. A person who wants to check the page follows [verification](references/verification.md).
+Open the page with the platform's opener, then print three lines: the page's absolute path and its mode; the feedback file's name or the caller's destination; and how to continue: after Save, say "saved feedback"; after Copy as prompt, paste the prompt into this or any agent session. A person who wants to check the page follows [verification](references/verification.md).
 
 _Done when_ the page is inlined, the person has it open and has those three lines.
 

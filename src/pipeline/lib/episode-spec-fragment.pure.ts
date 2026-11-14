@@ -35,8 +35,8 @@ export const pickBox = (slug: string, id: string, checked = false): string =>
 /** The leading digits of an Option id: its Slide's number. */
 const slideNumber = (id: string): number => Number(/^\d+/.exec(id)?.[0] ?? '0');
 
-/** A figure tag marked recommended: `data-recommended` bare or `"true"`, as `isRecommended` reads it. */
-const RECOMMENDED = /\sdata-recommended(?:="true"|(?=[\s>/]))/;
+/** A figure tag marked recommended: `data-recommended` bare, empty or `"true"`, not `"false"`, as `isRecommended` reads it. */
+const RECOMMENDED = /\sdata-recommended(?!\s*=\s*"false")/;
 
 /** The contract's findings on one Slide of a fragment. */
 function checkFragmentSlide({ slug, html }: FragmentSlide): string[] {
