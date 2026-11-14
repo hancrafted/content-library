@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
-import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { SCENE_HEIGHT, SCENE_WIDTH, ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';
@@ -9,6 +9,7 @@ import en from './i18n/en.json';
 import { GlossaryTerms, ProjectFile, RunColumn, type GlossaryTerm } from './run-column';
 import { SkillNest } from './skill-nest';
 import styles from './slide.module.css';
+import { CURRENT_BOX, CurrentArt, TwilightFloor } from './water-art';
 
 const CONTEXT_ENGINEERING = {
   slug: 'anthropic-context-engineering',
@@ -58,19 +59,18 @@ function RunsArrow({ label }: { readonly label: string }) {
   );
 }
 
-/** The read-back current: Monday's files carried into the start of Thursday's run. Drawn as the focal line. */
+/** The read-back current: Monday's files carried into the start of Thursday's run, the Spec's faceted current. */
 function ReadBackCurrent({ label }: { readonly label: string }) {
   return (
-    <div className="flex items-center justify-center @3xl:items-start">
+    <div className="flex items-center justify-center @3xl:items-stretch">
       <svg
         role="img"
         aria-label={label}
-        viewBox="0 0 64 160"
+        viewBox={CURRENT_BOX}
         preserveAspectRatio="none"
-        className={cn(styles.current, 'h-16 w-16 rotate-90 @3xl:h-full @3xl:min-h-40 @3xl:rotate-0')}
+        className={cn(styles.art, styles.current, 'h-16 w-16 rotate-90 @3xl:h-full @3xl:min-h-40 @3xl:rotate-0')}
       >
-        <path d="M 4 156 C 40 150, 30 60, 50 18" strokeWidth={6} fill="none" vectorEffect="non-scaling-stroke" />
-        <polygon points="40,20 60,0 60,28" />
+        <CurrentArt />
       </svg>
     </div>
   );
@@ -78,7 +78,7 @@ function ReadBackCurrent({ label }: { readonly label: string }) {
 
 /**
  * "grill-with-docs keeps context beside the skill" (Spec Option 19b): one skill against two runs, outside the control
- * room, on the real files. Overrules `three-column` for a Scene from `SlideFrame`: grill-with-docs spans the top as one
+ * room, on the real files, its sheets, current, light shafts and seabed lifted from the Spec (`paper-art.tsx`, `water-art.tsx`). Overrules `three-column` for a Scene from `SlideFrame`: grill-with-docs spans the top as one
  * sheet holding the two skills it runs; Monday's and Thursday's runs sit beneath it, each writing a glossary and
  * decision records beside it. Keeps `motion: local`, recast: the current carries Monday's files in, then Thursday's
  * glossary gains "Core", its row filling primary.
@@ -91,6 +91,7 @@ export const howGrillMeAndGrillWithDocsWork = slide({
   segments: [{ slug: 'the-interview-is-the-card' }, { slug: 'follow-the-arrow' }, { slug: 'skills-can-run-skills' }],
   content: ({ t, target, Marker }) => {
     const sheet = (id: 'grilling' | 'domain') => ({
+      paper: id,
       kind: t(`sheets.${id}.kind`),
       path: PATHS[id],
       steps: STEPS.map((step) => ({ chat: t(`sheets.${id}.steps.${step}`), coding: t(`coding.${id}.${step}`) })),
@@ -125,6 +126,7 @@ export const howGrillMeAndGrillWithDocsWork = slide({
           target={n === 2 ? target('run-2') : undefined}
         >
           <ProjectFile
+            paper={`glossary-${n}`}
             kind={{ chat: t('files.glossary.kind'), coding: PATHS.glossary }}
             beside={t('beside')}
             focus={grows}
@@ -135,7 +137,11 @@ export const howGrillMeAndGrillWithDocsWork = slide({
               terms={terms.map(term)}
             />
           </ProjectFile>
-          <ProjectFile kind={{ chat: t('files.decisions.kind'), coding: PATHS.decisions }} beside={t('beside')}>
+          <ProjectFile
+            paper={`decisions-${n}`}
+            kind={{ chat: t('files.decisions.kind'), coding: PATHS.decisions }}
+            beside={t('beside')}
+          >
             <ol className="flex flex-col gap-1">
               {DECISIONS.slice(0, decisions).map(({ entry, file }, index) => (
                 <li key={file} className={cn(grows && index === decisions - 1 && 'font-semibold')}>
@@ -155,7 +161,7 @@ export const howGrillMeAndGrillWithDocsWork = slide({
         <ZoneScene
           zone="twilight"
           label={t('alt.scene')}
-          className="rounded-2xl shadow-md"
+          className={cn(styles.art, 'rounded-2xl shadow-md')}
           overlay={
             <div className="flex flex-col gap-2 p-4 @3xl:p-6">
               <SkillNest
@@ -177,7 +183,9 @@ export const howGrillMeAndGrillWithDocsWork = slide({
               </p>
             </div>
           }
-        />
+        >
+          <TwilightFloor width={SCENE_WIDTH} height={SCENE_HEIGHT} />
+        </ZoneScene>
         <footer className="flex flex-col gap-3 border-t border-border pt-4 @2xl:flex-row @2xl:items-start">
           <p className="w-fit shrink-0 rounded-full border border-border px-3 text-caption font-semibold text-muted-foreground">
             {t('closing.chip')}
