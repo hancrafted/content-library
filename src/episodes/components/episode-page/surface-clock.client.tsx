@@ -2,7 +2,7 @@
 
 import { useUrlState } from '@/shared/hooks/use-url-state';
 import { anchorOffset } from '@/shared/lib/anchor-geometry.pure';
-import { inkScale, type INK_PROFILES } from '@/shared/lib/ink-transition.pure';
+import { inkTransform, type INK_PROFILES } from '@/shared/lib/ink-transition.pure';
 import { ownSignals } from '@/shared/lib/owned-signals';
 import type { SurfaceBoundary, SurfaceClock, SurfaceTone } from '@/shared/lib/surface-clock';
 import { driveSurfaceClock } from '@/shared/lib/surface-clock-driver';
@@ -100,7 +100,7 @@ function publishEdge(
   const render = (progress: number | undefined) => {
     if (progress === undefined) return;
     owned.property('--surface-edge-progress', String(progress));
-    if (inkSignals && surface.effect) inkSignals.property('transform', `scaleY(${inkScale(surface.effect, progress)})`);
+    if (inkSignals && surface.effect) inkSignals.property('transform', inkTransform(surface.effect, progress));
   };
   const suppress = (value: boolean) => effectSignals?.attribute('data-transition-suppressed', String(value));
   render(clock.getSnapshot().edges[index]?.progress);

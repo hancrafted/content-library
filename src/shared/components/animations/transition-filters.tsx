@@ -120,8 +120,8 @@ function WaveFilter({ id }: { id: string }) {
 }
 
 /**
- * The `bubbles` water line: a long, low swell only, so the incoming surface rises as calm water rather than a wavy
- * ink edge. The bubbles themselves are separate round shapes (`BubbleRise`), rising above this line.
+ * The `bubbles` water line for the landing's `LiquidInkTransition` only: a long, low swell. The Episode page draws
+ * its `bubbles` edge with `WaveFront` instead, a filter-free faceted crest.
  */
 function BubblesFilter({ id }: { id: string }) {
   return (
