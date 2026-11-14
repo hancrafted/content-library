@@ -27,7 +27,7 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, Keeping it alive lit",
+  "gauge": "Depth gauge",
   "aiStatement": "Keeping a skill right costs you every month",
   "entries": {
     "details": "+ Project details changed",

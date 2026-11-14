@@ -27,7 +27,7 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, What context goes inside lit",
+  "gauge": "Depth gauge",
   "aiStatement": "Domain knowledge goes inside, tied to the step that needs it",
   "extras": {
     "armPreset": "arm preset",

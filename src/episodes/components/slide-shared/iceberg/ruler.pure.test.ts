@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { descentOf, isDarkZone, rulerBands, zoneOf, ZONES, zoneToken, type Zone } from './ruler.pure';
+import { isDarkZone, rulerBands, zoneOf, ZONES, zoneToken, type Zone } from './ruler.pure';
 
 /*
  * The depth ruler's layout: the five zone bands from the Surface down, each holding one tile per Section that sits in
@@ -33,26 +33,17 @@ describe('success cases', () => {
     expect(bands).toEqual(expected);
   });
 
-  it('colours each zone from its one token and turns text light on the two dark zones only', () => {
+  it('colours each zone from its one token and turns text light from the Twilight down', () => {
     // ARRANGE
     const expected = [
       { token: 'var(--zone-surface)', dark: false },
       { token: 'var(--zone-sunlit)', dark: false },
-      { token: 'var(--zone-twilight)', dark: false },
+      { token: 'var(--zone-twilight)', dark: true },
       { token: 'var(--zone-midnight)', dark: true },
       { token: 'var(--zone-abyss)', dark: true },
     ];
     // ACT
     const seen = ZONES.map((zone) => ({ token: zoneToken(zone), dark: isDarkZone(zone) }));
-    // ASSERT
-    expect(seen).toEqual(expected);
-  });
-
-  it('sends the view further down for a deeper Section: none for the Surface, four bands to the Abyss', () => {
-    // ARRANGE
-    const expected = [0, 0, 1, 1, 2, 2, 3, 4];
-    // ACT
-    const seen = WATERLINE_SECTIONS.map((_, section) => descentOf(WATERLINE_SECTIONS, section));
     // ASSERT
     expect(seen).toEqual(expected);
   });

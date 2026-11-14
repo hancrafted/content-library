@@ -1,4 +1,5 @@
 {
+  "caption": "",
   "label": "Ein Forschungsschiff an der Wasserlinie hat seinen Tauchroboter am Kabel vom A-Rahmen herabgelassen; er hängt knapp über dem Wasser, seine Lampe leuchtet nach unten. Dahinter ein Eisberg, der größte Teil unter der Wasserlinie, über den Meereszonen bis hinab in die Tiefsee.",
   "youAreHere": "Du bist hier · Oberfläche",
   "zones": {
@@ -45,7 +46,7 @@
       }
     }
   },
-  "ruler": "Tiefenlineal, die Oberfläche hervorgehoben",
+  "gauge": "Tiefenanzeige",
   "view": {
     "label": "Ansicht",
     "chat": "Chat-App",

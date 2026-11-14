@@ -27,7 +27,7 @@
       "science": "Abyssopelagial"
     }
   },
-  "ruler": "Tiefenlineal, Ihn teilen hervorgehoben",
+  "gauge": "Tiefenanzeige",
   "aiStatement": "Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum",
   "owner": "Owner: Laborteam · v1.3 · Prüfung im März",
   "analogy": "Die Karte im Flottenhandbuch des Instituts.",

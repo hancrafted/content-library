@@ -139,15 +139,19 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('lights only its own Section on the ruler, never a neighbour', () => {
+  it('names only its own zone on the depth gauge, never a neighbour, and carries no Section tiles', () => {
     // ARRANGE
-    const expected = [['0'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7']];
+    const zones = ['surface', 'surface', 'sunlit', 'sunlit', 'twilight', 'twilight', 'midnight', 'abyss'];
+    const expected = zones.map((zone) => ({ current: [zone], tiles: 0 }));
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      return $('[data-tile][data-lit]')
-        .toArray()
-        .map((tile) => $(tile).attr('data-section'));
+      return {
+        current: $('[data-depth-gauge] [data-gauge-zone][data-current]')
+          .toArray()
+          .map((segment) => $(segment).attr('data-gauge-zone')),
+        tiles: $('[data-tile]').length,
+      };
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -219,16 +223,18 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('names the five zones on every ruler by their ocean terms, read from each Slide in its own words', () => {
+  it("names each Section's zone on its gauge by its ocean term, read from each Slide in its own words", () => {
     // ARRANGE
-    const terms = [
-      'the sea surface and the air above it',
-      'epipelagic',
-      'mesopelagic',
-      'bathypelagic',
-      'abyssopelagic',
+    const expected = [
+      ['the sea surface and the air above it'],
+      ['the sea surface and the air above it'],
+      ['epipelagic'],
+      ['epipelagic'],
+      ['mesopelagic'],
+      ['mesopelagic'],
+      ['bathypelagic'],
+      ['abyssopelagic'],
     ];
-    const expected = [terms, terms, terms, terms, terms, terms, terms, terms];
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);

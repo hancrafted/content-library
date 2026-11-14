@@ -1,6 +1,6 @@
 /*
  * The Iceberg style's depth (docs/design/design-guide.md#iceberg, design-ADR 0025): the five zones from the top, the
- * one mapping from a zone to its colour token and its text, and the depth ruler's layout, one tile per Section on its
+ * one mapping from a zone to its colour token and its text, and the rail's layout, one tile per Section on its
  * zone's band. An Episode hands over which zone each of its Sections sits in; the style knows no Episode.
  */
 
@@ -8,15 +8,15 @@
 export const ZONES = ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'] as const;
 export type Zone = (typeof ZONES)[number];
 
-/** Zones dark in both themes, whose surfaces carry light text in both. */
-const DARK_ZONES: ReadonlySet<Zone> = new Set(['midnight', 'abyss']);
+/** Zones dark enough for light text, the same in both themes (one zone palette, Han, 2026-11-14): Twilight down. */
+const DARK_ZONES: ReadonlySet<Zone> = new Set(['twilight', 'midnight', 'abyss']);
 
-/** The zone's one colour token in `globals.css`, light and dark there: what every Iceberg surface reads. */
+/** The zone's one colour token in `globals.css`, one value in both themes: what every Iceberg surface reads. */
 export function zoneToken(zone: Zone): string {
   return `var(--zone-${zone})`;
 }
 
-/** True where the zone is dark in both themes, so text on it turns light. */
+/** True where the zone is dark, so text on it turns light, in both themes alike. */
 export function isDarkZone(zone: Zone): boolean {
   return DARK_ZONES.has(zone);
 }
@@ -28,12 +28,7 @@ export function zoneOf(sections: readonly Zone[], section: number): Zone {
   return zone;
 }
 
-/** How many bands the ruler's view travels down from the Surface to reach a Section's band. */
-export function descentOf(sections: readonly Zone[], section: number): number {
-  return ZONES.indexOf(zoneOf(sections, section));
-}
-
-/** One Section's tile on the ruler; `lit` only on the Section the Slide belongs to. */
+/** One Section's tile on the rail; `lit` only on the Section the Slide belongs to. */
 export interface RulerTile {
   readonly section: number;
   readonly lit?: true;
@@ -46,7 +41,7 @@ export interface RulerBand {
 }
 
 /**
- * The ruler's five bands, each Section's tile on its zone's band and the Section `lit` lit. Sections only go down:
+ * The rail's five bands, each Section's tile on its zone's band and the Section `lit` lit. Sections only go down:
  * an Episode's descent never climbs back towards the Surface.
  */
 export function rulerBands(sections: readonly Zone[], lit: number): readonly RulerBand[] {

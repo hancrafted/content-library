@@ -16,7 +16,7 @@ export const whenToWriteOne = slide({
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
         section={2}
         wide
         statement={t('aiStatement')}

@@ -16,7 +16,7 @@ export const whatStaysBeside = slide({
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
         section={5}
         wide
         tilt="right"

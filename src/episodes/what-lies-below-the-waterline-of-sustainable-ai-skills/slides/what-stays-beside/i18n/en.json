@@ -27,7 +27,7 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, What context stays beside lit",
+  "gauge": "Depth gauge",
   "file": "project file",
   "aiStatement": "Project details stay beside the skill",
   "sites": {

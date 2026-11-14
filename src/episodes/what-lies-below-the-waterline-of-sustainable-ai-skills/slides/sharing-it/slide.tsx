@@ -16,7 +16,7 @@ export const sharingIt = slide({
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
         section={6}
         wide
         statement={t('aiStatement')}

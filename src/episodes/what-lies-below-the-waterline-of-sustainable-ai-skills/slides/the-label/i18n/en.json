@@ -27,7 +27,7 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, The description lit",
+  "gauge": "Depth gauge",
   "aiStatement": "The description is all the AI sees",
   "description": "“Use when we reach a new site and need a sample from the seabed.”",
   "analogy": "The index is open, every card behind it closed.",

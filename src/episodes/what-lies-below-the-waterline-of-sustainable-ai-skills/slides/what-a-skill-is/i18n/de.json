@@ -27,7 +27,7 @@
       "science": "Abyssopelagial"
     }
   },
-  "ruler": "Tiefenlineal, Was ein Skill ist hervorgehoben",
+  "gauge": "Tiefenanzeige",
   "aiStatement": "Ein Skill ist ein Name, eine Beschreibung und Anweisungen",
   "analogy": "Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte.",
   "agent": "SKILL.md, dazu scripts/ references/ assets/",

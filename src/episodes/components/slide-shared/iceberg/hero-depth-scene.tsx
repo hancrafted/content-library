@@ -1,15 +1,15 @@
 import { cn } from '@/shared/lib/utils';
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
+import { DepthGauge } from './depth-gauge';
 import styles from './hero-depth-scene.module.css';
 import { HERO_DEPTH, heroDepthBands } from './hero-depth.pure';
-import { isDarkZone, zoneToken } from './ruler.pure';
+import { zoneToken } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Iceberg } from './scenery/iceberg';
 import { depthScaleForKeel } from './scenery/scenery.pure';
 import { FishSchool, Whale } from './scenery/sea-life';
 import { LightRays } from './scenery/seabed';
 import { Clouds, SunMoon } from './scenery/sky';
-import { ZoneLabel } from './zone-label';
 import { Band } from './zone-scene';
 import sceneStyles from './zone-scene.module.css';
 import { seaFacets } from './zone-scene.pure';
@@ -22,15 +22,18 @@ const WATER = BANDS.slice(1).map((band, depth) => ({
   ...band,
   facets: seaFacets({ width, height: band.bottom - band.top, cell: 140, seed: 5 + depth * 6 }),
 }));
-/** Clouds kept to the right and low on the left, so the title and lede read on open sky. */
+/** Clouds kept to the right and low on the left, so the title reads on open sky; heights above the waterline. */
 const CLOUDS = [
   { x: 1050, y: 210, scale: 0.9, shape: 0 },
-  { x: 160, y: 660, scale: 0.85, shape: 0 },
-  { x: 560, y: 560, scale: 0.55, shape: 1 },
+  { x: 160, y: waterline - 50, scale: 0.85, shape: 0 },
+  { x: 560, y: waterline - 150, scale: 0.55, shape: 1 },
 ] as const;
-const BERG = { x: 1010, scale: 0.8, keel: 900 } as const;
+/** The iceberg, its keel, the fish and the whale at their depths under the waterline. */
+const BERG = { x: 1010, scale: 0.8, keel: waterline + 190 } as const;
+const FISH = { x: 790, y: waterline + 62 } as const;
+const WHALE = { x: 640, y: waterline + 205, scale: 0.7 } as const;
 
-/** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale clear of the ruler. */
+/** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale. */
 function Depth({ children }: { readonly children?: ReactNode }) {
   return (
     <>
@@ -55,31 +58,10 @@ function Depth({ children }: { readonly children?: ReactNode }) {
         scale={BERG.scale}
         depthScale={depthScaleForKeel(0, (BERG.keel - waterline) / BERG.scale)}
       />
-      <FishSchool x={790} y={772} />
-      <Whale x={640} y={915} scale={0.7} />
+      <FishSchool x={FISH.x} y={FISH.y} />
+      <Whale x={WHALE.x} y={WHALE.y} scale={WHALE.scale} />
       {children}
     </>
-  );
-}
-
-/** The ruler drawn down the Scene at the left inset: each zone's plain name at its band, the Surface's tile lit. */
-function Ruler({ zones, label }: { readonly zones: ZoneWords; readonly label: string }) {
-  return (
-    <ol aria-label={label} data-hero-ruler className={styles.ruler}>
-      {BANDS.map(({ zone, label: y }) => (
-        <li
-          key={zone}
-          data-ruler-zone={zone}
-          data-lit={zone === 'surface' ? '' : undefined}
-          data-dark={isDarkZone(zone) ? '' : undefined}
-          style={{ '--at-y': y } as CSSProperties}
-          className={styles.zone}
-        >
-          <span aria-hidden="true" className={styles.tile} />
-          <ZoneLabel words={zones[zone]} className={styles.label} />
-        </li>
-      ))}
-    </ol>
   );
 }
 
@@ -89,17 +71,17 @@ export interface HeroDepthSceneProps {
   /** Words for the picture: the drawing sits in the Backdrop, hidden from assistive tech, so they are read here. */
   readonly label: string;
   readonly zones: ZoneWords;
-  /** The ruler's name for assistive tech. */
-  readonly rulerLabel: string;
+  /** The depth gauge's name for assistive tech. */
+  readonly gaugeLabel: string;
   /** The "you are here" pill and the point in the drawing it hangs under, such as the robot. */
   readonly marker: { readonly text: string; readonly x: number; readonly y: number };
-  /** The Slide's figures: SVG in the drawing's 1200 by 1000 space, waterline at `HERO_DEPTH.waterline`. */
+  /** The Slide's figures: SVG in the drawing's `HERO_DEPTH` space, waterline at `HERO_DEPTH.waterline`. */
   readonly children?: ReactNode;
   /** HTML the Slide places over the hero, such as the view switch. */
   readonly overlay?: ReactNode;
 }
 
-/** The whole depth in the Slide's Backdrop: decoration, full-bleed, filled from the bottom. */
+/** The whole depth in the Slide's Backdrop: decoration, full-bleed, anchored at the top so sky and sun stay in view. */
 function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> & HeroDepthSceneProps['layers']) {
   return (
     <Backdrop mobile>
@@ -110,7 +92,7 @@ function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> &
       >
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="xMidYMax slice"
+          preserveAspectRatio="xMidYMin slice"
           aria-hidden="true"
           data-hero-depth
           className="absolute inset-0 size-full"
@@ -141,11 +123,12 @@ function Marker({ marker: { text, x, y } }: Pick<HeroDepthSceneProps, 'marker'>)
 /**
  * The Title slide's full-bleed hero in the Iceberg style (the Spec's picked Title-slide Option 0a): one drawing of the
  * whole depth fills the Slide from edge to edge as its Backdrop, under the hidden table of contents too, so the
- * Slide's title and lede sit in its sky. Over it, the depth ruler down the left inset, clear of the table of contents, each zone's label beside its
- * band, and the "you are here" pill under the figure the Slide names. The drawing fills its box from the bottom
- * (`slice`); the ruler and the pill follow it through the same scale, read from the overlay's container size.
+ * Slide's title sits in its sky. Over it, the slim depth gauge at the right edge naming the Surface, and the "you are
+ * here" pill under the figure the Slide names. The drawing fills its box from the top (`xMidYMin slice`), so a wide
+ * screen keeps the sky and the sun and crops deep water instead; the pill follows it through the same scale, read
+ * from the overlay's container size.
  */
-export function HeroDepthScene({ layers, label, zones, rulerLabel, marker, children, overlay }: HeroDepthSceneProps) {
+export function HeroDepthScene({ layers, label, zones, gaugeLabel, marker, children, overlay }: HeroDepthSceneProps) {
   return (
     <>
       <Drawing Backdrop={layers.Backdrop}>{children}</Drawing>
@@ -157,7 +140,7 @@ export function HeroDepthScene({ layers, label, zones, rulerLabel, marker, child
         <p data-hero-label className="sr-only">
           {label}
         </p>
-        <Ruler zones={zones} label={rulerLabel} />
+        <DepthGauge zone="surface" words={zones.surface} label={gaugeLabel} className={styles.gauge} />
         <Marker marker={marker} />
         {overlay}
       </div>

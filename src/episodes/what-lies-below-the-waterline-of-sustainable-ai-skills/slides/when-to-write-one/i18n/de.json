@@ -27,7 +27,7 @@
       "science": "Abyssopelagial"
     }
   },
-  "ruler": "Tiefenlineal, Wann Du einen schreibst hervorgehoben",
+  "gauge": "Tiefenanzeige",
   "aiStatement": "Beim dritten Mal schreibst Du den Skill auf",
   "steps": {
     "first": "1.",

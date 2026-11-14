@@ -16,7 +16,7 @@ export const whatASkillIs = slide({
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
         section={1}
         statement={t('aiStatement')}
         chat={t('analogy')}

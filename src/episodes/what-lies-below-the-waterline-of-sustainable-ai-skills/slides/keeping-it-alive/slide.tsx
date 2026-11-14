@@ -16,7 +16,7 @@ export const keepingItAlive = slide({
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
         section={7}
         wide
         statement={t('aiStatement')}
