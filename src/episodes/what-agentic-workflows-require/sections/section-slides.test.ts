@@ -178,11 +178,17 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('holds only its section slide in each placement marker, leaving the page Slides to the Section jobs', () => {
+  it('opens each placement marker with its own section slide, never a page Slide', () => {
     // ARRANGE
-    const expected = [1, 1, 1, 1, 1];
+    const expected = [
+      'a-thought-experiment',
+      'what-an-agentic-workflow-is',
+      'how-far-you-step-out',
+      'what-it-requires-of-each-person',
+      'what-it-requires-of-the-organisation',
+    ];
     // ACT
-    const actual = SECTIONS.map((section) => section.length);
+    const actual = SECTIONS.map(([opener]) => opener.slug);
     // ASSERT
     expect(actual).toEqual(expected);
   });

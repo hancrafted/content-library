@@ -1,7 +1,7 @@
 {
   "title": "What agentic workflows require of people and organisations · hancrafted",
   "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-  "toc": "Episodes Collapse contents What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation Open contents : Contents Episodes What agentic workflows require of people and organisations 1 A thought experiment 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation",
+  "toc": "Episodes Collapse contents What agentic workflows require of people and organisations 1 A thought experiment The thought experiment Now with agents 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation Open contents : Contents Episodes What agentic workflows require of people and organisations 1 A thought experiment The thought experiment Now with agents 2 What an agentic workflow is 3 How far you step out 4 What it requires of each person 5 What it requires of the organisation",
   "slides": [
     {
       "id": "top",
@@ -10,6 +10,14 @@
     {
       "id": "a-thought-experiment",
       "text": "A thought experiment Four perfect cards on one board, and the party still fails between them. Food & drinks Venue kitchen 31 vegetarian Egg dishes vegetarian served with eggs breaks: together the word meant something else"
+    },
+    {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "A thought experiment (1/2) Page 1 of 2 The thought experiment Four excellent freelancers each deliver exactly what their note asked, and none of it adds up. Shared board · their only channel: notes, no meetings, no calls Activities Own goal: Team event for 200, booked Paintball × 200 Travel : Accessible bus, 10 wheelchair users The 10 sit it out breaks “together” + Travel Own goal: Everyone there, no extra cost Everyone carpools Food & drinks : Open bar until 01:00 The drivers have been drinking breaks “safely” + Venue Own goal: Scenic, within budget Alpine hut, 1,800 m Travel : Guest info: route and times only Summer clothes, 6 °C at night breaks “safely” + Food & drinks Own goal: Dinner for 200, ordered 31 vegetarian Venue : Hut kitchen reads it as eggs allowed Indian colleagues can't eat breaks “together” = Party, 20 June Goal: everyone celebrates together and gets home safely ✗ together Activities, Food & drinks ✗ safely Travel, Venue The question What do you, as the manager, need to do so the result still comes out great?"
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "A thought experiment (2/2) Page 2 of 2 Now with agents AI speeds up the doing, but it can't add context nobody gave it: the same four failures arrive in 2 minutes instead of 2 weeks. Same board, same notes · handed to four agents Activities Own goal met 2 min Paintball × 200 Travel : accessible bus ✗ together + Travel Own goal met 2 min Everyone carpools Food & drinks : open bar to 01:00 ✗ safely + Venue Own goal met 2 min Alpine hut, 1,800 m Travel : route and times only ✗ safely + Food & drinks Own goal met 2 min 31 vegetarian Venue : hut kitchen: eggs OK ✗ together = Party, 20 June Goal: everyone celebrates together and gets home safely ✗ together Activities, Food & drinks ✗ safely Travel, Venue Every card 2 min 2 weeks · the same four failures, reached faster What no agent was told Trained on public text Your company's own talk isn't in it Rare facts are learned poorly So context must come with the task"
     },
     {
       "id": "what-an-agentic-workflow-is",
@@ -34,6 +42,14 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     { "id": "a-thought-experiment", "text": "A thought experiment No speaker notes for this Slide." },
+    {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "The thought experiment A real version of the board Anthropic's lead agent gave its subagents vague task descriptions, and they duplicated each other's searches and left gaps until each task carried an objective, an output format, tool guidance and boundaries; one team's account of its own system, not a controlled comparison 1 . Sources (1) Anthropic, How we built our multi-agent research system ( opens in a new tab ) anthropic.com"
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "Now with agents A model can learn from public text alone the LLaMA authors set out to show state-of-the-art models can be trained using publicly available datasets exclusively 1 . Sources (1) Touvron et al., LLaMA: Open and Efficient Foundation Language Models ( opens in a new tab ) arxiv.org Customer conversations are not training data Anthropic states that by default it does not use inputs or outputs of its commercial products for training, so a company's internal processes, decisions and naming are mostly absent from what a model learned 1 . Sources (1) Anthropic, Is my data used for model training? (commercial products) ( opens in a new tab ) privacy.claude.com Rare facts are learned poorly accuracy on a fact question tracks how many training documents mention it, so even a fact that is in the data is weak when it is rare 1 . Sources (1) Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge ( opens in a new tab ) arxiv.org The context must be supplied the retrieval literature's remedy is to pair the model with a searchable memory consulted at request time, which is why organisational knowledge has to arrive with the request 1 . Sources (1) Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks ( opens in a new tab ) arxiv.org"
+    },
     { "id": "what-an-agentic-workflow-is", "text": "What an agentic workflow is No speaker notes for this Slide." },
     { "id": "how-far-you-step-out", "text": "How far you step out No speaker notes for this Slide." },
     {
@@ -53,6 +69,14 @@
     {
       "id": "a-thought-experiment",
       "text": "A thought experiment 0:00 – 0:24 Imagine the board Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired four excellent freelancers to plan it, one each for Activities, Travel, Venue and Food and drinks. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes."
+    },
+    {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "The thought experiment 0:00 – 0:21 Everyone delivered Now the day arrives, and every one of the four has done exactly what was asked. Activities booked a team-building event, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly. 0:21 – 1:14 None of it adds up And still the party fails, because the failures sit between the cards. Activities booked paintball, while Travel had booked an accessible bus for ten colleagues in wheelchairs, who now sit it out. Travel had everyone carpool, while Food and drinks booked an open bar until one in the morning, so the drivers have been drinking. Venue found a scenic alpine hut, while the guest info from Travel gives only route and times, so people arrive in summer clothes for six degrees at night. And dinner was ordered with 31 vegetarian, which the hut's kitchen reads the Western way, so egg dishes land in front of colleagues who cannot eat them. Every step was perfect, and perfect steps do not add up on their own. 1:14 – 1:46 Your question So here is the question, and I want you to keep it in your head for the whole Episode. What do you, as the manager, need to do so the result still comes out great? One tempting answer is to get the four talking, to hold more meetings. I will leave the question open for now, and we will answer it step by step, from different angles, until we collect the answers at the end."
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "Now with agents 0:00 – 0:21 Speed, not context Now give the same four cards to agents. Each card is ticked far faster, which is wonderful, and it is exactly where the trap sits. AI speeds up the doing, but it cannot add context that nobody gave it, and the paintball agent never saw the accessible bus. 0:21 – 0:50 Plausible guess What makes this worse is that an agent which finds a gap tends to fill it with a plausible guess, instead of stopping to ask you. Nobody told the food agent what vegetarian means for these colleagues, so it picks the most common reading and carries on. The same four failures appear in the same four places, only now you reach them in two minutes instead of two weeks."
     },
     {
       "id": "what-an-agentic-workflow-is",

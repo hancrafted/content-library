@@ -1,7 +1,7 @@
 {
   "title": "Was agentische Workflows von Menschen und Organisationen verlangen · hancrafted",
   "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-  "toc": "Episoden Inhalt einklappen Was agentische Workflows von Menschen und Organisationen verlangen 1 Ein Gedankenexperiment 2 Was ein agentischer Workflow ist 3 Wie weit Du Dich herausnimmst 4 Was es von jeder Person verlangt 5 Was es von der Organisation verlangt Inhalt öffnen : Inhalt Episoden Was agentische Workflows von Menschen und Organisationen verlangen 1 Ein Gedankenexperiment 2 Was ein agentischer Workflow ist 3 Wie weit Du Dich herausnimmst 4 Was es von jeder Person verlangt 5 Was es von der Organisation verlangt",
+  "toc": "Episoden Inhalt einklappen Was agentische Workflows von Menschen und Organisationen verlangen 1 Ein Gedankenexperiment Das Gedankenexperiment Jetzt mit Agenten 2 Was ein agentischer Workflow ist 3 Wie weit Du Dich herausnimmst 4 Was es von jeder Person verlangt 5 Was es von der Organisation verlangt Inhalt öffnen : Inhalt Episoden Was agentische Workflows von Menschen und Organisationen verlangen 1 Ein Gedankenexperiment Das Gedankenexperiment Jetzt mit Agenten 2 Was ein agentischer Workflow ist 3 Wie weit Du Dich herausnimmst 4 Was es von jeder Person verlangt 5 Was es von der Organisation verlangt",
   "slides": [
     {
       "id": "top",
@@ -10,6 +10,14 @@
     {
       "id": "a-thought-experiment",
       "text": "Ein Gedankenexperiment Vier perfekte Karten auf einem Board, und das Fest scheitert trotzdem zwischen ihnen. Essen & Getränke Location-Küche 31 vegetarisch Eier- gerichte vegetarisch mit Eiern serviert verfehlt: zusammen das Wort meinte etwas anderes"
+    },
+    {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "Ein Gedankenexperiment (1/2) Seite 1 von 2 Das Gedankenexperiment Vier hervorragende Freelancer liefern jeweils genau, was ihr Zettel verlangte, und nichts davon geht auf. Gemeinsames Board · ihr einziger Kanal: Zettel, keine Meetings, keine Anrufe Programm Eigenes Ziel: Teamevent für 200, gebucht Paintball × 200 Anreise : Barrierefreier Bus, 10 Rollstuhlnutzende Die 10 sitzen am Rand verfehlt „zusammen“ + Anreise Eigenes Ziel: Alle vor Ort, ohne Mehrkosten Alle fahren in Fahrgemeinschaften Essen & Getränke : Offene Bar bis 01:00 Die Fahrer haben getrunken verfehlt „sicher“ + Location Eigenes Ziel: Malerisch, im Budget Almhütte, 1.800 m Anreise : Gästeinfo: nur Route und Zeiten Sommerkleidung, nachts 6 °C verfehlt „sicher“ + Essen & Getränke Eigenes Ziel: Abendessen für 200, bestellt 31 vegetarisch Location : Hüttenküche liest es als: Eier erlaubt Die indischen Kolleginnen und Kollegen können nicht essen verfehlt „zusammen“ = Fest, 20. Juni Ziel: alle feiern zusammen und kommen sicher nach Hause ✗ zusammen Programm, Essen & Getränke ✗ sicher Anreise, Location Die Frage Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird?"
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "Ein Gedankenexperiment (2/2) Seite 2 von 2 Jetzt mit Agenten KI beschleunigt das Tun, aber sie kann keinen Kontext ergänzen, den ihr niemand gegeben hat: Dieselben vier Fehler kommen in 2 Minuten statt in 2 Wochen. Dasselbe Board, dieselben Zettel · an vier Agenten übergeben Programm Eigenes Ziel erreicht 2 Min. Paintball × 200 Anreise : barrierefreier Bus ✗ zusammen + Anreise Eigenes Ziel erreicht 2 Min. Alle fahren in Fahrgemeinschaften Essen & Getränke : offene Bar bis 01:00 ✗ sicher + Location Eigenes Ziel erreicht 2 Min. Almhütte, 1.800 m Anreise : nur Route und Zeiten ✗ sicher + Essen & Getränke Eigenes Ziel erreicht 2 Min. 31 vegetarisch Location : Hüttenküche: Eier okay ✗ zusammen = Fest, 20. Juni Ziel: alle feiern zusammen und kommen sicher nach Hause ✗ zusammen Programm, Essen & Getränke ✗ sicher Anreise, Location Jede Karte 2 Min. 2 Wochen · dieselben vier Fehler, nur schneller erreicht Was kein Agent gesagt bekam Mit öffentlichen Texten trainiert Was in Deiner Firma gesagt wird, steckt nicht darin Seltene Fakten werden schlecht gelernt Also muss der Kontext mit der Aufgabe kommen"
     },
     {
       "id": "what-an-agentic-workflow-is",
@@ -35,6 +43,14 @@
     },
     { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment Keine Sprechernotizen für diese Folie." },
     {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "Das Gedankenexperiment Eine echte Version des Boards Der leitende Agent von Anthropic gab seinen Subagenten vage Aufgabenbeschreibungen; sie wiederholten die Suchen der anderen und ließen Lücken, bis jede Aufgabe ein Ziel, ein Ausgabeformat, Hinweise zu den Werkzeugen und Grenzen mitbekam. Das ist der Bericht eines Teams über sein eigenes System, kein kontrollierter Vergleich 1 . Quellen (1) Anthropic, How we built our multi-agent research system ( öffnet in neuem Tab ) anthropic.com"
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "Jetzt mit Agenten Ein Modell kann allein aus öffentlichen Texten lernen Die Autoren von LLaMA wollten zeigen, dass sich Modelle auf dem Stand der Technik ausschließlich mit öffentlich verfügbaren Datensätzen trainieren lassen 1 . Quellen (1) Touvron et al., LLaMA: Open and Efficient Foundation Language Models ( öffnet in neuem Tab ) arxiv.org Kundengespräche sind keine Trainingsdaten Anthropic gibt an, Eingaben und Ausgaben seiner kommerziellen Produkte standardmäßig nicht zum Training zu nutzen; die internen Abläufe, Entscheidungen und Begriffe eines Unternehmens fehlen also weitgehend in dem, was ein Modell gelernt hat 1 . Quellen (1) Anthropic, Is my data used for model training? (commercial products) ( öffnet in neuem Tab ) privacy.claude.com Seltene Fakten werden schlecht gelernt Wie gut ein Modell eine Faktenfrage beantwortet, hängt davon ab, wie viele Trainingsdokumente den Fakt erwähnen; selbst ein Fakt, der in den Daten steckt, sitzt also schwach, wenn er selten ist 1 . Quellen (1) Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge ( öffnet in neuem Tab ) arxiv.org Der Kontext muss mitgeliefert werden Die Forschung zu Retrieval verbindet das Modell mit einem durchsuchbaren Gedächtnis, das bei jeder Anfrage befragt wird; deshalb muss das Wissen einer Organisation mit der Anfrage ankommen 1 . Quellen (1) Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
       "id": "what-an-agentic-workflow-is",
       "text": "Was ein agentischer Workflow ist Keine Sprechernotizen für diese Folie."
     },
@@ -56,6 +72,14 @@
     {
       "id": "a-thought-experiment",
       "text": "Ein Gedankenexperiment 0:00 – 0:29 Stell Dir das Board vor Stell Dir vor, Du verantwortest ein Sommerfest für 200 Kolleginnen und Kollegen aus fünf Standorten, und Du hast vier hervorragende Freelancer mit der Planung beauftragt, je einen für Programm, Anreise, Location und Essen und Getränke. Sie treffen sich nie und rufen einander nie an, denn das Einzige, was sie teilen, ist ein Board, auf dem alle Zettel hinterlassen."
+    },
+    {
+      "id": "a-thought-experiment--the-thought-experiment",
+      "text": "Das Gedankenexperiment 0:00 – 0:27 Alle haben geliefert Jetzt ist der Tag da, und jeder der vier hat genau das getan, worum er gebeten wurde. Programm hat ein Teambuilding-Event gebucht, Anreise hat organisiert, wie alle hinkommen, Location hat einen Ort gefunden, und Essen und Getränke hat das Abendessen bestellt. Jede Karte ist abgehakt, und jeder Freelancer hat sein eigenes Ziel perfekt erreicht. 0:27 – 1:32 Nichts davon geht auf Und trotzdem scheitert das Fest, denn die Fehler liegen zwischen den Karten. Programm hat Paintball gebucht, während Anreise einen barrierefreien Bus für zehn Kolleginnen und Kollegen im Rollstuhl gebucht hatte, die jetzt am Rand sitzen. Anreise hat alle in Fahrgemeinschaften geschickt, während Essen und Getränke eine offene Bar bis ein Uhr nachts gebucht hat, also haben die Fahrer getrunken. Location hat eine malerische Almhütte gefunden, während die Gästeinfo von Anreise nur Route und Zeiten nennt, also kommen die Leute in Sommerkleidung bei sechs Grad in der Nacht. Und das Abendessen wurde mit 31 vegetarisch bestellt, was die Küche der Hütte auf westliche Art liest, also landen Eiergerichte vor Kolleginnen und Kollegen, die sie nicht essen können. Jeder Schritt war perfekt, und perfekte Schritte ergeben von allein kein gutes Ganzes. 1:32 – 2:05 Deine Frage Hier ist also die Frage, und ich möchte, dass Du sie die ganze Episode über im Kopf behältst. Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird? Eine verlockende Antwort ist, die vier miteinander reden zu lassen und mehr Meetings anzusetzen. Ich lasse die Frage vorerst offen, und wir beantworten sie Schritt für Schritt, aus verschiedenen Blickwinkeln, bis wir die Antworten am Ende sammeln."
+    },
+    {
+      "id": "a-thought-experiment--now-with-agents",
+      "text": "Jetzt mit Agenten 0:00 – 0:23 Tempo, nicht Kontext Jetzt gib dieselben vier Karten an Agenten. Jede Karte ist viel schneller abgehakt, das ist wunderbar, und genau dort sitzt die Falle. KI beschleunigt das Tun, aber sie kann keinen Kontext ergänzen, den ihr niemand gegeben hat, und der Paintball-Agent hat den barrierefreien Bus nie gesehen. 0:23 – 0:56 Plausible Vermutung Schlimmer noch: Ein Agent, der auf eine Lücke stößt, füllt sie meist mit einer plausiblen Vermutung, statt anzuhalten und Dich zu fragen. Niemand hat dem Essens-Agenten gesagt, was vegetarisch für diese Kolleginnen und Kollegen bedeutet, also nimmt er die häufigste Lesart und macht weiter. Dieselben vier Fehler tauchen an denselben vier Stellen auf, nur erreichst Du sie jetzt in zwei Minuten statt in zwei Wochen."
     },
     {
       "id": "what-an-agentic-workflow-is",
