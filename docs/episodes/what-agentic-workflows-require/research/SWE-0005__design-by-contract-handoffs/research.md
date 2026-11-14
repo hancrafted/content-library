@@ -16,9 +16,6 @@ sources:
   - id: 2
     resource: https://www.eiffel.com/values/design-by-contract/
     title: 'Eiffel Software, Design by Contract'
-verified:
-  - by: process:markdown-harness
-    at: 2026-11-14T11:47:26Z
 ---
 
 # Why does design by contract, agreeing what each party receives and delivers, make handoffs reliable without prescribing how the work is done?
