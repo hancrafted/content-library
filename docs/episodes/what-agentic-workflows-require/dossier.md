@@ -4,12 +4,14 @@ title: What agentic workflows require of people and organisations
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-14T12:12:11Z
+  at: 2026-11-14T12:18:28Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-11-14T12:12:11Z
+  - by: process:markdown-harness
+    at: 2026-11-14T12:18:28Z
 ---
 
 # What agentic workflows require of people and organisations {#everyone-delivered-nothing-added-up}
@@ -18,7 +20,7 @@ verified:
 
 #### Voice script
 
-1. **Imagine the board** — Second person, you are the manager. Five excellent freelancers, five cities, one summer party for 200 people. They never meet, they only leave notes on a shared board.
+1. **Imagine the board** — Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired five excellent freelancers in five different cities to plan it. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes.
 
 ### The thought experiment {#the-thought-experiment}
 
@@ -35,9 +37,9 @@ The party board with five columns: venue, travel, catering, invitations, budget.
 
 #### Voice script
 
-1. **Everyone delivered** — Every freelancer delivers exactly what their note asked. Venue booked, trains booked, caterer booked, invitations out, budget kept.
-2. **None of it adds up** — And the party still fails: the last train, the arrival time, the activity. Perfect steps do not add up on their own.
-3. **Your question** — So what do you, as the manager, need to do so the result still comes out great? Hold that question. We answer it step by step, and the last Slide collects the answers.
+1. **Everyone delivered** — Every freelancer delivers exactly what their note asked for. The venue is booked, the trains are booked, the caterer is booked, the invitations are out and the budget is kept, so every note on the board is ticked.
+2. **None of it adds up** — And the party still fails. The last train leaves before the party ends, the guests arrive two hours after the programme has started, and the activity excludes ten of your colleagues. Each step was perfect, and perfect steps do not add up on their own.
+3. **Your question** — So here is the question I want you to carry through this Episode: what do you, as the manager, need to do so that the result still comes out great? Hold on to it, because we answer it one angle at a time, and the last Slide collects the answers.
 
 ### Now with agents {#now-with-agents}
 
@@ -60,15 +62,15 @@ Slide 1's board replayed with an agent badge on each of the five columns. Every 
 
 #### Voice script
 
-1. **Speed, not context** — AI speeds up the doing. It cannot add context nobody gave it.
-2. **Plausible guess** — Where a gap is, an agent fills it with a plausible guess instead of asking. So the same three failures, in two minutes instead of two weeks.
-3. **Earlier Episodes** — This is the amnesiac freelancer from the earlier Episodes, now with five of them and no meeting.
+1. **Speed, not context** — Now give the same five notes to agents. AI makes the doing fast, but it cannot add context that nobody gave it, so the speed helps with everything except the gaps.
+2. **Plausible guess** — When an agent meets a gap, it does not stop and ask you, it fills the gap with a plausible guess and carries on. That is why the same three failures show up again, only now they arrive in two minutes instead of two weeks.
+3. **Earlier Episodes** — If you have seen the earlier Episodes, you know this one: it is the amnesiac freelancer, except that now there are five of them and no meeting between them.
 
 ## What an agentic workflow is {#what-an-agentic-workflow-is}
 
 #### Voice script
 
-1. **Name the thing** — Before we fix the board, a term. What is an agent, and what makes a workflow agentic? Term first, then the board.
+1. **Name the thing** — Before we fix the board, we need two terms to stand on. What is an agent, and what makes a workflow agentic? Term first, then the board.
 
 ### What an agent is {#what-an-agent-is}
 
@@ -89,8 +91,8 @@ The AI capability Explorable with the Agents column lit, a new Preset, its scene
 
 #### Voice script
 
-1. **Model, tools, loop** — An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. Not a chat answer, a loop.
-2. **Earlier Episodes** — You met this in the earlier Episodes. Here it matters for one reason: the agent steers its own steps.
+1. **Model, tools, loop** — An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.
+2. **Earlier Episodes** — You met this in the earlier Episodes, so I will not rebuild it here. What matters for the workflow is one consequence: because the agent steers its own steps, you cannot assume it takes the steps you would have taken.
 
 ### What an agentic workflow is {#what-an-agentic-workflow-is-slide}
 
@@ -115,15 +117,15 @@ The party board with the goal note on the right and task notes chaining towards 
 
 #### Voice script
 
-1. **The definition** — Close to what IBM and Salesforce say: structured processes in which AI agents make decisions, take actions and coordinate tasks, with minimal human intervention.
-2. **Two levels** — Read it as two levels. You design the path of tasks and handoffs. The agent steers inside its task.
-3. **Minimal, how minimal** — "Minimal" is doing a lot of work in that sentence. How minimal? That is the next Section.
+1. **The definition** — An agentic workflow is a process in which agents, not people, take the decisions and do the tasks, within a structure you set. The exact wording and where it comes from are in the Speaker notes.
+2. **Two levels** — Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away.
+3. **Minimal, how minimal** — Notice the phrase minimal human intervention, because it carries a lot of weight and says very little. How minimal, and for which task? That is what the next Section answers.
 
 ## How far you step out {#how-far-you-step-out}
 
 #### Voice script
 
-1. **Open question** — The definition left one thing open: how much of a person stays in. That is a choice, and you make it per task.
+1. **Open question** — The definition left one thing open, which is how much of a person stays in the workflow. That is not one setting for the whole company, it is a choice you make for each task, and it is the next thing to learn.
 
 ### In, on or out of the loop {#in-on-or-out-of-the-loop}
 
@@ -148,10 +150,10 @@ The three definitions as a legend beside one party board, each note tagged: gues
 
 #### Voice script
 
-1. **In** — In the loop: the agent acts only after a person approves.
-2. **On** — On the loop: it acts on its own while a person watches and can step in.
-3. **Out** — Out of the loop: it acts without any person, who sees only the result.
-4. **Per task** — You choose per task, not per company. So "minimal intervention" is a setting you choose, task by task.
+1. **In** — In the loop means the agent acts only after a person has approved. Think of the activity for the party: nothing is booked until you say yes.
+2. **On** — On the loop means the agent acts on its own while a person watches and can step in. The venue works like this, you read the reports and you intervene when something looks wrong.
+3. **Out** — Out of the loop means the agent acts without any person, who sees only the result. The guest list can work like this, because you are happy to receive the finished list and move on.
+4. **Per task** — So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task.
 
 ### Reviewability sets the distance {#reviewability-sets-the-distance}
 
@@ -172,15 +174,15 @@ An axis from in to out with the party tasks placed on it. The activity note star
 
 #### Voice script
 
-1. **The rule** — You can step out only as far as you can check the result. Where checking costs as much as doing, stepping out means accepting a risk nobody looks at.
-2. **Hypothesis, said openly** — This rule is my hypothesis, a synthesis of several sources. No study tests it as one claim, and the evidence comes from software.
-3. **Make it checkable** — So the lever is the check. Give the activity a test it can pass, and it can move from in to on.
+1. **The rule** — You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at.
+2. **Hypothesis, said openly** — I want to be straight with you about this rule: it is my hypothesis, a synthesis of several sources, and no study tests it as one claim. The evidence also comes mostly from software, so treat it as a good bet and not as a law.
+3. **Make it checkable** — That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop.
 
 ## What it requires of each person {#what-it-requires-of-each-person}
 
 #### Voice script
 
-1. **Three skills, three failures** — Back to the board. Each of the three failures comes from a missing skill in a person, and each skill has a name.
+1. **Three skills, three failures** — Back to the board. Each of the three failures comes from a skill that was missing in a person, and each of those skills has a name.
 
 ### Plan back from the goal {#plan-back-from-the-goal}
 
@@ -203,10 +205,10 @@ The board read right to left from the goal note "20 June: everyone celebrates to
 
 #### Voice script
 
-1. **Start at the goal** — Backward reasoning is a plain-language name for it: Pólya says working backwards, AI planning says regression. Start from the goal, ask what must hold just before it, repeat until you reach where you stand today.
-2. **State the outcome** — Write the goal as an outcome, not an activity: everyone celebrates together and gets home safely.
-3. **Outside your control** — Mark which dependencies you control and which you do not. The train timetable is not yours.
-4. **The task nobody owned** — Working back from "gets home safely" finds the shuttle. That working back finds tasks nobody owned is my inference, the sources only show that it finds the dependencies.
+1. **Start at the goal** — Start with the goal and work backwards. Backward reasoning is a plain-language name for something Pólya calls working backwards and AI planning calls regression. You ask what must be true just before the goal, then what must be true before that, and you repeat until you arrive at where you stand today.
+2. **State the outcome** — Write the goal as an outcome and not as an activity. Not book a venue, but everyone celebrates together and gets home safely, because an outcome tells you when you are done and an activity does not.
+3. **Outside your control** — Then sort the dependencies into the ones you control and the ones you do not. The train timetable is not yours, so you plan around it instead of pretending you can change it.
+4. **The task nobody owned** — Working back from getting home safely, you find the shuttle, the task that nobody owned on the first board. I should say that this is my inference: the sources show that working backwards finds the dependencies, and I am adding that it also finds the orphaned tasks.
 
 ### Contracts at the seams {#contracts-at-the-seams}
 
@@ -229,10 +231,10 @@ The travel to programme seam zoomed, with its contract card: Receives: five offi
 
 #### Voice script
 
-1. **Design by contract** — Design by contract, after Meyer: cooperation rests on contracts that state what each party receives and what it delivers.
-2. **Receives, delivers, checked by** — For each task, write three lines: what it receives, what it must deliver, and how someone else can check it.
-3. **Leave the how open** — The contract does not say how. Car, train or carpool, your choice. That the how stays open is my reading, Meyer does not state it.
-4. **The arrival time** — And the 4 p.m. arrival? Nobody owned the arrival time at the seam. Now travel owes it, and programme can rely on it.
+1. **Design by contract** — Design by contract, after Meyer, says that cooperation rests on contracts, and a contract states what each party receives and what it delivers. That sounds like software, but it is the most practical tool a manager has for a handoff.
+2. **Receives, delivers, checked by** — So before you hand any task to an agent, write three lines. What it receives, what it must deliver, and how someone else can check the result. Do this for one task this week, before you hand it over.
+3. **Leave the how open** — Notice what the contract leaves out: how the work is done. Travel owes everyone at the venue by half past one, and whether they come by car, train or carpool is their choice. That the how stays open is my reading, Meyer does not say it in these words.
+4. **The arrival time** — And the four o'clock arrival? Nobody owned the arrival time at the seam between travel and programme. With a contract, travel owes it and programme can rely on it, so the failure cannot happen quietly.
 
 ### Reviewing the result {#reviewing-the-result}
 
@@ -255,16 +257,16 @@ The paintball note checked twice. Against its contract: activity for 200 ticked,
 
 #### Voice script
 
-1. **Two checks** — Verification checks the result against its contract. Validation checks it against the goal.
-2. **Paintball passes** — The paintball note passes every line of its contract and still fails the goal. The contract was right about what was asked, and wrong about what was needed.
-3. **The human part** — The second check is the human part. It is the one that lets you step further out, because it is what you can trust when you are not watching.
-4. **Your verdict** — If an agent hands you a result that matches its note perfectly, which of the two questions have you actually answered?
+1. **Two checks** — Reviewing a result takes two checks that people often merge into one. Verification checks the result against its contract. Validation checks the result against the goal.
+2. **Paintball passes** — The paintball note passes every line of its contract: an activity for 200, within budget, on the right day. And it still fails the goal, because the contract was right about what was asked and wrong about what was needed.
+3. **The human part** — The second check is the human part, and it is the one that lets you step further out. When you are not watching, what you can trust is a result that has been checked against the goal, not only against the note.
+4. **Your verdict** — So the next time an agent hands you a result that matches its task perfectly, ask yourself which of the two checks you have actually done.
 
 ## What it requires of the organisation {#what-it-requires-of-the-organisation}
 
 #### Voice script
 
-1. **From people to the company** — Skills in people are not enough. The workflow they draw has a shape too, and that shape comes from the organisation.
+1. **From people to the company** — Skills in your people are not enough. The workflow they draw has a shape of its own, and that shape comes from the organisation they work in.
 
 ### The org chart trap {#the-org-chart-trap}
 
@@ -289,10 +291,10 @@ The party committee's org chart, with ten venue scouts, one caterer and one trav
 
 #### Voice script
 
-1. **Conway's law** — Conway's law, 1968: an organisation that designs a system produces a design that copies its own communication structure. A workflow people draw for themselves does the same.
-2. **A team's draft** — A team I worked with drew its AI workflow. One discipline had fourteen discovery steps, the others one or two. The workflow mirrored the headcount. I won't name the company or the team.
-3. **Broadly defined** — Conway says "defined broadly". Applying that to workflows is my inference, nobody has measured it for workflows. But it explains what I saw.
-4. **Your sign** — If the workflow your people draw looks like your org chart, suspect Conway's law, and redraw it from the goal.
+1. **Conway's law** — Conway's law, from 1968, in plain words: what people design follows who talks to whom. A workflow that people draw for themselves is a design too, so it does the same. The exact wording is in the Speaker notes.
+2. **A team's draft** — I saw this with a team I worked with. They drew their AI workflow, and one discipline ended up with fourteen discovery steps while the others got one or two. The workflow mirrored the headcount, not the goal. I will not name the company or the team.
+3. **Broadly defined** — Conway meant systems in a wide sense, but applying that to workflows is my inference, because nobody has measured it for workflows. It explains what I saw, though, and it gives you a test you can run.
+4. **Your sign** — So if the workflow your people draw looks like your org chart, suspect Conway's law and redraw it from the goal. If you lead the transformation, that check is yours to make.
 
 ### Designed AI first {#designed-ai-first}
 
@@ -313,10 +315,10 @@ Slide 10's board redrawn around the goal, with fewer notes and a contract on eve
 
 #### Voice script
 
-1. **Start at the outcome** — Design from the goal and its measurable outcome, not from today's roles.
-2. **Contract on every milestone** — Put a contract on every milestone and leave the inside of each step free.
-3. **Cut seams** — Every seam is a place for a gap. Merge steps that produce nothing anyone can review.
-4. **Not more meetings** — Remember the question from Slide 1? Get them talking was one answer. You did not need more meetings, you needed contracts.
+1. **Start at the outcome** — Here are three tips for a lean workflow, and the first is to start from the goal and its measurable outcome, not from today's roles. The roles tell you who is available, and the outcome tells you what is needed.
+2. **Contract on every milestone** — The second is to put a contract on every milestone and leave the inside of each step free. You decide what must arrive and how it is checked, and the person or the agent decides the rest.
+3. **Cut seams** — The third is to cut seams. Every seam is a place where a gap can hide, so merge the steps that produce nothing anyone can review.
+4. **Not more meetings** — Remember the question from the first Slide? One answer was to get them talking, to hold more meetings. You did not need more meetings, you needed contracts.
 
 ### What to look for in your team {#what-to-look-for-in-your-team}
 
@@ -341,13 +343,13 @@ Slide 1's question as the heading, and two short columns on the board. One colum
 
 #### Voice script
 
-1. **The answer** — So what did you need to do? Three skills in your people, and each fixed one failure.
+1. **The answer** — So what did you need to do? You needed three skills in your people, and each one fixes exactly one failure from the board.
 2. **Break down** — Break the work down from the goal, and the last train has an owner.
-3. **Write contracts** — Write the contract at the seam, and the 4 p.m. arrival cannot happen.
-4. **Review twice** — Review against the contract and against the goal, and paintball does not go ahead.
-5. **The organisation** — From the organisation: clear goals, contracts between teams, a policy on oversight per task, and workflows designed around the goal, not the org chart.
-6. **Look at your team** — Look at your team. Who can break work down, write a clear handoff and review an agent's result? Those are the skills to build.
-7. **Take one process** — And before Monday: pick one recurring process, mark which steps an agent could run, and whether a person stays in, on or out of the loop.
+3. **Write contracts** — Write the contract at the seam, and the four o'clock arrival cannot happen.
+4. **Review twice** — Review against the contract and against the goal, and the paintball does not go ahead.
+5. **The organisation** — The organisation has its own part: clear goals, contracts between teams, a policy on how much oversight each task gets, and workflows designed around the goal and not around the org chart.
+6. **Look at your team** — Now look at your team. Who can break work down, who writes a clear handoff, and who can review an agent's result? Those are the skills to build, and in my view they are where your effort pays off first, though no study has measured that as a set.
+7. **Take one process** — And before Monday, do the smallest version of all of this. Pick one recurring process in your team, mark which steps an agent could run, and decide for each whether a person stays in, on or out of the loop.
 
 ## Material left out
 
