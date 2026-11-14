@@ -36,7 +36,7 @@ Beside Copy as prompt and Save, the page states that **Save accepts the selected
 - A comment is optional on every item: no response, including redesign, needs one.
 - A per-item reset returns only its item to its default (the recommendation, or the caller's lock) and leaves its comments. Reset all asks with `confirm()`, then returns every item to its default, clears every comment and restores the recommended Next action and its sentences; cancelling changes nothing.
 - Drafts live in `localStorage` under a key holding the page id, per revision, and restore on load. Guard every storage call: without storage, the page says drafts are not kept, and editing, copying and saving still work.
-- A new revision starts unanswered and shows earlier feedback read-only: embed the feedback files you hold, and list older revisions' drafts from storage.
+- A new revision starts every item on its default (the recommendation, or the caller's lock), whatever the earlier revision's draft held, and shows earlier feedback read-only: embed the feedback files you hold, and list older revisions' drafts from storage. A draft overrides the recommendation only within its own revision, and never a lock.
 
 ## Truthful outcomes
 

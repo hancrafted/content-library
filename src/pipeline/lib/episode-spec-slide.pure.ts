@@ -62,13 +62,9 @@ function checkTokens($: CheerioAPI, figure: Selection, where: string): string[] 
   ];
 }
 
-export function checkOption(
-  $: CheerioAPI,
-  figure: Selection,
-  { slug, slidePicked }: { slug: string; slidePicked: boolean },
-): string[] {
+export function checkOption($: CheerioAPI, figure: Selection, slide: SlideMarks): string[] {
   const id = figure.attr('data-option') ?? '';
-  const where = `Option ${id} of {#${slug}}`;
+  const where = `Option ${id} of {#${slide.slug}}`;
   return [
     ...unless(
       figure.find('figcaption').text().includes(id),
@@ -78,19 +74,13 @@ export function checkOption(
       figure.find('[data-spec="build-notes"]').text().trim() !== '',
       `${where} has no build notes: a <div data-spec="build-notes"> with the parts, tokens, props and i18n keys.`,
     ),
-    ...checkPickBox($, figure, { slug, slidePicked }),
+    ...checkPickBox($, figure, { ...slide, id, where }),
     ...checkTokens($, figure, where),
   ];
 }
 
 /** An Option has exactly one pick checkbox, ticked as its marks ask. */
-function checkPickBox(
-  $: CheerioAPI,
-  figure: Selection,
-  { slug, slidePicked }: { slug: string; slidePicked: boolean },
-): string[] {
-  const id = figure.attr('data-option') ?? '';
-  const where = `Option ${id} of {#${slug}}`;
+function checkPickBox($: CheerioAPI, figure: Selection, { slug, slidePicked, id, where }: OptionName): string[] {
   const checkboxes = figure
     .find(`input[type="checkbox"][form="${FORM}"][name="pick:${slug}"]`)
     .toArray()
@@ -113,11 +103,22 @@ export function anyPicked(figures: readonly Selection[]): boolean {
   return figures.some((figure) => figure.is('[data-picked]'));
 }
 
+/** What an Option's checks read of its Slide: its slug and whether any Option of it is marked picked. */
+interface SlideMarks {
+  slug: string;
+  slidePicked: boolean;
+}
+
+/** An Option's id and how a finding names it, with its Slide's marks. */
+interface OptionName extends SlideMarks {
+  id: string;
+  where: string;
+}
+
 /** What an Option's mark says about its pick checkbox: picked, recommended, and whether its Slide has a picked one. */
-interface TickMarks {
+interface TickMarks extends Pick<SlideMarks, 'slidePicked'> {
   picked: boolean;
   recommended: boolean;
-  slidePicked: boolean;
 }
 
 /**

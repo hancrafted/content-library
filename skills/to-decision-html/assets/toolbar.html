@@ -1,23 +1,24 @@
 <!--
-  The toolbar of a decision page: copy these three blocks into the page, never write your own.
-    1. toolbar:head, inside <head>: the styles and the script that sets theme and navigation before first paint.
+  The toolbar of a decision page: copy these three blocks into the page as they are.
+    1. toolbar:head, inside <head>: the numbers, the styles and the script that sets theme and navigation before first paint.
     2. toolbar:markup, first in <body>: the bar and its presets.
     3. toolbar:script, last in <body>: the behaviour.
-  Supply the presets as JSON in the markup block; every other part stays as it is. The page gives its navigation
-  `data-page-nav` and the id the Outline button names in `aria-controls`. The readout reports the width of the first
-  shown element matching `data-measure` (default `[data-visual]`): name the box the presets resize. Add a tool inside
-  `[data-toolbar-end]`, never a second row.
-  The bar is one row at every width: below 1024 px it scrolls sideways inside itself and never wraps.
-  A preset with a width and a height has a fixed design size: the script keeps the visual's layout at that size and sets
-  --preview-width, --preview-height and --preview-scale on <html>, plus data-preview-fixed. The scale fits the whole
-  frame between the toolbar and a 16 px margin above and below; the page applies it with transform: scale().
+  Supply the presets as JSON in the markup block. The page gives its navigation `data-page-nav` and the id the Outline
+  button names in `aria-controls`. The readout reports the width of the first shown element matching `data-measure`
+  (default `[data-visual]`): name the box the presets resize. Add a tool inside `[data-toolbar-end]`.
+  The bar is one row; below 1024 px it scrolls inside itself. A preset with a width and a height has a fixed design
+  size: SKILL.md step 4 says how the page scales it. The numbers the bar works with are the JSON `data-toolbar-config`
+  in the head block; a page builder that leaves the bar out reads them there.
 -->
 
 <!-- toolbar:head -->
+<!-- navOpenWidth: the window width from which the navigation opens beside the page; toolbarHeight: the bar's height in px
+     before the script measures it; fitMargin: the px kept above and below a fixed design size; fitRoomMin: the least room
+     in px a fixed design size is scaled into. The dropdown rule below (max-width) is navOpenWidth less 1 px, in rem. -->
+<script type="application/json" data-toolbar-config>
+  { "navOpenWidth": 1800, "toolbarHeight": 61, "fitMargin": 16, "fitRoomMin": 240 }
+</script>
 <style data-toolbar-style>
-  :root {
-    --toolbar-h: 3.75rem;
-  }
   .dh-toolbar {
     position: sticky;
     top: 0;
@@ -27,7 +28,6 @@
     align-items: center;
     gap: 0.5rem;
     box-sizing: border-box;
-    min-height: 3.75rem;
     padding: 0.5rem var(--gutter, 2rem);
     overflow-x: auto;
     overflow-y: hidden;
@@ -126,7 +126,7 @@
         box-shadow 120ms ease;
     }
   }
-  /* The navigation is a dropdown: hidden when closed, floating under the toolbar below 1800 px when open. */
+  /* The navigation is a dropdown: hidden when closed, floating under the toolbar below navOpenWidth when open. */
   html[data-nav='closed'] [data-page-nav] {
     display: none;
   }
@@ -158,6 +158,8 @@
   // The theme and the navigation, applied before first paint. Storage may be blocked: every call is guarded.
   (() => {
     const root = document.documentElement;
+    const config = JSON.parse(document.querySelector('script[data-toolbar-config]').textContent);
+    root.style.setProperty('--toolbar-h', config.toolbarHeight + 'px');
     const read = (key) => {
       try {
         return localStorage.getItem(key);
@@ -173,8 +175,8 @@
     };
     apply();
     media.addEventListener('change', apply);
-    // Open on a wide screen, collapsed below 1800 px, where the content wants every pixel.
-    root.dataset.nav = innerWidth >= 1800 ? 'open' : 'closed';
+    // Open on a wide screen, collapsed below navOpenWidth, where the content wants every pixel.
+    root.dataset.nav = innerWidth >= config.navOpenWidth ? 'open' : 'closed';
   })();
 </script>
 
@@ -202,6 +204,7 @@
 <script>
   (() => {
     const root = document.documentElement;
+    const config = JSON.parse(document.querySelector('script[data-toolbar-config]').textContent);
     const bar = document.querySelector('[data-toolbar]');
     const write = (key, value) => {
       try {
@@ -236,16 +239,15 @@
       fit();
     };
 
-    // A fixed design size keeps its layout and scales down uniformly so the whole frame fits the viewport below
-    // the toolbar, between a margin above and below. The page applies --preview-scale with transform: scale().
-    const MARGIN = 16;
+    // A fixed design size scales down uniformly so the whole frame fits the viewport below the toolbar, between a
+    // margin above and below; the page applies --preview-scale (SKILL.md step 4).
     const scale = () => {
       const preset = current();
       if (!isFixed(preset)) {
         root.style.removeProperty('--preview-scale');
         return;
       }
-      const room = Math.max(innerHeight - bar.offsetHeight - 2 * MARGIN, 240);
+      const room = Math.max(innerHeight - bar.offsetHeight - 2 * config.fitMargin, config.fitRoomMin);
       root.style.setProperty('--preview-scale', Math.min(1, room / preset.height).toFixed(4));
     };
 
@@ -318,7 +320,7 @@
       segment.tabIndex = at === start ? 0 : -1;
     });
 
-    // The navigation: open in the page's grid on a wide screen, a dropdown under the toolbar below 1800 px.
+    // The navigation: open in the page's grid on a wide screen, a dropdown under the toolbar below navOpenWidth.
     const toggle = bar.querySelector('[data-nav-toggle]');
     const panel = document.getElementById(toggle.getAttribute('aria-controls'));
     const sync = () => toggle.setAttribute('aria-expanded', String(root.dataset.nav === 'open'));
@@ -333,10 +335,10 @@
       report();
     });
     panel?.addEventListener('click', (event) => {
-      if (event.target.closest('a') && innerWidth < 1800) close();
+      if (event.target.closest('a') && innerWidth < config.navOpenWidth) close();
     });
     addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || root.dataset.nav !== 'open' || innerWidth >= 1800) return;
+      if (event.key !== 'Escape' || root.dataset.nav !== 'open' || innerWidth >= config.navOpenWidth) return;
       close();
       toggle.focus();
     });

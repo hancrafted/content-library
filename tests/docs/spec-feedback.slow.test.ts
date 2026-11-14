@@ -19,11 +19,11 @@ const NEXT_LINE = '- `next` · gate — redesign';
 
 function savedRound(): string {
   const result = reviewToFeedback({
-    fields: [
-      ['pick:spent', '1a'],
-      ['note:page', 'Calmer overall.'],
-      ['next', 'redesign'],
-    ],
+    lines: [
+      '- `why--spent` · design — picked: 1a',
+      '- `page` · design — Calmer overall.',
+      '- `next` · gate — redesign',
+    ].join('\n'),
     slides: [{ section: 'why', slug: 'spent', options: ['1a', '1b'] }],
     round: 1,
     now: NOW,

@@ -2,8 +2,9 @@
  * The pages `npm run episode:spec-preview` renders: a designer's fragment inside the Spec's own page, so what a
  * designer measures is what the user sees. Each page is built from the Spec template, through the assembler's own
  * functions (`itemMarkup`, `optionsMarkup`), and set to one render preset the way the page's toolbar sets it
- * (`data-preset`, `--preview-width` and, for a fixed design size, `--preview-height` and `--preview-scale` on `<html>`). Only the page's script is left out: the Options' mocks are moved
- * into the item's visual column here, all of them, each its own screenshot target.
+ * (`data-preset`, `--toolbar-h`, `--preview-width` and, for a fixed design size, `--preview-height` and `--preview-scale`
+ * on `<html>`), with the numbers the template carries for the toolbar. Only the page's script is left out: the Options'
+ * mocks are moved into the item's visual column here, all of them, each its own screenshot target.
  */
 import { load } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
@@ -71,18 +72,39 @@ addEventListener('load', () => {
 });
 </script>`;
 
-/** The page's own script opens its navigation from this window width, as the template's head script does. */
-const NAV_OPEN_WIDTH = 1800;
+/** The numbers of the toolbar asset (`to-decision-html/assets/toolbar.html`), which the template carries as JSON. */
+export interface ToolbarConfig {
+  /** The window width from which the page's script opens its navigation. */
+  navOpenWidth: number;
+  /** The sticky toolbar's height in px. */
+  toolbarHeight: number;
+  /** The margin in px kept above and below a visual scaled to a fixed design size. */
+  fitMargin: number;
+  /** The least room in px a fixed design size is scaled into. */
+  fitRoomMin: number;
+}
+
+const TOOLBAR_NUMBERS: readonly (keyof ToolbarConfig)[] = ['navOpenWidth', 'toolbarHeight', 'fitMargin', 'fitRoomMin'];
+
+/**
+ * The toolbar's numbers, read from the template's `<script type="application/json" data-toolbar-config>`, the one
+ * place the toolbar asset states them. Throws when the template has none or one is not a positive number, so a
+ * template made without them fails loud.
+ */
+export function toolbarConfigOf(template: string): ToolbarConfig {
+  const text = load(template)('script[data-toolbar-config]').first().text();
+  const parsed: Partial<Record<keyof ToolbarConfig, unknown>> = text.trim() === '' ? {} : JSON.parse(text);
+  const bad = TOOLBAR_NUMBERS.filter((name) => typeof parsed[name] !== 'number' || !(parsed[name] > 0));
+  if (bad.length > 0)
+    throw new Error(`The Spec template's <script data-toolbar-config> lacks a positive number for ${bad.join(', ')}.`);
+  return parsed as unknown as ToolbarConfig;
+}
 
 /** The narrowest window the page is built for (a laptop): a preset narrower than it is still viewed in this one. */
 const LAPTOP_WINDOW = 1440;
 
 /** The height of that laptop window, which a preset with a fixed design size is scaled to fit. */
 const LAPTOP_HEIGHT = 900;
-
-/** The sticky toolbar's height and the margin kept above and below a scaled visual, as the toolbar asset's script uses. */
-const TOOLBAR_HEIGHT = 60;
-const FIT_MARGIN = 16;
 
 /** Whether a preset has a fixed design size (a width and a height), which scales down to fit instead of reflowing. */
 const isFixed = ({ height }: Preset): boolean => height !== DEFAULT_HEIGHT;
@@ -101,16 +123,19 @@ export function viewportOf(preset: Preset): { width: number; height: number } {
 }
 
 /** The scale a fixed-size preset is shown at: the room below the toolbar and between its margins over its height. */
-function scaleOf(preset: Preset): number {
-  const room = viewportOf(preset).height - TOOLBAR_HEIGHT - 2 * FIT_MARGIN;
+function scaleOf(preset: Preset, config: ToolbarConfig): number {
+  const room = Math.max(viewportOf(preset).height - config.toolbarHeight - 2 * config.fitMargin, config.fitRoomMin);
   return Math.min(1, Math.round((room / preset.height) * 10000) / 10000);
 }
 
-/** What the toolbar sets on `<html>` for a preset: the width, and for a fixed design size its height and scale too. */
-function presetStyle(preset: Preset): string {
-  const width = `--preview-width: ${preset.width}px`;
-  if (!isFixed(preset)) return width;
-  return `${width}; --preview-height: ${preset.height}px; --preview-scale: ${scaleOf(preset)}`;
+/**
+ * What the toolbar's scripts set on `<html>` for a preset: the toolbar's height, the width, and for a fixed design
+ * size its height and scale too.
+ */
+function presetStyle(preset: Preset, config: ToolbarConfig): string {
+  const base = `--toolbar-h: ${config.toolbarHeight}px; --preview-width: ${preset.width}px`;
+  if (!isFixed(preset)) return base;
+  return `${base}; --preview-height: ${preset.height}px; --preview-scale: ${scaleOf(preset, config)}`;
 }
 
 /** The Option ids of a fragment, in order. */
@@ -153,6 +178,7 @@ function slideMarkup(slug: string, html: string, templates: { item: string; opti
  */
 export function previewPage(template: string, fragment: string, preset: Preset): string {
   const $ = load(template);
+  const config = toolbarConfigOf(template);
   const templates = { item: templateOf($, 'item'), option: templateOf($, 'option') };
   $('template, script, [data-toolbar], .spec-scroll, #spec-review').remove();
   const slides = fragmentSlides(fragment).map(({ slug, html }) => slideMarkup(slug, html, templates));
@@ -167,8 +193,8 @@ export function previewPage(template: string, fragment: string, preset: Preset):
   });
   $('html').attr({
     'data-preset': preset.name,
-    'data-nav': viewportOf(preset).width >= NAV_OPEN_WIDTH ? 'open' : 'closed',
-    style: presetStyle(preset),
+    'data-nav': viewportOf(preset).width >= config.navOpenWidth ? 'open' : 'closed',
+    style: presetStyle(preset, config),
   });
   if (isFixed(preset)) $('html').attr('data-preview-fixed', '');
   $('body').append(OVERFLOW_SCRIPT);

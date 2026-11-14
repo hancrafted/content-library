@@ -36,23 +36,35 @@ function optionParts(figure: Selection) {
   return { stage, caption: caption.html() ?? undefined, notes: notes.length === 0 ? undefined : $.html(notes) };
 }
 
+/**
+ * How an Option's pick stands in the assembled page: `locked` by an earlier round (marked picked and ticked),
+ * `default` as the recommendation of a Slide with no lock (ticked), or `none` (neither).
+ */
+type PickState = 'locked' | 'default' | 'none';
+
+/** The pick state of one Option: the lock decides when the Slide has one, else the recommendation. */
+function pickStateOf(figure: Selection, lock: string | undefined): PickState {
+  if (lock === undefined) return isRecommended(figure) ? 'default' : 'none';
+  return figure.attr('data-option') === lock ? 'locked' : 'none';
+}
+
 /** One Option cloned from the template: the fragment's figure supplies its attributes, mock, caption and build notes. */
 function optionMarkup(
   figure: Selection,
-  { slug, template, locked, ticked }: { slug: string; template: string; locked: boolean; ticked: boolean },
+  { slug, template, state }: { slug: string; template: string; state: PickState },
 ): string {
   const id = figure.attr('data-option') ?? '';
   const { stage, caption, notes } = optionParts(figure);
   const pick = (box: Selection) => {
     box.attr({ name: `pick:${slug}`, value: id });
-    if (ticked) box.attr('checked', '');
+    if (state !== 'none') box.attr('checked', '');
   };
   return filledMarkup(template, { stage, caption, 'build-notes': notes, id: escape(id), pick }, (root) => {
     const kept = Object.entries(figure.attr() ?? {}).filter(([name]) => !OWN_ATTRIBUTES.test(name));
     root.attr(Object.fromEntries(kept));
     root.attr('data-option', id);
     root.attr('data-recommended', String(isRecommended(figure)));
-    if (locked) root.attr('data-picked', '');
+    if (state === 'locked') root.attr('data-picked', '');
   });
 }
 
@@ -75,17 +87,7 @@ export function optionsMarkup({ slug, html, template, locked }: OptionsSource): 
     .toArray()
     .map((figure) => $(figure) as Selection);
   const lock = figures.some((figure) => figure.attr('data-option') === locked) ? locked : undefined;
-  return figures
-    .map((figure) => {
-      const isLocked = figure.attr('data-option') === lock;
-      return optionMarkup(figure, {
-        slug,
-        template,
-        locked: isLocked,
-        ticked: lock === undefined ? isRecommended(figure) : isLocked,
-      });
-    })
-    .join('\n');
+  return figures.map((figure) => optionMarkup(figure, { slug, template, state: pickStateOf(figure, lock) })).join('\n');
 }
 
 /** What one item (a Slide or the Title slide) is cloned from: its id, header, words and, once it has them, Options. */

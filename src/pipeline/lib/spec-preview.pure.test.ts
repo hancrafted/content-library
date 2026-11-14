@@ -6,6 +6,7 @@ import {
   readPresets,
   shotName,
   shotsOf,
+  toolbarConfigOf,
   viewportOf,
   type Outcome,
   type Preset,
@@ -30,9 +31,13 @@ const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
 const CLEAN = `<!-- slide: spent -->${option('1a')}${option('1b')}`;
 const TITLE = `<!-- slide: top -->${option('0a')}${option('0b')}${option('0c')}`;
 
+/** The numbers of the toolbar asset, as the template carries them; these differ from the asset's, to show they are read. */
+const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, fitRoomMin: 300 };
+
 const DESKTOP: Preset = { name: 'desktop', width: 1920, height: 800, blocking: true };
 const MOBILE: Preset = { name: 'mobile', width: 390, height: 800, blocking: false };
 const SHORTS: Preset = { name: 'shorts', width: 1080, height: 1920, blocking: false };
+const WIDE: Preset = { name: 'wide', width: 1700, height: 800, blocking: false };
 const PRESETS = [DESKTOP, MOBILE];
 
 /** A Spec template in the shape the preview reads: a frame with the slots, a toolbar and review form, two templates. */
@@ -43,6 +48,7 @@ const TEMPLATE = `<!doctype html>
     <style>.spec-shell{}</style>
     <script>window.themeFlash = true;</script>
     <script type="application/json" id="spec-meta" data-slot="meta">{}</script>
+    <script type="application/json" data-toolbar-config>${JSON.stringify(CONFIG)}</script>
   </head>
   <body>
     <div class="dh-toolbar" role="toolbar" data-toolbar><button type="button" data-preset="fit">Fit</button></div>
@@ -104,6 +110,15 @@ const notes = (lines: string[]) => lines.filter((line) => line.startsWith('⚠')
 const shotLines = (lines: string[]) => lines.filter((line) => line.startsWith('screenshot '));
 
 describe('success cases', () => {
+  it('reads the toolbar numbers from the template the page is built from', () => {
+    // ARRANGE
+    const expected = CONFIG;
+    // ACT
+    const config = toolbarConfigOf(TEMPLATE);
+    // ASSERT
+    expect(config).toEqual(expected);
+  });
+
   it('passes a clean fragment with one screenshot line per Option and preset', () => {
     // ARRANGE
     const expectedLines = [
@@ -162,24 +177,27 @@ describe('success cases', () => {
   });
 
   describe('the preview page', () => {
-    it('sets the preset on the page as the toolbar does: data-preset and --preview-width, nav open from 1800 px', () => {
+    it('sets the preset on the page as the toolbar does: data-preset and --preview-width, nav open from the toolbar width', () => {
       // ARRANGE
       const expected = { 'data-preset': 'shorts', 'data-nav': 'closed' };
-      const wide = { 'data-preset': 'desktop', style: '--preview-width: 1920px', 'data-nav': 'open' };
+      const wide = { 'data-preset': 'wide', 'data-nav': 'open' };
+      const narrow = { 'data-preset': 'mobile', 'data-nav': 'closed' };
       // ACT
       const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
-      const desktop = load(previewPage(TEMPLATE, CLEAN, DESKTOP))('html').attr();
+      const opened = load(previewPage(TEMPLATE, CLEAN, WIDE))('html').attr();
+      const mobile = load(previewPage(TEMPLATE, CLEAN, MOBILE))('html').attr();
       // ASSERT
       expect(shorts).toMatchObject(expected);
-      expect(desktop).toMatchObject(wide);
+      expect(opened).toMatchObject(wide);
+      expect(mobile).toMatchObject(narrow);
     });
 
-    it('scales a preset with a fixed design size to the room below the toolbar, as the toolbar does', () => {
-      // ARRANGE: a laptop window 900 px tall, less the 60 px toolbar and a 16 px margin above and below
+    it('scales a preset with a fixed design size to the room below the toolbar, from the template toolbar numbers', () => {
+      // ARRANGE: a laptop window 900 px tall, less the 50 px toolbar and a 10 px margin above and below
       const expected = {
         'data-preset': 'shorts',
         'data-preview-fixed': '',
-        style: '--preview-width: 1080px; --preview-height: 1920px; --preview-scale: 0.4208',
+        style: '--toolbar-h: 50px; --preview-width: 1080px; --preview-height: 1920px; --preview-scale: 0.4323',
       };
       // ACT
       const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
@@ -188,6 +206,16 @@ describe('success cases', () => {
       expect(shorts).toMatchObject(expected);
       expect(desktop).not.toHaveProperty('data-preview-fixed');
       expect(desktop?.style).not.toContain('--preview-scale');
+    });
+
+    it('scales into the least room the toolbar numbers name when the window leaves less', () => {
+      // ARRANGE: 900 px less the bar and margins is 830 px, below a room minimum of 900 px
+      const template = TEMPLATE.replace('"fitRoomMin":300', '"fitRoomMin":900');
+      const expectedScale = '--preview-scale: 0.4688';
+      // ACT
+      const shorts = load(previewPage(template, CLEAN, SHORTS))('html').attr();
+      // ASSERT
+      expect(shorts?.style).toContain(expectedScale);
     });
 
     it('clones each Slide from the template item and each Option from the template Option, the assembler way', () => {
@@ -248,6 +276,21 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each([
+    [
+      'carries no toolbar numbers',
+      TEMPLATE.replace(/<script type="application\/json" data-toolbar-config>.*?<\/script>/, ''),
+    ],
+    ['carries a toolbar number that is not a positive number', TEMPLATE.replace('"fitMargin":10', '"fitMargin":"ten"')],
+  ])('throws, naming the numbers, when the template %s', (_name, template) => {
+    // ARRANGE
+    const message = /data-toolbar-config/;
+    // ACT
+    const read = () => toolbarConfigOf(template);
+    // ASSERT
+    expect(read).toThrow(message);
+  });
+
   it('fails with one line per contract violation and still renders every Option', () => {
     // ARRANGE
     const html = `<!-- slide: spent -->${option('1a', '<p class="w-[16%]">Narrow.</p>')}${option('1b').replace('<div data-spec="build-notes">Parts, tokens, props, i18n keys.</div>', '')}`;
