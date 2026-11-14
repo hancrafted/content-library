@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 
 /*
- * The party board drawn as SVG: a planning whiteboard a Scene fills with sticky notes (`note.tsx`), team tags,
- * handoff arrows, the oversight pills (`oversight-pills.tsx`), a person on the loop, the agent badge and the tick. Each
- * part takes plain props and its words from the Scene. Shared because each section slide draws the same board at its
- * own state (FE-007 §5).
+ * The party board drawn as SVG: a planning whiteboard a Scene fills with sticky notes (`note.tsx`), handoff arrows,
+ * the agent badge and the tick. Each part takes plain props and its words from the Scene. Shared because several
+ * section slides draw the same board at their own state, and each part here is drawn by two or more of them
+ * (FE-007 §5).
  */
 
 /** The board's own size, the frame every Scene lays its parts out in. */
@@ -23,18 +23,6 @@ export function Board({ label, children }: { label: string; children: ReactNode 
       <rect x={0} y={0} width={BOARD.width} height={BOARD.height} rx={10} className="fill-muted" />
       {children}
     </svg>
-  );
-}
-
-/** A team's name as a dark tag above its notes. */
-export function TeamTag({ x, y, width, label }: { x: number; y: number; width: number; label: string }) {
-  return (
-    <g data-team-tag>
-      <rect x={x} y={y} width={width} height={20} rx={10} className="fill-foreground" />
-      <text x={x + width / 2} y={y + 15} textAnchor="middle" className="fill-background text-caption font-semibold">
-        {label}
-      </text>
-    </g>
   );
 }
 
@@ -95,16 +83,6 @@ export function AgentBadge({ cx, cy }: { cx: number; cy: number }) {
         d={`M${cx} ${cy - 4.5} L${cx + 1.4} ${cy - 1.4} L${cx + 4.5} ${cy} L${cx + 1.4} ${cy + 1.4} L${cx} ${cy + 4.5} L${cx - 1.4} ${cy + 1.4} L${cx - 4.5} ${cy} L${cx - 1.4} ${cy - 1.4} Z`}
         className="fill-ai"
       />
-    </g>
-  );
-}
-
-/** A person, in the meaning colour `human`, standing with their feet at `y`. */
-export function Person({ cx, y }: { cx: number; y: number }) {
-  return (
-    <g data-person>
-      <circle cx={cx} cy={y - 18.6} r={4.34} className="fill-human" />
-      <path d={`M${cx - 6.82} ${y} Q${cx} ${y - 26.04} ${cx + 6.82} ${y} Z`} className="fill-human" />
     </g>
   );
 }

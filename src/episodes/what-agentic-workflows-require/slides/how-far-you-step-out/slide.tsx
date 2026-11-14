@@ -1,10 +1,11 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { AgentBadge, Arrow, Board, Person, Tick } from '@/episodes/components/slide-shared/party-board/board';
+import { AgentBadge, Arrow, Board, Tick } from '@/episodes/components/slide-shared/party-board/board';
 import { Note } from '@/episodes/components/slide-shared/party-board/note';
-import { OversightPills } from '@/episodes/components/slide-shared/party-board/oversight-pills';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { OversightPills } from './oversight-pills';
+import { Person } from './person';
 
 /** The middle of the seam, where the person stands over its check. */
 const MID = 180;

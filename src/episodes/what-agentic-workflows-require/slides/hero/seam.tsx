@@ -1,5 +1,5 @@
-import { ContractCard, type ContractCardProps } from '@/episodes/components/slide-shared/party-board/contract-card';
 import { cn } from '@/shared/lib/utils';
+import { ContractCard, type ContractCardProps } from './contract-card';
 
 /** A card on the board: the team that holds it, its fact and a detail line. */
 export interface SeamNote {

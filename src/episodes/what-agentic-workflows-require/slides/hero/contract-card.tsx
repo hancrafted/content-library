@@ -1,4 +1,3 @@
-import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 /** The three terms of a contract, in the reader's language. */
@@ -16,29 +15,6 @@ export interface ContractCardProps {
   readonly receives: ReactNode;
   readonly delivers: string;
   readonly checkedBy: string;
-  /** `fixed`: the seam now holds, marked with the `success` tick. */
-  readonly mark?: 'fixed';
-  readonly className?: string;
-}
-
-/** The fixed mark: the `success` tick on the card's corner, once the seam holds. */
-function FixedMark() {
-  return (
-    <span
-      aria-hidden="true"
-      className="absolute -top-3 -right-3 flex size-6 items-center justify-center rounded-full bg-(--success) text-(--success-foreground)"
-    >
-      <svg viewBox="0 0 16 16" className="size-3.5">
-        <path
-          d="M3.5 8.5 l3 3 l6 -6"
-          className="fill-none stroke-current"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </span>
-  );
 }
 
 /** The contract's three rows: each term and what the task agrees to under it. */
@@ -64,21 +40,16 @@ function Terms({
  * The contract card: what a task receives, what it delivers and how someone else checks the result, agreed at the seam
  * between two tasks and leaving how the work is done to the task. The one primary-outlined card on the board.
  */
-export function ContractCard({ label, mark, className, ...terms }: ContractCardProps) {
+export function ContractCard({ label, ...terms }: ContractCardProps) {
   return (
     <div
       data-contract
-      data-mark={mark}
-      className={cn(
-        'card-hover card-hover--raise relative flex flex-col gap-2 rounded-lg border-2 border-primary bg-card p-4 shadow-md',
-        className,
-      )}
+      className="card-hover card-hover--raise flex flex-col gap-2 rounded-lg border-2 border-primary bg-card p-4 shadow-md"
     >
       <p data-contract-label className="text-caption font-semibold text-primary uppercase">
         {label}
       </p>
       <Terms {...terms} />
-      {mark === 'fixed' && <FixedMark />}
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { Arrow, Board, TeamTag } from '@/episodes/components/slide-shared/party-board/board';
+import { Arrow, Board } from '@/episodes/components/slide-shared/party-board/board';
 import { Note } from '@/episodes/components/slide-shared/party-board/note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { TeamTag } from './team-tag';
 
 /** The middle of the seam, where its labels sit. */
 const MID = 180;
