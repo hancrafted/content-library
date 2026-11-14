@@ -5,7 +5,7 @@
  * line and the scan line are the primary colour, as in the Spec.
  *
  * Motion (`motion: local`, one emphasis): the highlight lands on the Collect sediment sample index line, and only then
- * the dashed scan line draws from the console to it. It plays once when the Slide's mount turns `[data-zone='active']`;
+ * the dashed scan line from the console to it fades in; both by opacity alone (decision 19). It plays once when the Slide's mount turns `[data-zone='active']`;
  * the rest state is the end state, so reduced motion shows the highlight resting on the line. Nothing loops.
  */
 
@@ -204,24 +204,15 @@
   }
 }
 
+/* The line fades in already lit, and the scan line fades in after it: opacity alone (decision 19). */
 @keyframes highlight-lands {
   from {
-    background: transparent;
-    color: inherit;
-  }
-
-  to {
-    background: var(--foreground);
-    color: var(--background);
+    opacity: 0;
   }
 }
 
 @keyframes scan-draws {
   from {
-    clip-path: inset(0 100% 0 0);
-  }
-
-  to {
-    clip-path: inset(0 0 0 0);
+    opacity: 0;
   }
 }
