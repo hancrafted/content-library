@@ -31,7 +31,7 @@ export function EmptyCard({
   return (
     <ZoneCard
       data-card="empty"
-      className="flex h-full -rotate-1 flex-col rounded-lg border-2 border-dashed p-4 shadow-md"
+      className="flex h-full -rotate-1 flex-col rounded-lg border-2 border-dashed border-primary p-4 shadow-md"
     >
       <Label label={label} />
       <p className={cn(FIELD, 'text-muted-foreground')}>{fields.title}</p>
@@ -83,7 +83,7 @@ export function DraftCard({ label, title, useWhen, steps, question }: DraftCardP
   return (
     <ZoneCard
       data-card="draft"
-      className="flex h-full rotate-1 flex-col rounded-lg border-2 border-dashed p-4 shadow-md"
+      className="flex h-full rotate-1 flex-col rounded-lg border-2 border-dashed border-primary p-4 shadow-md"
     >
       <Label label={label} />
       <p className={cn(FIELD, 'text-body font-semibold')}>{title}</p>
