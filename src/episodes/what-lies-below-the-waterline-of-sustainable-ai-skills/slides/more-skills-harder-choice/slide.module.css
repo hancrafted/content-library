@@ -1,47 +1,110 @@
 /*
- * "More skills, harder choice" (Option 13a): the room's floor, the near-twins and the one emphasis motion. No raw colour
- * (FE-011): the floor mixes `--zone-sunlit` with `--on-brand-accent` (white) and `--overlay` (black), both fixed
- * across themes; `--primary` marks the one wall line and its card. Dark mode only retunes the mixes.
+ * "More skills, harder choice" (Option 13a): the room's tones, the near-twins and the one emphasis motion. The tones
+ * are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from
+ * it; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). `--primary` marks the
+ * one wall line and its card.
  */
 
-.room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
-  );
+.art {
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --floor-lit: oklch(0.72 0.025 240);
+  --floor: oklch(0.66 0.028 244);
+  --bulk-lit: oklch(0.56 0.03 250);
+  --bulk: oklch(0.46 0.03 254);
+  --bulk-shade: oklch(0.36 0.03 258);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --pin: oklch(0.6 0.18 28);
+  --glint: oklch(1 0 0);
 }
 
-:global(.dark) .room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
-  );
+:global(.dark) .art {
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --floor-lit: oklch(0.25 0.02 255);
+  --floor: oklch(0.22 0.02 258);
+  --bulk-lit: oklch(0.42 0.025 250);
+  --bulk: oklch(0.34 0.025 254);
+  --bulk-shade: oklch(0.26 0.025 258);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --pin: oklch(0.58 0.16 28);
+  --glint: oklch(0.98 0.01 230);
 }
 
-.floor [data-tone='floor-lit'] {
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--room-lit);
+  stroke: var(--room-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--room);
+  stroke: var(--room);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--room-shade);
+  stroke: var(--room-shade);
+}
+
+.art [data-tone='floor-lit'] {
   fill: var(--floor-lit);
+  stroke: var(--floor-lit);
 }
 
-.floor [data-tone='floor'] {
+.art [data-tone='floor'] {
   fill: var(--floor);
+  stroke: var(--floor);
 }
 
-.floor [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
+.art [data-tone='bulk-lit'] {
+  fill: var(--bulk-lit);
+  stroke: var(--bulk-lit);
+}
+
+.art [data-tone='bulk'] {
+  fill: var(--bulk);
+  stroke: var(--bulk);
+}
+
+.art [data-tone='bulk-shade'] {
+  fill: var(--bulk-shade);
+  stroke: var(--bulk-shade);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--pin);
+  stroke: var(--pin);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
 }
 
 /* A near-twin card: dashed and at 65% ink at rest, the end state of its fade. */
@@ -75,6 +138,10 @@
   :global([data-zone='active']) .leader {
     animation: draw 800ms ease-out 1300ms both;
   }
+
+  :global([data-zone='active']) .tip {
+    animation: appear 200ms ease-out 2100ms both;
+  }
 }
 
 @keyframes fade-back {
@@ -87,6 +154,12 @@
   from {
     background: var(--card);
     color: var(--card-foreground);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
   }
 }
 

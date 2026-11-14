@@ -57,43 +57,22 @@ export const nameTheMomentNotTheContent = slide({
           zone="sunlit"
           iceberg="none"
           label={t('alt.scene')}
-          className="aspect-[2/1] w-full rounded-2xl shadow-md @5xl:col-start-1 @5xl:row-start-1"
+          className="aspect-[25/16] w-full rounded-2xl shadow-md @5xl:col-start-1 @5xl:row-start-1"
         >
           <ControlRoom />
         </ZoneScene>
         <RequestBubble
-          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[14%] @5xl:ml-[3%] @5xl:w-[30%] @5xl:self-start @5xl:justify-self-start"
+          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[17.6%] @5xl:ml-[2.4%] @5xl:aspect-[332/116] @5xl:w-[33.2%] @5xl:self-start @5xl:justify-self-start"
           who={t('request.who')}
           text={t.rich('request.text', { match: matched })}
           codingWho={t('request.codingWho')}
           coding={t.rich('request.coding', { match: matchedOnDark })}
         />
-        <p className="relative w-fit rounded-full bg-primary px-3 py-1 text-caption font-semibold text-primary-foreground @5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[24%] @5xl:ml-[3%] @5xl:self-start @5xl:justify-self-start">
+        <p className="relative w-fit rounded-full bg-primary px-3 py-1 text-caption font-semibold text-primary-foreground @5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[33%] @5xl:ml-[25%] @5xl:self-start @5xl:justify-self-start">
           {t('match.pairs')}
         </p>
-        <svg
-          aria-hidden
-          viewBox="0 0 1200 600"
-          preserveAspectRatio="none"
-          className="pointer-events-none relative hidden size-full @5xl:col-start-1 @5xl:row-start-1 @5xl:block"
-        >
-          <path
-            d="M 400 245 C 540 245, 560 395, 690 395"
-            pathLength={1}
-            strokeWidth={4}
-            vectorEffect="non-scaling-stroke"
-            className={`fill-none stroke-primary ${styles.match}`}
-          />
-          <path
-            d="M 400 215 C 540 215, 560 200, 690 200"
-            strokeWidth={2}
-            strokeDasharray="6 6"
-            vectorEffect="non-scaling-stroke"
-            className="fill-none stroke-muted-foreground"
-          />
-        </svg>
         <SkillIndexSheet
-          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[2%] @5xl:mr-[3%] @5xl:w-[40%] @5xl:self-start @5xl:justify-self-end"
+          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[3.4%] @5xl:ml-[54.8%] @5xl:w-[42%] @5xl:self-start @5xl:justify-self-start"
           name={t('index.skill')}
           slug={SKILL}
           target={target('moment')}
@@ -136,6 +115,34 @@ export const nameTheMomentNotTheContent = slide({
             marker: <Marker note="a-description-says-what-and-when" placement="beside" />,
           }}
         />
+        <svg
+          aria-hidden
+          viewBox="0 0 1000 640"
+          className="pointer-events-none relative hidden size-full @5xl:col-start-1 @5xl:row-start-1 @5xl:block"
+        >
+          <path
+            d="M 356 196 C 450 196, 450 150, 530 150"
+            strokeWidth={2}
+            strokeDasharray="4 7"
+            strokeLinecap="round"
+            className="fill-none stroke-muted-foreground"
+          />
+          <path
+            d="M 528 140 l 10 20 M 538 140 l -10 20"
+            strokeWidth={2}
+            strokeLinecap="round"
+            className="fill-none stroke-muted-foreground"
+          />
+          <path
+            d="M 356 236 C 440 236, 458 312, 548 312"
+            pathLength={1}
+            strokeWidth={4.5}
+            strokeLinecap="round"
+            className={`fill-none stroke-primary ${styles.match}`}
+          />
+          <circle cx={356} cy={236} r={6} strokeWidth={2} className="fill-primary stroke-background" />
+          <path d="M 562 312 l -14 -9 l 0 18 z" className={`fill-primary ${styles.verdict}`} />
+        </svg>
       </div>
       <div className="flex items-center gap-3">
         <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-body font-semibold text-primary-foreground">
