@@ -1680,6 +1680,63 @@ summary.row:hover {
 .bar[data-orientation='horizontal'] .line[data-crossed] {
   border-left-color: var(--primary);
 }
+/* Upright: the base bar's own drawing, restated so a narrow container's horizontal timeline bar does not reach it. */
+.bar[data-orientation='vertical'] {
+  width: 100%;
+  height: var(--bar-h, 100%);
+}
+.bar[data-orientation='vertical'] .block {
+  top: calc(var(--s) * 1%);
+  bottom: auto;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: max(calc(var(--z) * 1%), 2px);
+  cursor: default;
+}
+/* Labelled: a list read top to bottom that fills its figure. Each block is a row that holds a Slide's words, its height
+ * grown from its share of the window but never below its words; the free space closes the list. Sizes are illustrative. */
+.bar[data-labelled] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 0 auto;
+  height: auto;
+  padding: 2px;
+  overflow: visible;
+}
+.bar[data-labelled] .block {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  flex: var(--z) 0 auto;
+  min-height: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.4rem;
+  color: var(--foreground);
+  background: color-mix(in oklch, var(--k) 32%, var(--card));
+  box-shadow: inset 4px 0 0 var(--k);
+}
+.bar[data-labelled] .block[data-ring] {
+  min-height: 4.5rem;
+  outline-width: 3px;
+}
+.freeRow {
+  flex: var(--z) 0 auto;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--cs-border);
+  border-radius: 0.4rem;
+  color: var(--cs-sub);
+}
 .block[data-faded] {
   background: var(--cs-dim);
 }

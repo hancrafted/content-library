@@ -2,6 +2,7 @@ import { Character } from '@/episodes/components/slide-shared/character/characte
 import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { ControlRoom } from './room';
 import styles from './slide.module.css';
 
@@ -9,10 +10,13 @@ import styles from './slide.module.css';
 const VIEW_TOP = 200;
 
 /** Where an overlay word sits over the drawing, in the Scene's units, as percentages of the visible box. */
-export const at = (x: number, y: number) => ({ left: `${x / 12}%`, top: `${((y - VIEW_TOP) / 600) * 100}%` });
+export const at = (x: number, y: number) => ({
+  left: `${(x / SCENE_WIDTH) * 100}%`,
+  top: `${((y - VIEW_TOP) / (SCENE_HEIGHT - VIEW_TOP)) * 100}%`,
+});
 
 /** A width in the Scene's units, as a percentage of the box. */
-export const wide = (width: number) => `${width / 12}%`;
+export const wide = (width: number) => `${(width / SCENE_WIDTH) * 100}%`;
 
 const FLOOR = 720;
 const BULKHEAD = { x: 584, width: 24 } as const;

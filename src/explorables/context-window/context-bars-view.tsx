@@ -1,4 +1,5 @@
-import { ContextBarView } from './context-bar-view';
+import type { ReactNode } from 'react';
+import { ContextBarView, type BarOrientation } from './context-bar-view';
 import { barModel } from './context-bars.pure';
 import { percentText, shortTokens } from './context-format.pure';
 import { fill } from './context-view';
@@ -6,16 +7,24 @@ import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { Chat, MiniBar, MiniPreset } from './context.types';
 
-/* Static bars: one figure per bar, drawn horizontally with the pure view. Server-rendered, no interaction. */
+/* Static bars: one figure per bar, drawn with the pure view, horizontally unless asked. Server-rendered, no interaction. */
 
-interface Props {
+/** How a Slide asks for its bars: upright, and with its own words in each block. */
+export interface BarsLayout {
+  readonly orientation?: BarOrientation;
+  /** A Slide's words for each block of every bar, in block order (see `ContextBarView`). */
+  readonly labels?: readonly ReactNode[];
+  readonly free?: ReactNode;
+}
+
+interface Props extends BarsLayout {
   readonly mini: MiniPreset;
   readonly chats: Readonly<Record<string, Chat>>;
   readonly words: ContextWords;
   readonly locale: string;
 }
 
-interface FigureProps extends Pick<Props, 'words' | 'locale'> {
+interface FigureProps extends Pick<Props, 'words' | 'locale' | 'orientation' | 'labels' | 'free'> {
   readonly bar: MiniBar;
   readonly chat: Chat | undefined;
   readonly window: MiniPreset['window'];
@@ -35,7 +44,7 @@ function smartZoneLines(window: MiniPreset['window'], used: number) {
 }
 
 function Figure(props: FigureProps) {
-  const { bar, chat, window, words } = props;
+  const { bar, chat, window, words, orientation = 'horizontal', labels, free } = props;
   const model = barModel(bar, chat, window);
   const text = figureText(props, model.used);
   const lines = smartZoneLines(window, model.used);
@@ -46,7 +55,9 @@ function Figure(props: FigureProps) {
         <small className="text-caption">{bar.discarded ? `${text} · ${words.mini.discarded}` : text}</small>
       </figcaption>
       <ContextBarView
-        orientation="horizontal"
+        orientation={orientation}
+        labels={labels}
+        free={free}
         total={model.total}
         blocks={model.blocks}
         buffer={window.bufferTokens}
@@ -57,13 +68,23 @@ function Figure(props: FigureProps) {
   );
 }
 
-export function ContextBars({ mini, chats, words, locale }: Props) {
+export function ContextBars({ mini, chats, words, locale, ...layout }: Props) {
   return (
     <div className={`${styles.bars} text-caption`} data-bars={mini.id}>
       {mini.mini.map((bar) => {
         const chat = chats[bar.chat];
         if (!chat) throw new Error(`context bars: Preset "${mini.id}" names unknown chat "${bar.chat}"`);
-        return <Figure key={bar.label} bar={bar} chat={chat} window={mini.window} words={words} locale={locale} />;
+        return (
+          <Figure
+            key={bar.label}
+            bar={bar}
+            chat={chat}
+            window={mini.window}
+            words={words}
+            locale={locale}
+            {...layout}
+          />
+        );
       })}
     </div>
   );

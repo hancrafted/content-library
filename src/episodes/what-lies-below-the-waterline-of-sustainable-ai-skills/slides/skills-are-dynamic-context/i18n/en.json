@@ -20,7 +20,6 @@
     }
   },
   "window": {
-    "heading": "The context window, top to bottom",
     "label": "The context window at the end of the dive, top to bottom",
     "rows": {
       "system": {

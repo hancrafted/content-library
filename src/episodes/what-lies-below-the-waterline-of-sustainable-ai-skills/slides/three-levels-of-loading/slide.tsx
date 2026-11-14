@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
-import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { SCENE_WIDTH, ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import { ArrowDown, ArrowRight } from 'lucide-react';
@@ -171,7 +171,7 @@ export const threeLevelsOfLoading = slide({
               <Badge n={2} x={PROPPED.x} y={PROPPED.y} />
               <Badge n={3} x={925} y={500} />
               <div
-                style={{ ...at(PROPPED.x, PROPPED.y), width: `${(PROPPED.width / 1200) * 100}%` }}
+                style={{ ...at(PROPPED.x, PROPPED.y), width: `${(PROPPED.width / SCENE_WIDTH) * 100}%` }}
                 className="absolute hidden flex-col gap-0.5 p-2 text-caption leading-tight text-foreground @3xl:flex"
               >
                 <span className="font-semibold">{t('art.cardTitle')}</span>

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { BarBlock } from './context-bars.pure';
 import styles from './context.module.css';
 import { tint, vars } from './window-bits';
@@ -43,24 +44,83 @@ export interface ContextBarViewProps {
   /** The buffer kept free, in the unit of `total`. */
   readonly buffer?: number;
   readonly lines?: readonly BarLine[];
-  /** What the bar shows, for assistive technology: the blocks carry no text. */
+  /** What the bar shows, for assistive technology. */
   readonly label: string;
+  /**
+   * A Slide's words for each block, in block order. Given, the bar is a list read top to bottom: each block a row that
+   * holds its words, sized from its share but never smaller than its words, then a row for the free space.
+   */
+  readonly labels?: readonly ReactNode[];
+  /** The free-space row's words, drawn only with `labels`. */
+  readonly free?: ReactNode;
 }
 
-/** A static bar: one block per `blocks` entry at its place on the scale. */
-export function ContextBarView({ orientation, total, blocks, buffer = 0, lines = [], label }: ContextBarViewProps) {
+/** One block at its place on the scale, holding a Slide's words when the bar is a list. */
+function Block({
+  block,
+  total,
+  words,
+  listed,
+}: {
+  readonly block: BarBlock;
+  readonly total: number;
+  readonly words: ReactNode;
+  readonly listed: boolean;
+}) {
   return (
-    <div className={`${styles.bar} ${styles.barView}`} data-orientation={orientation} role="img" aria-label={label}>
-      {blocks.map((block) => (
-        <div
-          key={block.key}
-          className={styles.block}
-          data-faded={block.faded ? '' : undefined}
-          data-ring={block.ring ? '' : undefined}
-          style={tint(block.colour, { '--s': (block.start / total) * 100, '--z': (block.size / total) * 100 })}
-        />
+    <div
+      className={styles.block}
+      role={listed ? 'listitem' : undefined}
+      data-block={block.key}
+      data-faded={block.faded ? '' : undefined}
+      data-ring={block.ring ? '' : undefined}
+      style={tint(block.colour, { '--s': (block.start / total) * 100, '--z': (block.size / total) * 100 })}
+    >
+      {words}
+    </div>
+  );
+}
+
+/** The list's last row: what is left of the window. */
+function FreeRow({
+  blocks,
+  total,
+  children,
+}: {
+  readonly blocks: readonly BarBlock[];
+  readonly total: number;
+  readonly children: ReactNode;
+}) {
+  const used = blocks.reduce((sum, block) => sum + block.size, 0);
+  return (
+    <div className={styles.freeRow} role="listitem" style={vars({ '--z': ((total - used) / total) * 100 })}>
+      {children}
+    </div>
+  );
+}
+
+/** A static bar: one block per `blocks` entry at its place on the scale; a list of rows when given `labels`. */
+export function ContextBarView(props: ContextBarViewProps) {
+  const { orientation, total, blocks, buffer = 0, lines = [], label, labels, free } = props;
+  const listed = labels !== undefined;
+  return (
+    <div
+      className={`${styles.bar} ${styles.barView}`}
+      data-orientation={orientation}
+      data-labelled={listed ? '' : undefined}
+      role={listed ? 'list' : 'img'}
+      aria-label={label}
+    >
+      {blocks.map((block, i) => (
+        <Block key={block.key} block={block} total={total} words={labels?.[i]} listed={listed} />
       ))}
-      {buffer > 0 && <BarBuffer size={buffer} total={total} />}
+      {listed ? (
+        <FreeRow blocks={blocks} total={total}>
+          {free}
+        </FreeRow>
+      ) : (
+        buffer > 0 && <BarBuffer size={buffer} total={total} />
+      )}
       <BarLines lines={lines} />
     </div>
   );

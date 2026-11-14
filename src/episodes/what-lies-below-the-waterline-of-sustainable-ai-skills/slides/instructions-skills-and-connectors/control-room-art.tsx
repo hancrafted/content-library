@@ -2,6 +2,7 @@ import { Character } from '@/episodes/components/slide-shared/character/characte
 import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { ControlRoom } from './room';
 import { Cable, LabRack, Manual, Notebook, Sonar, WallBrief } from './things';
 
@@ -9,7 +10,10 @@ import { Cable, LabRack, Manual, Notebook, Sonar, WallBrief } from './things';
 const VIEW_TOP = 200;
 
 /** Where an overlay word sits over the drawing, in the Scene's units, as percentages of the visible box. */
-export const at = (x: number, y: number) => ({ left: `${x / 12}%`, top: `${((y - VIEW_TOP) / 600) * 100}%` });
+export const at = (x: number, y: number) => ({
+  left: `${(x / SCENE_WIDTH) * 100}%`,
+  top: `${((y - VIEW_TOP) / (SCENE_HEIGHT - VIEW_TOP)) * 100}%`,
+});
 
 /** The four things the room shows, in the order the Slide reads them. */
 export const THINGS = ['personal', 'project', 'skills', 'connectors'] as const;

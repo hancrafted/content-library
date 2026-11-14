@@ -150,6 +150,37 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
+  it("draws the context window as the Explorable's waterline-dive bar, upright, static on top and the skill body ringed", () => {
+    // ARRANGE
+    const expected = {
+      orientation: 'vertical',
+      rows: [
+        'System prompt',
+        'Skills',
+        'Memory files',
+        'Skill instructions',
+        'Tool results',
+        'Tool results',
+        'Tool results',
+        'Free space',
+      ],
+      ringed: 'Skill instructions',
+    };
+    // ACT
+    const $ = sceneOf('skills-are-dynamic-context');
+    const bar = $('[data-bars="waterline-dive"] [data-orientation]');
+    const rows = bar
+      .children('[role="listitem"]')
+      .toArray()
+      .map((row) => $(row).find('[data-term]').text() || $(row).text());
+    // ASSERT
+    expect({
+      orientation: bar.attr('data-orientation'),
+      rows,
+      ringed: bar.find('[data-ring] [data-term]').text(),
+    }).toEqual(expected);
+  });
+
   it('draws every page Scene with ZoneScene, at the Surface or through a window onto the deep', () => {
     // ARRANGE
     const expected = ['surface', 'surface', 'twilight', 'surface', 'surface'];
@@ -191,11 +222,20 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('carries both views on every page Slide, the coding words hidden until the switch', () => {
     // ARRANGE
-    const expected = [true, true, true, true, true];
+    const expected = [
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+    ];
     // ACT
     const actual = PAGE_SLUGS.map((slug) => {
       const $ = sceneOf(slug);
-      return $('[data-view="chat"]').length > 0 && $('[data-view="coding"]').length > 0;
+      const views = $('[data-view]')
+        .toArray()
+        .map((el) => $(el).attr('data-view') ?? '');
+      return [...new Set(views)].sort();
     });
     // ASSERT
     expect(actual).toEqual(expected);

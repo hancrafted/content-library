@@ -3,9 +3,10 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
+import { ContextBarsPreset } from '@/explorables/context-window/context';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { ARRIVAL_DELAY, at, CARD, ControlRoomArt, type Arrival } from './control-room-art';
+import { ARRIVAL_DELAY, ARRIVALS, at, CARD, ControlRoomArt } from './control-room-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './slide.module.css';
@@ -23,15 +24,13 @@ const COPILOT_INSTRUCTIONS = {
 };
 const CLAUDE_SKILLS = { slug: 'anthropic-claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 
-const STATIC_ROWS = ['system', 'skills', 'memory'] as const;
-type Row = (typeof STATIC_ROWS)[number] | 'instructions' | 'frames' | 'sonar' | 'logs';
-/** Each dynamic row stacks onto the window on the beat its object lands on the desk. */
-const DYNAMIC_ROWS: readonly { readonly row: Row; readonly arrival: Arrival }[] = [
-  { row: 'instructions', arrival: 'card' },
-  { row: 'frames', arrival: 'frames' },
-  { row: 'sonar', arrival: 'sonar' },
-  { row: 'logs', arrival: 'logs' },
-];
+/** The window's blocks top to bottom, as the Explorable's `waterline-dive` bar holds them: static, then dynamic. */
+const ROWS = ['system', 'skills', 'memory', 'instructions', 'frames', 'sonar', 'logs'] as const;
+type Row = (typeof ROWS)[number];
+/** Each dynamic block stacks onto the window on the beat its object lands on the desk (slide.module.css). */
+const ARRIVAL_BEATS = Object.fromEntries(
+  ARRIVALS.map((arrival) => [`--arrive-${arrival}`, `${ARRIVAL_DELAY[arrival]}ms`]),
+) as CSSProperties;
 type Pill = 'feed' | 'index' | 'orders' | 'card' | 'frames' | 'sonar' | 'logs';
 const PILLS: readonly { readonly pill: Pill; readonly x: number; readonly y: number }[] = [
   { pill: 'feed', x: 340, y: 70 },
@@ -43,39 +42,20 @@ const PILLS: readonly { readonly pill: Pill; readonly x: number; readonly y: num
   { pill: 'logs', x: 1035, y: 600 },
 ];
 
-/** One block of the context window: its AI term, and the scene's word or the file behind it on the right. */
-function WindowRow(props: {
-  readonly term: string;
-  readonly chat: string;
-  readonly coding: string;
-  readonly tone: 'static' | 'focal' | 'result';
-  readonly arrival?: Arrival;
-}) {
-  const style =
-    props.arrival === undefined
-      ? undefined
-      : ({ '--arrive-delay': `${ARRIVAL_DELAY[props.arrival]}ms` } as CSSProperties);
+/** One block's words: its AI term, and the scene's word or the file behind it on the right. */
+function BlockWords(props: { readonly term: string; readonly chat: string; readonly coding: string }) {
   return (
-    <li
-      data-row-tone={props.tone}
-      data-motion={props.arrival === undefined ? undefined : 'stack-on'}
-      style={style}
-      className={cn(
-        'flex flex-wrap items-baseline justify-between gap-x-3 rounded-lg px-3 py-2 text-caption',
-        props.tone === 'static' && 'bg-card text-card-foreground shadow-sm',
-        props.tone === 'focal' && 'bg-foreground py-4 text-background',
-        props.tone === 'result' && 'bg-(--photo) text-foreground',
-        props.arrival !== undefined && styles.arrive,
-      )}
-    >
-      <span className="font-semibold">{props.term}</span>
-      <InView view="chat" className="opacity-80">
+    <>
+      <span data-term className="font-semibold">
+        {props.term}
+      </span>
+      <InView view="chat" className="text-right opacity-80">
         {props.chat}
       </InView>
-      <InView view="coding" className="font-mono opacity-80">
+      <InView view="coding" className="text-right font-mono opacity-80">
         {props.coding}
       </InView>
-    </li>
+    </>
   );
 }
 
@@ -91,9 +71,9 @@ function Bracket({ label, children }: { readonly label: ReactNode; readonly chil
 
 /**
  * "Skills are static and dynamic context" (Spec Option 5b): the control room at the end of the dive beside the context
- * window standing upright, in the context window Explorable's own order and labels, static on top and dynamic below,
- * with a bracket naming each part. Overrules `grid-2x1` loosely for room, window and brackets over one footer; keeps
- * `motion: local`, each object landing on the desk as its block stacks onto the window.
+ * window Explorable's `waterline-dive` bar standing upright, static on top and dynamic below, each block carrying this
+ * Slide's words, with a bracket naming each part. Overrules `grid-2x1` loosely for room, window and brackets over one
+ * footer; keeps `motion: local`, each object landing on the desk as its block stacks onto the window.
  */
 export const skillsAreDynamicContext = slide({
   slug: 'skills-are-dynamic-context',
@@ -110,12 +90,14 @@ export const skillsAreDynamicContext = slide({
     },
   ],
   segments: [{ slug: 'back-to-the-window' }, { slug: 'the-standing-part' }, { slug: 'filling-as-you-dive' }],
-  content: ({ t, target, Marker }) => {
-    const row = (name: Row) => ({
-      term: t(`window.rows.${name}.term`),
-      chat: t(`window.rows.${name}.chat`),
-      coding: t(`window.rows.${name}.coding`),
-    });
+  content: ({ t, locale, target, Marker }) => {
+    const words = (name: Row) => (
+      <BlockWords
+        term={t(`window.rows.${name}.term`)}
+        chat={t(`window.rows.${name}.chat`)}
+        coding={t(`window.rows.${name}.coding`)}
+      />
+    );
     return (
       <SlideFrame className={cn(styles.scene, '@container mt-6 flex flex-col gap-6')}>
         <div className="grid gap-6 @4xl:grid-cols-[7fr_5fr]">
@@ -158,14 +140,19 @@ export const skillsAreDynamicContext = slide({
           >
             <ControlRoomArt />
           </ZoneScene>
-          <section aria-label={t('window.label')} className="flex flex-col gap-2">
-            <p className="text-caption text-muted-foreground">{t('window.heading')}</p>
-            <div className="grid grid-cols-[minmax(0,1fr)_8rem] gap-x-4 gap-y-3">
-              <ol className="flex flex-col gap-2 rounded-xl border p-2">
-                {STATIC_ROWS.map((name) => (
-                  <WindowRow key={name} tone="static" {...row(name)} />
-                ))}
-              </ol>
+          <section
+            aria-label={t('window.label')}
+            style={ARRIVAL_BEATS}
+            className={cn(styles.window, 'grid grid-cols-[minmax(0,1fr)_8rem] gap-x-4')}
+          >
+            <ContextBarsPreset
+              preset="waterline-dive"
+              locale={locale}
+              orientation="vertical"
+              labels={ROWS.map(words)}
+              free={t('window.free')}
+            />
+            <div className="flex flex-col justify-between gap-6 pt-8">
               <div {...target('static')}>
                 <Bracket
                   label={
@@ -181,23 +168,7 @@ export const skillsAreDynamicContext = slide({
                   </p>
                 </Bracket>
               </div>
-              <div aria-hidden className="col-span-2 h-1 rounded-full bg-foreground" />
-              <ol className="flex flex-col gap-2 rounded-xl border p-2">
-                {DYNAMIC_ROWS.map(({ row: name, arrival }) => (
-                  <WindowRow
-                    key={name}
-                    tone={name === 'instructions' ? 'focal' : 'result'}
-                    arrival={arrival}
-                    {...row(name)}
-                  />
-                ))}
-                <li className="rounded-lg border-2 border-dashed px-3 py-4 text-center text-caption text-muted-foreground">
-                  {t('window.free')}
-                </li>
-              </ol>
-              <div className="self-end">
-                <Bracket label={t('dynamic.label')}>{t('dynamic.text')}</Bracket>
-              </div>
+              <Bracket label={t('dynamic.label')}>{t('dynamic.text')}</Bracket>
             </div>
           </section>
         </div>

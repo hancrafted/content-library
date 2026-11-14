@@ -2,6 +2,7 @@ import { Character } from '@/episodes/components/slide-shared/character/characte
 import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
+import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import type { ReactNode } from 'react';
 import { ControlRoom } from './room';
 
@@ -13,7 +14,10 @@ export const ARRIVAL_DELAY: Readonly<Record<Arrival, number>> = { card: 200, fra
 const ARRIVAL_MS = 700;
 
 /** Where an overlay word sits over the drawing, in the Scene's 1200 by 800 units. */
-export const at = (x: number, y: number) => ({ left: `${x / 12}%`, top: `${y / 8}%` });
+export const at = (x: number, y: number) => ({
+  left: `${(x / SCENE_WIDTH) * 100}%`,
+  top: `${(y / SCENE_HEIGHT) * 100}%`,
+});
 
 const FEED = { x: 50, y: 50, width: 580, height: 330 } as const;
 const DESK_TOP = 560;

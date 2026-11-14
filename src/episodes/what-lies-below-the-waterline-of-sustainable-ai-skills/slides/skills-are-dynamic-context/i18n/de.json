@@ -20,7 +20,6 @@
     }
   },
   "window": {
-    "heading": "Das Kontextfenster, von oben nach unten",
     "label": "Das Kontextfenster am Ende des Tauchgangs, von oben nach unten",
     "rows": {
       "system": {

@@ -1,6 +1,6 @@
 /*
  * The Slide's token file: the control room at the end of the dive, its desk and what lands on it, and the context
- * window's rows, mixed from global tokens so both themes follow (FE-011). `--machine` colours only the robot, as the
+ * window's blocks, mixed from global tokens so both themes follow (FE-011). `--machine` colours only the robot, as the
  * cast draws it; the pilot is the cast's own.
  *
  * Motion (`motion: local`, one emphasis): each object lands on the desk (`Travel`) as its block stacks onto the window:
@@ -44,12 +44,26 @@
   stroke-width: 0.6;
 }
 
-.arrive {
-  translate: 0 0;
+/* The bar's dynamic blocks, keyed by the Explorable's block ids: the card's body, then the three tool results. */
+.window :global([data-block='waterline-dive-4@skills']) {
+  --arrive-delay: var(--arrive-card);
+}
+
+.window :global([data-block='waterline-dive-5@tool_result']) {
+  --arrive-delay: var(--arrive-frames);
+}
+
+.window :global([data-block='waterline-dive-6@tool_result']) {
+  --arrive-delay: var(--arrive-sonar);
+}
+
+.window :global([data-block='waterline-dive-7@tool_result']) {
+  --arrive-delay: var(--arrive-logs);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  :global([data-zone='active']) .arrive {
+  :global([data-zone='active']) .window :global([data-block='waterline-dive-4@skills']),
+  :global([data-zone='active']) .window :global([data-block$='@tool_result']) {
     animation: stack-on 700ms cubic-bezier(0.33, 0, 0.2, 1) var(--arrive-delay) both;
   }
 }

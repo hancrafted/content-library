@@ -2,18 +2,17 @@ import { Character } from '@/episodes/components/slide-shared/character/characte
 import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { ControlRoom } from './room';
 import styles from './slide.module.css';
 
 /** The Scene shows its lower part, from here to the floor: the box is twice as wide as tall. */
 export const VIEW_TOP = 200;
-const SCENE_W = 1200;
-const SCENE_H = 800;
 
 /** Where an overlay word sits over the drawing, in the Scene's units, as percentages of the visible box. */
 export const at = (x: number, y: number) => ({
-  left: `${(x / SCENE_W) * 100}%`,
-  top: `${((y - VIEW_TOP) / (SCENE_H - VIEW_TOP)) * 100}%`,
+  left: `${(x / SCENE_WIDTH) * 100}%`,
+  top: `${((y - VIEW_TOP) / (SCENE_HEIGHT - VIEW_TOP)) * 100}%`,
 });
 
 const SHELF = { x: 60, y: 250, width: 330, rows: 3, perRow: 9 } as const;
