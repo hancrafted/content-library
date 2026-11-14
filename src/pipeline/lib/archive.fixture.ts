@@ -34,6 +34,8 @@ export const SPEC = `<!doctype html><html><head><title>Spec</title><style>.spec-
       <div class="spec-card spec-panel" data-panel="voice-script"><ol data-spec="voice-script"><li>Spoken words</li></ol></div>
       <div class="spec-card spec-panel" data-panel="speaker-notes"><ol data-spec="speaker-notes"><li>A sourced fact</li></ol></div>
     </div>
+    <div class="spec-bar"><div class="spec-pickbar"></div><button type="button" class="spec-details-toggle">Show details</button><button type="button" class="spec-reset" data-reset>Reset</button></div>
+    <p class="spec-showing" role="status"></p>
     <div class="spec-options">
     <figure data-spec="option" data-option="1a" data-recommended><div data-spec="mock">Board A</div>
       <details><summary>Build notes</summary><div data-spec="build-notes">

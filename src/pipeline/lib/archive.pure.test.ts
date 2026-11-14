@@ -187,6 +187,8 @@ describe('success cases', () => {
         '.spec-pick',
         '.spec-note',
         '.spec-card-head',
+        '.spec-bar',
+        '.spec-showing',
         '[data-panel="voice-script"]',
         '[data-panel="speaker-notes"]',
         '.spec-words > input',

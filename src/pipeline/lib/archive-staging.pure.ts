@@ -21,13 +21,15 @@ export interface SlidePage {
 }
 
 /**
- * What the archive drops from a Spec article: the review controls and each Option's card head (its title, Recommended
- * and Locked flags and View button, which the tab of the archive carries once), which wrote feedback that already landed, and the
- * Voice script and Speaker notes, whose words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual
- * idea stays, alone, so its tab goes too.
+ * What the archive drops from a Spec article: the review controls (the rail's bar and status line, the picks and the
+ * notes) and each Option's card head (its title, Recommended and Locked flags and View button, which the tab of the
+ * archive carries once), which wrote feedback that already landed, and the Voice script and Speaker notes, whose
+ * words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual idea stays, alone, so its tab goes too.
  */
 const REVIEW_ONLY = [
   '.spec-card-head',
+  '.spec-bar',
+  '.spec-showing',
   '.spec-pick',
   '.spec-note',
   '.spec-words > [data-panel]:not([data-panel="visual-idea"])',
