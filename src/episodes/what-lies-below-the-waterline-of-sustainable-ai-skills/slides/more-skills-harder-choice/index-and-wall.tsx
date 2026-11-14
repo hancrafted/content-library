@@ -1,6 +1,7 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
+import { BoardFrame, CardPaper, WallPaper, WallPin } from './room-art';
 import styles from './slide.module.css';
 
 interface ViewWords {
@@ -39,13 +40,16 @@ function BoardCard({ card: { folder, name, twin }, led }: { readonly card: Index
       data-twin={twin ? '' : undefined}
       data-led={led ? '' : undefined}
       className={cn(
-        'flex min-h-11 items-center rounded-md bg-card px-3 py-2 text-caption text-card-foreground',
+        'relative flex min-h-11 items-center px-3 py-2 text-caption text-card-foreground',
         twin && cn('border-2 border-dashed border-muted-foreground', styles.twin),
         led && 'font-semibold ring-3 ring-primary',
       )}
     >
-      <InView view="chat">{name}</InView>
-      <InView view="coding" className="font-mono break-all">
+      <CardPaper />
+      <InView view="chat" className="relative">
+        {name}
+      </InView>
+      <InView view="coding" className="relative font-mono break-all">
         {folder}
       </InView>
     </li>
@@ -61,18 +65,21 @@ export interface SkillIndexBoardProps {
 }
 
 /**
- * The skill index board over the console: eight cards, the four near-twins dashed and faded back, the one card the wall
+ * The skill index board over the console, the Spec's faceted frame of paper cards: eight cards, the four near-twins dashed and faded back, the one card the wall
  * list leads to ringed in primary. In the Coding agent view each card shows its skill folder.
  */
 export function SkillIndexBoard({ label, cards, target, className }: SkillIndexBoardProps) {
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
       <Pill words={label} tone="card" />
-      <ul className="grid grid-cols-2 gap-2 rounded-xl bg-foreground/80 p-2 shadow-md">
-        {cards.map((card) => (
-          <BoardCard key={card.folder} card={card} led={card.folder === target} />
-        ))}
-      </ul>
+      <div data-board className="relative p-[3%]">
+        <BoardFrame />
+        <ul className="relative grid grid-cols-2 gap-2">
+          {cards.map((card) => (
+            <BoardCard key={card.folder} card={card} led={card.folder === target} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -105,23 +112,25 @@ export interface WallBriefProps {
 }
 
 /**
- * The project brief on the wall, the project instructions, always loaded: a short list of three skills, its first line
+ * The project brief pinned to the wall, the project instructions, always loaded: a short list of three skills, its first line
  * lit. In the Coding agent view it is `AGENTS.md` with a `## Skills` list.
  */
 export function WallBrief({ chat, coding, items, lit, pill, className }: WallBriefProps) {
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
-      <ZoneCard className="flex flex-col gap-3 rounded-xl p-4 shadow-md">
-        <InView view="chat" as="div" className="flex flex-col gap-1">
+      <ZoneCard className="relative flex flex-col gap-3 p-4">
+        <WallPaper />
+        <WallPin />
+        <InView view="chat" as="div" className="relative flex flex-col gap-1">
           <span className="text-body font-semibold">{chat.title}</span>
           <span className="text-caption">{chat.lead}</span>
         </InView>
-        <InView view="coding" as="div" className="flex flex-col gap-1 font-mono">
+        <InView view="coding" as="div" className="relative flex flex-col gap-1 font-mono">
           <span className="text-body font-semibold">{coding.title}</span>
           <span className="text-caption">{coding.heading}</span>
           <span className="text-caption">{coding.lead}</span>
         </InView>
-        <ol className="flex flex-col gap-1">
+        <ol className="relative flex flex-col gap-1">
           {items.map(({ folder, name }, index) => (
             <WallItem key={folder} folder={folder} name={name} n={index + 1} lit={folder === lit} />
           ))}

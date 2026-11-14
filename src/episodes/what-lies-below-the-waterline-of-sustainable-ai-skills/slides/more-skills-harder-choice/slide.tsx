@@ -81,13 +81,13 @@ export const moreSkillsHarderChoice = slide({
           <ControlRoom />
         </ZoneScene>
         <SkillIndexBoard
-          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[3%] @5xl:ml-[36%] @5xl:w-[34%] @5xl:self-start @5xl:justify-self-start"
+          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[1%] @5xl:ml-[39.2%] @5xl:w-[32.3%] @5xl:self-start @5xl:justify-self-start"
           label={{ chat: t('index.label'), coding: t('index.labelCoding') }}
           target={LIT}
           cards={CARDS.map(({ folder, twin }) => ({ folder, twin, name: t(`index.cards.${folder}`) }))}
         />
         <WallBrief
-          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[6%] @5xl:mr-[2%] @5xl:w-[25%] @5xl:self-start @5xl:justify-self-end"
+          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[4.6%] @5xl:ml-[72.3%] @5xl:w-[23.5%] @5xl:self-start @5xl:justify-self-start"
           chat={{ title: t('wall.title'), lead: t('wall.lead') }}
           coding={{ title: '# AGENTS.md', heading: '## Skills', lead: t('wall.lead') }}
           items={WALL.map((folder) => ({ folder, name: t(`index.cards.${folder}`) }))}
@@ -101,11 +101,20 @@ export const moreSkillsHarderChoice = slide({
           className="pointer-events-none relative hidden size-full @5xl:col-start-1 @5xl:row-start-1 @5xl:block"
         >
           <path
-            d="M 892 204 C 862 204, 862 180, 832 180"
+            d="M 882 251 C 842 251, 884 167, 850 167"
             pathLength={1}
             strokeWidth={3}
+            strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
             className={`fill-none stroke-primary ${styles.leader}`}
+          />
+          <path
+            d="M 860 158 L 849 167 L 860 176"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            className={`fill-none stroke-primary ${styles.tip}`}
           />
         </svg>
       </div>
