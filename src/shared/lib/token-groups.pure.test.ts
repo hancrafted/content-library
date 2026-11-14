@@ -59,6 +59,30 @@ describe('success cases', () => {
     expect(groups.map((g) => [g.label, g.tokens.map((t) => t.name)])).toEqual(expected);
   });
 
+  it('files the Iceberg zones before the scenery tones under Iceberg, never under Other', () => {
+    // ARRANGE
+    const tokens = [
+      token('--scenery-wall'),
+      token('--zone-abyss'),
+      token('--scenery-sea-surface'),
+      token('--zone-surface'),
+    ];
+    const expected = [['Iceberg', ['--zone-abyss', '--zone-surface', '--scenery-wall', '--scenery-sea-surface']]];
+    // ACT
+    const groups = groupGlobalTokens(tokens);
+    // ASSERT
+    expect(groups.map((g) => [g.label, g.tokens.map((t) => t.name)])).toEqual(expected);
+  });
+
+  it('describes a scenery tone by its family', () => {
+    // ARRANGE
+    const expected = 'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (design-ADR 0025).';
+    // ACT
+    const text = describeToken('--scenery-floor-lit');
+    // ASSERT
+    expect(text).toBe(expected);
+  });
+
   it('describes a global token in one line', () => {
     // ARRANGE
     const expected = 'Corner rounding of cards, buttons and inputs.';
