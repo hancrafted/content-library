@@ -278,9 +278,18 @@
   color: var(--primary-foreground);
 }
 
+/* The ring: drawn once on a layer of its own, shown by opacity alone (decision 19). */
 .ringed {
-  outline: 2px solid var(--primary);
-  outline-offset: 0;
+  position: relative;
+}
+
+.ringed::after {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -288,20 +297,20 @@
     animation: light-up 600ms ease-out 1200ms both;
   }
 
-  :global([data-zone='active']) .ringed {
+  :global([data-zone='active']) .ringed::after {
     animation: ring-in 400ms ease-out 1700ms both;
   }
 }
 
+/* The line fades in already lit: opacity alone (decision 19). */
 @keyframes light-up {
   from {
-    background: var(--card);
-    color: var(--card-foreground);
+    opacity: 0;
   }
 }
 
 @keyframes ring-in {
   from {
-    outline-color: transparent;
+    opacity: 0;
   }
 }
