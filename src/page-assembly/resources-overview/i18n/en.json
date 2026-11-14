@@ -1,14 +1,15 @@
 {
   "resourcesOverview": {
     "title": "Resources",
-    "intro": "Everything the site offers in one place: Episodes, Events, Explorable pages, Guides, Episode templates and Master slides.",
+    "intro": "Everything the site offers in one place: Episodes, Events, Explorable pages, Guides, Episode templates, Master slides and Themes.",
     "kinds": {
       "episode": "Episode",
       "event": "Event",
       "explorable-page": "Explorable page",
       "guide": "Guide",
       "episode-template": "Episode template",
-      "master-slide": "Master slide"
+      "master-slide": "Master slide",
+      "theme": "Theme"
     },
     "none": "No Resources yet.",
     "open": "Open",
@@ -27,7 +28,8 @@
       "explorable-page": "Explorable pages",
       "guide": "Guides",
       "episode-template": "Episode templates",
-      "master-slide": "Master slides"
+      "master-slide": "Master slides",
+      "theme": "Themes"
     }
   }
 }

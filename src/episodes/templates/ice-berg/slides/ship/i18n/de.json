@@ -1,0 +1,17 @@
+{
+  "title": "Schiff",
+  "caption": "Der Rumpf bestimmt die Ebenen; die Szene liefert die Crew",
+  "intro": "Vergleiche das leere Forschungsschiff, Platzierungsanker, besetzte Brücke und Deck, den gespiegelten Rumpf und das langsame Schaukeln. Punkte markieren Brückensitze, Deckpositionen, Roboterhalterung und A-Rahmenspitze.",
+  "contract": "Importiere Ship und shipAnchors aus slide-shared/deep-sea-expedition/ship und ship.pure. Der Ursprung liegt an der Wasserlinie mittschiffs. Brückenfiguren stehen hinter Fensterrahmen, Deckfiguren hinter der Reling. Spiegle die Anker zusammen mit dem Rumpf; rock gehört nur in eine Oberflächenszene.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "variants": {
+    "rest": "Leeres Schiff in Ruhe",
+    "anchors": "Anker für Crew und Roboter",
+    "crew": "Besetzte Brücke und Deck",
+    "flip": "Gespiegeltes Schiff mit Ankern",
+    "rock": "Schaukeln auf den Wellen"
+  }
+}

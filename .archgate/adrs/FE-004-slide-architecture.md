@@ -137,12 +137,12 @@ Ownership is findable without session memory.
 3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
 5. `episode-page/` owns the one container, composition mechanics and page-scoped presentation adapters. Episodes supplies plain inputs to domain-free shared measurement; it knows no Episode or Title. Page chrome is reached only from page assembly or the container.
-6. `episodes/resources/<slug>/` owns one Resource: an `episode()` record, never an Episode (design-ADR 0019).
+6. `episodes/templates/<slug>/`: Template composition, including Themes (design-ADR 0026), never an Episode.
 
 ### 4. One pass from Episode to page
 
 1. Route → template (by page kind) → registry → record → container → static HTML; anchors from position.
-2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`. Resources (design-ADR 0019): `/resources/`, `/<type>/<slug>/`.
+2. Routes: `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`. Resources: `/resources/`, `/<type>/<slug>/`; Themes: `/themes/<slug>/` (design-ADR 0026).
 
 ### 5. Text, styling and client code have fixed homes
 

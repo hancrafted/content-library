@@ -1,0 +1,25 @@
+{
+  "title": "Robot",
+  "caption": "One diving robot, four motions and a lamp you can aim",
+  "intro": "The remotely operated vehicle draws its own hull, camera, arm and search beam. Compare each motion with the still robot, then pause or replay the specimens.",
+  "contract": "Import Robot from slide-shared/deep-sea-expedition/robot. Place its SVG group inside your Scene's SVG; its origin is the cable attachment. Motion stays inside the figure; use Travel for movement across a Scene.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "notes": {
+    "coordinates": {
+      "header": "Coordinates and choreography",
+      "description": "The robot is an SVG group, about 80 by 60 drawing units, with its origin at the cable attachment. Its beam extends beyond the hull, so leave room in the viewBox. Robot owns the movement of its parts; a containing SVG transform or Travel places the whole robot in the Scene."
+    }
+  },
+  "variants": {
+    "rest": "At rest, lamp on",
+    "beamOn": "Beam on",
+    "scan": "Scan",
+    "dive": "Dive",
+    "surface": "Surface",
+    "lampOff": "Lamp off",
+    "aimDown": "Aim down"
+  }
+}

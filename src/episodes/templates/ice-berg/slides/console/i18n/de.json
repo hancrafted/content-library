@@ -1,0 +1,17 @@
+{
+  "title": "Steuerpult",
+  "caption": "Ein flexibles Pult mit Bildschirmplatz und Sitzanker",
+  "intro": "Vergleiche zwei Bildschirme, das kleine Pult, drei Becher und eigenen Inhalt in einem breiten Bildschirm. Das gespiegelte Beispiel markiert den Platz für einen sitzenden Character.",
+  "contract": "Importiere Console und consoleLayout aus slide-shared/deep-sea-expedition/console und console.pure. Der Ursprung liegt vorne links an der Tischplatte. Die Breite verändert das Pult, nicht seine Höhe; children füllt den ersten Bildschirm in dessen Koordinaten. Platziere einen sitzenden Character am zurückgegebenen Sitzanker.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "variants": {
+    "wide": "Breite 260, zwei Bildschirme",
+    "small": "Breite 82, ein Becher",
+    "mugs": "Breite 160, drei Becher",
+    "screen": "Ein breiter Bildschirm mit eigenem Inhalt",
+    "flip": "Gespiegeltes Pult mit Sitzanker"
+  }
+}

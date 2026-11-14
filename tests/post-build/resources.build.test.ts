@@ -105,6 +105,7 @@ describe('the Resources overview', () => {
           guide: '/guides/',
           'episode-template': '/episode-templates/',
           'master-slide': '/master-slides/',
+          theme: '/themes/',
         })[kind] ?? '';
       // ACT
       const cards = $('[data-resource-card]')

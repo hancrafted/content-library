@@ -50,6 +50,7 @@ function browserLabels(t: OverviewT): ResourceBrowserLabels {
       guide: t('kindPlurals.guide'),
       'episode-template': t('kindPlurals.episode-template'),
       'master-slide': t('kindPlurals.master-slide'),
+      theme: t('kindPlurals.theme'),
     },
   };
 }

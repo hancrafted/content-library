@@ -1,0 +1,19 @@
+{
+  "title": "Sea life",
+  "caption": "Each depth has its own quiet ambient movement",
+  "intro": "Fish sway in Sunlit, jellies bob in Twilight, a whale glides in Midnight and bubbles rise in Abyss. Compare a second fish school, then inspect the still seabed and shafts of light.",
+  "contract": "Import creatures from slide-shared/iceberg/scenery/sea-life and Seabed or LightRays from scenery/seabed. Counts and seeds give reproducible groups; explicit placements override them. ZoneScene composes these parts for story Slides. Ambient loops stop outside the active Slide and with reduced motion.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "variants": {
+    "school": "Sunlit: 11 fish, seed 1",
+    "left": "Five fish facing left, seed 4",
+    "jellies": "Twilight: two jellyfish",
+    "whale": "Midnight: humpback whale",
+    "bubbles": "Abyss: seven rising bubbles",
+    "seabed": "Seabed, 1200 units wide",
+    "rays": "Five shafts of light"
+  }
+}

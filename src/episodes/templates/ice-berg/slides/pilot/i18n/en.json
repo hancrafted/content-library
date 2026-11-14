@@ -1,0 +1,11 @@
+{
+  "title": "Pilot",
+  "caption": "Appearance belongs to the preset; stance belongs to Character",
+  "intro": "One pilot, five poses. The cap, flight jacket and mug identify the person while Character supplies standing, sitting, pointing, steering and holding.",
+  "contract": "Import Character from slide-shared/character/character and pilot from slide-shared/deep-sea-expedition/cast. The origin is the floor between the feet. The seated pose includes its chair; a console is a separate figure.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "poses": { "stand": "Stand", "sit": "Sit", "point": "Point", "steer": "Steer", "hold": "Hold the mug" }
+}

@@ -32,6 +32,7 @@ export const TEMPLATE_SLUGS = [
   'episode-template',
   'explorable-page',
   'grids',
+  'ice-berg',
   'timelines',
   'workshop-template',
 ] as const;

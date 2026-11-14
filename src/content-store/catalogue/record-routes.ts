@@ -103,6 +103,7 @@ export function guideRoute(slug: GuideSlug): string {
 export const TEMPLATE_TYPE_PATHS: Readonly<Record<TemplateType, string>> = {
   'episode-template': 'episode-templates',
   'master-slide': 'master-slides',
+  theme: 'themes',
 };
 
 /** The logical path of one Template's page, worked out from its type and slug and never stored: `/<type plural>/<slug>`. */

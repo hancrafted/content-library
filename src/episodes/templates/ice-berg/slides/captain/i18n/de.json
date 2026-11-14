@@ -1,0 +1,12 @@
+{
+  "title": "Kapitänin",
+  "caption": "Fünf Posen und drei Gesten teilen sich einen Körperbau",
+  "intro": "Offiziersjacke und Kapitänsmütze bestimmen das Aussehen, nicht das Verhalten. Vergleiche alle fünf Posen und danach Winken, Nicken und Hinwenden. Jede Geste endet in Ruhe; das fröhliche Emote erscheint anschließend.",
+  "contract": "Importiere Character aus slide-shared/character/character und captain aus slide-shared/deep-sea-expedition/cast. Posen und Bewegungen funktionieren mit jedem Character-Preset. flip spiegelt die Figur; Wörter bleiben lesbar.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "poses": { "stand": "Stehen", "sit": "Sitzen", "point": "Zeigen", "steer": "Steuern", "hold": "Halten" },
+  "motions": { "wave": "Winken", "nod": "Nicken", "turn-to": "Hinwenden" }
+}
