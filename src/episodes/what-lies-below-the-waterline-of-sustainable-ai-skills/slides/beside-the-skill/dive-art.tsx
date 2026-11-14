@@ -164,7 +164,7 @@ const BED: Facets = [
 /** The waterline's glow. */
 const GLOW: Facets = [
   ['glow-soft', 'M0 99L600 101L600 107L0 109Z'],
-  ['glow', 'M6 102.6L594 103L594 105L6 105.4Z'],
+  ['glow', 'M6 103L594 103L594 105L6 105Z'],
 ];
 
 function FacetPaths({ facets }: { readonly facets: Facets }) {
