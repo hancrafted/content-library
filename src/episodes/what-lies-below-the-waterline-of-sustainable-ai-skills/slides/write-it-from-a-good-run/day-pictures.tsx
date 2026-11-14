@@ -4,12 +4,13 @@ import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expe
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { CONSOLE_DESK_HEIGHT } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
-import { DiveArt, PANEL_ART, RoomArt, WrittenCard, type RoomHour } from './day-art';
+import type { CSSProperties } from 'react';
+import { DiveArt, RoomArt, WrittenCard, type RoomHour } from './day-art';
+import { FIGURE_SCALE, GREETING_BUBBLE, GREETING_SAYS_SCALE, MORNING_PILOT } from './greeting.pure';
+import { PANEL_ART } from './room-facets';
 
 const FLOOR = PANEL_ART.floor;
 const DESK_TOP = FLOOR - CONSOLE_DESK_HEIGHT;
-/** The figures at the Spec's size in its 300 by 236 panel. */
-const FIGURE_SCALE = 1.2;
 /** The robot on its cable, 2 m above the seabed, at the Spec's size. */
 const ROBOT = { x: 150, y: 110, scale: 1.25 } as const;
 /** The written card on the evening console: the Spec drew it on a lower desk, so it drops onto ours. */
@@ -80,24 +81,12 @@ const ROOM_PANELS: Record<
   'next-morning': {
     hour: 'dawn',
     console: { x: 226, width: 74 },
-    pilot: { x: 212, flip: true },
-    pilotMood: 'blank',
+    pilot: { x: MORNING_PILOT.x, flip: true },
+    pilotMood: MORNING_PILOT.mood,
     captain: { x: 62, pose: 'stand' },
     morning: true,
   },
 };
-
-/** The pilot's greeting the next morning, a speech bubble over the picture by his head. */
-function Greeting({ children }: { readonly children: string }) {
-  return (
-    <p
-      data-says="pilot"
-      className="absolute top-[34%] right-2 max-w-[60%] rounded-2xl rounded-br-none border-2 border-ai bg-card px-2.5 py-0.5 text-caption font-medium text-card-foreground"
-    >
-      {children}
-    </p>
-  );
-}
 
 interface RoomPictureProps {
   readonly panel: RoomPanel;
@@ -106,34 +95,56 @@ interface RoomPictureProps {
   readonly greeting?: string;
 }
 
+/** The console and cast of one room panel; the pilot greets the captain in his shared bubble the next morning. */
+function RoomCast({ panel, greeting }: { readonly panel: RoomPanel; readonly greeting?: string }) {
+  const own = ROOM_PANELS[panel];
+  return (
+    <>
+      <Console width={own.console.width} mugs={1} transform={`translate(${own.console.x} ${DESK_TOP})`} />
+      <g transform={`translate(${own.pilot.x} ${FLOOR}) scale(${FIGURE_SCALE})`}>
+        <Character
+          preset={pilot}
+          pose="sit"
+          motion={panel === 'interview' ? 'turn-to' : undefined}
+          mood={own.pilotMood}
+          flip={own.pilot.flip}
+          says={greeting}
+          bubble={greeting ? GREETING_BUBBLE : undefined}
+        />
+      </g>
+      {own.captain && (
+        <g transform={`translate(${own.captain.x} ${FLOOR}) scale(${FIGURE_SCALE})`}>
+          <Character preset={captain} pose={own.captain.pose} />
+        </g>
+      )}
+    </>
+  );
+}
+
 /**
  * Panels 2 to 4, in the control room. The room is this Slide's own drawing (`RoomArt`, Spec Option 10b); the people
- * and the console are the shared figures. The next morning's greeting is the panel's own HTML speech, over the picture.
+ * and the console are the shared figures. The next morning's greeting is the pilot's shared speech bubble
+ * (`greeting.pure.ts`, decision 53).
  */
 export function RoomPicture({ panel, label, greeting }: RoomPictureProps) {
   const own = ROOM_PANELS[panel];
-  const motion = panel === 'interview' ? 'turn-to' : undefined;
   return (
-    <div className="relative">
-      <svg viewBox={viewBox} role="img" aria-label={label} data-room-panel={panel} className="block h-auto w-full">
-        <RoomArt
-          hour={own.hour}
-          clock={own.morning}
-          pinnedCard={own.morning}
-          front={panel === 'writing' ? <WrittenCard dy={CARD_DROP} /> : undefined}
-        >
-          <Console width={own.console.width} mugs={1} transform={`translate(${own.console.x} ${DESK_TOP})`} />
-          <g transform={`translate(${own.pilot.x} ${FLOOR}) scale(${FIGURE_SCALE})`}>
-            <Character preset={pilot} pose="sit" motion={motion} mood={own.pilotMood} flip={own.pilot.flip} />
-          </g>
-          {own.captain && (
-            <g transform={`translate(${own.captain.x} ${FLOOR}) scale(${FIGURE_SCALE})`}>
-              <Character preset={captain} pose={own.captain.pose} />
-            </g>
-          )}
-        </RoomArt>
-      </svg>
-      {greeting && <Greeting>{greeting}</Greeting>}
-    </div>
+    <svg
+      viewBox={viewBox}
+      role="img"
+      aria-label={label}
+      data-room-panel={panel}
+      className="block h-auto w-full"
+      style={{ '--says-scale': GREETING_SAYS_SCALE } as CSSProperties}
+    >
+      <RoomArt
+        hour={own.hour}
+        clock={own.morning}
+        pinnedCard={own.morning}
+        front={panel === 'writing' ? <WrittenCard dy={CARD_DROP} /> : undefined}
+      >
+        <RoomCast panel={panel} greeting={greeting} />
+      </RoomArt>
+    </svg>
   );
 }

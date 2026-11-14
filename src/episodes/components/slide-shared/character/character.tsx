@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import type { ActorProps } from './actor';
+import type { ActorProps, BubblePlace } from './actor';
 import styles from './character.module.css';
 import { Emote } from './emote';
 import {
@@ -27,6 +27,8 @@ export interface CharacterProps extends ActorProps {
   readonly motion?: Motion;
   /** Faces left instead of right; the emote's words stay readable. */
   readonly flip?: boolean;
+  /** Where the speech bubble wraps and how high it rises, when two speakers share a picture. */
+  readonly bubble?: BubblePlace;
 }
 
 /** What each motion moves, how long it plays (ms), and where it pivots. */
@@ -94,7 +96,7 @@ const looks = (preset: Preset) => ({
  * pose, after its motion. Colours are slide-local custom properties derived from the global tokens in
  * `character.module.css`; only a `kind: 'ai'` preset shows a meaning colour, its `ai` tag.
  */
-export function Character({ preset, pose = 'stand', motion, mood, says, flip = false }: CharacterProps) {
+export function Character({ preset, pose = 'stand', motion, mood, says, flip = false, bubble }: CharacterProps) {
   const delay = emoteDelay(motion);
   const drawing = drawFigure(preset, pose, mood);
   const anchor = flip ? { x: -drawing.anchor.x, y: drawing.anchor.y } : drawing.anchor;
@@ -105,7 +107,7 @@ export function Character({ preset, pose = 'stand', motion, mood, says, flip = f
           <FigureGroup key={group} group={group} drawing={drawing} motion={motion} />
         ))}
       </g>
-      <Emote mood={mood} says={says} at={anchor} facing={flip ? 'left' : 'right'} />
+      <Emote mood={mood} says={says} at={anchor} facing={flip ? 'left' : 'right'} bubble={bubble} />
     </g>
   );
 }

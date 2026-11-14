@@ -5,6 +5,7 @@
  * label the bubble would cover, so a longer line or a moved figure fails the Slide's test, not Han's eye.
  */
 import { drawFigure } from '@/episodes/components/slide-shared/character/poses.pure';
+import { saysBox } from '@/episodes/components/slide-shared/character/says.pure';
 import { captain } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { CONSOLE_DESK_HEIGHT } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 
@@ -49,12 +50,12 @@ export type CalloutSlug = 'skill' | 'description' | 'project';
 
 /**
  * Each callout's place, in the Scene's units: the middle of its label's foot, where its leader starts. The labels sit
- * in the sky over the close-up, clear of the ship's mast.
+ * in the sky over the close-up, clear of the ship's mast and high enough that a phone's bubble keeps off them.
  */
 export const CALLOUTS: readonly { readonly slug: CalloutSlug; readonly at: { x: number; y: number } }[] = [
-  { slug: 'skill', at: { x: 470, y: 150 } },
-  { slug: 'description', at: { x: 700, y: 150 } },
-  { slug: 'project', at: { x: 1020, y: 150 } },
+  { slug: 'skill', at: { x: 470, y: 130 } },
+  { slug: 'description', at: { x: 700, y: 130 } },
+  { slug: 'project', at: { x: 1020, y: 130 } },
 ];
 
 /** Where each leader ends: on the card's top, on the manual's index, on the brief's top. */
@@ -72,10 +73,14 @@ const BODY = { size: 16, leading: 1.6, glyph: 9 } as const;
 const CAPTION = { size: 14, leading: 1.5, glyph: 7.5 } as const;
 /** The narrowest Scene that shows a label's full words: the Slide's `@4xl` container, 56rem. */
 const NARROWEST_FULL_LABEL_PX = 896;
+/** The Scene on a 375 px phone: the viewport less the Content area's 1rem insets. */
+const PHONE_SCENE_WIDTH_PX = 343;
+/** Screen pixels per Scene unit at the two widths the layout is held at. */
+export const FULL_LABEL_SCENE_PX = NARROWEST_FULL_LABEL_PX / SCENE.width;
+export const PHONE_SCENE_PX = PHONE_SCENE_WIDTH_PX / SCENE.width;
+/** A label's padding and border (`px-3 py-1 border-2`); a narrow Scene's badge shows its number, one glyph wide. */
 const LABEL_PAD = { x: 24 + 4, y: 8 + 4 } as const;
-
-/** The shared bubble's box in figure units (`emote.tsx`): 220 wide, wrapping at about 28 characters. */
-const BUBBLE = { width: 220, chars: 28, pad: { x: 16 + 2, y: 8 + 2 }, offset: { x: 10, bottom: -14 } } as const;
+const NUMBER_GLYPH = 9;
 
 /** The words a callout shows: the AI term at body size, the scene's word beneath at caption size. */
 export interface CalloutWords {
@@ -88,73 +93,92 @@ export interface CloseUpWords {
   /** What the captain asks for. */
   readonly request: string;
   readonly callouts: Readonly<Record<CalloutSlug, CalloutWords>>;
+  /** Screen pixels per Scene unit; the narrowest Scene with full labels when left out. */
+  readonly scenePx?: number;
 }
 
 export interface CloseUpLayout {
   readonly labels: readonly { readonly slug: CalloutSlug; readonly box: Box }[];
   readonly says: Box;
+  /** Where the bubble must stay: the close-up where labels show their words, the whole Scene on a phone. */
+  readonly bounds: Box;
+  /** Screen pixels per Scene unit the layout was measured at. */
+  readonly scenePx: number;
 }
 
-/** A label's box at the narrowest Scene that shows its full words, centred on its foot. */
-function labelBox(at: { x: number; y: number }, words: CalloutWords): Box {
-  const unit = SCENE.width / NARROWEST_FULL_LABEL_PX;
-  const px = Math.max(words.term.length * BODY.glyph, words.scene.length * CAPTION.glyph) + LABEL_PAD.x;
-  const height = (BODY.size * BODY.leading + CAPTION.size * CAPTION.leading + LABEL_PAD.y) * unit;
-  const width = px * unit;
+/** A label's box at `scenePx`, centred on its foot: its full words, or its number badge below `@4xl`. */
+function labelBox(at: { x: number; y: number }, words: CalloutWords, scenePx: number): Box {
+  const full = scenePx >= FULL_LABEL_SCENE_PX;
+  const px = full
+    ? Math.max(words.term.length * BODY.glyph, words.scene.length * CAPTION.glyph) + LABEL_PAD.x
+    : NUMBER_GLYPH + LABEL_PAD.x;
+  const textHeight = full ? BODY.size * BODY.leading + CAPTION.size * CAPTION.leading : CAPTION.size * CAPTION.leading;
+  const width = px / scenePx;
+  const height = (textHeight + LABEL_PAD.y) / scenePx;
   return { x: at.x - width / 2, y: at.y - height, width, height };
 }
 
-/** The lines the words wrap into at the bubble's width, by whole words. */
-function wrap(words: string, chars: number): readonly string[] {
-  return words.split(/\s+/).reduce<string[]>((lines, word) => {
-    const last = lines.at(-1);
-    if (last !== undefined && `${last} ${word}`.length <= chars) return [...lines.slice(0, -1), `${last} ${word}`];
-    return [...lines, word];
-  }, []);
-}
-
 /** The captain's speech bubble in the Scene: rising left of her head, as the shared `Emote` draws a figure facing left. */
-function saysBox(request: string): Box {
-  const lines = wrap(request.trim(), BUBBLE.chars);
-  const longest = Math.max(...lines.map((line) => line.length));
-  const width = Math.min(BUBBLE.width, longest * CAPTION.glyph + BUBBLE.pad.x);
-  const height = lines.length * CAPTION.size * CAPTION.leading + BUBBLE.pad.y;
+function saysIn(request: string, scenePx: number): Box {
   const head = drawFigure(captain, 'point').anchor;
-  const anchor = { x: CAPTAIN_X - head.x * CREW_SCALE, y: FLOOR_Y + head.y * CREW_SCALE };
-  const right = anchor.x - BUBBLE.offset.x * CREW_SCALE;
-  const bottom = anchor.y + BUBBLE.offset.bottom * CREW_SCALE;
-  const scale = CREW_SCALE * SAYS_SCALE;
-  return { x: right - width * scale, y: bottom - height * scale, width: width * scale, height: height * scale };
+  return saysBox({
+    words: request,
+    facing: 'left',
+    head: { x: CAPTAIN_X - head.x * CREW_SCALE, y: FLOOR_Y + head.y * CREW_SCALE },
+    figureScale: CREW_SCALE,
+    saysScale: SAYS_SCALE,
+    scenePx,
+  });
 }
 
-/** Every box the Slide's words take in the Scene, for the captain's line and the three callouts. */
-export function closeUpLayout({ request, callouts }: CloseUpWords): CloseUpLayout {
+const SCENE_BOX: Box = { x: 0, y: 0, width: SCENE.width, height: SCENE.height };
+
+/** Every box the Slide's words take in the Scene at `scenePx`, for the captain's line and the three callouts. */
+export function closeUpLayout({ request, callouts, scenePx = FULL_LABEL_SCENE_PX }: CloseUpWords): CloseUpLayout {
   return {
-    labels: CALLOUTS.map(({ slug, at }) => ({ slug, box: labelBox(at, callouts[slug]) })),
-    says: saysBox(request),
+    labels: CALLOUTS.map(({ slug, at }) => ({ slug, box: labelBox(at, callouts[slug], scenePx) })),
+    says: saysIn(request, scenePx),
+    bounds: scenePx >= FULL_LABEL_SCENE_PX ? CLOSE_UP : SCENE_BOX,
+    scenePx,
   };
 }
 
 const overlap = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
-const inScene = (box: Box) => box.x >= 0 && box.y >= 0 && box.x + box.width <= SCENE.width;
+/** The air the bubble keeps from a label, in CSS pixels, so the two never read as touching. */
+const LABEL_GAP_PX = 4;
+const grow = (box: Box, by: number): Box => ({
+  x: box.x - by,
+  y: box.y - by,
+  width: box.width + 2 * by,
+  height: box.height + 2 * by,
+});
+
+const inside = (box: Box, bounds: Box) =>
+  box.x >= bounds.x &&
+  box.y >= bounds.y &&
+  box.x + box.width <= bounds.x + bounds.width &&
+  box.y + box.height <= bounds.y + bounds.height;
 
 /**
- * What breaks the layout, in words: `says covers <label>` when the bubble covers a label, `<label> covers <label>`
- * when two labels meet, `<label> leaves the scene` past its edges, and `says leaves the close-up`. Empty when the
- * layout holds.
+ * What breaks the layout, in words: `says covers <label>` when the bubble covers a label or comes within 4 px of it, `<label> covers <label>`
+ * when two labels meet, `<label> leaves the scene` past its edges, and `says leaves its bounds` past the close-up (or,
+ * on a phone, the Scene). Empty when the layout holds.
  */
-export function clashes({ labels, says }: CloseUpLayout): readonly string[] {
-  const covered = labels.filter(({ box }) => overlap(box, says)).map(({ slug }) => `says covers ${slug}`);
+export function clashes({ labels, says, bounds, scenePx }: CloseUpLayout): readonly string[] {
+  const gap = LABEL_GAP_PX / scenePx;
+  const covered = labels.filter(({ box }) => overlap(grow(box, gap), says)).map(({ slug }) => `says covers ${slug}`);
   const crowded = labels.flatMap(({ slug, box }, index) =>
     labels
       .slice(index + 1)
       .filter((other) => overlap(box, other.box))
       .map((other) => `${slug} covers ${other.slug}`),
   );
-  const outside = labels.filter(({ box }) => !inScene(box)).map(({ slug }) => `${slug} leaves the scene`);
-  const escaped = says.y < CLOSE_UP.y || says.x < CLOSE_UP.x ? ['says leaves the close-up'] : [];
+  const outside = labels
+    .filter(({ box }) => box.x < 0 || box.y < 0 || box.x + box.width > SCENE.width)
+    .map(({ slug }) => `${slug} leaves the scene`);
+  const escaped = inside(says, bounds) ? [] : ['says leaves its bounds'];
   return [...covered, ...crowded, ...outside, ...escaped];
 }
 

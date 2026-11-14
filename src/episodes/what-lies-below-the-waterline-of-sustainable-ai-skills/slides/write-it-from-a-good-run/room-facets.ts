@@ -6,6 +6,10 @@
  */
 
 /** A tone of the drawing; `day-art.module.css` gives each its fill. */
+
+/** A panel picture's drawing space, the Spec's: 300 by 236, figures standing on the floor line at 210. */
+export const PANEL_ART = { width: 300, height: 236, floor: 210 } as const;
+
 export type ArtTone =
   | 'room-lit'
   | 'room'

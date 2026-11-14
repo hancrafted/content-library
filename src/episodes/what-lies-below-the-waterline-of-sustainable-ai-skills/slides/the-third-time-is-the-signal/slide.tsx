@@ -38,31 +38,15 @@ const STEPS = ['hold', 'camera', 'lower', 'identify', 'seal', 'label'] as const;
 interface PanelProps {
   readonly heading: string;
   readonly focal?: boolean;
-  readonly picture: ReactNode;
-  /** What the captain and the pilot say, over the picture in the Chat app view only. */
-  readonly says: { readonly captain: string; readonly pilot: string };
+  /** The morning's picture: with the crew's speech in the Chat app view, without it in the Coding agent view. */
+  readonly picture: { readonly chat: ReactNode; readonly coding: ReactNode };
   readonly chip: string;
   readonly chat: ReactNode;
   readonly coding: ReactNode;
 }
 
-/** A speech bubble over the panel's picture, its tail by the speaker's head: the captain's left, the pilot's right. */
-function Speech({ who, children }: { readonly who: 'captain' | 'pilot'; readonly children: string }) {
-  return (
-    <p
-      data-says={who}
-      className={cn(
-        'absolute max-w-[48%] rounded-2xl border-2 bg-card px-2.5 py-1 text-caption font-medium text-card-foreground',
-        who === 'captain' ? 'top-2 left-2 rounded-bl-none border-human' : 'top-[22%] right-2 rounded-br-none border-ai',
-      )}
-    >
-      {children}
-    </p>
-  );
-}
-
 /** One comic panel: its AI head, the morning's picture, and the card row; the view switch swaps words, never the art. */
-function ComicPanel({ heading, focal, picture, says, chip, chat, coding }: PanelProps) {
+function ComicPanel({ heading, focal, picture, chip, chat, coding }: PanelProps) {
   return (
     <li
       data-panel
@@ -83,12 +67,11 @@ function ComicPanel({ heading, focal, picture, says, chip, chat, coding }: Panel
         {heading}
       </p>
       <div className="relative">
-        {picture}
         <InView view="chat" as="div">
-          <Speech who="captain">{says.captain}</Speech>
-          <Speech who="pilot">{says.pilot}</Speech>
+          {picture.chat}
         </InView>
         <InView view="coding" as="div">
+          {picture.coding}
           <p
             data-session-chip
             className="absolute bottom-3 left-3 rounded-full bg-foreground px-3 py-1 font-mono text-caption font-semibold text-background"
@@ -205,8 +188,16 @@ export const theThirdTimeIsTheSignal = slide({
               key={panel}
               heading={t(`panels.${panel}.heading`)}
               focal={panel === 'third'}
-              picture={<MorningScene day={(index + 1) as Day} label={t(`panels.${panel}.alt`)} />}
-              says={{ captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) }}
+              picture={{
+                chat: (
+                  <MorningScene
+                    day={(index + 1) as Day}
+                    label={t(`panels.${panel}.alt`)}
+                    says={{ captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) }}
+                  />
+                ),
+                coding: <MorningScene day={(index + 1) as Day} label={t(`panels.${panel}.alt`)} />,
+              }}
               chip={t(`panels.${panel}.sessionChip`)}
               chat={cards[panel].chat}
               coding={cards[panel].coding}
