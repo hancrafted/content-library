@@ -4,9 +4,12 @@ title: What agentic workflows require of people and organisations
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-14T10:14:11Z
+  at: 2026-11-14T11:20:56Z
 verified:
-  - { by: process:markdown-harness, at: 2026-11-14T10:16:02Z }
+  - by: process:markdown-harness
+    at: 2026-11-14T10:16:02Z
+  - by: process:markdown-harness
+    at: 2026-11-14T11:20:56Z
 ---
 
 # What agentic workflows require of people and organisations
@@ -40,7 +43,7 @@ Explain what an agentic workflow is and what it requires of each person and of t
 
 ## Red thread
 
-Perfect steps don't add up on their own; an agentic workflow is a goal broken into reviewable handoffs, how far you step out depends on how well you can check them, and whether it works depends on designing it around the goal, not the org chart.
+Perfect steps don't add up on their own; an agentic workflow is a goal broken into reviewable handoffs, how far you step out depends on how well you can check them, each person has to plan back from the goal, agree contracts and review the results, and whether it works depends on designing it around the goal, not the org chart.
 
 ## Analogy
 
@@ -72,12 +75,15 @@ The company summer party for 200 employees across five offices, from the earlier
 
 3. **What an agent is** — the term the workflow builds on: an agent is a language model that uses tools in a loop and decides for itself how to reach a goal (Anthropic, Building effective agents); points viewers back to the earlier Episodes. _Visual:_ the AI capability Explorable with the Agents column lit (a new Preset), its scene playing the agent's loop; the Explorable keeps its own look, a deliberate exception to Board. _Research:_ 2
 4. **What an agentic workflow is** — the definition after IBM and Salesforce: structured processes in which AI agents make decisions, take actions and coordinate tasks with minimal human intervention. It works on two levels: you design the path of tasks and handoffs, and the agent steers inside its task. How minimal the intervention is stays open for Slides 5 and 6. _Visual:_ the party board with the goal note on the right and task notes chaining towards it, each arrow labelled with what it hands over and each note marked person or agent; the path is labelled "You design this", and one zoomed agent note "The agent steers this". _Research:_ 3, 4
+
+### How far you step out
+
 5. **In, on or out of the loop** — the three levels of human oversight, each defined in one plain line (after Losing Humanity, 2012): in, the agent acts only after a person approves; on, it acts on its own while a person watches and can step in; out, it acts without any person, who sees only the result. Oversight is chosen per task, which answers the "minimal intervention" left open on Slide 4. _Visual:_ the three definitions as a legend beside one party board, each note tagged: guest list _out_, venue _on_, activity _in_. _Research:_ 5
 6. **Reviewability sets the distance** — you can only step out of the loop as far as you can check the result, and trust grows with reviewability; making a task checkable is what moves it out. _Visual:_ an axis from in to out with the party tasks placed on it; the activity starts at _in_ (paintball, Slide 1) and slides to _on_ once it gets a check it can pass: everyone can join, wheelchair access, no fitness needed. _Research:_ 6
 
 ### What it requires of each person
 
-7. **Plan back from the goal** — backward reasoning, defined first: start from the goal and work back to the steps that must come before it, breaking the goal into subgoals until it reaches where you stand today; state the goal as an outcome, tell dependencies inside your control from those outside it, and find the tasks nobody owned. Resolves Slide 1's last train. _Visual:_ the board read right to left from the goal note "20 June: everyone celebrates together and gets home safely"; working back from "gets home safely" adds a note Slide 1 never had, the shuttle back, and the train timetable is marked as an external dependency. _Research:_ 7, 12
+7. **Plan back from the goal** — backward reasoning, defined first: start from the goal and work back to the steps that must come before it, breaking the goal into subgoals until it reaches where you stand today; state the goal as an outcome, tell dependencies inside your control from those outside it, and find the tasks nobody owned. Resolves Slide 1's last train. _Visual:_ the board read right to left from the goal note "20 June: everyone celebrates together and gets home safely"; working back from "gets home safely" adds a note Slide 1 never had, the shuttle back, and the train timetable is marked as an external dependency. _Research:_ 7
 8. **Contracts at the seams** — design by contract, defined first after Meyer: cooperation rests on contracts that state each party's obligations and benefits; agree what each task receives and delivers, not how it is done inside. Resolves Slide 1's 4 p.m. arrival. _Visual:_ the travel → programme seam zoomed, with its contract card — Receives: five offices, venue address, budget per person; Delivers: everyone at the venue by 13:30; Checked by: arrival list against the programme start — and below it "how: car, train or carpool, your choice". _Research:_ 8
 9. **Reviewing the result** — verification and validation (Boehm): check the result against its contract, then against the goal; the second check is the human part, and it is what lets you step further out. Resolves Slide 1's paintball. _Visual:_ the paintball note checked twice — against its contract: activity for 200 ✓, within budget ✓, on 20 June ✓; against the goal, "everyone celebrates together": ✗, ten colleagues use wheelchairs. _Research:_ 9
 
@@ -100,7 +106,6 @@ The company summer party for 200 employees across five offices, from the earlier
 9. Why does checking a result against its specification (verification) not show whether it serves the goal (validation), after Boehm?
 10. Why do the workflows an organisation designs copy its communication structure, as Conway's law states for systems "defined broadly"? (partial: SWE-0001)
 11. Why are breaking work down, writing handoffs and reviewing results the skills people need to work with agents? (partial: AIE-0006, AIE-0018)
-12. Why do language models plan worse backwards than forwards (arXiv 2411.01790)?
 
 ## Open ideas
 
@@ -115,8 +120,7 @@ The company summer party for 200 employees across five offices, from the earlier
 - Slide 10: the real team (one product manager, ten UX designers, two developers, one quality engineer) shown as headcount bars, rejected for the one-world Constraint and the risk of humour on a profession.
 - Shirky principle (institutions preserve the problem they solve) as the motive behind the transformation story, beside Conway's law for its shape.
 - Slide 11 tips not chosen: choose in, on or out per task by how well it can be checked (repeats Slide 5); let the people who own the goal draw the workflow, not each discipline its own column (repeats Slide 10).
-- Slide 7's term: backward reasoning, backward chaining or backcasting; research question 7 settles which one the sources support.
-- Splitting "What an agentic workflow is" into a fifth Section, "How far you step out", for Slides 5 and 6.
+- A Voice script line for Slide 7: language models plan worse backwards than forwards (arXiv 2411.01790), so working back from the goal is a skill people bring; it would need its own research question.
 - Worlds considered: a follow-up expedition campaign after the skills Episode, a kitchen renovation, a Mars rover, a newsroom, a film shoot, a modular house, the Apollo programme; the summer party won because the audience knows it and Slides can be reused.
 - Check the style of any Slides reused from earlier Episodes against Board.
 - Hands-on for the workshop (one to one and a half hours, not settled): plan a narrow team event or Christmas party as an agentic workflow; the HITL Explorable's project-plan Workflow as an anchor.
