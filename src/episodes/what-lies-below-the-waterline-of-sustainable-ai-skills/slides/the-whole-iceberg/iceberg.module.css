@@ -46,16 +46,91 @@
   opacity: 0.6;
 }
 
-.page {
-  fill: color-mix(in oklab, var(--on-brand-accent) 82%, var(--zone-twilight));
+/*
+ * The props lifted from the Spec (`index-art.tsx`): the paper of the index page and the manual, the manual's spine and
+ * the trail's bubbles, in the Spec's own tones (feedback 3, decision 46); dark values are the Spec's dark ones. The
+ * paper stays light in both themes, as in the Spec, so its words take the Spec's paper ink in both.
+ */
+.art {
+  --bubble: oklch(0.95 0.04 210 / 0.45);
+  --glint: oklch(1 0 0);
+  --paper: oklch(0.965 0.01 88);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper-shade: oklch(0.9 0.016 80);
+  --spine: oklch(0.55 0.11 30);
 }
 
-.pageLit {
-  fill: color-mix(in oklab, var(--on-brand-accent) 95%, var(--zone-surface));
+:global(.dark) .art {
+  --bubble: oklch(0.8 0.05 210 / 0.35);
+  --glint: oklch(0.98 0.01 230);
+  --paper: oklch(0.83 0.012 88);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper-shade: oklch(0.7 0.018 80);
+  --spine: oklch(0.48 0.1 30);
 }
 
-.spine {
-  fill: color-mix(in oklab, var(--bulb-edge) 70%, var(--overlay));
+.art path {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='bubble'] {
+  fill: var(--bubble);
+  stroke: none;
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='spine'] {
+  fill: var(--spine);
+  stroke: var(--spine);
+}
+
+/* The index page's words on its paper, and the mark beside the skill named by its moment. */
+/* Two classes, so the page's paper replaces the card's own background. */
+.index.paper {
+  --ink-paper: oklch(0.24 0.03 255);
+  --ink-paper-soft: oklch(0.48 0.03 250);
+  isolation: isolate;
+  background: none;
+  color: var(--ink-paper);
+}
+
+:global(.dark) /* Two classes, so the page's paper replaces the card's own background. */
+.index.paper {
+  --ink-paper: oklch(0.2 0.03 255);
+  --ink-paper-soft: oklch(0.4 0.03 250);
+}
+
+.soft {
+  color: var(--ink-paper-soft);
+}
+
+.mark {
+  position: absolute;
+  inset-block: 0.125rem;
+  inset-inline-start: 0;
+  width: 0.3rem;
+  border-radius: 2px;
+  background: var(--primary);
 }
 
 /* The index page: below the picture on a narrow Scene, in the sky right of the ship, clear of the berg, on a wide one. */
