@@ -4,7 +4,7 @@ import { SceneMotionRoot } from './scene-motion.client';
 import { Clouds } from './scenery/clouds';
 import { FlatSky, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
-import { placeIceberg } from './scenery/iceberg-placement.pure';
+import { placeIcebergInBands } from './scenery/iceberg-placement.pure';
 import { Seabed } from './scenery/seabed';
 import { SunMoon } from './scenery/sun-moon';
 import { Band, type ZoneSceneProps } from './zone-scene';
@@ -24,7 +24,6 @@ const WHOLE_BANDS = depthBands()
       seed: 5 + depth * 6,
     }),
   }));
-const bandOf = (zone: 'sunlit' | 'twilight') => WHOLE_BANDS.find((band) => band.zone === zone)!;
 /** The clouds in three layers, kept clear of the ship, the berg and the Surface's words floating in the sky. */
 const WHOLE_CLOUDS = [
   { x: 470, y: 95, scale: 0.35, shape: 1 },
@@ -32,13 +31,7 @@ const WHOLE_CLOUDS = [
   { x: 770, y: 430, scale: 0.8, shape: 0 },
 ] as const;
 /** The iceberg pushed to the right edge, so the zones have open water for words; its keel touches the Twilight zone. */
-const WHOLE_BERG = placeIceberg({
-  x: 1165,
-  waterline: WHOLE_DEPTH.waterline,
-  scale: 0.6,
-  sunlitBottom: bandOf('sunlit').bottom,
-  twilightDepth: bandOf('twilight').bottom - bandOf('twilight').top,
-});
+const WHOLE_BERG = placeIcebergInBands(WHOLE_BANDS, { x: 1165, waterline: WHOLE_DEPTH.waterline, scale: 0.6 });
 const WHOLE_SEABED_TOP = 845;
 
 export type WholeDepthSceneProps = Omit<ZoneSceneProps, 'zone' | 'iceberg'>;

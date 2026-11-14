@@ -5,7 +5,7 @@
  * on past both sides for screens wider than the drawing. The Sunlit band is deep enough for an iceberg keel twice its
  * tip that ends a fifth into the Twilight zone.
  */
-import { type IcebergPlacement, placeIceberg } from './scenery/iceberg-placement.pure';
+import { type IcebergPlacement, placeIcebergInBands } from './scenery/iceberg-placement.pure';
 import { ZONES, type Zone } from './zones.pure';
 
 /** The zones under the waterline. */
@@ -30,16 +30,7 @@ export const HERO_DEPTH: HeroDepth = {
 
 /** The hero's iceberg, through the one placement every Scene shares: keel a fifth into Twilight, twice the tip deep. */
 export function heroIceberg(depth: HeroDepth): IcebergPlacement {
-  const bands = heroDepthBands(depth);
-  const sunlit = bands.find((band) => band.zone === 'sunlit')!;
-  const twilight = bands.find((band) => band.zone === 'twilight')!;
-  return placeIceberg({
-    x: 1010,
-    waterline: depth.waterline,
-    scale: 0.7,
-    sunlitBottom: sunlit.bottom,
-    twilightDepth: twilight.bottom - twilight.top,
-  });
+  return placeIcebergInBands(heroDepthBands(depth), { x: 1010, waterline: depth.waterline, scale: 0.7 });
 }
 
 /** The sky and water's span across: one drawing's width past each side, so a screen wider than the drawing sees no edge. */

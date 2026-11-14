@@ -1,8 +1,10 @@
 /*
  * The one iceberg placement (decision 10 of feedback 2): the title hero, `ZoneScene` and `WholeDepthScene` all place
  * the berg through `placeIceberg`, so its body floats in the Sunlit zone and its keel only touches the Twilight zone
- * in every Scene. The drawing's own measures sit here too: they are the frozen box `Iceberg` draws in.
+ * in every Scene; a Scene that draws its zone bands hands them to `placeIcebergInBands`, which reads the frame from
+ * them. The drawing's own measures sit here too: they are the frozen box `Iceberg` draws in.
  */
+import type { Zone } from '../zones.pure';
 
 /** The keel's depth below the waterline at depth scale 1, in scene units: the drawing's frozen box, downward. */
 export const KEEL_DEPTH = 200;
@@ -44,4 +46,25 @@ export function placeIceberg({ x, waterline, scale, sunlitBottom, twilightDepth 
     throw new Error(`The Sunlit zone must end below the waterline (${waterline}), got ${sunlitBottom}.`);
   const keelY = sunlitBottom + KEEL_TOUCH * twilightDepth;
   return { x, waterline, scale, depthScale: (keelY - waterline) / (scale * KEEL_DEPTH) };
+}
+
+/** One zone's band in a Scene, its top and bottom in the Scene's units; the shape every Scene's band list shares. */
+export interface ZoneBand {
+  readonly zone: Zone;
+  readonly top: number;
+  readonly bottom: number;
+}
+
+/** Places the berg in a Scene's own bands: the Sunlit band's bottom and the Twilight band's depth frame the keel. */
+export function placeIcebergInBands(
+  bands: readonly ZoneBand[],
+  berg: Pick<IcebergFrame, 'x' | 'waterline' | 'scale'>,
+): IcebergPlacement {
+  const band = (zone: 'sunlit' | 'twilight') => {
+    const found = bands.find((own) => own.zone === zone);
+    if (found === undefined) throw new Error(`The Scene has no ${zone} band to place the iceberg in.`);
+    return found;
+  };
+  const twilight = band('twilight');
+  return placeIceberg({ ...berg, sunlitBottom: band('sunlit').bottom, twilightDepth: twilight.bottom - twilight.top });
 }
