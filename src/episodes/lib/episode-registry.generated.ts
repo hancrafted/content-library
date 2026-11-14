@@ -32,6 +32,7 @@ import { onboardAiEveryTime } from '@/episodes/onboard-ai-every-time/episode';
 import { episodeTemplate } from '@/episodes/templates/episode-template/episode';
 import { explorablePageTemplate as explorablePage } from '@/episodes/templates/explorable-page/episode';
 import { grids } from '@/episodes/templates/grids/episode';
+import { iceBerg } from '@/episodes/templates/ice-berg/episode';
 import { timelines } from '@/episodes/templates/timelines/episode';
 import { workshopTemplate } from '@/episodes/templates/workshop-template/episode';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
@@ -70,6 +71,7 @@ export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition 
   'episode-template': episodeTemplate,
   'explorable-page': explorablePage,
   grids: grids,
+  'ice-berg': iceBerg,
   timelines: timelines,
   'workshop-template': workshopTemplate,
 };

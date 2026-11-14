@@ -1,0 +1,89 @@
+{
+  "title": "Ice berg · hancrafted",
+  "description": "Explore the Ice berg Theme: reusable low-poly figures, scenery, poses, moods and motion, with usage examples for your own Slides.",
+  "toc": "Collapse contents Ice berg 1 Visual elements Robot Pilot Ship Captain Iceberg Sea life Console Sky Emote AI agent Open contents : Contents Ice berg 1 Visual elements Robot Pilot Ship Captain Iceberg Sea life Console Sky Emote AI agent",
+  "slides": [
+    { "id": "top", "text": "Ice berg A visual vocabulary, from the surface to the seabed" },
+    {
+      "id": "elements",
+      "text": "Visual elements Inspect each figure, its variants and the interface that keeps it reusable"
+    },
+    {
+      "id": "elements--robot",
+      "text": "Visual elements (1/10) Page 1 of 10 Robot One diving robot, four motions and a lamp you can aim The remotely operated vehicle draws its own hull, camera, arm and search beam. Compare each motion with the still robot, then pause or replay the specimens. Import Robot from slide-shared/deep-sea-expedition/robot. Place its SVG group inside your Scene's SVG; its origin is the cable attachment. Motion stays inside the figure; use Travel for movement across a Scene. Pause motion Replay specimens At rest, lamp on Usage example <Robot /> Beam on Usage example <Robot motion=\"beam-on\" /> Scan Usage example <Robot motion=\"scan\" /> Dive Usage example <Robot motion=\"dive\" /> Surface Usage example <Robot motion=\"surface\" /> Lamp off Usage example <Robot lamp={false} /> Aim down Usage example <Robot aim=\"down\" />"
+    },
+    {
+      "id": "elements--pilot",
+      "text": "Visual elements (2/10) Page 2 of 10 Pilot Appearance belongs to the preset; stance belongs to Character One pilot, five poses. The cap, flight jacket and mug identify the person while Character supplies standing, sitting, pointing, steering and holding. Import Character from slide-shared/character/character and pilot from slide-shared/deep-sea-expedition/cast. The origin is the floor between the feet. The seated pose includes its chair; a console is a separate figure. Pause motion Replay specimens Stand Usage example <Character preset={pilot} pose=\"stand\" /> Sit Usage example <Character preset={pilot} pose=\"sit\" /> Point Usage example <Character preset={pilot} pose=\"point\" /> Steer Usage example <Character preset={pilot} pose=\"steer\" /> Hold the mug Usage example <Character preset={pilot} pose=\"hold\" />"
+    },
+    {
+      "id": "elements--ship",
+      "text": "Visual elements (3/10) Page 3 of 10 Ship The hull owns its layers; the Scene supplies the crew Compare the empty research ship, placement anchors, populated bridge and deck, mirrored hull and slow rock. Dots mark bridge seats, deck positions, the robot cradle and A-frame tip. Import Ship and shipAnchors from slide-shared/deep-sea-expedition/ship and ship.pure. The origin is the waterline amidships. Bridge figures sit behind window frames; deck figures sit behind the rail. Mirror the anchors when you flip the hull; use rock only on a Surface Scene. Pause motion Replay specimens Empty ship, level Usage example <Ship /> Crew and robot anchors Usage example const anchors = shipAnchors(); <Ship /> Bridge and deck slots filled Usage example const { bridge, deck } = shipAnchors(); <Ship bridge={bridgeFigures} deck={deckFigures} /> Mirrored ship and anchors Usage example const anchors = shipAnchors(true); <Ship flip /> Rock on the swell Usage example <Ship rock />"
+    },
+    {
+      "id": "elements--captain",
+      "text": "Visual elements (4/10) Page 4 of 10 Captain Five poses and three gestures share one body plan The officer's jacket and captain's cap are appearance, not behavior. Compare all five poses, then watch a wave, nod and turn. Each gesture ends at rest; the happy emote appears after it. Import Character from slide-shared/character/character and captain from slide-shared/deep-sea-expedition/cast. Poses and motions work with any Character preset. Flip the figure with flip; words remain readable. Pause motion Replay specimens Stand Usage example <Character preset={captain} pose=\"stand\" /> Sit Usage example <Character preset={captain} pose=\"sit\" /> Point Usage example <Character preset={captain} pose=\"point\" /> Steer Usage example <Character preset={captain} pose=\"steer\" /> Hold Usage example <Character preset={captain} pose=\"hold\" /> Wave Usage example <Character preset={captain} motion=\"wave\" mood=\"happy\" /> Nod Usage example <Character preset={captain} motion=\"nod\" mood=\"happy\" /> Turn toward Usage example <Character preset={captain} motion=\"turn-to\" mood=\"happy\" />"
+    },
+    {
+      "id": "elements--iceberg",
+      "text": "Visual elements (5/10) Page 5 of 10 Iceberg A fixed waterline connects the visible tip and hidden keel Compare the whole iceberg at two scales, a keel fitted to a target depth, and the tip and keel in isolation. The dashed guide is the same waterline in every specimen. The iceberg itself never moves. Import Iceberg from slide-shared/iceberg/scenery/iceberg. x centers the drawing and waterline joins tip and keel. scale resizes both; depthScale stretches only the keel. depthScaleForKeel comes from scenery/scenery.pure. A story Scene usually lets ZoneScene choose the iceberg part. Pause motion Replay specimens Whole iceberg, scale 1 Usage example <Iceberg x={600} waterline={400} /> Whole iceberg, scale 0.55 Usage example <Iceberg x={600} waterline={400} scale={0.55} /> Keel fitted from waterline 400 to depth 575 Usage example <Iceberg x={600} waterline={400} depthScale={depthScaleForKeel(400, 575)} /> Tip only Usage example <Iceberg part=\"tip\" x={600} waterline={400} /> Keel only, depth scale 1.4 Usage example <Iceberg part=\"keel\" x={600} waterline={400} depthScale={1.4} />"
+    },
+    {
+      "id": "elements--sea-life",
+      "text": "Visual elements (6/10) Page 6 of 10 Sea life Each depth has its own quiet ambient movement Fish sway in Sunlit, jellies bob in Twilight, a whale glides in Midnight and bubbles rise in Abyss. Compare a second fish school, then inspect the still seabed and shafts of light. Import creatures from slide-shared/iceberg/scenery/sea-life and Seabed or LightRays from scenery/seabed. Counts and seeds give reproducible groups; explicit placements override them. ZoneScene composes these parts for story Slides. Ambient loops stop outside the active Slide and with reduced motion. Pause motion Replay specimens Sunlit: 11 fish, seed 1 Usage example <FishSchool x={0} y={0} count={11} seed={1} /> Five fish facing left, seed 4 Usage example <FishSchool x={0} y={0} count={5} seed={4} flip /> Twilight: two jellyfish Usage example <Jellies x={0} y={0} /> Midnight: humpback whale Usage example <Whale x={0} y={0} /> Abyss: seven rising bubbles Usage example <Bubbles x={0} y={0} count={7} /> Seabed, 1200 units wide Usage example <Seabed y={100} width={1200} /> Five shafts of light Usage example <LightRays x={0} y={0} count={5} />"
+    },
+    {
+      "id": "elements--console",
+      "text": "Visual elements (7/10) Page 7 of 10 Console A flexible desk with a screen slot and a seat anchor Compare two screens, the small desk, three mugs and custom content in one wide screen. The mirrored example marks where a seated Character belongs. Import Console and consoleLayout from slide-shared/deep-sea-expedition/console and console.pure. The origin is the desk top's front-left corner. Width changes the desk, not its height; children fill the first screen in its own coordinates. Place a seated Character at the returned seat anchor. Pause motion Replay specimens Width 260, two screens Usage example <Console width={260} /> Width 82, one mug Usage example <Console width={82} mugs={1} /> Width 160, three mugs Usage example <Console width={160} mugs={3} /> One wide screen, custom content Usage example <Console width={260} screens={1}> <rect width={80} height={10} className=\"fill-primary\" /> </Console> Mirrored console and seat anchor Usage example const { seat } = consoleLayout({ width: 260, flip: true }); <Console width={260} flip />"
+    },
+    {
+      "id": "elements--sky",
+      "text": "Visual elements (8/10) Page 8 of 10 Sky The theme selects the light; clouds carry the wind Switch the site theme to compare the sun and crescent moon. The second specimen forces a moon independently of the surrounding theme. The clouds show the default Surface arrangement. Import SunMoon and Clouds from slide-shared/iceberg/scenery/sky. Both lights are server-rendered and CSS selects day or night. Cloud placements accept x, y, scale and shape. Wind is the Surface's ambient loop; the gallery pause control also stops it. Pause motion Replay specimens Sun or moon, selected by the site theme Usage example <SunMoon x={0} y={0} /> Moon under a dark ancestor Usage example <g className=\"dark\"><SunMoon x={0} y={0} /></g> Surface clouds, drifting in the wind Usage example <Clouds />"
+    },
+    {
+      "id": "elements--emote",
+      "text": "Visual elements (9/10) Page 9 of 10 Emote Moods and words follow the actor's head, even when mirrored Five moods on the captain, AI colleague and robot: a question, surprise, a sparkle, thinking dots or an empty thought. Speech examples show where words sit beside the head and how they stay readable after a flip. Character and Robot share mood and says. Import their components from slide-shared/character/character and deep-sea-expedition/robot; actor.ts declares the mood vocabulary. Emote placement belongs to the actor, not the Slide. Keep says in the Slide's Translation files; an emote appears after the actor's motion and stays visible. Pause motion Replay specimens Captain: Confused Usage example <Character preset={captain} pose=\"point\" mood=\"confused\" /> Captain: Surprised Usage example <Character preset={captain} pose=\"point\" mood=\"surprised\" /> Captain: Happy Usage example <Character preset={captain} pose=\"point\" mood=\"happy\" /> Captain: Thinking Usage example <Character preset={captain} pose=\"point\" mood=\"thinking\" /> Captain: Blank Usage example <Character preset={captain} pose=\"point\" mood=\"blank\" /> AI agent: Confused Usage example <Character preset={aiAgent} pose=\"hold\" mood=\"confused\" /> AI agent: Surprised Usage example <Character preset={aiAgent} pose=\"hold\" mood=\"surprised\" /> AI agent: Happy Usage example <Character preset={aiAgent} pose=\"hold\" mood=\"happy\" /> AI agent: Thinking Usage example <Character preset={aiAgent} pose=\"hold\" mood=\"thinking\" /> AI agent: Blank Usage example <Character preset={aiAgent} pose=\"hold\" mood=\"blank\" /> Didn't we do this exact dive yesterday? Seated pilot, thinking and speaking Usage example <Character preset={pilot} pose=\"sit\" mood=\"thinking\" says={t(\"pilotSays\")} /> Descend slowly past the shelf. Captain pointing left, words readable Usage example <Character preset={captain} pose=\"point\" flip says={t(\"captainSays\")} /> Robot: Confused Usage example <Robot mood=\"confused\" /> Robot: Surprised Usage example <Robot mood=\"surprised\" /> Robot: Happy Usage example <Robot mood=\"happy\" /> Robot: Thinking Usage example <Robot mood=\"thinking\" /> Robot: Blank Usage example <Robot mood=\"blank\" /> Where was I yesterday? Confused robot, speaking Usage example <Robot mood=\"confused\" says={t(\"robotSays\")} /> Mirrored robot, thinking Usage example <Robot flip mood=\"thinking\" />"
+    },
+    {
+      "id": "elements--ai-agent",
+      "text": "Visual elements (10/10) Page 10 of 10 AI agent The same Character works outside the expedition crew A colleague with a laptop, not a robot. The freelancer preset uses the same five poses as the crew; its AI badge carries the AI meaning color. Import Character from slide-shared/character/character and aiAgent from slide-shared/character/shared-presets. This preset is independent of the expedition setting. Appearance changes; poses and moods do not. Pause motion Replay specimens Stand Usage example <Character preset={aiAgent} pose=\"stand\" /> Sit Usage example <Character preset={aiAgent} pose=\"sit\" /> Point Usage example <Character preset={aiAgent} pose=\"point\" /> Steer Usage example <Character preset={aiAgent} pose=\"steer\" /> Hold the laptop Usage example <Character preset={aiAgent} pose=\"hold\" />"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "elements", "text": "Visual elements No speaker notes for this Slide." },
+    {
+      "id": "elements--robot",
+      "text": "Robot Coordinates and choreography The robot is an SVG group, about 80 by 60 drawing units, with its origin at the cable attachment. Its beam extends beyond the hull, so leave room in the viewBox. Robot owns the movement of its parts; a containing SVG transform or Travel places the whole robot in the Scene."
+    },
+    { "id": "elements--pilot", "text": "Pilot No speaker notes for this Slide." },
+    { "id": "elements--ship", "text": "Ship No speaker notes for this Slide." },
+    { "id": "elements--captain", "text": "Captain No speaker notes for this Slide." },
+    { "id": "elements--iceberg", "text": "Iceberg No speaker notes for this Slide." },
+    { "id": "elements--sea-life", "text": "Sea life No speaker notes for this Slide." },
+    { "id": "elements--console", "text": "Console No speaker notes for this Slide." },
+    { "id": "elements--sky", "text": "Sky No speaker notes for this Slide." },
+    { "id": "elements--emote", "text": "Emote No speaker notes for this Slide." },
+    { "id": "elements--ai-agent", "text": "AI agent No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "elements", "text": "Visual elements No voice script for this Slide." },
+    { "id": "elements--robot", "text": "Robot No voice script for this Slide." },
+    { "id": "elements--pilot", "text": "Pilot No voice script for this Slide." },
+    { "id": "elements--ship", "text": "Ship No voice script for this Slide." },
+    { "id": "elements--captain", "text": "Captain No voice script for this Slide." },
+    { "id": "elements--iceberg", "text": "Iceberg No voice script for this Slide." },
+    { "id": "elements--sea-life", "text": "Sea life No voice script for this Slide." },
+    { "id": "elements--console", "text": "Console No voice script for this Slide." },
+    { "id": "elements--sky", "text": "Sky No voice script for this Slide." },
+    { "id": "elements--emote", "text": "Emote No voice script for this Slide." },
+    { "id": "elements--ai-agent", "text": "AI agent No voice script for this Slide." }
+  ]
+}

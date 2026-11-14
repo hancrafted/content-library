@@ -1,0 +1,17 @@
+{
+  "title": "Iceberg",
+  "caption": "A fixed waterline connects the visible tip and hidden keel",
+  "intro": "Compare the whole iceberg at two scales, a keel fitted to a target depth, and the tip and keel in isolation. The dashed guide is the same waterline in every specimen. The iceberg itself never moves.",
+  "contract": "Import Iceberg from slide-shared/iceberg/scenery/iceberg. x centers the drawing and waterline joins tip and keel. scale resizes both; depthScale stretches only the keel. depthScaleForKeel comes from scenery/scenery.pure. A story Scene usually lets ZoneScene choose the iceberg part.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "variants": {
+    "whole": "Whole iceberg, scale 1",
+    "narrow": "Whole iceberg, scale 0.55",
+    "depth": "Keel fitted from waterline 400 to depth 575",
+    "tip": "Tip only",
+    "keel": "Keel only, depth scale 1.4"
+  }
+}

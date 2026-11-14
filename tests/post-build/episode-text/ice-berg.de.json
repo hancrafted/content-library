@@ -1,0 +1,89 @@
+{
+  "title": "Ice berg · hancrafted",
+  "description": "Erkunde das Ice-berg-Theme: wiederverwendbare Low-Poly-Figuren, Kulissen, Posen, Stimmungen und Bewegungen mit Beispielen für deine eigenen Slides.",
+  "toc": "Inhalt einklappen Ice berg 1 Visuelle Elemente Roboter Pilot Schiff Kapitänin Eisberg Meeresleben Steuerpult Himmel Emote KI-Agent Inhalt öffnen : Inhalt Ice berg 1 Visuelle Elemente Roboter Pilot Schiff Kapitänin Eisberg Meeresleben Steuerpult Himmel Emote KI-Agent",
+  "slides": [
+    { "id": "top", "text": "Ice berg Eine Bildsprache von der Oberfläche bis zum Meeresboden" },
+    {
+      "id": "elements",
+      "text": "Visuelle Elemente Erkunde jede Figur, ihre Varianten und die Schnittstelle für ihre Wiederverwendung"
+    },
+    {
+      "id": "elements--robot",
+      "text": "Visuelle Elemente (1/10) Seite 1 von 10 Roboter Ein Tauchroboter, vier Bewegungen und ein ausrichtbarer Scheinwerfer Das ferngesteuerte Tauchgerät zeichnet Rumpf, Kamera, Arm und Lichtstrahl selbst. Vergleiche jede Bewegung mit dem ruhenden Roboter und pausiere oder wiederhole die Beispiele. Importiere Robot aus slide-shared/deep-sea-expedition/robot. Platziere seine SVG-Gruppe im SVG deiner Szene; der Ursprung ist die Kabelbefestigung. Die Figur steuert ihre Bewegung selbst; für Wege durch die Szene gibt es Travel. Bewegung pausieren Beispiele wiederholen In Ruhe, Licht an Verwendungsbeispiel <Robot /> Licht einschalten Verwendungsbeispiel <Robot motion=\"beam-on\" /> Absuchen Verwendungsbeispiel <Robot motion=\"scan\" /> Abtauchen Verwendungsbeispiel <Robot motion=\"dive\" /> Auftauchen Verwendungsbeispiel <Robot motion=\"surface\" /> Licht aus Verwendungsbeispiel <Robot lamp={false} /> Nach unten leuchten Verwendungsbeispiel <Robot aim=\"down\" />"
+    },
+    {
+      "id": "elements--pilot",
+      "text": "Visuelle Elemente (2/10) Seite 2 von 10 Pilot Das Preset bestimmt das Aussehen; Character bestimmt die Haltung Ein Pilot, fünf Posen. Kappe, Fliegerjacke und Becher machen die Person erkennbar; Character liefert Stehen, Sitzen, Zeigen, Steuern und Halten. Importiere Character aus slide-shared/character/character und pilot aus slide-shared/deep-sea-expedition/cast. Der Ursprung liegt am Boden zwischen den Füßen. Die Sitzpose bringt ihren Stuhl mit; das Pult ist eine eigene Figur. Bewegung pausieren Beispiele wiederholen Stehen Verwendungsbeispiel <Character preset={pilot} pose=\"stand\" /> Sitzen Verwendungsbeispiel <Character preset={pilot} pose=\"sit\" /> Zeigen Verwendungsbeispiel <Character preset={pilot} pose=\"point\" /> Steuern Verwendungsbeispiel <Character preset={pilot} pose=\"steer\" /> Den Becher halten Verwendungsbeispiel <Character preset={pilot} pose=\"hold\" />"
+    },
+    {
+      "id": "elements--ship",
+      "text": "Visuelle Elemente (3/10) Seite 3 von 10 Schiff Der Rumpf bestimmt die Ebenen; die Szene liefert die Crew Vergleiche das leere Forschungsschiff, Platzierungsanker, besetzte Brücke und Deck, den gespiegelten Rumpf und das langsame Schaukeln. Punkte markieren Brückensitze, Deckpositionen, Roboterhalterung und A-Rahmenspitze. Importiere Ship und shipAnchors aus slide-shared/deep-sea-expedition/ship und ship.pure. Der Ursprung liegt an der Wasserlinie mittschiffs. Brückenfiguren stehen hinter Fensterrahmen, Deckfiguren hinter der Reling. Spiegle die Anker zusammen mit dem Rumpf; rock gehört nur in eine Oberflächenszene. Bewegung pausieren Beispiele wiederholen Leeres Schiff in Ruhe Verwendungsbeispiel <Ship /> Anker für Crew und Roboter Verwendungsbeispiel const anchors = shipAnchors(); <Ship /> Besetzte Brücke und Deck Verwendungsbeispiel const { bridge, deck } = shipAnchors(); <Ship bridge={bridgeFigures} deck={deckFigures} /> Gespiegeltes Schiff mit Ankern Verwendungsbeispiel const anchors = shipAnchors(true); <Ship flip /> Schaukeln auf den Wellen Verwendungsbeispiel <Ship rock />"
+    },
+    {
+      "id": "elements--captain",
+      "text": "Visuelle Elemente (4/10) Seite 4 von 10 Kapitänin Fünf Posen und drei Gesten teilen sich einen Körperbau Offiziersjacke und Kapitänsmütze bestimmen das Aussehen, nicht das Verhalten. Vergleiche alle fünf Posen und danach Winken, Nicken und Hinwenden. Jede Geste endet in Ruhe; das fröhliche Emote erscheint anschließend. Importiere Character aus slide-shared/character/character und captain aus slide-shared/deep-sea-expedition/cast. Posen und Bewegungen funktionieren mit jedem Character-Preset. flip spiegelt die Figur; Wörter bleiben lesbar. Bewegung pausieren Beispiele wiederholen Stehen Verwendungsbeispiel <Character preset={captain} pose=\"stand\" /> Sitzen Verwendungsbeispiel <Character preset={captain} pose=\"sit\" /> Zeigen Verwendungsbeispiel <Character preset={captain} pose=\"point\" /> Steuern Verwendungsbeispiel <Character preset={captain} pose=\"steer\" /> Halten Verwendungsbeispiel <Character preset={captain} pose=\"hold\" /> Winken Verwendungsbeispiel <Character preset={captain} motion=\"wave\" mood=\"happy\" /> Nicken Verwendungsbeispiel <Character preset={captain} motion=\"nod\" mood=\"happy\" /> Hinwenden Verwendungsbeispiel <Character preset={captain} motion=\"turn-to\" mood=\"happy\" />"
+    },
+    {
+      "id": "elements--iceberg",
+      "text": "Visuelle Elemente (5/10) Seite 5 von 10 Eisberg Eine feste Wasserlinie verbindet sichtbare Spitze und verborgenen Kiel Vergleiche den ganzen Eisberg in zwei Größen, einen Kiel mit Zielposition sowie Spitze und Kiel einzeln. Die gestrichelte Hilfslinie bleibt in jedem Beispiel dieselbe Wasserlinie. Der Eisberg selbst bewegt sich nie. Importiere Iceberg aus slide-shared/iceberg/scenery/iceberg. x zentriert die Zeichnung; waterline verbindet Spitze und Kiel. scale verändert beide, depthScale streckt nur den Kiel. depthScaleForKeel liegt in scenery/scenery.pure. In einer erzählenden Szene wählt meist ZoneScene den Eisbergteil. Bewegung pausieren Beispiele wiederholen Ganzer Eisberg, Maßstab 1 Verwendungsbeispiel <Iceberg x={600} waterline={400} /> Ganzer Eisberg, Maßstab 0,55 Verwendungsbeispiel <Iceberg x={600} waterline={400} scale={0.55} /> Kiel von Wasserlinie 400 bis Zielposition 575 Verwendungsbeispiel <Iceberg x={600} waterline={400} depthScale={depthScaleForKeel(400, 575)} /> Nur die Spitze Verwendungsbeispiel <Iceberg part=\"tip\" x={600} waterline={400} /> Nur der Kiel, Tiefenmaßstab 1,4 Verwendungsbeispiel <Iceberg part=\"keel\" x={600} waterline={400} depthScale={1.4} />"
+    },
+    {
+      "id": "elements--sea-life",
+      "text": "Visuelle Elemente (6/10) Seite 6 von 10 Meeresleben Jede Tiefe hat ihre eigene ruhige Hintergrundbewegung Fische schwingen in der Lichtzone, Quallen schweben in der Dämmerzone, ein Wal gleitet in der Mitternachtszone und Blasen steigen im Abyss auf. Vergleiche einen zweiten Fischschwarm und danach den ruhenden Meeresboden und die Lichtstrahlen. Importiere Tiere aus slide-shared/iceberg/scenery/sea-life sowie Seabed oder LightRays aus scenery/seabed. Anzahl und Seed erzeugen reproduzierbare Gruppen; explizite Positionen ersetzen sie. ZoneScene setzt die Teile für erzählende Slides zusammen. Hintergrundschleifen stoppen außerhalb der aktiven Slide und bei reduzierter Bewegung. Bewegung pausieren Beispiele wiederholen Lichtzone: elf Fische, Seed 1 Verwendungsbeispiel <FishSchool x={0} y={0} count={11} seed={1} /> Fünf Fische nach links, Seed 4 Verwendungsbeispiel <FishSchool x={0} y={0} count={5} seed={4} flip /> Dämmerzone: zwei Quallen Verwendungsbeispiel <Jellies x={0} y={0} /> Mitternachtszone: Buckelwal Verwendungsbeispiel <Whale x={0} y={0} /> Abyss: sieben aufsteigende Blasen Verwendungsbeispiel <Bubbles x={0} y={0} count={7} /> Meeresboden, 1200 Einheiten breit Verwendungsbeispiel <Seabed y={100} width={1200} /> Fünf Lichtstrahlen Verwendungsbeispiel <LightRays x={0} y={0} count={5} />"
+    },
+    {
+      "id": "elements--console",
+      "text": "Visuelle Elemente (7/10) Seite 7 von 10 Steuerpult Ein flexibles Pult mit Bildschirmplatz und Sitzanker Vergleiche zwei Bildschirme, das kleine Pult, drei Becher und eigenen Inhalt in einem breiten Bildschirm. Das gespiegelte Beispiel markiert den Platz für einen sitzenden Character. Importiere Console und consoleLayout aus slide-shared/deep-sea-expedition/console und console.pure. Der Ursprung liegt vorne links an der Tischplatte. Die Breite verändert das Pult, nicht seine Höhe; children füllt den ersten Bildschirm in dessen Koordinaten. Platziere einen sitzenden Character am zurückgegebenen Sitzanker. Bewegung pausieren Beispiele wiederholen Breite 260, zwei Bildschirme Verwendungsbeispiel <Console width={260} /> Breite 82, ein Becher Verwendungsbeispiel <Console width={82} mugs={1} /> Breite 160, drei Becher Verwendungsbeispiel <Console width={160} mugs={3} /> Ein breiter Bildschirm mit eigenem Inhalt Verwendungsbeispiel <Console width={260} screens={1}> <rect width={80} height={10} className=\"fill-primary\" /> </Console> Gespiegeltes Pult mit Sitzanker Verwendungsbeispiel const { seat } = consoleLayout({ width: 260, flip: true }); <Console width={260} flip />"
+    },
+    {
+      "id": "elements--sky",
+      "text": "Visuelle Elemente (8/10) Seite 8 von 10 Himmel Das Theme wählt das Licht; die Wolken tragen den Wind Wechsle das Seitentheme, um Sonne und Mondsichel zu vergleichen. Das zweite Beispiel erzwingt unabhängig vom Umfeld einen Mond. Die Wolken zeigen die Standardanordnung an der Oberfläche. Importiere SunMoon und Clouds aus slide-shared/iceberg/scenery/sky. Beide Himmelskörper werden serverseitig gezeichnet; CSS wählt Tag oder Nacht. Wolkenpositionen nehmen x, y, scale und shape entgegen. Wind ist die Hintergrundschleife der Oberfläche; die Pausentaste der Galerie hält auch ihn an. Bewegung pausieren Beispiele wiederholen Sonne oder Mond nach Seitentheme Verwendungsbeispiel <SunMoon x={0} y={0} /> Mond unter einem dark-Elternelement Verwendungsbeispiel <g className=\"dark\"><SunMoon x={0} y={0} /></g> Oberflächenwolken im Wind Verwendungsbeispiel <Clouds />"
+    },
+    {
+      "id": "elements--emote",
+      "text": "Visuelle Elemente (9/10) Seite 9 von 10 Emote Stimmungen und Wörter folgen dem Kopf, auch nach dem Spiegeln Fünf Stimmungen bei Kapitänin, KI-Kollegen und Roboter: Fragezeichen, Überraschung, Funkeln, denkende Punkte oder ein leerer Gedanke. Sprechbeispiele zeigen die Position der Wörter neben dem Kopf und ihre Lesbarkeit nach dem Spiegeln. Character und Robot teilen mood und says. Ihre Komponenten liegen in slide-shared/character/character und deep-sea-expedition/robot; actor.ts definiert die Stimmungen. Der Akteur platziert das Emote, nicht die Slide. says gehört in die Translation-Dateien der Slide. Ein Emote erscheint nach der Bewegung des Akteurs und bleibt sichtbar. Bewegung pausieren Beispiele wiederholen Kapitänin: Verwirrt Verwendungsbeispiel <Character preset={captain} pose=\"point\" mood=\"confused\" /> Kapitänin: Überrascht Verwendungsbeispiel <Character preset={captain} pose=\"point\" mood=\"surprised\" /> Kapitänin: Fröhlich Verwendungsbeispiel <Character preset={captain} pose=\"point\" mood=\"happy\" /> Kapitänin: Denkend Verwendungsbeispiel <Character preset={captain} pose=\"point\" mood=\"thinking\" /> Kapitänin: Leer Verwendungsbeispiel <Character preset={captain} pose=\"point\" mood=\"blank\" /> KI-Agent: Verwirrt Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" mood=\"confused\" /> KI-Agent: Überrascht Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" mood=\"surprised\" /> KI-Agent: Fröhlich Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" mood=\"happy\" /> KI-Agent: Denkend Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" mood=\"thinking\" /> KI-Agent: Leer Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" mood=\"blank\" /> Haben wir nicht gestern genau diesen Tauchgang gemacht? Sitzender Pilot, denkend und sprechend Verwendungsbeispiel <Character preset={pilot} pose=\"sit\" mood=\"thinking\" says={t(\"pilotSays\")} /> Langsam am Schelf vorbeisinken. Kapitänin zeigt nach links, Wörter bleiben lesbar Verwendungsbeispiel <Character preset={captain} pose=\"point\" flip says={t(\"captainSays\")} /> Roboter: Verwirrt Verwendungsbeispiel <Robot mood=\"confused\" /> Roboter: Überrascht Verwendungsbeispiel <Robot mood=\"surprised\" /> Roboter: Fröhlich Verwendungsbeispiel <Robot mood=\"happy\" /> Roboter: Denkend Verwendungsbeispiel <Robot mood=\"thinking\" /> Roboter: Leer Verwendungsbeispiel <Robot mood=\"blank\" /> Wo war ich gestern? Verwirrter Roboter spricht Verwendungsbeispiel <Robot mood=\"confused\" says={t(\"robotSays\")} /> Gespiegelter Roboter denkt Verwendungsbeispiel <Robot flip mood=\"thinking\" />"
+    },
+    {
+      "id": "elements--ai-agent",
+      "text": "Visuelle Elemente (10/10) Seite 10 von 10 KI-Agent Derselbe Character funktioniert auch außerhalb der Expedition Ein Kollege mit Laptop, kein Roboter. Das Freelancer-Preset nutzt dieselben fünf Posen wie die Crew; sein KI-Abzeichen trägt die Bedeutungsfarbe für KI. Importiere Character aus slide-shared/character/character und aiAgent aus slide-shared/character/shared-presets. Dieses Preset ist unabhängig von der Expedition. Das Aussehen ändert sich; Posen und Stimmungen bleiben. Bewegung pausieren Beispiele wiederholen Stehen Verwendungsbeispiel <Character preset={aiAgent} pose=\"stand\" /> Sitzen Verwendungsbeispiel <Character preset={aiAgent} pose=\"sit\" /> Zeigen Verwendungsbeispiel <Character preset={aiAgent} pose=\"point\" /> Steuern Verwendungsbeispiel <Character preset={aiAgent} pose=\"steer\" /> Den Laptop halten Verwendungsbeispiel <Character preset={aiAgent} pose=\"hold\" />"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "elements", "text": "Visuelle Elemente Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "elements--robot",
+      "text": "Roboter Koordinaten und Choreografie Der Roboter ist eine SVG-Gruppe von etwa 80 mal 60 Zeicheneinheiten mit dem Ursprung an der Kabelbefestigung. Der Lichtstrahl reicht über den Rumpf hinaus; lasse im viewBox Platz dafür. Robot bewegt seine eigenen Teile. Eine umgebende SVG-Transformation oder Travel platziert den ganzen Roboter in der Szene."
+    },
+    { "id": "elements--pilot", "text": "Pilot Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--ship", "text": "Schiff Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--captain", "text": "Kapitänin Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--iceberg", "text": "Eisberg Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--sea-life", "text": "Meeresleben Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--console", "text": "Steuerpult Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--sky", "text": "Himmel Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--emote", "text": "Emote Keine Sprechernotizen für diese Folie." },
+    { "id": "elements--ai-agent", "text": "KI-Agent Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "elements", "text": "Visuelle Elemente Kein Sprechtext für diese Folie." },
+    { "id": "elements--robot", "text": "Roboter Kein Sprechtext für diese Folie." },
+    { "id": "elements--pilot", "text": "Pilot Kein Sprechtext für diese Folie." },
+    { "id": "elements--ship", "text": "Schiff Kein Sprechtext für diese Folie." },
+    { "id": "elements--captain", "text": "Kapitänin Kein Sprechtext für diese Folie." },
+    { "id": "elements--iceberg", "text": "Eisberg Kein Sprechtext für diese Folie." },
+    { "id": "elements--sea-life", "text": "Meeresleben Kein Sprechtext für diese Folie." },
+    { "id": "elements--console", "text": "Steuerpult Kein Sprechtext für diese Folie." },
+    { "id": "elements--sky", "text": "Himmel Kein Sprechtext für diese Folie." },
+    { "id": "elements--emote", "text": "Emote Kein Sprechtext für diese Folie." },
+    { "id": "elements--ai-agent", "text": "KI-Agent Kein Sprechtext für diese Folie." }
+  ]
+}

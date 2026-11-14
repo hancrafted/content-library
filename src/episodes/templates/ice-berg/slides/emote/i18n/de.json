@@ -1,0 +1,27 @@
+{
+  "title": "Emote",
+  "caption": "Stimmungen und Wörter folgen dem Kopf, auch nach dem Spiegeln",
+  "intro": "Fünf Stimmungen bei Kapitänin, KI-Kollegen und Roboter: Fragezeichen, Überraschung, Funkeln, denkende Punkte oder ein leerer Gedanke. Sprechbeispiele zeigen die Position der Wörter neben dem Kopf und ihre Lesbarkeit nach dem Spiegeln.",
+  "contract": "Character und Robot teilen mood und says. Ihre Komponenten liegen in slide-shared/character/character und deep-sea-expedition/robot; actor.ts definiert die Stimmungen. Der Akteur platziert das Emote, nicht die Slide. says gehört in die Translation-Dateien der Slide. Ein Emote erscheint nach der Bewegung des Akteurs und bleibt sichtbar.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "actors": { "captain": "Kapitänin", "agent": "KI-Agent", "robot": "Roboter" },
+  "moods": {
+    "confused": "Verwirrt",
+    "surprised": "Überrascht",
+    "happy": "Fröhlich",
+    "thinking": "Denkend",
+    "blank": "Leer"
+  },
+  "variants": {
+    "pilotSays": "Sitzender Pilot, denkend und sprechend",
+    "captainSays": "Kapitänin zeigt nach links, Wörter bleiben lesbar",
+    "robotSays": "Verwirrter Roboter spricht",
+    "robotFlip": "Gespiegelter Roboter denkt"
+  },
+  "pilotSays": "Haben wir nicht gestern genau diesen Tauchgang gemacht?",
+  "captainSays": "Langsam am Schelf vorbeisinken.",
+  "robotSays": "Wo war ich gestern?"
+}

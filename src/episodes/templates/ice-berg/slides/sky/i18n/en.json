@@ -1,0 +1,15 @@
+{
+  "title": "Sky",
+  "caption": "The theme selects the light; clouds carry the wind",
+  "intro": "Switch the site theme to compare the sun and crescent moon. The second specimen forces a moon independently of the surrounding theme. The clouds show the default Surface arrangement.",
+  "contract": "Import SunMoon and Clouds from slide-shared/iceberg/scenery/sky. Both lights are server-rendered and CSS selects day or night. Cloud placements accept x, y, scale and shape. Wind is the Surface's ambient loop; the gallery pause control also stops it.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "variants": {
+    "theme": "Sun or moon, selected by the site theme",
+    "moon": "Moon under a dark ancestor",
+    "clouds": "Surface clouds, drifting in the wind"
+  }
+}

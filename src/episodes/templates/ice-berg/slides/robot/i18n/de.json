@@ -1,0 +1,25 @@
+{
+  "title": "Roboter",
+  "caption": "Ein Tauchroboter, vier Bewegungen und ein ausrichtbarer Scheinwerfer",
+  "intro": "Das ferngesteuerte Tauchgerät zeichnet Rumpf, Kamera, Arm und Lichtstrahl selbst. Vergleiche jede Bewegung mit dem ruhenden Roboter und pausiere oder wiederhole die Beispiele.",
+  "contract": "Importiere Robot aus slide-shared/deep-sea-expedition/robot. Platziere seine SVG-Gruppe im SVG deiner Szene; der Ursprung ist die Kabelbefestigung. Die Figur steuert ihre Bewegung selbst; für Wege durch die Szene gibt es Travel.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "notes": {
+    "coordinates": {
+      "header": "Koordinaten und Choreografie",
+      "description": "Der Roboter ist eine SVG-Gruppe von etwa 80 mal 60 Zeicheneinheiten mit dem Ursprung an der Kabelbefestigung. Der Lichtstrahl reicht über den Rumpf hinaus; lasse im viewBox Platz dafür. Robot bewegt seine eigenen Teile. Eine umgebende SVG-Transformation oder Travel platziert den ganzen Roboter in der Szene."
+    }
+  },
+  "variants": {
+    "rest": "In Ruhe, Licht an",
+    "beamOn": "Licht einschalten",
+    "scan": "Absuchen",
+    "dive": "Abtauchen",
+    "surface": "Auftauchen",
+    "lampOff": "Licht aus",
+    "aimDown": "Nach unten leuchten"
+  }
+}

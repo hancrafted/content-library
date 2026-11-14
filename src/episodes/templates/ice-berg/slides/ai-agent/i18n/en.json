@@ -1,0 +1,11 @@
+{
+  "title": "AI agent",
+  "caption": "The same Character works outside the expedition crew",
+  "intro": "A colleague with a laptop, not a robot. The freelancer preset uses the same five poses as the crew; its AI badge carries the AI meaning color.",
+  "contract": "Import Character from slide-shared/character/character and aiAgent from slide-shared/character/shared-presets. This preset is independent of the expedition setting. Appearance changes; poses and moods do not.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "poses": { "stand": "Stand", "sit": "Sit", "point": "Point", "steer": "Steer", "hold": "Hold the laptop" }
+}

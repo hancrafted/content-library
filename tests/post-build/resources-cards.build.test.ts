@@ -9,6 +9,7 @@ const PLACEMENT = {
   guide: 'none',
   'episode-template': 'none',
   'master-slide': 'none',
+  theme: 'none',
 } as const;
 
 describe.each(LOCALES)('B1 Resource cards in %s', (locale) => {

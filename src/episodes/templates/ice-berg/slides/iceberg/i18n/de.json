@@ -1,0 +1,17 @@
+{
+  "title": "Eisberg",
+  "caption": "Eine feste Wasserlinie verbindet sichtbare Spitze und verborgenen Kiel",
+  "intro": "Vergleiche den ganzen Eisberg in zwei Größen, einen Kiel mit Zielposition sowie Spitze und Kiel einzeln. Die gestrichelte Hilfslinie bleibt in jedem Beispiel dieselbe Wasserlinie. Der Eisberg selbst bewegt sich nie.",
+  "contract": "Importiere Iceberg aus slide-shared/iceberg/scenery/iceberg. x zentriert die Zeichnung; waterline verbindet Spitze und Kiel. scale verändert beide, depthScale streckt nur den Kiel. depthScaleForKeel liegt in scenery/scenery.pure. In einer erzählenden Szene wählt meist ZoneScene den Eisbergteil.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "variants": {
+    "whole": "Ganzer Eisberg, Maßstab 1",
+    "narrow": "Ganzer Eisberg, Maßstab 0,55",
+    "depth": "Kiel von Wasserlinie 400 bis Zielposition 575",
+    "tip": "Nur die Spitze",
+    "keel": "Nur der Kiel, Tiefenmaßstab 1,4"
+  }
+}
