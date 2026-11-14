@@ -1,0 +1,199 @@
+/*
+ * The test dive's own tones, lifted from Spec Option 22a (feedback 3, decision 46): sky, clouds, surface and Sunlit
+ * water, the light ray and lit waterline, the seabed, the silt, the procedure card and the bubbles. Raw colours live
+ * only here, each with its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own
+ * fill so neighbours meet without a seam; the translucent ones are not, so they do not double at their edges.
+ */
+
+.art {
+  --art-sky-1: oklch(0.76 0.08 240);
+  --art-sky-2: oklch(0.8 0.07 236);
+  --art-sky-3: oklch(0.845 0.058 230);
+  --art-sky-4: oklch(0.885 0.045 222);
+  --art-cloud-lit: oklch(0.995 0.004 230);
+  --art-cloud-shade: oklch(0.91 0.03 240);
+  --art-sea-surface-lit: oklch(0.74 0.09 212);
+  --art-sea-surface: oklch(0.69 0.1 218);
+  --art-sea-sunlit: oklch(0.575 0.115 234);
+  --art-sea-sunlit-lit: oklch(0.62 0.11 228);
+  --art-ray: oklch(0.97 0.06 200 / 0.18);
+  --art-bed: oklch(0.34 0.035 60);
+  --art-bed-shade: oklch(0.27 0.03 50);
+  --art-bed-lit: oklch(0.42 0.04 70);
+  --art-glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --art-glow: oklch(0.99 0.03 200);
+  --art-silt-lit: oklch(0.62 0.05 70 / 0.75);
+  --art-silt: oklch(0.5 0.045 62 / 0.7);
+  --art-card-ghost: oklch(1 0 0 / 0.28);
+  --art-drop: oklch(0.3 0.04 255 / 0.18);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper: oklch(0.965 0.01 88);
+  --art-paper-shade: oklch(0.9 0.016 80);
+  --art-paper-rule: oklch(0.78 0.03 240);
+  --art-bubble: oklch(0.95 0.04 210 / 0.45);
+  --art-glint: oklch(1 0 0);
+}
+
+:global(.dark) .art {
+  --art-sky-1: oklch(0.24 0.05 268);
+  --art-sky-2: oklch(0.28 0.055 264);
+  --art-sky-3: oklch(0.32 0.055 258);
+  --art-sky-4: oklch(0.37 0.055 250);
+  --art-cloud-lit: oklch(0.47 0.045 255);
+  --art-cloud-shade: oklch(0.39 0.045 260);
+  --art-sea-surface-lit: oklch(0.44 0.075 222);
+  --art-sea-surface: oklch(0.405 0.078 226);
+  --art-sea-sunlit: oklch(0.34 0.075 240);
+  --art-sea-sunlit-lit: oklch(0.37 0.075 236);
+  --art-ray: oklch(0.8 0.08 200 / 0.12);
+  --art-bed: oklch(0.29 0.03 60);
+  --art-bed-shade: oklch(0.23 0.025 50);
+  --art-bed-lit: oklch(0.36 0.035 70);
+  --art-glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --art-glow: oklch(0.9 0.08 200);
+  --art-silt-lit: oklch(0.5 0.045 70 / 0.75);
+  --art-silt: oklch(0.4 0.04 62 / 0.7);
+  --art-card-ghost: oklch(1 0 0 / 0.16);
+  --art-drop: oklch(0.1 0.02 260 / 0.4);
+  --art-paper-lit: oklch(0.88 0.008 90);
+  --art-paper: oklch(0.83 0.012 88);
+  --art-paper-shade: oklch(0.7 0.018 80);
+  --art-paper-rule: oklch(0.6 0.03 240);
+  --art-bubble: oklch(0.8 0.05 210 / 0.35);
+  --art-glint: oklch(0.98 0.01 230);
+}
+
+.art [data-tone='sky-1'] {
+  fill: var(--art-sky-1);
+  stroke: var(--art-sky-1);
+}
+
+.art [data-tone='sky-2'] {
+  fill: var(--art-sky-2);
+  stroke: var(--art-sky-2);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--art-sky-3);
+  stroke: var(--art-sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--art-sky-4);
+  stroke: var(--art-sky-4);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--art-cloud-lit);
+  stroke: var(--art-cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--art-cloud-shade);
+  stroke: var(--art-cloud-shade);
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--art-sea-surface-lit);
+  stroke: var(--art-sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--art-sea-surface);
+  stroke: var(--art-sea-surface);
+}
+
+.art [data-tone='sea-sunlit'] {
+  fill: var(--art-sea-sunlit);
+  stroke: var(--art-sea-sunlit);
+}
+
+.art [data-tone='sea-sunlit-lit'] {
+  fill: var(--art-sea-sunlit-lit);
+  stroke: var(--art-sea-sunlit-lit);
+}
+
+.art [data-tone='ray'] {
+  fill: var(--art-ray);
+  stroke: none;
+}
+
+.art [data-tone='bed'] {
+  fill: var(--art-bed);
+  stroke: var(--art-bed);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--art-bed-shade);
+  stroke: var(--art-bed-shade);
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--art-bed-lit);
+  stroke: var(--art-bed-lit);
+}
+
+.art [data-tone='glow-soft'] {
+  fill: var(--art-glow-soft);
+  stroke: none;
+}
+
+.art [data-tone='glow'] {
+  fill: var(--art-glow);
+  stroke: var(--art-glow);
+}
+
+.art [data-tone='silt-lit'] {
+  fill: var(--art-silt-lit);
+  stroke: none;
+}
+
+.art [data-tone='silt'] {
+  fill: var(--art-silt);
+  stroke: none;
+}
+
+.art [data-tone='card-ghost'] {
+  fill: var(--art-card-ghost);
+  stroke: none;
+}
+
+.art [data-tone='drop'] {
+  fill: var(--art-drop);
+  stroke: none;
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--art-paper-shade);
+  stroke: var(--art-paper-shade);
+}
+
+.art [data-tone='paper-rule'] {
+  fill: var(--art-paper-rule);
+  stroke: var(--art-paper-rule);
+}
+
+.art [data-tone='bubble'] {
+  fill: var(--art-bubble);
+  stroke: none;
+}
+
+.art [data-tone='glint'] {
+  fill: var(--art-glint);
+  stroke: var(--art-glint);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
