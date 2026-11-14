@@ -105,9 +105,7 @@ export function researchFolders(): string[] {
   const staging = Object.values(stagingFolders()).flatMap((folder) => subfolders(path.join(folder, 'research')));
   const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
   const onDisk = [...staging, ...llmWiki].map((folder) => path.relative(ROOT, folder));
-  const planned = Object.values(perRunPipelines())
-    .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
-    .flatMap(({ outputs }) => outputs ?? [])
+  const planned = outputsOf(Object.values(perRunPipelines()))
     // A draft keeps write-research's foreach glob; only a named folder is a planned one.
     .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
     .map((output) => path.dirname(output));
@@ -123,17 +121,22 @@ export const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 /** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
 export const governance = new Map<string, boolean>();
 
-/** Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. */
+/** Every output the pipelines' jobs name, in order. */
+const outputsOf = (yamls: readonly string[]): string[] =>
+  yamls.flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs.flatMap((job) => job.outputs ?? []));
+
+/**
+ * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. The first
+ * lookup batches every markdown output the template and per-run pipelines name; only a path outside them spawns again.
+ */
 export function governed(file: string): boolean {
-  const known = governance.get(file);
-  if (known !== undefined) return known;
-  const output = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', file], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  });
-  const answer = (JSON.parse(output) as { result: { governance: string } }).result.governance === 'governed';
-  governance.set(file, answer);
-  return answer;
+  if (governance.has(file)) return governance.get(file) === true;
+  const yamls = governance.size === 0 ? [readFileSync(TEMPLATE, 'utf8'), ...Object.values(perRunPipelines())] : [];
+  const files = [...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md'))])];
+  const answer = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', '--batch', ...files], { cwd: ROOT });
+  const { results } = (JSON.parse(String(answer)) as { result: { results: { governance: string }[] } }).result;
+  files.forEach((each, at) => governance.set(each, results[at].governance === 'governed'));
+  return governance.get(file) === true;
 }
 
 /**
