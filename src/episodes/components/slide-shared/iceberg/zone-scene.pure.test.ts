@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { seaFacets, zoneSceneParts } from './zone-scene.pure';
+import { depthBands, seaFacets, zoneSceneParts } from './zone-scene.pure';
 
 /*
  * What `ZoneScene` draws for a zone: the one prop a Slide names decides the sky, the rays, the seabed, the iceberg's
@@ -32,6 +32,20 @@ describe('success cases', () => {
     const seen = { count: facets.length, tones: [...new Set(facets.map(({ tone }) => tone))].sort() };
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+  it('stacks the five zones as bands from the waterline down to the seabed, the Surface first', () => {
+    // ARRANGE
+    const expected = [
+      { zone: 'surface', top: 360, bottom: 460 },
+      { zone: 'sunlit', top: 460, bottom: 560 },
+      { zone: 'twilight', top: 560, bottom: 660 },
+      { zone: 'midnight', top: 660, bottom: 760 },
+      { zone: 'abyss', top: 760, bottom: 880 },
+    ];
+    // ACT
+    const bands = depthBands();
+    // ASSERT
+    expect(bands).toEqual(expected);
   });
 });
 

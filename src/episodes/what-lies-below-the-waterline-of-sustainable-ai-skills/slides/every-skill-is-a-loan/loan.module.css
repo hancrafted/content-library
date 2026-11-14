@@ -1,0 +1,121 @@
+/*
+ * "Every skill is a loan" (Option 23b): the statement hung on the robot's cable over the Abyss. No raw colour (FE-011):
+ * the words and glass over the water mix `--on-brand-accent` (white) and `--overlay` (black), fixed across themes, so
+ * they read on the dark Abyss water in both; the cable and clamps are the robot's, so they mix `--machine`. Dark mode
+ * only retunes the mixes.
+ */
+
+.stage {
+  --ink: color-mix(in oklab, var(--on-brand-accent) 94%, var(--zone-abyss));
+  --ink-soft: color-mix(in oklab, var(--on-brand-accent) 72%, var(--zone-abyss));
+  --glass: color-mix(in oklab, color-mix(in oklab, var(--zone-abyss) 86%, var(--on-brand-accent)) 84%, transparent);
+  --glass-edge: color-mix(in oklab, var(--on-brand-accent) 24%, transparent);
+  --code: color-mix(in oklab, var(--overlay) 55%, transparent);
+  --cable: color-mix(in oklab, var(--machine) 55%, var(--on-brand-accent));
+  --clamp: color-mix(in oklab, var(--machine) 45%, var(--overlay));
+  --clamp-lit: color-mix(in oklab, var(--machine) 70%, var(--on-brand-accent));
+  --block: color-mix(in oklab, var(--machine) 18%, var(--on-brand-accent));
+  --block-side: color-mix(in oklab, var(--machine) 35%, var(--on-brand-accent));
+  color: var(--ink);
+}
+
+:global(.dark) .stage {
+  --ink: color-mix(in oklab, var(--on-brand-accent) 90%, var(--zone-abyss));
+  --ink-soft: color-mix(in oklab, var(--on-brand-accent) 66%, var(--zone-abyss));
+  --glass: color-mix(in oklab, color-mix(in oklab, var(--zone-abyss) 90%, var(--on-brand-accent)) 86%, transparent);
+  --glass-edge: color-mix(in oklab, var(--on-brand-accent) 18%, transparent);
+  --code: color-mix(in oklab, var(--overlay) 65%, transparent);
+  --cable: color-mix(in oklab, var(--machine) 60%, var(--on-brand-accent));
+  --clamp: color-mix(in oklab, var(--machine) 40%, var(--overlay));
+  --clamp-lit: color-mix(in oklab, var(--machine) 75%, var(--on-brand-accent));
+  --block: color-mix(in oklab, var(--machine) 22%, var(--on-brand-accent));
+  --block-side: color-mix(in oklab, var(--machine) 42%, var(--on-brand-accent));
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+}
+
+.code {
+  background: var(--code);
+  color: var(--ink);
+}
+
+.cable {
+  background: linear-gradient(to right, var(--cable) 50%, var(--clamp) 50%);
+  transform-origin: top;
+}
+
+.clamp {
+  fill: var(--clamp);
+  stroke: var(--clamp-lit);
+  stroke-width: 2;
+}
+
+.glyph {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.robotCable {
+  stroke: var(--cable);
+  stroke-width: 3;
+}
+
+.block {
+  background: linear-gradient(to right, var(--block) 78%, var(--block-side) 78%);
+}
+
+.unpaid {
+  border: 2px dashed var(--ink-soft);
+}
+
+.next {
+  border: 2px dashed var(--glass-edge);
+}
+
+/*
+ * The one emphasis motion: the statement grows one entry at a time. The cable pays out to the next clamp, the entry
+ * appears and its block in the stack lights in sync, day one to the latest, once on entry. The base rules are the end
+ * state, which a still frame and reduced motion show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .cable {
+    animation: pay-out 2800ms linear 200ms both;
+  }
+
+  :global([data-zone='active']) .arrive {
+    animation: arrive 500ms ease-out calc(var(--step) * 700ms + 200ms) both;
+  }
+
+  :global([data-zone='active']) .light {
+    animation: light 500ms ease-out calc(var(--step) * 700ms + 400ms) both;
+  }
+}
+
+@keyframes pay-out {
+  from {
+    scale: 1 0;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    translate: 0 -0.75rem;
+  }
+}
+
+@keyframes light {
+  from {
+    opacity: 0.15;
+  }
+}

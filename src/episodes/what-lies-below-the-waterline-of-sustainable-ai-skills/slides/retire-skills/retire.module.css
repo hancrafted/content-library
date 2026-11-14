@@ -1,0 +1,129 @@
+/*
+ * "Retire skills" (Option 25b): the control room at night, its porthole onto the Abyss, the archive crate and the one
+ * emphasis motion. No raw colour (FE-011): the wall mixes the Abyss zone with `--overlay` (black), the crate mixes
+ * `--bulb-edge`'s ochre, the porthole rim `--on-brand-accent` (white) with `--overlay`; `--primary` marks the one line
+ * you need. Dark mode only retunes the mixes.
+ */
+
+.room {
+  --wall: color-mix(in oklab, var(--zone-abyss) 70%, var(--overlay));
+  --wall-lit: color-mix(in oklab, var(--zone-abyss) 82%, var(--on-brand-accent));
+  --rim: color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay));
+  --cable: color-mix(in oklab, var(--machine) 60%, var(--on-brand-accent));
+  --crate: color-mix(in oklab, var(--bulb-edge) 55%, var(--overlay));
+  --crate-lit: color-mix(in oklab, var(--bulb-edge) 70%, var(--on-brand-accent));
+  --retired: color-mix(in oklab, var(--on-brand-accent) 82%, var(--overlay));
+  --ink: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-abyss));
+}
+
+:global(.dark) .room {
+  --wall: color-mix(in oklab, var(--zone-abyss) 60%, var(--overlay));
+  --wall-lit: color-mix(in oklab, var(--zone-abyss) 85%, var(--on-brand-accent));
+  --rim: color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay));
+  --cable: color-mix(in oklab, var(--machine) 70%, var(--on-brand-accent));
+  --crate: color-mix(in oklab, var(--bulb-edge) 45%, var(--overlay));
+  --crate-lit: color-mix(in oklab, var(--bulb-edge) 60%, var(--overlay));
+  --retired: color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay));
+  --ink: color-mix(in oklab, var(--on-brand-accent) 88%, var(--zone-abyss));
+}
+
+.wall [data-tone='wall'] {
+  fill: var(--wall);
+}
+
+.wall [data-tone='wall-lit'] {
+  fill: var(--wall-lit);
+}
+
+/* The porthole's mask: the wall shows where the mask is white and opens onto the Abyss where it is black. */
+.maskOpen {
+  fill: var(--on-brand-accent);
+}
+
+.maskHole {
+  fill: var(--overlay);
+}
+
+.rim {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 14;
+}
+
+.cable {
+  stroke: var(--cable);
+  stroke-width: 3;
+}
+
+.ink {
+  color: var(--ink);
+}
+
+.crate {
+  background: linear-gradient(to bottom, var(--crate-lit) 0 18%, var(--crate) 18%);
+}
+
+.retired {
+  background: var(--retired);
+}
+
+/* The close-up shrinks from the top: its top edge stays put while the index closes up into the short card. */
+.closeUp {
+  transform-origin: top;
+}
+
+.needed {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/*
+ * The one emphasis motion, once on entry: the unused lines grey out, the retired cards drop into the crate, the index
+ * closes up into the short card and the needed line lights. The base rules are the end state, as reduced motion and a
+ * still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .greyOut {
+    animation: grey-out 600ms ease-out 300ms both;
+  }
+
+  :global([data-zone='active']) .drop {
+    animation: drop 700ms cubic-bezier(0.3, 0, 0.6, 1) calc(900ms + var(--n) * 120ms) both;
+  }
+
+  :global([data-zone='active']) .closeUp {
+    animation: close-up 700ms ease-out 1600ms both;
+  }
+
+  :global([data-zone='active']) .needed {
+    animation: light-up 500ms ease-out 2300ms both;
+  }
+}
+
+@keyframes grey-out {
+  from {
+    color: var(--card-foreground);
+    text-decoration-color: transparent;
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    translate: 0 -4rem;
+  }
+}
+
+@keyframes close-up {
+  from {
+    opacity: 0;
+    scale: 1 1.4;
+  }
+}
+
+@keyframes light-up {
+  from {
+    background: transparent;
+    color: var(--card-foreground);
+  }
+}

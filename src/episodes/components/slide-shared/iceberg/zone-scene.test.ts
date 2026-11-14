@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Travel } from './travel';
-import { ZoneScene } from './zone-scene';
+import { WholeDepthScene, ZoneScene } from './zone-scene';
 
 /*
  * `ZoneScene` as a Slide's server render draws it (design-ADR 0025): one `zone` prop picks the scenery the scenery
@@ -13,6 +13,8 @@ import { ZoneScene } from './zone-scene';
 const render = (props: Parameters<typeof ZoneScene>[0]) => load(renderToStaticMarkup(createElement(ZoneScene, props)));
 
 const SCENE = '[data-scene]';
+const whole = (props: Parameters<typeof WholeDepthScene>[0]) =>
+  load(renderToStaticMarkup(createElement(WholeDepthScene, props)));
 
 describe('success cases', () => {
   it('draws the Surface sky with the sun and moon, the whole iceberg and the clouds that carry its wind', () => {
@@ -60,6 +62,56 @@ describe('success cases', () => {
       figure: $('svg [data-travel] [data-figure]').length,
       travel: $('[data-travel]').attr('data-motion'),
       overlay: $(`${SCENE} > [data-words]`).text(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+  it('draws one picture from the sky to the seabed: every zone water in order, the whole iceberg, the seabed', () => {
+    // ARRANGE
+    const expected = {
+      pictures: 1,
+      sky: 1,
+      water: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      iceberg: 'whole',
+      seabed: 1,
+      viewBox: '0 0 1200 880',
+    };
+    // ACT
+    const $ = whole({ label: 'The whole iceberg' });
+    const seen = {
+      pictures: $('svg[role="img"]').length,
+      sky: $('[data-band="sky"]').length,
+      water: $('[data-depth-band]')
+        .toArray()
+        .map((band) => $(band).attr('data-depth-band')),
+      iceberg: $('[data-iceberg]').attr('data-iceberg'),
+      seabed: $('[data-seabed]').length,
+      viewBox: $('svg[role="img"]').attr('viewBox'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('colours each band from its own zone token, so the Surface water is the Surface zone', () => {
+    // ARRANGE
+    const expected = ['--water:var(--zone-surface)', '--water:var(--zone-abyss)'];
+    // ACT
+    const $ = whole({});
+    const seen = ['surface', 'abyss'].map((zone) => $(`[data-depth-band="${zone}"]`).attr('style'));
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('leaves out the zone creatures, so words written on the water stay legible', () => {
+    // ARRANGE
+    const expected = { fish: 0, jellies: 0, whale: 0, bubbles: 0 };
+    // ACT
+    const $ = whole({});
+    const seen = {
+      fish: $('[data-fish-school]').length,
+      jellies: $('[data-jellies]').length,
+      whale: $('[data-whale]').length,
+      bubbles: $('[data-bubbles]').length,
     };
     // ASSERT
     expect(seen).toEqual(expected);

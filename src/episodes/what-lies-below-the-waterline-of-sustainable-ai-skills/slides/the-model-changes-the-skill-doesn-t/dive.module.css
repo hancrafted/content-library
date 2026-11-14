@@ -1,0 +1,97 @@
+/*
+ * "The model changes, the skill doesn't" (Option 24a): each dive's own scenery, the porthole, both cables, yesterday's
+ * ghost, the silt cloud and the gap bracket. No raw colour (FE-011): the porthole mixes `--on-brand-accent` (white) and
+ * `--overlay` (black) with the Surface zone, the cables are the robot's and mix `--machine`, the silt mixes the Abyss
+ * with `--bulb-edge`'s ochre, and `--primary` marks the one gap to look at. Dark mode only retunes the mixes.
+ */
+
+.dive {
+  --rim: color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay));
+  --rim-lit: color-mix(in oklab, var(--on-brand-accent) 85%, var(--overlay));
+  --cabin: color-mix(in oklab, var(--zone-surface) 55%, var(--on-brand-accent));
+  --cable: color-mix(in oklab, var(--machine) 55%, var(--overlay));
+  --ghost: color-mix(in oklab, var(--on-brand-accent) 80%, transparent);
+  --silt: color-mix(in oklab, var(--bulb-edge) 45%, var(--zone-abyss));
+  --silt-lit: color-mix(in oklab, var(--bulb-edge) 65%, var(--on-brand-accent));
+}
+
+:global(.dark) .dive {
+  --rim: color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay));
+  --rim-lit: color-mix(in oklab, var(--on-brand-accent) 68%, var(--overlay));
+  --cabin: color-mix(in oklab, var(--zone-surface) 60%, var(--overlay));
+  --cable: color-mix(in oklab, var(--machine) 70%, var(--on-brand-accent));
+  --ghost: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
+  --silt: color-mix(in oklab, var(--bulb-edge) 40%, var(--zone-abyss));
+  --silt-lit: color-mix(in oklab, var(--bulb-edge) 60%, var(--zone-abyss));
+}
+
+.rim {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 18;
+}
+
+.rimLit {
+  fill: none;
+  stroke: var(--rim-lit);
+  stroke-width: 4;
+}
+
+.cabin {
+  fill: var(--cabin);
+}
+
+.cable {
+  stroke: var(--cable);
+  stroke-width: 4;
+}
+
+.ghostCable {
+  fill: none;
+  stroke: var(--ghost);
+  stroke-width: 3;
+  stroke-dasharray: 10 8;
+}
+
+.ghost {
+  opacity: 0.45;
+}
+
+.silt [data-tone='silt'] {
+  fill: var(--silt);
+}
+
+.silt [data-tone='silt-lit'] {
+  fill: var(--silt-lit);
+}
+
+.gap {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 5;
+}
+
+.label {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.ghostLabel {
+  border: 1px dashed var(--card-foreground);
+}
+
+/* The silt cloud billows up once the robot has hit the seabed; its rest state is the cloud, as reduced motion shows. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .silt {
+    animation: billow 900ms ease-out 1700ms both;
+    transform-box: fill-box;
+    transform-origin: bottom;
+  }
+}
+
+@keyframes billow {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
