@@ -3,13 +3,13 @@
 import type { Mode } from '../../scripts/grader/check.ts';
 import bar from '../judge/confidence-bar.json' with { type: 'json' };
 import type { Expectation } from './grading.pure.ts';
-import { fillPrompt, quoted, type Source } from './quality.pure.ts';
+import { fillPrompt, quoted, type Ruling, type Source } from './quality.pure.ts';
 
 /** One yes/no question of a case's checklist.json. */
 export interface CaseItem {
   readonly id: string;
   readonly question: string;
-  readonly source: Source;
+  readonly source: Source | Ruling;
 }
 
 /** One question the judge answers; the id says whether it comes from the bar or the case. */
