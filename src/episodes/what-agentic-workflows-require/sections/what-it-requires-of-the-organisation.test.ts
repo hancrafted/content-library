@@ -231,14 +231,14 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('runs the Explorable on Slide 13 with a level on each stage, a contract at each handoff and the four pins', () => {
+  it('runs the Explorable on Slide 13 with a level on each stage, a contract after each stage it hands off from and the four pins', () => {
     // ARRANGE
     const expected = {
       diagram: 1,
       goal: ['Goal: a quiz someone can use'],
       levels: ['In the loop', 'In the loop', 'On the loop', 'In the loop'],
       contracts: ['Plan → Requirements', 'Requirements → Research', 'Research → Page'],
-      pins: ['3', '1', '4', '2', '1', '2', '3', '4'],
+      pins: ['3', '1', '2', '4', '1', '2', '3', '4'],
       steps: [
         'Pick one recurring process.',
         'Write the contract first.',
@@ -252,7 +252,7 @@ describe('success cases', () => {
       diagram: $('[data-part="diagram"]').length,
       goal: textsOf($, '[data-quiz-goal]'),
       levels: textsOf($, '[data-part="diagram"] [data-oversight-pill]'),
-      contracts: textsOf($, '[data-handoffs] [data-contract-label]'),
+      contracts: textsOf($, '[data-part="diagram"] [data-stage-after] [data-contract-label]'),
       pins: $('[data-pin]')
         .toArray()
         .map((node) => $(node).attr('data-pin')),

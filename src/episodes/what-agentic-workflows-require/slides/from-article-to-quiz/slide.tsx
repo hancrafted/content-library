@@ -20,14 +20,15 @@ const ANTHROPIC_AGENTS = {
  */
 const WORKFLOW: WorkflowId = 'summer-party';
 
-/** The three handoffs between the stages, in the order the work crosses them. */
-const HANDOFFS = ['planRequirements', 'requirementsResearch', 'researchPage'] as const;
+/** A handoff between two stages, keyed as its contract's words are. */
+type Handoff = 'planRequirements' | 'requirementsResearch' | 'researchPage';
 
 /**
  * "From article to quiz" (Spec Option 13c): the human-in-the-loop Explorable full width in its own look, its Stages view
- * at Chat level with Demo mode on, each stage carrying its level as the shared oversight pill, a contract card at each
- * handoff below it, and four pins on the parts that show each step: the Plan level (1), the first contract (2), the goal
- * (3) and the Page stage's checked mark (4). The steps sit below as the legend. Keeps `basic-page` and `motion: none`.
+ * at Chat level with Demo mode on. Each stage carries its level as the shared oversight pill, and a contract card sits
+ * after each stage it hands off from. Four pins mark the parts that show each step: the Plan level (1), the first
+ * contract (2), the goal (3) and the Page stage's marks (4). The steps sit below as the legend. Keeps `basic-page` and
+ * `motion: none`.
  */
 export const fromArticleToQuiz = slide({
   slug: 'from-article-to-quiz',
@@ -42,6 +43,20 @@ export const fromArticleToQuiz = slide({
   content: ({ t, locale, Marker, target }) => {
     const level = (key: 'in' | 'on') => <OversightPill label={t(`levels.${key}`)} />;
     const terms = { receives: t('terms.receives'), delivers: t('terms.delivers'), checkedBy: t('terms.checkedBy') };
+    /** The contract card of a handoff, set after the stage it leaves; the first carries pin 2. */
+    const contract = (handoff: Handoff, pin?: 2) => (
+      <div className="relative">
+        <ContractCard
+          size="note"
+          heading={t(`contracts.${handoff}.seam`)}
+          terms={terms}
+          receives={t(`contracts.${handoff}.receives`)}
+          delivers={t(`contracts.${handoff}.delivers`)}
+          checkedBy={t(`contracts.${handoff}.checkedBy`)}
+        />
+        {pin !== undefined && <Pin n={pin} className="absolute -top-3 right-2" />}
+      </div>
+    );
     return (
       <SlideFrame className="gap-8 @container">
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-md">
@@ -63,9 +78,10 @@ export const fromArticleToQuiz = slide({
                       <Pin n={1} />
                     </>
                   ),
+                  after: contract('planRequirements', 2),
                 },
-                requirements: { marker: level('in') },
-                research: { marker: level('on') },
+                requirements: { marker: level('in'), after: contract('requirementsResearch') },
+                research: { marker: level('on'), after: contract('researchPage') },
                 page: {
                   marker: (
                     <>
@@ -77,21 +93,6 @@ export const fromArticleToQuiz = slide({
               },
             }}
           />
-          <div data-handoffs className="grid grid-cols-1 gap-3 @4xl:grid-cols-3">
-            {HANDOFFS.map((handoff, at) => (
-              <div key={handoff} className="relative">
-                <ContractCard
-                  size="note"
-                  heading={t(`contracts.${handoff}.seam`)}
-                  terms={terms}
-                  receives={t(`contracts.${handoff}.receives`)}
-                  delivers={t(`contracts.${handoff}.delivers`)}
-                  checkedBy={t(`contracts.${handoff}.checkedBy`)}
-                />
-                {at === 0 && <Pin n={2} className="absolute -top-3 right-2" />}
-              </div>
-            ))}
-          </div>
           <p {...target('two-levels')} className="flex items-center gap-2 text-caption text-muted-foreground">
             {t('twoLevels')}
             <Marker note="workflow-and-agent-two-levels" placement="beside" />

@@ -43,7 +43,7 @@ function Copies({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 text-center text-caption text-muted-foreground">
       <span>{label}</span>
-      <svg viewBox="0 0 48 24" className="h-6 w-12 rotate-90 @6xl:rotate-0" aria-hidden="true">
+      <svg viewBox="0 0 48 24" className="h-6 w-12 rotate-90 @5xl:rotate-0" aria-hidden="true">
         <path
           d="M2 12 H40 M32 4 L42 12 L32 20"
           className="fill-none stroke-foreground"
@@ -75,8 +75,8 @@ export const theOrgChartTrap = slide({
   segments: [{ slug: 'conways-law' }, { slug: 'a-teams-draft' }, { slug: 'broadly-defined' }, { slug: 'your-sign' }],
   content: ({ t, marker, Marker, target }) => (
     <SlideFrame className="gap-8 @container">
-      <div className="grid grid-cols-1 gap-6 rounded-xl bg-muted p-5 @3xl:p-8 @6xl:grid-cols-12">
-        <div {...target('org-chart')} className="w-full max-w-lg min-w-0 @6xl:col-span-4 @6xl:max-w-none">
+      <div className="grid grid-cols-1 gap-6 rounded-xl bg-muted p-5 @3xl:p-8 @5xl:grid-cols-12">
+        <div {...target('org-chart')} className="w-full max-w-lg min-w-0 @5xl:col-span-4 @5xl:max-w-none">
           <OrgChart
             label={
               <>
@@ -92,10 +92,10 @@ export const theOrgChartTrap = slide({
             }))}
           />
         </div>
-        <div className="@6xl:col-span-1">
+        <div className="@5xl:col-span-1">
           <Copies label={t('copies')} />
         </div>
-        <div {...target('draft')} className="min-w-0 @6xl:col-span-7">
+        <div {...target('draft')} className="min-w-0 @5xl:col-span-7">
           <DraftWorkflow
             label={
               <>

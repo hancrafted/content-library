@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/utils';
+import type { ReactNode } from 'react';
 import { ArrowDown, Connector } from './diagram-arrows';
 import { connectorInto, type Connector as ConnectorKind, type Rounds } from './diagram-layout.pure';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
@@ -62,12 +63,8 @@ const runOfStage = (ctx: Context, stage: Stage): StageRun | undefined =>
 
 function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
   const slot = ctx.slots.stages?.[stage.id] ?? {};
-  return (
-    <li
-      {...slot.target}
-      className="group/column focus-group__item relative flex min-w-0 flex-col gap-1 @2xl:flex-[1_0_11rem]"
-    >
-      {previous && <ArrowDown />}
+  const lane = (
+    <>
       {!ctx.readonly && (
         <TryButton
           label={ctx.words.tryIt}
@@ -77,7 +74,31 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
         />
       )}
       <StageBody ctx={ctx} stage={stage} slot={slot} into={previous && connectorInto(previous, stage, ctx.rounds)} />
+    </>
+  );
+  return (
+    <li
+      {...slot.target}
+      className="group/column focus-group__item relative flex min-w-0 flex-col gap-1 @2xl:flex-[1_0_11rem]"
+    >
+      {previous && <ArrowDown />}
+      {slot.after === undefined ? lane : <LaneWithAfter lane={lane} after={slot.after} />}
     </li>
+  );
+}
+
+/**
+ * A lane with the Slide's content after it: the lane keeps its own box, so the "Try it" button covers the lane alone,
+ * and the content sits below it in the column.
+ */
+function LaneWithAfter({ lane, after }: { lane: ReactNode; after: ReactNode }) {
+  return (
+    <>
+      <div className="relative flex flex-1 flex-col">{lane}</div>
+      <div data-stage-after="" className="mt-2">
+        {after}
+      </div>
+    </>
   );
 }
 

@@ -17,7 +17,7 @@ const tiltOf = (at: number) => (at % 4 === 0 || at % 4 === 3 ? '-rotate-1' : 'ro
 function Column({ column }: { column: DraftColumn }) {
   const focus = column.focus === true;
   return (
-    <div data-column={column.slug} className={cn('flex min-w-0 flex-col gap-2', focus && '@xl:col-span-2')}>
+    <div data-column={column.slug} className={cn('flex min-w-0 flex-col gap-2', focus && '@lg:col-span-2')}>
       <span
         data-column-label
         className={cn(
@@ -58,7 +58,7 @@ export function DraftWorkflow(props: {
       <p className="flex items-center gap-2 text-caption font-semibold text-muted-foreground uppercase">
         {props.label}
       </p>
-      <div className="grid grid-cols-1 items-start gap-3 @xl:grid-cols-5">
+      <div className="grid grid-cols-1 items-start gap-3 @lg:grid-cols-5">
         {props.columns.map((column) => (
           <Column key={column.slug} column={column} />
         ))}

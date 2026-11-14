@@ -147,6 +147,8 @@ export interface StageSlot {
   readonly aside?: ReactNode;
   /** After the stage card's checked mark and gate, or under a repeated stage's name, e.g. a pin the Slide's legend names. */
   readonly marker?: ReactNode;
+  /** Below the stage's lane in its column, outside the "Try it" button, e.g. the contract card of the handoff that leaves the stage. */
+  readonly after?: ReactNode;
   /** The Slide's `target(name)` for a Speaker note aimed at the stage. */
   readonly target?: TargetProps;
   /** The accessible name of the stage's list of jobs, where it differs from `DiagramSlots.jobsLabel`. */
