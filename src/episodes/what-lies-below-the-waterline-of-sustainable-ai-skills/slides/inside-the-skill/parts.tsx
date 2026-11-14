@@ -51,7 +51,12 @@ function stepLook(focus: boolean, last: boolean) {
   const tone = focus ? cn(styles.lit, 'bg-primary text-primary-foreground') : undefined;
   return {
     marks: focus ? { 'data-focus': '', 'data-motion': 'lit' } : {},
-    className: cn(styles.step, 'border-x-8 bg-card px-2 py-1 text-card-foreground', last && 'rounded-b-lg border-b-8'),
+    className: cn(
+      styles.step,
+      focus && 'relative',
+      'border-x-8 bg-card px-2 py-1 text-card-foreground',
+      last && 'rounded-b-lg border-b-8',
+    ),
     row: cn('flex flex-col gap-1 rounded-md px-2 py-2', tone),
     number: focus ? undefined : 'text-muted-foreground',
   };
@@ -62,6 +67,7 @@ export function StepCell({ n, text, pointer, long, focus, last }: StepCellProps)
   const look = stepLook(focus === true, last === true);
   return (
     <div data-step={n} {...look.marks} className={look.className}>
+      {focus === true && <span data-slot-mark aria-hidden className={styles.slotMark} />}
       <div className={look.row}>
         <p className="text-body font-semibold">
           <span className={look.number}>{n}.</span> {text}
@@ -73,27 +79,64 @@ export function StepCell({ n, text, pointer, long, focus, last }: StepCellProps)
   );
 }
 
-/** The card's head inside the sleeve: what the card is and its title. */
-export function CardHead({ label, title }: { readonly label: string; readonly title: string }) {
+export interface CardHeadProps {
+  readonly label: string;
+  readonly title: string;
+  /** The skill's folder and its file, as the Coding agent view names the card: code, so never translated. */
+  readonly root: string;
+  readonly file: string;
+}
+
+/** The card's head inside the sleeve: what the card is and its title, or its folder and `SKILL.md` for a coding agent. */
+export function CardHead({ label, title, root, file }: CardHeadProps) {
   return (
-    <div className={cn(styles.step, 'rounded-t-lg border-x-8 border-t-8 bg-card px-4 pt-4 pb-1 text-card-foreground')}>
-      <p className="text-caption text-muted-foreground">{label}</p>
-      <p className="text-body font-semibold">{title}</p>
+    <div
+      data-card-head
+      className={cn(styles.step, 'rounded-t-lg border-x-8 border-t-8 bg-card px-4 pt-4 pb-1 text-card-foreground')}
+    >
+      <InView view="chat" as="div">
+        <p className="text-caption text-muted-foreground">{label}</p>
+        <p className="text-body font-semibold">{title}</p>
+      </InView>
+      <InView view="coding" as="div">
+        <p translate="no" className="font-mono text-caption break-all text-muted-foreground">
+          {root}
+        </p>
+        <p translate="no" className="font-mono text-body font-semibold">
+          {file}
+        </p>
+      </InView>
     </div>
   );
 }
 
-/** The arrow from a step to its file: dashed, or solid for the lit step. Wide screens only. */
+/** The arrow from a step to its file: dashed, or solid `primary` for the lit step. Wide screens only. */
 export function StepArrow({ focal = false, long = false }: { readonly focal?: boolean; readonly long?: boolean }) {
   return (
     <span
       aria-hidden
+      data-arrow
+      data-focal={focal ? '' : undefined}
       className={cn(
-        'hidden shrink-0 border-t-2 @4xl:block',
+        'hidden shrink-0 @4xl:block',
         long ? 'flex-1' : 'w-8',
-        focal ? 'border-foreground' : 'border-dashed border-foreground',
+        focal ? 'border-t-[3px] border-primary' : 'border-t-2 border-dashed border-foreground',
       )}
     />
+  );
+}
+
+/** The trail the species guide leaves as it slides out of the sleeve: two pale streaks. Wide screens only. */
+export function SlideTrail() {
+  return (
+    <span
+      data-trail
+      aria-hidden
+      className={cn(styles.trail, 'pointer-events-none absolute inset-y-0 left-0 hidden w-8 @4xl:block')}
+    >
+      <span className="absolute top-[38%] h-1.5 w-full -skew-y-12 rounded-full" />
+      <span className="absolute bottom-[34%] h-1.5 w-full skew-y-12 rounded-full" />
+    </span>
   );
 }
 
@@ -125,11 +168,17 @@ function ContentsPage({ contents }: { readonly contents: NonNullable<SupportingF
   );
 }
 
-/** The file's AI term as a pill. */
-function KindPill({ kind }: { readonly kind: string }) {
+/** The file's AI term as a pill; the lit file's fills `primary`. */
+function KindPill({ kind, focal }: { readonly kind: string; readonly focal: boolean }) {
   return (
     <p>
-      <span data-kind className="rounded-full bg-foreground px-2 py-0.5 text-caption font-semibold text-background">
+      <span
+        data-kind
+        className={cn(
+          'rounded-full px-2 py-0.5 text-caption font-semibold',
+          focal ? 'bg-primary text-primary-foreground' : 'bg-foreground text-background',
+        )}
+      >
         {kind}
       </span>
     </p>
@@ -144,10 +193,10 @@ export function SupportingFile({ step, kind, name, hint, path, focal = false, co
       data-motion={focal ? 'slide-out' : undefined}
       className={cn(
         'focus-group__item flex min-w-0 flex-1 flex-col gap-1 rounded-lg bg-card p-3 text-card-foreground shadow-md',
-        focal && cn(styles.slideOut, 'border-2 border-foreground'),
+        focal && cn(styles.slideOut, 'border-[3px] border-primary'),
       )}
     >
-      <KindPill kind={kind} />
+      <KindPill kind={kind} focal={focal} />
       <p className="text-body font-semibold">{name}</p>
       <InView view="chat" as="p" className="text-caption text-muted-foreground">
         {hint}

@@ -19,7 +19,6 @@ const TOKENS = 'every-line-of-a-loaded-skill-is-a-recurring-token-cost';
 const SKILL_FILE = 'collect-sediment-sample/SKILL.md';
 const PROJECT_FILE = 'AGENTS.md';
 const CONTEXT_FILE = 'CONTEXT.md';
-const PILLS = [SKILL_FILE, PROJECT_FILE, CONTEXT_FILE] as const;
 const CODE = {
   skill: [['## Steps', '1. Check the arm and tubes.', '2. Descend to 40 m.']],
   instructions: [['## Dive sites', '- Site 4: 40 m', '- Site 7: 120 m']],
@@ -28,7 +27,8 @@ const CODE = {
     ['# CONTEXT.md', 'Site 4: 40 m'],
   ],
 } as const;
-const STEPS = ['s1', 's2', 's3', 's4'] as const;
+/** The card's steps by role (FE-002 §5.1); step 2's depth is the dashed slot. */
+const STEPS = ['check-gear', 'descend', 'lower-arm', 'identify'] as const;
 
 /**
  * "What context goes where" (Spec Option 14a): the information-architecture concept card, then the control room with
@@ -82,7 +82,7 @@ export const whatGoesWhereIsInformationArchitecture = slide({
         <aside
           {...target('ia-callout')}
           aria-label={t('iaCallout.label')}
-          className="rounded-xl border-l-4 border-foreground bg-card px-5 py-4 text-card-foreground shadow-md"
+          className="rounded-xl border-l-4 border-primary bg-card px-5 py-4 text-card-foreground shadow-md"
         >
           <p className="text-caption font-semibold text-muted-foreground uppercase">{t('iaCallout.label')}</p>
           <p className="mt-1 text-body">{t.rich('iaCallout.quote', { marker: marker(NNG) })}</p>
@@ -95,7 +95,7 @@ export const whatGoesWhereIsInformationArchitecture = slide({
           className="aspect-[2/1] w-full rounded-2xl shadow-md"
           overlay={
             <InView view="coding" as="div" className="pointer-events-none absolute inset-0 hidden @3xl:block">
-              {PILLS.map((path, index) => (
+              {[SKILL_FILE, t('pills.instructions'), CONTEXT_FILE].map((path, index) => (
                 <span
                   key={path}
                   data-path

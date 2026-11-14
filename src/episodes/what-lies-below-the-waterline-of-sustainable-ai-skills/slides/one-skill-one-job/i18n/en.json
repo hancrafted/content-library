@@ -11,10 +11,10 @@
   "card": {
     "title": "Collect sediment sample",
     "steps": {
-      "s1": "1. Check arm and tubes",
-      "s2": "2. descend to 40 m",
-      "s3": "3. Lower the arm",
-      "s4": "4. Identify the catch"
+      "check-gear": "1. Check arm and tubes",
+      "descend": "2. descend to 40 m",
+      "lower-arm": "3. Lower the arm",
+      "identify": "4. Identify the catch"
     },
     "scribble": "site 4"
   },
@@ -24,10 +24,7 @@
       "question": "is it tied to one place?",
       "head": "A project detail written into the skill",
       "text": "<marker>True at site 4, wrong at site 7: the AI follows the skill to the letter, and the dive still fails.</marker>",
-      "coding": {
-        "head": "A hard-coded path in a skill",
-        "text": "<marker>In a benchmark of 98 public skills, a workflow template made the agent write to <code>.github/workflows/</code> when the task asked for <code>ci/</code>.</marker>"
-      }
+      "coding": "<marker>A benchmark worked example: a template that hard-coded <code>.github/workflows/</code> beat a task that required <code>ci/</code>.</marker>"
     }
   },
   "pointer": {

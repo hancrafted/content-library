@@ -3,10 +3,12 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
+import { localizePath } from '@/shared/lib/locale.pure';
+import { ROUTES } from '@/shared/lib/static-routes';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './inside.module.css';
-import { CardHead, SkillNote, SkillTree, StepArrow, StepCell, SupportingFile } from './parts';
+import { CardHead, SkillNote, SkillTree, SlideTrail, StepArrow, StepCell, SupportingFile } from './parts';
 
 const MOVE_DETAIL = 'move-detail-out-of-skill-md-and-say-when-to-read-it';
 const CONTENTS = 'long-reference-files-start-with-a-contents-list';
@@ -26,11 +28,20 @@ const PATHS = {
   guide: 'references/species-guide.md',
   label: 'assets/label-template.md',
 } as const;
+/** Each step's pointer in the Coding agent view, keyed by the step's role (FE-002 §5.1). */
 const CODING_POINTERS = {
-  s3: `Run ${PATHS.arm}.`,
-  s4: `Read ${PATHS.guide}, starting with its contents.`,
-  s6: `Fill in ${PATHS.label}.`,
+  'lower-arm': `Run ${PATHS.arm}.`,
+  identify: `Read ${PATHS.guide}, starting with its contents.`,
+  label: `Fill in ${PATHS.label}.`,
 } as const;
+/**
+ * Slide 4, "Three levels of loading", by the anchor its place in Section 2 gives it, on this Episode's own page. Linked
+ * by path and anchor rather than `slideHref`, since that Slide is built on its own Section branch and `slideHref`
+ * throws for a Slide the record does not hold yet; switch to `slideHref('three-levels-of-loading')` once both Sections
+ * sit on one branch, so an Event's copy links within its own page.
+ */
+const LOADING_PAGE = `${ROUTES.episodes}/what-lies-below-the-waterline-of-sustainable-ai-skills`;
+const LOADING_SLIDE = 'what-a-skill-is--three-levels-of-loading';
 const CHAPTERS = [
   { slug: 'corals', page: 2 },
   { slug: 'sponges', page: 9 },
@@ -90,7 +101,7 @@ export const insideTheSkill = slide({
     },
   ],
   segments: [{ slug: 'extras-by-step' }, { slug: 'the-long-step' }, { slug: 'contents-first' }],
-  content: ({ t, marker, target }) => {
+  content: ({ t, locale, marker, target }) => {
     const pointer = (step: keyof typeof CODING_POINTERS) => ({
       chat: t(`pointers.${step}`),
       coding: CODING_POINTERS[step],
@@ -105,10 +116,17 @@ export const insideTheSkill = slide({
       <SlideFrame className="@container mt-6 gap-6">
         <p
           {...target('disclosure')}
-          className="max-w-3xl rounded-lg border-l-4 border-foreground bg-card px-4 py-2 text-caption text-card-foreground shadow-sm"
+          className="max-w-3xl rounded-lg border-l-4 border-primary bg-card px-4 py-2 text-caption text-card-foreground shadow-sm"
         >
           <span className="font-semibold">{t('disclosure.lead')}</span>{' '}
-          {t.rich('disclosure.text', { marker: marker(DISCLOSURE) })}
+          {t.rich('disclosure.text', {
+            marker: marker(DISCLOSURE),
+            link: (chunks) => (
+              <a className="font-semibold underline" href={localizePath(LOADING_PAGE, locale, LOADING_SLIDE)}>
+                {chunks}
+              </a>
+            ),
+          })}
         </p>
         <ZoneScene
           zone="twilight"
@@ -132,16 +150,16 @@ export const insideTheSkill = slide({
               </div>
               <Gap />
               {/* Row: the card's head in its sleeve. */}
-              <CardHead label={t('card.label')} title={t('card.title')} />
+              <CardHead label={t('card.label')} title={t('card.title')} root={ROOT} file="SKILL.md" />
               <Gap />
               <Gap />
-              <StepCell n={1} text={t('steps.s1')} />
+              <StepCell n={1} text={t('steps.hover')} />
               <Gap />
               <Gap />
-              <StepCell n={2} text={t('steps.s2')} />
+              <StepCell n={2} text={t('steps.check-camera')} />
               <Gap />
               <Gap />
-              <StepCell n={3} text={t('steps.s3')} pointer={pointer('s3')} />
+              <StepCell n={3} text={t('steps.lower-arm')} pointer={pointer('lower-arm')} />
               <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
                 <StepArrow />
                 <SupportingFile step={3} {...file('arm')} />
@@ -161,9 +179,10 @@ export const insideTheSkill = slide({
                   {t('rules.head')}
                 </p>
               </div>
-              <StepCell n={FOCUS} text={t('steps.s4')} pointer={pointer('s4')} focus />
-              <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
+              <StepCell n={FOCUS} text={t('steps.identify')} pointer={pointer('identify')} focus />
+              <div className="relative flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
                 <StepArrow focal />
+                <SlideTrail />
                 <SupportingFile
                   step={FOCUS}
                   focal
@@ -182,14 +201,14 @@ export const insideTheSkill = slide({
                   {t.rich('rules.contents', { marker: marker(CONTENTS) })}
                 </SkillNote>
               </div>
-              <StepCell n={5} text={t('steps.s5')} long={{ text: t('long.text'), more: t('long.more') }} />
+              <StepCell n={5} text={t('steps.seal')} long={{ text: t('long.text'), more: t('long.more') }} />
               <div className="hidden items-center @4xl:flex">
                 <StepArrow long />
               </div>
               <div className="py-2">
                 <SkillNote {...target('long-rule')}>{t.rich('rules.long', { marker: marker(MOVE_DETAIL) })}</SkillNote>
               </div>
-              <StepCell n={6} text={t('steps.s6')} pointer={pointer('s6')} last />
+              <StepCell n={6} text={t('steps.label')} pointer={pointer('label')} last />
               <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
                 <StepArrow />
                 <SupportingFile step={6} {...file('label')} />
@@ -200,14 +219,18 @@ export const insideTheSkill = slide({
         >
           <Wall />
         </ZoneScene>
-        <InView view="chat" as="p" className="max-w-xl border-t border-border pt-4 text-caption text-foreground">
-          <span className="font-semibold text-foreground">{t('footer.lead')}</span>{' '}
-          {t.rich('footer.chat', { marker: marker(CONTENTS) })}
-        </InView>
-        <InView view="coding" as="p" className="max-w-xl border-t border-border pt-4 text-caption text-foreground">
-          <span className="font-semibold text-foreground">{t('footer.codingLead')}</span>{' '}
-          {t.rich('footer.coding', { marker: marker(ONE_LEVEL) })}
-        </InView>
+        <div
+          data-footer
+          className="flex flex-col gap-2 border-t border-border pt-4 text-caption @3xl:flex-row @3xl:items-start @3xl:justify-between @3xl:gap-10"
+        >
+          <p data-analogy className="max-w-md text-foreground">
+            <span className="font-semibold text-foreground">{t('footer.lead')}</span> {t('footer.analogy')}
+          </p>
+          <p className="max-w-md text-foreground @3xl:text-right">
+            <InView view="chat">{t.rich('footer.chat', { marker: marker(CONTENTS) })}</InView>
+            <InView view="coding">{t.rich('footer.coding', { marker: marker(ONE_LEVEL) })}</InView>
+          </p>
+        </div>
       </SlideFrame>
     );
   },

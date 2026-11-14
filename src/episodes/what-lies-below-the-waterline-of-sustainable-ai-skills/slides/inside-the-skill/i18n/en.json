@@ -3,7 +3,7 @@
   "caption": "Domain knowledge can live inside a skill, kept apart from the steps until a step needs it.",
   "disclosure": {
     "lead": "This is progressive disclosure:",
-    "text": "<marker>the AI opens each supporting file only when a step needs it.</marker>"
+    "text": "the AI opens each supporting file only when a step needs it. <marker><link>See Slide 4</link></marker>."
   },
   "columns": {
     "instructions": "Instructions",
@@ -24,21 +24,21 @@
     "title": "Collect sediment sample"
   },
   "steps": {
-    "s1": "Hold the robot 2 m above the seabed.",
-    "s2": "Check the camera for loose sediment.",
-    "s3": "Lower the arm.",
-    "s4": "Identify what you collected.",
-    "s5": "Seal the core tube.",
-    "s6": "Label the sample."
+    "hover": "Hold the robot 2 m above the seabed.",
+    "check-camera": "Check the camera for loose sediment.",
+    "lower-arm": "Lower the arm.",
+    "identify": "Identify what you collected.",
+    "seal": "Seal the core tube.",
+    "label": "Label the sample."
   },
   "long": {
     "text": "Wipe the rim first and check the cap's ring for grit.",
     "more": "…12 more lines"
   },
   "pointers": {
-    "s3": "Run the arm preset.",
-    "s4": "Read the species guide, starting with its contents.",
-    "s6": "Fill in the label template."
+    "lower-arm": "Run the arm preset.",
+    "identify": "Read the species guide, starting with its contents.",
+    "label": "Fill in the label template."
   },
   "files": {
     "arm": {
@@ -120,9 +120,9 @@
   },
   "footer": {
     "lead": "In the story:",
-    "chat": "<marker>The card in its sleeve: each extra tied to the step that uses it.</marker>",
-    "codingLead": "In a coding agent:",
-    "coding": "<marker>SKILL.md links each file one level deep, in scripts/, references/ and assets/.</marker>"
+    "analogy": "The card in its sleeve: each extra tied to the step that uses it.",
+    "chat": "<marker>When step 4 opens the species guide, its contents page alone tells the AI what else is inside.</marker>",
+    "coding": "<marker>Link every supporting file straight from <code>SKILL.md</code>, one level deep.</marker>"
   },
   "alt": {
     "scene": "The procedure card in its sleeve on the control-room wall: six steps, step 4 lit. Step 3 points to a script, the arm preset; step 4 to a reference file, the species guide, which has slid out of the sleeve open on its contents page; step 6 to a template, the label template. Step 5 runs long and points to the rule for long instructions."

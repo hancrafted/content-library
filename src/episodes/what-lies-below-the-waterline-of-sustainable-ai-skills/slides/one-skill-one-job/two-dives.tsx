@@ -49,17 +49,20 @@ interface TagProps {
   readonly mark?: 'site' | 'short';
 }
 
-/** A small label on its own paper, so it reads on water and sky alike; scaled up in a narrow column (`.tag`). */
+/**
+ * A small label on its own paper, so it reads on water and sky alike; scaled up in a narrow column (`.tag`). The
+ * shortfall's pill fills `primary`, as the Option draws it.
+ */
 function Tag({ x, y, text, mark }: TagProps) {
   const width = text.length * 8 + 16;
   return (
     <g transform={`translate(${x} ${y})`}>
       <g className={styles.tag}>
-        <rect x={0} y={-15} width={width} height={22} rx={11} data-tone="tag" />
+        <rect x={0} y={-15} width={width} height={22} rx={11} data-tone={mark === 'short' ? 'tag-focal' : 'tag'} />
         <text
           x={8}
           y={1}
-          data-ink="tag"
+          data-ink={mark === 'short' ? 'tag-focal' : 'tag'}
           data-site={mark === 'site' ? '' : undefined}
           data-short={mark === 'short' ? '' : undefined}
           className="text-caption font-semibold"
@@ -122,8 +125,9 @@ function ShortBracket({ x, text }: { readonly x: number; readonly text: string }
         y2={SHELF_Y}
         strokeWidth={3}
         strokeDasharray="8 6"
-        data-tone="bracket"
+        data-tone="bracket-halo"
       />
+      <path d={`M${bx - 10} ${SHELF_Y}H${bx}V${DEEP_Y}H${bx - 10}`} strokeWidth={10} data-tone="bracket-halo" />
       <path d={`M${bx - 10} ${SHELF_Y}H${bx}V${DEEP_Y}H${bx - 10}`} strokeWidth={5} data-tone="bracket" />
       <Tag x={bx + 16} y={(SHELF_Y + DEEP_Y) / 2} text={text} mark="short" />
     </g>

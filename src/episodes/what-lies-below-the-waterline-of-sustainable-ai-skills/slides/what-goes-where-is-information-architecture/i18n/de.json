@@ -50,15 +50,18 @@
     "card": {
       "title": "Sedimentprobe nehmen",
       "steps": {
-        "s1": "1. Arm und Rohre prüfen",
-        "s2": "2. Abtauchen auf",
-        "s3": "3. Arm absenken",
-        "s4": "4. Fund bestimmen"
+        "check-gear": "1. Arm und Rohre prüfen",
+        "descend": "2. Abtauchen auf",
+        "lower-arm": "3. Arm absenken",
+        "identify": "4. Fund bestimmen"
       }
     },
     "plan": "Projektdatei",
     "planHint": "Tauchplan von heute",
     "note": "Platz 4 · 40 m"
+  },
+  "pills": {
+    "instructions": "AGENTS.md oder CLAUDE.md"
   },
   "alt": {
     "room": "Der Kontrollraum in der Seitenansicht. Eine Tatsache, die Tiefe des heutigen Tauchplatzes, und drei Orte, an denen sie stehen kann: auf der Ablaufkarte an der Konsole des Piloten, auf dem Projektbrief an der Wand neben der Kapitänin und im Tauchplan von heute auf einem Klemmbrett. Karte und Brief zeigen ein leeres gestricheltes Feld; ein gestrichelter Pfeil trägt die Notiz vom Feld der Karte auf den Tauchplan, wo sie Platz 4, 40 m lautet."

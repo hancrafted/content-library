@@ -11,10 +11,10 @@
   "card": {
     "title": "Sedimentprobe nehmen",
     "steps": {
-      "s1": "1. Arm und Rohre prüfen",
-      "s2": "2. auf 40 m abtauchen",
-      "s3": "3. Arm absenken",
-      "s4": "4. Fund bestimmen"
+      "check-gear": "1. Arm und Rohre prüfen",
+      "descend": "2. auf 40 m abtauchen",
+      "lower-arm": "3. Arm absenken",
+      "identify": "4. Fund bestimmen"
     },
     "scribble": "Platz 4"
   },
@@ -24,10 +24,7 @@
       "question": "an einen Ort gebunden?",
       "head": "Ein Projektdetail im Skill",
       "text": "<marker>Richtig an Platz 4, falsch an Platz 7: Die KI folgt dem Skill aufs Wort, und der Tauchgang scheitert trotzdem.</marker>",
-      "coding": {
-        "head": "Ein fest eingetragener Pfad im Skill",
-        "text": "<marker>In einem Benchmark mit 98 öffentlichen Skills ließ eine Workflow-Vorlage den Agenten nach <code>.github/workflows/</code> schreiben, obwohl die Aufgabe <code>ci/</code> verlangte.</marker>"
-      }
+      "coding": "<marker>Ein Fallbeispiel aus einem Benchmark: Eine Vorlage, die <code>.github/workflows/</code> fest eintrug, setzte sich gegen eine Aufgabe durch, die <code>ci/</code> verlangte.</marker>"
     }
   },
   "pointer": {

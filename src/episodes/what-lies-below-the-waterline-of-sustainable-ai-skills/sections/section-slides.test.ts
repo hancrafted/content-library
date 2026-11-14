@@ -65,7 +65,7 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('holds each Section in its own placement marker, its section slide alone', () => {
+  it('holds each Section in its own placement marker: its section slide, then its page Slides', () => {
     // ARRANGE
     const expected = [1, 1, 1, 1, 4, 1, 1, 1];
     // ACT

@@ -11,14 +11,15 @@ import { TwoDives } from './two-dives';
 
 const COUPLING = 'coupling-as-first-written';
 const OVERRIDE = 'project-details-hard-coded-into-a-skill-can-override-the-task';
-const STEPS = ['s1', 's2', 's3', 's4'] as const;
-const COUPLED_STEP = 's2';
+/** The card's steps by role (FE-002 §5.1); the descent holds the project detail. */
+const STEPS = ['check-gear', 'descend', 'lower-arm', 'identify'] as const;
+const COUPLED_STEP = 'descend';
 
 /** The skill as a coding agent holds it: code, so never translated. */
 const SKILL_FILE = 'collect-sediment-sample/SKILL.md';
-const SKILL_LINES = ['## Steps', '1. Check the arm and tubes.'] as const;
+const SKILL_LINES = ['1. Check arm and tubes.'] as const;
 const CODED_STEP = '2. Descend to 40 m.';
-const SKILL_TAIL = ['3. Lower the arm.'] as const;
+const SKILL_TAIL = ['3. Lower the arm.', '4. Identify the catch.'] as const;
 
 /**
  * "A project detail couples a skill to one project" (Spec Option 15b): one wide water column under one pinned skill
@@ -114,20 +115,19 @@ export const oneSkillOneJob = slide({
             <p className="flex flex-wrap items-center justify-between gap-2">
               <span
                 data-term
-                className="rounded-full bg-foreground px-3 py-0.5 text-caption font-semibold text-background"
+                className="rounded-full bg-primary px-3 py-0.5 text-caption font-semibold text-primary-foreground"
               >
                 {t('mistakes.coupling.term')}
               </span>
               <span className="text-caption text-muted-foreground">{t('mistakes.coupling.question')}</span>
             </p>
-            <InView view="chat" as="div" className="flex flex-col gap-2">
-              <p className="text-body font-semibold">{t('mistakes.coupling.head')}</p>
-              <p className="text-body">{t.rich('mistakes.coupling.text', override)}</p>
-            </InView>
-            <InView view="coding" as="div" className="flex flex-col gap-2">
-              <p className="text-body font-semibold">{t('mistakes.coupling.coding.head')}</p>
-              <p className="text-body">{t.rich('mistakes.coupling.coding.text', override)}</p>
-            </InView>
+            <p data-mistake-head className="text-body font-semibold">
+              {t('mistakes.coupling.head')}
+            </p>
+            <p className="text-body">
+              <InView view="chat">{t.rich('mistakes.coupling.text', override)}</InView>
+              <InView view="coding">{t.rich('mistakes.coupling.coding', override)}</InView>
+            </p>
           </div>
         </div>
         <div {...target('pointer')} className="grid gap-1 @3xl:grid-cols-[auto_1fr] @3xl:gap-6">

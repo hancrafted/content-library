@@ -53,6 +53,15 @@ function sceneOf(slug: string, locale: Locale = 'en') {
 }
 
 const MARKER = '[data-context-ref]';
+/** The `primary` classes an element carries: the Options' one emphasis colour. */
+const primaryOf = (element: ReturnType<ReturnType<typeof load>>) =>
+  (element.attr('class') ?? '').split(/\s+/).filter((name) => name.endsWith('-primary'));
+/** An element's words without its Context markers. */
+const wordsOf = (element: ReturnType<ReturnType<typeof load>>) => {
+  const copy = element.clone();
+  copy.find(MARKER).remove();
+  return copy.text().trim();
+};
 const textsOf = ($: ReturnType<typeof load>, selector: string) =>
   $(selector)
     .toArray()
@@ -269,6 +278,129 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('marks Slide 14’s concept card with a primary rule, as the verdict line is', () => {
+    // ARRANGE
+    const expected = { callout: ['border-primary'], verdict: ['border-primary'] };
+    // ACT
+    const $ = sceneOf(WHERE);
+    const actual = {
+      callout: primaryOf($('aside[data-target="ia-callout"]')),
+      verdict: primaryOf($('[data-verdict]')),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('fills Slide 15’s "80 m short" pill and its Coupling pill in primary', () => {
+    // ARRANGE
+    const expected = { short: 'tag-focal', coupling: ['bg-primary'] };
+    // ACT
+    const $ = sceneOf(COUPLING);
+    const actual = {
+      short: $('[data-short]').closest('g').find('rect').attr('data-tone'),
+      coupling: primaryOf($('[data-mistake] [data-term]')),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('keeps Slide 15’s heading in the Coding agent view, with the benchmark example and all four steps of the skill', () => {
+    // ARRANGE
+    const expected = {
+      heads: ['A project detail written into the skill'],
+      coding:
+        'A benchmark worked example: a template that hard-coded .github/workflows/ beat a task that required ci/.',
+      snippet: ['1. Check arm and tubes.', '2. Descend to 40 m.', '3. Lower the arm.', '4. Identify the catch.'],
+    };
+    // ACT
+    const $ = sceneOf(COUPLING);
+    const actual = {
+      heads: textsOf($, '[data-mistake] [data-mistake-head]'),
+      coding: wordsOf($('[data-mistake] [data-view="coding"]')),
+      snippet: $('[data-skill-card] [data-view="coding"] code').text().split('\n'),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('links Slide 16’s progressive-disclosure line to Slide 4, in each locale', () => {
+    // ARRANGE
+    const anchor = '#what-a-skill-is--three-levels-of-loading';
+    const expected = [
+      { text: 'See Slide 4', href: `/episodes/${EPISODE}${anchor}` },
+      { text: 'Folie 4 ansehen', href: `/de/episodes/${EPISODE}${anchor}` },
+    ];
+    // ACT
+    const actual = (['en', 'de'] as const).map((locale) => {
+      const link = sceneOf(INSIDE, locale)('[data-target="disclosure"] a');
+      return { text: link.text(), href: link.attr('href') };
+    });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('closes Slide 16 with the analogy in both views, the contents line in Chat app and the one-level line in Coding agent', () => {
+    // ARRANGE
+    const expected = {
+      analogy: 'In the story: The card in its sleeve: each extra tied to the step that uses it.',
+      chat: {
+        text: 'When step 4 opens the species guide, its contents page alone tells the AI what else is inside.',
+        marker: 'long-reference-files-start-with-a-contents-list',
+      },
+      coding: {
+        text: 'Link every supporting file straight from SKILL.md, one level deep.',
+        marker: 'references-stay-one-level-deep',
+      },
+      analogyMarkers: [],
+      analogyViews: [],
+    };
+    // ACT
+    const $ = sceneOf(INSIDE);
+    const view = (name: string) => {
+      const line = $(`[data-footer] [data-view="${name}"]`);
+      return { text: wordsOf(line), marker: line.find(MARKER).attr('data-context-ref') };
+    };
+    const analogy = $('[data-analogy]');
+    const actual = {
+      analogy: analogy.text(),
+      chat: view('chat'),
+      coding: view('coding'),
+      analogyMarkers: textsOf($, '[data-analogy] [data-context-ref]'),
+      analogyViews: analogy
+        .parents('[data-view]')
+        .toArray()
+        .map((parent) => $(parent).attr('data-view')),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('names the card SKILL.md in Slide 16’s Coding agent view and draws the lit file, its arrow and its pill in primary', () => {
+    // ARRANGE
+    const expected = {
+      head: 'collect-sediment-sample/SKILL.md',
+      guide: ['border-primary'],
+      arrow: ['border-primary'],
+      pill: ['bg-primary'],
+      trails: 1,
+      slotMark: ['4'],
+    };
+    // ACT
+    const $ = sceneOf(INSIDE);
+    const actual = {
+      head: $('[data-card-head] [data-view="coding"]').text(),
+      guide: primaryOf($('[data-file="4"]')),
+      arrow: primaryOf($('[data-arrow][data-focal]')),
+      pill: primaryOf($('[data-file="4"] [data-kind]')),
+      trails: $('[data-trail]').length,
+      slotMark: $('[data-slot-mark]')
+        .toArray()
+        .map((mark) => $(mark).closest('[data-step]').attr('data-step')),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -293,6 +425,29 @@ describe('failure cases', () => {
       focalHomes: textsOf($, '[data-home][data-focal] [data-term]'),
       verdicts: textsOf($, '[data-verdict]'),
     };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('keys every step and pointer by its role, never by its position (FE-002 §5.1), in both locales', () => {
+    // ARRANGE
+    const POSITIONAL = /^(s?\d+)$/;
+    const expected: string[] = [];
+    // ACT
+    const keyed = (messages: Record<string, unknown>, path: string[]) =>
+      Object.keys(
+        path.reduce<Record<string, unknown>>((node, key) => (node[key] ?? {}) as Record<string, unknown>, messages),
+      );
+    const actual = PAGE_SLIDES.flatMap((slug) =>
+      (['en', 'de'] as const).flatMap((locale) => {
+        const messages = slideOf(slug).messages[locale] as unknown as Record<string, unknown>;
+        return [['steps'], ['pointers'], ['card', 'steps'], ['art', 'card', 'steps']].flatMap((path) =>
+          keyed(messages, path)
+            .filter((key) => POSITIONAL.test(key))
+            .map((key) => `${slug} ${locale} ${[...path, key].join('.')}`),
+        );
+      }),
+    );
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -345,7 +500,7 @@ describe('edge cases', () => {
   it('names the files in the Coding agent view: the three homes, the coupled step and the three pointers', () => {
     // ARRANGE
     const expected = {
-      [WHERE]: ['collect-sediment-sample/SKILL.md', 'AGENTS.md', 'CONTEXT.md'],
+      [WHERE]: ['collect-sediment-sample/SKILL.md', 'AGENTS.md or CLAUDE.md', 'CONTEXT.md'],
       [COUPLING]: ['2. Descend to 40 m.'],
       [INSIDE]: [
         'Run scripts/arm-preset.py.',

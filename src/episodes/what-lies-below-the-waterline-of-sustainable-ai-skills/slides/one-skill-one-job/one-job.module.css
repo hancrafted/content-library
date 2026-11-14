@@ -1,7 +1,8 @@
 /*
  * Slide token file of "A project detail couples a skill to one project" (FE-011 §2): the ruler, the cables, the
  * leaders, the bracket and the labels over the water, mixed from global tokens so they follow light and dark with no
- * raw colour. `primary` is only the coupling card's ring (in slide.tsx); no meaning colour on scenery.
+ * raw colour. `primary` marks the shortfall (its bracket and pill) and the coupling card (in slide.tsx), as Option 15b
+ * draws them; no meaning colour on scenery.
  */
 
 .dives {
@@ -51,6 +52,14 @@
   fill: var(--tag-ink);
 }
 
+.dives [data-tone='tag-focal'] {
+  fill: var(--primary);
+}
+
+.dives [data-ink='tag-focal'] {
+  fill: var(--primary-foreground);
+}
+
 .dives [data-tone='tick'] {
   stroke: var(--tick);
 }
@@ -66,7 +75,13 @@
 
 .dives [data-tone='bracket'] {
   fill: none;
-  stroke: var(--foreground);
+  stroke: var(--primary);
+}
+
+/* The page's ground: a halo under the bracket, so it reads over water and rock, and the dashed lead from the robot. */
+.dives [data-tone='bracket-halo'] {
+  fill: none;
+  stroke: var(--background);
 }
 
 /* The project detail scribbled into the card, in the bulb's yellow highlighter, in either view. */

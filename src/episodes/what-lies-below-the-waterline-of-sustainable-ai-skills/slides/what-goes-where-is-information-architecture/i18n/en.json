@@ -50,15 +50,18 @@
     "card": {
       "title": "Collect sediment sample",
       "steps": {
-        "s1": "1. Check arm and tubes",
-        "s2": "2. Descend to",
-        "s3": "3. Lower the arm",
-        "s4": "4. Identify what you collected"
+        "check-gear": "1. Check arm and tubes",
+        "descend": "2. Descend to",
+        "lower-arm": "3. Lower the arm",
+        "identify": "4. Identify what you collected"
       }
     },
     "plan": "Project file",
     "planHint": "today's dive plan",
     "note": "Site 4 · 40 m"
+  },
+  "pills": {
+    "instructions": "AGENTS.md or CLAUDE.md"
   },
   "alt": {
     "room": "The control room in side view. One fact, the depth of today's site, and three places it can live: on the procedure card propped on the pilot's console, on the project brief pinned to the wall beside the captain, and in today's dive plan on a clipboard. The card and the brief show an empty dashed slot; a dashed arrow carries the note from the card's slot onto the dive plan, where it reads Site 4, 40 m."

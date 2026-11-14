@@ -3,7 +3,7 @@
   "caption": "Fachwissen kann im Skill liegen, getrennt von den Schritten, bis ein Schritt es braucht.",
   "disclosure": {
     "lead": "Das ist schrittweise Offenlegung:",
-    "text": "<marker>Die KI öffnet jede Zusatzdatei erst, wenn ein Schritt sie braucht.</marker>"
+    "text": "Die KI öffnet jede Zusatzdatei erst, wenn ein Schritt sie braucht. <marker><link>Folie 4 ansehen</link></marker>."
   },
   "columns": {
     "instructions": "Anweisungen",
@@ -24,21 +24,21 @@
     "title": "Sedimentprobe nehmen"
   },
   "steps": {
-    "s1": "Den Roboter 2 m über dem Meeresboden halten.",
-    "s2": "Die Kamera auf lockeres Sediment prüfen.",
-    "s3": "Den Arm absenken.",
-    "s4": "Bestimmen, was Du gesammelt hast.",
-    "s5": "Das Kernrohr verschließen.",
-    "s6": "Die Probe beschriften."
+    "hover": "Den Roboter 2 m über dem Meeresboden halten.",
+    "check-camera": "Die Kamera auf lockeres Sediment prüfen.",
+    "lower-arm": "Den Arm absenken.",
+    "identify": "Bestimmen, was Du gesammelt hast.",
+    "seal": "Das Kernrohr verschließen.",
+    "label": "Die Probe beschriften."
   },
   "long": {
     "text": "Erst den Rand abwischen und den Ring der Kappe auf Sand prüfen.",
     "more": "…12 weitere Zeilen"
   },
   "pointers": {
-    "s3": "Die Arm-Voreinstellung ausführen.",
-    "s4": "Den Artenführer lesen, zuerst sein Inhaltsverzeichnis.",
-    "s6": "Die Etikettvorlage ausfüllen."
+    "lower-arm": "Die Arm-Voreinstellung ausführen.",
+    "identify": "Den Artenführer lesen, zuerst sein Inhaltsverzeichnis.",
+    "label": "Die Etikettvorlage ausfüllen."
   },
   "files": {
     "arm": {
@@ -120,9 +120,9 @@
   },
   "footer": {
     "lead": "In der Geschichte:",
-    "chat": "<marker>Die Karte in ihrer Hülle: jedes Extra an den Schritt gebunden, der es nutzt.</marker>",
-    "codingLead": "Im Coding-Agenten:",
-    "coding": "<marker>Die SKILL.md verweist auf jede Datei eine Ebene tief, in scripts/, references/ und assets/.</marker>"
+    "analogy": "Die Karte in ihrer Hülle: jedes Extra an den Schritt gebunden, der es nutzt.",
+    "chat": "<marker>Wenn Schritt 4 den Artenführer öffnet, sagt allein sein Inhaltsverzeichnis der KI, was sonst noch darin steht.</marker>",
+    "coding": "<marker>Verlinke jede Zusatzdatei direkt aus der <code>SKILL.md</code>, eine Ebene tief.</marker>"
   },
   "alt": {
     "scene": "Die Ablaufkarte in ihrer Hülle an der Wand des Kontrollraums: sechs Schritte, Schritt 4 hervorgehoben. Schritt 3 verweist auf ein Skript, die Arm-Voreinstellung; Schritt 4 auf eine Referenzdatei, den Artenführer, der aus der Hülle geglitten ist und beim Inhaltsverzeichnis offen liegt; Schritt 6 auf eine Vorlage, die Etikettvorlage. Schritt 5 wird lang und verweist auf die Regel für lange Anweisungen."
