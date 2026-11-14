@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 import { zonePresentation, zoneTitlePresentation } from './zone-presentation';
 import type { Zone } from './zones.pure';
 
+/** The top of the Surface sky, as `sky.pure.ts` mixes it: what a Surface title and its incoming wave fill with. */
+const SKY_TOP = 'color-mix(in oklab, var(--zone-surface) 64%, var(--info))';
 /*
  * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): the bubbles into a section
  * slide and the slim rail, which a section slide shows on phones only. Zone backgrounds by Slide kind (Han,
@@ -74,9 +76,22 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('fills the Title slide with the Surface, its text dark in both themes', () => {
+  it('fills a Surface section slide with the top of its sky, so the wave rising into it reads as one with the sky', () => {
     // ARRANGE
-    const expected = { surface: 'var(--zone-surface)', foreground: 'var(--zone-abyss)' };
+    const expected = { surface: SKY_TOP, bubbles: 'var(--zone-surface)' };
+    // ACT
+    const presentation = zonePresentation({ sections: SECTIONS, section: 0, kind: 'section' });
+    const seen = {
+      surface: presentation.style['--slide-surface'],
+      bubbles: presentation.enter?.style['--slide-transition-bubble'],
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('fills the Title slide with the top of the Surface sky, its text dark in both themes', () => {
+    // ARRANGE
+    const expected = { surface: SKY_TOP, foreground: 'var(--zone-abyss)' };
     // ACT
     const { style } = zoneTitlePresentation();
     const seen = { surface: style['--slide-surface'], foreground: style['--foreground'] };

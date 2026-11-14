@@ -4,25 +4,25 @@ import { SceneMotionRoot } from './scene-motion.client';
 import { Bubbles } from './scenery/bubbles';
 import { Clouds } from './scenery/clouds';
 import { FishSchool } from './scenery/fish-school';
-import { FlatSky, FlatWater, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
 import { placeIceberg } from './scenery/iceberg-placement.pure';
 import { Jellies } from './scenery/jellies';
 import { Lanternfish } from './scenery/lanternfish';
 import { LightRays, Seabed } from './scenery/seabed';
 import { Siphonophore } from './scenery/siphonophore';
+import { FlatWater, LitWaterline, Sky } from './scenery/sky';
 import { SunMoon } from './scenery/sun-moon';
 import { Whale } from './scenery/whale';
+import { seaFacets, WATER_CELL, type SeaFacet } from './zone-edges.pure';
 import styles from './zone-scene.module.css';
 import {
-  seaFacets,
+  sectionTitleLiftStyle,
+  SURFACE_WATERLINE,
   TITLE_LIFE_AT,
   TITLE_LOOP_AT,
-  WATER_CELL,
   zoneSceneParts,
   type SceneIceberg,
   type SceneLife,
-  type SeaFacet,
   type TitleLife,
 } from './zone-scene.pure';
 import { zoneToken, type Zone } from './zones.pure';
@@ -31,7 +31,9 @@ import { zoneToken, type Zone } from './zones.pure';
 export const SCENE_WIDTH = 1200;
 export const SCENE_HEIGHT = 800;
 /** Where the Surface's waterline runs; below the Surface the whole Scene is water. */
-export const SURFACE_WATERLINE = 400;
+export { SURFACE_WATERLINE };
+/** How far a lifted Surface title's sky runs on above its drawing, in the Scene's units: past any lift a phone takes. */
+const SKY_RISE = 600;
 
 const SEABED_TOP = 690;
 /** The zone a ZoneScene draws fills the Scene, so the Twilight zone it does not draw starts at the Scene's bottom. */
@@ -47,6 +49,11 @@ export interface ZoneSceneProps {
    * title a lanternfish school and a siphonophore beside the drifting jellies; every other zone draws as on a page.
    */
   readonly sectionTitle?: boolean;
+  /**
+   * How far the Slide's figures reach above the waterline on a Surface Section title, such as the ship's masthead:
+   * the drawing starts at the top (feedback 3, decision 48) and moves down only as far as keeps them below the title.
+   */
+  readonly figuresReach?: number;
   /** Words for the picture; without them it is decoration, hidden from assistive tech. */
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
@@ -149,12 +156,12 @@ function Berg({ part, surface }: { readonly part: SceneIceberg; readonly surface
 
 const DEEP_WATER = seaFacets({ width: SCENE_WIDTH, height: SCENE_HEIGHT, cell: WATER_CELL, seed: 23 });
 
-/** The Surface's flat sky over its flat water, the waterline lit between them, or a deeper zone's faceted water. */
-function Ground({ sky }: { readonly sky: boolean }) {
+/** The Surface's faceted sky over its flat water, the waterline lit between them, or a deeper zone's faceted water. */
+function Ground({ sky, rise }: { readonly sky: boolean; readonly rise: number }) {
   if (!sky) return <Band facets={DEEP_WATER} />;
   return (
     <>
-      <FlatSky width={SCENE_WIDTH} height={SURFACE_WATERLINE} />
+      <Sky width={SCENE_WIDTH} height={SURFACE_WATERLINE} rise={rise} />
       <SunMoon x={980} y={120} />
       <Clouds />
       <g transform={`translate(0 ${SURFACE_WATERLINE})`}>
@@ -165,30 +172,45 @@ function Ground({ sky }: { readonly sky: boolean }) {
   );
 }
 
+/** How a Scene fills its box: from the bottom, or a Surface title from the top, lifted clear of its title's words. */
+function fillOf(sectionTitle: boolean | undefined, sky: boolean, reach: number | undefined) {
+  if (!sectionTitle || !sky) return { aspect: 'xMidYMax slice', rise: 0 } as const;
+  return {
+    aspect: 'xMidYMin slice',
+    rise: SKY_RISE,
+    root: styles.lifted,
+    drawing: styles.liftedDrawing,
+    style: sectionTitleLiftStyle(reach ?? 0),
+  } as const;
+}
+
 /**
  * The Iceberg style's Scene (design-ADR 0025): the zone's sky or water, its light rays or seabed, the iceberg and the
  * zone's one slow ambient loop, drawn from the scenery parts. A Slide names its zone and places its cast; retuning a
  * zone is one token (`--zone-<zone>` in `globals.css`) every Slide in it follows. The drawing fills the Scene's box
- * from the bottom (`slice`), so the waterline and the seabed stay in view at any width.
+ * from the bottom (`slice`), so the waterline and the seabed stay in view at any width; a Surface Section title fills
+ * it from the top instead, its whole sky at the top edge, moved down only as far as keeps its figures under the title.
  */
-export function ZoneScene({ zone, iceberg, sectionTitle, label, children, overlay, className }: ZoneSceneProps) {
+export function ZoneScene(props: ZoneSceneProps) {
+  const { zone, iceberg, sectionTitle, figuresReach, label, children, overlay, className } = props;
   const parts = zoneSceneParts({ zone, iceberg, sectionTitle });
-  const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water) } as CSSProperties;
+  const fill = fillOf(sectionTitle, parts.sky, figuresReach);
+  const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water), ...fill.style } as CSSProperties;
   return (
     <SceneMotionRoot
       zone={zone}
       style={tokens}
-      className={cn(styles.scene, 'relative isolate overflow-hidden', className)}
+      className={cn(styles.scene, fill.root, 'relative isolate overflow-hidden', className)}
     >
       <svg
         viewBox={`0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`}
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio={fill.aspect}
         role={label === undefined ? undefined : 'img'}
         aria-label={label}
         aria-hidden={label === undefined ? true : undefined}
-        className="absolute inset-0 -z-10 size-full"
+        className={cn('absolute inset-0 -z-10 size-full', fill.drawing)}
       >
-        <Ground sky={parts.sky} />
+        <Ground sky={parts.sky} rise={fill.rise} />
         {parts.rays && <LightRays x={60} y={0} count={7} spread={150} length={700} />}
         <Berg part={parts.iceberg} surface={parts.sky} />
         {parts.seabed && <Seabed y={SEABED_TOP} />}
