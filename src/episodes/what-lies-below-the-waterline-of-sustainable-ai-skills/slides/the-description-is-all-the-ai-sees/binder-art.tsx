@@ -1,5 +1,6 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
-import { Facets, type Facet } from './room-art';
+import { type Facet } from './room-art';
 import styles from './slide.module.css';
 
 /*
@@ -43,7 +44,7 @@ export function BinderCover() {
       preserveAspectRatio="none"
       className={cn(styles.art, 'pointer-events-none absolute inset-0 size-full')}
     >
-      <Facets facets={BINDER} />
+      <ToneFacets facets={BINDER} />
     </svg>
   );
 }
@@ -57,7 +58,7 @@ export function PaperFacets() {
       preserveAspectRatio="none"
       className={cn(styles.art, 'pointer-events-none absolute inset-0 size-full')}
     >
-      <Facets facets={PAPER} />
+      <ToneFacets facets={PAPER} />
     </svg>
   );
 }

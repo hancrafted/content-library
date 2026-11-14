@@ -2,10 +2,11 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
-import { atSpec, Facets, SHALLOWS, SHALLOWS_ASPECT, ShallowsArt } from './shallows-art';
+import { atSpec, SHALLOWS, SHALLOWS_ASPECT, ShallowsArt } from './shallows-art';
 import { BUBBLES, CARD, NO_CARD, SHALLOWS_FACETS, SILT } from './shallows-facets';
 import styles from './slide.module.css';
 
@@ -82,8 +83,8 @@ export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
       overlay={<DivePills pills={pills} />}
     >
       <ShallowsArt>
-        <Facets facets={SHALLOWS_FACETS} />
-        <Facets facets={withSkill ? CARD : NO_CARD} />
+        <ToneFacets facets={SHALLOWS_FACETS} />
+        <ToneFacets facets={withSkill ? CARD : NO_CARD} />
       </ShallowsArt>
       <line x1={CABLE_X} y1={CABLE_TOP} x2={CABLE_X} y2={robotTop} strokeWidth={3} className={styles.cable} />
       <Ship transform={`translate(${SHIP_X} ${SHALLOWS.waterline}) scale(${SHIP_SCALE})`} />
@@ -92,7 +93,7 @@ export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
         <Robot state={robotAt('does-the-skill-make-things-better').state} aim="down" />
       </g>
       <ShallowsArt>
-        <Facets facets={withSkill ? BUBBLES : SILT} />
+        <ToneFacets facets={withSkill ? BUBBLES : SILT} />
       </ShallowsArt>
     </ZoneScene>
   );

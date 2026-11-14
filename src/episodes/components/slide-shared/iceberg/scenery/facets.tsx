@@ -11,3 +11,26 @@ export function Facets({ layers }: { readonly layers: readonly FacetLayer[] }) {
     </>
   );
 }
+
+/** One facet of a drawing lifted from a Spec Option: its tone, then its outline. JSON rows type as plain arrays. */
+export type ToneFacet = readonly string[];
+
+interface ToneFacetsProps {
+  readonly facets: readonly ToneFacet[];
+  /**
+   * The hook the Slide's token file colours by. `data-lp` keeps a lifted drawing's tones apart from the shared figures'
+   * own `data-tone` parts, which a control-room Slide draws inside the same SVG.
+   */
+  readonly toneAttribute?: 'data-tone' | 'data-lp';
+  /** Wraps the facets in `<g data-part>`, so a part can be found, moved or faded as one. */
+  readonly part?: string;
+  readonly className?: string;
+}
+
+/** Paints a lifted drawing's facets in paint order, each a path its Slide's token file colours by tone. */
+export function ToneFacets({ facets, toneAttribute = 'data-tone', part, className }: ToneFacetsProps) {
+  const paths = facets.map(([tone, d], index) => (
+    <path key={index} {...{ [toneAttribute]: tone }} d={d} className={className} />
+  ));
+  return part === undefined ? <>{paths}</> : <g data-part={part}>{paths}</g>;
+}

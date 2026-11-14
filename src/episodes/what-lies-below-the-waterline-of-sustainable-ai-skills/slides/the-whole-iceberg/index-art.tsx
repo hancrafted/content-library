@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import styles from './iceberg.module.css';
 
@@ -10,10 +11,6 @@ import styles from './iceberg.module.css';
  */
 
 type Facet = readonly [tone: string, d: string];
-
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
 
 /** The index page in the sky, in the Spec's box. */
 const PAGE_BOX = '620 133 328 264';
@@ -32,7 +29,7 @@ export function IndexPaper() {
       preserveAspectRatio="none"
       className={cn(styles.art, 'pointer-events-none absolute inset-0 -z-10 size-full')}
     >
-      <Facets facets={PAGE} />
+      <ToneFacets facets={PAGE} />
     </svg>
   );
 }
@@ -51,7 +48,7 @@ const MANUAL: readonly Facet[] = [
 export function ManualArt({ x, y }: { readonly x: number; readonly y: number }) {
   return (
     <g aria-hidden className={styles.art} transform={`translate(${x - MANUAL_FOOT.x} ${y - MANUAL_FOOT.y})`}>
-      <Facets facets={MANUAL} />
+      <ToneFacets facets={MANUAL} />
     </g>
   );
 }
@@ -87,7 +84,7 @@ export function TrailBubbles({ trailX, nodes }: { readonly trailX: number; reado
         const specY = SPEC_NODES[n];
         return y === undefined || specY === undefined ? null : (
           <g key={specY} transform={`translate(${trailX - SPEC_TRAIL_X} ${y - specY})`}>
-            <Facets facets={bubble} />
+            <ToneFacets facets={bubble} />
           </g>
         );
       })}

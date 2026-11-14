@@ -1,14 +1,10 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import type { ReactNode } from 'react';
 import styles from './room-art.module.css';
-import { ROOM, type ArtFacet } from './room-facets';
+import { ROOM } from './room-facets';
 
 /** The A-frame's head over the rail, where the cable runs down into the sea. */
 const CABLE = { x: 313, top: 40, rail: 74 } as const;
-
-/** Facets in paint order, each a path its tone colours. */
-export function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-tone={tone} d={d} />);
-}
 
 /**
  * The control room of Spec Option 8a, this Slide's own drawing (feedback 3, decision 46): the faceted wall and floor,
@@ -19,7 +15,7 @@ export function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
 export function RoomArt({ children }: { readonly children?: ReactNode }) {
   return (
     <g data-room-art className={styles.art}>
-      <Facets facets={ROOM} />
+      <ToneFacets facets={ROOM} />
       <line
         data-cable
         x1={CABLE.x}

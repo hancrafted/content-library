@@ -1,7 +1,7 @@
 import { Character } from '@/episodes/components/slide-shared/character/character';
-import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
-import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
-import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { captain } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
+import { PilotAtConsole } from '@/episodes/components/slide-shared/deep-sea-expedition/pilot-at-console';
+import { ToneFacets, type ToneFacet } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import art from './room-art.json';
 import styles from './slide.module.css';
@@ -37,7 +37,6 @@ export const PILLS: Readonly<Record<Thing, { readonly x: number; readonly y: num
   connectors: { x: 948, y: 315 },
 };
 
-type Facet = readonly string[];
 interface Place {
   readonly x: number;
   readonly y: number;
@@ -54,26 +53,11 @@ const PILOT_REACH = 24;
 /** The Spec's desk top is lower than the shared Console's at the cast's scale; the manual stands on the shared one. */
 const MANUAL_LIFT = CONSOLE.y - 362;
 
-/** A part of the drawing, its facets in the Spec's paint order. */
-function Facets({ part, facets }: { readonly part: string; readonly facets: readonly Facet[] }) {
-  return (
-    <g data-part={part}>
-      {facets.map(([tone, d], index) => (
-        <path key={index} data-lp={tone} d={d} />
-      ))}
-    </g>
-  );
-}
-
 /** The pilot seated at a console, at its place. */
-function PilotAtConsole({ width, ...at }: Place & { readonly width: number }) {
-  const { seat } = consoleLayout({ width });
+function PilotAt({ width, ...at }: Place & { readonly width: number }) {
   return (
     <g transform={place(at)}>
-      <Console width={width} />
-      <g transform={`translate(${seat.x + PILOT_REACH} ${seat.y})`}>
-        <Character preset={pilot} pose="sit" />
-      </g>
+      <PilotAtConsole width={width} reach={PILOT_REACH} />
     </g>
   );
 }
@@ -87,20 +71,20 @@ function PilotAtConsole({ width, ...at }: Place & { readonly width: number }) {
 export function ControlRoomArt() {
   return (
     <g transform={`translate(0 ${ROOM_TOP})`} className={styles.art}>
-      <Facets part="room" facets={art.room} />
-      <Facets part="next-room" facets={art.nextRoom} />
-      <Facets part="bulkhead" facets={art.bulkhead} />
-      <Facets part="lab-rack" facets={art.rack} />
-      <Facets part="sonar" facets={art.sonar} />
-      <Facets part="cable" facets={art.cable} />
-      <Facets part="wall-brief" facets={art.brief} />
+      <ToneFacets toneAttribute="data-lp" part="room" facets={art.room} />
+      <ToneFacets toneAttribute="data-lp" part="next-room" facets={art.nextRoom} />
+      <ToneFacets toneAttribute="data-lp" part="bulkhead" facets={art.bulkhead} />
+      <ToneFacets toneAttribute="data-lp" part="lab-rack" facets={art.rack} />
+      <ToneFacets toneAttribute="data-lp" part="sonar" facets={art.sonar} />
+      <ToneFacets toneAttribute="data-lp" part="cable" facets={art.cable} />
+      <ToneFacets toneAttribute="data-lp" part="wall-brief" facets={art.brief} />
       <g transform={place(CAPTAIN)}>
         <Character preset={captain} pose="hold" />
       </g>
-      <Facets part="notebook" facets={art.notebook} />
-      <PilotAtConsole x={CONSOLE.x} y={CONSOLE.y} scale={CONSOLE.scale} width={CONSOLE.width} />
+      <ToneFacets toneAttribute="data-lp" part="notebook" facets={art.notebook} />
+      <PilotAt x={CONSOLE.x} y={CONSOLE.y} scale={CONSOLE.scale} width={CONSOLE.width} />
       <g transform={`translate(0 ${MANUAL_LIFT})`}>
-        <Facets part="manual" facets={art.manual} />
+        <ToneFacets toneAttribute="data-lp" part="manual" facets={art.manual} />
       </g>
     </g>
   );
@@ -109,12 +93,13 @@ export function ControlRoomArt() {
 /** Each panel's window onto the Spec's panel sheet: its top edge there. */
 const TILE_TOP: Readonly<Record<Thing, number>> = { personal: 20, project: 152, skills: 284, connectors: 416 };
 /** A panel's drawing behind its shared figures, and what it holds in front of them. */
-const TILE_ART: Readonly<Record<Thing, { readonly back: readonly Facet[]; readonly front: readonly Facet[] }>> = {
-  personal: { back: art.tilePersonal, front: art.tilePersonalFront },
-  project: { back: art.tileProject, front: [] },
-  skills: { back: art.tileSkills, front: art.tileSkillsFront },
-  connectors: { back: art.tileConnectors, front: [] },
-};
+const TILE_ART: Readonly<Record<Thing, { readonly back: readonly ToneFacet[]; readonly front: readonly ToneFacet[] }>> =
+  {
+    personal: { back: art.tilePersonal, front: art.tilePersonalFront },
+    project: { back: art.tileProject, front: [] },
+    skills: { back: art.tileSkills, front: art.tileSkillsFront },
+    connectors: { back: art.tileConnectors, front: [] },
+  };
 
 /** The shared figures a panel shows in front of its drawing, in the panel's own units. */
 function TileCast({ thing }: { readonly thing: Thing }) {
@@ -126,7 +111,7 @@ function TileCast({ thing }: { readonly thing: Thing }) {
         </g>
       );
     case 'skills':
-      return <PilotAtConsole x={280} y={77} scale={1.2} width={100} />;
+      return <PilotAt x={280} y={77} scale={1.2} width={100} />;
     default:
       return null;
   }
@@ -138,11 +123,11 @@ export function ThingTile({ thing, label }: { readonly thing: Thing; readonly la
   return (
     <svg viewBox="0 0 400 116" role="img" aria-label={label} className={`${styles.art} block h-auto w-full rounded-lg`}>
       <g transform={sheet}>
-        <Facets part={`tile-${thing}`} facets={TILE_ART[thing].back} />
+        <ToneFacets toneAttribute="data-lp" part={`tile-${thing}`} facets={TILE_ART[thing].back} />
       </g>
       <TileCast thing={thing} />
       <g transform={sheet}>
-        <Facets part={`tile-${thing}-front`} facets={TILE_ART[thing].front} />
+        <ToneFacets toneAttribute="data-lp" part={`tile-${thing}-front`} facets={TILE_ART[thing].front} />
       </g>
     </svg>
   );

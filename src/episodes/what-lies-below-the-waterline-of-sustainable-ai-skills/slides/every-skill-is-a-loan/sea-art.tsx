@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './loan.module.css';
@@ -82,10 +83,6 @@ const SLAB: readonly Facet[] = [
   ['glint', 'M0 6L10 0L102 0L92 6Z'],
 ];
 
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
-
 /** The water, snow and seabed behind the whole stage, stretched to it as the Spec does. */
 export function SeaArt() {
   return (
@@ -96,7 +93,7 @@ export function SeaArt() {
       data-sea-art
       className={cn(styles.art, 'pointer-events-none absolute inset-0 -z-10 size-full')}
     >
-      <Facets facets={SEA} />
+      <ToneFacets facets={SEA} />
     </svg>
   );
 }
@@ -105,8 +102,8 @@ export function SeaArt() {
 export function ClampArt({ icon, label }: { readonly icon: ClampIcon; readonly label: string }) {
   return (
     <svg viewBox="0 0 56 56" role="img" aria-label={label} className={cn(styles.art, 'relative z-10 size-14 shrink-0')}>
-      <Facets facets={PLATE} />
-      <Facets facets={PROPS[icon]} />
+      <ToneFacets facets={PLATE} />
+      <ToneFacets facets={PROPS[icon]} />
     </svg>
   );
 }
@@ -128,7 +125,7 @@ export function BlockArt({
       style={style}
       className={cn(styles.art, 'block shrink-0', slab ? 'h-5 w-24' : 'h-10 w-24', className)}
     >
-      <Facets facets={slab ? SLAB : BLOCK} />
+      <ToneFacets facets={slab ? SLAB : BLOCK} />
     </svg>
   );
 }

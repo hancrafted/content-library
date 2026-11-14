@@ -1,11 +1,7 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import styles from './stage-art.module.css';
-import { BINDER, CARD, CLIP, PIN, SHEET, WALL, type ArtFacet } from './stage-facets';
-
-/** Facets in paint order, each a path its tone colours. */
-function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-tone={tone} d={d} />);
-}
+import { BINDER, CARD, CLIP, PIN, SHEET, WALL } from './stage-facets';
 
 /** Where each lifted piece sits in the Spec's 1000 by 600 stage, as an SVG `viewBox`. */
 const BOXES = {
@@ -35,7 +31,7 @@ export function WallArt({ className }: PieceProps) {
       preserveAspectRatio="xMinYMax slice"
       className={cn(styles.art, className)}
     >
-      <Facets facets={WALL} />
+      <ToneFacets facets={WALL} />
     </svg>
   );
 }
@@ -50,7 +46,7 @@ export function PaperArt({ piece, className }: PieceProps & { readonly piece: 's
       preserveAspectRatio="none"
       className={cn(styles.art, className)}
     >
-      <Facets facets={piece === 'sheet' ? SHEET : CARD} />
+      <ToneFacets facets={piece === 'sheet' ? SHEET : CARD} />
     </svg>
   );
 }
@@ -59,7 +55,7 @@ export function PaperArt({ piece, className }: PieceProps & { readonly piece: 's
 export function FastenerArt({ piece, className }: PieceProps & { readonly piece: 'clip' | 'pin' }) {
   return (
     <svg aria-hidden data-fastener={piece} viewBox={BOXES[piece]} className={cn(styles.art, className)}>
-      <Facets facets={piece === 'clip' ? CLIP : PIN} />
+      <ToneFacets facets={piece === 'clip' ? CLIP : PIN} />
     </svg>
   );
 }
@@ -75,7 +71,7 @@ export function StuffedBinder({ x, y, scale }: { readonly x: number; readonly y:
       transform={`translate(${x} ${y}) scale(${scale}) translate(${-BINDER_FOOT.x} ${-BINDER_FOOT.y})`}
       className={styles.art}
     >
-      <Facets facets={BINDER} />
+      <ToneFacets facets={BINDER} />
     </g>
   );
 }

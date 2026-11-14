@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import { CRATE_BACK, CRATE_BOX, CRATE_FRONT, PORT_RIM, PORT_SEA, PORTHOLE, RETIRED_CARDS } from './crate-facets';
@@ -28,15 +29,11 @@ import {
 /** The Spec's room, 1000 by 590, stretched to the Scene's 1200 by 800 drawing. */
 const ROOM_STRETCH = `scale(${1200 / 1000} ${800 / 590})`;
 
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
-
 /** The night wall over the whole Scene, in the Scene's own drawing. */
 export function NightWall() {
   return (
     <g aria-hidden data-room-art transform={ROOM_STRETCH} className={styles.art}>
-      <Facets facets={NIGHT} />
+      <ToneFacets facets={NIGHT} />
     </g>
   );
 }
@@ -55,17 +52,17 @@ export function SheetPaper({ sheet }: { readonly sheet: Sheet }) {
   const hold =
     sheet === 'after' ? (
       <svg viewBox={PIN_BOX} className={cn(styles.art, 'absolute -top-1.5 left-1/2 size-3.5 -translate-x-1/2')}>
-        <Facets facets={PIN} />
+        <ToneFacets facets={PIN} />
       </svg>
     ) : (
       <svg viewBox={CLIP_BOX} className={cn(styles.art, 'absolute -top-5 left-1/2 h-10 w-17 -translate-x-1/2')}>
-        <Facets facets={CLIP} />
+        <ToneFacets facets={CLIP} />
       </svg>
     );
   return (
     <span aria-hidden className="pointer-events-none absolute inset-0">
       <svg viewBox={box} preserveAspectRatio="none" className={cn(styles.art, 'absolute inset-0 size-full')}>
-        <Facets facets={paper} />
+        <ToneFacets facets={paper} />
       </svg>
       {hold}
     </span>
@@ -80,13 +77,13 @@ export function CrateArt({ label }: { readonly label: ReactNode }) {
   return (
     <div className="relative aspect-[266/147] w-full">
       <svg aria-hidden viewBox={CRATE_BOX} className={cn(styles.art, 'absolute inset-0 size-full')}>
-        <Facets facets={CRATE_BACK} />
+        <ToneFacets facets={CRATE_BACK} />
         {RETIRED_CARDS.map((card, n) => (
           <g key={card[0]?.[1]} className={styles.drop} style={{ '--n': n } as CSSProperties}>
-            <Facets facets={card} />
+            <ToneFacets facets={card} />
           </g>
         ))}
-        <Facets facets={CRATE_FRONT} />
+        <ToneFacets facets={CRATE_FRONT} />
       </svg>
       {/* The label's paper, from 375, 426 to 575, 498 in the crate's box. */}
       <div className="absolute top-[41.5%] left-[9.4%] flex h-[49%] w-[75.2%] flex-col items-center justify-center text-center">
@@ -104,10 +101,10 @@ export function PortholeArt({ clipId, robot }: { readonly clipId: string; readon
         <circle cx={PORTHOLE.x} cy={PORTHOLE.y} r={PORTHOLE.r} />
       </clipPath>
       <g clipPath={`url(#${clipId})`}>
-        <Facets facets={PORT_SEA} />
+        <ToneFacets facets={PORT_SEA} />
         {robot}
       </g>
-      <Facets facets={PORT_RIM} />
+      <ToneFacets facets={PORT_RIM} />
     </g>
   );
 }
