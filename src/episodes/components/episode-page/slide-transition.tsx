@@ -1,4 +1,3 @@
-import { BubbleRise } from '@/shared/components/animations/bubble-rise';
 import { InkCanvas } from '@/shared/components/animations/ink-canvas';
 import { InkFilterDefinition } from '@/shared/components/animations/transition-filters';
 import { WaveFront } from '@/shared/components/animations/wave-front';
@@ -8,6 +7,7 @@ import type { CSSProperties } from 'react';
 import type { ResolvedSlideTransition } from '../slide-master/slide-presentation';
 import { SlideIdentity } from './slide-mount.client';
 import styles from './slide-presentation.module.css';
+import { TransitionBubbles } from './transition-bubbles.client';
 
 const TARGET_SURFACE = 'var(--slide-transition-target-surface)';
 
@@ -47,7 +47,7 @@ function EdgeEffect({
     return (
       <>
         <WaveFront color={TARGET_SURFACE} bleed={bleed} />
-        <BubbleRise />
+        <TransitionBubbles />
       </>
     );
   return (

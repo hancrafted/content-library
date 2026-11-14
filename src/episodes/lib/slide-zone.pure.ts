@@ -32,6 +32,16 @@ export function isPlaying(zone: SlideZone): boolean {
   return zone === 'active';
 }
 
+/**
+ * Whether a browser-drawn edge effect (the `bubbles` transition's bubbles) is drawn, given whether it was and its
+ * outgoing Slide's zone: from the Slide's first `active`, its trailing edge being about to play, until it is `far`.
+ * Never before the reader arrives, so the static HTML carries none.
+ */
+export function edgeEffectShown(shown: boolean, zone: SlideZone): boolean {
+  if (zone === 'active') return true;
+  return shown && zone !== 'far';
+}
+
 /** The height a wrapper's mount keeps while `far`, so unmounting never changes the scroll height; 0 means no hold. */
 export function keptHeight(zone: SlideZone, measured: number): number {
   return isMounted(zone) ? 0 : measured;

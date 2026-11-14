@@ -7,8 +7,9 @@ import { SlideTransition } from './slide-transition';
 
 /*
  * The outgoing Slide's trailing edge as the server renders it (docs/features/slide-transitions.md). The Iceberg
- * style's `bubbles` edge is a filter-free wave front painted in the incoming Slide's surface, with faceted bubbles
- * rising through it; every other effect keeps its filtered ink.
+ * style's `bubbles` edge is a filter-free wave front painted in the incoming Slide's surface; its faceted bubbles are
+ * drawn by the browser once the edge is about to play, never written into the page. Every other effect keeps its
+ * filtered ink.
  */
 
 const edge = (effect: ResolvedSlideTransition['declaration']['effect']): ResolvedSlideTransition => ({
@@ -23,12 +24,12 @@ const render = (effect: ResolvedSlideTransition['declaration']['effect']) =>
   load(renderToStaticMarkup(createElement(SlideTransition, { edge: edge(effect) })));
 
 describe('success cases', () => {
-  it('draws the bubbles edge as a front and back crest over the incoming surface, with forty faceted bubbles', () => {
+  it('draws the bubbles edge as a front and back crest over the incoming surface, leaving its bubbles to the browser', () => {
     // ARRANGE
     const expected = {
       waveFront: 1,
       crests: ['back', 'front'],
-      bubbles: 40,
+      bubbles: 0,
       target: '--slide-transition-target-surface:var(--zone-sunlit)',
     };
     // ACT
@@ -38,7 +39,7 @@ describe('success cases', () => {
       crests: $('[data-wave-crest]')
         .toArray()
         .map((crest) => $(crest).attr('data-wave-crest')),
-      bubbles: $('[data-bubble-rise] > [data-poly-bubble]').length,
+      bubbles: $('[data-poly-bubble]').length,
       target: $('[data-transition-edge] > div').attr('style'),
     };
     // ASSERT
