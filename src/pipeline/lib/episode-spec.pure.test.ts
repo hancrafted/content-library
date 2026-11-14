@@ -50,7 +50,7 @@ interface OptionShape {
   /** `data-recommended` as the generated template writes it, `"true"` or `"false"`, not the bare attribute. */
   explicitMark?: boolean;
   picked?: boolean;
-  /** Whether the pick checkbox carries `checked`; a picked Option's does, as the contract demands. */
+  /** Whether the pick checkbox carries `checked`; a picked Option's does, and so does a recommended one's, the default pick. */
   checked?: boolean;
   mock?: string;
   caption?: string | null;
@@ -77,7 +77,7 @@ function recommendedMark(recommended: boolean, explicit: boolean | undefined): s
 function option(slug: string, id: string, shape: OptionShape = {}): string {
   const { recommended, explicitMark, picked, checked, mock, caption, notes, after } = {
     ...OPTION_DEFAULTS,
-    checked: shape.picked,
+    checked: shape.picked ?? shape.recommended,
     ...shape,
   };
   const flags = [recommendedMark(recommended, explicitMark), picked ? ' data-picked' : ''].join('');
@@ -465,7 +465,7 @@ describe('failure cases', () => {
       'Option 1a of {#spent} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.',
     ],
     [
-      'an unpicked Option whose checkbox is ticked',
+      'an unpicked Option whose checkbox is ticked while another is the recommendation',
       {
         slides: [
           slide('spent', 1, {
@@ -474,7 +474,34 @@ describe('failure cases', () => {
           slide('middle', 2),
         ],
       },
-      'Option 1b of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option.',
+      'Option 1b of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option, or the recommended one while the Slide has none.',
+    ],
+    [
+      'a recommended Option whose checkbox is not ticked while its Slide has no picked Option',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { recommended: true, checked: false }), option('spent', '1b')],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} is recommended and its Slide has no picked Option, but its checkbox lacks checked: the pick defaults to the recommendation.',
+    ],
+    [
+      'a recommended Option ticked beside the picked one',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [
+              option('spent', '1a', { recommended: true, picked: false, checked: true }),
+              option('spent', '1b', { picked: true }),
+            ],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option, or the recommended one while the Slide has none.',
     ],
   ] satisfies [string, SpecShape, string][])('names %s', (_name, shape, expected) => {
     // ARRANGE

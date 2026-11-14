@@ -123,6 +123,7 @@ describe('success cases', () => {
       [FEEDBACK_PATH]: feedback('spec', [
         '- `why--spent` · design — picked: 1a',
         '- `why--spent` · design — picked: 1a, 1b — Combine them.',
+        '- `why--spent` · design — picked: none',
         '- `why--spent` · design — picked: none — Try a heat strip.',
         '- `top` · design — picked: 0b — Fuel the rocket in fewer steps.',
         '- `visual-language` · design — More accent.',
@@ -525,22 +526,20 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedTag);
   });
 
-  it('reports Spec review items without picks, with none and no note, or tagged other than design', () => {
+  it('reports Spec review items without picks, or tagged other than design', () => {
     // ARRANGE
     const files = folder({
       [FEEDBACK_PATH]: feedback('spec', [
         '- `why--spent` · design — Thinner bar.',
-        '- `why--spent` · design — picked: none',
         '- `why--spent` · content — picked: 1a',
       ]),
     });
-    const expectedForm = '`<section>--<slide>` · design — picked: <option ids>|none — note';
+    const expectedForm = '`<section>--<slide>` · design — picked: <option ids>|none, then an optional — note';
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
-    expect(kinds(findings)).toEqual(['feedback', 'feedback', 'feedback']);
+    expect(kinds(findings)).toEqual(['feedback', 'feedback']);
     expect(findings.map(({ message }) => message)).toEqual([
-      expect.stringContaining(expectedForm),
       expect.stringContaining(expectedForm),
       expect.stringContaining(expectedForm),
     ]);

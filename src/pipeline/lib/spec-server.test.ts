@@ -213,31 +213,28 @@ describe('success cases', () => {
     expect(response.headers.get('location')).toBe(expectedLocation);
     expect(saved).toBe(expectedText);
   });
-});
 
-describe('failure cases', () => {
-  it('answers a review with a Slide lacking pick and note with 400 naming it, and writes nothing', async () => {
+  it('saves a Slide set to Redesign with no note at all, a note being optional', async () => {
     // ARRANGE
     const { folder, base } = await serve();
-    const before = feedbackFolders(folder);
     const fields: [string, string][] = [
       ['pick:top', '0b'],
       ['pick:spent', '1b'],
       ['note:quiet', ''],
     ];
-    const expectedStatus = 400;
-    const expectedFault = 'Slide 2 "quiet" has no pick and no note';
+    const seeOther = 303;
+    const expectedLine = '- `why--quiet` · design — picked: none\n';
     // ACT
     const response = await post(base, fields);
-    const body = await response.text();
-    const after = feedbackFolders(folder);
+    const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
     // ASSERT
-    expect(response.status).toBe(expectedStatus);
-    expect(body).toContain(expectedFault);
-    expect(after).toEqual(before);
+    expect(response.status).toBe(seeOther);
+    expect(saved).toContain(expectedLine);
   });
+});
 
-  it('answers approve while a Slide has no pick with 400 naming the Slide, and writes nothing', async () => {
+describe('failure cases', () => {
+  it('answers approve while a Slide is set to Redesign with 400 naming the Slide, and writes nothing', async () => {
     // ARRANGE
     const { folder, base } = await serve();
     const before = feedbackFolders(folder);
@@ -248,7 +245,7 @@ describe('failure cases', () => {
       ['next', 'approve'],
     ];
     const expectedStatus = 400;
-    const expectedFault = 'Slide 2 "quiet" has no pick: pick an Option before you approve.';
+    const expectedFault = 'Slide 2 "quiet" is set to Redesign: pick an Option before you approve.';
     // ACT
     const response = await post(base, fields);
     const body = await response.text();

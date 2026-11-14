@@ -93,6 +93,20 @@ describe('success cases', () => {
       expect(attribute(SECOND, 'data-picked')).toBeDefined();
       expect($(`[data-option="${SECOND}"] input`).attr('checked')).toBeDefined();
       expect(attribute(FIRST, 'data-picked')).toBeUndefined();
+      expect($(`[data-option="${FIRST}"] input`).attr('checked')).toBeUndefined();
+    });
+
+    it('ticks the recommended Option, and marks none picked, when no Option is locked', () => {
+      // ARRANGE
+      const source = { slug: SLUG, html: FRAGMENT, template: OPTION_TEMPLATE, locked: undefined };
+      // ACT
+      const $ = load(optionsMarkup(source), null, false);
+      const ticked = $('input[checked]')
+        .toArray()
+        .map((box) => $(box).attr('value'));
+      // ASSERT
+      expect(ticked).toEqual([FIRST]);
+      expect($('[data-picked]').length).toBe(0);
     });
   });
 });
@@ -140,14 +154,14 @@ describe('edge cases', () => {
   });
 
   describe('optionsMarkup', () => {
-    it('locks nothing when the locked Option is not in the fragment', () => {
+    it('locks nothing, and ticks the recommended Option, when the locked Option is not in the fragment', () => {
       // ARRANGE
       const source = { slug: SLUG, html: FRAGMENT, template: OPTION_TEMPLATE, locked: 'not-an-option' };
       // ACT
       const $ = load(optionsMarkup(source), null, false);
       // ASSERT
       expect($('[data-picked]').length).toBe(0);
-      expect($('input[checked]').length).toBe(0);
+      expect($('input[checked]').attr('value')).toBe(FIRST);
     });
 
     it('carries a fragment figure attribute the template does not own over to the Option', () => {

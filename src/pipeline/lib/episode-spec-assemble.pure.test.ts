@@ -630,7 +630,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('leaves a Slide with zero or several picks unlocked', () => {
+  it('leaves a Slide with zero or several picks unlocked, on its recommended Option', () => {
     // ARRANGE
     const round = feedback(
       1,
@@ -640,8 +640,14 @@ describe('edge cases', () => {
     // ACT
     const $ = page({ ...FULL, feedback: [round] });
     // ASSERT
+    const recommended = $('figure[data-recommended="true"]')
+      .toArray()
+      .map((figure) => $(figure).attr('data-option'));
+    const ticked = $('input[type="checkbox"][checked]')
+      .toArray()
+      .map((box) => $(box).attr('value'));
     expect($('figure[data-picked]')).toHaveLength(0);
-    expect($('input[type="checkbox"][checked]')).toHaveLength(0);
+    expect(ticked).toEqual(recommended);
   });
 
   it('ignores a pick for an Option the Slide no longer has', () => {

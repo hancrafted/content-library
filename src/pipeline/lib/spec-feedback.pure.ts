@@ -1,7 +1,7 @@
 // A Spec review turned into the next feedback round (design-ADR 0011): the form fields the served Spec posts, the
 // Spec's Title slide and Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that
-// break a rule: a Slide with no pick carries a note, and approve needs exactly one pick on every Slide. The server
-// reads and writes; nothing here touches the disk.
+// break a rule: approve needs exactly one pick on every Slide. A Slide with no pick is set to Redesign, and a note is
+// optional everywhere. The server reads and writes; nothing here touches the disk.
 
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { BRIEF_KEYS } from './episode-spec-brief.pure.ts';
@@ -84,28 +84,25 @@ interface Posted {
   next: string | undefined;
 }
 
-/** The fault of a Slide's pick count under approve: exactly one pick on every Slide, none or several is refused. */
+/** The fault of a Slide's pick count under approve: exactly one pick on every Slide, Redesign or several is refused. */
 function approveFault({ slug, where }: Reviewed, count: number): Fault[] {
   if (count === 1) return [];
   const message =
     count === 0
-      ? `${where} has no pick: pick an Option before you approve.`
+      ? `${where} is set to Redesign: pick an Option before you approve.`
       : `${where} has ${count} picks: keep exactly one before you approve.`;
   return [{ slide: slug, message }];
 }
 
-/** The faults of one reviewed Slide: an unknown Option, not exactly one pick under approve, or no pick and no note. */
-function slideFaults(slide: Reviewed, { picks, note, next }: Posted): Fault[] {
+/** The faults of one reviewed Slide: an unknown Option, or not exactly one pick under approve. */
+function slideFaults(slide: Reviewed, { picks, next }: Posted): Fault[] {
   const { slug, options, where } = slide;
   const unknown = picks(slug).filter((pick) => !options.includes(pick));
   if (unknown.length > 0) return unknown.map((pick) => ({ slide: slug, message: `${where} has no Option ${pick}.` }));
-  if (next === 'approve') return approveFault(slide, picks(slug).length);
-  if (picks(slug).length === 0 && note(slug) === '')
-    return [{ slide: slug, message: `${where} has no pick and no note: tick an Option or say what to try.` }];
-  return [];
+  return next === 'approve' ? approveFault(slide, picks(slug).length) : [];
 }
 
-/** The faults that refuse the round: a Next action unknown, Slides lacking picks or notes, unknown Options, strays. */
+/** The faults that refuse the round: a Next action unknown, Slides lacking picks under approve, unknown Options, strays. */
 function faultsOf(review: Review, posted: Posted): Fault[] {
   const reviewed = reviewedSlides(review);
   const known = new Set([VISUAL_LANGUAGE, PAGE, ...(review.brief ?? []), ...reviewed.map(({ slug }) => slug)]);

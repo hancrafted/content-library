@@ -28,18 +28,21 @@ export function fragmentSlides(fragment: string): FragmentSlide[] {
   }));
 }
 
-/** The pick checkbox assembly adds to an Option. */
+/** The pick checkbox assembly adds to an Option; the recommended Option's comes ticked, the default pick. */
 export const pickBox = (slug: string, id: string, checked = false): string =>
   `<label class="spec-pick"><input type="checkbox" form="${FORM}" name="pick:${slug}" value="${id}"${checked ? ' checked' : ''} /> Pick ${id}</label>`;
 
 /** The leading digits of an Option id: its Slide's number. */
 const slideNumber = (id: string): number => Number(/^\d+/.exec(id)?.[0] ?? '0');
 
+/** A figure tag marked recommended: `data-recommended` bare or `"true"`, as `isRecommended` reads it. */
+const RECOMMENDED = /\sdata-recommended(?:="true"|(?=[\s>/]))/;
+
 /** The contract's findings on one Slide of a fragment. */
 function checkFragmentSlide({ slug, html }: FragmentSlide): string[] {
   const withBoxes = html.replace(
     /(<figure\b[^>]*data-option="([^"]+)"[^>]*>)/g,
-    (tag, _all, id: string) => `${tag}${pickBox(slug, id)}`,
+    (tag, _all, id: string) => `${tag}${pickBox(slug, id, RECOMMENDED.test(tag))}`,
   );
   const $ = load(withBoxes, null, false);
   const figures = $(OPTION)
@@ -50,7 +53,7 @@ function checkFragmentSlide({ slug, html }: FragmentSlide): string[] {
   const where = `The ${isTitle ? 'Title slide' : 'Slide'} {#${slug}}`;
   return [
     ...checkOptionMarks(figures, where, { number, approved: false, count: isTitle ? TITLE_OPTIONS : OPTIONS }),
-    ...figures.flatMap((figure) => checkOption($, figure, slug)),
+    ...figures.flatMap((figure) => checkOption($, figure, { slug, slidePicked: false })),
   ];
 }
 

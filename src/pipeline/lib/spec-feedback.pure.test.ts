@@ -4,8 +4,9 @@ import { nextRound, reviewToFeedback } from './spec-feedback.pure.ts';
 
 /*
  * A Spec review, as the served page's form posts it, turned into the next `feedback.md` round (design-ADR 0011):
- * per Slide its picks and note, then the Visual language note. A Slide with no pick needs a note, or the round is
- * refused, naming the Slide. The form fields and the clock are hand-written here; the server reads them.
+ * per Slide its picks and note, then the Visual language note. A Slide with no pick is set to Redesign and needs no
+ * note; approve refuses it, naming the Slide. The form fields and the clock are hand-written here; the server reads
+ * them.
  */
 
 const SLIDES: readonly SpecSlide[] = [
@@ -199,25 +200,25 @@ describe('failure cases', () => {
     });
   });
 
-  it('refuses a Slide with no pick and no note, naming it', () => {
+  it('saves a Slide set to Redesign with no note as picked: none, a note being optional', () => {
     // ARRANGE
     const fields: [string, string][] = [
       ['pick:spent', '1a'],
       ['note:quiet', '  \n '],
     ];
-    const expected = {
-      kind: 'rejected',
-      faults: [
-        { slide: 'quiet', message: 'Slide 2 "quiet" has no pick and no note: tick an Option or say what to try.' },
-      ],
-    };
+    const expected = [
+      ...header(1),
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: none',
+      '',
+    ].join('\n');
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual(expected);
+    expect(result).toEqual({ kind: 'saved', file: roundFile(1), text: expected });
   });
 
-  it('refuses approve while Slides have no pick, naming every one of them, a note or not', () => {
+  it('refuses approve while Slides are set to Redesign, naming every one of them, a note or not', () => {
     // ARRANGE
     const fields: [string, string][] = [
       ['pick:spent', '1a'],
@@ -228,8 +229,8 @@ describe('failure cases', () => {
     const expected = {
       kind: 'rejected',
       faults: [
-        { slide: 'top', message: 'The Title slide has no pick: pick an Option before you approve.' },
-        { slide: 'quiet', message: 'Slide 2 "quiet" has no pick: pick an Option before you approve.' },
+        { slide: 'top', message: 'The Title slide is set to Redesign: pick an Option before you approve.' },
+        { slide: 'quiet', message: 'Slide 2 "quiet" is set to Redesign: pick an Option before you approve.' },
       ],
     };
     // ACT
@@ -295,7 +296,7 @@ describe('failure cases', () => {
     expect(result).toEqual(expected);
   });
 
-  it('refuses a Title slide with no pick and no note, and an Option it does not have', () => {
+  it('saves a Title slide set to Redesign with no note, and refuses an Option it does not have', () => {
     // ARRANGE
     const fields: [string, string][] = [
       ['pick:spent', '1a'],
@@ -304,10 +305,15 @@ describe('failure cases', () => {
     const withUnknown: [string, string][] = [...fields, ['pick:top', '0d']];
     const expected = [
       {
-        kind: 'rejected',
-        faults: [
-          { slide: 'top', message: 'The Title slide has no pick and no note: tick an Option or say what to try.' },
-        ],
+        kind: 'saved',
+        file: roundFile(1),
+        text: [
+          ...header(1),
+          '- `top` · design — picked: none',
+          '- `why--spent` · design — picked: 1a',
+          '- `why--quiet` · design — picked: 2b',
+          '',
+        ].join('\n'),
       },
       { kind: 'rejected', faults: [{ slide: 'top', message: 'The Title slide has no Option 0d.' }] },
     ];

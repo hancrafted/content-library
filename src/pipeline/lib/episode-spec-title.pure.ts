@@ -11,6 +11,7 @@ import { type CheerioAPI } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import {
+  anyPicked,
   checkOption,
   checkOptionMarks,
   FORM,
@@ -77,7 +78,10 @@ function checkTitleOptions($: CheerioAPI, article: Selection, approved: boolean)
     .map((figure) => $(figure));
   return [
     ...checkOptionMarks(figures, WHERE, { number: 0, approved, count: TITLE_SLIDE_OPTIONS }),
-    ...figures.flatMap((figure) => [...checkOption($, figure, TITLE_ANCHOR), ...checkSet(figure, sections)]),
+    ...figures.flatMap((figure) => [
+      ...checkOption($, figure, { slug: TITLE_ANCHOR, slidePicked: anyPicked(figures) }),
+      ...checkSet(figure, sections),
+    ]),
     ...unless(
       article.find(`textarea[form="${FORM}"][name="note:${TITLE_ANCHOR}"]`).length === 1,
       `${WHERE} has no <textarea form="${FORM}" name="note:${TITLE_ANCHOR}">.`,

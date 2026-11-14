@@ -39,13 +39,13 @@ function optionParts(figure: Selection) {
 /** One Option cloned from the template: the fragment's figure supplies its attributes, mock, caption and build notes. */
 function optionMarkup(
   figure: Selection,
-  { slug, template, locked }: { slug: string; template: string; locked: boolean },
+  { slug, template, locked, ticked }: { slug: string; template: string; locked: boolean; ticked: boolean },
 ): string {
   const id = figure.attr('data-option') ?? '';
   const { stage, caption, notes } = optionParts(figure);
   const pick = (box: Selection) => {
     box.attr({ name: `pick:${slug}`, value: id });
-    if (locked) box.attr('checked', '');
+    if (ticked) box.attr('checked', '');
   };
   return filledMarkup(template, { stage, caption, 'build-notes': notes, id: escape(id), pick }, (root) => {
     const kept = Object.entries(figure.attr() ?? {}).filter(([name]) => !OWN_ATTRIBUTES.test(name));
@@ -64,7 +64,11 @@ interface OptionsSource {
   locked: string | undefined;
 }
 
-/** One Slide's Options cloned from the Option template, the locked Option marked picked and ticked. */
+/**
+ * One Slide's Options cloned from the Option template. The locked Option is marked picked and ticked; with no lock
+ * the recommended Option is ticked, so the page starts on the recommendation and a save with no tick sent still
+ * goes with it.
+ */
 export function optionsMarkup({ slug, html, template, locked }: OptionsSource): string {
   const $ = load(html, null, false);
   const figures = $('figure[data-spec="option"]')
@@ -72,7 +76,15 @@ export function optionsMarkup({ slug, html, template, locked }: OptionsSource): 
     .map((figure) => $(figure) as Selection);
   const lock = figures.some((figure) => figure.attr('data-option') === locked) ? locked : undefined;
   return figures
-    .map((figure) => optionMarkup(figure, { slug, template, locked: figure.attr('data-option') === lock }))
+    .map((figure) => {
+      const isLocked = figure.attr('data-option') === lock;
+      return optionMarkup(figure, {
+        slug,
+        template,
+        locked: isLocked,
+        ticked: lock === undefined ? isRecommended(figure) : isLocked,
+      });
+    })
     .join('\n');
 }
 

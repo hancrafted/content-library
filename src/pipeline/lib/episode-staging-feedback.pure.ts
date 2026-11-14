@@ -16,12 +16,12 @@ const FEEDBACK_ITEM = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · (content|implementa
 
 /*
  * A Spec review (`via: spec`) has its own item form: per page Slide, and for the Title slide whose Options carry
- * the section slides, its picks, a pick of none needing a note, and one optional `visual-language` item carrying
+ * the section slides, its picks (none meaning Redesign), each with an optional note, and one optional `visual-language` item carrying
  * the Visual language note alone, and `brief--<heading-slug>` items, one note each on a Brief card heading. Two
  * items speak for the Spec as a whole: `page`, the general comment, and `next`, the action after the Gate.
  */
 const SPEC_SLIDE_ITEM = new RegExp(
-  `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none — \\S.*|\\d+[a-z](?:, \\d+[a-z])*(?: — \\S.*)?)$`,
+  `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none|\\d+[a-z](?:, \\d+[a-z])*)(?: — \\S.*)?$`,
 );
 const SPEC_BRIEF_ITEM = new RegExp(`^- \`(${BRIEF_KEYS.join('|')})\` · design — \\S.*$`);
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
@@ -57,7 +57,7 @@ function checkSpecFeedbackLine(line: string, anchors: FeedbackAnchors): string[]
   const item = SPEC_SLIDE_ITEM.exec(line);
   if (item === null)
     return [
-      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note" or "- \`page\` · design — note" or "- \`next\` · gate — redesign|approve": "${line}".`,
+      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none, then an optional — note" (\`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note" or "- \`page\` · design — note" or "- \`next\` · gate — redesign|approve": "${line}".`,
     ];
   return unknownAnchor(item[1], anchors);
 }
