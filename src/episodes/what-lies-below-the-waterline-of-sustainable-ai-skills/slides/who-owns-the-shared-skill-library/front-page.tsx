@@ -74,13 +74,16 @@ function MetadataInset({ heading, lines, note }: FrontPageProps['inset']) {
 function DarkCorner({ children }: { readonly children: ReactNode }) {
   return (
     <>
-      <div data-dark-corner className="absolute right-7 bottom-6 h-1/4 w-2/5">
+      <div
+        data-dark-corner
+        className="absolute right-3 bottom-3 h-32 w-[70%] @xl:right-7 @xl:bottom-6 @xl:h-1/4 @xl:w-2/5"
+      >
         <DarkCornerArt />
       </div>
       <p
         className={cn(
           CORNER_INK,
-          'absolute right-12 bottom-8 flex max-w-32 items-end gap-1 text-right text-caption italic',
+          'absolute right-6 bottom-5 flex max-w-28 items-end gap-1 text-right text-caption italic @xl:right-12 @xl:bottom-8 @xl:max-w-32',
         )}
       >
         {children}
@@ -98,7 +101,7 @@ export function FrontPage({ label, scope, title, rows, inset, darkCorner, classN
   return (
     <div data-motion="zoom" className={cn(styles.page, ART_CLASS, 'relative', className)}>
       <BinderArt />
-      <ZoneCard className="relative flex flex-col gap-3 bg-transparent! px-10 pt-8 pb-36 @xl:px-14">
+      <ZoneCard className="relative flex flex-col gap-3 bg-transparent! px-10 pt-8 pb-40 @xl:px-14 @xl:pb-36">
         <p className="flex flex-wrap items-center justify-between gap-2 text-caption text-muted-foreground">
           {label}
           <span className="rounded-full bg-primary px-3 py-0.5 font-semibold text-primary-foreground">{scope}</span>
