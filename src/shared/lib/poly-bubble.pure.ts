@@ -1,5 +1,5 @@
 /*
- * The geometry of one faceted air bubble (`PolyBubble`, src/shared/components/animations/poly-bubble.tsx), in the
+ * The geometry of one faceted air bubble (`PolyBubble`, src/shared/components/core-components/poly-bubble/poly-bubble.tsx), in the
  * Iceberg style's low-poly manner: light from the upper left, flat facets, one glint. Everything sits in the anchor
  * box, -10..10 on both axes, centred on the origin, in whole units: a unit is at most 2 px on the largest bubble,
  * and short numbers keep the page light, since every Section edge carries forty bubbles.

@@ -1,7 +1,7 @@
+import { PolyBubble } from '@/shared/components/core-components/poly-bubble/poly-bubble';
 import { bubbleField } from '@/shared/lib/bubble-field.pure';
 import type { CSSProperties } from 'react';
 import styles from './bubble-rise.module.css';
-import { PolyBubble } from './poly-bubble';
 
 /** About forty bubbles of mixed sizes (Iceberg feedback-2 grill, decision 12). */
 const FIELD = bubbleField(40);
