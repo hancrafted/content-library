@@ -1,5 +1,5 @@
 import { slide } from '@/episodes/components/slide-master/slide';
-import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { SlideBackdrop } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ViewToggle } from '@/episodes/components/slide-shared/agent-view/view-toggle';
 import { Character } from '@/episodes/components/slide-shared/character/character';
@@ -80,8 +80,11 @@ export const hero = slide({
       { name: t('agent.files.project.name'), role: t('agent.files.project.role') },
     ];
     return (
-      // The frame takes the Slide's free height, so the shared header sits at the top, in the sky.
-      <SlideFrame className="flex-1">
+      <>
+        {/* An empty box takes the Slide's free height, so the shared header sits at the top, in the sky. The drawing
+            and its words sit beside it, never in it: the entrance lifts each child of the Scene, and a lifted frame
+            would hold them to its own inset box, so they position against the Slide wrapper, full-bleed. */}
+        <div aria-hidden="true" data-hero-room className="flex-1" />
         <HeroDepthScene
           layers={{ Backdrop: SlideBackdrop }}
           label={t('label')}
@@ -114,7 +117,7 @@ export const hero = slide({
         >
           <Dive />
         </HeroDepthScene>
-      </SlideFrame>
+      </>
     );
   },
 });

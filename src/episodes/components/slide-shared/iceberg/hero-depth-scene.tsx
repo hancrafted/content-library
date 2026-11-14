@@ -30,7 +30,7 @@ const CLOUDS = [
 ] as const;
 const BERG = { x: 1010, scale: 0.8, keel: 900 } as const;
 
-/** The drawing: the Surface sky, each zone's water from the waterline down, the iceberg, sun rays, fish and whale. */
+/** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale clear of the ruler. */
 function Depth({ children }: { readonly children?: ReactNode }) {
   return (
     <>
@@ -55,8 +55,8 @@ function Depth({ children }: { readonly children?: ReactNode }) {
         scale={BERG.scale}
         depthScale={depthScaleForKeel(0, (BERG.keel - waterline) / BERG.scale)}
       />
-      <FishSchool x={330} y={762} />
-      <Whale x={300} y={915} scale={0.7} />
+      <FishSchool x={790} y={772} />
+      <Whale x={640} y={915} scale={0.7} />
       {children}
     </>
   );

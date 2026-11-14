@@ -100,6 +100,19 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps the drawing and its words out of any frame, so the entrance lift never holds them to an inset box', () => {
+    // ARRANGE
+    const expected = { inFrame: 0, beside: 2 };
+    // ACT
+    const $ = sceneOf('en');
+    const seen = {
+      inFrame: $('article').length,
+      beside: $('body').children('[data-slot="slide-backdrop"], [data-hero-overlay]').length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('rocks the ship, the Surface loop, and nothing else of the cast', () => {
     // ARRANGE
     const expected = 1;
