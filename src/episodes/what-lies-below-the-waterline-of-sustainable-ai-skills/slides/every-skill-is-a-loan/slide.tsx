@@ -4,10 +4,10 @@ import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import { CableStepper } from './cable-stepper';
-import type { ClampIcon } from './clamp';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './loan.module.css';
+import { SeaArt, type ClampIcon } from './sea-art';
 import { UpkeepStack } from './upkeep-stack';
 
 const CUNNINGHAM = { slug: 'cunningham-wycash', url: 'https://c2.com/doc/oopsla92.html' };
@@ -53,7 +53,8 @@ export const everySkillIsALoan = slide({
         zone="abyss"
         className={cn('rounded-2xl', styles.stage)}
         overlay={
-          <div className="grid gap-6 p-5 pb-20 @4xl:grid-cols-12 @4xl:gap-8 @4xl:p-8 @4xl:pb-28">
+          <div className="relative isolate grid gap-6 p-5 pb-20 @4xl:grid-cols-12 @4xl:gap-8 @4xl:p-8 @4xl:pb-28">
+            <SeaArt />
             <div className="@4xl:col-span-7">
               <CableStepper
                 label={t('statement')}
