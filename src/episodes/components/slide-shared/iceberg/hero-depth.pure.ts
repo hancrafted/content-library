@@ -6,7 +6,8 @@
  * tip that ends a fifth into the Twilight zone.
  */
 import { type IcebergPlacement, placeIcebergInBands } from './scenery/iceberg-placement.pure';
-import { ZONES, type Zone } from './zones.pure';
+import { type SeaFacet, seaFacets, WATER_CELL } from './zone-scene.pure';
+import { type Zone, ZONES } from './zones.pure';
 
 /** The zones under the waterline. */
 export type UnderwaterZone = Exclude<Zone, 'surface'>;
@@ -58,4 +59,26 @@ export function heroDepthBands({ height, waterline, depths }: HeroDepth): readon
     return band;
   });
   return [{ zone: 'surface', top: 0, bottom: waterline }, ...bands];
+}
+
+/** One underwater band of the hero: faceted across the drawing, flat across the bleed beside it. */
+export interface HeroWaterBand extends HeroBand {
+  readonly facets: readonly SeaFacet[];
+  readonly bleed: { readonly left: number; readonly width: number };
+}
+
+/**
+ * The hero's water under the waterline (feedback 2, decision 8): low poly across the drawing only, in the shared
+ * water cell, so its facets are about half of what they were; past both sides the bleed lies flat in the zone's
+ * colour, so a wider screen adds no facets.
+ */
+export function heroWater(depth: HeroDepth): readonly HeroWaterBand[] {
+  const bleed = heroBleed(depth);
+  return heroDepthBands(depth)
+    .filter(({ zone }) => zone !== 'surface')
+    .map((band, index) => ({
+      ...band,
+      facets: seaFacets({ width: depth.width, height: band.bottom - band.top, cell: WATER_CELL, seed: 5 + index * 6 }),
+      bleed,
+    }));
 }
