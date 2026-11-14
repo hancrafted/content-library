@@ -81,17 +81,17 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it("draws each morning once, in the Slide's own room, with the shared captain and pilot at the shared console", () => {
+  it("draws each morning in the Slide's own room, with the shared captain and pilot at the shared console", () => {
     // ARRANGE
-    const expected = { mornings: ['1', '2', '3'], rooms: 3, characters: 2, consoles: 1, mugs: ['1', '2', '3'] };
+    const expected = { mornings: ['1', '2', '3'], rooms: 6, characters: 2, consoles: 1, mugs: ['1', '2', '3'] };
     // ACT
     const $ = sceneOf();
-    const pictures = $('[data-panel] [data-morning]');
+    const pictures = $('[data-panel] [data-view="chat"] [data-morning]');
     const seen = {
       mornings: pictures.toArray().map((svg) => $(svg).attr('data-morning')),
       rooms: $('[data-panel] [data-room-art]').length,
-      characters: $('[data-panel]').first().find('[data-character]').length,
-      consoles: $('[data-panel]').first().find('[data-console]').length,
+      characters: $('[data-panel] [data-view="chat"]').first().find('[data-character]').length,
+      consoles: $('[data-panel] [data-view="chat"]').first().find('[data-console]').length,
       mugs: pictures.toArray().map((svg) => String($(svg).find('[data-mug]').length)),
     };
     // ASSERT

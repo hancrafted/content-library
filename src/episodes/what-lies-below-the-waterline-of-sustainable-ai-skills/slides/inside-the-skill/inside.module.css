@@ -73,14 +73,14 @@
   stroke: var(--room-shade);
 }
 
-.wall [data-tone='robot-lit'] {
-  fill: var(--robot-lit);
-  stroke: var(--robot-lit);
-}
-
-.wall [data-tone='robot'] {
-  fill: var(--robot);
-  stroke: var(--robot);
+/*
+ * The console's edge along the foot (Spec Option 16a): a thin lit rim over the console's lit face, its left third
+ * lighter still, as the Option's lit facet. A fixed height, so a tall Scene never thickens it.
+ */
+.consoleEdge {
+  background:
+    linear-gradient(var(--robot-glint) 0 3px, transparent 3px),
+    linear-gradient(100deg, var(--robot-glint) 0 30%, var(--robot-lit) 30%);
 }
 
 .objects [data-tone='robot'] {
@@ -216,7 +216,8 @@
 }
 
 /*
- * The one emphasis motion (Spec Option 16a): step 4 fills `primary`, then the species guide slides out of the sleeve
+ * The one emphasis motion (Spec Option 16a): step 4 fades in already filled `primary` (opacity only: its words turn
+ * light with the fill, so no fill can fade in under them), then the species guide slides out of the sleeve
  * to the right. The base rules are the end state, so a still frame and reduced motion show it lit and slid out.
  */
 @media (prefers-reduced-motion: no-preference) {
@@ -235,8 +236,7 @@
 
 @keyframes step-lit {
   from {
-    background-color: var(--card);
-    color: var(--card-foreground);
+    opacity: 0;
   }
 }
 

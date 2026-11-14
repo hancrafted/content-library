@@ -7,9 +7,6 @@ import { AFTERNOON_WINDOW, DAWN_WINDOW, DUSK_WINDOW } from './window-facets';
 /** One lifted facet: its tone and its SVG path. */
 type ArtFacet = readonly [tone: string, d: string];
 
-/** A panel picture's drawing space, the Spec's: 300 by 236, figures standing on the floor line at 210. */
-export const PANEL_ART = { width: 300, height: 236, floor: 210 } as const;
-
 /** The robot's cable, from the surface down to where the robot hangs. */
 const CABLE = { x: 150, bottom: 110 } as const;
 

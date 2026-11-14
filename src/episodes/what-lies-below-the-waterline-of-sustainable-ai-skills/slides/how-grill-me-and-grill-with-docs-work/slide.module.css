@@ -135,9 +135,9 @@
 }
 
 /*
- * The one emphasis motion, once on entry: the current carries Monday's files into Thursday's run, then "Core" writes
- * into Thursday's glossary, its row fills primary and the "+1 term" tag appears. The base rules are the end state,
- * which reduced motion and a still frame show; nothing loops.
+ * The one emphasis motion, once on entry: the current carries Monday's files into Thursday's run, then "Core" fades
+ * into Thursday's glossary already filled primary (opacity only: its words turn light with the fill) and the "+1 term"
+ * tag appears. The base rules are the end state, which reduced motion and a still frame show; nothing loops.
  */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .current {
@@ -163,13 +163,6 @@
 @keyframes write {
   from {
     opacity: 0;
-    background: transparent;
-    color: inherit;
-  }
-  40% {
-    opacity: 1;
-    background: transparent;
-    color: inherit;
   }
 }
 

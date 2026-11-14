@@ -22,6 +22,7 @@ const emote = (props: EmoteProps) => {
     lineBreaks: $('[data-says] br').length,
     bubbleAt: $('[data-says-bubble] > g').attr('transform'),
     bubbleScaled: $('[data-says-bubble] > g > g').attr('class'),
+    wrapWidth: $('[data-says-bubble] [overflow="visible"]').attr('width'),
     motions: $('[data-motion]')
       .toArray()
       .map((part) => $(part).attr('data-motion')),
@@ -89,6 +90,16 @@ describe('success cases', () => {
     const { bubbleScaled } = emote(props);
     // ASSERT
     expect(bubbleScaled).toContain(expected);
+  });
+
+  it('rises by the lift and wraps at the width a Scene gives its bubble, so two facing speakers can stack', () => {
+    // ARRANGE
+    const props = { says: 'Which depth?', at: { x: 0, y: 0 }, bubble: { width: 160, lift: 50 } };
+    const expected = { bubbleAt: 'translate(10 -64)', wrapWidth: '160' };
+    // ACT
+    const { bubbleAt, wrapWidth } = emote(props);
+    // ASSERT
+    expect({ bubbleAt, wrapWidth }).toEqual(expected);
   });
 });
 

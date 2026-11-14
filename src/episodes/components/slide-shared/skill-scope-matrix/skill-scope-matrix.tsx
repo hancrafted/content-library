@@ -200,19 +200,22 @@ export interface SkillScopeSquareProps {
 
 /**
  * One square of the skill scope matrix, cropped out for a later Slide that comes back to it: the same square card, a
- * 2×2 locator naming where it sits, and its row and column above it.
+ * 2×2 locator naming where it sits, and its row and column above it, on a plate of the card's paper so they read on
+ * any zone's water, as the square does.
  */
 export function SkillScopeSquare({ back, locator, care, axes, square, className }: SkillScopeSquareProps) {
   return (
     <div data-matrix className={cn('flex flex-col gap-3', className)}>
-      <p className="flex items-center gap-3 text-caption">
-        <Locator at={square.id} label={locator} />
-        <span>{back}</span>
-      </p>
-      <p className="flex flex-wrap justify-between gap-x-3 text-caption text-muted-foreground">
-        <span>{axes.who}</span>
-        <span>{axes.where}</span>
-      </p>
+      <div data-matrix-axes className={cn(styles.plate, 'flex flex-col gap-2 rounded-xl px-3 py-2')}>
+        <p className="flex items-center gap-3 text-caption">
+          <Locator at={square.id} label={locator} />
+          <span>{back}</span>
+        </p>
+        <p className="flex flex-wrap justify-between gap-x-3 text-caption text-muted-foreground">
+          <span>{axes.who}</span>
+          <span>{axes.where}</span>
+        </p>
+      </div>
       <SquareCard square={square} care={care} />
     </div>
   );

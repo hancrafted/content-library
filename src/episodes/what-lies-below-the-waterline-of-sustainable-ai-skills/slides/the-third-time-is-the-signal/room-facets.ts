@@ -6,6 +6,10 @@
  */
 
 /** A tone of the drawing; `room-art.module.css` gives each its fill. */
+
+/** The room's drawing space, the Spec's: 360 by 280, figures standing on the floor line at 256. */
+export const ROOM_ART = { width: 360, height: 280, floor: 256 } as const;
+
 export type ArtTone =
   | 'room-shade'
   | 'room-lit'

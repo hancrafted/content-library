@@ -106,6 +106,7 @@ export const whoOwnsTheSharedSkillLibrary = slide({
       <ZoneScene
         zone="midnight"
         iceberg="none"
+        openWater={false}
         label={t('alt.scene')}
         className={cn(styles.scene, 'rounded-2xl p-4 shadow-md @xl:p-6')}
         overlay={

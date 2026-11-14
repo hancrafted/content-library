@@ -159,8 +159,8 @@ function ProcedureCard() {
   );
 }
 
-/** The cabin: its walls, the brief, the console and manual, the crew and the card, clipped to the close-up's frame. */
-function Cabin({ request, clipId }: { readonly request: string; readonly clipId: string }) {
+/** The cabin: its walls, the brief, the console and manual, the pilot and the card, clipped to the close-up's frame. */
+function Cabin({ clipId }: { readonly clipId: string }) {
   const seat = consoleLayout({ width: CONSOLE.width, flip: true }).seat;
   return (
     <g data-cabin clipPath={`url(#${clipId})`}>
@@ -170,9 +170,6 @@ function Cabin({ request, clipId }: { readonly request: string; readonly clipId:
       <Manual />
       <g transform={`translate(${CONSOLE.x + seat.x * CONSOLE.scale} ${FLOOR_Y}) scale(${CREW_SCALE})`}>
         <Character preset={pilot} pose="sit" flip />
-      </g>
-      <g transform={`translate(${CAPTAIN_X} ${FLOOR_Y}) scale(${CREW_SCALE})`}>
-        <Character preset={captain} pose="point" flip says={request} />
       </g>
       <Travel from={CARD_FROM} duration={CARD_MS} delay={CARD_DELAY_MS}>
         <ProcedureCard />
@@ -223,10 +220,17 @@ export function CloseUp({ request }: CloseUpProps) {
       <LensLines />
       <Ship transform={`translate(${SHIP.x} ${SURFACE_WATERLINE}) scale(${SHIP.scale})`} />
       <LensRing />
-      <Cabin request={request} clipId={clipId} />
+      <Cabin clipId={clipId} />
       <rect {...frame} strokeWidth={FRAME.width} data-tone="cut" />
       <rect {...frame} strokeWidth={FRAME.edge} data-tone="cut-edge" />
       <Leaders />
+      {/*
+        The captain stands inside the frame but outside its clip, over the leaders: on a phone her bubble outgrows the
+        close-up, and its words stay on top.
+      */}
+      <g transform={`translate(${CAPTAIN_X} ${FLOOR_Y}) scale(${CREW_SCALE})`}>
+        <Character preset={captain} pose="point" flip says={request} />
+      </g>
     </g>
   );
 }

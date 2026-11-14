@@ -2,9 +2,6 @@ import type { ReactNode } from 'react';
 import styles from './room-art.module.css';
 import { ROOM, type ArtFacet } from './room-facets';
 
-/** The room's drawing space, the Spec's: 360 by 280, figures standing on the floor line at 256. */
-export const ROOM_ART = { width: 360, height: 280, floor: 256 } as const;
-
 /** The A-frame's head over the rail, where the cable runs down into the sea. */
 const CABLE = { x: 313, top: 40, rail: 74 } as const;
 
