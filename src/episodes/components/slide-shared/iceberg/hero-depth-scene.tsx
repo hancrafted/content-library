@@ -62,7 +62,7 @@ function Depth({ children }: { readonly children?: ReactNode }) {
   );
 }
 
-/** The ruler drawn down the Scene's left edge: each zone's plain name at its band, the Surface's tile lit. */
+/** The ruler drawn down the Scene at the left inset: each zone's plain name at its band, the Surface's tile lit. */
 function Ruler({ zones, label }: { readonly zones: ZoneWords; readonly label: string }) {
   return (
     <ol aria-label={label} data-hero-ruler className={styles.ruler}>
@@ -141,7 +141,7 @@ function Marker({ marker: { text, x, y } }: Pick<HeroDepthSceneProps, 'marker'>)
 /**
  * The Title slide's full-bleed hero in the Iceberg style (the Spec's picked Title-slide Option 0a): one drawing of the
  * whole depth fills the Slide from edge to edge as its Backdrop, under the hidden table of contents too, so the
- * Slide's title and lede sit in its sky. Over it, the depth ruler down the left edge, each zone's label beside its
+ * Slide's title and lede sit in its sky. Over it, the depth ruler down the left inset, clear of the table of contents, each zone's label beside its
  * band, and the "you are here" pill under the figure the Slide names. The drawing fills its box from the bottom
  * (`slice`); the ruler and the pill follow it through the same scale, read from the overlay's container size.
  */

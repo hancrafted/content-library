@@ -17,7 +17,6 @@ export const sharingIt = slide({
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
-        robotAt="hanging"
         section={6}
         wide
         statement={t('aiStatement')}

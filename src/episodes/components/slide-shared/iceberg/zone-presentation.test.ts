@@ -76,6 +76,18 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps the scene behind a section slide alone: a page Slide draws only its rail, whatever scene it is handed', () => {
+    // ARRANGE
+    const expected = { scenes: 0, rails: 1 };
+    const scene = createElement('svg', { 'data-test-scene': '' });
+    // ACT
+    const { rear } = zonePresentation({ sections: SECTIONS, section: 3, kind: 'page', scene });
+    const $ = load(renderToStaticMarkup(createElement('div', null, rear)));
+    const seen = { scenes: $('[data-test-scene]').length, rails: $('[data-depth-rail]').length };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses a Section the Episode does not have', () => {
     // ARRANGE
     const expected = /No Section 8 of 8/;
@@ -87,6 +99,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('draws the scene of a section slide full-bleed behind it, under its rail, its text light where the zone is dark', () => {
+    // ARRANGE
+    const light = 'var(--on-brand-accent)';
+    const expected = { order: ['scene', 'rail'], foreground: [undefined, undefined, undefined, light, light] };
+    const scene = createElement('svg', { 'data-test-scene': '' });
+    // ACT
+    const at = (section: number) => zonePresentation({ sections: SECTIONS, section, kind: 'section', scene });
+    const $ = load(renderToStaticMarkup(createElement('div', null, at(0).rear)));
+    const seen = {
+      order: $('[data-test-scene], [data-depth-rail]')
+        .toArray()
+        .map((element) => ($(element).is('[data-test-scene]') ? 'scene' : 'rail')),
+      foreground: [0, 2, 4, 6, 7].map((section) => at(section).style['--foreground']),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('leaves the page text alone at every depth, the dark zones too, while zone backgrounds are paused', () => {
     // ARRANGE
     const expected = [undefined, undefined, undefined, undefined];

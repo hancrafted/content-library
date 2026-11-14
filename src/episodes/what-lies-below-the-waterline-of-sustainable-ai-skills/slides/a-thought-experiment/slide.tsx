@@ -18,7 +18,6 @@ export const aThoughtExperiment = slide({
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
-        robotAt="deck"
         section={0}
         tag={t('tag')}
         statement={t('aiStatement')}

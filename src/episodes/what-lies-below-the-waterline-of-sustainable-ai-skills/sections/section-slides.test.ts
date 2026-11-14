@@ -11,8 +11,9 @@ import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 /*
  * The section slides of "What lies below the waterline of sustainable AI skills", as the approved Spec gives them: one
  * per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one
- * echo of picked Title-slide Option 0a: the Section's card at its zone's depth, drawn by ZoneScene with the robot on
- * its cable and the whole depth ruler, the Section's tile lit (design-ADR-0025).
+ * echo of picked Title-slide Option 0a: the Section's card at its zone's depth and the whole depth ruler, the Section's
+ * tile lit, over its zone drawn by ZoneScene with the robot on its cable, full-bleed behind the Slide as its rear
+ * decoration, like the Title slide's hero (design-ADR-0025).
  */
 
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
@@ -32,6 +33,11 @@ function sceneOf(slug: string, locale: Locale = 'en') {
     header: 'shared',
   });
   return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
+}
+
+/** A section slide's rear decoration, the full-bleed drawing behind it, as static HTML. */
+function rearOf(slide: Slide) {
+  return load(renderToStaticMarkup(createElement(Fragment, null, slide.presentation?.rear)));
 }
 
 /** A section slide's title and Voice script segment titles in one locale. */
@@ -78,7 +84,19 @@ describe('success cases', () => {
     // ARRANGE
     const expected = ['surface', 'surface', 'sunlit', 'sunlit', 'twilight', 'twilight', 'midnight', 'abyss'];
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-scene]').attr('data-depth-zone'));
+    const actual = OPENERS.map((slide) => rearOf(slide)('[data-scene]').attr('data-depth-zone'));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('draws each zone full-bleed behind its section slide, never in the inset Foreground with the words', () => {
+    // ARRANGE
+    const expected = OPENERS.map(() => ({ behind: 1, foreground: 0 }));
+    // ACT
+    const actual = OPENERS.map((slide) => ({
+      behind: rearOf(slide)('[data-scene] svg').length,
+      foreground: sceneOf(slide.slug)('[data-scene]').length,
+    }));
     // ASSERT
     expect(actual).toEqual(expected);
   });

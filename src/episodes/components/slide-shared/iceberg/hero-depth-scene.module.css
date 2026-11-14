@@ -3,7 +3,7 @@
  * units. The drawing fills the Slide from the bottom (`xMidYMax slice`), so one scale maps it: the larger of the box's
  * width and height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so
  * `cq` units read that box: a point (x, y) sits at `50cqw + (x - width / 2) * scale` across and
- * `100cqh - (height - y) * scale` down. The ruler's labels take the zone's ink: dark on the light zones, light on the
+ * `100cqh - (height - y) * scale` down. The ruler starts at the left inset, where the Foreground starts. The ruler's labels take the zone's ink: dark on the light zones, light on the
  * two zones dark in both themes.
  */
 
@@ -26,7 +26,8 @@
 
 .zone {
   position: absolute;
-  left: max(1rem, 3cqw);
+  /* Inside the Content area's left inset, so the labels never sit under the table of contents as it fades in. */
+  left: var(--inset-l, 1rem);
   top: calc(100cqh - (var(--hero-height) - var(--at-y)) * var(--hero-scale));
   translate: 0 -50%;
   display: flex;

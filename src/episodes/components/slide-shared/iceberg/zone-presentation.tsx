@@ -9,6 +9,8 @@ export interface ZonePresentationInput {
   readonly section: number;
   /** A section slide descends into its zone through bubbles and shows the whole ruler; a page Slide carries the rail. */
   readonly kind: 'section' | 'page';
+  /** A section slide's drawing, laid full-bleed behind it as its rear decoration, under the rail; a page Slide has none. */
+  readonly scene?: ReactNode;
 }
 
 /** The Slide's surface and text in its zone; plain custom properties, as `presentation.style` takes. */
@@ -46,23 +48,32 @@ function zoneSurface(zone: Zone): ZoneStyle {
   return { '--slide-surface': zoneToken(zone), ...(isDarkZone(zone) ? LIGHT_TEXT : {}) };
 }
 
+/** A section slide's text sits over its scene, so it turns light where the zone is dark in both themes. */
+function sceneText(zone: Zone, scene: ReactNode): ZoneStyle {
+  return scene !== undefined && isDarkZone(zone) ? LIGHT_TEXT : {};
+}
+
 /**
  * A Slide's place in the Iceberg style (design guide, Iceberg): its surface from `zoneSurface`, which keeps the page's
  * own background while zone backgrounds are paused, the one `--zone-<zone>` token once they return. A page Slide carries the
  * slim rail at its left edge, its Section lit. A section slide descends into the zone through the `bubbles` ink and
- * shows the whole ruler, so its rail shows on phones only, where the ruler is hidden. A Slide names its Section, never
+ * shows the whole ruler, so its rail shows on phones only, where the ruler is hidden; its `scene` fills it from edge to
+ * edge behind its words, like the Title slide's hero. A Slide names its Section, never
  * a colour: `presentation: zonePresentation({ sections, section: 4, kind: 'page' })`.
  */
-export function zonePresentation({ sections, section, kind }: ZonePresentationInput): ZonePresentation {
+export function zonePresentation({ sections, section, kind, scene }: ZonePresentationInput): ZonePresentation {
   const zone = zoneOf(sections, section);
-  const style = zoneSurface(zone);
-  const rear = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
-  return kind === 'section'
-    ? {
-        style,
-        enter: { effect: 'bubbles', style: { '--slide-transition-bubble': zoneToken(zone) } },
-        rear,
-        rearMobile: true,
-      }
-    : { style, rear, rearMobile: true };
+  const rail = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
+  if (kind === 'page') return { style: zoneSurface(zone), rear: rail, rearMobile: true };
+  return {
+    style: { ...zoneSurface(zone), ...sceneText(zone, scene) },
+    enter: { effect: 'bubbles', style: { '--slide-transition-bubble': zoneToken(zone) } },
+    rear: (
+      <>
+        {scene}
+        {rail}
+      </>
+    ),
+    rearMobile: true,
+  };
 }

@@ -17,7 +17,6 @@ export const whatStaysBeside = slide({
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
-        robotAt="hanging"
         section={5}
         wide
         tilt="right"
