@@ -6,8 +6,9 @@ import { createHash } from 'node:crypto';
  * record with the current sources, and a mismatch fails a test until the template is regenerated.
  *
  * The hash covers the files that decide what a generated template contains:
- * - `skills/to-decision-html/SKILL.md` and every file under `skills/to-decision-html/references/`: the skill's
- *   instructions and the references they load;
+ * - `skills/to-decision-html/SKILL.md`, every file under `skills/to-decision-html/references/` and every file under
+ *   `skills/to-decision-html/assets/`: the skill's instructions, the references they load and the assets (the
+ *   toolbar) they tell a page to copy in;
  * - `skills/new-episode/references/spec-calibration.md`, without its "Regenerating the template" section: the
  *   procedure for regenerating changes nothing the template must hold, and the failure message points there.
  *

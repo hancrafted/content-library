@@ -33,12 +33,14 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('reads SKILL.md and every reference of the skill', () => {
+  it('reads SKILL.md, every reference and every asset of the skill, and nothing else', () => {
     // ARRANGE
-    const expected = ['SKILL.md', 'references/diagrams.md', 'references/feedback-contract.md'];
+    const expected = ['SKILL.md', 'references/diagrams.md', 'references/feedback-contract.md', 'assets/toolbar.html'];
     // ACT
     const files = Object.keys(readTemplateSources().skill);
-    const outside = files.filter((file) => file !== 'SKILL.md' && !file.startsWith('references/'));
+    const outside = files.filter(
+      (file) => file !== 'SKILL.md' && !file.startsWith('references/') && !file.startsWith('assets/'),
+    );
     // ASSERT
     expect(files).toEqual(expect.arrayContaining(expected));
     expect(outside).toEqual([]);

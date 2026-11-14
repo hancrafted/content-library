@@ -45,7 +45,7 @@ const TEMPLATE = `<!doctype html>
     <script type="application/json" id="spec-meta" data-slot="meta">{}</script>
   </head>
   <body>
-    <div class="spec-toolbar" role="toolbar"><button type="button" data-preset="fit">Fit</button></div>
+    <div class="dh-toolbar" role="toolbar" data-toolbar><button type="button" data-preset="fit">Fit</button></div>
     <div class="spec-shell">
       <nav class="spec-outline" data-slot="outline"></nav>
       <main class="spec-page">
@@ -205,7 +205,7 @@ describe('success cases', () => {
 
     it('leaves out the toolbar, the review form, the scroll buttons, the templates and every bare script of the template', () => {
       // ARRANGE
-      const left = ['.spec-toolbar', '.spec-scroll', '#spec-review', 'template', '#spec-meta'];
+      const left = ['[data-toolbar]', '.spec-scroll', '#spec-review', 'template', '#spec-meta'];
       // ACT
       const $ = load(previewPage(TEMPLATE, CLEAN, DESKTOP));
       const found = left.filter((selector) => $(selector).length > 0);

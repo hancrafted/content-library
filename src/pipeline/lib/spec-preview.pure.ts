@@ -126,7 +126,7 @@ function slideMarkup(slug: string, html: string, templates: { item: string; opti
 export function previewPage(template: string, fragment: string, preset: Preset): string {
   const $ = load(template);
   const templates = { item: templateOf($, 'item'), option: templateOf($, 'option') };
-  $('template, script, .spec-toolbar, .spec-scroll, #spec-review').remove();
+  $('template, script, [data-toolbar], .spec-scroll, #spec-review').remove();
   const slides = fragmentSlides(fragment).map(({ slug, html }) => slideMarkup(slug, html, templates));
   fillIn($, {
     'page-title': (element) => void element.text('Spec preview'),

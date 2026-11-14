@@ -15,6 +15,7 @@ const SOURCES: TemplateSources = {
   skill: {
     'SKILL.md': '# To decision HTML\n\nWrite the page.\n',
     'references/feedback-contract.md': '# Feedback\n\nThree lines.\n',
+    'assets/toolbar.html': '<div>Toolbar.</div>\n',
   },
   calibration: [
     '# Spec calibration',
@@ -70,6 +71,10 @@ describe('failure cases', () => {
       'a skill reference was added',
       { ...SOURCES, skill: { ...SOURCES.skill, 'references/new.md': 'A new reference.\n' } },
     ],
+    [
+      'a skill asset changed',
+      { ...SOURCES, skill: { ...SOURCES.skill, 'assets/toolbar.html': '<div>Changed.</div>\n' } },
+    ],
     ['the calibration changed', { ...SOURCES, calibration: SOURCES.calibration.replace('1920', '1280') }],
   ])('fails when %s, naming the regeneration section', (_name, current) => {
     // ARRANGE
@@ -103,6 +108,7 @@ describe('edge cases', () => {
     // ARRANGE
     const reordered: TemplateSources = {
       skill: {
+        'assets/toolbar.html': '<div>Toolbar.</div>\r\n',
         'references/feedback-contract.md': '# Feedback\r\n\r\nThree lines.\r\n',
         'SKILL.md': '# To decision HTML\r\n\r\nWrite the page.\r\n',
       },

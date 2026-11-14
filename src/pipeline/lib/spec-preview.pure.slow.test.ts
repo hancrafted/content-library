@@ -39,6 +39,19 @@ describe('success cases', () => {
     ).toEqual(expected);
   });
 
+  it('offers in the template toolbar every preset of the calibration, and the full column besides, by name and width', () => {
+    // ARRANGE
+    const calibrated = readPresets(readFileSync(CALIBRATION, 'utf8')).map(({ name, width }) => ({ id: name, width }));
+    const $ = load(readFileSync(TEMPLATE, 'utf8'));
+    // ACT
+    const offered = JSON.parse($('script[data-toolbar-presets]').text()) as { id: string; width?: number }[];
+    // ASSERT
+    expect(offered.map(({ id, width }) => ({ id, width })).filter(({ width }) => width !== undefined)).toEqual(
+      calibrated,
+    );
+    expect(offered.filter(({ width }) => width === undefined).map(({ id }) => id)).toEqual(['fit']);
+  });
+
   it('builds the preview page of the checked-in template at each preset with that preset on the page', () => {
     // ARRANGE
     const presets = readPresets(readFileSync(CALIBRATION, 'utf8'));
