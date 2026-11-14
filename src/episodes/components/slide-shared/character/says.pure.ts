@@ -106,3 +106,27 @@ export function saysBox({
   const bottom = head.y + (place.bottom - lift) * figureScale;
   return { x: facing === 'left' ? near - width : near, y: bottom - height, width, height };
 }
+
+/** The air a bubble keeps from its picture's edge, in screen pixels. */
+const ROOM_GAP_PX = 4;
+
+export interface SaysRoomInput {
+  /** The side the bubble rises on: 1 to the right of the head, its left edge anchored; -1 to the left, its right. */
+  readonly side: 1 | -1;
+  /** The bubble's drawn edges in screen pixels, and screen pixels per CSS pixel of its words (scale and fit). */
+  readonly bubble: { readonly left: number; readonly right: number; readonly drawnPerCss: number };
+  /** The picture's drawn edges in screen pixels. */
+  readonly picture: { readonly left: number; readonly right: number };
+}
+
+/**
+ * The widest the bubble's words may wrap, in their own CSS pixels, so a bubble turned up by the fit stays inside its
+ * picture: the room between its anchored edge and the picture's far edge. `undefined` when it already fits, or in a
+ * hidden picture; then the bubble keeps its own width.
+ */
+export function saysRoom({ side, bubble, picture }: SaysRoomInput): number | undefined {
+  if (!(bubble.drawnPerCss > 0)) return undefined;
+  if (bubble.left >= picture.left + ROOM_GAP_PX && bubble.right <= picture.right - ROOM_GAP_PX) return undefined;
+  const room = side === 1 ? picture.right - ROOM_GAP_PX - bubble.left : bubble.right - picture.left - ROOM_GAP_PX;
+  return Math.max(0, room) / bubble.drawnPerCss;
+}

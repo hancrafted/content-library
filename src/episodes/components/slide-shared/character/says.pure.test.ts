@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { saysBox, saysFit } from './says.pure';
+import { saysBox, saysFit, saysRoom } from './says.pure';
 
 /*
  * The shared speech bubble's size rule (decision 53): its words never draw smaller than the caption role they are set
@@ -15,6 +15,19 @@ describe('success cases', () => {
     const fit = saysFit(phone);
     // ASSERT
     expect(fit).toBe(expected);
+  });
+
+  it('leaves a bubble that stays inside its picture free to take its own width', () => {
+    // ARRANGE
+    const inside = {
+      side: 1,
+      bubble: { left: 20, right: 200, drawnPerCss: 1 },
+      picture: { left: 0, right: 340 },
+    } as const;
+    // ACT
+    const room = saysRoom(inside);
+    // ASSERT
+    expect(room).toBeUndefined();
   });
 
   it('leaves words alone that already draw at their caption size or larger', () => {
@@ -54,6 +67,25 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('gives a bubble that runs past the picture only the room left between its anchored edge and the picture edge', () => {
+    // ARRANGE
+    const left = {
+      side: -1,
+      bubble: { left: -30, right: 190, drawnPerCss: 2 },
+      picture: { left: 0, right: 340 },
+    } as const;
+    const right = {
+      side: 1,
+      bubble: { left: 200, right: 420, drawnPerCss: 2 },
+      picture: { left: 0, right: 340 },
+    } as const;
+    const expected = { left: 93, right: 68 };
+    // ACT
+    const seen = { left: saysRoom(left), right: saysRoom(right) };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('refuses to measure a bubble with no words, as the emote draws none', () => {
     // ARRANGE
     const words = '   ';
@@ -66,6 +98,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('leaves the width alone in a hidden picture, where the bubble draws at no size', () => {
+    // ARRANGE
+    const hidden = { side: 1, bubble: { left: 0, right: 0, drawnPerCss: 0 }, picture: { left: 0, right: 0 } } as const;
+    // ACT
+    const room = saysRoom(hidden);
+    // ASSERT
+    expect(room).toBeUndefined();
+  });
+
   it('grows the box in Scene units on a phone, where the fit turns the words up', () => {
     // ARRANGE
     const words = 'Nice to meet you.';

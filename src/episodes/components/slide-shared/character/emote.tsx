@@ -139,7 +139,7 @@ function SpeechBubble({ words, mood, facing, place }: BubbleProps) {
   return (
     <g data-says-bubble data-motion="emote" className={styles.pop}>
       <g transform={`translate(${x * side} ${bottom})`}>
-        <SaysFit>
+        <SaysFit side={side}>
           <Words words={words} side={side} width={place?.width ?? BUBBLE.width} />
         </SaysFit>
       </g>

@@ -40,3 +40,8 @@
   scale: calc(var(--says-scale, 1) * var(--says-fit, 1));
   transform-origin: 0 0;
 }
+
+/* Turned up on a phone, the words wrap inside the room `SaysFit` leaves them, so the bubble stays in its picture. */
+.saysScale [data-says] {
+  max-width: var(--says-room, none);
+}
