@@ -1,50 +1,179 @@
 /*
- * "Beside the skill" (Option 17a): the wall's facets, the two sheets, the dive's marks and the one emphasis motion.
- * No raw colour (FE-011): the wall mixes `--zone-surface` with `--card`, `--on-brand-accent` (white) and `--overlay`
- * (black); the skill's paper warms `--card` with `--bulb`; the plan cools it with `--zone-surface`. `--primary` marks
- * the one line and today's row. Dark mode only retunes the mixes.
+ * Slide token file of "Beside the skill" (FE-011 §2): the control-room wall, floor and sheets, and site 7's water and
+ * seabed, in the approved Spec Option 17a's own tones (feedback 3, decision 46), then the one emphasis motion. Dark
+ * values are the Spec's; dark mode is tuned later (decision 32). `--primary` marks the one line and today's row.
  */
 
-.wall {
-  --wall-lit: color-mix(in oklab, var(--zone-surface) 30%, var(--on-brand-accent));
-  --wall: color-mix(in oklab, var(--zone-surface) 42%, var(--on-brand-accent));
-  --wall-shade: color-mix(in oklab, var(--zone-surface) 55%, var(--on-brand-accent));
-  --floor: color-mix(in oklab, var(--zone-surface) 50%, var(--overlay));
+.art {
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --floor-lit: oklch(0.72 0.025 240);
+  --floor: oklch(0.66 0.028 244);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --drop: oklch(0.3 0.04 255 / 0.18);
+  --plan-lit: oklch(0.97 0.03 200);
+  --plan: oklch(0.93 0.04 205);
+  --plan-shade: oklch(0.86 0.05 210);
+  --plan-rule: oklch(0.7 0.06 220);
+  --tape: oklch(0.92 0.06 95 / 0.8);
+  --sea-surface-lit: oklch(0.74 0.09 212);
+  --sea-surface: oklch(0.69 0.1 218);
+  --sea-sunlit-lit: oklch(0.62 0.11 228);
+  --sea-sunlit: oklch(0.575 0.115 234);
+  --sea-twilight-lit: oklch(0.48 0.11 250);
+  --sea-twilight: oklch(0.435 0.105 255);
+  --ray: oklch(0.97 0.06 200 / 0.18);
+  --bed-lit: oklch(0.42 0.04 70);
+  --bed: oklch(0.34 0.035 60);
+  --bed-shade: oklch(0.27 0.03 50);
+  --glow: oklch(0.99 0.03 200);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
 }
 
-:global(.dark) .wall {
-  --wall-lit: color-mix(in oklab, var(--zone-surface) 55%, var(--overlay));
-  --wall: color-mix(in oklab, var(--zone-surface) 45%, var(--overlay));
-  --wall-shade: color-mix(in oklab, var(--zone-surface) 36%, var(--overlay));
-  --floor: color-mix(in oklab, var(--zone-surface) 22%, var(--overlay));
+:global(.dark) .art {
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --floor-lit: oklch(0.25 0.02 255);
+  --floor: oklch(0.22 0.02 258);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --drop: oklch(0.1 0.02 260 / 0.4);
+  --plan-lit: oklch(0.86 0.03 200);
+  --plan: oklch(0.8 0.035 205);
+  --plan-shade: oklch(0.72 0.045 210);
+  --plan-rule: oklch(0.55 0.05 220);
+  --tape: oklch(0.8 0.06 95 / 0.7);
+  --sea-surface-lit: oklch(0.44 0.075 222);
+  --sea-surface: oklch(0.405 0.078 226);
+  --sea-sunlit-lit: oklch(0.37 0.075 236);
+  --sea-sunlit: oklch(0.34 0.075 240);
+  --sea-twilight-lit: oklch(0.3 0.065 254);
+  --sea-twilight: oklch(0.27 0.06 258);
+  --ray: oklch(0.8 0.08 200 / 0.12);
+  --bed-lit: oklch(0.36 0.035 70);
+  --bed: oklch(0.29 0.03 60);
+  --bed-shade: oklch(0.23 0.025 50);
+  --glow: oklch(0.9 0.08 200);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
 }
 
-.wall [data-tone='wall-lit'] {
-  fill: var(--wall-lit);
+/* Each opaque facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
 }
 
-.wall [data-tone='wall'] {
-  fill: var(--wall);
+.art [data-tone='room-lit'] {
+  fill: var(--room-lit);
+  stroke: var(--room-lit);
 }
-
-.wall [data-tone='wall-shade'] {
-  fill: var(--wall-shade);
+.art [data-tone='room'] {
+  fill: var(--room);
+  stroke: var(--room);
 }
-
-.wall [data-tone='floor'] {
+.art [data-tone='room-shade'] {
+  fill: var(--room-shade);
+  stroke: var(--room-shade);
+}
+.art [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+  stroke: var(--floor-lit);
+}
+.art [data-tone='floor'] {
   fill: var(--floor);
+  stroke: var(--floor);
+}
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+.art [data-tone='plan-lit'] {
+  fill: var(--plan-lit);
+  stroke: var(--plan-lit);
+}
+.art [data-tone='plan'] {
+  fill: var(--plan);
+  stroke: var(--plan);
+}
+.art [data-tone='plan-shade'] {
+  fill: var(--plan-shade);
+  stroke: var(--plan-shade);
+}
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--sea-surface-lit);
+  stroke: var(--sea-surface-lit);
+}
+.art [data-tone='sea-surface'] {
+  fill: var(--sea-surface);
+  stroke: var(--sea-surface);
+}
+.art [data-tone='sea-sunlit-lit'] {
+  fill: var(--sea-sunlit-lit);
+  stroke: var(--sea-sunlit-lit);
+}
+.art [data-tone='sea-sunlit'] {
+  fill: var(--sea-sunlit);
+  stroke: var(--sea-sunlit);
+}
+.art [data-tone='sea-twilight-lit'] {
+  fill: var(--sea-twilight-lit);
+  stroke: var(--sea-twilight-lit);
+}
+.art [data-tone='sea-twilight'] {
+  fill: var(--sea-twilight);
+  stroke: var(--sea-twilight);
+}
+.art [data-tone='bed-lit'] {
+  fill: var(--bed-lit);
+  stroke: var(--bed-lit);
+}
+.art [data-tone='bed'] {
+  fill: var(--bed);
+  stroke: var(--bed);
+}
+.art [data-tone='bed-shade'] {
+  fill: var(--bed-shade);
+  stroke: var(--bed-shade);
+}
+.art [data-tone='glow'] {
+  fill: var(--glow);
+  stroke: var(--glow);
 }
 
-.paper {
-  background: color-mix(in oklab, var(--card) 92%, var(--bulb));
+/* The see-through tones, unstroked: the tape, the sheets' flat drop, the sun's shafts and the waterline's halo. */
+.art [data-tone='tape'] {
+  fill: var(--tape);
+  stroke: none;
+}
+.art [data-tone='drop'] {
+  fill: var(--drop);
+  stroke: none;
+}
+.art [data-tone='ray'] {
+  fill: var(--ray);
+  stroke: none;
+}
+.art [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
 }
 
-.plan {
-  background: color-mix(in oklab, var(--card) 82%, var(--zone-surface));
-}
-
-.tape {
-  background: color-mix(in oklab, var(--bulb) 55%, transparent);
+/* The dive plan's ruled lines, under its heading and between the sites. */
+.rule {
+  border-color: var(--plan-rule);
 }
 
 .link {

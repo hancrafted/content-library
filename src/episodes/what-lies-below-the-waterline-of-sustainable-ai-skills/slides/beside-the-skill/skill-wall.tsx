@@ -3,6 +3,7 @@ import { Words, type ViewWords } from '@/episodes/components/slide-shared/agent-
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import styles from './slide.module.css';
+import { SheetArt, WallArt } from './wall-art';
 
 export interface SkillWallProps {
   readonly skillTag: string;
@@ -27,23 +28,6 @@ export interface SkillWallProps {
 /** Grid rows of the wall: the tag, the sheets' heading and sub line, then one row per step, then the label. */
 const HEAD_ROW = 2;
 const FIRST_STEP_ROW = 4;
-
-/** The faceted wall and floor behind the sheets, lit from the upper left. Decoration only. */
-function Wall() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 600 400"
-      preserveAspectRatio="none"
-      className={cn(styles.wall, 'absolute inset-0 -z-10 size-full')}
-    >
-      <polygon data-tone="wall-lit" points="0,0 260,0 140,180 0,240" />
-      <polygon data-tone="wall" points="260,0 600,0 600,150 380,260 140,180" />
-      <polygon data-tone="wall-shade" points="0,240 140,180 380,260 600,150 600,350 0,350" />
-      <polygon data-tone="floor" points="0,350 600,350 600,400 0,400" />
-    </svg>
-  );
-}
 
 function Cell({
   row,
@@ -71,25 +55,16 @@ interface Rows {
 
 const PILL = 'w-fit rounded-full border border-foreground bg-card px-3 text-caption font-semibold';
 
-/** The sheets' paper and the plan's tape, drawn first so the words sit on them. */
+/** The sheets' faceted paper, their tape and flat drop (`wall-art.tsx`), drawn first so the words sit on them. */
 function Sheets({ rows }: { readonly rows: Rows }) {
   return (
     <>
-      <div
-        aria-hidden
-        className={cn(styles.paper, 'rounded-md shadow-md')}
-        style={{ gridRow: `${HEAD_ROW} / ${rows.label}`, gridColumn: 2 }}
-      />
-      <div
-        aria-hidden
-        className={cn(styles.plan, 'rounded-md shadow-md')}
-        style={{ gridRow: `${HEAD_ROW} / ${rows.last}`, gridColumn: 4 }}
-      />
-      <span
-        aria-hidden
-        className={cn(styles.tape, 'mx-auto h-3 w-12 self-end')}
-        style={{ gridRow: 1, gridColumn: 4 }}
-      />
+      <div aria-hidden className="relative" style={{ gridRow: `${HEAD_ROW} / ${rows.label}`, gridColumn: 2 }}>
+        <SheetArt sheet="skill" className="absolute inset-0 -z-10 size-full" />
+      </div>
+      <div aria-hidden className="relative" style={{ gridRow: `${HEAD_ROW} / ${rows.last}`, gridColumn: 4 }}>
+        <SheetArt sheet="plan" className="absolute inset-0 -z-10 size-full" />
+      </div>
     </>
   );
 }
@@ -149,7 +124,7 @@ function SiteRows({ plan }: { readonly plan: SkillWallProps['plan'] }) {
           data-today={today ? '' : undefined}
           className={cn(
             'flex flex-wrap items-baseline justify-between gap-x-2 self-center rounded-md px-3 py-1 text-body font-semibold',
-            today && cn(styles.today, 'shadow-md'),
+            today ? styles.today : cn(styles.rule, 'rounded-none border-b'),
           )}
           style={{ gridRow: FIRST_STEP_ROW + index, gridColumn: 4 }}
         >
@@ -173,7 +148,7 @@ function PlanCells({ tag, plan }: { readonly tag: string; readonly plan: SkillWa
           <Words words={plan.title} />
         </p>
       </Cell>
-      <Cell row={HEAD_ROW + 1} column="4" className="px-3">
+      <Cell row={HEAD_ROW + 1} column="4" className={cn(styles.rule, 'mx-3 border-b-2 pb-1')}>
         <InView view="chat" as="p" className="text-caption text-muted-foreground">
           {plan.sub}
         </InView>
@@ -210,8 +185,9 @@ function Leads({ rows, pointsTo }: { readonly rows: Rows; readonly pointsTo: str
 }
 
 /**
- * The control-room wall of Option 17a: the skill's sheet taped on the left, today's dive plan, the project file, on
- * the right. The focal step and the Site 7 row share one grid row, so the primary line between them stays level at
+ * The control-room wall of Option 17a: the Spec's faceted wall and floor, the skill's sheet taped on the left, today's
+ * dive plan, the project file, taped on the right. The focal step and the Site 7 row share one grid row, so the
+ * primary line between them stays level at
  * every width and in either view. A dotted lead ties the "Points to a project file" label to the step.
  */
 export function SkillWall({ skillTag, fileTag, pointsTo, card, plan }: SkillWallProps) {
@@ -220,9 +196,12 @@ export function SkillWall({ skillTag, fileTag, pointsTo, card, plan }: SkillWall
   return (
     <div
       data-skill-wall
-      className="relative isolate grid grid-cols-[0.75rem_minmax(0,3fr)_2.5rem_minmax(0,2fr)] gap-y-1 overflow-hidden rounded-2xl p-4 pl-2 text-card-foreground shadow-md"
+      className={cn(
+        styles.art,
+        'relative isolate grid grid-cols-[0.75rem_minmax(0,3fr)_2.5rem_minmax(0,2fr)] gap-y-1 overflow-hidden rounded-2xl p-4 pt-5 pl-2 text-card-foreground shadow-md',
+      )}
     >
-      <Wall />
+      <WallArt className="absolute inset-0 -z-20 size-full" />
       <Sheets rows={rows} />
       <SkillCells tag={skillTag} card={card} />
       <Leads rows={rows} pointsTo={pointsTo} />
