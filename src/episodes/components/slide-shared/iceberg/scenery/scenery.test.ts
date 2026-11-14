@@ -58,6 +58,20 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('draws each Abyss bubble as the shared faceted PolyBubble, each named ambient for its host loop', () => {
+    // ARRANGE
+    const expected = { drawn: 7, ambient: 7, ownShapes: 0 };
+    // ACT
+    const $ = render(createElement(Bubbles, { x: 0, y: 0 }));
+    const seen = {
+      drawn: $('[data-bubbles] [data-poly-bubble]').length,
+      ambient: $('[data-poly-bubble][data-motion="ambient"]').length,
+      ownShapes: $('[data-bubbles] [data-tone]').length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('draws both the sun and the moon, so the theme alone picks which shows', () => {
     // ARRANGE
     const expected = { day: 1, night: 1 };

@@ -18,6 +18,7 @@ import styles from './zone-scene.module.css';
 import {
   seaFacets,
   TITLE_LIFE_AT,
+  TITLE_LOOP_AT,
   WATER_CELL,
   zoneSceneParts,
   type SceneIceberg,
@@ -50,7 +51,7 @@ export interface ZoneSceneProps {
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
   readonly children?: ReactNode;
-  /** HTML over the drawing, such as a card or the depth ruler, inside the Scene so its motion settles with it. */
+  /** HTML over the drawing, such as a card or the depth gauge, inside the Scene so its motion settles with it. */
   readonly overlay?: ReactNode;
   readonly className?: string;
 }
@@ -67,10 +68,18 @@ export function Band({ facets }: { readonly facets: readonly SeaFacet[] }) {
 }
 
 /** The zone's one ambient loop, and the creatures only its Section title adds. */
-function Life({ life, titleLife }: { readonly life: SceneLife; readonly titleLife: readonly TitleLife[] }) {
+function Life({
+  life,
+  titleLife,
+  sectionTitle,
+}: {
+  readonly life: SceneLife;
+  readonly titleLife: readonly TitleLife[];
+  readonly sectionTitle: boolean;
+}) {
   return (
     <>
-      <Loop life={life} />
+      <Loop life={life} sectionTitle={sectionTitle} />
       {titleLife.map((creature) => (
         <TitleCreature key={creature} life={creature} />
       ))}
@@ -78,7 +87,7 @@ function Life({ life, titleLife }: { readonly life: SceneLife; readonly titleLif
   );
 }
 
-function Loop({ life }: { readonly life: SceneLife }) {
+function Loop({ life, sectionTitle }: { readonly life: SceneLife; readonly sectionTitle: boolean }) {
   switch (life) {
     case 'fish':
       return <FishSchool x={320} y={430} />;
@@ -87,7 +96,16 @@ function Loop({ life }: { readonly life: SceneLife }) {
     case 'whale':
       return <Whale x={360} y={420} scale={1.1} />;
     case 'bubbles':
-      return <Bubbles x={220} y={560} count={9} scale={1.5} />;
+      return sectionTitle ? (
+        <Bubbles
+          x={TITLE_LOOP_AT.bubbles.x}
+          y={TITLE_LOOP_AT.bubbles.y}
+          count={9}
+          scale={TITLE_LOOP_AT.bubbles.scale}
+        />
+      ) : (
+        <Bubbles x={220} y={560} count={9} scale={1.5} />
+      );
     case 'wind':
       // The Surface's wind lives in its clouds, which the sky draws.
       return null;
@@ -162,7 +180,7 @@ export function ZoneScene({ zone, iceberg, sectionTitle, label, children, overla
         {parts.rays && <LightRays x={60} y={0} count={7} spread={150} length={700} />}
         <Berg part={parts.iceberg} surface={parts.sky} />
         {parts.seabed && <Seabed y={SEABED_TOP} />}
-        <Life life={parts.life} titleLife={parts.titleLife} />
+        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={sectionTitle ?? false} />
         {children}
       </svg>
       {overlay}

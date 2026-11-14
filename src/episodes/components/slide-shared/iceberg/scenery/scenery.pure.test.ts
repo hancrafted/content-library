@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  bubbleShape,
   crescentFacets,
   depthScaleForKeel,
   icebergExtent,
@@ -152,14 +151,5 @@ describe('edge cases', () => {
     const facets = crescentFacets(40);
     // ASSERT
     expect(facets.map((f) => f.points.split(' ').length)).toEqual(Array.from({ length: quads }, () => corners));
-  });
-
-  it('draws a bubble as a hexagon with a three-point glint', () => {
-    // ARRANGE
-    const expected = { body: 6, glint: 3 };
-    // ACT
-    const { body, glint } = bubbleShape(6);
-    // ASSERT
-    expect({ body: body.split(' ').length, glint: glint.split(' ').length }).toEqual(expected);
   });
 });

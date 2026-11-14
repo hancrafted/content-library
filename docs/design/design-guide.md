@@ -113,10 +113,11 @@ Suits an Episode whose argument runs from what everyone sees to what few look at
 - Zone colours are design tokens behind CSS variables, so the gradient is tuned by changing one value per zone, never per Slide.
 - The Title slide and every Section title show a slim depth gauge at the right edge: the five zone colours as one thin strip, only the current zone named in its plain word; its depth and ocean term open in a popover, like a page Slide's zone label. A Section title's eyebrow names its place in the Episode ("Section 3 of 8"), never its zone. Every page Slide, and a Section title on phones, carries a slim rail at its left edge with one tile per Section, its own lit.
 - The Title slide shows its title alone; its caption stays the page's description. Its drawing takes the hero's full height, so the sun and all five zones show at any width; sky and water run on past its sides.
-- The Episode's scene is drawn flat, in a 2D side view, inside its zone. The iceberg is the frame, never a second analogy.
-- Motion is descent, once per Section; after that only the scene moves. Nothing loops at rest except one slow ambient loop per zone, in its scenery only (Surface: wind and the ship's rock; Sunlit: fish; Twilight: jellies; Midnight: the whale; Abyss: bubbles), paused off the active Slide and under reduced motion. The cast never loops. The modules and motion rules: `docs/adr/0025-scene-figures-are-deep-modules.md`.
+- The Episode's scene is drawn flat, in a 2D side view, inside its zone: the sky and the Surface water in flat fills, low poly from Sunlit down. The iceberg is the frame, never a second analogy: its body floats in Sunlit and its keel only touches Twilight, in every Scene.
+- Motion is descent, once per Section: the `bubbles` transition, a wave in the next Section's zone colour carrying faceted bubbles; after that only the scene moves. Nothing loops at rest except the ambient loops, in scenery only, paused off the active Slide and under reduced motion: Surface, three cloud layers drifting at their own speeds, the ship's rock and its pennant; Sunlit, fish; Twilight, jellies, and on a Twilight Section title also a lanternfish school and a siphonophore; Midnight, the whale; Abyss, bubbles. The cast never loops. The modules and motion rules: `docs/adr/0025-scene-figures-are-deep-modules.md`.
 - `primary` marks the one thing to look at; the meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 - Text keeps its contrast at every depth.
+- Dark mode is out of scope for now (Han, feedback-2 grill, 2026-11-14): the one zone palette serves both themes until Han settles the dark sky and water separately, so no change tunes dark mode on its own.
 
 ## Like this
 

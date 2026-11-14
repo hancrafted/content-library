@@ -14,7 +14,7 @@ describe('success cases', () => {
         ['ship', 6],
         ['captain', 8],
         ['iceberg', 5],
-        ['sea-life', 9],
+        ['sea-life', 10],
         ['console', 5],
         ['sky', 3],
         ['emote', 19],
