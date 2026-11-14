@@ -4,14 +4,12 @@ title: What agentic workflows require of people and organisations
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-14T12:18:28Z
+  at: 2026-11-14T15:03:59Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
-    at: 2026-11-14T12:12:11Z
-  - by: process:markdown-harness
-    at: 2026-11-14T12:18:28Z
+    at: 2026-11-14T15:03:59Z
 ---
 
 # What agentic workflows require of people and organisations {#everyone-delivered-nothing-added-up}
@@ -20,7 +18,7 @@ verified:
 
 #### Voice script
 
-1. **Imagine the board** — Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired five excellent freelancers in five different cities to plan it. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes.
+1. **Imagine the board** — NEEDS REWRITE (write-voice-script): four freelancers, four cards. Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired four excellent freelancers to plan it, one each for Activities, Travel, Venue and Food and drinks. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes.
 
 ### The thought experiment {#the-thought-experiment}
 
@@ -28,7 +26,11 @@ verified:
 
 master: basic-page · motion: local
 
-The party board with five columns: venue, travel, catering, invitations, budget. Each note ticks off one after another, and when all are ticked, three red marks appear on the board: the last train at 22:30 from a venue 40 km out while the party runs to 1 a.m., guests arriving at 4 p.m. for a programme that starts at 2, and paintball for 200 while ten colleagues use wheelchairs. The marks stay unexplained; later Slides resolve each one.
+The party board with four cards, one per freelancer: Activities, Travel, Venue, and Food & drinks. Each card ticks off in turn, and the ticks add up, plus by plus, to "= Party, 20 June ✗". Each card carries one failure at a seam with another card, labelled with the half of the goal it breaks.
+
+Activities booked paintball, while Travel booked an accessible bus for ten wheelchair users, who sit it out (breaks "together"; Slide 9 resolves it). Travel has everyone carpool at no extra cost, while Food & drinks booked an open bar until 01:00, so the drivers have been drinking (breaks "safely"; Slide 7). Venue found somewhere scenic and within budget, an alpine hut at 1,800 m, while Travel's guest info gives only route and times, so guests arrive in summer clothes for 6 °C at night (breaks "safely"; Slide 7). Food & drinks ordered dinner for 200 with "31 vegetarian" from the hut's kitchen, which reads vegetarian the Western way and serves egg dishes the Indian colleagues can't eat (breaks "together"; Slide 8).
+
+The marks stay unexplained; later Slides resolve each one, and Slide 12 collects the answers.
 
 #### Speaker notes
 
@@ -37,9 +39,9 @@ The party board with five columns: venue, travel, catering, invitations, budget.
 
 #### Voice script
 
-1. **Everyone delivered** — Every freelancer delivers exactly what their note asked for. The venue is booked, the trains are booked, the caterer is booked, the invitations are out and the budget is kept, so every note on the board is ticked.
-2. **None of it adds up** — And the party still fails. The last train leaves before the party ends, the guests arrive two hours after the programme has started, and the activity excludes ten of your colleagues. Each step was perfect, and perfect steps do not add up on their own.
-3. **Your question** — So here is the question I want you to carry through this Episode: what do you, as the manager, need to do so that the result still comes out great? Hold on to it, because we answer it one angle at a time, and the last Slide collects the answers.
+1. **Everyone delivered** — NEEDS REWRITE (write-voice-script): four cards ticked, every freelancer met their own goal perfectly.
+2. **None of it adds up** — NEEDS REWRITE: the four failures at the seams, each told in one line (paintball and the accessible bus, open bar and the drivers, alpine hut and summer clothes, vegetarian and the egg dishes); perfect steps do not add up on their own.
+3. **Your question** — NEEDS REWRITE: what do you, as the manager, need to do so the result still comes out great; one tempting answer is to get them talking, more meetings; the question stays open and Slide 12 collects the answers.
 
 ### Now with agents {#now-with-agents}
 
@@ -47,7 +49,7 @@ The party board with five columns: venue, travel, catering, invitations, budget.
 
 master: basic-page · motion: local
 
-Slide 1's board replayed with an agent badge on each of the five columns. Every ticked note is stamped "2 min" instead of "2 weeks", and the same three failures appear, reached faster.
+Slide 1's board replayed with an agent badge on each of the four cards, Activities, Travel, Venue and Food & drinks. Every ticked card is stamped "2 min" instead of "2 weeks", and the same four failures appear in the same places, reached faster.
 
 #### Speaker notes
 
@@ -62,9 +64,8 @@ Slide 1's board replayed with an agent badge on each of the five columns. Every 
 
 #### Voice script
 
-1. **Speed, not context** — Now give the same five notes to agents. AI makes the doing fast, but it cannot add context that nobody gave it, so the speed helps with everything except the gaps.
-2. **Plausible guess** — When an agent meets a gap, it does not stop and ask you, it fills the gap with a plausible guess and carries on. That is why the same three failures show up again, only now they arrive in two minutes instead of two weeks.
-3. **Earlier Episodes** — If you have seen the earlier Episodes, you know this one: it is the amnesiac freelancer, except that now there are five of them and no meeting between them.
+1. **Speed, not context** — NEEDS REWRITE (write-voice-script): the same four cards given to agents; AI speeds up the doing, it cannot add context nobody gave it.
+2. **Plausible guess** — NEEDS REWRITE: an agent fills a gap with a plausible guess instead of asking; the same four failures, in two minutes instead of two weeks.
 
 ## What an agentic workflow is {#what-an-agentic-workflow-is}
 
@@ -92,7 +93,7 @@ The AI capability Explorable with the Agents column lit, a new Preset, its scene
 #### Voice script
 
 1. **Model, tools, loop** — An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.
-2. **Earlier Episodes** — You met this in the earlier Episodes, so I will not rebuild it here. What matters for the workflow is one consequence: because the agent steers its own steps, you cannot assume it takes the steps you would have taken.
+2. **Steers its own steps** — NEEDS REWRITE (write-voice-script): this Episode starts from cold, so say what an agent is without relying on earlier Episodes; because the agent steers its own steps, you cannot assume it takes the steps you would have taken; the definition is cited in the Speaker notes.
 
 ### What an agentic workflow is {#what-an-agentic-workflow-is-slide}
 
@@ -100,7 +101,7 @@ The AI capability Explorable with the Agents column lit, a new Preset, its scene
 
 master: basic-page · motion: none
 
-The party board with the goal note on the right and task notes chaining towards it. Each arrow is labelled with what it hands over, and each note is marked person or agent. The path is labelled "You design this", and one zoomed agent note is labelled "The agent steers this".
+The human-in-the-loop Explorable with its summer-party Workflow ("Plan a summer party"); it keeps its own look, a deliberate exception to the Board style. It shows four stages, Plan, Requirements, Research and Page, as a path of tasks with handoffs towards the party: "AI grills you" (a plan of epics), "Grill the epic" (requirements and tickets, checked by a second chat), "Chat" (one fresh chat per ticket, research with sources) and "Gather the note", then "Make the page". Two gates mark where a person signs off: after Requirements ("You sign off") and after Page. The path of tasks and handoffs is labelled "You design this"; one step, zoomed, is labelled "The agent steers this".
 
 #### Speaker notes
 
@@ -133,7 +134,7 @@ The party board with the goal note on the right and task notes chaining towards 
 
 master: basic-page · motion: none
 
-The three definitions as a legend beside one party board, each note tagged: guest list out, venue on, activity in.
+The three levels as stacked bands, risk rising towards in and speed towards out. Each band holds its one-line definition, its role and a party task as its example: in, the gatekeeper approves (booking the activity); on, the pilot watches and steps in on exceptions (the venue); out, the auditor checks the logs afterwards (the guest list). Design inspiration: the risk traffic light and the spectrum of autonomy in `.scratch/what-agentic-workflows-require/spec/inspiration/`.
 
 #### Speaker notes
 
@@ -147,13 +148,18 @@ The three definitions as a legend beside one party board, each note tagged: gues
    - sources: [13] Willison, How StrongDM's AI team build serious software without even looking at the code — https://simonwillison.net/2026/Feb/7/software-factory/
 5. **Regulation limits out** — for high-risk uses, EU AI Act Article 14 requires that a person can override and stop the system [4].
    - sources: [4] EU AI Act (Regulation 2024/1689), Article 14 Human oversight — https://artificialintelligenceact.eu/article/14/
+6. **Aviation supplied the concept, not the words** — Sheridan traces supervisory control to computers replacing direct manual control in aircraft, which left the person "in a new role of monitor and goal-constraint setter"; no source traces the words "in, on, out of the loop" to aviation, they come from the military policy above [1].
+   - sources: [1] Sheridan, Human Supervisory Control (Handbook of Systems Engineering and Management, Wiley, 1999, ch. 16) — https://www.hlaszny.com/booksAndPapers/buckets/b3_handbookOfSysEng/Ch%2016%20Human%20Supervisory%20Control.pdf
+7. **Levels are not a strict ladder** — the FAA warns that describing automation as a linear hierarchy of levels is difficult to apply operationally, and that responsibility for flightpath management stays with the pilots at all times; it concerns airline pilots, so carrying it to agents is an analogy [3].
+   - sources: [3] FAA, Advisory Circular 120-123, Flightpath Management (21 Nov 2022) — https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_120-123.pdf
 
 #### Voice script
 
 1. **In** — In the loop means the agent acts only after a person has approved. Think of the activity for the party: nothing is booked until you say yes.
 2. **On** — On the loop means the agent acts on its own while a person watches and can step in. The venue works like this, you read the reports and you intervene when something looks wrong.
 3. **Out** — Out of the loop means the agent acts without any person, who sees only the result. The guest list can work like this, because you are happy to receive the finished list and move on.
-4. **Per task** — So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task.
+4. **Borrowed terms** — NEEDS REWRITE (write-voice-script): where the three terms were borrowed from, in one plain line for the listener; fields where an automated action cannot be undone, so the person's role was designed on purpose.
+5. **Per task** — So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task.
 
 ### Reviewability sets the distance {#reviewability-sets-the-distance}
 
@@ -161,7 +167,7 @@ The three definitions as a legend beside one party board, each note tagged: gues
 
 master: basic-page · motion: local
 
-An axis from in to out with the party tasks placed on it. The activity note starts at in (paintball, Slide 1) and slides along the axis to on once it carries a check it can pass: everyone can join, wheelchair access, no fitness needed.
+An axis from in to out with the party tasks placed on it, and two things that set where a task sits: its risk, what a wrong result can do, and how well the result can be checked. The activity starts at in (paintball, Slide 1) and slides to on once it gets a check it can pass: everyone can join, wheelchair access, no fitness needed.
 
 #### Speaker notes
 
@@ -171,18 +177,25 @@ An axis from in to out with the party tasks placed on it. The activity note star
    - sources: [3] Parasuraman and Manzey, Complacency and Bias in Human Use of Automation: An Attentional Integration (Human Factors 52(3), 2010) — https://doi.org/10.1177/0018720810376055
 3. **Level is a design choice** — the level of automation is set per function, judged by human performance consequences and the cost of errors, which is why a task may stay in for reasons other than checkability [2].
    - sources: [2] Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000) — https://doi.org/10.1109/3468.844354
+4. **Oversight follows risk in the rules** — the EU AI Act requires oversight measures "commensurate with the risks, level of autonomy and context of use" of a high-risk system [5].
+   - sources: [5] EU AI Act (Regulation 2024/1689), Article 14 Human oversight — https://artificialintelligenceact.eu/article/14/
+5. **Risk as a tool rating** — OpenAI tells builders to rate each tool low, medium or high by factors such as read-only versus write access, reversibility and financial impact, and to trigger human oversight for sensitive, irreversible or high-stakes actions until confidence in the agent grows [8].
+   - sources: [8] OpenAI, A practical guide to building agents — https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
+6. **Risk is one input, not the rule** — no source says risk alone decides the level; the aviation-derived model ranks the effect on human performance first and the cost of errors second, so combining risk and checkability into one per-task choice is a synthesis [2].
+   - sources: [2] Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000) — https://doi.org/10.1109/3468.844354
 
 #### Voice script
 
 1. **The rule** — You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at.
-2. **Hypothesis, said openly** — I want to be straight with you about this rule: it is my hypothesis, a synthesis of several sources, and no study tests it as one claim. The evidence also comes mostly from software, so treat it as a good bet and not as a law.
-3. **Make it checkable** — That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop.
+2. **Hypothesis, said openly** — The rule that you can step out only as far as you can check is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law.
+3. **Risk too** — NEEDS REWRITE (write-voice-script): what a wrong result can do also sets the level; the more severe or irreversible, the more a person stays in.
+4. **Make it checkable** — That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop.
 
 ## What it requires of each person {#what-it-requires-of-each-person}
 
 #### Voice script
 
-1. **Three skills, three failures** — Back to the board. Each of the three failures comes from a skill that was missing in a person, and each of those skills has a name.
+1. **Skills behind the failures** — NEEDS REWRITE (write-voice-script): back to the board; each of the four failures comes from a skill missing in a person, three skills in all, and each has a name.
 
 ### Plan back from the goal {#plan-back-from-the-goal}
 
@@ -190,7 +203,7 @@ An axis from in to out with the party tasks placed on it. The activity note star
 
 master: basic-page · motion: none
 
-The board read right to left from the goal note "20 June: everyone celebrates together and gets home safely". Working back from "gets home safely" adds a note Slide 1 never had, the shuttle back, and the train timetable is marked as an external dependency.
+The board read right to left from the goal note "20 June: everyone celebrates together and gets home safely". Working back from "gets home safely" adds what Slide 1 never had: a shuttle back after the open bar, and "bring warm clothes, 6 °C at night" in the guest info. The venue's kitchen is marked as an external dependency, outside your control. A call-out beside the board reads "Backward pass of the Critical Path Method, a well-known project-management principle" and "Agents do better with a clearly defined goal and outcome".
 
 #### Speaker notes
 
@@ -202,13 +215,26 @@ The board read right to left from the goal note "20 June: everyone celebrates to
    - sources: [2] Russell and Norvig, Artificial Intelligence: A Modern Approach, 2nd ed., chapter 11 Planning — https://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf
 4. **It feels wrong** — Pólya notes a psychological difficulty in turning around and not following the direct path to the end [1].
    - sources: [1] Pólya, How to Solve It (1945), entries Pappus and Working backwards — https://www.hlevkin.com/hlevkin/90MathPhysBioBooks/Math/Polya/George_Polya_How%20to%20Solve%20It.pdf
+5. **Project management does it too** — in the Critical Path Method, Kelley and Walker compute the latest time each event may occur "relative to a fixed project completion time"; neither this paper nor the NASA handbook uses the phrase "backward pass", which is later textbook vocabulary [1].
+   - sources: [1] Kelley and Walker, Critical-Path Planning and Scheduling (Proceedings of the Eastern Joint Computer Conference, 1959) — https://mosaicprojects.com.au/PDF/PM-History_Critical_Path_Planning_&_Scheduling_Kelley_and_Walker_1959.pdf
+6. **What the backward run gives** — a job whose maximum available time equals its duration is critical, because a delay in it delays the project; the method takes the jobs and dependencies as given and is not shown to find missing tasks, so that use here is an inference [1].
+   - sources: [1] Kelley and Walker, Critical-Path Planning and Scheduling (Proceedings of the Eastern Joint Computer Conference, 1959) — https://mosaicprojects.com.au/PDF/PM-History_Critical_Path_Planning_&_Scheduling_Kelley_and_Walker_1959.pdf
+7. **Scope starts at the end product** — the NASA handbook says a work breakdown structure begins with the end item and successively subdivides it, and calls it "a product-oriented structure, not an organizational structure" [2].
+   - sources: [2] Sadler, NASA Work Breakdown Structure (WBS) Handbook (NASA/SP-20250006071) — https://www.nasa.gov/wp-content/uploads/2025/06/nasa-wbs-handbook.pdf
+8. **Vendors say: clear goals** — Anthropic names the best-fit tasks for agents as those with clear success criteria and feedback loops, such as code that automated tests can verify; this is guidance, not a measurement [3].
+   - sources: [3] Anthropic, Building effective agents — https://www.anthropic.com/engineering/building-effective-agents
+9. **Missing detail costs accuracy** — models infer unstated requirements 41.1% of the time, prompts that omit requirements are twice as likely to regress when the model or prompt changes, and accuracy sometimes drops by more than 20% [7].
+   - sources: [7] Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts — https://arxiv.org/abs/2505.13360
+10. **Asking recovers it, and the limit** — on an underspecified coding benchmark, interacting to ask questions gained up to 74% over not asking, a ceiling and not an average; no source isolates a clear goal as a single variable, so the claim is that missing detail hurts and recovering it helps [5].
+    - sources: [5] Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering — https://arxiv.org/abs/2502.13069
 
 #### Voice script
 
 1. **Start at the goal** — Start with the goal and work backwards. Backward reasoning is a plain-language name for something Pólya calls working backwards and AI planning calls regression. You ask what must be true just before the goal, then what must be true before that, and you repeat until you arrive at where you stand today.
 2. **State the outcome** — Write the goal as an outcome and not as an activity. Not book a venue, but everyone celebrates together and gets home safely, because an outcome tells you when you are done and an activity does not.
-3. **Outside your control** — Then sort the dependencies into the ones you control and the ones you do not. The train timetable is not yours, so you plan around it instead of pretending you can change it.
-4. **The task nobody owned** — Working back from getting home safely, you find the shuttle, the task that nobody owned on the first board. I should say that this is my inference: the sources show that working backwards finds the dependencies, and I am adding that it also finds the orphaned tasks.
+3. **Outside your control** — NEEDS REWRITE (write-voice-script): sort the dependencies into inside and outside your control; the venue's kitchen is not yours, so you plan around it.
+4. **The tasks nobody owned** — NEEDS REWRITE: working back from "gets home safely" finds the shuttle after the open bar and the warm-clothes line in the guest info, which resolves the drinking drivers and the cold guests.
+5. **Well known, and agents like it** — NEEDS REWRITE: planning back from the goal is a well-known project-management principle, and agents do better with a clearly defined goal and outcome; hand the listener the verdict as a question.
 
 ### Contracts at the seams {#contracts-at-the-seams}
 
@@ -216,7 +242,7 @@ The board read right to left from the goal note "20 June: everyone celebrates to
 
 master: basic-page · motion: none
 
-The travel to programme seam zoomed, with its contract card: Receives: five offices, venue address, budget per person. Delivers: everyone at the venue by 13:30. Checked by: arrival list against the programme start. Below it a line: "how: car, train or carpool, your choice".
+The Food & drinks to venue-kitchen seam zoomed, with its contract card. Receives: 200 guests, 31 vegetarian, defined as no meat, fish or eggs. Delivers: dinner for 200 at 19:00. Checked by: the menu against the definition. Below it a line: "how: the kitchen's choice".
 
 #### Speaker notes
 
@@ -233,8 +259,8 @@ The travel to programme seam zoomed, with its contract card: Receives: five offi
 
 1. **Design by contract** — Design by contract, after Meyer, says that cooperation rests on contracts, and a contract states what each party receives and what it delivers. That sounds like software, but it is the most practical tool a manager has for a handoff.
 2. **Receives, delivers, checked by** — So before you hand any task to an agent, write three lines. What it receives, what it must deliver, and how someone else can check the result. Do this for one task this week, before you hand it over.
-3. **Leave the how open** — Notice what the contract leaves out: how the work is done. Travel owes everyone at the venue by half past one, and whether they come by car, train or carpool is their choice. That the how stays open is my reading, Meyer does not say it in these words.
-4. **The arrival time** — And the four o'clock arrival? Nobody owned the arrival time at the seam between travel and programme. With a contract, travel owes it and programme can rely on it, so the failure cannot happen quietly.
+3. **Leave the how open** — NEEDS REWRITE (write-voice-script): the contract leaves out how the work is done, the kitchen's choice; say it is the speaker's reading, Meyer does not say it in these words.
+4. **The egg dishes** — NEEDS REWRITE: the fact "31 vegetarian" travelled, but the word meant something else on each side; with a definition (no meat, fish or eggs) and a check, the egg dishes cannot arrive quietly.
 
 ### Reviewing the result {#reviewing-the-result}
 
@@ -242,7 +268,7 @@ The travel to programme seam zoomed, with its contract card: Receives: five offi
 
 master: basic-page · motion: none
 
-The paintball note checked twice. Against its contract: activity for 200 ticked, within budget ticked, on 20 June ticked. Against the goal "everyone celebrates together": crossed, because ten colleagues use wheelchairs.
+The paintball note checked twice. Against its contract: activity for 200 ticked, within budget ticked, on 20 June ticked. Against the goal "everyone celebrates together": crossed, because ten colleagues use wheelchairs, as Travel's accessible bus already said, a fact on another card that Activities never saw.
 
 #### Speaker notes
 
@@ -274,7 +300,7 @@ The paintball note checked twice. Against its contract: activity for 200 ticked,
 
 master: basic-page · motion: none
 
-The party committee's org chart, with ten venue scouts, one caterer and one travel planner, beside its draft workflow, which has fourteen venue-scouting steps and one catering step. The column heights match the headcount, a callback to Slide 1's five columns.
+The party committee's org chart, with ten venue scouts, one caterer and one travel planner, beside its draft workflow, which has fourteen venue-scouting steps and one catering step. The column heights match the headcount, a callback to Slide 1's four cards.
 
 #### Speaker notes
 
@@ -343,13 +369,33 @@ Slide 1's question as the heading, and two short columns on the board. One colum
 
 #### Voice script
 
-1. **The answer** — So what did you need to do? You needed three skills in your people, and each one fixes exactly one failure from the board.
-2. **Break down** — Break the work down from the goal, and the last train has an owner.
-3. **Write contracts** — Write the contract at the seam, and the four o'clock arrival cannot happen.
-4. **Review twice** — Review against the contract and against the goal, and the paintball does not go ahead.
+1. **The answer** — NEEDS REWRITE (write-voice-script): so what did you need to do; three skills in your people, each tied to the failures it fixes.
+2. **Break down** — NEEDS REWRITE: break the work down from the goal, and the drinking drivers and the cold guests have an owner.
+3. **Write contracts** — NEEDS REWRITE: write the contract at the seam, and the egg dishes cannot happen.
+4. **Review twice** — NEEDS REWRITE: review against the contract and against the goal, and the paintball does not go ahead.
 5. **The organisation** — The organisation has its own part: clear goals, contracts between teams, a policy on how much oversight each task gets, and workflows designed around the goal and not around the org chart.
-6. **Look at your team** — Now look at your team. Who can break work down, who writes a clear handoff, and who can review an agent's result? Those are the skills to build, and in my view they are where your effort pays off first, though no study has measured that as a set.
+6. **Look at your team** — Now look at your team. Who can break work down, who writes a clear handoff, and who can review an agent's result? Those are the skills to build, and in my view they are where your effort pays off first.
 7. **Take one process** — And before Monday, do the smallest version of all of this. Pick one recurring process in your team, mark which steps an agent could run, and decide for each whether a person stays in, on or out of the loop.
+
+### From article to quiz {#from-article-to-quiz}
+
+#### Visual
+
+master: basic-page · motion: none
+
+The human-in-the-loop Explorable, which keeps its own look, a deliberate exception to the Board style. It runs the summer-party Workflow until a quiz Workflow is authored separately; the quiz Workflow turns any knowledge article, a PDF or a URL, into a quiz. Each step carries its level, in, on or out of the loop, and a contract (receives, delivers, checked by) at every handoff.
+
+#### Speaker notes
+
+1. **Workflow and agent, two levels** — Anthropic separates workflows, orchestrated through predefined code paths, from agents that direct their own process; reading the quiz example as a path you design with steps the agent steers is an application of that split, not a claim the source makes [1].
+   - sources: [1] Anthropic, Building effective agents — https://www.anthropic.com/engineering/building-effective-agents
+
+#### Voice script
+
+1. **One whole workflow** — keywords: one agentic workflow end to end, any knowledge article, a PDF or a URL, turned into a quiz; the path is yours to design, each step is the agent's to steer.
+2. **In, on or out per step** — keywords: each step set in, on or out of the loop by its risk and how well the result can be checked (Actionable 1: pick a recurring process, mark the steps).
+3. **A contract at every handoff** — keywords: what each step receives, delivers and how someone else checks it (Actionable 2).
+4. **Designed around the goal** — keywords: start from the goal, not from today's teams (Actionable 3, Conway's law); who can break work down, write handoffs and review (Actionable 4); the recap of the four Actionables.
 
 ## Material left out
 
