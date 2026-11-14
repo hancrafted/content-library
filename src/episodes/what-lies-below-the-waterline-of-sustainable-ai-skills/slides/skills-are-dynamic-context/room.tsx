@@ -1,5 +1,5 @@
+import { seaFacets } from '@/episodes/components/slide-shared/iceberg/zone-edges.pure';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
-import { seaFacets } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
 import { useId } from 'react';
 import styles from './slide.module.css';
 

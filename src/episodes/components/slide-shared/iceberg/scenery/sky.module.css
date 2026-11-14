@@ -1,0 +1,66 @@
+/*
+ * The Surface's sky and water: the sky's four facet tones by day come from `sky.pure.ts` as `--sky-<n>-day` (the one
+ * place they are mixed, which a Surface title's transition wave reads too); by night a sky mixed from `--info` and
+ * `--overlay` with stars. The Surface water's flat steps of `--water`, and a lit waterline in both themes. Colours
+ * mixed from global tokens only (FE-011); each facet carries a same-colour hairline that closes anti-aliasing seams.
+ */
+
+.sky {
+  --sky-1: var(--sky-1-day);
+  --sky-2: var(--sky-2-day);
+  --sky-3: var(--sky-3-day);
+  --sky-4: var(--sky-4-day);
+}
+
+:global(.dark) .sky {
+  --sky-1: color-mix(in oklab, var(--info) 12%, var(--overlay));
+  --sky-2: color-mix(in oklab, var(--info) 16%, var(--overlay));
+  --sky-3: color-mix(in oklab, var(--info) 21%, var(--overlay));
+  --sky-4: color-mix(in oklab, var(--info) 27%, var(--overlay));
+}
+
+.sky [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.sky [data-tone='sky-1'] {
+  fill: var(--sky-1);
+  stroke: var(--sky-1);
+}
+
+.sky [data-tone='sky-2'] {
+  fill: var(--sky-2);
+  stroke: var(--sky-2);
+}
+
+.sky [data-tone='sky-3'] {
+  fill: var(--sky-3);
+  stroke: var(--sky-3);
+}
+
+.sky [data-tone='sky-4'] {
+  fill: var(--sky-4);
+  stroke: var(--sky-4);
+}
+
+.sky [data-stars] {
+  display: none;
+  fill: color-mix(in oklab, var(--on-brand-accent) 85%, transparent);
+}
+
+:global(.dark) .sky [data-stars] {
+  display: inline;
+}
+
+.water [data-water-step='0'] {
+  fill: var(--water);
+}
+
+.water [data-water-step='1'] {
+  fill: color-mix(in oklab, var(--water) 90%, var(--info));
+}
+
+.waterline {
+  fill: color-mix(in oklab, var(--on-brand-accent) 85%, var(--info));
+}
