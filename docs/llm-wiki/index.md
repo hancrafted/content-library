@@ -24,6 +24,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 - [Why does AI-assisted execution move the bottleneck to specification and review?](research/AIE/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md) — AI speeds up execution but the saved time is re-spent on verification, and review load rises with no company-level gain; the specification half is inferred, not measured.
 
+### AI Software Factory (AISF)
+
+- [Why does the factory metaphor fit AI-driven software production, and where does it break?](research/AISF/AISF-0001__factory-metaphor-fit-and-limits/research.md) — It fits as a flow of Jobs with stop-on-defect gates, mistake-proofing and standard work; it breaks where software differs: building is free copying, parts need no order, and Workers vary.
+
 ### Large language models (LLM)
 
 - [Why do large language models give different answers to the same prompt?](research/LLM/LLM-0001__llm-output-nondeterminism/research.md) — Models sample each next token from a probability distribution, and even with sampling switched off, server-side numerical effects still change the output between runs.
