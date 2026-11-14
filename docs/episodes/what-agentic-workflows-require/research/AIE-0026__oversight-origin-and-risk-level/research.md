@@ -88,14 +88,14 @@ The loop vocabulary has two roots: weapon autonomy, where the split is who selec
 - The Anthropic framework page [9] and the Art. 6 and Annex III pages [4][6] were read through a page summarizer or as page text, so quotes should be re-opened before they go on a Slide. Art. 6(3) exceptions are summarised; the Act's full list and its application dates (2 Dec 2027 for Annex III, 2 Aug 2028 for Annex I as shown on the page) may have been amended and were not checked.
 - OpenAI's guide [8] is undated in the PDF; its date is not used. Rules for AI systems (EU, NIST) are about harm to people; whether the same tiers suit a company's internal agent workflow is a design choice, not a legal requirement, unless the system falls in an Annex III area.
 
-[1]: https://www.hlaszny.com/booksAndPapers/buckets/b3_handbookOfSysEng/Ch%2016%20Human%20Supervisory%20Control.pdf 'Sheridan, Human Supervisory Control (Handbook of Systems Engineering and Management, Wiley, 1999, ch. 16)'
-[2]: https://doi.org/10.1109/3468.844354 'Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)'
-[3]: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_120-123.pdf 'FAA, Advisory Circular 120-123, Flightpath Management (21 Nov 2022)'
-[4]: https://artificialintelligenceact.eu/article/6/ 'EU AI Act (Regulation 2024/1689), Article 6 Classification rules for high-risk AI systems'
-[5]: https://artificialintelligenceact.eu/article/14/ 'EU AI Act (Regulation 2024/1689), Article 14 Human oversight'
-[6]: https://artificialintelligenceact.eu/annex/3/ 'EU AI Act (Regulation 2024/1689), Annex III High-risk AI systems'
-[7]: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf 'NIST, AI Risk Management Framework 1.0 (NIST AI 100-1, January 2023)'
-[8]: https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf 'OpenAI, A practical guide to building agents'
-[9]: https://www.anthropic.com/news/our-framework-for-developing-safe-and-trustworthy-agents 'Anthropic, Our framework for developing safe and trustworthy agents (Aug 2025)'
-[10]: https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/LLM/LLM-0024__human-in-on-out-of-the-loop/research.md 'Earlier research file, Why do human-in, human-on and human-out-of-the-loop mark different AI capability Levels? (LLM-0024)'
-[11]: docs/episodes/what-agentic-workflows-require/research/AIE-0024__result-checkability-limits-oversight/research.md 'Earlier research file, Why does how well a result can be checked limit how far human oversight can be reduced? (AIE-0024)'
+[1]: <https://www.hlaszny.com/booksAndPapers/buckets/b3_handbookOfSysEng/Ch%2016%20Human%20Supervisory%20Control.pdf> "Sheridan, Human Supervisory Control (Handbook of Systems Engineering and Management, Wiley, 1999, ch. 16)"
+[2]: <https://doi.org/10.1109/3468.844354> "Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)"
+[3]: <https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_120-123.pdf> "FAA, Advisory Circular 120-123, Flightpath Management (21 Nov 2022)"
+[4]: <https://artificialintelligenceact.eu/article/6/> "EU AI Act (Regulation 2024/1689), Article 6 Classification rules for high-risk AI systems"
+[5]: <https://artificialintelligenceact.eu/article/14/> "EU AI Act (Regulation 2024/1689), Article 14 Human oversight"
+[6]: <https://artificialintelligenceact.eu/annex/3/> "EU AI Act (Regulation 2024/1689), Annex III High-risk AI systems"
+[7]: <https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf> "NIST, AI Risk Management Framework 1.0 (NIST AI 100-1, January 2023)"
+[8]: <https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf> "OpenAI, A practical guide to building agents"
+[9]: <https://www.anthropic.com/news/our-framework-for-developing-safe-and-trustworthy-agents> "Anthropic, Our framework for developing safe and trustworthy agents (Aug 2025)"
+[10]: <https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/LLM/LLM-0024__human-in-on-out-of-the-loop/research.md> "Earlier research file, Why do human-in, human-on and human-out-of-the-loop mark different AI capability Levels? (LLM-0024)"
+[11]: <docs/episodes/what-agentic-workflows-require/research/AIE-0024__result-checkability-limits-oversight/research.md> "Earlier research file, Why does how well a result can be checked limit how far human oversight can be reduced? (AIE-0024)"
