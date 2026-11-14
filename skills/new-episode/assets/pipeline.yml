@@ -29,8 +29,8 @@
 #               writes one job per list item under the heading, or per h3 when it holds h3s.
 #               An approved per-run pipeline has none, and no glob output
 #     before    what runs before the implementor writes: `mh-query`, required when a job
-#               writes markdown, has the implementor run `npx mh query <path>` on every
-#               .md output and follow its intents; the reviewer runs it as its baseline
+#               writes markdown, has the implementor run `npx mh query --batch --intents`
+#               over its .md outputs and follow their intents; the reviewer runs it as its baseline
 #     outputs   full repo paths in the staging folder docs/episodes/<slug>/; a job reading
 #               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
