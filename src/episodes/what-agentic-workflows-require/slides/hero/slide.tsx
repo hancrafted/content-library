@@ -34,7 +34,8 @@ export const hero = slide({
             }}
             handoff={t('seam.handoff')}
             contract={{
-              label: t('contract.label'),
+              heading: t('contract.label'),
+              size: 'compact',
               terms: {
                 receives: t('contract.terms.receives'),
                 delivers: t('contract.terms.delivers'),

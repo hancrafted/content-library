@@ -1,0 +1,97 @@
+{
+  "title": "Reviewing the result",
+  "caption": "Verification checks a result against its contract; validation checks it against the goal. The second check is the human part.",
+  "result": {
+    "kicker": "Activity",
+    "text": "Paintball × 200",
+    "status": "Delivered, ticked on the board"
+  },
+  "fork": "One result, checked twice",
+  "verification": {
+    "label": "1 · Verification",
+    "question": "<q>“Am I building the product right?”</q>",
+    "heading": "Against its contract",
+    "checks": {
+      "headcount": "Activity for 200",
+      "budget": "Within budget",
+      "date": "On 20 June"
+    },
+    "verdict": "Passes: 3 of 3"
+  },
+  "validation": {
+    "label": "2 · Validation",
+    "question": "“Am I building the right product?”",
+    "goal": "Against the goal: everyone celebrates together",
+    "finding": "Ten colleagues use wheelchairs",
+    "seenOn": {
+      "card": "Travel’s accessible bus for ten",
+      "fact": "As <card></card> already said"
+    },
+    "why": "Right about what was asked, wrong about what was needed",
+    "fixLabel": "The fix lands in the contract",
+    "fix": "Checked by: everyone can join, wheelchair access",
+    "verdict": "Fails the goal"
+  },
+  "marks": { "passed": "Passed", "failed": "Failed", "fixed": "Fixed" },
+  "badges": { "agent": "Agent", "person": "Person" },
+  "notes": {
+    "two-definitions": {
+      "header": "Two definitions",
+      "description": "Boehm defines verification as establishing the correspondence between a software product and its specification, and validation as establishing its fitness or worth for its operational mission [1].",
+      "sources": {
+        "boehm-verifying-and-validating": {
+          "title": "Boehm, Guidelines for Verifying and Validating Software Requirements and Design Specifications (Euro IFIP 79)"
+        }
+      }
+    },
+    "his-two-questions": {
+      "header": "His two questions",
+      "description": "“Am I building the product right?” for verification and “Am I building the right product?” for validation [1].",
+      "sources": {
+        "boehm-verifying-and-validating": {
+          "title": "Boehm, Guidelines for Verifying and Validating Software Requirements and Design Specifications (Euro IFIP 79)"
+        }
+      }
+    },
+    "where-the-fix-lands": {
+      "header": "Where the fix lands",
+      "description": "a failed verification changes the product; a failed validation can change the requirements themselves [1].",
+      "sources": {
+        "boehm-verifying-and-validating": {
+          "title": "Boehm, Guidelines for Verifying and Validating Software Requirements and Design Specifications (Euro IFIP 79)"
+        }
+      }
+    },
+    "software-practice-not-agents": {
+      "header": "Software practice, not agents",
+      "description": "NASA words the same pair as “Are we building the product right?”; applying it to work handed to an agent is an inference [1].",
+      "sources": {
+        "nasa-ivv-overview": { "title": "NASA, IV&V Overview" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-checks": {
+        "title": "Two checks",
+        "keywords": "",
+        "script": "Reviewing a result takes two checks that people often merge into one. Verification checks the result against its contract. Validation checks the result against the goal."
+      },
+      "paintball-passes": {
+        "title": "Paintball passes",
+        "keywords": "",
+        "script": "The paintball note passes every line of its contract: an activity for 200, within budget, on the right day. And it still fails the goal, because the contract was right about what was asked and wrong about what was needed."
+      },
+      "the-human-part": {
+        "title": "The human part",
+        "keywords": "",
+        "script": "The second check is the human part, and it is the one that lets you step further out. When you are not watching, what you can trust is a result that has been checked against the goal, not only against the note."
+      },
+      "your-verdict": {
+        "title": "Your verdict",
+        "keywords": "",
+        "script": "So the next time an agent hands you a result that matches its task perfectly, ask yourself which of the two checks you have actually done."
+      }
+    }
+  }
+}

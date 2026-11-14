@@ -1,0 +1,85 @@
+{
+  "title": "Contracts at the seams",
+  "caption": "Design by contract: cooperation rests on contracts that state each party’s obligations and benefits. Agree what a task receives and delivers, not how it is done inside.",
+  "food": {
+    "kicker": "Food & drinks",
+    "task": "Dinner for 200, 31 vegetarian",
+    "hint": "Orders from the venue’s kitchen"
+  },
+  "contract": {
+    "heading": "Contract · Food & drinks → the venue’s kitchen",
+    "seam": "The seam",
+    "terms": { "receives": "Receives", "delivers": "Delivers", "checkedBy": "Checked by" },
+    "receives": "200 guests, 31 vegetarian,",
+    "definition": "defined as no meat, fish or eggs",
+    "delivers": "Dinner for 200 at 19:00",
+    "checkedBy": "The menu against the definition",
+    "how": "How: the kitchen’s choice"
+  },
+  "oneSide": "Each line belongs to one side: Food & drinks guarantees what goes in, <side>the kitchen what comes out</side>",
+  "kitchen": {
+    "kicker": "Kitchen",
+    "text": "The venue’s, at the alpine hut",
+    "hint": "External: not yours to change"
+  },
+  "dinner": {
+    "kicker": "Dinner 19:00",
+    "text": "31 vegetarian plates, no eggs"
+  },
+  "fixed": "Fixed",
+  "badges": { "agent": "Agent", "person": "Person" },
+  "notes": {
+    "a-contract-has-two-sides": {
+      "header": "A contract has two sides",
+      "description": "Meyer’s model is the business contract: each party expects benefits and accepts obligations to obtain them, documented in a contract document [1].",
+      "sources": {
+        "meyer-design-by-contract": { "title": "Meyer, Applying “Design by Contract” (IEEE Computer, October 1992)" }
+      }
+    },
+    "pre-and-postcondition": {
+      "header": "Pre- and postcondition",
+      "description": "the precondition states what any call must satisfy, the postcondition what the call ensures in return; each condition belongs to exactly one party [1].",
+      "sources": {
+        "meyer-design-by-contract": { "title": "Meyer, Applying “Design by Contract” (IEEE Computer, October 1992)" }
+      }
+    },
+    "no-defensive-duplication": {
+      "header": "No defensive duplication",
+      "description": "either the condition is guaranteed by the client or handled by the supplier; checking everything on both sides adds complexity [1].",
+      "sources": {
+        "meyer-design-by-contract": { "title": "Meyer, Applying “Design by Contract” (IEEE Computer, October 1992)" }
+      }
+    },
+    "same-split-in-eiffel": {
+      "header": "Same split in Eiffel",
+      "description": "Eiffel Software defines a precondition as what must be true before a component is used and a postcondition as what it guarantees after execution [1].",
+      "sources": {
+        "eiffel-design-by-contract": { "title": "Eiffel Software, Design by Contract" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "design-by-contract": {
+        "title": "Design by contract",
+        "keywords": "",
+        "script": "Design by contract, after Meyer, says that cooperation rests on contracts, and a contract states what each party receives and what it delivers. That sounds like software, but it is the most practical tool a manager has for a handoff."
+      },
+      "receives-delivers-checked-by": {
+        "title": "Receives, delivers, checked by",
+        "keywords": "",
+        "script": "So before you hand any task to an agent, write three lines. What it receives, what it must deliver, and how someone else can check the result. Do this for one task this week, before you hand it over."
+      },
+      "leave-the-how-open": {
+        "title": "Leave the how open",
+        "keywords": "",
+        "script": "Notice what the contract leaves out, and that is how the work is done. How the menu gets cooked is the kitchen's choice. That is my reading of design by contract, Meyer does not say it in these words, but it is why a contract stays short enough to write for every handoff."
+      },
+      "the-egg-dishes": {
+        "title": "The egg dishes",
+        "keywords": "",
+        "script": "Now the egg dishes. The fact 31 vegetarian travelled from one card to the other without a single error, but the word meant something else on each side. With a definition, no meat, fish or eggs, and a check of the menu against it, the egg dishes cannot arrive quietly."
+      }
+    }
+  }
+}
