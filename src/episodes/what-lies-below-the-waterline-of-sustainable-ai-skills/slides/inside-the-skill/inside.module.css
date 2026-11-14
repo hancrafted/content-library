@@ -1,0 +1,84 @@
+/*
+ * Slide token file of "Inside the skill" (FE-011 §2): the control-room wall behind the card, the card's sleeve, and the
+ * Slide's one emphasis motion, mixed from global tokens so they follow light and dark with no raw colour. `primary`
+ * marks only the lit step 4, its arrow, and the species guide's ring and pill; no meaning colour on scenery.
+ */
+
+.wall {
+  --room: color-mix(in oklab, var(--muted) 78%, var(--zone-twilight));
+  --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
+  --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));
+}
+
+.wall [data-tone='room'] {
+  fill: var(--room);
+}
+
+.wall [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+
+.wall [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
+
+/* The card's sleeve: a band of the wall's own blue-grey, darker, around the card. */
+.step {
+  border-color: color-mix(in oklab, var(--zone-twilight) 55%, var(--foreground));
+}
+
+/* The slot the species guide slid out of: a pale band on the sleeve's right edge, level with step 4. */
+.slotMark {
+  position: absolute;
+  inset-block: 0.75rem;
+  inset-inline-end: -8px;
+  width: 8px;
+  background: color-mix(in oklab, var(--zone-twilight) 30%, var(--card));
+}
+
+/* The trail the guide leaves as it slides out: streaks of the sleeve's own blue. */
+.trail > span {
+  background: color-mix(in oklab, var(--zone-twilight) 45%, var(--card));
+}
+
+/*
+ * The one emphasis motion (Spec Option 16a): step 4 fills `primary`, then the species guide slides out of the sleeve
+ * to the right. The base rules are the end state, so a still frame and reduced motion show it lit and slid out.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .lit {
+    animation: step-lit 500ms ease-out 300ms both;
+  }
+
+  :global([data-zone='active']) .slideOut {
+    animation: slide-out 800ms cubic-bezier(0.33, 0, 0.2, 1) 700ms both;
+  }
+
+  :global([data-zone='active']) .trail {
+    animation: trail-in 400ms ease-out 1200ms both;
+  }
+}
+
+@keyframes step-lit {
+  from {
+    background-color: var(--card);
+    color: var(--card-foreground);
+  }
+}
+
+@keyframes trail-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 0;
+    translate: -3rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
