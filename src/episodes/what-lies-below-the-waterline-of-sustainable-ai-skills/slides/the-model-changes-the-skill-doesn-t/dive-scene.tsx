@@ -36,9 +36,17 @@ const YESTERDAY = { x: 164, y: 319 } as const;
 /** The reader in the porthole: seated, scaled so head and shoulders fill the glass. */
 const READER = { x: 4, y: 74, scale: 1.25 } as const;
 
-/** Where an HTML label sits over the dive, as percentages of its box: the Spec's pill corners. */
+/**
+ * Where an HTML label sits over the dive, as percentages of its box: the Spec's pill corners. A label keeps clear of
+ * the dive's right edge, wrapping on a narrow dive rather than running off it.
+ */
+const EDGE = 8;
 const at = (x: number, y: number) =>
-  ({ left: `${(x / DIVE_WIDTH) * 100}%`, top: `${(y / DIVE_HEIGHT) * 100}%` }) as CSSProperties;
+  ({
+    left: `${(x / DIVE_WIDTH) * 100}%`,
+    top: `${(y / DIVE_HEIGHT) * 100}%`,
+    maxWidth: `${((DIVE_WIDTH - x - EDGE) / DIVE_WIDTH) * 100}%`,
+  }) as CSSProperties;
 const LABEL_AT: Record<DiveOutcome, CSSProperties> = { short: at(346, 263), silt: at(336, 293) };
 const YESTERDAY_AT = at(116.4, 282);
 
@@ -108,7 +116,7 @@ export interface DiveSceneProps {
 
 /** The words on the dive: where today's dive ended, and yesterday's, at the Spec's places. */
 function DiveLabels({ outcome, labels }: Pick<DiveSceneProps, 'outcome' | 'labels'>) {
-  const pill = 'absolute rounded-full px-3 py-0.5 text-caption font-semibold whitespace-nowrap';
+  const pill = 'absolute w-max rounded-2xl px-3 py-0.5 text-caption font-semibold';
   return (
     <>
       <span className={cn(pill, styles.label)} style={LABEL_AT[outcome]}>
