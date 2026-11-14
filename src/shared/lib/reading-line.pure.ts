@@ -45,3 +45,26 @@ export function keepReadingScroll(before: SlideBox, after: SlideBox, line: numbe
   const progress = (anchor - before.top) / before.height;
   return after.top + progress * after.height - anchor;
 }
+
+/** A box's place on the page, measured once: its top from the document top, and its height. */
+export interface PageBox {
+  readonly top: number;
+  readonly height: number;
+}
+
+/** The scroll state a frame reads without forcing layout. */
+export interface ReadingView {
+  readonly scrollY: number;
+  readonly viewportHeight: number;
+  readonly documentHeight: number;
+}
+
+/**
+ * How far the reading line has travelled through a box measured earlier, so a scroll frame needs no layout read:
+ * 1 once the page is scrolled to its end, 0 with no box or one of no height.
+ */
+export function readingFraction(box: PageBox | null, view: ReadingView): number {
+  if (view.scrollY + view.viewportHeight >= view.documentHeight - 1) return 1;
+  if (!box || box.height <= 0) return 0;
+  return (view.scrollY + view.viewportHeight * READING_LINE - box.top) / box.height;
+}

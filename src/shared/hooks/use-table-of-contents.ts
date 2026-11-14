@@ -1,4 +1,4 @@
-import { READING_LINE } from '@/shared/lib/reading-line.pure';
+import { readingFraction, type PageBox } from '@/shared/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
@@ -6,12 +6,19 @@ import { useEffect, useState } from 'react';
 const REVEAL_AFTER_MS = 300;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
-function fractionInto(element: Element | null): number {
+/**
+ * Calls back with the element's page box and the document height whenever either resizes. A ResizeObserver reports
+ * after layout, so reading boxes there forces no synchronous layout; the returned function stops observing.
+ */
+function observePageBox(element: Element | null, measured: (box: PageBox | null, documentHeight: number) => void) {
   const root = document.documentElement;
-  if (window.scrollY + window.innerHeight >= root.scrollHeight - 1) return 1;
-  if (!element) return 0;
-  const box = element.getBoundingClientRect();
-  return box.height > 0 ? (window.innerHeight * READING_LINE - box.top) / box.height : 0;
+  const observer = new ResizeObserver(() => {
+    const rect = element?.getBoundingClientRect();
+    measured(rect ? { top: rect.top + window.scrollY, height: rect.height } : null, root.scrollHeight);
+  });
+  observer.observe(root);
+  if (element) observer.observe(element);
+  return () => observer.disconnect();
 }
 
 /** How far the reading line has travelled through the active element, sampled once per frame; 1 at the page end. */
@@ -19,20 +26,25 @@ export function useFractionInto(active: string | null, targetAttribute: string):
   // Keyed by the entry it was measured on, so a new active entry never borrows the previous one's fraction.
   const [sample, setSample] = useState({ active, fraction: 0 });
   useEffect(() => {
-    const element = active && document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`);
-    let frame = 0;
+    const element = active ? document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`) : null;
+    let [box, documentHeight, frame]: [PageBox | null, number, number] = [null, Number.POSITIVE_INFINITY, 0];
     const schedule = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() =>
+      frame = requestAnimationFrame(() => {
+        const view = { scrollY: window.scrollY, viewportHeight: window.innerHeight, documentHeight };
         // Hundredths are plenty for a progress bar and skip re-renders between them.
-        setSample({ active, fraction: Math.round(fractionInto(element || null) * 100) / 100 }),
-      );
+        setSample({ active, fraction: Math.round(readingFraction(box, view) * 100) / 100 });
+      });
     };
-    schedule();
+    const stopObserving = observePageBox(element, (measuredBox, measuredHeight) => {
+      [box, documentHeight] = [measuredBox, measuredHeight];
+      schedule();
+    });
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     return () => {
       cancelAnimationFrame(frame);
+      stopObserving();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
     };

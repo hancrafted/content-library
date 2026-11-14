@@ -1,7 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { activeId, readingLineMargin } from './reading-line.pure';
+import { activeId, readingFraction, readingLineMargin } from './reading-line.pure';
 
 describe('success cases', () => {
+  it('measures how far the reading line has travelled through a box from its cached page position', () => {
+    // ARRANGE
+    const box = { top: 1000, height: 1000 };
+    const view = { scrollY: 900, viewportHeight: 1000, documentHeight: 5000 };
+    const quarterThrough = 0.25;
+    // ACT
+    const fraction = readingFraction(box, view);
+    // ASSERT
+    expect(fraction).toBeCloseTo(quarterThrough);
+  });
+
   it('activates the one entry crossing the reading line', () => {
     // ARRANGE
     const order = ['intro', 'intro--why', 'outro'];
@@ -23,6 +34,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('reports no progress without a box or with a box of no height', () => {
+    // ARRANGE
+    const view = { scrollY: 900, viewportHeight: 1000, documentHeight: 5000 };
+    // ACT
+    const fractions = [readingFraction(null, view), readingFraction({ top: 1000, height: 0 }, view)];
+    // ASSERT
+    expect(fractions).toEqual([0, 0]);
+  });
+
   it('ignores an intersecting id that is not in the outline', () => {
     // ARRANGE
     const order = ['intro', 'outro'];
@@ -35,6 +55,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reports the box complete once the page is scrolled to its end', () => {
+    // ARRANGE
+    const box = { top: 3000, height: 2000 };
+    const view = { scrollY: 3999.5, viewportHeight: 1000, documentHeight: 5000 };
+    // ACT
+    const fraction = readingFraction(box, view);
+    // ASSERT
+    expect(fraction).toBe(1);
+  });
+
   it('keeps the previous entry while the line sits in the gap between slides', () => {
     // ARRANGE
     const order = ['intro', 'outro'];
