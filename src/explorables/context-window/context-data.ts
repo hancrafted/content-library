@@ -20,6 +20,7 @@ import type {
   StepStory,
   WindowSize,
 } from './context.types';
+import { blocksChat } from './mini-chat.pure';
 import logDe from './summer-party.de.jsonl';
 import logEn from './summer-party.jsonl';
 
@@ -43,7 +44,13 @@ export const CONTEXT_PRESETS = [
   'gallery-full',
 ] as const;
 /** Every static bar Preset id. */
-export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after'] as const;
+export const MINI_PRESETS = [
+  'slide-10-old',
+  'slide-10-fresh',
+  'slide-11-before',
+  'slide-11-after',
+  'waterline-dive',
+] as const;
 
 export type ContextPresetId = (typeof CONTEXT_PRESETS)[number];
 export type MiniPresetId = (typeof MINI_PRESETS)[number];
@@ -77,7 +84,16 @@ interface Config {
   readonly windows: Readonly<Record<string, { readonly tokens: number; readonly buffer: number }>>;
   readonly lines: Readonly<Record<string, { readonly tokens: number; readonly short: string }>>;
   readonly chats: Readonly<
-    Record<string, { readonly log?: string; readonly steps?: number; readonly blocks?: readonly [Category, number][] }>
+    Record<
+      string,
+      {
+        readonly log?: string;
+        readonly steps?: number;
+        readonly blocks?: readonly [Category, number][];
+        /** `false`: the mini chat holds only its own blocks, without the shared starting instructions. */
+        readonly start?: false;
+      }
+    >
   >;
   readonly notes: Readonly<Record<string, StepNotes>>;
   readonly session: SessionPlan;
@@ -125,29 +141,6 @@ function startOf(config: Config): { id: string; blocks: Block[] } {
   return { id: config.start.id, blocks };
 }
 
-const MINI_STEP: Readonly<Partial<Record<Category, (id: string, blocks: Block[]) => Step>>> = {
-  memory: (id, blocks) => ({ id, kind: 'memory', path: 'CLAUDE.md', blocks }),
-  tool_use: (id, blocks) => ({ id, kind: 'tool', calls: [], blocks }),
-  tool_result: (id, blocks) => ({ id, kind: 'tool', calls: [], blocks }),
-  assistant: (id, blocks) => ({ id, kind: 'ai', text: '', blocks }),
-};
-
-/** A mini chat: the starting instructions, then one step per block row (a tool call and its result share one). */
-function blocksChat(id: string, start: Step, rows: readonly [Category, number][]): Chat {
-  const steps: Step[] = [start];
-  rows.forEach(([cat, tokens], i) => {
-    const previous = steps.at(-1);
-    if (cat === 'tool_result' && previous?.kind === 'tool') {
-      steps[steps.length - 1] = { ...previous, blocks: [...previous.blocks, { cat, tokens }] };
-      return;
-    }
-    const make =
-      MINI_STEP[cat] ?? ((sid: string, blocks: Block[]): Step => ({ id: sid, kind: 'you', text: '', blocks }));
-    steps.push(make(`${id}-${i + 1}`, [{ cat, tokens }]));
-  });
-  return { id, steps };
-}
-
 function windowOf(config: Config, words: ContextWords, ref: WindowRef): WindowSize {
   const size = config.windows[ref.size];
   if (!size) throw new Error(`context window: unknown window size "${ref.size}"`);
@@ -166,7 +159,7 @@ function chatsOf(en: Config, log: string): Record<string, Chat> {
   const full = fromClaudeLog(log, { id: 'summer-party', start, memory: en.memory });
   return Object.fromEntries(
     Object.entries(en.chats).map(([id, spec]) => {
-      if (!spec.log) return [id, blocksChat(id, startStep, spec.blocks ?? [])];
+      if (!spec.log) return [id, blocksChat(id, spec.start === false ? null : startStep, spec.blocks ?? [])];
       return [id, { id, steps: spec.steps ? full.steps.slice(0, spec.steps) : full.steps }];
     }),
   );

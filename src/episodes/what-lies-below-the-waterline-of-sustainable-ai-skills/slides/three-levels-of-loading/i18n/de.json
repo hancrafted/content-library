@@ -1,0 +1,134 @@
+{
+  "title": "Wie die KI einen Skill findet und liest",
+  "caption": "Wie die KI einen Skill findet und ihn und seine Zusatzdateien erst liest, wenn sie sie braucht.",
+  "analogy": {
+    "label": "In der Geschichte:",
+    "text": "Der Pilot liest das Register des Handbuchs, dann eine Karte, dann nur die Extras, nach denen ein Schritt fragt."
+  },
+  "concept": {
+    "label": "Das Konzept",
+    "term": "Progressive Disclosure",
+    "quote": "“Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone.”",
+    "source": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure (nngroup.com)",
+    "skills": "Für Skills schreibt Anthropic, dass Claude Informationen schrittweise lädt, wenn sie gebraucht werden.",
+    "stepsLabel": "Drei Stufen, die sich nacheinander öffnen: erst ein kurzer Überblick, dann das Detail, dann die Extras.",
+    "steps": { "overview": "Überblick", "detail": "Detail", "extras": "Extras" }
+  },
+  "example": "Das Beispiel: Ein Skill lädt in drei Stufen",
+  "levelsLabel": "Drei Ladestufen",
+  "levels": {
+    "index": {
+      "label": "Immer geladen",
+      "chat": "Name und Beschreibung jedes Skills: das Skill-Register",
+      "chatNote": "etwa 100 Tokens pro Skill, bezahlt in jeder Runde",
+      "coding": "die Frontmatter jeder SKILL.md",
+      "codingNote": "etwa 100 Tokens pro Skill, außer der Skill ist nur für Dich aufrufbar"
+    },
+    "card": {
+      "label": "Geladen, wenn der Skill genutzt wird",
+      "chat": "seine Hauptanweisungen",
+      "chatNote": "sobald eine Aufgabe zu seiner Beschreibung passt",
+      "coding": "der Hauptteil von SKILL.md, beim Aktivieren",
+      "codingSteps": "1. Den Roboter zwei Meter über dem Meeresboden halten. 2. … 6. Die Probe beschriften."
+    },
+    "extras": {
+      "label": "Nur bei Bedarf geladen",
+      "chat": "Referenzen, Vorlagen und Skripte",
+      "chatNote": "In Claude läuft ein Skript, und nur seine Ausgabe kommt ins Gespräch",
+      "coding": "eine Datei, wenn ein Schritt nach ihr fragt",
+      "codingNote": "Skripte laufen über bash; nur die Ausgabe kommt in den Kontext"
+    }
+  },
+  "description": "Nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen.",
+  "art": {
+    "shelfLabel": "das Register des Handbuchs: jeder Kartenreiter sichtbar",
+    "cardTitle": "Sedimentprobe nehmen",
+    "cardSteps": { "0": "1 Roboter 2 m hoch halten", "1": "2 Kamera prüfen", "2": "3 … 6" },
+    "extras": { "guide": "Artenführer", "label": "Etikettvorlage", "preset": "Arm-Preset" }
+  },
+  "otherApps": {
+    "chat": "Codex und Gemini CLI laden auch in Stufen",
+    "coding": "Codex und Gemini CLI: erst Metadaten, Hauptteil bei Nutzung"
+  },
+  "alt": {
+    "room": "Der Kontrollraum von der Seite. Links: das Handbuch an der Wand, jeder Kartenreiter sichtbar. In der Mitte: der Pilot an der Konsole, eine Karte gezogen und vor ihm aufgestellt. Rechts: unter einer Lampe die Hülle auf einem Beistelltisch, Artenführer, Probenetikett und Arm-Preset herausgezogen."
+  },
+  "notes": {
+    "three-levels-stated-by-the-standard": {
+      "header": "Drei Stufen, so steht es im Standard",
+      "description": "Der Agent-Skills-Standard nennt Metadaten (Name und Beschreibung, etwa 100 Tokens), die beim Start für alle Skills geladen werden, den Hauptteil von SKILL.md, wenn der Skill aktiviert wird, und Dateien in scripts/, references/ oder assets/ nur, wenn sie gebraucht werden [1]. Anthropic beschreibt dieselben drei Stufen [2]. Googles Day-3-Whitepaper ebenso: „1. Metadata (name + description) is always in the agent's context. 2. SKILL.md body is loaded only when the skill triggers. 3. Bundled resources are loaded strictly as needed“ [3]. Das ist Googles Beschreibung des Designs, kein Test, dass es funktioniert.",
+      "sources": {
+        "agent-skills-specification": { "title": "Agent Skills, Specification" },
+        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "other-apps-load-in-stages-too": {
+      "header": "Andere Apps laden auch in Stufen",
+      "description": "Codex listet zuerst Name, Beschreibung und Dateipfad und liest die vollständigen Anweisungen, wenn es sich für einen Skill entscheidet [1]; Gemini CLI dokumentiert erst Metadaten, den Hauptteil beim Aktivieren [2]. Für Apps, deren Seiten nicht gelesen wurden, ist die Drei-Stufen-Aussage aus dem gemeinsamen Format abgeleitet.",
+      "sources": {
+        "openai-codex-build-skills": { "title": "OpenAI, Build skills (Codex docs)" },
+        "google-gemini-cli-skills": { "title": "Google, Agent Skills in Gemini CLI" }
+      }
+    },
+    "scripts-documented-for-claude-only": {
+      "header": "Skripte: nur für Claude dokumentiert",
+      "description": "Claude führt Skripte über bash aus, und „only their output enters context“ [1]. Die gelesenen Seiten anderer Anbieter sagen, dass es mitgelieferte Skripte gibt, aber nicht, was das für den Kontext bedeutet; diese Aussage gilt also nur für Claude. Googles Day-3-Whitepaper fügt eine Zeile hinzu: Skripte „execute without ever polluting the token window“ [2]; nimm das als Googles Aussage, nicht als dokumentiertes Verhalten anderer Apps.",
+      "sources": {
+        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "what-the-skill-index-costs": {
+      "header": "Was das Skill-Register kostet",
+      "description": "Day 3 nennt die Kosten der Metadaten „tiny“, aber wiederkehrend: Sie fallen „on every turn“ an [1]. Das ist Googles Aussage; die Größe des Registers stammt aus der Zahl des Standards, etwa 100 Tokens pro Skill in Notiz 1, nicht aus Day 3.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "progressive-disclosure-as-anthropic-names-it": {
+      "header": "Progressive Disclosure, wie Anthropic es nennt",
+      "description": "Anthropic schreibt, das dateibasierte Design „allows progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront“ [1]. Das Konzept ist allgemein; ein Skill ist das Beispiel.",
+      "sources": {
+        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" }
+      }
+    },
+    "progressive-disclosure-as-nielsen-norman-group-defines-it": {
+      "header": "Progressive Disclosure, wie die Nielsen Norman Group es definiert",
+      "description": "Jakob Nielsens Artikel definiert es in seiner Zusammenfassung: „Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone“ [1]. Es ist ein Prinzip des Interaktionsdesigns von 2006, älter als Skills; die Slide zitiert es wörtlich und auf Englisch.",
+      "sources": {
+        "nngroup-progressive-disclosure": { "title": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-concept": {
+        "title": "Das Konzept",
+        "keywords": "",
+        "script": "Wie findet das Modell also einen Skill, und wie viel davon liest es? Interface-Designer hatten dasselbe Problem lange vor der KI: Ein Bildschirm, der jede Option auf einmal zeigt, überfordert den Menschen davor. Also zeigt man erst das Wichtigste und öffnet den Rest, wenn jemand ihn braucht. Das heißt Progressive Disclosure, und ein Skill wird genauso geladen, in drei Stufen."
+      },
+      "step-one": {
+        "title": "Stufe eins",
+        "keywords": "",
+        "script": "Stufe eins ist, wie das Modell einen Skill entdeckt, und sie ist immer geladen: Name und Beschreibung jedes Skills. Selbst mit hundert installierten Skills trägt das Modell also in jedes Gespräch nur dieses kurze Register, die Registerseite des Handbuchs."
+      },
+      "step-two": {
+        "title": "Stufe zwei",
+        "keywords": "",
+        "script": "Stufe zwei wird geladen, wenn der Skill genutzt wird. Erst wenn eine Aufgabe zu einer Beschreibung passt, liest das Modell die Hauptanweisungen dieses Skills, keinen Moment früher, so wie der Pilot eine Karte zieht."
+      },
+      "step-three": {
+        "title": "Stufe drei",
+        "keywords": "",
+        "script": "Stufe drei wird nur bei Bedarf geladen: die Referenzen, Vorlagen und Skripte, die Extras in der Hülle, die das Modell erst öffnet, wenn ein Schritt es dorthin schickt. Das genaue Verhalten unterscheidet sich ein wenig von App zu App, deshalb stehen die genauen Aussagen in den Notizen neben dieser Slide."
+      }
+    }
+  }
+}
