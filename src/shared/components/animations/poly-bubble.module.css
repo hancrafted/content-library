@@ -1,0 +1,32 @@
+/*
+ * `PolyBubble`'s colours: three tones of one tint plus a glint, flat fills, light from the upper left. Facets are
+ * picked by drawing order (body, shade, lit, glint), so the page carries no per-facet attribute; the body's stroke is
+ * the rim, half covered where a facet meets it. No raw colour (FE-011): every tone is mixed from
+ * `--poly-bubble-tint`, the light `--on-brand-accent` and `--foreground`. No filter, blur or shadow.
+ */
+
+.bubble {
+  --poly-bubble-water: var(--poly-bubble-tint, var(--info));
+
+  display: block;
+  overflow: visible;
+}
+
+.bubble > :nth-child(1) {
+  fill: color-mix(in oklab, var(--poly-bubble-water) 30%, transparent);
+  stroke: color-mix(in oklab, color-mix(in oklab, var(--poly-bubble-water) 70%, var(--foreground)) 80%, transparent);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.bubble > :nth-child(2) {
+  fill: color-mix(in oklab, color-mix(in oklab, var(--poly-bubble-water) 80%, var(--foreground)) 45%, transparent);
+}
+
+.bubble > :nth-child(3) {
+  fill: color-mix(in oklab, color-mix(in oklab, var(--poly-bubble-water) 35%, var(--on-brand-accent)) 55%, transparent);
+}
+
+.bubble > :nth-child(4) {
+  fill: color-mix(in oklab, var(--on-brand-accent) 90%, transparent);
+}
