@@ -4,6 +4,7 @@ import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import { Clamp, type ClampIcon } from './clamp';
+import { keyedLines } from './code-lines.pure';
 import styles from './loan.module.css';
 
 export interface StatementEntry {
@@ -46,8 +47,8 @@ function EntryBody({ entry }: { readonly entry: StatementEntry }) {
           {coding.lead}
         </p>
         <code translate="no" className={cn('mt-2 block rounded-md px-3 py-2 font-mono text-caption', styles.code)}>
-          {coding.code.map((line) => (
-            <span key={line} className="block break-words whitespace-pre-wrap">
+          {keyedLines(coding.code).map(({ key: lineKey, line }) => (
+            <span key={lineKey} className="block break-words whitespace-pre-wrap">
               {line}
             </span>
           ))}
