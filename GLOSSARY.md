@@ -70,14 +70,17 @@ _Avoid_: Clip, recording link
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short. A Brief's Format `guide` names the Guide Resource kind instead of an Episode.
 _Avoid_: Type, kind, length
 
-**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
+**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template, a Master slide or a Theme. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
 _Avoid_: Tooling page, Layout reference, reference Episode, Asset
 
 **Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.
 _Avoid_: Resource list, Resource catalogue
 
-**Template**: the record kind of an Episode template or a Master slide (types `episode-template` and `master-slide`), a page shaped like an Episode: an `episode()` composition of Slides rendered through the one Episode container, so it has the table of contents and the Context drawer. Its record holds a slug, a type, Tags and a visibility; its title and description are the composition's own words. It keeps its URL, `/episode-templates/<slug>/` or `/master-slides/<slug>/`, is public, indexed and in the sitemap, and is in no Episode list. Records in `src/content-store/templates/` and compositions in `src/episodes/templates/`. The five: Episode template, Workshop template and Explorable page template (Episode templates), Timelines and Grids (Master slides). Replaces the old Resource record kind.
+**Template**: an authoring Resource to copy from: an Episode template, a Master slide or a Theme. It presents reusable structure or visual vocabulary rather than a published Episode.
 _Avoid_: Resource (that is the umbrella), Tooling page
+
+**Theme**: a coherent visual vocabulary of scenery, figures and motion for authors to reuse, presented as a Template with an exploration Slide for each element.
+_Avoid_: Tag, colour scheme, Episode
 
 **Workshop template**: the Template (an Episode template, `/episode-templates/workshop-template/`) a new Event's opening Episode is copied from (`src/episodes/templates/workshop-template/`): a Title slide, then a hook, agenda, in-scope and out-of-scope, a poll, About me (its own Section) and orga Slides, every word but About me's a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
 _Avoid_: Event template, intro template, workshop Episode
@@ -224,15 +227,6 @@ _Avoid_: Phase, step
 
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
-
-**Spec template**: the page every Spec is built from, `skills/new-episode/assets/spec-template.html`: a page frame with the review form and two templates, an item and an Option, that the assembler fills. The `to-decision-html` skill generates it from the Spec calibration, and a Spec never edits it.
-_Avoid_: Spec frame, Spec layout
-
-**Spec calibration**: the one file of what every Spec shares, `skills/new-episode/references/spec-calibration.md`: the design size, the render presets, the template's slots, the attributes the assembler sets, the save format and the Next actions. It is the skill's only input from the Episode side.
-_Avoid_: Spec settings, Spec config
-
-**Next action**: what Han chooses at the Spec Gate when he saves a review, `redesign` or `approve`, saved as the round's `next` line. `redesign` starts a new Attempt for the Slides without exactly one pick; `approve` needs exactly one pick on every Slide.
-_Avoid_: Decision, verdict
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
 _Avoid_: Iteration, round
