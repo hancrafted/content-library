@@ -90,9 +90,24 @@ export const INSET_CLASSES =
  */
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
 
-/** The page's own classes: a toned page runs up under the floating header (its Title slide fills that band), any other starts below it. */
-export function pageClassOf(tone: 'normal' | 'inverse'): string {
-  return `${tone === 'inverse' ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
+/** What decides whether a Title slide fills the floating header's band: its tone and its own surface. */
+export interface TitleBand {
+  readonly tone: 'normal' | 'inverse';
+  readonly presentation?: { readonly style?: { readonly '--slide-surface'?: string } };
+}
+
+/**
+ * Whether the Title slide fills the floating header's band: an inverse Title does, and so does one that declares its own
+ * surface (`presentation.style['--slide-surface']`), such as an Iceberg Title in its zone's colour. Read from the
+ * declaration, never from a computed colour (FE-004 §5.4).
+ */
+export function fillsHeaderBand({ tone, presentation }: TitleBand): boolean {
+  return tone === 'inverse' || presentation?.style?.['--slide-surface'] !== undefined;
+}
+
+/** The page's own classes: a page whose Title fills the header's band runs up under the floating header, any other starts below it. */
+export function pageClassOf(title: TitleBand): string {
+  return `${fillsHeaderBand(title) ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
 }
 
 /**
