@@ -35,16 +35,16 @@
     "title": "Sedimentprobe nehmen",
     "description": "Nimmt einen Sedimentkern. Nutzen, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
     "steps": {
-      "s1": "Roboter 2 m über dem Meeresboden halten",
-      "s2": "Auf der Kamera eine flache Stelle suchen",
-      "s3": "Stechrohr hineindrücken, verschließen, anheben"
+      "hold": "Roboter 2 m über dem Meeresboden halten",
+      "findFlat": "Auf der Kamera eine flache Stelle suchen",
+      "core": "Stechrohr hineindrücken, verschließen, anheben"
     }
   },
   "brief": {
     "title": "Vermessung des Küstenschelfs",
     "lines": {
-      "l1": "Standorte 1 bis 7",
-      "l2": "Proben gehen in die Labordatenbank"
+      "sites": "Standorte 1 bis 7",
+      "samples": "Proben gehen in die Labordatenbank"
     }
   },
   "analogyLead": "In der Geschichte:",

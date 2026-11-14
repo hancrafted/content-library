@@ -35,16 +35,16 @@
     "title": "Collect sediment sample",
     "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
     "steps": {
-      "s1": "Hold the robot 2 m above the seabed",
-      "s2": "Find a flat patch on camera",
-      "s3": "Push the corer in, seal, lift"
+      "hold": "Hold the robot 2 m above the seabed",
+      "findFlat": "Find a flat patch on camera",
+      "core": "Push the corer in, seal, lift"
     }
   },
   "brief": {
     "title": "Coastal shelf survey",
     "lines": {
-      "l1": "Sites 1 to 7",
-      "l2": "Samples go to the lab database"
+      "sites": "Sites 1 to 7",
+      "samples": "Samples go to the lab database"
     }
   },
   "analogyLead": "In the story:",

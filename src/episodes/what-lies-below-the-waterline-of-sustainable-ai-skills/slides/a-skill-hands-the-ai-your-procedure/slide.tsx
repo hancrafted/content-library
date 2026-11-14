@@ -18,8 +18,8 @@ const NOTE = 'a-skill-spares-you-the-repeat';
 const SKILL_NAME = 'collect-sediment-sample';
 const SKILL_FILE = `${SKILL_NAME}/SKILL.md`;
 const PROJECT_FILE = 'AGENTS.md';
-const STEPS = ['s1', 's2', 's3'] as const;
-const LINES = ['l1', 'l2'] as const;
+const STEPS = ['hold', 'findFlat', 'core'] as const;
+const LINES = ['sites', 'samples'] as const;
 const CALLOUT_ORDER: readonly CalloutSlug[] = ['skill', 'description', 'project'];
 
 /**

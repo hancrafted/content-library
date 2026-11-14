@@ -51,14 +51,14 @@
   },
   "requests": {
     "should": {
-      "0": "Nimm eine Sedimentprobe an Ort 7.",
-      "1": "Hol hier eine Bodenprobe.",
-      "2": "Neuer Ort: Sediment beproben."
+      "siteSample": "Nimm eine Sedimentprobe an Ort 7.",
+      "seabedSample": "Hol hier eine Bodenprobe.",
+      "newSite": "Neuer Ort: Sediment beproben."
     },
     "shouldNot": {
-      "0": "Filme den Meeresboden an Ort 7.",
-      "1": "Protokolliere den Tauchgang von gestern.",
-      "2": "Nimm hier eine Probe der Wassersäule."
+      "filmSeabed": "Filme den Meeresboden an Ort 7.",
+      "logDive": "Protokolliere den Tauchgang von gestern.",
+      "waterColumn": "Nimm hier eine Probe der Wassersäule."
     }
   },
   "callout": {
