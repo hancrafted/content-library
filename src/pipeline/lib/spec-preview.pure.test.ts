@@ -148,12 +148,12 @@ describe('success cases', () => {
     expect(names).toEqual(expected);
   });
 
-  it('renders a preset narrower than a laptop in a laptop-wide window, so the mock takes the preset width', () => {
+  it('renders a preset narrower than a laptop in a laptop-wide window, and a fixed-size one in a laptop-tall window', () => {
     // ARRANGE
     const expected = [
       { width: 1920, height: 800 },
       { width: 1440, height: 800 },
-      { width: 1440, height: 1920 },
+      { width: 1440, height: 900 },
     ];
     // ACT
     const viewports = [DESKTOP, MOBILE, SHORTS].map(viewportOf);
@@ -164,7 +164,7 @@ describe('success cases', () => {
   describe('the preview page', () => {
     it('sets the preset on the page as the toolbar does: data-preset and --preview-width, nav open from 1800 px', () => {
       // ARRANGE
-      const expected = { 'data-preset': 'shorts', style: '--preview-width: 1080px', 'data-nav': 'closed' };
+      const expected = { 'data-preset': 'shorts', 'data-nav': 'closed' };
       const wide = { 'data-preset': 'desktop', style: '--preview-width: 1920px', 'data-nav': 'open' };
       // ACT
       const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
@@ -172,6 +172,22 @@ describe('success cases', () => {
       // ASSERT
       expect(shorts).toMatchObject(expected);
       expect(desktop).toMatchObject(wide);
+    });
+
+    it('scales a preset with a fixed design size to the room below the toolbar, as the toolbar does', () => {
+      // ARRANGE: a laptop window 900 px tall, less the 60 px toolbar and a 16 px margin above and below
+      const expected = {
+        'data-preset': 'shorts',
+        'data-preview-fixed': '',
+        style: '--preview-width: 1080px; --preview-height: 1920px; --preview-scale: 0.4208',
+      };
+      // ACT
+      const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
+      const desktop = load(previewPage(TEMPLATE, CLEAN, DESKTOP))('html').attr();
+      // ASSERT
+      expect(shorts).toMatchObject(expected);
+      expect(desktop).not.toHaveProperty('data-preview-fixed');
+      expect(desktop?.style).not.toContain('--preview-scale');
     });
 
     it('clones each Slide from the template item and each Option from the template Option, the assembler way', () => {

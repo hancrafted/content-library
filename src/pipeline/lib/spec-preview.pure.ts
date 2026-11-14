@@ -2,7 +2,7 @@
  * The pages `npm run episode:spec-preview` renders: a designer's fragment inside the Spec's own page, so what a
  * designer measures is what the user sees. Each page is built from the Spec template, through the assembler's own
  * functions (`itemMarkup`, `optionsMarkup`), and set to one render preset the way the page's toolbar sets it
- * (`data-preset` and `--preview-width` on `<html>`). Only the page's script is left out: the Options' mocks are moved
+ * (`data-preset`, `--preview-width` and, for a fixed design size, `--preview-height` and `--preview-scale` on `<html>`). Only the page's script is left out: the Options' mocks are moved
  * into the item's visual column here, all of them, each its own screenshot target.
  */
 import { load } from 'cheerio';
@@ -77,12 +77,40 @@ const NAV_OPEN_WIDTH = 1800;
 /** The narrowest window the page is built for (a laptop): a preset narrower than it is still viewed in this one. */
 const LAPTOP_WINDOW = 1440;
 
+/** The height of that laptop window, which a preset with a fixed design size is scaled to fit. */
+const LAPTOP_HEIGHT = 900;
+
+/** The sticky toolbar's height and the margin kept above and below a scaled visual, as the toolbar asset's script uses. */
+const TOOLBAR_HEIGHT = 60;
+const FIT_MARGIN = 16;
+
+/** Whether a preset has a fixed design size (a width and a height), which scales down to fit instead of reflowing. */
+const isFixed = ({ height }: Preset): boolean => height !== DEFAULT_HEIGHT;
+
 /**
  * The window a preset is rendered in. The toolbar's presets set the width of the mock inside a window, so the window
- * is the preset's width or a laptop's, whichever is wider: a mobile preset gives a 390 px mock beside its rail.
+ * is the preset's width or a laptop's, whichever is wider: a mobile preset gives a 390 px mock beside its rail. A
+ * preset with a fixed design size is scaled to the window's height, so it gets a laptop's height, the one a reviewer
+ * sees it in.
  */
-export function viewportOf({ width, height }: Preset): { width: number; height: number } {
-  return { width: Math.max(width, LAPTOP_WINDOW), height };
+export function viewportOf(preset: Preset): { width: number; height: number } {
+  return {
+    width: Math.max(preset.width, LAPTOP_WINDOW),
+    height: isFixed(preset) ? LAPTOP_HEIGHT : preset.height,
+  };
+}
+
+/** The scale a fixed-size preset is shown at: the room below the toolbar and between its margins over its height. */
+function scaleOf(preset: Preset): number {
+  const room = viewportOf(preset).height - TOOLBAR_HEIGHT - 2 * FIT_MARGIN;
+  return Math.min(1, Math.round((room / preset.height) * 10000) / 10000);
+}
+
+/** What the toolbar sets on `<html>` for a preset: the width, and for a fixed design size its height and scale too. */
+function presetStyle(preset: Preset): string {
+  const width = `--preview-width: ${preset.width}px`;
+  if (!isFixed(preset)) return width;
+  return `${width}; --preview-height: ${preset.height}px; --preview-scale: ${scaleOf(preset)}`;
 }
 
 /** The Option ids of a fragment, in order. */
@@ -140,8 +168,9 @@ export function previewPage(template: string, fragment: string, preset: Preset):
   $('html').attr({
     'data-preset': preset.name,
     'data-nav': viewportOf(preset).width >= NAV_OPEN_WIDTH ? 'open' : 'closed',
-    style: `--preview-width: ${preset.width}px`,
+    style: presetStyle(preset),
   });
+  if (isFixed(preset)) $('html').attr('data-preview-fixed', '');
   $('body').append(OVERFLOW_SCRIPT);
   return `${$.html()}\n`;
 }
