@@ -12,11 +12,12 @@ export const theLabel = slide({
   messages: { en, de },
   presentation: atDepth(3, 'section'),
   segments: [{ slug: 'the-label-decides' }, { slug: 'name-description' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={3}
         wide
         tilt="right"

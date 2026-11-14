@@ -3,6 +3,7 @@ import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/episodes/c
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition } from '../slide-master/slide-presentation';
+import { fillsHeaderBand } from './episode-page-container.pure';
 import type { TitleAppearance } from './record-content';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';
@@ -64,6 +65,11 @@ function ToneMark({ appearance, geometricTone }: Pick<TitleSlideProps, 'appearan
   return appearance.tone === 'inverse' ? <TitleTone tone={appearance.tone} geometricTone={geometricTone} /> : null;
 }
 
+/** Marks a Title that fills the floating header's band, so its words start below the header (`data-header-band`). */
+function headerBandOf(appearance: TitleAppearance) {
+  return fillsHeaderBand(appearance) ? '' : undefined;
+}
+
 /** The ink transition into the first page Slide, which a toned Title slide ends in. */
 function ToneInk({ target }: { target: string | undefined }) {
   return target ? <TitleInk targetId={target} /> : null;
@@ -76,6 +82,7 @@ function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
       id={TITLE_ANCHOR}
       data-slot="title-slide"
       data-tone={props.appearance.legacyTone}
+      data-header-band={headerBandOf(props.appearance)}
       presentation={props.appearance.presentation}
       transition={props.transition}
     >
@@ -136,6 +143,7 @@ export function TitleSlide(props: TitleSlideProps) {
       id={TITLE_ANCHOR}
       data-slot="title-slide"
       data-tone={props.appearance.legacyTone}
+      data-header-band={headerBandOf(props.appearance)}
       mode="shared"
       header={header}
       scene="hug"

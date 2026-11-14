@@ -228,7 +228,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const titleSlide = titleSlideOf(content, header, talk);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   const toc = tocPropsOf(content, props, sections);
-  const className = pageClassOf(content.titleAppearance.tone);
+  const className = pageClassOf(content.titleAppearance);
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>

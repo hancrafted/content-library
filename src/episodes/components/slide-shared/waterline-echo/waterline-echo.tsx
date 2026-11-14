@@ -1,18 +1,22 @@
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { InView } from '../agent-view/in-view';
-import { DepthRuler, type ZoneWords } from '../iceberg/depth-ruler';
+import { DepthGauge } from '../iceberg/depth-gauge';
 import { zoneOf, type Zone } from '../iceberg/ruler.pure';
 import { ZoneCard } from '../iceberg/zone-card';
+import type { ZoneWords } from '../iceberg/zone-words.pure';
 import { WATERLINE_SECTIONS } from './depth';
 
 export interface WaterlineEchoProps {
-  /** The Section's place among the eight, from 0: its zone, its lit tile on the ruler. */
+  /** The Section's place among the eight, from 0: its zone, named on the depth gauge, and its place over the card. */
   readonly section: number;
-  /** The five zones' words, for the ruler and the zone over the card. */
+  /** The Slide's template for its place in the Episode, such as `Section {number} of {total}`. */
+  readonly place: string;
+  /** The five zones' words, for the gauge and the zone over the card. */
   readonly zones: ZoneWords;
-  /** The ruler's name for assistive tech: `Depth ruler, What a skill is lit`. */
-  readonly rulerLabel: string;
+  /** The gauge's name for assistive tech: `Depth gauge`. */
+  readonly gaugeLabel: string;
   /** A small label over the card's statement, such as "AI model". */
   readonly tag?: string;
   /** The AI statement the card leads with. */
@@ -33,53 +37,58 @@ export interface WaterlineEchoProps {
 
 /**
  * A section slide's words over its echo of the Hero motif of "What lies below the waterline of sustainable AI skills"
- * (picked Title-slide Option 0a): the zone's name, the Section's card leading with its AI statement, and the whole
- * depth ruler with the Section's tile lit; on a phone the ruler gives way to the thin rail. The drawing itself, the
+ * (picked Title-slide Option 0a): the Section's place in the Episode, the Section's card leading with its AI statement, and the slim
+ * depth gauge at the right edge naming the Section's zone; on a phone the gauge gives way to the thin rail. The drawing itself, the
  * zone with the robot at the Section's depth, is the section slide's full-bleed rear decoration (`atDepth`), so these
  * words stay in the Foreground, inset clear of the table of contents. Shared because all eight section slides draw it.
  * Both view lines render; the page-level view switch shows one.
  */
-export function WaterlineEcho({ section, zones, rulerLabel, ...card }: WaterlineEchoProps) {
+export function WaterlineEcho({ section, place, zones, gaugeLabel, ...card }: WaterlineEchoProps) {
   const zone = zoneOf(WATERLINE_SECTIONS, section);
+  const where = fillTemplate(place, { number: section + 1, total: WATERLINE_SECTIONS.length });
   return (
-    <div data-echo data-section={section} data-echo-depth={zone} className="flex min-h-[60svh] flex-col gap-3 py-5">
-      <EchoOverlay zone={zone} section={section} zones={zones} rulerLabel={rulerLabel} card={card} />
+    <div
+      data-echo
+      data-section={section}
+      data-echo-depth={zone}
+      className="relative flex min-h-[60svh] flex-col gap-3 py-5"
+    >
+      <EchoOverlay zone={zone} where={where} zones={zones} gaugeLabel={gaugeLabel} card={card} />
     </div>
   );
 }
 
-/** The words over the echo's drawing: the zone's name, the Section's card and the whole ruler. */
+/** The words over the echo's drawing: the Section's place, its card and the depth gauge naming its zone. */
 function EchoOverlay({
   zone,
-  section,
+  where,
   zones,
-  rulerLabel,
+  gaugeLabel,
   card,
-}: Pick<WaterlineEchoProps, 'section' | 'zones' | 'rulerLabel'> & {
+}: Pick<WaterlineEchoProps, 'zones' | 'gaugeLabel'> & {
   readonly zone: Zone;
+  readonly where: string;
   readonly card: EchoCardProps;
 }) {
   return (
     <>
-      <p data-echo-zone className="text-caption font-semibold tracking-wide uppercase">
-        {zones[zone].name}
+      <p data-echo-place className="text-caption font-semibold tracking-wide uppercase">
+        {where}
       </p>
       <div className="mt-auto flex flex-wrap items-end gap-3">
         <EchoCard {...card} />
-        <div className="flex-1" />
-        <DepthRuler
-          sections={WATERLINE_SECTIONS}
-          lit={section}
-          zones={zones}
-          label={rulerLabel}
-          className="w-60 shrink-0 max-md:hidden"
-        />
       </div>
+      <DepthGauge
+        zone={zone}
+        words={zones[zone]}
+        label={gaugeLabel}
+        className="absolute top-[56%] right-0 max-md:hidden"
+      />
     </>
   );
 }
 
-type EchoCardProps = Omit<WaterlineEchoProps, 'section' | 'zones' | 'rulerLabel'>;
+type EchoCardProps = Omit<WaterlineEchoProps, 'section' | 'place' | 'zones' | 'gaugeLabel'>;
 
 /** The Section's card: its AI statement first, then its drawing, then the line of each view. */
 function EchoCard({ tag, statement, chat, coding, tilt = 'left', wide, above, children }: EchoCardProps) {

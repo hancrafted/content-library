@@ -12,11 +12,12 @@ export const keepingItAlive = slide({
   messages: { en, de },
   presentation: atDepth(7, 'section'),
   segments: [{ slug: 'the-abyss' }, { slug: 'nobody-sees-it' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={7}
         wide
         statement={t('aiStatement')}

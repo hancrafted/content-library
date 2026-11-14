@@ -1,18 +1,17 @@
 import { cn } from '@/shared/lib/utils';
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
+import { DepthGauge } from './depth-gauge';
 import styles from './hero-depth-scene.module.css';
-import { HERO_DEPTH, heroDepthBands } from './hero-depth.pure';
-import { isDarkZone, zoneToken } from './ruler.pure';
+import { HERO_DEPTH, heroBleed, heroDepthBands, heroIceberg } from './hero-depth.pure';
+import { zoneToken } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Clouds } from './scenery/clouds';
 import { FishSchool } from './scenery/fish-school';
 import { FlatSky, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
-import { placeIceberg } from './scenery/iceberg-placement.pure';
 import { LightRays } from './scenery/seabed';
 import { SunMoon } from './scenery/sun-moon';
 import { Whale } from './scenery/whale';
-import { ZoneLabel } from './zone-label';
 import { Band } from './zone-scene';
 import sceneStyles from './zone-scene.module.css';
 import { seaFacets, WATER_CELL } from './zone-scene.pure';
@@ -20,71 +19,59 @@ import type { ZoneWords } from './zone-words.pure';
 
 const { width, height, waterline } = HERO_DEPTH;
 const BANDS = heroDepthBands(HERO_DEPTH);
+/** Sky and water run a drawing's width past each side, for a screen wider than the drawing. */
+const BLEED = heroBleed(HERO_DEPTH);
 const WATER = BANDS.slice(1).map((band, depth) => ({
   ...band,
-  facets: seaFacets({ width, height: band.bottom - band.top, cell: WATER_CELL, seed: 5 + depth * 6 }),
+  facets: seaFacets({ width: BLEED.width, height: band.bottom - band.top, cell: WATER_CELL, seed: 5 + depth * 6 }),
 }));
-const bandOf = (zone: 'sunlit' | 'twilight') => BANDS.find((band) => band.zone === zone)!;
-/** Clouds kept to the right and low on the left, so the title and lede read on open sky. */
+/** The sun under the header bar and above the title, near enough the middle that a phone still shows it. */
+const SUN = { x: 850, y: 200, r: 34 } as const;
+/** Clouds kept to the right and low on the left, so the title reads on open sky; heights above the waterline. */
 const CLOUDS = [
-  { x: 1050, y: 210, scale: 0.9, shape: 0 },
-  { x: 160, y: 660, scale: 0.85, shape: 0 },
-  { x: 560, y: 560, scale: 0.55, shape: 1 },
+  { x: 1090, y: 290, scale: 0.9, shape: 0 },
+  { x: 160, y: waterline - 50, scale: 0.85, shape: 0 },
+  { x: 560, y: waterline - 150, scale: 0.55, shape: 1 },
 ] as const;
-/** The one iceberg placement: body in the Sunlit band, keel touching the Twilight band. */
-const BERG = placeIceberg({
-  x: 1010,
-  waterline,
-  scale: 0.8,
-  sunlitBottom: bandOf('sunlit').bottom,
-  twilightDepth: bandOf('twilight').bottom - bandOf('twilight').top,
-});
+/** The one iceberg placement: body in the Sunlit band, keel touching the Twilight band, keel twice the tip. */
+const BERG = heroIceberg(HERO_DEPTH);
+/** The fish in the Sunlit zone, the whale in the Twilight. */
+const FISH = { x: 790, y: waterline + 62 } as const;
+const WHALE = { x: 560, y: waterline + 265, scale: 0.7 } as const;
 
-/** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale clear of the ruler. */
+/** Each zone's water under the waterline, in its own colour, bleeding past both sides. */
+function Water() {
+  return WATER.map(({ zone, top, facets }) => (
+    <g
+      key={zone}
+      data-depth-band={zone}
+      transform={`translate(${BLEED.left} ${top})`}
+      style={{ '--water': zoneToken(zone) } as CSSProperties}
+    >
+      <Band facets={facets} />
+    </g>
+  ));
+}
+
+/** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale. */
 function Depth({ children }: { readonly children?: ReactNode }) {
   return (
     <>
-      <FlatSky width={width} height={waterline} />
-      <SunMoon x={1110} y={110} r={30} />
+      <g transform={`translate(${BLEED.left} 0)`}>
+        <FlatSky width={BLEED.width} height={waterline} />
+      </g>
+      <SunMoon x={SUN.x} y={SUN.y} r={SUN.r} />
       <Clouds at={CLOUDS} />
-      {WATER.map(({ zone, top, facets }) => (
-        <g
-          key={zone}
-          data-depth-band={zone}
-          transform={`translate(0 ${top})`}
-          style={{ '--water': zoneToken(zone) } as CSSProperties}
-        >
-          <Band facets={facets} />
-        </g>
-      ))}
-      <LitWaterline width={width} y={waterline} />
+      <Water />
+      <g transform={`translate(${BLEED.left} 0)`}>
+        <LitWaterline width={BLEED.width} y={waterline} />
+      </g>
       <LightRays x={140} y={waterline} count={6} spread={130} length={230} />
       <Iceberg part="whole" {...BERG} />
-      <FishSchool x={790} y={772} />
-      <Whale x={640} y={915} scale={0.7} />
+      <FishSchool x={FISH.x} y={FISH.y} />
+      <Whale x={WHALE.x} y={WHALE.y} scale={WHALE.scale} />
       {children}
     </>
-  );
-}
-
-/** The ruler drawn down the Scene at the left inset: each zone's plain name at its band, the Surface's tile lit. */
-function Ruler({ zones, label }: { readonly zones: ZoneWords; readonly label: string }) {
-  return (
-    <ol aria-label={label} data-hero-ruler className={styles.ruler}>
-      {BANDS.map(({ zone, label: y }) => (
-        <li
-          key={zone}
-          data-ruler-zone={zone}
-          data-lit={zone === 'surface' ? '' : undefined}
-          data-dark={isDarkZone(zone) ? '' : undefined}
-          style={{ '--at-y': y } as CSSProperties}
-          className={styles.zone}
-        >
-          <span aria-hidden="true" className={styles.tile} />
-          <ZoneLabel words={zones[zone]} className={styles.label} />
-        </li>
-      ))}
-    </ol>
   );
 }
 
@@ -94,17 +81,20 @@ export interface HeroDepthSceneProps {
   /** Words for the picture: the drawing sits in the Backdrop, hidden from assistive tech, so they are read here. */
   readonly label: string;
   readonly zones: ZoneWords;
-  /** The ruler's name for assistive tech. */
-  readonly rulerLabel: string;
+  /** The depth gauge's name for assistive tech. */
+  readonly gaugeLabel: string;
   /** The "you are here" pill and the point in the drawing it hangs under, such as the robot. */
   readonly marker: { readonly text: string; readonly x: number; readonly y: number };
-  /** The Slide's figures: SVG in the drawing's 1200 by 1000 space, waterline at `HERO_DEPTH.waterline`. */
+  /** The Slide's figures: SVG in the drawing's `HERO_DEPTH` space, waterline at `HERO_DEPTH.waterline`. */
   readonly children?: ReactNode;
   /** HTML the Slide places over the hero, such as the view switch. */
   readonly overlay?: ReactNode;
 }
 
-/** The whole depth in the Slide's Backdrop: decoration, full-bleed, filled from the bottom. */
+/**
+ * The whole depth in the Slide's Backdrop: decoration, full-bleed, fitted to the hero's height and centred, so the sky,
+ * the sun and all five zones stay in view; a wider screen sees the bleed of sky and water past the drawing's sides.
+ */
 function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> & HeroDepthSceneProps['layers']) {
   return (
     <Backdrop mobile>
@@ -115,10 +105,10 @@ function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> &
       >
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="xMidYMax slice"
           aria-hidden="true"
           data-hero-depth
-          className="absolute inset-0 size-full"
+          style={{ aspectRatio: `${width} / ${height}` }}
+          className={styles.drawing}
         >
           <Depth>{children}</Depth>
         </svg>
@@ -146,11 +136,11 @@ function Marker({ marker: { text, x, y } }: Pick<HeroDepthSceneProps, 'marker'>)
 /**
  * The Title slide's full-bleed hero in the Iceberg style (the Spec's picked Title-slide Option 0a): one drawing of the
  * whole depth fills the Slide from edge to edge as its Backdrop, under the hidden table of contents too, so the
- * Slide's title and lede sit in its sky. Over it, the depth ruler down the left inset, clear of the table of contents, each zone's label beside its
- * band, and the "you are here" pill under the figure the Slide names. The drawing fills its box from the bottom
- * (`slice`); the ruler and the pill follow it through the same scale, read from the overlay's container size.
+ * Slide's title sits in its sky. Over it, the slim depth gauge at the right edge naming the Surface, and the "you are
+ * here" pill under the figure the Slide names. The drawing takes the hero's full height, so every zone shows; the pill
+ * follows it through the same scale, read from the overlay's container size.
  */
-export function HeroDepthScene({ layers, label, zones, rulerLabel, marker, children, overlay }: HeroDepthSceneProps) {
+export function HeroDepthScene({ layers, label, zones, gaugeLabel, marker, children, overlay }: HeroDepthSceneProps) {
   return (
     <>
       <Drawing Backdrop={layers.Backdrop}>{children}</Drawing>
@@ -162,7 +152,7 @@ export function HeroDepthScene({ layers, label, zones, rulerLabel, marker, child
         <p data-hero-label className="sr-only">
           {label}
         </p>
-        <Ruler zones={zones} label={rulerLabel} />
+        <DepthGauge zone="surface" words={zones.surface} label={gaugeLabel} className={styles.gauge} />
         <Marker marker={marker} />
         {overlay}
       </div>

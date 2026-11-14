@@ -12,11 +12,12 @@ export const whatASkillIs = slide({
   messages: { en, de },
   presentation: atDepth(1, 'section'),
   segments: [{ slug: 'surface-first' }, { slug: 'the-mechanics-plainly' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={1}
         statement={t('aiStatement')}
         chat={t('analogy')}

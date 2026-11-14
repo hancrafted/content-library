@@ -3,13 +3,13 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { Zone } from './ruler.pure';
-import { zonePresentation } from './zone-presentation';
+import { zonePresentation, zoneTitlePresentation } from './zone-presentation';
 
 /*
  * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): the bubbles into a section
- * slide and the slim rail, which a section slide shows on phones only, beside the whole ruler it carries on wider
- * screens. Zone backgrounds are paused (Han, 2026-11-14): every Slide keeps the page's own light or dark background
- * and text, and the zone colours mark depth only on the ruler, the rail and the scenery.
+ * slide and the slim rail, which a section slide shows on phones only. Zone backgrounds by Slide kind (Han,
+ * 2026-11-14): the Title slide and every section slide fill with their zone's colour, its text dark or light by zone
+ * in both themes, and land with that colour under the page header; a page Slide keeps the page's own background.
  */
 
 const SECTIONS: readonly Zone[] = [
@@ -56,11 +56,11 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('descends into a section slide through bubbles tinted by its zone, its rail kept to phones where the whole ruler is hidden', () => {
+  it('fills a section slide with its zone and descends into it through bubbles tinted by that zone, its rail kept to phones', () => {
     // ARRANGE
     const expected = {
       enter: { effect: 'bubbles', style: { '--slide-transition-bubble': 'var(--zone-sunlit)' } },
-      surface: undefined,
+      surface: 'var(--zone-sunlit)',
       rail: { rails: 1, phoneOnly: '', lit: ['2'] },
     };
     // ACT
@@ -70,6 +70,16 @@ describe('success cases', () => {
       surface: presentation.style['--slide-surface'],
       rail: railOf(presentation.rear),
     };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('fills the Title slide with the Surface, its text dark in both themes', () => {
+    // ARRANGE
+    const expected = { surface: 'var(--zone-surface)', foreground: 'var(--zone-abyss)' };
+    // ACT
+    const { style } = zoneTitlePresentation();
+    const seen = { surface: style['--slide-surface'], foreground: style['--foreground'] };
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -99,10 +109,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('draws the scene of a section slide full-bleed behind it, under its rail, its text light where the zone is dark', () => {
+  it('draws the scene of a section slide full-bleed behind it, under its rail, its text dark to the Sunlit and light from the Twilight down', () => {
     // ARRANGE
+    const dark = 'var(--zone-abyss)';
     const light = 'var(--on-brand-accent)';
-    const expected = { order: ['scene', 'rail'], foreground: [undefined, undefined, undefined, light, light] };
+    const expected = { order: ['scene', 'rail'], foreground: [dark, dark, light, light, light] };
     const scene = createElement('svg', { 'data-test-scene': '' });
     // ACT
     const at = (section: number) => zonePresentation({ sections: SECTIONS, section, kind: 'section', scene });
@@ -117,13 +128,27 @@ describe('edge cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('leaves the page text alone at every depth, the dark zones too, while zone backgrounds are paused', () => {
+  it('lands a section slide with its zone under the page header, a page Slide where it always did', () => {
     // ARRANGE
-    const expected = [undefined, undefined, undefined, undefined];
+    const expected = {
+      section: { offset: '0px', before: 'var(--header-block)' },
+      page: { offset: undefined, before: undefined },
+    };
     // ACT
-    const seen = [6, 7, 4, 0].map(
-      (section) => zonePresentation({ sections: SECTIONS, section, kind: 'page' }).style['--foreground'],
-    );
+    const landing = (kind: 'section' | 'page') => {
+      const { style } = zonePresentation({ sections: SECTIONS, section: 3, kind });
+      return { offset: style['--slide-anchor-offset'], before: style['--slide-space-before'] };
+    };
+    const seen = { section: landing('section'), page: landing('page') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('leaves a page Slide on the page background and text at every depth, the dark zones too', () => {
+    // ARRANGE
+    const expected = [{}, {}, {}, {}];
+    // ACT
+    const seen = [6, 7, 4, 0].map((section) => zonePresentation({ sections: SECTIONS, section, kind: 'page' }).style);
     // ASSERT
     expect(seen).toEqual(expected);
   });

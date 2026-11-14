@@ -11,8 +11,8 @@ import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 /*
  * The section slides of "What lies below the waterline of sustainable AI skills", as the approved Spec gives them: one
  * per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one
- * echo of picked Title-slide Option 0a: the Section's card at its zone's depth and the whole depth ruler, the Section's
- * tile lit, over its zone drawn by ZoneScene with the robot on its cable, full-bleed behind the Slide as its rear
+ * echo of picked Title-slide Option 0a: the Section's place in the Episode over its card at its zone's depth, and the
+ * depth gauge naming its zone, over its zone drawn by ZoneScene with the robot on its cable, full-bleed behind the Slide as its rear
  * decoration, like the Title slide's hero (design-ADR-0025).
  */
 
@@ -139,15 +139,19 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('lights only its own Section on the ruler, never a neighbour', () => {
+  it('names only its own zone on the depth gauge, never a neighbour, and carries no Section tiles', () => {
     // ARRANGE
-    const expected = [['0'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7']];
+    const zones = ['surface', 'surface', 'sunlit', 'sunlit', 'twilight', 'twilight', 'midnight', 'abyss'];
+    const expected = zones.map((zone) => ({ current: [zone], tiles: 0 }));
     // ACT
     const actual = OPENERS.map(({ slug }) => {
       const $ = sceneOf(slug);
-      return $('[data-tile][data-lit]')
-        .toArray()
-        .map((tile) => $(tile).attr('data-section'));
+      return {
+        current: $('[data-depth-gauge] [data-gauge-zone][data-current]')
+          .toArray()
+          .map((segment) => $(segment).attr('data-gauge-zone')),
+        tiles: $('[data-tile]').length,
+      };
     });
     // ASSERT
     expect(actual).toEqual(expected);
@@ -219,41 +223,26 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('names the five zones on every ruler by their ocean terms, read from each Slide in its own words', () => {
+  it("names each Section's zone on its gauge in its plain word, read from each Slide in its own words", () => {
     // ARRANGE
-    const terms = [
-      'the sea surface and the air above it',
-      'epipelagic',
-      'mesopelagic',
-      'bathypelagic',
-      'abyssopelagic',
-    ];
-    const expected = [terms, terms, terms, terms, terms, terms, terms, terms];
+    const expected = ['Surface', 'Surface', 'Sunlit', 'Sunlit', 'Twilight', 'Twilight', 'Midnight', 'Abyss'];
     // ACT
-    const actual = OPENERS.map(({ slug }) => {
-      const $ = sceneOf(slug);
-      return $('[data-ocean-term]')
-        .toArray()
-        .map((term) => $(term).text());
-    });
+    const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-depth-gauge] [data-gauge-reading]').text());
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('names the zone over each card in German too', () => {
+  it("names each Section's place in the Episode over its card, in English and German", () => {
     // ARRANGE
-    const expected = [
-      'Oberfläche',
-      'Oberfläche',
-      'Sonnenlichtzone',
-      'Sonnenlichtzone',
-      'Dämmerzone',
-      'Dämmerzone',
-      'Mitternachtszone',
-      'Abyssal',
-    ];
+    const expected = {
+      en: OPENERS.map((_, index) => `Section ${index + 1} of 8`),
+      de: OPENERS.map((_, index) => `Abschnitt ${index + 1} von 8`),
+    };
     // ACT
-    const actual = OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-echo-zone]').text());
+    const actual = {
+      en: OPENERS.map(({ slug }) => sceneOf(slug, 'en')('[data-echo-place]').text()),
+      de: OPENERS.map(({ slug }) => sceneOf(slug, 'de')('[data-echo-place]').text()),
+    };
     // ASSERT
     expect(actual).toEqual(expected);
   });

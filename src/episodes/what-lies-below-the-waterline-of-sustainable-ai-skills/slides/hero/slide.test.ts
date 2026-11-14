@@ -44,21 +44,19 @@ describe('success cases', () => {
     expect(pills).toEqual(expected);
   });
 
-  it('names the five zones on the ruler down the left, from the Surface down, the Surface lit', () => {
+  it('names only the Surface on the depth gauge, in its plain word', () => {
     // ARRANGE
-    const expected = {
-      zones: ['Surface', 'Sunlit', 'Twilight', 'Midnight', 'Abyss'],
-      lit: ['surface'],
-    };
+    const expected = { zones: ['Surface'], current: ['surface'], reading: 'Surface' };
     // ACT
     const $ = sceneOf('en');
     const seen = {
-      zones: $('[data-hero-ruler] [data-ruler-zone] [data-zone-label]')
+      zones: $('[data-depth-gauge] [data-zone-label]')
         .toArray()
         .map((zone) => $(zone).text()),
-      lit: $('[data-hero-ruler] [data-ruler-zone][data-lit]')
+      current: $('[data-depth-gauge] [data-gauge-zone][data-current]')
         .toArray()
-        .map((zone) => $(zone).attr('data-ruler-zone')),
+        .map((zone) => $(zone).attr('data-gauge-zone')),
+      reading: $('[data-depth-gauge] [data-gauge-reading]').text(),
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -66,14 +64,14 @@ describe('success cases', () => {
 
   it('draws the whole depth full-bleed in the Backdrop and keeps every word a reader needs out of it', () => {
     // ARRANGE
-    const expected = { drawings: 1, wordsInBackdrop: 0, ruler: 1, pill: 1, described: 1 };
+    const expected = { drawings: 1, wordsInBackdrop: 0, gauge: 1, pill: 1, described: 1 };
     // ACT
     const $ = sceneOf('en');
     const backdrop = $('[data-slot="slide-backdrop"]');
     const seen = {
       drawings: backdrop.find('svg[data-hero-depth]').length,
-      wordsInBackdrop: backdrop.find('[data-hero-ruler], [data-you-are-here], [data-view-toggle], p, button').length,
-      ruler: $('[data-hero-overlay] [data-hero-ruler]').length,
+      wordsInBackdrop: backdrop.find('[data-depth-gauge], [data-you-are-here], [data-view-toggle], p, button').length,
+      gauge: $('[data-hero-overlay] [data-depth-gauge]').length,
       pill: $('[data-hero-overlay] [data-you-are-here]').length,
       described: $('[data-hero-overlay] [data-hero-label]').length,
     };

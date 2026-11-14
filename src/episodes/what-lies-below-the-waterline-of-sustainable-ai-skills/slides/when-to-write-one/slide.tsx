@@ -12,11 +12,12 @@ export const whenToWriteOne = slide({
   messages: { en, de },
   presentation: atDepth(2, 'section'),
   segments: [{ slug: 'sunlight' }, { slug: 'borrowed-principles' }, { slug: 'why-a-rule-of-thumb' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={2}
         wide
         statement={t('aiStatement')}

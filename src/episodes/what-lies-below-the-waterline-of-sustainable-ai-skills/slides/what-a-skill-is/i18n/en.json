@@ -27,7 +27,8 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, What a skill is lit",
+  "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "aiStatement": "A skill is a name, a description and instructions",
   "analogy": "A procedure card: title, use-when line, steps.",
   "agent": "SKILL.md, plus scripts/ references/ assets/",
