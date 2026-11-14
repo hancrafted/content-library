@@ -1,0 +1,22 @@
+{
+  "title": "Ein Gedankenexperiment",
+  "caption": "Vier perfekte Karten auf einem Board, und das Fest scheitert trotzdem zwischen ihnen.",
+  "board": "Essen und Getränke schickt 31 vegetarisch hinüber; die Küche der Location schickt Eiergerichte zurück, als gescheitert markiert: verfehlt zusammen",
+  "seam": {
+    "from": { "team": "Essen & Getränke", "note": "31\nvegetarisch" },
+    "to": { "team": "Location-Küche", "note": "Eier-\ngerichte" },
+    "handoff": "vegetarisch",
+    "back": "mit Eiern serviert"
+  },
+  "breaks": "verfehlt: zusammen",
+  "footer": "das Wort meinte etwas anderes",
+  "voiceScript": {
+    "segments": {
+      "imagine-the-board": {
+        "title": "Stell Dir das Board vor",
+        "keywords": "",
+        "script": "Stell Dir vor, Du verantwortest ein Sommerfest für 200 Kolleginnen und Kollegen aus fünf Standorten, und Du hast vier hervorragende Freelancer mit der Planung beauftragt, je einen für Programm, Anreise, Location und Essen und Getränke. Sie treffen sich nie und rufen einander nie an, denn das Einzige, was sie teilen, ist ein Board, auf dem alle Zettel hinterlassen."
+      }
+    }
+  }
+}

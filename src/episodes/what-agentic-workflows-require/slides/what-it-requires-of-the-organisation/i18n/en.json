@@ -1,0 +1,26 @@
+{
+  "title": "What it requires of the organisation",
+  "caption": "The workflow people draw takes the shape of the organisation.",
+  "board": "Above, the venue team of ten and Food and drinks of one, drawn as dashed team boxes; below, the four cards Activities, Travel, Venue, Food and drinks chained to the goal, their seams following the goal, not the teams",
+  "teams": {
+    "venue": "Venue team ×10",
+    "food": "Food & drinks ×1"
+  },
+  "follow": "seams follow the goal",
+  "cards": {
+    "activities": "Activities",
+    "travel": "Travel",
+    "venue": "Venue",
+    "food": "Food &\ndrinks",
+    "goal": "Goal"
+  },
+  "voiceScript": {
+    "segments": {
+      "from-people-to-the-company": {
+        "title": "From people to the company",
+        "keywords": "",
+        "script": "Skills in your people are not enough. The workflow they draw has a shape of its own, and that shape comes from the organisation they work in."
+      }
+    }
+  }
+}

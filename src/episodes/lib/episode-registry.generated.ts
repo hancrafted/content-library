@@ -35,6 +35,7 @@ import { grids } from '@/episodes/templates/grids/episode';
 import { iceBerg } from '@/episodes/templates/ice-berg/episode';
 import { timelines } from '@/episodes/templates/timelines/episode';
 import { workshopTemplate } from '@/episodes/templates/workshop-template/episode';
+import { whatAgenticWorkflowsRequire } from '@/episodes/what-agentic-workflows-require/episode';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 
 /** Every Episode's composition by id, so a record's slug must be its folder's name. */
@@ -63,6 +64,7 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,
+  'what-agentic-workflows-require': whatAgenticWorkflowsRequire,
   'what-lies-below-the-waterline-of-sustainable-ai-skills': whatLiesBelowTheWaterlineOfSustainableAiSkills,
 };
 

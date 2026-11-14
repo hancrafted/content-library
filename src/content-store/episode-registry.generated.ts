@@ -23,6 +23,7 @@ import { episodeMetadata as fromSharedUnderstandingToSharedContext } from '@/epi
 import { episodeMetadata as maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from '@/episodes/never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from '@/episodes/onboard-ai-every-time/episode-metadata';
+import { episodeMetadata as whatAgenticWorkflowsRequire } from '@/episodes/what-agentic-workflows-require/episode-metadata';
 import { episodeMetadata as whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode-metadata';
 import type { EpisodeInput } from './schemas/episode.schema';
 
@@ -52,6 +53,7 @@ export const EPISODE_METADATA = {
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,
+  'what-agentic-workflows-require': whatAgenticWorkflowsRequire,
   'what-lies-below-the-waterline-of-sustainable-ai-skills': whatLiesBelowTheWaterlineOfSustainableAiSkills,
 } as const satisfies { readonly [I in EpisodeId]: EpisodeInput & { readonly slug: EpisodeSlugOf<I> } };
 

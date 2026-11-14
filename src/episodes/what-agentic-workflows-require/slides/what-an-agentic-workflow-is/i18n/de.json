@@ -1,0 +1,26 @@
+{
+  "title": "Was ein agentischer Workflow ist",
+  "caption": "Zwei Begriffe als Grundlage: erst ein Agent, dann ein agentischer Workflow.",
+  "board": "Die vier Karten Programm, Anreise, Essen und Getränke, Location; die Nahtstelle zwischen Essen und Getränken und der Küche der Location vergrößert, beschriftet mit 31 vegetarisch: Die Nahtstelle gestaltest Du",
+  "cards": {
+    "activities": "Programm",
+    "travel": "Anreise",
+    "food": "Essen &\nGetränke",
+    "venue": "Location"
+  },
+  "seam": {
+    "from": "Essen & Getränke",
+    "to": "Location-Küche",
+    "handoff": "31 vegetarisch"
+  },
+  "design": "Die Nahtstelle gestaltest Du",
+  "voiceScript": {
+    "segments": {
+      "name-the-thing": {
+        "title": "Die Sache benennen",
+        "keywords": "",
+        "script": "Bevor wir das Board reparieren, brauchen wir zwei Begriffe als Grundlage. Was ist ein Agent, und was macht einen Workflow agentisch? Erst der Begriff, dann das Board."
+      }
+    }
+  }
+}
