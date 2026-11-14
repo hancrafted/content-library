@@ -1,5 +1,5 @@
+import { ContractCard, type ContractTermsProps } from '@/episodes/components/slide-shared/contract-card/contract-card';
 import { cn } from '@/shared/lib/utils';
-import { ContractCard, type ContractCardProps } from './contract-card';
 
 /** A card on the board: the team that holds it, its fact and a detail line. */
 export interface SeamNote {
@@ -16,7 +16,7 @@ export interface SeamProps {
   readonly to: SeamNote & { readonly external?: { readonly tag: string; readonly label: string } };
   /** The handoff arrow's accessible name. */
   readonly handoff: string;
-  readonly contract?: ContractCardProps;
+  readonly contract?: ContractTermsProps;
 }
 
 /** The agent badge on a card's corner: a spark in the meaning colour `ai`. */
