@@ -60,6 +60,14 @@
   --youtube: oklch(0.628 0.258 29.2);
   /* The scrim behind a modal drawer and the video frame's backdrop; callers set the opacity (`bg-overlay/40`). */
   --overlay: oklch(0 0 0);
+  /* The Iceberg style's five zones (docs/design/design-guide.md#iceberg), light fading with depth: one value per zone, so
+     Han tunes a zone once and every Slide that names it follows. Surface, Sunlit and Twilight carry the page's dark text;
+     Midnight and Abyss carry light text in both themes. */
+  --zone-surface: oklch(0.95 0.03 225);
+  --zone-sunlit: oklch(0.84 0.07 225);
+  --zone-twilight: oklch(0.7 0.09 235);
+  --zone-midnight: oklch(0.36 0.08 250);
+  --zone-abyss: oklch(0.2 0.045 260);
   /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
   /* Type roles (docs/design/design-system.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
@@ -129,6 +137,11 @@
   --highlight-target: oklch(0.75 0.14 260);
   --youtube: oklch(0.68 0.23 29.2);
   --overlay: oklch(0 0 0);
+  --zone-surface: oklch(0.34 0.06 245);
+  --zone-sunlit: oklch(0.3 0.06 240);
+  --zone-twilight: oklch(0.25 0.055 245);
+  --zone-midnight: oklch(0.2 0.045 250);
+  --zone-abyss: oklch(0.14 0.03 260);
 }
 
 @theme inline {

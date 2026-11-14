@@ -1,0 +1,49 @@
+{
+  "title": "Die Beschreibung",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Die Beschreibung hervorgehoben",
+  "aiStatement": "Die Beschreibung ist alles, was die KI sieht",
+  "description": "„Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“",
+  "analogy": "Das Register ist offen, jede Karte dahinter geschlossen.",
+  "agent": "SKILL.md: Name und Beschreibung laden zuerst",
+  "voiceScript": {
+    "segments": {
+      "the-label-decides": {
+        "title": "Das Etikett entscheidet",
+        "keywords": "",
+        "script": "Wir sind noch im Sonnenlicht, und das ist der Teil, den die meisten überspringen. Ein Skill, den das Modell nie auswählt, hilft niemandem. Deshalb zählt die Beschreibung mehr als die Anweisungen."
+      },
+      "name-description": {
+        "title": "Name, Beschreibung",
+        "keywords": "",
+        "script": "Bevor das Modell einen Skill öffnet, sieht es zwei Zeilen: den Namen und die Beschreibung. Mehr steht nicht im Register, und mehr hat das Modell nicht, um zu entscheiden."
+      }
+    }
+  }
+}

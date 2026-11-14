@@ -1,0 +1,117 @@
+{
+  "title": "Not every repeat deserves a skill",
+  "caption": "A skill written too early locks in a procedure nobody has proven.",
+  "alt": {
+    "scene": "The control room. The pilot, the AI model, sits at the console beside a fat ring binder bursting with thin card tabs, several red. A long skill index spills off the page; several entries are stamped never tested, and the one you need is buried seventh."
+  },
+  "index": {
+    "heading": {
+      "chat": "Skill index",
+      "coding": "<code>SKILL.md</code> names"
+    },
+    "count": {
+      "chat": "47 skills",
+      "coding": "47 folders"
+    },
+    "entries": {
+      "rinseCameraDome": { "label": "Rinse the dome" },
+      "sampleOld": { "label": "Sample (old)" },
+      "takeSampleV2": { "label": "Take sample v2" },
+      "namePhotoFolders": { "label": "Name the photo folders" },
+      "sedimentQuick": { "label": "Sediment, quick version" },
+      "sampleLikeAna": { "label": "Sample, Ana's way" },
+      "collectSedimentSample": { "label": "Collect sediment sample at a new site" },
+      "sampleButFaster": { "label": "Sample, but faster" },
+      "tuesdayWeatherNote": { "label": "Write Tuesday's weather note" },
+      "cleanArmMaybe": { "label": "Clean the arm (maybe)" },
+      "collectSedimentSampleCopy": { "label": "Collect sediment sample (copy)" },
+      "logDepthDraft": { "label": "Log depth (draft)" },
+      "crewCoffeeOrder": { "label": "Crew coffee order" },
+      "checkWinchAgain": { "label": "Check the winch, again" },
+      "sampleV3": { "label": "Sample v3 (try this)" },
+      "labelCoresAlt": { "label": "Label the cores, alt" },
+      "diveLogShort": { "label": "Dive log, short form" }
+    }
+  },
+  "stamp": "never tested",
+  "needed": "needed",
+  "check": {
+    "heading": "Before you write a skill",
+    "repeat": "Does the task <b>repeat</b>?",
+    "rules": "Does it have <b>rules</b>?",
+    "cost": "Does a <b>mistake cost</b> something?",
+    "verdict": {
+      "chat": "No to all three? Leave it in the chat.",
+      "coding": "No to all three? Leave it in the prompt: no new <code>SKILL.md</code>."
+    },
+    "disclaimer": "A practical filter, not a published test.",
+    "after": "After the check: 5 skills."
+  },
+  "price": {
+    "title": "Why check: every skill has a price.",
+    "body": "<marker>One more thing to keep right, and one more description in the skill index the AI reads every time.</marker>"
+  },
+  "didYouKnow": {
+    "label": "Did you know?",
+    "yagni": "<b>YAGNI:</b> <marker>build a thing when you need it, not when you foresee it</marker>",
+    "knuth": "<b>Knuth:</b> <marker>premature optimisation is \"the root of all evil\", a rule about timing</marker>"
+  },
+  "story": {
+    "label": "In the story:",
+    "analogy": "A manual stuffed with thin cards buries the one you need."
+  },
+  "notes": {
+    "skills-written-too-early": {
+      "header": "Skills written too early: Knuth on premature optimisation",
+      "description": "\"We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that critical 3%\" [1]. His reason is a cost, and the same paper calls ignoring efficiency in the small \"an overreaction\", so it is a rule about timing and measurement. The quotes were not checked against the original (the ACM page returned 403).",
+      "sources": {
+        "knuth-structured-programming": {
+          "title": "Knuth, Structured Programming with go to Statements"
+        }
+      }
+    },
+    "skills-nobody-needs-yet": {
+      "header": "Skills nobody needs yet: YAGNI, and what it does not cover",
+      "description": "\"Always implement things when you actually need them, never when you just foresee that you need them\" [1]. Fowler counts four costs of a presumptive feature (build, delay, carry, repair) and says YAGNI does not apply to effort to make software easier to modify [2].",
+      "sources": {
+        "jeffries-yagni": {
+          "title": "Jeffries, You're NOT gonna need it!"
+        },
+        "fowler-yagni": {
+          "title": "Fowler, Yagni"
+        }
+      }
+    },
+    "a-crowded-skill-index": {
+      "header": "A crowded skill index costs the AI too",
+      "description": "by default every skill's description is loaded on every turn, unless the skill is user-only, and Claude Code and Codex cap or shorten the skill listing, so a crowded index can shorten or drop descriptions [1][2].",
+      "sources": {
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code docs)"
+        },
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "too-early": {
+        "title": "Too early",
+        "keywords": "",
+        "script": "Now the opposite danger. If you write the skill after the first run, you freeze a guess, and a procedure nobody has proven now carries the authority of a skill."
+      },
+      "a-thin-card-has-a-price": {
+        "title": "A thin card has a price",
+        "keywords": "",
+        "script": "And every quick skill has a price. It is one more thing to keep right and one more line in an index that only grows, so picture a manual stuffed with thin cards, several of them never tested, until the one you need is buried in the middle."
+      },
+      "three-questions": {
+        "title": "Three questions",
+        "keywords": "",
+        "script": "So before you write a skill, ask three questions. Does the task repeat, does it have rules, and does a mistake cost something? If the answer is no to all three, leave it in the chat. This check is mine, a practical filter I use, not a published test."
+      }
+    }
+  }
+}

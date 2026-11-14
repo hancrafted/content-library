@@ -1,0 +1,85 @@
+{
+  "title": "A skill hands the AI your procedure",
+  "caption": "When a request matches its description, or you call it by name, the AI reads that one skill into the context.",
+  "request": "Grab some mud here before we move on.",
+  "callouts": {
+    "skill": {
+      "term": "1 · Skill",
+      "scene": "procedure card"
+    },
+    "description": {
+      "term": "2 · Description",
+      "scene": "index line"
+    },
+    "project": {
+      "term": "3 · Project instructions",
+      "scene": "project brief"
+    }
+  },
+  "tilesLabel": "The three things to remember",
+  "tiles": {
+    "skill": {
+      "gloss": "Your proven procedure. It enters the context <marker>when a request matches its description, or when you call it by name.</marker>",
+      "codeGloss": "Claude reads <code>SKILL.md</code> <marker>when a request matches the description, and only then does it enter the context.</marker>"
+    },
+    "description": {
+      "gloss": "One line that tells the AI what the skill is for.",
+      "codeGloss": "The name and description at the top of the file."
+    },
+    "project": {
+      "gloss": "What is true for this project, loaded in every conversation.",
+      "codeGloss": "The project instructions file the agent reads, <code>CLAUDE.md</code> in Claude Code."
+    }
+  },
+  "card": {
+    "title": "Collect sediment sample",
+    "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+    "steps": {
+      "hold": "Hold the robot 2 m above the seabed",
+      "findFlat": "Find a flat patch on camera",
+      "core": "Push the corer in, seal, lift"
+    }
+  },
+  "brief": {
+    "title": "Coastal shelf survey",
+    "lines": {
+      "sites": "Sites 1 to 7",
+      "samples": "Samples go to the lab database"
+    }
+  },
+  "analogyLead": "In the story:",
+  "analogy": "The pilot pulls one card from the dive manual when the dive needs it.",
+  "alt": {
+    "cutaway": "Cutaway of the research ship at the surface: in the control room the captain asks for a seabed sample, the pilot sits at the console, the project brief hangs on the wall, and one procedure card has slid out of the dive manual on the desk; the robot hangs on its cable below the waterline."
+  },
+  "notes": {
+    "a-skill-spares-you-the-repeat": {
+      "header": "A skill spares you the repeat",
+      "description": "Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations [1]. When a request matches a skill's description, Claude reads SKILL.md and only then does that content enter the context [1]. Calling a skill by name loads it too, as the Slide on two ways to call a skill shows.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills overview"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "title": "The answer",
+        "keywords": "",
+        "script": "Most people land on the same idea within a minute: write it down. Write the procedure once, keep it where the model can find it, and let the model read it when the task comes up, instead of you explaining it again every morning. That is a skill, and in our picture it is a procedure card in the dive manual at the console. The rest of this Episode is about doing it well."
+      },
+      "three-things-to-remember": {
+        "title": "Three things to remember",
+        "keywords": "",
+        "script": "Hold on to three terms, because we return to them all the way down. The skill is the procedure itself, the card. Its description is the one line that tells the model what the skill is for, an entry in the manual's index. And the project instructions hold what is true for this one project, the project brief on the wall."
+      },
+      "the-card-slides-out": {
+        "title": "The card slides out",
+        "keywords": "",
+        "script": "And here is the part that matters most: the model does not read every skill you have. It reads the descriptions, and it opens one skill when the task needs it, the way one card comes out of the manual when the dive needs it. (pause) That is the picture for everything that follows."
+      }
+    }
+  }
+}

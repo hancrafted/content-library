@@ -1,0 +1,45 @@
+/*
+ * The stuffed binder on the pilot's console: a blue cover mixed from `--info`, card tabs, the stamped ones in
+ * `--destructive`, and its paper label. No raw colour: every tone mixes theme-stable tokens (`--on-brand-accent` white,
+ * `--overlay` black) with a hue, as the shared control room does.
+ */
+
+.binderPalette {
+  --binder-lit: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
+  --binder: color-mix(in oklab, var(--info) 75%, var(--overlay));
+  --binder-shade: color-mix(in oklab, var(--info) 55%, var(--overlay));
+  --tab: color-mix(in oklab, var(--bulb) 25%, var(--on-brand-accent));
+  --tab-stamped: color-mix(in oklab, var(--destructive) 80%, var(--on-brand-accent));
+  --paper: var(--on-brand-accent);
+  --paper-ink: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay)));
+}
+
+:global(.dark) .binderPalette {
+  --paper: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
+}
+
+.paper {
+  fill: var(--paper);
+  stroke: var(--paper-ink);
+  stroke-width: 0.6;
+}
+
+.binderLit {
+  fill: var(--binder-lit);
+}
+
+.binder {
+  fill: var(--binder);
+}
+
+.binderShade {
+  fill: var(--binder-shade);
+}
+
+.tab {
+  fill: var(--tab);
+}
+
+.tabStamped {
+  fill: var(--tab-stamped);
+}

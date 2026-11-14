@@ -1,4 +1,4 @@
-export type TransitionStyle = 'liquid' | 'paper' | 'glitch' | 'goo' | 'dither' | 'wave';
+export type TransitionStyle = 'liquid' | 'paper' | 'glitch' | 'goo' | 'dither' | 'wave' | 'bubbles';
 
 function LiquidFilter({ id }: { id: string }) {
   return (
@@ -119,6 +119,30 @@ function WaveFilter({ id }: { id: string }) {
   );
 }
 
+/**
+ * The `bubbles` water line: a long, low swell only, so the incoming surface rises as calm water rather than a wavy
+ * ink edge. The bubbles themselves are separate round shapes (`BubbleRise`), rising above this line.
+ */
+function BubblesFilter({ id }: { id: string }) {
+  return (
+    <filter id={id} x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.002" numOctaves={1} seed={17} result="noise" />
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="noise"
+        scale={28}
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="displaced"
+      />
+      <feGaussianBlur in="displaced" stdDeviation={0.8} result="presmooth" />
+      <feComponentTransfer in="presmooth">
+        <feFuncA type="discrete" tableValues="0 0 0 0 1 1 1 1" />
+      </feComponentTransfer>
+    </filter>
+  );
+}
+
 const FILTERS = {
   liquid: LiquidFilter,
   paper: PaperFilter,
@@ -126,6 +150,7 @@ const FILTERS = {
   goo: GooFilter,
   dither: DitherFilter,
   wave: WaveFilter,
+  bubbles: BubblesFilter,
 };
 
 export function InkFilterDefinition({ style, id = `ink-edge-${style}` }: { style: TransitionStyle; id?: string }) {

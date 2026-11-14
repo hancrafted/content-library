@@ -1,0 +1,54 @@
+{
+  "label": "Ein Forschungsschiff an der Wasserlinie hat seinen Tauchroboter am Kabel vom A-Rahmen herabgelassen; er hängt knapp über dem Wasser, seine Lampe leuchtet nach unten. Dahinter ein Eisberg, der größte Teil unter der Wasserlinie, über den Meereszonen bis hinab in die Tiefsee.",
+  "youAreHere": "Du bist hier · Oberfläche",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "agent": {
+    "heading": "Coding-Agent · die Dateien dahinter",
+    "files": {
+      "skill": {
+        "name": "SKILL.md",
+        "role": "Name, Beschreibung, Anweisungen"
+      },
+      "folders": {
+        "name": "references/ scripts/ assets/",
+        "role": "Begleitdateien"
+      },
+      "project": {
+        "name": "eine Projektdatei, etwa CONTEXT.md",
+        "role": "Projektdetails, gelesen, wenn der Skill läuft"
+      }
+    }
+  },
+  "ruler": "Tiefenlineal, die Oberfläche hervorgehoben",
+  "view": {
+    "label": "Ansicht",
+    "chat": "Chat-App",
+    "coding": "Coding-Agent"
+  }
+}

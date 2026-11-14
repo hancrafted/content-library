@@ -1,0 +1,41 @@
+/*
+ * The emote's one motion: once the Slide's mount turns active, each mark and bubble pops in after the figure's own
+ * motion (`--emote-delay`, set by the figure), then rests. The base rule is the rest state, which is also what reduced
+ * motion and a Slide that is not active show: the emote is always visible, never behind hover.
+ */
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    scale: 0.2;
+  }
+  70% {
+    opacity: 1;
+    scale: 1.12;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.pop {
+  transform-box: fill-box;
+  transform-origin: 30% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .pop {
+    animation: pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) var(--emote-delay, 300ms) both;
+  }
+}
+
+/*
+ * The words' size against the figure: 1 draws caption text one figure unit per pixel. A close-up Scene sets
+ * `--says-scale` below 1 in its own CSS module; the bubble shrinks towards its corner by the head, so its tail still
+ * meets it.
+ */
+.saysScale {
+  scale: var(--says-scale, 1);
+  transform-origin: 0 0;
+}

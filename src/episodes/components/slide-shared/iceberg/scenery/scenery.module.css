@@ -1,0 +1,474 @@
+/*
+ * The scenery's palette and its one ambient loop per zone (design-ADR 0025, the design guide's Iceberg style).
+ *
+ * Colours: every `--scenery-*` tone is a mix of theme-stable tokens (`--on-brand-accent` white, `--overlay` black)
+ * with a hue from `--info` (blues) or `--bulb` (warm), light here and dark under `.dark`. No meaning colour lends a
+ * hue: `machine`, `human` and `ai` stay for their meanings. A facet path names its tone in `data-tone`; the rules
+ * below fill it, with a same-colour hairline that closes the anti-aliasing seams between facets.
+ *
+ * Motion: one slow loop per zone, scenery only, and only on the active Slide (`[data-zone='active']`, the Slide
+ * mount's hook). Each loop starts from the part's drawn pose, so with the animation removed (any other zone, reduced
+ * motion) the part rests where it is drawn. The iceberg never moves.
+ */
+
+.scenery {
+  --scenery-bed: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
+  --scenery-bed-lit: color-mix(
+    in oklab,
+    var(--bulb) 39%,
+    color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay))
+  );
+  --scenery-bed-shade: color-mix(
+    in oklab,
+    var(--bulb) 28%,
+    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
+  );
+  --scenery-berg-deep: color-mix(
+    in oklab,
+    var(--info) 83%,
+    color-mix(in oklab, var(--on-brand-accent) 8%, var(--overlay))
+  );
+  --scenery-berg-glint: color-mix(in oklab, var(--info) 3%, var(--on-brand-accent));
+  --scenery-berg-light: color-mix(in oklab, var(--info) 30%, var(--on-brand-accent));
+  --scenery-berg-lit: color-mix(in oklab, var(--info) 15%, var(--on-brand-accent));
+  --scenery-berg-mid: color-mix(in oklab, var(--info) 47%, var(--on-brand-accent));
+  --scenery-berg-shade: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --scenery-berg-sub: color-mix(in oklab, var(--info) 83%, var(--on-brand-accent));
+  --scenery-berg-sub-lit: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --scenery-berg-sub-shade: color-mix(
+    in oklab,
+    var(--info) 90%,
+    color-mix(in oklab, var(--on-brand-accent) 70%, var(--overlay))
+  );
+  --scenery-bubble: color-mix(in oklab, color-mix(in oklab, var(--info) 27%, var(--on-brand-accent)) 45%, transparent);
+  --scenery-cloud-lit: var(--on-brand-accent);
+  --scenery-cloud-shade: color-mix(in oklab, var(--info) 20%, var(--on-brand-accent));
+  --scenery-fish-lit: color-mix(
+    in oklab,
+    var(--bulb) 72%,
+    color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay))
+  );
+  --scenery-fish-shade: color-mix(
+    in oklab,
+    var(--bulb) 78%,
+    color-mix(in oklab, var(--on-brand-accent) 41%, var(--overlay))
+  );
+  --scenery-glint: var(--on-brand-accent);
+  --scenery-glow: color-mix(in oklab, var(--info) 20%, var(--on-brand-accent));
+  --scenery-glow-soft: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 47%, var(--on-brand-accent)) 55%,
+    transparent
+  );
+  --scenery-jelly: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 60%, transparent);
+  --scenery-jelly-lit: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 27%, var(--on-brand-accent)) 80%,
+    transparent
+  );
+  --scenery-moon: color-mix(in oklab, var(--info) 13%, color-mix(in oklab, var(--on-brand-accent) 94%, var(--overlay)));
+  --scenery-moon-glow: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 13%, var(--on-brand-accent)) 20%,
+    transparent
+  );
+  --scenery-moon-lit: color-mix(in oklab, var(--info) 7%, var(--on-brand-accent));
+  --scenery-ray: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 18%, transparent);
+  --scenery-sun: color-mix(in oklab, var(--bulb) 89%, var(--on-brand-accent));
+  --scenery-sun-glow: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--bulb) 44%, var(--on-brand-accent)) 35%,
+    transparent
+  );
+  --scenery-sun-lit: color-mix(in oklab, var(--bulb) 56%, var(--on-brand-accent));
+  --scenery-whale: color-mix(
+    in oklab,
+    var(--info) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay))
+  );
+  --scenery-whale-belly: color-mix(
+    in oklab,
+    var(--bulb) 39%,
+    color-mix(in oklab, var(--on-brand-accent) 89%, var(--overlay))
+  );
+  --scenery-whale-belly-shade: color-mix(
+    in oklab,
+    var(--bulb) 44%,
+    color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay))
+  );
+  --scenery-whale-lit: color-mix(
+    in oklab,
+    var(--info) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay))
+  );
+  --scenery-whale-shade: color-mix(
+    in oklab,
+    var(--info) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 33%, var(--overlay))
+  );
+}
+
+:global(.dark) .scenery {
+  --scenery-bed: color-mix(in oklab, var(--bulb) 25%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
+  --scenery-bed-lit: color-mix(
+    in oklab,
+    var(--bulb) 28%,
+    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
+  );
+  --scenery-bed-shade: color-mix(
+    in oklab,
+    var(--bulb) 19%,
+    color-mix(in oklab, var(--on-brand-accent) 13%, var(--overlay))
+  );
+  --scenery-berg-deep: color-mix(in oklab, var(--info) 42%, var(--overlay));
+  --scenery-berg-glint: color-mix(
+    in oklab,
+    var(--info) 17%,
+    color-mix(in oklab, var(--on-brand-accent) 98%, var(--overlay))
+  );
+  --scenery-berg-light: color-mix(
+    in oklab,
+    var(--info) 46%,
+    color-mix(in oklab, var(--on-brand-accent) 76%, var(--overlay))
+  );
+  --scenery-berg-lit: color-mix(
+    in oklab,
+    var(--info) 29%,
+    color-mix(in oklab, var(--on-brand-accent) 89%, var(--overlay))
+  );
+  --scenery-berg-mid: color-mix(
+    in oklab,
+    var(--info) 67%,
+    color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay))
+  );
+  --scenery-berg-shade: color-mix(in oklab, var(--info) 73%, var(--overlay));
+  --scenery-berg-sub: color-mix(in oklab, var(--info) 62%, var(--overlay));
+  --scenery-berg-sub-lit: color-mix(in oklab, var(--info) 72%, var(--overlay));
+  --scenery-berg-sub-shade: color-mix(in oklab, var(--info) 51%, var(--overlay));
+  --scenery-bubble: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 42%, color-mix(in oklab, var(--on-brand-accent) 81%, var(--overlay))) 35%,
+    transparent
+  );
+  --scenery-cloud-lit: color-mix(
+    in oklab,
+    var(--info) 38%,
+    color-mix(in oklab, var(--on-brand-accent) 28%, var(--overlay))
+  );
+  --scenery-cloud-shade: color-mix(
+    in oklab,
+    var(--info) 38%,
+    color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay))
+  );
+  --scenery-fish-lit: color-mix(
+    in oklab,
+    var(--bulb) 67%,
+    color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay))
+  );
+  --scenery-fish-shade: color-mix(
+    in oklab,
+    var(--bulb) 72%,
+    color-mix(in oklab, var(--on-brand-accent) 19%, var(--overlay))
+  );
+  --scenery-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
+  --scenery-glow: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --scenery-glow-soft: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 83%, color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay))) 45%,
+    transparent
+  );
+  --scenery-jelly: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 67%, color-mix(in oklab, var(--on-brand-accent) 42%, var(--overlay))) 55%,
+    transparent
+  );
+  --scenery-jelly-lit: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 50%, color-mix(in oklab, var(--on-brand-accent) 82%, var(--overlay))) 75%,
+    transparent
+  );
+  --scenery-moon: color-mix(in oklab, var(--info) 21%, color-mix(in oklab, var(--on-brand-accent) 88%, var(--overlay)));
+  --scenery-moon-glow: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 25%, color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay))) 16%,
+    transparent
+  );
+  --scenery-moon-lit: color-mix(
+    in oklab,
+    var(--info) 10%,
+    color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay))
+  );
+  --scenery-ray: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 67%, color-mix(in oklab, var(--on-brand-accent) 84%, var(--overlay))) 12%,
+    transparent
+  );
+  --scenery-sun: color-mix(in oklab, var(--bulb) 89%, color-mix(in oklab, var(--on-brand-accent) 96%, var(--overlay)));
+  --scenery-sun-glow: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--bulb) 44%, var(--on-brand-accent)) 20%,
+    transparent
+  );
+  --scenery-sun-lit: color-mix(in oklab, var(--bulb) 56%, var(--on-brand-accent));
+  --scenery-whale: color-mix(in oklab, var(--info) 46%, color-mix(in oklab, var(--on-brand-accent) 2%, var(--overlay)));
+  --scenery-whale-belly: color-mix(
+    in oklab,
+    var(--bulb) 39%,
+    color-mix(in oklab, var(--on-brand-accent) 66%, var(--overlay))
+  );
+  --scenery-whale-belly-shade: color-mix(
+    in oklab,
+    var(--bulb) 39%,
+    color-mix(in oklab, var(--on-brand-accent) 49%, var(--overlay))
+  );
+  --scenery-whale-lit: color-mix(
+    in oklab,
+    var(--info) 50%,
+    color-mix(in oklab, var(--on-brand-accent) 10%, var(--overlay))
+  );
+  --scenery-whale-shade: color-mix(in oklab, var(--info) 40%, var(--overlay));
+}
+
+.scenery [data-tone='bed'] {
+  fill: var(--scenery-bed);
+  stroke: var(--scenery-bed);
+}
+
+.scenery [data-tone='bed-lit'] {
+  fill: var(--scenery-bed-lit);
+  stroke: var(--scenery-bed-lit);
+}
+
+.scenery [data-tone='bed-shade'] {
+  fill: var(--scenery-bed-shade);
+  stroke: var(--scenery-bed-shade);
+}
+
+.scenery [data-tone='berg-deep'] {
+  fill: var(--scenery-berg-deep);
+  stroke: var(--scenery-berg-deep);
+}
+
+.scenery [data-tone='berg-glint'] {
+  fill: var(--scenery-berg-glint);
+  stroke: var(--scenery-berg-glint);
+}
+
+.scenery [data-tone='berg-light'] {
+  fill: var(--scenery-berg-light);
+  stroke: var(--scenery-berg-light);
+}
+
+.scenery [data-tone='berg-lit'] {
+  fill: var(--scenery-berg-lit);
+  stroke: var(--scenery-berg-lit);
+}
+
+.scenery [data-tone='berg-mid'] {
+  fill: var(--scenery-berg-mid);
+  stroke: var(--scenery-berg-mid);
+}
+
+.scenery [data-tone='berg-shade'] {
+  fill: var(--scenery-berg-shade);
+  stroke: var(--scenery-berg-shade);
+}
+
+.scenery [data-tone='berg-sub'] {
+  fill: var(--scenery-berg-sub);
+  stroke: var(--scenery-berg-sub);
+}
+
+.scenery [data-tone='berg-sub-lit'] {
+  fill: var(--scenery-berg-sub-lit);
+  stroke: var(--scenery-berg-sub-lit);
+}
+
+.scenery [data-tone='berg-sub-shade'] {
+  fill: var(--scenery-berg-sub-shade);
+  stroke: var(--scenery-berg-sub-shade);
+}
+
+.scenery [data-tone='bubble'] {
+  fill: var(--scenery-bubble);
+}
+
+.scenery [data-tone='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.scenery [data-tone='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.scenery [data-tone='fish-lit'] {
+  fill: var(--scenery-fish-lit);
+  stroke: var(--scenery-fish-lit);
+}
+
+.scenery [data-tone='fish-shade'] {
+  fill: var(--scenery-fish-shade);
+  stroke: var(--scenery-fish-shade);
+}
+
+.scenery [data-tone='glint'] {
+  fill: var(--scenery-glint);
+  stroke: var(--scenery-glint);
+}
+
+.scenery [data-tone='glow'] {
+  fill: var(--scenery-glow);
+  stroke: var(--scenery-glow);
+}
+
+.scenery [data-tone='glow-soft'] {
+  fill: var(--scenery-glow-soft);
+}
+
+.scenery [data-tone='jelly'] {
+  fill: var(--scenery-jelly);
+}
+
+.scenery [data-tone='jelly-lit'] {
+  fill: var(--scenery-jelly-lit);
+}
+
+.scenery [data-tone='moon'] {
+  fill: var(--scenery-moon);
+  stroke: var(--scenery-moon);
+}
+
+.scenery [data-tone='moon-glow'] {
+  fill: var(--scenery-moon-glow);
+}
+
+.scenery [data-tone='moon-lit'] {
+  fill: var(--scenery-moon-lit);
+  stroke: var(--scenery-moon-lit);
+}
+
+.scenery [data-tone='ray'] {
+  fill: var(--scenery-ray);
+}
+
+.scenery [data-tone='sun'] {
+  fill: var(--scenery-sun);
+  stroke: var(--scenery-sun);
+}
+
+.scenery [data-tone='sun-glow'] {
+  fill: var(--scenery-sun-glow);
+}
+
+.scenery [data-tone='sun-lit'] {
+  fill: var(--scenery-sun-lit);
+  stroke: var(--scenery-sun-lit);
+}
+
+.scenery [data-tone='whale'] {
+  fill: var(--scenery-whale);
+  stroke: var(--scenery-whale);
+}
+
+.scenery [data-tone='whale-belly'] {
+  fill: var(--scenery-whale-belly);
+  stroke: var(--scenery-whale-belly);
+}
+
+.scenery [data-tone='whale-belly-shade'] {
+  fill: var(--scenery-whale-belly-shade);
+  stroke: var(--scenery-whale-belly-shade);
+}
+
+.scenery [data-tone='whale-lit'] {
+  fill: var(--scenery-whale-lit);
+  stroke: var(--scenery-whale-lit);
+}
+
+.scenery [data-tone='whale-shade'] {
+  fill: var(--scenery-whale-shade);
+  stroke: var(--scenery-whale-shade);
+}
+
+.scenery [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* The sky: the sun by day, the crescent moon by night, swapped by the theme alone (the landing window's pattern). */
+.scenery [data-sky-night] {
+  display: none;
+}
+
+:global(.dark) .scenery [data-sky-day] {
+  display: none;
+}
+
+:global(.dark) .scenery [data-sky-night] {
+  display: inline;
+}
+
+/* Ambient loops: each named for what it does, each slow and peripheral. Members of a group stagger by inline delay. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .wind {
+    animation: scenery-wind 46s ease-in-out infinite alternate;
+  }
+
+  :global([data-zone='active']) .school {
+    animation: scenery-school 9s ease-in-out infinite alternate;
+  }
+
+  :global([data-zone='active']) .bob {
+    animation: scenery-bob 7s ease-in-out infinite alternate;
+  }
+
+  :global([data-zone='active']) .glide {
+    animation: scenery-glide 30s ease-in-out infinite alternate;
+  }
+
+  :global([data-zone='active']) .rise {
+    animation: scenery-rise 7s linear infinite;
+  }
+}
+
+@keyframes scenery-wind {
+  to {
+    transform: translateX(-28px);
+  }
+}
+
+@keyframes scenery-school {
+  to {
+    transform: translate(-16px, 5px);
+  }
+}
+
+@keyframes scenery-bob {
+  to {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes scenery-glide {
+  to {
+    transform: translate(36px, -6px);
+  }
+}
+
+/* A bubble rises from where it is drawn and fades before it restarts, so the loop never jumps in plain sight. */
+@keyframes scenery-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-70px);
+  }
+}

@@ -1,0 +1,92 @@
+/*
+ * "Name the trigger, not the content" (Option 12a): the room's floor and the one emphasis motion. No raw colour
+ * (FE-011): the floor mixes `--zone-sunlit` with `--on-brand-accent` (white) and `--overlay` (black), both fixed
+ * across themes; `--primary` marks the match. Dark mode only retunes the mixes.
+ */
+
+.room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
+  );
+}
+
+:global(.dark) .room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
+  );
+}
+
+.floor [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+}
+
+.floor [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.floor [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+/*
+ * The one emphasis motion: the primary line draws from your request to the moment description, then the moment entry's
+ * ring and its "matches" verdict appear. The base rules are the drawn rest state, which reduced motion and a still
+ * frame show; nothing loops.
+ */
+.match {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.ring {
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .match {
+    animation: draw 900ms ease-out 500ms both;
+  }
+
+  :global([data-zone='active']) .ring {
+    animation: ring-in 400ms ease-out 1400ms both;
+  }
+
+  :global([data-zone='active']) .verdict {
+    animation: appear 300ms ease-out 1400ms both;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes ring-in {
+  from {
+    outline-color: transparent;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}

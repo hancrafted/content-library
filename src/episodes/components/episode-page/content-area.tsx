@@ -12,7 +12,8 @@ export interface ContentAreaProps extends ComponentPropsWithoutRef<'main'> {
  * restructuring markup, so it must stay a grid.
  *
  * It alone owns the rhythm between Slides: the rule under each wrapper lives
- * here, never on the wrapper. It also hosts the Episode portal root, so
+ * here, never on the wrapper, and so does the space after the last Slide,
+ * which that Slide's surface fills. It also hosts the Episode portal root, so
  * popovers escape a wrapper without clipping.
  */
 export function ContentArea({ className, children, ...props }: ContentAreaProps) {
@@ -21,7 +22,7 @@ export function ContentArea({ className, children, ...props }: ContentAreaProps)
       data-slot="slides"
       data-testid="episode-page"
       className={cn(
-        'grid min-w-0 grid-cols-1 pb-24',
+        'grid min-w-0 grid-cols-1 [--content-end:--spacing(24)] pb-(--content-end)',
         // The insets are the only width mechanism (FE-009 §2): the container sets the variables, and every
         // wrapper takes them as inline padding. No transition, so a drawer switch reflows once.
         '[&_[data-slide]]:pl-(--inset-l) [&_[data-slide]]:pr-(--inset-r)',
@@ -30,6 +31,10 @@ export function ContentArea({ className, children, ...props }: ContentAreaProps)
         // wrappers, not the grid's direct children.
         '[&_[data-slide]]:border-b [&_[data-slide]]:border-border/60',
         '[&_[data-slide][data-surface-edge]]:border-b-0',
+        // The space after the last Slide is its own: its surface reaches down through it, with no rule between, so
+        // the page never shows a band of another background under it, whatever surface the Slide takes.
+        '[&>section:last-of-type>[data-slide]:last-child]:[--slide-surface-reach:var(--content-end)]',
+        '[&>section:last-of-type>[data-slide]:last-child]:border-b-0',
         className,
       )}
       {...props}

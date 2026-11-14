@@ -1,0 +1,42 @@
+/*
+ * The page-level Chat app / Coding agent view (design-ADR 0025, Interaction 1). The switch writes the page's view onto
+ * `<html data-agent-view>`; words of the other view hide. Only `display: none` is set, never a shown value, so an
+ * element keeps its own layout (`flex`, `grid`) in the view it belongs to. Chat app is the view without the attribute,
+ * so the static page and a reload show it.
+ */
+
+:global(html:not([data-agent-view='coding'])) .inView[data-view='coding'],
+:global(html[data-agent-view='coding']) .inView[data-view='chat'] {
+  display: none;
+}
+
+.toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9999px;
+  background: var(--card);
+  color: var(--card-foreground);
+  box-shadow: var(--shadow-header);
+}
+
+.option {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  touch-action: manipulation;
+}
+
+.option:hover:not([aria-pressed='true']) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.option[aria-pressed='true'] {
+  background: var(--selected);
+  color: var(--selected-foreground);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

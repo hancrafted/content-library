@@ -1,0 +1,52 @@
+{
+  "title": "Welcher Kontext hineingehört",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Welcher Kontext hineingehört hervorgehoben",
+  "aiStatement": "Fachwissen gehört hinein, an den Schritt gebunden, der es braucht",
+  "extras": {
+    "armPreset": "Arm-Voreinstellung",
+    "speciesGuide": "Artenführer"
+  },
+  "analogy": "Die Karte in ihrer Hülle: jedes Extra an seinen Schritt gebunden.",
+  "agent": "references/ und assets/ laden, wenn ein Schritt sie braucht",
+  "voiceScript": {
+    "segments": {
+      "twilight": {
+        "title": "Dämmerung",
+        "keywords": "",
+        "script": "Jetzt tiefer, in die Dämmerzone, wo das Licht schwach wird. Der Skill ist geschrieben und beschrieben, und die Frage ist, welcher Kontext hineingehört und welcher daneben bleibt."
+      },
+      "a-decision-not-a-law": {
+        "title": "Eine Entscheidung, kein Gesetz",
+        "keywords": "",
+        "script": "Mit dem Wort Regel bin ich hier vorsichtig. Das Vorgehen von den Projektdetails zu trennen, ist eine Designentscheidung mit Vor- und Nachteilen auf beiden Seiten. Ich zeige Dir die Abwägungen, und Du entscheidest."
+      }
+    }
+  }
+}

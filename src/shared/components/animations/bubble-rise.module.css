@@ -1,0 +1,31 @@
+/*
+ * Rising air bubbles (`BubbleRise`): each bubble's bottom is `(progress - start) * rise` host heights above the host's
+ * bottom, less its own size, so it waits below the host until progress reaches its start and has left through the top
+ * by full progress. It sways a few pixels as it climbs. A ring, a faint fill and one highlight make it read as air,
+ * not ink. No raw colour: the bubble colour is a token reference mixed with the theme's foreground and background.
+ */
+
+.field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bubble {
+  --bubble-progress: var(--surface-edge-progress, 0);
+  --bubble-tint: var(--slide-transition-bubble, var(--slide-transition-target-surface));
+  --bubble-colour: color-mix(in oklab, var(--bubble-tint) 75%, var(--foreground));
+
+  position: absolute;
+  left: calc(var(--bubble-x) * 1%);
+  bottom: calc((var(--bubble-progress) - var(--bubble-start)) * var(--bubble-rise) * 100% - var(--bubble-size) * 1px);
+  width: calc(var(--bubble-size) * 1px);
+  aspect-ratio: 1;
+  border: 2px solid color-mix(in oklab, var(--bubble-colour) 85%, transparent);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 30%, color-mix(in oklab, var(--background) 90%, transparent) 0 18%, transparent 24%),
+    color-mix(in oklab, var(--bubble-tint) 30%, transparent);
+  translate: calc(sin(var(--bubble-progress) * 14rad + var(--bubble-phase) * 1rad) * 6px) 0;
+}

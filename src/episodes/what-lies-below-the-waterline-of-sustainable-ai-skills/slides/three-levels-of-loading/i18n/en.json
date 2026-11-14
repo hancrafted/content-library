@@ -1,0 +1,160 @@
+{
+  "title": "How AI discovers and reads a skill",
+  "caption": "How AI discovers a skill, then reads it and its supporting files only when needed.",
+  "analogy": {
+    "label": "In the story:",
+    "text": "The pilot reads the manual's index, then one card, then only the extras a step asks for."
+  },
+  "concept": {
+    "label": "The concept",
+    "term": "Progressive disclosure",
+    "quote": "“Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone.”",
+    "source": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure (nngroup.com)",
+    "skills": "For skills, Anthropic's docs say Claude loads information in stages as needed.",
+    "stepsLabel": "Three steps that open one after another: a short overview, then the detail, then the extras.",
+    "steps": {
+      "overview": "overview",
+      "detail": "detail",
+      "extras": "extras"
+    }
+  },
+  "example": "The example: a skill loads in three levels",
+  "levelsLabel": "Three levels of loading",
+  "levels": {
+    "index": {
+      "label": "Always loaded",
+      "chat": "every skill's name and description: the skill index",
+      "chatNote": "about 100 tokens a skill, paid on every turn",
+      "coding": "every SKILL.md front matter",
+      "codingNote": "about 100 tokens per skill, unless the skill is user-only"
+    },
+    "card": {
+      "label": "Loaded when the skill is used",
+      "chat": "its main instructions",
+      "chatNote": "once a task matches its description",
+      "coding": "the SKILL.md body, on activation",
+      "codingSteps": "1. Hold the robot two metres above the seabed. 2. … 6. Label the sample."
+    },
+    "extras": {
+      "label": "Loaded only if needed",
+      "chat": "references, templates and scripts",
+      "chatNote": "In Claude, a script runs and only its output enters the conversation",
+      "coding": "one file, when a step asks for it",
+      "codingNote": "scripts run through bash; only output enters context"
+    }
+  },
+  "description": "Use when we reach a new site and need a sample from the seabed.",
+  "art": {
+    "shelfLabel": "the manual's index: every card's tab in view",
+    "cardTitle": "Collect sediment sample",
+    "cardSteps": {
+      "0": "1 Hold the robot 2 m up",
+      "1": "2 Check the camera",
+      "2": "3 … 6"
+    },
+    "extras": {
+      "guide": "species guide",
+      "label": "label template",
+      "preset": "arm preset"
+    }
+  },
+  "otherApps": {
+    "chat": "Codex and Gemini CLI load in stages too",
+    "coding": "Codex and Gemini CLI: metadata first, body on use"
+  },
+  "alt": {
+    "room": "The control room from the side. Left: the manual on the wall, every card's tab in view. Middle: the pilot at the console, one card pulled and propped in front of him. Right: under a lamp, the sleeve on a side table with the species guide, sample label and arm preset slid out."
+  },
+  "notes": {
+    "three-levels-stated-by-the-standard": {
+      "header": "Three levels, stated by the standard",
+      "description": "The Agent Skills standard names metadata (name and description, about 100 tokens) loaded at startup for all skills, the SKILL.md body when the skill is activated, and files in scripts/, references/ or assets/ only when required [1]. Anthropic states the same three levels [2]. Google's Day 3 whitepaper states them too: “1. Metadata (name + description) is always in the agent's context. 2. SKILL.md body is loaded only when the skill triggers. 3. Bundled resources are loaded strictly as needed” [3]. That is Google's description of the design, not a test that it works.",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "other-apps-load-in-stages-too": {
+      "header": "Other apps load in stages too",
+      "description": "Codex lists name, description and file path first and reads the full instructions when it decides to use a skill [1]; Gemini CLI documents metadata first, body on activation [2]. For apps whose pages were not read, the three-level claim is inferred from the shared format.",
+      "sources": {
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex docs)"
+        },
+        "google-gemini-cli-skills": {
+          "title": "Google, Agent Skills in Gemini CLI"
+        }
+      }
+    },
+    "scripts-documented-for-claude-only": {
+      "header": "Scripts: documented for Claude only",
+      "description": "Claude runs scripts through bash and “only their output enters context” [1]. The other vendors' pages read say bundled scripts exist but do not say what that does to context, so keep this claim to Claude. Google's Day 3 whitepaper adds one line, that scripts “execute without ever polluting the token window” [2]; treat it as Google's statement, not as documented behaviour in other apps.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "what-the-skill-index-costs": {
+      "header": "What the skill index costs",
+      "description": "Day 3 calls the metadata cost “tiny” but recurring: it is paid “on every turn” [1]. That is Google's claim; the size of the index comes from the standard's figure of about 100 tokens per skill in note 1, not from Day 3.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "progressive-disclosure-as-anthropic-names-it": {
+      "header": "Progressive disclosure, as Anthropic names it",
+      "description": "Anthropic's docs say the filesystem-based design “allows progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront” [1]. The concept is general; a skill is the example.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        }
+      }
+    },
+    "progressive-disclosure-as-nielsen-norman-group-defines-it": {
+      "header": "Progressive disclosure, as Nielsen Norman Group defines it",
+      "description": "Jakob Nielsen's article defines it in its summary: “Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone” [1]. It is an interaction-design principle from 2006, older than skills; the Slide quotes it as written.",
+      "sources": {
+        "nngroup-progressive-disclosure": {
+          "title": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-concept": {
+        "title": "The concept",
+        "keywords": "",
+        "script": "So how does the model find a skill, and how much of it does it read? Interface designers met the same problem long before AI: a screen that shows every option at once overwhelms the person using it, so you show the basics first and open the rest when someone needs it. They call it progressive disclosure, and a skill is loaded the same way, in three levels."
+      },
+      "step-one": {
+        "title": "Step one",
+        "keywords": "",
+        "script": "Level one is how the model discovers a skill, and it is always loaded: every skill's name and description. So even with a hundred skills installed, all the model carries into every conversation is that short index, the index page of the manual."
+      },
+      "step-two": {
+        "title": "Step two",
+        "keywords": "",
+        "script": "Level two is loaded when the skill is used. Only when a task matches a description does the model read that skill's main instructions, and not a moment before, the way the pilot pulls one card."
+      },
+      "step-three": {
+        "title": "Step three",
+        "keywords": "",
+        "script": "Level three is loaded only if needed: the references, templates and scripts, the extras in the sleeve, which the model opens only when a step sends it there. The exact behaviour differs a little from app to app, so I keep the precise claims in the notes beside this Slide."
+      }
+    }
+  }
+}

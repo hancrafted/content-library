@@ -1,0 +1,94 @@
+{
+  "title": "The description is the trigger",
+  "caption": "The AI sees only the name and description up front, and the description decides when the skill loads.",
+  "analogy": "From the pilot's chair: the index is open, every card behind it closed.",
+  "task": {
+    "text": "We've reached a new site."
+  },
+  "index": {
+    "heading": "Skill index",
+    "headingNote": "the manual's index",
+    "headingCoding": "front matter of each SKILL.md",
+    "entries": {
+      "samples": { "name": "Samples", "description": "Samples." },
+      "collect-sediment-sample": {
+        "name": "Collect sediment sample",
+        "description": "Take a sediment sample at a new site"
+      },
+      "misc-procedures": { "name": "Misc. procedures", "description": "Various procedures." },
+      "run-camera-survey": { "name": "Run camera survey", "description": "Film a strip of seabed" }
+    }
+  },
+  "pills": {
+    "loaded": "loaded: name and description",
+    "loadedCoding": "loaded at startup: name, description",
+    "closed": "behind it, every card: not loaded yet",
+    "closedCoding": "body: not loaded yet"
+  },
+  "question": "Two descriptions for the same skill. Which one would you open?",
+  "descriptions": {
+    "quoted": "“{text}”",
+    "vague": {
+      "label": "Vague description",
+      "tag": "stays shut",
+      "text": "Samples",
+      "coding": "Samples."
+    },
+    "clear": {
+      "label": "Clear description",
+      "tag": "lit by today's task",
+      "text": "Take a sediment sample at a new site",
+      "coding": "Take a sediment sample at a new site."
+    }
+  },
+  "scent": {
+    "title": "Did you know?",
+    "text": "<b>Information scent</b>: the cue on a label that tells you whether it leads where you want to go.",
+    "source": "Pirolli and Card, Xerox PARC, 1999: a finding about people searching. Borrowing it for the AI is an inference."
+  },
+  "footer": {
+    "story": "In the story:",
+    "quote": "“If the description doesn't convey when the skill is useful, the agent won't know to reach for it.”",
+    "coding": "At startup the agent reads only <code>name</code> and <code>description</code> from each <code>SKILL.md</code>; the body stays closed."
+  },
+  "alt": {
+    "scene": "The control room from the pilot's chair. Left, the captain says: We've reached a new site. The pilot sits at the console; through the window, a marker buoy at the new site. Beside him the manual's index is open: four skills, each a name and a one-line description, two of them vague. Behind the index, five procedure cards stand fanned out, shut and greyed."
+  },
+  "notes": {
+    "description-carries-the-whole-burden": {
+      "header": "Description carries the whole burden",
+      "description": "because only name and description load at startup, \"the description carries the entire burden of triggering. If the description doesn't convey when the skill is useful, the agent won't know to reach for it\" [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "descriptions-and-information-scent": {
+      "header": "Descriptions and information scent",
+      "description": "Pirolli and Card's abstract names \"information scent models, which address the identification of information value from proximal cues\" [1]. It is a finding about people foraging for information; that a vague label gives a model less to go on is an inference, not their finding. The page-646 definition was read second-hand.",
+      "sources": {
+        "pirolli-card-information-foraging": {
+          "title": "Pirolli and Card, Information Foraging (Psychological Review, 1999)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-pilots-view": {
+        "title": "The pilot's view",
+        "keywords": "",
+        "script": "Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. So unless you call the skill by name, the description is the trigger: it decides whether the model picks the skill on its own."
+      },
+      "two-entries": {
+        "title": "Two entries",
+        "keywords": "",
+        "script": "Take two descriptions for the same skill: \"Samples\", and \"Take a sediment sample at a new site\". A task comes in, because we have just reached a new site. Which one would you open?"
+      },
+      "scent": {
+        "title": "Scent",
+        "keywords": "",
+        "script": "Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They found it in people, and I am lending it to the model. So your job is to make the description smell like the task it serves, because that scent is what pulls the trigger."
+      }
+    }
+  }
+}

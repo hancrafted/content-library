@@ -1,0 +1,89 @@
+/*
+ * The Slide's one emphasis motion (Spec Option 10b): the day plays once, panel by panel; as panel 3 lights, its arrow
+ * and the notes lane's arrow draw into the skill card under it, so both sources fold into one card; in panel 4 the
+ * context gauge drops to empty while the pinned card stays. Played when the Slide's mount turns `[data-zone='active']`.
+ * The base rules are the end state, so a still frame and reduced motion show every panel at once. Nothing loops.
+ */
+
+.day {
+  --day-step: 700ms;
+}
+
+.gauge {
+  transform-origin: left center;
+}
+
+/* Panel 4's gauge rests empty: the run is forgotten. */
+.drop {
+  scale: 0 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .day .panel {
+    animation: light 500ms ease-out calc(var(--panel) * var(--day-step)) both;
+  }
+
+  :global([data-zone='active']) .day .arrow {
+    animation: draw 500ms ease-out calc(2 * var(--day-step) + 300ms) both;
+  }
+
+  :global([data-zone='active']) .day .drop {
+    animation: drop 700ms ease-in calc(3 * var(--day-step) + 300ms) both;
+  }
+}
+
+@keyframes light {
+  from {
+    opacity: 0.15;
+    translate: 0 0.5rem;
+  }
+}
+
+@keyframes draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes drop {
+  from {
+    scale: 1 1;
+  }
+  to {
+    scale: 0 1;
+  }
+}
+
+/* The next morning's greeting rises past the pilot's empty thought, near the room's left wall: turned down to fit it. */
+.roomPicture {
+  --says-scale: 0.9;
+}
+
+/* The written card pinned to the control-room wall: paper from theme-stable white and black, its pin `--primary`. */
+.pinnedCard {
+  --paper: var(--on-brand-accent);
+  --paper-ink: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay)));
+  --pin: var(--primary);
+}
+
+:global(.dark) .pinnedCard {
+  --paper: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
+}
+
+.paper {
+  fill: var(--paper);
+  stroke: var(--paper-ink);
+  stroke-width: 0.6;
+}
+
+.paperLine {
+  stroke: var(--paper-ink);
+  stroke-width: 0.8;
+}
+
+.pin {
+  fill: var(--pin);
+}

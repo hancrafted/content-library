@@ -1,0 +1,48 @@
+{
+  "title": "What a skill is",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, What a skill is lit",
+  "aiStatement": "A skill is a name, a description and instructions",
+  "analogy": "A procedure card: title, use-when line, steps.",
+  "agent": "SKILL.md, plus scripts/ references/ assets/",
+  "voiceScript": {
+    "segments": {
+      "surface-first": {
+        "title": "Surface first",
+        "keywords": "",
+        "script": "We are still at the surface, so before we ask when to write a skill, let's see what a skill is made of. I'll use the words your chat app uses, and if you work with a coding agent, some Slides have a second view that shows you the files behind each part."
+      },
+      "the-mechanics-plainly": {
+        "title": "The mechanics, plainly",
+        "keywords": "",
+        "script": "I want to be exact about how a skill gets loaded, because everything later depends on it. So I say first what the AI really does, and use the dive only to make it easier to picture."
+      }
+    }
+  }
+}

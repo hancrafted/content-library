@@ -1,0 +1,149 @@
+{
+  "title": "Schreib ihn aus einem guten Durchlauf",
+  "caption": "Mach aus einem gelungenen Durchlauf einen Skill: aus Deinen eigenen Notizen, oder indem Du die KI ihn aufschreiben lässt.",
+  "lane": {
+    "interview": "Aus einem KI-Interview",
+    "interviewSub": "ein Tag, vom Durchlauf zum Skill",
+    "label": "Ein Tag: der Durchlauf, das Interview, der Skill, der nächste Morgen"
+  },
+  "day": {
+    "run": {
+      "step": "<marker>Ein gelungener Durchlauf</marker>",
+      "time": "der heutige Tauchgang lief gut",
+      "ai": "Du hast die Aufgabe mit der KI erledigt und unterwegs Kontext und Korrekturen gegeben.",
+      "coding": "Eine Sitzung im Coding-Agent, keine Vermutung aus Allgemeinwissen."
+    },
+    "interview": {
+      "step": "<marker>Die KI interviewt Dich</marker>",
+      "time": "vor dem Abend fragt der Pilot",
+      "ai": "Sie fragt nach Deiner Absicht, nicht nur nach den Schritten.",
+      "questions": {
+        "depth": "Warum diese Tiefe?",
+        "order": "Warum diese Reihenfolge?",
+        "failure": "Was hätte als Fehlschlag gegolten?"
+      }
+    },
+    "evening": {
+      "step": "Die KI schreibt den Skill",
+      "time": "er schreibt die Karte, solange er es noch weiß",
+      "ai": "Im selben Gespräch, solange der ganze Durchlauf noch in ihrem Kontextfenster steht.",
+      "chat": "Den Skill, den sie schreibt, siehst Du unten.",
+      "coding": "Die <code>SKILL.md</code>, die sie schreibt, siehst Du unten."
+    },
+    "nextMorning": {
+      "step": "Das nächste Gespräch beginnt neu",
+      "time": "am nächsten Morgen hat er den Tauchgang vergessen; die Karte hängt an der Wand",
+      "ai": "Der Durchlauf ist vergessen. Der Skill nicht.",
+      "greeting": "Freut mich, Sie kennenzulernen.",
+      "coding": "Eine neue Sitzung öffnet mit leerem Kontextfenster; <code>collect-sediment-sample/SKILL.md</code> liegt weiter auf der Platte."
+    }
+  },
+  "coding": {
+    "request": "Mach aus diesem Gespräch einen Skill.",
+    "readsFirst": "Mit Anthropics skill-creator liest er zuerst das Gespräch und fragt dann:",
+    "asks": "Warum diese Tiefe? Warum diese Reihenfolge?"
+  },
+  "art": {
+    "depth": "2 m",
+    "full": "Kontextfenster: voll",
+    "empty": "Kontextfenster: leer"
+  },
+  "alt": {
+    "run": "Morgens unter Wasser: Der Roboter hängt am Kabel 2 m über dem Meeresboden, die Lampe an.",
+    "interview": "Nachmittags im Kontrollraum: Der Pilot dreht sich von seiner Konsole weg und fragt den Kapitän nach dem Warum; der Kapitän antwortet.",
+    "evening": "Abends: Im Fenster geht die Sonne unter; der Pilot sitzt an der Konsole und schreibt die Verfahrenskarte, solange der heutige Tauchgang noch in seinem Kopf ist.",
+    "nextMorning": "Am nächsten Morgen: Die Karte hängt an der Wand; der Pilot begrüßt den Kapitän wie einen Fremden.",
+    "logbook": "Logbuchseiten früherer Tauchgänge vom 12., 19. und 26. März."
+  },
+  "logbook": {
+    "first": "12. März",
+    "second": "19. März",
+    "third": "26. März"
+  },
+  "notesLane": {
+    "heading": "Aus Deinen eigenen Notizen",
+    "story": "Deine Logbuchseiten früherer Tauchgänge",
+    "text": "Notizen aus früheren Durchläufen, zum selben Skill zusammengeschrieben.",
+    "coding": "Oder führ die Aufgabe ohne geladenen Skill aus und <marker>entwirf aus dem Transkript eine <code>SKILL.md</code></marker>."
+  },
+  "tip": "Dich von der KI interviewen zu lassen, funktioniert auch hier.",
+  "skill": {
+    "label": "Skill",
+    "title": "Sedimentprobe nehmen",
+    "steps": {
+      "hold": {
+        "text": "Den Roboter 2 m über dem Meeresboden halten.",
+        "why": "Warum: Näher dran wirbeln die Triebwerke den Schlamm auf."
+      },
+      "lower": {
+        "text": "Den Arm langsam senken, das Kernrohr hineindrücken."
+      },
+      "label": {
+        "text": "Den Kern vor dem Einlagern beschriften.",
+        "why": "Warum: Unbeschriftete Kerne werden verwechselt."
+      }
+    },
+    "failedIf": "Fehlgeschlagen, wenn: Kern unter 30 cm oder keine Tiefe protokolliert.",
+    "file": {
+      "description": "Nimmt einen Sedimentkern. Verwenden, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
+      "hold": "1. 2 m über dem Meeresboden halten.",
+      "holdWhy": "Warum: näher wirbelt den Schlamm auf.",
+      "lower": "2. Arm senken, Kernrohr hineindrücken.",
+      "label": "3. Kern vor dem Einlagern beschriften.",
+      "failedIf": "Fehlgeschlagen, wenn: Kern unter 30 cm oder keine Tiefe protokolliert."
+    }
+  },
+  "firstStep": "Erster Schritt: Nimm eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Durchlauf davon einen Skill.",
+  "story": {
+    "label": "In der Geschichte:",
+    "analogy": "Deine Logbuchseiten, oder das abendliche Interview des Piloten über den guten Tauchgang von heute."
+  },
+  "notes": {
+    "write-the-skill-from-a-real-run": {
+      "header": "Den Skill aus einem echten Durchlauf schreiben",
+      "description": "Der Standard rät: „Complete a real task in conversation with an agent, providing context, corrections, and preferences along the way. Then extract the reusable pattern into a skill.“ Also erst eine echte Aufgabe im Gespräch mit einem Agenten erledigen, mit Kontext, Korrekturen und Vorlieben, und dann das wiederverwendbare Muster als Skill herausziehen. Ein Skill, den ein LLM allein aus Allgemeinwissen schreibt, ergibt „vague, generic procedures“, vage, allgemeine Verfahren [1].",
+      "sources": {
+        "agentskills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        }
+      }
+    },
+    "the-agent-can-interview-you": {
+      "header": "Der Agent kann Dich interviewen",
+      "description": "Anthropics skill-creator sucht im laufenden Gespräch nach einem Ablauf, den der Nutzer festhalten will, zieht zuerst die Antworten daraus und interviewt den Nutzer dann, um Lücken zu füllen [1].",
+      "sources": {
+        "anthropic-skill-creator": {
+          "title": "Anthropic, skill-creator SKILL.md"
+        }
+      }
+    },
+    "googles-route": {
+      "header": "Die Aufgabe erst ohne Skill ausführen: Googles Weg",
+      "description": "Tag 3 schlägt vor, die erfahrenste Fachkraft „narrate three workflows they do regularly“ zu lassen, also drei regelmäßige Abläufe zu erzählen, den häufigsten auszuwählen, die Prompts ohne geladenen Skill auszuführen und aus dem Transkript eine SKILL.md zu entwerfen. Am Ende steht: „Resist the urge to let an LLM generate fifty skills on day one.“ [1] Das passt zum Rat des Standards, aus einem echten Durchlauf zu extrahieren. Es ist eine Empfehlung des Anbieters Google, kein gemessenes Ergebnis.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam und Kolan, Agent Skills (Google-Whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-starting-points": {
+        "title": "Zwei Ausgangspunkte",
+        "keywords": "",
+        "script": "Sagen wir, es ist das dritte Mal und Du bist bereit, den Skill zu schreiben. Es gibt zwei gute Ausgangspunkte: Deine eigenen Notizen aus früheren Durchläufen, die Logbuchseiten früherer Tauchgänge, oder einen Durchlauf mit der KI, der gerade gut gelaufen ist, der Tauchgang von heute, solange er frisch ist."
+      },
+      "capture-the-why": {
+        "title": "Das Warum festhalten",
+        "keywords": "",
+        "script": "Beim frischen Durchlauf bittest Du die KI, Dich zu interviewen, bevor sie irgendetwas schreibt: warum diese Tiefe, warum diese Reihenfolge, was als Fehlschlag gegolten hätte. Der Skill soll Deine Absicht festhalten und nicht nur die Schritte, denn Schritte ohne das Warum brechen beim ersten Mal, wenn sich die Lage ändert."
+      },
+      "while-he-still-knows": {
+        "title": "Solange er es noch weiß",
+        "keywords": "",
+        "script": "Dann lass sie den Skill im selben Gespräch schreiben, solange der ganze Durchlauf noch in ihrem Kontextfenster steht. Morgen hat sie es vergessen, und genau damit haben wir angefangen. Das ist also Dein erster Schritt: Nimm eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Durchlauf davon einen Skill. In einem Coding-Agent ist das ein Satz: Bitte ihn, aus diesem Gespräch einen Skill zu machen."
+      }
+    }
+  }
+}

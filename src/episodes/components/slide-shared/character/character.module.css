@@ -1,0 +1,333 @@
+/*
+ * The Character's facet palette and its motions (design-ADR 0025, "Scene figures are deep modules").
+ *
+ * Colour: no raw colour lives here (FE-011, a `slide-shared` module is not a Slide token file). Every tone is a
+ * slide-local `--character-*` property mixed from non-meaning global tokens: `--on-brand-accent` (white) and
+ * `--overlay` (black) as the light and dark ends, `--brand-accent` and `--bulb-edge` for warm skin, hair and leather,
+ * `--bulb` for gold trim, `--info` for navy. `--ai` appears once, on the `kind: 'ai'` tag. In `.dark` the light end
+ * dims, so every light tone follows, and the navy that `--info` brightens in dark is mixed darker.
+ *
+ * Motion: each motion plays once while the Slide's mount is `[data-zone="active"]` and rests in the pose, which is also
+ * what reduced motion shows. A moving group turns about its pivot, which the markup moves to its own origin.
+ */
+
+.character {
+  --character-light: var(--on-brand-accent);
+  --character-black: var(--overlay);
+  --character-warm: color-mix(in oklab, var(--brand-accent) 50%, var(--bulb-edge));
+
+  /* skin: light */
+  --character-skin-lit: color-mix(in oklab, var(--character-warm) 40%, var(--character-light));
+  --character-skin: color-mix(in oklab, var(--character-warm) 56%, var(--character-light));
+  --character-skin-shade: color-mix(in oklab, var(--brand-accent) 78%, var(--character-light));
+  --character-lips: color-mix(in oklab, var(--brand-accent) 72%, var(--character-black));
+
+  /* hair: brown */
+  --character-hair-lit: color-mix(in oklab, var(--character-warm) 80%, var(--character-black));
+  --character-hair: color-mix(in oklab, var(--character-warm) 64%, var(--character-black));
+  --character-hair-shade: color-mix(in oklab, var(--character-warm) 48%, var(--character-black));
+
+  /* outfit: freelancer, a grey sweater over a light tee and dark trousers */
+  --character-top-lit: color-mix(in oklab, var(--character-light) 64%, var(--character-black));
+  --character-top: color-mix(in oklab, var(--character-light) 55%, var(--character-black));
+  --character-top-shade: color-mix(in oklab, var(--character-light) 45%, var(--character-black));
+  --character-collar: color-mix(in oklab, var(--character-light) 94%, var(--character-black));
+  --character-legs: color-mix(in oklab, var(--character-light) 33%, var(--character-black));
+  --character-legs-shade: color-mix(in oklab, var(--character-light) 26%, var(--character-black));
+
+  --character-dark: color-mix(in oklab, var(--character-light) 15%, var(--character-black));
+  --character-glint: var(--character-light);
+  --character-trim: var(--bulb);
+  --character-cap-crown: color-mix(in oklab, var(--character-light) 97%, var(--info));
+  --character-cap-crown-shade: color-mix(in oklab, var(--character-light) 84%, var(--info));
+  --character-ai-tag: var(--ai);
+  --character-chair-lit: color-mix(in oklab, var(--character-light) 58%, var(--character-black));
+  --character-chair: color-mix(in oklab, var(--character-light) 47%, var(--character-black));
+  --character-chair-shade: color-mix(in oklab, var(--character-light) 37%, var(--character-black));
+
+  /* prop: mug */
+  --character-prop-lit: var(--character-collar);
+  --character-prop: color-mix(in oklab, var(--character-light) 84%, var(--character-black));
+  --character-prop-shade: color-mix(in oklab, var(--character-light) 76%, var(--character-black));
+  --character-paper: var(--character-collar);
+  --character-fill: color-mix(in oklab, var(--character-warm) 45%, var(--character-black));
+  --character-screen: color-mix(in oklab, var(--character-light) 20%, var(--character-black));
+  --character-screen-glow: color-mix(in oklab, var(--bulb) 40%, var(--character-light));
+}
+
+:global(.dark) .character {
+  --character-light: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
+}
+
+/* ---------------------------------------------------------------- skin tones */
+
+.character[data-skin='medium'] {
+  --character-skin-lit: color-mix(in oklab, var(--character-warm) 72%, var(--character-light));
+  --character-skin: color-mix(in oklab, var(--character-warm) 90%, var(--character-light));
+  --character-skin-shade: color-mix(in oklab, var(--brand-accent) 86%, var(--character-black));
+  --character-lips: color-mix(in oklab, var(--brand-accent) 62%, var(--character-black));
+}
+
+.character[data-skin='deep'] {
+  --character-skin-lit: color-mix(in oklab, var(--character-warm) 72%, var(--character-black));
+  --character-skin: color-mix(in oklab, var(--character-warm) 60%, var(--character-black));
+  --character-skin-shade: color-mix(in oklab, var(--brand-accent) 48%, var(--character-black));
+  --character-lips: color-mix(in oklab, var(--brand-accent) 38%, var(--character-black));
+}
+
+/* ---------------------------------------------------------------- hair tones */
+
+.character[data-hair-tone='dark'] {
+  --character-hair-lit: color-mix(in oklab, var(--character-warm) 42%, var(--character-black));
+  --character-hair: color-mix(in oklab, var(--character-warm) 30%, var(--character-black));
+  --character-hair-shade: color-mix(in oklab, var(--character-warm) 20%, var(--character-black));
+}
+
+.character[data-hair-tone='blonde'] {
+  --character-hair-lit: color-mix(in oklab, var(--bulb) 70%, var(--bulb-edge));
+  --character-hair: color-mix(in oklab, var(--bulb-edge) 90%, var(--bulb));
+  --character-hair-shade: color-mix(in oklab, var(--bulb-edge) 80%, var(--character-black));
+}
+
+.character[data-hair-tone='grey'] {
+  --character-hair-lit: color-mix(in oklab, var(--character-light) 82%, var(--character-black));
+  --character-hair: color-mix(in oklab, var(--character-light) 70%, var(--character-black));
+  --character-hair-shade: color-mix(in oklab, var(--character-light) 56%, var(--character-black));
+}
+
+/* ---------------------------------------------------------------- outfits */
+
+.character[data-outfit='officer'] {
+  --character-top-lit: color-mix(in oklab, var(--info) 72%, var(--character-black));
+  --character-top: color-mix(in oklab, var(--info) 56%, var(--character-black));
+  --character-top-shade: color-mix(in oklab, var(--info) 42%, var(--character-black));
+  --character-legs: color-mix(in oklab, var(--info) 34%, var(--character-black));
+  --character-legs-shade: color-mix(in oklab, var(--info) 25%, var(--character-black));
+}
+
+:global(.dark) .character[data-outfit='officer'] {
+  --character-top-lit: color-mix(in oklab, var(--info) 54%, var(--character-black));
+  --character-top: color-mix(in oklab, var(--info) 43%, var(--character-black));
+  --character-top-shade: color-mix(in oklab, var(--info) 33%, var(--character-black));
+  --character-legs: color-mix(in oklab, var(--info) 27%, var(--character-black));
+  --character-legs-shade: color-mix(in oklab, var(--info) 20%, var(--character-black));
+}
+
+.character[data-outfit='pilot-jacket'] {
+  --character-top-lit: color-mix(in oklab, var(--bulb-edge) 82%, var(--character-black));
+  --character-top: color-mix(in oklab, var(--bulb-edge) 66%, var(--character-black));
+  --character-top-shade: color-mix(in oklab, var(--bulb-edge) 50%, var(--character-black));
+  --character-collar: color-mix(in oklab, var(--character-light) 88%, var(--character-black));
+}
+
+/* ---------------------------------------------------------------- props */
+
+.character[data-prop='clipboard'] {
+  --character-prop-lit: color-mix(in oklab, var(--bulb-edge) 88%, var(--character-light));
+  --character-prop: color-mix(in oklab, var(--bulb-edge) 80%, var(--character-black));
+  --character-prop-shade: color-mix(in oklab, var(--character-light) 40%, var(--character-black));
+}
+
+.character[data-prop='laptop'] {
+  --character-prop-lit: color-mix(in oklab, var(--character-light) 80%, var(--character-black));
+  --character-prop: color-mix(in oklab, var(--character-light) 68%, var(--character-black));
+  --character-prop-shade: color-mix(in oklab, var(--character-light) 50%, var(--character-black));
+}
+
+/* ---------------------------------------------------------------- tones: fill and a same-colour hairline that closes seams */
+
+.figure path {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.skin-lit {
+  fill: var(--character-skin-lit);
+  stroke: var(--character-skin-lit);
+}
+.skin {
+  fill: var(--character-skin);
+  stroke: var(--character-skin);
+}
+.skin-shade {
+  fill: var(--character-skin-shade);
+  stroke: var(--character-skin-shade);
+}
+.lips {
+  fill: var(--character-lips);
+  stroke: var(--character-lips);
+}
+.dark {
+  fill: var(--character-dark);
+  stroke: var(--character-dark);
+}
+.glint {
+  fill: var(--character-glint);
+  stroke: var(--character-glint);
+}
+.hair-lit {
+  fill: var(--character-hair-lit);
+  stroke: var(--character-hair-lit);
+}
+.hair {
+  fill: var(--character-hair);
+  stroke: var(--character-hair);
+}
+.hair-shade {
+  fill: var(--character-hair-shade);
+  stroke: var(--character-hair-shade);
+}
+.top-lit {
+  fill: var(--character-top-lit);
+  stroke: var(--character-top-lit);
+}
+.top {
+  fill: var(--character-top);
+  stroke: var(--character-top);
+}
+.top-shade {
+  fill: var(--character-top-shade);
+  stroke: var(--character-top-shade);
+}
+.collar {
+  fill: var(--character-collar);
+  stroke: var(--character-collar);
+}
+.trim {
+  fill: var(--character-trim);
+  stroke: var(--character-trim);
+}
+.legs {
+  fill: var(--character-legs);
+  stroke: var(--character-legs);
+}
+.legs-shade {
+  fill: var(--character-legs-shade);
+  stroke: var(--character-legs-shade);
+}
+.cap-crown {
+  fill: var(--character-cap-crown);
+  stroke: var(--character-cap-crown);
+}
+.cap-crown-shade {
+  fill: var(--character-cap-crown-shade);
+  stroke: var(--character-cap-crown-shade);
+}
+.ai-tag {
+  fill: var(--character-ai-tag);
+  stroke: var(--character-ai-tag);
+}
+.chair-lit {
+  fill: var(--character-chair-lit);
+  stroke: var(--character-chair-lit);
+}
+.chair {
+  fill: var(--character-chair);
+  stroke: var(--character-chair);
+}
+.chair-shade {
+  fill: var(--character-chair-shade);
+  stroke: var(--character-chair-shade);
+}
+.prop-lit {
+  fill: var(--character-prop-lit);
+  stroke: var(--character-prop-lit);
+}
+.prop {
+  fill: var(--character-prop);
+  stroke: var(--character-prop);
+}
+.prop-shade {
+  fill: var(--character-prop-shade);
+  stroke: var(--character-prop-shade);
+}
+.paper {
+  fill: var(--character-paper);
+  stroke: var(--character-paper);
+}
+.fill {
+  fill: var(--character-fill);
+  stroke: var(--character-fill);
+}
+.screen {
+  fill: var(--character-screen);
+  stroke: var(--character-screen);
+}
+.screen-glow {
+  fill: var(--character-screen-glow);
+  stroke: var(--character-screen-glow);
+}
+
+/* ---------------------------------------------------------------- motions, once on the active Slide */
+
+@keyframes wave {
+  0% {
+    rotate: 0deg;
+  }
+  30% {
+    rotate: var(--lift);
+  }
+  45% {
+    rotate: calc(var(--lift) + 18deg);
+  }
+  60% {
+    rotate: var(--lift);
+  }
+  75% {
+    rotate: calc(var(--lift) + 18deg);
+  }
+  88% {
+    rotate: var(--lift);
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+@keyframes nod {
+  0% {
+    rotate: 0deg;
+  }
+  30% {
+    rotate: 11deg;
+  }
+  55% {
+    rotate: -2deg;
+  }
+  78% {
+    rotate: 7deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+@keyframes turn-to {
+  0% {
+    scale: -1 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+.wave,
+.nod,
+.turn-to {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .wave {
+    animation: wave 1200ms ease-in-out both;
+  }
+
+  :global([data-zone='active']) .nod {
+    animation: nod 700ms ease-in-out both;
+  }
+
+  :global([data-zone='active']) .turn-to {
+    animation: turn-to 600ms cubic-bezier(0.65, 0, 0.35, 1) 150ms both;
+  }
+}

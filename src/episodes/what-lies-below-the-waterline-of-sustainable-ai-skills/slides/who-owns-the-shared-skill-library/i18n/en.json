@@ -1,0 +1,133 @@
+{
+  "title": "Who owns the shared skill library",
+  "caption": "Shared, general skills need rules for who adds, checks and removes them, and there is no settled practice yet.",
+  "analogy": "The fleet manual's front page. Fleet, ship and project are the tiers; the robots are the models and agents.",
+  "matrix": {
+    "back": "Back to Slide 18: Who uses it, and where",
+    "locator": "The shared, general square of Slide 18's matrix",
+    "shared": "Shared · others too",
+    "general": "General use · used in any project",
+    "care": "care",
+    "careLevel": "care 4 of 4",
+    "chat": {
+      "title": "Details kept beside, with an owner, a version and evals",
+      "sub": "Owned, versioned and tested"
+    },
+    "coding": {
+      "title": "A plugin or managed settings",
+      "sub": "Reaches a whole team: owner, version and evals before it ships."
+    },
+    "pill": "the fleet manual",
+    "pillCoding": "a plugin"
+  },
+  "page": {
+    "label": "Front page of the shared skill library",
+    "scope": "Shared, general use",
+    "title": "Before a skill goes in, beyond its owner and version"
+  },
+  "rows": {
+    "add": {
+      "term": "Who may add it",
+      "chat": "The organisation's library is set to “Requires review”, “Open” or “Off”; a reviewer approves a fixed version.",
+      "coding": "Whoever can merge to the repository; for plugins, admins choose which marketplaces and plugins are allowed and enabled."
+    },
+    "tier": {
+      "term": "Whom it reaches (its tier)",
+      "scene": "fleet, ship or project",
+      "chat": "Personal, shared, plugin or organisation-wide; only owners add or remove at the top tier.",
+      "coding": "<code>~/.claude/skills/</code> you, in every project · <code>.claude/skills/</code> the repository · a plugin or managed settings: a whole team."
+    },
+    "cost": {
+      "term": "What it costs to load",
+      "chat": "A loaded skill is a recurring token cost.",
+      "coding": "The loaded <code>SKILL.md</code> stays in the context window: a recurring token cost."
+    },
+    "models": {
+      "term": "Which models and agents it works with",
+      "scene": "which robots",
+      "chat": "A skill's value depends on the model and the agent it runs in.",
+      "coding": "Tested in the agent it ships to: the same model in another harness can turn a skill's effect around."
+    },
+    "retire": {
+      "term": "When it retires",
+      "chat": "Deprecate it when its evals keep failing or its workflow is retired.",
+      "coding": "Pin production skills to a version; deprecate when evals consistently fail."
+    }
+  },
+  "inset": {
+    "heading": "<code>SKILL.md</code>, its <code>metadata</code> map",
+    "note": "The Agent Skills format has no owner field; these keys are a convention."
+  },
+  "darkCorner": "Not settled yet: no common practice so far.",
+  "footer": {
+    "story": "In the story:",
+    "chat": "Fleet, ship and project are this Episode's words, not vendor terms: vendors tier skills by audience and risk, not by how general the content is.",
+    "coding": "Codex splits repository skill folders from user skill folders the same way Claude Code does."
+  },
+  "alt": {
+    "scene": "Midnight water, the robot hanging on its cable with its lamp lit. Left, the shared, general square of Slide 18's skill scope matrix, ringed, with a small locator showing where it sits among the four. A beam of light opens that square into the shared skill library's front page, drawn as the fleet manual on its binder: who may add a skill, whom it reaches, what it costs to load, which models and agents it works with, and when it retires. The page's lower corner is dark: not settled yet."
+  },
+  "notes": {
+    "shared-skills-are-tiered-by-audience": {
+      "header": "Shared skills are tiered by audience",
+      "description": "Anthropic's tiers in claude.ai: personal skills, skills shared with individuals, group skills bundled in a plugin, and organisation-wide skills that only owners can add or remove [1]. \"Fleet, ship, project\" are the Episode's words, not vendor terms; vendors tier by audience and risk, not by how general the content is.",
+      "sources": {
+        "anthropic-provision-and-manage-skills": {
+          "title": "Anthropic, Provision and manage skills for your organization"
+        }
+      }
+    },
+    "who-adds-reviews-and-removes-shared-skills": {
+      "header": "Who adds, reviews and removes shared skills",
+      "description": "the org library offers \"Requires review\", \"Open\" and \"Off\", a reviewer approves \"a fixed version\" and users stay on it until a new one is approved [1]. Anthropic says to pin production skills to a version and to deprecate skills whose evaluations consistently fail or whose workflow is retired [2].",
+      "sources": {
+        "anthropic-provision-and-manage-skills": {
+          "title": "Anthropic, Provision and manage skills for your organization"
+        },
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    },
+    "token-cost-and-model-fit-are-per-skill-facts": {
+      "header": "Token cost and model fit are per-skill facts",
+      "description": "a loaded skill is a recurring token cost [1], and a skill's value depends on the model and harness it runs in [2].",
+      "sources": {
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
+        },
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    },
+    "skill-governance-still-being-worked-out-is-a-judgement": {
+      "header": "Skill governance \"still being worked out\" is a judgement",
+      "description": "Anthropic's enterprise guidance lists what to track per skill (purpose, owner, version, evaluation status) and does not report how many organisations do so [1], so the unsettled corner is the Episode's judgement, not a measured claim.",
+      "sources": {
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-square": {
+        "title": "Back to the square",
+        "keywords": "",
+        "script": "Come back to the matrix, to the shared, general square. That is the kind of skill the most people rely on, so it is where care matters most."
+      },
+      "what-the-front-page-needs": {
+        "title": "What the front page needs",
+        "keywords": "",
+        "script": "A shared library needs rules beyond the owner and the version: who may add a skill, which tier it sits in and so whom it reaches, what it costs to load, which models and agents it works with, and when it retires. Each is a question somebody has to answer before the skill goes in."
+      },
+      "the-dark-corner": {
+        "title": "The dark corner",
+        "keywords": "",
+        "script": "And then there are the questions nobody has settled yet. I want to be plain with you: I do not have the answers there, and I don't think many organisations do yet. If you have worked it out in yours, I would like to hear how."
+      }
+    }
+  }
+}

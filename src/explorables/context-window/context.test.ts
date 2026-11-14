@@ -135,6 +135,40 @@ describe('edge cases', () => {
     expect({ zone, labels: $('[class*="labelLimit"]').length, discarded }).toEqual(expected);
   });
 
+  it("draws the waterline dive upright, a Slide's label in each block top to bottom, the skill body ringed", () => {
+    // ARRANGE
+    const labels = ['System', 'Index', 'Memory', 'Body', 'Frames', 'Sonar', 'Logs'];
+    const expected = {
+      orientation: 'vertical',
+      rows: ['System', 'Index', 'Memory', 'Body', 'Frames', 'Sonar', 'Logs', 'Free'],
+      ringed: 'Body',
+      faded: 0,
+    };
+    // ACT
+    const $ = load(
+      renderToStaticMarkup(
+        createElement(ContextBarsPreset, {
+          preset: 'waterline-dive',
+          locale: 'en',
+          orientation: 'vertical',
+          labels,
+          free: 'Free',
+        }),
+      ),
+    );
+    const bar = $('[data-orientation]');
+    // ASSERT
+    expect({
+      orientation: bar.attr('data-orientation'),
+      rows: bar
+        .children('[role="listitem"]')
+        .map((_, el) => $(el).text())
+        .get(),
+      ringed: $('[data-ring]').text(),
+      faded: $('[data-faded]').length,
+    }).toEqual(expected);
+  });
+
   it('draws the session as one segment per Section, filled up to and including the current one', () => {
     // ARRANGE
     const expected = {

@@ -103,6 +103,20 @@ Suits a non-technical audience meeting AI at work: a production line is a pictur
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Iceberg
+
+Suits an Episode whose argument runs from what everyone sees to what few look at: depth shows how far below the visible part a Slide sits.
+
+- Five zones from the top, each labelled in plain words with the ocean term beneath: Surface, Sunlit, Twilight, Midnight, Abyss. Each Section sits in one zone.
+- Zone backgrounds are paused (Han, 2026-11-14): they did not work, dark mode least. Every Slide keeps the default light or dark page background; zone colours mark depth only on the ruler and rail tiles and in the scenery. `ZONE_BACKGROUNDS` in `zone-presentation.tsx` is the one seam that brings them back.
+- Light fades with depth in shades of blue: the title Slide's scenery is the bright, white-sky Surface, and each Section's scenery dives deeper until the last is fully dark. The order holds in light and dark mode, each zone with its own light and dark value.
+- Zone colours are design tokens behind CSS variables, so the gradient is tuned by changing one value per zone, never per Slide.
+- A depth ruler holds one tile per Section, on bands for the zones. A Section Title shows the whole ruler: the view moves down and the Section's tile lights up. Every page Slide carries a slim rail at its left edge with that tile lit.
+- The Episode's scene is drawn flat, in a 2D side view, inside its zone. The iceberg is the frame, never a second analogy.
+- Motion is descent, once per Section; after that only the scene moves. Nothing loops at rest except one slow ambient loop per zone, in its scenery only (Surface: wind and the ship's rock; Sunlit: fish; Twilight: jellies; Midnight: the whale; Abyss: bubbles), paused off the active Slide and under reduced motion. The cast never loops. The modules and motion rules: `docs/adr/0025-scene-figures-are-deep-modules.md`.
+- `primary` marks the one thing to look at; the meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+- Text keeps its contrast at every depth.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.

@@ -1,0 +1,60 @@
+{
+  "title": "When to write one",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, When to write one lit",
+  "aiStatement": "The third time, write the skill down",
+  "steps": {
+    "first": "1st",
+    "second": "2nd",
+    "third": "3rd"
+  },
+  "analogy": "Explain the sample, refine it, write the card.",
+  "agent": "Ask the agent to turn this conversation into a skill",
+  "groundingLine": "What works for people also works for AI",
+  "groundingNote": ": a strong rule of thumb, not a law.",
+  "voiceScript": {
+    "segments": {
+      "sunlight": {
+        "title": "Sunlight",
+        "keywords": "",
+        "script": "We are one level down, in the sunlit zone. Here we decide two things: when a task deserves a skill at all, and how to describe it so the model actually picks it."
+      },
+      "borrowed-principles": {
+        "title": "Borrowed principles",
+        "keywords": "",
+        "script": "From here on I borrow principles from engineering, information architecture and UX, and they all lean on one idea: what works for people also works for AI. I say that as a strong rule of thumb, not as a law."
+      },
+      "why-a-rule-of-thumb": {
+        "title": "Why a rule of thumb",
+        "keywords": "",
+        "script": "It holds because the model acts only on what you hand it, like a capable newcomer on their first day. It is only a rule of thumb because there are places where it breaks, and I've put those in the notes on the next Slide for you to read."
+      }
+    }
+  }
+}
