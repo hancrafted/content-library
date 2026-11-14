@@ -110,9 +110,18 @@
   stroke-dashoffset: 0;
 }
 
+/* The ring: drawn once on a layer of its own, shown by opacity alone (decision 19). */
 .ring {
-  outline: 2px solid var(--primary);
-  outline-offset: 0;
+  position: relative;
+}
+
+.ring::after {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -120,7 +129,7 @@
     animation: draw 900ms ease-out 500ms both;
   }
 
-  :global([data-zone='active']) .ring {
+  :global([data-zone='active']) .ring::after {
     animation: ring-in 400ms ease-out 1400ms both;
   }
 
@@ -129,15 +138,16 @@
   }
 }
 
+/* The match line fades in: opacity alone (decision 19). */
 @keyframes draw {
   from {
-    stroke-dashoffset: 1;
+    opacity: 0;
   }
 }
 
 @keyframes ring-in {
   from {
-    outline-color: transparent;
+    opacity: 0;
   }
 }
 
