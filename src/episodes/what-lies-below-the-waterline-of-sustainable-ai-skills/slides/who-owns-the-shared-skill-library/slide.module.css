@@ -1,0 +1,120 @@
+/*
+ * "Who owns the shared skill library" (Option 21a): the binder, the zoom beam, the square's picture and the dark corner.
+ * No raw colour (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and
+ * `--overlay` as black, with the zone tokens for sea and sky and `--bulb` for the binder's green; the robot keeps the
+ * shared figure's own colours. Dark mode only retunes the mixes.
+ */
+
+.scene {
+  --binder: color-mix(in oklab, color-mix(in oklab, var(--zone-midnight) 60%, var(--bulb)) 85%, var(--overlay));
+  --beam: color-mix(in oklab, var(--bulb) 22%, transparent);
+  --beam-edge: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
+  --corner: color-mix(in oklab, var(--zone-abyss) 92%, var(--overlay));
+  --corner-ink: color-mix(in oklab, var(--on-brand-accent) 88%, var(--zone-abyss));
+  --cable: color-mix(in oklab, var(--on-brand-accent) 45%, var(--zone-midnight));
+}
+
+:global(.dark) .scene {
+  --binder: color-mix(in oklab, color-mix(in oklab, var(--zone-midnight) 55%, var(--bulb)) 70%, var(--overlay));
+  --beam: color-mix(in oklab, var(--bulb) 14%, transparent);
+  --beam-edge: color-mix(in oklab, var(--on-brand-accent) 50%, transparent);
+  --corner: color-mix(in oklab, var(--zone-abyss) 80%, var(--overlay));
+}
+
+.page {
+  background: var(--binder);
+}
+
+.corner {
+  background: var(--corner);
+  color: var(--corner-ink);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.beam {
+  fill: var(--beam);
+}
+
+.beamEdge {
+  fill: none;
+  stroke: var(--beam-edge);
+}
+
+.cable {
+  stroke: var(--cable);
+}
+
+.picture {
+  --sky: var(--zone-surface);
+  --sea-lit: var(--zone-sunlit);
+  --sea: var(--zone-twilight);
+  --book: var(--binder, var(--zone-midnight));
+  --book-shade: color-mix(in oklab, var(--book) 70%, var(--overlay));
+  --paper: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+  --hull: color-mix(in oklab, var(--zone-abyss) 85%, var(--on-brand-accent));
+  --house: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-surface));
+}
+
+.picture [data-tone='sky'] {
+  fill: var(--sky);
+}
+
+.picture [data-tone='sea-lit'] {
+  fill: var(--sea-lit);
+}
+
+.picture [data-tone='sea'] {
+  fill: var(--sea);
+}
+
+.picture [data-tone='book'] {
+  fill: var(--book);
+}
+
+.picture [data-tone='book-shade'] {
+  fill: var(--book-shade);
+}
+
+.picture [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.picture [data-tone='hull'] {
+  fill: var(--hull);
+}
+
+.picture [data-tone='house'] {
+  fill: var(--house);
+}
+
+/*
+ * The one emphasis motion, the zoom into the shared, general square: the beam widens out of the square and the front
+ * page scales up from it, once, on entry. The base rules are the open rest state, which reduced motion shows.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .zoomBeam {
+    animation: widen 700ms cubic-bezier(0.33, 0, 0.2, 1) 300ms both;
+  }
+
+  :global([data-zone='active']) .page {
+    animation: open-page 800ms cubic-bezier(0.33, 0, 0.2, 1) 500ms both;
+  }
+}
+
+@keyframes widen {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes open-page {
+  from {
+    opacity: 0;
+    scale: 0.4;
+    translate: -30% -20%;
+  }
+}

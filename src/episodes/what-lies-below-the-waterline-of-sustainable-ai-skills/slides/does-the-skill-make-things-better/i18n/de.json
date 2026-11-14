@@ -1,0 +1,156 @@
+{
+  "title": "Macht der Skill es besser?",
+  "caption": "Teste einen Skill, indem du dieselbe Aufgabe mit und ohne ihn laufen lässt, denn ein schlechter Skill kann schlechter abschneiden als keiner.",
+  "analogy": "Zwei Testtauchgänge im flachen Wasser, jedes Mal dieselbe Aufgabe.",
+  "task": {
+    "chip": "Dieselbe Aufgabe, zweimal",
+    "text": "Nimm an einem neuen Ort eine Sedimentprobe."
+  },
+  "quote": {
+    "open": "„",
+    "close": "“"
+  },
+  "runs": {
+    "without": {
+      "label": "Ohne den Skill",
+      "sub": "kein Skill: die Basislinie",
+      "subCoding": "Skill deaktiviert: die Basislinie"
+    },
+    "with": {
+      "label": "Mit dem Skill",
+      "sub": "der Skill geladen",
+      "loaded": "geladen"
+    }
+  },
+  "checks": {
+    "hold": "2 m über dem Meeresboden gehalten",
+    "camera": "Kamera auf loses Sediment geprüft",
+    "seal": "Kernrohr verschlossen",
+    "core": "Kern über 30 cm"
+  },
+  "score": {
+    "label": "Ergebnis · Beispiel",
+    "pass": "bestanden",
+    "fail": "nicht bestanden"
+  },
+  "art": {
+    "card": "Skill · Verfahrenskarte",
+    "noCard": "keine Karte",
+    "gauge": "2 m",
+    "silt": "Sediment aufgewirbelt"
+  },
+  "descTest": {
+    "title": "Teste auch die Beschreibung",
+    "lead": "Greift die KI im richtigen Moment zum Skill? Ein paar Anfragen in jede Richtung, Beinahe-Treffer eingeschlossen.",
+    "leadCoding": "Das Trigger-Set testet diese Zeile der Front Matter:",
+    "frontMatter": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+    "should": "Sollte den Skill auslösen",
+    "shouldNot": "Sollte den Skill nicht auslösen",
+    "nearMiss": "Beinahe-Treffer",
+    "footnote": "Der Leitfaden zu Beschreibungen auf agentskills.io schlägt etwa 20 Anfragen vor, 8 bis 10 in jede Richtung, jede etwa dreimal ausgeführt."
+  },
+  "requests": {
+    "should": {
+      "0": "Nimm eine Sedimentprobe an Ort 7.",
+      "1": "Hol hier eine Bodenprobe.",
+      "2": "Neuer Ort: Sediment beproben."
+    },
+    "shouldNot": {
+      "0": "Filme den Meeresboden an Ort 7.",
+      "1": "Protokolliere den Tauchgang von gestern.",
+      "2": "Nimm hier eine Probe der Wassersäule."
+    }
+  },
+  "callout": {
+    "tag": "Schon gewusst?",
+    "text": "In einem Benchmark schnitten Skills, die eine KI vor dem Lösen der Aufgabe selbst geschrieben hatte, ohne gelungenen Lauf dahinter, schlechter ab als gar kein Skill.",
+    "source": "SkillsBench, 2026: 8,1 bis 11,5 Punkte unter der Basislinie ohne Skill, in allen drei getesteten Konfigurationen.",
+    "aside": "Von 98 öffentlichen Skills zeigten 92 keine signifikante Wirkung; schädliche verloren bis zu 17,0 Punkte."
+  },
+  "vercel": "Nicht Vercels Ergebnis: Dort lag der Skill gleichauf mit keinem Skill.",
+  "footer": {
+    "story": "In der Geschichte:"
+  },
+  "alt": {
+    "without": "Testtauchgang ohne den Skill: Das Schiff im flachen Wasser lässt den Roboter am Kabel hinab; ohne Verfahrenskarte setzt der Roboter im Meeresboden auf und wirbelt das Sediment auf.",
+    "with": "Testtauchgang mit dem Skill: dasselbe Schiff, derselbe Ort, die Verfahrenskarte oben links; der Roboter hält 2 m über dem Meeresboden, seine Lampe auf der Probenstelle."
+  },
+  "notes": {
+    "skills-that-score-below-no-skill-skillsbench-not-vercel": {
+      "header": "Skills unter dem Wert ohne Skill: SkillsBench, nicht Vercel",
+      "description": "Vom Agenten selbst geschriebene Skills liegen in allen drei getesteten Konfigurationen 8,1 bis 11,5 Punkte unter der Basislinie ohne Skill [1]. In Vercels Eval lag der Skill mit 53 % gleichauf mit der Basislinie; nur Teilwerte sanken (Lint 89 % gegenüber 95 %, Tests 58 % gegenüber 63 %) [2]. „Schlechter als kein Skill“ gehört nicht zu Vercels Kernaussage.",
+      "sources": {
+        "skillsbench": {
+          "title": "Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks"
+        },
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "bad-skills-can-hurt-many-do-nothing": {
+      "header": "Schlechte Skills schaden, viele bewirken nichts",
+      "description": "Von 98 öffentlichen Skills zeigten 92 keinen statistisch signifikanten Effekt, und schädliche verloren bis zu 17,0 Punkte, weil sie den Agenten auf ihre eigenen Vorlagen festlegten [1]. Kuratierte Skills hoben die mittlere Erfolgsquote von 33,9 % auf 50,5 % [2].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        },
+        "skillsbench": {
+          "title": "Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks"
+        }
+      }
+    },
+    "test-the-skills-description-too": {
+      "header": "Teste auch die Beschreibung des Skills",
+      "description": "Das Trigger-Set im Leitfaden zu Beschreibungen auf agentskills.io umfasst „about 20 queries: 8-10 that should trigger and 8-10 that shouldn't“, jede etwa dreimal ausgeführt [1]. Anthropics Leitfaden rät, Szenarien zu bauen und mit einer Basislinie ohne Skill zu vergleichen [2]. „Drei und drei“ steht in keinem von beiden.",
+      "sources": {
+        "agent-skills-optimizing-descriptions": {
+          "title": "Agent Skills, Optimizing skill descriptions"
+        },
+        "anthropic-skill-authoring-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        }
+      }
+    },
+    "trigger-tests-in-googles-day-3-two-sizes": {
+      "header": "Trigger-Tests in Googles Day 3: zwei Größen",
+      "description": "Day 3 verlangt, dass eine Beschreibung Prüfungen besteht, „to hit the industry-standard 90% trigger accuracy rate“, die erste davon „You must write 3 positive and 3 negative triggers“, ohne Quelle für die Quote. An anderer Stelle heißt es „Write three eval cases (two positive, one negative) before drafting the body“ [1]. Die eigenen Zahlen widersprechen sich, es ist Herstellerempfehlung von Google, und nichts davon ist gemessen.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "skill-evals-in-googles-day-3-one-figure-misread": {
+      "header": "Skill-Evals in Googles Day 3: eine Zahl falsch gelesen",
+      "description": "Day 3 schreibt „a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%“ [1]. In Vercels Beitrag ist das der Standard-Skill gegen die Basislinie, nur beim Teilwert Tests, und insgesamt lagen beide bei 53 % gleichauf [2]. Vercels Wortlaut gilt, und SkillsBench aus der ersten Notiz, nicht Day 3, belegt Skills unter dem Wert ohne Skill.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-task-twice": {
+        "title": "Dieselbe Aufgabe zweimal",
+        "keywords": "",
+        "script": "Woher weißt du, dass ein Skill hilft? Lass dieselbe Aufgabe zweimal laufen, einmal ohne den Skill und einmal mit ihm, und vergleiche die Ergebnisse, wie zwei Testtauchgänge im flachen Wasser. Verlass dich nicht auf dein Gefühl, denn sich nützlich anfühlen und nützlich sein ist nicht dasselbe."
+      },
+      "the-callout": {
+        "title": "Der Hinweis",
+        "keywords": "",
+        "script": "(Pause) Und dieser Test ist wichtiger, als er klingt, denn ein Skill ist nicht automatisch ein Gewinn. Ein schlechter Skill kann das Modell schlechter dastehen lassen als gar kein Skill, und genau deshalb gibt es den Vergleich."
+      },
+      "test-the-label": {
+        "title": "Teste das Etikett",
+        "keywords": "",
+        "script": "Teste auch die Beschreibung. Nimm ein paar Anfragen, die den Skill auslösen sollten, und ein paar, die es nicht sollten, und nimm Beinahe-Treffer dazu, also die, die nach dem Skill klingen, aber etwas anderes brauchen. Sie zeigen dir, ob das Modell im richtigen Moment zu ihm greift."
+      }
+    }
+  }
+}

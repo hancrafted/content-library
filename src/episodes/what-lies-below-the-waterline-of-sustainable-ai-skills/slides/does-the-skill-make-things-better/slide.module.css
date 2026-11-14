@@ -1,0 +1,113 @@
+/*
+ * "Does the skill make things better?" (Option 22a): the shallows, the silt, the procedure card, the gauge and the score
+ * fill. No raw colour (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and
+ * `--overlay` as black, with `--brand-accent` for the seabed's sand and `--zone-sunlit` for the water it tints; the
+ * ship and robot keep the shared figures' own colours. Dark mode only retunes the mixes.
+ */
+
+.bed,
+.silt,
+.card,
+.ghost,
+.gauge,
+.cable {
+  --sand: color-mix(in oklab, var(--brand-accent) 45%, color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay)));
+  --bed-lit: color-mix(in oklab, var(--sand) 85%, var(--on-brand-accent));
+  --bed: var(--sand);
+  --bed-shade: color-mix(in oklab, var(--sand) 75%, var(--overlay));
+  --rock: color-mix(in oklab, var(--sand) 45%, var(--overlay));
+  --rock-lit: color-mix(in oklab, var(--sand) 70%, var(--overlay));
+  --silt: color-mix(in oklab, var(--sand) 65%, transparent);
+  --silt-lit: color-mix(in oklab, color-mix(in oklab, var(--sand) 70%, var(--on-brand-accent)) 70%, transparent);
+  --paper: color-mix(in oklab, var(--on-brand-accent) 96%, var(--zone-sunlit));
+  --paper-shade: color-mix(in oklab, var(--overlay) 25%, transparent);
+  --ink: color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay));
+  --ghost: color-mix(in oklab, var(--on-brand-accent) 75%, transparent);
+  --gauge: var(--on-brand-accent);
+  --cable: color-mix(in oklab, var(--overlay) 55%, transparent);
+}
+
+:global(.dark) :is(.bed, .silt, .card, .ghost, .gauge, .cable) {
+  --sand: color-mix(in oklab, var(--brand-accent) 35%, color-mix(in oklab, var(--on-brand-accent) 15%, var(--overlay)));
+  --paper: color-mix(in oklab, var(--on-brand-accent) 85%, var(--zone-sunlit));
+  --ghost: color-mix(in oklab, var(--on-brand-accent) 45%, transparent);
+  --cable: color-mix(in oklab, var(--on-brand-accent) 45%, transparent);
+}
+
+.bed [data-tone='bed-lit'] {
+  fill: var(--bed-lit);
+}
+
+.bed [data-tone='bed'] {
+  fill: var(--bed);
+}
+
+.bed [data-tone='bed-shade'] {
+  fill: var(--bed-shade);
+}
+
+.bed [data-tone='rock'] {
+  fill: var(--rock);
+}
+
+.bed [data-tone='rock-lit'] {
+  fill: var(--rock-lit);
+}
+
+.silt [data-tone='silt'] {
+  fill: var(--silt);
+}
+
+.silt [data-tone='silt-lit'] {
+  fill: var(--silt-lit);
+}
+
+.card [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.card [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+}
+
+.card [data-tone='ink'] {
+  fill: var(--ink);
+}
+
+.ghost {
+  fill: none;
+  stroke: var(--ghost);
+}
+
+.gauge {
+  fill: var(--gauge);
+  stroke: var(--gauge);
+}
+
+.gauge text {
+  stroke: none;
+}
+
+.cable {
+  stroke: var(--cable);
+}
+
+/*
+ * The one emphasis motion: the two scores fill in, segment by segment, the without-skill run first, once on entry. The
+ * base rule is the filled rest state, which reduced motion and a still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .segment {
+    animation: fill-in 300ms ease-out var(--seg-delay) both;
+  }
+}
+
+@keyframes fill-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

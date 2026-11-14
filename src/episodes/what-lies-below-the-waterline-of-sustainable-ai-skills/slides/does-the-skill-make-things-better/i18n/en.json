@@ -1,0 +1,156 @@
+{
+  "title": "Does the skill make things better?",
+  "caption": "Test a skill by running the same task with and without it, because a bad skill can do worse than none.",
+  "analogy": "Two test dives in shallow water, the same task each time.",
+  "task": {
+    "chip": "Same task, twice",
+    "text": "Take a sediment sample at a new site."
+  },
+  "quote": {
+    "open": "“",
+    "close": "”"
+  },
+  "runs": {
+    "without": {
+      "label": "Without the skill",
+      "sub": "no skill: the baseline",
+      "subCoding": "skill disabled: the baseline"
+    },
+    "with": {
+      "label": "With the skill",
+      "sub": "the skill loaded",
+      "loaded": "loaded"
+    }
+  },
+  "checks": {
+    "hold": "Held 2 m above the seabed",
+    "camera": "Camera checked for loose sediment",
+    "seal": "Core tube sealed",
+    "core": "Core over 30 cm"
+  },
+  "score": {
+    "label": "Score · illustration",
+    "pass": "passed",
+    "fail": "failed"
+  },
+  "art": {
+    "card": "skill · procedure card",
+    "noCard": "no card",
+    "gauge": "2 m",
+    "silt": "sediment stirred up"
+  },
+  "descTest": {
+    "title": "Test the description too",
+    "lead": "Does the AI reach for the skill at the right moment? A few requests each way, near-misses included.",
+    "leadCoding": "The trigger set tests this line of the front matter:",
+    "frontMatter": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+    "should": "Should trigger the skill",
+    "shouldNot": "Should not trigger the skill",
+    "nearMiss": "near-miss",
+    "footnote": "The agentskills.io guide to descriptions suggests about 20 queries, 8 to 10 each way, each run about 3 times."
+  },
+  "requests": {
+    "should": {
+      "0": "Take a sediment sample at Site 7.",
+      "1": "Get a seabed sample here.",
+      "2": "New site: sample the sediment."
+    },
+    "shouldNot": {
+      "0": "Film the seabed at Site 7.",
+      "1": "Log yesterday's dive.",
+      "2": "Sample the water column here."
+    }
+  },
+  "callout": {
+    "tag": "Did you know?",
+    "text": "In one benchmark, skills an AI wrote for itself before solving the task, with no good run behind them, scored below having no skill.",
+    "source": "SkillsBench, 2026: 8.1 to 11.5 points below the no-skill baseline, in all three configurations tested.",
+    "aside": "Of 98 public skills, 92 showed no significant effect; harmful ones lost up to 17.0 points."
+  },
+  "vercel": "Not Vercel's result: there, the skill tied no skill.",
+  "footer": {
+    "story": "In the story:"
+  },
+  "alt": {
+    "without": "Test dive without the skill: the ship in shallow water lowers the robot on its cable; with no procedure card, the robot settles into the seabed and stirs up the sediment.",
+    "with": "Test dive with the skill: the same ship and site, the procedure card at the upper left; the robot holds 2 m above the seabed, its lamp on the sample site."
+  },
+  "notes": {
+    "skills-that-score-below-no-skill-skillsbench-not-vercel": {
+      "header": "Skills that score below no skill: SkillsBench, not Vercel",
+      "description": "skills written by the agent itself land 8.1 to 11.5 points below the no-skill baseline on all three configurations tested [1]. In Vercel's eval the skill tied the baseline at 53%; only sub-scores dipped (lint 89% against 95%, test 58% against 63%) [2]. Do not attribute \"below no skill\" to Vercel's headline.",
+      "sources": {
+        "skillsbench": {
+          "title": "Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks"
+        },
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "bad-skills-can-hurt-many-do-nothing": {
+      "header": "Bad skills can hurt, many do nothing",
+      "description": "of 98 public skills, 92 showed no statistically significant effect, and harmful ones lost up to 17.0 points by anchoring the agent on their own templates [1]. Curated skills raised the average pass rate from 33.9% to 50.5% [2].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        },
+        "skillsbench": {
+          "title": "Li et al., SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks"
+        }
+      }
+    },
+    "test-the-skills-description-too": {
+      "header": "Test the skill's description too",
+      "description": "the trigger set in the agentskills.io guide to descriptions is \"about 20 queries: 8-10 that should trigger and 8-10 that shouldn't\", each run about 3 times [1]. Anthropic's guide says to build scenarios and compare against a no-skill baseline [2]. \"Three and three\" is in neither.",
+      "sources": {
+        "agent-skills-optimizing-descriptions": {
+          "title": "Agent Skills, Optimizing skill descriptions"
+        },
+        "anthropic-skill-authoring-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        }
+      }
+    },
+    "trigger-tests-in-googles-day-3-two-sizes": {
+      "header": "Trigger tests in Google's Day 3: two sizes",
+      "description": "Day 3 says a description must pass checks \"to hit the industry-standard 90% trigger accuracy rate\", the first being \"You must write 3 positive and 3 negative triggers\", with no source for the rate. Elsewhere it says \"Write three eval cases (two positive, one negative) before drafting the body\" [1]. Its own counts disagree, it is Google's vendor guidance, and none of it is measured.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "skill-evals-in-googles-day-3-one-figure-misread": {
+      "header": "Skill evals in Google's Day 3: one figure misread",
+      "description": "Day 3 says \"a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%\" [1]. In Vercel's post that is the default skill against the baseline on the test sub-score alone, and overall they tied at 53% [2]. Vercel's wording wins, and SkillsBench in the first note, not Day 3, is the evidence for skills scoring below no skill.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-task-twice": {
+        "title": "Same task twice",
+        "keywords": "",
+        "script": "How do you know a skill helps? Run the same task twice, once without the skill and once with it, and compare the results, like two test dives in shallow water. Don't trust your feeling about it, because feeling useful and being useful are not the same thing."
+      },
+      "the-callout": {
+        "title": "The callout",
+        "keywords": "",
+        "script": "(pause) And this test matters more than it sounds, because a skill is not automatically a gain. A bad skill can leave the model worse off than no skill at all, which is the whole reason the comparison exists."
+      },
+      "test-the-label": {
+        "title": "Test the label",
+        "keywords": "",
+        "script": "Test the description too. Take a few requests that should trigger the skill and a few that should not, and include near-misses, the ones that sound like the skill but need something else. Those show you whether the model reaches for it at the right moment."
+      }
+    }
+  }
+}
