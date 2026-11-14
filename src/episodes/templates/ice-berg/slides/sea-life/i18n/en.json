@@ -2,7 +2,7 @@
   "title": "Sea life",
   "caption": "Each depth has its own quiet ambient movement",
   "intro": "Fish sway in Sunlit, jellies bob in Twilight, a whale glides in Midnight and bubbles rise in Abyss. The Twilight Section titles add a lanternfish school and a siphonophore. Each bubble is the shared faceted PolyBubble, shown on its own at its three outlines. Compare a second fish school, then inspect the still seabed and shafts of light.",
-  "contract": "Import each creature from its own file in slide-shared/iceberg/scenery (fish-school, jellies, whale, lanternfish, siphonophore), Bubbles from bubbles and Seabed or LightRays from seabed; PolyBubble comes from src/shared/components/core-components/poly-bubble and its host moves it. Each creature's JSDoc freezes its props, box, hooks and tokens. Counts and seeds give reproducible groups; explicit placements override them. Ambient loops stop outside the active Slide and with reduced motion.",
+  "contract": "Import each creature from its own file in slide-shared/iceberg/scenery (fish-school, jellies, whale, lanternfish, siphonophore, bubbles) and Seabed or LightRays from seabed; PolyBubble comes from src/shared/components/core-components/poly-bubble and its host moves it. Each creature's JSDoc freezes its props, box, hooks and tokens. Counts and seeds give reproducible groups; explicit placements override them. Ambient loops stop outside the active Slide and with reduced motion.",
   "pause": "Pause motion",
   "resume": "Resume motion",
   "replay": "Replay specimens",
