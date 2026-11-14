@@ -4,6 +4,16 @@ refs=$(cat)
 
 npm run verify </dev/null || exit 1
 
+# The slow lane runs here only for what this branch changed since main: `--changed` follows imports, and
+# vitest.slow.config.mts names the files its tests read from disk. Without a merge-base, the whole lane runs.
+# The nightly workflow runs it all (ARCH-003-testing §4).
+if base=$(git merge-base HEAD origin/main 2>/dev/null); then
+  npm run -s test:slow -- --changed "$base" --passWithNoTests </dev/null || exit 1
+else
+  echo "no merge-base with origin/main: running the whole slow lane"
+  npm run -s test:slow </dev/null || exit 1
+fi
+
 # A push to main triggers the Pages deploy, so it also runs the build lanes
 # verify skips. Branch pushes stay fast; CI builds them on the PR.
 if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then

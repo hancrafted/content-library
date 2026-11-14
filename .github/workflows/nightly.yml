@@ -1,0 +1,62 @@
+name: Nightly
+
+# The checks too slow for every pull request (ARCH-003-testing §4): the slow lane in full, and the fast suite's time
+# budget. Neither blocks a merge, so a finding lands as a `needs-triage` issue: tools/test-budget/file-issue.sh.
+on:
+  schedule:
+    - cron: '0 3 * * *' # 03:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  slow:
+    name: slow lane
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: tests/docs/episode-staging reads this repo's own `git log`.
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:slow
+      - name: File the failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BODY: 'The slow lane failed on `${{ github.sha }}`: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+        run: tools/test-budget/file-issue.sh 'Nightly slow tests failed' "$BODY"
+
+  budget:
+    name: fast-suite budget
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Timings only: a failing test is the unit job's to report on its pull request.
+      - run: npx vitest run --reporter=json --outputFile=fast-suite.json || true
+      - name: File the tests over 2 s
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          over=$(node tools/test-budget/over-budget.ts fast-suite.json 2000)
+          [ -z "$over" ] && exit 0
+          body=$(printf 'Each line proposes moving the test to the slow lane (`*.slow.test.ts`) or making it faster (ARCH-003-testing §4). Run: %s\n\n%s' \
+            "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" "$over")
+          tools/test-budget/file-issue.sh 'Fast-suite tests over 2 s' "$body"

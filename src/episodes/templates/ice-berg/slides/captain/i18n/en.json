@@ -1,0 +1,12 @@
+{
+  "title": "Captain",
+  "caption": "Five poses and three gestures share one body plan",
+  "intro": "The officer's jacket and captain's cap are appearance, not behavior. Compare all five poses, then watch a wave, nod and turn. Each gesture ends at rest; the happy emote appears after it.",
+  "contract": "Import Character from slide-shared/character/character and captain from slide-shared/deep-sea-expedition/cast. Poses and motions work with any Character preset. Flip the figure with flip; words remain readable.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "poses": { "stand": "Stand", "sit": "Sit", "point": "Point", "steer": "Steer", "hold": "Hold" },
+  "motions": { "wave": "Wave", "nod": "Nod", "turn-to": "Turn toward" }
+}

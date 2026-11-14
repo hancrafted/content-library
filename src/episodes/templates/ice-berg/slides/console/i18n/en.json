@@ -1,0 +1,17 @@
+{
+  "title": "Console",
+  "caption": "A flexible desk with a screen slot and a seat anchor",
+  "intro": "Compare two screens, the small desk, three mugs and custom content in one wide screen. The mirrored example marks where a seated Character belongs.",
+  "contract": "Import Console and consoleLayout from slide-shared/deep-sea-expedition/console and console.pure. The origin is the desk top's front-left corner. Width changes the desk, not its height; children fill the first screen in its own coordinates. Place a seated Character at the returned seat anchor.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "variants": {
+    "wide": "Width 260, two screens",
+    "small": "Width 82, one mug",
+    "mugs": "Width 160, three mugs",
+    "screen": "One wide screen, custom content",
+    "flip": "Mirrored console and seat anchor"
+  }
+}

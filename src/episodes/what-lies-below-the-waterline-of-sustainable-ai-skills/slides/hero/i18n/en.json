@@ -1,0 +1,54 @@
+{
+  "label": "A research ship on the waterline has lowered its diving robot on a cable from the A-frame to hang just above the water, its lamp shining down; beyond it an iceberg, most of its mass below the waterline, above the sea zones down to the abyss.",
+  "youAreHere": "you are here · Surface",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "agent": {
+    "heading": "Coding agent · the files behind it",
+    "files": {
+      "skill": {
+        "name": "SKILL.md",
+        "role": "name, description, instructions"
+      },
+      "folders": {
+        "name": "references/ scripts/ assets/",
+        "role": "supporting files"
+      },
+      "project": {
+        "name": "a project file, such as CONTEXT.md",
+        "role": "project details, read when the skill runs"
+      }
+    }
+  },
+  "ruler": "Depth ruler, the Surface lit",
+  "view": {
+    "label": "View",
+    "chat": "Chat app",
+    "coding": "Coding agent"
+  }
+}

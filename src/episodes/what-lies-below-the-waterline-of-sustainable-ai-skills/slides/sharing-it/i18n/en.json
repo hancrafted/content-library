@@ -1,0 +1,49 @@
+{
+  "title": "Sharing it",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, Sharing it lit",
+  "aiStatement": "A shared skill needs an owner, a version, a review date",
+  "owner": "Owner: Lab team · v1.3 · review March",
+  "analogy": "The card in the institute's fleet manual.",
+  "agent": "metadata: owner, version, review date",
+  "voiceScript": {
+    "segments": {
+      "midnight": {
+        "title": "Midnight",
+        "keywords": "",
+        "script": "Now we are in deep water, the midnight zone. Everything so far was for you, so what changes when a colleague runs your skill?"
+      },
+      "three-jobs": {
+        "title": "Three jobs",
+        "keywords": "",
+        "script": "Three jobs wait down here. Give the skill an owner and a version, decide who looks after the shared library, and test that the skill actually helps."
+      }
+    }
+  }
+}

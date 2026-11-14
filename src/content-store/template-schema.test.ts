@@ -32,9 +32,9 @@ describe('success cases', () => {
     expect(parsed.success).toBe(true);
   });
 
-  it('knows exactly the two Template types', () => {
+  it('knows the authoring Template types', () => {
     // ARRANGE
-    const expected = ['episode-template', 'master-slide'];
+    const expected = ['episode-template', 'master-slide', 'theme'];
     // ACT
     const types = [...TEMPLATE_TYPES];
     // ASSERT
@@ -46,19 +46,21 @@ describe('failure cases', () => {
   it('refuses a Template of a type outside the closed list, naming the list', () => {
     // ARRANGE
     const record = { ...TEMPLATE, type: 'page-template' };
+    const expected = 'type is "page-template", but must be one of episode-template, master-slide, theme';
     // ACT
     const sentence = refusal(record);
     // ASSERT
-    expect(sentence).toBe('type is "page-template", but must be one of episode-template, master-slide');
+    expect(sentence).toBe(expected);
   });
 
   it('refuses a Template with no type', () => {
     // ARRANGE
     const record = withoutKey(TEMPLATE, 'type');
+    const expected = 'type is required, one of episode-template, master-slide, theme';
     // ACT
     const sentence = refusal(record);
     // ASSERT
-    expect(sentence).toBe('type is required, one of episode-template, master-slide');
+    expect(sentence).toBe(expected);
   });
 
   it('refuses a Template with no visibility, so a forgotten field fails closed', () => {

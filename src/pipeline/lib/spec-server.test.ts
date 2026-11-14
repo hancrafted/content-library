@@ -6,8 +6,8 @@ import { startSpecServer, type SpecServer } from './spec-server.ts';
 
 // A real loopback socket on port 0, against ARCH-003 §1.1: the spec (#211) asks for the POST → file round trip end to end.
 /*
- * The Spec server against a real temp Episode folder on port 0: it serves the Spec, saves a valid review as the next
- * feedback round and redirects back, and answers an invalid one with 400 and writes nothing.
+ * The Spec server against a real temp Episode folder on port 0: it serves the Spec, saves a valid review (the page's
+ * feedback lines) as the next feedback round and redirects back, and answers an invalid one with 400 and writes nothing.
  */
 
 const NOW = new Date('2026-10-15T10:40:05Z');
@@ -55,8 +55,10 @@ async function serve(): Promise<{ folder: string; base: string }> {
   return { folder, base: `http://127.0.0.1:${server.port}` };
 }
 
-function post(base: string, fields: [string, string][]): Promise<Response> {
-  return fetch(`${base}/`, { method: 'POST', body: new URLSearchParams(fields), redirect: 'manual' });
+/** Posts what the page posts: its feedback lines in the `feedback` field, one item per line. */
+function post(base: string, ...lines: string[]): Promise<Response> {
+  const body = new URLSearchParams([['feedback', lines.join('\n')]]);
+  return fetch(`${base}/`, { method: 'POST', body, redirect: 'manual' });
 }
 
 const feedbackFolders = (folder: string) => readdirSync(path.join(folder, 'feedback')).sort();
@@ -65,17 +67,35 @@ describe('success cases', () => {
   it('saves a Brief card note as a brief-- item of the round', async () => {
     // ARRANGE
     const { folder, base } = await serve();
-    const fields: [string, string][] = [
-      ['pick:top', '0a'],
-      ['pick:spent', '1a'],
-      ['pick:quiet', '2a'],
-      ['note:brief--style', 'Sober, please.'],
+    const lines = [
+      '- `top` · design — picked: 0a',
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: 2a',
+      '- `brief--style` · design — Sober, please.',
     ];
     // ACT
-    await post(base, fields);
+    await post(base, ...lines);
     const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
     // ASSERT
     expect(saved).toContain('- `brief--style` · design — Sober, please.\n');
+  });
+
+  it('saves the general comment and the Next action as page and next items of the round', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const lines = [
+      '- `top` · design — picked: 0a',
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: 2a',
+      '- `page` · design — Calmer overall.',
+      '- `next` · gate — approve',
+    ];
+    const expectedTail = '- `page` · design — Calmer overall.\n- `next` · gate — approve\n';
+    // ACT
+    await post(base, ...lines);
+    const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
+    // ASSERT
+    expect(saved).toContain(expectedTail);
   });
 
   it('serves the Spec page at the root', async () => {
@@ -160,12 +180,10 @@ describe('success cases', () => {
   it('saves a valid review as the next feedback round and redirects back naming it', async () => {
     // ARRANGE
     const { folder, base } = await serve();
-    const fields: [string, string][] = [
-      ['pick:top', '0a'],
-      ['pick:spent', '1a'],
-      ['note:spent', ''],
-      ['note:quiet', 'None fit: try a heat strip.'],
-      ['note:visual-language', ''],
+    const lines = [
+      '- `top` · design — picked: 0a',
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: none — None fit: try a heat strip.',
     ];
     const expectedLocation = '/?saved=02';
     const expectedText = [
@@ -188,29 +206,48 @@ describe('success cases', () => {
     ].join('\n');
     const seeOther = 303;
     // ACT
-    const response = await post(base, fields);
+    const response = await post(base, ...lines);
     const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
     // ASSERT
     expect(response.status).toBe(seeOther);
     expect(response.headers.get('location')).toBe(expectedLocation);
     expect(saved).toBe(expectedText);
   });
+
+  it('saves a Slide set to Redesign with no note at all, a note being optional', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const lines = [
+      '- `top` · design — picked: 0b',
+      '- `why--spent` · design — picked: 1b',
+      '- `why--quiet` · design — picked: none',
+    ];
+    const seeOther = 303;
+    const expectedLine = '- `why--quiet` · design — picked: none\n';
+    // ACT
+    const response = await post(base, ...lines);
+    const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
+    // ASSERT
+    expect(response.status).toBe(seeOther);
+    expect(saved).toContain(expectedLine);
+  });
 });
 
 describe('failure cases', () => {
-  it('answers a review with a Slide lacking pick and note with 400 naming it, and writes nothing', async () => {
+  it('answers approve while a Slide is set to Redesign with 400 naming the Slide, and writes nothing', async () => {
     // ARRANGE
     const { folder, base } = await serve();
     const before = feedbackFolders(folder);
-    const fields: [string, string][] = [
-      ['pick:top', '0b'],
-      ['pick:spent', '1b'],
-      ['note:quiet', ''],
+    const lines = [
+      '- `top` · design — picked: 0b',
+      '- `why--spent` · design — picked: 1b',
+      '- `why--quiet` · design — picked: none — Try something else.',
+      '- `next` · gate — approve',
     ];
     const expectedStatus = 400;
-    const expectedFault = 'Slide 2 "quiet" has no pick and no note';
+    const expectedFault = 'Slide 2 "quiet" is set to Redesign: pick an Option before you approve.';
     // ACT
-    const response = await post(base, fields);
+    const response = await post(base, ...lines);
     const body = await response.text();
     const after = feedbackFolders(folder);
     // ASSERT
@@ -221,6 +258,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('answers a form posted without the page script, which sends no lines, with 400 and writes nothing', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const before = feedbackFolders(folder);
+    const body = new URLSearchParams([['pick:spent', '1a']]);
+    const expectedStatus = 400;
+    // ACT
+    const response = await fetch(`${base}/`, { method: 'POST', body, redirect: 'manual' });
+    const after = feedbackFolders(folder);
+    // ASSERT
+    expect(response.status).toBe(expectedStatus);
+    expect(after).toEqual(before);
+  });
+
   it('serves nothing but the Spec and its CSS', async () => {
     // ARRANGE
     const { base } = await serve();

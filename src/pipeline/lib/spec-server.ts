@@ -1,5 +1,6 @@
 // The Spec review server (design-ADR 0011): serves an Episode's `spec/spec.html` and its `design.css`, and saves the
-// review form's POST as the next `feedback/<NN>/feedback.md` round. Nothing in the static export imports it;
+// review form's POST, its `feedback` field of lines the page formatted, as the next `feedback/<NN>/feedback.md` round.
+// Nothing in the static export imports it;
 // `npm run episode:spec` (the new-episode skill's `spec.ts`) is its command line.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
@@ -20,6 +21,9 @@ export interface SpecServerOptions {
   port: number;
   now: () => Date;
 }
+
+/** The form field holding the feedback lines: the page script formats them, and Copy as prompt copies the same ones. */
+const FEEDBACK_FIELD = 'feedback';
 
 /** The review form posts a few kilobytes; anything far larger is not a review. */
 const MAX_BODY = 1_000_000;
@@ -76,11 +80,11 @@ function existingRounds(folder: string): string[] {
 }
 
 async function save(response: ServerResponse, request: IncomingMessage, options: SpecServerOptions): Promise<void> {
-  const fields = [...new URLSearchParams(await readBody(request))];
+  const lines = new URLSearchParams(await readBody(request)).get(FEEDBACK_FIELD) ?? '';
   const html = readFileSync(path.join(options.folder, SPEC_FILE), 'utf8');
   const round = nextRound(existingRounds(options.folder));
   const result = reviewToFeedback({
-    fields,
+    lines,
     slides: specSlides(html),
     brief: specBriefKeys(html),
     titleSlide: specTitleSlideOptions(html),

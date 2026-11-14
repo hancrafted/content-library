@@ -1,0 +1,15 @@
+{
+  "title": "Himmel",
+  "caption": "Das Theme wählt das Licht; die Wolken tragen den Wind",
+  "intro": "Wechsle das Seitentheme, um Sonne und Mondsichel zu vergleichen. Das zweite Beispiel erzwingt unabhängig vom Umfeld einen Mond. Die Wolken zeigen die Standardanordnung an der Oberfläche.",
+  "contract": "Importiere SunMoon und Clouds aus slide-shared/iceberg/scenery/sky. Beide Himmelskörper werden serverseitig gezeichnet; CSS wählt Tag oder Nacht. Wolkenpositionen nehmen x, y, scale und shape entgegen. Wind ist die Hintergrundschleife der Oberfläche; die Pausentaste der Galerie hält auch ihn an.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "variants": {
+    "theme": "Sonne oder Mond nach Seitentheme",
+    "moon": "Mond unter einem dark-Elternelement",
+    "clouds": "Oberflächenwolken im Wind"
+  }
+}

@@ -16,6 +16,19 @@ const listedUrls = () =>
   );
 
 describe('success cases', () => {
+  it('lists the Ice berg Theme at its canonical route in both locales', () => {
+    // ARRANGE
+    const slug = 'ice-berg';
+    const expected = [
+      { kind: 'theme', slug, locale: 'en', route: '/themes/ice-berg', url: '/themes/ice-berg' },
+      { kind: 'theme', slug, locale: 'de', route: '/themes/ice-berg', url: '/de/themes/ice-berg' },
+    ];
+    // ACT
+    const entries = resourceIndex().filter((entry) => entry.slug === slug);
+    // ASSERT
+    expect(entries).toEqual(expected.map((entry) => expect.objectContaining(entry)));
+  });
+
   it('holds every listed page of every kind, in each locale it is exported in', () => {
     // ARRANGE
     const expected = listedUrls().sort();

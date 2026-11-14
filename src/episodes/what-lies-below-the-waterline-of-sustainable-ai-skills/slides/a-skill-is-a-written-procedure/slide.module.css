@@ -1,0 +1,31 @@
+/*
+ * The Slide's token file: the control-room wall, the procedure card and its sleeve, mixed from global tokens so both
+ * themes follow (FE-011). `--machine`, `--human` and `--ai` stay for their meanings; `primary` marks the use-when line.
+ */
+
+.scene {
+  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
+  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
+  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
+  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
+  --clip: color-mix(in oklab, var(--info) 70%, var(--card));
+  --clip-shade: color-mix(in oklab, var(--info) 70%, var(--foreground));
+  --sleeve: color-mix(in oklab, var(--info) 14%, transparent);
+  --sleeve-edge: color-mix(in oklab, var(--info) 45%, transparent);
+  --guide: color-mix(in oklab, var(--info) 55%, var(--success));
+  --fish: var(--bulb);
+  --preset: color-mix(in oklab, var(--info) 75%, var(--card));
+  --preset-arm: color-mix(in oklab, var(--foreground) 70%, var(--info));
+}
+
+.wall [data-tone='sea'] {
+  fill: var(--room-wall);
+  stroke: var(--room-wall);
+  stroke-width: 0.6;
+}
+
+.wall [data-tone='sea-lit'] {
+  fill: var(--room-wall-lit);
+  stroke: var(--room-wall-lit);
+  stroke-width: 0.6;
+}

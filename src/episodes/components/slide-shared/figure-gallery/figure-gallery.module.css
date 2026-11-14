@@ -1,0 +1,17 @@
+.specimen {
+  background: var(--specimen-surface);
+  --says-scale: 0.6;
+}
+
+.gallery[data-gallery-paused='true'] :global(*),
+.gallery[data-document='hidden'] :global(*),
+:global([data-zone='near']) .gallery :global(*) {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery :global(*) {
+    animation: none !important;
+    transition: none !important;
+  }
+}

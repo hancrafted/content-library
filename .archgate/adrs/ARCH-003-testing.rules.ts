@@ -26,6 +26,13 @@ async function testFiles(ctx: RuleContext): Promise<string[]> {
   return [...new Set(found.flat())];
 }
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];
+
+/** The other half of a subject split across lanes: `x.pure.slow.test.ts` ↔ `x.pure.test.ts`. */
+function laneSibling(file: string): string {
+  return file.endsWith('.slow.test.ts')
+    ? file.replace(/\.slow\.test\.ts$/, '.test.ts')
+    : file.replace(/\.test\.ts$/, '.slow.test.ts');
+}
 const MARKERS = ['ARRANGE', 'ACT', 'ASSERT'];
 
 // Playwright spells a block `test.describe(` and a hook `test.beforeEach(`: a block, and no test.
@@ -176,12 +183,15 @@ export default {
   rules: {
     'suite-three-blocks': {
       description:
-        'Every test file under src/, and every browser test, splits at top level into exactly three describe blocks — success cases, failure cases, edge cases — once each, with no fourth name (§2.1).',
+        'Every test file under src/, and every browser test, splits at top level into exactly three describe blocks — success cases, failure cases, edge cases — once each, with no fourth name; a *.slow.test.ts and its fast sibling hold the three between them (§2.1).',
       severity: 'error',
       async check(ctx) {
-        for (const file of await testFiles(ctx)) {
+        const files = await testFiles(ctx);
+        const blocksOf = new Map<string, string[]>();
+        for (const file of files) {
           const lines = (await ctx.readFile(file)).split('\n');
           const seen: string[] = [];
+          blocksOf.set(file, seen);
           lines.forEach((text, index) => {
             const m = TOP_DESCRIBE_RE.exec(text);
             if (m === null) return;
@@ -201,7 +211,11 @@ export default {
             }
             seen.push(name);
           });
-          const missing = BLOCKS.filter((name) => !seen.includes(name));
+        }
+        for (const file of files) {
+          // A slow file and its fast sibling test one subject: the pair holds the three blocks between them (§2.1).
+          const held = [...(blocksOf.get(file) ?? []), ...(blocksOf.get(laneSibling(file)) ?? [])];
+          const missing = BLOCKS.filter((name) => !held.includes(name));
           if (missing.length > 0) {
             ctx.report.violation({
               message: `Test file has no top-level describe '${missing.join("', '")}' — every suite splits into success cases, failure cases and edge cases (ARCH-003 [suite-three-blocks]).`,

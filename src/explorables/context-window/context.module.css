@@ -1680,6 +1680,100 @@ summary.row:hover {
 .bar[data-orientation='horizontal'] .line[data-crossed] {
   border-left-color: var(--primary);
 }
+/* Upright: the base bar's own drawing, restated so a narrow container's horizontal timeline bar does not reach it. */
+.bar[data-orientation='vertical'] {
+  width: 100%;
+  height: var(--bar-h, 100%);
+}
+.bar[data-orientation='vertical'] .block {
+  top: calc(var(--s) * 1%);
+  bottom: auto;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: max(calc(var(--z) * 1%), 2px);
+  cursor: default;
+}
+/* Labelled: a list read top to bottom on a grid its asides share, so an aside spans exactly its part's rows. Each
+ * track grows by its share of the window (fractions of one) but never below its words; the window's box is drawn
+ * behind the list, and the free space closes it. Sizes are illustrative. */
+.bars:has(.listed),
+.bars figure:has(.listed) {
+  flex: 1 0 auto;
+}
+.listed {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.25rem 1rem;
+  flex: 1 0 auto;
+  padding: 0.25rem;
+}
+.listed[data-asides] {
+  grid-template-columns: minmax(0, 1fr) var(--bar-aside, 8rem);
+}
+.listed::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1 / -1;
+  margin: -0.25rem;
+  border-radius: 0.6rem;
+  background: var(--cs-free);
+  box-shadow: inset 0 0 0 1px var(--cs-border);
+}
+.bar[data-labelled] {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: grid;
+  grid-template-rows: subgrid;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+.bar[data-labelled] .block {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  min-height: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.4rem;
+  color: var(--foreground);
+  background: color-mix(in oklch, var(--k) 32%, var(--card));
+  box-shadow: inset 4px 0 0 var(--k);
+}
+/* The ringed block is the one the Slide is about: solid primary, taller, lifted, as a pulled card. */
+.bar[data-labelled] .block[data-ring] {
+  min-height: 4.5rem;
+  color: var(--primary-foreground);
+  background: var(--primary);
+  box-shadow: var(--cs-shadow);
+}
+/* The line between two parts of a labelled bar. */
+.split {
+  border-top: 4px solid var(--foreground);
+  margin-block: 0.25rem;
+}
+.aside {
+  grid-column: 2;
+  grid-row: var(--from) / var(--to);
+  display: grid;
+}
+.freeRow {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--cs-border);
+  border-radius: 0.4rem;
+  color: var(--cs-sub);
+}
 .block[data-faded] {
   background: var(--cs-dim);
 }

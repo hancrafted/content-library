@@ -1,0 +1,11 @@
+{
+  "title": "Pilot",
+  "caption": "Das Preset bestimmt das Aussehen; Character bestimmt die Haltung",
+  "intro": "Ein Pilot, fünf Posen. Kappe, Fliegerjacke und Becher machen die Person erkennbar; Character liefert Stehen, Sitzen, Zeigen, Steuern und Halten.",
+  "contract": "Importiere Character aus slide-shared/character/character und pilot aus slide-shared/deep-sea-expedition/cast. Der Ursprung liegt am Boden zwischen den Füßen. Die Sitzpose bringt ihren Stuhl mit; das Pult ist eine eigene Figur.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "poses": { "stand": "Stehen", "sit": "Sitzen", "point": "Zeigen", "steer": "Steuern", "hold": "Den Becher halten" }
+}

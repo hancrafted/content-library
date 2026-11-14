@@ -9,21 +9,48 @@ import { appendMetaVerified } from './staging-file.pure';
  * the Spec contract do, by role attributes, never by the helpers inside the module.
  */
 
-const FRAME = `<!doctype html>
-<html lang="en">
+/** A slotted Spec template: a page frame with the slots the assembler fills, the review form and two <template>s. */
+const TEMPLATE = `<!doctype html>
+<html lang="en" data-mode="decide">
   <head>
     <meta charset="utf-8" />
-    <title>Spec · Template</title>
+    <title data-slot="page-title">Spec · Template</title>
     <style>body{}</style>
+    <script type="application/json" id="spec-meta" data-slot="meta"></script>
   </head>
+  <body>
+    <div class="spec-shell">
+      <nav class="spec-outline" aria-label="Slides" data-slot="outline"></nav>
+      <main class="spec-page">
+        <header class="spec-masthead">
+          <p class="spec-kicker" data-slot="kicker"></p>
+          <h1 data-slot="heading"></h1>
+          <p data-slot="lede"></p>
+        </header>
+        <div class="spec-intro" data-slot="intro"></div>
+        <div data-slot="items"></div>
+      </main>
+    </div>
+    <form id="spec-review" method="post"><button type="submit">Save review</button></form>
+    <template data-template="item">
+      <article data-spec="slide" data-fidelity data-depth="simple">
+        <header class="spec-slide-head"><span class="spec-number" data-slot="number"></span><h3 data-slot="title"></h3></header>
+        <p class="spec-purpose" data-slot="purpose"></p>
+        <div data-slot="words"></div>
+        <div class="spec-options" data-slot="options"></div>
+        <textarea class="spec-note" form="spec-review" data-slot="note"></textarea>
+      </article>
+    </template>
+    <template data-template="option">
+      <figure data-spec="option" data-option data-recommended>
+        <div data-slot="stage"></div>
+        <figcaption data-slot="caption"></figcaption>
+        <details class="spec-build"><summary>Build notes</summary><div data-slot="build-notes"></div></details>
+        <label class="spec-pick"><input type="checkbox" form="spec-review" data-slot="pick" /> Pick <b data-slot="id"></b></label>
+      </figure>
+    </template>
+  </body>
 </html>
-`;
-
-const REVIEW_ASSET = `<!-- spec-review:start -->
-<form id="spec-review" method="post">
-  <button type="submit">Save review</button>
-</form>
-<!-- spec-review:end -->
 `;
 
 const BRIEF = `---
@@ -140,9 +167,11 @@ const FRAGMENTS = [
   `<!-- slide: trim-the-paste -->${option('3a', true)}${option('3b')}`,
 ];
 
+/** The fidelity the Spec calibration gives every item. */
+const FIDELITY = 'mock';
+
 const BASE = {
-  frame: FRAME,
-  reviewAsset: REVIEW_ASSET,
+  template: TEMPLATE,
   generated: { by: 'process:spec-assemble', at: '2026-10-12T12:00:00Z' },
 };
 const CARD_BRIEF = BRIEF.replace(
@@ -246,6 +275,29 @@ describe('success cases', () => {
     expect(slide.find('[data-spec="visual-idea"]').text()).toBe('A bar that fills with blocks.');
   });
 
+  it("puts a Slide's words in collapsibles closed by default, one per kind that exists, and no tabs", () => {
+    // ARRANGE
+    const kinds = ['visual-idea', 'voice-script', 'speaker-notes'];
+    const labels = ['Visual idea', 'Voice script', 'Speaker notes'];
+    // ACT
+    const $ = page(WITH_DOSSIER);
+    const panels = $('#spent-attention .spec-words > details');
+    // ASSERT
+    expect(ids($, '#spent-attention .spec-words > details', 'data-panel')).toEqual(kinds);
+    expect(panels.map((_, panel) => $(panel).children('summary').text().trim()).get()).toEqual(labels);
+    expect(panels.filter('[open]')).toHaveLength(0);
+    expect($('#spent-attention .spec-words input[type="radio"], #spent-attention .spec-words label')).toHaveLength(0);
+  });
+
+  it('shows only the Visual idea collapsible for a Slide the Dossier has not reached', () => {
+    // ARRANGE
+    const kinds = ['visual-idea'];
+    // ACT
+    const $ = page(BRIEF_ONLY);
+    // ASSERT
+    expect(ids($, '#spent-attention .spec-words > details', 'data-panel')).toEqual(kinds);
+  });
+
   it('adds Options with pick boxes, wrapped build notes and a note field once fragments exist', () => {
     // ARRANGE
     const optionIds = ['1a', '1b'];
@@ -257,7 +309,7 @@ describe('success cases', () => {
     expect(slide.find('input[type="checkbox"][form="spec-review"][name="pick:spent-attention"]')).toHaveLength(
       optionIds.length,
     );
-    expect(slide.find('details.spec-build > [data-spec="build-notes"]')).toHaveLength(optionIds.length);
+    expect(slide.find('details.spec-build [data-spec="build-notes"]')).toHaveLength(optionIds.length);
     expect(slide.find('textarea[form="spec-review"][name="note:spent-attention"]')).toHaveLength(1);
     expect($('#visual-language textarea[name="note:visual-language"]')).toHaveLength(1);
     expect($('#episode-page').text()).toContain('Route.');
@@ -280,6 +332,136 @@ describe('success cases', () => {
     expect($('.spec-outline a[href="#top"]')).toHaveLength(1);
   });
 
+  it('puts the context cards in one row of collapsibles, closed by default, each holding its own heading and body', () => {
+    // ARRANGE
+    const cards = ['brief', 'style', 'visual-language', 'episode-page'];
+    const headings = ['Brief', 'Style', 'Visual language', 'Episode page'];
+    // ACT
+    const $ = page({ ...FULL, brief: CARD_BRIEF });
+    const row = $('.spec-intro');
+    // ASSERT
+    expect(
+      row
+        .children('section')
+        .map((_, card) => $(card).attr('id'))
+        .get(),
+    ).toEqual(cards);
+    expect(row.find('details').length).toBe(cards.length);
+    expect(row.find('details[open]')).toHaveLength(0);
+    expect(
+      row
+        .find('summary h2')
+        .map((_, heading) => $(heading).text())
+        .get(),
+    ).toEqual(headings);
+  });
+
+  it('keeps the Visual language note field inside its collapsible, tied to the review form', () => {
+    // ARRANGE
+    const selector = '#visual-language details textarea[form="spec-review"][name="note:visual-language"]';
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect($(selector)).toHaveLength(1);
+  });
+
+  it('links each context card from the outline, so a link opens the card it names', () => {
+    // ARRANGE
+    const links = ['#brief', '#style', '#visual-language', '#episode-page'];
+    // ACT
+    const $ = page({ ...FULL, brief: CARD_BRIEF });
+    const hrefs = $('.spec-outline a')
+      .map((_, link) => $(link).attr('href'))
+      .get();
+    // ASSERT
+    expect(hrefs.slice(0, links.length)).toEqual(links);
+  });
+
+  it('clones the item template once per Slide, Title slide included, with its item attributes set', () => {
+    // ARRANGE
+    const items = ['top', 'spent-attention', 'the-quiet-middle', 'trim-the-paste'];
+    const [titleSlide, slide] = items as [string, string];
+    const fidelities = items.map(() => FIDELITY);
+    const slideNumber = '1';
+    const slideTitle = 'Spent attention';
+    const titleRole = 'title-slide';
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect(ids($, '[data-item]', 'data-item')).toEqual(items);
+    expect(ids($, '[data-item]', 'data-fidelity')).toEqual(fidelities);
+    expect($(`article#${slide}`).attr('data-item')).toBe(slide);
+    expect($(`article#${titleSlide}`).attr('data-spec')).toBe(titleRole);
+    expect($(`article#${titleSlide}`).attr('data-number')).toBeUndefined();
+    expect($(`#${slide} .spec-number`).text()).toBe(slideNumber);
+    expect($(`#${slide} h3`).text()).toBe(slideTitle);
+  });
+
+  it('clones the Option template per fragment Option: its id, recommendation as true or false, mock, caption and pick slot', () => {
+    // ARRANGE
+    const expected = [
+      ['1a', 'true'],
+      ['1b', 'false'],
+    ];
+    const first = { id: '1a', mock: 'Mock 1a', caption: '1a A reason. Build cost: Scene.' };
+    // ACT
+    const $ = page(FULL);
+    const options = $('#spent-attention figure[data-spec="option"]');
+    // ASSERT
+    expect(
+      options.map((_, figure) => [[$(figure).attr('data-option'), $(figure).attr('data-recommended')]]).get(),
+    ).toEqual(expected);
+    expect(options.first().find('[data-spec="mock"]').text()).toBe(first.mock);
+    expect(options.first().find('figcaption').text()).toBe(first.caption);
+    expect(options.first().find('.spec-pick b').text()).toBe(first.id);
+    expect(options.first().find('input[name="pick:spent-attention"]').attr('value')).toBe(first.id);
+  });
+
+  it('keeps the echoes of a Title-slide Option in its stage', () => {
+    // ARRANGE
+    const echoes = ['why-it-forgets', 'spend-it-well'];
+    // ACT
+    const $ = page(FULL);
+    // ASSERT
+    expect(ids($, '#top figure[data-option="0a"] [data-spec="echo"]', 'data-section')).toEqual(echoes);
+  });
+
+  it('sets data-revision to the Gate round: one past the feedback rounds saved so far', () => {
+    // ARRANGE
+    const round = (n: number) => feedback(n, '- `top` · design — picked: 0a');
+    // ACT
+    const expected = ['1', '2', '3'];
+    const revisions = [[], [round(1)], [round(1), round(2)]].map((rounds) =>
+      page({ ...FULL, feedback: rounds })('html').attr('data-revision'),
+    );
+    // ASSERT
+    expect(revisions).toEqual(expected);
+  });
+
+  it('leaves no template, slot marker or placeholder behind in the page', () => {
+    // ARRANGE
+    const html = assembleSpec(FULL);
+    // ACT
+    const $ = load(html);
+    // ASSERT
+    expect($('template')).toHaveLength(0);
+    expect($('[data-slot]')).toHaveLength(0);
+    expect($('[data-item=""], [data-option=""]')).toHaveLength(0);
+  });
+
+  it('drops the Option and note slots of a Slide that has no Options yet, but keeps its item attributes', () => {
+    // ARRANGE
+    const expected = { item: 'spent-attention', fidelity: FIDELITY };
+    const purpose = 'the window fills';
+    // ACT
+    const $ = page(BRIEF_ONLY);
+    const slide = $('#spent-attention');
+    // ASSERT
+    expect(slide.find('.spec-options, .spec-note')).toHaveLength(0);
+    expect(slide.find('.spec-purpose').text()).toContain(purpose);
+    expect({ item: slide.attr('data-item'), fidelity: slide.attr('data-fidelity') }).toEqual(expected);
+  });
+
   it('locks a Slide with exactly one pick: data-picked on the Option, checked on its box alone', () => {
     // ARRANGE
     const round = feedback(
@@ -287,13 +469,30 @@ describe('success cases', () => {
       '- `top` · design — picked: 0b',
       '- `why-it-forgets--spent-attention` · design — picked: 1b — tighter',
     );
+    const [slidePick, titlePick] = ['1b', '0b'];
     // ACT
     const $ = page({ ...FULL, feedback: [round] });
     // ASSERT
-    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe('1b');
-    expect($('#spent-attention input[type="checkbox"][checked]').attr('value')).toBe('1b');
-    expect($('#top figure[data-picked]').attr('data-option')).toBe('0b');
+    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe(slidePick);
+    expect($('#spent-attention input[type="checkbox"][checked]').attr('value')).toBe(slidePick);
+    expect($('#top figure[data-picked]').attr('data-option')).toBe(titlePick);
     expect($('#the-quiet-middle figure[data-picked]')).toHaveLength(0);
+  });
+
+  it('keeps its locks across a round that carries the page and next lines', () => {
+    // ARRANGE
+    const round = feedback(
+      1,
+      '- `why-it-forgets--spent-attention` · design — picked: 1b',
+      '- `page` · design — Calmer overall.',
+      '- `next` · gate — redesign',
+    );
+    const slidePick = '1b';
+    // ACT
+    const $ = page({ ...FULL, feedback: [round] });
+    // ASSERT
+    expect($('#spent-attention figure[data-picked]').attr('data-option')).toBe(slidePick);
+    expect($('figure[data-picked]')).toHaveLength(1);
   });
 
   it('lets a later round override an earlier one and keeps earlier locks the later round omits', () => {
@@ -330,7 +529,7 @@ describe('success cases', () => {
     const pages = [assembleSpec(FULL), assembleSpec({ ...FULL, feedback: [round] })];
     // ACT
     const findings = pages.flatMap((html) =>
-      checkSpec({ 'spec/spec.html': html, 'dossier.md': DOSSIER }, REVIEW_ASSET).map(({ message }) => message),
+      checkSpec({ 'spec/spec.html': html, 'dossier.md': DOSSIER }).map(({ message }) => message),
     );
     // ASSERT
     expect(findings).toEqual([]);
@@ -400,6 +599,26 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses a template with a slot the assembler does not fill, naming it', () => {
+    // ARRANGE
+    const slot = 'ledger';
+    const template = TEMPLATE.replace('data-slot="lede"', `data-slot="${slot}"`);
+    // ACT
+    const run = () => assembleSpec({ ...FULL, template });
+    // ASSERT
+    expect(run).toThrow(`"${slot}"`);
+  });
+
+  it('refuses a template without its item or Option template', () => {
+    // ARRANGE
+    const missing = 'option';
+    const template = TEMPLATE.replace(`data-template="${missing}"`, 'data-template="choice"');
+    // ACT
+    const run = () => assembleSpec({ ...FULL, template });
+    // ASSERT
+    expect(run).toThrow(`"${missing}"`);
+  });
+
   it('refuses once the existing Spec is approved', () => {
     // ARRANGE
     const approved = appendMetaVerified(assembleSpec(FULL), { by: 'human:han', at: '2026-10-12T14:00:00Z' });
@@ -411,7 +630,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('leaves a Slide with zero or several picks unlocked', () => {
+  it('leaves a Slide with zero or several picks unlocked, on its recommended Option', () => {
     // ARRANGE
     const round = feedback(
       1,
@@ -421,8 +640,14 @@ describe('edge cases', () => {
     // ACT
     const $ = page({ ...FULL, feedback: [round] });
     // ASSERT
+    const recommended = $('figure[data-recommended="true"]')
+      .toArray()
+      .map((figure) => $(figure).attr('data-option'));
+    const ticked = $('input[type="checkbox"][checked]')
+      .toArray()
+      .map((box) => $(box).attr('value'));
     expect($('figure[data-picked]')).toHaveLength(0);
-    expect($('input[type="checkbox"][checked]')).toHaveLength(0);
+    expect(ticked).toEqual(recommended);
   });
 
   it('ignores a pick for an Option the Slide no longer has', () => {

@@ -1,0 +1,27 @@
+{
+  "title": "Emote",
+  "caption": "Moods and words follow the actor's head, even when mirrored",
+  "intro": "Five moods on the captain, AI colleague and robot: a question, surprise, a sparkle, thinking dots or an empty thought. Speech examples show where words sit beside the head and how they stay readable after a flip.",
+  "contract": "Character and Robot share mood and says. Import their components from slide-shared/character/character and deep-sea-expedition/robot; actor.ts declares the mood vocabulary. Emote placement belongs to the actor, not the Slide. Keep says in the Slide's Translation files; an emote appears after the actor's motion and stays visible.",
+  "pause": "Pause motion",
+  "resume": "Resume motion",
+  "replay": "Replay specimens",
+  "usage": "Usage example",
+  "actors": { "captain": "Captain", "agent": "AI agent", "robot": "Robot" },
+  "moods": {
+    "confused": "Confused",
+    "surprised": "Surprised",
+    "happy": "Happy",
+    "thinking": "Thinking",
+    "blank": "Blank"
+  },
+  "variants": {
+    "pilotSays": "Seated pilot, thinking and speaking",
+    "captainSays": "Captain pointing left, words readable",
+    "robotSays": "Confused robot, speaking",
+    "robotFlip": "Mirrored robot, thinking"
+  },
+  "pilotSays": "Didn't we do this exact dive yesterday?",
+  "captainSays": "Descend slowly past the shelf.",
+  "robotSays": "Where was I yesterday?"
+}

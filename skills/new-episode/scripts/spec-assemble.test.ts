@@ -1,3 +1,4 @@
+import { load } from 'cheerio';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
@@ -65,7 +66,7 @@ describe('success cases', () => {
     // ASSERT
     expect(run.status).toBe(0);
     const html = readFileSync(path.join(folder, 'spec/spec.html'), 'utf8');
-    expect(html).toContain('data-spec="slide" id="spent-attention"');
+    expect(load(html)('article[data-spec="slide"]#spent-attention[data-item="spent-attention"]')).toHaveLength(1);
   });
 
   it('writes a Brief-stage Spec that specStage classifies early', () => {

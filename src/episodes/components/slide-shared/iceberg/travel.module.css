@@ -1,0 +1,25 @@
+/*
+ * `Travel`: one move across the Scene, from `--travel-from` to `--travel-to`, played once under the Slide mount's
+ * `[data-zone='active']` and replayed on re-entry. Percentages are of the Scene's drawing (`view-box`). The base rule
+ * is the rest state, so reduced motion simply never starts the move.
+ */
+
+.travel {
+  transform-box: view-box;
+  translate: var(--travel-to);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .travel {
+    animation: travel var(--travel-duration) cubic-bezier(0.33, 0, 0.2, 1) var(--travel-delay) both;
+  }
+}
+
+@keyframes travel {
+  from {
+    translate: var(--travel-from);
+  }
+  to {
+    translate: var(--travel-to);
+  }
+}

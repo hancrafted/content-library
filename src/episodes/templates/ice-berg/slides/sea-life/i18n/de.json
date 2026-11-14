@@ -1,0 +1,19 @@
+{
+  "title": "Meeresleben",
+  "caption": "Jede Tiefe hat ihre eigene ruhige Hintergrundbewegung",
+  "intro": "Fische schwingen in der Lichtzone, Quallen schweben in der Dämmerzone, ein Wal gleitet in der Mitternachtszone und Blasen steigen im Abyss auf. Vergleiche einen zweiten Fischschwarm und danach den ruhenden Meeresboden und die Lichtstrahlen.",
+  "contract": "Importiere Tiere aus slide-shared/iceberg/scenery/sea-life sowie Seabed oder LightRays aus scenery/seabed. Anzahl und Seed erzeugen reproduzierbare Gruppen; explizite Positionen ersetzen sie. ZoneScene setzt die Teile für erzählende Slides zusammen. Hintergrundschleifen stoppen außerhalb der aktiven Slide und bei reduzierter Bewegung.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "variants": {
+    "school": "Lichtzone: elf Fische, Seed 1",
+    "left": "Fünf Fische nach links, Seed 4",
+    "jellies": "Dämmerzone: zwei Quallen",
+    "whale": "Mitternachtszone: Buckelwal",
+    "bubbles": "Abyss: sieben aufsteigende Blasen",
+    "seabed": "Meeresboden, 1200 Einheiten breit",
+    "rays": "Fünf Lichtstrahlen"
+  }
+}

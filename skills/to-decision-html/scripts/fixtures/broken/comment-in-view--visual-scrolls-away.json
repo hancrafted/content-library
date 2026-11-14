@@ -3,8 +3,8 @@
   "defect": "The cache store item's visual is not sticky, so typing a comment below it scrolls it out of view.",
   "replace": [
     {
-      "find": "section[data-item] > svg {\n        position: sticky;",
-      "with": "section[data-item] > svg {\n        position: static;"
+      "find": "section[data-item] .main > svg {\n        position: sticky;",
+      "with": "section[data-item] .main > svg {\n        position: static;"
     }
   ]
 }

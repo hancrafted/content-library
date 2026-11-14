@@ -1,0 +1,11 @@
+{
+  "title": "KI-Agent",
+  "caption": "Derselbe Character funktioniert auch außerhalb der Expedition",
+  "intro": "Ein Kollege mit Laptop, kein Roboter. Das Freelancer-Preset nutzt dieselben fünf Posen wie die Crew; sein KI-Abzeichen trägt die Bedeutungsfarbe für KI.",
+  "contract": "Importiere Character aus slide-shared/character/character und aiAgent aus slide-shared/character/shared-presets. Dieses Preset ist unabhängig von der Expedition. Das Aussehen ändert sich; Posen und Stimmungen bleiben.",
+  "pause": "Bewegung pausieren",
+  "resume": "Bewegung fortsetzen",
+  "replay": "Beispiele wiederholen",
+  "usage": "Verwendungsbeispiel",
+  "poses": { "stand": "Stehen", "sit": "Sitzen", "point": "Zeigen", "steer": "Steuern", "hold": "Den Laptop halten" }
+}

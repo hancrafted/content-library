@@ -1,0 +1,48 @@
+{
+  "title": "Was ein Skill ist",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Was ein Skill ist hervorgehoben",
+  "aiStatement": "Ein Skill ist ein Name, eine Beschreibung und Anweisungen",
+  "analogy": "Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte.",
+  "agent": "SKILL.md, dazu scripts/ references/ assets/",
+  "voiceScript": {
+    "segments": {
+      "surface-first": {
+        "title": "Erst die Oberfläche",
+        "keywords": "",
+        "script": "Wir sind noch an der Oberfläche. Bevor wir fragen, wann sich ein Skill lohnt, schauen wir uns an, woraus ein Skill besteht. Ich nehme die Wörter, die Deine Chat-App benutzt, und wenn Du mit einem Coding-Agenten arbeitest, haben manche Slides eine zweite Ansicht mit den Dateien hinter jedem Teil."
+      },
+      "the-mechanics-plainly": {
+        "title": "Die Mechanik, ganz nüchtern",
+        "keywords": "",
+        "script": "Wie ein Skill geladen wird, will ich genau sagen, denn alles Spätere hängt daran. Deshalb sage ich zuerst, was die KI wirklich tut, und nehme den Tauchgang nur als Bild, damit man es sich leichter vorstellen kann."
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Wann Du einen schreibst",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Wann Du einen schreibst hervorgehoben",
+  "aiStatement": "Beim dritten Mal schreibst Du den Skill auf",
+  "steps": {
+    "first": "1.",
+    "second": "2.",
+    "third": "3."
+  },
+  "analogy": "Die Probe erklären, verfeinern, die Karte schreiben.",
+  "agent": "Bitte den Agenten, aus diesem Gespräch einen Skill zu machen",
+  "groundingLine": "Was für Menschen funktioniert, funktioniert auch für KI",
+  "groundingNote": ": eine starke Faustregel, kein Gesetz.",
+  "voiceScript": {
+    "segments": {
+      "sunlight": {
+        "title": "Sonnenlicht",
+        "keywords": "",
+        "script": "Wir sind eine Ebene tiefer, in der Sonnenlichtzone. Hier entscheiden wir zwei Dinge: wann eine Aufgabe überhaupt einen Skill verdient, und wie Du ihn beschreibst, damit das Modell ihn auch wirklich auswählt."
+      },
+      "borrowed-principles": {
+        "title": "Geliehene Prinzipien",
+        "keywords": "",
+        "script": "Ab hier leihe ich mir Prinzipien aus Engineering, Informationsarchitektur und UX, und alle stützen sich auf eine Idee: Was für Menschen funktioniert, funktioniert auch für KI. Das sage ich als starke Faustregel, nicht als Gesetz."
+      },
+      "why-a-rule-of-thumb": {
+        "title": "Warum eine Faustregel",
+        "keywords": "",
+        "script": "Sie trägt, weil das Modell nur mit dem arbeitet, was Du ihm gibst, wie eine fähige neue Kollegin an ihrem ersten Tag. Eine Faustregel ist es, weil sie an manchen Stellen bricht. Die stehen in den Notizen zur nächsten Slide, zum Nachlesen."
+      }
+    }
+  }
+}

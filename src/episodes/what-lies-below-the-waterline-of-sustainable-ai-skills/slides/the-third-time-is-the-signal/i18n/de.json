@@ -1,0 +1,143 @@
+{
+  "title": "Beim dritten Mal ist es so weit",
+  "caption": "Schreib einen Skill beim dritten Mal, wenn Du weißt, wie ein gutes Ergebnis aussieht.",
+  "comic": "Comic in drei Bildern",
+  "panels": {
+    "first": {
+      "heading": "1. Mal: Du lernst, was nötig ist",
+      "captainLine": "Sedimentprobe nehmen: 2 m über dem Meeresboden halten…",
+      "pilotLine": "Welche Tiefe? Was kommt aufs Etikett?",
+      "sessionChip": "Sitzung 1 · beginnt neu",
+      "alt": "Tag 1 im Kontrollraum: Der Kapitän erklärt die Sedimentprobe; der Pilot fragt nach Tiefe und Etikett."
+    },
+    "second": {
+      "heading": "2. Mal: Du verfeinerst es",
+      "captainLine": "Noch mal: erst die Kamera prüfen, den Arm langsam senken.",
+      "pilotLine": "Röhre verschließen, dann beschriften?",
+      "sessionChip": "Sitzung 2 · beginnt neu",
+      "alt": "Tag 2: Der Kapitän verfeinert es, der Pilot hört zu; zwei Tassen auf der Konsole."
+    },
+    "third": {
+      "heading": "3. Mal: Du schreibst den Skill",
+      "captainLine": "Hier ist es, aufgeschrieben.",
+      "pilotLine": "Intakt, verschlossen, beschriftet. Verstanden.",
+      "sessionChip": "Sitzung 3 · beginnt neu",
+      "alt": "Tag 3: Der Kapitän reicht dem Piloten die geschriebene Verfahrenskarte; drei Tassen auf der Konsole."
+    }
+  },
+  "card": {
+    "kind": "· Verfahrenskarte",
+    "emptyLabel": "Skill · leer",
+    "draftLabel": "Skill · Entwurf",
+    "writtenLabel": "Skill · geschrieben",
+    "titleField": "Titel:",
+    "useWhenField": "Verwenden, wenn:",
+    "need": "Was ist nötig: Tiefe? Etikett?",
+    "goodQuestion": "Gutes Ergebnis = ?",
+    "title": "Sedimentprobe nehmen",
+    "useWhen": "<b>Verwenden, wenn</b> wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
+    "draftSteps": {
+      "hold": "1. Den Roboter 2 m über dem Meeresboden halten.",
+      "grab": "2. Den Schlamm greifen.",
+      "lower": "2. Den Arm <b>langsam</b> senken.",
+      "label": "3. Beschriften."
+    },
+    "steps": {
+      "hold": "Den Roboter 2 m über dem Meeresboden halten.",
+      "camera": "Die Kamera auf losen Schlamm prüfen.",
+      "lower": "Den Arm senken.",
+      "identify": "Bestimmen, was Du gesammelt hast.",
+      "seal": "Die Kernröhre verschließen.",
+      "label": "Die Probe beschriften."
+    },
+    "goodResult": "Gutes Ergebnis: ein intakter Kern, verschlossen und beschriftet."
+  },
+  "terminal": {
+    "first": {
+      "title": "Sitzung 1 · neues Kontextfenster",
+      "ask": "Nimm eine Sedimentprobe an Standort 4.",
+      "agent": "Welche Tiefe soll der Roboter halten? Wie soll ich die Probe beschriften?",
+      "answer": "2 m über dem Meeresboden. Beschrifte sie mit Standort, Tiefe und Uhrzeit."
+    },
+    "second": {
+      "title": "Sitzung 2 · neues Kontextfenster",
+      "ask": "Nimm eine Sedimentprobe an Standort 5.",
+      "agent": "Welche Tiefe soll der Roboter halten?",
+      "answer": "2 m, wie letztes Mal. Erst die Kamera prüfen, den Arm langsam senken, die Röhre verschließen."
+    }
+  },
+  "skillFile": {
+    "newFile": "neue Datei",
+    "description": "Nimmt einen Sedimentkern. Verwenden, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
+    "footer": "<marker>In einer Datei steht es in Sitzung 4 noch da.</marker>"
+  },
+  "notEnough": "<b>Zählen reicht nicht.</b> Wenn Du nicht prüfen kannst, ob das Ergebnis gut war, wiederholt der Skill eine Gewohnheit, und zwar mit großer Überzeugung.",
+  "didYouKnow": {
+    "label": "Schon gewusst?",
+    "text": "Das entspricht der Dreierregel aus <marker>Fowlers <em>Refactoring</em></marker>, einer Regel der Softwareentwicklung gegen zu frühes Verallgemeinern."
+  },
+  "story": {
+    "label": "In der Geschichte:",
+    "analogy": "Die Probe erklären, verfeinern, die Karte schreiben."
+  },
+  "agent": {
+    "analogy": "<b>In Claude Code oder Codex:</b> <marker>Jede Sitzung beginnt neu, also bleibt nur, was Du in eine Datei schreibst.</marker>"
+  },
+  "notes": {
+    "when-to-write-a-skill": {
+      "header": "Wann ein Skill sich lohnt: Fowlers Dreierregel",
+      "description": "„The first time you do something, you just do it. The second time you do something similar, you wince at the duplication, but you do the duplication thing anyway. The third time you do something similar, you refactor.“ [1] Beim ersten Mal tust Du es einfach, beim zweiten Mal zuckst Du über die Doppelung zusammen und tust es trotzdem, beim dritten Mal baust Du um. Das ist eine Faustregel, kein gemessenes Ergebnis. Die Würdigung von Don Roberts steht im Buch von 1999, das die Recherche nicht lesen konnte.",
+      "sources": {
+        "fowler-refactoring-slides": {
+          "title": "Fowler, Refactoring: Improving the Design of Existing Code (Folien von 1997)"
+        }
+      }
+    },
+    "the-model-as-a-new-employee": {
+      "header": "Das Modell als neuer Mitarbeiter: warum die Faustregel trägt",
+      "description": "Anthropic rät, sich Claude als „a brilliant but new employee who lacks context on your norms and workflows“ vorzustellen, also als brillanten, aber neuen Mitarbeiter ohne Kontext zu Euren Normen und Abläufen, und einen Prompt einer Kollegin mit wenig Kontext zu zeigen [1]. Anthropic Engineering vergleicht das Bauen eines Skills damit, eine Einarbeitungsmappe für eine neue Kollegin zusammenzustellen („like putting together an onboarding guide for a new hire“) [2].",
+      "sources": {
+        "anthropic-prompting-best-practices": {
+          "title": "Anthropic, Prompting best practices"
+        },
+        "anthropic-equipping-agents-with-skills": {
+          "title": "Anthropic Engineering, Equipping agents for the real world with Agent Skills"
+        }
+      }
+    },
+    "where-the-model-is-not-like-a-person": {
+      "header": "Wo das Modell nicht wie ein Mensch ist",
+      "description": "Jeder Punkt hat eine Quelle, die Liste der Bruchstellen selbst ist aber eine Zusammenschau: Sitzungen beginnen neu, nur geschriebene Dateien bleiben [1]; Regeln in einer Datei sind „context, not enforced configuration“, also Kontext, keine erzwungene Konfiguration [1]; neuere Modelle lesen Anweisungen wörtlicher [2]; dieselben Worte wirken je nach Modell anders [2]; Assistenten neigen dazu, dem Nutzer zuzustimmen [3].",
+      "sources": {
+        "anthropic-claude-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        },
+        "openai-gpt-4-1-prompting-guide": {
+          "title": "OpenAI, GPT-4.1 Prompting Guide"
+        },
+        "sharma-sycophancy": {
+          "title": "Sharma et al., Towards Understanding Sycophancy in Language Models"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-tries": {
+        "title": "Drei Versuche",
+        "keywords": "",
+        "script": "Wann wird also aus einer Aufgabe ein Skill? Denk daran, was Du jedes Mal lernst, wenn Du sie dem Modell erklärst. Beim ersten Mal findest Du heraus, was überhaupt nötig ist, beim zweiten Mal schärfst Du es nach, und beim dritten Mal kannst Du sagen, wie ein gutes Ergebnis aussieht. Genau dann weißt Du, was Du aufschreiben würdest."
+      },
+      "not-only-repetition": {
+        "title": "Nicht nur Wiederholung",
+        "keywords": "",
+        "script": "Aber Zählen reicht nicht. Wenn Du nicht prüfen kannst, ob das Ergebnis gut war, hältst Du kein Verfahren fest, Du kopierst eine Gewohnheit, und der Skill wiederholt diese Gewohnheit mit großer Überzeugung."
+      },
+      "did-you-know": {
+        "title": "Schon gewusst",
+        "keywords": "",
+        "script": "Softwareentwickler sind lange vor jedem KI-Werkzeug genauso darauf gekommen: Sie nennen es die Dreierregel, aus Fowlers Refactoring, eine Regel gegen zu frühes Verallgemeinern. Den genauen Wortlaut lasse ich in den Notizen, denn hier geht es nur darum, dass Menschen zuerst da waren."
+      }
+    }
+  }
+}

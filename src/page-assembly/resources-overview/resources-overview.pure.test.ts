@@ -53,6 +53,7 @@ const NAMES: Record<ResourceKind, string> = {
   guide: 'Guides',
   'episode-template': 'Templates',
   'master-slide': 'Masters',
+  theme: 'Themes',
 };
 const slugs = (set: ReadonlySet<string>) => [...set];
 

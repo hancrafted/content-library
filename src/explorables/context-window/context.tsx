@@ -1,7 +1,7 @@
 import { SpeechBubble } from '@/explorables/context-window/speech-bubble/speech-bubble';
 import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import type { ReactNode } from 'react';
-import { ContextBars } from './context-bars-view';
+import { ContextBars, type BarsLayout } from './context-bars-view';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';
 import type { ContextWords } from './context-words.types';
@@ -51,12 +51,20 @@ export function Context(props: Props<ContextPresetId>) {
   );
 }
 
-/** Static bars drawn horizontally: chats one under the other on one window size. */
-export function ContextBarsPreset({ preset: id, locale, words }: Props<MiniPresetId>) {
+/** Static bars: chats one under the other on one window size, horizontal unless a Slide asks for them upright. */
+export function ContextBarsPreset({ preset: id, locale, words, ...layout }: Props<MiniPresetId> & BarsLayout) {
   const data = contextData(localeOf(locale));
   const mini = data.minis[id];
   if (!mini) throw new Error(`context bars: unknown Preset "${id}"`);
-  return <ContextBars mini={mini} chats={data.chats} words={{ ...data.words, ...words }} locale={localeOf(locale)} />;
+  return (
+    <ContextBars
+      mini={mini}
+      chats={data.chats}
+      words={{ ...data.words, ...words }}
+      locale={localeOf(locale)}
+      {...layout}
+    />
+  );
 }
 
 /** The session bar: the audience's attention over the session, filled up to and including the Section `at` (null: fresh). */

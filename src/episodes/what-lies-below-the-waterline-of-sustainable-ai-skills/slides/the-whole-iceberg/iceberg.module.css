@@ -1,0 +1,238 @@
+/*
+ * "The whole iceberg" (Option 26a): the trail, the robot's cable, the open manual, the takeaway rows written on the
+ * water and the one emphasis motion. No raw colour (FE-011): the trail and its nodes mix `--on-brand-accent` (white),
+ * the cable mixes the Abyss with `--overlay` (black), the manual's pages and spine mix white and `--bulb-edge`'s ochre.
+ * Words on light water take `--card-foreground`, which turns light with the dark theme's water; words on water dark
+ * in both themes take white. `--primary` marks the three steps, inverted to `--background` on Midnight water.
+ */
+
+.trail {
+  --trail: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
+  --node: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-surface));
+  --node-halo: color-mix(in oklab, var(--on-brand-accent) 35%, transparent);
+}
+
+.dash {
+  stroke: var(--trail);
+  stroke-width: 2;
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+}
+
+.node {
+  fill: var(--node);
+}
+
+.halo {
+  fill: var(--node-halo);
+}
+
+.cable {
+  stroke: color-mix(in oklab, var(--zone-abyss) 70%, var(--overlay));
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: top;
+}
+
+.leader {
+  stroke: var(--card-foreground);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 4;
+  opacity: 0.6;
+}
+
+.page {
+  fill: color-mix(in oklab, var(--on-brand-accent) 82%, var(--zone-twilight));
+}
+
+.pageLit {
+  fill: color-mix(in oklab, var(--on-brand-accent) 95%, var(--zone-surface));
+}
+
+.spine {
+  fill: color-mix(in oklab, var(--bulb-edge) 70%, var(--overlay));
+}
+
+/* The index page: below the picture on a narrow Scene, in the sky right of the ship, clear of the berg, on a wide one. */
+.index {
+  margin: 0.75rem;
+}
+
+/* The takeaway rows: on a narrow Scene each follows the picture on its own zone's water. */
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--row-water);
+}
+
+.row[data-ink='shallow'] {
+  color: var(--card-foreground);
+}
+
+.row[data-ink='deep'] {
+  color: var(--on-brand-accent);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  hyphens: auto;
+}
+
+.tile {
+  width: 1rem;
+  height: 0.25rem;
+  flex-shrink: 0;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.lines {
+  display: block;
+  line-height: 1.375;
+}
+
+.line {
+  display: inline;
+}
+
+.line + .line::before {
+  content: ' ';
+}
+
+.chipSlot {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 0.375rem;
+}
+
+.chipSlot:empty {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+.chip[data-chip='primary'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.chip[data-chip='inverse'] {
+  background: var(--background);
+  color: var(--primary);
+}
+
+/*
+ * A Scene wide enough to hold the words on the water: each row sits on its zone's band in the one picture, the name
+ * left of the trail (x 18 to 208), the lines right of its node (from x 272), clear of the berg. Positions are the
+ * drawing's units (`--units` across) read against the Scene's width, as the drawing keeps its proportions.
+ */
+@container (width >= 44rem) {
+  .rows {
+    position: absolute;
+    inset: 0 0 auto;
+    pointer-events: none;
+  }
+
+  .row {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(var(--top) * 100cqw / var(--units));
+    height: calc(var(--band) * 100cqw / var(--units));
+    display: grid;
+    grid-template-columns: calc(190 * 100cqw / var(--units)) 1fr;
+    column-gap: calc(64 * 100cqw / var(--units));
+    align-items: center;
+    padding: 0 calc(138 * 100cqw / var(--units)) 0 calc(18 * 100cqw / var(--units));
+    background: none;
+    pointer-events: auto;
+  }
+}
+
+/* Wide enough for each line on its own: the two lines of a takeaway stack, their step chips in one column. */
+@container (width >= 64rem) {
+  .index {
+    position: absolute;
+    top: calc(24 * 100cqw / 1200);
+    left: 47%;
+    width: 40%;
+    margin: 0;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+  }
+
+  .line + .line::before {
+    content: none;
+  }
+
+  .chipSlot,
+  .chipSlot:empty {
+    display: inline-flex;
+    width: 1.25rem;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+}
+
+/*
+ * Below the wide Scene the index page is not in the sky, so its leader from the manual goes too; on the water the
+ * zone's name keeps the whole column, without its tile.
+ */
+@container (width < 64rem) {
+  .leader {
+    display: none;
+  }
+}
+
+@container (44rem <= width < 64rem) {
+  .tile {
+    display: none;
+  }
+}
+
+/*
+ * The one emphasis motion, once on entry: the robot rises on its cable from the seabed to the A-frame (its `Travel`)
+ * and each takeaway and its node light as it passes, the Abyss first and the Surface last. The base rules are the end
+ * state, every row lit and the robot home, as reduced motion and a still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .light {
+    animation: light 500ms ease-out var(--light-delay) both;
+  }
+
+  /* The same easing as `Travel`, so the cable's end stays on the robot as it rises. */
+  :global([data-zone='active']) .cable {
+    animation: pay-in var(--rise-duration) cubic-bezier(0.33, 0, 0.2, 1) var(--rise-delay) both;
+  }
+}
+
+@keyframes pay-in {
+  from {
+    scale: 1 var(--cable-from);
+  }
+}
+
+@keyframes light {
+  from {
+    opacity: 0.3;
+  }
+}

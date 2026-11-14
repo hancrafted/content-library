@@ -1,0 +1,11 @@
+/*
+ * A card on a zone's surface. The dark zones turn the Slide's text light (zone presentation), so a card resets the
+ * text tokens to its own paper: the card's foreground, and a muted tone mixed from it, in both themes.
+ */
+
+.card {
+  --foreground: var(--card-foreground);
+  --muted-foreground: color-mix(in oklab, var(--card-foreground) 62%, var(--card));
+  background: var(--card);
+  color: var(--card-foreground);
+}

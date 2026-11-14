@@ -1,0 +1,53 @@
+{
+  "title": "Ihn am Leben halten",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "metres": "0 m, die Wasserlinie",
+      "science": "die Meeresoberfläche und die Luft darüber"
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "metres": "0–200 m",
+      "science": "Epipelagial"
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "metres": "200–1.000 m",
+      "science": "Mesopelagial"
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "metres": "1.000–4.000 m",
+      "science": "Bathypelagial"
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "metres": "4.000–6.000 m; der Hadal-Graben reicht weiter bis etwa 11 km",
+      "science": "Abyssopelagial"
+    }
+  },
+  "ruler": "Tiefenlineal, Ihn am Leben halten hervorgehoben",
+  "aiStatement": "Einen Skill richtig zu halten, kostet Dich jeden Monat etwas",
+  "entries": {
+    "details": "+ Projektdetails geändert",
+    "tool": "+ Ein neues Werkzeug kam dazu",
+    "overlap": "+ Eine Beschreibung überschneidet sich mit einem anderen Skill"
+  },
+  "analogy": "Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit.",
+  "agent": "In beiden Ansichten gleich: Der Zettel ist die Pflege",
+  "voiceScript": {
+    "segments": {
+      "the-abyss": {
+        "title": "Die Tiefsee",
+        "keywords": "",
+        "script": "Das ist die tiefste Zone, die Tiefsee, Monate später. Den Skill zu schreiben, ging schnell, ihn richtig zu halten, ist die eigentliche Arbeit."
+      },
+      "nobody-sees-it": {
+        "title": "Niemand sieht es",
+        "keywords": "",
+        "script": "Die meisten hören beim ersten guten Lauf auf, und der Teil darunter bekommt wenig Aufmerksamkeit. Deshalb will ich hier drei Slides lang bleiben."
+      }
+    }
+  }
+}

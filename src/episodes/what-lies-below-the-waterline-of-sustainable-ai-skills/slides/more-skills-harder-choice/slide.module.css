@@ -1,0 +1,97 @@
+/*
+ * "More skills, harder choice" (Option 13a): the room's floor, the near-twins and the one emphasis motion. No raw colour
+ * (FE-011): the floor mixes `--zone-sunlit` with `--on-brand-accent` (white) and `--overlay` (black), both fixed
+ * across themes; `--primary` marks the one wall line and its card. Dark mode only retunes the mixes.
+ */
+
+.room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
+  );
+}
+
+:global(.dark) .room {
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
+  );
+  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-sunlit) 45%,
+    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
+  );
+}
+
+.floor [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+}
+
+.floor [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.floor [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+/* A near-twin card: dashed and at 65% ink at rest, the end state of its fade. */
+.twin {
+  opacity: 0.65;
+}
+
+/*
+ * The one emphasis motion: the near-twins fade back while the wall's first line fills primary and its leader draws to
+ * the one card. The base rules are the rest state, which reduced motion and a still frame show; nothing loops.
+ */
+.lit {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.leader {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .twin {
+    animation: fade-back 700ms ease-out 600ms both;
+  }
+
+  :global([data-zone='active']) .lit {
+    animation: light-up 600ms ease-out 900ms both;
+  }
+
+  :global([data-zone='active']) .leader {
+    animation: draw 800ms ease-out 1300ms both;
+  }
+}
+
+@keyframes fade-back {
+  from {
+    opacity: 1;
+  }
+}
+
+@keyframes light-up {
+  from {
+    background: var(--card);
+    color: var(--card-foreground);
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}

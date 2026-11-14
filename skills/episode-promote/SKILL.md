@@ -49,7 +49,7 @@ _Done when_ every kept card is applied or filed, and `npm run verify` is green.
 
 ### 7. Keep what outlives Staging, and delete Staging
 
-One commit, because `tests/docs/episode-staging.test.ts` fails on a half-moved Staging folder:
+One commit, because the staging checks (`tests/docs/episode-staging.test.ts` and `episode-staging.slow.test.ts`) fail on a half-moved Staging folder:
 
 - `brief.md` moves to `src/episodes/<slug>/brief.md` (a Guide's to `src/episodes/guides/<slug>/brief.md`), its `status: draft` line removed.
 - `npm run episode:promote-research -- docs/episodes/<staging>` moves every research folder into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md`, cited by a Slide or not. It refuses, before moving anything, a folder with no `research.md`, a research ID the wiki already holds, or a category `GLOSSARY.md` does not name; fix that and rerun.

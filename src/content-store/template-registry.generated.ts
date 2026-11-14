@@ -5,6 +5,7 @@ import type { TemplateInput } from './schemas/template.schema';
 import { template as episodeTemplate } from './templates/episode-template';
 import { template as explorablePage } from './templates/explorable-page';
 import { template as grids } from './templates/grids';
+import { template as iceBerg } from './templates/ice-berg';
 import { template as timelines } from './templates/timelines';
 import { template as workshopTemplate } from './templates/workshop-template';
 
@@ -13,6 +14,7 @@ export const TEMPLATE_RECORDS = {
   'episode-template': episodeTemplate,
   'explorable-page': explorablePage,
   grids: grids,
+  'ice-berg': iceBerg,
   timelines: timelines,
   'workshop-template': workshopTemplate,
 } as const satisfies { readonly [S in TemplateSlug]: TemplateInput & { readonly slug: S } };

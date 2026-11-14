@@ -1,0 +1,77 @@
+/*
+ * The Slide's token file: the control room split by a bulkhead, the manual and its index, mixed from global tokens so
+ * both themes follow (FE-011). `--machine`, `--human` and `--ai` stay for their meanings; the cast draws its own.
+ *
+ * Motion (`motion: local`, one emphasis): the highlight lands on the Collect sediment sample index line, and only then
+ * the dashed scan line draws from the console to it. It plays once when the Slide's mount turns `[data-zone='active']`;
+ * the rest state is the end state, so reduced motion shows the highlight resting on the line. Nothing loops.
+ */
+
+.scene {
+  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
+  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
+  --floor: color-mix(in oklab, var(--info) 10%, color-mix(in oklab, var(--muted-foreground) 55%, var(--muted)));
+  --floor-lit: color-mix(in oklab, var(--floor) 80%, var(--card));
+  --frame: color-mix(in oklab, var(--brand-accent) 35%, var(--muted-foreground));
+  --wood: color-mix(in oklab, var(--brand-accent) 45%, var(--muted-foreground));
+  --wood-shade: color-mix(in oklab, var(--wood) 75%, var(--foreground));
+  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
+  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
+  --ink: color-mix(in oklab, var(--muted-foreground) 70%, var(--paper));
+  --tab-a: color-mix(in oklab, var(--info) 70%, var(--card));
+  --tab-b: var(--bulb);
+  --tab-c: color-mix(in oklab, var(--success) 70%, var(--card));
+  --bulk: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
+  --book: color-mix(in oklab, var(--success) 60%, var(--foreground));
+  --book-lit: color-mix(in oklab, var(--success) 70%, var(--card));
+  --scan: var(--foreground);
+}
+
+.wall [data-tone='sea'] {
+  fill: var(--room-wall);
+  stroke: var(--room-wall);
+  stroke-width: 0.6;
+}
+
+.wall [data-tone='sea-lit'] {
+  fill: var(--room-wall-lit);
+  stroke: var(--room-wall-lit);
+  stroke-width: 0.6;
+}
+
+.hit {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .hit {
+    animation: highlight-lands 600ms ease-out 500ms both;
+  }
+
+  :global([data-zone='active']) .scan {
+    animation: scan-draws 700ms ease-out 1200ms both;
+  }
+}
+
+@keyframes highlight-lands {
+  from {
+    background: transparent;
+    color: inherit;
+  }
+
+  to {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+@keyframes scan-draws {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

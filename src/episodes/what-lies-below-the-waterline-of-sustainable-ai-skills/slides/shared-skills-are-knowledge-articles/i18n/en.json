@@ -1,0 +1,110 @@
+{
+  "title": "Shared skills are knowledge articles",
+  "caption": "A shared skill needs an owner, a version and a review date, as Anthropic's enterprise guidance asks for every skill.",
+  "analogy": "Your notebook card, and the same card in the institute's fleet manual, like a company knowledge article.",
+  "pills": {
+    "personal": "Personal skill",
+    "shared": "Shared skill"
+  },
+  "personalSub": "no header, only you run it",
+  "controlBlock": "Control block",
+  "skill": {
+    "name": "Collect sediment sample",
+    "description": "Use when we reach a new site and need a sample from the seabed.",
+    "step": "1 Hold the robot 2 m above the seabed …"
+  },
+  "fields": {
+    "owner": {
+      "key": "Owner",
+      "value": "Lab team",
+      "job": "Who fixes it when it breaks, and whom to ask when it goes wrong.",
+      "source": "“Team or individual responsible for maintenance”, in Anthropic's registry entry per skill."
+    },
+    "version": {
+      "key": "Version",
+      "value": "1.3",
+      "job": "One author's edit changes what the AI does for everyone who runs it."
+    },
+    "review": {
+      "key": "Next review",
+      "value": "March",
+      "job": "A date for its next review.",
+      "source": "Anthropic: “Skill authors should not be their own reviewers.”"
+    }
+  },
+  "who": {
+    "yours": {
+      "chat": "Your AI",
+      "coding": "Your agent"
+    },
+    "colleague": {
+      "chat": "A colleague's AI",
+      "coding": "A colleague's agent"
+    },
+    "otherTeam": {
+      "chat": "Another team's AI",
+      "coding": "Another team's agent"
+    }
+  },
+  "runs": "runs version",
+  "personalNote": "Personal skills skip this until you share them.",
+  "thirdStep": "Third step: before sharing a skill, decide where the project details live, and give it an owner.",
+  "formatNote": "The Agent Skills format has no owner, version or review-date field; its optional <code>metadata</code> map holds them by convention.",
+  "footer": {
+    "story": "In the story:"
+  },
+  "alt": {
+    "scene": "The control room at Midnight. Left, the captain holds her own notebook: a personal skill, no header, only she runs it. In the middle, the fleet manual lies open on a lectern under the institute's shelf, the same skill on its page with a control block on top: owner Lab team, version 1.3, next review in March. Dotted lines run from the page to three AIs at their consoles, yours, a colleague's and another team's, each running version 1.3."
+  },
+  "notes": {
+    "a-skill-registry-entry": {
+      "header": "A skill registry entry",
+      "description": "Anthropic's enterprise guidance says to keep a registry entry per skill with purpose, owner (\"Team or individual responsible for maintenance\"), version, dependencies and evaluation status including the last evaluation date [1].",
+      "sources": {
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    },
+    "a-skill-review-date-is-an-adaptation": {
+      "header": "A skill review date is an adaptation",
+      "description": "Knowledge-Centered Service does not review on a schedule: \"Let reuse of Not Validated articles be the review\" [1], and the page does not use the word \"owner\". Owner, version and a calendar review date combine KCS and Anthropic's guidance; no source defines them as a rule for skills.",
+      "sources": {
+        "kcs-v6-article-state": {
+          "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
+        }
+      }
+    },
+    "the-agent-skills-format-has-no-owner-field": {
+      "header": "The Agent Skills format has no owner field",
+      "description": "the Agent Skills format has no owner, version or review-date field; its optional metadata map holds them by convention [1]. Anthropic also says \"Skill authors should not be their own reviewers\" [2].",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "your-notebook": {
+        "title": "Your notebook",
+        "keywords": "",
+        "script": "A personal skill has no header at all, like a card in your own notebook. That is fine while it is only yours, because you know who wrote it, when you last used it, and who fixes it when it breaks."
+      },
+      "into-the-fleet-manual": {
+        "title": "Into the fleet manual",
+        "keywords": "",
+        "script": "Once you share it into your team's skill library, the fleet manual on our ship, it needs what any company knowledge article has: an owner, a version, and a date for its next review. It is the same skill with a control block on top, and your personal skills can skip this until you share them."
+      },
+      "why": {
+        "title": "Why",
+        "keywords": "",
+        "script": "Why bother? Because once it is shared, one author's edit changes what the model does for everyone who runs it, and nobody knows whom to ask when it goes wrong. That is your third step: before you share a skill, decide where the project details live, and give it an owner."
+      }
+    }
+  }
+}

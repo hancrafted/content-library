@@ -1,0 +1,128 @@
+{
+  "title": "Mehr Skills, schwerere Wahl",
+  "caption": "Skills, die sich ähneln, lassen die KI raten; eine kurze Liste in den Projektanweisungen nimmt ihr das Raten ab.",
+  "analogy": "Fast gleiche Karten lassen den Piloten raten; die Liste an der Wand entscheidet.",
+  "index": {
+    "label": "Skill-Register: 8 Skills, jeder mit Namen und Beschreibung",
+    "labelCoding": ".claude/skills/*/SKILL.md name + description",
+    "cards": {
+      "sample": "Probe",
+      "collect-water-sample": "Wasserprobe nehmen",
+      "take-sample": "Probe nehmen",
+      "collect-sediment-sample": "Sedimentprobe nehmen",
+      "film-transect": "Transekt filmen",
+      "seabed-sample-v2": "Bodenprobe v2",
+      "log-dive": "Tauchgang protokollieren",
+      "collect-mud-sample": "Schlammprobe nehmen"
+    }
+  },
+  "wall": {
+    "title": "Projektanweisungen",
+    "lead": "In diesem Projekt nutzen wir diese drei Skills:",
+    "pill": "Projektanweisungen, immer geladen",
+    "pillCoding": "AGENTS.md oder CLAUDE.md"
+  },
+  "terms": {
+    "label": "Wo die Wahl fällt",
+    "index": {
+      "term": "Skill-Register",
+      "scene": "das Register des Handbuchs",
+      "kind": "Name und Beschreibung jedes Skills",
+      "line": "Fast gleiche Skills klingen ähnlich, also muss die KI zwischen ihnen raten.",
+      "more": " … 8 insgesamt"
+    },
+    "instructions": {
+      "term": "Projektanweisungen",
+      "scene": "das Projektbriefing an der Wand",
+      "kind": "immer geladen; CLAUDE.md in Claude Code, sonst AGENTS.md",
+      "line": "Eine kurze Liste dort sagt, welche drei Skills gelten, also gibt es keine überfüllte Wahl."
+    }
+  },
+  "evidence": "Belege",
+  "hick": {
+    "title": "Hick'sches Gesetz, ein Befund über Menschen",
+    "text": "Menschen brauchen länger für eine Wahl, je mehr Information in ihr steckt.",
+    "source": "Hick 1952, Hyman 1953: Wahlreaktionsexperimente mit Menschen. Dass eine längere Liste eine KI schlechter wählen lässt, ist eine Schlussfolgerung, kein gemessenes Ergebnis."
+  },
+  "vercel": {
+    "title": "Vercels Agenten-Evals: Erfolgsquote",
+    "rows": {
+      "default": "Der Skill, ohne Hinweis",
+      "agents-md-line": "+ eine Zeile in <code>AGENTS.md</code>, die den Agenten anweist, den Skill zu nutzen"
+    },
+    "note": "Mit der Zeile wurde der Skill in über 95 % der Fälle geöffnet. Ein Doku-Skill, ein Framework. Ein Doku-Index, der den Skill ersetzte, erreichte 100 %."
+  },
+  "naming": {
+    "rule": "Benenne ihn als Tätigkeit, kleingeschriebene Wörter mit Bindestrichen",
+    "source": "Die Best Practices von <b>Anthropic</b> für Skills: Namen nur aus Kleinbuchstaben, Ziffern und Bindestrichen; tätigkeitsbezogene Namen wie <code>process-pdfs</code> und <code>analyze-spreadsheets</code> gelten als zulässig (bevorzugt ist die Gerundium-Form, <code>processing-pdfs</code>), und in einer Sammlung soll das Muster einheitlich bleiben."
+  },
+  "footer": {
+    "story": "In der Geschichte:"
+  },
+  "alt": {
+    "room": "Der Kontrollraum. Über der Konsole hängt das Skill-Register, acht Karten, vier davon fast gleich, gestrichelt und blasser. Der Pilot sitzt an der Konsole unter einem Fragezeichen. An der Wand rechts listet das Projektbriefing drei Skills; die erste Zeile, Sedimentprobe nehmen, leuchtet, und eine Linie führt von ihr zu genau dieser Karte im Register."
+  },
+  "notes": {
+    "choosing-among-many-skills-hick-and-hyman": {
+      "header": "Wahl unter vielen Skills: Hick und Hyman, ein Befund über Menschen",
+      "description": "Hick wandte die Informationstheorie auf Wahlreaktionsexperimente mit bis zu zehn Alternativen an [1]. Hyman berichtet, dass die Reaktionszeit linear mit der Informationsmenge der Wahl steigt [2]. Dass eine längere Liste eine KI schlechter wählen lässt, ist eine Schlussfolgerung, kein gemessenes Ergebnis.",
+      "sources": {
+        "hick-rate-of-gain-of-information": {
+          "title": "Hick, On the Rate of Gain of Information (Quarterly Journal of Experimental Psychology, 1952)"
+        },
+        "hyman-stimulus-information": {
+          "title": "Hyman, Stimulus Information as a Determinant of Reaction Time (Journal of Experimental Psychology, 1953)"
+        }
+      }
+    },
+    "agents-md-index-beat-skills-vercels-test": {
+      "header": "Ein Index in AGENTS.md schlug Skills: Vercels Test",
+      "description": "Eine Zeile in AGENTS.md, die den Agenten anwies, seinen Skill zu nutzen, hob die Erfolgsquote von 53 % auf 79 %, und der Skill wurde in 95 % der Fälle oder öfter geöffnet [1]. Ein komprimierter Doku-Index von etwa 8 KB in AGENTS.md, der den Skill ersetzte, erreichte 100 %. Vercels Arbeitshypothese: Es gibt keinen Entscheidungspunkt, und Skills laden erst, wenn sie aufgerufen werden [1]. Es ist ein Doku-Skill für ein Framework, kein Ablauf.",
+      "sources": {
+        "vercel-agents-md-outperforms-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "skills-too-broad-or-too-narrow": {
+      "header": "Skills zu breit oder zu eng",
+      "description": "Der Standard warnt, dass zu breit gefasste Skills sich schwer gezielt aktivieren lassen, während zu enge dazu zwingen, mehrere zu laden [1]. Keine Quelle misst direkt, dass einander ähnliche Skills seltener gewählt werden.",
+      "sources": {
+        "agent-skills-best-practices": { "title": "Agent Skills, Best practices for skill creators" }
+      }
+    },
+    "name-each-skill-as-an-action": {
+      "header": "Benenne jeden Skill als Tätigkeit",
+      "description": "Die Best Practices von Anthropic für Skills sagen: Ein Skill-Name besteht nur aus Kleinbuchstaben, Ziffern und Bindestrichen; bevorzugt ist die Gerundium-Form (processing-pdfs), tätigkeitsbezogene Namen wie process-pdfs und analyze-spreadsheets gelten als zulässige Alternative, und uneinheitliche Muster in einer Sammlung sind zu vermeiden [1]. Diese Episode benennt ihre Skills in der Tätigkeitsform, collect-sediment-sample.",
+      "sources": {
+        "anthropic-skill-authoring-best-practices": {
+          "title": "Anthropic, Skill authoring best practices (Claude Platform docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "near-twins": {
+        "title": "Fast gleiche Skills",
+        "keywords": "",
+        "script": "Jetzt sieh, was passiert, wenn sich die Skills stapeln. „Probe“, „Probe nehmen“, „Bodenprobe v2“: drei Skills, deren Beschreibungen ähnlich klingen, und ein Modell, das zwischen ihnen raten muss. Es rät, und Du hast es dazu gebracht."
+      },
+      "a-short-list-on-the-wall": {
+        "title": "Eine kurze Liste an der Wand",
+        "keywords": "",
+        "script": "Die Abhilfe ist billig: eine kurze Liste in Deinen Projektanweisungen, AGENTS.md, wenn Du mit einem Coding-Agenten arbeitest, die sagt: „In diesem Projekt nutzen wir diese drei Skills.“ Projektanweisungen sind immer geladen, also muss das Modell nicht mehr aus einem überfüllten Register wählen. Auf unserem Schiff ist das eine Liste an der Wand."
+      },
+      "hicks-law": {
+        "title": "Das Hick'sche Gesetz",
+        "keywords": "",
+        "script": "Menschen geht es genauso: Je ähnlicher sich die Optionen sind, desto länger dauert die Wahl, und Psychologen nennen das das Hick'sche Gesetz. Ich leihe es mir für das Modell, also nimm es als Bild, nicht als Messung. Was Du von dieser Slide mitnehmen sollst, ist die kurze Liste: Sie ist kurz, und sie ist immer geladen."
+      },
+      "name-it-as-an-action": {
+        "title": "Benenne ihn als Tätigkeit",
+        "keywords": "",
+        "script": "Eine Gewohnheit hält das Register noch ordentlich: Benenne jeden Skill als Tätigkeit, in kleingeschriebenen Wörtern mit Bindestrichen, etwa collect-sediment-sample. Ein Name, der sagt, was der Skill tut, sagt dem Modell und Dir, wofür er da ist, bevor irgendwer die Beschreibung liest, und wenn jeder Name demselben Muster folgt, fällt ein Fast-Zwilling auf, bevor er geschrieben wird."
+      }
+    }
+  }
+}

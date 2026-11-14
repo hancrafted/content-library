@@ -1,0 +1,85 @@
+{
+  "title": "Ein Skill gibt der KI Dein Vorgehen",
+  "caption": "Passt eine Anfrage zu seiner Beschreibung oder rufst Du ihn beim Namen, liest die KI genau diesen einen Skill in den Kontext.",
+  "request": "Hol hier etwas Schlamm, bevor wir weiterfahren.",
+  "callouts": {
+    "skill": {
+      "term": "1 · Skill",
+      "scene": "Ablaufkarte"
+    },
+    "description": {
+      "term": "2 · Beschreibung",
+      "scene": "Zeile im Index"
+    },
+    "project": {
+      "term": "3 · Projektanweisungen",
+      "scene": "Projektbrief"
+    }
+  },
+  "tilesLabel": "Die drei Dinge zum Merken",
+  "tiles": {
+    "skill": {
+      "gloss": "Dein bewährtes Vorgehen. Es kommt in den Kontext, <marker>wenn eine Anfrage zu seiner Beschreibung passt oder Du ihn beim Namen rufst.</marker>",
+      "codeGloss": "Claude liest <code>SKILL.md</code>, <marker>wenn eine Anfrage zur Beschreibung passt, und erst dann kommt der Inhalt in den Kontext.</marker>"
+    },
+    "description": {
+      "gloss": "Eine Zeile, die der KI sagt, wofür der Skill da ist.",
+      "codeGloss": "Name und Beschreibung oben in der Datei."
+    },
+    "project": {
+      "gloss": "Was für dieses Projekt gilt, in jedem Gespräch geladen.",
+      "codeGloss": "Die Datei mit den Projektanweisungen, die der Agent liest, in Claude Code <code>CLAUDE.md</code>."
+    }
+  },
+  "card": {
+    "title": "Sedimentprobe nehmen",
+    "description": "Nimmt einen Sedimentkern. Nutzen, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
+    "steps": {
+      "hold": "Roboter 2 m über dem Meeresboden halten",
+      "findFlat": "Auf der Kamera eine flache Stelle suchen",
+      "core": "Stechrohr hineindrücken, verschließen, anheben"
+    }
+  },
+  "brief": {
+    "title": "Vermessung des Küstenschelfs",
+    "lines": {
+      "sites": "Standorte 1 bis 7",
+      "samples": "Proben gehen in die Labordatenbank"
+    }
+  },
+  "analogyLead": "In der Geschichte:",
+  "analogy": "Der Pilot zieht eine Karte aus dem Tauchhandbuch, wenn der Tauchgang sie braucht.",
+  "alt": {
+    "cutaway": "Schnitt durch das Forschungsschiff an der Oberfläche: Im Kontrollraum bittet die Kapitänin um eine Probe vom Meeresboden, der Pilot sitzt an der Konsole, der Projektbrief hängt an der Wand, und eine Ablaufkarte ist aus dem Tauchhandbuch auf dem Pult geglitten; der Roboter hängt an seinem Kabel unter der Wasserlinie."
+  },
+  "notes": {
+    "a-skill-spares-you-the-repeat": {
+      "header": "Ein Skill erspart Dir die Wiederholung",
+      "description": "Anthropic grenzt Skills von Prompts ab: Ein Skill erspart Dir, dieselben Hinweise in jedem Gespräch zu wiederholen [1]. Passt eine Anfrage zur Beschreibung eines Skills, liest Claude die SKILL.md, und erst dann kommt ihr Inhalt in den Kontext [1]. Ruft man einen Skill beim Namen, wird er ebenfalls geladen, wie die Folie zu den zwei Wegen, einen Skill aufzurufen, zeigt.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills overview"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "title": "Die Antwort",
+        "keywords": "",
+        "script": "Die meisten kommen innerhalb einer Minute auf dieselbe Idee: aufschreiben. Schreib das Vorgehen einmal auf, leg es dorthin, wo das Modell es findet, und lass das Modell es lesen, wenn die Aufgabe ansteht, statt es jeden Morgen neu zu erklären. Das ist ein Skill, und in unserem Bild ist er eine Ablaufkarte im Tauchhandbuch an der Konsole. Im Rest dieser Episode geht es darum, das gut zu machen."
+      },
+      "three-things-to-remember": {
+        "title": "Drei Dinge zum Merken",
+        "keywords": "",
+        "script": "Merk Dir drei Begriffe, denn wir kommen bis ganz unten auf sie zurück. Der Skill ist das Vorgehen selbst, die Karte. Seine Beschreibung ist die eine Zeile, die dem Modell sagt, wofür der Skill da ist, ein Eintrag im Index des Handbuchs. Und die Projektanweisungen halten fest, was für genau dieses Projekt gilt, der Projektbrief an der Wand."
+      },
+      "the-card-slides-out": {
+        "title": "Die Karte gleitet heraus",
+        "keywords": "",
+        "script": "Und jetzt der wichtigste Teil: Das Modell liest nicht jeden Skill, den Du hast. Es liest die Beschreibungen und öffnet einen Skill, wenn die Aufgabe ihn braucht, so wie eine Karte aus dem Handbuch kommt, wenn der Tauchgang sie braucht. (Pause) Das ist das Bild für alles, was folgt."
+      }
+    }
+  }
+}

@@ -1,14 +1,15 @@
 {
   "resourcesOverview": {
     "title": "Ressourcen",
-    "intro": "Alles, was die Seite bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Anleitungen, Episodenvorlagen und Master-Folien.",
+    "intro": "Alles, was die Seite bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Anleitungen, Episodenvorlagen, Master-Folien und Themes.",
     "kinds": {
       "episode": "Episode",
       "event": "Event",
       "explorable-page": "Explorable-Seite",
       "guide": "Anleitung",
       "episode-template": "Episodenvorlage",
-      "master-slide": "Master-Folie"
+      "master-slide": "Master-Folie",
+      "theme": "Theme"
     },
     "none": "Noch keine Ressourcen.",
     "open": "Öffnen",
@@ -27,7 +28,8 @@
       "explorable-page": "Explorable-Seiten",
       "guide": "Anleitungen",
       "episode-template": "Episodenvorlagen",
-      "master-slide": "Master-Folien"
+      "master-slide": "Master-Folien",
+      "theme": "Themes"
     }
   }
 }

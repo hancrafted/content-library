@@ -1,0 +1,53 @@
+{
+  "title": "What context stays beside",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, What context stays beside lit",
+  "file": "project file",
+  "aiStatement": "Project details stay beside the skill",
+  "sites": {
+    "site4": "Site 4: 40 m",
+    "site7": "Site 7: 120 m"
+  },
+  "analogy": "Same card, any site: today's dive plan says 120 m.",
+  "agent": "The step reads a project file, such as CONTEXT.md, when it runs",
+  "voiceScript": {
+    "segments": {
+      "beside-not-inside": {
+        "title": "Beside, not inside",
+        "keywords": "",
+        "script": "Now the other home: project details that stay outside the skill, in project files it reads when it runs. The procedure goes inside, and whatever changes from one project to the next stays beside."
+      },
+      "where-it-gets-shared": {
+        "title": "Where it gets shared",
+        "keywords": "",
+        "script": "And who uses the skill decides how much care it needs. A skill for your own use can be loose, and a skill a colleague runs needs more, which sets up the next Section."
+      }
+    }
+  }
+}

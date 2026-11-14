@@ -1,0 +1,49 @@
+{
+  "title": "The description",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, The description lit",
+  "aiStatement": "The description is all the AI sees",
+  "description": "“Use when we reach a new site and need a sample from the seabed.”",
+  "analogy": "The index is open, every card behind it closed.",
+  "agent": "SKILL.md: name and description load first",
+  "voiceScript": {
+    "segments": {
+      "the-label-decides": {
+        "title": "The label decides",
+        "keywords": "",
+        "script": "We are still in sunlight, and this is the part most people skip. A skill the model never picks helps nobody, so the description matters more than the instructions."
+      },
+      "name-description": {
+        "title": "Name, description",
+        "keywords": "",
+        "script": "Before the model opens a skill, it sees two lines: the name and the description. That is all the index holds, and it is all the model has to decide with."
+      }
+    }
+  }
+}

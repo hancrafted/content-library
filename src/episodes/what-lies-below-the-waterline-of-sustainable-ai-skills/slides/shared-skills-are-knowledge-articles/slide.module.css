@@ -1,0 +1,174 @@
+/*
+ * "Shared skills are knowledge articles" (Option 20b): the control room's own scenery and its one emphasis motion. No
+ * raw colour (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and
+ * `--overlay` as black, fixed across themes, with the zone's `--zone-midnight` for the room's cast, `--bulb` and
+ * `--brand-accent` for the manuals' covers; `--primary` draws the reach to the AIs. Dark mode only retunes the mixes.
+ */
+
+.room {
+  --wall-white: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-midnight));
+  --room: color-mix(in oklab, var(--wall-white) 88%, var(--overlay));
+  --room-lit: color-mix(in oklab, var(--wall-white) 96%, var(--overlay));
+  --room-shade: color-mix(in oklab, var(--wall-white) 82%, var(--overlay));
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-midnight) 30%,
+    color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay))
+  );
+  --floor: color-mix(
+    in oklab,
+    var(--zone-midnight) 30%,
+    color-mix(in oklab, var(--on-brand-accent) 52%, var(--overlay))
+  );
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-midnight) 30%,
+    color-mix(in oklab, var(--on-brand-accent) 42%, var(--overlay))
+  );
+  --frame: color-mix(
+    in oklab,
+    var(--brand-accent) 35%,
+    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
+  );
+  --shelf: color-mix(
+    in oklab,
+    var(--brand-accent) 55%,
+    color-mix(in oklab, var(--on-brand-accent) 40%, var(--overlay))
+  );
+  --shelf-shade: color-mix(in oklab, var(--shelf) 70%, var(--overlay));
+  --spine-a: color-mix(in oklab, var(--zone-midnight) 70%, var(--bulb));
+  --spine-b: color-mix(in oklab, var(--brand-accent) 70%, var(--overlay));
+  --spine-c: color-mix(in oklab, var(--zone-twilight) 75%, var(--overlay));
+  --book: color-mix(in oklab, color-mix(in oklab, var(--zone-midnight) 60%, var(--bulb)) 80%, var(--overlay));
+  --book-lit: color-mix(in oklab, var(--zone-midnight) 55%, var(--bulb));
+  --page: color-mix(in oklab, var(--on-brand-accent) 96%, var(--bulb));
+  --lectern: color-mix(in oklab, var(--zone-twilight) 80%, var(--overlay));
+}
+
+:global(.dark) .room {
+  --wall-white: color-mix(in oklab, var(--on-brand-accent) 40%, var(--zone-midnight));
+  --room: color-mix(in oklab, var(--wall-white) 70%, var(--overlay));
+  --room-lit: color-mix(in oklab, var(--wall-white) 80%, var(--overlay));
+  --room-shade: color-mix(in oklab, var(--wall-white) 62%, var(--overlay));
+  --floor-lit: color-mix(
+    in oklab,
+    var(--zone-midnight) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
+  );
+  --floor: color-mix(
+    in oklab,
+    var(--zone-midnight) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay))
+  );
+  --floor-shade: color-mix(
+    in oklab,
+    var(--zone-midnight) 40%,
+    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
+  );
+  --page: color-mix(in oklab, var(--on-brand-accent) 82%, var(--bulb));
+}
+
+.room [data-tone='room'] {
+  fill: var(--room);
+}
+
+.room [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+
+.room [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
+
+.room [data-tone='frame'] {
+  stroke: var(--frame);
+}
+
+.room [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+}
+
+.room [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.room [data-tone='floor-shade'] {
+  fill: var(--floor-shade);
+}
+
+.room [data-tone='shelf'] {
+  fill: var(--shelf);
+}
+
+.room [data-tone='shelf-shade'] {
+  fill: var(--shelf-shade);
+}
+
+.room [data-tone='spine-a'] {
+  fill: var(--spine-a);
+}
+
+.room [data-tone='spine-b'] {
+  fill: var(--spine-b);
+}
+
+.room [data-tone='spine-c'] {
+  fill: var(--spine-c);
+}
+
+.room [data-tone='book'] {
+  fill: var(--book);
+}
+
+.room [data-tone='book-lit'] {
+  fill: var(--book-lit);
+}
+
+.room [data-tone='page'] {
+  fill: var(--page);
+}
+
+.room [data-tone='lectern'] {
+  fill: var(--lectern);
+}
+
+.reachLine {
+  fill: none;
+  stroke: var(--primary);
+}
+
+.reachDot {
+  fill: var(--primary);
+}
+
+/*
+ * The one emphasis motion: the control block is stamped onto the manual's page, then the reach lines draw in, once,
+ * on entry. The base rules are the rest state, which reduced motion and a still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .stamp {
+    animation: stamp 450ms cubic-bezier(0.3, 1.4, 0.5, 1) 700ms both;
+  }
+
+  :global([data-zone='active']) .reach {
+    animation: reach 900ms ease-out 1300ms both;
+  }
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 1.35;
+    rotate: -4deg;
+  }
+}
+
+@keyframes reach {
+  from {
+    clip-path: inset(0 100% 0 0) fill-box;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0) fill-box;
+  }
+}

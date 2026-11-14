@@ -56,6 +56,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('lets the last Slide reach its surface through the space after it, with no rule between, so no band shows', () => {
+    // ARRANGE
+    const end = '[--content-end:--spacing(24)]';
+    const space = 'pb-(--content-end)';
+    const reach = '[&>section:last-of-type>[data-slide]:last-child]:[--slide-surface-reach:var(--content-end)]';
+    const noRule = '[&>section:last-of-type>[data-slide]:last-child]:border-b-0';
+    const expected = [end, space, reach, noRule];
+    // ACT
+    const classes = (renderArea().match(/class="([^"]*)"/)?.[1] ?? '')
+      .replaceAll('&amp;', '&')
+      .replaceAll('&gt;', '>')
+      .split(' ');
+    const seen = expected.filter((name) => classes.includes(name));
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('provides the main landmark for episode content', () => {
     // ARRANGE
     // ACT

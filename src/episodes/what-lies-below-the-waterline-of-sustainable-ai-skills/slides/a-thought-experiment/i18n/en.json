@@ -1,0 +1,49 @@
+{
+  "title": "A thought experiment",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "metres": "0 m, the waterline",
+      "science": "the sea surface and the air above it"
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "metres": "0–200 m",
+      "science": "epipelagic"
+    },
+    "twilight": {
+      "name": "Twilight",
+      "metres": "200–1,000 m",
+      "science": "mesopelagic"
+    },
+    "midnight": {
+      "name": "Midnight",
+      "metres": "1,000–4,000 m",
+      "science": "bathypelagic"
+    },
+    "abyss": {
+      "name": "Abyss",
+      "metres": "4,000–6,000 m; the hadal trench goes on to about 11 km",
+      "science": "abyssopelagic"
+    }
+  },
+  "ruler": "Depth ruler, A thought experiment lit",
+  "tag": "AI model",
+  "aiStatement": "Unless you write it down, every conversation with AI starts from zero",
+  "analogy": "Your pilot is the AI model: ten years of skill, no memory of yesterday.",
+  "agent": "Each session begins with a fresh context window",
+  "voiceScript": {
+    "segments": {
+      "you-are-the-captain": {
+        "title": "You are the captain",
+        "keywords": "",
+        "script": "Imagine you work with an AI model that is brilliant at its job, the most capable colleague you have. I will give it a picture, because we need one all the way down: you are the captain of a coastal research project, and the model is your pilot of ten years, who steers a diving robot on a cable from the control room on deck while you decide where the project goes next."
+      },
+      "one-settled-condition": {
+        "title": "One settled condition",
+        "keywords": "",
+        "script": "Your pilot has one condition, and it never changes. He forms no new memories overnight, but he keeps everything he ever learnt as a pilot, every rule of the trade. That is an AI model: what it learnt in training stays, and what you told it in yesterday's conversation is gone."
+      }
+    }
+  }
+}

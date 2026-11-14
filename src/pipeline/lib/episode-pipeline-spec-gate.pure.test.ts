@@ -39,7 +39,7 @@ jobs:
     retries: 2
     gate: human
     agents:
-      - { type: implementor, skills: [], references: [], model: opus, session: orchestrator }
+      - { type: implementor, skills: [], references: [references/spec-calibration.md], model: opus, session: orchestrator }
   - id: implement-episode-init
     stage: build
     needs: [write-spec]
@@ -126,6 +126,36 @@ describe('failure cases', () => {
     expect(elsewhereMessages).toEqual(expect.arrayContaining(expectedElsewhere));
   });
 
+  it('rejects a write-spec that does not read the Spec calibration', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('references: [references/spec-calibration.md]', 'references: []');
+    const expected = [
+      'Job "write-spec" does not read references/spec-calibration.md; the Spec calibration holds what every Spec shares (design-ADR-0011).',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it.each(['assets/spec-frame.html', 'assets/spec-review.html'])(
+    'rejects a write-spec that still reads the retired %s, which the Spec template replaced',
+    (asset) => {
+      // ARRANGE
+      const yaml = PIPELINE.replace(
+        'references: [references/spec-calibration.md]',
+        `references: [references/spec-calibration.md, ${asset}]`,
+      );
+      const expected = [
+        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (design-ADR-0011).`,
+      ];
+      // ACT
+      const messages = check(yaml);
+      // ASSERT
+      expect(messages).toEqual(expected);
+    },
+  );
+
   it('rejects a Build init job that does not need write-spec', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(
@@ -184,8 +214,8 @@ describe('edge cases', () => {
   it('lets write-spec itself read the Dossier, the draft the Spec is written from', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(
-      '      - { type: implementor, skills: [], references: [], model: opus, session: orchestrator }\n',
-      `      - { type: implementor, skills: [], references: [${STAGING}/dossier.md], model: opus, session: orchestrator }\n`,
+      'references: [references/spec-calibration.md]',
+      `references: [references/spec-calibration.md, ${STAGING}/dossier.md]`,
     );
     // ACT
     const messages = check(yaml);
