@@ -6,10 +6,10 @@ import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth
 import { cn } from '@/shared/lib/utils';
 import { Folder } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { RoomWall } from './card-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { EXTRA_FOLDER, EXTRAS, ProcedureCard, type Extra } from './procedure-card';
-import { RoomWall } from './room';
 import styles from './slide.module.css';
 
 const SPEC = { slug: 'agent-skills-specification', url: 'https://agentskills.io/specification' };

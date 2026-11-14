@@ -108,24 +108,24 @@ export const instructionsSkillsAndConnectors = slide({
           zone="surface"
           iceberg="none"
           label={t('alt.room')}
-          className="aspect-[2/1] w-full rounded-2xl shadow-md"
+          className="aspect-[30/13] w-full rounded-2xl shadow-md"
           overlay={
             <>
               <p
-                style={at(425, 262)}
+                style={at(364, 86)}
                 className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
               >
                 {t('art.brief')}
               </p>
               <p
-                style={at(1095, 214)}
-                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
+                style={at(1106, 44)}
+                className="whitespace-nowrap absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
               >
                 {t('art.labDatabase')}
               </p>
               <p
-                style={at(1140, 740)}
-                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
+                style={at(1080, 494)}
+                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-background @2xl:block"
               >
                 {t('art.sonar')}
               </p>

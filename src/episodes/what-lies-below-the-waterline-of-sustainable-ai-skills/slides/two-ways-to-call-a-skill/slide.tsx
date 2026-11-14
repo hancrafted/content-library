@@ -74,28 +74,18 @@ export const twoWaysToCallASkill = slide({
         zone="surface"
         iceberg="none"
         label={t('alt.room')}
-        className="aspect-[2/1] w-full rounded-2xl shadow-md"
+        className="aspect-[20/9] w-full rounded-2xl shadow-md"
         overlay={
           <div className="hidden @3xl:contents">
-            <WayLabel x={30} y={215}>
+            <WayLabel x={24} y={18}>
               {t('byName.title')} · {t('byName.who')}
             </WayLabel>
-            <WayLabel x={630} y={215}>
+            <WayLabel x={624} y={18}>
               {t('byDescription.title')} · {t('byDescription.who')}
             </WayLabel>
             <p
-              data-speech-bubble
-              style={{ ...at(120, 260), width: wide(260) }}
-              className="absolute rounded-xl bg-card px-3 py-2 text-caption font-semibold text-card-foreground shadow-md"
-            >
-              <InView view="chat">{t('art.say')}</InView>
-              <InView view="coding" className="font-mono">
-                &gt; {CALL}
-              </InView>
-            </p>
-            <p
-              style={{ ...at(PULLED.x + 10, PULLED.y + 14), width: wide(PULLED.width - 20) }}
-              className="absolute flex -rotate-3 flex-col text-caption leading-tight text-foreground"
+              style={{ ...at(PULLED.x + 14, PULLED.y + 14), width: wide(PULLED.width - 24) }}
+              className="absolute flex -rotate-3 flex-col text-caption leading-tight whitespace-nowrap text-foreground"
             >
               <InView view="chat" className="font-semibold">
                 {t('index.entries.0.name')}
@@ -122,19 +112,19 @@ export const twoWaysToCallASkill = slide({
                 useWhen: t(`index.entries.${key}.useWhen`),
               }))}
             />
-            <span style={at(150, 735)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
+            <span style={at(120, 490)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
               {t('art.you')}
             </span>
-            <span style={at(250, 735)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
+            <span style={at(262, 490)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
               {t('art.model')}
             </span>
-            <span style={at(632, 735)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
+            <span style={at(672, 490)} className="absolute -translate-x-1/2 text-caption font-semibold text-foreground">
               {t('art.model')}
             </span>
           </div>
         }
       >
-        <ControlRoomArt />
+        <ControlRoomArt says={{ chat: t('art.say'), coding: `> ${CALL}` }} />
       </ZoneScene>
       <div aria-label={t('cardsLabel')} role="group" className="grid items-start gap-4 @3xl:grid-cols-2">
         <section
