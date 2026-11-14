@@ -7,14 +7,11 @@
  * Motion (`motion: local`, one emphasis): the highlight lands on the Collect sediment sample index line, and only then
  * the dashed scan line from the console to it fades in; both by opacity alone (decision 19). It plays once when the Slide's mount turns `[data-zone='active']`;
  * the rest state is the end state, so reduced motion shows the highlight resting on the line. Nothing loops.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .scene {
-  --room-shade: oklch(0.86 0.024 238);
-  --room-lit: oklch(0.95 0.012 230);
-  --room: oklch(0.905 0.018 234);
-  --floor: oklch(0.66 0.028 244);
-  --floor-lit: oklch(0.72 0.025 240);
   --bulk-lit: oklch(0.56 0.03 250);
   --bulk-shade: oklch(0.36 0.03 258);
   --drop: oklch(0.3 0.04 255 / 0.18);
@@ -33,11 +30,6 @@
 }
 
 :global(.dark) .scene {
-  --room-shade: oklch(0.285 0.025 256);
-  --room-lit: oklch(0.36 0.025 250);
-  --room: oklch(0.32 0.025 253);
-  --floor: oklch(0.22 0.02 258);
-  --floor-lit: oklch(0.25 0.02 255);
   --bulk-lit: oklch(0.42 0.025 250);
   --bulk-shade: oklch(0.26 0.025 258);
   --drop: oklch(0.1 0.02 260 / 0.4);
@@ -77,28 +69,28 @@
 }
 
 .art [data-lp='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-lp='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-lp='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-lp='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-lp='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-lp='bulk-lit'] {

@@ -3,39 +3,18 @@
  * the control room's wall and floor, its window at afternoon, dusk and dawn, the card being written at the console, the
  * wall clock (its rim steel, from a neutral token) and the card pinned up the next morning. Raw colours live only here, each with its dark value from the
  * Spec (FE-011); dark mode is tuned later.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
-  --art-sky-1: oklch(0.76 0.08 240);
-  --art-sky-2: oklch(0.8 0.07 236);
-  --art-sky-3: oklch(0.845 0.058 230);
-  --art-sky-4: oklch(0.885 0.045 222);
-  --art-cloud-lit: oklch(0.995 0.004 230);
-  --art-cloud-shade: oklch(0.91 0.03 240);
   --art-glow: oklch(0.99 0.03 200);
   --art-glow-soft: oklch(0.95 0.07 205 / 0.55);
-  --art-sea-surface-lit: oklch(0.74 0.09 212);
-  --art-sea-surface: oklch(0.69 0.1 218);
-  --art-sea-sunlit-lit: oklch(0.62 0.11 228);
-  --art-sea-sunlit: oklch(0.575 0.115 234);
-  --art-ray: oklch(0.97 0.06 200 / 0.18);
-  --art-bed-lit: oklch(0.42 0.04 70);
-  --art-bed: oklch(0.34 0.035 60);
-  --art-bed-shade: oklch(0.27 0.03 50);
-  --art-bubble: oklch(0.95 0.04 210 / 0.45);
   --art-house-lit: oklch(0.985 0.005 90);
   --art-house: oklch(0.92 0.012 85);
   --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
   --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-cloth-dark: oklch(0.22 0.02 265);
-  --art-room-lit: oklch(0.95 0.012 230);
-  --art-room: oklch(0.905 0.018 234);
-  --art-room-shade: oklch(0.86 0.024 238);
-  --art-floor-lit: oklch(0.72 0.025 240);
-  --art-floor: oklch(0.66 0.028 244);
-  --art-frame-lit: oklch(0.62 0.07 60);
-  --art-frame-shade: oklch(0.44 0.05 55);
-  --art-pane-glint: oklch(1 0 0 / 0.35);
   --art-glint: oklch(1 0 0);
   --art-paper-lit: oklch(0.995 0.004 90);
   --art-paper: oklch(0.965 0.01 88);
@@ -64,36 +43,13 @@
 }
 
 :global(.dark) .art {
-  --art-sky-1: oklch(0.24 0.05 268);
-  --art-sky-2: oklch(0.28 0.055 264);
-  --art-sky-3: oklch(0.32 0.055 258);
-  --art-sky-4: oklch(0.37 0.055 250);
-  --art-cloud-lit: oklch(0.47 0.045 255);
-  --art-cloud-shade: oklch(0.39 0.045 260);
   --art-glow: oklch(0.9 0.08 200);
   --art-glow-soft: oklch(0.75 0.1 205 / 0.45);
-  --art-sea-surface-lit: oklch(0.44 0.075 222);
-  --art-sea-surface: oklch(0.405 0.078 226);
-  --art-sea-sunlit-lit: oklch(0.37 0.075 236);
-  --art-sea-sunlit: oklch(0.34 0.075 240);
-  --art-ray: oklch(0.8 0.08 200 / 0.12);
-  --art-bed-lit: oklch(0.36 0.035 70);
-  --art-bed: oklch(0.29 0.03 60);
-  --art-bed-shade: oklch(0.23 0.025 50);
-  --art-bubble: oklch(0.8 0.05 210 / 0.35);
   --art-house-lit: oklch(0.86 0.008 90);
   --art-house: oklch(0.78 0.012 85);
   --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
   --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-cloth-dark: oklch(0.2 0.02 265);
-  --art-room-lit: oklch(0.36 0.025 250);
-  --art-room: oklch(0.32 0.025 253);
-  --art-room-shade: oklch(0.285 0.025 256);
-  --art-floor-lit: oklch(0.25 0.02 255);
-  --art-floor: oklch(0.22 0.02 258);
-  --art-frame-lit: oklch(0.5 0.06 60);
-  --art-frame-shade: oklch(0.36 0.045 55);
-  --art-pane-glint: oklch(1 0 0 / 0.18);
   --art-glint: oklch(0.98 0.01 230);
   --art-paper-lit: oklch(0.88 0.008 90);
   --art-paper: oklch(0.83 0.012 88);
@@ -127,47 +83,47 @@
 }
 
 .art [data-tone='sky-2'] {
-  fill: var(--art-sky-2);
-  stroke: var(--art-sky-2);
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
 }
 
 .art [data-tone='sky-1'] {
-  fill: var(--art-sky-1);
-  stroke: var(--art-sky-1);
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
 }
 
 .art [data-tone='sky-3'] {
-  fill: var(--art-sky-3);
-  stroke: var(--art-sky-3);
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
 }
 
 .art [data-tone='sky-4'] {
-  fill: var(--art-sky-4);
-  stroke: var(--art-sky-4);
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
 }
 
 .art [data-tone='sea-surface'] {
-  fill: var(--art-sea-surface);
-  stroke: var(--art-sea-surface);
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
 }
 
 .art [data-tone='sea-surface-lit'] {
-  fill: var(--art-sea-surface-lit);
-  stroke: var(--art-sea-surface-lit);
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
 }
 
 .art [data-tone='sea-sunlit-lit'] {
-  fill: var(--art-sea-sunlit-lit);
-  stroke: var(--art-sea-sunlit-lit);
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
 }
 
 .art [data-tone='sea-sunlit'] {
-  fill: var(--art-sea-sunlit);
-  stroke: var(--art-sea-sunlit);
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
 }
 
 .art [data-tone='ray'] {
-  fill: var(--art-ray);
+  fill: var(--scenery-ray);
   stroke: none;
 }
 
@@ -182,22 +138,22 @@
 }
 
 .art [data-tone='bed-shade'] {
-  fill: var(--art-bed-shade);
-  stroke: var(--art-bed-shade);
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
 }
 
 .art [data-tone='bed-lit'] {
-  fill: var(--art-bed-lit);
-  stroke: var(--art-bed-lit);
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
 }
 
 .art [data-tone='bed'] {
-  fill: var(--art-bed);
-  stroke: var(--art-bed);
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
 }
 
 .art [data-tone='bubble'] {
-  fill: var(--art-bubble);
+  fill: var(--scenery-bubble);
   stroke: none;
 }
 
@@ -207,52 +163,52 @@
 }
 
 .art [data-tone='room-lit'] {
-  fill: var(--art-room-lit);
-  stroke: var(--art-room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-tone='room'] {
-  fill: var(--art-room);
-  stroke: var(--art-room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-tone='room-shade'] {
-  fill: var(--art-room-shade);
-  stroke: var(--art-room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-tone='floor'] {
-  fill: var(--art-floor);
-  stroke: var(--art-floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-tone='floor-lit'] {
-  fill: var(--art-floor-lit);
-  stroke: var(--art-floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-tone='frame-lit'] {
-  fill: var(--art-frame-lit);
-  stroke: var(--art-frame-lit);
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
 }
 
 .art [data-tone='frame-shade'] {
-  fill: var(--art-frame-shade);
-  stroke: var(--art-frame-shade);
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .art [data-tone='cloud-lit'] {
-  fill: var(--art-cloud-lit);
-  stroke: var(--art-cloud-lit);
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
 }
 
 .art [data-tone='cloud-shade'] {
-  fill: var(--art-cloud-shade);
-  stroke: var(--art-cloud-shade);
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
 }
 
 .art [data-tone='pane-glint'] {
-  fill: var(--art-pane-glint);
+  fill: var(--scenery-window-glint);
   stroke: none;
 }
 

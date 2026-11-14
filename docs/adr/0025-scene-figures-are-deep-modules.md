@@ -53,7 +53,7 @@ A Slide's Scene reads:
 ### Colour tokens
 
 1. **Zone colours** are five global tokens in `globals.css`, `--zone-surface` to `--zone-abyss`, one value in both themes, so Han tunes each zone once in the token editor. Text contrast follows the zone, not the theme: dark on Surface and Sunlit, light from Twilight down. Dark mode is out of scope until Han settles it separately.
-2. **Scenery colours** stay mixed from global tokens. If the cast gallery shows neighbouring figures too alike, a small set of scenery tokens is promoted to `globals.css` (`--ice`, `--deep`, `--seabed`, `--creature`), each with a dark value, and the figures mix from those (Q24), following FE-011's own mitigation.
+2. **Scenery colours** that several Slides repeat are global `--scenery-*` tokens in `globals.css`, each with a dark value, so a Slide's drawing names them and Han tunes each once in the token editor (feedback round, Q54, following FE-011's own mitigation). The families: the sky (`--scenery-sky-1` to `-4`, `--scenery-cloud-lit`, `-shade`), the sea per zone (`--scenery-sea-surface` to `--scenery-sea-abyss`, each with `-lit`), the seabed (`--scenery-seabed`, `-lit`, `-shade`), light in the water (`--scenery-ray`, `--scenery-bubble`) and the room (`--scenery-wall`, `-lit`, `-shade`, `--scenery-floor`, `-lit`, `--scenery-window-frame-lit`, `-shade`, `--scenery-window-glint`). A prop only one Slide draws keeps its tones in that Slide's token file. The shared figures and `ZoneScene` still mix their palettes from global tokens (Q24).
 
 ### Motion
 

@@ -3,18 +3,12 @@
  * window and picture frame, and the wall clock, in the approved Spec Option 1a's own tones (feedback 3, decision 46),
  * and the strip's one motion. Dark values are the Spec's; dark mode is tuned later (decision 32). No meaning colour
  * here: `ai` marks only the pilot's tag.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .room {
-  --room-lit: oklch(0.95 0.012 230);
-  --room: oklch(0.905 0.018 234);
-  --room-shade: oklch(0.86 0.024 238);
-  --floor-lit: oklch(0.72 0.025 240);
-  --floor: oklch(0.66 0.028 244);
-  --frame-lit: oklch(0.62 0.07 60);
-  --frame-shade: oklch(0.44 0.05 55);
   --nail: oklch(0.28 0.02 260);
-  --pane-glint: oklch(1 0 0 / 0.35);
   --clock-rim-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
   --clock-rim: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --clock-face-lit: oklch(0.985 0.005 90);
@@ -23,15 +17,7 @@
 }
 
 :global(.dark) .room {
-  --room-lit: oklch(0.36 0.025 250);
-  --room: oklch(0.32 0.025 253);
-  --room-shade: oklch(0.285 0.025 256);
-  --floor-lit: oklch(0.25 0.02 255);
-  --floor: oklch(0.22 0.02 258);
-  --frame-lit: oklch(0.5 0.06 60);
-  --frame-shade: oklch(0.36 0.045 55);
   --nail: oklch(0.22 0.02 260);
-  --pane-glint: oklch(1 0 0 / 0.18);
   --clock-rim-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
   --clock-rim: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --clock-face-lit: oklch(0.86 0.008 90);
@@ -41,47 +27,47 @@
 
 /* Each wall and floor facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
 .room [data-tone='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .room [data-tone='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .room [data-tone='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .room [data-tone='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .room [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .room [data-tone='frame-lit'] {
-  fill: var(--frame-lit);
+  fill: var(--scenery-window-frame-lit);
 }
 
 .room [data-tone='frame-shade'] {
-  fill: var(--frame-shade);
+  fill: var(--scenery-window-frame-shade);
 }
 
 /* The mornings' window: a wooden frame and its mullion. */
 .room [data-tone='window'] {
   fill: none;
-  stroke: var(--frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .room [data-tone='window-lit'] {
   fill: none;
-  stroke: var(--frame-lit);
+  stroke: var(--scenery-window-frame-lit);
 }
 
 .room [data-tone='nail'] {
@@ -89,7 +75,7 @@
 }
 
 .room [data-tone='pane-glint'] {
-  fill: var(--pane-glint);
+  fill: var(--scenery-window-glint);
 }
 
 .room [data-tone='clock-rim-lit'] {

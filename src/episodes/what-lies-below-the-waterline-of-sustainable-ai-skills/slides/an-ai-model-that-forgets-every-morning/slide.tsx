@@ -61,7 +61,7 @@ export const anAiModelThatForgetsEveryMorning = slide({
           label={{ chat: t('photo.label'), coding: t('photo.codingLabel') }}
           className={`border-foreground ${SPAN.photo}`}
         >
-          <div className={`${styles.room} flex flex-1 flex-col justify-between bg-(--room)`}>
+          <div className={`${styles.room} flex flex-1 flex-col justify-between bg-(--scenery-wall)`}>
             <div data-photo-on-wall className="relative aspect-[360/212] w-full">
               <PhotoWall />
               <div
