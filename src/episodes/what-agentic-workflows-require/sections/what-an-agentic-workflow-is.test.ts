@@ -29,18 +29,22 @@ function slideOf(slug: string): Slide {
   return own;
 }
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
-function sceneOf(slug: string, locale: Locale = 'en') {
+/** A Slide as the page localizes it: its shared header's text and its Scene. */
+function localizedOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No placed Slide "${slug}".`);
-  const localized = localizeSlide(own, {
+  return localizeSlide(own, {
     episode: EPISODE,
     locale,
     placed: PLACED,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header: 'shared',
   });
-  return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
+}
+
+/** A Slide's Scene as the page renders it under the shared Slide header. */
+function sceneOf(slug: string, locale: Locale = 'en') {
+  return load(renderToStaticMarkup(createElement(Fragment, null, localizedOf(slug, locale).content)));
 }
 
 interface SlideText {
@@ -244,6 +248,22 @@ describe('success cases', () => {
       minimal: markersOf($, '[data-minimal-chip]'),
       research: $('[data-part="diagram"] > li').eq(2).attr('data-target'),
     };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it("ends each caption on the markers the mock shows: Anthropic's definition, then IBM's and Salesforce's wording", () => {
+    // ARRANGE
+    const expected = {
+      agent: { note: 'anthropic-definition', notes: undefined },
+      workflow: { note: undefined, notes: ['ibm-wording', 'salesforce-wording'] },
+    };
+    // ACT
+    const captionOf = (slug: string) => {
+      const header = localizedOf(slug).header;
+      return { note: header?.captionNote?.note, notes: header?.captionNotes?.map(({ note }) => note) };
+    };
+    const actual = { agent: captionOf(AGENT), workflow: captionOf(WORKFLOW) };
     // ASSERT
     expect(actual).toEqual(expected);
   });

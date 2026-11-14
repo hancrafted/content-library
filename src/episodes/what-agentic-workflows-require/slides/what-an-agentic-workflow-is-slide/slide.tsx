@@ -57,7 +57,7 @@ function researchTask(locale: string): string {
 export const whatAnAgenticWorkflowIsSlide = slide({
   slug: 'what-an-agentic-workflow-is-slide',
   messages: { en, de },
-  captionNote: 'ibm-wording',
+  captionNotes: ['ibm-wording', 'salesforce-wording'],
   notes: [
     { slug: 'ibm-wording', target: CAPTION, sources: [IBM] },
     { slug: 'salesforce-wording', target: CAPTION, sources: [SALESFORCE] },
