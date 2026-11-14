@@ -22,7 +22,7 @@ function Cable({ x, top, bottom }: { readonly x: number; readonly top: number; r
 function SurfaceDive({ at }: { readonly at: RobotState }) {
   const anchors = shipAnchors();
   const onDeck = at === 'deck' || at === 'recovered';
-  const robot = <Robot aim={onDeck ? 'ahead' : 'down'} lamp={!onDeck} />;
+  const robot = <Robot aim={onDeck ? 'ahead' : 'down'} lamp={!onDeck} state={at} />;
   const hang = at === 'hanging' ? UNDER_A_FRAME.hanging : UNDER_A_FRAME['in-water'];
   return (
     <Ship
@@ -49,7 +49,7 @@ function DeepDive({ at }: { readonly at: RobotState }) {
     <>
       <Cable x={DIVE_X} top={0} bottom={depth} />
       <g transform={`translate(${DIVE_X} ${depth}) scale(${ROBOT_SCALE})`}>
-        <Robot aim="down" />
+        <Robot aim="down" state={at} />
       </g>
     </>
   );

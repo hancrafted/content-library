@@ -63,7 +63,7 @@ function RobotOnCable() {
     <>
       <line x1={tip.x} y1={tip.y} x2={tip.x} y2={ROBOT_DEPTH} strokeWidth={3} className="stroke-muted-foreground" />
       <g transform={`translate(${tip.x} ${ROBOT_DEPTH}) scale(${ROBOT_SCALE})`}>
-        <Robot aim="down" />
+        <Robot state={ROBOT.state} aim="down" />
       </g>
       {ROBOT_BUBBLES.map(({ dx, dy, size }) => (
         <PolyBubble key={dy} x={tip.x + dx} y={ROBOT_DEPTH + dy} size={size} />

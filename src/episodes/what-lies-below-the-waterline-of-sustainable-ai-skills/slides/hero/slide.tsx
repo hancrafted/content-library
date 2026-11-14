@@ -12,6 +12,7 @@ import { HERO_DEPTH } from '@/episodes/components/slide-shared/iceberg/hero-dept
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { zoneTitlePresentation } from '@/episodes/components/slide-shared/iceberg/zone-presentation';
 import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -54,7 +55,7 @@ function Dive() {
             className="stroke-muted-foreground"
           />
           <g transform={`translate(${aFrameTip.x} ${ROBOT_HANG}) scale(0.9)`}>
-            <Robot aim="down" />
+            <Robot state={robotAt('hero').state} aim="down" />
           </g>
         </>
       }

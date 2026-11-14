@@ -1,6 +1,6 @@
 import { localizeSlide, localizeTitleScene } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
-import { ROBOT_STORY } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
+import { ROBOT_STORY, robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import { load } from 'cheerio';
 import { createElement, Fragment, type ReactNode } from 'react';
@@ -21,6 +21,34 @@ const PLACED = placeSections<Slide>(episode.sections).flat();
 
 const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, null, node));
 const drawsRobot = (markup: string) => load(markup)('[data-robot]').length > 0;
+
+/** Every Slide's drawn markup, content and rear decoration, Title slide first, by slug. */
+function drawnSlides(): readonly { readonly slug: string; readonly markup: string }[] {
+  const title = localizeTitleScene(hero, {
+    episode: EPISODE,
+    locale: 'en',
+    placed: [],
+    referenceLabels: LABELS,
+    header: 'shared',
+  });
+  const pages = PLACED.map((entry) => {
+    const own = localizeSlide(entry, {
+      episode: EPISODE,
+      locale: 'en',
+      placed: PLACED,
+      referenceLabels: LABELS,
+      header: 'shared',
+    });
+    return { slug: entry.slide.slug, markup: html(own.content) + html(entry.slide.presentation?.rear) };
+  });
+  return [{ slug: hero.slug, markup: html(title) }, ...pages];
+}
+
+/** The states each robot a Slide draws carries, `unmarked` for a robot drawn without one. */
+const drawnStates = (markup: string) =>
+  load(markup)('[data-robot]')
+    .toArray()
+    .map((robot) => load(markup)(robot).attr('data-robot-state') ?? 'unmarked');
 
 /** The slugs of every Slide whose content or rear decoration draws the robot, Title slide first. */
 function slidesWithRobot(): readonly string[] {
@@ -56,6 +84,19 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('fails a Slide that draws the robot in any state but its row', () => {
+    // ARRANGE
+    const expected: readonly string[] = [];
+    // ACT
+    const strays = drawnSlides().flatMap(({ slug, markup }) =>
+      drawnStates(markup)
+        .filter((state) => ROBOT_STORY.some((row) => row.slide === slug) && state !== robotAt(slug).state)
+        .map((state) => `${slug} draws ${state}, its row says ${robotAt(slug).state}`),
+    );
+    // ASSERT
+    expect(strays).toEqual(expected);
+  });
+
   it('has no row for a Slide the Episode does not hold', () => {
     // ARRANGE
     const held = new Set([hero.slug, ...PLACED.map(({ slide }) => slide.slug)]);

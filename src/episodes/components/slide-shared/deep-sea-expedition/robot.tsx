@@ -12,9 +12,10 @@ import {
   type RobotAim,
   type RobotFacet,
   type RobotMotion,
+  type RobotState,
 } from './robot.pure';
 
-export type { RobotAim, RobotMotion } from './robot.pure';
+export type { RobotAim, RobotMotion, RobotState } from './robot.pure';
 
 export interface RobotProps extends ActorProps {
   /** Played once when the Slide turns active; the rest state is the motion's end state. */
@@ -25,6 +26,8 @@ export interface RobotProps extends ActorProps {
   readonly aim?: RobotAim;
   /** Faces left instead of right; its words stay readable. */
   readonly flip?: boolean;
+  /** Where the robot is in the Episode's story, marked as `data-robot-state` so a test can hold each Slide to it. */
+  readonly state?: RobotState;
 }
 
 const MOTION_CLASS: Record<RobotMotion, string> = {
@@ -99,10 +102,10 @@ function Moving({
  * `Travel`. It implements the actor contract: `mood` and `says` pop in at its head anchor, above the dome, once its
  * own motion has played. Its motions stay inside the figure; moving across the Scene is `Travel`'s job.
  */
-export function Robot({ motion, mood, says, lamp, aim = 'ahead', flip }: RobotProps) {
+export function Robot({ motion, mood, says, lamp, aim = 'ahead', flip, state }: RobotProps) {
   const { lampLit, beam, beamMotion, bodyMotion } = robotLook({ motion, lamp });
   return (
-    <g data-robot data-mood={mood} className={styles.figure}>
+    <g data-robot data-robot-state={state} data-mood={mood} className={styles.figure}>
       <g data-robot-body transform={flip ? 'scale(-1 1)' : undefined}>
         <Moving motion={bodyMotion} part="whole">
           {beam && <Beam aim={aim} motion={beamMotion} />}

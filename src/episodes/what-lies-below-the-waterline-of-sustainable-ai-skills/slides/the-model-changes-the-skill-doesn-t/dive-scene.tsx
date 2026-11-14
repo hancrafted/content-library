@@ -7,6 +7,7 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/bubbles';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { useId, type CSSProperties } from 'react';
 import { Cabin, DIVE_HEIGHT, DIVE_WIDTH, DiveSea, PORTHOLE, PortRim, Silt, type DiveHalf } from './dive-art';
@@ -86,7 +87,7 @@ function Yesterday() {
     <g className={styles.ghost}>
       <path d={`M${CABLE_X} ${CABLE_TOP}Q262 216 ${YESTERDAY.x} ${YESTERDAY.y}`} className={styles.ghostCable} />
       <g transform={`translate(${YESTERDAY.x} ${YESTERDAY.y}) scale(${ROBOT_SCALE})`}>
-        <Robot lamp={false} />
+        <Robot state={robotAt('the-model-changes-the-skill-doesn-t').state} lamp={false} />
       </g>
     </g>
   );
@@ -100,7 +101,7 @@ function Today({ outcome }: { readonly outcome: DiveOutcome }) {
       <line x1={CABLE_X} y1={CABLE_TOP} x2={CABLE_X} y2={y} className={styles.cable} />
       <Bubbles x={CABLE_X + 18} y={y - 12} count={3} scale={0.45} />
       <g transform={`translate(${CABLE_X} ${y}) scale(${ROBOT_SCALE})`}>
-        <Robot aim="down" />
+        <Robot state={robotAt('the-model-changes-the-skill-doesn-t').state} aim="down" />
       </g>
     </Travel>
   );

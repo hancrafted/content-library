@@ -4,10 +4,10 @@
  * hoists the robot back to the A-frame after an earlier one has it in the water. The shared `Robot` knows none of
  * this; it draws whatever a Slide places. Shared beside `WATERLINE_SECTIONS` because Slides of every Section read it.
  */
+import type { RobotState } from '../deep-sea-expedition/robot.pure';
 import type { Zone } from '../iceberg/zones.pure';
 
-/** Where the robot is: on the ship's deck, hanging from the A-frame over the water, in the water, on the seabed, or hauled back aboard at the end. */
-export type RobotState = 'deck' | 'hanging' | 'in-water' | 'seabed' | 'recovered';
+export type { RobotState } from '../deep-sea-expedition/robot.pure';
 
 /** One Slide's robot: its state and, under the waterline, the zone it is in. */
 export interface RobotBeat {

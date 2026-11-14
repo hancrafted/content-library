@@ -4,6 +4,7 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
 import { SCENE_HEIGHT, SCENE_WIDTH, SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 
 /*
  * The framed photo's picture (Spec Option 1a, first panel): you and the pilot side by side on the research ship's deck,
@@ -41,7 +42,7 @@ export function PhotoOnDeck() {
       deck={
         <>
           <g transform={`translate(${robot.x} ${robot.y - ROBOT_HEIGHT * ROBOT_SCALE}) scale(${ROBOT_SCALE})`}>
-            <Robot lamp={false} />
+            <Robot state={robotAt('an-ai-model-that-forgets-every-morning').state} lamp={false} />
           </g>
           <g transform={`translate(${aft.x} ${aft.y}) scale(${CREW_SCALE})`}>
             <Character preset={captain} pose="stand" />

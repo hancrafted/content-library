@@ -4,6 +4,7 @@ import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expe
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { CONSOLE_DESK_HEIGHT } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import type { CSSProperties } from 'react';
 import { DiveArt, RoomArt, WrittenCard, type RoomHour } from './day-art';
 import { FIGURE_SCALE, GREETING_BUBBLE, GREETING_SAYS_SCALE, MORNING_PILOT } from './greeting.pure';
@@ -25,7 +26,7 @@ export function RunPicture({ label, depth }: { readonly label: string; readonly 
       <svg viewBox={viewBox} role="img" aria-label={label} data-zone="sunlit" className="block h-auto w-full">
         <DiveArt>
           <g transform={`translate(${ROBOT.x} ${ROBOT.y}) scale(${ROBOT.scale})`}>
-            <Robot aim="down" />
+            <Robot state={robotAt('write-it-from-a-good-run').state} aim="down" />
           </g>
         </DiveArt>
       </svg>
