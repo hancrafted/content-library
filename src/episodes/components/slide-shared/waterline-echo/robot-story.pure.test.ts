@@ -26,6 +26,18 @@ describe('success cases', () => {
     expect({ state, depth }).toEqual(expected);
   });
 
+  it('keeps the robot at or above Sunlit until the first Twilight Section, "What goes inside" (decision 57)', () => {
+    // ARRANGE
+    const expected: readonly string[] = [];
+    const firstTwilight = ROBOT_STORY.findIndex(({ slide }) => slide === 'what-goes-inside');
+    // ACT
+    const tooDeep = ROBOT_STORY.slice(0, firstTwilight)
+      .filter(({ depth }) => depth !== undefined && depth !== 'surface' && depth !== 'sunlit')
+      .map(({ slide }) => slide);
+    // ASSERT
+    expect(tooDeep).toEqual(expected);
+  });
+
   it('opens on deck in the thought experiment and goes in the water when the skill hands over the procedure', () => {
     // ARRANGE
     const expected = ['deck', 'deck', 'in-water'];

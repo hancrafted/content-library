@@ -65,8 +65,8 @@ function Lands({ arrival, children }: { readonly arrival: Arrival; readonly chil
 }
 
 /**
- * The wall screen's live feed: sunlit water over twilight water with light rays, a seabed of sediment and stones, the
- * robot on its tether with its lamp on the bed, its sonar rings, a core marker, a few fish and a jelly. The glass clips
+ * The wall screen's live feed: Sunlit shallows with light rays over a seabed of sediment and stones, the robot hanging
+ * on its tether in the water (decision 59) with its lamp on the bed, its sonar rings, a core marker, a few fish and a jelly. The glass clips
  * it, the beam too; its `clipPath` id comes from `useId`, so a copied Slide repeats none.
  */
 function CameraFeed() {

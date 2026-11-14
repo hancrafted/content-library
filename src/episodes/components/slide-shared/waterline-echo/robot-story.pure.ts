@@ -25,7 +25,7 @@ export const ROBOT_STORY: readonly RobotBeat[] = [
   { slide: 'an-ai-model-that-forgets-every-morning', state: 'deck' },
   { slide: 'a-skill-hands-the-ai-your-procedure', state: 'in-water', depth: 'surface' },
   { slide: 'what-a-skill-is', state: 'in-water', depth: 'surface' },
-  { slide: 'skills-are-dynamic-context', state: 'seabed', depth: 'twilight' },
+  { slide: 'skills-are-dynamic-context', state: 'in-water', depth: 'sunlit' },
   { slide: 'when-to-write-one', state: 'in-water', depth: 'sunlit' },
   { slide: 'write-it-from-a-good-run', state: 'in-water', depth: 'sunlit' },
   { slide: 'the-label', state: 'in-water', depth: 'sunlit' },
