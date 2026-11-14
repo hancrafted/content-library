@@ -58,7 +58,7 @@ function DivePills({ pills }: Pick<TestDiveProps, 'pills'>) {
           {pills.card.coding}
         </InView>
       </span>
-      {pills.silt === undefined ? null : <span className={cn(PILL, 'right-[4%] bottom-[16%]')}>{pills.silt}</span>}
+      {pills.silt === undefined ? null : <span className={cn(PILL, 'right-[3%] bottom-[4%]')}>{pills.silt}</span>}
     </>
   );
 }
