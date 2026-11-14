@@ -1,8 +1,9 @@
 /*
  * The Title slide's hero drawing (design guide, Iceberg; the Spec's picked Title-slide Option 0a): a Surface sky the
- * title sits in, the waterline, then the four zones under it in bands that thin with depth, the Abyss reaching the
- * bottom. The drawing shows from its top (Han, 2026-11-14), so the sky is low enough that a wide screen still reaches
- * the waterline and the ship on it.
+ * title and the sun sit in, the waterline, then the four zones under it, the Abyss reaching the bottom. The drawing is
+ * fitted to the hero's height, so all five zones and the sun show at any width (Han, 2026-11-14); the sky and water run
+ * on past both sides for screens wider than the drawing. The Sunlit band is deep enough for an iceberg keel twice its
+ * tip that ends a fifth into the Twilight zone.
  */
 import { ZONES, type Zone } from './ruler.pure';
 
@@ -18,13 +19,26 @@ export interface HeroDepth {
   readonly depths: Readonly<Record<UnderwaterZone, number>>;
 }
 
-/** The hero's drawing space; the sky holds a two-line title above the ship, and a 16:9 screen reaches the water. */
+/** The hero's drawing space; the sky, nearly two thirds of it, holds the title over the ship, the sun and the berg's tip. */
 export const HERO_DEPTH: HeroDepth = {
   width: 1200,
-  height: 830,
-  waterline: 540,
-  depths: { sunlit: 100, twilight: 75, midnight: 60, abyss: 55 },
+  height: 1180,
+  waterline: 760,
+  depths: { sunlit: 230, twilight: 80, midnight: 60, abyss: 50 },
 };
+
+/** How far into the Twilight zone the iceberg's keel reaches: a fifth, so it only touches it. */
+const KEEL_INTO_TWILIGHT = 0.2;
+
+/** Where the hero's iceberg keel ends: a fifth into the Twilight zone, under the whole Sunlit band. */
+export function heroKeel({ waterline, depths }: HeroDepth): number {
+  return waterline + depths.sunlit + depths.twilight * KEEL_INTO_TWILIGHT;
+}
+
+/** The sky and water's span across: one drawing's width past each side, so a screen wider than the drawing sees no edge. */
+export function heroBleed({ width }: HeroDepth): { readonly left: number; readonly width: number } {
+  return { left: -width, width: width * 3 };
+}
 
 /** One zone's band in the hero, its top and bottom. */
 export interface HeroBand {

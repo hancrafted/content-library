@@ -1,13 +1,23 @@
 /*
- * The Title slide's hero overlay (`HeroDepthScene`): HTML over the full-bleed drawing, placed in the drawing's own
- * units. The drawing fills the Slide from the top (`xMidYMin slice`), so one scale maps it: the larger of the box's
- * width and height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so
- * `cq` units read that box: a point (x, y) sits at `50cqw + (x - width / 2) * scale` across and `y * scale` down.
+ * The Title slide's hero (`HeroDepthScene`): the drawing takes the Slide's full height, centred across, its sky and
+ * water bleeding past both sides (`overflow: visible`, clipped by the scene box), so one scale maps it: the box's
+ * height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so `cq` units
+ * read that box: a point (x, y) of the drawing sits at `50cqw + (x - width / 2) * scale` across and `y * scale` down.
  * The depth gauge sits at the right inset, below the title's lines and clear of the ship in the drawing's middle.
  */
 
+.drawing {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: auto;
+  translate: -50% 0;
+  overflow: visible;
+}
+
 .overlay {
-  --hero-scale: max(calc(100cqw / var(--hero-width)), calc(100cqh / var(--hero-height)));
+  --hero-scale: calc(100cqh / var(--hero-height));
 
   position: absolute;
   inset: 0;
@@ -22,7 +32,7 @@
 .gauge {
   position: absolute;
   right: var(--inset-r, 1rem);
-  top: 62%;
+  top: 55%;
 }
 
 .marker {
