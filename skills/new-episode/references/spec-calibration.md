@@ -28,6 +28,8 @@ These rows are the presets data of the toolbar's segmented bar (the skill's `ass
 | `mobile`  | 390 px wide            | `reports` |
 | `shorts`  | 1080 × 1920 (vertical) | `reports` |
 
+`shorts` is a fixed design size: the mock keeps its 1080 × 1920 layout, as YouTube Shorts shows it, and is scaled down to fit the viewport below the toolbar, so the whole 9:16 frame is visible without scrolling. `spec-preview` renders it in a laptop-tall window (1440 × 900) at the same scale.
+
 ## Template and slots
 
 The template is a page frame plus two `<template>` elements. The assembler (`npm run episode:spec-assemble`, `src/pipeline/lib/episode-spec-assemble.pure.ts`) clones each `<template>`, fills its `data-slot` elements and sets the attributes below. A slot holding markup has its content replaced; one with no content is removed; a slot the assembler does not know makes it throw.

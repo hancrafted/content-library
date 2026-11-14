@@ -8,6 +8,9 @@
   shown element matching `data-measure` (default `[data-visual]`): name the box the presets resize. Add a tool inside
   `[data-toolbar-end]`, never a second row.
   The bar is one row at every width: below 1024 px it scrolls sideways inside itself and never wraps.
+  A preset with a width and a height has a fixed design size: the script keeps the visual's layout at that size and sets
+  --preview-width, --preview-height and --preview-scale on <html>, plus data-preview-fixed. The scale fits the whole
+  frame between the toolbar and a 16 px margin above and below; the page applies it with transform: scale().
 -->
 
 <!-- toolbar:head -->
@@ -29,46 +32,71 @@
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
-    background: color-mix(in oklch, var(--card, Canvas) 94%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border, GrayText);
+    background: color-mix(in oklch, var(--card, Canvas) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid color-mix(in oklch, var(--border, GrayText) 60%, transparent);
   }
   .dh-toolbar > * {
     flex: none;
   }
-  .dh-tool,
-  .dh-seg button {
+  /* A tool is a quiet outline; hover and pressed tint it, and an open one is filled. */
+  .dh-tool {
     font: inherit;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 500;
     min-height: 2.75rem;
-    padding: 0.3rem 0.85rem;
-    border-radius: 999px;
-    border: 1px solid var(--border, GrayText);
-    background: var(--card, Canvas);
+    padding: 0.3rem 1rem;
+    border-radius: 0.625rem;
+    border: 1px solid color-mix(in oklch, var(--border, GrayText) 70%, transparent);
+    background: transparent;
     color: inherit;
     cursor: pointer;
     white-space: nowrap;
+  }
+  .dh-tool:hover {
+    background: color-mix(in oklch, var(--foreground, CanvasText) 6%, transparent);
+  }
+  .dh-tool:active {
+    background: color-mix(in oklch, var(--foreground, CanvasText) 12%, transparent);
   }
   .dh-tool[aria-expanded='true'] {
     background: var(--foreground, CanvasText);
     color: var(--background, Canvas);
     border-color: transparent;
   }
-  /* One segmented bar, one selection: the selected segment is filled. */
+  /* One segmented bar, one selection: a track with a raised, filled thumb under the selected segment. */
   .dh-seg {
     display: inline-flex;
-    border: 1px solid var(--border, GrayText);
-    border-radius: 999px;
-    background: var(--card, Canvas);
+    gap: 2px;
+    padding: 2px;
+    border-radius: 0.75rem;
+    background: color-mix(in oklch, var(--muted, GrayText) 80%, var(--background, Canvas));
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--border, GrayText) 50%, transparent);
   }
   .dh-seg button {
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 0.5rem;
     border: 0;
     background: transparent;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .dh-seg button:hover {
+    background: color-mix(in oklch, var(--foreground, CanvasText) 7%, transparent);
+  }
+  .dh-seg button:active {
+    background: color-mix(in oklch, var(--foreground, CanvasText) 13%, transparent);
   }
   .dh-seg button[aria-checked='true'] {
     background: var(--foreground, CanvasText);
     color: var(--background, Canvas);
+    font-weight: 600;
+    box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground, CanvasText) 25%, transparent);
   }
   .dh-size {
     font-size: 0.8125rem;
@@ -89,6 +117,15 @@
     outline: 2px solid var(--ring, Highlight);
     outline-offset: 2px;
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .dh-tool,
+    .dh-seg button {
+      transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        box-shadow 120ms ease;
+    }
+  }
   /* The navigation is a dropdown: hidden when closed, floating under the toolbar below 1800 px when open. */
   html[data-nav='closed'] [data-page-nav] {
     display: none;
@@ -107,8 +144,8 @@
       box-sizing: border-box;
       padding: 1rem;
       background: var(--card, Canvas);
-      border-right: 1px solid var(--border, GrayText);
-      box-shadow: 0 0 2rem color-mix(in oklch, var(--foreground, CanvasText) 25%, transparent);
+      border-right: 1px solid color-mix(in oklch, var(--border, GrayText) 60%, transparent);
+      box-shadow: 0 0 2rem color-mix(in oklch, var(--foreground, CanvasText) 18%, transparent);
     }
   }
   @media print {
@@ -174,6 +211,11 @@
       }
     };
     const size = bar.querySelector('[data-preview-size]');
+    const presets = JSON.parse(document.querySelector('script[data-toolbar-presets]')?.textContent || '[]');
+    const sizeOf = ({ width, height }) => (height ? width + ' × ' + height + ' px' : width + ' px');
+    // A preset with a width and a height has a fixed design size.
+    const isFixed = (preset) => Boolean(preset?.width && preset.height);
+    const current = () => presets.find((preset) => preset.id === root.dataset.preset);
 
     // The size the previews take now, shown only while it fits on the row.
     const fit = () => {
@@ -184,19 +226,42 @@
       const target = [...document.querySelectorAll(size.dataset.measure || '[data-visual]')].find(
         (candidate) => candidate.offsetParent !== null,
       );
-      size.value = target ? 'Showing ' + Math.round(target.getBoundingClientRect().width) + ' px wide' : '';
+      const preset = current();
+      const shown = target ? Math.round(target.getBoundingClientRect().width) : 0;
+      size.value = !target
+        ? ''
+        : isFixed(preset)
+          ? 'Showing ' + sizeOf(preset) + ' at ' + Math.round((shown / preset.width) * 100) + '%'
+          : 'Showing ' + shown + ' px wide';
       fit();
     };
 
+    // A fixed design size keeps its layout and scales down uniformly so the whole frame fits the viewport below
+    // the toolbar, between a margin above and below. The page applies --preview-scale with transform: scale().
+    const MARGIN = 16;
+    const scale = () => {
+      const preset = current();
+      if (!isFixed(preset)) {
+        root.style.removeProperty('--preview-scale');
+        return;
+      }
+      const room = Math.max(innerHeight - bar.offsetHeight - 2 * MARGIN, 240);
+      root.style.setProperty('--preview-scale', Math.min(1, room / preset.height).toFixed(4));
+    };
+
     // The sticky parts of the page sit below the toolbar, whose height is --toolbar-h.
-    const measure = () => root.style.setProperty('--toolbar-h', bar.offsetHeight + 'px');
+    const measure = () => {
+      root.style.setProperty('--toolbar-h', bar.offsetHeight + 'px');
+      scale();
+    };
     if (typeof ResizeObserver === 'function') new ResizeObserver(measure).observe(bar);
     measure();
-    addEventListener('resize', report);
+    addEventListener('resize', () => {
+      scale();
+      report();
+    });
 
     // The presets: one segmented bar, one selection. A preset with a width sets --preview-width and data-preset on <html>.
-    const presets = JSON.parse(document.querySelector('script[data-toolbar-presets]')?.textContent || '[]');
-    const sizeOf = ({ width, height }) => (height ? width + ' × ' + height + ' px' : width + ' px');
     const group = bar.querySelector('[data-presets]');
     const segments = presets.map((preset) => {
       const name = preset.title || preset.label + ', ' + sizeOf(preset);
@@ -219,6 +284,14 @@
         root.style.removeProperty('--preview-width');
         delete root.dataset.preset;
       }
+      if (isFixed(preset)) {
+        root.style.setProperty('--preview-height', preset.height + 'px');
+        root.dataset.previewFixed = '';
+      } else {
+        root.style.removeProperty('--preview-height');
+        delete root.dataset.previewFixed;
+      }
+      scale();
       segments.forEach((segment, other) => {
         segment.setAttribute('aria-checked', String(other === at));
         segment.tabIndex = other === at ? 0 : -1;
