@@ -192,6 +192,9 @@ export interface ControlRoomProps {
   readonly note: string;
 }
 
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
+
 /** The whole room, as children of a `ZoneScene`. */
 export function ControlRoom({ brief, card, plan, note }: ControlRoomProps) {
   const seat = consoleLayout({ width: CONSOLE_WIDTH }).seat;
@@ -203,7 +206,9 @@ export function ControlRoom({ brief, card, plan, note }: ControlRoomProps) {
         <Character preset={captain} pose="point" />
       </g>
       <Console width={CONSOLE_WIDTH} transform={`translate(${CONSOLE_X} ${DESK_TOP}) scale(${CONSOLE_SCALE})`} />
-      <g transform={`translate(${CONSOLE_X + seat.x * CONSOLE_SCALE} ${FLOOR_Y}) scale(${PILOT_SCALE})`}>
+      <g
+        transform={`translate(${CONSOLE_X + (seat.x + PILOT_REACH) * CONSOLE_SCALE} ${FLOOR_Y}) scale(${PILOT_SCALE})`}
+      >
         <Character preset={pilot} pose="sit" />
       </g>
       <ProcedureCard title={card.title} steps={card.steps} />
