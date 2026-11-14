@@ -1,5 +1,6 @@
 import { localizeSlide, type LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
+import { SlideHeader } from '@/episodes/components/slide-master/slide-header';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
@@ -43,6 +44,14 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
+
+/** The Slide as the page renders it: the shared Slide header, its caption and caption marker, above the Scene. */
+function slideOf(slug: string) {
+  const { header, content } = localized(slug);
+  if (header === undefined) throw new Error(`Slide "${slug}" has no shared header.`);
+  const heading = createElement(SlideHeader, { seed: slug, level: 'h3', entrance: 'none', ...header });
+  return load(renderToStaticMarkup(createElement(Fragment, null, heading, content)));
+}
 
 /** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
@@ -199,9 +208,14 @@ describe('success cases', () => {
 
   it('follows the caption with the Context marker its picked Option shows there, and only there', () => {
     // ARRANGE
-    const expected = [undefined, 'skill-governance-still-being-worked-out-is-a-judgement', undefined];
+    const expected = [[], ['skill-governance-still-being-worked-out-is-a-judgement'], []];
     // ACT
-    const actual = PAGE_SLIDES.map((slug) => PLACED.find(({ slide }) => slide.slug === slug)?.slide.captionNote);
+    const actual = PAGE_SLIDES.map((slug) => {
+      const $ = slideOf(slug);
+      return $('[data-target="caption"] [data-context-ref]')
+        .toArray()
+        .map((marker) => $(marker).attr('data-context-ref'));
+    });
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -249,10 +263,8 @@ describe('failure cases', () => {
     ];
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
-      const $ = sceneOf(slug);
-      return localized(slug).notes.map(({ target }) =>
-        target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
-      );
+      const $ = slideOf(slug);
+      return localized(slug).notes.map(({ target }) => $(`[data-target="${target}"]`).length);
     });
     // ASSERT
     expect(counts).toEqual(expected);
@@ -335,29 +347,63 @@ describe('edge cases', () => {
 
   it('keeps both views on every Slide, so the page switch has words for Chat app and Coding agent', () => {
     // ARRANGE
-    const expected = PAGE_SLIDES.map(() => ({ chat: true, coding: true }));
+    const expected = [
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+    ];
     // ACT
     const actual = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      return { chat: $('[data-view="chat"]').length > 0, coding: $('[data-view="coding"]').length > 0 };
+      const views = $('[data-view]')
+        .toArray()
+        .map((view) => $(view).attr('data-view'));
+      return [...new Set(views)].sort();
     });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('quotes the task and every request in the marks of the reading locale', () => {
+    // ARRANGE
+    const expected = {
+      en: { task: '“Take a sediment sample at a new site.”', request: '“Take a sediment sample at Site 7.”' },
+      de: {
+        task: '„Nimm an einem neuen Ort eine Sedimentprobe.“',
+        request: '„Nimm eine Sedimentprobe an Ort 7.“',
+      },
+    };
+    // ACT
+    const quoted = (locale: Locale) => {
+      const $ = sceneOf('does-the-skill-make-things-better', locale);
+      return {
+        task: $('[data-task] [data-view="chat"]').text(),
+        request: $('[data-request="should"]').first().find('[data-quote]').text(),
+      };
+    };
+    const actual = { en: quoted('en'), de: quoted('de') };
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
   it('writes every German Slide with notes and Voice script of the same shape, each title translated', () => {
     // ARRANGE
-    const expected = PAGE_SLIDES.map((slug) => ({
-      notes: localized(slug).notes.length,
-      segments: localized(slug).voiceScript.length,
-      differs: true,
-    }));
+    const expected = [
+      { title: 'Geteilte Skills sind Wissensartikel', notes: 3, segments: 3, blankNotes: [], blankSegments: [] },
+      { title: 'Wem die geteilte Skill-Bibliothek gehört', notes: 4, segments: 3, blankNotes: [], blankSegments: [] },
+      { title: 'Macht der Skill es besser?', notes: 5, segments: 3, blankNotes: [], blankSegments: [] },
+    ];
     // ACT
-    const actual = PAGE_SLIDES.map((slug) => ({
-      notes: localized(slug, 'de').notes.filter(({ description }) => description.length > 0).length,
-      segments: localized(slug, 'de').voiceScript.filter(({ script }) => script.length > 0).length,
-      differs: localized(slug, 'de').title !== localized(slug).title,
-    }));
+    const actual = PAGE_SLIDES.map((slug) => {
+      const { title, notes, voiceScript } = localized(slug, 'de');
+      return {
+        title,
+        notes: notes.length,
+        segments: voiceScript.length,
+        blankNotes: notes.filter(({ description }) => description.trim() === '').map(({ header }) => header),
+        blankSegments: voiceScript.filter(({ script }) => script.trim() === '').map(({ title: segment }) => segment),
+      };
+    });
     // ASSERT
     expect(actual).toEqual(expected);
   });

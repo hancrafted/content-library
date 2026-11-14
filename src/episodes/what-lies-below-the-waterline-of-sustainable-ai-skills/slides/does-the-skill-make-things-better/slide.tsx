@@ -68,12 +68,15 @@ export const doesTheSkillMakeThingsBetter = slide({
   segments: [{ slug: 'same-task-twice' }, { slug: 'the-callout' }, { slug: 'test-the-label' }],
   content: ({ t, target, Marker }) => (
     <SlideFrame className="@container mt-8 gap-6">
-      <p className="flex flex-wrap items-center justify-center gap-3 text-caption">
-        <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">
+      <p data-task className="flex flex-wrap items-center justify-center gap-3 text-caption">
+        <span className="rounded-full bg-foreground px-3 py-1 font-semibold text-(--slide-surface)">
           {t('task.chip')}
         </span>
-        <InView view="chat">{`“${t('task.text')}”`}</InView>
-        <InView view="coding" className="font-mono">{`prompt: “${t('task.text')}”`}</InView>
+        <InView view="chat">{`${t('quote.open')}${t('task.text')}${t('quote.close')}`}</InView>
+        <InView
+          view="coding"
+          className="font-mono"
+        >{`prompt: ${t('quote.open')}${t('task.text')}${t('quote.close')}`}</InView>
       </p>
       <div className="grid gap-4 @3xl:grid-cols-2">
         {RUNS.map((run) => (
@@ -130,6 +133,7 @@ export const doesTheSkillMakeThingsBetter = slide({
               requests: SHOULD_NOT.map(({ key, nearMiss }) => ({ text: t(`requests.shouldNot.${key}`), nearMiss })),
             }}
             nearMiss={t('descTest.nearMiss')}
+            quote={{ open: t('quote.open'), close: t('quote.close') }}
             footnote={
               <>
                 <span>{t('descTest.footnote')}</span>

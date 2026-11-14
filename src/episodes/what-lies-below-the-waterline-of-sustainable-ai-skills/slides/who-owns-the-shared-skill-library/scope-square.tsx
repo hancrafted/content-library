@@ -18,7 +18,7 @@ function Locator({ label }: { readonly label: string }) {
           key={square}
           data-square={square}
           data-focal={square === FOCAL ? '' : undefined}
-          className={cn('rounded-xs', square === FOCAL ? 'bg-foreground' : 'bg-foreground/35')}
+          className={cn('rounded-xs', square === FOCAL ? 'bg-primary' : 'bg-foreground/35')}
         />
       ))}
     </span>
@@ -39,7 +39,7 @@ function FleetManual({ pill }: { readonly pill: { readonly chat: string; readonl
         <polygon data-tone="hull" points="132,48 206,48 196,62 140,62" />
         <polygon data-tone="house" points="150,36 182,36 182,48 150,48" />
       </svg>
-      <span className="absolute right-1.5 bottom-1.5 rounded-full bg-card-foreground px-2 text-caption text-card">
+      <span className="absolute right-1.5 bottom-1.5 rounded-full bg-card px-2 text-caption text-card-foreground">
         <InView view="chat">{pill.chat}</InView>
         <InView view="coding" className="font-mono">
           {pill.coding}
@@ -101,10 +101,7 @@ export function ScopeSquare({ back, locator, pill, className, ...words }: ScopeS
         <Locator label={locator} />
         <span>{back}</span>
       </p>
-      <ZoneCard
-        data-zoomed={FOCAL}
-        className="flex flex-col gap-2 rounded-xl p-3 shadow-md ring-2 ring-card-foreground"
-      >
+      <ZoneCard data-zoomed={FOCAL} className="flex flex-col gap-2 rounded-xl p-3 shadow-md ring-2 ring-primary">
         <SquareWords {...words} />
         <FleetManual pill={pill} />
       </ZoneCard>

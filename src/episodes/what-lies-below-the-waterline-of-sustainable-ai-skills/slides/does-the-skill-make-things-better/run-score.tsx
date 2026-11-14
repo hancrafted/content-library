@@ -27,13 +27,12 @@ function ScoreBar({ run, checks, passed }: Pick<RunScoreProps, 'run' | 'checks'>
       {checks.map(({ label }, index) => (
         <span
           key={label}
-          data-lp-seg={run}
           data-motion={index < passed ? 'fill' : undefined}
           style={{ '--seg-delay': `${RUN_DELAY[run] + index * SEGMENT_STEP}ms` } as CSSProperties}
           className={cn(
             'h-2.5 rounded-full border border-muted-foreground',
             index < passed && styles.segment,
-            index < passed && (run === 'with' ? 'bg-foreground' : 'bg-muted-foreground'),
+            index < passed && (run === 'with' ? 'bg-primary' : 'bg-muted-foreground'),
           )}
         />
       ))}

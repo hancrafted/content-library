@@ -6,6 +6,10 @@
     "chip": "Same task, twice",
     "text": "Take a sediment sample at a new site."
   },
+  "quote": {
+    "open": "“",
+    "close": "”"
+  },
   "runs": {
     "without": {
       "label": "Without the skill",

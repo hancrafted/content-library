@@ -92,7 +92,7 @@ export function FrontPage({ label, scope, title, rows, inset, darkCorner, classN
       <ZoneCard className="relative flex flex-col gap-3 overflow-hidden rounded-lg p-4 pb-28">
         <p className="flex flex-wrap items-center justify-between gap-2 text-caption text-muted-foreground">
           {label}
-          <span className="rounded-full bg-card-foreground px-3 py-0.5 font-semibold text-card">{scope}</span>
+          <span className="rounded-full bg-primary px-3 py-0.5 font-semibold text-primary-foreground">{scope}</span>
         </p>
         <p className="text-body font-semibold">{title}</p>
         <ol className="focus-group focus-group--dim-others flex flex-col">

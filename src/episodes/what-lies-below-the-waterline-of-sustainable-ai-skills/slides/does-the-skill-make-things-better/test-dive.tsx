@@ -156,6 +156,6 @@ export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
 export function runClass(focal: boolean) {
   return cn(
     'card-hover card-hover--raise flex flex-col gap-3 rounded-xl p-4 shadow-md',
-    focal && 'outline-2 -outline-offset-4 outline-card-foreground outline-solid',
+    focal && 'ring-2 ring-primary',
   );
 }

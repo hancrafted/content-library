@@ -6,6 +6,10 @@
     "chip": "Dieselbe Aufgabe, zweimal",
     "text": "Nimm an einem neuen Ort eine Sedimentprobe."
   },
+  "quote": {
+    "open": "„",
+    "close": "“"
+  },
   "runs": {
     "without": {
       "label": "Ohne den Skill",

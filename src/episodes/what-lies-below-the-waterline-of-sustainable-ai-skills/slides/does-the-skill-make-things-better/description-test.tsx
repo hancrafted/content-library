@@ -7,6 +7,11 @@ export interface Request {
   readonly nearMiss?: boolean;
 }
 
+export interface Quote {
+  readonly open: string;
+  readonly close: string;
+}
+
 export interface DescriptionTestProps {
   /** The card's head with its Context marker. */
   readonly title: ReactNode;
@@ -16,32 +21,34 @@ export interface DescriptionTestProps {
   readonly should: { readonly label: string; readonly requests: readonly Request[] };
   readonly shouldNot: { readonly label: string; readonly requests: readonly Request[] };
   readonly nearMiss: string;
+  /** The reading locale's quotation marks around each request. */
+  readonly quote: Quote;
   /** The footnote with its Context marker. */
   readonly footnote: ReactNode;
   readonly target: { readonly 'data-target': string };
   readonly footnoteTarget: { readonly 'data-target': string };
 }
 
-/** One request, a near-miss marked. */
-function RequestItem({
-  kind,
-  text,
-  near,
-  nearMiss,
-}: {
+interface RequestItemProps {
   readonly kind: 'should' | 'should-not';
   readonly text: string;
   readonly near: boolean;
   readonly nearMiss: string;
-}) {
+  readonly quote: Quote;
+}
+
+/** One request in the reading locale's quotation marks, a near-miss marked. */
+function RequestItem({ kind, text, near, nearMiss, quote }: RequestItemProps) {
   return (
     <li
       data-request={kind}
       data-near-miss={near ? '' : undefined}
       className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-1.5 text-caption"
     >
-      <span>
-        “<span data-request-text>{text}</span>”
+      <span data-quote>
+        {quote.open}
+        <span data-request-text>{text}</span>
+        {quote.close}
       </span>
       {near ? (
         <span className="shrink-0 rounded-full border border-(--warning) px-2 text-caption text-(--warning)">
@@ -57,10 +64,11 @@ interface RequestsProps {
   readonly label: string;
   readonly requests: readonly Request[];
   readonly nearMiss: string;
+  readonly quote: Quote;
 }
 
 /** One column of requests: those that should trigger the skill, or those that should not, a near-miss marked. */
-function Requests({ kind, label, requests, nearMiss }: RequestsProps) {
+function Requests({ kind, label, requests, nearMiss, quote }: RequestsProps) {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-caption font-semibold">
@@ -71,7 +79,7 @@ function Requests({ kind, label, requests, nearMiss }: RequestsProps) {
       </p>
       <ul className="flex flex-col gap-1.5">
         {requests.map(({ text, nearMiss: near }) => (
-          <RequestItem key={text} kind={kind} text={text} near={near === true} nearMiss={nearMiss} />
+          <RequestItem key={text} kind={kind} text={text} near={near === true} nearMiss={nearMiss} quote={quote} />
         ))}
       </ul>
     </div>
@@ -103,14 +111,20 @@ function Lead({ lead, frontMatter }: Pick<DescriptionTestProps, 'lead' | 'frontM
  * included; the Coding agent view shows the front matter it tests and the eval's `should_trigger` columns.
  */
 export function DescriptionTest(props: DescriptionTestProps) {
-  const { title, should, shouldNot, nearMiss, footnote, target, footnoteTarget } = props;
+  const { title, should, shouldNot, nearMiss, quote, footnote, target, footnoteTarget } = props;
   return (
     <ZoneCard {...target} className="flex flex-col gap-3 rounded-xl p-4 shadow-md">
       <p className="flex items-center gap-1 text-body font-semibold">{title}</p>
       <Lead lead={props.lead} frontMatter={props.frontMatter} />
       <div className="grid gap-4 @xl:grid-cols-2">
-        <Requests kind="should" label={should.label} requests={should.requests} nearMiss={nearMiss} />
-        <Requests kind="should-not" label={shouldNot.label} requests={shouldNot.requests} nearMiss={nearMiss} />
+        <Requests kind="should" label={should.label} requests={should.requests} nearMiss={nearMiss} quote={quote} />
+        <Requests
+          kind="should-not"
+          label={shouldNot.label}
+          requests={shouldNot.requests}
+          nearMiss={nearMiss}
+          quote={quote}
+        />
       </div>
       <p {...footnoteTarget} className="flex items-start gap-1 text-caption text-muted-foreground">
         {footnote}
