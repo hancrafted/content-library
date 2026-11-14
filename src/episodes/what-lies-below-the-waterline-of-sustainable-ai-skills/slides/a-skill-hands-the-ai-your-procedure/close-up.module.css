@@ -1,0 +1,160 @@
+/*
+ * Slide token file of "A skill hands the AI your procedure" (FE-011 §2): the cabin close-up's wall, floor, frame,
+ * brief, manual and card, in the approved Spec Option 2a's own tones (feedback 3, decision 46). Dark values are the
+ * Spec's; dark mode is tuned later (decision 32). `primary` marks the one thing to look at, the skill; no meaning
+ * colour on scenery.
+ */
+
+.closeUp {
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --floor-lit: oklch(0.72 0.025 240);
+  --floor: oklch(0.66 0.028 244);
+  --house-lit: oklch(0.985 0.005 90);
+  --house: oklch(0.92 0.012 85);
+  --house-shade: oklch(0.8 0.02 75);
+  --frame-lit: oklch(0.62 0.07 60);
+  --frame-shade: oklch(0.44 0.05 55);
+  --paper: oklch(0.97 0.01 85);
+  --paper-head: oklch(0.4 0.03 255);
+  --paper-rule: oklch(0.8 0.02 240);
+  --paper-ink: oklch(0.26 0.03 255);
+  --pin: oklch(0.55 0.17 28);
+  --cover: oklch(0.4 0.03 255);
+}
+
+:global(.dark) .closeUp {
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --floor-lit: oklch(0.25 0.02 255);
+  --floor: oklch(0.22 0.02 258);
+  --house-lit: oklch(0.86 0.008 90);
+  --house: oklch(0.78 0.012 85);
+  --house-shade: oklch(0.66 0.018 75);
+  --frame-lit: oklch(0.5 0.06 60);
+  --frame-shade: oklch(0.36 0.045 55);
+  --paper: oklch(0.85 0.01 85);
+  --paper-head: oklch(0.4 0.03 255);
+  --paper-rule: oklch(0.68 0.02 240);
+  --paper-ink: oklch(0.22 0.03 255);
+  --pin: oklch(0.55 0.15 28);
+  --cover: oklch(0.4 0.03 255);
+}
+
+/* Each facet strokes in its own fill, so neighbouring facets meet without a hairline seam (as the Spec draws them). */
+.closeUp [data-tone='room'] {
+  fill: var(--room);
+  stroke: var(--room);
+}
+
+.closeUp [data-tone='room-lit'] {
+  fill: var(--room-lit);
+  stroke: var(--room-lit);
+}
+
+.closeUp [data-tone='room-shade'] {
+  fill: var(--room-shade);
+  stroke: var(--room-shade);
+}
+
+.closeUp [data-tone='house-shade'] {
+  fill: var(--house-shade);
+  stroke: var(--house-shade);
+}
+
+.closeUp [data-tone='floor'] {
+  fill: var(--floor);
+}
+
+.closeUp [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+}
+
+.closeUp [data-tone='frame-lit'] {
+  fill: var(--frame-lit);
+}
+
+.closeUp [data-tone='frame-shade'] {
+  fill: var(--frame-shade);
+}
+
+.closeUp [data-tone='paper-head'] {
+  fill: var(--paper-head);
+}
+
+.closeUp [data-tone='paper-rule'] {
+  fill: var(--paper-rule);
+}
+
+.closeUp [data-tone='pin'] {
+  fill: var(--pin);
+}
+
+.closeUp [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.closeUp [data-tone='card'] {
+  fill: var(--paper);
+  stroke: var(--paper-ink);
+}
+
+.closeUp [data-tone='card-rule'] {
+  stroke: var(--paper-rule);
+}
+
+.closeUp [data-tone='cover'] {
+  fill: var(--cover);
+}
+
+/* The close-up's frame: the ship's white superstructure cut open, outlined in ink. */
+.closeUp [data-tone='cut'] {
+  fill: none;
+  stroke: var(--house);
+}
+
+.closeUp [data-tone='cut-edge'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+/* The lens: a ring round the bridge window on the ship and the two lines that open from it to the close-up. */
+.closeUp [data-tone='lens'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+.closeUp [data-tone='leader'] {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+.closeUp [data-tone='leader-focal'] {
+  fill: none;
+  stroke: var(--primary);
+}
+
+/*
+ * The Slide's one emphasis motion (Spec Option 2a): the card slides out of the manual (`Travel`), then its pill and
+ * leader appear last. The base rule is the rest state, so a still frame and reduced motion show both at once.
+ */
+.late {
+  transform-box: fill-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .late {
+    animation: late-in 360ms ease-out var(--late-delay, 0ms) both;
+  }
+}
+
+@keyframes late-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

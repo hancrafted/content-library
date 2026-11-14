@@ -2,8 +2,9 @@ import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
-import { Callouts, type CalloutSlug } from './callouts';
-import { Cutaway } from './cutaway';
+import { Callouts } from './callouts';
+import { CloseUp } from './close-up';
+import type { CalloutSlug } from './close-up.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { CodeFile, Gloss, TermTile } from './term-tile';
@@ -23,9 +24,10 @@ const LINES = ['sites', 'samples'] as const;
 const CALLOUT_ORDER: readonly CalloutSlug[] = ['skill', 'description', 'project'];
 
 /**
- * "A skill hands the AI your procedure" (Spec Option 2a): one wide cutaway of the research ship at the Surface, the
- * control room cut open, with three numbered callouts naming the AI terms on what they stand for (1 Skill on the
- * procedure card, 2 Description on the manual's index, 3 Project instructions on the brief), and the same three as tiles
+ * "A skill hands the AI your procedure" (Spec Option 2a, zoomed out in feedback 3): the whole research ship at the
+ * Surface with the robot in the water, and a close-up of its cabin beside it, with three numbered callouts naming the AI
+ * terms on what they stand for (1 Skill on the procedure card, 2 Description on the manual's index, 3 Project
+ * instructions on the brief), and the same three as tiles
  * beneath, in the page's Chat app or Coding agent view. Keeps `master: grid-1x1` and `motion: local`: the card slides
  * out of the manual on entry, its pill and leader last; at rest it shows out.
  */
@@ -51,11 +53,11 @@ export const aSkillHandsTheAiYourProcedure = slide({
         <ZoneScene
           zone="surface"
           iceberg="none"
-          label={t('alt.cutaway')}
+          label={t('alt.closeUp')}
           className="aspect-[3/2] w-full rounded-xl"
           overlay={<Callouts words={words} />}
         >
-          <Cutaway request={t('request')} />
+          <CloseUp request={t('request')} />
         </ZoneScene>
         <ol aria-label={t('tilesLabel')} className="focus-group focus-group--dim-others grid gap-4 @2xl:grid-cols-3">
           <TermTile
