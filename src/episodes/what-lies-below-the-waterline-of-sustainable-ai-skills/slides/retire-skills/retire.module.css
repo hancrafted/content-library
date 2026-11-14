@@ -67,6 +67,11 @@
   background: var(--retired);
 }
 
+/* The close-up shrinks from the top: its top edge stays put while the index closes up into the short card. */
+.closeUp {
+  transform-origin: top;
+}
+
 .needed {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -113,7 +118,6 @@
   from {
     opacity: 0;
     scale: 1 1.4;
-    transform-origin: top;
   }
 }
 

@@ -1,9 +1,9 @@
-import type { Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
-import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
-import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { isDarkZone, zoneToken, type Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
+import { depthBands, WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './iceberg.module.css';
+import { NODES, passesAt } from './rise';
 
 export interface TakeawayLine {
   readonly text: string;
@@ -19,66 +19,67 @@ export interface TakeawayRow {
   readonly marker?: ReactNode;
 }
 
-const ZONES = 5;
+const TOPS = new Map(depthBands().map(({ zone, top }) => [zone, top]));
+const NODE_Y = new Map(NODES.map(({ zone, y }) => [zone, y]));
 
-function StepMarker({ zone, step }: { readonly zone: Zone; readonly step: number }) {
+/**
+ * A step's chip: `primary`, the focal colour, on light water; inverted to the page background on water dark in both
+ * themes (Midnight), where `primary` would sink into it.
+ */
+function StepChip({ zone, step }: { readonly zone: Zone; readonly step: number }) {
+  const chip = isDarkZone(zone) ? 'inverse' : 'primary';
   return (
-    <span
-      data-step-marker={zone}
-      className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
-    >
+    <span data-step-marker={zone} data-chip={chip} className={cn(styles.chip, 'text-caption font-semibold')}>
       {step}
     </span>
   );
 }
 
-/** A takeaway's two lines, each led by the step it carries, if any. */
-function Lines({ zone, lines }: Pick<TakeawayRow, 'zone' | 'lines'>) {
+/** One zone's takeaway, written straight on its water: the zone's name, then its two lines, each led by its step. */
+function Row({ row: { zone, name, lines, marker } }: { readonly row: TakeawayRow }) {
+  const place = {
+    '--top': TOPS.get(zone),
+    '--row-water': zoneToken(zone),
+    '--light-delay': `${passesAt(NODE_Y.get(zone) ?? 0)}ms`,
+  } as CSSProperties;
   return (
-    <span className="flex min-w-0 flex-1 flex-col">
-      {lines.map(({ text, step }) => (
-        <span key={text} className="flex items-start gap-2 text-caption">
-          {step === undefined ? null : <StepMarker zone={zone} step={step} />}
-          <span>{text}</span>
-        </span>
-      ))}
-    </span>
-  );
-}
-
-/** One zone's row: its own water, the zone's name and the takeaway, lit when the robot passes. */
-function Row({ row: { zone, name, lines, marker }, rise }: { readonly row: TakeawayRow; readonly rise: number }) {
-  return (
-    <li data-takeaway={zone} className="focus-group__item">
-      <ZoneScene
-        zone={zone}
-        iceberg="none"
-        className="px-3 py-2.5 @3xl:px-5"
-        overlay={
-          <div className={cn('flex items-center gap-3', styles.light)} style={{ '--rise': rise } as CSSProperties}>
-            <span aria-hidden className={cn('size-2.5 shrink-0', styles.node)} />
-            <ZoneCard className="flex min-w-0 flex-1 flex-col gap-1 rounded-lg px-3 py-1.5 @3xl:flex-row @3xl:items-center @3xl:gap-4">
-              <span className="w-28 shrink-0 text-caption font-semibold">{name}</span>
-              <Lines zone={zone} lines={lines} />
-              {marker}
-            </ZoneCard>
-          </div>
-        }
-      />
+    <li
+      data-takeaway={zone}
+      data-ink={isDarkZone(zone) ? 'deep' : 'shallow'}
+      style={place}
+      className={cn('focus-group__item', styles.row)}
+    >
+      <span className={cn(styles.name, 'text-caption font-semibold')}>
+        <span aria-hidden className={styles.tile} />
+        {name}
+      </span>
+      <span className={cn(styles.lines, styles.light, 'text-caption')}>
+        {lines.map(({ text, step }, index) => (
+          <span key={text} className={cn(styles.line, index === 0 && 'font-semibold')}>
+            <span className={styles.chipSlot}>{step === undefined ? null : <StepChip zone={zone} step={step} />}</span>
+            {text}
+            {index === lines.length - 1 ? marker : null}
+          </span>
+        ))}
+      </span>
     </li>
   );
 }
 
 /**
- * The whole depth below the Surface (Option 26a): one row per zone, each over its own zone's water, holding the
- * Section's takeaway at its depth with the three steps numbered where they surfaced. Each row lights as the robot
- * passes it, the Abyss first.
+ * Each Section's takeaway at its depth (Option 26a): on a wide Scene, every row sits on its own zone's water in the
+ * one picture, beside the trail's node, in light ink where the water is dark; on a narrow one the rows follow the
+ * picture, each on its zone's water. Each row lights as the robot rises past it, the Abyss first.
  */
 export function TakeawayRows({ label, rows }: { readonly label: string; readonly rows: readonly TakeawayRow[] }) {
   return (
-    <ol aria-label={label} className={cn('focus-group focus-group--dim-others flex flex-col', styles.rows)}>
-      {rows.map((row, depth) => (
-        <Row key={row.zone} row={row} rise={ZONES - 1 - depth} />
+    <ol
+      aria-label={label}
+      style={{ '--units': WHOLE_DEPTH.width, '--band': WHOLE_DEPTH.band } as CSSProperties}
+      className={cn('focus-group focus-group--dim-others', styles.rows)}
+    >
+      {rows.map((row) => (
+        <Row key={row.zone} row={row} />
       ))}
     </ol>
   );

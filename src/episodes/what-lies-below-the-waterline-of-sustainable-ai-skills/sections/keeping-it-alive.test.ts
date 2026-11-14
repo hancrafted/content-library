@@ -340,6 +340,8 @@ describe('edge cases', () => {
     const expected = {
       zones: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
       steps: ['sunlit', 'sunlit', 'midnight'],
+      chips: ['primary', 'primary', 'inverse'],
+      cards: ['third-time', 'the-moment', 'before-sharing'],
       index: ['collect-sediment-sample', 'grilling', 'domain-modeling'],
     };
     // ACT
@@ -347,7 +349,39 @@ describe('edge cases', () => {
     const actual = {
       zones: valuesOf(slug, '[data-takeaway]', 'data-takeaway'),
       steps: valuesOf(slug, '[data-step-marker]', 'data-step-marker'),
+      chips: valuesOf(slug, '[data-step-marker]', 'data-chip'),
+      cards: valuesOf(slug, '[data-step]', 'data-step'),
       index: valuesOf(slug, '[data-index-entry]', 'data-index-entry'),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('draws the whole iceberg as one picture, the robot rising on its cable up a trail with a node at every zone', () => {
+    // ARRANGE
+    const expected = {
+      pictures: 1,
+      water: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      trail: 1,
+      nodes: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      rising: { robot: 1, cable: 1, ship: 0 },
+    };
+    // ACT
+    const $ = sceneOf('the-whole-iceberg');
+    const actual = {
+      pictures: $('svg[role="img"]').length,
+      water: $('[data-depth-band]')
+        .toArray()
+        .map((band) => $(band).attr('data-depth-band')),
+      trail: $('[data-rise-trail]').length,
+      nodes: $('[data-trail-node]')
+        .toArray()
+        .map((node) => $(node).attr('data-trail-node')),
+      rising: {
+        robot: $('[data-travel] [data-robot]').length,
+        cable: $('[data-cable]').length,
+        ship: $('[data-travel] [data-ship]').length,
+      },
     };
     // ASSERT
     expect(actual).toEqual(expected);

@@ -2,7 +2,7 @@
  * What `ZoneScene` draws for the zone a Slide names (design-ADR 0025): one zone, one set of scenery and one slow
  * ambient loop, so retuning a zone is one edit every Slide in it follows. Deterministic, as the scenery parts are.
  */
-import type { Zone } from './ruler.pure';
+import { ZONES, type Zone } from './ruler.pure';
 import { seededRandom, toPoints, type IcebergPart } from './scenery/scenery.pure';
 
 /** The iceberg's part in a Scene, or none. */
@@ -86,4 +86,27 @@ export function seaFacets({ width, height, cell, seed }: SeaOptions): readonly S
       ];
     }),
   );
+}
+
+/**
+ * The whole depth in one picture (`WholeDepthScene`): the sky above the waterline and the five zones stacked below it,
+ * each band as deep as the next, the Abyss reaching down to the seabed at the bottom of the drawing.
+ */
+export const WHOLE_DEPTH = { width: 1200, height: 880, waterline: 360, band: 100 } as const;
+
+/** One zone's water in the whole depth, from its top to its bottom, in the drawing's units. */
+export interface DepthBand {
+  readonly zone: Zone;
+  readonly top: number;
+  readonly bottom: number;
+}
+
+/** The five zones from the waterline down, the Surface first; the Abyss runs on to the bottom of the drawing. */
+export function depthBands(): readonly DepthBand[] {
+  const { waterline, band, height } = WHOLE_DEPTH;
+  return ZONES.map((zone, depth) => ({
+    zone,
+    top: waterline + depth * band,
+    bottom: depth === ZONES.length - 1 ? height : waterline + (depth + 1) * band,
+  }));
 }

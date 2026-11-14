@@ -38,15 +38,15 @@
     "codingLead": "SKILL.md, der immer geladene Teil"
   },
   "steps": {
-    "0": {
+    "third-time": {
       "text": "Wähle eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Lauf einen Skill.",
       "agent": "Bitte den Agenten, dieses Gespräch in einen Skill zu verwandeln und unter {path} zu speichern."
     },
-    "1": {
+    "the-moment": {
       "text": "Schreib seine Beschreibung als den Moment, in dem Du ihn brauchst.",
       "agent": "Die Zeile <code>description:</code> im Front Matter von <code>SKILL.md</code>."
     },
-    "2": {
+    "before-sharing": {
       "text": "Bevor Du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Verantwortlichen.",
       "agent": "Schritte verweisen auf eine Projektdatei wie <code>CONTEXT.md</code>; geteilt in diesem Repository: <code>.claude/skills/</code>; geteilt über Projekte hinweg: ein Plugin, mit einem Verantwortlichen."
     }
@@ -57,7 +57,9 @@
       "header": "Skill-Governance: was geklärt ist und was nicht",
       "description": "Keine Quelle legt Verantwortlichen und Prüfdatum als Regel für Skills fest, und keine zeigt, wie viele Organisationen geteilte Skills überhaupt steuern [1]. Die Matrix aus Publikum und Reichweite ist eine Faustregel, kein veröffentlichtes Rahmenwerk [2].",
       "sources": {
-        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" },
+        "anthropic-skills-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        },
         "skilldex": {
           "title": "Saha und Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
         }

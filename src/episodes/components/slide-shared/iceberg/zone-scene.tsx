@@ -8,7 +8,15 @@ import { Bubbles, FishSchool, Jellies, Whale } from './scenery/sea-life';
 import { LightRays, Seabed } from './scenery/seabed';
 import { Clouds, SunMoon } from './scenery/sky';
 import styles from './zone-scene.module.css';
-import { seaFacets, zoneSceneParts, type SceneIceberg, type SceneLife, type SeaFacet } from './zone-scene.pure';
+import {
+  depthBands,
+  seaFacets,
+  WHOLE_DEPTH,
+  zoneSceneParts,
+  type SceneIceberg,
+  type SceneLife,
+  type SeaFacet,
+} from './zone-scene.pure';
 
 /** Every Scene draws in one space, 1200 by 800, so a Slide places its figures in the same numbers at every zone. */
 export const SCENE_WIDTH = 1200;
@@ -115,6 +123,84 @@ export function ZoneScene({ zone, iceberg, label, children, overlay, className }
         <Life life={parts.life} />
         {children}
       </svg>
+      {overlay}
+    </SceneMotionRoot>
+  );
+}
+
+/** The whole depth's sky and water: its own facets, since its sky is shorter and its water five bands deep. */
+const WHOLE_SKY = seaFacets({ width: WHOLE_DEPTH.width, height: WHOLE_DEPTH.waterline, cell: 160, seed: 11 });
+const WHOLE_BANDS = depthBands().map((band, depth) => ({
+  ...band,
+  facets: seaFacets({ width: WHOLE_DEPTH.width, height: band.bottom - band.top, cell: 150, seed: 5 + depth * 6 }),
+}));
+/** The clouds kept clear of the ship on the left and of the words a Slide writes beside it. */
+const WHOLE_CLOUDS = [
+  { x: 120, y: 150, scale: 0.75, shape: 0 },
+  { x: 1060, y: 230, scale: 0.5, shape: 1 },
+] as const;
+/** The iceberg pushed to the right edge, so the zones have open water for words; its keel reaches the Abyss. */
+const WHOLE_BERG = { x: 1165, scale: 0.6, keel: 820 } as const;
+const WHOLE_SEABED_TOP = 845;
+
+export type WholeDepthSceneProps = Omit<ZoneSceneProps, 'zone' | 'iceberg'>;
+
+/** The whole depth's drawing: the sky, each zone's water from the waterline down, the iceberg and the seabed. */
+function WholeDepth() {
+  return (
+    <>
+      <Band facets={WHOLE_SKY} band="sky" />
+      <SunMoon x={1120} y={70} r={28} />
+      <Clouds at={WHOLE_CLOUDS} />
+      {WHOLE_BANDS.map(({ zone, top, facets }) => (
+        <g
+          key={zone}
+          data-depth-band={zone}
+          transform={`translate(0 ${top})`}
+          style={{ '--water': zoneToken(zone) } as CSSProperties}
+        >
+          <Band facets={facets} band="water" />
+        </g>
+      ))}
+      <Iceberg
+        part="whole"
+        x={WHOLE_BERG.x}
+        waterline={WHOLE_DEPTH.waterline}
+        scale={WHOLE_BERG.scale}
+        depthScale={depthScaleForKeel(0, (WHOLE_BERG.keel - WHOLE_DEPTH.waterline) / WHOLE_BERG.scale)}
+      />
+      <Seabed y={WHOLE_SEABED_TOP} />
+    </>
+  );
+}
+
+/**
+ * The Iceberg style's whole depth in one Scene: the Surface sky, then each zone's own water stacked from the waterline
+ * to the seabed (`depthBands`), the whole iceberg pushed right with its keel down into the Abyss. For a closing Slide
+ * that looks at every zone at once; a Slide in one zone uses `ZoneScene`. It draws no creatures, so words written on
+ * the water stay legible, and keeps the Surface's wind as its one ambient loop. The drawing keeps its proportions
+ * (1200 by 880), so a Slide places its overlay in the drawing's units read against the Scene's width.
+ */
+export function WholeDepthScene({ label, children, overlay, className }: WholeDepthSceneProps) {
+  const { width, height } = WHOLE_DEPTH;
+  return (
+    <SceneMotionRoot
+      zone="surface"
+      style={{ '--zone': zoneToken('surface') } as CSSProperties}
+      className={cn(styles.scene, 'relative isolate', className)}
+    >
+      <div className="relative overflow-hidden" style={{ aspectRatio: `${width} / ${height}` }}>
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          role={label === undefined ? undefined : 'img'}
+          aria-label={label}
+          aria-hidden={label === undefined ? true : undefined}
+          className="absolute inset-0 -z-10 size-full"
+        >
+          <WholeDepth />
+          {children}
+        </svg>
+      </div>
       {overlay}
     </SceneMotionRoot>
   );

@@ -38,15 +38,15 @@
     "codingLead": "SKILL.md, the part always loaded"
   },
   "steps": {
-    "0": {
+    "third-time": {
       "text": "Pick one task you've explained three times, and turn a good run of it into a skill.",
       "agent": "Ask the agent to turn this conversation into a skill and save it to {path}."
     },
-    "1": {
+    "the-moment": {
       "text": "Write its description as the moment you'd need it.",
       "agent": "The <code>description:</code> line in the front matter of <code>SKILL.md</code>."
     },
-    "2": {
+    "before-sharing": {
       "text": "Before sharing a skill, decide where the project details live, and give it an owner.",
       "agent": "Steps point to a project file such as <code>CONTEXT.md</code>; shared in this repository: <code>.claude/skills/</code>; shared across projects: a plugin, with an owner."
     }
@@ -57,7 +57,9 @@
       "header": "Skill governance: what is settled, and what is not",
       "description": "no source defines owner and review date as a rule for skills, and none shows how many organisations govern shared skills at all [1]. The audience-by-scope matrix is a rule of thumb, not a published framework [2].",
       "sources": {
-        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" },
+        "anthropic-skills-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        },
         "skilldex": {
           "title": "Saha and Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
         }
