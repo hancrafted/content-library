@@ -72,6 +72,28 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('places each Abyss bubble like every creature group: the group at its centre, each bubble at its own size times the group scale', () => {
+    // ARRANGE
+    const at = [
+      { x: 10, y: -20, s: 0.5 },
+      { x: -6, y: 30, s: 1 },
+    ];
+    const expected = {
+      group: 'translate(680 560)',
+      bubbles: ['translate(10 -20) scale(0.75 0.75)', 'translate(-6 30) scale(1.5 1.5)'],
+    };
+    // ACT
+    const $ = render(createElement(Bubbles, { x: 680, y: 560, at, scale: 1.5 }));
+    const seen = {
+      group: $('[data-bubbles]').attr('transform'),
+      bubbles: $('[data-bubbles] > g')
+        .map((_, member) => $(member).attr('transform'))
+        .get(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('draws both the sun and the moon, so the theme alone picks which shows', () => {
     // ARRANGE
     const expected = { day: 1, night: 1 };

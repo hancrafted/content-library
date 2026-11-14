@@ -183,7 +183,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('raises the Abyss bubbles in view on its Section title, and at the left on its page Slides', () => {
     // ARRANGE
-    const expected = { title: 'translate(680 560) scale(1.5)', page: 'translate(220 560) scale(1.5)' };
+    const expected = { title: 'translate(680 560)', page: 'translate(220 560)' };
     // ACT
     const seen = {
       title: render({ zone: 'abyss', sectionTitle: true })('[data-bubbles]').attr('transform'),
