@@ -3,8 +3,7 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
-import { localizePath } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/static-routes';
+import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './inside.module.css';
@@ -34,14 +33,11 @@ const CODING_POINTERS = {
   identify: `Read ${PATHS.guide}, starting with its contents.`,
   label: `Fill in ${PATHS.label}.`,
 } as const;
-/**
- * Slide 4, "Three levels of loading", by the anchor its place in Section 2 gives it, on this Episode's own page. Linked
- * by path and anchor rather than `slideHref`, since that Slide is built on its own Section branch and `slideHref`
- * throws for a Slide the record does not hold yet; switch to `slideHref('three-levels-of-loading')` once both Sections
- * sit on one branch, so an Event's copy links within its own page.
- */
-const LOADING_PAGE = `${ROUTES.episodes}/what-lies-below-the-waterline-of-sustainable-ai-skills`;
-const LOADING_SLIDE = 'what-a-skill-is--three-levels-of-loading';
+/** A Slide link (`slideHref`) taken apart into its logical path and anchor, so the `href` goes through `localizePath`. */
+function partsOf(link: string) {
+  const [path = '', anchor] = link.split('#');
+  return { path: stripLocale(path), anchor };
+}
 const CHAPTERS = [
   { slug: 'corals', page: 2 },
   { slug: 'sponges', page: 9 },
@@ -101,7 +97,8 @@ export const insideTheSkill = slide({
     },
   ],
   segments: [{ slug: 'extras-by-step' }, { slug: 'the-long-step' }, { slug: 'contents-first' }],
-  content: ({ t, locale, marker, target }) => {
+  content: ({ t, locale, marker, target, slideHref }) => {
+    const loading = partsOf(slideHref('three-levels-of-loading'));
     const pointer = (step: keyof typeof CODING_POINTERS) => ({
       chat: t(`pointers.${step}`),
       coding: CODING_POINTERS[step],
@@ -122,7 +119,7 @@ export const insideTheSkill = slide({
           {t.rich('disclosure.text', {
             marker: marker(DISCLOSURE),
             link: (chunks) => (
-              <a className="font-semibold underline" href={localizePath(LOADING_PAGE, locale, LOADING_SLIDE)}>
+              <a className="font-semibold underline" href={localizePath(loading.path, locale, loading.anchor)}>
                 {chunks}
               </a>
             ),

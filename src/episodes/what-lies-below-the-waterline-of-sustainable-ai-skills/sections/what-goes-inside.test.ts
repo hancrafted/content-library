@@ -6,6 +6,7 @@ import { load } from 'cheerio';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 import { whatGoesInsideSection } from './what-goes-inside';
 
 /*
@@ -17,7 +18,8 @@ import { whatGoesInsideSection } from './what-goes-inside';
 
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const SLIDES = whatGoesInsideSection as readonly Slide[];
-const PLACED = placeSections<Slide>([whatGoesInsideSection]).flat();
+/** The whole Episode is placed, so Slide 16's `slideHref` to Slide 4 in Section 2 resolves. */
+const PLACED = placeSections<Slide>(whatLiesBelowTheWaterlineOfSustainableAiSkills.sections).flat();
 const WHERE = 'what-goes-where-is-information-architecture';
 const COUPLING = 'one-skill-one-job';
 const INSIDE = 'inside-the-skill';
