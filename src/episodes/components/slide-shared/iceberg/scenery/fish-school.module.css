@@ -1,0 +1,46 @@
+/* The fish-school drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in fish-school.tsx. */
+
+.school {
+  --fish-lit: color-mix(in oklab, var(--bulb) 72%, color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay)));
+  --fish-shade: color-mix(in oklab, var(--bulb) 78%, color-mix(in oklab, var(--on-brand-accent) 41%, var(--overlay)));
+  --fish-glint: var(--on-brand-accent);
+}
+
+:global(.dark) .school {
+  --fish-lit: color-mix(in oklab, var(--bulb) 67%, color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay)));
+  --fish-shade: color-mix(in oklab, var(--bulb) 72%, color-mix(in oklab, var(--on-brand-accent) 19%, var(--overlay)));
+  --fish-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
+}
+
+.school [data-tone='fish-lit'] {
+  fill: var(--fish-lit);
+  stroke: var(--fish-lit);
+}
+
+.school [data-tone='fish-shade'] {
+  fill: var(--fish-shade);
+  stroke: var(--fish-shade);
+}
+
+.school [data-tone='glint'] {
+  fill: var(--fish-glint);
+  stroke: var(--fish-glint);
+}
+
+.school [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* The Sunlit loop: the school sways as one, only on the active Slide, resting where it is drawn otherwise. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .sway {
+    animation: school-sway 9s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes school-sway {
+  to {
+    transform: translate(-16px, 5px);
+  }
+}

@@ -3,7 +3,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Travel } from './travel';
-import { WholeDepthScene, ZoneScene } from './zone-scene';
+import { WholeDepthScene } from './whole-depth-scene';
+import { ZoneScene } from './zone-scene';
 
 /*
  * `ZoneScene` as a Slide's server render draws it (design-ADR 0025): one `zone` prop picks the scenery the scenery
@@ -19,7 +20,7 @@ const whole = (props: Parameters<typeof WholeDepthScene>[0]) =>
 describe('success cases', () => {
   it('draws the Surface sky with the sun and moon, the whole iceberg and the clouds that carry its wind', () => {
     // ARRANGE
-    const expected = { zone: 'surface', sky: 1, sunMoon: 1, iceberg: 'whole', clouds: 3, seabed: 0 };
+    const expected = { zone: 'surface', sky: 1, sunMoon: 1, iceberg: 'whole', clouds: 6, seabed: 0 };
     // ACT
     const $ = render({ zone: 'surface' });
     const seen = {
@@ -71,7 +72,7 @@ describe('success cases', () => {
     const expected = {
       pictures: 1,
       sky: 1,
-      water: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      water: ['sunlit', 'twilight', 'midnight', 'abyss'],
       iceberg: 'whole',
       seabed: 1,
       viewBox: '0 0 1200 880',
@@ -92,12 +93,12 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('colours each band from its own zone token, so the Surface water is the Surface zone', () => {
+  it('colours each band from its own zone token, the water under the waterline starting with the Sunlit zone', () => {
     // ARRANGE
-    const expected = ['--water:var(--zone-surface)', '--water:var(--zone-abyss)'];
+    const expected = ['--water:var(--zone-sunlit)', '--water:var(--zone-abyss)'];
     // ACT
     const $ = whole({});
-    const seen = ['surface', 'abyss'].map((zone) => $(`[data-depth-band="${zone}"]`).attr('style'));
+    const seen = ['sunlit', 'abyss'].map((zone) => $(`[data-depth-band="${zone}"]`).attr('style'));
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -116,9 +117,59 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it('draws the Surface sky and water flat, without facets, the waterline lit and stars for the night', () => {
+    // ARRANGE
+    const expected = { skyFacets: 0, waterFacets: 0, litWaterline: 1, stars: 1, cloudLayers: ['far', 'mid', 'near'] };
+    // ACT
+    const $ = render({ zone: 'surface' });
+    const seen = {
+      skyFacets: $('[data-band="sky"] [data-tone]').length,
+      waterFacets: $('[data-band="water"] [data-tone]').length,
+      litWaterline: $('[data-lit-waterline]').length,
+      stars: $('[data-band="sky"] [data-stars]').length,
+      cloudLayers: [
+        ...new Set(
+          $('[data-cloud-layer]')
+            .toArray()
+            .map((cloud) => $(cloud).attr('data-cloud-layer')),
+        ),
+      ].sort(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('adds the lanternfish school and the siphonophore to a Twilight Section title, beside the jellies', () => {
+    // ARRANGE
+    const expected = { jellies: 1, lanternfish: 1, siphonophore: 1 };
+    // ACT
+    const $ = render({ zone: 'twilight', sectionTitle: true });
+    const seen = {
+      jellies: $('[data-jellies]').length,
+      lanternfish: $('[data-lanternfish-school]').length,
+      siphonophore: $('[data-siphonophore]').length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('leaves the title life out of a Twilight page Slide, which keeps only its jellies', () => {
+    // ARRANGE
+    const expected = { jellies: 1, lanternfish: 0, siphonophore: 0 };
+    // ACT
+    const $ = render({ zone: 'twilight' });
+    const seen = {
+      jellies: $('[data-jellies]').length,
+      lanternfish: $('[data-lanternfish-school]').length,
+      siphonophore: $('[data-siphonophore]').length,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('rests idle in the static page, so nothing plays until its Slide turns active', () => {
     // ARRANGE
     const expected = 'idle';

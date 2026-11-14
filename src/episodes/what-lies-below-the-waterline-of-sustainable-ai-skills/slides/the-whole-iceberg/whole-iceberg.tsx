@@ -4,7 +4,7 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
-import { WholeDepthScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { WholeDepthScene } from '@/episodes/components/slide-shared/iceberg/whole-depth-scene';
 import { WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './iceberg.module.css';
@@ -33,17 +33,18 @@ const HALO = 13;
 
 const diamond = (x: number, y: number, r: number) => `${x},${y - r} ${x + r},${y} ${x},${y + r} ${x - r},${y}`;
 
-/** The dashed trail the robot took up from the seabed, a node at each zone lighting as it passes. */
+/** The dashed trail the robot took up from the seabed, a node at each zone lighting as it passes; the Surface's stays unlit. */
 function RiseTrail() {
   return (
     <g data-rise-trail className={styles.trail}>
       <line x1={TRAIL_X} y1={ROBOT_START_Y + 30} x2={TRAIL_X} y2={WHOLE_DEPTH.waterline + 8} className={styles.dash} />
-      {NODES.map(({ zone, y }) => (
+      {NODES.map(({ zone, y, unlit }) => (
         <g
           key={zone}
           data-trail-node={zone}
-          className={styles.light}
-          style={{ '--light-delay': `${passesAt(y)}ms` } as CSSProperties}
+          data-unlit={unlit ? '' : undefined}
+          className={unlit ? styles.unlit : styles.light}
+          style={unlit ? undefined : ({ '--light-delay': `${passesAt(y)}ms` } as CSSProperties)}
         >
           <polygon points={diamond(TRAIL_X, y, HALO)} className={styles.halo} />
           <polygon points={diamond(TRAIL_X, y, NODE)} className={styles.node} />

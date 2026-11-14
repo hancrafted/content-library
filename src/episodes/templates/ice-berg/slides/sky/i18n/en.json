@@ -1,8 +1,8 @@
 {
   "title": "Sky",
   "caption": "The theme selects the light; clouds carry the wind",
-  "intro": "Switch the site theme to compare the sun and crescent moon. The second specimen forces a moon independently of the surrounding theme. The clouds show the default Surface arrangement.",
-  "contract": "Import SunMoon and Clouds from slide-shared/iceberg/scenery/sky. Both lights are server-rendered and CSS selects day or night. Cloud placements accept x, y, scale and shape. Wind is the Surface's ambient loop; the gallery pause control also stops it.",
+  "intro": "Switch the site theme to compare the sun and crescent moon. The second specimen forces a moon independently of the surrounding theme. The clouds show the default Surface arrangement in three layers.",
+  "contract": "Import SunMoon from slide-shared/iceberg/scenery/sun-moon and Clouds from scenery/clouds. Both lights are server-rendered and CSS selects day or night. Cloud placements accept x, y, scale, shape and a layer (far, mid or near); without one, the size picks it. Each layer drifts at its own speed: the Surface's wind, which the gallery pause control also stops. ZoneScene draws the flat sky, its night stars and the lit waterline around them.",
   "pause": "Pause motion",
   "resume": "Resume motion",
   "replay": "Replay specimens",

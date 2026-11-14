@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { depthBands, seaFacets, zoneSceneParts } from './zone-scene.pure';
+import { depthBands, seaFacets, WATER_CELL, zoneSceneParts } from './zone-scene.pure';
 
 /*
  * What `ZoneScene` draws for a zone: the one prop a Slide names decides the sky, the rays, the seabed, the iceberg's
@@ -10,11 +10,11 @@ describe('success cases', () => {
   it('draws each zone with its own scenery and its one ambient loop, from the Surface down', () => {
     // ARRANGE
     const expected = [
-      { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind', water: 'sunlit' },
-      { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish', water: 'sunlit' },
-      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies', water: 'twilight' },
-      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale', water: 'midnight' },
-      { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles', water: 'abyss' },
+      { sky: true, rays: false, seabed: false, iceberg: 'whole', life: 'wind', water: 'sunlit', titleLife: [] },
+      { sky: false, rays: true, seabed: false, iceberg: 'keel', life: 'fish', water: 'sunlit', titleLife: [] },
+      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'jellies', water: 'twilight', titleLife: [] },
+      { sky: false, rays: false, seabed: false, iceberg: 'none', life: 'whale', water: 'midnight', titleLife: [] },
+      { sky: false, rays: false, seabed: true, iceberg: 'none', life: 'bubbles', water: 'abyss', titleLife: [] },
     ];
     // ACT
     const parts = (['surface', 'sunlit', 'twilight', 'midnight', 'abyss'] as const).map((zone) =>
@@ -33,10 +33,10 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
-  it('stacks the five zones as bands from the waterline down to the seabed, the Surface first', () => {
+  it('floats the Surface in the sky above the ship, then stacks the four zones from the waterline to the seabed', () => {
     // ARRANGE
     const expected = [
-      { zone: 'surface', top: 360, bottom: 460 },
+      { zone: 'surface', top: 190, bottom: 290 },
       { zone: 'sunlit', top: 460, bottom: 560 },
       { zone: 'twilight', top: 560, bottom: 660 },
       { zone: 'midnight', top: 660, bottom: 760 },
@@ -46,6 +46,24 @@ describe('success cases', () => {
     const bands = depthBands();
     // ASSERT
     expect(bands).toEqual(expected);
+  });
+
+  it('adds a lanternfish school and a siphonophore to a Twilight Section title, beside its drifting jellies', () => {
+    // ARRANGE
+    const expected = { life: 'jellies', titleLife: ['lanternfish', 'siphonophore'] };
+    // ACT
+    const { life, titleLife } = zoneSceneParts({ zone: 'twilight', sectionTitle: true });
+    // ASSERT
+    expect({ life, titleLife }).toEqual(expected);
+  });
+
+  it('cuts the deep water into about half the facets it had: 30 triangles over a 1200 by 800 Scene', () => {
+    // ARRANGE
+    const expected = 30;
+    // ACT
+    const facets = seaFacets({ width: 1200, height: 800, cell: WATER_CELL, seed: 23 });
+    // ASSERT
+    expect(facets).toHaveLength(expected);
   });
 });
 
@@ -61,9 +79,26 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps every other zone the same on its Section title: the title life is the Twilight zone only', () => {
+    // ARRANGE
+    const zones = ['surface', 'sunlit', 'midnight', 'abyss'] as const;
+    // ACT
+    const titleLife = zones.flatMap((zone) => zoneSceneParts({ zone, sectionTitle: true }).titleLife);
+    // ASSERT
+    expect(titleLife).toEqual([]);
+  });
+
   it('lets a Slide show another part of the iceberg, and keeps the zone loop with it', () => {
     // ARRANGE
-    const expected = { sky: false, rays: true, seabed: false, iceberg: 'tip', life: 'fish', water: 'sunlit' };
+    const expected = {
+      sky: false,
+      rays: true,
+      seabed: false,
+      iceberg: 'tip',
+      life: 'fish',
+      water: 'sunlit',
+      titleLife: [],
+    };
     // ACT
     const parts = zoneSceneParts({ zone: 'sunlit', iceberg: 'tip' });
     // ASSERT

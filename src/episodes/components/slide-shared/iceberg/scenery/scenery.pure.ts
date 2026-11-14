@@ -3,7 +3,7 @@
  * jellies or a column of bubbles sits. Deterministic: a seed, never `Math.random`, so every render of a Slide draws
  * the same sea.
  */
-import { ICEBERG_HALF_WIDTH, KEEL_DEPTH, TIP_HEIGHT } from './facet-data';
+import { ICEBERG_HALF_WIDTH, KEEL_DEPTH, TIP_HEIGHT } from './iceberg-placement.pure';
 
 /** Which part of the iceberg a Scene shows: all of it, only what floats above the waterline, or only the keel below. */
 export type IcebergPart = 'whole' | 'tip' | 'keel';

@@ -1,8 +1,8 @@
 {
   "title": "Sea life",
   "caption": "Each depth has its own quiet ambient movement",
-  "intro": "Fish sway in Sunlit, jellies bob in Twilight, a whale glides in Midnight and bubbles rise in Abyss. Compare a second fish school, then inspect the still seabed and shafts of light.",
-  "contract": "Import creatures from slide-shared/iceberg/scenery/sea-life and Seabed or LightRays from scenery/seabed. Counts and seeds give reproducible groups; explicit placements override them. ZoneScene composes these parts for story Slides. Ambient loops stop outside the active Slide and with reduced motion.",
+  "intro": "Fish sway in Sunlit, jellies bob in Twilight, a whale glides in Midnight and bubbles rise in Abyss. The Twilight Section titles add a lanternfish school and a siphonophore. Compare a second fish school, then inspect the still seabed and shafts of light.",
+  "contract": "Import each creature from its own file in slide-shared/iceberg/scenery (fish-school, jellies, whale, lanternfish, siphonophore), Bubbles from sea-life and Seabed or LightRays from seabed. Each creature's JSDoc freezes its props, box, hooks and tokens. Counts and seeds give reproducible groups; explicit placements override them. Ambient loops stop outside the active Slide and with reduced motion.",
   "pause": "Pause motion",
   "resume": "Resume motion",
   "replay": "Replay specimens",
@@ -14,6 +14,8 @@
     "whale": "Midnight: humpback whale",
     "bubbles": "Abyss: seven rising bubbles",
     "seabed": "Seabed, 1200 units wide",
-    "rays": "Five shafts of light"
+    "rays": "Five shafts of light",
+    "lanternfish": "Twilight title: nine lanternfish, seed 3",
+    "siphonophore": "Twilight title: a siphonophore of nine bells"
   }
 }

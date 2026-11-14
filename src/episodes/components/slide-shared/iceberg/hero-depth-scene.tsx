@@ -4,37 +4,47 @@ import styles from './hero-depth-scene.module.css';
 import { HERO_DEPTH, heroDepthBands } from './hero-depth.pure';
 import { isDarkZone, zoneToken } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
+import { Clouds } from './scenery/clouds';
+import { FishSchool } from './scenery/fish-school';
+import { FlatSky, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
-import { depthScaleForKeel } from './scenery/scenery.pure';
-import { FishSchool, Whale } from './scenery/sea-life';
+import { placeIceberg } from './scenery/iceberg-placement.pure';
 import { LightRays } from './scenery/seabed';
-import { Clouds, SunMoon } from './scenery/sky';
+import { SunMoon } from './scenery/sun-moon';
+import { Whale } from './scenery/whale';
 import { ZoneLabel } from './zone-label';
 import { Band } from './zone-scene';
 import sceneStyles from './zone-scene.module.css';
-import { seaFacets } from './zone-scene.pure';
+import { seaFacets, WATER_CELL } from './zone-scene.pure';
 import type { ZoneWords } from './zone-words.pure';
 
 const { width, height, waterline } = HERO_DEPTH;
 const BANDS = heroDepthBands(HERO_DEPTH);
-const SKY = seaFacets({ width, height: waterline, cell: 160, seed: 11 });
 const WATER = BANDS.slice(1).map((band, depth) => ({
   ...band,
-  facets: seaFacets({ width, height: band.bottom - band.top, cell: 140, seed: 5 + depth * 6 }),
+  facets: seaFacets({ width, height: band.bottom - band.top, cell: WATER_CELL, seed: 5 + depth * 6 }),
 }));
+const bandOf = (zone: 'sunlit' | 'twilight') => BANDS.find((band) => band.zone === zone)!;
 /** Clouds kept to the right and low on the left, so the title and lede read on open sky. */
 const CLOUDS = [
   { x: 1050, y: 210, scale: 0.9, shape: 0 },
   { x: 160, y: 660, scale: 0.85, shape: 0 },
   { x: 560, y: 560, scale: 0.55, shape: 1 },
 ] as const;
-const BERG = { x: 1010, scale: 0.8, keel: 900 } as const;
+/** The one iceberg placement: body in the Sunlit band, keel touching the Twilight band. */
+const BERG = placeIceberg({
+  x: 1010,
+  waterline,
+  scale: 0.8,
+  sunlitBottom: bandOf('sunlit').bottom,
+  twilightDepth: bandOf('twilight').bottom - bandOf('twilight').top,
+});
 
 /** The drawing: the Surface sky, each zone's water, the iceberg, sun rays, and fish and whale clear of the ruler. */
 function Depth({ children }: { readonly children?: ReactNode }) {
   return (
     <>
-      <Band facets={SKY} band="sky" />
+      <FlatSky width={width} height={waterline} />
       <SunMoon x={1110} y={110} r={30} />
       <Clouds at={CLOUDS} />
       {WATER.map(({ zone, top, facets }) => (
@@ -44,17 +54,12 @@ function Depth({ children }: { readonly children?: ReactNode }) {
           transform={`translate(0 ${top})`}
           style={{ '--water': zoneToken(zone) } as CSSProperties}
         >
-          <Band facets={facets} band="water" />
+          <Band facets={facets} />
         </g>
       ))}
+      <LitWaterline width={width} y={waterline} />
       <LightRays x={140} y={waterline} count={6} spread={130} length={230} />
-      <Iceberg
-        part="whole"
-        x={BERG.x}
-        waterline={waterline}
-        scale={BERG.scale}
-        depthScale={depthScaleForKeel(0, (BERG.keel - waterline) / BERG.scale)}
-      />
+      <Iceberg part="whole" {...BERG} />
       <FishSchool x={790} y={772} />
       <Whale x={640} y={915} scale={0.7} />
       {children}

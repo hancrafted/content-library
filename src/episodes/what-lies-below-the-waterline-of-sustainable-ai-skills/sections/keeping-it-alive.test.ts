@@ -357,13 +357,14 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws the whole iceberg as one picture, the robot rising on its cable up a trail with a node at every zone', () => {
+  it('draws the whole iceberg as one picture, the robot rising up a trail to the A-frame, the Surface node above it unlit', () => {
     // ARRANGE
     const expected = {
       pictures: 1,
-      water: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      water: ['sunlit', 'twilight', 'midnight', 'abyss'],
       trail: 1,
       nodes: ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'],
+      unlit: ['surface'],
       rising: { robot: 1, cable: 1, ship: 0 },
     };
     // ACT
@@ -375,6 +376,9 @@ describe('edge cases', () => {
         .map((band) => $(band).attr('data-depth-band')),
       trail: $('[data-rise-trail]').length,
       nodes: $('[data-trail-node]')
+        .toArray()
+        .map((node) => $(node).attr('data-trail-node')),
+      unlit: $('[data-trail-node][data-unlit]')
         .toArray()
         .map((node) => $(node).attr('data-trail-node')),
       rising: {

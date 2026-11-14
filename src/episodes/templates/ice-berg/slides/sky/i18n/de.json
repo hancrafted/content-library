@@ -1,8 +1,8 @@
 {
   "title": "Himmel",
   "caption": "Das Theme wählt das Licht; die Wolken tragen den Wind",
-  "intro": "Wechsle das Seitentheme, um Sonne und Mondsichel zu vergleichen. Das zweite Beispiel erzwingt unabhängig vom Umfeld einen Mond. Die Wolken zeigen die Standardanordnung an der Oberfläche.",
-  "contract": "Importiere SunMoon und Clouds aus slide-shared/iceberg/scenery/sky. Beide Himmelskörper werden serverseitig gezeichnet; CSS wählt Tag oder Nacht. Wolkenpositionen nehmen x, y, scale und shape entgegen. Wind ist die Hintergrundschleife der Oberfläche; die Pausentaste der Galerie hält auch ihn an.",
+  "intro": "Wechsle das Seitentheme, um Sonne und Mondsichel zu vergleichen. Das zweite Beispiel erzwingt unabhängig vom Umfeld einen Mond. Die Wolken zeigen die Standardanordnung an der Oberfläche in drei Ebenen.",
+  "contract": "Importiere SunMoon aus slide-shared/iceberg/scenery/sun-moon und Clouds aus scenery/clouds. Beide Himmelskörper werden serverseitig gezeichnet; CSS wählt Tag oder Nacht. Wolkenpositionen nehmen x, y, scale, shape und eine Ebene (far, mid oder near) entgegen; ohne Ebene entscheidet die Größe. Jede Ebene treibt in ihrem eigenen Tempo: der Wind der Oberfläche, den die Pausentaste der Galerie ebenfalls anhält. ZoneScene zeichnet darum den flachen Himmel, seine Nachtsterne und die helle Wasserlinie.",
   "pause": "Bewegung pausieren",
   "resume": "Bewegung fortsetzen",
   "replay": "Beispiele wiederholen",

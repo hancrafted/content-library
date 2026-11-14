@@ -1,8 +1,21 @@
-import { ICEBERG_GLOW, ICEBERG_KEEL, ICEBERG_TIP } from './facet-data';
+import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
-import styles from './scenery.module.css';
+import styles from './iceberg.module.css';
 import { icebergLayers, type IcebergPart } from './scenery.pure';
 
+/**
+ * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
+ * redraw changes only the facets below and `iceberg.module.css`.
+ *
+ * - Props: `part`, `x`, `waterline`, `scale`, `depthScale`, as typed here.
+ * - Box: at scale 1 the drawing stays within x -190 to 190, y -168 (tip) to 200 × `depthScale` (keel point), with
+ *   (0, 0) on the waterline at the berg's centre (`KEEL_DEPTH`, `TIP_HEIGHT`, `ICEBERG_HALF_WIDTH` in
+ *   `iceberg-placement.pure.ts`). Scenes place it only through `placeIceberg`.
+ * - Hooks: root `data-iceberg="<part>"`; `data-iceberg-tip`, `data-iceberg-keel` (stretched by `depthScale` alone),
+ *   `data-iceberg-glow`.
+ * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`, with `transparent`.
+ * - Motion: none; the iceberg never moves, so no `data-motion`.
+ */
 export interface IcebergProps {
   /** `whole` on the Surface, `tip` where only the visible part matters, `keel` once the Scene is below the waterline. */
   readonly part?: IcebergPart;
@@ -11,10 +24,7 @@ export interface IcebergProps {
   /** Where the waterline crosses the Scene; the tip stands on it and the keel hangs from it. */
   readonly waterline: number;
   readonly scale?: number;
-  /**
-   * Stretches the keel downward only, so its point lands where the Scene needs it (about 250 m, the top of the
-   * Twilight zone): `depthScaleForKeel(waterline, keelY)` gives the value.
-   */
+  /** Stretches the keel downward only, so its point lands where `placeIceberg` puts it. */
   readonly depthScale?: number;
 }
 
@@ -26,7 +36,7 @@ export interface IcebergProps {
 export function Iceberg({ part = 'whole', x, waterline, scale = 1, depthScale = 1 }: IcebergProps) {
   const layers = icebergLayers(part);
   return (
-    <g className={styles.scenery} data-iceberg={part} transform={`translate(${x} ${waterline}) scale(${scale})`}>
+    <g className={styles.iceberg} data-iceberg={part} transform={`translate(${x} ${waterline}) scale(${scale})`}>
       {layers.keel && (
         <g data-iceberg-keel transform={`scale(1 ${depthScale})`}>
           <Facets layers={ICEBERG_KEEL} />
@@ -45,3 +55,51 @@ export function Iceberg({ part = 'whole', x, waterline, scale = 1, depthScale = 
     </g>
   );
 }
+
+// The drawing: precomputed facets from the Spec's `parts.py` (seed 25), the keel's outline cut by hand (Spec review).
+const ICEBERG_TIP: readonly FacetLayer[] = [
+  {
+    tone: 'berg-mid',
+    d: 'M154 0L150 -14L170 0ZM42.7 -39.9L17.7 -24.9L13.5 -51.5ZM46 -15.4L42.7 -39.9L68.9 -18.2ZM-98.1 -14.7L-122.4 0L-115.6 -33ZM-72 -37.2L-98.1 -14.7L-98.8 -50.2ZM-69.2 -60L-72 -37.2L-98.8 -50.2ZM-72 -37.2L-69.2 -60L-40.5 -53.4ZM100.4 0L101.5 -27.7L126 -20ZM-8.7 -13.8L-3.8 -38.5L17.7 -24.9ZM42.7 -39.9L69.2 -41.9L68.9 -18.2ZM69.2 -41.9L101.5 -27.7L68.9 -18.2ZM50.8 0L32.3 0L46 -15.4ZM-10.5 -88.9L-5.3 -66.5L-31.7 -78.4ZM-76.5 -17L-73.3 0L-90.4 0ZM-76.5 -17L-98.1 -14.7L-72 -37.2ZM-76.5 -17L-72 -37.2L-47.2 -27.6ZM82.7 0L63.7 0L68.9 -18.2ZM101.5 -27.7L82.7 0L68.9 -18.2ZM-106.1 -96L-96.7 -84.8L-112 -80.5ZM-96.7 -84.8L-106.1 -96L-100 -112ZM-55 0L-32.7 -13.8L-38.1 0ZM-8.7 -13.8L-26.5 -37.1L-3.8 -38.5ZM-32.7 -13.8L-26.5 -37.1L-8.7 -13.8Z',
+  },
+  {
+    tone: 'berg-lit',
+    d: 'M-115.6 -33L-145 -41.6L-138 -58ZM-115.6 -33L-116 -70L-98.8 -50.2ZM-116 -70L-115.6 -33L-138 -58ZM45.6 -63.2L32.5 -88.8L48 -84ZM-33.9 -112.5L-10.5 -88.9L-31.7 -78.4ZM-73.5 -147.2L-50 -140L-59.1 -125.3ZM-50 -140L-26 -128.8L-33.9 -112.5ZM-3.8 -38.5L-5.3 -66.5L13.5 -51.5ZM-5.3 -66.5L19.7 -76.1L13.5 -51.5ZM-98.1 -14.7L-103.1 0L-122.4 0ZM116.5 -30.3L101.5 -27.7L102 -46ZM132.9 0L126 -20L150 -14ZM-59.2 -156.1L-73.5 -147.2L-66 -168ZM70 -56L69.2 -41.9L42.7 -39.9ZM-5.6 -110L-10.5 -88.9L-20 -116ZM19.7 -76.1L22 -92L32.5 -88.8ZM-116 -70L-96.7 -84.8L-98.8 -50.2ZM-96.7 -84.8L-116 -70L-112 -80.5ZM-96.7 -84.8L-69.2 -60L-98.8 -50.2ZM-72.8 -109.2L-96.7 -84.8L-100 -112ZM-96.7 -84.8L-72.8 -109.2L-76 -85.4ZM121.2 0L100.4 0L126 -20ZM-32.7 -13.8L-21.8 0L-38.1 0ZM-21.8 0L-32.7 -13.8L-8.7 -13.8ZM57.5 -71.9L45.6 -63.2L48 -84ZM-84 -118L-72.8 -109.2L-100 -112ZM-72.8 -109.2L-84 -118L-59.1 -125.3ZM-55.3 -89.4L-72.8 -109.2L-59.1 -125.3ZM-55.3 -89.4L-33.9 -112.5L-31.7 -78.4ZM-40.5 -53.4L-55.3 -89.4L-31.7 -78.4ZM-69.2 -60L-55.3 -89.4L-40.5 -53.4ZM-26.5 -37.1L-5.3 -66.5L-3.8 -38.5ZM101.5 -27.7L88.1 -50.3L102 -46Z',
+  },
+  {
+    tone: 'berg-shade',
+    d: 'M-72 -37.2L-40.5 -53.4L-47.2 -27.6ZM17.7 -24.9L-3.8 -38.5L13.5 -51.5ZM63.7 0L46 -15.4L68.9 -18.2ZM-98.1 -14.7L-115.6 -33L-98.8 -50.2ZM-8.7 -13.8L17.7 -24.9L0.1 0ZM50.8 0L46 -15.4L63.7 0ZM-26 -128.8L-20 -116L-33.9 -112.5ZM101.5 -27.7L116.5 -30.3L126 -20ZM154 0L132.9 0L150 -14ZM-21.8 0L-8.7 -13.8L0.1 0ZM-32.7 -13.8L-55 0L-47.2 -27.6ZM57.5 -71.9L70 -56L45.6 -63.2ZM-26.5 -37.1L-32.7 -13.8L-47.2 -27.6ZM-40.5 -53.4L-26.5 -37.1L-47.2 -27.6ZM-5.3 -66.5L-26.5 -37.1L-40.5 -53.4Z',
+  },
+  {
+    tone: 'berg-light',
+    d: 'M-166 -22L-156 0L-176 0ZM-150 -30L-156 0L-166 -22ZM17.7 -24.9L15.4 0L0.1 0ZM45.6 -63.2L42.7 -39.9L13.5 -51.5ZM42.7 -39.9L46 -15.4L17.7 -24.9ZM-20 -116L-10.5 -88.9L-33.9 -112.5ZM-50 -140L-33.9 -112.5L-59.1 -125.3ZM-156 0L-136.1 -13.9L-140.6 0ZM-136.1 -13.9L-156 0L-150 -30ZM-145 -41.6L-136.1 -13.9L-150 -30ZM-115.6 -33L-136.1 -13.9L-145 -41.6ZM-136.1 -13.9L-122.4 0L-140.6 0ZM-122.4 0L-136.1 -13.9L-115.6 -33ZM32.3 0L15.4 0L17.7 -24.9ZM46 -15.4L32.3 0L17.7 -24.9ZM-26 -128.8L-50 -140L-36 -150ZM19.7 -76.1L45.6 -63.2L13.5 -51.5ZM45.6 -63.2L19.7 -76.1L32.5 -88.8ZM19.7 -76.1L-5.3 -66.5L-10.5 -88.9ZM-5.3 -66.5L-40.5 -53.4L-31.7 -78.4ZM-76.5 -17L-55 0L-73.3 0ZM-55 0L-76.5 -17L-47.2 -27.6ZM100.4 0L82.7 0L101.5 -27.7ZM-59.2 -156.1L-50 -140L-73.5 -147.2ZM45.6 -63.2L70 -56L42.7 -39.9ZM-5.6 -110L13.4 -107.4L-10.5 -88.9ZM13.4 -107.4L-5.6 -110L2 -128ZM22 -92L19.7 -76.1L-10.5 -88.9ZM13.4 -107.4L22 -92L-10.5 -88.9ZM-84 -118L-78.4 -133.6L-59.1 -125.3ZM-33.9 -112.5L-55.3 -89.4L-59.1 -125.3ZM70 -56L88.1 -50.3L69.2 -41.9ZM69.2 -41.9L88.1 -50.3L101.5 -27.7Z',
+  },
+  {
+    tone: 'berg-glint',
+    d: 'M-78.4 -133.6L-73.5 -147.2L-59.1 -125.3ZM-103.1 0L-98.1 -14.7L-90.4 0ZM-98.1 -14.7L-76.5 -17L-90.4 0ZM-5.6 -110L-20 -116L2 -128ZM-96.7 -84.8L-76 -85.4L-69.2 -60ZM132.9 0L121.2 0L126 -20ZM-72.8 -109.2L-55.3 -89.4L-76 -85.4ZM-76 -85.4L-55.3 -89.4L-69.2 -60Z',
+  },
+];
+
+const ICEBERG_KEEL: readonly FacetLayer[] = [
+  {
+    tone: 'berg-sub-lit',
+    d: 'M-176 0L-170.2 17.8L-188 24ZM78.1 0L97.2 0L84.1 14.8ZM24.1 0L43.2 0L31.9 16ZM-4.2 18L-33.2 17.1L-7.8 0ZM38.4 45L61.5 32.3L62.3 57.6ZM61.5 32.3L38.4 45L31.9 16ZM60.1 0L61.5 32.3L43.2 0ZM-61.3 35.7L-33.2 17.1L-44.6 50.3ZM-46.1 0L-61.3 35.7L-72.7 15ZM-61.3 35.7L-46.1 0L-33.2 17.1ZM-92.9 24.3L-88.3 0L-72.7 15ZM-61.3 35.7L-92.9 24.3L-72.7 15ZM-92.9 24.3L-61.3 35.7L-89.7 53.6ZM103 27.6L126.2 21.5L116.3 60.9ZM61.5 32.3L81 44.5L62.3 57.6ZM81 44.5L61.5 32.3L84.1 14.8ZM114.9 0L103 27.6L97.2 0ZM154.1 0L147.6 27.9L130.7 0ZM147.6 27.9L126.2 21.5L130.7 0ZM9.6 0L-4.2 18L-7.8 0ZM9.6 0L24.1 0L31.9 16ZM-4.2 18L9.6 0L31.9 16ZM9.9 41.6L-4.2 18L31.9 16ZM-46.1 0L-31.4 0L-33.2 17.1ZM-88.3 0L-65.4 0L-72.7 15ZM-65.4 0L-46.1 0L-72.7 15ZM-92.9 24.3L-101.2 0L-88.3 0ZM-21.4 47.4L9.9 41.6L-8.2 74.3ZM9.9 41.6L-21.4 47.4L-4.2 18ZM-144.1 16.1L-143.6 0L-121.4 0ZM-144.1 16.1L-159 0L-143.6 0ZM-159 0L-144.1 16.1L-170.2 17.8ZM-101.2 0L-116.4 19.5L-121.4 0ZM-116.4 19.5L-101.2 0L-92.9 24.3ZM-116.4 19.5L-92.9 24.3L-89.7 53.6ZM-133.9 38.2L-116.4 19.5L-89.7 53.6Z',
+  },
+  {
+    tone: 'berg-sub-shade',
+    d: 'M-170.2 17.8L-166.1 33.2L-188 24ZM-98.1 96.6L-75.3 90.1L-92 112ZM-34 160L-40.4 145.3L-24.4 137.1ZM-40.4 145.3L-48 128L-24.4 137.1ZM-36.4 101.6L-64.9 121.8L-75.3 90.1ZM-64.9 121.8L-36.4 101.6L-48 128ZM-48 128L-36.4 101.6L-24.4 137.1ZM149.1 84.8L139.9 56.2L163.2 78.1ZM54.3 116.9L54 143.4L28.1 136.1ZM89.9 119L54.3 116.9L70.6 85.5ZM-89.7 53.6L-60.4 68.2L-75.3 90.1ZM-60.4 68.2L-36.4 101.6L-75.3 90.1ZM-104 82L-89.7 53.6L-75.3 90.1ZM102.9 91.4L89.1 66.7L116.3 60.9ZM102.9 91.4L89.9 119L70.6 85.5ZM89.1 66.7L102.9 91.4L70.6 85.5ZM89.1 66.7L81 44.5L116.3 60.9ZM162 44L147.6 27.9L178 32.6ZM147.6 27.9L162 44L139.9 56.2ZM-2.8 157.3L20.2 160.3L-8 176ZM20.2 160.3L0.5 188.7L-8 176ZM43.1 69.6L62.3 57.6L70.6 85.5ZM-145.7 56.1L-126.3 62.1L-142 70ZM-60.4 68.2L-38.8 73L-36.4 101.6ZM21.1 107.1L54.3 116.9L28.1 136.1ZM132.1 78.4L139.9 56.2L149.1 84.8ZM-21.4 47.4L-38.8 73L-44.6 50.3ZM-33.2 17.1L-21.4 47.4L-44.6 50.3ZM-144.1 16.1L-166.1 33.2L-170.2 17.8ZM-119.1 77.2L-126.3 62.1L-89.7 53.6ZM-126.3 62.1L-119.1 77.2L-142 70ZM5.9 130.1L21.1 107.1L28.1 136.1ZM20.2 160.3L5.9 130.1L28.1 136.1ZM5.9 130.1L20.2 160.3L-2.8 157.3ZM5.9 130.1L-7.2 100.2L21.1 107.1ZM-36.4 101.6L-7.2 100.2L-24.4 137.1ZM-7.2 100.2L5.9 130.1L-24.4 137.1ZM107.6 130.6L127 106.1L122 126ZM-133.9 38.2L-145.7 56.1L-150 40Z',
+  },
+  {
+    tone: 'berg-sub',
+    d: 'M178 32.6L178 9.6L190 24ZM43.2 0L61.5 32.3L31.9 16ZM178 9.6L154.1 0L170 0ZM62.3 57.6L89.1 66.7L70.6 85.5ZM126.2 21.5L139.9 56.2L116.3 60.9ZM60.1 0L78.1 0L84.1 14.8ZM61.5 32.3L60.1 0L84.1 14.8ZM-60.4 68.2L-61.3 35.7L-44.6 50.3ZM-61.3 35.7L-60.4 68.2L-89.7 53.6ZM-98.1 96.6L-104 82L-75.3 90.1ZM-75.3 90.1L-80 116.4L-92 112ZM97.2 0L103 27.6L84.1 14.8ZM81 44.5L89.1 66.7L62.3 57.6ZM103 27.6L81 44.5L84.1 14.8ZM81 44.5L103 27.6L116.3 60.9ZM126.2 21.5L114.9 0L130.7 0ZM103 27.6L114.9 0L126.2 21.5ZM147.6 27.9L178 9.6L178 32.6ZM147.6 27.9L154.1 0L178 9.6ZM147.6 27.9L139.9 56.2L126.2 21.5ZM43.1 69.6L38.4 45L62.3 57.6ZM38.4 45L43.1 69.6L18.5 69ZM43.1 69.6L38.7 92.1L18.5 69ZM9.9 41.6L38.4 45L18.5 69ZM-8.2 74.3L9.9 41.6L18.5 69ZM38.4 45L9.9 41.6L31.9 16ZM-33.2 17.1L-31.4 0L-7.8 0ZM-38.8 73L-60.4 68.2L-44.6 50.3ZM38.7 92.1L21.1 107.1L18.5 69ZM163.2 78.1L170.4 60.9L176 72ZM139.9 56.2L170.4 60.9L163.2 78.1ZM162 44L170.4 60.9L139.9 56.2ZM-38.8 73L-21.4 47.4L-8.2 74.3ZM-4.2 18L-21.4 47.4L-33.2 17.1ZM-159 0L-170.2 17.8L-176 0ZM-166.1 33.2L-144.1 16.1L-150 40ZM-116.4 19.5L-144.1 16.1L-121.4 0ZM-8.2 74.3L-7.2 100.2L-36.4 101.6ZM-7.2 100.2L-8.2 74.3L18.5 69ZM21.1 107.1L-7.2 100.2L18.5 69ZM-144.1 16.1L-133.9 38.2L-150 40ZM-116.4 19.5L-133.9 38.2L-144.1 16.1ZM-133.9 38.2L-126.3 62.1L-145.7 56.1ZM-126.3 62.1L-133.9 38.2L-89.7 53.6ZM130 94L132.1 78.4L149.1 84.8Z',
+  },
+  {
+    tone: 'berg-deep',
+    d: 'M62 168L54 143.4L68 157.4ZM107.6 130.6L93.3 135.1L89.9 119ZM-18.5 169.5L-34 160L-24.4 137.1ZM-2.8 157.3L-18.5 169.5L-24.4 137.1ZM-18.5 169.5L-2.8 157.3L-8 176ZM0.5 188.7L26 184L8 200ZM54.3 116.9L38.7 92.1L70.6 85.5ZM93.3 135.1L78 140L89.9 119ZM78 140L54.3 116.9L89.9 119ZM54.3 116.9L78 140L54 143.4ZM54 143.4L78 140L68 157.4ZM44.8 175.7L54 143.4L62 168ZM-64.9 121.8L-80 116.4L-75.3 90.1ZM54 143.4L20.2 160.3L28.1 136.1ZM44.8 175.7L20.2 160.3L54 143.4ZM20.2 160.3L44.8 175.7L26 184ZM0.5 188.7L20.2 160.3L26 184ZM38.7 92.1L43.1 69.6L70.6 85.5ZM-38.8 73L-8.2 74.3L-36.4 101.6ZM21.1 107.1L38.7 92.1L54.3 116.9ZM132.1 78.4L102.9 91.4L116.3 60.9ZM139.9 56.2L132.1 78.4L116.3 60.9ZM-104 82L-119.1 77.2L-89.7 53.6ZM5.9 130.1L-2.8 157.3L-24.4 137.1ZM127 106.1L107.6 130.6L89.9 119ZM102.9 91.4L127 106.1L89.9 119ZM132.1 78.4L130 94L102.9 91.4ZM130 94L127 106.1L102.9 91.4Z',
+  },
+];
+
+const ICEBERG_GLOW: readonly FacetLayer[] = [
+  { tone: 'glow-soft', d: 'M-182 -5L176 -3L176 3L-182 5Z' },
+  { tone: 'glow', d: 'M-170 -1.4L164 -1L164 1L-170 1.4Z' },
+];
