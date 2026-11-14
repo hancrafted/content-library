@@ -10,7 +10,7 @@ export function ContextGauge({ label, state }: { readonly label: string; readonl
   return (
     <ZoneCard
       data-gauge={state}
-      className="mx-3 mt-2 rounded-md px-2 py-1 font-mono text-caption font-semibold shadow-sm"
+      className="absolute bottom-2 left-2 max-w-[calc(100%-1rem)] rounded-md px-2 py-1 font-mono text-caption font-semibold whitespace-nowrap"
     >
       {label}
       <span className="mt-1 block h-2 rounded-full border border-foreground">
