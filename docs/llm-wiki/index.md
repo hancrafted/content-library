@@ -24,6 +24,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 - [Why does AI-assisted execution move the bottleneck to specification and review?](research/AIE/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md) — AI speeds up execution but the saved time is re-spent on verification, and review load rises with no company-level gain; the specification half is inferred, not measured.
 
+### Evals (EVAL)
+
+- [Why can removing a skill, ADR or context file from an agent's input leave its results unchanged or even better?](research/EVAL/EVAL-0002__removing-context-keeps-results/research.md) — Removing context changes nothing when it is redundant, unused or not what the task fails on, and helps when it costs attention; only non-discoverable, task-fit procedure measurably lifts results.
+
 ### Large language models (LLM)
 
 - [Why do large language models give different answers to the same prompt?](research/LLM/LLM-0001__llm-output-nondeterminism/research.md) — Models sample each next token from a probability distribution, and even with sampling switched off, server-side numerical effects still change the output between runs.
