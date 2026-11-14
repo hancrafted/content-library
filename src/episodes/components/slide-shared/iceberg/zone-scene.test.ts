@@ -190,6 +190,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('leaves the zone creature out when the Slide covers the open water, keeping the water itself', () => {
+    // ARRANGE
+    const expected = { whale: 0, water: 1 };
+    // ACT
+    const $ = render({ zone: 'midnight', openWater: false });
+    const seen = { whale: $('[data-whale]').length, water: $('[data-band="water"]').length };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('raises the Abyss bubbles in view on its Section title, and at the left on its page Slides', () => {
     // ARRANGE
     const expected = { title: 'translate(680 560)', page: 'translate(220 560)' };

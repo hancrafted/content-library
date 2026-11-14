@@ -54,6 +54,11 @@ export interface ZoneSceneProps {
    * the drawing starts at the top (feedback 3, decision 48) and moves down only as far as keeps them below the title.
    */
   readonly figuresReach?: number;
+  /**
+   * `false` when the Slide's overlay covers the zone's open water, so its ambient creature (the Midnight whale, the
+   * Twilight jellies) would show only as a stray part between the overlay's cards. The water, rays and seabed stay.
+   */
+  readonly openWater?: boolean;
   /** Words for the picture; without them it is decoration, hidden from assistive tech. */
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
@@ -74,16 +79,19 @@ export function Band({ facets }: { readonly facets: readonly SeaFacet[] }) {
   );
 }
 
-/** The zone's one ambient loop, and the creatures only its Section title adds. */
+/** The zone's one ambient loop, and the creatures only its Section title adds; none where the Slide covers the water. */
 function Life({
   life,
   titleLife,
   sectionTitle,
+  open = true,
 }: {
   readonly life: SceneLife;
   readonly titleLife: readonly TitleLife[];
   readonly sectionTitle: boolean;
+  readonly open?: boolean;
 }) {
+  if (!open) return null;
   return (
     <>
       <Loop life={life} sectionTitle={sectionTitle} />
@@ -192,7 +200,7 @@ function fillOf(sectionTitle: boolean | undefined, sky: boolean, reach: number |
  * it from the top instead, its whole sky at the top edge, moved down only as far as keeps its figures under the title.
  */
 export function ZoneScene(props: ZoneSceneProps) {
-  const { zone, iceberg, sectionTitle, figuresReach, label, children, overlay, className } = props;
+  const { zone, iceberg, sectionTitle, figuresReach, openWater, label, children, overlay, className } = props;
   const parts = zoneSceneParts({ zone, iceberg, sectionTitle });
   const fill = fillOf(sectionTitle, parts.sky, figuresReach);
   const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water), ...fill.style } as CSSProperties;
@@ -214,7 +222,7 @@ export function ZoneScene(props: ZoneSceneProps) {
         {parts.rays && <LightRays x={60} y={0} count={7} spread={150} length={700} />}
         <Berg part={parts.iceberg} surface={parts.sky} />
         {parts.seabed && <Seabed y={SEABED_TOP} />}
-        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={sectionTitle ?? false} />
+        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={sectionTitle ?? false} open={openWater} />
         {children}
       </svg>
       {overlay}
