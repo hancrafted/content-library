@@ -14,6 +14,8 @@ verified:
     at: 2026-11-14T11:32:49Z
   - by: process:markdown-harness
     at: 2026-11-14T14:28:29Z
+  - by: human:han
+    at: 2026-11-14T14:32:42Z
 ---
 
 # What agentic workflows require of people and organisations

@@ -357,6 +357,91 @@ jobs:
 
   # Wants the research rather than needing it: a blocked question leaves a
   # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-research-oversight-origin-and-risk-level
+    stage: research
+    intent: >-
+      Research question 12: "Why do in, on and out of the loop come from military and aviation automation, and why does a task's risk, what a wrong result can do, decide which level it gets?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/AIE-0026__oversight-origin-and-risk-level/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-research-critical-path-backward-pass
+    stage: research
+    intent: >-
+      Research question 13: "Why is planning back from the goal a well-known project-management principle, as in the backward pass of the Critical Path Method?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/what-agentic-workflows-require/research/PLAN-0002__critical-path-backward-pass/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-research-clear-goals-improve-agents
+    stage: research
+    intent: >-
+      Research question 14: "Why do AI agents perform better when given a clearly defined goal and outcome?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/what-agentic-workflows-require/research/LLM-0032__clear-goals-improve-agents/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
@@ -369,6 +454,9 @@ jobs:
       - write-research-verification-versus-validation
       - write-research-conways-law-shapes-workflow-design
       - write-research-skills-for-working-with-agents
+      - write-research-oversight-origin-and-risk-level
+      - write-research-critical-path-backward-pass
+      - write-research-clear-goals-improve-agents
     before: [mh-query]
     outputs: [docs/episodes/what-agentic-workflows-require/dossier.md]
     checks: [mh, vitest]

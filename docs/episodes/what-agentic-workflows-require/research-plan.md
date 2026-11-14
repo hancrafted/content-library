@@ -10,6 +10,9 @@
 - new: SWE-0006__verification-versus-validation, question 9.
 - new: ORG-0003__conways-law-shapes-workflow-design, question 10.
 - new: AIE-0025__skills-for-working-with-agents, question 11.
+- new: AIE-0026__oversight-origin-and-risk-level, question 12.
+- new: PLAN-0002__critical-path-backward-pass, question 13.
+- new: LLM-0032__clear-goals-improve-agents, question 14.
 
 ## Reuse
 
