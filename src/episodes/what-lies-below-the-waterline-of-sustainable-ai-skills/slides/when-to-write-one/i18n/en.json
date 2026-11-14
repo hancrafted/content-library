@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "aiStatement": "The third time, write the skill down",
   "steps": {
     "first": "1st",

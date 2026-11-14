@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "aiStatement": "A shared skill needs an owner, a version, a review date",
   "owner": "Owner: Lab team · v1.3 · review March",
   "analogy": "The card in the institute's fleet manual.",

@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "aiStatement": "Die Beschreibung ist alles, was die KI sieht",
   "description": "„Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“",
   "analogy": "Das Register ist offen, jede Karte dahinter geschlossen.",

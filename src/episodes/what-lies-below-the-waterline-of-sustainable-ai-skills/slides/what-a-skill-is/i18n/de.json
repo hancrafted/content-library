@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "aiStatement": "Ein Skill ist ein Name, eine Beschreibung und Anweisungen",
   "analogy": "Eine Verfahrenskarte: Titel, Wann-Zeile, Schritte.",
   "agent": "SKILL.md, dazu scripts/ references/ assets/",

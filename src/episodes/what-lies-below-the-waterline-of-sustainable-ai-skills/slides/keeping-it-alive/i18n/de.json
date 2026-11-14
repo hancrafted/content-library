@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "aiStatement": "Einen Skill richtig zu halten, kostet Dich jeden Monat etwas",
   "entries": {
     "details": "+ Projektdetails geändert",

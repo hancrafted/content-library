@@ -12,11 +12,12 @@ export const sharingIt = slide({
   messages: { en, de },
   presentation: atDepth(6, 'section'),
   segments: [{ slug: 'midnight' }, { slug: 'three-jobs' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         gaugeLabel={t('gauge')}
+        place={template('place')}
         section={6}
         wide
         statement={t('aiStatement')}

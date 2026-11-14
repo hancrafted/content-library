@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "file": "Projektdatei",
   "aiStatement": "Projektdetails bleiben neben dem Skill",
   "sites": {

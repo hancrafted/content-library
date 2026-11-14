@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "aiStatement": "Keeping a skill right costs you every month",
   "entries": {
     "details": "+ Project details changed",

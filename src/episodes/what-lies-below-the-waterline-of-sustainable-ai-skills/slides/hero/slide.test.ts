@@ -44,9 +44,9 @@ describe('success cases', () => {
     expect(pills).toEqual(expected);
   });
 
-  it('names only the Surface on the depth gauge, with its ocean term', () => {
+  it('names only the Surface on the depth gauge, in its plain word', () => {
     // ARRANGE
-    const expected = { zones: ['Surface'], current: ['surface'], term: 'the sea surface and the air above it' };
+    const expected = { zones: ['Surface'], current: ['surface'], reading: 'Surface' };
     // ACT
     const $ = sceneOf('en');
     const seen = {
@@ -56,7 +56,7 @@ describe('success cases', () => {
       current: $('[data-depth-gauge] [data-gauge-zone][data-current]')
         .toArray()
         .map((zone) => $(zone).attr('data-gauge-zone')),
-      term: $('[data-depth-gauge] [data-ocean-term]').text(),
+      reading: $('[data-depth-gauge] [data-gauge-reading]').text(),
     };
     // ASSERT
     expect(seen).toEqual(expected);

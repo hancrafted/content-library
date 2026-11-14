@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "file": "project file",
   "aiStatement": "Project details stay beside the skill",
   "sites": {

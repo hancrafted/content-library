@@ -13,11 +13,12 @@ export const aThoughtExperiment = slide({
   messages: { en, de },
   presentation: atDepth(0, 'section'),
   segments: [{ slug: 'you-are-the-captain' }, { slug: 'one-settled-condition' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         gaugeLabel={t('gauge')}
+        place={template('place')}
         section={0}
         tag={t('tag')}
         statement={t('aiStatement')}

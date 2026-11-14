@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "aiStatement": "Fachwissen gehört hinein, an den Schritt gebunden, der es braucht",
   "extras": {
     "armPreset": "Arm-Voreinstellung",

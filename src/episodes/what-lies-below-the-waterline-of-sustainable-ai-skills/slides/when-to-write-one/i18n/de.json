@@ -28,6 +28,7 @@
     }
   },
   "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "aiStatement": "Beim dritten Mal schreibst Du den Skill auf",
   "steps": {
     "first": "1.",

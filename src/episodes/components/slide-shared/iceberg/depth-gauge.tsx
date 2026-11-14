@@ -37,10 +37,10 @@ function GaugeStrip({ zone }: { readonly zone: Zone }) {
 /**
  * The slim depth gauge the Title slide and every section slide show at their right edge (design guide, Iceberg): the
  * five zone colours as one thin strip from the Surface down, the current zone's segment marked, and only that zone
- * named beside it, in plain words with the ocean term beneath. No Section tiles: the table of contents names the
- * Sections. The strip is decoration; assistive tech reads the gauge's name and the zone's. The gauge's own box is the
- * current zone's mark: the caller places that point, and the strip hangs above and below it by depth, so the name sits
- * in the same place on every Slide.
+ * named beside it in its plain word, a button whose popover gives the depth and the ocean term, like a page Slide's
+ * zone label. No Section tiles: the table of contents names the Sections. The strip is decoration; assistive tech
+ * reads the gauge's name and the zone's. The gauge's own box is the current zone's mark: the caller places that point,
+ * and the strip hangs above and below it by depth, so the name sits in the same place on every Slide.
  */
 export function DepthGauge({ zone, words, label, className }: DepthGaugeProps) {
   return (
@@ -56,9 +56,6 @@ export function DepthGauge({ zone, words, label, className }: DepthGaugeProps) {
         <GaugeStrip zone={zone} />
         <ZoneCard data-gauge-reading className={cn(styles.reading, 'text-caption')}>
           <ZoneLabel words={words} className={cn(styles.label, 'font-semibold')} />
-          <span data-ocean-term className="text-muted-foreground">
-            {words.science}
-          </span>
         </ZoneCard>
       </div>
     </div>

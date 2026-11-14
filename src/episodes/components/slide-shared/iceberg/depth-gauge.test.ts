@@ -7,7 +7,8 @@ import type { ZoneLabelWords } from './zone-words.pure';
 
 /*
  * The slim depth gauge at the right edge of the Title slide and every section slide (design guide, Iceberg): the five
- * zone colours as one thin strip, and only the zone the Slide sits in named, in plain words with the ocean term.
+ * zone colours as one thin strip, and only the zone the Slide sits in named, in its plain word; depth and ocean term
+ * open in its popover.
  */
 
 const TWILIGHT: ZoneLabelWords = { name: 'Twilight', metres: '200–1,000 m', science: 'mesopelagic' };
@@ -39,9 +40,9 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('names only the current zone, in plain words with the ocean term beneath, under the gauge’s own name', () => {
+  it('names only the current zone, in its plain word, as the button that opens its depth and ocean term', () => {
     // ARRANGE
-    const expected = { label: 'Depth gauge', names: ['Twilight'], term: 'mesopelagic' };
+    const expected = { label: 'Depth gauge', names: ['Twilight'], text: 'Twilight', buttons: 1 };
     // ACT
     const $ = html(createElement(DepthGauge, { zone: 'twilight', words: TWILIGHT, label: 'Depth gauge' }));
     const seen = {
@@ -49,7 +50,8 @@ describe('success cases', () => {
       names: $('[data-zone-label]')
         .toArray()
         .map((name) => $(name).text()),
-      term: $('[data-ocean-term]').text(),
+      text: $('[data-gauge-reading]').text(),
+      buttons: $('[data-gauge-reading] button[data-zone-label]').length,
     };
     // ASSERT
     expect(seen).toEqual(expected);
