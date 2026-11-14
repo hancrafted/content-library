@@ -1,10 +1,25 @@
+import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
-import { previewReport, type Render } from './spec-preview.pure.ts';
+import {
+  previewPage,
+  previewReport,
+  readPresets,
+  shotName,
+  shotsOf,
+  toolbarConfigOf,
+  viewportOf,
+  type Outcome,
+  type Preset,
+  type Rendered,
+  type Shot,
+} from './spec-preview.pure.ts';
 
 /*
- * What `npm run episode:spec-preview` reports for a fragment, given a renderer: the Spec contract violations, an
- * overflow line per Option that runs past its box, one screenshot line per rendered Option, and whether it fails.
- * A hand-written renderer stands in for the browser; `skills/new-episode/scripts/spec-preview.browser.test.ts` drives the real one.
+ * What `npm run episode:spec-preview` renders and reports for a fragment: the page at each preset, built from the Spec
+ * template; then, given what each render came to, the Spec contract violations, an overflow line per Option and
+ * preset (a failure at the presets the calibration marks `fails`, a note elsewhere), one screenshot line per rendered
+ * Option and preset, and whether it fails. The presets come from the Spec calibration's table.
+ * A hand-written renderer stands in for the browser. The checked-in calibration is read in `spec-preview.pure.slow.test.ts`.
  */
 
 const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
@@ -14,69 +29,368 @@ const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
   <div data-spec="build-notes">Parts, tokens, props, i18n keys.</div>
 </figure>`;
 const CLEAN = `<!-- slide: spent -->${option('1a')}${option('1b')}`;
+const TITLE = `<!-- slide: top -->${option('0a')}${option('0b')}${option('0c')}`;
 
-/** A renderer that overflows the given Options by the given counts and shoots to `/shots/<id>.png`. */
+/** The numbers of the toolbar asset, as the template carries them; these differ from the asset's, to show they are read. */
+const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, fitRoomMin: 300 };
+
+const DESKTOP: Preset = { name: 'desktop', width: 1920, height: 800, blocking: true };
+const MOBILE: Preset = { name: 'mobile', width: 390, height: 800, blocking: false };
+const SHORTS: Preset = { name: 'shorts', width: 1080, height: 1920, blocking: false };
+const WIDE: Preset = { name: 'wide', width: 1700, height: 800, blocking: false };
+const PRESETS = [DESKTOP, MOBILE];
+
+/** A Spec template in the shape the preview reads: a frame with the slots, a toolbar and review form, two templates. */
+const TEMPLATE = `<!doctype html>
+<html lang="en" data-mode="decide">
+  <head>
+    <title data-slot="page-title">Spec</title>
+    <style>.spec-shell{}</style>
+    <script>window.themeFlash = true;</script>
+    <script type="application/json" id="spec-meta" data-slot="meta">{}</script>
+    <script type="application/json" data-toolbar-config>${JSON.stringify(CONFIG)}</script>
+  </head>
+  <body>
+    <div class="dh-toolbar" role="toolbar" data-toolbar><button type="button" data-preset="fit">Fit</button></div>
+    <div class="spec-shell">
+      <nav class="spec-outline" data-slot="outline"></nav>
+      <main class="spec-page">
+        <header class="spec-masthead"><p data-slot="kicker"></p><h1 data-slot="heading"></h1><p data-slot="lede"></p></header>
+        <div class="spec-intro" data-slot="intro"></div>
+        <div data-slot="items"></div>
+        <form id="spec-review"><button type="submit">Save</button></form>
+      </main>
+    </div>
+    <div class="spec-scroll"><button type="button">Top</button></div>
+    <template data-template="item">
+      <article class="spec-item" data-spec="slide">
+        <h3 data-slot="title"></h3>
+        <span data-slot="number"></span>
+        <div class="spec-layout">
+          <div class="spec-main"><div class="spec-stages"></div></div>
+          <aside class="spec-rail"><div class="spec-options" data-slot="options"></div><textarea data-slot="note"></textarea></aside>
+        </div>
+      </article>
+    </template>
+    <template data-template="option">
+      <figure data-spec="option" data-option data-recommended="false">
+        <div class="spec-stage" data-slot="stage"></div>
+        <figcaption data-slot="caption"></figcaption>
+        <input type="checkbox" data-slot="pick" />
+        <span data-slot="id"></span>
+        <div data-slot="build-notes"></div>
+      </figure>
+    </template>
+    <script>addEventListener('DOMContentLoaded', () => {});</script>
+  </body>
+</html>`;
+
+const STAGE = '.spec-stage[data-option]';
+
+/** A renderer that overflows the given `<id>@<preset>` pairs by the given counts and shoots to `/shots/<name>.png`. */
 const rendering =
-  (overflow: Record<string, number> = {}): Render =>
-  (id) => ({ path: `/shots/${id}.png`, overflow: overflow[id] ?? 0 });
+  (overflow: Record<string, number> = {}) =>
+  (shot: Shot): Rendered => ({
+    path: `/shots/${shotName(shot)}.png`,
+    overflow: overflow[`${shot.id}@${shot.preset.name}`] ?? 0,
+  });
+
+/** What rendering every Shot of a fragment came to, a renderer that throws giving that Shot's error. */
+const outcomesOf = (fragment: string, presets: readonly Preset[], render: (shot: Shot) => Rendered): Outcome[] =>
+  shotsOf(fragment, presets).map((shot) => {
+    try {
+      return { shot, result: render(shot) };
+    } catch (error) {
+      return { shot, result: error as Error };
+    }
+  });
 
 const violations = (lines: string[]) => lines.filter((line) => line.startsWith('✖'));
+const notes = (lines: string[]) => lines.filter((line) => line.startsWith('⚠'));
+const shotLines = (lines: string[]) => lines.filter((line) => line.startsWith('screenshot '));
+
 describe('success cases', () => {
-  it('passes a clean fragment with one screenshot line per Option', () => {
+  it('reads the toolbar numbers from the template the page is built from', () => {
     // ARRANGE
-    const expectedLines = ['screenshot 1a /shots/1a.png', 'screenshot 1b /shots/1b.png'];
+    const expected = CONFIG;
     // ACT
-    const report = previewReport(CLEAN, rendering());
+    const config = toolbarConfigOf(TEMPLATE);
+    // ASSERT
+    expect(config).toEqual(expected);
+  });
+
+  it('passes a clean fragment with one screenshot line per Option and preset', () => {
+    // ARRANGE
+    const expectedLines = [
+      'screenshot 1a desktop /shots/1a-desktop.png',
+      'screenshot 1a mobile /shots/1a-mobile.png',
+      'screenshot 1b desktop /shots/1b-desktop.png',
+      'screenshot 1b mobile /shots/1b-mobile.png',
+    ];
+    // ACT
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, PRESETS, rendering()));
     // ASSERT
     expect(report.failed).toBe(false);
     expect(report.lines).toEqual(expectedLines);
   });
+
+  it('reads the render presets and what overflow does at each from the Spec calibration table', () => {
+    // ARRANGE
+    const calibration = `# Spec calibration
+
+## Render presets
+
+| Preset    | Size                   | Overflow  |
+| --------- | ---------------------- | --------- |
+| \`desktop\` | 1920 px wide           | \`fails\`   |
+| \`shorts\`  | 1080 × 1920 (vertical) | \`reports\` |
+
+## Template and slots
+`;
+    const expected = [DESKTOP, SHORTS];
+    // ACT
+    const presets = readPresets(calibration);
+    // ASSERT
+    expect(presets).toEqual(expected);
+  });
+
+  it('lists every Option at every preset, Option by Option', () => {
+    // ARRANGE
+    const expected = ['1a-desktop', '1a-mobile', '1b-desktop', '1b-mobile'];
+    // ACT
+    const names = shotsOf(CLEAN, PRESETS).map(shotName);
+    // ASSERT
+    expect(names).toEqual(expected);
+  });
+
+  it('renders a preset narrower than a laptop in a laptop-wide window, and a fixed-size one in a laptop-tall window', () => {
+    // ARRANGE
+    const expected = [
+      { width: 1920, height: 800 },
+      { width: 1440, height: 800 },
+      { width: 1440, height: 900 },
+    ];
+    // ACT
+    const viewports = [DESKTOP, MOBILE, SHORTS].map(viewportOf);
+    // ASSERT
+    expect(viewports).toEqual(expected);
+  });
+
+  describe('the preview page', () => {
+    it('sets the preset on the page as the toolbar does: data-preset and --preview-width, nav open from the toolbar width', () => {
+      // ARRANGE
+      const expected = { 'data-preset': 'shorts', 'data-nav': 'closed' };
+      const wide = { 'data-preset': 'wide', 'data-nav': 'open' };
+      const narrow = { 'data-preset': 'mobile', 'data-nav': 'closed' };
+      // ACT
+      const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
+      const opened = load(previewPage(TEMPLATE, CLEAN, WIDE))('html').attr();
+      const mobile = load(previewPage(TEMPLATE, CLEAN, MOBILE))('html').attr();
+      // ASSERT
+      expect(shorts).toMatchObject(expected);
+      expect(opened).toMatchObject(wide);
+      expect(mobile).toMatchObject(narrow);
+    });
+
+    it('scales a preset with a fixed design size to the room below the toolbar, from the template toolbar numbers', () => {
+      // ARRANGE: a laptop window 900 px tall, less the 50 px toolbar and a 10 px margin above and below
+      const expected = {
+        'data-preset': 'shorts',
+        'data-preview-fixed': '',
+        style: '--toolbar-h: 50px; --preview-width: 1080px; --preview-height: 1920px; --preview-scale: 0.4323',
+      };
+      // ACT
+      const shorts = load(previewPage(TEMPLATE, CLEAN, SHORTS))('html').attr();
+      const desktop = load(previewPage(TEMPLATE, CLEAN, DESKTOP))('html').attr();
+      // ASSERT
+      expect(shorts).toMatchObject(expected);
+      expect(desktop).not.toHaveProperty('data-preview-fixed');
+      expect(desktop?.style).not.toContain('--preview-scale');
+    });
+
+    it('scales into the least room the toolbar numbers name when the window leaves less', () => {
+      // ARRANGE: 900 px less the bar and margins is 830 px, below a room minimum of 900 px
+      const template = TEMPLATE.replace('"fitRoomMin":300', '"fitRoomMin":900');
+      const expectedScale = '--preview-scale: 0.4688';
+      // ACT
+      const shorts = load(previewPage(template, CLEAN, SHORTS))('html').attr();
+      // ASSERT
+      expect(shorts?.style).toContain(expectedScale);
+    });
+
+    it('clones each Slide from the template item and each Option from the template Option, the assembler way', () => {
+      // ARRANGE
+      const expectedOptions = [
+        ['1a', 'true'],
+        ['1b', 'false'],
+      ];
+      // ACT
+      const $ = load(previewPage(TEMPLATE, CLEAN, DESKTOP));
+      const options = $('.spec-options > figure[data-spec="option"]');
+      // ASSERT
+      expect($('article#spent').attr('data-item')).toBe('spent');
+      expect(
+        options.map((_, figure) => [[$(figure).attr('data-option'), $(figure).attr('data-recommended')]]).get(),
+      ).toEqual(expectedOptions);
+      expect($('input[name="pick:spent"]').length).toBe(options.length);
+    });
+
+    it('moves every Option mock into the visual column, tagged with its Option, and splits the layout', () => {
+      // ARRANGE
+      const expected = ['1a', '1b'];
+      // ACT
+      const $ = load(previewPage(TEMPLATE, CLEAN, DESKTOP));
+      const staged = $(`.spec-stages > ${STAGE}`).map((_, stage) => $(stage).attr('data-option'));
+      // ASSERT
+      expect(staged.get()).toEqual(expected);
+      expect($('.spec-layout').hasClass('is-split')).toBe(true);
+      expect($('.spec-options [data-spec="mock"]')).toHaveLength(0);
+    });
+
+    it('leaves out the toolbar, the review form, the scroll buttons, the templates and every bare script of the template', () => {
+      // ARRANGE
+      const left = ['[data-toolbar]', '.spec-scroll', '#spec-review', 'template', '#spec-meta'];
+      // ACT
+      const $ = load(previewPage(TEMPLATE, CLEAN, DESKTOP));
+      const found = left.filter((selector) => $(selector).length > 0);
+      const scripts = $('script')
+        .map((_, script) => $(script).html() ?? '')
+        .get();
+      // ASSERT
+      expect(found).toEqual([]);
+      expect(scripts).toHaveLength(1);
+      expect(scripts[0]).toContain('data-overflow');
+    });
+
+    it('gives the Title slide a title-slide item with no number, and keeps the nav column of the shell', () => {
+      // ARRANGE
+      const role = 'title-slide';
+      // ACT
+      const $ = load(previewPage(TEMPLATE, TITLE, DESKTOP));
+      // ASSERT
+      expect($('article#top').attr('data-spec')).toBe(role);
+      expect($('article#top').attr('data-number')).toBeUndefined();
+      expect($('nav.spec-outline')).toHaveLength(1);
+    });
+  });
 });
 
 describe('failure cases', () => {
+  it.each([
+    [
+      'carries no toolbar numbers',
+      TEMPLATE.replace(/<script type="application\/json" data-toolbar-config>.*?<\/script>/, ''),
+    ],
+    ['carries a toolbar number that is not a positive number', TEMPLATE.replace('"fitMargin":10', '"fitMargin":"ten"')],
+  ])('throws, naming the numbers, when the template %s', (_name, template) => {
+    // ARRANGE
+    const message = /data-toolbar-config/;
+    // ACT
+    const read = () => toolbarConfigOf(template);
+    // ASSERT
+    expect(read).toThrow(message);
+  });
+
   it('fails with one line per contract violation and still renders every Option', () => {
     // ARRANGE
     const html = `<!-- slide: spent -->${option('1a', '<p class="w-[16%]">Narrow.</p>')}${option('1b').replace('<div data-spec="build-notes">Parts, tokens, props, i18n keys.</div>', '')}`;
     const arbitrary = 'arbitrary Tailwind value "w-[16%]"';
     const noNotes = 'Option 1b of {#spent} has no build notes';
     const expectedViolations = 2;
-    const expectedShots = 2;
+    const expectedShots = 4;
     // ACT
-    const report = previewReport(html, rendering());
-    const shots = report.lines.filter((line) => line.startsWith('screenshot '));
+    const report = previewReport(html, outcomesOf(html, PRESETS, rendering()));
     // ASSERT
     expect(report.failed).toBe(true);
     expect(violations(report.lines)).toHaveLength(expectedViolations);
     expect(violations(report.lines)[0]).toContain(arbitrary);
     expect(violations(report.lines)[1]).toContain(noNotes);
-    expect(shots).toHaveLength(expectedShots);
+    expect(shotLines(report.lines)).toHaveLength(expectedShots);
   });
 
-  it('names the Option and its Slide whose text runs past its box at 1440px', () => {
+  it('names the Option, its Slide and the preset whose text runs past its box, and fails at a blocking preset', () => {
     // ARRANGE
     const expected = [
-      '✖ Option 1a of {#spent} has text running past its box at 1440px (2 elements): shorten it or let it wrap.',
+      '✖ Option 1a of {#spent} has text running past its box at desktop 1920px (2 elements): shorten it or let it wrap.',
     ];
     // ACT
-    const report = previewReport(CLEAN, rendering({ '1a': 2 }));
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, PRESETS, rendering({ '1a@desktop': 2 })));
     // ASSERT
     expect(report.failed).toBe(true);
+    expect(violations(report.lines)).toEqual(expected);
+  });
+
+  it('reports one line per overflowing blocking preset of the same Option', () => {
+    // ARRANGE
+    const laptop: Preset = { name: 'laptop', width: 1440, height: 800, blocking: true };
+    const overflow = { '1b@desktop': 1, '1b@laptop': 3 };
+    const expected = [
+      '✖ Option 1b of {#spent} has text running past its box at desktop 1920px (1 element): shorten it or let it wrap.',
+      '✖ Option 1b of {#spent} has text running past its box at laptop 1440px (3 elements): shorten it or let it wrap.',
+    ];
+    // ACT
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, [DESKTOP, laptop], rendering(overflow)));
+    // ASSERT
     expect(violations(report.lines)).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('fails naming an Option the renderer could not render, and keeps the others', () => {
+  it('only reports, and does not fail, text running past its box at a preset the calibration marks reports', () => {
     // ARRANGE
-    const render: Render = (id) => {
-      if (id === '1b') throw new Error('Browser did not start');
-      return { path: `/shots/${id}.png`, overflow: 0 };
-    };
-    const expected = ['✖ Option 1b could not be rendered: Browser did not start', 'screenshot 1a /shots/1a.png'];
+    const expected = [
+      '⚠ Option 1a of {#spent} has text running past its box at mobile 390px (2 elements): shorten it or let it wrap.',
+    ];
     // ACT
-    const report = previewReport(CLEAN, render);
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, PRESETS, rendering({ '1a@mobile': 2 })));
+    // ASSERT
+    expect(report.failed).toBe(false);
+    expect(notes(report.lines)).toEqual(expected);
+    expect(violations(report.lines)).toEqual([]);
+  });
+
+  it('names a vertical preset by its width and height', () => {
+    // ARRANGE
+    const expected = [
+      '⚠ Option 1a of {#spent} has text running past its box at shorts 1080×1920 (1 element): shorten it or let it wrap.',
+    ];
+    // ACT
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, [SHORTS], rendering({ '1a@shorts': 1 })));
+    // ASSERT
+    expect(notes(report.lines)).toEqual(expected);
+  });
+
+  it('fails naming an Option and preset the renderer could not render, and keeps the others', () => {
+    // ARRANGE
+    const render = (shot: Shot): Rendered => {
+      if (shot.id === '1b' && shot.preset.name === 'mobile') throw new Error('Browser did not start');
+      return { path: `/shots/${shotName(shot)}.png`, overflow: 0 };
+    };
+    const expectedShots = 3;
+    const expected = ['✖ Option 1b could not be rendered at mobile: Browser did not start'];
+    // ACT
+    const report = previewReport(CLEAN, outcomesOf(CLEAN, PRESETS, render));
     // ASSERT
     expect(report.failed).toBe(true);
-    expect(report.lines).toEqual(expected);
+    expect(violations(report.lines)).toEqual(expected);
+    expect(shotLines(report.lines)).toHaveLength(expectedShots);
+  });
+
+  it('refuses a calibration with no presets table instead of rendering nothing', () => {
+    // ARRANGE
+    const calibration = '# Spec calibration\n\n## Page\n';
+    // ACT
+    const read = () => readPresets(calibration);
+    // ASSERT
+    expect(read).toThrow(/Render presets/);
+  });
+
+  it('throws on a template slot the preview does not fill', () => {
+    // ARRANGE
+    const template = TEMPLATE.replace('data-slot="lede"', 'data-slot="sidebar"');
+    // ACT
+    const render = () => previewPage(template, CLEAN, DESKTOP);
+    // ASSERT
+    expect(render).toThrow(/"sidebar"/);
   });
 });

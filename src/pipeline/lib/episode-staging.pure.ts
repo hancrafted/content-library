@@ -145,20 +145,15 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
 
 /**
  * Checks one staging folder's files against each other. `files` maps a path
- * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text;
- * `reviewAsset` is the shared review asset a Spec page must inline.
+ * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
-export function checkStagingFolder(
-  files: Readonly<Record<string, string>>,
-  known: KnownVisuals,
-  reviewAsset: string,
-): Finding[] {
+export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   return [
     ...checkStagingOrder(files),
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...checkSpec(files, reviewAsset, specStage(files[SPEC_FILE] ?? '')),
+    ...checkSpec(files, specStage(files[SPEC_FILE] ?? '')),
     ...checkFeedbackRounds(files),
   ];
 }

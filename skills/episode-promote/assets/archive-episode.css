@@ -2,8 +2,13 @@
 .spec-kicker a {
   color: inherit;
 }
-.spec-words > [data-panel='visual-idea'] {
-  display: block;
+/* The Visual idea leads each Slide, ahead of its Options, in the rail the Spec lays out. */
+.spec-rail {
+  display: flex;
+  flex-direction: column;
+}
+.spec-words {
+  order: -1;
 }
 [data-archive-slide] {
   margin-bottom: 4rem;
@@ -22,4 +27,65 @@
   margin: 4rem 0 2rem;
   font-size: 1.75rem;
   font-weight: 600;
+}
+
+/* The Options of a Slide as tabs, with no script: a radio and label per Option, one figure shown by :checked. */
+.spec-options.is-tabbed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.spec-options.is-tabbed > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.spec-options.is-tabbed > label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  box-sizing: border-box;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 999px;
+  background: var(--card, #fff);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.spec-options.is-tabbed > input:checked + label {
+  border-color: transparent;
+  background: var(--foreground, #111);
+  color: var(--background, #fff);
+}
+.spec-options.is-tabbed > input:focus-visible + label {
+  outline: 2px solid var(--ring, Highlight);
+  outline-offset: 2px;
+}
+.spec-options.is-tabbed .spec-badge {
+  display: inline-block;
+}
+.spec-options.is-tabbed > [data-spec='option'] {
+  display: none;
+  flex-basis: 100%;
+  margin: 0;
+}
+.spec-options.is-tabbed > input:nth-of-type(1):checked ~ [data-spec='option']:nth-of-type(1) {
+  display: block;
+}
+.spec-options.is-tabbed > input:nth-of-type(2):checked ~ [data-spec='option']:nth-of-type(2) {
+  display: block;
+}
+.spec-options.is-tabbed > input:nth-of-type(3):checked ~ [data-spec='option']:nth-of-type(3) {
+  display: block;
+}
+.spec-options.is-tabbed > input:nth-of-type(4):checked ~ [data-spec='option']:nth-of-type(4) {
+  display: block;
+}
+.spec-options.is-tabbed > input:nth-of-type(5):checked ~ [data-spec='option']:nth-of-type(5) {
+  display: block;
+}
+.spec-options.is-tabbed > input:nth-of-type(6):checked ~ [data-spec='option']:nth-of-type(6) {
+  display: block;
 }

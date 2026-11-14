@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
+import { feedbackItems } from './archive-staging.pure.ts';
 import { EVENTS, FEEDBACK, SPEC } from './archive.fixture.ts';
 import { designArchive } from './archive.pure.ts';
 
@@ -112,7 +113,7 @@ describe('success cases', () => {
       expect(prompts('top')).toEqual([title]);
     });
 
-    it('shows the Visual idea untabbed and lists the design references the Slide cites, archive-relative', () => {
+    it('shows the Visual idea in its collapsible, open, and lists the design references the Slide cites, archive-relative', () => {
       // ARRANGE
       const visualIdea = 'A board of month columns.';
       const images = ['reference/deck/pages/page-03.jpg', 'reference/deck/pages/page-08.jpg'];
@@ -124,6 +125,7 @@ describe('success cases', () => {
 
       // ASSERT
       expect(slide.find('.spec-words > [data-panel="visual-idea"] [data-spec="visual-idea"]').text()).toBe(visualIdea);
+      expect(slide.find('.spec-words > details[data-panel="visual-idea"]').is('[open]')).toBe(true);
       expect(
         slide
           .find('[data-archive="references"] img')
@@ -179,32 +181,137 @@ describe('success cases', () => {
       ).toEqual(section.slides);
     });
 
-    it('drops the review form, the picks, the notes and the words, and tabs the Options with one script of its own', () => {
+    it('drops the review form, the picks, the notes, the words and the Option card heads, and carries no script', () => {
       // ARRANGE
       const dropped = [
         'form',
         '.spec-pick',
         '.spec-note',
+        '.spec-card-head',
+        '.spec-bar',
+        '.spec-showing',
         '[data-panel="voice-script"]',
         '[data-panel="speaker-notes"]',
-        '.spec-words > input',
-        '.spec-words > label',
         '#spec-meta',
       ];
-      const specScripts = ['/* option tabs */', '/* review form */'];
 
       // ACT
       const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
       const found = dropped.filter((selector) => $(selector).length > 0);
-      const scripts = $('script')
-        .map((_, script) => $(script).html() ?? '')
-        .get();
-      const carried = specScripts.filter((text) => scripts.some((script) => script.includes(text)));
 
       // ASSERT
       expect(found).toEqual([]);
-      expect(scripts).toHaveLength(1);
-      expect(carried).toEqual([]);
+      expect($('script')).toHaveLength(0);
+    });
+
+    it('tabs the Options of a Slide with a radio and a label each, open on the picked Option, with no script', () => {
+      // ARRANGE
+      const labels = ['Option 1a', 'Option 1b'];
+      const [opening, ids] = ['1b', ['1a', '1b']];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const tabs = $('[data-archive-slide="watch-cash"] .spec-options.is-tabbed');
+
+      // ASSERT
+      expect(
+        tabs
+          .children('label')
+          .map((_, label) =>
+            $(label)
+              .text()
+              .replace(/[✓]|Recommended/g, ''),
+          )
+          .get(),
+      ).toEqual(labels);
+      expect(
+        tabs
+          .children('input[type="radio"]')
+          .map((_, input) => $(input).attr('value'))
+          .get(),
+      ).toEqual(ids);
+      expect(tabs.children('input[checked]').attr('value')).toBe(opening);
+    });
+
+    it('opens a Slide on its recommended Option when the Spec marks none picked', () => {
+      // ARRANGE
+      const spec = INPUT.spec.replace(/ data-picked/g, '');
+      const recommended = '1a';
+
+      // ACT
+      const $ = page(designArchive({ ...INPUT, spec }).pages, 'cash-first/index.html');
+      const tabs = $('[data-archive-slide="watch-cash"] .spec-options');
+
+      // ASSERT
+      expect(tabs.children('input[checked]').attr('value')).toBe(recommended);
+    });
+
+    it('shows Recommended once per Option: on its tab, never again on the Option beneath it', () => {
+      // ARRANGE
+      const badgesPerTab = [1, 0];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const options = $('[data-archive-slide="watch-cash"] .spec-options');
+      const counts = options.children('label').map((_, label) => $(label).find('.spec-badge').length);
+
+      // ASSERT
+      expect(counts.get()).toEqual(badgesPerTab);
+      expect(options.find('figure .spec-badge')).toHaveLength(0);
+    });
+
+    it('treats data-recommended="false" of the generated template as not recommended', () => {
+      // ARRANGE
+      const spec = INPUT.spec.replace(
+        'data-option="1a" data-recommended>',
+        'data-option="1a" data-recommended="false">',
+      );
+
+      // ACT
+      const $ = page(designArchive({ ...INPUT, spec }).pages, 'cash-first/index.html');
+      const badges = $('[data-archive-slide="watch-cash"] .spec-options > label .spec-badge');
+
+      // ASSERT
+      expect(badges).toHaveLength(0);
+    });
+  });
+
+  describe('Spec feedback with the page and next lines', () => {
+    it('reads the page and next items of a round beside its Slide items, each labelled with its round', () => {
+      // ARRANGE
+      const files = {
+        'feedback/02/feedback.md': [
+          '# Feedback round 2',
+          '',
+          '- `why-cash--watch-cash` · design — picked: 1b',
+          '- `page` · design — Calmer overall.',
+          '- `next` · gate — redesign',
+        ].join('\n'),
+      };
+      const expected = [
+        { anchor: 'why-cash--watch-cash', round: 2, text: 'design — picked: 1b' },
+        { anchor: 'page', round: 2, text: 'design — Calmer overall.' },
+        { anchor: 'next', round: 2, text: 'gate — redesign' },
+      ];
+      // ACT
+      const items = feedbackItems(files);
+      // ASSERT
+      expect(items).toEqual(expected);
+    });
+
+    it('files the page and next items under no Slide of the archive page', () => {
+      // ARRANGE
+      const feedback = {
+        ...FEEDBACK,
+        'feedback/03/feedback.md':
+          '# Feedback round 3\n\n- `page` · design — Calmer overall.\n- `next` · gate — approve\n',
+      };
+      const pageNote = 'Calmer overall.';
+      // ACT
+      const $ = page(designArchive({ ...INPUT, feedback }).pages, 'cash-first/index.html');
+      const text = $('[data-archive="feedback"]').text();
+      // ASSERT
+      expect(text).not.toContain(pageNote);
     });
   });
 });

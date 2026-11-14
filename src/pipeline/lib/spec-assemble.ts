@@ -87,11 +87,10 @@ function forbiddenHits(folder: string, forbid: readonly string[] | undefined): s
   );
 }
 
-function assembled(sources: Sources, reviewAsset: string, now: Date): string {
+function assembled(sources: Sources, now: Date): string {
   const { folder, brief, dossier, scratch, fragments } = sources;
   return assembleSpec({
-    frame: readFileSync(path.join(ASSETS, 'spec-frame.html'), 'utf8'),
-    reviewAsset,
+    template: readFileSync(path.join(ASSETS, 'spec-template.html'), 'utf8'),
     generated: { by: 'process:spec-assemble', at: utcSeconds(now) },
     brief,
     dossier,
@@ -104,7 +103,7 @@ function assembled(sources: Sources, reviewAsset: string, now: Date): string {
 }
 
 /** Writes the self-contained page, then checks the Spec contract that applies to the stage reached. */
-async function written(sources: Sources, reviewAsset: string, html: string): Promise<SpecAssembleReport> {
+async function written(sources: Sources, html: string): Promise<SpecAssembleReport> {
   const { folder, dossier, fragments } = sources;
   const specPath = path.join(folder, SPEC_FILE);
   mkdirSync(path.dirname(specPath), { recursive: true });
@@ -115,7 +114,6 @@ async function written(sources: Sources, reviewAsset: string, html: string): Pro
   const stage = options ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
   const findings = checkSpec(
     { [SPEC_FILE]: html, ...(dossier === undefined ? {} : { 'dossier.md': dossier }) },
-    reviewAsset,
     options ? 'options' : 'early',
   );
   const done = `✔ ${path.relative(ROOT, specPath)} assembled to the ${stage} stage`;
@@ -132,12 +130,11 @@ export async function assembleSpecFolder(request: {
   if ('failed' in sources) return sources;
   const hits = forbiddenHits(sources.folder, request.forbid);
   if (hits.length > 0) return refused(hits);
-  const reviewAsset = readFileSync(path.join(ASSETS, 'spec-review.html'), 'utf8');
   let html: string;
   try {
-    html = assembled(sources, reviewAsset, request.now);
+    html = assembled(sources, request.now);
   } catch (error) {
     return refused([`✖ ${error instanceof Error ? error.message : String(error)}`]);
   }
-  return written(sources, reviewAsset, html);
+  return written(sources, html);
 }

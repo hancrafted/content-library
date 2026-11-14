@@ -1,5 +1,5 @@
 // The page grows with the screen. A visual that declares a design size with `data-design-width="<px>"` (a 1920 px
-// Slide) renders, at 2560 × 1440, at least as wide as min(design width, available width), where
+// frame) renders, at 2560 × 1440, at least as wide as min(design width, available width), where
 //   available = screen width − navigation still shown − rail − 3 gutters (48 px: before, between and after).
 // The rail is the widest Option of the visual's item that sits beside the visual, 0 when none does; the navigation
 // is collapsed first by its toggle, as laptop-room does, and counts only while it is still shown beside the content.
