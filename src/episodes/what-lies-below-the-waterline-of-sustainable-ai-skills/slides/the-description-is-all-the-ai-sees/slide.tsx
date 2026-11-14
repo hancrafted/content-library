@@ -48,12 +48,12 @@ export const theDescriptionIsAllTheAiSees = slide({
           zone="sunlit"
           iceberg="none"
           label={t('alt.scene')}
-          className="aspect-[2/1] w-full rounded-2xl shadow-md @5xl:col-start-1 @5xl:row-start-1"
+          className="aspect-[20/9] w-full rounded-2xl shadow-md @5xl:col-start-1 @5xl:row-start-1"
         >
           <ControlRoom says={t('task.text')} />
         </ZoneScene>
         <ManualIndex
-          className="@5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[3%] @5xl:mr-[5%] @5xl:w-[36%] @5xl:self-start @5xl:justify-self-end"
+          className="w-full max-w-md justify-self-center @5xl:col-start-1 @5xl:row-start-1 @5xl:mt-[1%] @5xl:ml-[53.3%] @5xl:w-[25.7%] @5xl:max-w-none @5xl:self-start @5xl:justify-self-start"
           heading={t('index.heading')}
           headingNote={t('index.headingNote')}
           headingCoding={t('index.headingCoding')}

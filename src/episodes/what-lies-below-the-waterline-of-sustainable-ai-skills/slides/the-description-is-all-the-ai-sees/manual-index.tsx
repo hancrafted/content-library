@@ -1,6 +1,7 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
+import { BinderCover, PaperFacets } from './binder-art';
 import styles from './slide.module.css';
 
 export interface IndexEntry {
@@ -62,8 +63,9 @@ function IndexRow({ entry: { slug, name, description, vague, focal } }: { readon
 }
 
 /**
- * The manual's index in close-up, the one page the pilot can read: each skill a name over its one-line description, the
- * clear entry lit as the task arrives. Real text on the card, so it reads at any width; in the Coding agent view each
+ * The manual's index in close-up, the one page the pilot can read, in the Spec's green binder with its rings: each skill
+ * a name over its one-line description, the clear entry lit as the task arrives. Real text on the card, so it reads at
+ * any width; in the Coding agent view each
  * name becomes the `name:` line of its `SKILL.md`.
  */
 export function ManualIndex(props: ManualIndexProps) {
@@ -71,21 +73,25 @@ export function ManualIndex(props: ManualIndexProps) {
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
       <Pill words={loaded} tone="primary" />
-      <ZoneCard className="rounded-xl p-4 shadow-md">
-        <p className="border-b border-border pb-2 text-body font-semibold">
-          <InView view="chat">
-            {heading} <span className="text-caption font-normal text-muted-foreground">· {headingNote}</span>
-          </InView>
-          <InView view="coding" className="font-mono text-caption">
-            {headingCoding}
-          </InView>
-        </p>
-        <ul className="mt-2 flex flex-col gap-1">
-          {entries.map((entry) => (
-            <IndexRow key={entry.slug} entry={entry} />
-          ))}
-        </ul>
-      </ZoneCard>
+      <div data-binder className="relative px-[4%] pt-[8%] pb-[6%]">
+        <BinderCover />
+        <ZoneCard className="relative overflow-hidden p-4">
+          <PaperFacets />
+          <p className="relative border-b border-border pb-2 text-body font-semibold">
+            <InView view="chat">
+              {heading} <span className="text-caption font-normal text-muted-foreground">· {headingNote}</span>
+            </InView>
+            <InView view="coding" className="font-mono text-caption">
+              {headingCoding}
+            </InView>
+          </p>
+          <ul className="relative mt-2 flex flex-col gap-1">
+            {entries.map((entry) => (
+              <IndexRow key={entry.slug} entry={entry} />
+            ))}
+          </ul>
+        </ZoneCard>
+      </div>
       <Pill words={closed} tone="muted" />
     </div>
   );
