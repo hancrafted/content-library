@@ -12,6 +12,8 @@ const CONSOLE_WIDTH = 120;
 /** The console where the Spec stands it, its left edge at 366. */
 const CONSOLE_X = 183;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 
 /**
  * The control room from the pilot's chair (Option 11a): the captain at the left calls out the new site, the pilot sits
@@ -28,7 +30,7 @@ export function ControlRoom({ says }: { readonly says: string }) {
         </g>
         <g transform={`translate(${CONSOLE_X} ${-70})`}>
           <Console width={CONSOLE_WIDTH} mugs={1} />
-          <g transform={`translate(${SEAT.x} ${SEAT.y})`}>
+          <g transform={`translate(${SEAT.x + PILOT_REACH} ${SEAT.y})`}>
             <Character preset={pilot} pose="sit" />
           </g>
         </g>
