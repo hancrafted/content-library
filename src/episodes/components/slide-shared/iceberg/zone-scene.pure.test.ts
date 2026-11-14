@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   depthBands,
-  seaFacets,
+  sectionTitleBottom,
+  sectionTitleLift,
+  SURFACE_WATERLINE,
   TITLE_LIFE_AT,
   TITLE_LOOP_AT,
   visibleSpan,
-  WATER_CELL,
+  wholeWater,
   zoneSceneParts,
 } from './zone-scene.pure';
 
@@ -32,15 +34,6 @@ describe('success cases', () => {
     expect(parts).toEqual(expected);
   });
 
-  it('cuts the water into triangles, each lit towards the upper left or not', () => {
-    // ARRANGE
-    const expected = { count: 4, tones: ['sea', 'sea-lit'] };
-    // ACT
-    const facets = seaFacets({ width: 200, height: 100, cell: 100, seed: 3 });
-    const seen = { count: facets.length, tones: [...new Set(facets.map(({ tone }) => tone))].sort() };
-    // ASSERT
-    expect(seen).toEqual(expected);
-  });
   it('floats the Surface in the sky above the ship, then stacks the four zones from the waterline to the seabed', () => {
     // ARRANGE
     const expected = [
@@ -56,6 +49,21 @@ describe('success cases', () => {
     expect(bands).toEqual(expected);
   });
 
+  it("waves the whole depth's zone boundaries from the same generator, the waterline straight", () => {
+    // ARRANGE
+    const expected = { waterline: 1, wavy: ['twilight', 'midnight', 'abyss'], seams: [true, true, true] };
+    // ACT
+    const bands = wholeWater();
+    const heights = (zone: string) => new Set(bands.find((band) => band.zone === zone)?.top.map(([, y]) => y)).size;
+    const seen = {
+      waterline: heights('sunlit'),
+      wavy: bands.filter(({ zone }) => zone !== 'sunlit' && heights(zone) > 1).map(({ zone }) => zone),
+      seams: bands.slice(1).map(({ top }, index) => top === bands[index]?.bottom),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('adds a lanternfish school and a siphonophore to a Twilight Section title, beside its drifting jellies', () => {
     // ARRANGE
     const expected = { life: 'jellies', titleLife: ['lanternfish', 'siphonophore'] };
@@ -63,15 +71,6 @@ describe('success cases', () => {
     const { life, titleLife } = zoneSceneParts({ zone: 'twilight', sectionTitle: true });
     // ASSERT
     expect({ life, titleLife }).toEqual(expected);
-  });
-
-  it('cuts the deep water into about half the facets it had: 30 triangles over a 1200 by 800 Scene', () => {
-    // ARRANGE
-    const expected = 30;
-    // ACT
-    const facets = seaFacets({ width: 1200, height: 800, cell: WATER_CELL, seed: 23 });
-    // ASSERT
-    expect(facets).toHaveLength(expected);
   });
 
   it('keeps the whole siphonophore in view on a phone, where the Scene shows only its middle (decision 38)', () => {
@@ -116,17 +115,47 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('refuses water cut into cells of no size', () => {
+  it("refuses figures that reach higher above the waterline than the Scene's top", () => {
     // ARRANGE
-    const expected = /positive/;
+    const expected = /reach 450 above the waterline, past the Scene's top at 400/;
     // ACT
-    const cut = () => seaFacets({ width: 200, height: 100, cell: 0, seed: 3 });
+    const lift = () => sectionTitleLift({ width: 1440, height: 786 }, 450);
     // ASSERT
-    expect(cut).toThrow(expected);
+    expect(lift).toThrow(expected);
   });
 });
 
 describe('edge cases', () => {
+  it("lifts a Surface title's drawing just enough that what reaches above the waterline clears the title", () => {
+    // ARRANGE
+    const reach = 150;
+    const boxes = [
+      { width: 1440, height: 786 },
+      { width: 1920, height: 900 },
+      { width: 1280, height: 600 },
+      { width: 1024, height: 700 },
+      { width: 768, height: 640 },
+      { width: 375, height: 760 },
+      { width: 375, height: 600 },
+    ];
+    // ACT
+    const covered = boxes.filter((box) => {
+      const lift = sectionTitleLift(box, reach);
+      const scale = Math.max(box.width / 1200, (box.height - lift) / 800);
+      return lift + (SURFACE_WATERLINE - reach) * scale < sectionTitleBottom(box);
+    });
+    // ASSERT
+    expect(covered).toEqual([]);
+  });
+
+  it("leaves a Surface title's drawing at the top when its box is tall enough for the title above", () => {
+    // ARRANGE
+    const tall = { width: 1440, height: 1200 };
+    // ACT
+    const lift = sectionTitleLift(tall, 150);
+    // ASSERT
+    expect(lift).toBe(0);
+  });
   it('shows the whole Scene across on a box wider than the Scene, and its middle on a narrow one', () => {
     // ARRANGE
     const expected = [
@@ -166,24 +195,5 @@ describe('edge cases', () => {
     const parts = zoneSceneParts({ zone: 'sunlit', iceberg: 'tip' });
     // ASSERT
     expect(parts).toEqual(expected);
-  });
-
-  it('cuts the same water for seed 7 every time: the grid outer corners fixed, its one inner corner nudged', () => {
-    // ARRANGE
-    // Two by two cells of 100: the only inner corner, at (100, 100), moves by seed 7 to (70.7, 73.7).
-    const expected = [
-      { points: '0,0 100,0 0,100', tone: 'sea-lit' },
-      { points: '100,0 70.7,73.7 0,100', tone: 'sea' },
-      { points: '100,0 200,0 70.7,73.7', tone: 'sea-lit' },
-      { points: '200,0 200,100 70.7,73.7', tone: 'sea' },
-      { points: '0,100 70.7,73.7 0,200', tone: 'sea-lit' },
-      { points: '70.7,73.7 100,200 0,200', tone: 'sea' },
-      { points: '70.7,73.7 200,100 100,200', tone: 'sea-lit' },
-      { points: '200,100 200,200 100,200', tone: 'sea' },
-    ];
-    // ACT
-    const facets = seaFacets({ width: 200, height: 200, cell: 100, seed: 7 });
-    // ASSERT
-    expect(facets).toEqual(expected);
   });
 });

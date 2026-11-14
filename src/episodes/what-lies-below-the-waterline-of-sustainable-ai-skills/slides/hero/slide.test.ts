@@ -112,9 +112,23 @@ describe('success cases', () => {
     expect(layers).toEqual(expected);
   });
 
-  it('draws the water under the waterline in 40 triangles, about half the 72 before feedback 2 (decision 8)', () => {
+  it('ends the Abyss on the faceted seabed, across the drawing and mirrored across the bleed each side', () => {
     // ARRANGE
-    const expected = 40;
+    const expected = { seabeds: 3, abyssLast: 'abyss' };
+    // ACT
+    const $ = sceneOf('en');
+    const seen = {
+      seabeds: $('[data-hero-depth] [data-seabed]').length,
+      abyssLast: $('[data-depth-band]').last().attr('data-depth-band'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('draws the water under the waterline at half the facet density before feedback 2, its bleed faceted too', () => {
+    // ARRANGE
+    // 72 across one 1200-wide drawing before (decision 8); now 40 a drawing's width, over the three widths of the bleed.
+    const expected = 120;
     // ACT
     const $ = sceneOf('en');
     const triangles = $('[data-depth-band] [data-band="water"] polygon').length;
@@ -178,6 +192,15 @@ describe('edge cases', () => {
       .map((button) => $(button).text());
     // ASSERT
     expect(options).toEqual(expected);
+  });
+
+  it('sets the view switch a rem below the floating header band, which the hero runs up under (decision 50)', () => {
+    // ARRANGE
+    const expected = 'top-[calc(var(--header-block)+1rem)]';
+    // ACT
+    const classes = sceneOf('en')('[data-view-toggle]').attr('class')?.split(' ');
+    // ASSERT
+    expect(classes).toContain(expected);
   });
 
   it('marks the Surface in German too', () => {

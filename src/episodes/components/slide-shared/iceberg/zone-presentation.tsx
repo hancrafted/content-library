@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { DepthRail } from './depth-rail';
+import { skyTop } from './scenery/sky.pure';
 import { isDarkZone, zoneOf, zoneToken, type Zone } from './zones.pure';
 
 export interface ZonePresentationInput {
@@ -58,7 +59,16 @@ function zoneSurface(zone: Zone, kind: SlideKind): ZoneStyle {
   if (!ZONE_BACKGROUNDS[kind]) return {};
   const landing: ZoneStyle =
     kind === 'section' ? { '--slide-anchor-offset': '0px', '--slide-space-before': 'var(--header-block)' } : {};
-  return { '--slide-surface': zoneToken(zone), ...zoneText(zone), ...landing };
+  return { '--slide-surface': surfaceOf(zone), ...zoneText(zone), ...landing };
+}
+
+/**
+ * The colour a zone-filled Slide takes: its zone's, but the top of the sky in the Surface, whose drawing starts with
+ * its sky at the top edge, so the `bubbles` wave rising into a Surface title, which fills with the incoming surface,
+ * reads as one with the sky above it (feedback 3, decision 48).
+ */
+function surfaceOf(zone: Zone): string {
+  return zone === 'surface' ? skyTop() : zoneToken(zone);
 }
 
 /**

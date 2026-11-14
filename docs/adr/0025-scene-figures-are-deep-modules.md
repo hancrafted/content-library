@@ -20,11 +20,11 @@ Han amended the record in the feedback-2 grill of 2026-11-14, on the Episode's t
 
 Three modules under `src/episodes/components/slide-shared/`, split by what each changes with:
 
-| Module                 | Changes with                     | Owns                                                                                                                                                                                                                                                        |
-| ---------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `iceberg/`             | the Iceberg style (design guide) | zone tokens, the depth gauge (`DepthGauge`), rail (`DepthRail`), zone label, `ZoneScene`, `HeroDepthScene`, `WholeDepthScene`, `Travel`; in `scenery/` the sky (`FlatSky`, `Clouds`, `SunMoon`), sea life, seabed, light rays, `Iceberg` and `placeIceberg` |
-| `character/`           | how people are drawn             | `Character`: body, poses, moods, the emote and `says` bubble at the head; `shared-presets.ts` with `aiAgent`                                                                                                                                                |
-| `deep-sea-expedition/` | this Episode's analogy           | `cast.ts` (captain, pilot presets), `Robot`, `Ship`, `Console`, `ControlRoom`                                                                                                                                                                               |
+| Module                 | Changes with                     | Owns                                                                                                                                                                                                                                                    |
+| ---------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iceberg/`             | the Iceberg style (design guide) | zone tokens, the depth gauge (`DepthGauge`), rail (`DepthRail`), zone label, `ZoneScene`, `HeroDepthScene`, `WholeDepthScene`, `Travel`; in `scenery/` the sky (`Sky`, `Clouds`, `SunMoon`), sea life, seabed, light rays, `Iceberg` and `placeIceberg` |
+| `character/`           | how people are drawn             | `Character`: body, poses, moods, the emote and `says` bubble at the head; `shared-presets.ts` with `aiAgent`                                                                                                                                            |
+| `deep-sea-expedition/` | this Episode's analogy           | `cast.ts` (captain, pilot presets), `Robot`, `Ship`, `Console`, `ControlRoom`                                                                                                                                                                           |
 
 Each Fable element (`Ship` with its pennant, `Iceberg`, `Clouds`, `SunMoon`, `Lanternfish`, `Siphonophore`, `Jellies`, `FishSchool`, `Whale`, and `PolyBubble`) is its own `.tsx` drawing with its own CSS module, behind a frozen interface its tests pin: props, anchor box, `data-*` hooks and tokens. A redraw changes the drawing only. `PolyBubble`, the one faceted bubble the Abyss scenery and the `bubbles` transition both draw, is a primitive several parts share, so it lives in `src/shared/components/core-components/poly-bubble/` (FE-007-module-layering).
 
@@ -86,6 +86,7 @@ Han decided these in the feedback-2 grill of 2026-11-14, on the title Slides, th
 5. **Fable elements behind frozen interfaces:** each element is split into its own file and CSS module, so a Fable redraw touches one drawing at a time and its interface tests stay green (Q15, Q17).
 6. **`PolyBubble` shared:** one faceted bubble for the Abyss scenery and the transition (Q7, Q16), in `src/shared/components/core-components/poly-bubble/`.
 7. **Transition bubbles drawn by the browser:** the `bubbles` transition's forty bubbles are rendered from a seeded field when the edge plays, never in the static HTML (Q28).
+8. **Faceted sky (feedback 3, changes 3):** the sky takes a few large, soft, low-contrast facets as in the Spec's Option 0a; the Surface water stays flat with its lit waterline, and the zones meet on uneven waves from one generator (Q41, Q45).
 
 ## Alternatives and cost
 

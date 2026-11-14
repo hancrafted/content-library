@@ -97,7 +97,7 @@ export const hero = slide({
             <>
               <ViewToggle
                 labels={{ label: t('view.label'), chat: t('view.chat'), coding: t('view.coding') }}
-                className="absolute top-4 right-(--inset-r)"
+                className="absolute top-[calc(var(--header-block)+1rem)] right-(--inset-r)"
               />
               <InView view="coding" as="div" className="absolute right-(--inset-r) bottom-6 w-80 max-sm:w-64">
                 <ZoneCard className="rounded-xl p-4 shadow-md">

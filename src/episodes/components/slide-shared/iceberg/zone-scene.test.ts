@@ -118,13 +118,22 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('draws the Surface sky and water flat, without facets, the waterline lit and stars for the night', () => {
+  it('draws the Surface sky in its four soft tones and the Surface water flat, the waterline lit, stars for the night', () => {
     // ARRANGE
-    const expected = { skyFacets: 0, waterFacets: 0, litWaterline: 1, stars: 1, cloudLayers: ['far', 'mid', 'near'] };
+    const expected = {
+      skyTones: ['sky-1', 'sky-2', 'sky-3', 'sky-4'],
+      waterFacets: 0,
+      litWaterline: 1,
+      stars: 1,
+      cloudLayers: ['far', 'mid', 'near'],
+    };
     // ACT
     const $ = render({ zone: 'surface' });
     const seen = {
-      skyFacets: $('[data-band="sky"] [data-tone]').length,
+      skyTones: $('[data-band="sky"] [data-tone]')
+        .toArray()
+        .map((facets) => $(facets).attr('data-tone'))
+        .sort(),
       waterFacets: $('[data-band="water"] [data-tone]').length,
       litWaterline: $('[data-lit-waterline]').length,
       stars: $('[data-band="sky"] [data-stars]').length,

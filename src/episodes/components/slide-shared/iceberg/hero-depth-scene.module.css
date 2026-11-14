@@ -1,28 +1,60 @@
 /*
- * The Title slide's hero (`HeroDepthScene`): the drawing takes the Slide's full height, centred across, its sky and
- * water bleeding past both sides (`overflow: visible`, clipped by the scene box), so one scale maps it: the box's
- * height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so `cq` units
- * read that box: a point (x, y) of the drawing sits at `50cqw + (x - width / 2) * scale` across and `y * scale` down.
- * The depth gauge sits at the right inset, below the title's lines and clear of the ship in the drawing's middle.
+ * The Title slide's hero (`HeroDepthScene`): the drawing starts `--hero-lift` below the top and takes the rest of the
+ * Slide's height, centred across, its sky and water bleeding past both sides and its sky up above it (`overflow:
+ * visible`, clipped by the scene box), so one scale maps it: the height left over the drawing's. The lift is
+ * `heroLift` in `hero-depth.pure.ts`: zero on a tall window; on a short one, just enough that the title's last line
+ * ends above the ship's masthead, from `heroLiftStyle`'s share and line counts and the type tokens. The frame and the
+ * overlay are size containers covering the same box, so `cq` units read that box: a point (x, y) of the drawing sits
+ * at `50cqw + (x - width / 2) * scale` across and `lift + y * scale` down. The depth gauge sits at the right inset,
+ * below the title's lines and clear of the ship in the drawing's middle.
  */
+
+.frame {
+  container-type: size;
+}
+
+.drawing,
+.overlay {
+  --hero-title-lines: var(--title-lines-wide);
+  --hero-title-top: calc(var(--header-block) + 1rem + 6rem);
+  --hero-title-bottom: calc(var(--hero-title-top) + var(--hero-title-lines) * var(--leading-hero) * var(--size-hero));
+  --hero-lift: max(0px, calc((var(--hero-title-bottom) - var(--hero-keep) * 100cqh) / (1 - var(--hero-keep))));
+}
+
+@media (width < 80rem) {
+  .drawing,
+  .overlay {
+    --hero-title-lines: var(--title-lines-tablet);
+  }
+}
+
+@media (width < 48rem) {
+  .drawing,
+  .overlay {
+    --hero-title-lines: var(--title-lines-phone);
+    --hero-title-top: calc(var(--header-block) + 1rem + 4rem);
+  }
+}
 
 .drawing {
   position: absolute;
-  top: 0;
+  top: var(--hero-lift);
   left: 50%;
-  height: 100%;
+  height: calc(100% - var(--hero-lift));
   width: auto;
   translate: -50% 0;
   overflow: visible;
 }
 
 .overlay {
-  --hero-scale: calc(100cqh / var(--hero-height));
-
   position: absolute;
   inset: 0;
   container-type: size;
   pointer-events: none;
+}
+
+.marker {
+  --hero-scale: calc((100cqh - var(--hero-lift)) / var(--hero-height));
 }
 
 .overlay > * {
@@ -38,7 +70,7 @@
 .marker {
   position: absolute;
   left: calc(50cqw + (var(--at-x) - var(--hero-width) / 2) * var(--hero-scale));
-  top: calc(var(--at-y) * var(--hero-scale));
+  top: calc(var(--hero-lift) + var(--at-y) * var(--hero-scale));
   translate: -50% 0;
   white-space: nowrap;
 }

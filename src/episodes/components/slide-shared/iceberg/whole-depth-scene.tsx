@@ -2,28 +2,18 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Clouds } from './scenery/clouds';
-import { FlatSky, LitWaterline } from './scenery/flat-sky';
 import { Iceberg } from './scenery/iceberg';
 import { placeIcebergInBands } from './scenery/iceberg-placement.pure';
 import { Seabed } from './scenery/seabed';
+import { LitWaterline, Sky } from './scenery/sky';
 import { SunMoon } from './scenery/sun-moon';
 import { Band, type ZoneSceneProps } from './zone-scene';
 import styles from './zone-scene.module.css';
-import { depthBands, seaFacets, WATER_CELL, WHOLE_DEPTH } from './zone-scene.pure';
+import { depthBands, WHOLE_DEPTH, wholeWater } from './zone-scene.pure';
 import { zoneToken } from './zones.pure';
 
-/** The whole depth's water under the waterline: its own facets, four bands deep; the Surface is the sky above. */
-const WHOLE_BANDS = depthBands()
-  .filter(({ zone }) => zone !== 'surface')
-  .map((band, depth) => ({
-    ...band,
-    facets: seaFacets({
-      width: WHOLE_DEPTH.width,
-      height: band.bottom - band.top,
-      cell: WATER_CELL,
-      seed: 5 + depth * 6,
-    }),
-  }));
+/** The whole depth's water under the waterline, four bands between wavy boundaries; the Surface is the sky above. */
+const WHOLE_BANDS = wholeWater();
 /** The clouds in three layers, kept clear of the ship, the berg and the Surface's words floating in the sky. */
 const WHOLE_CLOUDS = [
   { x: 470, y: 95, scale: 0.35, shape: 1 },
@@ -31,7 +21,7 @@ const WHOLE_CLOUDS = [
   { x: 770, y: 430, scale: 0.8, shape: 0 },
 ] as const;
 /** The iceberg pushed to the right edge, so the zones have open water for words; its keel touches the Twilight zone. */
-const WHOLE_BERG = placeIcebergInBands(WHOLE_BANDS, { x: 1165, waterline: WHOLE_DEPTH.waterline, scale: 0.6 });
+const WHOLE_BERG = placeIcebergInBands(depthBands(), { x: 1165, waterline: WHOLE_DEPTH.waterline, scale: 0.6 });
 const WHOLE_SEABED_TOP = 845;
 
 export type WholeDepthSceneProps = Omit<ZoneSceneProps, 'zone' | 'iceberg'>;
@@ -40,16 +30,11 @@ export type WholeDepthSceneProps = Omit<ZoneSceneProps, 'zone' | 'iceberg'>;
 function WholeDepth() {
   return (
     <>
-      <FlatSky width={WHOLE_DEPTH.width} height={WHOLE_DEPTH.waterline} />
+      <Sky width={WHOLE_DEPTH.width} height={WHOLE_DEPTH.waterline} />
       <SunMoon x={1120} y={70} r={28} />
       <Clouds at={WHOLE_CLOUDS} />
-      {WHOLE_BANDS.map(({ zone, top, facets }) => (
-        <g
-          key={zone}
-          data-depth-band={zone}
-          transform={`translate(0 ${top})`}
-          style={{ '--water': zoneToken(zone) } as CSSProperties}
-        >
+      {WHOLE_BANDS.map(({ zone, facets }) => (
+        <g key={zone} data-depth-band={zone} style={{ '--water': zoneToken(zone) } as CSSProperties}>
           <Band facets={facets} />
         </g>
       ))}
