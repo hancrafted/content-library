@@ -6,9 +6,10 @@ import type { Zone } from './ruler.pure';
 import { zonePresentation } from './zone-presentation';
 
 /*
- * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): its zone's surface, light text
- * on the dark zones, the bubbles ink into a section slide, and the slim rail, which a section slide shows on phones
- * only, beside the whole ruler it carries on wider screens.
+ * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): the bubbles into a section
+ * slide and the slim rail, which a section slide shows on phones only, beside the whole ruler it carries on wider
+ * screens. Zone backgrounds are paused (Han, 2026-11-14): every Slide keeps the page's own light or dark background
+ * and text, and the zone colours mark depth only on the ruler, the rail and the scenery.
  */
 
 const SECTIONS: readonly Zone[] = [
@@ -35,10 +36,10 @@ const railOf = (rear: Parameters<typeof renderToStaticMarkup>[0]) => {
 };
 
 describe('success cases', () => {
-  it('gives a page Slide its zone surface and a rail with its Section lit, on phones too, and no bubbles', () => {
+  it('keeps a page Slide on the page background, with a rail with its Section lit, on phones too, and no bubbles', () => {
     // ARRANGE
     const expected = {
-      surface: 'var(--zone-midnight)',
+      surface: undefined,
       enter: undefined,
       mobile: true,
       rail: { rails: 1, phoneOnly: undefined, lit: ['6'] },
@@ -59,7 +60,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       enter: { effect: 'bubbles' },
-      surface: 'var(--zone-sunlit)',
+      surface: undefined,
       rail: { rails: 1, phoneOnly: '', lit: ['2'] },
     };
     // ACT
@@ -86,9 +87,9 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('turns text light on the two dark zones in both themes, and leaves the page text alone above them', () => {
+  it('leaves the page text alone at every depth, the dark zones too, while zone backgrounds are paused', () => {
     // ARRANGE
-    const expected = ['var(--on-brand-accent)', 'var(--on-brand-accent)', undefined, undefined];
+    const expected = [undefined, undefined, undefined, undefined];
     // ACT
     const seen = [6, 7, 4, 0].map(
       (section) => zonePresentation({ sections: SECTIONS, section, kind: 'page' }).style['--foreground'],

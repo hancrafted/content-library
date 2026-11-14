@@ -18,8 +18,9 @@ export const WATERLINE_SECTIONS: readonly Zone[] = [
 ];
 
 /**
- * A Slide's `presentation` at its Section's depth: `presentation: atDepth(4, 'page')`. The zone colours the surface,
- * a section slide descends through bubbles, and a page Slide carries the rail with its Section lit.
+ * A Slide's `presentation` at its Section's depth: `presentation: atDepth(4, 'page')`. A section slide descends
+ * through bubbles, and a page Slide carries the rail with its Section lit; the surface stays the page's own while zone
+ * backgrounds are paused.
  */
 export function atDepth(section: number, kind: 'section' | 'page'): ZonePresentation {
   return zonePresentation({ sections: WATERLINE_SECTIONS, section, kind });
