@@ -94,7 +94,7 @@ describe('success cases', () => {
     const expected = OPENERS.map(() => ({ behind: 1, foreground: 0 }));
     // ACT
     const actual = OPENERS.map((slide) => ({
-      behind: rearOf(slide)('[data-scene] svg').length,
+      behind: rearOf(slide)('[data-scene] > svg').length,
       foreground: sceneOf(slide.slug)('[data-scene]').length,
     }));
     // ASSERT

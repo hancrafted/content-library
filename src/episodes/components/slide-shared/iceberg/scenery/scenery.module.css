@@ -1,6 +1,7 @@
 /*
- * The palette and motion of the scenery that is no Fable element: the seabed, the light rays and the rising bubbles
- * (design-ADR 0025, the design guide's Iceberg style). Each Fable element keeps its own CSS module beside its drawing.
+ * The palette and motion of the scenery that is no Fable element: the seabed, the light rays and the rise of the
+ * Abyss bubbles, whose drawing and colours are `PolyBubble`'s (design-ADR 0025, the design guide's Iceberg style).
+ * Each Fable element keeps its own CSS module beside its drawing.
  *
  * Colours: every `--scenery-*` tone is a mix of theme-stable tokens (`--on-brand-accent` white, `--overlay` black)
  * with a hue from `--info` (blues) or `--bulb` (warm), light here and dark under `.dark`. A facet path names its tone
@@ -22,8 +23,6 @@
     var(--bulb) 28%,
     color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
   );
-  --scenery-bubble: color-mix(in oklab, color-mix(in oklab, var(--info) 27%, var(--on-brand-accent)) 45%, transparent);
-  --scenery-glint: var(--on-brand-accent);
   --scenery-ray: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 18%, transparent);
 }
 
@@ -39,12 +38,6 @@
     var(--bulb) 19%,
     color-mix(in oklab, var(--on-brand-accent) 13%, var(--overlay))
   );
-  --scenery-bubble: color-mix(
-    in oklab,
-    color-mix(in oklab, var(--info) 42%, color-mix(in oklab, var(--on-brand-accent) 81%, var(--overlay))) 35%,
-    transparent
-  );
-  --scenery-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
   --scenery-ray: color-mix(
     in oklab,
     color-mix(in oklab, var(--info) 67%, color-mix(in oklab, var(--on-brand-accent) 84%, var(--overlay))) 12%,
@@ -65,15 +58,6 @@
 .scenery [data-tone='bed-shade'] {
   fill: var(--scenery-bed-shade);
   stroke: var(--scenery-bed-shade);
-}
-
-.scenery [data-tone='bubble'] {
-  fill: var(--scenery-bubble);
-}
-
-.scenery [data-tone='glint'] {
-  fill: var(--scenery-glint);
-  stroke: var(--scenery-glint);
 }
 
 .scenery [data-tone='ray'] {
