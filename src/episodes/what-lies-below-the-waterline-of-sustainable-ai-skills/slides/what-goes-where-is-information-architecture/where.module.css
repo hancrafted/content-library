@@ -1,47 +1,88 @@
 /*
  * Slide token file of "What context goes where" (FE-011 §2): the control room's wall and floor, the papers on it and
- * the note that travels, all mixed from global tokens so they follow light and dark with no raw colour. `primary`
- * marks only the one focal thing, the verdict line (in slide.tsx); no meaning colour on scenery.
+ * the note that travels, in the tones of Spec Option 14a (feedback 3, decision 46), each with its dark value from the
+ * Option. `primary` marks only the one focal thing, the verdict line (in slide.tsx); no meaning colour on scenery.
  */
 
 .room {
-  --room: color-mix(in oklab, var(--muted) 78%, var(--zone-twilight));
-  --room-lit: color-mix(in oklab, var(--room) 70%, var(--card));
-  --room-shade: color-mix(in oklab, var(--room) 86%, var(--foreground));
-  --floor: color-mix(in oklab, var(--muted-foreground) 55%, var(--room));
-  --floor-shade: color-mix(in oklab, var(--floor) 82%, var(--foreground));
-  --paper: var(--card);
-  --paper-lit: color-mix(in oklab, var(--card) 80%, var(--muted));
-  --paper-rule: color-mix(in oklab, var(--muted-foreground) 55%, var(--card));
-  --paper-ink: var(--card-foreground);
-  --paper-soft: color-mix(in oklab, var(--card-foreground) 62%, var(--card));
-  --drop: color-mix(in oklab, var(--overlay) 16%, transparent);
-  --board: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
-  --board-lit: color-mix(in oklab, var(--board) 80%, var(--card));
-  --clip: color-mix(in oklab, var(--foreground) 70%, var(--muted-foreground));
-  --note: color-mix(in oklab, var(--bulb) 70%, var(--card));
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --floor-lit: oklch(0.72 0.025 240);
+  --floor: oklch(0.66 0.028 244);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --paper-rule: oklch(0.78 0.03 240);
+  --paper-ink: oklch(0.22 0.03 255);
+  --paper-soft: color-mix(in oklab, var(--paper-ink) 62%, var(--paper));
+  --drop: oklch(0.3 0.04 255 / 0.18);
+  --pin: oklch(0.6 0.18 28);
+  --glint: oklch(1 0 0);
+  --board-lit: oklch(0.66 0.06 60);
+  --board: oklch(0.56 0.06 58);
+  --board-shade: oklch(0.46 0.05 55);
+  --clip-lit: oklch(0.7 0.02 250);
+  --clip: oklch(0.55 0.02 252);
+  --chip-skill: oklch(0.72 0.1 252);
+  --note: oklch(0.9 0.12 95);
+  --note-shade: oklch(0.82 0.13 88);
   --note-edge: var(--bulb-edge);
-  --note-ink: var(--overlay);
 }
 
-.room [data-tone='room'] {
+:global(.dark) .room {
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --floor-lit: oklch(0.25 0.02 255);
+  --floor: oklch(0.22 0.02 258);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --paper-rule: oklch(0.6 0.03 240);
+  --paper-ink: oklch(0.2 0.03 255);
+  --drop: oklch(0.1 0.02 260 / 0.4);
+  --pin: oklch(0.58 0.16 28);
+  --glint: oklch(0.98 0.01 230);
+  --board-lit: oklch(0.52 0.05 60);
+  --board: oklch(0.44 0.05 58);
+  --board-shade: oklch(0.36 0.04 55);
+  --clip-lit: oklch(0.55 0.02 250);
+  --clip: oklch(0.42 0.02 252);
+  --chip-skill: oklch(0.58 0.1 255);
+  --note: oklch(0.8 0.11 95);
+  --note-shade: oklch(0.7 0.12 88);
+}
+
+/* The wall's and floor's facets: each stroked in its own fill, so no hairline shows between neighbours. */
+.facets [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.facets [data-tone='room'] {
   fill: var(--room);
+  stroke: var(--room);
 }
 
-.room [data-tone='room-lit'] {
+.facets [data-tone='room-lit'] {
   fill: var(--room-lit);
+  stroke: var(--room-lit);
 }
 
-.room [data-tone='room-shade'] {
+.facets [data-tone='room-shade'] {
   fill: var(--room-shade);
+  stroke: var(--room-shade);
 }
 
-.room [data-tone='floor'] {
+.facets [data-tone='floor'] {
   fill: var(--floor);
+  stroke: var(--floor);
 }
 
-.room [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
+.facets [data-tone='floor-lit'] {
+  fill: var(--floor-lit);
+  stroke: var(--floor-lit);
 }
 
 .room [data-tone='paper'] {
@@ -52,12 +93,52 @@
   fill: var(--paper-lit);
 }
 
-.room [data-tone='card-band'] {
-  fill: var(--clip);
+.room [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
 }
 
 .room [data-tone='drop'] {
   fill: var(--drop);
+}
+
+.room [data-tone='pin'] {
+  fill: var(--pin);
+}
+
+.room [data-tone='glint'] {
+  fill: var(--glint);
+}
+
+.room [data-tone='board'] {
+  fill: var(--board);
+}
+
+.room [data-tone='board-lit'] {
+  fill: var(--board-lit);
+}
+
+.room [data-tone='board-shade'] {
+  fill: var(--board-shade);
+}
+
+.room [data-tone='clip'] {
+  fill: var(--clip);
+}
+
+.room [data-tone='clip-lit'] {
+  fill: var(--clip-lit);
+}
+
+.room [data-tone='card-band'] {
+  fill: var(--chip-skill);
+}
+
+.room [data-tone='note'] {
+  fill: var(--note);
+}
+
+.room [data-tone='note-shade'] {
+  fill: var(--note-shade);
 }
 
 .room [data-tone='rule'] {
@@ -70,24 +151,8 @@
   stroke-dasharray: 8 6;
 }
 
-.room [data-tone='pin'] {
-  fill: var(--brand-accent);
-}
-
-.room [data-tone='board'] {
-  fill: var(--board);
-}
-
-.room [data-tone='board-lit'] {
-  fill: var(--board-lit);
-}
-
-.room [data-tone='clip'] {
-  fill: var(--clip);
-}
-
-.room [data-tone='note'] {
-  fill: var(--note);
+.room [data-tone='note-edge'] {
+  fill: none;
   stroke: var(--note-edge);
 }
 
@@ -102,14 +167,12 @@
 
 .room [data-tone='pin-dot'] {
   fill: var(--foreground);
+  stroke: var(--background);
+  stroke-width: 3;
 }
 
 .room [data-ink='ink'] {
   fill: var(--paper-ink);
-}
-
-.room [data-depth-note] {
-  fill: var(--note-ink);
 }
 
 .room [data-ink='soft'] {
