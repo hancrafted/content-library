@@ -4,10 +4,14 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
+import { ScriptArt, TemplateArt } from './card-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './inside.module.css';
-import { CardHead, SkillNote, SkillTree, SlideTrail, StepArrow, StepCell, SupportingFile } from './parts';
+import { CardHead, SkillNote, SkillTree, SlideTrail, StepArrow, StepCell } from './parts';
+import { SupportingFile } from './supporting-file';
+import { WallArt } from './wall-art';
 
 const MOVE_DETAIL = 'move-detail-out-of-skill-md-and-say-when-to-read-it';
 const CONTENTS = 'long-reference-files-start-with-a-contents-list';
@@ -51,21 +55,10 @@ const FOCUS = 4;
 /** An empty cell of the three-column grid, there only to keep each file level with its step on wide screens. */
 const Gap = () => <div aria-hidden className="hidden @4xl:block" />;
 
-/** The control-room wall behind the card, faceted, lit from the upper left. */
-function Wall() {
-  return (
-    <g className={styles.wall}>
-      <rect x={0} y={0} width={1200} height={800} data-tone="room" />
-      <polygon points="0,0 560,0 140,620" data-tone="room-lit" />
-      <polygon points="560,0 820,0 420,460" data-tone="room-lit" />
-      <polygon points="760,800 1200,320 1200,800" data-tone="room-shade" />
-    </g>
-  );
-}
-
 /**
  * "Inside the skill" (Spec Option 16a): keeps `master: three-column` (instructions, supporting files, rules for long
- * files), each file level with the step that uses it, on the control-room wall. Keeps `motion: local`: step 4 fills
+ * files), each file level with the step that uses it, on the control-room wall lifted from the Option (feedback 3,
+ * decision 46). Keeps `motion: local`: step 4 fills
  * `primary`, its arrow turns solid and the species guide slides out of the sleeve, once on entry; at rest it shows slid
  * out. The rows are a grid rather than the build notes' inline SVG, so every word reads at phone width too.
  */
@@ -129,7 +122,7 @@ export const insideTheSkill = slide({
           zone="twilight"
           iceberg="none"
           label={t('alt.scene')}
-          className="rounded-2xl shadow-md"
+          className={cn(styles.scene, 'rounded-2xl shadow-md')}
           overlay={
             <div className="focus-group focus-group--dim-others grid gap-x-4 p-4 @4xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(0,3fr)] @4xl:p-8">
               {/* Row: the column heads, and the key under "Supporting files". */}
@@ -159,7 +152,7 @@ export const insideTheSkill = slide({
               <StepCell n={3} text={t('steps.lower-arm')} pointer={pointer('lower-arm')} />
               <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
                 <StepArrow />
-                <SupportingFile step={3} {...file('arm')} />
+                <SupportingFile step={3} {...file('arm')} art={<ScriptArt />} />
               </div>
               <div className="flex flex-col justify-end gap-3 py-2">
                 <SkillTree
@@ -208,13 +201,13 @@ export const insideTheSkill = slide({
               <StepCell n={6} text={t('steps.label')} pointer={pointer('label')} last />
               <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
                 <StepArrow />
-                <SupportingFile step={6} {...file('label')} />
+                <SupportingFile step={6} {...file('label')} art={<TemplateArt />} />
               </div>
               <Gap />
             </div>
           }
         >
-          <Wall />
+          <WallArt />
         </ZoneScene>
         <div
           data-footer
