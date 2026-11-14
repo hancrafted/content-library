@@ -1,8 +1,8 @@
 {
   "title": "Schiff",
   "caption": "Der Rumpf bestimmt die Ebenen; die Szene liefert die Crew",
-  "intro": "Vergleiche das leere Forschungsschiff, Platzierungsanker, besetzte Brücke und Deck, den gespiegelten Rumpf und das langsame Schaukeln. Punkte markieren Brückensitze, Deckpositionen, Roboterhalterung und A-Rahmenspitze.",
-  "contract": "Importiere Ship und shipAnchors aus slide-shared/deep-sea-expedition/ship und ship.pure. Der Ursprung liegt an der Wasserlinie mittschiffs. Brückenfiguren stehen hinter Fensterrahmen, Deckfiguren hinter der Reling. Spiegle die Anker zusammen mit dem Rumpf; rock gehört nur in eine Oberflächenszene.",
+  "intro": "Vergleiche das leere Forschungsschiff, Platzierungsanker, besetzte Brücke und Deck, den gespiegelten Rumpf, das langsame Schaukeln und den Wimpel am Masttopp. Punkte markieren Brückensitze, Deckpositionen, Roboterhalterung, A-Rahmenspitze und Masttopp.",
+  "contract": "Importiere Ship und shipAnchors aus slide-shared/deep-sea-expedition/ship und ship.pure. Der Ursprung ist die Wasserlinie mittschiffs. Brückenfiguren stehen hinter den Fensterrahmen, Deckfiguren hinter der Reling. Spiegle die Anker, wenn du den Rumpf spiegelst; nutze rock nur in einer Szene an der Oberfläche, dort weht dann auch der Wimpel im Wind.",
   "pause": "Bewegung pausieren",
   "resume": "Bewegung fortsetzen",
   "replay": "Beispiele wiederholen",
@@ -12,6 +12,7 @@
     "anchors": "Anker für Crew und Roboter",
     "crew": "Besetzte Brücke und Deck",
     "flip": "Gespiegeltes Schiff mit Ankern",
-    "rock": "Schaukeln auf den Wellen"
+    "rock": "Schaukeln auf den Wellen",
+    "pennant": "Wimpel, der im Wind flattert"
   }
 }

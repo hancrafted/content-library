@@ -113,13 +113,16 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('rocks the ship, the Surface loop, and nothing else of the cast', () => {
+  it('rocks the ship and flies its pennant, the Surface loop, and nothing else of the cast', () => {
     // ARRANGE
-    const expected = 1;
+    const expected = ['ambient', 'ambient'];
     // ACT
-    const rocking = sceneOf('en')('[data-ship] [data-motion="ambient"]').length;
+    const $ = sceneOf('en');
+    const rocking = $('[data-ship] [data-motion]')
+      .toArray()
+      .map((part) => $(part).attr('data-motion'));
     // ASSERT
-    expect(rocking).toBe(expected);
+    expect(rocking).toEqual(expected);
   });
 });
 

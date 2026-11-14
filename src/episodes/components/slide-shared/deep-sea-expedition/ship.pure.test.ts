@@ -29,11 +29,12 @@ describe('success cases', () => {
       fore: { x: 132, y: expect.closeTo(-36.51, digits) },
       robot: { x: -110, y: expect.closeTo(-29.925, digits) },
       aFrameTip: { x: -165, y: -99 },
+      pennant: { x: 53, y: -179 },
     };
     // ACT
-    const { deck, robot, aFrameTip } = shipAnchors();
+    const { deck, robot, aFrameTip, pennant } = shipAnchors();
     // ASSERT
-    expect({ aft: deck.aft, fore: deck.fore, robot, aFrameTip }).toEqual(expected);
+    expect({ aft: deck.aft, fore: deck.fore, robot, aFrameTip, pennant }).toEqual(expected);
   });
 
   it('draws the hull before the bridge crew and the rail after the deck crew', () => {
