@@ -129,9 +129,9 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws Slide 1 as five panels: the photo, three mornings piling up mugs, and the empty card', () => {
+  it('draws Slide 1 as five panels: the untagged photo, three mornings piling up mugs, and the empty card', () => {
     // ARRANGE
-    const expected = { panels: 5, mornings: [1, 2, 3], greetings: 3, card: 1, aiTag: ['AI model'] };
+    const expected = { panels: 5, mornings: [1, 2, 3], greetings: 3, card: 1, aiTag: [] };
     // ACT
     const $ = sceneOf(FORGETS);
     const actual = {

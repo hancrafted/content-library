@@ -290,12 +290,22 @@
 }
 
 .level {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+  position: relative;
 }
 
-.level[data-level='extras'] {
-  outline-color: var(--primary);
+/* The level's ring: drawn once, shown and hidden by opacity alone (decision 19). */
+.level::after {
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--primary);
+  border-radius: calc(var(--radius-xl) + 4px);
+  opacity: 0;
+  pointer-events: none;
+  content: '';
+}
+
+.level[data-level='extras']::after {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -311,15 +321,15 @@
     animation: lamp-on 600ms ease-out 2600ms both;
   }
 
-  :global([data-zone='active']) .level[data-level='index'] {
+  :global([data-zone='active']) .level[data-level='index']::after {
     animation: ring-pass 1400ms ease-in-out 200ms both;
   }
 
-  :global([data-zone='active']) .level[data-level='card'] {
+  :global([data-zone='active']) .level[data-level='card']::after {
     animation: ring-pass 1400ms ease-in-out 1400ms both;
   }
 
-  :global([data-zone='active']) .level[data-level='extras'] {
+  :global([data-zone='active']) .level[data-level='extras']::after {
     animation: ring-on 600ms ease-out 2600ms both;
   }
 }
@@ -349,21 +359,21 @@
 @keyframes ring-pass {
   0%,
   100% {
-    outline-color: transparent;
+    opacity: 0;
   }
 
   35%,
   65% {
-    outline-color: var(--primary);
+    opacity: 1;
   }
 }
 
 @keyframes ring-on {
   from {
-    outline-color: transparent;
+    opacity: 0;
   }
 
   to {
-    outline-color: var(--primary);
+    opacity: 1;
   }
 }

@@ -9,7 +9,7 @@ import { EmptyProcedureCard } from './empty-procedure-card';
 import styles from './forgets.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { PILOT_HEAD, PhotoOnDeck } from './photo-on-deck';
+import { PhotoOnDeck } from './photo-on-deck';
 import { PICTURE, PaneGlint, PhotoWall } from './room-art';
 
 const MOLLICK = {
@@ -38,7 +38,7 @@ const PERCENT = 100;
 
 /**
  * "An AI model that forgets every morning" (Spec Option 1a): a five-panel comic in the low-poly Iceberg register. The
- * framed photo of you and your pilot of ten years, tagged AI model; three identical mornings in the control room, each a
+ * framed photo of you and your pilot of ten years, untagged (Han's note on 1a); three identical mornings in the control room, each a
  * Surface `ZoneScene` where only the coffee mugs pile up; then "What would you do?" beside an empty procedure card.
  * Keeps `master: grid-bento` and `motion: local`: the panels appear one after another on entry, at rest all show. The
  * Coding agent view turns the mornings into sessions and adds the fresh-context-window line to the footer.
@@ -78,13 +78,6 @@ export const anAiModelThatForgetsEveryMorning = slide({
                   <PhotoOnDeck />
                 </ZoneScene>
                 <PaneGlint />
-                <span
-                  data-ai-tag
-                  style={{ left: `${PILOT_HEAD.left * PERCENT}%`, top: `${PILOT_HEAD.top * PERCENT}%` }}
-                  className="absolute -translate-x-1/2 -translate-y-full rounded-full border-2 border-ai bg-card px-2 text-caption font-semibold whitespace-nowrap text-card-foreground shadow-sm"
-                >
-                  {t('aiTag')}
-                </span>
               </div>
             </div>
             <p className="m-3 mt-0 rounded-md border border-foreground bg-card px-3 py-1 text-caption text-card-foreground">

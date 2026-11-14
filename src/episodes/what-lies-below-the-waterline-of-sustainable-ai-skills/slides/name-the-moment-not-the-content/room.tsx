@@ -9,6 +9,8 @@ import { CAPTAIN_X, CREW_SCALE, FLOOR, REQUEST_BUBBLE } from './speech.pure';
 const CONSOLE_WIDTH = 92;
 const CONSOLE_X = 225;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 
 /** What the captain says in each view: the request in the Chat app, the prompt in the Coding agent. */
 export interface Request {
@@ -37,7 +39,7 @@ export function ControlRoom({ request }: { readonly request: Request }) {
         ))}
         <g transform={`translate(${CONSOLE_X} ${-70})`}>
           <Console width={CONSOLE_WIDTH} mugs={1} />
-          <g transform={`translate(${SEAT.x} ${SEAT.y})`}>
+          <g transform={`translate(${SEAT.x + PILOT_REACH} ${SEAT.y})`}>
             <Character preset={pilot} pose="sit" />
           </g>
         </g>

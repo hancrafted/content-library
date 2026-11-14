@@ -54,6 +54,13 @@
   --art-sun: oklch(0.86 0.15 75);
   --art-card-glow: oklch(0.97 0.1 95 / 0.55);
   --art-cable: oklch(0.3 0.02 260);
+  --art-wood-lit: oklch(0.66 0.07 62);
+  --art-wood: oklch(0.56 0.07 55);
+  --art-wood-shade: oklch(0.45 0.06 50);
+  --art-pencil: oklch(0.82 0.14 85);
+  --art-cover: var(--human);
+  --art-cover-shade: color-mix(in oklab, var(--human) 66%, oklch(0.24 0.07 268));
+  --art-ink: oklch(0.42 0.05 260);
 }
 
 :global(.dark) .art {
@@ -105,6 +112,13 @@
   --art-sun: oklch(0.8 0.14 75);
   --art-card-glow: oklch(0.92 0.1 95 / 0.35);
   --art-cable: oklch(0.18 0.015 260);
+  --art-wood-lit: oklch(0.5 0.06 62);
+  --art-wood: oklch(0.42 0.06 55);
+  --art-wood-shade: oklch(0.34 0.05 50);
+  --art-pencil: oklch(0.74 0.13 85);
+  --art-cover: var(--human);
+  --art-cover-shade: color-mix(in oklab, var(--human) 62%, oklch(0.22 0.07 268));
+  --art-ink: oklch(0.36 0.04 260);
 }
 
 .art [data-tone] {
@@ -345,6 +359,41 @@
 .art [data-tone='pin'] {
   fill: var(--art-pin);
   stroke: var(--art-pin);
+}
+
+.art [data-tone='wood-lit'] {
+  fill: var(--art-wood-lit);
+  stroke: var(--art-wood-lit);
+}
+
+.art [data-tone='wood'] {
+  fill: var(--art-wood);
+  stroke: var(--art-wood);
+}
+
+.art [data-tone='wood-shade'] {
+  fill: var(--art-wood-shade);
+  stroke: var(--art-wood-shade);
+}
+
+.art [data-tone='pencil'] {
+  fill: var(--art-pencil);
+  stroke: var(--art-pencil);
+}
+
+.art [data-tone='cover'] {
+  fill: var(--art-cover);
+  stroke: var(--art-cover);
+}
+
+.art [data-tone='cover-shade'] {
+  fill: var(--art-cover-shade);
+  stroke: var(--art-cover-shade);
+}
+
+/* The pinned pages' dates, in the Spec's paper ink. */
+.ink {
+  color: var(--art-ink);
 }
 
 /* The robot's cable from the surface. */

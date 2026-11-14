@@ -196,9 +196,5 @@
 @keyframes light-up {
   from {
     opacity: 0.35;
-    border-color: var(--border);
-  }
-  to {
-    opacity: 1;
   }
 }
