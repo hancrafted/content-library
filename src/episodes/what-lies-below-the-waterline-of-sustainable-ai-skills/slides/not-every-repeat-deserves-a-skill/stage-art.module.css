@@ -1,0 +1,150 @@
+/*
+ * The control room's own tones, lifted from Spec Option 9a (feedback 3, decision 46): the faceted wall behind the
+ * whole stage, the stuffed binder with its card tabs and red stamps, the index sheet's paper and clip, and the check
+ * card's paper and pin. Raw colours live only here, each with its dark value from the Spec (FE-011); dark mode is tuned
+ * later.
+ */
+
+.art {
+  --art-robot-lit: color-mix(in oklab, var(--machine) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 68%, oklch(0.22 0.06 270));
+  --art-robot-dark: oklch(0.28 0.02 260);
+  --art-room-lit: oklch(0.95 0.012 230);
+  --art-room: oklch(0.905 0.018 234);
+  --art-room-shade: oklch(0.86 0.024 238);
+  --art-glint: oklch(1 0 0);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper: oklch(0.972 0.009 88);
+  --art-paper-shade: oklch(0.935 0.014 84);
+  --art-paper-edge: oklch(0.86 0.02 80);
+  --art-binder-lit: oklch(0.56 0.09 250);
+  --art-binder: oklch(0.47 0.09 255);
+  --art-binder-shade: oklch(0.38 0.08 260);
+  --art-tab-lit: oklch(0.97 0.02 92);
+  --art-tab: oklch(0.9 0.04 88);
+  --art-stamp: color-mix(in oklab, var(--destructive) 82%, oklch(1 0 0));
+  --art-stamp-shade: var(--destructive);
+  --art-pin: color-mix(in oklab, var(--primary) 80%, oklch(1 0 0));
+}
+
+:global(.dark) .art {
+  --art-robot-lit: color-mix(in oklab, var(--machine) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--machine) 62%, oklch(0.2 0.05 270));
+  --art-robot-dark: oklch(0.22 0.02 260);
+  --art-room-lit: oklch(0.36 0.025 250);
+  --art-room: oklch(0.32 0.025 253);
+  --art-room-shade: oklch(0.285 0.025 256);
+  --art-glint: oklch(0.98 0.01 230);
+  --art-paper-lit: oklch(0.43 0.02 250);
+  --art-paper: oklch(0.39 0.02 252);
+  --art-paper-shade: oklch(0.35 0.02 255);
+  --art-paper-edge: oklch(0.29 0.02 258);
+  --art-binder-lit: oklch(0.46 0.08 250);
+  --art-binder: oklch(0.38 0.08 255);
+  --art-binder-shade: oklch(0.3 0.07 260);
+  --art-tab-lit: oklch(0.5 0.02 92);
+  --art-tab: oklch(0.43 0.03 88);
+  --art-stamp: color-mix(in oklab, var(--destructive) 80%, oklch(0.2 0 0));
+  --art-stamp-shade: var(--destructive);
+  --art-pin: color-mix(in oklab, var(--primary) 80%, oklch(0.2 0 0));
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--art-room-shade);
+  stroke: var(--art-room-shade);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--art-room-lit);
+  stroke: var(--art-room-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--art-room);
+  stroke: var(--art-room);
+}
+
+.art [data-tone='tab'] {
+  fill: var(--art-tab);
+  stroke: var(--art-tab);
+}
+
+.art [data-tone='stamp'] {
+  fill: var(--art-stamp);
+  stroke: var(--art-stamp);
+}
+
+.art [data-tone='stamp-shade'] {
+  fill: var(--art-stamp-shade);
+  stroke: var(--art-stamp-shade);
+}
+
+.art [data-tone='tab-lit'] {
+  fill: var(--art-tab-lit);
+  stroke: var(--art-tab-lit);
+}
+
+.art [data-tone='binder-lit'] {
+  fill: var(--art-binder-lit);
+  stroke: var(--art-binder-lit);
+}
+
+.art [data-tone='binder-shade'] {
+  fill: var(--art-binder-shade);
+  stroke: var(--art-binder-shade);
+}
+
+.art [data-tone='binder'] {
+  fill: var(--art-binder);
+  stroke: var(--art-binder);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--art-paper-shade);
+  stroke: var(--art-paper-shade);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--art-paper-edge);
+  stroke: var(--art-paper-edge);
+}
+
+.art [data-tone='robot-shade'] {
+  fill: var(--art-robot-shade);
+  stroke: var(--art-robot-shade);
+}
+
+.art [data-tone='robot-lit'] {
+  fill: var(--art-robot-lit);
+  stroke: var(--art-robot-lit);
+}
+
+.art [data-tone='robot-dark'] {
+  fill: var(--art-robot-dark);
+  stroke: var(--art-robot-dark);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--art-pin);
+  stroke: var(--art-pin);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--art-glint);
+  stroke: var(--art-glint);
+}
