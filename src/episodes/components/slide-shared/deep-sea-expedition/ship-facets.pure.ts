@@ -19,6 +19,8 @@ export const SHIP_TONES = [
   'machine-lit',
   'machine',
   'machine-shade',
+  'pennant-lit',
+  'pennant',
 ] as const;
 export type ShipTone = (typeof SHIP_TONES)[number];
 
@@ -113,6 +115,19 @@ export const SUPERSTRUCTURE_ROWS: readonly FacetRow[] = [
   ['machine', [54, -30, 82, -31, 80, -48, 56, -46]],
   ['machine-lit', [56, -46, 80, -48, 74, -54, 60, -52]],
   ['machine-shade', [74, -31, 82, -31, 80, -48, 74, -47]],
+];
+
+/** The masthead the pennant flies from, above the radar; its staff is drawn with the superstructure. */
+export const MASTHEAD = { x: 193, y: -179 } as const;
+
+/**
+ * The pennant, in its own units about the masthead (`MASTHEAD`), streaming aft in the wind: a long lit upper half and
+ * a shaded lower half, with a notch at the fly. Drawn by `Ship` in its own group, so the wind moves it alone.
+ */
+export const PENNANT_ROWS: readonly FacetRow[] = [
+  ['hull', [-0.6, 0, 0.6, 0, 0.6, 15, -0.6, 15]],
+  ['pennant-lit', [0, 0, -26, 3.4, -21, 4.2, 0, 4.2]],
+  ['pennant', [0, 4.2, -21, 4.2, -26, 5, 0, 8.4]],
 ];
 
 /** Drawn over the deck crew: the rail aft of the funnel and on the foredeck. */

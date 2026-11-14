@@ -8,15 +8,10 @@
  * which the Scene's client leaf reports as `data-document="hidden"` (CSS alone cannot see a background tab).
  */
 
-.sky {
-  --band: var(--zone);
-}
-
 .water {
   --band: var(--water);
 }
 
-.sky [data-tone],
 .water [data-tone] {
   fill: var(--band);
   stroke: var(--band);
@@ -24,7 +19,6 @@
   stroke-linejoin: round;
 }
 
-.sky [data-tone='sea-lit'],
 .water [data-tone='sea-lit'] {
   fill: color-mix(in oklab, var(--band) 92%, var(--on-brand-accent));
   stroke: color-mix(in oklab, var(--band) 92%, var(--on-brand-accent));

@@ -1,10 +1,20 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { FigureGallery, Specimen } from '@/episodes/components/slide-shared/figure-gallery/figure-gallery';
-import { Bubbles, FishSchool, Jellies, Whale } from '@/episodes/components/slide-shared/iceberg/scenery/sea-life';
+import { FishSchool } from '@/episodes/components/slide-shared/iceberg/scenery/fish-school';
+import { Jellies } from '@/episodes/components/slide-shared/iceberg/scenery/jellies';
+import { Lanternfish } from '@/episodes/components/slide-shared/iceberg/scenery/lanternfish';
+import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/sea-life';
 import { LightRays, Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
+import { Siphonophore } from '@/episodes/components/slide-shared/iceberg/scenery/siphonophore';
+import { Whale } from '@/episodes/components/slide-shared/iceberg/scenery/whale';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
+/*
+ * The sea life in the gallery, to judge each creature on its own before it meets a Slide. Pending: the faceted
+ * `PolyBubble` (feedback 2, decision 13) is built by the transition work in `src/shared/components/animations/`; it
+ * joins this Slide as its own specimen once it lands, and the Abyss bubbles below then draw with it.
+ */
 export const seaLife = slide({
   slug: 'sea-life',
   messages: { en, de },
@@ -44,6 +54,26 @@ export const seaLife = slide({
         viewBox="-100 -90 270 210"
       >
         <Jellies x={0} y={0} />
+      </Specimen>
+      <Specimen
+        variant="lanternfish"
+        label={t('variants.lanternfish')}
+        usage={t('usage')}
+        zone="twilight"
+        code="<Lanternfish x={0} y={0} count={9} seed={3} />"
+        viewBox="-180 -110 360 220"
+      >
+        <Lanternfish x={0} y={0} />
+      </Specimen>
+      <Specimen
+        variant="siphonophore"
+        label={t('variants.siphonophore')}
+        usage={t('usage')}
+        zone="twilight"
+        code="<Siphonophore x={0} y={-110} segments={9} />"
+        viewBox="-120 -125 240 250"
+      >
+        <Siphonophore x={0} y={-110} />
       </Specimen>
       <Specimen
         variant="whale"

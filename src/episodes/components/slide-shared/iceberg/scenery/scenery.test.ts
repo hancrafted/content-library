@@ -2,16 +2,20 @@ import { load } from 'cheerio';
 import { createElement, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { Clouds } from './clouds';
+import { FishSchool } from './fish-school';
 import { Iceberg } from './iceberg';
-import { Bubbles, FishSchool, Jellies, Whale } from './sea-life';
+import { Jellies } from './jellies';
+import { Bubbles } from './sea-life';
 import { LightRays } from './seabed';
-import { Clouds, SunMoon } from './sky';
+import { SunMoon } from './sun-moon';
+import { Whale } from './whale';
 
 /*
  * The scenery parts `ZoneScene` draws: the iceberg by part, the sea life with its one ambient loop each, the sky's
  * clouds and its sun and moon, the seabed and the light rays. Rendered to static markup, as a Scene's server render
  * does, and read by their `data-*` hooks. That every tone they paint has a colour is checked against the CSS on disk,
- * in scenery.slow.test.ts.
+ * in scenery.slow.test.ts and fable-elements.slow.test.ts.
  */
 
 const render = (element: ReactElement) => load(renderToStaticMarkup(createElement('svg', null, element)));
@@ -40,7 +44,7 @@ describe('success cases', () => {
 
   it('marks each creature loop as ambient, so a check finds every moving part', () => {
     // ARRANGE
-    const expected = { school: 1, jellies: 2, whale: 1, bubbles: 7, clouds: 3 };
+    const expected = { school: 1, jellies: 2, whale: 1, bubbles: 7, clouds: 6 };
     // ACT
     const count = (element: ReactElement) => render(element)(AMBIENT).length;
     const seen = {

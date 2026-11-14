@@ -1,0 +1,51 @@
+/* The lanternfish drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in lanternfish.tsx. */
+
+.lanternfish {
+  --lantern-lit: color-mix(in oklab, var(--info) 45%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
+  --lantern: color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
+  --lantern-glow: color-mix(in oklab, var(--info) 35%, var(--on-brand-accent));
+  --lantern-glint: var(--on-brand-accent);
+}
+
+:global(.dark) .lanternfish {
+  --lantern-lit: color-mix(in oklab, var(--info) 55%, color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay)));
+  --lantern: color-mix(in oklab, var(--info) 45%, color-mix(in oklab, var(--on-brand-accent) 12%, var(--overlay)));
+  --lantern-glow: color-mix(in oklab, var(--info) 30%, var(--on-brand-accent));
+  --lantern-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
+}
+
+.lanternfish [data-tone='lantern-lit'] {
+  fill: var(--lantern-lit);
+  stroke: var(--lantern-lit);
+}
+
+.lanternfish [data-tone='lantern'] {
+  fill: var(--lantern);
+  stroke: var(--lantern);
+}
+
+.lanternfish [data-tone='lantern-glow'] {
+  fill: var(--lantern-glow);
+}
+
+.lanternfish [data-tone='glint'] {
+  fill: var(--lantern-glint);
+}
+
+.lanternfish [data-tone] {
+  stroke-width: 0.4;
+  stroke-linejoin: round;
+}
+
+/* Each fish darts forward and drifts back on its own beat, only on the active Slide. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .dart {
+    animation: lanternfish-dart 5s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes lanternfish-dart {
+  to {
+    transform: translate(7px, -2px);
+  }
+}

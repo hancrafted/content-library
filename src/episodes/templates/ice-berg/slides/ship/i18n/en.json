@@ -1,8 +1,8 @@
 {
   "title": "Ship",
   "caption": "The hull owns its layers; the Scene supplies the crew",
-  "intro": "Compare the empty research ship, placement anchors, populated bridge and deck, mirrored hull and slow rock. Dots mark bridge seats, deck positions, the robot cradle and A-frame tip.",
-  "contract": "Import Ship and shipAnchors from slide-shared/deep-sea-expedition/ship and ship.pure. The origin is the waterline amidships. Bridge figures sit behind window frames; deck figures sit behind the rail. Mirror the anchors when you flip the hull; use rock only on a Surface Scene.",
+  "intro": "Compare the empty research ship, placement anchors, populated bridge and deck, mirrored hull, slow rock and the pennant at the masthead. Dots mark bridge seats, deck positions, the robot cradle, the A-frame tip and the masthead.",
+  "contract": "Import Ship and shipAnchors from slide-shared/deep-sea-expedition/ship and ship.pure. The origin is the waterline amidships. Bridge figures sit behind window frames; deck figures sit behind the rail. Mirror the anchors when you flip the hull; use rock only on a Surface Scene, where it also flies the pennant in the wind.",
   "pause": "Pause motion",
   "resume": "Resume motion",
   "replay": "Replay specimens",
@@ -12,6 +12,7 @@
     "anchors": "Crew and robot anchors",
     "crew": "Bridge and deck slots filled",
     "flip": "Mirrored ship and anchors",
-    "rock": "Rock on the swell"
+    "rock": "Rock on the swell",
+    "pennant": "Pennant fluttering in the wind"
   }
 }

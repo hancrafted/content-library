@@ -1,0 +1,81 @@
+/* The siphonophore drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in siphonophore.tsx. */
+
+.siphonophore {
+  --siph-float: color-mix(in oklab, color-mix(in oklab, var(--info) 30%, var(--on-brand-accent)) 85%, transparent);
+  --siph-bell-lit: color-mix(in oklab, color-mix(in oklab, var(--info) 20%, var(--on-brand-accent)) 75%, transparent);
+  --siph-bell: color-mix(in oklab, color-mix(in oklab, var(--info) 45%, var(--on-brand-accent)) 55%, transparent);
+  --siph-stem: color-mix(in oklab, color-mix(in oklab, var(--info) 35%, var(--on-brand-accent)) 60%, transparent);
+  --siph-glint: var(--on-brand-accent);
+}
+
+:global(.dark) .siphonophore {
+  --siph-float: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 50%, color-mix(in oklab, var(--on-brand-accent) 80%, var(--overlay))) 80%,
+    transparent
+  );
+  --siph-bell-lit: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 85%, var(--overlay))) 70%,
+    transparent
+  );
+  --siph-bell: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 65%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay))) 55%,
+    transparent
+  );
+  --siph-stem: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 55%, color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay))) 55%,
+    transparent
+  );
+  --siph-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
+}
+
+.siphonophore [data-tone='siph-float'] {
+  fill: var(--siph-float);
+}
+
+.siphonophore [data-tone='siph-bell-lit'] {
+  fill: var(--siph-bell-lit);
+}
+
+.siphonophore [data-tone='siph-bell'] {
+  fill: var(--siph-bell);
+}
+
+.siphonophore [data-tone='siph-stem'] {
+  fill: var(--siph-stem);
+}
+
+.siphonophore [data-tone='glint'] {
+  fill: var(--siph-glint);
+}
+
+/* The colony sways from its float, slowly, only on the active Slide. */
+.sway {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .sway {
+    animation: siphonophore-sway 11s ease-in-out infinite;
+  }
+}
+
+/* It starts and ends level, where it is drawn, so the loop never jumps when it starts. */
+@keyframes siphonophore-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(3deg);
+  }
+
+  75% {
+    transform: rotate(-3deg);
+  }
+}

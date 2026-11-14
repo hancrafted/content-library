@@ -56,7 +56,7 @@ function Dive({ at, surface }: { readonly at: RobotAt; readonly surface: boolean
  */
 export function EchoDrawing({ zone, robotAt }: { readonly zone: Zone; readonly robotAt: RobotAt }) {
   return (
-    <ZoneScene zone={zone} className="absolute inset-0 size-full">
+    <ZoneScene zone={zone} sectionTitle className="absolute inset-0 size-full">
       <Dive at={robotAt} surface={zone === 'surface'} />
     </ZoneScene>
   );

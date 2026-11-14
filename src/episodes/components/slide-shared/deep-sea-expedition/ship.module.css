@@ -38,6 +38,8 @@
   --ship-machine-lit: color-mix(in oklab, var(--info) 78%, var(--on-brand-accent));
   --ship-machine: color-mix(in oklab, var(--info) 84%, var(--on-brand-accent));
   --ship-machine-shade: color-mix(in oklab, var(--info) 68%, var(--overlay));
+  --ship-pennant-lit: color-mix(in oklab, var(--brand-accent) 80%, var(--on-brand-accent));
+  --ship-pennant: var(--brand-accent);
 }
 
 :global(.dark) .ship {
@@ -74,6 +76,8 @@
   --ship-machine-lit: color-mix(in oklab, var(--info) 88%, var(--on-brand-accent));
   --ship-machine: color-mix(in oklab, var(--info) 92%, var(--overlay));
   --ship-machine-shade: color-mix(in oklab, var(--info) 62%, var(--overlay));
+  --ship-pennant-lit: color-mix(in oklab, var(--brand-accent) 85%, var(--on-brand-accent));
+  --ship-pennant: color-mix(in oklab, var(--brand-accent) 85%, var(--overlay));
 }
 
 .hull-lit {
@@ -128,6 +132,14 @@
   fill: var(--ship-machine-shade);
 }
 
+.pennant-lit {
+  fill: var(--ship-pennant-lit);
+}
+
+.pennant {
+  fill: var(--ship-pennant);
+}
+
 /* The rock pivots on the ship's origin, the waterline amidships, and rests level. */
 .rock {
   transform-box: view-box;
@@ -153,8 +165,37 @@
   }
 }
 
+/*
+ * The pennant flutters in the wind about the masthead: it narrows and its fly lifts and drops, resting as drawn. Only
+ * with the rock, on the active Slide.
+ */
+.flutter {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+:global([data-zone='active']) .flutter {
+  animation: ship-pennant 2.4s ease-in-out infinite;
+}
+
+@keyframes ship-pennant {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  30% {
+    transform: scaleX(0.9) skewY(-5deg);
+  }
+
+  65% {
+    transform: scaleX(0.96) skewY(4deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  :global([data-zone='active']) .rock {
+  :global([data-zone='active']) .rock,
+  :global([data-zone='active']) .flutter {
     animation: none;
   }
 }

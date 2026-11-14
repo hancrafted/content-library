@@ -23,6 +23,11 @@
   fill: var(--node);
 }
 
+/* The Surface's node floats in the sky above the A-frame, where the robot never rises: it stays unlit. */
+.unlit {
+  opacity: 0.35;
+}
+
 .halo {
   fill: var(--node-halo);
 }
