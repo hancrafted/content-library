@@ -200,6 +200,20 @@ describe('edge cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('lifts a Surface Section title by how far its figures reach, given with the title itself', () => {
+    // ARRANGE
+    const expected = { reached: '--scene-figures-below:120', bare: '--scene-figures-below:400' };
+    // ACT
+    const below = (props: Parameters<typeof ZoneScene>[0]) =>
+      (render(props)(SCENE).attr('style') ?? '').match(/--scene-figures-below:\d+/)?.[0];
+    const seen = {
+      reached: below({ zone: 'surface', sectionTitle: { figuresReach: 280 } }),
+      bare: below({ zone: 'surface', sectionTitle: true }),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('raises the Abyss bubbles in view on its Section title, and at the left on its page Slides', () => {
     // ARRANGE
     const expected = { title: 'translate(680 560)', page: 'translate(220 560)' };

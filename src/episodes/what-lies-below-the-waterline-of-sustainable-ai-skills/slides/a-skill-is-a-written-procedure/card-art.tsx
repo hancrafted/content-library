@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { cn } from '@/shared/lib/utils';
 import art from './card-art.json';
@@ -10,7 +11,6 @@ import styles from './slide.module.css';
  * cut from the Spec's sheet by its own window.
  */
 
-type Facet = readonly string[];
 export type CardPart = 'clip' | 'head' | 'body' | 'guide' | 'label' | 'preset' | 'sleeveGlint' | 'pocketFront';
 
 /** Each part's window onto the Spec's sheet: `x y width height`. */
@@ -24,11 +24,6 @@ const WINDOW: Readonly<Record<CardPart, string>> = {
   sleeveGlint: '34 46 436 554',
   pocketFront: '34 476 436 124',
 };
-
-/** The rows of one part, in the Spec's paint order. */
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-lp={tone} d={d} />);
-}
 
 /**
  * One part of the clipboard as its own picture. `fill` stretches it over its box, for a paper or the sleeve's shine
@@ -50,7 +45,7 @@ export function CardArt({
       aria-hidden
       className={cn(styles.art, className)}
     >
-      <Facets facets={art[part]} />
+      <ToneFacets toneAttribute="data-lp" facets={art[part]} />
     </svg>
   );
 }
@@ -62,7 +57,7 @@ export function CardArt({
 export function RoomWall() {
   return (
     <g data-room-wall transform={`scale(${SCENE_WIDTH / 476} ${SCENE_HEIGHT / 640})`} className={styles.art}>
-      <Facets facets={art.wall} />
+      <ToneFacets toneAttribute="data-lp" facets={art.wall} />
     </g>
   );
 }

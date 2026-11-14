@@ -3,14 +3,11 @@
  * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
  * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). The sheet's clip is steel,
  * mixed from `--muted-foreground`, never a meaning colour; `--primary` marks the match.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
-  --room-lit: oklch(0.95 0.012 230);
-  --room: oklch(0.905 0.018 234);
-  --room-shade: oklch(0.86 0.024 238);
-  --floor-lit: oklch(0.72 0.025 240);
-  --floor: oklch(0.66 0.028 244);
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.972 0.009 88);
   --paper-shade: oklch(0.935 0.014 84);
@@ -21,11 +18,6 @@
 }
 
 :global(.dark) .art {
-  --room-lit: oklch(0.36 0.025 250);
-  --room: oklch(0.32 0.025 253);
-  --room-shade: oklch(0.285 0.025 256);
-  --floor-lit: oklch(0.25 0.02 255);
-  --floor: oklch(0.22 0.02 258);
   --paper-lit: oklch(0.43 0.02 250);
   --paper: oklch(0.39 0.02 252);
   --paper-shade: oklch(0.35 0.02 255);
@@ -41,28 +33,28 @@
 }
 
 .art [data-tone='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-tone='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-tone='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-tone='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-tone='paper-lit'] {

@@ -3,15 +3,14 @@
  * whole stage, the stuffed binder with its card tabs and red stamps, the index sheet's paper and steel clip (mixed from a neutral token), and the check
  * card's paper and pin. Raw colours live only here, each with its dark value from the Spec (FE-011); dark mode is tuned
  * later.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
   --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
   --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
   --art-robot-dark: oklch(0.28 0.02 260);
-  --art-room-lit: oklch(0.95 0.012 230);
-  --art-room: oklch(0.905 0.018 234);
-  --art-room-shade: oklch(0.86 0.024 238);
   --art-glint: oklch(1 0 0);
   --art-paper-lit: oklch(0.995 0.004 90);
   --art-paper: oklch(0.972 0.009 88);
@@ -31,9 +30,6 @@
   --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
   --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
   --art-robot-dark: oklch(0.22 0.02 260);
-  --art-room-lit: oklch(0.36 0.025 250);
-  --art-room: oklch(0.32 0.025 253);
-  --art-room-shade: oklch(0.285 0.025 256);
   --art-glint: oklch(0.98 0.01 230);
   --art-paper-lit: oklch(0.43 0.02 250);
   --art-paper: oklch(0.39 0.02 252);
@@ -55,18 +51,18 @@
 }
 
 .art [data-tone='room-shade'] {
-  fill: var(--art-room-shade);
-  stroke: var(--art-room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-tone='room-lit'] {
-  fill: var(--art-room-lit);
-  stroke: var(--art-room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-tone='room'] {
-  fill: var(--art-room);
-  stroke: var(--art-room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-tone='tab'] {

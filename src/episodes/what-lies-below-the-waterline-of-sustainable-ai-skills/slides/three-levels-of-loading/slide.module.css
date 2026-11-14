@@ -8,25 +8,11 @@
  * card 1, then on the propped card with card 2, then the ceiling lamp switches on over the sleeve and card 3 keeps its
  * ring. It plays once when the Slide's mount turns `[data-zone='active']`; the rest state is the end state, so reduced
  * motion shows the lamp on and card 3 ringed.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .scene {
-  --room: oklch(0.905 0.018 234);
-  --room-lit: oklch(0.95 0.012 230);
-  --room-shade: oklch(0.86 0.024 238);
-  --floor-lit: oklch(0.72 0.025 240);
-  --floor: oklch(0.66 0.028 244);
-  --frame-lit: oklch(0.62 0.07 60);
-  --frame-shade: oklch(0.44 0.05 55);
-  --sky-2: oklch(0.8 0.07 236);
-  --sky-1: oklch(0.76 0.08 240);
-  --sky-3: oklch(0.845 0.058 230);
-  --sky-4: oklch(0.885 0.045 222);
-  --cloud-lit: oklch(0.995 0.004 230);
-  --cloud-shade: oklch(0.91 0.03 240);
-  --sea-surface: oklch(0.69 0.1 218);
-  --sea-surface-lit: oklch(0.74 0.09 212);
-  --pane-glint: oklch(1 0 0 / 0.35);
   --halo: oklch(0.97 0.08 200 / 0.38);
   --shelf-shade: oklch(0.42 0.05 55);
   --shelf-lit: oklch(0.66 0.07 60);
@@ -40,7 +26,6 @@
   --robot-dark: oklch(0.28 0.02 260);
   --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
   --beam: oklch(0.98 0.12 95 / 0.45);
-  --sea-twilight-lit: oklch(0.48 0.11 250);
   --paper-rule: oklch(0.8 0.03 240);
   --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
   --robot: var(--info);
@@ -51,22 +36,6 @@
 }
 
 :global(.dark) .scene {
-  --room: oklch(0.32 0.025 253);
-  --room-lit: oklch(0.36 0.025 250);
-  --room-shade: oklch(0.285 0.025 256);
-  --floor-lit: oklch(0.25 0.02 255);
-  --floor: oklch(0.22 0.02 258);
-  --frame-lit: oklch(0.5 0.06 60);
-  --frame-shade: oklch(0.36 0.045 55);
-  --sky-2: oklch(0.28 0.055 264);
-  --sky-1: oklch(0.24 0.05 268);
-  --sky-3: oklch(0.32 0.055 258);
-  --sky-4: oklch(0.37 0.055 250);
-  --cloud-lit: oklch(0.47 0.045 255);
-  --cloud-shade: oklch(0.39 0.045 260);
-  --sea-surface: oklch(0.405 0.078 226);
-  --sea-surface-lit: oklch(0.44 0.075 222);
-  --pane-glint: oklch(1 0 0 / 0.18);
   --halo: oklch(0.9 0.1 200 / 0.26);
   --shelf-shade: oklch(0.32 0.04 55);
   --shelf-lit: oklch(0.52 0.06 60);
@@ -80,7 +49,6 @@
   --robot-dark: oklch(0.22 0.02 260);
   --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
   --beam: oklch(0.95 0.1 95 / 0.24);
-  --sea-twilight-lit: oklch(0.3 0.065 254);
   --paper-rule: oklch(0.64 0.03 240);
   --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
   --robot: var(--info);
@@ -96,83 +64,83 @@
 }
 
 .art [data-lp='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-lp='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-lp='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-lp='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-lp='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-lp='frame-lit'] {
-  fill: var(--frame-lit);
-  stroke: var(--frame-lit);
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
 }
 
 .art [data-lp='frame-shade'] {
-  fill: var(--frame-shade);
-  stroke: var(--frame-shade);
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .art [data-lp='sky-2'] {
-  fill: var(--sky-2);
-  stroke: var(--sky-2);
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
 }
 
 .art [data-lp='sky-1'] {
-  fill: var(--sky-1);
-  stroke: var(--sky-1);
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
 }
 
 .art [data-lp='sky-3'] {
-  fill: var(--sky-3);
-  stroke: var(--sky-3);
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
 }
 
 .art [data-lp='sky-4'] {
-  fill: var(--sky-4);
-  stroke: var(--sky-4);
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
 }
 
 .art [data-lp='cloud-lit'] {
-  fill: var(--cloud-lit);
-  stroke: var(--cloud-lit);
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
 }
 
 .art [data-lp='cloud-shade'] {
-  fill: var(--cloud-shade);
-  stroke: var(--cloud-shade);
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
 }
 
 .art [data-lp='sea-surface'] {
-  fill: var(--sea-surface);
-  stroke: var(--sea-surface);
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
 }
 
 .art [data-lp='sea-surface-lit'] {
-  fill: var(--sea-surface-lit);
-  stroke: var(--sea-surface-lit);
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
 }
 
 .art [data-lp='pane-glint'] {
-  fill: var(--pane-glint);
-  stroke: var(--pane-glint);
+  fill: var(--scenery-window-glint);
+  stroke: var(--scenery-window-glint);
 }
 
 .art [data-lp='halo'] {
@@ -241,8 +209,8 @@
 }
 
 .art [data-lp='sea-twilight-lit'] {
-  fill: var(--sea-twilight-lit);
-  stroke: var(--sea-twilight-lit);
+  fill: var(--scenery-sea-twilight-lit);
+  stroke: var(--scenery-sea-twilight-lit);
 }
 
 .art [data-lp='paper-rule'] {

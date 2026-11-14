@@ -1,7 +1,6 @@
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import type { ReactNode } from 'react';
 import styles from './shallows-art.module.css';
-import type { ArtFacet } from './shallows-facets';
 
 /** The Spec's drawing space for one test dive: 560 by 330, its lit waterline at 112 and its seabed's top near 280. */
 const SPEC = { width: 560, height: 330, waterline: 112, bed: 280 } as const;
@@ -17,11 +16,6 @@ export const SHALLOWS = { waterline: atSpec(0, SPEC.waterline).y, bed: atSpec(0,
 
 /** The Scene's box shows the whole Spec drawing: its aspect, for the Scene's class string. */
 export const SHALLOWS_ASPECT = 'aspect-[56/33]';
-
-/** Facets in paint order, each a path its tone colours. */
-export function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-tone={tone} d={d} />);
-}
 
 /**
  * The test dive's own drawing from Spec Option 22a (feedback 3, decision 46), in the Spec's units scaled onto the

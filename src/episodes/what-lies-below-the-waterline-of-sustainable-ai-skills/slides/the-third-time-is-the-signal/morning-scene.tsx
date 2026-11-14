@@ -2,7 +2,8 @@ import { Character } from '@/episodes/components/slide-shared/character/characte
 import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { CONSOLE_DESK_HEIGHT } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
-import { Facets, RoomArt } from './room-art';
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
+import { RoomArt } from './room-art';
 import artStyles from './room-art.module.css';
 import { ROOM_ART, WRITTEN_CARD } from './room-facets';
 import { CAPTAIN_X, FIGURE_SCALE, PILOT_MOOD, PILOT_X, SPEC_CAPTAIN, SPEECH, type Day } from './speech.pure';
@@ -36,7 +37,7 @@ function Captain({ day, says }: { readonly day: Day; readonly says: Says }) {
       </g>
       {day === 3 && (
         <g data-written-card transform={CARD_TRANSFORM}>
-          <Facets facets={WRITTEN_CARD} />
+          <ToneFacets facets={WRITTEN_CARD} />
           <path d={CARD_LINES} className={artStyles.cardLines} />
         </g>
       )}

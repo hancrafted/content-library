@@ -4,12 +4,12 @@
  * mixed from a neutral token), the dark corner's three facets and the light ink written on it. Raw colours live only here, each with its dark
  * value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours meet
  * without a seam; the translucent ones are not, so they do not double at their edges.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
   --art-ink-deep: oklch(0.975 0.01 230);
-  --art-sea-abyss: oklch(0.205 0.042 270);
-  --art-sea-abyss-lit: oklch(0.24 0.05 268);
   --art-halo: oklch(0.97 0.08 200 / 0.2);
   --art-halo-core: oklch(0.98 0.08 200 / 0.32);
   --art-drop: oklch(0.12 0.04 265 / 0.35);
@@ -30,8 +30,6 @@
 
 :global(.dark) .art {
   --art-ink-deep: oklch(0.975 0.01 230);
-  --art-sea-abyss: oklch(0.145 0.024 270);
-  --art-sea-abyss-lit: oklch(0.17 0.03 268);
   --art-halo: oklch(0.9 0.1 200 / 0.12);
   --art-halo-core: oklch(0.92 0.1 200 / 0.2);
   --art-drop: oklch(0.05 0.02 265 / 0.5);
@@ -51,13 +49,13 @@
 }
 
 .art [data-tone='sea-abyss'] {
-  fill: var(--art-sea-abyss);
-  stroke: var(--art-sea-abyss);
+  fill: var(--scenery-sea-abyss);
+  stroke: var(--scenery-sea-abyss);
 }
 
 .art [data-tone='sea-abyss-lit'] {
-  fill: var(--art-sea-abyss-lit);
-  stroke: var(--art-sea-abyss-lit);
+  fill: var(--scenery-sea-abyss-lit);
+  stroke: var(--scenery-sea-abyss-lit);
 }
 
 .art [data-tone='halo'] {

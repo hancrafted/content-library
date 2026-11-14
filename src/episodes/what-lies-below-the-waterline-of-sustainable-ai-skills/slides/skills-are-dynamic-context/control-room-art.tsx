@@ -1,6 +1,7 @@
 import { Character } from '@/episodes/components/slide-shared/character/character';
 import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
@@ -42,19 +43,6 @@ const PILOT = { x: 124, y: 486, scale: 1.5 } as const;
 /** The wall screen's glass, which the feed's drawing and the robot's beam stay inside. */
 const SCREEN = { x: 36, y: 34, width: 368, height: 212 } as const;
 
-type Facet = readonly string[];
-
-/** A part of the drawing, its facets in the Spec's paint order. */
-function Facets({ part, facets }: { readonly part: string; readonly facets: readonly Facet[] }) {
-  return (
-    <g data-part={part}>
-      {facets.map(([tone, d], index) => (
-        <path key={index} data-lp={tone} d={d} />
-      ))}
-    </g>
-  );
-}
-
 /** One arrival dropping onto the desk on its beat. */
 function Lands({ arrival, children }: { readonly arrival: Arrival; readonly children: ReactNode }) {
   return (
@@ -76,11 +64,11 @@ function CameraFeed() {
       <clipPath id={clip}>
         <rect {...SCREEN} />
       </clipPath>
-      <Facets part="feed-water" facets={art.feedWater} />
+      <ToneFacets toneAttribute="data-lp" part="feed-water" facets={art.feedWater} />
       <g transform={`translate(${ROBOT.x} ${ROBOT.y}) scale(${ROBOT.scale})`}>
         <Robot state={robotAt('skills-are-dynamic-context').state} aim="down" lamp />
       </g>
-      <Facets part="feed-life" facets={art.feedLife} />
+      <ToneFacets toneAttribute="data-lp" part="feed-life" facets={art.feedLife} />
     </g>
   );
 }
@@ -90,16 +78,16 @@ function Arrivals() {
   return (
     <>
       <Lands arrival="card">
-        <Facets part="card" facets={art.card} />
+        <ToneFacets toneAttribute="data-lp" part="card" facets={art.card} />
       </Lands>
       <Lands arrival="frames">
-        <Facets part="frames" facets={art.frames} />
+        <ToneFacets toneAttribute="data-lp" part="frames" facets={art.frames} />
       </Lands>
       <Lands arrival="sonar">
-        <Facets part="sonar" facets={art.sonar} />
+        <ToneFacets toneAttribute="data-lp" part="sonar" facets={art.sonar} />
       </Lands>
       <Lands arrival="logs">
-        <Facets part="logs" facets={art.logs} />
+        <ToneFacets toneAttribute="data-lp" part="logs" facets={art.logs} />
       </Lands>
     </>
   );
@@ -113,14 +101,14 @@ function Arrivals() {
 export function ControlRoomArt() {
   return (
     <g transform={`translate(${LEFT} 0) scale(${SCALE})`} className={styles.art}>
-      <Facets part="room" facets={art.room} />
+      <ToneFacets toneAttribute="data-lp" part="room" facets={art.room} />
       <CameraFeed />
-      <Facets part="wall" facets={art.wall} />
-      <Facets part="desk" facets={art.desk} />
+      <ToneFacets toneAttribute="data-lp" part="wall" facets={art.wall} />
+      <ToneFacets toneAttribute="data-lp" part="desk" facets={art.desk} />
       <g transform={`translate(${PILOT.x} ${PILOT.y}) scale(${PILOT.scale})`}>
         <Character preset={pilot} pose="sit" />
       </g>
-      <Facets part="notebook" facets={art.notebook} />
+      <ToneFacets toneAttribute="data-lp" part="notebook" facets={art.notebook} />
       <Arrivals />
     </g>
   );

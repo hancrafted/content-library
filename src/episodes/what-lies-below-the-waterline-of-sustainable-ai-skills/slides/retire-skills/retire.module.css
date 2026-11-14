@@ -4,6 +4,8 @@
  * `.art` for the facets `room-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode
  * (feedback 2, decision 32). The rivets and the clipboard's clip are steel, mixed from `--muted-foreground`, never a meaning colour. `--primary` marks the one
  * line you need.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .room {
@@ -17,20 +19,14 @@
 }
 
 .art {
-  --bed: oklch(0.34 0.035 60);
-  --bed-lit: oklch(0.42 0.04 70);
-  --bed-shade: oklch(0.27 0.03 50);
   --crate: oklch(0.56 0.075 62);
   --crate-dark: oklch(0.3 0.04 52);
   --crate-lit: oklch(0.66 0.07 68);
   --crate-shade: oklch(0.45 0.065 56);
-  --frame-lit: oklch(0.62 0.07 60);
-  --frame-shade: oklch(0.44 0.05 55);
   --glint: oklch(1 0 0);
   --night: oklch(0.31 0.04 262);
   --night-lit: oklch(0.36 0.04 258);
   --night-shade: oklch(0.265 0.038 266);
-  --pane-glint: oklch(1 0 0 / 0.35);
   --paper: oklch(0.972 0.009 88);
   --paper-edge: oklch(0.86 0.02 80);
   --paper-lit: oklch(0.995 0.004 90);
@@ -42,28 +38,18 @@
   --clip-dark: oklch(0.28 0.02 260);
   --clip-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
   --clip-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
-  --sea-abyss: oklch(0.205 0.042 270);
-  --sea-abyss-lit: oklch(0.24 0.05 268);
-  --sea-midnight: oklch(0.31 0.072 265);
-  --sea-midnight-lit: oklch(0.35 0.08 262);
   --tab: oklch(0.9 0.04 88);
 }
 
 :global(.dark) .art {
-  --bed: oklch(0.29 0.03 60);
-  --bed-lit: oklch(0.36 0.035 70);
-  --bed-shade: oklch(0.23 0.025 50);
   --crate: oklch(0.44 0.06 62);
   --crate-dark: oklch(0.24 0.03 52);
   --crate-lit: oklch(0.52 0.06 68);
   --crate-shade: oklch(0.36 0.05 56);
-  --frame-lit: oklch(0.5 0.06 60);
-  --frame-shade: oklch(0.36 0.045 55);
   --glint: oklch(0.98 0.01 230);
   --night: oklch(0.235 0.033 262);
   --night-lit: oklch(0.27 0.035 258);
   --night-shade: oklch(0.2 0.03 266);
-  --pane-glint: oklch(1 0 0 / 0.18);
   --paper: oklch(0.39 0.02 252);
   --paper-edge: oklch(0.29 0.02 258);
   --paper-lit: oklch(0.43 0.02 250);
@@ -75,10 +61,6 @@
   --clip-dark: oklch(0.22 0.02 260);
   --clip-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
   --clip-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
-  --sea-abyss: oklch(0.145 0.024 270);
-  --sea-abyss-lit: oklch(0.17 0.03 268);
-  --sea-midnight: oklch(0.205 0.042 266);
-  --sea-midnight-lit: oklch(0.23 0.048 264);
   --tab: oklch(0.43 0.03 88);
 }
 
@@ -88,18 +70,18 @@
 }
 
 .art [data-tone='bed'] {
-  fill: var(--bed);
-  stroke: var(--bed);
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
 }
 
 .art [data-tone='bed-lit'] {
-  fill: var(--bed-lit);
-  stroke: var(--bed-lit);
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
 }
 
 .art [data-tone='bed-shade'] {
-  fill: var(--bed-shade);
-  stroke: var(--bed-shade);
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
 }
 
 .art [data-tone='crate'] {
@@ -123,13 +105,13 @@
 }
 
 .art [data-tone='frame-lit'] {
-  fill: var(--frame-lit);
-  stroke: var(--frame-lit);
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
 }
 
 .art [data-tone='frame-shade'] {
-  fill: var(--frame-shade);
-  stroke: var(--frame-shade);
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .art [data-tone='glint'] {
@@ -153,7 +135,7 @@
 }
 
 .art [data-tone='pane-glint'] {
-  fill: var(--pane-glint);
+  fill: var(--scenery-window-glint);
   stroke: none;
 }
 
@@ -213,23 +195,23 @@
 }
 
 .art [data-tone='sea-abyss'] {
-  fill: var(--sea-abyss);
-  stroke: var(--sea-abyss);
+  fill: var(--scenery-sea-abyss);
+  stroke: var(--scenery-sea-abyss);
 }
 
 .art [data-tone='sea-abyss-lit'] {
-  fill: var(--sea-abyss-lit);
-  stroke: var(--sea-abyss-lit);
+  fill: var(--scenery-sea-abyss-lit);
+  stroke: var(--scenery-sea-abyss-lit);
 }
 
 .art [data-tone='sea-midnight'] {
-  fill: var(--sea-midnight);
-  stroke: var(--sea-midnight);
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
 }
 
 .art [data-tone='sea-midnight-lit'] {
-  fill: var(--sea-midnight-lit);
-  stroke: var(--sea-midnight-lit);
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
 }
 
 .art [data-tone='tab'] {

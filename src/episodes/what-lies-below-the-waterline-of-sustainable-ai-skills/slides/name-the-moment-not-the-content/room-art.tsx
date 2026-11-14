@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import styles from './slide.module.css';
 import { ART_SCALE, ART_TOP } from './speech.pure';
@@ -108,15 +109,11 @@ const CLIP: readonly Facet[] = [
   ['clip-dark', 'M736 14L742 14L746 32L740 32ZM774 14L780 14L776 32L770 32ZM736 12L780 12L780 16L736 16Z'],
 ];
 
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
-
 /** The room behind the cast: faceted walls and floor. */
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP}) scale(${ART_SCALE})`}>
-      <Facets facets={ROOM} />
+      <ToneFacets facets={ROOM} />
     </g>
   );
 }
@@ -130,7 +127,7 @@ export function SheetPaper() {
       preserveAspectRatio="none"
       className={cn(styles.art, 'pointer-events-none absolute inset-0 size-full')}
     >
-      <Facets facets={PAPER} />
+      <ToneFacets facets={PAPER} />
     </svg>
   );
 }
@@ -146,7 +143,7 @@ export function SheetClip() {
         'pointer-events-none absolute top-0 left-1/2 w-[16%] -translate-x-1/2 -translate-y-[55%]',
       )}
     >
-      <Facets facets={CLIP} />
+      <ToneFacets facets={CLIP} />
     </svg>
   );
 }

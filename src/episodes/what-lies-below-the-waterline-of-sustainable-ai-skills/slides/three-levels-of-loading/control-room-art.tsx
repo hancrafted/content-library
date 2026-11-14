@@ -1,7 +1,4 @@
-import { Character } from '@/episodes/components/slide-shared/character/character';
-import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
-import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
-import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { PilotAtConsole } from '@/episodes/components/slide-shared/deep-sea-expedition/pilot-at-console';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import art from './room-art.json';
 import styles from './slide.module.css';
@@ -51,19 +48,6 @@ function Facets({ part, facets }: { readonly part: string; readonly facets: read
   );
 }
 
-/** The pilot seated at the console. */
-function PilotAtConsole() {
-  const { seat } = consoleLayout({ width: CONSOLE.width });
-  return (
-    <g transform={`translate(${CONSOLE.x} ${CONSOLE.y}) scale(${CONSOLE.scale})`}>
-      <Console width={CONSOLE.width} />
-      <g transform={`translate(${seat.x + PILOT_REACH} ${seat.y})`}>
-        <Character preset={pilot} pose="sit" />
-      </g>
-    </g>
-  );
-}
-
 /**
  * The control room from the side, read left to right as the three loading levels: the manual's index on the wall,
  * its cards standing at uneven heights; the pilot at the console with one card propped up; the sleeve on the side table
@@ -75,7 +59,9 @@ export function ControlRoomArt() {
     <g transform={`translate(0 ${ROOM_TOP})`} className={styles.art}>
       <Facets part="room" facets={art.room} />
       <Facets part="manual-shelf" facets={art.shelf} />
-      <PilotAtConsole />
+      <g transform={`translate(${CONSOLE.x} ${CONSOLE.y}) scale(${CONSOLE.scale})`}>
+        <PilotAtConsole width={CONSOLE.width} reach={PILOT_REACH} />
+      </g>
       <Facets part="pulled-card" facets={art.card} />
       <Facets part="side-table" facets={art.table} />
     </g>

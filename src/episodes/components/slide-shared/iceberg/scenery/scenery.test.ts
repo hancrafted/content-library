@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Bubbles } from './bubbles';
 import { Clouds } from './clouds';
+import { ToneFacets } from './facets';
 import { FishSchool } from './fish-school';
 import { Iceberg } from './iceberg';
 import { Jellies } from './jellies';
@@ -112,6 +113,34 @@ describe('success cases', () => {
     const seen = { rays: $('[data-ray]').length, moving: $(MOTION).length };
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+
+  it('paints each row of tone and outline as one path, in paint order, its tone on the hook the Slide names', () => {
+    // ARRANGE
+    const facets = [
+      ['room', 'M0 0 L1 0 Z'],
+      ['floor-lit', 'M0 1 L1 1 Z'],
+    ] as const;
+    const expected = [
+      ['room', 'M0 0 L1 0 Z'],
+      ['floor-lit', 'M0 1 L1 1 Z'],
+    ];
+    // ACT
+    const $ = render(createElement(ToneFacets, { facets, toneAttribute: 'data-lp', part: 'room' }));
+    const seen = $('g[data-part="room"] path')
+      .toArray()
+      .map((path) => [$(path).attr('data-lp'), $(path).attr('d')]);
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('names the tone on data-tone and adds no group when the Slide names no part', () => {
+    // ARRANGE
+    const expected = { groups: 0, tone: 'sky-1' };
+    // ACT
+    const $ = render(createElement(ToneFacets, { facets: [['sky-1', 'M0 0 Z']] }));
+    // ASSERT
+    expect({ groups: $('g').length, tone: $('path').attr('data-tone') }).toEqual(expected);
   });
 });
 

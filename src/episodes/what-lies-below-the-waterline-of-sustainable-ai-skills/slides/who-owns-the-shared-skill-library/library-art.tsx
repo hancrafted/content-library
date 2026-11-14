@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { SCENE_HEIGHT } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { cn } from '@/shared/lib/utils';
 import styles from './library-art.module.css';
@@ -5,11 +6,6 @@ import { ABYSS, type ArtFacet, BINDER, DARK_CORNER, HALO } from './library-facet
 
 /** The Spec's Scene is 1200 by 720; the Abyss band stretches to the Scene's 800 units of height. */
 const SPEC_SCENE_HEIGHT = 720;
-
-/** Facets in paint order, each a path its tone colours. */
-function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-tone={tone} d={d} />);
-}
 
 /** A part of the drawing stretched over its HTML box, as the Spec draws it (`preserveAspectRatio="none"`). */
 function Stretched({
@@ -30,7 +26,7 @@ function Stretched({
       preserveAspectRatio="none"
       className={cn(styles.art, 'absolute inset-0 size-full', className)}
     >
-      <Facets facets={facets} />
+      <ToneFacets facets={facets} />
     </svg>
   );
 }
@@ -46,7 +42,7 @@ export const CORNER_INK = styles.cornerInk;
 export function AbyssBand() {
   return (
     <g aria-hidden className={styles.art} transform={`scale(1 ${SCENE_HEIGHT / SPEC_SCENE_HEIGHT})`}>
-      <Facets facets={ABYSS} />
+      <ToneFacets facets={ABYSS} />
     </g>
   );
 }

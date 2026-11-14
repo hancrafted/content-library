@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { cn } from '@/shared/lib/utils';
 import styles from './slide.module.css';
 
@@ -78,10 +79,6 @@ const PIN: readonly Facet[] = [
   ['glint', 'M1002 42L1009 42L1004 54Z'],
 ];
 
-function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
-
 /** A lifted prop stretched to the HTML box it backs. */
 function Backdrop({ viewBox, facets }: { readonly viewBox: string; readonly facets: readonly Facet[] }) {
   return (
@@ -91,7 +88,7 @@ function Backdrop({ viewBox, facets }: { readonly viewBox: string; readonly face
       preserveAspectRatio="none"
       className={cn(styles.art, 'pointer-events-none absolute inset-0 size-full')}
     >
-      <Facets facets={facets} />
+      <ToneFacets facets={facets} />
     </svg>
   );
 }
@@ -100,7 +97,7 @@ function Backdrop({ viewBox, facets }: { readonly viewBox: string; readonly face
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP}) scale(1 ${ART_STRETCH})`}>
-      <Facets facets={ROOM} />
+      <ToneFacets facets={ROOM} />
     </g>
   );
 }
@@ -128,7 +125,7 @@ export function WallPin() {
       viewBox="1002 42 14 12"
       className={cn(styles.art, 'pointer-events-none absolute top-0 left-1/2 w-[5%] -translate-x-1/2 -translate-y-1/3')}
     >
-      <Facets facets={PIN} />
+      <ToneFacets facets={PIN} />
     </svg>
   );
 }

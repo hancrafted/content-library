@@ -2,14 +2,11 @@
  * Slide token file of "What context goes where" (FE-011 §2): the control room's wall and floor, the papers on it and
  * the note that travels, in the tones of Spec Option 14a (feedback 3, decision 46), each with its dark value from the
  * Option. `primary` marks only the one focal thing, the verdict line (in slide.tsx); no meaning colour on scenery.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .room {
-  --room-lit: oklch(0.95 0.012 230);
-  --room: oklch(0.905 0.018 234);
-  --room-shade: oklch(0.86 0.024 238);
-  --floor-lit: oklch(0.72 0.025 240);
-  --floor: oklch(0.66 0.028 244);
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.965 0.01 88);
   --paper-shade: oklch(0.9 0.016 80);
@@ -31,11 +28,6 @@
 }
 
 :global(.dark) .room {
-  --room-lit: oklch(0.36 0.025 250);
-  --room: oklch(0.32 0.025 253);
-  --room-shade: oklch(0.285 0.025 256);
-  --floor-lit: oklch(0.25 0.02 255);
-  --floor: oklch(0.22 0.02 258);
   --paper-lit: oklch(0.88 0.008 90);
   --paper: oklch(0.83 0.012 88);
   --paper-shade: oklch(0.7 0.018 80);
@@ -61,28 +53,28 @@
 }
 
 .facets [data-tone='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .facets [data-tone='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .facets [data-tone='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .facets [data-tone='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .facets [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .room [data-tone='paper'] {

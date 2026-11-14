@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import styles from './slide.module.css';
 
 /*
@@ -200,15 +201,11 @@ const SHUT: readonly Facet[] = [
   ['clasp', 'M1009 281L1031 282.2L1029.4 312.2L1007.5 311Z'],
 ];
 
-export function Facets({ facets }: { readonly facets: readonly Facet[] }) {
-  return facets.map(([tone, d]) => <path key={`${tone} ${d}`} data-tone={tone} d={d} />);
-}
-
 /** The room behind the cast: walls, window and floor. */
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP})`}>
-      <Facets facets={ROOM} />
+      <ToneFacets facets={ROOM} />
     </g>
   );
 }
@@ -217,9 +214,9 @@ export function RoomArt() {
 export function BinderSurround() {
   return (
     <g aria-hidden className={styles.art} transform={`translate(0 ${ART_TOP})`}>
-      <Facets facets={HALO} />
+      <ToneFacets facets={HALO} />
       <g data-shut-cards>
-        <Facets facets={SHUT} />
+        <ToneFacets facets={SHUT} />
       </g>
     </g>
   );

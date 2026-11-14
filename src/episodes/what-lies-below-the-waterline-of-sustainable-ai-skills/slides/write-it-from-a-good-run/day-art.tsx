@@ -1,3 +1,4 @@
+import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import type { ReactNode } from 'react';
 import styles from './day-art.module.css';
 import { DIVE, DIVE_BUBBLES } from './dive-facets';
@@ -19,10 +20,6 @@ const WINDOWS: Record<RoomHour, readonly ArtFacet[]> = {
   dawn: DAWN_WINDOW,
 };
 
-function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
-  return facets.map(([tone, d], index) => <path key={index} data-tone={tone} d={d} />);
-}
-
 /**
  * Panel 1's background, lifted from Spec Option 10b (feedback 3, decision 46): the sky over the surface, the Sunlit
  * water with its light rays, the faceted seabed and the robot's cable from above. The shared `Robot` hangs on the
@@ -31,10 +28,10 @@ function Facets({ facets }: { readonly facets: readonly ArtFacet[] }) {
 export function DiveArt({ children }: { readonly children?: ReactNode }) {
   return (
     <g data-dive-art className={styles.art}>
-      <Facets facets={DIVE} />
+      <ToneFacets facets={DIVE} />
       <line x1={CABLE.x} y1={0} x2={CABLE.x} y2={CABLE.bottom} className={styles.cable} />
       {children}
-      <Facets facets={DIVE_BUBBLES} />
+      <ToneFacets facets={DIVE_BUBBLES} />
     </g>
   );
 }
@@ -59,16 +56,16 @@ export interface RoomArtProps {
 export function RoomArt({ hour, clock = false, pinnedCard = false, children, front }: RoomArtProps) {
   return (
     <g data-room-art={hour} className={styles.art}>
-      <Facets facets={ROOM_WALL} />
-      <Facets facets={WINDOWS[hour]} />
+      <ToneFacets facets={ROOM_WALL} />
+      <ToneFacets facets={WINDOWS[hour]} />
       {clock && (
         <g data-wall-clock>
-          <Facets facets={WALL_CLOCK} />
+          <ToneFacets facets={WALL_CLOCK} />
         </g>
       )}
       {pinnedCard && (
         <g data-pinned-card>
-          <Facets facets={PINNED_CARD} />
+          <ToneFacets facets={PINNED_CARD} />
         </g>
       )}
       {children}
@@ -81,7 +78,7 @@ export function RoomArt({ hour, clock = false, pinnedCard = false, children, fro
 export function WrittenCard({ dy }: { readonly dy: number }) {
   return (
     <g data-written-card transform={`translate(0 ${dy})`} className={styles.art}>
-      <Facets facets={WRITTEN_CARD} />
+      <ToneFacets facets={WRITTEN_CARD} />
     </g>
   );
 }

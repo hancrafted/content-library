@@ -3,28 +3,14 @@
  * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
  * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). `--primary` marks the one entry
  * to look at.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
-  --sky-1: oklch(0.76 0.08 240);
-  --sky-2: oklch(0.8 0.07 236);
-  --sky-3: oklch(0.845 0.058 230);
-  --sky-4: oklch(0.885 0.045 222);
-  --cloud-lit: oklch(0.995 0.004 230);
-  --cloud-shade: oklch(0.91 0.03 240);
   --glow: oklch(0.99 0.03 200);
   --glow-soft: oklch(0.95 0.07 205 / 0.55);
-  --sea-surface-lit: oklch(0.74 0.09 212);
-  --sea-surface: oklch(0.69 0.1 218);
   --hull: oklch(0.4 0.03 255);
-  --room-lit: oklch(0.95 0.012 230);
-  --room: oklch(0.905 0.018 234);
-  --room-shade: oklch(0.86 0.024 238);
-  --floor-lit: oklch(0.72 0.025 240);
-  --floor: oklch(0.66 0.028 244);
-  --frame-lit: oklch(0.62 0.07 60);
-  --frame-shade: oklch(0.44 0.05 55);
-  --pane-glint: oklch(1 0 0 / 0.35);
   --buoy-lit: oklch(0.72 0.17 45);
   --buoy: oklch(0.6 0.17 38);
   --halo: oklch(0.98 0.07 95 / 0.55);
@@ -45,25 +31,9 @@
 }
 
 :global(.dark) .art {
-  --sky-1: oklch(0.24 0.05 268);
-  --sky-2: oklch(0.28 0.055 264);
-  --sky-3: oklch(0.32 0.055 258);
-  --sky-4: oklch(0.37 0.055 250);
-  --cloud-lit: oklch(0.47 0.045 255);
-  --cloud-shade: oklch(0.39 0.045 260);
   --glow: oklch(0.9 0.08 200);
   --glow-soft: oklch(0.75 0.1 205 / 0.45);
-  --sea-surface-lit: oklch(0.44 0.075 222);
-  --sea-surface: oklch(0.405 0.078 226);
   --hull: oklch(0.4 0.03 255);
-  --room-lit: oklch(0.36 0.025 250);
-  --room: oklch(0.32 0.025 253);
-  --room-shade: oklch(0.285 0.025 256);
-  --floor-lit: oklch(0.25 0.02 255);
-  --floor: oklch(0.22 0.02 258);
-  --frame-lit: oklch(0.5 0.06 60);
-  --frame-shade: oklch(0.36 0.045 55);
-  --pane-glint: oklch(1 0 0 / 0.18);
   --buoy-lit: oklch(0.66 0.15 45);
   --buoy: oklch(0.55 0.15 38);
   --halo: oklch(0.9 0.08 95 / 0.2);
@@ -89,33 +59,33 @@
 }
 
 .art [data-tone='sky-1'] {
-  fill: var(--sky-1);
-  stroke: var(--sky-1);
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
 }
 
 .art [data-tone='sky-2'] {
-  fill: var(--sky-2);
-  stroke: var(--sky-2);
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
 }
 
 .art [data-tone='sky-3'] {
-  fill: var(--sky-3);
-  stroke: var(--sky-3);
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
 }
 
 .art [data-tone='sky-4'] {
-  fill: var(--sky-4);
-  stroke: var(--sky-4);
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
 }
 
 .art [data-tone='cloud-lit'] {
-  fill: var(--cloud-lit);
-  stroke: var(--cloud-lit);
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
 }
 
 .art [data-tone='cloud-shade'] {
-  fill: var(--cloud-shade);
-  stroke: var(--cloud-shade);
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
 }
 
 .art [data-tone='glow'] {
@@ -129,13 +99,13 @@
 }
 
 .art [data-tone='sea-surface-lit'] {
-  fill: var(--sea-surface-lit);
-  stroke: var(--sea-surface-lit);
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
 }
 
 .art [data-tone='sea-surface'] {
-  fill: var(--sea-surface);
-  stroke: var(--sea-surface);
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
 }
 
 .art [data-tone='hull'] {
@@ -144,42 +114,42 @@
 }
 
 .art [data-tone='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-tone='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-tone='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-tone='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-tone='frame-lit'] {
-  fill: var(--frame-lit);
-  stroke: var(--frame-lit);
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
 }
 
 .art [data-tone='frame-shade'] {
-  fill: var(--frame-shade);
-  stroke: var(--frame-shade);
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .art [data-tone='pane-glint'] {
-  fill: var(--pane-glint);
+  fill: var(--scenery-window-glint);
   stroke: none;
 }
 

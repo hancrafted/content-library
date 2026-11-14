@@ -3,7 +3,7 @@
  * Abyss bubbles, whose drawing and colours are `PolyBubble`'s (design-ADR 0025, the design guide's Iceberg style).
  * Each Fable element keeps its own CSS module beside its drawing.
  *
- * Colours: every `--scenery-*` tone is a mix of theme-stable tokens (`--on-brand-accent` white, `--overlay` black)
+ * Colours: every tone is a mix of theme-stable tokens (`--on-brand-accent` white, `--overlay` black)
  * with a hue from `--info` (blues) or `--bulb` (warm), light here and dark under `.dark`. A facet path names its tone
  * in `data-tone`; the rules below fill it, with a same-colour hairline that closes the anti-aliasing seams.
  *
@@ -12,33 +12,17 @@
  */
 
 .scenery {
-  --scenery-bed: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
-  --scenery-bed-lit: color-mix(
-    in oklab,
-    var(--bulb) 39%,
-    color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay))
-  );
-  --scenery-bed-shade: color-mix(
-    in oklab,
-    var(--bulb) 28%,
-    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
-  );
-  --scenery-ray: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 18%, transparent);
+  --bed: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
+  --bed-lit: color-mix(in oklab, var(--bulb) 39%, color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay)));
+  --bed-shade: color-mix(in oklab, var(--bulb) 28%, color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay)));
+  --ray: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 18%, transparent);
 }
 
 :global(.dark) .scenery {
-  --scenery-bed: color-mix(in oklab, var(--bulb) 25%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
-  --scenery-bed-lit: color-mix(
-    in oklab,
-    var(--bulb) 28%,
-    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
-  );
-  --scenery-bed-shade: color-mix(
-    in oklab,
-    var(--bulb) 19%,
-    color-mix(in oklab, var(--on-brand-accent) 13%, var(--overlay))
-  );
-  --scenery-ray: color-mix(
+  --bed: color-mix(in oklab, var(--bulb) 25%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
+  --bed-lit: color-mix(in oklab, var(--bulb) 28%, color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay)));
+  --bed-shade: color-mix(in oklab, var(--bulb) 19%, color-mix(in oklab, var(--on-brand-accent) 13%, var(--overlay)));
+  --ray: color-mix(
     in oklab,
     color-mix(in oklab, var(--info) 67%, color-mix(in oklab, var(--on-brand-accent) 84%, var(--overlay))) 12%,
     transparent
@@ -46,22 +30,22 @@
 }
 
 .scenery [data-tone='bed'] {
-  fill: var(--scenery-bed);
-  stroke: var(--scenery-bed);
+  fill: var(--bed);
+  stroke: var(--bed);
 }
 
 .scenery [data-tone='bed-lit'] {
-  fill: var(--scenery-bed-lit);
-  stroke: var(--scenery-bed-lit);
+  fill: var(--bed-lit);
+  stroke: var(--bed-lit);
 }
 
 .scenery [data-tone='bed-shade'] {
-  fill: var(--scenery-bed-shade);
-  stroke: var(--scenery-bed-shade);
+  fill: var(--bed-shade);
+  stroke: var(--bed-shade);
 }
 
 .scenery [data-tone='ray'] {
-  fill: var(--scenery-ray);
+  fill: var(--ray);
 }
 
 .scenery [data-tone] {

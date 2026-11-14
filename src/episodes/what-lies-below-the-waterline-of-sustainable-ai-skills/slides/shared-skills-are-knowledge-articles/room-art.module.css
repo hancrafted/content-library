@@ -4,20 +4,12 @@
  * rings and lectern post (the post in steel, mixed from a neutral token). Raw colours live only here, each with
  * its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours
  * meet without a seam; the translucent ones are not, so they do not double at their edges.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .art {
-  --art-room: oklch(0.905 0.018 234);
-  --art-room-lit: oklch(0.95 0.012 230);
-  --art-room-shade: oklch(0.86 0.024 238);
-  --art-floor: oklch(0.66 0.028 244);
-  --art-floor-lit: oklch(0.72 0.025 240);
-  --art-frame-shade: oklch(0.44 0.05 55);
-  --art-sea-midnight: oklch(0.31 0.072 265);
-  --art-sea-midnight-lit: oklch(0.35 0.08 262);
-  --art-bubble: oklch(0.95 0.04 210 / 0.45);
   --art-glint: oklch(1 0 0);
-  --art-pane-glint: oklch(1 0 0 / 0.35);
   --art-shelf: oklch(0.55 0.06 60);
   --art-shelf-shade: oklch(0.42 0.05 55);
   --art-spine-a: oklch(0.55 0.09 212);
@@ -38,17 +30,7 @@
 }
 
 :global(.dark) .art {
-  --art-room: oklch(0.32 0.025 253);
-  --art-room-lit: oklch(0.36 0.025 250);
-  --art-room-shade: oklch(0.285 0.025 256);
-  --art-floor: oklch(0.22 0.02 258);
-  --art-floor-lit: oklch(0.25 0.02 255);
-  --art-frame-shade: oklch(0.36 0.045 55);
-  --art-sea-midnight: oklch(0.205 0.042 266);
-  --art-sea-midnight-lit: oklch(0.23 0.048 264);
-  --art-bubble: oklch(0.8 0.05 210 / 0.35);
   --art-glint: oklch(0.98 0.01 230);
-  --art-pane-glint: oklch(1 0 0 / 0.18);
   --art-shelf: oklch(0.45 0.05 60);
   --art-shelf-shade: oklch(0.34 0.04 55);
   --art-spine-a: oklch(0.47 0.08 214);
@@ -69,47 +51,47 @@
 }
 
 .art [data-tone='room'] {
-  fill: var(--art-room);
-  stroke: var(--art-room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-tone='room-lit'] {
-  fill: var(--art-room-lit);
-  stroke: var(--art-room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-tone='room-shade'] {
-  fill: var(--art-room-shade);
-  stroke: var(--art-room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-tone='floor'] {
-  fill: var(--art-floor);
-  stroke: var(--art-floor);
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
 }
 
 .art [data-tone='floor-lit'] {
-  fill: var(--art-floor-lit);
-  stroke: var(--art-floor-lit);
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
 }
 
 .art [data-tone='frame-shade'] {
-  fill: var(--art-frame-shade);
-  stroke: var(--art-frame-shade);
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
 }
 
 .art [data-tone='sea-midnight'] {
-  fill: var(--art-sea-midnight);
-  stroke: var(--art-sea-midnight);
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
 }
 
 .art [data-tone='sea-midnight-lit'] {
-  fill: var(--art-sea-midnight-lit);
-  stroke: var(--art-sea-midnight-lit);
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
 }
 
 .art [data-tone='bubble'] {
-  fill: var(--art-bubble);
+  fill: var(--scenery-bubble);
   stroke: none;
 }
 
@@ -119,7 +101,7 @@
 }
 
 .art [data-tone='pane-glint'] {
-  fill: var(--art-pane-glint);
+  fill: var(--scenery-window-glint);
   stroke: none;
 }
 

@@ -4,6 +4,8 @@
  * the cable mixes the Abyss with `--overlay` (black), the manual's pages and spine mix white and `--bulb-edge`'s ochre.
  * Words on light water take `--card-foreground`, which turns light with the dark theme's water; words on water dark
  * in both themes take white. `--primary` marks the three steps, inverted to `--background` on Midnight water.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .trail {
@@ -52,7 +54,6 @@
  * paper stays light in both themes, as in the Spec, so its words take the Spec's paper ink in both.
  */
 .art {
-  --bubble: oklch(0.95 0.04 210 / 0.45);
   --glint: oklch(1 0 0);
   --paper: oklch(0.965 0.01 88);
   --paper-lit: oklch(0.995 0.004 90);
@@ -61,7 +62,6 @@
 }
 
 :global(.dark) .art {
-  --bubble: oklch(0.8 0.05 210 / 0.35);
   --glint: oklch(0.98 0.01 230);
   --paper: oklch(0.83 0.012 88);
   --paper-lit: oklch(0.88 0.008 90);
@@ -75,7 +75,7 @@
 }
 
 .art [data-tone='bubble'] {
-  fill: var(--bubble);
+  fill: var(--scenery-bubble);
   stroke: none;
 }
 

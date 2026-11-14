@@ -3,12 +3,11 @@
  * lifted from the approved Spec's Option 3a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011;
  * dark mode is tuned later). `--info` colours the clip, the arm preset and the console's edge, as the Spec's machine blue;
  * `primary` marks the use-when line.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .scene {
-  --room-shade: oklch(0.86 0.024 238);
-  --room: oklch(0.905 0.018 234);
-  --room-lit: oklch(0.95 0.012 230);
   --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
   --robot: var(--info);
   --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
@@ -32,9 +31,6 @@
 }
 
 :global(.dark) .scene {
-  --room-shade: oklch(0.285 0.025 256);
-  --room: oklch(0.32 0.025 253);
-  --room-lit: oklch(0.36 0.025 250);
   --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
   --robot: var(--info);
   --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
@@ -63,18 +59,18 @@
 }
 
 .art [data-lp='room-shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
 }
 
 .art [data-lp='room'] {
-  fill: var(--room);
-  stroke: var(--room);
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
 }
 
 .art [data-lp='room-lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
 .art [data-lp='robot-lit'] {

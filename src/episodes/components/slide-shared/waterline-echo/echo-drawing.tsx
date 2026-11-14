@@ -66,8 +66,7 @@ export function EchoDrawing({ zone, robot }: { readonly zone: Zone; readonly rob
   return (
     <ZoneScene
       zone={zone}
-      sectionTitle
-      figuresReach={surface ? SHIP_REACH : undefined}
+      sectionTitle={surface ? { figuresReach: SHIP_REACH } : true}
       className="absolute inset-0 size-full"
     >
       {surface ? <SurfaceDive at={robot} /> : <DeepDive at={robot} />}
