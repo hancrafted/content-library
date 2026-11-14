@@ -104,6 +104,21 @@ describe('edge cases', () => {
     expect(html).toContain(`aria-label="${expected.label}"`);
   });
 
+  it('follows the caption with one Context marker per note, in the order the Slide names them', () => {
+    // ARRANGE
+    const expected = ['ibm-wording', 'salesforce-wording'];
+    const notes = [
+      { note: 'ibm-wording', label: "Speaker note: IBM's wording" },
+      { note: 'salesforce-wording', label: "Speaker note: Salesforce's wording" },
+    ];
+    // ACT
+    const html = header({ entrance: 'none', captionNotes: notes });
+    const caption = /<p data-target="caption"[^>]*>(.*?)<\/p>/.exec(html)?.[1] ?? '';
+    const markers = [...caption.matchAll(/data-context-ref="([^"]+)"/g)].map(([, note]) => note);
+    // ASSERT
+    expect(markers).toEqual(expected);
+  });
+
   it('draws no marker in a caption without a note', () => {
     // ARRANGE
     const expected = 'data-context-ref';

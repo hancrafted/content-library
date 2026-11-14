@@ -29,6 +29,8 @@ export interface LevelColumnProps {
   readonly onFlip: (level: Level) => void;
   readonly target?: TargetProps;
   readonly marker?: ReactNode;
+  /** A Slide's marker beside the source line on the card's back. */
+  readonly sourceMarker?: ReactNode;
   /** The rows the toolbar adds, in stacking order, and what they need. */
   readonly shown: readonly Row[];
   readonly productivity: Productivity;
@@ -105,7 +107,9 @@ function Card(props: LevelColumnProps) {
           marker={props.marker}
         />
       }
-      back={<CardBackView words={words} labels={props.labels} />}
+      back={
+        <CardBackView words={words} labels={props.labels} marker={props.marker} sourceMarker={props.sourceMarker} />
+      }
     />
   );
 }

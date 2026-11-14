@@ -201,6 +201,38 @@ describe('edge cases', () => {
     expect(typed).toBe(kit);
   });
 
+  it('keeps the several notes a caption ends on, in the order the Slide names them', () => {
+    // ARRANGE
+    const expected = ['reference-episode', 'reference-episode'];
+    // ACT
+    const record = slide({
+      slug: 'why-a-template',
+      messages: { en: EN, de: DE },
+      notes: [{ slug: 'reference-episode', target: 'prose' }],
+      captionNotes: ['reference-episode', 'reference-episode'],
+      content: () => null,
+    });
+    // ASSERT
+    expect(record.captionNotes).toEqual(expected);
+  });
+
+  it('refuses a Slide that names its caption note both as one and as several', () => {
+    // ARRANGE
+    const expected = /captionNote.*captionNotes/;
+    // ACT
+    const declare = () =>
+      slide({
+        slug: 'why-a-template',
+        messages: { en: EN, de: DE },
+        notes: [{ slug: 'reference-episode', target: 'prose' }],
+        captionNote: 'reference-episode',
+        captionNotes: ['reference-episode'],
+        content: () => null,
+      });
+    // ASSERT
+    expect(declare).toThrow(expected);
+  });
+
   it('defaults notes and segments to none', () => {
     // ARRANGE
     const expected = { slug: 'what-comes-next', messages: UNTITLED, notes: [], segments: [] };

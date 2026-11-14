@@ -128,13 +128,14 @@ export interface Productivity {
   readonly measured?: readonly [number, number];
 }
 
-/** How a Slide shows the timeline: whether the scenes play once on arrival, and which level is lit. */
+/** How a Slide shows the timeline: whether the scenes play once on arrival, which level is lit and which card opens back side up. */
 export interface AiCapabilityPreset {
   readonly autoplay: boolean;
   readonly lit: Level | null;
+  readonly turned?: Level | null;
 }
 
-export const PRESETS = ['timeline', 'recap'] as const;
+export const PRESETS = ['timeline', 'recap', 'agents'] as const;
 export type AiCapabilityPresetId = (typeof PRESETS)[number];
 
 /** A Slide's override of the words: any key, at any depth. */

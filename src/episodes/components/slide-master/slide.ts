@@ -83,6 +83,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly segments: readonly SegmentSpec[];
   /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
+  /** The slugs of the notes whose Context markers follow the caption, in order, when it needs several; never beside `captionNote`. */
+  readonly captionNotes?: readonly string[];
   /** The Slide's header action, drawn right-aligned in the title row, and the panel it opens under the header. */
   readonly headerAction?: (kit: RuntimeKit) => ReactNode;
   readonly content: (kit: RuntimeKit) => ReactNode;
@@ -104,6 +106,8 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
+  /** Several of the Slide's notes, each with its own Context marker after the caption, in order; use it instead of `captionNote`. */
+  readonly captionNotes?: readonly N['slug'][];
   /**
    * An action beside the title, such as a Guide's Help button: the Slide header renders it right-aligned in the title
    * row (wrapping under the caption on a phone). The node may render a panel too; it sits under the header, full width,
@@ -111,6 +115,19 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
    */
   readonly headerAction?: (kit: OwnSlideKit<M, N>) => ReactNode;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
+}
+
+/** The note or notes a Slide's caption ends on, as the record keeps them: one note or several, never both. */
+function captionOf(spec: {
+  readonly slug: string;
+  readonly captionNote?: string;
+  readonly captionNotes?: readonly string[];
+}): Pick<Slide, 'captionNote' | 'captionNotes'> {
+  const { slug, captionNote, captionNotes } = spec;
+  if (captionNote !== undefined && captionNotes !== undefined) {
+    throw new Error(`Slide "${slug}" names captionNote and captionNotes: name one note or several, not both.`);
+  }
+  return { ...(captionNote !== undefined && { captionNote }), ...(captionNotes !== undefined && { captionNotes }) };
 }
 
 /** Declares a Slide; its own Translation files type `t`, `template`, notes and segments. */
@@ -125,7 +142,7 @@ export function slide<
     messages: spec.messages,
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
-    ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
+    ...captionOf(spec),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     ...(spec.headerAction !== undefined && {
       headerAction: spec.headerAction as unknown as NonNullable<Slide['headerAction']>,
