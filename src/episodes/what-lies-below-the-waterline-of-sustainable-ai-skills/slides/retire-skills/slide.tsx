@@ -51,7 +51,6 @@ const LOG = [
   ['briefing', 'crew-coffee-order'],
   ['m5', 'collect-sediment-sample'],
 ] as const;
-const RETIRED_CARDS = 5;
 
 /**
  * "Retire skills" (Spec Option 25b): the control room at night, the skill index read against the season's task log,
@@ -102,7 +101,6 @@ export const retireSkills = slide({
                   }))}
                 />
                 <ArchiveCrate
-                  cards={RETIRED_CARDS}
                   lines={(['title', 'count', 'restore'] as const).map((line) => ({
                     chat: t(`archive.chat.${line}`),
                     coding: t(`archive.coding.${line}`),

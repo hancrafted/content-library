@@ -1,0 +1,59 @@
+/** One facet: the token that fills it, and its outline. */
+export type Facet = readonly [tone: string, d: string];
+
+/** The waterline's glow, the lit line between the sky and the sea, across the Spec's 560 by 420 dive. */
+export const GLOW: readonly Facet[] = [
+  ['glow-soft', 'M0 61L560 63L560 69L0 71Z'],
+  ['glow', 'M6 64.6L554 65L554 67L6 67.4Z'],
+];
+
+/** The cabin's faceted wall behind the porthole, which the porthole's circle clips; the reader brings its own chair. */
+export const CABIN: readonly Facet[] = [
+  ['room', 'M102.1 96.7L91.9 132.9L76.8 102.4Z'],
+  ['room-shade', 'M91.9 132.9L102.1 96.7L118 110.8Z'],
+  ['room', 'M91.9 132.9L61.7 139.2L76.8 102.4ZM61.7 139.2L91.9 132.9L68.2 166ZM36.8 166L61.7 139.2L68.2 166Z'],
+  ['room-shade', 'M102.1 96.7L118 87.4L118 110.8Z'],
+  ['room-lit', 'M73.4 66L97.7 66L76.8 102.4Z'],
+  ['room', 'M97.7 66L102.1 96.7L76.8 102.4ZM118 87.4L97.7 66L118 66Z'],
+  ['room-shade', 'M97.7 66L118 87.4L102.1 96.7Z'],
+  ['room', 'M61.7 139.2L46.4 99L76.8 102.4Z'],
+  ['room-lit', 'M46.4 99L40.3 66L73.4 66ZM46.4 99L73.4 66L76.8 102.4Z'],
+  ['room', 'M118 143.5L91.9 132.9L118 110.8Z'],
+  ['room-shade', 'M91.9 132.9L90.9 166L68.2 166ZM90.9 166L118 143.5L118 166ZM118 143.5L90.9 166L91.9 132.9Z'],
+  ['room-lit', 'M18 145.6L36.8 166L18 166Z'],
+  ['room-shade', 'M46.4 99L36 123.2L18 120.6Z'],
+  ['room', 'M36 123.2L46.4 99L61.7 139.2ZM36 123.2L18 145.6L18 120.6ZM36 123.2L61.7 139.2L36.8 166Z'],
+  [
+    'room-lit',
+    'M18 145.6L36 123.2L36.8 166ZM40.3 66L18 86.9L18 66ZM46.4 99L18 86.9L40.3 66ZM18 86.9L46.4 99L18 120.6Z',
+  ],
+];
+
+/** The porthole's faceted brass rim around the circle at 68, 116, lit at the upper left, and its rivets. */
+export const PORT: readonly Facet[] = [
+  [
+    'port-shade',
+    'M127 116L121.2 141.6L113 137.7L118 116ZM121.2 141.6L104.8 162.1L99.2 155.1L113 137.7ZM104.8 162.1L81.1 173.5L79.1 164.7L99.2 155.1ZM81.1 173.5L54.9 173.5L56.9 164.7L79.1 164.7ZM54.9 173.5L31.2 162.1L36.8 155.1L56.9 164.7Z',
+  ],
+  ['port', 'M31.2 162.1L14.8 141.6L23 137.7L36.8 155.1Z'],
+  [
+    'port-lit',
+    'M14.8 141.6L9 116L18 116L23 137.7ZM9 116L14.8 90.4L23 94.3L18 116ZM14.8 90.4L31.2 69.9L36.8 76.9L23 94.3ZM31.2 69.9L54.9 58.5L56.9 67.3L36.8 76.9ZM54.9 58.5L81.1 58.5L79.1 67.3L56.9 67.3ZM81.1 58.5L104.8 69.9L99.2 76.9L79.1 67.3Z',
+  ],
+  ['port', 'M104.8 69.9L121.2 90.4L113 94.3L99.2 76.9Z'],
+  [
+    'port-shade',
+    'M121.2 90.4L127 116L118 116L113 94.3ZM118.1 132.1L120.1 130.1L122.1 132.1L120.1 134.1ZM78.1 169.1L80.1 167.1L82.1 169.1L80.1 171.1ZM26 153L28 151L30 153L28 155ZM13.9 99.9L15.9 97.9L17.9 99.9L15.9 101.9ZM53.9 62.9L55.9 60.9L57.9 62.9L55.9 64.9ZM106 79L108 77L110 79L108 81Z',
+  ],
+];
+
+/** The silt the robot stirs up where it hits the seabed: faceted puffs, lit and plain. */
+export const SILT: readonly Facet[] = [
+  ['silt', 'M267.9 354.4L252.1 368.9L225.8 368.9L213.3 354.4L228.5 339.8L256 339.8Z'],
+  ['silt-lit', 'M335.2 376.3L324.8 390.1L300.4 390.1L293.7 376.3L302.2 362.5L327.6 362.5Z'],
+  ['silt', 'M388.6 378L374.8 392.4L348.5 392.4L330.8 378L345.3 363.5L371 363.5Z'],
+  ['silt-lit', 'M328.1 354.4L318.9 363.6L302.7 363.6L292.9 354.4L301.1 345.2L318.8 345.2Z'],
+  ['silt', 'M348.6 367.2L340.7 381.3L313.2 381.3L301.3 367.2L314 353.1L339.5 353.1Z'],
+  ['silt-lit', 'M272.8 335.4L257.7 350.1L231.1 350.1L216.5 335.4L233.1 320.8L256 320.8Z'],
+  ['silt', 'M295.9 349L281.7 364.1L254.1 364.1L241.3 349L255 333.9L284.1 333.9Z'],
+];

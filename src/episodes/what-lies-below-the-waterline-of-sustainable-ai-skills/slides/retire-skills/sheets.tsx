@@ -1,8 +1,9 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import styles from './retire.module.css';
+import { CrateArt, SheetPaper } from './room-art';
 
 /** Words that differ by view: the skill as the chat app names it, or its folder. */
 export interface ByView {
@@ -33,7 +34,7 @@ function SheetHead({
   readonly note?: string;
 }) {
   return (
-    <div className="border-b-2 border-current pb-1">
+    <div className="relative border-b-2 border-current pb-1">
       {note === undefined ? null : <p className="text-right text-caption text-muted-foreground">{note}</p>}
       <p className="flex items-baseline justify-between gap-3">
         <Swap words={heading} className="text-body font-semibold" />
@@ -80,14 +81,15 @@ export function BeforeIndex(props: {
   readonly more: string;
 }) {
   return (
-    <ZoneCard className="focus-group__item flex flex-col gap-2 rounded-lg p-4 shadow-md">
+    <ZoneCard className="focus-group__item relative flex flex-col gap-2 p-4 pt-5">
+      <SheetPaper sheet="before" />
       <SheetHead heading={props.heading} count={props.count} note={props.season} />
-      <ol className="flex flex-col">
+      <ol className="relative flex flex-col">
         {props.lines.map((line) => (
           <BeforeLineItem key={line.folder} line={line} />
         ))}
       </ol>
-      <p className="text-caption text-muted-foreground italic">{props.more}</p>
+      <p className="relative text-caption text-muted-foreground italic">{props.more}</p>
     </ZoneCard>
   );
 }
@@ -107,12 +109,13 @@ export function TaskLog(props: {
   readonly more: string;
 }) {
   return (
-    <ZoneCard className="focus-group__item flex flex-col gap-2 rounded-lg p-4 shadow-md">
-      <p className="flex items-baseline justify-between gap-3 border-b-2 border-current pb-1">
+    <ZoneCard className="focus-group__item relative flex flex-col gap-2 p-4 pt-5">
+      <SheetPaper sheet="log" />
+      <p className="relative flex items-baseline justify-between gap-3 border-b-2 border-current pb-1">
         <span className="text-body font-semibold">{props.heading}</span>
         <span className="text-caption text-muted-foreground">{props.season}</span>
       </p>
-      <ol className="flex flex-col gap-1.5">
+      <ol className="relative flex flex-col gap-1.5">
         {props.rows.map(({ key, date, task, skill }) => (
           <li key={key} className="flex flex-col">
             <span className="text-caption text-muted-foreground">
@@ -124,35 +127,24 @@ export function TaskLog(props: {
           </li>
         ))}
       </ol>
-      <p className="text-caption text-muted-foreground">{props.more}</p>
+      <p className="relative text-caption text-muted-foreground">{props.more}</p>
     </ZoneCard>
   );
 }
 
-/** The archive crate: the retired cards dropped in, its label naming the date and that a card can come back. */
-export function ArchiveCrate({ cards, lines }: { readonly cards: number; readonly lines: readonly ByView[] }) {
+/** The archive crate (the Spec's, `room-art.tsx`): the retired cards standing in it, its label naming the date and that a card can come back. */
+export function ArchiveCrate({ lines }: { readonly lines: readonly ByView[] }) {
   return (
-    <div className="focus-group__item flex flex-col items-center">
-      <div aria-hidden className="flex gap-1">
-        {Array.from({ length: cards }, (_, n) => (
-          <span
-            key={n}
-            className={cn('h-8 w-6 rounded-sm', styles.retired, styles.drop)}
-            style={{ '--n': n } as CSSProperties}
+    <div className="focus-group__item">
+      <CrateArt
+        label={lines.map((words, index) => (
+          <Swap
+            key={words.chat}
+            words={words}
+            className={cn('text-caption text-card-foreground', index === 0 && 'font-semibold')}
           />
         ))}
-      </div>
-      <div className={cn('w-full rounded-lg px-4 pt-4 pb-3', styles.crate)}>
-        <ZoneCard className="flex flex-col items-center rounded-md px-3 py-2 text-center">
-          {lines.map((words, index) => (
-            <Swap
-              key={words.chat}
-              words={words}
-              className={cn('text-caption', index === 0 ? 'font-semibold' : 'text-muted-foreground')}
-            />
-          ))}
-        </ZoneCard>
-      </div>
+      />
     </div>
   );
 }
@@ -189,17 +181,18 @@ export function AfterIndex(props: {
   return (
     <ZoneCard
       className={cn(
-        'focus-group__item card-hover card-hover--raise flex flex-col gap-2 rounded-lg p-4 shadow-md',
+        'focus-group__item card-hover card-hover--raise relative flex flex-col gap-2 p-4 pt-5',
         styles.closeUp,
       )}
     >
+      <SheetPaper sheet="after" />
       <SheetHead heading={props.heading} count={props.count} />
-      <ol className="flex flex-col gap-0.5">
+      <ol className="relative flex flex-col gap-0.5">
         {props.lines.map((line) => (
           <AfterLineItem key={line.folder} line={line} neededLabel={props.neededLabel} />
         ))}
       </ol>
-      <p className="text-caption text-muted-foreground">{props.callback}</p>
+      <p className="relative text-caption text-muted-foreground">{props.callback}</p>
     </ZoneCard>
   );
 }

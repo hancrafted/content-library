@@ -3,8 +3,9 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
-import { Clamp, type ClampIcon } from './clamp';
+import { keyedLines } from './code-lines.pure';
 import styles from './loan.module.css';
+import { ClampArt, type ClampIcon } from './sea-art';
 
 export interface StatementEntry {
   readonly key: ClampIcon;
@@ -46,8 +47,8 @@ function EntryBody({ entry }: { readonly entry: StatementEntry }) {
           {coding.lead}
         </p>
         <code translate="no" className={cn('mt-2 block rounded-md px-3 py-2 font-mono text-caption', styles.code)}>
-          {coding.code.map((line) => (
-            <span key={line} className="block break-words whitespace-pre-wrap">
+          {keyedLines(coding.code).map(({ key: lineKey, line }) => (
+            <span key={lineKey} className="block break-words whitespace-pre-wrap">
               {line}
             </span>
           ))}
@@ -111,7 +112,7 @@ function NextEntry({
 /**
  * The skill's running statement (Option 23b), a copy of the `vertical-stepper` master: its spine is the robot's cable,
  * each step a clamp with its glyph, every entry open at rest, the latest the focal mark on paper. The robot hangs at
- * the cable's end beside a dashed entry for the next fix.
+ * the cable's end beside a dashed entry for the next fix. Each clamp is the Spec's faceted plate holding its entry's prop.
  */
 export function CableStepper({ label, entries, next, robotLabel }: CableStepperProps) {
   return (
@@ -125,7 +126,7 @@ export function CableStepper({ label, entries, next, robotLabel }: CableStepperP
           className="focus-group__item relative flex gap-4"
         >
           <span className={styles.arrive} style={stepOf(step)}>
-            <Clamp icon={entry.key} label={entry.iconLabel} />
+            <ClampArt icon={entry.key} label={entry.iconLabel} />
           </span>
           <EntryCard entry={entry} step={step} />
         </li>
