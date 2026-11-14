@@ -35,6 +35,8 @@ const LEFT_CONSOLE = { x: 300, width: 270 } as const;
 const RIGHT_CONSOLE = { x: 716, width: 200 } as const;
 /** The Spec's desk top is lower than the shared Console's at the cast's scale; the manual stands on the shared one. */
 const MANUAL_LIFT = DESK_TOP - 369;
+/** The Spec's pilots sit with their hands on the desk: each chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 /** The pulled card above the left console, where its words go. */
 export const PULLED = { x: 343, y: 210, width: 206, height: 106 } as const;
 /** The index board on the right wall; its entries are the overlay's. */
@@ -62,7 +64,7 @@ function PilotAtConsole({ x, width }: { readonly x: number; readonly width: numb
   return (
     <g transform={`translate(${x} ${DESK_TOP}) scale(${CONSOLE_SCALE})`}>
       <Console width={units} />
-      <g transform={`translate(${seat.x} ${seat.y})`}>
+      <g transform={`translate(${seat.x + PILOT_REACH} ${seat.y})`}>
         <Character preset={pilot} pose="sit" />
       </g>
     </g>
