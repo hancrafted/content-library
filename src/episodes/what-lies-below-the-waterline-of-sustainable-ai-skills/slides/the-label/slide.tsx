@@ -17,7 +17,6 @@ export const theLabel = slide({
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
-        robotAt="hanging"
         section={3}
         wide
         tilt="right"

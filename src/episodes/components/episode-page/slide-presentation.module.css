@@ -1,6 +1,7 @@
+/* The last Slide's surface reaches down through the Content area's end space (`--slide-surface-reach`), so no band. */
 .surface {
   position: absolute;
-  inset: 0;
+  inset: 0 0 calc(-1 * var(--slide-surface-reach, 0px));
   z-index: -20;
   pointer-events: none;
   background: var(--slide-surface, var(--background));
@@ -12,6 +13,7 @@
   --slide-transition-bleed: initial;
   --slide-transition-height: 100svh;
   --slide-transition-opacity: 1;
+  --slide-transition-bubble: initial;
 }
 
 .edge {

@@ -9,19 +9,32 @@ export interface ZonePresentationInput {
   readonly section: number;
   /** A section slide descends into its zone through bubbles and shows the whole ruler; a page Slide carries the rail. */
   readonly kind: 'section' | 'page';
+  /** A section slide's drawing, laid full-bleed behind it as its rear decoration, under the rail; a page Slide has none. */
+  readonly scene?: ReactNode;
 }
 
 /** The Slide's surface and text in its zone; plain custom properties, as `presentation.style` takes. */
-export type ZoneStyle = Readonly<Record<`--${string}`, string>> & { readonly '--slide-surface': string };
+export type ZoneStyle = Readonly<Record<`--${string}`, string>> & { readonly '--slide-surface'?: string };
 
 /** What a Slide passes as its `presentation` (design-ADR 0022's optional configuration), built from its zone alone. */
 export interface ZonePresentation {
   readonly style: ZoneStyle;
-  readonly enter?: { readonly effect: 'bubbles' };
+  /** The descent's bubbles, tinted by the zone the section slide descends into: depth marked in scenery, not surface. */
+  readonly enter?: {
+    readonly effect: 'bubbles';
+    readonly style: Readonly<Record<'--slide-transition-bubble', string>>;
+  };
   readonly rear: ReactNode;
   /** The rail reads on phones too: there it is the only depth mark (design guide, Iceberg). */
   readonly rearMobile: true;
 }
+
+/**
+ * Whether a Slide takes its zone's colour as its background. Paused (Han, 2026-11-14; design guide, Iceberg): every
+ * Slide keeps the page's own light or dark background, and the zone colours mark depth only on the ruler, the rail
+ * and the scenery. The one seam that brings zone backgrounds back: set it to `true`.
+ */
+const ZONE_BACKGROUNDS = false;
 
 const LIGHT_TEXT: Readonly<Record<`--${string}`, string>> = {
   '--slide-surface-foreground': 'var(--on-brand-accent)',
@@ -29,18 +42,38 @@ const LIGHT_TEXT: Readonly<Record<`--${string}`, string>> = {
   '--muted-foreground': 'color-mix(in oklab, var(--on-brand-accent) 78%, transparent)',
 };
 
+/** The zone's colour over the whole surface, its text light where the zone is dark in both themes; none while paused. */
+function zoneSurface(zone: Zone): ZoneStyle {
+  if (!ZONE_BACKGROUNDS) return {};
+  return { '--slide-surface': zoneToken(zone), ...(isDarkZone(zone) ? LIGHT_TEXT : {}) };
+}
+
+/** A section slide's text sits over its scene, so it turns light where the zone is dark in both themes. */
+function sceneText(zone: Zone, scene: ReactNode): ZoneStyle {
+  return scene !== undefined && isDarkZone(zone) ? LIGHT_TEXT : {};
+}
+
 /**
- * A Slide's place in the Iceberg style (design guide, Iceberg): its Section's zone colours its whole surface, from the
- * one `--zone-<zone>` token, and turns its text light where the zone is dark in both themes. A page Slide carries the
+ * A Slide's place in the Iceberg style (design guide, Iceberg): its surface from `zoneSurface`, which keeps the page's
+ * own background while zone backgrounds are paused, the one `--zone-<zone>` token once they return. A page Slide carries the
  * slim rail at its left edge, its Section lit. A section slide descends into the zone through the `bubbles` ink and
- * shows the whole ruler, so its rail shows on phones only, where the ruler is hidden. A Slide names its Section, never
+ * shows the whole ruler, so its rail shows on phones only, where the ruler is hidden; its `scene` fills it from edge to
+ * edge behind its words, like the Title slide's hero. A Slide names its Section, never
  * a colour: `presentation: zonePresentation({ sections, section: 4, kind: 'page' })`.
  */
-export function zonePresentation({ sections, section, kind }: ZonePresentationInput): ZonePresentation {
+export function zonePresentation({ sections, section, kind, scene }: ZonePresentationInput): ZonePresentation {
   const zone = zoneOf(sections, section);
-  const style: ZoneStyle = { '--slide-surface': zoneToken(zone), ...(isDarkZone(zone) ? LIGHT_TEXT : {}) };
-  const rear = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
-  return kind === 'section'
-    ? { style, enter: { effect: 'bubbles' }, rear, rearMobile: true }
-    : { style, rear, rearMobile: true };
+  const rail = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
+  if (kind === 'page') return { style: zoneSurface(zone), rear: rail, rearMobile: true };
+  return {
+    style: { ...zoneSurface(zone), ...sceneText(zone, scene) },
+    enter: { effect: 'bubbles', style: { '--slide-transition-bubble': zoneToken(zone) } },
+    rear: (
+      <>
+        {scene}
+        {rail}
+      </>
+    ),
+    rearMobile: true,
+  };
 }

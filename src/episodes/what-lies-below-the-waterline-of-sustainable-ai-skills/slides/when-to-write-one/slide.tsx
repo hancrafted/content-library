@@ -17,7 +17,6 @@ export const whenToWriteOne = slide({
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
         rulerLabel={t('ruler')}
-        robotAt="hanging"
         section={2}
         wide
         statement={t('aiStatement')}
