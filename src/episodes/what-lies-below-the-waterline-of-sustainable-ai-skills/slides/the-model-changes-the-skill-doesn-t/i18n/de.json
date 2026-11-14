@@ -1,0 +1,110 @@
+{
+  "title": "Das Modell ändert sich, der Skill nicht",
+  "caption": "Ein Modell-Update ändert, wer Deinen Skill liest, also kann sich ein Skill, der gestern funktioniert hat, heute anders verhalten.",
+  "analogy": "Dieselbe Karte, zwei Tauchgänge, zwei Tiefen.",
+  "story": "In der Geschichte:",
+  "card": {
+    "label": "Der Skill, unverändert",
+    "same": "dieselben Worte",
+    "name": "Sedimentprobe nehmen",
+    "description": "Verwenden, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.",
+    "step": "2. Langsam zum Meeresboden absteigen."
+  },
+  "halves": {
+    "update": {
+      "term": "Modell-Update",
+      "text": "Dein Anbieter liefert eine neue Version des Modells aus. Der Skill behält dieselben Worte, und dieselbe Anweisung führt jetzt zu einem anderen Ergebnis.",
+      "coding": "Dieselbe <code>collect-sediment-sample/SKILL.md</code>, gelesen von einer neuen Modellversion.",
+      "changed": "Modell",
+      "changedValue": "neue Version"
+    },
+    "switch": {
+      "term": "Anderes Modell oder anderer Agent",
+      "text": "Eine Kollegin führt Deinen Skill in einer anderen App oder einem anderen Agenten aus, selbst auf demselben Modell, und der liest dieselben Worte auf seine Art.",
+      "coding": "Dieselbe <code>collect-sediment-sample/SKILL.md</code>, ausgeführt in Claude Code und in Codex: ein anderer Agent, selbst auf demselben Modell.",
+      "changed": "Agent, Modell",
+      "changedValue": "ein anderer"
+    }
+  },
+  "unchanged": "unverändert",
+  "art": {
+    "short": "heute: bleibt zu früh stehen",
+    "silt": "heute: in den Schlick",
+    "yesterday": "gestern"
+  },
+  "lehman": {
+    "didYouKnow": "Schon gewusst?",
+    "term": "Lehmans Gesetze",
+    "text": "Software im Einsatz muss laufend angepasst werden, sonst wird sie zunehmend unbefriedigend. Hier bleibt der Skill gleich, und die Welt um ihn herum bewegt sich.",
+    "dispute": "Umstritten: Von den Gesetzen hielten nur fortlaufende Veränderung und fortlaufendes Wachstum in jeder untersuchten Studie."
+  },
+  "reader": {
+    "title": "Dieselben Worte, ein neuer Leser",
+    "chat": "Anthropics Prompting-Leitfaden hat modellspezifische Abschnitte dazu, wo sich „a single model behaves differently“; OpenAI schreibt, dass für andere Modelle optimierte Prompts „may not immediately work“.",
+    "coding": "Deine SKILL.md wird als Text gelesen, von dem Modell, das sie gerade ausführt. Anthropics Leitfaden zeigt pro Modell, „what to change in your prompt“; OpenAI: Für andere Modelle optimierte Prompts „may not immediately work“."
+  },
+  "analogyOnly": "Nur eine Analogie: Der Pilot behält sein Können und vergisst die Tage. Eine Skill-Datei wird als Text gelesen, näher an einer geschriebenen Notiz als an einer trainierten Fähigkeit.",
+  "alt": {
+    "update": "Dein Pilot, zurück vom neuen Kurs seiner Schule, liest dieselbe Karte. Der Roboter bleibt im tiefen Wasser zu früh stehen; der gestrige Tauchgang, gestrichelt gezeichnet, erreichte den Meeresboden.",
+    "switch": "Ein Pilot einer anderen Schule liest dieselbe Karte. Der Roboter fährt direkt in den Schlick; der gestrige Tauchgang, gestrichelt gezeichnet, hielt knapp über dem Meeresboden."
+  },
+  "notes": {
+    "lehmans-laws-and-their-limits": {
+      "header": "Skills in einer Welt, die sich ändert: Lehmans erste zwei Gesetze und ihre Grenzen",
+      "description": "„E-type systems must be continually adapted else they become progressively less satisfactory“; die Komplexität wächst, „unless work is done to maintain or reduce it“ [1]. Die Gesetze sind umstritten: Nur fortlaufende Veränderung und fortlaufendes Wachstum wurden von allen untersuchten Studien bestätigt [2], und Linux wuchs überlinear [3].",
+      "sources": {
+        "lehman-ramil-wernick-laws": {
+          "title": "Lehman, Ramil und Wernick, Metrics and Laws of Software Evolution: The Nineties View"
+        },
+        "herraiz-laws-review": {
+          "title": "Herraiz, Rodriguez, Robles und Gonzalez-Barahona, The evolution of the laws of software evolution: a discussion based on a systematic literature review"
+        },
+        "godfrey-tu-linux": { "title": "Godfrey und Tu, Evolution in Open Source Software: A Case Study" }
+      }
+    },
+    "each-model-reads-instructions-differently": {
+      "header": "Jedes Modell liest dieselben Anweisungen anders",
+      "description": "Anthropics Leitfaden hat modellspezifische Abschnitte dazu, wo sich „a single model behaves differently and what to change in your prompt“ [1]; OpenAI schreibt, dass für andere Modelle optimierte Prompts „may not immediately work“ [2].",
+      "sources": {
+        "anthropic-prompting-best-practices": { "title": "Anthropic, Prompting best practices" },
+        "openai-gpt-4-1-prompting-guide": { "title": "OpenAI, GPT-4.1 Prompting Guide" }
+      }
+    },
+    "model-memory-and-patient-hm": {
+      "header": "Das Gedächtnis des Modells und Patient H.M.: eine Analogie, die beim Skill bricht",
+      "description": "H.M. lernte Spiegelzeichnen und behielt es über 3 Tage, ohne sich an eine der Sitzungen zu erinnern [1], weil Fertigkeiten von einem Gedächtnissystem außerhalb der geschädigten Region gespeichert werden [2]. Auf ein Modell passt das nur als Analogie: Trainierte Gewichte entsprechen der Fertigkeit, aber eine Skill-Datei wird als Text gelesen und ist damit näher an einer deklarativen Notiz. Diese Zuordnung ist eine Schlussfolgerung; Milner 1962 wurde nur über Squires Darstellung gelesen.",
+      "sources": {
+        "squire-legacy-of-hm": { "title": "Squire, The Legacy of Patient H.M. for Neuroscience" },
+        "squire-memory-systems": { "title": "Squire, Conscious and Unconscious Memory Systems" }
+      }
+    },
+    "the-agent-changes-the-skill-too": {
+      "header": "Auch der Agent verändert den Skill, selbst beim selben Modell",
+      "description": "In einem Benchmark mit 98 öffentlichen Skills kehrt sich bei 40 die Wirkung um, wenn zwei Agenten-Umgebungen dasselbe Modell ausführen, und die Autoren raten, einen Skill „with the model, agent, and repositories in which it will be deployed“ zu prüfen [1].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "not-the-only-pilot": {
+        "title": "Nicht der einzige Pilot",
+        "keywords": "",
+        "script": "Unter Deinem Skill ändert sich noch etwas, und das hast Du nicht in der Hand: das Modell, das ihn liest. Jedes KI-Modell hat die Eigenschaft, mit der wir angefangen haben, und jeder KI-Anbieter trainiert sein eigenes, so wie jede Pilotenschule ihre eigenen Piloten ausbildet. Der Leser Deines Skills steht also nie fest."
+      },
+      "update-and-switch": {
+        "title": "Update und Wechsel",
+        "keywords": "",
+        "script": "Zwei Dinge können den Leser ändern. Ein Modell-Update: Dein Anbieter liefert eine neue Version aus, Dein Skill behält dieselben Worte, aber eine Anweisung wie „langsam absteigen“ führt jetzt zu einem anderen Tauchgang. Ein anderes Modell oder ein anderer Agent: Eine Kollegin führt Deinen Skill in einer anderen App aus, und die liest dieselben Worte auf ihre Art. Nicht der Skill hat sich geändert, sondern der Leser, und Ingenieure haben das in der Software schon lange gesehen: Was im Einsatz ist, muss sich laufend ändern, sonst wird es schlechter."
+      },
+      "hand-over-the-verdict": {
+        "title": "Das Urteil übergeben",
+        "keywords": "",
+        "script": "Also meine Frage an Dich: Welche Deiner Skills würdest Du nach dem nächsten Modell-Update noch einmal prüfen? Wenn Du einen besitzt, würdest Du ihm zutrauen, sich morgen genauso zu verhalten?"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+/*
+ * "The whole iceberg" (Option 26a): the takeaway rows over each zone's water and the one emphasis motion. No raw
+ * colour (FE-011): a row's words sit on a `ZoneCard`, so they keep their contrast at every depth; its node mixes
+ * `--on-brand-accent` (white); `--primary` marks the three steps. Dark mode only retunes the mixes.
+ */
+
+.rows {
+  --node: color-mix(in oklab, var(--on-brand-accent) 90%, var(--zone-surface));
+  --node-edge: color-mix(in oklab, var(--on-brand-accent) 40%, transparent);
+}
+
+:global(.dark) .rows {
+  --node: color-mix(in oklab, var(--on-brand-accent) 80%, var(--zone-surface));
+  --node-edge: color-mix(in oklab, var(--on-brand-accent) 30%, transparent);
+}
+
+.node {
+  background: var(--node);
+  box-shadow: 0 0 0 4px var(--node-edge);
+  rotate: 45deg;
+}
+
+/*
+ * The one emphasis motion, once on entry: each takeaway lights as the robot passes its depth, the Abyss first and the
+ * Surface last, then the robot arrives on deck (its `Travel`). The base rules are the end state, every row lit, as
+ * reduced motion and a still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .light {
+    animation: light 500ms ease-out calc(var(--rise) * 350ms + 200ms) both;
+  }
+}
+
+@keyframes light {
+  from {
+    opacity: 0.3;
+  }
+}

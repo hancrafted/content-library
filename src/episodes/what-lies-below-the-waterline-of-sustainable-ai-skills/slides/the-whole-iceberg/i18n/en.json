@@ -1,0 +1,86 @@
+{
+  "title": "The whole iceberg",
+  "caption": "Write a skill the third time, describe it by the moment, and decide where the project details live before you share it.",
+  "analogy": "The robot back on deck; the manual open at a short index.",
+  "story": "In the story:",
+  "takeaways": "Each Section's takeaway at its depth",
+  "zones": {
+    "surface": {
+      "name": "Surface",
+      "line1": "A skill hands the AI your proven procedure on demand;",
+      "line2": "until a task needs it, the AI reads only its name and description."
+    },
+    "sunlit": {
+      "name": "Sunlit",
+      "line1": "Write it from a run that worked;",
+      "line2": "the AI sees only its description."
+    },
+    "twilight": {
+      "name": "Twilight",
+      "line1": "A good skill does one job; to work in more than one project,",
+      "line2": "it keeps project details beside it, in files it reads when it runs."
+    },
+    "midnight": {
+      "name": "Midnight",
+      "line1": "A shared skill is a knowledge article:",
+      "line2": "it needs an owner, a version and a review date."
+    },
+    "abyss": {
+      "name": "Abyss",
+      "line1": "Keeping a skill right is the work: a model update changes who reads it,",
+      "line2": "so test it again, and retire skills nobody uses."
+    }
+  },
+  "index": {
+    "title": "Skill index",
+    "lead": "always loaded: name and description",
+    "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+    "codingLead": "SKILL.md, the part always loaded"
+  },
+  "steps": {
+    "0": {
+      "text": "Pick one task you've explained three times, and turn a good run of it into a skill.",
+      "agent": "Ask the agent to turn this conversation into a skill and save it to {path}."
+    },
+    "1": {
+      "text": "Write its description as the moment you'd need it.",
+      "agent": "The <code>description:</code> line in the front matter of <code>SKILL.md</code>."
+    },
+    "2": {
+      "text": "Before sharing a skill, decide where the project details live, and give it an owner.",
+      "agent": "Steps point to a project file such as <code>CONTEXT.md</code>; shared in this repository: <code>.claude/skills/</code>; shared across projects: a plugin, with an owner."
+    }
+  },
+  "alt": "The whole iceberg from the Surface to the Abyss: the ship at the waterline with the captain and the pilot on the bridge, the robot back on deck, and the manual open at a short index of three skills.",
+  "notes": {
+    "skill-governance-settled-and-not": {
+      "header": "Skill governance: what is settled, and what is not",
+      "description": "no source defines owner and review date as a rule for skills, and none shows how many organisations govern shared skills at all [1]. The audience-by-scope matrix is a rule of thumb, not a published framework [2].",
+      "sources": {
+        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" },
+        "skilldex": {
+          "title": "Saha and Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-steps": {
+        "title": "Three steps",
+        "keywords": "",
+        "script": "Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write its description as the moment you would need it. Three: before you share it, decide where the project details live, and give it an owner."
+      },
+      "the-honest-caveat": {
+        "title": "The honest caveat",
+        "keywords": "",
+        "script": "I want to be honest about the deep end. Governance, review and retirement are the part I am least sure about, and I am still learning there too. If you find something that works, tell me."
+      },
+      "your-first-card": {
+        "title": "Your first card",
+        "keywords": "",
+        "script": "We are back on deck, with a short index. If you want a low-key start, take the task you explained last week and turn its best run into your first skill. Thank you."
+      }
+    }
+  }
+}
