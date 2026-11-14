@@ -1,0 +1,127 @@
+{
+  "title": "Worauf Du in Deinem Team achten solltest",
+  "heading": "Was hättest Du tun müssen?",
+  "caption": "Bau in jeder Person drei Fähigkeiten auf, die die vier Fehler vom Board beheben, und gib ihnen eine Organisation, die <b>um das Ziel herum gestaltet</b> ist.",
+  "person": {
+    "label": "In jeder Person",
+    "skills": {
+      "breakDown": {
+        "skill": "Die Arbeit vom Ziel aus zerlegen",
+        "fixed": {
+          "drivers": { "was": "Fahrgemeinschaften + Open Bar", "now": "ein Shuttle zurück, niemand fährt" },
+          "cold": { "was": "1.800 m in Sommerkleidung", "now": "Gästeinfo: warme Kleidung, 6 °C in der Nacht" }
+        }
+      },
+      "contract": {
+        "skill": "Den Vertrag an der Nahtstelle schreiben",
+        "fixed": {
+          "eggs": {
+            "was": "„31 vegetarisch“ bekam Eiergerichte",
+            "now": "definiert: kein Fleisch, kein Fisch, keine Eier"
+          }
+        }
+      },
+      "review": {
+        "skill": "<marker>Gegen Vertrag und Ziel prüfen</marker>",
+        "fixed": {
+          "paintball": { "was": "Paintball × 200", "now": "eine Aktivität, bei der die zehn Rollstuhlnutzer mitmachen" }
+        }
+      }
+    }
+  },
+  "fixed": "Behoben",
+  "organisation": {
+    "label": "Von der Organisation",
+    "items": {
+      "goals": { "title": "Klare Ziele", "text": "Ein Ergebnis, das Du messen kannst, etwa „alle sicher zu Hause“." },
+      "contracts": {
+        "title": "Verträge zwischen Teams",
+        "text": "Erhält, liefert, geprüft durch, an jeder Nahtstelle."
+      },
+      "oversight": { "title": "Eine Aufsichtsregel pro Aufgabe" },
+      "workflows": { "title": "Workflows um das Ziel herum", "text": "Nicht um das Organigramm herum." }
+    }
+  },
+  "oversight": { "in": "In der Schleife", "on": "An der Schleife", "out": "Außerhalb der Schleife" },
+  "footnote": {
+    "synthesis": "<marker>Dass diese drei die Fähigkeiten sind, die es aufzubauen gilt, ist eine Synthese: Keine Studie prüft sie als Gruppe</marker>.",
+    "juniors": "<marker>Juniors lernen sie an kleinen Aufgaben, genau denen, die Agenten zuerst übernehmen</marker>."
+  },
+  "notes": {
+    "management-101-skills": {
+      "header": "Management-Grundlagen",
+      "description": "„If you can explain what you need, give effective feedback, and design ways of evaluating work, you are going to be able to work with agents“ [1].",
+      "sources": {
+        "mollick-management-superpower": {
+          "title": "Mollick, Management as AI Superpower (One Useful Thing, 27. Januar 2026)"
+        }
+      }
+    },
+    "effort-moves-to-steering-and-checking": {
+      "header": "Der Aufwand wandert ins Steuern und Prüfen",
+      "description": "In einer Befragung von 319 Wissensarbeitenden verlagerte sich kritisches Denken hin zum Prüfen von Informationen, zum Einbinden von Antworten und zur Verantwortung für die Aufgabe [1].",
+      "sources": {
+        "lee-critical-thinking": {
+          "title": "Lee et al. (Carnegie Mellon, Microsoft Research), The Impact of Generative AI on Critical Thinking (CHI 2025)"
+        }
+      }
+    },
+    "evidence-is-indirect": {
+      "header": "Die Belege sind indirekt",
+      "description": "Keine Quelle prüft Arbeit zerlegen, Übergaben schreiben und Ergebnisse prüfen als Gruppe, und keine misst, wie viele Menschen das können; dass dies die Fähigkeiten sind, die es aufzubauen gilt, ist eine Synthese [1].",
+      "sources": {
+        "tomasev-intelligent-delegation": {
+          "title": "Tomašev, Franklin, Osindero (Google DeepMind), Intelligent AI Delegation"
+        }
+      }
+    },
+    "juniors-may-not-build-them": {
+      "header": "Juniors bauen sie vielleicht nicht auf",
+      "description": "Die kleinen Aufgaben, an denen Juniors ihr Urteilsvermögen aufbauen, sind genau die, die am ehesten an Agenten abgegeben werden [1].",
+      "sources": {
+        "tomasev-intelligent-delegation": {
+          "title": "Tomašev, Franklin, Osindero (Google DeepMind), Intelligent AI Delegation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "title": "Die Antwort",
+        "keywords": "",
+        "script": "Was hättest Du also tun müssen? Du hättest drei Fähigkeiten in Deinen Leuten gebraucht, und jede hängt an den Fehlern, die sie behoben hätte."
+      },
+      "break-down": {
+        "title": "Zerlegen",
+        "keywords": "",
+        "script": "Die erste ist, die Arbeit vom Ziel aus zu zerlegen. Tu das, und die trinkenden Fahrer und die frierenden Gäste haben eine Zuständigkeit, bevor das Fest beginnt."
+      },
+      "write-contracts": {
+        "title": "Verträge schreiben",
+        "keywords": "",
+        "script": "Die zweite ist, den Vertrag an der Nahtstelle zu schreiben: was eine Aufgabe erhält, was sie liefert und wie es geprüft wird. Tu das, und die Eiergerichte können nicht passieren."
+      },
+      "review-twice": {
+        "title": "Zweimal prüfen",
+        "keywords": "",
+        "script": "Die dritte ist, zweimal zu prüfen, gegen den Vertrag und gegen das Ziel. Tu das, und das Paintball findet nicht statt."
+      },
+      "the-organisation": {
+        "title": "Die Organisation",
+        "keywords": "",
+        "script": "Die Organisation hat ihren eigenen Teil: klare Ziele, Verträge zwischen Teams, eine Regel dafür, wie viel Aufsicht jede Aufgabe bekommt, und Workflows, die um das Ziel herum gestaltet sind und nicht um das Organigramm."
+      },
+      "look-at-your-team": {
+        "title": "Schau auf Dein Team",
+        "keywords": "",
+        "script": "Schau jetzt auf Dein Team. Wer kann Arbeit zerlegen, wer schreibt eine klare Übergabe, und wer kann das Ergebnis eines Agenten prüfen? Das sind die Fähigkeiten, die es aufzubauen gilt, und meiner Meinung nach zahlt sich Dein Aufwand dort zuerst aus."
+      },
+      "take-one-process": {
+        "title": "Nimm einen Prozess",
+        "keywords": "",
+        "script": "Und mach vor Montag die kleinste Version von alldem. Nimm einen wiederkehrenden Prozess in Deinem Team, markiere, welche Schritte ein Agent übernehmen könnte, und entscheide für jeden, ob eine Person in, an oder außerhalb der Schleife bleibt."
+      }
+    }
+  }
+}

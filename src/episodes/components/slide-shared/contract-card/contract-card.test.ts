@@ -95,6 +95,39 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('draws the note card under a board note: its terms inline, the how below, filled where the Scene leads the eye', () => {
+    // ARRANGE
+    const expected = {
+      label: ['Plan → Requirements'],
+      terms: ['Receives', 'Delivers', 'Checked by'],
+      values: ['31 vegetarian', 'dinner for 200', 'the menu'],
+      how: ['How: the kitchen’s choice'],
+      filled: 1,
+      strip: 0,
+    };
+    // ACT
+    const $ = render({
+      size: 'note',
+      filled: true,
+      heading: 'Plan → Requirements',
+      terms: TERMS,
+      receives: '31 vegetarian',
+      delivers: 'dinner for 200',
+      checkedBy: 'the menu',
+      how: 'How: the kitchen’s choice',
+    });
+    const actual = {
+      label: textsOf($, '[data-contract-label]'),
+      terms: textsOf($, '[data-contract-term]'),
+      values: textsOf($, '[data-contract] dd'),
+      how: textsOf($, '[data-contract-how]'),
+      filled: $('[data-contract].bg-primary').length,
+      strip: $('[data-contract-strip]').length,
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -164,6 +197,25 @@ describe('edge cases', () => {
       markerIn: $('[data-contract-term]')
         .toArray()
         .map((node) => $(node).find('[data-marker]').length),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+  it('leaves out the Receives line, the label and the fill on a plain note card that names none', () => {
+    // ARRANGE
+    const expected = { terms: ['Delivers', 'Checked by'], label: 0, filled: 0, plain: 1 };
+    // ACT
+    const $ = render({
+      size: 'note',
+      terms: TERMS,
+      delivers: 'a programme for all 200',
+      checkedBy: 'against the goal',
+    });
+    const actual = {
+      terms: textsOf($, '[data-contract-term]'),
+      label: $('[data-contract-label]').length,
+      filled: $('[data-contract].bg-primary').length,
+      plain: $('[data-contract].bg-card').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
