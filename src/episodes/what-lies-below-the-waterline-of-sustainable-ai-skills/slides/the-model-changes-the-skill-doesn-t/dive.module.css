@@ -1,74 +1,265 @@
 /*
- * "The model changes, the skill doesn't" (Option 24a): each dive's own scenery, the porthole, both cables, yesterday's
- * ghost, the silt cloud and the gap bracket. No raw colour (FE-011): the porthole mixes `--on-brand-accent` (white) and
- * `--overlay` (black) with the Surface zone, the cables are the robot's and mix `--machine`, the silt mixes the Abyss
- * with `--bulb-edge`'s ochre, and `--primary` marks the one gap to look at. Dark mode only retunes the mixes.
+ * "The model changes, the skill doesn't" (Option 24a): each dive's tones, the cables, yesterday's ghost and the gap
+ * bracket. The tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets
+ * `dive-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32).
+ * `--primary` marks the one gap to look at.
  */
 
-.dive {
-  --rim: color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay));
-  --rim-lit: color-mix(in oklab, var(--on-brand-accent) 85%, var(--overlay));
-  --cabin: color-mix(in oklab, var(--zone-surface) 55%, var(--on-brand-accent));
-  --cable: color-mix(in oklab, var(--machine) 55%, var(--overlay));
-  --ghost: color-mix(in oklab, var(--on-brand-accent) 80%, transparent);
-  --silt: color-mix(in oklab, var(--bulb-edge) 45%, var(--zone-abyss));
-  --silt-lit: color-mix(in oklab, var(--bulb-edge) 65%, var(--on-brand-accent));
+.art {
+  --sky-1: oklch(0.76 0.08 240);
+  --sky-2: oklch(0.8 0.07 236);
+  --sky-3: oklch(0.845 0.058 230);
+  --sky-4: oklch(0.885 0.045 222);
+  --cloud-lit: oklch(0.995 0.004 230);
+  --cloud-shade: oklch(0.91 0.03 240);
+  --glow: oklch(0.99 0.03 200);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --sea-surface-lit: oklch(0.74 0.09 212);
+  --sea-surface: oklch(0.69 0.1 218);
+  --sea-sunlit-lit: oklch(0.62 0.11 228);
+  --sea-sunlit: oklch(0.575 0.115 234);
+  --sea-twilight-lit: oklch(0.48 0.11 250);
+  --sea-twilight: oklch(0.435 0.105 255);
+  --sea-midnight-lit: oklch(0.35 0.08 262);
+  --sea-midnight: oklch(0.31 0.072 265);
+  --sea-abyss-lit: oklch(0.24 0.05 268);
+  --sea-abyss: oklch(0.205 0.042 270);
+  --ray: oklch(0.97 0.06 200 / 0.18);
+  --bed-lit: oklch(0.42 0.04 70);
+  --bed: oklch(0.34 0.035 60);
+  --bed-shade: oklch(0.27 0.03 50);
+  --room-lit: oklch(0.95 0.012 230);
+  --room: oklch(0.905 0.018 234);
+  --room-shade: oklch(0.86 0.024 238);
+  --silt: oklch(0.62 0.05 70 / 0.72);
+  --silt-lit: oklch(0.78 0.045 75 / 0.62);
+  --port-lit: oklch(0.7 0.03 245);
+  --port: oklch(0.55 0.03 250);
+  --port-shade: oklch(0.4 0.03 255);
+  --robot-dark: oklch(0.28 0.02 260);
+  --cloud-lit: oklch(0.995 0.004 230);
 }
 
-:global(.dark) .dive {
-  --rim: color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay));
-  --rim-lit: color-mix(in oklab, var(--on-brand-accent) 68%, var(--overlay));
-  --cabin: color-mix(in oklab, var(--zone-surface) 60%, var(--overlay));
-  --cable: color-mix(in oklab, var(--machine) 70%, var(--on-brand-accent));
-  --ghost: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
-  --silt: color-mix(in oklab, var(--bulb-edge) 40%, var(--zone-abyss));
-  --silt-lit: color-mix(in oklab, var(--bulb-edge) 60%, var(--zone-abyss));
+:global(.dark) .art {
+  --sky-1: oklch(0.24 0.05 268);
+  --sky-2: oklch(0.28 0.055 264);
+  --sky-3: oklch(0.32 0.055 258);
+  --sky-4: oklch(0.37 0.055 250);
+  --cloud-lit: oklch(0.47 0.045 255);
+  --cloud-shade: oklch(0.39 0.045 260);
+  --glow: oklch(0.9 0.08 200);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --sea-surface-lit: oklch(0.44 0.075 222);
+  --sea-surface: oklch(0.405 0.078 226);
+  --sea-sunlit-lit: oklch(0.37 0.075 236);
+  --sea-sunlit: oklch(0.34 0.075 240);
+  --sea-twilight-lit: oklch(0.3 0.065 254);
+  --sea-twilight: oklch(0.27 0.06 258);
+  --sea-midnight-lit: oklch(0.23 0.048 264);
+  --sea-midnight: oklch(0.205 0.042 266);
+  --sea-abyss-lit: oklch(0.17 0.03 268);
+  --sea-abyss: oklch(0.145 0.024 270);
+  --ray: oklch(0.8 0.08 200 / 0.12);
+  --bed-lit: oklch(0.36 0.035 70);
+  --bed: oklch(0.29 0.03 60);
+  --bed-shade: oklch(0.23 0.025 50);
+  --room-lit: oklch(0.36 0.025 250);
+  --room: oklch(0.32 0.025 253);
+  --room-shade: oklch(0.285 0.025 256);
+  --silt: oklch(0.5 0.04 65 / 0.72);
+  --silt-lit: oklch(0.64 0.04 70 / 0.62);
+  --port-lit: oklch(0.52 0.03 245);
+  --port: oklch(0.42 0.03 250);
+  --port-shade: oklch(0.3 0.03 255);
+  --robot-dark: oklch(0.22 0.02 260);
+  --cloud-lit: oklch(0.47 0.045 255);
 }
 
-.rim {
-  fill: none;
-  stroke: var(--rim);
-  stroke-width: 18;
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
 }
 
-.rimLit {
-  fill: none;
-  stroke: var(--rim-lit);
-  stroke-width: 4;
+.art [data-tone='sky-1'] {
+  fill: var(--sky-1);
+  stroke: var(--sky-1);
 }
 
-.cabin {
-  fill: var(--cabin);
+.art [data-tone='sky-2'] {
+  fill: var(--sky-2);
+  stroke: var(--sky-2);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--sky-3);
+  stroke: var(--sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--sky-4);
+  stroke: var(--sky-4);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--cloud-lit);
+  stroke: var(--cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--cloud-shade);
+  stroke: var(--cloud-shade);
+}
+
+.art [data-tone='glow'] {
+  fill: var(--glow);
+  stroke: var(--glow);
+}
+
+.art [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--sea-surface-lit);
+  stroke: var(--sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--sea-surface);
+  stroke: var(--sea-surface);
+}
+
+.art [data-tone='sea-sunlit-lit'] {
+  fill: var(--sea-sunlit-lit);
+  stroke: var(--sea-sunlit-lit);
+}
+
+.art [data-tone='sea-sunlit'] {
+  fill: var(--sea-sunlit);
+  stroke: var(--sea-sunlit);
+}
+
+.art [data-tone='sea-twilight-lit'] {
+  fill: var(--sea-twilight-lit);
+  stroke: var(--sea-twilight-lit);
+}
+
+.art [data-tone='sea-twilight'] {
+  fill: var(--sea-twilight);
+  stroke: var(--sea-twilight);
+}
+
+.art [data-tone='sea-midnight-lit'] {
+  fill: var(--sea-midnight-lit);
+  stroke: var(--sea-midnight-lit);
+}
+
+.art [data-tone='sea-midnight'] {
+  fill: var(--sea-midnight);
+  stroke: var(--sea-midnight);
+}
+
+.art [data-tone='sea-abyss-lit'] {
+  fill: var(--sea-abyss-lit);
+  stroke: var(--sea-abyss-lit);
+}
+
+.art [data-tone='sea-abyss'] {
+  fill: var(--sea-abyss);
+  stroke: var(--sea-abyss);
+}
+
+.art [data-tone='ray'] {
+  fill: var(--ray);
+  stroke: none;
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--bed-lit);
+  stroke: var(--bed-lit);
+}
+
+.art [data-tone='bed'] {
+  fill: var(--bed);
+  stroke: var(--bed);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--bed-shade);
+  stroke: var(--bed-shade);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--room-lit);
+  stroke: var(--room-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--room);
+  stroke: var(--room);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--room-shade);
+  stroke: var(--room-shade);
+}
+
+.art [data-tone='silt'] {
+  fill: var(--silt);
+  stroke: none;
+}
+
+.art [data-tone='silt-lit'] {
+  fill: var(--silt-lit);
+  stroke: none;
+}
+
+.art [data-tone='port-lit'] {
+  fill: var(--port-lit);
+  stroke: var(--port-lit);
+}
+
+.art [data-tone='port'] {
+  fill: var(--port);
+  stroke: var(--port);
+}
+
+.art [data-tone='port-shade'] {
+  fill: var(--port-shade);
+  stroke: var(--port-shade);
 }
 
 .cable {
-  stroke: var(--cable);
-  stroke-width: 4;
+  stroke: var(--robot-dark);
+  stroke-width: 2.4;
+  stroke-linecap: round;
 }
 
 .ghostCable {
   fill: none;
-  stroke: var(--ghost);
-  stroke-width: 3;
-  stroke-dasharray: 10 8;
+  stroke: var(--cloud-lit);
+  stroke-width: 2;
+  stroke-dasharray: 5 6;
+  stroke-linecap: round;
 }
 
 .ghost {
-  opacity: 0.45;
+  opacity: 0.42;
 }
 
-.silt [data-tone='silt'] {
-  fill: var(--silt);
-}
-
-.silt [data-tone='silt-lit'] {
-  fill: var(--silt-lit);
+.gapEdge {
+  fill: none;
+  stroke: var(--background);
+  stroke-width: 8;
+  stroke-linejoin: round;
 }
 
 .gap {
   fill: none;
   stroke: var(--primary);
-  stroke-width: 5;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
 }
 
 .label {
@@ -77,7 +268,9 @@
 }
 
 .ghostLabel {
-  border: 1px dashed var(--card-foreground);
+  background: color-mix(in oklab, var(--foreground) 40%, transparent);
+  color: var(--background);
+  border: 1.5px dashed var(--background);
 }
 
 /* The silt cloud billows up once the robot has hit the seabed; its rest state is the cloud, as reduced motion shows. */

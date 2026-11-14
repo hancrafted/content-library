@@ -75,11 +75,10 @@ export const theModelChangesTheSkillDoesnT = slide({
           <p className="text-caption text-muted-foreground">{t('card.description')}</p>
         </InView>
         <InView view="coding" as="div" className="font-mono text-caption">
-          {FRONT_MATTER.map((line) => (
-            <span key={line} translate="no" className="block whitespace-pre-wrap">
-              {line}
-            </span>
-          ))}
+          {/* One block of lines, not one element per line: the front matter's two `---` fences are equal lines. */}
+          <span translate="no" className="block whitespace-pre-wrap">
+            {FRONT_MATTER.join('\n')}
+          </span>
         </InView>
         <p className="rounded-lg border border-border bg-muted px-3 py-2 text-body font-semibold">{t('card.step')}</p>
       </ZoneCard>
@@ -105,6 +104,7 @@ export const theModelChangesTheSkillDoesnT = slide({
               </span>
             </InView>
             <DiveScene
+              half={half}
               outcome={outcome}
               reader={reader}
               label={t(`alt.${half}`)}
