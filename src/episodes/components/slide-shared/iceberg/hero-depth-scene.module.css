@@ -3,7 +3,7 @@
  * units. The drawing fills the Slide from the top (`xMidYMin slice`), so one scale maps it: the larger of the box's
  * width and height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so
  * `cq` units read that box: a point (x, y) sits at `50cqw + (x - width / 2) * scale` across and `y * scale` down.
- * The depth gauge sits at the right inset, clear of the table of contents and of the drawing's middle.
+ * The depth gauge sits at the right inset, below the title's lines and clear of the ship in the drawing's middle.
  */
 
 .overlay {
@@ -22,8 +22,7 @@
 .gauge {
   position: absolute;
   right: var(--inset-r, 1rem);
-  top: 50%;
-  translate: 0 -50%;
+  top: 62%;
 }
 
 .marker {
@@ -34,7 +33,7 @@
   white-space: nowrap;
 }
 
-/* On a phone the gauge's words do not fit beside the drawing; the pill still marks the Surface. */
+/* On a phone the gauge does not fit beside the drawing; the pill still marks the Surface. */
 @media (width < 48rem) {
   .gauge {
     display: none;

@@ -69,12 +69,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('sets the name beside its own band, at the top for the Surface and the bottom for the Abyss', () => {
+  it('hangs the strip from the current band, the Surface at its top and the Abyss at its bottom', () => {
     // ARRANGE
     const expected = ['--at:0', '--at:4'];
     // ACT
     const at = (zone: 'surface' | 'abyss', words: ZoneLabelWords) =>
-      html(createElement(DepthGauge, { zone, words, label: 'Depth gauge' }))('[data-gauge-reading]').attr('style');
+      html(createElement(DepthGauge, { zone, words, label: 'Depth gauge' }))('[data-depth-gauge]').attr('style');
     const seen = [at('surface', SURFACE), at('abyss', ABYSS)];
     // ASSERT
     expect(seen).toEqual(expected);

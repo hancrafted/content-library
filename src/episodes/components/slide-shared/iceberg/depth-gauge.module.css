@@ -1,20 +1,23 @@
 /*
  * The slim depth gauge (design guide, Iceberg): the five zones as one thin strip, each segment `--zone` from the zone's
  * one global token (`zoneToken` in `ruler.pure.ts`), and beside the current segment its name on the gauge's own card
- * paper, so the words keep their contrast over any scenery. `--at` is the current zone's place from the top, 0 to 4.
+ * paper, so the words keep their contrast over any scenery. `--at` is the current zone's place from the top, 0 to 4;
+ * the strip shifts up by it, so the gauge's own top edge is the middle of the current segment, wherever the caller sets it.
  * No motion: the bubbles into a section slide already carry the descent.
  */
 
 /* The caller places the gauge (its `className`); this inner box anchors the name beside the strip. */
 .gauge {
-  --segment: 1.75rem;
+  --segment: 1.5rem;
   --segment-gap: 2px;
 
   width: max-content;
+  height: 0;
 }
 
 .body {
   position: relative;
+  translate: 0 calc(-1 * (var(--at) * (var(--segment) + var(--segment-gap)) + var(--segment) / 2));
 }
 
 .strip {
@@ -68,4 +71,11 @@
 .label:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Below a laptop's width the Foreground is too narrow for the name beside the scene: the strip alone marks depth. */
+@media (width < 64rem) {
+  .reading {
+    display: none;
+  }
 }

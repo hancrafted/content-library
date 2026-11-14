@@ -76,7 +76,7 @@ function EchoOverlay({
         zone={zone}
         words={zones[zone]}
         label={gaugeLabel}
-        className="absolute top-1/2 right-0 -translate-y-1/2 max-md:hidden"
+        className="absolute top-[56%] right-0 max-md:hidden"
       />
     </>
   );
