@@ -116,9 +116,21 @@ function Loop({ life, sectionTitle }: { readonly life: SceneLife; readonly secti
 function TitleCreature({ life }: { readonly life: TitleLife }) {
   switch (life) {
     case 'lanternfish':
-      return <Lanternfish {...TITLE_LIFE_AT.lanternfish} />;
+      return (
+        <Lanternfish
+          x={TITLE_LIFE_AT.lanternfish.x}
+          y={TITLE_LIFE_AT.lanternfish.y}
+          scale={TITLE_LIFE_AT.lanternfish.scale}
+        />
+      );
     case 'siphonophore':
-      return <Siphonophore {...TITLE_LIFE_AT.siphonophore} />;
+      return (
+        <Siphonophore
+          x={TITLE_LIFE_AT.siphonophore.x}
+          y={TITLE_LIFE_AT.siphonophore.y}
+          scale={TITLE_LIFE_AT.siphonophore.scale}
+        />
+      );
   }
 }
 
