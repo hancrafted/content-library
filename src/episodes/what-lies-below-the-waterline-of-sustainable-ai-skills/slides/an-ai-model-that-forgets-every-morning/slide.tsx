@@ -10,6 +10,7 @@ import styles from './forgets.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PILOT_HEAD, PhotoOnDeck } from './photo-on-deck';
+import { PICTURE, PaneGlint, PhotoWall } from './room-art';
 
 const MOLLICK = {
   slug: 'mollick-good-enough-prompting',
@@ -60,20 +61,33 @@ export const anAiModelThatForgetsEveryMorning = slide({
           label={{ chat: t('photo.label'), coding: t('photo.codingLabel') }}
           className={`border-foreground ${SPAN.photo}`}
         >
-          <div className={`${styles.room} flex flex-1 flex-col justify-between gap-3 bg-(--room) p-3`}>
-            <div className="relative rounded-sm border-8 border-(--frame) shadow-md">
-              <ZoneScene zone="surface" iceberg="none" label={t('alt.photo')} className="aspect-[3/2] w-full">
-                <PhotoOnDeck />
-              </ZoneScene>
-              <span
-                data-ai-tag
-                style={{ left: `${PILOT_HEAD.left * PERCENT}%`, top: `${PILOT_HEAD.top * PERCENT}%` }}
-                className="absolute -translate-x-1/2 -translate-y-full rounded-full border-2 border-ai bg-card px-2 text-caption font-semibold text-card-foreground shadow-sm"
+          <div className={`${styles.room} flex flex-1 flex-col justify-between bg-(--room)`}>
+            <div data-photo-on-wall className="relative aspect-[360/212] w-full">
+              <PhotoWall />
+              <div
+                data-photo
+                className="absolute"
+                style={{
+                  left: `${PICTURE.left * PERCENT}%`,
+                  top: `${PICTURE.top * PERCENT}%`,
+                  width: `${PICTURE.width * PERCENT}%`,
+                  height: `${PICTURE.height * PERCENT}%`,
+                }}
               >
-                {t('aiTag')}
-              </span>
+                <ZoneScene zone="surface" iceberg="none" label={t('alt.photo')} className="h-full w-full">
+                  <PhotoOnDeck />
+                </ZoneScene>
+                <PaneGlint />
+                <span
+                  data-ai-tag
+                  style={{ left: `${PILOT_HEAD.left * PERCENT}%`, top: `${PILOT_HEAD.top * PERCENT}%` }}
+                  className="absolute -translate-x-1/2 -translate-y-full rounded-full border-2 border-ai bg-card px-2 text-caption font-semibold whitespace-nowrap text-card-foreground shadow-sm"
+                >
+                  {t('aiTag')}
+                </span>
+              </div>
             </div>
-            <p className="rounded-md border border-foreground bg-card px-3 py-1 text-caption text-card-foreground">
+            <p className="m-3 mt-0 rounded-md border border-foreground bg-card px-3 py-1 text-caption text-card-foreground">
               {t('photo.caption')}
             </p>
           </div>

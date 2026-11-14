@@ -10,14 +10,16 @@ import { SCENE_HEIGHT, SCENE_WIDTH, SURFACE_WATERLINE } from '@/episodes/compone
  * ten years of projects. Drawn in `ZoneScene`'s 1200 by 800 space from the shared ship and cast (design-ADR 0025).
  */
 
-const SHIP_X = 810;
-const SHIP_SCALE = 4.2;
-const CREW_SCALE = 0.42;
+/** The whole ship in the photo, as the Spec framed it: masthead to keel inside the picture. */
+const SHIP_X = 600;
+const SHIP_SCALE = 2.2;
+/** The crew stand larger than the ship's scale gives them, as in the Spec's photo, so they read as the subject. */
+const CREW_SCALE = 0.72;
 const ROBOT_SCALE = 0.55;
 /** The robot is drawn hanging from its cable at (0, 0); this lifts it to sit on its cradle. */
 const ROBOT_HEIGHT = 59;
 /** The pilot stands this far forward of the captain on deck, in the ship's units. */
-const PILOT_STEP = 30;
+const PILOT_STEP = 40;
 /** The figure's height above its feet, in its own units, where the tag sits. */
 const HEAD_HEIGHT = 112;
 
