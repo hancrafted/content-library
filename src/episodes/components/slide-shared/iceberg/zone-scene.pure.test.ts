@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { depthBands, seaFacets, WATER_CELL, zoneSceneParts } from './zone-scene.pure';
+import { depthBands, seaFacets, TITLE_LIFE_AT, visibleSpan, WATER_CELL, zoneSceneParts } from './zone-scene.pure';
 
 /*
  * What `ZoneScene` draws for a zone: the one prop a Slide names decides the sky, the rays, the seabed, the iceberg's
@@ -65,6 +65,24 @@ describe('success cases', () => {
     // ASSERT
     expect(facets).toHaveLength(expected);
   });
+
+  it('keeps the whole siphonophore in view on a phone, where the Scene shows only its middle (decision 38)', () => {
+    // ARRANGE
+    const phones = [
+      { width: 375, height: 700 },
+      { width: 375, height: 812 },
+      { width: 375, height: 900 },
+    ];
+    const { x, halfWidth, scale } = TITLE_LIFE_AT.siphonophore;
+    const colony = { left: x - halfWidth * scale, right: x + halfWidth * scale };
+    // ACT
+    const outside = phones.filter((box) => {
+      const view = visibleSpan(box);
+      return colony.left < view.left || colony.right > view.right;
+    });
+    // ASSERT
+    expect(outside).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {
@@ -79,6 +97,21 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('shows the whole Scene across on a box wider than the Scene, and its middle on a narrow one', () => {
+    // ARRANGE
+    const expected = [
+      { left: 0, right: 1200 },
+      { left: 400, right: 800 },
+    ];
+    // ACT
+    const spans = [
+      { width: 1500, height: 800 },
+      { width: 400, height: 800 },
+    ].map((box) => visibleSpan(box));
+    // ASSERT
+    expect(spans).toEqual(expected);
+  });
+
   it('keeps every other zone the same on its Section title: the title life is the Twilight zone only', () => {
     // ARRANGE
     const zones = ['surface', 'sunlit', 'midnight', 'abyss'] as const;

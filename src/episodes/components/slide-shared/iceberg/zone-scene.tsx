@@ -17,6 +17,7 @@ import { Whale } from './scenery/whale';
 import styles from './zone-scene.module.css';
 import {
   seaFacets,
+  TITLE_LIFE_AT,
   WATER_CELL,
   zoneSceneParts,
   type SceneIceberg,
@@ -93,13 +94,13 @@ function Loop({ life }: { readonly life: SceneLife }) {
   }
 }
 
-/** The Twilight Section titles' extra life: a lanternfish school low right of the robot, a siphonophore beside it. */
+/** The Twilight Section titles' extra life: a lanternfish school low right of the robot, a siphonophore beside it, in view on a phone. */
 function TitleCreature({ life }: { readonly life: TitleLife }) {
   switch (life) {
     case 'lanternfish':
-      return <Lanternfish x={860} y={610} scale={1.5} />;
+      return <Lanternfish {...TITLE_LIFE_AT.lanternfish} />;
     case 'siphonophore':
-      return <Siphonophore x={960} y={300} scale={1.3} />;
+      return <Siphonophore {...TITLE_LIFE_AT.siphonophore} />;
   }
 }
 

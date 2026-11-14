@@ -47,6 +47,25 @@ export interface ZoneSceneChoice {
 /** The Twilight zone feels empty on its Section titles (feedback 2, decision 11): they add a school and a colony. */
 const TITLE_LIFE: Partial<Record<Zone, readonly TitleLife[]>> = { twilight: ['lanternfish', 'siphonophore'] };
 
+/** Where `ZoneScene` draws each title creature, in its 1200 by 800 space, with half its drawn width at size 1. */
+export const TITLE_LIFE_AT: Readonly<
+  Record<TitleLife, { readonly x: number; readonly y: number; readonly scale: number; readonly halfWidth: number }>
+> = {
+  lanternfish: { x: 860, y: 610, scale: 1.5, halfWidth: 135 },
+  // Right of the robot's cable at 600 and inside the middle a phone shows, so it stays in view at 375 px (decision 38).
+  siphonophore: { x: 720, y: 180, scale: 1.3, halfWidth: 20 },
+};
+
+/** The Scene's drawing space; `ZoneScene` fills its box from the bottom centre (`xMidYMax slice`). */
+const SCENE = { width: 1200, height: 800 } as const;
+
+/** Which part of the Scene's width a box of this size shows, in the Scene's units, as `slice` crops it. */
+export function visibleSpan({ width, height }: { readonly width: number; readonly height: number }) {
+  const scale = Math.max(width / SCENE.width, height / SCENE.height);
+  const shown = Math.min(SCENE.width, width / scale);
+  return { left: (SCENE.width - shown) / 2, right: (SCENE.width + shown) / 2 };
+}
+
 /** The scenery a zone draws, its one ambient loop always among it, with a Slide's choice of iceberg part. */
 export function zoneSceneParts({ zone, iceberg, sectionTitle = false }: ZoneSceneChoice): ZoneSceneParts {
   const own = DEFAULTS[zone];
