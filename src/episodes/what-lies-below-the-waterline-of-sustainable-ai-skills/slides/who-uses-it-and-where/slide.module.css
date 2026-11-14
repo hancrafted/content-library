@@ -5,6 +5,29 @@
  * manual from `--info` and `--muted-foreground`; `--primary` marks the owner tag and steps the squares' tint with care.
  */
 
+/*
+ * A picture's labels sit at their corners while the matrix has its axis column (Tailwind `@2xl`, 42rem). Narrower, a
+ * picture is about 130 px wide, too small for two corner labels: they stack in flow over the drawing, which grows to
+ * hold them, so none is clipped and none covers another. The dashed trip is hidden at that width too.
+ */
+@container (width < 42rem) {
+  .onPicture {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    aspect-ratio: auto;
+    min-height: 4rem;
+    padding: 0.5rem;
+  }
+
+  /* In flow, but still positioned, so each label paints over the drawing as it does at its corner. */
+  .onPicture > :not(svg) {
+    position: relative;
+    inset: auto;
+  }
+}
+
 .square {
   background: color-mix(in oklab, var(--primary) calc((var(--care) - 1) * 5%), var(--card));
 }

@@ -87,14 +87,17 @@ function geometryOf(seabedM: number, ghostM: number): DiveGeometry {
   };
 }
 
-/** The check that pops in once the robot has settled on the seabed. */
+/**
+ * The check that pops in once the robot has settled on the seabed: an outline mark, like the wall's tags, so primary
+ * stays on the step, the line, today's row and the seabed pill.
+ */
 function Check({ x, y, label }: { readonly x: number; readonly y: number; readonly label: string }) {
   return (
     <p
       data-motion="check"
       className={cn(
         styles.check,
-        'absolute grid size-8 -translate-1/2 place-items-center rounded-full bg-primary text-primary-foreground shadow-md',
+        'absolute grid size-8 -translate-1/2 place-items-center rounded-full border border-foreground bg-card text-card-foreground shadow-md',
       )}
       style={at(x, y)}
     >

@@ -34,7 +34,8 @@
       "picture": "your notebook",
       "coding": {
         "head": "The details sit inline in <code>{file}</code>",
-        "sub": "A step names the detail itself, say <code>{step}</code>; least upkeep."
+        "sub": "A step names the detail itself, say <code>{step}</code>; least upkeep.",
+        "step": "Descend to 40 m."
       }
     },
     "pg": {

@@ -34,7 +34,8 @@
       "picture": "dein Notizbuch",
       "coding": {
         "head": "Die Details stehen direkt in <code>{file}</code>",
-        "sub": "Ein Schritt nennt das Detail selbst, etwa <code>{step}</code>; am wenigsten Pflege."
+        "sub": "Ein Schritt nennt das Detail selbst, etwa <code>{step}</code>; am wenigsten Pflege.",
+        "step": "Descend to 40 m."
       }
     },
     "pg": {

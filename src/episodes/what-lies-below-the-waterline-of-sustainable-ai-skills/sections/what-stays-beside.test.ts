@@ -282,14 +282,65 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps both views on every Slide, so the page switch has words for Chat app and Coding agent', () => {
     // ARRANGE
-    const expected = PAGE_SLIDES.map(() => ({ chat: true, coding: true }));
+    const expected = [
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+      ['chat', 'coding'],
+    ];
     // ACT
     const actual = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      return { chat: $('[data-view="chat"]').length > 0, coding: $('[data-view="coding"]').length > 0 };
+      const views = $('[data-view]')
+        .toArray()
+        .map((element) => $(element).attr('data-view'));
+      return [...new Set(views)].sort();
     });
     // ASSERT
     expect(actual).toEqual(expected);
+  });
+
+  it('shows each Context marker of Who uses it, and where only in the views its picked Option shows it', () => {
+    // ARRANGE
+    // "both" is a marker outside any view; the footer's "Where a skill is stored" marker is the Coding agent's alone.
+    const expected = [
+      { note: 'where-a-skill-is-stored', view: 'both' },
+      { note: 'evals-matter-once-a-skill-is-shared', view: 'chat' },
+      { note: 'evals-matter-once-a-skill-is-shared', view: 'coding' },
+      { note: 'the-skill-scope-matrix-is-an-inference', view: 'both' },
+      { note: 'where-a-skill-is-stored', view: 'coding' },
+    ];
+    // ACT
+    const $ = sceneOf('who-uses-it-and-where');
+    const actual = $('[data-context-ref]')
+      .toArray()
+      .map((marker) => ({
+        note: $(marker).attr('data-context-ref'),
+        view: $(marker).closest('[data-view]').attr('data-view') ?? 'both',
+      }));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('fills primary in the dive only on the seabed pill, as the focal point of Beside the skill gives it', () => {
+    // ARRANGE
+    const expected = ['seabed 120 m'];
+    // ACT
+    const $ = sceneOf('beside-the-skill');
+    const actual = $('[data-dive] .bg-primary')
+      .toArray()
+      .map((element) => $(element).text());
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('writes the inline step of the personal, project-specific square through the Translation file', () => {
+    // ARRANGE
+    const expected = 'A step names the detail itself, say Descend to 40 m.; least upkeep.';
+    // ACT
+    const $ = sceneOf('who-uses-it-and-where');
+    const actual = $('[data-square="pp"] p[data-view="coding"]').last().text();
+    // ASSERT
+    expect(actual).toBe(expected);
   });
 
   it('names the project file through the project folder variable in the Coding agent view', () => {
@@ -304,16 +355,16 @@ describe('edge cases', () => {
 
   it('writes every German Slide with notes and Voice script of the same shape, each title translated', () => {
     // ARRANGE
-    const expected = PAGE_SLIDES.map((slug) => ({
-      notes: localized(slug).notes.length,
-      segments: localized(slug).voiceScript.length,
-      differs: true,
-    }));
+    const expected = [
+      { title: 'Neben dem Skill', notes: 1, segments: 3 },
+      { title: 'Wer ihn nutzt, und wo', notes: 3, segments: 3 },
+      { title: 'grill-with-docs hält den Kontext neben dem Skill', notes: 1, segments: 3 },
+    ];
     // ACT
     const actual = PAGE_SLIDES.map((slug) => ({
+      title: localized(slug, 'de').title,
       notes: localized(slug, 'de').notes.filter(({ description }) => description.length > 0).length,
       segments: localized(slug, 'de').voiceScript.filter(({ script }) => script.length > 0).length,
-      differs: localized(slug, 'de').title !== localized(slug).title,
     }));
     // ASSERT
     expect(actual).toEqual(expected);

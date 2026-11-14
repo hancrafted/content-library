@@ -1,4 +1,5 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
+import { Words, type ViewWords } from '@/episodes/components/slide-shared/agent-view/view-words';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './slide.module.css';
@@ -23,7 +24,7 @@ export interface Square {
   readonly coding: { readonly head: ReactNode; readonly sub: ReactNode };
   readonly picture: PictureKind;
   /** The white label naming the picture's story object, in each view. */
-  readonly label: { readonly chat: string; readonly coding: string };
+  readonly label: ViewWords;
   /** What else sits on the picture: the trip's label, the scribbled card, the owner tag. */
   readonly extras?: ReactNode;
   readonly focus?: boolean;
@@ -79,10 +80,10 @@ function SquareWords({ square }: { readonly square: Square }) {
       <InView view="chat" as="p" className="text-caption text-muted-foreground">
         {square.sub}
       </InView>
-      <InView view="coding" as="p" className="text-body font-semibold break-words">
+      <InView view="coding" as="p" className="text-body font-semibold wrap-anywhere">
         {square.coding.head}
       </InView>
-      <InView view="coding" as="p" className="flex items-start gap-1 text-caption text-muted-foreground">
+      <InView view="coding" as="p" className="flex items-start gap-1 text-caption text-muted-foreground wrap-anywhere">
         {square.coding.sub}
       </InView>
     </div>
@@ -106,11 +107,8 @@ function SquareCard({ square, care }: { readonly square: Square; readonly care: 
       <CareDots care={square.care} word={care} label={square.careLabel} />
       <SquareWords square={square} />
       <SquarePicture kind={square.picture}>
-        <p className="absolute top-2 left-2 rounded-full bg-card px-2 text-caption font-semibold text-card-foreground shadow-sm">
-          <InView view="chat">{square.label.chat}</InView>
-          <InView view="coding" className="font-mono">
-            {square.label.coding}
-          </InView>
+        <p className="absolute top-2 left-2 max-w-full rounded-full bg-card px-2 text-caption font-semibold text-card-foreground shadow-sm">
+          <Words words={square.label} />
         </p>
         {square.extras}
       </SquarePicture>

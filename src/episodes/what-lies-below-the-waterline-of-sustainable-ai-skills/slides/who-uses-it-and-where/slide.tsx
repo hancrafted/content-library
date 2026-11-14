@@ -26,7 +26,6 @@ const EVALS = 'evals-matter-once-a-skill-is-shared';
 /** Paths are code: the same in every locale, never translated. */
 const CODE = {
   inline: 'SKILL.md',
-  inlineStep: 'Descend to 40 m.',
   personal: '~/.claude/skills/<name>/SKILL.md',
   personalLabel: '~/.claude/skills/',
   project: '.claude/skills/',
@@ -77,7 +76,7 @@ export const whoUsesItAndWhere = slide({
     const coding: Record<SquareId, { head: ReactNode; sub: ReactNode }> = {
       pp: {
         head: t.rich('squares.pp.coding.head', { file: CODE.inline }),
-        sub: t.rich('squares.pp.coding.sub', { step: CODE.inlineStep }),
+        sub: t.rich('squares.pp.coding.sub', { step: t('squares.pp.coding.step') }),
       },
       pg: { head: t.rich('squares.pg.coding.head', { path: CODE.personal }), sub: t('squares.pg.coding.sub') },
       sp: {
@@ -194,12 +193,12 @@ export const whoUsesItAndWhere = slide({
               {t('stamp')}
               <Marker note={INFERENCE} placement="beside" />
             </p>
-            <p className="flex items-start gap-1 text-caption text-muted-foreground">
-              <span>
-                <InView view="chat">{t('footer.chat')}</InView>
-                <InView view="coding">{t('footer.coding')}</InView>
-              </span>
-              <Marker note={STORED} placement="beside" />
+            <p className="text-caption text-muted-foreground">
+              <InView view="chat">{t('footer.chat')}</InView>
+              <InView view="coding" className="inline-flex items-start gap-1">
+                <span>{t('footer.coding')}</span>
+                <Marker note={STORED} placement="beside" />
+              </InView>
             </p>
           </div>
         </footer>

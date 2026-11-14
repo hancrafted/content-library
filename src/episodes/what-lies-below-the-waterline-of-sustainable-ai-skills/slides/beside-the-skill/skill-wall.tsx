@@ -1,12 +1,8 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
+import { Words, type ViewWords } from '@/episodes/components/slide-shared/agent-view/view-words';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import styles from './slide.module.css';
-
-interface ViewWords {
-  readonly chat: string;
-  readonly coding: string;
-}
 
 export interface SkillWallProps {
   readonly skillTag: string;
@@ -31,17 +27,6 @@ export interface SkillWallProps {
 /** Grid rows of the wall: the tag, the sheets' heading and sub line, then one row per step, then the label. */
 const HEAD_ROW = 2;
 const FIRST_STEP_ROW = 4;
-
-function Words({ words, mono = true }: { readonly words: ViewWords; readonly mono?: boolean }) {
-  return (
-    <>
-      <InView view="chat">{words.chat}</InView>
-      <InView view="coding" className={cn(mono && 'font-mono', 'break-words')}>
-        {words.coding}
-      </InView>
-    </>
-  );
-}
 
 /** The faceted wall and floor behind the sheets, lit from the upper left. Decoration only. */
 function Wall() {

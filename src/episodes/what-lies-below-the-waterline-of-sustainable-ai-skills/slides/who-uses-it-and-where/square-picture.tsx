@@ -103,10 +103,13 @@ export interface SquarePictureProps {
   readonly children?: ReactNode;
 }
 
-/** The small project picture under a square's words (Option 18a): one drawing per square, its labels over it. */
+/**
+ * The small project picture under a square's words (Option 18a): one drawing per square, its labels over it. Too
+ * narrow for its labels' corners, the picture stacks them in flow over the drawing instead (`slide.module.css`).
+ */
 export function SquarePicture({ kind, children }: SquarePictureProps) {
   return (
-    <div data-picture={kind} className="relative aspect-[20/7] overflow-hidden rounded-md">
+    <div data-picture={kind} className={cn(styles.onPicture, 'relative aspect-[20/7] overflow-hidden rounded-md')}>
       <svg
         aria-hidden
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
