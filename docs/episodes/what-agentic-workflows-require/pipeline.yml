@@ -53,7 +53,7 @@
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
-status: draft
+status: approved
 template: 4e8e4e6
 dev_port: 4001
 spec_port: 4002
@@ -122,28 +122,9 @@ jobs:
           [references/retrieval.md, docs/episodes/what-agentic-workflows-require/brief.md, docs/llm-wiki/index.md]
         model: inherit
 
-  # Runs `npm run convert-reference` once per file the Brief lists under
-  # References: a script, so no reviewer. A run with no References drops it.
-  - id: convert-references
-    stage: setup
-    needs: [brief-grill]
-    before: [mh-query]
-    outputs: [docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md]
-    checks: [mh, vitest]
-    retries: 1
-    agents:
-      - type: implementor
-        skills: []
-        references: [references/convert-references.md, docs/episodes/what-agentic-workflows-require/brief.md]
-        model: inherit
-        session: orchestrator
-
-  # Wants convert-references rather than needing it: a missing conversion tool
-  # leaves the design references out instead of blocking the Episode.
   - id: customize-pipeline
     stage: setup
     needs: [retrieval]
-    wants: [convert-references]
     outputs: [docs/episodes/what-agentic-workflows-require/pipeline.yml]
     checks: [vitest]
     retries: 0
@@ -158,15 +139,204 @@ jobs:
         model: inherit
         session: orchestrator
 
-  # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
-  - id: write-research
+  # One job per question retrieval lists under Research jobs; a reused question has none.
+  - id: write-research-agentic-workflow-vendor-definitions
     stage: research
+    intent: >-
+      Research question 3: "Why do IBM and Salesforce define agentic workflows as structured processes in which AI agents make decisions, take actions and coordinate tasks with minimal human intervention?"
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/what-agentic-workflows-require/research-plan.md#research-jobs
     before: [mh-query]
-    outputs: [docs/episodes/what-agentic-workflows-require/research/*/research.md]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/LLM-0030__agentic-workflow-vendor-definitions/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-workflows-vs-agents-control-split
+    stage: research
+    intent: >-
+      Research question 4: "Why does Anthropic separate workflows, which follow paths fixed in advance, from agents, which steer their own process?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/LLM-0031__workflows-vs-agents-control-split/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-result-checkability-limits-oversight
+    stage: research
+    intent: >-
+      Research question 6: "Why does how well a result can be checked limit how far human oversight can be reduced?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/AIE-0024__result-checkability-limits-oversight/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-backward-reasoning-from-the-goal
+    stage: research
+    intent: >-
+      Research question 7: "Why does backward reasoning, working back from the goal, find the steps and dependencies a plan needs (Pólya, AI planning)?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/PLAN-0001__backward-reasoning-from-the-goal/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-design-by-contract-handoffs
+    stage: research
+    intent: >-
+      Research question 8: "Why does design by contract, agreeing what each party receives and delivers, make handoffs reliable without prescribing how the work is done (Meyer, Applying "Design by Contract", 1992)?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/what-agentic-workflows-require/research/SWE-0005__design-by-contract-handoffs/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-verification-versus-validation
+    stage: research
+    intent: >-
+      Research question 9: "Why does checking a result against its specification (verification) not show whether it serves the goal (validation), after Boehm?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/SWE-0006__verification-versus-validation/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-conways-law-shapes-workflow-design
+    stage: research
+    intent: >-
+      Research question 10: "Why do the workflows an organisation designs copy its communication structure, as Conway's law states for systems "defined broadly"?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/ORG-0003__conways-law-shapes-workflow-design/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/what-agentic-workflows-require/brief.md,
+            docs/episodes/what-agentic-workflows-require/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-skills-for-working-with-agents
+    stage: research
+    intent: >-
+      Research question 11: "Why are breaking work down, writing handoffs and reviewing results the skills people need to work with agents?"
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/what-agentic-workflows-require/research/AIE-0025__skills-for-working-with-agents/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -190,7 +360,15 @@ jobs:
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    wants:
+      - write-research-agentic-workflow-vendor-definitions
+      - write-research-workflows-vs-agents-control-split
+      - write-research-result-checkability-limits-oversight
+      - write-research-backward-reasoning-from-the-goal
+      - write-research-design-by-contract-handoffs
+      - write-research-verification-versus-validation
+      - write-research-conways-law-shapes-workflow-design
+      - write-research-skills-for-working-with-agents
     before: [mh-query]
     outputs: [docs/episodes/what-agentic-workflows-require/dossier.md]
     checks: [mh, vitest]
@@ -202,8 +380,17 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/what-agentic-workflows-require/brief.md
           - docs/episodes/what-agentic-workflows-require/research-plan.md
-          - docs/episodes/what-agentic-workflows-require/research/*/research.md
-          - docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md
+          - docs/episodes/what-agentic-workflows-require/research/LLM-0030__agentic-workflow-vendor-definitions/research.md
+          - docs/episodes/what-agentic-workflows-require/research/LLM-0031__workflows-vs-agents-control-split/research.md
+          - docs/episodes/what-agentic-workflows-require/research/AIE-0024__result-checkability-limits-oversight/research.md
+          - docs/episodes/what-agentic-workflows-require/research/PLAN-0001__backward-reasoning-from-the-goal/research.md
+          - docs/episodes/what-agentic-workflows-require/research/SWE-0005__design-by-contract-handoffs/research.md
+          - docs/episodes/what-agentic-workflows-require/research/SWE-0006__verification-versus-validation/research.md
+          - docs/episodes/what-agentic-workflows-require/research/ORG-0003__conways-law-shapes-workflow-design/research.md
+          - docs/episodes/what-agentic-workflows-require/research/AIE-0025__skills-for-working-with-agents/research.md
+          - docs/llm-wiki/research/LLM/LLM-0005__llm-lacks-organization-knowledge/research.md
+          - docs/llm-wiki/research/LLM/LLM-0018__ai-layers-model-to-factory/research.md
+          - docs/llm-wiki/research/LLM/LLM-0024__human-in-on-out-of-the-loop/research.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
           - docs/profile/mental-model-guide.md
@@ -272,7 +459,8 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md
+          - docs/features/explorables/ai-capability.md
+          - src/episodes/onboard-ai-every-time/
         model: opus
         session: orchestrator
       - type: reviewer
@@ -285,7 +473,6 @@ jobs:
           - docs/episodes/what-agentic-workflows-require/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -321,11 +508,13 @@ jobs:
 
   # One job per Section, the h3s under the Brief's Slides, in parallel: each
   # builds its Slides at its own placement marker.
-  - id: implement-section
+  - id: implement-section-a-thought-experiment
+    intent: >-
+      Build Section 1 of 5, "A thought experiment", of the Brief at its placement marker.
     stage: build
     needs: [implement-episode-init]
     isolation: worktree
-    foreach: docs/episodes/what-agentic-workflows-require/brief.md#slides
+    port: 4003
     outputs: []
     checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
@@ -337,7 +526,7 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/what-agentic-workflows-require/spec/spec.html
-          - docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md
+          - src/episodes/onboard-ai-every-time/
         model: opus
       # code-review spawns its own subagents, so the reviewer runs in the
       # orchestrator's session; its subagents give the fresh eyes.
@@ -353,14 +542,171 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/what-agentic-workflows-require/spec/spec.html
-          - docs/episodes/what-agentic-workflows-require/reference/*/design-reference.md
+          - src/episodes/onboard-ai-every-time/
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-what-an-agentic-workflow-is
+    intent: >-
+      Build Section 2 of 5, "What an agentic workflow is", of the Brief at its placement marker.
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4004
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+          - docs/features/explorables/ai-capability.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+          - docs/features/explorables/ai-capability.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-how-far-you-step-out
+    intent: >-
+      Build Section 3 of 5, "How far you step out", of the Brief at its placement marker.
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4005
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-what-it-requires-of-each-person
+    intent: >-
+      Build Section 4 of 5, "What it requires of each person", of the Brief at its placement marker.
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4006
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-what-it-requires-of-the-organisation
+    intent: >-
+      Build Section 5 of 5, "What it requires of the organisation", of the Brief at its placement marker.
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4007
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/what-agentic-workflows-require/spec/spec.html
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      [
+        implement-section-a-thought-experiment,
+        implement-section-what-an-agentic-workflow-is,
+        implement-section-how-far-you-step-out,
+        implement-section-what-it-requires-of-each-person,
+        implement-section-what-it-requires-of-the-organisation,
+      ]
     outputs: []
     checks: []
     retries: 0
