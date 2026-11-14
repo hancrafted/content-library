@@ -10,6 +10,8 @@ const CREW_SCALE = 2.3;
 const CONSOLE_WIDTH = 92;
 const CONSOLE_X = 225;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
 
 /**
  * The control room on the day of the dive (Option 12a): the captain stands and gestures at the left, the pilot sits at
@@ -26,7 +28,7 @@ export function ControlRoom() {
         </g>
         <g transform={`translate(${CONSOLE_X} ${-70})`}>
           <Console width={CONSOLE_WIDTH} mugs={1} />
-          <g transform={`translate(${SEAT.x} ${SEAT.y})`}>
+          <g transform={`translate(${SEAT.x + PILOT_REACH} ${SEAT.y})`}>
             <Character preset={pilot} pose="sit" />
           </g>
         </g>
