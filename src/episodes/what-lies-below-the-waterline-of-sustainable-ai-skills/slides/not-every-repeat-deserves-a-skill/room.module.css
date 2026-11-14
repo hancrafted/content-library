@@ -1,72 +1,27 @@
 /*
- * The control room's palette, copied from Slide 8's folder (FE-007 §5): wall, floor, a paper label, binder. No raw colour: every tone mixes
- * theme-stable tokens (`--on-brand-accent` white, `--overlay` black) with a hue from `--info` (blue) or `--bulb`
- * (warm), as the shared scenery does. No meaning colour lends a hue.
- * Facets are lit from the upper left: `lit`, `mid`, `shade`.
+ * The stuffed binder on the pilot's console: a blue cover mixed from `--info`, card tabs, the stamped ones in
+ * `--destructive`, and its paper label. No raw colour: every tone mixes theme-stable tokens (`--on-brand-accent` white,
+ * `--overlay` black) with a hue, as the shared control room does.
  */
 
-.room {
-  --room-lit: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
-  --room-mid: color-mix(in oklab, var(--info) 16%, var(--on-brand-accent));
-  --room-shade: color-mix(in oklab, var(--info) 26%, color-mix(in oklab, var(--on-brand-accent) 90%, var(--overlay)));
-  --floor-lit: color-mix(in oklab, var(--info) 22%, color-mix(in oklab, var(--on-brand-accent) 62%, var(--overlay)));
-  --floor: color-mix(in oklab, var(--info) 26%, color-mix(in oklab, var(--on-brand-accent) 52%, var(--overlay)));
+.binderPalette {
+  --binder-lit: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
+  --binder: color-mix(in oklab, var(--info) 75%, var(--overlay));
+  --binder-shade: color-mix(in oklab, var(--info) 55%, var(--overlay));
+  --tab: color-mix(in oklab, var(--bulb) 25%, var(--on-brand-accent));
+  --tab-stamped: color-mix(in oklab, var(--destructive) 80%, var(--on-brand-accent));
   --paper: var(--on-brand-accent);
   --paper-ink: color-mix(in oklab, var(--info) 20%, color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay)));
 }
 
-:global(.dark) .room {
-  --room-lit: color-mix(in oklab, var(--info) 30%, color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay)));
-  --room-mid: color-mix(in oklab, var(--info) 34%, color-mix(in oklab, var(--on-brand-accent) 24%, var(--overlay)));
-  --room-shade: color-mix(in oklab, var(--info) 36%, color-mix(in oklab, var(--on-brand-accent) 17%, var(--overlay)));
-  --floor-lit: color-mix(in oklab, var(--info) 30%, color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay)));
-  --floor: color-mix(in oklab, var(--info) 30%, color-mix(in oklab, var(--on-brand-accent) 10%, var(--overlay)));
+:global(.dark) .binderPalette {
   --paper: color-mix(in oklab, var(--on-brand-accent) 86%, var(--overlay));
-}
-
-.room [data-tone] {
-  stroke-width: 0.6;
-  stroke-linejoin: round;
-}
-
-.room [data-tone='lit'] {
-  fill: var(--room-lit);
-  stroke: var(--room-lit);
-}
-
-.room [data-tone='mid'] {
-  fill: var(--room-mid);
-  stroke: var(--room-mid);
-}
-
-.room [data-tone='shade'] {
-  fill: var(--room-shade);
-  stroke: var(--room-shade);
-}
-
-.room [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
-  stroke: var(--floor-lit);
-}
-
-.room [data-tone='floor'] {
-  fill: var(--floor);
-  stroke: var(--floor);
 }
 
 .paper {
   fill: var(--paper);
   stroke: var(--paper-ink);
   stroke-width: 0.6;
-}
-
-/* The stuffed binder on the console: a blue cover mixed from `--info`, card tabs, the stamped ones in `--destructive`. */
-.room {
-  --binder-lit: color-mix(in oklab, var(--info) 55%, var(--on-brand-accent));
-  --binder: color-mix(in oklab, var(--info) 75%, var(--overlay));
-  --binder-shade: color-mix(in oklab, var(--info) 55%, var(--overlay));
-  --tab: color-mix(in oklab, var(--bulb) 25%, var(--on-brand-accent));
-  --tab-stamped: color-mix(in oklab, var(--destructive) 80%, var(--on-brand-accent));
 }
 
 .binderLit {

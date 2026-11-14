@@ -6,11 +6,13 @@ import {
   CONSOLE_DESK_HEIGHT,
   consoleLayout,
 } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
-import { ControlRoom, FLOOR, ROOM_HEIGHT, ROOM_WIDTH } from './control-room';
+import { ControlRoom } from '@/episodes/components/slide-shared/deep-sea-expedition/control-room';
+import { ROOM } from '@/episodes/components/slide-shared/deep-sea-expedition/control-room.pure';
 import styles from './slide.module.css';
 
 export type Day = 1 | 2 | 3;
 
+const FLOOR = ROOM.floor;
 const CONSOLE = { x: 200, width: 92 } as const;
 const CAPTAIN_X = 50;
 /** The figures a little under their drawn size, so a bubble fits over each head in the room. */
@@ -30,15 +32,15 @@ export interface MorningSceneProps {
 
 /**
  * One morning in the control room, the comic's panel picture: the captain explains, the pilot at his console listens.
- * Only the mug count and the captain's pose change from day to day; on day 3 he holds the written card out. The room
- * is this Slide's; the people and the console are the shared figures (design-ADR 0025).
+ * Only the mug count and the captain's pose change from day to day; on day 3 he holds the written card out. The room,
+ * the people and the console are the shared figures (design-ADR 0025).
  */
 export function MorningScene({ day, label, says }: MorningSceneProps) {
   const { seat } = consoleLayout({ width: CONSOLE.width, mugs: day });
   const deskTop = FLOOR - CONSOLE_DESK_HEIGHT;
   return (
     <svg
-      viewBox={`0 0 ${ROOM_WIDTH} ${ROOM_HEIGHT}`}
+      viewBox={`0 0 ${ROOM.width} ${ROOM.height}`}
       role="img"
       aria-label={label}
       data-morning={day}

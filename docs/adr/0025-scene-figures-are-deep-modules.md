@@ -22,7 +22,7 @@ Three modules under `src/episodes/components/slide-shared/`, split by what each 
 | ---------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `iceberg/`             | the Iceberg style (design guide) | zone tokens, depth ruler, rail, zone label, `ZoneScene` (sky with sun and moon, sea, light rays, seabed, iceberg, the zone's ambient loop), `Travel` |
 | `character/`           | how people are drawn             | `Character`: body, poses, moods, the emote and `says` bubble at the head; `shared-presets.ts` with `aiAgent`                                         |
-| `deep-sea-expedition/` | this Episode's analogy           | `cast.ts` (captain, pilot presets), `Robot`, `Ship`, `Console`                                                                                       |
+| `deep-sea-expedition/` | this Episode's analogy           | `cast.ts` (captain, pilot presets), `Robot`, `Ship`, `Console`, `ControlRoom`                                                                        |
 
 `iceberg/` knows no cast and `character/` knows no setting, so a later Iceberg Episode about something else reuses the style, and a later setting (`office/cast.ts`) adds presets without touching `Character`.
 
