@@ -3383,3 +3383,13 @@
 {"kind":"event","t":"2026-11-14T06:29:45Z","seq":3383,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"e7c601e5032a1fef","name":"note","source":"typed","attributes":{"note.type":"needs-human","note.text":"At 375 px the drawing on 'Not every repeat deserves a skill' runs 36 px past the Slide's right edge (predates the cleanup)"}}
 {"kind":"end","t":"2026-11-14T06:31:31Z","seq":3384,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"40e7406fa69a0d62","status":"ok","summary":"draft PR #572, served on 4000"}
 {"kind":"end","t":"2026-11-14T06:31:31Z","seq":3385,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"e7c601e5032a1fef","status":"ok","summary":"https://github.com/hancrafted/content-library/pull/572"}
+{"kind":"end","t":"2026-11-14T06:38:27Z","seq":3386,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"4fff9e36a489126e","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:27Z","seq":3387,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"b035dab0bd4eb962","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:28Z","seq":3388,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"16d9a4bac9132398","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:28Z","seq":3389,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"9a12edb664a75b49","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:28Z","seq":3390,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"cb6e65ad90bed9c0","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:28Z","seq":3391,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"688bd730abfa2529","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:29Z","seq":3392,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"234dc148f7635f8f","status":"ok"}
+{"kind":"end","t":"2026-11-14T06:38:29Z","seq":3393,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"64ed1a8f1ff6fc55","status":"ok"}
+{"kind":"end-run","t":"2026-11-14T06:38:29Z","seq":3394,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"0fdffe1b164f5793","status":"ok","summary":"26 Slides in 8 Sections built, reviewed and merged; Han's feedback 1 applied; draft PR #572, CI green"}
+{"kind":"end-run","t":"2026-11-14T06:38:29Z","seq":3395,"trace_id":"827d1e75d3bf73747453cd95da4327d1","span_id":"0fdffe1b164f5793","status":"ok","summary":"26 Slides in 8 Sections built, reviewed and merged; Han's feedback 1 applied; draft PR #572, CI green","source":"measured","gen_ai.response.model":"claude-opus-5-5","gen_ai.usage.input_tokens":2586,"gen_ai.usage.output_tokens":688596,"gen_ai.usage.cache_read.input_tokens":256967443}
