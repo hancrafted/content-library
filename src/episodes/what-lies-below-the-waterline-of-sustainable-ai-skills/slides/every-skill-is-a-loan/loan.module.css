@@ -1,35 +1,226 @@
 /*
- * "Every skill is a loan" (Option 23b): the statement hung on the robot's cable over the Abyss. No raw colour (FE-011):
- * the words and glass over the water mix `--on-brand-accent` (white) and `--overlay` (black), fixed across themes, so
- * they read on the dark Abyss water in both; the cable and clamps are the robot's, so they mix `--machine`. Dark mode
- * only retunes the mixes.
+ * "Every skill is a loan" (Option 23b): the statement hung on the robot's cable over the Abyss. The tones are the
+ * approved Spec's own (feedback 3, decision 46): the drawing's facet tokens on `.art`, which `sea-art.tsx` lifts, and
+ * the words, glass, paper and cable on `.stage`. Dark values are the Spec's dark ones, tuned later with dark mode
+ * (feedback 2, decision 32). The robot's tones mix `--info`, as the shared robot's do.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .stage {
-  --ink: color-mix(in oklab, var(--on-brand-accent) 94%, var(--zone-abyss));
-  --ink-soft: color-mix(in oklab, var(--on-brand-accent) 72%, var(--zone-abyss));
-  --glass: color-mix(in oklab, color-mix(in oklab, var(--zone-abyss) 86%, var(--on-brand-accent)) 84%, transparent);
-  --glass-edge: color-mix(in oklab, var(--on-brand-accent) 24%, transparent);
+  --ink: oklch(0.975 0.01 230);
+  --ink-soft: color-mix(in oklab, oklch(0.975 0.01 230) 70%, transparent);
+  --glass: oklch(0.98 0.01 230 / 0.09);
+  --glass-edge: oklch(0.98 0.01 230 / 0.2);
   --code: color-mix(in oklab, var(--overlay) 55%, transparent);
-  --cable: color-mix(in oklab, var(--machine) 55%, var(--on-brand-accent));
-  --clamp: color-mix(in oklab, var(--machine) 45%, var(--overlay));
-  --clamp-lit: color-mix(in oklab, var(--machine) 70%, var(--on-brand-accent));
-  --block: color-mix(in oklab, var(--machine) 18%, var(--on-brand-accent));
-  --block-side: color-mix(in oklab, var(--machine) 35%, var(--on-brand-accent));
+  --cable: oklch(0.5 0.03 255);
+  --cable-lit: oklch(0.72 0.03 245);
+  --unpaid: color-mix(in oklab, oklch(0.975 0.01 230) 40%, transparent);
   color: var(--ink);
 }
 
 :global(.dark) .stage {
-  --ink: color-mix(in oklab, var(--on-brand-accent) 90%, var(--zone-abyss));
-  --ink-soft: color-mix(in oklab, var(--on-brand-accent) 66%, var(--zone-abyss));
-  --glass: color-mix(in oklab, color-mix(in oklab, var(--zone-abyss) 90%, var(--on-brand-accent)) 86%, transparent);
-  --glass-edge: color-mix(in oklab, var(--on-brand-accent) 18%, transparent);
+  --ink: oklch(0.975 0.01 230);
+  --ink-soft: color-mix(in oklab, oklch(0.975 0.01 230) 70%, transparent);
+  --glass: oklch(0.98 0.01 230 / 0.07);
+  --glass-edge: oklch(0.98 0.01 230 / 0.16);
   --code: color-mix(in oklab, var(--overlay) 65%, transparent);
-  --cable: color-mix(in oklab, var(--machine) 60%, var(--on-brand-accent));
-  --clamp: color-mix(in oklab, var(--machine) 40%, var(--overlay));
-  --clamp-lit: color-mix(in oklab, var(--machine) 75%, var(--on-brand-accent));
-  --block: color-mix(in oklab, var(--machine) 22%, var(--on-brand-accent));
-  --block-side: color-mix(in oklab, var(--machine) 42%, var(--on-brand-accent));
+  --cable: oklch(0.42 0.025 255);
+  --cable-lit: oklch(0.62 0.03 245);
+  --unpaid: color-mix(in oklab, oklch(0.975 0.01 230) 40%, transparent);
+}
+
+.art {
+  --snow: oklch(0.92 0.03 220 / 0.5);
+  --plate-lit: oklch(0.46 0.04 258);
+  --plate: oklch(0.36 0.04 262);
+  --plate-shade: oklch(0.28 0.035 266);
+  --tab-a: oklch(0.74 0.09 212);
+  --tab-b: oklch(0.89 0.13 92);
+  --tab-c: oklch(0.72 0.1 252);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --paper-rule: oklch(0.74 0.03 245);
+  --pin: oklch(0.62 0.18 28);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot-dark: oklch(0.28 0.02 260);
+  --glint: oklch(1 0 0);
+  --block-lit: oklch(0.9 0.02 230);
+  --block: oklch(0.8 0.035 238);
+  --block-shade: oklch(0.66 0.05 248);
+}
+
+:global(.dark) .art {
+  --snow: oklch(0.85 0.04 220 / 0.4);
+  --plate-lit: oklch(0.38 0.035 258);
+  --plate: oklch(0.3 0.035 262);
+  --plate-shade: oklch(0.23 0.03 266);
+  --tab-a: oklch(0.6 0.08 218);
+  --tab-b: oklch(0.78 0.12 92);
+  --tab-c: oklch(0.58 0.1 255);
+  --paper-lit: oklch(0.9 0.008 90);
+  --paper: oklch(0.85 0.012 88);
+  --paper-shade: oklch(0.74 0.018 80);
+  --paper-rule: oklch(0.6 0.03 245);
+  --pin: oklch(0.6 0.16 28);
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot-dark: oklch(0.22 0.02 260);
+  --glint: oklch(0.98 0.01 230);
+  --block-lit: oklch(0.8 0.02 230);
+  --block: oklch(0.7 0.035 238);
+  --block-shade: oklch(0.56 0.05 248);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='sea-midnight-lit'] {
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
+}
+
+.art [data-tone='sea-midnight'] {
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
+}
+
+.art [data-tone='sea-abyss-lit'] {
+  fill: var(--scenery-sea-abyss-lit);
+  stroke: var(--scenery-sea-abyss-lit);
+}
+
+.art [data-tone='sea-abyss'] {
+  fill: var(--scenery-sea-abyss);
+  stroke: var(--scenery-sea-abyss);
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.art [data-tone='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.art [data-tone='snow'] {
+  fill: var(--snow);
+  stroke: var(--snow);
+}
+
+.art [data-tone='plate-lit'] {
+  fill: var(--plate-lit);
+  stroke: var(--plate-lit);
+}
+
+.art [data-tone='plate'] {
+  fill: var(--plate);
+  stroke: var(--plate);
+}
+
+.art [data-tone='plate-shade'] {
+  fill: var(--plate-shade);
+  stroke: var(--plate-shade);
+}
+
+.art [data-tone='tab-a'] {
+  fill: var(--tab-a);
+  stroke: var(--tab-a);
+}
+
+.art [data-tone='tab-b'] {
+  fill: var(--tab-b);
+  stroke: var(--tab-b);
+}
+
+.art [data-tone='tab-c'] {
+  fill: var(--tab-c);
+  stroke: var(--tab-c);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='paper-rule'] {
+  fill: var(--paper-rule);
+  stroke: var(--paper-rule);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--pin);
+  stroke: var(--pin);
+}
+
+.art [data-tone='robot-glint'] {
+  fill: var(--robot-glint);
+  stroke: var(--robot-glint);
+}
+
+.art [data-tone='robot-lit'] {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.art [data-tone='robot'] {
+  fill: var(--robot);
+  stroke: var(--robot);
+}
+
+.art [data-tone='robot-shade'] {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.art [data-tone='robot-dark'] {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-tone='block-lit'] {
+  fill: var(--block-lit);
+  stroke: var(--block-lit);
+}
+
+.art [data-tone='block'] {
+  fill: var(--block);
+  stroke: var(--block);
+}
+
+.art [data-tone='block-shade'] {
+  fill: var(--block-shade);
+  stroke: var(--block-shade);
 }
 
 .soft {
@@ -47,22 +238,8 @@
 }
 
 .cable {
-  background: linear-gradient(to right, var(--cable) 50%, var(--clamp) 50%);
+  background: linear-gradient(to right, var(--cable-lit) 45%, var(--cable) 45%);
   transform-origin: top;
-}
-
-.clamp {
-  fill: var(--clamp);
-  stroke: var(--clamp-lit);
-  stroke-width: 2;
-}
-
-.glyph {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .robotCable {
@@ -70,12 +247,8 @@
   stroke-width: 3;
 }
 
-.block {
-  background: linear-gradient(to right, var(--block) 78%, var(--block-side) 78%);
-}
-
 .unpaid {
-  border: 2px dashed var(--ink-soft);
+  border: 2px dashed var(--unpaid);
 }
 
 .next {
@@ -89,7 +262,8 @@
  */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .cable {
-    animation: pay-out 2800ms linear 200ms both;
+    background: linear-gradient(to right, var(--cable-lit) 45%, var(--cable) 45%);
+    transform-origin: top;
   }
 
   :global([data-zone='active']) .arrive {

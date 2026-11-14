@@ -70,7 +70,10 @@ export function RunScore({ run, label, checks, verdict }: RunScoreProps) {
     <div className="flex flex-col gap-2">
       <p className="flex items-end justify-between gap-2">
         <span className="text-caption text-muted-foreground">{label}</span>
-        <span data-score className="text-heading font-semibold tabular-nums">
+        <span
+          data-score
+          className={cn('text-subheading font-semibold tabular-nums', run === 'without' && 'text-muted-foreground')}
+        >
           {`${passed} / ${checks.length}`}
         </span>
       </p>

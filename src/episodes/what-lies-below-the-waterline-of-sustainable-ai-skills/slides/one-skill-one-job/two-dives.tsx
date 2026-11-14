@@ -1,23 +1,22 @@
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import { Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { DESCENT_MS, LATE_DELAY } from './motion';
 import styles from './one-job.module.css';
+import { depthY, sceneX, WaterColumnArt } from './water-column-art';
 
 /*
- * The water column of Spec Option 15b, in `ZoneScene`'s 1200 by 800 space at the Surface: two research ships on the
+ * The two dives of Spec Option 15b, in `ZoneScene`'s 1200 by 800 space at the Surface: two research ships on the
  * waterline, each lowering its robot by the same card. At site 4 the shelf lies at 40 m and the robot reaches it; at
  * site 7 the seabed lies at 120 m and the robot stops at 40, the "80 m short" bracket beside it. The robots descend
- * together once (`Travel`), then the bracket draws. The ships, robots and seabed are shared figures (design-ADR 0025);
- * the shelf is stacked from the shared seabed, and the ruler, bracket and leaders are this Slide's own.
+ * together once (`Travel`), then the bracket draws. The water, shelf and seabed are this Slide's own, lifted from the
+ * Option (`water-column-art.tsx`, feedback 3, decision 46); the ships and robots are shared figures (design-ADR 0025);
+ * the ruler, bracket, check mark, bubbles and leaders are this Slide's own.
  */
 
-/** Scene units per metre: the waterline at 0 m, the deep seabed at 120 m. */
-const PER_METRE = 3;
-const depthY = (metres: number) => SURFACE_WATERLINE + metres * PER_METRE;
 const SHELF_Y = depthY(40);
 const DEEP_Y = depthY(120);
 const SHIP_SCALE = 1.2;
@@ -31,9 +30,11 @@ const DESCENT_FROM = '0 -14%';
 
 const ANCHORS = shipAnchors();
 
+/** Each ship's place, so its A-frame hangs the cable where the Option's does: over the shelf, and over the deep. */
+const shipAt = (specCable: number) => sceneX(specCable) - ANCHORS.aFrameTip.x * SHIP_SCALE;
 export const SITES = [
-  { slug: 'four', x: 330, reaches: true },
-  { slug: 'seven', x: 900, reaches: false },
+  { slug: 'four', x: shipAt(97.5), reaches: true },
+  { slug: 'seven', x: shipAt(507.5), reaches: false },
 ] as const;
 
 const tipOf = (shipX: number) => ({
@@ -74,20 +75,6 @@ function Tag({ x, y, text, mark }: TagProps) {
   );
 }
 
-/** The shelf under site 4: a faceted rock body falling away towards site 7, the shared seabed along its top. */
-function Shelf() {
-  const top = SHELF_Y + 24;
-  return (
-    <g data-shelf>
-      <polygon points={`0,${top} 560,${top} 690,800 0,800`} data-tone="rock" />
-      <polygon points={`0,${top} 300,${top} 0,700`} data-tone="rock-lit" />
-      <polygon points={`560,${top} 690,800 470,800`} data-tone="rock-shade" />
-      <polygon points={`180,800 360,620 520,800`} data-tone="rock-shade" />
-      <Seabed y={SHELF_Y} width={600} />
-    </g>
-  );
-}
-
 /** The depth ruler at the left edge, 0 to 120 m. */
 function Ruler({ label }: { readonly label: (metres: number) => string }) {
   return TICKS.map((metres) => (
@@ -98,6 +85,27 @@ function Ruler({ label }: { readonly label: (metres: number) => string }) {
   ));
 }
 
+/** The check mark on the robot that reached the shelf, as the Option draws it. */
+function Check({ x, y }: { readonly x: number; readonly y: number }) {
+  return (
+    <g data-check transform={`translate(${x} ${y})`}>
+      <circle r={20} strokeWidth={3.5} data-tone="check-disc" />
+      <path d="M-9 0l6 6.5 12-13" strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" data-tone="check-mark" />
+    </g>
+  );
+}
+
+/** Three small faceted bubbles rising from the robot left hanging, as the Option draws them. */
+function Bubbles({ x, y }: { readonly x: number; readonly y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`} data-tone="bubble">
+      <polygon points="9,0 4.5,-7.8 -4.5,-7.8 -9,0 -4.5,7.8 4.5,7.8" />
+      <polygon points="21,-22 17.5,-28 10.5,-28 7,-22 10.5,-16 17.5,-16" transform="translate(-4 -2)" />
+      <polygon points="5,-46 2.5,-50 -2.5,-50 -5,-46 -2.5,-42 2.5,-42" />
+    </g>
+  );
+}
+
 /** The cable from the A-frame and the robot descending it; site 4's touches the shelf, site 7's stops short. */
 function Dive({ x, reaches }: { readonly x: number; readonly reaches: boolean }) {
   const tip = tipOf(x);
@@ -106,8 +114,14 @@ function Dive({ x, reaches }: { readonly x: number; readonly reaches: boolean })
       <line x1={tip.x} y1={tip.y} x2={tip.x} y2={ROBOT_TOP} strokeWidth={3} data-tone="cable" />
       <Travel from={DESCENT_FROM} duration={DESCENT_MS}>
         <g transform={`translate(${tip.x} ${ROBOT_TOP}) scale(${ROBOT_SCALE})`}>
-          <Robot motion="dive" aim="down" mood={reaches ? 'happy' : 'confused'} />
+          <Robot
+            state={robotAt('one-skill-one-job').state}
+            motion="dive"
+            aim="down"
+            mood={reaches ? 'happy' : 'confused'}
+          />
         </g>
+        {reaches ? <Check x={tip.x + 66} y={ROBOT_TOP + 40} /> : <Bubbles x={tip.x + 36} y={ROBOT_TOP - 30} />}
       </Travel>
     </>
   );
@@ -134,20 +148,22 @@ function ShortBracket({ x, text }: { readonly x: number; readonly text: string }
   );
 }
 
-/** Dashed leaders from the card in the sky down to both ships: one skill, two dives. */
+/** Dashed curves from the card's lower corners to both ships' mastheads: one skill, two dives. */
 function Leaders() {
-  return SITES.map(({ slug, x }) => (
-    <line
-      key={slug}
-      x1={600}
-      y1={250}
-      x2={x}
-      y2={SURFACE_WATERLINE - 50}
-      strokeWidth={3}
-      strokeDasharray="10 8"
-      data-tone="leader"
-    />
-  ));
+  return SITES.map(({ slug, x }, index) => {
+    const from = { x: index === 0 ? 450 : 750, y: 300 };
+    const to = { x: x + ANCHORS.pennant.x * SHIP_SCALE, y: SURFACE_WATERLINE + ANCHORS.pennant.y * SHIP_SCALE - 6 };
+    const bend = index === 0 ? -90 : 90;
+    return (
+      <path
+        key={slug}
+        d={`M${from.x} ${from.y} C${from.x + bend} ${from.y + 30} ${to.x - bend / 3} ${to.y - 40} ${to.x} ${to.y}`}
+        strokeWidth={3}
+        strokeDasharray="8 9"
+        data-tone="leader"
+      />
+    );
+  });
 }
 
 export interface TwoDivesProps {
@@ -160,8 +176,7 @@ export interface TwoDivesProps {
 export function TwoDives({ sites, short, depth }: TwoDivesProps) {
   return (
     <g className={styles.dives}>
-      <Seabed y={DEEP_Y - 10} />
-      <Shelf />
+      <WaterColumnArt />
       <Leaders />
       {SITES.map(({ slug, x, reaches }) => (
         <g key={slug}>

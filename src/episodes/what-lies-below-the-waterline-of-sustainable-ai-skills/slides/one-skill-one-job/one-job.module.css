@@ -1,8 +1,10 @@
 /*
- * Slide token file of "A project detail couples a skill to one project" (FE-011 §2): the ruler, the cables, the
- * leaders, the bracket and the labels over the water, mixed from global tokens so they follow light and dark with no
- * raw colour. `primary` marks the shortfall (its bracket and pill) and the coupling card (in slide.tsx), as Option 15b
+ * Slide token file of "A project detail couples a skill to one project" (FE-011 §2): the water column, its rock and
+ * light in the tones of Spec Option 15b, each with its dark value from the Option; the ruler, the cables, the leaders,
+ * the bracket and the labels over the water, mixed from global tokens. `primary` marks the shortfall (its bracket and pill) and the coupling card (in slide.tsx), as Option 15b
  * draws them; no meaning colour on scenery.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .dives {
@@ -10,15 +12,85 @@
   --tag-ink: var(--card-foreground);
   --tick: var(--card);
   --cable: color-mix(in oklab, var(--foreground) 70%, var(--card));
-  --leader: var(--card-foreground);
-  /* The shelf's rock, mixed as the shared seabed mixes its own, so the two read as one floor. */
-  --rock: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
-  --rock-lit: color-mix(in oklab, var(--rock) 80%, var(--on-brand-accent));
-  --rock-shade: color-mix(in oklab, var(--rock) 80%, var(--overlay));
+  /* The water, light, rock and bubbles of Spec Option 15b (feedback 3, decision 46). */
+  --glow: oklch(0.99 0.03 200);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
 }
 
 :global(.dark) .dives {
-  --rock: color-mix(in oklab, var(--bulb) 25%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
+  --glow: oklch(0.9 0.08 200);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
+}
+
+/* The water column's facets: each stroked in its own fill, so no hairline shows between neighbours. */
+.facets [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.facets [data-tone='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.facets [data-tone='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.facets [data-tone='sea-sunlit-lit'] {
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
+}
+
+.facets [data-tone='sea-sunlit'] {
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
+}
+
+.facets [data-tone='sea-twilight-lit'] {
+  fill: var(--scenery-sea-twilight-lit);
+  stroke: var(--scenery-sea-twilight-lit);
+}
+
+.facets [data-tone='sea-twilight'] {
+  fill: var(--scenery-sea-twilight);
+  stroke: var(--scenery-sea-twilight);
+}
+
+.facets [data-tone='ray'] {
+  fill: var(--scenery-ray);
+  stroke: none;
+}
+
+.facets [data-tone='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.facets [data-tone='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.facets [data-tone='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.facets [data-tone='glow'] {
+  fill: var(--glow);
+  stroke: none;
+}
+
+.facets [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
+}
+
+.facets [data-tone='bubble'] {
+  fill: var(--scenery-bubble);
+  stroke: none;
 }
 
 /* Labels keep a readable size: the drawing scales down with its column, so a narrow column scales its labels up. */
@@ -30,18 +102,6 @@
   .dives {
     --tag-scale: 2.6;
   }
-}
-
-.dives [data-tone='rock'] {
-  fill: var(--rock);
-}
-
-.dives [data-tone='rock-lit'] {
-  fill: var(--rock-lit);
-}
-
-.dives [data-tone='rock-shade'] {
-  fill: var(--rock-shade);
 }
 
 .dives [data-tone='tag'] {
@@ -68,9 +128,24 @@
   stroke: var(--cable);
 }
 
+/* The leaders from the card to the ships: dashed in the page's ground, as the Option draws them. */
 .dives [data-tone='leader'] {
-  stroke: var(--leader);
-  opacity: 0.6;
+  fill: none;
+  stroke: var(--background);
+}
+
+.dives [data-tone='check-disc'] {
+  fill: var(--foreground);
+  stroke: var(--background);
+}
+
+.dives [data-tone='check-mark'] {
+  fill: none;
+  stroke: var(--background);
+}
+
+.dives [data-tone='bubble'] {
+  fill: var(--scenery-bubble);
 }
 
 .dives [data-tone='bracket'] {

@@ -39,6 +39,7 @@
     "episode:status": "node skills/new-episode/scripts/status.ts",
     "preview": "node skills/visual-check/scripts/preview.ts",
     "inspect-page": "node skills/visual-check/scripts/inspect-page.ts",
+    "frame-sample": "node skills/visual-check/scripts/frame-sample.ts",
     "decision-html:prove": "node skills/to-decision-html/scripts/prove.ts",
     "episode:log": "node skills/new-episode/scripts/log.ts",
     "episode:trace": "node skills/new-episode/scripts/trace.ts",

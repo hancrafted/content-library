@@ -61,4 +61,24 @@ describe('edge cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it('writes every number short, so forty bubbles on every edge stay light in the page', () => {
+    // ARRANGE
+    const decimals = { x: 1, start: 3, rise: 3, phase: 2 };
+    const expected = { long: [] };
+    // ACT
+    const field = bubbleField(40);
+    const digits = (value: number) => (String(value).split('.')[1] ?? '').length;
+    const seen = {
+      long: field.filter(
+        ({ x, start, rise, phase }) =>
+          digits(x) > decimals.x ||
+          digits(start) > decimals.start ||
+          digits(rise) > decimals.rise ||
+          digits(phase) > decimals.phase,
+      ),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
 });

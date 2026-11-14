@@ -1,50 +1,75 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { zoneToken, type Zone } from './ruler.pure';
 import { SceneMotionRoot } from './scene-motion.client';
+import { Bubbles } from './scenery/bubbles';
+import { Clouds } from './scenery/clouds';
+import { FishSchool } from './scenery/fish-school';
 import { Iceberg } from './scenery/iceberg';
-import { depthScaleForKeel } from './scenery/scenery.pure';
-import { Bubbles, FishSchool, Jellies, Whale } from './scenery/sea-life';
+import { placeIceberg } from './scenery/iceberg-placement.pure';
+import { Jellies } from './scenery/jellies';
+import { Lanternfish } from './scenery/lanternfish';
 import { LightRays, Seabed } from './scenery/seabed';
-import { Clouds, SunMoon } from './scenery/sky';
+import { Siphonophore } from './scenery/siphonophore';
+import { FlatWater, LitWaterline, Sky } from './scenery/sky';
+import { SunMoon } from './scenery/sun-moon';
+import { Whale } from './scenery/whale';
+import { seaFacets, WATER_CELL, type SeaFacet } from './zone-edges.pure';
 import styles from './zone-scene.module.css';
 import {
-  depthBands,
-  seaFacets,
-  WHOLE_DEPTH,
+  sectionTitleLiftStyle,
+  SURFACE_WATERLINE,
+  TITLE_LIFE_AT,
+  TITLE_LOOP_AT,
   zoneSceneParts,
   type SceneIceberg,
   type SceneLife,
-  type SeaFacet,
+  type TitleLife,
 } from './zone-scene.pure';
+import { zoneToken, type Zone } from './zones.pure';
 
 /** Every Scene draws in one space, 1200 by 800, so a Slide places its figures in the same numbers at every zone. */
 export const SCENE_WIDTH = 1200;
 export const SCENE_HEIGHT = 800;
 /** Where the Surface's waterline runs; below the Surface the whole Scene is water. */
-export const SURFACE_WATERLINE = 400;
+export { SURFACE_WATERLINE };
+/** How far a lifted Surface title's sky runs on above its drawing, in the Scene's units: past any lift a phone takes. */
+const SKY_RISE = 600;
 
-const KEEL_REACH = 520;
 const SEABED_TOP = 690;
+/** The zone a ZoneScene draws fills the Scene, so the Twilight zone it does not draw starts at the Scene's bottom. */
+const UNSEEN_TWILIGHT = 100;
 
 export interface ZoneSceneProps {
   /** The one choice a Slide makes: the zone it sits in. */
   readonly zone: Zone;
   /** Another part of the iceberg than the zone's own (`whole` on the Surface, `keel` in Sunlit, none deeper). */
   readonly iceberg?: SceneIceberg;
+  /**
+   * The Scene is a Section title's drawing, so it adds its zone's title life (feedback 2, decision 11): on a Twilight
+   * title a lanternfish school and a siphonophore beside the drifting jellies; every other zone draws as on a page.
+   * A Surface title's drawing starts at the top (feedback 3, decision 48); `figuresReach` is how far the Slide's
+   * figures reach above the waterline, such as the ship's masthead, and the drawing moves down only as far as keeps
+   * them below the title.
+   */
+  readonly sectionTitle?: boolean | { readonly figuresReach: number };
+  /**
+   * `false` when the Slide's overlay covers the zone's open water, so its ambient creature (the Midnight whale, the
+   * Twilight jellies) would show only as a stray part between the overlay's cards. The water, rays and seabed stay.
+   */
+  readonly openWater?: boolean;
   /** Words for the picture; without them it is decoration, hidden from assistive tech. */
   readonly label?: string;
   /** The Slide's figures: SVG in the Scene's 1200 by 800 space, placed with `transform` or `Travel`. */
   readonly children?: ReactNode;
-  /** HTML over the drawing, such as a card or the depth ruler, inside the Scene so its motion settles with it. */
+  /** HTML over the drawing, such as a card or the depth gauge, inside the Scene so its motion settles with it. */
   readonly overlay?: ReactNode;
   readonly className?: string;
 }
 
-/** One band of faceted sky or water, filled from the Scene's `--zone` or `--water`. */
-export function Band({ facets, band }: { readonly facets: readonly SeaFacet[]; readonly band: 'sky' | 'water' }) {
+/** One band of faceted water, filled from the Scene's `--water`; the sky and the Surface's water are flat. */
+export function Band({ facets }: { readonly facets: readonly SeaFacet[] }) {
   return (
-    <g data-band={band} className={styles[band]}>
+    <g data-band="water" className={styles.water}>
       {facets.map(({ points, tone }) => (
         <polygon key={points} data-tone={tone} points={points} />
       ))}
@@ -52,7 +77,30 @@ export function Band({ facets, band }: { readonly facets: readonly SeaFacet[]; r
   );
 }
 
-function Life({ life }: { readonly life: SceneLife }) {
+/** The zone's one ambient loop, and the creatures only its Section title adds; none where the Slide covers the water. */
+function Life({
+  life,
+  titleLife,
+  sectionTitle,
+  open = true,
+}: {
+  readonly life: SceneLife;
+  readonly titleLife: readonly TitleLife[];
+  readonly sectionTitle: boolean;
+  readonly open?: boolean;
+}) {
+  if (!open) return null;
+  return (
+    <>
+      <Loop life={life} sectionTitle={sectionTitle} />
+      {titleLife.map((creature) => (
+        <TitleCreature key={creature} life={creature} />
+      ))}
+    </>
+  );
+}
+
+function Loop({ life, sectionTitle }: { readonly life: SceneLife; readonly sectionTitle: boolean }) {
   switch (life) {
     case 'fish':
       return <FishSchool x={320} y={430} />;
@@ -61,147 +109,120 @@ function Life({ life }: { readonly life: SceneLife }) {
     case 'whale':
       return <Whale x={360} y={420} scale={1.1} />;
     case 'bubbles':
-      return <Bubbles x={220} y={560} count={9} scale={1.5} />;
+      return sectionTitle ? (
+        <Bubbles
+          x={TITLE_LOOP_AT.bubbles.x}
+          y={TITLE_LOOP_AT.bubbles.y}
+          count={9}
+          scale={TITLE_LOOP_AT.bubbles.scale}
+        />
+      ) : (
+        <Bubbles x={220} y={560} count={9} scale={1.5} />
+      );
     case 'wind':
       // The Surface's wind lives in its clouds, which the sky draws.
       return null;
   }
 }
 
-function Berg({ part, surface }: { readonly part: SceneIceberg; readonly surface: boolean }) {
-  if (part === 'none') return null;
-  const waterline = surface ? SURFACE_WATERLINE : 0;
-  const depthScale = part === 'tip' ? 1 : depthScaleForKeel(waterline, waterline + KEEL_REACH);
-  return <Iceberg part={part} x={900} waterline={waterline} scale={surface ? 0.8 : 1} depthScale={depthScale} />;
+/** The Twilight Section titles' extra life: a lanternfish school low right of the robot, a siphonophore beside it, in view on a phone. */
+function TitleCreature({ life }: { readonly life: TitleLife }) {
+  switch (life) {
+    case 'lanternfish':
+      return (
+        <Lanternfish
+          x={TITLE_LIFE_AT.lanternfish.x}
+          y={TITLE_LIFE_AT.lanternfish.y}
+          scale={TITLE_LIFE_AT.lanternfish.scale}
+        />
+      );
+    case 'siphonophore':
+      return (
+        <Siphonophore
+          x={TITLE_LIFE_AT.siphonophore.x}
+          y={TITLE_LIFE_AT.siphonophore.y}
+          scale={TITLE_LIFE_AT.siphonophore.scale}
+        />
+      );
+  }
 }
 
-const SKY_FACETS = seaFacets({ width: SCENE_WIDTH, height: SURFACE_WATERLINE, cell: 160, seed: 11 });
-const SURFACE_WATER = seaFacets({ width: SCENE_WIDTH, height: SCENE_HEIGHT - SURFACE_WATERLINE, cell: 150, seed: 5 });
-const DEEP_WATER = seaFacets({ width: SCENE_WIDTH, height: SCENE_HEIGHT, cell: 170, seed: 23 });
+/** The berg through the one placement every Scene shares: body in the Sunlit zone, keel touching the Twilight zone. */
+function Berg({ part, surface }: { readonly part: SceneIceberg; readonly surface: boolean }) {
+  if (part === 'none') return null;
+  const placed = placeIceberg({
+    x: 900,
+    waterline: surface ? SURFACE_WATERLINE : 0,
+    scale: surface ? 0.8 : 1,
+    sunlitBottom: SCENE_HEIGHT,
+    twilightDepth: UNSEEN_TWILIGHT,
+  });
+  return <Iceberg part={part} {...placed} depthScale={part === 'tip' ? 1 : placed.depthScale} />;
+}
 
-/** The Surface's sky over its water, or a deeper zone's water throughout. */
-function Ground({ sky }: { readonly sky: boolean }) {
-  if (!sky) return <Band facets={DEEP_WATER} band="water" />;
+const DEEP_WATER = seaFacets({ width: SCENE_WIDTH, height: SCENE_HEIGHT, cell: WATER_CELL, seed: 23 });
+
+/** The Surface's faceted sky over its flat water, the waterline lit between them, or a deeper zone's faceted water. */
+function Ground({ sky, rise }: { readonly sky: boolean; readonly rise: number }) {
+  if (!sky) return <Band facets={DEEP_WATER} />;
   return (
     <>
-      <Band facets={SKY_FACETS} band="sky" />
+      <Sky width={SCENE_WIDTH} height={SURFACE_WATERLINE} rise={rise} />
       <SunMoon x={980} y={120} />
       <Clouds />
       <g transform={`translate(0 ${SURFACE_WATERLINE})`}>
-        <Band facets={SURFACE_WATER} band="water" />
+        <FlatWater width={SCENE_WIDTH} height={SCENE_HEIGHT - SURFACE_WATERLINE} />
       </g>
+      <LitWaterline width={SCENE_WIDTH} y={SURFACE_WATERLINE} />
     </>
   );
+}
+
+/** How a Scene fills its box: from the bottom, or a Surface title from the top, lifted clear of its title's words. */
+function fillOf(sectionTitle: ZoneSceneProps['sectionTitle'], sky: boolean) {
+  if (!sectionTitle || !sky) return { aspect: 'xMidYMax slice', rise: 0 } as const;
+  return {
+    aspect: 'xMidYMin slice',
+    rise: SKY_RISE,
+    root: styles.lifted,
+    drawing: styles.liftedDrawing,
+    style: sectionTitleLiftStyle(sectionTitle === true ? 0 : sectionTitle.figuresReach),
+  } as const;
 }
 
 /**
  * The Iceberg style's Scene (design-ADR 0025): the zone's sky or water, its light rays or seabed, the iceberg and the
  * zone's one slow ambient loop, drawn from the scenery parts. A Slide names its zone and places its cast; retuning a
  * zone is one token (`--zone-<zone>` in `globals.css`) every Slide in it follows. The drawing fills the Scene's box
- * from the bottom (`slice`), so the waterline and the seabed stay in view at any width.
+ * from the bottom (`slice`), so the waterline and the seabed stay in view at any width; a Surface Section title fills
+ * it from the top instead, its whole sky at the top edge, moved down only as far as keeps its figures under the title.
  */
-export function ZoneScene({ zone, iceberg, label, children, overlay, className }: ZoneSceneProps) {
-  const parts = zoneSceneParts({ zone, iceberg });
-  const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water) } as CSSProperties;
+export function ZoneScene(props: ZoneSceneProps) {
+  const { zone, iceberg, sectionTitle, openWater, label, children, overlay, className } = props;
+  const parts = zoneSceneParts({ zone, iceberg, sectionTitle: Boolean(sectionTitle) });
+  const fill = fillOf(sectionTitle, parts.sky);
+  const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water), ...fill.style } as CSSProperties;
   return (
     <SceneMotionRoot
       zone={zone}
       style={tokens}
-      className={cn(styles.scene, 'relative isolate overflow-hidden', className)}
+      className={cn(styles.scene, fill.root, 'relative isolate overflow-hidden', className)}
     >
       <svg
         viewBox={`0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`}
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio={fill.aspect}
         role={label === undefined ? undefined : 'img'}
         aria-label={label}
         aria-hidden={label === undefined ? true : undefined}
-        className="absolute inset-0 -z-10 size-full"
+        className={cn('absolute inset-0 -z-10 size-full', fill.drawing)}
       >
-        <Ground sky={parts.sky} />
+        <Ground sky={parts.sky} rise={fill.rise} />
         {parts.rays && <LightRays x={60} y={0} count={7} spread={150} length={700} />}
         <Berg part={parts.iceberg} surface={parts.sky} />
         {parts.seabed && <Seabed y={SEABED_TOP} />}
-        <Life life={parts.life} />
+        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={Boolean(sectionTitle)} open={openWater} />
         {children}
       </svg>
-      {overlay}
-    </SceneMotionRoot>
-  );
-}
-
-/** The whole depth's sky and water: its own facets, since its sky is shorter and its water five bands deep. */
-const WHOLE_SKY = seaFacets({ width: WHOLE_DEPTH.width, height: WHOLE_DEPTH.waterline, cell: 160, seed: 11 });
-const WHOLE_BANDS = depthBands().map((band, depth) => ({
-  ...band,
-  facets: seaFacets({ width: WHOLE_DEPTH.width, height: band.bottom - band.top, cell: 150, seed: 5 + depth * 6 }),
-}));
-/** The clouds kept clear of the ship on the left and of the words a Slide writes beside it. */
-const WHOLE_CLOUDS = [
-  { x: 120, y: 150, scale: 0.75, shape: 0 },
-  { x: 1060, y: 230, scale: 0.5, shape: 1 },
-] as const;
-/** The iceberg pushed to the right edge, so the zones have open water for words; its keel reaches the Abyss. */
-const WHOLE_BERG = { x: 1165, scale: 0.6, keel: 820 } as const;
-const WHOLE_SEABED_TOP = 845;
-
-export type WholeDepthSceneProps = Omit<ZoneSceneProps, 'zone' | 'iceberg'>;
-
-/** The whole depth's drawing: the sky, each zone's water from the waterline down, the iceberg and the seabed. */
-function WholeDepth() {
-  return (
-    <>
-      <Band facets={WHOLE_SKY} band="sky" />
-      <SunMoon x={1120} y={70} r={28} />
-      <Clouds at={WHOLE_CLOUDS} />
-      {WHOLE_BANDS.map(({ zone, top, facets }) => (
-        <g
-          key={zone}
-          data-depth-band={zone}
-          transform={`translate(0 ${top})`}
-          style={{ '--water': zoneToken(zone) } as CSSProperties}
-        >
-          <Band facets={facets} band="water" />
-        </g>
-      ))}
-      <Iceberg
-        part="whole"
-        x={WHOLE_BERG.x}
-        waterline={WHOLE_DEPTH.waterline}
-        scale={WHOLE_BERG.scale}
-        depthScale={depthScaleForKeel(0, (WHOLE_BERG.keel - WHOLE_DEPTH.waterline) / WHOLE_BERG.scale)}
-      />
-      <Seabed y={WHOLE_SEABED_TOP} />
-    </>
-  );
-}
-
-/**
- * The Iceberg style's whole depth in one Scene: the Surface sky, then each zone's own water stacked from the waterline
- * to the seabed (`depthBands`), the whole iceberg pushed right with its keel down into the Abyss. For a closing Slide
- * that looks at every zone at once; a Slide in one zone uses `ZoneScene`. It draws no creatures, so words written on
- * the water stay legible, and keeps the Surface's wind as its one ambient loop. The drawing keeps its proportions
- * (1200 by 880), so a Slide places its overlay in the drawing's units read against the Scene's width.
- */
-export function WholeDepthScene({ label, children, overlay, className }: WholeDepthSceneProps) {
-  const { width, height } = WHOLE_DEPTH;
-  return (
-    <SceneMotionRoot
-      zone="surface"
-      style={{ '--zone': zoneToken('surface') } as CSSProperties}
-      className={cn(styles.scene, 'relative isolate', className)}
-    >
-      <div className="relative overflow-hidden" style={{ aspectRatio: `${width} / ${height}` }}>
-        <svg
-          viewBox={`0 0 ${width} ${height}`}
-          role={label === undefined ? undefined : 'img'}
-          aria-label={label}
-          aria-hidden={label === undefined ? true : undefined}
-          className="absolute inset-0 -z-10 size-full"
-        >
-          <WholeDepth />
-          {children}
-        </svg>
-      </div>
       {overlay}
     </SceneMotionRoot>
   );

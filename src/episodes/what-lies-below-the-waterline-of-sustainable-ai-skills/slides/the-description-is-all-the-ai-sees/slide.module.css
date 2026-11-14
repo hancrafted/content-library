@@ -1,100 +1,241 @@
 /*
- * "The description is the trigger" (Option 11a): the room's own scenery and its one emphasis motion. No raw colour
- * (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white and `--overlay` as
- * black, fixed across themes, the zone's `--zone-sunlit` and `--zone-surface` for the sea and sky through the window,
- * `--bulb` for the reading light; `--primary` marks the one entry to look at. Dark mode only retunes the mixes.
+ * "The description is the trigger" (Option 11a): the room's tones and its one emphasis motion. The tones are the
+ * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
+ * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). `--primary` marks the one entry
+ * to look at.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
-.room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
-  );
-  --frame: color-mix(
-    in oklab,
-    var(--brand-accent) 30%,
-    color-mix(in oklab, var(--on-brand-accent) 40%, var(--overlay))
-  );
-  --shut: color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay));
-  --shut-shade: color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay));
-  --cone: color-mix(in oklab, var(--bulb) 30%, transparent);
-  --buoy: color-mix(in oklab, var(--brand-accent) 80%, var(--overlay));
+.art {
+  --glow: oklch(0.99 0.03 200);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --hull: oklch(0.4 0.03 255);
+  --buoy-lit: oklch(0.72 0.17 45);
+  --buoy: oklch(0.6 0.17 38);
+  --halo: oklch(0.98 0.07 95 / 0.55);
+  --shut-lit: oklch(0.87 0.008 250);
+  --shut: oklch(0.81 0.01 250);
+  --shut-shade: oklch(0.74 0.012 252);
+  --shut-tab: oklch(0.68 0.015 252);
+  --shut-rule: oklch(0.76 0.012 250);
+  --clasp: oklch(0.5 0.015 255);
+  --book-lit: oklch(0.6 0.1 150);
+  --book: oklch(0.5 0.1 155);
+  --book-shade: oklch(0.4 0.09 160);
+  --ring-metal: oklch(0.78 0.01 250);
+  --glint: oklch(1 0 0);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.97 0.009 88);
+  --paper-shade: oklch(0.935 0.014 84);
 }
 
-:global(.dark) .room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
-  );
-  --frame: color-mix(
-    in oklab,
-    var(--brand-accent) 25%,
-    color-mix(in oklab, var(--on-brand-accent) 25%, var(--overlay))
-  );
-  --shut: color-mix(in oklab, var(--on-brand-accent) 48%, var(--overlay));
-  --shut-shade: color-mix(in oklab, var(--on-brand-accent) 38%, var(--overlay));
-  --cone: color-mix(in oklab, var(--bulb) 18%, transparent);
-  --buoy: color-mix(in oklab, var(--brand-accent) 70%, var(--overlay));
+:global(.dark) .art {
+  --glow: oklch(0.9 0.08 200);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --hull: oklch(0.4 0.03 255);
+  --buoy-lit: oklch(0.66 0.15 45);
+  --buoy: oklch(0.55 0.15 38);
+  --halo: oklch(0.9 0.08 95 / 0.2);
+  --shut-lit: oklch(0.5 0.012 252);
+  --shut: oklch(0.45 0.012 254);
+  --shut-shade: oklch(0.4 0.012 256);
+  --shut-tab: oklch(0.36 0.014 256);
+  --shut-rule: oklch(0.42 0.012 254);
+  --clasp: oklch(0.3 0.015 258);
+  --book-lit: oklch(0.52 0.09 150);
+  --book: oklch(0.43 0.09 155);
+  --book-shade: oklch(0.34 0.08 160);
+  --ring-metal: oklch(0.62 0.01 250);
+  --glint: oklch(0.98 0.01 230);
+  --paper-lit: oklch(0.9 0.008 90);
+  --paper: oklch(0.86 0.01 88);
+  --paper-shade: oklch(0.8 0.015 84);
 }
 
-.floor [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
 }
 
-.floor [data-tone='floor'] {
-  fill: var(--floor);
+.art [data-tone='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
 }
 
-.floor [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
+.art [data-tone='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
 }
 
-.window [data-tone='frame'] {
-  fill: var(--frame);
-  stroke: var(--frame);
+.art [data-tone='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
 }
 
-.window [data-tone='sky'] {
-  fill: var(--zone-surface);
+.art [data-tone='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
 }
 
-.window [data-tone='sea'] {
-  fill: var(--zone-sunlit);
+.art [data-tone='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
 }
 
-.window [data-tone='buoy'],
-.window [data-tone='flag'] {
+.art [data-tone='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-tone='glow'] {
+  fill: var(--glow);
+  stroke: var(--glow);
+}
+
+.art [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-tone='hull'] {
+  fill: var(--hull);
+  stroke: var(--hull);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-tone='buoy-lit'] {
+  fill: var(--buoy-lit);
+  stroke: var(--buoy-lit);
+}
+
+.art [data-tone='buoy'] {
   fill: var(--buoy);
+  stroke: var(--buoy);
 }
 
-.window [data-tone='pole'] {
-  stroke: var(--frame);
+.art [data-tone='halo'] {
+  fill: var(--halo);
+  stroke: none;
 }
 
-.shut [data-tone='shut'] {
+.art [data-tone='shut-lit'] {
+  fill: var(--shut-lit);
+  stroke: var(--shut-lit);
+}
+
+.art [data-tone='shut'] {
   fill: var(--shut);
+  stroke: var(--shut);
 }
 
-.shut [data-tone='shut-shade'] {
+.art [data-tone='shut-shade'] {
   fill: var(--shut-shade);
+  stroke: var(--shut-shade);
 }
 
-.cone {
-  fill: var(--cone);
+.art [data-tone='shut-tab'] {
+  fill: var(--shut-tab);
+  stroke: var(--shut-tab);
+}
+
+.art [data-tone='shut-rule'] {
+  fill: var(--shut-rule);
+  stroke: var(--shut-rule);
+}
+
+.art [data-tone='clasp'] {
+  fill: var(--clasp);
+  stroke: var(--clasp);
+}
+
+.art [data-tone='book-lit'] {
+  fill: var(--book-lit);
+  stroke: var(--book-lit);
+}
+
+.art [data-tone='book'] {
+  fill: var(--book);
+  stroke: var(--book);
+}
+
+.art [data-tone='book-shade'] {
+  fill: var(--book-shade);
+  stroke: var(--book-shade);
+}
+
+.art [data-tone='ring-metal'] {
+  fill: var(--ring-metal);
+  stroke: var(--ring-metal);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
 }
 
 /*
@@ -107,9 +248,18 @@
   color: var(--primary-foreground);
 }
 
+/* The ring: drawn once on a layer of its own, shown by opacity alone (decision 19). */
 .ringed {
-  outline: 2px solid var(--primary);
-  outline-offset: 0;
+  position: relative;
+}
+
+.ringed::after {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -117,20 +267,20 @@
     animation: light-up 600ms ease-out 1200ms both;
   }
 
-  :global([data-zone='active']) .ringed {
+  :global([data-zone='active']) .ringed::after {
     animation: ring-in 400ms ease-out 1700ms both;
   }
 }
 
+/* The line fades in already lit: opacity alone (decision 19). */
 @keyframes light-up {
   from {
-    background: var(--card);
-    color: var(--card-foreground);
+    opacity: 0;
   }
 }
 
 @keyframes ring-in {
   from {
-    outline-color: transparent;
+    opacity: 0;
   }
 }

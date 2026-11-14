@@ -1,13 +1,14 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
-import type { Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
+import type { Zone } from '@/episodes/components/slide-shared/iceberg/zones.pure';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './iceberg.module.css';
+import { IndexPaper } from './index-art';
 import { TakeawayRows, type TakeawayLine } from './takeaway-rows';
 import { WholeIceberg } from './whole-iceberg';
 
@@ -58,19 +59,21 @@ export const theWholeIceberg = slide({
         label={t('alt')}
         overlay={
           <>
-            <ZoneCard data-index-page className={cn(styles.index, 'flex flex-col gap-1.5 rounded-lg p-4 shadow-md')}>
+            <ZoneCard data-index-page className={cn(styles.index, styles.paper, 'relative flex flex-col gap-1.5 p-4')}>
+              <IndexPaper />
               <InView view="chat" as="p" className="flex flex-col">
                 <span className="text-body font-semibold">{t('index.title')}</span>
-                <span className="text-caption text-muted-foreground">{t('index.lead')}</span>
+                <span className={cn(styles.soft, 'text-caption')}>{t('index.lead')}</span>
               </InView>
               <InView view="coding" as="p" className="flex flex-col">
                 <span translate="no" className="font-mono text-caption font-semibold break-all">
                   ~/.claude/skills/{FOCAL_SKILL}/
                 </span>
-                <span className="text-caption text-muted-foreground">{t('index.codingLead')}</span>
+                <span className={cn(styles.soft, 'text-caption')}>{t('index.codingLead')}</span>
               </InView>
               <ul className="flex flex-wrap gap-x-4 gap-y-1">
-                <li data-index-entry={FOCAL_SKILL} className="flex basis-full flex-col">
+                <li data-index-entry={FOCAL_SKILL} className="relative flex basis-full flex-col ps-3">
+                  <span aria-hidden data-index-mark className={styles.mark} />
                   <InView view="chat" className="font-mono text-caption font-semibold">
                     {FOCAL_SKILL}
                   </InView>
@@ -90,7 +93,7 @@ export const theWholeIceberg = slide({
                     key={name}
                     data-index-entry={name}
                     translate="no"
-                    className="font-mono text-caption text-muted-foreground"
+                    className={cn(styles.soft, 'font-mono text-caption')}
                   >
                     {name}
                   </li>

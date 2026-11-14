@@ -108,24 +108,24 @@ export const instructionsSkillsAndConnectors = slide({
           zone="surface"
           iceberg="none"
           label={t('alt.room')}
-          className="aspect-[2/1] w-full rounded-2xl shadow-md"
+          className="aspect-[30/13] w-full rounded-2xl shadow-md"
           overlay={
             <>
               <p
-                style={at(425, 262)}
+                style={at(364, 86)}
                 className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
               >
                 {t('art.brief')}
               </p>
               <p
-                style={at(1095, 214)}
-                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
+                style={at(1106, 44)}
+                className="whitespace-nowrap absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
               >
                 {t('art.labDatabase')}
               </p>
               <p
-                style={at(1140, 740)}
-                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @2xl:block"
+                style={at(1080, 494)}
+                className="absolute hidden -translate-x-1/2 text-caption font-semibold text-background @2xl:block"
               >
                 {t('art.sonar')}
               </p>
@@ -187,7 +187,9 @@ export const instructionsSkillsAndConnectors = slide({
                     href={localizePath(dynamicContext.path, locale, dynamicContext.anchor)}
                     className={cn(
                       'w-fit rounded-full border px-2 text-caption font-semibold underline-offset-2 hover:underline',
-                      KIND[thing] === 'dynamic' && 'border-foreground bg-foreground text-background',
+                      KIND[thing] === 'dynamic'
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-foreground/40 text-foreground',
                     )}
                   >
                     {t(`tags.${KIND[thing]}`)}

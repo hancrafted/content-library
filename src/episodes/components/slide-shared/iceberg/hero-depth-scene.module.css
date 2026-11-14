@@ -1,91 +1,83 @@
 /*
- * The Title slide's hero overlay (`HeroDepthScene`): HTML over the full-bleed drawing, placed in the drawing's own
- * units. The drawing fills the Slide from the bottom (`xMidYMax slice`), so one scale maps it: the larger of the box's
- * width and height over the drawing's. The overlay is a size container covering the same box as the Backdrop, so
- * `cq` units read that box: a point (x, y) sits at `50cqw + (x - width / 2) * scale` across and
- * `100cqh - (height - y) * scale` down. The ruler starts at the left inset, where the Foreground starts. The ruler's labels take the zone's ink: dark on the light zones, light on the
- * two zones dark in both themes.
+ * The Title slide's hero (`HeroDepthScene`): the drawing starts `--hero-lift` below the top and takes the rest of the
+ * Slide's height, centred across, its sky and water bleeding past both sides and its sky up above it (`overflow:
+ * visible`, clipped by the scene box), so one scale maps it: the height left over the drawing's. The lift is
+ * `heroLift` in `hero-depth.pure.ts`: zero on a tall window; on a short one, just enough that the title's last line
+ * ends above the ship's masthead, from `heroLiftStyle`'s share and line counts and the type tokens. The frame and the
+ * overlay are size containers covering the same box, so `cq` units read that box: a point (x, y) of the drawing sits
+ * at `50cqw + (x - width / 2) * scale` across and `lift + y * scale` down. The depth gauge sits at the right inset,
+ * below the title's lines and clear of the ship in the drawing's middle.
  */
 
-.overlay {
-  --hero-scale: max(calc(100cqw / var(--hero-width)), calc(100cqh / var(--hero-height)));
+.frame {
+  container-type: size;
+}
 
+.drawing,
+.overlay {
+  --hero-title-lines: var(--title-lines-wide);
+  --hero-title-top: calc(var(--header-block) + 1rem + 6rem);
+  --hero-title-bottom: calc(var(--hero-title-top) + var(--hero-title-lines) * var(--leading-hero) * var(--size-hero));
+  --hero-lift: max(0px, calc((var(--hero-title-bottom) - var(--hero-keep) * 100cqh) / (1 - var(--hero-keep))));
+}
+
+@media (width < 80rem) {
+  .drawing,
+  .overlay {
+    --hero-title-lines: var(--title-lines-tablet);
+  }
+}
+
+@media (width < 48rem) {
+  .drawing,
+  .overlay {
+    --hero-title-lines: var(--title-lines-phone);
+    --hero-title-top: calc(var(--header-block) + 1rem + 4rem);
+  }
+}
+
+.drawing {
+  position: absolute;
+  top: var(--hero-lift);
+  left: 50%;
+  height: calc(100% - var(--hero-lift));
+  width: auto;
+  translate: -50% 0;
+  overflow: visible;
+}
+
+.overlay {
   position: absolute;
   inset: 0;
   container-type: size;
   pointer-events: none;
 }
 
+.marker {
+  --hero-scale: calc((100cqh - var(--hero-lift)) / var(--hero-height));
+}
+
 .overlay > * {
   pointer-events: auto;
 }
 
-.ruler {
-  pointer-events: none;
-}
-
-.zone {
+.gauge {
   position: absolute;
-  /* Inside the Content area's left inset, so the labels never sit under the table of contents as it fades in. */
-  left: var(--inset-l, 1rem);
-  top: calc(100cqh - (var(--hero-height) - var(--at-y)) * var(--hero-scale));
-  translate: 0 -50%;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--foreground);
-  pointer-events: auto;
-}
-
-.zone[data-dark] {
-  color: var(--on-brand-accent);
-}
-
-.tile {
-  display: block;
-  width: 0.875rem;
-  height: 0.25rem;
-  border-radius: 2px;
-  background: currentcolor;
-  opacity: 0.55;
-}
-
-.zone[data-lit] .tile {
-  width: 1.75rem;
-  height: 0.4rem;
-  background: var(--primary);
-  opacity: 1;
-}
-
-.label {
-  text-decoration: underline dotted;
-  text-underline-offset: 3px;
-  cursor: help;
-  border-radius: 2px;
-  touch-action: manipulation;
-}
-
-.label:hover,
-.label[aria-expanded='true'] {
-  text-decoration-style: solid;
-}
-
-.label:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  right: var(--inset-r, 1rem);
+  top: 55%;
 }
 
 .marker {
   position: absolute;
   left: calc(50cqw + (var(--at-x) - var(--hero-width) / 2) * var(--hero-scale));
-  top: calc(100cqh - (var(--hero-height) - var(--at-y)) * var(--hero-scale));
+  top: calc(var(--hero-lift) + var(--at-y) * var(--hero-scale));
   translate: -50% 0;
   white-space: nowrap;
 }
 
-/* On a phone the ruler's words do not fit beside the drawing; the pill still marks the Surface. */
+/* On a phone the gauge does not fit beside the drawing; the pill still marks the Surface. */
 @media (width < 48rem) {
-  .ruler {
+  .gauge {
     display: none;
   }
 }

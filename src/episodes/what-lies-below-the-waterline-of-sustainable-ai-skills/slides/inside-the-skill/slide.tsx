@@ -4,10 +4,14 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
+import { ScriptArt, TemplateArt } from './card-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './inside.module.css';
-import { CardHead, SkillNote, SkillTree, SlideTrail, StepArrow, StepCell, SupportingFile } from './parts';
+import { CardHead, SkillNote, SkillTree, SlideTrail, StepArrow, StepCell } from './parts';
+import { SupportingFile } from './supporting-file';
+import { ConsoleEdge, WallArt } from './wall-art';
 
 const MOVE_DETAIL = 'move-detail-out-of-skill-md-and-say-when-to-read-it';
 const CONTENTS = 'long-reference-files-start-with-a-contents-list';
@@ -51,21 +55,10 @@ const FOCUS = 4;
 /** An empty cell of the three-column grid, there only to keep each file level with its step on wide screens. */
 const Gap = () => <div aria-hidden className="hidden @4xl:block" />;
 
-/** The control-room wall behind the card, faceted, lit from the upper left. */
-function Wall() {
-  return (
-    <g className={styles.wall}>
-      <rect x={0} y={0} width={1200} height={800} data-tone="room" />
-      <polygon points="0,0 560,0 140,620" data-tone="room-lit" />
-      <polygon points="560,0 820,0 420,460" data-tone="room-lit" />
-      <polygon points="760,800 1200,320 1200,800" data-tone="room-shade" />
-    </g>
-  );
-}
-
 /**
  * "Inside the skill" (Spec Option 16a): keeps `master: three-column` (instructions, supporting files, rules for long
- * files), each file level with the step that uses it, on the control-room wall. Keeps `motion: local`: step 4 fills
+ * files), each file level with the step that uses it, on the control-room wall lifted from the Option (feedback 3,
+ * decision 46). Keeps `motion: local`: step 4 fills
  * `primary`, its arrow turns solid and the species guide slides out of the sleeve, once on entry; at rest it shows slid
  * out. The rows are a grid rather than the build notes' inline SVG, so every word reads at phone width too.
  */
@@ -129,92 +122,101 @@ export const insideTheSkill = slide({
           zone="twilight"
           iceberg="none"
           label={t('alt.scene')}
-          className="rounded-2xl shadow-md"
+          className={cn(styles.scene, 'rounded-2xl shadow-md')}
           overlay={
-            <div className="focus-group focus-group--dim-others grid gap-x-4 p-4 @4xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(0,3fr)] @4xl:p-8">
-              {/* Row: the column heads, and the key under "Supporting files". */}
-              <p className="pb-3 text-body font-semibold">{t('columns.instructions')}</p>
-              <div {...target('files-head')} className="flex flex-col gap-1 pb-3">
-                <p className="text-body font-semibold">{t('columns.files')}</p>
-                <p className="text-caption">
-                  <span className="font-semibold">{t('key.domain.term')}</span>{' '}
-                  <span className="text-muted-foreground">{t('key.domain.text')}</span>
-                </p>
-                <p className="text-caption">
-                  <span className="font-semibold">{t('key.project.term')}</span>{' '}
-                  <span className="text-muted-foreground">{t('key.project.text')}</span>
-                </p>
+            <>
+              <div className="focus-group focus-group--dim-others grid gap-x-4 p-4 @4xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(0,3fr)] @4xl:grid-rows-[repeat(6,auto)_1fr_auto] @4xl:p-8">
+                {/* Row: the column heads, and the key under "Supporting files". */}
+                <p className="pb-3 text-body font-semibold">{t('columns.instructions')}</p>
+                <div {...target('files-head')} className="flex flex-col gap-1 pb-3">
+                  <p className="text-body font-semibold">{t('columns.files')}</p>
+                  <p className="text-caption">
+                    <span className="font-semibold">{t('key.domain.term')}</span>{' '}
+                    <span className="text-muted-foreground">{t('key.domain.text')}</span>
+                  </p>
+                  <p className="text-caption">
+                    <span className="font-semibold">{t('key.project.term')}</span>{' '}
+                    <span className="text-muted-foreground">{t('key.project.text')}</span>
+                  </p>
+                </div>
+                <Gap />
+                {/* Row: the card's head in its sleeve. */}
+                <CardHead label={t('card.label')} title={t('card.title')} root={ROOT} file="SKILL.md" />
+                <Gap />
+                <Gap />
+                <StepCell n={1} text={t('steps.hover')} />
+                <Gap />
+                <Gap />
+                <StepCell n={2} text={t('steps.check-camera')} />
+                <Gap />
+                <Gap />
+                <StepCell n={3} text={t('steps.lower-arm')} pointer={pointer('lower-arm')} />
+                <div className="flex items-center gap-2 py-2 pl-6 @4xl:py-0 @4xl:pl-0">
+                  <StepArrow />
+                  <SupportingFile step={3} {...file('arm')} art={<ScriptArt />} />
+                </div>
+                <div className="flex flex-col justify-end gap-3 py-2">
+                  <SkillTree
+                    label={t.rich('tree', { marker: marker(ONE_LEVEL) })}
+                    root={ROOT}
+                    entries={[
+                      { path: 'SKILL.md' },
+                      { path: PATHS.arm },
+                      { path: PATHS.guide, focal: true },
+                      { path: PATHS.label },
+                    ]}
+                  />
+                  <p className="hidden text-caption font-semibold text-muted-foreground uppercase @4xl:block">
+                    {t('rules.head')}
+                  </p>
+                </div>
+                <StepCell n={FOCUS} text={t('steps.identify')} pointer={pointer('identify')} focus />
+                {/*
+                The species guide and the first rule are taller than step 4: on wide screens they span step 4's row
+                and step 5's, which alone grows (`1fr`), so steps 3 to 5 stay close as the Option draws them.
+              */}
+                <div className="relative flex items-center gap-2 py-2 pl-6 @4xl:col-start-2 @4xl:row-span-2 @4xl:row-start-6 @4xl:mb-6 @4xl:items-start @4xl:pl-0 @4xl:[&>[data-arrow]]:mt-7">
+                  <StepArrow focal />
+                  <SlideTrail />
+                  <SupportingFile
+                    step={FOCUS}
+                    focal
+                    {...file('guide')}
+                    contents={{
+                      head: t('guide.contents'),
+                      rows: CHAPTERS.map(({ slug, page }) => ({
+                        label: t(`guide.chapters.${slug}`),
+                        page: t('guide.page', { page }),
+                      })),
+                    }}
+                  />
+                </div>
+                <div className="py-2 @4xl:col-start-3 @4xl:row-span-2 @4xl:row-start-6">
+                  <SkillNote {...target('contents-rule')}>
+                    {t.rich('rules.contents', { marker: marker(CONTENTS) })}
+                  </SkillNote>
+                </div>
+                <StepCell n={5} text={t('steps.seal')} long={{ text: t('long.text'), more: t('long.more') }} />
+                <div className="hidden items-end pb-6 @4xl:col-start-2 @4xl:row-start-7 @4xl:flex">
+                  <StepArrow long />
+                </div>
+                <div className="py-2 @4xl:col-start-3 @4xl:row-start-7 @4xl:self-end">
+                  <SkillNote {...target('long-rule')}>
+                    {t.rich('rules.long', { marker: marker(MOVE_DETAIL) })}
+                  </SkillNote>
+                </div>
+                <StepCell n={6} text={t('steps.label')} pointer={pointer('label')} last />
+                <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
+                  <StepArrow />
+                  <SupportingFile step={6} {...file('label')} art={<TemplateArt />} />
+                </div>
+                <Gap />
               </div>
-              <Gap />
-              {/* Row: the card's head in its sleeve. */}
-              <CardHead label={t('card.label')} title={t('card.title')} root={ROOT} file="SKILL.md" />
-              <Gap />
-              <Gap />
-              <StepCell n={1} text={t('steps.hover')} />
-              <Gap />
-              <Gap />
-              <StepCell n={2} text={t('steps.check-camera')} />
-              <Gap />
-              <Gap />
-              <StepCell n={3} text={t('steps.lower-arm')} pointer={pointer('lower-arm')} />
-              <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
-                <StepArrow />
-                <SupportingFile step={3} {...file('arm')} />
-              </div>
-              <div className="flex flex-col justify-end gap-3 py-2">
-                <SkillTree
-                  label={t.rich('tree', { marker: marker(ONE_LEVEL) })}
-                  root={ROOT}
-                  entries={[
-                    { path: 'SKILL.md' },
-                    { path: PATHS.arm },
-                    { path: PATHS.guide, focal: true },
-                    { path: PATHS.label },
-                  ]}
-                />
-                <p className="hidden text-caption font-semibold text-muted-foreground uppercase @4xl:block">
-                  {t('rules.head')}
-                </p>
-              </div>
-              <StepCell n={FOCUS} text={t('steps.identify')} pointer={pointer('identify')} focus />
-              <div className="relative flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
-                <StepArrow focal />
-                <SlideTrail />
-                <SupportingFile
-                  step={FOCUS}
-                  focal
-                  {...file('guide')}
-                  contents={{
-                    head: t('guide.contents'),
-                    rows: CHAPTERS.map(({ slug, page }) => ({
-                      label: t(`guide.chapters.${slug}`),
-                      page: t('guide.page', { page }),
-                    })),
-                  }}
-                />
-              </div>
-              <div className="py-2">
-                <SkillNote {...target('contents-rule')}>
-                  {t.rich('rules.contents', { marker: marker(CONTENTS) })}
-                </SkillNote>
-              </div>
-              <StepCell n={5} text={t('steps.seal')} long={{ text: t('long.text'), more: t('long.more') }} />
-              <div className="hidden items-center @4xl:flex">
-                <StepArrow long />
-              </div>
-              <div className="py-2">
-                <SkillNote {...target('long-rule')}>{t.rich('rules.long', { marker: marker(MOVE_DETAIL) })}</SkillNote>
-              </div>
-              <StepCell n={6} text={t('steps.label')} pointer={pointer('label')} last />
-              <div className="flex items-center gap-2 py-2 pl-6 @4xl:pl-0">
-                <StepArrow />
-                <SupportingFile step={6} {...file('label')} />
-              </div>
-              <Gap />
-            </div>
+              <ConsoleEdge />
+            </>
           }
         >
-          <Wall />
+          <WallArt />
         </ZoneScene>
         <div
           data-footer

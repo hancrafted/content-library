@@ -3,6 +3,7 @@ import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { SheetClip, SheetPaper } from './room-art';
 import styles from './slide.module.css';
 
 /** One description for the skill, in both views. */
@@ -102,7 +103,7 @@ function ContentDraft({ content }: { readonly content: Description }) {
 /** The Coding agent view: the two drafts of the skill's front matter, the content one dimmed. */
 function FrontMatterDrafts({ slug, coding, content, moment }: Omit<SkillIndexSheetProps, 'name' | 'chat' | 'target'>) {
   return (
-    <InView view="coding" as="div" className="flex flex-col gap-3">
+    <InView view="coding" as="div" className="relative flex flex-col gap-3">
       <SheetHeading heading={coding} />
       <ContentDraft content={content} />
       <div>
@@ -129,7 +130,7 @@ function FrontMatterDrafts({ slug, coding, content, moment }: Omit<SkillIndexShe
 }
 
 /**
- * The skill index on the wall, Slide 3's paper: two descriptions for the same skill, the content one muted with its
+ * The skill index on the wall, the Spec's faceted sheet held by its clip: two descriptions for the same skill, the content one muted with its
  * "says nothing about when" verdict, the moment one ringed in primary with "matches" and its optional "not for" half
  * dashed. In the Coding agent view the two become drafts of the skill's front matter.
  */
@@ -144,8 +145,10 @@ export function SkillIndexSheet({
   className,
 }: SkillIndexSheetProps) {
   return (
-    <ZoneCard {...target} className={cn('relative flex flex-col rounded-xl p-5 shadow-md', className)}>
-      <InView view="chat" as="div" className="flex flex-col gap-4">
+    <ZoneCard {...target} className={cn('relative flex flex-col p-5', className)}>
+      <SheetPaper />
+      <SheetClip />
+      <InView view="chat" as="div" className="relative flex flex-col gap-4">
         <SheetHeading heading={chat} />
         <ContentLine name={name} content={content} />
         <MomentLine name={name} moment={moment} />

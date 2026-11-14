@@ -3,46 +3,50 @@ import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/ca
 import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
 import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { useId } from 'react';
+import { PORTHOLE } from './crate-facets';
 import styles from './retire.module.css';
+import { NightWall, PortholeArt } from './room-art';
 
-/** Low in the wall between the sheets, where the cards leave it in view. */
-const PORTHOLE = { x: 600, y: 735, r: 50 } as const;
+/** Low in the wall between the sheets, where the cards leave it in view, in the Scene's 1200 by 800 units. */
+const PORTHOLE_AT = { x: 600, y: 735, r: 50 } as const;
+/** The Spec's porthole, 40 across its glass, moved and scaled to its place in this room. */
+const PORTHOLE_PLACE = `translate(${PORTHOLE_AT.x} ${PORTHOLE_AT.y}) scale(${PORTHOLE_AT.r / PORTHOLE.r}) translate(${-PORTHOLE.x} ${-PORTHOLE.y})`;
 const CONSOLE_WIDTH = 120;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
 
-/** The night wall's facets, lit from the upper left, with the porthole cut out of them. */
-const WALL: readonly { readonly tone: 'wall' | 'wall-lit'; readonly points: string }[] = [
-  { tone: 'wall-lit', points: '0,0 520,0 300,380 0,300' },
-  { tone: 'wall', points: '520,0 1200,0 1200,260 760,420 300,380' },
-  { tone: 'wall', points: '0,300 300,380 220,800 0,800' },
-  { tone: 'wall-lit', points: '300,380 760,420 700,800 220,800' },
-  { tone: 'wall', points: '760,420 1200,260 1200,800 700,800' },
-];
-
-/**
- * The control room at night (Option 25b): the wall with a porthole onto the Abyss, where the robot hangs on its cable
- * with its lamp on, and the pilot at the console. The Abyss behind is `ZoneScene`'s; the figures are the shared cast
- * (design-ADR 0025); the wall and porthole are this Slide's own scenery.
- */
-export function NightRoom() {
-  const mask = useId();
+/** The robot hanging in the porthole's water on its cable, lamp on, in the Spec's porthole units. */
+function PortholeRobot() {
   return (
     <g>
-      <mask id={mask}>
-        <rect width={1200} height={800} className={styles.maskOpen} />
-        <circle cx={PORTHOLE.x} cy={PORTHOLE.y} r={PORTHOLE.r} className={styles.maskHole} />
-      </mask>
-      <line x1={PORTHOLE.x} y1={0} x2={PORTHOLE.x} y2={PORTHOLE.y - 20} className={styles.cable} />
-      <g transform={`translate(${PORTHOLE.x} ${PORTHOLE.y - 25}) scale(0.8)`}>
-        <Robot aim="down" />
+      <line
+        x1={PORTHOLE.x}
+        y1={PORTHOLE.y - PORTHOLE.r}
+        x2={PORTHOLE.x}
+        y2={PORTHOLE.y - 12}
+        className={styles.cable}
+      />
+      <g transform={`translate(${PORTHOLE.x} ${PORTHOLE.y - 12}) scale(0.5)`}>
+        <Robot state={robotAt('retire-skills').state} aim="down" />
       </g>
-      <g mask={`url(#${mask})`} className={styles.wall}>
-        {WALL.map(({ tone, points }) => (
-          <polygon key={points} data-tone={tone} points={points} />
-        ))}
+    </g>
+  );
+}
+
+/**
+ * The control room at night (Option 25b): the Spec's faceted night wall, the porthole onto the Abyss with its brass
+ * rim, the robot hanging inside on its cable with its lamp on, and the pilot at the console. The wall and porthole are
+ * lifted from the Spec (`room-art.tsx`); the figures are the shared cast (design-ADR 0025).
+ */
+export function NightRoom() {
+  const clip = useId();
+  return (
+    <g>
+      <NightWall />
+      <g transform={PORTHOLE_PLACE}>
+        <PortholeArt clipId={clip} robot={<PortholeRobot />} />
       </g>
-      <circle cx={PORTHOLE.x} cy={PORTHOLE.y} r={PORTHOLE.r + 7} className={styles.rim} />
       <g transform="translate(900 800) scale(1.6)">
         <g transform="translate(0 -70)">
           <Console width={CONSOLE_WIDTH} />

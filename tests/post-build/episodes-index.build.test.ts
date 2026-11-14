@@ -1,17 +1,19 @@
 // Post-build check for Issue #85:
-// 1. /episodes index page: lists browse grid, in production build leaves out in-progress drafts.
+// 1. /episodes index page: lists browse grid; a production build leaves out Upcoming drafts, a preview build lists them.
 // 2. /episode/<slug> legacy stubs: forward with <meta http-equiv="refresh"> and declare canonical pointing to /episodes/<slug>.
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episodeRoute, legacyEpisodeRoute } from '../../src/content-store/catalogue/record-routes';
+import { upcomingListed } from '../../src/page-assembly/lib/upcoming-listing.pure';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { ROUTES } from '../../src/shared/lib/static-routes';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
+const UPCOMING_LISTED = upcomingListed({ ...process.env, NODE_ENV: 'production' });
 const PUBLISHED_SLUGS = [
   'maintaining-markdown-for-ai',
   'ai-token-economy',
@@ -42,7 +44,8 @@ describe('/episodes index page', () => {
       expect(cardSlugs).toContain(slug);
     }
     for (const slug of DRAFT_SLUGS) {
-      expect(cardSlugs).not.toContain(slug);
+      if (UPCOMING_LISTED) expect(cardSlugs).toContain(slug);
+      else expect(cardSlugs).not.toContain(slug);
     }
   });
 

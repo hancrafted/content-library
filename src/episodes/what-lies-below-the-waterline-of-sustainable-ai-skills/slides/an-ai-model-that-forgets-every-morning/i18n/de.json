@@ -7,7 +7,6 @@
     "codingLabel": "Das KI-Modell: behält, was es im Training gelernt hat",
     "caption": "Zehn Jahre Projekte mit dem besten Piloten, den Du kennst."
   },
-  "aiTag": "KI-Modell",
   "days": {
     "d1": {
       "label": "Tag 1 · 07:00",
@@ -41,7 +40,7 @@
     "caption": "Claude Code: Jede Session beginnt mit einem frischen Kontextfenster; nur geschriebene Dateien tragen Wissen hinüber."
   },
   "alt": {
-    "photo": "Ein gerahmtes Foto an der Wand im Kontrollraum: Du und der Pilot an Deck des Forschungsschiffs, zehn Jahre Projekte; der Pilot trägt das Schild KI-Modell.",
+    "photo": "Ein gerahmtes Foto an der Wand im Kontrollraum: Du und der Pilot an Deck des Forschungsschiffs, zehn Jahre Projekte; der Pilot ist das KI-Modell.",
     "morning": "Tag {day}, 07:00 im Kontrollraum: Die Kapitänin erklärt die Sedimentprobe, der Pilot dreht sich von seiner Konsole um und begrüßt sie wie eine Fremde; durchs Fenster steht der Roboter untätig an Deck. {mugs, plural, one {# Kaffeebecher} other {# Kaffeebecher}} auf der Konsole."
   },
   "notes": {

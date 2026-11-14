@@ -2,11 +2,13 @@ import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
+import { cn } from '@/shared/lib/utils';
 import { PersonalCopy, Readers, SharedCopy } from './copies';
 import { FieldCard } from './field-card';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { ControlRoom } from './room';
+import { ROOM_ASPECT } from './room-art';
 
 const ENTERPRISE = {
   slug: 'anthropic-skills-for-enterprise',
@@ -56,7 +58,7 @@ export const sharedSkillsAreKnowledgeArticles = slide({
           zone="midnight"
           iceberg="none"
           label={t('alt.scene')}
-          className="aspect-[2/1] w-full rounded-2xl shadow-md"
+          className={cn(ROOM_ASPECT, 'w-full rounded-2xl shadow-md')}
         >
           <ControlRoom />
         </ZoneScene>
@@ -64,7 +66,7 @@ export const sharedSkillsAreKnowledgeArticles = slide({
           <PersonalCopy
             pill={t('pills.personal')}
             sub={t('personalSub')}
-            className="@5xl:absolute @5xl:top-[26%] @5xl:left-[7%]"
+            className="@5xl:absolute @5xl:top-[26.8%] @5xl:left-[9%]"
           />
           <SharedCopy
             pill={t('pills.shared')}
@@ -76,7 +78,7 @@ export const sharedSkillsAreKnowledgeArticles = slide({
               value: t(`fields.${slug}.value`),
               codingKey,
             }))}
-            className="@xl:row-span-2 @5xl:absolute @5xl:top-[29%] @5xl:left-[28.5%] @5xl:w-[29%]"
+            className="@xl:row-span-2 @5xl:absolute @5xl:top-[26.8%] @5xl:left-[35%] @5xl:w-[26.7%]"
           />
           <Readers
             className="@5xl:contents"

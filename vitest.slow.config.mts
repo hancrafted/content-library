@@ -9,8 +9,8 @@ const ROOT = import.meta.dirname;
 
 /**
  * What reruns the whole lane: the files the slow tests read from disk rather than import
- * (tests/docs/episode-staging.slow.test.ts and its fixture; the scenery palette that
- * src/episodes/components/slide-shared/iceberg/scenery/scenery.slow.test.ts reads), the lane's own config and the
+ * (tests/docs/episode-staging.slow.test.ts and its fixture; the scenery's CSS modules that
+ * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the lane's own config and the
  * installed packages.
  */
 const TRIGGERS = [
@@ -25,7 +25,8 @@ const TRIGGERS = [
   'src/episodes/components/slide-shared/motions/**',
   'src/episodes/templates/*/slides/**',
   'markdown-harness.config.yaml',
-  'src/episodes/components/slide-shared/iceberg/scenery/scenery.module.css',
+  'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
+  'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
 ];
 
 export default defineConfig({

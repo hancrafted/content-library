@@ -1,6 +1,6 @@
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import type { Zone } from '@/episodes/components/slide-shared/iceberg/ruler.pure';
 import { depthBands, WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
+import type { Zone } from '@/episodes/components/slide-shared/iceberg/zones.pure';
 
 /*
  * Where the robot rises in "The whole iceberg" (Option 26a), in the whole depth's units: straight up under the
@@ -20,13 +20,21 @@ export const RISE = ROBOT_START_Y - ROBOT_REST_Y;
 export const RISE_DELAY_MS = 300;
 export const RISE_MS = 2400;
 
-/** Each zone's node on the trail, at the middle of its row of words. */
-export const NODES: readonly { readonly zone: Zone; readonly y: number }[] = depthBands().map(({ zone, top }) => ({
-  zone,
-  y: top + WHOLE_DEPTH.band / 2,
-}));
+/**
+ * Each zone's node on the trail, at the middle of its row of words. The Surface's row floats in the sky above the
+ * A-frame (decision 27 of feedback 2), so the robot never reaches its node: it stays `unlit`.
+ */
+export const NODES: readonly { readonly zone: Zone; readonly y: number; readonly unlit: boolean }[] = depthBands().map(
+  ({ zone, top }) => {
+    const y = top + WHOLE_DEPTH.band / 2;
+    return { zone, y, unlit: y < ROBOT_REST_Y };
+  },
+);
 
-/** When the rising robot passes a node, from the Slide turning active: the Abyss first, the Surface last. */
+/**
+ * When the rising robot passes a height, from the Slide turning active: the Abyss first, the Surface last. A height
+ * above the robot's rest is reached when the robot arrives there.
+ */
 export function passesAt(y: number): number {
-  return Math.round(RISE_DELAY_MS + (RISE_MS * Math.max(0, ROBOT_START_Y - y)) / RISE);
+  return Math.round(RISE_DELAY_MS + (RISE_MS * Math.min(RISE, Math.max(0, ROBOT_START_Y - y))) / RISE);
 }

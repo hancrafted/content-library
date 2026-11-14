@@ -11,6 +11,12 @@ export type RobotMotion = (typeof ROBOT_MOTIONS)[number];
 /** Where the beam points: `ahead` along the robot's path, `down` at the seabed below it. */
 export type RobotAim = 'ahead' | 'down';
 
+/**
+ * Where the robot is in a story: on the ship's deck, hanging from the A-frame over the water, in the water, on the
+ * seabed, or hauled back aboard at the end. The figure only marks it (`data-robot-state`); a Scene places it.
+ */
+export type RobotState = 'deck' | 'hanging' | 'in-water' | 'seabed' | 'recovered';
+
 /** A facet's tone; the CSS module maps each to a colour derived from the `machine` and `bulb` tokens. */
 export type RobotTone = 'spark' | 'glint' | 'lit' | 'mid' | 'shade' | 'dark' | 'glass' | 'glassGlint' | 'lens';
 

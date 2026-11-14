@@ -26,6 +26,14 @@ Add `--out <scratchpad path>.png`, optionally `--clip <selector>` to frame one e
 
 The first call installs `chrome-headless-shell` into the git-ignored `.cache/inspect-page-shared/` of the main checkout (once for all worktrees, slow) and starts it detached; every later call, parallel ones included, opens its own tab in that worktree's one browser (profile and endpoint in its own `.cache/inspect-page/`) and closes only that tab. It exits after 10 minutes without a call; `npm run inspect-page -- --stop` ends it early. A dead browser is replaced on the next call. `CHROME_PATH` overrides the binary.
 
+## Frame time
+
+Smoothness is judged by dropped frames, not by eye: `scripts/frame-sampler.js` samples requestAnimationFrame deltas during a Slide transition or an ambient loop and returns `{ frames, droppedFrames, droppedShare, p95 }`. A frame over 25 ms is dropped; jitter around 16.7 ms is not. The bar: at normal speed at most 5% dropped, at 4× CPU no worse than `main`. Measure the built export (`npm run preview`), never `next dev`.
+
+- From the shell, with the CPU slowed through `Emulation.setCPUThrottlingRate`: `npm run frame-sample -- --url <url> --transition <outgoing Slide id> [--ambient <Slide id>] --cpu 1,4 [--theme dark --width 375 --height 812]`. It drives Playwright's Chromium headless.
+- In the user's Chrome: paste the file's contents with claude-in-chrome's javascript tool, then `await sampleFrames({ transition: '<outgoing Slide id>' })`, or `{ ms: 3000 }` alone for an ambient loop. The tab must be in front: a background tab fires no frame.
+- Compare against `main` in paired runs, back to back: other agents' builds load the machine and move the absolute numbers.
+
 ## Browser tools
 
 The claude-in-chrome tools are deferred, not missing: load them via ToolSearch before concluding they are unavailable. They suit interactive checks; this skill suits repeatable ones.

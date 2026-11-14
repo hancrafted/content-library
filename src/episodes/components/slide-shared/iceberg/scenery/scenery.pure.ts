@@ -3,7 +3,7 @@
  * jellies or a column of bubbles sits. Deterministic: a seed, never `Math.random`, so every render of a Slide draws
  * the same sea.
  */
-import { ICEBERG_HALF_WIDTH, KEEL_DEPTH, TIP_HEIGHT } from './facet-data';
+import { ICEBERG_HALF_WIDTH, KEEL_DEPTH, TIP_HEIGHT } from './iceberg-placement.pure';
 
 /** Which part of the iceberg a Scene shows: all of it, only what floats above the waterline, or only the keel below. */
 export type IcebergPart = 'whole' | 'tip' | 'keel';
@@ -123,22 +123,6 @@ export function rayWedges({ count, spread, length, seed }: RayOptions): readonly
       [x + slant - w * 0.2, length],
     ]);
   });
-}
-
-/** A bubble: a hexagon of radius `r` with a glint at its upper left, as `parts.py` `bubbles`. */
-export function bubbleShape(r: number): { readonly body: string; readonly glint: string } {
-  const body = Array.from({ length: 6 }, (_, k) => {
-    const a = (k * Math.PI) / 3;
-    return [r * Math.cos(a), r * Math.sin(a)] as const;
-  });
-  return {
-    body: toPoints(body),
-    glint: toPoints([
-      [-r * 0.5, -r * 0.2],
-      [-r * 0.1, -r * 0.65],
-      [-r * 0.05, -r * 0.2],
-    ]),
-  };
 }
 
 /** One facet of a low-poly disc: a polygon and whether it faces the light at the upper left. */

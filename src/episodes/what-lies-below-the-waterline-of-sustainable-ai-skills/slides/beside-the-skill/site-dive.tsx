@@ -1,7 +1,6 @@
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import { Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import {
   SCENE_HEIGHT,
@@ -9,8 +8,10 @@ import {
   SURFACE_WATERLINE,
   ZoneScene,
 } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { useId, type CSSProperties, type ReactNode } from 'react';
+import { DiveWater } from './dive-art';
 import styles from './slide.module.css';
 
 /** Scene units per metre of depth: the waterline at 0 m, the seabed at 120 m above the Scene's floor. */
@@ -31,8 +32,8 @@ const CABLE_TOP = SURFACE_WATERLINE + ANCHORS.aFrameTip.y * SHIP_SCALE;
 const ROBOT_DRAWN_HEIGHT = ROBOT_HEIGHT * ROBOT_SCALE;
 /** Where the robot starts, just under the ship, as a share of the Scene's height above its rest. */
 const START_DEPTH_M = 6;
-/** The seabed's ridge rises above its line; lowered this much, the robot's skids rest on it. */
-const SEABED_SINK = 14;
+/** The seabed's ridge rises a little above its line; drawn this much higher, the robot's skids rest in it. */
+const SEABED_RISE = 6;
 
 export interface SiteDiveProps {
   readonly label: string;
@@ -179,7 +180,7 @@ function Descent({ at: g }: { readonly at: DiveGeometry }) {
             strokeWidth={2.5}
           />
           <g transform={`translate(${CABLE_X} ${g.robotTop}) scale(${ROBOT_SCALE})`}>
-            <Robot aim="down" />
+            <Robot state={robotAt('beside-the-skill').state} aim="down" />
           </g>
         </Travel>
       </g>
@@ -188,7 +189,8 @@ function Descent({ at: g }: { readonly at: DiveGeometry }) {
 }
 
 /**
- * Site 7 in cross-section (Option 17a, right half): the ship on the Surface, the depth ticks, the dashed outline
+ * Site 7 in cross-section (Option 17a, right half): the ship on the Surface over the Spec's water deepening from the
+ * Surface to Twilight (`dive-art.tsx`), the depth ticks, the dashed outline
  * where Slide 15's dive stopped at 40 m, and the robot descending on its cable to the seabed at 120 m, where the check
  * appears. The Scene is drawn at 3 by 2, its own aspect, so the HTML labels sit on the drawing at every width.
  */
@@ -203,7 +205,14 @@ export function SiteDive(props: SiteDiveProps) {
         className="aspect-[3/2] w-full rounded-2xl shadow-md"
         overlay={<DiveLabels props={props} at={g} />}
       >
-        <Seabed y={g.seabed + SEABED_SINK} />
+        <g className={styles.art}>
+          <DiveWater
+            width={SCENE_WIDTH}
+            waterline={SURFACE_WATERLINE}
+            bedTop={g.seabed - SEABED_RISE}
+            bottom={SCENE_HEIGHT}
+          />
+        </g>
         <Marks ticks={props.ticks} ghostTop={g.ghostTop} />
         <Descent at={g} />
         <Ship transform={`translate(${SHIP_X} ${SURFACE_WATERLINE}) scale(${SHIP_SCALE})`} />

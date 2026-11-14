@@ -11,10 +11,10 @@ describe('success cases', () => {
       const expected = [
         ['robot', 7],
         ['pilot', 5],
-        ['ship', 5],
+        ['ship', 6],
         ['captain', 8],
         ['iceberg', 5],
-        ['sea-life', 7],
+        ['sea-life', 10],
         ['console', 5],
         ['sky', 3],
         ['emote', 19],

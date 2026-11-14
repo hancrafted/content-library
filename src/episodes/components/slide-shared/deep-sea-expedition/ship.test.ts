@@ -38,9 +38,9 @@ describe('success cases', () => {
     expect(order).toEqual(expected);
   });
 
-  it('rocks when the Surface Slide asks for it, marking the rock as the ambient loop', () => {
+  it('rocks and flies its pennant when the Surface Slide asks for it, marking both as the ambient loop', () => {
     // ARRANGE
-    const expected = ['ambient'];
+    const expected = ['ambient', 'ambient'];
     // ACT
     const seen = motions({ rock: true });
     // ASSERT
@@ -54,6 +54,15 @@ describe('success cases', () => {
     const placed = draw({ transform })('[data-ship]').attr('transform');
     // ASSERT
     expect(placed).toBe(transform);
+  });
+
+  it('flies a pennant from the masthead, on the side the ship faces', () => {
+    // ARRANGE
+    const expected = ['translate(53 -179)', 'translate(-53 -179)'];
+    // ACT
+    const masts = [false, true].map((flip) => draw({ flip })('[data-pennant]').attr('transform'));
+    // ASSERT
+    expect(masts).toEqual(expected);
   });
 });
 

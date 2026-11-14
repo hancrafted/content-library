@@ -17,6 +17,7 @@ function AnchorMarks({ flip = false }: { readonly flip?: boolean }) {
     anchors.deck.fore,
     anchors.robot,
     anchors.aFrameTip,
+    anchors.pennant,
   ];
   return (
     <g data-anchor-marks>
@@ -109,6 +110,15 @@ export const ship = slide({
         usage={t('usage')}
         code="<Ship rock />"
         viewBox="-190 -210 380 270"
+      >
+        <Ship rock />
+      </Specimen>
+      <Specimen
+        variant="pennant"
+        label={t('variants.pennant')}
+        usage={t('usage')}
+        code="<Ship rock />"
+        viewBox="-30 -200 140 80"
       >
         <Ship rock />
       </Specimen>

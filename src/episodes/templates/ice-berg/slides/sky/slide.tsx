@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { FigureGallery, Specimen } from '@/episodes/components/slide-shared/figure-gallery/figure-gallery';
-import { Clouds, SunMoon } from '@/episodes/components/slide-shared/iceberg/scenery/sky';
+import { Clouds } from '@/episodes/components/slide-shared/iceberg/scenery/clouds';
+import { SunMoon } from '@/episodes/components/slide-shared/iceberg/scenery/sun-moon';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

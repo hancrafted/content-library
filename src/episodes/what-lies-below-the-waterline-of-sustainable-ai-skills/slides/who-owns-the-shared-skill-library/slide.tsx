@@ -5,10 +5,12 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { ZoneScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { SkillScopeSquare } from '@/episodes/components/slide-shared/skill-scope-matrix/skill-scope-matrix';
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import { FrontPage } from './front-page';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { AbyssBand, HaloArt } from './library-art';
 import styles from './slide.module.css';
 
 const PROVISION = {
@@ -49,43 +51,35 @@ const FRONT_MATTER = [
   '---',
 ];
 
-/** The robot on its cable, lamp lit, the depth marker at the lower left of the Midnight water. */
+/** The robot on its cable, lamp lit, in the Abyss band at the lower left of the water, where the Spec hangs it. */
 function DepthMarker() {
   return (
     <g aria-hidden>
-      <line x1={90} y1={0} x2={90} y2={640} strokeWidth={3} className={styles.cable} />
-      <g transform="translate(90 640) scale(1.6)">
-        <Robot aim="ahead" />
+      <AbyssBand />
+      <line x1={70} y1={0} x2={70} y2={660} strokeWidth={3} className={styles.cable} />
+      <g transform="translate(70 660) scale(1.4)">
+        <Robot state={robotAt('who-owns-the-shared-skill-library').state} aim="ahead" />
       </g>
     </g>
   );
 }
 
-/** The faceted beam that opens the square into the page, between the two on a wide Slide. */
+/** The faceted beam that opens the square into the page, between the two on a wide Slide (Spec Option 21a's halo). */
 function ZoomBeam() {
   return (
     <div className="relative hidden @5xl:block">
-      <svg
-        aria-hidden
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        data-motion="zoom"
-        className={cn(styles.zoomBeam, 'absolute inset-0 size-full')}
-      >
-        <polygon points="0,14 100,0 100,100 0,62" className={styles.beam} />
-        <polyline
-          points="0,14 100,0"
-          strokeDasharray="3 3"
-          vectorEffect="non-scaling-stroke"
-          className={styles.beamEdge}
-        />
-        <polyline
-          points="0,62 100,100"
-          strokeDasharray="3 3"
-          vectorEffect="non-scaling-stroke"
-          className={styles.beamEdge}
-        />
-      </svg>
+      <div data-motion="zoom" className={cn(styles.zoomBeam, 'absolute inset-0')}>
+        <HaloArt />
+        <svg aria-hidden viewBox="0 0 120 600" preserveAspectRatio="none" className="absolute inset-0 size-full">
+          <path
+            d="M0 138L120 0M0 214L120 600"
+            strokeWidth={1.5}
+            strokeDasharray="6 5"
+            vectorEffect="non-scaling-stroke"
+            className={styles.beamEdge}
+          />
+        </svg>
+      </div>
     </div>
   );
 }
@@ -113,6 +107,7 @@ export const whoOwnsTheSharedSkillLibrary = slide({
       <ZoneScene
         zone="midnight"
         iceberg="none"
+        openWater={false}
         label={t('alt.scene')}
         className={cn(styles.scene, 'rounded-2xl p-4 shadow-md @xl:p-6')}
         overlay={

@@ -1,31 +1,174 @@
 /*
- * The Slide's token file: the control-room wall, the procedure card and its sleeve, mixed from global tokens so both
- * themes follow (FE-011). `--machine`, `--human` and `--ai` stay for their meanings; `primary` marks the use-when line.
+ * The Slide's token file: the control-room wall, the clipboard, its papers, the sleeve and the extras in its pocket,
+ * lifted from the approved Spec's Option 3a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011;
+ * dark mode is tuned later). `--info` colours the clip, the arm preset and the console's edge, as the Spec's machine blue;
+ * `primary` marks the use-when line.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .scene {
-  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
-  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
-  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
-  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
-  --clip: color-mix(in oklab, var(--info) 70%, var(--card));
-  --clip-shade: color-mix(in oklab, var(--info) 70%, var(--foreground));
-  --sleeve: color-mix(in oklab, var(--info) 14%, transparent);
-  --sleeve-edge: color-mix(in oklab, var(--info) 45%, transparent);
-  --guide: color-mix(in oklab, var(--info) 55%, var(--success));
-  --fish: var(--bulb);
-  --preset: color-mix(in oklab, var(--info) 75%, var(--card));
-  --preset-arm: color-mix(in oklab, var(--foreground) 70%, var(--info));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot-dark: oklch(0.28 0.02 260);
+  --drop: oklch(0.3 0.04 255 / 0.2);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper-shade: oklch(0.935 0.014 84);
+  --paper: oklch(0.972 0.009 88);
+  --paper-edge: oklch(0.86 0.02 80);
+  --guide-shade: oklch(0.46 0.08 210);
+  --guide-lit: oklch(0.64 0.09 196);
+  --guide: oklch(0.56 0.09 202);
+  --fish-lit: oklch(0.89 0.13 92);
+  --fish-shade: oklch(0.76 0.14 76);
+  --string: oklch(0.58 0.06 60);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
+  --lamp: oklch(0.97 0.1 95);
+  --sleeve-glint: oklch(1 0 0 / 0.6);
+  --sleeve: oklch(0.95 0.03 215 / 0.34);
+  --sleeve-edge: oklch(0.78 0.05 225 / 0.75);
 }
 
-.wall [data-tone='sea'] {
-  fill: var(--room-wall);
-  stroke: var(--room-wall);
-  stroke-width: 0.6;
+:global(.dark) .scene {
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot-dark: oklch(0.22 0.02 260);
+  --drop: oklch(0.1 0.02 260 / 0.45);
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper-shade: oklch(0.35 0.02 255);
+  --paper: oklch(0.39 0.02 252);
+  --paper-edge: oklch(0.29 0.02 258);
+  --guide-shade: oklch(0.37 0.07 210);
+  --guide-lit: oklch(0.52 0.08 196);
+  --guide: oklch(0.45 0.08 202);
+  --fish-lit: oklch(0.82 0.12 92);
+  --fish-shade: oklch(0.68 0.13 76);
+  --string: oklch(0.5 0.05 60);
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
+  --lamp: oklch(0.97 0.11 95);
+  --sleeve-glint: oklch(1 0 0 / 0.2);
+  --sleeve: oklch(0.7 0.05 225 / 0.16);
+  --sleeve-edge: oklch(0.75 0.05 225 / 0.45);
 }
 
-.wall [data-tone='sea-lit'] {
-  fill: var(--room-wall-lit);
-  stroke: var(--room-wall-lit);
+.art [data-lp] {
   stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-lp='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-lp='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-lp='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-lp='robot-lit'] {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.art [data-lp='robot'] {
+  fill: var(--robot);
+  stroke: var(--robot);
+}
+
+.art [data-lp='robot-shade'] {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.art [data-lp='robot-dark'] {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.art [data-lp='drop'] {
+  fill: var(--drop);
+  stroke: none;
+}
+
+.art [data-lp='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-lp='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-lp='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-lp='paper-edge'] {
+  fill: var(--paper-edge);
+  stroke: var(--paper-edge);
+}
+
+.art [data-lp='guide-shade'] {
+  fill: var(--guide-shade);
+  stroke: var(--guide-shade);
+}
+
+.art [data-lp='guide-lit'] {
+  fill: var(--guide-lit);
+  stroke: var(--guide-lit);
+}
+
+.art [data-lp='guide'] {
+  fill: var(--guide);
+  stroke: var(--guide);
+}
+
+.art [data-lp='fish-lit'] {
+  fill: var(--fish-lit);
+  stroke: var(--fish-lit);
+}
+
+.art [data-lp='fish-shade'] {
+  fill: var(--fish-shade);
+  stroke: var(--fish-shade);
+}
+
+.art [data-lp='string'] {
+  fill: var(--string);
+  stroke: var(--string);
+}
+
+.art [data-lp='robot-glint'] {
+  fill: var(--robot-glint);
+  stroke: var(--robot-glint);
+}
+
+.art [data-lp='lamp'] {
+  fill: var(--lamp);
+  stroke: var(--lamp);
+}
+
+.art [data-lp='sleeve-glint'] {
+  fill: var(--sleeve-glint);
+  stroke: none;
+}
+
+.art [data-lp='sleeve'] {
+  fill: var(--sleeve);
+  stroke: none;
+}
+
+.art [data-lp='sleeve-edge'] {
+  fill: var(--sleeve-edge);
+  stroke: none;
 }

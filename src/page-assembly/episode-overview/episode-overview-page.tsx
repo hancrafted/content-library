@@ -2,6 +2,7 @@ import { EpisodeBrowser, type BrowseLabels } from '@/episodes/components/episode
 import { newestFirst } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { cardLabels } from '@/episodes/components/episode-card/episode-card';
 import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
+import { upcomingListed } from '@/page-assembly/lib/upcoming-listing.pure';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
@@ -51,16 +52,16 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
 }
 
 /**
- * The Episode overview, the page at /episodes (FE-007 §1): lists every published Episode, and in dev mode
- * also lists in-progress staging Episodes as a GUI entry point (#85). One link to the Resources closes the page.
+ * The Episode overview, the page at /episodes (FE-007 §1): lists every published Episode, and in dev mode or a
+ * pull request's preview also lists Upcoming Episodes as a GUI entry point (#85, `upcomingListed`). One link to the Resources closes the page.
  */
 export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
-  const isDev = process.env.NODE_ENV === 'development';
+  const listUpcoming = upcomingListed(process.env);
   const tBrowser = await getTranslations({ locale, namespace: 'episodeBrowser' });
   const tPage = await getTranslations({ locale, namespace: 'episodesPage' });
   const cards = await episodeCards(locale, {
-    includeDrafts: isDev,
-    linkDrafts: isDev,
+    includeDrafts: listUpcoming,
+    linkDrafts: listUpcoming,
   });
 
   return (

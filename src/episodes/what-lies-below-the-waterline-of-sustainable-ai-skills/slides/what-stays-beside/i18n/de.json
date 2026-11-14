@@ -27,7 +27,8 @@
       "science": "Abyssopelagial"
     }
   },
-  "ruler": "Tiefenlineal, Welcher Kontext daneben bleibt hervorgehoben",
+  "gauge": "Tiefenanzeige",
+  "place": "Abschnitt {number} von {total}",
   "file": "Projektdatei",
   "aiStatement": "Projektdetails bleiben neben dem Skill",
   "sites": {

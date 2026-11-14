@@ -1,17 +1,76 @@
 /*
- * "Who uses it, and where" (Option 18a): the scribbled card, the travelling card and its owner tag, and the one
- * emphasis motion around the shared skill scope matrix. No raw colour (FE-011): the card sheets warm
- * `--on-brand-accent` with `--bulb`; the scribble is `--human`, the captain's own hand.
+ * Slide token file of "Who uses it, and where" (FE-011 §2): the index cards on the matrix's pictures in the approved
+ * Spec Option 18a's own tones (feedback 3, decision 46), and the one emphasis motion around the shared skill scope
+ * matrix. Dark values are the Spec's; dark mode is tuned later (decision 32). The scribble is `--human`, the
+ * captain's own hand.
  */
 
-/* The captain's scribble on the personal card: in his hand, the `human` colour. */
-.scribble {
-  background: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
-  color: var(--human);
+.art {
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --paper-rule: oklch(0.78 0.03 240);
+  --drop: oklch(0.3 0.04 255 / 0.18);
+  --pin: oklch(0.6 0.18 28);
+  --ink-paper: oklch(0.25 0.03 255);
 }
 
-.cardSheet {
-  background: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+:global(.dark) .art {
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --paper-rule: oklch(0.6 0.03 240);
+  --drop: oklch(0.1 0.02 260 / 0.4);
+  --pin: oklch(0.58 0.16 28);
+  --ink-paper: oklch(0.2 0.03 255);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+}
+
+.art [data-tone='paper-rule'] {
+  fill: var(--paper-rule);
+}
+
+.art [data-tone='drop'] {
+  fill: var(--drop);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--pin);
+}
+
+/* The "Dive plan" label is written on the sheet's light paper, so it keeps the Spec's dark paper ink in both themes. */
+.paperInk {
+  color: var(--ink-paper);
+}
+
+/* Where the picture stacks its labels in flow over the wall (the matrix's narrow layout), the label brings its paper. */
+@container (width < 42rem) {
+  .paperInk {
+    padding-inline: 0.5rem;
+    border-radius: 9999px;
+    background: var(--paper-lit);
+  }
+}
+
+/* The dashed lead from the card box to the dive plan, drawn in ink like the Spec's. */
+.art [data-tone='lead'] {
+  stroke: var(--foreground);
+}
+
+/* The captain's scribble on the personal card: in his hand, the `human` colour, on the card's own paper (a light tone). */
+.scribble {
+  color: var(--human);
 }
 
 /* The rest state: the personal label dimmed, the shared one lit. */

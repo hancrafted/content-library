@@ -1,46 +1,378 @@
 /*
- * The Slide's token file: the control room, the bulkhead, the cable and the four things it shows, mixed from global
- * tokens so both themes follow (FE-011). `--machine`, `--human` and `--ai` stay for their meanings; the cast draws its
- * own. `motion: none`: the speaker walks the four tags one at a time.
+ * The Slide's token file: the control room, the next room, the bulkhead, the cable and the four things it shows, lifted
+ * from the approved Spec's Option 6a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011; dark
+ * mode is tuned later). `--info` colours the rack and the sonar drone, and the captain's navy, as the shared figures' do; the cast draws its own.
+ * `motion: none`: the speaker walks the four tags one at a time.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
 .scene {
-  --room-wall: color-mix(in oklab, var(--info) 14%, var(--muted));
-  --room-wall-lit: color-mix(in oklab, var(--room-wall) 70%, var(--card));
-  --floor: color-mix(in oklab, var(--info) 10%, color-mix(in oklab, var(--muted-foreground) 55%, var(--muted)));
-  --floor-lit: color-mix(in oklab, var(--floor) 80%, var(--card));
-  --frame: color-mix(in oklab, var(--brand-accent) 35%, var(--muted-foreground));
-  --wood: color-mix(in oklab, var(--brand-accent) 45%, var(--muted-foreground));
-  --wood-shade: color-mix(in oklab, var(--wood) 75%, var(--foreground));
-  --paper: color-mix(in oklab, var(--bulb) 6%, var(--card));
-  --paper-shade: color-mix(in oklab, var(--paper) 86%, var(--muted-foreground));
-  --ink: color-mix(in oklab, var(--muted-foreground) 70%, var(--paper));
-  --tab-a: color-mix(in oklab, var(--info) 70%, var(--card));
-  --tab-b: var(--bulb);
-  --tab-c: color-mix(in oklab, var(--success) 70%, var(--card));
-  --bulk: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
-  --cable: color-mix(in oklab, var(--foreground) 75%, var(--info));
-  --rack: color-mix(in oklab, var(--info) 60%, var(--foreground));
-  --rack-face: color-mix(in oklab, var(--foreground) 85%, var(--info));
-  --rack-led: var(--success);
-  --book: color-mix(in oklab, var(--success) 60%, var(--foreground));
-  --book-lit: color-mix(in oklab, var(--success) 70%, var(--card));
-  --notebook: color-mix(in oklab, var(--info) 45%, var(--foreground));
-  --pin: var(--brand-accent);
-  --sonar: color-mix(in oklab, var(--info) 75%, var(--card));
-  --ping: color-mix(in oklab, var(--info) 35%, var(--card));
-  --chart-a: color-mix(in oklab, var(--info) 60%, var(--card));
-  --chart-b: var(--bulb);
+  --lab-lit: oklch(0.93 0.014 200);
+  --lab-shade: oklch(0.84 0.026 210);
+  --lab: oklch(0.885 0.02 205);
+  --hull-lit: oklch(0.52 0.03 250);
+  --hull: oklch(0.4 0.03 255);
+  --stripe: oklch(0.55 0.17 28);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --glow: oklch(0.99 0.03 200);
+  --glint: oklch(1 0 0);
+  --bulk-lit: oklch(0.56 0.03 250);
+  --bulk-shade: oklch(0.36 0.03 258);
+  --bulk: oklch(0.46 0.03 254);
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --screen: oklch(0.27 0.04 245);
+  --rack-led: oklch(0.82 0.16 150);
+  --robot-dark: oklch(0.28 0.02 260);
+  --ping: oklch(0.95 0.08 200 / 0.55);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
+  --cable: oklch(0.3 0.02 260);
+  --cable-lit: oklch(0.46 0.03 255);
+  --drop: oklch(0.3 0.04 255 / 0.18);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --paper-rule: oklch(0.78 0.03 240);
+  --tab-a: oklch(0.74 0.09 212);
+  --tab-c: oklch(0.72 0.1 252);
+  --tab-b: oklch(0.89 0.13 92);
+  --pin: oklch(0.6 0.18 28);
+  --captain-shade: color-mix(in oklab, var(--info) 46%, oklch(0.24 0.02 260));
+  --captain: color-mix(in oklab, var(--info) 62%, oklch(0.24 0.02 260));
+  --cloth-dark: oklch(0.22 0.02 265);
+  --book-lit: oklch(0.6 0.1 150);
+  --book: oklch(0.5 0.1 155);
+  --book-shade: oklch(0.4 0.09 160);
 }
 
-.wall [data-tone='sea'] {
-  fill: var(--room-wall);
-  stroke: var(--room-wall);
-  stroke-width: 0.6;
+:global(.dark) .scene {
+  --lab-lit: oklch(0.37 0.025 220);
+  --lab-shade: oklch(0.29 0.025 225);
+  --lab: oklch(0.33 0.025 222);
+  --hull-lit: oklch(0.5 0.03 250);
+  --hull: oklch(0.4 0.03 255);
+  --stripe: oklch(0.55 0.15 28);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --glow: oklch(0.9 0.08 200);
+  --glint: oklch(0.98 0.01 230);
+  --bulk-lit: oklch(0.42 0.025 250);
+  --bulk-shade: oklch(0.26 0.025 258);
+  --bulk: oklch(0.34 0.025 254);
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --screen: oklch(0.18 0.03 245);
+  --rack-led: oklch(0.78 0.16 150);
+  --robot-dark: oklch(0.22 0.02 260);
+  --ping: oklch(0.85 0.1 200 / 0.4);
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
+  --cable: oklch(0.18 0.015 260);
+  --cable-lit: oklch(0.32 0.02 255);
+  --drop: oklch(0.1 0.02 260 / 0.4);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --paper-rule: oklch(0.6 0.03 240);
+  --tab-a: oklch(0.6 0.08 218);
+  --tab-c: oklch(0.58 0.1 255);
+  --tab-b: oklch(0.78 0.12 92);
+  --pin: oklch(0.58 0.16 28);
+  --captain-shade: color-mix(in oklab, var(--info) 42%, oklch(0.22 0.02 260));
+  --captain: color-mix(in oklab, var(--info) 62%, oklch(0.24 0.02 260));
+  --cloth-dark: oklch(0.2 0.02 265);
+  --book-lit: oklch(0.52 0.09 150);
+  --book: oklch(0.43 0.09 155);
+  --book-shade: oklch(0.34 0.08 160);
 }
 
-.wall [data-tone='sea-lit'] {
-  fill: var(--room-wall-lit);
-  stroke: var(--room-wall-lit);
+.art [data-lp] {
   stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-lp='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-lp='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-lp='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-lp='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-lp='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-lp='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-lp='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-lp='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
+}
+
+.art [data-lp='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
+}
+
+.art [data-lp='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
+}
+
+.art [data-lp='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
+}
+
+.art [data-lp='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-lp='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.art [data-lp='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-lp='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-lp='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-lp='lab-lit'] {
+  fill: var(--lab-lit);
+  stroke: var(--lab-lit);
+}
+
+.art [data-lp='lab-shade'] {
+  fill: var(--lab-shade);
+  stroke: var(--lab-shade);
+}
+
+.art [data-lp='lab'] {
+  fill: var(--lab);
+  stroke: var(--lab);
+}
+
+.art [data-lp='hull-lit'] {
+  fill: var(--hull-lit);
+  stroke: var(--hull-lit);
+}
+
+.art [data-lp='hull'] {
+  fill: var(--hull);
+  stroke: var(--hull);
+}
+
+.art [data-lp='stripe'] {
+  fill: var(--stripe);
+  stroke: var(--stripe);
+}
+
+.art [data-lp='sea-sunlit'] {
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
+}
+
+.art [data-lp='sea-sunlit-lit'] {
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
+}
+
+.art [data-lp='ray'] {
+  fill: var(--scenery-ray);
+  stroke: none;
+}
+
+.art [data-lp='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
+}
+
+.art [data-lp='glow'] {
+  fill: var(--glow);
+  stroke: var(--glow);
+}
+
+.art [data-lp='bubble'] {
+  fill: var(--scenery-bubble);
+  stroke: none;
+}
+
+.art [data-lp='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-lp='bulk-lit'] {
+  fill: var(--bulk-lit);
+  stroke: var(--bulk-lit);
+}
+
+.art [data-lp='bulk-shade'] {
+  fill: var(--bulk-shade);
+  stroke: var(--bulk-shade);
+}
+
+.art [data-lp='bulk'] {
+  fill: var(--bulk);
+  stroke: var(--bulk);
+}
+
+.art [data-lp='robot-lit'] {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.art [data-lp='robot'] {
+  fill: var(--robot);
+  stroke: var(--robot);
+}
+
+.art [data-lp='robot-shade'] {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.art [data-lp='screen'] {
+  fill: var(--screen);
+  stroke: var(--screen);
+}
+
+.art [data-lp='rack-led'] {
+  fill: var(--rack-led);
+  stroke: var(--rack-led);
+}
+
+.art [data-lp='robot-dark'] {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.art [data-lp='ping'] {
+  fill: var(--ping);
+  stroke: none;
+}
+
+.art [data-lp='robot-glint'] {
+  fill: var(--robot-glint);
+  stroke: var(--robot-glint);
+}
+
+.art [data-lp='cable'] {
+  fill: var(--cable);
+  stroke: var(--cable);
+}
+
+.art [data-lp='cable-lit'] {
+  fill: var(--cable-lit);
+  stroke: var(--cable-lit);
+}
+
+.art [data-lp='drop'] {
+  fill: var(--drop);
+  stroke: none;
+}
+
+.art [data-lp='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-lp='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-lp='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-lp='paper-rule'] {
+  fill: var(--paper-rule);
+  stroke: var(--paper-rule);
+}
+
+.art [data-lp='tab-a'] {
+  fill: var(--tab-a);
+  stroke: var(--tab-a);
+}
+
+.art [data-lp='tab-c'] {
+  fill: var(--tab-c);
+  stroke: var(--tab-c);
+}
+
+.art [data-lp='tab-b'] {
+  fill: var(--tab-b);
+  stroke: var(--tab-b);
+}
+
+.art [data-lp='pin'] {
+  fill: var(--pin);
+  stroke: var(--pin);
+}
+
+.art [data-lp='captain-shade'] {
+  fill: var(--captain-shade);
+  stroke: var(--captain-shade);
+}
+
+.art [data-lp='captain'] {
+  fill: var(--captain);
+  stroke: var(--captain);
+}
+
+.art [data-lp='cloth-dark'] {
+  fill: var(--cloth-dark);
+  stroke: var(--cloth-dark);
+}
+
+.art [data-lp='book-lit'] {
+  fill: var(--book-lit);
+  stroke: var(--book-lit);
+}
+
+.art [data-lp='book'] {
+  fill: var(--book);
+  stroke: var(--book);
+}
+
+.art [data-lp='book-shade'] {
+  fill: var(--book-shade);
+  stroke: var(--book-shade);
 }

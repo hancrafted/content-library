@@ -12,11 +12,12 @@ export const whatStaysBeside = slide({
   messages: { en, de },
   presentation: atDepth(5, 'section'),
   segments: [{ slug: 'beside-not-inside' }, { slug: 'where-it-gets-shared' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={5}
         wide
         tilt="right"

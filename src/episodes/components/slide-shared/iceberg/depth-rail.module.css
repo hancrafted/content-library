@@ -1,0 +1,50 @@
+/*
+ * The slim rail at a Slide's left edge (design guide, Iceberg). Each tile reads `--zone`, which the component sets from
+ * the zone's one global token (`zoneToken` in `zones.pure.ts`, the one zone-to-token mapping); the lit tile, the
+ * Slide's own Section, is the one focal mark, `primary`.
+ */
+
+.rail {
+  /* In the Slide's rear Backdrop, just left of its Foreground's inset edge. */
+  position: absolute;
+  top: 6rem;
+  left: max(0.5rem, calc(var(--inset-l, 1rem) - 1.75rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 0.625rem;
+}
+
+.railTile {
+  display: block;
+  height: 1.75rem;
+  border-radius: 2px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 20%, transparent);
+  background: var(--zone);
+}
+
+.railTile.lit {
+  background: var(--primary);
+  border-color: var(--background);
+}
+
+/* On a phone the rail is a thin coloured strip at the left edge, clear of the Foreground's 1rem inset. */
+@media (width < 48rem) {
+  .rail {
+    left: 0.25rem;
+    width: 5px;
+    gap: 2px;
+  }
+
+  .railTile {
+    height: 1.25rem;
+    border: 0;
+    border-radius: 1px;
+  }
+}
+
+@media (width >= 48rem) {
+  .phoneOnly {
+    display: none;
+  }
+}

@@ -1,12 +1,13 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { SleeveClip } from './card-art';
 import styles from './inside.module.css';
 
 /*
- * The parts of Spec Option 16a, one row per step: the step on the card in its sleeve, the supporting file it uses
- * level with it, and the rules for long files beside. Markup is this Slide's own (FE-007 §4); colours come from the
- * Slide token file.
+ * The parts of Spec Option 16a, one row per step: the step on the faceted paper card in its clear sleeve, the
+ * supporting file it uses level with it, drawn as an object (`card-art.tsx`), and the rules for long files beside.
+ * Markup is this Slide's own (FE-007 §4); colours come from the Slide token file.
  */
 
 export interface StepCellProps {
@@ -37,27 +38,35 @@ function Pointer({ pointer }: { readonly pointer: NonNullable<StepCellProps['poi
 /** A long step's first lines, then how many more. */
 function LongLines({ long }: { readonly long: NonNullable<StepCellProps['long']> }) {
   return (
-    <>
+    <div className="relative flex flex-col gap-1 pr-5">
       <p className="pl-5 text-caption text-muted-foreground">{long.text}</p>
       <p data-long className="pl-5 text-caption font-semibold">
         {long.more}
       </p>
-    </>
+      <span
+        aria-hidden
+        className="absolute inset-y-0 right-0 w-2 border-y-2 border-r-2 border-dashed border-muted-foreground"
+      />
+    </div>
   );
 }
 
 /** The step's lit marks and classes: step 4 fills `primary` and is marked for the drawer and browser checks. */
-function stepLook(focus: boolean, last: boolean) {
+function rowLook(focus: boolean, last: boolean) {
   const tone = focus ? cn(styles.lit, 'bg-primary text-primary-foreground') : undefined;
+  return cn('flex flex-col gap-1 rounded-md px-2 py-2', !focus && !last && styles.rule, tone);
+}
+
+function stepLook(focus: boolean, last: boolean) {
   return {
     marks: focus ? { 'data-focus': '', 'data-motion': 'lit' } : {},
     className: cn(
       styles.step,
       focus && 'relative',
-      'border-x-8 bg-card px-2 py-1 text-card-foreground',
+      'border-x-8 px-2 py-1 text-card-foreground',
       last && 'rounded-b-lg border-b-8',
     ),
-    row: cn('flex flex-col gap-1 rounded-md px-2 py-2', tone),
+    row: rowLook(focus, last),
     number: focus ? undefined : 'text-muted-foreground',
   };
 }
@@ -92,8 +101,14 @@ export function CardHead({ label, title, root, file }: CardHeadProps) {
   return (
     <div
       data-card-head
-      className={cn(styles.step, 'rounded-t-lg border-x-8 border-t-8 bg-card px-4 pt-4 pb-1 text-card-foreground')}
+      className={cn(
+        styles.step,
+        'relative mt-6 rounded-t-lg border-x-8 border-t-8 px-4 pt-4 pb-1 text-card-foreground',
+      )}
     >
+      <span aria-hidden className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2">
+        <SleeveClip />
+      </span>
       <InView view="chat" as="div">
         <p className="text-caption text-muted-foreground">{label}</p>
         <p className="text-body font-semibold">{title}</p>
@@ -110,7 +125,7 @@ export function CardHead({ label, title, root, file }: CardHeadProps) {
   );
 }
 
-/** The arrow from a step to its file: dashed, or solid `primary` for the lit step. Wide screens only. */
+/** The arrow from a step to its file: dashed, or solid `primary` for the lit step, with its head. Wide screens only. */
 export function StepArrow({ focal = false, long = false }: { readonly focal?: boolean; readonly long?: boolean }) {
   return (
     <span
@@ -118,11 +133,18 @@ export function StepArrow({ focal = false, long = false }: { readonly focal?: bo
       data-arrow
       data-focal={focal ? '' : undefined}
       className={cn(
-        'hidden shrink-0 @4xl:block',
+        'relative mr-2 hidden shrink-0 @4xl:block',
         long ? 'flex-1' : 'w-8',
         focal ? 'border-t-[3px] border-primary' : 'border-t-2 border-dashed border-foreground',
       )}
-    />
+    >
+      <svg
+        viewBox="0 0 8 8"
+        className={cn('absolute -top-[6px] -right-2.5 size-2.5', focal ? 'fill-primary' : 'fill-foreground')}
+      >
+        <path d="M0 0L8 4L0 8Z" />
+      </svg>
+    </span>
   );
 }
 
@@ -137,75 +159,6 @@ export function SlideTrail() {
       <span className="absolute top-[38%] h-1.5 w-full -skew-y-12 rounded-full" />
       <span className="absolute bottom-[34%] h-1.5 w-full skew-y-12 rounded-full" />
     </span>
-  );
-}
-
-export interface SupportingFileProps {
-  readonly step: number;
-  readonly kind: string;
-  readonly name: string;
-  readonly hint: string;
-  readonly path: string;
-  readonly focal?: boolean;
-  /** A reference file opens on its contents page. */
-  readonly contents?: { readonly head: string; readonly rows: readonly { label: string; page: string }[] };
-}
-
-/** The reference file's contents page, open where the guide slid out. */
-function ContentsPage({ contents }: { readonly contents: NonNullable<SupportingFileProps['contents']> }) {
-  return (
-    <div className="mt-1 border-t border-border pt-2">
-      <p className="text-caption font-semibold">{contents.head}</p>
-      <ol data-contents className="mt-1 flex flex-col text-caption">
-        {contents.rows.map(({ label, page }) => (
-          <li key={label} className="flex justify-between gap-3">
-            <span>{label}</span>
-            <span className="text-muted-foreground">{page}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-/** The file's AI term as a pill; the lit file's fills `primary`. */
-function KindPill({ kind, focal }: { readonly kind: string; readonly focal: boolean }) {
-  return (
-    <p>
-      <span
-        data-kind
-        className={cn(
-          'rounded-full px-2 py-0.5 text-caption font-semibold',
-          focal ? 'bg-primary text-primary-foreground' : 'bg-foreground text-background',
-        )}
-      >
-        {kind}
-      </span>
-    </p>
-  );
-}
-
-/** One supporting file, led by its AI term, the scene's name beneath, its path in the Coding agent view. */
-export function SupportingFile({ step, kind, name, hint, path, focal = false, contents }: SupportingFileProps) {
-  return (
-    <div
-      data-file={step}
-      data-motion={focal ? 'slide-out' : undefined}
-      className={cn(
-        'focus-group__item flex min-w-0 flex-1 flex-col gap-1 rounded-lg bg-card p-3 text-card-foreground shadow-md',
-        focal && cn(styles.slideOut, 'border-[3px] border-primary'),
-      )}
-    >
-      <KindPill kind={kind} focal={focal} />
-      <p className="text-body font-semibold">{name}</p>
-      <InView view="chat" as="p" className="text-caption text-muted-foreground">
-        {hint}
-      </InView>
-      <InView view="coding" as="p" className="font-mono text-caption break-all text-muted-foreground">
-        {path}
-      </InView>
-      {contents && <ContentsPage contents={contents} />}
-    </div>
   );
 }
 

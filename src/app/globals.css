@@ -61,13 +61,45 @@
   /* The scrim behind a modal drawer and the video frame's backdrop; callers set the opacity (`bg-overlay/40`). */
   --overlay: oklch(0 0 0);
   /* The Iceberg style's five zones (docs/design/design-guide.md#iceberg), light fading with depth: one value per zone, so
-     Han tunes a zone once and every Slide that names it follows. Surface, Sunlit and Twilight carry the page's dark text;
-     Midnight and Abyss carry light text in both themes. */
+     Han tunes a zone once and every Slide that names it follows. One palette in both themes (Han, 2026-11-14): `.dark`
+     repeats these values. Surface and Sunlit carry dark text (`--zone-abyss`), Twilight down light text, at AA. */
   --zone-surface: oklch(0.95 0.03 225);
   --zone-sunlit: oklch(0.84 0.07 225);
-  --zone-twilight: oklch(0.7 0.09 235);
+  --zone-twilight: oklch(0.54 0.1 240);
   --zone-midnight: oklch(0.36 0.08 250);
   --zone-abyss: oklch(0.2 0.045 260);
+  /* The Iceberg style's scenery (design-ADR 0025, Colour tokens): the Spec's tones for the sky, the sea by zone, the
+     seabed and the room (wall, floor, window) that several Slides repeat, so each is tuned once. A tone one Slide
+     alone draws stays in its token file. Lit, base and shade facets, light from the upper left. */
+  --scenery-sky-1: oklch(0.76 0.08 240);
+  --scenery-sky-2: oklch(0.8 0.07 236);
+  --scenery-sky-3: oklch(0.845 0.058 230);
+  --scenery-sky-4: oklch(0.885 0.045 222);
+  --scenery-cloud-lit: oklch(0.995 0.004 230);
+  --scenery-cloud-shade: oklch(0.91 0.03 240);
+  --scenery-sea-surface-lit: oklch(0.74 0.09 212);
+  --scenery-sea-surface: oklch(0.69 0.1 218);
+  --scenery-sea-sunlit-lit: oklch(0.62 0.11 228);
+  --scenery-sea-sunlit: oklch(0.575 0.115 234);
+  --scenery-sea-twilight-lit: oklch(0.48 0.11 250);
+  --scenery-sea-twilight: oklch(0.435 0.105 255);
+  --scenery-sea-midnight-lit: oklch(0.35 0.08 262);
+  --scenery-sea-midnight: oklch(0.31 0.072 265);
+  --scenery-sea-abyss-lit: oklch(0.24 0.05 268);
+  --scenery-sea-abyss: oklch(0.205 0.042 270);
+  --scenery-seabed-lit: oklch(0.42 0.04 70);
+  --scenery-seabed: oklch(0.34 0.035 60);
+  --scenery-seabed-shade: oklch(0.27 0.03 50);
+  --scenery-ray: oklch(0.97 0.06 200 / 0.18);
+  --scenery-bubble: oklch(0.95 0.04 210 / 0.45);
+  --scenery-wall-lit: oklch(0.95 0.012 230);
+  --scenery-wall: oklch(0.905 0.018 234);
+  --scenery-wall-shade: oklch(0.86 0.024 238);
+  --scenery-floor-lit: oklch(0.72 0.025 240);
+  --scenery-floor: oklch(0.66 0.028 244);
+  --scenery-window-frame-lit: oklch(0.62 0.07 60);
+  --scenery-window-frame-shade: oklch(0.44 0.05 55);
+  --scenery-window-glint: oklch(1 0 0 / 0.35);
   /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
   /* Type roles (docs/design/design-system.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
@@ -137,11 +169,40 @@
   --highlight-target: oklch(0.75 0.14 260);
   --youtube: oklch(0.68 0.23 29.2);
   --overlay: oklch(0 0 0);
-  --zone-surface: oklch(0.34 0.06 245);
-  --zone-sunlit: oklch(0.3 0.06 240);
-  --zone-twilight: oklch(0.25 0.055 245);
-  --zone-midnight: oklch(0.2 0.045 250);
-  --zone-abyss: oklch(0.14 0.03 260);
+  --zone-surface: oklch(0.95 0.03 225);
+  --zone-sunlit: oklch(0.84 0.07 225);
+  --zone-twilight: oklch(0.54 0.1 240);
+  --zone-midnight: oklch(0.36 0.08 250);
+  --zone-abyss: oklch(0.2 0.045 260);
+  --scenery-sky-1: oklch(0.24 0.05 268);
+  --scenery-sky-2: oklch(0.28 0.055 264);
+  --scenery-sky-3: oklch(0.32 0.055 258);
+  --scenery-sky-4: oklch(0.37 0.055 250);
+  --scenery-cloud-lit: oklch(0.47 0.045 255);
+  --scenery-cloud-shade: oklch(0.39 0.045 260);
+  --scenery-sea-surface-lit: oklch(0.44 0.075 222);
+  --scenery-sea-surface: oklch(0.405 0.078 226);
+  --scenery-sea-sunlit-lit: oklch(0.37 0.075 236);
+  --scenery-sea-sunlit: oklch(0.34 0.075 240);
+  --scenery-sea-twilight-lit: oklch(0.3 0.065 254);
+  --scenery-sea-twilight: oklch(0.27 0.06 258);
+  --scenery-sea-midnight-lit: oklch(0.23 0.048 264);
+  --scenery-sea-midnight: oklch(0.205 0.042 266);
+  --scenery-sea-abyss-lit: oklch(0.17 0.03 268);
+  --scenery-sea-abyss: oklch(0.145 0.024 270);
+  --scenery-seabed-lit: oklch(0.36 0.035 70);
+  --scenery-seabed: oklch(0.29 0.03 60);
+  --scenery-seabed-shade: oklch(0.23 0.025 50);
+  --scenery-ray: oklch(0.8 0.08 200 / 0.12);
+  --scenery-bubble: oklch(0.8 0.05 210 / 0.35);
+  --scenery-wall-lit: oklch(0.36 0.025 250);
+  --scenery-wall: oklch(0.32 0.025 253);
+  --scenery-wall-shade: oklch(0.285 0.025 256);
+  --scenery-floor-lit: oklch(0.25 0.02 255);
+  --scenery-floor: oklch(0.22 0.02 258);
+  --scenery-window-frame-lit: oklch(0.5 0.06 60);
+  --scenery-window-frame-shade: oklch(0.36 0.045 55);
+  --scenery-window-glint: oklch(1 0 0 / 0.18);
 }
 
 @theme inline {
@@ -582,7 +643,8 @@
 .dark {
   --tone-paper: var(--primary);
   --tone-ink: var(--primary-foreground);
-  --header-block: 4.75rem;
+  /* The floating header's whole band: its 1rem top margin and its 3.875rem bar, so a Slide run up under it leaves no seam. */
+  --header-block: 4.875rem;
 }
 
 [data-tone='inverse'],

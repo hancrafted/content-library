@@ -1,10 +1,12 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
-import { Clamp, type ClampIcon } from './clamp';
+import { keyedLines } from './code-lines.pure';
 import styles from './loan.module.css';
+import { ClampArt, type ClampIcon } from './sea-art';
 
 export interface StatementEntry {
   readonly key: ClampIcon;
@@ -46,8 +48,8 @@ function EntryBody({ entry }: { readonly entry: StatementEntry }) {
           {coding.lead}
         </p>
         <code translate="no" className={cn('mt-2 block rounded-md px-3 py-2 font-mono text-caption', styles.code)}>
-          {coding.code.map((line) => (
-            <span key={line} className="block break-words whitespace-pre-wrap">
+          {keyedLines(coding.code).map(({ key: lineKey, line }) => (
+            <span key={lineKey} className="block break-words whitespace-pre-wrap">
               {line}
             </span>
           ))}
@@ -77,7 +79,7 @@ function CableEnd({ label }: { readonly label: string }) {
     <svg viewBox="-55 -40 140 150" role="img" aria-label={label} className="relative z-10 w-24 shrink-0">
       <line x1={0} y1={-40} x2={0} y2={0} className={styles.robotCable} />
       <g transform="scale(1.1)">
-        <Robot aim="down" />
+        <Robot state={robotAt('every-skill-is-a-loan').state} aim="down" />
       </g>
     </svg>
   );
@@ -111,7 +113,7 @@ function NextEntry({
 /**
  * The skill's running statement (Option 23b), a copy of the `vertical-stepper` master: its spine is the robot's cable,
  * each step a clamp with its glyph, every entry open at rest, the latest the focal mark on paper. The robot hangs at
- * the cable's end beside a dashed entry for the next fix.
+ * the cable's end beside a dashed entry for the next fix. Each clamp is the Spec's faceted plate holding its entry's prop.
  */
 export function CableStepper({ label, entries, next, robotLabel }: CableStepperProps) {
   return (
@@ -125,7 +127,7 @@ export function CableStepper({ label, entries, next, robotLabel }: CableStepperP
           className="focus-group__item relative flex gap-4"
         >
           <span className={styles.arrive} style={stepOf(step)}>
-            <Clamp icon={entry.key} label={entry.iconLabel} />
+            <ClampArt icon={entry.key} label={entry.iconLabel} />
           </span>
           <EntryCard entry={entry} step={step} />
         </li>

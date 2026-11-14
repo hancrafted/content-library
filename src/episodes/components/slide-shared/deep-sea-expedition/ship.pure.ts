@@ -7,6 +7,8 @@ import {
   DECK,
   type FacetRow,
   HULL_ROWS,
+  MASTHEAD,
+  PENNANT_ROWS,
   RAIL_ROWS,
   SHIP_TONES,
   type ShipTone,
@@ -52,6 +54,8 @@ export interface ShipAnchors {
   readonly robot: ShipAnchor;
   /** The A-frame's tip, where the robot's cable hangs from. */
   readonly aFrameTip: ShipAnchor;
+  /** The masthead, where the pennant flies from. */
+  readonly pennant: ShipAnchor;
   /** The bridge window's clear opening: a figure placed behind it shows only inside this box. */
   readonly window: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
 }
@@ -101,6 +105,7 @@ export function shipAnchors(flip = false): ShipAnchors {
     deck: { aft: onDeck(90), fore: onDeck(272) },
     robot: onDeck(30),
     aFrameTip: { x: x(-25), y: -99 },
+    pennant: { x: x(MASTHEAD.x), y: MASTHEAD.y },
     window: {
       x: Math.min(x(WINDOW.left), x(WINDOW.right)),
       y: WINDOW.top,
@@ -108,6 +113,17 @@ export function shipAnchors(flip = false): ShipAnchors {
       height: WINDOW.sill - WINDOW.top,
     },
   };
+}
+
+/** The pennant's facets about the masthead, streaming aft: to the left, or to the right when the ship is `flip`ped. */
+export function pennantFacets(flip = false): readonly ShipFacet[] {
+  return PENNANT_ROWS.map(([tone, flat]) => ({
+    tone,
+    points: Array.from(
+      { length: flat.length / 2 },
+      (_, index) => [(flip ? -1 : 1) * flat[2 * index]!, flat[2 * index + 1]!] as const,
+    ),
+  }));
 }
 
 /** A facet's points as an SVG `points` attribute. */

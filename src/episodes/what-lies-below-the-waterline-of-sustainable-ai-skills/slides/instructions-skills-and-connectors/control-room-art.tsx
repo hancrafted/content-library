@@ -1,168 +1,134 @@
 import { Character } from '@/episodes/components/slide-shared/character/character';
-import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
-import { Console } from '@/episodes/components/slide-shared/deep-sea-expedition/console';
-import { consoleLayout } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
+import { captain } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
+import { PilotAtConsole } from '@/episodes/components/slide-shared/deep-sea-expedition/pilot-at-console';
+import { ToneFacets, type ToneFacet } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '@/episodes/components/slide-shared/iceberg/zone-scene';
-import { ControlRoom } from './room';
-import { Cable, LabRack, Manual, Notebook, Sonar, WallBrief } from './things';
+import art from './room-art.json';
+import styles from './slide.module.css';
 
-/** The Scene shows its lower part, from here to the floor: the box is twice as wide as tall. */
-const VIEW_TOP = 200;
+/*
+ * The control room and its four cartoon panels, lifted facet by facet from the approved Spec's Option 6a (feedback 3,
+ * decision 46): `room-art.json` holds the drawing as rows of tone and outline, in the Spec's units and paint order.
+ * The room is 1200 by 520 and the Scene shows its lower 520 units, so every place below is in the Spec's units; each
+ * panel is a 400 by 116 window onto the Spec's panel sheet. The Spec's own captain, pilot and console are left out:
+ * the shared cast and Console stand in their place.
+ */
 
-/** Where an overlay word sits over the drawing, in the Scene's units, as percentages of the visible box. */
+/** How tall the room is; the Scene's box keeps this ratio, so the room fills it. */
+export const ROOM_HEIGHT = 520;
+const ROOM_TOP = SCENE_HEIGHT - ROOM_HEIGHT;
+const FLOOR = 440;
+
+/** Where an overlay word sits over the room, in the Spec's units, as percentages of the visible box. */
 export const at = (x: number, y: number) => ({
   left: `${(x / SCENE_WIDTH) * 100}%`,
-  top: `${((y - VIEW_TOP) / (SCENE_HEIGHT - VIEW_TOP)) * 100}%`,
+  top: `${(y / ROOM_HEIGHT) * 100}%`,
 });
 
 /** The four things the room shows, in the order the Slide reads them. */
 export const THINGS = ['personal', 'project', 'skills', 'connectors'] as const;
 export type Thing = (typeof THINGS)[number];
 
-/** Where each thing's numbered pill touches it in the room. */
+/** Where each thing's numbered pill sits over the room, its top centre, at the Spec's places. */
 export const PILLS: Readonly<Record<Thing, { readonly x: number; readonly y: number }>> = {
-  personal: { x: 150, y: 640 },
-  project: { x: 360, y: 450 },
-  skills: { x: 740, y: 450 },
-  connectors: { x: 1000, y: 470 },
+  personal: { x: 230, y: 323 },
+  project: { x: 372, y: 268 },
+  skills: { x: 676, y: 176 },
+  connectors: { x: 948, y: 315 },
 };
 
-const FLOOR = 720;
-const BULKHEAD = { x: 960, width: 26 } as const;
-const CONSOLE = { x: 620, y: 580, width: 140, scale: 2 } as const;
-
-/** The captain standing with the notebook held forward. */
-function CaptainWithNotebook({ x, scale }: { readonly x: number; readonly scale: number }) {
-  return (
-    <g>
-      <g transform={`translate(${x} ${FLOOR}) scale(${scale})`}>
-        <Character preset={captain} pose="hold" />
-      </g>
-      <Notebook x={x + 22 * scale} y={FLOOR - 52 * scale} scale={scale / 2.4} />
-    </g>
-  );
-}
-
-/** The pilot at the console, the manual standing on its right end. */
-function PilotAtConsole({
-  x,
-  y,
-  width,
-  scale,
-}: {
+interface Place {
   readonly x: number;
   readonly y: number;
-  readonly width: number;
   readonly scale: number;
-}) {
-  const { seat } = consoleLayout({ width });
-  return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
-      <Console width={width} />
-      <g transform={`translate(${seat.x} ${seat.y})`}>
-        <Character preset={pilot} pose="sit" />
-      </g>
-      <Manual x={width - 34} y={-2} scale={0.5} />
-    </g>
-  );
 }
 
-/** Through the bulkhead: the cable from the console up to the lab database and down into the sea to the sonar. */
-function NextRoom() {
-  const shaft = BULKHEAD.x + 60;
+const place = ({ x, y, scale }: Place) => `translate(${x} ${y}) scale(${scale})`;
+
+/** The captain's place, the hand meeting the Spec's notebook; the console's, where the Spec's stands, at the cast's scale. */
+const CAPTAIN: Place = { x: 167, y: FLOOR, scale: 2.5 };
+const CONSOLE = { x: 560, y: 300, width: 135, scale: 2 } as const;
+/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
+const PILOT_REACH = 24;
+/** The Spec's desk top is lower than the shared Console's at the cast's scale; the manual stands on the shared one. */
+const MANUAL_LIFT = CONSOLE.y - 362;
+
+/** The pilot seated at a console, at its place. */
+function PilotAt({ width, ...at }: Place & { readonly width: number }) {
   return (
-    <>
-      <rect x={BULKHEAD.x} y={0} width={BULKHEAD.width} height={800} className="fill-(--bulk)" />
-      <rect x={BULKHEAD.x + BULKHEAD.width} y={432} width={1200} height={8} className="fill-(--bulk)" />
-      <LabRack x={1040} y={240} />
-      <Cable
-        points={[
-          [CONSOLE.x + CONSOLE.width * CONSOLE.scale - 10, 700],
-          [shaft, 700],
-          [shaft, 380],
-          [1040, 380],
-        ]}
-      />
-      <Cable
-        points={[
-          [shaft, 600],
-          [1080, 640],
-        ]}
-      />
-      <Sonar x={1070} y={650} />
-    </>
+    <g transform={place(at)}>
+      <PilotAtConsole width={width} reach={PILOT_REACH} />
+    </g>
   );
 }
 
 /**
- * The control room in side view, inside `ZoneScene`: you, the captain, with your notebook; the project brief on the
- * wall; the pilot at the console with the manual; and through the bulkhead the cable up to the lab database and down
- * into the sea, where the Surface's water shows through, to the sonar.
+ * The control room in side view, inside `ZoneScene`: the faceted wall, the window's two panes on a Surface sky with a
+ * cloud; you, the captain, with your notebook; the project brief pinned on the wall; the pilot at the console with the
+ * manual; the bulkhead; and in the next room the lab database's rack with its lights, above the hull where the sea runs
+ * with light rays, and the cable's pipes from the console up to the rack and down to the sonar drone pinging below.
  */
 export function ControlRoomArt() {
   return (
-    <>
-      <ControlRoom
-        floor={FLOOR}
-        openings={[
-          { x: 560, y: 300, width: 240, height: 160, framed: true },
-          { x: BULKHEAD.x + BULKHEAD.width, y: 440, width: 1200 - BULKHEAD.x - BULKHEAD.width, height: 360 },
-        ]}
-      />
-      <WallBrief x={360} y={250} />
-      <NextRoom />
-      <CaptainWithNotebook x={200} scale={2.4} />
-      <PilotAtConsole {...CONSOLE} />
-    </>
-  );
-}
-
-/** The thing alone, cut out of the room for its panel. */
-function TileThing({ thing }: { readonly thing: Thing }) {
-  switch (thing) {
-    case 'personal':
-      return <CaptainWithNotebookTile />;
-    case 'project':
-      return <WallBrief x={250} y={14} scale={0.55} />;
-    case 'skills':
-      return <PilotAtConsole x={250} y={56} width={80} scale={0.85} />;
-    case 'connectors':
-      return (
-        <>
-          <Cable
-            points={[
-              [0, 40],
-              [200, 40],
-              [230, 90],
-              [300, 96],
-            ]}
-          />
-          <LabRack x={330} y={8} scale={0.35} />
-          <Sonar x={290} y={92} scale={0.5} />
-        </>
-      );
-  }
-}
-
-/** The captain with the notebook, at the panel's scale. */
-function CaptainWithNotebookTile() {
-  return (
-    <>
-      <g transform="translate(290 116) scale(0.9)">
+    <g transform={`translate(0 ${ROOM_TOP})`} className={styles.art}>
+      <ToneFacets toneAttribute="data-lp" part="room" facets={art.room} />
+      <ToneFacets toneAttribute="data-lp" part="next-room" facets={art.nextRoom} />
+      <ToneFacets toneAttribute="data-lp" part="bulkhead" facets={art.bulkhead} />
+      <ToneFacets toneAttribute="data-lp" part="lab-rack" facets={art.rack} />
+      <ToneFacets toneAttribute="data-lp" part="sonar" facets={art.sonar} />
+      <ToneFacets toneAttribute="data-lp" part="cable" facets={art.cable} />
+      <ToneFacets toneAttribute="data-lp" part="wall-brief" facets={art.brief} />
+      <g transform={place(CAPTAIN)}>
         <Character preset={captain} pose="hold" />
       </g>
-      <Notebook x={310} y={70} scale={0.38} />
-    </>
+      <ToneFacets toneAttribute="data-lp" part="notebook" facets={art.notebook} />
+      <PilotAt x={CONSOLE.x} y={CONSOLE.y} scale={CONSOLE.scale} width={CONSOLE.width} />
+      <g transform={`translate(0 ${MANUAL_LIFT})`}>
+        <ToneFacets toneAttribute="data-lp" part="manual" facets={art.manual} />
+      </g>
+    </g>
   );
+}
+
+/** Each panel's window onto the Spec's panel sheet: its top edge there. */
+const TILE_TOP: Readonly<Record<Thing, number>> = { personal: 20, project: 152, skills: 284, connectors: 416 };
+/** A panel's drawing behind its shared figures, and what it holds in front of them. */
+const TILE_ART: Readonly<Record<Thing, { readonly back: readonly ToneFacet[]; readonly front: readonly ToneFacet[] }>> =
+  {
+    personal: { back: art.tilePersonal, front: art.tilePersonalFront },
+    project: { back: art.tileProject, front: [] },
+    skills: { back: art.tileSkills, front: art.tileSkillsFront },
+    connectors: { back: art.tileConnectors, front: [] },
+  };
+
+/** The shared figures a panel shows in front of its drawing, in the panel's own units. */
+function TileCast({ thing }: { readonly thing: Thing }) {
+  switch (thing) {
+    case 'personal':
+      return (
+        <g transform={place({ x: 293, y: 162, scale: 1.5 })}>
+          <Character preset={captain} pose="hold" />
+        </g>
+      );
+    case 'skills':
+      return <PilotAt x={280} y={77} scale={1.2} width={100} />;
+    default:
+      return null;
+  }
 }
 
 /** One cartoon panel: the thing alone, cut out of the room, 400 by 116 units. */
 export function ThingTile({ thing, label }: { readonly thing: Thing; readonly label: string }) {
+  const sheet = `translate(-20 ${-TILE_TOP[thing]})`;
   return (
-    <svg viewBox="0 0 400 116" role="img" aria-label={label} className="block h-auto w-full rounded-lg">
-      <rect width={400} height={116} className="fill-(--room-wall)" />
-      <polygon points="0,0 220,0 120,116 0,116" className="fill-(--room-wall-lit)" />
-      <TileThing thing={thing} />
+    <svg viewBox="0 0 400 116" role="img" aria-label={label} className={`${styles.art} block h-auto w-full rounded-lg`}>
+      <g transform={sheet}>
+        <ToneFacets toneAttribute="data-lp" part={`tile-${thing}`} facets={TILE_ART[thing].back} />
+      </g>
+      <TileCast thing={thing} />
+      <g transform={sheet}>
+        <ToneFacets toneAttribute="data-lp" part={`tile-${thing}-front`} facets={TILE_ART[thing].front} />
+      </g>
     </svg>
   );
 }

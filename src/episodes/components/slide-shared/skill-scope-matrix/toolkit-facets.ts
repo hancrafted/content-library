@@ -1,0 +1,52 @@
+/*
+ * The card box in the captain's colour, paper cards with coloured tabs standing in it and a label on its face,
+ * beside the pinned dive plan, before the faceted wall.
+ * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
+ */
+import type { SquareFacets } from './square-facet';
+
+export const TOOLKIT: SquareFacets = {
+  back: [
+    { tone: 'room-shade', d: 'M380 87.1L318.6 47.4L380 0Z' },
+    { tone: 'room-lit', d: 'M299 0L318.6 47.4L230.1 57.3ZM209.8 0L299 0L230.1 57.3ZM318.6 47.4L299 0L380 0Z' },
+    { tone: 'room-shade', d: 'M318.6 47.4L292.6 145L230.1 57.3Z' },
+    { tone: 'room', d: 'M292.6 145L246.1 145L230.1 57.3Z' },
+    { tone: 'room-lit', d: 'M292.6 145L380 87.1L380 145Z' },
+    { tone: 'room-shade', d: 'M380 87.1L292.6 145L318.6 47.4Z' },
+    {
+      tone: 'room',
+      d: 'M135.7 0L209.8 0L230.1 57.3ZM0 78.6L59.3 145L0 145ZM59.3 145L0 78.6L68.5 82.4ZM246.1 145L165.8 145L230.1 57.3ZM70.4 0L135.7 0L68.5 82.4ZM70.4 0L0 78.6L0 0Z',
+    },
+    { tone: 'room-lit', d: 'M0 78.6L70.4 0L68.5 82.4Z' },
+    { tone: 'room', d: 'M135.7 0L140.8 99.3L68.5 82.4ZM140.8 99.3L165.8 145L59.3 145Z' },
+    { tone: 'room-shade', d: 'M140.8 99.3L59.3 145L68.5 82.4Z' },
+    { tone: 'room-lit', d: 'M140.8 99.3L135.7 0L230.1 57.3Z' },
+    { tone: 'room-shade', d: 'M165.8 145L140.8 99.3L230.1 57.3Z' },
+    { tone: 'desk-lit', d: 'M0 115L380 113L380 122L0 123Z' },
+    { tone: 'desk', d: 'M0 123L380 122L380 145L0 145Z' },
+    { tone: 'desk-shade', d: 'M235.6 122.5L380 122L380 145L266 145Z' },
+    { tone: 'drop', d: 'M64 113L186 113L188 120L62 120Z' },
+    { tone: 'paper', d: 'M73.3 55L131.3 53L131.3 73L73.3 73Z' },
+    { tone: 'tab-a', d: 'M77.3 46L91.3 46L91.3 55L77.3 55Z' },
+    { tone: 'paper-lit', d: 'M98.8 52L156.8 50L156.8 73L98.8 73Z' },
+    { tone: 'tab-b', d: 'M102.8 43L116.8 43L116.8 52L102.8 52Z' },
+    { tone: 'paper', d: 'M124.3 55L182.3 53L182.3 73L124.3 73Z' },
+    { tone: 'tab-c', d: 'M128.3 46L142.3 46L142.3 55L128.3 55Z' },
+    { tone: 'paper-lit', d: 'M147.5 52L205.5 50L205.5 73L147.5 73Z' },
+    { tone: 'tab-a', d: 'M151.5 43L165.5 43L165.5 52L151.5 52Z' },
+    { tone: 'own-lit', d: 'M60 65L176 63L60 115Z' },
+    { tone: 'own', d: 'M176 63L176 115L60 115Z' },
+    { tone: 'own-shade', d: 'M176 63L186 59L186 111L176 115Z' },
+    { tone: 'paper-lit', d: 'M104.1 79L131.9 78.5L131.9 85L104.1 85.5Z' },
+    { tone: 'drop', d: 'M242.9 28.8L338.9 31.7L336.6 107.6L240.6 104.7Z' },
+    { tone: 'paper-lit', d: 'M237.1 20.6L331.1 23.4L234.9 95.6Z' },
+    { tone: 'paper', d: 'M331.1 23.4L328.9 98.4L234.9 95.6Z' },
+    { tone: 'paper-shade', d: 'M302.9 97.6L329.5 76.4L328.9 98.4Z' },
+    {
+      tone: 'paper-rule',
+      d: 'M248.2 51L304.2 52.6L304.2 54.6L248.2 53ZM247.9 62.9L289.9 64.2L289.8 66.2L247.8 64.9ZM247.5 74.9L296.5 76.4L296.4 78.4L247.5 76.9ZM247.2 86.9L282.1 88L282.1 90L247.1 88.9Z',
+    },
+    { tone: 'pin', d: 'M276 16L290 16L288 28L278 28Z' },
+  ],
+  front: [],
+};

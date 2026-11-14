@@ -3,6 +3,8 @@ import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import artStyles from './day-art.module.css';
+import { LOGBOOK, LOGBOOK_ART, PAGE_DATES } from './logbook-facets';
 import styles from './slide.module.css';
 
 /** The skill's name and file, as Slides 3 and 6 give them: code, not translated. */
@@ -18,23 +20,48 @@ interface NotesLaneProps {
   readonly targetProps: TargetProps;
 }
 
-/** The logbook pages of earlier dives, pinned up, each with its date. */
+/** One pinned page's date, laid over the drawing where the Spec writes it. */
+function PageDate({ page, index }: { readonly page: string; readonly index: number }) {
+  const date = PAGE_DATES[index];
+  if (!date) return null;
+  return (
+    <span
+      aria-hidden
+      style={{
+        left: `${(date.x / LOGBOOK_ART.width) * 100}%`,
+        top: `${(date.y / LOGBOOK_ART.height) * 100}%`,
+        rotate: `${date.tilt}deg`,
+      }}
+      className={cn(artStyles.ink, 'absolute -translate-y-full text-caption leading-none font-semibold')}
+    >
+      {page}
+    </span>
+  );
+}
+
+/**
+ * The logbook pages of earlier dives, pinned up, each with its date, over the open logbook and a pencil on the chart
+ * table: Spec Option 10b's drawing (`logbook-facets.ts`), its dates the Slide's words laid over it.
+ */
 function Logbook({ label, pages }: { readonly label: string; readonly pages: readonly string[] }) {
   return (
-    <div role="img" aria-label={label} className="flex items-end gap-2 self-start rounded-md bg-muted p-3">
+    <div
+      role="img"
+      aria-label={label}
+      data-logbook
+      className={cn(artStyles.art, 'relative max-w-72 min-w-40 shrink-0 grow basis-40 self-start')}
+    >
+      <svg
+        viewBox={`0 0 ${LOGBOOK_ART.width} ${LOGBOOK_ART.height}`}
+        aria-hidden
+        className="block h-auto w-full rounded-lg"
+      >
+        {LOGBOOK.map(([tone, d], index) => (
+          <path key={index} data-tone={tone} d={d} />
+        ))}
+      </svg>
       {pages.map((page, index) => (
-        <span
-          key={page}
-          aria-hidden
-          className={cn(
-            'flex h-16 w-14 flex-col gap-1 rounded-sm border border-border bg-card p-1 text-caption shadow-sm',
-            index === 0 ? '-rotate-3' : index === 1 ? 'rotate-2' : '',
-          )}
-        >
-          <span className="font-semibold">{page}</span>
-          <span className="h-px bg-border" />
-          <span className="h-px bg-border" />
-        </span>
+        <PageDate key={page} page={page} index={index} />
       ))}
     </div>
   );

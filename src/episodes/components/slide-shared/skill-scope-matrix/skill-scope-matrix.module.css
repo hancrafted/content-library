@@ -1,8 +1,9 @@
 /*
  * The skill scope matrix (Option 18a): the squares' care tint, the pictures' facets and the dashed trip. No raw colour
- * (FE-011): the desk warms `--bulb` toward `--overlay`; sky and sea mix `--zone-surface` and `--zone-sunlit`; the
- * notebook and card box derive from `--human` (the captain's own things); the binder and manual from `--info` and
- * `--muted-foreground`; `--primary` steps the squares' tint with care.
+ * (FE-011): every tone mixes global tokens toward the Spec's own. The wall, sky and sea mix the zone tokens, deepening
+ * toward `--zone-midnight` and `--zone-abyss` in dark; the desk warms `--bulb` toward `--overlay`; the notebook and
+ * card box derive from `--human` (the captain's own things); the project binder from `--success` (the Spec's green),
+ * the fleet manual from `--info`; `--primary` steps the squares' tint with care.
  */
 
 /*
@@ -29,47 +30,105 @@
 }
 
 /*
- * A square is a card that reads on any zone, as `ZoneCard` does: its text tokens reset to its own paper, so a Slide
- * deep in a dark zone that shows one square keeps its words legible.
+ * A square, and the cropped square's axis plate, read on any zone, as `ZoneCard` does: their text tokens reset to
+ * their own paper, so a Slide deep in a dark zone that shows one square keeps its words legible.
  */
-.square {
+.square,
+.plate {
   --foreground: var(--card-foreground);
   --muted-foreground: color-mix(in oklab, var(--card-foreground) 62%, var(--card));
+}
+
+.square {
   background: color-mix(in oklab, var(--primary) calc((var(--care) - 1) * 5%), var(--card));
 }
 
+/* The cropped square's locator and axis words sit on the card's own paper, so they keep AA contrast on dark water. */
+.plate {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
 .picture {
+  --room-lit: color-mix(in oklab, var(--zone-surface) 65%, var(--on-brand-accent));
+  --room: color-mix(in oklab, var(--zone-twilight) 12%, var(--zone-surface));
+  --room-shade: color-mix(in oklab, var(--zone-twilight) 22%, var(--zone-surface));
   --desk-lit: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 40%, var(--on-brand-accent)));
   --desk: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 52%, var(--on-brand-accent)));
   --desk-shade: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 64%, var(--on-brand-accent)));
-  --sky: color-mix(in oklab, var(--zone-surface) 60%, var(--on-brand-accent));
-  --sky-lit: color-mix(in oklab, var(--zone-surface) 40%, var(--on-brand-accent));
-  --sea: var(--zone-sunlit);
-  --sea-lit: color-mix(in oklab, var(--zone-sunlit) 80%, var(--on-brand-accent));
-  --page-lit: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
-  --page: color-mix(in oklab, var(--on-brand-accent) 84%, var(--bulb));
-  --rule: color-mix(in oklab, var(--zone-twilight) 45%, var(--on-brand-accent));
+  --drop: var(--zone-abyss);
+  --paper-lit: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+  --paper: color-mix(in oklab, var(--on-brand-accent) 84%, var(--bulb));
+  --paper-shade: color-mix(in oklab, var(--on-brand-accent) 74%, var(--bulb-edge));
+  --paper-rule: color-mix(in oklab, var(--zone-twilight) 45%, var(--on-brand-accent));
+  --spine: var(--zone-abyss);
+  --lead: var(--zone-abyss);
+  --scribble: color-mix(in oklab, var(--human) 80%, var(--zone-abyss));
+  --own-lit: color-mix(in oklab, var(--human) 68%, var(--on-brand-accent));
   --own: var(--human);
-  --own-lit: color-mix(in oklab, var(--human) 80%, var(--on-brand-accent));
-  --binder: color-mix(in oklab, var(--muted-foreground) 70%, var(--overlay));
-  --binder-lit: var(--muted-foreground);
-  --manual: color-mix(in oklab, var(--zone-twilight) 70%, var(--overlay));
-  --manual-lit: var(--zone-twilight);
+  --own-shade: color-mix(in oklab, var(--human) 66%, var(--zone-abyss));
+  --pin: color-mix(in oklab, var(--destructive) 85%, var(--on-brand-accent));
+  --pencil-lit: var(--bulb);
+  --pencil: color-mix(in oklab, var(--bulb) 60%, var(--bulb-edge));
+  --pencil-tip: color-mix(in oklab, var(--ai) 40%, var(--on-brand-accent));
+  --tab-a: color-mix(in oklab, var(--zone-twilight) 45%, var(--zone-sunlit));
+  --tab-b: var(--bulb);
+  --tab-c: color-mix(in oklab, var(--machine) 75%, var(--on-brand-accent));
+  --sky-1: color-mix(in oklab, var(--zone-twilight) 25%, var(--zone-sunlit));
+  --sky-2: color-mix(in oklab, var(--zone-twilight) 15%, var(--zone-sunlit));
+  --sky-3: var(--zone-sunlit);
+  --sky-4: color-mix(in oklab, var(--zone-sunlit) 70%, var(--zone-surface));
+  --cloud-lit: color-mix(in oklab, var(--on-brand-accent) 85%, var(--zone-surface));
+  --cloud-shade: color-mix(in oklab, var(--zone-surface) 60%, var(--zone-sunlit));
+  --sea-surface-lit: color-mix(in oklab, var(--zone-twilight) 35%, var(--zone-sunlit));
+  --sea-surface: color-mix(in oklab, var(--zone-twilight) 50%, var(--zone-sunlit));
+  --glow: color-mix(in oklab, var(--on-brand-accent) 85%, var(--zone-surface));
+  --glow-soft: var(--glow);
+  --binder-lit: color-mix(in oklab, var(--success) 80%, var(--on-brand-accent));
+  --binder: var(--success);
+  --binder-shade: color-mix(in oklab, var(--success) 78%, var(--zone-abyss));
+  --manual-lit: color-mix(in oklab, var(--info) 75%, var(--zone-twilight));
+  --manual: color-mix(in oklab, var(--info) 50%, var(--zone-midnight));
+  --manual-shade: color-mix(in oklab, var(--zone-midnight) 75%, var(--zone-abyss));
   --gilt: var(--bulb);
-  --pencil: var(--bulb);
-  --tab: color-mix(in oklab, var(--bulb) 70%, var(--on-brand-accent));
 }
 
 :global(.dark) .picture {
+  --room-lit: var(--zone-midnight);
+  --room: color-mix(in oklab, var(--zone-midnight) 75%, var(--zone-abyss));
+  --room-shade: color-mix(in oklab, var(--zone-midnight) 55%, var(--zone-abyss));
   --desk-lit: color-mix(in oklab, var(--bulb) 30%, var(--overlay));
   --desk: color-mix(in oklab, var(--bulb) 22%, var(--overlay));
   --desk-shade: color-mix(in oklab, var(--bulb) 14%, var(--overlay));
-  --sky: color-mix(in oklab, var(--zone-surface) 70%, var(--overlay));
-  --sky-lit: color-mix(in oklab, var(--zone-surface) 80%, var(--overlay));
-  --page-lit: color-mix(in oklab, var(--on-brand-accent) 80%, var(--bulb));
-  --page: color-mix(in oklab, var(--on-brand-accent) 68%, var(--bulb));
+  --paper-lit: color-mix(in oklab, var(--on-brand-accent) 80%, var(--bulb));
+  --paper: color-mix(in oklab, var(--on-brand-accent) 68%, var(--bulb));
+  --paper-shade: color-mix(in oklab, var(--paper) 82%, var(--overlay));
+  --sky-1: color-mix(in oklab, var(--zone-abyss) 75%, var(--zone-midnight));
+  --sky-2: color-mix(in oklab, var(--zone-abyss) 50%, var(--zone-midnight));
+  --sky-3: color-mix(in oklab, var(--zone-abyss) 25%, var(--zone-midnight));
+  --sky-4: var(--zone-midnight);
+  --cloud-lit: color-mix(in oklab, var(--zone-midnight) 55%, var(--zone-twilight));
+  --cloud-shade: color-mix(in oklab, var(--zone-midnight) 85%, var(--zone-twilight));
+  --sea-surface-lit: color-mix(in oklab, var(--zone-twilight) 45%, var(--zone-midnight));
+  --sea-surface: color-mix(in oklab, var(--zone-twilight) 25%, var(--zone-midnight));
+  --glow: color-mix(in oklab, var(--zone-sunlit) 70%, var(--on-brand-accent));
+  --binder-lit: color-mix(in oklab, var(--success) 60%, var(--zone-abyss));
+  --binder: color-mix(in oklab, var(--success) 45%, var(--zone-abyss));
+  --binder-shade: color-mix(in oklab, var(--success) 30%, var(--zone-abyss));
+  --manual-lit: color-mix(in oklab, var(--info) 25%, var(--zone-midnight));
+  --manual: color-mix(in oklab, var(--info) 12%, var(--zone-midnight));
+  --manual-shade: color-mix(in oklab, var(--zone-midnight) 60%, var(--zone-abyss));
 }
 
+.picture [data-tone='room-lit'] {
+  fill: var(--room-lit);
+}
+.picture [data-tone='room'] {
+  fill: var(--room);
+}
+.picture [data-tone='room-shade'] {
+  fill: var(--room-shade);
+}
 .picture [data-tone='desk-lit'] {
   fill: var(--desk-lit);
 }
@@ -79,59 +138,123 @@
 .picture [data-tone='desk-shade'] {
   fill: var(--desk-shade);
 }
-.picture [data-tone='sky'] {
-  fill: var(--sky);
+.picture [data-tone='drop'] {
+  fill: var(--drop);
 }
-.picture [data-tone='sky-lit'] {
-  fill: var(--sky-lit);
+.picture [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
 }
-.picture [data-tone='sea'] {
-  fill: var(--sea);
+.picture [data-tone='paper'] {
+  fill: var(--paper);
 }
-.picture [data-tone='sea-lit'] {
-  fill: var(--sea-lit);
+.picture [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
 }
-.picture [data-tone='page-lit'] {
-  fill: var(--page-lit);
+.picture [data-tone='paper-rule'] {
+  fill: var(--paper-rule);
 }
-.picture [data-tone='page'] {
-  fill: var(--page);
+.picture [data-tone='spine'] {
+  fill: var(--spine);
 }
-.picture [data-tone='rule'] {
-  stroke: var(--rule);
+.picture [data-tone='lead'] {
+  fill: var(--lead);
 }
 .picture [data-tone='scribble'] {
-  stroke: var(--own);
+  fill: var(--scribble);
 }
-.picture [data-tone='cover'],
-.picture [data-tone='box'] {
-  fill: var(--own);
-}
-.picture [data-tone='box-lit'],
-.picture [data-tone='box-top'] {
+.picture [data-tone='own-lit'] {
   fill: var(--own-lit);
 }
-.picture [data-tone='pencil'],
+.picture [data-tone='own'] {
+  fill: var(--own);
+}
+.picture [data-tone='own-shade'] {
+  fill: var(--own-shade);
+}
 .picture [data-tone='pin'] {
+  fill: var(--pin);
+}
+.picture [data-tone='pencil-lit'] {
+  fill: var(--pencil-lit);
+}
+.picture [data-tone='pencil'] {
   fill: var(--pencil);
 }
-.picture [data-tone='tab'] {
-  fill: var(--tab);
+.picture [data-tone='pencil-tip'] {
+  fill: var(--pencil-tip);
 }
-.picture [data-tone='binder'] {
-  fill: var(--binder);
+.picture [data-tone='tab-a'] {
+  fill: var(--tab-a);
+}
+.picture [data-tone='tab-b'] {
+  fill: var(--tab-b);
+}
+.picture [data-tone='tab-c'] {
+  fill: var(--tab-c);
+}
+.picture [data-tone='sky-1'] {
+  fill: var(--sky-1);
+}
+.picture [data-tone='sky-2'] {
+  fill: var(--sky-2);
+}
+.picture [data-tone='sky-3'] {
+  fill: var(--sky-3);
+}
+.picture [data-tone='sky-4'] {
+  fill: var(--sky-4);
+}
+.picture [data-tone='cloud-lit'] {
+  fill: var(--cloud-lit);
+}
+.picture [data-tone='cloud-shade'] {
+  fill: var(--cloud-shade);
+}
+.picture [data-tone='sea-surface-lit'] {
+  fill: var(--sea-surface-lit);
+}
+.picture [data-tone='sea-surface'] {
+  fill: var(--sea-surface);
+}
+.picture [data-tone='glow'] {
+  fill: var(--glow);
+}
+.picture [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
 }
 .picture [data-tone='binder-lit'] {
   fill: var(--binder-lit);
 }
-.picture [data-tone='manual'] {
-  fill: var(--manual);
+.picture [data-tone='binder'] {
+  fill: var(--binder);
+}
+.picture [data-tone='binder-shade'] {
+  fill: var(--binder-shade);
 }
 .picture [data-tone='manual-lit'] {
   fill: var(--manual-lit);
 }
+.picture [data-tone='manual'] {
+  fill: var(--manual);
+}
+.picture [data-tone='manual-shade'] {
+  fill: var(--manual-shade);
+}
 .picture [data-tone='gilt'] {
   fill: var(--gilt);
+}
+
+/* The drop under paper and the soft waterline glow are translucent: one opaque tone at an opacity, deeper in dark. */
+.picture [data-tone='drop'] {
+  fill-opacity: 0.18;
+}
+
+:global(.dark) .picture [data-tone='drop'] {
+  fill-opacity: 0.4;
+}
+
+.picture [data-tone='glow-soft'] {
+  fill-opacity: 0.55;
 }
 
 .trip {

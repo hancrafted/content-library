@@ -1,0 +1,96 @@
+/* The iceberg drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in iceberg.tsx. */
+
+.iceberg {
+  --berg-deep: color-mix(in oklab, var(--info) 83%, color-mix(in oklab, var(--on-brand-accent) 8%, var(--overlay)));
+  --berg-glint: color-mix(in oklab, var(--info) 3%, var(--on-brand-accent));
+  --berg-light: color-mix(in oklab, var(--info) 30%, var(--on-brand-accent));
+  --berg-lit: color-mix(in oklab, var(--info) 15%, var(--on-brand-accent));
+  --berg-mid: color-mix(in oklab, var(--info) 47%, var(--on-brand-accent));
+  --berg-shade: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --berg-sub: color-mix(in oklab, var(--info) 83%, var(--on-brand-accent));
+  --berg-sub-lit: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --berg-sub-shade: color-mix(
+    in oklab,
+    var(--info) 90%,
+    color-mix(in oklab, var(--on-brand-accent) 70%, var(--overlay))
+  );
+  --berg-glow: color-mix(in oklab, var(--info) 20%, var(--on-brand-accent));
+  --berg-glow-soft: color-mix(in oklab, color-mix(in oklab, var(--info) 47%, var(--on-brand-accent)) 55%, transparent);
+}
+
+:global(.dark) .iceberg {
+  --berg-deep: color-mix(in oklab, var(--info) 42%, var(--overlay));
+  --berg-glint: color-mix(in oklab, var(--info) 17%, color-mix(in oklab, var(--on-brand-accent) 98%, var(--overlay)));
+  --berg-light: color-mix(in oklab, var(--info) 46%, color-mix(in oklab, var(--on-brand-accent) 76%, var(--overlay)));
+  --berg-lit: color-mix(in oklab, var(--info) 29%, color-mix(in oklab, var(--on-brand-accent) 89%, var(--overlay)));
+  --berg-mid: color-mix(in oklab, var(--info) 67%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
+  --berg-shade: color-mix(in oklab, var(--info) 73%, var(--overlay));
+  --berg-sub: color-mix(in oklab, var(--info) 62%, var(--overlay));
+  --berg-sub-lit: color-mix(in oklab, var(--info) 72%, var(--overlay));
+  --berg-sub-shade: color-mix(in oklab, var(--info) 51%, var(--overlay));
+  --berg-glow: color-mix(in oklab, var(--info) 67%, var(--on-brand-accent));
+  --berg-glow-soft: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 83%, color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay))) 45%,
+    transparent
+  );
+}
+
+.iceberg [data-tone='berg-deep'] {
+  fill: var(--berg-deep);
+  stroke: var(--berg-deep);
+}
+
+.iceberg [data-tone='berg-glint'] {
+  fill: var(--berg-glint);
+  stroke: var(--berg-glint);
+}
+
+.iceberg [data-tone='berg-light'] {
+  fill: var(--berg-light);
+  stroke: var(--berg-light);
+}
+
+.iceberg [data-tone='berg-lit'] {
+  fill: var(--berg-lit);
+  stroke: var(--berg-lit);
+}
+
+.iceberg [data-tone='berg-mid'] {
+  fill: var(--berg-mid);
+  stroke: var(--berg-mid);
+}
+
+.iceberg [data-tone='berg-shade'] {
+  fill: var(--berg-shade);
+  stroke: var(--berg-shade);
+}
+
+.iceberg [data-tone='berg-sub'] {
+  fill: var(--berg-sub);
+  stroke: var(--berg-sub);
+}
+
+.iceberg [data-tone='berg-sub-lit'] {
+  fill: var(--berg-sub-lit);
+  stroke: var(--berg-sub-lit);
+}
+
+.iceberg [data-tone='berg-sub-shade'] {
+  fill: var(--berg-sub-shade);
+  stroke: var(--berg-sub-shade);
+}
+
+.iceberg [data-tone='glow'] {
+  fill: var(--berg-glow);
+  stroke: var(--berg-glow);
+}
+
+.iceberg [data-tone='glow-soft'] {
+  fill: var(--berg-glow-soft);
+}
+
+.iceberg [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}

@@ -69,9 +69,7 @@ export const doesTheSkillMakeThingsBetter = slide({
   content: ({ t, target, Marker }) => (
     <SlideFrame className="@container mt-8 gap-6">
       <p data-task className="flex flex-wrap items-center justify-center gap-3 text-caption">
-        <span className="rounded-full bg-foreground px-3 py-1 font-semibold text-(--slide-surface)">
-          {t('task.chip')}
-        </span>
+        <span className="rounded-full bg-foreground px-3 py-1 font-semibold text-background">{t('task.chip')}</span>
         <InView view="chat">{`${t('quote.open')}${t('task.text')}${t('quote.close')}`}</InView>
         <InView
           view="coding"

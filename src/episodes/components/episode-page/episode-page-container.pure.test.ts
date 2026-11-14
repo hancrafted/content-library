@@ -1,7 +1,7 @@
 import { episodeRef, explorablePageRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
-import { eyebrowsOf, sourceFolderOf } from './episode-page-container.pure';
+import { eyebrowsOf, fillsHeaderBand, sourceFolderOf } from './episode-page-container.pure';
 
 /** A table-of-contents Section with page Slides of these ids, each titled after its id. */
 function section(id: string, title: string, items: readonly string[]): TocSection {
@@ -46,6 +46,20 @@ describe('success cases', () => {
     const folder = sourceFolderOf(episodeRef('ai-token-economy'));
     // ASSERT
     expect(folder).toBe(expected);
+  });
+
+  it('runs the page up under the header for a Title that fills its band: inverse, or with its own surface', () => {
+    // ARRANGE
+    const expected = [true, true, false];
+    const titles = [
+      { tone: 'inverse' as const },
+      { tone: 'normal' as const, presentation: { style: { '--slide-surface': 'var(--zone-surface)' } } },
+      { tone: 'normal' as const },
+    ];
+    // ACT
+    const seen = titles.map(fillsHeaderBand);
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 });
 

@@ -44,21 +44,19 @@ describe('success cases', () => {
     expect(pills).toEqual(expected);
   });
 
-  it('names the five zones on the ruler down the left, from the Surface down, the Surface lit', () => {
+  it('names only the Surface on the depth gauge, in its plain word', () => {
     // ARRANGE
-    const expected = {
-      zones: ['Surface', 'Sunlit', 'Twilight', 'Midnight', 'Abyss'],
-      lit: ['surface'],
-    };
+    const expected = { zones: ['Surface'], current: ['surface'], reading: 'Surface' };
     // ACT
     const $ = sceneOf('en');
     const seen = {
-      zones: $('[data-hero-ruler] [data-ruler-zone] [data-zone-label]')
+      zones: $('[data-depth-gauge] [data-zone-label]')
         .toArray()
         .map((zone) => $(zone).text()),
-      lit: $('[data-hero-ruler] [data-ruler-zone][data-lit]')
+      current: $('[data-depth-gauge] [data-gauge-zone][data-current]')
         .toArray()
-        .map((zone) => $(zone).attr('data-ruler-zone')),
+        .map((zone) => $(zone).attr('data-gauge-zone')),
+      reading: $('[data-depth-gauge] [data-gauge-reading]').text(),
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -66,14 +64,14 @@ describe('success cases', () => {
 
   it('draws the whole depth full-bleed in the Backdrop and keeps every word a reader needs out of it', () => {
     // ARRANGE
-    const expected = { drawings: 1, wordsInBackdrop: 0, ruler: 1, pill: 1, described: 1 };
+    const expected = { drawings: 1, wordsInBackdrop: 0, gauge: 1, pill: 1, described: 1 };
     // ACT
     const $ = sceneOf('en');
     const backdrop = $('[data-slot="slide-backdrop"]');
     const seen = {
       drawings: backdrop.find('svg[data-hero-depth]').length,
-      wordsInBackdrop: backdrop.find('[data-hero-ruler], [data-you-are-here], [data-view-toggle], p, button').length,
-      ruler: $('[data-hero-overlay] [data-hero-ruler]').length,
+      wordsInBackdrop: backdrop.find('[data-depth-gauge], [data-you-are-here], [data-view-toggle], p, button').length,
+      gauge: $('[data-hero-overlay] [data-depth-gauge]').length,
       pill: $('[data-hero-overlay] [data-you-are-here]').length,
       described: $('[data-hero-overlay] [data-hero-label]').length,
     };
@@ -97,6 +95,46 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it("drifts the sky's clouds in three layers, far, mid and near, as the Section titles' sky does (decision 9)", () => {
+    // ARRANGE
+    const expected = ['far', 'mid', 'near'];
+    // ACT
+    const $ = sceneOf('en');
+    const layers = [
+      ...new Set(
+        $('[data-hero-depth] [data-cloud]')
+          .toArray()
+          .map((cloud) => $(cloud).attr('data-cloud-layer')),
+      ),
+    ].sort();
+    // ASSERT
+    expect(layers).toEqual(expected);
+  });
+
+  it('ends the Abyss on the faceted seabed, across the drawing and mirrored across the bleed each side', () => {
+    // ARRANGE
+    const expected = { seabeds: 3, abyssLast: 'abyss' };
+    // ACT
+    const $ = sceneOf('en');
+    const seen = {
+      seabeds: $('[data-hero-depth] [data-seabed]').length,
+      abyssLast: $('[data-depth-band]').last().attr('data-depth-band'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('draws the water under the waterline at half the facet density before feedback 2, its bleed faceted too', () => {
+    // ARRANGE
+    // 72 across one 1200-wide drawing before (decision 8); now 40 a drawing's width, over the three widths of the bleed.
+    const expected = 120;
+    // ACT
+    const $ = sceneOf('en');
+    const triangles = $('[data-depth-band] [data-band="water"] polygon').length;
+    // ASSERT
+    expect(triangles).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -113,13 +151,16 @@ describe('failure cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('rocks the ship, the Surface loop, and nothing else of the cast', () => {
+  it('rocks the ship and flies its pennant, the Surface loop, and nothing else of the cast', () => {
     // ARRANGE
-    const expected = 1;
+    const expected = ['ambient', 'ambient'];
     // ACT
-    const rocking = sceneOf('en')('[data-ship] [data-motion="ambient"]').length;
+    const $ = sceneOf('en');
+    const rocking = $('[data-ship] [data-motion]')
+      .toArray()
+      .map((part) => $(part).attr('data-motion'));
     // ASSERT
-    expect(rocking).toBe(expected);
+    expect(rocking).toEqual(expected);
   });
 });
 
@@ -151,6 +192,15 @@ describe('edge cases', () => {
       .map((button) => $(button).text());
     // ASSERT
     expect(options).toEqual(expected);
+  });
+
+  it('sets the view switch a rem below the floating header band, which the hero runs up under (decision 50)', () => {
+    // ARRANGE
+    const expected = 'top-[calc(var(--header-block)+1rem)]';
+    // ACT
+    const classes = sceneOf('en')('[data-view-toggle]').attr('class')?.split(' ');
+    // ASSERT
+    expect(classes).toContain(expected);
   });
 
   it('marks the Surface in German too', () => {

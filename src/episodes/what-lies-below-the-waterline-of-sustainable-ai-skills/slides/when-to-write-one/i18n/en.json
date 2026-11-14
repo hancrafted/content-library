@@ -27,7 +27,8 @@
       "science": "abyssopelagic"
     }
   },
-  "ruler": "Depth ruler, When to write one lit",
+  "gauge": "Depth gauge",
+  "place": "Section {number} of {total}",
   "aiStatement": "The third time, write the skill down",
   "steps": {
     "first": "1st",

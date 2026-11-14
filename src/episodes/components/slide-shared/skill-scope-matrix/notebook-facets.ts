@@ -1,0 +1,51 @@
+/*
+ * The captain's notebook open on the desk before the room's faceted wall: scribbled zigzag lines over the ruled
+ * left page, the dark spine, a pencil beside it. Slide 18 lays the scribbled index card on the right.
+ * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
+ */
+import type { SquareFacets } from './square-facet';
+
+export const NOTEBOOK: SquareFacets = {
+  back: [
+    { tone: 'room-shade', d: 'M380 89.5L339.1 42.6L380 0Z' },
+    { tone: 'room', d: 'M219.7 0L288.1 0L228.5 49.6Z' },
+    { tone: 'room-lit', d: 'M339.1 42.6L288.1 0L380 0Z' },
+    { tone: 'room', d: 'M280.5 97.5L222.5 145L228.5 49.6ZM288.1 0L280.5 97.5L228.5 49.6Z' },
+    { tone: 'room-lit', d: 'M280.5 97.5L288.1 0L339.1 42.6Z' },
+    { tone: 'room-shade', d: 'M380 89.5L280.5 97.5L339.1 42.6Z' },
+    { tone: 'room', d: 'M72.5 57.2L0 86.2L0 0ZM72.2 0L72.5 57.2L0 0Z' },
+    { tone: 'room-shade', d: 'M222.5 145L142.8 79.9L228.5 49.6ZM280.5 97.5L301.6 145L222.5 145Z' },
+    { tone: 'room-lit', d: 'M301.6 145L380 89.5L380 145Z' },
+    { tone: 'room-shade', d: 'M301.6 145L280.5 97.5L380 89.5Z' },
+    { tone: 'room-lit', d: 'M160.3 0L219.7 0L228.5 49.6ZM142.8 79.9L160.3 0L228.5 49.6Z' },
+    { tone: 'room', d: 'M72.2 0L160.3 0L72.5 57.2Z' },
+    { tone: 'room-lit', d: 'M160.3 0L142.8 79.9L72.5 57.2Z' },
+    { tone: 'room', d: 'M142.8 79.9L76.9 145L72.5 57.2Z' },
+    { tone: 'room-shade', d: 'M0 86.2L76.9 145L0 145Z' },
+    { tone: 'room', d: 'M76.9 145L0 86.2L72.5 57.2ZM149.1 145L142.8 79.9L222.5 145Z' },
+    { tone: 'room-lit', d: 'M149.1 145L76.9 145L142.8 79.9Z' },
+    { tone: 'desk-lit', d: 'M0 115L380 113L380 122L0 123Z' },
+    { tone: 'desk', d: 'M0 123L380 122L380 145L0 145Z' },
+    { tone: 'desk-shade', d: 'M235.6 122.5L380 122L380 145L266 145Z' },
+    { tone: 'drop', d: 'M28 65L109 59L190 65L192 121L109 117L26 121Z' },
+    { tone: 'own-shade', d: 'M29 61L109 56L189 61L190 118L109 115L28 118Z' },
+    { tone: 'paper-lit', d: 'M34 59L109 55L109 113L34 115Z' },
+    { tone: 'paper', d: 'M34 59L109 113L34 115ZM109 55L184 59L184 115L109 113Z' },
+    { tone: 'paper-shade', d: 'M184 59L184 115L109 113Z' },
+    { tone: 'spine', d: 'M108 55L110 55L110 113L108 113Z' },
+    {
+      tone: 'paper-rule',
+      d: 'M42 69L101 67L101 68.4L42 70.4ZM42 77L101 75L101 76.4L42 78.4ZM42 85L101 83L101 84.4L42 86.4ZM42 93L101 91L101 92.4L42 94.4ZM42 101L101 99L101 100.4L42 102.4Z',
+    },
+    {
+      tone: 'scribble',
+      d: 'M44 66.8L51.5 70.2L59 66.8L66.5 70.2L74 66.8L81.5 70.2L89.1 66.8L89.1 69.6L81.5 69.6L74 69.6L66.5 69.6L59 69.6L51.5 69.6L44 69.6ZM44 75.8L52.5 79.2L60.9 75.8L69.4 79.2L77.9 75.8L86.4 79.2L94.8 75.8L94.8 78.6L86.4 78.6L77.9 78.6L69.4 78.6L60.9 78.6L52.5 78.6L44 78.6ZM44 84.8L52 88.2L60.1 84.8L68.1 88.2L76.2 84.8L84.2 88.2L92.2 84.8L92.2 87.6L84.2 87.6L76.2 87.6L68.1 87.6L60.1 87.6L52 87.6L44 87.6Z',
+    },
+    { tone: 'pencil-lit', d: 'M320.9 111.9L370.4 95.8L368.5 90.1L319.1 106.1Z' },
+    { tone: 'pencil', d: 'M319.1 106.1L368.5 90.1L369.5 92.9L320 109Z' },
+    { tone: 'pencil-tip', d: 'M320.9 111.9L319.1 106.1L310.5 112.1Z' },
+    { tone: 'lead', d: 'M313.3 112L310.5 112.1L314.1 110.4Z' },
+    { tone: 'pin', d: 'M370.4 95.8L376.1 93.9L374.2 88.2L368.5 90.1Z' },
+  ],
+  front: [],
+};

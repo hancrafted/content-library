@@ -1,0 +1,66 @@
+/* The clouds drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in clouds.tsx. */
+
+.clouds {
+  --cloud-lit: var(--on-brand-accent);
+  --cloud-shade: color-mix(in oklab, var(--info) 20%, var(--on-brand-accent));
+}
+
+:global(.dark) .clouds {
+  --cloud-lit: color-mix(in oklab, var(--info) 38%, color-mix(in oklab, var(--on-brand-accent) 28%, var(--overlay)));
+  --cloud-shade: color-mix(in oklab, var(--info) 38%, color-mix(in oklab, var(--on-brand-accent) 16%, var(--overlay)));
+}
+
+.clouds [data-tone='cloud-lit'] {
+  fill: var(--cloud-lit);
+  stroke: var(--cloud-lit);
+}
+
+.clouds [data-tone='cloud-shade'] {
+  fill: var(--cloud-shade);
+  stroke: var(--cloud-shade);
+}
+
+.clouds [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* A far cloud is paler, so the layers read as depth even at rest. */
+.clouds [data-cloud-layer='far'] {
+  opacity: 0.7;
+}
+
+/* The Surface's wind: three layers, each drifting at its own speed, only on the active Slide. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .wind {
+    animation: cloud-drift-near 38s ease-in-out infinite alternate;
+  }
+
+  :global([data-zone='active']) .wind[data-cloud-layer='mid'] {
+    animation-name: cloud-drift-mid;
+    animation-duration: 56s;
+  }
+
+  :global([data-zone='active']) .wind[data-cloud-layer='far'] {
+    animation-name: cloud-drift-far;
+    animation-duration: 84s;
+  }
+}
+
+@keyframes cloud-drift-near {
+  to {
+    transform: translateX(-70px);
+  }
+}
+
+@keyframes cloud-drift-mid {
+  to {
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes cloud-drift-far {
+  to {
+    transform: translateX(-20px);
+  }
+}

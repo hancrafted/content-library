@@ -104,14 +104,15 @@ function SkillCard({ skill, slug }: Pick<SharedCopyProps, 'skill' | 'slug'>) {
 }
 
 /**
- * The same card in the fleet manual, with the control block stamped on top: owner, version, next review. In the
- * Coding agent view the page is the `SKILL.md` front matter and the control block its `metadata` lines.
+ * The same card in the fleet manual, with the control block stamped on top: owner, version, next review. On a wide
+ * Slide it lies on the manual's faceted page in the room drawing, so its card goes clear; narrower, it is a card of its
+ * own under the drawing. In the Coding agent view the page is the `SKILL.md` front matter and the control block its `metadata` lines.
  */
 export function SharedCopy({ pill, heading, fields, skill, slug, className }: SharedCopyProps) {
   return (
-    <div data-copy="shared" className={cn('flex flex-col items-start gap-2', className)}>
+    <div data-copy="shared" className={cn('flex flex-col items-start gap-2 @5xl:items-center @5xl:gap-3', className)}>
       <CopyPill dark>{pill}</CopyPill>
-      <ZoneCard className="flex w-full flex-col gap-2 rounded-lg p-3 shadow-md">
+      <ZoneCard className="flex w-full flex-col gap-2 rounded-lg p-3 shadow-md @5xl:bg-transparent! @5xl:px-1 @5xl:py-0 @5xl:shadow-none">
         <ControlBlock heading={heading} fields={fields} />
         <SkillCard skill={skill} slug={slug} />
       </ZoneCard>
@@ -128,8 +129,8 @@ export interface ReaderLabel {
   readonly version: string;
 }
 
-/** Where each label sits over the room on a wide Slide: beside its console, as `READER_ROWS` place them. */
-const READER_TOPS = ['31%', '52%', '73%'] as const;
+/** Where each label sits over the room on a wide Slide: beside its console, as the room's desk rows place them. */
+const READER_TOPS = ['30.4%', '51.1%', '71.8%'] as const;
 
 /** One AI's label: who it is, and the version it runs. */
 function Reader({ who, runs, version, top }: ReaderLabel & { readonly top: string }) {
@@ -138,7 +139,7 @@ function Reader({ who, runs, version, top }: ReaderLabel & { readonly top: strin
       data-reach
       data-version={version}
       style={{ '--reader-top': top } as CSSProperties}
-      className="@5xl:absolute @5xl:top-(--reader-top) @5xl:right-[1.5%] @5xl:w-[17%]"
+      className="@5xl:absolute @5xl:top-(--reader-top) @5xl:right-[1%] @5xl:left-[85%]"
     >
       <ZoneCard className="flex flex-col rounded-md px-2 py-1 shadow-md">
         <span className="text-caption font-semibold">

@@ -83,7 +83,7 @@ describe('success cases', () => {
     // ACT
     const $ = sceneOf();
     const seen = {
-      zone: $('[data-day-panel="1"] [data-scene]').attr('data-depth-zone'),
+      zone: $('[data-day-panel="1"] [data-dive-art]').closest('svg').attr('data-zone'),
       robots: $('[data-day-panel="1"] [data-robot]').length,
       rooms: $('[data-room-panel]')
         .toArray()

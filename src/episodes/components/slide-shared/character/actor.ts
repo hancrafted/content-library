@@ -21,9 +21,20 @@ export interface HeadAnchor {
   readonly y: number;
 }
 
+/**
+ * Where a Scene wants the speech bubble, in figure units: `width` the words wrap inside (220 when left out), `lift` how
+ * far above its usual place by the head it rises, its tail stretched to meet the head. Two speakers facing each other
+ * stack their bubbles with a lift; a Slide's layout test measures both with `saysBox` (`says.pure.ts`).
+ */
+export interface BubblePlace {
+  readonly width?: number;
+  readonly lift?: number;
+}
+
 /** The props `Emote` takes: the actor's feeling and words, placed at its head anchor. */
 export interface EmoteProps extends ActorProps {
   readonly at: HeadAnchor;
+  readonly bubble?: BubblePlace;
   /** The side the figure faces, where its speech bubble and thought rise; `right` when left out. */
   readonly facing?: 'right' | 'left';
 }

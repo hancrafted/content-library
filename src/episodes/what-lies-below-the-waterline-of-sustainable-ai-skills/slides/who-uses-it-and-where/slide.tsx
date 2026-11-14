@@ -10,6 +10,7 @@ import type { PictureKind } from '@/episodes/components/slide-shared/skill-scope
 import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { CardArt, PlanLead } from './card-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './slide.module.css';
@@ -111,26 +112,37 @@ export const whoUsesItAndWhere = slide({
             data-scribble
             className={cn(
               styles.scribble,
-              'absolute right-[18%] bottom-[22%] -rotate-6 px-2 py-1 text-caption italic shadow-sm',
+              styles.art,
+              'absolute right-[18%] bottom-[22%] isolate -rotate-6 px-2 pt-2.5 pb-1.5 text-caption font-semibold italic',
             )}
           >
+            <CardArt />
             {t('scribble')}
           </p>
         </>
       ),
       pg: (
-        <p className="absolute right-[6%] bottom-[46%] text-caption font-semibold text-card-foreground">{t('plan')}</p>
+        <>
+          <PlanLead className={styles.art} />
+          <p className={cn(styles.art, styles.paperInk, 'absolute top-[22%] left-[69%] text-caption font-semibold')}>
+            {t('plan')}
+          </p>
+        </>
       ),
       sg: (
         <>
           <TripLabel end="arrival">{t('trip.shared')}</TripLabel>
-          <div className={cn(styles.card, 'absolute bottom-[18%] left-[30%] flex flex-col items-start gap-1')}>
-            <span aria-hidden className={cn(styles.cardSheet, 'block h-7 w-14 rounded-sm shadow-md')} />
+          <div
+            className={cn(styles.card, styles.art, 'absolute bottom-[18%] left-[30%] flex flex-col items-start gap-1')}
+          >
+            <span aria-hidden className="relative isolate block h-8 w-14 rotate-6">
+              <CardArt ruled />
+            </span>
             <p
               data-owner-tag
               className={cn(
                 styles.ownerTag,
-                'flex items-center gap-1 rounded-full bg-primary px-2 text-caption font-semibold text-primary-foreground shadow-md',
+                'flex rotate-[4deg] items-center gap-1 rounded-full bg-primary px-2 text-caption font-semibold text-primary-foreground shadow-md',
               )}
             >
               <span aria-hidden className="size-1.5 rounded-full bg-primary-foreground" />

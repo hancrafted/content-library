@@ -2,6 +2,7 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { ART_CLASS, BinderArt, CORNER_INK, DarkCornerArt } from './library-art';
 import styles from './slide.module.css';
 
 export interface FrontRow {
@@ -69,40 +70,51 @@ function MetadataInset({ heading, lines, note }: FrontPageProps['inset']) {
   );
 }
 
-/** The page's lower corner, left dark for the questions nobody has settled. */
+/** The page's lower corner, left dark in faceted tones for the questions nobody has settled. */
 function DarkCorner({ children }: { readonly children: ReactNode }) {
   return (
-    <div
-      data-dark-corner
-      className={cn(styles.corner, 'absolute right-0 bottom-0 flex h-28 w-[70%] items-end justify-end p-3')}
-    >
-      <p className="flex max-w-48 items-end gap-1 text-right text-caption italic">{children}</p>
-    </div>
+    <>
+      <div
+        data-dark-corner
+        className="absolute right-3 bottom-3 h-32 w-[70%] @xl:right-7 @xl:bottom-6 @xl:h-1/4 @xl:w-2/5"
+      >
+        <DarkCornerArt />
+      </div>
+      <p
+        className={cn(
+          CORNER_INK,
+          'absolute right-6 bottom-5 flex max-w-28 items-end gap-1 text-right text-caption italic @xl:right-12 @xl:bottom-8 @xl:max-w-32',
+        )}
+      >
+        {children}
+      </p>
+    </>
   );
 }
 
 /**
- * The shared skill library's front page, drawn as the fleet manual open on its binder rings: what a skill needs beyond
- * owner and version, each line led by its AI term, and the lower corner left dark for what nobody has settled. Hover
- * dims the other lines.
+ * The shared skill library's front page, drawn as the fleet manual open on its binder rings (Spec Option 21a's binder,
+ * its faceted page and index tabs, in `library-art.tsx`): what a skill needs beyond owner and version, each line led by
+ * its AI term, and the lower corner left dark for what nobody has settled. Hover dims the other lines.
  */
 export function FrontPage({ label, scope, title, rows, inset, darkCorner, className }: FrontPageProps) {
   return (
-    <div data-motion="zoom" className={cn(styles.page, 'rounded-xl p-2 shadow-md', className)}>
-      <ZoneCard className="relative flex flex-col gap-3 overflow-hidden rounded-lg p-4 pb-28">
+    <div data-motion="zoom" className={cn(styles.page, ART_CLASS, 'relative', className)}>
+      <BinderArt />
+      <ZoneCard className="relative flex flex-col gap-3 bg-transparent! px-10 pt-8 pb-40 @xl:px-14 @xl:pb-36">
         <p className="flex flex-wrap items-center justify-between gap-2 text-caption text-muted-foreground">
           {label}
           <span className="rounded-full bg-primary px-3 py-0.5 font-semibold text-primary-foreground">{scope}</span>
         </p>
         <p className="text-body font-semibold">{title}</p>
-        <ol className="focus-group focus-group--dim-others flex flex-col">
+        <ol className="focus-group focus-group--dim-others flex flex-col pr-4">
           {rows.map((row) => (
             <Row key={row.slug} {...row} />
           ))}
         </ol>
         <MetadataInset {...inset} />
-        <DarkCorner>{darkCorner}</DarkCorner>
       </ZoneCard>
+      <DarkCorner>{darkCorner}</DarkCorner>
     </div>
   );
 }

@@ -12,11 +12,12 @@ export const whatGoesInside = slide({
   messages: { en, de },
   presentation: atDepth(4, 'section'),
   segments: [{ slug: 'twilight' }, { slug: 'a-decision-not-a-law' }],
-  content: ({ t }) => (
+  content: ({ t, template }) => (
     <SlideFrame>
       <WaterlineEcho
         zones={zoneWordsFrom((key) => t(key))}
-        rulerLabel={t('ruler')}
+        gaugeLabel={t('gauge')}
+        place={template('place')}
         section={4}
         wide
         statement={t('aiStatement')}

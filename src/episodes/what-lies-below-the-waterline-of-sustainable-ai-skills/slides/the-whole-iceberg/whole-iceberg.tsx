@@ -4,10 +4,12 @@ import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/ro
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
-import { WholeDepthScene } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { WholeDepthScene } from '@/episodes/components/slide-shared/iceberg/whole-depth-scene';
 import { WHOLE_DEPTH } from '@/episodes/components/slide-shared/iceberg/zone-scene.pure';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './iceberg.module.css';
+import { ManualArt, TrailBubbles } from './index-art';
 import {
   A_FRAME_Y,
   NODES,
@@ -33,22 +35,24 @@ const HALO = 13;
 
 const diamond = (x: number, y: number, r: number) => `${x},${y - r} ${x + r},${y} ${x},${y + r} ${x - r},${y}`;
 
-/** The dashed trail the robot took up from the seabed, a node at each zone lighting as it passes. */
+/** The dashed trail the robot took up from the seabed, a node at each zone lighting as it passes; the Surface's stays unlit. */
 function RiseTrail() {
   return (
     <g data-rise-trail className={styles.trail}>
       <line x1={TRAIL_X} y1={ROBOT_START_Y + 30} x2={TRAIL_X} y2={WHOLE_DEPTH.waterline + 8} className={styles.dash} />
-      {NODES.map(({ zone, y }) => (
+      {NODES.map(({ zone, y, unlit }) => (
         <g
           key={zone}
           data-trail-node={zone}
-          className={styles.light}
-          style={{ '--light-delay': `${passesAt(y)}ms` } as CSSProperties}
+          data-unlit={unlit ? '' : undefined}
+          className={unlit ? styles.unlit : styles.light}
+          style={unlit ? undefined : ({ '--light-delay': `${passesAt(y)}ms` } as CSSProperties)}
         >
           <polygon points={diamond(TRAIL_X, y, HALO)} className={styles.halo} />
           <polygon points={diamond(TRAIL_X, y, NODE)} className={styles.node} />
         </g>
       ))}
+      <TrailBubbles trailX={TRAIL_X} nodes={NODES.filter(({ unlit }) => !unlit).map(({ y }) => y)} />
     </g>
   );
 }
@@ -78,25 +82,20 @@ function RisingRobot() {
       />
       <Travel from={`0 ${(RISE / WHOLE_DEPTH.height) * 100}%`} duration={RISE_MS} delay={RISE_DELAY_MS}>
         <g transform={`translate(${TRAIL_X} ${ROBOT_REST_Y}) scale(${ROBOT_SCALE})`}>
-          <Robot lamp={false} />
+          <Robot state={robotAt('the-whole-iceberg').state} lamp={false} />
         </g>
       </Travel>
     </>
   );
 }
 
-/** The manual open on the foredeck, its pages and spine, with a dotted leader up to the index page beside it. */
+/** The manual open on the foredeck, the Spec's faceted pages and spine, with a dotted leader up to the index page. */
 function OpenManual() {
   const { x, y } = MANUAL;
   return (
     <g data-open-manual>
       <line x1={x + 16} y1={y - 12} x2={PAGE_EDGE.x} y2={PAGE_EDGE.y} className={styles.leader} />
-      <polygon points={`${x - 30},${y - 4} ${x},${y} ${x},${y - 12} ${x - 28},${y - 16}`} className={styles.page} />
-      <polygon points={`${x},${y} ${x + 30},${y - 4} ${x + 28},${y - 16} ${x},${y - 12}`} className={styles.pageLit} />
-      <polygon
-        points={`${x - 2},${y} ${x + 2},${y} ${x + 1.5},${y - 12} ${x - 1.5},${y - 12}`}
-        className={styles.spine}
-      />
+      <ManualArt x={x} y={y} />
     </g>
   );
 }

@@ -32,10 +32,16 @@
 
 /*
  * The words' size against the figure: 1 draws caption text one figure unit per pixel. A close-up Scene sets
- * `--says-scale` below 1 in its own CSS module; the bubble shrinks towards its corner by the head, so its tail still
- * meets it.
+ * `--says-scale` below 1 in its own CSS module; `--says-fit` (set by `SaysFit`) turns the bubble back up wherever the
+ * picture would draw its words below their caption size. Either way it scales about its corner by the head, so its
+ * tail still meets it.
  */
 .saysScale {
-  scale: var(--says-scale, 1);
+  scale: calc(var(--says-scale, 1) * var(--says-fit, 1));
   transform-origin: 0 0;
+}
+
+/* Turned up on a phone, the words wrap inside the room `SaysFit` leaves them, so the bubble stays in its picture. */
+.saysScale [data-says] {
+  max-width: var(--says-room, none);
 }

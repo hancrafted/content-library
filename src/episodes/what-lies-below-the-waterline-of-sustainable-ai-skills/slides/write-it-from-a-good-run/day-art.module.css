@@ -1,0 +1,359 @@
+/*
+ * The day's own tones, lifted from Spec Option 10b (feedback 3, decision 46): the dive's sky, sea, light rays and seabed,
+ * the control room's wall and floor, its window at afternoon, dusk and dawn, the card being written at the console, the
+ * wall clock (its rim steel, from a neutral token) and the card pinned up the next morning. Raw colours live only here, each with its dark value from the
+ * Spec (FE-011); dark mode is tuned later.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.art {
+  --art-glow: oklch(0.99 0.03 200);
+  --art-glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --art-house-lit: oklch(0.985 0.005 90);
+  --art-house: oklch(0.92 0.012 85);
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
+  --art-cloth-dark: oklch(0.22 0.02 265);
+  --art-glint: oklch(1 0 0);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper: oklch(0.965 0.01 88);
+  --art-paper-shade: oklch(0.9 0.016 80);
+  --art-paper-rule: oklch(0.78 0.03 240);
+  --art-pin: oklch(0.6 0.18 28);
+  --art-dusk-1: oklch(0.55 0.1 300);
+  --art-dusk-2: oklch(0.68 0.12 340);
+  --art-dusk-3: oklch(0.8 0.12 40);
+  --art-dusk-4: oklch(0.88 0.11 75);
+  --art-dusk-cloud-lit: oklch(0.9 0.08 50);
+  --art-dusk-cloud: oklch(0.74 0.1 10);
+  --art-dusk-sea-lit: oklch(0.58 0.09 300);
+  --art-dusk-sea: oklch(0.48 0.09 280);
+  --art-sun-lit: oklch(0.96 0.12 95);
+  --art-sun: oklch(0.86 0.15 75);
+  --art-card-glow: oklch(0.97 0.1 95 / 0.55);
+  --art-cable: oklch(0.3 0.02 260);
+  --art-wood-lit: oklch(0.66 0.07 62);
+  --art-wood: oklch(0.56 0.07 55);
+  --art-wood-shade: oklch(0.45 0.06 50);
+  --art-pencil: oklch(0.82 0.14 85);
+  --art-cover: var(--human);
+  --art-cover-shade: color-mix(in oklab, var(--human) 66%, oklch(0.24 0.07 268));
+  --art-ink: oklch(0.42 0.05 260);
+}
+
+:global(.dark) .art {
+  --art-glow: oklch(0.9 0.08 200);
+  --art-glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --art-house-lit: oklch(0.86 0.008 90);
+  --art-house: oklch(0.78 0.012 85);
+  --art-robot-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-robot-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
+  --art-cloth-dark: oklch(0.2 0.02 265);
+  --art-glint: oklch(0.98 0.01 230);
+  --art-paper-lit: oklch(0.88 0.008 90);
+  --art-paper: oklch(0.83 0.012 88);
+  --art-paper-shade: oklch(0.7 0.018 80);
+  --art-paper-rule: oklch(0.6 0.03 240);
+  --art-pin: oklch(0.58 0.16 28);
+  --art-dusk-1: oklch(0.3 0.07 295);
+  --art-dusk-2: oklch(0.4 0.09 330);
+  --art-dusk-3: oklch(0.52 0.1 30);
+  --art-dusk-4: oklch(0.62 0.1 65);
+  --art-dusk-cloud-lit: oklch(0.62 0.08 45);
+  --art-dusk-cloud: oklch(0.48 0.08 10);
+  --art-dusk-sea-lit: oklch(0.36 0.07 295);
+  --art-dusk-sea: oklch(0.3 0.07 280);
+  --art-sun-lit: oklch(0.9 0.12 95);
+  --art-sun: oklch(0.8 0.14 75);
+  --art-card-glow: oklch(0.92 0.1 95 / 0.35);
+  --art-cable: oklch(0.18 0.015 260);
+  --art-wood-lit: oklch(0.5 0.06 62);
+  --art-wood: oklch(0.42 0.06 55);
+  --art-wood-shade: oklch(0.34 0.05 50);
+  --art-pencil: oklch(0.74 0.13 85);
+  --art-cover: var(--human);
+  --art-cover-shade: color-mix(in oklab, var(--human) 62%, oklch(0.22 0.07 268));
+  --art-ink: oklch(0.36 0.04 260);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
+}
+
+.art [data-tone='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-tone='sea-sunlit-lit'] {
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
+}
+
+.art [data-tone='sea-sunlit'] {
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
+}
+
+.art [data-tone='ray'] {
+  fill: var(--scenery-ray);
+  stroke: none;
+}
+
+.art [data-tone='glow-soft'] {
+  fill: var(--art-glow-soft);
+  stroke: none;
+}
+
+.art [data-tone='glow'] {
+  fill: var(--art-glow);
+  stroke: var(--art-glow);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.art [data-tone='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.art [data-tone='bubble'] {
+  fill: var(--scenery-bubble);
+  stroke: none;
+}
+
+.art [data-tone='glint'] {
+  fill: var(--art-glint);
+  stroke: var(--art-glint);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-tone='dusk-1'] {
+  fill: var(--art-dusk-1);
+  stroke: var(--art-dusk-1);
+}
+
+.art [data-tone='dusk-2'] {
+  fill: var(--art-dusk-2);
+  stroke: var(--art-dusk-2);
+}
+
+.art [data-tone='dusk-3'] {
+  fill: var(--art-dusk-3);
+  stroke: var(--art-dusk-3);
+}
+
+.art [data-tone='dusk-4'] {
+  fill: var(--art-dusk-4);
+  stroke: var(--art-dusk-4);
+}
+
+.art [data-tone='dusk-cloud-lit'] {
+  fill: var(--art-dusk-cloud-lit);
+  stroke: var(--art-dusk-cloud-lit);
+}
+
+.art [data-tone='dusk-cloud'] {
+  fill: var(--art-dusk-cloud);
+  stroke: var(--art-dusk-cloud);
+}
+
+.art [data-tone='dusk-sea'] {
+  fill: var(--art-dusk-sea);
+  stroke: var(--art-dusk-sea);
+}
+
+.art [data-tone='dusk-sea-lit'] {
+  fill: var(--art-dusk-sea-lit);
+  stroke: var(--art-dusk-sea-lit);
+}
+
+.art [data-tone='sun'] {
+  fill: var(--art-sun);
+  stroke: var(--art-sun);
+}
+
+.art [data-tone='sun-lit'] {
+  fill: var(--art-sun-lit);
+  stroke: var(--art-sun-lit);
+}
+
+.art [data-tone='card-glow'] {
+  fill: var(--art-card-glow);
+  stroke: none;
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--art-paper-shade);
+  stroke: var(--art-paper-shade);
+}
+
+.art [data-tone='paper-rule'] {
+  fill: var(--art-paper-rule);
+  stroke: var(--art-paper-rule);
+}
+
+.art [data-tone='robot-lit'] {
+  fill: var(--art-robot-lit);
+  stroke: var(--art-robot-lit);
+}
+
+.art [data-tone='robot-shade'] {
+  fill: var(--art-robot-shade);
+  stroke: var(--art-robot-shade);
+}
+
+.art [data-tone='house-lit'] {
+  fill: var(--art-house-lit);
+  stroke: var(--art-house-lit);
+}
+
+.art [data-tone='house'] {
+  fill: var(--art-house);
+  stroke: var(--art-house);
+}
+
+.art [data-tone='cloth-dark'] {
+  fill: var(--art-cloth-dark);
+  stroke: var(--art-cloth-dark);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--art-pin);
+  stroke: var(--art-pin);
+}
+
+.art [data-tone='wood-lit'] {
+  fill: var(--art-wood-lit);
+  stroke: var(--art-wood-lit);
+}
+
+.art [data-tone='wood'] {
+  fill: var(--art-wood);
+  stroke: var(--art-wood);
+}
+
+.art [data-tone='wood-shade'] {
+  fill: var(--art-wood-shade);
+  stroke: var(--art-wood-shade);
+}
+
+.art [data-tone='pencil'] {
+  fill: var(--art-pencil);
+  stroke: var(--art-pencil);
+}
+
+.art [data-tone='cover'] {
+  fill: var(--art-cover);
+  stroke: var(--art-cover);
+}
+
+.art [data-tone='cover-shade'] {
+  fill: var(--art-cover-shade);
+  stroke: var(--art-cover-shade);
+}
+
+/* The pinned pages' dates, in the Spec's paper ink. */
+.ink {
+  color: var(--art-ink);
+}
+
+/* The robot's cable from the surface. */
+.cable {
+  stroke: var(--art-cable);
+  stroke-width: 2;
+}

@@ -38,15 +38,15 @@ const STEPS = ['hold', 'camera', 'lower', 'identify', 'seal', 'label'] as const;
 interface PanelProps {
   readonly heading: string;
   readonly focal?: boolean;
-  readonly chatPicture: ReactNode;
-  readonly codingPicture: ReactNode;
+  /** The morning's picture: with the crew's speech in the Chat app view, without it in the Coding agent view. */
+  readonly picture: { readonly chat: ReactNode; readonly coding: ReactNode };
   readonly chip: string;
   readonly chat: ReactNode;
   readonly coding: ReactNode;
 }
 
 /** One comic panel: its AI head, the morning's picture, and the card row; the view switch swaps words, never the art. */
-function ComicPanel({ heading, focal, chatPicture, codingPicture, chip, chat, coding }: PanelProps) {
+function ComicPanel({ heading, focal, picture, chip, chat, coding }: PanelProps) {
   return (
     <li
       data-panel
@@ -68,10 +68,10 @@ function ComicPanel({ heading, focal, chatPicture, codingPicture, chip, chat, co
       </p>
       <div className="relative">
         <InView view="chat" as="div">
-          {chatPicture}
+          {picture.chat}
         </InView>
         <InView view="coding" as="div">
-          {codingPicture}
+          {picture.coding}
           <p
             data-session-chip
             className="absolute bottom-3 left-3 rounded-full bg-foreground px-3 py-1 font-mono text-caption font-semibold text-background"
@@ -110,13 +110,6 @@ export const theThirdTimeIsTheSignal = slide({
   segments: [{ slug: 'three-tries' }, { slug: 'not-only-repetition' }, { slug: 'did-you-know' }],
   content: ({ t, marker, target }) => {
     const kind = t('card.kind');
-    const picture = (panel: (typeof PANELS)[number], day: Day, speech: boolean) => (
-      <MorningScene
-        day={day}
-        label={t(`panels.${panel}.alt`)}
-        says={speech ? { captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) } : undefined}
-      />
-    );
     const terminal = (session: 'first' | 'second') => (
       <AgentTerminal
         title={t(`terminal.${session}.title`)}
@@ -195,8 +188,16 @@ export const theThirdTimeIsTheSignal = slide({
               key={panel}
               heading={t(`panels.${panel}.heading`)}
               focal={panel === 'third'}
-              chatPicture={picture(panel, (index + 1) as Day, true)}
-              codingPicture={picture(panel, (index + 1) as Day, false)}
+              picture={{
+                chat: (
+                  <MorningScene
+                    day={(index + 1) as Day}
+                    label={t(`panels.${panel}.alt`)}
+                    says={{ captain: t(`panels.${panel}.captainLine`), pilot: t(`panels.${panel}.pilotLine`) }}
+                  />
+                ),
+                coding: <MorningScene day={(index + 1) as Day} label={t(`panels.${panel}.alt`)} />,
+              }}
               chip={t(`panels.${panel}.sessionChip`)}
               chat={cards[panel].chat}
               coding={cards[panel].coding}

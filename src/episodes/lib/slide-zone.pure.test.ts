@@ -2,11 +2,13 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   APPROACH_ROOT_MARGIN,
   createZoneStore,
+  edgeEffectShown,
   entryIn,
   isMounted,
   isPlaying,
   keptHeight,
   zoneOf,
+  type SlideZone,
 } from './slide-zone.pure';
 
 describe('success cases', () => {
@@ -107,6 +109,23 @@ describe('success cases', () => {
     });
   });
 
+  describe('edge effect', () => {
+    it('draws an edge effect once its outgoing Slide is active and keeps it while the Slide stays near', () => {
+      // ARRANGE
+      const zones: SlideZone[] = ['near', 'active', 'near', 'active'];
+      const expected = [false, true, true, true];
+      // ACT
+      const seen: boolean[] = [];
+      zones.reduce((shown, zone) => {
+        const next = edgeEffectShown(shown, zone);
+        seen.push(next);
+        return next;
+      }, false);
+      // ASSERT
+      expect(seen).toEqual(expected);
+    });
+  });
+
   describe('zone store', () => {
     it('turns far when the approach observer says the Slide left, near when it returns', () => {
       // ARRANGE
@@ -180,6 +199,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('drops an edge effect once its outgoing Slide is far, and draws none before the reader arrives', () => {
+    // ARRANGE
+    const expected = { droppedWhenFar: false, beforeArrival: false };
+    // ACT
+    const seen = { droppedWhenFar: edgeEffectShown(true, 'far'), beforeArrival: edgeEffectShown(false, 'near') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('reports an unobserved Slide as near, so prerendered content survives hydration', () => {
     // ARRANGE
     const store = createZoneStore();

@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { zoneToken, type Zone } from '../iceberg/ruler.pure';
+import { zoneToken, type Zone } from '../iceberg/zones.pure';
 import styles from './figure-gallery.module.css';
 import { GalleryMotion, type GalleryMotionLabels } from './gallery-motion.client';
 

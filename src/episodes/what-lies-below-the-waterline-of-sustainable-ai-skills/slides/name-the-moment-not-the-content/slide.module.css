@@ -1,47 +1,95 @@
 /*
- * "Name the trigger, not the content" (Option 12a): the room's floor and the one emphasis motion. No raw colour
- * (FE-011): the floor mixes `--zone-sunlit` with `--on-brand-accent` (white) and `--overlay` (black), both fixed
- * across themes; `--primary` marks the match. Dark mode only retunes the mixes.
+ * "Name the trigger, not the content" (Option 12a): the room's tones and the one emphasis motion. The tones are the
+ * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
+ * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). The sheet's clip is steel,
+ * mixed from `--muted-foreground`, never a meaning colour; `--primary` marks the match.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
  */
 
-.room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 55%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 40%, color-mix(in oklab, var(--on-brand-accent) 45%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 40%,
-    color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay))
-  );
+.art {
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.972 0.009 88);
+  --paper-shade: oklch(0.935 0.014 84);
+  --paper-edge: oklch(0.86 0.02 80);
+  --clip-dark: oklch(0.28 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
 }
 
-:global(.dark) .room {
-  --floor-lit: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 30%, var(--overlay))
-  );
-  --floor: color-mix(in oklab, var(--zone-sunlit) 45%, color-mix(in oklab, var(--on-brand-accent) 22%, var(--overlay)));
-  --floor-shade: color-mix(
-    in oklab,
-    var(--zone-sunlit) 45%,
-    color-mix(in oklab, var(--on-brand-accent) 14%, var(--overlay))
-  );
+:global(.dark) .art {
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper: oklch(0.39 0.02 252);
+  --paper-shade: oklch(0.35 0.02 255);
+  --paper-edge: oklch(0.29 0.02 258);
+  --clip-dark: oklch(0.22 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
 }
 
-.floor [data-tone='floor-lit'] {
-  fill: var(--floor-lit);
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
 }
 
-.floor [data-tone='floor'] {
-  fill: var(--floor);
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
 }
 
-.floor [data-tone='floor-shade'] {
-  fill: var(--floor-shade);
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--paper-edge);
+  stroke: var(--paper-edge);
+}
+
+.art [data-tone='clip-dark'] {
+  fill: var(--clip-dark);
+  stroke: var(--clip-dark);
+}
+
+.art [data-tone='clip-lit'] {
+  fill: var(--clip-lit);
+  stroke: var(--clip-lit);
+}
+
+.art [data-tone='clip-shade'] {
+  fill: var(--clip-shade);
+  stroke: var(--clip-shade);
 }
 
 /*
@@ -54,9 +102,18 @@
   stroke-dashoffset: 0;
 }
 
+/* The ring: drawn once on a layer of its own, shown by opacity alone (decision 19). */
 .ring {
-  outline: 2px solid var(--primary);
-  outline-offset: 0;
+  position: relative;
+}
+
+.ring::after {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -64,7 +121,7 @@
     animation: draw 900ms ease-out 500ms both;
   }
 
-  :global([data-zone='active']) .ring {
+  :global([data-zone='active']) .ring::after {
     animation: ring-in 400ms ease-out 1400ms both;
   }
 
@@ -73,15 +130,16 @@
   }
 }
 
+/* The match line fades in: opacity alone (decision 19). */
 @keyframes draw {
   from {
-    stroke-dashoffset: 1;
+    opacity: 0;
   }
 }
 
 @keyframes ring-in {
   from {
-    outline-color: transparent;
+    opacity: 0;
   }
 }
 
@@ -89,4 +147,17 @@
   from {
     opacity: 0;
   }
+}
+
+/*
+ * The captain drawn once per view, as `InView` does for words: the other view's drawing hides. The crew stands at room
+ * scale, 2.3 times the figure, so the shared bubble turns its words down (`REQUEST_SAYS_SCALE`) to read at caption size.
+ */
+.inView {
+  --says-scale: 0.5;
+}
+
+:global(html:not([data-agent-view='coding'])) .inView[data-view='coding'],
+:global(html[data-agent-view='coding']) .inView[data-view='chat'] {
+  display: none;
 }

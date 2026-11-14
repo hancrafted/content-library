@@ -782,6 +782,60 @@ describe('edge cases', () => {
       expect(tocEntranceOf(content)).toBe(policy);
     },
   );
+  it('marks a Title with its own surface as filling the header band, so its words clear the header', async () => {
+    // ARRANGE
+    const record = episode({
+      ...RECORD,
+      title: slide({
+        slug: 'hero',
+        messages: EPISODE,
+        content: () => null,
+        presentation: { style: { '--slide-surface': 'var(--zone-surface)' } },
+      }),
+    });
+    const expected = { band: '', tone: 'normal' };
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const $ = load(
+      renderToStaticMarkup(
+        createElement(TitleSlide, {
+          title: content.title,
+          mode: content.header,
+          entrance: content.entrance,
+          appearance: content.titleAppearance,
+        }),
+      ),
+    );
+    const seen = { band: $('#top').attr('data-header-band'), tone: $('#top').attr('data-surface-tone') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+  it("shows no caption on a Title whose title Slide gives an empty one, while the Episode's own caption stays", async () => {
+    // ARRANGE
+    const hero = slide({ slug: 'hero', messages: { en: { caption: '' }, de: { caption: '' } }, content: () => null });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const expected = { onScreen: '', captions: 0, episode: 'The smallest Episode.' };
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const $ = load(
+      renderToStaticMarkup(
+        createElement(TitleSlide, {
+          title: content.title,
+          caption: content.caption,
+          mode: content.header,
+          entrance: content.entrance,
+          appearance: content.titleAppearance,
+        }),
+      ),
+    );
+    const seen = {
+      onScreen: content.caption,
+      captions: $('#top [data-target="caption"]').length,
+      episode: record.messages.en.caption,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
   it('keeps an unconfigured Title untoned, without ink or a clock', async () => {
     // ARRANGE
     const expectedAppearance = { tone: 'normal' };
@@ -799,6 +853,7 @@ describe('edge cases', () => {
     const $ = load(html);
     // ASSERT
     expect(content.titleAppearance).toEqual(expectedAppearance);
+    expect($('#top').attr('data-header-band')).toBeUndefined();
     expect($('#top').attr('data-tone')).toBeUndefined();
     expect($('#top').attr('data-surface-tone')).toBeUndefined();
     expect(PageSurfaceClock({ content })).toBeNull();

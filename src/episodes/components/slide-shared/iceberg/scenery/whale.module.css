@@ -1,0 +1,75 @@
+/* The whale drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in whale.tsx. */
+
+.whale {
+  --whale: color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay)));
+  --whale-belly: color-mix(in oklab, var(--bulb) 39%, color-mix(in oklab, var(--on-brand-accent) 89%, var(--overlay)));
+  --whale-belly-shade: color-mix(
+    in oklab,
+    var(--bulb) 44%,
+    color-mix(in oklab, var(--on-brand-accent) 72%, var(--overlay))
+  );
+  --whale-lit: color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 60%, var(--overlay)));
+  --whale-shade: color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 33%, var(--overlay)));
+  --whale-glint: var(--on-brand-accent);
+}
+
+:global(.dark) .whale {
+  --whale: color-mix(in oklab, var(--info) 46%, color-mix(in oklab, var(--on-brand-accent) 2%, var(--overlay)));
+  --whale-belly: color-mix(in oklab, var(--bulb) 39%, color-mix(in oklab, var(--on-brand-accent) 66%, var(--overlay)));
+  --whale-belly-shade: color-mix(
+    in oklab,
+    var(--bulb) 39%,
+    color-mix(in oklab, var(--on-brand-accent) 49%, var(--overlay))
+  );
+  --whale-lit: color-mix(in oklab, var(--info) 50%, color-mix(in oklab, var(--on-brand-accent) 10%, var(--overlay)));
+  --whale-shade: color-mix(in oklab, var(--info) 40%, var(--overlay));
+  --whale-glint: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
+}
+
+.whale [data-tone='whale'] {
+  fill: var(--whale);
+  stroke: var(--whale);
+}
+
+.whale [data-tone='whale-belly'] {
+  fill: var(--whale-belly);
+  stroke: var(--whale-belly);
+}
+
+.whale [data-tone='whale-belly-shade'] {
+  fill: var(--whale-belly-shade);
+  stroke: var(--whale-belly-shade);
+}
+
+.whale [data-tone='whale-lit'] {
+  fill: var(--whale-lit);
+  stroke: var(--whale-lit);
+}
+
+.whale [data-tone='whale-shade'] {
+  fill: var(--whale-shade);
+  stroke: var(--whale-shade);
+}
+
+.whale [data-tone='glint'] {
+  fill: var(--whale-glint);
+  stroke: var(--whale-glint);
+}
+
+.whale [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* The Midnight loop: the whale glides slowly back and forth, only on the active Slide. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .glide {
+    animation: whale-glide 30s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes whale-glide {
+  to {
+    transform: translate(36px, -6px);
+  }
+}

@@ -1,0 +1,69 @@
+/* The sun-moon drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in sun-moon.tsx. */
+
+.sunMoon {
+  --sky-sun: color-mix(in oklab, var(--bulb) 89%, var(--on-brand-accent));
+  --sky-sun-glow: color-mix(in oklab, color-mix(in oklab, var(--bulb) 44%, var(--on-brand-accent)) 35%, transparent);
+  --sky-sun-lit: color-mix(in oklab, var(--bulb) 56%, var(--on-brand-accent));
+  --sky-moon: color-mix(in oklab, var(--info) 13%, color-mix(in oklab, var(--on-brand-accent) 94%, var(--overlay)));
+  --sky-moon-glow: color-mix(in oklab, color-mix(in oklab, var(--info) 13%, var(--on-brand-accent)) 20%, transparent);
+  --sky-moon-lit: color-mix(in oklab, var(--info) 7%, var(--on-brand-accent));
+}
+
+:global(.dark) .sunMoon {
+  --sky-sun: color-mix(in oklab, var(--bulb) 89%, color-mix(in oklab, var(--on-brand-accent) 96%, var(--overlay)));
+  --sky-sun-glow: color-mix(in oklab, color-mix(in oklab, var(--bulb) 44%, var(--on-brand-accent)) 20%, transparent);
+  --sky-sun-lit: color-mix(in oklab, var(--bulb) 56%, var(--on-brand-accent));
+  --sky-moon: color-mix(in oklab, var(--info) 21%, color-mix(in oklab, var(--on-brand-accent) 88%, var(--overlay)));
+  --sky-moon-glow: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--info) 25%, color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay))) 16%,
+    transparent
+  );
+  --sky-moon-lit: color-mix(in oklab, var(--info) 10%, color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay)));
+}
+
+.sunMoon [data-tone='sun'] {
+  fill: var(--sky-sun);
+  stroke: var(--sky-sun);
+}
+
+.sunMoon [data-tone='sun-glow'] {
+  fill: var(--sky-sun-glow);
+}
+
+.sunMoon [data-tone='sun-lit'] {
+  fill: var(--sky-sun-lit);
+  stroke: var(--sky-sun-lit);
+}
+
+.sunMoon [data-tone='moon'] {
+  fill: var(--sky-moon);
+  stroke: var(--sky-moon);
+}
+
+.sunMoon [data-tone='moon-glow'] {
+  fill: var(--sky-moon-glow);
+}
+
+.sunMoon [data-tone='moon-lit'] {
+  fill: var(--sky-moon-lit);
+  stroke: var(--sky-moon-lit);
+}
+
+.sunMoon [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* The sun by day, the crescent moon by night, swapped by the theme alone (the landing window's pattern). */
+.sunMoon [data-sky-night] {
+  display: none;
+}
+
+:global(.dark) .sunMoon [data-sky-day] {
+  display: none;
+}
+
+:global(.dark) .sunMoon [data-sky-night] {
+  display: inline;
+}

@@ -1,0 +1,66 @@
+import { describe, expect, it } from 'vitest';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { NARROWEST_PICTURE_PX, speechClashes, speechLayout, type SpeechWords } from './speech.pure';
+
+/*
+ * The morning's speech (decision 53): the captain and the pilot face each other, so their shared bubbles stack, the
+ * captain's lifted above the pilot's. Neither covers the other or leaves the picture, on any morning, in either
+ * language, at the narrowest picture the comic draws, where the words are at their caption size.
+ */
+
+const PANELS = ['first', 'second', 'third'] as const;
+const DAYS = { first: 1, second: 2, third: 3 } as const;
+type Messages = typeof en;
+const linesOf = (messages: Messages): readonly SpeechWords[] =>
+  PANELS.map((panel) => ({
+    day: DAYS[panel],
+    captain: messages.panels[panel].captainLine,
+    pilot: messages.panels[panel].pilotLine,
+  }));
+const clashesIn = (messages: Messages, picturePx: number) =>
+  linesOf(messages).flatMap((words) => speechClashes(speechLayout(words, picturePx)).map((c) => `${words.day}: ${c}`));
+
+describe('success cases', () => {
+  it('stacks the English bubbles clear of each other and inside the picture every morning', () => {
+    // ARRANGE
+    const picturePx = NARROWEST_PICTURE_PX;
+    // ACT
+    const found = clashesIn(en, picturePx);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+
+  it('stacks the German bubbles clear of each other and inside the picture every morning', () => {
+    // ARRANGE
+    const picturePx = NARROWEST_PICTURE_PX;
+    // ACT
+    const found = clashesIn(de as Messages, picturePx);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+});
+
+describe('failure cases', () => {
+  it("names the meeting when the pilot says too much and his bubble grows into the captain's", () => {
+    // ARRANGE
+    const pilotLine = 'Which depth? What goes on the label? Which tube, and how slowly do I lower the arm?';
+    const words = { day: 1, captain: en.panels.first.captainLine, pilot: pilotLine } as const;
+    const expected = 'bubbles meet';
+    // ACT
+    const found = speechClashes(speechLayout(words, NARROWEST_PICTURE_PX));
+    // ASSERT
+    expect(found).toContain(expected);
+  });
+});
+
+describe('edge cases', () => {
+  it('holds on a wide picture too, where the words draw larger and the bubbles keep their place in the room', () => {
+    // ARRANGE
+    const widePx = 520;
+    // ACT
+    const found = [...clashesIn(en, widePx), ...clashesIn(de as Messages, widePx)];
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+});

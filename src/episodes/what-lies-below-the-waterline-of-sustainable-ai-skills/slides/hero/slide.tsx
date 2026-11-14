@@ -10,7 +10,9 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { HeroDepthScene } from '@/episodes/components/slide-shared/iceberg/hero-depth-scene';
 import { HERO_DEPTH } from '@/episodes/components/slide-shared/iceberg/hero-depth.pure';
 import { ZoneCard } from '@/episodes/components/slide-shared/iceberg/zone-card';
+import { zoneTitlePresentation } from '@/episodes/components/slide-shared/iceberg/zone-presentation';
 import { zoneWordsFrom } from '@/episodes/components/slide-shared/iceberg/zone-words.pure';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -53,7 +55,7 @@ function Dive() {
             className="stroke-muted-foreground"
           />
           <g transform={`translate(${aFrameTip.x} ${ROBOT_HANG}) scale(0.9)`}>
-            <Robot aim="down" />
+            <Robot state={robotAt('hero').state} aim="down" />
           </g>
         </>
       }
@@ -65,7 +67,7 @@ function Dive() {
  * The Title slide's hero Scene (the record's `title`), the Hero motif of picked Option 0a, full screen (Han's feedback
  * 1): the whole depth is one drawing in the Slide's Backdrop, edge to edge and under the hidden table of contents, so
  * the shared header's `h1` and lede sit in its sky. The research ship on the waterline has lowered its diving robot
- * from the A-frame to hang just above the water, the ruler down the left names the zones with the Surface lit, and one
+ * from the A-frame to hang just above the water, the slim depth gauge at the right edge names the Surface, and one
  * pill marks the robot as the Surface. Each section slide echoes the scene one zone deeper
  * (`slide-shared/waterline-echo/`). It also holds the page's one Chat app / Coding agent switch, which every view line
  * of the Episode follows.
@@ -73,6 +75,7 @@ function Dive() {
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: zoneTitlePresentation(),
   content: ({ t }) => {
     const files = [
       { name: t('agent.files.skill.name'), role: t('agent.files.skill.role') },
@@ -89,13 +92,13 @@ export const hero = slide({
           layers={{ Backdrop: SlideBackdrop }}
           label={t('label')}
           zones={zoneWordsFrom((key) => t(key))}
-          rulerLabel={t('ruler')}
+          gaugeLabel={t('gauge')}
           marker={{ text: t('youAreHere'), ...MARKER }}
           overlay={
             <>
               <ViewToggle
                 labels={{ label: t('view.label'), chat: t('view.chat'), coding: t('view.coding') }}
-                className="absolute top-4 right-(--inset-r)"
+                className="absolute top-[calc(var(--header-block)+1rem)] right-(--inset-r)"
               />
               <InView view="coding" as="div" className="absolute right-(--inset-r) bottom-6 w-80 max-sm:w-64">
                 <ZoneCard className="rounded-xl p-4 shadow-md">

@@ -1,8 +1,11 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { cn } from '@/shared/lib/utils';
+import { PaperArt, type PaperId } from './paper-art';
 import styles from './slide.module.css';
 
 export interface SkillSheetProps {
+  /** The Spec's sheet this skill's paper is cut from. */
+  readonly paper: PaperId;
   readonly kind: string;
   readonly path: string;
   /** Plain steps in the Chat app view; the file's own lines, highlighted, in the Coding agent view. */
@@ -16,9 +19,10 @@ export interface SkillNestProps {
 }
 
 /** One skill grill-with-docs runs: its steps as tiles, or its lines as the file writes them. */
-function SkillSheet({ kind, path, steps }: SkillSheetProps) {
+function SkillSheet({ paper, kind, path, steps }: SkillSheetProps) {
   return (
-    <section data-skill-sheet={path} className={cn(styles.paper, 'flex flex-col gap-2 rounded-md p-3 shadow-md')}>
+    <section data-skill-sheet={path} className={cn(styles.paper, 'relative isolate flex flex-col gap-2 p-3')}>
+      <PaperArt paper={paper} />
       <h5 className="border-b border-border pb-1 text-caption font-semibold text-muted-foreground">
         <InView view="chat">{kind}</InView>
         <InView view="coding" className="font-mono">
@@ -46,7 +50,8 @@ function SkillSheet({ kind, path, steps }: SkillSheetProps) {
  */
 export function SkillNest({ outer, stays, inner }: SkillNestProps) {
   return (
-    <section data-skill-nest className={cn(styles.paper, 'relative flex flex-col gap-3 rounded-md p-4 shadow-lg')}>
+    <section data-skill-nest className={cn(styles.paper, 'relative isolate flex flex-col gap-3 p-4')}>
+      <PaperArt paper="nest" />
       <p className="absolute -top-3 right-3 rounded-full bg-foreground px-3 text-caption font-semibold text-background">
         {stays}
       </p>

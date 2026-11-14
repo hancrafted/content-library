@@ -9,6 +9,7 @@ import { ConsoleCorner } from './console-corner';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './slide.module.css';
+import { FastenerArt, PaperArt, WallArt } from './stage-art';
 
 const KNUTH = { slug: 'knuth-structured-programming', url: 'https://dl.acm.org/doi/10.1145/356635.356640' };
 const JEFFRIES = { slug: 'jeffries-yagni', url: 'https://ronjeffries.com/xprog/articles/practices/pracnotneed/' };
@@ -66,78 +67,88 @@ export const notEveryRepeatDeservesASkill = slide({
     <SlideFrame className="@container mt-8 gap-6">
       <div
         data-stage
-        className="focus-group focus-group--dim-others grid items-start gap-6 overflow-hidden rounded-2xl bg-card/40 p-4 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] @3xl:p-6"
+        className="focus-group focus-group--dim-others relative isolate grid grid-cols-1 items-start gap-6 overflow-hidden rounded-2xl p-4 pt-6 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] @3xl:p-6 @3xl:pt-8"
       >
+        <WallArt className="absolute inset-0 -z-10 size-full" />
         <div className="self-end">
           <ConsoleCorner label={t('alt.scene')} />
         </div>
+        <div className="relative min-w-0">
+          <FastenerArt piece="clip" className="absolute -top-5 left-1/2 z-10 w-16 -translate-x-1/2" />
+          <ZoneCard
+            data-index
+            style={{ '--entries': ENTRIES.length } as CSSProperties}
+            className={cn(
+              styles.index,
+              styles.sheet,
+              'focus-group__item relative isolate -mb-6 max-h-[34rem] rounded-t-lg px-4 pt-4 shadow-md',
+            )}
+          >
+            <PaperArt piece="sheet" className="absolute inset-0 -z-10 size-full" />
+            <p className="flex items-end justify-between gap-2 border-b-2 border-foreground px-2 pb-1 text-caption">
+              <InView view="chat" className="font-semibold">
+                {t('index.heading.chat')}
+              </InView>
+              <InView view="coding" className="font-semibold">
+                {t.rich('index.heading.coding')}
+              </InView>
+              <InView view="chat" className="text-muted-foreground">
+                {t('index.count.chat')}
+              </InView>
+              <InView view="coding" className="text-muted-foreground">
+                {t('index.count.coding')}
+              </InView>
+            </p>
+            <ol className="flex flex-col">
+              {ENTRIES.map((entry, line) => {
+                const needed = 'needed' in entry;
+                return (
+                  <li
+                    key={entry.key}
+                    data-entry={entry.name}
+                    data-needed={needed ? '' : undefined}
+                    data-motion="grow"
+                    style={{ '--line': line } as CSSProperties}
+                    className={cn(
+                      'flex min-h-7 items-center justify-between gap-2 px-2 text-caption',
+                      needed
+                        ? cn(styles.needed, 'rounded-md bg-primary font-semibold text-primary-foreground')
+                        : cn(styles.entry, 'border-b border-border'),
+                    )}
+                  >
+                    <InView view="chat" className="truncate">
+                      {t(`index.entries.${entry.key}.label`)}
+                    </InView>
+                    <InView view="coding" className="truncate font-mono">
+                      {entry.name}
+                    </InView>
+                    {needed && (
+                      <span className="shrink-0 rounded-full border border-primary-foreground px-2">{t('needed')}</span>
+                    )}
+                    {'untested' in entry && (
+                      <span
+                        data-stamp
+                        className={cn(
+                          styles.stamp,
+                          entry.tilt,
+                          'shrink-0 rounded-sm border-2 border-destructive px-1.5 font-semibold text-destructive opacity-50',
+                        )}
+                      >
+                        {t('stamp')}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </ZoneCard>
+        </div>
         <ZoneCard
-          data-index
-          style={{ '--entries': ENTRIES.length } as CSSProperties}
-          className={cn(
-            styles.index,
-            styles.sheet,
-            'focus-group__item -mb-6 max-h-[34rem] rounded-t-lg px-4 pt-4 shadow-md',
-          )}
+          data-check
+          className="focus-group__item card-hover card-hover--raise relative isolate rounded-lg p-5 shadow-md"
         >
-          <p className="flex items-end justify-between gap-2 border-b-2 border-foreground px-2 pb-1 text-caption">
-            <InView view="chat" className="font-semibold">
-              {t('index.heading.chat')}
-            </InView>
-            <InView view="coding" className="font-semibold">
-              {t.rich('index.heading.coding')}
-            </InView>
-            <InView view="chat" className="text-muted-foreground">
-              {t('index.count.chat')}
-            </InView>
-            <InView view="coding" className="text-muted-foreground">
-              {t('index.count.coding')}
-            </InView>
-          </p>
-          <ol className="flex flex-col">
-            {ENTRIES.map((entry, line) => {
-              const needed = 'needed' in entry;
-              return (
-                <li
-                  key={entry.key}
-                  data-entry={entry.name}
-                  data-needed={needed ? '' : undefined}
-                  data-motion="grow"
-                  style={{ '--line': line } as CSSProperties}
-                  className={cn(
-                    'flex min-h-7 items-center justify-between gap-2 px-2 text-caption',
-                    needed
-                      ? cn(styles.needed, 'rounded-md bg-primary font-semibold text-primary-foreground')
-                      : cn(styles.entry, 'border-b border-border'),
-                  )}
-                >
-                  <InView view="chat" className="truncate">
-                    {t(`index.entries.${entry.key}.label`)}
-                  </InView>
-                  <InView view="coding" className="truncate font-mono">
-                    {entry.name}
-                  </InView>
-                  {needed && (
-                    <span className="shrink-0 rounded-full border border-primary-foreground px-2">{t('needed')}</span>
-                  )}
-                  {'untested' in entry && (
-                    <span
-                      data-stamp
-                      className={cn(
-                        styles.stamp,
-                        entry.tilt,
-                        'shrink-0 rounded-sm border-2 border-destructive px-1.5 font-semibold text-destructive opacity-50',
-                      )}
-                    >
-                      {t('stamp')}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </ZoneCard>
-        <ZoneCard data-check className="focus-group__item card-hover card-hover--raise rounded-lg p-5 shadow-md">
+          <PaperArt piece="card" className="absolute inset-0 -z-10 size-full rounded-lg" />
+          <FastenerArt piece="pin" className="absolute -top-1 left-1/2 w-5 -translate-x-1/2" />
           <p className="text-body font-semibold text-primary">{t('check.heading')}</p>
           <ol className="mt-4 flex flex-col gap-3 text-body">
             {QUESTIONS.map((question) => (

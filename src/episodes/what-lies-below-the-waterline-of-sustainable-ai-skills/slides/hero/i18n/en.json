@@ -1,4 +1,5 @@
 {
+  "caption": "",
   "label": "A research ship on the waterline has lowered its diving robot on a cable from the A-frame to hang just above the water, its lamp shining down; beyond it an iceberg, most of its mass below the waterline, above the sea zones down to the abyss.",
   "youAreHere": "you are here · Surface",
   "zones": {
@@ -45,7 +46,7 @@
       }
     }
   },
-  "ruler": "Depth ruler, the Surface lit",
+  "gauge": "Depth gauge",
   "view": {
     "label": "View",
     "chat": "Chat app",

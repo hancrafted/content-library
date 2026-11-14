@@ -7,7 +7,6 @@
     "codingLabel": "The AI model: keeps what it learnt in training",
     "caption": "Ten years of projects with the best pilot you know."
   },
-  "aiTag": "AI model",
   "days": {
     "d1": {
       "label": "Day 1 · 07:00",
@@ -41,7 +40,7 @@
     "caption": "Claude Code: each session begins with a fresh context window; only written files carry knowledge across."
   },
   "alt": {
-    "photo": "A framed photo on the control-room wall: you and the pilot on the deck of the research ship, ten years of projects; the pilot is tagged AI model.",
+    "photo": "A framed photo on the control-room wall: you and the pilot on the deck of the research ship, ten years of projects; the pilot is the AI model.",
     "morning": "Day {day}, 07:00 in the control room: the captain explains the sediment sample, the pilot turns from his console and greets her as a stranger; through the window the robot sits idle on deck. {mugs, plural, one {# coffee mug} other {# coffee mugs}} on the console."
   },
   "notes": {

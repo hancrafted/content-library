@@ -6,7 +6,7 @@ import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth
 import { ContextBarsPreset } from '@/explorables/context-window/context';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { ARRIVAL_DELAY, ARRIVALS, at, CARD, ControlRoomArt } from './control-room-art';
+import { ARRIVAL_DELAY, ARRIVALS, at, CARD, ControlRoomArt, ROOM } from './control-room-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './slide.module.css';
@@ -35,13 +35,13 @@ const ARRIVAL_BEATS = Object.fromEntries(
 ) as CSSProperties;
 type Pill = 'feed' | 'index' | 'orders' | 'card' | 'frames' | 'sonar' | 'logs';
 const PILLS: readonly { readonly pill: Pill; readonly x: number; readonly y: number }[] = [
-  { pill: 'feed', x: 340, y: 70 },
-  { pill: 'index', x: 1095, y: 345 },
-  { pill: 'orders', x: 405, y: 500 },
-  { pill: 'card', x: 580, y: 600 },
-  { pill: 'frames', x: 770, y: 600 },
-  { pill: 'sonar', x: 905, y: 600 },
-  { pill: 'logs', x: 1035, y: 600 },
+  { pill: 'feed', x: 220, y: 51 },
+  { pill: 'index', x: 652, y: 215 },
+  { pill: 'orders', x: 218, y: 321 },
+  { pill: 'card', x: 364, y: 371 },
+  { pill: 'frames', x: 497, y: 371 },
+  { pill: 'sonar', x: 574, y: 371 },
+  { pill: 'logs', x: 654, y: 371 },
 ];
 
 /** One block's words: its AI term, and the scene's word or the file behind it on the right. */
@@ -125,23 +125,23 @@ export const skillsAreDynamicContext = slide({
           <ZoneScene
             zone="twilight"
             label={t('alt.room')}
-            className="aspect-[3/2] w-full rounded-2xl shadow-md"
+            className="aspect-[9/7] w-full rounded-2xl shadow-md"
             overlay={
               <>
                 <p
-                  style={at(785, 90)}
+                  style={at(508, 54)}
                   className="absolute hidden -translate-x-1/2 text-caption font-semibold whitespace-nowrap text-foreground @lg:block"
                 >
                   {t('art.brief')}
                 </p>
                 <p
-                  style={at(1092, 170)}
+                  style={at(683, 100)}
                   className="absolute hidden -translate-x-1/2 text-caption font-semibold text-foreground @lg:block"
                 >
                   {t('art.index')}
                 </p>
                 <div
-                  style={{ ...at(CARD.x, CARD.y + 8), width: `${CARD.width / 12}%` }}
+                  style={{ ...at(CARD.x, CARD.y + 6), width: `${(CARD.width / ROOM.width) * 100}%` }}
                   className="absolute hidden flex-col p-2 text-caption leading-tight text-foreground @2xl:flex"
                 >
                   <span className="font-semibold">{t('art.cardTitle')}</span>

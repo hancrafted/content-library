@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { zoneWordsFrom, type ZoneWordKey } from './zone-words.pure';
 
 /*
- * The zone words a Slide hands the ruler and the zone label: read key by key from the Slide's own `i18n/`, through
+ * The zone words a Slide hands the depth gauge and the zone label: read key by key from the Slide's own `i18n/`, through
  * its `t`, so no Slide reads its Translation file raw.
  */
 

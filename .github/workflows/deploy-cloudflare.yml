@@ -43,6 +43,8 @@ jobs:
     env:
       # Served from the domain root: no base path.
       NEXT_PUBLIC_BASE_PATH: ''
+      # A pull request's preview lists and links Upcoming Episodes on /episodes, so a draft can be reviewed there; production never does.
+      LIST_UPCOMING_EPISODES: ${{ github.event_name == 'pull_request' && 'true' || '' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

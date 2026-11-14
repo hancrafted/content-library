@@ -8,17 +8,21 @@ import {
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
 import { Ship } from '@/episodes/components/slide-shared/deep-sea-expedition/ship';
 import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedition/ship.pure';
-import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { SCENE_HEIGHT, SCENE_WIDTH, SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
+import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
+import { useId } from 'react';
 import styles from './forgets.module.css';
+import { Clock, MorningRoom } from './room-art';
 
 /*
- * The control room of Slide 1, drawn in `ZoneScene`'s 1200 by 800 space: a faceted wall with one window, through which
- * the Surface sky and the ship's stern deck show, the robot idle on deck beside the empty A-frame. The wall, floor and
- * window frame are this Slide's own scenery; every figure comes from `slide-shared/` (design-ADR 0025).
+ * The control room of Slide 1, drawn in `ZoneScene`'s 1200 by 800 space: the Spec's faceted wall with one window,
+ * through which the Surface sky and the ship's stern deck show, the robot idle on deck beside the empty A-frame, and
+ * the wall clock at 07:00. The wall, floor, window frame and clock are this Slide's own scenery (`room-art.tsx`);
+ * every figure comes from `slide-shared/` (design-ADR 0025).
  */
 
 /** The window onto the stern deck, in the Scene's units. */
-const WINDOW = { x: 620, y: 70, width: 440, height: 240 } as const;
+const WINDOW = { x: 620, y: 70, width: 380, height: 240 } as const;
 const FLOOR_Y = 770;
 /** One scale for the crew and the console: a comic close-up; its CSS module turns the speech bubbles down to match. */
 const CREW_SCALE = 4.4;
@@ -36,24 +40,17 @@ const CAPTAIN_SCALE = 5;
 
 const ANCHORS = shipAnchors();
 
-/** The wall around the window, as one path with the window cut out (`evenodd`). */
+/** The wall around the window, as one path with the window cut out (`evenodd`): the wall's facets are clipped to it. */
 const WALL = [
-  `M0 0H1200V${FLOOR_Y}H0Z`,
+  `M0 0H${SCENE_WIDTH}V${FLOOR_Y}H0Z`,
   `M${WINDOW.x} ${WINDOW.y}h${WINDOW.width}v${WINDOW.height}h${-WINDOW.width}Z`,
 ].join('');
 
-/** The wall's lit and shaded planes, outside the window, lit from the upper left. */
-const WALL_FACETS = [
-  { tone: 'room-lit', points: '0,0 420,0 140,380' },
-  { tone: 'room-lit', points: '420,0 600,0 600,240 300,200' },
-  { tone: 'room-shade', points: `600,420 1200,380 1200,${FLOOR_Y} 760,${FLOOR_Y}` },
-  { tone: 'room-shade', points: `0,520 260,${FLOOR_Y} 0,${FLOOR_Y}` },
-] as const;
-
-const FLOOR_FACETS = [
-  { tone: 'floor', points: `0,${FLOOR_Y} 1200,${FLOOR_Y} 1200,800 0,800` },
-  { tone: 'floor-shade', points: `640,${FLOOR_Y} 1200,${FLOOR_Y} 1200,800 900,800` },
-] as const;
+/** The wall clock, right of the window and clear of both lines: 07:00 every morning. */
+const CLOCK = { cx: 1040, cy: 120, r: 30 } as const;
+const WINDOW_FRAME = 16;
+const WINDOW_GLINT = 5;
+const MULLION = 10;
 
 /** What the window shows: the ship's stern deck, the robot idle in its cradle, the A-frame's hook empty. */
 function SternDeck() {
@@ -63,33 +60,36 @@ function SternDeck() {
       transform={`translate(${SHIP_X} ${SURFACE_WATERLINE}) scale(${SHIP_SCALE})`}
       deck={
         <g transform={`translate(${robot.x} ${robot.y - ROBOT_HEIGHT * ROBOT_SCALE}) scale(${ROBOT_SCALE})`}>
-          <Robot lamp={false} />
+          <Robot state={robotAt('an-ai-model-that-forgets-every-morning').state} lamp={false} />
         </g>
       }
     />
   );
 }
 
-/** The wall with its window, the window frame and the floor. */
-function RoomWalls() {
+/** The faceted wall round its window, the floor, the window's wooden frame and mullion, and the clock. */
+function RoomWalls({ clipId }: { readonly clipId: string }) {
+  const lit = `M${WINDOW.x} ${WINDOW.y + WINDOW.height}V${WINDOW.y}H${WINDOW.x + WINDOW.width}`;
   return (
     <g className={styles.room}>
-      <path d={WALL} fillRule="evenodd" data-tone="room" />
-      {WALL_FACETS.map(({ tone, points }) => (
-        <polygon key={points} data-tone={tone} points={points} />
-      ))}
-      <rect {...WINDOW} strokeWidth={16} data-tone="frame" />
+      <MorningRoom
+        width={SCENE_WIDTH}
+        floorY={FLOOR_Y}
+        bottom={SCENE_HEIGHT}
+        clipId={clipId}
+        clip={<path d={WALL} clipRule="evenodd" />}
+      />
+      <rect {...WINDOW} strokeWidth={WINDOW_FRAME} data-tone="window" />
+      <path d={lit} strokeWidth={WINDOW_GLINT} data-tone="window-lit" />
       <line
         x1={WINDOW.x + WINDOW.width / 2}
         y1={WINDOW.y}
         x2={WINDOW.x + WINDOW.width / 2}
         y2={WINDOW.y + WINDOW.height}
-        strokeWidth={10}
-        data-tone="frame"
+        strokeWidth={MULLION}
+        data-tone="window"
       />
-      {FLOOR_FACETS.map(({ tone, points }) => (
-        <polygon key={points} data-tone={tone} points={points} />
-      ))}
+      <Clock {...CLOCK} />
     </g>
   );
 }
@@ -109,13 +109,14 @@ export interface ControlRoomProps {
  * so the repeat is the joke. Children of a `ZoneScene` at the Surface.
  */
 export function ControlRoom({ mugs, captainLine, greeting }: ControlRoomProps) {
+  const clipId = `forgets-window-${useId()}`;
   const layout = consoleLayout({ width: CONSOLE_WIDTH, mugs });
   const consoleY = FLOOR_Y - CONSOLE_DESK_HEIGHT * CREW_SCALE;
   const seatX = CONSOLE_X + layout.seat.x * CREW_SCALE;
   return (
     <>
       <SternDeck />
-      <RoomWalls />
+      <RoomWalls clipId={clipId} />
       <Console
         width={CONSOLE_WIDTH}
         mugs={mugs}

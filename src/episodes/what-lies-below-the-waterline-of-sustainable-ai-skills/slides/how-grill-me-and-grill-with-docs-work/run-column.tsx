@@ -1,6 +1,7 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { PaperArt, type PaperId } from './paper-art';
 import styles from './slide.module.css';
 
 export interface GlossaryTerm {
@@ -12,6 +13,8 @@ export interface GlossaryTerm {
 }
 
 export interface ProjectFileProps {
+  /** The Spec's sheet this file's paper is cut from. */
+  readonly paper: PaperId;
   readonly kind: { readonly chat: string; readonly coding: string };
   readonly beside: string;
   readonly focus?: boolean;
@@ -36,8 +39,8 @@ function FileHeading({ kind, tag }: Pick<ProjectFileProps, 'kind' | 'tag'>) {
   );
 }
 
-/** One file a run writes beside the skill: a faceted sheet led by its AI term, the "Beside the skill" label under it. */
-export function ProjectFile({ kind, beside, focus = false, tag, children }: ProjectFileProps) {
+/** One file a run writes beside the skill: the Spec's faceted sheet led by its AI term, the "Beside the skill" label under it. */
+export function ProjectFile({ paper, kind, beside, focus = false, tag, children }: ProjectFileProps) {
   return (
     <div className="flex flex-col items-start gap-2">
       <section
@@ -45,10 +48,11 @@ export function ProjectFile({ kind, beside, focus = false, tag, children }: Proj
         data-focus={focus ? '' : undefined}
         className={cn(
           styles.paper,
-          'flex w-full flex-1 flex-col gap-2 rounded-md p-3 text-caption shadow-md',
-          focus && 'ring-3 ring-primary',
+          'relative isolate flex w-full flex-1 flex-col gap-2 p-3 text-caption',
+          focus && 'rounded-md ring-3 ring-primary ring-offset-2 ring-offset-transparent',
         )}
       >
+        <PaperArt paper={paper} />
         <FileHeading kind={kind} tag={tag} />
         {children}
       </section>

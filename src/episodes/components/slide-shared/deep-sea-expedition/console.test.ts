@@ -3,6 +3,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Console, type ConsoleProps } from './console';
+import { consoleLayout } from './console.pure';
+import { PilotAtConsole } from './pilot-at-console';
 
 /*
  * The control-room console: an SVG group a Scene places in its own `<svg>`. A Slide shows its own content on the
@@ -19,6 +21,27 @@ const draw = (props: ConsoleProps) =>
   load(renderToStaticMarkup(createElement('svg', null, createElement(Console, props))), { xml: true });
 
 describe('success cases', () => {
+  it('seats the pilot at the console, the reach forward of the seat', () => {
+    // ARRANGE
+    const { seat } = consoleLayout({ width: 200 });
+    const expected = { consoles: 1, pose: 'sit', at: `translate(${seat.x + 24} ${seat.y})` };
+    // ACT
+    const $ = load(
+      renderToStaticMarkup(createElement('svg', null, createElement(PilotAtConsole, { width: 200, reach: 24 }))),
+      {
+        xml: true,
+      },
+    );
+    const seated = $('[data-character]').parent();
+    const seen = {
+      consoles: $('[data-console]').length,
+      pose: $('[data-character]').attr('data-pose'),
+      at: seated.attr('transform'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('draws screen content inside the first screen’s glass, the second keeping its trace', () => {
     // ARRANGE
     const content = createElement('rect', { 'data-skill-file': '', width: 40, height: 20 });

@@ -1,6 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './loan.module.css';
+import { BlockArt } from './sea-art';
 
 export interface UpkeepStackProps {
   readonly label: string;
@@ -26,7 +27,7 @@ function Caption({ label, hint }: { readonly label: string; readonly hint: strin
 
 /**
  * Writing weighed against keeping it right (Option 23b): one thin slab for the five minutes, a stack of one block per
- * fix beside it, each block lighting with its entry on the statement, and a dashed outline for the next. Heights are
+ * fix, the Spec's faceted blocks with their lit tops beside it, each block lighting with its entry on the statement, and a dashed outline for the next. Heights are
  * illustration, labelled as such.
  */
 export function UpkeepStack({ label, alt, writing, keeping, blocks, next, note }: UpkeepStackProps) {
@@ -34,16 +35,16 @@ export function UpkeepStack({ label, alt, writing, keeping, blocks, next, note }
     <div className={cn('rounded-xl p-5', styles.glass)}>
       <p className="text-body font-semibold">{label}</p>
       <div role="img" aria-label={alt} className="mt-4 grid grid-cols-2 items-end gap-x-6 gap-y-2">
-        <div className={cn('mx-auto h-3 w-20', styles.block)} />
-        <div className="flex flex-col-reverse gap-1">
+        <BlockArt slab className="mx-auto" />
+        <div className="flex flex-col-reverse">
           {blocks.map(({ key, label: block }, step) => (
             <div key={key} data-block={key} className="flex items-center gap-2">
-              <div className={cn('h-7 w-20 shrink-0', styles.block, styles.light)} style={stepOf(step + 1)} />
+              <BlockArt className={styles.light} style={stepOf(step + 1)} />
               <span className={cn('text-caption', styles.soft)}>{block}</span>
             </div>
           ))}
           <div data-block={next.key} data-unpaid="" className="flex items-center gap-2">
-            <div className={cn('h-7 w-20 shrink-0', styles.unpaid)} />
+            <div className={cn('h-10 w-24 shrink-0', styles.unpaid)} />
             <span className={cn('text-caption', styles.soft)}>{next.label}</span>
           </div>
         </div>

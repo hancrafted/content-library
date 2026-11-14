@@ -25,6 +25,12 @@ const GEMINI_CLI = {
 const NNG = { slug: 'nngroup-progressive-disclosure', url: 'https://www.nngroup.com/articles/progressive-disclosure/' };
 
 const SKILL = 'collect-sediment-sample';
+/** The extras' words under their drawings on the side table, at the Spec's places. */
+const EXTRA_LABELS = [
+  { key: 'guide', x: 893 },
+  { key: 'label', x: 1012 },
+  { key: 'preset', x: 1131 },
+] as const;
 const FILES = ['references/species-guide.md', 'assets/label-template.md', 'scripts/arm-preset.py'];
 
 /**
@@ -164,15 +170,16 @@ export const threeLevelsOfLoading = slide({
           zone="surface"
           iceberg="none"
           label={t('alt.room')}
-          className={cn(styles.scene, 'aspect-[2/1] w-full rounded-2xl shadow-md')}
+          className={cn(styles.scene, 'aspect-[120/47] w-full rounded-2xl shadow-md')}
           overlay={
             <>
-              <Badge n={1} x={60} y={242} />
-              <Badge n={2} x={PROPPED.x} y={PROPPED.y} />
-              <Badge n={3} x={925} y={500} />
+              <Badge n={1} x={58} y={58} />
+              <Badge n={2} x={PROPPED.x - 4} y={PROPPED.y - 4} />
+              <Badge n={3} x={850} y={216} />
               <div
-                style={{ ...at(PROPPED.x, PROPPED.y), width: `${(PROPPED.width / SCENE_WIDTH) * 100}%` }}
-                className="absolute hidden flex-col gap-0.5 p-2 text-caption leading-tight text-foreground @3xl:flex"
+                data-propped-words
+                style={{ ...at(PROPPED.x, PROPPED.y), minWidth: `${(PROPPED.width / SCENE_WIDTH) * 100}%` }}
+                className="absolute hidden w-max flex-col gap-0.5 rounded-sm bg-card px-2 pt-3 pb-2 text-caption leading-tight whitespace-nowrap text-card-foreground @3xl:flex"
               >
                 <span className="font-semibold">{t('art.cardTitle')}</span>
                 <span>{t('art.cardSteps.0')}</span>
@@ -180,19 +187,20 @@ export const threeLevelsOfLoading = slide({
                 <span>{t('art.cardSteps.2')}</span>
               </div>
               <p
-                style={at(225, 640)}
+                style={at(220, 346)}
                 className="absolute hidden -translate-x-1/2 text-caption font-semibold whitespace-nowrap text-foreground @3xl:block"
               >
                 {t('art.shelfLabel')}
               </p>
-              <p
-                style={at(1030, 628)}
-                className="absolute hidden -translate-x-1/2 gap-2 text-caption font-semibold whitespace-nowrap text-foreground @3xl:flex"
-              >
-                <span>{t('art.extras.guide')}</span>
-                <span>{t('art.extras.label')}</span>
-                <span>{t('art.extras.preset')}</span>
-              </p>
+              {EXTRA_LABELS.map(({ key, x }) => (
+                <p
+                  key={key}
+                  style={at(x, 316)}
+                  className="absolute hidden -translate-x-1/2 text-caption font-semibold whitespace-nowrap text-foreground @3xl:block"
+                >
+                  {t(`art.extras.${key}`)}
+                </p>
+              ))}
             </>
           }
         >

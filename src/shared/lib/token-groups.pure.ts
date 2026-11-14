@@ -7,6 +7,12 @@ import { classifyToken, type Token } from './token-discovery.pure';
 const TAG_PREFIX = '--tag-';
 const TAG_DESCRIPTION = 'Colour of one Tag: icon, ink and wash of the cards it leads.';
 
+/** The Iceberg style's tones: one value per zone, then the scenery several of its Slides repeat (design-ADR 0025). */
+const ZONE_PREFIX = '--zone-';
+const ZONE_DESCRIPTION = 'Iceberg zone colour: a title Slide, the gauge and the rail at that depth.';
+const SCENERY_PREFIX = '--scenery-';
+const SCENERY_DESCRIPTION = 'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (design-ADR 0025).';
+
 const DESCRIPTIONS: Record<string, string> = {
   '--primary': 'Main action colour: primary buttons and the strongest emphasis.',
   '--primary-foreground': 'Text and icons on a primary surface.',
@@ -67,6 +73,8 @@ const DESCRIPTIONS: Record<string, string> = {
 /** One line on what a global token affects; `undefined` for a token not in the table (a Slide's own, say). */
 export function describeToken(name: string): string | undefined {
   if (name.startsWith(TAG_PREFIX)) return TAG_DESCRIPTION;
+  if (name.startsWith(ZONE_PREFIX)) return ZONE_DESCRIPTION;
+  if (name.startsWith(SCENERY_PREFIX)) return SCENERY_DESCRIPTION;
   return DESCRIPTIONS[name];
 }
 
@@ -119,6 +127,7 @@ const GROUPS: readonly { label: string; names?: readonly string[]; prefixes?: re
   { label: 'Lines & focus', names: ['--border', '--input', '--ring', '--highlight-target'] },
   { label: 'Domain', names: ['--machine', '--human', '--ai', '--bulb', '--bulb-edge'] },
   { label: 'Tags', prefixes: [TAG_PREFIX] },
+  { label: 'Iceberg', prefixes: [ZONE_PREFIX, SCENERY_PREFIX] },
   { label: 'Chrome', names: ['--selected', '--selected-foreground', '--youtube', '--overlay'] },
   { label: 'Typography', prefixes: ['--size-', '--leading-', '--tracking-', '--weight-', '--font-'] },
   { label: 'Shape', names: ['--radius'] },
