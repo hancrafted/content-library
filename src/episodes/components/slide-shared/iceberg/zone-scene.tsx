@@ -47,13 +47,11 @@ export interface ZoneSceneProps {
   /**
    * The Scene is a Section title's drawing, so it adds its zone's title life (feedback 2, decision 11): on a Twilight
    * title a lanternfish school and a siphonophore beside the drifting jellies; every other zone draws as on a page.
+   * A Surface title's drawing starts at the top (feedback 3, decision 48); `figuresReach` is how far the Slide's
+   * figures reach above the waterline, such as the ship's masthead, and the drawing moves down only as far as keeps
+   * them below the title.
    */
-  readonly sectionTitle?: boolean;
-  /**
-   * How far the Slide's figures reach above the waterline on a Surface Section title, such as the ship's masthead:
-   * the drawing starts at the top (feedback 3, decision 48) and moves down only as far as keeps them below the title.
-   */
-  readonly figuresReach?: number;
+  readonly sectionTitle?: boolean | { readonly figuresReach: number };
   /**
    * `false` when the Slide's overlay covers the zone's open water, so its ambient creature (the Midnight whale, the
    * Twilight jellies) would show only as a stray part between the overlay's cards. The water, rays and seabed stay.
@@ -181,14 +179,14 @@ function Ground({ sky, rise }: { readonly sky: boolean; readonly rise: number })
 }
 
 /** How a Scene fills its box: from the bottom, or a Surface title from the top, lifted clear of its title's words. */
-function fillOf(sectionTitle: boolean | undefined, sky: boolean, reach: number | undefined) {
+function fillOf(sectionTitle: ZoneSceneProps['sectionTitle'], sky: boolean) {
   if (!sectionTitle || !sky) return { aspect: 'xMidYMax slice', rise: 0 } as const;
   return {
     aspect: 'xMidYMin slice',
     rise: SKY_RISE,
     root: styles.lifted,
     drawing: styles.liftedDrawing,
-    style: sectionTitleLiftStyle(reach ?? 0),
+    style: sectionTitleLiftStyle(sectionTitle === true ? 0 : sectionTitle.figuresReach),
   } as const;
 }
 
@@ -200,9 +198,9 @@ function fillOf(sectionTitle: boolean | undefined, sky: boolean, reach: number |
  * it from the top instead, its whole sky at the top edge, moved down only as far as keeps its figures under the title.
  */
 export function ZoneScene(props: ZoneSceneProps) {
-  const { zone, iceberg, sectionTitle, figuresReach, openWater, label, children, overlay, className } = props;
-  const parts = zoneSceneParts({ zone, iceberg, sectionTitle });
-  const fill = fillOf(sectionTitle, parts.sky, figuresReach);
+  const { zone, iceberg, sectionTitle, openWater, label, children, overlay, className } = props;
+  const parts = zoneSceneParts({ zone, iceberg, sectionTitle: Boolean(sectionTitle) });
+  const fill = fillOf(sectionTitle, parts.sky);
   const tokens = { '--zone': zoneToken(zone), '--water': zoneToken(parts.water), ...fill.style } as CSSProperties;
   return (
     <SceneMotionRoot
@@ -222,7 +220,7 @@ export function ZoneScene(props: ZoneSceneProps) {
         {parts.rays && <LightRays x={60} y={0} count={7} spread={150} length={700} />}
         <Berg part={parts.iceberg} surface={parts.sky} />
         {parts.seabed && <Seabed y={SEABED_TOP} />}
-        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={sectionTitle ?? false} open={openWater} />
+        <Life life={parts.life} titleLife={parts.titleLife} sectionTitle={Boolean(sectionTitle)} open={openWater} />
         {children}
       </svg>
       {overlay}
