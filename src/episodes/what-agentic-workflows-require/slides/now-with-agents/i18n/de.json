@@ -1,0 +1,126 @@
+{
+  "title": "Jetzt mit Agenten",
+  "caption": "KI beschleunigt das Tun, aber sie <b>kann keinen Kontext ergänzen, den ihr niemand gegeben hat</b>: Dieselben vier Fehler kommen in 2 Minuten statt in 2 Wochen.",
+  "board": {
+    "label": "Dasselbe Board, dieselben Zettel",
+    "detail": "an vier Agenten übergeben"
+  },
+  "cardsLabel": "Vier abgehakte Karten",
+  "ownGoalMet": "Eigenes Ziel erreicht",
+  "stamp": "2 Min.",
+  "doneBy": {
+    "person": "Von einer Person erledigt",
+    "agent": "Von einem Agenten erledigt"
+  },
+  "done": "Erledigt",
+  "fails": "Scheitert",
+  "breaks": {
+    "together": "✗ zusammen",
+    "safely": "✗ sicher"
+  },
+  "halves": {
+    "together": "zusammen",
+    "safely": "sicher"
+  },
+  "cards": {
+    "activities": {
+      "label": "Programm",
+      "fact": "Paintball × 200",
+      "seamCard": "Anreise",
+      "held": "barrierefreier Bus"
+    },
+    "travel": {
+      "label": "Anreise",
+      "fact": "Alle fahren in Fahrgemeinschaften",
+      "seamCard": "Essen & Getränke",
+      "held": "offene Bar bis 01:00"
+    },
+    "venue": {
+      "label": "Location",
+      "fact": "Almhütte, 1.800 m",
+      "seamCard": "Anreise",
+      "held": "nur Route und Zeiten"
+    },
+    "food": {
+      "label": "Essen & Getränke",
+      "fact": "31 vegetarisch",
+      "seamCard": "Location",
+      "held": "Hüttenküche: Eier okay"
+    }
+  },
+  "result": {
+    "title": "Fest, 20. Juni",
+    "goal": "Ziel: alle feiern zusammen und kommen sicher nach Hause",
+    "broken": {
+      "together": "Programm, Essen & Getränke",
+      "safely": "Anreise, Location"
+    }
+  },
+  "speed": {
+    "label": "Jede Karte",
+    "value": "2 Min.",
+    "before": "2 Wochen",
+    "claim": "dieselben vier Fehler, nur schneller erreicht"
+  },
+  "context": {
+    "title": "Was kein Agent gesagt bekam",
+    "items": {
+      "public-text": "Mit öffentlichen Texten trainiert",
+      "own-talk": "Was in Deiner Firma gesagt wird, steckt nicht darin",
+      "rare-facts": "Seltene Fakten werden schlecht gelernt",
+      "with-the-task": "Also muss der Kontext mit der Aufgabe kommen"
+    }
+  },
+  "notes": {
+    "a-model-can-learn-from-public-text-alone": {
+      "header": "Ein Modell kann allein aus öffentlichen Texten lernen",
+      "description": "Die Autoren von LLaMA wollten zeigen, dass sich Modelle auf dem Stand der Technik ausschließlich mit öffentlich verfügbaren Datensätzen trainieren lassen [1].",
+      "sources": {
+        "touvron-llama": {
+          "title": "Touvron et al., LLaMA: Open and Efficient Foundation Language Models"
+        }
+      }
+    },
+    "customer-conversations-are-not-training-data": {
+      "header": "Kundengespräche sind keine Trainingsdaten",
+      "description": "Anthropic gibt an, Eingaben und Ausgaben seiner kommerziellen Produkte standardmäßig nicht zum Training zu nutzen; die internen Abläufe, Entscheidungen und Begriffe eines Unternehmens fehlen also weitgehend in dem, was ein Modell gelernt hat [1].",
+      "sources": {
+        "anthropic-commercial-training": {
+          "title": "Anthropic, Is my data used for model training? (commercial products)"
+        }
+      }
+    },
+    "rare-facts-are-learned-poorly": {
+      "header": "Seltene Fakten werden schlecht gelernt",
+      "description": "Wie gut ein Modell eine Faktenfrage beantwortet, hängt davon ab, wie viele Trainingsdokumente den Fakt erwähnen; selbst ein Fakt, der in den Daten steckt, sitzt also schwach, wenn er selten ist [1].",
+      "sources": {
+        "kandpal-long-tail": {
+          "title": "Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge"
+        }
+      }
+    },
+    "the-context-must-be-supplied": {
+      "header": "Der Kontext muss mitgeliefert werden",
+      "description": "Die Forschung zu Retrieval verbindet das Modell mit einem durchsuchbaren Gedächtnis, das bei jeder Anfrage befragt wird; deshalb muss das Wissen einer Organisation mit der Anfrage ankommen [1].",
+      "sources": {
+        "lewis-rag": {
+          "title": "Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "speed-not-context": {
+        "title": "Tempo, nicht Kontext",
+        "keywords": "",
+        "script": "Jetzt gib dieselben vier Karten an Agenten. Jede Karte ist viel schneller abgehakt, das ist wunderbar, und genau dort sitzt die Falle. KI beschleunigt das Tun, aber sie kann keinen Kontext ergänzen, den ihr niemand gegeben hat, und der Paintball-Agent hat den barrierefreien Bus nie gesehen."
+      },
+      "plausible-guess": {
+        "title": "Plausible Vermutung",
+        "keywords": "",
+        "script": "Schlimmer noch: Ein Agent, der auf eine Lücke stößt, füllt sie meist mit einer plausiblen Vermutung, statt anzuhalten und Dich zu fragen. Niemand hat dem Essens-Agenten gesagt, was vegetarisch für diese Kolleginnen und Kollegen bedeutet, also nimmt er die häufigste Lesart und macht weiter. Dieselben vier Fehler tauchen an denselben vier Stellen auf, nur erreichst Du sie jetzt in zwei Minuten statt in zwei Wochen."
+      }
+    }
+  }
+}

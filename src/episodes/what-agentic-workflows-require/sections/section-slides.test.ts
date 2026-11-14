@@ -178,7 +178,7 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('opens each placement marker with its section slide, never a page Slide', () => {
+  it('opens each placement marker with its own section slide, never a page Slide', () => {
     // ARRANGE
     const expected = [
       'a-thought-experiment',
