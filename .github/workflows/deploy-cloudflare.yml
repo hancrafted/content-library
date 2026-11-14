@@ -6,7 +6,19 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
+  # A pull request gets a preview only when it changes what the export is built from; a docs- or tooling-only pull
+  # request skips it. Keep this list in step with the build's inputs: docs/features/hosting.md.
   pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'next.config.ts'
+      - 'tsconfig.json'
+      - 'postcss.config.mjs'
+      - 'raw-text-files.mts'
+      - '.github/workflows/deploy-cloudflare.yml'
   workflow_dispatch:
 
 permissions:
