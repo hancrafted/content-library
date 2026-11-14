@@ -136,7 +136,7 @@ The human-in-the-loop Explorable with its summer-party Workflow ("Plan a summer 
 
 master: basic-page · motion: none
 
-The three levels as stacked bands, risk rising towards in and speed towards out. Each band holds its one-line definition, its role and a party task as its example: in, the gatekeeper approves (booking the activity); on, the pilot watches and steps in on exceptions (the venue); out, the auditor checks the logs afterwards (the guest list). Design inspiration: the risk traffic light and the spectrum of autonomy in `.scratch/what-agentic-workflows-require/spec/inspiration/`.
+The three levels as three cards side by side, risk highest at in and speed highest at out. Each level holds its full name and abbreviation, its one-line definition and its role, and one party task, booking the venue, as its example at every level: in, the gatekeeper approves (the agent proposes a venue and nothing is booked until you say yes); on, the pilot watches and steps in on exceptions (the agent books and you read its reports); out, the auditor checks the logs afterwards (the agent books and you get the confirmation). Design inspiration: the risk traffic light and the spectrum of autonomy in `.scratch/what-agentic-workflows-require/spec/inspiration/`.
 
 #### Speaker notes
 
@@ -157,9 +157,9 @@ The three levels as stacked bands, risk rising towards in and speed towards out.
 
 #### Voice script
 
-1. **In** — In the loop means the agent acts only after a person has approved. Think of the activity for the party: nothing is booked until you say yes.
-2. **On** — On the loop means the agent acts on its own while a person watches and can step in. The venue works like this, you read the reports and you intervene when something looks wrong.
-3. **Out** — Out of the loop means the agent acts without any person, who sees only the result. The guest list can work like this, because you are happy to receive the finished list and move on.
+1. **In** — Human in the loop means the agent acts only after a person has approved. Take booking the venue for the party: the agent proposes a venue, and nothing is booked until you say yes.
+2. **On** — Human on the loop means the agent acts on its own while a person watches and can step in. Now the agent books the venue itself, you read its reports, and you step in when something looks wrong.
+3. **Out** — Human out of the loop means the agent acts without any person, who sees only the result. The agent books the venue, and all you get is the confirmation.
 4. **Borrowed terms** — These three terms were borrowed from automation outside AI, from fields where an automated action often cannot be undone, so what role the person plays was decided on purpose and not left to chance. The detail is in the Speaker notes. We borrow them because the question is the same for your agents.
 5. **Per task** — So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task.
 

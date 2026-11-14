@@ -1358,6 +1358,9 @@
         .col-start-6 {
           grid-column-start: 6;
         }
+        .row-span-3 {
+          grid-row: span 3 / span 3;
+        }
         .container {
           width: 100%;
           @media (width >= 40rem) {
@@ -1574,6 +1577,9 @@
         .min-w-0 {
           min-width: 0px;
         }
+        .min-w-8 {
+          min-width: calc(var(--spacing) * 8);
+        }
         .flex-1 {
           flex: 1;
         }
@@ -1637,6 +1643,9 @@
         }
         .grid-cols-12 {
           grid-template-columns: repeat(12, minmax(0, 1fr));
+        }
+        .grid-rows-subgrid {
+          grid-template-rows: subgrid;
         }
         .flex-col {
           flex-direction: column;
@@ -1724,6 +1733,9 @@
         }
         .gap-y-2 {
           row-gap: calc(var(--spacing) * 2);
+        }
+        .gap-y-4 {
+          row-gap: calc(var(--spacing) * 4);
         }
         :where(.divide-x > :not(:last-child)) {
           --tw-divide-x-reverse: 0;
@@ -3242,7 +3254,7 @@
         "status": "draft",
         "generated": {
           "by": "process:spec-assemble",
-          "at": "2026-11-14T20:13:24Z"
+          "at": "2026-11-14T20:24:07Z"
         },
         "locale": "en",
         "brief": "../brief.md"
@@ -13711,22 +13723,28 @@
                               </p>
                             </div>
                           </div>
-                          <div class="relative flex flex-col gap-5 rounded-xl bg-muted p-8">
+                          <div class="relative flex flex-col gap-6 rounded-xl bg-muted p-8">
                             <span
                               class="absolute -top-4 right-10 rotate-2 rounded-md bg-primary px-4 py-1 text-body font-semibold text-primary-foreground shadow-md"
                               >Chosen per task</span
                             >
                             <ol
-                              class="focus-group focus-group--dim-others grid grid-cols-3 gap-6"
+                              class="focus-group focus-group--dim-others grid grid-cols-3 gap-x-6 gap-y-4"
                               aria-label="Three levels of human oversight"
                             >
                               <li
-                                class="focus-group__item card-hover card-hover--raise flex flex-col gap-3 rounded-lg bg-card p-5 shadow-md"
+                                class="focus-group__item card-hover card-hover--raise row-span-3 grid grid-rows-subgrid gap-y-4 rounded-lg bg-card p-5 shadow-md"
                               >
-                                <span
-                                  class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
-                                  >In the loop</span
-                                >
+                                <div class="flex flex-col items-start gap-2">
+                                  <span
+                                    class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
+                                    >In the loop</span
+                                  >
+                                  <p class="text-body">
+                                    <b class="font-semibold">Human in the loop</b>
+                                    <span class="text-muted-foreground">· HITL</span>
+                                  </p>
+                                </div>
                                 <p class="text-body">The agent acts only after a person approves.</p>
                                 <div class="flex items-center gap-3 border-t border-border pt-3">
                                   <svg viewBox="0 0 40 40" class="w-10 shrink-0" aria-hidden="true">
@@ -13744,26 +13762,32 @@
                                 </div>
                               </li>
                               <li
-                                class="focus-group__item card-hover card-hover--raise flex flex-col gap-3 rounded-lg bg-card p-5 shadow-md"
+                                class="focus-group__item card-hover card-hover--raise row-span-3 grid grid-rows-subgrid gap-y-4 rounded-lg bg-card p-5 shadow-md"
                               >
-                                <span class="flex items-center gap-1"
-                                  ><span
+                                <div class="flex flex-col items-start gap-2">
+                                  <span
                                     class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
                                     >On the loop</span
-                                  ><span
-                                    data-spec="context-marker"
-                                    data-note='Two senses of "on"'
-                                    role="img"
-                                    aria-label='Speaker note: Two senses of "on"'
-                                    class="inline-flex align-middle text-primary"
-                                    ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
-                                      <path
-                                        d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
-                                        class="fill-none stroke-current"
-                                        stroke-width="1.5"
-                                        stroke-linejoin="round"
-                                      ></path></svg></span
-                                ></span>
+                                  >
+                                  <p class="text-body">
+                                    <b class="font-semibold">Human on the loop</b>
+                                    <span class="text-muted-foreground">· HOTL</span>
+                                    <span
+                                      data-spec="context-marker"
+                                      data-note='Two senses of "on"'
+                                      role="img"
+                                      aria-label='Speaker note: Two senses of "on"'
+                                      class="inline-flex align-middle text-primary"
+                                      ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                        <path
+                                          d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                          class="fill-none stroke-current"
+                                          stroke-width="1.5"
+                                          stroke-linejoin="round"
+                                        ></path></svg
+                                    ></span>
+                                  </p>
+                                </div>
                                 <p class="text-body">It acts on its own while a person watches and can step in.</p>
                                 <div class="flex items-center gap-3 border-t border-border pt-3">
                                   <svg viewBox="0 0 40 40" class="w-10 shrink-0" aria-hidden="true">
@@ -13781,12 +13805,18 @@
                                 </div>
                               </li>
                               <li
-                                class="focus-group__item card-hover card-hover--raise flex flex-col gap-3 rounded-lg bg-card p-5 shadow-md"
+                                class="focus-group__item card-hover card-hover--raise row-span-3 grid grid-rows-subgrid gap-y-4 rounded-lg bg-card p-5 shadow-md"
                               >
-                                <span
-                                  class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
-                                  >Out of the loop</span
-                                >
+                                <div class="flex flex-col items-start gap-2">
+                                  <span
+                                    class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
+                                    >Out of the loop</span
+                                  >
+                                  <p class="text-body">
+                                    <b class="font-semibold">Human out of the loop</b>
+                                    <span class="text-muted-foreground">· HOOTL</span>
+                                  </p>
+                                </div>
                                 <p class="text-body">It acts without any person, who sees only the result.</p>
                                 <div class="flex items-center gap-3 border-t border-border pt-3">
                                   <svg viewBox="0 0 40 40" class="w-10 shrink-0" aria-hidden="true">
@@ -13809,6 +13839,82 @@
                                     <p class="text-caption text-muted-foreground">checks the logs afterwards</p>
                                   </div>
                                 </div>
+                              </li>
+                            </ol>
+                            <div class="flex items-center gap-3">
+                              <svg viewBox="0 0 24 24" class="size-6 shrink-0" aria-hidden="true">
+                                <path
+                                  d="M12 3 V19 M6 13 L12 20 L18 13"
+                                  class="fill-none stroke-foreground"
+                                  stroke-width="2.5"
+                                ></path>
+                              </svg>
+                              <span
+                                class="shrink-0 whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-caption uppercase text-background"
+                                >One task, three ways</span
+                              >
+                              <p class="text-body">
+                                <span class="text-muted-foreground">Venue ·</span>
+                                <b class="font-semibold">Book a venue for 200 on 20 June</b>
+                              </p>
+                              <svg
+                                viewBox="0 0 120 24"
+                                preserveAspectRatio="none"
+                                class="h-6 min-w-8 flex-1"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  d="M2 12 H116 M106 4 L118 12 L106 20"
+                                  class="fill-none stroke-foreground"
+                                  stroke-width="2.5"
+                                  vector-effect="non-scaling-stroke"
+                                ></path>
+                              </svg>
+                              <div class="w-1/4 shrink-0 rounded-md border-2 border-foreground bg-card p-3 shadow-md">
+                                <p class="text-caption uppercase text-muted-foreground">Goal</p>
+                                <p class="mt-1 text-body font-semibold">
+                                  20 June: everyone celebrates together and gets home safely
+                                </p>
+                              </div>
+                            </div>
+                            <ol class="grid grid-cols-3 gap-6" aria-label="Booking the venue at each level">
+                              <li class="relative flex flex-col gap-1 -rotate-1 rounded-md bg-card p-4 shadow-md">
+                                <span
+                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
+                                  >Agent</span
+                                >
+                                <span
+                                  class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
+                                  >In the loop</span
+                                >
+                                <p class="text-body font-semibold">Proposes a venue</p>
+                                <p class="text-caption text-muted-foreground">Nothing is booked until you say yes.</p>
+                              </li>
+                              <li class="relative flex flex-col gap-1 rotate-1 rounded-md bg-card p-4 shadow-md">
+                                <span
+                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
+                                  >Agent</span
+                                >
+                                <span
+                                  class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
+                                  >On the loop</span
+                                >
+                                <p class="text-body font-semibold">Books the venue and reports</p>
+                                <p class="text-caption text-muted-foreground">
+                                  You read the reports and step in if something looks wrong.
+                                </p>
+                              </li>
+                              <li class="relative flex flex-col gap-1 -rotate-1 rounded-md bg-card p-4 shadow-md">
+                                <span
+                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
+                                  >Agent</span
+                                >
+                                <span
+                                  class="w-fit whitespace-nowrap rounded-full border-2 border-foreground px-3 text-caption font-semibold"
+                                  >Out of the loop</span
+                                >
+                                <p class="text-body font-semibold">Books the venue</p>
+                                <p class="text-caption text-muted-foreground">You get the confirmation.</p>
                               </li>
                             </ol>
                             <div class="flex flex-col gap-1">
@@ -13845,71 +13951,6 @@
                                         stroke-linejoin="round"
                                       ></path></svg></span
                                 ></span>
-                              </div>
-                            </div>
-                            <div class="flex items-center gap-0 pt-2">
-                              <div class="relative min-w-0 flex-1 -rotate-1 rounded-md bg-card p-3 shadow-md">
-                                <span
-                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
-                                  >Agent</span
-                                >
-                                <p class="text-caption uppercase text-muted-foreground">Activities · in</p>
-                                <p class="text-body font-semibold">Book the activity for 200</p>
-                                <p class="text-caption text-muted-foreground">Nothing is booked until you say yes.</p>
-                              </div>
-                              <div class="flex w-20 shrink-0 flex-col items-center text-center">
-                                <span class="text-caption text-muted-foreground">programme</span>
-                                <svg viewBox="0 0 80 16" class="w-full" aria-hidden="true">
-                                  <path
-                                    d="M2 8 H74 M68 3 L76 8 L68 13"
-                                    class="fill-none stroke-foreground"
-                                    stroke-width="2"
-                                  ></path>
-                                </svg>
-                              </div>
-                              <div class="relative min-w-0 flex-1 rotate-1 rounded-md bg-card p-3 shadow-md">
-                                <span
-                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
-                                  >Agent</span
-                                >
-                                <p class="text-caption uppercase text-muted-foreground">Venue · on</p>
-                                <p class="text-body font-semibold">A venue for 200 on 20 June</p>
-                                <p class="text-caption text-muted-foreground">You read the reports.</p>
-                              </div>
-                              <div class="flex w-20 shrink-0 flex-col items-center text-center">
-                                <span class="text-caption text-muted-foreground">address</span>
-                                <svg viewBox="0 0 80 16" class="w-full" aria-hidden="true">
-                                  <path
-                                    d="M2 8 H74 M68 3 L76 8 L68 13"
-                                    class="fill-none stroke-foreground"
-                                    stroke-width="2"
-                                  ></path>
-                                </svg>
-                              </div>
-                              <div class="relative min-w-0 flex-1 -rotate-1 rounded-md bg-card p-3 shadow-md">
-                                <span
-                                  class="absolute -top-3 right-3 rounded-full border border-ai bg-card px-2 text-caption text-ai"
-                                  >Agent</span
-                                >
-                                <p class="text-caption uppercase text-muted-foreground">Guest list · out</p>
-                                <p class="text-body font-semibold">200 names, 5 offices</p>
-                                <p class="text-caption text-muted-foreground">You get the finished list.</p>
-                              </div>
-                              <div class="flex w-20 shrink-0 flex-col items-center text-center">
-                                <span class="text-caption text-muted-foreground">200 guests</span>
-                                <svg viewBox="0 0 80 16" class="w-full" aria-hidden="true">
-                                  <path
-                                    d="M2 8 H74 M68 3 L76 8 L68 13"
-                                    class="fill-none stroke-foreground"
-                                    stroke-width="2"
-                                  ></path>
-                                </svg>
-                              </div>
-                              <div class="min-w-0 flex-1 rounded-md border-2 border-foreground bg-card p-3 shadow-md">
-                                <p class="text-caption uppercase text-muted-foreground">Goal</p>
-                                <p class="mt-1 text-body font-semibold">
-                                  20 June: everyone celebrates together and gets home safely
-                                </p>
                               </div>
                             </div>
                             <div
@@ -13972,9 +14013,11 @@
                         >
                       </label>
                       <figcaption>
-                        <b>5b</b> A spectrum: three role cards left to right from in to out, two opposing wedges for
-                        risk and speed beneath, and the party chain under them, each task on its level, ending at the
-                        goal. Build cost: Scene.
+                        <b>5b</b> A spectrum: three level cards left to right from in to out, each under its shared
+                        oversight pill naming the level in full with its abbreviation, its definition and its role, and
+                        under each card the same task, booking the venue, as it runs at that level, led by an arrow to
+                        the goal note at the right edge, above two opposing wedges for risk and speed. Build cost:
+                        Scene.
                       </figcaption>
                       <details class="spec-build">
                         <summary>Build notes</summary>
@@ -13984,26 +14027,45 @@
                             (<code>.scratch/what-agentic-workflows-require/spec/inspiration/slide-5-spectrum-of-autonomy.png</code>)
                             for the columns, with the risk traffic light's roles (gatekeeper, pilot, auditor) and its
                             two forces as SVG wedges (<code>fill-foreground/20</code> and <code>/60</code>, no status
-                            colours). The examples move into the board's chain, so the example and the workflow read as
-                            one. Parts in the Slide's folder: <code>LevelCard</code> (<code
-                              >{ level: 'in' | 'on' | 'out'; label: string; definition: string; role: { name: string;
-                              does: string; icon: 'gate' | 'eye' | 'log' } }</code
+                            colours). Han's round-2 note: each card now states the full name ("Human in the loop",
+                            "Human on the loop", "Human out of the loop") as its heading with the abbreviation (HITL,
+                            HOTL, HOOTL) beside it in muted text, under the Visual language's shared oversight pill ("In
+                            the loop", "On the loop", "Out of the loop", the same labels as 5a and Slide 6), then the
+                            definition; the cards share one row grid (the <code>ol</code> is <code>grid-cols-3</code>,
+                            each card <code>row-span-3 grid-rows-subgrid</code> over name, definition and role), so the
+                            role block's divider sits at the same height in all three without any fixed height (FE-009);
+                            the chain of three different party tasks is replaced by one task, booking the venue, shown
+                            under each card at its level in a second <code>grid-cols-3</code> with the same gap, each
+                            example note carrying the same shared pill, so each example sits under its card. The goal
+                            note stays at the right edge, as the Visual language requires: the one-task strip between
+                            the two grids ends in an SVG arrow to a <code>w-1/4</code> goal note, so the task leads to
+                            the goal while both <code>grid-cols-3</code> keep the board's full width and their columns
+                            stay aligned. The venue reads most clearly to a manager of the four cards: proposing,
+                            booking with reports, and booking with only a confirmation are three familiar ways to
+                            delegate a booking, and a booking commits money, so the risk of each level is plain;
+                            Activities is kept for Slide 6, where it moves from in to on, and the guest list, not one of
+                            Slide 1's cards, leaves the Slide. Parts in the Slide's folder:
+                            <code>LevelCard</code> (<code
+                              >{ level: 'in' | 'on' | 'out'; label: string; name: string; abbr: string; definition:
+                              string; role: { name: string; does: string; icon: 'gate' | 'eye' | 'log' } }</code
+                            >), placed by <code>LevelGrid</code> with the subgrid; <code>TaskExample</code> (<code
+                              >{ level: 'in' | 'on' | 'out'; label: string; text: string; aside: string }</code
+                            >), one per level of the one task, under <code>ExampleTask</code> (<code
+                              >{ card: string; task: string; label: string }</code
                             >); <code>ForceWedges</code> (<code
                               >{ risk: { label: string; hint: string }; speed: { label: string; hint: string } }</code
-                            >); <code>TaskNote</code> (<code
-                              >{ card: string; level: 'in' | 'on' | 'out'; fact: string; aside: string }</code
-                            >); <code>Handoff</code>; <code>OriginStrip</code> and the goal note as in 5a. Hover: the
-                            level cards are <code>focus-group__item</code>s with <code>card-hover--raise</code>. "Chosen
-                            per task" is the one <code>bg-primary</code> fill. 5a is recommended over this because here
-                            the eye reads three tiers (cards, wedges, chain) before the claim lands. Context markers:
-                            caption opens "Out is a per-step property"; beside "On the loop" opens "Two senses of “on”";
-                            beside Speed opens "Levels are not a strict ladder"; after the two origin pills open "Origin
-                            of the three terms" and "Aviation supplied the concept, not the words". i18n keys
-                            <code>title</code>, <code>caption</code>, <code>stamp</code>,
-                            <code>levels.in|on|out.label|definition|role|does</code>, <code>risk.label|hint</code>,
-                            <code>speed.label|hint</code>,
-                            <code>notes.activities|venue|guestList.card|fact|aside</code>,
-                            <code>handoffs.programme|address|guests</code>, <code>goal.label|text</code>,
+                            >); <code>OriginStrip</code> as in 5a; the goal note styled as in 5a, reached by an SVG
+                            arrow instead of a brace. The oversight pills and agent badges are the Visual language's
+                            parts. Hover: the level cards are <code>focus-group__item</code>s with
+                            <code>card-hover--raise</code>. "Chosen per task" is the one <code>bg-primary</code> fill.
+                            5a is recommended over this because here the eye reads three tiers (cards, example, wedges)
+                            before the claim lands. Context markers: caption opens "Out is a per-step property"; beside
+                            "Human on the loop" opens "Two senses of “on”"; beside Speed opens "Levels are not a strict
+                            ladder"; after the two origin pills open "Origin of the three terms" and "Aviation supplied
+                            the concept, not the words". i18n keys <code>title</code>, <code>caption</code>,
+                            <code>stamp</code>, <code>levels.in|on|out.label|name|abbr|definition|role|does</code>,
+                            <code>example.label|card|task</code>, <code>example.in|on|out.text|aside</code>,
+                            <code>risk.label|hint</code>, <code>speed.label|hint</code>, <code>goal.label|text</code>,
                             <code>origin.label|words|concept</code>.
                           </div>
                         </div>
@@ -14379,11 +14441,13 @@
                         <div class="spec-panel-body">
                           <p class="text-caption"><code>master: basic-page · motion: none</code></p>
                           <p data-spec="visual-idea">
-                            The three levels as stacked bands, risk rising towards in and speed towards out. Each band
-                            holds its one-line definition, its role and a party task as its example: in, the gatekeeper
-                            approves (booking the activity); on, the pilot watches and steps in on exceptions (the
-                            venue); out, the auditor checks the logs afterwards (the guest list). Design inspiration:
-                            the risk traffic light and the spectrum of autonomy in
+                            The three levels as three cards side by side, risk highest at in and speed highest at out.
+                            Each level holds its full name and abbreviation, its one-line definition and its role, and
+                            one party task, booking the venue, as its example at every level: in, the gatekeeper
+                            approves (the agent proposes a venue and nothing is booked until you say yes); on, the pilot
+                            watches and steps in on exceptions (the agent books and you read its reports); out, the
+                            auditor checks the logs afterwards (the agent books and you get the confirmation). Design
+                            inspiration: the risk traffic light and the spectrum of autonomy in
                             <code>.scratch/what-agentic-workflows-require/spec/inspiration/</code>.
                           </p>
                         </div>
@@ -14393,18 +14457,18 @@
                         <div class="spec-panel-body">
                           <ol data-spec="voice-script">
                             <li>
-                              <strong>In</strong> — In the loop means the agent acts only after a person has approved.
-                              Think of the activity for the party: nothing is booked until you say yes.
+                              <strong>In</strong> — Human in the loop means the agent acts only after a person has
+                              approved. Take booking the venue for the party: the agent proposes a venue, and nothing is
+                              booked until you say yes.
                             </li>
                             <li>
-                              <strong>On</strong> — On the loop means the agent acts on its own while a person watches
-                              and can step in. The venue works like this, you read the reports and you intervene when
-                              something looks wrong.
+                              <strong>On</strong> — Human on the loop means the agent acts on its own while a person
+                              watches and can step in. Now the agent books the venue itself, you read its reports, and
+                              you step in when something looks wrong.
                             </li>
                             <li>
-                              <strong>Out</strong> — Out of the loop means the agent acts without any person, who sees
-                              only the result. The guest list can work like this, because you are happy to receive the
-                              finished list and move on.
+                              <strong>Out</strong> — Human out of the loop means the agent acts without any person, who
+                              sees only the result. The agent books the venue, and all you get is the confirmation.
                             </li>
                             <li>
                               <strong>Borrowed terms</strong> — These three terms were borrowed from automation outside
