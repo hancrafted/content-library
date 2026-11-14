@@ -1,0 +1,138 @@
+{
+  "title": "Wer ihn nutzt, und wo",
+  "caption": "Wer einen Skill nutzt, und wo, entscheidet, was hineingehört und wie viel Pflege er braucht.",
+  "analogy": "Eine Karte wandert aus deinem Notizbuch ins Flottenhandbuch; Projektkarten bleiben im Projektordner.",
+  "stamp": "Faustregel",
+  "axes": {
+    "who": {
+      "personal": {
+        "label": "Persönlich",
+        "hint": "nur du"
+      },
+      "shared": {
+        "label": "Geteilt",
+        "hint": "auch andere"
+      }
+    },
+    "where": {
+      "specific": {
+        "label": "Projektspezifisch",
+        "hint": "in einem Projekt genutzt"
+      },
+      "general": {
+        "label": "Allgemein",
+        "hint": "in jedem Projekt genutzt"
+      }
+    }
+  },
+  "care": "Pflege",
+  "careLevel": "Pflege {level} von 4",
+  "squares": {
+    "pp": {
+      "head": "Details direkt im Skill",
+      "sub": "Am wenigsten Pflege",
+      "picture": "dein Notizbuch",
+      "coding": {
+        "head": "Die Details stehen direkt in <code>{file}</code>",
+        "sub": "Ein Schritt nennt das Detail selbst, etwa <code>{step}</code>; am wenigsten Pflege."
+      }
+    },
+    "pg": {
+      "head": "Details neben dem Skill",
+      "sub": "Dein eigener Werkzeugkasten",
+      "picture": "dein Werkzeugkasten",
+      "coding": {
+        "head": "<code>{path}</code>",
+        "sub": "Lädt in jedem Projekt; die Details bleiben in den Dateien des jeweiligen Projekts."
+      }
+    },
+    "sp": {
+      "head": "Details in seinen Begleitdateien",
+      "sub": "Gehört dem Projektteam",
+      "picture": "der Projektordner",
+      "coding": {
+        "head": "<code>{path}</code>, ins Repository eingecheckt",
+        "sub": "Erreicht alle, die dort arbeiten; Details in <code>{references}</code>."
+      }
+    },
+    "sg": {
+      "head": "Details daneben, mit Verantwortlichem, Version und Evals",
+      "sub": "Mit Verantwortlichem, versioniert und getestet",
+      "picture": "das Flottenhandbuch",
+      "coding": {
+        "head": "Ein Plugin oder verwaltete Einstellungen",
+        "sub": "Erreicht ein ganzes Team: Verantwortlicher, Version und Evals, bevor er ausgeliefert wird.",
+        "picture": "ein Plugin"
+      }
+    }
+  },
+  "scribble": "Standort 4: 40 m",
+  "plan": "Tauchplan",
+  "trip": {
+    "personal": "persönlicher Skill",
+    "shared": "geteilter Skill"
+  },
+  "ownerTag": "Verantwortlich: Vermessungsteam",
+  "footer": {
+    "story": "In der Geschichte:",
+    "chat": "Das Etikett stammt von mir: Probier die Matrix an deinen eigenen Skills aus und schau, wo sie bricht.",
+    "coding": "Codex trennt Repository-Ordner von Benutzerordnern auf dieselbe Weise."
+  },
+  "alt": {
+    "matrix": "Eine Vier-Felder-Matrix. Spalten: projektspezifisch und allgemein; Zeilen: persönlich und geteilt. Persönlich und projektspezifisch: ein offenes Notizbuch mit einer Karte, auf der „Standort 4: 40 m“ gekritzelt steht. Persönlich und allgemein: ein Karteikasten neben dem angehefteten Tauchplan. Geteilt und projektspezifisch: ein Projektordner vor dem Schiff. Geteilt und allgemein: das Flottenhandbuch mit drei Schiffen; ein gestrichelter Weg trägt die Karte aus dem Notizbuch ins Handbuch, wo sie ein Schild mit dem Verantwortlichen bekommt."
+  },
+  "notes": {
+    "where-a-skill-is-stored": {
+      "header": "Wo ein Skill liegt, bestimmt, wer ihn bekommt",
+      "description": "Claude-Code-Skills im Home-Verzeichnis laden \"in every project\", Skills, die in ein Repository eingecheckt sind, erreichen \"everyone who works there\", und Plugins oder verwaltete Einstellungen erreichen \"a whole team\" [1]. Codex trennt Repository-Ordner auf dieselbe Weise von Benutzerordnern [2].",
+      "sources": {
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude-Code-Dokumentation)"
+        },
+        "codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex-Dokumentation)"
+        }
+      }
+    },
+    "the-skill-scope-matrix-is-an-inference": {
+      "header": "Die Skill-Matrix ist eine Schlussfolgerung",
+      "description": "Kein veröffentlichtes Framework verbindet die beiden Achsen zu einer Vier-Felder-Matrix mit Pflegestufen; am nächsten kommen Stufenmodelle mit einer Achse [1]. Microsofts Zonen-Governance knüpft die Pflege an die Zielgruppe, aber für Agenten, nicht für Skills: private persönliche Agenten, freigegebene Umgebungen und Admin-Freigabe für geteilte [2]. Das Feld als Faustregel kennzeichnen.",
+      "sources": {
+        "skilldex": {
+          "title": "Saha und Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
+        },
+        "microsoft-zoned-governance": {
+          "title": "Microsoft, Implement a zoned governance strategy (Copilot Studio)"
+        }
+      }
+    },
+    "evals-matter-once-a-skill-is-shared": {
+      "header": "Evals zählen, sobald ein Skill geteilt wird",
+      "description": "40 von 98 Skills kehren ihre Wirkung um, wenn zwei Harnesses dasselbe Modell ausführen; ein Skill wird daher am besten \"with the model, agent, and repositories in which it will be deployed\" bewertet [1].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-questions": {
+        "title": "Zwei Fragen",
+        "keywords": "",
+        "script": "Hier ist ein Entscheidungswerkzeug, und es stellt zwei Fragen. Wer nutzt den Skill, nur du oder auch andere? Und wo, in jedem Projekt oder in einem bestimmten?"
+      },
+      "four-squares": {
+        "title": "Vier Felder",
+        "keywords": "",
+        "script": "Daraus ergeben sich vier Felder. Persönlich und projektspezifisch: Schreib die Details direkt hinein, das braucht am wenigsten Pflege. Persönlich und allgemein: Halte die Details daneben, das ist dein eigener Werkzeugkasten. Geteilt und projektspezifisch: Die Details können in seinen Begleitdateien liegen, und das Projektteam ist verantwortlich. Geteilt und allgemein: Die Details liegen daneben, mit einem Verantwortlichen, einer Version und Evals. Wenn ein Skill also aus deinem eigenen Notizbuch in die gemeinsame Bibliothek wandert, verliert er seine Projektdetails und bekommt einen Verantwortlichen."
+      },
+      "a-rule-of-thumb": {
+        "title": "Eine Faustregel",
+        "keywords": "",
+        "script": "Diese Matrix ist eine Faustregel, und das Etikett stammt von mir. So denke ich darüber, also probier sie an deinen eigenen Skills aus und sag mir, wo sie bricht."
+      }
+    }
+  }
+}

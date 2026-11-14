@@ -1,0 +1,138 @@
+{
+  "title": "Who uses it, and where",
+  "caption": "Who uses a skill, and where, decides what goes inside it and how much care it needs.",
+  "analogy": "One card moves from your notebook to the fleet manual; project cards stay in the project binder.",
+  "stamp": "Rule of thumb",
+  "axes": {
+    "who": {
+      "personal": {
+        "label": "Personal",
+        "hint": "only you"
+      },
+      "shared": {
+        "label": "Shared",
+        "hint": "others too"
+      }
+    },
+    "where": {
+      "specific": {
+        "label": "Project-specific",
+        "hint": "used in one project"
+      },
+      "general": {
+        "label": "General use",
+        "hint": "used in any project"
+      }
+    }
+  },
+  "care": "care",
+  "careLevel": "care {level} of 4",
+  "squares": {
+    "pp": {
+      "head": "Details written into the skill",
+      "sub": "Least upkeep",
+      "picture": "your notebook",
+      "coding": {
+        "head": "The details sit inline in <code>{file}</code>",
+        "sub": "A step names the detail itself, say <code>{step}</code>; least upkeep."
+      }
+    },
+    "pg": {
+      "head": "Details kept beside the skill",
+      "sub": "Your own toolkit",
+      "picture": "your own toolkit",
+      "coding": {
+        "head": "<code>{path}</code>",
+        "sub": "Loads in every project; the details stay in each project's files."
+      }
+    },
+    "sp": {
+      "head": "Details kept in its supporting files",
+      "sub": "Owned by the project team",
+      "picture": "the project binder",
+      "coding": {
+        "head": "<code>{path}</code> committed to the repository",
+        "sub": "Reaches everyone who works there; details in <code>{references}</code>."
+      }
+    },
+    "sg": {
+      "head": "Details kept beside, with an owner, a version and evals",
+      "sub": "Owned, versioned and tested",
+      "picture": "the fleet manual",
+      "coding": {
+        "head": "A plugin or managed settings",
+        "sub": "Reaches a whole team: owner, version and evals before it ships.",
+        "picture": "a plugin"
+      }
+    }
+  },
+  "scribble": "Site 4: 40 m",
+  "plan": "Dive plan",
+  "trip": {
+    "personal": "personal skill",
+    "shared": "shared skill"
+  },
+  "ownerTag": "Owner: survey team",
+  "footer": {
+    "story": "In the story:",
+    "chat": "The label is mine: try the matrix on your own skills and see where it breaks.",
+    "coding": "Codex splits repository folders from user folders the same way."
+  },
+  "alt": {
+    "matrix": "A two-by-two matrix. Columns: project-specific and general use; rows: personal and shared. Personal and project-specific: an open notebook with a card scribbled \"Site 4: 40 m\". Personal and general: a card box beside the pinned dive plan. Shared and project-specific: a project binder in front of the ship. Shared and general: the fleet manual with three ships; a dashed path carries the card from the notebook into the manual, where it gains an owner tag."
+  },
+  "notes": {
+    "where-a-skill-is-stored": {
+      "header": "Where a skill is stored encodes who gets it",
+      "description": "Claude Code skills in the home directory load \"in every project\", skills committed to a repository reach \"everyone who works there\", and plugins or managed settings reach \"a whole team\" [1]. Codex splits repository folders from user folders the same way [2].",
+      "sources": {
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
+        },
+        "codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex documentation)"
+        }
+      }
+    },
+    "the-skill-scope-matrix-is-an-inference": {
+      "header": "The skill scope matrix is an inference",
+      "description": "no published framework combines the two axes into a 2x2 with care levels; the nearest are one-axis tier schemes [1]. Microsoft's zoned governance ties care to audience for agents, not skills: private personal agents, approved environments and admin approval for shared ones [2]. Label the square a rule of thumb.",
+      "sources": {
+        "skilldex": {
+          "title": "Saha and Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
+        },
+        "microsoft-zoned-governance": {
+          "title": "Microsoft, Implement a zoned governance strategy (Copilot Studio)"
+        }
+      }
+    },
+    "evals-matter-once-a-skill-is-shared": {
+      "header": "Evals matter once a skill is shared",
+      "description": "40 of 98 skills change sign between two harnesses running the same model, so a skill is best evaluated \"with the model, agent, and repositories in which it will be deployed\" [1].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-questions": {
+        "title": "Two questions",
+        "keywords": "",
+        "script": "Here is a decision tool, and it asks two questions. Who uses the skill, only you or others too? And where, in any project or in one in particular?"
+      },
+      "four-squares": {
+        "title": "Four squares",
+        "keywords": "",
+        "script": "Four squares come out of that. Personal and project-specific: write the details straight in, it needs the least upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner."
+      },
+      "a-rule-of-thumb": {
+        "title": "A rule of thumb",
+        "keywords": "",
+        "script": "This matrix is a rule of thumb, and the label is mine. It is how I think about it, so try it on your own skills and tell me where it breaks."
+      }
+    }
+  }
+}

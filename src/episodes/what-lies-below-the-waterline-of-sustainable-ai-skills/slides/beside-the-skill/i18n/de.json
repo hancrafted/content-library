@@ -1,0 +1,90 @@
+{
+  "title": "Neben dem Skill",
+  "caption": "Projektdetails können neben dem Skill liegen, in Dateien, die er beim Ausführen liest.",
+  "analogy": "Dieselbe Karte, jeder Standort: Diesmal erreicht der Roboter den Meeresboden bei 120 m.",
+  "wall": {
+    "head": "Der Schritt verweist auf eine Projektdatei",
+    "skillTag": "Skill",
+    "fileTag": "Projektdatei",
+    "pointsTo": "Verweist auf eine Projektdatei",
+    "card": {
+      "title": "Sedimentprobe nehmen",
+      "description": "Verwenden, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen.",
+      "codingDescription": "description: Use when we reach a new site and need a sample from the seabed.",
+      "steps": {
+        "0": "1. Arm und Röhrchen prüfen",
+        "1": "2. Auf die Tiefe aus dem heutigen Tauchplan abtauchen.",
+        "2": "3. Arm absenken",
+        "3": "4. Fang bestimmen"
+      },
+      "codingSteps": {
+        "0": "1. Check arm and tubes.",
+        "1": "2. Descend to the depth for today's site in {path}.",
+        "2": "3. Lower the arm.",
+        "3": "4. Identify the catch."
+      }
+    },
+    "plan": {
+      "title": "Projektdatei",
+      "sub": "der heutige Tauchplan",
+      "rows": {
+        "site4": "Standort 4: 40 m",
+        "site7": "Standort 7: 120 m"
+      },
+      "today": "heute"
+    },
+    "verdict": "Schritt 2 enthält keine Tiefe mehr. Er sagt der KI, wo sie nachsehen soll, und die KI liest diese Datei, wenn der Schritt läuft.",
+    "codingVerdict": "Der Schritt nennt <code>{file}</code> über <code>{variable}</code>, also findet er die Datei in jedem Projekt, in dem der Skill installiert ist."
+  },
+  "dive": {
+    "head": "Derselbe Skill an Standort 7, unverändert",
+    "site": "Standort 7",
+    "ghost": "hier ging es vorher nicht weiter",
+    "seabed": "Meeresboden 120 m",
+    "reached": "Meeresboden erreicht",
+    "verdict": "Wo der Skill von Folie 15 bei 40 m stehen blieb, erreicht dieselbe Anleitung jetzt den Meeresboden: Nur die Projektdatei hat sich geändert.",
+    "codingVerdict": "Das Beispiel des Standards selbst: das Schema aus <code>{schema}</code> lesen, statt Joins in den Skill zu schreiben.",
+    "metres": "{metres} m"
+  },
+  "footer": {
+    "story": "In der Geschichte:",
+    "chat": "Ein Skill „should teach the agent how to approach a class of problems, not what to produce for a specific instance“ (er soll eine Klasse von Problemen lehren, nicht das Ergebnis für einen Einzelfall). Agent Skills, Best Practices",
+    "coding": "Claude Code bietet <code>{variable}</code>, damit ein Skill Projektdateien erreicht, egal wo er installiert ist."
+  },
+  "alt": {
+    "dive": "Standort 7 im Querschnitt: Das Forschungsschiff an der Oberfläche lässt den Tauchroboter am Kabel hinab, vorbei an einem gestrichelten Umriss bei 40 m, wo er vorher stehen blieb, bis zum Meeresboden bei 120 m, wo ein Häkchen zeigt, dass er angekommen ist."
+  },
+  "notes": {
+    "a-skill-teaches-the-class-of-problem": {
+      "header": "Ein Skill lehrt die Klasse des Problems und liest den Einzelfall",
+      "description": "Ein Skill soll dem Agenten beibringen, wie er eine Klasse von Problemen angeht, nicht, was er für einen bestimmten Einzelfall produziert: \"should teach the agent how to approach a class of problems, not what to produce for a specific instance\". Das Beispiel liest das Schema aus references/schema.yaml, statt Joins in den Skill zu schreiben [1]. Claude Code bietet $'{'CLAUDE_PROJECT_DIR'}', damit ein Skill Projektdateien unabhängig vom Installationsort referenzieren kann [2].",
+      "sources": {
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        },
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude-Code-Dokumentation)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-card-points": {
+        "title": "Die Karte verweist",
+        "keywords": "",
+        "script": "Hier ist der Fehler von vorhin, behoben. Der Skill sagt nicht mehr 40 Meter. Sein Schritt sagt „tauche auf die Tiefe aus dem heutigen Tauchplan“, und dieser Tauchplan ist eine Projektdatei, die der Skill liest, wenn der Schritt läuft: Standort 4, 40 Meter, Standort 7, 120 Meter."
+      },
+      "same-card-any-site": {
+        "title": "Dieselbe Karte, jeder Standort",
+        "keywords": "",
+        "script": "Spiel Standort 7 noch einmal ab. Es ist derselbe Skill, ohne Änderung, und diesmal erreicht der Roboter den Meeresboden bei 120 Metern. Die Anleitung ist geblieben, und die Details des Standorts lagen in der Projektdatei. Das ist dein dritter Schritt im Kleinen: Entscheide, wo die Projektdetails liegen."
+      },
+      "for-developers": {
+        "title": "Für Entwickler",
+        "keywords": "",
+        "script": "In der Coding-Agent-Ansicht nennt der Schritt eine Projektdatei, zum Beispiel CONTEXT.md, und der Agent liest sie, wenn dieser Schritt läuft. Für alle anderen ist es irgendein Dokument in deinem Projekt, das der Skill das Modell lesen lässt."
+      }
+    }
+  }
+}

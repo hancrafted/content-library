@@ -1,0 +1,189 @@
+/*
+ * "Who uses it, and where" (Option 18a): the squares' care tint, the pictures' facets and the one emphasis motion.
+ * No raw colour (FE-011): the desk warms `--bulb` toward `--overlay`; sky and sea mix `--zone-surface` and
+ * `--zone-sunlit`; the notebook, card box and scribble derive from `--human` (the captain's own things); the binder and
+ * manual from `--info` and `--muted-foreground`; `--primary` marks the owner tag and steps the squares' tint with care.
+ */
+
+.square {
+  background: color-mix(in oklab, var(--primary) calc((var(--care) - 1) * 5%), var(--card));
+}
+
+.picture {
+  --desk-lit: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 40%, var(--on-brand-accent)));
+  --desk: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 52%, var(--on-brand-accent)));
+  --desk-shade: color-mix(in oklab, var(--bulb) 35%, color-mix(in oklab, var(--overlay) 64%, var(--on-brand-accent)));
+  --sky: color-mix(in oklab, var(--zone-surface) 60%, var(--on-brand-accent));
+  --sky-lit: color-mix(in oklab, var(--zone-surface) 40%, var(--on-brand-accent));
+  --sea: var(--zone-sunlit);
+  --sea-lit: color-mix(in oklab, var(--zone-sunlit) 80%, var(--on-brand-accent));
+  --page-lit: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+  --page: color-mix(in oklab, var(--on-brand-accent) 84%, var(--bulb));
+  --rule: color-mix(in oklab, var(--zone-twilight) 45%, var(--on-brand-accent));
+  --own: var(--human);
+  --own-lit: color-mix(in oklab, var(--human) 80%, var(--on-brand-accent));
+  --binder: color-mix(in oklab, var(--muted-foreground) 70%, var(--overlay));
+  --binder-lit: var(--muted-foreground);
+  --manual: color-mix(in oklab, var(--zone-twilight) 70%, var(--overlay));
+  --manual-lit: var(--zone-twilight);
+  --gilt: var(--bulb);
+  --pencil: var(--bulb);
+  --tab: color-mix(in oklab, var(--bulb) 70%, var(--on-brand-accent));
+}
+
+:global(.dark) .picture {
+  --desk-lit: color-mix(in oklab, var(--bulb) 30%, var(--overlay));
+  --desk: color-mix(in oklab, var(--bulb) 22%, var(--overlay));
+  --desk-shade: color-mix(in oklab, var(--bulb) 14%, var(--overlay));
+  --sky: color-mix(in oklab, var(--zone-surface) 70%, var(--overlay));
+  --sky-lit: color-mix(in oklab, var(--zone-surface) 80%, var(--overlay));
+  --page-lit: color-mix(in oklab, var(--on-brand-accent) 80%, var(--bulb));
+  --page: color-mix(in oklab, var(--on-brand-accent) 68%, var(--bulb));
+}
+
+.picture [data-tone='desk-lit'] {
+  fill: var(--desk-lit);
+}
+.picture [data-tone='desk'] {
+  fill: var(--desk);
+}
+.picture [data-tone='desk-shade'] {
+  fill: var(--desk-shade);
+}
+.picture [data-tone='sky'] {
+  fill: var(--sky);
+}
+.picture [data-tone='sky-lit'] {
+  fill: var(--sky-lit);
+}
+.picture [data-tone='sea'] {
+  fill: var(--sea);
+}
+.picture [data-tone='sea-lit'] {
+  fill: var(--sea-lit);
+}
+.picture [data-tone='page-lit'] {
+  fill: var(--page-lit);
+}
+.picture [data-tone='page'] {
+  fill: var(--page);
+}
+.picture [data-tone='rule'] {
+  stroke: var(--rule);
+}
+.picture [data-tone='scribble'] {
+  stroke: var(--own);
+}
+.picture [data-tone='cover'],
+.picture [data-tone='box'] {
+  fill: var(--own);
+}
+.picture [data-tone='box-lit'],
+.picture [data-tone='box-top'] {
+  fill: var(--own-lit);
+}
+.picture [data-tone='pencil'],
+.picture [data-tone='pin'] {
+  fill: var(--pencil);
+}
+.picture [data-tone='tab'] {
+  fill: var(--tab);
+}
+.picture [data-tone='binder'] {
+  fill: var(--binder);
+}
+.picture [data-tone='binder-lit'] {
+  fill: var(--binder-lit);
+}
+.picture [data-tone='manual'] {
+  fill: var(--manual);
+}
+.picture [data-tone='manual-lit'] {
+  fill: var(--manual-lit);
+}
+.picture [data-tone='gilt'] {
+  fill: var(--gilt);
+}
+
+/* The captain's scribble on the personal card: in his hand, the `human` colour. */
+.scribble {
+  background: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+  color: var(--human);
+}
+
+.cardSheet {
+  background: color-mix(in oklab, var(--on-brand-accent) 94%, var(--bulb));
+}
+
+.trip {
+  fill: none;
+  stroke: var(--foreground);
+}
+
+/* The rest state: the personal label dimmed, the shared one lit. */
+.start {
+  opacity: 0.6;
+}
+
+/*
+ * The one emphasis motion, once on entry: the dashed path draws from the notebook to the fleet manual, the clean card
+ * slides into the manual, its owner tag swings on, the personal label dims and the shared one lights. The base rules
+ * are the end state, which reduced motion and a still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .trip {
+    animation: reveal 1200ms ease-in-out 300ms both;
+  }
+
+  :global([data-zone='active']) .card {
+    animation: arrive 700ms cubic-bezier(0.33, 0, 0.2, 1) 1300ms both;
+  }
+
+  :global([data-zone='active']) .ownerTag {
+    transform-origin: left top;
+    animation: swing 500ms ease-out 2000ms both;
+  }
+
+  :global([data-zone='active']) .start {
+    animation: dim 600ms ease-out 1300ms both;
+  }
+
+  :global([data-zone='active']) .arrival {
+    animation: light 400ms ease-out 1900ms both;
+  }
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    translate: -40% -80%;
+  }
+}
+
+@keyframes swing {
+  from {
+    opacity: 0;
+    rotate: -30deg;
+  }
+}
+
+@keyframes dim {
+  from {
+    opacity: 1;
+  }
+}
+
+@keyframes light {
+  from {
+    opacity: 0.3;
+  }
+}
