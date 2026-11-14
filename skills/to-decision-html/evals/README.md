@@ -12,7 +12,7 @@ node evals/run.ts --case ink --runs 1
 
 `--case` (repeatable; default every case in the manifest), `--arm` (repeatable; default `with_skill` and `without_skill`), `--runs` (default 1), `--model`, `--parallel` (default 2) and `--timeout-minutes` (default 30) are optional. Each run is a full agent session that spends real tokens, about $3 to $6 and 15 to 25 minutes, so run the smallest set that answers the question: one case at `--runs 1` to try a change, the benchmark only to compare versions.
 
-The benchmark is every case at k = 3, 18 sessions:
+The benchmark is every case at k = 3, 30 sessions:
 
 ```sh
 node evals/run.ts --runs 3 --parallel 4
@@ -31,7 +31,7 @@ node evals/regrade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # 
 
 ## Fidelity sweep
 
-The sweep asks whether the skill honours the fidelity rung it is asked for, and how the rung moves quality. It runs the `ink` case with the skill only, once per rung (`diagram`, `wireframe`, `mock`, `prototype`) × k. Each variant's calibration is the frozen one with only its Fidelity rung rewritten (`runner/calibration.pure.ts`). The sweep stays out of the benchmark, which keeps its three cases.
+The sweep asks whether the skill honours the fidelity rung it is asked for, and how the rung moves quality. It runs the `ink` case with the skill only, once per rung (`diagram`, `wireframe`, `mock`, `prototype`) × k. Each variant's calibration is the frozen one with only its Fidelity rung rewritten (`runner/calibration.pure.ts`). The sweep stays out of the benchmark.
 
 ```sh
 node evals/sweep.ts --runs 3          # 12 sessions; --rung (repeatable) narrows the rungs, --runs 1 tries a change
@@ -123,17 +123,18 @@ A run that lacks an assertion, for example because its judge failed, counts as f
 
 ## Cases
 
-| Case                 | Mode      | Input                                                                                                      |
-| -------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
-| `ink`                | `decide`  | A reconstructed handoff comparing three interaction approaches, at prototype rung.                         |
-| `after-grill`        | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.                                   |
-| `ticket`             | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it.                            |
-| `architecture-round` | `decide`  | Ten code-level decisions from an architecture round, for a reader who judges principles, benefit and cost. |
+| Case                 | Mode      | Input                                                                                                            |
+| -------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| `ink`                | `decide`  | A reconstructed handoff comparing three interaction approaches, at prototype rung.                               |
+| `after-grill`        | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.                                         |
+| `ticket`             | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it.                                  |
+| `architecture-round` | `decide`  | Ten code-level decisions from an architecture round, for a reader who judges principles, benefit and cost.       |
+| `episode-spec`       | `decide`  | An Episode's Title slide and four Slides with their mock Options, for a reviewer who picks one Option per Slide. |
 
 `cases/manifest.json` lists each case's prompt, attachments, mode, calibration answers, `checklist` and `probe`, its provenance, and the sha256 of every frozen file. A run refuses a case whose hashes no longer match, and `runner/cases.test.ts` fails on it in the fast suite. A run sees the prompt, attachments and calibration answers, never the checklist or probe.
 
-A case's `checklist.json` holds 3 to 5 `items`, each `{ "id", "question", "source" }`, where the question is answerable yes or no from the page. Its `probe.json` holds `questions`, each `{ "id", "question", "choices": { "a": "…" }, "answer": ["a"], "source" }`; `unknown` is offered on every question, so no choice takes that id. A `source` is `{ "file", "quote" }`: a verbatim quote from the prompt, an attachment or the calibration answers, because a key comes from what the run itself sees and never from a generated page. `runner/cases.test.ts` checks every key's source and choices.
+A case's `checklist.json` holds 3 to 12 `items`, one per rule the person set, each `{ "id", "question", "source" }`, where the question is answerable yes or no from the page. Its `probe.json` holds `questions`, each `{ "id", "question", "choices": { "a": "…" }, "answer": ["a"], "source" }`; `unknown` is offered on every question, so no choice takes that id. A `source` is `{ "file", "quote" }`: a verbatim quote from the prompt, an attachment or the calibration answers, because a key comes from what the run itself sees and never from a generated page. `runner/cases.test.ts` checks every key's source and choices.
 
-A case may name a `reference`: a page a person judged good, frozen beside the case, hashed with its other files and never shown to a run (`referenceOf` in `runner/cases.ts` reads it). `architecture-round/reference.html` scored 32 of 34 when graded as a run (2026-11-13), missing the rung named per item and one Option framed as a principle.
+A case may name a `reference`: a page a person judged good, frozen beside the case, hashed with its other files and never shown to a run (`referenceOf` in `runner/cases.ts` reads it). `architecture-round/reference.html` scored 32 of 34 when graded as a run (2026-11-13), missing the rung named per item and one Option framed as a principle. `episode-spec/reference.html` is the Episode Spec page Han approved after four feedback rounds (2026-11-14), frozen byte for byte; it is self-contained, with its design tokens inlined.
 
 To change a case, freeze a new one. Append it to the manifest: a case's eval id is its position there, and earlier iterations keep theirs. A case without a mode and `calibration.md` cannot run headless.

@@ -103,6 +103,10 @@ export function qualityKeys(id: string): QualityKeys | null {
   };
 }
 
+/** A checklist holds one item per rule the person set; a page held to a long list of rules, like episode-spec, needs more than 5. */
+const MIN_ITEMS = 3;
+const MAX_ITEMS = 12;
+
 /**
  * A key must come from what the run itself sees (its prompt, attachments and calibration answers), quoted verbatim,
  * never from a generated page or a provenance-only file. One problem per key that does not.
@@ -123,9 +127,9 @@ export function keyProblems(dir: string, evalCase: EvalCase, { checklist, probe 
       .map((choice) => `probe ${id} keys ${choice}, which is not one of its choices`);
   };
   return [
-    ...(checklist.length >= 3 && checklist.length <= 5
+    ...(checklist.length >= MIN_ITEMS && checklist.length <= MAX_ITEMS
       ? []
-      : [`checklist has ${checklist.length} items; a case has 3 to 5`]),
+      : [`checklist has ${checklist.length} items; a case has ${MIN_ITEMS} to ${MAX_ITEMS}`]),
     ...checklist.flatMap((item) => sourced(`checklist ${item.id}`, item.source)),
     ...probe.flatMap((question) => [...sourced(`probe ${question.id}`, question.source), ...keyed(question)]),
   ];

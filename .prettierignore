@@ -25,3 +25,6 @@ next-env.d.ts
 design-archive
 # Living HTML Specs, hand-maintained with /to-decision-html.
 docs/features/explorables/*.spec.html
+skills/to-decision-html/evals/cases/episode-spec/decisions.md
+skills/to-decision-html/evals/cases/episode-spec/*.html
+skills/to-decision-html/evals/cases/episode-spec/design.css

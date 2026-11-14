@@ -62,10 +62,22 @@ describe('frozen eval cases', () => {
             'architecture-round/calibration.md',
           ],
         },
+        {
+          id: 'episode-spec',
+          mode: 'decide',
+          prompt: 'episode-spec/prompt.md',
+          inputs: [
+            'episode-spec/decisions.md',
+            'episode-spec/visual-language.html',
+            'episode-spec/episode-page.html',
+            'episode-spec/design.css',
+            'episode-spec/calibration.md',
+          ],
+        },
       ];
 
       // ACT
-      const loaded = ['after-grill', 'ticket', 'architecture-round']
+      const loaded = ['after-grill', 'ticket', 'architecture-round', 'episode-spec']
         .map(loadCase)
         .map(({ id, mode, prompt, inputs }) => ({ id, mode, prompt, inputs }));
 
@@ -73,12 +85,14 @@ describe('frozen eval cases', () => {
       expect(loaded).toEqual(expected);
     });
 
-    it('asks prototype fidelity of every ink item, diagram of every architecture-round item, and no single rung of the others', () => {
+    it('asks prototype fidelity of every ink item, diagram of every architecture-round item, mock of every episode-spec item, and no single rung of the others', () => {
       // ARRANGE
-      const expected = [{ fidelity: 'prototype' }, {}, {}, { fidelity: 'diagram' }];
+      const expected = [{ fidelity: 'prototype' }, {}, {}, { fidelity: 'diagram' }, { fidelity: 'mock' }];
 
       // ACT
-      const asked = ['ink', 'after-grill', 'ticket', 'architecture-round'].map((id) => loadCase(id).asked);
+      const asked = ['ink', 'after-grill', 'ticket', 'architecture-round', 'episode-spec'].map(
+        (id) => loadCase(id).asked,
+      );
 
       // ASSERT
       expect(asked).toEqual(expected);
@@ -92,13 +106,19 @@ describe('frozen eval cases', () => {
       const problems = keyed.flatMap((entry) => keyProblems(CASES, loadCase(entry.id), qualityKeys(entry.id)!));
 
       // ASSERT
-      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket', 'architecture-round']);
+      expect(keyed.map((entry) => entry.id)).toEqual([
+        'ink',
+        'after-grill',
+        'ticket',
+        'architecture-round',
+        'episode-spec',
+      ]);
       expect(problems).toEqual([]);
     });
-    it('gives architecture-round its frozen reference page, and the other three cases none', () => {
+    it('gives architecture-round and episode-spec their frozen reference pages, and the other three cases none', () => {
       // ARRANGE
-      const ids = ['ink', 'after-grill', 'ticket', 'architecture-round'];
-      const expected = [null, null, null, 'architecture-round/reference.html'];
+      const ids = ['ink', 'after-grill', 'ticket', 'architecture-round', 'episode-spec'];
+      const expected = [null, null, null, 'architecture-round/reference.html', 'episode-spec/reference.html'];
 
       // ACT
       const references = ids.map(referenceOf);
@@ -106,6 +126,7 @@ describe('frozen eval cases', () => {
       // ASSERT
       expect(references).toEqual(expected);
       expect(existsSync(path.join(CASES, references[3]!))).toBe(true);
+      expect(existsSync(path.join(CASES, references[4]!))).toBe(true);
     });
   });
 
@@ -160,7 +181,7 @@ describe('frozen eval cases', () => {
         probe: [{ ...first, answer: ['z'] }, ...rest],
       };
       const expected = [
-        'checklist has 2 items; a case has 3 to 5',
+        'checklist has 2 items; a case has 3 to 12',
         'probe approach-count keys z, which is not one of its choices',
       ];
 

@@ -118,6 +118,45 @@
         "architecture-round/probe.json": "5c5439257666a5067b10caa6a6542d2fa3cb7eca68ffe31dadf8af7e49b692d7",
         "architecture-round/reference.html": "356b7ad155b4d921ef7d32cc5d38a1ca02dd8532deccfa49cc2fbbfe30b7d114"
       }
+    },
+    {
+      "id": "episode-spec",
+      "kind": "frozen-decisions",
+      "mode": "decide",
+      "source": {
+        "session": "d4eeec02-feaf-4a64-bd67-50d6fab988de",
+        "title": "Episode Spec page, from template to approval",
+        "repository": "hancrafted/content-library",
+        "branch": "feat/556-spec-template",
+        "commit": "d3e15b61",
+        "pr": "https://github.com/hancrafted/content-library/pull/566",
+        "turns": "Han approved after four feedback rounds (2026-11-14), then asked: \"can you also save the current version as an eval baseline?\"",
+        "copy": "decisions.md is the sample Episode's Brief (skills/new-episode/assets/sample-episode/brief.md), then its Title slide and four Slides with purpose, words from the sample Dossier and every Option from skills/new-episode/assets/sample-fragments/fragments.html: caption, build notes and mock HTML verbatim. visual-language.html and episode-page.html are those fragments byte for byte. design.css is the page's compiled <style data-design-css> block byte for byte, so a run can inline the tokens the mocks use. calibration.md is drawn from skills/new-episode/references/spec-calibration.md at that commit (design size, render presets, Next actions, feedback fields) plus the page rules of Han's four rounds, written as the caller's requirements; it leaves out template regeneration, the assembler and its slots. prompt.md asks the task as a caller would, without the word template.",
+        "omitted": "The Spec template (skills/new-episode/assets/spec-template.html, provenance only), the assembler and the review server; the four fix-round briefs. Han's own words in them shaped calibration.md and checklist.json.",
+        "reference": "reference.html is skills/new-episode/assets/sample-episode/spec/spec.html at d3e15b61, assembled from the template and the same fragments, which Han approved after four feedback rounds (2026-11-14). It is self-contained: inline CSS and scripts, no link or fetch of another file, so it is frozen byte for byte. Runs never see it."
+      },
+      "prompt": "episode-spec/prompt.md",
+      "attachments": [
+        "episode-spec/decisions.md",
+        "episode-spec/visual-language.html",
+        "episode-spec/episode-page.html",
+        "episode-spec/design.css"
+      ],
+      "calibration": "episode-spec/calibration.md",
+      "checklist": "episode-spec/checklist.json",
+      "probe": "episode-spec/probe.json",
+      "reference": "episode-spec/reference.html",
+      "hashes": {
+        "episode-spec/prompt.md": "22ae00c999b16e16d99b3833c54e6ecc8fce71066986b0598c82fb53bb4eb48f",
+        "episode-spec/decisions.md": "65001665c8c92222b4fea7b23a1872c1d0b8e243512d11416c43b86d95eb5438",
+        "episode-spec/visual-language.html": "938b200a46e0e9990e0fea30a74d52ee13770ab91e94afaad8949db667d53a50",
+        "episode-spec/episode-page.html": "d9506ccf49730f3e711f15b04be10525d728409a27d9154c5717844c0f9581d7",
+        "episode-spec/design.css": "e04276223363b1ed8992fe8f3710438c7e1befd5db2e4f5e72319b776edbc645",
+        "episode-spec/calibration.md": "a05b9aa73bfb07135d8affcd34d7c6d57008050996405b3fce9b3a48ec1a62d1",
+        "episode-spec/checklist.json": "b2e2f2521d6c34bedd2e34d20eeb92c1d9321745b1d244f1c51e93264459a725",
+        "episode-spec/probe.json": "568b4fe3502fc1575f29b5f24022f310f71c2ea45757b052e5d4bea354c06b50",
+        "episode-spec/reference.html": "75f674a98220a2175f72cf9249f397fa7de70db77db79386714a38f364a957ae"
+      }
     }
   ]
 }
