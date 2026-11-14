@@ -187,7 +187,9 @@ export const instructionsSkillsAndConnectors = slide({
                     href={localizePath(dynamicContext.path, locale, dynamicContext.anchor)}
                     className={cn(
                       'w-fit rounded-full border px-2 text-caption font-semibold underline-offset-2 hover:underline',
-                      KIND[thing] === 'dynamic' && 'border-foreground bg-foreground text-background',
+                      KIND[thing] === 'dynamic'
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-foreground/40 text-foreground',
                     )}
                   >
                     {t(`tags.${KIND[thing]}`)}
