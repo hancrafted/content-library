@@ -7,13 +7,14 @@ import { Bubbles } from '@/episodes/components/slide-shared/iceberg/scenery/sea-
 import { LightRays, Seabed } from '@/episodes/components/slide-shared/iceberg/scenery/seabed';
 import { Siphonophore } from '@/episodes/components/slide-shared/iceberg/scenery/siphonophore';
 import { Whale } from '@/episodes/components/slide-shared/iceberg/scenery/whale';
+import { PolyBubble } from '@/shared/components/core-components/poly-bubble/poly-bubble';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /*
- * The sea life in the gallery, to judge each creature on its own before it meets a Slide. Pending: the faceted
- * `PolyBubble` (feedback 2, decision 13) is built by the transition work in `src/shared/components/animations/`; it
- * joins this Slide as its own specimen once it lands, and the Abyss bubbles below then draw with it.
+ * The sea life in the gallery, to judge each creature on its own before it meets a Slide. `PolyBubble`
+ * (src/shared/components/core-components/poly-bubble/) is the one faceted bubble both the Abyss bubbles and the `bubbles` transition
+ * draw, so it stands here on its own at each of its three outlines.
  */
 export const seaLife = slide({
   slug: 'sea-life',
@@ -94,6 +95,18 @@ export const seaLife = slide({
         viewBox="-80 -150 160 300"
       >
         <Bubbles x={0} y={0} />
+      </Specimen>
+      <Specimen
+        variant="poly-bubble"
+        label={t('variants.polyBubble')}
+        usage={t('usage')}
+        zone="abyss"
+        code="<PolyBubble sides={7} x={-40} y={-40} size={80} />"
+        viewBox="-150 -60 300 120"
+      >
+        <PolyBubble sides={6} x={-140} y={-40} size={80} />
+        <PolyBubble sides={7} x={-40} y={-40} size={80} />
+        <PolyBubble sides={8} x={60} y={-40} size={80} />
       </Specimen>
       <Specimen
         variant="seabed"
