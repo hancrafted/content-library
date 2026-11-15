@@ -16,7 +16,7 @@ const CARD: readonly (readonly [Tone, string])[] = [
   ['paper-lit', 'M0 0L100 0L0 64Z'],
   ['paper', 'M100 0L100 64L0 64Z'],
   ['paper-shade', 'M92 64L100 56L100 64Z'],
-  ['pin', 'M6 6L60 6L60 9.5L6 9.5Z'],
+  ['pin', 'M6 6L60 6L60 10L6 10Z'],
 ];
 
 /** The ruled lines a blank card carries; a scribbled card has the captain's words on them instead. */

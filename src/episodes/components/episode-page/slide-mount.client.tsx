@@ -14,11 +14,11 @@ function useMeasuredHeight(mounted: boolean) {
   useEffect(() => {
     const element = box.current;
     if (!mounted || !element) return;
-    const observer = new ResizeObserver(() => {
-      height.current = element.getBoundingClientRect().height;
+    // The observer reports the first size right after layout, so mounting forces no synchronous layout read.
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) height.current = entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height;
     });
     observer.observe(element);
-    height.current = element.getBoundingClientRect().height;
     return () => observer.disconnect();
   }, [mounted]);
   return { box, height };

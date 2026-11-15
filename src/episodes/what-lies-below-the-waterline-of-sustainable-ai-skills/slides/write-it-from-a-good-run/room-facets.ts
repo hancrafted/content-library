@@ -60,41 +60,35 @@ export const ROOM_WALL: readonly ArtFacet[] = [
 /** Panel 3: the card he writes at the console, glowing in the screen light; in panel units. */
 export const WRITTEN_CARD: readonly ArtFacet[] = [
   ['card-glow', 'M214 138L226 124L262 124L274 138L262 152L226 152Z'],
-  ['paper-lit', 'M221.2 127.6L261.1 124.4L222.9 149.6Z'],
-  ['paper', 'M261.1 124.4L262.8 146.4L222.9 149.6Z'],
-  ['paper-shade', 'M254.8 147L262.2 138.4L262.8 146.4Z'],
-  [
-    'paper-rule',
-    'M227.7 133.3L251.7 131.4L251.8 133L227.8 134.9ZM228 137.7L247.5 136.1L247.7 137.7L228.1 139.3ZM228.4 142.1L250.7 140.3L250.8 141.9L228.5 143.7Z',
-  ],
+  ['paper-lit', 'M221 128L261 124L223 150Z'],
+  ['paper', 'M261 124L263 146L223 150Z'],
+  ['paper-shade', 'M255 147L262 138L263 146Z'],
+  ['paper-rule', 'M228 133L252 131L252 133L228 135ZM228 138L248 136L248 138L228 139ZM228 142L251 140L251 142L229 144Z'],
 ];
 
 /** Panel 4: the wall clock: the night has passed. */
 export const WALL_CLOCK: readonly ArtFacet[] = [
-  ['robot-lit', 'M30 32L39.9 36.1L37.9 38.1L30 34.8Z'],
+  ['robot-lit', 'M30 32L40 36L38 38L30 35Z'],
   [
     'robot-shade',
-    'M39.9 36.1L44 46L41.2 46L37.9 38.1ZM44 46L39.9 55.9L37.9 53.9L41.2 46ZM39.9 55.9L30 60L30 57.2L37.9 53.9ZM30 60L20.1 55.9L22.1 53.9L30 57.2Z',
+    'M40 36L44 46L41 46L38 38ZM44 46L40 56L38 54L41 46ZM40 56L30 60L30 57L38 54ZM30 60L20 56L22 54L30 57Z',
   ],
-  [
-    'robot-lit',
-    'M20.1 55.9L16 46L18.8 46L22.1 53.9ZM16 46L20.1 36.1L22.1 38.1L18.8 46ZM20.1 36.1L30 32L30 34.8L22.1 38.1Z',
-  ],
-  ['house-lit', 'M30 46L30 34.8L37.9 38.1Z'],
-  ['house', 'M30 46L37.9 38.1L41.2 46ZM30 46L41.2 46L37.9 53.9ZM30 46L37.9 53.9L30 57.2ZM30 46L30 57.2L22.1 53.9Z'],
-  ['house-lit', 'M30 46L22.1 53.9L18.8 46ZM30 46L18.8 46L22.1 38.1ZM30 46L22.1 38.1L30 34.8Z'],
-  ['cloth-dark', 'M29.2 45.5L26.8 51.5L30.8 46.5ZM29.2 46L30 36.5L30.8 46Z'],
+  ['robot-lit', 'M20 56L16 46L19 46L22 54ZM16 46L20 36L22 38L19 46ZM20 36L30 32L30 35L22 38Z'],
+  ['house-lit', 'M30 46L30 35L38 38Z'],
+  ['house', 'M30 46L38 38L41 46ZM30 46L41 46L38 54ZM30 46L38 54L30 57ZM30 46L30 57L22 54Z'],
+  ['house-lit', 'M30 46L22 54L19 46ZM30 46L19 46L22 38ZM30 46L22 38L30 35Z'],
+  ['cloth-dark', 'M29 46L27 52L31 47ZM29 46L30 37L31 46Z'],
 ];
 
 /** Panel 4: the written card pinned to the wall, still there the next morning. */
 export const PINNED_CARD: readonly ArtFacet[] = [
   ['card-glow', 'M56 66L68 36L104 36L116 66L104 96L68 96Z'],
-  ['paper-lit', 'M67.3 29.2L109.2 30.9L64.8 91.1Z'],
-  ['paper', 'M109.2 30.9L106.7 92.8L64.8 91.1Z'],
-  ['paper-shade', 'M98.4 92.5L107.1 84.4L106.7 92.8Z'],
+  ['paper-lit', 'M67 29L109 31L65 91Z'],
+  ['paper', 'M109 31L107 93L65 91Z'],
+  ['paper-shade', 'M98 93L107 84L107 93Z'],
   [
     'paper-rule',
-    'M72.6 46.8L98.3 47.8L98.3 49.4L72.5 48.4ZM72.2 56.1L93.2 56.9L93.1 58.5L72.1 57.7ZM71.8 65.4L95.8 66.3L95.7 67.9L71.7 67ZM71.4 74.6L87.9 75.3L87.9 76.9L71.4 76.2Z',
+    'M73 47L98 48L98 49L73 48ZM72 56L93 57L93 59L72 58ZM72 65L96 66L96 68L72 67ZM71 75L88 75L88 77L71 76Z',
   ],
   ['pin', 'M84 26L90 26L89 34L85 34Z'],
 ];
