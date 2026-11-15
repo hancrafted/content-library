@@ -52,3 +52,6 @@ export function producerIdsOf(file: WorkflowFile, stageIndex: number, task: Task
   const ids = [...(task.needs ?? []), ...task.slots.flatMap((slot) => names.get(slot.id)?.task.id ?? [])];
   return [...new Set(ids)];
 }
+
+/** Whether a task may be skipped: the one reading of `optional`, absent meaning required. */
+export const isOptionalTask = (task: TaskDef): boolean => task.optional === true;

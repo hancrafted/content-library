@@ -4,7 +4,7 @@ import { JobArrow } from './diagram-arrows';
 import type { JobSlot, UiWords } from './human-in-the-loop.types';
 import { JobButton } from './job-button.client';
 import { NodePopover } from './node-popover.client';
-import { CheckedMark, NAME_BUTTON, popoverOf } from './stage-card';
+import { CheckedMark, dashedIf, NAME_BUTTON, Pill, popoverOf } from './stage-card';
 import { StateMark } from './state-mark';
 import type { JobState } from './workflow-run.pure';
 import type { Job, Stage } from './workflow.types';
@@ -40,15 +40,6 @@ function Name({ stage, job, slot }: Pick<JobCardProps, 'stage' | 'job' | 'slot'>
   );
 }
 
-/** The tag of a job the viewer may skip, in words so the dashed border never carries it alone. */
-function OptionalTag({ word }: { readonly word: string }) {
-  return (
-    <span data-optional="" className="rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">
-      {word}
-    </span>
-  );
-}
-
 function Heading({ stage, job, slot, words }: Pick<JobCardProps, 'stage' | 'job' | 'slot' | 'words'>) {
   return (
     <p className="flex items-center gap-1 text-caption font-semibold">
@@ -56,7 +47,7 @@ function Heading({ stage, job, slot, words }: Pick<JobCardProps, 'stage' | 'job'
         <Name stage={stage} job={job} slot={slot} />
       </span>
       {slot.marker && <span className="relative z-10">{slot.marker}</span>}
-      {job.optional && <OptionalTag word={words.optional} />}
+      {job.optional && <Pill mark="data-optional">{words.optional}</Pill>}
     </p>
   );
 }
@@ -83,7 +74,7 @@ export function JobCard({ stage, job, slot, words, joined, state, round, onOpen 
       data-job-card={job.id}
       className={cn(
         'relative flex flex-col gap-1 rounded-lg border border-border bg-background p-2.5',
-        job.optional && 'border-dashed',
+        dashedIf(job.optional),
         onOpen && 'hover:shadow-sm',
       )}
     >

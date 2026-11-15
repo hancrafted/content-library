@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, UiWords } from './human-in-the-loop.types';
-import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import { job, optionalFlow, stage, flow as workflow } from './workflow-fixture.pure';
 import type { Workflow } from './workflow.types';
 
 const flow = (): Workflow =>
@@ -48,11 +48,6 @@ const render = (props: Partial<DiagramProps> = {}) =>
 const COLUMN = 'li[class*="focus-group__item"]';
 const POPOVER = { in: 'in.', out: 'out.', inLabel: 'In:', outLabel: 'Out:' };
 
-const optionalFlow = (): Workflow =>
-  workflow([
-    stage('a', [job({ id: 'must', title: 'Must' }), job({ id: 'extra', title: 'Extra', optional: true })]),
-    { ...stage('b', [job({ id: 'bonus', title: 'Bonus', optional: true })]), optional: true },
-  ]);
 const withWords = { ...words, optional: 'optional' } as UiWords;
 
 describe('success cases', () => {

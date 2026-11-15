@@ -1,5 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import { RotateCw } from 'lucide-react';
+import type { ReactNode } from 'react';
 import type { PopoverCopy, StageSlot, UiWords } from './human-in-the-loop.types';
 import { MoveCircles } from './move-circles.client';
 import { NodePopover, type NodeCopy } from './node-popover.client';
@@ -22,9 +23,12 @@ export const NAME_BUTTON =
 export const popoverOf = (copy: PopoverCopy | undefined, stageName: string): NodeCopy | undefined =>
   copy && { title: stageName, ...copy };
 
+/** A card the viewer may skip is drawn with a dashed border; the "optional" tag says it in words (job cards only). */
+export const dashedIf = (optional: boolean): string | false => optional && 'border-dashed';
+
 /** The classes of a stage's card: a gate lifts it, an optional stage draws it dashed. */
 export const stageCardClass = (stage: Stage, gate: string | undefined): string =>
-  cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm', stage.optional && 'border-dashed');
+  cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm', dashedIf(stage.optional));
 
 /** Whether any job of the stage is checked against its criteria in a fresh chat. */
 export const isChecked = (stage: Stage): boolean => stage.jobs.some((job) => job.reviewed);
@@ -63,12 +67,23 @@ export function Title({ stage, slot }: { readonly stage: Stage; readonly slot: S
 
 /** The gate's badge: where the human decides whether the work goes on. */
 export function GateBadge({ gate }: { readonly gate: string }) {
+  return <Pill mark="data-gate">{gate}</Pill>;
+}
+
+/** The small rounded label of a card: the gate mark, a job's "optional" tag. `mark` is the data attribute that names it. */
+export function Pill({
+  mark,
+  children,
+}: {
+  readonly mark: 'data-gate' | 'data-optional';
+  readonly children: ReactNode;
+}) {
   return (
     <span
-      data-gate=""
+      {...{ [mark]: '' }}
       className="inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground"
     >
-      {gate}
+      {children}
     </span>
   );
 }

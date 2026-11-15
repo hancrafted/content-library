@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, DiagramSlots, UiWords } from './human-in-the-loop.types';
-import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import { job, optionalFlow, stage, flow as workflow } from './workflow-fixture.pure';
 import type { JobRun, JobState, Run } from './workflow-run.pure';
 import type { Workflow } from './workflow.types';
 
@@ -59,12 +59,6 @@ const render = (props: Partial<DiagramProps> = {}) =>
     ),
   );
 const COLUMN = 'li[class*="focus-group__item"]';
-
-const optionalFlow = (): Workflow =>
-  workflow([
-    stage('a', [job({ id: 'must' }), job({ id: 'extra', optional: true })]),
-    { ...stage('b', [job({ id: 'bonus', optional: true })]), optional: true },
-  ]);
 
 describe('success cases', () => {
   it('puts one "Try it" button over each stage column, named for its stage and holding no pressed state', () => {

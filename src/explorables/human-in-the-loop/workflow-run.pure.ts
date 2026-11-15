@@ -1,4 +1,5 @@
 import { overOf } from './workflow-foreach.pure';
+import { isOptionalTask } from './workflow-outputs.pure';
 import { itemsUnder, type Item } from './workflow-run-items.pure';
 import type { ForeachDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -120,9 +121,9 @@ function itemsOf(file: WorkflowFile, foreach: ForeachDef, input: RunInput): Item
  * The jobs a stage's count and state go by: its required ones. An optional job is left out entirely, so a stage is
  * done without it. In an optional stage every job is optional, so there its own jobs count.
  */
-const countedOf = (stage: StageDef, runs: readonly JobRun[]): readonly JobRun[] => {
+const countedRuns = (stage: StageDef, runs: readonly JobRun[]): readonly JobRun[] => {
   if (stage.optional) return runs;
-  const optional = new Set(stage.jobs.filter((task) => task.optional).map((task) => task.id));
+  const optional = new Set(stage.jobs.filter(isOptionalTask).map((task) => task.id));
   return runs.filter((each) => !optional.has(each.id));
 };
 
@@ -131,13 +132,14 @@ function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRu
   const items = stage.foreach ? itemsOf(file, stage.foreach, input) : [];
   const rounds = items.map((item, at): RoundRun => {
     const jobs = stage.jobs.map((task) => jobRun(task, { stage: stage.id, round: at + 1 }, results));
-    return { number: at + 1, title: item.title, item: item.text, jobs, state: leastOf(countedOf(stage, jobs)) };
+    return { number: at + 1, title: item.title, item: item.text, jobs, state: leastOf(countedRuns(stage, jobs)) };
   });
   const jobs = stage.foreach ? [] : stage.jobs.map((task) => jobRun(task, { stage: stage.id }, results));
-  const every = [...jobs, ...rounds.flatMap((round) => round.jobs)];
-  const all = countedOf(stage, every);
-  const done = all.filter((each) => each.state !== 'open').length;
-  return { id: stage.id, jobs, rounds, done, total: all.length, state: all.length > 0 ? leastOf(all) : 'open' };
+  const allRuns = [...jobs, ...rounds.flatMap((round) => round.jobs)];
+  const counted = countedRuns(stage, allRuns);
+  const done = counted.filter((each) => each.state !== 'open').length;
+  const state = counted.length > 0 ? leastOf(counted) : 'open';
+  return { id: stage.id, jobs, rounds, done, total: counted.length, state };
 }
 
 /** The rounds each repeated stage plays now, by stage id, as `workflowView` takes them. */

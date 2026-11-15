@@ -404,6 +404,18 @@ describe('success cases', () => {
     expect(problems).toContain('Slot "checked" of task "compare" takes the output of the optional task "check"');
   });
 
+  it('refuses a marker naming an optional output the required job has no slot for, so a marker cannot reach it', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      optionalCheck(file);
+      later(file, takes('plan'), '{{checked}}');
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('The simple prompt of task "compare" has the unknown marker {{checked}}.');
+  });
+
   it('refuses a required job in the same stage that needs an optional job', () => {
     // ARRANGE
     const change = (file: File) => {
