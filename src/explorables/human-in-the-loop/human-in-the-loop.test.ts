@@ -15,7 +15,7 @@ describe('success cases', () => {
 
   it('hands the client every authored Workflow and the chosen id, with no control overridden by default', () => {
     // ARRANGE
-    const authored = ['project-plan', 'vacation', 'summer-party'];
+    const authored = ['project-plan', 'vacation', 'summer-party', 'source-to-quiz'];
     const props = { ...BASE, locale: 'en' };
     // ACT
     const data = humanInTheLoopData(props);
