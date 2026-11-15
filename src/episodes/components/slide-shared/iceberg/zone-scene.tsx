@@ -1,5 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
+import { Art } from '../art/art';
+import { artName } from '../art/art.pure';
 import { SceneMotionRoot } from './scene-motion.client';
 import { Bubbles } from './scenery/bubbles';
 import { Clouds } from './scenery/clouds';
@@ -70,9 +72,11 @@ export interface ZoneSceneProps {
 export function Band({ facets }: { readonly facets: readonly SeaFacet[] }) {
   return (
     <g data-band="water" className={styles.water}>
-      {facets.map(({ points, tone }) => (
-        <polygon key={points} data-tone={tone} points={points} />
-      ))}
+      <Art name={artName('water', facets)}>
+        {facets.map(({ points, tone }) => (
+          <polygon key={points} data-tone={tone} points={points} />
+        ))}
+      </Art>
     </g>
   );
 }

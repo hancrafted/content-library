@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import { placeTransform, type GroupProps } from './creature-group.pure';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
@@ -23,7 +24,9 @@ export function FishSchool({ x, y, at, count = 11, seed = 1, scale = 1.3, flip =
       <g className={styles.sway} data-motion="ambient">
         {fish.map((p) => (
           <g key={`${p.x}:${p.y}`} data-fish transform={placeTransform(p, scale, flip)}>
-            <Facets layers={FISH} />
+            <Art name="fish">
+              <Facets layers={FISH} />
+            </Art>
           </g>
         ))}
       </g>

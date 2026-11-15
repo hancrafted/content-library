@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
 import styles from './whale.module.css';
@@ -32,7 +33,9 @@ export function Whale({ x, y, scale = 0.8, flip = false }: WhaleProps) {
       transform={`translate(${x} ${y}) scale(${(flip ? -1 : 1) * scale} ${scale})`}
     >
       <g className={styles.glide} data-motion="ambient">
-        <Facets layers={WHALE} />
+        <Art name="whale">
+          <Facets layers={WHALE} />
+        </Art>
       </g>
     </g>
   );

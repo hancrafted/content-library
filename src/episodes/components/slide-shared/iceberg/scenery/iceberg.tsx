@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
 import styles from './iceberg.module.css';
@@ -39,17 +40,23 @@ export function Iceberg({ part = 'whole', x, waterline, scale = 1, depthScale = 
     <g className={styles.iceberg} data-iceberg={part} transform={`translate(${x} ${waterline}) scale(${scale})`}>
       {layers.keel && (
         <g data-iceberg-keel transform={`scale(1 ${depthScale})`}>
-          <Facets layers={ICEBERG_KEEL} />
+          <Art name="iceberg/keel">
+            <Facets layers={ICEBERG_KEEL} />
+          </Art>
         </g>
       )}
       {layers.tip && (
         <g data-iceberg-tip>
-          <Facets layers={ICEBERG_TIP} />
+          <Art name="iceberg/tip">
+            <Facets layers={ICEBERG_TIP} />
+          </Art>
         </g>
       )}
       {layers.glow && (
         <g data-iceberg-glow>
-          <Facets layers={ICEBERG_GLOW} />
+          <Art name="iceberg/glow">
+            <Facets layers={ICEBERG_GLOW} />
+          </Art>
         </g>
       )}
     </g>

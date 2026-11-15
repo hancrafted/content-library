@@ -1,3 +1,5 @@
+import { Art } from '../../art/art';
+import { artName } from '../../art/art.pure';
 import type { FacetLayer } from './facet-data';
 
 /** Paints a part's layers in order, each a path the scenery palette colours by its `data-tone`. */
@@ -29,8 +31,12 @@ interface ToneFacetsProps {
 
 /** Paints a lifted drawing's facets in paint order, each a path its Slide's token file colours by tone. */
 export function ToneFacets({ facets, toneAttribute = 'data-tone', part, className }: ToneFacetsProps) {
-  const paths = facets.map(([tone, d], index) => (
-    <path key={index} {...{ [toneAttribute]: tone }} d={d} className={className} />
-  ));
-  return part === undefined ? <>{paths}</> : <g data-part={part}>{paths}</g>;
+  const paths = (
+    <Art name={artName(part ?? 'facets', { facets, toneAttribute })} className={className}>
+      {facets.map(([tone, d], index) => (
+        <path key={index} {...{ [toneAttribute]: tone }} d={d} />
+      ))}
+    </Art>
+  );
+  return part === undefined ? paths : <g data-part={part}>{paths}</g>;
 }

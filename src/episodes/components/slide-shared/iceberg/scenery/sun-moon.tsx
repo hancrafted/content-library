@@ -1,3 +1,5 @@
+import { Art } from '../../art/art';
+import { artName } from '../../art/art.pure';
 import { crescentFacets, sunFacets, toPoints } from './scenery.pure';
 import styles from './sun-moon.module.css';
 
@@ -38,16 +40,20 @@ export function SunMoon({ x, y, r = 34 }: SunMoonProps) {
   return (
     <g className={styles.sunMoon} data-sun-moon transform={`translate(${x} ${y})`}>
       <g data-sky-day>
-        <polygon data-tone="sun-glow" points={ring(r * GLOW_REACH)} />
-        {sunFacets(r).map((facet) => (
-          <polygon key={facet.points} data-tone={facet.lit ? 'sun-lit' : 'sun'} points={facet.points} />
-        ))}
+        <Art name={artName('sun', r)}>
+          <polygon data-tone="sun-glow" points={ring(r * GLOW_REACH)} />
+          {sunFacets(r).map((facet) => (
+            <polygon key={facet.points} data-tone={facet.lit ? 'sun-lit' : 'sun'} points={facet.points} />
+          ))}
+        </Art>
       </g>
       <g data-sky-night>
-        <polygon data-tone="moon-glow" points={ring(r * GLOW_REACH * 0.8)} />
-        {crescentFacets(r).map((facet) => (
-          <polygon key={facet.points} data-tone={facet.lit ? 'moon-lit' : 'moon'} points={facet.points} />
-        ))}
+        <Art name={artName('moon', r)}>
+          <polygon data-tone="moon-glow" points={ring(r * GLOW_REACH * 0.8)} />
+          {crescentFacets(r).map((facet) => (
+            <polygon key={facet.points} data-tone={facet.lit ? 'moon-lit' : 'moon'} points={facet.points} />
+          ))}
+        </Art>
       </g>
     </g>
   );

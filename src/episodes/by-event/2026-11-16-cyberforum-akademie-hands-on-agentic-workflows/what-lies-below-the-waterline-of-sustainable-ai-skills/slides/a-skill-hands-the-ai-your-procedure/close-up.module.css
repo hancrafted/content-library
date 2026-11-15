@@ -47,9 +47,16 @@
   stroke: var(--scenery-wall-shade);
 }
 
-.closeUp [data-tone='house-shade'] {
+/* The cabin's own shade; the ship's deck house takes the same tone through its own properties, below. */
+.closeUp [data-cabin] [data-tone='house-shade'] {
   fill: var(--house-shade);
   stroke: var(--house-shade);
+}
+
+/* The ship's deck house in the cabin's shade, edged in it, as the close-up draws it (its drawing is an art asset). */
+.closeUp g[data-ship] {
+  --ship-house-shade: var(--house-shade);
+  --ship-house-shade-edge: var(--house-shade);
 }
 
 .closeUp [data-tone='floor'] {

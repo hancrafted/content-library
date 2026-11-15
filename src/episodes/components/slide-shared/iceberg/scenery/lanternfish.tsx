@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import { placeTransform, type GroupProps } from './creature-group.pure';
 import styles from './lanternfish.module.css';
 import { scatter } from './scenery.pure';
@@ -29,9 +30,11 @@ export function Lanternfish({ x, y, at, count = 9, seed = 3, scale = 1.2, flip =
             data-motion="ambient"
             style={{ animationDelay: `${-index * DART_STAGGER_SECONDS}s` }}
           >
-            {LANTERNFISH.map(({ tone, points }) => (
-              <polygon key={points} data-tone={tone} points={points} />
-            ))}
+            <Art name="lanternfish">
+              {LANTERNFISH.map(({ tone, points }) => (
+                <polygon key={points} data-tone={tone} points={points} />
+              ))}
+            </Art>
           </g>
         </g>
       ))}

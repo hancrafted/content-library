@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { Art } from '../art/art';
+import { artName } from '../art/art.pure';
 import styles from './ship.module.css';
 import { pennantFacets, pointsAttr, shipAnchors, shipLayers, type ShipFacet } from './ship.pure';
 
@@ -32,7 +34,9 @@ const Polygons = ({ facets }: { readonly facets: readonly ShipFacet[] }) =>
 
 const Facets = ({ facets, layer }: { readonly facets: readonly ShipFacet[]; readonly layer: string }) => (
   <g data-layer={layer}>
-    <Polygons facets={facets} />
+    <Art name={artName(`ship/${layer}`, facets)}>
+      <Polygons facets={facets} />
+    </Art>
   </g>
 );
 
@@ -42,7 +46,9 @@ function Pennant({ flip, wind }: { readonly flip: boolean; readonly wind: boolea
   return (
     <g data-pennant transform={`translate(${x} ${y})`}>
       <g {...(wind ? { 'data-motion': 'ambient', className: styles.flutter } : {})}>
-        <Polygons facets={pennantFacets(flip)} />
+        <Art name={`ship/pennant${flip ? '-flip' : ''}`}>
+          <Polygons facets={pennantFacets(flip)} />
+        </Art>
       </g>
     </g>
   );

@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { Art } from '../art/art';
+import { artName } from '../art/art.pure';
 import styles from './control-room.module.css';
 import { ROOM, roomFacets, windowAt, type RoomSize } from './control-room.pure';
 
@@ -56,9 +58,11 @@ export interface ControlRoomProps {
 export function ControlRoom({ size = ROOM, time = 'day', clock = true, children }: ControlRoomProps) {
   return (
     <g data-control-room className={styles.room}>
-      {roomFacets(size).map(({ tone, points }) => (
-        <polygon key={points} data-tone={tone} points={points} />
-      ))}
+      <Art name={artName('control-room', size)}>
+        {roomFacets(size).map(({ tone, points }) => (
+          <polygon key={points} data-tone={tone} points={points} />
+        ))}
+      </Art>
       {time !== false && <RoomWindow time={time} size={size} />}
       {clock && <WallClock />}
       {children}

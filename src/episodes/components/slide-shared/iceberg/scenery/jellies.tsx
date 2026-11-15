@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import { placeTransform, type GroupProps } from './creature-group.pure';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
@@ -34,7 +35,9 @@ export function Jellies({ x, y, at, count, seed = 1, scale = 1 }: Omit<GroupProp
             data-motion="ambient"
             style={{ animationDelay: `${-index * JELLY_STAGGER_SECONDS}s` }}
           >
-            <Facets layers={JELLY} />
+            <Art name="jelly">
+              <Facets layers={JELLY} />
+            </Art>
           </g>
         </g>
       ))}
