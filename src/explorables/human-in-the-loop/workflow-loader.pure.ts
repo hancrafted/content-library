@@ -8,6 +8,7 @@ import {
   templateProblems,
 } from './workflow-loader-checks.pure.ts';
 import { jobOrderProblems } from './workflow-loader-jobs.pure.ts';
+import { optionalProblems } from './workflow-loader-optional.pure.ts';
 import type { WorkflowFile } from './workflow-schema.types';
 import { shapeProblems } from './workflow-shape.pure.ts';
 
@@ -47,6 +48,7 @@ export function loadWorkflow(source: string): FileResult {
     ...foreachProblems(file),
     ...jobOrderProblems(file),
     ...contentProblems(file),
+    ...optionalProblems(file),
   ];
   return problems.length > 0 ? { problems } : { file };
 }

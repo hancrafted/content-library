@@ -95,6 +95,7 @@ function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelPro
       copied: copied.has(key),
       done: filled(values, resultKey(step, job.task)),
       needsInput: needsInput(inputs, values),
+      optional: job.optional,
     };
   });
   const reviews = reviewSteps.map((step) => {

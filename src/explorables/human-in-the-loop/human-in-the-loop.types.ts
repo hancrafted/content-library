@@ -26,6 +26,8 @@ export interface UiWords {
   readonly viewJobsTip: string;
   /** The Stages card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
+  /** The tag of a job card the viewer may skip. */
+  readonly optional: string;
   readonly repeats: string; // Jobs view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
   readonly round: string; // Jobs view: what a round is called where the stage names no item
   readonly tryJob: string; // Jobs view: a job card's hidden name (`{job}`, `{stage}`)

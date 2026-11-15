@@ -9,6 +9,7 @@ ui:
   viewJobs: Jobs
   viewJobsTip: 'The detailed view: every job of each stage'
   checked: checked
+  optional: optional
   stateOpen: open
   stateDone: done
   repeats: '× each {item} ({n})'

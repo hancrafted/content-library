@@ -26,6 +26,8 @@ export interface Job {
   readonly outputs: readonly { readonly id: string }[];
   /** Whether the job has a review in a fresh chat; the diagram ticks each chat then. */
   readonly reviewed: boolean;
+  /** The job may be skipped: its card is dashed and tagged, and it never counts toward the stage. */
+  readonly optional: boolean;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */
   readonly parked?: readonly string[];
   /** The task of the file this job was made from; the popover renders from it. */
@@ -60,6 +62,8 @@ export interface Stage {
   readonly gate?: number;
   /** The stage repeats once per H3 of an earlier output; its jobs run once per round. */
   readonly foreach?: ForeachDef;
+  /** The stage may be skipped: its card is dashed. */
+  readonly optional: boolean;
   readonly jobs: readonly Job[];
 }
 

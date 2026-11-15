@@ -39,6 +39,7 @@ const taskShape = (task: TaskDef) => ({
   examples: count(task.details.example),
   good: task.details.goodLooksLike.length,
   techniques: task.details.techniques ?? [],
+  optional: task.optional ?? false,
 });
 
 /** What must match across the pair. */
@@ -55,6 +56,7 @@ const structureOf = (file: WorkflowFile) => ({
     moves: stage.moves?.map((move) => move.letter),
     gate: stage.gate,
     summary: Boolean(stage.summary),
+    optional: stage.optional ?? false,
     foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },
     card: stage.card?.lines.length,
     jobs: stage.jobs.map(taskShape),
@@ -130,6 +132,19 @@ describe('success cases', () => {
     expect(description).not.toBe('');
     expect((description.match(/[.!?](\s|$)/g) ?? []).length).toBe(1);
   });
+
+  it.each(EACH.filter(([id]) => id === 'source-to-quiz'))(
+    'marks the eval job of source-to-quiz optional and titles it without "Bonus", in %s %s',
+    (id, locale) => {
+      // ARRANGE
+      const file = fileOf(id, locale);
+      // ACT
+      const task = file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === 'eval');
+      // ASSERT
+      expect(task?.optional).toBe(true);
+      expect(task?.title).not.toMatch(/bonus/i);
+    },
+  );
 
   it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {
     // ARRANGE

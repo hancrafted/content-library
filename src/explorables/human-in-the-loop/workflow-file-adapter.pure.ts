@@ -1,4 +1,4 @@
-import { producerIdsOf } from './workflow-outputs.pure.ts';
+import { isOptionalTask, producerIdsOf } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
 
@@ -17,6 +17,7 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
     inputs: task.slots.map((slot) => slot.id),
     outputs: task.output === undefined ? [] : [{ id: task.output }],
     reviewed: task.review !== undefined,
+    optional: isOptionalTask(task),
     task,
   };
 }
@@ -31,6 +32,7 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
     card: stage.card,
     gate: stage.gate,
     foreach: stage.foreach,
+    optional: stage.optional === true,
     jobs: stage.jobs.map((task) => jobOf(file, task, index)),
   };
 }
