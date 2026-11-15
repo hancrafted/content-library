@@ -92,9 +92,9 @@ describe('success cases', () => {
     const expected = [
       'In — Human in the loop means the agent acts only after a person has approved. Take booking the venue for the party: the agent proposes a venue, and nothing is booked until you say yes.',
       'On — Human on the loop means the agent acts on its own while a person watches and can step in. Now the agent books the venue itself, you read its reports, and you step in when something looks wrong.',
-      'Out — Human out of the loop means the agent acts without any person, who sees only the result. The agent books the venue, and all you get is the confirmation.',
+      'Out — Out of the loop means no person intervenes while this task runs. Someone can still review the result afterwards; in this example, the agent books the venue and you receive a confirmation.',
       'Borrowed terms — These three terms were borrowed from automation outside AI, from fields where an automated action often cannot be undone, so what role the person plays was decided on purpose and not left to chance. The detail is in the Speaker notes. We borrow them because the question is the same for your agents.',
-      'Per task — So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task.',
+      "Per task — People choose a level for each task; it is not one setting for a whole company. Consider the task's consequences, context and any applicable rules.",
     ];
     // ACT
     const actual = scriptOf(slideOf(LEVELS));
@@ -195,10 +195,10 @@ describe('success cases', () => {
   it('scripts Slide 6 in the Spec’s Voice script, verbatim', () => {
     // ARRANGE
     const expected = [
-      'The rule — You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at.',
+      'The rule — As a design heuristic, ask how well a result can be checked and what a wrong result could do. Neither factor sets the level by itself: people choose the oversight that fits the task, its context and applicable rules.',
       'Hypothesis, said openly — The rule that you can step out only as far as you can check is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law.',
-      'Risk too — Checkability is only half of it. What a wrong result can do also helps set the level, so the more damage a wrong result can cause, the more a person stays in.',
-      'Make it checkable — That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop.',
+      'Risk too — This is a synthesis, not a rule from one source. A higher-impact mistake may call for closer oversight, but context and other constraints matter too.',
+      'Make it checkable — One useful design move is to build a check into the task: everyone can join, wheelchair access, no fitness needed. With a check like that, people could choose to monitor this activity instead of approving every step.',
     ];
     // ACT
     const actual = scriptOf(slideOf(DISTANCE));

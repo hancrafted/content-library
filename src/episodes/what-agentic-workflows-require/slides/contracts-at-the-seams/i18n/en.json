@@ -1,6 +1,6 @@
 {
   "title": "Contracts at the seams",
-  "caption": "Design by contract: cooperation rests on contracts that state each party’s obligations and benefits. Agree what a task receives and delivers, not how it is done inside.",
+  "caption": "Using design by contract as a lens, agree what a task receives and delivers at a handoff without prescribing how it works inside.",
   "food": {
     "kicker": "Food & drinks",
     "task": "Dinner for 200, 31 vegetarian",
@@ -63,12 +63,12 @@
       "design-by-contract": {
         "title": "Design by contract",
         "keywords": "",
-        "script": "Design by contract, after Meyer, says that cooperation rests on contracts, and a contract states what each party receives and what it delivers. That sounds like software, but it is the most practical tool a manager has for a handoff."
+        "script": "Meyer's design-by-contract model describes obligations and benefits between parties. Applying that idea to a team or agent handoff is a practical lens, not a rule that every task needs the same contract."
       },
       "receives-delivers-checked-by": {
         "title": "Receives, delivers, checked by",
         "keywords": "",
-        "script": "So before you hand any task to an agent, write three lines. What it receives, what it must deliver, and how someone else can check the result. Do this for one task this week, before you hand it over."
+        "script": "For a handoff that matters, try writing three lines: what the next task receives, what it delivers and how the result can be checked. Keep the contract as specific as the goal requires."
       },
       "leave-the-how-open": {
         "title": "Leave the how open",

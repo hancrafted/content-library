@@ -1,36 +1,36 @@
 {
-  "title": "Vom Artikel zum Quiz",
-  "caption": "Ein ganzer agentischer Workflow macht aus jedem Wissensartikel, einem PDF oder einer URL, ein Quiz: jeder Schritt <b>in, an oder außerhalb der Schleife</b>, ein Vertrag an jeder Übergabe.",
-  "goal": "Ziel: ein Quiz, mit dem jemand etwas anfangen kann",
-  "workflowLabel": "Der agentische Workflow, Stufe für Stufe",
+  "title": "Ein durchgängiger Workflow",
+  "caption": "Verfolge den Sommerfest-Workflow vom Ziel bis zum Plan. Die Aufsichtsstufen sind Beispiele, keine Vorgaben; wähle für jede Aufgabe, was passt.",
+  "goal": "Ziel: 200 Menschen aus fünf Standorten nächsten Sommer zusammenbringen, mit einem Budget von 60.000 €",
+  "workflowLabel": "Der Sommerfest-Workflow, Stufe für Stufe",
   "levels": { "in": "In der Schleife", "on": "An der Schleife", "out": "Außerhalb der Schleife" },
   "terms": { "receives": "Erhält", "delivers": "Liefert", "checkedBy": "Geprüft durch:" },
   "contracts": {
     "planRequirements": {
       "seam": "Plan → Anforderungen",
-      "receives": "ein Ziel und seine Epics",
-      "delivers": "ein ausgewähltes Epic",
-      "checkedBy": "Du nennst das Epic, mit dem es losgeht"
+      "receives": "das Festziel und seine Rahmenbedingungen",
+      "delivers": "vier Arbeitsbereiche, zuerst Location und Datum",
+      "checkedBy": "Die Priorität passt zum Ziel"
     },
     "requirementsResearch": {
       "seam": "Anforderungen → Recherche",
-      "receives": "das Epic",
-      "delivers": "Tickets, jedes mit einer Frage",
-      "checkedBy": "Deine Freigabe"
+      "receives": "den gewählten Arbeitsbereich Location und Datum",
+      "delivers": "Bedürfnisse, Prüfungen und Recherchefragen",
+      "checkedBy": "Die organisierende Person gibt dieses Paket frei"
     },
     "researchPage": {
       "seam": "Recherche → Seite",
-      "receives": "ein Ticket",
-      "delivers": "Fakten mit Quellen",
-      "checkedBy": "Quellen öffnen sich und passen"
+      "receives": "freigegebene Prüfungen und Recherchefragen",
+      "delivers": "belegte Ergebnisse zu Location, Anreise und Datum",
+      "checkedBy": "Quellen stützen die Aussagen; Lücken bleiben offen"
     }
   },
-  "twoLevels": "Du entwirfst den Weg; der Agent steuert jeden Schritt",
+  "twoLevels": "Du gestaltest die Stufen; der Agent steuert innerhalb jeder Aufgabe",
   "steps": {
-    "process": "<b>Nimm einen wiederkehrenden Prozess.</b> Markiere jeden Schritt: Agent oder Person, in, an oder außerhalb der Schleife.",
-    "contract": "<b>Schreib zuerst den Vertrag.</b> Was die Aufgabe erhält, was sie liefert, wie jemand anderes es prüft.",
-    "conway": "<b>Vermute Conways Gesetz.</b> Wenn der Workflow spiegelt, wie Menschen heute arbeiten, zeichne ihn um das Ziel herum neu.",
-    "skills": "<b>Bau drei Fähigkeiten auf.</b> Arbeit zerlegen, klare Übergaben schreiben, das Ergebnis eines Agenten prüfen."
+    "process": "<b>Nimm einen wiederkehrenden Prozess.</b> Markiere jeden Schritt: Agent oder Person, in, an oder außerhalb der Schleife. „Außerhalb“ heißt: kein Eingreifen während dieser Aufgabe.",
+    "contract": "<b>Beschreibe die Übergabe klar.</b> Was die Aufgabe erhält und liefert und wie sich ihr Ergebnis prüfen lässt; nicht jede Prüfung muss ein Mensch vornehmen.",
+    "conway": "<b>Nutze Conways Gesetz als Denkanstoß.</b> Wenn Teamgrenzen den Übergaben und dem Ziel im Weg stehen, zieh einen anderen Entwurf in Betracht.",
+    "skills": "<b>Entwickle hilfreiche Fähigkeiten.</b> Arbeit zerlegen, klare Übergaben schreiben und Ergebnisse prüfen."
   },
   "notes": {
     "workflow-and-agent-two-levels": {
@@ -44,22 +44,22 @@
       "one-whole-workflow": {
         "title": "Ein ganzer Workflow",
         "keywords": "",
-        "script": "Setzen wir alles zu einem ganzen agentischen Workflow zusammen. Er nimmt jeden Wissensartikel, ein PDF oder eine URL, und macht daraus ein Quiz. Den Weg der Schritte entwirfst Du, und jeden Schritt steuert der Agent."
+        "script": "Fassen wir die Episode am tatsächlichen Sommerfest-Workflow zusammen. Sein Ziel: 200 Menschen aus fünf Standorten nächsten Sommer mit einem Budget von 60.000 Euro zusammenbringen. Er führt über Plan, Anforderungen, Recherche und Seite zu einem Festplan auf einer Seite. Die gezeigten Aufsichtsstufen sind Beispiele, keine Vorgaben."
       },
       "in-on-or-out-per-step": {
         "title": "In, an oder außerhalb, pro Schritt",
         "keywords": "",
-        "script": "Jeder Schritt bekommt seine eigene Stufe, in, an oder außerhalb der Schleife, bestimmt durch das Risiko eines falschen Ergebnisses und dadurch, wie gut sich dieses Ergebnis prüfen lässt. Das kannst Du mit einem eigenen Prozess tun: Nimm einen wiederkehrenden Prozess in Deinem Team und markiere, welche Schritte ein Agent übernehmen könnte und ob eine Person jeweils in, an oder außerhalb der Schleife bleibt."
+        "script": "Die Markierungen sind Beispiele für diesen Workflow: Plan und Recherche sind an der Schleife, Anforderungen und Seite in der Schleife. Menschen wählen die passende Stufe pro Aufgabe und berücksichtigen Risiken, Prüfungen und Kontext. Außerhalb heißt: kein Eingreifen während dieser Aufgabe, nicht unbedingt keine spätere Prüfung."
       },
       "a-contract-at-every-handoff": {
         "title": "Ein Vertrag an jeder Übergabe",
         "keywords": "",
-        "script": "An jeder Übergabe sitzt ein Vertrag: was der nächste Schritt erhält, was er liefern muss und wie jemand anderes es prüfen kann. Schreib diese drei Zeilen, bevor Du eine Aufgabe an einen Agenten gibst; sie sind es, die Dich dem, was zurückkommt, weiter vertrauen lassen."
+        "script": "Die Karten machen drei Übergaben sichtbar: was die nächste Stufe erhält, was sie liefern soll und wie sich das Ergebnis prüfen lässt. Hier gibt die organisierende Person die Recherchefragen frei; Quellen stützen die Ergebnisse, und Lücken bleiben offen. Prüfungen können passend automatisiert oder von Menschen vorgenommen werden."
       },
       "designed-around-the-goal": {
         "title": "Um das Ziel herum gestaltet",
         "keywords": "",
-        "script": "Schau, wo dieser Workflow angefangen hat: beim Ziel, einem Quiz, mit dem jemand etwas anfangen kann, und nicht dabei, wie irgendein Team heute arbeitet. Wenn Du eine Transformation leitest und der Workflow, den Deine Leute zeichnen, spiegelt, wie sie jetzt arbeiten, dann vermute Conways Gesetz und zeichne ihn um das Ziel herum neu. Und schau auf Dein Team, denn Arbeit zerlegen, klare Übergaben schreiben und das Ergebnis eines Agenten prüfen sind die Fähigkeiten, die es aufzubauen gilt. Nimm einen Prozess, schreib die Verträge, entscheide die Stufen und bau diese drei Fähigkeiten in Deinen Leuten auf."
+        "script": "Achte darauf, dass dieses Beispiel beim Festziel beginnt, nicht beim Organigramm. Nutze Conways Gesetz als Denkanstoß und prüfe, ob Teamgrenzen dem Ziel helfen oder im Weg stehen; allein ist es keine Diagnose. Arbeit zu zerlegen, klare Übergaben zu schreiben und Ergebnisse zu prüfen sind hilfreiche Fähigkeiten, aber keine allgemeine Checkliste. Fang mit einem Prozess an und entscheide, was zu seinen Aufgaben passt."
       }
     }
   }

@@ -1,12 +1,12 @@
 {
   "title": "KI-first entworfen",
-  "caption": "Fang beim Ergebnis des Ziels an, setz einen <b>Vertrag auf jeden Meilenstein</b> und streich die Nahtstellen, die nichts liefern, was jemand prüfen kann.",
+  "caption": "Ein möglicher Neuentwurf beginnt beim Ziel, macht Übergaben prüfbar und streicht Schritte ohne prüfbaren Mehrwert.",
   "before": {
-    "label": "Vorher · der Entwurf des Komitees, 16 Schritte",
+    "label": "Beispiel vorher · ein am Komitee ausgerichteter Entwurf mit 16 Schritten",
     "columns": { "venue": "Location-Suche · 14", "catering": "Catering · 1", "travel": "Anreise · 1" },
     "note": "vom Organigramm geformt"
   },
-  "after": { "label": "Nachher · vom Ziel aus neu gezeichnet: 5 Zettel, ein Vertrag an jedem Pfeil" },
+  "after": { "label": "Ein möglicher Neuentwurf vom Ziel aus: 5 Zettel, ein Vertrag an jedem Pfeil" },
   "terms": { "receives": "Erhält", "delivers": "Liefert", "checkedBy": "Geprüft:" },
   "doers": { "agent": "Agent", "person": "Person" },
   "board": {
@@ -40,10 +40,10 @@
   },
   "tips": {
     "outcome": "<b>Fang beim Ergebnis an.</b> Rollen sagen, wer frei ist; das Ergebnis sagt, was gebraucht wird.",
-    "contract": "<b>Ein Vertrag auf jedem Meilenstein</b>, <marker>das Innere bleibt frei</marker>.",
-    "seams": "<b>Streich Nahtstellen.</b> <marker>Leg Schritte zusammen, die nichts Prüfbares liefern</marker>."
+    "contract": "<b>Mach Übergaben prüfbar</b>, <marker>lass den inneren Ablauf offen</marker>.",
+    "seams": "<b>Vereinfache unnötige Übergaben.</b> <marker>Leg Schritte ohne prüfbaren Mehrwert zusammen</marker>."
   },
-  "payoff": "Du brauchtest nicht mehr Meetings. Du brauchtest Verträge.",
+  "payoff": "In diesem Beispiel schließen bessere Übergaben die Lücken – nicht mehr Meetings.",
   "notes": {
     "checkpoints-in-the-path": {
       "header": "Checkpoints im Ablauf",
@@ -75,22 +75,22 @@
       "start-at-the-outcome": {
         "title": "Beim Ergebnis anfangen",
         "keywords": "",
-        "script": "Hier sind drei Tipps für einen schlanken Workflow, und der erste ist, beim Ziel und seinem messbaren Ergebnis anzufangen, nicht bei den heutigen Rollen. Die Rollen sagen Dir, wer verfügbar ist, und das Ergebnis sagt Dir, was gebraucht wird."
+        "script": "Das ist eine mögliche Antwort auf das Sommerfest-Beispiel. Fang beim angestrebten Ergebnis an, statt die heutigen Rollen in den Workflow zu übertragen. Die Rollen sagen Dir, wer verfügbar ist; das Ergebnis hilft zu erkennen, was der Plan braucht."
       },
       "contract-on-every-milestone": {
         "title": "Vertrag auf jedem Meilenstein",
         "keywords": "",
-        "script": "Der zweite ist, auf jeden Meilenstein einen Vertrag zu setzen und das Innere jedes Schritts freizulassen. Du entscheidest, was ankommen muss und wie es geprüft wird, und die Person oder der Agent entscheidet den Rest."
+        "script": "Mach dann wichtige Übergaben prüfbar, ohne jeden Schritt im Inneren der Aufgabe vorzuschreiben. Vereinbare, was ankommen muss und wie sich das Ergebnis prüfen lässt; die ausführende Person oder der Agent entscheidet, wie."
       },
       "cut-seams": {
         "title": "Nahtstellen streichen",
         "keywords": "",
-        "script": "Der dritte ist, Nahtstellen zu streichen. Jede Nahtstelle ist ein Ort, an dem sich eine Lücke verstecken kann, also leg die Schritte zusammen, die nichts liefern, was jemand prüfen kann."
+        "script": "Suche schließlich nach Übergaben ohne prüfbaren Mehrwert. In diesem Beispiel ist es ein möglicher Neuentwurf, zusammengehörige Arbeit zu bündeln – keine Regel, dass weniger Schritte immer besser sind."
       },
       "not-more-meetings": {
         "title": "Nicht mehr Meetings",
         "keywords": "",
-        "script": "Erinnerst Du Dich an die Frage von der ersten Folie? Eine Antwort war, sie zum Reden zu bringen, mehr Meetings abzuhalten. Du brauchtest nicht mehr Meetings, Du brauchtest Verträge."
+        "script": "Erinnerst Du Dich an die Frage von der ersten Folie? Mehr Meetings waren eine mögliche Antwort. In diesem Beispiel schließen klarere Ziele und Übergaben die Lücken; bei einem anderen Workflow kann etwas anderes nötig sein."
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "title": "Die Organigramm-Falle",
-  "caption": "Conways Gesetz: Was Menschen entwerfen, bildet ab, <b>wer mit wem spricht</b>, und ein Workflow, den Menschen für sich selbst zeichnen, ist auch ein Entwurf.",
+  "caption": "Conways Gesetz ist eine hilfreiche Hypothese: Entwürfe spiegeln oft, <b>wer mit wem spricht</b>. Ein Workflow, den Menschen zeichnen, ist ebenfalls ein Entwurf.",
   "orgChart": {
     "label": "Festkomitee · Organigramm",
     "lead": "Leitung des Komitees",
@@ -45,7 +45,7 @@
   "hedges": {
     "tendency": "<marker>Eine Tendenz, keine Regel: stark in 70 % der Studien zu Unternehmen</marker>",
     "inference": "Es auf Workflows anzuwenden, ist meine Schlussfolgerung, kein gemessenes Ergebnis.",
-    "firstDesign": "<marker>Der erste Entwurf ist selten der beste: Zeichne ihn vom Ziel aus neu</marker>"
+    "firstDesign": "<marker>Der erste Entwurf muss nicht der beste sein: Prüf ihn am Ziel</marker>"
   },
   "notes": {
     "the-law-as-conway-states-it": {
@@ -91,7 +91,7 @@
       "conways-law": {
         "title": "Conways Gesetz",
         "keywords": "",
-        "script": "Conways Gesetz von 1968, in einfachen Worten: Was Menschen entwerfen, folgt dem, wer mit wem spricht. Ein Workflow, den Menschen für sich selbst zeichnen, ist auch ein Entwurf, also tut er dasselbe. Den genauen Wortlaut findest Du in den Speaker Notes."
+        "script": "Conways Gesetz von 1968 beschreibt eine Tendenz: Entwürfe spiegeln oft die Kommunikationsstruktur. Es auf Workflows anzuwenden, ist eine Schlussfolgerung, keine gemessene Regel; den genauen Wortlaut und die Belege findest Du in den Speaker Notes."
       },
       "a-teams-draft": {
         "title": "Der Entwurf eines Teams",
@@ -101,12 +101,12 @@
       "broadly-defined": {
         "title": "Im weiten Sinne",
         "keywords": "",
-        "script": "Conway meinte Systeme im weiten Sinne, aber das auf Workflows anzuwenden, ist meine Schlussfolgerung, denn niemand hat es für Workflows gemessen. Es erklärt aber, was ich gesehen habe, und es gibt Dir einen Test, den Du machen kannst."
+        "script": "Conway meinte Systeme im weiten Sinne, aber das auf Workflows anzuwenden, ist meine Schlussfolgerung; die Belege zeigen kein universelles Muster. Nimm das als Anlass zu prüfen, ob Teamgrenzen dem Ziel helfen oder im Weg stehen."
       },
       "your-sign": {
         "title": "Dein Warnzeichen",
         "keywords": "",
-        "script": "Wenn also der Workflow, den Deine Leute zeichnen, wie Euer Organigramm aussieht, dann vermute Conways Gesetz und zeichne ihn vom Ziel aus neu. Wenn Du die Transformation leitest, ist diese Prüfung Deine Aufgabe."
+        "script": "Wenn ein Workflow Euer Organigramm spiegelt, nutze Conways Gesetz als Denkanstoß: Helfen die Teamgrenzen dem Ziel? Zieh einen neuen Entwurf in Betracht, wenn sie im Weg stehen."
       }
     }
   }

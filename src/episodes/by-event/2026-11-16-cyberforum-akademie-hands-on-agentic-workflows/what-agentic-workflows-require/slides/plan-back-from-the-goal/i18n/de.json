@@ -30,7 +30,7 @@
   "rules": {
     "outcome": "<b>Formuliere das Ziel als Ergebnis.</b> Es sagt Dir, wann Du fertig bist.",
     "external": "<b>Markiere, was außerhalb Deiner Kontrolle liegt.</b> Plane darum herum.",
-    "orphan": "<b>Finde die Aufgaben, die niemandem gehörten.</b> Sie tauchen unter ihrem Teilziel auf."
+    "orphan": "<b>Suche nach Aufgaben, die im Entwurf niemandem gehörten.</b> In diesem Beispiel tauchen sie unter einem Teilziel auf."
   },
   "callout": {
     "label": "Bekannt",
@@ -149,12 +149,12 @@
       "the-tasks-nobody-owned": {
         "title": "Die Aufgaben, die niemandem gehörten",
         "keywords": "",
-        "script": "Jetzt arbeite Dich von kommen sicher nach Hause zurück. Kurz davor brauchen die Leute eine Fahrt nach Hause, und niemand hatte nach einer offenen Bar eine geplant, also erscheint ein Shuttle auf dem Board. Kurz vor der Ankunft müssen die Gäste wissen, wie die Nacht wird, also bekommt die Gästeinfo eine Zeile: warme Kleidung mitbringen, nachts sechs Grad. Diese beiden Aufgaben gehörten auf dem ersten Board niemandem, und mit ihnen haben die trinkenden Fahrer und die frierenden Gäste einen Verantwortlichen."
+        "script": "Jetzt arbeite Dich von „sicher nach Hause kommen“ zurück. In diesem Beispiel zeigt sich eine Lücke im Entwurf: Nach einer offenen Bar brauchen die Leute eine Heimfahrt, also kommt ein Shuttle dazu. Vom Ankommen aus rückwärts zu denken, legt außerdem nahe, den Gästen bei sechs Grad nachts warme Kleidung zu empfehlen. Das sind hilfreiche Fragen an diesen Plan – keine Garantie, dass Rückwärtsplanung jede fehlende Aufgabe findet."
       },
       "well-known-and-agents-like-it": {
         "title": "Bekannt, und Agenten mögen es",
         "keywords": "",
-        "script": "Vom Ziel aus rückwärts zu planen ist nichts Exotisches, und auch Agenten arbeiten besser, wenn sie ein klar definiertes Ziel und Ergebnis bekommen. Wenn Du also einem Agenten eine Aufgabe übergibst: Hast Du ihm das Ziel gegeben oder nur die Tätigkeit?"
+        "script": "Vom Ziel aus rückwärts zu planen, ist eine bekannte Idee im Projektmanagement. Auch Leitfäden für Agenten empfehlen klare Ziele und Erfolgskriterien; das ist eine Empfehlung, keine allgemeingültige Messung. Wenn Du einem Agenten eine Aufgabe übergibst: Hast Du ihm das Ziel genannt oder nur die Tätigkeit?"
       }
     }
   }

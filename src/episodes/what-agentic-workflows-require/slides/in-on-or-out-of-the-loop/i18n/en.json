@@ -24,9 +24,9 @@
       "label": "Out of the loop",
       "name": "Human out of the loop",
       "abbr": "HOOTL",
-      "definition": "It acts without any person, who sees only the result.",
+      "definition": "No one intervenes during the task; a person may still review its result afterwards.",
       "role": "The auditor",
-      "does": "checks the logs afterwards"
+      "does": "may review the result or logs afterwards"
     }
   },
   "agent": "Agent",
@@ -46,7 +46,7 @@
     "label": "Goal",
     "text": "20 June: everyone celebrates together and gets home safely"
   },
-  "risk": { "label": "Risk", "hint": "of a wrong result: highest where a person approves" },
+  "risk": { "label": "Risk", "hint": "of a wrong result: depends on the task and its context" },
   "speed": { "label": "Speed", "hint": "highest where nobody waits" },
   "origin": {
     "label": "Borrowed terms",
@@ -127,7 +127,7 @@
       "out": {
         "title": "Out",
         "keywords": "",
-        "script": "Human out of the loop means the agent acts without any person, who sees only the result. The agent books the venue, and all you get is the confirmation."
+        "script": "Out of the loop means no person intervenes while this task runs. Someone can still review the result afterwards; in this example, the agent books the venue and you receive a confirmation."
       },
       "borrowed-terms": {
         "title": "Borrowed terms",
@@ -137,7 +137,7 @@
       "per-task": {
         "title": "Per task",
         "keywords": "",
-        "script": "So you choose per task, not per company. Minimal intervention stops being a vague promise and becomes a setting that you choose, task by task."
+        "script": "People choose a level for each task; it is not one setting for a whole company. Consider the task's consequences, context and any applicable rules."
       }
     }
   }

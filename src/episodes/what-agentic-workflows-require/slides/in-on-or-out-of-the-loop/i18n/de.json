@@ -24,9 +24,9 @@
       "label": "Außerhalb der Schleife",
       "name": "Human out of the Loop",
       "abbr": "HOOTL",
-      "definition": "Er handelt ohne jeden Menschen, der nur das Ergebnis sieht.",
+      "definition": "Während der Aufgabe greift niemand ein; das Ergebnis kann trotzdem später geprüft werden.",
       "role": "Der Prüfer",
-      "does": "prüft hinterher die Protokolle"
+      "does": "kann Ergebnis oder Protokolle später prüfen"
     }
   },
   "agent": "Agent",
@@ -46,7 +46,7 @@
     "label": "Ziel",
     "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause"
   },
-  "risk": { "label": "Risiko", "hint": "eines falschen Ergebnisses: am höchsten, wo ein Mensch freigibt" },
+  "risk": { "label": "Risiko", "hint": "eines falschen Ergebnisses: abhängig von Aufgabe und Kontext" },
   "speed": { "label": "Tempo", "hint": "am höchsten, wo niemand wartet" },
   "origin": {
     "label": "Geliehene Begriffe",
@@ -129,7 +129,7 @@
       "out": {
         "title": "Außerhalb",
         "keywords": "",
-        "script": "Human out of the Loop heißt, der Agent handelt ohne jeden Menschen, der nur das Ergebnis sieht. Der Agent bucht die Location, und alles, was Du bekommst, ist die Bestätigung."
+        "script": "Außerhalb der Schleife heißt: Während dieser Aufgabe greift niemand ein. Das Ergebnis kann trotzdem später geprüft werden; in diesem Beispiel bucht der Agent die Location, und Du erhältst eine Bestätigung."
       },
       "borrowed-terms": {
         "title": "Geliehene Begriffe",
@@ -139,7 +139,7 @@
       "per-task": {
         "title": "Pro Aufgabe",
         "keywords": "",
-        "script": "Du wählst also pro Aufgabe, nicht pro Unternehmen. Minimales Eingreifen ist dann kein vages Versprechen mehr, sondern eine Einstellung, die Du wählst, Aufgabe für Aufgabe."
+        "script": "Menschen wählen die Stufe pro Aufgabe; sie ist keine Einstellung für ein ganzes Unternehmen. Entscheidend sind die Folgen der Aufgabe, ihr Kontext und geltende Regeln."
       }
     }
   }

@@ -1223,9 +1223,9 @@
     "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require": {
       "en": {
         "title": "What agentic workflows require of people and organisations",
-        "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
-        "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-        "minutes": 17.450000000000003,
+        "caption": "Everyone delivered exactly what was asked, and none of it added up. This Episode uses a working definition of an agentic workflow: a goal-led process with checkable handoffs, designed around the goal, not the org chart.",
+        "description": "A working definition of agentic workflows; how people choose oversight task by task and can review outcomes; useful capabilities for planning, handoffs and checks; and organisational conditions that can support goal-led workflows. The examples are illustrative, not universal rules, and handoff gaps are not automatically individual failures.",
+        "minutes": 16.87857142857143,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1235,12 +1235,12 @@
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "The thought experiment",
-                "minutes": 1.7714285714285714
+                "minutes": 1.7857142857142856
               },
               {
                 "id": "a-thought-experiment--now-with-agents",
                 "title": "Now with agents",
-                "minutes": 0.8357142857142857
+                "minutes": 0.8071428571428572
               }
             ]
           },
@@ -1249,15 +1249,11 @@
             "title": "What an agentic workflow is",
             "minutes": 0.19285714285714287,
             "items": [
-              {
-                "id": "what-an-agentic-workflow-is--what-an-agent-is",
-                "title": "What an agent is",
-                "minutes": 0.8714285714285714
-              },
+              { "id": "what-an-agentic-workflow-is--what-an-agent-is", "title": "What an agent is", "minutes": 0.85 },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "What an agentic workflow is",
-                "minutes": 0.7928571428571428
+                "minutes": 0.8785714285714286
               }
             ]
           },
@@ -1269,12 +1265,12 @@
               {
                 "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
                 "title": "In, on or out of the loop",
-                "minutes": 1.2785714285714287
+                "minutes": 1.3
               },
               {
                 "id": "how-far-you-step-out--reviewability-sets-the-distance",
                 "title": "Reviewability sets the distance",
-                "minutes": 1.1285714285714286
+                "minutes": 1.0214285714285714
               }
             ]
           },
@@ -1286,17 +1282,17 @@
               {
                 "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
                 "title": "Plan back from the goal",
-                "minutes": 1.8285714285714285
+                "minutes": 1.7642857142857142
               },
               {
                 "id": "what-it-requires-of-each-person--contracts-at-the-seams",
                 "title": "Contracts at the seams",
-                "minutes": 1.3
+                "minutes": 1.2
               },
               {
                 "id": "what-it-requires-of-each-person--reviewing-the-result",
                 "title": "Reviewing the result",
-                "minutes": 0.9571428571428571
+                "minutes": 1.0071428571428571
               }
             ]
           },
@@ -1308,22 +1304,22 @@
               {
                 "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
                 "title": "The org chart trap",
-                "minutes": 1.1071428571428572
+                "minutes": 1.057142857142857
               },
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "Designed AI first",
-                "minutes": 0.9285714285714286
+                "minutes": 0.9142857142857143
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
                 "title": "What to look for in your team",
-                "minutes": 1.557142857142857
+                "minutes": 1.435714285714286
               },
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
-                "title": "From article to quiz",
-                "minutes": 1.6999999999999997
+                "title": "One whole workflow",
+                "minutes": 1.4642857142857144
               }
             ]
           }
@@ -1331,9 +1327,9 @@
       },
       "de": {
         "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
-        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
-        "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-        "minutes": 20.16666666666667,
+        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Diese Episode nutzt eine Arbeitsdefinition für agentische Workflows: ein zielgerichteter Prozess mit prüfbaren Übergaben, am Ziel statt am Organigramm ausgerichtet.",
+        "description": "Eine Arbeitsdefinition agentischer Workflows; wie Menschen die Aufsicht pro Aufgabe festlegen und Ergebnisse prüfen können; hilfreiche Fähigkeiten für Planung, Übergaben und Prüfungen; und organisatorische Voraussetzungen für zielgerichtete Workflows. Die Beispiele sind keine allgemeinen Regeln, und Lücken bei Übergaben sind nicht automatisch individuelles Versagen.",
+        "minutes": 19.433333333333337,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1343,9 +1339,13 @@
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "Das Gedankenexperiment",
-                "minutes": 2.083333333333333
+                "minutes": 2.1083333333333334
               },
-              { "id": "a-thought-experiment--now-with-agents", "title": "Jetzt mit Agenten", "minutes": 0.925 }
+              {
+                "id": "a-thought-experiment--now-with-agents",
+                "title": "Jetzt mit Agenten",
+                "minutes": 0.9666666666666667
+              }
             ]
           },
           {
@@ -1353,15 +1353,11 @@
             "title": "Was ein agentischer Workflow ist",
             "minutes": 0.225,
             "items": [
-              {
-                "id": "what-an-agentic-workflow-is--what-an-agent-is",
-                "title": "Was ein Agent ist",
-                "minutes": 0.9666666666666667
-              },
+              { "id": "what-an-agentic-workflow-is--what-an-agent-is", "title": "Was ein Agent ist", "minutes": 0.95 },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "Was ein agentischer Workflow ist",
-                "minutes": 0.8916666666666667
+                "minutes": 0.9833333333333334
               }
             ]
           },
@@ -1378,7 +1374,7 @@
               {
                 "id": "how-far-you-step-out--reviewability-sets-the-distance",
                 "title": "Prüfbarkeit bestimmt den Abstand",
-                "minutes": 1.3166666666666667
+                "minutes": 1.1416666666666666
               }
             ]
           },
@@ -1390,17 +1386,17 @@
               {
                 "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
                 "title": "Vom Ziel aus rückwärts planen",
-                "minutes": 2.1416666666666666
+                "minutes": 2.0583333333333336
               },
               {
                 "id": "what-it-requires-of-each-person--contracts-at-the-seams",
                 "title": "Verträge an den Nahtstellen",
-                "minutes": 1.4916666666666667
+                "minutes": 1.3666666666666667
               },
               {
                 "id": "what-it-requires-of-each-person--reviewing-the-result",
                 "title": "Das Ergebnis prüfen",
-                "minutes": 1.0750000000000002
+                "minutes": 1.1833333333333333
               }
             ]
           },
@@ -1412,22 +1408,22 @@
               {
                 "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
                 "title": "Die Organigramm-Falle",
-                "minutes": 1.3333333333333335
+                "minutes": 1.2000000000000002
               },
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "KI-first entworfen",
-                "minutes": 1.1083333333333334
+                "minutes": 1.0999999999999999
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
                 "title": "Worauf Du in Deinem Team achten solltest",
-                "minutes": 1.7833333333333334
+                "minutes": 1.6500000000000001
               },
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
-                "title": "Vom Artikel zum Quiz",
-                "minutes": 1.9833333333333334
+                "title": "Ein durchgängiger Workflow",
+                "minutes": 1.6583333333333332
               }
             ]
           }
@@ -2791,9 +2787,9 @@
     "what-agentic-workflows-require": {
       "en": {
         "title": "What agentic workflows require of people and organisations",
-        "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
-        "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-        "minutes": 17.450000000000003,
+        "caption": "Everyone delivered exactly what was asked, and none of it added up. This Episode uses a working definition of an agentic workflow: a goal-led process with checkable handoffs, designed around the goal, not the org chart.",
+        "description": "A working definition of agentic workflows; how people choose oversight task by task and can review outcomes; useful capabilities for planning, handoffs and checks; and organisational conditions that can support goal-led workflows. The examples are illustrative, not universal rules, and handoff gaps are not automatically individual failures.",
+        "minutes": 16.87857142857143,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -2803,12 +2799,12 @@
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "The thought experiment",
-                "minutes": 1.7714285714285714
+                "minutes": 1.7857142857142856
               },
               {
                 "id": "a-thought-experiment--now-with-agents",
                 "title": "Now with agents",
-                "minutes": 0.8357142857142857
+                "minutes": 0.8071428571428572
               }
             ]
           },
@@ -2817,15 +2813,11 @@
             "title": "What an agentic workflow is",
             "minutes": 0.19285714285714287,
             "items": [
-              {
-                "id": "what-an-agentic-workflow-is--what-an-agent-is",
-                "title": "What an agent is",
-                "minutes": 0.8714285714285714
-              },
+              { "id": "what-an-agentic-workflow-is--what-an-agent-is", "title": "What an agent is", "minutes": 0.85 },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "What an agentic workflow is",
-                "minutes": 0.7928571428571428
+                "minutes": 0.8785714285714286
               }
             ]
           },
@@ -2837,12 +2829,12 @@
               {
                 "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
                 "title": "In, on or out of the loop",
-                "minutes": 1.2785714285714287
+                "minutes": 1.3
               },
               {
                 "id": "how-far-you-step-out--reviewability-sets-the-distance",
                 "title": "Reviewability sets the distance",
-                "minutes": 1.1285714285714286
+                "minutes": 1.0214285714285714
               }
             ]
           },
@@ -2854,17 +2846,17 @@
               {
                 "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
                 "title": "Plan back from the goal",
-                "minutes": 1.8285714285714285
+                "minutes": 1.7642857142857142
               },
               {
                 "id": "what-it-requires-of-each-person--contracts-at-the-seams",
                 "title": "Contracts at the seams",
-                "minutes": 1.3
+                "minutes": 1.2
               },
               {
                 "id": "what-it-requires-of-each-person--reviewing-the-result",
                 "title": "Reviewing the result",
-                "minutes": 0.9571428571428571
+                "minutes": 1.0071428571428571
               }
             ]
           },
@@ -2876,22 +2868,22 @@
               {
                 "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
                 "title": "The org chart trap",
-                "minutes": 1.1071428571428572
+                "minutes": 1.057142857142857
               },
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "Designed AI first",
-                "minutes": 0.9285714285714286
+                "minutes": 0.9142857142857143
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
                 "title": "What to look for in your team",
-                "minutes": 1.557142857142857
+                "minutes": 1.435714285714286
               },
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
-                "title": "From article to quiz",
-                "minutes": 1.6999999999999997
+                "title": "One whole workflow",
+                "minutes": 1.4642857142857144
               }
             ]
           }
@@ -2899,9 +2891,9 @@
       },
       "de": {
         "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
-        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
-        "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-        "minutes": 20.16666666666667,
+        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Diese Episode nutzt eine Arbeitsdefinition für agentische Workflows: ein zielgerichteter Prozess mit prüfbaren Übergaben, am Ziel statt am Organigramm ausgerichtet.",
+        "description": "Eine Arbeitsdefinition agentischer Workflows; wie Menschen die Aufsicht pro Aufgabe festlegen und Ergebnisse prüfen können; hilfreiche Fähigkeiten für Planung, Übergaben und Prüfungen; und organisatorische Voraussetzungen für zielgerichtete Workflows. Die Beispiele sind keine allgemeinen Regeln, und Lücken bei Übergaben sind nicht automatisch individuelles Versagen.",
+        "minutes": 19.433333333333337,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -2911,9 +2903,13 @@
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "Das Gedankenexperiment",
-                "minutes": 2.083333333333333
+                "minutes": 2.1083333333333334
               },
-              { "id": "a-thought-experiment--now-with-agents", "title": "Jetzt mit Agenten", "minutes": 0.925 }
+              {
+                "id": "a-thought-experiment--now-with-agents",
+                "title": "Jetzt mit Agenten",
+                "minutes": 0.9666666666666667
+              }
             ]
           },
           {
@@ -2921,15 +2917,11 @@
             "title": "Was ein agentischer Workflow ist",
             "minutes": 0.225,
             "items": [
-              {
-                "id": "what-an-agentic-workflow-is--what-an-agent-is",
-                "title": "Was ein Agent ist",
-                "minutes": 0.9666666666666667
-              },
+              { "id": "what-an-agentic-workflow-is--what-an-agent-is", "title": "Was ein Agent ist", "minutes": 0.95 },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "Was ein agentischer Workflow ist",
-                "minutes": 0.8916666666666667
+                "minutes": 0.9833333333333334
               }
             ]
           },
@@ -2946,7 +2938,7 @@
               {
                 "id": "how-far-you-step-out--reviewability-sets-the-distance",
                 "title": "Prüfbarkeit bestimmt den Abstand",
-                "minutes": 1.3166666666666667
+                "minutes": 1.1416666666666666
               }
             ]
           },
@@ -2958,17 +2950,17 @@
               {
                 "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
                 "title": "Vom Ziel aus rückwärts planen",
-                "minutes": 2.1416666666666666
+                "minutes": 2.0583333333333336
               },
               {
                 "id": "what-it-requires-of-each-person--contracts-at-the-seams",
                 "title": "Verträge an den Nahtstellen",
-                "minutes": 1.4916666666666667
+                "minutes": 1.3666666666666667
               },
               {
                 "id": "what-it-requires-of-each-person--reviewing-the-result",
                 "title": "Das Ergebnis prüfen",
-                "minutes": 1.0750000000000002
+                "minutes": 1.1833333333333333
               }
             ]
           },
@@ -2980,22 +2972,22 @@
               {
                 "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
                 "title": "Die Organigramm-Falle",
-                "minutes": 1.3333333333333335
+                "minutes": 1.2000000000000002
               },
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "KI-first entworfen",
-                "minutes": 1.1083333333333334
+                "minutes": 1.0999999999999999
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
                 "title": "Worauf Du in Deinem Team achten solltest",
-                "minutes": 1.7833333333333334
+                "minutes": 1.6500000000000001
               },
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
-                "title": "Vom Artikel zum Quiz",
-                "minutes": 1.9833333333333334
+                "title": "Ein durchgängiger Workflow",
+                "minutes": 1.6583333333333332
               }
             ]
           }

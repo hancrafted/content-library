@@ -52,7 +52,7 @@
       "fact": "31 vegetarisch",
       "seamCard": "Location",
       "held": "Hüttenküche liest es als: Eier erlaubt",
-      "result": "Die indischen Kolleginnen und Kollegen können nicht essen"
+      "result": "Kein Essen ohne Ei"
     }
   },
   "result": {
@@ -88,7 +88,7 @@
       "none-of-it-adds-up": {
         "title": "Nichts davon geht auf",
         "keywords": "",
-        "script": "Und trotzdem scheitert das Fest, denn die Fehler liegen zwischen den Karten. Programm hat Paintball gebucht, während Anreise einen barrierefreien Bus für zehn Kolleginnen und Kollegen im Rollstuhl gebucht hatte, die jetzt am Rand sitzen. Anreise hat alle in Fahrgemeinschaften geschickt, während Essen und Getränke eine offene Bar bis ein Uhr nachts gebucht hat, also haben die Fahrer getrunken. Location hat eine malerische Almhütte gefunden, während die Gästeinfo von Anreise nur Route und Zeiten nennt, also kommen die Leute in Sommerkleidung bei sechs Grad in der Nacht. Und das Abendessen wurde mit 31 vegetarisch bestellt, was die Küche der Hütte auf westliche Art liest, also landen Eiergerichte vor Kolleginnen und Kollegen, die sie nicht essen können. Jeder Schritt war perfekt, und perfekte Schritte ergeben von allein kein gutes Ganzes."
+        "script": "Und trotzdem scheitert das Fest, weil die Lücken zwischen den Karten liegen – nicht, weil jemand die eigene Aufgabe schlecht erledigt hätte. Programm hat Paintball gebucht, während Anreise einen barrierefreien Bus für zehn Rollstuhlnutzende organisiert hatte, die nun nicht mitmachen können. Anreise hat Fahrgemeinschaften organisiert, während Essen und Getränke eine offene Bar bis ein Uhr nachts gebucht hat; dadurch haben die Fahrer Alkohol getrunken. Location hat eine malerische Almhütte gefunden, aber in der Gästeinfo von Anreise standen nur Route und Zeiten. Also kommen die Leute in Sommerkleidung bei sechs Grad in der Nacht. Und die Angabe „31 vegetarisch“ ließ offen, ob Eier erlaubt waren; die Küche der Hütte hat sie eingeplant, sodass Gäste, die keine Eier essen, kein passendes Essen haben. Jede Karte war erledigt, doch die Übergaben passten nicht zum gemeinsamen Ziel."
       },
       "your-question": {
         "title": "Deine Frage",

@@ -1,6 +1,6 @@
 {
   "title": "Das Ergebnis prüfen",
-  "caption": "Verifikation prüft ein Ergebnis gegen seinen Vertrag; Validierung prüft es gegen das Ziel. Die zweite Prüfung ist der menschliche Teil.",
+  "caption": "Verifikation prüft ein Ergebnis gegen seinen Vertrag; Validierung gegen das Ziel. In diesem Beispiel prüft ein Mensch das Ziel; passende Prüfungen können auch automatisiert sein.",
   "result": {
     "kicker": "Programm",
     "text": "Paintball × 200",
@@ -75,7 +75,7 @@
       "two-checks": {
         "title": "Zwei Prüfungen",
         "keywords": "",
-        "script": "Ein Ergebnis zu prüfen, braucht zwei Prüfungen, die oft zu einer verschmolzen werden. Verifikation prüft das Ergebnis gegen seinen Vertrag. Validierung prüft das Ergebnis gegen das Ziel."
+        "script": "Wir können zwei Begriffe aus der Softwareentwicklung nutzen, um zwei Fragen an ein Ergebnis zu stellen. Verifikation prüft es gegen den Vertrag; Validierung prüft, ob es dem Ziel dient. Die Begriffe auf Agentenarbeit anzuwenden, ist eine Analogie."
       },
       "paintball-passes": {
         "title": "Paintball besteht",
@@ -83,9 +83,9 @@
         "script": "Der Paintball-Zettel erfüllt jede Zeile seines Vertrags: ein Programm für 200, im Budget, am richtigen Tag. Und trotzdem verfehlt er das Ziel, weil der Vertrag richtig war in dem, was verlangt war, und falsch in dem, was gebraucht wurde."
       },
       "the-human-part": {
-        "title": "Der menschliche Teil",
+        "title": "Die Prüfung des Ziels",
         "keywords": "",
-        "script": "Die zweite Prüfung ist der menschliche Teil, und sie ist es, die Dich weiter herausgehen lässt. Wenn Du nicht hinschaust, kannst Du einem Ergebnis vertrauen, das gegen das Ziel geprüft wurde, nicht nur gegen den Zettel."
+        "script": "In diesem Beispiel prüft ein Mensch das übergeordnete Ziel, nicht nur den Aufgabenzettel. Andere Prüfungen lassen sich passend automatisieren. Menschen wählen die Aufsicht und können das Ergebnis auch dann noch prüfen, wenn sie während der Aufgabe nicht eingegriffen haben."
       },
       "your-verdict": {
         "title": "Dein Urteil",

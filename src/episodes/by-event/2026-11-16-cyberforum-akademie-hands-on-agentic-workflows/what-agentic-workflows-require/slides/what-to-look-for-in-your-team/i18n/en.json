@@ -1,9 +1,9 @@
 {
   "title": "What to look for in your team",
   "heading": "What did you need to do?",
-  "caption": "Build three skills in each person, which fix the four failures from the board, and give them an organisation <b>designed around the goal</b>.",
+  "caption": "Three useful capabilities to develop, synthesized from this party example, alongside an organisation <b>designed around the goal</b>.",
   "person": {
-    "label": "In each person",
+    "label": "Useful capabilities",
     "skills": {
       "breakDown": {
         "skill": "Break the work down from the goal",
@@ -34,8 +34,8 @@
   },
   "oversight": { "in": "In the loop", "on": "On the loop", "out": "Out of the loop" },
   "footnote": {
-    "synthesis": "<marker>That these three are the skills to build is a synthesis: no study tests them as a set</marker>.",
-    "juniors": "<marker>Juniors learn them on narrow tasks, the ones agents take first</marker>."
+    "synthesis": "<marker>This three-skill set is a synthesis from the example, not a tested universal checklist</marker>.",
+    "juniors": "<marker>Junior colleagues may have fewer chances to practise narrow tasks when agents take them over</marker>."
   },
   "notes": {
     "management-101-skills": {
@@ -80,32 +80,32 @@
       "the-answer": {
         "title": "The answer",
         "keywords": "",
-        "script": "So what did you need to do? You needed three skills in your people, and each one is tied to the failures it would have fixed."
+        "script": "In this party example, three useful capabilities might help address the gaps. This is a synthesis, not a universal checklist for every person or team."
       },
       "break-down": {
         "title": "Break down",
         "keywords": "",
-        "script": "The first is to break the work down from the goal. Do that, and the drinking drivers and the cold guests have an owner before the party starts."
+        "script": "First, work back from the goal. In this example, that helps assign someone to plan the ride home and tell guests what to wear."
       },
       "write-contracts": {
         "title": "Write contracts",
         "keywords": "",
-        "script": "The second is to write the contract at the seam, what a task receives, what it delivers and how it is checked. Do that, and the egg dishes cannot happen."
+        "script": "Second, clarify important handoffs: what a task receives and delivers, and how its result can be checked. Here, defining the dietary requirement would help avoid the egg-dish mismatch."
       },
       "review-twice": {
         "title": "Review twice",
         "keywords": "",
-        "script": "The third is to review twice, against the contract and against the goal. Do that, and the paintball does not go ahead."
+        "script": "Third, check results against both the agreed task and the broader goal. In this example, that could flag an activity some guests cannot join."
       },
       "the-organisation": {
         "title": "The organisation",
         "keywords": "",
-        "script": "The organisation has its own part: clear goals, contracts between teams, a policy on how much oversight each task gets, and workflows designed around the goal and not around the org chart."
+        "script": "The organisation also shapes the conditions: clear goals, useful handoffs, task-specific oversight choices and workflows designed around the goal rather than the org chart."
       },
       "look-at-your-team": {
         "title": "Look at your team",
         "keywords": "",
-        "script": "Now look at your team. Who can break work down, who writes a clear handoff, and who can review an agent's result? Those are the skills to build, and in my view they are where your effort pays off first."
+        "script": "Now look at your team. Where would it help to strengthen planning, clear handoffs or checking an agent's result? Those are useful capabilities to develop, based on this example and the evidence in the Speaker notes."
       },
       "take-one-process": {
         "title": "Take one process",

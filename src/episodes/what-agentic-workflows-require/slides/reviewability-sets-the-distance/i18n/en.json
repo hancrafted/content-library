@@ -1,8 +1,8 @@
 {
   "title": "Reviewability sets the distance",
-  "caption": "A task's level is set by what a wrong result can do and by how well you can <b>check the result</b>; making it checkable moves it out.",
+  "caption": "For each task, consider both the impact of a wrong result and how well it can be checked. This is a useful synthesis, not a universal formula.",
   "board": {
-    "label": "Summer party · each task as far out as its risk and its check allow"
+    "label": "Summer party · illustrative choices, not defaults; risk and checkability are two considerations"
   },
   "agent": "Agent",
   "tasks": {
@@ -23,7 +23,7 @@
       "fact": "One activity for 200",
       "was": "Was: Paintball × 200, only your yes or no",
       "ifWrong": "colleagues left out of the day",
-      "move": "The activity moves from in the loop to on the loop"
+      "move": "One possible shift: from approval to monitoring"
     }
   },
   "risk": {
@@ -111,7 +111,7 @@
       "the-rule": {
         "title": "The rule",
         "keywords": "",
-        "script": "You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at."
+        "script": "As a design heuristic, ask how well a result can be checked and what a wrong result could do. Neither factor sets the level by itself: people choose the oversight that fits the task, its context and applicable rules."
       },
       "hypothesis-said-openly": {
         "title": "Hypothesis, said openly",
@@ -121,12 +121,12 @@
       "risk-too": {
         "title": "Risk too",
         "keywords": "",
-        "script": "Checkability is only half of it. What a wrong result can do also helps set the level, so the more damage a wrong result can cause, the more a person stays in."
+        "script": "This is a synthesis, not a rule from one source. A higher-impact mistake may call for closer oversight, but context and other constraints matter too."
       },
       "make-it-checkable": {
         "title": "Make it checkable",
         "keywords": "",
-        "script": "That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop."
+        "script": "One useful design move is to build a check into the task: everyone can join, wheelchair access, no fitness needed. With a check like that, people could choose to monitor this activity instead of approving every step."
       }
     }
   }

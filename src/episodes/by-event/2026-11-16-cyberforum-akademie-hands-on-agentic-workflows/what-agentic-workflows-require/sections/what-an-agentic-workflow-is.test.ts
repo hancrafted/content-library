@@ -112,7 +112,7 @@ describe('success cases', () => {
       {
         title: 'Steers its own steps',
         script:
-          'If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. That is the reason the rest of this Episode is about what you must set up around it.',
+          'If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. The rest of this Episode asks what people and organisations can design around that difference.',
       },
     ];
     // ACT
@@ -127,17 +127,17 @@ describe('success cases', () => {
       {
         title: 'The definition',
         script:
-          'An agentic workflow is a process in which agents, not people, take the decisions and do the tasks, within a structure you set. The exact wording and where it comes from are in the Speaker notes.',
+          'For this Episode, an agentic workflow is a process where agents take some decisions and actions inside a path people set. That is a working definition informed by vendor descriptions, not a universal standard. The exact sources are in the Speaker notes.',
       },
       {
         title: 'Two levels',
         script:
-          'Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away.',
+          'Read it as two levels. You design the path: the tasks and what each hands over to the next. The agent steers inside its own task. How much oversight each task gets is a separate choice, not something the definition settles.',
       },
       {
         title: 'Minimal, how minimal',
         script:
-          'Notice the phrase minimal human intervention, because it carries a lot of weight and says very little. How minimal, and for which task? That is what the next Section answers.',
+          'Notice the phrase minimal human intervention: it carries a lot of weight but does not say how much or for which task. Here, people sign off twice. The next Section looks at how oversight can be chosen task by task.',
       },
     ];
     // ACT
@@ -210,9 +210,9 @@ describe('success cases', () => {
     const expected = {
       design: ['You design this'],
       handoffs: [
-        'a plan of epics',
-        'tickets you signed off',
-        'research, a source per number',
+        'four work areas; Venue and date first',
+        'signed-off needs, checks and research questions',
+        'sourced findings; gaps stay open',
         'one page: the party plan',
       ],
       steers: ['The agent steers this'],

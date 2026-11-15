@@ -1,9 +1,9 @@
 {
   "title": "Worauf Du in Deinem Team achten solltest",
   "heading": "Was hättest Du tun müssen?",
-  "caption": "Bau in jeder Person drei Fähigkeiten auf, die die vier Fehler vom Board beheben, und gib ihnen eine Organisation, die <b>um das Ziel herum gestaltet</b> ist.",
+  "caption": "Drei hilfreiche Fähigkeiten, abgeleitet aus diesem Sommerfest-Beispiel, und eine Organisation, die <b>um das Ziel herum gestaltet</b> ist.",
   "person": {
-    "label": "In jeder Person",
+    "label": "Hilfreiche Fähigkeiten",
     "skills": {
       "breakDown": {
         "skill": "Die Arbeit vom Ziel aus zerlegen",
@@ -44,8 +44,8 @@
   },
   "oversight": { "in": "In der Schleife", "on": "An der Schleife", "out": "Außerhalb der Schleife" },
   "footnote": {
-    "synthesis": "<marker>Dass diese drei die Fähigkeiten sind, die es aufzubauen gilt, ist eine Synthese: Keine Studie prüft sie als Gruppe</marker>.",
-    "juniors": "<marker>Juniors lernen sie an kleinen Aufgaben, genau denen, die Agenten zuerst übernehmen</marker>."
+    "synthesis": "<marker>Diese drei Fähigkeiten als Set sind eine Synthese aus dem Beispiel, keine geprüfte allgemeine Checkliste</marker>.",
+    "juniors": "<marker>Jüngere Teammitglieder haben womöglich weniger Gelegenheit, kleine Aufgaben zu üben, wenn Agenten sie übernehmen</marker>."
   },
   "notes": {
     "management-101-skills": {
@@ -90,32 +90,32 @@
       "the-answer": {
         "title": "Die Antwort",
         "keywords": "",
-        "script": "Was hättest Du also tun müssen? Du hättest drei Fähigkeiten in Deinen Leuten gebraucht, und jede hängt an den Fehlern, die sie behoben hätte."
+        "script": "In diesem Sommerfest-Beispiel könnten drei hilfreiche Fähigkeiten helfen, die Lücken zu schließen. Das ist eine Synthese, keine allgemeine Checkliste für jede Person und jedes Team."
       },
       "break-down": {
         "title": "Zerlegen",
         "keywords": "",
-        "script": "Die erste ist, die Arbeit vom Ziel aus zu zerlegen. Tu das, und die trinkenden Fahrer und die frierenden Gäste haben eine Zuständigkeit, bevor das Fest beginnt."
+        "script": "Erstens: Arbeite vom Ziel aus rückwärts. In diesem Beispiel hilft das, jemanden für die Heimfahrt und den Hinweis an die Gäste einzuplanen."
       },
       "write-contracts": {
         "title": "Verträge schreiben",
         "keywords": "",
-        "script": "Die zweite ist, den Vertrag an der Nahtstelle zu schreiben: was eine Aufgabe erhält, was sie liefert und wie es geprüft wird. Tu das, und die Eiergerichte können nicht passieren."
+        "script": "Zweitens: Kläre wichtige Übergaben – was eine Aufgabe erhält und liefert und wie sich ihr Ergebnis prüfen lässt. Hier hilft eine genaue Ernährungsanforderung, das Missverständnis um die Eiergerichte zu vermeiden."
       },
       "review-twice": {
         "title": "Zweimal prüfen",
         "keywords": "",
-        "script": "Die dritte ist, zweimal zu prüfen, gegen den Vertrag und gegen das Ziel. Tu das, und das Paintball findet nicht statt."
+        "script": "Drittens: Prüfe Ergebnisse gegen die vereinbarte Aufgabe und das übergeordnete Ziel. In diesem Beispiel könnte das eine Aktivität aufdecken, bei der manche Gäste nicht mitmachen können."
       },
       "the-organisation": {
         "title": "Die Organisation",
         "keywords": "",
-        "script": "Die Organisation hat ihren eigenen Teil: klare Ziele, Verträge zwischen Teams, eine Regel dafür, wie viel Aufsicht jede Aufgabe bekommt, und Workflows, die um das Ziel herum gestaltet sind und nicht um das Organigramm."
+        "script": "Auch die Organisation gestaltet die Voraussetzungen: klare Ziele, hilfreiche Übergaben, eine passende Aufsicht pro Aufgabe und Workflows, die sich am Ziel statt am Organigramm orientieren."
       },
       "look-at-your-team": {
         "title": "Schau auf Dein Team",
         "keywords": "",
-        "script": "Schau jetzt auf Dein Team. Wer kann Arbeit zerlegen, wer schreibt eine klare Übergabe, und wer kann das Ergebnis eines Agenten prüfen? Das sind die Fähigkeiten, die es aufzubauen gilt, und meiner Meinung nach zahlt sich Dein Aufwand dort zuerst aus."
+        "script": "Schau jetzt auf Dein Team. Wo wäre es hilfreich, Planung, klare Übergaben oder das Prüfen von Agentenergebnissen zu stärken? Das sind sinnvolle Fähigkeiten, abgeleitet aus diesem Beispiel und den Belegen in den Speaker Notes."
       },
       "take-one-process": {
         "title": "Nimm einen Prozess",

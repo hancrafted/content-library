@@ -1,8 +1,8 @@
 {
   "title": "Designed AI first",
-  "caption": "Start from the goal’s outcome, put a <b>contract on every milestone</b>, and cut the seams that produce nothing anyone can review.",
+  "caption": "One possible redesign starts from the goal, makes handoffs checkable and removes steps that add no reviewable value.",
   "before": {
-    "label": "Before · the committee’s draft, 16 steps",
+    "label": "Illustrative before · committee-shaped draft, 16 steps",
     "columns": {
       "venue": "Venue scouting · 14",
       "catering": "Catering · 1",
@@ -10,9 +10,7 @@
     },
     "note": "shaped by the org chart"
   },
-  "after": {
-    "label": "After · redrawn from the goal: 5 notes, a contract on every arrow"
-  },
+  "after": { "label": "One possible redraw from the goal: 5 notes, a contract on every arrow" },
   "terms": {
     "receives": "Receives",
     "delivers": "Delivers",
@@ -53,10 +51,10 @@
   },
   "tips": {
     "outcome": "<b>Start at the outcome.</b> Roles say who is free; the outcome says what is needed.",
-    "contract": "<b>A contract on every milestone</b>, <marker>the inside left free</marker>.",
-    "seams": "<b>Cut seams.</b> <marker>Merge steps that produce nothing reviewable</marker>."
+    "contract": "<b>Make handoffs checkable</b>, <marker>while leaving the inside of a task open</marker>.",
+    "seams": "<b>Simplify unhelpful handoffs.</b> <marker>Merge steps that add no reviewable value</marker>."
   },
-  "payoff": "You didn’t need more meetings. You needed contracts.",
+  "payoff": "In this example, better handoffs—not more meetings—close the gaps.",
   "notes": {
     "checkpoints-in-the-path": {
       "header": "Checkpoints in the path",
@@ -94,22 +92,22 @@
       "start-at-the-outcome": {
         "title": "Start at the outcome",
         "keywords": "",
-        "script": "Here are three tips for a lean workflow, and the first is to start from the goal and its measurable outcome, not from today's roles. The roles tell you who is available, and the outcome tells you what is needed."
+        "script": "Here is one possible response to the party example. Start from the intended outcome, rather than copying today's roles into the workflow. The roles tell you who is available; the outcome helps show what the plan needs."
       },
       "contract-on-every-milestone": {
         "title": "Contract on every milestone",
         "keywords": "",
-        "script": "The second is to put a contract on every milestone and leave the inside of each step free. You decide what must arrive and how it is checked, and the person or the agent decides the rest."
+        "script": "Then make the important handoffs checkable, without prescribing every step inside the task. Agree what needs to arrive and how the result can be checked; the person or agent doing the work can choose how."
       },
       "cut-seams": {
         "title": "Cut seams",
         "keywords": "",
-        "script": "The third is to cut seams. Every seam is a place where a gap can hide, so merge the steps that produce nothing anyone can review."
+        "script": "Finally, look for handoffs that add no reviewable value. In this example, combining related work is one possible redesign—not a rule that fewer steps are always better."
       },
       "not-more-meetings": {
         "title": "Not more meetings",
         "keywords": "",
-        "script": "Remember the question from the first Slide? One answer was to get them talking, to hold more meetings. You did not need more meetings, you needed contracts."
+        "script": "Remember the question from the first Slide? More meetings were one possible answer. In this example, clearer goals and handoffs address the gaps; another workflow may need something else."
       }
     }
   }

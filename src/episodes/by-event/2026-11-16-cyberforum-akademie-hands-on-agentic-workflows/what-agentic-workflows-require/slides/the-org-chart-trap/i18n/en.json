@@ -1,6 +1,6 @@
 {
   "title": "The org chart trap",
-  "caption": "Conway’s law: what people design copies <b>who talks to whom</b>, and a workflow people draw for themselves is a design too.",
+  "caption": "Conway’s law is a useful hypothesis: designs often reflect <b>who talks to whom</b>. A workflow people draw for themselves is also a design.",
   "orgChart": {
     "label": "Party committee · org chart",
     "lead": "Committee lead",
@@ -64,7 +64,7 @@
   "hedges": {
     "tendency": "<marker>A tendency, not a rule: strong in 70% of firm studies</marker>",
     "inference": "Applying it to workflows is my inference, not a measured result.",
-    "firstDesign": "<marker>The first design is rarely the best: redraw it from the goal</marker>"
+    "firstDesign": "<marker>The first design may not be best: test it against the goal</marker>"
   },
   "notes": {
     "the-law-as-conway-states-it": {
@@ -118,7 +118,7 @@
       "conways-law": {
         "title": "Conway's law",
         "keywords": "",
-        "script": "Conway's law, from 1968, in plain words: what people design follows who talks to whom. A workflow that people draw for themselves is a design too, so it does the same. The exact wording is in the Speaker notes."
+        "script": "Conway's 1968 law describes a tendency for designs to reflect communication structures. Applying it to workflows is an inference, not a measured rule; the exact wording and evidence are in the Speaker notes."
       },
       "a-teams-draft": {
         "title": "A team's draft",
@@ -128,12 +128,12 @@
       "broadly-defined": {
         "title": "Broadly defined",
         "keywords": "",
-        "script": "Conway meant systems in a wide sense, but applying that to workflows is my inference, because nobody has measured it for workflows. It explains what I saw, though, and it gives you a test you can run."
+        "script": "Conway meant systems in a wide sense, but applying that to workflows is my inference; the evidence does not establish a universal pattern. Treat it as a prompt to examine whether team boundaries help or hinder the goal."
       },
       "your-sign": {
         "title": "Your sign",
         "keywords": "",
-        "script": "So if the workflow your people draw looks like your org chart, suspect Conway's law and redraw it from the goal. If you lead the transformation, that check is yours to make."
+        "script": "If a workflow mirrors your org chart, use Conway's law as a prompt: are the team boundaries helping meet the goal? Consider a redesign if they get in the way."
       }
     }
   }

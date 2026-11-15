@@ -77,7 +77,7 @@ describe('success cases', () => {
         'what-to-look-for-in-your-team',
         'from-article-to-quiz',
       ],
-      titles: ['The org chart trap', 'Designed AI first', 'What to look for in your team', 'From article to quiz'],
+      titles: ['The org chart trap', 'Designed AI first', 'What to look for in your team', 'One whole workflow'],
       headings: [undefined, undefined, 'What did you need to do?', undefined],
     };
     // ACT
@@ -117,7 +117,7 @@ describe('success cases', () => {
   it('carries the sign segment of Slide 10 verbatim from the Spec', () => {
     // ARRANGE
     const expected =
-      "So if the workflow your people draw looks like your org chart, suspect Conway's law and redraw it from the goal. If you lead the transformation, that check is yours to make.";
+      "If a workflow mirrors your org chart, use Conway's law as a prompt: are the team boundaries helping meet the goal? Consider a redesign if they get in the way.";
     // ACT
     const actual = messagesOf(slideOf('the-org-chart-trap')).voiceScript.segments['your-sign']?.script;
     // ASSERT
@@ -173,8 +173,8 @@ describe('success cases', () => {
       receives: ['31 vegetarian: no meat, fish or eggs'],
       goal: ['20 June: everyone celebrates together and gets home safely'],
       pins: ['3', '2', '1', '1', '2', '3'],
-      tips: ['Start at the outcome.', 'A contract on every milestone', 'Cut seams.'],
-      payoff: ['You didn’t need more meetings. You needed contracts.'],
+      tips: ['Start at the outcome.', 'Make handoffs checkable', 'Simplify unhelpful handoffs.'],
+      payoff: ['In this example, better handoffs—not more meetings—close the gaps.'],
     };
     // ACT
     const $ = sceneOf('designed-ai-first');
@@ -235,15 +235,15 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       diagram: 1,
-      goal: ['Goal: a quiz someone can use'],
-      levels: ['In the loop', 'In the loop', 'On the loop', 'In the loop'],
+      goal: ['Goal: bring 200 people from five offices together next summer, within €60,000'],
+      levels: ['On the loop', 'In the loop', 'On the loop', 'In the loop'],
       contracts: ['Plan → Requirements', 'Requirements → Research', 'Research → Page'],
       pins: ['3', '1', '2', '4', '1', '2', '3', '4'],
       steps: [
         'Pick one recurring process.',
-        'Write the contract first.',
-        'Suspect Conway’s law.',
-        'Build three skills.',
+        'Write the handoff clearly.',
+        'Use Conway’s law as a prompt.',
+        'Develop useful capabilities.',
       ],
     };
     // ACT
@@ -326,7 +326,7 @@ describe('edge cases', () => {
         'Die Organigramm-Falle',
         'KI-first entworfen',
         'Worauf Du in Deinem Team achten solltest',
-        'Vom Artikel zum Quiz',
+        'Ein durchgängiger Workflow',
       ],
       pills: ['In der Schleife', 'An der Schleife', 'Außerhalb der Schleife'],
     };

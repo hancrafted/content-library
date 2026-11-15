@@ -100,20 +100,20 @@ describe('success cases', () => {
   it('sets the speed card beside the board, and opens one Speaker note per line of what no agent was told', () => {
     // ARRANGE
     const expected = {
-      speed: ['Every card', '2 min', '2 weeks · the same four failures, reached faster'],
+      speed: ['Every card', '2 min', '2 weeks · illustrative comparison, not a benchmark'],
       struck: ['2 weeks'],
-      title: ['What no agent was told'],
+      title: ['Context the agents lacked'],
       lines: [
-        'Trained on public text',
-        "Your company's own talk isn't in it",
-        'Rare facts are learned poorly',
-        'So context must come with the task',
+        'Public text can be in training data',
+        'Private team context may be missing',
+        'Rare facts can be harder to recall from training alone',
+        'Make context available when the task runs',
       ],
       markers: [
-        'Speaker note: A model can learn from public text alone',
-        'Speaker note: Customer conversations are not training data',
-        'Speaker note: Rare facts are learned poorly',
-        'Speaker note: The context must be supplied',
+        'Speaker note: One model trained only on public datasets',
+        'Speaker note: Anthropic excludes commercial data by default',
+        'Speaker note: Rare facts can be harder to recall',
+        'Speaker note: Context can be retrieved at request time',
       ],
     };
     // ACT
@@ -137,12 +137,12 @@ describe('success cases', () => {
       'speed-not-context': {
         title: 'Speed, not context',
         script:
-          'Now give the same four cards to agents. Each card is ticked far faster, which is wonderful, and it is exactly where the trap sits. AI speeds up the doing, but it cannot add context that nobody gave it, and the paintball agent never saw the accessible bus.',
+          'Now give the same four cards to agents. In this thought experiment, each card is ticked much faster, while the handoff gaps remain. That is an illustration, not a measured universal speedup. An agent also cannot reliably use private constraints it cannot access, and the paintball agent never saw the accessible bus.',
       },
       'plausible-guess': {
         title: 'Plausible guess',
         script:
-          'What makes this worse is that an agent which finds a gap tends to fill it with a plausible guess, instead of stopping to ask you. Nobody told the food agent what vegetarian means for these colleagues, so it picks the most common reading and carries on. The same four failures appear in the same four places, only now you reach them in two minutes instead of two weeks.',
+          "When context is missing, an agent may fill the gap with a plausible guess instead of asking. In our food example, no one specified whether eggs were allowed, so the kitchen's interpretation did not fit those guests. The example reaches the same four handoff failures in two minutes instead of two weeks; those timings illustrate the scenario, not a general benchmark.",
       },
     };
     // ACT
@@ -161,9 +161,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       {
-        header: 'A model can learn from public text alone',
+        header: 'One model trained only on public datasets',
         description:
-          'the LLaMA authors set out to show state-of-the-art models can be trained using publicly available datasets exclusively [1].',
+          "The LLaMA authors set out to show that state-of-the-art models could be trained using publicly available datasets exclusively; this describes that model's training, not every model [1].",
         sources: [
           {
             title: 'Touvron et al., LLaMA: Open and Efficient Foundation Language Models',
@@ -172,9 +172,9 @@ describe('success cases', () => {
         ],
       },
       {
-        header: 'Customer conversations are not training data',
+        header: 'Anthropic excludes commercial data by default',
         description:
-          "Anthropic states that by default it does not use inputs or outputs of its commercial products for training, so a company's internal processes, decisions and naming are mostly absent from what a model learned [1].",
+          "Anthropic says it does not use inputs or outputs from its commercial products for training by default. For those products, internal processes, decisions and naming are not automatically part of the model's training data; other providers and settings may differ [1].",
         sources: [
           {
             title: 'Anthropic, Is my data used for model training? (commercial products)',
@@ -183,9 +183,9 @@ describe('success cases', () => {
         ],
       },
       {
-        header: 'Rare facts are learned poorly',
+        header: 'Rare facts can be harder to recall',
         description:
-          'accuracy on a fact question tracks how many training documents mention it, so even a fact that is in the data is weak when it is rare [1].',
+          'In the studied factual-question benchmarks, answer accuracy tracked how many training documents mentioned a fact. That finding does not mean every rare fact is absent or every model behaves alike [1].',
         sources: [
           {
             title: 'Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge',
@@ -194,9 +194,9 @@ describe('success cases', () => {
         ],
       },
       {
-        header: 'The context must be supplied',
+        header: 'Context can be retrieved at request time',
         description:
-          "the retrieval literature's remedy is to pair the model with a searchable memory consulted at request time, which is why organisational knowledge has to arrive with the request [1].",
+          'Retrieval-augmented generation pairs a model with searchable memory that can be consulted when a request runs. Relevant organisational knowledge can therefore be supplied or retrieved at task time rather than assumed to be in training data [1].',
         sources: [
           {
             title: 'Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks',
@@ -234,7 +234,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = {
       cards: ['Programm', 'Anreise', 'Location', 'Essen & Getränke'],
-      title: ['Was kein Agent gesagt bekam'],
+      title: ['Fehlender Kontext'],
     };
     // ACT
     const $ = sceneOf('de');

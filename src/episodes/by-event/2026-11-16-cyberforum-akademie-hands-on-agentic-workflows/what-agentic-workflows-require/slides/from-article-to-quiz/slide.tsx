@@ -14,21 +14,17 @@ const ANTHROPIC_AGENTS = {
   url: 'https://www.anthropic.com/engineering/building-effective-agents',
 };
 
-/**
- * The Workflow the Explorable runs. The summer-party Workflow stands in for the quiz Workflow, whose stages it shares
- * (Plan, Requirements, Research, Page); the Slide swaps this one value when the quiz Workflow lands.
- */
+/** The actual summer-party Workflow used throughout this Slide and in its stage-by-stage example. */
 const WORKFLOW: WorkflowId = 'summer-party';
 
 /** A handoff between two stages, keyed as its contract's words are. */
 type Handoff = 'planRequirements' | 'requirementsResearch' | 'researchPage';
 
 /**
- * "From article to quiz" (Spec Option 13c): the human-in-the-loop Explorable full width in its own look, its Stages view
- * at Chat level with Demo mode on. Each stage carries its level as the shared oversight pill, and a contract card sits
- * after each stage it hands off from. Four pins mark the parts that show each step: the Plan level (1), the first
- * contract (2), the goal (3) and the Page stage's marks (4). The steps sit below as the legend. Keeps `basic-page` and
- * `motion: none`.
+ * "One whole workflow" (Spec Option 13c): the actual summer-party Workflow full width in its own look, its Stages view
+ * at Chat level with Demo mode on. Each stage carries an illustrative oversight choice as the shared pill, and a
+ * contract card sits after each stage it hands off from. Four pins mark the Plan level (1), first contract (2), goal
+ * (3) and Page stage (4). The steps sit below as the legend. Keeps `basic-page` and `motion: none`.
  */
 export const fromArticleToQuiz = slide({
   slug: 'from-article-to-quiz',
@@ -74,7 +70,7 @@ export const fromArticleToQuiz = slide({
                 plan: {
                   marker: (
                     <>
-                      {level('in')}
+                      {level('on')}
                       <Pin n={1} />
                     </>
                   ),

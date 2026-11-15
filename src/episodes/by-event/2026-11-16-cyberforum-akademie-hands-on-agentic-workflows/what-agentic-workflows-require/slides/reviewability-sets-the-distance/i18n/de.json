@@ -1,8 +1,8 @@
 {
   "title": "Prüfbarkeit bestimmt den Abstand",
-  "caption": "Die Stufe einer Aufgabe hängt davon ab, was ein falsches Ergebnis anrichten kann und wie gut Du <b>das Ergebnis prüfen</b> kannst; wer sie prüfbar macht, rückt sie nach außen.",
+  "caption": "Wäge pro Aufgabe ab, was ein falsches Ergebnis anrichten könnte und wie gut es sich prüfen lässt. Das ist eine hilfreiche Synthese, keine allgemeingültige Formel.",
   "board": {
-    "label": "Sommerfest · jede Aufgabe so weit außen, wie ihr Risiko und ihre Prüfung es erlauben"
+    "label": "Sommerfest · Beispiele, keine Vorgaben; Risiko und Prüfbarkeit sind zwei Faktoren"
   },
   "agent": "Agent",
   "tasks": {
@@ -23,7 +23,7 @@
       "fact": "Ein Programmpunkt für 200",
       "was": "War: Paintball × 200, nur Dein Ja oder Nein",
       "ifWrong": "Kolleginnen und Kollegen bleiben außen vor",
-      "move": "Das Programm rückt von in der Schleife zu an der Schleife"
+      "move": "Mögliche Änderung: von Freigabe zu Überwachung"
     }
   },
   "risk": {
@@ -113,7 +113,7 @@
       "the-rule": {
         "title": "Die Regel",
         "keywords": "",
-        "script": "Du kannst Dich nur so weit aus der Schleife herausnehmen, wie Du das Ergebnis prüfen kannst. Wo das Prüfen so viel kostet, wie die Arbeit selbst zu machen, sparst Du durch das Herausnehmen nichts, Du nimmst nur ein Risiko in Kauf, auf das niemand schaut."
+        "script": "Als Entwurfsheuristik kannst Du fragen, wie gut sich ein Ergebnis prüfen lässt und was ein Fehler anrichten könnte. Keiner der beiden Faktoren bestimmt die Stufe allein: Menschen wählen die Aufsicht passend zur Aufgabe, ihrem Kontext und geltenden Regeln."
       },
       "hypothesis-said-openly": {
         "title": "Hypothese, offen gesagt",
@@ -123,12 +123,12 @@
       "risk-too": {
         "title": "Auch das Risiko",
         "keywords": "",
-        "script": "Prüfbarkeit ist nur die eine Hälfte. Was ein falsches Ergebnis anrichten kann, bestimmt die Stufe mit: Je mehr Schaden ein falsches Ergebnis anrichten kann, desto mehr bleibt ein Mensch drin."
+        "script": "Das ist eine Synthese, keine Regel aus einer einzelnen Quelle. Ein Fehler mit größeren Folgen kann engere Aufsicht nahelegen, aber auch Kontext und andere Vorgaben zählen."
       },
       "make-it-checkable": {
         "title": "Mach es prüfbar",
         "keywords": "",
-        "script": "Damit ist die Prüfung der Hebel, den Du in der Hand hast. Gib dem Programm einen Test, den es bestehen kann, etwa alle können mitmachen, rollstuhlgerecht, keine Fitness nötig, und dieselbe Aufgabe kann von in der Schleife zu an der Schleife rücken."
+        "script": "Ein sinnvoller Entwurfsschritt ist, eine Prüfung in die Aufgabe einzubauen: Alle können mitmachen, rollstuhlgerecht, keine Fitness nötig. Mit so einer Prüfung können Menschen entscheiden, das Programm zu überwachen, statt jeden Schritt freizugeben."
       }
     }
   }

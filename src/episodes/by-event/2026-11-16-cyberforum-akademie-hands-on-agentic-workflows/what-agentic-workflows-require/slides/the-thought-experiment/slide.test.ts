@@ -89,7 +89,7 @@ describe('success cases', () => {
         'The 10 sit it out',
         'The drivers have been drinking',
         'Summer clothes, 6 °C at night',
-        "Indian colleagues can't eat",
+        'Egg-free guests have no meal',
       ],
       breaks: ['breaks “together”', 'breaks “safely”', 'breaks “safely”', 'breaks “together”'],
       goal: ['Goal: everyone celebrates together and gets home safely'],
@@ -138,7 +138,7 @@ describe('success cases', () => {
       'none-of-it-adds-up': {
         title: 'None of it adds up',
         script:
-          "And still the party fails, because the failures sit between the cards. Activities booked paintball, while Travel had booked an accessible bus for ten colleagues in wheelchairs, who now sit it out. Travel had everyone carpool, while Food and drinks booked an open bar until one in the morning, so the drivers have been drinking. Venue found a scenic alpine hut, while the guest info from Travel gives only route and times, so people arrive in summer clothes for six degrees at night. And dinner was ordered with 31 vegetarian, which the hut's kitchen reads the Western way, so egg dishes land in front of colleagues who cannot eat them. Every step was perfect, and perfect steps do not add up on their own.",
+          "And still the party fails, because the gaps sit between the cards—not because anyone failed at their own task. Activities booked paintball, while Travel had arranged an accessible bus for ten wheelchair users, who now cannot join. Travel set up carpools, while Food and drinks booked an open bar until one in the morning, leaving drivers with alcohol. Venue found a scenic alpine hut, but Travel's guest information gave only route and times, so people arrive in summer clothes for six degrees at night. And the food note said “31 vegetarian” without defining whether eggs were allowed; the hut kitchen included them, leaving guests who avoid eggs without a suitable meal. Each card was completed, but the handoffs did not add up to the shared goal.",
       },
       'your-question': {
         title: 'Your question',

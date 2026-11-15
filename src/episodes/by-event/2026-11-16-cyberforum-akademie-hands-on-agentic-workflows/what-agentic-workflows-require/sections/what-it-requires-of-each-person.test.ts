@@ -98,7 +98,7 @@ describe('success cases', () => {
         'Well known, and agents like it',
       ],
       ['Design by contract', 'Receives, delivers, checked by', 'Leave the how open', 'The egg dishes'],
-      ['Two checks', 'Paintball passes', 'The human part', 'Your verdict'],
+      ['Two checks', 'Paintball passes', 'The goal check', 'Your verdict'],
     ];
     // ACT
     const actual = PAGE_SLIDES.map((slide) =>
@@ -111,7 +111,7 @@ describe('success cases', () => {
   it('carries the contract segment of Slide 8 verbatim from the Spec', () => {
     // ARRANGE
     const expected =
-      'So before you hand any task to an agent, write three lines. What it receives, what it must deliver, and how someone else can check the result. Do this for one task this week, before you hand it over.';
+      'For a handoff that matters, try writing three lines: what the next task receives, what it delivers and how the result can be checked. Keep the contract as specific as the goal requires.';
     // ACT
     const actual = messagesOf(slideOf('contracts-at-the-seams')).voiceScript.segments['receives-delivers-checked-by']
       ?.script;
@@ -287,7 +287,7 @@ describe('edge cases', () => {
       },
       {
         title: 'Das Ergebnis prüfen',
-        segments: ['Zwei Prüfungen', 'Paintball besteht', 'Der menschliche Teil', 'Dein Urteil'],
+        segments: ['Zwei Prüfungen', 'Paintball besteht', 'Die Prüfung des Ziels', 'Dein Urteil'],
       },
     ];
     // ACT

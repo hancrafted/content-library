@@ -43,7 +43,7 @@
       "steers-its-own-steps": {
         "title": "Steers its own steps",
         "keywords": "",
-        "script": "If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. That is the reason the rest of this Episode is about what you must set up around it."
+        "script": "If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. The rest of this Episode asks what people and organisations can design around that difference."
       }
     }
   }

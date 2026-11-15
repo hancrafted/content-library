@@ -1,6 +1,6 @@
 {
   "title": "Verträge an den Nahtstellen",
-  "caption": "Design by Contract: Zusammenarbeit beruht auf Verträgen, die Pflichten und Nutzen jeder Seite festhalten. Vereinbare, was eine Aufgabe erhält und liefert, nicht wie sie innen erledigt wird.",
+  "caption": "Design by Contract als Denkhilfe: Vereinbare bei einer Übergabe, was eine Aufgabe erhält und liefert, ohne ihr Vorgehen im Inneren vorzuschreiben.",
   "food": {
     "kicker": "Essen & Getränke",
     "task": "Abendessen für 200, 31 vegetarisch",
@@ -63,12 +63,12 @@
       "design-by-contract": {
         "title": "Design by Contract",
         "keywords": "",
-        "script": "Design by Contract, nach Meyer, sagt, dass Zusammenarbeit auf Verträgen beruht, und ein Vertrag hält fest, was jede Seite erhält und was sie liefert. Das klingt nach Software, ist aber das praktischste Werkzeug, das eine Führungskraft für eine Übergabe hat."
+        "script": "Meyers Modell Design by Contract beschreibt Pflichten und Nutzen zwischen Beteiligten. Die Idee auf Übergaben zwischen Teams oder Agenten anzuwenden, ist eine praktische Denkhilfe, keine Regel, dass jede Aufgabe denselben Vertrag braucht."
       },
       "receives-delivers-checked-by": {
         "title": "Erhält, liefert, geprüft durch",
         "keywords": "",
-        "script": "Bevor Du also eine Aufgabe an einen Agenten übergibst, schreib drei Zeilen. Was er erhält, was er liefern muss und wie jemand anderes das Ergebnis prüfen kann. Mach das diese Woche für eine Aufgabe, bevor Du sie übergibst."
+        "script": "Für eine wichtige Übergabe kannst Du drei Zeilen festhalten: Was die nächste Aufgabe erhält, was sie liefert und wie sich das Ergebnis prüfen lässt. So konkret wie nötig, passend zum Ziel."
       },
       "leave-the-how-open": {
         "title": "Das Wie offenlassen",

@@ -1,6 +1,6 @@
 {
   "title": "Was ein agentischer Workflow ist",
-  "caption": "Ein strukturierter Prozess, in dem KI-Agenten Entscheidungen treffen, Aktionen ausführen und Aufgaben koordinieren, mit minimalem menschlichem Eingreifen. <b>Du gestaltest den Weg; der Agent steuert innerhalb seiner Aufgabe.</b>",
+  "caption": "Arbeitsdefinition für diese Episode: Agenten treffen manche Entscheidungen und handeln innerhalb eines von Menschen gestalteten Ablaufs. Keine allgemeingültige Definition. <b>Du gestaltest den Weg; der Agent steuert seine Aufgabe.</b>",
   "design": {
     "label": "Das gestaltest Du",
     "hint": "die Stufen, ihre Reihenfolge, was jede übergibt, wo Du freigibst"
@@ -9,9 +9,9 @@
   "gate": "Du gibst frei",
   "handoffsLabel": "Was jede Stufe übergibt",
   "handoffs": {
-    "plan": "ein Plan aus Epics",
-    "requirements": "Tickets, die Du freigegeben hast",
-    "research": "Recherche, eine Quelle pro Zahl",
+    "plan": "vier Arbeitsbereiche; Location und Datum zuerst",
+    "requirements": "freigegebene Bedürfnisse, Prüfungen und Recherchefragen",
+    "research": "belegte Ergebnisse; Lücken bleiben offen",
     "page": "eine Seite: der Plan fürs Fest"
   },
   "steers": {
@@ -71,17 +71,17 @@
       "the-definition": {
         "title": "Die Definition",
         "keywords": "",
-        "script": "Ein agentischer Workflow ist ein Prozess, in dem Agenten, nicht Menschen, die Entscheidungen treffen und die Aufgaben erledigen, innerhalb einer Struktur, die Du festlegst. Den genauen Wortlaut und woher er stammt, findest Du in den Speaker Notes."
+        "script": "Für diese Episode ist ein agentischer Workflow ein Prozess, in dem Agenten manche Entscheidungen treffen und innerhalb eines von Menschen gestalteten Ablaufs handeln. Das ist eine Arbeitsdefinition, gestützt auf Beschreibungen von Anbietern, keine allgemeingültige Norm. Die genauen Quellen stehen in den Speaker Notes."
       },
       "two-levels": {
         "title": "Zwei Ebenen",
         "keywords": "",
-        "script": "Lies es als zwei Ebenen. Auf der ersten Ebene gestaltest Du den Weg, also die Aufgaben und was jede Aufgabe an die nächste übergibt. Auf der zweiten Ebene steuert der Agent innerhalb seiner eigenen Aufgabe, und das ist der Teil, den Du abgibst."
+        "script": "Lies es als zwei Ebenen. Du gestaltest den Weg: die Aufgaben und was jede an die nächste übergibt. Der Agent steuert innerhalb seiner eigenen Aufgabe. Wie viel Aufsicht jede Aufgabe bekommt, ist eine eigene Entscheidung, die diese Definition nicht beantwortet."
       },
       "minimal-how-minimal": {
         "title": "Minimal, wie minimal",
         "keywords": "",
-        "script": "Achte auf die Wendung minimales menschliches Eingreifen, denn sie trägt viel Gewicht und sagt sehr wenig. Wie minimal, und für welche Aufgabe? Das beantwortet der nächste Abschnitt."
+        "script": "Achte auf die Wendung minimales menschliches Eingreifen: Sie trägt viel Gewicht, sagt aber nicht, wie viel oder für welche Aufgabe. Hier wird zweimal freigegeben. Im nächsten Abschnitt geht es darum, die Aufsicht pro Aufgabe festzulegen."
       }
     }
   }

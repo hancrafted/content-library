@@ -30,7 +30,7 @@
   "rules": {
     "outcome": "<b>State the goal as an outcome.</b> It tells you when you are done.",
     "external": "<b>Mark what is outside your control.</b> Plan around it.",
-    "orphan": "<b>Find the tasks nobody owned.</b> They appear under their subgoal."
+    "orphan": "<b>Look for tasks the draft left unowned.</b> In this example, they appear under a subgoal."
   },
   "callout": {
     "label": "Well known",
@@ -149,12 +149,12 @@
       "the-tasks-nobody-owned": {
         "title": "The tasks nobody owned",
         "keywords": "",
-        "script": "Now work back from gets home safely. Just before it, people need a ride home, and nobody had planned one after an open bar, so a shuttle appears on the board. Just before arrival, guests need to know what the night will be like, so the guest info gets a line saying bring warm clothes, six degrees at night. Those two tasks belonged to nobody on the first board, and with them the drinking drivers and the cold guests have an owner."
+        "script": "Now work back from gets home safely. In this example, that points to a gap in the draft: people need a ride home after an open bar, so a shuttle is added. Working back from arrival also suggests telling guests to bring warm clothes for six degrees at night. Those are useful questions to ask of this plan, not a guarantee that backward planning will uncover every missing task."
       },
       "well-known-and-agents-like-it": {
         "title": "Well known, and agents like it",
         "keywords": "",
-        "script": "Planning back from the goal is nothing exotic, and agents also do better when they receive a clearly defined goal and outcome. So when you hand a task to an agent, have you given it the goal, or only the activity?"
+        "script": "Planning back from a goal is a familiar project-planning idea. Agent guidance also recommends clear goals and success criteria, though that is guidance rather than a universal measurement. When you hand an agent a task, have you given it the goal or only the activity?"
       }
     }
   }
