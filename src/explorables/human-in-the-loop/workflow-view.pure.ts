@@ -2,7 +2,7 @@ import { producersFor } from './workflow-outputs.pure.ts';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure.ts';
 import type { ChatButtonDef, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
-import type { Job, Workflow } from './workflow.types';
+import type { Job, Stage, Workflow } from './workflow.types';
 
 /*
  * The view seam: what a stage's "Try it" modal shows for a Workflow at a level. Pure, so the modal's information
@@ -104,6 +104,12 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
   };
 }
 
+/** Whether the stepper plays the stage once per round: always at Simple; at Technical only when the stage opts in and demo mode is off. */
+const repeatsAt = (stage: Stage, level: Level, demo: boolean | undefined): boolean => {
+  if (stage.foreach === undefined) return false;
+  return level === 'simple' || (stage.foreach.technical === 'rounds' && demo === false);
+};
+
 /** The view model of a Workflow for a level: one modal per stage. */
 export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOptions): WorkflowView {
   return {
@@ -112,7 +118,7 @@ export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOp
       id: stage.id,
       name: stage.name,
       goal: stage.goal,
-      repeats: stage.foreach !== undefined && level === 'simple',
+      repeats: repeatsAt(stage, level, demo),
       jobs: stage.jobs.map((job) => ({
         id: job.id,
         title: job.title,

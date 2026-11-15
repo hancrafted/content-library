@@ -1,9 +1,13 @@
-import type { PromptSlot } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
+import type { PromptSection, PromptSlot } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import type { PromptView } from '@/shared/components/core-components/try-prompt/try-prompt.types';
 import { joinPrompt } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { expandSections, limitMarker, limitValue } from './workflow-markers.pure.ts';
 import { slotSample } from './workflow-sample.pure.ts';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
+
+/** The `/name` lines of the skills a technical prompt calls, as the leading section with no heading: it stands above the first H2. */
+const skillLines = (skills: readonly string[] | undefined): PromptSection[] =>
+  skills === undefined || skills.length === 0 ? [] : [{ text: skills.map((name) => `/${name}`).join('\n') }];
 
 /*
  * A task's prompts as TryPrompt takes them. The caller resolves what a Workflow file knows (`{{n}}`, `{{template}}`,
@@ -68,7 +72,7 @@ function inputsOf(slots: readonly SlotDef[], width: (slot: SlotDef) => number): 
 }
 
 function viewOf(
-  step: { sections: readonly SectionDef[]; slots: readonly SlotDef[]; instructions?: string },
+  step: { sections: readonly PromptSection[]; slots: readonly SlotDef[]; instructions?: string },
   file: WorkflowFile,
 ): PromptView {
   const { sections, instructions } = step;
@@ -90,14 +94,34 @@ const forMode = (sections: readonly SectionDef[], options: PromptOptions): Secti
   return sections.filter((section) => section.only !== other);
 };
 
+/** A technical prompt's sections with its skill lines first, markers resolved; a simple prompt has no skill lines. */
+function promptSections(
+  file: WorkflowFile,
+  task: TaskDef,
+  at: { sections: readonly SectionDef[]; skills?: readonly string[]; runtime: Runtime; options: PromptOptions },
+): PromptSection[] {
+  const { runtime, options } = at;
+  const fills = { template: fenced(file.templates[task.template] ?? ''), ...limitsOf(task, options) };
+  const shown = forMode(at.sections, options);
+  const expanded = expandSections(shown, task.slots, widthsOf(file, task.slots, options));
+  const body = expanded.map((section) => ({ ...section, text: resolve(section.text, fills) }));
+  return [...(runtime === 'technical' ? skillLines(at.skills) : []), ...body];
+}
+
 /** The prompt of the do step for one runtime; a round's `{{item}}` stays in the text, for `roundStep` to fill. */
 export function doPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): PromptView {
   const { runtime, options } = modeOf(mode);
-  const fills = { template: fenced(file.templates[task.template] ?? ''), ...limitsOf(task, options) };
-  const shown = forMode(task.do[runtime], options);
-  const expanded = expandSections(shown, task.slots, widthsOf(file, task.slots, options));
-  const sections = expanded.map((section) => ({ ...section, text: resolve(section.text, fills) }));
+  const sections = promptSections(file, task, { sections: task.do[runtime], skills: task.skills, runtime, options });
   return viewOf({ sections, slots: task.slots, instructions: task.instructions }, file);
+}
+
+/** The second technical prompt of a job that calls a second skill; it takes no slot, only the round's item and the limits. */
+export function thenPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): PromptView | undefined {
+  const { options } = modeOf(mode);
+  if (task.then === undefined) return undefined;
+  const { skills, sections: own } = task.then;
+  const sections = promptSections(file, task, { sections: own, skills, runtime: 'technical', options });
+  return viewOf({ sections, slots: [] }, file);
 }
 
 /**
@@ -125,17 +149,24 @@ export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode
 }
 
 export interface TaskStep {
-  readonly id: 'do' | 'review';
+  readonly id: 'do' | 'review' | 'then';
   /** The round's number, on the step `roundStep` made for a round of a repeated stage. */
   readonly chat?: number;
   readonly prompt: PromptView;
+  /** On a technical do step of a job that calls a second skill: the prompt copied after it, in the same session. */
+  readonly then?: TaskStep;
   /** On a round's step: the job's step before the round was made from it, and the rewrite that makes a round's text from the template's. */
   readonly template?: { readonly prompt: PromptView; readonly rewrite: (text: string) => string };
 }
 
 /** The steps of a task at a runtime: its do prompt, then its review. A repeated stage's rounds are made from them. */
 export function stepsOf(file: WorkflowFile, task: TaskDef, mode: PromptMode): TaskStep[] {
-  const doStep: TaskStep = { id: 'do', prompt: doPrompt(file, task, mode) };
+  const second = modeOf(mode).runtime === 'technical' ? thenPrompt(file, task, mode) : undefined;
+  const doStep: TaskStep = {
+    id: 'do',
+    prompt: doPrompt(file, task, mode),
+    ...(second && { then: { id: 'then', prompt: second } }),
+  };
   const review: TaskStep = { id: 'review', prompt: reviewPrompt(file, task, mode) };
   return task.review ? [doStep, review] : [doStep];
 }
@@ -153,7 +184,7 @@ export interface RoundShare {
 function roundName(id: string, at: { step: TaskStep['id']; round: number; share: RoundShare }): string | undefined {
   const { step, round, share } = at;
   if (share.sameStage?.includes(id)) return `${id}_${round}`;
-  const shared = step === 'do' || share.previous.includes(id) || id === share.output;
+  const shared = step !== 'review' || share.previous.includes(id) || id === share.output;
   return shared ? undefined : `${id}#${round}`;
 }
 
@@ -178,6 +209,7 @@ export function roundStep(step: TaskStep, round: { number: number; item: string 
     });
   return {
     ...step,
+    ...(step.then && { then: roundStep(step.then, round, share) }),
     chat: round.number,
     template: { prompt, rewrite: fill },
     prompt: {

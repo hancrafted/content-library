@@ -44,7 +44,11 @@ export type RenderResult = { readonly text: string } | { readonly problems: read
 
 /** The requested step of a job as the stepper shows it: in a round, with the share the stepper passes. */
 function requestedStep(job: JobModalView, request: RenderRequest): TaskStep | undefined {
-  const step = job.task.steps.find((each) => each.id === (request.step ?? 'do'));
+  const wanted = request.step ?? 'do';
+  const step =
+    wanted === 'then'
+      ? job.task.steps.find((each) => each.id === 'do')?.then
+      : job.task.steps.find((each) => each.id === wanted);
   if (step === undefined || request.round === undefined) return step;
   const share = { previous: job.task.previous, output: job.task.output, sameStage: job.task.sameStage };
   return roundStep(step, request.round, share);

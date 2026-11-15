@@ -30,10 +30,13 @@ export function scopeOf(base: DebugBase, at: Pick<DebugScope, 'stage' | 'job' | 
 /** Which prompt is copied: the prompt itself, or the prompt wrapped in the request to explain it. */
 export interface DebugPrompt {
   readonly prompt: 'copy' | 'explain';
-  readonly step: 'do' | 'review';
+  readonly step: 'do' | 'review' | 'then';
   /** The chat of a fan-out or of a round. */
   readonly chat?: number;
 }
+
+/** A footer's step word back to a step; an unknown word is the do step. */
+const stepOf = (word: string | undefined): DebugPrompt['step'] => (word === 'review' || word === 'then' ? word : 'do');
 
 const LEVELS: Record<Level, string> = { simple: 'chat', technical: 'cli' };
 
@@ -133,7 +136,7 @@ function promptFrom(fields: Fields): DebugPrompt {
   const chat = fields.get('chat');
   return {
     prompt: fields.get('prompt') === 'explain' ? 'explain' : 'copy',
-    step: fields.get('step') === 'review' ? 'review' : 'do',
+    step: stepOf(fields.get('step')),
     ...(chat === undefined ? {} : { chat: Number(chat) }),
   };
 }

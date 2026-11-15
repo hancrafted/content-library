@@ -9,6 +9,7 @@ import {
 } from './workflow-loader-checks.pure.ts';
 import { jobOrderProblems, singletonProblems } from './workflow-loader-jobs.pure.ts';
 import { optionalProblems } from './workflow-loader-optional.pure.ts';
+import { skillProblems } from './workflow-loader-skills.pure.ts';
 import { fileInMode } from './workflow-mode.pure.ts';
 import { MODES, type WorkflowFile } from './workflow-schema.types.ts';
 import { shapeProblems } from './workflow-shape.pure.ts';
@@ -66,5 +67,6 @@ function modeProblems(file: WorkflowFile): string[] {
     ...jobOrderProblems(view),
     ...contentProblems(view),
     ...optionalProblems(view),
+    ...skillProblems(view),
   ]);
 }

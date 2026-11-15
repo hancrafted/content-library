@@ -44,6 +44,8 @@ export interface UiWords {
   readonly stepContextInfo: string;
   readonly stepDo: string;
   readonly stepDoInfo: string;
+  /** Above the second prompt of a job that calls a second skill. */
+  readonly thenCopy: string;
   readonly stepCheck: string;
   readonly stepCheckInfo: string;
   readonly copyExplanation: string;

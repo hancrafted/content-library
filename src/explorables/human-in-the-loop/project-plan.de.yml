@@ -190,6 +190,7 @@ stages:
             - Die Zielgruppe sagt, für wen es ist und wie viele.
             - "Nichts ist geschätzt: Eine Größe, die nicht vorgegeben war, heißt 'noch nicht festgelegt'."
         instructions: 'Öffne einen neuen Chat (ChatGPT oder ein anderer KI-Chat), füge den Prompt ein und lies den Brief, den er schreibt. Kopiere ihn dann mit dem Kopieren-Knopf an seinem Feld: Jeder spätere Schritt braucht ihn.'
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -232,7 +233,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Mach aus meiner groben Idee unten einen Aufgabenbrief: das Ziel in ein bis zwei Sätzen, die Zielgruppe, den Rahmen und was fertig heißt.
+                Mach aus meiner groben Idee unten einen Aufgabenbrief: das Ziel in ein bis zwei Sätzen, die Zielgruppe, den Rahmen und was fertig heißt.
 
                 ```markdown
                 {{idea}}
@@ -300,6 +301,7 @@ stages:
             - Eine Frage betrifft etwas, woran du nicht gedacht hattest.
             - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, nicht geraten.
         instructions: "Öffne einen neuen Chat, füge den Prompt ein und beantworte die Fragen mit deinen eigenen Worten; 'ja' übernimmt alle Empfehlungen. Kopiere dann das Ergebnis."
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -345,7 +347,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Stelle mir höchstens {{limit.questions}} nummerierte Fragen zu dieser Aufgabe, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, einer offenen Frage für das, was nur ich weiß, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe. Wenn ich geantwortet habe, schreibe das Ergebnis.
+                Stelle mir höchstens {{limit.questions}} nummerierte Fragen zu dieser Aufgabe, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, einer offenen Frage für das, was nur ich weiß, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe. Wenn ich geantwortet habe, schreibe das Ergebnis.
 
                 ```markdown
                 {{task}}
@@ -424,6 +426,7 @@ stages:
             - Jedes Epic ist ein H3 unter Epics, mit einem Satz dazu, was es entscheidet.
             - Zusammen decken die Epics das Ziel ab, ohne Überschneidung.
         instructions: 'Öffne einen neuen Chat, füge den Prompt ein und lies den Plan, den er schreibt. Kopiere den Plan: Die nächste Stufe nimmt je ein Epic.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -472,7 +475,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Schreibe einen Grobplan für diese Aufgabe: das Ziel, dann etwa vier Epics, jedes ein H3 unter der Überschrift Epics mit einem Satz dazu, was es entscheidet, und die offenen Entscheidungen. Plane nichts innerhalb eines Epics.
+                Schreibe einen Grobplan für diese Aufgabe: das Ziel, dann etwa vier Epics, jedes ein H3 unter der Überschrift Epics mit einem Satz dazu, was es entscheidet, und die offenen Entscheidungen. Plane nichts innerhalb eines Epics.
 
                 ```markdown
                 {{task}}
@@ -573,6 +576,7 @@ stages:
             - Eine Antwort ist etwas, woran du nicht gedacht hattest.
             - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, nicht geraten.
         instructions: "Öffne für jedes Epic einen neuen Chat und füge den Prompt dieses Chats ein; antworte mit eigenen Worten, 'ja' übernimmt alle Empfehlungen. Kopiere jedes Ergebnis."
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -625,7 +629,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /grilling Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Epics des Plans unten als ein Epic und starte pro Epic einen Subagenten, jeden mit frischem Kontext und nur seinem eigenen Epic. Jeder Subagent stellt mir höchstens {{limit.questions}} nummerierte Fragen zu seinem Epic, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe.
+                Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Epics des Plans unten als ein Epic und starte pro Epic einen Subagenten, jeden mit frischem Kontext und nur seinem eigenen Epic. Jeder Subagent stellt mir höchstens {{limit.questions}} nummerierte Fragen zu seinem Epic, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe.
 
                 ```markdown
                 {{plan}}
@@ -712,6 +716,7 @@ stages:
             - In der Spezifikation steht nichts, was die Antworten nicht sagten.
             - Abhängigkeiten nennen die anderen Epics, nicht Aufgaben.
         instructions: 'Öffne für jedes Epic einen neuen Chat und füge den Prompt mit diesem Epic ein. Prüfe, dass sich jede Anforderung mit Ja oder Nein abhaken ließe, und kopiere dann das Ergebnis.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -765,7 +770,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-spec Du bist der Orchestrator. Starte pro Epic einen Subagenten, jeden mit frischem Kontext. Jeder Subagent macht aus den Fragen und Antworten seines Epics eine Spezifikation: das Ziel, Anforderungen, die sich jeweils mit Ja oder Nein abhaken lassen, was nicht dabei ist und die Abhängigkeiten zu anderen Epics. Befrage mich nicht noch einmal.
+                Du bist der Orchestrator. Starte pro Epic einen Subagenten, jeden mit frischem Kontext. Jeder Subagent macht aus den Fragen und Antworten seines Epics eine Spezifikation: das Ziel, Anforderungen, die sich jeweils mit Ja oder Nein abhaken lassen, was nicht dabei ist und die Abhängigkeiten zu anderen Epics. Befrage mich nicht noch einmal.
 
                 ```markdown
                 {{plan}}
@@ -849,6 +854,7 @@ stages:
             - Jede Anforderung nennt das Epic, aus dem sie kam.
             - Offene Fragen sind aufgelistet, nicht geraten.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den Epic-Spezifikationen ein. Kopiere das Anforderungsdokument, das er schreibt.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -889,7 +895,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Führe diese Epic-Spezifikationen zu einem Anforderungsdokument zusammen: eine nummerierte Liste mit dem Epic jeder Anforderung, nichts hinzugefügt und nichts weggelassen, und die offenen Fragen.
+                Führe diese Epic-Spezifikationen zu einem Anforderungsdokument zusammen: eine nummerierte Liste mit dem Epic jeder Anforderung, nichts hinzugefügt und nichts weggelassen, und die offenen Fragen.
 
                 ```markdown
                 {{spec_*}}
@@ -955,6 +961,7 @@ stages:
             - Jeder Konflikt endet in einer Entscheidung, mit dem Grund in wenigen Worten.
             - In der endgültigen Liste bleibt kein Konflikt übrig.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den Anforderungen ein. Lies jeden Konflikt und jede Entscheidung und kopiere dann das Ergebnis.'
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -995,7 +1002,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Finde die Abhängigkeiten und die Konflikte zwischen diesen Anforderungen, schlage für jeden Konflikt eine Entscheidung mit dem Grund in wenigen Worten vor und schreibe die endgültige Liste ohne Konflikte. Kennzeichne jede Entscheidung, die bei mir liegt, als offene Entscheidung.
+                Finde die Abhängigkeiten und die Konflikte zwischen diesen Anforderungen, schlage für jeden Konflikt eine Entscheidung mit dem Grund in wenigen Worten vor und schreibe die endgültige Liste ohne Konflikte. Kennzeichne jede Entscheidung, die bei mir liegt, als offene Entscheidung.
 
                 ```markdown
                 {{requirements}}
@@ -1068,6 +1075,7 @@ stages:
             - Jedes Ticket nennt die Anforderungen, die es abdeckt.
             - Zusammen decken die Tickets jede Anforderung ab, ohne Überschneidung.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den aufgelösten Anforderungen ein. Kopiere die Tickets, die er schreibt: In der nächsten Stufe bekommt jedes Ticket seinen eigenen Chat.'
+        skills: [to-tickets]
         do:
           simple:
             - heading: Deine Rolle
@@ -1108,7 +1116,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-tickets Schneide diese Anforderungen in etwa fünf Tickets als vertikale Scheiben, jedes ein H3 unter der Überschrift Tickets, mit dem, was zu liefern ist, und den Anforderungen, die es abdeckt, ohne Überschneidung, jede Anforderung abgedeckt.
+                Schneide diese Anforderungen in etwa fünf Tickets als vertikale Scheiben, jedes ein H3 unter der Überschrift Tickets, mit dem, was zu liefern ist, und den Anforderungen, die es abdeckt, ohne Überschneidung, jede Anforderung abgedeckt.
 
                 ```markdown
                 {{resolved}}
@@ -1227,6 +1235,7 @@ stages:
             - Die Zahlentabelle hat beschriftete Spalten und, wo sinnvoll, eine Summe.
             - "Jede Zahl stammt aus dem Ticket oder den Anforderungen; eine unbekannte heißt 'nicht bekannt'."
         instructions: 'Öffne für jedes Ticket einen neuen Chat und füge den Prompt dieses Chats ein. Kopiere jedes Ergebnis.'
+        skills: [to-tickets]
         do:
           simple:
             - heading: Deine Rolle
@@ -1274,7 +1283,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-tickets Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeden mit frischem Kontext und nur seinem eigenen Ticket. Jeder Subagent tut, was sein Ticket verlangt, schreibt das Ergebnis in ein paar Sätzen auf und führt eine Tabelle mit Zahlen und beschrifteten Spalten.
+                Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeden mit frischem Kontext und nur seinem eigenen Ticket. Jeder Subagent tut, was sein Ticket verlangt, schreibt das Ergebnis in ein paar Sätzen auf und führt eine Tabelle mit Zahlen und beschrifteten Spalten.
 
                 ```markdown
                 {{resolved}}
@@ -1359,6 +1368,7 @@ stages:
             - Die Zahlen aller Tickets stehen an einem Ort.
             - Die offenen Entscheidungen aller Ergebnisse sind gesammelt.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den Ticket-Ergebnissen ein. Kopiere das verbundene Dokument.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -1399,7 +1409,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Verbinde diese Ticket-Ergebnisse zu einem Dokument: eine Zeile pro Ergebnis, eine Tabelle mit allen Zahlen und jede offene Entscheidung gesammelt. Ändere nichts an den Ergebnissen.
+                Verbinde diese Ticket-Ergebnisse zu einem Dokument: eine Zeile pro Ergebnis, eine Tabelle mit allen Zahlen und jede offene Entscheidung gesammelt. Ändere nichts an den Ergebnissen.
 
                 ```markdown
                 {{ticket_*}}
@@ -1471,6 +1481,7 @@ stages:
             - Jede Kennzahl stammt aus den verbundenen Ergebnissen.
             - Risiken und offene Entscheidungen sind getrennte Listen, jede mit einer klaren Frage.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den verbundenen Ergebnissen ein. Kopiere den Bericht, den er schreibt.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -1512,7 +1523,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Schreibe aus diesen verbundenen Ergebnissen einen Statusbericht: eine Zusammenfassung in drei Sätzen, bis zu fünf Kennzahlen, die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus den Ergebnissen.
+                Schreibe aus diesen verbundenen Ergebnissen einen Statusbericht: eine Zusammenfassung in drei Sätzen, bis zu fünf Kennzahlen, die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus den Ergebnissen.
 
                 ```markdown
                 {{combined}}
@@ -1599,6 +1610,7 @@ stages:
             - Jede Zahl in einem Diagramm stammt aus dem Bericht.
             - Die Seite öffnet sich im Browser aus einer einzigen Datei, ohne weitere Dateien.
         instructions: 'Öffne einen neuen Chat, füge den Prompt ein und speichere das HTML, das er schreibt, als Datei, dann öffne sie im Browser. Setze den Haken, wenn du die Seite angesehen und entschieden hast.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Deine Rolle
@@ -1642,7 +1654,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Stelle diesen Bericht als eine eigenständige HTML-Seite dar: zuerst die Zusammenfassung, dann ein oder zwei Diagramme der Kennzahlen, dann die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus dem Bericht.
+                Stelle diesen Bericht als eine eigenständige HTML-Seite dar: zuerst die Zusammenfassung, dann ein oder zwei Diagramme der Kennzahlen, dann die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus dem Bericht.
 
                 ```markdown
                 {{report}}

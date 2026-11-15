@@ -22,6 +22,8 @@ const count = (value: string | readonly string[] | undefined): number | undefine
 
 const sectionShape = (section: SectionDef) => [section.purpose, section.only, section.techniques ?? []];
 const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, count(slot.sample)];
+/** The second technical prompt of a task as structure: its skills and its sections, none when absent. */
+const thenShape = ({ then }: TaskDef) => then && { skills: then.skills, sections: then.sections.map(sectionShape) };
 const taskShape = (task: TaskDef) => ({
   id: task.id,
   output: task.output,
@@ -29,6 +31,7 @@ const taskShape = (task: TaskDef) => ({
   goal: [Boolean(task.goal.do), Boolean(task.goal.review)],
   template: task.template,
   slots: task.slots.map(slotShape),
+  technicalCalls: [task.skills ?? [], thenShape(task)],
   simple: task.do.simple.map(sectionShape),
   technical: task.do.technical.map(sectionShape),
   instructions: Boolean(task.instructions),
@@ -73,6 +76,7 @@ const structureOf = (file: WorkflowFile) => ({
     optional: stage.optional ?? false,
     foreach: stage.foreach && {
       demo: stage.foreach.demo,
+      technical: stage.foreach.technical,
       item: Boolean(stage.foreach.item),
       over: overShape(file, stage.foreach.over),
     },

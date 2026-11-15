@@ -221,6 +221,7 @@ stages:
             - Every number the plan needs, such as the budget and the head count, comes from your answers.
             - Four to six epics, one line each, and one named for In depth with the reason.
         instructions: "Open a new chat (ChatGPT or any AI chat, no login needed), paste the prompt and answer each round in your own words; 'yes' takes the recommendations. When it says nothing is left, type 'done' and copy the plan it writes."
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -285,7 +286,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Grill me about this project in rounds, at most three questions per round and at most {{limit.questions}} in total, numbered across rounds, each with a recommended answer worded so that my "yes" accepts it: two or three options for a choice, as a numbered list of true alternatives, an open question for what only I know. Cover the goal, the places the people come from and how many from each, the budget and what it covers, the time window and what must not happen. Then propose four to six epics and the one to take in depth first: the one the others depend on most, else the riskiest. When I type "done", write the plan, with every epic as an H3 under Epics, one line each.
+                Grill me about this project in rounds, at most three questions per round and at most {{limit.questions}} in total, numbered across rounds, each with a recommended answer worded so that my "yes" accepts it: two or three options for a choice, as a numbered list of true alternatives, an open question for what only I know. Cover the goal, the places the people come from and how many from each, the budget and what it covers, the time window and what must not happen. Then propose four to six epics and the one to take in depth first: the one the others depend on most, else the riskiest. When I type "done", write the plan, with every epic as an H3 under Epics, one line each.
 
                 ```markdown
                 {{idea}}
@@ -387,6 +388,7 @@ stages:
             - Every acceptance criterion names its need and can be ticked yes or no.
             - Each ticket is one question a fresh chat can answer with web search on its own, the most important first.
         instructions: "Open a new chat, paste the prompt with your plan filled in and answer each round; 'yes' takes the recommendations. When it says nothing is left, type 'done' and copy the requirements it writes."
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -450,7 +452,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Grill me about the epic named under In depth in this plan, in rounds, at most three questions per round and at most {{limit.questions}} in total, each with a recommended answer worded so that my "yes" accepts it, and only about decisions that change this epic, each settled concretely enough for a web search (a named city, a number, a date range); a choice that needs facts first, such as a provider or an exact day, becomes a ticket. When I type "done", write its requirements: needs N1 … as user stories, acceptance criteria A1 (N1) … that can be ticked yes or no, and at most {{limit.tickets}} tickets as H3s under Tickets, the most important first, each one question a fresh chat can answer with web search on its own, asking for facts no other ticket asks for, with one line under it.
+                Grill me about the epic named under In depth in this plan, in rounds, at most three questions per round and at most {{limit.questions}} in total, each with a recommended answer worded so that my "yes" accepts it, and only about decisions that change this epic, each settled concretely enough for a web search (a named city, a number, a date range); a choice that needs facts first, such as a provider or an exact day, becomes a ticket. When I type "done", write its requirements: needs N1 … as user stories, acceptance criteria A1 (N1) … that can be ticked yes or no, and at most {{limit.tickets}} tickets as H3s under Tickets, the most important first, each one question a fresh chat can answer with web search on its own, asking for facts no other ticket asks for, with one line under it.
 
                 ```markdown
                 {{plan}}
@@ -560,6 +562,7 @@ stages:
             - Every number in the findings has its unit and a source with a full URL, the URL of one page, never a list of many.
             - Each acceptance criterion this ticket bears on is met, not met or not found.
         instructions: "Open a new chat for each ticket, paste that chat's prompt (web search works in ChatGPT without a login) and copy the result before you open the next chat. If an answer breaks off or looks wrong, do not argue with it: start a new chat and paste the prompt again."
+        skills: [research]
         do:
           simple:
             - heading: Your role
@@ -630,7 +633,7 @@ stages:
               purpose: task
               techniques: [delimiters, research, fresh-context]
               text: |
-                /research You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket and the requirements. Each subagent answers its ticket with web search: the answer first in two sentences, a findings table with every number's unit and source, the acceptance criteria it bears on as met, not met or not found, the full URL of each source's own page, and what it could not find. Nothing is guessed; prices are in euros, converted where needed.
+                You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket and the requirements. Each subagent answers its ticket with web search: the answer first in two sentences, a findings table with every number's unit and source, the acceptance criteria it bears on as met, not met or not found, the full URL of each source's own page, and what it could not find. Nothing is guessed; prices are in euros, converted where needed.
 
                 ```markdown
                 {{spec}}

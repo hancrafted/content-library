@@ -35,7 +35,8 @@ export function rawPrompt({ sections }: PromptParts): string {
 }
 
 /** Where a step's edit is stored: Simple and Technical copy different text, and every round of a stage shares one edit. */
-export const editKey = (level: string, jobId: string, step: 'do' | 'review'): string => `${level}:${jobId}.${step}`;
+export const editKey = (level: string, jobId: string, step: 'do' | 'review' | 'then'): string =>
+  `${level}:${jobId}.${step}`;
 
 /** What a copy button copies: the edit with earlier results filled in, else the YAML prompt filled in. */
 export function promptText(parts: PromptParts, values: SlotValues, edit: string | undefined): string {

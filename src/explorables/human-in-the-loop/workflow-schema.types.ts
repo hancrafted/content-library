@@ -117,6 +117,13 @@ export interface LimitDef {
   readonly demo: number;
 }
 
+/** A second technical prompt of a job that calls a second skill: copied after the first, in the same session. */
+export interface ThenDef {
+  /** Skill names, each printed as `/<name>` on its own line at the top of the prompt. */
+  readonly skills: readonly string[];
+  readonly sections: readonly SectionDef[];
+}
+
 export interface TaskDef {
   readonly id: string;
   /** The job's bold name on the diagram, and its heading in a stage's modal. */
@@ -139,6 +146,13 @@ export interface TaskDef {
   /** One or two plain sentences on what the user does in the do step; shown above the slots in the popover. */
   readonly instructions?: string;
   readonly do: Readonly<Record<Runtime, readonly SectionDef[]>>;
+  /**
+   * Skill names the technical do prompt calls, each printed as `/<name>` on its own line before its first heading.
+   * A slash call written inside technical section text is a load problem: the skill lines come from here only.
+   */
+  readonly skills?: readonly string[];
+  /** Absent unless the job calls a second skill: the technical prompt copied after the do prompt. */
+  readonly then?: ThenDef;
   readonly review?: ReviewDef;
   /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every demo cap sits here, next to its full value. */
   readonly limits?: Readonly<Record<string, LimitDef>>;
@@ -162,6 +176,11 @@ export interface ForeachDef {
   readonly over: string;
   /** Demo mode takes the first N H3s, in document order; the example results cover these rounds only. */
   readonly demo: number;
+  /**
+   * `rounds`: the stage plays one round per item at the Technical level too, each round's technical prompt taking
+   * `{{item}}`, while demo mode is off. Absent: at the Technical level one prompt runs every round.
+   */
+  readonly technical?: 'rounds';
   /** What one round is called in this file's language (`epic`): the Detailed bracket reads "× each epic (2)". Absent: "round". */
   readonly item?: string;
 }

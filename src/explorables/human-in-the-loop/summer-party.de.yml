@@ -220,6 +220,7 @@ stages:
             - Jede Zahl, die der Plan braucht, wie das Budget und die Zahl der Gäste, stammt aus deinen Antworten.
             - Vier bis sechs Epics, je eine Zeile, und eines unter Vertiefung genannt, mit dem Grund.
         instructions: "Öffne einen neuen Chat (ChatGPT oder ein anderer KI-Chat, ohne Anmeldung), füge den Prompt ein und beantworte jede Runde mit eigenen Worten; 'ja' übernimmt die Empfehlungen. Wenn die KI sagt, dass nichts mehr offen ist, schreibe 'fertig' und kopiere den Plan, den sie schreibt."
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -284,7 +285,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Befrage mich zu diesem Projekt in Runden, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, über die Runden nummeriert, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt: zwei oder drei Optionen bei einer Wahl, als nummerierte Liste echter Alternativen, eine offene Frage für das, was nur ich weiß. Decke das Ziel ab, die Orte, aus denen die Leute kommen, und wie viele von jedem, das Budget und was es abdeckt, den Zeitraum und was nicht passieren darf. Schlage dann vier bis sechs Epics vor und das eine, das zuerst vertieft werden soll: das, von dem die anderen am meisten abhängen, sonst das riskanteste. Wenn ich "fertig" schreibe, schreibe den Plan, mit jedem Epic als H3 unter Epics, je eine Zeile.
+                Befrage mich zu diesem Projekt in Runden, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, über die Runden nummeriert, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt: zwei oder drei Optionen bei einer Wahl, als nummerierte Liste echter Alternativen, eine offene Frage für das, was nur ich weiß. Decke das Ziel ab, die Orte, aus denen die Leute kommen, und wie viele von jedem, das Budget und was es abdeckt, den Zeitraum und was nicht passieren darf. Schlage dann vier bis sechs Epics vor und das eine, das zuerst vertieft werden soll: das, von dem die anderen am meisten abhängen, sonst das riskanteste. Wenn ich "fertig" schreibe, schreibe den Plan, mit jedem Epic als H3 unter Epics, je eine Zeile.
 
                 ```markdown
                 {{idea}}
@@ -386,6 +387,7 @@ stages:
             - Jedes Akzeptanzkriterium nennt sein Bedürfnis und lässt sich mit Ja oder Nein abhaken.
             - Jedes Ticket ist eine Frage, die ein frischer Chat mit Websuche allein beantworten kann, die wichtigste zuerst.
         instructions: "Öffne einen neuen Chat, füge den Prompt mit deinem Plan ein und beantworte jede Runde; 'ja' übernimmt die Empfehlungen. Wenn die KI sagt, dass nichts mehr offen ist, schreibe 'fertig' und kopiere die Anforderungen, die sie schreibt."
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -449,7 +451,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Befrage mich zu dem Epic, das in diesem Plan unter Vertiefung genannt ist, in Runden, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt, und nur zu Entscheidungen, die dieses Epic ändern, jede so konkret geklärt, dass sie für eine Websuche taugt (eine genannte Stadt, eine Zahl, ein Zeitraum); eine Wahl, die erst Fakten braucht, zum Beispiel ein Anbieter oder ein genauer Tag, wird ein Ticket. Wenn ich "fertig" schreibe, schreibe seine Anforderungen: Bedürfnisse N1 … als User Stories, Akzeptanzkriterien A1 (N1) …, die sich mit Ja oder Nein abhaken lassen, und höchstens {{limit.tickets}} Tickets als H3 unter Tickets, das wichtigste zuerst, jedes eine Frage, die ein frischer Chat mit Websuche allein beantworten kann, die nach Fakten fragt, nach denen kein anderes Ticket fragt, mit einer Zeile darunter.
+                Befrage mich zu dem Epic, das in diesem Plan unter Vertiefung genannt ist, in Runden, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt, und nur zu Entscheidungen, die dieses Epic ändern, jede so konkret geklärt, dass sie für eine Websuche taugt (eine genannte Stadt, eine Zahl, ein Zeitraum); eine Wahl, die erst Fakten braucht, zum Beispiel ein Anbieter oder ein genauer Tag, wird ein Ticket. Wenn ich "fertig" schreibe, schreibe seine Anforderungen: Bedürfnisse N1 … als User Stories, Akzeptanzkriterien A1 (N1) …, die sich mit Ja oder Nein abhaken lassen, und höchstens {{limit.tickets}} Tickets als H3 unter Tickets, das wichtigste zuerst, jedes eine Frage, die ein frischer Chat mit Websuche allein beantworten kann, die nach Fakten fragt, nach denen kein anderes Ticket fragt, mit einer Zeile darunter.
 
                 ```markdown
                 {{plan}}
@@ -559,6 +561,7 @@ stages:
             - Jede Zahl in den Ergebnissen hat ihre Einheit und eine Quelle mit vollständiger URL, der URL einer Seite, nie einer Liste vieler.
             - Jedes Akzeptanzkriterium, das dieses Ticket betrifft, ist erfüllt, nicht erfüllt oder nicht gefunden.
         instructions: 'Öffne für jedes Ticket einen neuen Chat, füge den Prompt dieses Chats ein (Websuche funktioniert in ChatGPT ohne Anmeldung) und kopiere das Ergebnis, bevor du den nächsten Chat öffnest. Bricht eine Antwort ab oder sieht sie falsch aus, diskutiere nicht mit ihr: Öffne einen neuen Chat und füge den Prompt noch einmal ein.'
+        skills: [research]
         do:
           simple:
             - heading: Deine Rolle
@@ -629,7 +632,7 @@ stages:
               purpose: task
               techniques: [delimiters, research, fresh-context]
               text: |
-                /research Du bist der Orchestrator. Nimm jeden H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeweils mit frischem Kontext und nur seinem eigenen Ticket und den Anforderungen. Jeder Subagent beantwortet sein Ticket mit Websuche: die Antwort zuerst in zwei Sätzen, eine Ergebnistabelle mit Einheit und Quelle jeder Zahl, die Akzeptanzkriterien, die es betrifft, als erfüllt, nicht erfüllt oder nicht gefunden, den vollständigen URL der eigenen Seite jeder Quelle und was er nicht finden konnte. Nichts wird geschätzt; Preise stehen in Euro, wo nötig umgerechnet.
+                Du bist der Orchestrator. Nimm jeden H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeweils mit frischem Kontext und nur seinem eigenen Ticket und den Anforderungen. Jeder Subagent beantwortet sein Ticket mit Websuche: die Antwort zuerst in zwei Sätzen, eine Ergebnistabelle mit Einheit und Quelle jeder Zahl, die Akzeptanzkriterien, die es betrifft, als erfüllt, nicht erfüllt oder nicht gefunden, den vollständigen URL der eigenen Seite jeder Quelle und was er nicht finden konnte. Nichts wird geschätzt; Preise stehen in Euro, wo nötig umgerechnet.
 
                 ```markdown
                 {{spec}}
