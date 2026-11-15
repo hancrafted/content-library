@@ -19,6 +19,7 @@ import { episodeMetadata as _20261104IntroHitlWorkflows__aiGivesYouMoreWork } fr
 import { episodeMetadata as _20261104IntroHitlWorkflows__intro } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode-metadata';
 import { episodeMetadata as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode-metadata';
 import { episodeMetadata as _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/episode-metadata';
+import { episodeMetadata as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode-metadata';
 import { episodeMetadata as fromSharedUnderstandingToSharedContext } from '@/episodes/from-shared-understanding-to-shared-context/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from '@/episodes/never-too-early-sales/episode-metadata';
@@ -46,6 +47,8 @@ export const EPISODE_METADATA = {
   '2026-11-04-intro-hitl-workflows__onboard-ai-every-time': _20261104IntroHitlWorkflows__onboardAiEveryTime,
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro':
     _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro,
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require':
+    _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire,
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'ai-token-economy': aiTokenEconomy,

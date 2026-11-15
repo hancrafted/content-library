@@ -1,0 +1,19 @@
+{
+  "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen: Ein agentischer Workflow ist <b>ein Ziel, zerlegt in Übergaben, die Du prüfen kannst</b>, gebaut um das Ziel, nicht um das Organigramm.",
+  "seam": {
+    "from": { "team": "Essen & Getränke", "fact": "Abendessen für 200", "detail": "31 vegetarisch" },
+    "to": { "team": "Location-Küche", "fact": "Menü um 19:00" },
+    "handoff": "Der Übergabepfeil von Essen und Getränken zur Küche der Location",
+    "how": "wie: Sache der Küche"
+  },
+  "contract": {
+    "label": "Vertrag an der Nahtstelle",
+    "terms": { "receives": "Erhält", "delivers": "Liefert", "checkedBy": "Geprüft durch" },
+    "receives": "200 Gäste, 31 vegetarisch, definiert als <b>kein Fleisch, kein Fisch, keine Eier</b>",
+    "delivers": "Abendessen für 200 um 19:00",
+    "checkedBy": "das Menü gegen die Definition"
+  },
+  "agent": "Von einem Agenten erledigt",
+  "external": { "tag": "extern", "label": "Externe Abhängigkeit, außerhalb Deiner Kontrolle" },
+  "goal": { "label": "Ziel", "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause" }
+}

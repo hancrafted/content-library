@@ -1,0 +1,25 @@
+{
+  "title": "Was es von jeder Person verlangt",
+  "caption": "Vier Fehler, drei fehlende Fähigkeiten, und jede Fähigkeit hat einen Namen.",
+  "board": "Die Vertragskarte der Nahtstelle: erhält 200 Gäste, 31 vegetarisch, definiert als ohne Fleisch, Fisch und Eier; liefert Abendessen für 200 um 19:00; geprüft durch das Menü gegen die Definition; abgehakt",
+  "seam": {
+    "from": "Essen & Getränke",
+    "to": "Location-Küche"
+  },
+  "contract": {
+    "terms": { "receives": "Erhält", "delivers": "Liefert", "checkedBy": "Geprüft durch" },
+    "receives": "200 Gäste, 31 vegetarisch",
+    "definition": "= ohne Fleisch, Fisch, Eier",
+    "delivers": "Abendessen für 200, 19:00",
+    "checkedBy": "Menü vs. Definition"
+  },
+  "voiceScript": {
+    "segments": {
+      "skills-behind-the-failures": {
+        "title": "Fähigkeiten hinter den Fehlern",
+        "keywords": "",
+        "script": "Gehen wir zurück zum Board. Jeder der vier Fehler kam von einer Fähigkeit, die einer Person fehlte, und insgesamt sind es drei Fähigkeiten. Jede hat einen Namen, und wir nehmen sie uns eine nach der anderen vor."
+      }
+    }
+  }
+}

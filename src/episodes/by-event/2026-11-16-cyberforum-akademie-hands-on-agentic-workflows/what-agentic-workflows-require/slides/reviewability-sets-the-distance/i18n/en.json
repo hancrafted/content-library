@@ -1,0 +1,133 @@
+{
+  "title": "Reviewability sets the distance",
+  "caption": "A task's level is set by what a wrong result can do and by how well you can <b>check the result</b>; making it checkable moves it out.",
+  "board": {
+    "label": "Summer party · each task as far out as its risk and its check allow"
+  },
+  "agent": "Agent",
+  "tasks": {
+    "guestList": {
+      "label": "Guest list",
+      "fact": "200 names, 5 offices",
+      "ifWrong": "a name missing, fixed with one email",
+      "checkedBy": "Checked by: count against each office's staff list, no person needed"
+    },
+    "venue": {
+      "label": "Venue",
+      "fact": "A venue for 200 on 20 June",
+      "ifWrong": "200 people at a place that doesn't fit",
+      "checkedBy": "Checked by: capacity, date, access, read in the reports"
+    },
+    "activity": {
+      "label": "Activity",
+      "fact": "One activity for 200",
+      "was": "Was: Paintball × 200, only your yes or no",
+      "ifWrong": "colleagues left out of the day",
+      "move": "The activity moves from in the loop to on the loop"
+    }
+  },
+  "risk": {
+    "label": "If wrong:",
+    "value": "risk {value} of 3"
+  },
+  "levels": {
+    "was": "In",
+    "in": "In the loop",
+    "on": "On the loop",
+    "out": "Out of the loop"
+  },
+  "checkCard": {
+    "heading": "Its check, built in",
+    "checks": {
+      "join": "Everyone can join",
+      "access": "Wheelchair access",
+      "fitness": "No fitness needed"
+    }
+  },
+  "handoffs": {
+    "guests": "200 guests",
+    "venue": "venue, date",
+    "programme": "programme"
+  },
+  "goal": {
+    "label": "Goal",
+    "text": "20 June: everyone celebrates together and gets home safely"
+  },
+  "hedge": "My hypothesis: weighing risk and checkability together is a synthesis, <risk>not one source's rule</risk>, and the evidence for checkability <software>comes mostly from software</software>.",
+  "notes": {
+    "software-is-easy-to-check": {
+      "header": "Software is easy to check",
+      "description": "\"Software is unusually amenable to supervisory oversight because the outputs can be tested\"; where checking needs the expertise that producing took, trust may build more slowly [1].",
+      "sources": {
+        "anthropic-measuring-agent-autonomy": {
+          "title": "Anthropic, Measuring AI agent autonomy in practice (18 Feb 2026)"
+        }
+      }
+    },
+    "vigilance-is-no-check": {
+      "header": "Vigilance is no check",
+      "description": "complacency and automation bias occur in naive and expert people and are not removed by training or instructions, so the check must be built into the result [1].",
+      "sources": {
+        "parasuraman-manzey-complacency-and-bias": {
+          "title": "Parasuraman and Manzey, Complacency and Bias in Human Use of Automation: An Attentional Integration (Human Factors 52(3), 2010)"
+        }
+      }
+    },
+    "level-is-a-design-choice": {
+      "header": "Level is a design choice",
+      "description": "the level of automation is set per function, judged by human performance consequences and the cost of errors, which is why a task may stay in for reasons other than checkability [1].",
+      "sources": {
+        "parasuraman-sheridan-wickens-levels-of-automation": {
+          "title": "Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)"
+        }
+      }
+    },
+    "oversight-follows-risk-in-the-rules": {
+      "header": "Oversight follows risk in the rules",
+      "description": "the EU AI Act requires oversight measures \"commensurate with the risks, level of autonomy and context of use\" of a high-risk system [1].",
+      "sources": {
+        "eu-ai-act-article-14": { "title": "EU AI Act (Regulation 2024/1689), Article 14 Human oversight" }
+      }
+    },
+    "risk-as-a-tool-rating": {
+      "header": "Risk as a tool rating",
+      "description": "OpenAI tells builders to rate each tool low, medium or high by factors such as read-only versus write access, reversibility and financial impact, and to trigger human oversight for sensitive, irreversible or high-stakes actions until confidence in the agent grows [1].",
+      "sources": {
+        "openai-practical-guide-to-building-agents": { "title": "OpenAI, A practical guide to building agents" }
+      }
+    },
+    "risk-is-one-input-not-the-rule": {
+      "header": "Risk is one input, not the rule",
+      "description": "no source says risk alone decides the level; the aviation-derived model ranks the effect on human performance first and the cost of errors second, so combining risk and checkability into one per-task choice is a synthesis [1].",
+      "sources": {
+        "parasuraman-sheridan-wickens-levels-of-automation": {
+          "title": "Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-rule": {
+        "title": "The rule",
+        "keywords": "",
+        "script": "You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at."
+      },
+      "hypothesis-said-openly": {
+        "title": "Hypothesis, said openly",
+        "keywords": "",
+        "script": "The rule that you can step out only as far as you can check is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law."
+      },
+      "risk-too": {
+        "title": "Risk too",
+        "keywords": "",
+        "script": "Checkability is only half of it. What a wrong result can do also helps set the level, so the more damage a wrong result can cause, the more a person stays in."
+      },
+      "make-it-checkable": {
+        "title": "Make it checkable",
+        "keywords": "",
+        "script": "That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop."
+      }
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "title": "The org chart trap",
+  "caption": "Conway’s law: what people design copies <b>who talks to whom</b>, and a workflow people draw for themselves is a design too.",
+  "orgChart": {
+    "label": "Party committee · org chart",
+    "lead": "Committee lead",
+    "roles": {
+      "venue": {
+        "label": "Venue scouts",
+        "people": "10 people"
+      },
+      "catering": {
+        "label": "Caterer",
+        "people": "1 person"
+      },
+      "travel": {
+        "label": "Travel planner",
+        "people": "1 person"
+      }
+    }
+  },
+  "copies": "copies",
+  "workflow": {
+    "label": "Their draft AI workflow",
+    "columns": {
+      "venue": {
+        "label": "Venue scouting · 14 steps",
+        "steps": {
+          "brief": "1 Brief the scouts",
+          "regions": "2 List regions",
+          "long-list": "3 Long-list venues",
+          "call": "4 Call 40 venues",
+          "dates": "5 Check dates",
+          "north": "6 Visit north",
+          "south": "7 Visit south",
+          "score": "8 Score venues",
+          "prices": "9 Compare prices",
+          "revisit": "10 Second visits",
+          "shortlist": "11 Shortlist 3",
+          "present": "12 Present",
+          "vote": "13 Vote",
+          "book": "14 Book venue"
+        }
+      },
+      "catering": {
+        "label": "Catering · 1 step",
+        "steps": {
+          "order": "Order 200 meals"
+        }
+      },
+      "travel": {
+        "label": "Travel · 1 step",
+        "steps": {
+          "trains": "Book trains"
+        }
+      }
+    }
+  },
+  "goalLabel": "Goal",
+  "goal": "20 June: everyone celebrates together and gets home safely",
+  "goalNote": "No step plans back from here.",
+  "quote": "“Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization’s communication structure.”",
+  "author": "Melvin Conway, 1968",
+  "hedges": {
+    "tendency": "<marker>A tendency, not a rule: strong in 70% of firm studies</marker>",
+    "inference": "Applying it to workflows is my inference, not a measured result.",
+    "firstDesign": "<marker>The first design is rarely the best: redraw it from the goal</marker>"
+  },
+  "notes": {
+    "the-law-as-conway-states-it": {
+      "header": "The law as Conway states it",
+      "description": "\"Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization's communication structure\" [1].",
+      "sources": {
+        "conway-law": {
+          "title": "Melvin Conway, Conway's Law (author's page)"
+        }
+      }
+    },
+    "why-it-happens": {
+      "header": "Why it happens",
+      "description": "organising the team already makes design decisions, and two parts of a design can depend on each other only where their designers talked [1].",
+      "sources": {
+        "conway-committees": {
+          "title": "Melvin Conway, How Do Committees Invent? (Datamation, April 1968)"
+        }
+      }
+    },
+    "a-tendency-not-a-rule": {
+      "header": "A tendency, not a rule",
+      "description": "a review of 142 empirical studies found mirroring a prevalent pattern but not universal: strong in 70% of industry and firm studies, absent in 56% of open collaborative projects [1].",
+      "sources": {
+        "colfer-baldwin-mirroring": {
+          "title": "Colfer and Baldwin, The mirroring hypothesis: theory, evidence, and exceptions (Industrial and Corporate Change, 2016)"
+        }
+      }
+    },
+    "components-include-tasks": {
+      "header": "Components include tasks",
+      "description": "the same review defines the components of a technical system as all the tasks and decisions required to design, operate and maintain it [1].",
+      "sources": {
+        "colfer-baldwin-mirroring": {
+          "title": "Colfer and Baldwin, The mirroring hypothesis: theory, evidence, and exceptions (Industrial and Corporate Change, 2016)"
+        }
+      }
+    },
+    "the-first-design-is-not-the-best": {
+      "header": "The first design is not the best",
+      "description": "Conway himself says the first design is almost never the best possible, so the organisation must stay flexible [1].",
+      "sources": {
+        "conway-committees": {
+          "title": "Melvin Conway, How Do Committees Invent? (Datamation, April 1968)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "conways-law": {
+        "title": "Conway's law",
+        "keywords": "",
+        "script": "Conway's law, from 1968, in plain words: what people design follows who talks to whom. A workflow that people draw for themselves is a design too, so it does the same. The exact wording is in the Speaker notes."
+      },
+      "a-teams-draft": {
+        "title": "A team's draft",
+        "keywords": "",
+        "script": "I saw this with a team I worked with. They drew their AI workflow, and one discipline ended up with fourteen discovery steps while the others got one or two. The workflow mirrored the headcount, not the goal. I will not name the company or the team."
+      },
+      "broadly-defined": {
+        "title": "Broadly defined",
+        "keywords": "",
+        "script": "Conway meant systems in a wide sense, but applying that to workflows is my inference, because nobody has measured it for workflows. It explains what I saw, though, and it gives you a test you can run."
+      },
+      "your-sign": {
+        "title": "Your sign",
+        "keywords": "",
+        "script": "So if the workflow your people draw looks like your org chart, suspect Conway's law and redraw it from the goal. If you lead the transformation, that check is yours to make."
+      }
+    }
+  }
+}

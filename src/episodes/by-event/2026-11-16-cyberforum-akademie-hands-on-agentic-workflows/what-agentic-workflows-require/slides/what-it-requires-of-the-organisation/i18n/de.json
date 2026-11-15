@@ -1,0 +1,26 @@
+{
+  "title": "Was es von der Organisation verlangt",
+  "caption": "Der Workflow, den Menschen zeichnen, nimmt die Form der Organisation an.",
+  "board": "Oben das Location-Team aus zehn und Essen und Getränke aus einer Person, als gestrichelte Teamkästen; unten die vier Karten Programm, Anreise, Location, Essen und Getränke, zum Ziel verkettet, ihre Nahtstellen folgen dem Ziel, nicht den Teams",
+  "teams": {
+    "venue": "Location-Team ×10",
+    "food": "Essen & Getränke ×1"
+  },
+  "follow": "Nahtstellen folgen dem Ziel",
+  "cards": {
+    "activities": "Programm",
+    "travel": "Anreise",
+    "venue": "Location",
+    "food": "Essen &\nGetränke",
+    "goal": "Ziel"
+  },
+  "voiceScript": {
+    "segments": {
+      "from-people-to-the-company": {
+        "title": "Von den Menschen zum Unternehmen",
+        "keywords": "",
+        "script": "Fähigkeiten in Deinen Leuten reichen nicht. Der Workflow, den sie zeichnen, hat eine eigene Form, und diese Form kommt aus der Organisation, in der sie arbeiten."
+      }
+    }
+  }
+}

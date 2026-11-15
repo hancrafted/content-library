@@ -1,0 +1,36 @@
+/*
+ * The activity's level move. While it plays (`data-play`, once on the Slide's first `active` and on every mouse enter
+ * and keyboard focus) the arrow draws out of the dashed "In" pill and the new pill slides in behind it, as if the
+ * pinned check card had pushed the task one level out. The base rules are the end state, which is also what reduced
+ * motion shows.
+ */
+
+.arrow,
+.to {
+  display: inline-flex;
+}
+
+@keyframes grow {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .move[data-play] .arrow {
+    transform-origin: left center;
+    animation: grow 400ms ease-out 250ms backwards;
+  }
+
+  .move[data-play] .to {
+    animation: slide 600ms ease-out 450ms backwards;
+  }
+}

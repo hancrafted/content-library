@@ -1,0 +1,126 @@
+{
+  "title": "Now with agents",
+  "caption": "AI speeds up the doing, but it <b>can't add context nobody gave it</b>: the same four failures arrive in 2 minutes instead of 2 weeks.",
+  "board": {
+    "label": "Same board, same notes",
+    "detail": "handed to four agents"
+  },
+  "cardsLabel": "Four ticked cards",
+  "ownGoalMet": "Own goal met",
+  "stamp": "2 min",
+  "doneBy": {
+    "person": "Done by a person",
+    "agent": "Done by an agent"
+  },
+  "done": "Done",
+  "fails": "Fails",
+  "breaks": {
+    "together": "✗ together",
+    "safely": "✗ safely"
+  },
+  "halves": {
+    "together": "together",
+    "safely": "safely"
+  },
+  "cards": {
+    "activities": {
+      "label": "Activities",
+      "fact": "Paintball × 200",
+      "seamCard": "Travel",
+      "held": "accessible bus"
+    },
+    "travel": {
+      "label": "Travel",
+      "fact": "Everyone carpools",
+      "seamCard": "Food & drinks",
+      "held": "open bar to 01:00"
+    },
+    "venue": {
+      "label": "Venue",
+      "fact": "Alpine hut, 1,800 m",
+      "seamCard": "Travel",
+      "held": "route and times only"
+    },
+    "food": {
+      "label": "Food & drinks",
+      "fact": "31 vegetarian",
+      "seamCard": "Venue",
+      "held": "hut kitchen: eggs OK"
+    }
+  },
+  "result": {
+    "title": "Party, 20 June",
+    "goal": "Goal: everyone celebrates together and gets home safely",
+    "broken": {
+      "together": "Activities, Food & drinks",
+      "safely": "Travel, Venue"
+    }
+  },
+  "speed": {
+    "label": "Every card",
+    "value": "2 min",
+    "before": "2 weeks",
+    "claim": "the same four failures, reached faster"
+  },
+  "context": {
+    "title": "What no agent was told",
+    "items": {
+      "public-text": "Trained on public text",
+      "own-talk": "Your company's own talk isn't in it",
+      "rare-facts": "Rare facts are learned poorly",
+      "with-the-task": "So context must come with the task"
+    }
+  },
+  "notes": {
+    "a-model-can-learn-from-public-text-alone": {
+      "header": "A model can learn from public text alone",
+      "description": "the LLaMA authors set out to show state-of-the-art models can be trained using publicly available datasets exclusively [1].",
+      "sources": {
+        "touvron-llama": {
+          "title": "Touvron et al., LLaMA: Open and Efficient Foundation Language Models"
+        }
+      }
+    },
+    "customer-conversations-are-not-training-data": {
+      "header": "Customer conversations are not training data",
+      "description": "Anthropic states that by default it does not use inputs or outputs of its commercial products for training, so a company's internal processes, decisions and naming are mostly absent from what a model learned [1].",
+      "sources": {
+        "anthropic-commercial-training": {
+          "title": "Anthropic, Is my data used for model training? (commercial products)"
+        }
+      }
+    },
+    "rare-facts-are-learned-poorly": {
+      "header": "Rare facts are learned poorly",
+      "description": "accuracy on a fact question tracks how many training documents mention it, so even a fact that is in the data is weak when it is rare [1].",
+      "sources": {
+        "kandpal-long-tail": {
+          "title": "Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge"
+        }
+      }
+    },
+    "the-context-must-be-supplied": {
+      "header": "The context must be supplied",
+      "description": "the retrieval literature's remedy is to pair the model with a searchable memory consulted at request time, which is why organisational knowledge has to arrive with the request [1].",
+      "sources": {
+        "lewis-rag": {
+          "title": "Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "speed-not-context": {
+        "title": "Speed, not context",
+        "keywords": "",
+        "script": "Now give the same four cards to agents. Each card is ticked far faster, which is wonderful, and it is exactly where the trap sits. AI speeds up the doing, but it cannot add context that nobody gave it, and the paintball agent never saw the accessible bus."
+      },
+      "plausible-guess": {
+        "title": "Plausible guess",
+        "keywords": "",
+        "script": "What makes this worse is that an agent which finds a gap tends to fill it with a plausible guess, instead of stopping to ask you. Nobody told the food agent what vegetarian means for these colleagues, so it picks the most common reading and carries on. The same four failures appear in the same four places, only now you reach them in two minutes instead of two weeks."
+      }
+    }
+  }
+}

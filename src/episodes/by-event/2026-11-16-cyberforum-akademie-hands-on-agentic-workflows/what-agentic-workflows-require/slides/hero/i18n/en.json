@@ -1,0 +1,19 @@
+{
+  "caption": "Everyone delivered exactly what was asked, and none of it added up: an agentic workflow is <b>a goal broken into handoffs you can check</b>, designed around the goal, not the org chart.",
+  "seam": {
+    "from": { "team": "Food & drinks", "fact": "Dinner for 200", "detail": "31 vegetarian" },
+    "to": { "team": "Venue kitchen", "fact": "Menu at 19:00" },
+    "handoff": "The handoff arrow from Food and drinks to the venue's kitchen",
+    "how": "how: the kitchen’s choice"
+  },
+  "contract": {
+    "label": "Contract at the seam",
+    "terms": { "receives": "Receives", "delivers": "Delivers", "checkedBy": "Checked by" },
+    "receives": "200 guests, 31 vegetarian, defined as <b>no meat, fish or eggs</b>",
+    "delivers": "dinner for 200 at 19:00",
+    "checkedBy": "the menu against the definition"
+  },
+  "agent": "Done by an agent",
+  "external": { "tag": "external", "label": "External dependency, outside your control" },
+  "goal": { "label": "Goal", "text": "20 June: everyone celebrates together and gets home safely" }
+}

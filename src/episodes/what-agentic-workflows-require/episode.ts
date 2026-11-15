@@ -13,7 +13,7 @@ import { hero } from './slides/hero/slide';
  * step out of the loop per task, and what it requires of each person and of the organisation, so the workflow is
  * designed around the goal, not the org chart. Built from the approved Spec under
  * docs/episodes/what-agentic-workflows-require/, its Title slide the picked Option 0b, one seam of the party board
- * zoomed with its contract card. Upcoming until its video is live.
+ * zoomed with its contract card.
  *
  * Each Section is one placement marker under `sections/`, named after the Brief's Section title and listed here in Spec
  * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.
