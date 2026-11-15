@@ -40,6 +40,9 @@ const nextConfig: NextConfig = {
   },
   // An Explorable's data files (a Claude Code `.jsonl` log, a `.yml` config) are imported as text and parsed at
   // build time; `vitest.config.mts` loads them the same way (raw-text-files.mts).
+  // Turbopack's default CSS chunking merges Slide stylesheets across routes, so each Episode page loaded other
+  // Episodes' CSS; the graph strategy with a low request cost keeps each page close to its own (FE-004 §4.3).
+  experimental: { cssChunking: { type: 'graph', requestCost: 5000 } },
   turbopack: {
     rules: {
       '*.jsonl': { type: 'raw' },
