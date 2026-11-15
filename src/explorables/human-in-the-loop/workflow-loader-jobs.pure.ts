@@ -6,7 +6,8 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
  * output, an output on every job but the last, the goals and the stage summary. One sentence per problem.
  */
 
-const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
+/** The ids that appear more than once, each repeat once. */
+export const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 const SUMMARY_WORDS = 8;
 

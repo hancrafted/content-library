@@ -1,6 +1,6 @@
 import { markerCount } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure.ts';
-import { unneededOutputs } from './workflow-loader-jobs.pure.ts';
+import { dupes, unneededOutputs } from './workflow-loader-jobs.pure.ts';
 import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
 import { expandSections, unknownMarkers } from './workflow-markers.pure.ts';
 import { producersFor, tasksOf, type Producer } from './workflow-outputs.pure.ts';
@@ -11,8 +11,6 @@ import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './wor
  * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
  * markers, and every sample and example against its template. One sentence per problem.
  */
-
-const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 export function templateProblems(file: WorkflowFile): string[] {
   return Object.entries(file.templates).flatMap(([key, source]) => {
