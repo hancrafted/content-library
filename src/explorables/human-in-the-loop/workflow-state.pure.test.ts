@@ -5,6 +5,8 @@ import { createState, reduce, type WorkflowEvent, type WorkflowState } from './w
 const start = { workflowId: 'project-plan', level: 'simple', view: 'stages' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
+const edits = { 'simple:a.do': '## Mine' };
+
 describe('success cases', () => {
   it('keeps what is pasted into a slot, shared whatever stage is open, and keeps it when a modal closes', () => {
     // ARRANGE
@@ -92,6 +94,7 @@ describe('success cases', () => {
       openJobId: null,
       openRound: null,
       slotValues: {},
+      prompts: {},
       uploaded: null,
       uploadProblems: [],
     };
@@ -188,6 +191,43 @@ describe('success cases', () => {
       openStageId: null,
     });
   });
+
+  it('holds the edits the viewer makes, none at the start', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const edited = reduce(initial, { type: 'prompts', values: edits });
+    // ASSERT
+    expect(initial.prompts).toEqual({});
+    expect(edited.prompts).toEqual(edits);
+  });
+
+  it('takes back saved edits with a saved run', () => {
+    // ARRANGE
+    const run = { results: {}, demo: true };
+    // ACT
+    const state = reduce(createState(start), { type: 'restore', ...run, prompts: edits });
+    // ASSERT
+    expect(state.prompts).toEqual(edits);
+  });
+
+  it('a reset clears the edits too', () => {
+    // ARRANGE
+    const edited = reduce(createState(start), { type: 'prompts', values: edits });
+    // ACT
+    const state = reduce(edited, { type: 'reset' });
+    // ASSERT
+    expect(state.prompts).toEqual({});
+  });
+
+  it('switching Workflow starts without the edits of the other', () => {
+    // ARRANGE
+    const edited = reduce(createState(start), { type: 'prompts', values: edits });
+    // ACT
+    const state = reduce(edited, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(state.prompts).toEqual({});
+  });
 });
 
 describe('failure cases', () => {
@@ -221,5 +261,14 @@ describe('edge cases', () => {
     const closed = reduce(initial, { type: 'close' });
     // ASSERT
     expect(closed).toEqual(initial);
+  });
+
+  it('takes back an old entry without prompts as no edits', () => {
+    // ARRANGE
+    const withEdits = reduce(createState(start), { type: 'prompts', values: edits });
+    // ACT
+    const state = reduce(withEdits, { type: 'restore', results: {}, demo: true });
+    // ASSERT
+    expect(state.prompts).toEqual({});
   });
 });

@@ -1,5 +1,5 @@
 import { readProgress, removeProgress, writeProgress } from '@/shared/lib/prefs-storage';
-import { verdictOf, type ProgressEntry } from '@/shared/lib/progress.pure';
+import { normalizedEntry, verdictOf, type ProgressEntry } from '@/shared/lib/progress.pure';
 import {
   useCallback,
   useEffect,
@@ -49,9 +49,10 @@ interface Store {
 }
 
 /** The run of a viewer who has pasted nothing and not touched demo mode. */
-const EMPTY: Progress = { results: {}, demo: true };
+const EMPTY: Progress = { results: {}, demo: true, prompts: {} };
 
-const signature = (progress: Progress): string => JSON.stringify(progress);
+/** What a run is compared by: an empty `prompts` counts as none, as storage holds it. */
+const signature = (progress: Progress): string => JSON.stringify(normalizedEntry(progress));
 
 /** Reads the entry of `key` when it or its hash changes, resumes a matching one, and says what was found. */
 function useLoad({ progress, onResume }: Options, { key, hash, saved, setRefused }: Store) {
@@ -79,7 +80,7 @@ function useSave({ progress, active }: { readonly progress: Progress; readonly a
     if (!active || key === null) return;
     const now = signature(progress);
     if (now === saved.current) return;
-    const ok = writeProgress(key, { hash, ...progress });
+    const ok = writeProgress(key, normalizedEntry({ hash, ...progress }));
     if (ok) saved.current = now;
     setRefused(!ok);
   }, [active, key, hash, progress, saved, setRefused]);

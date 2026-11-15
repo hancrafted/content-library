@@ -46,6 +46,9 @@ export interface UiWords {
   readonly stepCheckInfo: string;
   readonly copyExplanation: string;
   readonly copyExplanationTip: string;
+  /** The pencil beside Copy prompt: its name and tooltip; and the tooltip of the dot on Copy prompt while an edit exists. */
+  readonly editPrompt: string;
+  readonly editedTip: string;
   readonly explainWrapper: string;
   readonly previousResults: string;
   readonly insertedAt: string;

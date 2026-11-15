@@ -55,7 +55,7 @@ function ChatButton({ button, words }: { readonly button: ChatButtonDef; readonl
 }
 
 /** Buttons joined into one control: inner corners squared and inner borders shared. */
-const GROUP =
+export const BUTTON_GROUP =
   'flex w-fit items-stretch [&>*]:focus-visible:relative [&>*]:focus-visible:z-10 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none';
 
 /**
@@ -65,7 +65,7 @@ const GROUP =
  */
 export function ChatButtons({ buttons, words }: ChatButtonsProps) {
   return (
-    <div role="group" className={GROUP} data-chat-buttons="" aria-label={words.openAIChats}>
+    <div role="group" className={BUTTON_GROUP} data-chat-buttons="" aria-label={words.openAIChats}>
       {buttons.map((button) => (
         <ChatButton key={button.url} button={button} words={words} />
       ))}

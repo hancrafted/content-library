@@ -8,6 +8,8 @@ export interface ProgressEntry {
   readonly demo: boolean;
   /** What the viewer pasted, keyed as the hands-on keys its results. */
   readonly results: Readonly<Record<string, string>>;
+  /** The viewer's edits of step prompts, by `<level>:<job>.<step>`. Absent when none: an old entry stays valid. */
+  readonly prompts?: Readonly<Record<string, string>>;
 }
 
 /** Every stored entry, by the hands-on's key. */
@@ -29,14 +31,25 @@ export const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 export const isText = (value: unknown): value is string => typeof value === 'string';
 
+/** Absent, or a record of texts. */
+const isOptionalTexts = (value: unknown): boolean =>
+  value === undefined || (isRecord(value) && Object.values(value).every(isText));
+
 export function isEntry(value: unknown): value is ProgressEntry {
   if (!isRecord(value)) return false;
   return (
     isText(value.hash) &&
     typeof value.demo === 'boolean' &&
     isRecord(value.results) &&
-    Object.values(value.results).every(isText)
+    Object.values(value.results).every(isText) &&
+    isOptionalTexts(value.prompts)
   );
+}
+
+/** The entry as it is stored and compared: an empty `prompts` is left out, so a run without edits looks as it always did. */
+export function normalizedEntry<T extends Omit<ProgressEntry, 'hash'>>(entry: T): T {
+  const { prompts, ...rest } = entry;
+  return (prompts !== undefined && Object.keys(prompts).length > 0 ? entry : rest) as T;
 }
 
 /** Reads the stored store, keeping only valid entries; anything malformed yields `{}`. */

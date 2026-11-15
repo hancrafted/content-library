@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ResetConfirm, useDemoProps } from './demo-controls.client';
 import { ModalHeader } from './modal-header.client';
 import type { ModalProps } from './part-props.types';
+import { editState } from './prompt-edits.pure';
 import type { SlotState, StepKit } from './step-kit.types';
 import { Stepper } from './stepper.client';
 import { tryTitle } from './words.pure';
@@ -26,7 +27,7 @@ function Panel({ stage, run, jobId, round, slots, level, onLevel, debug, ...chro
   const { words } = chrome;
   const demoProps = useDemoProps(words, chrome);
   const first = stage.jobs[0];
-  const kit: StepKit = { words, onCopy: copy, info: showContext };
+  const kit: StepKit = { words, onCopy: copy, info: showContext, edits: editState(chrome, level) };
   return (
     <>
       <ModalHeader {...{ stage, level, onLevel, showContext, ...demoProps }} onContext={setShowContext} />

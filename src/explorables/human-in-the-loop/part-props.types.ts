@@ -47,6 +47,8 @@ export interface ModalProps extends DemoProps {
   readonly round: number | null;
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
+  /** The viewer's edits of step prompts, by `editKey`. */
+  readonly prompts: Readonly<Record<string, string>>;
   /** What the copy buttons append a debug footer from; null while debug mode is off. */
   readonly debug: DebugBase | null;
   readonly words: UiWords;
@@ -54,4 +56,5 @@ export interface ModalProps extends DemoProps {
   readonly onLevel: (level: Level) => void;
   readonly onClose: () => void;
   readonly onSlots: (values: Readonly<Record<string, string>>) => void;
+  readonly onPrompts: (values: Readonly<Record<string, string>>) => void;
 }

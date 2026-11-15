@@ -1,13 +1,15 @@
 'use client';
 
-import { ChatButtons } from '@/shared/components/core-components/chat-buttons/chat-buttons';
+import { BUTTON_GROUP, ChatButtons } from '@/shared/components/core-components/chat-buttons/chat-buttons';
 import { CopyButton, PromptActions } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
-import { joinPrompt, type PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
+import type { PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { CheckedBox } from './checked-box.client';
 import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { debugFooter } from './debug-footer.pure';
+import { editOf, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
+import { editKey, promptText, rawPrompt } from './prompt-edits.pure';
 import { Context } from './step-context.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { StepSection } from './step-section.client';
@@ -79,27 +81,28 @@ interface ActionsProps {
   readonly panel: string;
 }
 
-/** Copy the prompt, then the AI chats to paste it into; and, at the right, copy the prompt wrapped in the request to explain it. */
-function Actions({ step, task, kit, slots, panel }: ActionsProps) {
-  const { words } = kit;
-  const plain = joinPrompt(partsOf(step), slots.values);
-  const copy = tryWords(words);
-  const { debug } = kit;
+/** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
+function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
+  const { words, debug } = kit;
+  const plain = promptText(partsOf(step), slots.values, edit);
   const footer = (prompt: 'copy' | 'explain') =>
     debug ? debugFooter(debug, { prompt, step: step.id, chat: step.chat }) : null;
-  const text = debuggedPrompt(words, plain, footer('copy'));
   const copied = (ok: boolean) => {
     if (ok) kit.lead?.onCopied(panel);
     return ok;
   };
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <PromptActions
-        text={text}
-        copyLabel={copy.copyPrompt}
-        lead={leadOf(kit, panel) === 'copy'}
-        kit={{ ...kit, words: copy, onCopy: async (each) => copied(await kit.onCopy(each)) }}
-      />
+      <div className={BUTTON_GROUP} data-prompt-buttons="">
+        <PromptActions
+          text={debuggedPrompt(words, plain, footer('copy'))}
+          copyLabel={words.copyPrompt}
+          lead={leadOf(kit, panel) === 'copy'}
+          edited={edit === undefined ? undefined : words.editedTip}
+          kit={{ ...kit, words: tryWords(words), onCopy: async (each) => copied(await kit.onCopy(each)) }}
+        />
+        <EditToggle words={words} open={editing.on} onToggle={editing.toggle} />
+      </div>
       <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} words={words} />
       <span className="ml-auto" />
       <ExplainButton
@@ -107,6 +110,33 @@ function Actions({ step, task, kit, slots, panel }: ActionsProps) {
         onCopy={() => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')))}
       />
     </div>
+  );
+}
+
+interface RowProps extends ActionsProps {
+  readonly edit: string | undefined;
+  readonly editing: ReturnType<typeof useOpen>;
+}
+
+/** The row of buttons, and below it the editor while it is open. */
+function Actions(props: ActionsProps) {
+  const { step, task, kit } = props;
+  const editing = useOpen();
+  const at = { key: editKey(kit.edits.level, task.id, step.id), yaml: rawPrompt(partsOf(step)) };
+  const { edit, text, onText, onReset } = editOf(kit.edits, at);
+  return (
+    <>
+      <ActionRow {...props} edit={edit} editing={editing} />
+      {editing.on && (
+        <PromptEditor
+          words={kit.words}
+          text={text}
+          edited={edit !== undefined}
+          {...{ onText, onReset }}
+          onClose={editing.close}
+        />
+      )}
+    </>
   );
 }
 
