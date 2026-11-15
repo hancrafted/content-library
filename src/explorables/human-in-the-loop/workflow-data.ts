@@ -5,6 +5,8 @@ import uiEn from './human-in-the-loop.config.yml';
 import type { UiWords } from './human-in-the-loop.types';
 import projectPlanDe from './project-plan.de.yml';
 import projectPlanEn from './project-plan.en.yml';
+import sourceToQuizDe from './source-to-quiz.de.yml';
+import sourceToQuizEn from './source-to-quiz.en.yml';
 import summerPartyDe from './summer-party.de.yml';
 import summerPartyEn from './summer-party.en.yml';
 import vacationDe from './vacation.de.yml';
@@ -25,6 +27,7 @@ const SOURCES = {
   'project-plan': { en: projectPlanEn, de: projectPlanDe },
   vacation: { en: vacationEn, de: vacationDe },
   'summer-party': { en: summerPartyEn, de: summerPartyDe },
+  'source-to-quiz': { en: sourceToQuizEn, de: sourceToQuizDe },
 } as const satisfies Record<string, Record<WorkflowLocale, string>>;
 
 export type WorkflowId = keyof typeof SOURCES;
