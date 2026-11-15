@@ -4,8 +4,8 @@ id: FE-005
 title: 'Static Export Contract'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx,js,jsx,mjs}', '{next.config,proxy,middleware}.{ts,js,mjs}']
-paths: ['src/**/*.{ts,tsx}', 'next.config.ts']
+files: ['src/**/*.{ts,tsx,js,jsx,mjs}', '{next.config,proxy,middleware}.{ts,js,mjs}', 'tools/art/**/*.ts']
+paths: ['src/**/*.{ts,tsx}', 'next.config.ts', 'tools/art/**/*.ts']
 description: "What output: 'export' forbids — every request-time Next.js feature — and what every dynamic route segment must export so its path set is closed at build time."
 ---
 
@@ -39,6 +39,12 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 3. No intercepting route folder — `(.)`, `(..)`, `(...)` — under `src/app/`.
 4. A route handler MUST export only `GET`, taking no `Request`.
 
+### 5. Build-time assets are static files
+
+1. A build step that writes files the site serves MUST write them into `public/` before `next build` (as `prebuild`) and MUST NOT need a request: `npm run art` writes Scene art to `public/art/<name>.<hash>.svg` and its manifest.
+2. A generated asset's file name MUST carry a hash of its content, and `public/_headers` MUST serve its folder `immutable`, so EN, DE and every Episode reuse one cached copy, and remounting after a scroll asks the server nothing.
+3. Generated assets and their manifest are build output, ignored by git and rebuilt on every build.
+
 ## Do's and Don'ts
 
 ### Do's
@@ -47,6 +53,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 2. **DO** keep `output: 'export'` and `images: { unoptimized: true }` in `next.config.ts`. (Decision 2, 📜 Rule: `export-config-intact`)
 3. **DO** compute everything a page needs at build time, in the server component. (Decisions 3 and 4)
 4. **DO** run `npm run build` after touching `src/app/` or `next.config.ts`. (Decision 1)
+5. **DO** write build-time assets to `public/<folder>/` with a content hash in the name, and give the folder an immutable rule in `public/_headers`. (Decision 5)
 
 ### Don'ts
 
@@ -79,6 +86,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 2. **Lint:** `no-restricted-imports` bans the three modules under `src/` (§3).
 3. **Post-build test** (`npm run test:build`, CI and deploy, before upload): every page the page catalogue builds × its locales has a file in `out/`; prints the page count so an empty walk can't pass.
 4. **Build:** `npm run build` in CI fails on many request-time APIs.
+5. **Post-build test:** every manifest URL exists in `out/art/`, every art `<use>` in an exported page resolves to a file there, and `_headers` serves `/art/*` immutable (§5).
 
 **Manual review duties:** new dependencies checked for request-time Next.js APIs; a new kind of page is listed by the page catalogue, which derives its pages and static params from the records, so the post-build test expects it.
 
