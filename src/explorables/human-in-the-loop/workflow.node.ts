@@ -2,7 +2,7 @@ import type { SlotValues } from '@/shared/components/core-components/try-prompt/
 import { joinPrompt } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { workflowInMode, workflowOf } from './workflow-file-adapter.pure.ts';
 import { loadWorkflow } from './workflow-loader.pure.ts';
-import type { TaskStep } from './workflow-prompts.pure';
+import type { StepKind, TaskStep } from './workflow-prompts.pure';
 import { roundStep } from './workflow-prompts.pure.ts';
 import type { WorkflowFile } from './workflow-schema.types';
 import type { JobModalView, ViewOptions } from './workflow-view.pure';
@@ -31,7 +31,7 @@ export interface Round {
 /** Which prompt to render: a job, its do or review step, the level, demo mode, a round and the pasted values. */
 export interface RenderRequest {
   readonly job: string;
-  readonly step?: TaskStep['id'];
+  readonly step?: StepKind;
   readonly level?: ViewOptions['level'];
   /** Demo mode picks each limit's demo value and the demo-only sections; default on. */
   readonly demo?: boolean;

@@ -1015,6 +1015,18 @@ describe('failure cases', () => {
     // ASSERT
     expect(problems).toContain('stages[1].foreach.technical is "always", which is not one of rounds.');
   });
+
+  it('reports {{item}} in a then prompt of a stage without technical rounds once, not as an unknown marker too', () => {
+    // ARRANGE
+    const then = { skills: ['to-spec'], sections: [{ ...section, text: 'Write {{item}}.' }] };
+    const change = (file: File) => Object.assign(research(file), { then });
+    const wanted = 'names {{item}}, but stage "research" has no `foreach.technical: rounds`';
+    // ACT
+    const lines = problemsOf(load(change)).split('\n');
+    // ASSERT
+    expect(lines.filter((line) => line.includes(wanted))).toHaveLength(1);
+    expect(lines.filter((line) => line.includes('{{item}}'))).toHaveLength(1);
+  });
 });
 
 describe('edge cases', () => {

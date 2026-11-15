@@ -1,3 +1,4 @@
+import type { StepKind } from './workflow-prompts.pure.ts';
 import type { Level } from './workflow-state.pure';
 
 /*
@@ -30,7 +31,7 @@ export function scopeOf(base: DebugBase, at: Pick<DebugScope, 'stage' | 'job' | 
 /** Which prompt is copied: the prompt itself, or the prompt wrapped in the request to explain it. */
 export interface DebugPrompt {
   readonly prompt: 'copy' | 'explain';
-  readonly step: 'do' | 'review' | 'then';
+  readonly step: StepKind;
   /** The chat of a fan-out or of a round. */
   readonly chat?: number;
 }

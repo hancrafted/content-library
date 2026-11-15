@@ -7,10 +7,12 @@ import type { SectionDef, StageDef, TaskDef, WorkflowFile } from './workflow-sch
  * names `{{item}}` only in a stage that plays rounds at the Technical level. One sentence per problem.
  */
 
-const SKILL_NAME = /^[a-z][a-z0-9-]*$/;
+/** What a skill's name is made of: the one source of the name check and of the slash-call search. */
+const NAME = '[a-z][a-z0-9-]*';
+const SKILL_NAME = new RegExp(`^${NAME}$`);
 
 /** A `/name` token at the start of a line or after a space or an opening mark, ended by space, end or punctuation: not a path or URL. */
-const SLASH_CALL = /(?:^|[\s("'`])\/([a-z][a-z0-9-]*)(?=$|[\s.,;:)"'`!?])/gm;
+const SLASH_CALL = new RegExp(`(?:^|[\\s("'\`])\\/(${NAME})(?=$|[\\s.,;:)"'\`!?])`, 'gm');
 
 /** The skills a text calls with a slash, in order, each once. */
 export const slashCallsIn = (text: string): string[] => [
@@ -39,21 +41,24 @@ function callProblems(task: TaskDef): string[] {
   ];
 }
 
+/** Whether the stage plays rounds at the Technical level: only then a technical prompt may name `{{item}}`. */
+const playsRounds = (stage: StageDef): boolean => stage.foreach?.technical === 'rounds';
+
 function itemProblems(task: TaskDef, stage: StageDef): string[] {
-  const plays = stage.foreach?.technical === 'rounds';
   const sections = [...task.do.technical, ...(task.then?.sections ?? [])];
-  if (plays || !markerNamesIn(sections.map((s) => s.text)).includes('item')) return [];
+  if (playsRounds(stage) || !markerNamesIn(sections.map((s) => s.text)).includes('item')) return [];
   return [
     `The technical prompt of task "${task.id}" names {{item}}, but stage "${stage.id}" has no \`foreach.technical: rounds\`.`,
   ];
 }
 
-function thenMarkerProblems(task: TaskDef, stage: StageDef): string[] {
+function thenMarkerProblems(task: TaskDef): string[] {
   if (task.then === undefined) return [];
   const scope = {
     reviewer: false,
     slots: task.slots,
-    repeated: stage.foreach?.technical === 'rounds',
+    // `{{item}}` is judged once, by `itemProblems`, for the do and the then prompt alike.
+    repeated: true,
     limits: Object.keys(task.limits ?? {}),
   };
   return unknownMarkers(task.then.sections, scope).map(
@@ -68,6 +73,6 @@ export const skillProblems = (file: WorkflowFile): string[] =>
       ...nameProblems(task),
       ...callProblems(task),
       ...itemProblems(task, stage),
-      ...thenMarkerProblems(task, stage),
+      ...thenMarkerProblems(task),
     ]),
   );

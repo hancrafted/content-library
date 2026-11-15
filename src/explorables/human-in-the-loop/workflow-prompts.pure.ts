@@ -117,8 +117,8 @@ export function doPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): P
 
 /** The second technical prompt of a job that calls a second skill; it takes no slot, only the round's item and the limits. */
 export function thenPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): PromptView | undefined {
-  const { options } = modeOf(mode);
-  if (task.then === undefined) return undefined;
+  const { runtime, options } = modeOf(mode);
+  if (task.then === undefined || runtime !== 'technical') return undefined;
   const { skills, sections: own } = task.then;
   const sections = promptSections(file, task, { sections: own, skills, runtime: 'technical', options });
   return viewOf({ sections, slots: [] }, file);
@@ -148,8 +148,11 @@ export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode
   return viewOf({ sections, slots: review.slots, instructions: review.instructions }, file);
 }
 
+/** The kind of a step: the do prompt, the check, or the second technical prompt of a job that calls a second skill. */
+export type StepKind = 'do' | 'review' | 'then';
+
 export interface TaskStep {
-  readonly id: 'do' | 'review' | 'then';
+  readonly id: StepKind;
   /** The round's number, on the step `roundStep` made for a round of a repeated stage. */
   readonly chat?: number;
   readonly prompt: PromptView;
@@ -161,7 +164,7 @@ export interface TaskStep {
 
 /** The steps of a task at a runtime: its do prompt, then its review. A repeated stage's rounds are made from them. */
 export function stepsOf(file: WorkflowFile, task: TaskDef, mode: PromptMode): TaskStep[] {
-  const second = modeOf(mode).runtime === 'technical' ? thenPrompt(file, task, mode) : undefined;
+  const second = thenPrompt(file, task, mode);
   const doStep: TaskStep = {
     id: 'do',
     prompt: doPrompt(file, task, mode),
@@ -181,10 +184,11 @@ export interface RoundShare {
 }
 
 /** What a field is called in round `round`: its own round's result (`id_K`), its own field (`id#K`), or shared (none). */
-function roundName(id: string, at: { step: TaskStep['id']; round: number; share: RoundShare }): string | undefined {
+function roundName(id: string, at: { step: StepKind; round: number; share: RoundShare }): string | undefined {
   const { step, round, share } = at;
   if (share.sameStage?.includes(id)) return `${id}_${round}`;
-  const shared = step !== 'review' || share.previous.includes(id) || id === share.output;
+  // The then prompt shares like the do prompt: only a check keeps its own field per round.
+  const shared = step === 'do' || step === 'then' || share.previous.includes(id) || id === share.output;
   return shared ? undefined : `${id}#${round}`;
 }
 
