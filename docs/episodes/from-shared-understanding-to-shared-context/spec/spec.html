@@ -2983,12 +2983,12 @@
             </ol>
           </li>
           <li>
-            <span class="spec-outline-section">Context is the requirement</span>
+            <span class="spec-outline-section">Context and requirements</span>
             <ol>
               <li><a href="#what-the-ai-actually-sees">7 · What the AI actually sees</a></li>
               <li>
                 <a href="#context-engineering-is-requirements-engineering-for-agents"
-                  >8 · Context engineering is requirements engineering for agents</a
+                  >8 · A useful parallel: context and requirements</a
                 >
               </li>
               <li><a href="#static-and-dynamic-context">9 · Static and dynamic context</a></li>
@@ -3041,7 +3041,10 @@
               <ul>
                 <li>Why does speeding up one station with AI move the bottleneck elsewhere in an organisation?</li>
                 <li>Why does requirements engineering decide the outcome more than execution does?</li>
-                <li>Why does context engineering for agents work like requirements engineering?</li>
+                <li>
+                  Where do context engineering and requirements engineering overlap, and where does the parallel break
+                  down?
+                </li>
                 <li>
                   Why does more context make models worse: context rot and IBM's four failure modes, building on
                   [Context Engineering for AI Agents: 4 Failure Modes to
@@ -3117,8 +3120,8 @@
                 <code>episode({ slug, messages: { en, de }, title, sections })</code>, registered by
                 <code>npm run registry</code>. Metadata from the Brief: Format Foundations, 20 to 30 minutes, the theory
                 block of the Academy hands-on workshop; Audience Organization (tech-adjacent to non-technical Academy
-                participants); <code>status: 'upcoming'</code>, <code>visibility: 'public'</code>, no
-                <code>publishedOn</code>.
+                participants; unresolved: the Event record says Individual); <code>status: 'upcoming'</code>,
+                <code>visibility: 'public'</code>, no <code>publishedOn</code>.
               </li>
               <li>
                 Title slide: the picked Title-slide Option, built as the record's <code>title</code> Slide, title "From
@@ -3361,7 +3364,7 @@
                     stroke-linejoin="round"
                   ></path>
                   <text x="632" y="326" text-anchor="middle" class="fill-muted-foreground text-caption">
-                    Every station runs faster with AI
+                    Suppose AI speeds up work at every station
                   </text>
 
                   <path
@@ -3545,10 +3548,10 @@
                   </div>
                 </li>
                 <li data-spec="echo" data-section="context-is-the-requirement">
-                  <p>Section 3 · Context is the requirement</p>
+                  <p>Section 3 · Context and requirements</p>
                   <div data-spec="mock" class="flex">
                     <div class="flex flex-1 flex-col justify-between gap-4 rounded-2xl bg-section-band p-6">
-                      <h2 class="text-subheading font-semibold">Context is the requirement</h2>
+                      <h2 class="text-subheading font-semibold">Context and requirements</h2>
                       <svg
                         viewBox="0 0 300 150"
                         class="w-full"
@@ -3809,7 +3812,7 @@
                         viewBox="0 0 300 150"
                         class="w-full"
                         role="img"
-                        aria-label="An AI station copies a vague sheet ten times faster"
+                        aria-label="An AI station copies a vague sheet; speed does not make it clear"
                       >
                         <path
                           d="M10 56 H38 L48 66 V104 H10 Z"
@@ -3948,10 +3951,10 @@
                   </div>
                 </li>
                 <li data-spec="echo" data-section="context-is-the-requirement">
-                  <p>Section 3 · Context is the requirement</p>
+                  <p>Section 3 · Context and requirements</p>
                   <div data-spec="mock" class="flex">
                     <div class="flex flex-1 flex-col justify-between gap-4 rounded-2xl bg-section-band p-6">
-                      <h2 class="text-subheading font-semibold">Context is the requirement</h2>
+                      <h2 class="text-subheading font-semibold">Context and requirements</h2>
                       <svg
                         viewBox="0 0 300 150"
                         class="w-full"
@@ -4064,10 +4067,10 @@
               </ol>
               <figcaption>
                 <b>0b</b> The work order is the Hero motif: one crisp sheet for the tire swing in front of the vague
-                drafts it replaced, and on each section slide that sheet's next state: copied ten times faster while
-                vague, translated from intent, the first page in the context window, written in interview rounds and
-                carried to a fresh chat. It puts the Actionables on the Title slide, but shows the line only on the
-                first section slide. Build cost: Scene for the title Slide and one Scene per section slide.
+                drafts it replaced, and on each section slide that sheet's next state: copied while still vague,
+                translated from intent, the first page in the context window, written in interview rounds and carried to
+                a fresh chat. It puts the Actionables on the Title slide, but shows the line only on the first section
+                slide. Build cost: Scene for the title Slide and one Scene per section slide.
               </figcaption>
               <details class="spec-build">
                 <summary>Build notes</summary>
@@ -4130,7 +4133,7 @@
                   viewBox="0 0 520 440"
                   class="col-span-6 w-full"
                   role="img"
-                  aria-label="A work order sets the aim; AI speeds the throw; every document lands on the bull"
+                  aria-label="A work order sets the aim; AI speeds the throw; the darts land on the intent"
                 >
                   <circle cx="364" cy="220" r="150" class="fill-card stroke-foreground" stroke-width="3"></circle>
                   <circle
@@ -4328,10 +4331,10 @@
                   </div>
                 </li>
                 <li data-spec="echo" data-section="context-is-the-requirement">
-                  <p>Section 3 · Context is the requirement</p>
+                  <p>Section 3 · Context and requirements</p>
                   <div data-spec="mock" class="flex">
                     <div class="flex flex-1 flex-col justify-between gap-4 rounded-2xl bg-section-band p-6">
-                      <h2 class="text-subheading font-semibold">Context is the requirement</h2>
+                      <h2 class="text-subheading font-semibold">Context and requirements</h2>
                       <svg
                         viewBox="0 0 300 150"
                         class="w-full"
@@ -4480,8 +4483,8 @@
             <h2>A thought experiment</h2>
             <ol data-spec="voice-script">
               <li>
-                <strong>Imagine your organization as a line</strong> — AI doesn't build the right swing for you, but it
-                can build the wrong one ten times faster. Imagine your own organization as a factory line, with
+                <strong>Imagine your organization as a line</strong> — AI doesn't make a vague request clear; it can
+                help produce the wrong result faster, too. Imagine your own organization as a factory line, with
                 documents moving from one work centre to the next, a request here, a design there, a finished result at
                 the end. You already know this picture, because everyone in this room has lived the tire swing cartoon,
                 where each station built its own version of what the customer asked for.
@@ -4591,8 +4594,8 @@
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What the customer really wanted</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
-                      AI doesn’t build the right swing, but it can build the
-                      <b class="font-semibold text-primary">wrong one ten times faster</b>.
+                      AI doesn’t make a vague request clear; it can produce the
+                      <b class="font-semibold text-primary">wrong result faster, too</b>.
                     </p>
                   </div>
                   <div class="flex flex-col gap-6 rounded-xl bg-muted p-8">
@@ -5848,7 +5851,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <h3 class="mt-4 text-subheading font-semibold">What the customer really wanted</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
                       AI doesn’t build the right swing, but it can build the
-                      <b class="font-semibold text-primary">wrong one ten times faster</b>.
+                      <b class="font-semibold text-primary">wrong result faster, too</b>.
                     </p>
                   </div>
                   <div class="flex flex-col gap-8 rounded-xl bg-muted p-8">
@@ -6667,7 +6670,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <h3 class="mt-4 text-subheading font-semibold">What the customer really wanted</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
                       AI doesn’t build the right swing, but it can build the
-                      <b class="font-semibold text-primary">wrong one ten times faster</b>.
+                      <b class="font-semibold text-primary">wrong result faster, too</b>.
                     </p>
                   </div>
                   <div class="grid grid-cols-12 gap-8">
@@ -7615,7 +7618,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     Keeps <code>master: basic-page</code>; overrules <code>motion: local</code> to <code>none</code>,
                     because the two lines sit side by side at rest and a flow would only restage what the pair already
                     shows. The cartoon is the Hook's poster and the focal point on the left; the two lines on the right
-                    answer it. <br /><br />
+                    answer it. The faster-wrong line is a thought experiment, not a quantified productivity claim.
+                    <br /><br />
                     <b>Parts.</b> Slide-local <code>TireSwingCartoon</code> as a 2 × 2 grid of paper cards (four of the
                     cartoon's panels, the last with <code>border-primary</code>), and the shared
                     <b>factory line</b> part in a compact preset without the customer ends (<code>compact: true</code>),
@@ -7653,8 +7657,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
               <h3>What happens with AI</h3>
             </header>
             <p class="spec-purpose">
-              AI accelerates every station and brings the whole organization out of balance, as the market shows right
-              now
+              a thought experiment about faster work shifting a bottleneck, grounded by observational evidence about
+              review load in high-AI-adoption software teams
             </p>
             <div class="spec-words">
               <input
@@ -7693,9 +7697,10 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Voice script</h4>
                 <ol data-spec="voice-script">
                   <li>
-                    <strong>Every station faster</strong> — So now give every station AI. Each one runs faster, which
-                    sounds like good news, but the line was only ever as fast as its slowest station, and that station
-                    cannot keep up with what arrives. You can see this in the market right now.
+                    <strong>The bottleneck moves</strong> — Imagine giving every station a tool that speeds up its task.
+                    That sounds like good news, but the line is only as fast as its slowest station. If more work
+                    arrives than that station can check, a queue builds. This is a thought experiment, not a claim that
+                    every station has measurably sped up.
                   </li>
                   <li>
                     <strong>Moving bottleneck</strong> — For a long time the slow part was making the thing in the first
@@ -7711,7 +7716,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                   <li>
                     <strong>Measured: the load moves to review</strong> — on teams with high AI adoption, developers
                     completed 21% more tasks and merged 98% more pull requests, while review time rose 91% and pull
-                    requests grew 154%; the report finds no significant company-level gain [1].
+                    requests grew 154%; in that observational sample, no statistically significant company-level
+                    improvement was observed [1].
                     <ul>
                       <li data-source="1">
                         [1] Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025) —
@@ -7760,7 +7766,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What happens when every station gets AI</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
-                      Every station runs faster, and documents
+                      Suppose AI speeds up work at each station: documents could
                       <b class="font-semibold text-primary">pile up where the work gets checked</b>.
                     </p>
                   </div>
@@ -8777,7 +8783,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What happens when every station gets AI</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
-                      Every station runs faster, and documents
+                      Suppose AI speeds up work at each station: documents could
                       <b class="font-semibold text-primary">pile up where the work gets checked</b>.
                     </p>
                   </div>
@@ -9542,7 +9548,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What happens when every station gets AI</h3>
                     <p class="mt-2 max-w-3xl text-body text-muted-foreground">
-                      Every station runs faster, and documents
+                      Suppose AI speeds up work at each station: documents could
                       <b class="font-semibold text-primary">pile up where the work gets checked</b>.
                     </p>
                   </div>
@@ -10402,12 +10408,15 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         </div>
                         <div class="col-span-4 flex items-center gap-2">
                           <span class="h-3 flex-1 rounded-full border border-border bg-card"></span
-                          ><span class="text-caption text-muted-foreground">Out: no gain for the company</span>
+                          ><span class="text-caption text-muted-foreground"
+                            >No statistically significant company-level improvement observed in the sample</span
+                          >
                         </div>
                       </div>
                     </div>
                     <p class="text-caption text-muted-foreground">
-                      Teams with high AI adoption, 2025. Time saved creating is re-spent on checking
+                      Faros 2025 observational sample: software teams with high AI adoption. Time saved creating is
+                      re-spent on checking
                       <span class="whitespace-nowrap"
                         >(<span
                           data-spec="context-marker"
@@ -10451,10 +10460,12 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
                     Keeps <code>master: basic-page</code> and <code>motion: local</code>: on entry and on hover of the
-                    pile, documents slide in from the left and stack until the pile stands at its end state. Zooms the
-                    line in on one station, as the Factory style allows for a Slide about one worker: a strip at the top
-                    locates Review on the line, the board below is the bottleneck itself, with the human reviewer
-                    (<code>stroke-human</code>) behind a pile of 28 documents. <br /><br />
+                    pile, documents slide in from the left and stack until the pile stands at its end state. Treat
+                    faster work at every station as the thought experiment; scope the reported figures visibly to the
+                    Faros observational sample of high-adoption software teams. Zooms the line in on one station, as the
+                    Factory style allows for a Slide about one worker: a strip at the top locates Review on the line,
+                    the board below is the bottleneck itself, with the human reviewer (<code>stroke-human</code>) behind
+                    a pile of 28 documents. <br /><br />
                     <b>Parts.</b> A Slide-local <code>BottleneckZoom</code> (<code
                       >{ arriving: string[]; pile: number; station: string; figure: string; figureLabel: string; out:
                       string }</code
@@ -15634,8 +15645,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
               <h3>Precision and accuracy</h3>
             </header>
             <p class="spec-purpose">
-              precision: someone else could execute without a single question; accuracy: the result matches the intent
-              and solves the actual problem
+              Episode shorthand: precision is how much a requirement leaves to guess; accuracy is whether the result
+              matches the intended outcome
             </p>
             <div class="spec-words">
               <input
@@ -15674,19 +15685,18 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Voice script</h4>
                 <ol data-spec="voice-script">
                   <li>
-                    <strong>Precision</strong> — Start with precision. A document is precise when someone else could
-                    execute it without asking you a single question. Nothing is left to guess.
+                    <strong>Precision</strong> — Here I use precision as shorthand for how clearly a requirement says
+                    what to do: how much it leaves to guess. A clear requirement can still point to the wrong outcome.
                   </li>
                   <li>
-                    <strong>Accuracy</strong> — Accuracy is a different thing: the result matches what you intended and
-                    solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy
-                    is darts landing on the bull. A document can be precise and not accurate, and then you have the ten
-                    wrong swings, built faster and with great care.
+                    <strong>Accuracy</strong> — Accuracy is whether the result matches what you intended and solves the
+                    actual problem. Picture a dartboard: precision is darts landing close together; accuracy is darts
+                    landing on the bull. A clear, consistent set of instructions can still produce the wrong result.
                   </li>
                   <li>
-                    <strong>Art, not a science</strong> — Now, honesty about the craft. Writing a good requirement is an
-                    art, not a science. You only know whether it was precise and accurate after you have tried it, and
-                    that is why this Section sits where it does.
+                    <strong>A teaching distinction</strong> — This is a practical distinction, not a formal scoring
+                    system. You often learn whether a requirement is on target only after trying it, and that is why
+                    this Section sits where it does.
                   </li>
                 </ol>
               </div>
@@ -15741,8 +15751,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Precision and accuracy</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      <b>Precise:</b> someone else could build it without a single question. <b>Accurate:</b> the result
-                      matches the intent and solves the actual problem. You need both.
+                      In this Episode, <b>precise</b> means clear enough to leave little to guess; <b>accurate</b>
+                      means aimed at the intended outcome. These are practical shorthand, not formal measures.
                     </p>
                   </div>
                   <div class="flex flex-col gap-3">
@@ -16123,11 +16133,11 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <details class="spec-build">
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
-                    Keeps <code>master: grid-2x2</code>: the quadrant’s axes carry meaning here (precision up, accuracy
-                    right), so the Master slide’s axis cross is copied and each cell gains a dartboard beside the
-                    document that arrives at the bike bench. Keeps <code>motion: none</code>: the Visual’s “first
-                    boards, then documents” is one frame, board and sheet side by side, so the claim stands at rest.
-                    Parts in the Slide folder: <code>dartboard.tsx</code>
+                    Keeps <code>master: grid-2x2</code>: the quadrant’s axes carry meaning here (Episode shorthand:
+                    precision up, accuracy right), so the Master slide’s axis cross is copied and each cell gains a
+                    dartboard beside the document that arrives at the bike bench. Keeps <code>motion: none</code>: the
+                    Visual’s “first boards, then documents” is one frame, board and sheet side by side, so the claim
+                    stands at rest. Parts in the Slide folder: <code>dartboard.tsx</code>
                     <code>{ darts: { x: number; y: number }[]; tone: "primary" | "warning" | "foreground" }</code>
                     (rings <code>fill-card</code>/<code>fill-muted</code>, bull <code>fill-muted-foreground/40</code> so
                     dark darts on it stay visible, darts in the tone); <code>work-order.tsx</code>
@@ -16159,8 +16169,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Precision and accuracy</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      <b>Precise:</b> someone else could build it without a single question. <b>Accurate:</b> the result
-                      matches the intent and solves the actual problem. You need both.
+                      In this Episode, <b>precise</b> means clear enough to leave little to guess; <b>accurate</b>
+                      means aimed at the intended outcome. These are practical shorthand, not formal measures.
                     </p>
                   </div>
                   <ul class="focus-group focus-group--dim-others grid grid-cols-4 gap-6">
@@ -16543,7 +16553,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
         <section data-spec="section" id="context-is-the-requirement">
           <div class="spec-section-band">
             <p class="spec-kicker">Section 3 · section slide, drawn in the Title-slide Options</p>
-            <h2>Context is the requirement</h2>
+            <h2>Context and requirements</h2>
             <ol data-spec="voice-script">
               <li>
                 <strong>The claim</strong> — So here is the claim, and I want you to treat it as a claim: context
@@ -16634,7 +16644,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>1 / 6</span>
+                      <span>Context and requirements</span><span>1 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What the AI actually sees</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -16809,7 +16819,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>1 / 6</span>
+                      <span>Context and requirements</span><span>1 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">What the AI actually sees</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -16992,11 +17002,11 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
           <article data-spec="slide" id="context-engineering-is-requirements-engineering-for-agents" data-number="8">
             <header class="spec-slide-head">
               <span class="spec-number">8</span>
-              <h3>Context engineering is requirements engineering for agents</h3>
+              <h3>A useful parallel: context and requirements</h3>
             </header>
             <p class="spec-purpose">
-              the definition: what you add to the context window decides whether the agent has the precision and
-              accuracy to work towards
+              what you add to the context window shapes what the agent can work towards, much as requirements shape a
+              task; the comparison is useful but incomplete
             </p>
             <div class="spec-words">
               <input
@@ -17027,22 +17037,22 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Visual idea</h4>
                 <p class="text-caption"><code>master: grid-1x2 · motion: none</code></p>
                 <p data-spec="visual-idea">
-                  The dartboard from the earlier Slide beside a context window, the same four outcomes drawn on each: a
-                  window with precise, accurate content, precise but wrong, accurate but vague, and neither.
+                  The earlier dartboard beside a context window, using the four outcomes as a teaching analogy: clear
+                  and on target, clear but off target, vague, or neither.
                 </p>
               </div>
               <div class="spec-card spec-panel" data-panel="voice-script">
                 <h4>Voice script</h4>
                 <ol data-spec="voice-script">
                   <li>
-                    <strong>The definition</strong> — What you add to the context window decides whether the agent has
-                    the precision and accuracy to work towards. That is the whole definition, and it is why we call it a
-                    requirement.
+                    <strong>The parallel</strong> — What you put in the context window shapes what the agent can work
+                    towards. That resembles requirements work: both help set direction, but they are not the same thing.
                   </li>
                   <li>
-                    <strong>Same four outcomes</strong> — Remember the dartboard with its four outcomes? It is the same
-                    dartboard, with the same four outcomes, but a different object. Your requirement document is now a
-                    context window, and it can land precise, accurate, both or neither.
+                    <strong>A teaching analogy</strong> — The dartboard gives us a simple way to think about context: it
+                    can be clear and on target, clear but off target, vague, or both. But a context window is not a
+                    requirements document. It is a limited set of information available during a run, and that set can
+                    change as work proceeds.
                   </li>
                 </ol>
               </div>
@@ -17107,14 +17117,12 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>2 / 6</span>
+                      <span>Context and requirements</span><span>2 / 6</span>
                     </p>
-                    <h3 class="mt-4 text-subheading font-semibold">
-                      Context engineering is requirements engineering for agents
-                    </h3>
+                    <h3 class="mt-4 text-subheading font-semibold">A useful parallel: context and requirements</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      What you put in the context window decides whether the agent has
-                      <b class="font-semibold text-primary">the precision and accuracy to work towards.</b>
+                      What you put in the context window shapes the agent’s work, much as requirements shape a task:
+                      <b class="font-semibold text-primary">a useful parallel, not the same discipline.</b>
                     </p>
                   </div>
                   <div class="flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-3">
@@ -17123,7 +17131,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     >
                     <p class="text-body">a city bike to ride to work, by Friday</p>
                     <span class="ml-auto text-caption text-muted-foreground"
-                      >Same four outcomes as the dartboard
+                      >Four outcomes, used as a teaching analogy
                       <span
                         data-spec="context-marker"
                         data-note="Input quality tracks output quality"
@@ -17415,14 +17423,12 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>2 / 6</span>
+                      <span>Context and requirements</span><span>2 / 6</span>
                     </p>
-                    <h3 class="mt-4 text-subheading font-semibold">
-                      Context engineering is requirements engineering for agents
-                    </h3>
+                    <h3 class="mt-4 text-subheading font-semibold">A useful parallel: context and requirements</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      What you put in the context window decides whether the agent has
-                      <b class="font-semibold text-primary">the precision and accuracy to work towards.</b>
+                      What you put in the context window shapes the agent’s work, much as requirements shape a task:
+                      <b class="font-semibold text-primary">a useful parallel, not the same discipline.</b>
                     </p>
                   </div>
                   <div class="grid grid-cols-12 items-center gap-6">
@@ -17805,8 +17811,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
               <h3>Static and dynamic context</h3>
             </header>
             <p class="spec-purpose">
-              static is memory files, system prompts and the initial prompt; dynamic is what the agent pulls in through
-              retrieval, web search or your project folder
+              static context is set before work; dynamic context is fetched during a run from connected sources that
+              people can limit and review
             </p>
             <div class="spec-words">
               <input
@@ -17850,14 +17856,14 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     order. For an agent that means memory files, system prompts and your initial prompt.
                   </li>
                   <li>
-                    <strong>During the shift</strong> — Dynamic context is what arrives during the shift. A worker
-                    fetches parts from the storeroom, phones a supplier, opens the folder of the current job. For an
-                    agent that means retrieval, web search and your project folder, pulled in on its own while it works.
+                    <strong>During the shift</strong> — Dynamic context is fetched while the work is underway. A worker
+                    gets parts from the storeroom, phones a supplier, opens the current job folder. For an agent, that
+                    can mean retrieval, web search or project files, fetched from sources you have made available.
                   </li>
                   <li>
-                    <strong>Why it matters</strong> — Why does the difference matter? Because both land on the same
-                    bench. The AI cannot tell the sheet you wrote from the box someone dropped off, so the bench has to
-                    hold up, whichever way things arrive.
+                    <strong>Why it matters</strong> — Both kinds land on the same bench. You can limit which sources are
+                    available and check what was fetched; do not assume every arriving detail is equally relevant or
+                    reliable.
                   </li>
                 </ol>
               </div>
@@ -17886,11 +17892,12 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>3 / 6</span>
+                      <span>Context and requirements</span><span>3 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Static and dynamic context</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      Static is set up before the shift, dynamic arrives during it:
+                      Static is set up before the shift; dynamic is fetched during it. You can limit sources and check
+                      what arrives:
                       <b class="font-semibold text-primary">both land on the same bench.</b>
                     </p>
                   </div>
@@ -18321,11 +18328,12 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>3 / 6</span>
+                      <span>Context and requirements</span><span>3 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Static and dynamic context</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      Static is set up before the shift, dynamic arrives during it:
+                      Static is set up before the shift; dynamic is fetched during it. You can limit sources and check
+                      what arrives:
                       <b class="font-semibold text-primary">both land on the same bench.</b>
                     </p>
                   </div>
@@ -19049,9 +19057,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Speaker notes</h4>
                 <ol data-spec="speaker-notes">
                   <li>
-                    <strong>More is not safer</strong> — stating all requirements at once lowered compliance (98.7% for
-                    one requirement alone against 85.0% for gpt-4o with 19) [1], and repository context files that
-                    restated discoverable information did not generally improve coding-agent success [2].
+                    <strong>More is not safer</strong> — in one GPT-4o test, compliance was 98.7% with one requirement
+                    and 85.0% with 19 [1]. This is a result from that test, not a general rate. Repository context files
+                    that restated discoverable information did not generally improve coding-agent success [2].
                     <ul>
                       <li data-source="1">
                         [1] Why do explicit written requirements reduce the variation in LLM output? (earlier research
@@ -19075,7 +19083,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>4 / 6</span>
+                      <span>Context and requirements</span><span>4 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">You run the bench</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -19512,13 +19520,14 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                           ></span>
                         </p>
                         <p class="mt-2 text-body">
-                          <span class="font-semibold text-primary">98.7%</span> of one rule followed, alone
+                          <span class="font-semibold text-primary">98.7%</span> with one requirement
                         </p>
                         <p class="text-body">
-                          <span class="font-semibold text-warning">85.0%</span> when 19 rules come at once
+                          <span class="font-semibold text-warning">85.0%</span> with 19 requirements
                         </p>
                         <p class="hover-reveal__detail mt-1 text-caption text-muted-foreground">
-                          gpt-4o; context files that repeat what the agent can find did not help either.
+                          One GPT-4o test; do not generalize this rate. Context files that repeat what the agent can
+                          find did not help either.
                         </p>
                       </div>
                     </div>
@@ -19544,10 +19553,11 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                       >{ yours: { label: string; items: { title: string; hint: string }[] }; notYours: { label: string;
                       text: string } }</code
                     >; and <code>more-is-not-safer.tsx</code>, props
-                    <code>{ label: string; alone: string; together: string; detail: string }</code>; the fall to 85.0%
-                    is trouble, so <code>warning</code>. Hover: the detail line is a <code>hover-reveal__detail</code>.
-                    Context marker on the stat card opens "More is not safer". i18n keys <code>title</code>,
-                    <code>caption</code>, <code>you</code>, <code>ai</code>, <code>onBench.label|text</code>,
+                    <code>{ label: string; alone: string; together: string; detail: string }</code>; label the 98.7%
+                    versus 85.0% figures as one specific GPT-4o test, not a general compliance rate; the fall is
+                    <code>warning</code>. Hover: the detail line is a <code>hover-reveal__detail</code>. Context marker
+                    on the stat card opens "More is not safer". i18n keys <code>title</code>, <code>caption</code>,
+                    <code>you</code>, <code>ai</code>, <code>onBench.label|text</code>,
                     <code>heldBack.label|text</code>, <code>yours.label</code>, <code>yours.items.*</code>,
                     <code>notYours.label|text</code>, <code>stat.label|alone|together|detail</code>.
                   </div>
@@ -19561,7 +19571,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>4 / 6</span>
+                      <span>Context and requirements</span><span>4 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">You run the bench</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -20013,7 +20023,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>5 / 6</span>
+                      <span>Context and requirements</span><span>5 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Context rot at the bench</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -21062,7 +21072,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>5 / 6</span>
+                      <span>Context and requirements</span><span>5 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Context rot at the bench</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -21924,18 +21934,20 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Visual idea</h4>
                 <p class="text-caption"><code>master: grid-2x2 · motion: none</code></p>
                 <p data-spec="visual-idea">
-                  The same bench, each of four fixes clearing one mess: checking the sheet against a real bike
-                  (validate), replacing the binder with a one-page summary (compact), keeping only the wrenches the job
-                  needs (curate), pulling the old sheets down or starting at a clean bench (prune).
+                  The same bench, four possible responses shown beside four kinds of mess: checking the sheet against a
+                  real bike (validate), replacing the binder with a one-page summary (compact), keeping only the
+                  wrenches the job needs (curate), pulling the old sheets down or starting at a clean bench (prune).
+                  This is a teaching pairing; fixes can overlap.
                 </p>
               </div>
               <div class="spec-card spec-panel" data-panel="voice-script">
                 <h4>Voice script</h4>
                 <ol data-spec="voice-script">
                   <li>
-                    <strong>Four cleanups</strong> — There are four cleanups, one for each mess. Validate: check the
-                    sheet against a real bike. Compact: replace the binder with a one-page summary. Curate: keep only
-                    the wrenches the job needs. Prune: pull the old sheets down.
+                    <strong>Four cleanups</strong> — For this teaching picture, pair each mess with one possible
+                    cleanup; in practice, fixes can overlap. Validate: check the sheet against a real bike. Compact:
+                    replace the binder with a one-page summary. Curate: keep only the wrenches the job needs. Prune:
+                    pull the old sheets down.
                   </li>
                   <li>
                     <strong>Fresh chat</strong> — Sometimes the cleanest fix is a clean bench. Start a fresh chat and
@@ -21948,9 +21960,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Speaker notes</h4>
                 <ol data-spec="speaker-notes">
                   <li>
-                    <strong>The video's framing</strong> — the IBM Technology video pairs each mode with one fix:
-                    validate, compact, curate, prune. Its closing line says all four fixes work by throwing something
-                    away [5].
+                    <strong>The video's framing</strong> — the IBM Technology video shows one illustrative cleanup
+                    beside each mode: validate, compact, curate, prune. This is a teaching framing, not an exclusive
+                    pairing. Its closing line says all four fixes work by throwing something away [5].
                     <ul>
                       <li data-source="5">
                         [5] IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid —
@@ -21974,10 +21986,10 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     </ul>
                   </li>
                   <li>
-                    <strong>One fix per mode is a simplification</strong> — compaction can launder a bad fact into a
-                    clean summary, so it does not repair poisoning; that a fresh window is the thread behind compact and
-                    prune is inference, and Anthropic warns overly aggressive compaction loses subtle but critical
-                    context [6].
+                    <strong>The one-to-one pairing is simplified</strong> — these are teaching examples, not exclusive
+                    fixes: real fixes can overlap. Compaction can launder a bad fact into a clean summary, so it does
+                    not repair poisoning; that a fresh window is the thread behind compact and prune is inference, and
+                    Anthropic warns overly aggressive compaction loses subtle but critical context [6].
                     <ul>
                       <li data-source="6">
                         [6] Anthropic, Effective context engineering for AI agents —
@@ -21995,17 +22007,17 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>6 / 6</span>
+                      <span>Context and requirements</span><span>6 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Keeping the bench clean</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
-                      One cleanup per mess, and
+                      These are teaching examples, not one-to-one cures;
                       <b class="font-semibold text-primary">sometimes the cleanest fix is a clean bench.</b>
                     </p>
                   </div>
                   <div class="flex items-center justify-between text-caption text-muted-foreground">
                     <span class="inline-flex items-center gap-1"
-                      >Four fixes, paired as in the IBM Technology video
+                      >Simplified pairings from the IBM Technology video; fixes can overlap
                       <span
                         data-spec="context-marker"
                         data-note="The video's framing"
@@ -22321,9 +22333,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                           >Compact</span
                         ><span
                           data-spec="context-marker"
-                          data-note="One fix per mode is a simplification"
+                          data-note="The one-to-one pairing is simplified"
                           role="img"
-                          aria-label="Speaker note: One fix per mode is a simplification"
+                          aria-label="Speaker note: The one-to-one pairing is simplified"
                           class="inline-flex align-middle text-primary"
                           ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                             <path
@@ -22921,11 +22933,13 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
                     Overrules <code>grid-2x2</code>: four fixes in the same column order as Slide 11 let the viewer
-                    carry each mess across, which a quadrant would scramble; Scene from <code>SlideFrame</code>. Keeps
-                    <code>motion: none</code>. Parts: the vignettes of <code>bench-mess.tsx</code> (Slide 11; promoted
-                    to <code>slide-shared/bike-bench/</code> as the second Slide that needs it) plus four clean ones
-                    (<code>checked-sheet | one-page | three-wrenches | one-sheet</code>); Slide-local
-                    <code>fix-column.tsx</code>, props
+                    compare each mess with one possible cleanup, which a quadrant would scramble; this is a simplified
+                    teaching pairing, not one exclusive fix per failure, and real fixes can overlap. Scene from
+                    <code>SlideFrame</code>. Keeps <code>motion: none</code>. Parts: the vignettes of
+                    <code>bench-mess.tsx</code> (Slide 11; promoted to <code>slide-shared/bike-bench/</code> as the
+                    second Slide that needs it) plus four clean ones (<code
+                      >checked-sheet | one-page | three-wrenches | one-sheet</code
+                    >); Slide-local <code>fix-column.tsx</code>, props
                     <code>{ mess: string; verb: string; how: string; before: MessId; after: CleanId }</code>, the verb
                     pill <code>primary</code>, the before state dulled (<code>opacity-60</code>);
                     <code>fresh-bench.tsx</code>, a dark band (<code>bg-foreground text-background</code>) with two
@@ -22933,8 +22947,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <code>slide-10-fresh</code> of the Context window Explorable (existing Presets); the leftover mess
                     in the old bar is <code>warning</code>, what you bring <code>human</code>. Hover: columns are
                     <code>focus-group__item</code>s. Context markers: on the framing line "The video's framing"; on the
-                    other-fixes line "Breunig lists other fixes"; beside the Compact pill "One fix per mode is a
-                    simplification". i18n keys <code>title</code>, <code>caption</code>, <code>framing</code>,
+                    other-fixes line "Breunig lists other fixes"; beside the Compact pill "The one-to-one pairing is
+                    simplified". i18n keys <code>title</code>, <code>caption</code>, <code>framing</code>,
                     <code>others</code>, <code>fixes.{validate|compact|curate|prune}.mess|verb|how</code>,
                     <code>fresh.label|text|old|new</code>.
                   </div>
@@ -22954,7 +22968,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Context is the requirement</span><span>6 / 6</span>
+                      <span>Context and requirements</span><span>6 / 6</span>
                     </p>
                     <h3 class="mt-4 text-subheading font-semibold">Keeping the bench clean</h3>
                     <p class="mt-2 max-w-4xl text-body text-muted-foreground">
@@ -23211,7 +23225,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <div class="col-span-4 flex flex-col gap-4">
                       <div class="rounded-xl bg-card p-5 shadow-md">
                         <p class="inline-flex items-center gap-1 text-caption uppercase text-muted-foreground">
-                          One fix per mess
+                          A teaching pairing, not one fix per failure
                           <span
                             data-spec="context-marker"
                             data-note="The video's framing"
@@ -23237,9 +23251,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                               >Compact
                               <span
                                 data-spec="context-marker"
-                                data-note="One fix per mode is a simplification"
+                                data-note="The one-to-one pairing is simplified"
                                 role="img"
-                                aria-label="Speaker note: One fix per mode is a simplification"
+                                aria-label="Speaker note: The one-to-one pairing is simplified"
                                 class="inline-flex align-middle text-primary"
                                 ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                                   <path
@@ -23298,7 +23312,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <code>bench-tag.tsx</code> in <code>primary</code>. Side: Slide-local <code>fix-list.tsx</code>,
                     props <code>{ label: string; fixes: { verb: string; mess: string }[]; more: string }</code>, and a
                     dark note for the fresh chat. Context markers: on the list label "The video's framing", beside
-                    Compact "One fix per mode is a simplification", on the more-fixes line "Breunig lists other fixes".
+                    Compact "The one-to-one pairing is simplified", on the more-fixes line "Breunig lists other fixes".
                     i18n keys <code>title</code>, <code>caption</code>, <code>tags.*</code>, <code>fixes.*</code>,
                     <code>more</code>, <code>fresh.label|text</code>. Weaker than 12a: the messes are gone, so the
                     viewer must remember Slide 11 to see what each fix cleared.
@@ -23329,9 +23343,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 tire swing.
               </li>
               <li>
-                <strong>The claim</strong> — So here is the claim: let the AI do the interviewing, and you do the
-                answering. You are good at knowing what you want when someone asks you the right question. You are less
-                good at writing it all down unprompted.
+                <strong>The claim</strong> — Let the AI ask useful questions, and you answer and review what it drafts.
+                Often, a question helps you say what you want more clearly than starting with a blank prompt.
               </li>
             </ol>
           </div>
@@ -23341,8 +23354,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
               <h3>Meta prompting</h3>
             </header>
             <p class="spec-purpose">
-              creating precise, accurate context without rot feels like a lot of work, but a separate session can have
-              the AI create the high-signal context for you
+              creating precise, accurate context without rot feels like a lot of work, but a separate session can ask
+              questions, draft high-signal context and leave unanswered details open for review
             </p>
             <div class="spec-words">
               <input
@@ -23395,7 +23408,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                 <h4>Speaker notes</h4>
                 <ol data-spec="speaker-notes">
                   <li>
-                    <strong>Users answer better than they write</strong> — when a model elicits preferences with
+                    <strong>Questions can draw out richer answers</strong> — when a model elicits preferences with
                     open-ended questions, the user's answers are often more informative than prompts they wrote unaided,
                     and users report it takes less effort [1].
                     <ul>
@@ -23472,6 +23485,14 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         <li class="max-w-xs self-end rounded-2xl rounded-br-sm bg-human/15 px-4 py-2">
                           The front desk, by phone and walk-in.
                         </li>
+                        <li
+                          class="max-w-xs self-start rounded-2xl rounded-bl-sm border border-ai/40 bg-ai/10 px-4 py-2"
+                        >
+                          What service checks and exact deadline should I include?
+                        </li>
+                        <li class="max-w-xs self-end rounded-2xl rounded-br-sm bg-human/15 px-4 py-2">
+                          Not decided yet—leave both open.
+                        </li>
                       </ol>
                       <div class="flex items-center gap-3 rounded-lg bg-human/10 px-3 py-2">
                         <svg viewBox="0 0 40 40" class="size-10" aria-hidden="true">
@@ -23479,16 +23500,16 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                           <path d="M6 38 C 6 26, 34 26, 34 38 Z" class="fill-human"></path>
                         </svg>
                         <p class="text-caption">
-                          <b class="font-semibold">You</b> only answer. No prompt to write from scratch.
+                          <b class="font-semibold">You</b> answer questions and review the draft.
                         </p>
                       </div>
                       <p class="inline-flex items-center gap-1 text-caption font-semibold text-foreground">
-                        You answer better than you write
+                        Questions can draw out richer answers
                         <span
                           data-spec="context-marker"
-                          data-note="Users answer better than they write"
+                          data-note="Questions can draw out richer answers"
                           role="img"
-                          aria-label="Speaker note: Users answer better than they write"
+                          aria-label="Speaker note: Questions can draw out richer answers"
                           class="inline-flex align-middle text-primary"
                           ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                             <path
@@ -23565,16 +23586,21 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         </div>
                         <dl class="mt-3 grid grid-cols-4 gap-x-3 gap-y-2 text-caption">
                           <dt class="font-semibold">Goal</dt>
-                          <dd class="col-span-3">Rental fleet serviced, 40 slots open</dd>
+                          <dd class="col-span-3">Every rental bike serviced; 40 repair slots bookable</dd>
                           <dt class="font-semibold">Who</dt>
-                          <dd class="col-span-3">Front desk books, two mechanics</dd>
-                          <dt class="font-semibold">Must</dt>
-                          <dd class="col-span-3">Brakes and tyres on every bike</dd>
+                          <dd class="col-span-3">
+                            Front desk books by phone and walk-in; service staff: not confirmed
+                          </dd>
+                          <dt class="font-semibold">To confirm</dt>
+                          <dd class="col-span-3">Required service checks and exact deadline</dd>
                           <dt class="font-semibold">Done when</dt>
-                          <dd class="col-span-3">Calendar full by 1 March</dd>
+                          <dd class="col-span-3">
+                            Every rental bike serviced and 40 repair slots bookable before the spring rush; exact date:
+                            not provided
+                          </dd>
                         </dl>
                         <p class="mt-3 inline-flex items-center gap-1 text-caption text-muted-foreground">
-                          Written from your answers
+                          Drafted from your answers; open details remain unconfirmed
                           <span
                             data-spec="context-marker"
                             data-note="Prompts generated from requirements"
@@ -23644,8 +23670,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <code>SlideFrame</code>: the two halves are unequal rooms with a hand-off between them, which the
                     Master slide's two equal halves cannot carry. Keeps <code>motion: none</code>; hover only,
                     <code>card-hover card-hover--raise</code> on the work order. Visual language: the bike bench and the
-                    document icon as specified there; <code>ai</code> on the AI worker and its questions,
-                    <code>human</code> on the answers, <code>machine</code> on the work order's icon,
+                    document icon as specified there; the output must contain only supplied details, and unanswered
+                    service checks or dates stay explicitly "to confirm"; <code>ai</code> on the AI worker and its
+                    questions, <code>human</code> on the answers, <code>machine</code> on the work order's icon,
                     <code>primary</code> on the work order and the hand-off arrow, drafts dulled to
                     <code>muted-foreground</code>. Parts in the Slide folder: <code>PlanningOffice</code>
                     <code
@@ -23658,9 +23685,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     >, <code>BenchRoom</code> <code>{ label: string; worker: string }</code>. A shared
                     <code>DocumentIcon</code> and <code>Bench</code> drawing come from the Section's sibling Slides once
                     a second Slide uses them (FE-007: move to <code>slide-shared/</code> then). Context markers
-                    (<code>ContextMarker</code>): beside "You answer better than you write" opens "Users answer better
-                    than they write"; beside "Written from your answers" opens "Prompts generated from requirements".
-                    i18n keys <code>title</code>, <code>caption</code>, <code>office.label</code>,
+                    (<code>ContextMarker</code>): beside "Questions can draw out richer answers" opens that speaker
+                    note; beside "Drafted from your answers; open details remain unconfirmed" opens "Prompts generated
+                    from requirements". i18n keys <code>title</code>, <code>caption</code>, <code>office.label</code>,
                     <code>office.exchange.*</code>, <code>office.answerBetter</code>, <code>office.residue</code>,
                     <code>handOff.label</code>, <code>handOff.note</code>, <code>workOrder.title</code>,
                     <code>workOrder.rows.*</code>, <code>workOrder.source</code>, <code>bench.label</code>,
@@ -23725,9 +23752,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         Answers beat a prompt written alone
                         <span
                           data-spec="context-marker"
-                          data-note="Users answer better than they write"
+                          data-note="Questions can draw out richer answers"
                           role="img"
-                          aria-label="Speaker note: Users answer better than they write"
+                          aria-label="Speaker note: Questions can draw out richer answers"
                           class="inline-flex align-middle text-primary"
                           ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                             <path
@@ -23775,7 +23802,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         </div>
                         <ul class="mt-3 flex flex-col gap-1 text-caption">
                           <li><b class="font-semibold">Goal:</b> rental fleet serviced, 40 repair slots open</li>
-                          <li><b class="font-semibold">Who:</b> front desk books, two mechanics service</li>
+                          <li><b class="font-semibold">Who:</b> front desk books; service staffing to confirm</li>
                           <li><b class="font-semibold">Out:</b> e-bikes</li>
                           <li><b class="font-semibold">Done when:</b> calendar full by 1 March</li>
                         </ul>
@@ -23831,7 +23858,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                       >{ title: string; rows: readonly { slug: string; term: string; value: string }[]; source: string
                       }</code
                     >, <code>BenchStrip</code> <code>{ text: string }</code>. Context markers: beside "Answers beat a
-                    prompt written alone" opens "Users answer better than they write"; beside "Generated from your
+                    prompt written alone" opens "Questions can draw out richer answers"; beside "Generated from your
                     requirements" opens "Prompts generated from requirements". i18n keys <code>title</code>,
                     <code>caption</code>, <code>chat.label</code>, <code>chat.messages.*</code>,
                     <code>chat.answerBetter</code>, <code>funnel.label</code>, <code>workOrder.*</code>,
@@ -23922,9 +23949,9 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                             Answering beats writing
                             <span
                               data-spec="context-marker"
-                              data-note="Users answer better than they write"
+                              data-note="Questions can draw out richer answers"
                               role="img"
-                              aria-label="Speaker note: Users answer better than they write"
+                              aria-label="Speaker note: Questions can draw out richer answers"
                               class="inline-flex align-middle text-primary"
                               ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                                 <path
@@ -24000,7 +24027,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                     <code
                       >{ title: string; exchange: readonly { slug: string; who: 'ai' | 'human'; text: string }[];
                       workOrder: { title: string; summary: string; source: string }; note: string }</code
-                    >. Context markers: beside "Answering beats writing" opens "Users answer better than they write";
+                    >. Context markers: beside "Answering beats writing" opens "Questions can draw out richer answers";
                     beside "From your answers" opens "Prompts generated from requirements". i18n keys
                     <code>title</code>, <code>caption</code>, <code>buried.*</code>, <code>separate.*</code>.
                   </div>
@@ -24618,10 +24645,10 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                   </li>
                   <li>
                     <strong>Close</strong> — So the second thing to take with you: move that result into a fresh chat
-                    instead of continuing the long one. To sum up: the line only runs as well as what it receives,
-                    context is the requirement, the bench has to stay clean, and the interview builds it for you. I
-                    cannot promise it fits every task, and it is early days for all of this. If you try it, I would love
-                    to hear how it went. Thank you.
+                    instead of continuing the long one. To sum up: the line only runs as well as what it receives;
+                    context shapes the work but is not the whole requirement; the bench has to stay clean, and the
+                    interview helps you build a clear handover. This will not fit every task, and it is early days. If
+                    you try it, I would love to hear how it went. Thank you.
                   </li>
                 </ol>
               </div>
@@ -24687,8 +24714,8 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         <p class="text-heading font-semibold leading-none">R</p>
                         <p class="text-body font-semibold">Requirements first</p>
                         <p class="border-t border-border pt-2 text-caption text-muted-foreground">
-                          <b class="font-semibold text-foreground">Today:</b> context is the requirement, so it comes
-                          before the work
+                          <b class="font-semibold text-foreground">Today:</b> clarify the task and the context the agent
+                          needs before the work
                         </p>
                       </li>
                       <li
@@ -24826,9 +24853,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         <li class="focus-group__item grid grid-cols-12 items-center gap-3 border-b border-border py-3">
                           <span class="col-span-1 text-subheading font-semibold">R</span
                           ><span class="col-span-4 text-body font-semibold">Requirements first</span
-                          ><span class="col-span-7 text-caption text-muted-foreground"
-                            >Context is the requirement, set before the work</span
-                          >
+                          ><span class="col-span-7 text-caption text-muted-foreground">Context shapes the work</span>
                         </li>
                         <li class="focus-group__item grid grid-cols-12 items-center gap-3 border-b border-border py-3">
                           <span class="col-span-1 text-subheading font-semibold">I</span
@@ -24925,7 +24950,7 @@ type DialProps = { label: string; value: number; tone: 'foreground' | 'warning' 
                         <span class="col-span-2 text-heading font-semibold text-muted-foreground">R</span>
                         <span class="col-span-4 text-body font-semibold">Requirements first</span>
                         <span class="col-span-6 text-caption text-muted-foreground"
-                          >Every product is a translation · Context is the requirement</span
+                          >Every product is a translation · Context shapes the work</span
                         >
                       </li>
                       <li
