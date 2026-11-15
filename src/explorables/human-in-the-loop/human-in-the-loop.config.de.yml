@@ -9,6 +9,7 @@ ui:
   viewJobs: Aufgaben
   viewJobsTip: 'Die Detailansicht: jede Aufgabe jeder Phase'
   checked: geprüft
+  optional: optional
   stateOpen: offen
   stateDone: erledigt
   repeats: '× pro {item} ({n})'

@@ -84,6 +84,20 @@ describe('success cases', () => {
     expect(named).toEqual(gemini);
     expect(none).toBeUndefined();
   });
+
+  it('marks an optional job in its modal view, so its steps never lead the stepper', () => {
+    // ARRANGE
+    const task = loaded.file.stages[0]!.jobs[0]!;
+    const optional = workflowOf({
+      ...loaded.file,
+      stages: [{ ...loaded.file.stages[0]!, jobs: [{ ...task, optional: true }] }, ...loaded.file.stages.slice(1)],
+    });
+    // ACT
+    const marked = jobOf(workflowView(optional, SIMPLE), task.id);
+    const plain = jobOf(workflowView(WORKFLOW, SIMPLE), task.id);
+    // ASSERT
+    expect([marked.optional, plain.optional]).toEqual([true, false]);
+  });
 });
 
 describe('failure cases', () => {

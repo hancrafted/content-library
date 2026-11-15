@@ -145,6 +145,8 @@ export interface TaskDef {
   /** The AI chats this job's prompts open in, overriding the visual's default buttons: a page job names Gemini alone. */
   readonly openAIButtons?: readonly ChatButtonDef[];
   readonly details: DetailsDef;
+  /** The job may be skipped: it never blocks a stage or the run, and no required job may take its output. */
+  readonly optional?: boolean;
 }
 
 /** The sign-off card of a gate stage. */
@@ -177,6 +179,8 @@ export interface StageDef {
   readonly moves?: readonly MoveDef[];
   readonly gate?: number;
   readonly card?: CardDef;
+  /** The stage may be skipped: every job of it is optional too. */
+  readonly optional?: boolean;
   readonly jobs: readonly TaskDef[];
 }
 

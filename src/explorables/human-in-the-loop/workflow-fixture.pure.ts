@@ -29,6 +29,7 @@ export const JOB: Job = {
   inputs: [],
   outputs: [],
   reviewed: false,
+  optional: false,
   task: TASK,
 };
 
@@ -39,6 +40,7 @@ export const stage = (id: string, jobs: readonly Job[]): Stage => ({
   name: id.toUpperCase(),
   goal: 'G',
   moves: [],
+  optional: false,
   jobs,
 });
 
@@ -61,3 +63,10 @@ export const flow = (stages: readonly Stage[], focalJobId?: string): Workflow =>
   stages,
   file: FILE,
 });
+
+/** Two stages for the optional marks: `a` holds a required and an optional job, `b` is an optional stage. */
+export const optionalFlow = (): Workflow =>
+  flow([
+    stage('a', [job({ id: 'must' }), job({ id: 'extra', optional: true })]),
+    { ...stage('b', [job({ id: 'bonus', optional: true })]), optional: true },
+  ]);

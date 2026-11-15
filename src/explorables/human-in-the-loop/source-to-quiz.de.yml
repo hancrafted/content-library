@@ -1012,9 +1012,9 @@ stages:
               purpose: template
               text: *format_file
 
-      # optional: true, once the schema has the field: https://github.com/hancrafted/content-library/issues/589
       - id: eval
-        title: 'Bonus: lass einen Agenten bewerten'
+        optional: true
+        title: 'Lass einen Agenten bewerten'
         summary: Bedienbarkeit und Qualität der Fragen, bewertet
         goal:
           do: 'Bonus, für alle, die schon weiter sind: Lass einen frischen Chat quiz.html nach Bedienbarkeit und Qualität der Fragen bewerten.'

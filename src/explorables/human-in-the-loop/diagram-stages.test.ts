@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, DiagramSlots, UiWords } from './human-in-the-loop.types';
-import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import { job, optionalFlow, stage, flow as workflow } from './workflow-fixture.pure';
 import type { JobRun, JobState, Run } from './workflow-run.pure';
 import type { Workflow } from './workflow.types';
 
@@ -189,6 +189,17 @@ describe('success cases', () => {
     const marks = [plain('[data-checked]').length, worked('[data-checked]').length];
     // ASSERT
     expect(marks).toEqual([1, 0]);
+  });
+
+  it('draws a stage card dashed only for an optional stage, and gives a stage with optional jobs no badge', () => {
+    // ARRANGE
+    const $ = render({ workflow: optionalFlow(), rounds: {} });
+    // ACT
+    const [first, second] = $('[data-stage-card]').toArray();
+    // ASSERT
+    expect($(second).attr('class')).toContain('border-dashed');
+    expect($(first).attr('class')).not.toContain('border-dashed');
+    expect($('[data-optional]')).toHaveLength(0);
   });
 });
 
