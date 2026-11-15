@@ -38,29 +38,35 @@ const ANCHORED = listEvents().flatMap(({ slug, playlist }) =>
 );
 
 describe('success cases', () => {
-  it.each(IN_LOCALES)("says $label's own title, caption and description", ({ page, locale }) => {
-    // ARRANGE
-    const { title, caption, description } = compositionOf(page).messages[locale];
-    // ACT
-    const summary = summaryOf(page)[locale];
-    // ASSERT
-    expect(summary).toMatchObject({ title, caption, description });
-  });
+  it.each(IN_LOCALES)(
+    "says $label's own title, caption and description (else run `npm run registry`)",
+    ({ page, locale }) => {
+      // ARRANGE
+      const { title, caption, description } = compositionOf(page).messages[locale];
+      // ACT
+      const summary = summaryOf(page)[locale];
+      // ASSERT
+      expect(summary).toMatchObject({ title, caption, description });
+    },
+  );
 
-  it.each(IN_LOCALES)("quotes $label's whole reading time and table of contents", ({ page, locale }) => {
-    // ARRANGE
-    const composition = compositionOf(page);
-    const minutes = episodeMinutes(composition, locale);
-    const sections = tocSectionsOf(
-      placeSections(composition.sections)
-        .flat()
-        .map((slide) => localizeSlideOutline(slide, locale)),
-    );
-    // ACT
-    const summary = summaryOf(page)[locale];
-    // ASSERT
-    expect(summary).toMatchObject({ minutes, sections });
-  });
+  it.each(IN_LOCALES)(
+    "quotes $label's whole reading time and table of contents (else run `npm run registry`)",
+    ({ page, locale }) => {
+      // ARRANGE
+      const composition = compositionOf(page);
+      const minutes = episodeMinutes(composition, locale);
+      const sections = tocSectionsOf(
+        placeSections(composition.sections)
+          .flat()
+          .map((slide) => localizeSlideOutline(slide, locale)),
+      );
+      // ACT
+      const summary = summaryOf(page)[locale];
+      // ASSERT
+      expect(summary).toMatchObject({ minutes, sections });
+    },
+  );
 
   it("reads an Episode's German title without its Slides", () => {
     // ARRANGE

@@ -22,6 +22,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 ### 1. Dynamic segments are closed at build time (📜 Rule: `dynamic-segment-static-params`)
 
 1. Every `page` and `layout` under a dynamic `[segment]` in `src/app/` MUST export `generateStaticParams` returning the full param list and `dynamicParams = false`, so an unlisted param 404s instead of rendering on demand.
+2. Episode pages close their path set as static folders instead, one per page: `episodes/<slug>/` and `events/<event>/episodes/<slug>/`. One dynamic route would ship every Episode's JS and CSS on each page. `npm run registry` writes and prunes them from the page catalogue; a stale or obsolete one fails the fast suite.
 
 ### 2. The export config stays intact (📜 Rule: `export-config-intact`)
 
@@ -47,6 +48,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 2. **DO** keep `output: 'export'` and `images: { unoptimized: true }` in `next.config.ts`. (Decision 2, 📜 Rule: `export-config-intact`)
 3. **DO** compute everything a page needs at build time, in the server component. (Decisions 3 and 4)
 4. **DO** run `npm run build` after touching `src/app/` or `next.config.ts`. (Decision 1)
+5. **DO** run `npm run registry` after a change that adds or drops an Episode page — an Episode folder, a Playlist entry. (Decision 1)
 
 ### Don'ts
 
@@ -55,6 +57,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 3. **DON'T** write `'use server'`, `export const revalidate`, a `POST` handler or `GET(request)`. (Decision 4, 📜 Rule: `no-request-time-features`)
 4. **DON'T** create an intercepting route folder; give the view its own route. (Decision 4)
 5. **DON'T** leave a param list open — no `dynamicParams = true`, no missing `generateStaticParams`. (Decision 1)
+6. **DON'T** hand-write an Episode page's route folder, or bring back a shared `[episode]` route. (Decision 1)
 
 ## Consequences
 
@@ -66,7 +69,8 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 **Negative:**
 
 1. **No request-time escape hatch:** forms, auth, personalisation and server redirects need a third-party service or a client-side design.
-2. **A dropped page is only partly caught:** the post-build test expects every page the page catalogue lists × its locales, so it can't see a page missing from the catalogue. It runs after build, so a dropped page blocks the pull request and deploy, not the commit.
+2. **Episode routes are generated:** a new Episode page needs `npm run registry` before it builds.
+3. **A dropped page is only partly caught:** the post-build test expects every page the page catalogue lists × its locales, so it can't see a page missing from the catalogue. It runs after build, so a dropped page blocks the pull request and deploy, not the commit.
 
 **Risks:**
 
@@ -78,7 +82,8 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 1. **Rules** (archgate, error): `dynamic-segment-static-params` (§1), `export-config-intact` (§2), `no-request-time-features` (§4).
 2. **Lint:** `no-restricted-imports` bans the three modules under `src/` (§3).
 3. **Post-build test** (`npm run test:build`, CI and deploy, before upload): every page the page catalogue builds × its locales has a file in `out/`; prints the page count so an empty walk can't pass.
-4. **Build:** `npm run build` in CI fails on many request-time APIs.
+4. **Unit test:** the generated Episode routes match the page catalogue's param lists, none stale or left over (§1.2).
+5. **Build:** `npm run build` in CI fails on many request-time APIs.
 
 **Manual review duties:** new dependencies checked for request-time Next.js APIs; a new kind of page is listed by the page catalogue, which derives its pages and static params from the records, so the post-build test expects it.
 

@@ -13,7 +13,7 @@ description: 'Who imports whom: thin routes, five layers importing only downward
 
 ## Context
 
-Under the App Router the directory **is** the URL: `src/app/[locale]/episodes/[episode]/page.tsx` sits where it sits because `/de/episodes/<slug>` exists. So `src/app/` is the **framework zone**: the router owns position, and this record governs only what a file there contains. Everywhere else position is chosen, so the folder carries the law.
+Under the App Router the directory **is** the URL: `src/app/[locale]/events/[event]/page.tsx` sits where it sits because `/de/events/<slug>` exists. So `src/app/` is the **framework zone**: the router owns position, and this record governs only what a file there contains. Everywhere else position is chosen, so the folder carries the law.
 
 The tree follows the product, so an agent learns what the product is before its plumbing (design-ADR `docs/adr/0017-source-tree-follows-the-product.md` holds the reasoning and the rejected layouts). Five layers:
 
@@ -50,6 +50,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. A `page.tsx` MUST render one page-assembly template, a root layout `SiteShell`; a nested layout never `<html>`.
 2. A route holds no markup, data shaping or logic; shared components only via `SiteShell`, no area.
+3. An Episode page's route is generated, one per page (`npm run registry`): it hands its own Episode's record to the template, so the page ships no other Episode's code.
 
 ### 2. Import direction
 
@@ -80,7 +81,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### Do's
 
-1. **DO** render one `<XxxPage locale={…} />` from `@/page-assembly/<template>/*`. (Decision 1)
+1. **DO** render one `<XxxPage locale={…} />` from `@/page-assembly/<template>/*`; let `npm run registry` write Episode routes. (Decision 1)
 2. **DO** add a page template as its own folder in `src/page-assembly/`, its single-use parts beside it. (Decision 2)
 3. **DO** let page assembly hand one area's parts to another — `<PlaylistList entries={cards} />`. (Decision 2)
 4. **DO** import or skip downward: an area → the store, an area → shared lib, hooks → lib. (Decision 2)
@@ -125,7 +126,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries` over `src/`, `skills/` and `tools/`, pre-commit and CI): §1.1, §1.2, §2, §3 and §5; each message names the allowed locations and points here. Probe tests over a throwaway tree pin every rule.
+1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries` over `src/`, `skills/` and `tools/`, pre-commit and CI): §1, §2, §3 and §5; each message names the allowed locations and points here. Probe tests over a throwaway tree pin every rule.
 2. **Unit test:** every top-level `src/` folder but the routes, and `tools/`, has a pointer-only `AGENTS.md` whose paths, ADR ids, sections and rule names exist.
 3. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` in a `lib/` folder (§3).
 
