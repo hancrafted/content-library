@@ -3,6 +3,7 @@
   "entry": [
     ".archgate/adrs/*.rules.ts",
     "src/page-assembly/i18n-request.ts",
+    "src/episodes/components/art-build/art-pages.tsx",
     "skills/*/scripts/*.pure.ts",
     "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts",
     "skills/to-decision-html/scripts/{grade-page,prove}.ts",

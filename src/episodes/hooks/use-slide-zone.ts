@@ -1,4 +1,5 @@
 import {
+  artLoadsIn,
   createZoneStore,
   entryIn,
   type SlideEntry,
@@ -64,4 +65,22 @@ export function useEntryOf(id: string | null): SlideEntry {
  */
 export function useSlideEntry(): SlideEntry {
   return useEntryState(useContext(SlideIdContext)).entry;
+}
+
+/**
+ * Whether the Scene art of Slide `id` loads (FE-009 §4): once the observer has seen the Slide outside `far`; never in
+ * the static HTML, whose `<use>` elements reach the browser without an `href`.
+ */
+export function useArtLoadsOf(id: string | null): boolean {
+  const store = useContext(ZoneStoreContext) ?? OUTSIDE_PAGE;
+  return useSyncExternalStore(
+    store.subscribe,
+    () => artLoadsIn(store, id),
+    () => false,
+  );
+}
+
+/** Whether the Scene art of the Slide this component sits in loads, as `useArtLoadsOf` reads it. */
+export function useArtLoads(): boolean {
+  return useArtLoadsOf(useContext(SlideIdContext));
 }

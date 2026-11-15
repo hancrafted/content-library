@@ -16,35 +16,29 @@ export type ClampIcon = 'written' | 'sites' | 'arm' | 'overlap';
 
 /** Each clamp's faceted hexagon plate, lit from the upper left, in the clamp's own 56 by 56 units. */
 const PLATE: readonly Facet[] = [
-  ['plate-lit', 'M28 28L28 1L51.4 14.5Z'],
-  ['plate', 'M28 28L51.4 14.5L51.4 41.5Z'],
-  ['plate-shade', 'M28 28L51.4 41.5L28 55ZM28 28L28 55L4.6 41.5Z'],
-  ['plate', 'M28 28L4.6 41.5L4.6 14.5Z'],
-  ['plate-lit', 'M28 28L4.6 14.5L28 1Z'],
+  ['plate-lit', 'M28 28L28 1L51 15Z'],
+  ['plate', 'M28 28L51 15L51 42Z'],
+  ['plate-shade', 'M28 28L51 42L28 55ZM28 28L28 55L5 42Z'],
+  ['plate', 'M28 28L5 42L5 15Z'],
+  ['plate-lit', 'M28 28L5 15L28 1Z'],
 ];
 
 /** What each clamp holds: the skill's card, the site list struck through, the robot's arm, two overlapping cards. */
 const PROPS: Record<ClampIcon, readonly Facet[]> = {
   written: [
-    ['tab-a', 'M29.3 8.2L38.4 8.2L38.4 13L29.3 13Z'],
+    ['tab-a', 'M29 8L38 8L38 13L29 13Z'],
     ['paper-lit', 'M15 12L41 12L15 44Z'],
     ['paper', 'M41 12L41 44L15 44Z'],
-    ['paper-shade', 'M35.3 44L41 38.2L41 44Z'],
-    [
-      'paper-rule',
-      'M19.2 21L36.3 21L36.3 22.6L19.2 22.6ZM19.2 27.4L31.1 27.4L31.1 29L19.2 29ZM19.2 33.8L36.3 33.8L36.3 35.4L19.2 35.4Z',
-    ],
+    ['paper-shade', 'M35 44L41 38L41 44Z'],
+    ['paper-rule', 'M19 21L36 21L36 23L19 23ZM19 27L31 27L31 29L19 29ZM19 34L36 34L36 35L19 35Z'],
   ],
   sites: [
-    ['tab-b', 'M29.2 9.4L37.6 9.4L37.6 14L29.2 14Z'],
+    ['tab-b', 'M29 9L38 9L38 14L29 14Z'],
     ['paper-lit', 'M16 13L40 13L16 43Z'],
     ['paper', 'M40 13L40 43L16 43Z'],
-    ['paper-shade', 'M34.7 43L40 37.6L40 43Z'],
-    [
-      'paper-rule',
-      'M19.8 21.4L35.7 21.4L35.7 22.9L19.8 22.9ZM19.8 27.4L30.9 27.4L30.9 28.9L19.8 28.9ZM19.8 33.4L35.7 33.4L35.7 34.9L19.8 34.9Z',
-    ],
-    ['pin', 'M18 26.5L40 23.5L40.5 25.5L18.5 28.5Z'],
+    ['paper-shade', 'M35 43L40 38L40 43Z'],
+    ['paper-rule', 'M20 21L36 21L36 23L20 23ZM20 27L31 27L31 29L20 29ZM20 33L36 33L36 35L20 35Z'],
+    ['pin', 'M18 27L40 24L41 26L19 29Z'],
   ],
   arm: [
     ['robot-shade', 'M14 40L24 36L26 42L16 45Z'],
@@ -53,19 +47,19 @@ const PROPS: Record<ClampIcon, readonly Facet[]> = {
     ['robot-glint', 'M30 19L37 24L42 16L37 13Z'],
     ['robot', 'M37 13L42 16L44 11L40 9Z'],
     ['robot-dark', 'M40 9L44 11L47 7L44 5ZM44 11L46 14L49 12L47 9Z'],
-    ['glint', 'M31.5 20L35 21.5L33.5 23L31 22Z'],
+    ['glint', 'M32 20L35 22L34 23L31 22Z'],
   ],
   overlap: [
-    ['tab-c', 'M22.1 13.9L29 13L29.5 17.1L22.6 18Z'],
-    ['paper-lit', 'M11.5 18.3L31.4 15.9L14.6 44.1Z'],
-    ['paper', 'M31.4 15.9L34.5 41.7L14.6 44.1Z'],
-    ['paper-shade', 'M30.1 42.2L33.9 37.1L34.5 41.7Z'],
-    ['paper-rule', 'M15.6 25.1L28.7 23.6L28.8 24.8L15.7 26.4ZM16.2 30.3L25.3 29.2L25.5 30.5L16.3 31.6Z'],
-    ['tab-a', 'M35.3 10L42.3 10.6L41.9 14.7L35 14.1Z'],
-    ['paper-lit', 'M24.1 12.2L44 13.8L22 38.2Z'],
-    ['paper', 'M44 13.8L41.9 39.8L22 38.2Z'],
-    ['paper-shade', 'M37.5 39.4L42.3 35.1L41.9 39.8Z'],
-    ['paper-rule', 'M26.7 19.8L39.8 20.8L39.7 22.1L26.6 21.1ZM26.3 24.9L35.4 25.7L35.3 27L26.2 26.2Z'],
+    ['tab-c', 'M22 14L29 13L30 17L23 18Z'],
+    ['paper-lit', 'M12 18L31 16L15 44Z'],
+    ['paper', 'M31 16L35 42L15 44Z'],
+    ['paper-shade', 'M30 42L34 37L35 42Z'],
+    ['paper-rule', 'M16 25L29 24L29 25L16 26ZM16 30L25 29L26 31L16 32Z'],
+    ['tab-a', 'M35 10L42 11L42 15L35 14Z'],
+    ['paper-lit', 'M24 12L44 14L22 38Z'],
+    ['paper', 'M44 14L42 40L22 38Z'],
+    ['paper-shade', 'M38 39L42 35L42 40Z'],
+    ['paper-rule', 'M27 20L40 21L40 22L27 21ZM26 25L35 26L35 27L26 26Z'],
   ],
 };
 

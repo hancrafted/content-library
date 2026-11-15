@@ -56,6 +56,8 @@ export type SlideEntry = 'pending' | 'entering' | 'done';
 
 export interface ZoneStore {
   getZone(id: string): SlideZone;
+  /** Whether the approach observer has reported the Slide yet: until then it reads `near` only for hydration's sake. */
+  isSeen(id: string): boolean;
   subscribe(listener: () => void): () => void;
   setNear(id: string, isNear: boolean): void;
   setActive(id: string | null): void;
@@ -67,6 +69,15 @@ export interface ZoneStore {
 /** The entrance of the Slide `id` names; outside any Slide (`null`) it reads `done`, so nothing there waits. */
 export function entryIn(store: Pick<ZoneStore, 'getEntry'>, id: string | null): SlideEntry {
   return id === null ? 'done' : store.getEntry(id);
+}
+
+/**
+ * Whether a Slide's Scene art loads (FE-009 §4): once the observer has seen the Slide outside `far`, never on the
+ * `near` every Slide reads before its first report, which would fetch every Slide's art at hydration. Outside any
+ * Slide (`null`), the Title slide, it always loads.
+ */
+export function artLoadsIn(store: Pick<ZoneStore, 'getZone' | 'isSeen'>, id: string | null): boolean {
+  return id === null || (store.isSeen(id) && isMounted(store.getZone(id)));
 }
 
 /** The page's entrances: a Slide starts entering on its first `active` and is then done for good. */
@@ -98,14 +109,16 @@ export function createZoneStore(): ZoneStore {
   const notify = () => listeners.forEach((listener) => listener());
   return {
     getZone: (id) => zoneOf({ isNear: near.get(id) ?? true, isActive: active === id }),
+    isSeen: (id) => near.has(id),
     subscribe(listener) {
       listeners.add(listener);
       return () => void listeners.delete(listener);
     },
     setNear(id, isNear) {
+      const seen = near.has(id);
       const before = zoneOf({ isNear: near.get(id) ?? true, isActive: active === id });
       near.set(id, isNear);
-      if (zoneOf({ isNear, isActive: active === id }) !== before) notify();
+      if (!seen || zoneOf({ isNear, isActive: active === id }) !== before) notify();
     },
     setActive(id) {
       if (active === id) return;

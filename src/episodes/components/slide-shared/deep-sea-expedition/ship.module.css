@@ -106,6 +106,8 @@
 
 .house-shade {
   fill: var(--ship-house-shade);
+  /* No edge unless a Scene sets one, as the cabin close-up does. */
+  stroke: var(--ship-house-shade-edge, none);
 }
 
 .glass {

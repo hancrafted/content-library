@@ -1,4 +1,6 @@
 import type { CSSProperties } from 'react';
+import { Art } from '../art/art';
+import { artName } from '../art/art.pure';
 import type { ActorProps, BubblePlace } from './actor';
 import styles from './character.module.css';
 import { Emote } from './emote';
@@ -52,9 +54,13 @@ interface GroupProps {
 
 /** One paint group; a moving one turns about its pivot, moved to its own origin so the CSS rotates from `0 0`. */
 function FigureGroup({ group, drawing, motion }: GroupProps) {
-  const paths = drawing.groups[group].map((facet, index) => (
-    <path key={index} d={facetPath(facet)} className={styles[facet.tone]} />
-  ));
+  const paths = (
+    <Art name={artName(`character/${group}`, drawing.groups[group])}>
+      {drawing.groups[group].map((facet, index) => (
+        <path key={index} d={facetPath(facet)} className={styles[facet.tone]} />
+      ))}
+    </Art>
+  );
   if (!motion || !MOTION_PARTS[motion].groups.includes(group)) return <g data-group={group}>{paths}</g>;
   const [px, py]: Point = drawing.pivots[MOTION_PARTS[motion].pivot];
   const lift = motion === 'wave' ? ({ '--lift': `${drawing.waveLift}deg` } as CSSProperties) : undefined;

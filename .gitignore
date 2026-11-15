@@ -12,6 +12,9 @@ docs/markdown-harness/activity.csv
 # Next.js
 .next/
 out/
+
+# Scene art, rebuilt by `npm run art` before every build (FE-005 §5).
+public/art/
 next-env.d.ts
 *.tsbuildinfo
 

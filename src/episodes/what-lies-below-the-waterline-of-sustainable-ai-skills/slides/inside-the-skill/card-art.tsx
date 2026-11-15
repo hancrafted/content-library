@@ -12,18 +12,18 @@ export function ScriptArt() {
   return (
     <svg viewBox="480 212 90 80" aria-hidden className={cn(styles.objects, 'h-12 w-auto shrink-0')}>
       <path data-tone="robot" d="M482 224L492 214L568 214L568 290L482 290Z" />
-      <path data-tone="robot-lit" d="M482 224L492 214L533.6 214L507.8 255.8L482 267.2Z" />
-      <path data-tone="robot-shade" d="M568 236.8L568 290L525 290Z" />
+      <path data-tone="robot-lit" d="M482 224L492 214L534 214L508 256L482 267Z" />
+      <path data-tone="robot-shade" d="M568 237L568 290L525 290Z" />
       <path data-tone="robot-glint" d="M492 216L508 216L494 230Z" />
       <path
         data-tone="lamp"
-        d="M499.2 282L505.2 282L505.2 290L499.2 290ZM510.4 282L516.4 282L516.4 290L510.4 290ZM521.6 282L527.6 282L527.6 290L521.6 290ZM532.7 282L538.8 282L538.8 290L532.7 290ZM543.9 282L549.9 282L549.9 290L543.9 290Z"
+        d="M499 282L505 282L505 290L499 290ZM510 282L516 282L516 290L510 290ZM522 282L528 282L528 290L522 290ZM533 282L539 282L539 290L533 290ZM544 282L550 282L550 290L544 290Z"
       />
       <path
         data-tone="robot-dark"
-        d="M500.9 252L519.6 252L516.7 247.7L503.8 247.7ZM508.8 247.7L513.1 247.7L525.3 227.6L521 226.2ZM521 226.2L525.3 227.6L545.4 233.4L543.9 237.7ZM543.9 230.5L554 227.6L551.1 234.8L554 242L543.9 239.1Z"
+        d="M501 252L520 252L517 248L504 248ZM509 248L513 248L525 228L521 226ZM521 226L525 228L545 233L544 238ZM544 231L554 228L551 235L554 242L544 239Z"
       />
-      <path data-tone="paper-lit" d="M494.9 259.6L557.7 259.6L557.7 285.6L494.9 285.6Z" />
+      <path data-tone="paper-lit" d="M495 260L558 260L558 286L495 286Z" />
     </svg>
   );
 }
@@ -33,15 +33,12 @@ export function TemplateArt() {
   return (
     <svg viewBox="464 573 112 60" aria-hidden className={cn(styles.objects, 'h-12 w-auto shrink-0')}>
       <path data-tone="paper" d="M498 580L572 580L572 630L498 630L480 605Z" />
-      <path data-tone="paper-lit" d="M498 580L572 580L530.6 607.5L480 605Z" />
-      <path data-tone="paper-shade" d="M572 630L498 630L544.4 611Z" />
-      <path data-tone="paper-edge" d="M500 605L497 610.2L491 610.2L488 605L491 599.8L497 599.8Z" />
-      <path data-tone="robot-dark" d="M496.5 605L494.8 607.4L492 606.5L492 603.5L494.8 602.6Z" />
+      <path data-tone="paper-lit" d="M498 580L572 580L531 608L480 605Z" />
+      <path data-tone="paper-shade" d="M572 630L498 630L544 611Z" />
+      <path data-tone="paper-edge" d="M500 605L497 610L491 610L488 605L491 600L497 600Z" />
+      <path data-tone="robot-dark" d="M497 605L495 607L492 607L492 604L495 603Z" />
       <path data-tone="string" d="M493 605L495 605L470 575L467 576Z" />
-      <path
-        data-tone="paper-edge"
-        d="M510 611L548.7 611L548.7 612.6L510 612.6ZM510 619.5L558 619.5L558 621.1L510 621.1Z"
-      />
+      <path data-tone="paper-edge" d="M510 611L549 611L549 613L510 613ZM510 620L558 620L558 621L510 621Z" />
     </svg>
   );
 }
@@ -52,13 +49,10 @@ export function GuideTab() {
     <svg viewBox="658 280 70 20" aria-hidden className={cn(styles.objects, 'h-5 w-auto')}>
       <path data-tone="guide" d="M664 282L722 282L726 298L660 298Z" />
       <path data-tone="guide-lit" d="M664 282L694 282L678 298L660 298Z" />
-      <path data-tone="fish-lit" d="M687 290L692.6 286.1L694 290ZM692.6 286.1L700.3 288.2L694 290Z" />
-      <path
-        data-tone="fish-shade"
-        d="M700.3 288.2L702.4 290L694 290ZM702.4 290L700.3 292.1L694 290ZM700.3 292.1L692.6 293.5L694 290Z"
-      />
-      <path data-tone="fish-lit" d="M692.6 293.5L687 290L694 290ZM687 290L682.1 286.5L683.5 290Z" />
-      <path data-tone="fish-shade" d="M687 290L683.5 290L682.1 293.5Z" />
+      <path data-tone="fish-lit" d="M687 290L693 286L694 290ZM693 286L700 288L694 290Z" />
+      <path data-tone="fish-shade" d="M700 288L702 290L694 290ZM702 290L700 292L694 290ZM700 292L693 294L694 290Z" />
+      <path data-tone="fish-lit" d="M693 294L687 290L694 290ZM687 290L682 287L684 290Z" />
+      <path data-tone="fish-shade" d="M687 290L684 290L682 294Z" />
     </svg>
   );
 }
