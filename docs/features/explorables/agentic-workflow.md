@@ -299,6 +299,8 @@ What a free consumer chat got wrong in real runs, and the prompt fix that held. 
 | Listed every doubt it had, so the result read unsure                        | "At most three open doubts, the ones that could change the decision"; the artifact shows them in one box.                             |
 | Numbered criteria only from the second job on                               | The interview's template numbers needs (N1…) and criteria ("A2 (N2).") from the start.                                                |
 | Wrote fan-out H3s with no body                                              | "Under each H3, one line: …"                                                                                                          |
+| A coding agent ended on prose, so the participant had nothing to paste back | Its final reply starts with "Result:": the content block when a later step parses it, else the path in one line.                      |
+| Asked in jargon a participant who had never opened an HTML file             | Start with a reader calibration (words, technical depth), recorded in the result so later prompts keep to it.                         |
 
 The free tier's limits as of 2026-10-27: web search works; Canvas needs a login; the code block's Preview button does nothing; "New chat" asks "Clear current chat?" and discards the old chat, so a participant copies each result first.
 

@@ -6,11 +6,10 @@ title: Turn a source into a quiz
 description: Decide what a good quiz needs, apply it to one source, then turn it into a skill that makes the next quiz.
 
 scenario:
-  summary: Build a quiz maker for an AI workshop, then turn the Episode "What agentic workflows require" into its first quiz.
+  summary: Build a quiz maker, then turn the Episode "What agentic workflows require" into its first quiz.
   facts:
     - 'The goal: a quiz maker prompt that lets AI turn any web page or PDF into a fun quiz: one standalone HTML file with modern visuals and gamified animations.'
     - 'The first source: https://hancrafted.net/episodes/what-agentic-workflows-require/'
-    - 'For: the participants of an AI workshop'
 
 purposes:
   role: Giving the AI a role sets the tone and depth of its answer.
@@ -97,6 +96,9 @@ templates:
   categories: |
     # Intent: <Name of the task>
     ## Goal
+    ## Reader
+    Words: <the words to use>
+    Depth: <the technical detail the reader follows>
     ## Categories
     ### <Category>
     Scope: <one line>
@@ -182,6 +184,9 @@ stages:
             # Intent: Workshop quiz maker
             ## Goal
             A quiz maker prompt that lets AI turn any web page or PDF into a fun quiz: one standalone HTML file with modern visuals and gamified animations.
+            ## Reader
+            Words: plain everyday words (1.1)
+            Depth: some: follows a file or a setting when it is explained (2.2)
             ## Categories
             ### Learning purpose
             Scope: What a player takes away from a quiz, and how that is drawn from any source.
@@ -199,6 +204,7 @@ stages:
           goodLooksLike:
             - Every category is an H3 with one Scope line and one Intent line.
             - Each Intent line cites the questions it rests on, such as (Q2).
+            - Reader holds the words and depth you chose, and every question kept to them.
             - The categories are the ones you confirmed; the rest sit under Out of scope.
             - Nothing inside a category is decided yet; that is the next stage's job.
         instructions: 'Open a new chat, put your goal in the box and paste the prompt. Answer each round like "1.2 2.3" (question.option), confirm the categories it proposes, then copy the result.'
@@ -217,6 +223,15 @@ stages:
                 ```text
                 {{goal}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: &calibrate_intent |
+                Before the first question, ask me one short calibration round, so every later question fits me. Ask these two questions with their options, numbered as here:
+
+                1. Which words should I use? 1. Plain everyday words. 2. Some professional terms. 3. Technical terms.
+                2. How much technical detail can you follow? 1. None: you have never opened an HTML file. 2. Some: you follow a file or a setting when it is explained. 3. All: you read code.
+
+                I answer like "1.1 2.2". They are not Q questions. Ask every later question at the level I chose, with technical terms only if I chose them, and write my two answers under Reader in the result.
             - heading: Steps
               purpose: steps
               techniques: [allow-unknown]
@@ -233,6 +248,7 @@ stages:
               text: |
                 - Every question had numbered options ending in "something else", and none carried a recommendation.
                 - I confirmed the categories before you wrote the result.
+                - Reader holds my calibration answers, and every question kept to that level.
                 - Every confirmed category is an H3 with one Scope line and one Intent line citing its questions.
                 - The result holds only what I answered; the rest is marked "open".
             - heading: Out of scope
@@ -259,6 +275,9 @@ stages:
                 ```text
                 {{goal}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_intent
             - heading: Out of scope
               purpose: scope
               text: *out_of_scope_intent
@@ -357,6 +376,15 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: &calibrate_grill |
+                If my intent has a Reader section, keep to its level and skip this round. Otherwise, before the first question, ask me one short calibration round, so every later question fits me. Ask these two questions with their options, numbered as here:
+
+                1. Which words should I use? 1. Plain everyday words. 2. Some professional terms. 3. Technical terms.
+                2. How much technical detail can you follow? 1. None: you have never opened an HTML file. 2. Some: you follow a file or a setting when it is explained. 3. All: you read code.
+
+                I answer like "1.1 2.2". They are not Q questions and count toward no limit. Ask every later question at the level I chose, with technical terms only if I chose them.
             - heading: Steps
               purpose: steps
               text: |
@@ -393,11 +421,17 @@ stages:
               text: |
                 Interview me about the requirements of the task in `.scratch/task/intent.md`: go through its categories in order, then the seams between them, at most three questions per round and at most {{limit.questions}} in total. Write no spec yet: the next prompt writes it from the decisions of this grill.
 
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_grill
             - heading: Practice run
               purpose: scope
               only: demo
               techniques: [simplest-first]
               text: *practice_grill
+            - heading: Last line
+              purpose: template
+              text: &next_spec 'When nothing is left to ask, end with one line that tells me to type the to-spec skill''s slash command next, or to paste the second prompt: "Next: type <the command> (or paste the second prompt)."'
         then:
           skills: [to-spec]
           sections:
@@ -410,8 +444,8 @@ stages:
               text: *out_of_scope_grill_demo
             - heading: Format
               purpose: template
-              text: &format_file |
-                Write the file in this template, then tell me its path in one line.
+              text: &format_result |
+                Write the file in this template. Your final reply is one line: "Result:", then what the file is and its path, such as "Result: the spec is in .scratch/task/spec.md."
 
                 {{template}}
         review:
@@ -508,6 +542,9 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_grill
             - heading: Steps
               purpose: steps
               text: |
@@ -544,20 +581,26 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_grill
+            - heading: Last line
+              purpose: template
+              text: *next_spec
         then:
           skills: [to-spec]
           sections:
             - heading: Task
               purpose: task
               text: |
-                Write `.scratch/task/handoffs/<category-slug>.md`, with a short slug for this category, from the decisions of this grill and nothing else. Then tell me its path in one line.
+                Write `.scratch/task/handoffs/<category-slug>.md`, with a short slug for this category, from the decisions of this grill and nothing else.
 
             - heading: Out of scope
               purpose: scope
               text: *out_of_scope_grill_category
             - heading: Format
               purpose: template
-              text: *format_file
+              text: *format_result
 
   - id: seams
     only: full
@@ -625,6 +668,9 @@ stages:
                 ```markdown
                 {{handoff_*}}
                 ```
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_grill
             - heading: Steps
               purpose: steps
               text: |
@@ -651,8 +697,14 @@ stages:
             - heading: Task
               purpose: task
               text: |
-                Read every handoff in `.scratch/task/handoffs/`, then settle the seams: where two handoffs conflict, ask me which decision wins, one question at a time. Write no spec yet: the next prompt writes it from the decisions of this grill.
+                Read `.scratch/task/intent.md` and every handoff in `.scratch/task/handoffs/`, then settle the seams: where two handoffs conflict, ask me which decision wins, one question at a time. Write no spec yet: the next prompt writes it from the decisions of this grill.
 
+            - heading: Who you write for
+              purpose: steps
+              text: *calibrate_grill
+            - heading: Last line
+              purpose: template
+              text: *next_spec
         then:
           skills: [to-spec]
           sections:
@@ -665,7 +717,7 @@ stages:
               text: *out_of_scope_seams
             - heading: Format
               purpose: template
-              text: *format_file
+              text: *format_result
         review:
           instructions: 'Paste the result into the box below and copy the prompt into another new chat. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into the first chat and keep the corrected result.'
           slots:
@@ -943,7 +995,10 @@ stages:
               text: *practice_strict
             - heading: Format
               purpose: template
-              text: *format_file
+              text: &format_file |
+                Write the file in this template, then tell me its path in one line.
+
+                {{template}}
 
   - id: improve
     title: Improve

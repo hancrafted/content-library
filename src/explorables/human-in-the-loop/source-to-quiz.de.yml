@@ -6,11 +6,10 @@ title: Aus einer Quelle ein Quiz machen
 description: Entscheide, was ein gutes Quiz braucht, wende es auf eine Quelle an und mach daraus einen Skill, der das nächste Quiz macht.
 
 scenario:
-  summary: Bau einen Quiz-Generator für einen KI-Workshop und mach dann aus der Episode "Was agentische Workflows von Menschen und Organisationen verlangen" sein erstes Quiz.
+  summary: Bau einen Quiz-Generator und mach dann aus der Episode "Was agentische Workflows von Menschen und Organisationen verlangen" sein erstes Quiz.
   facts:
     - 'Das Ziel: Ein Quiz-Generator-Prompt, mit dem die KI jede Webseite oder jedes PDF in ein unterhaltsames Quiz verwandelt: eine eigenständige HTML-Datei mit modernen Visuals und gamifizierten Animationen.'
     - 'Die erste Quelle: https://hancrafted.net/de/episodes/what-agentic-workflows-require/'
-    - 'Für: die Teilnehmenden eines KI-Workshops'
 
 purposes:
   role: Mit einer Rolle bestimmst du Ton und Tiefe der Antwort.
@@ -97,6 +96,9 @@ templates:
   categories: |
     # Absicht: <Name der Aufgabe>
     ## Ziel
+    ## Lesende
+    Wörter: <welche Wörter zu benutzen sind>
+    Tiefe: <wie viel technisches Detail die Lesenden verstehen>
     ## Kategorien
     ### <Kategorie>
     Umfang: <eine Zeile>
@@ -182,6 +184,9 @@ stages:
             # Absicht: Workshop-Quiz-Generator
             ## Ziel
             Ein Quiz-Generator-Prompt, mit dem die KI jede Webseite oder jedes PDF in ein unterhaltsames Quiz verwandelt: eine eigenständige HTML-Datei mit modernen Visuals und gamifizierten Animationen.
+            ## Lesende
+            Wörter: einfache Alltagswörter (1.1)
+            Tiefe: etwas: versteht eine Datei oder eine Einstellung, wenn sie erklärt wird (2.2)
             ## Kategorien
             ### Lernzweck
             Umfang: Was ein Spieler aus einem Quiz mitnimmt und wie das aus jeder Quelle gewonnen wird.
@@ -199,6 +204,7 @@ stages:
           goodLooksLike:
             - Jede Kategorie ist eine H3 mit einer Zeile Umfang und einer Zeile Absicht.
             - Jede Zeile Absicht nennt die Fragen, auf denen sie beruht, etwa (Q2).
+            - Lesende hält die Wörter und die Tiefe fest, die du gewählt hast, und jede Frage blieb dabei.
             - Die Kategorien sind die, die du bestätigt hast; der Rest steht unter Nicht im Umfang.
             - Innerhalb einer Kategorie ist noch nichts entschieden; das macht die nächste Stage.
         instructions: 'Öffne einen neuen Chat, trag dein Ziel in das Feld ein und füge den Prompt ein. Beantworte jede Runde wie "1.2 2.3" (Frage.Option), bestätige die vorgeschlagenen Kategorien und kopiere dann das Ergebnis.'
@@ -217,6 +223,15 @@ stages:
                 ```text
                 {{goal}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: &calibrate_intent |
+                Stell mir vor der ersten Frage eine kurze Kalibrierungsrunde, damit jede spätere Frage zu mir passt. Stell diese zwei Fragen mit ihren Optionen, nummeriert wie hier:
+
+                1. Welche Wörter soll ich benutzen? 1. Einfache Alltagswörter. 2. Einige Fachbegriffe. 3. Technische Begriffe.
+                2. Wie viel technisches Detail kannst du verstehen? 1. Keins: Du hast noch nie eine HTML-Datei geöffnet. 2. Etwas: Du verstehst eine Datei oder eine Einstellung, wenn sie erklärt wird. 3. Alles: Du liest Code.
+
+                Ich antworte wie "1.1 2.2". Sie sind keine Q-Fragen. Stell jede spätere Frage auf der Ebene, die ich gewählt habe, mit technischen Begriffen nur, wenn ich sie gewählt habe, und schreibe meine zwei Antworten unter Lesende ins Ergebnis.
             - heading: Schritte
               purpose: steps
               techniques: [allow-unknown]
@@ -233,6 +248,7 @@ stages:
               text: |
                 - Jede Frage hatte nummerierte Optionen, zuletzt "etwas anderes", und keine trug eine Empfehlung.
                 - Ich habe die Kategorien bestätigt, bevor du das Ergebnis geschrieben hast.
+                - Lesende enthält meine Antworten der Kalibrierung, und jede Frage blieb auf dieser Ebene.
                 - Jede bestätigte Kategorie ist eine H3 mit einer Zeile Umfang und einer Zeile Absicht, die ihre Fragen nennt.
                 - Das Ergebnis enthält nur, was ich beantwortet habe; der Rest ist als "offen" markiert.
             - heading: Nicht im Umfang
@@ -259,6 +275,9 @@ stages:
                 ```text
                 {{goal}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_intent
             - heading: Nicht im Umfang
               purpose: scope
               text: *out_of_scope_intent
@@ -357,6 +376,15 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: &calibrate_grill |
+                Hat meine Absicht einen Abschnitt Lesende, halte dich an ihre Ebene und lass diese Runde aus. Sonst stell mir vor der ersten Frage eine kurze Kalibrierungsrunde, damit jede spätere Frage zu mir passt. Stell diese zwei Fragen mit ihren Optionen, nummeriert wie hier:
+
+                1. Welche Wörter soll ich benutzen? 1. Einfache Alltagswörter. 2. Einige Fachbegriffe. 3. Technische Begriffe.
+                2. Wie viel technisches Detail kannst du verstehen? 1. Keins: Du hast noch nie eine HTML-Datei geöffnet. 2. Etwas: Du verstehst eine Datei oder eine Einstellung, wenn sie erklärt wird. 3. Alles: Du liest Code.
+
+                Ich antworte wie "1.1 2.2". Sie sind keine Q-Fragen und zählen zu keinem Limit. Stell jede spätere Frage auf der Ebene, die ich gewählt habe, mit technischen Begriffen nur, wenn ich sie gewählt habe.
             - heading: Schritte
               purpose: steps
               text: |
@@ -393,11 +421,17 @@ stages:
               text: |
                 Befrage mich zu den Anforderungen der Aufgabe in `.scratch/task/intent.md`: Geh ihre Kategorien der Reihe nach durch, dann die Nahtstellen zwischen ihnen, höchstens drei Fragen pro Runde und insgesamt höchstens {{limit.questions}}. Schreibe noch keine Spezifikation: Der nächste Prompt schreibt sie aus den Entscheidungen dieses Grills.
 
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_grill
             - heading: Übungslauf
               purpose: scope
               only: demo
               techniques: [simplest-first]
               text: *practice_grill
+            - heading: Letzte Zeile
+              purpose: template
+              text: &next_spec 'Wenn nichts mehr zu fragen ist, ende mit einer Zeile, die mir sagt, als Nächstes den Slash-Befehl des Skills to-spec zu tippen oder den zweiten Prompt einzufügen: "Weiter: tippe <den Befehl> (oder füge den zweiten Prompt ein)."'
         then:
           skills: [to-spec]
           sections:
@@ -410,8 +444,8 @@ stages:
               text: *out_of_scope_grill_demo
             - heading: Format
               purpose: template
-              text: &format_file |
-                Schreibe die Datei in dieser Vorlage und nenne mir dann ihren Pfad in einer Zeile.
+              text: &format_result |
+                Schreibe die Datei in dieser Vorlage. Deine letzte Antwort ist eine Zeile: "Ergebnis:", dann was die Datei ist und ihr Pfad, etwa "Ergebnis: Die Spezifikation liegt in .scratch/task/spec.md."
 
                 {{template}}
         review:
@@ -508,6 +542,9 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_grill
             - heading: Schritte
               purpose: steps
               text: |
@@ -544,20 +581,26 @@ stages:
                 ```markdown
                 {{categories}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_grill
+            - heading: Letzte Zeile
+              purpose: template
+              text: *next_spec
         then:
           skills: [to-spec]
           sections:
             - heading: Aufgabe
               purpose: task
               text: |
-                Schreibe `.scratch/task/handoffs/<category-slug>.md`, mit einem kurzen Slug für diese Kategorie, allein aus den Entscheidungen dieses Grills. Nenne mir dann ihren Pfad in einer Zeile.
+                Schreibe `.scratch/task/handoffs/<category-slug>.md`, mit einem kurzen Slug für diese Kategorie, allein aus den Entscheidungen dieses Grills.
 
             - heading: Nicht im Umfang
               purpose: scope
               text: *out_of_scope_grill_category
             - heading: Format
               purpose: template
-              text: *format_file
+              text: *format_result
 
   - id: seams
     only: full
@@ -625,6 +668,9 @@ stages:
                 ```markdown
                 {{handoff_*}}
                 ```
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_grill
             - heading: Schritte
               purpose: steps
               text: |
@@ -651,8 +697,14 @@ stages:
             - heading: Aufgabe
               purpose: task
               text: |
-                Lies jede Übergabe in `.scratch/task/handoffs/` und kläre dann die Nahtstellen: Wo zwei Übergaben im Konflikt stehen, frag mich, welche Entscheidung gewinnt, eine Frage nach der anderen. Schreibe noch keine Spezifikation: Der nächste Prompt schreibt sie aus den Entscheidungen dieses Grills.
+                Lies `.scratch/task/intent.md` und jede Übergabe in `.scratch/task/handoffs/` und kläre dann die Nahtstellen: Wo zwei Übergaben im Konflikt stehen, frag mich, welche Entscheidung gewinnt, eine Frage nach der anderen. Schreibe noch keine Spezifikation: Der nächste Prompt schreibt sie aus den Entscheidungen dieses Grills.
 
+            - heading: Für wen du schreibst
+              purpose: steps
+              text: *calibrate_grill
+            - heading: Letzte Zeile
+              purpose: template
+              text: *next_spec
         then:
           skills: [to-spec]
           sections:
@@ -665,7 +717,7 @@ stages:
               text: *out_of_scope_seams
             - heading: Format
               purpose: template
-              text: *format_file
+              text: *format_result
         review:
           instructions: 'Füge das Ergebnis in das Feld unten ein und kopiere den Prompt in einen weiteren neuen Chat. Sagt er Bereit, geh weiter; sagt er Nachbessern nötig, füge seine Korrekturanweisung in den ersten Chat ein und behalte das korrigierte Ergebnis.'
           slots:
@@ -943,7 +995,10 @@ stages:
               text: *practice_strict
             - heading: Format
               purpose: template
-              text: *format_file
+              text: &format_file |
+                Schreibe die Datei in dieser Vorlage und nenne mir dann ihren Pfad in einer Zeile.
+
+                {{template}}
 
   - id: improve
     title: Verbessern
