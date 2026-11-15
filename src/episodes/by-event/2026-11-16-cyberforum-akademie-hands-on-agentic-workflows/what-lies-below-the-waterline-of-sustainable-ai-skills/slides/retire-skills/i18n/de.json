@@ -1,0 +1,114 @@
+{
+  "title": "Skills ausmustern",
+  "caption": "Mustere Skills aus, die niemand nutzt, damit der richtige leicht zu finden bleibt.",
+  "analogy": "Karten, die das Tauchlogbuch nie erwähnt, kommen in die Archivkiste.",
+  "story": "In der Geschichte:",
+  "season": "diese Saison",
+  "before": {
+    "heading": { "chat": "Skill-Index · vorher", "coding": ".claude/skills/ · vorher" },
+    "count": { "chat": "47 Skills", "coding": "47 Ordner" },
+    "uses": "{count}-mal genutzt",
+    "unused": "ungenutzt",
+    "more": "… 30 weitere, alle ungenutzt"
+  },
+  "index": {
+    "rinse-camera-dome": "Kamerakuppel spülen",
+    "sample-old": "Probe (alt)",
+    "take-sample-v2": "Probe nehmen v2",
+    "name-photo-folders": "Fotoordner benennen",
+    "sediment-quick": "Sediment, schnelle Version",
+    "sample-like-ana": "Probe, wie Ana es macht",
+    "collect-sediment-sample": "Sedimentprobe an einem neuen Ort nehmen",
+    "sample-but-faster": "Probe, aber schneller",
+    "tuesday-weather-note": "Wetternotiz für Dienstag schreiben",
+    "clean-arm-maybe": "Arm reinigen (vielleicht)",
+    "collect-sediment-sample-copy": "Sedimentprobe nehmen (Kopie)",
+    "log-depth-draft": "Tiefe loggen (Entwurf)",
+    "crew-coffee-order": "Kaffeebestellung der Crew",
+    "check-winch-again": "Winde prüfen, nochmal",
+    "sample-v3": "Probe v3 (probier das)",
+    "label-cores-alt": "Kerne beschriften, alternativ",
+    "dive-log-short": "Tauchlogbuch, Kurzform"
+  },
+  "log": {
+    "heading": "Aufgabenlog",
+    "rows": {
+      "k4": { "date": "3. Juni", "task": "Neuer Ort K-4" },
+      "photos": { "date": "11. Juni", "task": "Fotos von K-4" },
+      "briefing": { "date": "8. Aug.", "task": "Morgenbesprechung" },
+      "m5": { "date": "27. Aug.", "task": "Neuer Ort M-5" }
+    },
+    "more": "und 23 weitere Aufgaben"
+  },
+  "archive": {
+    "chat": {
+      "title": "Archiv · 40 Skills",
+      "count": "ausgemustert am 12. Nov. 2026",
+      "restore": "wiederherstellbar"
+    },
+    "coding": {
+      "title": "retired/2026-11-12/",
+      "count": "40 Skill-Ordner",
+      "restore": "wiederherstellen: einen zurückschieben"
+    }
+  },
+  "after": {
+    "heading": { "chat": "Skill-Index · nachher", "coding": ".claude/skills/ · nachher" },
+    "count": { "chat": "7 Skills", "coding": "7 Ordner" },
+    "needed": "der, den Du brauchst",
+    "callback": "Vor ein paar Slides: der 7. von 47. Jetzt der 3. von 7."
+  },
+  "closesUp": "der Index rückt zusammen",
+  "didYouKnow": "Schon gewusst?",
+  "callouts": {
+    "method": {
+      "heading": "Das Logbuch lesen",
+      "body": "Leg Deinen Skill-Index neben das, was Deine Aufgaben diese Saison genutzt haben. Schalte die Skills ab, die keine Aufgabe geöffnet hat, und heb eine Kopie mit Datum auf.",
+      "bodyCoding": "Leg die Ordner in <code>.claude/skills/</code> neben das, was Deine Aufgaben diese Saison genutzt haben. Verschieb die ungenutzten aus <code>.claude/skills/</code> in einen datierten Archivordner, den der Agent nicht durchsucht.",
+      "sub": "Die eigene Methode dieser Episode, keine veröffentlichte Regel.",
+      "subCoding": "Die eigene Methode und Ordnerkonvention dieser Episode, keine veröffentlichte Regel und keine Funktion einer App."
+    },
+    "archive": {
+      "heading": "Archivieren, nicht löschen",
+      "body": "Knowledge-Centered Service archiviert, statt zu löschen: Löschen kann Links brechen, und ein archivierter Artikel lässt sich wiederherstellen."
+    },
+    "when": {
+      "heading": "Wann ein Skill fällig ist",
+      "body": "Anthropic: Mustere einen Skill aus, dessen Evaluationen dauerhaft scheitern oder dessen Arbeitsablauf ausgemustert ist."
+    }
+  },
+  "alt": {
+    "scene": "Der Kontrollraum bei Nacht. Durch das Bullauge hängt der Roboter an seinem Kabel im Abyssal, die Lampe an; der Pilot sitzt an der Konsole."
+  },
+  "notes": {
+    "retire-a-skill-archive-over-delete": {
+      "header": "Einen Skill ausmustern: archivieren statt löschen",
+      "description": "Knowledge-Centered Service zieht Archivieren dem Löschen vor, weil Löschen Links brechen kann und ein archivierter Artikel wiederherstellbar ist [1]. Anthropic rät, einen Skill auszumustern, dessen Evaluationen dauerhaft scheitern oder dessen Arbeitsablauf ausgemustert ist [2]. Das Tauchlogbuch zu lesen, um zu entscheiden, was ins Archiv kommt, ist die eigene Methode dieser Episode.",
+      "sources": {
+        "kcs-v6-article-state": {
+          "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
+        },
+        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-log": {
+        "title": "Das Logbuch lesen",
+        "keywords": "",
+        "script": "Letzte Aufgabe: Skills ausmustern. Leg Deine Liste von Skills neben das, was Deine Arbeit diese Saison tatsächlich genutzt hat, auf unserem Schiff das Tauchlogbuch, und sieh nach, welche Skills keine Aufgabe je geöffnet hat."
+      },
+      "the-archive-box": {
+        "title": "Die Archivkiste",
+        "keywords": "",
+        "script": "Diese Skills kommen in ein Archiv, jeder mit dem Datum seiner Ausmusterung, damit die Entscheidung festgehalten ist und sich später niemand fragt, wo ein Skill geblieben ist."
+      },
+      "short-index-again": {
+        "title": "Wieder ein kurzer Index",
+        "keywords": "",
+        "script": "Und der Index, der übrig bleibt, ist wieder kurz, und der, den Du brauchst, ist leicht zu finden. Erinnerst Du Dich an die Beschreibung, die vor ein paar Slides mitten in einem vollgestopften Handbuch vergraben war? Sie ist wieder sichtbar, und das Modell kann sie wählen."
+      }
+    }
+  }
+}

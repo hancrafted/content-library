@@ -1,0 +1,142 @@
+{
+  "title": "Skills sind statischer und dynamischer Kontext",
+  "caption": "Was immer geladen ist, ist statisch; ein Skill lädt bei Bedarf, also ist er dynamisch.",
+  "analogy": {
+    "label": "In der Geschichte:",
+    "text": "Vor dem Tauchgang: Deine Befehle, das Briefing und das Register. Währenddessen: die Karte und alles, was der Roboter heraufschickt."
+  },
+  "art": {
+    "brief": "Projektbriefing",
+    "index": "Register",
+    "cardTitle": "Sedimentprobe nehmen",
+    "pills": {
+      "feed": "Kamerabild",
+      "orders": "Dauerbefehle",
+      "index": "Register des Handbuchs",
+      "card": "gezogene Karte",
+      "frames": "Bilder",
+      "sonar": "Sonar",
+      "logs": "Protokolle"
+    }
+  },
+  "window": {
+    "label": "Das Kontextfenster am Ende des Tauchgangs, von oben nach unten",
+    "rows": {
+      "system": {
+        "term": "System-Prompt",
+        "chat": "verborgene Startanweisungen",
+        "coding": "System-Prompt, Tool-Schemas"
+      },
+      "skills": {
+        "term": "Skills",
+        "chat": "das Register des Handbuchs",
+        "coding": "Name und Beschreibung jeder SKILL.md"
+      },
+      "memory": {
+        "term": "Memory-Dateien",
+        "chat": "Deine Dauerbefehle und das Projektbriefing",
+        "coding": "AGENTS.md (CLAUDE.md in Claude Code)"
+      },
+      "instructions": {
+        "term": "Skill-Anweisungen",
+        "chat": "die gezogene Karte",
+        "coding": "Hauptteil von SKILL.md"
+      },
+      "frames": {
+        "term": "Tool-Ergebnisse",
+        "chat": "Kamerabilder",
+        "coding": "Dateiinhalte"
+      },
+      "sonar": {
+        "term": "Tool-Ergebnisse",
+        "chat": "Sonardaten",
+        "coding": "Bash-Ausgabe"
+      },
+      "logs": {
+        "term": "Tool-Ergebnisse",
+        "chat": "Probenprotokolle",
+        "coding": "MCP-Antworten"
+      }
+    },
+    "free": "Freier Platz"
+  },
+  "static": {
+    "label": "Statisch",
+    "text": "immer geladen, in jeder Interaktion"
+  },
+  "dynamic": {
+    "label": "Dynamisch",
+    "text": "bei Bedarf geladen, während die Aufgabe läuft"
+  },
+  "footer": {
+    "chat": "Ein Skill ist dynamisch, ob Du ihn am Anfang aufrufst oder die KI ihn mitten in der Aufgabe wählt.",
+    "ruleOfThumb": "Statisch hat Ausnahmen, nimm die Trennung also als Faustregel.",
+    "codingLead": "Aufgerufen oder gewählt, trotzdem dynamisch:",
+    "coding": "<code>/collect-sediment-sample</code> am Anfang einer Nachricht in Claude Code, oder der Agent wählt den Skill mitten in der Aufgabe; so oder so kommt der Hauptteil von <code>SKILL.md</code> erst bei Bedarf ins Fenster.",
+    "exceptionsLead": "Ausnahmen:",
+    "exceptions": "Dateien in <code>.claude/rules/</code> mit <code>paths</code> laden erst, wenn passende Dateien geöffnet werden; Gemini CLI lädt weitere <code>GEMINI.md</code>-Dateien erst, wenn es sie braucht; ein Skill, der nur für Dich aufrufbar ist, hält sogar Name und Beschreibung heraus."
+  },
+  "alt": {
+    "room": "Der Kontrollraum am Ende des Tauchgangs. An der Wand: das Live-Kamerabild vom Roboter am Meeresboden, das Projektbriefing und das Handbuch im Regal, die Registerseite nach außen. Am Tisch sitzt der Pilot; auf dem Tisch sein Notizbuch mit Dauerbefehlen und alles, was während des Tauchgangs ankam: die gezogene Verfahrenskarte Sedimentprobe nehmen, aufgestellt und beleuchtet; ausgedruckte Kamerabilder; ein Sonarstreifen; und ein Probenprotokoll auf einem Klemmbrett."
+  },
+  "notes": {
+    "static-and-dynamic-as-google-defines-them": {
+      "header": "Statisch und dynamisch, wie Google es definiert",
+      "description": "Statischer Kontext ist immer geladen: Systemanweisungen, Regeldateien (AGENTS.md, CLAUDE.md, GEMINI.md), globales Gedächtnis und Persona-Definitionen; dynamischer Kontext wird bei Bedarf geladen: Skill-Anweisungen, ausgelöst durch passende Aufgaben, Tool-Ergebnisse, abgerufene Dokumente und der gefensterte Gesprächsverlauf [1]. Das ist Googles Sicht als Anbieter auf die Mechanik der Anbieter, kein gemessenes Ergebnis.",
+      "sources": {
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "why-static-and-dynamic-context-are-kept-apart": {
+      "header": "Warum statischer und dynamischer Kontext getrennt bleiben",
+      "description": "Day 1 sagt, statischer Kontext „is expensive because every token is present in every interaction, regardless of relevance“; zu viel davon „wastes tokens and dilutes signals“, zu wenig „means the agent forgets critical rules“ [1]. Day 3 wiederholt die Trennung für die beiden Dateien: „From one side AGENTS.md is always loaded within the project; Skills load on demand.“ [2]",
+      "sources": {
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        },
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "static-instructions-are-a-rule-of-thumb": {
+      "header": "Statische Anweisungen sind eine Faustregel",
+      "description": "Anweisungen sind nicht streng statisch. Dateien in .claude/rules/ mit paths laden in Claude Code erst, wenn passende Dateien geöffnet werden [1], Gemini CLI lädt weitere GEMINI.md-Dateien erst, wenn ein Tool ein Verzeichnis berührt [2], und pfadbezogene Anweisungen in Copilot gelten nur für passende Dateien [3]. Standardmäßig sind auch Name und Beschreibung eines Skills immer geladen, außer der Skill ist nur für den Nutzer aufrufbar [4].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project (Claude Code docs)"
+        },
+        "google-gemini-cli-gemini-md": {
+          "title": "Google, Provide context with GEMINI.md files (Gemini CLI docs)"
+        },
+        "github-copilot-repository-instructions": {
+          "title": "GitHub, Adding repository custom instructions for GitHub Copilot"
+        },
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-window": {
+        "title": "Zurück zum Fenster",
+        "keywords": "",
+        "script": "Manche von Euch kennen das Explorable zum Kontextfenster, in dem wir uns angeschaut haben, was das Modell alles auf einmal im Kopf hält. Das hier ist dasselbe Kontextfenster, und jetzt platzieren wir Skills darin."
+      },
+      "the-standing-part": {
+        "title": "Der feste Teil",
+        "keywords": "",
+        "script": "Fang mit dem an, was da ist, bevor irgendeine Aufgabe beginnt, in der Reihenfolge des Explorables: der System-Prompt, die Skills, also Name und Beschreibung jedes Skills, und die Memory-Dateien, also Deine Anweisungen in AGENTS.md. Auf unserem Schiff sind das die festen Regeln, das Register des Handbuchs und Deine Dauerbefehle mit dem Projektbriefing. Dieser Teil ist statisch, er steht im Fenster, egal welche Aufgabe kommt."
+      },
+      "filling-as-you-dive": {
+        "title": "Füllen beim Tauchen",
+        "keywords": "",
+        "script": "Dann beginnt die Aufgabe, und das Fenster füllt sich: der Skill, den das Modell geöffnet hat, und die Tool-Ergebnisse, die zurückkommen, die Kamerabilder, Sonardaten und Probenprotokolle des Tauchgangs. Dieser Teil ist dynamisch, und die Anweisungen eines Skills gehören dazu, ob Du den Skill am Anfang aufrufst oder das Modell ihn mittendrin wählt. Ein Skill steht also auf beiden Seiten der Linie: Name und Beschreibung sind statisch, der Skill selbst ist dynamisch."
+      }
+    }
+  }
+}

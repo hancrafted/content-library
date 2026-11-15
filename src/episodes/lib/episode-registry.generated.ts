@@ -20,6 +20,7 @@ import { introHitlWorkflows as _20261104IntroHitlWorkflows__intro } from '@/epis
 import { introHitlOnboardAiEveryTime as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
 import { cyberforumIntro as _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/episode';
 import { whatAgenticWorkflowsRequire as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode';
+import { whatLiesBelowTheWaterlineOfSustainableAiSkills as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
@@ -60,6 +61,8 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
     _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro,
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require':
     _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire,
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills':
+    _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatLiesBelowTheWaterlineOfSustainableAiSkills,
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'ai-token-economy': aiTokenEconomy,

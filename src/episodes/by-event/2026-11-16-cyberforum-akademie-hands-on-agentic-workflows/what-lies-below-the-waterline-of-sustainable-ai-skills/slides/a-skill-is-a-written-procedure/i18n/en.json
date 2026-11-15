@@ -1,0 +1,129 @@
+{
+  "title": "A skill is a folder of instructions",
+  "caption": "“Skills are folders that include instructions, scripts, and resources that Claude can load when needed.”",
+  "quoteSource": "Anthropic, Introducing Agent Skills (claude.com/blog/skills)",
+  "analogy": {
+    "label": "In the story:",
+    "text": "A procedure card: title and use-when line in the head, steps in the body, extras in the sleeve."
+  },
+  "card": {
+    "label": "Procedure card 7 · head",
+    "title": "Collect sediment sample",
+    "useWhenLead": "Use when",
+    "useWhen": "we reach a new site and need a sample from the seabed.",
+    "backLabel": "Body · the steps",
+    "steps": {
+      "0": "Hold the robot 2 m above the seabed.",
+      "1": "Check the camera for loose sediment.",
+      "2": "Lower the arm.",
+      "3": "Identify what you collected.",
+      "4": "Seal the core tube.",
+      "5": "Label the sample."
+    }
+  },
+  "extras": {
+    "guide": "Species guide",
+    "label": "Label template",
+    "preset": "Arm preset"
+  },
+  "alone": "SKILL.md alone",
+  "folder": "The folder: optional supporting files beside it",
+  "labels": {
+    "parts": "The two parts of SKILL.md",
+    "nameDescription": {
+      "term": "Name and description",
+      "scene": "Head of the card: the title and the use-when line"
+    },
+    "instructions": {
+      "term": "Instructions",
+      "scene": "Body of the card: the numbered steps"
+    }
+  },
+  "coding": {
+    "oneFile": "one file",
+    "frontmatter": "frontmatter",
+    "body": "body of SKILL.md",
+    "description": "Use when we reach a new site and need a sample from the seabed."
+  },
+  "supporting": {
+    "title": "Supporting files",
+    "optional": "optional",
+    "list": "Optional supporting files",
+    "kinds": {
+      "guide": "reference",
+      "label": "template",
+      "preset": "script"
+    },
+    "reach": "The steps reach for these only when needed.",
+    "standard": "the Agent Skills standard: the folder format in full",
+    "newTab": "(opens in a new tab)"
+  },
+  "routing": "Google calls the description “your routing algorithm”.",
+  "appNames": "Claude, ChatGPT and Codex say “Skills”, GitHub Copilot “agent skills”; the Gemini app turns Gems into skills for personal accounts on 17 December 2026.",
+  "alt": {
+    "scene": "One continuous clipboard graphic on the control-room wall: a procedure card in a clear sleeve. Head: Collect sediment sample, use when we reach a new site and need a sample from the seabed. Body: six numbered steps. In the sleeve's pocket: a species guide, a label template and an arm preset."
+  },
+  "notes": {
+    "what-a-skill-is-made-of": {
+      "header": "What a skill is made of",
+      "description": "A skill is a folder with a required SKILL.md (a name and a description, then the instructions) and optional scripts/, references/ and assets/ folders [1]. ChatGPT describes the same three parts in its own words: a name and description, workflow steps and supporting materials [2].",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "openai-academy-skills": {
+          "title": "OpenAI Academy, Skills"
+        }
+      }
+    },
+    "names-differ-by-app": {
+      "header": "Names differ by app",
+      "description": "Claude, ChatGPT and Codex say “Skills”, GitHub Copilot says “agent skills”, and the Gemini app turns Gems into skills for personal accounts on 17 December 2026 [1]. Whether the Gemini app's skills are SKILL.md folders is not stated in the pages read; it is verified for Gemini CLI only [2].",
+      "sources": {
+        "google-gems-to-skills": {
+          "title": "Google, About the transition from Gems to skills (Gemini Apps Help)"
+        },
+        "google-gemini-cli-skills": {
+          "title": "Google, Agent Skills in Gemini CLI"
+        }
+      }
+    },
+    "the-description-is-the-routing-line": {
+      "header": "The description is the routing line",
+      "description": "Google's Day 3 whitepaper calls the description “your routing algorithm” [1]. This is Google's framing of how a skill is chosen, not a measurement of how often it routes correctly.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        }
+      }
+    },
+    "anthropics-definition-of-a-skill": {
+      "header": "Anthropic's definition of a skill",
+      "description": "Anthropic defines skills as “folders that include instructions, scripts, and resources that Claude can load when needed” [1]. The Slide quotes the sentence as written; “Claude” in it is Anthropic's product, and the Agent Skills standard (note 1) publishes the same folder format for other agents.",
+      "sources": {
+        "anthropic-introducing-agent-skills": {
+          "title": "Anthropic, Introducing Agent Skills"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "name-and-use-when": {
+        "title": "Name and use-when",
+        "keywords": "",
+        "script": "A skill is a folder of instructions, and the company that introduced skills says so in almost those words. The folder holds one file it cannot do without, and that file starts with a name and a description, one line saying when to use it. That line matters more than it looks, because it is the first thing the model sees and, as you'll hear in a minute, often the only thing. On our card it is the title and the “use when” line in the head."
+      },
+      "steps-in-the-body": {
+        "title": "Steps in the body",
+        "keywords": "",
+        "script": "Then come the instructions, the procedure itself as numbered steps, in the body of the card. Beside that file a skill can carry optional supporting files that its steps reach for, like a species guide, a label template or an arm preset tucked into the card's sleeve. So a skill is a procedure, plus the material that procedure needs."
+      },
+      "for-developers": {
+        "title": "For developers",
+        "keywords": "",
+        "script": "If you work with a coding agent, switch to the coding-agent view, where the two parts of the file are called its frontmatter and the body of SKILL.md, and you can open and edit each. If you don't, you can ignore that view completely."
+      }
+    }
+  }
+}

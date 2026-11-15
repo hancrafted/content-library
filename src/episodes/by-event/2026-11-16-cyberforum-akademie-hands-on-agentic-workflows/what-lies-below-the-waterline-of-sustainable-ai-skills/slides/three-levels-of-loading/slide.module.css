@@ -1,0 +1,347 @@
+/*
+ * The Slide's token file: the control room lifted from the approved Spec's Option 4b (feedback 3, decision 46), its
+ * wall, floor, window, shelf, cards, side table and the lamp's light, with the Spec's own light and dark values (FE-011;
+ * dark mode is tuned later). `--info` colours only the arm preset, as the shared robot's hull; `--human` and `--ai` stay for
+ * their meanings.
+ *
+ * Motion (`motion: local`, one emphasis): a soft light moves left to right in loading order, the halo on the shelf with
+ * card 1, then on the propped card with card 2, then the ceiling lamp switches on over the sleeve and card 3 keeps its
+ * ring. It plays once when the Slide's mount turns `[data-zone='active']`; the rest state is the end state, so reduced
+ * motion shows the lamp on and card 3 ringed.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.scene {
+  --halo: oklch(0.97 0.08 200 / 0.38);
+  --shelf-shade: oklch(0.42 0.05 55);
+  --shelf-lit: oklch(0.66 0.07 60);
+  --paper-lit: oklch(0.99 0.006 90);
+  --paper-shade: oklch(0.86 0.02 75);
+  --tab-a: oklch(0.74 0.09 212);
+  --paper: oklch(0.955 0.012 85);
+  --tab-b: oklch(0.89 0.13 92);
+  --tab-c: oklch(0.72 0.1 252);
+  --shelf: oklch(0.55 0.06 58);
+  --robot-dark: oklch(0.28 0.02 260);
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --beam: oklch(0.98 0.12 95 / 0.45);
+  --paper-rule: oklch(0.8 0.03 240);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot: var(--info);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, oklch(1 0 0));
+  --sleeve: oklch(0.93 0.03 215 / 0.55);
+  --sleeve-edge: oklch(0.99 0.01 215 / 0.8);
+  --lamp: oklch(0.97 0.1 95);
+}
+
+:global(.dark) .scene {
+  --halo: oklch(0.9 0.1 200 / 0.26);
+  --shelf-shade: oklch(0.32 0.04 55);
+  --shelf-lit: oklch(0.52 0.06 60);
+  --paper-lit: oklch(0.9 0.008 90);
+  --paper-shade: oklch(0.7 0.02 75);
+  --tab-a: oklch(0.6 0.08 218);
+  --paper: oklch(0.84 0.012 85);
+  --tab-b: oklch(0.78 0.12 92);
+  --tab-c: oklch(0.58 0.1 255);
+  --shelf: oklch(0.42 0.05 58);
+  --robot-dark: oklch(0.22 0.02 260);
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --beam: oklch(0.95 0.1 95 / 0.24);
+  --paper-rule: oklch(0.64 0.03 240);
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot: var(--info);
+  --robot-glint: color-mix(in oklab, var(--info) 55%, oklch(1 0 0));
+  --sleeve: oklch(0.8 0.04 215 / 0.45);
+  --sleeve-edge: oklch(0.92 0.02 215 / 0.6);
+  --lamp: oklch(0.97 0.11 95);
+}
+
+.art [data-lp] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-lp='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-lp='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-lp='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-lp='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-lp='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-lp='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-lp='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-lp='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
+}
+
+.art [data-lp='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
+}
+
+.art [data-lp='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
+}
+
+.art [data-lp='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
+}
+
+.art [data-lp='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.art [data-lp='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-lp='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-lp='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-lp='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: var(--scenery-window-glint);
+}
+
+.art [data-lp='halo'] {
+  fill: var(--halo);
+  stroke: var(--halo);
+}
+
+.art [data-lp='shelf-shade'] {
+  fill: var(--shelf-shade);
+  stroke: var(--shelf-shade);
+}
+
+.art [data-lp='shelf-lit'] {
+  fill: var(--shelf-lit);
+  stroke: var(--shelf-lit);
+}
+
+.art [data-lp='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-lp='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-lp='tab-a'] {
+  fill: var(--tab-a);
+  stroke: var(--tab-a);
+}
+
+.art [data-lp='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-lp='tab-b'] {
+  fill: var(--tab-b);
+  stroke: var(--tab-b);
+}
+
+.art [data-lp='tab-c'] {
+  fill: var(--tab-c);
+  stroke: var(--tab-c);
+}
+
+.art [data-lp='shelf'] {
+  fill: var(--shelf);
+  stroke: var(--shelf);
+}
+
+.art [data-lp='robot-dark'] {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.art [data-lp='robot-lit'] {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.art [data-lp='beam'] {
+  fill: var(--beam);
+  stroke: var(--beam);
+}
+
+.art [data-lp='sea-twilight-lit'] {
+  fill: var(--scenery-sea-twilight-lit);
+  stroke: var(--scenery-sea-twilight-lit);
+}
+
+.art [data-lp='paper-rule'] {
+  fill: var(--paper-rule);
+  stroke: var(--paper-rule);
+}
+
+.art [data-lp='robot-shade'] {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.art [data-lp='robot'] {
+  fill: var(--robot);
+  stroke: var(--robot);
+}
+
+.art [data-lp='robot-glint'] {
+  fill: var(--robot-glint);
+  stroke: var(--robot-glint);
+}
+
+.art [data-lp='sleeve'] {
+  fill: var(--sleeve);
+  stroke: var(--sleeve);
+}
+
+.art [data-lp='sleeve-edge'] {
+  fill: var(--sleeve-edge);
+  stroke: var(--sleeve-edge);
+}
+
+.art [data-lp='lamp'] {
+  fill: var(--lamp);
+  stroke: var(--lamp);
+}
+
+.halo,
+.beam {
+  pointer-events: none;
+}
+
+.halo {
+  opacity: 0;
+}
+
+.level {
+  position: relative;
+}
+
+/* The level's ring: drawn once, shown and hidden by opacity alone (decision 19). */
+.level::after {
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--primary);
+  border-radius: calc(var(--radius-xl) + 4px);
+  opacity: 0;
+  pointer-events: none;
+  content: '';
+}
+
+.level[data-level='extras']::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .halo[data-halo='index'] {
+    animation: halo-pass 1400ms ease-in-out 200ms both;
+  }
+
+  :global([data-zone='active']) .halo[data-halo='card'] {
+    animation: halo-pass 1400ms ease-in-out 1400ms both;
+  }
+
+  :global([data-zone='active']) .beam {
+    animation: lamp-on 600ms ease-out 2600ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='index']::after {
+    animation: ring-pass 1400ms ease-in-out 200ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='card']::after {
+    animation: ring-pass 1400ms ease-in-out 1400ms both;
+  }
+
+  :global([data-zone='active']) .level[data-level='extras']::after {
+    animation: ring-on 600ms ease-out 2600ms both;
+  }
+}
+
+@keyframes halo-pass {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  35%,
+  65% {
+    opacity: 1;
+  }
+}
+
+@keyframes lamp-on {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ring-pass {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  35%,
+  65% {
+    opacity: 1;
+  }
+}
+
+@keyframes ring-on {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "title": "Inside the skill",
+  "caption": "Domain knowledge can live inside a skill, kept apart from the steps until a step needs it.",
+  "disclosure": {
+    "lead": "This is progressive disclosure:",
+    "text": "the AI opens each supporting file only when a step needs it. <marker><link>See Slide 4</link></marker>."
+  },
+  "columns": {
+    "instructions": "Instructions",
+    "files": "Supporting files"
+  },
+  "key": {
+    "domain": {
+      "term": "Domain knowledge:",
+      "text": "true in every project, like a species guide."
+    },
+    "project": {
+      "term": "Project details:",
+      "text": "true for one, like today's depth."
+    }
+  },
+  "card": {
+    "label": "The skill's instructions",
+    "title": "Collect sediment sample"
+  },
+  "steps": {
+    "hover": "Hold the robot 2 m above the seabed.",
+    "check-camera": "Check the camera for loose sediment.",
+    "lower-arm": "Lower the arm.",
+    "identify": "Identify what you collected.",
+    "seal": "Seal the core tube.",
+    "label": "Label the sample."
+  },
+  "long": {
+    "text": "Wipe the rim first and check the cap's ring for grit.",
+    "more": "…12 more lines"
+  },
+  "pointers": {
+    "lower-arm": "Run the arm preset.",
+    "identify": "Read the species guide, starting with its contents.",
+    "label": "Fill in the label template."
+  },
+  "files": {
+    "arm": {
+      "kind": "Script",
+      "name": "Arm preset",
+      "hint": "runs a fixed motion"
+    },
+    "guide": {
+      "kind": "Reference file",
+      "name": "Species guide",
+      "hint": "opens on its contents"
+    },
+    "label": {
+      "kind": "Template",
+      "name": "Label template",
+      "hint": "filled in at step 6"
+    }
+  },
+  "guide": {
+    "contents": "Contents",
+    "chapters": {
+      "corals": "1 Corals",
+      "sponges": "2 Sponges",
+      "worms": "3 Worms and tubes",
+      "crustaceans": "4 Crustaceans",
+      "unknown": "5 Unknown finds"
+    },
+    "page": "p. {page}"
+  },
+  "rules": {
+    "head": "Two rules for long files",
+    "contents": "<marker>Long reference files start with a contents list, because the AI may only read the start.</marker>",
+    "long": "<marker>When the instructions get long, move the next paragraph into a reference file.</marker>"
+  },
+  "tree": "<marker>The skill’s folder, every file one level under SKILL.md</marker>",
+  "notes": {
+    "move-detail-out-of-skill-md-and-say-when-to-read-it": {
+      "header": "Move detail out of SKILL.md, and say when to read it",
+      "description": "\"Keep your main SKILL.md under 500 lines. Move detailed reference material to separate files\" [1]. The key is telling the agent when to load each file, for example \"Read references/api-errors.md if the API returns a non-200 status code\" [2].",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        }
+      }
+    },
+    "long-reference-files-start-with-a-contents-list": {
+      "header": "Long reference files start with a contents list",
+      "description": "\"For reference files longer than 100 lines, include a table of contents at the top. This ensures Claude can see the full scope of available information even when previewing with partial reads\" [1]. This is Anthropic's account of Claude's behaviour and no source measures its effect.",
+      "sources": {
+        "anthropic-skill-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        }
+      }
+    },
+    "references-stay-one-level-deep": {
+      "header": "References stay one level deep",
+      "description": "Claude \"might partially read files when they're referenced from other referenced files\", using commands such as head -100, so references stay one level deep from SKILL.md [1]. The standard states the rule without the reason [2].",
+      "sources": {
+        "anthropic-skill-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        },
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        }
+      }
+    },
+    "progressive-disclosure-as-anthropic-names-it": {
+      "header": "Progressive disclosure, as Anthropic names it",
+      "description": "Anthropic's docs say the filesystem-based design \"allows progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront\" [1]. Supporting files opened only at the step that needs them are the same idea as the three loading levels.",
+      "sources": {
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        }
+      }
+    }
+  },
+  "footer": {
+    "lead": "In the story:",
+    "analogy": "The card in its sleeve: each extra tied to the step that uses it.",
+    "chat": "<marker>When step 4 opens the species guide, its contents page alone tells the AI what else is inside.</marker>",
+    "coding": "<marker>Link every supporting file straight from <code>SKILL.md</code>, one level deep.</marker>"
+  },
+  "alt": {
+    "scene": "The procedure card in its sleeve on the control-room wall: six steps, step 4 lit. Step 3 points to a script, the arm preset; step 4 to a reference file, the species guide, which has slid out of the sleeve open on its contents page; step 6 to a template, the label template. Step 5 runs long and points to the rule for long instructions."
+  },
+  "voiceScript": {
+    "segments": {
+      "extras-by-step": {
+        "title": "Extras by step",
+        "keywords": "",
+        "script": "So what can safely live inside a skill? Domain knowledge, kept in supporting files and tied to the step that needs it. Step three, lower the arm, runs a script, the arm preset. Step four, identify what you collected, reads a reference file, the species guide, and step six, label the sample, fills in a template."
+      },
+      "the-long-step": {
+        "title": "The long step",
+        "keywords": "",
+        "script": "When one step's instructions grow long, move the next paragraph into a reference file and leave a pointer in the step, so the instructions stay short enough for the model to take in at once."
+      },
+      "contents-first": {
+        "title": "Contents first",
+        "keywords": "",
+        "script": "And start every long reference file with a contents list, because the model may only skim the top. When step four opens the species guide, its contents page alone tells the model what else is inside."
+      }
+    }
+  }
+}

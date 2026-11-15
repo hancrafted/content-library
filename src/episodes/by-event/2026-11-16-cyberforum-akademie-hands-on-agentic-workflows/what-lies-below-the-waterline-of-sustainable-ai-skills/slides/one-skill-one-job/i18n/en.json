@@ -1,0 +1,74 @@
+{
+  "title": "A project detail couples a skill to one project",
+  "caption": "A project detail written into a skill ties it to that one project.",
+  "sites": {
+    "four": "Site 4",
+    "seven": "Site 7"
+  },
+  "sameSkill": "the same skill, two dives",
+  "short": "80 m short",
+  "depth": "{metres} m",
+  "card": {
+    "title": "Collect sediment sample",
+    "steps": {
+      "check-gear": "1. Check arm and tubes",
+      "descend": "2. descend to 40 m",
+      "lower-arm": "3. Lower the arm",
+      "identify": "4. Identify the catch"
+    },
+    "scribble": "site 4"
+  },
+  "mistakes": {
+    "coupling": {
+      "term": "Coupling",
+      "question": "is it tied to one place?",
+      "head": "A project detail written into the skill",
+      "text": "<marker>True at site 4, wrong at site 7: the AI follows the skill to the letter, and the dive still fails.</marker>",
+      "coding": "<marker>A benchmark worked example: a template that hard-coded <code>.github/workflows/</code> beat a task that required <code>ci/</code>.</marker>"
+    }
+  },
+  "pointer": {
+    "lead": "Did you know?",
+    "head": "Code has a word for this: coupling.",
+    "text": "<marker>The fewer and simpler the connections between modules, the easier each is to understand (Stevens, Myers and Constantine, 1974). Written for code modules, applied to skills by analogy.</marker>"
+  },
+  "analogyLead": "In the story:",
+  "analogy": "At site 7 the seabed lies at 120 m; the card still says 40.",
+  "alt": {
+    "dives": "One skill card pinned above two dives. At site 4 the robot reaches the seabed at 40 m. At site 7 the seabed lies at 120 m, and the robot following the same card hangs at 40 m, 80 m short."
+  },
+  "notes": {
+    "coupling-as-first-written": {
+      "header": "Coupling, as first written",
+      "description": "\"The fewer and simpler the connections between modules, the easier it is to understand each module without reference to other modules\" [1]. It is a design principle for code modules, applied to skills by analogy.",
+      "sources": {
+        "structured-design": {
+          "title": "Stevens, Myers and Constantine, Structured design"
+        }
+      }
+    },
+    "project-details-hard-coded-into-a-skill-can-override-the-task": {
+      "header": "Project details hard-coded into a skill can override the task",
+      "description": "In a benchmark of 98 public skills, a generic workflow template made the agent write files to .github/workflows/ when the task required ci/; the authors advise abstract guidance over templates with hard-coded paths [1]. It is one worked example, not a test of this picture.",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "scribbled-in": {
+        "title": "Scribbled in",
+        "keywords": "",
+        "script": "Take a sampling skill with one project detail written into it: \"descend to 40 metres\", true at site 4. At site 7 the seabed lies at 120, and the robot hangs uselessly at 40 while the model follows the skill perfectly. (pause) The skill was followed to the letter, and the dive still failed."
+      },
+      "coupling": {
+        "title": "Coupling",
+        "keywords": "",
+        "script": "Engineers have a word for this mistake: coupling. The 40 metres written into the skill ties it to one place. For a skill it comes down to this: keep project details out, so the skill has no ties to one project."
+      }
+    }
+  }
+}

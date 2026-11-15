@@ -1,0 +1,140 @@
+{
+  "title": "Zwei Wege, einen Skill aufzurufen",
+  "caption": "Du rufst einen Skill beim Namen auf, oder die KI wählt ihn über seine Beschreibung.",
+  "analogy": {
+    "label": "In der Geschichte:",
+    "text": "Verlang die Karte, oder lass den Piloten sie im Register finden."
+  },
+  "cardsLabel": "Zwei Wege, einen Skill aufzurufen",
+  "byName": {
+    "title": "Beim Namen aufgerufen",
+    "who": "Du wählst",
+    "text": "Du nennst den Skill, und die KI öffnet genau diesen Skill. Kein Raten.",
+    "chatLead": "In Chat-Apps nennst Du den Skill:",
+    "codingLead": "Am Anfang Deiner Nachricht, je nach App:",
+    "claude": "nenn ihn in Deiner Nachricht",
+    "skillsMenu": "(oder wähl ihn unter /skills)"
+  },
+  "byDescription": {
+    "title": "Über die Beschreibung gewählt",
+    "who": "die KI wählt",
+    "text": "Du sagst nichts über den Skill. Die KI gleicht die Aufgabe mit jeder Beschreibung ab; Name und Beschreibung, die Du geschrieben hast, sind ihre einzigen Hinweise.",
+    "chatLead": "Eine schwache Beschreibung, und der Skill bleibt ungenutzt, egal wie gut seine Anweisungen sind.",
+    "codingTask": "Aufgabe: „Wir sind am neuen Standort. Hol uns eine Probe vom Meeresboden.“ passt zu genau einer <code>description:</code>-Zeile."
+  },
+  "index": {
+    "title": "Skill-Register",
+    "subtitle": "das Register des Handbuchs",
+    "coding": "description: × 3 Skills",
+    "entries": {
+      "0": {
+        "name": "Sedimentprobe nehmen",
+        "useWhen": "Nutzen, wenn wir einen neuen Standort erreichen und eine Probe vom Meeresboden brauchen."
+      },
+      "1": {
+        "name": "Wassersäule messen",
+        "useWhen": "Nutzen, wenn Temperatur und Salzgehalt nach Tiefe gemessen werden."
+      },
+      "2": {
+        "name": "Kamerafahrt starten",
+        "useWhen": "Nutzen, wenn ein neues Stück Meeresboden kartiert wird."
+      }
+    }
+  },
+  "stat": {
+    "figure": "56 % · nie geöffnet",
+    "text": "(Vercel, ein Next.js-Doku-Skill)",
+    "chatScope": "Ein Eval eines Anbieters, ein Doku-Skill: eine Illustration, keine Regel für alle Skills.",
+    "codingScope": "Ausdrücklich angewiesen, ihn zu nutzen, öffnete der Agent ihn in 95 % oder mehr. Nicht „Skills im Allgemeinen“, wie Googles Day 3 es nacherzählt."
+  },
+  "footer": {
+    "chat": "„Slash-Befehl“ ist Wortwahl von Claude Code und Copilot CLI; „beim Namen“ gilt in jeder App.",
+    "coding": "Gemini CLI fügt einen Schritt hinzu: Der Agent fragt, ob er einen Skill aktivieren darf, und Du stimmst zu, bevor er lädt."
+  },
+  "art": {
+    "say": "„Sedimentprobe nehmen, bitte.“",
+    "openedByName": "beim Namen geöffnet",
+    "taskLabel": "die Aufgabe, kein Skill genannt",
+    "task": "„Hol uns eine Probe vom Meeresboden.“",
+    "you": "Du",
+    "model": "die KI"
+  },
+  "alt": {
+    "room": "Der Kontrollraum, in zwei Hälften geteilt. Links, beim Namen aufgerufen: Du, der Kapitän, bittest um die Sedimentprobe, und der Pilot zieht genau diese eine Karte aus dem Handbuch. Rechts, über die Beschreibung gewählt: Niemand nennt einen Skill; der Pilot liest das Register des Handbuchs, und die Markierung landet auf der Zeile Sedimentprobe nehmen."
+  },
+  "notes": {
+    "calling-a-skill-by-name-differs-by-app": {
+      "header": "Einen Skill beim Namen aufrufen, je nach App anders",
+      "description": "Claude Code startet eine Nachricht mit /skill-name [1]; Codex nutzt $ oder /skills [2]; ChatGPT und die Gemini-App nutzen @ [3]; Copilot CLI setzt einen Schrägstrich vor den Namen [4]. Googles eigene Hilfeseiten widersprechen sich für die Gemini-App bei / und @ [5][6], deshalb zeigt die Slide @ und die Notiz behält /. „Slash-Befehl“ ist Wortwahl von Claude Code und Copilot CLI; „beim Namen“ gilt für alle.",
+      "sources": {
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code docs)"
+        },
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex docs)"
+        },
+        "openai-academy-skills": {
+          "title": "OpenAI Academy, Skills"
+        },
+        "github-copilot-cli-skills": {
+          "title": "GitHub, Adding agent skills for GitHub Copilot CLI"
+        },
+        "google-gemini-apps-workflows": {
+          "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)"
+        },
+        "google-gems-to-skills": {
+          "title": "Google, About the transition from Gems to skills (Gemini Apps Help)"
+        }
+      }
+    },
+    "the-model-picks-a-skill-by-its-description": {
+      "header": "Das Modell wählt einen Skill über seine Beschreibung",
+      "description": "Nennst Du keinen Skill, gleicht das Modell die Aufgabe mit der Beschreibung ab. Gemini CLI fügt einen Schritt hinzu: Das Modell bittet darum, einen Skill zu aktivieren, und der Nutzer stimmt zu, bevor er eingefügt wird [1].",
+      "sources": {
+        "google-gemini-cli-skills": {
+          "title": "Google, Agent Skills in Gemini CLI"
+        }
+      }
+    },
+    "skills-left-unused-what-the-56-measures": {
+      "header": "Ungenutzte Skills: was die 56 % messen",
+      "description": "„In 56 % der Eval-Fälle wurde der Skill nie aufgerufen“: gemeint ist der Doku-Skill in Vercels Standardkonfiguration für die APIs von Next.js 16, nicht alle Skills im Allgemeinen [1]. Ausdrückliche Anweisungen, ihn zu nutzen, hoben den Aufruf auf 95 % oder mehr und die Erfolgsquote von 53 % auf 79 % [1]. In der Standardkonfiguration lag der Skill insgesamt gleichauf mit der Basislinie ohne Skill bei 53 % [1]. Ein Eval eines Anbieters, kein genanntes Modell, keine Wiederholung: nimm es als Illustration.",
+      "sources": {
+        "vercel-agents-md-vs-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "unused-skills-in-googles-day-3-two-misreadings-of-vercel": {
+      "header": "Ungenutzte Skills in Googles Day 3: zwei Fehllesungen von Vercel",
+      "description": "Googles Day 3 schreibt von „a 56% non-invocation rate for skills expected to activate consistently“ [1]. Das macht aus einem Next.js-Doku-Skill Skills im Allgemeinen und nennt Vercels Eval-Suite eine „production analysis“. Es heißt dort auch „a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%“ [1]. In Vercels Beitrag ist das der Standard-Skill gegen die Basislinie, nur im Test-Teilwert, kein entkernter Skill, und die Gesamtquoten lagen gleich bei 53 % [2]. Vercels eigene Wortwahl gilt. Day 3 ist Googles Anbieterleitfaden zum Einsatz von Skills, kein Beleg, dass Skills ungenutzt bleiben.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "vercel-agents-md-vs-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "by-name": {
+        "title": "Beim Namen",
+        "keywords": "",
+        "script": "Es gibt zwei Wege, wie ein Skill genutzt wird. Der erste ist der einfache: Du rufst ihn beim Namen auf, so wie Du dem Piloten sagen würdest „Sedimentprobe nehmen, bitte“, und das Modell öffnet genau diesen Skill. Kein Raten."
+      },
+      "by-description": {
+        "title": "Über die Beschreibung",
+        "keywords": "",
+        "script": "Beim zweiten sagst Du nichts über den Skill. Das Modell liest die Beschreibungen, während es arbeitet, und entscheidet selbst, dass diese Aufgabe einen braucht. Seine einzigen Hinweise sind Name und Beschreibung, die Du geschrieben hast. Ist die Beschreibung schwach, bleibt der Skill ungenutzt, egal wie gut seine Anweisungen sind."
+      },
+      "unused-is-real": {
+        "title": "Ungenutzt ist echt",
+        "keywords": "",
+        "script": "Und dass Skills ungenutzt bleiben, ist keine Theorie: Es wurde gemessen, allerdings nur im Test eines Anbieters mit einem Doku-Skill, also halte den Befund locker. Die Frage, die bleiben sollte, vor jedem Skill, den Du schreibst: Würde das Modell ihn jemals wählen?"
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "title": "The model changes, the skill doesn't",
+  "caption": "A model update changes who reads your skill, so a skill that worked yesterday can behave differently today.",
+  "analogy": "Same card, two dives, two depths.",
+  "story": "In the story:",
+  "card": {
+    "label": "The skill, unchanged",
+    "same": "same words",
+    "name": "Collect sediment sample",
+    "description": "Use when we reach a new site and need a sample from the seabed.",
+    "step": "2. Descend slowly to the seabed."
+  },
+  "halves": {
+    "update": {
+      "term": "Model update",
+      "text": "Your provider ships a new version of the model. The skill keeps the same words, and the same instruction now gives a different result.",
+      "coding": "The same <code>collect-sediment-sample/SKILL.md</code>, a new model version reading it.",
+      "changed": "model",
+      "changedValue": "new version"
+    },
+    "switch": {
+      "term": "Different model or agent",
+      "text": "A colleague runs your skill in another app or agent, even on the same model, and it reads the same words its own way.",
+      "coding": "The same <code>collect-sediment-sample/SKILL.md</code>, run in Claude Code and in Codex: another agent, even on the same model.",
+      "changed": "agent, model",
+      "changedValue": "another one"
+    }
+  },
+  "unchanged": "unchanged",
+  "art": {
+    "short": "today: stops short",
+    "silt": "today: into the silt",
+    "yesterday": "yesterday"
+  },
+  "lehman": {
+    "didYouKnow": "Did you know?",
+    "term": "Lehman's laws",
+    "text": "Software in use must keep being adapted, or it becomes progressively less satisfactory. Here the skill stays put and the world around it moves.",
+    "dispute": "Disputed: of the laws, only continuing change and continuing growth held in every study reviewed."
+  },
+  "reader": {
+    "title": "Same words, a new reader",
+    "chat": "Anthropic's prompting guide has model-specific sections on where \"a single model behaves differently\"; OpenAI notes that prompts optimized for other models \"may not immediately work\".",
+    "coding": "Your SKILL.md is read as text by whichever model runs it. Anthropic's guide shows \"what to change in your prompt\" per model; OpenAI: prompts optimized for other models \"may not immediately work\"."
+  },
+  "analogyOnly": "Analogy only: the pilot keeps his piloting and forgets the days. A skill file is read as text, closer to a written note than to a trained skill.",
+  "alt": {
+    "update": "Your pilot, back from his school's new course, reads the same card. The robot stops short in the deep water; yesterday's dive, drawn dashed, reached the seabed.",
+    "switch": "A pilot from another school reads the same card. The robot goes straight into the silt; yesterday's dive, drawn dashed, stopped just above the seabed."
+  },
+  "notes": {
+    "lehmans-laws-and-their-limits": {
+      "header": "Skills in a changing world: Lehman's first two laws, and their limits",
+      "description": "\"E-type systems must be continually adapted else they become progressively less satisfactory\"; complexity increases \"unless work is done to maintain or reduce it\" [1]. The laws are disputed: only continuing change and continuing growth were validated by all studies reviewed [2], and Linux grew super-linearly [3].",
+      "sources": {
+        "lehman-ramil-wernick-laws": {
+          "title": "Lehman, Ramil and Wernick, Metrics and Laws of Software Evolution: The Nineties View"
+        },
+        "herraiz-laws-review": {
+          "title": "Herraiz, Rodriguez, Robles and Gonzalez-Barahona, The evolution of the laws of software evolution: a discussion based on a systematic literature review"
+        },
+        "godfrey-tu-linux": { "title": "Godfrey and Tu, Evolution in Open Source Software: A Case Study" }
+      }
+    },
+    "each-model-reads-instructions-differently": {
+      "header": "Each model reads the same instructions differently",
+      "description": "Anthropic's guide has model-specific sections on where \"a single model behaves differently and what to change in your prompt\" [1]; OpenAI notes that prompts optimized for other models \"may not immediately work\" [2].",
+      "sources": {
+        "anthropic-prompting-best-practices": { "title": "Anthropic, Prompting best practices" },
+        "openai-gpt-4-1-prompting-guide": { "title": "OpenAI, GPT-4.1 Prompting Guide" }
+      }
+    },
+    "model-memory-and-patient-hm": {
+      "header": "The model's memory and patient H.M.: an analogy that breaks at the skill",
+      "description": "H.M. learned mirror drawing and kept it across 3 days while remembering none of the sessions [1], because skills are stored by a memory system outside the damaged region [2]. For a model this maps only as analogy: trained weights fit the skill side, but a skill file is read as text, which makes it closer to a declarative note. That mapping is inference; Milner 1962 was read only through Squire's account.",
+      "sources": {
+        "squire-legacy-of-hm": { "title": "Squire, The Legacy of Patient H.M. for Neuroscience" },
+        "squire-memory-systems": { "title": "Squire, Conscious and Unconscious Memory Systems" }
+      }
+    },
+    "the-agent-changes-the-skill-too": {
+      "header": "The agent changes the skill too, even on the same model",
+      "description": "in a benchmark of 98 public skills, 40 change sign between two harnesses running the same model, and the authors advise evaluating a skill \"with the model, agent, and repositories in which it will be deployed\" [1].",
+      "sources": {
+        "swe-skills-bench": {
+          "title": "Han et al., SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "not-the-only-pilot": {
+        "title": "Not the only pilot",
+        "keywords": "",
+        "script": "There is one more thing that changes under your skill, and you do not control it: the model that reads it. Every AI model has the condition we started with, and each AI provider trains its own, the way each pilot school trains its own pilots. So the reader of your skill is never fixed."
+      },
+      "update-and-switch": {
+        "title": "Update and switch",
+        "keywords": "",
+        "script": "Two things can change the reader. A model update: your provider ships a new version, your skill keeps the same words, but an instruction like \"descend slowly\" now gives a different dive. A different model or agent: a colleague runs your skill in another app, and it reads the same words its own way. The skill did not change, the reader did, and engineers saw this long ago in software: what is in use has to keep changing, or it gets worse."
+      },
+      "hand-over-the-verdict": {
+        "title": "Hand over the verdict",
+        "keywords": "",
+        "script": "So here is my question to you: which of your skills would you re-check after the next model update? If you own one, would you trust it to behave the same way tomorrow?"
+      }
+    }
+  }
+}

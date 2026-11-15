@@ -1,0 +1,196 @@
+/*
+ * The control room's own tones, lifted from Spec Option 20b (feedback 3, decision 46): the faceted wall and floor, the
+ * porthole onto the Midnight water, the shelf of manuals, and the fleet manual's green covers, faceted page, binder
+ * rings and lectern post (the post in steel, mixed from a neutral token). Raw colours live only here, each with
+ * its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours
+ * meet without a seam; the translucent ones are not, so they do not double at their edges.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.art {
+  --art-glint: oklch(1 0 0);
+  --art-shelf: oklch(0.55 0.06 60);
+  --art-shelf-shade: oklch(0.42 0.05 55);
+  --art-spine-a: oklch(0.55 0.09 212);
+  --art-drop: oklch(0.12 0.03 265 / 0.35);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-book: oklch(0.5 0.1 155);
+  --art-spine-b: oklch(0.62 0.12 85);
+  --art-spine-c: oklch(0.5 0.09 252);
+  --art-book-lit: oklch(0.6 0.1 150);
+  --art-post-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
+  --art-post-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-book-shade: oklch(0.4 0.09 160);
+  --art-paper: oklch(0.972 0.009 88);
+  --art-paper-shade: oklch(0.935 0.014 84);
+  --art-paper-edge: oklch(0.86 0.02 80);
+  --art-ring-shade: oklch(0.6 0.015 250);
+  --art-ring: oklch(0.82 0.01 250);
+}
+
+:global(.dark) .art {
+  --art-glint: oklch(0.98 0.01 230);
+  --art-shelf: oklch(0.45 0.05 60);
+  --art-shelf-shade: oklch(0.34 0.04 55);
+  --art-spine-a: oklch(0.47 0.08 214);
+  --art-drop: oklch(0.05 0.02 265 / 0.5);
+  --art-paper-lit: oklch(0.9 0.008 90);
+  --art-book: oklch(0.43 0.09 155);
+  --art-spine-b: oklch(0.55 0.11 85);
+  --art-spine-c: oklch(0.42 0.08 254);
+  --art-book-lit: oklch(0.52 0.09 150);
+  --art-post-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
+  --art-post-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-book-shade: oklch(0.34 0.08 160);
+  --art-paper: oklch(0.86 0.012 88);
+  --art-paper-shade: oklch(0.8 0.016 84);
+  --art-paper-edge: oklch(0.7 0.02 80);
+  --art-ring-shade: oklch(0.5 0.015 250);
+  --art-ring: oklch(0.7 0.01 250);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-tone='sea-midnight'] {
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
+}
+
+.art [data-tone='sea-midnight-lit'] {
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
+}
+
+.art [data-tone='bubble'] {
+  fill: var(--scenery-bubble);
+  stroke: none;
+}
+
+.art [data-tone='glint'] {
+  fill: var(--art-glint);
+  stroke: var(--art-glint);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-tone='shelf'] {
+  fill: var(--art-shelf);
+  stroke: var(--art-shelf);
+}
+
+.art [data-tone='shelf-shade'] {
+  fill: var(--art-shelf-shade);
+  stroke: var(--art-shelf-shade);
+}
+
+.art [data-tone='spine-a'] {
+  fill: var(--art-spine-a);
+  stroke: var(--art-spine-a);
+}
+
+.art [data-tone='drop'] {
+  fill: var(--art-drop);
+  stroke: none;
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='book'] {
+  fill: var(--art-book);
+  stroke: var(--art-book);
+}
+
+.art [data-tone='spine-b'] {
+  fill: var(--art-spine-b);
+  stroke: var(--art-spine-b);
+}
+
+.art [data-tone='spine-c'] {
+  fill: var(--art-spine-c);
+  stroke: var(--art-spine-c);
+}
+
+.art [data-tone='book-lit'] {
+  fill: var(--art-book-lit);
+  stroke: var(--art-book-lit);
+}
+
+.art [data-tone='post-shade'] {
+  fill: var(--art-post-shade);
+  stroke: var(--art-post-shade);
+}
+
+.art [data-tone='post-lit'] {
+  fill: var(--art-post-lit);
+  stroke: var(--art-post-lit);
+}
+
+.art [data-tone='book-shade'] {
+  fill: var(--art-book-shade);
+  stroke: var(--art-book-shade);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--art-paper-shade);
+  stroke: var(--art-paper-shade);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--art-paper-edge);
+  stroke: var(--art-paper-edge);
+}
+
+.art [data-tone='ring-shade'] {
+  fill: var(--art-ring-shade);
+  stroke: var(--art-ring-shade);
+}
+
+.art [data-tone='ring'] {
+  fill: var(--art-ring);
+  stroke: var(--art-ring);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}

@@ -1,0 +1,154 @@
+{
+  "title": "grill-with-docs keeps context beside the skill",
+  "caption": "The interview stays the same; what each run settles about your project is written beside it, for the next run to read. Based on Matt Pocock's grill-with-docs skill, from his skills repo (github.com/mattpocock/skills).",
+  "stays": "Stays the same every run",
+  "beside": "Beside the skill",
+  "outer": {
+    "name": "grill-with-docs",
+    "desc": "Skill · runs two skills: the grilling interview and domain-modeling"
+  },
+  "sheets": {
+    "grilling": {
+      "kind": "Skill · the interview",
+      "steps": {
+        "0": "Map the plan as a tree of decisions.",
+        "1": "Ask every question you can ask now, in one round.",
+        "2": "Recommend an answer to each.",
+        "3": "Wait for your answers, then go on."
+      }
+    },
+    "domain": {
+      "kind": "Skill · domain-modeling",
+      "steps": {
+        "0": "Check words against the glossary.",
+        "1": "Sharpen fuzzy words.",
+        "2": "Write terms down as they settle.",
+        "3": "Record hard-to-reverse decisions."
+      }
+    }
+  },
+  "arrows": {
+    "runs": "runs",
+    "again": "runs again, same steps",
+    "current": "Monday's files carried into Thursday's run"
+  },
+  "runs": {
+    "1": {
+      "label": "Run 1",
+      "lead": "Monday · writes its files beside the skill",
+      "coding": "<code>{command}</code> writes <code>{glossary}</code>, <code>{decisions}</code>"
+    },
+    "2": {
+      "label": "Run 2",
+      "lead": "Thursday · reads Monday's files first",
+      "coding": "<code>{command}</code> reads them first, then asks"
+    }
+  },
+  "files": {
+    "glossary": {
+      "kind": "Glossary",
+      "heading": "Project terms",
+      "added": "+1 term"
+    },
+    "decisions": {
+      "kind": "Decisions",
+      "entries": {
+        "0": "1. Take the depth from the dive plan",
+        "1": "2. Label each core by its site"
+      }
+    }
+  },
+  "terms": {
+    "site": {
+      "name": "Site",
+      "text": "One sampling point on the seabed."
+    },
+    "divePlan": {
+      "name": "Dive plan",
+      "text": "Today's sites and their depths."
+    },
+    "core": {
+      "name": "Core",
+      "text": "A sediment sample cut out whole.",
+      "avoid": "Avoid: Plug"
+    }
+  },
+  "coding": {
+    "outer": "Call the Skill tool twice, for \"grilling\" and \"domain-modeling\".",
+    "grilling": {
+      "0": "Map this as a design tree.",
+      "1": "Ask the whole frontier in one round …",
+      "2": "… give your recommended answer.",
+      "3": "Then wait for the user's answers …"
+    },
+    "domain": {
+      "0": "### Challenge against the glossary",
+      "1": "### Sharpen fuzzy language",
+      "2": "### Update GLOSSARY.md inline",
+      "3": "### Offer ADRs sparingly"
+    },
+    "glossaryHeading": "# Glossary",
+    "terms": {
+      "site": {
+        "name": "Site",
+        "text": "One sampling point on the seabed."
+      },
+      "divePlan": {
+        "name": "Dive plan",
+        "text": "Today's sites and their depths."
+      },
+      "core": {
+        "name": "Core",
+        "text": "A sediment sample cut out whole.",
+        "avoid": "Avoid: Plug"
+      }
+    }
+  },
+  "story": {
+    "label": "In the story:",
+    "text": "skill = the card, files = the dive plan"
+  },
+  "closing": {
+    "chip": "One more thing",
+    "text": "A skill can also run other skills: grill-with-docs runs grilling and domain-modeling. There is no settled name for that yet."
+  },
+  "alt": {
+    "scene": "In twilight water, one sheet, grill-with-docs, holds the two skills it runs: the grilling interview and domain-modeling, labelled \"Stays the same every run\". Beneath it two runs, Monday and Thursday, each write a glossary and decision records beside the skill. A current carries Monday's files into Thursday's run, and Thursday's glossary is one term longer: Core."
+  },
+  "notes": {
+    "project-context-written-beside-the-skill": {
+      "header": "Project context written beside the skill, read next run",
+      "description": "Anthropic says models, like people who use \"file systems, inboxes, and bookmarks\", do well with notes kept outside the context window [1], and a skill should teach an approach while reading instance details from files [2]. The grill-with-docs files are this repository's own copy of Matt Pocock's skill [3], not a research source. The Slide shows grill-with-docs only; the grill-me skill is not shown.",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Anthropic Engineering, Effective context engineering for AI agents"
+        },
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        },
+        "pocock-skills": {
+          "title": "Pocock, skills (GitHub repository; skills/engineering/grill-with-docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-interview-is-the-card": {
+        "title": "The interview is the card",
+        "keywords": "",
+        "script": "Let me show you inside and beside together, on real files instead of the dive. This is grill-with-docs, a skill by Matt Pocock that I use, and it runs an interview, which is the procedure. It stays the same every time."
+      },
+      "follow-the-arrow": {
+        "title": "Follow the arrow",
+        "keywords": "",
+        "script": "While it runs, grill-with-docs writes files beside itself, a glossary and decision records, and the next run checks your words against them. The skill stays the same, and what it learned about your project waits beside it."
+      },
+      "skills-can-run-skills": {
+        "title": "Skills can run skills",
+        "keywords": "",
+        "script": "One last thing: a skill can also run other skills: grill-with-docs runs one called grilling and another called domain-modeling. There is no settled name for that yet, and I'll leave it there."
+      }
+    }
+  }
+}

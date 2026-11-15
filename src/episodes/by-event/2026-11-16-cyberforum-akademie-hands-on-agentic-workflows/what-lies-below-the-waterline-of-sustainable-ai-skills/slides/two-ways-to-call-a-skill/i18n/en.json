@@ -1,0 +1,140 @@
+{
+  "title": "Two ways to call a skill",
+  "caption": "You call a skill by name, or the AI picks it from its description.",
+  "analogy": {
+    "label": "In the story:",
+    "text": "Ask for the card, or let the pilot find it in the index."
+  },
+  "cardsLabel": "Two ways to call a skill",
+  "byName": {
+    "title": "Called by name",
+    "who": "you choose",
+    "text": "You name the skill, and the AI opens that skill. No guessing.",
+    "chatLead": "In chat apps, name the skill:",
+    "codingLead": "At the start of your message, by app:",
+    "claude": "name it in your message",
+    "skillsMenu": "(or pick it from /skills)"
+  },
+  "byDescription": {
+    "title": "Picked from its description",
+    "who": "the AI chooses",
+    "text": "You say nothing about the skill. The AI matches the task to each description; the name and description you wrote are its only clues.",
+    "chatLead": "A poor description, and the skill stays unused, however good its instructions are.",
+    "codingTask": "Task: “We're at the new site. Get us a sample from the seabed.” matches one <code>description:</code> line."
+  },
+  "index": {
+    "title": "Skill index",
+    "subtitle": "the manual's index",
+    "coding": "description: × 3 skills",
+    "entries": {
+      "0": {
+        "name": "Collect sediment sample",
+        "useWhen": "Use when we reach a new site and need a sample from the seabed."
+      },
+      "1": {
+        "name": "Measure water column",
+        "useWhen": "Use when measuring temperature and salt by depth."
+      },
+      "2": {
+        "name": "Run camera survey",
+        "useWhen": "Use when mapping a new stretch of seabed."
+      }
+    }
+  },
+  "stat": {
+    "figure": "56% · never opened",
+    "text": "(Vercel, one Next.js docs skill)",
+    "chatScope": "One vendor's eval, one documentation skill: an illustration, not a rule for all skills.",
+    "codingScope": "Told explicitly to use it, the agent opened it in 95% or more. Not “skills in general”, as Google's Day 3 retells it."
+  },
+  "footer": {
+    "chat": "“Slash command” is Claude Code and Copilot CLI wording; “by name” holds in every app.",
+    "coding": "Gemini CLI adds a step: the agent asks to activate a skill, and you consent before it loads."
+  },
+  "art": {
+    "say": "“Collect sediment sample, please.”",
+    "openedByName": "opened by name",
+    "taskLabel": "the task, no skill named",
+    "task": "“Get us a sample from the seabed.”",
+    "you": "you",
+    "model": "the AI"
+  },
+  "alt": {
+    "room": "The control room split in two. Left, called by name: you, the captain, ask for the sediment sample, and the pilot pulls that one card out of the manual. Right, picked from its description: nobody names a skill; the pilot reads the manual's index, and the highlight lands on the Collect sediment sample line."
+  },
+  "notes": {
+    "calling-a-skill-by-name-differs-by-app": {
+      "header": "Calling a skill by name differs by app",
+      "description": "Claude Code runs /skill-name at the start of a message [1]; Codex uses $ or /skills [2]; ChatGPT and the Gemini app use @ [3]; Copilot CLI uses a slash before the name [4]. Gemini's own help pages disagree on / versus @ for the Gemini app [5][6], so the Slide shows @ and the note keeps /. “Slash command” is Claude Code and Copilot CLI wording; “by name” holds for all.",
+      "sources": {
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code docs)"
+        },
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex docs)"
+        },
+        "openai-academy-skills": {
+          "title": "OpenAI Academy, Skills"
+        },
+        "github-copilot-cli-skills": {
+          "title": "GitHub, Adding agent skills for GitHub Copilot CLI"
+        },
+        "google-gemini-apps-workflows": {
+          "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)"
+        },
+        "google-gems-to-skills": {
+          "title": "Google, About the transition from Gems to skills (Gemini Apps Help)"
+        }
+      }
+    },
+    "the-model-picks-a-skill-by-its-description": {
+      "header": "The model picks a skill by its description",
+      "description": "Unless you name a skill, the model matches the task to the description. Gemini CLI adds a step: the model asks to activate a skill and the user consents before it is injected [1].",
+      "sources": {
+        "google-gemini-cli-skills": {
+          "title": "Google, Agent Skills in Gemini CLI"
+        }
+      }
+    },
+    "skills-left-unused-what-the-56-measures": {
+      "header": "Skills left unused: what the 56% measures",
+      "description": "“In 56% of eval cases, the skill was never invoked”: the documentation skill in Vercel's default configuration for Next.js 16 APIs, not all skills in general [1]. Explicit instructions to use it raised invocation to 95% or more, and the pass rate from 53% to 79% [1]. In the default configuration the skill tied the no-skill baseline overall at 53% [1]. One vendor's eval, no named model, no replication, so treat it as an illustration.",
+      "sources": {
+        "vercel-agents-md-vs-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    },
+    "unused-skills-in-googles-day-3-two-misreadings-of-vercel": {
+      "header": "Unused skills in Google's Day 3: two misreadings of Vercel",
+      "description": "Google's Day 3 writes “a 56% non-invocation rate for skills expected to activate consistently” [1]. That turns one Next.js docs skill into skills in general, and calls Vercel's eval suite a “production analysis”. It also says “a skill stripped of its instructions scored 58%, while the agent without the skill scored 63%” [1]. In Vercel's post that is the default skill against the baseline on the test sub-score alone, not a stripped skill, and overall pass rates were equal at 53% [2]. Vercel's own wording wins. Day 3 is Google's vendor guidance on how to use skills, not evidence that skills go unused.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "vercel-agents-md-vs-skills": {
+          "title": "Jude Gao (Vercel), AGENTS.md outperforms skills in our agent evals"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "by-name": {
+        "title": "By name",
+        "keywords": "",
+        "script": "There are two ways a skill gets used. The first is the simple one: you call it by name, the way you would tell the pilot “Collect sediment sample, please”, and the model opens that skill. No guessing involved."
+      },
+      "by-description": {
+        "title": "By description",
+        "keywords": "",
+        "script": "In the second you say nothing about the skill. The model reads the descriptions while it works and decides for itself that this task needs one. Its only clues are the name and description you wrote, so if the description is poor, the skill stays unused, however good its instructions are."
+      },
+      "unused-is-real": {
+        "title": "Unused is real",
+        "keywords": "",
+        "script": "And skills going unused is not a theory: it has been measured, though only in one vendor's test of one documentation skill, so hold the finding loosely. The question it should leave you with, in front of every skill you write, is whether the model would ever pick it."
+      }
+    }
+  }
+}

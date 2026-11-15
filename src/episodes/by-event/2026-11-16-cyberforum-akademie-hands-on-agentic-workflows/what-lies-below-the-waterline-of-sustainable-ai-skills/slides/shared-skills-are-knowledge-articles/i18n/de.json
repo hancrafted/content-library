@@ -1,0 +1,110 @@
+{
+  "title": "Geteilte Skills sind Wissensartikel",
+  "caption": "Ein geteilter Skill braucht einen Owner, eine Version und ein Prüfdatum, wie es Anthropics Leitfaden für Unternehmen für jeden Skill verlangt.",
+  "analogy": "Deine Karte im Notizbuch, und dieselbe Karte im Flottenhandbuch des Instituts, wie ein Wissensartikel in einer Firma.",
+  "pills": {
+    "personal": "Persönlicher Skill",
+    "shared": "Geteilter Skill"
+  },
+  "personalSub": "kein Kopf, nur du nutzt ihn",
+  "controlBlock": "Kontrollblock",
+  "skill": {
+    "name": "Sedimentprobe nehmen",
+    "description": "Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.",
+    "step": "1 Den Roboter 2 m über dem Meeresboden halten …"
+  },
+  "fields": {
+    "owner": {
+      "key": "Owner",
+      "value": "Laborteam",
+      "job": "Wer ihn repariert, wenn er bricht, und wen man fragt, wenn etwas schiefgeht.",
+      "source": "„Team or individual responsible for maintenance“, im Registereintrag pro Skill bei Anthropic."
+    },
+    "version": {
+      "key": "Version",
+      "value": "1.3",
+      "job": "Eine Änderung eines Autors ändert, was die KI für alle tut, die ihn nutzen."
+    },
+    "review": {
+      "key": "Nächste Prüfung",
+      "value": "März",
+      "job": "Ein Datum für die nächste Prüfung.",
+      "source": "Anthropic: „Skill authors should not be their own reviewers.“"
+    }
+  },
+  "who": {
+    "yours": {
+      "chat": "Deine KI",
+      "coding": "Dein Agent"
+    },
+    "colleague": {
+      "chat": "Die KI einer Kollegin",
+      "coding": "Der Agent einer Kollegin"
+    },
+    "otherTeam": {
+      "chat": "Die KI eines anderen Teams",
+      "coding": "Der Agent eines anderen Teams"
+    }
+  },
+  "runs": "nutzt Version",
+  "personalNote": "Persönliche Skills brauchen das erst, wenn du sie teilst.",
+  "thirdStep": "Dritter Schritt: Bevor du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Owner.",
+  "formatNote": "Das Agent-Skills-Format hat kein Feld für Owner, Version oder Prüfdatum; seine optionale <code>metadata</code>-Map hält sie per Konvention.",
+  "footer": {
+    "story": "In der Geschichte:"
+  },
+  "alt": {
+    "scene": "Der Kontrollraum in der Mitternachtszone. Links hält die Kapitänin ihr eigenes Notizbuch: ein persönlicher Skill, ohne Kopf, nur sie nutzt ihn. In der Mitte liegt das Flottenhandbuch aufgeschlagen auf einem Pult unter dem Regal des Instituts, derselbe Skill auf seiner Seite, mit einem Kontrollblock darüber: Owner Laborteam, Version 1.3, nächste Prüfung im März. Gepunktete Linien führen von der Seite zu drei KIs an ihren Konsolen, deiner, der einer Kollegin und der eines anderen Teams, jede mit Version 1.3."
+  },
+  "notes": {
+    "a-skill-registry-entry": {
+      "header": "Ein Registereintrag pro Skill",
+      "description": "Anthropics Leitfaden für Unternehmen empfiehlt einen Registereintrag pro Skill mit Zweck, Owner („Team or individual responsible for maintenance“), Version, Abhängigkeiten und Evaluationsstatus samt Datum der letzten Evaluation [1].",
+      "sources": {
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    },
+    "a-skill-review-date-is-an-adaptation": {
+      "header": "Ein Prüfdatum für Skills ist eine Übertragung",
+      "description": "Knowledge-Centered Service prüft nicht nach Kalender: „Let reuse of Not Validated articles be the review“ [1], und die Seite verwendet das Wort „Owner“ nicht. Owner, Version und ein festes Prüfdatum verbinden KCS mit Anthropics Leitfaden; keine Quelle legt sie als Regel für Skills fest.",
+      "sources": {
+        "kcs-v6-article-state": {
+          "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
+        }
+      }
+    },
+    "the-agent-skills-format-has-no-owner-field": {
+      "header": "Das Agent-Skills-Format hat kein Owner-Feld",
+      "description": "Das Agent-Skills-Format kennt kein Feld für Owner, Version oder Prüfdatum; die optionale metadata-Map hält sie per Konvention [1]. Anthropic schreibt außerdem: „Skill authors should not be their own reviewers“ [2].",
+      "sources": {
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "anthropic-skills-for-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "your-notebook": {
+        "title": "Dein Notizbuch",
+        "keywords": "",
+        "script": "Ein persönlicher Skill hat gar keinen Kopf, wie eine Karte in deinem eigenen Notizbuch. Das passt, solange er nur dir gehört, denn du weißt, wer ihn geschrieben hat, wann du ihn zuletzt genutzt hast und wer ihn repariert, wenn er bricht."
+      },
+      "into-the-fleet-manual": {
+        "title": "Ins Flottenhandbuch",
+        "keywords": "",
+        "script": "Sobald du ihn in die Skill-Bibliothek deines Teams teilst, ins Flottenhandbuch auf unserem Schiff, braucht er, was jeder Wissensartikel in einer Firma hat: einen Owner, eine Version und ein Datum für die nächste Prüfung. Es ist derselbe Skill mit einem Kontrollblock obendrauf, und deine persönlichen Skills brauchen das erst, wenn du sie teilst."
+      },
+      "why": {
+        "title": "Warum",
+        "keywords": "",
+        "script": "Warum der Aufwand? Weil, sobald er geteilt ist, die Änderung eines Autors verändert, was das Modell für alle tut, die ihn nutzen, und niemand weiß, wen man fragen soll, wenn etwas schiefgeht. Das ist dein dritter Schritt: Bevor du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Owner."
+      }
+    }
+  }
+}

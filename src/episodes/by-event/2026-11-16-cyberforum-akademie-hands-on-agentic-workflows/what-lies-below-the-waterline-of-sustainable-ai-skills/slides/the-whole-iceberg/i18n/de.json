@@ -1,0 +1,88 @@
+{
+  "title": "Der ganze Eisberg",
+  "caption": "Schreib einen Skill beim dritten Mal, beschreib ihn über den Moment, und entscheide, wo die Projektdetails liegen, bevor Du ihn teilst.",
+  "analogy": "Der Roboter zurück an Deck; das Handbuch aufgeschlagen bei einem kurzen Index.",
+  "story": "In der Geschichte:",
+  "takeaways": "Die Erkenntnis jedes Abschnitts auf seiner Tiefe",
+  "zones": {
+    "surface": {
+      "name": "Oberfläche",
+      "line1": "Ein Skill gibt der KI Dein bewährtes Vorgehen, wenn sie es braucht;",
+      "line2": "bis eine Aufgabe ihn braucht, liest die KI nur Name und Beschreibung."
+    },
+    "sunlit": {
+      "name": "Sonnenlichtzone",
+      "line1": "Schreib ihn aus einem Lauf, der funktioniert hat;",
+      "line2": "die KI sieht nur seine Beschreibung."
+    },
+    "twilight": {
+      "name": "Dämmerzone",
+      "line1": "Ein guter Skill erledigt eine Aufgabe; damit er in mehr als einem Projekt funktioniert,",
+      "line2": "hält er die Projektdetails neben sich, in Dateien, die er beim Ausführen liest."
+    },
+    "midnight": {
+      "name": "Mitternachtszone",
+      "line1": "Ein geteilter Skill ist ein Wissensartikel:",
+      "line2": "Er braucht einen Verantwortlichen, eine Version und ein Prüfdatum."
+    },
+    "abyss": {
+      "name": "Abyssal",
+      "line1": "Einen Skill richtig zu halten, ist die Arbeit: Ein Modell-Update ändert, wer ihn liest,",
+      "line2": "also teste ihn erneut, und mustere Skills aus, die niemand nutzt."
+    }
+  },
+  "index": {
+    "title": "Skill-Index",
+    "lead": "immer geladen: Name und Beschreibung",
+    "description": "Nimmt einen Sedimentkern. Verwenden, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.",
+    "codingLead": "SKILL.md, der immer geladene Teil"
+  },
+  "steps": {
+    "third-time": {
+      "text": "Wähle eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Lauf einen Skill.",
+      "agent": "Bitte den Agenten, dieses Gespräch in einen Skill zu verwandeln und unter {path} zu speichern."
+    },
+    "the-moment": {
+      "text": "Schreib seine Beschreibung als den Moment, in dem Du ihn brauchst.",
+      "agent": "Die Zeile <code>description:</code> im Front Matter von <code>SKILL.md</code>."
+    },
+    "before-sharing": {
+      "text": "Bevor Du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Verantwortlichen.",
+      "agent": "Schritte verweisen auf eine Projektdatei wie <code>CONTEXT.md</code>; geteilt in diesem Repository: <code>.claude/skills/</code>; geteilt über Projekte hinweg: ein Plugin, mit einem Verantwortlichen."
+    }
+  },
+  "alt": "Der ganze Eisberg von der Oberfläche bis zum Abyssal: das Schiff an der Wasserlinie mit Kapitänin und Pilot auf der Brücke, der Roboter zurück an Deck und das Handbuch aufgeschlagen bei einem kurzen Index aus drei Skills.",
+  "notes": {
+    "skill-governance-settled-and-not": {
+      "header": "Skill-Governance: was geklärt ist und was nicht",
+      "description": "Keine Quelle legt Verantwortlichen und Prüfdatum als Regel für Skills fest, und keine zeigt, wie viele Organisationen geteilte Skills überhaupt steuern [1]. Die Matrix aus Publikum und Reichweite ist eine Faustregel, kein veröffentlichtes Rahmenwerk [2].",
+      "sources": {
+        "anthropic-skills-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        },
+        "skilldex": {
+          "title": "Saha und Hemanth, Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-steps": {
+        "title": "Drei Schritte",
+        "keywords": "",
+        "script": "Lass mich die drei Schritte vom Meeresboden heraufholen. Eins: Wähle eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Lauf einen Skill. Zwei: Schreib seine Beschreibung als den Moment, in dem Du ihn brauchen würdest. Drei: Bevor Du ihn teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Verantwortlichen."
+      },
+      "the-honest-caveat": {
+        "title": "Der ehrliche Vorbehalt",
+        "keywords": "",
+        "script": "Ich will ehrlich sein, was das tiefe Ende angeht. Governance, Review und Ausmustern sind der Teil, bei dem ich mir am wenigsten sicher bin, und auch ich lerne da noch. Wenn Du etwas findest, das funktioniert, sag es mir."
+      },
+      "your-first-card": {
+        "title": "Deine erste Karte",
+        "keywords": "",
+        "script": "Wir sind zurück an Deck, mit einem kurzen Index. Wenn Du ganz entspannt anfangen willst, nimm die Aufgabe, die Du letzte Woche erklärt hast, und mach aus ihrem besten Lauf Deinen ersten Skill. Danke."
+      }
+    }
+  }
+}

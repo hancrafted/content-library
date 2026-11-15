@@ -1,0 +1,154 @@
+{
+  "title": "grill-with-docs hält den Kontext neben dem Skill",
+  "caption": "Das Interview bleibt gleich; was jeder Durchlauf über dein Projekt klärt, wird daneben festgehalten, damit der nächste Durchlauf es liest. Nach Matt Pococks Skill grill-with-docs aus seinem Skills-Repository (github.com/mattpocock/skills).",
+  "stays": "Bleibt bei jedem Durchlauf gleich",
+  "beside": "Neben dem Skill",
+  "outer": {
+    "name": "grill-with-docs",
+    "desc": "Skill · führt zwei Skills aus: das grilling-Interview und domain-modeling"
+  },
+  "sheets": {
+    "grilling": {
+      "kind": "Skill · das Interview",
+      "steps": {
+        "0": "Den Plan als Baum von Entscheidungen aufzeichnen.",
+        "1": "Jede Frage, die jetzt geht, in einer Runde stellen.",
+        "2": "Zu jeder eine Antwort empfehlen.",
+        "3": "Auf deine Antworten warten, dann weiter."
+      }
+    },
+    "domain": {
+      "kind": "Skill · domain-modeling",
+      "steps": {
+        "0": "Begriffe mit dem Glossar abgleichen.",
+        "1": "Unscharfe Begriffe schärfen.",
+        "2": "Begriffe festhalten, sobald sie feststehen.",
+        "3": "Schwer umkehrbare Entscheidungen festhalten."
+      }
+    }
+  },
+  "arrows": {
+    "runs": "führt aus",
+    "again": "führt erneut aus, gleiche Schritte",
+    "current": "Montags Dateien fließen in den Durchlauf am Donnerstag"
+  },
+  "runs": {
+    "1": {
+      "label": "Durchlauf 1",
+      "lead": "Montag · schreibt seine Dateien neben den Skill",
+      "coding": "<code>{command}</code> schreibt <code>{glossary}</code>, <code>{decisions}</code>"
+    },
+    "2": {
+      "label": "Durchlauf 2",
+      "lead": "Donnerstag · liest zuerst Montags Dateien",
+      "coding": "<code>{command}</code> liest sie zuerst, dann fragt er"
+    }
+  },
+  "files": {
+    "glossary": {
+      "kind": "Glossar",
+      "heading": "Projektbegriffe",
+      "added": "+1 Begriff"
+    },
+    "decisions": {
+      "kind": "Entscheidungen",
+      "entries": {
+        "0": "1. Die Tiefe aus dem Tauchplan nehmen",
+        "1": "2. Jeden Kern nach seinem Standort beschriften"
+      }
+    }
+  },
+  "terms": {
+    "site": {
+      "name": "Standort",
+      "text": "Ein Probenpunkt auf dem Meeresboden."
+    },
+    "divePlan": {
+      "name": "Tauchplan",
+      "text": "Die heutigen Standorte und ihre Tiefen."
+    },
+    "core": {
+      "name": "Kern",
+      "text": "Eine Sedimentprobe, im Ganzen ausgestochen.",
+      "avoid": "Nicht: Pfropfen"
+    }
+  },
+  "coding": {
+    "outer": "Call the Skill tool twice, for \"grilling\" and \"domain-modeling\".",
+    "grilling": {
+      "0": "Map this as a design tree.",
+      "1": "Ask the whole frontier in one round …",
+      "2": "… give your recommended answer.",
+      "3": "Then wait for the user's answers …"
+    },
+    "domain": {
+      "0": "### Challenge against the glossary",
+      "1": "### Sharpen fuzzy language",
+      "2": "### Update GLOSSARY.md inline",
+      "3": "### Offer ADRs sparingly"
+    },
+    "glossaryHeading": "# Glossary",
+    "terms": {
+      "site": {
+        "name": "Site",
+        "text": "One sampling point on the seabed."
+      },
+      "divePlan": {
+        "name": "Dive plan",
+        "text": "Today's sites and their depths."
+      },
+      "core": {
+        "name": "Core",
+        "text": "A sediment sample cut out whole.",
+        "avoid": "Avoid: Plug"
+      }
+    }
+  },
+  "story": {
+    "label": "In der Geschichte:",
+    "text": "Skill = die Karte, Dateien = der Tauchplan"
+  },
+  "closing": {
+    "chip": "Noch eine Sache",
+    "text": "Ein Skill kann auch andere Skills ausführen: grill-with-docs führt grilling und domain-modeling aus. Einen festen Namen dafür gibt es noch nicht."
+  },
+  "alt": {
+    "scene": "Im Dämmerwasser hält ein Blatt, grill-with-docs, die zwei Skills, die es ausführt: das grilling-Interview und domain-modeling, beschriftet mit „Bleibt bei jedem Durchlauf gleich“. Darunter schreiben zwei Durchläufe, Montag und Donnerstag, je ein Glossar und Entscheidungen neben den Skill. Eine Strömung trägt Montags Dateien in den Durchlauf am Donnerstag, und das Glossar vom Donnerstag hat einen Begriff mehr: Kern."
+  },
+  "notes": {
+    "project-context-written-beside-the-skill": {
+      "header": "Projektkontext neben dem Skill, beim nächsten Durchlauf gelesen",
+      "description": "Anthropic schreibt, dass Modelle, wie Menschen mit \"file systems, inboxes, and bookmarks\", gut mit Notizen außerhalb des Kontextfensters arbeiten [1], und ein Skill soll eine Vorgehensweise lehren und die Details des Einzelfalls aus Dateien lesen [2]. Die grill-with-docs-Dateien sind die eigene Kopie dieses Repositorys von Matt Pococks Skill [3], keine Forschungsquelle. Die Folie zeigt nur grill-with-docs; der Skill grill-me wird nicht gezeigt.",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Anthropic Engineering, Effective context engineering for AI agents"
+        },
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        },
+        "pocock-skills": {
+          "title": "Pocock, skills (GitHub-Repository; skills/engineering/grill-with-docs)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-interview-is-the-card": {
+        "title": "Das Interview ist die Karte",
+        "keywords": "",
+        "script": "Ich zeige dir drinnen und daneben zusammen, an echten Dateien statt am Tauchgang. Das ist grill-with-docs, ein Skill von Matt Pocock, den ich nutze, und er führt ein Interview, das ist die Anleitung. Sie bleibt jedes Mal gleich."
+      },
+      "follow-the-arrow": {
+        "title": "Folge dem Pfeil",
+        "keywords": "",
+        "script": "Während er läuft, schreibt grill-with-docs Dateien neben sich, ein Glossar und Entscheidungen, und der nächste Durchlauf prüft deine Begriffe daran. Der Skill bleibt gleich, und was er über dein Projekt gelernt hat, wartet daneben."
+      },
+      "skills-can-run-skills": {
+        "title": "Skills führen Skills aus",
+        "keywords": "",
+        "script": "Eine letzte Sache: Ein Skill kann auch andere Skills ausführen. grill-with-docs führt einen namens grilling und einen namens domain-modeling aus. Einen festen Namen dafür gibt es noch nicht, und dabei belasse ich es."
+      }
+    }
+  }
+}

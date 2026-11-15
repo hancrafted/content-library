@@ -1,0 +1,143 @@
+{
+  "title": "The third time is the signal",
+  "caption": "Write a skill the third time, once you know what a good result looks like.",
+  "comic": "Comic strip, three panels",
+  "panels": {
+    "first": {
+      "heading": "1st time: you learn what's needed",
+      "captainLine": "Collect sediment sample: hold 2 m above the seabed…",
+      "pilotLine": "Which depth? What goes on the label?",
+      "sessionChip": "Session 1 · starts fresh",
+      "alt": "Day 1 in the control room: the captain explains the sediment sample; the pilot asks which depth and which label."
+    },
+    "second": {
+      "heading": "2nd time: you refine it",
+      "captainLine": "Again: check the camera first, lower the arm slowly.",
+      "pilotLine": "Seal the tube, then label?",
+      "sessionChip": "Session 2 · starts fresh",
+      "alt": "Day 2: the captain refines it, the pilot listens; two mugs on the console."
+    },
+    "third": {
+      "heading": "3rd time: you write the skill",
+      "captainLine": "Here it is, written down.",
+      "pilotLine": "Intact, sealed, labelled. Got it.",
+      "sessionChip": "Session 3 · starts fresh",
+      "alt": "Day 3: the captain holds the written procedure card out to the pilot; three mugs on the console."
+    }
+  },
+  "card": {
+    "kind": "· procedure card",
+    "emptyLabel": "Skill · empty",
+    "draftLabel": "Skill · draft",
+    "writtenLabel": "Skill · written",
+    "titleField": "Title:",
+    "useWhenField": "Use when:",
+    "need": "What is needed: depth? label?",
+    "goodQuestion": "Good result = ?",
+    "title": "Collect sediment sample",
+    "useWhen": "<b>Use when</b> we reach a new site and need a sample from the seabed.",
+    "draftSteps": {
+      "hold": "1. Hold the robot 2 m above the seabed.",
+      "grab": "2. Grab the mud.",
+      "lower": "2. Lower the arm <b>slowly</b>.",
+      "label": "3. Label it."
+    },
+    "steps": {
+      "hold": "Hold the robot 2 m above the seabed.",
+      "camera": "Check the camera for loose sediment.",
+      "lower": "Lower the arm.",
+      "identify": "Identify what you collected.",
+      "seal": "Seal the core tube.",
+      "label": "Label the sample."
+    },
+    "goodResult": "Good result: an intact core, sealed and labelled."
+  },
+  "terminal": {
+    "first": {
+      "title": "Session 1 · new context window",
+      "ask": "Take a sediment sample at site 4.",
+      "agent": "Which depth should the robot hold? How should I label the sample?",
+      "answer": "Hold 2 m above the seabed. Label it with site, depth and time."
+    },
+    "second": {
+      "title": "Session 2 · new context window",
+      "ask": "Take a sediment sample at site 5.",
+      "agent": "Which depth should the robot hold?",
+      "answer": "2 m, like last time. Check the camera first, lower the arm slowly, seal the tube."
+    }
+  },
+  "skillFile": {
+    "newFile": "new file",
+    "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
+    "footer": "<marker>Written to a file, it is there in session 4.</marker>"
+  },
+  "notEnough": "<b>Counting is not enough.</b> If you cannot check whether the result was good, the skill repeats a habit with great confidence.",
+  "didYouKnow": {
+    "label": "Did you know?",
+    "text": "This matches the rule of three from <marker>Fowler's <em>Refactoring</em></marker>, a software engineering rule against generalising too early."
+  },
+  "story": {
+    "label": "In the story:",
+    "analogy": "Explain the sample, refine it, write the card."
+  },
+  "agent": {
+    "analogy": "<b>In Claude Code or Codex:</b> <marker>each session starts fresh, so only what you write to a file carries over.</marker>"
+  },
+  "notes": {
+    "when-to-write-a-skill": {
+      "header": "When to write a skill: Fowler's rule of three",
+      "description": "\"The first time you do something, you just do it. The second time you do something similar, you wince at the duplication, but you do the duplication thing anyway. The third time you do something similar, you refactor.\" [1] It is a heuristic, not a measured result. The credit to Don Roberts is in the 1999 book, which the research could not read.",
+      "sources": {
+        "fowler-refactoring-slides": {
+          "title": "Fowler, Refactoring: Improving the Design of Existing Code (1997 slides)"
+        }
+      }
+    },
+    "the-model-as-a-new-employee": {
+      "header": "The model as a new employee: why the rule of thumb holds",
+      "description": "Anthropic tells the writer to think of Claude as \"a brilliant but new employee who lacks context on your norms and workflows\", and to show a prompt to a colleague with minimal context [1]. Anthropic Engineering calls building a skill \"like putting together an onboarding guide for a new hire\" [2].",
+      "sources": {
+        "anthropic-prompting-best-practices": {
+          "title": "Anthropic, Prompting best practices"
+        },
+        "anthropic-equipping-agents-with-skills": {
+          "title": "Anthropic Engineering, Equipping agents for the real world with Agent Skills"
+        }
+      }
+    },
+    "where-the-model-is-not-like-a-person": {
+      "header": "Where the model is not like a person",
+      "description": "each is backed by a source, but listing them as the breaks is a synthesis: sessions start fresh, so only written files carry over [1]; rules in a file are \"context, not enforced configuration\" [1]; newer models read instructions more literally [2]; the same words read differently by model [2]; assistants drift toward agreeing with the user [3].",
+      "sources": {
+        "anthropic-claude-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        },
+        "openai-gpt-4-1-prompting-guide": {
+          "title": "OpenAI, GPT-4.1 Prompting Guide"
+        },
+        "sharma-sycophancy": {
+          "title": "Sharma et al., Towards Understanding Sycophancy in Language Models"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-tries": {
+        "title": "Three tries",
+        "keywords": "",
+        "script": "So when does a task become a skill? Think about what you learn each time you explain it to the model. The first time you find out what is needed at all, the second time you tighten it, and by the third time you can tell what a good result looks like, which is the moment you know what you would be writing down."
+      },
+      "not-only-repetition": {
+        "title": "Not only repetition",
+        "keywords": "",
+        "script": "But counting is not enough. If you cannot check whether the result was good, you are not capturing a procedure, you are copying a habit, and the skill will repeat your habit with great confidence."
+      },
+      "did-you-know": {
+        "title": "Did you know",
+        "keywords": "",
+        "script": "Software engineers arrived at this the same way, long before any AI tool: they call it the rule of three, from Fowler's Refactoring, a rule against generalising too early. I'll leave the exact wording in the notes, because the point here is only that people got there first."
+      }
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "title": "Beside the skill",
+  "caption": "Project details can stay beside the skill, in files it reads when it runs.",
+  "analogy": "Same card, any site: this time the robot reaches the seabed at 120 m.",
+  "wall": {
+    "head": "The step points to a project file",
+    "skillTag": "Skill",
+    "fileTag": "Project file",
+    "pointsTo": "Points to a project file",
+    "card": {
+      "title": "Collect sediment sample",
+      "description": "Use when we reach a new site and need a sample from the seabed.",
+      "codingDescription": "description: Use when we reach a new site and need a sample from the seabed.",
+      "steps": {
+        "0": "1. Check arm and tubes",
+        "1": "2. Descend to the depth in today's dive plan.",
+        "2": "3. Lower the arm",
+        "3": "4. Identify the catch"
+      },
+      "codingSteps": {
+        "0": "1. Check arm and tubes.",
+        "1": "2. Descend to the depth for today's site in {path}.",
+        "2": "3. Lower the arm.",
+        "3": "4. Identify the catch."
+      }
+    },
+    "plan": {
+      "title": "Project file",
+      "sub": "today's dive plan",
+      "rows": {
+        "site4": "Site 4: 40 m",
+        "site7": "Site 7: 120 m"
+      },
+      "today": "today"
+    },
+    "verdict": "Step 2 no longer holds a depth. It tells the AI where to look, and the AI reads that file when the step runs.",
+    "codingVerdict": "The step names <code>{file}</code> through <code>{variable}</code>, so it resolves in any project the skill is installed in."
+  },
+  "dive": {
+    "head": "The same skill at site 7, no edit",
+    "site": "Site 7",
+    "ghost": "stopped here before",
+    "seabed": "seabed 120 m",
+    "reached": "reached the seabed",
+    "verdict": "Where Slide 15's skill stopped at 40 m, the same procedure now reaches the seabed: only the project file changed.",
+    "codingVerdict": "The standard's own example: read the schema from <code>{schema}</code> instead of writing joins into the skill.",
+    "metres": "{metres} m"
+  },
+  "footer": {
+    "story": "In the story:",
+    "chat": "A skill “should teach the agent how to approach a class of problems, not what to produce for a specific instance.” Agent Skills, best practices",
+    "coding": "Claude Code offers <code>{variable}</code>, so a skill can reference project files wherever it is installed."
+  },
+  "alt": {
+    "dive": "Site 7 in cross-section: the research ship on the surface lowers the diving robot on its cable past a dashed outline at 40 m, where it stopped before, down to the seabed at 120 m, where a check mark shows it arrived."
+  },
+  "notes": {
+    "a-skill-teaches-the-class-of-problem": {
+      "header": "A skill teaches the class of problem and reads the instance",
+      "description": "a skill \"should teach the agent how to approach a class of problems, not what to produce for a specific instance\"; the example reads the schema from references/schema.yaml instead of writing joins into the skill [1]. Claude Code offers $'{'CLAUDE_PROJECT_DIR'}' so a skill can reference project files independent of where it is installed [2].",
+      "sources": {
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        },
+        "claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-card-points": {
+        "title": "The card points",
+        "keywords": "",
+        "script": "Here is the mistake from before, fixed. The skill no longer says 40 metres. Its step says \"descend to the depth in today's dive plan\", and that dive plan is a project file the skill reads when the step runs: site 4, 40 metres, site 7, 120 metres."
+      },
+      "same-card-any-site": {
+        "title": "Same card, any site",
+        "keywords": "",
+        "script": "Replay site 7. It is the same skill with no edit, and this time the robot reaches the seabed at 120 metres. The procedure stayed put and the site details lived in the project file, which is your third step in miniature: decide where the project details live."
+      },
+      "for-developers": {
+        "title": "For developers",
+        "keywords": "",
+        "script": "In the coding-agent view the step names a project file, say CONTEXT.md, and the agent reads it when that step runs. For everyone else, it is any document in your project that the skill tells the model to read."
+      }
+    }
+  }
+}

@@ -1,0 +1,244 @@
+/*
+ * "The model changes, the skill doesn't" (Option 24a): each dive's tones, the cables, yesterday's ghost and the gap
+ * bracket. The tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets
+ * `dive-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32).
+ * `--primary` marks the one gap to look at.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.art {
+  --glow: oklch(0.99 0.03 200);
+  --glow-soft: oklch(0.95 0.07 205 / 0.55);
+  --silt: oklch(0.62 0.05 70 / 0.72);
+  --silt-lit: oklch(0.78 0.045 75 / 0.62);
+  --port-lit: oklch(0.7 0.03 245);
+  --port: oklch(0.55 0.03 250);
+  --port-shade: oklch(0.4 0.03 255);
+  --robot-dark: oklch(0.28 0.02 260);
+}
+
+:global(.dark) .art {
+  --glow: oklch(0.9 0.08 200);
+  --glow-soft: oklch(0.75 0.1 205 / 0.45);
+  --silt: oklch(0.5 0.04 65 / 0.72);
+  --silt-lit: oklch(0.64 0.04 70 / 0.62);
+  --port-lit: oklch(0.52 0.03 245);
+  --port: oklch(0.42 0.03 250);
+  --port-shade: oklch(0.3 0.03 255);
+  --robot-dark: oklch(0.22 0.02 260);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
+}
+
+.art [data-tone='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-tone='glow'] {
+  fill: var(--glow);
+  stroke: var(--glow);
+}
+
+.art [data-tone='glow-soft'] {
+  fill: var(--glow-soft);
+  stroke: none;
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-tone='sea-sunlit-lit'] {
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
+}
+
+.art [data-tone='sea-sunlit'] {
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
+}
+
+.art [data-tone='sea-twilight-lit'] {
+  fill: var(--scenery-sea-twilight-lit);
+  stroke: var(--scenery-sea-twilight-lit);
+}
+
+.art [data-tone='sea-twilight'] {
+  fill: var(--scenery-sea-twilight);
+  stroke: var(--scenery-sea-twilight);
+}
+
+.art [data-tone='sea-midnight-lit'] {
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
+}
+
+.art [data-tone='sea-midnight'] {
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
+}
+
+.art [data-tone='sea-abyss-lit'] {
+  fill: var(--scenery-sea-abyss-lit);
+  stroke: var(--scenery-sea-abyss-lit);
+}
+
+.art [data-tone='sea-abyss'] {
+  fill: var(--scenery-sea-abyss);
+  stroke: var(--scenery-sea-abyss);
+}
+
+.art [data-tone='ray'] {
+  fill: var(--scenery-ray);
+  stroke: none;
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.art [data-tone='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='silt'] {
+  fill: var(--silt);
+  stroke: none;
+}
+
+.art [data-tone='silt-lit'] {
+  fill: var(--silt-lit);
+  stroke: none;
+}
+
+.art [data-tone='port-lit'] {
+  fill: var(--port-lit);
+  stroke: var(--port-lit);
+}
+
+.art [data-tone='port'] {
+  fill: var(--port);
+  stroke: var(--port);
+}
+
+.art [data-tone='port-shade'] {
+  fill: var(--port-shade);
+  stroke: var(--port-shade);
+}
+
+.cable {
+  stroke: var(--robot-dark);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.ghostCable {
+  fill: none;
+  stroke: var(--scenery-cloud-lit);
+  stroke-width: 2;
+  stroke-dasharray: 5 6;
+  stroke-linecap: round;
+}
+
+.ghost {
+  opacity: 0.42;
+}
+
+.gapEdge {
+  fill: none;
+  stroke: var(--background);
+  stroke-width: 8;
+  stroke-linejoin: round;
+}
+
+.gap {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+
+.label {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.ghostLabel {
+  background: color-mix(in oklab, var(--foreground) 40%, transparent);
+  color: var(--background);
+  border: 1.5px dashed var(--background);
+}
+
+/* The silt cloud billows up once the robot has hit the seabed; its rest state is the cloud, as reduced motion shows. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .silt {
+    animation: billow 900ms ease-out 1700ms both;
+    transform-box: fill-box;
+    transform-origin: bottom;
+  }
+}
+
+@keyframes billow {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}

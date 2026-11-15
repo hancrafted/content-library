@@ -1,0 +1,181 @@
+/*
+ * The control room's own tones, lifted from Spec Option 8a (feedback 3, decision 46): the faceted wall and floor,
+ * the window onto the deck with its sky, clouds, sea and A-frame, the wall clock, and the written card the captain holds
+ * out on day 3. Raw colours live only here, each with its dark value from the Spec (FE-011); dark mode is tuned later.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.art {
+  --art-hull-lit: oklch(0.52 0.03 250);
+  --art-hull: oklch(0.4 0.03 255);
+  --art-house-lit: oklch(0.985 0.005 90);
+  --art-house: oklch(0.92 0.012 85);
+  --art-steel-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --art-steel-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
+  --art-cloth-dark: oklch(0.22 0.02 265);
+  --art-paper-lit: oklch(0.995 0.004 90);
+  --art-paper: oklch(0.972 0.009 88);
+  --art-paper-edge: oklch(0.86 0.02 80);
+}
+
+:global(.dark) .art {
+  --art-hull-lit: oklch(0.5 0.03 250);
+  --art-hull: oklch(0.4 0.03 255);
+  --art-house-lit: oklch(0.86 0.008 90);
+  --art-house: oklch(0.78 0.012 85);
+  --art-steel-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --art-steel-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
+  --art-cloth-dark: oklch(0.2 0.02 265);
+  --art-paper-lit: oklch(0.43 0.02 250);
+  --art-paper: oklch(0.39 0.02 252);
+  --art-paper-edge: oklch(0.29 0.02 258);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-tone='sky-1'] {
+  fill: var(--scenery-sky-1);
+  stroke: var(--scenery-sky-1);
+}
+
+.art [data-tone='sky-2'] {
+  fill: var(--scenery-sky-2);
+  stroke: var(--scenery-sky-2);
+}
+
+.art [data-tone='sky-3'] {
+  fill: var(--scenery-sky-3);
+  stroke: var(--scenery-sky-3);
+}
+
+.art [data-tone='sky-4'] {
+  fill: var(--scenery-sky-4);
+  stroke: var(--scenery-sky-4);
+}
+
+.art [data-tone='cloud-lit'] {
+  fill: var(--scenery-cloud-lit);
+  stroke: var(--scenery-cloud-lit);
+}
+
+.art [data-tone='cloud-shade'] {
+  fill: var(--scenery-cloud-shade);
+  stroke: var(--scenery-cloud-shade);
+}
+
+.art [data-tone='sea-surface-lit'] {
+  fill: var(--scenery-sea-surface-lit);
+  stroke: var(--scenery-sea-surface-lit);
+}
+
+.art [data-tone='sea-surface'] {
+  fill: var(--scenery-sea-surface);
+  stroke: var(--scenery-sea-surface);
+}
+
+.art [data-tone='hull-lit'] {
+  fill: var(--art-hull-lit);
+  stroke: var(--art-hull-lit);
+}
+
+.art [data-tone='hull'] {
+  fill: var(--art-hull);
+  stroke: var(--art-hull);
+}
+
+.art [data-tone='steel-shade'] {
+  fill: var(--art-steel-shade);
+  stroke: var(--art-steel-shade);
+}
+
+.art [data-tone='steel-lit'] {
+  fill: var(--art-steel-lit);
+  stroke: var(--art-steel-lit);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-tone='house-lit'] {
+  fill: var(--art-house-lit);
+  stroke: var(--art-house-lit);
+}
+
+.art [data-tone='house'] {
+  fill: var(--art-house);
+  stroke: var(--art-house);
+}
+
+.art [data-tone='cloth-dark'] {
+  fill: var(--art-cloth-dark);
+  stroke: var(--art-cloth-dark);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--art-paper);
+  stroke: var(--art-paper);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--art-paper-lit);
+  stroke: var(--art-paper-lit);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--art-paper-edge);
+  stroke: var(--art-paper-edge);
+}
+
+/* The A-frame's cable over the side: the robot is in the water below. */
+.cable {
+  stroke-width: 1.4;
+}
+
+/* The ruled lines written on the day-3 card, in the primary ink the Spec writes them in. */
+.cardLines {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
