@@ -1,5 +1,5 @@
 import { explorablePageParams } from '@/content-store/store';
-import type { ComposedPage } from '@/episodes/lib/registry';
+import type { ComposedPage } from '@/episodes/lib/composed-page';
 import { ExplorableHomesProvider } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import { explorableHomeSlugs } from '@/shared/components/core-components/explorable-home/explorable-home.pure';
 import type { Locale } from '@/shared/lib/locale.pure';

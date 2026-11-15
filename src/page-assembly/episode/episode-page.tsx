@@ -13,8 +13,8 @@ import {
   type RouteParams,
 } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
+import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { summaryOf } from '@/episodes/lib/page-summary';
-import { compositionOf } from '@/episodes/lib/registry';
 import { eventEpisodeFrame } from '@/events/components/event-episode-frame';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
@@ -47,28 +47,45 @@ export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): Eve
 
 /**
  * Every Episode-shaped page (FE-007 §1), rendered through the one container (FE-002): an Episode's own page with its
- * structured data once published, and an Episode under its Event framed by the Event.
+ * structured data once published, and an Episode under its Event framed by the Event. Its route, generated one per
+ * page, hands in the page's own composition, so the page imports no other Episode's Slides (FE-007 §1.3); a
+ * composition of another Episode is a bug in the generator, so it throws.
  */
-export async function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
+export async function EpisodePage({
+  page,
+  composition,
+  locale,
+}: {
+  page: EpisodePageRef;
+  composition: EpisodeComposition;
+  locale: Locale;
+}) {
+  if (composition.slug !== page.episode.slug)
+    throw new Error(`The route for "${page.episode.id}" hands in the composition of "${composition.slug}"`);
   const t = await getTranslations({ locale, namespace: 'nav' });
   const context = episodeContextOf(page, locale, t('episodes'));
   return matchPage<EpisodePageRef, ReactNode>(page, {
-    episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} context={context} />,
-    'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} context={context} />,
+    episode: ({ episode }) => (
+      <OwnEpisodePage episode={episode} composition={composition} locale={locale} context={context} />
+    ),
+    'event-episode': (eventEpisode) => (
+      <EpisodeUnderEvent page={eventEpisode} composition={composition} locale={locale} context={context} />
+    ),
   });
 }
 
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
 function OwnEpisodePage({
   episode,
+  composition,
   locale,
   context,
 }: {
   episode: StandaloneRef<EpisodeId>;
+  composition: EpisodeComposition;
   locale: Locale;
   context: TocPageContext;
 }) {
-  const composition = compositionOf(episode);
   const { title, description } = composition.messages[locale];
   const video = episodeVideo(episode, locale);
   const data =
@@ -96,10 +113,12 @@ function OwnEpisodePage({
  */
 function EpisodeUnderEvent({
   page,
+  composition,
   locale,
   context,
 }: {
   page: EventEpisodePage;
+  composition: EpisodeComposition;
   locale: Locale;
   context: TocPageContext;
 }) {
@@ -109,7 +128,7 @@ function EpisodeUnderEvent({
     <EpisodePageContainer
       locale={locale}
       page={shown.episode}
-      episode={compositionOf(shown.episode)}
+      episode={composition}
       video={episodeVideo(shown.episode, locale)}
       tocPage={context}
       frame={{

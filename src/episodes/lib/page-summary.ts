@@ -1,6 +1,6 @@
+import type { ComposedPage } from './composed-page';
 import summaries from './page-summaries.generated.json';
 import type { PageSummary } from './page-summary.pure';
-import type { ComposedPage } from './registry';
 
 type Summaries = Readonly<Record<string, PageSummary>>;
 

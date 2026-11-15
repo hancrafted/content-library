@@ -71,7 +71,7 @@ function identifierOf(id: string): string {
 }
 
 /** The one Episode record an `episode.ts` exports, as `export const <name> = episode({`. */
-function exportedRecord(folder: EpisodeFolder): string {
+export function exportedRecord(folder: EpisodeFolder): string {
   const names = [...(folder.episodeSource ?? '').matchAll(/export const (\w+)\s*=\s*episode\(/g)].map(
     ([, name]) => name,
   );
