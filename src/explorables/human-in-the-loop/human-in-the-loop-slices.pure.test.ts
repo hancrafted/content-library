@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest';
 import {
   callbacksFor,
   progressTarget,
-  progressUploadEvent,
   shownWorkflow,
   showWorkflow,
   slicesOf,
   uploadEvent,
 } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
+import { progressUploadEvent } from './progress-upload.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -235,6 +235,43 @@ describe('success cases', () => {
     const event = refusal(text);
     // ASSERT
     expect(event).toEqual({ type: 'restore', results: entry.results, demo: entry.demo });
+  });
+
+  it('restores the prompt edits of a progress file with the run', () => {
+    // ARRANGE
+    const { text } = progressFile('two', { ...entry, prompts: { 'simple:s.ask.do': '## Mine' } });
+    // ACT
+    const event = refusal(text);
+    // ASSERT
+    expect(event).toEqual({
+      type: 'restore',
+      results: entry.results,
+      demo: entry.demo,
+      prompts: { 'simple:s.ask.do': '## Mine' },
+    });
+  });
+
+  it('hands the modal the edits and a way to change them', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const state = { ...createState(start), prompts: { 'simple:s.ask.do': '## Mine' } };
+    // ACT
+    const { modal } = slicesFor(state, {}, sent);
+    modal.edits.onChange({});
+    // ASSERT
+    expect(modal.edits).toMatchObject({ values: state.prompts, level: 'simple' });
+    expect(sent).toEqual([{ type: 'prompts', values: {} }]);
+  });
+
+  it('counts a prompt edit as saved work: Reset and Save progress show, the demo switch stays free', () => {
+    // ARRANGE
+    const state = { ...createState(start), prompts: { 'simple:s.ask.do': '## Mine' } };
+    // ACT
+    const { toolbar, modal } = slicesFor(state);
+    // ASSERT
+    expect(toolbar.demo).toMatchObject({ resetShow: true, hasWork: true, locked: false });
+    expect(modal.demo.resetShow).toBe(true);
+    expect(toolbar.canSave).toBe(true);
   });
 
   it("offers Reset's download of the run only where progress can be saved to a file", () => {

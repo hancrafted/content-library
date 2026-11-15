@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { mergeProgress, parseProgress, progressKeyOf, verdictOf } from './progress.pure';
+import { mergeProgress, normalizedEntry, parseProgress, progressKeyOf, verdictOf } from './progress.pure';
 
 const entry = { hash: 'abc', demo: true, results: { 'a.b': 'text' } };
+
+const edited = { ...entry, prompts: { 'simple:a.do': '## Mine' } };
 
 describe('success cases', () => {
   it('keys a Workflow run by the hands-on, never by Episode', () => {
@@ -67,6 +69,24 @@ describe('success cases', () => {
     // ASSERT
     expect(verdict).toBe('stale');
   });
+
+  it('reads a stored entry with its prompt edits', () => {
+    // ARRANGE
+    const raw = JSON.stringify({ k: edited });
+    // ACT
+    const all = parseProgress(raw);
+    // ASSERT
+    expect(all.k).toEqual(edited);
+  });
+
+  it('still reads an old entry that has no prompts field', () => {
+    // ARRANGE
+    const raw = JSON.stringify({ k: entry });
+    // ACT
+    const all = parseProgress(raw);
+    // ASSERT
+    expect(all.k).toEqual(entry);
+  });
 });
 
 describe('failure cases', () => {
@@ -93,6 +113,15 @@ describe('failure cases', () => {
     // ASSERT
     expect(Object.keys(all)).toEqual(['good']);
   });
+
+  it('drops an entry whose prompts are not text', () => {
+    // ARRANGE
+    const raw = JSON.stringify({ k: { ...entry, prompts: { a: 1 } }, j: { ...entry, prompts: ['x'] } });
+    // ACT
+    const all = parseProgress(raw);
+    // ASSERT
+    expect(all).toEqual({});
+  });
 });
 
 describe('edge cases', () => {
@@ -112,5 +141,23 @@ describe('edge cases', () => {
     const merged = JSON.parse(mergeProgress(raw, 'mine', entry));
     // ASSERT
     expect(merged).toEqual({ mine: entry });
+  });
+
+  it('leaves out an empty prompts field, so a run without edits is stored as before', () => {
+    // ARRANGE
+    const run = { ...entry, prompts: {} };
+    // ACT
+    const stored = normalizedEntry(run);
+    // ASSERT
+    expect(stored).toEqual(entry);
+  });
+
+  it('keeps prompts that hold an edit', () => {
+    // ARRANGE
+    const run = edited;
+    // ACT
+    const stored = normalizedEntry(run);
+    // ASSERT
+    expect(stored).toEqual(edited);
   });
 });

@@ -6,17 +6,11 @@ import { progressFile } from '@/shared/lib/progress-file.pure';
 import { useCallback, useMemo, useReducer, useState, type Dispatch } from 'react';
 import { debugAvailable } from './debug-footer.pure';
 import { DiagramPart } from './diagram-part';
-import {
-  callbacksFor,
-  progressTarget,
-  progressUploadEvent,
-  showWorkflow,
-  shownWorkflow,
-  slicesOf,
-} from './human-in-the-loop-slices.pure';
+import { callbacksFor, progressTarget, showWorkflow, shownWorkflow, slicesOf } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
 import type { ProgressActions, ProgressNote } from './progress-controls.types';
+import { progressUploadEvent } from './progress-upload.pure';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
 import { createState, reduce, type View, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
@@ -40,9 +34,9 @@ function actionsOf(
   const target = progressTarget(data, state);
   if (!target) return null;
   const shown = { ...target, title: shownWorkflow(data, state)?.title ?? '' };
-  const { slotValues: results, demo } = state;
+  const { slotValues: results, demo, prompts } = state;
   return {
-    onDownload: () => saveFile(progressFile(target.id, { hash: target.hash, results, demo })),
+    onDownload: () => saveFile(progressFile(target.id, { hash: target.hash, results, demo, prompts })),
     onUpload: (text) => dispatch(progressUploadEvent(text, shown, data.words)),
   };
 }
@@ -53,8 +47,8 @@ function actionsOf(
  */
 function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispatch: Dispatch<WorkflowEvent>) {
   const target = progressTarget(data, state);
-  const { slotValues: results, demo } = state;
-  const progress = useMemo<Progress>(() => ({ results, demo }), [results, demo]);
+  const { slotValues: results, demo, prompts } = state;
+  const progress = useMemo<Progress>(() => ({ results, demo, prompts }), [results, demo, prompts]);
   const onResume = useCallback((saved: Progress) => dispatch({ type: 'restore', ...saved }), [dispatch]);
   const key = target?.key ?? null;
   const { status, kept, discard, reset } = useProgress({ key, hash: target?.hash ?? '', progress, onResume });

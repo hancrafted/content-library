@@ -48,6 +48,11 @@ export interface UiWords {
   readonly stepCheckInfo: string;
   readonly copyExplanation: string;
   readonly copyExplanationTip: string;
+  /** The pencil beside Copy prompt: its name and tooltip; and the tooltip of the dot on Copy prompt while an edit exists. */
+  readonly editPrompt: string;
+  readonly editedTip: string;
+  /** Reset in the prompt editor: back to the Workflow's text; apart from the progress Reset. */
+  readonly editReset: string;
   readonly explainWrapper: string;
   readonly previousResults: string;
   readonly insertedAt: string;

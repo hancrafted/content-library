@@ -9,7 +9,7 @@
     },
     {
       "id": "play",
-      "text": "Human-in-the-Loop-Workflow Der Projektplan-Workflow: sechs Phasen von einer vagen Aufgabe zu einem geprüften Bericht, ein frischer Chat pro Aufgabe, und Du prüfst jedes Ergebnis dazwischen. Lies mich Was es zeigt Der Projektplan-Workflow in der Phasenansicht: sechs Phasen von einem vagen Ziel bis zum geprüften Bericht, je eine Karte. Was Du ausprobierst Klick auf eine Phase, um ihr Fenster „Jetzt üben“ zu öffnen und ihre Prompts in einen frischen KI-Chat zu kopieren. In der Werkzeugleiste wählst Du einen anderen Anwendungsfall. Worauf Du achtest Das Häkchen auf einer Karte zeigt: Ein Mensch prüft dieses Ergebnis, bevor die nächste Phase beginnt. Anwendungsfall : Ein Projekt planen Phasen Aufgaben Demo-Modus Jetzt üben für Grobplan Grobplan Von der vagen Aufgabe zu Epics geprüft Freigabe 1 Jetzt üben für Epics Epics Epics 1 geprüft Epics 2 geprüft Befragen, dann spezifizieren, je Epic Jetzt üben für Anforderungen Anforderungen Zusammenführen, Konflikte lösen, Tickets schneiden geprüft Freigabe 2 Jetzt üben für Ausführen Ausführen Ausführen 1 geprüft Ausführen 2 geprüft Ausführen 3 geprüft Ausführen 4 geprüft Ein frischer Chat pro Ticket Jetzt üben für Zusammenführen Zusammenführen Ergebnisse zu einem Bericht verbunden geprüft Jetzt üben für Prüfen Prüfen Der Bericht als Seite, dann deine Freigabe Freigabe 3"
+      "text": "Human-in-the-Loop-Workflow Der Quelle-zu-Quiz-Workflow: drei Phasen von einer Quelle zu einem Quiz und einem wiederverwendbaren Skill, ein frischer Chat pro Aufgabe, und Du prüfst jedes Ergebnis dazwischen. Lies mich Was es zeigt Der Quelle-zu-Quiz-Workflow in der Phasenansicht: drei Phasen von einem Ziel bis zu einem Quiz und einem wiederverwendbaren Skill, je eine Karte. Was Du ausprobierst Klick auf eine Phase, um ihr Fenster „Jetzt üben“ zu öffnen und ihre Prompts in einen frischen KI-Chat zu kopieren. In der Werkzeugleiste wählst Du einen anderen Anwendungsfall. Worauf Du achtest Das Häkchen auf einer Karte zeigt: Ein Mensch prüft dieses Ergebnis, bevor die nächste Phase beginnt. Anwendungsfall : Aus einer Quelle ein Quiz machen Phasen Aufgaben Demo-Modus Jetzt üben für Anforderungen Anforderungen Von einem Ziel zur Quiz-Spezifikation geprüft Freigabe 1 Jetzt üben für Umsetzen Umsetzen Bauen, spielen, korrigieren Freigabe 2 Jetzt üben für Verbessern Verbessern Dein Durchlauf wird ein wiederverwendbarer Skill"
     },
     {
       "id": "about",
@@ -23,7 +23,7 @@
     },
     {
       "id": "play",
-      "text": "Ausprobieren Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Projektplan-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+      "text": "Ausprobieren Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Quelle-zu-Quiz-Workflow, die anderen Anwendungsfälle eine Pille weiter, jedes „Ausprobieren“ offen."
     },
     {
       "id": "about",
