@@ -67,7 +67,7 @@ _Done when_ every todo is done or blocked, and each one has a closed Job span wi
 
 ### 6. Serve and open the PR
 
-Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it.
+Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it. The job also copies the Episode into an Event's Playlist when the user named one, and checks the PR's Cloudflare preview and its Lighthouse scores.
 
 Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. The user's feedback and Promotion follow; [Promotion archives the log](#promotion).
 
