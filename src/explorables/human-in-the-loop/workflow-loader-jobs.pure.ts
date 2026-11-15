@@ -6,6 +6,9 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
  * output, an output on every job but the last, the goals and the stage summary. One sentence per problem.
  */
 
+/** The ids that appear more than once, each repeat once. */
+export const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
+
 const SUMMARY_WORDS = 8;
 
 const wordCount = (text: string): number => text.trim().split(/\s+/).length;
@@ -86,4 +89,17 @@ export function jobOrderProblems(file: WorkflowFile): string[] {
       ]),
     ];
   });
+}
+
+/**
+ * Outputs handed on twice, and gates held twice, by stages of the file as it runs in one mode: the same output or gate
+ * may sit on two stages only when they are marked for opposite modes, so the caller passes one mode's file.
+ */
+export function singletonProblems(file: WorkflowFile): string[] {
+  const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
+  const gates = file.stages.flatMap((stage) => (stage.gate === undefined ? [] : [String(stage.gate)]));
+  return [
+    ...dupes(outputs).map((name) => `The output "${name}" is handed on by two tasks.`),
+    ...dupes(gates).map((gate) => `The gate ${gate} is held by two stages that can run together.`),
+  ];
 }

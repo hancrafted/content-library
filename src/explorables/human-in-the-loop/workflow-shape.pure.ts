@@ -38,6 +38,7 @@ const limit = obj({ full: int, demo: int });
 const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(CHAT_MARK_NAMES) } }, [
   'icon',
 ]);
+const skills = list(str, 1);
 const task = obj(
   {
     id: str,
@@ -50,13 +51,15 @@ const task = obj(
     slots: list(slot),
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
+    skills,
+    then: obj({ skills, sections: list(section, 1) }),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     limits: { t: 'rec', of: limit },
     openAIButtons: list(chatButton, 1),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
     optional: bool,
   },
-  ['summary', 'needs', 'output', 'review', 'instructions', 'limits', 'openAIButtons', 'optional'],
+  ['summary', 'needs', 'output', 'skills', 'then', 'review', 'instructions', 'limits', 'openAIButtons', 'optional'],
 );
 const stage = obj(
   {
@@ -64,14 +67,15 @@ const stage = obj(
     title: str,
     learningGoal: str,
     summary: str,
-    foreach: obj({ over: str, demo: int, item: str }, ['item']),
+    foreach: obj({ over: str, demo: int, item: str, technical: enumOf(['rounds']) }, ['item', 'technical']),
     moves: list(obj({ letter: enumOf(['B', 'R', 'I', 'E', 'F']), why: str }), 1),
     gate: int,
+    only: enumOf(MODES),
     card: obj({ label: str, lines: list(str), status: str }),
     optional: bool,
     jobs: list(task, 1),
   },
-  ['summary', 'foreach', 'moves', 'gate', 'card', 'optional'],
+  ['summary', 'foreach', 'moves', 'gate', 'only', 'card', 'optional'],
 );
 
 /** The Spec of a whole Workflow file. */

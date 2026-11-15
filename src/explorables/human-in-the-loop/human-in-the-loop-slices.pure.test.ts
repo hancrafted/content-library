@@ -552,4 +552,58 @@ describe('edge cases', () => {
     for (const part of Object.values(slices)) expect(Object.keys(part)).not.toContain('dispatch');
     for (const part of Object.values(slices)) expect(Object.keys(part)).not.toContain('state');
   });
+
+  /** The fixture with its repeated `each` stage marked for one mode. */
+  const marked = (only: 'demo' | 'full'): Workflow => {
+    const loaded = loadWorkflow(fixtureEn);
+    if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
+    const stages = loaded.file.stages.map((each) => (each.id === 'each' ? { ...each, only } : each));
+    return workflowOf({ ...loaded.file, stages });
+  };
+  const idsOf = (workflow: Workflow, demo: boolean) => {
+    const state = { ...createState(start), demo };
+    const shownNow = showWorkflow(workflow, state);
+    return {
+      drawn: shownNow.workflow.stages.map((each) => each.id),
+      viewed: shownNow.view.stages.map((each) => each.id),
+      run: shownNow.run.stages.map((each) => each.id),
+      rounds: Object.keys(shownNow.drawn),
+    };
+  };
+
+  it('shows the stages of the current mode only: the diagram, the view, the run and the rounds drawn', () => {
+    // ARRANGE
+    const demoOnly = marked('demo');
+    // ACT
+    const demo = idsOf(demoOnly, true);
+    const full = idsOf(demoOnly, false);
+    // ASSERT
+    expect(demo).toEqual({
+      drawn: ['ask', 'each', 'end'],
+      viewed: ['ask', 'each', 'end'],
+      run: ['ask', 'each', 'end'],
+      rounds: ['each'],
+    });
+    expect(full).toEqual({ drawn: ['ask', 'end'], viewed: ['ask', 'end'], run: ['ask', 'end'], rounds: [] });
+  });
+
+  it('counts only the jobs of the stages of the current mode', () => {
+    // ARRANGE
+    const fullOnly = marked('full');
+    const total = (demo: boolean) =>
+      showWorkflow(fullOnly, { ...createState(start), demo }).run.stages.reduce((sum, each) => sum + each.total, 0);
+    // ACT
+    const counts = [total(true), total(false)];
+    // ASSERT
+    expect(counts[1]).toBeGreaterThan(counts[0] as number);
+  });
+
+  it('hands back the Workflow itself when no stage is marked, so nothing is rebuilt', () => {
+    // ARRANGE
+    const real = realFlow();
+    // ACT
+    const shownNow = showWorkflow(real, createState(start));
+    // ASSERT
+    expect(shownNow.workflow).toBe(real);
+  });
 });

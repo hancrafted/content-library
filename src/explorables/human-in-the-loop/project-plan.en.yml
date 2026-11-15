@@ -190,6 +190,7 @@ stages:
             - The audience says who it is for and how many.
             - "Nothing is guessed: a figure that was not given says 'not set yet'."
         instructions: 'Open a new chat (ChatGPT or any AI chat), paste the prompt and read the brief it writes. Then copy the brief with the copy button on its box: every later step needs it.'
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -232,7 +233,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Turn my rough idea below into a task brief: the goal in one or two sentences, the audience, the constraints and what done looks like.
+                Turn my rough idea below into a task brief: the goal in one or two sentences, the audience, the constraints and what done looks like.
 
                 ```markdown
                 {{idea}}
@@ -300,6 +301,7 @@ stages:
             - One question is about something you had not thought of.
             - What is still undecided is listed under Open decisions, not guessed.
         instructions: "Open a new chat, paste the prompt and answer the questions in your own words; 'yes' takes all the recommendations. Then copy the result."
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -345,7 +347,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Ask me at most {{limit.questions}} numbered questions about this task, with two options and a recommended answer for each choice, an open question for what only I know, and one question about something I probably have not thought of. When I have answered, write the result.
+                Ask me at most {{limit.questions}} numbered questions about this task, with two options and a recommended answer for each choice, an open question for what only I know, and one question about something I probably have not thought of. When I have answered, write the result.
 
                 ```markdown
                 {{task}}
@@ -424,6 +426,7 @@ stages:
             - Every epic is an H3 under Epics, with one sentence on what it decides.
             - The epics together cover the goal, with no overlap.
         instructions: 'Open a new chat, paste the prompt and read the plan it writes. Copy the plan: the next stage takes one epic at a time.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -472,7 +475,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Write a high-level plan for this task: the goal, then about four epics, each an H3 under the heading Epics with one sentence on what it decides, and the open decisions. Do not plan inside any epic.
+                Write a high-level plan for this task: the goal, then about four epics, each an H3 under the heading Epics with one sentence on what it decides, and the open decisions. Do not plan inside any epic.
 
                 ```markdown
                 {{task}}
@@ -573,6 +576,7 @@ stages:
             - One answer is something you had not thought of.
             - What is still undecided is listed under Open decisions, not guessed.
         instructions: "Open a new chat for each epic and paste that chat's prompt; answer in your own words, 'yes' takes all the recommendations. Copy every result."
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -625,7 +629,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /grilling You are the orchestrator. Take every H3 under the heading Epics of the plan below as one epic, and start one subagent per epic, each with a fresh context and only its own epic. Each subagent asks me at most {{limit.questions}} numbered questions about its epic, with two options and a recommended answer for each choice, and one question about something I probably have not thought of.
+                You are the orchestrator. Take every H3 under the heading Epics of the plan below as one epic, and start one subagent per epic, each with a fresh context and only its own epic. Each subagent asks me at most {{limit.questions}} numbered questions about its epic, with two options and a recommended answer for each choice, and one question about something I probably have not thought of.
 
                 ```markdown
                 {{plan}}
@@ -712,6 +716,7 @@ stages:
             - Nothing is in the spec that the answers did not say.
             - Dependencies name the other epics, not tasks.
         instructions: 'Open a new chat for each epic and paste the prompt with that epic filled in. Check that each requirement could be ticked off with yes or no, then copy the result.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -765,7 +770,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-spec You are the orchestrator. Start one subagent per epic, each with a fresh context. Each subagent turns the questions and answers of its epic into a spec: the goal, requirements that can each be ticked yes or no, what is out of scope and the dependencies on other epics. Do not interview me again.
+                You are the orchestrator. Start one subagent per epic, each with a fresh context. Each subagent turns the questions and answers of its epic into a spec: the goal, requirements that can each be ticked yes or no, what is out of scope and the dependencies on other epics. Do not interview me again.
 
                 ```markdown
                 {{plan}}
@@ -849,6 +854,7 @@ stages:
             - Each requirement says which epic it came from.
             - Open questions are listed, not guessed.
         instructions: 'Open a new chat and paste the prompt with the epic specs filled in. Copy the requirements document it writes.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -889,7 +895,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Merge these epic specs into one requirements document: one numbered list with the epic of each requirement, nothing added and nothing dropped, and the open questions.
+                Merge these epic specs into one requirements document: one numbered list with the epic of each requirement, nothing added and nothing dropped, and the open questions.
 
                 ```markdown
                 {{spec_*}}
@@ -955,6 +961,7 @@ stages:
             - Every conflict ends in a decision, with the reason in a few words.
             - The final list has no conflict left.
         instructions: 'Open a new chat and paste the prompt with the requirements filled in. Read each conflict and decision, then copy the result.'
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -995,7 +1002,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Find the dependencies and the conflicts between these requirements, propose a decision for each conflict with the reason in a few words, and write the final list without conflicts. Mark every decision that is mine to make as an open decision.
+                Find the dependencies and the conflicts between these requirements, propose a decision for each conflict with the reason in a few words, and write the final list without conflicts. Mark every decision that is mine to make as an open decision.
 
                 ```markdown
                 {{requirements}}
@@ -1068,6 +1075,7 @@ stages:
             - Each ticket names the requirements it covers.
             - Together the tickets cover every requirement, with no overlap.
         instructions: 'Open a new chat and paste the prompt with the resolved requirements filled in. Copy the tickets it writes: each ticket gets its own chat in the next stage.'
+        skills: [to-tickets]
         do:
           simple:
             - heading: Your role
@@ -1108,7 +1116,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-tickets Cut these requirements into about five vertical-slice tickets, each an H3 under the heading Tickets, saying what to deliver and which requirements it covers, none overlapping, every requirement covered.
+                Cut these requirements into about five vertical-slice tickets, each an H3 under the heading Tickets, saying what to deliver and which requirements it covers, none overlapping, every requirement covered.
 
                 ```markdown
                 {{resolved}}
@@ -1227,6 +1235,7 @@ stages:
             - The numbers table has labelled columns and a total where one makes sense.
             - Every number comes from the ticket or the requirements; an unknown one says 'not known'.
         instructions: "Open a new chat for each ticket and paste that chat's prompt. Copy every result."
+        skills: [to-tickets]
         do:
           simple:
             - heading: Your role
@@ -1274,7 +1283,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-tickets You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket. Each subagent does what its ticket asks, writes the result in a few sentences and keeps one table of numbers with labelled columns.
+                You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket. Each subagent does what its ticket asks, writes the result in a few sentences and keeps one table of numbers with labelled columns.
 
                 ```markdown
                 {{resolved}}
@@ -1359,6 +1368,7 @@ stages:
             - The numbers of all tickets are in one place.
             - The open decisions of all results are collected.
         instructions: 'Open a new chat and paste the prompt with the ticket results filled in. Copy the combined document.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -1399,7 +1409,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Combine these ticket results into one document: one line per result, one table with all numbers and every open decision collected. Change nothing in the results.
+                Combine these ticket results into one document: one line per result, one table with all numbers and every open decision collected. Change nothing in the results.
 
                 ```markdown
                 {{ticket_*}}
@@ -1471,6 +1481,7 @@ stages:
             - Every key figure comes from the combined results.
             - Risks and open decisions are separate lists, each with a clear owner or question.
         instructions: 'Open a new chat and paste the prompt with the combined results filled in. Copy the report it writes.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -1512,7 +1523,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Write a status report from these combined results: a three-sentence summary, up to five key figures, the risks and the open decisions. Use only numbers from the results.
+                Write a status report from these combined results: a three-sentence summary, up to five key figures, the risks and the open decisions. Use only numbers from the results.
 
                 ```markdown
                 {{combined}}
@@ -1599,6 +1610,7 @@ stages:
             - Every number on a chart comes from the report.
             - The page opens in a browser from one file, with no other files.
         instructions: 'Open a new chat, paste the prompt and save the HTML it writes as a file, then open it in your browser. Tick the box when you have looked at the page and decided.'
+        skills: [to-spec]
         do:
           simple:
             - heading: Your role
@@ -1642,7 +1654,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Render this report as one self-contained HTML page: the summary first, then one or two charts of the key figures, then the risks and the open decisions. Use only numbers from the report.
+                Render this report as one self-contained HTML page: the summary first, then one or two charts of the key figures, then the risks and the open decisions. Use only numbers from the report.
 
                 ```markdown
                 {{report}}

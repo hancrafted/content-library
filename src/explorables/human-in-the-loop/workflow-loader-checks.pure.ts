@@ -1,9 +1,9 @@
 import { markerCount } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure.ts';
-import { unneededOutputs } from './workflow-loader-jobs.pure.ts';
+import { dupes, unneededOutputs } from './workflow-loader-jobs.pure.ts';
 import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
 import { expandSections, unknownMarkers } from './workflow-markers.pure.ts';
-import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure.ts';
+import { producersFor, tasksOf, type Producer } from './workflow-outputs.pure.ts';
 import { slotSample } from './workflow-sample.pure.ts';
 import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -11,8 +11,6 @@ import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './wor
  * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
  * markers, and every sample and example against its template. One sentence per problem.
  */
-
-const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 export function templateProblems(file: WorkflowFile): string[] {
   return Object.entries(file.templates).flatMap(([key, source]) => {
@@ -25,13 +23,12 @@ export function templateProblems(file: WorkflowFile): string[] {
   });
 }
 
+/** Stage ids and task ids used twice anywhere in the file: a mode never makes two of them the same. */
 export function idProblems(file: WorkflowFile): string[] {
   const tasks = tasksOf(file);
-  const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
   return [
     ...dupes(file.stages.map((stage) => stage.id)).map((id) => `The stage id "${id}" is used twice.`),
     ...dupes(tasks.map((task) => task.id)).map((id) => `The task id "${id}" is used twice.`),
-    ...dupes(outputs).map((name) => `The output "${name}" is handed on by two tasks.`),
   ];
 }
 

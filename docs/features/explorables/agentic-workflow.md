@@ -10,7 +10,7 @@ Read before writing or changing a Workflow file (`src/explorables/human-in-the-l
 
 ## One language per file
 
-A file is written in one language and renders as written; it has no locale field. A Workflow ships as a pair, `<id>.en.yml` and `<id>.de.yml`, registered in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files of a pair to one structure: Workflow, stage, task and slot ids, slot modes, `free`, sample and example counts, section purposes and technique ids, `foreach`, the number of facts, checks and card lines, the template keys. Strings are free. Change one file's structure and change its twin in the same commit. The build throws every problem of a shipped file; a viewer's upload lists them under the toolbar.
+A file is written in one language and renders as written; it has no locale field. A Workflow ships as a pair, `<id>.en.yml` and `<id>.de.yml`, registered in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files of a pair to one structure: Workflow, stage, task and slot ids, slot modes, `free`, sample and example counts, section purposes and technique ids, `foreach`, `only`, the number of facts, checks and card lines, the template keys. Strings are free. Change one file's structure and change its twin in the same commit. The build throws every problem of a shipped file; a viewer's upload lists them under the toolbar.
 
 ## Top level
 
@@ -39,12 +39,14 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 ## Stage and task fields
 
-Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `moves` (a list of `letter`, one of `B`, `R`, `I`, `E` or `F`, and `why`, the circle's tooltip: why that BRIEF move applies to this stage; a stage applies several moves, one or none, listed in BRIEF order), `gate` (a whole number, the stage's gate), `card` (`label`, `lines`, `status`, the sign-off card) and `optional` (see Optional jobs and stages). The first stage with a `card` holds the focal job of the diagram.
+Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `moves` (a list of `letter`, one of `B`, `R`, `I`, `E` or `F`, and `why`, the circle's tooltip: why that BRIEF move applies to this stage; a stage applies several moves, one or none, listed in BRIEF order), `gate` (a whole number, the stage's gate), `only` (`demo` or `full`; see Stages by mode), `card` (`label`, `lines`, `status`, the sign-off card) and `optional` (see Optional jobs and stages). The first stage with a `card` holds the focal job of the diagram.
 
-Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `review`, `needs`, `instructions`, `limits`, `openAIButtons`, `optional`.
+Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `skills`, `then`, `review`, `needs`, `instructions`, `limits`, `openAIButtons`, `optional`.
 
 - `goal`: `do` is the one-sentence goal of the do step, the stepper's title; `review` is the goal of the review step and is required when the job has a review.
 - `needs`: ids of jobs of the same stage that run first. A slot may take the output of a job it needs; a slot that takes a same-stage output without `needs`, an unknown id and a cycle are load problems.
+- `skills`: the skills the technical do prompt calls, a list of names without the slash (`[grilling]`). The renderer prints each as `/<name>` on its own line at the very top of the prompt, then a blank line, before the first `## heading`; the page's preview, edit box and copy all show it, and `render-prompt.ts` prints it. A slash call (`/grilling`, `/to-spec`) written inside a technical section's text is a load problem, so a skill can be called only through this field, and every pasted prompt starts with its skill call. Name a skill the viewer's coding agent has; an AI chat (Simple level) has none.
+- `then`: for a job that needs a second skill, `{ skills, sections }`: a second technical prompt, built like the first (its own `skills` line on top, its sections after), copied after the do prompt in the same session. The stepper shows both copy buttons in the one step, the second under "Then, in the same session"; the result box stays below both. It takes no slot: only `{{item}}`, `{{template}}` and the job's limits. The renderer's `--then` flag prints it. Write the do prompt to ask only, and `then` to write the file and name where it lands.
 - `openAIButtons`: the AI chats this job's prompts open in, each `{ label, url, icon }`, shown as one button group ("ChatGPT | Gemini") beside Copy prompt. Without it a job shows the visual's default, `ui.openAIButtons` in `human-in-the-loop.config.yml`. A page job names Gemini alone, since the free ChatGPT has failed to return a page. `url` starts with `https://` and opens an empty chat, never a prefilled one; `icon` is `chatgpt`, `gemini` (the chat marks in `core-components/chat-icons/`) or `null` for the label alone.
 
 - `output` names what the task hands on. A later task's slot takes it by that id. The final job of the last stage may have none; the viewer ticks a checkbox when it is done.
@@ -52,7 +54,7 @@ Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`
 - `do` carries `simple` and `technical`, each at least one section. Simple is a text-only chat; technical is a coding harness, so its prompt is the slash command plus the task. Both are full prompts; nothing is assembled between them.
 - `instructions`: one or two plain sentences on what the user does in the do step, shown above the slots.
 - `details`: `why`, `example`, `goodLooksLike` (at least one line) and optional `techniques`; the right column of the popover. `why` and `techniques` render under "why it matters".
-- Ids are unique across the file: stage ids, task ids and outputs.
+- Ids are unique across the file: stage ids and task ids. An output and a gate are unique among the stages that can run together; see Stages by mode.
 
 Section: `heading` (rendered as H2), `text` (markdown with markers), and optional `purpose` (no purpose, no marker or tooltip), `explain` (replaces the purpose's explanation for this section), `techniques` (catalogue ids, listed with their tier in the purpose tooltip), `only` (`demo` or `full`: the section shows in that mode only, in a do prompt or the reviewer; absent, in both). `project-plan` gives every prompt a `Practice run` section with `only: demo`, which steers toward the simplest option, and a `Scope` section with `only: full`; both say to name a missing number as an open decision rather than guess one. Every `techniques` list, on a section or on `details`, names catalogue ids only, each once, and is non-empty when present. Tag only where the technique genuinely applies.
 
@@ -95,8 +97,9 @@ A job that reads all rounds of a repeated stage (the merge of the epic specs, th
 
 ## Repeated stage
 
-A stage repeats with `foreach: { over: <output>#<h2 slug>, demo: N, item: <word> }`; it replaces the old `fanOut`. `item` is optional: what one round is called in the file's language (`epic`, German `Epic`), so the Detailed bracket reads "× each epic (2)"; without it the bracket says "round". `over` names an output an earlier stage hands on and the slug of an H2 of that job's template (lowercase words joined by dashes). Each H3 under that H2 in the pasted result is one round, and the whole stage's jobs run once per round. A round reaches its item through `{{item}}`, which is filled with the H3 and the text under it; the round's title is the H3 text.
+A stage repeats with `foreach: { over: <output>#<h2 slug>, demo: N, item: <word>, technical: rounds }`; it replaces the old `fanOut`. `item` is optional: what one round is called in the file's language (`epic`, German `Epic`), so the Detailed bracket reads "× each epic (2)"; without it the bracket says "round". `over` names an output an earlier stage hands on and the slug of an H2 of that job's template (lowercase words joined by dashes). Each H3 under that H2 in the pasted result is one round, and the whole stage's jobs run once per round. A round reaches its item through `{{item}}`, which is filled with the H3 and the text under it; the round's title is the H3 text.
 
+- `technical: rounds` (optional, the only value) opts the stage in to rounds at the Technical level: while demo mode is off, the Technical stepper plays one round per item like the chat, and each round's technical prompt may take `{{item}}`. Without it one technical prompt, an orchestrator, runs every round, and `{{item}}` in a technical prompt is a load problem. In demo mode the Technical level never plays rounds. Only `source-to-quiz`'s `grill` opts in.
 - Demo mode takes the first `demo` H3s, in document order; full mode takes every H3 pasted. Before anything is pasted, the rounds come from the producing job's `details.example`.
 - Each job's output becomes `x_1` ... `x_N` (N is `demo`); a later slot over it is `multiple` with N markers. `details.example` of a job in the stage is a list of N, one example per demo round, so the example and the downstream sample stay one coherent set.
 - The loader reports an `over` that is not `output#slug`, an unknown output or heading, a `demo` below 1, `fanOut` as an unknown field and `{{item}}` outside a repeated stage.
@@ -133,6 +136,16 @@ A stage repeats with `foreach: { over: <output>#<h2 slug>, demo: N, item: <word>
 #   slots: [{ id: research, mode: multiple, label: ..., sample: [ "<1>", "<2>", "<3>" ] }]
 #   a do section uses {{research_1}} {{research_2}} {{research_3}}
 ```
+
+## Stages by mode
+
+A stage may carry `only: demo` or `only: full`, the vocabulary of a section's `only`. Absent, it takes part in both modes. Use it where demo mode needs a different chain, not a shorter one: `source-to-quiz` has one grill over three categories in demo mode (`grill-demo`) and one round per category plus a seams job in a full run (`grill`, `seams`).
+
+- The diagram, run model, counts, stepper and progress show only the stages of the current mode. `fileInMode` (`workflow-mode.pure.ts`) is the one filter: a file as one mode runs it, without the other mode's stages. The run model, the view and the diagram read that file.
+- Two stages may hand on the same `output`, or hold the same `gate`, only when they are marked for opposite modes; the loader reports `The output "x" is handed on by two tasks.` and `The gate N is held by two stages that can run together.` otherwise. Stage ids and task ids stay unique across the whole file.
+- Dependency checks run once per mode, on the file as that mode runs it: a slot, `needs` or `foreach.over` that names an output only the other mode hands on is a problem. A problem found in both modes is reported once.
+- A later stage reads the shared output (`spec`) without knowing which mode produced it. The first stage with a `card` in the current mode holds the focal job.
+- The pair test holds `only` equal in both languages.
 
 ## Optional jobs and stages
 

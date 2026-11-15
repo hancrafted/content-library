@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { readTemplate } from './markdown-handoff.pure';
 import { WORKFLOW_IDS, workflowFor } from './workflow-data';
+import { slugOf } from './workflow-foreach.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -20,6 +22,8 @@ const count = (value: string | readonly string[] | undefined): number | undefine
 
 const sectionShape = (section: SectionDef) => [section.purpose, section.only, section.techniques ?? []];
 const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, count(slot.sample)];
+/** The second technical prompt of a task as structure: its skills and its sections, none when absent. */
+const thenShape = ({ then }: TaskDef) => then && { skills: then.skills, sections: then.sections.map(sectionShape) };
 const taskShape = (task: TaskDef) => ({
   id: task.id,
   output: task.output,
@@ -27,6 +31,7 @@ const taskShape = (task: TaskDef) => ({
   goal: [Boolean(task.goal.do), Boolean(task.goal.review)],
   template: task.template,
   slots: task.slots.map(slotShape),
+  technicalCalls: [task.skills ?? [], thenShape(task)],
   simple: task.do.simple.map(sectionShape),
   technical: task.do.technical.map(sectionShape),
   instructions: Boolean(task.instructions),
@@ -42,6 +47,17 @@ const taskShape = (task: TaskDef) => ({
   optional: task.optional ?? false,
 });
 
+/**
+ * What a `foreach.over` points at, as structure: the output and which H2 of its template, by position. The slug is
+ * a word of one language (`categories`, German `kategorien`), so only its place among the H2s must match.
+ */
+const overShape = (file: WorkflowFile, over: string) => {
+  const [output = '', slug = ''] = over.split('#');
+  const key = file.stages.flatMap((stage) => stage.jobs).find((task) => task.output === output)?.template ?? '';
+  const slugs = readTemplate(file.templates[key] ?? '').h2.map(slugOf);
+  return [output, slugs.indexOf(slug)];
+};
+
 /** What must match across the pair. */
 const structureOf = (file: WorkflowFile) => ({
   id: file.id,
@@ -55,9 +71,15 @@ const structureOf = (file: WorkflowFile) => ({
     id: stage.id,
     moves: stage.moves?.map((move) => move.letter),
     gate: stage.gate,
+    only: stage.only,
     summary: Boolean(stage.summary),
     optional: stage.optional ?? false,
-    foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },
+    foreach: stage.foreach && {
+      demo: stage.foreach.demo,
+      technical: stage.foreach.technical,
+      item: Boolean(stage.foreach.item),
+      over: overShape(file, stage.foreach.over),
+    },
     card: stage.card?.lines.length,
     jobs: stage.jobs.map(taskShape),
   })),

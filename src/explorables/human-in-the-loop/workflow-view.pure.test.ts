@@ -98,6 +98,27 @@ describe('success cases', () => {
     // ASSERT
     expect([marked.optional, plain.optional]).toEqual([true, false]);
   });
+
+  it('plays a repeated stage per round at the Technical level only when it opts in and demo mode is off', () => {
+    // ARRANGE
+    const opted = (): typeof WORKFLOW => ({
+      ...WORKFLOW,
+      stages: WORKFLOW.stages.map((stage) =>
+        stage.id === 'each' ? { ...stage, foreach: { ...stage.foreach!, technical: 'rounds' as const } } : stage,
+      ),
+    });
+    const repeats = (demo: boolean, level: typeof SIMPLE | typeof TECHNICAL, workflow = opted()) =>
+      workflowView(workflow, { ...level, demo }).stages.find((stage) => stage.id === 'each')?.repeats;
+    // ACT
+    const seen = [
+      repeats(false, TECHNICAL),
+      repeats(true, TECHNICAL),
+      repeats(false, SIMPLE),
+      repeats(false, TECHNICAL, WORKFLOW),
+    ];
+    // ASSERT
+    expect(seen).toEqual([true, false, true, false]);
+  });
 });
 
 describe('failure cases', () => {

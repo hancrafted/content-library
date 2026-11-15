@@ -1,6 +1,6 @@
 // `node skills/author-hitl-workflow/scripts/render-prompt.ts <workflow.yml> <job> [options] [<marker>=<file>...]`:
 // prints one prompt of a Workflow file exactly as the page copies it (debug footer left out), so a local run
-// pastes the same text a viewer would. Options: --review (the review step), --full (a full run, not demo),
+// pastes the same text a viewer would. Options: --review (the review step), --then (the second technical prompt of a job that calls a second skill), --full (a full run, not demo),
 // --level=chat|cli (the chat prompt, the default, or the CLI one), --round=<n>:<item-file> (round n of a repeated stage, its H3 block).
 // Each <marker>=<file> fills a slot with a file's text: idea=idea.md, note_1=a.md, verdict_result#2=v.md.
 // Exits 1 with every problem on stderr.
@@ -14,6 +14,7 @@ const read = (path: string): string => readFileSync(path, 'utf8').trim();
 /** Each flag, and the request field its value sets. */
 const FLAGS: Readonly<Record<string, (value: string) => Options>> = {
   '--review': () => ({ step: 'review' }),
+  '--then': () => ({ step: 'then' }),
   '--full': () => ({ demo: false }),
   '--level': (value) => {
     const level = Object.hasOwn(LEVEL_OF, value) ? LEVEL_OF[value] : undefined;

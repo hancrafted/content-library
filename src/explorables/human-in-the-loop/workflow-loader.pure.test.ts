@@ -476,6 +476,45 @@ describe('success cases', () => {
     // ASSERT
     expect(problems).toContain('stages[0].jobs[0].optional must be true or false.');
   });
+
+  it('loads the skills a technical prompt calls and a second technical prompt with its own skills', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      Object.assign(research(file), {
+        skills: ['grill-with-docs'],
+        then: {
+          skills: ['to-spec'],
+          sections: [{ ...section, text: 'Write it to `.scratch/task/spec.md`, nowhere else.' }],
+        },
+      });
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages[1]?.jobs[0]?.skills).toEqual(['grill-with-docs']);
+  });
+
+  it('loads a repeated stage that opts in to technical rounds, and lets its technical prompt name {{item}}', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[1]!.foreach!, { technical: 'rounds' });
+      research(file).do.technical = [{ ...section, text: 'Only {{item}} in {{plan}}.' }];
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
+
+  it('does not take a path, a URL or a word with a slash for a skill call', () => {
+    // ARRANGE
+    const text = 'Read .scratch/task/intent.md, see https://example.com/a/b, choose and/or stop, 1/2.';
+    const change = (file: File) => void (research(file).do.technical = [{ ...section, text }]);
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
 });
 
 describe('failure cases', () => {
@@ -913,6 +952,81 @@ describe('failure cases', () => {
     // ASSERT
     expect(result).toMatch(/unknown marker/);
   });
+
+  it('refuses a slash call written inside technical section text, naming the task and the call', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      void (research(file).do.technical = [{ ...section, text: 'Run /grilling on this.\n/to-spec then.' }]);
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain(
+      'The technical prompt of task "research" calls /grilling in its text; name it in `skills`.',
+    );
+    expect(problems).toContain(
+      'The technical prompt of task "research" calls /to-spec in its text; name it in `skills`.',
+    );
+  });
+
+  it('refuses a slash call inside the sections of a second technical prompt', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      Object.assign(research(file), {
+        then: { skills: ['to-spec'], sections: [{ ...section, text: 'Use /research.' }] },
+      });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain(
+      'The second technical prompt of task "research" calls /research in its text; name it in `skills`.',
+    );
+  });
+
+  it('refuses a skill name that is not a lowercase skill name', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(research(file), { skills: ['/grilling', 'Write Spec'] });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain(
+      'Task "research" names the skill "/grilling"; write the name without the slash, lowercase.',
+    );
+    expect(problems).toContain(
+      'Task "research" names the skill "Write Spec"; write the name without the slash, lowercase.',
+    );
+  });
+
+  it('refuses {{item}} in a technical prompt of a stage that does not opt in to technical rounds', () => {
+    // ARRANGE
+    const change = (file: File) => void (research(file).do.technical = [{ ...section, text: 'Only {{item}}.' }]);
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain(
+      'The technical prompt of task "research" names {{item}}, but stage "research" has no `foreach.technical: rounds`.',
+    );
+  });
+
+  it('refuses a foreach.technical that is not rounds', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[1]!.foreach!, { technical: 'always' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].foreach.technical is "always", which is not one of rounds.');
+  });
+
+  it('reports {{item}} in a then prompt of a stage without technical rounds once, not as an unknown marker too', () => {
+    // ARRANGE
+    const then = { skills: ['to-spec'], sections: [{ ...section, text: 'Write {{item}}.' }] };
+    const change = (file: File) => Object.assign(research(file), { then });
+    const wanted = 'names {{item}}, but stage "research" has no `foreach.technical: rounds`';
+    // ACT
+    const lines = problemsOf(load(change)).split('\n');
+    // ASSERT
+    expect(lines.filter((line) => line.includes(wanted))).toHaveLength(1);
+    expect(lines.filter((line) => line.includes('{{item}}'))).toHaveLength(1);
+  });
 });
 
 describe('edge cases', () => {
@@ -946,4 +1060,99 @@ describe('edge cases', () => {
     // ASSERT
     expect(problems).toMatch(/must be a mapping/);
   });
+
+  it('loads two stages that hand on the same output and hold the same gate in opposite modes', () => {
+    // ARRANGE
+    const change = (file: File) => plannedTwice(file);
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages.map((stage) => stage.only)).toEqual(['demo', 'full', undefined]);
+  });
+
+  it('refuses the same output on two stages when they can run together, marked the same or not at all', () => {
+    // ARRANGE
+    const same = (file: File) => plannedTwice(file, { quick: { only: 'full' } });
+    const open = (file: File) => plannedTwice(file, { quick: { only: undefined } });
+    // ACT
+    const problems = [problemsOf(load(same)), problemsOf(load(open))];
+    // ASSERT
+    expect(problems[0]).toContain('The output "plan" is handed on by two tasks.');
+    expect(problems[1]).toContain('The output "plan" is handed on by two tasks.');
+  });
+
+  it('refuses the same gate on two stages that can run together, naming it', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[0]!, { gate: 1 });
+      Object.assign(file.stages[1]!, { gate: 1 });
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('The gate 1 is held by two stages that can run together.');
+  });
+
+  it('still refuses a stage id or a task id used twice across opposite modes', () => {
+    // ARRANGE
+    const stageId = (file: File) => plannedTwice(file, { quick: { id: 'plan' } });
+    const taskId = (file: File) =>
+      plannedTwice(file, { quick: { jobs: [{ ...file.stages[0]!.jobs[0]!, id: 'plan' }] } });
+    // ACT
+    const problems = [problemsOf(load(stageId)), problemsOf(load(taskId))];
+    // ASSERT
+    expect(problems[0]).toContain('The stage id "plan" is used twice.');
+    expect(problems[1]).toContain('The task id "plan" is used twice.');
+  });
+
+  it('checks dependencies per mode: a slot taking an output that exists only in the other mode is refused', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[0]!, { only: 'full' });
+      Object.assign(file.stages[0]!.jobs[0]!, { output: 'plan' });
+      Object.assign(file.stages[1]!, { only: 'demo' });
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" repeats over "plan#pieces", but no earlier stage hands on "plan".');
+    expect(problems).toContain('Slot "plan" of task "research" names no output of an earlier stage.');
+  });
+
+  it('reports a problem of a mode-marked stage once, not once per mode', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[1]!.jobs[0]!, { template: 'missing' });
+    // ACT
+    const problems = problemsOf(load(change)).split('\n');
+    // ASSERT
+    expect(problems.filter((line) => line.includes('unknown template "missing"'))).toHaveLength(1);
+  });
+
+  it('refuses an `only` that is neither demo nor full', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[0]!, { only: 'always' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[0].only is "always", which is not one of demo, full.');
+  });
 });
+
+/**
+ * The Plan stage exists twice, as a quick `demo` take and a thorough `full` one: both hand on `plan`, both hold gate 1.
+ * Research, after them, takes `plan` in either mode.
+ */
+function plannedTwice(file: File, over: { quick?: object; thorough?: object } = {}): void {
+  const [plan] = file.stages;
+  const quick = {
+    ...plan!,
+    id: 'plan-quick',
+    only: 'demo',
+    gate: 1,
+    jobs: [{ ...plan!.jobs[0]!, id: 'plan-quick' }],
+    ...over.quick,
+  };
+  Object.assign(plan!, { only: 'full', gate: 1, ...over.thorough });
+  file.stages.splice(0, 0, quick as never);
+}

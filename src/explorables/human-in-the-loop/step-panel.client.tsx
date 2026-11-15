@@ -13,6 +13,7 @@ import { Context } from './step-context.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { StepSection } from './step-section.client';
 import { debuggedPrompt, explanationPrompt } from './words.pure';
+import type { StepKind } from './workflow-prompts.pure';
 import type { TaskModalView } from './workflow-view.pure';
 
 /*
@@ -44,7 +45,7 @@ export const resultKey = (step: Step, task: TaskModalView): string => {
 };
 
 /** The name a step goes by in the item's lead: its kind and its chat. */
-export const panelKey = (kind: 'do' | 'review', step: Step): string => `${kind}#${step.chat ?? 0}`;
+export const panelKey = (kind: StepKind, step: Step): string => `${kind}#${step.chat ?? 0}`;
 
 /** What leads in this panel, if anything: its context, its Copy prompt, or its answer. */
 function leadOf(kit: StepKit, key: string) {
@@ -198,6 +199,14 @@ function DoSteps(props: PanelProps) {
       {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
         <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} />
+        {step.then && (
+          <>
+            <p data-then="" className="text-caption text-muted-foreground">
+              {words.thenCopy}
+            </p>
+            <Actions step={step.then} task={task} kit={kit} slots={slots} panel={panelKey('then', step)} />
+          </>
+        )}
         <Result
           name={resultKey(step, task)}
           kit={kit}
