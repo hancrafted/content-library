@@ -112,17 +112,27 @@ function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string
   );
 }
 
-/** The one scroll container; it returns to the top when the item or tab changes, and a revealed note scrolls to its top. */
+/**
+ * The one scroll container; it returns to the top when the item or tab changes, and a revealed note scrolls to its top.
+ * It scrolls back only once it has left the top: a `scrollTo` on a body still at the top, on mount or while the active
+ * Slide changes as the page scrolls, would force a layout of the whole page for nothing.
+ */
 function PanelBody(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   const body = useRef<HTMLDivElement>(null);
+  const leftTop = useRef(false);
   useEffect(() => {
+    if (!leftTop.current) return;
+    leftTop.current = false;
     body.current?.scrollTo({ top: 0 });
   }, [drawer.current, drawer.tab]);
   return (
     <div
       ref={body}
       {...{ [CONTEXT_SCROLL_ATTR]: '' }}
+      onScroll={(event) => {
+        leftTop.current = event.currentTarget.scrollTop > 0;
+      }}
       onClick={revealCitation}
       className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4"
     >

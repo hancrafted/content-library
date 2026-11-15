@@ -1,7 +1,7 @@
 import { routeOf } from '@/content-store/catalogue/record-routes';
 import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
 import { guideVideo, listedGuides } from '@/content-store/store';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import { BadgeList } from '@/shared/components/ui/badge-list';
@@ -17,7 +17,7 @@ import { getTranslations } from 'next-intl/server';
 function guideCards(locale: Locale) {
   const tagWords = PAGE_WORDS[locale].tags;
   return listedGuides().map(({ page, tags }) => {
-    const { title, description } = compositionOf(page.guide).messages[locale];
+    const { title, description } = summaryOf(page.guide)[locale];
     const video = guideVideo(page.guide.slug, locale);
     return {
       slug: page.guide.slug,

@@ -109,7 +109,7 @@ flowchart LR
 
 ### Don'ts
 
-1. **DON'T** render the table of contents, set an anchor `id` or add a route for one Episode. (Decision 1)
+1. **DON'T** render the table of contents, set an anchor `id` or hand-write a route for one Episode; its generated route renders the one container. (Decision 1)
 2. **DON'T** add a slide-type union or a renderer picking markup from data. (Decision 3)
 3. **DON'T** cast a key to make `t`, `ref` or `target` compile. (Decision 3)
 4. **DON'T** write `<h2>` in an Episode file. (Decision 4)
@@ -145,7 +145,7 @@ flowchart LR
 ## Compliance and Enforcement
 
 1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, a slug the generated registry does not hold, foreign key, undeclared note or untitled Section opener fails `tsc`, unless the Section declares none.
-2. **Unit tests:** the generated registry in step with the Episode folders, so an unregistered folder fails the fast suite; anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
+2. **Unit tests:** the generated registry, routes and summaries in step with the Episode folders, so an unregistered folder fails the fast suite; anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 

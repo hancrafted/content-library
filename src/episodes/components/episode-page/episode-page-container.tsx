@@ -5,7 +5,7 @@ import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/c
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
-import type { ComposedPage } from '@/episodes/lib/registry';
+import type { ComposedPage } from '@/episodes/lib/composed-page';
 import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { TocCollection, TocPageContext, TocSection } from '@/shared/lib/table-of-contents.pure';

@@ -33,9 +33,11 @@ const PINNED = [
   'client-never-imports-content-store',
   'content-store-tier',
   'core-components-are-a-leaf',
+  'episode-and-listing-routes-never-reach-every-composition',
   'episode-metadata-reaches-only-schemas-and-lib',
   'explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib',
   'explorable-reaches-shared-ui-and-lib',
+  'generated-episode-route-reaches-only-an-episode-record',
   'hooks-import-no-upper-tier',
   'hooks-reached-only-from-client',
   'layers-never-import-app',
@@ -45,6 +47,7 @@ const PINNED = [
   'page-assembly-reaches-areas-through-tier-folders',
   'page-chrome-reached-only-from-page-assembly-or-container',
   'records-read-only-through-store',
+  'route-reaches-components-only-via-roots',
   'schemas-are-a-leaf',
   'section-reaches-pool-by-alias',
   'section-slide-never-from-pool',
@@ -135,6 +138,11 @@ const EVENT = 'src/page-assembly/event';
 const DASHBOARD = 'src/page-assembly/dashboard';
 const EVENTS = 'src/events';
 const PIPELINE = 'src/pipeline';
+/** A generated Episode route (FE-007 §1.3): one per Episode page, its own page and one under an Event. */
+const OWN_ROUTE = 'src/app/(en)/episodes/probe/page.tsx';
+const EVENT_ROUTE = 'src/app/[locale]/events/2026-01-01-probe/episodes/probe/page.tsx';
+/** A hand-written route, which reaches no area at all. */
+const LIST_ROUTE = 'src/app/(en)/probe-list/page.tsx';
 
 /** Product areas, layers, and where `src/` meets `skills/` and `tools/`. */
 const AREAS: Readonly<Record<string, Probe>> = {
@@ -190,6 +198,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   [`${EVENT}/event-page.tsx`]: [`${EVENTS}/components/probe-card`, `${EVENTS}/lib/probe-event.pure`],
   [`${DASHBOARD}/dashboard-page.tsx`]: [`${PIPELINE}/components/dashboard`, `${PIPELINE}/lib/run-log.pure`],
   [`${SLIDE}/slide.tsx`]: ['src/explorables/probe/probe'],
+  [OWN_ROUTE]: ['src/episodes/probe/episode', `${LANDING}/landing-page`],
   'tools/probe/helper.ts': ['src/episodes/lib/probe.pure'],
   'skills/probe/scripts/run.ts': [`${PIPELINE}/lib/run-log.pure`, 'src/content-store/store'],
   'skills/probe/scripts/render.ts': ['src/explorables/probe/workflow.node'],
@@ -202,6 +211,8 @@ const AREAS: Readonly<Record<string, Probe>> = {
     'src/explorables/index',
   ],
   [`${DASHBOARD}/reaches-hook.tsx`]: [`${PIPELINE}/hooks/use-run`],
+  [EVENT_ROUTE]: ['src/episodes/lib/registry', `${LANDING}/landing-page`],
+  [LIST_ROUTE]: ['src/episodes/probe/episode', `${LANDING}/landing-page`],
   [`${EVENTS}/lib/reaches-episodes.pure.ts`]: ['src/episodes/lib/probe.pure'],
   [`${EVENTS}/components/reaches-episodes.tsx`]: [
     'src/episodes/lib/registry',
@@ -429,13 +440,14 @@ afterAll(() => {
 });
 
 describe('success cases', () => {
-  it("lets page assembly reach each area through its tier folders, a Slide show an Explorable, the store read Episode metadata, and skills and tools reach an area lib, the store entry or an Explorable's node entry", () => {
+  it("lets page assembly reach each area through its tier folders, a Slide show an Explorable, the store read Episode metadata, a generated Episode route its own Episode's record, and skills and tools reach an area lib, the store entry or an Explorable's node entry", () => {
     // ARRANGE
     const legal = [
       `${LANDING}/landing-page.tsx`,
       `${SLIDE}/slide.tsx`,
       `${EVENTS}/components/event-card.tsx`,
       `${STORE}/store.ts`,
+      OWN_ROUTE,
       'tools/probe/helper.ts',
       'skills/probe/scripts/run.ts',
       'skills/probe/scripts/render.ts',
@@ -562,7 +574,7 @@ describe('failure cases', () => {
     expect(found).toEqual(expected);
   });
 
-  it('rejects an upward edge, one area importing another, page assembly reaching past tier folders, a lib reaching React or a hook, a hook reached from a server file, shared reading the domain, the store reaching an area, and src/ and skills/ or tools/ meeting anywhere else', () => {
+  it('rejects an upward edge, one area importing another, a route reaching an area but a generated one its Episode record, page assembly reaching past tier folders, a lib reaching React or a hook, a hook reached from a server file, shared reading the domain, the store reaching an area, and src/ and skills/ or tools/ meeting anywhere else', () => {
     // ARRANGE
     const expected = [
       `areas-never-import-each-other: ${EVENTS}/components/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.pure.ts`,
@@ -574,7 +586,9 @@ describe('failure cases', () => {
       `areas-never-import-each-other: ${PIPELINE}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
       'content-store-tier: src/content-store/reaches-area.ts -> src/episodes/lib/probe.pure.ts',
       `content-store-tier: src/content-store/reaches-area.ts -> ${EVENTS}/components/event-card.tsx`,
+      `episode-and-listing-routes-never-reach-every-composition: ${EVENT_ROUTE} -> src/episodes/lib/registry.ts`,
       'explorable-reaches-shared-ui-and-lib: src/explorables/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
+      `generated-episode-route-reaches-only-an-episode-record: ${EVENT_ROUTE} -> src/episodes/lib/registry.ts`,
       `hooks-reached-only-from-client: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${DASHBOARD}/reaches-hook.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
@@ -592,6 +606,7 @@ describe('failure cases', () => {
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${EVENTS}/index.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> src/explorables/index.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
+      `route-reaches-components-only-via-roots: ${LIST_ROUTE} -> src/episodes/probe/episode.ts`,
       `shared-knows-no-domain: src/shared/components/reaches-events.tsx -> ${EVENTS}/components/probe-card.tsx`,
       'shared-knows-no-domain: src/shared/lib/reaches-domain.pure.ts -> src/content-store/schemas/fields.ts',
       'shared-knows-no-domain: src/shared/lib/reaches-domain.pure.ts -> src/content-store/store.ts',

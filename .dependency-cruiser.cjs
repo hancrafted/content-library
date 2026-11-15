@@ -11,12 +11,21 @@ const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 // The Episodes area's tier folders, each the tier its name says (FE-007): components, browser hooks, plain logic.
 const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and Template's record, so they sit
-// above the Episodes they list and the lib rules below leave them out.
-const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated)';
+// above the Episodes they list and the lib rules below leave them out. composition-summaries works the page summaries
+// out of them for `npm run registry`; no page imports it (FE-004 §4).
+const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The tests that run over every composed Episode and Template through those registries, rendering Slides.
 const REGISTRY_TESTS =
-  '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
+  '^src/episodes/lib/(page-summary|placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
+// A generated Episode route (FE-007 §1.3): `npm run registry` writes one per Episode page under each locale's route
+// group, at `episodes/<slug>/` or `events/<event>/episodes/<slug>/`, and it imports its own Episode's record.
+const GENERATED_EPISODE_ROUTE = [
+  '^src/app/[^/]+/episodes/[a-z0-9-]+/page\\.tsx$',
+  '^src/app/[^/]+/events/[a-z0-9-]+/episodes/[a-z0-9-]+/page\\.tsx$',
+];
+// An Episode's record: its folder's episode.ts, an Event's copy's under by-event/<event>/.
+const EPISODE_RECORD = ['^src/episodes/[^/]+/episode\\.ts$', '^src/episodes/by-event/[^/]+/[^/]+/episode\\.ts$'];
 // The product areas (spec #348): each a top-level folder of src/, between page assembly above and the content store
 // below. AREA captures the area's name, so a rule's `to` can say "this same area" as `^src/$1/`.
 const AREA_NAMES = '(episodes|events|explorables|pipeline)';
@@ -458,10 +467,32 @@ module.exports = {
       severity: 'error',
       comment:
         'A route composes; it does not lay out. src/app/** renders a page template from src/page-assembly/ and reaches shared components and page chrome only through SiteShell, and no product area at all (FE-007).',
-      from: { path: '^src/app/' },
+      from: { path: '^src/app/', pathNot: GENERATED_EPISODE_ROUTE },
       to: {
         path: ['^src/shared/(components|page-chrome)/', '^src/(episodes|events|explorables|pipeline)/'],
         pathNot: '^src/shared/page-chrome/site-shell\\.tsx$',
+      },
+    },
+    {
+      name: 'episode-and-listing-routes-never-reach-every-composition',
+      severity: 'error',
+      comment:
+        "src/episodes/lib/registry.ts imports every composition, and Turbopack ships every client component a route's server graph reaches, so a route reaching it loads every Episode's JS and CSS. Only the Template, Explorable page and Guide routes may: an Episode's generated route hands in its own composition, and the landing and every listing page read summaryOf (src/episodes/lib/page-summary.ts) instead (FE-004 §4, FE-007 §1.3).",
+      from: {
+        path: '^src/app/',
+        pathNot: '^src/app/[^/]+/(explorables|guides|episode-templates|master-slides|themes)/\\[[a-z]+\\]/page\\.tsx$',
+      },
+      to: { path: '^src/episodes/lib/registry\\.ts$', reachable: true },
+    },
+    {
+      name: 'generated-episode-route-reaches-only-an-episode-record',
+      severity: 'error',
+      comment:
+        "A generated Episode route, src/app/<group>/[events/<event>/]episodes/<slug>/page.tsx, reaches one product file: its own Episode's episode.ts, which it hands to the Episode page template, so the page imports no other Episode's Slides. Like every route it reaches no shared component and no other area file. `npm run registry` writes it; never edit it by hand (FE-007 §1.3).",
+      from: { path: GENERATED_EPISODE_ROUTE },
+      to: {
+        path: ['^src/shared/(components|page-chrome)/', '^src/(episodes|events|explorables|pipeline)/'],
+        pathNot: EPISODE_RECORD,
       },
     },
     // The area rules (spec #348, FE-007 §2.3–§2.5 and §2.8). With the layer rules above (layers-never-import-app,

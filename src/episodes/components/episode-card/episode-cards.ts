@@ -1,9 +1,8 @@
 import { hasPage } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
-import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
-import { sectionOf } from '@/episodes/lib/episode.pure';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
+import { sectionTitleAt } from '@/episodes/lib/page-summary.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
@@ -12,7 +11,7 @@ import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './e
 /** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
   if (entry.status !== 'published' || !hasPage(entry.ref)) return undefined;
-  const total = episodeMinutes(compositionOf(entry.ref), locale);
+  const total = summaryOf(entry.ref)[locale].minutes;
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
@@ -24,13 +23,13 @@ function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string }
 }
 
 /**
- * An Episode with a page (published, or upcoming with its id registered) with its title and caption from the registry,
+ * An Episode with a page (published, or upcoming with its id registered) with its title and caption from its summary,
  * by its ref; a page-less upcoming one has no record, and a page-less published one is a bug, so it throws.
  */
 function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
   const { ref } = entry;
   if (hasPage(ref)) {
-    const { title, caption } = compositionOf(ref).messages[locale];
+    const { title, caption } = summaryOf(ref)[locale];
     return { ...entry, copy: { title, caption } };
   }
   if (entry.status !== 'published') return entry;
@@ -72,8 +71,7 @@ function atSection(
   { entry, anchor }: { entry: LoadedEpisode; anchor: string },
   locale: Locale,
 ): EpisodeCard {
-  const section = hasPage(entry.ref) ? sectionOf(compositionOf(entry.ref).sections, anchor) : undefined;
-  const title = section?.messages[locale].title;
+  const title = hasPage(entry.ref) ? sectionTitleAt(summaryOf(entry.ref)[locale], anchor) : undefined;
   if (typeof title !== 'string') throw new Error(`The Episode "${entry.ref.id}" has no Section at "${anchor}"`);
   const { slug, route, href, status, leadTag, format, featuredRank } = card;
   return { slug, route, href, status, title, caption: '', leadTag, format, tags: [], featuredRank };

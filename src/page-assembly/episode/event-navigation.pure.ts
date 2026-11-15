@@ -1,9 +1,6 @@
 import { eventEpisodeRoute, eventRoute, routeOf, type EpisodesPathPage } from '@/content-store/catalogue/record-routes';
 import type { EventEpisodePage, ServedEvent } from '@/content-store/store';
-import { tocSectionsOf } from '@/episodes/components/episode-page/episode-page-container.pure';
-import { localizeSlideOutline } from '@/episodes/components/slide-master/slide-outline';
-import { placeSections } from '@/episodes/lib/episode.pure';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { eventCopy } from '@/events/lib/event-words';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
@@ -15,7 +12,7 @@ export function episodeContextOf(
   backLabel: string,
 ): TocPageContext {
   return {
-    title: compositionOf(page.episode).messages[locale].title,
+    title: summaryOf(page.episode)[locale].title,
     route: routeOf(page),
     back: {
       label: page.kind === 'event-episode' ? eventCopy(page.presented.event.slug, locale).title : backLabel,
@@ -35,12 +32,8 @@ export function eventNavigationOf(event: ServedEvent, locale: Locale): TocCollec
         : [
             {
               route: eventEpisodeRoute(event.slug, page),
-              title: compositionOf(page).messages[locale].title,
-              sections: tocSectionsOf(
-                placeSections(compositionOf(page).sections)
-                  .flat()
-                  .map((slide) => localizeSlideOutline(slide, locale)),
-              ),
+              title: summaryOf(page)[locale].title,
+              sections: summaryOf(page)[locale].sections,
             },
           ],
     ),
