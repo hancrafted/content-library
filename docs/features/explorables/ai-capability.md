@@ -40,12 +40,13 @@ Its Explorable page, `/explorables/ai-capability/`, shows the `timeline` Preset 
 />
 ```
 
-- `preset`: `timeline` rests until a pointer enters a column; `recap` rests the same way and lights workflows. Presets live in `ai-capability.config.yml`; `autoplay: true` would play the four scenes once in turn when the Slide scrolls into view.
+- `preset`: `timeline` rests until a pointer enters a column; `recap` rests the same way and lights workflows; `agents` lights agents and opens its card back side up. Presets live in `ai-capability.config.yml`; `autoplay: true` would play the four scenes once in turn when the Slide scrolls into view, and `turned: <level>` opens that card on its definition.
 - `words`: overrides any default word, at any depth — `{ levels: { factory: { year: '2026' } }, rows: { label: 'Rows' } }`.
-- `targets` and `markers`: per Level, the column a Speaker note lights and the Context marker placed on its card.
+- `targets` and `markers`: per Level, the column a Speaker note lights and the Context marker placed on its card, on whichever face is up.
+- `sourceMarkers`: per Level, a Context marker beside the source line on the back of its card.
 - `rowTargets`: per layer row, the `data-target` a Speaker note lights, placed on that row's chip, which renders whether the row is shown or not.
 
-Shown by the CyberForum intro: Slide `grounding` (`timeline`) and Slide `check-in-3--disciplines-recap` (`recap`).
+Shown by the CyberForum intro: Slide `grounding` (`timeline`) and Slide `check-in-3--disciplines-recap` (`recap`); and by the Episode `what-agentic-workflows-require`: Slide `what-an-agent-is` (`agents`).
 
 ## How it moves
 
@@ -56,6 +57,6 @@ Shown by the CyberForum intro: Slide `grounding` (`timeline`) and Slide `check-i
 - `scene-frames.pure.test.ts`: the choreography of each scene.
 - `rows.pure.test.ts`: row order whichever chip is pressed first, the chip order, a shown row's grid line, and where a multiplier sits on the productivity track.
 - `spans.pure.test.ts`: a span's positions on the four Levels, its slice per Level, and the fade stops of its drawn part.
-- `ai-capability.test.ts`: the config pair's parity (words, Presets, productivity, layers), every span end naming a Level and an edge, the server render (Explain first and on, the five other chips off, no row shown), the Factory drawn as a building with a question mark, the layer stacks' order and spans, every layer item holding a definition with a source page, the words override, the Presets.
+- `ai-capability.test.ts`: the config pair's parity (words, Presets, productivity, layers), every span end naming a Level and an edge, the server render (Explain first and on, the five other chips off, no row shown), the Factory drawn as a building with a question mark, the layer stacks' order and spans, every layer item holding a definition with a source page, the words override, the Presets, the `agents` Preset's turned card and the markers on a card's back.
 - Manual browser checks on the built export: a card and the model band turn to their definition, hover lights a column, a turned-away face keeps its link out of the tab order, the recap lights workflows, the scenes rest until hovered, a square travels its wire, the four wires end level in both locales, a chip blends its row in and out, rows stack in toolbar order, toolbar to model band fits 1440×900 with one row on, the layer rows hover, pin and slice without clipping at 1440 and 390 in both themes, and the phone carousel steps Levels with its arrows.
 - `tests/post-build/explorables.build.test.ts`: the retired `/explorables/ai-disciplines/` URL is gone in both locales.

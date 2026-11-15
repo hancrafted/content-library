@@ -252,6 +252,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **ORG**: Organizations: how a company passes knowledge between its people, from onboarding a new hire to the know-how that never gets written down.
 
+**PLAN**: Planning and problem solving: how a person or a program works out the steps that reach a goal, from heuristics for solving a problem to planning algorithms.
+
 **SALES**: Sales: how a company finds, wins and closes its customers, from first lead to signed deal, and how a buyer finds, trusts and chooses a coach or consultant.
 
 **START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.

@@ -1,0 +1,96 @@
+import { cn } from '@/shared/lib/utils';
+import { Cross } from './marks';
+import { SumCard } from './sum-card';
+import { FAIL_CHIP, type SeamSumProps } from './types';
+
+export type { Half, SeamSumCard } from './types';
+
+/*
+ * The party board as a sum: four cards, each ticked against its own goal, add up plus by plus to the party, which
+ * fails. Each card carries its failure at a seam: the fact, a chip naming the other card and what it held, the result
+ * and the half of the goal it breaks. Takes every word from its Scene. `compact` is the narrow form: the own goal
+ * shortens to the Scene's "met" line, a stamp may sit beside it, and the result line drops. Shared because the
+ * person board and its agent replay draw the same sum (FE-007 §5). Four across once the board is wide enough (the
+ * compact form sooner), else stacked, plus signs between.
+ */
+
+const SIGN = 'self-center text-subheading font-semibold text-muted-foreground';
+
+/** The four cards with a plus sign before each but the first. */
+function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'> & { compact: boolean }) {
+  return (
+    <ul
+      aria-label={words.cards}
+      className={cn(
+        'focus-group focus-group--dim-others flex flex-col items-stretch px-1',
+        compact ? 'gap-1 @2xl:flex-row' : 'gap-2 @3xl:flex-row',
+      )}
+    >
+      {cards.map((card, index) => (
+        <li
+          key={card.slug}
+          className={cn(
+            'flex min-w-0 flex-1 basis-0 flex-col items-stretch gap-1',
+            compact ? '@2xl:flex-row @2xl:gap-1' : '@3xl:flex-row @3xl:gap-2',
+          )}
+        >
+          {index > 0 && (
+            <span data-plus aria-hidden className={SIGN}>
+              +
+            </span>
+          )}
+          <SumCard card={card} words={words} compact={compact} tilt={index % 2 === 0 ? 'rotate-1' : '-rotate-1'} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** "=" and the party the cards add up to: its goal, failed, and which cards broke which half. */
+function SumResult({ result, words }: Pick<SeamSumProps, 'result' | 'words'>) {
+  return (
+    <div className="flex items-center gap-4 px-1">
+      <span aria-hidden className={SIGN}>
+        =
+      </span>
+      <div
+        data-sum-result
+        className="relative flex flex-1 rotate-1 flex-wrap items-center gap-x-6 gap-y-2 rounded-sm border-2 border-destructive bg-card px-4 py-3 shadow-xl"
+      >
+        <Cross label={words.fails} />
+        <p data-result-title className="text-body font-semibold">
+          {result.title}
+        </p>
+        <p data-result-goal className="text-caption text-muted-foreground">
+          {result.goal}
+        </p>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1">
+          {result.broken.map(({ half, by }) => (
+            <li key={half} data-broken={half} className="flex items-center gap-2">
+              <span className={FAIL_CHIP}>✗ {words.halves[half]}</span>{' '}
+              <span className="text-caption text-muted-foreground">{by}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+/** The four cards, the sum signs and the party they add up to, on the muted board. */
+export function SeamSum({ label, cards, result, words, compact = false }: SeamSumProps) {
+  return (
+    <div
+      data-seam-sum
+      className={cn('@container flex flex-col gap-4 rounded-xl bg-muted shadow-inner', compact ? 'p-3' : 'p-4')}
+    >
+      <p data-sum-label className="flex flex-wrap items-center gap-x-1.5 text-caption text-muted-foreground">
+        <span className="font-medium text-foreground">{label.name}</span> <span aria-hidden>·</span>{' '}
+        <span>{label.detail}</span>
+        {label.marker}
+      </p>
+      <CardRow cards={cards} words={words} compact={compact} />
+      <SumResult result={result} words={words} />
+    </div>
+  );
+}

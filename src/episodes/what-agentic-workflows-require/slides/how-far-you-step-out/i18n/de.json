@@ -1,0 +1,20 @@
+{
+  "title": "Wie weit Du Dich herausnimmst",
+  "caption": "Wie viel Mensch drinbleibt, entscheidest Du für jede Aufgabe.",
+  "board": "Ein Mensch steht an der Schleife über der Nahtstelle von Essen und Getränken zur Küche der Location und prüft das Menü; darüber die Pillen in, an und außen, an ausgewählt",
+  "pills": { "in": "in", "on": "an", "out": "außen" },
+  "seam": {
+    "from": "Essen & Getränke",
+    "to": "Location-Küche"
+  },
+  "footer": "ein Mensch an der Schleife prüft das Menü",
+  "voiceScript": {
+    "segments": {
+      "open-question": {
+        "title": "Offene Frage",
+        "keywords": "",
+        "script": "Die Definition hat eine Sache offengelassen: wie viel Mensch im Workflow bleibt. Das ist keine Einstellung für das ganze Unternehmen, sondern eine Entscheidung, die Du für jede Aufgabe triffst, und genau das lernen wir als Nächstes."
+      }
+    }
+  }
+}

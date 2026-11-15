@@ -24,6 +24,7 @@ export const EPISODE_IDS = [
   'maintaining-markdown-for-ai',
   'never-too-early-sales',
   'onboard-ai-every-time',
+  'what-agentic-workflows-require',
   'what-lies-below-the-waterline-of-sustainable-ai-skills',
 ] as const;
 

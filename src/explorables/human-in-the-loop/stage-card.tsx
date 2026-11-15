@@ -73,18 +73,25 @@ export function GateBadge({ gate }: { readonly gate: string }) {
 const ReviewedMark = ({ stage, words }: { stage: Stage; words: UiWords }) =>
   isChecked(stage) ? <CheckedMark word={words.checked} /> : null;
 
-function Marks(props: { stage: Stage; gate: string | undefined; words: UiWords; run: StageRun | undefined }) {
-  const { stage, gate, words, run } = props;
+function Marks(props: {
+  stage: Stage;
+  gate: string | undefined;
+  words: UiWords;
+  run: StageRun | undefined;
+  marker: StageSlot['marker'];
+}) {
+  const { stage, gate, words, run, marker } = props;
   return (
     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 empty:hidden">
       {run ? <StageProgress run={run} words={words} /> : <ReviewedMark stage={stage} words={words} />}
       {gate && <GateBadge gate={gate} />}
+      {marker}
     </div>
   );
 }
 
 /**
- * One stage as a card: title, BRIEF letters, summary, the checked mark and the gate badge. Where the run has work
+ * One stage as a card: title, BRIEF letters, summary, the checked mark, the gate badge and the Slide's marker. Where the run has work
  * (`run`), the card says instead how many jobs are done and where the stage stands.
  */
 export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean; run?: StageRun }) {
@@ -103,7 +110,7 @@ export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords
           {stage.summary}
         </p>
       )}
-      <Marks stage={stage} gate={gate} words={words} run={run} />
+      <Marks stage={stage} gate={gate} words={words} run={run} marker={slot.marker} />
     </div>
   );
 }

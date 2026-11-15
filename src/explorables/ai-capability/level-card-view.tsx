@@ -49,14 +49,23 @@ export function CardFrontView(props: {
 /** What a card's back shows: a definition and its source. */
 export type Defined = Pick<LevelWords, 'definition' | 'sourceLabel' | 'sourceUrl'>;
 
-/** A card's back (a pure view): the definition and the source it is taken from, opening in a new tab. */
-export function CardBackView(props: { readonly words: Defined; readonly labels: CardLabels }) {
+/**
+ * A card's back (a pure view): the definition and the source it is taken from, opening in a new tab. A Slide's card
+ * marker sits on top, as on the front, and its source marker beside the source line.
+ */
+export function CardBackView(props: {
+  readonly words: Defined;
+  readonly labels: CardLabels;
+  readonly marker?: ReactNode;
+  readonly sourceMarker?: ReactNode;
+}) {
   return (
     <div className="flex h-full flex-col gap-1 rounded-2xl bg-foreground px-4 py-3 text-background">
-      <p className="text-caption">
+      {props.marker && <span className="absolute top-2 right-2 z-10">{props.marker}</span>}
+      <p className={`text-caption ${props.marker ? 'pr-7' : ''}`}>
         <span className="font-semibold text-(--tone)">{props.labels.definition}:</span> {props.words.definition}
       </p>
-      <p className="relative z-10 mt-auto text-caption">
+      <p className="relative z-10 mt-auto flex items-center gap-1.5 text-caption">
         <a
           href={externalHref(props.words.sourceUrl)}
           target="_blank"
@@ -67,6 +76,7 @@ export function CardBackView(props: { readonly words: Defined; readonly labels: 
           <span aria-hidden="true"> ↗</span>
           <span className="sr-only"> ({props.labels.newTab})</span>
         </a>
+        {props.sourceMarker}
       </p>
     </div>
   );

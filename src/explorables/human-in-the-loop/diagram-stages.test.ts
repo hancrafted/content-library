@@ -236,6 +236,41 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("sets a Slide's marker after a stage card's checked mark, and under a repeated stage's name, on those stages only", () => {
+    // ARRANGE
+    const pin = (n: string) => createElement('span', { 'data-pin': n }, n);
+    const slots: DiagramSlots = { stages: { a: { marker: pin('4') }, b: { marker: pin('1') } } };
+    const $ = render({ slots });
+    // ACT
+    const actual = {
+      card: $(COLUMN)
+        .first()
+        .find('[data-checked], [data-pin]')
+        .map((_, el) => (el.attribs['data-pin'] === undefined ? 'checked' : 'pin'))
+        .get(),
+      head: $(COLUMN).eq(1).find('[data-stage-head] [data-pin]').length,
+      others: $(COLUMN).eq(2).find('[data-pin]').length,
+    };
+    // ASSERT
+    expect(actual).toEqual({ card: ['checked', 'pin'], head: 1, others: 0 });
+  });
+
+  it("sets a Slide's after content below a stage's lane, in that stage's column only", () => {
+    // ARRANGE
+    const card = createElement('div', { 'data-after-card': '' }, 'A → B');
+    const slots: DiagramSlots = { stages: { a: { after: card } } };
+    const $ = render({ slots });
+    // ACT
+    const actual = {
+      own: $(COLUMN).first().children().last().is('[data-stage-after]'),
+      cards: $(COLUMN)
+        .toArray()
+        .map((column) => $(column).find('[data-after-card]').length),
+    };
+    // ASSERT
+    expect(actual).toEqual({ own: true, cards: [1, 0, 0] });
+  });
+
   it("labels a stage gate with the Slide word, else the visual's gate word with its number", () => {
     // ARRANGE
     const gate = (slots?: DiagramSlots) => render({ slots }).root().find('[data-gate]').text();

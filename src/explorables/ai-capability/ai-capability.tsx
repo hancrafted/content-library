@@ -21,11 +21,14 @@ export interface AiCapabilityProps {
   readonly targets?: Partial<Record<Level, TargetProps>>;
   /** The `data-target` a Speaker note lights, per layer row: the Oversight row's origin note. */
   readonly rowTargets?: Partial<Record<LayerRow, TargetProps>>;
-  /** A Slide's context marker, placed on a level's card. */
+  /** A Slide's context marker, placed on a level's card, on whichever face is up. */
   readonly markers?: Partial<Record<Level, ReactNode>>;
+  /** A Slide's context marker beside the source line on the back of a level's card. */
+  readonly sourceMarkers?: Partial<Record<Level, ReactNode>>;
 }
 
-export function AiCapability({ preset, locale, words, targets, rowTargets, markers }: AiCapabilityProps) {
+export function AiCapability(props: AiCapabilityProps) {
+  const { preset, locale, words, targets, rowTargets, markers, sourceMarkers } = props;
   const data = aiCapabilityData(locale);
   const chosen = data.presets[preset];
   if (chosen === undefined) throw new Error(`ai-capability: unknown Preset "${preset}"`);
@@ -39,6 +42,7 @@ export function AiCapability({ preset, locale, words, targets, rowTargets, marke
         targets={targets}
         rowTargets={rowTargets}
         markers={markers}
+        sourceMarkers={sourceMarkers}
       />
       <ExploreItLink slug="ai-capability" />
     </>

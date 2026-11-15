@@ -1,0 +1,20 @@
+{
+  "title": "How far you step out",
+  "caption": "How much of a person stays in is a choice you make per task.",
+  "board": "A person stands on the loop above the seam from Food and drinks to the venue kitchen, checking the menu; the pills in, on and out above, on selected",
+  "pills": { "in": "in", "on": "on", "out": "out" },
+  "seam": {
+    "from": "Food & drinks",
+    "to": "Venue kitchen"
+  },
+  "footer": "a person on the loop checks the menu",
+  "voiceScript": {
+    "segments": {
+      "open-question": {
+        "title": "Open question",
+        "keywords": "",
+        "script": "The definition left one thing open, which is how much of a person stays in the workflow. That is not one setting for the whole company, it is a choice you make for each task, and it is the next thing to learn."
+      }
+    }
+  }
+}

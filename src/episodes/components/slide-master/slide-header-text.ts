@@ -17,6 +17,8 @@ export interface SlideHeaderText {
   readonly captionEmphasis?: readonly TextRange[];
   /** The Speaker note the caption ends on with a Context marker: its slug and the marker's accessible name. */
   readonly captionNote?: CaptionNote;
+  /** The Speaker notes the caption ends on when it ends on several, each with its own Context marker, in order. */
+  readonly captionNotes?: readonly CaptionNote[];
   /** The Slide's `headerAction`, rendered: the header draws it right-aligned in the title row. */
   readonly action?: ReactNode;
 }
@@ -88,11 +90,25 @@ export function captionNoteOf(input: {
   return { note, label: markerLabel(t(`notes.${note}.header`)) };
 }
 
-/** The shared Slide header's text, with the Context marker its caption ends on when the Slide names a note for it. */
-export function sharedHeaderOf(input: Parameters<typeof captionNoteOf>[0]): SlideHeaderText | undefined {
+/** The markers a Slide's caption ends on when it names several notes, in order; each note must be one the Slide declares. */
+export function captionNotesOf(input: {
+  readonly t: RuntimeTranslator;
+  readonly notes: readonly string[] | undefined;
+  readonly declared: readonly string[];
+  readonly markerLabel: (title: string) => string;
+}): readonly CaptionNote[] | undefined {
+  const { notes, ...rest } = input;
+  return notes?.map((note) => captionNoteOf({ ...rest, note }) as CaptionNote);
+}
+
+/** The shared Slide header's text, with the Context markers its caption ends on when the Slide names one note or several. */
+export function sharedHeaderOf(
+  input: Parameters<typeof captionNoteOf>[0] & { readonly notes?: readonly string[] },
+): SlideHeaderText | undefined {
   const text = headerTextOf(input.t);
   const captionNote = captionNoteOf(input);
-  return text && { ...text, ...(captionNote && { captionNote }) };
+  const captionNotes = captionNotesOf({ ...input, notes: input.notes });
+  return text && { ...text, ...(captionNote && { captionNote }), ...(captionNotes && { captionNotes }) };
 }
 
 /** The shared header's text for a Slide, with the action its `headerAction` renders, when it declares one. */
@@ -103,6 +119,7 @@ export function headerWithAction(
   const header = sharedHeaderOf({
     t: input.t,
     note: slide.captionNote,
+    notes: slide.captionNotes,
     declared: input.notes,
     markerLabel: input.markerLabel,
   });
