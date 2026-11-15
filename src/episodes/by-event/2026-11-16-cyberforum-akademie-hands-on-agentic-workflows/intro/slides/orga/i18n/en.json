@@ -1,10 +1,10 @@
 {
   "title": "Organisation",
-  "caption": "Recording and questions, in two rules.",
+  "caption": "Before the recording starts: recording, tools and breaks.",
   "recordingLabel": "Recorded",
-  "recording": "The theory part is recorded and published on YouTube.",
+  "recording": "The theory Episodes are recorded for YouTube; the hands-ons and check-ins are not.",
   "questionsLabel": "Questions",
-  "questions": "Questions: raise your hand in Zoom, and I pause the recording first.",
+  "questions": "Questions: raise your hand in Zoom, and I pause the recording first. Have an AI chat open, ideally Gemini or Claude; two breaks, at 0:55 and 2:40.",
   "steps": {
     "hand": "Raise hand",
     "pause": "I pause",
@@ -12,8 +12,8 @@
   },
   "notes": {
     "talking-points": {
-      "header": "Recording and questions",
-      "description": "The theory part is recorded. Raise your hand in Zoom and I pause the recording before the question comes."
+      "header": "Recording, tools, breaks",
+      "description": "Say this before the recording starts. Only the theory Episodes are recorded. Have an AI chat open, ideally Gemini or Claude, which build the HTML page best; ChatGPT and Copilot work too. Two breaks: at 0:55, to pick an article, and at 2:40."
     },
     "pause-first": {
       "header": "Pause first",

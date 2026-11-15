@@ -1,0 +1,41 @@
+{
+  "title": "Start the interview",
+  "caption": "Hands-on 1a: let the AI question you about your quiz, and keep the chat open.",
+  "stage": "Stage 1 · Requirements",
+  "timebox": "20 minutes",
+  "steps": {
+    "first": "Open the quiz Workflow and pick “Turn a source into a quiz”.",
+    "second": "Step “Name the categories”: copy the prompt, paste it into your AI chat with your article’s link or text.",
+    "third": "Step “Grill me”: copy the next prompt and answer the AI’s questions, one at a time.",
+    "fourth": "Leave the chat open: the next Episode comes before the interview ends."
+  },
+  "doneLabel": "Done looks like",
+  "done": "The AI asks you its questions one by one, and you have answered the first few.",
+  "workflow": {
+    "label": "Open the quiz Workflow",
+    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "newTab": "opens in a new tab"
+  },
+  "help": {
+    "button": "Help",
+    "label": "Where you're stuck",
+    "placeholder": "Paste what the AI answered, or describe where you're stuck…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm in a hands-on workshop: I'm turning an article into a quiz with an AI chat, and I'm stuck.\n\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm not technical. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    },
+    "step": "Stage 1, Requirements: Name the categories, then Grill me"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Twenty minutes, then theory",
+      "description": "Start the grill now and stop after about twenty minutes, mid-interview: the requirements Episode explains what the participants are doing, and they finish it right after. ChatGPT works; Gemini or Claude are better at the later HTML page."
+    }
+  }
+}

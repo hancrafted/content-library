@@ -1,0 +1,41 @@
+{
+  "title": "Das heutige Quiz",
+  "caption": "Was du heute baust: ein Quiz aus einem Artikel, in drei Stufen, dann einen Skill, der das nächste Quiz in einem Schritt macht.",
+  "stage": "Vor der Pause",
+  "timebox": "15 Minuten",
+  "steps": {
+    "first": "Such dir einen Artikel aus, aus dem dein Team lernen soll. Kein Artikel? Der Workflow nennt eine Beispielquelle.",
+    "second": "Öffne einen KI-Chat, am besten Gemini oder Claude; ChatGPT und Copilot gehen auch.",
+    "third": "Öffne den Quiz-Workflow und wähl „Aus einer Quelle ein Quiz machen“. Nur anschauen, noch nicht starten.",
+    "fourth": "Klappt es nach fünf Minuten nicht? Komm früher in den Raum zurück, dann lösen wir es."
+  },
+  "doneLabel": "Fertig sieht so aus",
+  "done": "Ein Artikel und ein offener KI-Chat, bereit fürs Interview.",
+  "workflow": {
+    "label": "Quiz-Workflow öffnen",
+    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "newTab": "öffnet in einem neuen Tab"
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Wo du feststeckst",
+    "placeholder": "Füg ein, was die KI geantwortet hat, oder beschreib, wo du feststeckst…",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füg diesen Prompt in eine KI ein, die du nutzen darfst.",
+    "prompt": "Ich bin in einem Hands-on-Workshop: Ich mache mit einem KI-Chat aus einem Artikel ein Quiz und komme nicht weiter.\n\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin nicht technisch. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt.",
+    "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
+    "chats": {
+      "openAIChats": "KI-Chat öffnen",
+      "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
+      "newTab": "öffnet in einem neuen Tab"
+    },
+    "step": "Vor dem Hands-on: einen Artikel aussuchen und meinen KI-Chat öffnen"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Drei Stufen, ein Quiz",
+      "description": "Ein oder zwei Beispiel-Quizze per Bildschirmfreigabe zeigen. Der Workflow hat drei Stufen: Anforderungen (Interview und Spec), Umsetzen (Seite bauen und spielen), Verbessern (aus dem Durchlauf einen Skill machen). Jeder Check-in kommt hierher zurück."
+    }
+  }
+}

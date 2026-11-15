@@ -1,10 +1,10 @@
 {
   "title": "Organisation",
-  "caption": "Aufzeichnung und Fragen, in zwei Regeln.",
+  "caption": "Bevor die Aufnahme startet: Aufnahme, Werkzeuge und Pausen.",
   "recordingLabel": "Aufgezeichnet",
-  "recording": "Der Theorieteil wird aufgezeichnet und erscheint auf YouTube.",
+  "recording": "Die Theorie-Episoden werden für YouTube aufgezeichnet; Hands-ons und Check-ins nicht.",
   "questionsLabel": "Fragen",
-  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme.",
+  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme. Halte einen KI-Chat offen, am besten Gemini oder Claude; zwei Pausen, um 0:55 und 2:40.",
   "steps": {
     "hand": "Hand heben",
     "pause": "Aufnahme pausiert",
@@ -12,8 +12,8 @@
   },
   "notes": {
     "talking-points": {
-      "header": "Aufzeichnung und Fragen",
-      "description": "Der Theorieteil wird aufgezeichnet. Wer eine Frage hat, hebt in Zoom die Hand, und ich pausiere die Aufnahme, bevor die Frage kommt."
+      "header": "Aufnahme, Werkzeuge, Pausen",
+      "description": "Das sagen, bevor die Aufnahme startet. Nur die Theorie-Episoden werden aufgezeichnet. Einen KI-Chat offen halten, am besten Gemini oder Claude, die die HTML-Seite am besten bauen; ChatGPT und Copilot gehen auch. Zwei Pausen: um 0:55, um einen Artikel auszusuchen, und um 2:40."
     },
     "pause-first": {
       "header": "Erst pausieren",

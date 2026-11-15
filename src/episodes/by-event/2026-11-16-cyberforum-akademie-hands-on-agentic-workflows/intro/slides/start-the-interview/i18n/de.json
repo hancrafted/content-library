@@ -1,0 +1,41 @@
+{
+  "title": "Das Interview starten",
+  "caption": "Hands-on 1a: Lass dich von der KI zu deinem Quiz befragen, und lass den Chat offen.",
+  "stage": "Stufe 1 · Anforderungen",
+  "timebox": "20 Minuten",
+  "steps": {
+    "first": "Öffne den Quiz-Workflow und wähl „Aus einer Quelle ein Quiz machen“.",
+    "second": "Schritt „Die Kategorien benennen“: Prompt kopieren und mit dem Link oder Text deines Artikels in deinen KI-Chat einfügen.",
+    "third": "Schritt „Grill mich“: den nächsten Prompt kopieren und die Fragen der KI beantworten, eine nach der anderen.",
+    "fourth": "Lass den Chat offen: Die nächste Episode kommt, bevor das Interview fertig ist."
+  },
+  "doneLabel": "Fertig sieht so aus",
+  "done": "Die KI stellt dir ihre Fragen einzeln, und die ersten hast du beantwortet.",
+  "workflow": {
+    "label": "Quiz-Workflow öffnen",
+    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "newTab": "öffnet in einem neuen Tab"
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Wo du feststeckst",
+    "placeholder": "Füg ein, was die KI geantwortet hat, oder beschreib, wo du feststeckst…",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füg diesen Prompt in eine KI ein, die du nutzen darfst.",
+    "prompt": "Ich bin in einem Hands-on-Workshop: Ich mache mit einem KI-Chat aus einem Artikel ein Quiz und komme nicht weiter.\n\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin nicht technisch. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt.",
+    "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
+    "chats": {
+      "openAIChats": "KI-Chat öffnen",
+      "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
+      "newTab": "öffnet in einem neuen Tab"
+    },
+    "step": "Stufe 1, Anforderungen: Die Kategorien benennen, dann Grill mich"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Zwanzig Minuten, dann Theorie",
+      "description": "Jetzt mit dem Grillen anfangen und nach etwa zwanzig Minuten mitten im Interview stoppen: Die Anforderungs-Episode erklärt, was die Teilnehmenden gerade tun, danach machen sie es fertig. ChatGPT geht; Gemini oder Claude können die spätere HTML-Seite besser."
+    }
+  }
+}

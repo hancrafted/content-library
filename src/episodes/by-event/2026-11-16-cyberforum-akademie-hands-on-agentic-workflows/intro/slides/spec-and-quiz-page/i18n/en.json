@@ -1,0 +1,41 @@
+{
+  "title": "Spec and quiz page",
+  "caption": "Hands-on 1b: finish the interview, write the spec, build the quiz page, and swap with a partner.",
+  "stage": "Stage 1 · Requirements, then Stage 2 · Execute",
+  "timebox": "20 minutes",
+  "steps": {
+    "first": "Finish “Grill me” in the chat you left open.",
+    "second": "Step “Write the spec”: copy the prompt; the AI turns your answers into a short spec.",
+    "third": "Step “Build the quiz”: in a fresh chat, the spec becomes one HTML page you open by double-click.",
+    "fourth": "Play it, then share the page and your prompt with a partner and compare."
+  },
+  "doneLabel": "Done looks like",
+  "done": "A quiz page on your laptop that a partner has played.",
+  "workflow": {
+    "label": "Open the quiz Workflow",
+    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "newTab": "opens in a new tab"
+  },
+  "help": {
+    "button": "Help",
+    "label": "Where you're stuck",
+    "placeholder": "Paste what the AI answered, or describe where you're stuck…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm in a hands-on workshop: I'm turning an article into a quiz with an AI chat, and I'm stuck.\n\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm not technical. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    },
+    "step": "Stage 1 and 2: Write the spec, Build the quiz, Play it and fix it"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Fresh chat for the build",
+      "description": "Building in a fresh chat from the spec is the point of the day: the spec carries the shared understanding, not the long interview. If a page does not open, the Help prompt explains the error in plain words."
+    }
+  }
+}

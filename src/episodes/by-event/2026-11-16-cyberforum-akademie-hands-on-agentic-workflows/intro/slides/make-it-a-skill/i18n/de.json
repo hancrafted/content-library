@@ -1,0 +1,41 @@
+{
+  "title": "Mach einen Skill daraus",
+  "caption": "Hands-on 2: Mach aus deinem guten Durchlauf einen Quiz-Skill und beweis ihn an einem zweiten Artikel.",
+  "stage": "Stufe 3 · Verbessern",
+  "timebox": "45 Minuten",
+  "steps": {
+    "first": "Schritt „Den Skill schreiben“: Prompt in den Chat deines guten Durchlaufs kopieren; die KI schreibt, was sie gelernt hat, als Skill.",
+    "second": "Speichere den Skill dort, wo deine KI ihn nutzen kann, wie der Workflow es für dein Tool zeigt.",
+    "third": "Schritt „Den Skill ausprobieren“: Gib ihm einen zweiten Artikel und sonst nichts.",
+    "fourth": "Vergleich die beiden Quizze: Was fehlt dem Skill noch?"
+  },
+  "doneLabel": "Fertig sieht so aus",
+  "done": "Eine zweite Quizseite, in einem Schritt aus deinem Skill gemacht.",
+  "workflow": {
+    "label": "Quiz-Workflow öffnen",
+    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "newTab": "öffnet in einem neuen Tab"
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Wo du feststeckst",
+    "placeholder": "Füg ein, was die KI geantwortet hat, oder beschreib, wo du feststeckst…",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füg diesen Prompt in eine KI ein, die du nutzen darfst.",
+    "prompt": "Ich bin in einem Hands-on-Workshop: Ich mache mit einem KI-Chat aus einem Artikel ein Quiz und komme nicht weiter.\n\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin nicht technisch. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt.",
+    "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
+    "chats": {
+      "openAIChats": "KI-Chat öffnen",
+      "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
+      "newTab": "öffnet in einem neuen Tab"
+    },
+    "step": "Stufe 3, Verbessern: Den Skill schreiben, dann Den Skill ausprobieren"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Beim nächsten Mal ein Schritt",
+      "description": "Hier landet der rote Faden: Der Durchlauf von Hand hat einen Nachmittag gedauert, der Skill braucht einen Schritt. Wer keinen zweiten Artikel hat, nimmt die Ersatzquelle aus dem Workflow."
+    }
+  }
+}
