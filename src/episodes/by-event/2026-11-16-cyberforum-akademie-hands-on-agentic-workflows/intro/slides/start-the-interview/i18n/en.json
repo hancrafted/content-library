@@ -1,19 +1,19 @@
 {
   "title": "Start the interview",
-  "caption": "Hands-on 1a: let the AI question you about your quiz, and keep the chat open.",
-  "stage": "Stage 1 · Requirements",
+  "caption": "Hands-on 1a: clarify your intent with the AI, then start the grill and keep the chat open.",
+  "stage": "Requirements, then Grill",
   "timebox": "20 minutes",
   "steps": {
-    "first": "Open the quiz Workflow and pick “Turn a source into a quiz”.",
-    "second": "Step “Name the categories”: copy the prompt, paste it into your AI chat with your article’s link or text.",
-    "third": "Step “Grill me”: copy the next prompt and answer the AI’s questions, one at a time.",
-    "fourth": "Leave the chat open: the next Episode comes before the interview ends."
+    "first": "Step “Clarify the intent”: put your goal in the box, paste the prompt into a new chat.",
+    "second": "Answer each round like “1.2 2.3” (question.option), then confirm the three categories it marks ★.",
+    "third": "Copy its result back into the Workflow.",
+    "fourth": "Step “Grill me and write the spec”: paste the prompt into a new chat and answer; leave it open for the next Episode."
   },
   "doneLabel": "Done looks like",
-  "done": "The AI asks you its questions one by one, and you have answered the first few.",
+  "done": "Your intent sits in the Workflow, and the grill has asked its first questions.",
   "workflow": {
     "label": "Open the quiz Workflow",
-    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
     "newTab": "opens in a new tab"
   },
   "help": {
@@ -30,7 +30,7 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     },
-    "step": "Stage 1, Requirements: Name the categories, then Grill me"
+    "step": "Requirements: Clarify the intent, then Grill: Grill me and write the spec"
   },
   "notes": {
     "talking-points": {

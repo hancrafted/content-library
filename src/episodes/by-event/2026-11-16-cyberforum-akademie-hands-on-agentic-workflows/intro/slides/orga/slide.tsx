@@ -38,7 +38,7 @@ export const orga = slide({
             </span>
             <p className="text-caption font-semibold tracking-widest text-youtube uppercase">{t('recordingLabel')}</p>
           </div>
-          <p className="text-subheading font-semibold text-balance">{t('recording')}</p>
+          <p className="text-body font-semibold text-balance">{t('recording')}</p>
           <div className="mt-auto flex items-center gap-3 rounded-xl bg-muted p-4" aria-hidden="true">
             <span className="flex size-10 items-center justify-center rounded-lg bg-youtube text-primary-foreground">
               <svg viewBox="0 0 24 24" className="size-5">
@@ -61,7 +61,7 @@ export const orga = slide({
             </span>
             <p className="text-caption font-semibold tracking-widest text-human uppercase">{t('questionsLabel')}</p>
           </div>
-          <p className="text-subheading font-semibold text-balance">{t('questions')}</p>
+          <p className="text-body font-semibold text-balance">{t('questions')}</p>
           <ol className="mt-auto flex flex-col gap-3 sm:flex-row">
             <li className="flex flex-1 flex-col items-center gap-2 rounded-xl bg-human/10 p-4 text-center text-human">
               <span className="flex h-8 items-center justify-center">

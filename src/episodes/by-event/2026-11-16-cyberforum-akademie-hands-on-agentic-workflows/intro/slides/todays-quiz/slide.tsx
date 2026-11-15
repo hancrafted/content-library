@@ -44,6 +44,7 @@ export const todaysQuiz = slide({
           steps={STEPS.map((key) => t(key))}
           workflow={{
             path: WORKFLOW_PATH,
+            fragment: 'play',
             locale,
             label: t('workflow.label'),
             pick: t('workflow.pick'),

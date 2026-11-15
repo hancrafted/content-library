@@ -1,19 +1,19 @@
 {
   "title": "Today's quiz",
-  "caption": "What you build today: a quiz from one article, in three stages, then a skill that makes the next quiz in one step.",
+  "caption": "What you build today: a quiz from one article, from intent to spec to page, then a skill that makes the next quiz in one go.",
   "stage": "Before the break",
   "timebox": "15 minutes",
   "steps": {
     "first": "Pick one article you’d like your team to learn from. No article? The Workflow names a sample source.",
     "second": "Open an AI chat, ideally Gemini or Claude; ChatGPT and Copilot work too.",
-    "third": "Open the quiz Workflow and pick “Turn a source into a quiz”. Look, don’t start yet.",
+    "third": "Open the quiz Workflow: “Turn a source into a quiz” is already picked. Look, don’t start yet.",
     "fourth": "Not working after five minutes? Come back to the room early and we sort it out."
   },
   "doneLabel": "Done looks like",
   "done": "An article and an open AI chat, ready for the interview.",
   "workflow": {
     "label": "Open the quiz Workflow",
-    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
     "newTab": "opens in a new tab"
   },
   "help": {
@@ -35,7 +35,7 @@
   "notes": {
     "talking-points": {
       "header": "Three stages, one quiz",
-      "description": "Show one or two example quizzes on screen share. The Workflow has three stages: Requirements (interview and spec), Execute (build and play the page), Improve (turn the run into a skill). Every check-in comes back here."
+      "description": "Show one or two example quizzes on screen share. The Workflow runs in stages: Requirements (clarify the intent), Grill (interview into a spec), Execute (build, play and fix the page), Improve (turn the run into a skill and try it)."
     }
   }
 }

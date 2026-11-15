@@ -1,19 +1,19 @@
 {
   "title": "Das heutige Quiz",
-  "caption": "Was du heute baust: ein Quiz aus einem Artikel, in drei Stufen, dann einen Skill, der das nächste Quiz in einem Schritt macht.",
+  "caption": "Was du heute baust: ein Quiz aus einem Artikel, von der Absicht über die Spezifikation zur Seite, dann einen Skill, der das nächste Quiz in einem Zug macht.",
   "stage": "Vor der Pause",
   "timebox": "15 Minuten",
   "steps": {
     "first": "Such dir einen Artikel aus, aus dem dein Team lernen soll. Kein Artikel? Der Workflow nennt eine Beispielquelle.",
     "second": "Öffne einen KI-Chat, am besten Gemini oder Claude; ChatGPT und Copilot gehen auch.",
-    "third": "Öffne den Quiz-Workflow und wähl „Aus einer Quelle ein Quiz machen“. Nur anschauen, noch nicht starten.",
+    "third": "Öffne den Quiz-Workflow: „Aus einer Quelle ein Quiz machen“ ist schon gewählt. Schau, aber fang noch nicht an.",
     "fourth": "Klappt es nach fünf Minuten nicht? Komm früher in den Raum zurück, dann lösen wir es."
   },
   "doneLabel": "Fertig sieht so aus",
   "done": "Ein Artikel und ein offener KI-Chat, bereit fürs Interview.",
   "workflow": {
     "label": "Quiz-Workflow öffnen",
-    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "pick": "Der Workflow von heute, „Aus einer Quelle ein Quiz machen“, ist schon gewählt. Jeder Schritt hat seinen Prompt zum Kopieren, für einen KI-Chat oder einen Coding-Agenten; füg jedes Ergebnis wieder in sein Feld ein.",
     "newTab": "öffnet in einem neuen Tab"
   },
   "help": {
@@ -35,7 +35,7 @@
   "notes": {
     "talking-points": {
       "header": "Drei Stufen, ein Quiz",
-      "description": "Ein oder zwei Beispiel-Quizze per Bildschirmfreigabe zeigen. Der Workflow hat drei Stufen: Anforderungen (Interview und Spec), Umsetzen (Seite bauen und spielen), Verbessern (aus dem Durchlauf einen Skill machen). Jeder Check-in kommt hierher zurück."
+      "description": "Zeig ein oder zwei Beispiel-Quizze per Bildschirmfreigabe. Der Workflow läuft in Stufen: Anforderungen (die Absicht klären), Grill (Interview bis zur Spezifikation), Umsetzen (Seite bauen, spielen, korrigieren), Verbessern (aus dem Durchlauf einen Skill machen und ausprobieren)."
     }
   }
 }

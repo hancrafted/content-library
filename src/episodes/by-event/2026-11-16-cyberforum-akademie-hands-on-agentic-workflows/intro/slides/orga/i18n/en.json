@@ -4,7 +4,7 @@
   "recordingLabel": "Recorded",
   "recording": "The theory Episodes are recorded for YouTube; the hands-ons and check-ins are not.",
   "questionsLabel": "Questions",
-  "questions": "Questions: raise your hand in Zoom, and I pause the recording first. Have an AI chat open, ideally Gemini or Claude; two breaks, at 0:55 and 2:40.",
+  "questions": "Questions: raise your hand in Zoom, and I pause the recording first.",
   "steps": {
     "hand": "Raise hand",
     "pause": "I pause",

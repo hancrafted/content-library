@@ -4,7 +4,7 @@
   "recordingLabel": "Aufgezeichnet",
   "recording": "Die Theorie-Episoden werden für YouTube aufgezeichnet; Hands-ons und Check-ins nicht.",
   "questionsLabel": "Fragen",
-  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme. Halte einen KI-Chat offen, am besten Gemini oder Claude; zwei Pausen, um 0:55 und 2:40.",
+  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme.",
   "steps": {
     "hand": "Hand heben",
     "pause": "Aufnahme pausiert",

@@ -1,19 +1,19 @@
 {
   "title": "Spec und Quizseite",
-  "caption": "Hands-on 1b: Interview fertig machen, Spec schreiben, Quizseite bauen und mit einem Partner tauschen.",
-  "stage": "Stufe 1 · Anforderungen, dann Stufe 2 · Umsetzen",
+  "caption": "Hands-on 1b: Mach den Grill zur Spezifikation fertig, bau die Quizseite, spiel und korrigier sie.",
+  "stage": "Grill, dann Umsetzen",
   "timebox": "20 Minuten",
   "steps": {
-    "first": "Mach „Grill mich“ im offenen Chat fertig.",
-    "second": "Schritt „Die Spezifikation schreiben“: Prompt kopieren; die KI macht aus deinen Antworten eine kurze Spec.",
-    "third": "Schritt „Das Quiz bauen“: In einem frischen Chat wird aus der Spec eine HTML-Seite, die du per Doppelklick öffnest.",
-    "fourth": "Spiel es, dann teil Seite und Prompt mit einem Partner und vergleicht."
+    "first": "Mach den Grill im offenen Chat fertig; er schreibt die Spezifikation.",
+    "second": "Füg die Spezifikation wieder in den Workflow ein und zeichne sie ab.",
+    "third": "Schritt „Das Quiz bauen“: Ein neuer Chat macht aus der Spezifikation quiz.html; öffne sie per Doppelklick.",
+    "fourth": "Schritt „Spielen und korrigieren“: Spiel, notier, was dir auffällt, und lass einen neuen Chat korrigieren."
   },
   "doneLabel": "Fertig sieht so aus",
-  "done": "Eine Quizseite auf deinem Laptop, die ein Partner gespielt hat.",
+  "done": "Eine quiz.html, die du einmal gespielt und einmal korrigiert hast.",
   "workflow": {
     "label": "Quiz-Workflow öffnen",
-    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "pick": "Der Workflow von heute, „Aus einer Quelle ein Quiz machen“, ist schon gewählt. Jeder Schritt hat seinen Prompt zum Kopieren, für einen KI-Chat oder einen Coding-Agenten; füg jedes Ergebnis wieder in sein Feld ein.",
     "newTab": "öffnet in einem neuen Tab"
   },
   "help": {
@@ -30,7 +30,7 @@
       "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
       "newTab": "öffnet in einem neuen Tab"
     },
-    "step": "Stufe 1 und 2: Die Spezifikation schreiben, Das Quiz bauen, Spielen und korrigieren"
+    "step": "Grill: Grill mich und schreibe die Spezifikation, dann Umsetzen: Das Quiz bauen, Spielen und korrigieren"
   },
   "notes": {
     "talking-points": {

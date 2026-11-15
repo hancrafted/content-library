@@ -6,6 +6,8 @@ import { DoneStrip } from '../guide-step/guide-step';
 export interface HandsOnWorkflowLink {
   /** The locale-neutral path of the page holding the Workflow: `/explorables/human-in-the-loop`. */
   readonly path: string;
+  /** The anchor on that page to land on: `play`, the Explorable's play area. */
+  readonly fragment?: string;
   readonly locale: Locale;
   /** The link's own words: "Open the quiz Workflow". */
   readonly label: string;
@@ -55,7 +57,7 @@ function WorkflowCard({ workflow }: { readonly workflow: HandsOnWorkflowLink }) 
   return (
     <div className="flex flex-col justify-center gap-4 rounded-xl bg-primary p-8 text-primary-foreground shadow-md md:col-span-4">
       <a
-        href={localizePath(workflow.path, workflow.locale)}
+        href={localizePath(workflow.path, workflow.locale, workflow.fragment)}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex w-fit items-center gap-2 rounded-lg bg-background px-4 py-3 text-body font-semibold text-foreground"

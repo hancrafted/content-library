@@ -1,19 +1,19 @@
 {
   "title": "Mach einen Skill daraus",
-  "caption": "Hands-on 2: Mach aus deinem guten Durchlauf einen Quiz-Skill und beweis ihn an einem zweiten Artikel.",
-  "stage": "Stufe 3 · Verbessern",
+  "caption": "Hands-on 2: Mach aus deinem Durchlauf einen Skill und beweis ihn an einer neuen Webseite.",
+  "stage": "Verbessern",
   "timebox": "45 Minuten",
   "steps": {
-    "first": "Schritt „Den Skill schreiben“: Prompt in den Chat deines guten Durchlaufs kopieren; die KI schreibt, was sie gelernt hat, als Skill.",
-    "second": "Speichere den Skill dort, wo deine KI ihn nutzen kann, wie der Workflow es für dein Tool zeigt.",
-    "third": "Schritt „Den Skill ausprobieren“: Gib ihm einen zweiten Artikel und sonst nichts.",
-    "fourth": "Vergleich die beiden Quizze: Was fehlt dem Skill noch?"
+    "first": "Schritt „Den Skill schreiben“: Aus Spezifikation und Quiz-Notiz wird eine SKILL.md.",
+    "second": "Schritt „Den Skill ausprobieren“: Gib ihm eine neue Webseite und sonst nichts, dann spiel das Quiz, das er baut.",
+    "third": "Übernimm die Lehren dieses Durchlaufs in deine SKILL.md.",
+    "fourth": "Schon weiter? Lass ihn noch einmal auf ein PDF los, oder probier Schritt „Lass einen Agenten bewerten“."
   },
   "doneLabel": "Fertig sieht so aus",
-  "done": "Eine zweite Quizseite, in einem Schritt aus deinem Skill gemacht.",
+  "done": "Ein zweites Quiz, in einem Zug aus deinem Skill gebaut.",
   "workflow": {
     "label": "Quiz-Workflow öffnen",
-    "pick": "Wähl auf der Seite „Aus einer Quelle ein Quiz machen“. Jeder Schritt dort hat den Prompt zum Kopieren, als Chat-Version und für einen Agenten.",
+    "pick": "Der Workflow von heute, „Aus einer Quelle ein Quiz machen“, ist schon gewählt. Jeder Schritt hat seinen Prompt zum Kopieren, für einen KI-Chat oder einen Coding-Agenten; füg jedes Ergebnis wieder in sein Feld ein.",
     "newTab": "öffnet in einem neuen Tab"
   },
   "help": {
@@ -30,7 +30,7 @@
       "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
       "newTab": "öffnet in einem neuen Tab"
     },
-    "step": "Stufe 3, Verbessern: Den Skill schreiben, dann Den Skill ausprobieren"
+    "step": "Verbessern: Den Skill schreiben, dann Den Skill ausprobieren"
   },
   "notes": {
     "talking-points": {

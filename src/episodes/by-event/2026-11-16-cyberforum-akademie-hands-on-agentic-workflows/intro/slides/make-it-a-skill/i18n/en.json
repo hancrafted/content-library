@@ -1,19 +1,19 @@
 {
   "title": "Make it a skill",
-  "caption": "Hands-on 2: turn your good run into a quiz skill, then prove it on a second article.",
-  "stage": "Stage 3 · Improve",
+  "caption": "Hands-on 2: turn your run into a skill, then prove it on a new web page.",
+  "stage": "Improve",
   "timebox": "45 minutes",
   "steps": {
-    "first": "Step “Write the skill”: copy the prompt into the chat of your good run; the AI writes what it learned as a skill.",
-    "second": "Save the skill where your AI can use it, as the Workflow shows for your tool.",
-    "third": "Step “Try the skill”: give it a second article and nothing else.",
-    "fourth": "Compare the two quizzes: what does the skill still miss?"
+    "first": "Step “Write the skill”: your spec and quiz note become a SKILL.md.",
+    "second": "Step “Try the skill”: give it a new web page and nothing else, then play the quiz it builds.",
+    "third": "Carry the lessons of that run back into your SKILL.md.",
+    "fourth": "Ahead? Run it once more on a PDF, or try step “Let an agent grade it”."
   },
   "doneLabel": "Done looks like",
-  "done": "A second quiz page, made in one step from your skill.",
+  "done": "A second quiz, built in one go from your skill.",
   "workflow": {
     "label": "Open the quiz Workflow",
-    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
     "newTab": "opens in a new tab"
   },
   "help": {
@@ -30,7 +30,7 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     },
-    "step": "Stage 3, Improve: Write the skill, then Try the skill"
+    "step": "Improve: Write the skill, then Try the skill"
   },
   "notes": {
     "talking-points": {

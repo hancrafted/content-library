@@ -1,19 +1,19 @@
 {
   "title": "Spec and quiz page",
-  "caption": "Hands-on 1b: finish the interview, write the spec, build the quiz page, and swap with a partner.",
-  "stage": "Stage 1 · Requirements, then Stage 2 · Execute",
+  "caption": "Hands-on 1b: finish the grill into a spec, build the quiz page, play it and fix it.",
+  "stage": "Grill, then Execute",
   "timebox": "20 minutes",
   "steps": {
-    "first": "Finish “Grill me” in the chat you left open.",
-    "second": "Step “Write the spec”: copy the prompt; the AI turns your answers into a short spec.",
-    "third": "Step “Build the quiz”: in a fresh chat, the spec becomes one HTML page you open by double-click.",
-    "fourth": "Play it, then share the page and your prompt with a partner and compare."
+    "first": "Finish the grill in the chat you left open; it writes the spec.",
+    "second": "Paste the spec back into the Workflow and sign it off.",
+    "third": "Step “Build the quiz”: a new chat turns the spec into quiz.html; open it by double-click.",
+    "fourth": "Step “Play it and fix it”: play, note what you notice, and let a new chat fix it."
   },
   "doneLabel": "Done looks like",
-  "done": "A quiz page on your laptop that a partner has played.",
+  "done": "A quiz.html you have played once and fixed once.",
   "workflow": {
     "label": "Open the quiz Workflow",
-    "pick": "On the page, pick “Turn a source into a quiz”. Each step there has the prompt to copy, in a chat version and one for an agent.",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
     "newTab": "opens in a new tab"
   },
   "help": {
@@ -30,7 +30,7 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     },
-    "step": "Stage 1 and 2: Write the spec, Build the quiz, Play it and fix it"
+    "step": "Grill: Grill me and write the spec, then Execute: Build the quiz, Play it and fix it"
   },
   "notes": {
     "talking-points": {
