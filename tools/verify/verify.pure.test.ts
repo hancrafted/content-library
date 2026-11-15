@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { runPlan, type Exec, type Plan } from './verify.pure.ts';
+import { COMMIT_PLAN, QUICK_PLAN, runPlan, VERIFY_PLAN, type Exec, type Plan } from './verify.pure.ts';
 
 /** A stand-in for the process adapter: each step exits with the code `codes` names (0 by default) and logs its run. */
 function fakeExec(codes: Readonly<Record<string, number>> = {}, outputs: Readonly<Record<string, string>> = {}) {
@@ -112,6 +112,42 @@ describe('runPlan', () => {
       expect(log).toContain('end test');
       expect(printed).toContain(expectedLintBlock);
       expect(printed.at(-1)).toBe(expectedVerdict);
+    });
+  });
+
+  describe('the named plans', () => {
+    const commandOf = (plan: Plan, name: string) => plan.phases.flat().find((step) => step.name === name)?.command;
+
+    it('quick plan runs whole-repo lint and format, typecheck and the tests of uncommitted changes', () => {
+      // ARRANGE
+      const expectedSteps = ['lint', 'format', 'typecheck', 'test'];
+      const expectedTest = 'vitest run --changed';
+      // ACT
+      const steps = QUICK_PLAN.phases.flat().map((step) => step.name);
+      // ASSERT
+      expect(QUICK_PLAN.label).toBe('verify:quick');
+      expect(steps).toEqual(expectedSteps);
+      expect(commandOf(QUICK_PLAN, 'test')).toBe(expectedTest);
+      expect(commandOf(QUICK_PLAN, 'lint')).toBe(commandOf(VERIFY_PLAN, 'lint'));
+      expect(commandOf(QUICK_PLAN, 'format')).toBe(commandOf(VERIFY_PLAN, 'format'));
+    });
+
+    it('commit plan runs only the tests that the change affects', () => {
+      // ARRANGE
+      const expectedTest = 'vitest run --changed';
+      // ACT
+      const command = commandOf(COMMIT_PLAN, 'test');
+      // ASSERT
+      expect(command).toBe(expectedTest);
+    });
+
+    it('verify plan keeps CI parity: it runs the whole suite', () => {
+      // ARRANGE
+      const expectedTest = 'npm run -s test';
+      // ACT
+      const command = commandOf(VERIFY_PLAN, 'test');
+      // ASSERT
+      expect(command).toBe(expectedTest);
     });
   });
 });
