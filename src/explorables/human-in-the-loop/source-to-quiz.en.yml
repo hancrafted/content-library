@@ -99,9 +99,10 @@ templates:
     ## Goal
     ## Categories
     ### <Category>
-    ## Out of scope
+    ## Not to ask
   decisions: |
     # Decisions: <Name of the quiz maker>
+    ## Goal
     ## Decisions
     ### <Category>
     ## Terms
@@ -153,10 +154,12 @@ stages:
     learningGoal: 'Requirements engineering: decide what any good quiz needs before you look at a source.'
     summary: 'From a goal to a quiz spec'
     moves:
+      - letter: B
+        why: 'One chat breaks your goal into the categories a quiz maker must decide.'
       - letter: R
         why: 'The requirements come before any source: you decide what a good quiz is, then apply it.'
       - letter: I
-        why: 'A ready-made prompt names the categories, then an interview fills them with your answers.'
+        why: 'The AI interviews you category by category; you decide, it writes down.'
     gate: 1
     card:
       label: You sign off the spec
@@ -181,7 +184,7 @@ stages:
             label: Your goal, in one line
             sample: A quiz maker that turns any web page or PDF into a fun quiz for the participants of an AI workshop.
         details:
-          why: This is meta prompting. One chat names what the interview must cover, so the interview asks about every part of a good quiz, not only about what comes to mind first.
+          why: This is meta prompting. One chat turns your goal into the interview's agenda, one open question per category, so the interview asks about every part of a good quiz, not only about what comes to mind first.
           techniques: [meta-prompting, simplest-first]
           example: &categories_example |
             # Requirement categories: Workshop quiz maker
@@ -200,10 +203,10 @@ stages:
             What does a player see right after an answer, and how does it point back to the source?
             ### The file
             What must the quiz file be, so anyone can open it by double-click?
-            ## Out of scope
+            ## Not to ask
             - Questions about one particular source: the quiz maker works for any.
           goodLooksLike:
-            - Six categories, each an H3 with one open question under it.
+            - Six categories or more, each an H3 with one open question under it.
             - Every question holds for any source, not only one.
             - Nothing is answered yet; the list only asks.
         instructions: 'Log in to ChatGPT, open a new chat, put your goal in the box and paste the prompt. Edit the list in the chat if a category is missing, then copy it.'
@@ -230,7 +233,7 @@ stages:
                 1. Write these six categories as H3s, in this order: Learning goals (how goals are picked from any source), Players (who plays, and where), Question kinds (form, number and difficulty), Game mechanics (what keeps a player playing), Feedback (what follows an answer), The file (what the quiz file must be).
                 2. Under each H3, write one line: the open question the interview must answer for that category, phrased for my goal.
                 3. Add a category only if my goal needs one the six miss, at most two more, each with its open question.
-                4. Under Out of scope, list what the interview must leave alone, one line each.
+                4. Under Not to ask, list only what my goal itself rules out, one line each, or None.
             - heading: What done looks like
               purpose: task
               text: |
@@ -256,7 +259,7 @@ stages:
               purpose: task
               techniques: [meta-prompting]
               text: |
-                Work in the workshop starter folder (https://hancrafted.net/hancrafted-workshop-starter.zip); if you have not, run /hancrafted-check-setup first. Create `.scratch/quiz-maker/` and write `.scratch/quiz-maker/categories.md` for my goal below: a quiz maker that turns any web page or PDF into one HTML quiz file, with no source chosen yet. Write six categories as H3s, in this order: Learning goals (how goals are picked from any source), Players, Question kinds, Game mechanics, Feedback (what follows an answer), The file. Under each, one open question for the interview, phrased for my goal; add at most two categories my goal needs. Ask nothing and answer nothing.
+                Work in the workshop starter folder (https://hancrafted.net/hancrafted-workshop-starter.zip); if the folder has no setup yet, run /hancrafted-check-setup first. Create `.scratch/quiz-maker/` and write `.scratch/quiz-maker/categories.md` for my goal below: a quiz maker that turns any web page or PDF into one HTML quiz file, with no source chosen yet. Write six categories as H3s, in this order: Learning goals (how goals are picked from any source), Players, Question kinds, Game mechanics, Feedback (what follows an answer), The file. Under each, one open question for the interview, phrased for my goal; add at most two categories my goal needs. Ask nothing and answer nothing.
 
                 ```text
                 {{goal}}
@@ -298,6 +301,8 @@ stages:
           techniques: [allow-unknown, fresh-context]
           example: &decisions_example |
             # Decisions: Workshop quiz maker
+            ## Goal
+            A quiz maker that turns any web page or PDF into a fun quiz for the participants of an AI workshop.
             ## Decisions
             ### Learning goals
             - Q1: Three learning goals per source, each a thing the player can do afterwards, taken from the source's main sections.
@@ -321,7 +326,7 @@ stages:
             - None
           goodLooksLike:
             - Every category got at least one question, and its decision sits under its H3.
-            - Every decision is in your words, with the question number it came from.
+            - Every decision says what you chose, with the question number it came from.
             - Words that could mean two things are pinned under Terms.
             - What is still open is listed, not guessed.
         instructions: "Open a new chat, put your categories in the box and paste the prompt. Answer in your own words ('yes' takes all the recommendations) and copy the decisions it writes at the end."
@@ -355,7 +360,7 @@ stages:
               purpose: task
               text: |
                 - Every category got at least one question, and its decision sits under its H3.
-                - Every decision is in my words, with the question number it came from.
+                - Every decision says what I chose, with the question number it came from.
                 - Words that could mean two things are pinned under Terms.
                 - What is still undecided is listed under Open decisions, or it says None.
             - heading: Out of scope
@@ -365,18 +370,18 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: &practice_strict 'This is a practice run, so keep it small: the numbers above are already cut for it. Ask or change only what the steps name.'
             - heading: Format
               purpose: template
               text: |
-                When every category is done, write the result as one markdown code block that starts with ```markdown, not a document or a canvas. Use one H3 per category under Decisions, in the order of my categories. Inside the block, use exactly the headings of this template, in this order. If your answer breaks off, I will start a new chat and paste this prompt again.
+                When every category is done, write the result as one markdown code block that starts with ```markdown, not a document or a canvas. Under Goal, copy the Goal of my categories word for word. Use one H3 per category under Decisions, in the order of my categories, then the H3 Out of scope last. Inside the block, use exactly the headings of this template, in this order. If your answer breaks off, I will start a new chat and paste this prompt again.
 
                 {{template}}
           technical:
             - heading: Task
               purpose: task
               text: |
-                /grill-with-docs Interview me about the requirements of a quiz maker that turns any web page or PDF into one HTML quiz file; no source is chosen yet, so ask nothing about one. The doc to grill against is `.scratch/quiz-maker/categories.md`: go through its categories in order, at most three questions per round and at most {{limit.questions}} in total. As each category is settled, write its decisions under its H3 in `.scratch/quiz-maker/decisions.md`, each with its question number, and the words we pinned under Terms. Last, ask what the quiz maker must leave out, and keep it as a final H3 Out of scope.
+                /grill-with-docs Interview me about the requirements of a quiz maker that turns any web page or PDF into one HTML quiz file; no source is chosen yet, so ask nothing about one. The doc to grill against is `.scratch/quiz-maker/categories.md`: go through its categories in order, at most three questions per round and at most {{limit.questions}} in total. As each category is settled, write its decisions under its H3 in `.scratch/quiz-maker/decisions.md`, each with its question number, and the words we pinned under Terms. Last, ask what the quiz maker must leave out, and keep it as a final H3 Out of scope. Copy the Goal of `categories.md` under Goal, keep every term under Terms in decisions.md, and write no other file.
             - heading: Out of scope
               purpose: scope
               text: *out_of_scope_grill
@@ -384,7 +389,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -409,27 +414,29 @@ stages:
           example: &spec_example |
             # Quiz spec: Workshop quiz maker
             ## Purpose
-            Turn any web page or PDF into a fun quiz that checks what workshop participants took away.
+            A quiz maker that turns any web page or PDF into a fun quiz for the participants of an AI workshop. (Goal)
             ## Players
-            Workshop participants who just heard the talk, playing on a phone during the break.
+            Workshop participants who just heard the talk, playing on a phone during the break. (Q2)
             ## Learning goals
-            Three per source, each a thing the player can do afterwards, taken from the source's main sections.
+            Three per source, each a thing the player can do afterwards, taken from the source's main sections. (Q1)
             ## Questions
-            - Multiple choice with four options; true or false where a common myth is busted.
-            - Four questions per learning goal, from easy to hard.
+            - Multiple choice with four options; true or false where a common myth is busted. (Q3)
+            - Four questions per learning goal, from easy to hard. (Q4)
             ## Game mechanics
-            - Points with a streak bonus, a progress bar, stars per learning goal on the end screen.
-            - A retry of the missed questions.
-            - Points per answer: open: how many.
+            - Points with a streak bonus, stars per learning goal on the end screen, a retry of the missed questions. (Q5)
+            - Points, a progress bar, an end screen. (floor)
+            - Points per answer: open: how many. (Q5)
             ## Feedback
-            Right or wrong at once, one sentence why, and the passage quoted word for word.
+            Right or wrong at once, one sentence why, and the passage quoted word for word. (Q6)
             ## The file
-            One HTML file that opens by double-click and works offline; every answer option is a button; readable on a phone, light or dark as the device is set.
+            - Readable on a phone, light or dark as the device is set. (Q2)
+            - One HTML file that opens by double-click; every answer option a button. (floor)
             ## Out of scope
-            - Accounts, a leaderboard, sound.
+            - Accounts, a leaderboard, sound. (Q7)
           goodLooksLike:
             - Every decision of the decisions (Q1, Q2 and so on) shows up in the spec, in a section you can name; none is missing or written as open.
-            - 'Each line of the spec comes from a decision or from the floor (points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button).'
+            - 'The floor is all there, each item marked (floor), even where no decision names it: points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button. A line marked (floor) counts as given, never as made up.'
+            - Every other line, apart from Purpose marked (Goal), ends with the Q number of the decision it comes from.
             - Nothing in it holds for one source only; it would hold for a quiz on a cooking recipe.
             - 'No number is made up: a count or value the decisions do not give says "open:" and what is missing.'
         instructions: 'Open a new chat, paste the prompt with your decisions in the box, and copy the spec. Then check it in another new chat before you sign it off.'
@@ -452,20 +459,22 @@ stages:
               text: |
                 The spec describes a quiz maker: what every quiz it makes must do, from any web page or PDF.
 
-                1. Under Purpose, write one sentence: what the quiz maker turns into what, for whom.
+                1. Under Purpose, write the Goal of the decisions as one sentence.
                 2. Under Players, write who plays and where, in one or two sentences.
                 3. Under Learning goals, write the rule for picking goals from any source: how many and of what kind. Name no goal of one particular source.
                 4. Under Questions, write the kinds, how many per goal and how hard, as decided.
                 5. Under Game mechanics, list the decided mechanics. Always include points, a progress bar and an end screen.
-                6. Under Feedback, write what follows each answer. Always include the reason and the passage of the source, quoted word for word.
+                6. Under Feedback, write what follows each answer. Always include the reason and the passage of the source, copied character for character.
                 7. Under The file, write what was decided, and always: one HTML file that opens by double-click, every answer option a button.
-                8. Under Out of scope, list what was ruled out.
+                8. Under Out of scope, list what the decisions rule out, or None.
                 9. Take only what the decisions say, in their words, and the floor named in the steps above; add no sentence of your own. Invent no numbers: where the decisions give no point values or counts, write "open: <what>" instead of choosing.
+                10. End every line with its source in brackets: (Goal) for Purpose, the Q number it comes from, such as (Q3), or (floor) for an item the steps above always ask for.
             - heading: What done looks like
               purpose: task
               text: |
                 - Every decision of the decisions (Q1, Q2 and so on) shows up in the spec, in a section you can name; none is missing or written as open.
-                - Each line of the spec comes from a decision or from the floor (points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button).
+                - The floor is all there, each item marked (floor), even where no decision names it: points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button. A line marked (floor) counts as given, never as made up.
+                - Every other line, apart from Purpose marked (Goal), ends with the Q number of the decision it comes from.
                 - Nothing in it holds for one source only; it would hold for a quiz on a cooking recipe.
                 - No number is made up: a count or value the decisions do not give says "open:" and what is missing.
             - heading: Out of scope
@@ -475,7 +484,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format
@@ -483,7 +492,7 @@ stages:
             - heading: Task
               purpose: task
               text: |
-                /to-spec Start from `.scratch/quiz-maker/decisions.md`, not from this conversation, and write the spec to `.scratch/quiz-maker/spec.md`. It describes a quiz maker: what every quiz it makes must do, from any web page or PDF, so name no goal of one source. Always include points, a progress bar, an end screen, feedback with the reason and the passage quoted word for word, and one HTML file that opens by double-click with options as buttons. Take each decision in its own words, add no sentence of your own, invent no numbers, and write "open: <what>" where a decision is missing.
+                /to-spec Start from `.scratch/quiz-maker/decisions.md`, not from this conversation, and write the spec to `.scratch/quiz-maker/spec.md`. It describes a quiz maker: what every quiz it makes must do, from any web page or PDF, so name no goal of one source. Under Purpose, write the Goal of the decisions. Always include points, a progress bar, an end screen, feedback with the reason and the passage copied character for character, and one HTML file that opens by double-click with every answer option a button. Take each decision in its own words, add no sentence of your own, invent no numbers, and write "open: <what>" where a decision is missing. End every line with its source: (Goal) for Purpose, (Q3) for a decision, (floor) for an item above. Write only spec.md, in the template below instead of the skill's own sections, and publish nothing to an issue tracker.
             - heading: Out of scope
               purpose: scope
               text: *out_of_scope_spec
@@ -491,7 +500,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -508,7 +517,8 @@ stages:
               sample: *spec_example
           checks:
             - Every decision of the decisions (Q1, Q2 and so on) shows up in the spec, in a section you can name; none is missing or written as open.
-            - 'Each line of the spec comes from a decision or from the floor (points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button). In the evidence, list every line by its first words with its Q number or floor item; fail any line with neither, quoted. Common quiz practice is neither.'
+            - 'The floor is all there, each item marked (floor), even where no decision names it: points, a progress bar, an end screen, feedback that quotes the source, one file that opens by double-click, every answer option a button. A line marked (floor) counts as given, never as made up.'
+            - 'Every other line, apart from Purpose marked (Goal), ends with the Q number of the decision it comes from, and says what that decision says; fail a line with no Q number or a wrong one, quoted. Common quiz practice is no decision.'
             - Nothing in it holds for one source only; it would hold for a quiz on a cooking recipe.
             - 'No number is made up: a count or value the decisions do not give says "open:" and what is missing.'
 
@@ -519,6 +529,8 @@ stages:
     moves:
       - letter: E
         why: 'You play the quiz before anyone trusts it, and what you noticed becomes numbered fixes.'
+      - letter: F
+        why: 'A fresh chat gets the file, the passages and your notes, not the chat that built it.'
     gate: 2
     jobs:
       - id: build
@@ -570,7 +582,7 @@ stages:
             ## Known gaps
             - The best score is lost when the browser blocks storage
           goodLooksLike:
-            - Every passage is copied word for word, so you find it with Ctrl+F in the source.
+            - Every passage is copied character for character, so you find it with Ctrl+F in the source.
             - The learning goals and questions follow the spec's rules.
             - The quiz opens by double-click and works on a phone.
             - Points, instant feedback with a quote and an end screen work.
@@ -604,7 +616,7 @@ stages:
                 1. Open the source and read all of it, to the end. If you cannot open it, say so in one line, ask me to paste its text or attach it as a PDF, and stop.
                 2. Quote {{limit.passages}} passages a player should remember, numbered P1, P2 and so on, each followed by where it sits in brackets. Copy each passage character for character, one unbroken stretch of one or two sentences, so I find it with Ctrl+F: add, drop and reword nothing. Spread them over the whole source.
                 3. Pick the learning goals the way the spec's Learning goals says, each resting on passages.
-                4. Write at most {{limit.questions}} questions the way the spec's Questions says, each with one right answer, a reason and its passage quoted word for word.
+                4. Write at most {{limit.questions}} questions the way the spec's Questions says, each with one right answer, a reason and its passage copied character for character, with its P number.
                 5. Build one HTML file with its CSS and JavaScript inside. A small library from a CDN is allowed; the page must still work by double-click from the desktop. Put every text of the quiz in one data block written as JSON, double-quoted strings with \" for a quote inside, so an apostrophe or a quote from the source never breaks the script.
                 6. Make every option a <button>, shuffled in JavaScript on every load except true or false. Build the spec's game mechanics and feedback; always points, a progress bar, the reason and the quoted passage after each answer, and an end screen.
                 7. Follow The file of the spec; make it readable on a phone and follow the device's light or dark setting.
@@ -612,7 +624,7 @@ stages:
             - heading: What done looks like
               purpose: task
               text: |
-                - Every passage is copied word for word, so I find it with Ctrl+F in the source.
+                - Every passage is copied character for character, so I find it with Ctrl+F in the source.
                 - The learning goals and questions follow the spec's rules.
                 - The quiz opens by double-click and works on a phone.
                 - Points, instant feedback with a quote and an end screen work.
@@ -635,7 +647,7 @@ stages:
               purpose: task
               techniques: [cite-sources, allow-unknown]
               text: |
-                Build `.scratch/quiz-maker/quiz.html` from `.scratch/quiz-maker/spec.md` and the source below: a URL (it may point to a PDF) or a PDF in this folder. Read the source in full; quote {{limit.passages}} passages word for word, numbered P1, P2 and so on, each one unbroken stretch of one or two sentences with where it sits. Pick the learning goals and write at most {{limit.questions}} questions as the spec says, each with a reason and its passage. One file with its CSS and JavaScript inside, a CDN library allowed, working by double-click, every quiz text in one JSON data block of double-quoted, escaped strings; every option a `<button>`, shuffled on every load except true or false; the spec's mechanics and feedback, always with points, a progress bar, the quoted passage after each answer and an end screen. Before you finish, click through it once as a player (start, answer, Next, end screen, retry) and fix what breaks. Then write `.scratch/quiz-maker/build-note.md` and open the quiz in my browser.
+                Build `.scratch/quiz-maker/quiz.html` from `.scratch/quiz-maker/spec.md` and the source below: a URL (it may point to a PDF) or a PDF in this folder. Read the source in full; quote {{limit.passages}} passages character for character, numbered P1, P2 and so on, each one unbroken stretch of one or two sentences with where it sits. Pick the learning goals and write at most {{limit.questions}} questions as the spec says, each with a reason and its passage. One file with its CSS and JavaScript inside, a CDN library allowed, working by double-click, every quiz text in one JSON data block of double-quoted, escaped strings; every option a `<button>`, shuffled on every load except true or false; the spec's mechanics and feedback, always with points, a progress bar, the quoted passage after each answer and an end screen. Before you finish, click through it once as a player (start, answer, Next, end screen, retry) and fix what breaks. Then write `.scratch/quiz-maker/build-note.md` and open the quiz in my browser.
 
                 ```text
                 {{source_input}}
@@ -692,7 +704,7 @@ stages:
             ## Known gaps
             - The best score is lost when the browser blocks storage
           goodLooksLike:
-            - Your notes are kept word for word under What I noticed.
+            - Your notes are copied character for character under What I noticed.
             - Every note led to a fix or to Keep as is.
             - Every fix is applied, and the note says how; nothing else changed.
             - The quiz still opens by double-click.
@@ -726,24 +738,24 @@ stages:
                 1. If the attached file is missing, say so in one line and stop.
                 2. Turn every note into fixes numbered F1, F2 and so on, each one sentence that says what changes. A note too vague to fix becomes a question instead: at most three questions, each with numbered options of one sentence and your recommendation, worded so that "yes" accepts it. What I liked goes under Keep as is.
                 3. Show me the fixes and the questions, then wait for my answer. Never answer for me.
-                4. After my answer, apply every agreed fix, F1 first, and nothing else. Keep the text of every question, option, reason and quote exactly as it is, unless a fix names it; take new wording and quotes from the passages, word for word with their P number.
+                4. After my answer, apply every agreed fix, F1 first, and nothing else. Keep the text of every question, option, reason and quote exactly as it is, unless a fix names it; take new wording and quotes from the passages, character for character with their P number. Copy my notes character for character under What I noticed.
                 5. Keep it one file with its CSS and JavaScript inside, working by double-click, and keep everything under Keep as is working.
                 6. Before you answer, check the new page: every question still shows its text and every option, and the note names only what you changed.
             - heading: What done looks like
               purpose: task
               text: |
-                - My notes are kept word for word under What I noticed.
+                - My notes are copied character for character under What I noticed.
                 - Every note led to a fix or to Keep as is.
                 - Every fix is applied, and the note says how; nothing else changed.
                 - The quiz still opens by double-click.
             - heading: Out of scope
               purpose: scope
-              text: &out_of_scope_playtest 'Add no feature my notes do not ask for: the next stage turns this run into a skill.'
+              text: &out_of_scope_playtest 'Change only what an agreed fix names: the next stage turns this run into a skill.'
             - heading: Practice run
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: |
@@ -754,7 +766,7 @@ stages:
             - heading: Task
               purpose: task
               text: |
-                I played `.scratch/quiz-maker/quiz.html`; my notes are below. Turn every note into fixes numbered F1, F2 … each one sentence saying what changes, and ask at most three questions, with a recommendation each, about notes too vague to fix; then wait for my answer. After it, apply every agreed fix to `quiz.html`, F1 first, and nothing else; take any new wording or quote from the passages in `build-note.md`, word for word with its P number, and keep it one file. Write my notes word for word and what you did to `.scratch/quiz-maker/quiz-note.md` and open the quiz in my browser.
+                I played `.scratch/quiz-maker/quiz.html`; my notes are below. Turn every note into fixes numbered F1, F2 … each one sentence saying what changes, and ask at most three questions, with a recommendation each, about notes too vague to fix; then wait for my answer. After it, apply every agreed fix to `quiz.html`, F1 first, and nothing else; take any new wording or quote from the passages in `build-note.md`, character for character with its P number, and keep it one file. Write my notes character for character and what you did to `.scratch/quiz-maker/quiz-note.md` and open the quiz in my browser.
 
                 ```text
                 {{notes}}
@@ -766,7 +778,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -775,6 +787,9 @@ stages:
     title: Improve
     learningGoal: 'Turn what this run taught you into a skill, then prove it on a source it has never seen.'
     summary: 'Your run becomes a reusable skill'
+    moves:
+      - letter: E
+        why: 'The skill is proven on a source it has never seen, and an agent grades the quiz.'
     jobs:
       - id: write-skill
         title: Write the skill
@@ -794,19 +809,20 @@ stages:
             sample: *quiz_example
         details:
           why: A skill keeps what you learned, so the next quiz starts where this one ended. Your spec becomes its rules, your fixes become its lessons, and the next chat does not make the same mistakes.
-          techniques: [meta-prompting, few-shot]
+          techniques: [meta-prompting]
           example: &skill_example |
             # Source to quiz
             ## When to use
             When someone hands you a web page or a PDF and wants a quiz to learn it.
             ## Steps
-            1. Read the source in full and quote 15 passages word for word, numbered P1 to P15.
+            1. Read the source in full and quote 15 passages, each copied character for character, numbered P1 to P15.
             2. Pick three learning goals from its main sections, each a thing the player can do afterwards, with the passages it rests on.
             3. Write four questions per goal, from easy to hard, each with a reason and a quoted passage.
             4. Build quiz.html as The quiz file says.
             5. Walk through it as a player (start, answer, Next, end, retry), fix what breaks, then say: "Save this as quiz.html and open it in your browser."
             ## The quiz file
             - One file with its CSS and JavaScript inside; a CDN library is allowed.
+            - Every quiz text sits in one JSON data block of double-quoted, escaped strings.
             - Options are buttons, shuffled on every load.
             - Points with a streak bonus, a progress bar, feedback with the quote after each answer, stars per goal, a retry of the missed ones.
             - Answer buttons at least 48 pixels high; light or dark as the device is set.
@@ -931,9 +947,9 @@ stages:
             ## Lessons for the skill
             - Step 2: pick the sections with the most passages.
           goodLooksLike:
-            - The skill made the quiz without more help.
-            - The quiz opens by double-click and quotes the new source word for word.
-            - Whatever needed help is listed as a lesson for the skill.
+            - The skill made the quiz without asking you.
+            - Every answer quotes the new source character for character, with its passage number.
+            - Where a step did not fit, the note says so as a lesson for the skill.
         instructions: 'Log in to Gemini, open a new chat, put a new URL in the box and paste the prompt; save the HTML as quiz.html, play it, and add the lessons of the note to your skill. Bonus, for those who are ahead: run it once more in a new chat on a PDF from your computer, attached, with its file name in the box.'
         do:
           simple:
@@ -959,8 +975,8 @@ stages:
               purpose: task
               text: |
                 - The skill made the quiz without asking me.
-                - Every answer in the quiz quotes the new source, word for word, with its passage number.
-                - Where a step did not fit this source, the note says so as a lesson for the skill.
+                - Every answer quotes the new source character for character, with its passage number.
+                - Where a step did not fit, the note says so as a lesson for the skill.
             - heading: Out of scope
               purpose: scope
               text: &out_of_scope_try 'Change no step of the skill: where a step does not fit this source, write it under Where it needed help.'
@@ -1036,7 +1052,7 @@ stages:
             3. None
           goodLooksLike:
             - Every rubric line is PASS or FAIL, with the evidence.
-            - The fixes are the three that matter most, each one sentence.
+            - Up to three fixes, the ones that matter most, each one sentence.
             - The verdict follows from the rubric.
         instructions: 'Bonus, for those who are ahead: log in, open a new chat, attach quiz.html and paste the prompt. Nothing else needs its result.'
         do:
@@ -1068,16 +1084,16 @@ stages:
                 1. Read the HTML and walk through it as a player would: start, one question, an answer, the end screen.
                 2. Grade usability U1 to U4: Tab reaches every option and Enter picks it (a <button> takes Enter by itself), feedback right after an answer, a 390 pixel wide screen (fail only what forces a width over 390 pixels), an end screen that says what to do next. Write PASS or FAIL with the evidence.
                 3. Grade question quality Q1 to Q4: one right answer each, believable wrong options, every quote present in the file, every learning goal the spec asks for covered.
-                4. Name the three fixes still to make that matter most, one sentence each, never one the note already lists as done, and a verdict that follows from the grades.
+                4. Name up to three fixes still to make that matter most, one sentence each, or None, never one the note already lists as done, and a verdict that follows from the grades.
             - heading: What done looks like
               purpose: task
               text: |
                 - Every rubric line is PASS or FAIL, with the evidence.
-                - The fixes are the three that matter most, each one sentence.
+                - Up to three fixes, the ones that matter most, each one sentence.
                 - The verdict follows from the rubric.
             - heading: Out of scope
               purpose: scope
-              text: &out_of_scope_eval 'Change nothing: you only grade. Your rubric can become a check in the skill.'
+              text: &out_of_scope_eval 'Change nothing: you only grade.'
             - heading: Practice run
               purpose: scope
               only: demo
@@ -1091,7 +1107,7 @@ stages:
               purpose: task
               techniques: [separate-verification]
               text: |
-                Grade `.scratch/quiz-maker/quiz.html` against `.scratch/quiz-maker/spec.md` by reading it: usability U1 to U4 (Tab reaches every option and Enter picks it, a `<button>` taking Enter by itself; feedback right after an answer; a 390 pixel wide screen, failing only what forces a width over 390 pixels; an end screen that says what to do next) and question quality Q1 to Q4 (one right answer each, believable wrong options, every quote present, every learning goal the spec asks for covered), PASS or FAIL with evidence, then the three fixes still to make that matter most and a verdict. If you can run Playwright (`npx playwright`), also click through the whole quiz once at 390 pixels wide and add what you saw as evidence. Write `.scratch/quiz-maker/eval.md`.
+                Grade `.scratch/quiz-maker/quiz.html` against `.scratch/quiz-maker/spec.md` by reading it: usability U1 to U4 (Tab reaches every option and Enter picks it, a `<button>` taking Enter by itself; feedback right after an answer; a 390 pixel wide screen, failing only what forces a width over 390 pixels; an end screen that says what to do next) and question quality Q1 to Q4 (one right answer each, believable wrong options, every quote present, every learning goal the spec asks for covered), PASS or FAIL with evidence, then up to three fixes still to make that matter most, or None, and a verdict. If you can run Playwright (`npx playwright`), also click through the whole quiz once at 390 pixels wide and add what you saw as evidence. Write `.scratch/quiz-maker/eval.md`.
             - heading: Out of scope
               purpose: scope
               text: *out_of_scope_eval

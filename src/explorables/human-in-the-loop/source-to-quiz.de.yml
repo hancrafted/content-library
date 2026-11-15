@@ -99,9 +99,10 @@ templates:
     ## Ziel
     ## Kategorien
     ### <Kategorie>
-    ## Nicht im Umfang
+    ## Nicht fragen
   decisions: |
     # Entscheidungen: <Name des Quiz-Generators>
+    ## Ziel
     ## Entscheidungen
     ### <Kategorie>
     ## Begriffe
@@ -153,10 +154,12 @@ stages:
     learningGoal: 'Anforderungsmanagement: entscheiden, was jedes gute Quiz braucht, bevor du dir eine Quelle ansiehst.'
     summary: 'Von einem Ziel zur Quiz-Spezifikation'
     moves:
+      - letter: B
+        why: 'Ein Chat zerlegt dein Ziel in die Kategorien, die ein Quiz-Generator entscheiden muss.'
       - letter: R
         why: 'Die Anforderungen kommen vor jeder Quelle: Du entscheidest, was ein gutes Quiz ist, und wendest es dann an.'
       - letter: I
-        why: 'Ein fertiger Prompt nennt die Kategorien, dann füllt ein Interview sie mit deinen Antworten.'
+        why: 'Die KI befragt dich Kategorie für Kategorie; du entscheidest, sie schreibt mit.'
     gate: 1
     card:
       label: Du zeichnest die Spezifikation ab
@@ -181,7 +184,7 @@ stages:
             label: Dein Ziel, in einer Zeile
             sample: Ein Quiz-Generator, der jede Webseite und jedes PDF in ein unterhaltsames Quiz für die Teilnehmenden eines KI-Workshops verwandelt.
         details:
-          why: Das ist Meta-Prompting. Ein Chat benennt, was das Interview abdecken muss, damit das Interview nach jedem Teil eines guten Quiz fragt, nicht nur nach dem, was zuerst einfällt.
+          why: Das ist Meta-Prompting. Ein Chat macht aus deinem Ziel die Tagesordnung des Interviews, eine offene Frage pro Kategorie, damit das Interview nach jedem Teil eines guten Quiz fragt, nicht nur nach dem, was zuerst einfällt.
           techniques: [meta-prompting, simplest-first]
           example: &categories_example |
             # Anforderungskategorien: Workshop-Quiz-Generator
@@ -200,10 +203,10 @@ stages:
             Was sieht ein Spieler direkt nach einer Antwort, und wie verweist es auf die Quelle?
             ### Die Datei
             Was muss die Quiz-Datei sein, damit jeder sie per Doppelklick öffnen kann?
-            ## Nicht im Umfang
+            ## Nicht fragen
             - Fragen zu einer bestimmten Quelle: Der Quiz-Generator funktioniert für jede.
           goodLooksLike:
-            - Sechs Kategorien, jede eine H3 mit einer offenen Frage darunter.
+            - Sechs Kategorien oder mehr, jede eine H3 mit einer offenen Frage darunter.
             - Jede Frage gilt für jede Quelle, nicht nur für eine.
             - Noch ist nichts beantwortet; die Liste fragt nur.
         instructions: 'Melde dich bei ChatGPT an, öffne einen neuen Chat, trag dein Ziel in das Feld ein und füge den Prompt ein. Bearbeite die Liste im Chat, wenn eine Kategorie fehlt, und kopiere sie dann.'
@@ -230,7 +233,7 @@ stages:
                 1. Schreibe diese sechs Kategorien als H3, in dieser Reihenfolge: Lernziele (wie Ziele aus jeder Quelle gewählt werden), Spielende (wer spielt und wo), Fragearten (Form, Anzahl und Schwierigkeit), Spielmechanik (was einen Spieler beim Spielen hält), Feedback (was auf eine Antwort folgt), Die Datei (was die Quiz-Datei sein muss).
                 2. Schreibe unter jede H3 eine Zeile: die offene Frage, die das Interview für diese Kategorie beantworten muss, passend zu meinem Ziel formuliert.
                 3. Füge eine Kategorie nur hinzu, wenn mein Ziel eine braucht, die den sechs fehlt, höchstens zwei weitere, jede mit ihrer offenen Frage.
-                4. Liste unter Nicht im Umfang auf, was das Interview nicht anfassen soll, je eine Zeile.
+                4. Liste unter Nicht fragen nur auf, was mein Ziel selbst ausschließt, je eine Zeile, oder Keine.
             - heading: Woran du siehst, dass du fertig bist
               purpose: task
               text: |
@@ -256,7 +259,7 @@ stages:
               purpose: task
               techniques: [meta-prompting]
               text: |
-                Arbeite im Workshop-Starterordner (https://hancrafted.net/hancrafted-workshop-starter.zip); falls noch nicht geschehen, führe zuerst /hancrafted-check-setup aus. Lege `.scratch/quiz-maker/` an und schreibe `.scratch/quiz-maker/categories.md` für mein Ziel unten: ein Quiz-Generator, der jede Webseite und jedes PDF in eine HTML-Quiz-Datei verwandelt, noch ohne gewählte Quelle. Schreibe sechs Kategorien als H3, in dieser Reihenfolge: Lernziele (wie Ziele aus jeder Quelle gewählt werden), Spielende, Fragearten, Spielmechanik, Feedback (was auf eine Antwort folgt), Die Datei. Unter jede eine offene Frage für das Interview, passend zu meinem Ziel formuliert; füge höchstens zwei Kategorien hinzu, die mein Ziel braucht. Frage nichts und beantworte nichts.
+                Arbeite im Workshop-Starterordner (https://hancrafted.net/hancrafted-workshop-starter.zip); falls der Ordner noch nicht eingerichtet ist, führe zuerst /hancrafted-check-setup aus. Lege `.scratch/quiz-maker/` an und schreibe `.scratch/quiz-maker/categories.md` für mein Ziel unten: ein Quiz-Generator, der jede Webseite und jedes PDF in eine HTML-Quiz-Datei verwandelt, noch ohne gewählte Quelle. Schreibe sechs Kategorien als H3, in dieser Reihenfolge: Lernziele (wie Ziele aus jeder Quelle gewählt werden), Spielende, Fragearten, Spielmechanik, Feedback (was auf eine Antwort folgt), Die Datei. Unter jede eine offene Frage für das Interview, passend zu meinem Ziel formuliert; füge höchstens zwei Kategorien hinzu, die mein Ziel braucht. Frage nichts und beantworte nichts.
 
                 ```text
                 {{goal}}
@@ -298,6 +301,8 @@ stages:
           techniques: [allow-unknown, fresh-context]
           example: &decisions_example |
             # Entscheidungen: Workshop-Quiz-Generator
+            ## Ziel
+            Ein Quiz-Generator, der jede Webseite und jedes PDF in ein unterhaltsames Quiz für die Teilnehmenden eines KI-Workshops verwandelt.
             ## Entscheidungen
             ### Lernziele
             - Q1: Drei Lernziele pro Quelle, jedes etwas, das der Spieler danach kann, aus den Hauptabschnitten der Quelle genommen.
@@ -321,7 +326,7 @@ stages:
             - Keine
           goodLooksLike:
             - Jede Kategorie hat mindestens eine Frage bekommen, und ihre Entscheidung steht unter ihrer H3.
-            - Jede Entscheidung steht in deinen Worten da, mit der Nummer der Frage, aus der sie kam.
+            - Jede Entscheidung sagt, was du gewählt hast, mit der Nummer der Frage, aus der sie kam.
             - Wörter, die zweierlei heißen könnten, sind unter Begriffe festgelegt.
             - Was noch offen ist, ist aufgelistet, nicht geraten.
         instructions: 'Öffne einen neuen Chat, trag deine Kategorien in das Feld ein und füge den Prompt ein. Antworte mit deinen eigenen Worten ("ja" übernimmt alle Empfehlungen) und kopiere die Entscheidungen, die er am Ende schreibt.'
@@ -355,7 +360,7 @@ stages:
               purpose: task
               text: |
                 - Jede Kategorie hat mindestens eine Frage bekommen, und ihre Entscheidung steht unter ihrer H3.
-                - Jede Entscheidung steht in meinen Worten da, mit der Nummer der Frage, aus der sie kam.
+                - Jede Entscheidung sagt, was ich gewählt habe, mit der Nummer der Frage, aus der sie kam.
                 - Wörter, die zweierlei heißen könnten, sind unter Begriffe festgelegt.
                 - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, oder dort steht Keine.
             - heading: Nicht im Umfang
@@ -365,18 +370,18 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: &practice_strict 'Das ist ein Übungslauf, also halte es klein: Die Zahlen oben sind schon dafür gekürzt. Frage oder ändere nur, was die Schritte nennen.'
             - heading: Format
               purpose: template
               text: |
-                Wenn jede Kategorie erledigt ist, schreibe das Ergebnis als einen Markdown-Codeblock, der mit ```markdown beginnt, nicht als Dokument oder Canvas. Nutze unter Entscheidungen eine H3 pro Kategorie, in der Reihenfolge meiner Kategorien. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge. Wenn deine Antwort abbricht, starte ich einen neuen Chat und füge diesen Prompt noch einmal ein.
+                Wenn jede Kategorie erledigt ist, schreibe das Ergebnis als einen Markdown-Codeblock, der mit ```markdown beginnt, nicht als Dokument oder Canvas. Kopiere unter Ziel das Ziel meiner Kategorien wörtlich. Nutze unter Entscheidungen eine H3 pro Kategorie, in der Reihenfolge meiner Kategorien, dann zuletzt die H3 Nicht im Umfang. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge. Wenn deine Antwort abbricht, starte ich einen neuen Chat und füge diesen Prompt noch einmal ein.
 
                 {{template}}
           technical:
             - heading: Aufgabe
               purpose: task
               text: |
-                /grill-with-docs Befrage mich zu den Anforderungen an einen Quiz-Generator, der jede Webseite und jedes PDF in eine HTML-Quiz-Datei verwandelt; noch ist keine Quelle gewählt, also frage nichts zu einer. Das Dokument, gegen das du grillst, ist `.scratch/quiz-maker/categories.md`: Geh seine Kategorien der Reihe nach durch, höchstens drei Fragen pro Runde und insgesamt höchstens {{limit.questions}}. Sobald eine Kategorie geklärt ist, schreibe ihre Entscheidungen unter ihre H3 in `.scratch/quiz-maker/decisions.md`, jede mit ihrer Fragenummer, und die festgelegten Wörter unter Begriffe. Frag zuletzt, was der Quiz-Generator weglassen muss, und halte es als letzte H3 Nicht im Umfang fest.
+                /grill-with-docs Befrage mich zu den Anforderungen an einen Quiz-Generator, der jede Webseite und jedes PDF in eine HTML-Quiz-Datei verwandelt; noch ist keine Quelle gewählt, also frage nichts zu einer. Das Dokument, gegen das du grillst, ist `.scratch/quiz-maker/categories.md`: Geh seine Kategorien der Reihe nach durch, höchstens drei Fragen pro Runde und insgesamt höchstens {{limit.questions}}. Sobald eine Kategorie geklärt ist, schreibe ihre Entscheidungen unter ihre H3 in `.scratch/quiz-maker/decisions.md`, jede mit ihrer Fragenummer, und die festgelegten Wörter unter Begriffe. Frag zuletzt, was der Quiz-Generator weglassen muss, und halte es als letzte H3 Nicht im Umfang fest. Kopiere das Ziel aus `categories.md` unter Ziel, behalte jeden Begriff unter Begriffe in decisions.md und schreibe keine andere Datei.
             - heading: Nicht im Umfang
               purpose: scope
               text: *out_of_scope_grill
@@ -384,7 +389,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -409,27 +414,29 @@ stages:
           example: &spec_example |
             # Quiz-Spezifikation: Workshop-Quiz-Generator
             ## Zweck
-            Jede Webseite und jedes PDF in ein unterhaltsames Quiz verwandeln, das prüft, was Workshop-Teilnehmende mitgenommen haben.
+            Ein Quiz-Generator, der jede Webseite und jedes PDF in ein unterhaltsames Quiz für die Teilnehmenden eines KI-Workshops verwandelt. (Ziel)
             ## Spielende
-            Workshop-Teilnehmende, die gerade den Vortrag gehört haben und in der Pause auf dem Handy spielen.
+            Workshop-Teilnehmende, die gerade den Vortrag gehört haben und in der Pause auf dem Handy spielen. (Q2)
             ## Lernziele
-            Drei pro Quelle, jedes etwas, das der Spieler danach kann, aus den Hauptabschnitten der Quelle genommen.
+            Drei pro Quelle, jedes etwas, das der Spieler danach kann, aus den Hauptabschnitten der Quelle genommen. (Q1)
             ## Fragen
-            - Multiple Choice mit vier Optionen; wahr oder falsch, wo ein verbreiteter Mythos entlarvt wird.
-            - Vier Fragen pro Lernziel, von leicht bis schwer.
+            - Multiple Choice mit vier Optionen; wahr oder falsch, wo ein verbreiteter Mythos entlarvt wird. (Q3)
+            - Vier Fragen pro Lernziel, von leicht bis schwer. (Q4)
             ## Spielmechanik
-            - Punkte mit Serienbonus, ein Fortschrittsbalken, Sterne pro Lernziel auf dem Endbildschirm.
-            - Eine Wiederholung der verpassten Fragen.
-            - Punkte pro Antwort: offen: wie viele.
+            - Punkte mit Serienbonus, Sterne pro Lernziel auf dem Endbildschirm, eine Wiederholung der verpassten Fragen. (Q5)
+            - Punkte, ein Fortschrittsbalken, ein Endbildschirm. (Mindestumfang)
+            - Punkte pro Antwort: offen: wie viele. (Q5)
             ## Feedback
-            Sofort richtig oder falsch, ein Satz, warum, und die Passage wörtlich zitiert.
+            Sofort richtig oder falsch, ein Satz, warum, und die Passage wörtlich zitiert. (Q6)
             ## Die Datei
-            Eine HTML-Datei, die sich per Doppelklick öffnet und offline funktioniert; jede Antwortoption ist ein Knopf; auf dem Handy lesbar, hell oder dunkel, wie das Gerät eingestellt ist.
+            - Auf dem Handy lesbar, hell oder dunkel, wie das Gerät eingestellt ist. (Q2)
+            - Eine HTML-Datei, die sich per Doppelklick öffnet; jede Antwortoption ein Knopf. (Mindestumfang)
             ## Nicht im Umfang
-            - Konten, eine Bestenliste, Ton.
+            - Konten, eine Bestenliste, Ton. (Q7)
           goodLooksLike:
             - Jede Entscheidung der Entscheidungen (Q1, Q2 und so weiter) taucht in der Spezifikation auf, in einem Abschnitt, den du benennen kannst; keine fehlt oder ist als offen notiert.
-            - 'Jede Zeile der Spezifikation stammt aus einer Entscheidung oder aus dem Mindestumfang (Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf).'
+            - 'Der Mindestumfang ist ganz da, jeder Punkt mit (Mindestumfang) markiert, auch wo keine Entscheidung ihn nennt: Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf. Eine mit (Mindestumfang) markierte Zeile gilt als gegeben, nie als ausgedacht.'
+            - Jede andere Zeile, außer Zweck mit (Ziel), endet mit der Q-Nummer der Entscheidung, aus der sie stammt.
             - Nichts darin gilt nur für eine Quelle; es würde auch für ein Quiz über ein Kochrezept gelten.
             - 'Keine Zahl ist ausgedacht: Eine Anzahl oder ein Wert, den die Entscheidungen nicht nennen, steht als "offen:" mit dem, was fehlt.'
         instructions: 'Öffne einen neuen Chat, füge den Prompt mit deinen Entscheidungen im Feld ein und kopiere die Spezifikation. Prüfe sie dann in einem weiteren neuen Chat, bevor du sie abzeichnest.'
@@ -452,20 +459,22 @@ stages:
               text: |
                 Die Spezifikation beschreibt einen Quiz-Generator: was jedes Quiz, das er macht, können muss, aus jeder Webseite und jedem PDF.
 
-                1. Schreibe unter Zweck einen Satz: was der Quiz-Generator in was verwandelt, für wen.
+                1. Schreibe unter Zweck das Ziel der Entscheidungen als einen Satz.
                 2. Schreibe unter Spielende, wer spielt und wo, in ein oder zwei Sätzen.
                 3. Schreibe unter Lernziele die Regel, nach der Ziele aus jeder Quelle gewählt werden: wie viele und welcher Art. Nenne kein Ziel einer bestimmten Quelle.
                 4. Schreibe unter Fragen die Arten, wie viele pro Ziel und wie schwer, wie entschieden.
                 5. Liste unter Spielmechanik die entschiedene Mechanik auf. Nimm immer Punkte, einen Fortschrittsbalken und einen Endbildschirm auf.
-                6. Schreibe unter Feedback, was auf jede Antwort folgt. Nimm immer die Begründung und die Passage der Quelle auf, wörtlich zitiert.
+                6. Schreibe unter Feedback, was auf jede Antwort folgt. Nimm immer die Begründung und die Passage der Quelle auf, Zeichen für Zeichen kopiert.
                 7. Schreibe unter Die Datei, was entschieden wurde, und immer: eine HTML-Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf.
-                8. Liste unter Nicht im Umfang auf, was ausgeschlossen wurde.
+                8. Liste unter Nicht im Umfang auf, was die Entscheidungen ausschließen, oder Keine.
                 9. Nimm nur, was die Entscheidungen sagen, in ihren Worten, und den Mindestumfang aus den Schritten oben; füge keinen eigenen Satz hinzu. Erfinde keine Zahlen: Wo die Entscheidungen keine Punktwerte oder Anzahlen nennen, schreibe "offen: <was>", statt selbst zu wählen.
+                10. Beende jede Zeile mit ihrer Herkunft in Klammern: (Ziel) für Zweck, die Q-Nummer, aus der sie stammt, etwa (Q3), oder (Mindestumfang) für einen Punkt, den die Schritte oben immer verlangen.
             - heading: Woran du siehst, dass du fertig bist
               purpose: task
               text: |
                 - Jede Entscheidung der Entscheidungen (Q1, Q2 und so weiter) taucht in der Spezifikation auf, in einem Abschnitt, den du benennen kannst; keine fehlt oder ist als offen notiert.
-                - Jede Zeile der Spezifikation stammt aus einer Entscheidung oder aus dem Mindestumfang (Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf).
+                - Der Mindestumfang ist ganz da, jeder Punkt mit (Mindestumfang) markiert, auch wo keine Entscheidung ihn nennt: Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf. Eine mit (Mindestumfang) markierte Zeile gilt als gegeben, nie als ausgedacht.
+                - Jede andere Zeile, außer Zweck mit (Ziel), endet mit der Q-Nummer der Entscheidung, aus der sie stammt.
                 - Nichts darin gilt nur für eine Quelle; es würde auch für ein Quiz über ein Kochrezept gelten.
                 - Keine Zahl ist ausgedacht: Eine Anzahl oder ein Wert, den die Entscheidungen nicht nennen, steht als "offen:" mit dem, was fehlt.
             - heading: Nicht im Umfang
@@ -475,7 +484,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format
@@ -483,7 +492,7 @@ stages:
             - heading: Aufgabe
               purpose: task
               text: |
-                /to-spec Geh von `.scratch/quiz-maker/decisions.md` aus, nicht von diesem Gespräch, und schreibe die Spezifikation nach `.scratch/quiz-maker/spec.md`. Sie beschreibt einen Quiz-Generator: was jedes Quiz, das er macht, können muss, aus jeder Webseite und jedem PDF, also nenne kein Ziel einer bestimmten Quelle. Nimm immer Punkte, einen Fortschrittsbalken, einen Endbildschirm, Feedback mit der Begründung und der wörtlich zitierten Passage und eine HTML-Datei auf, die sich per Doppelklick öffnet, mit Optionen als Knöpfen. Nimm jede Entscheidung in ihren eigenen Worten, füge keinen eigenen Satz hinzu, erfinde keine Zahlen und schreibe "offen: <was>", wo eine Entscheidung fehlt.
+                /to-spec Geh von `.scratch/quiz-maker/decisions.md` aus, nicht von diesem Gespräch, und schreibe die Spezifikation nach `.scratch/quiz-maker/spec.md`. Sie beschreibt einen Quiz-Generator: was jedes Quiz, das er macht, können muss, aus jeder Webseite und jedem PDF, also nenne kein Ziel einer bestimmten Quelle. Schreibe unter Zweck das Ziel der Entscheidungen. Nimm immer Punkte, einen Fortschrittsbalken, einen Endbildschirm, Feedback mit der Begründung und der Zeichen für Zeichen kopierten Passage und eine HTML-Datei auf, die sich per Doppelklick öffnet, mit jeder Antwortoption als Knopf. Nimm jede Entscheidung in ihren eigenen Worten, füge keinen eigenen Satz hinzu, erfinde keine Zahlen und schreibe "offen: <was>", wo eine Entscheidung fehlt. Beende jede Zeile mit ihrer Herkunft: (Ziel) für Zweck, (Q3) für eine Entscheidung, (Mindestumfang) für einen Punkt oben. Schreibe nur spec.md, in der Vorlage unten statt in den eigenen Abschnitten des Skills, und veröffentliche nichts in einem Issue-Tracker.
             - heading: Nicht im Umfang
               purpose: scope
               text: *out_of_scope_spec
@@ -491,7 +500,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -508,7 +517,8 @@ stages:
               sample: *spec_example
           checks:
             - Jede Entscheidung der Entscheidungen (Q1, Q2 und so weiter) taucht in der Spezifikation auf, in einem Abschnitt, den du benennen kannst; keine fehlt oder ist als offen notiert.
-            - 'Jede Zeile der Spezifikation stammt aus einer Entscheidung oder aus dem Mindestumfang (Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf). Liste im Beleg jede Zeile mit ihren ersten Worten und ihrer Q-Nummer oder ihrem Punkt aus dem Mindestumfang auf; lass jede Zeile ohne beides durchfallen, mit Zitat. Übliche Quiz-Praxis ist keins von beiden.'
+            - 'Der Mindestumfang ist ganz da, jeder Punkt mit (Mindestumfang) markiert, auch wo keine Entscheidung ihn nennt: Punkte, ein Fortschrittsbalken, ein Endbildschirm, Feedback, das die Quelle zitiert, eine Datei, die sich per Doppelklick öffnet, jede Antwortoption ein Knopf. Eine mit (Mindestumfang) markierte Zeile gilt als gegeben, nie als ausgedacht.'
+            - 'Jede andere Zeile, außer Zweck mit (Ziel), endet mit der Q-Nummer der Entscheidung, aus der sie stammt, und sagt, was diese Entscheidung sagt; lass eine Zeile ohne Q-Nummer oder mit einer falschen durchfallen, mit Zitat. Übliche Quiz-Praxis ist keine Entscheidung.'
             - Nichts darin gilt nur für eine Quelle; es würde auch für ein Quiz über ein Kochrezept gelten.
             - 'Keine Zahl ist ausgedacht: Eine Anzahl oder ein Wert, den die Entscheidungen nicht nennen, steht als "offen:" mit dem, was fehlt.'
 
@@ -519,6 +529,8 @@ stages:
     moves:
       - letter: E
         why: 'Du spielst das Quiz, bevor ihm jemand vertraut, und was dir auffällt, wird zu nummerierten Korrekturen.'
+      - letter: F
+        why: 'Ein frischer Chat bekommt die Datei, die Passagen und deine Notizen, nicht den Chat, der sie gebaut hat.'
     gate: 2
     jobs:
       - id: build
@@ -570,7 +582,7 @@ stages:
             ## Bekannte Lücken
             - Der beste Punktestand geht verloren, wenn der Browser den Speicher blockiert
           goodLooksLike:
-            - Jede Passage ist wörtlich kopiert, sodass du sie mit Strg+F in der Quelle findest.
+            - Jede Passage ist Zeichen für Zeichen kopiert, sodass du sie mit Strg+F in der Quelle findest.
             - Die Lernziele und Fragen folgen den Regeln der Spezifikation.
             - Das Quiz öffnet sich per Doppelklick und funktioniert auf dem Handy.
             - Punkte, sofortiges Feedback mit Zitat und ein Endbildschirm funktionieren.
@@ -604,7 +616,7 @@ stages:
                 1. Öffne die Quelle und lies alles, bis zum Ende. Wenn du sie nicht öffnen kannst, sag es in einer Zeile, bitte mich, ihren Text einzufügen oder sie als PDF anzuhängen, und hör auf.
                 2. Zitiere {{limit.passages}} Passagen, die sich ein Spieler merken sollte, nummeriert P1, P2 und so weiter, jede gefolgt von ihrer Stelle in Klammern. Kopiere jede Passage Zeichen für Zeichen, als ein zusammenhängendes Stück von ein oder zwei Sätzen, damit ich sie mit Strg+F finde: Füge nichts hinzu, lass nichts weg und formuliere nichts um. Verteile sie über die ganze Quelle.
                 3. Wähle die Lernziele so, wie es Lernziele in der Spezifikation sagt, jedes auf Passagen gestützt.
-                4. Schreibe höchstens {{limit.questions}} Fragen so, wie es Fragen in der Spezifikation sagt, jede mit einer richtigen Antwort, einer Begründung und ihrer Passage, wörtlich zitiert.
+                4. Schreibe höchstens {{limit.questions}} Fragen so, wie es Fragen in der Spezifikation sagt, jede mit einer richtigen Antwort, einer Begründung und ihrer Passage, Zeichen für Zeichen kopiert, mit ihrer P-Nummer.
                 5. Baue eine HTML-Datei mit ihrem CSS und JavaScript darin. Eine kleine Bibliothek von einem CDN ist erlaubt; die Seite muss trotzdem per Doppelklick vom Desktop funktionieren. Leg jeden Text des Quiz in einen Datenblock, als JSON geschrieben, Strings in doppelten Anführungszeichen mit \" für ein Anführungszeichen darin, damit ein Apostroph oder ein Anführungszeichen aus der Quelle nie das Skript kaputtmacht.
                 6. Mach jede Option zu einem <button>, bei jedem Laden in JavaScript gemischt, außer bei wahr oder falsch. Baue die Spielmechanik und das Feedback der Spezifikation; immer Punkte, einen Fortschrittsbalken, die Begründung und die zitierte Passage nach jeder Antwort und einen Endbildschirm.
                 7. Folge Die Datei aus der Spezifikation; mach es auf dem Handy lesbar und folge der Hell- oder Dunkel-Einstellung des Geräts.
@@ -612,7 +624,7 @@ stages:
             - heading: Woran du siehst, dass du fertig bist
               purpose: task
               text: |
-                - Jede Passage ist wörtlich kopiert, sodass ich sie mit Strg+F in der Quelle finde.
+                - Jede Passage ist Zeichen für Zeichen kopiert, sodass ich sie mit Strg+F in der Quelle finde.
                 - Die Lernziele und Fragen folgen den Regeln der Spezifikation.
                 - Das Quiz öffnet sich per Doppelklick und funktioniert auf dem Handy.
                 - Punkte, sofortiges Feedback mit Zitat und ein Endbildschirm funktionieren.
@@ -635,7 +647,7 @@ stages:
               purpose: task
               techniques: [cite-sources, allow-unknown]
               text: |
-                Baue `.scratch/quiz-maker/quiz.html` aus `.scratch/quiz-maker/spec.md` und der Quelle unten: einer URL (sie kann auf ein PDF zeigen) oder einem PDF in diesem Ordner. Lies die Quelle vollständig; zitiere {{limit.passages}} Passagen wörtlich, nummeriert P1, P2 und so weiter, jede ein zusammenhängendes Stück von ein oder zwei Sätzen mit ihrer Stelle. Wähle die Lernziele und schreibe höchstens {{limit.questions}} Fragen, wie es die Spezifikation sagt, jede mit einer Begründung und ihrer Passage. Eine Datei mit ihrem CSS und JavaScript darin, eine CDN-Bibliothek erlaubt, per Doppelklick lauffähig, jeder Text des Quiz in einem JSON-Datenblock aus Strings in doppelten Anführungszeichen, korrekt maskiert; jede Option ein `<button>`, bei jedem Laden gemischt außer bei wahr oder falsch; die Mechanik und das Feedback der Spezifikation, immer mit Punkten, einem Fortschrittsbalken, der zitierten Passage nach jeder Antwort und einem Endbildschirm. Klick dich vor dem Abschluss einmal als Spieler durch (Start, Antwort, Weiter, Endbildschirm, Wiederholung) und repariere, was kaputtgeht. Schreibe dann `.scratch/quiz-maker/build-note.md` und öffne das Quiz in meinem Browser.
+                Baue `.scratch/quiz-maker/quiz.html` aus `.scratch/quiz-maker/spec.md` und der Quelle unten: einer URL (sie kann auf ein PDF zeigen) oder einem PDF in diesem Ordner. Lies die Quelle vollständig; zitiere {{limit.passages}} Passagen Zeichen für Zeichen, nummeriert P1, P2 und so weiter, jede ein zusammenhängendes Stück von ein oder zwei Sätzen mit ihrer Stelle. Wähle die Lernziele und schreibe höchstens {{limit.questions}} Fragen, wie es die Spezifikation sagt, jede mit einer Begründung und ihrer Passage. Eine Datei mit ihrem CSS und JavaScript darin, eine CDN-Bibliothek erlaubt, per Doppelklick lauffähig, jeder Text des Quiz in einem JSON-Datenblock aus Strings in doppelten Anführungszeichen, korrekt maskiert; jede Option ein `<button>`, bei jedem Laden gemischt außer bei wahr oder falsch; die Mechanik und das Feedback der Spezifikation, immer mit Punkten, einem Fortschrittsbalken, der zitierten Passage nach jeder Antwort und einem Endbildschirm. Klick dich vor dem Abschluss einmal als Spieler durch (Start, Antwort, Weiter, Endbildschirm, Wiederholung) und repariere, was kaputtgeht. Schreibe dann `.scratch/quiz-maker/build-note.md` und öffne das Quiz in meinem Browser.
 
                 ```text
                 {{source_input}}
@@ -692,7 +704,7 @@ stages:
             ## Bekannte Lücken
             - Der beste Punktestand geht verloren, wenn der Browser den Speicher blockiert
           goodLooksLike:
-            - Deine Notizen stehen wörtlich unter Was mir aufgefallen ist.
+            - Deine Notizen sind Zeichen für Zeichen unter Was mir aufgefallen ist kopiert.
             - Jede Notiz hat zu einer Korrektur oder zu Bleibt so geführt.
             - Jede Korrektur ist umgesetzt, und die Notiz sagt, wie; sonst hat sich nichts geändert.
             - Das Quiz öffnet sich noch per Doppelklick.
@@ -726,24 +738,24 @@ stages:
                 1. Fehlt die angehängte Datei, sag es in einer Zeile und hör auf.
                 2. Mach aus jeder Notiz Korrekturen, nummeriert F1, F2 und so weiter, jede ein Satz, der sagt, was sich ändert. Eine Notiz, die zu vage zum Korrigieren ist, wird stattdessen eine Frage: höchstens drei Fragen, jede mit nummerierten Optionen von einem Satz und deiner Empfehlung, so formuliert, dass "ja" sie annimmt. Was mir gefallen hat, kommt unter Bleibt so.
                 3. Zeig mir die Korrekturen und die Fragen und warte dann auf meine Antwort. Antworte nie für mich.
-                4. Setze nach meiner Antwort jede vereinbarte Korrektur um, F1 zuerst, und nichts sonst. Lass den Text jeder Frage, Option, Begründung und jedes Zitats genau so, wie er ist, außer eine Korrektur nennt ihn; nimm neue Formulierungen und Zitate aus den Passagen, wörtlich mit ihrer P-Nummer.
+                4. Setze nach meiner Antwort jede vereinbarte Korrektur um, F1 zuerst, und nichts sonst. Lass den Text jeder Frage, Option, Begründung und jedes Zitats genau so, wie er ist, außer eine Korrektur nennt ihn; nimm neue Formulierungen und Zitate aus den Passagen, Zeichen für Zeichen mit ihrer P-Nummer. Kopiere meine Notizen Zeichen für Zeichen unter Was mir aufgefallen ist.
                 5. Halte es bei einer Datei mit ihrem CSS und JavaScript darin, per Doppelklick lauffähig, und halte alles unter Bleibt so funktionsfähig.
                 6. Prüfe vor der Antwort die neue Seite: Jede Frage zeigt noch ihren Text und jede Option, und die Notiz nennt nur, was du geändert hast.
             - heading: Woran du siehst, dass du fertig bist
               purpose: task
               text: |
-                - Meine Notizen stehen wörtlich unter Was mir aufgefallen ist.
+                - Meine Notizen sind Zeichen für Zeichen unter Was mir aufgefallen ist kopiert.
                 - Jede Notiz hat zu einer Korrektur oder zu Bleibt so geführt.
                 - Jede Korrektur ist umgesetzt, und die Notiz sagt, wie; sonst hat sich nichts geändert.
                 - Das Quiz öffnet sich noch per Doppelklick.
             - heading: Nicht im Umfang
               purpose: scope
-              text: &out_of_scope_playtest 'Füge keine Funktion hinzu, um die meine Notizen nicht bitten: Die nächste Stufe macht aus diesem Durchlauf einen Skill.'
+              text: &out_of_scope_playtest 'Ändere nur, was eine vereinbarte Korrektur nennt: Die nächste Stufe macht aus diesem Durchlauf einen Skill.'
             - heading: Übungslauf
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: |
@@ -754,7 +766,7 @@ stages:
             - heading: Aufgabe
               purpose: task
               text: |
-                Ich habe `.scratch/quiz-maker/quiz.html` gespielt; meine Notizen stehen unten. Mach aus jeder Notiz Korrekturen, nummeriert F1, F2 …, jede ein Satz, der sagt, was sich ändert, und stelle höchstens drei Fragen, jede mit einer Empfehlung, zu Notizen, die zu vage zum Korrigieren sind; warte dann auf meine Antwort. Setze danach jede vereinbarte Korrektur in `quiz.html` um, F1 zuerst, und nichts sonst; nimm jede neue Formulierung und jedes neue Zitat aus den Passagen in `build-note.md`, wörtlich mit seiner P-Nummer, und halte es bei einer Datei. Schreibe meine Notizen wörtlich und was du getan hast nach `.scratch/quiz-maker/quiz-note.md` und öffne das Quiz in meinem Browser.
+                Ich habe `.scratch/quiz-maker/quiz.html` gespielt; meine Notizen stehen unten. Mach aus jeder Notiz Korrekturen, nummeriert F1, F2 …, jede ein Satz, der sagt, was sich ändert, und stelle höchstens drei Fragen, jede mit einer Empfehlung, zu Notizen, die zu vage zum Korrigieren sind; warte dann auf meine Antwort. Setze danach jede vereinbarte Korrektur in `quiz.html` um, F1 zuerst, und nichts sonst; nimm jede neue Formulierung und jedes neue Zitat aus den Passagen in `build-note.md`, Zeichen für Zeichen mit seiner P-Nummer, und halte es bei einer Datei. Schreibe meine Notizen Zeichen für Zeichen und was du getan hast nach `.scratch/quiz-maker/quiz-note.md` und öffne das Quiz in meinem Browser.
 
                 ```text
                 {{notes}}
@@ -766,7 +778,7 @@ stages:
               purpose: scope
               only: demo
               techniques: [simplest-first]
-              text: *practice
+              text: *practice_strict
             - heading: Format
               purpose: template
               text: *format_file
@@ -775,6 +787,9 @@ stages:
     title: Verbessern
     learningGoal: 'Was dich dieser Durchlauf gelehrt hat, wird ein Skill, und du beweist ihn an einer Quelle, die er noch nie gesehen hat.'
     summary: 'Dein Durchlauf wird ein wiederverwendbarer Skill'
+    moves:
+      - letter: E
+        why: 'Der Skill wird an einer Quelle bewiesen, die er noch nie gesehen hat, und ein Agent bewertet das Quiz.'
     jobs:
       - id: write-skill
         title: Den Skill schreiben
@@ -794,19 +809,20 @@ stages:
             sample: *quiz_example
         details:
           why: Ein Skill bewahrt, was du gelernt hast, damit das nächste Quiz dort beginnt, wo dieses endete. Deine Spezifikation wird zu seinen Regeln, deine Korrekturen werden zu seinen Lehren, und der nächste Chat macht nicht dieselben Fehler.
-          techniques: [meta-prompting, few-shot]
+          techniques: [meta-prompting]
           example: &skill_example |
             # Von der Quelle zum Quiz
             ## Wann einsetzen
             Wenn dir jemand eine Webseite oder ein PDF gibt und ein Quiz will, um es zu lernen.
             ## Schritte
-            1. Lies die Quelle vollständig und zitiere 15 Passagen wörtlich, nummeriert P1 bis P15.
+            1. Lies die Quelle vollständig und zitiere 15 Passagen, jede Zeichen für Zeichen kopiert, nummeriert P1 bis P15.
             2. Wähle drei Lernziele aus ihren Hauptabschnitten, jedes etwas, das der Spieler danach kann, mit den Passagen, auf denen es beruht.
             3. Schreibe vier Fragen pro Ziel, von leicht bis schwer, jede mit einer Begründung und einer zitierten Passage.
             4. Baue quiz.html so, wie es Die Quiz-Datei sagt.
             5. Geh es als Spieler durch (Start, Antwort, Weiter, Ende, Wiederholung), repariere, was kaputtgeht, und sag dann: "Speichere das als quiz.html und öffne es in deinem Browser."
             ## Die Quiz-Datei
             - Eine Datei mit ihrem CSS und JavaScript darin; eine CDN-Bibliothek ist erlaubt.
+            - Jeder Text des Quiz steht in einem JSON-Datenblock aus Strings in doppelten Anführungszeichen, korrekt maskiert.
             - Optionen sind Knöpfe, bei jedem Laden gemischt.
             - Punkte mit Serienbonus, ein Fortschrittsbalken, Feedback mit dem Zitat nach jeder Antwort, Sterne pro Ziel, eine Wiederholung der verpassten Fragen.
             - Antwortknöpfe mindestens 48 Pixel hoch; hell oder dunkel, wie das Gerät eingestellt ist.
@@ -931,9 +947,9 @@ stages:
             ## Lehren für den Skill
             - Schritt 2: Wähle die Abschnitte mit den meisten Passagen.
           goodLooksLike:
-            - Der Skill hat das Quiz ohne weitere Hilfe gemacht.
-            - Das Quiz öffnet sich per Doppelklick und zitiert die neue Quelle wörtlich.
-            - Was Hilfe brauchte, steht als Lehre für den Skill da.
+            - Der Skill hat das Quiz gemacht, ohne dich zu fragen.
+            - Jede Antwort zitiert die neue Quelle Zeichen für Zeichen, mit der Nummer ihrer Passage.
+            - Wo ein Schritt nicht passte, sagt es die Notiz als Lehre für den Skill.
         instructions: 'Melde dich bei Gemini an, öffne einen neuen Chat, trag eine neue URL in das Feld ein und füge den Prompt ein; speichere das HTML als quiz.html, spiel es und übernimm die Lehren der Notiz in deinen Skill. Bonus, für alle, die schon weiter sind: Lass ihn in einem neuen Chat noch einmal auf ein PDF von deinem Rechner los, angehängt, mit seinem Dateinamen im Feld.'
         do:
           simple:
@@ -959,8 +975,8 @@ stages:
               purpose: task
               text: |
                 - Der Skill hat das Quiz gemacht, ohne mich zu fragen.
-                - Jede Antwort im Quiz zitiert die neue Quelle, wörtlich, mit der Nummer ihrer Passage.
-                - Wo ein Schritt nicht zu dieser Quelle passte, sagt es die Notiz als Lehre für den Skill.
+                - Jede Antwort zitiert die neue Quelle Zeichen für Zeichen, mit der Nummer ihrer Passage.
+                - Wo ein Schritt nicht passte, sagt es die Notiz als Lehre für den Skill.
             - heading: Nicht im Umfang
               purpose: scope
               text: &out_of_scope_try 'Ändere keinen Schritt des Skills: Wo ein Schritt nicht zu dieser Quelle passt, schreib es unter Wo er Hilfe brauchte.'
@@ -1036,7 +1052,7 @@ stages:
             3. Keine
           goodLooksLike:
             - Jede Zeile des Rasters ist BESTANDEN oder DURCHGEFALLEN, mit dem Beleg.
-            - Die Korrekturen sind die drei wichtigsten, jede in einem Satz.
+            - Bis zu drei Korrekturen, die wichtigsten, jede in einem Satz.
             - Das Urteil folgt aus dem Raster.
         instructions: 'Bonus, für alle, die schon weiter sind: Melde dich an, öffne einen neuen Chat, häng quiz.html an und füge den Prompt ein. Kein anderer Schritt braucht sein Ergebnis.'
         do:
@@ -1068,16 +1084,16 @@ stages:
                 1. Lies das HTML und geh es durch, wie ein Spieler es würde: Start, eine Frage, eine Antwort, der Endbildschirm.
                 2. Bewerte die Bedienbarkeit U1 bis U4: Tab erreicht jede Option und Enter wählt sie (ein <button> nimmt Enter von selbst an), Feedback direkt nach einer Antwort, ein 390 Pixel breiter Bildschirm (lass nur durchfallen, was eine Breite über 390 Pixel erzwingt), ein Endbildschirm, der sagt, was als Nächstes zu tun ist. Schreibe BESTANDEN oder DURCHGEFALLEN mit dem Beleg.
                 3. Bewerte die Qualität der Fragen Q1 bis Q4: je eine richtige Antwort, glaubwürdige falsche Optionen, jedes Zitat in der Datei vorhanden, jedes Lernziel abgedeckt, das die Spezifikation verlangt.
-                4. Nenne die drei wichtigsten noch offenen Korrekturen, je in einem Satz, nie eine, die die Notiz schon als erledigt aufführt, und ein Urteil, das aus der Bewertung folgt.
+                4. Nenne bis zu drei der wichtigsten noch offenen Korrekturen, je in einem Satz, oder Keine, nie eine, die die Notiz schon als erledigt aufführt, und ein Urteil, das aus der Bewertung folgt.
             - heading: Woran du siehst, dass du fertig bist
               purpose: task
               text: |
                 - Jede Zeile des Rasters ist BESTANDEN oder DURCHGEFALLEN, mit dem Beleg.
-                - Die Korrekturen sind die drei wichtigsten, jede in einem Satz.
+                - Bis zu drei Korrekturen, die wichtigsten, jede in einem Satz.
                 - Das Urteil folgt aus dem Raster.
             - heading: Nicht im Umfang
               purpose: scope
-              text: &out_of_scope_eval 'Ändere nichts: Du bewertest nur. Dein Raster kann eine Prüfung im Skill werden.'
+              text: &out_of_scope_eval 'Ändere nichts: Du bewertest nur.'
             - heading: Übungslauf
               purpose: scope
               only: demo
@@ -1091,7 +1107,7 @@ stages:
               purpose: task
               techniques: [separate-verification]
               text: |
-                Bewerte `.scratch/quiz-maker/quiz.html` gegen `.scratch/quiz-maker/spec.md`, indem du es liest: Bedienbarkeit U1 bis U4 (Tab erreicht jede Option und Enter wählt sie, ein `<button>` nimmt Enter von selbst an; Feedback direkt nach einer Antwort; ein 390 Pixel breiter Bildschirm, wobei nur durchfällt, was eine Breite über 390 Pixel erzwingt; ein Endbildschirm, der sagt, was als Nächstes zu tun ist) und Qualität der Fragen Q1 bis Q4 (je eine richtige Antwort, glaubwürdige falsche Optionen, jedes Zitat vorhanden, jedes Lernziel abgedeckt, das die Spezifikation verlangt), BESTANDEN oder DURCHGEFALLEN mit Beleg, dann die drei wichtigsten noch offenen Korrekturen und ein Urteil. Wenn du Playwright ausführen kannst (`npx playwright`), klick dich zusätzlich einmal bei 390 Pixel Breite durch das ganze Quiz und füge hinzu, was du gesehen hast, als Beleg. Schreibe `.scratch/quiz-maker/eval.md`.
+                Bewerte `.scratch/quiz-maker/quiz.html` gegen `.scratch/quiz-maker/spec.md`, indem du es liest: Bedienbarkeit U1 bis U4 (Tab erreicht jede Option und Enter wählt sie, ein `<button>` nimmt Enter von selbst an; Feedback direkt nach einer Antwort; ein 390 Pixel breiter Bildschirm, wobei nur durchfällt, was eine Breite über 390 Pixel erzwingt; ein Endbildschirm, der sagt, was als Nächstes zu tun ist) und Qualität der Fragen Q1 bis Q4 (je eine richtige Antwort, glaubwürdige falsche Optionen, jedes Zitat vorhanden, jedes Lernziel abgedeckt, das die Spezifikation verlangt), BESTANDEN oder DURCHGEFALLEN mit Beleg, dann bis zu drei der wichtigsten noch offenen Korrekturen, oder Keine, und ein Urteil. Wenn du Playwright ausführen kannst (`npx playwright`), klick dich zusätzlich einmal bei 390 Pixel Breite durch das ganze Quiz und füge hinzu, was du gesehen hast, als Beleg. Schreibe `.scratch/quiz-maker/eval.md`.
             - heading: Nicht im Umfang
               purpose: scope
               text: *out_of_scope_eval
