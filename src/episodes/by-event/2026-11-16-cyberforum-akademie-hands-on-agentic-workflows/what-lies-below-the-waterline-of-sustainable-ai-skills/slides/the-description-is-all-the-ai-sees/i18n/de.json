@@ -1,0 +1,94 @@
+{
+  "title": "Die Beschreibung ist der Auslöser",
+  "caption": "Die KI sieht vorab nur Name und Beschreibung, und die Beschreibung entscheidet, wann der Skill lädt.",
+  "analogy": "Vom Platz des Piloten aus: Das Register ist offen, jede Karte dahinter geschlossen.",
+  "task": {
+    "text": "Wir sind am neuen Ort."
+  },
+  "index": {
+    "heading": "Skill-Register",
+    "headingNote": "das Register des Handbuchs",
+    "headingCoding": "Front Matter jeder SKILL.md",
+    "entries": {
+      "samples": { "name": "Proben", "description": "Proben." },
+      "collect-sediment-sample": {
+        "name": "Sedimentprobe nehmen",
+        "description": "Eine Sedimentprobe an einem neuen Ort nehmen"
+      },
+      "misc-procedures": { "name": "Sonstige Abläufe", "description": "Verschiedene Abläufe." },
+      "run-camera-survey": { "name": "Kamerafahrt", "description": "Einen Streifen Meeresboden filmen" }
+    }
+  },
+  "pills": {
+    "loaded": "geladen: Name und Beschreibung",
+    "loadedCoding": "beim Start geladen: name, description",
+    "closed": "dahinter jede Karte: noch nicht geladen",
+    "closedCoding": "Body: noch nicht geladen"
+  },
+  "question": "Zwei Beschreibungen für denselben Skill. Welche würdest Du öffnen?",
+  "descriptions": {
+    "quoted": "„{text}“",
+    "vague": {
+      "label": "Vage Beschreibung",
+      "tag": "bleibt zu",
+      "text": "Proben",
+      "coding": "Proben."
+    },
+    "clear": {
+      "label": "Klare Beschreibung",
+      "tag": "von der heutigen Aufgabe beleuchtet",
+      "text": "Eine Sedimentprobe an einem neuen Ort nehmen",
+      "coding": "Eine Sedimentprobe an einem neuen Ort nehmen."
+    }
+  },
+  "scent": {
+    "title": "Schon gewusst?",
+    "text": "<b>Information Scent</b>, die Informationsfährte: der Hinweis auf einem Etikett, der Dir sagt, ob es dorthin führt, wo Du hinwillst.",
+    "source": "Pirolli und Card, Xerox PARC, 1999: ein Befund über Menschen, die suchen. Ihn auf die KI zu übertragen, ist eine Schlussfolgerung."
+  },
+  "footer": {
+    "story": "In der Geschichte:",
+    "quote": "„Wenn die Beschreibung nicht vermittelt, wann der Skill nützlich ist, weiß der Agent nicht, dass er zu ihm greifen soll.“",
+    "coding": "Beim Start liest der Agent aus jeder <code>SKILL.md</code> nur <code>name</code> und <code>description</code>; der Body bleibt zu."
+  },
+  "alt": {
+    "scene": "Der Kontrollraum vom Platz des Piloten aus. Links sagt der Kapitän: Wir sind am neuen Ort. Der Pilot sitzt an der Konsole; durchs Fenster eine Markierungsboje am neuen Ort. Neben ihm liegt das Register des Handbuchs offen: vier Skills, jeder mit Namen und einer Zeile Beschreibung, zwei davon vage. Hinter dem Register stehen fünf Ablaufkarten aufgefächert, geschlossen und ausgegraut."
+  },
+  "notes": {
+    "description-carries-the-whole-burden": {
+      "header": "Die Beschreibung trägt die ganze Last",
+      "description": "Weil beim Start nur Name und Beschreibung laden, trägt laut dem Standard die Beschreibung die ganze Last des Auslösens: Vermittelt sie nicht, wann der Skill nützlich ist, weiß der Agent nicht, dass er zu ihm greifen soll [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "descriptions-and-information-scent": {
+      "header": "Beschreibungen und Information Scent",
+      "description": "Die Zusammenfassung von Pirolli und Card nennt Modelle der Informationsfährte, die erklären, wie Menschen den Wert einer Information an nahen Hinweisen erkennen [1]. Das ist ein Befund über Menschen auf Informationssuche; dass ein vages Etikett einem Modell weniger Anhalt gibt, ist eine Schlussfolgerung, nicht ihr Befund. Die Definition auf Seite 646 wurde aus zweiter Hand gelesen.",
+      "sources": {
+        "pirolli-card-information-foraging": {
+          "title": "Pirolli und Card, Information Foraging (Psychological Review, 1999)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-pilots-view": {
+        "title": "Der Blick des Piloten",
+        "keywords": "",
+        "script": "Setz Dich kurz auf den Platz des Modells. Zu Beginn einer Aufgabe hat es von jedem Skill Namen und Beschreibung vor sich, aber keine der Anweisungen dahinter, wie ein Pilot mit offenem Register und lauter geschlossenen Karten. Solange Du den Skill also nicht beim Namen rufst, ist die Beschreibung der Auslöser: Sie entscheidet, ob das Modell den Skill von sich aus wählt."
+      },
+      "two-entries": {
+        "title": "Zwei Einträge",
+        "keywords": "",
+        "script": "Nimm zwei Beschreibungen für denselben Skill: „Proben“ und „Eine Sedimentprobe an einem neuen Ort nehmen“. Eine Aufgabe kommt herein, weil wir gerade einen neuen Ort erreicht haben. Welche würdest Du öffnen?"
+      },
+      "scent": {
+        "title": "Die Fährte",
+        "keywords": "",
+        "script": "Forschende, die untersuchen, wie Menschen suchen, nennen das Information Scent, die Informationsfährte: der Hinweis auf einem Etikett, der Dir sagt, ob es dorthin führt, wo Du hinwillst. Gefunden haben sie das bei Menschen, und ich leihe es mir für das Modell. Deine Aufgabe ist also, dass die Beschreibung nach der Aufgabe riecht, der sie dient, denn diese Fährte löst den Skill aus."
+      }
+    }
+  }
+}

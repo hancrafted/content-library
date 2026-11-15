@@ -1,0 +1,57 @@
+import styles from './where.module.css';
+
+/*
+ * The control room's wall and floor, lifted from Spec Option 14a (feedback 3, decision 46): the faceted wall lit from
+ * the upper left, the skirting, and the faceted floor. The Option draws them in a 1200 by 520 box; here they fill the
+ * part of `ZoneScene`'s 1200 by 800 space a 2:1 box shows, from y = 200 down, so the floor meets the crew's feet at
+ * `FLOOR_Y`. Tones live in the Slide token file.
+ */
+
+/** The Option's box height, and where its floor starts. */
+const SPEC_HEIGHT = 520;
+const SPEC_FLOOR = 452;
+/** The top of the part of the Scene a 2:1 box shows. */
+export const VIEW_TOP = 200;
+const SCALE_Y = (800 - VIEW_TOP) / SPEC_HEIGHT;
+/** Where the floor starts in the Scene's units: the crew stand and the console rests here. */
+export const FLOOR_Y = VIEW_TOP + SPEC_FLOOR * SCALE_Y;
+
+type Tone = 'room' | 'room-lit' | 'room-shade' | 'floor' | 'floor-lit';
+
+/** The Option's facets, merged per tone and drawn in this order: wall, its lit and shaded planes, the skirting, the floor. */
+const FACETS: readonly (readonly [Tone, string])[] = [
+  [
+    'room',
+    'M1200 177L1200 290L1058 239ZM1084 102L1200 177L1058 239ZM914 326L926 452L795 452ZM926 452L914 326L1050 452ZM1121 370L1200 290L1200 452ZM1200 290L1121 370L1058 239ZM1121 370L914 326L1058 239ZM907 132L914 326L715 164ZM793 0L907 132L715 164ZM0 281L0 184L157 292ZM555 0L486 89L381 0ZM486 89L555 0L715 164ZM914 326L709 316L715 164ZM498 314L283 359L359 234ZM498 314L709 316L639 452ZM486 89L498 314L359 234ZM709 316L498 314L715 164ZM150 0L254 0L181 115ZM181 115L254 0L359 234Z',
+  ],
+  [
+    'room-lit',
+    'M671 0L793 0L715 164ZM181 115L0 184L0 0ZM0 184L181 115L157 292ZM157 292L181 115L359 234ZM381 0L486 89L359 234ZM1084 102L1090 0L1200 0ZM1090 0L1084 102L911 0ZM907 132L1084 102L1058 239ZM1084 102L907 132L911 0ZM914 326L907 132L1058 239ZM907 132L793 0L911 0ZM0 281L157 292L0 452ZM150 0L181 115L0 0ZM555 0L671 0L715 164ZM498 314L486 89L715 164ZM254 0L381 0L359 234Z',
+  ],
+  [
+    'room-shade',
+    'M1200 177L1084 102L1200 0ZM157 292L152 452L0 452ZM1050 452L1121 370L1200 452ZM914 326L1121 370L1050 452ZM283 359L152 452L157 292ZM283 359L157 292L359 234ZM639 452L709 316L795 452ZM709 316L914 326L795 452ZM283 359L498 314L396 452ZM253 452L283 359L396 452ZM283 359L253 452L152 452ZM498 314L512 452L396 452ZM512 452L498 314L639 452ZM0 444L1200 444L1200 452L0 452Z',
+  ],
+  [
+    'floor',
+    'M0 520L79 452L107 520ZM79 452L0 520L0 452ZM1088 520L1110 452L1200 520ZM1200 520L1110 452L1200 452ZM994 452L1110 452L1088 520ZM79 452L181 452L107 520ZM984 520L994 452L1088 520ZM781 520L805 452L891 520ZM805 452L888 452L891 520ZM699 452L805 452L781 520ZM488 452L503 520L389 520ZM503 520L488 452L578 452Z',
+  ],
+  [
+    'floor-lit',
+    'M994 452L984 520L888 452ZM888 452L984 520L891 520ZM578 452L678 520L595 520ZM488 452L389 520L383 452ZM181 452L209 520L107 520ZM699 452L678 520L578 452ZM678 520L699 452L781 520ZM503 520L578 452L595 520ZM312 452L209 520L181 452ZM389 520L312 452L383 452ZM305 520L312 452L389 520ZM312 452L305 520L209 520Z',
+  ],
+];
+
+/** The room behind the crew, as the first child of the control room. */
+export function RoomArt() {
+  return (
+    <g data-room-art className={styles.facets}>
+      <rect x={0} y={0} width={1200} height={VIEW_TOP + 1} data-tone="room" />
+      <g transform={`translate(0 ${VIEW_TOP}) scale(1 ${SCALE_Y})`}>
+        {FACETS.map(([tone, d]) => (
+          <path key={tone} d={d} data-tone={tone} />
+        ))}
+      </g>
+    </g>
+  );
+}

@@ -1,0 +1,106 @@
+{
+  "title": "Retire skills",
+  "caption": "Retire skills nobody uses, so the right one stays easy to find.",
+  "analogy": "Cards the dive log never mentions go into the archive box.",
+  "story": "In the story:",
+  "season": "this season",
+  "before": {
+    "heading": { "chat": "Skill index · before", "coding": ".claude/skills/ · before" },
+    "count": { "chat": "47 skills", "coding": "47 folders" },
+    "uses": "{count} uses",
+    "unused": "unused",
+    "more": "… 30 more, all unused"
+  },
+  "index": {
+    "rinse-camera-dome": "Rinse the dome",
+    "sample-old": "Sample (old)",
+    "take-sample-v2": "Take sample v2",
+    "name-photo-folders": "Name the photo folders",
+    "sediment-quick": "Sediment, quick version",
+    "sample-like-ana": "Sample, Ana's way",
+    "collect-sediment-sample": "Collect sediment sample at a new site",
+    "sample-but-faster": "Sample, but faster",
+    "tuesday-weather-note": "Write Tuesday's weather note",
+    "clean-arm-maybe": "Clean the arm (maybe)",
+    "collect-sediment-sample-copy": "Collect sediment sample (copy)",
+    "log-depth-draft": "Log depth (draft)",
+    "crew-coffee-order": "Crew coffee order",
+    "check-winch-again": "Check the winch, again",
+    "sample-v3": "Sample v3 (try this)",
+    "label-cores-alt": "Label the cores, alt",
+    "dive-log-short": "Dive log, short form"
+  },
+  "log": {
+    "heading": "Task log",
+    "rows": {
+      "k4": { "date": "3 Jun", "task": "New site K-4" },
+      "photos": { "date": "11 Jun", "task": "Photos from K-4" },
+      "briefing": { "date": "8 Aug", "task": "Morning briefing" },
+      "m5": { "date": "27 Aug", "task": "New site M-5" }
+    },
+    "more": "and 23 more tasks"
+  },
+  "archive": {
+    "chat": { "title": "Archive · 40 skills", "count": "retired 12 Nov 2026", "restore": "can be restored" },
+    "coding": { "title": "retired/2026-11-12/", "count": "40 skill folders", "restore": "restore: move one back" }
+  },
+  "after": {
+    "heading": { "chat": "Skill index · after", "coding": ".claude/skills/ · after" },
+    "count": { "chat": "7 skills", "coding": "7 folders" },
+    "needed": "the one you need",
+    "callback": "A few Slides ago: 7th of 47. Now 3rd of 7."
+  },
+  "closesUp": "the index closes up",
+  "didYouKnow": "Did you know?",
+  "callouts": {
+    "method": {
+      "heading": "Read the log",
+      "body": "Put your skill index next to what your tasks used this season. Switch off the skills no task opened, and keep a copy with the date.",
+      "bodyCoding": "Put the folders in <code>.claude/skills/</code> next to what your tasks used this season. Move the unused ones out of <code>.claude/skills/</code> into a dated archive folder the agent does not scan.",
+      "sub": "The Episode's own method, not a published rule.",
+      "subCoding": "The Episode's own method and folder convention, not a published rule or an app feature."
+    },
+    "archive": {
+      "heading": "Archive, don't delete",
+      "body": "Knowledge-Centered Service archives instead of deleting: deleting can break links, and an archived article can be restored."
+    },
+    "when": {
+      "heading": "When a skill is due",
+      "body": "Anthropic: deprecate a skill whose evaluations consistently fail or whose workflow is retired."
+    }
+  },
+  "alt": {
+    "scene": "The control room at night. Through the porthole, the robot hangs on its cable in the Abyss, its lamp on; the pilot sits at the console."
+  },
+  "notes": {
+    "retire-a-skill-archive-over-delete": {
+      "header": "Retire a skill: archive over delete",
+      "description": "Knowledge-Centered Service prefers archiving to deleting, because deleting can break links and an archived article can be restored [1]. Anthropic says to deprecate a skill whose evaluations consistently fail or whose workflow is retired [2]. Reading the dive log to pick what to archive is the Episode's own method.",
+      "sources": {
+        "kcs-v6-article-state": {
+          "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
+        },
+        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-log": {
+        "title": "Read the log",
+        "keywords": "",
+        "script": "Last job: retire skills. Put your list of skills next to what your work actually used this season, the dive log on our ship, and see which skills no task ever opened."
+      },
+      "the-archive-box": {
+        "title": "The archive box",
+        "keywords": "",
+        "script": "Those skills go into an archive, each with the date it was retired, so the decision is written down and nobody wonders later where a skill went."
+      },
+      "short-index-again": {
+        "title": "Short index again",
+        "keywords": "",
+        "script": "And the index left behind is short again, with the one you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the model can pick it."
+      }
+    }
+  }
+}

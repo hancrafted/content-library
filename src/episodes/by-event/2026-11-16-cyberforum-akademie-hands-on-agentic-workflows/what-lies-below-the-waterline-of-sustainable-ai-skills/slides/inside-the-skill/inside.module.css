@@ -1,0 +1,254 @@
+/*
+ * Slide token file of "Inside the skill" (FE-011 §2): the control-room wall, the paper card in its clear sleeve, the
+ * species guide's book and the file objects, in the tones of Spec Option 16a (feedback 3, decision 46), each with its
+ * dark value from the Option; the machine tones mix the global `--info`, as the shared robot's hull. `primary` marks only the lit step 4, its
+ * arrow, and the species guide's ring and pill; no meaning colour on scenery.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.scene {
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.972 0.009 88);
+  --paper-shade: oklch(0.935 0.014 84);
+  --paper-edge: oklch(0.86 0.02 80);
+  --sleeve: oklch(0.95 0.03 215 / 0.34);
+  --sleeve-edge: oklch(0.78 0.05 225 / 0.75);
+  --guide-lit: oklch(0.64 0.09 196);
+  --guide: oklch(0.56 0.09 202);
+  --guide-shade: oklch(0.46 0.08 210);
+  --string: oklch(0.58 0.06 60);
+  --pg: oklch(0.965 0.01 88);
+  --trail: oklch(0.98 0.03 215 / 0.5);
+  --fish-lit: oklch(0.89 0.13 92);
+  --fish-shade: oklch(0.76 0.14 76);
+  --robot-dark: oklch(0.28 0.02 260);
+  --lamp: oklch(0.97 0.1 95);
+  --robot-glint: color-mix(in oklab, var(--info) 45%, var(--card));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, var(--card));
+  --robot: var(--info);
+  --robot-shade: color-mix(in oklab, var(--info) 68%, var(--foreground));
+}
+
+:global(.dark) .scene {
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper: oklch(0.39 0.02 252);
+  --paper-shade: oklch(0.35 0.02 255);
+  --paper-edge: oklch(0.29 0.02 258);
+  --sleeve: oklch(0.7 0.05 225 / 0.16);
+  --sleeve-edge: oklch(0.75 0.05 225 / 0.45);
+  --guide-lit: oklch(0.52 0.08 196);
+  --guide: oklch(0.45 0.08 202);
+  --guide-shade: oklch(0.37 0.07 210);
+  --string: oklch(0.5 0.05 60);
+  --pg: oklch(0.41 0.02 252);
+  --trail: oklch(0.75 0.05 215 / 0.25);
+  --fish-lit: oklch(0.82 0.12 92);
+  --fish-shade: oklch(0.68 0.13 76);
+  --robot-dark: oklch(0.22 0.02 260);
+  --lamp: oklch(0.97 0.11 95);
+}
+
+.wall [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.wall [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.wall [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.wall [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+/*
+ * The console's edge along the foot (Spec Option 16a): a thin lit rim over the console's lit face, its left third
+ * lighter still, as the Option's lit facet. A fixed height, so a tall Scene never thickens it.
+ */
+.consoleEdge {
+  background:
+    linear-gradient(var(--robot-glint) 0 3px, transparent 3px),
+    linear-gradient(100deg, var(--robot-glint) 0 30%, var(--robot-lit) 30%);
+}
+
+.objects [data-tone='robot'] {
+  fill: var(--robot);
+}
+
+.objects [data-tone='robot-lit'] {
+  fill: var(--robot-lit);
+}
+
+.objects [data-tone='robot-shade'] {
+  fill: var(--robot-shade);
+}
+
+.objects [data-tone='robot-glint'] {
+  fill: var(--robot-glint);
+}
+
+.objects [data-tone='robot-dark'] {
+  fill: var(--robot-dark);
+}
+
+.objects [data-tone='lamp'] {
+  fill: var(--lamp);
+}
+
+.objects [data-tone='paper'] {
+  fill: var(--paper);
+}
+
+.objects [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+}
+
+.objects [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+}
+
+.objects [data-tone='paper-edge'] {
+  fill: var(--paper-edge);
+}
+
+.objects [data-tone='string'] {
+  fill: var(--string);
+}
+
+.objects [data-tone='guide'] {
+  fill: var(--guide);
+}
+
+.objects [data-tone='guide-lit'] {
+  fill: var(--guide-lit);
+}
+
+.objects [data-tone='fish-lit'] {
+  fill: var(--fish-lit);
+}
+
+.objects [data-tone='fish-shade'] {
+  fill: var(--fish-shade);
+}
+
+/*
+ * The card in its clear sleeve: the sleeve's pale edge around faceted paper. Each row lays its own lit and shaded
+ * facet across the paper, at its own angle, so the card reads as one faceted sheet.
+ */
+.step {
+  border-color: var(--sleeve-edge);
+  background: linear-gradient(
+    var(--facet-angle, 118deg),
+    var(--paper-lit) 0 var(--facet-lit, 34%),
+    var(--paper) var(--facet-lit, 34%) var(--facet-shade, 78%),
+    var(--paper-shade) var(--facet-shade, 78%)
+  );
+}
+
+.step[data-step='1'] {
+  --facet-angle: 160deg;
+  --facet-lit: 48%;
+}
+
+.step[data-step='2'] {
+  --facet-angle: 104deg;
+  --facet-shade: 64%;
+}
+
+.step[data-step='3'] {
+  --facet-angle: 74deg;
+  --facet-lit: 22%;
+}
+
+.step[data-step='5'] {
+  --facet-angle: 140deg;
+  --facet-lit: 40%;
+  --facet-shade: 70%;
+}
+
+.step[data-step='6'] {
+  --facet-angle: 96deg;
+  --facet-lit: 28%;
+  --facet-shade: 84%;
+}
+
+/* The ruled line under each step, as on the Option's card. */
+.rule {
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+
+/* The slot the species guide slid out of: a pale band on the sleeve's right edge, level with step 4. */
+.slotMark {
+  position: absolute;
+  inset-block: 0.75rem;
+  inset-inline-end: -8px;
+  width: 8px;
+  background: var(--sleeve);
+}
+
+/* The trail the guide leaves as it slides out: pale streaks of the sleeve. */
+.trail > span {
+  background: var(--trail);
+}
+
+/* The species guide as a book: its faceted cover around the page, its spine darker down the left. */
+.book {
+  background:
+    linear-gradient(90deg, var(--guide-shade) 0 0.5rem, transparent 0.5rem),
+    linear-gradient(128deg, var(--guide-lit) 0 30%, var(--guide) 30% 66%, var(--guide-shade) 66%);
+}
+
+.page {
+  background: linear-gradient(150deg, var(--paper-lit) 0 42%, var(--pg) 42%);
+}
+
+/*
+ * The one emphasis motion (Spec Option 16a): step 4 fades in already filled `primary` (opacity only: its words turn
+ * light with the fill, so no fill can fade in under them), then the species guide slides out of the sleeve
+ * to the right. The base rules are the end state, so a still frame and reduced motion show it lit and slid out.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .lit {
+    animation: step-lit 500ms ease-out 300ms both;
+  }
+
+  :global([data-zone='active']) .slideOut {
+    animation: slide-out 800ms cubic-bezier(0.33, 0, 0.2, 1) 700ms both;
+  }
+
+  :global([data-zone='active']) .trail {
+    animation: trail-in 400ms ease-out 1200ms both;
+  }
+}
+
+@keyframes step-lit {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes trail-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 0;
+    translate: -3rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

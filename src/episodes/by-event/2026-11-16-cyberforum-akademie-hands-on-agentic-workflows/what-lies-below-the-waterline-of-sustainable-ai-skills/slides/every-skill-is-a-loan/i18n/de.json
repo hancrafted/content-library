@@ -1,0 +1,101 @@
+{
+  "title": "Jeder Skill ist ein Kredit",
+  "caption": "Einen Skill zu schreiben geht schnell; ihn richtig zu halten, kostet Dich jeden Monat etwas.",
+  "analogy": "Eine Karte mit laufendem Zettel, wie ein Kontoauszug für einen Kredit.",
+  "thirty": "Dreißig Skills zu schreiben ist leicht. Dreißig zu besitzen ist der schwere Teil.",
+  "story": "In der Geschichte:",
+  "statement": "Der laufende Auszug des Skills, Monat für Monat",
+  "entries": {
+    "written": {
+      "month": "Tag eins",
+      "term": "Skill geschrieben",
+      "scene": "",
+      "chat": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt."
+    },
+    "sites": {
+      "month": "Wochen später",
+      "term": "Projektdetails geändert",
+      "scene": "die Liste der Tauchorte hat sich geändert",
+      "chat": "Der Skill nennt noch die Orte der letzten Saison."
+    },
+    "arm": {
+      "month": "Monate später",
+      "term": "Ein neues Werkzeug kam dazu",
+      "scene": "ein neuer Roboterarm",
+      "chat": "Schritt 3 beschreibt noch den alten Arm."
+    },
+    "overlap": {
+      "month": "Noch später",
+      "term": "Eine Beschreibung überschneidet sich mit einem anderen Skill",
+      "scene": "eine Zeile im Index überschneidet sich mit einer anderen Karte",
+      "chat": "„Sedimentprobe nehmen“ und „Meeresboden vermessen“ klingen jetzt ähnlich, also greift die KI womöglich zum falschen."
+    }
+  },
+  "coding": {
+    "written": { "lead": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt." },
+    "sites": { "lead": "collect-sediment-sample/SKILL.md, Schritt 1" },
+    "arm": { "lead": "collect-sediment-sample/SKILL.md, Schritt 3" },
+    "overlap": { "lead": "zwei Beschreibungen, zwischen denen der Agent wählt" }
+  },
+  "next": {
+    "label": "Nächste Korrektur · …",
+    "count": "und so weiter"
+  },
+  "stack": {
+    "label": "Ein Skill, über Monate",
+    "writing": "schreiben",
+    "writingHint": "fünf Minuten",
+    "keeping": "richtig halten",
+    "keepingHint": "ein Block pro Korrektur",
+    "blocks": {
+      "sites": "Orte",
+      "arm": "Arm",
+      "overlap": "Überschneidung",
+      "next": "nächste"
+    },
+    "note": "Eine Illustration, keine Messung."
+  },
+  "debt": {
+    "term": "Technische Schuld",
+    "quote": "„Shipping first time code is like going into debt.“ Die Zinsen: „every minute spent on not-quite-right code“.",
+    "source": "Ward Cunningham, 1992, über Software. Die Parallele zu Skills ziehen wir."
+  },
+  "alt": {
+    "robot": "Der Roboter am Ende des Kabels, seine Lampe an",
+    "stack": "Das Schreiben ist eine dünne Platte; das Richtighalten ein Stapel aus drei Blöcken, einer pro Korrektur, und ein gestrichelter Umriss für den nächsten, noch nicht bezahlt. Eine Illustration, keine Messung.",
+    "icons": {
+      "written": "Der Skill, geschrieben",
+      "sites": "Projektdetails geändert",
+      "arm": "Ein neues Werkzeug kam dazu",
+      "overlap": "Eine Beschreibung überschneidet sich mit einem anderen Skill"
+    }
+  },
+  "notes": {
+    "skill-upkeep-as-technical-debt": {
+      "header": "Skill-Pflege als technische Schuld: Cunninghams Worte",
+      "description": "„Shipping first time code is like going into debt. A little debt speeds development so long as it is paid back promptly with a rewrite.“ „Every minute spent on not-quite-right code counts as interest on that debt.“ [1] Den Fehler nennt er „the failure to consolidate“. Die Übertragung auf Skills ist eine Schlussfolgerung, nicht seine Aussage.",
+      "sources": {
+        "cunningham-wycash": { "title": "Cunningham, The WyCash Portfolio Management System" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "quick-to-write": {
+        "title": "Schnell geschrieben",
+        "keywords": "",
+        "script": "Einen Skill schreibst Du in fünf Minuten. Das ist der Kredit: Du bekommst das Tempo jetzt."
+      },
+      "a-running-tab": {
+        "title": "Eine laufende Rechnung",
+        "keywords": "",
+        "script": "Dann kommen die Auszüge, eine Zeile nach der anderen. Die Projektdetails haben sich geändert, ein neues Werkzeug kam dazu, und eine Beschreibung überschneidet sich jetzt mit der eines anderen Skills. Nichts davon ist eine Katastrophe, und jedes ist ein kleiner Betrag, der sich aufhäuft. Ingenieure nennen das technische Schuld, nach Ward Cunningham."
+      },
+      "owning-thirty": {
+        "title": "Dreißig besitzen",
+        "keywords": "",
+        "script": "Dreißig Skills zu schreiben ist leicht. Dreißig zu besitzen ist der schwere Teil, denn die Kosten lagen nie im Schreiben, sondern darin, den Skill richtig zu halten, Monat für Monat."
+      }
+    }
+  }
+}

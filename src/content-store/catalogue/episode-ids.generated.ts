@@ -18,6 +18,7 @@ export const EPISODE_IDS = [
   '2026-11-04-intro-hitl-workflows__onboard-ai-every-time',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require',
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills',
   'ai-attention-span',
   'ai-gives-you-more-work',
   'ai-token-economy',

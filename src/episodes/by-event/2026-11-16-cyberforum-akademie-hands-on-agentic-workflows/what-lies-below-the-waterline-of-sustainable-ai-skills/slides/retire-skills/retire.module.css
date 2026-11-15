@@ -1,0 +1,290 @@
+/*
+ * "Retire skills" (Option 25b): the control room at night, its porthole onto the Abyss, the archive crate and the one
+ * emphasis motion. The drawing's tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens on
+ * `.art` for the facets `room-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode
+ * (feedback 2, decision 32). The rivets and the clipboard's clip are steel, mixed from `--muted-foreground`, never a meaning colour. `--primary` marks the one
+ * line you need.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.room {
+  --cable: oklch(0.28 0.02 260);
+  --ink: oklch(0.975 0.01 230);
+}
+
+:global(.dark) .room {
+  --cable: oklch(0.22 0.02 260);
+  --ink: oklch(0.975 0.01 230);
+}
+
+.art {
+  --crate: oklch(0.56 0.075 62);
+  --crate-dark: oklch(0.3 0.04 52);
+  --crate-lit: oklch(0.66 0.07 68);
+  --crate-shade: oklch(0.45 0.065 56);
+  --glint: oklch(1 0 0);
+  --night: oklch(0.31 0.04 262);
+  --night-lit: oklch(0.36 0.04 258);
+  --night-shade: oklch(0.265 0.038 266);
+  --paper: oklch(0.972 0.009 88);
+  --paper-edge: oklch(0.86 0.02 80);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper-shade: oklch(0.935 0.014 84);
+  --pin: color-mix(in oklab, var(--primary) 80%, oklch(1 0 0));
+  --retired: oklch(0.82 0.015 82);
+  --retired-lit: oklch(0.9 0.01 85);
+  --rivet: color-mix(in oklab, var(--muted-foreground) 45%, oklch(1 0 0));
+  --clip-dark: oklch(0.28 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 68%, oklch(0.22 0.02 260));
+  --tab: oklch(0.9 0.04 88);
+}
+
+:global(.dark) .art {
+  --crate: oklch(0.44 0.06 62);
+  --crate-dark: oklch(0.24 0.03 52);
+  --crate-lit: oklch(0.52 0.06 68);
+  --crate-shade: oklch(0.36 0.05 56);
+  --glint: oklch(0.98 0.01 230);
+  --night: oklch(0.235 0.033 262);
+  --night-lit: oklch(0.27 0.035 258);
+  --night-shade: oklch(0.2 0.03 266);
+  --paper: oklch(0.39 0.02 252);
+  --paper-edge: oklch(0.29 0.02 258);
+  --paper-lit: oklch(0.43 0.02 250);
+  --paper-shade: oklch(0.35 0.02 255);
+  --pin: color-mix(in oklab, var(--primary) 80%, oklch(0.2 0 0));
+  --retired: oklch(0.55 0.012 82);
+  --retired-lit: oklch(0.62 0.01 85);
+  --rivet: color-mix(in oklab, var(--muted-foreground) 55%, oklch(1 0 0));
+  --clip-dark: oklch(0.22 0.02 260);
+  --clip-lit: color-mix(in oklab, var(--muted-foreground) 82%, oklch(1 0 0));
+  --clip-shade: color-mix(in oklab, var(--muted-foreground) 62%, oklch(0.2 0.02 260));
+  --tab: oklch(0.43 0.03 88);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.art [data-tone='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.art [data-tone='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.art [data-tone='crate'] {
+  fill: var(--crate);
+  stroke: var(--crate);
+}
+
+.art [data-tone='crate-dark'] {
+  fill: var(--crate-dark);
+  stroke: var(--crate-dark);
+}
+
+.art [data-tone='crate-lit'] {
+  fill: var(--crate-lit);
+  stroke: var(--crate-lit);
+}
+
+.art [data-tone='crate-shade'] {
+  fill: var(--crate-shade);
+  stroke: var(--crate-shade);
+}
+
+.art [data-tone='frame-lit'] {
+  fill: var(--scenery-window-frame-lit);
+  stroke: var(--scenery-window-frame-lit);
+}
+
+.art [data-tone='frame-shade'] {
+  fill: var(--scenery-window-frame-shade);
+  stroke: var(--scenery-window-frame-shade);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+.art [data-tone='night'] {
+  fill: var(--night);
+  stroke: var(--night);
+}
+
+.art [data-tone='night-lit'] {
+  fill: var(--night-lit);
+  stroke: var(--night-lit);
+}
+
+.art [data-tone='night-shade'] {
+  fill: var(--night-shade);
+  stroke: var(--night-shade);
+}
+
+.art [data-tone='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: none;
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-edge'] {
+  fill: var(--paper-edge);
+  stroke: var(--paper-edge);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--pin);
+  stroke: var(--pin);
+}
+
+.art [data-tone='retired'] {
+  fill: var(--retired);
+  stroke: var(--retired);
+}
+
+.art [data-tone='retired-lit'] {
+  fill: var(--retired-lit);
+  stroke: var(--retired-lit);
+}
+
+.art [data-tone='rivet'] {
+  fill: var(--rivet);
+  stroke: var(--rivet);
+}
+
+.art [data-tone='clip-dark'] {
+  fill: var(--clip-dark);
+  stroke: var(--clip-dark);
+}
+
+.art [data-tone='clip-lit'] {
+  fill: var(--clip-lit);
+  stroke: var(--clip-lit);
+}
+
+.art [data-tone='clip-shade'] {
+  fill: var(--clip-shade);
+  stroke: var(--clip-shade);
+}
+
+.art [data-tone='sea-abyss'] {
+  fill: var(--scenery-sea-abyss);
+  stroke: var(--scenery-sea-abyss);
+}
+
+.art [data-tone='sea-abyss-lit'] {
+  fill: var(--scenery-sea-abyss-lit);
+  stroke: var(--scenery-sea-abyss-lit);
+}
+
+.art [data-tone='sea-midnight'] {
+  fill: var(--scenery-sea-midnight);
+  stroke: var(--scenery-sea-midnight);
+}
+
+.art [data-tone='sea-midnight-lit'] {
+  fill: var(--scenery-sea-midnight-lit);
+  stroke: var(--scenery-sea-midnight-lit);
+}
+
+.art [data-tone='tab'] {
+  fill: var(--tab);
+  stroke: var(--tab);
+}
+
+.cable {
+  stroke: var(--cable);
+  stroke-width: 2;
+}
+
+.ink {
+  color: var(--ink);
+}
+
+/* The close-up shrinks from the top: its top edge stays put while the index closes up into the short card. */
+.closeUp {
+  transform-origin: top;
+}
+
+.needed {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/*
+ * The one emphasis motion, once on entry: the unused lines grey out, the retired cards drop into the crate, the index
+ * closes up into the short card and the needed line lights. The base rules are the end state, as reduced motion and a
+ * still frame show; nothing loops.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .greyOut {
+    animation: grey-out 600ms ease-out 300ms both;
+  }
+
+  :global([data-zone='active']) .drop {
+    animation: drop 700ms cubic-bezier(0.3, 0, 0.6, 1) calc(900ms + var(--n) * 120ms) both;
+  }
+
+  :global([data-zone='active']) .closeUp {
+    animation: close-up 700ms ease-out 1600ms both;
+  }
+
+  :global([data-zone='active']) .needed {
+    animation: light-up 500ms ease-out 2300ms both;
+  }
+}
+
+@keyframes grey-out {
+  from {
+    color: var(--card-foreground);
+    text-decoration-color: transparent;
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    translate: 0 -4rem;
+  }
+}
+
+@keyframes close-up {
+  from {
+    opacity: 0;
+    scale: 1 1.4;
+  }
+}
+
+@keyframes light-up {
+  from {
+    background: transparent;
+    color: var(--card-foreground);
+  }
+}

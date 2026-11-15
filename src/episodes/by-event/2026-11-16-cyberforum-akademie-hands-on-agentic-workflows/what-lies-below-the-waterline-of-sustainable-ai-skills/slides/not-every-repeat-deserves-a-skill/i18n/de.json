@@ -1,0 +1,117 @@
+{
+  "title": "Nicht jede Wiederholung verdient einen Skill",
+  "caption": "Ein zu früh geschriebener Skill legt ein Verfahren fest, das niemand erprobt hat.",
+  "alt": {
+    "scene": "Der Kontrollraum. Der Pilot, das KI-Modell, sitzt an der Konsole neben einem dicken Ringordner voller dünner Kartenreiter, mehrere davon rot. Ein langes Skill-Verzeichnis läuft über den Rand; mehrere Einträge tragen den Stempel nie getestet, und der eine, den Du brauchst, steht vergraben an siebter Stelle."
+  },
+  "index": {
+    "heading": {
+      "chat": "Skill-Verzeichnis",
+      "coding": "<code>SKILL.md</code>-Namen"
+    },
+    "count": {
+      "chat": "47 Skills",
+      "coding": "47 Ordner"
+    },
+    "entries": {
+      "rinseCameraDome": { "label": "Kuppel abspülen" },
+      "sampleOld": { "label": "Probe (alt)" },
+      "takeSampleV2": { "label": "Probe nehmen v2" },
+      "namePhotoFolders": { "label": "Fotoordner benennen" },
+      "sedimentQuick": { "label": "Sediment, Schnellversion" },
+      "sampleLikeAna": { "label": "Probe, wie Ana es macht" },
+      "collectSedimentSample": { "label": "Sedimentprobe an neuem Standort nehmen" },
+      "sampleButFaster": { "label": "Probe, aber schneller" },
+      "tuesdayWeatherNote": { "label": "Wetternotiz für Dienstag" },
+      "cleanArmMaybe": { "label": "Arm reinigen (vielleicht)" },
+      "collectSedimentSampleCopy": { "label": "Sedimentprobe nehmen (Kopie)" },
+      "logDepthDraft": { "label": "Tiefe protokollieren (Entwurf)" },
+      "crewCoffeeOrder": { "label": "Kaffeebestellung der Crew" },
+      "checkWinchAgain": { "label": "Winde prüfen, nochmal" },
+      "sampleV3": { "label": "Probe v3 (probier das)" },
+      "labelCoresAlt": { "label": "Kerne beschriften, alt" },
+      "diveLogShort": { "label": "Tauchlog, Kurzform" }
+    }
+  },
+  "stamp": "nie getestet",
+  "needed": "gebraucht",
+  "check": {
+    "heading": "Bevor Du einen Skill schreibst",
+    "repeat": "<b>Wiederholt</b> sich die Aufgabe?",
+    "rules": "Hat sie <b>Regeln</b>?",
+    "cost": "<b>Kostet ein Fehler</b> etwas?",
+    "verdict": {
+      "chat": "Dreimal nein? Lass es im Chat.",
+      "coding": "Dreimal nein? Lass es im Prompt: keine neue <code>SKILL.md</code>."
+    },
+    "disclaimer": "Ein praktischer Filter, kein veröffentlichter Test.",
+    "after": "Nach der Prüfung: 5 Skills."
+  },
+  "price": {
+    "title": "Warum prüfen: Jeder Skill hat einen Preis.",
+    "body": "<marker>Eine Sache mehr, die stimmen muss, und eine Beschreibung mehr im Skill-Verzeichnis, das die KI jedes Mal liest.</marker>"
+  },
+  "didYouKnow": {
+    "label": "Schon gewusst?",
+    "yagni": "<b>YAGNI:</b> <marker>Bau etwas, wenn Du es brauchst, nicht wenn Du es kommen siehst</marker>",
+    "knuth": "<b>Knuth:</b> <marker>Vorzeitige Optimierung ist „the root of all evil“, eine Regel über das Timing</marker>"
+  },
+  "story": {
+    "label": "In der Geschichte:",
+    "analogy": "Ein Handbuch voller dünner Karten begräbt die eine, die Du brauchst."
+  },
+  "notes": {
+    "skills-written-too-early": {
+      "header": "Zu früh geschriebene Skills: Knuth über vorzeitige Optimierung",
+      "description": "„We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that critical 3%“ [1]. Kleine Effizienzgewinne solle man in etwa 97 % der Fälle vergessen, die kritischen 3 % aber nicht verpassen. Sein Grund sind Kosten, und derselbe Aufsatz nennt es „an overreaction“, Effizienz im Kleinen ganz zu ignorieren; es ist also eine Regel über Timing und Messung. Die Zitate wurden nicht am Original geprüft (die ACM-Seite antwortete mit 403).",
+      "sources": {
+        "knuth-structured-programming": {
+          "title": "Knuth, Structured Programming with go to Statements"
+        }
+      }
+    },
+    "skills-nobody-needs-yet": {
+      "header": "Skills, die noch niemand braucht: YAGNI, und was es nicht abdeckt",
+      "description": "„Always implement things when you actually need them, never when you just foresee that you need them“ [1]: Bau Dinge, wenn Du sie wirklich brauchst, nie, wenn Du nur absiehst, dass Du sie brauchen wirst. Fowler zählt vier Kosten einer vorweggenommenen Funktion (Bauen, Verzögern, Mitschleppen, Reparieren) und sagt, YAGNI gelte nicht für Aufwand, der Software leichter änderbar macht [2].",
+      "sources": {
+        "jeffries-yagni": {
+          "title": "Jeffries, You're NOT gonna need it!"
+        },
+        "fowler-yagni": {
+          "title": "Fowler, Yagni"
+        }
+      }
+    },
+    "a-crowded-skill-index": {
+      "header": "Ein volles Skill-Verzeichnis kostet auch die KI",
+      "description": "Standardmäßig wird die Beschreibung jedes Skills in jeder Runde geladen, außer der Skill ist nur für den Nutzer aufrufbar, und Claude Code und Codex begrenzen oder kürzen die Skill-Liste; ein volles Verzeichnis kann Beschreibungen also kürzen oder ganz weglassen [1][2].",
+      "sources": {
+        "anthropic-claude-code-skills": {
+          "title": "Anthropic, Extend Claude with skills (Claude-Code-Dokumentation)"
+        },
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex-Dokumentation)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "too-early": {
+        "title": "Zu früh",
+        "keywords": "",
+        "script": "Jetzt die umgekehrte Gefahr. Wenn Du den Skill nach dem ersten Durchlauf schreibst, frierst Du eine Vermutung ein, und ein Verfahren, das niemand erprobt hat, trägt plötzlich die Autorität eines Skills."
+      },
+      "a-thin-card-has-a-price": {
+        "title": "Eine dünne Karte hat ihren Preis",
+        "keywords": "",
+        "script": "Und jeder schnelle Skill hat einen Preis. Er ist eine Sache mehr, die stimmen muss, und eine Zeile mehr in einem Verzeichnis, das nur wächst. Stell Dir ein Handbuch voller dünner Karten vor, mehrere davon nie getestet, bis die eine, die Du brauchst, irgendwo in der Mitte vergraben ist."
+      },
+      "three-questions": {
+        "title": "Drei Fragen",
+        "keywords": "",
+        "script": "Bevor Du also einen Skill schreibst, stell drei Fragen. Wiederholt sich die Aufgabe, hat sie Regeln, und kostet ein Fehler etwas? Wenn die Antwort dreimal nein ist, lass es im Chat. Diese Prüfung ist meine eigene, ein praktischer Filter, den ich nutze, kein veröffentlichter Test."
+      }
+    }
+  }
+}

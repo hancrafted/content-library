@@ -1,0 +1,122 @@
+{
+  "title": "Anweisungen, Skills und Konnektoren",
+  "caption": "Persönliche und Projektanweisungen sind immer geladen, Skills laden bei Bedarf, und Konnektoren reichen in andere Systeme.",
+  "analogy": { "label": "In der Geschichte:", "text": "Dein Notizbuch, die Wand, das Handbuch und das Kabel." },
+  "listLabel": "Anweisungen, Skills und Konnektoren",
+  "tags": { "static": "statisch", "dynamic": "dynamisch" },
+  "things": {
+    "personal": {
+      "term": "Persönliche Anweisungen",
+      "scope": "folgen Dir in jedes Projekt",
+      "scene": "Dein Notizbuch: Dauerbefehle, die mit auf jedes Schiff kommen",
+      "panel": "Dein Notizbuch",
+      "alt": "Bild 1 von 4: Dein Notizbuch in der Hand des Kapitäns.",
+      "coding": {
+        "lead": "zu Beginn jeder Sitzung gelesen, in jedem Projekt",
+        "code": "# Dauerbefehle\n- Proben in metrischen Einheiten beschriften."
+      }
+    },
+    "project": {
+      "term": "Projektanweisungen",
+      "scope": "nur in diesem einen Projekt",
+      "scene": "das Projektbriefing an der Wand",
+      "panel": "das Briefing an der Wand",
+      "alt": "Bild 2 von 4: Das Projektbriefing an der Wand.",
+      "coding": {
+        "lead": "die Datei mit den Projektanweisungen, die der Agent liest, immer geladen; CLAUDE.md in Claude Code",
+        "code": "# Projektbriefing\n…\n## Skills\n- collect-sediment-sample\n- measure-water-column"
+      }
+    },
+    "skills": {
+      "term": "Skills",
+      "scope": "einer kommt, wenn eine Aufgabe ihn braucht",
+      "scene": "das Handbuch an der Konsole",
+      "panel": "das Handbuch an der Konsole",
+      "alt": "Bild 3 von 4: Das Handbuch an der Konsole.",
+      "coding": {
+        "lead": "Frontmatter immer geladen · Hauptteil bei Bedarf",
+        "code": "---\nname: collect-sediment-sample\ndescription: Nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen.\n---\n1. Den Roboter 2 m über dem Meeresboden halten."
+      }
+    },
+    "connectors": {
+      "term": "Konnektoren",
+      "scope": "reichen in andere Systeme; Tools vorab gelistet, Ergebnisse bei Bedarf",
+      "scene": "das Kabel zum Sonar und zur Labordatenbank",
+      "panel": "das Kabel zu Sonar und Labor",
+      "alt": "Bild 4 von 4: Das Kabel zum Sonar und zur Labordatenbank.",
+      "coding": {
+        "lead": "bringt Tools und Daten, keine Anleitung",
+        "path": "ein MCP-Server",
+        "code": "zwei MCP-Server, benannt nach der Szene\nsonar\nlab-database"
+      }
+    }
+  },
+  "art": { "brief": "Projektbriefing", "labDatabase": "Labordatenbank", "sonar": "Sonar" },
+  "footer": {
+    "chat": "Jede App nennt sie anders: ChatGPT sagt Apps; Gemini, Connected Apps.",
+    "coding": "Googles Rat aus Day 3: AGENTS.md knapp halten, unten ein kurzer Katalog der Skills; „The cleanest setups use both.“"
+  },
+  "alt": {
+    "room": "Der Kontrollraum von der Seite. Links: Du, der Kapitän, mit Deinem Notizbuch. An der Wand: das Projektbriefing. An der Konsole: der Pilot, das Handbuch steht auf der Konsole. Ein Kabel läuft von der Konsole am Boden entlang durch das Schott, hinauf zur Labordatenbank im Nebenraum und hinab ins Meer zum Sonar."
+  },
+  "notes": {
+    "instructions-are-always-loaded-skills-are-not": {
+      "header": "Anweisungen sind immer geladen, Skills nicht",
+      "description": "Claude Code liest CLAUDE.md „at the start of every session“ und lädt einen Skill „on demand“ [1]. Codex, Gemini CLI und GitHub Copilot dokumentieren dieselbe Trennung für ihre Anweisungsdateien und Skills [2]. Die eigenen und Projektanweisungen von ChatGPT wurden nicht gelesen, und ob die Gemini-App ihre Anweisungen zu Beginn jeder Sitzung lädt, ist nicht belegt; für diese beiden Apps ist die Trennung also nicht bestätigt.",
+      "sources": {
+        "anthropic-claude-code-features": { "title": "Anthropic, Extend Claude Code (Claude Code docs)" },
+        "github-copilot-cli-skills": { "title": "GitHub, Adding agent skills for GitHub Copilot CLI" }
+      }
+    },
+    "names-in-chat-apps": {
+      "header": "Namen in Chat-Apps",
+      "description": "Claude nennt sie Instructions, Projektanweisungen und Connectors [1]; ChatGPT sagt inzwischen „apps (formerly connectors)“ [2]; die Gemini-App sagt „Instructions for Gemini“ und „Connected Apps“ [3].",
+      "sources": {
+        "anthropic-personalization-features": {
+          "title": "Anthropic, Understanding Claude's personalization features (Help Center)"
+        },
+        "openai-academy-skills": { "title": "OpenAI Academy, Skills" },
+        "google-gemini-apps-workflows": { "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)" }
+      }
+    },
+    "connectors-reach-skills-know-how": {
+      "header": "Konnektoren reichen hin, Skills wissen wie",
+      "description": "Konnektoren sind Model-Context-Protocol-Server (MCP), die Tools und Daten hinzufügen, keine Anleitung [1]. Anthropic beschreibt MCP als die Verbindung und einen Skill als das Wissen, wie man sie nutzt [2].",
+      "sources": {
+        "github-copilot-mcp": { "title": "GitHub, About Model Context Protocol (MCP) (Copilot docs)" },
+        "anthropic-claude-code-features": { "title": "Anthropic, Extend Claude Code (Claude Code docs)" }
+      }
+    },
+    "skill-vs-agents-md-as-google-puts-it": {
+      "header": "Skill oder AGENTS.md, wie Google es sagt",
+      "description": "Day 3 hat einen Abschnitt „Skill vs. AGENTS.md“: „From one side AGENTS.md is always loaded within the project; Skills load on demand. The cleanest setups use both.“ Es rät, AGENTS.md knapp zu halten und es bei Bedarf als Wegweiser in die Skill-Bibliothek zu nutzen, „with a short catalog at the bottom that tells the agent what's available“ [1]. Day 1 nennt immer geladene Regeldateien statischen Kontext [2]. Beides ist Googles Rat als Anbieter, wie man die zwei trennt, kein Beleg, dass die Trennung funktioniert.",
+      "sources": {
+        "google-day-3-agent-skills": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
+        },
+        "google-day-1-new-sdlc": {
+          "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-things-in-the-room": {
+        "title": "Vier Dinge im Raum",
+        "keywords": "",
+        "script": "Vier Dinge bestimmen, was das Modell weiß, und sie haben vier verschiedene Aufgaben: persönliche Anweisungen, Projektanweisungen, Skills und Konnektoren. Im Kontrollraum sind das Dein Notizbuch, das Projektbriefing an der Wand, das Handbuch an der Konsole und das Kabel zum Sonar und zur Labordatenbank."
+      },
+      "read-the-tags": {
+        "title": "Lies die Schilder",
+        "keywords": "",
+        "script": "Nimm sie einzeln. Persönliche Anweisungen sind statisch, und sie folgen Dir in jedes Projekt, so wie Dein Notizbuch mit auf jedes Schiff kommt. Projektanweisungen sind auch statisch, aber nur in diesem einen Projekt. Skills sind dynamisch, weil einer kommt, wenn eine Aufgabe ihn braucht, und die Ergebnisse eines Konnektors sind auch dynamisch, weil sie während der Arbeit aus einem anderen System kommen; der Konnektor lässt das Modell außerdem in diesem System handeln. Das ist die Trennung der letzten Slide, jetzt mit Namen."
+      },
+      "your-words-may-differ": {
+        "title": "Deine Wörter können anders sein",
+        "keywords": "",
+        "script": "Deine App benutzt für diese vier vielleicht andere Wörter, also achte auf die Aufgabe, nicht auf das Wort. Und wenn Du mit einem Coding-Agenten arbeitest, zeigt die andere Ansicht die Dateien: Deine Datei mit persönlichen Anweisungen, AGENTS.md für das Projekt, eine SKILL.md für jeden Skill und einen Server für jeden Konnektor."
+      }
+    }
+  }
+}

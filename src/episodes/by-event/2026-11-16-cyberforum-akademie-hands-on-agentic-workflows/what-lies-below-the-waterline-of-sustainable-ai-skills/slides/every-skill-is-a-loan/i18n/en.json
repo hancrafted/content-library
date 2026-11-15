@@ -1,0 +1,101 @@
+{
+  "title": "Every skill is a loan",
+  "caption": "Writing a skill is quick; keeping it right costs you something every month.",
+  "analogy": "A card with a running tag, like a loan statement.",
+  "thirty": "Writing thirty skills is easy. Owning thirty is the hard part.",
+  "story": "In the story:",
+  "statement": "The skill's running statement, month by month",
+  "entries": {
+    "written": {
+      "month": "Day one",
+      "term": "Skill written",
+      "scene": "",
+      "chat": "Five minutes, from a good run. That is the loan: you get the speed now."
+    },
+    "sites": {
+      "month": "Weeks later",
+      "term": "Project details changed",
+      "scene": "the site list changed",
+      "chat": "The skill still names last season's sites."
+    },
+    "arm": {
+      "month": "Months later",
+      "term": "A new tool arrived",
+      "scene": "a new robot arm",
+      "chat": "Step 3 still describes the old arm."
+    },
+    "overlap": {
+      "month": "Later still",
+      "term": "A description now overlaps another skill's",
+      "scene": "an index line overlaps another card",
+      "chat": "“Collect sediment sample” and “Seabed survey” now sound alike, so the AI can reach for the wrong one."
+    }
+  },
+  "coding": {
+    "written": { "lead": "Five minutes, from a good run. That is the loan: you get the speed now." },
+    "sites": { "lead": "collect-sediment-sample/SKILL.md, step 1" },
+    "arm": { "lead": "collect-sediment-sample/SKILL.md, step 3" },
+    "overlap": { "lead": "two descriptions the agent chooses between" }
+  },
+  "next": {
+    "label": "Next fix · …",
+    "count": "and counting"
+  },
+  "stack": {
+    "label": "One skill, over months",
+    "writing": "writing",
+    "writingHint": "five minutes",
+    "keeping": "keeping it right",
+    "keepingHint": "one block per fix",
+    "blocks": {
+      "sites": "sites",
+      "arm": "arm",
+      "overlap": "overlap",
+      "next": "next"
+    },
+    "note": "An illustration, not a measurement."
+  },
+  "debt": {
+    "term": "Technical debt",
+    "quote": "“Shipping first time code is like going into debt.” The interest: “every minute spent on not-quite-right code”.",
+    "source": "Ward Cunningham, 1992, about software. The parallel to skills is ours."
+  },
+  "alt": {
+    "robot": "The robot at the end of the cable, its lamp on",
+    "stack": "Writing is one thin slab; keeping it right is a stack of three blocks, one per fix, and a dashed outline for the next, not yet paid. An illustration, not a measurement.",
+    "icons": {
+      "written": "The skill, written",
+      "sites": "Project details changed",
+      "arm": "A new tool arrived",
+      "overlap": "A description now overlaps another skill's"
+    }
+  },
+  "notes": {
+    "skill-upkeep-as-technical-debt": {
+      "header": "Skill upkeep as technical debt: Cunningham's words",
+      "description": "\"Shipping first time code is like going into debt. A little debt speeds development so long as it is paid back promptly with a rewrite.\" \"Every minute spent on not-quite-right code counts as interest on that debt.\" [1] He names the failure mode as \"the failure to consolidate\". The software parallel to skills is an inference, not his claim.",
+      "sources": {
+        "cunningham-wycash": { "title": "Cunningham, The WyCash Portfolio Management System" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "quick-to-write": {
+        "title": "Quick to write",
+        "keywords": "",
+        "script": "A skill takes five minutes to write. That is the loan: you get the speed now."
+      },
+      "a-running-tab": {
+        "title": "A running tab",
+        "keywords": "",
+        "script": "Then the statements arrive, one line at a time. The project details changed, a new tool arrived, and a description now overlaps another skill's. None of them is a disaster, and each is a small cost that piles up. Engineers call it technical debt, Ward Cunningham's phrase."
+      },
+      "owning-thirty": {
+        "title": "Owning thirty",
+        "keywords": "",
+        "script": "Writing thirty skills is easy. Owning thirty is the hard part, because the cost was never in writing the skill, it is in keeping it right, month after month."
+      }
+    }
+  }
+}

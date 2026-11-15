@@ -1,0 +1,162 @@
+/*
+ * "More skills, harder choice" (Option 13a): the room's tones, the near-twins and the one emphasis motion. The tones
+ * are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from
+ * it; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). `--primary` marks the
+ * one wall line and its card.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.art {
+  --bulk-lit: oklch(0.56 0.03 250);
+  --bulk: oklch(0.46 0.03 254);
+  --bulk-shade: oklch(0.36 0.03 258);
+  --paper-lit: oklch(0.995 0.004 90);
+  --paper: oklch(0.965 0.01 88);
+  --paper-shade: oklch(0.9 0.016 80);
+  --pin: oklch(0.6 0.18 28);
+  --glint: oklch(1 0 0);
+}
+
+:global(.dark) .art {
+  --bulk-lit: oklch(0.42 0.025 250);
+  --bulk: oklch(0.34 0.025 254);
+  --bulk-shade: oklch(0.26 0.025 258);
+  --paper-lit: oklch(0.88 0.008 90);
+  --paper: oklch(0.83 0.012 88);
+  --paper-shade: oklch(0.7 0.018 80);
+  --pin: oklch(0.58 0.16 28);
+  --glint: oklch(0.98 0.01 230);
+}
+
+.art [data-tone] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-tone='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-tone='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-tone='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-tone='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-tone='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-tone='bulk-lit'] {
+  fill: var(--bulk-lit);
+  stroke: var(--bulk-lit);
+}
+
+.art [data-tone='bulk'] {
+  fill: var(--bulk);
+  stroke: var(--bulk);
+}
+
+.art [data-tone='bulk-shade'] {
+  fill: var(--bulk-shade);
+  stroke: var(--bulk-shade);
+}
+
+.art [data-tone='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-tone='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-tone='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-tone='pin'] {
+  fill: var(--pin);
+  stroke: var(--pin);
+}
+
+.art [data-tone='glint'] {
+  fill: var(--glint);
+  stroke: var(--glint);
+}
+
+/* A near-twin card: dashed and at 65% ink at rest, the end state of its fade. */
+.twin {
+  opacity: 0.65;
+}
+
+/*
+ * The one emphasis motion: the near-twins fade back while the wall's first line fills primary and its leader draws to
+ * the one card. The base rules are the rest state, which reduced motion and a still frame show; nothing loops.
+ */
+.lit {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.leader {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .twin {
+    animation: fade-back 700ms ease-out 600ms both;
+  }
+
+  :global([data-zone='active']) .lit {
+    animation: light-up 600ms ease-out 900ms both;
+  }
+
+  :global([data-zone='active']) .leader {
+    animation: draw 800ms ease-out 1300ms both;
+  }
+
+  :global([data-zone='active']) .tip {
+    animation: appear 200ms ease-out 2100ms both;
+  }
+}
+
+@keyframes fade-back {
+  from {
+    opacity: 1;
+  }
+}
+
+/* The line fades in already lit, the leader after it: opacity alone (decision 19). */
+@keyframes light-up {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes draw {
+  from {
+    opacity: 0;
+  }
+}

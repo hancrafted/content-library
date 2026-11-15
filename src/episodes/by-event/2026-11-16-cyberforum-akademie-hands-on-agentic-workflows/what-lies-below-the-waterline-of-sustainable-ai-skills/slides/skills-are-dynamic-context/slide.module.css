@@ -1,0 +1,306 @@
+/*
+ * The Slide's token file: the control room at the end of the dive, lifted from the approved Spec's Option 5b (feedback
+ * 3, decision 46), its wall, floor, camera feed, desk and what lands on it, with the Spec's own light and dark values
+ * (FE-011; dark mode is tuned later). `--info` colours only the robot's things, as the shared robot's hull; the pilot is the
+ * cast's own.
+ *
+ * Motion (`motion: local`, one emphasis): each object lands on the desk (`Travel`) as its block stacks onto the window:
+ * the card, the frames, the sonar strip, the sample log. It plays once when the Slide's mount turns
+ * `[data-zone='active']`; the rest state is the end state, so reduced motion shows everything placed. Nothing loops.
+ * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
+ * tokens (design-ADR 0025, Colour tokens).
+ */
+
+.scene {
+  --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));
+  --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
+  --robot: var(--info);
+  --ping: oklch(0.93 0.09 190 / 0.5);
+  --robot-dark: oklch(0.28 0.02 260);
+  --fish-lit: oklch(0.89 0.13 92);
+  --fish-shade: oklch(0.76 0.14 76);
+  --jelly: oklch(0.72 0.1 320 / 0.6);
+  --jelly-lit: oklch(0.86 0.08 320 / 0.8);
+  --paper-lit: oklch(0.99 0.006 90);
+  --paper: oklch(0.955 0.012 85);
+  --paper-shade: oklch(0.86 0.02 75);
+  --paper-rule: oklch(0.8 0.03 240);
+  --stripe: oklch(0.55 0.17 28);
+  --desk-lit: oklch(0.66 0.07 60);
+  --tab-a: oklch(0.74 0.09 212);
+  --tab-b: oklch(0.89 0.13 92);
+  --tab-c: oklch(0.72 0.1 252);
+  --desk: oklch(0.55 0.06 58);
+  --desk-shade: oklch(0.42 0.05 55);
+  --cloth-dark: oklch(0.22 0.02 265);
+  --halo: oklch(0.97 0.08 200 / 0.42);
+  --photo-paper: oklch(0.97 0.01 85);
+  --paper-ink: oklch(0.24 0.03 255);
+}
+
+:global(.dark) .scene {
+  --robot-shade: color-mix(in oklab, var(--info) 62%, oklch(0.2 0.05 270));
+  --robot-lit: color-mix(in oklab, var(--info) 82%, oklch(1 0 0));
+  --robot: var(--info);
+  --ping: oklch(0.85 0.1 190 / 0.38);
+  --robot-dark: oklch(0.22 0.02 260);
+  --fish-lit: oklch(0.82 0.12 92);
+  --fish-shade: oklch(0.68 0.13 76);
+  --jelly: oklch(0.6 0.11 320 / 0.6);
+  --jelly-lit: oklch(0.75 0.1 320 / 0.8);
+  --paper-lit: oklch(0.9 0.008 90);
+  --paper: oklch(0.84 0.012 85);
+  --paper-shade: oklch(0.7 0.02 75);
+  --paper-rule: oklch(0.64 0.03 240);
+  --stripe: oklch(0.55 0.15 28);
+  --desk-lit: oklch(0.52 0.06 60);
+  --tab-a: oklch(0.6 0.08 218);
+  --tab-b: oklch(0.78 0.12 92);
+  --tab-c: oklch(0.58 0.1 255);
+  --desk: oklch(0.42 0.05 58);
+  --desk-shade: oklch(0.32 0.04 55);
+  --cloth-dark: oklch(0.2 0.02 265);
+  --halo: oklch(0.9 0.1 200 / 0.26);
+  --photo-paper: oklch(0.85 0.01 85);
+  --paper-ink: oklch(0.2 0.03 255);
+}
+
+.art [data-lp] {
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.art [data-lp='room'] {
+  fill: var(--scenery-wall);
+  stroke: var(--scenery-wall);
+}
+
+.art [data-lp='room-shade'] {
+  fill: var(--scenery-wall-shade);
+  stroke: var(--scenery-wall-shade);
+}
+
+.art [data-lp='room-lit'] {
+  fill: var(--scenery-wall-lit);
+  stroke: var(--scenery-wall-lit);
+}
+
+.art [data-lp='floor'] {
+  fill: var(--scenery-floor);
+  stroke: var(--scenery-floor);
+}
+
+.art [data-lp='floor-lit'] {
+  fill: var(--scenery-floor-lit);
+  stroke: var(--scenery-floor-lit);
+}
+
+.art [data-lp='robot-shade'] {
+  fill: var(--robot-shade);
+  stroke: var(--robot-shade);
+}
+
+.art [data-lp='robot-lit'] {
+  fill: var(--robot-lit);
+  stroke: var(--robot-lit);
+}
+
+.art [data-lp='robot'] {
+  fill: var(--robot);
+  stroke: var(--robot);
+}
+
+.art [data-lp='sea-sunlit-lit'] {
+  fill: var(--scenery-sea-sunlit-lit);
+  stroke: var(--scenery-sea-sunlit-lit);
+}
+
+.art [data-lp='sea-sunlit'] {
+  fill: var(--scenery-sea-sunlit);
+  stroke: var(--scenery-sea-sunlit);
+}
+
+.art [data-lp='sea-twilight-lit'] {
+  fill: var(--scenery-sea-twilight-lit);
+  stroke: var(--scenery-sea-twilight-lit);
+}
+
+.art [data-lp='sea-twilight'] {
+  fill: var(--scenery-sea-twilight);
+  stroke: var(--scenery-sea-twilight);
+}
+
+.art [data-lp='ray'] {
+  fill: var(--scenery-ray);
+  stroke: var(--scenery-ray);
+}
+
+.art [data-lp='bed-lit'] {
+  fill: var(--scenery-seabed-lit);
+  stroke: var(--scenery-seabed-lit);
+}
+
+.art [data-lp='bed-shade'] {
+  fill: var(--scenery-seabed-shade);
+  stroke: var(--scenery-seabed-shade);
+}
+
+.art [data-lp='bed'] {
+  fill: var(--scenery-seabed);
+  stroke: var(--scenery-seabed);
+}
+
+.art [data-lp='ping'] {
+  fill: var(--ping);
+  stroke: var(--ping);
+}
+
+.art [data-lp='robot-dark'] {
+  fill: var(--robot-dark);
+  stroke: var(--robot-dark);
+}
+
+.art [data-lp='fish-lit'] {
+  fill: var(--fish-lit);
+  stroke: var(--fish-lit);
+}
+
+.art [data-lp='fish-shade'] {
+  fill: var(--fish-shade);
+  stroke: var(--fish-shade);
+}
+
+.art [data-lp='jelly'] {
+  fill: var(--jelly);
+  stroke: var(--jelly);
+}
+
+.art [data-lp='jelly-lit'] {
+  fill: var(--jelly-lit);
+  stroke: var(--jelly-lit);
+}
+
+.art [data-lp='pane-glint'] {
+  fill: var(--scenery-window-glint);
+  stroke: var(--scenery-window-glint);
+}
+
+.art [data-lp='paper-lit'] {
+  fill: var(--paper-lit);
+  stroke: var(--paper-lit);
+}
+
+.art [data-lp='paper'] {
+  fill: var(--paper);
+  stroke: var(--paper);
+}
+
+.art [data-lp='paper-shade'] {
+  fill: var(--paper-shade);
+  stroke: var(--paper-shade);
+}
+
+.art [data-lp='paper-rule'] {
+  fill: var(--paper-rule);
+  stroke: var(--paper-rule);
+}
+
+.art [data-lp='stripe'] {
+  fill: var(--stripe);
+  stroke: var(--stripe);
+}
+
+.art [data-lp='desk-lit'] {
+  fill: var(--desk-lit);
+  stroke: var(--desk-lit);
+}
+
+.art [data-lp='tab-a'] {
+  fill: var(--tab-a);
+  stroke: var(--tab-a);
+}
+
+.art [data-lp='tab-b'] {
+  fill: var(--tab-b);
+  stroke: var(--tab-b);
+}
+
+.art [data-lp='tab-c'] {
+  fill: var(--tab-c);
+  stroke: var(--tab-c);
+}
+
+.art [data-lp='desk'] {
+  fill: var(--desk);
+  stroke: var(--desk);
+}
+
+.art [data-lp='desk-shade'] {
+  fill: var(--desk-shade);
+  stroke: var(--desk-shade);
+}
+
+.art [data-lp='cloth-dark'] {
+  fill: var(--cloth-dark);
+  stroke: var(--cloth-dark);
+}
+
+.art [data-lp='halo'] {
+  fill: var(--halo);
+  stroke: var(--halo);
+}
+
+.art [data-lp='photo-paper'] {
+  fill: var(--photo-paper);
+  stroke: var(--photo-paper);
+}
+
+.art [data-lp='tether'] {
+  fill: none;
+  stroke: var(--robot-dark);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.art [data-lp='trace'] {
+  fill: none;
+  stroke: var(--paper-ink);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+/* The bar's dynamic blocks, keyed by the Explorable's block ids: the card's body, then the three tool results. */
+.window :global([data-block='waterline-dive-4@skills']) {
+  --arrive-delay: var(--arrive-card);
+}
+
+.window :global([data-block='waterline-dive-5@tool_result']) {
+  --arrive-delay: var(--arrive-frames);
+}
+
+.window :global([data-block='waterline-dive-6@tool_result']) {
+  --arrive-delay: var(--arrive-sonar);
+}
+
+.window :global([data-block='waterline-dive-7@tool_result']) {
+  --arrive-delay: var(--arrive-logs);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .window :global([data-block='waterline-dive-4@skills']),
+  :global([data-zone='active']) .window :global([data-block$='@tool_result']) {
+    animation: stack-on 700ms cubic-bezier(0.33, 0, 0.2, 1) var(--arrive-delay) both;
+  }
+}
+
+@keyframes stack-on {
+  from {
+    opacity: 0;
+    translate: 0 -1rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

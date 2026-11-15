@@ -1,0 +1,97 @@
+{
+  "title": "Nenne den Auslöser, nicht den Inhalt",
+  "caption": "Sag, was ein Skill tut und wann er dran ist, in den Worten, die jemand wirklich sagen würde.",
+  "analogy": "Zwei Registerzeilen für dieselbe Karte; nur eine passt zu dem, was der Kapitän sagt.",
+  "request": {
+    "who": "Deine Bitte, am Tag des Tauchgangs",
+    "text": "„Hol hier noch etwas <match>Schlamm</match> <match>hoch</match>, bevor wir weiterfahren.“",
+    "codingWho": "Dein Prompt an den Coding-Agenten",
+    "coding": "Hol hier noch etwas <match>Schlamm</match> <match>hoch</match>, bevor wir weiterfahren."
+  },
+  "match": {
+    "pairs": "nach Bedeutung: Schlamm → Meeresboden, hier → neuer Ort"
+  },
+  "index": {
+    "title": "Skill-Register",
+    "note": "Zwei Beschreibungen für denselben Skill; die KI sieht nur diese Zeilen.",
+    "skill": "Sedimentprobe nehmen"
+  },
+  "content": {
+    "tag": "Beschreibt den Inhalt",
+    "verdict": "sagt nichts darüber, wann",
+    "text": "SOP-07: Umgang mit dem Kerngerät, Schritte 1 bis 9"
+  },
+  "moment": {
+    "tag": "Beschreibt den Moment",
+    "verdict": "passt",
+    "use": "Nimmt einen Sedimentkern. Nutzen, wenn wir einen <match>neuen Ort</match> erreichen und eine <match>Probe vom Meeresboden</match> brauchen.",
+    "notFor": "Nicht für Wasserproben oder Filmaufnahmen.",
+    "notForTag": "· optional: nur Googles Leitfaden empfiehlt es"
+  },
+  "coding": {
+    "title": "Was der Agent zuerst lädt",
+    "note": "Zwei Entwürfe von <code>collect-sediment-sample/SKILL.md</code>: ihr Front Matter.",
+    "hedge": "Die „Nicht für“-Zeile ist optional: nur Googles Leitfaden empfiehlt sie"
+  },
+  "step": "Zweiter Schritt: Schreib die Beschreibung als den Moment, in dem Du ihn brauchst.",
+  "footer": {
+    "story": "In der Geschichte:",
+    "chat": "Eine Beschreibung sagt, was der Skill tut und wann er dran ist; Claude wählt danach unter womöglich über 100 Skills",
+    "coding": "Der Standard: Eine Beschreibung soll sagen, was der Skill tut und wann man ihn nutzt; Anthropic ergänzt konkrete Auslöser und Kontexte"
+  },
+  "alt": {
+    "scene": "Der Kontrollraum. Links steht der Kapitän und zeigt; der Pilot sitzt an der Konsole, den Blick auf das Skill-Register an der Wand."
+  },
+  "notes": {
+    "a-description-says-what-and-when": {
+      "header": "Eine Beschreibung sagt, was und wann",
+      "description": "Der Standard verlangt, dass eine Beschreibung sagt, was der Skill tut und wann man ihn nutzt, und Stichworte enthält, an denen Agenten passende Aufgaben erkennen [1]. Anthropic ergänzt konkrete Auslöser und Kontexte, weil Claude danach unter womöglich über 100 Skills wählt [2].",
+      "sources": {
+        "agent-skills-specification": { "title": "Agent Skills, Specification" },
+        "anthropic-skill-authoring-best-practices": { "title": "Anthropic, Skill authoring best practices" }
+      }
+    },
+    "write-the-description-in-the-users-words": {
+      "header": "Schreib die Beschreibung in den Worten der Nutzer",
+      "description": "Der Standard rät: im Imperativ formulieren, auf die Absicht der Nutzer statt auf die Umsetzung zielen und lieber zu aufdringlich als zu zurückhaltend sein, also die Kontexte, in denen der Skill gilt, ausdrücklich aufzählen [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "not-for-lines-googles-advice-alone": {
+      "header": "„Nicht für“-Zeilen in einer Beschreibung: nur Googles Rat",
+      "description": "Der Standard und Anthropic empfehlen keinen „Nicht für“-Satz in der Beschreibung. Zu häufiges Auslösen fangen sie ab, indem sie knapp danebenliegende Anfragen testen, die Stichworte teilen, aber etwas anderes brauchen; so zeigt sich, ob die Beschreibung präzise ist und nicht nur breit [1].",
+      "sources": {
+        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+      }
+    },
+    "the-not-for-clause-in-googles-day-3": {
+      "header": "Der „Nicht für“-Satz in Googles Day 3",
+      "description": "Googles Whitepaper zu Day 3 verlangt, ausdrücklich zu sagen, wofür ein Skill nicht da ist, nennt als Beispiel „Do NOT use for employee shift scheduling or financial accounting“, und seine Checkliste fordert, das „wann nicht“ aufzunehmen, damit der Skill nicht zu oft auslöst [1]. Es nennt die Beschreibung den Routing-Algorithmus, das Einzige, woran das Modell entscheidet, ob es den Skill lädt, und rät, aufdringlich zu werden, wenn das Modell zu selten auslöst. Eine Messung, dass der Satz hilft, gibt es nicht; es ist die Empfehlung eines Anbieters, eine Wahl zwischen Quellen.",
+      "sources": {
+        "google-agent-skills-whitepaper": {
+          "title": "Singhal, Hernandez Larios, Dus, Nigam und Kolan, Agent Skills (Google-Whitepaper, Kaggle)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-labels": {
+        "title": "Zwei Etiketten",
+        "keywords": "",
+        "script": "Hier sind zwei Beschreibungen für denselben Skill. Die erste nennt den Inhalt, „SOP-07: Umgang mit dem Kerngerät, Schritte 1 bis 9“, und die zweite sagt, was der Skill tut, und nennt den Moment: „Nimmt einen Sedimentkern. Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Die eine sagt nur, was drinsteht, die andere nennt den Auslöser, also wann Du ihn brauchst, und das ist Dein zweiter Schritt: Schreib die Beschreibung als den Moment, in dem Du ihn brauchst."
+      },
+      "your-request": {
+        "title": "Deine Bitte",
+        "keywords": "",
+        "script": "Jetzt ist der Tag des Tauchgangs, und Du tippst: „Hol hier noch etwas Schlamm hoch, bevor wir weiterfahren.“ Nichts in „SOP-07, Schritte 1 bis 9“ sagt dem Modell, wann er gebraucht wird, aber „eine Probe vom Meeresboden“ tut es, also passt nur die Beschreibung des Moments. Schreib sie in den Worten, die Du wirklich sagen würdest."
+      },
+      "the-closing-line": {
+        "title": "Die Schlusszeile",
+        "keywords": "",
+        "script": "Zum Schluss kann die Beschreibung des Moments eine zweite Hälfte haben: „Nicht für Wasserproben oder Filmaufnahmen.“ Sie sagt dem Modell, wo der Skill aufhört, damit es ihn nicht für eine Arbeit öffnet, die er nicht kann. Nimm diese Hälfte als Wahl, nicht als Regel, und teste, ob sie Deinem Skill hilft."
+      }
+    }
+  }
+}
