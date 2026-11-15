@@ -1,3 +1,5 @@
+import { Art } from '../../art/art';
+import { artName } from '../../art/art.pure';
 import { toPoints } from './scenery.pure';
 import styles from './siphonophore.module.css';
 
@@ -82,10 +84,12 @@ export function Siphonophore({ x, y, segments = 9, scale = 1 }: SiphonophoreProp
   return (
     <g className={styles.siphonophore} data-siphonophore transform={`translate(${x} ${y}) scale(${scale})`}>
       <g className={styles.sway} data-motion="ambient">
-        <Trail last={bells.at(-1)!} />
-        <polygon data-tone="siph-float" points="0,-12 5,-6 4,6 0,10 -4,6 -5,-6" />
-        <polygon data-tone="glint" points="-3,-6 0,-10 -1,-3" />
-        <Bells bells={bells} />
+        <Art name={artName('siphonophore', segments)}>
+          <Trail last={bells.at(-1)!} />
+          <polygon data-tone="siph-float" points="0,-12 5,-6 4,6 0,10 -4,6 -5,-6" />
+          <polygon data-tone="glint" points="-3,-6 0,-10 -1,-3" />
+          <Bells bells={bells} />
+        </Art>
       </g>
     </g>
   );

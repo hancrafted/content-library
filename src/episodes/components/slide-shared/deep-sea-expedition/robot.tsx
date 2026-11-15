@@ -1,5 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import { Art } from '../art/art';
 import type { ActorProps } from '../character/actor';
 import { Emote } from '../character/emote';
 import styles from './robot.module.css';
@@ -50,23 +51,29 @@ function Beam({ aim, motion }: { readonly aim: RobotAim; readonly motion?: Robot
         data-motion={motion}
         className={cn(styles.beam, motion && MOTION_CLASS[motion])}
       >
-        <polygon points={cone} className={styles.beamCone} />
-        <polygon points={core} className={styles.beamCore} />
+        <Art name={`robot/beam-${aim}`}>
+          <polygon points={cone} className={styles.beamCone} />
+          <polygon points={core} className={styles.beamCore} />
+        </Art>
       </g>
     </g>
   );
 }
 
 function Hull({ lampLit }: { readonly lampLit: boolean }) {
-  return ROBOT_FACETS.map((facet) => (
-    <polygon
-      key={facet.points}
-      data-part={facet.part}
-      data-lens={facet.tone === 'lens' ? (lampLit ? 'lit' : 'off') : undefined}
-      points={facet.points}
-      className={cn(styles.facet, facetClass(facet, lampLit))}
-    />
-  ));
+  return (
+    <Art name={`robot/hull-lamp-${lampLit ? 'lit' : 'off'}`}>
+      {ROBOT_FACETS.map((facet) => (
+        <polygon
+          key={facet.points}
+          data-part={facet.part}
+          data-lens={facet.tone === 'lens' ? (lampLit ? 'lit' : 'off') : undefined}
+          points={facet.points}
+          className={cn(styles.facet, facetClass(facet, lampLit))}
+        />
+      ))}
+    </Art>
+  );
 }
 
 function Head({ mood, says, motion, flip }: Pick<RobotProps, 'mood' | 'says' | 'motion' | 'flip'>) {

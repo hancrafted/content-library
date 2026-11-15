@@ -43,7 +43,7 @@ A Slide's Scene reads:
 </ZoneScene>
 ```
 
-1. **A figure is a server component rendering inline SVG.** It ships no client JavaScript. Its colours are mixed with `color-mix()` from global tokens in its own CSS module, as `note-tints` does, never raw colours: shared parts reach every Episode that reuses them, so FE-011-design-tokens keeps raw colours out of `slide-shared/` (Q23). Meaning colours appear only for their meanings: `ai` on the `aiAgent` badge, nowhere in scenery.
+1. **A figure is a server component; its drawing is a static asset.** The figure's TSX stays the one source of its drawing. It wraps each drawing in `<Art name="robot/hull-lamp-lit">`; the build step `npm run art` (FE-005 §5) renders it to a content-hashed file under `/art/`, and the page places it as one `<use>`. A figure ships no client JavaScript. Its colours are custom properties mixed with `color-mix()` from global tokens in its own CSS module, as `note-tints` does, set on the inline host group around its `<use>`s and inherited into the asset; the asset paints with presentation attributes that name those properties (`fill="var(--robot-lit)"`), never with its own `<style>`, which WebKit and Firefox ignore. Raw colours stay out of `slide-shared/`: shared parts reach every Episode that reuses them, so FE-011-design-tokens keeps them out (Q23). Meaning colours appear only for their meanings: `ai` on the `aiAgent` badge, nowhere in scenery.
 2. **`ZoneScene` is deep.** One `zone` prop draws that zone's scenery; retuning a zone is one edit that all its Slides follow. The Surface sky draws both sun and moon and `.dark` swaps them in CSS, the pattern of the landing hero (`src/page-assembly/landing/promotion-window.tsx`), copied, since an Episode does not import page assembly.
 3. **A preset varies appearance only:** build, skin tone, hair, headwear, outfit, one held prop, and `kind`. Poses and moods belong to `Character`, so any preset takes any pose. `kind: 'ai'` draws the `ai` meaning colour as one badge, so an AI agent reads as a colleague, the amnesiac freelancer, not a robot.
 4. **The actor contract** is `mood`, `says` and a head anchor where the emote sits. `Character` and `Robot` both implement it. `mood` is one of a closed set (`confused`, `surprised`, `happy`, `thinking`, `blank`); `says` is text from the Slide's `i18n/` (FE-003-localization), never a preset field.
@@ -58,8 +58,8 @@ A Slide's Scene reads:
 ### Motion
 
 1. **Trigger:** a Scene's motion starts when its Slide's mount carries `data-zone="active"` (`slide-mount.client.tsx`), plays once per entry and replays on re-entry. There is no Replay button on the page.
-2. **Engine:** CSS keyframes for scene motion, server-rendered, with no GSAP. The Section-title descent is the `bubbles` transition into the section slide: a canvas wave in the next Section's zone colour, its crest irregular, carrying about forty `PolyBubble`s the browser draws when the edge plays, never the static HTML ([Slide transitions](../features/slide-transitions.md)). Figures stay inline SVG; only the transition wave is canvas.
-3. **Choreography:** movement across the Scene is `Travel`, because positions belong to the Slide; movement inside a figure is its `motion` prop, because only the figure knows its parts. A Slide never targets a figure's internal parts.
+2. **Engine:** CSS keyframes for scene motion, server-rendered, with no GSAP. The Section-title descent is the `bubbles` transition into the section slide: a canvas wave in the next Section's zone colour, its crest irregular, carrying about forty `PolyBubble`s the browser draws when the edge plays, never the static HTML ([Slide transitions](../features/slide-transitions.md)). Figure drawings are static `<use>` assets (Interfaces 1); the groups that place and move them stay inline SVG; only the transition wave is canvas.
+3. **Choreography:** movement across the Scene is `Travel`, because positions belong to the Slide; movement inside a figure is its `motion` prop, because only the figure knows its parts. A Slide never targets a figure's internal parts. **Whole or inside (decision 63):** a part that moves as a whole (a cloud, the pennant, the robot's beam or body, a fish, an arrival, a waving arm) is its own `<use>`, moved by page CSS on the `<use>` or its inline group. A part that changes inside itself (a stroke draw, a growing bar, a fill change, screen contents) and localized text (`says`, labels) stay inline markup. Nothing animates inside an asset: WebKit and Firefox run no keyframes there, and `getAnimations()` cannot see them.
 4. **Emotes** pop in once after their figure's motion and stay visible: meaning is never behind hover or a click.
 5. **Ambient loops:** slow loops per zone, scenery only, drawn by `ZoneScene` (Surface: three cloud layers drifting at their own speeds, the ship's rock, which a Surface Slide switches on with `Ship`'s `rock` prop so a ship elsewhere stays still, and the pennant fluttering at its masthead; Sunlit: a fish school; Twilight: jellies, and on a Twilight Section title also a lanternfish school and a siphonophore; Midnight: the whale; Abyss: rising `PolyBubble`s). A loop may move small groups, each bubble or fish on its own, by transform or opacity only. Each pauses outside `active` and while the document is hidden. The cast never loops; the iceberg never moves.
 6. **Reduced motion:** every figure's rest state is its end state, so `prefers-reduced-motion: reduce` only removes animations. Figures are server components and cannot set attributes, so they mark each animated part `data-motion="<name>"`; one client leaf in `ZoneScene` listens for the Scene's `animationend` events and sets `data-motion="settled"` on the Scene once every once-animation has ended (ambient loops excluded), which browser checks wait on (ARCH-003-testing §5). An emote reads `--emote-delay`, set by its figure, so it pops in after the figure's motion.
@@ -75,6 +75,8 @@ A Slide's Scene reads:
 
 The Build job `implement-scene-cast` writes these figures before any Section uses them. It needs `implement-episode-init` and runs before `implement-iceberg-style`, whose `ZoneScene` draws its sea life and iceberg; every `implement-section-*` job needs both. Four Opus agents at medium effort, in parallel: `Character` with the captain, pilot and `aiAgent` presets; `Robot`; `Ship` and `Console`; the sea life and iceberg for `ZoneScene`. A Sonnet agent builds the cast gallery, a `/to-decision-html` page rendering the real components in every pose and mood, light and dark, beside the Spec's low-poly figure. Han's picks there gate the job; a Fable redraw is decided after he sees it.
 
+**Art assets (decision 63):** `npm run art` renders every composed page's Slides as `next dev` renders them, finds each `<Art>`, and bakes the paint its CSS modules give it into a file `public/art/<name>.<hash>.svg`, plus the manifest `<Art>` reads. One drawing is one file, however many Episodes, Event copies and Slides draw it; a name drawn two ways, because a Slide's CSS repaints a shared figure, stays inline, and the build names it. A figure redraw changes the TSX as before; the asset follows on the next build. `next dev` and the tests draw every drawing inline, so a redraw shows at once and a figure's tests read its markup.
+
 ## Feedback 2 changes
 
 Han decided these in the feedback-2 grill of 2026-11-14, on the title Slides, the scenery and the transition:
@@ -87,12 +89,14 @@ Han decided these in the feedback-2 grill of 2026-11-14, on the title Slides, th
 6. **`PolyBubble` shared:** one faceted bubble for the Abyss scenery and the transition (Q7, Q16), in `src/shared/components/core-components/poly-bubble/`.
 7. **Transition bubbles drawn by the browser:** the `bubbles` transition's forty bubbles are rendered from a seeded field when the edge plays, never in the static HTML (Q28).
 8. **Faceted sky (feedback 3, changes 3):** the sky takes a few large, soft, low-contrast facets as in the Spec's Option 0a; the Surface water stays flat with its lit waterline, and the zones meet on uneven waves from one generator (Q41, Q45).
+9. **Scene art as static assets (perf grill, decision 63):** whole-moving and static parts become `<use>` assets mounted near the viewport; only parts moving inside a figure stay inline (Interfaces 1, Motion 3, Build).
 
 ## Alternatives and cost
 
 - **One kit holding style and cast** ties a later Iceberg Episode to a submarine crew; the design guide calls the iceberg the frame, never a second analogy.
 - **Figures copied into each Slide** (product rule 4) would mean 21 robots drifting apart.
-- **Static `.svg` files** cannot take zone tokens or dark mode; **generating TSX from the Spec's Python** puts a second toolchain into the build.
+- **Hand-drawn static `.svg` files** would be a second source beside the TSX. Generated assets that paint with `var()` presentation attributes take zone tokens and dark mode through the `<use>` host (spike, 2026-11-14: Chromium, WebKit and Firefox). **Generating TSX from the Spec's Python** puts a second toolchain into the build.
+- **Everything inline** cost the Iceberg EN page 1.88 MB of rendered SVG plus 2.38 MB in flight data, 17.6k of its 28k elements (decision 63).
 - **Each Section drawing its own figures** gives eight robots; **an HTML preview ported to TSX later** gives two artefacts per figure and an approval the port can quietly break.
 - **Exported scenery parts per Slide** is shallow: each Slide relearns which parts belong at which depth.
 - **Choreography in the figure** grows the figure with every Slide; **in the Slide's CSS** couples 21 Slides to the robot's SVG structure.
@@ -107,6 +111,8 @@ The cost:
 - The design guide's Iceberg style gains an exception to "nothing loops at rest".
 - `implement-scene-cast` adds a gate before every Section job.
 - `aiAgent` is built before any Slide uses it, as proof of the seam.
+- Paint rules in a figure's CSS module stay simple selectors (`.a`, `[x='v']`) that read the same in dark mode and on the active Slide, so `npm run art` can bake them into attributes; dark mode and state reach a drawing only through custom properties on its host.
+- Hooks inside a drawing live in `/art` files, not in the page HTML.
 
 ## Relationship to binding rules
 

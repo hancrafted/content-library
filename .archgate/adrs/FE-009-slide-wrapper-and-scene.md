@@ -33,17 +33,17 @@ Navigation needs stable, measurable Slide boxes; visualisations need freedom ins
 
 **Ladder, lowest to highest:**
 
-| Layer                                                                              | z    |
-| ---------------------------------------------------------------------------------- | ---- |
-| Surface (inside the `isolate` wrapper)                                             | -20  |
-| Rear Backdrop decoration (inside the wrapper)                                      | -10  |
-| Primary Scene content (inside the wrapper)                                         | auto |
-| Resolved outgoing edge effect (inside the wrapper)                                 | 10   |
-| Front decoration (inside the wrapper)                                              | 20   |
-| From `md`: table of contents, drawer card (non-modal), talk player, drawer trigger | 40   |
-| Episode portal root (popovers), site header                                        | 50   |
-| Scrim (below `md`)                                                                 | 60   |
-| Drawer card below `md`, sheets                                                     | 70   |
+| Layer                                             | z    |
+| ------------------------------------------------- | ---- |
+| Surface (inside the `isolate` wrapper)            | -20  |
+| Rear Backdrop decoration (in the wrapper)         | -10  |
+| Primary Scene content (in the wrapper)            | auto |
+| Resolved outgoing edge effect (in the wrapper)    | 10   |
+| Front decoration (in the wrapper)                 | 20   |
+| From `md`: contents, drawer card, player, trigger | 40   |
+| Episode portal root (popovers), site header       | 50   |
+| Scrim (below `md`)                                | 60   |
+| Drawer card below `md`, sheets                    | 70   |
 
 Native `<dialog>`s occupy the top layer without z-index. Portal popovers stay above non-modal cards.
 
@@ -75,6 +75,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 
 1. `SlideMount` MUST be a client leaf inside the wrapper, rendering removable Scene content only outside `far` with height kept. Surface/effect lifetime MUST be independent.
 2. It MUST provide its Slide id for `useSlideZone()`.
+3. Scene art (`<Art>`, design-ADR 0025) MUST get its `<use>` `href` once its Slide is seen outside `far`, set by the mount or a Backdrop Scene's root, not per `<use>`; a Title slide MAY load it while parsing.
 
 ### 5. One observer
 
@@ -124,6 +125,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 9. **DON'T** render a popover inside a Scene's own subtree. (Decision 8)
 10. **DON'T** tie host lifetime to a removable Scene/Backdrop. (Decision 3, Decision 4, Decision 7)
 11. **DON'T** lift effects/front decoration outside local rungs. (Decision 8)
+12. **DON'T** animate inside an art asset. (Decision 4)
 
 ## Consequences
 
@@ -144,6 +146,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 4. **Pausing is a Scene duty:** the wrapper cannot enforce it.
 5. **Hydration mounts everything once:** an unreported Slide reads `near`; the first observer callback only removes content.
 6. **Separate lifetimes:** mounts cannot own edge-renderer availability.
+7. **Far art is an empty `<use>` to crawlers;** print loads it (decision 69).
 
 **Risks:**
 
@@ -154,9 +157,9 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 
 ## Compliance and Enforcement
 
-1. **Unit tests:** zone derivation; wrapper and mount contracts.
+1. **Unit tests:** zone derivation; wrapper and mount contracts; art loads only once seen outside `far` (§4.3).
 2. **Lint:** `new IntersectionObserver` refused outside the Slide observer and the reveal hook (§5.1).
-3. **Post-build test:** Content area grid, portal root, wrappers as isolated grid children, Backdrops assistively hidden and absent in print, no three-column grid, static anchors (§2, §3, §7).
+3. **Post-build test:** Content area grid, portal root, wrappers as isolated grid children, Backdrops assistively hidden and absent in print, no three-column grid, static anchors (§2, §3, §7); art `<use>` without `href`, under a loading root (§4.3).
 4. **Browser check:** DOM numbers at 375, 1100 and 1440px, drawer beside/over/closed: viewport-wide Backdrop, Foreground clear of chrome (§2, §7).
 
 **Exception (§5.1):** the landing About-card reveal hook observes once, then disconnects; no page-service report or zone write.

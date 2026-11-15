@@ -1,6 +1,7 @@
 'use client';
 
-import { useSlideZone } from '@/episodes/hooks/use-slide-zone';
+import { useArtLoader } from '@/episodes/hooks/use-art-loader';
+import { useArtLoads, useSlideZone } from '@/episodes/hooks/use-slide-zone';
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { onceAnimations, sceneMotionIn, type SceneMotion } from './scene-motion.pure';
 import type { Zone } from './zones.pure';
@@ -65,16 +66,21 @@ function useDocumentHidden() {
  * It also mirrors its Slide's zone as `data-zone`, the scope every figure's motion CSS reads
  * (`[data-zone='active'] …`, Motion 1). A page Slide's Scene sits inside its mount, which carries the same value; the
  * Title slide's and a section slide's Scene sit in the Backdrop, beside the mount, and would never see it otherwise.
+ *
+ * It loads the Scene's art (FE-009 §4): each `<Art>` reaches the page as a `<use>` without an `href`, which it sets
+ * once its Slide is seen outside `far`, and for every `<use>` before the page prints.
  */
 export function SceneMotionRoot({ className, zone, style, children }: SceneMotionProps) {
   const scene = useRef<HTMLDivElement>(null);
   const slideZone = useSlideZone();
   const motion = useSettle(scene, sceneMotionIn(slideZone));
   const hidden = useDocumentHidden();
+  useArtLoader(scene, useArtLoads());
   return (
     <div
       ref={scene}
       data-scene
+      data-art-root
       data-depth-zone={zone}
       data-zone={slideZone}
       data-motion={motion}

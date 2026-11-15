@@ -1,3 +1,4 @@
+import { Art } from '../../art/art';
 import styles from './clouds.module.css';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
@@ -60,7 +61,9 @@ export function Clouds({ at = SURFACE_CLOUDS }: { readonly at?: readonly CloudAt
             data-motion="ambient"
             style={{ animationDelay: `${-index * WIND_STAGGER_SECONDS}s` }}
           >
-            <Facets layers={CLOUDS[cloud.shape]!} />
+            <Art name={`cloud/${cloud.shape}`}>
+              <Facets layers={CLOUDS[cloud.shape]!} />
+            </Art>
           </g>
         </g>
       ))}

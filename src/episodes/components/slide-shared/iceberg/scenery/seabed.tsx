@@ -1,3 +1,5 @@
+import { Art } from '../../art/art';
+import { artName } from '../../art/art.pure';
 import { SEABED } from './facet-data';
 import { Facets } from './facets';
 import styles from './scenery.module.css';
@@ -17,7 +19,9 @@ export interface SeabedProps {
 export function Seabed({ y, x = 0, width = SEABED_WIDTH }: SeabedProps) {
   return (
     <g className={styles.scenery} data-seabed transform={`translate(${x} ${y}) scale(${width / SEABED_WIDTH} 1)`}>
-      <Facets layers={SEABED} />
+      <Art name="seabed">
+        <Facets layers={SEABED} />
+      </Art>
     </g>
   );
 }
@@ -38,9 +42,11 @@ export interface LightRaysProps {
 export function LightRays({ x, y, count = 5, spread = 70, length = 200, seed = 1 }: LightRaysProps) {
   return (
     <g className={styles.scenery} data-light-rays transform={`translate(${x} ${y})`}>
-      {rayWedges({ count, spread, length, seed }).map((points) => (
-        <polygon key={points} data-tone="ray" data-ray points={points} />
-      ))}
+      <Art name={artName('rays', { count, spread, length, seed })}>
+        {rayWedges({ count, spread, length, seed }).map((points) => (
+          <polygon key={points} data-tone="ray" data-ray points={points} />
+        ))}
+      </Art>
     </g>
   );
 }

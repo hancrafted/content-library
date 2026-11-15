@@ -1,4 +1,6 @@
 import type { CSSProperties } from 'react';
+import { Art } from '../../art/art';
+import { artName } from '../../art/art.pure';
 import styles from './sky.module.css';
 import { SKY_TONES, skyColour, skyFacets } from './sky.pure';
 
@@ -56,13 +58,17 @@ export function Sky({ x = 0, width, height, rise = 0, seed = 3 }: SkyProps) {
   })).filter(({ points }) => points.length > 0);
   return (
     <g data-band="sky" className={styles.sky} style={DAY}>
-      {tones.map(({ tone, points }) => (
-        <path key={tone} data-tone={tone} d={pathOf(points)} />
-      ))}
-      <g data-stars>
-        {STARS.map(([sx, sy, size]) => (
-          <polygon key={`${sx}:${sy}`} points={star(x + sx * width, sy * height, STAR_RADIUS * size)} />
+      <Art name={artName('sky', { x, width, height, rise, seed })}>
+        {tones.map(({ tone, points }) => (
+          <path key={tone} data-tone={tone} d={pathOf(points)} />
         ))}
+      </Art>
+      <g data-stars>
+        <Art name={artName('stars', { x, width, height })}>
+          {STARS.map(([sx, sy, size]) => (
+            <polygon key={`${sx}:${sy}`} points={star(x + sx * width, sy * height, STAR_RADIUS * size)} />
+          ))}
+        </Art>
       </g>
     </g>
   );
