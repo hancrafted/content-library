@@ -245,6 +245,18 @@ describe('success cases', () => {
       expected,
     );
   });
+
+  it('serves a repeated Episode at the anchor of one Slide inside a Section', () => {
+    // ARRANGE
+    const intro = { ...EPISODE, slug: 'ai-token-economy' };
+    const anchor = 'hands-on--make-it-a-skill';
+    const playlist = { ...PLAYLIST, episodes: ['ai-token-economy', { episode: 'ai-token-economy', anchor }] };
+    const input = { ...SOUND, episodes: [own(intro)], playlists: [playlist] };
+    // ACT
+    const [event] = loadContent(input).events;
+    // ASSERT
+    expect(event.playlist.episodes.map((entry) => entry.anchor)).toEqual([undefined, anchor]);
+  });
 });
 
 describe('failure cases', () => {
@@ -450,11 +462,24 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
-  it('refuses a Playlist entry whose anchor is no slug', () => {
+  it('refuses a Playlist entry whose anchor is no Section or Slide anchor', () => {
     // ARRANGE
     const input = {
       ...SOUND,
       playlists: [{ ...PLAYLIST, episodes: ['alpha', { episode: 'alpha', anchor: 'Check In' }] }],
+    };
+    const expected = 'Playlist axel: episodes.1.anchor';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist entry whose anchor joins its Section and Slide with more than two hyphens', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      playlists: [{ ...PLAYLIST, episodes: ['alpha', { episode: 'alpha', anchor: 'hands-on---quiz' }] }],
     };
     const expected = 'Playlist axel: episodes.1.anchor';
     // ACT

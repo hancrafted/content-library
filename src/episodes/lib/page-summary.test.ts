@@ -8,7 +8,7 @@ import { LOCALES } from '@/shared/lib/locale.pure';
 import { describe, expect, it } from 'vitest';
 import { placeSections, sectionOf } from './episode.pure';
 import { summaryOf } from './page-summary';
-import { sectionTitleAt } from './page-summary.pure';
+import { anchorTitleAt } from './page-summary.pure';
 import { compositionOf, type ComposedPage } from './registry';
 
 /*
@@ -30,10 +30,12 @@ const IN_LOCALES = COMPOSED.flatMap((page) =>
   LOCALES.map((locale) => ({ label: `${page.id} in ${locale}`, page, locale })),
 );
 
-/** Every Playlist entry that opens its Episode at an anchor, with the Event presenting it. */
+/** Every Playlist entry that opens its Episode at a Section's anchor, with the Event presenting it. */
 const ANCHORED = listEvents().flatMap(({ slug, playlist }) =>
   playlist.episodes.flatMap(({ page, anchor }) =>
-    page === undefined || anchor === undefined ? [] : [{ label: `${page.id}#${anchor} in ${slug}`, page, anchor }],
+    page === undefined || anchor === undefined || anchor.includes('--')
+      ? []
+      : [{ label: `${page.id}#${anchor} in ${slug}`, page, anchor }],
   ),
 );
 
@@ -81,9 +83,31 @@ describe('success cases', () => {
     // ARRANGE
     const expected = LOCALES.map((locale) => sectionOf(compositionOf(page).sections, anchor)?.messages[locale].title);
     // ACT
-    const titles = LOCALES.map((locale) => sectionTitleAt(summaryOf(page)[locale], anchor));
+    const titles = LOCALES.map((locale) => anchorTitleAt(summaryOf(page)[locale], anchor));
     // ASSERT
     expect(titles).toEqual(expected);
+  });
+  it('names a page Slide by its own title when the anchor is that Slide', () => {
+    // ARRANGE
+    const expected = 'Make it a skill';
+    const summary = {
+      title: '',
+      caption: '',
+      description: '',
+      minutes: 0,
+      sections: [
+        {
+          id: 'hands-on',
+          title: 'Hands-on',
+          minutes: 0,
+          items: [{ id: 'hands-on--make-it-a-skill', title: expected, minutes: 0 }],
+        },
+      ],
+    };
+    // ACT
+    const title = anchorTitleAt(summary, 'hands-on--make-it-a-skill');
+    // ASSERT
+    expect(title).toBe(expected);
   });
 });
 
@@ -102,16 +126,16 @@ describe('failure cases', () => {
     // ARRANGE
     const anchor = 'no-such-section';
     // ACT
-    const title = sectionTitleAt(summaryOf(episodeRef('onboard-ai-every-time')).en, anchor);
+    const title = anchorTitleAt(summaryOf(episodeRef('onboard-ai-every-time')).en, anchor);
     // ASSERT
     expect(title).toBeUndefined();
   });
 });
 
 describe('edge cases', () => {
-  it('names the Section of an untitled Slide, folded into the entry before it', () => {
+  it('names the titled Slide an untitled Slide is folded into', () => {
     // ARRANGE
-    const expected = 'Section';
+    const expected = 'Titled';
     const summary = {
       title: '',
       caption: '',
@@ -129,7 +153,7 @@ describe('edge cases', () => {
       ],
     };
     // ACT
-    const title = sectionTitleAt(summary, 'section--quiet');
+    const title = anchorTitleAt(summary, 'section--quiet');
     // ASSERT
     expect(title).toBe(expected);
   });
