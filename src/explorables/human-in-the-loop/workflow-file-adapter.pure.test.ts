@@ -63,6 +63,25 @@ describe('success cases', () => {
     expect(out).toEqual({ kind: 'out', branches });
     expect(back).toEqual({ kind: 'in', branches });
   });
+
+  it('hands the optional marks of jobs and stages on to the diagram model', () => {
+    // ARRANGE
+    const file = parse(fixtureEn) as WorkflowFile;
+    const [first, ...rest] = file.stages;
+    const marked: WorkflowFile = {
+      ...file,
+      stages: [
+        { ...first!, jobs: first!.jobs.map((task, at) => (at === 0 ? task : { ...task, optional: true })) },
+        ...rest.map((each) => ({ ...each, optional: true })),
+      ],
+    };
+    // ACT
+    const made = workflowOf(marked);
+    // ASSERT
+    expect(made.stages[0]?.optional).toBe(false);
+    expect(made.stages[1]?.optional).toBe(true);
+    expect(made.stages[0]?.jobs.map((each) => each.optional)).toEqual(first!.jobs.map((_, at) => at !== 0));
+  });
 });
 
 describe('failure cases', () => {

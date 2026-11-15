@@ -35,7 +35,7 @@ function base() {
             output: 'plan',
             template: 'plan',
             slots: [],
-            do: { simple: [section], technical: [section] },
+            do: { simple: [{ ...section }], technical: [{ ...section }] },
             review: {
               slots: [{ id: 'plan_result', mode: 'single', label: 'Result', sample: PLAN }],
               checks: ['Clear.'],
@@ -140,6 +140,10 @@ function ending(file: File, over: object = {}): void {
     ] as never,
   });
 }
+
+/** Plan's second job `check` is optional and hands on `checked`; a later Compare stage takes `slot`. */
+const optionalCheck = (file: File) => checking(file, { optional: true });
+const takes = (id: string) => ({ id, mode: 'single', label: id, sample: PLAN });
 
 describe('success cases', () => {
   it('loads the AI chat buttons a job offers, each a label, an https link and an icon or none', () => {
@@ -357,6 +361,108 @@ describe('success cases', () => {
     // ASSERT
     expect(r0).toBe(true);
     expect(r1).toBe(false);
+  });
+
+  it('loads an optional job that no required job reads', () => {
+    // ARRANGE
+    const change = (file: File) => optionalCheck(file);
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages[0]?.jobs[1]?.optional).toBe(true);
+  });
+
+  it('lets an optional job draw on an earlier optional job of its own stage', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      optionalCheck(file);
+      file.stages[0]!.jobs.push({
+        ...file.stages[0]!.jobs[0]!,
+        id: 'again',
+        output: 'again',
+        optional: true,
+        needs: ['check'],
+        slots: [takes('checked')],
+      } as never);
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
+
+  it('refuses a required job whose slot takes the output of an optional job, naming both', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      optionalCheck(file);
+      later(file, takes('checked'), '{{checked}}');
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Slot "checked" of task "compare" takes the output of the optional task "check"');
+  });
+
+  it('refuses a required job in the same stage that needs an optional job', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      optionalCheck(file);
+      file.stages[0]!.jobs.push({
+        ...file.stages[0]!.jobs[0]!,
+        id: 'after',
+        output: 'after',
+        needs: ['check'],
+        slots: [],
+      } as never);
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Task "after" needs the optional task "check"');
+  });
+
+  it('refuses a required repeated stage that repeats over the output of an optional job', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[0]!.jobs[0]!, { optional: true });
+      file.stages[1]!.jobs[0]!.slots = [];
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" repeats over the output "plan" of the optional task "plan"');
+  });
+
+  it('refuses an optional stage that holds a required job', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[1]!, { optional: true });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" is optional, so its task "research" must be optional too');
+  });
+
+  it('loads an optional stage whose jobs are all optional, and lets a later optional stage take its output', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[1]!, { optional: true });
+      Object.assign(file.stages[1]!.jobs[0]!, { optional: true });
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages[1]?.optional).toBe(true);
+  });
+
+  it('refuses optional that is not true or false', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[0]!.jobs[0]!, { optional: 'yes' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[0].jobs[0].optional must be true or false.');
   });
 });
 

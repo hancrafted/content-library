@@ -22,6 +22,10 @@ export const NAME_BUTTON =
 export const popoverOf = (copy: PopoverCopy | undefined, stageName: string): NodeCopy | undefined =>
   copy && { title: stageName, ...copy };
 
+/** The classes of a stage's card: a gate lifts it, an optional stage draws it dashed. */
+export const stageCardClass = (stage: Stage, gate: string | undefined): string =>
+  cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm', stage.optional && 'border-dashed');
+
 /** Whether any job of the stage is checked against its criteria in a fresh chat. */
 export const isChecked = (stage: Stage): boolean => stage.jobs.some((job) => job.reviewed);
 
@@ -98,7 +102,7 @@ export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords
   const { stage, slot, words, moves, run } = props;
   const gate = gateLabelOf(stage, slot, words);
   return (
-    <div data-stage-card="" className={cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm')}>
+    <div data-stage-card="" className={stageCardClass(stage, gate)}>
       <Title stage={stage} slot={slot} />
       {moves && stage.moves.length > 0 && (
         <div className="relative z-10">

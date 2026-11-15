@@ -60,6 +60,12 @@ const render = (props: Partial<DiagramProps> = {}) =>
   );
 const COLUMN = 'li[class*="focus-group__item"]';
 
+const optionalFlow = (): Workflow =>
+  workflow([
+    stage('a', [job({ id: 'must' }), job({ id: 'extra', optional: true })]),
+    { ...stage('b', [job({ id: 'bonus', optional: true })]), optional: true },
+  ]);
+
 describe('success cases', () => {
   it('puts one "Try it" button over each stage column, named for its stage and holding no pressed state', () => {
     // ARRANGE
@@ -189,6 +195,17 @@ describe('success cases', () => {
     const marks = [plain('[data-checked]').length, worked('[data-checked]').length];
     // ASSERT
     expect(marks).toEqual([1, 0]);
+  });
+
+  it('draws a stage card dashed only for an optional stage, and gives a stage with optional jobs no badge', () => {
+    // ARRANGE
+    const $ = render({ workflow: optionalFlow(), rounds: {} });
+    // ACT
+    const [first, second] = $('[data-stage-card]').toArray();
+    // ASSERT
+    expect($(second).attr('class')).toContain('border-dashed');
+    expect($(first).attr('class')).not.toContain('border-dashed');
+    expect($('[data-optional]')).toHaveLength(0);
   });
 });
 

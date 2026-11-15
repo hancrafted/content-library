@@ -29,6 +29,7 @@ export const JOB: Job = {
   inputs: [],
   outputs: [],
   reviewed: false,
+  optional: false,
   task: TASK,
 };
 
@@ -39,6 +40,7 @@ export const stage = (id: string, jobs: readonly Job[]): Stage => ({
   name: id.toUpperCase(),
   goal: 'G',
   moves: [],
+  optional: false,
   jobs,
 });
 

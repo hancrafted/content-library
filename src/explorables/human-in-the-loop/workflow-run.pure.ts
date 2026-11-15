@@ -49,10 +49,10 @@ export interface StageRun {
   readonly jobs: readonly JobRun[];
   /** The rounds of a repeated stage; empty otherwise. */
   readonly rounds: readonly RoundRun[];
-  /** Jobs (in every round) whose result is in, out of every job to do: "3/5". */
+  /** Jobs (in every round) whose result is in, out of every required job to do: "3/5". Optional jobs are not counted. */
   readonly done: number;
   readonly total: number;
-  /** The least advanced state of every job of the stage, rounds included: `open` where it has none. */
+  /** The least advanced state of every required job of the stage, rounds included: `open` where it has none. */
   readonly state: JobState;
 }
 
@@ -116,15 +116,26 @@ function itemsOf(file: WorkflowFile, foreach: ForeachDef, input: RunInput): Item
   return input.demo ? shown.slice(0, foreach.demo) : shown;
 }
 
+/**
+ * The jobs a stage's count and state go by: its required ones. An optional job is left out entirely, so a stage is
+ * done without it. In an optional stage every job is optional, so there its own jobs count.
+ */
+const countedOf = (stage: StageDef, runs: readonly JobRun[]): readonly JobRun[] => {
+  if (stage.optional) return runs;
+  const optional = new Set(stage.jobs.filter((task) => task.optional).map((task) => task.id));
+  return runs.filter((each) => !optional.has(each.id));
+};
+
 function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRun {
   const { results } = input;
   const items = stage.foreach ? itemsOf(file, stage.foreach, input) : [];
   const rounds = items.map((item, at): RoundRun => {
     const jobs = stage.jobs.map((task) => jobRun(task, { stage: stage.id, round: at + 1 }, results));
-    return { number: at + 1, title: item.title, item: item.text, jobs, state: leastOf(jobs) };
+    return { number: at + 1, title: item.title, item: item.text, jobs, state: leastOf(countedOf(stage, jobs)) };
   });
   const jobs = stage.foreach ? [] : stage.jobs.map((task) => jobRun(task, { stage: stage.id }, results));
-  const all = [...jobs, ...rounds.flatMap((round) => round.jobs)];
+  const every = [...jobs, ...rounds.flatMap((round) => round.jobs)];
+  const all = countedOf(stage, every);
   const done = all.filter((each) => each.state !== 'open').length;
   return { id: stage.id, jobs, rounds, done, total: all.length, state: all.length > 0 ? leastOf(all) : 'open' };
 }

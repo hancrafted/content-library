@@ -17,6 +17,7 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
     inputs: task.slots.map((slot) => slot.id),
     outputs: task.output === undefined ? [] : [{ id: task.output }],
     reviewed: task.review !== undefined,
+    optional: task.optional === true,
     task,
   };
 }
@@ -31,6 +32,7 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
     card: stage.card,
     gate: stage.gate,
     foreach: stage.foreach,
+    optional: stage.optional === true,
     jobs: stage.jobs.map((task) => jobOf(file, task, index)),
   };
 }

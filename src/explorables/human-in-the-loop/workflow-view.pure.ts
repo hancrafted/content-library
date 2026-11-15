@@ -45,6 +45,8 @@ export interface JobModalView {
   readonly title: string;
   /** The one-sentence goal of the do step (the stepper's title) and, when the job has a review, of the review. */
   readonly goal: TaskDef['goal'];
+  /** The job may be skipped: none of its steps leads the stepper. */
+  readonly optional: boolean;
   readonly task: TaskModalView;
 }
 
@@ -115,6 +117,7 @@ export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOp
         id: job.id,
         title: job.title,
         goal: job.task.goal,
+        optional: job.optional,
         task: taskView(job, workflow, { level, stage: stageAt, demo, rounds }),
       })),
     })),

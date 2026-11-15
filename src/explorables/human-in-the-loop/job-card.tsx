@@ -40,13 +40,23 @@ function Name({ stage, job, slot }: Pick<JobCardProps, 'stage' | 'job' | 'slot'>
   );
 }
 
-function Heading({ stage, job, slot }: Pick<JobCardProps, 'stage' | 'job' | 'slot'>) {
+/** The tag of a job the viewer may skip, in words so the dashed border never carries it alone. */
+function OptionalTag({ word }: { readonly word: string }) {
+  return (
+    <span data-optional="" className="rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">
+      {word}
+    </span>
+  );
+}
+
+function Heading({ stage, job, slot, words }: Pick<JobCardProps, 'stage' | 'job' | 'slot' | 'words'>) {
   return (
     <p className="flex items-center gap-1 text-caption font-semibold">
       <span data-title="">
         <Name stage={stage} job={job} slot={slot} />
       </span>
       {slot.marker && <span className="relative z-10">{slot.marker}</span>}
+      {job.optional && <OptionalTag word={words.optional} />}
     </p>
   );
 }
@@ -73,12 +83,13 @@ export function JobCard({ stage, job, slot, words, joined, state, round, onOpen 
       data-job-card={job.id}
       className={cn(
         'relative flex flex-col gap-1 rounded-lg border border-border bg-background p-2.5',
+        job.optional && 'border-dashed',
         onOpen && 'hover:shadow-sm',
       )}
     >
       {joined && <JobArrow />}
       {onOpen && <JobButton stage={stage.name} jobId={job.id} round={round} label={label} onOpen={onOpen} />}
-      <Heading stage={stage} job={job} slot={slot} />
+      <Heading stage={stage} job={job} slot={slot} words={words} />
       <Detail detail={slot.detail ?? job.detail} />
       <Mark state={state} reviewed={job.reviewed} words={words} />
       {slot.after && <div className="relative z-10">{slot.after}</div>}

@@ -54,8 +54,9 @@ const task = obj(
     limits: { t: 'rec', of: limit },
     openAIButtons: list(chatButton, 1),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
+    optional: bool,
   },
-  ['summary', 'needs', 'output', 'review', 'instructions', 'limits', 'openAIButtons'],
+  ['summary', 'needs', 'output', 'review', 'instructions', 'limits', 'openAIButtons', 'optional'],
 );
 const stage = obj(
   {
@@ -67,9 +68,10 @@ const stage = obj(
     moves: list(obj({ letter: enumOf(['B', 'R', 'I', 'E', 'F']), why: str }), 1),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
+    optional: bool,
     jobs: list(task, 1),
   },
-  ['summary', 'foreach', 'moves', 'gate', 'card'],
+  ['summary', 'foreach', 'moves', 'gate', 'card', 'optional'],
 );
 
 /** The Spec of a whole Workflow file. */

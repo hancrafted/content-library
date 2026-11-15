@@ -39,9 +39,9 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 ## Stage and task fields
 
-Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `moves` (a list of `letter`, one of `B`, `R`, `I`, `E` or `F`, and `why`, the circle's tooltip: why that BRIEF move applies to this stage; a stage applies several moves, one or none, listed in BRIEF order), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
+Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `moves` (a list of `letter`, one of `B`, `R`, `I`, `E` or `F`, and `why`, the circle's tooltip: why that BRIEF move applies to this stage; a stage applies several moves, one or none, listed in BRIEF order), `gate` (a whole number, the stage's gate), `card` (`label`, `lines`, `status`, the sign-off card) and `optional` (see Optional jobs and stages). The first stage with a `card` holds the focal job of the diagram.
 
-Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `review`, `needs`, `instructions`, `limits`, `openAIButtons`.
+Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `review`, `needs`, `instructions`, `limits`, `openAIButtons`, `optional`.
 
 - `goal`: `do` is the one-sentence goal of the do step, the stepper's title; `review` is the goal of the review step and is required when the job has a review.
 - `needs`: ids of jobs of the same stage that run first. A slot may take the output of a job it needs; a slot that takes a same-stage output without `needs`, an unknown id and a cycle are load problems.
@@ -133,6 +133,16 @@ A stage repeats with `foreach: { over: <output>#<h2 slug>, demo: N, item: <word>
 #   slots: [{ id: research, mode: multiple, label: ..., sample: [ "<1>", "<2>", "<3>" ] }]
 #   a do section uses {{research_1}} {{research_2}} {{research_3}}
 ```
+
+## Optional jobs and stages
+
+`optional: true` on a job marks work a viewer may skip, such as `source-to-quiz`'s `eval`. On a stage it marks a whole skippable stage, and every job in it must be `optional: true` too.
+
+- An optional job or stage may draw on any earlier output, optional or not.
+- No required job, in any stage, may take an optional job's output: not by a slot (a `do` or review slot), not through `needs`, and not as the output its stage repeats over. Skipping the optional work therefore never starves a later job or feeds sample data into a real run.
+- Progress leaves optional jobs out: a stage's "done of total" counts required jobs only, a stage is done without its optional jobs, and no step of an optional job leads the stepper. A stage whose jobs are all optional counts its own jobs, since it has no required ones.
+- The Jobs view draws an optional job card dashed with an "optional" tag (the Explorable's word `optional`), and an optional stage's card dashed; the Stages view draws a stage with optional jobs like any other.
+- Write the title of an optional job without "Bonus": the tag says it.
 
 ## Review
 
@@ -291,6 +301,7 @@ Reviews earn their extra chat only at a gate: a review after every job doubled t
 - Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `demo` cap below 1.
 - Slots: names no output of an earlier stage (and is not `free`); takes all rounds of a repeated stage but is `single`; is `multiple` but its output is not from a repeated stage; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
 - Jobs: a `needs` id that is no job of the stage; a `needs` cycle; a slot taking a same-stage output without `needs`; a job with a review and no `goal.review`; a job with no output that is not the final job of the last stage; a stage `summary` over eight words.
+- Optional: an optional stage with a required job; a required job taking an optional job's output by slot, review slot or `needs`; a required stage repeating over an optional job's output.
 - Techniques: a section or details naming an unknown technique id.
 - Markers: an unknown marker in a task prompt (either runtime) or in the reviewer, naming the marker.
 - Handoffs: a sample or example with front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a job whose stage does not repeat; an example list whose length is not the stage's demo cap.
