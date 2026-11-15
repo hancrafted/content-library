@@ -11,12 +11,13 @@ const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 // The Episodes area's tier folders, each the tier its name says (FE-007): components, browser hooks, plain logic.
 const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and Template's record, so they sit
-// above the Episodes they list and the lib rules below leave them out.
-const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated)';
+// above the Episodes they list and the lib rules below leave them out. composition-summaries works the page summaries
+// out of them for `npm run registry`; no page imports it (FE-004 §4).
+const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The tests that run over every composed Episode and Template through those registries, rendering Slides.
 const REGISTRY_TESTS =
-  '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
+  '^src/episodes/lib/(page-summary|placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
 // The product areas (spec #348): each a top-level folder of src/, between page assembly above and the content store
 // below. AREA captures the area's name, so a rule's `to` can say "this same area" as `^src/$1/`.
 const AREA_NAMES = '(episodes|events|explorables|pipeline)';

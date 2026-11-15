@@ -8,7 +8,7 @@ import {
   listedTemplates,
   type LoadedEpisode,
 } from '@/content-store/store';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { eventCopy } from '@/events/lib/event-words';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { ResourceEntry, ResourceKind } from './resource-index.pure';
@@ -33,7 +33,7 @@ function listedEpisodePages(): Listed[] {
               slug: episode.slug,
               page: { kind: 'episode', episode },
               tags,
-              words: (locale: Locale) => compositionOf(episode).messages[locale],
+              words: (locale: Locale) => summaryOf(episode)[locale],
             },
           ],
           'event-copy': () => [],
@@ -58,7 +58,7 @@ function listedExplorablePagePages(): Listed[] {
     slug: page.explorablePage.slug,
     page,
     tags,
-    words: (locale) => compositionOf(page.explorablePage).messages[locale],
+    words: (locale) => summaryOf(page.explorablePage)[locale],
   }));
 }
 
@@ -68,7 +68,7 @@ function listedGuidePages(): Listed[] {
     slug: page.guide.slug,
     page,
     tags,
-    words: (locale) => compositionOf(page.guide).messages[locale],
+    words: (locale) => summaryOf(page.guide)[locale],
   }));
 }
 
@@ -78,7 +78,7 @@ function listedTemplatePages(): Listed[] {
     slug: page.template.slug,
     page,
     tags,
-    words: (locale) => compositionOf(page.template).messages[locale],
+    words: (locale) => summaryOf(page.template)[locale],
   }));
 }
 

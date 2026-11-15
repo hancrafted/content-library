@@ -1,14 +1,19 @@
 // `npm run registry` writes the Episode registry from the Episode folders and the Event, Template, Explorable page and Guide registries from
-// their record files, formatted as Prettier would. The fast suite fails while a checked-in registry file is stale
-// (registry.test.ts). What each registry holds: episode-registry.pure.ts and event-registry.pure.ts.
+// their record files, formatted as Prettier would; then, from the compositions those registries list, the page
+// summaries. The fast suite fails while a checked-in file is stale: a registry in registry.test.ts, a summary in
+// src/episodes/lib/page-summary.test.ts. What each holds: episode-registry.pure.ts, event-registry.pure.ts and
+// page-summaries.pure.ts.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
+import { createVitest } from 'vitest/node';
+import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
 import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
 import { eventRegistryFiles } from './event-registry.pure.ts';
 import { explorablePageRegistryFile } from './explorable-page-registry.pure.ts';
 import { guideRegistryFile } from './guide-registry.pure.ts';
+import { pageSummariesFile } from './page-summaries.pure.ts';
 import { templateRegistryFile } from './template-registry.pure.ts';
 
 const EVENTS_DIR = 'src/content-store/events';
@@ -41,15 +46,30 @@ function readFoldersIn(root: string, dir: string): string[] {
     .map(({ name }) => name);
 }
 
-/** Each registry file as the folders and files give it, in the repository's Prettier style, so `format:check` passes it. */
-async function registryFiles(root: string): Promise<RegistryFile[]> {
-  const files = [
+/** Loads a module of the site by its path from the repository root, aliases, JSON and JSX resolved as the site resolves them. */
+type SiteLoader = <T>(repoPath: string) => Promise<T>;
+
+/** The registry files the folders and record files give, read as plain text. */
+function sourceFiles(root: string): RegistryFile[] {
+  return [
     ...episodeRegistryFiles(readEpisodeFolders(root)),
     ...eventRegistryFiles(readFilesIn(root, EVENTS_DIR)),
     templateRegistryFile(readFilesIn(root, TEMPLATES_DIR)),
     explorablePageRegistryFile(readFilesIn(root, EXPLORABLE_PAGES_DIR), readFoldersIn(root, EXPLORABLES_DIR)),
     guideRegistryFile(readFilesIn(root, GUIDES_DIR)),
   ];
+}
+
+/** The summaries the compositions give, read through the site's own module graph once the source registries are current. */
+async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
+  const summaries = await load<{ compositionSummaries: typeof compositionSummaries }>(
+    'src/episodes/lib/composition-summaries.ts',
+  );
+  return [pageSummariesFile(summaries.compositionSummaries())];
+}
+
+/** Files in the repository's Prettier style, so `format:check` passes them. */
+async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
   return Promise.all(
     files.map(async (file) => {
       const filepath = path.join(root, file.path);
@@ -64,14 +84,32 @@ function onDisk(root: string, file: RegistryFile): string | undefined {
   return existsSync(at) ? readFileSync(at, 'utf8') : undefined;
 }
 
+function staleOf(root: string, files: readonly RegistryFile[]): RegistryFile[] {
+  return files.filter((file) => onDisk(root, file) !== file.text);
+}
+
 /** The registry files whose checked-in text differs from what the folders give: none when every registry is current. */
 export async function staleRegistryFiles(root: string): Promise<string[]> {
-  return (await registryFiles(root)).filter((file) => onDisk(root, file) !== file.text).map((file) => file.path);
+  return staleOf(root, await formatted(root, sourceFiles(root))).map((file) => file.path);
+}
+
+function write(root: string, files: readonly RegistryFile[]): string[] {
+  const stale = staleOf(root, files);
+  stale.forEach((file) => writeFileSync(path.join(root, file.path), file.text));
+  return stale.map((file) => file.path);
 }
 
 if (import.meta.main) {
   const root = process.cwd();
-  const written = (await registryFiles(root)).filter((file) => onDisk(root, file) !== file.text);
-  written.forEach((file) => writeFileSync(path.join(root, file.path), file.text));
-  console.log(written.length === 0 ? 'Every registry is current' : `wrote ${written.map((f) => f.path).join(', ')}`);
+  const written = write(root, await formatted(root, sourceFiles(root)));
+  // The compositions import Slides, JSON and aliases plain node cannot load: Vitest's module runner loads them as the
+  // fast suite does, after the source registries above are written, so it reads the current ones.
+  const vitest = await createVitest('test', { config: path.join(root, 'vitest.config.mts'), watch: false });
+  try {
+    const load: SiteLoader = (repoPath) => vitest.import(path.join(root, repoPath));
+    written.push(...write(root, await formatted(root, await summaryFiles(load))));
+  } finally {
+    await vitest.close();
+  }
+  console.log(written.length === 0 ? 'Every registry is current' : `wrote ${written.join(', ')}`);
 }

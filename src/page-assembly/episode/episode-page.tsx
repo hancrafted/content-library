@@ -13,6 +13,7 @@ import {
   type RouteParams,
 } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { compositionOf } from '@/episodes/lib/registry';
 import { eventEpisodeFrame } from '@/events/components/event-episode-frame';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
@@ -103,7 +104,7 @@ function EpisodeUnderEvent({
   context: TocPageContext;
 }) {
   const shown = page.presented;
-  const titleOf = (episode: EpisodeRef<EpisodeId>) => compositionOf(episode).messages[locale].title;
+  const titleOf = (episode: EpisodeRef<EpisodeId>) => summaryOf(episode)[locale].title;
   return (
     <EpisodePageContainer
       locale={locale}
@@ -121,12 +122,12 @@ function EpisodeUnderEvent({
 
 /**
  * An Episode-shaped page's title, description, treatment and release date, for `pageMetadata` (FE-008): an Episode's,
- * under `/episodes/` or its Event, read through the registry and the content store. The treatment, which decides robots and canonical, is the page catalogue's.
+ * under `/episodes/` or its Event, read from its summary and the content store. The treatment, which decides robots and canonical, is the page catalogue's.
  */
 export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy {
   const treatment = treatmentOf(page);
   const episodeOf = ({ episode }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
-    const { title, description } = compositionOf(episode).messages[locale];
+    const { title, description } = summaryOf(episode)[locale];
     const publishedOn = episodePublishedOn(episode);
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };

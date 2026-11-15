@@ -1,0 +1,3898 @@
+{
+  "episodes": {
+    "2026-10-23-axel-agentic-workflow__ai-attention-span": {
+      "en": {
+        "title": "Why AI has a weird attention span you must learn to manage",
+        "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
+        "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+        "minutes": 20.3,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Thought experiment",
+            "minutes": 0.6571428571428571,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "The long phone call",
+                "minutes": 1.4285714285714286
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "AI forgets the middle too",
+                "minutes": 1.5999999999999999
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "The AI's attention span",
+            "minutes": 0.34285714285714286,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "The context window",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "What happens when the context fills up",
+                "minutes": 2.25
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Attention is a budget",
+                "minutes": 2.2142857142857144
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "What we learned so far",
+                "minutes": 1.0571428571428572
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "What fills the window",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "What's really in the context window",
+                "minutes": 1.1500000000000001
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "One innocent question",
+                "minutes": 1.3285714285714285
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "The chat looks the same. The window doesn't.",
+                "minutes": 0.8714285714285714
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Managing the attention span",
+            "minutes": 0.21428571428571427,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Everyday habits",
+                "minutes": 1.5999999999999999
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "The workflow for bigger projects",
+                "minutes": 1.8928571428571428
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human in the loop workflow",
+                "minutes": 1.9
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Congratulations",
+                "minutes": 0.44285714285714284
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+        "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
+        "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+        "minutes": 23.058333333333334,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Gedankenexperiment",
+            "minutes": 0.8083333333333333,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "Das lange Telefonat",
+                "minutes": 1.8166666666666667
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "Auch die KI vergisst die Mitte",
+                "minutes": 1.7166666666666668
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "Die Aufmerksamkeitsspanne der KI",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "Das Kontextfenster",
+                "minutes": 1.1916666666666664
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "Was passiert, wenn der Kontext voll wird",
+                "minutes": 2.5083333333333333
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Aufmerksamkeit ist ein Budget",
+                "minutes": 2.5250000000000004
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "Was wir bisher gelernt haben",
+                "minutes": 1.1749999999999998
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "Was das Fenster füllt",
+            "minutes": 0.35833333333333334,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "Was wirklich im Kontextfenster steckt",
+                "minutes": 1.2999999999999998
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "Eine harmlose Frage",
+                "minutes": 1.5083333333333333
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+                "minutes": 1.0333333333333334
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Die Aufmerksamkeitsspanne managen",
+            "minutes": 0.2833333333333333,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Gewohnheiten für jeden Tag",
+                "minutes": 1.8416666666666668
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "Der Workflow für größere Projekte",
+                "minutes": 2.033333333333333
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human-in-the-Loop-Workflow",
+                "minutes": 2.0416666666666665
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Glückwunsch",
+                "minutes": 0.525
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-10-23-axel-agentic-workflow__ai-gives-you-more-work": {
+      "en": {
+        "title": "Will AI reduce your work? It adds work: managing it.",
+        "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+        "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+        "minutes": 5.421428571428572,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "From execution to management",
+            "minutes": 0.8642857142857143,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Every revolution, one card",
+                "minutes": 1.7857142857142856
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "You were promoted",
+                "minutes": 1.3214285714285714
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Practise it today, at work",
+                "minutes": 1.45
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+        "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+        "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+        "minutes": 6.116666666666667,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "Von der Ausführung zum Management",
+            "minutes": 0.9666666666666667,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Jede Revolution, eine Karte",
+                "minutes": 1.9666666666666668
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "Du wurdest befördert",
+                "minutes": 1.5166666666666666
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Üb es heute, bei der Arbeit",
+                "minutes": 1.6666666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-10-23-axel-agentic-workflow__onboard-ai-every-time": {
+      "en": {
+        "title": "Treat AI like a brilliant freelancer with amnesia",
+        "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+        "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+        "minutes": 6.95,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "The thought experiment",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "You're the new hire",
+                "minutes": 1.0857142857142856
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Five traits, or you pay the price",
+                "minutes": 0.8071428571428572
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "What happens with one prompt",
+                "minutes": 1.8214285714285714
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "How do we work with this freelancer?",
+            "minutes": 0.16428571428571428,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Your first human-in-the-loop agentic workflow",
+                "minutes": 1.6642857142857144
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Five moves against five traits",
+                "minutes": 0.5928571428571429
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+        "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
+        "description": "Die fünf Eigenschaften, die KI teuer machen, und die fünf Schritte, mit denen Du sie im Griff behältst: Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+        "minutes": 9.141666666666667,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "Das Gedankenexperiment",
+            "minutes": 0.5416666666666666,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "Du bist die neue Kraft",
+                "minutes": 1.4333333333333333
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
+                "minutes": 2.1083333333333334
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "Was ein einziger Prompt bewirkt",
+                "minutes": 2.2333333333333334
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "Wie arbeiten wir mit diesem Freelancer?",
+            "minutes": 0.19166666666666668,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+                "minutes": 1.9083333333333334
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Fünf Schritte gegen fünf Eigenschaften",
+                "minutes": 0.3416666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span": {
+      "en": {
+        "title": "Why AI has a weird attention span you must learn to manage",
+        "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
+        "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+        "minutes": 20.3,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Thought experiment",
+            "minutes": 0.6571428571428571,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "The long phone call",
+                "minutes": 1.4285714285714286
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "AI forgets the middle too",
+                "minutes": 1.5999999999999999
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "The AI's attention span",
+            "minutes": 0.34285714285714286,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "The context window",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "What happens when the context fills up",
+                "minutes": 2.25
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Attention is a budget",
+                "minutes": 2.2142857142857144
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "What we learned so far",
+                "minutes": 1.0571428571428572
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "What fills the window",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "What's really in the context window",
+                "minutes": 1.1500000000000001
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "One innocent question",
+                "minutes": 1.3285714285714285
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "The chat looks the same. The window doesn't.",
+                "minutes": 0.8714285714285714
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Managing the attention span",
+            "minutes": 0.21428571428571427,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Everyday habits",
+                "minutes": 1.5999999999999999
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "The workflow for bigger projects",
+                "minutes": 1.8928571428571428
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human in the loop workflow",
+                "minutes": 1.9
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Congratulations",
+                "minutes": 0.44285714285714284
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+        "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
+        "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+        "minutes": 30.174999999999997,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Gedankenexperiment",
+            "minutes": 0.8083333333333333,
+            "items": [
+              { "id": "thought-experiment--the-long-phone-call-story", "title": "Das lange Telefonat", "minutes": 1.9 },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "Auch die KI vergisst die Mitte",
+                "minutes": 2.3499999999999996
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "Die Aufmerksamkeitsspanne der KI",
+            "minutes": 0.475,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "Das Kontextfenster",
+                "minutes": 2.0416666666666665
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "Was passiert, wenn der Kontext voll wird",
+                "minutes": 2.7083333333333335
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Aufmerksamkeit ist ein Budget",
+                "minutes": 3.958333333333334
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "Was wir bisher gelernt haben",
+                "minutes": 1.6166666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "Was das Fenster füllt",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "Was wirklich im Kontextfenster steckt",
+                "minutes": 2.033333333333333
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "Eine harmlose Frage",
+                "minutes": 2.0666666666666664
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+                "minutes": 1.85
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Die Aufmerksamkeitsspanne managen",
+            "minutes": 0.275,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Gewohnheiten für jeden Tag",
+                "minutes": 1.6333333333333333
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "Der Workflow für größere Projekte",
+                "minutes": 2.3166666666666664
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human-in-the-Loop-Workflow",
+                "minutes": 3.2249999999999996
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Glückwunsch",
+                "minutes": 0.525
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work": {
+      "en": {
+        "title": "Will AI reduce your work? It adds work: managing it.",
+        "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+        "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+        "minutes": 5.421428571428572,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "From execution to management",
+            "minutes": 0.8642857142857143,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Every revolution, one card",
+                "minutes": 1.7857142857142856
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "You were promoted",
+                "minutes": 1.3214285714285714
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Practise it today, at work",
+                "minutes": 1.45
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+        "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+        "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+        "minutes": 6.116666666666667,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "Von der Ausführung zum Management",
+            "minutes": 0.9666666666666667,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Jede Revolution, eine Karte",
+                "minutes": 1.9666666666666668
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "Du wurdest befördert",
+                "minutes": 1.5166666666666666
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Üb es heute, bei der Arbeit",
+                "minutes": 1.6666666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro": {
+      "en": {
+        "title": "Generative AI at work: working agentically",
+        "caption": "A picture in your head of how the AI ticks, whatever the tool.",
+        "description": "What the webinar covers and leaves out, and how it runs: three layers, the agenda, the scope, a poll and the organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rapid evolution of AI disciplines", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "In scope",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Out of scope", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Where do you stand?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "About me", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: freelancer with amnesia", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: the attention span", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: from doing to managing",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Where tonight's demo sits", "minutes": 0 }]
+          }
+        ]
+      },
+      "de": {
+        "title": "Generative KI im Arbeitsalltag: agentisch arbeiten",
+        "caption": "Ein Bild im Kopf, wie die KI tickt, egal mit welchem Tool.",
+        "description": "Was das Webinar behandelt und auslässt, und wie es abläuft: drei Ebenen, die Agenda, der Fokus, eine Umfrage und die Organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rasante Entwicklung der KI-Disziplinen", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "Im Fokus",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Nicht im Fokus", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Wo steht ihr?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "Über mich", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: Freelancer mit Amnesie", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: die Aufmerksamkeitsspanne", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: vom Ausführen zum Managen",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Wo die Demo von heute steht", "minutes": 0 }]
+          }
+        ]
+      }
+    },
+    "2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time": {
+      "en": {
+        "title": "Treat AI like a brilliant freelancer with amnesia",
+        "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+        "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+        "minutes": 6.95,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "The thought experiment",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "You're the new hire",
+                "minutes": 1.0857142857142856
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Five traits, or you pay the price",
+                "minutes": 0.8071428571428572
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "What happens with one prompt",
+                "minutes": 1.8214285714285714
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "How do we work with this freelancer?",
+            "minutes": 0.16428571428571428,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Five moves against five traits",
+                "minutes": 0.5928571428571429
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Your first human-in-the-loop agentic workflow",
+                "minutes": 1.6642857142857144
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+        "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
+        "description": "Die fünf Eigenschaften, die KI teuer machen, und die fünf Schritte, mit denen Du sie im Griff behältst: Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+        "minutes": 9.675,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "Das Gedankenexperiment",
+            "minutes": 0.43333333333333335,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "Du bist die neue Kraft",
+                "minutes": 1.4333333333333333
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
+                "minutes": 2.1083333333333334
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "Was ein einziger Prompt bewirkt",
+                "minutes": 2.2333333333333334
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "Wie arbeiten wir mit diesem Freelancer?",
+            "minutes": 0.8333333333333334,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Fünf Schritte gegen fünf Eigenschaften",
+                "minutes": 0.3416666666666667
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+                "minutes": 1.9083333333333334
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-04-intro-hitl-workflows__ai-attention-span": {
+      "en": {
+        "title": "Why AI has a weird attention span you must learn to manage",
+        "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
+        "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+        "minutes": 20.3,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Thought experiment",
+            "minutes": 0.6571428571428571,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "The long phone call",
+                "minutes": 1.4285714285714286
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "AI forgets the middle too",
+                "minutes": 1.5999999999999999
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "The AI's attention span",
+            "minutes": 0.34285714285714286,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "The context window",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "What happens when the context fills up",
+                "minutes": 2.25
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Attention is a budget",
+                "minutes": 2.2142857142857144
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "What we learned so far",
+                "minutes": 1.0571428571428572
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "What fills the window",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "What's really in the context window",
+                "minutes": 1.1500000000000001
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "One innocent question",
+                "minutes": 1.3285714285714285
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "The chat looks the same. The window doesn't.",
+                "minutes": 0.8714285714285714
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Managing the attention span",
+            "minutes": 0.21428571428571427,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Everyday habits",
+                "minutes": 1.5999999999999999
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "The workflow for bigger projects",
+                "minutes": 1.8928571428571428
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human in the loop workflow",
+                "minutes": 1.9
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Congratulations",
+                "minutes": 0.44285714285714284
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+        "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
+        "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+        "minutes": 30.174999999999997,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Gedankenexperiment",
+            "minutes": 0.8083333333333333,
+            "items": [
+              { "id": "thought-experiment--the-long-phone-call-story", "title": "Das lange Telefonat", "minutes": 1.9 },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "Auch die KI vergisst die Mitte",
+                "minutes": 2.3499999999999996
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "Die Aufmerksamkeitsspanne der KI",
+            "minutes": 0.475,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "Das Kontextfenster",
+                "minutes": 2.0416666666666665
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "Was passiert, wenn der Kontext voll wird",
+                "minutes": 2.7083333333333335
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Aufmerksamkeit ist ein Budget",
+                "minutes": 3.958333333333334
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "Was wir bisher gelernt haben",
+                "minutes": 1.6166666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "Was das Fenster füllt",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "Was wirklich im Kontextfenster steckt",
+                "minutes": 2.033333333333333
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "Eine harmlose Frage",
+                "minutes": 2.0666666666666664
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+                "minutes": 1.85
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Die Aufmerksamkeitsspanne managen",
+            "minutes": 0.275,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Gewohnheiten für jeden Tag",
+                "minutes": 1.6333333333333333
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "Der Workflow für größere Projekte",
+                "minutes": 2.3166666666666664
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human-in-the-Loop-Workflow",
+                "minutes": 3.2249999999999996
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Glückwunsch",
+                "minutes": 0.525
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-04-intro-hitl-workflows__ai-gives-you-more-work": {
+      "en": {
+        "title": "Will AI reduce your work? It adds work: managing it.",
+        "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+        "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+        "minutes": 5.421428571428572,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "From execution to management",
+            "minutes": 0.8642857142857143,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Every revolution, one card",
+                "minutes": 1.7857142857142856
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "You were promoted",
+                "minutes": 1.3214285714285714
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Practise it today, at work",
+                "minutes": 1.45
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+        "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+        "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+        "minutes": 6.116666666666667,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "Von der Ausführung zum Management",
+            "minutes": 0.9666666666666667,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Jede Revolution, eine Karte",
+                "minutes": 1.9666666666666668
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "Du wurdest befördert",
+                "minutes": 1.5166666666666666
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Üb es heute, bei der Arbeit",
+                "minutes": 1.6666666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-04-intro-hitl-workflows__intro": {
+      "en": {
+        "title": "Intro Human in the Loop Workflow",
+        "caption": "A picture in your head of how the AI ticks, whatever the tool.",
+        "description": "An introduction to human-in-the-loop workflows, with an agenda, a poll and check-ins.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rapid evolution of AI disciplines", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          { "id": "poll", "title": "Where do you stand?", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: freelancer with amnesia", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: the attention span", "minutes": 0, "items": [] },
+          { "id": "check-in-3", "title": "Check-in: from doing to managing", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Intro Human in the Loop Workflow",
+        "caption": "Ein Bild im Kopf, wie die KI tickt, egal mit welchem Tool.",
+        "description": "Eine Einführung in Human-in-the-Loop-Workflows mit Agenda, Umfrage und Check-ins.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rasante Entwicklung der KI-Disziplinen", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          { "id": "poll", "title": "Wo steht ihr?", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: Freelancer mit Amnesie", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: die Aufmerksamkeitsspanne", "minutes": 0, "items": [] },
+          { "id": "check-in-3", "title": "Check-in: vom Ausführen zum Managen", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "2026-11-04-intro-hitl-workflows__onboard-ai-every-time": {
+      "en": {
+        "title": "Treat AI like a brilliant freelancer with amnesia",
+        "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+        "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+        "minutes": 6.95,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "The thought experiment",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "You're the new hire",
+                "minutes": 1.0857142857142856
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Five traits, or you pay the price",
+                "minutes": 0.8071428571428572
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "What happens with one prompt",
+                "minutes": 1.8214285714285714
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "How do we work with this freelancer?",
+            "minutes": 0.16428571428571428,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Five moves against five traits",
+                "minutes": 0.5928571428571429
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Your first human-in-the-loop agentic workflow",
+                "minutes": 1.6642857142857144
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+        "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
+        "description": "Die fünf Eigenschaften, die KI teuer machen, und die fünf Schritte, mit denen Du sie im Griff behältst: Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+        "minutes": 9.675,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "Das Gedankenexperiment",
+            "minutes": 0.43333333333333335,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "Du bist die neue Kraft",
+                "minutes": 1.4333333333333333
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
+                "minutes": 2.1083333333333334
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "Was ein einziger Prompt bewirkt",
+                "minutes": 2.2333333333333334
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "Wie arbeiten wir mit diesem Freelancer?",
+            "minutes": 0.8333333333333334,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Fünf Schritte gegen fünf Eigenschaften",
+                "minutes": 0.3416666666666667
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+                "minutes": 1.9083333333333334
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro": {
+      "en": {
+        "title": "Generative AI at work: working agentically",
+        "caption": "A picture in your head of how the AI ticks, whatever the tool.",
+        "description": "What the webinar covers and leaves out, and how it runs: three layers, the agenda, the scope, a poll and the organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rapid evolution of AI disciplines", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "In scope",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Out of scope", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Where do you stand?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "About me", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: freelancer with amnesia", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: the attention span", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: from doing to managing",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Where tonight's demo sits", "minutes": 0 }]
+          }
+        ]
+      },
+      "de": {
+        "title": "Generative KI im Arbeitsalltag: agentisch arbeiten",
+        "caption": "Ein Bild im Kopf, wie die KI tickt, egal mit welchem Tool.",
+        "description": "Was das Webinar behandelt und auslässt, und wie es abläuft: drei Ebenen, die Agenda, der Fokus, eine Umfrage und die Organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rasante Entwicklung der KI-Disziplinen", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "Im Fokus",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Nicht im Fokus", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Wo steht ihr?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "Über mich", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: Freelancer mit Amnesie", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: die Aufmerksamkeitsspanne", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: vom Ausführen zum Managen",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Wo die Demo von heute steht", "minutes": 0 }]
+          }
+        ]
+      }
+    },
+    "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require": {
+      "en": {
+        "title": "What agentic workflows require of people and organisations",
+        "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
+        "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
+        "minutes": 17.450000000000003,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "A thought experiment",
+            "minutes": 0.40714285714285714,
+            "items": [
+              {
+                "id": "a-thought-experiment--the-thought-experiment",
+                "title": "The thought experiment",
+                "minutes": 1.7714285714285714
+              },
+              {
+                "id": "a-thought-experiment--now-with-agents",
+                "title": "Now with agents",
+                "minutes": 0.8357142857142857
+              }
+            ]
+          },
+          {
+            "id": "what-an-agentic-workflow-is",
+            "title": "What an agentic workflow is",
+            "minutes": 0.19285714285714287,
+            "items": [
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agent-is",
+                "title": "What an agent is",
+                "minutes": 0.8714285714285714
+              },
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+                "title": "What an agentic workflow is",
+                "minutes": 0.7928571428571428
+              }
+            ]
+          },
+          {
+            "id": "how-far-you-step-out",
+            "title": "How far you step out",
+            "minutes": 0.30714285714285716,
+            "items": [
+              {
+                "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
+                "title": "In, on or out of the loop",
+                "minutes": 1.2785714285714287
+              },
+              {
+                "id": "how-far-you-step-out--reviewability-sets-the-distance",
+                "title": "Reviewability sets the distance",
+                "minutes": 1.1285714285714286
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-each-person",
+            "title": "What it requires of each person",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
+                "title": "Plan back from the goal",
+                "minutes": 1.8285714285714285
+              },
+              {
+                "id": "what-it-requires-of-each-person--contracts-at-the-seams",
+                "title": "Contracts at the seams",
+                "minutes": 1.3
+              },
+              {
+                "id": "what-it-requires-of-each-person--reviewing-the-result",
+                "title": "Reviewing the result",
+                "minutes": 0.9571428571428571
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-the-organisation",
+            "title": "What it requires of the organisation",
+            "minutes": 0.19285714285714287,
+            "items": [
+              {
+                "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
+                "title": "The org chart trap",
+                "minutes": 1.1071428571428572
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--designed-ai-first",
+                "title": "Designed AI first",
+                "minutes": 0.9285714285714286
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+                "title": "What to look for in your team",
+                "minutes": 1.557142857142857
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
+                "title": "From article to quiz",
+                "minutes": 1.6999999999999997
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
+        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
+        "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
+        "minutes": 20.16666666666667,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "Ein Gedankenexperiment",
+            "minutes": 0.48333333333333334,
+            "items": [
+              {
+                "id": "a-thought-experiment--the-thought-experiment",
+                "title": "Das Gedankenexperiment",
+                "minutes": 2.083333333333333
+              },
+              { "id": "a-thought-experiment--now-with-agents", "title": "Jetzt mit Agenten", "minutes": 0.925 }
+            ]
+          },
+          {
+            "id": "what-an-agentic-workflow-is",
+            "title": "Was ein agentischer Workflow ist",
+            "minutes": 0.225,
+            "items": [
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agent-is",
+                "title": "Was ein Agent ist",
+                "minutes": 0.9666666666666667
+              },
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+                "title": "Was ein agentischer Workflow ist",
+                "minutes": 0.8916666666666667
+              }
+            ]
+          },
+          {
+            "id": "how-far-you-step-out",
+            "title": "Wie weit Du Dich herausnimmst",
+            "minutes": 0.3,
+            "items": [
+              {
+                "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
+                "title": "In, an oder außerhalb der Schleife",
+                "minutes": 1.5333333333333332
+              },
+              {
+                "id": "how-far-you-step-out--reviewability-sets-the-distance",
+                "title": "Prüfbarkeit bestimmt den Abstand",
+                "minutes": 1.3166666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-each-person",
+            "title": "Was es von jeder Person verlangt",
+            "minutes": 0.30833333333333335,
+            "items": [
+              {
+                "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
+                "title": "Vom Ziel aus rückwärts planen",
+                "minutes": 2.1416666666666666
+              },
+              {
+                "id": "what-it-requires-of-each-person--contracts-at-the-seams",
+                "title": "Verträge an den Nahtstellen",
+                "minutes": 1.4916666666666667
+              },
+              {
+                "id": "what-it-requires-of-each-person--reviewing-the-result",
+                "title": "Das Ergebnis prüfen",
+                "minutes": 1.0750000000000002
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-the-organisation",
+            "title": "Was es von der Organisation verlangt",
+            "minutes": 0.21666666666666667,
+            "items": [
+              {
+                "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
+                "title": "Die Organigramm-Falle",
+                "minutes": 1.3333333333333335
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--designed-ai-first",
+                "title": "KI-first entworfen",
+                "minutes": 1.1083333333333334
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+                "title": "Worauf Du in Deinem Team achten solltest",
+                "minutes": 1.7833333333333334
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
+                "title": "Vom Artikel zum Quiz",
+                "minutes": 1.9833333333333334
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills": {
+      "en": {
+        "title": "What lies below the waterline of sustainable AI skills",
+        "caption": "Every conversation with AI starts from zero on how you work. A skill hands it your proven procedure on demand, and where you keep the project details, inside the skill or beside it, decides how reusable it is.",
+        "description": "When a task you keep explaining should become a skill, how to write its description as the moment you'd need it, what goes into the skill and what stays in project context, and what a shared skill needs to stay right: an owner, a version, tests and a retirement date.",
+        "minutes": 32.842857142857135,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "A thought experiment",
+            "minutes": 0.8857142857142857,
+            "items": [
+              {
+                "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+                "title": "An AI model that forgets every morning",
+                "minutes": 1.157142857142857
+              },
+              {
+                "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+                "title": "A skill hands the AI your procedure",
+                "minutes": 1.35
+              }
+            ]
+          },
+          {
+            "id": "what-a-skill-is",
+            "title": "What a skill is",
+            "minutes": 0.6428571428571428,
+            "items": [
+              {
+                "id": "what-a-skill-is--a-skill-is-a-written-procedure",
+                "title": "A skill is a folder of instructions",
+                "minutes": 1.3571428571428572
+              },
+              {
+                "id": "what-a-skill-is--three-levels-of-loading",
+                "title": "How AI discovers and reads a skill",
+                "minutes": 1.4071428571428573
+              },
+              {
+                "id": "what-a-skill-is--skills-are-dynamic-context",
+                "title": "Skills are static and dynamic context",
+                "minutes": 1.35
+              },
+              {
+                "id": "what-a-skill-is--instructions-skills-and-connectors",
+                "title": "Instructions, skills and connectors",
+                "minutes": 1.307142857142857
+              },
+              {
+                "id": "what-a-skill-is--two-ways-to-call-a-skill",
+                "title": "Two ways to call a skill",
+                "minutes": 0.9928571428571428
+              }
+            ]
+          },
+          {
+            "id": "when-to-write-one",
+            "title": "When to write one",
+            "minutes": 0.8714285714285713,
+            "items": [
+              {
+                "id": "when-to-write-one--the-third-time-is-the-signal",
+                "title": "The third time is the signal",
+                "minutes": 1.0499999999999998
+              },
+              {
+                "id": "when-to-write-one--not-every-repeat-deserves-a-skill",
+                "title": "Not every repeat deserves a skill",
+                "minutes": 0.9071428571428571
+              },
+              {
+                "id": "when-to-write-one--write-it-from-a-good-run",
+                "title": "Write it from a good run",
+                "minutes": 1.2428571428571429
+              }
+            ]
+          },
+          {
+            "id": "the-label",
+            "title": "The description",
+            "minutes": 0.4285714285714286,
+            "items": [
+              {
+                "id": "the-label--the-description-is-all-the-ai-sees",
+                "title": "The description is the trigger",
+                "minutes": 1.157142857142857
+              },
+              {
+                "id": "the-label--name-the-moment-not-the-content",
+                "title": "Name the trigger, not the content",
+                "minutes": 1.3428571428571427
+              },
+              {
+                "id": "the-label--more-skills-harder-choice",
+                "title": "More skills, harder choice",
+                "minutes": 1.5142857142857142
+              }
+            ]
+          },
+          {
+            "id": "what-goes-inside",
+            "title": "What context goes inside",
+            "minutes": 0.4714285714285714,
+            "items": [
+              {
+                "id": "what-goes-inside--what-goes-where-is-information-architecture",
+                "title": "What context goes where",
+                "minutes": 1.435714285714286
+              },
+              {
+                "id": "what-goes-inside--one-skill-one-job",
+                "title": "A project detail couples a skill to one project",
+                "minutes": 0.6785714285714286
+              },
+              { "id": "what-goes-inside--inside-the-skill", "title": "Inside the skill", "minutes": 0.9071428571428571 }
+            ]
+          },
+          {
+            "id": "what-stays-beside",
+            "title": "What context stays beside",
+            "minutes": 0.4857142857142857,
+            "items": [
+              {
+                "id": "what-stays-beside--beside-the-skill",
+                "title": "Beside the skill",
+                "minutes": 0.9642857142857143
+              },
+              {
+                "id": "what-stays-beside--who-uses-it-and-where",
+                "title": "Who uses it, and where",
+                "minutes": 1.0357142857142858
+              },
+              {
+                "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+                "title": "grill-with-docs keeps context beside the skill",
+                "minutes": 0.7857142857142857
+              }
+            ]
+          },
+          {
+            "id": "sharing-it",
+            "title": "Sharing it",
+            "minutes": 0.3642857142857143,
+            "items": [
+              {
+                "id": "sharing-it--shared-skills-are-knowledge-articles",
+                "title": "Shared skills are knowledge articles",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "sharing-it--who-owns-the-shared-skill-library",
+                "title": "Who owns the shared skill library",
+                "minutes": 0.9214285714285715
+              },
+              {
+                "id": "sharing-it--does-the-skill-make-things-better",
+                "title": "Does the skill make things better?",
+                "minutes": 0.95
+              }
+            ]
+          },
+          {
+            "id": "keeping-it-alive",
+            "title": "Keeping it alive",
+            "minutes": 0.33571428571428574,
+            "items": [
+              {
+                "id": "keeping-it-alive--every-skill-is-a-loan",
+                "title": "Every skill is a loan",
+                "minutes": 0.6571428571428571
+              },
+              {
+                "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+                "title": "The model changes, the skill doesn't",
+                "minutes": 1.2142857142857144
+              },
+              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7214285714285714 },
+              {
+                "id": "keeping-it-alive--the-whole-iceberg",
+                "title": "The whole iceberg",
+                "minutes": 0.8928571428571428
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
+        "caption": "Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt.",
+        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
+        "minutes": 36.7,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "Ein Gedankenexperiment",
+            "minutes": 1.0583333333333333,
+            "items": [
+              {
+                "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+                "title": "Ein KI-Modell, das jeden Morgen vergisst",
+                "minutes": 1.25
+              },
+              {
+                "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+                "title": "Ein Skill gibt der KI Dein Vorgehen",
+                "minutes": 1.4583333333333335
+              }
+            ]
+          },
+          {
+            "id": "what-a-skill-is",
+            "title": "Was ein Skill ist",
+            "minutes": 0.7166666666666667,
+            "items": [
+              {
+                "id": "what-a-skill-is--a-skill-is-a-written-procedure",
+                "title": "Ein Skill ist ein Ordner mit Anweisungen",
+                "minutes": 1.4666666666666666
+              },
+              {
+                "id": "what-a-skill-is--three-levels-of-loading",
+                "title": "Wie die KI einen Skill findet und liest",
+                "minutes": 1.5250000000000001
+              },
+              {
+                "id": "what-a-skill-is--skills-are-dynamic-context",
+                "title": "Skills sind statischer und dynamischer Kontext",
+                "minutes": 1.4083333333333332
+              },
+              {
+                "id": "what-a-skill-is--instructions-skills-and-connectors",
+                "title": "Anweisungen, Skills und Konnektoren",
+                "minutes": 1.4666666666666668
+              },
+              {
+                "id": "what-a-skill-is--two-ways-to-call-a-skill",
+                "title": "Zwei Wege, einen Skill aufzurufen",
+                "minutes": 1.0833333333333335
+              }
+            ]
+          },
+          {
+            "id": "when-to-write-one",
+            "title": "Wann Du einen schreibst",
+            "minutes": 0.9083333333333333,
+            "items": [
+              {
+                "id": "when-to-write-one--the-third-time-is-the-signal",
+                "title": "Beim dritten Mal ist es so weit",
+                "minutes": 1.1
+              },
+              {
+                "id": "when-to-write-one--not-every-repeat-deserves-a-skill",
+                "title": "Nicht jede Wiederholung verdient einen Skill",
+                "minutes": 1.0416666666666667
+              },
+              {
+                "id": "when-to-write-one--write-it-from-a-good-run",
+                "title": "Schreib ihn aus einem guten Durchlauf",
+                "minutes": 1.3916666666666666
+              }
+            ]
+          },
+          {
+            "id": "the-label",
+            "title": "Die Beschreibung",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-label--the-description-is-all-the-ai-sees",
+                "title": "Die Beschreibung ist der Auslöser",
+                "minutes": 1.291666666666667
+              },
+              {
+                "id": "the-label--name-the-moment-not-the-content",
+                "title": "Nenne den Auslöser, nicht den Inhalt",
+                "minutes": 1.575
+              },
+              {
+                "id": "the-label--more-skills-harder-choice",
+                "title": "Mehr Skills, schwerere Wahl",
+                "minutes": 1.666666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-goes-inside",
+            "title": "Welcher Kontext hineingehört",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "what-goes-inside--what-goes-where-is-information-architecture",
+                "title": "Welcher Kontext wohin gehört",
+                "minutes": 1.6166666666666667
+              },
+              {
+                "id": "what-goes-inside--one-skill-one-job",
+                "title": "Ein Projektdetail bindet einen Skill an ein Projekt",
+                "minutes": 0.7416666666666667
+              },
+              { "id": "what-goes-inside--inside-the-skill", "title": "Im Skill", "minutes": 1 }
+            ]
+          },
+          {
+            "id": "what-stays-beside",
+            "title": "Welcher Kontext daneben bleibt",
+            "minutes": 0.5333333333333334,
+            "items": [
+              {
+                "id": "what-stays-beside--beside-the-skill",
+                "title": "Neben dem Skill",
+                "minutes": 1.0916666666666668
+              },
+              {
+                "id": "what-stays-beside--who-uses-it-and-where",
+                "title": "Wer ihn nutzt, und wo",
+                "minutes": 1.1333333333333333
+              },
+              {
+                "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+                "title": "grill-with-docs hält den Kontext neben dem Skill",
+                "minutes": 0.875
+              }
+            ]
+          },
+          {
+            "id": "sharing-it",
+            "title": "Ihn teilen",
+            "minutes": 0.42500000000000004,
+            "items": [
+              {
+                "id": "sharing-it--shared-skills-are-knowledge-articles",
+                "title": "Geteilte Skills sind Wissensartikel",
+                "minutes": 1.2166666666666668
+              },
+              {
+                "id": "sharing-it--who-owns-the-shared-skill-library",
+                "title": "Wem die geteilte Skill-Bibliothek gehört",
+                "minutes": 1.0166666666666666
+              },
+              {
+                "id": "sharing-it--does-the-skill-make-things-better",
+                "title": "Macht der Skill es besser?",
+                "minutes": 1.0833333333333333
+              }
+            ]
+          },
+          {
+            "id": "keeping-it-alive",
+            "title": "Ihn am Leben halten",
+            "minutes": 0.38333333333333336,
+            "items": [
+              {
+                "id": "keeping-it-alive--every-skill-is-a-loan",
+                "title": "Jeder Skill ist ein Kredit",
+                "minutes": 0.8166666666666667
+              },
+              {
+                "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+                "title": "Das Modell ändert sich, der Skill nicht",
+                "minutes": 1.4166666666666665
+              },
+              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8916666666666666 },
+              {
+                "id": "keeping-it-alive--the-whole-iceberg",
+                "title": "Der ganze Eisberg",
+                "minutes": 1.0499999999999998
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ai-attention-span": {
+      "en": {
+        "title": "Why AI has a weird attention span you must learn to manage",
+        "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
+        "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+        "minutes": 20.3,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Thought experiment",
+            "minutes": 0.6571428571428571,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "The long phone call",
+                "minutes": 1.4285714285714286
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "AI forgets the middle too",
+                "minutes": 1.5999999999999999
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "The AI's attention span",
+            "minutes": 0.34285714285714286,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "The context window",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "What happens when the context fills up",
+                "minutes": 2.25
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Attention is a budget",
+                "minutes": 2.2142857142857144
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "What we learned so far",
+                "minutes": 1.0571428571428572
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "What fills the window",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "What's really in the context window",
+                "minutes": 1.1500000000000001
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "One innocent question",
+                "minutes": 1.3285714285714285
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "The chat looks the same. The window doesn't.",
+                "minutes": 0.8714285714285714
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Managing the attention span",
+            "minutes": 0.21428571428571427,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Everyday habits",
+                "minutes": 1.5999999999999999
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "The workflow for bigger projects",
+                "minutes": 1.8928571428571428
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human in the loop workflow",
+                "minutes": 1.9
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Congratulations",
+                "minutes": 0.44285714285714284
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+        "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
+        "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+        "minutes": 23.058333333333334,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Gedankenexperiment",
+            "minutes": 0.8083333333333333,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "Das lange Telefonat",
+                "minutes": 1.8166666666666667
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "Auch die KI vergisst die Mitte",
+                "minutes": 1.7166666666666668
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "Die Aufmerksamkeitsspanne der KI",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "Das Kontextfenster",
+                "minutes": 1.1916666666666664
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "Was passiert, wenn der Kontext voll wird",
+                "minutes": 2.5083333333333333
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Aufmerksamkeit ist ein Budget",
+                "minutes": 2.5250000000000004
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "Was wir bisher gelernt haben",
+                "minutes": 1.1749999999999998
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "Was das Fenster füllt",
+            "minutes": 0.35833333333333334,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "Was wirklich im Kontextfenster steckt",
+                "minutes": 1.2999999999999998
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "Eine harmlose Frage",
+                "minutes": 1.5083333333333333
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+                "minutes": 1.0333333333333334
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Die Aufmerksamkeitsspanne managen",
+            "minutes": 0.2833333333333333,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Gewohnheiten für jeden Tag",
+                "minutes": 1.8416666666666668
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "Der Workflow für größere Projekte",
+                "minutes": 2.033333333333333
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human-in-the-Loop-Workflow",
+                "minutes": 2.0416666666666665
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Glückwunsch",
+                "minutes": 0.525
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ai-gives-you-more-work": {
+      "en": {
+        "title": "Will AI reduce your work? It adds work: managing it.",
+        "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+        "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+        "minutes": 5.421428571428572,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "From execution to management",
+            "minutes": 0.8642857142857143,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Every revolution, one card",
+                "minutes": 1.7857142857142856
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "You were promoted",
+                "minutes": 1.3214285714285714
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Practise it today, at work",
+                "minutes": 1.45
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+        "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+        "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+        "minutes": 6.116666666666667,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "Von der Ausführung zum Management",
+            "minutes": 0.9666666666666667,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Jede Revolution, eine Karte",
+                "minutes": 1.9666666666666668
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "Du wurdest befördert",
+                "minutes": 1.5166666666666666
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Üb es heute, bei der Arbeit",
+                "minutes": 1.6666666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ai-token-economy": {
+      "en": {
+        "title": "The AI Token Economy",
+        "caption": "AI can give you and the people you lead super powers, but it comes with hidden managing responsibilities you didn't sign up for.",
+        "description": "A field guide to the token economy: what AI actually costs, why the meter stays invisible, and how to manage context and models efficiently.",
+        "minutes": 0,
+        "sections": [
+          {
+            "id": "motivation",
+            "title": "Motivation",
+            "minutes": 0,
+            "items": [
+              { "id": "motivation--lead-one-upskill-many", "title": "Lead One, Upskill Many", "minutes": 0 },
+              { "id": "motivation--the-four-eras-of-ai", "title": "The Four Eras of AI", "minutes": 0 },
+              { "id": "motivation--the-invisible-invoice", "title": "The Invisible Invoice", "minutes": 0 },
+              { "id": "motivation--outcome-per-euro", "title": "Outcome Per Euro", "minutes": 0 }
+            ]
+          },
+          {
+            "id": "what-is-a-token",
+            "title": "What Is a Token",
+            "minutes": 0,
+            "items": [
+              { "id": "what-is-a-token--live-context-breakdown", "title": "Live Context Breakdown", "minutes": 0 },
+              { "id": "what-is-a-token--cli-vs-web-tool-obscurity", "title": "CLI vs Web Tool Obscurity", "minutes": 0 }
+            ]
+          },
+          {
+            "id": "managing-context",
+            "title": "Managing Context",
+            "minutes": 0,
+            "items": [
+              { "id": "managing-context--the-lost-middle", "title": "The Lost Middle", "minutes": 0 },
+              {
+                "id": "managing-context--the-fullness-gauge-and-levers",
+                "title": "The Fullness Gauge & Levers",
+                "minutes": 0
+              }
+            ]
+          },
+          {
+            "id": "cost-of-agentic-ai",
+            "title": "Cost of Agentic AI",
+            "minutes": 0,
+            "items": [
+              {
+                "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+                "title": "The Compounding Cost Curve",
+                "minutes": 0
+              }
+            ]
+          },
+          { "id": "model-tiers", "title": "Model Tiers", "minutes": 0, "items": [] },
+          { "id": "tools-and-tips", "title": "Tools & Tips", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Die KI-Token-Ökonomie",
+        "caption": "KI kann Ihnen und Ihrem Team Superkräfte verleihen, bringt jedoch versteckte Managementverantwortung mit sich.",
+        "description": "Ein Leitfaden zur Token-Ökonomie: Was KI tatsächlich kostet, warum der Zähler unsichtbar bleibt und wie Sie Kontext und Modelle effizient steuern.",
+        "minutes": 0,
+        "sections": [
+          {
+            "id": "motivation",
+            "title": "Motivation",
+            "minutes": 0,
+            "items": [
+              { "id": "motivation--lead-one-upskill-many", "title": "Einen führen, viele befähigen", "minutes": 0 },
+              { "id": "motivation--the-four-eras-of-ai", "title": "Die vier Epochen der KI", "minutes": 0 },
+              { "id": "motivation--the-invisible-invoice", "title": "Die unsichtbare Rechnung", "minutes": 0 },
+              { "id": "motivation--outcome-per-euro", "title": "Ergebnis pro Euro", "minutes": 0 }
+            ]
+          },
+          {
+            "id": "what-is-a-token",
+            "title": "Was ist ein Token",
+            "minutes": 0,
+            "items": [
+              { "id": "what-is-a-token--live-context-breakdown", "title": "Kontext-Aufschlüsselung", "minutes": 0 },
+              {
+                "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+                "title": "Verschleierung in Web-Tools",
+                "minutes": 0
+              }
+            ]
+          },
+          {
+            "id": "managing-context",
+            "title": "Kontextverwaltung",
+            "minutes": 0,
+            "items": [
+              { "id": "managing-context--the-lost-middle", "title": "Verloren in der Mitte", "minutes": 0 },
+              {
+                "id": "managing-context--the-fullness-gauge-and-levers",
+                "title": "Auslastungsanzeige & Hebel",
+                "minutes": 0
+              }
+            ]
+          },
+          {
+            "id": "cost-of-agentic-ai",
+            "title": "Kosten von agentischer KI",
+            "minutes": 0,
+            "items": [
+              {
+                "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+                "title": "Die kumulierte Kostenkurve",
+                "minutes": 0
+              }
+            ]
+          },
+          { "id": "model-tiers", "title": "Modellstufen", "minutes": 0, "items": [] },
+          { "id": "tools-and-tips", "title": "Werkzeuge & Tipps", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "from-shared-understanding-to-shared-context": {
+      "en": {
+        "title": "From shared understanding to shared context",
+        "caption": "AI makes every station faster, so what you hand the agent decides the result: context engineering is requirements engineering for agents, and an AI interview builds that context for you.",
+        "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat.",
+        "minutes": 16.214285714285715,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "A thought experiment",
+            "minutes": 1.05,
+            "items": [
+              {
+                "id": "a-thought-experiment--what-the-customer-really-wanted",
+                "title": "What the customer really wanted",
+                "minutes": 1.1071428571428572
+              },
+              {
+                "id": "a-thought-experiment--what-happens-with-ai",
+                "title": "What happens with AI",
+                "minutes": 0.7142857142857143
+              },
+              {
+                "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+                "title": "Speed the whole line can carry",
+                "minutes": 0.9142857142857144
+              }
+            ]
+          },
+          {
+            "id": "every-product-is-a-translation",
+            "title": "Why precise and accurate requirements mattered before AI",
+            "minutes": 0.4928571428571429,
+            "items": [
+              {
+                "id": "every-product-is-a-translation--value-was-always-translation",
+                "title": "Value was always translation",
+                "minutes": 0.7428571428571429
+              },
+              {
+                "id": "every-product-is-a-translation--defining-and-building",
+                "title": "Defining and building",
+                "minutes": 0.65
+              },
+              {
+                "id": "every-product-is-a-translation--precision-and-accuracy",
+                "title": "Precision and accuracy",
+                "minutes": 0.9357142857142857
+              }
+            ]
+          },
+          {
+            "id": "context-is-the-requirement",
+            "title": "Context is the requirement",
+            "minutes": 0.7214285714285715,
+            "items": [
+              {
+                "id": "context-is-the-requirement--what-the-ai-actually-sees",
+                "title": "What the AI actually sees",
+                "minutes": 0.5
+              },
+              {
+                "id": "context-is-the-requirement--context-engineering-is-requirements-engineering-for-agents",
+                "title": "Context engineering is requirements engineering for agents",
+                "minutes": 1.1642857142857144
+              },
+              {
+                "id": "context-is-the-requirement--static-and-dynamic-context",
+                "title": "Static and dynamic context",
+                "minutes": 1.0142857142857142
+              },
+              { "id": "context-is-the-requirement--you-run-the-bench", "title": "You run the bench", "minutes": 0.7 },
+              {
+                "id": "context-is-the-requirement--context-rot",
+                "title": "Context rot",
+                "minutes": 1.4357142857142857
+              },
+              {
+                "id": "context-is-the-requirement--keeping-the-bench-clean",
+                "title": "Keeping the bench clean",
+                "minutes": 0.5285714285714285
+              }
+            ]
+          },
+          {
+            "id": "creating-context-for-agents",
+            "title": "Creating context for agents",
+            "minutes": 0.5714285714285714,
+            "items": [
+              {
+                "id": "creating-context-for-agents--meta-prompting",
+                "title": "Meta prompting",
+                "minutes": 0.8357142857142856
+              },
+              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 0.9142857142857144 },
+              { "id": "creating-context-for-agents--brief", "title": "BRIEF", "minutes": 1.2214285714285715 }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Vom geteilten Verständnis zum geteilten Kontext",
+        "caption": "KI macht jede Station schneller, also entscheidet das, was Du dem Agenten übergibst, über das Ergebnis: Context Engineering ist Requirements Engineering für Agenten, und ein KI-Interview baut diesen Kontext für Dich.",
+        "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
+        "minutes": 18.05,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "Ein Gedankenexperiment",
+            "minutes": 1.1333333333333333,
+            "items": [
+              {
+                "id": "a-thought-experiment--what-the-customer-really-wanted",
+                "title": "Was der Kunde wirklich wollte",
+                "minutes": 1.2333333333333334
+              },
+              { "id": "a-thought-experiment--what-happens-with-ai", "title": "Was mit KI passiert", "minutes": 0.775 },
+              {
+                "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+                "title": "Tempo, das das ganze Band trägt",
+                "minutes": 0.95
+              }
+            ]
+          },
+          {
+            "id": "every-product-is-a-translation",
+            "title": "Warum präzise und genaue Anforderungen schon vor der KI zählten",
+            "minutes": 0.5666666666666667,
+            "items": [
+              {
+                "id": "every-product-is-a-translation--value-was-always-translation",
+                "title": "Wert war immer Übersetzung",
+                "minutes": 0.8666666666666667
+              },
+              {
+                "id": "every-product-is-a-translation--defining-and-building",
+                "title": "Festlegen und bauen",
+                "minutes": 0.75
+              },
+              {
+                "id": "every-product-is-a-translation--precision-and-accuracy",
+                "title": "Präzision und Genauigkeit",
+                "minutes": 1.0916666666666668
+              }
+            ]
+          },
+          {
+            "id": "context-is-the-requirement",
+            "title": "Kontext ist die Anforderung",
+            "minutes": 0.7916666666666666,
+            "items": [
+              {
+                "id": "context-is-the-requirement--what-the-ai-actually-sees",
+                "title": "Was die KI wirklich sieht",
+                "minutes": 0.5666666666666667
+              },
+              {
+                "id": "context-is-the-requirement--context-engineering-is-requirements-engineering-for-agents",
+                "title": "Context Engineering ist Requirements Engineering für Agenten",
+                "minutes": 1.2166666666666668
+              },
+              {
+                "id": "context-is-the-requirement--static-and-dynamic-context",
+                "title": "Statischer und dynamischer Kontext",
+                "minutes": 1.1833333333333333
+              },
+              {
+                "id": "context-is-the-requirement--you-run-the-bench",
+                "title": "Du führst die Werkbank",
+                "minutes": 0.7749999999999999
+              },
+              {
+                "id": "context-is-the-requirement--context-rot",
+                "title": "Context Rot",
+                "minutes": 1.5916666666666668
+              },
+              {
+                "id": "context-is-the-requirement--keeping-the-bench-clean",
+                "title": "Die Werkbank sauber halten",
+                "minutes": 0.6083333333333334
+              }
+            ]
+          },
+          {
+            "id": "creating-context-for-agents",
+            "title": "Kontext für Agenten erstellen",
+            "minutes": 0.575,
+            "items": [
+              {
+                "id": "creating-context-for-agents--meta-prompting",
+                "title": "Meta-Prompting",
+                "minutes": 0.9583333333333333
+              },
+              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 1.05 },
+              { "id": "creating-context-for-agents--brief", "title": "BRIEF", "minutes": 1.3666666666666667 }
+            ]
+          }
+        ]
+      }
+    },
+    "maintaining-markdown-for-ai": {
+      "en": {
+        "title": "Maintaining markdown for AI",
+        "caption": "AI collapsed the cost of writing documentation and raised the cost of verifying it. The work moved — and the verifying half is nobody else's job.",
+        "description": "AI collapsed the cost of writing documentation and raised the cost of verifying it. Maintaining markdown for AI: where the effort goes and how to steer the machine half.",
+        "minutes": 9.400000000000002,
+        "sections": [
+          {
+            "id": "markdown-in-ai-workflows",
+            "title": "Markdown in AI workflows",
+            "minutes": 1.2357142857142858,
+            "items": []
+          },
+          { "id": "volume-outruns-review", "title": "Volume outruns review", "minutes": 1.3, "items": [] },
+          {
+            "id": "where-the-effort-goes",
+            "title": "Where the effort goes",
+            "minutes": 0.9,
+            "items": [
+              {
+                "id": "where-the-effort-goes--what-the-machine-verifies",
+                "title": "What the machine verifies",
+                "minutes": 0.7142857142857143
+              },
+              {
+                "id": "where-the-effort-goes--what-ai-accelerates",
+                "title": "What AI accelerates",
+                "minutes": 0.8928571428571429
+              },
+              {
+                "id": "where-the-effort-goes--what-remains-human",
+                "title": "What remains human",
+                "minutes": 0.38571428571428573
+              }
+            ]
+          },
+          { "id": "google-okf", "title": "Google OKF", "minutes": 1.0071428571428571, "items": [] },
+          {
+            "id": "steering-the-ai",
+            "title": "Steering the AI",
+            "minutes": 0.8785714285714286,
+            "items": [
+              {
+                "id": "steering-the-ai--deterministic-core",
+                "title": "Runs on a 100% deterministic core",
+                "minutes": 0.7571428571428571
+              },
+              { "id": "steering-the-ai--live-demo", "title": "Live demo", "minutes": 0.6214285714285714 },
+              { "id": "steering-the-ai--feature-roadmap", "title": "Feature Roadmap", "minutes": 0 }
+            ]
+          },
+          {
+            "id": "the-verifying-half-is-yours",
+            "title": "The verifying half is yours",
+            "minutes": 0.7071428571428572,
+            "items": []
+          }
+        ]
+      },
+      "de": {
+        "title": "Markdown für KI pflegen",
+        "caption": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Die Arbeit hat sich verlagert — und der verifizierende Teil ist die Aufgabe von niemand anderem.",
+        "description": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Markdown für KI pflegen: wohin der Aufwand fließt und wie der maschinelle Teil gesteuert wird.",
+        "minutes": 5.675000000000001,
+        "sections": [
+          {
+            "id": "markdown-in-ai-workflows",
+            "title": "Markdown in KI-Workflows",
+            "minutes": 1.2000000000000002,
+            "items": []
+          },
+          { "id": "volume-outruns-review", "title": "Volumen überholt die Prüfung", "minutes": 0.975, "items": [] },
+          {
+            "id": "where-the-effort-goes",
+            "title": "Wohin der Aufwand fließt",
+            "minutes": 0.5666666666666667,
+            "items": [
+              {
+                "id": "where-the-effort-goes--what-the-machine-verifies",
+                "title": "Was die Maschine verifiziert",
+                "minutes": 0.36666666666666664
+              },
+              { "id": "where-the-effort-goes--what-ai-accelerates", "title": "Was KI beschleunigt", "minutes": 0.45 },
+              {
+                "id": "where-the-effort-goes--what-remains-human",
+                "title": "Was menschlich bleibt",
+                "minutes": 0.35833333333333334
+              }
+            ]
+          },
+          { "id": "google-okf", "title": "Google OKF", "minutes": 0.4083333333333333, "items": [] },
+          {
+            "id": "steering-the-ai",
+            "title": "Die KI steuern",
+            "minutes": 0.375,
+            "items": [
+              {
+                "id": "steering-the-ai--deterministic-core",
+                "title": "Läuft auf einem 100% deterministischen Kern",
+                "minutes": 0.4083333333333333
+              },
+              { "id": "steering-the-ai--live-demo", "title": "Live-Demo", "minutes": 0.3416666666666667 },
+              { "id": "steering-the-ai--feature-roadmap", "title": "Feature-Roadmap", "minutes": 0 }
+            ]
+          },
+          {
+            "id": "the-verifying-half-is-yours",
+            "title": "Der verifizierende Teil liegt bei Ihnen",
+            "minutes": 0.225,
+            "items": []
+          }
+        ]
+      }
+    },
+    "never-too-early-sales": {
+      "en": {
+        "title": "Why it's never too early to start with sales",
+        "caption": "Revenue arrives months after the costs that create it, so by the time you feel you need sales it is already too late: start the pipeline before you need the money.",
+        "description": "Why sales must start long before revenue is needed, and the first concrete steps to build a sales pipeline: find your zero-cash month, keep a list of potential customers, make first contact, and track your conversion rate and sales cycle.",
+        "minutes": 10.321428571428571,
+        "sections": [
+          {
+            "id": "why-watching-cashflow-is-mission-critical",
+            "title": "Why watching cashflow is mission critical",
+            "minutes": 0.9714285714285713,
+            "items": [
+              {
+                "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+                "title": "Watch your cashflow",
+                "minutes": 0.7285714285714286
+              }
+            ]
+          },
+          {
+            "id": "why-sales-is-more-than-just-selling",
+            "title": "Why sales is more than just selling",
+            "minutes": 0.42142857142857143,
+            "items": [
+              {
+                "id": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+                "title": "Sales is more than selling",
+                "minutes": 1
+              }
+            ]
+          },
+          {
+            "id": "how-to-start-doing-sales",
+            "title": "How to start doing sales",
+            "minutes": 0.6428571428571428,
+            "items": [
+              {
+                "id": "how-to-start-doing-sales--stages-of-sale",
+                "title": "Stages of sale",
+                "minutes": 0.8928571428571428
+              },
+              {
+                "id": "how-to-start-doing-sales--pipeline-tools-in-practice",
+                "title": "Pipeline tools in practice",
+                "minutes": 0.6285714285714286
+              },
+              {
+                "id": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+                "title": "How marketing feeds the pipeline",
+                "minutes": 0.5928571428571429
+              },
+              {
+                "id": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+                "title": "Watch your cashflow, revenue pulled in",
+                "minutes": 0.5357142857142857
+              }
+            ]
+          },
+          {
+            "id": "why-building-an-effective-sales-pipeline-takes-time",
+            "title": "Why building an effective sales pipeline takes time",
+            "minutes": 0.3142857142857143,
+            "items": [
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+                "title": "What is a sales pipeline",
+                "minutes": 0.6714285714285715
+              },
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+                "title": "Pipeline by the numbers",
+                "minutes": 0.8285714285714286
+              },
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+                "title": "Why it takes time to ramp up",
+                "minutes": 0.8999999999999999
+              }
+            ]
+          },
+          {
+            "id": "start-before-you-need-the-money",
+            "title": "Start before you need the money",
+            "minutes": 0.2357142857142857,
+            "items": [
+              {
+                "id": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+                "title": "Watch your cashflow, \"Start when?\"",
+                "minutes": 0.9571428571428572
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum es nie zu früh ist, mit dem Vertrieb anzufangen",
+        "caption": "Umsatz kommt Monate nach den Kosten, die ihn erzeugen. Wenn Du merkst, dass Du Vertrieb brauchst, ist es schon zu spät: Bau die Pipeline auf, bevor Du das Geld brauchst.",
+        "description": "Warum Vertrieb lange vor dem Tag beginnen muss, an dem Du Umsatz brauchst, und die ersten konkreten Schritte zu einer Sales-Pipeline: Finde Deinen Monat ohne Cash, pflege eine Liste möglicher Kunden, nimm den ersten Kontakt auf und miss Conversion-Rate und Verkaufszyklus.",
+        "minutes": 12.058333333333332,
+        "sections": [
+          {
+            "id": "why-watching-cashflow-is-mission-critical",
+            "title": "Warum der Blick auf den Cashflow überlebenswichtig ist",
+            "minutes": 1.1083333333333334,
+            "items": [
+              {
+                "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+                "title": "Behalte Deinen Cashflow im Blick",
+                "minutes": 0.9083333333333333
+              }
+            ]
+          },
+          {
+            "id": "why-sales-is-more-than-just-selling",
+            "title": "Warum Vertrieb mehr ist als Verkaufen",
+            "minutes": 0.4833333333333333,
+            "items": [
+              {
+                "id": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+                "title": "Vertrieb ist mehr als Verkaufen",
+                "minutes": 1.1166666666666665
+              }
+            ]
+          },
+          {
+            "id": "how-to-start-doing-sales",
+            "title": "Wie Du mit dem Vertrieb anfängst",
+            "minutes": 0.775,
+            "items": [
+              { "id": "how-to-start-doing-sales--stages-of-sale", "title": "Phasen des Verkaufs", "minutes": 1 },
+              {
+                "id": "how-to-start-doing-sales--pipeline-tools-in-practice",
+                "title": "Pipeline-Tools in der Praxis",
+                "minutes": 0.7000000000000001
+              },
+              {
+                "id": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+                "title": "Wie Marketing die Pipeline füllt",
+                "minutes": 0.675
+              },
+              {
+                "id": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+                "title": "Behalte Deinen Cashflow im Blick, Umsatz vorgezogen",
+                "minutes": 0.7166666666666667
+              }
+            ]
+          },
+          {
+            "id": "why-building-an-effective-sales-pipeline-takes-time",
+            "title": "Warum eine wirksame Sales-Pipeline Zeit braucht",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+                "title": "Was ist eine Sales-Pipeline",
+                "minutes": 0.7916666666666666
+              },
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+                "title": "Die Pipeline in Zahlen",
+                "minutes": 0.9166666666666666
+              },
+              {
+                "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+                "title": "Warum der Hochlauf Zeit braucht",
+                "minutes": 1.0250000000000001
+              }
+            ]
+          },
+          {
+            "id": "start-before-you-need-the-money",
+            "title": "Fang an, bevor Du das Geld brauchst",
+            "minutes": 0.2833333333333333,
+            "items": [
+              {
+                "id": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+                "title": "Behalte Deinen Cashflow im Blick, „Wann anfangen?“",
+                "minutes": 1.1666666666666665
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "onboard-ai-every-time": {
+      "en": {
+        "title": "Treat AI like a brilliant freelancer with amnesia",
+        "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+        "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+        "minutes": 6.95,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "The thought experiment",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "You're the new hire",
+                "minutes": 1.0857142857142856
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Five traits, or you pay the price",
+                "minutes": 0.8071428571428572
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "What happens with one prompt",
+                "minutes": 1.8214285714285714
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "How do we work with this freelancer?",
+            "minutes": 0.16428571428571428,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Your first human-in-the-loop agentic workflow",
+                "minutes": 1.6642857142857144
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Five moves against five traits",
+                "minutes": 0.5928571428571429
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+        "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
+        "description": "Die fünf Eigenschaften, die KI teuer machen, und die fünf Schritte, mit denen Du sie im Griff behältst: Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+        "minutes": 9.141666666666667,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "Das Gedankenexperiment",
+            "minutes": 0.5416666666666666,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "Du bist die neue Kraft",
+                "minutes": 1.4333333333333333
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
+                "minutes": 2.1083333333333334
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "Was ein einziger Prompt bewirkt",
+                "minutes": 2.2333333333333334
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "Wie arbeiten wir mit diesem Freelancer?",
+            "minutes": 0.19166666666666668,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+                "minutes": 1.9083333333333334
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Fünf Schritte gegen fünf Eigenschaften",
+                "minutes": 0.3416666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "what-agentic-workflows-require": {
+      "en": {
+        "title": "What agentic workflows require of people and organisations",
+        "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
+        "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
+        "minutes": 17.450000000000003,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "A thought experiment",
+            "minutes": 0.40714285714285714,
+            "items": [
+              {
+                "id": "a-thought-experiment--the-thought-experiment",
+                "title": "The thought experiment",
+                "minutes": 1.7714285714285714
+              },
+              {
+                "id": "a-thought-experiment--now-with-agents",
+                "title": "Now with agents",
+                "minutes": 0.8357142857142857
+              }
+            ]
+          },
+          {
+            "id": "what-an-agentic-workflow-is",
+            "title": "What an agentic workflow is",
+            "minutes": 0.19285714285714287,
+            "items": [
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agent-is",
+                "title": "What an agent is",
+                "minutes": 0.8714285714285714
+              },
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+                "title": "What an agentic workflow is",
+                "minutes": 0.7928571428571428
+              }
+            ]
+          },
+          {
+            "id": "how-far-you-step-out",
+            "title": "How far you step out",
+            "minutes": 0.30714285714285716,
+            "items": [
+              {
+                "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
+                "title": "In, on or out of the loop",
+                "minutes": 1.2785714285714287
+              },
+              {
+                "id": "how-far-you-step-out--reviewability-sets-the-distance",
+                "title": "Reviewability sets the distance",
+                "minutes": 1.1285714285714286
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-each-person",
+            "title": "What it requires of each person",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
+                "title": "Plan back from the goal",
+                "minutes": 1.8285714285714285
+              },
+              {
+                "id": "what-it-requires-of-each-person--contracts-at-the-seams",
+                "title": "Contracts at the seams",
+                "minutes": 1.3
+              },
+              {
+                "id": "what-it-requires-of-each-person--reviewing-the-result",
+                "title": "Reviewing the result",
+                "minutes": 0.9571428571428571
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-the-organisation",
+            "title": "What it requires of the organisation",
+            "minutes": 0.19285714285714287,
+            "items": [
+              {
+                "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
+                "title": "The org chart trap",
+                "minutes": 1.1071428571428572
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--designed-ai-first",
+                "title": "Designed AI first",
+                "minutes": 0.9285714285714286
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+                "title": "What to look for in your team",
+                "minutes": 1.557142857142857
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
+                "title": "From article to quiz",
+                "minutes": 1.6999999999999997
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
+        "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
+        "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
+        "minutes": 20.16666666666667,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "Ein Gedankenexperiment",
+            "minutes": 0.48333333333333334,
+            "items": [
+              {
+                "id": "a-thought-experiment--the-thought-experiment",
+                "title": "Das Gedankenexperiment",
+                "minutes": 2.083333333333333
+              },
+              { "id": "a-thought-experiment--now-with-agents", "title": "Jetzt mit Agenten", "minutes": 0.925 }
+            ]
+          },
+          {
+            "id": "what-an-agentic-workflow-is",
+            "title": "Was ein agentischer Workflow ist",
+            "minutes": 0.225,
+            "items": [
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agent-is",
+                "title": "Was ein Agent ist",
+                "minutes": 0.9666666666666667
+              },
+              {
+                "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+                "title": "Was ein agentischer Workflow ist",
+                "minutes": 0.8916666666666667
+              }
+            ]
+          },
+          {
+            "id": "how-far-you-step-out",
+            "title": "Wie weit Du Dich herausnimmst",
+            "minutes": 0.3,
+            "items": [
+              {
+                "id": "how-far-you-step-out--in-on-or-out-of-the-loop",
+                "title": "In, an oder außerhalb der Schleife",
+                "minutes": 1.5333333333333332
+              },
+              {
+                "id": "how-far-you-step-out--reviewability-sets-the-distance",
+                "title": "Prüfbarkeit bestimmt den Abstand",
+                "minutes": 1.3166666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-each-person",
+            "title": "Was es von jeder Person verlangt",
+            "minutes": 0.30833333333333335,
+            "items": [
+              {
+                "id": "what-it-requires-of-each-person--plan-back-from-the-goal",
+                "title": "Vom Ziel aus rückwärts planen",
+                "minutes": 2.1416666666666666
+              },
+              {
+                "id": "what-it-requires-of-each-person--contracts-at-the-seams",
+                "title": "Verträge an den Nahtstellen",
+                "minutes": 1.4916666666666667
+              },
+              {
+                "id": "what-it-requires-of-each-person--reviewing-the-result",
+                "title": "Das Ergebnis prüfen",
+                "minutes": 1.0750000000000002
+              }
+            ]
+          },
+          {
+            "id": "what-it-requires-of-the-organisation",
+            "title": "Was es von der Organisation verlangt",
+            "minutes": 0.21666666666666667,
+            "items": [
+              {
+                "id": "what-it-requires-of-the-organisation--the-org-chart-trap",
+                "title": "Die Organigramm-Falle",
+                "minutes": 1.3333333333333335
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--designed-ai-first",
+                "title": "KI-first entworfen",
+                "minutes": 1.1083333333333334
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+                "title": "Worauf Du in Deinem Team achten solltest",
+                "minutes": 1.7833333333333334
+              },
+              {
+                "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
+                "title": "Vom Artikel zum Quiz",
+                "minutes": 1.9833333333333334
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "what-lies-below-the-waterline-of-sustainable-ai-skills": {
+      "en": {
+        "title": "What lies below the waterline of sustainable AI skills",
+        "caption": "Every conversation with AI starts from zero on how you work. A skill hands it your proven procedure on demand, and where you keep the project details, inside the skill or beside it, decides how reusable it is.",
+        "description": "When a task you keep explaining should become a skill, how to write its description as the moment you'd need it, what goes into the skill and what stays in project context, and what a shared skill needs to stay right: an owner, a version, tests and a retirement date.",
+        "minutes": 32.842857142857135,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "A thought experiment",
+            "minutes": 0.8857142857142857,
+            "items": [
+              {
+                "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+                "title": "An AI model that forgets every morning",
+                "minutes": 1.157142857142857
+              },
+              {
+                "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+                "title": "A skill hands the AI your procedure",
+                "minutes": 1.35
+              }
+            ]
+          },
+          {
+            "id": "what-a-skill-is",
+            "title": "What a skill is",
+            "minutes": 0.6428571428571428,
+            "items": [
+              {
+                "id": "what-a-skill-is--a-skill-is-a-written-procedure",
+                "title": "A skill is a folder of instructions",
+                "minutes": 1.3571428571428572
+              },
+              {
+                "id": "what-a-skill-is--three-levels-of-loading",
+                "title": "How AI discovers and reads a skill",
+                "minutes": 1.4071428571428573
+              },
+              {
+                "id": "what-a-skill-is--skills-are-dynamic-context",
+                "title": "Skills are static and dynamic context",
+                "minutes": 1.35
+              },
+              {
+                "id": "what-a-skill-is--instructions-skills-and-connectors",
+                "title": "Instructions, skills and connectors",
+                "minutes": 1.307142857142857
+              },
+              {
+                "id": "what-a-skill-is--two-ways-to-call-a-skill",
+                "title": "Two ways to call a skill",
+                "minutes": 0.9928571428571428
+              }
+            ]
+          },
+          {
+            "id": "when-to-write-one",
+            "title": "When to write one",
+            "minutes": 0.8714285714285713,
+            "items": [
+              {
+                "id": "when-to-write-one--the-third-time-is-the-signal",
+                "title": "The third time is the signal",
+                "minutes": 1.0499999999999998
+              },
+              {
+                "id": "when-to-write-one--not-every-repeat-deserves-a-skill",
+                "title": "Not every repeat deserves a skill",
+                "minutes": 0.9071428571428571
+              },
+              {
+                "id": "when-to-write-one--write-it-from-a-good-run",
+                "title": "Write it from a good run",
+                "minutes": 1.2428571428571429
+              }
+            ]
+          },
+          {
+            "id": "the-label",
+            "title": "The description",
+            "minutes": 0.4285714285714286,
+            "items": [
+              {
+                "id": "the-label--the-description-is-all-the-ai-sees",
+                "title": "The description is the trigger",
+                "minutes": 1.157142857142857
+              },
+              {
+                "id": "the-label--name-the-moment-not-the-content",
+                "title": "Name the trigger, not the content",
+                "minutes": 1.3428571428571427
+              },
+              {
+                "id": "the-label--more-skills-harder-choice",
+                "title": "More skills, harder choice",
+                "minutes": 1.5142857142857142
+              }
+            ]
+          },
+          {
+            "id": "what-goes-inside",
+            "title": "What context goes inside",
+            "minutes": 0.4714285714285714,
+            "items": [
+              {
+                "id": "what-goes-inside--what-goes-where-is-information-architecture",
+                "title": "What context goes where",
+                "minutes": 1.435714285714286
+              },
+              {
+                "id": "what-goes-inside--one-skill-one-job",
+                "title": "A project detail couples a skill to one project",
+                "minutes": 0.6785714285714286
+              },
+              { "id": "what-goes-inside--inside-the-skill", "title": "Inside the skill", "minutes": 0.9071428571428571 }
+            ]
+          },
+          {
+            "id": "what-stays-beside",
+            "title": "What context stays beside",
+            "minutes": 0.4857142857142857,
+            "items": [
+              {
+                "id": "what-stays-beside--beside-the-skill",
+                "title": "Beside the skill",
+                "minutes": 0.9642857142857143
+              },
+              {
+                "id": "what-stays-beside--who-uses-it-and-where",
+                "title": "Who uses it, and where",
+                "minutes": 1.0357142857142858
+              },
+              {
+                "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+                "title": "grill-with-docs keeps context beside the skill",
+                "minutes": 0.7857142857142857
+              }
+            ]
+          },
+          {
+            "id": "sharing-it",
+            "title": "Sharing it",
+            "minutes": 0.3642857142857143,
+            "items": [
+              {
+                "id": "sharing-it--shared-skills-are-knowledge-articles",
+                "title": "Shared skills are knowledge articles",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "sharing-it--who-owns-the-shared-skill-library",
+                "title": "Who owns the shared skill library",
+                "minutes": 0.9214285714285715
+              },
+              {
+                "id": "sharing-it--does-the-skill-make-things-better",
+                "title": "Does the skill make things better?",
+                "minutes": 0.95
+              }
+            ]
+          },
+          {
+            "id": "keeping-it-alive",
+            "title": "Keeping it alive",
+            "minutes": 0.33571428571428574,
+            "items": [
+              {
+                "id": "keeping-it-alive--every-skill-is-a-loan",
+                "title": "Every skill is a loan",
+                "minutes": 0.6571428571428571
+              },
+              {
+                "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+                "title": "The model changes, the skill doesn't",
+                "minutes": 1.2142857142857144
+              },
+              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7214285714285714 },
+              {
+                "id": "keeping-it-alive--the-whole-iceberg",
+                "title": "The whole iceberg",
+                "minutes": 0.8928571428571428
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
+        "caption": "Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt.",
+        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
+        "minutes": 36.7,
+        "sections": [
+          {
+            "id": "a-thought-experiment",
+            "title": "Ein Gedankenexperiment",
+            "minutes": 1.0583333333333333,
+            "items": [
+              {
+                "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+                "title": "Ein KI-Modell, das jeden Morgen vergisst",
+                "minutes": 1.25
+              },
+              {
+                "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+                "title": "Ein Skill gibt der KI Dein Vorgehen",
+                "minutes": 1.4583333333333335
+              }
+            ]
+          },
+          {
+            "id": "what-a-skill-is",
+            "title": "Was ein Skill ist",
+            "minutes": 0.7166666666666667,
+            "items": [
+              {
+                "id": "what-a-skill-is--a-skill-is-a-written-procedure",
+                "title": "Ein Skill ist ein Ordner mit Anweisungen",
+                "minutes": 1.4666666666666666
+              },
+              {
+                "id": "what-a-skill-is--three-levels-of-loading",
+                "title": "Wie die KI einen Skill findet und liest",
+                "minutes": 1.5250000000000001
+              },
+              {
+                "id": "what-a-skill-is--skills-are-dynamic-context",
+                "title": "Skills sind statischer und dynamischer Kontext",
+                "minutes": 1.4083333333333332
+              },
+              {
+                "id": "what-a-skill-is--instructions-skills-and-connectors",
+                "title": "Anweisungen, Skills und Konnektoren",
+                "minutes": 1.4666666666666668
+              },
+              {
+                "id": "what-a-skill-is--two-ways-to-call-a-skill",
+                "title": "Zwei Wege, einen Skill aufzurufen",
+                "minutes": 1.0833333333333335
+              }
+            ]
+          },
+          {
+            "id": "when-to-write-one",
+            "title": "Wann Du einen schreibst",
+            "minutes": 0.9083333333333333,
+            "items": [
+              {
+                "id": "when-to-write-one--the-third-time-is-the-signal",
+                "title": "Beim dritten Mal ist es so weit",
+                "minutes": 1.1
+              },
+              {
+                "id": "when-to-write-one--not-every-repeat-deserves-a-skill",
+                "title": "Nicht jede Wiederholung verdient einen Skill",
+                "minutes": 1.0416666666666667
+              },
+              {
+                "id": "when-to-write-one--write-it-from-a-good-run",
+                "title": "Schreib ihn aus einem guten Durchlauf",
+                "minutes": 1.3916666666666666
+              }
+            ]
+          },
+          {
+            "id": "the-label",
+            "title": "Die Beschreibung",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-label--the-description-is-all-the-ai-sees",
+                "title": "Die Beschreibung ist der Auslöser",
+                "minutes": 1.291666666666667
+              },
+              {
+                "id": "the-label--name-the-moment-not-the-content",
+                "title": "Nenne den Auslöser, nicht den Inhalt",
+                "minutes": 1.575
+              },
+              {
+                "id": "the-label--more-skills-harder-choice",
+                "title": "Mehr Skills, schwerere Wahl",
+                "minutes": 1.666666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-goes-inside",
+            "title": "Welcher Kontext hineingehört",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "what-goes-inside--what-goes-where-is-information-architecture",
+                "title": "Welcher Kontext wohin gehört",
+                "minutes": 1.6166666666666667
+              },
+              {
+                "id": "what-goes-inside--one-skill-one-job",
+                "title": "Ein Projektdetail bindet einen Skill an ein Projekt",
+                "minutes": 0.7416666666666667
+              },
+              { "id": "what-goes-inside--inside-the-skill", "title": "Im Skill", "minutes": 1 }
+            ]
+          },
+          {
+            "id": "what-stays-beside",
+            "title": "Welcher Kontext daneben bleibt",
+            "minutes": 0.5333333333333334,
+            "items": [
+              {
+                "id": "what-stays-beside--beside-the-skill",
+                "title": "Neben dem Skill",
+                "minutes": 1.0916666666666668
+              },
+              {
+                "id": "what-stays-beside--who-uses-it-and-where",
+                "title": "Wer ihn nutzt, und wo",
+                "minutes": 1.1333333333333333
+              },
+              {
+                "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+                "title": "grill-with-docs hält den Kontext neben dem Skill",
+                "minutes": 0.875
+              }
+            ]
+          },
+          {
+            "id": "sharing-it",
+            "title": "Ihn teilen",
+            "minutes": 0.42500000000000004,
+            "items": [
+              {
+                "id": "sharing-it--shared-skills-are-knowledge-articles",
+                "title": "Geteilte Skills sind Wissensartikel",
+                "minutes": 1.2166666666666668
+              },
+              {
+                "id": "sharing-it--who-owns-the-shared-skill-library",
+                "title": "Wem die geteilte Skill-Bibliothek gehört",
+                "minutes": 1.0166666666666666
+              },
+              {
+                "id": "sharing-it--does-the-skill-make-things-better",
+                "title": "Macht der Skill es besser?",
+                "minutes": 1.0833333333333333
+              }
+            ]
+          },
+          {
+            "id": "keeping-it-alive",
+            "title": "Ihn am Leben halten",
+            "minutes": 0.38333333333333336,
+            "items": [
+              {
+                "id": "keeping-it-alive--every-skill-is-a-loan",
+                "title": "Jeder Skill ist ein Kredit",
+                "minutes": 0.8166666666666667
+              },
+              {
+                "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+                "title": "Das Modell ändert sich, der Skill nicht",
+                "minutes": 1.4166666666666665
+              },
+              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8916666666666666 },
+              {
+                "id": "keeping-it-alive--the-whole-iceberg",
+                "title": "Der ganze Eisberg",
+                "minutes": 1.0499999999999998
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "templates": {
+    "episode-template": {
+      "en": {
+        "title": "Episode template",
+        "caption": "The smallest Episode worth copying: two Sections, one Slide with notes and a Voice script, one with only a picture.",
+        "description": "Copy this Episode template to start a new Episode: a Title slide and two Sections of Slides stacked down one page, with notes, a Voice script and a picture-only Slide to learn from.",
+        "minutes": 0.2928571428571428,
+        "sections": [
+          {
+            "id": "foundations",
+            "title": "Foundations",
+            "minutes": 0,
+            "items": [
+              {
+                "id": "foundations--why-a-template",
+                "title": "Why every Episode starts from a copy",
+                "minutes": 0.2928571428571428
+              }
+            ]
+          },
+          {
+            "id": "next-steps",
+            "title": "Next steps",
+            "minutes": 0,
+            "items": [],
+            "unlisted": [{ "id": "next-steps--what-comes-next", "minutes": 0 }]
+          }
+        ]
+      },
+      "de": {
+        "title": "Episoden-Vorlage",
+        "caption": "Die kleinste Episode, die sich zu kopieren lohnt: zwei Abschnitte, eine Folie mit Notizen und Sprechtext, eine nur mit Bild.",
+        "description": "Kopieren Sie diese Episodenvorlage, um eine neue Episode zu beginnen: eine Titelfolie und zwei Abschnitte aus Folien, untereinander auf einer Seite, mit Notizen, Sprechtext und einer reinen Bildfolie zum Lernen.",
+        "minutes": 0.35833333333333334,
+        "sections": [
+          {
+            "id": "foundations",
+            "title": "Grundlagen",
+            "minutes": 0,
+            "items": [
+              {
+                "id": "foundations--why-a-template",
+                "title": "Warum jede Episode als Kopie beginnt",
+                "minutes": 0.35833333333333334
+              }
+            ]
+          },
+          {
+            "id": "next-steps",
+            "title": "Nächste Schritte",
+            "minutes": 0,
+            "items": [],
+            "unlisted": [{ "id": "next-steps--what-comes-next", "minutes": 0 }]
+          }
+        ]
+      }
+    },
+    "explorable-page": {
+      "en": {
+        "title": "Replace with the payoff: what the visitor can do after trying it",
+        "caption": "Replace with one sentence on what the Explorable shows and who it is for.",
+        "description": "Copy this Episode template as the start of a new Explorable page: a title that states the payoff, Why, How and What with cited Speaker notes, then the Explorable with every option on. Every word is a placeholder.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Play", "minutes": 0, "items": [] },
+          { "id": "about", "title": "About", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Ersetze dies durch den Nutzen: was Besucher nach dem Ausprobieren können",
+        "caption": "Ersetze dies durch einen Satz dazu, was das Explorable zeigt und für wen es ist.",
+        "description": "Kopiere dieses Episoden-Template als Start einer neuen Explorable-Seite: ein Titel, der den Nutzen nennt, Warum, Wie und Was mit belegten Speaker Notes, dann der Explorable mit allen Optionen. Jedes Wort ist ein Platzhalter.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Ausprobieren", "minutes": 0, "items": [] },
+          { "id": "about", "title": "Worum es geht", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "grids": {
+      "en": {
+        "title": "Grids",
+        "caption": "Ten reusable Slide layouts that arrange content in a grid, with placeholder words only.",
+        "description": "Master slides for grids: one to three rows by one to three columns, and a bento. Copy one into an Episode and replace the words.",
+        "minutes": 1.7071428571428575,
+        "sections": [
+          {
+            "id": "grids",
+            "title": "Grids",
+            "minutes": 0,
+            "items": [
+              { "id": "grids--grid-1x1", "title": "Grid 1 × 1", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-1x2", "title": "Grid 1 × 2", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-1x3", "title": "Grid 1 × 3", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-2x1", "title": "Grid 2 × 1", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-2x2", "title": "Grid 2 × 2", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-2x3", "title": "Grid 2 × 3", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-3x1", "title": "Grid 3 × 1", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-3x2", "title": "Grid 3 × 2", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-3x3", "title": "Grid 3 × 3", "minutes": 0.17142857142857143 },
+              { "id": "grids--grid-bento", "title": "Bento grid", "minutes": 0.16428571428571428 }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Raster",
+        "caption": "Zehn wiederverwendbare Folien-Layouts, die Inhalte in einem Raster anordnen, nur mit Platzhaltertext.",
+        "description": "Master-Folien für Raster: ein bis drei Zeilen mal ein bis drei Spalten und ein Bento. Kopieren Sie eines in eine Episode und ersetzen Sie die Texte.",
+        "minutes": 1.9833333333333332,
+        "sections": [
+          {
+            "id": "grids",
+            "title": "Raster",
+            "minutes": 0,
+            "items": [
+              { "id": "grids--grid-1x1", "title": "Raster 1 × 1", "minutes": 0.2 },
+              { "id": "grids--grid-1x2", "title": "Raster 1 × 2", "minutes": 0.2 },
+              { "id": "grids--grid-1x3", "title": "Raster 1 × 3", "minutes": 0.2 },
+              { "id": "grids--grid-2x1", "title": "Raster 2 × 1", "minutes": 0.2 },
+              { "id": "grids--grid-2x2", "title": "Raster 2 × 2", "minutes": 0.2 },
+              { "id": "grids--grid-2x3", "title": "Raster 2 × 3", "minutes": 0.2 },
+              { "id": "grids--grid-3x1", "title": "Raster 3 × 1", "minutes": 0.2 },
+              { "id": "grids--grid-3x2", "title": "Raster 3 × 2", "minutes": 0.2 },
+              { "id": "grids--grid-3x3", "title": "Raster 3 × 3", "minutes": 0.2 },
+              { "id": "grids--grid-bento", "title": "Bento-Raster", "minutes": 0.18333333333333332 }
+            ]
+          }
+        ]
+      }
+    },
+    "ice-berg": {
+      "en": {
+        "title": "Ice berg",
+        "caption": "A visual vocabulary, from the surface to the seabed",
+        "description": "Explore the Ice berg Theme: reusable low-poly figures, scenery, poses, moods and motion, with usage examples for your own Slides.",
+        "minutes": 0,
+        "sections": [
+          {
+            "id": "elements",
+            "title": "Visual elements",
+            "minutes": 0,
+            "items": [
+              { "id": "elements--robot", "title": "Robot", "minutes": 0 },
+              { "id": "elements--pilot", "title": "Pilot", "minutes": 0 },
+              { "id": "elements--ship", "title": "Ship", "minutes": 0 },
+              { "id": "elements--captain", "title": "Captain", "minutes": 0 },
+              { "id": "elements--iceberg", "title": "Iceberg", "minutes": 0 },
+              { "id": "elements--sea-life", "title": "Sea life", "minutes": 0 },
+              { "id": "elements--console", "title": "Console", "minutes": 0 },
+              { "id": "elements--sky", "title": "Sky", "minutes": 0 },
+              { "id": "elements--emote", "title": "Emote", "minutes": 0 },
+              { "id": "elements--ai-agent", "title": "AI agent", "minutes": 0 }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Ice berg",
+        "caption": "Eine Bildsprache von der Oberfläche bis zum Meeresboden",
+        "description": "Erkunde das Ice-berg-Theme: wiederverwendbare Low-Poly-Figuren, Kulissen, Posen, Stimmungen und Bewegungen mit Beispielen für deine eigenen Slides.",
+        "minutes": 0,
+        "sections": [
+          {
+            "id": "elements",
+            "title": "Visuelle Elemente",
+            "minutes": 0,
+            "items": [
+              { "id": "elements--robot", "title": "Roboter", "minutes": 0 },
+              { "id": "elements--pilot", "title": "Pilot", "minutes": 0 },
+              { "id": "elements--ship", "title": "Schiff", "minutes": 0 },
+              { "id": "elements--captain", "title": "Kapitänin", "minutes": 0 },
+              { "id": "elements--iceberg", "title": "Eisberg", "minutes": 0 },
+              { "id": "elements--sea-life", "title": "Meeresleben", "minutes": 0 },
+              { "id": "elements--console", "title": "Steuerpult", "minutes": 0 },
+              { "id": "elements--sky", "title": "Himmel", "minutes": 0 },
+              { "id": "elements--emote", "title": "Emote", "minutes": 0 },
+              { "id": "elements--ai-agent", "title": "KI-Agent", "minutes": 0 }
+            ]
+          }
+        ]
+      }
+    },
+    "timelines": {
+      "en": {
+        "title": "Timelines",
+        "caption": "Eight reusable Slide layouts for showing things in time, with placeholder words only.",
+        "description": "Master slides for timelines: a horizontal rail, scroll-snap, a Gantt chart, a centre spine, sticky years, a stepper, a radial cycle and a metro map. Copy one into an Episode and replace the words.",
+        "minutes": 1.3,
+        "sections": [
+          {
+            "id": "timelines",
+            "title": "Timelines",
+            "minutes": 0,
+            "items": [
+              { "id": "timelines--horizontal-rail", "title": "Horizontal rail", "minutes": 0.16428571428571428 },
+              { "id": "timelines--horizontal-scroll-snap", "title": "Scrolling track", "minutes": 0.16428571428571428 },
+              { "id": "timelines--horizontal-gantt", "title": "Phase bars", "minutes": 0.16428571428571428 },
+              { "id": "timelines--vertical-center-spine", "title": "Centre spine", "minutes": 0.16428571428571428 },
+              { "id": "timelines--vertical-sticky-years", "title": "Sticky years", "minutes": 0.16428571428571428 },
+              { "id": "timelines--vertical-stepper", "title": "Stepper", "minutes": 0.15714285714285714 },
+              { "id": "timelines--radial-cycle", "title": "Cycle", "minutes": 0.15714285714285714 },
+              { "id": "timelines--metro-map", "title": "Metro map", "minutes": 0.16428571428571428 }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Zeitleisten",
+        "caption": "Acht wiederverwendbare Folien-Layouts, um Dinge in der Zeit zu zeigen, nur mit Platzhaltertext.",
+        "description": "Master-Folien für Zeitleisten: eine horizontale Schiene, Scroll-Snap, ein Gantt-Diagramm, eine Mittelachse, feste Jahreszahlen, ein Stepper, ein Kreislauf und ein Metro-Plan. Kopieren Sie eine in eine Episode und ersetzen Sie die Texte.",
+        "minutes": 1.4833333333333334,
+        "sections": [
+          {
+            "id": "timelines",
+            "title": "Zeitleisten",
+            "minutes": 0,
+            "items": [
+              { "id": "timelines--horizontal-rail", "title": "Horizontale Schiene", "minutes": 0.19166666666666668 },
+              { "id": "timelines--horizontal-scroll-snap", "title": "Scroll-Leiste", "minutes": 0.18333333333333332 },
+              { "id": "timelines--horizontal-gantt", "title": "Phasenbalken", "minutes": 0.18333333333333332 },
+              { "id": "timelines--vertical-center-spine", "title": "Mittelachse", "minutes": 0.18333333333333332 },
+              { "id": "timelines--vertical-sticky-years", "title": "Haftende Jahre", "minutes": 0.19166666666666668 },
+              { "id": "timelines--vertical-stepper", "title": "Schrittfolge", "minutes": 0.18333333333333332 },
+              { "id": "timelines--radial-cycle", "title": "Zyklus", "minutes": 0.18333333333333332 },
+              { "id": "timelines--metro-map", "title": "Liniennetz", "minutes": 0.18333333333333332 }
+            ]
+          }
+        ]
+      }
+    },
+    "workshop-template": {
+      "en": {
+        "title": "Workshop template",
+        "caption": "The opening Episode of a workshop: copy it once per Event for the agenda, the scope and the organisers.",
+        "description": "Copy this Episode template as the opening Episode of a new Event: title, agenda, what is in and out of scope, and who organises it, with placeholder words to replace.",
+        "minutes": 0,
+        "sections": [
+          { "id": "hook", "title": "Hook", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "In scope",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Out of scope", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Where do you stand?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "About me", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Workshop-Vorlage",
+        "caption": "Die erste Episode eines Workshops: pro Veranstaltung einmal kopieren, für Agenda, Umfang und Organisation.",
+        "description": "Kopieren Sie diese Episodenvorlage als erste Episode einer neuen Veranstaltung: Titel, Agenda, was dazugehört und was nicht, und wer sie organisiert, mit Platzhaltertexten zum Ersetzen.",
+        "minutes": 0,
+        "sections": [
+          { "id": "hook", "title": "Einstieg", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "Im Fokus",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Nicht im Fokus", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Wo steht ihr?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "Über mich", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] }
+        ]
+      }
+    }
+  },
+  "explorablePages": {
+    "ai-capability": {
+      "en": {
+        "title": "AI capability",
+        "caption": "Four Levels of working with AI on one large language model, seen from several angles: the effort each asks you to manage, its productivity increase, how many people work at it, the AI disciplines it adds and where a person sits in its oversight.",
+        "description": "An interactive timeline of four Levels of working with AI, from chat to the emerging factory, with the effort each asks you to manage, its productivity increase against what studies measured, how many people work at it, the AI disciplines it adds, and where a person sits in the loop.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Play", "minutes": 0, "items": [] },
+          { "id": "about", "title": "About", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "KI-Fähigkeiten",
+        "caption": "Vier Stufen der Arbeit mit KI auf einem Large Language Model, aus mehreren Blickwinkeln: welchen Führungsaufwand jede verlangt, ihre Produktivitätssteigerung, wie viele Menschen auf ihr arbeiten, welche KI-Disziplinen sie hinzufügt und wo ein Mensch in ihrer Aufsicht sitzt.",
+        "description": "Eine interaktive Zeitleiste der vier Stufen der Arbeit mit KI, vom Chat bis zur entstehenden Factory: welchen Führungsaufwand jede verlangt, ihre Produktivitätssteigerung neben dem, was Studien gemessen haben, wie viele Menschen auf ihr arbeiten, welche KI-Disziplinen sie hinzufügt und wo ein Mensch in der Schleife sitzt.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Ausprobieren", "minutes": 0, "items": [] },
+          { "id": "about", "title": "Worum es geht", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "context-window": {
+      "en": {
+        "title": "Context window",
+        "caption": "What fills an AI chat's window, step by step, and how much attention each part gets: try every part and control.",
+        "description": "An interactive explanation of the context window: what fills an AI chat, how compaction works and how attention thins out, with every control to try.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Play", "minutes": 0, "items": [] },
+          { "id": "about", "title": "About", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Kontextfenster",
+        "caption": "Was das Fenster eines KI-Chats füllt, Schritt für Schritt, und wie viel Aufmerksamkeit jeder Teil bekommt: Probier jeden Teil und jede Einstellung aus.",
+        "description": "Eine interaktive Erklärung des Kontextfensters: was einen KI-Chat füllt, wie die Verdichtung funktioniert und wie die Aufmerksamkeit abnimmt, mit allen Einstellungen zum Ausprobieren.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Ausprobieren", "minutes": 0, "items": [] },
+          { "id": "about", "title": "Worum es geht", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "human-in-the-loop": {
+      "en": {
+        "title": "Human in the loop",
+        "caption": "A workflow where AI chats do the jobs and you steer: each stage, its handoff and its check.",
+        "description": "An interactive explanation of the human in the loop workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you checking every artifact in between.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Play", "minutes": 0, "items": [] },
+          { "id": "about", "title": "About", "minutes": 0, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Human in the Loop",
+        "caption": "Ein Workflow, in dem KI-Chats die Arbeit machen und Du steuerst: jede Phase, ihre Übergabe und ihre Prüfung.",
+        "description": "Eine interaktive Erklärung des Human-in-the-Loop-Workflows: sechs Phasen von der vagen Aufgabe zum geprüften Bericht, ein frischer Chat für jede Aufgabe, und Du prüfst jedes Ergebnis dazwischen.",
+        "minutes": 0,
+        "sections": [
+          { "id": "play", "title": "Ausprobieren", "minutes": 0, "items": [] },
+          { "id": "about", "title": "Worum es geht", "minutes": 0, "items": [] }
+        ]
+      }
+    },
+    "software-ecology": {
+      "en": {
+        "title": "Software ecology",
+        "caption": "What the customer really wanted: the AI edition.",
+        "description": "An interactive factory of your organization: run it from the tire swing cartoon to AI at one work center, see where the pressure lands, and why clear requirements lower it.",
+        "minutes": 4.128571428571429,
+        "sections": [
+          { "id": "play", "title": "Play", "minutes": 2.6, "items": [] },
+          { "id": "about", "title": "Why, how and what", "minutes": 1.5285714285714287, "items": [] }
+        ]
+      },
+      "de": {
+        "title": "Software-Ökosystem",
+        "caption": "Was der Kunde wirklich wollte: die KI-Ausgabe.",
+        "description": "Eine interaktive Fabrik Deiner Organisation: Lass sie vom Reifenschaukel-Cartoon bis zur KI an einem Arbeitsplatz laufen, sieh, wo der Druck landet, und warum klare Anforderungen ihn senken.",
+        "minutes": 4.6416666666666675,
+        "sections": [
+          { "id": "play", "title": "Ausprobieren", "minutes": 2.825, "items": [] },
+          { "id": "about", "title": "Warum, wie und was", "minutes": 1.8166666666666669, "items": [] }
+        ]
+      }
+    }
+  },
+  "guides": {
+    "setup-ai-agent-and-starter-folder": {
+      "en": {
+        "title": "Get workshop-ready: your AI agent on your laptop",
+        "caption": "You've never opened a terminal. By the end of this page you'll have run your first skill in one.",
+        "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
+        "minutes": 11.492857142857142,
+        "sections": [
+          {
+            "id": "your-terminal",
+            "title": "Your terminal",
+            "minutes": 0.6142857142857143,
+            "items": [
+              { "id": "your-terminal--overview", "title": "Overview", "minutes": 0.7857142857142857 },
+              {
+                "id": "your-terminal--open-your-terminal",
+                "title": "Open your terminal",
+                "minutes": 1.4214285714285713
+              },
+              {
+                "id": "your-terminal--what-youre-looking-at",
+                "title": "What you're looking at",
+                "minutes": 0.9071428571428571
+              }
+            ]
+          },
+          {
+            "id": "your-ai-agent",
+            "title": "Your AI agent",
+            "minutes": 0.22857142857142856,
+            "items": [
+              {
+                "id": "your-ai-agent--install-your-ai-agent",
+                "title": "Install your AI agent",
+                "minutes": 1.7857142857142856
+              }
+            ]
+          },
+          {
+            "id": "your-folder",
+            "title": "Your folder",
+            "minutes": 0.2785714285714286,
+            "items": [
+              {
+                "id": "your-folder--download-and-unzip-the-starter-folder",
+                "title": "Download and unzip the starter folder",
+                "minutes": 0.6214285714285714
+              },
+              {
+                "id": "your-folder--start-the-agent-inside-that-folder",
+                "title": "Start the agent inside that folder",
+                "minutes": 1.3714285714285714
+              },
+              { "id": "your-folder--log-in", "title": "Log in", "minutes": 0.9928571428571429 }
+            ]
+          },
+          {
+            "id": "your-first-skill",
+            "title": "Your first skill",
+            "minutes": 0.2857142857142857,
+            "items": [
+              {
+                "id": "your-first-skill--run-your-first-skill",
+                "title": "Run your first skill",
+                "minutes": 1.1571428571428573
+              }
+            ]
+          },
+          {
+            "id": "the-technical-route",
+            "title": "The technical route",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+                "title": "Set up the Matt Pocock skills yourself",
+                "minutes": 0.75
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop",
+        "caption": "Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt.",
+        "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
+        "minutes": 12.766666666666664,
+        "sections": [
+          {
+            "id": "your-terminal",
+            "title": "Dein Terminal",
+            "minutes": 0.6666666666666667,
+            "items": [
+              { "id": "your-terminal--overview", "title": "Überblick", "minutes": 0.85 },
+              { "id": "your-terminal--open-your-terminal", "title": "Öffne Dein Terminal", "minutes": 1.55 },
+              {
+                "id": "your-terminal--what-youre-looking-at",
+                "title": "Was Du da siehst",
+                "minutes": 1.0166666666666666
+              }
+            ]
+          },
+          {
+            "id": "your-ai-agent",
+            "title": "Dein KI-Agent",
+            "minutes": 0.23333333333333334,
+            "items": [
+              {
+                "id": "your-ai-agent--install-your-ai-agent",
+                "title": "Installiere deinen KI-Agenten",
+                "minutes": 1.9583333333333333
+              }
+            ]
+          },
+          {
+            "id": "your-folder",
+            "title": "Dein Ordner",
+            "minutes": 0.2833333333333333,
+            "items": [
+              {
+                "id": "your-folder--download-and-unzip-the-starter-folder",
+                "title": "Starter-Ordner herunterladen und entpacken",
+                "minutes": 0.7333333333333334
+              },
+              {
+                "id": "your-folder--start-the-agent-inside-that-folder",
+                "title": "Den Agenten in diesem Ordner starten",
+                "minutes": 1.45
+              },
+              { "id": "your-folder--log-in", "title": "Melde dich an", "minutes": 1.0666666666666667 }
+            ]
+          },
+          {
+            "id": "your-first-skill",
+            "title": "Dein erster Skill",
+            "minutes": 0.3333333333333333,
+            "items": [
+              {
+                "id": "your-first-skill--run-your-first-skill",
+                "title": "Deinen ersten Skill ausführen",
+                "minutes": 1.3916666666666666
+              }
+            ]
+          },
+          {
+            "id": "the-technical-route",
+            "title": "Der technische Weg",
+            "minutes": 0.31666666666666665,
+            "items": [
+              {
+                "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+                "title": "Die Matt-Pocock-Skills selbst einrichten",
+                "minutes": 0.9166666666666666
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

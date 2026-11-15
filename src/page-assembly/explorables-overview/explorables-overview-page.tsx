@@ -1,6 +1,6 @@
 import { routeOf } from '@/content-store/catalogue/record-routes';
 import { listedExplorablePages } from '@/content-store/store';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { EXPLORABLE_CARD_ARTWORK } from '@/page-assembly/lib/explorable-card-artwork';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
@@ -14,7 +14,7 @@ import { ExplorableCardView, type ExplorableCard } from './explorable-card';
 function explorableCards(locale: Locale, typeLabel: string): ExplorableCard[] {
   const tagWords = PAGE_WORDS[locale].tags;
   return listedExplorablePages().map(({ page, tags }) => {
-    const { title, description } = compositionOf(page.explorablePage).messages[locale];
+    const { title, description } = summaryOf(page.explorablePage)[locale];
     return {
       slug: page.explorablePage.slug,
       route: routeOf(page),
