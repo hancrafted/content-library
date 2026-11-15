@@ -7,9 +7,10 @@ import {
   techniqueProblems,
   templateProblems,
 } from './workflow-loader-checks.pure.ts';
-import { jobOrderProblems } from './workflow-loader-jobs.pure.ts';
+import { jobOrderProblems, singletonProblems } from './workflow-loader-jobs.pure.ts';
 import { optionalProblems } from './workflow-loader-optional.pure.ts';
-import type { WorkflowFile } from './workflow-schema.types';
+import { fileInMode } from './workflow-mode.pure.ts';
+import { MODES, type WorkflowFile } from './workflow-schema.types.ts';
 import { shapeProblems } from './workflow-shape.pure.ts';
 
 /*
@@ -45,10 +46,25 @@ export function loadWorkflow(source: string): FileResult {
     ...idProblems(file),
     ...techniqueProblems(file),
     ...reviewerProblems(file),
-    ...foreachProblems(file),
-    ...jobOrderProblems(file),
-    ...contentProblems(file),
-    ...optionalProblems(file),
+    ...modeProblems(file),
   ];
-  return problems.length > 0 ? { problems } : { file };
+  const unique = [...new Set(problems)];
+  return unique.length > 0 ? { problems: unique } : { file };
+}
+
+/**
+ * Everything that reads a chain of stages, run on the file as each mode runs it: a stage marked for one mode is checked
+ * only among the stages of that mode, so a dependency on a stage of the other mode is refused. A file with no marked
+ * stage is the same in both modes and is checked once.
+ */
+function modeProblems(file: WorkflowFile): string[] {
+  const marked = file.stages.some((stage) => stage.only !== undefined);
+  const views = marked ? MODES.map((mode) => fileInMode(file, mode)) : [file];
+  return views.flatMap((view) => [
+    ...singletonProblems(view),
+    ...foreachProblems(view),
+    ...jobOrderProblems(view),
+    ...contentProblems(view),
+    ...optionalProblems(view),
+  ]);
 }

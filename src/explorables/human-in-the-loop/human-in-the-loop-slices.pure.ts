@@ -4,7 +4,7 @@ import type { DiagramProps, HumanInTheLoopData } from './human-in-the-loop.types
 import type { ModalProps, ToolbarProps } from './part-props.types';
 import type { DemoProps, DemoState, ProgressActions, ProgressNote } from './progress-controls.types';
 import { offers } from './toolbar-controls.pure';
-import { workflowOf } from './workflow-file-adapter.pure';
+import { workflowInMode, workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, roundsOf as playedRounds, resultsOf, runOf, type Run } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
@@ -93,8 +93,9 @@ function drawnRounds(workflow: Workflow, run: Run): Record<string, number> {
   return Object.fromEntries(counts);
 }
 
-/** The one entry that computes the Run of the shown Workflow, and its view and rounds from that same run. */
-export function showWorkflow(workflow: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
+/** The one entry that computes the Run of the shown Workflow in the current mode (stages marked for the other mode are left out), and its view and rounds from that same run. */
+export function showWorkflow(whole: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
+  const workflow = workflowInMode(whole, demo);
   const run = runOf(workflow.file, { results: slotValues, demo });
   const played = playedRounds(run);
   return {

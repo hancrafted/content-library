@@ -1,3 +1,4 @@
+import { fileInMode, modeOf } from './workflow-mode.pure.ts';
 import { isOptionalTask, producerIdsOf } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
@@ -49,4 +50,10 @@ export function workflowOf(file: WorkflowFile): Workflow {
     stages: file.stages.map((stage, index) => stageOf(file, stage, index)),
     file,
   };
+}
+
+/** The Workflow as the current mode runs it: the stages marked for the other mode are left out, edges and focal job included. */
+export function workflowInMode(workflow: Workflow, demo: boolean): Workflow {
+  const file = fileInMode(workflow.file, modeOf(demo));
+  return file === workflow.file ? workflow : workflowOf(file);
 }

@@ -173,6 +173,8 @@ export interface StageDef {
   readonly learningGoal: string;
   /** The Stages card's text, at most eight words. */
   readonly summary?: string;
+  /** Absent: the stage takes part in both modes. Marked `demo` or `full`, only in that mode: the diagram, run model and counts leave it out in the other. */
+  readonly only?: Mode;
   /** The stage repeats: one round per H3 under an H2 of an earlier output; the jobs of the stage run once per round. */
   readonly foreach?: ForeachDef;
   /** The BRIEF moves the stage applies, in BRIEF order; a stage may apply several or none. */

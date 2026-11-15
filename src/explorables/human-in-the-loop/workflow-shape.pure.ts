@@ -67,11 +67,12 @@ const stage = obj(
     foreach: obj({ over: str, demo: int, item: str }, ['item']),
     moves: list(obj({ letter: enumOf(['B', 'R', 'I', 'E', 'F']), why: str }), 1),
     gate: int,
+    only: enumOf(MODES),
     card: obj({ label: str, lines: list(str), status: str }),
     optional: bool,
     jobs: list(task, 1),
   },
-  ['summary', 'foreach', 'moves', 'gate', 'card', 'optional'],
+  ['summary', 'foreach', 'moves', 'gate', 'only', 'card', 'optional'],
 );
 
 /** The Spec of a whole Workflow file. */

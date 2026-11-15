@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { readTemplate } from './markdown-handoff.pure';
 import { WORKFLOW_IDS, workflowFor } from './workflow-data';
+import { slugOf } from './workflow-foreach.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -42,6 +44,17 @@ const taskShape = (task: TaskDef) => ({
   optional: task.optional ?? false,
 });
 
+/**
+ * What a `foreach.over` points at, as structure: the output and which H2 of its template, by position. The slug is
+ * a word of one language (`categories`, German `kategorien`), so only its place among the H2s must match.
+ */
+const overShape = (file: WorkflowFile, over: string) => {
+  const [output = '', slug = ''] = over.split('#');
+  const key = file.stages.flatMap((stage) => stage.jobs).find((task) => task.output === output)?.template ?? '';
+  const slugs = readTemplate(file.templates[key] ?? '').h2.map(slugOf);
+  return [output, slugs.indexOf(slug)];
+};
+
 /** What must match across the pair. */
 const structureOf = (file: WorkflowFile) => ({
   id: file.id,
@@ -55,9 +68,14 @@ const structureOf = (file: WorkflowFile) => ({
     id: stage.id,
     moves: stage.moves?.map((move) => move.letter),
     gate: stage.gate,
+    only: stage.only,
     summary: Boolean(stage.summary),
     optional: stage.optional ?? false,
-    foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },
+    foreach: stage.foreach && {
+      demo: stage.foreach.demo,
+      item: Boolean(stage.foreach.item),
+      over: overShape(file, stage.foreach.over),
+    },
     card: stage.card?.lines.length,
     jobs: stage.jobs.map(taskShape),
   })),

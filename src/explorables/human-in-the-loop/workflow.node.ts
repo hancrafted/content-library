@@ -1,6 +1,6 @@
 import type { SlotValues } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { joinPrompt } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
-import { workflowOf } from './workflow-file-adapter.pure.ts';
+import { workflowInMode, workflowOf } from './workflow-file-adapter.pure.ts';
 import { loadWorkflow } from './workflow-loader.pure.ts';
 import type { TaskStep } from './workflow-prompts.pure';
 import { roundStep } from './workflow-prompts.pure.ts';
@@ -52,7 +52,8 @@ function requestedStep(job: JobModalView, request: RenderRequest): TaskStep | un
 
 /** The job as the stepper shows it, at the requested level and mode. */
 function jobView(file: WorkflowFile, request: RenderRequest): JobModalView | undefined {
-  const view = workflowView(workflowOf(file), { level: request.level ?? 'simple', demo: request.demo ?? true });
+  const demo = request.demo ?? true;
+  const view = workflowView(workflowInMode(workflowOf(file), demo), { level: request.level ?? 'simple', demo });
   return view.stages.flatMap((stage) => stage.jobs).find((each) => each.id === request.job);
 }
 

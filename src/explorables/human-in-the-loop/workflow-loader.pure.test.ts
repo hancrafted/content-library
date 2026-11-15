@@ -946,4 +946,99 @@ describe('edge cases', () => {
     // ASSERT
     expect(problems).toMatch(/must be a mapping/);
   });
+
+  it('loads two stages that hand on the same output and hold the same gate in opposite modes', () => {
+    // ARRANGE
+    const change = (file: File) => plannedTwice(file);
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages.map((stage) => stage.only)).toEqual(['demo', 'full', undefined]);
+  });
+
+  it('refuses the same output on two stages when they can run together, marked the same or not at all', () => {
+    // ARRANGE
+    const same = (file: File) => plannedTwice(file, { quick: { only: 'full' } });
+    const open = (file: File) => plannedTwice(file, { quick: { only: undefined } });
+    // ACT
+    const problems = [problemsOf(load(same)), problemsOf(load(open))];
+    // ASSERT
+    expect(problems[0]).toContain('The output "plan" is handed on by two tasks.');
+    expect(problems[1]).toContain('The output "plan" is handed on by two tasks.');
+  });
+
+  it('refuses the same gate on two stages that can run together, naming it', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[0]!, { gate: 1 });
+      Object.assign(file.stages[1]!, { gate: 1 });
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('The gate 1 is held by two stages that can run together.');
+  });
+
+  it('still refuses a stage id or a task id used twice across opposite modes', () => {
+    // ARRANGE
+    const stageId = (file: File) => plannedTwice(file, { quick: { id: 'plan' } });
+    const taskId = (file: File) =>
+      plannedTwice(file, { quick: { jobs: [{ ...file.stages[0]!.jobs[0]!, id: 'plan' }] } });
+    // ACT
+    const problems = [problemsOf(load(stageId)), problemsOf(load(taskId))];
+    // ASSERT
+    expect(problems[0]).toContain('The stage id "plan" is used twice.');
+    expect(problems[1]).toContain('The task id "plan" is used twice.');
+  });
+
+  it('checks dependencies per mode: a slot taking an output that exists only in the other mode is refused', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(file.stages[0]!, { only: 'full' });
+      Object.assign(file.stages[0]!.jobs[0]!, { output: 'plan' });
+      Object.assign(file.stages[1]!, { only: 'demo' });
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" repeats over "plan#pieces", but no earlier stage hands on "plan".');
+    expect(problems).toContain('Slot "plan" of task "research" names no output of an earlier stage.');
+  });
+
+  it('reports a problem of a mode-marked stage once, not once per mode', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[1]!.jobs[0]!, { template: 'missing' });
+    // ACT
+    const problems = problemsOf(load(change)).split('\n');
+    // ASSERT
+    expect(problems.filter((line) => line.includes('unknown template "missing"'))).toHaveLength(1);
+  });
+
+  it('refuses an `only` that is neither demo nor full', () => {
+    // ARRANGE
+    const change = (file: File) => Object.assign(file.stages[0]!, { only: 'always' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[0].only is "always", which is not one of demo, full.');
+  });
 });
+
+/**
+ * The Plan stage exists twice, as a quick `demo` take and a thorough `full` one: both hand on `plan`, both hold gate 1.
+ * Research, after them, takes `plan` in either mode.
+ */
+function plannedTwice(file: File, over: { quick?: object; thorough?: object } = {}): void {
+  const [plan] = file.stages;
+  const quick = {
+    ...plan!,
+    id: 'plan-quick',
+    only: 'demo',
+    gate: 1,
+    jobs: [{ ...plan!.jobs[0]!, id: 'plan-quick' }],
+    ...over.quick,
+  };
+  Object.assign(plan!, { only: 'full', gate: 1, ...over.thorough });
+  file.stages.splice(0, 0, quick as never);
+}
