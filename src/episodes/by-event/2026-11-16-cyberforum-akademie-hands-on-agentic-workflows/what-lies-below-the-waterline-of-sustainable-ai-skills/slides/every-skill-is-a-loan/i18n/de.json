@@ -10,7 +10,7 @@
       "month": "Tag eins",
       "term": "Skill geschrieben",
       "scene": "",
-      "chat": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt."
+      "chat": "Illustratives Ziel: fünf Minuten nach einem gelungenen Durchlauf. Das ist der Kredit: Du bekommst das Tempo jetzt."
     },
     "sites": {
       "month": "Wochen später",
@@ -32,7 +32,9 @@
     }
   },
   "coding": {
-    "written": { "lead": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt." },
+    "written": {
+      "lead": "Illustratives Ziel: fünf Minuten nach einem gelungenen Durchlauf. Das ist der Kredit: Du bekommst das Tempo jetzt."
+    },
     "sites": { "lead": "collect-sediment-sample/SKILL.md, Schritt 1" },
     "arm": { "lead": "collect-sediment-sample/SKILL.md, Schritt 3" },
     "overlap": { "lead": "zwei Beschreibungen, zwischen denen der Agent wählt" }
@@ -44,7 +46,7 @@
   "stack": {
     "label": "Ein Skill, über Monate",
     "writing": "schreiben",
-    "writingHint": "fünf Minuten",
+    "writingHint": "Beispiel: fünf Minuten",
     "keeping": "richtig halten",
     "keepingHint": "ein Block pro Korrektur",
     "blocks": {
@@ -84,7 +86,7 @@
       "quick-to-write": {
         "title": "Schnell geschrieben",
         "keywords": "",
-        "script": "Einen Skill schreibst Du in fünf Minuten. Das ist der Kredit: Du bekommst das Tempo jetzt."
+        "script": "Das Ziel hier: einen Skill nach einem gelungenen Durchlauf in fünf Minuten entwerfen – als Beispiel, nicht als Durchschnitt. Das ist der Kredit: Du bekommst das Tempo jetzt."
       },
       "a-running-tab": {
         "title": "Eine laufende Rechnung",
@@ -94,7 +96,7 @@
       "owning-thirty": {
         "title": "Dreißig besitzen",
         "keywords": "",
-        "script": "Dreißig Skills zu schreiben ist leicht. Dreißig zu besitzen ist der schwere Teil, denn die Kosten lagen nie im Schreiben, sondern darin, den Skill richtig zu halten, Monat für Monat."
+        "script": "Dreißig Skills anzulegen mag leicht sein. Dreißig aktuell zu halten, ist schwieriger – die Kosten stecken in der Pflege, Monat für Monat."
       }
     }
   }

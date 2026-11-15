@@ -1,6 +1,6 @@
 {
   "title": "More skills, harder choice",
-  "caption": "Skills that look alike leave the AI guessing; a short list in the project instructions takes the guess away.",
+  "caption": "When a platform uses skill descriptions for discovery, similar ones can be hard to distinguish; a project list can help.",
   "analogy": "Near-twin cards leave the pilot guessing; the list on the wall settles it.",
   "index": {
     "label": "Skill index: 8 skills, each by name and description",
@@ -19,7 +19,7 @@
   "wall": {
     "title": "Project instructions",
     "lead": "In this project, use these three skills:",
-    "pill": "Project instructions, always loaded",
+    "pill": "Project list, if the app loads it",
     "pillCoding": "AGENTS.md or CLAUDE.md"
   },
   "terms": {
@@ -34,7 +34,7 @@
     "instructions": {
       "term": "Project instructions",
       "scene": "the project brief on the wall",
-      "kind": "always loaded; CLAUDE.md in Claude Code, AGENTS.md elsewhere",
+      "kind": "configured files; loading varies by app",
       "line": "A short list there says which three skills to use, so there is no crowded choice."
     }
   },
@@ -111,12 +111,12 @@
       "a-short-list-on-the-wall": {
         "title": "A short list on the wall",
         "keywords": "",
-        "script": "The fix is cheap: a short list in your project instructions, AGENTS.md if you work with a coding agent, that says \"In this project, use these three skills.\" Project instructions are always loaded, so the model no longer has to choose from a crowded index. On our ship, that is a list on the wall."
+        "script": "One possible fix is a short list in project instructions—AGENTS.md in some coding-agent setups—saying, \"In this project, use these three skills.\" If the app includes those instructions in context, they can guide discovery. On our ship, that is a list on the wall."
       },
       "hicks-law": {
         "title": "Hick's law",
         "keywords": "",
-        "script": "People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. I am lending it to the model, so hold it as a picture, not a measurement. What I want you to take from this Slide is the short list: it is short, and it is always loaded."
+        "script": "Hick's law describes people taking longer to choose as the information in a choice grows. Applying that to AI skill selection is an inference, not a measurement. The practical idea here is a short, clear list when the app can use it."
       },
       "name-it-as-an-action": {
         "title": "Name it as an action",

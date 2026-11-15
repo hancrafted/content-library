@@ -1,7 +1,7 @@
 {
   "title": "Nenne den Auslöser, nicht den Inhalt",
   "caption": "Sag, was ein Skill tut und wann er dran ist, in den Worten, die jemand wirklich sagen würde.",
-  "analogy": "Zwei Registerzeilen für dieselbe Karte; nur eine passt zu dem, was der Kapitän sagt.",
+  "analogy": "Zwei Registerzeilen für dieselbe Karte; eine gibt dem Kapitän einen klareren Hinweis.",
   "request": {
     "who": "Deine Bitte, am Tag des Tauchgangs",
     "text": "„Hol hier noch etwas <match>Schlamm</match> <match>hoch</match>, bevor wir weiterfahren.“",
@@ -13,7 +13,7 @@
   },
   "index": {
     "title": "Skill-Register",
-    "note": "Zwei Beschreibungen für denselben Skill; die KI sieht nur diese Zeilen.",
+    "note": "Zwei mögliche Beschreibungen; diese Plattform kann sie vor den vollständigen Anweisungen bereitstellen.",
     "skill": "Sedimentprobe nehmen"
   },
   "content": {
@@ -36,7 +36,7 @@
   "step": "Zweiter Schritt: Schreib die Beschreibung als den Moment, in dem Du ihn brauchst.",
   "footer": {
     "story": "In der Geschichte:",
-    "chat": "Eine Beschreibung sagt, was der Skill tut und wann er dran ist; Claude wählt danach unter womöglich über 100 Skills",
+    "chat": "Eine Beschreibung sagt, was der Skill tut und wann er nützlich ist; Claude Code dokumentiert die Auswahl aus womöglich über 100 Skills danach",
     "coding": "Der Standard: Eine Beschreibung soll sagen, was der Skill tut und wann man ihn nutzt; Anthropic ergänzt konkrete Auslöser und Kontexte"
   },
   "alt": {
@@ -45,7 +45,7 @@
   "notes": {
     "a-description-says-what-and-when": {
       "header": "Eine Beschreibung sagt, was und wann",
-      "description": "Der Standard verlangt, dass eine Beschreibung sagt, was der Skill tut und wann man ihn nutzt, und Stichworte enthält, an denen Agenten passende Aufgaben erkennen [1]. Anthropic ergänzt konkrete Auslöser und Kontexte, weil Claude danach unter womöglich über 100 Skills wählt [2].",
+      "description": "Der Standard verlangt, dass eine Beschreibung sagt, was der Skill tut und wann man ihn nutzt, und Stichworte enthält, an denen Agenten passende Aufgaben erkennen [1]. Anthropic empfiehlt konkrete Auslöser und Kontexte für Claude Code, das anhand von Beschreibungen unter womöglich über 100 Skills auswählen kann [2]. Das ist produktspezifische Empfehlung, kein universeller Suchmechanismus.",
       "sources": {
         "agent-skills-specification": { "title": "Agent Skills, Specification" },
         "anthropic-skill-authoring-best-practices": { "title": "Anthropic, Skill authoring best practices" }
@@ -80,12 +80,12 @@
       "two-labels": {
         "title": "Zwei Etiketten",
         "keywords": "",
-        "script": "Hier sind zwei Beschreibungen für denselben Skill. Die erste nennt den Inhalt, „SOP-07: Umgang mit dem Kerngerät, Schritte 1 bis 9“, und die zweite sagt, was der Skill tut, und nennt den Moment: „Nimmt einen Sedimentkern. Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Die eine sagt nur, was drinsteht, die andere nennt den Auslöser, also wann Du ihn brauchst, und das ist Dein zweiter Schritt: Schreib die Beschreibung als den Moment, in dem Du ihn brauchst."
+        "script": "Hier sind zwei Beschreibungen für denselben Skill. Die erste nennt den Inhalt: „SOP-07: Umgang mit dem Kerngerät, Schritte 1 bis 9“. Die zweite erklärt, was der Skill tut und wann er nützlich sein könnte. Das gibt Menschen – und Plattformen, die Beschreibungen nutzen – einen klareren Hinweis. Dein zweiter Schritt: Beschreib den Moment, in dem Du den Skill brauchst."
       },
       "your-request": {
         "title": "Deine Bitte",
         "keywords": "",
-        "script": "Jetzt ist der Tag des Tauchgangs, und Du tippst: „Hol hier noch etwas Schlamm hoch, bevor wir weiterfahren.“ Nichts in „SOP-07, Schritte 1 bis 9“ sagt dem Modell, wann er gebraucht wird, aber „eine Probe vom Meeresboden“ tut es, also passt nur die Beschreibung des Moments. Schreib sie in den Worten, die Du wirklich sagen würdest."
+        "script": "Jetzt ist der Tag des Tauchgangs, und Du tippst: „Hol hier noch etwas Schlamm hoch, bevor wir weiterfahren.“ „SOP-07, Schritte 1 bis 9“ sagt nicht, wann das Vorgehen nützlich sein könnte; „eine Probe vom Meeresboden“ gibt einen klareren Hinweis. Eine Plattform kann diese Formulierung nutzen, aber das garantiert keine automatische Zuordnung. Schreib sie in den Worten, die Du wirklich sagen würdest."
       },
       "the-closing-line": {
         "title": "Die Schlusszeile",

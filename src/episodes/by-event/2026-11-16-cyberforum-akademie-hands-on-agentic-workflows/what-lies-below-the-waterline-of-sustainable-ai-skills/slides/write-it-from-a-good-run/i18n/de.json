@@ -31,11 +31,11 @@
       "coding": "Die <code>SKILL.md</code>, die sie schreibt, siehst Du unten."
     },
     "nextMorning": {
-      "step": "Das nächste Gespräch beginnt neu",
-      "time": "am nächsten Morgen hat er den Tauchgang vergessen; die Karte hängt an der Wand",
-      "ai": "Der Durchlauf ist vergessen. Der Skill nicht.",
+      "step": "Ein späteres Gespräch beginnt",
+      "time": "in diesem Gedankenexperiment vergisst der Pilot den Tauchgang; die Karte bleibt an der Wand",
+      "ai": "Die App übernimmt dieses Gespräch womöglich nicht; der gespeicherte Skill kann verfügbar bleiben.",
       "greeting": "Freut mich, Sie kennenzulernen.",
-      "coding": "Eine neue Sitzung öffnet mit leerem Kontextfenster; <code>collect-sediment-sample/SKILL.md</code> liegt weiter auf der Platte."
+      "coding": "Eine neue Claude-Code-Sitzung hat einen neuen Gesprächskontext; Projektanweisungen können weiterhin geladen werden, und <code>collect-sediment-sample/SKILL.md</code> bleibt auf der Platte."
     }
   },
   "coding": {
@@ -45,14 +45,14 @@
   },
   "art": {
     "depth": "2 m",
-    "full": "Kontextfenster: voll",
-    "empty": "Kontextfenster: leer"
+    "full": "heutiger Durchlauf im Kontext",
+    "empty": "spätere Anfrage; Kontext der App"
   },
   "alt": {
     "run": "Morgens unter Wasser: Der Roboter hängt am Kabel 2 m über dem Meeresboden, die Lampe an.",
     "interview": "Nachmittags im Kontrollraum: Der Pilot dreht sich von seiner Konsole weg und fragt den Kapitän nach dem Warum; der Kapitän antwortet.",
     "evening": "Abends: Im Fenster geht die Sonne unter; der Pilot sitzt an der Konsole und schreibt die Verfahrenskarte, solange der heutige Tauchgang noch in seinem Kopf ist.",
-    "nextMorning": "Am nächsten Morgen: Die Karte hängt an der Wand; der Pilot begrüßt den Kapitän wie einen Fremden.",
+    "nextMorning": "In diesem Gedankenexperiment hängt die Karte an der Wand; der Pilot begrüßt den Kapitän wie einen Fremden.",
     "logbook": "Logbuchseiten früherer Tauchgänge vom 12., 19. und 26. März."
   },
   "logbook": {
@@ -142,7 +142,7 @@
       "while-he-still-knows": {
         "title": "Solange er es noch weiß",
         "keywords": "",
-        "script": "Dann lass sie den Skill im selben Gespräch schreiben, solange der ganze Durchlauf noch in ihrem Kontextfenster steht. Morgen hat sie es vergessen, und genau damit haben wir angefangen. Das ist also Dein erster Schritt: Nimm eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Durchlauf davon einen Skill. In einem Coding-Agent ist das ein Satz: Bitte ihn, aus diesem Gespräch einen Skill zu machen."
+        "script": "Dann lass sie den Skill im selben Gespräch schreiben, solange der Durchlauf noch im Kontext verfügbar ist. Eine spätere Anfrage enthält dieses Gespräch womöglich nicht, auch wenn eine App Verlauf oder gespeicherte Erinnerungen hinzufügen kann. Der Skill ist ein gespeichertes Vorgehen, keine Änderung am Training oder Gedächtnis des Modells. Such Dir also eine Aufgabe aus, die Du dreimal erklärt hast, und mach aus einem guten Durchlauf einen Skill. In einem Coding-Agent reicht die Bitte, aus diesem Gespräch einen Skill zu machen."
       }
     }
   }

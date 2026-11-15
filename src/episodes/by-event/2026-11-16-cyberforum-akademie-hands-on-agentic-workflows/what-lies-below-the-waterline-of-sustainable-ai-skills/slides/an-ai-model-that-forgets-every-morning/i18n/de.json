@@ -1,6 +1,6 @@
 {
-  "title": "Ein KI-Modell, das jeden Morgen vergisst",
-  "caption": "Solange Du es nicht aufschreibst, fängt jedes neue Gespräch mit KI bei null an, wie Du arbeitest.",
+  "title": "Ein Modell, das im Gedankenexperiment vergisst",
+  "caption": "Eine spätere Anfrage enthält vielleicht nicht, was Du zuvor erklärt hast; was übernommen wird, hängt von der App ab.",
   "strip": "Comicstreifen, fünf Bilder",
   "photo": {
     "label": "An der Wand im Kontrollraum",
@@ -10,24 +10,24 @@
   "days": {
     "d1": {
       "label": "Tag 1 · 07:00",
-      "sessionLabel": "Session 1 · frisches Kontextfenster",
+      "sessionLabel": "Session 1 · kein früherer Chat mitgegeben",
       "captainLine": "Die Sedimentprobe: zuerst 2 m über dem Meeresboden halten …"
     },
     "d2": {
       "label": "Tag 2 · 07:00",
-      "sessionLabel": "Session 2 · frisches Kontextfenster",
+      "sessionLabel": "Session 2 · kein früherer Chat mitgegeben",
       "captainLine": "Die Sedimentprobe, noch mal: zuerst 2 m …"
     },
     "d3": {
       "label": "Tag 3 · 07:00",
-      "sessionLabel": "Session 3 · frisches Kontextfenster",
+      "sessionLabel": "Session 3 · kein früherer Chat mitgegeben",
       "captainLine": "Sedimentprobe nehmen. Schritt eins …"
     }
   },
   "greeting": "Freut mich, Sie kennenzulernen.",
   "questionDay": "Tag 4, bevor er aufwacht",
   "question": "Was würdest Du tun?",
-  "questionBody": "Du hast es der KI hundertmal erklärt. Sie hat es einmal gehört.",
+  "questionBody": "Du hast es oft erklärt; ob die App es übernimmt, ist eine Produktentscheidung.",
   "card": {
     "label": "Ablaufkarte",
     "title": "Titel:",
@@ -35,18 +35,18 @@
     "steps": "Leere Schritte zum Ausfüllen"
   },
   "analogyLead": "In der Geschichte:",
-  "analogy": "Dein Pilot ist das KI-Modell: zehn Jahre Können, keine Erinnerung an gestern.",
+  "analogy": "In diesem Gedankenexperiment steht der Pilot für ein Modell ohne mitgegebenen Gesprächsverlauf; echte Apps können Verlauf oder gespeicherte Erinnerungen hinzufügen.",
   "agent": {
-    "caption": "Claude Code: Jede Session beginnt mit einem frischen Kontextfenster; nur geschriebene Dateien tragen Wissen hinüber."
+    "caption": "Claude Code startet mit einem neuen Sitzungskontext; Projektanweisungen und Dateien können weiterhin Informationen ergänzen."
   },
   "alt": {
-    "photo": "Ein gerahmtes Foto an der Wand im Kontrollraum: Du und der Pilot an Deck des Forschungsschiffs, zehn Jahre Projekte; der Pilot ist das KI-Modell.",
+    "photo": "Ein gerahmtes Foto an der Wand im Kontrollraum: Du und der Pilot an Deck des Forschungsschiffs, zehn Jahre Projekte; der Pilot steht für das trainierte Können des Modells.",
     "morning": "Tag {day}, 07:00 im Kontrollraum: Die Kapitänin erklärt die Sedimentprobe, der Pilot dreht sich von seiner Konsole um und begrüßt sie wie eine Fremde; durchs Fenster steht der Roboter untätig an Deck. {mugs, plural, one {# Kaffeebecher} other {# Kaffeebecher}} auf der Konsole."
   },
   "notes": {
     "each-ai-conversation-starts-fresh": {
-      "header": "Jedes KI-Gespräch beginnt neu: Mollicks vergesslicher Kollege",
-      "description": "Ethan Mollick rät, KI zu behandeln „like an infinitely patient new coworker who forgets everything you tell them each new conversation“, wie einen unendlich geduldigen neuen Kollegen, der in jedem neuen Gespräch alles vergisst [1]. Jede Claude-Code-Session beginnt „with a fresh context window“, und nur geschriebene Dateien tragen Wissen hinüber [2]. „Amnesie“ ist das Wort dieser Episode, nicht Mollicks.",
+      "header": "Mollicks Metapher und das Claude-Code-Beispiel",
+      "description": "Ethan Mollick empfiehlt als Faustregel, KI zu behandeln „like an infinitely patient new coworker who forgets everything you tell them each new conversation“ [1]. Das ist eine Metapher, keine Aussage über jedes Produkt. Anthropic dokumentiert für Claude Code, dass jede Session mit einem neuen Gesprächskontext beginnt; Projektanweisungen und Dateien können weiterhin Kontext liefern [2].",
       "sources": {
         "mollick-good-enough-prompting": {
           "title": "Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24. Nov. 2024)"
@@ -62,12 +62,12 @@
       "three-mornings": {
         "title": "Drei Morgen",
         "keywords": "",
-        "script": "Am nächsten Morgen öffnest Du also ein neues Gespräch, und das Modell weiß nichts mehr von gestern. In unserem Bild begrüßt Dich der Pilot mit „Freut mich, Sie kennenzulernen“, Du erklärst Schritt für Schritt, wie man die Sedimentprobe nimmt, und der Roboter wartet an Deck, während Du redest. Am Morgen darauf dieselbe Begrüßung und dieselbe Erklärung, und am dritten Morgen könntest Du sie im Schlaf aufsagen."
+        "script": "Am nächsten Morgen öffnest Du ein neues Gespräch. In diesem Beispiel gibt die App keinen Verlauf vom Vortag mit. Der Pilot begrüßt Dich mit „Freut mich, Sie kennenzulernen“, Du erklärst die Sedimentprobe, und der Roboter wartet an Deck. Eine echte App kann Chatverlauf oder gespeicherte Erinnerungen übernehmen; in dieser Geschichte lassen wir das beiseite, damit das Wiederholen eines Vorgehens sichtbar wird."
       },
       "the-hook": {
         "title": "Der Haken",
         "keywords": "",
-        "script": "So fühlt sich die Arbeit mit KI heute an, denn jedes Gespräch fängt bei null an, wie Du arbeitest. Du hast es der KI hundertmal erklärt. Sie hat es einmal gehört."
+        "script": "Das kann passieren, wenn eine App ein Vorgehen nicht in eine spätere Anfrage übernimmt. Vielleicht hast Du es oft erklärt, doch im neuen Kontext fehlen diese Erklärungen. Ein gespeicherter Skill ist eine separate Datei, die die App bereitstellen kann; er ändert weder das Training noch das Gedächtnis des Modells."
       },
       "what-would-you-do": {
         "title": "Was würdest Du tun",

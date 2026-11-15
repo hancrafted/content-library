@@ -77,10 +77,9 @@ function Stat({ figure, label }: { figure: string; label: string }) {
 }
 
 /**
- * What happens with AI (Spec Option 2c): the line zoomed in on one station. A strip locates Review among the AI
- * stations; the board below is the bottleneck itself, documents arriving faster and bigger from the AI stations,
- * piling up in front of the human reviewer, and nothing more coming out. On the Slide's entrance, and on every hover
- * or focus of the pile, the documents slide in from the left and stack until the pile stands at 28.
+ * What happens with AI (Spec Option 2c): an illustrative line zoomed in on one station. The report's observed
+ * measures are scoped in the copy; the drawn queue is not a measured count or a causal explanation. On the Slide's
+ * entrance, and on every hover or focus of the pile, the documents slide in from the left and stack until it stands at 28.
  */
 export const whatHappensWithAi = slide({
   slug: 'what-happens-with-ai',

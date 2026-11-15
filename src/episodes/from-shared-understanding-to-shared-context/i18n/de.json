@@ -1,5 +1,5 @@
 {
   "title": "Vom geteilten Verständnis zum geteilten Kontext",
-  "caption": "KI macht jede Station schneller, also entscheidet das, was Du dem Agenten übergibst, über das Ergebnis: Context Engineering ist Requirements Engineering für Agenten, und ein KI-Interview baut diesen Kontext für Dich.",
-  "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen."
+  "caption": "KI kann Arbeit beschleunigen, aber was Du einem Agenten mitgibst, beeinflusst das Ergebnis. Der Vergleich zwischen Context Engineering und Requirements Engineering hilft, ist aber nicht vollständig; ein KI-Interview kann die Übergabe klären.",
+  "description": "Wie Arbeit schneller werden kann, ohne dass dadurch ein besseres Ergebnis garantiert ist, worin sich statischer und dynamischer Kontext unterscheiden, wie Du problematischen Kontext erkennst und wie ein KI-Interview helfen kann, eine brauchbare Übergabe für einen frischen Chat zu erstellen."
 }

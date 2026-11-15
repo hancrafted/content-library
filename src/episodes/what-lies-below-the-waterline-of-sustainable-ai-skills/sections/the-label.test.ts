@@ -63,7 +63,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       'The description',
-      'The description is the trigger',
+      'The description can help discovery',
       'Name the trigger, not the content',
       'More skills, harder choice',
     ];
@@ -80,7 +80,7 @@ describe('success cases', () => {
         {
           title: "The pilot's view",
           script:
-            "Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. So unless you call the skill by name, the description is the trigger: it decides whether the model picks the skill on its own.",
+            "Sit in the model's chair for a second. In this example, the platform makes skill names and descriptions available before loading the full instructions, like a pilot with the index open and every card closed. Some platforms can use that metadata to help discover a skill; the way it is activated depends on the product.",
         },
         {
           title: 'Two entries',
@@ -90,19 +90,19 @@ describe('success cases', () => {
         {
           title: 'Scent',
           script:
-            'Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They found it in people, and I am lending it to the model. So your job is to make the description smell like the task it serves, because that scent is what pulls the trigger.',
+            'Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They studied people; applying the idea to AI skill discovery is an analogy, not their finding. A description that names the task can still help a person or a platform find the right procedure.',
         },
       ],
       [
         {
           title: 'Two labels',
           script:
-            'Here are two descriptions for the same skill. The first names the content, "SOP-07: corer handling, steps 1 to 9", and the second says what the skill does and names the moment, "Takes a sediment core. Use when we reach a new site and need a sample from the seabed". One says only what is inside, the other names the trigger, when you need it, and that is your second step: write the description as the moment you\'d need it.',
+            'Here are two descriptions for the same skill. The first names the content, "SOP-07: corer handling, steps 1 to 9"; the second explains what it does and when it may help. That gives a person—and a platform that uses descriptions—a clearer cue. Your second step: describe the moment you\'d need the skill.',
         },
         {
           title: 'Your request',
           script:
-            'Now it is the day of the dive and you type, "Grab some mud here before we move on." Nothing in "SOP-07, steps 1 to 9" tells the model when it is needed, but "a sample from the seabed" does, so only the moment description matches. Write it in the words you would actually say.',
+            'Now it is the day of the dive and you type, "Grab some mud here before we move on." "SOP-07, steps 1 to 9" does not say when the procedure may help; "a sample from the seabed" gives a clearer cue. A platform might use that wording, but this is not a guarantee of automatic matching. Write it in the words you would actually say.',
         },
         {
           title: 'The closing line',
@@ -119,12 +119,12 @@ describe('success cases', () => {
         {
           title: 'A short list on the wall',
           script:
-            'The fix is cheap: a short list in your project instructions, AGENTS.md if you work with a coding agent, that says "In this project, use these three skills." Project instructions are always loaded, so the model no longer has to choose from a crowded index. On our ship, that is a list on the wall.',
+            'One possible fix is a short list in project instructions—AGENTS.md in some coding-agent setups—saying, "In this project, use these three skills." If the app includes those instructions in context, they can guide discovery. On our ship, that is a list on the wall.',
         },
         {
           title: "Hick's law",
           script:
-            "People have the same trouble: the more the options look alike, the longer it takes to choose, and psychologists call that Hick's law. I am lending it to the model, so hold it as a picture, not a measurement. What I want you to take from this Slide is the short list: it is short, and it is always loaded.",
+            "Hick's law describes people taking longer to choose as the information in a choice grows. Applying that to AI skill selection is an inference, not a measurement. The practical idea here is a short, clear list when the app can use it.",
         },
         {
           title: 'Name it as an action',
@@ -145,7 +145,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       [
-        { header: 'Description carries the whole burden', urls: [OPTIMIZING] },
+        { header: 'Descriptions can help discovery', urls: [OPTIMIZING] },
         { header: 'Descriptions and information scent', urls: [PIROLLI] },
       ],
       [
@@ -338,8 +338,8 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'Die Beschreibung ist der Auslöser',
-        notes: ['Die Beschreibung trägt die ganze Last', 'Beschreibungen und Information Scent'],
+        title: 'Die Beschreibung kann beim Finden helfen',
+        notes: ['Beschreibungen können beim Finden helfen', 'Beschreibungen und Information Scent'],
         segments: ['Der Blick des Piloten', 'Zwei Einträge', 'Die Fährte'],
         empty: [],
       },

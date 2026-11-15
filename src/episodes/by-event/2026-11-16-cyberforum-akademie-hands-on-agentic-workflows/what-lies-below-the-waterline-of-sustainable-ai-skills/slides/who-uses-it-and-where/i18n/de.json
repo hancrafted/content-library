@@ -25,8 +25,8 @@
       }
     }
   },
-  "care": "Pflege",
-  "careLevel": "Pflege {level} von 4",
+  "care": "Pflegeaufwand (Beispiel)",
+  "careLevel": "Beispielstufe {level} von 4",
   "squares": {
     "pp": {
       "head": "Details direkt im Skill",
@@ -44,25 +44,25 @@
       "picture": "dein Werkzeugkasten",
       "coding": {
         "head": "<code>{path}</code>",
-        "sub": "Lädt in jedem Projekt; die Details bleiben in den Dateien des jeweiligen Projekts."
+        "sub": "Eine benutzerweite Einrichtung kann ihn projektübergreifend verfügbar machen; Details bleiben projektspezifisch."
       }
     },
     "sp": {
       "head": "Details in seinen Begleitdateien",
-      "sub": "Gehört dem Projektteam",
+      "sub": "Projektspezifisch; Teamverantwortung ist optional",
       "picture": "der Projektordner",
       "coding": {
         "head": "<code>{path}</code>, ins Repository eingecheckt",
-        "sub": "Erreicht alle, die dort arbeiten; Details in <code>{references}</code>."
+        "sub": "Eine Repository-Kopie kann Mitwirkende erreichen; Details können in <code>{references}</code> liegen."
       }
     },
     "sg": {
-      "head": "Details daneben, mit Verantwortlichem, Version und Evals",
-      "sub": "Mit Verantwortlichem, versioniert und getestet",
+      "head": "Details daneben; ein Team kann Owner, Version und Evals festhalten",
+      "sub": "Optionale Team-Governance",
       "picture": "das Flottenhandbuch",
       "coding": {
         "head": "Ein Plugin oder verwaltete Einstellungen",
-        "sub": "Erreicht ein ganzes Team: Verantwortlicher, Version und Evals, bevor er ausgeliefert wird.",
+        "sub": "Verwaltung oder Plugin kann Skills im Team verteilen; die Governance entscheidet das Team.",
         "picture": "ein Plugin"
       }
     }
@@ -73,19 +73,19 @@
     "personal": "persönlicher Skill",
     "shared": "geteilter Skill"
   },
-  "ownerTag": "Verantwortlich: Vermessungsteam",
+  "ownerTag": "Beispiel: Laborteam",
   "footer": {
     "story": "In der Geschichte:",
     "chat": "Das Etikett stammt von mir: Probier die Matrix an deinen eigenen Skills aus und schau, wo sie bricht.",
-    "coding": "Codex trennt Repository-Ordner von Benutzerordnern auf dieselbe Weise."
+    "coding": "Codex dokumentiert Repository- und Benutzerordner für Skills; andere Produkte unterscheiden sich."
   },
   "alt": {
     "matrix": "Eine Vier-Felder-Matrix. Spalten: projektspezifisch und allgemein; Zeilen: persönlich und geteilt. Persönlich und projektspezifisch: ein offenes Notizbuch mit einer Karte, auf der „Standort 4: 40 m“ gekritzelt steht. Persönlich und allgemein: ein Karteikasten neben dem angehefteten Tauchplan. Geteilt und projektspezifisch: ein Projektordner vor dem Schiff. Geteilt und allgemein: das Flottenhandbuch mit drei Schiffen; ein gestrichelter Weg trägt die Karte aus dem Notizbuch ins Handbuch, wo sie ein Schild mit dem Verantwortlichen bekommt."
   },
   "notes": {
     "where-a-skill-is-stored": {
-      "header": "Wo ein Skill liegt, bestimmt, wer ihn bekommt",
-      "description": "Claude-Code-Skills im Home-Verzeichnis laden \"in every project\", Skills, die in ein Repository eingecheckt sind, erreichen \"everyone who works there\", und Plugins oder verwaltete Einstellungen erreichen \"a whole team\" [1]. Codex trennt Repository-Ordner auf dieselbe Weise von Benutzerordnern [2].",
+      "header": "Der Speicherort kann den Zugriff beeinflussen",
+      "description": "In Claude Code sind Skills im Home-Verzeichnis projektübergreifend verfügbar, Repository-Skills werden mit Mitwirkenden geteilt, und Plugins oder verwaltete Einstellungen können Skills im Team verteilen [1]. Codex dokumentiert ebenfalls Repository- und Benutzerordner für Skills [2]. Das sind Produktbeispiele; Verfügbarkeit und Team-Governance unterscheiden sich.",
       "sources": {
         "claude-code-skills": {
           "title": "Anthropic, Extend Claude with skills (Claude-Code-Dokumentation)"
@@ -127,7 +127,7 @@
       "four-squares": {
         "title": "Vier Felder",
         "keywords": "",
-        "script": "Daraus ergeben sich vier Felder. Persönlich und projektspezifisch: Schreib die Details direkt hinein, das braucht am wenigsten Pflege. Persönlich und allgemein: Halte die Details daneben, das ist dein eigener Werkzeugkasten. Geteilt und projektspezifisch: Die Details können in seinen Begleitdateien liegen, und das Projektteam ist verantwortlich. Geteilt und allgemein: Die Details liegen daneben, mit einem Verantwortlichen, einer Version und Evals. Wenn ein Skill also aus deinem eigenen Notizbuch in die gemeinsame Bibliothek wandert, verliert er seine Projektdetails und bekommt einen Verantwortlichen."
+        "script": "Daraus ergeben sich vier Felder. Persönlich und projektspezifisch: Halte die Details beim Skill. Persönlich und allgemein: Leg wiederverwendbare Details daneben. Geteilt und projektspezifisch: Ein Projekt kann den Skill samt Begleitdateien teilen. Geteilt und allgemein: Ein Team kann ein verwaltetes Paket wählen und Owner, Version und Evaluationen festhalten. Ein geteilter Skill muss seine Projektdetails nicht verlieren – wichtig ist, seinen Geltungsbereich klarzumachen."
       },
       "a-rule-of-thumb": {
         "title": "Eine Faustregel",

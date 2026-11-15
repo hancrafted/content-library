@@ -1,5 +1,5 @@
 {
   "title": "From shared understanding to shared context",
-  "caption": "AI makes every station faster, so what you hand the agent decides the result: context engineering is requirements engineering for agents, and an AI interview builds that context for you.",
-  "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat."
+  "caption": "AI can speed up some work, but what you hand an agent shapes its result. Context engineering offers a useful, imperfect analogy to requirements engineering; an AI interview can help clarify the handover.",
+  "description": "How work can speed up without guaranteeing a better result, how static and dynamic context differ, how to spot context that goes bad, and how an AI interview can help build a useful handover to take into a fresh chat."
 }

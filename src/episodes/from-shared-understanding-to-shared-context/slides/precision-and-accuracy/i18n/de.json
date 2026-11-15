@@ -1,13 +1,13 @@
 {
   "title": "Präzision und Genauigkeit",
-  "caption": "<b>Präzise:</b> Jemand anderes könnte es ohne eine einzige Frage bauen. <b>Genau:</b> Das Ergebnis trifft die Absicht und löst das eigentliche Problem. Du brauchst beides.",
+  "caption": "In dieser Episode heißt <b>präzise</b>: wenige offene Fragen. <b>Genau</b> heißt: Das Ergebnis entspricht der Absicht. Wir verwenden die Begriffe hier als Arbeitsdefinitionen.",
   "axes": {
     "tight": "Eng",
     "loose": "Locker",
     "off": "Verfehlt die Absicht",
     "on": "Trifft die Absicht",
-    "precision": "Nach oben: <b>Präzision</b>, wie wenige Fragen das Blatt offen lässt",
-    "accuracy": "Nach rechts: <b>Genauigkeit</b>, ob es trifft, was der Radfahrer wollte"
+    "precision": "Nach oben: <b>Präzision</b>, wie wenige Fragen offen bleiben",
+    "accuracy": "Nach rechts: <b>Genauigkeit</b>, ob es der Absicht des Radfahrers entspricht"
   },
   "workOrder": "Arbeitsauftrag",
   "atTheBench": "An der Werkbank:",
@@ -63,12 +63,12 @@
       "precision": {
         "title": "Präzision",
         "keywords": "",
-        "script": "Fangen wir mit Präzision an. Ein Dokument ist präzise, wenn jemand anderes es umsetzen könnte, ohne Dir eine einzige Frage zu stellen. Nichts bleibt zu raten."
+        "script": "In diesem Beispiel verwende ich Präzision dafür, wie wenige Fragen der Arbeitsauftrag offen lässt. So sprechen wir hier über Klarheit – nicht als allgemeingültige Definition des Begriffs."
       },
       "accuracy": {
         "title": "Genauigkeit",
         "keywords": "",
-        "script": "Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein enger Cluster heißt: Jeder, der es baut, landet am selben Ort. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt."
+        "script": "Hier bedeutet Genauigkeit, ob das Ergebnis der Absicht des Radfahrers entspricht. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander; Genauigkeit heißt, sie treffen das Bullseye. Eine enge Gruppe kann trotzdem das Ziel verfehlen. Ein klarer Arbeitsauftrag kann also auf das falsche Ergebnis zielen; sorgfältige Ausführung korrigiert die falsche Richtung nicht."
       },
       "art-not-a-science": {
         "title": "Kunst, keine Wissenschaft",

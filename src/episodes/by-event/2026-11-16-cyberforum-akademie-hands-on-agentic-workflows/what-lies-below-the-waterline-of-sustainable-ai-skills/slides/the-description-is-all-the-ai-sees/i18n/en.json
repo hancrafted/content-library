@@ -1,6 +1,6 @@
 {
-  "title": "The description is the trigger",
-  "caption": "The AI sees only the name and description up front, and the description decides when the skill loads.",
+  "title": "The description can help discovery",
+  "caption": "Some platforms use a skill's name and description to help find it; activation depends on the platform.",
   "analogy": "From the pilot's chair: the index is open, every card behind it closed.",
   "task": {
     "text": "We've reached a new site."
@@ -21,8 +21,8 @@
   },
   "pills": {
     "loaded": "loaded: name and description",
-    "loadedCoding": "loaded at startup: name, description",
-    "closed": "behind it, every card: not loaded yet",
+    "loadedCoding": "metadata exposed for discovery",
+    "closed": "instructions not yet loaded in this example",
     "closedCoding": "body: not loaded yet"
   },
   "question": "Two descriptions for the same skill. Which one would you open?",
@@ -48,16 +48,16 @@
   },
   "footer": {
     "story": "In the story:",
-    "quote": "“If the description doesn't convey when the skill is useful, the agent won't know to reach for it.”",
-    "coding": "At startup the agent reads only <code>name</code> and <code>description</code> from each <code>SKILL.md</code>; the body stays closed."
+    "quote": "A clear description can help a platform identify when a skill may be useful.",
+    "coding": "In this Agent Skills pattern, <code>name</code> and <code>description</code> help identify a skill; apps decide how and when to activate it."
   },
   "alt": {
     "scene": "The control room from the pilot's chair. Left, the captain says: We've reached a new site. The pilot sits at the console; through the window, a marker buoy at the new site. Beside him the manual's index is open: four skills, each a name and a one-line description, two of them vague. Behind the index, five procedure cards stand fanned out, shut and greyed."
   },
   "notes": {
     "description-carries-the-whole-burden": {
-      "header": "Description carries the whole burden",
-      "description": "because only name and description load at startup, \"the description carries the entire burden of triggering. If the description doesn't convey when the skill is useful, the agent won't know to reach for it\" [1].",
+      "header": "Descriptions can help discovery",
+      "description": "The Agent Skills guidance recommends descriptions that clearly state when a skill should be used [1]. This supports discovery in systems that use the metadata; it does not mean every platform automatically selects skills by matching the task.",
       "sources": {
         "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
       }
@@ -77,7 +77,7 @@
       "the-pilots-view": {
         "title": "The pilot's view",
         "keywords": "",
-        "script": "Sit in the model's chair for a second. At the start of a task it has every skill's name and description in front of it, and none of the instructions behind them, like a pilot with the index open and every card closed. So unless you call the skill by name, the description is the trigger: it decides whether the model picks the skill on its own."
+        "script": "Sit in the model's chair for a second. In this example, the platform makes skill names and descriptions available before loading the full instructions, like a pilot with the index open and every card closed. Some platforms can use that metadata to help discover a skill; the way it is activated depends on the product."
       },
       "two-entries": {
         "title": "Two entries",
@@ -87,7 +87,7 @@
       "scent": {
         "title": "Scent",
         "keywords": "",
-        "script": "Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They found it in people, and I am lending it to the model. So your job is to make the description smell like the task it serves, because that scent is what pulls the trigger."
+        "script": "Researchers who study how people search call this information scent: the cue on a label that tells you whether it leads where you want to go. They studied people; applying the idea to AI skill discovery is an analogy, not their finding. A description that names the task can still help a person or a platform find the right procedure."
       }
     }
   }

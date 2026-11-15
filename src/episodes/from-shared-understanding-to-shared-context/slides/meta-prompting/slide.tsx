@@ -17,6 +17,8 @@ const EXCHANGE = [
   { slug: 'a1', who: 'human' },
   { slug: 'q2', who: 'ai' },
   { slug: 'a2', who: 'human' },
+  { slug: 'q3', who: 'ai' },
+  { slug: 'a3', who: 'human' },
 ] as const;
 
 /** The work order's rows, in the order the mock reads them. */

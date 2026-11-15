@@ -1,9 +1,9 @@
 {
-  "caption": "AI throws every dart faster. <b>Where they land is set by what you hand the AI (the agent)</b>, and an AI interview sharpens that aim with you.",
-  "label": "A work order sets the aim; AI speeds the throw; every document lands on the bull",
+  "caption": "Imagine an AI-assisted station working faster. <b>What the agent receives can shape where its work lands</b>, and an interview can help clarify that handover.",
+  "label": "The handover sets an aim; AI may speed work; the board shows the intended result",
   "handover": "What you\nhand the AI\n(the agent)",
   "aim": "sets the aim",
   "ai": "AI",
-  "speed": "every throw faster",
+  "speed": "may speed work",
   "intent": "The intent"
 }

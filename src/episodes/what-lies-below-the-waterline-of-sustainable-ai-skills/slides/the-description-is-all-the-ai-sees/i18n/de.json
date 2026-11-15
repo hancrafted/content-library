@@ -1,6 +1,6 @@
 {
-  "title": "Die Beschreibung ist der Auslöser",
-  "caption": "Die KI sieht vorab nur Name und Beschreibung, und die Beschreibung entscheidet, wann der Skill lädt.",
+  "title": "Die Beschreibung kann beim Finden helfen",
+  "caption": "Manche Plattformen nutzen Name und Beschreibung eines Skills bei der Suche; wie er aktiviert wird, hängt vom Produkt ab.",
   "analogy": "Vom Platz des Piloten aus: Das Register ist offen, jede Karte dahinter geschlossen.",
   "task": {
     "text": "Wir sind am neuen Ort."
@@ -21,8 +21,8 @@
   },
   "pills": {
     "loaded": "geladen: Name und Beschreibung",
-    "loadedCoding": "beim Start geladen: name, description",
-    "closed": "dahinter jede Karte: noch nicht geladen",
+    "loadedCoding": "Metadaten für die Suche bereitgestellt",
+    "closed": "Anweisungen in diesem Beispiel noch nicht geladen",
     "closedCoding": "Body: noch nicht geladen"
   },
   "question": "Zwei Beschreibungen für denselben Skill. Welche würdest Du öffnen?",
@@ -48,16 +48,16 @@
   },
   "footer": {
     "story": "In der Geschichte:",
-    "quote": "„Wenn die Beschreibung nicht vermittelt, wann der Skill nützlich ist, weiß der Agent nicht, dass er zu ihm greifen soll.“",
-    "coding": "Beim Start liest der Agent aus jeder <code>SKILL.md</code> nur <code>name</code> und <code>description</code>; der Body bleibt zu."
+    "quote": "Eine klare Beschreibung kann einer Plattform zeigen, wann ein Skill nützlich sein könnte.",
+    "coding": "In diesem Agent-Skills-Muster helfen <code>name</code> und <code>description</code>, einen Skill zu finden; Apps bestimmen, wie und wann sie ihn aktivieren."
   },
   "alt": {
     "scene": "Der Kontrollraum vom Platz des Piloten aus. Links sagt der Kapitän: Wir sind am neuen Ort. Der Pilot sitzt an der Konsole; durchs Fenster eine Markierungsboje am neuen Ort. Neben ihm liegt das Register des Handbuchs offen: vier Skills, jeder mit Namen und einer Zeile Beschreibung, zwei davon vage. Hinter dem Register stehen fünf Ablaufkarten aufgefächert, geschlossen und ausgegraut."
   },
   "notes": {
     "description-carries-the-whole-burden": {
-      "header": "Die Beschreibung trägt die ganze Last",
-      "description": "Weil beim Start nur Name und Beschreibung laden, trägt laut dem Standard die Beschreibung die ganze Last des Auslösens: Vermittelt sie nicht, wann der Skill nützlich ist, weiß der Agent nicht, dass er zu ihm greifen soll [1].",
+      "header": "Beschreibungen können beim Finden helfen",
+      "description": "Die Agent-Skills-Empfehlungen raten zu Beschreibungen, die klar benennen, wann ein Skill eingesetzt werden soll [1]. Das unterstützt die Suche in Systemen, die diese Metadaten nutzen; es bedeutet nicht, dass jede Plattform Skills automatisch anhand der Aufgabe auswählt.",
       "sources": {
         "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
       }
@@ -77,7 +77,7 @@
       "the-pilots-view": {
         "title": "Der Blick des Piloten",
         "keywords": "",
-        "script": "Setz Dich kurz auf den Platz des Modells. Zu Beginn einer Aufgabe hat es von jedem Skill Namen und Beschreibung vor sich, aber keine der Anweisungen dahinter, wie ein Pilot mit offenem Register und lauter geschlossenen Karten. Solange Du den Skill also nicht beim Namen rufst, ist die Beschreibung der Auslöser: Sie entscheidet, ob das Modell den Skill von sich aus wählt."
+        "script": "Setz Dich kurz auf den Platz des Modells. In diesem Beispiel stellt die Plattform Namen und Beschreibungen bereit, bevor sie die vollständigen Anweisungen lädt – wie ein Pilot mit offenem Register und geschlossenen Karten. Manche Plattformen nutzen diese Metadaten bei der Suche nach einem Skill; wie er aktiviert wird, hängt vom Produkt ab."
       },
       "two-entries": {
         "title": "Zwei Einträge",
@@ -87,7 +87,7 @@
       "scent": {
         "title": "Die Fährte",
         "keywords": "",
-        "script": "Forschende, die untersuchen, wie Menschen suchen, nennen das Information Scent, die Informationsfährte: der Hinweis auf einem Etikett, der Dir sagt, ob es dorthin führt, wo Du hinwillst. Gefunden haben sie das bei Menschen, und ich leihe es mir für das Modell. Deine Aufgabe ist also, dass die Beschreibung nach der Aufgabe riecht, der sie dient, denn diese Fährte löst den Skill aus."
+        "script": "Forschende, die untersuchen, wie Menschen suchen, nennen das Information Scent: der Hinweis auf einem Etikett, ob es zum Gesuchten führt. Sie haben Menschen untersucht; die Übertragung auf die Suche nach KI-Skills ist eine Analogie, nicht ihr Forschungsergebnis. Eine Beschreibung, die die Aufgabe benennt, kann trotzdem Menschen oder Plattformen helfen, das passende Vorgehen zu finden."
       }
     }
   }

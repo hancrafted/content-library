@@ -1,6 +1,6 @@
 {
   "title": "Statischer und dynamischer Kontext",
-  "caption": "Statisch wird vor der Schicht eingerichtet, dynamisch kommt währenddessen dazu: <b>Beides landet auf derselben Werkbank.</b>",
+  "caption": "Statischer Kontext wird vor der Schicht eingerichtet; dynamischer kann währenddessen abgerufen werden. Du kannst Quellen begrenzen und prüfen, was dazukommt: <b>Beides landet auf derselben Werkbank.</b>",
   "before": {
     "time": "07:00",
     "label": "Vor der Schicht",
@@ -28,7 +28,7 @@
   "notes": {
     "dynamic-means-loaded-at-run-time": {
       "header": "Dynamisch heißt: zur Laufzeit geladen",
-      "description": "Agenten halten leichte Verweise wie Dateipfade und Links bereit und laden Daten erst zur Laufzeit mit Werkzeugen in den Kontext, statt alles vorab zu laden [1].",
+      "description": "Agenten können leichte Verweise wie Dateipfade und Links bereithalten und ausgewählte Daten erst während der Arbeit mit Werkzeugen in den Kontext laden, statt alles vorab zu laden [1]. Welche Quellen erreichbar sind, hängt von der Einrichtung des Agenten ab; Menschen können den Zugriff begrenzen und abgerufenes Material prüfen.",
       "sources": {
         "anthropic-effective-context-engineering": {
           "title": "Anthropic, Effective context engineering for AI agents"
@@ -46,12 +46,12 @@
       "during-the-shift": {
         "title": "Während der Schicht",
         "keywords": "",
-        "script": "Dynamischer Kontext ist das, was während der Schicht dazukommt. Jemand holt Teile aus dem Lager, ruft einen Lieferanten an, öffnet die Mappe zum aktuellen Auftrag. Für einen Agenten heißt das: Retrieval, Websuche und Dein Projektordner, die er sich selbst holt, während er arbeitet."
+        "script": "Dynamischer Kontext sind Informationen, die während der Arbeit abgerufen werden. In unserem Beispiel holt jemand Teile, kontaktiert einen Lieferanten oder öffnet die Mappe zum Auftrag. Ein Agent kann über Werkzeuge Material abrufen, während er arbeitet. Du kannst die erreichbaren Quellen begrenzen und prüfen, was er abruft; dafür musst Du nicht jeden Schritt beaufsichtigen."
       },
       "why-it-matters": {
         "title": "Warum das wichtig ist",
         "keywords": "",
-        "script": "Warum ist der Unterschied wichtig? Weil beides auf derselben Werkbank landet. Die KI kann die Anweisung, die Du geschrieben hast, nicht von der Kiste unterscheiden, die jemand abgestellt hat. Die Werkbank muss also halten, egal, auf welchem Weg etwas ankommt. Den statischen Teil schreibst Du selbst, also kannst Du ihn prüfen. Dynamisches Material kommt ungebeten, also prüfe, was es mitbringt."
+        "script": "Warum ist der Unterschied wichtig? Beide Arten von Kontext können die Arbeit beeinflussen. Die KI unterscheidet womöglich nicht zwischen Deiner Anweisung und Material, das sie unterwegs abruft. Überlege deshalb, worauf sie zugreifen kann. Du kannst das abgerufene Material und das Ergebnis prüfen, ohne jeden Schritt zu beobachten."
       }
     }
   }

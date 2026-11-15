@@ -1,6 +1,6 @@
 {
   "title": "The model changes, the skill doesn't",
-  "caption": "A model update changes who reads your skill, so a skill that worked yesterday can behave differently today.",
+  "caption": "A model or agent update may change how a skill behaves; the same text can produce different results.",
   "analogy": "Same card, two dives, two depths.",
   "story": "In the story:",
   "card": {
@@ -13,7 +13,7 @@
   "halves": {
     "update": {
       "term": "Model update",
-      "text": "Your provider ships a new version of the model. The skill keeps the same words, and the same instruction now gives a different result.",
+      "text": "Your provider ships a new model version. The skill keeps the same words, and an instruction may now produce a different result.",
       "coding": "The same <code>collect-sediment-sample/SKILL.md</code>, a new model version reading it.",
       "changed": "model",
       "changedValue": "new version"
@@ -93,7 +93,7 @@
       "not-the-only-pilot": {
         "title": "Not the only pilot",
         "keywords": "",
-        "script": "There is one more thing that changes under your skill, and you do not control it: the model that reads it. Every AI model has the condition we started with, and each AI provider trains its own, the way each pilot school trains its own pilots. So the reader of your skill is never fixed."
+        "script": "One more thing can change how your skill behaves: the model or agent that reads it. Providers train different models, like different pilot schools training their own pilots. The reader can change, so test the skill in the product and setup where you plan to use it."
       },
       "update-and-switch": {
         "title": "Update and switch",

@@ -67,15 +67,7 @@ describe('success cases', () => {
   it('names the handover, the aim, the AI, the speed and the intent in English', () => {
     // ARRANGE
     // Han's proofread names the agent by its everyday word first: the handover reads "What you hand the AI (the agent)".
-    const expected = [
-      'The intent',
-      'What you',
-      'hand the AI',
-      '(the agent)',
-      'sets the aim',
-      'AI',
-      'every throw faster',
-    ];
+    const expected = ['The intent', 'What you', 'hand the AI', '(the agent)', 'sets the aim', 'AI', 'may speed work'];
     // ACT
     const $ = sceneOf('en');
     const words = $('text, tspan')

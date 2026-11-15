@@ -1,6 +1,6 @@
 {
   "title": "Mehr Skills, schwerere Wahl",
-  "caption": "Skills, die sich ähneln, lassen die KI raten; eine kurze Liste in den Projektanweisungen nimmt ihr das Raten ab.",
+  "caption": "Wenn eine Plattform Beschreibungen zur Skill-Suche nutzt, sind ähnliche Skills schwer zu unterscheiden; eine Projektliste kann helfen.",
   "analogy": "Fast gleiche Karten lassen den Piloten raten; die Liste an der Wand entscheidet.",
   "index": {
     "label": "Skill-Register: 8 Skills, jeder mit Namen und Beschreibung",
@@ -19,7 +19,7 @@
   "wall": {
     "title": "Projektanweisungen",
     "lead": "In diesem Projekt nutzen wir diese drei Skills:",
-    "pill": "Projektanweisungen, immer geladen",
+    "pill": "Projektliste, sofern die App sie lädt",
     "pillCoding": "AGENTS.md oder CLAUDE.md"
   },
   "terms": {
@@ -34,7 +34,7 @@
     "instructions": {
       "term": "Projektanweisungen",
       "scene": "das Projektbriefing an der Wand",
-      "kind": "immer geladen; CLAUDE.md in Claude Code, sonst AGENTS.md",
+      "kind": "konfigurierte Dateien; das Laden hängt von der App ab",
       "line": "Eine kurze Liste dort sagt, welche drei Skills gelten, also gibt es keine überfüllte Wahl."
     }
   },
@@ -111,12 +111,12 @@
       "a-short-list-on-the-wall": {
         "title": "Eine kurze Liste an der Wand",
         "keywords": "",
-        "script": "Die Abhilfe ist billig: eine kurze Liste in Deinen Projektanweisungen, AGENTS.md, wenn Du mit einem Coding-Agenten arbeitest, die sagt: „In diesem Projekt nutzen wir diese drei Skills.“ Projektanweisungen sind immer geladen, also muss das Modell nicht mehr aus einem überfüllten Register wählen. Auf unserem Schiff ist das eine Liste an der Wand."
+        "script": "Eine mögliche Abhilfe ist eine kurze Liste in den Projektanweisungen – in manchen Coding-Agent-Setups etwa in AGENTS.md – mit dem Satz: „In diesem Projekt nutzen wir diese drei Skills.“ Wenn die App diese Anweisungen in den Kontext übernimmt, können sie bei der Suche helfen. Auf unserem Schiff ist das eine Liste an der Wand."
       },
       "hicks-law": {
         "title": "Das Hick'sche Gesetz",
         "keywords": "",
-        "script": "Menschen geht es genauso: Je ähnlicher sich die Optionen sind, desto länger dauert die Wahl, und Psychologen nennen das das Hick'sche Gesetz. Ich leihe es mir für das Modell, also nimm es als Bild, nicht als Messung. Was Du von dieser Slide mitnehmen sollst, ist die kurze Liste: Sie ist kurz, und sie ist immer geladen."
+        "script": "Das Hick'sche Gesetz beschreibt, dass Menschen länger für eine Wahl brauchen, wenn die Informationsmenge der Optionen wächst. Die Übertragung auf die Auswahl von KI-Skills ist eine Schlussfolgerung, keine Messung. Die praktische Idee hier: eine kurze, klare Liste, sofern die App sie nutzen kann."
       },
       "name-it-as-an-action": {
         "title": "Benenne ihn als Tätigkeit",

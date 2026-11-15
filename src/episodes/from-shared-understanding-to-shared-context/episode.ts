@@ -8,10 +8,10 @@ import { everyProductIsATranslationSection } from './sections/every-product-is-a
 import { hero } from './slides/hero/slide';
 
 /*
- * "From shared understanding to shared context": AI makes every station faster, so what you hand the agent decides
- * the result; context engineering is requirements engineering for agents, and an AI interview builds that context.
- * Built from the approved Spec under docs/episodes/from-shared-understanding-to-shared-context/, its Title slide the
- * picked Option 0c, the dartboard. Upcoming until its video is live.
+ * "From shared understanding to shared context": what an agent receives can shape its work; context engineering
+ * offers a useful but imperfect analogy to requirements engineering, and an AI interview can help clarify a handover.
+ * Built from the Spec and its subsequent content corrections under docs/episodes/from-shared-understanding-to-shared-context/,
+ * its Title slide the picked Option 0c, the dartboard. Upcoming until its video is live.
  *
  * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
  * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.

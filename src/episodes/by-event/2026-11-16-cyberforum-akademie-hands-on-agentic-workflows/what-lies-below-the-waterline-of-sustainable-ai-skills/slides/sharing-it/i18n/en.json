@@ -29,10 +29,10 @@
   },
   "gauge": "Depth gauge",
   "place": "Section {number} of {total}",
-  "aiStatement": "A shared skill needs an owner, a version, a review date",
-  "owner": "Owner: Lab team · v1.3 · review March",
+  "aiStatement": "A team may track a shared skill's owner, version and review plan",
+  "owner": "Example convention: Lab team · v1.3 · review March",
   "analogy": "The card in the institute's fleet manual.",
-  "agent": "metadata: owner, version, review date",
+  "agent": "optional metadata: owner, version, review plan",
   "voiceScript": {
     "segments": {
       "midnight": {
@@ -43,7 +43,7 @@
       "three-jobs": {
         "title": "Three jobs",
         "keywords": "",
-        "script": "Three jobs wait down here. Give the skill an owner and a version, decide who looks after the shared library, and test that the skill actually helps."
+        "script": "Three jobs wait down here. A team may choose an owner and version, decide how to maintain its shared library, and test whether a skill actually helps."
       }
     }
   }

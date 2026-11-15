@@ -1,6 +1,6 @@
 {
   "title": "Shared skills are knowledge articles",
-  "caption": "A shared skill needs an owner, a version and a review date, as Anthropic's enterprise guidance asks for every skill.",
+  "caption": "A team may track an owner, version and review plan for a shared skill; these fields are a governance choice, not part of the format.",
   "analogy": "Your notebook card, and the same card in the institute's fleet manual, like a company knowledge article.",
   "pills": {
     "personal": "Personal skill",
@@ -47,8 +47,8 @@
     }
   },
   "runs": "runs version",
-  "personalNote": "Personal skills skip this until you share them.",
-  "thirdStep": "Third step: before sharing a skill, decide where the project details live, and give it an owner.",
+  "personalNote": "Example team convention; personal skills may not need these fields.",
+  "thirdStep": "Third step: before sharing, decide where project details live; a team can also name an owner.",
   "formatNote": "The Agent Skills format has no owner, version or review-date field; its optional <code>metadata</code> map holds them by convention.",
   "footer": {
     "story": "In the story:"
@@ -58,8 +58,8 @@
   },
   "notes": {
     "a-skill-registry-entry": {
-      "header": "A skill registry entry",
-      "description": "Anthropic's enterprise guidance says to keep a registry entry per skill with purpose, owner (\"Team or individual responsible for maintenance\"), version, dependencies and evaluation status including the last evaluation date [1].",
+      "header": "An example skill registry entry",
+      "description": "Anthropic's enterprise guidance recommends a registry entry per skill with purpose, owner (\"Team or individual responsible for maintenance\"), version, dependencies and evaluation status including the last evaluation date [1]. This is enterprise guidance, not a requirement of the Agent Skills format.",
       "sources": {
         "anthropic-skills-for-enterprise": {
           "title": "Anthropic, Skills for enterprise"
@@ -67,8 +67,8 @@
       }
     },
     "a-skill-review-date-is-an-adaptation": {
-      "header": "A skill review date is an adaptation",
-      "description": "Knowledge-Centered Service does not review on a schedule: \"Let reuse of Not Validated articles be the review\" [1], and the page does not use the word \"owner\". Owner, version and a calendar review date combine KCS and Anthropic's guidance; no source defines them as a rule for skills.",
+      "header": "A scheduled review is one team's choice",
+      "description": "Knowledge-Centered Service does not prescribe a calendar review: \"Let reuse of Not Validated articles be the review\" [1], and the page does not use the word \"owner\". A team may adapt owner, version and a review date to its needs; no source defines them as mandatory fields for every shared skill.",
       "sources": {
         "kcs-v6-article-state": {
           "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
@@ -98,12 +98,12 @@
       "into-the-fleet-manual": {
         "title": "Into the fleet manual",
         "keywords": "",
-        "script": "Once you share it into your team's skill library, the fleet manual on our ship, it needs what any company knowledge article has: an owner, a version, and a date for its next review. It is the same skill with a control block on top, and your personal skills can skip this until you share them."
+        "script": "If a team shares it in a library—the fleet manual on our ship—it may choose to add governance details such as an owner, version and review plan. Those fields are a team convention, not a universal requirement, and the Agent Skills format does not define them."
       },
       "why": {
         "title": "Why",
         "keywords": "",
-        "script": "Why bother? Because once it is shared, one author's edit changes what the model does for everyone who runs it, and nobody knows whom to ask when it goes wrong. That is your third step: before you share a skill, decide where the project details live, and give it an owner."
+        "script": "Why bother? A shared edit can affect everyone using that version, so a team may want to know who maintains it and where project details live. That is your third step: decide where those details belong; your team can name an owner if that helps."
       }
     }
   }

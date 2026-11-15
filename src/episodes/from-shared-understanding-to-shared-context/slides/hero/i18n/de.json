@@ -1,9 +1,9 @@
 {
-  "caption": "KI wirft jeden Pfeil schneller. <b>Wo sie landen, entscheidet das, was Du der KI (dem Agenten) übergibst</b>, und ein KI-Interview schärft dieses Ziel mit Dir.",
-  "label": "Ein Arbeitsauftrag setzt das Ziel; KI beschleunigt den Wurf; jedes Dokument landet im Bullseye",
+  "caption": "Stell Dir eine Station vor, an der KI die Arbeit beschleunigt. <b>Was der Agent erhält, kann beeinflussen, wo seine Arbeit landet</b>; ein Interview kann helfen, die Übergabe zu klären.",
+  "label": "Die Übergabe gibt ein Ziel vor; KI kann Arbeit beschleunigen; die Scheibe zeigt das gewünschte Ergebnis",
   "handover": "Was Du der KI\n(dem Agenten)\nübergibst",
   "aim": "setzt das Ziel",
   "ai": "KI",
-  "speed": "jeder Wurf schneller",
+  "speed": "kann Arbeit beschleunigen",
   "intent": "Die Absicht"
 }

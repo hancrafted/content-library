@@ -65,7 +65,7 @@ function TripLabel({ end, children }: { readonly end: 'start' | 'arrival'; reado
 /**
  * "Who uses it, and where" (Spec Option 18a): the skill scope matrix, a rule of thumb. Keeps `grid-2x2` as picture
  * squares with the axis heads outside; keeps `motion: local`: one card travels once along the dashed path from the
- * notebook into the fleet manual, where the owner tag swings on.
+ * notebook into the fleet manual, where an example owner tag swings on.
  */
 export const whoUsesItAndWhere = slide({
   slug: 'who-uses-it-and-where',

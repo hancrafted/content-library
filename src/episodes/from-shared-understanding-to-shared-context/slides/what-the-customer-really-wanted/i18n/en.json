@@ -1,6 +1,6 @@
 {
   "title": "What the customer really wanted",
-  "caption": "AI doesn’t build the right swing, but it can build the <b>wrong one ten times faster</b>.",
+  "caption": "AI does not guarantee the right result. <b>A wrong handover can still lead to a wrong result—sometimes faster.</b>",
   "notes": {
     "why-the-line-gets-out-of-balance": {
       "header": "Why the line gets out of balance",
@@ -17,17 +17,17 @@
       "the-hook": {
         "title": "The Hook",
         "keywords": "",
-        "script": "That is the sentence from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it."
+        "script": "That is the point from a moment ago: a wrong swing can be built faster. This is an illustration, not a measured promise. Keep it in mind as we look at what can shape the result and what you can do about it."
       },
       "cartoon-to-balanced-line": {
         "title": "Cartoon to balanced line",
         "keywords": "",
-        "script": "Now picture the cartoon turning into a real factory line. Input comes in at a constant rate, every station keeps pace with the next, the output is steady and the quality is high. If this was how your organization worked, you would not need this Episode."
+        "script": "Now picture the cartoon turning into a real factory line. Input comes in at a steady rate, stations keep pace, and the output is steady. If work flowed this smoothly in your organization, there might be less to solve here."
       },
       "reality": {
         "title": "Reality",
         "keywords": "",
-        "script": "But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. Efficiency, effectiveness and multiplication are the three dials on this line: turn them all up, and the line stops flowing. So look at the line you work in and ask yourself: which station is yours?"
+        "script": "Real work does not always flow like the cartoon. A change at one station can create a queue elsewhere, but the effect depends on the work. Trying to speed up every step does not guarantee better flow. Look at the line you work in and ask yourself: which station is yours?"
       }
     }
   }

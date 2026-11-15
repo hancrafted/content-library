@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { contextIsTheRequirementSection } from './context-is-the-requirement';
 
 /*
- * Section 3 of "From shared understanding to shared context", "Context is the requirement", as the approved Spec
+ * Section 3 of "From shared understanding to shared context", "Context and requirements", as revised in the Spec
  * gives it: Slides 7 to 12 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context
  * marker wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one
  * interface the page reads a Slide by: localized on the shared Slide header.
@@ -59,9 +59,9 @@ describe('success cases', () => {
   it('lists Slides 7 to 12 after the section slide, in Spec order, titled by their Spec h3', () => {
     // ARRANGE
     const expected = [
-      'Context is the requirement',
+      'Context and requirements',
       'What the AI actually sees',
-      'Context engineering is requirements engineering for agents',
+      'Context engineering and requirements: a useful analogy',
       'Static and dynamic context',
       'You run the bench',
       'Context rot',
@@ -120,7 +120,7 @@ describe('success cases', () => {
         'Where the parallel stops',
       ],
       ['Dynamic means loaded at run time'],
-      ['More is not safer'],
+      ['A result from one GPT-4o test'],
       ['Length alone does part of the damage', 'The four names', 'Credit and limit', 'Numbers for confusion and clash'],
       ["The video's framing", 'Breunig lists other fixes', 'One fix per mode is a simplification'],
     ];

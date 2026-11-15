@@ -1,7 +1,7 @@
 {
   "title": "Die Werkbank sauber halten",
   "caption": "Eine Aufräumaktion pro Chaos, und <b>manchmal ist die sauberste Lösung eine saubere Werkbank.</b>",
-  "framing": "Vier Lösungen, gepaart wie im Video von IBM Technology",
+  "framing": "Eine veranschaulichende Zuordnung aus dem Video von IBM Technology",
   "others": "Es gibt auch andere Lösungen",
   "fixes": {
     "validate": {
@@ -42,7 +42,7 @@
   "notes": {
     "the-videos-framing": {
       "header": "Die Einteilung im Video",
-      "description": "das Video von IBM Technology ordnet jeder Art eine Lösung zu: gegenprüfen, verdichten, auswählen, ausmisten. Sein Schlusssatz: Alle vier Lösungen wirken, indem sie etwas wegwerfen [1].",
+      "description": "IBM Technology stellt vier Arten von Problemen je eine Lösung gegenüber: gegenprüfen, verdichten, auswählen und ausmisten. Das ist ein Lehrmodell, keine vollständige oder ausschließliche Zuordnung. In der Praxis können Probleme sich überschneiden, und eine Lösung kann bei mehreren Arten helfen [1].",
       "sources": {
         "ibm-context-engineering-failure-modes": {
           "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
@@ -60,7 +60,7 @@
     },
     "one-fix-per-mode-is-a-simplification": {
       "header": "Eine Lösung pro Art ist vereinfacht",
-      "description": "Verdichten kann einen falschen Fakt in eine saubere Zusammenfassung waschen und repariert Poisoning deshalb nicht; dass ein frisches Fenster der gemeinsame Kern von Verdichten und Ausmisten ist, ist eine Schlussfolgerung, und Anthropic warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verliert [1].",
+      "description": "Probleme und Lösungen können sich überschneiden: Beim Verdichten kann ein falscher Fakt in einer sauberen Zusammenfassung erhalten bleiben; Poisoning wird dadurch nicht unbedingt behoben. Der Zusammenhang zwischen einem frischen Fenster und Verdichten sowie Ausmisten ist eine Schlussfolgerung. Anthropic warnt außerdem, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verlieren kann [1].",
       "sources": {
         "anthropic-effective-context-engineering": {
           "title": "Anthropic, Effective context engineering for AI agents"
@@ -73,7 +73,7 @@
       "four-cleanups": {
         "title": "Vier Aufräumaktionen",
         "keywords": "",
-        "script": "Es gibt vier Aufräumaktionen, eine für jedes Chaos. Gegenprüfen: die Anweisung an einem echten Rad kontrollieren. Verdichten: den Ordner durch eine einseitige Zusammenfassung ersetzen. Auswählen: nur die Schraubenschlüssel behalten, die der Auftrag braucht. Ausmisten: die alten Anweisungen abhängen."
+        "script": "IBM Technology stellt in seinem Video vier Aufräumaktionen vier Arten von Problemen gegenüber – als Lehrmodell: gegenprüfen, indem Du die Anweisung an einem echten Rad kontrollierst; verdichten, indem Du einen Ordner durch eine Zusammenfassung ersetzt; nur die nötigen Werkzeuge auswählen; alte Anweisungen ausmisten. Die Zuordnung ist nicht exklusiv: Probleme können sich überschneiden, und eine Lösung kann bei mehr als einer Art helfen."
       },
       "fresh-chat": {
         "title": "Frischer Chat",

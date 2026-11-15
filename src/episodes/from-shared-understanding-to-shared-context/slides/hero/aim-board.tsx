@@ -54,7 +54,7 @@ function Handover({ handover, aim }: Pick<AimBoardProps, 'handover' | 'aim'>) {
   );
 }
 
-/** The aim line from the work order to the board, and the AI badge on it that speeds every throw. */
+/** The aim line from the handover to the board, with an AI badge to mark the thought experiment's faster work. */
 function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
   return (
     <>
@@ -72,8 +72,8 @@ function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
 }
 
 /**
- * The Title slide's Hero motif (picked Option 0c): the work order you hand the agent sets the aim, the AI badge
- * speeds the throw, and every document lands on the bull of the dartboard, the intent. One inline SVG; its words
+ * The Title slide's Hero motif (picked Option 0c): the handover sets an aim, the AI badge marks a possible speed-up,
+ * and the documents on the bull represent the intended result. One inline SVG; its words
  * arrive as props from the Slide's own text.
  */
 export function AimBoard({ label, handover, aim, ai, speed, intent, hits }: AimBoardProps) {

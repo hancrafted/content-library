@@ -54,10 +54,10 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       'A skill is a folder of instructions',
-      'How AI discovers and reads a skill',
-      'Skills are static and dynamic context',
+      'How some platforms load skills in stages',
+      'Skills can be static and dynamic context',
       'Instructions, skills and connectors',
-      'Two ways to call a skill',
+      'Two ways a skill can be invoked',
     ];
     // ACT
     const actual = PAGE_SLUGS.map((slug) => localized(slug).title);
@@ -100,7 +100,7 @@ describe('success cases', () => {
         "Anthropic's definition of a skill",
       ],
       [
-        'Three levels, stated by the standard',
+        'Three stages in the Agent Skills format',
         'Other apps load in stages too',
         'Scripts: documented for Claude only',
         'What the skill index costs',
@@ -108,19 +108,19 @@ describe('success cases', () => {
         'Progressive disclosure, as Nielsen Norman Group defines it',
       ],
       [
-        'Static and dynamic, as Google defines them',
+        'Static and dynamic, as Google frames them',
         'Why static and dynamic context are kept apart',
-        'Static instructions are a rule of thumb',
+        'Instruction loading varies by product',
       ],
       [
-        'Instructions are always loaded, skills are not',
+        'Instruction and skill loading depends on the app',
         'Names in chat apps',
         'Connectors reach, skills know how',
         'Skill vs. AGENTS.md, as Google puts it',
       ],
       [
         'Calling a skill by name differs by app',
-        'The model picks a skill by its description',
+        'Platforms can use descriptions to discover skills',
         'Skills left unused: what the 56% measures',
         "Unused skills in Google's Day 3: two misreadings of Vercel",
       ],
@@ -157,7 +157,7 @@ describe('success cases', () => {
       rows: [
         'System prompt',
         'Skills',
-        'Memory files',
+        'Project instructions',
         'line',
         'Skill instructions',
         'Tool results',

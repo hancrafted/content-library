@@ -29,21 +29,21 @@
   },
   "gauge": "Tiefenanzeige",
   "place": "Abschnitt {number} von {total}",
-  "aiStatement": "Die Beschreibung ist alles, was die KI sieht",
+  "aiStatement": "In diesem Beispiel kommt die Beschreibung zuerst",
   "description": "„Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“",
   "analogy": "Das Register ist offen, jede Karte dahinter geschlossen.",
-  "agent": "SKILL.md: Name und Beschreibung laden zuerst",
+  "agent": "Agent-Skills-Format: Metadaten können zuerst verfügbar sein",
   "voiceScript": {
     "segments": {
       "the-label-decides": {
         "title": "Das Etikett entscheidet",
         "keywords": "",
-        "script": "Wir sind noch im Sonnenlicht, und das ist der Teil, den die meisten überspringen. Ein Skill, den das Modell nie auswählt, hilft niemandem. Deshalb zählt die Beschreibung mehr als die Anweisungen."
+        "script": "Wir sind noch in der Sonnenlichtzone, und das ist der Teil, den viele überspringen. Wenn Menschen oder eine Plattform einen Skill nicht finden, bleibt er vielleicht ungenutzt. Mach deshalb seinen Zweck klar und schreib hilfreiche Anweisungen."
       },
       "name-description": {
         "title": "Name, Beschreibung",
         "keywords": "",
-        "script": "Bevor das Modell einen Skill öffnet, sieht es zwei Zeilen: den Namen und die Beschreibung. Mehr steht nicht im Register, und mehr hat das Modell nicht, um zu entscheiden."
+        "script": "In diesem Beispiel für stufenweises Laden gehören Name und Beschreibung zu den Skill-Metadaten. Eine Plattform kann sie vor den vollständigen Anweisungen zur Suche nutzen; andere Produkte können anders funktionieren."
       }
     }
   }

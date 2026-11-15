@@ -1,6 +1,6 @@
 {
   "title": "Geteilte Skills sind Wissensartikel",
-  "caption": "Ein geteilter Skill braucht einen Owner, eine Version und ein Prüfdatum, wie es Anthropics Leitfaden für Unternehmen für jeden Skill verlangt.",
+  "caption": "Ein Team kann Owner, Version und Prüfplan für einen geteilten Skill festhalten – das ist eine Governance-Entscheidung, keine Vorgabe des Formats.",
   "analogy": "Deine Karte im Notizbuch, und dieselbe Karte im Flottenhandbuch des Instituts, wie ein Wissensartikel in einer Firma.",
   "pills": {
     "personal": "Persönlicher Skill",
@@ -47,8 +47,8 @@
     }
   },
   "runs": "nutzt Version",
-  "personalNote": "Persönliche Skills brauchen das erst, wenn du sie teilst.",
-  "thirdStep": "Dritter Schritt: Bevor du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Owner.",
+  "personalNote": "Beispiel für eine Teamkonvention; persönliche Skills brauchen diese Felder vielleicht nicht.",
+  "thirdStep": "Dritter Schritt: Klär vor dem Teilen, wo Projektdetails liegen; ein Team kann außerdem eine verantwortliche Person benennen.",
   "formatNote": "Das Agent-Skills-Format hat kein Feld für Owner, Version oder Prüfdatum; seine optionale <code>metadata</code>-Map hält sie per Konvention.",
   "footer": {
     "story": "In der Geschichte:"
@@ -58,8 +58,8 @@
   },
   "notes": {
     "a-skill-registry-entry": {
-      "header": "Ein Registereintrag pro Skill",
-      "description": "Anthropics Leitfaden für Unternehmen empfiehlt einen Registereintrag pro Skill mit Zweck, Owner („Team or individual responsible for maintenance“), Version, Abhängigkeiten und Evaluationsstatus samt Datum der letzten Evaluation [1].",
+      "header": "Beispiel für einen Registereintrag",
+      "description": "Anthropics Leitfaden für Unternehmen empfiehlt einen Registereintrag pro Skill mit Zweck, Owner („Team or individual responsible for maintenance“), Version, Abhängigkeiten und Evaluationsstatus samt Datum der letzten Evaluation [1]. Das ist eine Empfehlung für Unternehmen, keine Vorgabe des Agent-Skills-Formats.",
       "sources": {
         "anthropic-skills-for-enterprise": {
           "title": "Anthropic, Skills for enterprise"
@@ -67,8 +67,8 @@
       }
     },
     "a-skill-review-date-is-an-adaptation": {
-      "header": "Ein Prüfdatum für Skills ist eine Übertragung",
-      "description": "Knowledge-Centered Service prüft nicht nach Kalender: „Let reuse of Not Validated articles be the review“ [1], und die Seite verwendet das Wort „Owner“ nicht. Owner, Version und ein festes Prüfdatum verbinden KCS mit Anthropics Leitfaden; keine Quelle legt sie als Regel für Skills fest.",
+      "header": "Ein fester Prüfplan ist eine Teamentscheidung",
+      "description": "Knowledge-Centered Service schreibt keine Prüfung nach Kalender vor: „Let reuse of Not Validated articles be the review“ [1], und das Dokument verwendet das Wort „Owner“ nicht. Ein Team kann Owner, Version und Prüfdatum an den eigenen Bedarf anpassen; keine Quelle erklärt diese Felder für jeden geteilten Skill zur Pflicht.",
       "sources": {
         "kcs-v6-article-state": {
           "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
@@ -98,12 +98,12 @@
       "into-the-fleet-manual": {
         "title": "Ins Flottenhandbuch",
         "keywords": "",
-        "script": "Sobald du ihn in die Skill-Bibliothek deines Teams teilst, ins Flottenhandbuch auf unserem Schiff, braucht er, was jeder Wissensartikel in einer Firma hat: einen Owner, eine Version und ein Datum für die nächste Prüfung. Es ist derselbe Skill mit einem Kontrollblock obendrauf, und deine persönlichen Skills brauchen das erst, wenn du sie teilst."
+        "script": "Wenn ein Team ihn in einer Bibliothek teilt – dem Flottenhandbuch auf unserem Schiff –, kann es Verwaltungsangaben wie Owner, Version und Prüfplan ergänzen. Das ist eine Teamkonvention, keine allgemeine Pflicht; das Agent-Skills-Format definiert diese Felder nicht."
       },
       "why": {
         "title": "Warum",
         "keywords": "",
-        "script": "Warum der Aufwand? Weil, sobald er geteilt ist, die Änderung eines Autors verändert, was das Modell für alle tut, die ihn nutzen, und niemand weiß, wen man fragen soll, wenn etwas schiefgeht. Das ist dein dritter Schritt: Bevor du einen Skill teilst, entscheide, wo die Projektdetails liegen, und gib ihm einen Owner."
+        "script": "Warum? Eine geteilte Änderung kann alle betreffen, die diese Version nutzen. Deshalb kann es sinnvoll sein, festzuhalten, wer sie pflegt und wo die Projektdetails liegen. Das ist dein dritter Schritt: Klär, wo diese Details hingehören; dein Team kann bei Bedarf eine verantwortliche Person benennen."
       }
     }
   }

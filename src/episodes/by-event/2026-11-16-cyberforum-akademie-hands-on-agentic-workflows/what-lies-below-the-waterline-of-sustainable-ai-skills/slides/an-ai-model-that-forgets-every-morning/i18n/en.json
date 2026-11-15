@@ -1,6 +1,6 @@
 {
-  "title": "An AI model that forgets every morning",
-  "caption": "Unless you write it down, every new conversation with AI starts from zero on how you work.",
+  "title": "A model that forgets in this thought experiment",
+  "caption": "A later request may not include what you explained before; what carries over depends on the app.",
   "strip": "Comic strip, five panels",
   "photo": {
     "label": "On the control-room wall",
@@ -10,24 +10,24 @@
   "days": {
     "d1": {
       "label": "Day 1 · 07:00",
-      "sessionLabel": "Session 1 · fresh context window",
+      "sessionLabel": "Session 1 · no prior chat supplied",
       "captainLine": "The sediment sample: first, hold 2 m above the seabed…"
     },
     "d2": {
       "label": "Day 2 · 07:00",
-      "sessionLabel": "Session 2 · fresh context window",
+      "sessionLabel": "Session 2 · no prior chat supplied",
       "captainLine": "The sediment sample, again: first, hold 2 m…"
     },
     "d3": {
       "label": "Day 3 · 07:00",
-      "sessionLabel": "Session 3 · fresh context window",
+      "sessionLabel": "Session 3 · no prior chat supplied",
       "captainLine": "Collect sediment sample. Step one…"
     }
   },
   "greeting": "Nice to meet you.",
   "questionDay": "Day 4, before he wakes up",
   "question": "What would you do?",
-  "questionBody": "You've explained this to the AI a hundred times. It has heard it once.",
+  "questionBody": "You have explained this many times; whether the app carries it forward is a product choice.",
   "card": {
     "label": "Procedure card",
     "title": "Title:",
@@ -35,18 +35,18 @@
     "steps": "Blank steps to fill in"
   },
   "analogyLead": "In the story:",
-  "analogy": "Your pilot is the AI model: ten years of skill, no memory of yesterday.",
+  "analogy": "In this thought experiment, the pilot represents a model with no conversation history supplied; real apps may add history or saved memory.",
   "agent": {
-    "caption": "Claude Code: each session begins with a fresh context window; only written files carry knowledge across."
+    "caption": "Claude Code starts a new session context; project instructions and files may still add information."
   },
   "alt": {
-    "photo": "A framed photo on the control-room wall: you and the pilot on the deck of the research ship, ten years of projects; the pilot is the AI model.",
+    "photo": "A framed photo on the control-room wall: you and the pilot on the deck of the research ship, ten years of projects; the pilot represents the model's trained expertise.",
     "morning": "Day {day}, 07:00 in the control room: the captain explains the sediment sample, the pilot turns from his console and greets her as a stranger; through the window the robot sits idle on deck. {mugs, plural, one {# coffee mug} other {# coffee mugs}} on the console."
   },
   "notes": {
     "each-ai-conversation-starts-fresh": {
-      "header": "Each AI conversation starts fresh: Mollick's forgetful coworker",
-      "description": "Ethan Mollick advises treating AI \"like an infinitely patient new coworker who forgets everything you tell them each new conversation\" [1]. Claude Code sessions each begin \"with a fresh context window\" and only written files carry knowledge across [2]. \"Amnesiac\" is the Episode's word, not Mollick's.",
+      "header": "Mollick's metaphor and the Claude Code example",
+      "description": "Ethan Mollick offers the rule of thumb to treat AI \"like an infinitely patient new coworker who forgets everything you tell them each new conversation\" [1]. That is a metaphor, not a claim about every product. Anthropic documents that Claude Code sessions begin with a new conversation context; project instructions and files may still provide context [2].",
       "sources": {
         "mollick-good-enough-prompting": {
           "title": "Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024)"
@@ -62,12 +62,12 @@
       "three-mornings": {
         "title": "Three mornings",
         "keywords": "",
-        "script": "So the next morning you open a new conversation, and the model knows nothing of yesterday. In our picture the pilot greets you with \"Nice to meet you\", you explain how to take the sediment sample step by step, and the robot waits on deck while you talk. The morning after, it is the same greeting and the same explanation, and by the third morning you could recite it in your sleep."
+        "script": "So the next morning you open a new conversation. In this example, the app supplies no history from yesterday. The pilot greets you with \"Nice to meet you\", you explain how to take the sediment sample, and the robot waits on deck while you talk. A real app may carry over chat history or saved memory; this story holds those features aside so we can see the problem of repeating a procedure."
       },
       "the-hook": {
         "title": "The hook",
         "keywords": "",
-        "script": "That is what working with AI feels like today, because every conversation starts from zero on how you work. You've explained this to the AI a hundred times. It has heard it once."
+        "script": "That can happen when an app does not carry a procedure into a later request. You may have explained it many times, but the new context may not include those explanations. A saved skill is a separate file the app can provide; it does not change the model's training or memory."
       },
       "what-would-you-do": {
         "title": "What would you do",

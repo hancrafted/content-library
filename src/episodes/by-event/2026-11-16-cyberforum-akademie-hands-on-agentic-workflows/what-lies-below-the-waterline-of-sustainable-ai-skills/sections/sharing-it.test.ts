@@ -91,24 +91,24 @@ describe('success cases', () => {
         {
           title: 'Into the fleet manual',
           script:
-            "Once you share it into your team's skill library, the fleet manual on our ship, it needs what any company knowledge article has: an owner, a version, and a date for its next review. It is the same skill with a control block on top, and your personal skills can skip this until you share them.",
+            'If a team shares it in a library—the fleet manual on our ship—it may choose to add governance details such as an owner, version and review plan. Those fields are a team convention, not a universal requirement, and the Agent Skills format does not define them.',
         },
         {
           title: 'Why',
           script:
-            "Why bother? Because once it is shared, one author's edit changes what the model does for everyone who runs it, and nobody knows whom to ask when it goes wrong. That is your third step: before you share a skill, decide where the project details live, and give it an owner.",
+            'Why bother? A shared edit can affect everyone using that version, so a team may want to know who maintains it and where project details live. That is your third step: decide where those details belong; your team can name an owner if that helps.',
         },
       ],
       [
         {
           title: 'Back to the square',
           script:
-            'Come back to the matrix, to the shared, general square. That is the kind of skill the most people rely on, so it is where care matters most.',
+            'Come back to the matrix, to the shared, general square. When a team distributes a skill broadly, its audience and setup may call for extra care.',
         },
         {
           title: 'What the front page needs',
           script:
-            'A shared library needs rules beyond the owner and the version: who may add a skill, which tier it sits in and so whom it reaches, what it costs to load, which models and agents it works with, and when it retires. Each is a question somebody has to answer before the skill goes in.',
+            "A team may want to settle questions beyond owner and version: who can add a skill, whom it reaches, what context it uses, which models and agents it supports, and when to retire it. The answers depend on the product and the team's needs.",
         },
         {
           title: 'The dark corner',
@@ -146,8 +146,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       [
-        { header: 'A skill registry entry', urls: [ENTERPRISE] },
-        { header: 'A skill review date is an adaptation', urls: [KCS] },
+        { header: 'An example skill registry entry', urls: [ENTERPRISE] },
+        { header: "A scheduled review is one team's choice", urls: [KCS] },
         { header: 'The Agent Skills format has no owner field', urls: [SPECIFICATION, ENTERPRISE] },
       ],
       [

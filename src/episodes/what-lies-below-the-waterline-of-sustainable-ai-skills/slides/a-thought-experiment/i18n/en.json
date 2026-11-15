@@ -30,9 +30,9 @@
   "gauge": "Depth gauge",
   "place": "Section {number} of {total}",
   "tag": "AI model",
-  "aiStatement": "Unless you write it down, every conversation with AI starts from zero",
-  "analogy": "Your pilot is the AI model: ten years of skill, no memory of yesterday.",
-  "agent": "Each session begins with a fresh context window",
+  "aiStatement": "The model works with the context its app supplies—not automatically with every past conversation.",
+  "analogy": "Your pilot has trained expertise; yesterday's briefing comes aboard only if the app includes it.",
+  "agent": "The app supplies context for each model request",
   "voiceScript": {
     "segments": {
       "you-are-the-captain": {
@@ -43,7 +43,7 @@
       "one-settled-condition": {
         "title": "One settled condition",
         "keywords": "",
-        "script": "Your pilot has one condition, and it never changes. He forms no new memories overnight, but he keeps everything he ever learnt as a pilot, every rule of the trade. That is an AI model: what it learnt in training stays, and what you told it in yesterday's conversation is gone."
+        "script": "For this thought experiment, the pilot keeps the expertise from training but carries no briefing from one dive to the next. Real products may add conversation history or saved memory; the model works with the context its app supplies for this request."
       }
     }
   }

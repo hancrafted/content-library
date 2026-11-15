@@ -1,7 +1,7 @@
 {
   "title": "Context Rot",
   "heading": "Context Rot an der Werkbank",
-  "caption": "Eine vollere Werkbank kann eine schlechtere sein: <b>vier Arten von Chaos, vor der Schicht eingerichtet oder währenddessen angekommen.</b>",
+  "caption": "Mehr Kontext ist nicht immer hilfreicher: <b>Vier Arten von Chaos können vor oder während der Arbeit entstehen.</b>",
   "credit": "Namen nach Drew Breunig und IBM",
   "columns": {
     "poisoning": { "label": "Ein falscher Fakt, der hängen bleibt", "term": "Poisoning" },
@@ -34,7 +34,7 @@
   "notes": {
     "length-alone-does-part-of-the-damage": {
       "header": "Schon die Länge richtet Schaden an",
-      "description": "die Qualität der Ausgabe sinkt, je voller das Fenster wird, selbst wenn die KI alles Relevante findet [1].",
+      "description": "In der zitierten Studie sank die Ausgabequalität im getesteten Aufbau, je voller das Kontextfenster wurde – selbst bei perfektem Retrieval [1]. Das zeigt nicht, dass sich jedes Modell bei jeder Aufgabe gleich verhält.",
       "sources": {
         "context-rot-as-window-fills": {
           "title": "content-library research, Why does a language model's output quality drop as its context window fills?"
@@ -61,7 +61,7 @@
     },
     "numbers-for-confusion-and-clash": {
       "header": "Zahlen zu Confusion und Clash",
-      "description": "auf dem Berkeley Function-Calling Leaderboard schneidet jedes Modell mit mehr als einem Werkzeug schlechter ab; ein quantisiertes Llama 3.1 8b scheiterte mit 46 Werkzeugen und schaffte es mit 19; stückweise gelieferte Prompts senkten die Werte im Schnitt um 39 % [1].",
+      "description": "Breunig verweist auf Ergebnisse des Berkeley Function-Calling Leaderboard, in denen größere Werkzeug-Sets die Auswahl in den betrachteten Vergleichen erschwerten; ein quantisiertes Llama 3.1 8B scheiterte mit 46 Werkzeugen und war mit 19 erfolgreich. Eine separate Multi-Turn-Studie berichtete einen durchschnittlichen Score-Rückgang von 39 %, wenn Anweisungen auf mehrere Züge verteilt wurden. Das ist nicht dasselbe wie klärende Fragen [1].",
       "sources": {
         "breunig-how-long-contexts-fail": {
           "title": "Drew Breunig, How Long Contexts Fail"
@@ -89,7 +89,7 @@
       "more-context-worse-result": {
         "title": "Mehr Kontext, schlechteres Ergebnis",
         "keywords": "",
-        "script": "Mehr ist nicht sicherer. Eine vollere Werkbank kann eine schlechtere Werkbank sein. Noch ein Dokument dazuzulegen, nur zur Sicherheit, ist genau der Anfang der meisten dieser Probleme."
+        "script": "Mehr ist nicht automatisch sicherer. Eine vollere Werkbank kann schlechter sein, wenn irrelevantes oder widersprüchliches Material das wichtige Signal schwerer erkennbar macht. Zusätzliche Dokumente nur zur Sicherheit können genau dieses Problem schaffen."
       }
     }
   }

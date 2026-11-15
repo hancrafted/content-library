@@ -1,6 +1,6 @@
 {
   "title": "Grill-me",
-  "caption": "Matt Pococks grill-me-Skill: Die KI stellt Fragen in Runden, Du antwortest, und nach der letzten Runde schreibt sie <b>die Spec: einen einseitigen Arbeitsauftrag</b>.",
+  "caption": "Matt Pococks grill-me-Skill: Die KI stellt Fragen in Runden, Du antwortest, und danach entwirft sie <b>einen einseitigen Arbeitsauftrag</b>.",
   "chat": {
     "task": "Frühjahrs-Servicewoche für die Fahrradwerkstatt",
     "roleSwitch": "Die KI fragt · Du antwortest",
@@ -26,15 +26,15 @@
         "questions": {
           "q1": "Woran erkennen wir, dass es fertig ist?"
         },
-        "answer": "„40 Reparaturtermine gebucht, Kalender voll bis 1. März.“"
+        "answer": "„40 Reparaturtermine gebucht; genauer Termin noch offen.“"
       }
     },
-    "closing": "Keine Lücken mehr. Ich schreibe die Spec.",
+    "closing": "Offene Punkte markiert. Ich entwerfe die Spec.",
     "roundsNote": "in Runden, nicht einzeln"
   },
   "spec": {
-    "label": "Die Spec landet auf der Werkbank",
-    "title": "Spec · Frühjahrs-Servicewoche",
+    "label": "Der Spec-Entwurf landet auf der Werkbank",
+    "title": "Spec-Entwurf · Frühjahrs-Servicewoche",
     "rows": {
       "for": {
         "term": "Für",
@@ -54,7 +54,7 @@
       },
       "done": {
         "term": "Fertig, wenn",
-        "value": "40 Termine, Kalender voll bis 1. März"
+        "value": "40 Termine; genauer Termin noch offen"
       }
     }
   },
@@ -76,7 +76,7 @@
       }
     },
     "asking-beats-guessing-on-unclear-tasks": {
-      "header": "Fragen schlägt Raten, bei unklaren Aufgaben",
+      "header": "Klärende Fragen können bei unklaren Aufgaben helfen",
       "description": "auf einer unterspezifizierten Variante von SWE-Bench Verified schnitten Agenten, die fehlende Informationen beim Nutzer erfragten, um bis zu 74 % besser ab als Agenten ohne Rückfrage; das ist ein Höchstwert, gemessen mit simulierten Nutzern, und die Modelle konnten schlecht erkennen, welche Aufgaben eine Frage brauchen [1].",
       "sources": {
         "vijayvargiya-ambig-swe": {
@@ -99,7 +99,7 @@
       "matt-pococks-skill": {
         "title": "Der Skill von Matt Pocock",
         "keywords": "",
-        "script": "Grill-me ist eine fertige Anleitung, die Matt Pocock einen Skill nennt, und sie bringt die KI dazu, Dich zu befragen, bevor sie loslegt, in Runden statt Frage für Frage, damit Du in Deinem eigenen Fluss antworten kannst. Das funktioniert, weil die Lücken, die Du gelassen hast, mit Deinen eigenen Antworten gefüllt werden. Statt zu raten, was Du gemeint hast, fragt sie Dich, und am Ende schreibt sie die Aufgabe als Spec auf, als einseitigen Arbeitsauftrag."
+        "script": "Grill-me ist eine fertige Anleitung, die Matt Pocock einen Skill nennt. Sie lässt die KI vor dem Start Fragen stellen – in Runden statt eine nach der anderen. So kannst Du in Deinem eigenen Fluss antworten. Offene Punkte sollte die KI nicht erraten: Was unbekannt bleibt, gehört im Entwurf zur Klärung markiert."
       },
       "next-30-minutes": {
         "title": "Die nächsten 30 Minuten",
@@ -109,7 +109,7 @@
       "actionable-one": {
         "title": "Erste Handlungsempfehlung",
         "keywords": "",
-        "script": "Das Erste zum Mitnehmen also: Lass Dich vor Deiner nächsten komplexen Aufgabe von der KI in Runden von Fragen interviewen, und mach aus dem Ergebnis eine Spec."
+        "script": "Das Erste zum Mitnehmen also: Lass Dich vor Deiner nächsten komplexen Aufgabe von der KI in Runden befragen. Mach aus den Antworten einen Spec-Entwurf und markiere offene Punkte zur Klärung."
       }
     }
   }

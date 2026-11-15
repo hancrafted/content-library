@@ -1,6 +1,6 @@
 {
   "title": "Was der Kunde wirklich wollte",
-  "caption": "KI baut nicht die richtige Schaukel, aber sie kann <b>die falsche zehnmal schneller bauen</b>.",
+  "caption": "KI garantiert nicht das richtige Ergebnis. <b>Eine falsche Übergabe kann zu einem falschen Ergebnis führen – manchmal schneller.</b>",
   "notes": {
     "why-the-line-gets-out-of-balance": {
       "header": "Warum das Band aus dem Gleichgewicht gerät",
@@ -17,17 +17,17 @@
       "the-hook": {
         "title": "Der Aufhänger",
         "keywords": "",
-        "script": "Das ist der Satz von eben: zehn falsche Schaukeln, schneller gebaut. Behalte ihn im Kopf, denn der Rest dieser Episode handelt davon, warum er stimmt und was Du dagegen tust."
+        "script": "Das ist der Punkt von eben: Eine falsche Schaukel kann schneller gebaut werden. Das ist eine Veranschaulichung, keine gemessene Vorhersage. Behalte den Gedanken im Kopf, während wir uns ansehen, was das Ergebnis beeinflussen kann und was Du tun kannst."
       },
       "cartoon-to-balanced-line": {
         "title": "Vom Cartoon zum ausgeglichenen Band",
         "keywords": "",
-        "script": "Stell Dir jetzt vor, der Cartoon wird zu einem echten Fließband. Die Arbeit kommt in gleichmäßigem Takt herein, jede Station hält mit der nächsten Schritt, der Ausstoß ist stetig und die Qualität hoch. Wenn Deine Organisation so arbeiten würde, bräuchtest Du diese Episode nicht."
+        "script": "Stell Dir vor, aus dem Cartoon wird ein echtes Fließband. Die Arbeit kommt in gleichmäßigem Takt herein, die Stationen halten mit, und der Ausstoß ist stetig. Wenn die Arbeit in Deiner Organisation so flüssig liefe, gäbe es hier womöglich weniger zu lösen."
       },
       "reality": {
         "title": "Die Wirklichkeit",
         "keywords": "",
-        "script": "Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Effizienz, Effektivität und Vervielfachung sind die drei Regler an diesem Band: Dreh sie alle hoch, und das Band hört auf zu fließen. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
+        "script": "In der Praxis läuft die Arbeit nicht immer so reibungslos wie im Cartoon. Eine Änderung an einer Station kann anderswo eine Warteschlange entstehen lassen; das hängt von der Arbeit ab. Alle Schritte zu beschleunigen, garantiert keinen besseren Ablauf. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
       }
     }
   }

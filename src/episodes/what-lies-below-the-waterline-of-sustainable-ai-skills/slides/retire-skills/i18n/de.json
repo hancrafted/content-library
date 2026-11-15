@@ -5,11 +5,11 @@
   "story": "In der Geschichte:",
   "season": "diese Saison",
   "before": {
-    "heading": { "chat": "Skill-Index · vorher", "coding": ".claude/skills/ · vorher" },
-    "count": { "chat": "47 Skills", "coding": "47 Ordner" },
+    "heading": { "chat": "Beispiel-Index · vorher", "coding": ".claude/skills/ · Beispiel" },
+    "count": { "chat": "47 Skills · Beispiel", "coding": "47 Ordner · Beispiel" },
     "uses": "{count}-mal genutzt",
     "unused": "ungenutzt",
-    "more": "… 30 weitere, alle ungenutzt"
+    "more": "… 30 weitere in diesem Beispiel, ungenutzt"
   },
   "index": {
     "rinse-camera-dome": "Kamerakuppel spülen",
@@ -42,21 +42,21 @@
   },
   "archive": {
     "chat": {
-      "title": "Archiv · 40 Skills",
-      "count": "ausgemustert am 12. Nov. 2026",
+      "title": "Beispielarchiv · 40 Skills",
+      "count": "Beispieldatum: 12. Nov. 2026",
       "restore": "wiederherstellbar"
     },
     "coding": {
-      "title": "retired/2026-11-12/",
-      "count": "40 Skill-Ordner",
+      "title": "retired/2026-11-12/ · Beispiel",
+      "count": "40 Beispielordner",
       "restore": "wiederherstellen: einen zurückschieben"
     }
   },
   "after": {
-    "heading": { "chat": "Skill-Index · nachher", "coding": ".claude/skills/ · nachher" },
+    "heading": { "chat": "Beispiel-Index · nachher", "coding": ".claude/skills/ · Beispiel" },
     "count": { "chat": "7 Skills", "coding": "7 Ordner" },
     "needed": "der, den Du brauchst",
-    "callback": "Vor ein paar Slides: der 7. von 47. Jetzt der 3. von 7."
+    "callback": "In diesem Beispiel: der 7. von 47, jetzt der 3. von 7."
   },
   "closesUp": "der Index rückt zusammen",
   "didYouKnow": "Schon gewusst?",
@@ -97,7 +97,7 @@
       "read-the-log": {
         "title": "Das Logbuch lesen",
         "keywords": "",
-        "script": "Letzte Aufgabe: Skills ausmustern. Leg Deine Liste von Skills neben das, was Deine Arbeit diese Saison tatsächlich genutzt hat, auf unserem Schiff das Tauchlogbuch, und sieh nach, welche Skills keine Aufgabe je geöffnet hat."
+        "script": "Letzte Aufgabe: Skills ausmustern. In diesem Beispiel legst Du die Skill-Liste neben das, was die Arbeit diese Saison genutzt hat – auf unserem Schiff das Tauchlogbuch – und siehst nach, welche Skills keine Aufgabe geöffnet hat."
       },
       "the-archive-box": {
         "title": "Die Archivkiste",
@@ -107,7 +107,7 @@
       "short-index-again": {
         "title": "Wieder ein kurzer Index",
         "keywords": "",
-        "script": "Und der Index, der übrig bleibt, ist wieder kurz, und der, den Du brauchst, ist leicht zu finden. Erinnerst Du Dich an die Beschreibung, die vor ein paar Slides mitten in einem vollgestopften Handbuch vergraben war? Sie ist wieder sichtbar, und das Modell kann sie wählen."
+        "script": "Der Beispiel-Index ist wieder kurz, und der Skill, den Du brauchst, leicht zu finden. Erinnerst Du Dich an die Beschreibung, die vor ein paar Slides mitten in einem vollgestopften Handbuch vergraben war? Jetzt ist sie sichtbar, und die Plattform kann den Skill anzeigen."
       }
     }
   }

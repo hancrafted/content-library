@@ -8,34 +8,34 @@
     "surface": {
       "name": "Surface",
       "line1": "A skill hands the AI your proven procedure on demand;",
-      "line2": "until a task needs it, the AI reads only its name and description."
+      "line2": "some platforms use its name and description for discovery; activation varies."
     },
     "sunlit": {
       "name": "Sunlit",
       "line1": "Write it from a run that worked;",
-      "line2": "the AI sees only its description."
+      "line2": "a clear description can help people or platforms find it."
     },
     "twilight": {
       "name": "Twilight",
-      "line1": "A good skill does one job; to work in more than one project,",
-      "line2": "it keeps project details beside it, in files it reads when it runs."
+      "line1": "A useful skill has a clear scope; project-specific skills are valid.",
+      "line2": "For broader reuse, keep changing project details in supporting files."
     },
     "midnight": {
       "name": "Midnight",
-      "line1": "A shared skill is a knowledge article:",
-      "line2": "it needs an owner, a version and a review date."
+      "line1": "A team may treat a shared skill like a knowledge article:",
+      "line2": "owner, version and review plan are optional team conventions."
     },
     "abyss": {
       "name": "Abyss",
-      "line1": "Keeping a skill right is the work: a model update changes who reads it,",
+      "line1": "Keeping a skill right is the work: a model update may change how it behaves,",
       "line2": "so test it again, and retire skills nobody uses."
     }
   },
   "index": {
     "title": "Skill index",
-    "lead": "always loaded: name and description",
+    "lead": "metadata exposed in this example",
     "description": "Takes a sediment core. Use when we reach a new site and need a sample from the seabed.",
-    "codingLead": "SKILL.md, the part always loaded"
+    "codingLead": "SKILL.md metadata, when the app exposes it"
   },
   "steps": {
     "third-time": {
@@ -43,12 +43,12 @@
       "agent": "Ask the agent to turn this conversation into a skill and save it to {path}."
     },
     "the-moment": {
-      "text": "Write its description as the moment you'd need it.",
+      "text": "Write a clear description that helps people or platforms find it.",
       "agent": "The <code>description:</code> line in the front matter of <code>SKILL.md</code>."
     },
     "before-sharing": {
-      "text": "Before sharing a skill, decide where the project details live, and give it an owner.",
-      "agent": "Steps point to a project file such as <code>CONTEXT.md</code>; shared in this repository: <code>.claude/skills/</code>; shared across projects: a plugin, with an owner."
+      "text": "Before sharing, decide the skill's scope and where project details belong; a team may name an owner.",
+      "agent": "Keep project-specific instructions with their project. In Claude Code, skills may be shared through repository settings or plugins; teams can choose their own governance."
     }
   },
   "alt": "The whole iceberg from the Surface to the Abyss: the ship at the waterline with the captain and the pilot on the bridge, the robot back on deck, and the manual open at a short index of three skills.",
@@ -71,7 +71,7 @@
       "three-steps": {
         "title": "Three steps",
         "keywords": "",
-        "script": "Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write its description as the moment you would need it. Three: before you share it, decide where the project details live, and give it an owner."
+        "script": "Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write a clear description that helps people or platforms find it. Three: before sharing, decide the skill's scope and where project details belong; your team may name an owner if useful."
       },
       "the-honest-caveat": {
         "title": "The honest caveat",

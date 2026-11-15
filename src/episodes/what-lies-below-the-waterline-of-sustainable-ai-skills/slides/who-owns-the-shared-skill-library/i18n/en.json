@@ -1,21 +1,21 @@
 {
   "title": "Who owns the shared skill library",
-  "caption": "Shared, general skills need rules for who adds, checks and removes them, and there is no settled practice yet.",
+  "caption": "Teams sharing general skills may set policies for access, review and retirement; there is no cross-product standard.",
   "analogy": "The fleet manual's front page. Fleet, ship and project are the tiers; the robots are the models and agents.",
   "matrix": {
     "back": "Back to Slide 18: Who uses it, and where",
     "locator": "The shared, general square of Slide 18's matrix",
     "shared": "Shared · others too",
     "general": "General use · used in any project",
-    "care": "care",
-    "careLevel": "care 4 of 4",
+    "care": "example upkeep",
+    "careLevel": "example level 4 of 4",
     "chat": {
-      "title": "Details kept beside, with an owner, a version and evals",
-      "sub": "Owned, versioned and tested"
+      "title": "Details kept beside; a team may track owner, version and evals",
+      "sub": "Optional team governance"
     },
     "coding": {
       "title": "A plugin or managed settings",
-      "sub": "Reaches a whole team: owner, version and evals before it ships."
+      "sub": "Can reach a team; governance depends on the product and team."
     },
     "pill": "the fleet manual",
     "pillCoding": "a plugin"
@@ -23,12 +23,12 @@
   "page": {
     "label": "Front page of the shared skill library",
     "scope": "Shared, general use",
-    "title": "Before a skill goes in, beyond its owner and version"
+    "title": "Questions a team can settle before sharing broadly"
   },
   "rows": {
     "add": {
       "term": "Who may add it",
-      "chat": "The organisation's library is set to “Requires review”, “Open” or “Off”; a reviewer approves a fixed version.",
+      "chat": "Anthropic's organisation library offers “Requires review”, “Open” or “Off”; a reviewer approves a fixed version.",
       "coding": "Whoever can merge to the repository; for plugins, admins choose which marketplaces and plugins are allowed and enabled."
     },
     "tier": {
@@ -39,8 +39,8 @@
     },
     "cost": {
       "term": "What it costs to load",
-      "chat": "A loaded skill is a recurring token cost.",
-      "coding": "The loaded <code>SKILL.md</code> stays in the context window: a recurring token cost."
+      "chat": "Loaded skill instructions use context; the actual cost depends on the app and session.",
+      "coding": "Loaded <code>SKILL.md</code> content uses context; cost varies by product and session."
     },
     "models": {
       "term": "Which models and agents it works with",
@@ -50,8 +50,8 @@
     },
     "retire": {
       "term": "When it retires",
-      "chat": "Deprecate it when its evals keep failing or its workflow is retired.",
-      "coding": "Pin production skills to a version; deprecate when evals consistently fail."
+      "chat": "A team may retire it when evaluations keep failing or its workflow is retired.",
+      "coding": "Anthropic recommends pinning production skills to a version and deprecating ones that consistently fail evaluation."
     }
   },
   "inset": {
@@ -116,12 +116,12 @@
       "back-to-the-square": {
         "title": "Back to the square",
         "keywords": "",
-        "script": "Come back to the matrix, to the shared, general square. That is the kind of skill the most people rely on, so it is where care matters most."
+        "script": "Come back to the matrix, to the shared, general square. When a team distributes a skill broadly, its audience and setup may call for extra care."
       },
       "what-the-front-page-needs": {
         "title": "What the front page needs",
         "keywords": "",
-        "script": "A shared library needs rules beyond the owner and the version: who may add a skill, which tier it sits in and so whom it reaches, what it costs to load, which models and agents it works with, and when it retires. Each is a question somebody has to answer before the skill goes in."
+        "script": "A team may want to settle questions beyond owner and version: who can add a skill, whom it reaches, what context it uses, which models and agents it supports, and when to retire it. The answers depend on the product and the team's needs."
       },
       "the-dark-corner": {
         "title": "The dark corner",

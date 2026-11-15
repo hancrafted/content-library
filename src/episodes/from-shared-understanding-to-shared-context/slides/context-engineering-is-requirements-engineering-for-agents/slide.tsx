@@ -44,7 +44,7 @@ function UpArrow() {
 }
 
 /**
- * "Context engineering is requirements engineering for agents" (Spec Option 8a): Google's definition in the caption, its
+ * "Context engineering and requirements: a useful analogy" (Spec Option 8a): Google's definition in the caption, its
  * four parts read as a requirement on a card (Han's feedback), then one bike order, four columns, each
  * dartboard standing over the context window that produces it. Overrules `grid-1x2` for the four columns; keeps
  * `motion: none`. The boards are the shared `Dartboard` and `Darts`; hover dims the other columns.

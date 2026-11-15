@@ -1,6 +1,6 @@
 {
   "title": "A skill hands the AI your procedure",
-  "caption": "When a request matches its description, or you call it by name, the AI reads that one skill into the context.",
+  "caption": "A skill can give an app a reusable procedure; how it becomes available depends on the platform.",
   "request": "Grab some mud here before we move on.",
   "callouts": {
     "skill": {
@@ -19,16 +19,16 @@
   "tilesLabel": "The three things to remember",
   "tiles": {
     "skill": {
-      "gloss": "Your proven procedure. It enters the context <marker>when a request matches its description, or when you call it by name.</marker>",
-      "codeGloss": "Claude reads <code>SKILL.md</code> <marker>when a request matches the description, and only then does it enter the context.</marker>"
+      "gloss": "Your proven procedure. An app can add it to context <marker>when the skill is invoked or activated.</marker>",
+      "codeGloss": "In Claude Code, <code>SKILL.md</code> instructions enter context <marker>when the skill is activated.</marker>"
     },
     "description": {
-      "gloss": "One line that tells the AI what the skill is for.",
+      "gloss": "One line that describes when the skill may be useful.",
       "codeGloss": "The name and description at the top of the file."
     },
     "project": {
-      "gloss": "What is true for this project, loaded in every conversation.",
-      "codeGloss": "The project instructions file the agent reads, <code>CLAUDE.md</code> in Claude Code."
+      "gloss": "What is specific to this project; when it loads depends on the app.",
+      "codeGloss": "A project instructions file; Claude Code uses <code>CLAUDE.md</code>."
     }
   },
   "card": {
@@ -55,7 +55,7 @@
   "notes": {
     "a-skill-spares-you-the-repeat": {
       "header": "A skill spares you the repeat",
-      "description": "Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations [1]. When a request matches a skill's description, Claude reads SKILL.md and only then does that content enter the context [1]. Calling a skill by name loads it too, as the Slide on two ways to call a skill shows.",
+      "description": "Anthropic contrasts skills with prompts: a skill spares you from repeating the same guidance across conversations [1]. For Claude Code, Anthropic documents that SKILL.md content enters context on activation, such as through description matching or explicit invocation [1]. Other products may expose skills differently.",
       "sources": {
         "anthropic-agent-skills-overview": {
           "title": "Anthropic, Agent Skills overview"
@@ -68,7 +68,7 @@
       "the-answer": {
         "title": "The answer",
         "keywords": "",
-        "script": "Most people land on the same idea within a minute: write it down. Write the procedure once, keep it where the model can find it, and let the model read it when the task comes up, instead of you explaining it again every morning. That is a skill, and in our picture it is a procedure card in the dive manual at the console. The rest of this Episode is about doing it well."
+        "script": "A useful idea is to write a procedure down once and keep it where the app can make it available for later tasks, instead of explaining it again and again. That is a skill, and in our picture it is a procedure card in the dive manual at the console. The rest of this Episode is about doing it well."
       },
       "three-things-to-remember": {
         "title": "Three things to remember",
@@ -78,7 +78,7 @@
       "the-card-slides-out": {
         "title": "The card slides out",
         "keywords": "",
-        "script": "And here is the part that matters most: the model does not read every skill you have. It reads the descriptions, and it opens one skill when the task needs it, the way one card comes out of the manual when the dive needs it. (pause) That is the picture for everything that follows."
+        "script": "And here is the part that matters most: a platform need not load every skill's full instructions at once. In a staged-loading pattern, it can expose descriptions and load a skill when invoked or activated, the way one card comes out of the manual for a dive. (pause) That is the picture for everything that follows."
       }
     }
   }

@@ -1,21 +1,21 @@
 {
   "title": "Wem die geteilte Skill-Bibliothek gehört",
-  "caption": "Geteilte, allgemeine Skills brauchen Regeln, wer sie hinzufügt, prüft und entfernt, und eine feste Praxis gibt es dafür noch nicht.",
+  "caption": "Teams können Richtlinien für Zugriff, Prüfung und Ausmusterung geteilter Skills festlegen; einen produktübergreifenden Standard gibt es nicht.",
   "analogy": "Die Titelseite des Flottenhandbuchs. Flotte, Schiff und Projekt sind die Stufen; die Roboter sind die Modelle und Agenten.",
   "matrix": {
     "back": "Zurück zu Folie 18: Wer ihn nutzt, und wo",
     "locator": "Das Feld geteilt und allgemein in der Matrix von Folie 18",
     "shared": "Geteilt · auch andere",
     "general": "Allgemein · in jedem Projekt",
-    "care": "Sorgfalt",
-    "careLevel": "Sorgfalt 4 von 4",
+    "care": "Pflegeaufwand (Beispiel)",
+    "careLevel": "Beispielstufe 4 von 4",
     "chat": {
-      "title": "Details daneben, mit Owner, Version und Evals",
-      "sub": "Mit Owner, versioniert und getestet"
+      "title": "Details daneben; ein Team kann Owner, Version und Evals festhalten",
+      "sub": "Optionale Team-Governance"
     },
     "coding": {
       "title": "Ein Plugin oder verwaltete Einstellungen",
-      "sub": "Erreicht ein ganzes Team: Owner, Version und Evals, bevor er ausgeliefert wird."
+      "sub": "Kann ein Team erreichen; die Governance hängt von Produkt und Team ab."
     },
     "pill": "das Flottenhandbuch",
     "pillCoding": "ein Plugin"
@@ -23,12 +23,12 @@
   "page": {
     "label": "Titelseite der geteilten Skill-Bibliothek",
     "scope": "Geteilt, allgemein",
-    "title": "Bevor ein Skill hineinkommt, über Owner und Version hinaus"
+    "title": "Fragen, die ein Team vor breiter Verteilung klären kann"
   },
   "rows": {
     "add": {
       "term": "Wer ihn hinzufügen darf",
-      "chat": "Die Bibliothek der Organisation steht auf „Requires review“, „Open“ oder „Off“; eine prüfende Person gibt eine feste Version frei.",
+      "chat": "Anthropics Organisationsbibliothek bietet „Requires review“, „Open“ oder „Off“; eine prüfende Person gibt eine feste Version frei.",
       "coding": "Wer ins Repository mergen darf; bei Plugins wählen Admins, welche Marktplätze und Plugins erlaubt und aktiv sind."
     },
     "tier": {
@@ -39,8 +39,8 @@
     },
     "cost": {
       "term": "Was das Laden kostet",
-      "chat": "Ein geladener Skill kostet bei jedem Lauf wieder Tokens.",
-      "coding": "Die geladene <code>SKILL.md</code> bleibt im Kontextfenster: Tokenkosten, die wiederkehren."
+      "chat": "Geladene Skill-Anweisungen nutzen Kontext; die tatsächlichen Kosten hängen von App und Sitzung ab.",
+      "coding": "Geladener Inhalt aus <code>SKILL.md</code> nutzt Kontext; die Kosten variieren je nach Produkt und Sitzung."
     },
     "models": {
       "term": "Mit welchen Modellen und Agenten er funktioniert",
@@ -50,8 +50,8 @@
     },
     "retire": {
       "term": "Wann er in Rente geht",
-      "chat": "Außer Dienst stellen, wenn seine Evals immer wieder scheitern oder sein Ablauf wegfällt.",
-      "coding": "Produktive Skills auf eine Version festlegen; außer Dienst stellen, wenn Evals dauerhaft scheitern."
+      "chat": "Ein Team kann ihn ausmustern, wenn Evaluationen wiederholt scheitern oder der Ablauf wegfällt.",
+      "coding": "Anthropic empfiehlt, produktive Skills auf eine Version festzulegen und bei dauerhaft schlechten Evaluationen auszumustern."
     }
   },
   "inset": {
@@ -116,12 +116,12 @@
       "back-to-the-square": {
         "title": "Zurück zum Feld",
         "keywords": "",
-        "script": "Komm zurück zur Matrix, zum Feld geteilt und allgemein. Auf diese Art Skill verlassen sich die meisten Menschen, also zählt hier die Sorgfalt am meisten."
+        "script": "Komm zurück zur Matrix, zum Feld geteilt und allgemein. Wenn ein Team einen Skill breit verteilt, können Zielgruppe und Einsatzumgebung besondere Sorgfalt erfordern."
       },
       "what-the-front-page-needs": {
         "title": "Was die Titelseite braucht",
         "keywords": "",
-        "script": "Eine geteilte Bibliothek braucht Regeln über Owner und Version hinaus: wer einen Skill hinzufügen darf, auf welcher Stufe er liegt und wen er damit erreicht, was das Laden kostet, mit welchen Modellen und Agenten er funktioniert und wann er in Rente geht. Jede dieser Fragen muss jemand beantworten, bevor der Skill hineinkommt."
+        "script": "Ein Team kann neben Owner und Version weitere Fragen klären: Wer darf einen Skill hinzufügen, wen erreicht er, wie viel Kontext nutzt er, mit welchen Modellen und Agenten funktioniert er und wann wird er ausgemustert? Die Antworten hängen vom Produkt und den Bedürfnissen des Teams ab."
       },
       "the-dark-corner": {
         "title": "Die dunkle Ecke",

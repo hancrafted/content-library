@@ -1,6 +1,6 @@
 {
-  "title": "Skills are static and dynamic context",
-  "caption": "What's always loaded is static; a skill loads on demand, so it is dynamic.",
+  "title": "Skills can be static and dynamic context",
+  "caption": "A useful split: standing context and information a platform adds as a task unfolds.",
   "analogy": {
     "label": "In the story:",
     "text": "Before the dive: your orders, the brief and the index. During it: the card and everything the robot sends up."
@@ -30,12 +30,12 @@
       "skills": {
         "term": "Skills",
         "chat": "the manual's index",
-        "coding": "name and description of every SKILL.md"
+        "coding": "skill metadata, if the app exposes it"
       },
       "memory": {
-        "term": "Memory files",
+        "term": "Project instructions",
         "chat": "your standing orders and the project brief",
-        "coding": "AGENTS.md (CLAUDE.md in Claude Code)"
+        "coding": "configured instruction files; loading varies by app"
       },
       "instructions": {
         "term": "Skill instructions",
@@ -62,17 +62,17 @@
   },
   "static": {
     "label": "Static",
-    "text": "always loaded, in every interaction"
+    "text": "standing context, when configured"
   },
   "dynamic": {
     "label": "Dynamic",
-    "text": "loaded on demand, as the task goes on"
+    "text": "added as the task goes on; app-dependent"
   },
   "footer": {
-    "chat": "A skill is dynamic whether you call it at the start or the AI picks it mid-task.",
+    "chat": "A skill's instructions may be added when you call it or when a platform activates it.",
     "ruleOfThumb": "Static has exceptions, so take the split as a rule of thumb.",
-    "codingLead": "Called or picked, still dynamic:",
-    "coding": "<code>/collect-sediment-sample</code> at the start of a message in Claude Code, or the agent picks the skill mid-task; either way its <code>SKILL.md</code> body enters the window on demand.",
+    "codingLead": "One product example: Claude Code",
+    "coding": "When you call <code>/collect-sediment-sample</code> or Claude Code activates it, its <code>SKILL.md</code> instructions enter the context.",
     "exceptionsLead": "Exceptions:",
     "exceptions": "<code>.claude/rules/</code> files with <code>paths</code> load only when matching files open; Gemini CLI loads further <code>GEMINI.md</code> files just in time; a skill set to user-only invocation keeps even its name and description out."
   },
@@ -81,8 +81,8 @@
   },
   "notes": {
     "static-and-dynamic-as-google-defines-them": {
-      "header": "Static and dynamic, as Google defines them",
-      "description": "Static context is always loaded: system instructions, rule files (AGENTS.md, CLAUDE.md, GEMINI.md), global memory and persona definitions; dynamic context is loaded on demand: skill instructions triggered by task matching, tool results, retrieved documents and windowed session history [1]. This is Google's vendor framing of the vendors' own mechanics, not a measured result.",
+      "header": "Static and dynamic, as Google frames them",
+      "description": "Google's whitepaper distinguishes standing context—such as system instructions, rule files, memory and persona definitions—from context added on demand, such as skill instructions, tool results, retrieved documents and windowed session history [1]. This is Google's framing of agent context, not a universal runtime guarantee or a measured result.",
       "sources": {
         "google-day-1-new-sdlc": {
           "title": "Osmani, Saboo and Kartakis, The New SDLC With Vibe Coding (Google whitepaper, Kaggle)"
@@ -102,8 +102,8 @@
       }
     },
     "static-instructions-are-a-rule-of-thumb": {
-      "header": "Static instructions are a rule of thumb",
-      "description": "Instructions are not strictly static. Claude Code .claude/rules/ files with paths load only when matching files open [1], Gemini CLI loads further GEMINI.md files just in time when a tool touches a directory [2], and Copilot path-specific instructions apply by file match [3]. By default, a skill's name and description are always loaded too, unless the skill is set to user-only invocation [4].",
+      "header": "Instruction loading varies by product",
+      "description": "Instruction files are not always present in every request. Claude Code .claude/rules/ files with paths load only when matching files open [1], Gemini CLI loads further GEMINI.md files just in time when a tool touches a directory [2], and Copilot path-specific instructions apply by file match [3]. Claude Code can expose skill names and descriptions for discovery, unless a skill is set to user-only invocation [4]. These are product-specific behaviours.",
       "sources": {
         "anthropic-claude-code-memory": {
           "title": "Anthropic, How Claude remembers your project (Claude Code docs)"
@@ -130,12 +130,12 @@
       "the-standing-part": {
         "title": "The standing part",
         "keywords": "",
-        "script": "Start with what is there before any task begins, in the order the Explorable shows it: the system prompt, the skills, meaning the name and description of every skill, and the memory files, meaning your instructions in AGENTS.md. On our ship that is the standing rules, the manual's index, and your standing orders and the project brief. That part is static, so it sits in the window whatever the task turns out to be."
+        "script": "Start with the context that may be there before a task begins, in the order the Explorable shows it: system instructions, skill metadata when the app exposes it, and project instructions when configured. On our ship that is the standing rules, the manual's index, and your standing orders and project brief. Treat this as a useful sketch, not a guarantee about every app or request."
       },
       "filling-as-you-dive": {
         "title": "Filling as you dive",
         "keywords": "",
-        "script": "Then the task begins and the window fills up: the skill the model opened, and the tool results it gets back, the camera frames, sonar readings and sample logs of the dive. That part is dynamic, and a skill's instructions belong to it, whether you call the skill at the start or the model picks it halfway through. So a skill sits on both sides of the line: its name and description are static, and the skill itself is dynamic."
+        "script": "Then the task begins and the context can grow: a skill's instructions, if the app activates it, and tool results such as camera frames, sonar readings and sample logs. The exact loading path differs by product. A skill's metadata and full instructions can therefore appear at different points, depending on how that app handles them."
       }
     }
   }

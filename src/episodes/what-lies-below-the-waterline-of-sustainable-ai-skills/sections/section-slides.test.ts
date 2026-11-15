@@ -121,13 +121,13 @@ describe('success cases', () => {
   it('leads each card with its AI statement, as the echoes of Option 0a do', () => {
     // ARRANGE
     const expected = [
-      'Unless you write it down, every conversation with AI starts from zero',
+      'The model works with the context its app supplies—not automatically with every past conversation.',
       'A skill is a name, a description and instructions',
       'The third time, write the skill down',
-      'The description is all the AI sees',
+      'In this example, the description comes first',
       'Domain knowledge goes inside, tied to the step that needs it',
       'Project details stay beside the skill',
-      'A shared skill needs an owner, a version, a review date',
+      "A team may track a shared skill's owner, version and review plan",
       'Keeping a skill right costs you every month',
     ];
     // ACT
@@ -198,8 +198,8 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = [
       {
-        chat: ['Your pilot is the AI model: ten years of skill, no memory of yesterday.'],
-        coding: ['Each session begins with a fresh context window'],
+        chat: ["Your pilot has trained expertise; yesterday's briefing comes aboard only if the app includes it."],
+        coding: ['The app supplies context for each model request'],
       },
       {
         chat: ['A procedure card: title, use-when line, steps.'],
@@ -211,7 +211,7 @@ describe('edge cases', () => {
       },
       {
         chat: ['The index is open, every card behind it closed.'],
-        coding: ['SKILL.md: name and description load first'],
+        coding: ['Agent Skills format: metadata may be available first'],
       },
       {
         chat: ['The card in its sleeve: each extra tied to its step.'],
@@ -221,7 +221,10 @@ describe('edge cases', () => {
         chat: ["Same card, any site: today's dive plan says 120 m."],
         coding: ['The step reads a project file, such as CONTEXT.md, when it runs'],
       },
-      { chat: ["The card in the institute's fleet manual."], coding: ['metadata: owner, version, review date'] },
+      {
+        chat: ["The card in the institute's fleet manual."],
+        coding: ['optional metadata: owner, version, review plan'],
+      },
       {
         chat: ['A card with a running tag, like a loan statement.'],
         coding: ['Same in both views: the tag is the upkeep'],

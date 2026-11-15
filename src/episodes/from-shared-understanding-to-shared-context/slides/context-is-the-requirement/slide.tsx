@@ -4,7 +4,7 @@ import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboar
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Context is the requirement", echoing the Hero motif: the dartboard inside the context window
+// The section slide of "Context and requirements", echoing the Hero motif: the dartboard inside the context window
 // frame, in `machine`, static and dynamic context feeding it.
 export const contextIsTheRequirement = slide({
   slug: 'context-is-the-requirement',

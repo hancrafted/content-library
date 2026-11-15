@@ -1437,24 +1437,24 @@
     "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills": {
       "en": {
         "title": "What lies below the waterline of sustainable AI skills",
-        "caption": "Every conversation with AI starts from zero on how you work. A skill hands it your proven procedure on demand, and where you keep the project details, inside the skill or beside it, decides how reusable it is.",
-        "description": "When a task you keep explaining should become a skill, how to write its description as the moment you'd need it, what goes into the skill and what stays in project context, and what a shared skill needs to stay right: an owner, a version, tests and a retirement date.",
-        "minutes": 32.842857142857135,
+        "caption": "A model receives the context its app supplies. A skill can provide a proven procedure when needed, and where project details live affects how reusable it is.",
+        "description": "When a task you keep explaining might become a skill, how to describe when it is useful, what belongs in it and what stays in project context, and how a team might maintain shared skills.",
+        "minutes": 31.421428571428567,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "A thought experiment",
-            "minutes": 0.8857142857142857,
+            "minutes": 0.8214285714285714,
             "items": [
               {
                 "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
-                "title": "An AI model that forgets every morning",
-                "minutes": 1.157142857142857
+                "title": "A model that forgets in this thought experiment",
+                "minutes": 1.2857142857142856
               },
               {
                 "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
                 "title": "A skill hands the AI your procedure",
-                "minutes": 1.35
+                "minutes": 1.2642857142857142
               }
             ]
           },
@@ -1470,30 +1470,30 @@
               },
               {
                 "id": "what-a-skill-is--three-levels-of-loading",
-                "title": "How AI discovers and reads a skill",
-                "minutes": 1.4071428571428573
+                "title": "How some platforms load skills in stages",
+                "minutes": 1.3357142857142856
               },
               {
                 "id": "what-a-skill-is--skills-are-dynamic-context",
-                "title": "Skills are static and dynamic context",
-                "minutes": 1.35
+                "title": "Skills can be static and dynamic context",
+                "minutes": 1.1071428571428572
               },
               {
                 "id": "what-a-skill-is--instructions-skills-and-connectors",
                 "title": "Instructions, skills and connectors",
-                "minutes": 1.307142857142857
+                "minutes": 1.2142857142857142
               },
               {
                 "id": "what-a-skill-is--two-ways-to-call-a-skill",
-                "title": "Two ways to call a skill",
-                "minutes": 0.9928571428571428
+                "title": "Two ways a skill can be invoked",
+                "minutes": 0.7714285714285714
               }
             ]
           },
           {
             "id": "when-to-write-one",
             "title": "When to write one",
-            "minutes": 0.8714285714285713,
+            "minutes": 0.7142857142857142,
             "items": [
               {
                 "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -1508,30 +1508,26 @@
               {
                 "id": "when-to-write-one--write-it-from-a-good-run",
                 "title": "Write it from a good run",
-                "minutes": 1.2428571428571429
+                "minutes": 1.3
               }
             ]
           },
           {
             "id": "the-label",
             "title": "The description",
-            "minutes": 0.4285714285714286,
+            "minutes": 0.5,
             "items": [
               {
                 "id": "the-label--the-description-is-all-the-ai-sees",
-                "title": "The description is the trigger",
-                "minutes": 1.157142857142857
+                "title": "The description can help discovery",
+                "minutes": 1.0642857142857143
               },
               {
                 "id": "the-label--name-the-moment-not-the-content",
                 "title": "Name the trigger, not the content",
-                "minutes": 1.3428571428571427
+                "minutes": 1.2142857142857144
               },
-              {
-                "id": "the-label--more-skills-harder-choice",
-                "title": "More skills, harder choice",
-                "minutes": 1.5142857142857142
-              }
+              { "id": "the-label--more-skills-harder-choice", "title": "More skills, harder choice", "minutes": 1.3 }
             ]
           },
           {
@@ -1565,7 +1561,7 @@
               {
                 "id": "what-stays-beside--who-uses-it-and-where",
                 "title": "Who uses it, and where",
-                "minutes": 1.0357142857142858
+                "minutes": 0.9285714285714286
               },
               {
                 "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
@@ -1582,12 +1578,12 @@
               {
                 "id": "sharing-it--shared-skills-are-knowledge-articles",
                 "title": "Shared skills are knowledge articles",
-                "minutes": 1.0571428571428572
+                "minutes": 0.9428571428571428
               },
               {
                 "id": "sharing-it--who-owns-the-shared-skill-library",
                 "title": "Who owns the shared skill library",
-                "minutes": 0.9214285714285715
+                "minutes": 0.8285714285714285
               },
               {
                 "id": "sharing-it--does-the-skill-make-things-better",
@@ -1604,18 +1600,18 @@
               {
                 "id": "keeping-it-alive--every-skill-is-a-loan",
                 "title": "Every skill is a loan",
-                "minutes": 0.6571428571428571
+                "minutes": 0.7071428571428572
               },
               {
                 "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
                 "title": "The model changes, the skill doesn't",
-                "minutes": 1.2142857142857144
+                "minutes": 1.1571428571428573
               },
-              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7214285714285714 },
+              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7 },
               {
                 "id": "keeping-it-alive--the-whole-iceberg",
                 "title": "The whole iceberg",
-                "minutes": 0.8928571428571428
+                "minutes": 0.9285714285714286
               }
             ]
           }
@@ -1623,24 +1619,24 @@
       },
       "de": {
         "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
-        "caption": "Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt.",
-        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
-        "minutes": 36.7,
+        "caption": "Das Modell verarbeitet den Kontext, den seine App mitgibt. Ein Skill kann bei Bedarf ein bewährtes Vorgehen bereitstellen; wo Projektdetails liegen, beeinflusst, wie gut es sich wiederverwenden lässt.",
+        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden könnte, wie Du beschreibst, wann er nützlich ist, was hineingehört und was im Projektkontext bleibt – und wie ein Team gemeinsame Skills pflegen kann.",
+        "minutes": 35.175,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "Ein Gedankenexperiment",
-            "minutes": 1.0583333333333333,
+            "minutes": 0.975,
             "items": [
               {
                 "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
-                "title": "Ein KI-Modell, das jeden Morgen vergisst",
-                "minutes": 1.25
+                "title": "Ein Modell, das im Gedankenexperiment vergisst",
+                "minutes": 1.3583333333333334
               },
               {
                 "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
                 "title": "Ein Skill gibt der KI Dein Vorgehen",
-                "minutes": 1.4583333333333335
+                "minutes": 1.35
               }
             ]
           },
@@ -1656,30 +1652,30 @@
               },
               {
                 "id": "what-a-skill-is--three-levels-of-loading",
-                "title": "Wie die KI einen Skill findet und liest",
-                "minutes": 1.5250000000000001
+                "title": "Wie manche Plattformen Skills stufenweise laden",
+                "minutes": 1.4500000000000002
               },
               {
                 "id": "what-a-skill-is--skills-are-dynamic-context",
-                "title": "Skills sind statischer und dynamischer Kontext",
-                "minutes": 1.4083333333333332
+                "title": "Skills können statischer und dynamischer Kontext sein",
+                "minutes": 1.1833333333333331
               },
               {
                 "id": "what-a-skill-is--instructions-skills-and-connectors",
                 "title": "Anweisungen, Skills und Konnektoren",
-                "minutes": 1.4666666666666668
+                "minutes": 1.35
               },
               {
                 "id": "what-a-skill-is--two-ways-to-call-a-skill",
-                "title": "Zwei Wege, einen Skill aufzurufen",
-                "minutes": 1.0833333333333335
+                "title": "Zwei Wege, einen Skill zu nutzen",
+                "minutes": 0.875
               }
             ]
           },
           {
             "id": "when-to-write-one",
             "title": "Wann Du einen schreibst",
-            "minutes": 0.9083333333333333,
+            "minutes": 0.85,
             "items": [
               {
                 "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -1694,29 +1690,29 @@
               {
                 "id": "when-to-write-one--write-it-from-a-good-run",
                 "title": "Schreib ihn aus einem guten Durchlauf",
-                "minutes": 1.3916666666666666
+                "minutes": 1.5
               }
             ]
           },
           {
             "id": "the-label",
             "title": "Die Beschreibung",
-            "minutes": 0.5,
+            "minutes": 0.5416666666666666,
             "items": [
               {
                 "id": "the-label--the-description-is-all-the-ai-sees",
-                "title": "Die Beschreibung ist der Auslöser",
-                "minutes": 1.291666666666667
+                "title": "Die Beschreibung kann beim Finden helfen",
+                "minutes": 1.1416666666666666
               },
               {
                 "id": "the-label--name-the-moment-not-the-content",
                 "title": "Nenne den Auslöser, nicht den Inhalt",
-                "minutes": 1.575
+                "minutes": 1.4083333333333332
               },
               {
                 "id": "the-label--more-skills-harder-choice",
                 "title": "Mehr Skills, schwerere Wahl",
-                "minutes": 1.666666666666667
+                "minutes": 1.5583333333333336
               }
             ]
           },
@@ -1751,7 +1747,7 @@
               {
                 "id": "what-stays-beside--who-uses-it-and-where",
                 "title": "Wer ihn nutzt, und wo",
-                "minutes": 1.1333333333333333
+                "minutes": 0.9666666666666667
               },
               {
                 "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
@@ -1763,17 +1759,17 @@
           {
             "id": "sharing-it",
             "title": "Ihn teilen",
-            "minutes": 0.42500000000000004,
+            "minutes": 0.4,
             "items": [
               {
                 "id": "sharing-it--shared-skills-are-knowledge-articles",
                 "title": "Geteilte Skills sind Wissensartikel",
-                "minutes": 1.2166666666666668
+                "minutes": 1
               },
               {
                 "id": "sharing-it--who-owns-the-shared-skill-library",
                 "title": "Wem die geteilte Skill-Bibliothek gehört",
-                "minutes": 1.0166666666666666
+                "minutes": 0.9500000000000001
               },
               {
                 "id": "sharing-it--does-the-skill-make-things-better",
@@ -1790,18 +1786,18 @@
               {
                 "id": "keeping-it-alive--every-skill-is-a-loan",
                 "title": "Jeder Skill ist ein Kredit",
-                "minutes": 0.8166666666666667
+                "minutes": 0.8333333333333333
               },
               {
                 "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
                 "title": "Das Modell ändert sich, der Skill nicht",
-                "minutes": 1.4166666666666665
+                "minutes": 1.375
               },
-              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8916666666666666 },
+              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8666666666666667 },
               {
                 "id": "keeping-it-alive--the-whole-iceberg",
                 "title": "Der ganze Eisberg",
-                "minutes": 1.0499999999999998
+                "minutes": 1.0916666666666668
               }
             ]
           }
@@ -2193,24 +2189,24 @@
     "from-shared-understanding-to-shared-context": {
       "en": {
         "title": "From shared understanding to shared context",
-        "caption": "AI makes every station faster, so what you hand the agent decides the result: context engineering is requirements engineering for agents, and an AI interview builds that context for you.",
-        "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat.",
-        "minutes": 16.214285714285715,
+        "caption": "AI can speed up some work, but what you hand an agent shapes its result. Context engineering offers a useful, imperfect analogy to requirements engineering; an AI interview can help clarify the handover.",
+        "description": "How work can speed up without guaranteeing a better result, how static and dynamic context differ, how to spot context that goes bad, and how an AI interview can help build a useful handover to take into a fresh chat.",
+        "minutes": 16.264285714285716,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "A thought experiment",
-            "minutes": 1.05,
+            "minutes": 0.9928571428571429,
             "items": [
               {
                 "id": "a-thought-experiment--what-the-customer-really-wanted",
                 "title": "What the customer really wanted",
-                "minutes": 1.1071428571428572
+                "minutes": 0.9571428571428571
               },
               {
                 "id": "a-thought-experiment--what-happens-with-ai",
                 "title": "What happens with AI",
-                "minutes": 0.7142857142857143
+                "minutes": 0.8285714285714285
               },
               {
                 "id": "a-thought-experiment--speed-the-whole-line-can-carry",
@@ -2237,14 +2233,14 @@
               {
                 "id": "every-product-is-a-translation--precision-and-accuracy",
                 "title": "Precision and accuracy",
-                "minutes": 0.9357142857142857
+                "minutes": 0.8928571428571429
               }
             ]
           },
           {
             "id": "context-is-the-requirement",
-            "title": "Context is the requirement",
-            "minutes": 0.7214285714285715,
+            "title": "Context and requirements",
+            "minutes": 0.75,
             "items": [
               {
                 "id": "context-is-the-requirement--what-the-ai-actually-sees",
@@ -2253,24 +2249,28 @@
               },
               {
                 "id": "context-is-the-requirement--context-engineering-is-requirements-engineering-for-agents",
-                "title": "Context engineering is requirements engineering for agents",
-                "minutes": 1.1642857142857144
+                "title": "Context engineering and requirements: a useful analogy",
+                "minutes": 1.0357142857142856
               },
               {
                 "id": "context-is-the-requirement--static-and-dynamic-context",
                 "title": "Static and dynamic context",
-                "minutes": 1.0142857142857142
+                "minutes": 1.0357142857142856
               },
-              { "id": "context-is-the-requirement--you-run-the-bench", "title": "You run the bench", "minutes": 0.7 },
+              {
+                "id": "context-is-the-requirement--you-run-the-bench",
+                "title": "You run the bench",
+                "minutes": 0.6785714285714286
+              },
               {
                 "id": "context-is-the-requirement--context-rot",
                 "title": "Context rot",
-                "minutes": 1.4357142857142857
+                "minutes": 1.4500000000000002
               },
               {
                 "id": "context-is-the-requirement--keeping-the-bench-clean",
                 "title": "Keeping the bench clean",
-                "minutes": 0.5285714285714285
+                "minutes": 0.7071428571428571
               }
             ]
           },
@@ -2282,31 +2282,35 @@
               {
                 "id": "creating-context-for-agents--meta-prompting",
                 "title": "Meta prompting",
-                "minutes": 0.8357142857142856
+                "minutes": 0.9285714285714286
               },
-              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 0.9142857142857144 },
-              { "id": "creating-context-for-agents--brief", "title": "BRIEF", "minutes": 1.2214285714285715 }
+              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 0.85 },
+              { "id": "creating-context-for-agents--brief", "title": "BRIEF", "minutes": 1.2857142857142856 }
             ]
           }
         ]
       },
       "de": {
         "title": "Vom geteilten Verständnis zum geteilten Kontext",
-        "caption": "KI macht jede Station schneller, also entscheidet das, was Du dem Agenten übergibst, über das Ergebnis: Context Engineering ist Requirements Engineering für Agenten, und ein KI-Interview baut diesen Kontext für Dich.",
-        "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
-        "minutes": 18.05,
+        "caption": "KI kann Arbeit beschleunigen, aber was Du einem Agenten mitgibst, beeinflusst das Ergebnis. Der Vergleich zwischen Context Engineering und Requirements Engineering hilft, ist aber nicht vollständig; ein KI-Interview kann die Übergabe klären.",
+        "description": "Wie Arbeit schneller werden kann, ohne dass dadurch ein besseres Ergebnis garantiert ist, worin sich statischer und dynamischer Kontext unterscheiden, wie Du problematischen Kontext erkennst und wie ein KI-Interview helfen kann, eine brauchbare Übergabe für einen frischen Chat zu erstellen.",
+        "minutes": 17.96666666666667,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "Ein Gedankenexperiment",
-            "minutes": 1.1333333333333333,
+            "minutes": 1.0333333333333332,
             "items": [
               {
                 "id": "a-thought-experiment--what-the-customer-really-wanted",
                 "title": "Was der Kunde wirklich wollte",
-                "minutes": 1.2333333333333334
+                "minutes": 1.1333333333333333
               },
-              { "id": "a-thought-experiment--what-happens-with-ai", "title": "Was mit KI passiert", "minutes": 0.775 },
+              {
+                "id": "a-thought-experiment--what-happens-with-ai",
+                "title": "Was mit KI passiert",
+                "minutes": 0.9416666666666667
+              },
               {
                 "id": "a-thought-experiment--speed-the-whole-line-can-carry",
                 "title": "Tempo, das das ganze Band trägt",
@@ -2332,14 +2336,14 @@
               {
                 "id": "every-product-is-a-translation--precision-and-accuracy",
                 "title": "Präzision und Genauigkeit",
-                "minutes": 1.0916666666666668
+                "minutes": 0.9750000000000001
               }
             ]
           },
           {
             "id": "context-is-the-requirement",
-            "title": "Kontext ist die Anforderung",
-            "minutes": 0.7916666666666666,
+            "title": "Kontext und Anforderungen",
+            "minutes": 0.9,
             "items": [
               {
                 "id": "context-is-the-requirement--what-the-ai-actually-sees",
@@ -2348,28 +2352,28 @@
               },
               {
                 "id": "context-is-the-requirement--context-engineering-is-requirements-engineering-for-agents",
-                "title": "Context Engineering ist Requirements Engineering für Agenten",
-                "minutes": 1.2166666666666668
+                "title": "Context Engineering und Anforderungen: ein hilfreicher Vergleich",
+                "minutes": 1.05
               },
               {
                 "id": "context-is-the-requirement--static-and-dynamic-context",
                 "title": "Statischer und dynamischer Kontext",
-                "minutes": 1.1833333333333333
+                "minutes": 1.1583333333333332
               },
               {
                 "id": "context-is-the-requirement--you-run-the-bench",
                 "title": "Du führst die Werkbank",
-                "minutes": 0.7749999999999999
+                "minutes": 0.7666666666666666
               },
               {
                 "id": "context-is-the-requirement--context-rot",
                 "title": "Context Rot",
-                "minutes": 1.5916666666666668
+                "minutes": 1.6333333333333333
               },
               {
                 "id": "context-is-the-requirement--keeping-the-bench-clean",
                 "title": "Die Werkbank sauber halten",
-                "minutes": 0.6083333333333334
+                "minutes": 0.8
               }
             ]
           },
@@ -2381,9 +2385,9 @@
               {
                 "id": "creating-context-for-agents--meta-prompting",
                 "title": "Meta-Prompting",
-                "minutes": 0.9583333333333333
+                "minutes": 1.0583333333333333
               },
-              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 1.05 },
+              { "id": "creating-context-for-agents--grill-me", "title": "Grill-me", "minutes": 0.875 },
               { "id": "creating-context-for-agents--brief", "title": "BRIEF", "minutes": 1.3666666666666667 }
             ]
           }
@@ -3001,24 +3005,24 @@
     "what-lies-below-the-waterline-of-sustainable-ai-skills": {
       "en": {
         "title": "What lies below the waterline of sustainable AI skills",
-        "caption": "Every conversation with AI starts from zero on how you work. A skill hands it your proven procedure on demand, and where you keep the project details, inside the skill or beside it, decides how reusable it is.",
-        "description": "When a task you keep explaining should become a skill, how to write its description as the moment you'd need it, what goes into the skill and what stays in project context, and what a shared skill needs to stay right: an owner, a version, tests and a retirement date.",
-        "minutes": 32.842857142857135,
+        "caption": "A model receives the context its app supplies. A skill can provide a proven procedure when needed, and where project details live affects how reusable it is.",
+        "description": "When a task you keep explaining might become a skill, how to describe when it is useful, what belongs in it and what stays in project context, and how a team might maintain shared skills.",
+        "minutes": 31.421428571428567,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "A thought experiment",
-            "minutes": 0.8857142857142857,
+            "minutes": 0.8214285714285714,
             "items": [
               {
                 "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
-                "title": "An AI model that forgets every morning",
-                "minutes": 1.157142857142857
+                "title": "A model that forgets in this thought experiment",
+                "minutes": 1.2857142857142856
               },
               {
                 "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
                 "title": "A skill hands the AI your procedure",
-                "minutes": 1.35
+                "minutes": 1.2642857142857142
               }
             ]
           },
@@ -3034,30 +3038,30 @@
               },
               {
                 "id": "what-a-skill-is--three-levels-of-loading",
-                "title": "How AI discovers and reads a skill",
-                "minutes": 1.4071428571428573
+                "title": "How some platforms load skills in stages",
+                "minutes": 1.3357142857142856
               },
               {
                 "id": "what-a-skill-is--skills-are-dynamic-context",
-                "title": "Skills are static and dynamic context",
-                "minutes": 1.35
+                "title": "Skills can be static and dynamic context",
+                "minutes": 1.1071428571428572
               },
               {
                 "id": "what-a-skill-is--instructions-skills-and-connectors",
                 "title": "Instructions, skills and connectors",
-                "minutes": 1.307142857142857
+                "minutes": 1.2142857142857142
               },
               {
                 "id": "what-a-skill-is--two-ways-to-call-a-skill",
-                "title": "Two ways to call a skill",
-                "minutes": 0.9928571428571428
+                "title": "Two ways a skill can be invoked",
+                "minutes": 0.7714285714285714
               }
             ]
           },
           {
             "id": "when-to-write-one",
             "title": "When to write one",
-            "minutes": 0.8714285714285713,
+            "minutes": 0.7142857142857142,
             "items": [
               {
                 "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -3072,30 +3076,26 @@
               {
                 "id": "when-to-write-one--write-it-from-a-good-run",
                 "title": "Write it from a good run",
-                "minutes": 1.2428571428571429
+                "minutes": 1.3
               }
             ]
           },
           {
             "id": "the-label",
             "title": "The description",
-            "minutes": 0.4285714285714286,
+            "minutes": 0.5,
             "items": [
               {
                 "id": "the-label--the-description-is-all-the-ai-sees",
-                "title": "The description is the trigger",
-                "minutes": 1.157142857142857
+                "title": "The description can help discovery",
+                "minutes": 1.0642857142857143
               },
               {
                 "id": "the-label--name-the-moment-not-the-content",
                 "title": "Name the trigger, not the content",
-                "minutes": 1.3428571428571427
+                "minutes": 1.2142857142857144
               },
-              {
-                "id": "the-label--more-skills-harder-choice",
-                "title": "More skills, harder choice",
-                "minutes": 1.5142857142857142
-              }
+              { "id": "the-label--more-skills-harder-choice", "title": "More skills, harder choice", "minutes": 1.3 }
             ]
           },
           {
@@ -3129,7 +3129,7 @@
               {
                 "id": "what-stays-beside--who-uses-it-and-where",
                 "title": "Who uses it, and where",
-                "minutes": 1.0357142857142858
+                "minutes": 0.9285714285714286
               },
               {
                 "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
@@ -3146,12 +3146,12 @@
               {
                 "id": "sharing-it--shared-skills-are-knowledge-articles",
                 "title": "Shared skills are knowledge articles",
-                "minutes": 1.0571428571428572
+                "minutes": 0.9428571428571428
               },
               {
                 "id": "sharing-it--who-owns-the-shared-skill-library",
                 "title": "Who owns the shared skill library",
-                "minutes": 0.9214285714285715
+                "minutes": 0.8285714285714285
               },
               {
                 "id": "sharing-it--does-the-skill-make-things-better",
@@ -3168,18 +3168,18 @@
               {
                 "id": "keeping-it-alive--every-skill-is-a-loan",
                 "title": "Every skill is a loan",
-                "minutes": 0.6571428571428571
+                "minutes": 0.7071428571428572
               },
               {
                 "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
                 "title": "The model changes, the skill doesn't",
-                "minutes": 1.2142857142857144
+                "minutes": 1.1571428571428573
               },
-              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7214285714285714 },
+              { "id": "keeping-it-alive--retire-skills", "title": "Retire skills", "minutes": 0.7 },
               {
                 "id": "keeping-it-alive--the-whole-iceberg",
                 "title": "The whole iceberg",
-                "minutes": 0.8928571428571428
+                "minutes": 0.9285714285714286
               }
             ]
           }
@@ -3187,24 +3187,24 @@
       },
       "de": {
         "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
-        "caption": "Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt.",
-        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
-        "minutes": 36.7,
+        "caption": "Ein Modell erhält den Kontext, den seine App ihm mitgibt. Ein Skill kann bewährtes Vorgehen bereitstellen, wenn es gebraucht wird; wo Projektdetails liegen, beeinflusst die Wiederverwendbarkeit.",
+        "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden könnte, wie Du beschreibst, wann er nützlich ist, was in ihn gehört und was im Projektkontext bleibt – und wie ein Team geteilte Skills pflegen kann.",
+        "minutes": 35.175,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "Ein Gedankenexperiment",
-            "minutes": 1.0583333333333333,
+            "minutes": 0.975,
             "items": [
               {
                 "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
-                "title": "Ein KI-Modell, das jeden Morgen vergisst",
-                "minutes": 1.25
+                "title": "Ein Modell, das im Gedankenexperiment vergisst",
+                "minutes": 1.3583333333333334
               },
               {
                 "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
                 "title": "Ein Skill gibt der KI Dein Vorgehen",
-                "minutes": 1.4583333333333335
+                "minutes": 1.35
               }
             ]
           },
@@ -3220,30 +3220,30 @@
               },
               {
                 "id": "what-a-skill-is--three-levels-of-loading",
-                "title": "Wie die KI einen Skill findet und liest",
-                "minutes": 1.5250000000000001
+                "title": "Wie manche Plattformen Skills stufenweise laden",
+                "minutes": 1.4500000000000002
               },
               {
                 "id": "what-a-skill-is--skills-are-dynamic-context",
-                "title": "Skills sind statischer und dynamischer Kontext",
-                "minutes": 1.4083333333333332
+                "title": "Skills können statischer und dynamischer Kontext sein",
+                "minutes": 1.1833333333333331
               },
               {
                 "id": "what-a-skill-is--instructions-skills-and-connectors",
                 "title": "Anweisungen, Skills und Konnektoren",
-                "minutes": 1.4666666666666668
+                "minutes": 1.35
               },
               {
                 "id": "what-a-skill-is--two-ways-to-call-a-skill",
-                "title": "Zwei Wege, einen Skill aufzurufen",
-                "minutes": 1.0833333333333335
+                "title": "Zwei Wege, einen Skill zu nutzen",
+                "minutes": 0.875
               }
             ]
           },
           {
             "id": "when-to-write-one",
             "title": "Wann Du einen schreibst",
-            "minutes": 0.9083333333333333,
+            "minutes": 0.85,
             "items": [
               {
                 "id": "when-to-write-one--the-third-time-is-the-signal",
@@ -3258,29 +3258,29 @@
               {
                 "id": "when-to-write-one--write-it-from-a-good-run",
                 "title": "Schreib ihn aus einem guten Durchlauf",
-                "minutes": 1.3916666666666666
+                "minutes": 1.5
               }
             ]
           },
           {
             "id": "the-label",
             "title": "Die Beschreibung",
-            "minutes": 0.5,
+            "minutes": 0.5416666666666666,
             "items": [
               {
                 "id": "the-label--the-description-is-all-the-ai-sees",
-                "title": "Die Beschreibung ist der Auslöser",
-                "minutes": 1.291666666666667
+                "title": "Die Beschreibung kann beim Finden helfen",
+                "minutes": 1.1416666666666666
               },
               {
                 "id": "the-label--name-the-moment-not-the-content",
                 "title": "Nenne den Auslöser, nicht den Inhalt",
-                "minutes": 1.575
+                "minutes": 1.4083333333333332
               },
               {
                 "id": "the-label--more-skills-harder-choice",
                 "title": "Mehr Skills, schwerere Wahl",
-                "minutes": 1.666666666666667
+                "minutes": 1.5583333333333336
               }
             ]
           },
@@ -3315,7 +3315,7 @@
               {
                 "id": "what-stays-beside--who-uses-it-and-where",
                 "title": "Wer ihn nutzt, und wo",
-                "minutes": 1.1333333333333333
+                "minutes": 0.9666666666666667
               },
               {
                 "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
@@ -3327,17 +3327,17 @@
           {
             "id": "sharing-it",
             "title": "Ihn teilen",
-            "minutes": 0.42500000000000004,
+            "minutes": 0.4,
             "items": [
               {
                 "id": "sharing-it--shared-skills-are-knowledge-articles",
                 "title": "Geteilte Skills sind Wissensartikel",
-                "minutes": 1.2166666666666668
+                "minutes": 1
               },
               {
                 "id": "sharing-it--who-owns-the-shared-skill-library",
                 "title": "Wem die geteilte Skill-Bibliothek gehört",
-                "minutes": 1.0166666666666666
+                "minutes": 0.9500000000000001
               },
               {
                 "id": "sharing-it--does-the-skill-make-things-better",
@@ -3354,18 +3354,18 @@
               {
                 "id": "keeping-it-alive--every-skill-is-a-loan",
                 "title": "Jeder Skill ist ein Kredit",
-                "minutes": 0.8166666666666667
+                "minutes": 0.8333333333333333
               },
               {
                 "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
                 "title": "Das Modell ändert sich, der Skill nicht",
-                "minutes": 1.4166666666666665
+                "minutes": 1.375
               },
-              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8916666666666666 },
+              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8666666666666667 },
               {
                 "id": "keeping-it-alive--the-whole-iceberg",
                 "title": "Der ganze Eisberg",
-                "minutes": 1.0499999999999998
+                "minutes": 1.0916666666666668
               }
             ]
           }

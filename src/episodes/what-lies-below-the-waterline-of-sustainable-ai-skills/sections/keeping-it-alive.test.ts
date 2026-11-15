@@ -93,7 +93,8 @@ describe('success cases', () => {
       [
         {
           title: 'Quick to write',
-          script: 'A skill takes five minutes to write. That is the loan: you get the speed now.',
+          script:
+            'The target here is five minutes to draft a skill from a good run—an illustration, not an average. That is the loan: you get the speed now.',
         },
         {
           title: 'A running tab',
@@ -103,14 +104,14 @@ describe('success cases', () => {
         {
           title: 'Owning thirty',
           script:
-            'Writing thirty skills is easy. Owning thirty is the hard part, because the cost was never in writing the skill, it is in keeping it right, month after month.',
+            'For example, writing thirty skills may be easy. Keeping thirty right is the harder part, because the cost is in maintaining them month after month.',
         },
       ],
       [
         {
           title: 'Not the only pilot',
           script:
-            'There is one more thing that changes under your skill, and you do not control it: the model that reads it. Every AI model has the condition we started with, and each AI provider trains its own, the way each pilot school trains its own pilots. So the reader of your skill is never fixed.',
+            'One more thing can change how your skill behaves: the model or agent that reads it. Providers train different models, like different pilot schools training their own pilots. The reader can change, so test the skill in the product and setup where you plan to use it.',
         },
         {
           title: 'Update and switch',
@@ -127,7 +128,7 @@ describe('success cases', () => {
         {
           title: 'Read the log',
           script:
-            'Last job: retire skills. Put your list of skills next to what your work actually used this season, the dive log on our ship, and see which skills no task ever opened.',
+            'Last job: retire skills. In this example, put the skill list next to what the work used this season—the dive log on our ship—and see which skills no task opened.',
         },
         {
           title: 'The archive box',
@@ -137,14 +138,14 @@ describe('success cases', () => {
         {
           title: 'Short index again',
           script:
-            'And the index left behind is short again, with the one you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the model can pick it.',
+            'And the example index is short again, with the skill you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the platform can surface it.',
         },
       ],
       [
         {
           title: 'Three steps',
           script:
-            'Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write its description as the moment you would need it. Three: before you share it, decide where the project details live, and give it an owner.',
+            "Let me bring the three steps up from the seabed. One: pick a task you have explained three times, and turn a good run of it into a skill. Two: write a clear description that helps people or platforms find it. Three: before sharing, decide the skill's scope and where project details belong; your team may name an owner if useful.",
         },
         {
           title: 'The honest caveat',

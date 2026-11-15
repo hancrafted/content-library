@@ -10,7 +10,7 @@
       "month": "Day one",
       "term": "Skill written",
       "scene": "",
-      "chat": "Five minutes, from a good run. That is the loan: you get the speed now."
+      "chat": "Illustrative target: five minutes from a good run. That is the loan: you get the speed now."
     },
     "sites": {
       "month": "Weeks later",
@@ -32,7 +32,9 @@
     }
   },
   "coding": {
-    "written": { "lead": "Five minutes, from a good run. That is the loan: you get the speed now." },
+    "written": {
+      "lead": "Illustrative target: five minutes, from a good run. That is the loan: you get the speed now."
+    },
     "sites": { "lead": "collect-sediment-sample/SKILL.md, step 1" },
     "arm": { "lead": "collect-sediment-sample/SKILL.md, step 3" },
     "overlap": { "lead": "two descriptions the agent chooses between" }
@@ -44,7 +46,7 @@
   "stack": {
     "label": "One skill, over months",
     "writing": "writing",
-    "writingHint": "five minutes",
+    "writingHint": "illustrative: five minutes",
     "keeping": "keeping it right",
     "keepingHint": "one block per fix",
     "blocks": {
@@ -84,7 +86,7 @@
       "quick-to-write": {
         "title": "Quick to write",
         "keywords": "",
-        "script": "A skill takes five minutes to write. That is the loan: you get the speed now."
+        "script": "The target here is five minutes to draft a skill from a good run—an illustration, not an average. That is the loan: you get the speed now."
       },
       "a-running-tab": {
         "title": "A running tab",
@@ -94,7 +96,7 @@
       "owning-thirty": {
         "title": "Owning thirty",
         "keywords": "",
-        "script": "Writing thirty skills is easy. Owning thirty is the hard part, because the cost was never in writing the skill, it is in keeping it right, month after month."
+        "script": "For example, writing thirty skills may be easy. Keeping thirty right is the harder part, because the cost is in maintaining them month after month."
       }
     }
   }

@@ -1,29 +1,29 @@
 {
   "title": "Anweisungen, Skills und Konnektoren",
-  "caption": "Persönliche und Projektanweisungen sind immer geladen, Skills laden bei Bedarf, und Konnektoren reichen in andere Systeme.",
+  "caption": "Apps können Anweisungen und Skills unterschiedlich laden; Konnektoren verbinden Agenten mit anderen Systemen.",
   "analogy": { "label": "In der Geschichte:", "text": "Dein Notizbuch, die Wand, das Handbuch und das Kabel." },
   "listLabel": "Anweisungen, Skills und Konnektoren",
   "tags": { "static": "statisch", "dynamic": "dynamisch" },
   "things": {
     "personal": {
       "term": "Persönliche Anweisungen",
-      "scope": "folgen Dir in jedes Projekt",
+      "scope": "können Dich appabhängig in andere Projekte begleiten",
       "scene": "Dein Notizbuch: Dauerbefehle, die mit auf jedes Schiff kommen",
       "panel": "Dein Notizbuch",
       "alt": "Bild 1 von 4: Dein Notizbuch in der Hand des Kapitäns.",
       "coding": {
-        "lead": "zu Beginn jeder Sitzung gelesen, in jedem Projekt",
+        "lead": "Beispiel: in Claude Code zu Sitzungsbeginn gelesen",
         "code": "# Dauerbefehle\n- Proben in metrischen Einheiten beschriften."
       }
     },
     "project": {
       "term": "Projektanweisungen",
-      "scope": "nur in diesem einen Projekt",
+      "scope": "können auf ein Projekt begrenzt sein",
       "scene": "das Projektbriefing an der Wand",
       "panel": "das Briefing an der Wand",
       "alt": "Bild 2 von 4: Das Projektbriefing an der Wand.",
       "coding": {
-        "lead": "die Datei mit den Projektanweisungen, die der Agent liest, immer geladen; CLAUDE.md in Claude Code",
+        "lead": "Projektanweisungen; wann sie geladen werden, hängt von der App ab",
         "code": "# Projektbriefing\n…\n## Skills\n- collect-sediment-sample\n- measure-water-column"
       }
     },
@@ -34,7 +34,7 @@
       "panel": "das Handbuch an der Konsole",
       "alt": "Bild 3 von 4: Das Handbuch an der Konsole.",
       "coding": {
-        "lead": "Frontmatter immer geladen · Hauptteil bei Bedarf",
+        "lead": "Metadaten und Anweisungen können zu unterschiedlichen Zeitpunkten laden",
         "code": "---\nname: collect-sediment-sample\ndescription: Nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen.\n---\n1. Den Roboter 2 m über dem Meeresboden halten."
       }
     },
@@ -61,8 +61,8 @@
   },
   "notes": {
     "instructions-are-always-loaded-skills-are-not": {
-      "header": "Anweisungen sind immer geladen, Skills nicht",
-      "description": "Claude Code liest CLAUDE.md „at the start of every session“ und lädt einen Skill „on demand“ [1]. Codex, Gemini CLI und GitHub Copilot dokumentieren dieselbe Trennung für ihre Anweisungsdateien und Skills [2]. Die eigenen und Projektanweisungen von ChatGPT wurden nicht gelesen, und ob die Gemini-App ihre Anweisungen zu Beginn jeder Sitzung lädt, ist nicht belegt; für diese beiden Apps ist die Trennung also nicht bestätigt.",
+      "header": "Anweisungen und Skills laden je nach App anders",
+      "description": "Claude Code liest CLAUDE.md „at the start of every session“ und lädt einen Skill „on demand“ [1]. Andere Produkte dokumentieren ihr jeweiliges Verhalten beim Laden von Anweisungen und Skills [2]. ChatGPTs eigene und Projektanweisungen wurden nicht geprüft; auch ist nicht belegt, ob die Gemini-App ihre Anweisungen zu Sitzungsbeginn lädt. Dieselbe Trennung lässt sich daher nicht für alle Apps annehmen.",
       "sources": {
         "anthropic-claude-code-features": { "title": "Anthropic, Extend Claude Code (Claude Code docs)" },
         "github-copilot-cli-skills": { "title": "GitHub, Adding agent skills for GitHub Copilot CLI" }
@@ -110,7 +110,7 @@
       "read-the-tags": {
         "title": "Lies die Schilder",
         "keywords": "",
-        "script": "Nimm sie einzeln. Persönliche Anweisungen sind statisch, und sie folgen Dir in jedes Projekt, so wie Dein Notizbuch mit auf jedes Schiff kommt. Projektanweisungen sind auch statisch, aber nur in diesem einen Projekt. Skills sind dynamisch, weil einer kommt, wenn eine Aufgabe ihn braucht, und die Ergebnisse eines Konnektors sind auch dynamisch, weil sie während der Arbeit aus einem anderen System kommen; der Konnektor lässt das Modell außerdem in diesem System handeln. Das ist die Trennung der letzten Slide, jetzt mit Namen."
+        "script": "Nimm sie einzeln. Persönliche Anweisungen können Dich in andere Projekte begleiten, wie Dein Notizbuch auf ein anderes Schiff; Projektanweisungen lassen sich auf ein Projekt begrenzen. Wann sie geladen werden, hängt von der App ab. Ein Skill kann für eine Aufgabe aktiviert werden. Ein Konnektor kann Ergebnisse aus einem anderen System liefern oder dem Modell ermöglichen, dort zu handeln. Das ist die Unterscheidung der letzten Slide, jetzt mit Namen."
       },
       "your-words-may-differ": {
         "title": "Deine Wörter können anders sein",

@@ -1,6 +1,6 @@
 {
   "title": "Instructions, skills and connectors",
-  "caption": "Personal and project instructions are always loaded, skills load on demand, and connectors reach into other systems.",
+  "caption": "Instructions and skills can be loaded differently by each app; connectors link agents to other systems.",
   "analogy": {
     "label": "In the story:",
     "text": "Your notebook, the wall, the manual and the cable."
@@ -13,23 +13,23 @@
   "things": {
     "personal": {
       "term": "Personal instructions",
-      "scope": "follow you into every project",
+      "scope": "may follow you across projects, depending on the app",
       "scene": "your notebook: standing orders that come onto any ship",
       "panel": "your notebook",
       "alt": "Cartoon panel 1 of 4: Your notebook, in the captain's hand.",
       "coding": {
-        "lead": "read at the start of every session, in every project",
+        "lead": "example: read at session start in Claude Code",
         "code": "# Standing orders\n- Label samples in metric units."
       }
     },
     "project": {
       "term": "Project instructions",
-      "scope": "only inside this one project",
+      "scope": "can be scoped to one project",
       "scene": "the project brief on the wall",
       "panel": "the brief on the wall",
       "alt": "Cartoon panel 2 of 4: The project brief on the wall.",
       "coding": {
-        "lead": "the project instructions file the agent reads, always loaded; CLAUDE.md in Claude Code",
+        "lead": "project instruction files; when they load depends on the app",
         "code": "# Project brief\n…\n## Skills\n- collect-sediment-sample\n- measure-water-column"
       }
     },
@@ -40,7 +40,7 @@
       "panel": "the manual at the console",
       "alt": "Cartoon panel 3 of 4: The manual at the console.",
       "coding": {
-        "lead": "front matter always loaded · body on demand",
+        "lead": "metadata and instructions may load at different times",
         "code": "---\nname: collect-sediment-sample\ndescription: Use when we reach a new site and need a sample from the seabed.\n---\n1. Hold the robot 2 m above the seabed."
       }
     },
@@ -71,8 +71,8 @@
   },
   "notes": {
     "instructions-are-always-loaded-skills-are-not": {
-      "header": "Instructions are always loaded, skills are not",
-      "description": "Claude Code reads CLAUDE.md “at the start of every session” and loads a skill “on demand” [1]. Codex, Gemini CLI and GitHub Copilot document the same split for their instruction files and skills [2]. ChatGPT custom and project instructions were not read, and whether the Gemini app loads its instructions at the start of each session is unverified, so the split is not confirmed for those two apps.",
+      "header": "Instruction and skill loading depends on the app",
+      "description": "Claude Code reads CLAUDE.md “at the start of every session” and loads a skill “on demand” [1]. Other products document their own instruction and skill-loading behaviour [2]. ChatGPT custom and project instructions were not read, and whether the Gemini app loads its instructions at the start of each session is unverified, so the same split cannot be assumed across apps.",
       "sources": {
         "anthropic-claude-code-features": {
           "title": "Anthropic, Extend Claude Code (Claude Code docs)"
@@ -132,7 +132,7 @@
       "read-the-tags": {
         "title": "Read the tags",
         "keywords": "",
-        "script": "Take them one at a time. Personal instructions are static, and they follow you into every project, as your notebook comes with you onto any ship. Project instructions are static too, but only inside this one project. Skills are dynamic, because one arrives when a task needs it, and a connector's results are dynamic too, because they arrive from another system while you work; the connector also lets the model act in that system. That is the split from the last Slide, now with names."
+        "script": "Take them one at a time. Personal instructions may follow you across projects, like your notebook coming aboard another ship; project instructions can be scoped to one project. Exactly when either is loaded depends on the app. A skill may be activated for a task, and a connector can bring in results from another system or let the model act there. That is the distinction from the last Slide, now with names."
       },
       "your-words-may-differ": {
         "title": "Your words may differ",

@@ -61,7 +61,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       'A thought experiment',
-      'An AI model that forgets every morning',
+      'A model that forgets in this thought experiment',
       'A skill hands the AI your procedure',
     ];
     // ACT
@@ -90,7 +90,7 @@ describe('success cases', () => {
   it('keeps the Spec’s hook line verbatim in Slide 1’s Voice script', () => {
     // ARRANGE
     const expected =
-      "That is what working with AI feels like today, because every conversation starts from zero on how you work. You've explained this to the AI a hundred times. It has heard it once.";
+      "That can happen when an app does not carry a procedure into a later request. You may have explained it many times, but the new context may not include those explanations. A saved skill is a separate file the app can provide; it does not change the model's training or memory.";
     // ACT
     const actual = messagesOf(slideOf(FORGETS)).voiceScript.segments['the-hook']?.script;
     // ASSERT
@@ -102,7 +102,7 @@ describe('success cases', () => {
     const expected = {
       [FORGETS]: [
         {
-          header: "Each AI conversation starts fresh: Mollick's forgetful coworker",
+          header: "Mollick's metaphor and the Claude Code example",
           sources: [
             'https://www.oneusefulthing.org/p/getting-started-with-ai-good-enough',
             'https://code.claude.com/docs/en/memory',
@@ -217,7 +217,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'Ein KI-Modell, das jeden Morgen vergisst',
+        title: 'Ein Modell, das im Gedankenexperiment vergisst',
         segments: ['Drei Morgen', 'Der Haken', 'Was würdest Du tun'],
       },
       {
@@ -241,9 +241,9 @@ describe('edge cases', () => {
   it('turns Slide 1’s mornings into sessions in the Coding agent view', () => {
     // ARRANGE
     const expected = [
-      'Session 1 · fresh context window',
-      'Session 2 · fresh context window',
-      'Session 3 · fresh context window',
+      'Session 1 · no prior chat supplied',
+      'Session 2 · no prior chat supplied',
+      'Session 3 · no prior chat supplied',
     ];
     // ACT
     const $ = sceneOf(FORGETS);

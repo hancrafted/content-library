@@ -1,7 +1,7 @@
 {
   "title": "Name the trigger, not the content",
   "caption": "Say what a skill does and when to use it, in the words someone would actually say.",
-  "analogy": "Two index lines for the same card; only one matches what the captain says.",
+  "analogy": "Two index lines for the same card; one gives a clearer cue for the captain's request.",
   "request": {
     "who": "Your request, on the day of the dive",
     "text": "“Grab some <match>mud</match> <match>here</match> before we move on.”",
@@ -13,7 +13,7 @@
   },
   "index": {
     "title": "Skill index",
-    "note": "Two descriptions for the same skill; the AI sees only these lines.",
+    "note": "Two candidate descriptions; this platform may expose them before the full instructions.",
     "skill": "Collect sediment sample"
   },
   "content": {
@@ -36,7 +36,7 @@
   "step": "Second step: write its description as the moment you'd need it.",
   "footer": {
     "story": "In the story:",
-    "chat": "A description says what the skill does and when to use it; Claude chooses among potentially 100+ skills by it",
+    "chat": "A description says what the skill does and when to use it; Claude Code documents using it to choose among potentially 100+ skills",
     "coding": "The standard: a description “Should describe both what the skill does and when to use it”; Anthropic adds specific triggers and contexts"
   },
   "alt": {
@@ -45,7 +45,7 @@
   "notes": {
     "a-description-says-what-and-when": {
       "header": "A description says what and when",
-      "description": "the standard says a description \"Should describe both what the skill does and when to use it\" and include keywords that help agents identify relevant tasks [1]. Anthropic adds specific triggers and contexts, because Claude chooses among potentially 100+ skills by it [2].",
+      "description": "The standard says a description \"Should describe both what the skill does and when to use it\" and include keywords that help agents identify relevant tasks [1]. Anthropic recommends specific triggers and contexts for Claude Code, which may choose among potentially 100+ skills using descriptions [2]. This is product guidance, not a universal discovery mechanism.",
       "sources": {
         "agent-skills-specification": { "title": "Agent Skills, Specification" },
         "anthropic-skill-authoring-best-practices": { "title": "Anthropic, Skill authoring best practices" }
@@ -80,12 +80,12 @@
       "two-labels": {
         "title": "Two labels",
         "keywords": "",
-        "script": "Here are two descriptions for the same skill. The first names the content, \"SOP-07: corer handling, steps 1 to 9\", and the second says what the skill does and names the moment, \"Takes a sediment core. Use when we reach a new site and need a sample from the seabed\". One says only what is inside, the other names the trigger, when you need it, and that is your second step: write the description as the moment you'd need it."
+        "script": "Here are two descriptions for the same skill. The first names the content, \"SOP-07: corer handling, steps 1 to 9\"; the second explains what it does and when it may help. That gives a person—and a platform that uses descriptions—a clearer cue. Your second step: describe the moment you'd need the skill."
       },
       "your-request": {
         "title": "Your request",
         "keywords": "",
-        "script": "Now it is the day of the dive and you type, \"Grab some mud here before we move on.\" Nothing in \"SOP-07, steps 1 to 9\" tells the model when it is needed, but \"a sample from the seabed\" does, so only the moment description matches. Write it in the words you would actually say."
+        "script": "Now it is the day of the dive and you type, \"Grab some mud here before we move on.\" \"SOP-07, steps 1 to 9\" does not say when the procedure may help; \"a sample from the seabed\" gives a clearer cue. A platform might use that wording, but this is not a guarantee of automatic matching. Write it in the words you would actually say."
       },
       "the-closing-line": {
         "title": "The closing line",

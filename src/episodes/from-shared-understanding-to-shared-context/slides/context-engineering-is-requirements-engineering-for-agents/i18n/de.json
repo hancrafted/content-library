@@ -1,6 +1,6 @@
 {
-  "title": "Context Engineering ist Requirements Engineering für Agenten",
-  "caption": "Googles Definition, übersetzt aus dem Englischen: Context Engineering ist „die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben.“",
+  "title": "Context Engineering und Anforderungen: ein hilfreicher Vergleich",
+  "caption": "Googles übersetzte Definition: Context Engineering ist „die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben.“ Der Vergleich hilft, aber beides ist nicht dasselbe.",
   "definitionCard": {
     "heading": "Als Anforderung gelesen",
     "codebase": {
@@ -49,7 +49,7 @@
     }
   },
   "quote": "Anthropic: Ziel ist „die kleinstmögliche Menge an Tokens mit hohem Signal“, <definition>die die Chance auf das gewünschte Ergebnis maximiert</definition>.",
-  "limits": "<proposal>Eine Parallele, die Forschende vorschlagen</proposal>; anders als eine Spezifikation <stops>ist das Fenster ein Budget, das sich ändert, während der Agent arbeitet</stops>.",
+  "limits": "<proposal>Forschende haben diesen Vergleich vorgeschlagen</proposal>; anders als eine Anforderungsspezifikation <stops>ist das Kontextfenster ein begrenztes Budget, das sich während der Arbeit verändern kann</stops>.",
   "notes": {
     "googles-definition": {
       "header": "Googles Definition",
@@ -80,7 +80,7 @@
     },
     "a-proposal-not-a-finding": {
       "header": "Ein Vorschlag, kein Befund",
-      "description": "Forschende ziehen die Parallele ausdrücklich, aber keine Quelle hat sie gemessen; dass beide Disziplinen dieselbe Aufgabe haben, ist eine Schlussfolgerung [1].",
+      "description": "Forschende haben die Parallele vorgeschlagen, aber keine Quelle hat geprüft, ob beide Disziplinen gleichzusetzen sind. Sie als identisch darzustellen, ginge über die Belege hinaus [1].",
       "sources": {
         "chen-promptware-engineering": {
           "title": "Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software Engineering for Prompt-Enabled Systems"
@@ -102,12 +102,12 @@
       "the-definition": {
         "title": "Die Definition",
         "keywords": "",
-        "script": "So definieren drei Google-Ingenieure Context Engineering: die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben. Das ist für Software geschrieben, aber die Logik ist dieselbe. Und jetzt von der Technik in die Werkstatt: Die Codebase ist das Material, das schon da ist. Die Architektur ist, wie die Teile zusammenpassen. Die Konventionen sind die Hausregeln. Und die Absicht ist das Ziel. Material, Zusammenspiel, Hausregeln, Ziel: genau das hat eine gute Anforderung schon immer gesagt. Was Du ins Kontextfenster legst, entscheidet also, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Darum nennen wir es Requirements Engineering für Agenten."
+        "script": "So definieren drei Google-Autoren Context Engineering: KI-Agenten reichhaltige, strukturierte Informationen über Codebase, Architektur, Konventionen und Absicht zu geben. Der Werkstattvergleich macht das greifbar: Die Codebase ist das vorhandene Material, die Architektur beschreibt, wie die Teile zusammenpassen, Konventionen sind die Hausregeln, und die Absicht ist das Ziel. Das sind hilfreiche Fragen für eine gute Übergabe. Context Engineering ist aber nicht einfach Requirements Engineering für Agenten: Der Kontext eines Agenten ist begrenzt, verändert sich und kann Informationen enthalten, die während der Arbeit abgerufen werden."
       },
       "same-four-outcomes": {
         "title": "Dieselben vier Ergebnisse",
         "keywords": "",
-        "script": "Erinnerst Du Dich an die Dartscheibe mit ihren vier Ergebnissen? Es ist dieselbe Scheibe, mit denselben vier Ergebnissen, nur ein anderes Objekt. Dein Anforderungsdokument ist jetzt ein Kontextfenster, und es kann präzise landen, genau, beides oder keins von beiden."
+        "script": "Erinnerst Du Dich an die Dartscheibe mit ihren vier Ergebnissen? Wir können sie wiederverwenden, um eine Übergabe zu betrachten: Ist sie klar, und weist sie auf das gewünschte Ergebnis? Dadurch wird ein Kontextfenster nicht zur Anforderungsspezifikation; die Scheibe hilft uns nur, das Ergebnis einzuordnen."
       }
     }
   }

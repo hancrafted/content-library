@@ -1,6 +1,6 @@
 {
-  "title": "Context engineering is requirements engineering for agents",
-  "caption": "Google’s definition: context engineering is “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.”",
+  "title": "Context engineering and requirements: a useful analogy",
+  "caption": "Google’s definition: context engineering is “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.” The comparison helps, but the two are not the same.",
   "definitionCard": {
     "heading": "Read as a requirement",
     "codebase": {
@@ -49,7 +49,7 @@
     }
   },
   "quote": "Anthropic: aim for “the smallest possible set of high-signal tokens” <definition>that maximize the chance of the outcome you want</definition>.",
-  "limits": "<proposal>A parallel researchers propose</proposal>; unlike a spec, <stops>the window is a budget that changes while the agent works</stops>.",
+  "limits": "<proposal>Researchers have proposed this analogy</proposal>; unlike a requirements document, <stops>the context window is a limited budget that can change while the agent works</stops>.",
   "notes": {
     "googles-definition": {
       "header": "Google’s definition",
@@ -80,7 +80,7 @@
     },
     "a-proposal-not-a-finding": {
       "header": "A proposal, not a finding",
-      "description": "researchers draw the parallel explicitly, but no source measured it; the sentence that both disciplines share a job is an inference [1].",
+      "description": "researchers have proposed the parallel, but no source measured whether the disciplines are equivalent; treating them as the same discipline would go beyond the evidence [1].",
       "sources": {
         "chen-promptware-engineering": {
           "title": "Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software Engineering for Prompt-Enabled Systems"
@@ -102,12 +102,12 @@
       "the-definition": {
         "title": "The definition",
         "keywords": "",
-        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. That was written for software, but the logic is the same. Let me translate that from engineering into the workshop. The codebase is the materials you already have. The architecture is how the parts fit together. The conventions are the house rules. And the intent is the goal. Materials, how it fits, house rules, the goal: that is what a good requirement has always said. So what you add to the context window decides whether the agent has the precision and accuracy to work towards, and that is why we call it requirements engineering for agents."
+        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. The workshop analogy can help make that concrete: the codebase is the material you already have, architecture is how the parts fit, conventions are the house rules, and intent is the goal. Those are useful questions to ask when preparing a handover. But context engineering is not simply requirements engineering for agents: an agent's context is a limited, changing set and can include information retrieved during the work."
       },
       "same-four-outcomes": {
         "title": "Same four outcomes",
         "keywords": "",
-        "script": "Remember the dartboard with its four outcomes? It is the same dartboard, with the same four outcomes, but a different object. Your requirement document is now a context window, and it can land precise, accurate, both or neither."
+        "script": "Remember the dartboard with its four outcomes? We can reuse it to think about a handover: is it clear, and does it point toward the intended result? That does not make a context window a requirements document; it is just a helpful way to look at the outcome."
       }
     }
   }

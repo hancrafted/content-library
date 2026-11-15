@@ -31,11 +31,11 @@
       "coding": "The <code>SKILL.md</code> it writes, below."
     },
     "nextMorning": {
-      "step": "The next conversation starts fresh",
-      "time": "next morning he has forgotten the dive; the card hangs on the wall",
-      "ai": "The run is forgotten. The skill is not.",
+      "step": "A later conversation starts",
+      "time": "in this thought experiment, the pilot forgets the dive; the card stays on the wall",
+      "ai": "The app may not carry over this conversation; the saved skill can remain available.",
       "greeting": "Nice to meet you.",
-      "coding": "A new session opens with an empty context window; <code>collect-sediment-sample/SKILL.md</code> is still on disk."
+      "coding": "A new Claude Code session has a new conversation context; project instructions may still load, and <code>collect-sediment-sample/SKILL.md</code> remains on disk."
     }
   },
   "coding": {
@@ -45,14 +45,14 @@
   },
   "art": {
     "depth": "2 m",
-    "full": "context window: full",
-    "empty": "context window: empty"
+    "full": "today's run in context",
+    "empty": "later request; app-supplied context"
   },
   "alt": {
     "run": "Morning, under water: the robot hangs on its cable 2 m above the seabed, lamp on.",
     "interview": "Afternoon in the control room: the pilot turns from his console and asks the captain why; the captain answers.",
     "evening": "Evening: the sun sets in the window; the pilot sits at the console and writes the procedure card while today's dive is still in his head.",
-    "nextMorning": "Next morning: the card hangs pinned to the wall; the pilot greets the captain as a stranger.",
+    "nextMorning": "In this thought experiment, the card hangs pinned to the wall; the pilot greets the captain as a stranger.",
     "logbook": "Logbook pages from earlier dives, dated 12, 19 and 26 March."
   },
   "logbook": {
@@ -142,7 +142,7 @@
       "while-he-still-knows": {
         "title": "While he still knows",
         "keywords": "",
-        "script": "Then let it write the skill in the same conversation, while the whole run is still in its context window. Tomorrow it will have forgotten, and that is the condition we started with. So that is your first step: pick one task you've explained three times, and turn a good run of it into a skill. In a coding agent, that is one sentence: ask it to turn this conversation into a skill."
+        "script": "Then let it write the skill in the same conversation, while the run is still available in context. A later request may not include this conversation, though an app can add history or saved memory. The skill is a saved procedure, not a change to the model's training or memory. So pick one task you've explained three times, and turn a good run of it into a skill. In a coding agent, ask it to turn this conversation into a skill."
       }
     }
   }

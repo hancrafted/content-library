@@ -54,7 +54,7 @@ describe('success cases', () => {
         title: 'Why precise and accurate requirements mattered before AI',
         segments: ['An old pain', 'Where the Section goes'],
       },
-      { title: 'Context is the requirement', segments: ['The claim', 'The route'] },
+      { title: 'Context and requirements', segments: ['The claim', 'The route'] },
       { title: 'Creating context for agents', segments: ['The pain', 'The claim'] },
     ];
     // ACT
@@ -85,13 +85,13 @@ describe('success cases', () => {
         'every-product-is-a-translation':
           'Every product translates an intent. How well that translation is written down decides the result.',
         'context-is-the-requirement':
-          'Context engineering: deciding what the AI sees, the way requirements decide what a team builds.',
+          "A useful but incomplete analogy: both ask what information supports the work, but an agent's context is not a requirements document.",
       },
       de: {
         'every-product-is-a-translation':
           'Jedes Produkt übersetzt eine Absicht. Wie gut diese Übersetzung aufgeschrieben ist, entscheidet über das Ergebnis.',
         'context-is-the-requirement':
-          'Context Engineering: entscheiden, was die KI sieht, so wie Anforderungen entscheiden, was ein Team baut.',
+          'Ein hilfreicher, aber unvollständiger Vergleich: Beides fragt, welche Informationen die Arbeit unterstützen; der Agentenkontext ist aber keine Anforderungsspezifikation.',
       },
     };
     const slugs = ['every-product-is-a-translation', 'context-is-the-requirement'] as const;

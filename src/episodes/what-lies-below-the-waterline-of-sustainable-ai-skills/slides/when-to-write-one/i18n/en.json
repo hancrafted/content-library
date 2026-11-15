@@ -37,24 +37,24 @@
   },
   "analogy": "Explain the sample, refine it, write the card.",
   "agent": "Ask the agent to turn this conversation into a skill",
-  "groundingLine": "What works for people also works for AI",
-  "groundingNote": ": a strong rule of thumb, not a law.",
+  "groundingLine": "Human-facing principles can inform AI design",
+  "groundingNote": ": a hypothesis to test, not a law.",
   "voiceScript": {
     "segments": {
       "sunlight": {
         "title": "Sunlight",
         "keywords": "",
-        "script": "We are one level down, in the sunlit zone. Here we decide two things: when a task deserves a skill at all, and how to describe it so the model actually picks it."
+        "script": "We are one level down, in the sunlit zone. Here we decide two things: when a task may deserve a skill, and how to describe it so people or platforms can find it."
       },
       "borrowed-principles": {
         "title": "Borrowed principles",
         "keywords": "",
-        "script": "From here on I borrow principles from engineering, information architecture and UX, and they all lean on one idea: what works for people also works for AI. I say that as a strong rule of thumb, not as a law."
+        "script": "From here on I borrow principles from engineering, information architecture and UX. They can suggest useful ways to design for AI, but transfer is a hypothesis to test, not a law."
       },
       "why-a-rule-of-thumb": {
         "title": "Why a rule of thumb",
         "keywords": "",
-        "script": "It holds because the model acts only on what you hand it, like a capable newcomer on their first day. It is only a rule of thumb because there are places where it breaks, and I've put those in the notes on the next Slide for you to read."
+        "script": "The model's output depends on its training and the context the product supplies, like a capable newcomer with a briefing. The human-facing principles are useful hypotheses, but they can break; the next Slide's notes show where."
       }
     }
   }

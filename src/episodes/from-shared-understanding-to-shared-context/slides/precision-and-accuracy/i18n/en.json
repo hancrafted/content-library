@@ -1,13 +1,13 @@
 {
   "title": "Precision and accuracy",
-  "caption": "<b>Precise:</b> someone else could build it without a single question. <b>Accurate:</b> the result matches the intent and solves the actual problem. You need both.",
+  "caption": "For this episode: <b>precise</b> means few open questions; <b>accurate</b> means aligned with the intended outcome. These are working definitions, not universal ones.",
   "axes": {
     "tight": "Tight",
     "loose": "Loose",
     "off": "Off the intent",
     "on": "On the intent",
-    "precision": "Up: <b>precision</b>, how few questions the sheet leaves open",
-    "accuracy": "Right: <b>accuracy</b>, whether it hits what the rider wanted"
+    "precision": "Up: <b>precision</b>, how few questions the sheet leaves open here",
+    "accuracy": "Right: <b>accuracy</b>, whether it matches the rider's intent here"
   },
   "workOrder": "Work order",
   "atTheBench": "At the bench:",
@@ -63,12 +63,12 @@
       "precision": {
         "title": "Precision",
         "keywords": "",
-        "script": "Start with precision. A document is precise when someone else could execute it without asking you a single question. Nothing is left to guess."
+        "script": "For this example, I use precision to mean how few questions the work order leaves open. It is a useful way to talk about clarity here, not a universal definition of the term."
       },
       "accuracy": {
         "title": "Accuracy",
         "keywords": "",
-        "script": "Accuracy is a different thing: the result matches what you intended and solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A tight cluster means everyone who builds it ends up in the same place. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care."
+        "script": "Here, accuracy means whether the result matches the rider's intent. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A tight cluster can still miss the target. A work order can be clear yet point to the wrong outcome; careful execution cannot fix a mistaken aim."
       },
       "art-not-a-science": {
         "title": "Art, not a science",

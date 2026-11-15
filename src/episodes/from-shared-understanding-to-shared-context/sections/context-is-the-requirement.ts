@@ -7,7 +7,7 @@ import { staticAndDynamicContext } from '../slides/static-and-dynamic-context/sl
 import { whatTheAiActuallySees } from '../slides/what-the-ai-actually-sees/slide';
 import { youRunTheBench } from '../slides/you-run-the-bench/slide';
 
-/** Placement marker of the Section "Context is the requirement": its Slides in Spec order, section slide first. */
+/** Placement marker of the Section "Context and requirements": its Slides in Spec order, section slide first. */
 export const contextIsTheRequirementSection: Section = [
   contextIsTheRequirement,
   whatTheAiActuallySees,

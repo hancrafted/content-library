@@ -70,11 +70,11 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       first:
-        'So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec.',
+        'So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a draft spec with open details marked for confirmation.',
       office:
-        "Why a separate office? Because the planning chat is full of questions, half-ideas and drafts, and in the bench's terms that is rot. The work order is not. So keep the office and the bench apart.",
+        'Why keep a separate planning chat? It can contain questions, half-ideas and drafts that do not all belong in the handover. Take the useful brief into a fresh chat; leave unresolved details clearly marked rather than turning a guess into a fact.',
       close:
-        'So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. To sum up: the line only runs as well as what it receives, context is the requirement, the bench has to stay clean, and the interview builds it for you. I cannot promise it fits every task, and it is early days for all of this. If you try it, I would love to hear how it went. Thank you.',
+        'So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. To sum up: what a line receives shapes its output; context can help frame the work, but it is not the same as a requirements document; a clean bench can help; and an interview can help build the handover. I cannot promise this fits every task, and it is early days for all of this. If you try it, I would love to hear how it went. Thank you.',
     };
     // ACT
     const actual = {
@@ -90,12 +90,12 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       [
-        { header: 'Users answer better than they write', urls: [LI] },
+        { header: 'Questions can draw out richer answers', urls: [LI] },
         { header: 'Prompts generated from requirements', urls: [REPROMPT] },
       ],
       [
         { header: 'Where grill-me comes from', urls: [POCOCK_SKILLS, POCOCK_VIDEO] },
-        { header: 'Asking beats guessing, on unclear tasks', urls: [AMBIG_SWE] },
+        { header: 'Clarifying questions can help on unclear tasks', urls: [AMBIG_SWE] },
         { header: 'Rounds are inferred', urls: [LABAN] },
       ],
       [{ header: 'Why a fresh chat', urls: [ANTHROPIC] }],

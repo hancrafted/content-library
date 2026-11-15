@@ -16,7 +16,7 @@
     "requirements": {
       "letter": "R",
       "move": "Anforderungen zuerst",
-      "today": "Kontext ist die Anforderung, also kommt er vor der Arbeit"
+      "today": "Kontext rahmt die Arbeit, ist aber keine Anforderungsspezifikation"
     },
     "interview": {
       "letter": "I",
@@ -59,7 +59,7 @@
       "close": {
         "title": "Abschluss",
         "keywords": "",
-        "script": "Das Zweite zum Mitnehmen also: Nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Zusammengefasst: Das Band läuft nur so gut wie das, was bei ihm ankommt, Kontext ist die Anforderung, die Werkbank muss sauber bleiben, und das Interview baut ihn für Dich. Ich kann nicht versprechen, dass es zu jeder Aufgabe passt, und bei alldem stehen wir noch am Anfang. Wenn Du es ausprobierst, würde ich gern hören, wie es gelaufen ist. Danke."
+        "script": "Das Zweite zum Mitnehmen also: Nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Zusammengefasst: Was beim Band ankommt, beeinflusst das Ergebnis. Kontext kann die Arbeit rahmen, ist aber keine Anforderungsspezifikation. Eine saubere Werkbank kann helfen, und ein Interview kann die Übergabe vorbereiten. Ich kann nicht versprechen, dass das zu jeder Aufgabe passt, und bei alldem stehen wir noch am Anfang. Wenn Du es ausprobierst, würde ich gern hören, wie es gelaufen ist. Danke."
       }
     }
   }

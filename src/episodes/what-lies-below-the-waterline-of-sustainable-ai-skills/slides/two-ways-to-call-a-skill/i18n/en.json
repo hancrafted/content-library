@@ -1,24 +1,24 @@
 {
-  "title": "Two ways to call a skill",
-  "caption": "You call a skill by name, or the AI picks it from its description.",
+  "title": "Two ways a skill can be invoked",
+  "caption": "You can call a skill directly; some platforms can also use its description to help discover it.",
   "analogy": {
     "label": "In the story:",
     "text": "Ask for the card, or let the pilot find it in the index."
   },
-  "cardsLabel": "Two ways to call a skill",
+  "cardsLabel": "Ways a skill can be invoked",
   "byName": {
     "title": "Called by name",
     "who": "you choose",
-    "text": "You name the skill, and the AI opens that skill. No guessing.",
+    "text": "You name or select the skill; the app's exact invocation varies.",
     "chatLead": "In chat apps, name the skill:",
     "codingLead": "At the start of your message, by app:",
     "claude": "name it in your message",
     "skillsMenu": "(or pick it from /skills)"
   },
   "byDescription": {
-    "title": "Picked from its description",
-    "who": "the AI chooses",
-    "text": "You say nothing about the skill. The AI matches the task to each description; the name and description you wrote are its only clues.",
+    "title": "Found through its description",
+    "who": "platform-assisted",
+    "text": "Some platforms can use task descriptions to surface a skill. Others require you to choose or approve it.",
     "chatLead": "A poor description, and the skill stays unused, however good its instructions are.",
     "codingTask": "Task: “We're at the new site. Get us a sample from the seabed.” matches one <code>description:</code> line."
   },
@@ -48,7 +48,7 @@
     "codingScope": "Told explicitly to use it, the agent opened it in 95% or more. Not “skills in general”, as Google's Day 3 retells it."
   },
   "footer": {
-    "chat": "“Slash command” is Claude Code and Copilot CLI wording; “by name” holds in every app.",
+    "chat": "Invocation varies by app; examples below are product-specific.",
     "coding": "Gemini CLI adds a step: the agent asks to activate a skill, and you consent before it loads."
   },
   "art": {
@@ -88,8 +88,8 @@
       }
     },
     "the-model-picks-a-skill-by-its-description": {
-      "header": "The model picks a skill by its description",
-      "description": "Unless you name a skill, the model matches the task to the description. Gemini CLI adds a step: the model asks to activate a skill and the user consents before it is injected [1].",
+      "header": "Platforms can use descriptions to discover skills",
+      "description": "Some platforms use skill descriptions in discovery; others rely on explicit invocation. Gemini CLI documents an additional step: the agent asks to activate a skill and the user consents before it is loaded [1].",
       "sources": {
         "google-gemini-cli-skills": {
           "title": "Google, Agent Skills in Gemini CLI"
@@ -123,17 +123,17 @@
       "by-name": {
         "title": "By name",
         "keywords": "",
-        "script": "There are two ways a skill gets used. The first is the simple one: you call it by name, the way you would tell the pilot “Collect sediment sample, please”, and the model opens that skill. No guessing involved."
+        "script": "One way to use a skill is to call or select it directly, the way you would ask the pilot for the sediment-sampling procedure. The exact command or menu depends on the app."
       },
       "by-description": {
         "title": "By description",
         "keywords": "",
-        "script": "In the second you say nothing about the skill. The model reads the descriptions while it works and decides for itself that this task needs one. Its only clues are the name and description you wrote, so if the description is poor, the skill stays unused, however good its instructions are."
+        "script": "Some platforms can also use a task and a skill's description to help surface a match. Others ask you to choose or approve the skill. A clear description can help discovery, but it doesn't guarantee automatic activation."
       },
       "unused-is-real": {
         "title": "Unused is real",
         "keywords": "",
-        "script": "And skills going unused is not a theory: it has been measured, though only in one vendor's test of one documentation skill, so hold the finding loosely. The question it should leave you with, in front of every skill you write, is whether the model would ever pick it."
+        "script": "A vendor has measured one documentation skill going unused in some evaluation cases; treat that as a bounded example, not a general rate. When you write a skill, ask whether its intended users or platform can find it."
       }
     }
   }

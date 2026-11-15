@@ -1,6 +1,6 @@
 {
   "title": "Grill-me",
-  "caption": "Matt Pocock’s grill-me skill: the AI asks a round of questions at a time, you answer, and after the last round it writes <b>the spec: a one-page work order</b>.",
+  "caption": "Matt Pocock’s grill-me skill: the AI asks questions in rounds, you answer, and after the last round it drafts <b>a one-page work order</b>.",
   "chat": {
     "task": "Spring service week for the bike workshop",
     "roleSwitch": "The AI asks · you answer",
@@ -26,15 +26,15 @@
         "questions": {
           "q1": "How will we know it’s done?"
         },
-        "answer": "“40 repair slots booked, calendar full by 1 March.”"
+        "answer": "“40 repair slots booked; exact deadline to confirm.”"
       }
     },
-    "closing": "No gaps left. Writing the spec.",
+    "closing": "Open details marked. Drafting the spec.",
     "roundsNote": "in rounds, not one by one"
   },
   "spec": {
-    "label": "The spec, landing on the bench",
-    "title": "Spec · Spring service week",
+    "label": "The draft spec, landing on the bench",
+    "title": "Draft spec · Spring service week",
     "rows": {
       "for": {
         "term": "For",
@@ -54,7 +54,7 @@
       },
       "done": {
         "term": "Done when",
-        "value": "40 slots, calendar full by 1 March"
+        "value": "40 slots; exact deadline to confirm"
       }
     }
   },
@@ -76,7 +76,7 @@
       }
     },
     "asking-beats-guessing-on-unclear-tasks": {
-      "header": "Asking beats guessing, on unclear tasks",
+      "header": "Clarifying questions can help on unclear tasks",
       "description": "on an underspecified variant of SWE-Bench Verified, agents that interacted with the user to fill missing information improved by up to 74% over non-interactive ones; that is a maximum, from simulated users, and models struggled to tell which tasks need a question [1].",
       "sources": {
         "vijayvargiya-ambig-swe": {
@@ -99,7 +99,7 @@
       "matt-pococks-skill": {
         "title": "Matt Pocock's skill",
         "keywords": "",
-        "script": "Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts, in rounds rather than one question at a time, so you can answer in your own flow. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order."
+        "script": "Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI ask questions before it starts, in rounds rather than one at a time. It can help you answer in your own flow. Instead of filling gaps with guesses, it asks; any detail that remains unknown should stay marked for confirmation in the draft spec."
       },
       "next-30-minutes": {
         "title": "Next 30 minutes",
@@ -109,7 +109,7 @@
       "actionable-one": {
         "title": "Actionable one",
         "keywords": "",
-        "script": "So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec."
+        "script": "So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a draft spec with open details marked for confirmation."
       }
     }
   }

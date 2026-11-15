@@ -25,8 +25,8 @@
       }
     }
   },
-  "care": "care",
-  "careLevel": "care {level} of 4",
+  "care": "indicative upkeep",
+  "careLevel": "example level {level} of 4",
   "squares": {
     "pp": {
       "head": "Details written into the skill",
@@ -44,25 +44,25 @@
       "picture": "your own toolkit",
       "coding": {
         "head": "<code>{path}</code>",
-        "sub": "Loads in every project; the details stay in each project's files."
+        "sub": "A user-level setup can make it available across projects; details stay project-specific."
       }
     },
     "sp": {
       "head": "Details kept in its supporting files",
-      "sub": "Owned by the project team",
+      "sub": "Project-scoped; team ownership is a choice",
       "picture": "the project binder",
       "coding": {
         "head": "<code>{path}</code> committed to the repository",
-        "sub": "Reaches everyone who works there; details in <code>{references}</code>."
+        "sub": "A repository copy can reach collaborators; details may live in <code>{references}</code>."
       }
     },
     "sg": {
-      "head": "Details kept beside, with an owner, a version and evals",
-      "sub": "Owned, versioned and tested",
+      "head": "Details kept beside; a team may track owner, version and evals",
+      "sub": "Optional team governance",
       "picture": "the fleet manual",
       "coding": {
         "head": "A plugin or managed settings",
-        "sub": "Reaches a whole team: owner, version and evals before it ships.",
+        "sub": "A managed or plugin-based setup can reach a team; governance is a team choice.",
         "picture": "a plugin"
       }
     }
@@ -73,19 +73,19 @@
     "personal": "personal skill",
     "shared": "shared skill"
   },
-  "ownerTag": "Owner: survey team",
+  "ownerTag": "Example: lab team",
   "footer": {
     "story": "In the story:",
     "chat": "The label is mine: try the matrix on your own skills and see where it breaks.",
-    "coding": "Codex splits repository folders from user folders the same way."
+    "coding": "Codex documents repository and user skill folders; other products differ."
   },
   "alt": {
     "matrix": "A two-by-two matrix. Columns: project-specific and general use; rows: personal and shared. Personal and project-specific: an open notebook with a card scribbled \"Site 4: 40 m\". Personal and general: a card box beside the pinned dive plan. Shared and project-specific: a project binder in front of the ship. Shared and general: the fleet manual with three ships; a dashed path carries the card from the notebook into the manual, where it gains an owner tag."
   },
   "notes": {
     "where-a-skill-is-stored": {
-      "header": "Where a skill is stored encodes who gets it",
-      "description": "Claude Code skills in the home directory load \"in every project\", skills committed to a repository reach \"everyone who works there\", and plugins or managed settings reach \"a whole team\" [1]. Codex splits repository folders from user folders the same way [2].",
+      "header": "Storage scope can shape who gets a skill",
+      "description": "In Claude Code, skills in the home directory are available across projects, repository skills are shared with collaborators, and plugins or managed settings can distribute skills to a team [1]. Codex documents repository and user skill locations too [2]. These are product examples; availability and team governance vary.",
       "sources": {
         "claude-code-skills": {
           "title": "Anthropic, Extend Claude with skills (Claude Code documentation)"
@@ -127,7 +127,7 @@
       "four-squares": {
         "title": "Four squares",
         "keywords": "",
-        "script": "Four squares come out of that. Personal and project-specific: write the details straight in, it needs the least upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner."
+        "script": "Four squares come out of that. Personal and project-specific: keep the details with the skill. Personal and general: keep reusable details nearby. Shared and project-specific: a project can share a skill and its supporting files. Shared and general: a team may choose a managed package and track its owner, version and evaluations. Moving a skill into shared use does not mean stripping project details; make its intended scope clear."
       },
       "a-rule-of-thumb": {
         "title": "A rule of thumb",

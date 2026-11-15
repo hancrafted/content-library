@@ -1,6 +1,6 @@
 {
   "title": "Das Modell ändert sich, der Skill nicht",
-  "caption": "Ein Modell-Update ändert, wer Deinen Skill liest, also kann sich ein Skill, der gestern funktioniert hat, heute anders verhalten.",
+  "caption": "Ein Modell- oder Agent-Update kann das Verhalten eines Skills ändern; derselbe Text kann andere Ergebnisse liefern.",
   "analogy": "Dieselbe Karte, zwei Tauchgänge, zwei Tiefen.",
   "story": "In der Geschichte:",
   "card": {
@@ -13,7 +13,7 @@
   "halves": {
     "update": {
       "term": "Modell-Update",
-      "text": "Dein Anbieter liefert eine neue Version des Modells aus. Der Skill behält dieselben Worte, und dieselbe Anweisung führt jetzt zu einem anderen Ergebnis.",
+      "text": "Dein Anbieter liefert eine neue Modellversion aus. Der Skill behält dieselben Worte, doch eine Anweisung kann nun ein anderes Ergebnis liefern.",
       "coding": "Dieselbe <code>collect-sediment-sample/SKILL.md</code>, gelesen von einer neuen Modellversion.",
       "changed": "Modell",
       "changedValue": "neue Version"
@@ -93,7 +93,7 @@
       "not-the-only-pilot": {
         "title": "Nicht der einzige Pilot",
         "keywords": "",
-        "script": "Unter Deinem Skill ändert sich noch etwas, und das hast Du nicht in der Hand: das Modell, das ihn liest. Jedes KI-Modell hat die Eigenschaft, mit der wir angefangen haben, und jeder KI-Anbieter trainiert sein eigenes, so wie jede Pilotenschule ihre eigenen Piloten ausbildet. Der Leser Deines Skills steht also nie fest."
+        "script": "Noch etwas kann beeinflussen, wie sich Dein Skill verhält: das Modell oder der Agent, der ihn liest. Anbieter trainieren unterschiedliche Modelle – wie verschiedene Pilotenschulen ihre eigenen Piloten ausbilden. Der Leser kann sich ändern; teste den Skill deshalb im Produkt und Setup, in dem Du ihn einsetzen willst."
       },
       "update-and-switch": {
         "title": "Update und Wechsel",

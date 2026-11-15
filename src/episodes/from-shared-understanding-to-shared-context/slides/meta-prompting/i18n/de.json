@@ -5,12 +5,14 @@
     "label": "Planungsbüro · eigener Chat",
     "exchange": {
       "q1": "Was muss vor dem Frühlingsansturm fertig sein?",
-      "a1": "Jedes Leihrad gewartet und 40 Reparaturtermine gebucht.",
+      "a1": "Alle Leihräder warten und 40 Reparaturtermine anbieten.",
       "q2": "Wer bucht die Termine, und wie?",
-      "a2": "Der Empfang, per Telefon und vor Ort."
+      "a2": "Der Empfang, per Telefon und vor Ort.",
+      "q3": "Welche Prüfungen am Rad und bis wann genau?",
+      "a3": "Noch nicht entschieden – beides offenlassen."
     },
-    "you": "<b>Du</b> antwortest nur. Kein Prompt, den Du von null schreiben musst.",
-    "answerBetter": "Du antwortest besser, als Du schreibst",
+    "you": "<b>Du</b> beantwortest Fragen und prüfst den Entwurf. Du musst keinen Prompt von Grund auf schreiben.",
+    "answerBetter": "Gezielte Fragen helfen, Wünsche klarer zu formulieren",
     "residue": "Bleibt im Büro: Fragen, halbe Ideen, Entwürfe"
   },
   "handOff": {
@@ -20,22 +22,22 @@
   "workOrder": {
     "title": "Arbeitsauftrag · Frühjahrs-Servicewoche",
     "rows": {
-      "goal": { "term": "Ziel", "value": "Leihflotte gewartet, 40 Termine gebucht" },
-      "who": { "term": "Wer", "value": "Empfang bucht, zwei Mechaniker" },
-      "must": { "term": "Muss", "value": "Bremsen und Reifen an jedem Rad" },
-      "done": { "term": "Fertig, wenn", "value": "Kalender voll bis 1. März" }
+      "goal": { "term": "Ziel", "value": "Leihflotte warten; 40 Reparaturtermine anbieten" },
+      "who": { "term": "Wer", "value": "Empfang bucht; wer wartet, ist noch offen" },
+      "must": { "term": "Muss", "value": "Prüfschritte am Rad: noch offen" },
+      "done": { "term": "Fertig, wenn", "value": "Fertigstellungstermin: noch offen" }
     },
-    "source": "Aus Deinen Antworten geschrieben"
+    "source": "Aus Deinen Antworten erstellt; offene Details sind noch unbestätigt"
   },
   "bench": {
     "label": "Das Band · Fahrradwerkbank",
     "drawing": "Die Fahrradwerkbank, nur mit dem Arbeitsauftrag darauf",
-    "worker": "Der KI-Arbeiter startet mit einer Seite, nicht mit dem ganzen Gespräch."
+    "worker": "Der KI-Arbeiter kann mit einer Seite statt dem ganzen Gespräch starten. Du kannst das Ergebnis prüfen."
   },
   "notes": {
     "users-answer-better-than-they-write": {
-      "header": "Antworten gelingt besser als Schreiben",
-      "description": "wenn ein Modell Präferenzen mit offenen Fragen erhebt, sind die Antworten der Nutzer oft aussagekräftiger als Prompts, die sie allein geschrieben haben, und die Nutzer empfinden es als weniger aufwendig [1].",
+      "header": "Fragen können ausführlichere Antworten ermöglichen",
+      "description": "In einer Studie zur Präferenzerhebung waren Antworten auf Fragen eines Modells oft informativer als selbst verfasste Prompts; die Teilnehmenden empfanden den Aufwand zudem als geringer [1]. Daraus folgt nicht, dass alle Menschen immer besser antworten oder dass der Befund für jede Aufgabe gilt.",
       "sources": {
         "li-eliciting-human-preferences": {
           "title": "Li et al., Eliciting Human Preferences with Language Models"
@@ -57,7 +59,7 @@
       "separate-session": {
         "title": "Eigene Sitzung",
         "keywords": "",
-        "script": "Meta-Prompting heißt: Ein KI-Chat schreibt den Auftrag für einen anderen. Die eigene Sitzung erstellt den Kontext für Dich, und der soll aussagekräftig sein: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht."
+        "script": "Meta-Prompting heißt: Ein KI-Chat hilft dabei, einen Auftrag für einen anderen zu schreiben. Gezielte Fragen können Details hervorholen, aber die KI sollte sie nicht erfinden: Ist eine Serviceprüfung oder ein Termin unbekannt, bleibt der Punkt zur Klärung offen. Du kannst den Entwurf prüfen, bevor Du ihn dem Agenten gibst."
       },
       "fresh-chat-clean-work-order": {
         "title": "Frischer Chat, sauberer Arbeitsauftrag",
@@ -67,7 +69,7 @@
       "why-a-separate-office": {
         "title": "Warum ein eigenes Büro",
         "keywords": "",
-        "script": "Warum ein eigenes Büro? Weil der Planungschat voller Fragen, halber Ideen und Entwürfe ist, und in der Sprache der Werkbank ist das Context Rot. Der Arbeitsauftrag ist es nicht. Also halte Büro und Werkbank getrennt."
+        "script": "Warum ein eigener Planungs-Chat? Darin können Fragen, halbe Ideen und Entwürfe stehen, die nicht alle in die Übergabe gehören. Nimm den brauchbaren Auftrag in einen frischen Chat mit. Markiere offene Details klar, statt eine Vermutung als Tatsache auszugeben."
       }
     }
   }

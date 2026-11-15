@@ -1,24 +1,24 @@
 {
-  "title": "Zwei Wege, einen Skill aufzurufen",
-  "caption": "Du rufst einen Skill beim Namen auf, oder die KI wählt ihn über seine Beschreibung.",
+  "title": "Zwei Wege, einen Skill zu nutzen",
+  "caption": "Du kannst einen Skill direkt aufrufen; manche Plattformen nutzen seine Beschreibung auch beim Finden.",
   "analogy": {
     "label": "In der Geschichte:",
     "text": "Verlang die Karte, oder lass den Piloten sie im Register finden."
   },
-  "cardsLabel": "Zwei Wege, einen Skill aufzurufen",
+  "cardsLabel": "Wege, einen Skill zu nutzen",
   "byName": {
     "title": "Beim Namen aufgerufen",
     "who": "Du wählst",
-    "text": "Du nennst den Skill, und die KI öffnet genau diesen Skill. Kein Raten.",
+    "text": "Du nennst oder wählst den Skill; der genaue Aufruf hängt von der App ab.",
     "chatLead": "In Chat-Apps nennst Du den Skill:",
     "codingLead": "Am Anfang Deiner Nachricht, je nach App:",
     "claude": "nenn ihn in Deiner Nachricht",
     "skillsMenu": "(oder wähl ihn unter /skills)"
   },
   "byDescription": {
-    "title": "Über die Beschreibung gewählt",
-    "who": "die KI wählt",
-    "text": "Du sagst nichts über den Skill. Die KI gleicht die Aufgabe mit jeder Beschreibung ab; Name und Beschreibung, die Du geschrieben hast, sind ihre einzigen Hinweise.",
+    "title": "Über die Beschreibung gefunden",
+    "who": "mit Plattformhilfe",
+    "text": "Manche Plattformen nutzen die Aufgabenbeschreibung, um einen Skill vorzuschlagen. Andere verlangen, dass Du ihn auswählst oder freigibst.",
     "chatLead": "Eine schwache Beschreibung, und der Skill bleibt ungenutzt, egal wie gut seine Anweisungen sind.",
     "codingTask": "Aufgabe: „Wir sind am neuen Standort. Hol uns eine Probe vom Meeresboden.“ passt zu genau einer <code>description:</code>-Zeile."
   },
@@ -48,7 +48,7 @@
     "codingScope": "Ausdrücklich angewiesen, ihn zu nutzen, öffnete der Agent ihn in 95 % oder mehr. Nicht „Skills im Allgemeinen“, wie Googles Day 3 es nacherzählt."
   },
   "footer": {
-    "chat": "„Slash-Befehl“ ist Wortwahl von Claude Code und Copilot CLI; „beim Namen“ gilt in jeder App.",
+    "chat": "Der Aufruf hängt von der App ab; die Beispiele sind produktspezifisch.",
     "coding": "Gemini CLI fügt einen Schritt hinzu: Der Agent fragt, ob er einen Skill aktivieren darf, und Du stimmst zu, bevor er lädt."
   },
   "art": {
@@ -88,8 +88,8 @@
       }
     },
     "the-model-picks-a-skill-by-its-description": {
-      "header": "Das Modell wählt einen Skill über seine Beschreibung",
-      "description": "Nennst Du keinen Skill, gleicht das Modell die Aufgabe mit der Beschreibung ab. Gemini CLI fügt einen Schritt hinzu: Das Modell bittet darum, einen Skill zu aktivieren, und der Nutzer stimmt zu, bevor er eingefügt wird [1].",
+      "header": "Plattformen können Beschreibungen zur Suche nutzen",
+      "description": "Manche Plattformen nutzen Skill-Beschreibungen bei der Suche; andere setzen auf einen ausdrücklichen Aufruf. Gemini CLI dokumentiert einen zusätzlichen Schritt: Der Agent bittet darum, einen Skill zu aktivieren, und der Nutzer stimmt zu, bevor er geladen wird [1].",
       "sources": {
         "google-gemini-cli-skills": {
           "title": "Google, Agent Skills in Gemini CLI"
@@ -123,17 +123,17 @@
       "by-name": {
         "title": "Beim Namen",
         "keywords": "",
-        "script": "Es gibt zwei Wege, wie ein Skill genutzt wird. Der erste ist der einfache: Du rufst ihn beim Namen auf, so wie Du dem Piloten sagen würdest „Sedimentprobe nehmen, bitte“, und das Modell öffnet genau diesen Skill. Kein Raten."
+        "script": "Ein Weg, einen Skill zu nutzen: Du rufst ihn direkt auf oder wählst ihn aus – so, wie Du den Piloten um das Vorgehen für eine Sedimentprobe bittest. Der genaue Befehl oder Menüpunkt hängt von der App ab."
       },
       "by-description": {
         "title": "Über die Beschreibung",
         "keywords": "",
-        "script": "Beim zweiten sagst Du nichts über den Skill. Das Modell liest die Beschreibungen, während es arbeitet, und entscheidet selbst, dass diese Aufgabe einen braucht. Seine einzigen Hinweise sind Name und Beschreibung, die Du geschrieben hast. Ist die Beschreibung schwach, bleibt der Skill ungenutzt, egal wie gut seine Anweisungen sind."
+        "script": "Manche Plattformen nutzen eine Aufgabe und die Skill-Beschreibung, um einen möglichen Treffer vorzuschlagen. Andere bitten Dich, den Skill auszuwählen oder freizugeben. Eine klare Beschreibung kann beim Finden helfen, garantiert aber keine automatische Aktivierung."
       },
       "unused-is-real": {
         "title": "Ungenutzt ist echt",
         "keywords": "",
-        "script": "Und dass Skills ungenutzt bleiben, ist keine Theorie: Es wurde gemessen, allerdings nur im Test eines Anbieters mit einem Doku-Skill, also halte den Befund locker. Die Frage, die bleiben sollte, vor jedem Skill, den Du schreibst: Würde das Modell ihn jemals wählen?"
+        "script": "Ein Anbieter hat in einigen Tests einen Doku-Skill gemessen, der nicht aufgerufen wurde. Das ist ein begrenztes Beispiel, keine allgemeine Quote. Frag beim Schreiben eines Skills: Können die vorgesehenen Nutzer oder die Plattform ihn finden?"
       }
     }
   }

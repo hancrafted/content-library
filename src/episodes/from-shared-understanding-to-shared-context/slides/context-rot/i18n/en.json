@@ -1,7 +1,7 @@
 {
   "title": "Context rot",
   "heading": "Context rot at the bench",
-  "caption": "A fuller bench can be a worse bench: <b>four messes, set up before the shift or arriving during it.</b>",
+  "caption": "More context is not always more useful: <b>four kinds of mess can arrive before or during the work.</b>",
   "credit": "Names after Drew Breunig and IBM",
   "columns": {
     "poisoning": { "label": "A wrong fact stuck in", "term": "poisoning" },
@@ -34,7 +34,7 @@
   "notes": {
     "length-alone-does-part-of-the-damage": {
       "header": "Length alone does part of the damage",
-      "description": "output quality falls as the window fills, even with perfect retrieval [1].",
+      "description": "in the cited study's tested setup, output quality declined as the context window filled, even with perfect retrieval [1]. This does not show that every model and task behaves the same.",
       "sources": {
         "context-rot-as-window-fills": {
           "title": "content-library research, Why does a language model's output quality drop as its context window fills?"
@@ -61,7 +61,7 @@
     },
     "numbers-for-confusion-and-clash": {
       "header": "Numbers for confusion and clash",
-      "description": "on the Berkeley Function-Calling Leaderboard every model does worse with more than one tool, a quantized Llama 3.1 8b failed with 46 tools and succeeded with 19; piecemeal prompts cut scores by 39% on average [1].",
+      "description": "Breunig cites Berkeley Function-Calling Leaderboard results where larger tool sets hurt selection in the tested comparisons; one quantized Llama 3.1 8B result failed with 46 tools and succeeded with 19. A separate multi-turn study reported a 39% average score drop when instructions were split across turns; that is not the same as asking clarifying questions [1].",
       "sources": {
         "breunig-how-long-contexts-fail": {
           "title": "Drew Breunig, How Long Contexts Fail"
@@ -89,7 +89,7 @@
       "more-context-worse-result": {
         "title": "More context, worse result",
         "keywords": "",
-        "script": "More is not safer. A fuller bench can be a worse bench. Adding one more document to be on the safe side is exactly how most of these messes begin."
+        "script": "More is not automatically safer. A fuller bench can be worse when irrelevant or conflicting material makes the useful signal harder to find. Adding documents just in case can create that problem."
       }
     }
   }

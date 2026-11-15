@@ -1,6 +1,6 @@
 {
   "title": "You run the bench",
-  "caption": "You set up the bench, decide what the AI may fetch and steer when it drifts; <b>the AI works with what you hand it.</b>",
+  "caption": "You set up the bench and can limit what the AI may fetch. It can work without you watching every step; <b>you can review the result.</b>",
   "drawing": "A person at the bench hands parts to the AI worker",
   "you": "You",
   "ai": "AI worker",
@@ -16,23 +16,23 @@
     "label": "Your job",
     "items": {
       "bench": { "title": "What lands on the bench", "hint": "Brief it like a new colleague on day one." },
-      "heading": { "title": "Where the work is heading", "hint": "Steer when it drifts." }
+      "heading": { "title": "Where the work is heading", "hint": "Review the result; steer it if needed." }
     }
   },
   "notYours": {
     "label": "Not your job",
-    "text": "How the worker does it inside."
+    "text": "You do not need to supervise every step. You can review the result."
   },
   "stat": {
-    "label": "More is not safer",
-    "alone": "Asked to follow one rule, the AI does it <figure>99%</figure> of the time",
-    "together": "Asked to follow 19 at once: <figure>85%</figure>",
-    "detail": "Repeating things the AI can find on its own did not help either."
+    "label": "One GPT-4o test: more requirements, lower compliance",
+    "alone": "One requirement: <figure>98.7%</figure> compliance",
+    "together": "19 requirements at once: <figure>85.0%</figure>",
+    "detail": "This is one test, not a prediction for every model or task. One study also found no general benefit from repository files that repeated discoverable information."
   },
   "notes": {
     "more-is-not-safer": {
-      "header": "More is not safer",
-      "description": "stating all requirements at once lowered compliance (98.7% for one requirement alone against 85.0% for gpt-4o with 19) [1], and repository context files that restated discoverable information did not generally improve coding-agent success [2].",
+      "header": "A result from one GPT-4o test",
+      "description": "In one specific GPT-4o test, compliance was 98.7% with one requirement and 85.0% with 19 requirements at once [1]. This result is limited to that test; it does not show that more instructions always reduce compliance. Separately, a study of repository context files did not find a general benefit from restating discoverable information [2].",
       "sources": {
         "written-requirements-reduce-variance": {
           "title": "content-library research, Why do explicit written requirements reduce the variation in LLM output?"
@@ -48,12 +48,12 @@
       "human-manages-the-context": {
         "title": "Human manages the context",
         "keywords": "",
-        "script": "You run the bench. You manage what goes on it and what the AI may fetch, and you steer it in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?"
+        "script": "You run the bench. You set the context and can limit what the AI may fetch. It can work from there without you overseeing every step, and you can review the result. Think of the AI as a colleague: what would you brief them on, and what would not help?"
       },
       "not-how-the-ai-works-inside": {
         "title": "Not how the AI works inside",
         "keywords": "",
-        "script": "The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge. So what does a bench look like when it goes bad?"
+        "script": "Your role is to shape the handover and decide what sources are available, not to supervise every action. You can still review what the agent produces. That is why you can learn this without engineering knowledge. So what can happen when the context goes wrong?"
       }
     }
   }

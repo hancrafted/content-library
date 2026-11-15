@@ -29,10 +29,10 @@
   },
   "gauge": "Tiefenanzeige",
   "place": "Abschnitt {number} von {total}",
-  "aiStatement": "Ein geteilter Skill braucht einen Owner, eine Version, ein Prüfdatum",
-  "owner": "Owner: Laborteam · v1.3 · Prüfung im März",
+  "aiStatement": "Ein Team kann Owner, Version und Prüfplan eines geteilten Skills festhalten",
+  "owner": "Beispielkonvention: Laborteam · v1.3 · Prüfung im März",
   "analogy": "Die Karte im Flottenhandbuch des Instituts.",
-  "agent": "metadata: Owner, Version, Prüfdatum",
+  "agent": "optionale Metadaten: Owner, Version, Prüfplan",
   "voiceScript": {
     "segments": {
       "midnight": {
@@ -43,7 +43,7 @@
       "three-jobs": {
         "title": "Drei Aufgaben",
         "keywords": "",
-        "script": "Hier unten warten drei Aufgaben. Gib dem Skill einen Owner und eine Version, kläre, wer sich um die gemeinsame Bibliothek kümmert, und teste, ob der Skill wirklich hilft."
+        "script": "Hier unten warten drei Aufgaben. Ein Team kann Owner und Version festlegen, die Pflege seiner gemeinsamen Bibliothek organisieren und testen, ob ein Skill tatsächlich hilft."
       }
     }
   }

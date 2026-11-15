@@ -1,6 +1,6 @@
 {
-  "title": "Wie die KI einen Skill findet und liest",
-  "caption": "Wie die KI einen Skill findet und ihn und seine Zusatzdateien erst liest, wenn sie sie braucht.",
+  "title": "Wie manche Plattformen Skills stufenweise laden",
+  "caption": "Das Agent-Skills-Format trennt Metadaten, Anweisungen und Zusatzdateien; wie sie geladen werden, legt die jeweilige App fest.",
   "analogy": {
     "label": "In der Geschichte:",
     "text": "Der Pilot liest das Register des Handbuchs, dann eine Karte, dann nur die Extras, nach denen ein Schritt fragt."
@@ -10,33 +10,33 @@
     "term": "Progressive Disclosure",
     "quote": "“Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone.”",
     "source": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure (nngroup.com)",
-    "skills": "Für Skills schreibt Anthropic, dass Claude Informationen schrittweise lädt, wenn sie gebraucht werden.",
-    "stepsLabel": "Drei Stufen, die sich nacheinander öffnen: erst ein kurzer Überblick, dann das Detail, dann die Extras.",
+    "skills": "Das Agent-Skills-Format beschreibt Stufen; wie Apps sie laden, hängt von der jeweiligen Umsetzung ab.",
+    "stepsLabel": "Ein hilfreiches Modell: Metadaten, dann Anweisungen, dann Zusatzdateien.",
     "steps": { "overview": "Überblick", "detail": "Detail", "extras": "Extras" }
   },
-  "example": "Das Beispiel: Ein Skill lädt in drei Stufen",
+  "example": "Ein Muster für stufenweises Laden",
   "levelsLabel": "Drei Ladestufen",
   "levels": {
     "index": {
-      "label": "Immer geladen",
-      "chat": "Name und Beschreibung jedes Skills: das Skill-Register",
-      "chatNote": "etwa 100 Tokens pro Skill, bezahlt in jeder Runde",
-      "coding": "die Frontmatter jeder SKILL.md",
-      "codingNote": "etwa 100 Tokens pro Skill, außer der Skill ist nur für Dich aufrufbar"
+      "label": "Metadaten zuerst in diesem Format",
+      "chat": "Namen und Beschreibungen, sofern die App sie bereitstellt",
+      "chatNote": "Schätzwert des Standards; der Kontext variiert",
+      "coding": "Front Matter der SKILL.md im Agent-Skills-Format",
+      "codingNote": "Einstellungen und Verhalten der App können abweichen"
     },
     "card": {
-      "label": "Geladen, wenn der Skill genutzt wird",
+      "label": "Anweisungen bei Aktivierung",
       "chat": "seine Hauptanweisungen",
-      "chatNote": "sobald eine Aufgabe zu seiner Beschreibung passt",
+      "chatNote": "wenn die Plattform den Skill aktiviert",
       "coding": "der Hauptteil von SKILL.md, beim Aktivieren",
       "codingSteps": "1. Den Roboter zwei Meter über dem Meeresboden halten. 2. … 6. Die Probe beschriften."
     },
     "extras": {
-      "label": "Nur bei Bedarf geladen",
+      "label": "Zusatzdateien über Verweise",
       "chat": "Referenzen, Vorlagen und Skripte",
       "chatNote": "In Claude läuft ein Skript, und nur seine Ausgabe kommt ins Gespräch",
       "coding": "eine Datei, wenn ein Schritt nach ihr fragt",
-      "codingNote": "Skripte laufen über bash; nur die Ausgabe kommt in den Kontext"
+      "codingNote": "Nur für Claude belegt: Skripte laufen über bash; die Ausgabe kommt in den Kontext"
     }
   },
   "description": "Nutzen, wenn wir eine neue Stelle erreichen und eine Probe vom Meeresboden brauchen.",
@@ -47,16 +47,16 @@
     "extras": { "guide": "Artenführer", "label": "Etikettvorlage", "preset": "Arm-Preset" }
   },
   "otherApps": {
-    "chat": "Codex und Gemini CLI laden auch in Stufen",
-    "coding": "Codex und Gemini CLI: erst Metadaten, Hauptteil bei Nutzung"
+    "chat": "Codex und Gemini CLI dokumentieren stufenweises Laden",
+    "coding": "Dokumentierte Beispiele: erst Metadaten, Anweisungen bei Aktivierung"
   },
   "alt": {
     "room": "Der Kontrollraum von der Seite. Links: das Handbuch an der Wand, jeder Kartenreiter sichtbar. In der Mitte: der Pilot an der Konsole, eine Karte gezogen und vor ihm aufgestellt. Rechts: unter einer Lampe die Hülle auf einem Beistelltisch, Artenführer, Probenetikett und Arm-Preset herausgezogen."
   },
   "notes": {
     "three-levels-stated-by-the-standard": {
-      "header": "Drei Stufen, so steht es im Standard",
-      "description": "Der Agent-Skills-Standard nennt Metadaten (Name und Beschreibung, etwa 100 Tokens), die beim Start für alle Skills geladen werden, den Hauptteil von SKILL.md, wenn der Skill aktiviert wird, und Dateien in scripts/, references/ oder assets/ nur, wenn sie gebraucht werden [1]. Anthropic beschreibt dieselben drei Stufen [2]. Googles Day-3-Whitepaper ebenso: „1. Metadata (name + description) is always in the agent's context. 2. SKILL.md body is loaded only when the skill triggers. 3. Bundled resources are loaded strictly as needed“ [3]. Das ist Googles Beschreibung des Designs, kein Test, dass es funktioniert.",
+      "header": "Drei Stufen im Agent-Skills-Format",
+      "description": "Die Agent-Skills-Spezifikation beschreibt Metadaten (Name und Beschreibung, etwa 100 Tokens) als beim Start verfügbar, den Hauptteil von SKILL.md bei Aktivierung und Dateien in scripts/, references/ oder assets/ bei Bedarf [1]. Anthropic dokumentiert ein ähnliches Muster für Claude [2]. Auch Googles Day 3 beschreibt diese Stufen [3]. Das beschreibt das Format und benannte Umsetzungen, ist aber keine Garantie für ein universelles Laufzeitverhalten.",
       "sources": {
         "agent-skills-specification": { "title": "Agent Skills, Specification" },
         "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" },
@@ -112,22 +112,22 @@
       "the-concept": {
         "title": "Das Konzept",
         "keywords": "",
-        "script": "Wie findet das Modell also einen Skill, und wie viel davon liest es? Interface-Designer hatten dasselbe Problem lange vor der KI: Ein Bildschirm, der jede Option auf einmal zeigt, überfordert den Menschen davor. Also zeigt man erst das Wichtigste und öffnet den Rest, wenn jemand ihn braucht. Das heißt Progressive Disclosure, und ein Skill wird genauso geladen, in drei Stufen."
+        "script": "Wie macht eine Plattform einen Skill verfügbar, und was lädt sie? Interface-Designer kannten ein ähnliches Problem lange vor der KI: Ein Bildschirm mit allen Optionen auf einmal kann überfordern. Also zeigt man erst das Wichtigste und öffnet mehr, wenn es gebraucht wird. Das heißt Progressive Disclosure. Das Agent-Skills-Format bietet ein stufenweises Muster; die Produkte setzen es unterschiedlich um."
       },
       "step-one": {
         "title": "Stufe eins",
         "keywords": "",
-        "script": "Stufe eins ist, wie das Modell einen Skill entdeckt, und sie ist immer geladen: Name und Beschreibung jedes Skills. Selbst mit hundert installierten Skills trägt das Modell also in jedes Gespräch nur dieses kurze Register, die Registerseite des Handbuchs."
+        "script": "Im Agent-Skills-Format sind Name und Beschreibung die kurzen Metadaten eines Skills. Manche Plattformen stellen sie zur Suche bereit, bevor sie die vollständigen Anweisungen laden; andere können sich anders verhalten. Das Register zeigt dieses Muster, verspricht aber nichts über jedes Gespräch."
       },
       "step-two": {
         "title": "Stufe zwei",
         "keywords": "",
-        "script": "Stufe zwei wird geladen, wenn der Skill genutzt wird. Erst wenn eine Aufgabe zu einer Beschreibung passt, liest das Modell die Hauptanweisungen dieses Skills, keinen Moment früher, so wie der Pilot eine Karte zieht."
+        "script": "Wenn eine Plattform einen Skill aktiviert, kann sie seine Hauptanweisungen laden. Manche gleichen Aufgaben mit Beschreibungen ab; explizites Aufrufen und andere Wege gibt es ebenfalls. Auf unserem Schiff zieht der Pilot dafür eine Karte."
       },
       "step-three": {
         "title": "Stufe drei",
         "keywords": "",
-        "script": "Stufe drei wird nur bei Bedarf geladen: die Referenzen, Vorlagen und Skripte, die Extras in der Hülle, die das Modell erst öffnet, wenn ein Schritt es dorthin schickt. Das genaue Verhalten unterscheidet sich ein wenig von App zu App, deshalb stehen die genauen Aussagen in den Notizen neben dieser Slide."
+        "script": "Ein Skill kann auf Referenzen, Vorlagen und Skripte verweisen – die Extras in der Hülle. Wann diese Dateien gelesen werden, hängt von der Plattform und den Anweisungen ab; das dokumentierte Skriptverhalten gilt für Claude. Die Notizen halten die Details zu einzelnen Produkten fest."
       }
     }
   }

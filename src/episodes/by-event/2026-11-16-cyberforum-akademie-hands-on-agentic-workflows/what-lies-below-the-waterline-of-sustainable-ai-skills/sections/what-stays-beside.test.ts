@@ -92,7 +92,7 @@ describe('success cases', () => {
         {
           title: 'Four squares',
           script:
-            'Four squares come out of that. Personal and project-specific: write the details straight in, it needs the least upkeep. Personal and general: keep the details beside, it is your own toolkit. Shared and project-specific: the details can live in its supporting files, and the project team owns it. Shared and general: the details sit beside, with an owner, a version and evals. So as a skill moves from your own notebook into the shared library, it loses its project details and gains an owner.',
+            'Four squares come out of that. Personal and project-specific: keep the details with the skill. Personal and general: keep reusable details nearby. Shared and project-specific: a project can share a skill and its supporting files. Shared and general: a team may choose a managed package and track its owner, version and evaluations. Moving a skill into shared use does not mean stripping project details; make its intended scope clear.',
         },
         {
           title: 'A rule of thumb',
@@ -136,7 +136,7 @@ describe('success cases', () => {
         },
       ],
       [
-        { header: 'Where a skill is stored encodes who gets it', urls: [CLAUDE_SKILLS, CODEX_SKILLS] },
+        { header: 'Storage scope can shape who gets a skill', urls: [CLAUDE_SKILLS, CODEX_SKILLS] },
         { header: 'The skill scope matrix is an inference', urls: [SKILLDEX, ZONED_GOVERNANCE] },
         { header: 'Evals matter once a skill is shared', urls: [SWE_SKILLS_BENCH] },
       ],

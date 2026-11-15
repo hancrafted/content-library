@@ -63,7 +63,7 @@ describe('success cases', () => {
         'A run that worked ()',
         'The AI interviews you ()',
         'The AI writes the skill',
-        'The next conversation starts fresh',
+        'A later conversation starts',
       ],
     };
     // ACT

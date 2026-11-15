@@ -5,11 +5,11 @@
   "story": "In the story:",
   "season": "this season",
   "before": {
-    "heading": { "chat": "Skill index · before", "coding": ".claude/skills/ · before" },
-    "count": { "chat": "47 skills", "coding": "47 folders" },
+    "heading": { "chat": "Example index · before", "coding": ".claude/skills/ · example" },
+    "count": { "chat": "47 skills · example", "coding": "47 folders · example" },
     "uses": "{count} uses",
     "unused": "unused",
-    "more": "… 30 more, all unused"
+    "more": "… 30 more in this example, unused"
   },
   "index": {
     "rinse-camera-dome": "Rinse the dome",
@@ -41,14 +41,22 @@
     "more": "and 23 more tasks"
   },
   "archive": {
-    "chat": { "title": "Archive · 40 skills", "count": "retired 12 Nov 2026", "restore": "can be restored" },
-    "coding": { "title": "retired/2026-11-12/", "count": "40 skill folders", "restore": "restore: move one back" }
+    "chat": {
+      "title": "Example archive · 40 skills",
+      "count": "example date: 12 Nov 2026",
+      "restore": "can be restored"
+    },
+    "coding": {
+      "title": "retired/2026-11-12/ · example",
+      "count": "40 example folders",
+      "restore": "restore: move one back"
+    }
   },
   "after": {
-    "heading": { "chat": "Skill index · after", "coding": ".claude/skills/ · after" },
+    "heading": { "chat": "Example index · after", "coding": ".claude/skills/ · example" },
     "count": { "chat": "7 skills", "coding": "7 folders" },
     "needed": "the one you need",
-    "callback": "A few Slides ago: 7th of 47. Now 3rd of 7."
+    "callback": "In this example: 7th of 47. Now 3rd of 7."
   },
   "closesUp": "the index closes up",
   "didYouKnow": "Did you know?",
@@ -89,7 +97,7 @@
       "read-the-log": {
         "title": "Read the log",
         "keywords": "",
-        "script": "Last job: retire skills. Put your list of skills next to what your work actually used this season, the dive log on our ship, and see which skills no task ever opened."
+        "script": "Last job: retire skills. In this example, put the skill list next to what the work used this season—the dive log on our ship—and see which skills no task opened."
       },
       "the-archive-box": {
         "title": "The archive box",
@@ -99,7 +107,7 @@
       "short-index-again": {
         "title": "Short index again",
         "keywords": "",
-        "script": "And the index left behind is short again, with the one you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the model can pick it."
+        "script": "And the example index is short again, with the skill you need easy to find. Remember the description buried in the middle of a stuffed manual a few Slides ago? It is back in view, and the platform can surface it."
       }
     }
   }
