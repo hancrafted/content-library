@@ -69,7 +69,7 @@ _Done when_ every todo is done or blocked, and each one has a closed Job span wi
 
 Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it. The job also copies the Episode into an Event's Playlist when the user named one, and checks the PR's Cloudflare preview and its Lighthouse scores.
 
-Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. The user's feedback and Promotion follow; [Promotion archives the log](#promotion).
+Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. It stops the Run's servers, so start `npx next dev -p <dev_port>` again, detached, in the Episode's worktree, and confirm the printed link answers 200. The user's feedback and Promotion follow; [Promotion archives the log](#promotion).
 
 _Done when_ the user has the Episode's local link and the draft PR's URL, and the Run has its `end-run` line.
 
@@ -81,8 +81,8 @@ A job with `isolation: worktree` works in a worktree of its own, so jobs running
 
 1. Before its implementor, run `npm run wt:new -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. The `--` in the branch name is needed: git cannot create `episode/<slug>/<job id>` beside the branch `episode/<slug>`. Each worktree runs its own `npm ci`.
 2. Its implementor and reviewer work only in that worktree, its checks run there, and its pass commit is made there.
-3. On a pass, merge the job branch into `episode/<slug>` and run `mh` and `vitest` again there: a file can pass alone and fail beside its siblings, through a duplicate research ID or a cross-file check. A failure after the merge counts as a failed attempt of that job.
-4. After the merge, or when the job is blocked, stop a Section job's dev server first, since `wt:done` deletes the worktree it serves: `kill $(cat <job worktree>/.scratch/dev-<port>.pid)`, or `kill $(lsof -ti tcp:<port>)` when the file is missing. Then run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for the user.
+3. On a pass, merge the job branch into `episode/<slug>` and run `mh` and `vitest` again there: a file can pass alone and fail beside its siblings, through a duplicate research ID or a cross-file check. A failure after the merge counts as a failed attempt of that job. Parallel Section jobs each rewrite the post-build captures `tests/post-build/episode-text/<ep>.{en,de}.json`, so their merges conflict there: `git rm` both captures in the merge commit, and after the last Section merges run `npm run build`, then `npm run test:build` twice (the first run writes the missing captures and fails), and commit them.
+4. After the merge, or when the job is blocked, stop a Section job's dev server first, since `wt:done` deletes the worktree it serves: `kill $(cat <job worktree>/.scratch/dev-<port>.pid)`, or `kill $(lsof -ti tcp:<port>)` when the file is missing. Run `npm run inspect-page -- --stop` in the job worktree too: a reviewer's shared browser left running there blocks `wt:done`. Then run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for the user.
 
 A subagent writes no narrative file: it returns its notes and a summary, and you record them with [`note` and `end-job --summary`](#job-narrative) after the merge. A subagent never writes a start, end or gate line either. A reviewer writes its Score lines (step 3), by the absolute path of the Episode's worktree you give it. Nobody writes `docs/episodes/runs.csv`: [`npm run episode:runs-csv`](references/event-log.md#runs-csv) generates it.
 

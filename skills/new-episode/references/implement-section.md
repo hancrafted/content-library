@@ -8,6 +8,8 @@ The implementor (`archgate:developer`) builds its Section of the approved Spec, 
 
 - Build each page Slide of the Section in its own Slide folder and add it to the Section's placement marker ([`implement-episode-init.md`](implement-episode-init.md#placement-markers)) in Spec order. Touch no other Section's marker or Slides: a sibling job builds them in parallel.
 - On a retry, the failed lines go to a new implementor, quoted verbatim, as fix work in the job's worktree.
+- A test names its Episode as `episodeRef('<slug>').id` (from `@/episodes/lib/episode-folders`), never the slug as a string literal, so an Event's copy of the Episode runs the same tests by changing one argument.
+- Return a note only for what is new in this Section. "German copy unreviewed" and "interactive pass skipped, no browser" are facts about the whole Run: `open-pr` states them once.
 - Serve the Section for the user while the job runs: in the job's worktree, start `npx next dev -p <port>`, `<port>` the job's `port` in `pipeline.yml`, detached, so it outlives the agent's session: the harness's detached background mode, or `nohup npx next dev -p <port> > .scratch/dev-<port>.log 2>&1 & echo $! > .scratch/dev-<port>.pid`. A retry reuses the server already listening there. The orchestrator stops it before it removes the worktree; after the merge, `implement-episode-init`'s server shows the Section.
 
 ## The Spec is the source
