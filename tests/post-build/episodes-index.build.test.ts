@@ -22,11 +22,9 @@ const PUBLISHED_SLUGS = [
   'ai-attention-span',
   'ai-gives-you-more-work',
   'from-shared-understanding-to-shared-context',
-];
-const DRAFT_SLUGS: readonly string[] = [
-  'what-lies-below-the-waterline-of-sustainable-ai-skills',
   'what-agentic-workflows-require',
 ];
+const DRAFT_SLUGS: readonly string[] = ['what-lies-below-the-waterline-of-sustainable-ai-skills'];
 const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };
 
 describe('/episodes index page', () => {

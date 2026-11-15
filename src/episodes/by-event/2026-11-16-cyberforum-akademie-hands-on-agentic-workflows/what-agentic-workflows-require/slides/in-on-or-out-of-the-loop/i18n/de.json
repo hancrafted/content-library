@@ -1,0 +1,146 @@
+{
+  "title": "In, an oder außerhalb der Schleife",
+  "caption": "Drei Stufen menschlicher Aufsicht, gewählt <b>pro Aufgabe</b>: Derselbe Workflow hält einen Menschen bei einer Aufgabe in der Schleife, bei einer anderen an der Schleife und bei einer dritten außerhalb.",
+  "stamp": "Pro Aufgabe gewählt",
+  "levelsLabel": "Drei Stufen menschlicher Aufsicht",
+  "levels": {
+    "in": {
+      "label": "In der Schleife",
+      "name": "Human in the Loop",
+      "abbr": "HITL",
+      "definition": "Der Agent handelt erst, nachdem ein Mensch zugestimmt hat.",
+      "role": "Der Torwächter",
+      "does": "gibt jeden Schritt frei"
+    },
+    "on": {
+      "label": "An der Schleife",
+      "name": "Human on the Loop",
+      "abbr": "HOTL",
+      "definition": "Er handelt selbst, während ein Mensch zusieht und eingreifen kann.",
+      "role": "Der Pilot",
+      "does": "sieht zu, greift bei Ausnahmen ein"
+    },
+    "out": {
+      "label": "Außerhalb der Schleife",
+      "name": "Human out of the Loop",
+      "abbr": "HOOTL",
+      "definition": "Er handelt ohne jeden Menschen, der nur das Ergebnis sieht.",
+      "role": "Der Prüfer",
+      "does": "prüft hinterher die Protokolle"
+    }
+  },
+  "agent": "Agent",
+  "example": {
+    "label": "Eine Aufgabe, drei Wege",
+    "card": "Location",
+    "task": "Eine Location für 200 am 20. Juni buchen",
+    "listLabel": "Die Buchung der Location auf jeder Stufe",
+    "in": { "text": "Schlägt eine Location vor", "aside": "Nichts wird gebucht, bevor Du Ja sagst." },
+    "on": {
+      "text": "Bucht die Location und berichtet",
+      "aside": "Du liest die Berichte und greifst ein, wenn etwas falsch aussieht."
+    },
+    "out": { "text": "Bucht die Location", "aside": "Du bekommst die Bestätigung." }
+  },
+  "goal": {
+    "label": "Ziel",
+    "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause"
+  },
+  "risk": { "label": "Risiko", "hint": "eines falschen Ergebnisses: am höchsten, wo ein Mensch freigibt" },
+  "speed": { "label": "Tempo", "hint": "am höchsten, wo niemand wartet" },
+  "origin": {
+    "label": "Geliehene Begriffe",
+    "words": "Die Wörter: Militärpolitik zu autonomen Waffen, 2012",
+    "concept": "Das Konzept: überwachende Steuerung im Flugzeug"
+  },
+  "notes": {
+    "origin-of-the-three-terms": {
+      "header": "Herkunft der drei Begriffe",
+      "description": "Die Dreiteilung stammt aus einem Bericht von 2012 über autonome Waffen: in der Schleife heißt Gewalt nur auf menschlichen Befehl, an der Schleife heißt unter einem menschlichen Bediener, der übersteuern kann, außerhalb der Schleife heißt ohne jede menschliche Eingabe [1].",
+      "sources": {
+        "hrw-losing-humanity": { "title": "Human Rights Watch und Harvard IHRC, Losing Humanity (19. Nov. 2012)" }
+      }
+    },
+    "two-senses-of-on": {
+      "header": "Zwei Bedeutungen von „an“",
+      "description": "Die Ethik-Leitlinien der EU von 2019 definieren „an der Schleife“ als Eingreifen beim Entwurf und Überwachen des Betriebs; das unterscheidet sich vom militärischen Sinn des Übersteuerns, der hier gemeint ist. Einen Begriff für außerhalb der Schleife haben die Leitlinien nicht [1].",
+      "sources": {
+        "eu-hleg-ethics-guidelines": {
+          "title": "Hochrangige Expertengruppe der EU für KI, Ethik-Leitlinien für eine vertrauenswürdige KI (8. Apr. 2019)"
+        }
+      }
+    },
+    "approving-to-monitoring": {
+      "header": "Vom Freigeben zum Überwachen",
+      "description": "Erfahrene Nutzer gehen vom Freigeben einzelner Aktionen dazu über, den Agenten zu überwachen und bei Bedarf einzugreifen [1].",
+      "sources": {
+        "anthropic-measuring-agent-autonomy": {
+          "title": "Anthropic, Measuring AI agent autonomy in practice (18. Feb. 2026)"
+        }
+      }
+    },
+    "out-is-a-per-step-property": {
+      "header": "Außerhalb gilt pro Schritt",
+      "description": "Keine Quelle behauptet, ein Mensch sei für einen ganzen Lebenszyklus außerhalb der Schleife; die Menschen wechseln zu Spezifikationen und zur Prüfung der Ergebnisse [1].",
+      "sources": {
+        "willison-software-factory": {
+          "title": "Willison, How StrongDM's AI team build serious software without even looking at the code"
+        }
+      }
+    },
+    "regulation-limits-out": {
+      "header": "Regulierung begrenzt außerhalb",
+      "description": "Für Hochrisiko-Anwendungen verlangt Artikel 14 der KI-Verordnung der EU, dass ein Mensch das System übersteuern und anhalten kann [1].",
+      "sources": {
+        "eu-ai-act-article-14": {
+          "title": "KI-Verordnung der EU (Verordnung 2024/1689), Artikel 14 Menschliche Aufsicht"
+        }
+      }
+    },
+    "aviation-supplied-the-concept-not-the-words": {
+      "header": "Die Luftfahrt lieferte das Konzept, nicht die Wörter",
+      "description": "Sheridan führt die überwachende Steuerung darauf zurück, dass Computer im Flugzeug die direkte Handsteuerung ersetzten, was den Menschen „in a new role of monitor and goal-constraint setter“ zurückließ; keine Quelle führt die Wörter „in, on, out of the loop“ auf die Luftfahrt zurück, sie stammen aus der Militärpolitik oben [1].",
+      "sources": {
+        "sheridan-human-supervisory-control": {
+          "title": "Sheridan, Human Supervisory Control (Handbook of Systems Engineering and Management, Wiley, 1999, Kap. 16)"
+        }
+      }
+    },
+    "levels-are-not-a-strict-ladder": {
+      "header": "Die Stufen sind keine strenge Leiter",
+      "description": "Die FAA warnt, dass sich Automatisierung als lineare Hierarchie von Stufen im Betrieb schwer anwenden lässt und dass die Verantwortung für die Flugbahnführung jederzeit bei den Piloten bleibt; das betrifft Verkehrspiloten, die Übertragung auf Agenten ist also eine Analogie [1].",
+      "sources": {
+        "faa-ac-120-123": { "title": "FAA, Advisory Circular 120-123, Flightpath Management (21. Nov. 2022)" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "in": {
+        "title": "In",
+        "keywords": "",
+        "script": "Human in the Loop heißt, der Agent handelt erst, nachdem ein Mensch zugestimmt hat. Nimm die Buchung der Location für das Fest: Der Agent schlägt eine Location vor, und nichts wird gebucht, bevor Du Ja sagst."
+      },
+      "on": {
+        "title": "An",
+        "keywords": "",
+        "script": "Human on the Loop heißt, der Agent handelt selbst, während ein Mensch zusieht und eingreifen kann. Jetzt bucht der Agent die Location selbst, Du liest seine Berichte, und Du greifst ein, wenn etwas falsch aussieht."
+      },
+      "out": {
+        "title": "Außerhalb",
+        "keywords": "",
+        "script": "Human out of the Loop heißt, der Agent handelt ohne jeden Menschen, der nur das Ergebnis sieht. Der Agent bucht die Location, und alles, was Du bekommst, ist die Bestätigung."
+      },
+      "borrowed-terms": {
+        "title": "Geliehene Begriffe",
+        "keywords": "",
+        "script": "Diese drei Begriffe sind aus der Automatisierung außerhalb der KI geliehen, aus Bereichen, in denen sich eine automatische Handlung oft nicht rückgängig machen lässt; deshalb wurde dort bewusst entschieden, welche Rolle der Mensch spielt, und nicht dem Zufall überlassen. Die Details stehen in den Speaker Notes. Wir leihen sie uns, weil sich für Deine Agenten dieselbe Frage stellt."
+      },
+      "per-task": {
+        "title": "Pro Aufgabe",
+        "keywords": "",
+        "script": "Du wählst also pro Aufgabe, nicht pro Unternehmen. Minimales Eingreifen ist dann kein vages Versprechen mehr, sondern eine Einstellung, die Du wählst, Aufgabe für Aufgabe."
+      }
+    }
+  }
+}

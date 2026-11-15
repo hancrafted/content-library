@@ -1,0 +1,88 @@
+{
+  "title": "What an agentic workflow is",
+  "caption": "A structured process in which AI agents make decisions, take actions and coordinate tasks, with minimal human intervention. <b>You design the path; the agent steers inside its task.</b>",
+  "design": {
+    "label": "You design this",
+    "hint": "the stages, their order, what each hands over, where you sign off"
+  },
+  "diagramLabel": "Plan a summer party, in four stages",
+  "gate": "You sign off",
+  "handoffsLabel": "What each stage hands over",
+  "handoffs": {
+    "plan": "a plan of epics",
+    "requirements": "tickets you signed off",
+    "research": "research, a source per number",
+    "page": "one page: the party plan"
+  },
+  "steers": {
+    "label": "The agent steers this",
+    "task": "You set its task: {task} How it gets there is its own call.",
+    "steps": {
+      "search": "Search the web",
+      "compare": "Compare 3 venues",
+      "source": "Note a source per number"
+    },
+    "done": "until it thinks it is done"
+  },
+  "agent": "Agent",
+  "minimal": {
+    "term": "\u201cMinimal human intervention\u201d",
+    "question": "Here you sign off twice. How minimal, and for which task? The next Section answers it."
+  },
+  "notes": {
+    "ibm-wording": {
+      "header": "IBM's wording",
+      "description": "\u201cAgentic workflows are AI-driven processes where autonomous AI agents make decisions, take actions and coordinate tasks with minimal human intervention.\u201d [1]",
+      "sources": {
+        "ibm-agentic-workflows": { "title": "Gutowska and Stryker (IBM), What are Agentic Workflows?" }
+      }
+    },
+    "salesforce-wording": {
+      "header": "Salesforce's wording",
+      "description": "\u201cAgentic workflows are structured processes where AI agents make decisions, solve problems, and perform tasks with minimal human input.\u201d The word \u201cstructured\u201d is Salesforce's; \u201ccoordinate tasks\u201d is IBM's. The Slide's sentence merges the two and belongs to neither vendor [1].",
+      "sources": {
+        "salesforce-agentic-workflows": { "title": "Salesforce, What Are Agentic Workflows?" }
+      }
+    },
+    "why-vendors-stress-autonomy": {
+      "header": "Why the vendors stress autonomy",
+      "description": "Both sell agent platforms and praise reduced oversight; that this explains their wording is an inference, the pages give no reason [1].",
+      "sources": {
+        "ibm-agentic-workflows": { "title": "Gutowska and Stryker (IBM), What are Agentic Workflows?" }
+      }
+    },
+    "two-levels-of-control": {
+      "header": "Two levels of control",
+      "description": "Anthropic draws the line at who controls the steps: workflows are orchestrated through predefined code paths, agents direct their own process. Applying \u201cyou design the path, the agent steers inside its task\u201d to a team's process is an inference [1].",
+      "sources": {
+        "anthropic-building-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    },
+    "autonomy-as-a-degree": {
+      "header": "Autonomy as a degree",
+      "description": "Ng prefers to call systems agent-like to different degrees, with a gray zone, over a binary [1].",
+      "sources": {
+        "ng-the-batch-253": { "title": "Andrew Ng, The Batch issue 253 (letter on agentic workflows)" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-definition": {
+        "title": "The definition",
+        "keywords": "",
+        "script": "An agentic workflow is a process in which agents, not people, take the decisions and do the tasks, within a structure you set. The exact wording and where it comes from are in the Speaker notes."
+      },
+      "two-levels": {
+        "title": "Two levels",
+        "keywords": "",
+        "script": "Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away."
+      },
+      "minimal-how-minimal": {
+        "title": "Minimal, how minimal",
+        "keywords": "",
+        "script": "Notice the phrase minimal human intervention, because it carries a lot of weight and says very little. How minimal, and for which task? That is what the next Section answers."
+      }
+    }
+  }
+}

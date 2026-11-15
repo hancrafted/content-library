@@ -1,0 +1,117 @@
+{
+  "title": "What to look for in your team",
+  "heading": "What did you need to do?",
+  "caption": "Build three skills in each person, which fix the four failures from the board, and give them an organisation <b>designed around the goal</b>.",
+  "person": {
+    "label": "In each person",
+    "skills": {
+      "breakDown": {
+        "skill": "Break the work down from the goal",
+        "fixed": {
+          "drivers": { "was": "Carpools + open bar", "now": "a shuttle back, nobody drives" },
+          "cold": { "was": "1,800 m in summer clothes", "now": "guest info: warm clothes, 6 °C at night" }
+        }
+      },
+      "contract": {
+        "skill": "Write the contract at the seam",
+        "fixed": { "eggs": { "was": "“31 vegetarian” got egg dishes", "now": "defined: no meat, fish or eggs" } }
+      },
+      "review": {
+        "skill": "<marker>Review against contract and goal</marker>",
+        "fixed": { "paintball": { "was": "Paintball × 200", "now": "an activity the ten wheelchair users join" } }
+      }
+    }
+  },
+  "fixed": "Fixed",
+  "organisation": {
+    "label": "From the organisation",
+    "items": {
+      "goals": { "title": "Clear goals", "text": "An outcome you can measure, like “everyone home safe”." },
+      "contracts": { "title": "Contracts between teams", "text": "Receives, delivers, checked by, at every seam." },
+      "oversight": { "title": "An oversight policy per task" },
+      "workflows": { "title": "Workflows around the goal", "text": "Not around the org chart." }
+    }
+  },
+  "oversight": { "in": "In the loop", "on": "On the loop", "out": "Out of the loop" },
+  "footnote": {
+    "synthesis": "<marker>That these three are the skills to build is a synthesis: no study tests them as a set</marker>.",
+    "juniors": "<marker>Juniors learn them on narrow tasks, the ones agents take first</marker>."
+  },
+  "notes": {
+    "management-101-skills": {
+      "header": "Management 101 skills",
+      "description": "\"If you can explain what you need, give effective feedback, and design ways of evaluating work, you are going to be able to work with agents\" [1].",
+      "sources": {
+        "mollick-management-superpower": {
+          "title": "Mollick, Management as AI Superpower (One Useful Thing, 27 January 2026)"
+        }
+      }
+    },
+    "effort-moves-to-steering-and-checking": {
+      "header": "Effort moves to steering and checking",
+      "description": "in a survey of 319 knowledge workers, critical thinking moved toward information verification, response integration and task stewardship [1].",
+      "sources": {
+        "lee-critical-thinking": {
+          "title": "Lee et al. (Carnegie Mellon, Microsoft Research), The Impact of Generative AI on Critical Thinking (CHI 2025)"
+        }
+      }
+    },
+    "evidence-is-indirect": {
+      "header": "Evidence is indirect",
+      "description": "no source tests breaking work down, writing handoffs and reviewing results as a set, and none measures how many people can do them; that these are the skills to build is a synthesis [1].",
+      "sources": {
+        "tomasev-intelligent-delegation": {
+          "title": "Tomašev, Franklin, Osindero (Google DeepMind), Intelligent AI Delegation"
+        }
+      }
+    },
+    "juniors-may-not-build-them": {
+      "header": "Juniors may not build them",
+      "description": "the narrow tasks through which juniors build judgement are those most likely to be offloaded to agents [1].",
+      "sources": {
+        "tomasev-intelligent-delegation": {
+          "title": "Tomašev, Franklin, Osindero (Google DeepMind), Intelligent AI Delegation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "title": "The answer",
+        "keywords": "",
+        "script": "So what did you need to do? You needed three skills in your people, and each one is tied to the failures it would have fixed."
+      },
+      "break-down": {
+        "title": "Break down",
+        "keywords": "",
+        "script": "The first is to break the work down from the goal. Do that, and the drinking drivers and the cold guests have an owner before the party starts."
+      },
+      "write-contracts": {
+        "title": "Write contracts",
+        "keywords": "",
+        "script": "The second is to write the contract at the seam, what a task receives, what it delivers and how it is checked. Do that, and the egg dishes cannot happen."
+      },
+      "review-twice": {
+        "title": "Review twice",
+        "keywords": "",
+        "script": "The third is to review twice, against the contract and against the goal. Do that, and the paintball does not go ahead."
+      },
+      "the-organisation": {
+        "title": "The organisation",
+        "keywords": "",
+        "script": "The organisation has its own part: clear goals, contracts between teams, a policy on how much oversight each task gets, and workflows designed around the goal and not around the org chart."
+      },
+      "look-at-your-team": {
+        "title": "Look at your team",
+        "keywords": "",
+        "script": "Now look at your team. Who can break work down, who writes a clear handoff, and who can review an agent's result? Those are the skills to build, and in my view they are where your effort pays off first."
+      },
+      "take-one-process": {
+        "title": "Take one process",
+        "keywords": "",
+        "script": "And before Monday, do the smallest version of all of this. Pick one recurring process in your team, mark which steps an agent could run, and decide for each whether a person stays in, on or out of the loop."
+      }
+    }
+  }
+}

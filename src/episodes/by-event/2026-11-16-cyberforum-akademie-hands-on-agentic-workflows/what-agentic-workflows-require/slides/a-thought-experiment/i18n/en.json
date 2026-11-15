@@ -1,0 +1,22 @@
+{
+  "title": "A thought experiment",
+  "caption": "Four perfect cards on one board, and the party still fails between them.",
+  "board": "Food and drinks sends 31 vegetarian across; the venue kitchen sends egg dishes back, marked failed: breaks together",
+  "seam": {
+    "from": { "team": "Food & drinks", "note": "31\nvegetarian" },
+    "to": { "team": "Venue kitchen", "note": "Egg\ndishes" },
+    "handoff": "vegetarian",
+    "back": "served with eggs"
+  },
+  "breaks": "breaks: together",
+  "footer": "the word meant something else",
+  "voiceScript": {
+    "segments": {
+      "imagine-the-board": {
+        "title": "Imagine the board",
+        "keywords": "",
+        "script": "Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired four excellent freelancers to plan it, one each for Activities, Travel, Venue and Food and drinks. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes."
+      }
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "title": "Prüfbarkeit bestimmt den Abstand",
+  "caption": "Die Stufe einer Aufgabe hängt davon ab, was ein falsches Ergebnis anrichten kann und wie gut Du <b>das Ergebnis prüfen</b> kannst; wer sie prüfbar macht, rückt sie nach außen.",
+  "board": {
+    "label": "Sommerfest · jede Aufgabe so weit außen, wie ihr Risiko und ihre Prüfung es erlauben"
+  },
+  "agent": "Agent",
+  "tasks": {
+    "guestList": {
+      "label": "Gästeliste",
+      "fact": "200 Namen, 5 Standorte",
+      "ifWrong": "ein Name fehlt, mit einer E-Mail behoben",
+      "checkedBy": "Geprüft durch: Abgleich mit der Personalliste jedes Standorts, kein Mensch nötig"
+    },
+    "venue": {
+      "label": "Location",
+      "fact": "Eine Location für 200 am 20. Juni",
+      "ifWrong": "200 Menschen an einem Ort, der nicht passt",
+      "checkedBy": "Geprüft durch: Kapazität, Datum, Zugang, in den Berichten gelesen"
+    },
+    "activity": {
+      "label": "Programm",
+      "fact": "Ein Programmpunkt für 200",
+      "was": "War: Paintball × 200, nur Dein Ja oder Nein",
+      "ifWrong": "Kolleginnen und Kollegen bleiben außen vor",
+      "move": "Das Programm rückt von in der Schleife zu an der Schleife"
+    }
+  },
+  "risk": {
+    "label": "Wenn falsch:",
+    "value": "Risiko {value} von 3"
+  },
+  "levels": {
+    "was": "In",
+    "in": "In der Schleife",
+    "on": "An der Schleife",
+    "out": "Außerhalb der Schleife"
+  },
+  "checkCard": {
+    "heading": "Seine Prüfung, eingebaut",
+    "checks": {
+      "join": "Alle können mitmachen",
+      "access": "Rollstuhlgerecht",
+      "fitness": "Keine Fitness nötig"
+    }
+  },
+  "handoffs": {
+    "guests": "200 Gäste",
+    "venue": "Location, Datum",
+    "programme": "Programm"
+  },
+  "goal": {
+    "label": "Ziel",
+    "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause"
+  },
+  "hedge": "Meine Hypothese: Risiko und Prüfbarkeit zusammen abzuwägen ist eine Synthese, <risk>nicht die Regel einer einzelnen Quelle</risk>, und die Belege für Prüfbarkeit <software>stammen vor allem aus der Software</software>.",
+  "notes": {
+    "software-is-easy-to-check": {
+      "header": "Software lässt sich leicht prüfen",
+      "description": "„Software is unusually amenable to supervisory oversight because the outputs can be tested“; wo das Prüfen dieselbe Expertise braucht wie das Herstellen, wächst Vertrauen womöglich langsamer [1].",
+      "sources": {
+        "anthropic-measuring-agent-autonomy": {
+          "title": "Anthropic, Measuring AI agent autonomy in practice (18. Feb. 2026)"
+        }
+      }
+    },
+    "vigilance-is-no-check": {
+      "header": "Wachsamkeit ist keine Prüfung",
+      "description": "Selbstzufriedenheit und Automatisierungs-Bias treten bei Laien wie bei Fachleuten auf und verschwinden weder durch Training noch durch Anweisungen; die Prüfung muss also ins Ergebnis eingebaut sein [1].",
+      "sources": {
+        "parasuraman-manzey-complacency-and-bias": {
+          "title": "Parasuraman und Manzey, Complacency and Bias in Human Use of Automation: An Attentional Integration (Human Factors 52(3), 2010)"
+        }
+      }
+    },
+    "level-is-a-design-choice": {
+      "header": "Die Stufe ist eine Designentscheidung",
+      "description": "Der Grad der Automatisierung wird pro Funktion festgelegt, beurteilt nach den Folgen für die menschliche Leistung und den Kosten von Fehlern; deshalb kann eine Aufgabe auch aus anderen Gründen als ihrer Prüfbarkeit in der Schleife bleiben [1].",
+      "sources": {
+        "parasuraman-sheridan-wickens-levels-of-automation": {
+          "title": "Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)"
+        }
+      }
+    },
+    "oversight-follows-risk-in-the-rules": {
+      "header": "In den Regeln folgt die Aufsicht dem Risiko",
+      "description": "Die KI-Verordnung der EU verlangt für ein Hochrisiko-System Aufsichtsmaßnahmen, die „den Risiken, dem Grad der Autonomie und dem Nutzungskontext“ angemessen sind [1].",
+      "sources": {
+        "eu-ai-act-article-14": {
+          "title": "KI-Verordnung der EU (Verordnung 2024/1689), Artikel 14 Menschliche Aufsicht"
+        }
+      }
+    },
+    "risk-as-a-tool-rating": {
+      "header": "Risiko als Bewertung eines Werkzeugs",
+      "description": "OpenAI rät, jedes Werkzeug als niedrig, mittel oder hoch einzustufen, nach Faktoren wie Lese- oder Schreibzugriff, Umkehrbarkeit und finanzieller Wirkung, und für heikle, unumkehrbare oder folgenschwere Aktionen menschliche Aufsicht auszulösen, bis das Vertrauen in den Agenten wächst [1].",
+      "sources": {
+        "openai-practical-guide-to-building-agents": { "title": "OpenAI, A practical guide to building agents" }
+      }
+    },
+    "risk-is-one-input-not-the-rule": {
+      "header": "Risiko ist ein Faktor, nicht die Regel",
+      "description": "Keine Quelle sagt, dass das Risiko allein die Stufe bestimmt; das aus der Luftfahrt stammende Modell stellt die Wirkung auf die menschliche Leistung an die erste Stelle und die Kosten von Fehlern an die zweite; Risiko und Prüfbarkeit zu einer Wahl pro Aufgabe zu verbinden, ist also eine Synthese [1].",
+      "sources": {
+        "parasuraman-sheridan-wickens-levels-of-automation": {
+          "title": "Parasuraman, Sheridan, Wickens, A Model for Types and Levels of Human Interaction with Automation (IEEE Trans. SMC-A 30(3), 2000)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-rule": {
+        "title": "Die Regel",
+        "keywords": "",
+        "script": "Du kannst Dich nur so weit aus der Schleife herausnehmen, wie Du das Ergebnis prüfen kannst. Wo das Prüfen so viel kostet, wie die Arbeit selbst zu machen, sparst Du durch das Herausnehmen nichts, Du nimmst nur ein Risiko in Kauf, auf das niemand schaut."
+      },
+      "hypothesis-said-openly": {
+        "title": "Hypothese, offen gesagt",
+        "keywords": "",
+        "script": "Die Regel, dass Du Dich nur so weit herausnehmen kannst, wie Du prüfen kannst, ist meine Hypothese, und das sage ich offen; die Belege dafür stammen vor allem aus der Software, also nimm sie als gute Wette und nicht als Gesetz."
+      },
+      "risk-too": {
+        "title": "Auch das Risiko",
+        "keywords": "",
+        "script": "Prüfbarkeit ist nur die eine Hälfte. Was ein falsches Ergebnis anrichten kann, bestimmt die Stufe mit: Je mehr Schaden ein falsches Ergebnis anrichten kann, desto mehr bleibt ein Mensch drin."
+      },
+      "make-it-checkable": {
+        "title": "Mach es prüfbar",
+        "keywords": "",
+        "script": "Damit ist die Prüfung der Hebel, den Du in der Hand hast. Gib dem Programm einen Test, den es bestehen kann, etwa alle können mitmachen, rollstuhlgerecht, keine Fitness nötig, und dieselbe Aufgabe kann von in der Schleife zu an der Schleife rücken."
+      }
+    }
+  }
+}
