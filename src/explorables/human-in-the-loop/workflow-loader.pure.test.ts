@@ -515,6 +515,20 @@ describe('success cases', () => {
     // ASSERT
     expect(problems).toBe('');
   });
+
+  it('takes a slash command inside backticks as text for the user, not a skill call', () => {
+    // ARRANGE
+    const text = 'End with one line: "Next: type `/to-spec` (or paste the second prompt)."';
+    const change = (file: File) =>
+      Object.assign(research(file), {
+        do: { ...research(file).do, technical: [{ ...section, text }] },
+        then: { skills: ['to-spec'], sections: [{ ...section, text: 'Then type `/research`.' }] },
+      });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
 });
 
 describe('failure cases', () => {
