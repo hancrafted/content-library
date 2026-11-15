@@ -9,7 +9,7 @@
     },
     {
       "id": "play",
-      "text": "Human in the loop workflow The project-plan workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you check every artifact in between. Read me What it shows The project-plan Workflow in its Stages view: six stages from a vague goal to a reviewed report, one card each. What to try Click a stage to open its Practice it window and copy its prompts into a fresh AI chat. Pick another use case in the toolbar. What to notice The checked mark on a card says a person reviews that result before the next stage starts. Use case : Plan a project Stages Jobs Demo mode Practice it for High-level plan High-level plan From a vague task to epics checked Gate 1 Practice it for Epics Epics Epics 1 checked Epics 2 checked Grill, then spec, once per epic Practice it for Requirements Requirements Merge specs, resolve conflicts, cut tickets checked Gate 2 Practice it for Execute Execute Execute 1 checked Execute 2 checked Execute 3 checked Execute 4 checked One fresh chat per ticket Practice it for Aggregate Aggregate Results combined into one report checked Practice it for Review Review The report as a page, then your sign-off Gate 3"
+      "text": "Human in the loop workflow The source-to-quiz workflow: three stages from a source to a quiz and a reusable skill, a fresh chat for each job, and you check every artifact in between. Read me What it shows The source-to-quiz Workflow in its Stages view: three stages from a goal to a quiz and a reusable skill, one card each. What to try Click a stage to open its Practice it window and copy its prompts into a fresh AI chat. Pick another use case in the toolbar. What to notice The checked mark on a card says a person reviews that result before the next stage starts. Use case : Turn a source into a quiz Stages Jobs Demo mode Practice it for Requirements Requirements From a goal to a quiz spec checked Gate 1 Practice it for Execute Execute Build it, play it, fix it Gate 2 Practice it for Improve Improve Your run becomes a reusable skill"
     },
     {
       "id": "about",
@@ -23,7 +23,7 @@
     },
     {
       "id": "play",
-      "text": "Play The Explorable explanation in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the project-plan Workflow, Vacation one pill away, every \"Try it\" open."
+      "text": "Play The Explorable explanation in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the source-to-quiz Workflow, the other use cases one pill away, every \"Try it\" open."
     },
     {
       "id": "about",
