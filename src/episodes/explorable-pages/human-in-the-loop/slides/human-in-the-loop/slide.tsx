@@ -6,8 +6,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /**
- * The human in the loop workflow in its own words: the project-plan Workflow in its Stages view (Vacation one pill
- * away), every toolbar control and every stage's "Try it", with a readme on the Slide. The AI attention span Episode
+ * The human in the loop workflow in its own words: the source-to-quiz Workflow in its Stages view (the other
+ * use cases one pill away), every toolbar control and every stage's "Try it", with a readme on the Slide. The AI attention span Episode
  * shows it with that Slide's words on top.
  */
 export const humanInTheLoop = slide({
@@ -25,7 +25,7 @@ export const humanInTheLoop = slide({
         ]}
       />
       <div {...target('workflow')}>
-        <HumanInTheLoop workflow="project-plan" locale={locale} />
+        <HumanInTheLoop workflow="source-to-quiz" locale={locale} />
       </div>
     </SlideFrame>
   ),

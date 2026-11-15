@@ -1,6 +1,6 @@
 {
   "title": "Human-in-the-Loop-Workflow",
-  "caption": "Der Projektplan-Workflow: sechs Phasen von einer vagen Aufgabe zu einem geprüften Bericht, ein frischer Chat pro Aufgabe, und Du prüfst jedes Ergebnis dazwischen.",
+  "caption": "Der Quelle-zu-Quiz-Workflow: drei Phasen von einer Quelle zu einem Quiz und einem wiederverwendbaren Skill, ein frischer Chat pro Aufgabe, und Du prüfst jedes Ergebnis dazwischen.",
   "readme": {
     "heading": "Lies mich",
     "labels": {
@@ -8,14 +8,14 @@
       "tryit": "Was Du ausprobierst",
       "notice": "Worauf Du achtest"
     },
-    "shows": "Der Projektplan-Workflow in der Phasenansicht: sechs Phasen von einem vagen Ziel bis zum geprüften Bericht, je eine Karte.",
+    "shows": "Der Quelle-zu-Quiz-Workflow in der Phasenansicht: drei Phasen von einem Ziel bis zu einem Quiz und einem wiederverwendbaren Skill, je eine Karte.",
     "tryit": "Klick auf eine Phase, um ihr Fenster „Jetzt üben“ zu öffnen und ihre Prompts in einen frischen KI-Chat zu kopieren. In der Werkzeugleiste wählst Du einen anderen Anwendungsfall.",
     "notice": "Das Häkchen auf einer Karte zeigt: Ein Mensch prüft dieses Ergebnis, bevor die nächste Phase beginnt."
   },
   "notes": {
     "workflow": {
       "header": "Die Visualisierung mit eigenen Worten",
-      "description": "Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Projektplan-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+      "description": "Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Quelle-zu-Quiz-Workflow, die anderen Anwendungsfälle eine Pille weiter, jedes „Ausprobieren“ offen."
     }
   }
 }
