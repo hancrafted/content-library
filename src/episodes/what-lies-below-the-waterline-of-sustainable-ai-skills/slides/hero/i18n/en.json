@@ -46,10 +46,5 @@
       }
     }
   },
-  "gauge": "Depth gauge",
-  "view": {
-    "label": "View",
-    "chat": "Chat app",
-    "coding": "Coding agent"
-  }
+  "gauge": "Depth gauge"
 }

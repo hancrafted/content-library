@@ -208,6 +208,7 @@ async function EpisodeToc(props: ReturnType<typeof tocPropsOf>) {
         topId={TITLE_ANCHOR}
         labels={labels}
         collection={props.collection}
+        agentView={props.content.agentView}
       />
     </aside>
   );

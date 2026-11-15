@@ -3,32 +3,13 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { InView } from './in-view';
-import { ViewToggle } from './view-toggle';
 
 /*
  * The page-level Chat app / Coding agent switch (design-ADR 0025, Interaction 1): one switch the whole Episode page
- * follows, Chat app first. The view is transient, held in memory (FE-001 §1.3, Han's decision), so a reload opens
- * in Chat app again.
+ * follows. Both views remain in static HTML; the navigation menu selects which one is shown.
  */
 
-const LABELS = { label: 'View', chat: 'Chat app', coding: 'Coding agent' };
-
 describe('success cases', () => {
-  it('offers the two views as a pressed pair, Chat app pressed in the static page', () => {
-    // ARRANGE
-    const expected = [
-      { name: 'Chat app', pressed: 'true' },
-      { name: 'Coding agent', pressed: 'false' },
-    ];
-    // ACT
-    const $ = load(renderToStaticMarkup(createElement(ViewToggle, { labels: LABELS })));
-    const buttons = $('[data-view-toggle] button')
-      .toArray()
-      .map((button) => ({ name: $(button).text(), pressed: $(button).attr('aria-pressed') }));
-    // ASSERT
-    expect(buttons).toEqual(expected);
-  });
-
   it('marks words that belong to one view, so the switch shows only that view', () => {
     // ARRANGE
     const expected = { chat: 'chat', coding: 'coding' };
@@ -65,12 +46,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('names the pair for assistive tech as one group', () => {
+  it('keeps inline view alternatives inside a surrounding sentence', () => {
     // ARRANGE
-    const expected = { role: 'group', name: 'View' };
+    const expected = { text: 'Read the cardSKILL.md.', blocks: 0 };
     // ACT
-    const $ = load(renderToStaticMarkup(createElement(ViewToggle, { labels: LABELS })));
-    const seen = { role: $('[data-view-toggle]').attr('role'), name: $('[data-view-toggle]').attr('aria-label') };
+    const $ = load(
+      renderToStaticMarkup(
+        createElement(
+          'p',
+          null,
+          'Read ',
+          createElement(InView, { view: 'chat', children: 'the card' }),
+          createElement(InView, { view: 'coding', children: 'SKILL.md' }),
+          '.',
+        ),
+      ),
+    );
+    const seen = { text: $('p').text(), blocks: $('p div').length };
     // ASSERT
     expect(seen).toEqual(expected);
   });

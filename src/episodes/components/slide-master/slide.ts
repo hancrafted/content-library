@@ -189,6 +189,8 @@ export type HeaderMode = 'shared' | 'authored';
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
+  /** Offers the page-wide Chat app / Coding agent choice in the table-of-contents menu. */
+  readonly agentView?: true;
   /** Configured pages reveal navigation on Title departure by default; visible-from-start bypasses only that entrance. */
   readonly tocEntrance?: 'title-departure' | 'visible-from-start';
   /** One policy for every adjacent edge; incoming enter wins when omitted. */

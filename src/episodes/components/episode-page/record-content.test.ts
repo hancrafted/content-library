@@ -2,9 +2,11 @@ import { introHitlAiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-h
 import { introHitlAiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
 import { introHitlWorkflows } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
 import { introHitlOnboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
+import { whatLiesBelowTheWaterlineOfSustainableAiSkills as eventWaterline } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
+import { whatLiesBelowTheWaterlineOfSustainableAiSkills as waterline } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 import { TRANSLATIONS } from '@/page-assembly/translations';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
@@ -73,6 +75,44 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it.each([waterline, eventWaterline])('enables view chrome for each waterline composition', async (record) => {
+    // ARRANGE
+    const locale = 'de';
+    // ACT
+    const content = await recordContent(record, locale, {
+      translatorOf: translatorOf(locale),
+      id: 'what-lies-below-the-waterline-of-sustainable-ai-skills',
+    });
+    // ASSERT
+    expect(content.agentView).toBe(true);
+  });
+
+  it('carries the alternate-view opt-in to page chrome without needing a hero Scene', async () => {
+    // ARRANGE
+    const record = episode({ ...RECORD, agentView: true });
+    // ACT
+    const content = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'ai-token-economy',
+    });
+    // ASSERT
+    expect(content.agentView).toBe(true);
+  });
+
+  it('keeps view chrome reachable on the Title slide instead of hiding it until departure', async () => {
+    // ARRANGE
+    const record = episode({ ...RECORD, agentView: true, tocEntrance: 'title-departure' });
+    const expected = 'visible-from-start';
+    // ACT
+    const content = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'ai-token-economy',
+    });
+    const policy = tocEntranceOf(content);
+    // ASSERT
+    expect(policy).toBe(expected);
+  });
+
   it.each([
     [introHitlAiAttentionSpan, 'thought-experiment'],
     [introHitlAiGivesYouMoreWork, 'from-execution-to-management'],

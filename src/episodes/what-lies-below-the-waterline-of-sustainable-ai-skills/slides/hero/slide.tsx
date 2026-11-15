@@ -1,7 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideBackdrop } from '@/episodes/components/slide-master/slide-master';
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
-import { ViewToggle } from '@/episodes/components/slide-shared/agent-view/view-toggle';
 import { Character } from '@/episodes/components/slide-shared/character/character';
 import { captain, pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { Robot } from '@/episodes/components/slide-shared/deep-sea-expedition/robot';
@@ -69,8 +68,7 @@ function Dive() {
  * the shared header's `h1` and lede sit in its sky. The research ship on the waterline has lowered its diving robot
  * from the A-frame to hang just above the water, the slim depth gauge at the right edge names the Surface, and one
  * pill marks the robot as the Surface. Each section slide echoes the scene one zone deeper
- * (`slide-shared/waterline-echo/`). It also holds the page's one Chat app / Coding agent switch, which every view line
- * of the Episode follows.
+ * (`slide-shared/waterline-echo/`). Its file inset follows the persistent page-chrome view selection.
  */
 export const hero = slide({
   slug: 'hero',
@@ -96,10 +94,6 @@ export const hero = slide({
           marker={{ text: t('youAreHere'), ...MARKER }}
           overlay={
             <>
-              <ViewToggle
-                labels={{ label: t('view.label'), chat: t('view.chat'), coding: t('view.coding') }}
-                className="absolute top-[calc(var(--header-block)+1rem)] right-(--inset-r)"
-              />
               <InView view="coding" as="div" className="absolute right-(--inset-r) bottom-6 w-80 max-sm:w-64">
                 <ZoneCard className="rounded-xl p-4 shadow-md">
                   <p className="text-caption font-semibold text-primary uppercase">{t('agent.heading')}</p>

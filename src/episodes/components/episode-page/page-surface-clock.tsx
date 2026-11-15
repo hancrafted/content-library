@@ -10,7 +10,10 @@ export function usesSurfaceClock(content: Pick<EpisodeContent, 'titleAppearance'
 }
 
 /** Entrance policy depends on composition, never the active Slide or sampled tone. */
-export function tocEntranceOf(content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance'>) {
+export function tocEntranceOf(
+  content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance' | 'agentView'>,
+) {
+  if (content.agentView) return 'visible-from-start';
   return content.tocEntrance ?? (usesSurfaceClock(content) ? 'title-departure' : 'legacy');
 }
 
