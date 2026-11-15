@@ -1,9 +1,10 @@
+import type { AgentView } from '@/shared/lib/agent-view';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import styles from './agent-view.module.css';
 
 /** The two views of the Brief: Chat app, the default, and Coding agent (Claude Code, Codex). */
-export type AgentView = 'chat' | 'coding';
+export type { AgentView } from '@/shared/lib/agent-view';
 
 export interface InViewProps {
   readonly view: AgentView;

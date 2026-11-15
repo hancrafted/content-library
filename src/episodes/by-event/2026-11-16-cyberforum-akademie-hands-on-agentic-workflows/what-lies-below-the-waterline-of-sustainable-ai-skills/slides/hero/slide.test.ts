@@ -11,7 +11,7 @@ import { hero } from './slide';
  * The Title slide's hero Scene, picked Option 0a: the research ship on the waterline has lowered its diving robot to
  * hang just above the water, where the ruler marks the Surface. Read as the Title slide renders it, with no Section
  * placed beside it. The whole depth is one full-bleed drawing in the Backdrop, so the title and lede sit in its sky
- * (Han's feedback 1); the ruler, the pill and the view switch stay reader content over it. The scenery comes from
+ * (Han's feedback 1); the ruler and the pill stay reader content over it. The scenery comes from
  * the Iceberg style, the ship, crew and robot from the cast (design-ADR-0025).
  */
 
@@ -186,25 +186,14 @@ describe('edge cases', () => {
     expect({ view: inset.attr('data-view'), files }).toEqual(expected);
   });
 
-  it('holds the page one view switch, Chat app first', () => {
+  it('leaves the page-wide view control to persistent chrome rather than the removable hero', () => {
     // ARRANGE
-    const expected = ['Chat app', 'Coding agent'];
+    const selector = '[data-view-toggle]';
     // ACT
     const $ = sceneOf('en');
-    const options = $('[data-view-toggle] button')
-      .toArray()
-      .map((button) => $(button).text());
+    const controls = $(selector).length;
     // ASSERT
-    expect(options).toEqual(expected);
-  });
-
-  it('sets the view switch a rem below the floating header band, which the hero runs up under (decision 50)', () => {
-    // ARRANGE
-    const expected = 'top-[calc(var(--header-block)+1rem)]';
-    // ACT
-    const classes = sceneOf('en')('[data-view-toggle]').attr('class')?.split(' ');
-    // ASSERT
-    expect(classes).toContain(expected);
+    expect(controls).toBe(0);
   });
 
   it('marks the Surface in German too', () => {

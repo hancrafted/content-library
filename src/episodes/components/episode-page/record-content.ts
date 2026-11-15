@@ -58,6 +58,7 @@ export interface TitleAppearance {
 
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
+  readonly agentView?: true;
   readonly titleAppearance: TitleAppearance;
   readonly tocEntrance?: EpisodeComposition['tocEntrance'];
   readonly transitions: ReadonlyMap<string, ResolvedSlideTransition>;
@@ -93,6 +94,7 @@ export async function recordContent(
   const slides = episode.placed.map((placed) => localizeSlide(placed, episode));
   const transitions = transitionsOf(record, slides, episode.header);
   return {
+    agentView: record.agentView,
     tocEntrance: record.tocEntrance,
     transitions,
     title: lines.heading ?? title,

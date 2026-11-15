@@ -1,5 +1,6 @@
 'use client';
 
+import { useAgentView } from '@/shared/hooks/use-agent-view';
 import {
   useFractionInto,
   useOpenSections,
@@ -94,11 +95,13 @@ export interface TableOfContentsProps {
   topId: string;
   labels: TocLabels;
   collection?: TocCollection;
+  agentView?: true;
 }
 
 function usePanel(props: TableOfContentsProps) {
   const { view, time } = useTocState({ ...props, route: props.page.route });
   const [scope, setScope] = useState(TOC_DEFAULT_SCOPE);
+  const agentView = useAgentView(props.agentView === true);
   return {
     view,
     page: props.page,
@@ -106,6 +109,7 @@ function usePanel(props: TableOfContentsProps) {
     labels: props.labels,
     time,
     collection: props.collection,
+    agentView: props.agentView ? agentView : undefined,
     scope,
     onToggleScope: () => setScope((value) => (value === 'page' ? 'collection' : 'page')),
   };

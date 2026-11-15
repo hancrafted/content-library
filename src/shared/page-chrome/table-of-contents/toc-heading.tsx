@@ -21,6 +21,9 @@ export interface TocLabels {
   options: string;
   zoomOut: string;
   zoomIn: string;
+  view: string;
+  chatView: string;
+  codingView: string;
 }
 
 interface HeadingDetailsProps {
