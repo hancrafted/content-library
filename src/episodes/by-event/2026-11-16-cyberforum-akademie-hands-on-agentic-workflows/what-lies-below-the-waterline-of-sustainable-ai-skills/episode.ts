@@ -24,6 +24,7 @@ export const whatLiesBelowTheWaterlineOfSustainableAiSkills = episode({
   slug: 'what-lies-below-the-waterline-of-sustainable-ai-skills',
   messages: { en, de },
   title: hero,
+  agentView: true,
   sections: [
     aThoughtExperimentSection,
     whatASkillIsSection,

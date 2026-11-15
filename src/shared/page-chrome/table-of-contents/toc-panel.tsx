@@ -1,3 +1,4 @@
+import type { AgentViewControl } from '@/shared/lib/agent-view';
 import type {
   ReadingTime,
   TocCollection,
@@ -82,7 +83,12 @@ function PanelHeading(props: TocPanelProps) {
       actions={
         <>
           <ScopeButton {...props} />
-          <TocOptions labels={props.labels} collapsed={props.collapsed} onToggleCollapse={props.onToggleCollapse} />
+          <TocOptions
+            labels={props.labels}
+            collapsed={props.collapsed}
+            onToggleCollapse={props.onToggleCollapse}
+            agentView={props.agentView}
+          />
         </>
       }
     />
@@ -97,6 +103,7 @@ export interface TocPanelProps {
   time: ReadingTime;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
+  agentView?: AgentViewControl;
   className?: string;
   testId?: string;
   collection?: TocCollection;

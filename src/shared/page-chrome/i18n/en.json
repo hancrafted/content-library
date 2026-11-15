@@ -63,7 +63,10 @@
     "backToTop": "Back to top",
     "options": "Navigation options",
     "zoomOut": "Zoom out to Event",
-    "zoomIn": "Zoom in to this Episode"
+    "zoomIn": "Zoom in to this Episode",
+    "view": "View",
+    "chatView": "Chat app",
+    "codingView": "Coding agent"
   },
   "contextDrawer": {
     "title": "Context",

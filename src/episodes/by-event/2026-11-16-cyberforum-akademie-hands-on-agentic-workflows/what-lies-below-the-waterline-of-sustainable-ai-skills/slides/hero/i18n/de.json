@@ -46,10 +46,5 @@
       }
     }
   },
-  "gauge": "Tiefenanzeige",
-  "view": {
-    "label": "Ansicht",
-    "chat": "Chat-App",
-    "coding": "Coding-Agent"
-  }
+  "gauge": "Tiefenanzeige"
 }
