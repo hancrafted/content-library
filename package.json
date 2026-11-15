@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "art": "node tools/art/art.ts",
+    "prebuild": "npm run art",
     "build": "next build",
     "lint": "eslint . && npm run lint:boundaries",
     "lint:boundaries": "depcruise src skills tools",

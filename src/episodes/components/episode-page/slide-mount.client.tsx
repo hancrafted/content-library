@@ -1,7 +1,8 @@
 'use client';
 
 import type { HeaderMode } from '@/episodes/components/slide-master/slide';
-import { SlideIdContext, useEntryOf, useZoneOf } from '@/episodes/hooks/use-slide-zone';
+import { useArtLoader } from '@/episodes/hooks/use-art-loader';
+import { SlideIdContext, useArtLoadsOf, useEntryOf, useZoneOf } from '@/episodes/hooks/use-slide-zone';
 import { isMounted, keptHeight, type SlideEntry, type SlideZone } from '@/episodes/lib/slide-zone.pure';
 import { cn } from '@/shared/lib/utils';
 import { useEffect, useRef, type ReactNode, type Ref } from 'react';
@@ -46,6 +47,7 @@ export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, 
     <div
       ref={boxRef}
       data-slot="slide-mount"
+      data-art-root
       data-zone={zone}
       data-entry={entry}
       className={cn('flex flex-1 flex-col', className)}
@@ -63,6 +65,8 @@ export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, 
  * the Slide id (the Title slide has none and is never far), so
  * `useSlideZone()` below it reads this Slide's zone. On the shared header it
  * also carries the Slide's entrance state for the play-once CSS (design-ADR-0012).
+ * It loads the Scene art its content draws (`<Art>`, design-ADR 0025) once the
+ * Slide is seen outside `far`.
  */
 export function SlideMount({
   id,
@@ -78,6 +82,7 @@ export function SlideMount({
   const zone = useZoneOf(id ?? null);
   const entry = useEntryOf(id ?? null);
   const { box, height } = useMeasuredHeight(isMounted(zone));
+  useArtLoader(box, useArtLoadsOf(id ?? null));
   return (
     <SlideMountView
       id={id ?? null}

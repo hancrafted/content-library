@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   APPROACH_ROOT_MARGIN,
+  artLoadsIn,
   createZoneStore,
   edgeEffectShown,
   entryIn,
@@ -150,6 +151,20 @@ describe('success cases', () => {
       expect([store.getZone('a'), store.getZone('b')]).toEqual(['near', 'active']);
     });
 
+    it("loads a Slide's art once the observer has seen it outside far", () => {
+      // ARRANGE
+      const store = createZoneStore();
+      const expected = { unseen: false, near: true, far: false, titleSlide: true };
+      // ACT
+      const unseen = artLoadsIn(store, 'a');
+      store.setNear('a', true);
+      const near = artLoadsIn(store, 'a');
+      store.setNear('b', false);
+      const seen = { unseen, near, far: artLoadsIn(store, 'b'), titleSlide: artLoadsIn(store, null) };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    });
+
     it('stops notifying after unsubscribe', () => {
       // ARRANGE
       const store = createZoneStore();
@@ -215,6 +230,19 @@ describe('edge cases', () => {
     const zone = store.getZone('a');
     // ASSERT
     expect(zone).toBe('near');
+  });
+
+  it('tells subscribers when the observer first sees a Slide near, though its zone stays near', () => {
+    // ARRANGE
+    const store = createZoneStore();
+    const listener = vi.fn();
+    store.subscribe(listener);
+    const expectedCalls = 1;
+    // ACT
+    store.setNear('a', true);
+    store.setNear('a', true);
+    // ASSERT
+    expect(listener).toHaveBeenCalledTimes(expectedCalls);
   });
 
   it('starts every store fresh', () => {

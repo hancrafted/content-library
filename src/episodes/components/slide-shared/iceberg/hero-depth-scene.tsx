@@ -1,5 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
+import { ArtNow } from '../art/art';
 import { DepthGauge } from './depth-gauge';
 import styles from './hero-depth-scene.module.css';
 import { HERO_DEPTH, heroBleed, heroIceberg, heroLiftStyle, heroSeabed, heroWater } from './hero-depth.pure';
@@ -132,6 +133,8 @@ function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> &
         >
           <Depth>{children}</Depth>
         </svg>
+        {/* The Title slide's art loads as the HTML parses: its first paint never waits for hydration (FE-009 §4). */}
+        <ArtNow />
       </SceneMotionRoot>
     </Backdrop>
   );
