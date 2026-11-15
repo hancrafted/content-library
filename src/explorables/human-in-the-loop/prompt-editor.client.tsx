@@ -1,6 +1,7 @@
 'use client';
 
 import { OUTLINED_ICON } from '@/shared/components/core-components/icon-button/icon-button.client';
+import { CopyButton } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
@@ -8,8 +9,6 @@ import { cn } from '@/shared/lib/utils';
 import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import type { UiWords } from './human-in-the-loop.types';
-import { withEdit } from './prompt-edits.pure';
-import type { EditState } from './step-kit.types';
 
 /*
  * The pencil beside Copy prompt and the editor it opens: a textarea of the step's prompt as markdown with its
@@ -62,7 +61,7 @@ export function PromptEditor({ words, text, edited, onText, onReset, onClose }: 
     <div data-prompt-editor="" className="flex min-w-0 flex-col gap-1.5">
       <div className="flex items-center justify-end gap-1">
         <Button type="button" variant="ghost" size="sm" data-control="edit-reset" disabled={!edited} onClick={onReset}>
-          {words.reset}
+          {words.editReset}
         </Button>
         <Button type="button" variant="ghost" size="sm" data-control="edit-close" onClick={onClose}>
           {words.close}
@@ -80,25 +79,30 @@ export function PromptEditor({ words, text, edited, onText, onReset, onClose }: 
   );
 }
 
-/** Where a step's edit is stored and what its YAML prompt reads. */
-export interface EditAt {
-  readonly key: string;
-  readonly yaml: string;
-}
-
-/** A step's edit: whether there is one, the text to show, and how it changes or goes. */
-export function editOf({ values, onChange }: EditState, at: EditAt) {
-  const edit = values[at.key];
-  return {
-    edit,
-    text: edit ?? at.yaml,
-    onText: (text: string) => onChange(withEdit(values, at, text)),
-    onReset: () => onChange(withEdit(values, at, null)),
-  };
-}
-
 /** Whether the editor is open: transient, so a reload closes it. */
 export function useOpen() {
   const [on, set] = useState(false);
   return { on, toggle: () => set((now) => !now), close: () => set(false) };
+}
+
+interface CopyPromptProps {
+  readonly words: UiWords;
+  /** An edit exists: Copy prompt shows a dot, and a tooltip saying it copies the edited version. */
+  readonly edited: boolean;
+  readonly lead: boolean;
+  readonly onCopy: () => Promise<boolean>;
+}
+
+/** Copy prompt of a step, marked while it copies the viewer's edit. */
+export function CopyPrompt({ words, edited, lead, onCopy }: CopyPromptProps) {
+  const button = (
+    <CopyButton label={words.copyPrompt} done={words.copied} lead={lead} edited={edited} onCopy={onCopy} />
+  );
+  if (!edited) return button;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipContent>{words.editedTip}</TooltipContent>
+    </Tooltip>
+  );
 }

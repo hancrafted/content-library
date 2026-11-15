@@ -1,6 +1,7 @@
 import type { DebugBase } from './debug-footer.pure';
 import type { UiWords } from './human-in-the-loop.types';
 import type { DemoProps, ProgressActions, ProgressNote } from './progress-controls.types';
+import type { StepKit } from './step-kit.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
@@ -47,8 +48,8 @@ export interface ModalProps extends DemoProps {
   readonly round: number | null;
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
-  /** The viewer's edits of step prompts, by `editKey`. */
-  readonly prompts: Readonly<Record<string, string>>;
+  /** The viewer's edits of step prompts, at the level shown, and how one changes. */
+  readonly edits: StepKit['edits'];
   /** What the copy buttons append a debug footer from; null while debug mode is off. */
   readonly debug: DebugBase | null;
   readonly words: UiWords;
@@ -56,5 +57,4 @@ export interface ModalProps extends DemoProps {
   readonly onLevel: (level: Level) => void;
   readonly onClose: () => void;
   readonly onSlots: (values: Readonly<Record<string, string>>) => void;
-  readonly onPrompts: (values: Readonly<Record<string, string>>) => void;
 }

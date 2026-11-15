@@ -27,6 +27,7 @@ ui:
   copyExplanation: 'Copy explanation prompt'
   copyExplanationTip: 'Paste this prompt into a chat: the AI explains the prompt, why it is built this way and what you could improve, then offers to guide you through the exercise.'
   editPrompt: Edit prompt
+  editReset: Reset to default
   editedTip: 'Copies your edited version of this prompt. Reset in the editor brings back the original.'
   explainWrapper: "You are my prompt engineering coach, and I am learning to plan projects with AI. Below is the prompt of one step of a guided exercise. Do not carry it out: explain it to me, then help me through the exercise.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\"\n\nIn plain words, short and concrete, quoting the lines you mean:\n1. What this step does and why it matters for the whole project.\n2. What each part of the prompt is for.\n3. Which techniques it uses (role, context, delimiters, steps, output format) and why they help.\n4. Where it is weak, and how I could adjust it for my own project.\nThen offer to guide me through the exercise: suggest three questions I could ask you next, such as \"Explain what we just did\", \"Why is this step important?\" and \"What would change for my own project?\", and wait for my answer."
   stepN: 'Step {n}: {title}'

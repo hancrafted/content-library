@@ -2,6 +2,7 @@ import type { PromptKit } from '@/shared/components/core-components/try-prompt/t
 import type { DebugScope } from './debug-footer.pure';
 import type { UiWords } from './human-in-the-loop.types';
 import type { NextAction } from './next-action.pure';
+import type { PromptEdits } from './prompt-edits.pure';
 import type { Level } from './workflow-state.pure';
 
 /** The Workflow-wide pasted values, owned by the parent, and how a TryPrompt reports a change. */
@@ -16,9 +17,9 @@ export interface SlotState {
  */
 /** The viewer's prompt edits and how one changes (`prompt-edits.pure.ts`), with the level whose text they edit. */
 export interface EditState {
-  readonly values: Readonly<Record<string, string>>;
+  readonly values: PromptEdits;
   readonly level: Level;
-  readonly onChange: (values: Readonly<Record<string, string>>) => void;
+  readonly onChange: (values: PromptEdits) => void;
 }
 
 export type StepKit = PromptKit & {

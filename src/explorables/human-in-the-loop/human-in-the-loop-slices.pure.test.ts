@@ -257,9 +257,9 @@ describe('success cases', () => {
     const state = { ...createState(start), prompts: { 'simple:s.ask.do': '## Mine' } };
     // ACT
     const { modal } = slicesFor(state, {}, sent);
-    modal.onPrompts({});
+    modal.edits.onChange({});
     // ASSERT
-    expect(modal.prompts).toEqual(state.prompts);
+    expect(modal.edits).toMatchObject({ values: state.prompts, level: 'simple' });
     expect(sent).toEqual([{ type: 'prompts', values: {} }]);
   });
 

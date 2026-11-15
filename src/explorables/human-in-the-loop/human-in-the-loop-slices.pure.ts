@@ -48,7 +48,7 @@ export type Callbacks = Pick<
   'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onDemo' | 'onReset' | 'onDebug'
 > &
   Pick<DiagramProps, 'onOpenStage'> &
-  Pick<ModalProps, 'onClose' | 'onSlots' | 'onPrompts'>;
+  Pick<ModalProps, 'onClose' | 'onSlots'> & { onPrompts: ModalProps['edits']['onChange'] };
 
 /** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
@@ -220,14 +220,13 @@ function modalOf(
     jobId: state.openJobId,
     round: state.openRound,
     slotValues: markerValuesOf(file, state.slotValues),
-    prompts: state.prompts,
+    edits: { values: state.prompts, level: state.level, onChange: on.onPrompts },
     debug: state.debug && debugAvailable ? debugBase({ data, state, workflow }) : null,
     words: data.words,
     level: state.level,
     onLevel: on.onLevel,
     onClose: on.onClose,
     onSlots: (values) => on.onSlots(resultsOf(file, values)),
-    onPrompts: on.onPrompts,
     ...demo,
   };
 }

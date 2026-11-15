@@ -3,7 +3,7 @@
 import { useMotion } from '@/shared/hooks/use-motion';
 import { cn } from '@/shared/lib/utils';
 import { Check, Copy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ButtonHTMLAttributes } from 'react';
 import { OUTLINED_ICON } from '../icon-button/icon-button.client';
 import styles from './prompt-actions.module.css';
 import type { PromptKit } from './try-prompt.types';
@@ -34,7 +34,10 @@ function useConfirmed() {
   return [at !== 0, () => setAt((now) => now + 1)] as const;
 }
 
-interface CopyButtonProps {
+interface CopyButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'aria-label' | 'type' | 'onClick' | 'title'
+> {
   readonly label: string;
   readonly done: string;
   readonly onCopy: () => Promise<boolean>;
@@ -42,20 +45,14 @@ interface CopyButtonProps {
   readonly lead?: boolean;
   /** A tooltip saying where the copied text goes. */
   readonly tip?: string;
-  /** The tooltip of a dot after the label, saying the copy is the viewer's edited version; absent: no dot. */
-  readonly edited?: string;
+  /** The copy is the viewer's edited version: a dot follows the label. */
+  readonly edited?: boolean;
 }
 
-/** The tooltip and data marks of the button: the edited tooltip wins over `tip`. */
-function stateOf({
-  confirmed,
-  lead,
-  tip,
-  edited,
-}: Pick<CopyButtonProps, 'lead' | 'tip' | 'edited'> & { confirmed: boolean }) {
+/** The data marks of the button. */
+function attrsOf({ confirmed, lead, edited }: Pick<CopyButtonProps, 'lead' | 'edited'> & { confirmed: boolean }) {
   return {
-    title: edited ?? tip,
-    'data-edited': edited === undefined ? undefined : true,
+    'data-edited': edited || undefined,
     'data-copied': confirmed,
     'data-lead': lead || undefined,
   };
@@ -63,12 +60,12 @@ function stateOf({
 
 /** A small dot after the label while the copy is the viewer's edit. */
 function EditedDot({ edited }: Pick<CopyButtonProps, 'edited'>) {
-  if (edited === undefined) return null;
+  if (!edited) return null;
   return <span aria-hidden="true" data-edited-dot="" className="size-1.5 rounded-full bg-current" />;
 }
 
 /** "Copy prompt": a press copies, and on success the icon turns into a tick and the label into "Copied", then back. */
-export function CopyButton({ label, done, onCopy, lead = false, tip, edited }: CopyButtonProps) {
+export function CopyButton({ label, done, onCopy, lead = false, tip, edited, ...rest }: CopyButtonProps) {
   const motion = useMotion();
   const [confirmed, confirm] = useConfirmed();
   const Icon = confirmed ? Check : Copy;
@@ -76,8 +73,10 @@ export function CopyButton({ label, done, onCopy, lead = false, tip, edited }: C
     <button
       type="button"
       {...motion}
+      {...rest}
       aria-label={label}
-      {...stateOf({ confirmed, lead, tip, edited })}
+      title={tip}
+      {...attrsOf({ confirmed, lead, edited })}
       className={cn(WRITTEN_OUT, lead && LEAD)}
       onClick={() => void onCopy().then((ok) => ok && confirm())}
     >
@@ -94,20 +93,10 @@ interface PromptActionsProps {
   readonly kit: PromptKit;
   /** Copy prompt is the next thing to press. */
   readonly lead?: boolean;
-  /** The text is the viewer's edit: the tooltip of the dot on the button. */
-  readonly edited?: string;
 }
 
 /** The button of a prompt: copy it. */
-export function PromptActions({ text, copyLabel, kit, lead, edited }: PromptActionsProps) {
+export function PromptActions({ text, copyLabel, kit, lead }: PromptActionsProps) {
   const { words } = kit;
-  return (
-    <CopyButton
-      label={copyLabel}
-      done={words.copied ?? copyLabel}
-      onCopy={() => kit.onCopy(text)}
-      lead={lead}
-      edited={edited}
-    />
-  );
+  return <CopyButton label={copyLabel} done={words.copied ?? copyLabel} onCopy={() => kit.onCopy(text)} lead={lead} />;
 }

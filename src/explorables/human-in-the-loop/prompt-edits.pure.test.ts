@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { editKey, promptText, rawPrompt, withEdit } from './prompt-edits.pure';
+import { parse } from 'yaml';
+import { editKey, editOf, partsOf, promptText, rawPrompt, roundedEdit, withEdit } from './prompt-edits.pure';
+import { roundStep, stepsOf } from './workflow-prompts.pure';
+import type { TaskDef, WorkflowFile } from './workflow-schema.types';
+import fixtureEn from './workflow.fixture.en.yml';
+
+const file = parse(fixtureEn) as WorkflowFile;
+const taskOf = (id: string): TaskDef =>
+  file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
+/** The repeated job with its review, to play two rounds of it. */
+const reviewedLook = (): TaskDef => ({
+  ...taskOf('look'),
+  review: { slots: [{ id: 'note_result', mode: 'single', label: 'Result' }], checks: ['Check {{item}}.'] },
+});
+const share = { previous: ['brief'], output: 'note' };
 
 const parts = {
   sections: [{ heading: 'Role', text: 'You plan for {{goal}}.' }, { text: 'Plain tail.' }],
@@ -51,6 +65,46 @@ describe('success cases', () => {
     // ASSERT
     expect(next).toEqual({ other: 'x', k: 'changed' });
   });
+
+  it('edits the template of a repeated stage, so an edit of round 1 reads in round 2 with its own item and slot', () => {
+    // ARRANGE
+    const [, review] = stepsOf(file, reviewedLook(), 'simple');
+    const one = roundStep(review!, { number: 1, item: 'Alpha' }, share);
+    const two = roundStep(review!, { number: 2, item: 'Beta' }, share);
+    const shown = rawPrompt(partsOf(one.template!));
+    const edit = 'MINE {{item}} and {{note_result}}';
+    // ACT
+    const text = promptText(partsOf(two), { 'note_result#2': 'R2' }, roundedEdit(edit, two));
+    // ASSERT
+    expect(rawPrompt(partsOf(two.template!))).toBe(shown);
+    expect(shown).toContain('{{item}}');
+    expect(text).toBe('MINE Beta and R2');
+  });
+
+  it('keeps the Technical command text apart from the Simple prompt, under its own key', () => {
+    // ARRANGE
+    const task = taskOf('ask');
+    // ACT
+    const simple = stepsOf(file, task, 'simple')[0]!;
+    const technical = stepsOf(file, task, 'technical')[0]!;
+    // ASSERT
+    expect(rawPrompt(partsOf(technical))).not.toBe(rawPrompt(partsOf(simple)));
+    expect(editKey('technical', 'ask', 'do')).toBe('technical:ask.do');
+    expect(editKey('technical', 'ask', 'do')).not.toBe(editKey('simple', 'ask', 'do'));
+  });
+
+  it('writes an edit through the change callback, and drops it on Reset', () => {
+    // ARRANGE
+    const sent: Record<string, string>[] = [];
+    const state = { values: { k: 'mine' }, onChange: (v: Record<string, string>) => sent.push(v) };
+    // ACT
+    const step = editOf(state, { key: 'k', yaml: 'yaml' });
+    step.onText('new');
+    step.onReset();
+    // ASSERT
+    expect(step.text).toBe('mine');
+    expect(sent).toEqual([{ k: 'new' }, {}]);
+  });
 });
 
 describe('failure cases', () => {
@@ -90,5 +144,24 @@ describe('edge cases', () => {
     const next = withEdit(edits, { key: 'k', yaml: 'yaml' }, null);
     // ASSERT
     expect(next).toEqual({});
+  });
+
+  it('shows the YAML prompt when there is no edit', () => {
+    // ARRANGE
+    const state = { values: {}, onChange: () => undefined };
+    // ACT
+    const step = editOf(state, { key: 'k', yaml: 'yaml' });
+    // ASSERT
+    expect(step.text).toBe('yaml');
+    expect(step.edit).toBeUndefined();
+  });
+
+  it('leaves the edit as it is for a step that is no round', () => {
+    // ARRANGE
+    const [first] = stepsOf(file, taskOf('ask'), 'simple');
+    // ACT
+    const edit = roundedEdit('x {{item}}', first!);
+    // ASSERT
+    expect(edit).toBe('x {{item}}');
   });
 });

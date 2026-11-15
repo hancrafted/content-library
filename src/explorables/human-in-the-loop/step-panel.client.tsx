@@ -1,19 +1,18 @@
 'use client';
 
 import { BUTTON_GROUP, ChatButtons } from '@/shared/components/core-components/chat-buttons/chat-buttons';
-import { CopyButton, PromptActions } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
-import type { PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
+import { CopyButton } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { CheckedBox } from './checked-box.client';
 import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { debugFooter } from './debug-footer.pure';
-import { editOf, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
-import { editKey, promptText, rawPrompt } from './prompt-edits.pure';
+import { CopyPrompt, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
+import { editKey, editOf, partsOf, promptText, rawPrompt, roundedEdit } from './prompt-edits.pure';
 import { Context } from './step-context.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { StepSection } from './step-section.client';
-import { debuggedPrompt, explanationPrompt, tryWords } from './words.pure';
+import { debuggedPrompt, explanationPrompt } from './words.pure';
 import type { TaskModalView } from './workflow-view.pure';
 
 /*
@@ -53,11 +52,6 @@ function leadOf(kit: StepKit, key: string) {
   return next?.key === key ? next.action : null;
 }
 
-export const partsOf = ({ prompt }: Step): PromptParts => ({
-  sections: prompt.sections ?? [{ text: prompt.text }],
-  slots: prompt.slots ?? [],
-});
-
 /** Copy explanation prompt: the prompt wrapped in a request to explain it. It never leads. */
 function ExplainButton({ kit, onCopy }: { kit: StepKit; onCopy: () => Promise<boolean> }) {
   const { words } = kit;
@@ -84,22 +78,21 @@ interface ActionsProps {
 /** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
 function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
   const { words, debug } = kit;
-  const plain = promptText(partsOf(step), slots.values, edit);
+  const plain = promptText(partsOf(step), slots.values, roundedEdit(edit, step));
   const footer = (prompt: 'copy' | 'explain') =>
     debug ? debugFooter(debug, { prompt, step: step.id, chat: step.chat }) : null;
-  const copied = (ok: boolean) => {
-    if (ok) kit.lead?.onCopied(panel);
-    return ok;
-  };
   return (
     <div className="flex flex-wrap items-center gap-2">
       <div className={BUTTON_GROUP} data-prompt-buttons="">
-        <PromptActions
-          text={debuggedPrompt(words, plain, footer('copy'))}
-          copyLabel={words.copyPrompt}
+        <CopyPrompt
+          words={words}
+          edited={edit !== undefined}
           lead={leadOf(kit, panel) === 'copy'}
-          edited={edit === undefined ? undefined : words.editedTip}
-          kit={{ ...kit, words: tryWords(words), onCopy: async (each) => copied(await kit.onCopy(each)) }}
+          onCopy={async () => {
+            const ok = await kit.onCopy(debuggedPrompt(words, plain, footer('copy')));
+            if (ok) kit.lead?.onCopied(panel);
+            return ok;
+          }}
         />
         <EditToggle words={words} open={editing.on} onToggle={editing.toggle} />
       </div>
@@ -122,7 +115,7 @@ interface RowProps extends ActionsProps {
 function Actions(props: ActionsProps) {
   const { step, task, kit } = props;
   const editing = useOpen();
-  const at = { key: editKey(kit.edits.level, task.id, step.id), yaml: rawPrompt(partsOf(step)) };
+  const at = { key: editKey(kit.edits.level, task.id, step.id), yaml: rawPrompt(partsOf(step.template ?? step)) };
   const { edit, text, onText, onReset } = editOf(kit.edits, at);
   return (
     <>

@@ -129,6 +129,8 @@ export interface TaskStep {
   /** The round's number, on the step `roundStep` made for a round of a repeated stage. */
   readonly chat?: number;
   readonly prompt: PromptView;
+  /** On a round's step: the job's step before the round was made from it, and the rewrite that makes a round's text from the template's. */
+  readonly template?: { readonly prompt: PromptView; readonly rewrite: (text: string) => string };
 }
 
 /** The steps of a task at a runtime: its do prompt, then its review. A repeated stage's rounds are made from them. */
@@ -177,6 +179,7 @@ export function roundStep(step: TaskStep, round: { number: number; item: string 
   return {
     ...step,
     chat: round.number,
+    template: { prompt, rewrite: fill },
     prompt: {
       ...prompt,
       text: fill(prompt.text),

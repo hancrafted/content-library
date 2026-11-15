@@ -17,7 +17,8 @@ function blockTexts(doc: Document, field: 'results' | 'prompts'): void {
   }
 }
 
-function blockResults(doc: Document): Document {
+/** The document with every result and every prompt edit in block-literal style. */
+function withBlockLiterals(doc: Document): Document {
   blockTexts(doc, 'results');
   blockTexts(doc, 'prompts');
   return doc;
@@ -34,7 +35,7 @@ export function progressFile(workflowId: string, entry: ProgressEntry): { name: 
     results: entry.results,
     ...(prompts && { prompts }),
   });
-  return { name: `${slug}-progress.yml`, text: blockResults(doc).toString(), type: FILE_TYPE };
+  return { name: `${slug}-progress.yml`, text: withBlockLiterals(doc).toString(), type: FILE_TYPE };
 }
 
 /** Why an uploaded progress file is not taken: it is no progress file, it is of another Workflow, or of an edited one. */

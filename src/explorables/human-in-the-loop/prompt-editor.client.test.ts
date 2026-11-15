@@ -3,9 +3,9 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { UiWords } from './human-in-the-loop.types';
-import { editOf, EditToggle, PromptEditor } from './prompt-editor.client';
+import { EditToggle, PromptEditor } from './prompt-editor.client';
 
-const words = { editPrompt: 'Edit prompt', reset: 'Reset', close: 'Close' } as UiWords;
+const words = { editPrompt: 'Edit prompt', editReset: 'Reset to default', close: 'Close' } as UiWords;
 const noop = () => undefined;
 const editor = (edited: boolean) =>
   load(
@@ -30,7 +30,7 @@ describe('success cases', () => {
       .map((_, el) => $(el).text())
       .get();
     // ASSERT
-    expect(buttons).toEqual(['Reset', 'Close']);
+    expect(buttons).toEqual(['Reset to default', 'Close']);
     expect($('textarea').text()).toBe('## Role');
   });
 
@@ -42,24 +42,6 @@ describe('success cases', () => {
     // ASSERT
     expect($('button').attr('aria-label')).toBe('Edit prompt');
     expect($('button').attr('aria-pressed')).toBe('true');
-  });
-
-  it('writes an edit through the change callback, and drops it on Reset', () => {
-    // ARRANGE
-    const sent: Record<string, string>[] = [];
-    const at = { key: 'k', yaml: 'yaml' };
-    const state = {
-      values: { k: 'mine' },
-      level: 'simple' as const,
-      onChange: (v: Record<string, string>) => sent.push(v),
-    };
-    // ACT
-    const step = editOf(state, at);
-    step.onText('new');
-    step.onReset();
-    // ASSERT
-    expect(step.text).toBe('mine');
-    expect(sent).toEqual([{ k: 'new' }, {}]);
   });
 });
 
@@ -75,13 +57,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows the YAML prompt when there is no edit', () => {
+  it('shows Close even while there is no edit', () => {
     // ARRANGE
-    const state = { values: {}, level: 'simple' as const, onChange: noop };
+    const $ = editor(false);
     // ACT
-    const step = editOf(state, { key: 'k', yaml: 'yaml' });
+    const close = $('[data-control="edit-close"]').attr('disabled');
     // ASSERT
-    expect(step.text).toBe('yaml');
-    expect(step.edit).toBeUndefined();
+    expect(close).toBeUndefined();
   });
 });
