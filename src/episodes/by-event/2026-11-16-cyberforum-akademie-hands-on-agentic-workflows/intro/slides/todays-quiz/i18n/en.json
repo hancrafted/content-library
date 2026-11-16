@@ -1,13 +1,13 @@
 {
   "title": "Today's quiz",
   "caption": "What you build today: a quiz from one article, from intent to spec to page, then a skill that makes the next quiz in one go.",
-  "stage": "Before the break",
-  "timebox": "15 minutes",
+  "stage": "Before the interview",
+  "timebox": "10 minutes",
   "steps": {
     "first": "Pick one article you’d like your team to learn from. No article? The Workflow names a sample source.",
     "second": "Open an AI chat, ideally Gemini or Claude; ChatGPT and Copilot work too.",
     "third": "Open the quiz Workflow: “Turn a source into a quiz” is already picked. Look, don’t start yet.",
-    "fourth": "Not working after five minutes? Come back to the room early and we sort it out."
+    "fourth": "Not working after five minutes? Raise your hand in Zoom and we sort it out."
   },
   "doneLabel": "Done looks like",
   "done": "An article and an open AI chat, ready for the interview.",

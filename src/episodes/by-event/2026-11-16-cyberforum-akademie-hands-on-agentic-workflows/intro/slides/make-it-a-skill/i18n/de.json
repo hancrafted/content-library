@@ -1,8 +1,8 @@
 {
   "title": "Mach einen Skill daraus",
-  "caption": "Hands-on 2: Mach aus deinem Durchlauf einen Skill und beweis ihn an einer neuen Webseite.",
+  "caption": "Hands-on: Mach aus deinem Durchlauf einen Skill und beweis ihn an einer neuen Webseite.",
   "stage": "Verbessern",
-  "timebox": "45 Minuten",
+  "timebox": "30 Minuten",
   "steps": {
     "first": "Schritt „Den Skill schreiben“: Aus Spezifikation und Quiz-Notiz wird eine SKILL.md.",
     "second": "Schritt „Den Skill ausprobieren“: Gib ihm eine neue Webseite und sonst nichts, dann spiel das Quiz, das er baut.",

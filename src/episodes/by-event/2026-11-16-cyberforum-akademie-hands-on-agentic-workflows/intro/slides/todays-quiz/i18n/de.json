@@ -1,13 +1,13 @@
 {
   "title": "Das heutige Quiz",
   "caption": "Was du heute baust: ein Quiz aus einem Artikel, von der Absicht über die Spezifikation zur Seite, dann einen Skill, der das nächste Quiz in einem Zug macht.",
-  "stage": "Vor der Pause",
-  "timebox": "15 Minuten",
+  "stage": "Vor dem Interview",
+  "timebox": "10 Minuten",
   "steps": {
     "first": "Such dir einen Artikel aus, aus dem dein Team lernen soll. Kein Artikel? Der Workflow nennt eine Beispielquelle.",
     "second": "Öffne einen KI-Chat, am besten Gemini oder Claude; ChatGPT und Copilot gehen auch.",
     "third": "Öffne den Quiz-Workflow: „Aus einer Quelle ein Quiz machen“ ist schon gewählt. Schau, aber fang noch nicht an.",
-    "fourth": "Klappt es nach fünf Minuten nicht? Komm früher in den Raum zurück, dann lösen wir es."
+    "fourth": "Klappt es nach fünf Minuten nicht? Heb die Hand in Zoom, dann lösen wir es."
   },
   "doneLabel": "Fertig sieht so aus",
   "done": "Ein Artikel und ein offener KI-Chat, bereit fürs Interview.",

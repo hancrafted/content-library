@@ -16,12 +16,12 @@ const BLOCKS: readonly {
 }[] = [
   { key: 'welcome', kind: 'start' },
   { key: 'first', kind: 'theory', n: 1 },
-  { key: 'break1', kind: 'break' },
   { key: 'grill', kind: 'handsOn' },
+  { key: 'break1', kind: 'break' },
   { key: 'second', kind: 'theory', n: 2 },
   { key: 'quiz', kind: 'handsOn' },
-  { key: 'third', kind: 'theory', n: 3 },
   { key: 'break2', kind: 'break' },
+  { key: 'third', kind: 'theory', n: 3 },
   { key: 'skill', kind: 'handsOn' },
   { key: 'qa', kind: 'close' },
 ];

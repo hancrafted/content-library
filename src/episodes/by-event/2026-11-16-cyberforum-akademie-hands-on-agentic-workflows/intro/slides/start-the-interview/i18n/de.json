@@ -1,16 +1,16 @@
 {
   "title": "Das Interview starten",
-  "caption": "Hands-on 1a: Kläre mit der KI deine Absicht, dann starte den Grill und lass den Chat offen.",
+  "caption": "Hands-on: Kläre mit der KI deine Absicht, dann starte den Grill und lass den Chat offen.",
   "stage": "Anforderungen, dann Grill",
-  "timebox": "20 Minuten",
+  "timebox": "30 Minuten",
   "steps": {
     "first": "Schritt „Die Absicht klären“: Trag dein Ziel in das Feld ein und füg den Prompt in einen neuen Chat ein.",
     "second": "Beantworte jede Runde wie „1.2 2.3“ (Frage.Option), dann bestätige die drei Kategorien mit ★.",
     "third": "Kopier sein Ergebnis zurück in den Workflow.",
-    "fourth": "Schritt „Grill mich und schreibe die Spezifikation“: Prompt in einen neuen Chat einfügen und antworten; lass ihn für die nächste Episode offen."
+    "fourth": "Schritt „Grill mich und schreibe die Spezifikation“: Prompt in einen neuen Chat einfügen und antworten, bis er die Spezifikation geschrieben hat; lass den Chat offen."
   },
   "doneLabel": "Fertig sieht so aus",
-  "done": "Deine Absicht steht im Workflow, und der Grill hat seine ersten Fragen gestellt.",
+  "done": "Deine Absicht steht im Workflow, und der Grill hat deine Spezifikation geschrieben.",
   "workflow": {
     "label": "Quiz-Workflow öffnen",
     "pick": "Der Workflow von heute, „Aus einer Quelle ein Quiz machen“, ist schon gewählt. Jeder Schritt hat seinen Prompt zum Kopieren, für einen KI-Chat oder einen Coding-Agenten; füg jedes Ergebnis wieder in sein Feld ein.",
@@ -34,8 +34,8 @@
   },
   "notes": {
     "talking-points": {
-      "header": "Zwanzig Minuten, dann Theorie",
-      "description": "Jetzt mit dem Grillen anfangen und nach etwa zwanzig Minuten mitten im Interview stoppen: Die Anforderungs-Episode erklärt, was die Teilnehmenden gerade tun, danach machen sie es fertig. ChatGPT geht; Gemini oder Claude können die spätere HTML-Seite besser."
+      "header": "Dreißig Minuten, dann die Pause",
+      "description": "Die Teilnehmenden das Interview bis zur Spezifikation durchlaufen lassen; die Episode zum geteilten Kontext nach der Pause erklärt, was sie gerade getan haben. ChatGPT geht; Gemini oder Claude können die spätere HTML-Seite besser."
     }
   }
 }

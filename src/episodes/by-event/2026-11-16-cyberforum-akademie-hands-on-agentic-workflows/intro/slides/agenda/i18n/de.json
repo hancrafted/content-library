@@ -5,18 +5,18 @@
   "blocks": {
     "welcome": {
       "time": "0:00",
-      "title": "Begrüßung und Orga"
+      "title": "Begrüßung und Einführung"
     },
     "first": {
-      "time": "0:25",
+      "time": "0:20",
       "title": "Was agentische Workflows von Menschen und Organisationen verlangen"
     },
     "break1": {
-      "time": "0:55",
-      "title": "Pause: Artikel aussuchen"
+      "time": "1:20",
+      "title": "Pause"
     },
     "grill": {
-      "time": "1:10",
+      "time": "0:40",
       "title": "Hands-on: Die KI interviewt dich"
     },
     "second": {
@@ -28,20 +28,20 @@
       "title": "Hands-on: Spec und Quizseite"
     },
     "third": {
-      "time": "2:10",
+      "time": "2:30",
       "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt"
     },
     "break2": {
-      "time": "2:40",
+      "time": "2:20",
       "title": "Pause"
     },
     "skill": {
-      "time": "2:55",
-      "title": "Hands-on: Mach einen Skill daraus"
+      "time": "3:10",
+      "title": "Hands-on: Einen Skill erstellen"
     },
     "qa": {
       "time": "3:40",
-      "title": "Abschluss, Fragen und Antworten"
+      "title": "Rückblick, Fragen und Feedback"
     }
   },
   "kinds": {
@@ -54,7 +54,7 @@
   "notes": {
     "talking-points": {
       "header": "Vier Stunden, ab 0:00 gezählt",
-      "description": "Begrüßung bis 0:25, Episode 1 bis 0:55, dann eine Pause, um einen Artikel auszusuchen. Das Interview (20), Episode 2 (20), Spec und Quizseite (20), Episode 3 (30), eine Pause, den Skill schreiben (45) und die letzten 20 Minuten für Abschluss und Fragen."
+      "description": "Begrüßung bis 0:20, Episode 1 bis 0:40, dann das Interview (40), eine Pause, Episode 2 (20), Spec und Quizseite (30), eine Pause, Episode 3 (40), den Skill erstellen (30) und die letzten 20 Minuten für Rückblick, Fragen und Feedback."
     }
   }
 }

@@ -1,8 +1,8 @@
 {
   "title": "Make it a skill",
-  "caption": "Hands-on 2: turn your run into a skill, then prove it on a new web page.",
+  "caption": "Hands-on: turn your run into a skill, then prove it on a new web page.",
   "stage": "Improve",
-  "timebox": "45 minutes",
+  "timebox": "30 minutes",
   "steps": {
     "first": "Step “Write the skill”: your spec and quiz note become a SKILL.md.",
     "second": "Step “Try the skill”: give it a new web page and nothing else, then play the quiz it builds.",
