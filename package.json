@@ -63,7 +63,8 @@
     "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "dashboard:demo": "node tools/demo/dashboard-demo.ts",
     "episode:backfill-identity": "node skills/new-episode/scripts/backfill-identity.ts",
-    "check:skills": "mh check --root skills --config skills/markdown-harness.config.yaml && for c in skills/*/markdown-harness.config.yaml; do test ! -e \"$c\" || mh check --root \"$(dirname \"$c\")\" --config \"$c\" || exit 1; done"
+    "check:skills": "mh check --root skills --config skills/markdown-harness.config.yaml && for c in skills/*/markdown-harness.config.yaml; do test ! -e \"$c\" || mh check --root \"$(dirname \"$c\")\" --config \"$c\" || exit 1; done",
+    "retro:load": "node tools/retro/load.ts"
   },
   "devDependencies": {
     "@hancrafted/markdown-harness": "~0.0.7",
@@ -73,7 +74,6 @@
     "@types/qrcode": "~1.5.6",
     "@types/react": "~19.3.0",
     "@types/react-dom": "~19.3.0",
-    "@typescript-eslint/parser": "~8.71.2",
     "@vitest/coverage-v8": "~5.0.3",
     "archgate": "~0.55.0",
     "cheerio": "~1.2.0",
@@ -84,6 +84,7 @@
     "json5": "2.2.3",
     "knip": "~6.40.0",
     "lint-staged": "~17.6.0",
+    "oxc-parser": "0.150.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
     "oxlint-plugin-eslint": "1.93.0",

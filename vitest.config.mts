@@ -13,8 +13,9 @@ const ROOT = import.meta.dirname;
  * of every fast test, not by grep. A new fast test that reads another path adds it here.
  *
  * Not listed: the `.ts` and `.tsx` files that scanner tests walk (no-daisyui, source-tree, the codegen registry,
- * factory-model-seam, slide-folders). Listing `src/**` would turn every edit into a full rerun; the full suite at
- * pre-push and in CI covers them.
+ * factory-model-seam). Listing `src/**` would turn every edit into a full rerun; the full suite at pre-push and in CI
+ * covers them. The Slide-folder checks need no trigger: each page folder's `episode-checks.test.ts` imports its Slides
+ * through `import.meta.glob`, which `--changed` follows (ARCH-003 §4.7).
  */
 const TRIGGERS = [
   // The suite itself, and the plugin that turns `.yml` and `.jsonl` imports into text.
@@ -30,6 +31,10 @@ const TRIGGERS = [
   '.github/workflows/ci.yml',
   '.github/workflows/deploy-cloudflare.yml',
   '.archgate/adrs/FE-007-module-layering.md',
+  // The files the FE-013 CLI test copies into its fixture project root and hands to `archgate check`.
+  '.archgate/config.json',
+  '.archgate/adrs/FE-013-content-store.md',
+  '.archgate/adrs/FE-013-content-store.rules.ts',
   // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging, verified-corpus and the Explorable's guide.
   'GLOSSARY.md',
   'docs/agents/*.md',
