@@ -1,10 +1,9 @@
 // Merging a finished branch into its --base, before its worktree is removed.
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { slowTestsLogPath, slowTestsSince } from '../../../vitest-slow-tests.mts';
-
-const git = (cwd: string, ...args: string[]) => spawnSync('git', args, { cwd, encoding: 'utf8' });
+import { git } from './git.ts';
 
 /** The worktree that has `base` checked out, from `git worktree list --porcelain`. */
 function checkoutOf(base: string, cwd: string): string | null {
@@ -51,7 +50,7 @@ function isStale(lock: string): boolean {
  * so merges into one base run one at a time. The lock is released however `fn` ends.
  */
 function withBaseLock<T>(base: string, cwd: string, fn: () => T): T {
-  const commonDir = git(cwd, 'rev-parse', '--path-format=absolute', '--git-common-dir').stdout.trim();
+  const commonDir = git(cwd, ['rev-parse', '--path-format=absolute', '--git-common-dir']).stdout.trim();
   const lock = path.join(commonDir, `wt-merge-${base.replaceAll('/', '-')}.lock`);
   const deadline = Date.now() + WAIT_LIMIT_MS;
   let announced = false;
@@ -87,12 +86,12 @@ function withBaseLock<T>(base: string, cwd: string, fn: () => T): T {
  */
 export function mergeIntoBase(branch: string, base: string, cwd: string): 'merged' | 'already-merged' {
   return withBaseLock(base, cwd, () => {
-    if (git(cwd, 'merge-base', '--is-ancestor', branch, base).status === 0) return 'already-merged';
+    if (git(cwd, ['merge-base', '--is-ancestor', branch, base]).status === 0) return 'already-merged';
     const tree = checkoutOf(base, cwd);
     if (tree === null) throw new Error(`${base} is not checked out in any worktree; check it out, then rerun`);
-    const merge = git(tree, 'merge', '--no-ff', '--no-edit', branch);
+    const merge = git(tree, ['merge', '--no-ff', '--no-edit', branch]);
     if (merge.status === 0) return 'merged';
-    git(tree, 'merge', '--abort');
+    git(tree, ['merge', '--abort']);
     throw new Error(
       `merging ${branch} into ${base} failed (conflict or dirty ${tree}):\n${merge.stdout}${merge.stderr}`,
     );
@@ -107,9 +106,9 @@ export function mergeIntoBase(branch: string, base: string, cwd: string): 'merge
  */
 export function slowTestReport(branch: string, base: string, cwd: string): string[] {
   const log = slowTestsLogPath(cwd);
-  const fork = git(cwd, 'merge-base', branch, base).stdout.trim();
+  const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
   if (log === null || fork === '') return [];
-  const since = new Date(git(cwd, 'log', '-1', '--format=%cI', fork).stdout.trim());
+  const since = new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
   const entries = slowTestsSince(log, branch, since);
   if (entries.length === 0) return [];
   const count = entries.length === 1 ? '1 test' : `${entries.length} tests`;

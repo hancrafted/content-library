@@ -1,6 +1,6 @@
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
-import { composedPageChecks, type PageEntry } from './composed-page-checks';
+import { composedPageChecks, type GlobEntries, type NamedCheck } from './composed-page-checks';
 
 /*
  * The Episode-level checks (ARCH-003 §4.7): every invariant that holds inside one page folder, run on that folder
@@ -17,19 +17,10 @@ import { composedPageChecks, type PageEntry } from './composed-page-checks';
  * the full suite; a rerun trigger on `src/episodes/**` would rerun every test on every Slide edit.
  */
 
-/** A page folder's Slide server entries, as `import.meta.glob('./slides/*\/slide.tsx')` returns them: lazy, by path. */
-export type SlideEntries = Readonly<Record<string, () => Promise<unknown>>>;
-
-/** One check: the test name it runs under, and its findings, empty when it holds. */
-export interface EpisodeCheck {
-  readonly name: string;
-  readonly findings: () => Promise<readonly string[]>;
-}
-
 /** The checks of one page folder: those run once per Slide folder, and those run once for the folder. */
 export interface EpisodeChecks {
-  readonly slides: readonly EpisodeCheck[];
-  readonly folder: readonly EpisodeCheck[];
+  readonly slides: readonly NamedCheck[];
+  readonly folder: readonly NamedCheck[];
 }
 
 const ENTRY = 'slide.tsx';
@@ -66,7 +57,7 @@ function declaresNotes(value: unknown): value is DeclaringSlide {
 }
 
 /** The slug check: the folder holds the one Slide it is named after. */
-function slugCheck(shown: string, slug: string, load: () => Promise<unknown>): EpisodeCheck {
+function slugCheck(shown: string, slug: string, load: () => Promise<unknown>): NamedCheck {
   return {
     name: `${shown} names its folder after the one Slide slug its server entry declares`,
     findings: async () => {
@@ -79,7 +70,7 @@ function slugCheck(shown: string, slug: string, load: () => Promise<unknown>): E
 }
 
 /** The Speaker-note check: under `notes.*` sit only the notes the Slide declares, in every locale (FE-010 §3.1). */
-function notesCheck(shown: string, load: () => Promise<unknown>): EpisodeCheck {
+function notesCheck(shown: string, load: () => Promise<unknown>): NamedCheck {
   return {
     name: `${shown} keeps under notes.* only the Speaker notes its Slide declares, in every locale (FE-010 §3.1)`,
     findings: async () =>
@@ -97,14 +88,14 @@ function notesCheck(shown: string, load: () => Promise<unknown>): EpisodeCheck {
 }
 
 /** The checks over Slide folders sitting in `slidesDir`, shown by `prefix` + slug. */
-function slideFolderChecks(slidesDir: string, prefix: string, entries: SlideEntries): EpisodeChecks {
+function slideFolderChecks(slidesDir: string, prefix: string, entries: GlobEntries): EpisodeChecks {
   const loaders = new Map(Object.entries(entries).map(([key, load]) => [path.basename(path.dirname(key)), load]));
   const folders = subfolders(slidesDir);
   const slides = folders.flatMap((slug) => {
     const load = loaders.get(slug);
     return load === undefined ? [] : [slugCheck(`${prefix}${slug}`, slug, load), notesCheck(`${prefix}${slug}`, load)];
   });
-  const entryCheck: EpisodeCheck = {
+  const entryCheck: NamedCheck = {
     name: `gives every Slide folder a ${ENTRY}, so no folder holds a Slide under another name`,
     findings: async () =>
       folders.filter((slug) => !loaders.has(slug)).map((slug) => `${prefix}${slug} has no ${ENTRY}`),
@@ -117,13 +108,13 @@ function slideFolderChecks(slidesDir: string, prefix: string, entries: SlideEntr
  * folder, `entries` its `import.meta.glob('./slides/*\/slide.tsx')`, which puts every Slide in the test's import graph,
  * and `page` its `import.meta.glob('./episode.ts')`, which puts its composition there: Sections, markers and own text.
  */
-export function episodeChecks(dir: string, entries: SlideEntries, page: PageEntry = {}): EpisodeChecks {
+export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntries = {}): EpisodeChecks {
   const { slides, folder } = slideFolderChecks(path.join(dir, SLIDES_DIR), `${SLIDES_DIR}/`, entries);
-  const codeFolders: EpisodeCheck = {
+  const codeFolders: NamedCheck = {
     name: 'keeps no Episode-level parts/ or client/ folder: Slide code lives only in its Slide folder',
     findings: async () => EPISODE_CODE_FOLDERS.filter((kind) => existsSync(path.join(dir, kind))),
   };
-  const handedOver: EpisodeCheck = {
+  const handedOver: NamedCheck = {
     name: `hands its ${PAGE_ENTRY} to the checks, so none of its composition goes unchecked`,
     findings: async () =>
       existsSync(path.join(dir, PAGE_ENTRY)) && Object.keys(page).length === 0
@@ -134,6 +125,6 @@ export function episodeChecks(dir: string, entries: SlideEntries, page: PageEntr
 }
 
 /** The checks of the Slide pool, whose Slide folders sit directly in `dir`: `entries` is `import.meta.glob('./*\/slide.tsx')`. */
-export function slidePoolChecks(dir: string, entries: SlideEntries): EpisodeChecks {
+export function slidePoolChecks(dir: string, entries: GlobEntries): EpisodeChecks {
   return slideFolderChecks(dir, '', entries);
 }

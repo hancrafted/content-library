@@ -2,7 +2,8 @@ import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { episodeChecks, slidePoolChecks, type EpisodeChecks, type SlideEntries } from './episode-checks';
+import type { GlobEntries } from './composed-page-checks';
+import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-checks';
 
 /*
  * The Episode-level checks on a fixture Episode folder built per test: Slide folders under `slides/`, and the server
@@ -31,7 +32,7 @@ function slide(slug: string, notes: readonly string[] = [], noteKeys: readonly s
 }
 
 /** Server entries keyed as `import.meta.glob('./slides/*\/slide.tsx')` keys them. */
-function entries(modules: Record<string, object>, prefix = './slides/'): SlideEntries {
+function entries(modules: Record<string, object>, prefix = './slides/'): GlobEntries {
   return Object.fromEntries(
     Object.entries(modules).map(([folder, module]) => [`${prefix}${folder}/slide.tsx`, async () => module]),
   );

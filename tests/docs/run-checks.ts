@@ -1,3 +1,4 @@
+import type { NamedCheck } from '@/episodes/lib/composed-page-checks';
 import { checkPipeline } from '@/pipeline/lib/episode-pipeline.pure';
 import { checkReferenceJobs } from '@/pipeline/lib/episode-reference-jobs.pure';
 import { checkResearchJobs } from '@/pipeline/lib/episode-research-jobs.pure';
@@ -31,12 +32,6 @@ import {
  * A check returns findings and never throws, so a broken Run's test names what broke. Add a new Run-level check here:
  * every Run's test runs it without being edited.
  */
-
-/** One check: the test name it runs under, and its findings, empty when it holds. */
-export interface RunCheck {
-  readonly name: string;
-  readonly findings: () => Promise<readonly string[]>;
-}
 
 /** The test file beside every Run, which the checks never read as a staging file. */
 export const RUN_CHECKS_TEST = 'run-checks.test.ts';
@@ -188,7 +183,7 @@ const CHECKS: readonly (readonly [string, (run: Run) => readonly string[]])[] = 
  * The checks of the Run whose staging folder is `dir`, read from disk as the staging checks always read it. The Run's
  * test globs its text files only to put them in its import graph, which `--changed` follows.
  */
-export function runChecks(dir: string): RunCheck[] {
+export function runChecks(dir: string): NamedCheck[] {
   const staging = path.relative(ROOT, dir).split(path.sep).join('/');
   return CHECKS.map(([name, findings]) => ({
     name,
