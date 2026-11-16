@@ -59,7 +59,7 @@ function withLoc<T>(source: string, tree: T): T {
 
 // Stands in for archgate's RuleContext over an in-memory file set. `ast` parses the source itself with oxc-parser,
 // so no TypeScript version is pinned here. Archgate parses transpiled output, whose lines drift from the source's
-// where types are erased; that mapping is checked through the real CLI in tests/archgate/fe-013-content-store.cli.test.ts.
+// where types are erased; that mapping is checked through the real CLI in tests/archgate/fe-013-content-store.cli.slow.test.ts.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {

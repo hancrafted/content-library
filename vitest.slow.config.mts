@@ -11,8 +11,8 @@ const ROOT = import.meta.dirname;
 /**
  * What reruns the whole lane: the files the slow tests read from disk rather than import
  * (the Spec tests' staging folders, skills and templates; the scenery's CSS modules that
- * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the lane's own config and the
- * installed packages.
+ * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the FE-013 rule the archgate CLI test
+ * copies, the lane's own config and the installed packages.
  */
 const TRIGGERS = [
   'vitest.slow.config.mts',
@@ -28,6 +28,9 @@ const TRIGGERS = [
   'markdown-harness.config.yaml',
   'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
   'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
+  // The FE-013 rule the archgate CLI test copies into its fixture project.
+  '.archgate/config.json',
+  '.archgate/adrs/FE-013-content-store.*',
 ];
 
 export default defineConfig({
