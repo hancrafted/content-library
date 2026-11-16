@@ -163,6 +163,7 @@ stages:
         why: 'The AI interviews you on the whole task, option by option; you decide, it writes down.'
     jobs:
       - id: break-up
+        recommendedModel: high
         title: Clarify the intent
         summary: What the task is for, decided
         goal:
@@ -294,6 +295,7 @@ stages:
       status: Signed off
     jobs:
       - id: grill-demo
+        recommendedModel: high
         title: Grill me and write the spec
         summary: One grill, the spec written
         goal:
@@ -449,6 +451,7 @@ stages:
       item: category
     jobs:
       - id: grill-category
+        recommendedModel: high
         title: Grill the category
         summary: One category, in depth, in a fresh chat
         goal:
@@ -578,6 +581,7 @@ stages:
       status: Signed off
     jobs:
       - id: seams
+        recommendedModel: high
         title: Settle the seams and write the spec
         summary: Conflicts resolved, one spec written
         goal:
@@ -696,6 +700,7 @@ stages:
     gate: 2
     jobs:
       - id: build
+        recommendedModel: medium
         title: Build the quiz
         summary: One HTML file you double-click
         goal:
@@ -830,6 +835,7 @@ stages:
                 {{template}}
 
       - id: playtest
+        recommendedModel: medium
         title: Play it and fix it
         summary: Your notes become fixes, applied
         goal:
@@ -954,6 +960,7 @@ stages:
         why: 'The skill is proven on a source it has never seen, and an agent grades the quiz.'
     jobs:
       - id: write-skill
+        recommendedModel: medium
         title: Write the skill
         summary: One file that makes the next quiz
         goal:
@@ -1077,6 +1084,7 @@ stages:
                 {{template}}
 
       - id: try-skill
+        recommendedModel: medium
         title: Try the skill
         summary: A new source, one go, a new quiz
         goal:
@@ -1177,6 +1185,7 @@ stages:
               text: *format_file
 
       - id: eval
+        recommendedModel: medium
         optional: true
         title: 'Let an agent grade it'
         summary: Usability and question quality, graded

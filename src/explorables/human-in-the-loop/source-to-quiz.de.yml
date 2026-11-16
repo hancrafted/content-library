@@ -163,6 +163,7 @@ stages:
         why: 'Die KI befragt dich zur ganzen Aufgabe, Option für Option; du entscheidest, sie schreibt mit.'
     jobs:
       - id: break-up
+        recommendedModel: high
         title: Die Absicht klären
         summary: Wofür die Aufgabe da ist, entschieden
         goal:
@@ -294,6 +295,7 @@ stages:
       status: Abgezeichnet
     jobs:
       - id: grill-demo
+        recommendedModel: high
         title: Grill mich und schreibe die Spezifikation
         summary: Ein Grill, die Spezifikation geschrieben
         goal:
@@ -449,6 +451,7 @@ stages:
       item: Kategorie
     jobs:
       - id: grill-category
+        recommendedModel: high
         title: Die Kategorie grillen
         summary: Eine Kategorie, in der Tiefe, in einem frischen Chat
         goal:
@@ -578,6 +581,7 @@ stages:
       status: Abgezeichnet
     jobs:
       - id: seams
+        recommendedModel: high
         title: Die Nahtstellen klären und die Spezifikation schreiben
         summary: Konflikte gelöst, eine Spezifikation geschrieben
         goal:
@@ -696,6 +700,7 @@ stages:
     gate: 2
     jobs:
       - id: build
+        recommendedModel: medium
         title: Das Quiz bauen
         summary: Eine HTML-Datei zum Doppelklicken
         goal:
@@ -830,6 +835,7 @@ stages:
                 {{template}}
 
       - id: playtest
+        recommendedModel: medium
         title: Spielen und korrigieren
         summary: Deine Notizen werden umgesetzte Korrekturen
         goal:
@@ -954,6 +960,7 @@ stages:
         why: 'Der Skill wird an einer Quelle bewiesen, die er noch nie gesehen hat, und ein Agent bewertet das Quiz.'
     jobs:
       - id: write-skill
+        recommendedModel: medium
         title: Den Skill schreiben
         summary: Eine Datei, die das nächste Quiz macht
         goal:
@@ -1077,6 +1084,7 @@ stages:
                 {{template}}
 
       - id: try-skill
+        recommendedModel: medium
         title: Den Skill ausprobieren
         summary: Eine neue Quelle, ein Rutsch, ein neues Quiz
         goal:
@@ -1177,6 +1185,7 @@ stages:
               text: *format_file
 
       - id: eval
+        recommendedModel: medium
         optional: true
         title: 'Lass einen Agenten bewerten'
         summary: Bedienbarkeit und Qualität der Fragen, bewertet

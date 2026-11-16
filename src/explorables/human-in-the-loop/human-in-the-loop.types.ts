@@ -135,6 +135,15 @@ export interface UiWords {
   readonly openAIChatTip: string;
   /** The AI chats a prompt opens in, unless its job names its own: one shadcn button each, "ChatGPT | Gemini". */
   readonly openAIButtons: readonly ChatButtonDef[];
+  /** The model note right of the chat buttons: "Model: {tier}" (`{tier}` is the tier's label), the `?` button's name, and per tier its label and its tooltip. */
+  readonly model: string;
+  readonly modelInfo: string;
+  readonly modelHigh: string;
+  readonly modelHighTip: string;
+  readonly modelMedium: string;
+  readonly modelMediumTip: string;
+  readonly modelLow: string;
+  readonly modelLowTip: string;
   /** Progress marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;
