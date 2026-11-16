@@ -32,7 +32,7 @@ const SLIDES_DIR = 'slides';
 /** Folders an Episode MUST NOT keep beside its Slides: Slide code lives only in its Slide folder (FE-004 §3). */
 const EPISODE_CODE_FOLDERS = ['parts', 'client'];
 
-interface SlideRecord {
+interface DeclaringSlide {
   slug: string;
   notes: { slug: string }[];
   messages: Record<string, { notes?: Record<string, unknown> }>;
@@ -54,7 +54,7 @@ function slidesOf(module: unknown): { slug: string }[] {
   );
 }
 
-function isSlideRecord(value: unknown): value is SlideRecord {
+function declaresNotes(value: unknown): value is DeclaringSlide {
   return typeof value === 'object' && value !== null && 'slug' in value && 'notes' in value && 'messages' in value;
 }
 
@@ -77,7 +77,7 @@ function notesCheck(shown: string, load: () => Promise<unknown>): EpisodeCheck {
     name: `${shown} keeps under notes.* only the Speaker notes its Slide declares, in every locale (FE-010 §3.1)`,
     findings: async () =>
       Object.values((await load()) as object)
-        .filter(isSlideRecord)
+        .filter(declaresNotes)
         .flatMap(({ slug, notes, messages }) => {
           const declared = new Set(notes.map((note) => note.slug));
           return Object.entries(messages).flatMap(([locale, strings]) =>
