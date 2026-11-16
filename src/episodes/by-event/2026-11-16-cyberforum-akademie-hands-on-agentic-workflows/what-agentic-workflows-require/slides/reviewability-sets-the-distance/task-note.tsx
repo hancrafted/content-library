@@ -2,11 +2,9 @@ import { AgentTag } from '@/episodes/components/slide-shared/party-notes/agent-t
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import type { Trust } from './trust.pure';
 
-/** How much damage a wrong result can do, on a three-step scale. */
-export type RiskValue = 1 | 2 | 3;
-
-const STEPS: readonly RiskValue[] = [1, 2, 3];
+const STEPS: readonly Trust[] = [1, 2, 3];
 
 /** The "trust needed" meter: three squares, filled up to the task's risk. `value` reads out what the squares show. */
 export function RiskMeter({
@@ -16,7 +14,7 @@ export function RiskMeter({
   marker,
 }: {
   label: string;
-  value: RiskValue;
+  value: Trust;
   valueLabel: string;
   marker?: ReactNode;
 }) {
@@ -37,7 +35,7 @@ export function RiskMeter({
 }
 
 /** One square of the trust-earned meter: filled when earned, dashed while still short of the need, else empty. */
-function trustSquare(step: RiskValue, earned: RiskValue, needed: RiskValue): string {
+function trustSquare(step: Trust, earned: Trust, needed: Trust): string {
   if (step <= earned) return 'size-3 rounded-sm bg-foreground';
   if (step <= needed) return 'size-3 rounded-sm border border-dashed border-muted-foreground';
   return 'size-3 rounded-sm border border-foreground';
@@ -56,8 +54,8 @@ export function TrustMeter({
   marker,
 }: {
   label: string;
-  value: RiskValue;
-  needed: RiskValue;
+  value: Trust;
+  needed: Trust;
   valueLabel: string;
   was?: string;
   marker?: ReactNode;

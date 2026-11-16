@@ -350,8 +350,8 @@ describe('edge cases', () => {
   it('titles and chains Slide 6 in German on the German page', () => {
     // ARRANGE
     const expected = {
-      title: 'Vertrauen erlaubt den Schritt nach außen, Prüfbarkeit baut das Vertrauen auf',
-      links: ['Für Prüfung bauen', 'Verdientes Vertrauen', 'Nach außen treten'],
+      title: 'Vertrauen erlaubt den Schritt nach außen; Prüfung baut das Vertrauen auf',
+      links: ['Prüfbar bauen', 'Verdientes Vertrauen', 'Nach außen treten'],
       pills: ['In', 'An', 'Außen'],
     };
     // ACT

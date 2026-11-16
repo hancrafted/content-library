@@ -1,5 +1,5 @@
 {
-  "title": "Vertrauen erlaubt den Schritt nach außen, Prüfbarkeit baut das Vertrauen auf",
+  "title": "Vertrauen erlaubt den Schritt nach außen; Prüfung baut das Vertrauen auf",
   "caption": "Eine Aufgabe rückt nur so weit nach außen, wie ihr verdientes Vertrauen das nötige Vertrauen deckt; <b>eine eingebaute Prüfung</b> verdient es.",
   "board": {
     "label": "Sommerfest · jede Aufgabe rückt so weit nach außen, wie ihr verdientes Vertrauen das nötige deckt"
@@ -137,7 +137,7 @@
     }
   },
   "chain": {
-    "review": "Für Prüfung bauen",
+    "review": "Prüfbar bauen",
     "trust": "Verdientes Vertrauen",
     "step": "Nach außen treten",
     "levels": {
