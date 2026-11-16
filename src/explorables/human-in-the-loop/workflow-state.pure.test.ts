@@ -19,6 +19,15 @@ describe('success cases', () => {
     expect(later.slotValues).toEqual(pasted);
   });
 
+  it('stores a pasted fenced result without its fence, Result line and path', () => {
+    // ARRANGE
+    const pasted = { 'break-up.intent': 'Result:\n```markdown\n### Pricing\n```\n.scratch/task/intent.md' };
+    // ACT
+    const state = reduce(createState(start), { type: 'slots', values: pasted });
+    // ASSERT
+    expect(state.slotValues).toEqual({ 'break-up.intent': '### Pricing' });
+  });
+
   it('takes back a saved run: its results and its demo flag', () => {
     // ARRANGE
     const saved = { results: { 'a.b': 'text' }, demo: false };

@@ -1,3 +1,4 @@
+import { unwrapPastedResult } from './pasted-result.pure';
 import type { PromptEdits } from './prompt-edits.pure';
 import type { Workflow } from './workflow.types';
 
@@ -101,6 +102,16 @@ const FRESH = {
   uploadProblems: [],
 } as const;
 
+/** A pasted result keeps only its fence's inside (`pasted-result.pure.ts`); a value that did not change is left as stored. */
+function unwrapChanged(
+  before: Readonly<Record<string, string>>,
+  values: Readonly<Record<string, string>>,
+): Readonly<Record<string, string>> {
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]) => [key, value === before[key] ? value : unwrapPastedResult(value)]),
+  );
+}
+
 const HANDLERS: Handlers = {
   level: (state, { level }) => ({ ...state, level }),
   view: (state, { view }) => ({ ...state, view }),
@@ -117,7 +128,7 @@ const HANDLERS: Handlers = {
   debug: (state, { debug }) => ({ ...state, debug }),
   reset: (state) => ({ ...state, slotValues: {}, prompts: {}, demo: true }),
   prompts: (state, { values }) => ({ ...state, prompts: values }),
-  slots: (state, { values }) => ({ ...state, slotValues: values }),
+  slots: (state, { values }) => ({ ...state, slotValues: unwrapChanged(state.slotValues, values) }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   restore: (state, { results, demo, prompts }) => ({
     ...state,
