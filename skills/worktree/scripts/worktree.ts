@@ -6,8 +6,9 @@ import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { mergeIntoBase } from './worktree-merge.ts';
+import { mergeIntoBase, slowTestReport } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
+import { removeWorktree } from './worktree-remove.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -139,11 +140,27 @@ function deleteMerged(branch: string, base: string): void {
 }
 
 function mergeBeforeRemoval(branch: string, base: string): void {
+  // Read before the merge, which moves the merge-base up to the branch tip.
+  const slowTests = slowTestReport(branch, base, mainRoot());
   try {
     const result = mergeIntoBase(branch, base, mainRoot());
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
+    for (const line of slowTests) console.log(line);
   } catch (error) {
     fail(`${(error as Error).message}\n  nothing was removed`);
+  }
+}
+
+function removeCheckout(target: string, branch: string): void {
+  try {
+    const result = removeWorktree(target, branch, mainRoot());
+    if (result === 'leftovers-cleared')
+      console.log(
+        `✔ cleared what an interrupted removal left in ${target} (Finder metadata, ignored or committed files)`,
+      );
+    if (result === 'gone') console.log(`✔ ${target} was already removed`);
+  } catch (error) {
+    fail((error as Error).message);
   }
 }
 
@@ -157,7 +174,7 @@ function finish(branch: string, base: string | null, kill: boolean): void {
   // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
   for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
   refuseWhileBusy(target, kill);
-  stream('git', ['worktree', 'remove', target]);
+  removeCheckout(target, branch);
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
   if (base !== null) {

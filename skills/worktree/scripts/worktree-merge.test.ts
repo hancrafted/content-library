@@ -1,9 +1,9 @@
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawn } from 'node:child_process';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { mergeIntoBase } from './worktree-merge.ts';
+import { mergeIntoBase, slowTestReport } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -30,7 +30,41 @@ function fixture() {
   writeFileSync(path.join(workTree, 'work.txt'), 'w');
   git(workTree, 'add', '.');
   git(workTree, 'commit', '-qm', 'work');
-  return { main, baseTree, workTree };
+  return { root, main, baseTree, workTree };
+}
+
+/** A second branch, `other`, off `base` with its own commit in its own worktree. */
+function addOtherBranch(root: string, main: string): void {
+  const otherTree = path.join(root, 'other-tree');
+  git(main, 'worktree', 'add', '-q', otherTree, '-b', 'other', 'base');
+  writeFileSync(path.join(otherTree, 'other.txt'), 'o');
+  git(otherTree, 'add', '.');
+  git(otherTree, 'commit', '-qm', 'other');
+}
+
+/** A merge hook that logs when each merge commit starts and ends, holding the merge open a moment. */
+function logMerges(root: string, main: string): string {
+  const log = path.join(root, 'merges.log');
+  const hook = path.join(main, '.git', 'hooks', 'pre-merge-commit');
+  writeFileSync(hook, `#!/bin/sh\necho start >> ${log}\nsleep 0.3\necho end >> ${log}\n`);
+  chmodSync(hook, 0o755);
+  return log;
+}
+
+const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
+
+/** Runs mergeIntoBase in its own process, as a second `wt:done` would. */
+function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
+  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(mergeIntoBase(process.argv[1], 'base', process.argv[2]));`;
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, ['--input-type=module', '-e', code, branch, cwd], {
+      encoding: 'utf8',
+    } as never);
+    let output = '';
+    child.stdout.on('data', (chunk) => (output += chunk));
+    child.stderr.on('data', (chunk) => (output += chunk));
+    child.on('close', (exit) => resolve({ code: exit, output }));
+  });
 }
 
 describe('mergeIntoBase', () => {
@@ -56,6 +90,37 @@ describe('mergeIntoBase', () => {
       // ASSERT
       expect(result).toBe('already-merged');
       expect(git(baseTree, 'rev-parse', 'HEAD')).toBe(head);
+    });
+
+    it('merges two branches finishing at once one after the other, both into the base', async () => {
+      // ARRANGE
+      const { root, main } = fixture();
+      addOtherBranch(root, main);
+      const log = logMerges(root, main);
+      // ACT
+      const results = await Promise.all([mergeInChild('work', main), mergeInChild('other', main)]);
+      // ASSERT
+      expect(
+        results.map((r) => r.code),
+        results.map((r) => r.output).join('\n'),
+      ).toEqual([0, 0]);
+      expect(readFileSync(log, 'utf8').trim().split('\n')).toEqual(['start', 'end', 'start', 'end']);
+      expect(() => git(main, 'merge-base', '--is-ancestor', 'work', 'base')).not.toThrow();
+      expect(() => git(main, 'merge-base', '--is-ancestor', 'other', 'base')).not.toThrow();
+    });
+
+    it('takes over a merge lock left by a process that was killed mid-merge', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const lock = path.join(main, '.git', 'wt-merge-base.lock');
+      mkdirSync(lock);
+      const dead = execFileSync(process.execPath, ['-e', 'console.log(process.pid)'], { encoding: 'utf8' }).trim();
+      writeFileSync(path.join(lock, 'pid'), dead);
+      // ACT
+      const result = mergeIntoBase('work', 'base', main);
+      // ASSERT
+      expect(result).toBe('merged');
+      expect(existsSync(lock)).toBe(false);
     });
   });
 
@@ -84,6 +149,59 @@ describe('mergeIntoBase', () => {
       // ASSERT
       expect(run).toThrow(/conflict/i);
       expect(git(baseTree, 'status', '--porcelain')).toBe('');
+    });
+
+    it('releases the merge lock when the merge fails, so the next merge into the base runs', () => {
+      // ARRANGE
+      const { root, main, baseTree, workTree } = fixture();
+      addOtherBranch(root, main);
+      writeFileSync(path.join(workTree, 'a.txt'), 'from work');
+      git(workTree, 'commit', '-aqm', 'edit a');
+      writeFileSync(path.join(baseTree, 'a.txt'), 'from base');
+      git(baseTree, 'commit', '-aqm', 'edit a on base');
+      expect(() => mergeIntoBase('work', 'base', main)).toThrow(/conflict/i);
+      // ACT
+      const result = mergeIntoBase('other', 'base', main);
+      // ASSERT
+      expect(result).toBe('merged');
+    });
+  });
+});
+
+/** One slow-tests log line, as the fast suite's reporter writes it. */
+const slowEntry = (test: string, branch: string, at: Date) =>
+  JSON.stringify({ test, file: 'src/walk.test.ts', ms: 6200, branch, at: at.toISOString() }) + '\n';
+
+describe('slowTestReport', () => {
+  describe('success cases', () => {
+    it('lists the slow tests the branch logged since its merge-base, and not older ones', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
+      const hour = 60 * 60 * 1000;
+      writeFileSync(
+        path.join(main, '.git', 'slow-tests.jsonl'),
+        slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - hour)) +
+          slowEntry('after the fork', 'work', new Date(forkedAt.getTime() + hour)) +
+          slowEntry('on another branch', 'other', new Date(forkedAt.getTime() + hour)),
+      );
+      const header = '! 1 test ran past 5 s on work since it branched off base:';
+      const line = `  6.2 s  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + hour).toISOString()})`;
+      // ACT
+      const report = slowTestReport('work', 'base', main);
+      // ASSERT
+      expect(report).toEqual([header, line]);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('prints nothing when the repository has no slow-tests log yet', () => {
+      // ARRANGE
+      const { main } = fixture();
+      // ACT
+      const report = slowTestReport('work', 'base', main);
+      // ASSERT
+      expect(report).toEqual([]);
     });
   });
 });
