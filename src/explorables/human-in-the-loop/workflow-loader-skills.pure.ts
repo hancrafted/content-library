@@ -3,8 +3,9 @@ import type { SectionDef, StageDef, TaskDef, WorkflowFile } from './workflow-sch
 
 /*
  * The checks of technical prompts that call skills. A skill is named in `skills` and printed as a `/<name>` line at the
- * top of the prompt, so a slash call inside section text is refused; a second skill goes in `then`. A technical prompt
- * names `{{item}}` only in a stage that plays rounds at the Technical level. One sentence per problem.
+ * top of the prompt, so a bare slash call inside section text is refused, while one inside backticks is text for the
+ * user to type; a second skill goes in `then`. A technical prompt names `{{item}}` only in a stage that plays rounds at
+ * the Technical level. One sentence per problem.
  */
 
 /** What a skill's name is made of: the one source of the name check and of the slash-call search. */
@@ -12,11 +13,14 @@ const NAME = '[a-z][a-z0-9-]*';
 const SKILL_NAME = new RegExp(`^${NAME}$`);
 
 /** A `/name` token at the start of a line or after a space or an opening mark, ended by space, end or punctuation: not a path or URL. */
-const SLASH_CALL = new RegExp(`(?:^|[\\s("'\`])\\/(${NAME})(?=$|[\\s.,;:)"'\`!?])`, 'gm');
+const SLASH_CALL = new RegExp(`(?:^|[\\s("'])\\/(${NAME})(?=$|[\\s.,;:)"'!?])`, 'gm');
 
-/** The skills a text calls with a slash, in order, each once. */
+/** An inline code span: a command inside backticks is text for the user to type, never a call. */
+const CODE_SPAN = /`[^`\n]*`/g;
+
+/** The skills a text calls with a slash, outside inline code, in order, each once. */
 export const slashCallsIn = (text: string): string[] => [
-  ...new Set([...text.matchAll(SLASH_CALL)].map((found) => `/${found[1] ?? ''}`)),
+  ...new Set([...text.replace(CODE_SPAN, ' ').matchAll(SLASH_CALL)].map((found) => `/${found[1] ?? ''}`)),
 ];
 
 const callsIn = (sections: readonly SectionDef[]): string[] => [
