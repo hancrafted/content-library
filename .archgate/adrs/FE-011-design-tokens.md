@@ -4,7 +4,7 @@ id: FE-011
 title: 'Design Tokens'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx,css,json}']
+files: ['src/**/*.{ts,tsx,css,json}', 'oxlint.config.mts', 'tools/lint/*.ts']
 # prettier-ignore
 paths: ['src/episodes/**', 'src/explorables/**', 'src/events/**', 'src/page-assembly/landing/**', 'src/app/globals.css']
 description: 'Values, not shape: every colour, font size and font weight in the site and inside a Scene is a token reference — raw colours only in the global palette and a Slide token file, four type roles plus one hero exception, weights normal to semibold — while Scene markup, props and layout stay free; legacy files sit on a list that only shrinks.'

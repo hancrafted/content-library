@@ -4,8 +4,8 @@ id: FE-006
 title: 'Server/Client Boundary'
 domain: frontend
 rules: false
-files: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
-paths: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
+files: ['src/**/*.{ts,tsx}', 'oxlint.config.mts', 'tools/lint/*.ts', '.dependency-cruiser.cjs']
+paths: ['src/**/*.{ts,tsx}', 'oxlint.config.mts', 'tools/lint/*.ts', '.dependency-cruiser.cjs']
 description: "Server Components by default; 'use client' only at leaves, never under src/app, and only in a file named *.client.tsx — the classifier that makes the client bundle glob-addressable."
 ---
 

@@ -4,8 +4,8 @@ id: GEN-005
 title: 'Lint and Format Toolchain'
 domain: general
 rules: false
-files: ['.oxlintrc.json', 'eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
-paths: ['.oxlintrc.json', 'eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
+files: ['oxlint.config.mts', 'tools/lint/*.ts', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
+paths: ['oxlint.config.mts', 'tools/lint/*.ts', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
 description: 'Which tools lint and format the repo, their exact pins, why the alpha JS-plugin layer is acceptable, and the dependency-admission review of each package.'
 ---
 
@@ -33,6 +33,8 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 2. A rule with no native port MUST run as an oxlint JS plugin: `better-tailwindcss`, `check-file`, and `oxlint-plugin-eslint` carrying the original `no-restricted-syntax` selectors unchanged.
 3. oxfmt `printWidth` MUST be `120` explicitly; the default of 100 would reflow the repo.
 4. A script that formats a generated file MUST use oxfmt.
+5. The lint config MUST be the TypeScript file `oxlint.config.mts` (oxlint 1.93 loads it under Node, experimental), never a committed JSON copy. It imports the design-token legacy list `src/shared/design-system/legacy.json` and the selector and token constants in `tools/lint/constants.ts`, so the list stays one file read by lint and Archgate (FE-011) and no glob is duplicated. A generator with a staleness test was the fallback and is not needed.
+6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins, and `@typescript-eslint/parser` stays as a dev dependency for the FE-013 rules test, which parses as Archgate does.
 
 ### 2. Exact pins
 
