@@ -26,6 +26,12 @@ const TRIGGERS = [
   'src/episodes/components/slide-shared/motions/**',
   'src/episodes/templates/*/slides/**',
   'markdown-harness.config.yaml',
+  // tools/art/art-parallel.slow.test.ts spawns `npm run art`, which renders every composed page and bakes its CSS modules.
+  'tools/art/**',
+  'raw-text-files.mts',
+  'src/episodes/**',
+  'src/content-store/**',
+  'src/shared/**',
   'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
   'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
 ];
