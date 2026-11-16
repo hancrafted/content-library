@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { needsBuild } from './needs-build.pure.ts';
+import { parse } from 'yaml';
+import { EXPORT_PATHS, needsBuild } from './needs-build.pure.ts';
+
+const WORKFLOW = '.github/workflows/deploy-cloudflare.yml';
 
 describe('needsBuild', () => {
   describe('success cases', () => {
@@ -7,6 +12,8 @@ describe('needsBuild', () => {
       'src/app/page.tsx',
       'public/favicon.ico',
       'next.config.ts',
+      'next.config.mjs',
+      'next.config.js',
       'postcss.config.mjs',
       'tsconfig.json',
       'package.json',
@@ -42,6 +49,15 @@ describe('needsBuild', () => {
       expect(needed).toBe(false);
     });
 
+    it('does not mistake a next.config lookalike for the Next config', () => {
+      // ARRANGE
+      const changed = ['next.config', 'docs/next.config.ts', 'next.configuration.md'];
+      // ACT
+      const needed = needsBuild(changed);
+      // ASSERT
+      expect(needed).toBe(false);
+    });
+
     it('skips the build for an empty list', () => {
       // ARRANGE
       const changed: string[] = [];
@@ -58,6 +74,19 @@ describe('needsBuild', () => {
       const needed = needsBuild(changed);
       // ASSERT
       expect(needed).toBe(false);
+    });
+  });
+
+  describe('the deploy workflow', () => {
+    it('filters pull requests by the same paths, minus the workflow file itself', () => {
+      // ARRANGE
+      const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
+        on: { pull_request: { paths: string[] } };
+      };
+      // ACT
+      const filter = workflow.on.pull_request.paths.filter((entry) => entry !== WORKFLOW);
+      // ASSERT
+      expect([...filter].sort()).toEqual([...EXPORT_PATHS].sort());
     });
   });
 });
