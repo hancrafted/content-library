@@ -1,7 +1,8 @@
 name: Deploy to Cloudflare Pages
 
 # Production: every push to main publishes out/ to https://hancrafted.net. Pull-request previews are built and
-# deployed by ci.yml. The build runs here, not in Cloudflare's Git build, so Cloudflare's build limits never apply. One-time setup (project, domain, www redirect): docs/features/hosting.md.
+# deployed by ci.yml. The build runs here, not in Cloudflare's Git build, so Cloudflare's build limits never apply.
+# One-time setup (project, domain, www redirect): docs/features/hosting.md.
 on:
   push:
     branches: [main]

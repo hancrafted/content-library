@@ -81,7 +81,13 @@ describe('needsBuild', () => {
     const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
       jobs: Record<
         string,
-        { needs?: string | string[]; if?: string; outputs?: Record<string, string>; steps?: { run?: string }[] }
+        {
+          needs?: string | string[];
+          if?: string;
+          env?: Record<string, string>;
+          outputs?: Record<string, string>;
+          steps?: { run?: string }[];
+        }
       >;
     };
 
@@ -109,6 +115,14 @@ describe('needsBuild', () => {
       expect(previewNeeds).not.toContain('build-test');
       expect(runs(buildTest)).toContain('npm run test:build');
       expect(runs(exportJob)).not.toContain('npm run test:build');
+    });
+
+    it('builds the post-build suite with the same env as the export it tests', () => {
+      // ARRANGE
+      const { export: exportJob, 'build-test': buildTest } = workflow.jobs;
+      // ACT / ASSERT
+      expect(exportJob?.env).toBeDefined();
+      expect(buildTest?.env).toEqual(exportJob?.env);
     });
 
     it('keeps forks and Dependabot away from the preview', () => {

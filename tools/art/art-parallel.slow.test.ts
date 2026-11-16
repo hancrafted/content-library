@@ -4,14 +4,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 
-/*
- * Rerun triggers (ARCH-003-testing §4.4): the test spawns `npm run art`'s real entry, which reads the pages it renders
- * and their CSS modules from disk, so `--changed` cannot follow it. vitest.slow.config.mts lists them: `tools/art/**`,
- * `raw-text-files.mts`, `src/episodes/**`, `src/content-store/**` and `src/shared/**`.
- */
+// Rerun triggers (ARCH-003-testing §4.4): see TRIGGERS in vitest.slow.config.mts.
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const PAGES = '2026-11-16-cyberforum-akademie-hands-on';
-const MANY = '4';
+const SEVERAL_WORKERS = '4';
 const scratch = mkdtempSync(path.join(tmpdir(), 'art-parallel-'));
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
 
@@ -46,11 +42,11 @@ describe('success cases', () => {
       const manifest = 'manifest.json';
       // ACT
       const one = bake('1');
-      const many = bake(MANY);
+      const several = bake(SEVERAL_WORKERS);
       // ASSERT
       expect(Object.keys(one)).toContain(manifest);
       expect(Object.keys(one).length).toBeGreaterThan(1);
-      expect(many).toEqual(one);
+      expect(several).toEqual(one);
     },
     TIMEOUT,
   );
@@ -74,12 +70,12 @@ describe('edge cases', () => {
     'bakes the same files when there are more workers than chunks of Slides',
     () => {
       // ARRANGE
-      const lots = '64';
+      const moreWorkersThanChunks = '64';
       // ACT
       const one = bake('1');
-      const lotsOfWorkers = bake(lots);
+      const oversized = bake(moreWorkersThanChunks);
       // ASSERT
-      expect(lotsOfWorkers).toEqual(one);
+      expect(oversized).toEqual(one);
     },
     TIMEOUT,
   );
