@@ -23,7 +23,9 @@ describe('success cases', () => {
     // ACT
     const unchecked = pageFolders(ROOT)
       .filter(({ dir }) => !existsSync(path.join(dir, CHECKS_TEST)))
-      .map(({ folder }) => `${folder} has no ${CHECKS_TEST}: copy one from another page folder`);
+      .map(
+        ({ folder }) => `${folder} has no ${CHECKS_TEST}: copy src/episodes/templates/episode-template/${CHECKS_TEST}`,
+      );
     // ASSERT
     expect(unchecked).toEqual(expected);
   });
