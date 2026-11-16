@@ -11,7 +11,7 @@ Worktrees live in `.worktrees/<branch with / as ->`, branched from freshly fetch
 
 `npm run wt:new -- <branch>` fetches, adds the worktree, runs `npm ci` and `npx husky` inside it. The checkout is done when the command prints `✔ worktree ready`; `cd` there and work.
 
-`--base <branch>` starts the worktree from that local branch instead of `origin/main`, with no fetch: `npm run wt:new -- episode/<slug>--<job id> --base episode/<slug>` gives an Episode job its own worktree on the integration branch.
+`--base <branch>` starts the worktree from that local branch instead of `origin/main`, with no fetch: `npm run wt:new -- <parent>--<issue>-<task> --base <parent>` gives a subagent its own worktree on its orchestrator's branch (the naming convention is in `AGENTS.md`). `wt:new` refuses a `--` branch whose parent, everything before the first `--`, is missing, is `main` or differs from `--base`, and prints the command that fixes it. `parseArgs` in `scripts/worktree-args.pure.ts` exposes the parent and issue number, for tools that match branches to issues.
 
 A real `node_modules` is the point: a symlinked one breaks Turbopack, `mh check` and the hooks.
 
