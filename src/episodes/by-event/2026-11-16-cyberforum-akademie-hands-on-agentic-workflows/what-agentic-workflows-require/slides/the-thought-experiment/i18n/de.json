@@ -6,12 +6,6 @@
     "detail": "ihr einziger Kanal: Zettel, keine Meetings, keine Anrufe"
   },
   "cardsLabel": "Vier abgehakte Karten",
-  "ownGoal": "Eigenes Ziel:",
-  "doneBy": {
-    "person": "Von einer Person erledigt",
-    "agent": "Von einem Agenten erledigt"
-  },
-  "done": "Erledigt",
   "fails": "Scheitert",
   "breaks": {
     "together": "verfehlt „zusammen“",
@@ -24,35 +18,31 @@
   "cards": {
     "activities": {
       "label": "Programm",
-      "goal": "Teamevent für 200, gebucht",
       "fact": "Paintball × 200",
-      "seamCard": "Anreise",
-      "held": "Barrierefreier Bus, 10 Rollstuhlnutzende",
-      "result": "Die 10 sitzen am Rand"
+      "result": "Die 10 Rollstuhlnutzenden sitzen am Rand",
+      "causeCard": "Anreise",
+      "cause": "Barrierefreier Bus, 10 Rollstuhlnutzende"
     },
     "travel": {
       "label": "Anreise",
-      "goal": "Alle vor Ort, ohne Mehrkosten",
       "fact": "Alle fahren in Fahrgemeinschaften",
-      "seamCard": "Essen & Getränke",
-      "held": "Offene Bar bis 01:00",
-      "result": "Die Fahrer haben getrunken"
+      "result": "Die Fahrer haben getrunken",
+      "causeCard": "Essen & Getränke",
+      "cause": "Offene Bar bis 01:00"
     },
     "venue": {
       "label": "Location",
-      "goal": "Malerisch, im Budget",
       "fact": "Almhütte, 1.800 m",
-      "seamCard": "Anreise",
-      "held": "Gästeinfo: nur Route und Zeiten",
-      "result": "Sommerkleidung, nachts 6 °C"
+      "result": "Sommerkleidung, nachts 6 °C",
+      "causeCard": "Anreise",
+      "cause": "Gästeinfo: nur Route und Zeiten"
     },
     "food": {
       "label": "Essen & Getränke",
-      "goal": "Abendessen für 200, bestellt",
       "fact": "31 vegetarisch",
-      "seamCard": "Location",
-      "held": "Hüttenküche liest es als: Eier erlaubt",
-      "result": "Die indischen Kolleginnen und Kollegen können nicht essen"
+      "result": "Indische Kolleginnen und Kollegen können nicht essen",
+      "causeCard": "Location",
+      "cause": "Hüttenküche liest es als: Eier erlaubt"
     }
   },
   "result": {
@@ -62,10 +52,6 @@
       "together": "Programm, Essen & Getränke",
       "safely": "Anreise, Location"
     }
-  },
-  "question": {
-    "label": "Die Frage",
-    "text": "Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird?"
   },
   "notes": {
     "a-real-version-of-the-board": {
@@ -89,12 +75,10 @@
         "title": "Nichts davon geht auf",
         "keywords": "",
         "script": "Und trotzdem scheitert das Fest, denn die Fehler liegen zwischen den Karten. Programm hat Paintball gebucht, während Anreise einen barrierefreien Bus für zehn Kolleginnen und Kollegen im Rollstuhl gebucht hatte, die jetzt am Rand sitzen. Anreise hat alle in Fahrgemeinschaften geschickt, während Essen und Getränke eine offene Bar bis ein Uhr nachts gebucht hat, also haben die Fahrer getrunken. Location hat eine malerische Almhütte gefunden, während die Gästeinfo von Anreise nur Route und Zeiten nennt, also kommen die Leute in Sommerkleidung bei sechs Grad in der Nacht. Und das Abendessen wurde mit 31 vegetarisch bestellt, was die Küche der Hütte auf westliche Art liest, also landen Eiergerichte vor Kolleginnen und Kollegen, die sie nicht essen können. Jeder Schritt war perfekt, und perfekte Schritte ergeben von allein kein gutes Ganzes."
-      },
-      "your-question": {
-        "title": "Deine Frage",
-        "keywords": "",
-        "script": "Hier ist also die Frage, und ich möchte, dass Du sie die ganze Episode über im Kopf behältst. Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird? Eine verlockende Antwort ist, die vier miteinander reden zu lassen und mehr Meetings anzusetzen. Ich lasse die Frage vorerst offen, und wir beantworten sie Schritt für Schritt, aus verschiedenen Blickwinkeln, bis wir die Antworten am Ende sammeln."
       }
     }
-  }
+  },
+  "doneByPerson": "Von einer Person erledigt",
+  "hadSet": "hatte festgelegt:",
+  "done": "Erledigt"
 }

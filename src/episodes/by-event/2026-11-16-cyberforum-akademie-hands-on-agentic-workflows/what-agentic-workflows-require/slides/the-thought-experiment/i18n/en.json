@@ -6,12 +6,6 @@
     "detail": "their only channel: notes, no meetings, no calls"
   },
   "cardsLabel": "Four ticked cards",
-  "ownGoal": "Own goal:",
-  "doneBy": {
-    "person": "Done by a person",
-    "agent": "Done by an agent"
-  },
-  "done": "Done",
   "fails": "Fails",
   "breaks": {
     "together": "breaks “together”",
@@ -24,35 +18,31 @@
   "cards": {
     "activities": {
       "label": "Activities",
-      "goal": "Team event for 200, booked",
       "fact": "Paintball × 200",
-      "seamCard": "Travel",
-      "held": "Accessible bus, 10 wheelchair users",
-      "result": "The 10 sit it out"
+      "result": "The 10 wheelchair users sit it out",
+      "causeCard": "Travel",
+      "cause": "Accessible bus, 10 wheelchair users"
     },
     "travel": {
       "label": "Travel",
-      "goal": "Everyone there, no extra cost",
       "fact": "Everyone carpools",
-      "seamCard": "Food & drinks",
-      "held": "Open bar until 01:00",
-      "result": "The drivers have been drinking"
+      "result": "The drivers have been drinking",
+      "causeCard": "Food & drinks",
+      "cause": "Open bar until 01:00"
     },
     "venue": {
       "label": "Venue",
-      "goal": "Scenic, within budget",
       "fact": "Alpine hut, 1,800 m",
-      "seamCard": "Travel",
-      "held": "Guest info: route and times only",
-      "result": "Summer clothes, 6 °C at night"
+      "result": "Summer clothes, 6 °C at night",
+      "causeCard": "Travel",
+      "cause": "Guest info: route and times only"
     },
     "food": {
       "label": "Food & drinks",
-      "goal": "Dinner for 200, ordered",
       "fact": "31 vegetarian",
-      "seamCard": "Venue",
-      "held": "Hut kitchen reads it as eggs allowed",
-      "result": "Indian colleagues can't eat"
+      "result": "Indian colleagues can't eat",
+      "causeCard": "Venue",
+      "cause": "Hut kitchen reads it as eggs allowed"
     }
   },
   "result": {
@@ -62,10 +52,6 @@
       "together": "Activities, Food & drinks",
       "safely": "Travel, Venue"
     }
-  },
-  "question": {
-    "label": "The question",
-    "text": "What do you, as the manager, need to do so the result still comes out great?"
   },
   "notes": {
     "a-real-version-of-the-board": {
@@ -89,12 +75,10 @@
         "title": "None of it adds up",
         "keywords": "",
         "script": "And still the party fails, because the failures sit between the cards. Activities booked paintball, while Travel had booked an accessible bus for ten colleagues in wheelchairs, who now sit it out. Travel had everyone carpool, while Food and drinks booked an open bar until one in the morning, so the drivers have been drinking. Venue found a scenic alpine hut, while the guest info from Travel gives only route and times, so people arrive in summer clothes for six degrees at night. And dinner was ordered with 31 vegetarian, which the hut's kitchen reads the Western way, so egg dishes land in front of colleagues who cannot eat them. Every step was perfect, and perfect steps do not add up on their own."
-      },
-      "your-question": {
-        "title": "Your question",
-        "keywords": "",
-        "script": "So here is the question, and I want you to keep it in your head for the whole Episode. What do you, as the manager, need to do so the result still comes out great? One tempting answer is to get the four talking, to hold more meetings. I will leave the question open for now, and we will answer it step by step, from different angles, until we collect the answers at the end."
       }
     }
-  }
+  },
+  "doneByPerson": "Done by a person",
+  "hadSet": "had set:",
+  "done": "Done"
 }

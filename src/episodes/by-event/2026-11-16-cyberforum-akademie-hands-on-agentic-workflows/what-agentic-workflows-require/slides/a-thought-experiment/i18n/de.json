@@ -1,21 +1,51 @@
 {
-  "title": "Ein Gedankenexperiment",
-  "caption": "Vier perfekte Karten auf einem Board, und das Fest scheitert trotzdem zwischen ihnen.",
-  "board": "Essen und Getränke schickt 31 vegetarisch hinüber; die Küche der Location schickt Eiergerichte zurück, als gescheitert markiert: verfehlt zusammen",
-  "seam": {
-    "from": { "team": "Essen & Getränke", "note": "31\nvegetarisch" },
-    "to": { "team": "Location-Küche", "note": "Eier-\ngerichte" },
-    "handoff": "vegetarisch",
-    "back": "mit Eiern serviert"
+  "title": "Du bist die Führungskraft",
+  "caption": "Du hast vier hervorragende Freelancer für ein Fest beauftragt. Du bist die einzige Verbindung zwischen ihnen.",
+  "task": {
+    "label": "Aufgabe",
+    "text": "Plane das Sommerfest: 200 Kolleginnen und Kollegen, fünf Standorte, 20. Juni"
   },
-  "breaks": "verfehlt: zusammen",
-  "footer": "das Wort meinte etwas anderes",
+  "freelancers": {
+    "label": "Vier Freelancer",
+    "activities": "Programm",
+    "travel": "Anreise",
+    "venue": "Location",
+    "food": "Essen & Getränke"
+  },
+  "doneByPerson": "Von einer Person erledigt",
+  "price": {
+    "label": "Fünf Eigenschaften",
+    "probabilistic": { "initial": "P", "name": "Probabilistic" },
+    "relentless": { "initial": "R", "name": "Relentless" },
+    "informed": { "initial": "I", "name": "Informed" },
+    "confident": { "initial": "C", "name": "Confident" },
+    "every-word-billed": { "initial": "E", "name": "Every word billed" }
+  },
+  "rule": "Sie sprechen mit niemandem, es sei denn, Du sagst es ihnen.",
+  "goal": {
+    "label": "Ziel",
+    "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause"
+  },
+  "manager": {
+    "label": "Du bist die Führungskraft",
+    "question": "Dein Auftrag: ein Plan, mit dem alle vier das Ziel erreichen. Was tust Du?"
+  },
   "voiceScript": {
     "segments": {
-      "imagine-the-board": {
-        "title": "Stell Dir das Board vor",
+      "now-you-are-the-manager": {
+        "title": "Jetzt bist Du die Führungskraft",
         "keywords": "",
-        "script": "Stell Dir vor, Du verantwortest ein Sommerfest für 200 Kolleginnen und Kollegen aus fünf Standorten, und Du hast vier hervorragende Freelancer mit der Planung beauftragt, je einen für Programm, Anreise, Location und Essen und Getränke. Sie treffen sich nie und rufen einander nie an, denn das Einzige, was sie teilen, ist ein Board, auf dem alle Zettel hinterlassen."
+        "script": "Jetzt bist Du die Führungskraft. Dasselbe Sommerfest, 200 Kolleginnen und Kollegen aus fünf Standorten, am 20. Juni. Diesmal planst Du nicht selbst: Du hast vier Freelancer, je einen für Programm, Anreise, Location und Essen und Getränke."
+      },
+      "four-price-freelancers": {
+        "title": "Vier PRICE-Freelancer",
+        "keywords": "",
+        "script": "Sie sind hervorragend, und es sind die PRICE-Freelancer: probabilistic, relentless, informed, confident und every word billed. Und es gibt eine Regel: Sie sprechen mit niemandem, es sei denn, Du sagst es ihnen. Du bist die einzige Verbindung zwischen ihnen."
+      },
+      "your-job": {
+        "title": "Dein Auftrag",
+        "keywords": "",
+        "script": "Das Ziel ist, dass alle zusammen feiern und sicher nach Hause kommen. Dein Auftrag: ein Plan, mit dem alle vier das Ziel erreichen. Was tust Du? (Pause)"
       }
     }
   }

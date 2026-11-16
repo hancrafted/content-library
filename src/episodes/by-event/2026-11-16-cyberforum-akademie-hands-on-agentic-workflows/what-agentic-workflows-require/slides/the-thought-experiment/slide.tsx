@@ -1,8 +1,11 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { SeamSum, type Half, type SeamSumCard } from '@/episodes/components/slide-shared/seam-sum/seam-sum';
+import { Cross, DoneBy, Tick } from '@/episodes/components/slide-shared/seam-sum/marks';
+import { FAIL_CHIP, type Half } from '@/episodes/components/slide-shared/seam-sum/types';
+import { FailureFocus } from './failure-focus.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { PartyResult } from './party-result';
 
 /** Each card, the half of the goal its seam failure breaks, in board order. */
 const CARDS = [
@@ -10,15 +13,15 @@ const CARDS = [
   { slug: 'travel', breaks: 'safely' },
   { slug: 'venue', breaks: 'safely' },
   { slug: 'food', breaks: 'together' },
-] as const satisfies readonly { slug: SeamSumCard['slug']; breaks: Half }[];
+] as const satisfies readonly { slug: string; breaks: Half }[];
 
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
 /*
- * "The thought experiment" (Spec Option 1c): the party board as a sum. Four cards, each ticked by a person against its
- * own goal, add up plus by plus to the party, which fails; each card carries its failure at the seam with another card
- * and the half of the goal it breaks. The manager's question sits under it as the one `primary` banner. The marks stay
- * unexplained; later Slides resolve them. No motion: the sum reads in a still frame.
+ * "The thought experiment" (Spec Option A, cards plus the cause on hover): the party board as a sum. Four cards, each
+ * ticked by a person, add up to the party, which fails. Each card shows one fact and one result line at rest, so all
+ * four failures read without a pointer; lighting one dims the other three and adds the cause from the card it met.
+ * The setup slide carries the manager's question, so this Slide asks none. No stepping, no motion beyond the dimming.
  */
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
@@ -35,50 +38,69 @@ export const theThoughtExperiment = slide({
       ],
     },
   ],
-  segments: [{ slug: 'everyone-delivered' }, { slug: 'none-of-it-adds-up' }, { slug: 'your-question' }],
+  segments: [{ slug: 'everyone-delivered' }, { slug: 'none-of-it-adds-up' }],
   content: ({ t, Marker, target }) => (
-    <SlideFrame className="gap-5">
-      <div {...target('board')}>
-        <SeamSum
-          label={{
-            name: t('board.label'),
-            detail: t('board.detail'),
-            marker: <Marker note="a-real-version-of-the-board" placement="beside" />,
-          }}
-          cards={CARDS.map(({ slug, breaks }) => ({
-            slug,
-            label: t(`cards.${slug}.label`),
-            doneBy: 'person',
-            goal: t(`cards.${slug}.goal`),
-            failure: {
-              fact: t(`cards.${slug}.fact`),
-              seam: { card: t(`cards.${slug}.seamCard`), held: t(`cards.${slug}.held`) },
-              result: t(`cards.${slug}.result`),
-              breaks,
-            },
-          }))}
-          result={{
-            title: t('result.title'),
-            goal: t('result.goal'),
-            broken: HALVES.map((half) => ({ half, by: t(`result.broken.${half}`) })),
-          }}
-          words={{
-            cards: t('cardsLabel'),
-            ownGoal: t('ownGoal'),
-            breaks: { together: t('breaks.together'), safely: t('breaks.safely') },
-            halves: { together: t('halves.together'), safely: t('halves.safely') },
-            doneBy: { person: t('doneBy.person'), agent: t('doneBy.agent') },
-            done: t('done'),
-            fails: t('fails'),
-          }}
-        />
-      </div>
+    <SlideFrame>
       <div
-        data-question
-        className="flex flex-col gap-1 rounded-sm bg-primary px-5 py-3 text-primary-foreground shadow-xl sm:flex-row sm:items-center sm:gap-4"
+        data-seam-sum
+        {...target('board')}
+        className="@container flex flex-col gap-4 rounded-xl bg-muted p-4 shadow-inner"
       >
-        <span className="shrink-0 text-caption font-medium uppercase">{t('question.label')}</span>{' '}
-        <p className="text-body font-semibold">{t('question.text')}</p>
+        <p data-sum-label className="flex flex-wrap items-center gap-x-1.5 text-caption text-muted-foreground">
+          <span className="font-medium text-foreground">{t('board.label')}</span> <span aria-hidden>·</span>{' '}
+          <span>{t('board.detail')}</span>
+          <Marker note="a-real-version-of-the-board" placement="beside" />
+        </p>
+        <FailureFocus
+          label={t('cardsLabel')}
+          items={CARDS.map(({ slug, breaks }) => ({
+            slug,
+            body: (
+              <>
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span
+                    data-card-label
+                    className="rounded-full bg-foreground px-3 py-0.5 text-caption font-medium text-background"
+                  >
+                    {t(`cards.${slug}.label`)}
+                  </span>
+                  <DoneBy who="person" label={t('doneByPerson')} />
+                </div>
+                <div className="flex items-start gap-1.5">
+                  <Tick label={t('done')} />
+                  <p data-fact className="text-body leading-snug font-semibold break-words hyphens-auto">
+                    {t(`cards.${slug}.fact`)}
+                  </p>
+                </div>
+                <div className="relative flex flex-col gap-1.5 rounded-sm border-2 border-destructive px-2 pt-1.5 pb-2">
+                  <Cross label={t('fails')} />
+                  <p data-failure-result className="text-caption font-medium text-destructive">
+                    {t(`cards.${slug}.result`)}
+                  </p>
+                  <span data-breaks className={`self-start ${FAIL_CHIP}`}>
+                    {t(`breaks.${breaks}`)}
+                  </span>
+                </div>
+              </>
+            ),
+            cause: (
+              <>
+                <b className="font-medium text-foreground">{t(`cards.${slug}.causeCard`)}</b> {t('hadSet')}{' '}
+                {t(`cards.${slug}.cause`)}
+              </>
+            ),
+          }))}
+        />
+        <PartyResult
+          title={t('result.title')}
+          goal={t('result.goal')}
+          fails={t('fails')}
+          broken={HALVES.map((half) => ({
+            half,
+            chip: `✗ ${t(`halves.${half}`)}`,
+            by: t(`result.broken.${half}`),
+          }))}
+        />
       </div>
     </SlideFrame>
   ),

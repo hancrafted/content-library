@@ -10,10 +10,9 @@ import { describe, expect, it } from 'vitest';
 import { whatAgenticWorkflowsRequire } from '../episode';
 
 /*
- * The section slides of "What agentic workflows require of people and organisations", as the approved Spec gives
- * them: one per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segment, and each
- * Scene one echo of picked Title-slide Option 0b, the seam from Food & drinks to the venue's kitchen at its Section's
- * state.
+ * The section slides of "What agentic workflows require of people and organisations": one per Section, in Spec order,
+ * each titled by its Section, carrying its Voice script, and each Scene its own picture of its Section's state. The
+ * first is the manager setup, the others echo the contract seam of the Spec's picked Option 0b.
  */
 
 const EPISODE = episodeRef(
@@ -64,9 +63,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'A thought experiment',
-        caption: 'Four perfect cards on one board, and the party still fails between them.',
-        segments: ['Imagine the board'],
+        title: "You're the manager",
+        caption: 'You hired four excellent freelancers for one party. You are the only link between them.',
+        segments: ["Now you're the manager", 'Four PRICE freelancers', 'Your job'],
       },
       {
         title: 'What an agentic workflow is',
@@ -95,23 +94,44 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('carries the opening Voice script segment verbatim from the Spec', () => {
+  it('opens the Episode with the manager setup: the party, the four freelancers and the closing question', () => {
     // ARRANGE
-    const expected =
-      'Imagine you are the manager of a summer party for 200 colleagues from five offices, and you have hired four excellent freelancers to plan it, one each for Activities, Travel, Venue and Food and drinks. They never meet and they never call each other, because the only thing they share is a board where everyone leaves notes.';
+    const expected = {
+      'now-you-are-the-manager':
+        "Now you're the manager. Same summer party, 200 colleagues from five offices, on the 20th of June. This time you don't plan it yourself: you have four freelancers, one each for Activities, Travel, Venue and Food and drinks.",
+      'four-price-freelancers':
+        'They are excellent, and they are the PRICE freelancers: probabilistic, relentless, informed, confident, and every word billed. And there is one rule: they talk to no one unless you tell them to. You are the only link between them.',
+      'your-job':
+        'The goal is that everyone celebrates together and gets home safely. Your job: a plan so all four reach the goal. What do you do? (pause)',
+    };
     // ACT
-    const messages = OPENERS[0]?.messages.en as unknown as ScriptMessages;
-    const actual = messages.voiceScript.segments['imagine-the-board']?.script;
+    const opener = OPENERS[0] as Slide;
+    const messages = opener.messages.en as unknown as ScriptMessages;
+    const actual = Object.fromEntries(
+      opener.segments.map(({ slug }) => [slug, messages.voiceScript.segments[slug]?.script]),
+    );
     // ASSERT
-    expect(actual).toBe(expected);
+    expect(actual).toEqual(expected);
   });
 
-  it('breaks the seam on A thought experiment: 31 vegetarian across, egg dishes back, breaking together', () => {
+  it('sets the manager scene on A thought experiment: four PRICE freelancers, the rule, the goal and the question', () => {
     // ARRANGE
-    const expected = { failed: ['Egg dishes'], breaks: ['breaks: together'] };
+    const expected = {
+      freelancers: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
+      chips: [5, 5, 5, 5],
+      rule: ['✗They talk to no one unless you tell them to.'],
+      question: ['Your job: a plan so all four reach the goal. What do you do?'],
+    };
     // ACT
     const $ = sceneOf('a-thought-experiment');
-    const actual = { failed: textsOf($, '[data-mark="fail"] [data-note-text]'), breaks: textsOf($, '[data-breaks]') };
+    const actual = {
+      freelancers: textsOf($, '[data-freelancer] [data-card-label]'),
+      chips: $('[data-freelancer]')
+        .toArray()
+        .map((card) => $(card).find('[data-price-chip]').length),
+      rule: textsOf($, '[data-rule]'),
+      question: textsOf($, '[data-question]'),
+    };
     // ASSERT
     expect(actual).toEqual(expected);
   });
@@ -197,9 +217,9 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('marks no seam as failed outside A thought experiment', () => {
+  it('marks no seam as failed on any section slide', () => {
     // ARRANGE
-    const expected = [1, 0, 0, 0, 0];
+    const expected = [0, 0, 0, 0, 0];
     // ACT
     const actual = OPENERS.map(({ slug }) => sceneOf(slug)('[data-mark="fail"]').length);
     // ASSERT
@@ -211,7 +231,10 @@ describe('edge cases', () => {
   it('titles and scripts every German section slide, segment by segment, as English does', () => {
     // ARRANGE
     const expected = [
-      { title: 'Ein Gedankenexperiment', segments: ['Stell Dir das Board vor'] },
+      {
+        title: 'Du bist die Führungskraft',
+        segments: ['Jetzt bist Du die Führungskraft', 'Vier PRICE-Freelancer', 'Dein Auftrag'],
+      },
       { title: 'Was ein agentischer Workflow ist', segments: ['Die Sache benennen'] },
       { title: 'Wie weit Du Dich herausnimmst', segments: ['Offene Frage'] },
       { title: 'Was es von jeder Person verlangt', segments: ['Fähigkeiten hinter den Fehlern'] },

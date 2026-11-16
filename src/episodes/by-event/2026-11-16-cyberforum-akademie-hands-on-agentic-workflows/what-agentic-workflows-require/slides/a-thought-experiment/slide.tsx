@@ -1,49 +1,43 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { Arrow, Board } from '@/episodes/components/slide-shared/party-board/board';
-import { Note } from '@/episodes/components/slide-shared/party-board/note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { TeamTag } from './team-tag';
+import { ManagerStack } from './manager-stack';
 
-/** The middle of the seam, where its labels sit. */
-const MID = 180;
+const FREELANCERS = ['activities', 'travel', 'venue', 'food'] as const;
+const TRAITS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 
-// The section slide of "A thought experiment", echoing the Hero motif (picked Title-slide Option 0b): the seam broken.
-// "31 vegetarian" goes across and egg dishes come back; the kitchen's card carries the failed mark and the half of the
-// goal it breaks. Its Voice script opens the Episode, since the Title slide has none.
+/*
+ * The section slide of "A thought experiment" (Spec Option A, Stack): "You're the manager", the sibling of
+ * "You're the new hire" with the roles reversed. The slug stays `a-thought-experiment`, the Section's published
+ * anchor (FE-002 §5), so shared links to the Section and its Slides still land. Its Voice script opens the Episode
+ * and ends on the question, which the room answers before the reveal.
+ */
 export const aThoughtExperiment = slide({
   slug: 'a-thought-experiment',
   messages: { en, de },
-  segments: [{ slug: 'imagine-the-board' }],
+  segments: [{ slug: 'now-you-are-the-manager' }, { slug: 'four-price-freelancers' }, { slug: 'your-job' }],
   content: ({ t }) => (
     <SlideFrame>
-      <Board label={t('board')}>
-        <TeamTag x={8} y={16} width={124} label={t('seam.from.team')} />
-        <TeamTag x={228} y={16} width={124} label={t('seam.to.team')} />
-        <Note box={{ x: 18, y: 52, width: 104, height: 52 }} tilt={-2} ticked lines={t('seam.from.note').split('\n')} />
-        <Note
-          box={{ x: 238, y: 52, width: 104, height: 52 }}
-          tilt={2}
-          ticked
-          look="fail"
-          lines={t('seam.to.note').split('\n')}
-        />
-        <Arrow from={126} to={234} y={70} />
-        <Arrow from={234} to={126} y={90} tone="destructive" />
-        <text x={MID} y={64} textAnchor="middle" className="fill-muted-foreground text-caption">
-          {t('seam.handoff')}
-        </text>
-        <text x={MID} y={114} textAnchor="middle" className="fill-destructive text-caption font-medium">
-          {t('seam.back')}
-        </text>
-        <text data-breaks x={MID} y={142} textAnchor="middle" className="fill-destructive text-caption font-semibold">
-          {t('breaks')}
-        </text>
-        <text x={MID} y={164} textAnchor="middle" className="fill-muted-foreground text-caption">
-          {t('footer')}
-        </text>
-      </Board>
+      <ManagerStack
+        task={{ label: t('task.label'), text: t('task.text') }}
+        freelancers={{
+          label: t('freelancers.label'),
+          doneBy: t('doneByPerson'),
+          cards: FREELANCERS.map((slug) => ({ slug, label: t(`freelancers.${slug}`) })),
+        }}
+        price={{
+          label: t('price.label'),
+          traits: TRAITS.map((slug) => ({
+            slug,
+            initial: t(`price.${slug}.initial`),
+            name: t(`price.${slug}.name`),
+          })),
+        }}
+        rule={t('rule')}
+        goal={{ label: t('goal.label'), text: t('goal.text') }}
+        manager={{ label: t('manager.label'), question: t('manager.question') }}
+      />
     </SlideFrame>
   ),
 });
