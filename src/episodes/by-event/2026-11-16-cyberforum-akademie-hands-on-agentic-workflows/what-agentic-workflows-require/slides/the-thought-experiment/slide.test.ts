@@ -10,9 +10,9 @@ import { describe, expect, it } from 'vitest';
 import { theThoughtExperiment } from './slide';
 
 /*
- * "The thought experiment", picked Option 1c: the party board as a sum. Four cards, each ticked against its own goal,
- * add up plus by plus to the failed party; each card carries its seam failure, the card it met and the half of the
- * goal it breaks. Read as the page renders the Scene under the shared Slide header.
+ * "The thought experiment", picked Option A (cards plus the cause on hover): four ticked cards add up to the failed
+ * party. At rest each card shows one fact, one result line and the half of the goal it breaks; the cause from the card
+ * it met is in the DOM for the lit card. Read as the page renders the Scene under the shared Slide header.
  */
 
 const SECTION = slide({
@@ -48,60 +48,21 @@ interface SlideText {
 const textOf = (locale: Locale) => theThoughtExperiment.messages[locale] as unknown as SlideText;
 
 describe('success cases', () => {
-  it('adds the four cards, each ticked for its own goal by a person, plus by plus to the party', () => {
+  it('shows the four ticked cards and the failed party they add up to, with its two broken halves as chips', () => {
     // ARRANGE
     const expected = {
       cards: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
-      goals: [
-        'Own goal: Team event for 200, booked',
-        'Own goal: Everyone there, no extra cost',
-        'Own goal: Scenic, within budget',
-        'Own goal: Dinner for 200, ordered',
-      ],
-      people: 4,
-      plus: 3,
+      ticks: 4,
       result: ['Party, 20 June'],
-    };
-    // ACT
-    const $ = sceneOf();
-    const actual = {
-      cards: textsOf($, '[data-sum-card] [data-card-label]'),
-      goals: textsOf($, '[data-sum-card] [data-own-goal]'),
-      people: $('[data-sum-card] [data-done-by="person"]').length,
-      plus: $('[data-plus]').length,
-      result: textsOf($, '[data-sum-result] [data-result-title]'),
-    };
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
-
-  it('marks each card failed at its seam, naming the card it met, the result and the half it breaks', () => {
-    // ARRANGE
-    const expected = {
-      facts: ['Paintball × 200', 'Everyone carpools', 'Alpine hut, 1,800 m', '31 vegetarian'],
-      seams: [
-        'Travel: Accessible bus, 10 wheelchair users',
-        'Food & drinks: Open bar until 01:00',
-        'Travel: Guest info: route and times only',
-        'Venue: Hut kitchen reads it as eggs allowed',
-      ],
-      results: [
-        'The 10 sit it out',
-        'The drivers have been drinking',
-        'Summer clothes, 6 °C at night',
-        "Indian colleagues can't eat",
-      ],
-      breaks: ['breaks “together”', 'breaks “safely”', 'breaks “safely”', 'breaks “together”'],
       goal: ['Goal: everyone celebrates together and gets home safely'],
-      broken: ['✗ together Activities, Food & drinks', '✗ safely Travel, Venue'],
+      broken: ['✗ together', '✗ safely'],
     };
     // ACT
     const $ = sceneOf();
     const actual = {
-      facts: textsOf($, '[data-sum-card] [data-fact]'),
-      seams: textsOf($, '[data-sum-card] [data-seam]'),
-      results: textsOf($, '[data-sum-card] [data-failure-result]'),
-      breaks: textsOf($, '[data-sum-card] [data-breaks]'),
+      cards: textsOf($, '[data-failure-card] [data-card-label]'),
+      ticks: $('[data-failure-card] svg[aria-label="Done"]').length,
+      result: textsOf($, '[data-sum-result] [data-result-title]'),
       goal: textsOf($, '[data-sum-result] [data-result-goal]'),
       broken: textsOf($, '[data-sum-result] [data-broken]'),
     };
@@ -109,41 +70,67 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('asks the manager’s question in the one banner, and opens the board’s Speaker note beside its label', () => {
+  it('keeps one fact, one result line and one broken half per card readable at rest', () => {
     // ARRANGE
     const expected = {
-      question: ['The question What do you, as the manager, need to do so the result still comes out great?'],
-      markers: ['Speaker note: A real version of the board'],
+      facts: ['Paintball × 200', 'Everyone carpools', 'Alpine hut, 1,800 m', '31 vegetarian'],
+      results: [
+        'The 10 wheelchair users sit it out',
+        'The drivers have been drinking',
+        'Summer clothes, 6 °C at night',
+        "Indian colleagues can't eat",
+      ],
+      breaks: ['breaks “together”', 'breaks “safely”', 'breaks “safely”', 'breaks “together”'],
     };
     // ACT
     const $ = sceneOf();
     const actual = {
-      question: textsOf($, '[data-question]'),
-      markers: $('[data-sum-label] button')
-        .toArray()
-        .map((node) => $(node).attr('aria-label')),
+      facts: textsOf($, '[data-failure-card] [data-fact]'),
+      results: textsOf($, '[data-failure-card] [data-failure-result]'),
+      breaks: textsOf($, '[data-failure-card] [data-breaks]'),
     };
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('carries the Spec’s Voice script, segment by segment, verbatim', () => {
+  it('shows the cause from the card each one met at rest, as one sentence per card', () => {
+    // ARRANGE
+    const expected = [
+      'Travel had set: accessible bus, 10 wheelchair users',
+      'Food & drinks had set: open bar until 01:00',
+      'Travel had set: guest info with route and times only',
+      'Venue had set: a hut kitchen that reads it as eggs allowed',
+    ];
+    // ACT
+    const actual = textsOf(sceneOf(), '[data-failure-card] [data-cause]');
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('opens the board’s Speaker note from the goal bar', () => {
+    // ARRANGE
+    const expected = ['Speaker note: A real version of the board'];
+    // ACT
+    const $ = sceneOf();
+    const actual = $('[data-sum-result] button')
+      .toArray()
+      .map((node) => $(node).attr('aria-label'));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('carries the reveal’s two Voice script segments verbatim', () => {
     // ARRANGE
     const expected = {
       'everyone-delivered': {
         title: 'Everyone delivered',
         script:
-          'Now the day arrives, and every one of the four has done exactly what was asked. Activities booked a team-building event, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly.',
+          'Now the day arrives, and every one of the four has done exactly what was asked. Activities booked paintball for all 200, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly.',
       },
       'none-of-it-adds-up': {
         title: 'None of it adds up',
         script:
           "And still the party fails, because the failures sit between the cards. Activities booked paintball, while Travel had booked an accessible bus for ten colleagues in wheelchairs, who now sit it out. Travel had everyone carpool, while Food and drinks booked an open bar until one in the morning, so the drivers have been drinking. Venue found a scenic alpine hut, while the guest info from Travel gives only route and times, so people arrive in summer clothes for six degrees at night. And dinner was ordered with 31 vegetarian, which the hut's kitchen reads the Western way, so egg dishes land in front of colleagues who cannot eat them. Every step was perfect, and perfect steps do not add up on their own.",
-      },
-      'your-question': {
-        title: 'Your question',
-        script:
-          'So here is the question, and I want you to keep it in your head for the whole Episode. What do you, as the manager, need to do so the result still comes out great? One tempting answer is to get the four talking, to hold more meetings. I will leave the question open for now, and we will answer it step by step, from different angles, until we collect the answers at the end.',
       },
     };
     // ACT
@@ -186,28 +173,69 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('shows no agent on the board: the four freelancers are people', () => {
+  it('keeps the reveal calm: no person or agent badge, no board detail line, no broken-by lists', () => {
     // ARRANGE
-    const expected = 0;
+    const expected = { badges: 0, labelRow: 0, brokenBy: 0 };
     // ACT
-    const actual = sceneOf()('[data-done-by="agent"]').length;
+    const $ = sceneOf();
+    const actual = {
+      badges: $('[data-done-by]').length,
+      labelRow: $('[data-sum-label]').length,
+      brokenBy: $('[data-broken] .text-muted-foreground').length,
+    };
     // ASSERT
-    expect(actual).toBe(expected);
+    expect(actual).toEqual(expected);
+  });
+
+  it('asks no question: the setup slide before it carries it, and the Voice script has no question segment', () => {
+    // ARRANGE
+    const expected = { banners: 0, segments: ['everyone-delivered', 'none-of-it-adds-up'] };
+    // ACT
+    const actual = {
+      banners: sceneOf()('[data-question]').length,
+      segments: theThoughtExperiment.segments.map(({ slug }) => slug),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('lights and dims nothing at rest, and the four focusable groups are named, never a bare list item', () => {
+    // ARRANGE
+    const expected = {
+      lit: 0,
+      dimmed: 0,
+      focusable: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
+      focusableItems: 0,
+    };
+    // ACT
+    const $ = sceneOf();
+    const actual = {
+      lit: $('[data-lit]').length,
+      dimmed: $('[data-dimmed]').length,
+      focusable: $('[data-failure-card][tabindex="0"][role="group"]')
+        .toArray()
+        .map((node) => $(node).attr('aria-label')),
+      focusableItems: $('li[tabindex]').length,
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('names the cards and the broken halves in German on the German page', () => {
+  it('names the cards, the broken halves and the cause sentence in German on the German page', () => {
     // ARRANGE
     const expected = {
       cards: ['Programm', 'Anreise', 'Location', 'Essen & Getränke'],
-      broken: ['✗ zusammen Programm, Essen & Getränke', '✗ sicher Anreise, Location'],
+      broken: ['✗ zusammen', '✗ sicher'],
+      cause: 'Anreise hatte festgelegt: ein barrierefreier Bus, 10 Rollstuhlnutzende',
     };
     // ACT
     const $ = sceneOf('de');
     const actual = {
-      cards: textsOf($, '[data-sum-card] [data-card-label]'),
+      cards: textsOf($, '[data-failure-card] [data-card-label]'),
       broken: textsOf($, '[data-sum-result] [data-broken]'),
+      cause: textsOf($, '[data-failure-card] [data-cause]')[0],
     };
     // ASSERT
     expect(actual).toEqual(expected);
