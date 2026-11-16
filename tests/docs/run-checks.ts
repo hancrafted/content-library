@@ -73,7 +73,10 @@ export function researchFoldersOfRun(
   return [...new Set([...onDisk, ...planned.filter((folder) => !promoted.has(path.posix.basename(folder)))])];
 }
 
-/** Every research folder of the llm-wiki and of every Run but this one, each Run read from disk and its pipeline. */
+/**
+ * Every research folder of the llm-wiki and of every Run but this one, each Run read from disk and its pipeline. Those
+ * reads sit outside this Run's glob; `--changed` still catches a clash, because the edited Run's own test reads this one.
+ */
 function researchFoldersElsewhere(staging: string, wiki: readonly string[]): string[] {
   const runs = subfolders(path.join(ROOT, 'docs/episodes'))
     .map((run) => path.relative(ROOT, run).split(path.sep).join('/'))

@@ -11,6 +11,10 @@ import { composedPageChecks, type PageEntry } from './composed-page-checks';
  * A check returns findings and never throws, so a broken Episode's test names what broke. Add a new Episode-level
  * check here, to `slides` (one per Slide folder) or `folder` (one per page folder), or to `composed-page-checks.ts` when
  * it reads the page's composition: every per-Episode test runs it without being edited.
+ *
+ * Accepted rerun gap (ARCH-003 §4.6): folder existence read from disk (a Slide folder without its slide.tsx, a parts/
+ * or client/ folder, a marker no Section imports) is outside the globs, so `--changed` misses it until push and CI run
+ * the full suite; a rerun trigger on `src/episodes/**` would rerun every test on every Slide edit.
  */
 
 /** A page folder's Slide server entries, as `import.meta.glob('./slides/*\/slide.tsx')` returns them: lazy, by path. */
