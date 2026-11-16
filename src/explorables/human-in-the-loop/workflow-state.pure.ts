@@ -1,3 +1,4 @@
+import { unwrapPastedResult } from './pasted-result.pure';
 import type { PromptEdits } from './prompt-edits.pure';
 import type { Workflow } from './workflow.types';
 
@@ -101,6 +102,22 @@ const FRESH = {
   uploadProblems: [],
 } as const;
 
+/**
+ * A paste is a slot going from empty to a value in one event, and only then keeps just its fence's inside
+ * (`pasted-result.pure.ts`); typing under existing text is stored as typed.
+ */
+function unwrapPasted(
+  before: Readonly<Record<string, string>>,
+  values: Readonly<Record<string, string>>,
+): Readonly<Record<string, string>> {
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]) => [
+      key,
+      (before[key] ?? '').trim() === '' ? unwrapPastedResult(value) : value,
+    ]),
+  );
+}
+
 const HANDLERS: Handlers = {
   level: (state, { level }) => ({ ...state, level }),
   view: (state, { view }) => ({ ...state, view }),
@@ -117,7 +134,7 @@ const HANDLERS: Handlers = {
   debug: (state, { debug }) => ({ ...state, debug }),
   reset: (state) => ({ ...state, slotValues: {}, prompts: {}, demo: true }),
   prompts: (state, { values }) => ({ ...state, prompts: values }),
-  slots: (state, { values }) => ({ ...state, slotValues: values }),
+  slots: (state, { values }) => ({ ...state, slotValues: unwrapPasted(state.slotValues, values) }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   restore: (state, { results, demo, prompts }) => ({
     ...state,
