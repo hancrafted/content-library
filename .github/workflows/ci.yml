@@ -1,13 +1,11 @@
 name: CI
 
-# Lint, typecheck, the fast suite, a full static build and the post-build export test on every pull request and every
-# pushed branch, so a change that would break the Cloudflare Pages deploy fails before it merges, and a branch pushed
-# without a PR is still checked. Three independent jobs run in parallel: each pays for its own `npm ci`, and the run
-# takes as long as the slowest lane instead of the sum of all steps.
-# A push to a branch with an open PR fires both push and pull_request; the concurrency group below keys on the branch
-# name for both, so the later run cancels the earlier one and one run per branch survives.
+# Lint, typecheck, the fast suite, a full static build and the post-build export test on every pushed branch, so a
+# change that would break the Cloudflare Pages deploy fails before it merges. Three independent jobs run in parallel:
+# each pays for its own `npm ci`, and the run takes as long as the slowest lane instead of the sum of all steps.
+# Push only: a PR shows the push run on its head commit as its checks. Adding pull_request would start a second run
+# per push, and cancelling one of the pair leaves a cancelled run the PR counts as failed. No fork PRs here.
 on:
-  pull_request:
   push:
     # Every branch, no tags: `push` with no filter also fires on tags.
     branches: ['**']
@@ -19,10 +17,9 @@ env:
   # The production origin (FE-008). One of the places to change on a domain move: docs/features/hosting.md.
   SITE_URL: https://hancrafted.net
 
-# A newer run on the same branch cancels the older one. `head_ref` is the PR's branch on pull_request and empty on
-# push, where `ref_name` is the branch.
+# A newer push to the same branch cancels the older run.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

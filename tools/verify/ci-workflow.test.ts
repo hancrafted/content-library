@@ -15,13 +15,13 @@ const workflow = (): Workflow =>
   parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as Workflow;
 
 describe('the CI workflow', () => {
-  it('runs on pull requests', () => {
+  it('runs on push only, so a push to a PR branch starts one run and a PR shows that run as its checks', () => {
     // ARRANGE
-    const { on } = workflow();
+    const pushOnly = ['push'];
     // ACT
-    const triggers = Object.keys(on);
+    const triggers = Object.keys(workflow().on);
     // ASSERT
-    expect(triggers).toContain('pull_request');
+    expect(triggers).toEqual(pushOnly);
   });
 
   it('runs on a push to every branch, so a branch pushed without a PR is still checked', () => {
@@ -34,9 +34,9 @@ describe('the CI workflow', () => {
     expect(push?.['branches-ignore']).toBeUndefined();
   });
 
-  it('keeps one run per branch, so a push to a PR branch does not run twice (push and pull_request)', () => {
+  it('keeps one run per branch: a newer push cancels the older run', () => {
     // ARRANGE
-    const perBranch = '${{ github.workflow }}-${{ github.head_ref || github.ref_name }}';
+    const perBranch = '${{ github.workflow }}-${{ github.ref }}';
     // ACT
     const { concurrency } = workflow();
     // ASSERT
