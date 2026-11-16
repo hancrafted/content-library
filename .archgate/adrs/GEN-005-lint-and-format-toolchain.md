@@ -4,8 +4,8 @@ id: GEN-005
 title: 'Lint and Format Toolchain'
 domain: general
 rules: false
-files: ['eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
-paths: ['eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
+files: ['.oxlintrc.json', 'eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
+paths: ['.oxlintrc.json', 'eslint.config.mjs', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
 description: 'Which tools lint and format the repo, their exact pins, why the alpha JS-plugin layer is acceptable, and the dependency-admission review of each package.'
 ---
 
