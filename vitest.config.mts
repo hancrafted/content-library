@@ -73,7 +73,7 @@ export default defineConfig({
     },
   },
   test: {
-    maxWorkers: currentWorkers(),
+    maxWorkers: await currentWorkers(),
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,
