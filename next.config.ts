@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   // `next dev` would otherwise rewrite AGENTS.md (a symlink target) when it detects an agent.
   agentRules: false,
+  // `npm run typecheck` owns type safety: it runs before every build at pre-push (inside verify) and in CI's static
+  // lane, so the build skips its duplicate check (tools/verify/ci-workflow.test.ts).
+  typescript: { ignoreBuildErrors: true },
   basePath,
   assetPrefix: basePath || undefined,
   env: {
