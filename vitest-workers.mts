@@ -31,11 +31,18 @@ export const IDLE_TIMEOUT_MS = 5_000;
 const MAX_TIMEOUT_MS = 20_000;
 
 /**
+ * The load factor a machine still counts as idle at. A quiet desktop reads 1.1 to 1.4 (background apps keep a
+ * share of the CPU busy), so a deadband at 1.5 keeps it on the 5 s default.
+ */
+const IDLE_DEADBAND = 1.5;
+
+/**
  * The fast suite's test timeout under a load factor (all the CPU time there is over the idle share of it: 1 on an
- * idle machine, 4 when a quarter is idle): 5 s scaled by the factor, capped at 20 s, so a loaded run finishes.
+ * idle machine, 4 when a quarter is idle): 5 s up to the deadband, scaled by the factor over the deadband above
+ * it, capped at 20 s, so a loaded run finishes.
  */
 export function timeoutFor(loadFactor: number): number {
-  return Math.min(Math.round(IDLE_TIMEOUT_MS * Math.max(loadFactor, 1)), MAX_TIMEOUT_MS);
+  return Math.min(Math.round(IDLE_TIMEOUT_MS * Math.max(loadFactor / IDLE_DEADBAND, 1)), MAX_TIMEOUT_MS);
 }
 
 /** What a vitest run sizes itself by: the workers it may start, the load factor it measured and the timeout that gives. */
@@ -52,14 +59,12 @@ export async function currentLoad(env: Record<string, string | undefined> = proc
   if (env.CI) return { workers: Math.max(os.cpus().length - 1, 1), loadFactor: 1, testTimeout: IDLE_TIMEOUT_MS };
   const before = sample();
   await new Promise((resolve) => setTimeout(resolve, SAMPLE_MS));
-  const cores = before.length;
-  const idle = idleFraction(before, sample());
+  return loadFromIdle(before.length, idleFraction(before, sample()));
+}
+
+/** The load a machine with this many cores and this idle share (0 to 1) is under. */
+export function loadFromIdle(cores: number, idle: number): Load {
   // A saturated machine reads 0 idle: the floor keeps the factor finite, the cap in timeoutFor does the rest.
   const loadFactor = 1 / Math.max(idle, 0.01);
   return { workers: workersFor(cores, cores * idle), loadFactor, testTimeout: timeoutFor(loadFactor) };
-}
-
-/** The worker count for this machine right now (see currentLoad). */
-export async function currentWorkers(env: Record<string, string | undefined> = process.env): Promise<number> {
-  return (await currentLoad(env)).workers;
 }
