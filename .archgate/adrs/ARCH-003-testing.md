@@ -36,9 +36,9 @@ Test-driven development is the primary agentic coding practice. Agents optimizin
 ### 4. Where a test lives
 
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
-2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build.
+2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build. Playwright stays available for interactive inspection and visual checks.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
-4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. A fast-suite test MUST finish within 3 s on CI, or the lane fails; the slow lane is the only home for simulation-scale work. The nightly budget files every test over 2 s first.
+4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. A fast-suite test MUST finish within 3 s on CI, or the lane fails; simulation-scale work belongs in the slow lane. The nightly budget files every test over 2 s first.
 5. Verification runs at four levels, each with one job:
    - **Agent loop** (`npm run verify:quick`): whole-repo lint, whole-repo format check, typecheck, and the tests the uncommitted changes affect (`vitest run --changed`).
    - **Pre-commit** (`npm run verify:commit`): the commit-time checks, with the tests the change affects, never the whole suite.

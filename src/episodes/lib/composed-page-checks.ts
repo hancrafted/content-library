@@ -35,11 +35,11 @@ import { anchorTitleAt } from './page-summary.pure';
  * `composed-page-render.ts`.
  */
 
-/** A page folder's composition entry, as `import.meta.glob('./episode.ts')` returns it: lazy, by path. */
-export type PageEntry = Readonly<Record<string, () => Promise<unknown>>>;
+/** Modules as `import.meta.glob` returns them, lazy, by path: a page's `./episode.ts`, or its Slides' entries. */
+export type GlobEntries = Readonly<Record<string, () => Promise<unknown>>>;
 
-/** One check: the test name it runs under, and its findings, empty when it holds. */
-interface PageCheck {
+/** One check: the test name it runs under, and its findings, empty when it holds. Run checks share the shape. */
+export interface NamedCheck {
   readonly name: string;
   readonly findings: () => Promise<readonly string[]>;
 }
@@ -76,7 +76,7 @@ const check = (
   name: string,
   findings: (composition: EpisodeComposition) => readonly string[] | Promise<readonly string[]>,
   load: Load,
-): PageCheck => ({
+): NamedCheck => ({
   name,
   findings: async () => findings(await load()),
 });
@@ -160,7 +160,7 @@ function playlistAnchorFindings(page: EpisodeRef, { sections }: EpisodeCompositi
 }
 
 /** The checks every Episode's composition holds: its own text, header, Sections and the Playlist anchors into it. */
-function episodeOnlyChecks(page: EpisodeRef, load: Load): PageCheck[] {
+function episodeOnlyChecks(page: EpisodeRef, load: Load): NamedCheck[] {
   return [
     check('gives the Episode its own title, caption and description in en and de', missingOwnText, load),
     check(
@@ -178,7 +178,7 @@ function episodeOnlyChecks(page: EpisodeRef, load: Load): PageCheck[] {
 }
 
 /** The checks every composed page holds: its slug, summary and published anchors. */
-function composedChecks(page: ComposedPage, load: Load): PageCheck[] {
+function composedChecks(page: ComposedPage, load: Load): NamedCheck[] {
   const status = () => listEpisodes().find(({ ref }) => ref.id === page.id)?.status;
   return [
     check(
@@ -203,7 +203,7 @@ function composedChecks(page: ComposedPage, load: Load): PageCheck[] {
  * The checks an Episode's or a Template's page holds: no DOM id repeated, and its Section markers in step. An Explorable
  * page or a Guide renders its Slides under its own route and keeps no markers.
  */
-function slideDeckChecks(dir: string, page: ComposedPage, load: Load): PageCheck[] {
+function slideDeckChecks(dir: string, page: ComposedPage, load: Load): NamedCheck[] {
   return [
     check(
       'repeats no DOM id when one of its Slides sits twice on one page',
@@ -219,7 +219,7 @@ function slideDeckChecks(dir: string, page: ComposedPage, load: Load): PageCheck
 }
 
 /** The composition checks of the page folder `dir`, from its `episode.ts` entry; none when it has no page. */
-export function composedPageChecks(dir: string, entry: PageEntry): PageCheck[] {
+export function composedPageChecks(dir: string, entry: GlobEntries): NamedCheck[] {
   const load = Object.values(entry)[0];
   if (load === undefined) return [];
   const page = pageRefOf(dir) as ComposedPage;

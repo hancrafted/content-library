@@ -1,6 +1,6 @@
 import os from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { currentLoad, currentWorkers, idleFraction, timeoutFor, workersFor, type CpuTimes } from './vitest-workers.mts';
+import { currentLoad, idleFraction, loadFromIdle, timeoutFor, workersFor, type CpuTimes } from './vitest-workers.mts';
 
 const cpu = (idle: number, busy: number): CpuTimes => ({ idle, busy });
 
@@ -37,46 +37,65 @@ describe('idleFraction', () => {
   });
 });
 
-describe('currentWorkers', () => {
-  it('takes every core but one on a CI runner, which no other run shares', async () => {
-    // ARRANGE
-    const cores = os.cpus().length;
-
-    // ACT
-    const workers = await currentWorkers({ CI: 'true' });
-
-    // ASSERT
-    expect(workers).toBe(Math.max(cores - 1, 1));
-  });
-});
-
 describe('timeoutFor', () => {
-  it('keeps the 5 s default on an idle machine', () => {
+  it('keeps the 5 s default up to the deadband, where a quiet machine reads 1.1 to 1.4', () => {
     // ARRANGE
-    const idle = 1;
+    const quiet = [1, 1.1, 1.4, 1.5];
     // ACT
-    const timeout = timeoutFor(idle);
+    const timeouts = quiet.map(timeoutFor);
     // ASSERT
-    expect(timeout).toBe(5_000);
+    expect(timeouts).toEqual([5_000, 5_000, 5_000, 5_000]);
   });
 
-  it('scales the timeout in proportion to the load factor', () => {
+  it('scales the timeout with the load factor above the deadband', () => {
     // ARRANGE
-    const doubled = 2;
-    const tripled = 3;
+    const busy = [3, 4.5];
     // ACT
-    const timeouts = [timeoutFor(doubled), timeoutFor(tripled)];
+    const timeouts = busy.map(timeoutFor);
     // ASSERT
     expect(timeouts).toEqual([10_000, 15_000]);
   });
 
   it('caps the timeout at 20 s however loaded the machine is', () => {
     // ARRANGE
-    const saturated = 10;
+    const saturated = 100;
     // ACT
     const timeout = timeoutFor(saturated);
     // ASSERT
     expect(timeout).toBe(20_000);
+  });
+});
+
+describe('loadFromIdle', () => {
+  it('gives a normally idle machine the 5 s timeout', () => {
+    // ARRANGE: 16 cores, 80% idle over the sample window (load factor 1.25)
+    const before = Array.from({ length: 16 }, () => cpu(1_000, 1_000));
+    const after = Array.from({ length: 16 }, () => cpu(1_080, 1_020));
+    // ACT
+    const load = loadFromIdle(16, idleFraction(before, after));
+    // ASSERT
+    expect(load.loadFactor).toBeCloseTo(1.25);
+    expect(load.testTimeout).toBe(5_000);
+    expect(load.workers).toBe(12);
+  });
+
+  it('lengthens the timeout on a machine a quarter idle', () => {
+    // ARRANGE
+    const idle = 0.25;
+    // ACT
+    const load = loadFromIdle(16, idle);
+    // ASSERT
+    expect(load.testTimeout).toBe(13_333);
+  });
+
+  it('keeps a saturated machine finite and capped', () => {
+    // ARRANGE
+    const idle = 0;
+    // ACT
+    const load = loadFromIdle(16, idle);
+    // ASSERT
+    expect(load.testTimeout).toBe(20_000);
+    expect(load.workers).toBe(2);
   });
 });
 
@@ -89,6 +108,15 @@ describe('currentLoad', () => {
     // ASSERT
     expect(load.testTimeout).toBe(5_000);
     expect(load.loadFactor).toBe(1);
+  });
+
+  it('takes every core but one on a CI runner, which no other run shares', async () => {
+    // ARRANGE
+    const cores = os.cpus().length;
+    // ACT
+    const { workers } = await currentLoad({ CI: 'true' });
+    // ASSERT
+    expect(workers).toBe(Math.max(cores - 1, 1));
   });
 });
 

@@ -17,9 +17,7 @@ describe('success cases', () => {
     // ASSERT
     expect(found).toEqual(expected);
   });
-});
 
-describe('failure cases', () => {
   it.each(CHECKS.folder)('$name', async ({ findings }) => {
     // ARRANGE
     const expected: string[] = [];
@@ -27,6 +25,17 @@ describe('failure cases', () => {
     const found = await findings();
     // ASSERT
     expect(found).toEqual(expected);
+  });
+});
+
+describe('failure cases', () => {
+  it('checks each Slide folder for its server entry, so a folder holding a Slide under another name fails', () => {
+    // ARRANGE
+    const entryCheck = 'gives every Slide folder a slide.tsx, so no folder holds a Slide under another name';
+    // ACT
+    const names = CHECKS.folder.map(({ name }) => name);
+    // ASSERT
+    expect(names).toContain(entryCheck);
   });
 });
 

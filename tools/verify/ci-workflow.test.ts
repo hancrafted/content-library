@@ -34,13 +34,13 @@ describe('the CI workflow', () => {
     expect(push?.['branches-ignore']).toBeUndefined();
   });
 
-  it('cancels the run in progress when a newer one starts on the same ref', () => {
+  it('keeps one run per branch, so a push to a PR branch does not run twice (push and pull_request)', () => {
     // ARRANGE
-    const perRef = '${{ github.ref }}';
+    const perBranch = '${{ github.workflow }}-${{ github.head_ref || github.ref_name }}';
     // ACT
     const { concurrency } = workflow();
     // ASSERT
-    expect(concurrency.group).toContain(perRef);
+    expect(concurrency.group).toBe(perBranch);
     expect(concurrency['cancel-in-progress']).toBe(true);
   });
 

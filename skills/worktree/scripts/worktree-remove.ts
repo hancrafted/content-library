@@ -1,11 +1,8 @@
 // Removing a finished worktree, robust to macOS Finder writing a .DS_Store into it while git deletes it.
-import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, readlinkSync, rmSync } from 'node:fs';
 import path from 'node:path';
-
-const git = (cwd: string, args: string[], input?: string) =>
-  spawnSync('git', args, { cwd, encoding: 'utf8', input, maxBuffer: 256 * 1024 * 1024 });
+import { git } from './git.ts';
 
 /** Files Finder drops into any folder it shows; they hold nothing of the branch. */
 const FINDER_METADATA = new Set(['.DS_Store']);
