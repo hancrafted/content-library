@@ -36,9 +36,9 @@ Test-driven development is the primary agentic coding practice. Agents optimizin
 ### 4. Where a test lives
 
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
-2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build. Playwright remains available for interactive inspection and visual checks.
+2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
-4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. The fast suite also holds only tests that cost well under a second, because it runs in full at push and in CI.
+4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. A fast-suite test MUST finish within 3 s on CI, or the lane fails; the slow lane is the only home for simulation-scale work. The nightly budget files every test over 2 s first.
 5. Verification runs at four levels, each with one job:
    - **Agent loop** (`npm run verify:quick`): whole-repo lint, whole-repo format check, typecheck, and the tests the uncommitted changes affect (`vitest run --changed`).
    - **Pre-commit** (`npm run verify:commit`): the commit-time checks, with the tests the change affects, never the whole suite.
@@ -87,7 +87,7 @@ Test-driven development is the primary agentic coding practice. Agents optimizin
 
 ### Positive
 
-- **Tests are dependable evidence.** Mocks, skips, assertion-free bodies and ambient state are blocked: green means correct, red means broken.
+- **Tests are dependable evidence.** Mocks, skips and ambient state are blocked: green means correct, red means broken.
 - **Missing cases surface immediately.** The three-block split forces failure and edge cases to be confronted.
 - **Browser tests run as fast as the page.** No sleep pads a run, and a timeout names the element that never arrived.
 
@@ -107,12 +107,12 @@ Test-driven development is the primary agentic coding practice. Agents optimizin
 
 ## Compliance and Enforcement
 
-1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`. Browser-test support remains available if a suite is reintroduced.
+1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test lanes:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); pre-push runs the slow tests a branch affects.
 4. **Unit tests** (§4.7): a page folder or Run without its checks test fails.
 5. **Verification levels** (§4.5): the agent loop and pre-commit run the tests the change affects; pre-push and CI run the full fast suite. The plans live in `tools/verify/verify.pure.ts`, and their test asserts each level's steps.
-6. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
+6. **CI budget** (§4.4): the CI fast lane fails on a test over 3 s, printing it; nightly runs the slow lane in full and files every fast-suite test over 2 s as an issue.
 7. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
 
 **Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow or fast test reads from disk is a rerun trigger in its lane's config.
