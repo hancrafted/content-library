@@ -6,4 +6,7 @@ import type { EpisodeId, ExplorablePageSlug, GuideSlug, TemplateSlug } from '@/c
  * page or a Guide. Its own module, so naming one never reaches the registry, which imports every composition (FE-004 §4).
  */
 export type ComposedPage =
-  EpisodeRef<EpisodeId> | TemplateRef<TemplateSlug> | ExplorablePageRef<ExplorablePageSlug> | GuideRef<GuideSlug>;
+  | EpisodeRef<EpisodeId>
+  | TemplateRef<TemplateSlug>
+  | ExplorablePageRef<ExplorablePageSlug>
+  | GuideRef<GuideSlug>;

@@ -88,7 +88,8 @@ const REQUIRED = ['workflow', 'stage', 'job', 'prompt', 'step', 'level', 'demo',
 
 /** What a reply's footer says: the scope and the prompt it was written from, or why it can't be read. */
 export type ReadFooter =
-  { readonly scope: DebugScope; readonly prompt: DebugPrompt } | { readonly problems: readonly string[] };
+  | { readonly scope: DebugScope; readonly prompt: DebugPrompt }
+  | { readonly problems: readonly string[] };
 
 /** `id "name"` back into its id and name. */
 const fromNamed = (value: string): { id: string; title: string } => {

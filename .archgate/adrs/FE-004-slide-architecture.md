@@ -4,9 +4,9 @@ id: FE-004
 title: 'Slide Architecture'
 domain: frontend
 rules: false
-# prettier-ignore
+# oxfmt-ignore
 files: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
-# prettier-ignore
+# oxfmt-ignore
 paths: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 description: 'Read-first architecture map: tiers, Episode modules, static composition, text/style/client homes, reuse and approved presentation boundaries. Detailed rules belong to each concern’s owner.'
 ---

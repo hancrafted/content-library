@@ -138,7 +138,7 @@ try {
       crops,
     }),
   );
-  execFileSync('npx', ['prettier', '--write', '--log-level', 'warn', reference], { stdio: 'inherit' });
+  execFileSync('npx', ['oxfmt', reference], { stdio: 'inherit' });
   const kept = Object.values(crops).filter((name) => name !== null).length;
   console.log(
     `✔ ${reference}: ${pageCount} pages, ${renders.length} page images, ${kept} of ${Object.keys(crops).length} cut-outs kept`,

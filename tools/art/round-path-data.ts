@@ -1,9 +1,9 @@
 // `npm run art:round -- [--decimals <n>] <file>…`: rounds the coordinates of every quoted SVG path string in the
 // given files (Scene art JSON, facet modules, art components) in place, to integers unless `--decimals` says
-// otherwise, then formats each as Prettier would, since shorter strings rewrap. What counts as a path string:
+// otherwise, then formats each as oxfmt would, since shorter strings rewrap. What counts as a path string:
 // round-path-data.pure.ts.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { format, resolveConfig } from 'prettier';
+import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import { roundPathData } from './round-path-data.pure.ts';
 
 const args = process.argv.slice(2);
@@ -18,8 +18,7 @@ if (files.length === 0 || !Number.isInteger(decimals) || decimals < 0) {
 let changed = 0;
 for (const file of files) {
   const before = readFileSync(file, 'utf8');
-  const options = await resolveConfig(file);
-  const after = await format(roundPathData(before, decimals), { ...options, filepath: file });
+  const after = await formatAsRepo(file, roundPathData(before, decimals));
   if (after === before) continue;
   writeFileSync(file, after);
   changed++;

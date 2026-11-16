@@ -34,7 +34,8 @@ export interface PopoverRequest extends PopoverRules {
 }
 
 export type PopoverPlacement =
-  PlacementOn<'above', { readonly bottom: number }> | PlacementOn<'below', { readonly top: number }>;
+  | PlacementOn<'above', { readonly bottom: number }>
+  | PlacementOn<'below', { readonly top: number }>;
 
 type PlacementOn<S extends PopoverSide, Edge> = Edge & {
   readonly side: S;

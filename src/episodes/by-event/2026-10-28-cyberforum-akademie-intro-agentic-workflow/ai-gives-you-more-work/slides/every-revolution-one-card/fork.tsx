@@ -73,7 +73,8 @@ function OpenFork({ title, beside, manage }: { title: string; beside: string; ma
 }
 
 type ForkProps =
-  { open: false; stayed: ReactNode; rose: ReactNode } | { open: true; title: string; beside: string; manage: string };
+  | { open: false; stayed: ReactNode; rose: ReactNode }
+  | { open: true; title: string; beside: string; manage: string };
 
 /** The fork under an exhibit: the steam engine's, where people went two ways, or AI's, still open. */
 export function Fork(props: ForkProps) {

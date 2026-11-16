@@ -59,7 +59,9 @@ function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLEleme
 
 function rangeScope(
   measurement:
-    { descriptor: SurfaceDescriptor; scope?: CSSStyleDeclaration; css: CSSStyleDeclaration } | null | undefined,
+    | { descriptor: SurfaceDescriptor; scope?: CSSStyleDeclaration; css: CSSStyleDeclaration }
+    | null
+    | undefined,
 ) {
   return measurement?.descriptor.effect ? measurement.scope : measurement?.css;
 }

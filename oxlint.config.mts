@@ -54,7 +54,7 @@ export default defineConfig({
     'next-env.d.ts',
     '.worktrees/**',
     '.claude/worktrees/**',
-    // An Episode's throwaway prototype, kept byte for byte for the retro (as in .prettierignore): never product code.
+    // An Episode's throwaway prototype, kept byte for byte for the retro (as in `.oxfmtrc.jsonc`): never product code.
     'docs/episodes/*/prototype/**',
   ],
   jsPlugins: [

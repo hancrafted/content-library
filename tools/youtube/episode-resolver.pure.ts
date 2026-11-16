@@ -20,7 +20,8 @@ export interface EpisodeEntry {
 }
 
 export type Resolution =
-  { readonly ok: true; readonly episode: EpisodeEntry } | { readonly ok: false; readonly reason: string };
+  | { readonly ok: true; readonly episode: EpisodeEntry }
+  | { readonly ok: false; readonly reason: string };
 
 /** The `youtube` field of an Episode's metadata: an Event recording `{id, language}`, or a public `{locale: id}` map. */
 export type YoutubeMetadata = { readonly id: string } | Readonly<Record<string, string>>;

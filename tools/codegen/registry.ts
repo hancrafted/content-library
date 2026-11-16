@@ -1,11 +1,11 @@
 // `npm run registry` writes the Episode registry from the Episode folders and the Event, Template, Explorable page and Guide registries from
-// their record files, formatted as Prettier would; then, from the page catalogue, one route per Episode page, and from
+// their record files, formatted as oxfmt would; then, from the page catalogue, one route per Episode page, and from
 // the compositions, the page summaries. The fast suite fails while a checked-in file is stale: a registry or a route in
 // registry.test.ts, a summary in src/episodes/lib/page-summary.test.ts. What each holds: episode-registry.pure.ts,
 // event-registry.pure.ts, episode-routes.pure.ts and page-summaries.pure.ts.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { format, resolveConfig } from 'prettier';
+import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import { createVitest } from 'vitest/node';
 import type * as store from '../../src/content-store/store.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
@@ -137,13 +137,12 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
-/** Files in the repository's Prettier style, so `format:check` passes them. */
+/** Files in the repository's oxfmt style, so `format:check` passes them. */
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
   return Promise.all(
     files.map(async (file) => {
       const filepath = path.join(root, file.path);
-      const options = await resolveConfig(filepath);
-      return { path: file.path, text: await format(file.text, { ...options, filepath }) };
+      return { path: file.path, text: await formatAsRepo(filepath, file.text) };
     }),
   );
 }
