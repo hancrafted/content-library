@@ -14,9 +14,18 @@ else
   npm run -s test:slow </dev/null || exit 1
 fi
 
-# A push to main triggers the Pages deploy, so it also runs the build lanes
-# verify skips. Branch pushes stay fast; CI builds them on the PR.
+# The build lanes catch export failures, CI's most common. A push to main triggers the Pages deploy, so it always
+# builds. A branch builds only when it changed an export input since main (`needsBuild`, tools/verify/needs-build.pure.ts),
+# so docs- and skills-only pushes stay fast. Without a merge-base, the branch builds.
 if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
-  echo "push to main: running build and test:build"
+  echo "push to main"
+  build=1
+elif base=$(git merge-base HEAD origin/main 2>/dev/null); then
+  git diff --name-only "$base" HEAD | npm run -s verify:needs-build && build=1 || build=0
+else
+  build=1
+fi
+if [ "$build" = 1 ]; then
+  echo "running build and test:build"
   npm run build </dev/null && npm run test:build </dev/null || exit 1
 fi
