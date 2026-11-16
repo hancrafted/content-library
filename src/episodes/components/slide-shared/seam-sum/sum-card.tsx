@@ -1,5 +1,6 @@
 import { cn } from '@/shared/lib/utils';
-import { Cross, DoneBy, SeamIcon, Tick } from './marks';
+import { CardHeader } from './card-header';
+import { Cross, SeamIcon, Tick } from './marks';
 import { FAIL_CHIP, type SeamSumCard, type SeamSumWords } from './types';
 
 interface CardProps {
@@ -71,15 +72,7 @@ export function SumCard({ tilt, ...props }: CardProps & { readonly tilt: string 
         tilt,
       )}
     >
-      <div className="flex flex-wrap items-center justify-between gap-1">
-        <span
-          data-card-label
-          className="rounded-full bg-foreground px-3 py-0.5 text-caption font-medium text-background"
-        >
-          {card.label}
-        </span>
-        <DoneBy who={card.doneBy} label={words.doneBy[card.doneBy]} />
-      </div>
+      <CardHeader label={card.label} doneBy={{ who: card.doneBy, label: words.doneBy[card.doneBy] }} />
       <OwnGoal {...props} />
       <Failure {...props} />
     </div>

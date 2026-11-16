@@ -1,6 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import { Cross } from './marks';
 import { SumCard } from './sum-card';
+import { tiltOf } from './tilt.pure';
 import { FAIL_CHIP, type SeamSumProps } from './types';
 
 export type { Half, SeamSumCard } from './types';
@@ -39,7 +40,7 @@ function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'
               +
             </span>
           )}
-          <SumCard card={card} words={words} compact={compact} tilt={index % 2 === 0 ? 'rotate-1' : '-rotate-1'} />
+          <SumCard card={card} words={words} compact={compact} tilt={tiltOf(index)} />
         </li>
       ))}
     </ul>
