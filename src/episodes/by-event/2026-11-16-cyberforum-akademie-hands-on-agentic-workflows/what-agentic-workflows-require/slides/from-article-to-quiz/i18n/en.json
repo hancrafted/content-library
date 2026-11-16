@@ -25,7 +25,7 @@
       "checkedBy": "sources open and match"
     }
   },
-  "twoLevels": "You design the path; the agent steers each step",
+  "twoLevels": "You design the path; the agent loops through its task; you steer at the checkpoints.",
   "steps": {
     "process": "<b>Pick one recurring process.</b> Mark each step: agent or person, in, on or out of the loop.",
     "contract": "<b>Write the contract first.</b> What the task receives, what it delivers, how someone else checks it.",
@@ -35,7 +35,7 @@
   "notes": {
     "workflow-and-agent-two-levels": {
       "header": "Workflow and agent, two levels",
-      "description": "Anthropic separates workflows, orchestrated through predefined code paths, from agents that direct their own process; reading the quiz example as a path you design with steps the agent steers is an application of that split, not a claim the source makes [1].",
+      "description": "Anthropic separates workflows, orchestrated through predefined code paths, from agents that direct their own process; reading the quiz example as a path you design and steer, with steps the agent runs in a loop, is an application of that split, not a claim the source makes [1].",
       "sources": { "anthropic-building-effective-agents": { "title": "Anthropic, Building effective agents" } }
     }
   },
@@ -44,7 +44,7 @@
       "one-whole-workflow": {
         "title": "One whole workflow",
         "keywords": "",
-        "script": "Let's put it all together in one whole agentic workflow. It takes any knowledge article, a PDF or a URL, and turns it into a quiz. The path of steps is yours to design, and each step is the agent's to steer."
+        "script": "Let's put it all together in one whole agentic workflow. It takes any knowledge article, a PDF or a URL, and turns it into a quiz. The path of steps is yours to design, each step is a task the agent loops through, and you steer at the checkpoints, you, or later a harness."
       },
       "in-on-or-out-per-step": {
         "title": "In, on or out per step",

@@ -1,6 +1,6 @@
 {
   "title": "Was ein Agent ist",
-  "caption": "Ein Agent ist ein Sprachmodell, das <b>Werkzeuge in einer Schleife nutzt</b> und selbst entscheidet, wie es ein Ziel erreicht.",
+  "caption": "Ein Agent ist ein Sprachmodell, das <b>Werkzeuge in einer Schleife nutzt</b>, bis sein Ziel erreicht ist.",
   "explorable": {
     "levels": {
       "agents": {
@@ -41,9 +41,9 @@
         "script": "Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht. Er ist keine einzelne Chat-Antwort, die Du liest und dann weitergehst, er ist eine Schleife aus Handeln, auf das Ergebnis schauen und wieder Handeln, bis er glaubt, fertig zu sein."
       },
       "steers-its-own-steps": {
-        "title": "Steuert seine eigenen Schritte",
+        "title": "Läuft in seiner eigenen Schleife",
         "keywords": "",
-        "script": "Wenn Du bisher nur ein Chat-Werkzeug genutzt hast, ist das der Wechsel. Im Chat steuerst Du jeden Schritt selbst, weil Du jede Antwort liest und entscheidest, was Du als Nächstes fragst. Ein Agent steuert seine eigenen Schritte, also kannst Du nicht davon ausgehen, dass er die Schritte geht, die Du gegangen wärst. Deshalb geht es im Rest dieser Episode darum, was Du um ihn herum aufsetzen musst."
+        "script": "Wenn Du bisher nur ein Chat-Werkzeug genutzt hast, ist das der Wechsel. Im Chat gehst Du jeden Schritt selbst, weil Du jede Antwort liest und entscheidest, was Du als Nächstes fragst. Ein Agent geht den nächsten Schritt selbst, also geht er vielleicht nicht den, den Du gegangen wärst. Deshalb geht es im Rest dieser Episode darum, was Du um ihn herum aufsetzen musst."
       }
     }
   }

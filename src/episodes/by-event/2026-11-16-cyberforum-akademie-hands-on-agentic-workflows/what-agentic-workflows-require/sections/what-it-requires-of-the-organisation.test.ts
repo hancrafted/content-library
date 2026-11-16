@@ -367,4 +367,30 @@ describe('edge cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('says who loops and who steers on Slide 13 with the settled sentence, in English and German', () => {
+    // ARRANGE
+    const expected = {
+      en: 'You design the path; the agent loops through its task; you steer at the checkpoints.',
+      de: 'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.',
+    };
+    // ACT
+    const actual = {
+      en: textsOf(sceneOf('from-article-to-quiz'), '[data-target="two-levels"]')[0],
+      de: textsOf(sceneOf('from-article-to-quiz', 'de'), '[data-target="two-levels"]')[0],
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('never says the agent steers on Slide 13, in any word the Slide carries', () => {
+    // ARRANGE
+    const pattern =
+      /agent steers|steers each step|agent's to steer|Agent steuert|steuert jeden Schritt|jeden Schritt steuert/i;
+    const slide = SECTION.find(({ slug }) => slug === 'from-article-to-quiz');
+    // ACT
+    const found = pattern.test(JSON.stringify(slide?.messages));
+    // ASSERT
+    expect(found).toBe(false);
+  });
 });
