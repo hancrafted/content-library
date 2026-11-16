@@ -18,7 +18,7 @@ fi
 # builds. A branch builds only when it changed an export input since main (`needsBuild`, tools/verify/needs-build.pure.ts),
 # so docs- and skills-only pushes stay fast. Without a merge-base, the branch builds.
 if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
-  echo "push to main: running build and test:build"
+  echo "push to main"
   build=1
 elif base=$(git merge-base HEAD origin/main 2>/dev/null); then
   git diff --name-only "$base" HEAD | node tools/verify/needs-build.ts && build=1 || build=0
