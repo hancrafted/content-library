@@ -38,7 +38,7 @@ export default defineConfig({
     },
   },
   test: {
-    maxWorkers: currentWorkers(),
+    maxWorkers: await currentWorkers(),
     include: ['**/*.slow.test.ts'],
     exclude: [...configDefaults.exclude, '.worktrees/**', '.claude/**', '.agents/**'],
     // Seconds of work by design, on a machine other sessions may load: the default 5 s is the fast suite's bar.
