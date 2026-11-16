@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
+import { currentWorkers } from './vitest-workers.mts';
 
 const ROOT = import.meta.dirname;
 
@@ -42,6 +43,7 @@ export default defineConfig({
     },
   },
   test: {
+    maxWorkers: currentWorkers(),
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,
