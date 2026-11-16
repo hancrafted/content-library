@@ -21,8 +21,8 @@ import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
+import { formatAsRepo } from './oxfmt-format.ts';
 import { compositionOf, type ComposedPage } from './registry';
 
 /*
@@ -41,10 +41,9 @@ function snapshotPath(page: Page): string {
   return path.join(__dirname, '..', folderOf(page), 'published-anchors.json');
 }
 
-/** The file to paste for a new Episode: its anchors sorted, formatted with the repo's prettier config so `prettier --check` accepts it. */
+/** The file to paste for a new Episode: its anchors sorted, formatted with the repo's oxfmt config so `format:check` accepts it. */
 async function snapshotFile(file: string, produced: readonly string[]): Promise<string> {
-  const options = await resolveConfig(file);
-  return format(JSON.stringify([...new Set(produced)].sort()), { ...options, filepath: file });
+  return formatAsRepo(file, JSON.stringify([...new Set(produced)].sort()));
 }
 
 /** The snapshot's anchors, or a thrown file to paste when the Episode has none. */
@@ -137,7 +136,7 @@ describe('failure cases', () => {
     expect(rest).toEqual([]);
   });
 
-  it('fails an Episode that has no published-anchors.json and prints the sorted file as prettier writes it', async () => {
+  it('fails an Episode that has no published-anchors.json and prints the sorted file as oxfmt writes it', async () => {
     // ARRANGE
     const unregistered = episodeRef('no-such-episode');
     const produced = ['demo--why', 'demo', 'demo--how'];
@@ -175,7 +174,7 @@ describe('edge cases', () => {
     expect(lost).toEqual([]);
   });
 
-  it('prints a list too long for one line one anchor per line, as prettier writes it', async () => {
+  it('prints a list too long for one line one anchor per line, as oxfmt writes it', async () => {
     // ARRANGE
     const produced = [
       'why-context-runs-out',

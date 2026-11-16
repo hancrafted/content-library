@@ -46,7 +46,9 @@ export interface DashboardReadout {
   readonly signals: readonly Signal[];
   /** How the backlog drains, or null while under a week of work waits. */
   readonly drain:
-    { readonly kind: 'grow'; readonly n: number } | { readonly kind: 'clears'; readonly weeks: number } | null;
+    | { readonly kind: 'grow'; readonly n: number }
+    | { readonly kind: 'clears'; readonly weeks: number }
+    | null;
   readonly out: { readonly now: number; readonly paths: TrendPaths };
   /** Share good in %, or null while too little leaves. */
   readonly good: { readonly now: number | null; readonly paths: TrendPaths };

@@ -28,7 +28,8 @@ export interface Fault {
 }
 
 export type ReviewResult =
-  { kind: 'saved'; file: string; text: string } | { kind: 'rejected'; faults: readonly Fault[] };
+  | { kind: 'saved'; file: string; text: string }
+  | { kind: 'rejected'; faults: readonly Fault[] };
 
 function pad(round: number): string {
   return String(round).padStart(2, '0');

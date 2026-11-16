@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
+import { currentWorkers } from './vitest-workers.mts';
 
 // The slow lane: `*.slow.test.ts`, tests that take seconds of real work or read the live repo from disk
 // (ARCH-003-testing §4). `npm run test:slow` runs it; pre-push runs only the affected ones, with `--changed`;
@@ -37,6 +38,7 @@ export default defineConfig({
     },
   },
   test: {
+    maxWorkers: await currentWorkers(),
     include: ['**/*.slow.test.ts'],
     exclude: [...configDefaults.exclude, '.worktrees/**', '.claude/**', '.agents/**'],
     // Seconds of work by design, on a machine other sessions may load: the default 5 s is the fast suite's bar.

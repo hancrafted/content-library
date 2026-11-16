@@ -4,8 +4,8 @@
 // ticket turned green: pass and fail for each rule, a missing store entry, and the edges: a moved diagram, a `%% store:` line outside
 // the diagram, nested and extended shapes, prose naming a type, and helper types.
 
+import { parseForESLint } from '@typescript-eslint/parser';
 import ts from 'typescript';
-import tseslint from 'typescript-eslint';
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-013-content-store.rules';
 
@@ -33,7 +33,7 @@ function globRegExp(glob: string): RegExp {
 }
 
 // Stands in for archgate's RuleContext over an in-memory file set. `ast` parses
-// the transpiled output with typescript-eslint, as archgate does: types are erased, so
+// the transpiled output with the typescript-eslint parser, as archgate does: types are erased, so
 // the tree's lines drift from the source's, and the rule must map them back.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
@@ -54,7 +54,7 @@ function makeCtx(files: Record<string, string>) {
       const js = ts.transpileModule(source, {
         compilerOptions: { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext },
       }).outputText;
-      return tseslint.parser.parseForESLint(js, { loc: true, range: true }).ast;
+      return parseForESLint(js, { loc: true, range: true }).ast;
     },
     report: {
       violation: (detail: Reported) => violations.push(detail),

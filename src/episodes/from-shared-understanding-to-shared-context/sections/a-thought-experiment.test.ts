@@ -178,7 +178,8 @@ describe('success cases', () => {
       return { label: $('[data-bench-zoom] figcaption').text(), benches: $('[data-bench-zoom] svg').length };
     };
     const own = aThoughtExperimentSection.find((slide) => slide.slug === slug)?.messages.en as
-      { voiceScript: { segments: Record<string, { script: string }> } } | undefined;
+      | { voiceScript: { segments: Record<string, { script: string }> } }
+      | undefined;
     const actual = {
       en: zoom('en'),
       de: zoom('de'),

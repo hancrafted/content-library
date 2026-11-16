@@ -13,7 +13,14 @@ export interface UrlWindow {
 }
 
 export type UrlEvent =
-  'popstate' | 'hashchange' | 'scroll' | 'scrollend' | 'wheel' | 'touchstart' | 'pointerdown' | 'keydown';
+  | 'popstate'
+  | 'hashchange'
+  | 'scroll'
+  | 'scrollend'
+  | 'wheel'
+  | 'touchstart'
+  | 'pointerdown'
+  | 'keydown';
 
 export interface UrlState {
   /** Attaches page-owned browser actions; safe after disposal for React effect reattachment. */

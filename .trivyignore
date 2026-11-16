@@ -1,5 +1,5 @@
 # braces 3.0.3 is the newest published release, so no fixed version exists to upgrade to.
-# It is reached only through dev tooling (@next/eslint-plugin-next > fast-glob > micromatch),
+# It is reached only through dev tooling (eslint-plugin-check-file > micromatch),
 # which runs on our own source files and never ships in the static export.
 # The expiry forces a re-check; drop this entry as soon as a patched release lands.
 CVE-2026-93687 exp:2026-12-31

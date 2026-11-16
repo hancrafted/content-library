@@ -15,13 +15,13 @@ description: 'Hygiene Disciplines binding every file under src/ whatever its lan
 
 A home for hygiene Disciplines that bind every file under `src/`, whatever its language, and belong to no one subsystem.
 
-An inline `eslint-disable` silences a rule where no reviewer looks for it, and agents reach for it to turn red green. ESLint honours every directive it's handed, so only a separate check can refuse them.
+An inline lint-disable directive silences a rule where no reviewer looks for it, and agents reach for it to turn red green. The linter honours every directive it's handed, so only a separate check can refuse them. Two families exist: `eslint-*` directives, which the ESLint-compatible JS plugin layer still recognises, and `oxlint-*` directives, which oxlint honours natively.
 
 ## Decision
 
-### 1. No inline eslint suppression (📜 Rule: `no-eslint-disable`)
+### 1. No inline lint suppression (📜 Rule: `no-eslint-disable`)
 
-1. A file under `src/` MUST NOT carry an eslint directive comment — `eslint-disable`, `-line`, `-next-line` or `eslint-enable`, in `//` or `/* */` form.
+1. A file under `src/` MUST NOT carry a lint directive comment in either family — `eslint-disable`, `oxlint-disable`, their `-line` and `-next-line` variants, or `eslint-enable` and `oxlint-enable`, in `//` or `/* */` form.
 2. A wrong rule is turned off in the lint config, behind a `files:` glob, with its reason.
 
 ## Do's and Don'ts
@@ -32,7 +32,7 @@ An inline `eslint-disable` silences a rule where no reviewer looks for it, and a
 
 ### Don'ts
 
-1. **DON'T** write `// eslint-disable-next-line` or any other directive under `src/`. (Decision 1, 📜 Rule: `no-eslint-disable`)
+1. **DON'T** write `// eslint-disable-next-line`, `// oxlint-disable-next-line` or any other directive under `src/`. (Decision 1, 📜 Rule: `no-eslint-disable`)
 
 ## Consequences
 
@@ -46,10 +46,10 @@ An inline `eslint-disable` silences a rule where no reviewer looks for it, and a
 
 ## Compliance and Enforcement
 
-1. **Rule** `no-eslint-disable` (archgate, error): every file under `src/`.
+1. **Rule** `no-eslint-disable` (archgate, error): every file under `src/`; the rule id keeps its original name though it now covers both directive families.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [ESLint — configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments) — the directive forms §1 bans.
+- [ESLint — configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments) and [oxlint — inline ignore comments](https://oxc.rs/docs/guide/usage/linter/ignore-comments.html) — the directive forms §1 bans.

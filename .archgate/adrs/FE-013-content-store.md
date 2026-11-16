@@ -4,9 +4,9 @@ id: FE-013
 title: 'Content Store'
 domain: frontend
 rules: true
-# prettier-ignore
+# oxfmt-ignore
 files: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
-# prettier-ignore
+# oxfmt-ignore
 paths: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
 description: 'Every record enters the site through one content store that parses it with a Zod schema whose inferred type is its only type, every field described, and refuses a bad record at build time, naming it.'
 ---
