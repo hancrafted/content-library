@@ -11,6 +11,26 @@ export interface WorktreeArgs {
   base: string | null;
   /** `done` only: stop the processes that block removal. */
   kill: boolean;
+  /** A subagent branch's parent, everything before its first `--`; null for an orchestrator branch. */
+  parent: string | null;
+  /** The ticket in `<parent>--<issue>-<task>`; null without one. The cleanup skill matches branches to issues by it. */
+  issue: number | null;
+}
+
+interface Owner {
+  parent: string | null;
+  issue: number | null;
+}
+
+/** Reads who owns a branch: `<type>/<slug>` is an orchestrator's, `<parent>--[<issue>-]<task>` a subagent's. */
+function readOwner(branch: string): Owner | { error: string } {
+  const split = branch.indexOf('--');
+  if (split === -1) return { parent: null, issue: null };
+  const task = branch.slice(split + 2);
+  if (task === '')
+    return { error: `'${branch}' needs <parent>--<task>: the parent before the first --, the task after it` };
+  const ticket = /^(\d+)-./.exec(task);
+  return { parent: branch.slice(0, split), issue: ticket === null ? null : Number(ticket[1]) };
 }
 
 const USAGE =
@@ -54,10 +74,30 @@ export function parseArgs(argv: readonly string[]): WorktreeArgs | { error: stri
   if ('error' in flags) return flags;
   const error = checkShape(command, flags);
   if (error !== null) return { error };
+  const branch = flags.positional[0] ?? '';
+  const owner = readOwner(branch);
+  if ('error' in owner) return owner;
   return {
     command: command as WorktreeArgs['command'],
-    branch: flags.positional[0] ?? '',
+    branch,
     base: flags.base,
     kill: flags.kill,
+    ...owner,
   };
+}
+
+/**
+ * Why `wt:new` refuses this branch, or null. A subagent branch starts from its parent:
+ * the parent must exist, must not be main, and must be the --base. Each refusal names the fix.
+ */
+export function refuseNewBranch(args: WorktreeArgs, branchExists: (branch: string) => boolean): string | null {
+  const { branch, parent, base } = args;
+  if (parent === null) return null;
+  const task = branch.slice(parent.length + 2);
+  if (parent === 'main')
+    return `a subagent branch cannot hang off main; create its parent first: npm run wt:new -- <type>/<slug>, then npm run wt:new -- <type>/<slug>--${task} --base <type>/<slug>`;
+  if (base !== parent) return `'${branch}' starts from its parent; run: npm run wt:new -- ${branch} --base ${parent}`;
+  if (!branchExists(parent))
+    return `parent branch '${parent}' does not exist; create it first: npm run wt:new -- ${parent}, then rerun this command`;
+  return null;
 }

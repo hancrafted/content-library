@@ -5,7 +5,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
-import { parseArgs } from './worktree-args.pure.ts';
+import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
 import { mergeIntoBase } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 
@@ -183,8 +183,16 @@ function sync(base: string | null): void {
   console.log(`✔ ${branch} merged with ${plan.target}`);
 }
 
+/** Whether a local branch of that name exists. */
+function localBranchExists(branch: string): boolean {
+  return spawnSync('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
+}
+
 const args = parseArgs(process.argv.slice(2));
 if ('error' in args) fail(args.error);
-else if (args.command === 'new') create(args.branch, args.base);
-else if (args.command === 'sync') sync(args.base);
+else if (args.command === 'new') {
+  const refusal = refuseNewBranch(args, localBranchExists);
+  if (refusal !== null) fail(refusal);
+  create(args.branch, args.base);
+} else if (args.command === 'sync') sync(args.base);
 else finish(args.branch, args.base, args.kill);
