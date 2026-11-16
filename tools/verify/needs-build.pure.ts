@@ -1,6 +1,6 @@
-// Pre-push's build trigger: whether a branch changed anything the static export is built from. `EXPORT_PATHS` is the
-// `paths:` filter of `.github/workflows/deploy-cloudflare.yml` minus the workflow file itself, which no local build
-// reads; needs-build.pure.test.ts fails when the two drift.
+// Whether a branch changed anything the static export is built from: pre-push's build trigger and, through the same
+// `verify:needs-build` command, the `changed` output of CI's `export` job that gates the PR preview. `EXPORT_PATHS` is
+// the only list of export inputs; add a file here when the build starts reading it.
 
 /** GitHub `paths:` globs of what the export is built from: source, public assets, dependencies, Next and PostCSS config, and what the art bake reads. */
 export const EXPORT_PATHS = [

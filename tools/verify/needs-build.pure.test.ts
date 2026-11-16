@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { EXPORT_PATHS, needsBuild } from './needs-build.pure.ts';
+import { needsBuild } from './needs-build.pure.ts';
 
-const WORKFLOW = '.github/workflows/deploy-cloudflare.yml';
+const WORKFLOW = '.github/workflows/ci.yml';
 
 describe('needsBuild', () => {
   describe('success cases', () => {
@@ -77,16 +77,28 @@ describe('needsBuild', () => {
     });
   });
 
-  describe('the deploy workflow', () => {
-    it('filters pull requests by the same paths, minus the workflow file itself', () => {
+  describe('the CI workflow', () => {
+    const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
+      jobs: Record<string, { needs?: string | string[]; if?: string; outputs?: Record<string, string> }>;
+    };
+
+    it('gates the preview job on the export job and its changed output', () => {
       // ARRANGE
-      const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
-        on: { pull_request: { paths: string[] } };
-      };
+      const { export: exportJob, preview } = workflow.jobs;
       // ACT
-      const filter = workflow.on.pull_request.paths.filter((entry) => entry !== WORKFLOW);
+      const needs = [preview?.needs ?? []].flat();
       // ASSERT
-      expect([...filter].sort()).toEqual([...EXPORT_PATHS].sort());
+      expect(needs).toContain('export');
+      expect(exportJob?.outputs).toHaveProperty('changed');
+      expect(preview?.if).toContain('needs.export.outputs.changed');
+    });
+
+    it('keeps forks and Dependabot away from the preview', () => {
+      // ARRANGE
+      const condition = workflow.jobs.preview?.if ?? '';
+      // ACT / ASSERT
+      expect(condition).toContain('github.repository');
+      expect(condition).toContain('dependabot[bot]');
     });
   });
 });
