@@ -1,0 +1,1 @@
+../../.archgate/adrs/GEN-005-lint-and-format-toolchain.md

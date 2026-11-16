@@ -1,6 +1,6 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-011 — Design Tokens: the checks ESLint's class-string lint cannot see. Raw values in CSS, in style objects and
+// FE-011 — Design Tokens: the checks the class-string lint cannot see. Raw values in CSS, in style objects and
 // SVG attributes, a Slide token file that shadows a global token or lacks a dark value, an Episode selector in the
 // global stylesheet, and a dead entry on the legacy list. Each check is one rule, A1..A6 in the ticket.
 // Self-contained by design: archgate forbids imports between rules files.
