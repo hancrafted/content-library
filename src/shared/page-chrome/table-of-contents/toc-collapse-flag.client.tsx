@@ -2,7 +2,6 @@
 
 import { useActiveSlide } from '@/shared/hooks/use-url-state';
 import { keepReadingScroll, READING_LINE } from '@/shared/lib/reading-line.pure';
-
 import { TOC_COLLAPSED_ATTR } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useLayoutEffect } from 'react';
 

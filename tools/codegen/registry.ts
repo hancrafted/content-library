@@ -5,11 +5,11 @@
 // event-registry.pure.ts, episode-routes.pure.ts and page-summaries.pure.ts.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import { createVitest } from 'vitest/node';
 import type * as store from '../../src/content-store/store.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
 import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
+import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import {
   episodeRegistryFiles,
   exportedRecord,
