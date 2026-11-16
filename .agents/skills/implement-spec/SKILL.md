@@ -21,16 +21,14 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
 
-3. Create the integration branch, checked out in its own worktree. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
+3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
 
-4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch (`npm run wt:new -- <integration>--<issue>-<task> --base <integration>`). Each implementer subagent:
+4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
    - calls the Skill tool with `tdd` to build the ticket;
-   - commits locally, then finishes with `npm run wt:done -- <its branch> --base <integration>` from the main checkout: it merges into the integration branch under a lock, so concurrent finishes land one at a time, then removes the worktree;
-   - on a merge conflict, merges the integration tip into its own branch (`npm run wt:sync -- --base <integration>`), resolves it, and reruns `wt:done`;
-   - keeps its commits local: a subagent pushes and opens a PR only when the user asks for one.
+   - merges the integration branch tip into its own branch before reporting done
 
-5. Once an **implementer subagent** reports, its work is already on the integration branch. Push the integration branch once per merge round; you are the only agent that pushes.
+5. Once an **implementer subagent** completes, merge its work to the integration branch with a **merger subagent**.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
@@ -38,4 +36,4 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
-9. Clean up any **implementer subagent** worktree a failed `wt:done` left behind.
+9. Clean up all **implementer subagent** worktrees.
