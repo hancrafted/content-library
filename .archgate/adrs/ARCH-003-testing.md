@@ -45,6 +45,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
    - **Pre-push:** everything CI runs: the full fast suite (`npm run verify`) and the slow lane for what the branch changed. Plus `build` and `test:build` when the branch changed an export input since the merge-base with main (`needsBuild` in `tools/verify/needs-build.pure.ts`); a push to main always builds.
    - **CI:** everything, unchanged. `npm run verify` keeps meaning what CI will say.
 6. `--changed` follows imports, not disk reads. A fast test that reads a file from disk rather than importing it names that file as a rerun trigger in `vitest.config.mts`, as a slow test does in `vitest.slow.config.mts`, or a change to the file skips the test at the agent loop and at commit.
+7. A check on one page folder (Episode, Event copy, Template, Explorable page, Guide, the Slide pool) lives in `src/episodes/lib/episode-checks.ts`, run by that folder's own `episode-checks.test.ts`, so `--changed` runs only touched Episodes. No fast test imports every Episode; a cross-Episode invariant reads only an index or folder names.
 
 ### 5. Browser tests wait on the page
 
@@ -67,6 +68,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 9. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 10. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
 11. **DO** name a file a fast test reads from disk in the `forceRerunTriggers` of `vitest.config.mts`. (Decision 4.6)
+12. **DO** add a one-folder check to `episode-checks.ts`; every `episode-checks.test.ts` runs it unedited. (Decision 4.7)
 
 ### Don'ts
 
@@ -108,9 +110,10 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`. Browser-test support remains available if a suite is reintroduced.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test lanes:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); pre-push runs the slow tests a branch affects.
-4. **Verification levels** (§4.5): the agent loop and pre-commit run the tests the change affects; pre-push and CI run the full fast suite. The plans live in `tools/verify/verify.pure.ts`, and their test asserts each level's steps.
-5. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
-6. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
+4. **Unit test** (§4.7): a page folder without its `episode-checks.test.ts` fails.
+5. **Verification levels** (§4.5): the agent loop and pre-commit run the tests the change affects; pre-push and CI run the full fast suite. The plans live in `tools/verify/verify.pure.ts`, and their test asserts each level's steps.
+6. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
+7. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
 
 **Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow or fast test reads from disk is a rerun trigger in its lane's config.
 
