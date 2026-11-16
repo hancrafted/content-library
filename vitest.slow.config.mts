@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { currentWorkers } from './tools/verify/vitest-workers.pure.ts';
+import { currentWorkers } from './tools/verify/workers.ts';
 
 // The slow lane: `*.slow.test.ts`, tests that take seconds of real work or read the live repo from disk
 // (ARCH-003-testing §4). `npm run test:slow` runs it; pre-push runs only the affected ones, with `--changed`;
@@ -12,7 +12,9 @@ const ROOT = import.meta.dirname;
  * What reruns the whole lane: the files the slow tests read from disk rather than import
  * (tests/docs/episode-staging.slow.test.ts and its fixture; the scenery's CSS modules that
  * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the lane's own config and the
- * installed packages.
+ * installed packages. tools/art/art-parallel.slow.test.ts spawns `npm run art`'s real entry, which `--changed` cannot
+ * follow: it reruns when the branch changes the bake (`tools/art/**`) or the loader it uses (`raw-text-files.mts`).
+ * A change to the pages it renders is the nightly run's to catch.
  */
 const TRIGGERS = [
   'vitest.slow.config.mts',
@@ -26,12 +28,8 @@ const TRIGGERS = [
   'src/episodes/components/slide-shared/motions/**',
   'src/episodes/templates/*/slides/**',
   'markdown-harness.config.yaml',
-  // tools/art/art-parallel.slow.test.ts spawns `npm run art`, which renders every composed page and bakes its CSS modules.
   'tools/art/**',
   'raw-text-files.mts',
-  'src/episodes/**',
-  'src/content-store/**',
-  'src/shared/**',
   'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
   'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
 ];

@@ -7,7 +7,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { createViteServer } from 'vitest/node';
 import { rawTextFiles } from '../../raw-text-files.mts';
-import { currentWorkers } from '../verify/vitest-workers.pure.ts';
+import { currentWorkers } from '../verify/workers.ts';
 import { bakeInWorkers } from './art-bake-pool.ts';
 import { bakeChunk, chunksOf, mergeChunks } from './art-chunks.pure.ts';
 import { artStore } from './art-store.pure.ts';
