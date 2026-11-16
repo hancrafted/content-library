@@ -13,7 +13,7 @@ import { whatAnAgenticWorkflowIsSection } from './what-an-agentic-workflow-is';
  * The Section "What an agentic workflow is", as the approved Spec gives it: its section slide, then Slide 3 "What an
  * agent is" (picked Option 3a, the AI capability Explorable with the Agents card turned to Anthropic's cited
  * definition) and Slide 4 "What an agentic workflow is" (picked Option 4a, the human-in-the-loop Explorable running the
- * summer party, the path you design above it and the task the agent steers zoomed below it).
+ * summer party, the path you design above it and the task the agent loops through zoomed below it).
  */
 
 const EPISODE = episodeRef(
@@ -107,12 +107,12 @@ describe('success cases', () => {
       {
         title: 'Model, tools, loop',
         script:
-          'An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.',
+          'An agent is a language model that uses tools in a loop until its goal is met. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.',
       },
       {
-        title: 'Steers its own steps',
+        title: 'Runs its own loop',
         script:
-          'If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. That is the reason the rest of this Episode is about what you must set up around it.',
+          'If you have only used a chat tool so far, here is the shift. In a chat you take every step yourself, because you read each answer and decide what to ask next. An agent takes the next step itself, so it may not take the one you would have taken. That is the reason the rest of this Episode is about what you must set up around it.',
       },
     ];
     // ACT
@@ -132,7 +132,7 @@ describe('success cases', () => {
       {
         title: 'Two levels',
         script:
-          'Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away.',
+          'Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent loops through its own task, and that is the part you hand away. Put together: you design the path; the agent loops through its task; you steer at the checkpoints. The one who steers is you, or later a harness.',
       },
       {
         title: 'Minimal, how minimal',
@@ -205,7 +205,7 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('brackets the path as yours, hands each stage over and zooms into the task the agent steers', () => {
+  it('brackets the path as yours, hands each stage over and zooms into the task the agent loops through', () => {
     // ARRANGE
     const expected = {
       design: ['You design this'],
@@ -215,7 +215,7 @@ describe('success cases', () => {
         'research, a source per number',
         'one page: the party plan',
       ],
-      steers: ['The agent steers this'],
+      steers: ['The agent loops here'],
       task: [
         'You set its task: research each ticket in its own fresh chat, with web search and a source for every number. How it gets there is its own call.',
       ],
@@ -271,6 +271,25 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+  it('says the agent loops through its task and you steer at the checkpoints, in English and German', () => {
+    // ARRANGE
+    const expected = {
+      agentCaption: 'An agent is a language model that uses tools in a loop until its goal is met.',
+      workflowEn: 'You design the path; the agent loops through its task; you steer at the checkpoints.',
+      workflowDe:
+        'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.',
+      labelDe: 'Hier läuft der Agent in der Schleife',
+    };
+    // ACT
+    const actual = {
+      agentCaption: textOf(AGENT).caption.replace(/<\/?b>/g, ''),
+      workflowEn: textOf(WORKFLOW).caption.replace(/^.*<b>|<\/b>$/g, ''),
+      workflowDe: textOf(WORKFLOW, 'de').caption.replace(/^.*<b>|<\/b>$/g, ''),
+      labelDe: textsOf(sceneOf(WORKFLOW, 'de'), '[data-steers-label]')[0],
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -303,13 +322,22 @@ describe('failure cases', () => {
     // ASSERT
     expect(shown).toEqual([]);
   });
+
+  it('never says the agent steers, on either Slide or in either language', () => {
+    // ARRANGE
+    const pattern = /agent steers|steers inside|steers its own|Das steuert der Agent|Agent steuert|Steuert seine/i;
+    // ACT
+    const words = [AGENT, WORKFLOW].map((slug) => JSON.stringify(slideOf(slug).messages)).join(' ');
+    // ASSERT
+    expect(pattern.test(words)).toBe(false);
+  });
 });
 
 describe('edge cases', () => {
   it('shows the German definition, the German Workflow and the German Voice script titles on the German page', () => {
     // ARRANGE
     const expected = {
-      agentSegments: ['Modell, Werkzeuge, Schleife', 'Steuert seine eigenen Schritte'],
+      agentSegments: ['Modell, Werkzeuge, Schleife', 'Läuft in seiner eigenen Schleife'],
       workflowSegments: ['Die Definition', 'Zwei Ebenen', 'Minimal, wie minimal'],
       workflow: 'Ein Sommerfest planen',
     };
