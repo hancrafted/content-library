@@ -43,5 +43,5 @@ The browser lane (`*.browser.test.ts`) drove `chrome-headless-shell` over raw CD
 - A behaviour the user never corrected has no browser test; the lane is as complete as the feedback behind it.
 - Explorable explanations gain a `data-motion` attribute to keep honest: a missing `settled` on completion hangs the spec until its timeout.
 - A CI-only failure surfaces the next morning, not on the PR, until the lane moves to pull requests.
-- `eslint-plugin-playwright` misses the stars signal of ARCH-001 (398; 42 contributors, 3.0M weekly downloads, released 2026-10-05), admitted because core ESLint has no rule for Playwright's waiting patterns.
-- Enforcement: ESLint over `**/*.browser.test.ts`; ARCH-003's shape rules, once its globs cover `tests/browser/` and `skills/`; the feedback rule in `AGENTS.md`, held by review. ARCH-003 §4.2 ("CI opens no browser") needs amending by the user before the nightly lands. Research behind the tool choice: `.scratch/browser-tests/research.md` (local).
+- `eslint-plugin-playwright` misses the stars signal of ARCH-001 (398; 42 contributors, 3.0M weekly downloads, released 2026-10-05), admitted because the linter's core rules have none for Playwright's waiting patterns.
+- Enforcement: lint over `**/*.browser.test.ts`; ARCH-003's shape rules, once its globs cover `tests/browser/` and `skills/`; the feedback rule in `AGENTS.md`, held by review. ARCH-003 §4.2 ("CI opens no browser") needs amending by the user before the nightly lands. Research behind the tool choice: `.scratch/browser-tests/research.md` (local).

@@ -44,7 +44,7 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('reads the recorded hash from the template, however Prettier wrapped the tag', () => {
+  it('reads the recorded hash from the template, however the formatter wrapped the tag', () => {
     // ARRANGE
     const hash = templateHash(SOURCES);
     const wrapped = `<head>\n  <meta\n    name="spec-template-source-hash"\n    content="${hash}"\n  />\n</head>`;

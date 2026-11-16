@@ -24,7 +24,7 @@ _Done when_ `npx vitest run src/explorables/human-in-the-loop/workflow-pair.test
 
 The engine tests run on `workflow.fixture.en.yml`, so only these read a shipped Workflow: `workflow-pair`, `workflow-content.*`, `workflow-file`, `workflow-state`, `human-in-the-loop` and its `.browser` test. They find stages by index or id, so changing a shipped Workflow's stages or jobs breaks them by position: update each to the new shape.
 
-_Done when_ `npm run verify` passes. Prettier formats the YAML too.
+_Done when_ `npm run verify` passes. oxfmt formats the YAML too.
 
 ## 5. Slide text
 

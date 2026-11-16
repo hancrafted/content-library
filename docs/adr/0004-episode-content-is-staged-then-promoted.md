@@ -43,5 +43,5 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
 ## Consequences
 
 - The Archgate ADRs need no amendment for promoted text: no markdown joins a Slide folder. `brief.md` sits in the Episode folder.
-- `design-archive/` is committed, kept out of Prettier and out of Tailwind's source scan, and served by `npm run design-archive`.
+- `design-archive/` is committed, kept out of format and out of Tailwind's source scan, and served by `npm run design-archive`.
 - The design references a Slide cites survive Staging only as copies in the Design archive.

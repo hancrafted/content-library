@@ -4,8 +4,8 @@ id: FE-006
 title: 'Server/Client Boundary'
 domain: frontend
 rules: false
-files: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
-paths: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
+files: ['src/**/*.{ts,tsx}', 'oxlint.config.mts', 'tools/lint/*.ts', '.dependency-cruiser.cjs']
+paths: ['src/**/*.{ts,tsx}', 'oxlint.config.mts', 'tools/lint/*.ts', '.dependency-cruiser.cjs']
 description: "Server Components by default; 'use client' only at leaves, never under src/app, and only in a file named *.client.tsx — the classifier that makes the client bundle glob-addressable."
 ---
 
@@ -15,7 +15,7 @@ description: "Server Components by default; 'use client' only at leaves, never u
 
 Under the App Router every component is a Server Component until a `'use client'` directive marks a module as a client entry point. Everything that module imports joins the client bundle. Where the directive sits therefore decides bundle size, which props must survive serialization, and — under `output: 'export'` — whether a component renders into the HTML at build time or only after hydration.
 
-A glob cannot see inside a file. With the directive alone, "which files are client entry points" is answerable only by reading every file, so no ADR `files:` scope, ESLint block or dependency-cruiser rule can address the client bundle. A filename suffix fixes that: it makes the boundary glob-addressable, the property the classifier suffixes of the reference ADRs (markdown-harness `ARCH-004 Folders and Files`) exist to provide.
+A glob cannot see inside a file. With the directive alone, "which files are client entry points" is answerable only by reading every file, so no ADR `files:` scope, lint block or dependency-cruiser rule can address the client bundle. A filename suffix fixes that: it makes the boundary glob-addressable, the property the classifier suffixes of the reference ADRs (markdown-harness `ARCH-004 Folders and Files`) exist to provide.
 
 **Deviation from the reference ADRs.** Their classifier axis is determinism — `.pure` / `.impure` / `.types`. In a React tree the architecturally consequential axis is server versus client. This is the reference ADR's own stated risk — "the suffix set is closed on no measured evidence" — arriving in a different stack. The two axes do not collide, because `src/shared/lib/**` holds no components — but `src/shared/lib/**` is only partly classified. `locale.pure.ts`, `theme.pure.ts` and `prefs.pure.ts` follow the determinism axis; `static-routes.ts`, `prefs-storage.ts` and `utils.ts` carry no classifier, and no ADR here governs them. `utils.ts` is a name the reference `ARCH-004` Decision 4 bans outright; it arrived with the shadcn scaffold, so it is inherited, not chosen. This record classifies and renames nothing under `src/shared/lib/**`.
 
@@ -90,7 +90,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 **Negative:**
 
 1. **Rename churn:** adding or removing interactivity renames the file and every import of it.
-2. **Two new dev dependencies:** `eslint-plugin-check-file` misses the dependency admission bar's stars signal (614 at adoption); admitted on downloads, contributors and recency because core ESLint cannot match a filename. `dependency-cruiser` clears all four.
+2. **Two new dev dependencies:** `eslint-plugin-check-file` misses the dependency admission bar's stars signal (614 at adoption); admitted on downloads, contributors and recency because the linter's core rules cannot match a filename. `dependency-cruiser` clears all four.
 3. **Transitive client code is unnamed:** a module without the suffix still joins the bundle when a `.client` leaf imports it; the suffix names entry points, not bundle membership.
 
 **Risks:**
@@ -102,10 +102,10 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 **Enforcers per Discipline:**
 
-- §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
-- §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
-- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,episodes,events,explorables,pipeline,shared}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
-- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
+- §2.1: core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
+- §2.2: core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
+- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in the lint config — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,episodes,events,explorables,pipeline,shared}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §5: lint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src skills tools`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/shared/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
@@ -120,5 +120,5 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 - [Next.js — Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components) — the `'use client'` boundary, leaf placement, serializable props.
 - [React — `'use client'`](https://react.dev/reference/rsc/use-client) — the serializable prop types §4 lists.
-- [eslint-plugin-check-file](https://github.com/dukeluo/eslint-plugin-check-file) and [ESLint — `no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax).
+- [eslint-plugin-check-file](https://github.com/dukeluo/eslint-plugin-check-file) and [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax).
 - [dependency-cruiser — rules reference](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md) and [`tsPreCompilationDeps`](https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#tspre-compilation-deps).

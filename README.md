@@ -13,7 +13,7 @@ npm run dev        # http://localhost:3000
 | ------------------- | ---------------------------------------------------------- |
 | `npm run dev`       | Dev server with hot reload                                 |
 | `npm run build`     | Static export into `out/`                                  |
-| `npm run lint`      | ESLint                                                     |
+| `npm run lint`      | oxlint and dependency-cruiser                              |
 | `npm run typecheck` | Generates Next route types, then `tsc --noEmit`            |
 | `npm test`          | Vitest unit tests                                          |
 | `npm run verify`    | Every gate: archgate, lint, format, types, tests, knip, mh |

@@ -32,14 +32,16 @@ function AgentNode({ node, state, label }: { readonly node: Node; readonly state
   const [x, y] = AT[node];
   return (
     <g data-node={node} data-state={state} transform={`translate(${x - 22},${y - 14})`}>
+      {/* An opaque card under the box, so the edges never show through an active agent's translucent tone. */}
+      <rect width="44" height="28" rx="6" className="fill-card" />
       <rect width="44" height="28" rx="6" strokeWidth="1.5" className={`transition-colors ${BOX[state]}`} />
       {state === 'done' ? (
         <path d="M15 14l5 5 9-10" className="fill-none stroke-background" strokeWidth="2.5" />
       ) : (
         <text
-          transform={`translate(22 13) scale(${LABEL_SCALE})`}
+          transform={`translate(22 14) scale(${LABEL_SCALE})`}
           textAnchor="middle"
-          dominantBaseline="middle"
+          dominantBaseline="central"
           className="fill-foreground text-caption font-semibold"
         >
           {label}

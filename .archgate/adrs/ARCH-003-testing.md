@@ -38,7 +38,13 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
 2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. There is no automated browser suite; the fast suite opens no browser and needs no build. Playwright remains available for interactive inspection and visual checks.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
-4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. Every commit pays for the fast suite, so it holds only tests that cost well under a second.
+4. A test that takes seconds of real work, or reads the live repo from disk, is a `*.slow.test.ts` beside its fast sibling. The slow lane runs nightly in full, and before a push only for what the branch changed. A slow test that reads a file from disk names it as a rerun trigger, or a change to that file skips it. The fast suite also holds only tests that cost well under a second, because it runs in full at push and in CI.
+5. Verification runs at four levels, each with one job:
+   - **Agent loop** (`npm run verify:quick`): whole-repo lint, whole-repo format check, typecheck, and the tests the uncommitted changes affect (`vitest run --changed`).
+   - **Pre-commit** (`npm run verify:commit`): the commit-time checks, with the tests the change affects, never the whole suite.
+   - **Pre-push:** everything CI runs: the full fast suite (`npm run verify`) and the slow lane for what the branch changed. Plus `build` and `test:build` when the branch changed an export input since the merge-base with main (`needsBuild` in `tools/verify/needs-build.pure.ts`); a push to main always builds.
+   - **CI:** everything, unchanged. `npm run verify` keeps meaning what CI will say.
+6. `--changed` follows imports, not disk reads. A fast test that reads a file from disk rather than importing it names that file as a rerun trigger in `vitest.config.mts`, as a slow test does in `vitest.slow.config.mts`, or a change to the file skips the test at the agent loop and at commit.
 
 ### 5. Browser tests wait on the page
 
@@ -60,6 +66,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 8. **DO** move a test the nightly budget lists into `*.slow.test.ts`, or make it faster — a tour played frame by frame, a check that walks every staging folder. (Decision 4.4)
 9. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 10. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
+11. **DO** name a file a fast test reads from disk in the `forceRerunTriggers` of `vitest.config.mts`. (Decision 4.6)
 
 ### Don'ts
 
@@ -86,6 +93,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 - **Collaborator substitution requires hand-written stand-ins.** In-file test doubles are more verbose than `vi.spyOn`, trading brevity for transparency.
 - **Built-output tests run late.** A `*.build.test.ts` fails on the pull request, not at commit; browser behaviour is checked manually.
+- **Commit-time tests are partial.** Pre-commit runs only the affected tests, so a miss in the import graph or a missing rerun trigger surfaces at push, not at commit.
 - **Slow tests run later still.** A `*.slow.test.ts` fails at push, or the next night when the change it missed was not its trigger; never at commit or on the pull request.
 - **Animations carry a contract.** Every animating element a browser test waits on reports `data-motion`; a missing `settled` hangs the test until its timeout.
 
@@ -100,10 +108,11 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`. Browser-test support remains available if a suite is reintroduced.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test lanes:** the fast suite excludes `*.build.test.ts` (§4.2) and `*.slow.test.ts` (§4.4); pre-push runs the slow tests a branch affects.
-4. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
-5. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
+4. **Verification levels** (§4.5): the agent loop and pre-commit run the tests the change affects; pre-push and CI run the full fast suite. The plans live in `tools/verify/verify.pure.ts`, and their test asserts each level's steps.
+5. **Nightly CI:** runs the slow lane in full, and files every fast-suite test over its time budget as an issue (§4.4).
+6. **Review:** §5 applies if browser tests are reintroduced; there is no browser-test lint gate.
 
-**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow test reads from disk is a rerun trigger.
+**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3); §4.4 — every file a slow or fast test reads from disk is a rerun trigger in its lane's config.
 
 **Exceptions:** amend this record; never an inline suppression.
 

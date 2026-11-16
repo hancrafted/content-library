@@ -22,7 +22,16 @@ export interface ControlDef {
   readonly type: 'pills' | 'segmented' | 'switch' | 'action';
   /** The keys of the visual's labels the control reads: its accessible name and its tooltip (`UiWords` keys). */
   readonly label:
-    'workflow' | 'view' | 'cli' | 'demo' | 'reset' | 'debug' | 'progressSave' | 'progressLoad' | 'download' | 'upload';
+    | 'workflow'
+    | 'view'
+    | 'cli'
+    | 'demo'
+    | 'reset'
+    | 'debug'
+    | 'progressSave'
+    | 'progressLoad'
+    | 'download'
+    | 'upload';
   readonly tip:
     | 'workflow'
     | 'viewTip'

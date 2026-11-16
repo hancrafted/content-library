@@ -1,6 +1,6 @@
 {
   "title": "Out of scope",
-  "caption": "No choice of model or software, no tool comparison, no vibe coding.",
+  "caption": "No choice of model or software, no tool comparison, no code.",
   "panel": {
     "title": "Set aside, on purpose",
     "line": "So nobody waits for it."
@@ -12,17 +12,17 @@
     },
     "second": {
       "title": "Tool comparisons",
-      "reason": "The picture fits every tool."
+      "reason": "Every step works in ChatGPT, Copilot, Gemini or Claude."
     },
     "third": {
-      "title": "Vibe coding",
-      "reason": "No code tonight, all in plain words."
+      "title": "Programming",
+      "reason": "The AI writes the quiz page; you never read its code."
     }
   },
   "notes": {
     "talking-points": {
       "header": "So no one waits",
-      "description": "Naming what is missing tonight keeps expectations honest: which model or which software, we can take in the Q&A; no tool contest and no vibe coding, all in plain words."
+      "description": "Which model or software, we can take in the Q&A. No tool contest: every step works in the common chats. No programming: the AI writes the page."
     }
   }
 }

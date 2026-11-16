@@ -1,47 +1,60 @@
 {
   "title": "Agenda",
-  "caption": "Zwei Stunden, Zeiten ab Start: Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
+  "caption": "Vier Stunden, Zeiten ab Beginn: drei Theorie-Episoden, nach jeder ein Hands-on-Schritt, mit zwei Pausen.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
       "time": "0:00",
-      "title": "Einstieg"
+      "title": "Begrüßung und Orga"
     },
     "first": {
-      "time": "0:20",
-      "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
+      "time": "0:25",
+      "title": "Was agentische Workflows von Menschen und Organisationen verlangen"
+    },
+    "break1": {
+      "time": "0:55",
+      "title": "Pause: Artikel aussuchen"
     },
     "grill": {
-      "time": "0:35",
-      "title": "Live-Demo „Grill me“"
+      "time": "1:10",
+      "title": "Hands-on: Die KI interviewt dich"
     },
     "second": {
-      "time": "0:50",
-      "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
+      "time": "1:30",
+      "title": "Vom geteilten Verständnis zum geteilten Kontext"
     },
-    "workflow": {
-      "time": "1:15",
-      "title": "Live-Demo: ein agentischer Workflow"
+    "quiz": {
+      "time": "1:50",
+      "title": "Hands-on: Spec und Quizseite"
     },
     "third": {
-      "time": "1:30",
-      "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
+      "time": "2:10",
+      "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt"
+    },
+    "break2": {
+      "time": "2:40",
+      "title": "Pause"
+    },
+    "skill": {
+      "time": "2:55",
+      "title": "Hands-on: Mach einen Skill daraus"
     },
     "qa": {
-      "time": "1:40",
-      "title": "Fragen und Puffer"
+      "time": "3:40",
+      "title": "Abschluss, Fragen und Antworten"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theorie",
-    "demo": "Demo",
+    "handsOn": "Hands-on",
+    "break": "Pause",
     "close": "Abschluss"
   },
   "notes": {
     "talking-points": {
-      "header": "Zwei Stunden, ab 0:00 gezählt",
-      "description": "20 Minuten Einstieg, dann Episode 1 (15), die Demo „Grill me“ (15), Episode 2 (25), der agentische Workflow (15) und Episode 3 (10); die letzten 20 Minuten sind Fragen und Puffer. Die Check-ins gehören zur Zeit ihrer Episode."
+      "header": "Vier Stunden, ab 0:00 gezählt",
+      "description": "Begrüßung bis 0:25, Episode 1 bis 0:55, dann eine Pause, um einen Artikel auszusuchen. Das Interview (20), Episode 2 (20), Spec und Quizseite (20), Episode 3 (30), eine Pause, den Skill schreiben (45) und die letzten 20 Minuten für Abschluss und Fragen."
     }
   }
 }

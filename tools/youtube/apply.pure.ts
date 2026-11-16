@@ -9,7 +9,8 @@ export type DescriptionPlan =
   | { readonly action: 'none' }
   | { readonly action: 'refuse'; readonly reason: string };
 export type CommentPlan =
-  { readonly action: 'post'; readonly text: string } | { readonly action: 'none'; readonly reason: string };
+  | { readonly action: 'post'; readonly text: string }
+  | { readonly action: 'none'; readonly reason: string };
 
 export interface ApplyPlan {
   readonly description: DescriptionPlan;

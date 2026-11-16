@@ -31,25 +31,27 @@ const PREFLIGHT = script('preflight');
 const BOUNDARIES = script('boundaries', 'lint:boundaries');
 const TYPECHECK = script('typecheck');
 const TEST = script('test');
+const LINT = { name: 'lint', command: 'oxlint' };
+const FORMAT = script('format', 'format:check');
+/** Tests that the uncommitted changes affect: the changed files and everything that imports them. */
+const TEST_CHANGED: Step = { name: 'test', command: 'vitest run --changed' };
 
 /**
- * `npm run verify`: the two health checks gate the rest, which run side by side. `lint` here is ESLint alone:
+ * `npm run verify`: the two health checks gate the rest, which run side by side. `lint` here is oxlint alone (GEN-005):
  * the `lint` script also runs the boundaries check, which is its own step so the two run side by side.
  */
 export const VERIFY_PLAN: Plan = {
   label: 'verify',
   phases: [
     [PREFLIGHT, script('archgate', 'archgate:full')],
-    [
-      { name: 'lint', command: 'eslint .' },
-      BOUNDARIES,
-      script('format', 'format:check'),
-      TYPECHECK,
-      TEST,
-      script('knip'),
-      script('docs', 'check:docs'),
-    ],
+    [LINT, BOUNDARIES, FORMAT, TYPECHECK, TEST, script('knip'), script('docs', 'check:docs')],
   ],
+};
+
+/** `npm run verify:quick`, the agent loop: whole-repo lint and format, typecheck, and only the tests the uncommitted changes affect. */
+export const QUICK_PLAN: Plan = {
+  label: 'verify:quick',
+  phases: [[LINT, FORMAT, TYPECHECK, TEST_CHANGED]],
 };
 
 /** `npm run verify:commit`: lint-staged rewrites staged files, so it runs alone, after the health checks and before the checks that read them. */
@@ -58,7 +60,7 @@ export const COMMIT_PLAN: Plan = {
   phases: [
     [PREFLIGHT, script('events', 'check:events')],
     [script('lint-staged')],
-    [{ name: 'archgate', command: 'archgate check' }, BOUNDARIES, TYPECHECK, TEST],
+    [{ name: 'archgate', command: 'archgate check' }, BOUNDARIES, TYPECHECK, TEST_CHANGED],
   ],
 };
 

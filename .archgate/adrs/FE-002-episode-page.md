@@ -4,9 +4,9 @@ id: FE-002
 title: 'Episode Page'
 domain: frontend
 rules: false
-# prettier-ignore
+# oxfmt-ignore
 files: ['src/episodes/**', 'src/shared/page-chrome/table-of-contents/**', 'src/explorables/**', 'src/app/**/episode/**', 'src/shared/lib/speaking-time.pure*']
-# prettier-ignore
+# oxfmt-ignore
 paths: ['src/episodes/**', 'src/shared/page-chrome/table-of-contents/**', 'src/explorables/**', 'src/app/**/episode/**', 'src/shared/lib/speaking-time.pure*']
 description: 'How an Episode page is built: the Slide is the unit, one folder carrying its own text, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
 ---

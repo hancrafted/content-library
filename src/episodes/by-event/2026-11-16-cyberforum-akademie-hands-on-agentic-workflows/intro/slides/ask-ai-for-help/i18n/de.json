@@ -1,0 +1,46 @@
+{
+  "title": "Frag die KI um Hilfe",
+  "caption": "Du hängst fest? Frag zuerst die KI, dann mich: Das geht schneller, und der Griff funktioniert mit jedem Tool.",
+  "statement": "Wenn du feststeckst, füg ein, was du siehst, sag, wo du bist, und bitte um einen nächsten Schritt.",
+  "flow": {
+    "stuck": {
+      "label": "Feststecken",
+      "text": "Ein Fehler, eine seltsame Antwort, ein Knopf, den du nicht findest."
+    },
+    "help": {
+      "label": "Hilfe",
+      "text": "Füg ein, was du siehst, ins Feld unter Hilfe auf jeder Hands-on-Folie."
+    },
+    "copy": {
+      "label": "Prompt kopieren",
+      "text": "Er ergänzt, wo du bist, und bittet um einfache Worte."
+    },
+    "next": {
+      "label": "Ein nächster Schritt",
+      "text": "Füg ihn in einen KI-Chat ein, probier, was er sagt."
+    }
+  },
+  "tryIt": "Probier es jetzt: Hilfe steht oben rechts auf dieser Folie.",
+  "help": {
+    "button": "Hilfe",
+    "label": "Wo du feststeckst",
+    "placeholder": "Füg ein, was die KI geantwortet hat, oder beschreib, wo du feststeckst…",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füg diesen Prompt in eine KI ein, die du nutzen darfst.",
+    "prompt": "Ich bin in einem Hands-on-Workshop: Ich mache mit einem KI-Chat aus einem Artikel ein Quiz und komme nicht weiter.\n\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin nicht technisch. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt.",
+    "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
+    "chats": {
+      "openAIChats": "KI-Chat öffnen",
+      "openAIChatTip": "Öffne einen leeren {chat}-Chat in einem neuen Tab und füg dann den Prompt ein",
+      "newTab": "öffnet in einem neuen Tab"
+    },
+    "step": "Lernen, die KI um Hilfe zu bitten, bevor das Hands-on beginnt"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Den Griff verkaufen, nicht den Knopf",
+      "description": "Die KI erklären zu lassen, wo man feststeckt, ist ein Griff für jedes Tool, nicht nur für heute. Das Hilfe-Feld schreibt nur den Prompt: wo du bist, was du siehst, einfache Worte, ein nächster Schritt. Alle öffnen Hilfe jetzt einmal, damit sie es später finden."
+    }
+  }
+}
