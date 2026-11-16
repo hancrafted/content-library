@@ -13,9 +13,16 @@ import type { ModelTier } from './workflow-schema.types';
  * Tooltip; a press opens it and keeps it open, where Radix alone closes it again on click and never opens it on a tap.
  */
 
-export function ModelNote({ words, tier }: { readonly words: ModelWords; readonly tier: ModelTier }) {
+interface ModelNoteProps {
+  readonly words: ModelWords;
+  readonly tier: ModelTier;
+  /** The note of a review step: its tooltip says why Low fits this check only. */
+  readonly review?: boolean;
+}
+
+export function ModelNote({ words, tier, review }: ModelNoteProps) {
   const [open, setOpen] = useState(false);
-  const { label, tip } = modelNote(words, tier);
+  const { label, tip } = modelNote(words, tier, review);
   return (
     <span data-model-note={tier} className="inline-flex items-center gap-1 text-caption text-muted-foreground">
       <span>{label}</span>

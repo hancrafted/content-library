@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { modelNote, type ModelWords } from './model-tier.pure';
+import { modelNote, noteFor, type ModelWords } from './model-tier.pure';
 
 const words: ModelWords = {
   model: 'Model: {tier}',
   modelInfo: 'What this model tier means',
+  modelReviewTip: 'review tip',
   modelHigh: 'High · deep thinking',
   modelHighTip: 'high tip',
   modelMedium: 'Medium · everyday',
@@ -25,9 +26,50 @@ describe('success cases', () => {
     // ASSERT
     expect(note).toEqual(expected);
   });
+
+  it('words a review as Low with the tooltip of its own, whatever the tier asked for', () => {
+    // ARRANGE
+    const expected = { label: 'Model: Low · quick', tip: 'review tip' };
+    // ACT
+    const note = modelNote(words, 'low', true);
+    // ASSERT
+    expect(note).toEqual(expected);
+  });
+
+  it.each([
+    ['review#0', 'high', { tier: 'low', review: true }],
+    ['review#2', 'low', { tier: 'low', review: true }],
+    ['do#0', 'high', { tier: 'high', review: false }],
+    ['then#0', 'medium', { tier: 'medium', review: false }],
+  ] as const)('shows %s (job tier %s) as %j', (panel, recommended, expected) => {
+    // ARRANGE
+    const job = recommended;
+    // ACT
+    const note = noteFor(panel, job);
+    // ASSERT
+    expect(note).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('shows no note on a review of a job without a tier', () => {
+    // ARRANGE
+    const panel = 'review#0';
+    // ACT
+    const note = noteFor(panel, undefined);
+    // ASSERT
+    expect(note).toBeUndefined();
+  });
+
+  it('shows no note on a do prompt of a job without a tier', () => {
+    // ARRANGE
+    const panel = 'do#0';
+    // ACT
+    const note = noteFor(panel, undefined);
+    // ASSERT
+    expect(note).toBeUndefined();
+  });
+
   it('has no words for a tier outside high, medium and low, which the loader never lets through', () => {
     // ARRANGE
     const unknown = 'ultra' as never;

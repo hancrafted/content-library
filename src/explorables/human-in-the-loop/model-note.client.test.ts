@@ -9,6 +9,7 @@ import type { ModelTier } from './workflow-schema.types';
 const words: ModelWords = {
   model: 'Model: {tier}',
   modelInfo: 'What this model tier means',
+  modelReviewTip: 'Review tip.',
   modelHigh: 'High · deep thinking',
   modelHighTip: 'Reasoning.',
   modelMedium: 'Medium · everyday',
@@ -16,7 +17,8 @@ const words: ModelWords = {
   modelLow: 'Low · quick',
   modelLowTip: 'Exploring.',
 };
-const render = (tier: ModelTier) => load(renderToStaticMarkup(createElement(ModelNote, { words, tier })));
+const render = (tier: ModelTier, review = false) =>
+  load(renderToStaticMarkup(createElement(ModelNote, { words, tier, review })));
 
 describe('success cases', () => {
   it('shows the tier beside a `?` button that names it', () => {
@@ -30,6 +32,16 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toBe(label);
     expect(ariaLabel).toBe(name);
+  });
+
+  it('names the Low tier on a review note', () => {
+    // ARRANGE
+    const label = 'Model: Low · quick';
+    const $ = render('low', true);
+    // ACT
+    const text = $('[data-model-note]').text();
+    // ASSERT
+    expect(text).toBe(label);
   });
 });
 
