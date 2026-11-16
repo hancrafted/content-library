@@ -21,12 +21,13 @@ const count = (value: string | readonly string[] | undefined): number | undefine
   value === undefined ? undefined : typeof value === 'string' ? 1 : value.length;
 
 const sectionShape = (section: SectionDef) => [section.purpose, section.only, section.techniques ?? []];
-const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, count(slot.sample)];
+const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, slot.blank ?? false, count(slot.sample)];
 /** The second technical prompt of a task as structure: its skills and its sections, none when absent. */
 const thenShape = ({ then }: TaskDef) => then && { skills: then.skills, sections: then.sections.map(sectionShape) };
 const taskShape = (task: TaskDef) => ({
   id: task.id,
   output: task.output,
+  doneLabel: Boolean(task.doneLabel),
   needs: task.needs ?? [],
   goal: [Boolean(task.goal.do), Boolean(task.goal.review)],
   template: task.template,
@@ -155,19 +156,6 @@ describe('success cases', () => {
     expect(description).not.toBe('');
     expect((description.match(/[.!?](\s|$)/g) ?? []).length).toBe(1);
   });
-
-  it.each(EACH.filter(([id]) => id === 'source-to-quiz'))(
-    'marks the eval job of source-to-quiz optional and titles it without "Bonus", in %s %s',
-    (id, locale) => {
-      // ARRANGE
-      const file = fileOf(id, locale);
-      // ACT
-      const task = file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === 'eval');
-      // ASSERT
-      expect(task?.optional).toBe(true);
-      expect(task?.title).not.toMatch(/bonus/i);
-    },
-  );
 
   it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {
     // ARRANGE

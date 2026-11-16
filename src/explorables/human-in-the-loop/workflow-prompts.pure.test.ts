@@ -10,7 +10,7 @@ const task = (id: string): TaskDef =>
   file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
   joinPrompt({ sections: prompt.sections ?? [], slots: prompt.slots ?? [] }, {});
-const examples = (id: string): readonly string[] => [task(id).details.example].flat();
+const examples = (id: string): readonly string[] => [task(id).details.example ?? ''].flat();
 /** The repeated job with a review of each round, so the round's own review field can be tested; the fixture reviews only `ask`. */
 const reviewedLook = (): TaskDef => {
   const look = task('look');

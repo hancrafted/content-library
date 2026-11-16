@@ -212,7 +212,7 @@ describe('failure cases', () => {
           ...sections(each.do.simple),
           ...sections(each.do.technical),
           ...(each.review?.checks ?? []),
-          ...[each.details.example].flat(),
+          ...[each.details.example ?? []].flat(),
           ...each.details.goodLooksLike,
         ]),
       ];

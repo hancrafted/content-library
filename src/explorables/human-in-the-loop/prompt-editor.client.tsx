@@ -1,13 +1,13 @@
 'use client';
 
 import { OUTLINED_ICON } from '@/shared/components/core-components/icon-button/icon-button.client';
-import { CopyButton } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { cn } from '@/shared/lib/utils';
 import { Pencil } from 'lucide-react';
 import { useState } from 'react';
+import { BlockedCopy } from './blocked-copy.client';
 import type { UiWords } from './human-in-the-loop.types';
 
 /*
@@ -90,15 +90,17 @@ interface CopyPromptProps {
   /** An edit exists: Copy prompt shows a dot, and a tooltip saying it copies the edited version. */
   readonly edited: boolean;
   readonly lead: boolean;
+  /** A blank field of the step is still empty: Copy prompt is disabled. */
+  readonly blocked?: boolean;
   readonly onCopy: () => Promise<boolean>;
 }
 
 /** Copy prompt of a step, marked while it copies the viewer's edit. */
-export function CopyPrompt({ words, edited, lead, onCopy }: CopyPromptProps) {
+export function CopyPrompt({ words, edited, lead, blocked = false, onCopy }: CopyPromptProps) {
   const button = (
-    <CopyButton label={words.copyPrompt} done={words.copied} lead={lead} edited={edited} onCopy={onCopy} />
+    <BlockedCopy words={words} label={words.copyPrompt} blocked={blocked} lead={lead} edited={edited} onCopy={onCopy} />
   );
-  if (!edited) return button;
+  if (!edited || blocked) return button;
   return (
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>

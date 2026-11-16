@@ -5,6 +5,10 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
  * `x_1` … `x_N` (N the demo rounds), and `x` itself names them all (a `multiple` slot). Every name points at the producing task.
  */
 
+/** The template a task's prompts and reviewer fill `{{template}}` from: empty for a checkbox job, which names none. */
+export const templateOf = (file: WorkflowFile, task: TaskDef): string =>
+  task.template === undefined ? '' : (file.templates[task.template] ?? '');
+
 export interface Producer {
   readonly task: TaskDef;
   readonly stage: StageDef;

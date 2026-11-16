@@ -60,6 +60,8 @@ interface ActionsProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly panel: string;
+  /** A blank field of the step this prompt belongs to is still empty: its copies are disabled. */
+  readonly blocked?: boolean;
 }
 
 /** The job's model note on its do and `then` prompts; its review, a fresh chat, shows none. */
@@ -70,11 +72,17 @@ function TaskModel({ panel, task, words }: Pick<ActionsProps, 'panel' | 'task'> 
 }
 
 /** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
-function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
+function ActionRow({ step, task, kit, slots, panel, blocked, edit, editing }: RowProps) {
   const { words, debug } = kit;
   const plain = promptText(partsOf(step), slots.values, roundedEdit(edit, step));
   const footer = (prompt: 'copy' | 'explain') =>
     debug ? debugFooter(debug, { prompt, step: step.id, chat: step.chat }) : null;
+  const copy = async () => {
+    const ok = await kit.onCopy(debuggedPrompt(words, plain, footer('copy')));
+    if (ok) kit.lead?.onCopied(panel);
+    return ok;
+  };
+  const explain = () => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')));
   return (
     <div className="flex flex-wrap items-center gap-2">
       <div className={BUTTON_GROUP} data-prompt-buttons="">
@@ -82,21 +90,15 @@ function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
           words={words}
           edited={edit !== undefined}
           lead={leadOf(kit, panel) === 'copy'}
-          onCopy={async () => {
-            const ok = await kit.onCopy(debuggedPrompt(words, plain, footer('copy')));
-            if (ok) kit.lead?.onCopied(panel);
-            return ok;
-          }}
+          blocked={blocked}
+          onCopy={copy}
         />
         <EditToggle words={words} open={editing.on} onToggle={editing.toggle} />
       </div>
       <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} words={words} />
       <TaskModel panel={panel} task={task} words={words} />
       <span className="ml-auto" />
-      <ExplainButton
-        kit={kit}
-        onCopy={() => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')))}
-      />
+      <ExplainButton kit={kit} blocked={blocked} onCopy={explain} />
     </div>
   );
 }
@@ -110,11 +112,12 @@ interface RowProps extends ActionsProps {
 function Actions(props: ActionsProps) {
   const { step, task, kit } = props;
   const editing = useOpen();
+  const blocked = props.blocked ?? needsInput(entriesOfStep(step, task, kit), props.slots.values);
   const at = { key: editKey(kit.edits.level, task.id, step.id), yaml: rawPrompt(partsOf(step.template ?? step)) };
   const { edit, text, onText, onReset } = editOf(kit.edits, at);
   return (
     <>
-      <ActionRow {...props} edit={edit} editing={editing} />
+      <ActionRow {...props} blocked={blocked} edit={edit} editing={editing} />
       {editing.on && (
         <PromptEditor
           words={kit.words}
@@ -133,12 +136,14 @@ interface ResultProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly final: boolean;
+  readonly doneLabel?: string;
   readonly lead: boolean;
 }
 
-function Result({ name, kit, slots, final, lead }: ResultProps) {
+function Result({ name, kit, slots, final, doneLabel, lead }: ResultProps) {
   const { words } = kit;
-  if (final) return <CheckedBox name={name} label={words.markDone} slots={slots} mark="done" lead={lead} />;
+  if (final)
+    return <CheckedBox name={name} label={doneLabel ?? words.markDone} slots={slots} mark="done" lead={lead} />;
   return (
     <ContextField
       field={name}
@@ -183,14 +188,14 @@ function ContextStep({ step, task, kit, slots, first }: PanelProps) {
 }
 
 /** The second prompt of a job that calls a second skill, copied in the same session, so under the same model tier. */
-function ThenStep({ then, panel, ...rest }: ActionsProps & { readonly then: Step }) {
+function ThenStep({ then, panel, blocked, ...rest }: ActionsProps & { readonly then: Step }) {
   const { kit } = rest;
   return (
     <>
       <p data-then="" className="text-caption text-muted-foreground">
         {kit.words.thenCopy}
       </p>
-      <Actions {...rest} step={then} panel={panel} />
+      <Actions {...rest} step={then} panel={panel} blocked={blocked} />
     </>
   );
 }
@@ -201,17 +206,19 @@ function DoSteps(props: PanelProps) {
   const hasContext = entriesOfStep(step, task, kit).length > 0;
   const panel = panelKey('do', step);
   const lead = leadOf(kit, panel);
+  const blocked = needsInput(entriesOfStep(step, task, kit), slots.values);
   return (
     <>
       {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
-        <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} />
-        {step.then && <ThenStep {...props} then={step.then} panel={panelKey('then', step)} />}
+        <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} blocked={blocked} />
+        {step.then && <ThenStep {...props} then={step.then} panel={panelKey('then', step)} blocked={blocked} />}
         <Result
           name={resultKey(step, task)}
           kit={kit}
           slots={slots}
           final={task.output === undefined}
+          doneLabel={task.doneLabel}
           lead={lead === 'answer'}
         />
       </StepSection>
