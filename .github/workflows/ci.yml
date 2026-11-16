@@ -4,8 +4,8 @@ name: CI
 # pushed branch, so a change that would break the Cloudflare Pages deploy fails before it merges, and a branch pushed
 # without a PR is still checked. Three independent jobs run in parallel: each pays for its own `npm ci`, and the run
 # takes as long as the slowest lane instead of the sum of all steps.
-# A push to a branch with an open PR runs twice: once on the pushed commit (push) and once on the PR's merge commit
-# (pull_request). Their refs differ, so the concurrency group below cancels neither.
+# A push to a branch with an open PR fires both push and pull_request; the concurrency group below keys on the branch
+# name for both, so the later run cancels the earlier one and one run per branch survives.
 on:
   pull_request:
   push:
@@ -19,9 +19,10 @@ env:
   # The production origin (FE-008). One of the places to change on a domain move: docs/features/hosting.md.
   SITE_URL: https://hancrafted.net
 
-# A newer run on the same ref cancels the older one.
+# A newer run on the same branch cancels the older one. `head_ref` is the PR's branch on pull_request and empty on
+# push, where `ref_name` is the branch.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
