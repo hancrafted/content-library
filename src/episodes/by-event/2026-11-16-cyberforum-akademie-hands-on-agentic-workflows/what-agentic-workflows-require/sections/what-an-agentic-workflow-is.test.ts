@@ -107,7 +107,7 @@ describe('success cases', () => {
       {
         title: 'Model, tools, loop',
         script:
-          'An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.',
+          'An agent is a language model that uses tools in a loop until its goal is met. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done.',
       },
       {
         title: 'Runs its own loop',

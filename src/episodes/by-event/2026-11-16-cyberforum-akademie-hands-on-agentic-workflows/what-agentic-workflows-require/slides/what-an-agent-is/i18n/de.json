@@ -38,7 +38,7 @@
       "model-tools-loop": {
         "title": "Modell, Werkzeuge, Schleife",
         "keywords": "",
-        "script": "Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht. Er ist keine einzelne Chat-Antwort, die Du liest und dann weitergehst, er ist eine Schleife aus Handeln, auf das Ergebnis schauen und wieder Handeln, bis er glaubt, fertig zu sein."
+        "script": "Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt, bis sein Ziel erreicht ist. Er ist keine einzelne Chat-Antwort, die Du liest und dann weitergehst, er ist eine Schleife aus Handeln, auf das Ergebnis schauen und wieder Handeln, bis er glaubt, fertig zu sein."
       },
       "steers-its-own-steps": {
         "title": "Läuft in seiner eigenen Schleife",
