@@ -28,6 +28,7 @@
     "preflight": "node skills/worktree/scripts/preflight.ts",
     "archgate:full": "archgate check --base $(git rev-list --max-parents=0 HEAD)",
     "verify": "node tools/verify/verify.ts",
+    "verify:quick": "node tools/verify/verify.ts quick",
     "verify:commit": "node tools/verify/verify.ts commit",
     "lint-staged": "lint-staged",
     "check:docs": "mh check && npm run check:skills",
