@@ -45,6 +45,7 @@ const taskShape = (task: TaskDef) => ({
   good: task.details.goodLooksLike.length,
   techniques: task.details.techniques ?? [],
   optional: task.optional ?? false,
+  recommendedModel: task.recommendedModel,
 });
 
 /**

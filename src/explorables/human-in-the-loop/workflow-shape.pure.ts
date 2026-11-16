@@ -1,5 +1,5 @@
 import { CHAT_MARK_NAMES } from '../../shared/components/core-components/chat-icons/chat-marks.pure.ts';
-import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
+import { MODEL_TIERS, MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
@@ -57,9 +57,22 @@ const task = obj(
     limits: { t: 'rec', of: limit },
     openAIButtons: list(chatButton, 1),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
+    recommendedModel: enumOf(MODEL_TIERS),
     optional: bool,
   },
-  ['summary', 'needs', 'output', 'skills', 'then', 'review', 'instructions', 'limits', 'openAIButtons', 'optional'],
+  [
+    'summary',
+    'needs',
+    'output',
+    'skills',
+    'then',
+    'review',
+    'instructions',
+    'limits',
+    'openAIButtons',
+    'recommendedModel',
+    'optional',
+  ],
 );
 const stage = obj(
   {

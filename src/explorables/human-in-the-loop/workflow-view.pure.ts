@@ -1,6 +1,6 @@
 import { producersFor } from './workflow-outputs.pure.ts';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure.ts';
-import type { ChatButtonDef, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
+import type { ChatButtonDef, ModelTier, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Stage, Workflow } from './workflow.types';
 
@@ -37,6 +37,8 @@ export interface TaskModalView {
   readonly techniques: readonly TechniqueDef[];
   /** The AI chats the job's prompts open in; absent: the visual's default buttons. */
   readonly openAIButtons?: readonly ChatButtonDef[];
+  /** The model tier the job is best run with; absent: the step shows no model note. */
+  readonly recommendedModel?: ModelTier;
 }
 
 /** One job inside a stage's modal. */
@@ -101,6 +103,7 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
       workflow.file.techniques.filter((each) => each.id === id),
     ),
     ...(task.openAIButtons && { openAIButtons: task.openAIButtons }),
+    ...(task.recommendedModel && { recommendedModel: task.recommendedModel }),
   };
 }
 

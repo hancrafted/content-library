@@ -119,6 +119,17 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual([true, false, true, false]);
   });
+
+  it('hands the step the recommended model tier of a job, and none for a job without one', () => {
+    // ARRANGE
+    const tiered = structuredClone(loaded.file);
+    Object.assign(tiered.stages[0]!.jobs[0]!, { recommendedModel: 'medium' });
+    // ACT
+    const view = workflowView(workflowOf(tiered), SIMPLE);
+    // ASSERT
+    expect(view.stages[0]?.jobs[0]?.task.recommendedModel).toBe('medium');
+    expect(view.stages[1]?.jobs[0]?.task.recommendedModel).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {

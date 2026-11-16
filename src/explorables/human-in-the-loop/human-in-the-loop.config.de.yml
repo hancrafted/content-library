@@ -94,6 +94,14 @@ ui:
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   newTab: öffnet in neuem Tab
+  model: 'Modell: {tier}'
+  modelInfo: 'Was diese Modellstufe bedeutet'
+  modelHigh: 'Hoch · gründlich denken'
+  modelHighTip: 'Nachdenken: Grillen, Planen, Prüfen. Coding-Agent: Opus, Argon, Sol. Chat: ChatGPT Thinking, Gemini Pro.'
+  modelMedium: 'Mittel · Alltag'
+  modelMediumTip: 'Die Arbeit erledigen: Schreiben, Code, einen Plan ausführen. Coding-Agent: Sonnet, Terra, Hydrogen. Chat: das Standardmodell.'
+  modelLow: 'Niedrig · schnell'
+  modelLowTip: 'Erkunden und zusammenfassen. Coding-Agent: Haiku, Luna. Chat: ein schnelles oder Instant-Modell.'
   openAIChats: Einen KI-Chat öffnen
   openAIChatTip: 'Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein'
   openAIButtons:
