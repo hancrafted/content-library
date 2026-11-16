@@ -1,6 +1,6 @@
 {
   "title": "Was ein agentischer Workflow ist",
-  "caption": "Ein strukturierter Prozess, in dem KI-Agenten Entscheidungen treffen, Aktionen ausführen und Aufgaben koordinieren, mit minimalem menschlichem Eingreifen. <b>Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.</b>",
+  "caption": "Ein strukturierter Prozess, in dem KI-Agenten Entscheidungen treffen, Aktionen ausführen und Aufgaben koordinieren, mit minimalem menschlichem Eingreifen. <b>Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Checkpoints.</b>",
   "design": {
     "label": "Das gestaltest Du",
     "hint": "die Stufen, ihre Reihenfolge, was jede übergibt, wo Du freigibst"
@@ -16,7 +16,7 @@
   },
   "steers": {
     "label": "Hier läuft der Agent in der Schleife",
-    "task": "Du legst seine Aufgabe fest: {task} Wie er dorthin kommt, entscheidet er selbst.",
+    "task": "Du legst seine Aufgabe fest: {task} Er läuft in einer Schleife durch seine Schritte, bis er meint, fertig zu sein.",
     "steps": {
       "search": "Im Web suchen",
       "compare": "3 Locations vergleichen",
@@ -76,7 +76,7 @@
       "two-levels": {
         "title": "Zwei Ebenen",
         "keywords": "",
-        "script": "Lies es als zwei Ebenen. Auf der ersten Ebene gestaltest Du den Weg, also die Aufgaben und was jede Aufgabe an die nächste übergibt. Auf der zweiten Ebene läuft der Agent in einer Schleife durch seine eigene Aufgabe, und das ist der Teil, den Du abgibst. Zusammen: Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten. Steuern tust Du, oder später ein Harness."
+        "script": "Lies es als zwei Ebenen. Auf der ersten Ebene gestaltest Du den Weg, also die Aufgaben und was jede Aufgabe an die nächste übergibt. Auf der zweiten Ebene läuft der Agent in einer Schleife durch seine eigene Aufgabe, und das ist der Teil, den Du abgibst. Zusammen: Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Checkpoints. Steuern tust Du, oder später ein Harness."
       },
       "minimal-how-minimal": {
         "title": "Minimal, wie minimal",

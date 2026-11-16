@@ -25,7 +25,7 @@
       "checkedBy": "Quellen öffnen sich und passen"
     }
   },
-  "twoLevels": "Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.",
+  "twoLevels": "Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Checkpoints",
   "steps": {
     "process": "<b>Nimm einen wiederkehrenden Prozess.</b> Markiere jeden Schritt: Agent oder Person, in, an oder außerhalb der Schleife.",
     "contract": "<b>Schreib zuerst den Vertrag.</b> Was die Aufgabe erhält, was sie liefert, wie jemand anderes es prüft.",
@@ -44,7 +44,7 @@
       "one-whole-workflow": {
         "title": "Ein ganzer Workflow",
         "keywords": "",
-        "script": "Setzen wir alles zu einem ganzen agentischen Workflow zusammen. Er nimmt jeden Wissensartikel, ein PDF oder eine URL, und macht daraus ein Quiz. Den Weg der Schritte gestaltest Du, jeder Schritt ist eine Aufgabe, durch die der Agent in einer Schleife läuft, und Du steuerst an den Kontrollpunkten, Du oder später ein Harness."
+        "script": "Setzen wir alles zu einem ganzen agentischen Workflow zusammen. Er nimmt jeden Wissensartikel, ein PDF oder eine URL, und macht daraus ein Quiz. Den Weg der Schritte gestaltest Du, jeder Schritt ist eine Aufgabe, durch die der Agent in einer Schleife läuft, und Du steuerst an den Checkpoints, Du oder später ein Harness."
       },
       "in-on-or-out-per-step": {
         "title": "In, an oder außerhalb, pro Schritt",

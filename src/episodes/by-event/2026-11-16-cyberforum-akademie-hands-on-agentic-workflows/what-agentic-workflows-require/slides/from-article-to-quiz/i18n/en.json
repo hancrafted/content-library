@@ -25,7 +25,7 @@
       "checkedBy": "sources open and match"
     }
   },
-  "twoLevels": "You design the path; the agent loops through its task; you steer at the checkpoints.",
+  "twoLevels": "You design the path; the agent loops through its task; you steer at the checkpoints",
   "steps": {
     "process": "<b>Pick one recurring process.</b> Mark each step: agent or person, in, on or out of the loop.",
     "contract": "<b>Write the contract first.</b> What the task receives, what it delivers, how someone else checks it.",

@@ -217,7 +217,7 @@ describe('success cases', () => {
       ],
       steers: ['The agent loops here'],
       task: [
-        'You set its task: research each ticket in its own fresh chat, with web search and a source for every number. How it gets there is its own call.',
+        'You set its task: research each ticket in its own fresh chat, with web search and a source for every number. It loops through its steps until it thinks it is done.',
       ],
       steps: ['Search the web', 'Compare 3 venues', 'Note a source per number'],
       gates: ['You sign off', 'You sign off'],
@@ -277,7 +277,7 @@ describe('success cases', () => {
       agentCaption: 'An agent is a language model that uses tools in a loop until its goal is met.',
       workflowEn: 'You design the path; the agent loops through its task; you steer at the checkpoints.',
       workflowDe:
-        'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.',
+        'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Checkpoints.',
       labelDe: 'Hier läuft der Agent in der Schleife',
     };
     // ACT
@@ -325,7 +325,8 @@ describe('failure cases', () => {
 
   it('never says the agent steers, on either Slide or in either language', () => {
     // ARRANGE
-    const pattern = /agent steers|steers inside|steers its own|Das steuert der Agent|Agent steuert|Steuert seine/i;
+    const pattern =
+      /agent steers|steers inside|steers its own|Das steuert der Agent|Agent steuert|Steuert seine|Agent steuert innerhalb|steuert seine|entscheidet er selbst|entscheidet der Agent/i;
     // ACT
     const words = [AGENT, WORKFLOW].map((slug) => JSON.stringify(slideOf(slug).messages)).join(' ');
     // ASSERT
