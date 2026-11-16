@@ -1,5 +1,6 @@
+import os from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { idleFraction, workersFor, type CpuTimes } from './vitest-workers.mts';
+import { currentWorkers, idleFraction, workersFor, type CpuTimes } from './vitest-workers.mts';
 
 const cpu = (idle: number, busy: number): CpuTimes => ({ idle, busy });
 
@@ -33,5 +34,18 @@ describe('idleFraction', () => {
 
   it('counts a machine with no elapsed ticks as fully idle', () => {
     expect(idleFraction([cpu(5, 5)], [cpu(5, 5)])).toBe(1);
+  });
+});
+
+describe('currentWorkers', () => {
+  it('takes every core but one on a CI runner, which no other run shares', async () => {
+    // ARRANGE
+    const cores = os.cpus().length;
+
+    // ACT
+    const workers = await currentWorkers({ CI: 'true' });
+
+    // ASSERT
+    expect(workers).toBe(Math.max(cores - 1, 1));
   });
 });
