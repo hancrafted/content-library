@@ -1,3 +1,4 @@
+import { DoneBy } from '@/episodes/components/slide-shared/seam-sum/marks';
 import { cn } from '@/shared/lib/utils';
 
 export interface Freelancer {
@@ -19,22 +20,6 @@ interface ManagerStackProps {
   readonly rule: string;
   readonly goal: { readonly label: string; readonly text: string };
   readonly manager: { readonly label: string; readonly question: string };
-}
-
-/** The person badge: a freelancer is a person. */
-function PersonBadge({ label }: { label: string }) {
-  return (
-    <span
-      role="img"
-      aria-label={label}
-      className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-human bg-card text-human"
-    >
-      <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
-        <circle cx="8" cy="5" r="3" className="fill-current" />
-        <path d="M2.5 15c0-3.3 2.4-5.5 5.5-5.5s5.5 2.2 5.5 5.5z" className="fill-current" />
-      </svg>
-    </span>
-  );
 }
 
 /** The five PRICE letters of one freelancer, named for assistive technology. */
@@ -89,7 +74,7 @@ function FreelancerCard(props: {
         >
           {freelancer.label}
         </span>
-        <PersonBadge label={doneBy} />
+        <DoneBy who="person" label={doneBy} />
       </div>
       <PriceChips price={price} />
     </li>
