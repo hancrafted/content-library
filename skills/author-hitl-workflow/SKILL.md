@@ -44,7 +44,7 @@ Walk back from the target:
 - A fan-out stage (`foreach`) researches one item per round, in a fresh chat; each result is one card in the target.
 - The opening interview writes the spec and names the fan-out items as H3s, one line of body under each.
 
-For each job, decide what the chat level runs, what the coding-agent level runs, and which Matt Pocock skill (if any) the coding agent invokes. Name that skill in the job's `skills` field, never as a `/name` in the prompt text; a job that needs a second skill gets a `then` prompt.
+For each job, decide what the chat level runs, what the coding-agent level runs, which Matt Pocock skill (if any) the coding agent invokes, and which model tier to run it on (`recommendedModel`: `high` to grill, plan or review; `medium` to write, code or execute a plan; `low` to explore or summarise). Name that skill in the job's `skills` field, never as a `/name` in the prompt text; a job that needs a second skill gets a `then` prompt.
 
 Name each job by its kind (an interview, research, compare, decide, artifact or review job); the kind decides which [prompt checks](references/prompt-checks.md) bear hardest on it. Reviews sit at the gates only.
 

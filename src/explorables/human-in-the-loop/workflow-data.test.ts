@@ -35,6 +35,19 @@ describe('success cases', () => {
     // ASSERT
     expect(drift).toEqual(keyPaths(en));
   });
+
+  it('sets a recommended model on every job of source-to-quiz, the same in both languages', () => {
+    // ARRANGE
+    const tiers = (locale: 'en' | 'de') =>
+      workflowFor('source-to-quiz', locale).stages.flatMap((stage) =>
+        stage.jobs.map((job) => job.task.recommendedModel),
+      );
+    // ACT
+    const en = tiers('en');
+    // ASSERT
+    expect(en).not.toContain(undefined);
+    expect(tiers('de')).toEqual(en);
+  });
 });
 
 describe('failure cases', () => {

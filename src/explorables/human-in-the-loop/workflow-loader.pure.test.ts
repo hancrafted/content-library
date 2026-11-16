@@ -161,6 +161,17 @@ describe('success cases', () => {
     expect(read).toEqual(buttons);
   });
 
+  it('loads the recommended model tier of a job, and a job without one', () => {
+    // ARRANGE
+    const change = (file: File) => void Object.assign(research(file), { recommendedModel: 'high' });
+    // ACT
+    const tiered = load(change);
+    const plain = load(() => undefined);
+    // ASSERT
+    expect('file' in tiered && tiered.file.stages[1]?.jobs[0]?.recommendedModel).toBe('high');
+    expect('file' in plain && plain.file.stages[1]?.jobs[0]?.recommendedModel).toBeUndefined();
+  });
+
   it('loads a job that hands on an output without a review, so only the gates need a check', () => {
     // ARRANGE
     const change = (file: File) => void delete (file.stages[0]!.jobs[0] as { review?: unknown }).review;
@@ -544,6 +555,15 @@ describe('failure cases', () => {
     expect(link).toContain(`${where}[0].url "http://example.com/" must start with https://.`);
     expect(icon).toContain(`${where}[0].icon is "sparkles", which is not one of chatgpt, gemini.`);
     expect(empty).toContain(`${where} needs at least 1 entries.`);
+  });
+
+  it('refuses a recommended model that is not high, medium or low', () => {
+    // ARRANGE
+    const change = (file: File) => void Object.assign(research(file), { recommendedModel: 'ultra' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].jobs[0].recommendedModel is "ultra", which is not one of high, medium, low.');
   });
 
   it('reports a description that is not a text', () => {

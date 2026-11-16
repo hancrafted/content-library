@@ -24,6 +24,10 @@ export type Purpose = (typeof PURPOSES)[number];
 export const TIERS = ['basic', 'advanced'] as const;
 export type Tier = (typeof TIERS)[number];
 
+/** The model a job is best run with: reasoning work, doing the work, or exploring. The words of each tier live in the visual's config, once. */
+export const MODEL_TIERS = ['high', 'medium', 'low'] as const;
+export type ModelTier = (typeof MODEL_TIERS)[number];
+
 /**
  * One prompt technique of the catalogue. The catalogue is data, written once at the top of a Workflow file: adding a
  * technique is a new entry, never a schema change. Sections and tasks name techniques by `id`.
@@ -159,6 +163,8 @@ export interface TaskDef {
   /** The AI chats this job's prompts open in, overriding the visual's default buttons: a page job names Gemini alone. */
   readonly openAIButtons?: readonly ChatButtonDef[];
   readonly details: DetailsDef;
+  /** The model tier the job (its `then` step and review included, one session) is best run with; absent: none is recommended. */
+  readonly recommendedModel?: ModelTier;
   /** The job may be skipped: it never blocks a stage or the run, and no required job may take its output. */
   readonly optional?: boolean;
 }

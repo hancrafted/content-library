@@ -1,12 +1,13 @@
 'use client';
 
 import { BUTTON_GROUP, ChatButtons } from '@/shared/components/core-components/chat-buttons/chat-buttons';
-import { CopyButton } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { CheckedBox } from './checked-box.client';
 import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { debugFooter } from './debug-footer.pure';
+import { ExplainButton } from './explain-button.client';
+import type { UiWords } from './human-in-the-loop.types';
+import { ModelNote } from './model-note.client';
 import { CopyPrompt, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
 import { editKey, editOf, partsOf, promptText, rawPrompt, roundedEdit } from './prompt-edits.pure';
 import { Context } from './step-context.client';
@@ -53,27 +54,19 @@ function leadOf(kit: StepKit, key: string) {
   return next?.key === key ? next.action : null;
 }
 
-/** Copy explanation prompt: the prompt wrapped in a request to explain it. It never leads. */
-function ExplainButton({ kit, onCopy }: { kit: StepKit; onCopy: () => Promise<boolean> }) {
-  const { words } = kit;
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span>
-          <CopyButton label={words.copyExplanation} done={words.copied} onCopy={onCopy} />
-        </span>
-      </TooltipTrigger>
-      <TooltipContent align="end">{words.copyExplanationTip}</TooltipContent>
-    </Tooltip>
-  );
-}
-
 interface ActionsProps {
   readonly step: Step;
   readonly task: TaskModalView;
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly panel: string;
+}
+
+/** The job's model note on its do and `then` prompts; its review, a fresh chat, shows none. */
+function TaskModel({ panel, task, words }: Pick<ActionsProps, 'panel' | 'task'> & { readonly words: UiWords }) {
+  const tier = task.recommendedModel;
+  if (!tier || panel.startsWith('review')) return null;
+  return <ModelNote words={words} tier={tier} />;
 }
 
 /** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
@@ -98,6 +91,7 @@ function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
         <EditToggle words={words} open={editing.on} onToggle={editing.toggle} />
       </div>
       <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} words={words} />
+      <TaskModel panel={panel} task={task} words={words} />
       <span className="ml-auto" />
       <ExplainButton
         kit={kit}
@@ -188,6 +182,19 @@ function ContextStep({ step, task, kit, slots, first }: PanelProps) {
   );
 }
 
+/** The second prompt of a job that calls a second skill, copied in the same session, so under the same model tier. */
+function ThenStep({ then, panel, ...rest }: ActionsProps & { readonly then: Step }) {
+  const { kit } = rest;
+  return (
+    <>
+      <p data-then="" className="text-caption text-muted-foreground">
+        {kit.words.thenCopy}
+      </p>
+      <Actions {...rest} step={then} panel={panel} />
+    </>
+  );
+}
+
 function DoSteps(props: PanelProps) {
   const { step, task, kit, slots, first } = props;
   const { words } = kit;
@@ -199,14 +206,7 @@ function DoSteps(props: PanelProps) {
       {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
         <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} />
-        {step.then && (
-          <>
-            <p data-then="" className="text-caption text-muted-foreground">
-              {words.thenCopy}
-            </p>
-            <Actions step={step.then} task={task} kit={kit} slots={slots} panel={panelKey('then', step)} />
-          </>
-        )}
+        {step.then && <ThenStep {...props} then={step.then} panel={panelKey('then', step)} />}
         <Result
           name={resultKey(step, task)}
           kit={kit}

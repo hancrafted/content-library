@@ -94,6 +94,14 @@ ui:
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
   newTab: opens in a new tab
+  model: 'Model: {tier}'
+  modelInfo: 'What this model tier means'
+  modelHigh: 'High · deep thinking'
+  modelHighTip: 'Reasoning: grilling, planning, reviewing. Coding agent: Opus, Argon, Sol. Chat: ChatGPT Thinking, Gemini Pro.'
+  modelMedium: 'Medium · everyday'
+  modelMediumTip: 'Doing the work: writing, code, executing a plan. Coding agent: Sonnet, Terra, Hydrogen. Chat: the default model.'
+  modelLow: 'Low · quick'
+  modelLowTip: 'Exploring and summarising. Coding agent: Haiku, Luna. Chat: a fast or instant model.'
   openAIChats: Open an AI chat
   openAIChatTip: 'Open an empty {chat} chat in a new tab, then paste the prompt'
   openAIButtons:
