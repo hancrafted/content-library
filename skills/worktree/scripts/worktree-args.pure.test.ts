@@ -47,6 +47,15 @@ describe('subagent branches', () => {
     expect(args).toMatchObject({ parent: 'episode/y', issue: null });
   });
 
+  it('reads no issue number from a task that only starts with digits, since only <digits>- names a ticket', () => {
+    // ACT
+    const results = ['feat/x--2fa-login', 'feat/x--2fa', 'feat/x--640'].map((branch) =>
+      parseArgs(['new', branch, '--base', 'feat/x']),
+    );
+    // ASSERT
+    expect(results).toEqual(results.map(() => expect.objectContaining({ parent: 'feat/x', issue: null })));
+  });
+
   it('keeps a later -- in the task, since the parent ends at the first one', () => {
     // ACT
     const args = parseArgs(['new', 'perf/a--640-b--c', '--base', 'perf/a']);
