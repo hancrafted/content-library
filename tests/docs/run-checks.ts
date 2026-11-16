@@ -49,32 +49,53 @@ function contentsOf(dir: string): Record<string, string> {
   return Object.fromEntries(Object.entries(readFolder(dir)).filter(([file]) => file !== RUN_CHECKS_TEST));
 }
 
-/** Every research folder of the llm-wiki and of every Run but this one, as repo paths: folder names only. */
-function researchFoldersElsewhere(staging: string): string[] {
-  const runs = subfolders(path.join(ROOT, 'docs/episodes'))
-    .filter((run) => path.relative(ROOT, run) !== staging)
-    .flatMap((run) => subfolders(path.join(run, 'research')));
-  const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
-  return [...runs, ...llmWiki].map((folder) => path.relative(ROOT, folder));
-}
+/** The llm-wiki's research folders, as repo paths. */
+const wikiResearchFolders = (): string[] =>
+  subfolders(path.join(LLM_WIKI, 'research'))
+    .flatMap(subfolders)
+    .map((folder) => path.relative(ROOT, folder));
 
-/** The research folders this Run holds or its pipeline will write, as repo paths; a promoted one is the wiki's. */
-function ownResearchFolders(staging: string, files: Readonly<Record<string, string>>, elsewhere: readonly string[]) {
-  const onDisk = [
-    ...new Set(
-      Object.keys(files)
-        .filter((file) => file.startsWith('research/') && file.split('/').length > 2)
-        .map((file) => `${staging}/${file.split('/').slice(0, 2).join('/')}`),
-    ),
-  ];
-  const yaml = files['pipeline.yml'];
-  const planned = (yaml === undefined ? [] : outputsOf([yaml]))
+/**
+ * A Run's research folders, as repo paths: those on disk, and those its pipeline plans, so two Runs planning one ID
+ * clash before either writes its folder. A planned folder that Promotion already moved into the llm-wiki, under the
+ * same name, is that wiki folder.
+ */
+export function researchFoldersOfRun(
+  onDisk: readonly string[],
+  pipeline: string | undefined,
+  wiki: readonly string[],
+): string[] {
+  const planned = (pipeline === undefined ? [] : outputsOf([pipeline]))
     // A draft keeps write-research's foreach glob; only a named folder is a planned one.
     .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
-    .map((output) => path.dirname(output));
-  // A planned folder that Promotion already moved into the llm-wiki, under the same name, is that wiki folder.
-  const promoted = new Set(elsewhere.map((folder) => path.basename(folder)));
-  return [...onDisk, ...planned.filter((folder) => !promoted.has(path.basename(folder)))];
+    .map((output) => path.posix.dirname(output));
+  const promoted = new Set(wiki.map((folder) => path.posix.basename(folder)));
+  return [...new Set([...onDisk, ...planned.filter((folder) => !promoted.has(path.posix.basename(folder)))])];
+}
+
+/** Every research folder of the llm-wiki and of every Run but this one, each Run read from disk and its pipeline. */
+function researchFoldersElsewhere(staging: string, wiki: readonly string[]): string[] {
+  const runs = subfolders(path.join(ROOT, 'docs/episodes'))
+    .map((run) => path.relative(ROOT, run).split(path.sep).join('/'))
+    .filter((run) => run !== staging)
+    .flatMap((run) => {
+      const onDisk = subfolders(path.join(ROOT, run, 'research')).map((folder) => path.relative(ROOT, folder));
+      const pipeline = path.join(ROOT, run, 'pipeline.yml');
+      return researchFoldersOfRun(onDisk, existsSync(pipeline) ? readFileSync(pipeline, 'utf8') : undefined, wiki);
+    });
+  return [...runs, ...wiki];
+}
+
+/** This Run's research folders against every folder elsewhere: each name, each ID used once, reported for this Run's. */
+export function researchIdFindings(
+  own: readonly string[],
+  elsewhere: readonly string[],
+  categories: readonly string[],
+): string[] {
+  // Every folder elsewhere is checked by its own Run or the template test: report only findings that name this Run's.
+  return checkResearchFolders([...own, ...elsewhere], categories)
+    .filter(({ message }) => own.some((folder) => message.includes(folder)))
+    .map(({ message }) => message);
 }
 
 /** One Run's staging folder, repo-relative, and its files by their path inside it. */
@@ -112,12 +133,16 @@ function unsettledBriefFindings({ staging, files }: Run): string[] {
 
 function researchFolderFindings({ staging, files }: Run): string[] {
   const categories = researchCategories(readFileSync(path.join(ROOT, 'GLOSSARY.md'), 'utf8'));
-  const elsewhere = researchFoldersElsewhere(staging);
-  const own = ownResearchFolders(staging, files, elsewhere);
-  // Every folder elsewhere is checked by its own Run or the template test: report only findings that name this Run's.
-  return checkResearchFolders([...own, ...elsewhere], categories)
-    .filter(({ message }) => own.some((folder) => message.includes(folder)))
-    .map(({ message }) => message);
+  const wiki = wikiResearchFolders();
+  const onDisk = [
+    ...new Set(
+      Object.keys(files)
+        .filter((file) => file.startsWith('research/') && file.split('/').length > 2)
+        .map((file) => `${staging}/${file.split('/').slice(0, 2).join('/')}`),
+    ),
+  ];
+  const own = researchFoldersOfRun(onDisk, files['pipeline.yml'], wiki);
+  return researchIdFindings(own, researchFoldersElsewhere(staging, wiki), categories);
 }
 
 function verifiedFindings({ staging, files }: Run): string[] {
