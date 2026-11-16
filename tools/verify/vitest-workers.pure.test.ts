@@ -1,6 +1,6 @@
 import os from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { currentWorkers, idleFraction, workersFor, type CpuTimes } from './vitest-workers.mts';
+import { currentWorkers, idleFraction, workersFor, type CpuTimes } from './vitest-workers.pure.ts';
 
 const cpu = (idle: number, busy: number): CpuTimes => ({ idle, busy });
 

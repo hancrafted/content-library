@@ -1,7 +1,10 @@
 import os from 'node:os';
 
 /** One CPU's cumulative ticks: idle, and everything else (user, nice, sys, irq). */
-export type CpuTimes = { idle: number; busy: number };
+export interface CpuTimes {
+  idle: number;
+  busy: number;
+}
 
 /** Workers for a vitest run: the cores other processes leave free, never below 2 nor above cores - 1. */
 export function workersFor(cores: number, freeCores: number): number {
