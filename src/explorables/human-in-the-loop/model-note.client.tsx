@@ -4,17 +4,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import { cn } from '@/shared/lib/utils';
 import { CircleHelp } from 'lucide-react';
 import { useState } from 'react';
-import type { UiWords } from './human-in-the-loop.types';
-import { modelNote } from './model-tier.pure';
+import { modelNote, type ModelWords } from './model-tier.pure';
 import type { ModelTier } from './workflow-schema.types';
 
 /*
  * The model the step's job is best run with, in the action row right of the chat buttons: "Model: High · deep
- * thinking" and a `?` that shows the tier's one standard tooltip. A tap opens the tooltip too, which hover alone
- * would not give on a touch screen.
+ * thinking" and a `?` that shows the tier's one standard tooltip. Hover and keyboard focus open it as with any
+ * Tooltip; a press opens it and keeps it open, where Radix alone closes it again on click and never opens it on a tap.
  */
 
-export function ModelNote({ words, tier }: { readonly words: UiWords; readonly tier: ModelTier }) {
+export function ModelNote({ words, tier }: { readonly words: ModelWords; readonly tier: ModelTier }) {
   const [open, setOpen] = useState(false);
   const { label, tip } = modelNote(words, tier);
   return (

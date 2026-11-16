@@ -6,6 +6,7 @@ import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { debugFooter } from './debug-footer.pure';
 import { ExplainButton } from './explain-button.client';
+import type { UiWords } from './human-in-the-loop.types';
 import { ModelNote } from './model-note.client';
 import { CopyPrompt, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
 import { editKey, editOf, partsOf, promptText, rawPrompt, roundedEdit } from './prompt-edits.pure';
@@ -14,7 +15,6 @@ import type { SlotState, StepKit } from './step-kit.types';
 import { StepSection } from './step-section.client';
 import { debuggedPrompt, explanationPrompt } from './words.pure';
 import type { StepKind } from './workflow-prompts.pure';
-import type { ModelTier } from './workflow-schema.types';
 import type { TaskModalView } from './workflow-view.pure';
 
 /*
@@ -60,12 +60,17 @@ interface ActionsProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly panel: string;
-  /** The model tier shown right of the chat buttons: the do and `then` prompts of a job show it, its review (a fresh chat) does not. */
-  readonly model?: ModelTier;
+}
+
+/** The job's model note on its do and `then` prompts; its review, a fresh chat, shows none. */
+function TaskModel({ panel, task, words }: Pick<ActionsProps, 'panel' | 'task'> & { readonly words: UiWords }) {
+  const tier = task.recommendedModel;
+  if (!tier || panel.startsWith('review')) return null;
+  return <ModelNote words={words} tier={tier} />;
 }
 
 /** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
-function ActionRow({ step, task, kit, slots, panel, model, edit, editing }: RowProps) {
+function ActionRow({ step, task, kit, slots, panel, edit, editing }: RowProps) {
   const { words, debug } = kit;
   const plain = promptText(partsOf(step), slots.values, roundedEdit(edit, step));
   const footer = (prompt: 'copy' | 'explain') =>
@@ -86,7 +91,7 @@ function ActionRow({ step, task, kit, slots, panel, model, edit, editing }: RowP
         <EditToggle words={words} open={editing.on} onToggle={editing.toggle} />
       </div>
       <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} words={words} />
-      {model && <ModelNote words={words} tier={model} />}
+      <TaskModel panel={panel} task={task} words={words} />
       <span className="ml-auto" />
       <ExplainButton
         kit={kit}
@@ -179,13 +184,13 @@ function ContextStep({ step, task, kit, slots, first }: PanelProps) {
 
 /** The second prompt of a job that calls a second skill, copied in the same session, so under the same model tier. */
 function ThenStep({ then, panel, ...rest }: ActionsProps & { readonly then: Step }) {
-  const { kit, task } = rest;
+  const { kit } = rest;
   return (
     <>
       <p data-then="" className="text-caption text-muted-foreground">
         {kit.words.thenCopy}
       </p>
-      <Actions {...rest} step={then} panel={panel} model={task.recommendedModel} />
+      <Actions {...rest} step={then} panel={panel} />
     </>
   );
 }
@@ -200,7 +205,7 @@ function DoSteps(props: PanelProps) {
     <>
       {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
-        <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} model={task.recommendedModel} />
+        <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} />
         {step.then && <ThenStep {...props} then={step.then} panel={panelKey('then', step)} />}
         <Result
           name={resultKey(step, task)}

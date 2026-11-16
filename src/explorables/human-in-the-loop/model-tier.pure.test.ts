@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { modelNote } from './model-tier.pure';
+import { modelNote, type ModelWords } from './model-tier.pure';
 
-const words = {
+const words: ModelWords = {
   model: 'Model: {tier}',
+  modelInfo: 'What this model tier means',
   modelHigh: 'High · deep thinking',
   modelHighTip: 'high tip',
   modelMedium: 'Medium · everyday',
@@ -27,23 +28,33 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('leaves a label without the placeholder as it is', () => {
+  it('has no words for a tier outside high, medium and low, which the loader never lets through', () => {
     // ARRANGE
-    const plain = { ...words, model: 'Model' };
+    const unknown = 'ultra' as never;
     // ACT
-    const note = modelNote(plain, 'low');
+    const note = () => modelNote(words, unknown);
     // ASSERT
-    expect(note.label).toBe('Model');
+    expect(note).toThrow(TypeError);
   });
 });
 
 describe('edge cases', () => {
   it('keeps a `$` of a tier label as it is', () => {
     // ARRANGE
-    const dollar = { ...words, modelHigh: '$& costs' };
+    const label = '$& costs';
+    const expected = 'Model: $& costs';
     // ACT
-    const note = modelNote(dollar, 'high');
+    const note = modelNote({ ...words, modelHigh: label }, 'high');
     // ASSERT
-    expect(note.label).toBe('Model: $& costs');
+    expect(note.label).toBe(expected);
+  });
+
+  it('leaves a frame without the placeholder as it is', () => {
+    // ARRANGE
+    const frame = 'Model';
+    // ACT
+    const note = modelNote({ ...words, model: frame }, 'low');
+    // ASSERT
+    expect(note.label).toBe(frame);
   });
 });
