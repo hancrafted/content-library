@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, UiWords } from './human-in-the-loop.types';
-import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import { job, optionalFlow, stage, flow as workflow } from './workflow-fixture.pure';
 import type { Workflow } from './workflow.types';
 
 const flow = (): Workflow =>
@@ -47,6 +47,8 @@ const render = (props: Partial<DiagramProps> = {}) =>
   );
 const COLUMN = 'li[class*="focus-group__item"]';
 const POPOVER = { in: 'in.', out: 'out.', inLabel: 'In:', outLabel: 'Out:' };
+
+const withWords = { ...words, optional: 'optional' } as UiWords;
 
 describe('success cases', () => {
   it('draws every job as a job card inside its stage card, in the order their needs give', () => {
@@ -150,6 +152,28 @@ describe('success cases', () => {
     expect(card.find('[data-summary] [data-detail]').text()).toBe('Forgets');
     expect(card.find('[data-marker]')).toHaveLength(1);
     expect(card.find('[data-after]')).toHaveLength(1);
+  });
+
+  it('draws an optional job card dashed with an "optional" tag, and a required one solid without', () => {
+    // ARRANGE
+    const $ = render({ workflow: optionalFlow(), words: withWords });
+    // ACT
+    const [must, extra] = $(COLUMN).first().find('[data-job-card]').toArray();
+    // ASSERT
+    expect($(extra).attr('class')).toContain('border-dashed');
+    expect($(extra).find('[data-optional]').text()).toBe('optional');
+    expect($(must).attr('class')).not.toContain('border-dashed');
+    expect($(must).find('[data-optional]')).toHaveLength(0);
+  });
+
+  it('draws the stage card of an optional stage dashed, and that of a stage with an optional job solid', () => {
+    // ARRANGE
+    const $ = render({ workflow: optionalFlow(), words: withWords });
+    // ACT
+    const [first, second] = $('[data-stage-card]').toArray();
+    // ASSERT
+    expect($(second).attr('class')).toContain('border-dashed');
+    expect($(first).attr('class')).not.toContain('border-dashed');
   });
 });
 

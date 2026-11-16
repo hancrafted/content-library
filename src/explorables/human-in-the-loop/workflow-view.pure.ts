@@ -1,8 +1,8 @@
 import { producersFor } from './workflow-outputs.pure.ts';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure.ts';
-import type { ChatButtonDef, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
+import type { ChatButtonDef, ModelTier, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
-import type { Job, Workflow } from './workflow.types';
+import type { Job, Stage, Workflow } from './workflow.types';
 
 /*
  * The view seam: what a stage's "Try it" modal shows for a Workflow at a level. Pure, so the modal's information
@@ -25,6 +25,8 @@ export interface TaskModalView {
   readonly steps: readonly TaskStep[];
   /** The name this task hands on: its result is saved under it (`name_K` for round K of a repeated stage). Absent: a checkbox marks it done. */
   readonly output?: string;
+  /** The words beside the checkbox of a job without an output; absent: the visual's `markDone` word. */
+  readonly doneLabel?: string;
   /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
   readonly previous: readonly string[];
   /** The outputs of the jobs of the same stage this job needs: in a repeated stage each round takes its own. */
@@ -37,6 +39,8 @@ export interface TaskModalView {
   readonly techniques: readonly TechniqueDef[];
   /** The AI chats the job's prompts open in; absent: the visual's default buttons. */
   readonly openAIButtons?: readonly ChatButtonDef[];
+  /** The model tier the job is best run with; absent: the step shows no model note. */
+  readonly recommendedModel?: ModelTier;
 }
 
 /** One job inside a stage's modal. */
@@ -45,6 +49,8 @@ export interface JobModalView {
   readonly title: string;
   /** The one-sentence goal of the do step (the stepper's title) and, when the job has a review, of the review. */
   readonly goal: TaskDef['goal'];
+  /** The job may be skipped: none of its steps leads the stepper. */
+  readonly optional: boolean;
   readonly task: TaskModalView;
 }
 
@@ -76,6 +82,10 @@ function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds
   );
 }
 
+/** The examples a task shows: none for a checkbox job, one text, or one per demo round. */
+const examplesOf = (example: TaskDef['details']['example']): readonly string[] =>
+  example === undefined ? [] : typeof example === 'string' ? [example] : example;
+
 type TaskAt = { level: Level; stage: number } & Pick<ViewOptions, 'demo' | 'rounds'>;
 
 function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView {
@@ -90,17 +100,25 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
     id: task.id,
     steps: stepsOf(workflow.file, task, { runtime, ...options }),
     output: task.output,
+    doneLabel: task.doneLabel,
     sameStage,
     previous: [...producersFor(workflow.file, stageAt, task).keys()],
     why: task.details.why,
-    examples: typeof example === 'string' ? [example] : example,
+    examples: examplesOf(example),
     goodLooksLike: task.details.goodLooksLike,
     techniques: (task.details.techniques ?? []).flatMap((id) =>
       workflow.file.techniques.filter((each) => each.id === id),
     ),
     ...(task.openAIButtons && { openAIButtons: task.openAIButtons }),
+    ...(task.recommendedModel && { recommendedModel: task.recommendedModel }),
   };
 }
+
+/** Whether the stepper plays the stage once per round: always at Simple; at Technical only when the stage opts in and demo mode is off. */
+const repeatsAt = (stage: Stage, level: Level, demo: boolean | undefined): boolean => {
+  if (stage.foreach === undefined) return false;
+  return level === 'simple' || (stage.foreach.technical === 'rounds' && demo === false);
+};
 
 /** The view model of a Workflow for a level: one modal per stage. */
 export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOptions): WorkflowView {
@@ -110,11 +128,12 @@ export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOp
       id: stage.id,
       name: stage.name,
       goal: stage.goal,
-      repeats: stage.foreach !== undefined && level === 'simple',
+      repeats: repeatsAt(stage, level, demo),
       jobs: stage.jobs.map((job) => ({
         id: job.id,
         title: job.title,
         goal: job.task.goal,
+        optional: job.optional,
         task: taskView(job, workflow, { level, stage: stageAt, demo, rounds }),
       })),
     })),

@@ -236,6 +236,7 @@ stages:
             - Every acceptance criterion names its need and can be ticked yes or no.
             - Exactly three kinds of stay to research, none named in advance.
         instructions: "Open a new chat (ChatGPT or any AI chat, no login needed), paste the prompt and answer each round of questions in your own words; 'yes' takes the recommendations. When it says nothing is left, type 'done' and copy the requirements it writes."
+        skills: [grilling]
         do:
           simple:
             - heading: Your role
@@ -299,7 +300,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Grill me about the stay for this vacation in rounds, at most three questions per round and at most {{limit.questions}} in total, numbered across rounds, each with a recommended answer worded so that my "yes" accepts it: two or three options for a choice, as a numbered list of true alternatives, an open question for what only I know. Cover the budget, the dealbreakers, the distance to the sea and the airport, and what matters around the stay. When I type "done", write the requirements in plain words, ending with exactly three kinds of stay to research as H3s, none named.
+                Grill me about the stay for this vacation in rounds, at most three questions per round and at most {{limit.questions}} in total, numbered across rounds, each with a recommended answer worded so that my "yes" accepts it: two or three options for a choice, as a numbered list of true alternatives, an open question for what only I know. Cover the budget, the dealbreakers, the distance to the sea and the airport, and what matters around the stay. When I type "done", write the requirements in plain words, ending with exactly three kinds of stay to research as H3s, none named.
 
                 ```markdown
                 {{idea}}
@@ -432,6 +433,7 @@ stages:
             - The price is a published rate in euros with its source and a 7-night total, never a guess.
             - Two photos of the stay itself, and a review score with its link.
         instructions: "Open a new chat for each kind of stay, paste that chat's prompt (web search works in ChatGPT without a login) and copy the result before you open the next chat. If an answer breaks off or looks wrong, do not argue with it: start a new chat and paste the prompt again."
+        skills: [research]
         do:
           simple:
             - heading: Your role
@@ -501,7 +503,7 @@ stages:
               purpose: task
               techniques: [delimiters, cite-sources, fresh-context]
               text: |
-                /research You are the orchestrator. Take every H3 under the heading Research of the requirements below as one kind of stay, and start one subagent per kind, in parallel, each with a fresh context and only its own kind and the requirements. Each subagent finds one real stay of its kind with web search, checks it against every acceptance criterion and the budget, and gives the published rate in euros with a 7-night total, the drive from the airport, two direct image URLs of the stay itself (outside or view, and a room), review scores with links and a full URL for every source. Nothing is guessed.
+                You are the orchestrator. Take every H3 under the heading Research of the requirements below as one kind of stay, and start one subagent per kind, in parallel, each with a fresh context and only its own kind and the requirements. Each subagent finds one real stay of its kind with web search, checks it against every acceptance criterion and the budget, and gives the published rate in euros with a 7-night total, the drive from the airport, two direct image URLs of the stay itself (outside or view, and a room), review scores with links and a full URL for every source. Nothing is guessed.
 
                 ```markdown
                 {{spec}}

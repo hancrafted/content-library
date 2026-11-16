@@ -9,6 +9,7 @@ ui:
   viewJobs: Aufgaben
   viewJobsTip: 'Die Detailansicht: jede Aufgabe jeder Phase'
   checked: geprüft
+  optional: optional
   stateOpen: offen
   stateDone: erledigt
   repeats: '× pro {item} ({n})'
@@ -22,10 +23,15 @@ ui:
   stepContextInfo: 'Der Prompt unten braucht Ergebnisse früherer Aufgaben oder zusätzliche Eingaben. Sie werden hier eingetragen, wenn du das Ergebnis in einem früheren Schritt eingefügt hast. Jedes Feld enthält schon ein Beispiel oder dein früheres Ergebnis; ersetze es gern durch deinen eigenen Text.'
   stepDo: 'Prompt in einem KI-Chat ausführen, dann das Ergebnis hier einfügen'
   stepDoInfo: 'Führe den Prompt in einer neuen Unterhaltung aus und füge das Ergebnis hier ein. Schließe die Unterhaltung nicht.'
+  thenCopy: 'Danach, in derselben Sitzung, kopiere diesen zweiten Prompt:'
   stepCheck: 'Ergebnis prüfen (optional)'
   stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
   copyExplanation: 'Erklär-Prompt kopieren'
   copyExplanationTip: 'Füge diesen Prompt in einen Chat ein: Die KI erklärt den Prompt, warum er so gebaut ist und was du verbessern kannst, und bietet dann an, dich durch die Übung zu führen.'
+  typeFirst: Schreibe zuerst deine Notizen
+  editPrompt: Prompt bearbeiten
+  editReset: Auf Standard zurücksetzen
+  editedTip: 'Kopiert Deine bearbeitete Version dieses Prompts. Mit Zurücksetzen im Editor kommt das Original zurück.'
   explainWrapper: "Du bist mein Coach für Prompt Engineering, und ich lerne, Projekte mit KI zu planen. Unten steht der Prompt eines Schritts aus einer angeleiteten Übung. Führe ihn nicht aus: Erkläre ihn mir und begleite mich dann durch die Übung.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\"\n\nIn einfachen Worten, kurz und konkret, mit Zitat der Zeilen, die du meinst:\n1. Was dieser Schritt tut und warum er für das ganze Projekt wichtig ist.\n2. Wofür jeder Teil des Prompts da ist.\n3. Welche Techniken er nutzt (Rolle, Kontext, Abgrenzung, Schritte, Ausgabeformat) und warum sie helfen.\n4. Wo er schwach ist und wie ich ihn an mein eigenes Projekt anpassen könnte.\nBiete mir danach an, mich durch die Übung zu führen: Schlag drei Fragen vor, die ich dir als Nächstes stellen könnte, etwa \"Erklär mir, was wir gerade gemacht haben\", \"Warum ist dieser Schritt wichtig?\" und \"Was wäre bei meinem eigenen Projekt anders?\", und warte auf meine Antwort."
   stepN: 'Schritt {n}: {title}'
   previousResults: Frühere Ergebnisse
@@ -55,7 +61,7 @@ ui:
   debugInstruction: "Debug-Modus: Beende JEDE Antwort, die du in diesem Chat schreibst, auch die erste, mit der Zeile unten, unverändert, allein in einem Codeblock, als allerletztes der Antwort. Ich füge deine Antwort damit als Feedback wieder ein.\n\n```\n{footer}\n```"
   reset: Zurücksetzen
   resetTip: 'Frühere Arbeit wurde hier oder in einer anderen Episode gefunden. Zurücksetzen beginnt von vorn.'
-  resetConfirm: 'Zurücksetzen löscht die eingefügten Ergebnisse dieses Workflows, hier und in jeder Episode. Lade sie vorher herunter, um sie zu behalten.'
+  resetConfirm: 'Zurücksetzen löscht die eingefügten Ergebnisse und die Prompt-Änderungen dieses Workflows, hier und in jeder Episode. Lade sie vorher herunter, um sie zu behalten.'
   resetDownload: Fortschritt herunterladen
   resetNow: Jetzt zurücksetzen
   resetCancel: Abbrechen
@@ -89,6 +95,14 @@ ui:
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   newTab: öffnet in neuem Tab
+  model: 'Modell: {tier}'
+  modelInfo: 'Was diese Modellstufe bedeutet'
+  modelHigh: 'Hoch · gründlich denken'
+  modelHighTip: 'Nachdenken: Grillen, Planen, Prüfen. Coding-Agent: Opus, Argon, Sol. Chat: ChatGPT Thinking, Gemini Pro.'
+  modelMedium: 'Mittel · Alltag'
+  modelMediumTip: 'Die Arbeit erledigen: Schreiben, Code, einen Plan ausführen. Coding-Agent: Sonnet, Terra, Hydrogen. Chat: das Standardmodell.'
+  modelLow: 'Niedrig · schnell'
+  modelLowTip: 'Erkunden und zusammenfassen. Coding-Agent: Haiku, Luna. Chat: ein schnelles oder Instant-Modell.'
   openAIChats: Einen KI-Chat öffnen
   openAIChatTip: 'Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein'
   openAIButtons:

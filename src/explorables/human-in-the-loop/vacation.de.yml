@@ -236,6 +236,7 @@ stages:
             - Jedes Akzeptanzkriterium nennt sein Bedürfnis und lässt sich mit Ja oder Nein abhaken.
             - Genau drei Arten von Unterkünften zum Recherchieren, keine vorab benannt.
         instructions: "Öffne einen neuen Chat (ChatGPT oder ein anderer KI-Chat, ohne Anmeldung), füge den Prompt ein und beantworte jede Fragerunde in deinen eigenen Worten; 'ja' nimmt die Empfehlungen an. Wenn nichts mehr zu fragen bleibt, schreibe 'fertig' und kopiere die Anforderungen, die er schreibt."
+        skills: [grilling]
         do:
           simple:
             - heading: Deine Rolle
@@ -299,7 +300,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Befrage mich in Runden zur Unterkunft für diesen Urlaub, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, über die Runden hinweg nummeriert, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt: zwei oder drei Optionen bei einer Wahl, als nummerierte Liste echter Alternativen, eine offene Frage bei dem, was nur ich weiß. Decke das Budget, die Ausschlusskriterien, die Entfernung zum Meer und zum Flughafen und das, was rund um die Unterkunft wichtig ist, ab. Wenn ich "fertig" schreibe, schreibe die Anforderungen in einfachen Worten und ende mit genau drei Arten von Unterkünften zum Recherchieren als H3, keine benannt.
+                Befrage mich in Runden zur Unterkunft für diesen Urlaub, höchstens drei Fragen pro Runde und höchstens {{limit.questions}} insgesamt, über die Runden hinweg nummeriert, jede mit einer empfohlenen Antwort, so formuliert, dass mein "ja" sie annimmt: zwei oder drei Optionen bei einer Wahl, als nummerierte Liste echter Alternativen, eine offene Frage bei dem, was nur ich weiß. Decke das Budget, die Ausschlusskriterien, die Entfernung zum Meer und zum Flughafen und das, was rund um die Unterkunft wichtig ist, ab. Wenn ich "fertig" schreibe, schreibe die Anforderungen in einfachen Worten und ende mit genau drei Arten von Unterkünften zum Recherchieren als H3, keine benannt.
 
                 ```markdown
                 {{idea}}
@@ -432,6 +433,7 @@ stages:
             - Der Preis ist ein veröffentlichter Preis in Euro mit Quelle und Gesamtpreis für 7 Nächte, nie eine Schätzung.
             - Zwei Fotos der Unterkunft selbst und eine Bewertung mit Link.
         instructions: 'Öffne für jede Art von Unterkunft einen neuen Chat, füge den Prompt dieses Chats ein (die Websuche geht in ChatGPT ohne Anmeldung) und kopiere das Ergebnis, bevor du den nächsten Chat öffnest. Bricht eine Antwort ab oder sieht sie falsch aus, diskutiere nicht mit ihr: Öffne einen neuen Chat und füge den Prompt noch einmal ein.'
+        skills: [research]
         do:
           simple:
             - heading: Deine Rolle
@@ -501,7 +503,7 @@ stages:
               purpose: task
               techniques: [delimiters, cite-sources, fresh-context]
               text: |
-                /research Du bist der Orchestrator. Nimm jede H3 unter der Überschrift Research der Anforderungen unten als eine Art von Unterkunft und starte pro Art einen Subagenten, parallel, jeden mit frischem Kontext und nur seiner eigenen Art und den Anforderungen. Jeder Subagent findet mit Websuche eine echte Unterkunft seiner Art, prüft sie gegen jedes Akzeptanzkriterium und das Budget und nennt den veröffentlichten Preis in Euro mit Gesamtpreis für 7 Nächte, die Fahrt vom Flughafen, zwei direkte Bild-URLs der Unterkunft selbst (von außen oder die Aussicht, und ein Zimmer), Bewertungen mit Links und eine vollständige URL für jede Quelle. Nichts wird geraten.
+                Du bist der Orchestrator. Nimm jede H3 unter der Überschrift Research der Anforderungen unten als eine Art von Unterkunft und starte pro Art einen Subagenten, parallel, jeden mit frischem Kontext und nur seiner eigenen Art und den Anforderungen. Jeder Subagent findet mit Websuche eine echte Unterkunft seiner Art, prüft sie gegen jedes Akzeptanzkriterium und das Budget und nennt den veröffentlichten Preis in Euro mit Gesamtpreis für 7 Nächte, die Fahrt vom Flughafen, zwei direkte Bild-URLs der Unterkunft selbst (von außen oder die Aussicht, und ein Zimmer), Bewertungen mit Links und eine vollständige URL für jede Quelle. Nichts wird geraten.
 
                 ```markdown
                 {{spec}}

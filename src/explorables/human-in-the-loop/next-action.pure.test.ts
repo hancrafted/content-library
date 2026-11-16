@@ -35,12 +35,55 @@ describe('success cases', () => {
     // ASSERT
     expect(next).toBeNull();
   });
+
+  it('leads with the then copy after the do copy, and only then with the result', () => {
+    // ARRANGE
+    const then = (copied: boolean) => ({ key: 'then', copied });
+    const before = [panel('do', { then: then(false) }), panel('review')];
+    const first = [panel('do', { copied: true, then: then(false) }), panel('review')];
+    const both = [panel('do', { copied: true, then: then(true) }), panel('review')];
+    // ACT
+    const seen = [before, first, both].map(nextAction);
+    // ASSERT
+    expect(seen).toEqual([
+      { key: 'do', action: 'copy' },
+      { key: 'then', action: 'copy' },
+      { key: 'do', action: 'answer' },
+    ]);
+  });
+
+  it('leads inside an optional job from the context to the copies to the answer, since only the job is optional', () => {
+    // ARRANGE
+    const then = (copied: boolean) => ({ key: 'then', copied });
+    const empty = [panel('do', { needsInput: true, then: then(false) })];
+    const typed = [panel('do', { then: then(false) })];
+    const first = [panel('do', { copied: true, then: then(false) })];
+    const both = [panel('do', { copied: true, then: then(true) })];
+    // ACT
+    const seen = [empty, typed, first, both].map(nextAction);
+    // ASSERT
+    expect(seen).toEqual([
+      { key: 'do', action: 'context' },
+      { key: 'do', action: 'copy' },
+      { key: 'then', action: 'copy' },
+      { key: 'do', action: 'answer' },
+    ]);
+  });
 });
 
 describe('failure cases', () => {
   it('leads with the context while a field has neither a value nor a sample', () => {
     // ARRANGE
     const panels = [panel('do', { needsInput: true }), panel('review')];
+    // ACT
+    const next = nextAction(panels);
+    // ASSERT
+    expect(next).toEqual({ key: 'do', action: 'context' });
+  });
+
+  it('asks for the context before either copy when a field is still empty', () => {
+    // ARRANGE
+    const panels = [panel('do', { needsInput: true, then: { key: 'then', copied: false } })];
     // ACT
     const next = nextAction(panels);
     // ASSERT

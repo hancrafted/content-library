@@ -1,12 +1,10 @@
-import { readProgressFile, type Refusal } from '@/shared/lib/progress-file.pure';
 import { progressKeyOf } from '@/shared/lib/progress.pure';
-import { fillTemplate } from '@/shared/lib/template.pure';
 import { SOURCE_CHARS, type DebugBase } from './debug-footer.pure';
-import type { DiagramProps, HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
+import type { DiagramProps, HumanInTheLoopData } from './human-in-the-loop.types';
 import type { ModalProps, ToolbarProps } from './part-props.types';
 import type { DemoProps, DemoState, ProgressActions, ProgressNote } from './progress-controls.types';
 import { offers } from './toolbar-controls.pure';
-import { workflowOf } from './workflow-file-adapter.pure';
+import { workflowInMode, workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, roundsOf as playedRounds, resultsOf, runOf, type Run } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
@@ -36,23 +34,6 @@ export function progressTarget(
   return id !== undefined && hash !== undefined ? { id, key: progressKeyOf(id), hash } : null;
 }
 
-const REFUSALS: Record<Refusal, 'refuseUnreadable' | 'refuseOtherWorkflow' | 'refuseChanged'> = {
-  unreadable: 'refuseUnreadable',
-  'other-workflow': 'refuseOtherWorkflow',
-  changed: 'refuseChanged',
-};
-
-/** What an uploaded progress file becomes: the run restored, or a refusal naming the shown Workflow by its title. */
-export function progressUploadEvent(
-  text: string,
-  shown: { readonly id: string; readonly hash: string; readonly title: string },
-  words: UiWords,
-): WorkflowEvent {
-  const read = readProgressFile(text, { workflow: shown.id, hash: shown.hash });
-  if ('entry' in read) return { type: 'restore', results: read.entry.results, demo: read.entry.demo };
-  return { type: 'upload-failed', problems: [fillTemplate(words[REFUSALS[read.refusal]], { workflow: shown.title })] };
-}
-
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
 export function uploadEvent(yaml: string): WorkflowEvent {
   const result = loadWorkflow(yaml);
@@ -67,7 +48,7 @@ export type Callbacks = Pick<
   'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onDemo' | 'onReset' | 'onDebug'
 > &
   Pick<DiagramProps, 'onOpenStage'> &
-  Pick<ModalProps, 'onClose' | 'onSlots'>;
+  Pick<ModalProps, 'onClose' | 'onSlots'> & { onPrompts: ModalProps['edits']['onChange'] };
 
 /** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
@@ -83,6 +64,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
       dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }), ...(round !== undefined && { round }) }),
     onClose: () => dispatch({ type: 'close' }),
     onSlots: (values) => dispatch({ type: 'slots', values }),
+    onPrompts: (values) => dispatch({ type: 'prompts', values }),
   };
 }
 
@@ -111,8 +93,9 @@ function drawnRounds(workflow: Workflow, run: Run): Record<string, number> {
   return Object.fromEntries(counts);
 }
 
-/** The one entry that computes the Run of the shown Workflow, and its view and rounds from that same run. */
-export function showWorkflow(workflow: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
+/** The one entry that computes the Run of the shown Workflow in the current mode (stages marked for the other mode are left out), and its view and rounds from that same run. */
+export function showWorkflow(whole: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
+  const workflow = workflowInMode(whole, demo);
   const run = runOf(workflow.file, { results: slotValues, demo });
   const played = playedRounds(run);
   return {
@@ -157,12 +140,13 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
 /** The demo switch and Reset for both places that hold them: the toolbar and the popover. */
 function demoPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): DemoProps {
   const { controls, readonly } = data;
+  const hasWork = !canChange || Object.keys(state.prompts).length > 0;
   const demo: DemoState = {
     show: offers(controls, 'demo', readonly),
-    resetShow: offers(controls, 'reset', readonly) && !canChange,
+    resetShow: offers(controls, 'reset', readonly) && hasWork,
     on: state.demo,
     locked: !canChange,
-    hasWork: !canChange,
+    hasWork,
   };
   return { demo, onDemo: on.onDemo, onReset: on.onReset, onDownloadRun: progress?.onDownload };
 }
@@ -237,6 +221,7 @@ function modalOf(
     jobId: state.openJobId,
     round: state.openRound,
     slotValues: markerValuesOf(file, state.slotValues),
+    edits: { values: state.prompts, level: state.level, onChange: on.onPrompts },
     debug: state.debug && debugAvailable ? debugBase({ data, state, workflow }) : null,
     words: data.words,
     level: state.level,

@@ -84,6 +84,52 @@ describe('success cases', () => {
     expect(named).toEqual(gemini);
     expect(none).toBeUndefined();
   });
+
+  it('marks an optional job in its modal view, so its steps never lead the stepper', () => {
+    // ARRANGE
+    const task = loaded.file.stages[0]!.jobs[0]!;
+    const optional = workflowOf({
+      ...loaded.file,
+      stages: [{ ...loaded.file.stages[0]!, jobs: [{ ...task, optional: true }] }, ...loaded.file.stages.slice(1)],
+    });
+    // ACT
+    const marked = jobOf(workflowView(optional, SIMPLE), task.id);
+    const plain = jobOf(workflowView(WORKFLOW, SIMPLE), task.id);
+    // ASSERT
+    expect([marked.optional, plain.optional]).toEqual([true, false]);
+  });
+
+  it('plays a repeated stage per round at the Technical level only when it opts in and demo mode is off', () => {
+    // ARRANGE
+    const opted = (): typeof WORKFLOW => ({
+      ...WORKFLOW,
+      stages: WORKFLOW.stages.map((stage) =>
+        stage.id === 'each' ? { ...stage, foreach: { ...stage.foreach!, technical: 'rounds' as const } } : stage,
+      ),
+    });
+    const repeats = (demo: boolean, level: typeof SIMPLE | typeof TECHNICAL, workflow = opted()) =>
+      workflowView(workflow, { ...level, demo }).stages.find((stage) => stage.id === 'each')?.repeats;
+    // ACT
+    const seen = [
+      repeats(false, TECHNICAL),
+      repeats(true, TECHNICAL),
+      repeats(false, SIMPLE),
+      repeats(false, TECHNICAL, WORKFLOW),
+    ];
+    // ASSERT
+    expect(seen).toEqual([true, false, true, false]);
+  });
+
+  it('hands the step the recommended model tier of a job, and none for a job without one', () => {
+    // ARRANGE
+    const tiered = structuredClone(loaded.file);
+    Object.assign(tiered.stages[0]!.jobs[0]!, { recommendedModel: 'medium' });
+    // ACT
+    const view = workflowView(workflowOf(tiered), SIMPLE);
+    // ASSERT
+    expect(view.stages[0]?.jobs[0]?.task.recommendedModel).toBe('medium');
+    expect(view.stages[1]?.jobs[0]?.task.recommendedModel).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {

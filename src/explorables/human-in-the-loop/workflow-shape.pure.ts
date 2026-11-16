@@ -1,5 +1,5 @@
 import { CHAT_MARK_NAMES } from '../../shared/components/core-components/chat-icons/chat-marks.pure.ts';
-import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
+import { MODEL_TIERS, MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
@@ -30,14 +30,16 @@ const section = obj(
   ['only', 'purpose', 'explain', 'techniques'],
 );
 const technique = obj({ id: str, tier: enumOf(TIERS), title: str, explain: str });
-const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
+const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool, blank: bool }, [
   'sample',
   'free',
+  'blank',
 ]);
 const limit = obj({ full: int, demo: int });
 const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(CHAT_MARK_NAMES) } }, [
   'icon',
 ]);
+const skills = list(str, 1);
 const task = obj(
   {
     id: str,
@@ -46,16 +48,35 @@ const task = obj(
     goal: obj({ do: str, review: str }, ['review']),
     needs: ids,
     output: str,
+    doneLabel: str,
     template: str,
     slots: list(slot),
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
+    skills,
+    then: obj({ skills, sections: list(section, 1) }),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     limits: { t: 'rec', of: limit },
     openAIButtons: list(chatButton, 1),
-    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
+    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['example', 'techniques']),
+    recommendedModel: enumOf(MODEL_TIERS),
+    optional: bool,
   },
-  ['summary', 'needs', 'output', 'review', 'instructions', 'limits', 'openAIButtons'],
+  [
+    'summary',
+    'needs',
+    'output',
+    'doneLabel',
+    'template',
+    'skills',
+    'then',
+    'review',
+    'instructions',
+    'limits',
+    'openAIButtons',
+    'recommendedModel',
+    'optional',
+  ],
 );
 const stage = obj(
   {
@@ -63,13 +84,15 @@ const stage = obj(
     title: str,
     learningGoal: str,
     summary: str,
-    foreach: obj({ over: str, demo: int, item: str }, ['item']),
+    foreach: obj({ over: str, demo: int, item: str, technical: enumOf(['rounds']) }, ['item', 'technical']),
     moves: list(obj({ letter: enumOf(['B', 'R', 'I', 'E', 'F']), why: str }), 1),
     gate: int,
+    only: enumOf(MODES),
     card: obj({ label: str, lines: list(str), status: str }),
+    optional: bool,
     jobs: list(task, 1),
   },
-  ['summary', 'foreach', 'moves', 'gate', 'card'],
+  ['summary', 'foreach', 'moves', 'gate', 'only', 'card', 'optional'],
 );
 
 /** The Spec of a whole Workflow file. */

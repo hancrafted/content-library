@@ -3,6 +3,8 @@ import { progressFile, readProgressFile } from './progress-file.pure';
 
 const entry = { hash: 'abc', demo: true, results: { 'a.b': 'text' } };
 
+const edited = { ...entry, prompts: { 'simple:a.do': '## Mine\n\nline {{x}}\n' } };
+
 describe('success cases', () => {
   it('names the file after the Workflow and writes workflow, hash, demo and results as YAML', () => {
     // ARRANGE
@@ -31,6 +33,16 @@ describe('success cases', () => {
     const read = readProgressFile(text, { workflow: 'x', hash: run.hash });
     // ASSERT
     expect(read).toEqual({ entry: run });
+  });
+
+  it('writes the edits as block scalars and reads them back', () => {
+    // ARRANGE
+    const { text } = progressFile('x', edited);
+    // ACT
+    const read = readProgressFile(text, { workflow: 'x', hash: edited.hash });
+    // ASSERT
+    expect(text).toContain('prompts:\n  simple:a.do: |\n');
+    expect(read).toEqual({ entry: edited });
   });
 });
 
@@ -69,6 +81,15 @@ describe('failure cases', () => {
     // ASSERT
     expect(read).toEqual(expected);
   });
+
+  it('refuses a file whose prompts are not text', () => {
+    // ARRANGE
+    const text = 'workflow: x\nhash: abc\ndemo: true\nresults: {}\nprompts:\n  a: 1\n';
+    // ACT
+    const read = readProgressFile(text, { workflow: 'x', hash: 'abc' });
+    // ASSERT
+    expect(read).toEqual({ refusal: 'unreadable' });
+  });
 });
 
 describe('edge cases', () => {
@@ -79,5 +100,15 @@ describe('edge cases', () => {
     const read = readProgressFile(text, { workflow: 'x', hash: 'abc' });
     // ASSERT
     expect(read).toEqual({ entry: { hash: 'abc', demo: false, results: {} } });
+  });
+
+  it('writes no prompts field for a run without edits, and reads an old file as before', () => {
+    // ARRANGE
+    const { text } = progressFile('x', { ...entry, prompts: {} });
+    // ACT
+    const read = readProgressFile(text, { workflow: 'x', hash: entry.hash });
+    // ASSERT
+    expect(text).not.toContain('prompts');
+    expect(read).toEqual({ entry });
   });
 });

@@ -26,6 +26,8 @@ export interface UiWords {
   readonly viewJobsTip: string;
   /** The Stages card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
+  /** The tag of a job card the viewer may skip. */
+  readonly optional: string;
   readonly repeats: string; // Jobs view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
   readonly round: string; // Jobs view: what a round is called where the stage names no item
   readonly tryJob: string; // Jobs view: a job card's hidden name (`{job}`, `{stage}`)
@@ -42,10 +44,19 @@ export interface UiWords {
   readonly stepContextInfo: string;
   readonly stepDo: string;
   readonly stepDoInfo: string;
+  /** Above the second prompt of a job that calls a second skill. */
+  readonly thenCopy: string;
   readonly stepCheck: string;
   readonly stepCheckInfo: string;
   readonly copyExplanation: string;
   readonly copyExplanationTip: string;
+  /** Why Copy prompt is disabled while a blank field is empty. */
+  readonly typeFirst: string;
+  /** The pencil beside Copy prompt: its name and tooltip; and the tooltip of the dot on Copy prompt while an edit exists. */
+  readonly editPrompt: string;
+  readonly editedTip: string;
+  /** Reset in the prompt editor: back to the Workflow's text; apart from the progress Reset. */
+  readonly editReset: string;
   readonly explainWrapper: string;
   readonly previousResults: string;
   readonly insertedAt: string;
@@ -126,6 +137,15 @@ export interface UiWords {
   readonly openAIChatTip: string;
   /** The AI chats a prompt opens in, unless its job names its own: one shadcn button each, "ChatGPT | Gemini". */
   readonly openAIButtons: readonly ChatButtonDef[];
+  /** The model note right of the chat buttons: "Model: {tier}" (`{tier}` is the tier's label), the `?` button's name, and per tier its label and its tooltip. */
+  readonly model: string;
+  readonly modelInfo: string;
+  readonly modelHigh: string;
+  readonly modelHighTip: string;
+  readonly modelMedium: string;
+  readonly modelMediumTip: string;
+  readonly modelLow: string;
+  readonly modelLowTip: string;
   /** Progress marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;

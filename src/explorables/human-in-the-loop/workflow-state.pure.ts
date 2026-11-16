@@ -1,3 +1,5 @@
+import { unwrapPastedResult } from './pasted-result.pure';
+import type { PromptEdits } from './prompt-edits.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -29,6 +31,8 @@ export interface WorkflowState {
   readonly demo: boolean;
   /** What the viewer pasted, keyed as the run model keys results (`stage.job`, `stage.job#k`), plus free inputs by their own name. The hook saves these. */
   readonly slotValues: Readonly<Record<string, string>>;
+  /** The viewer's edits of step prompts, by `editKey` (`prompt-edits.pure.ts`). The hook saves these with the results. */
+  readonly prompts: PromptEdits;
   /** Debug mode: the copy buttons add a footer instruction. In memory only, never stored (FE-001), off at the start. */
   readonly debug: boolean;
   /** What was wrong with the last upload; empty when it loaded or none was tried. */
@@ -55,7 +59,13 @@ export type WorkflowEvent =
   | { readonly type: 'debug'; readonly debug: boolean }
   | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
-  | { readonly type: 'restore'; readonly results: Readonly<Record<string, string>>; readonly demo: boolean }
+  | { readonly type: 'prompts'; readonly values: PromptEdits }
+  | {
+      readonly type: 'restore';
+      readonly results: Readonly<Record<string, string>>;
+      readonly demo: boolean;
+      readonly prompts?: PromptEdits;
+    }
   | { readonly type: 'upload-failed'; readonly problems: readonly string[] };
 
 export function createState(start: Start): WorkflowState {
@@ -67,6 +77,7 @@ export function createState(start: Start): WorkflowState {
     openJobId: null,
     openRound: null,
     slotValues: {},
+    prompts: {},
     uploaded: null,
     uploadProblems: [],
   };
@@ -79,16 +90,33 @@ type Handlers = {
   ) => WorkflowState;
 };
 
-/** What changing the shown Workflow starts over: the open stage, the pasted values, demo mode, any upload and its problems. */
+/** What changing the shown Workflow starts over: the open stage, the pasted values, the prompt edits, demo mode, any upload and its problems. */
 const FRESH = {
   openStageId: null,
   openJobId: null,
   openRound: null,
   demo: true,
   slotValues: {},
+  prompts: {},
   uploaded: null,
   uploadProblems: [],
 } as const;
+
+/**
+ * A paste is a slot going from empty to a value in one event, and only then keeps just its fence's inside
+ * (`pasted-result.pure.ts`); typing under existing text is stored as typed.
+ */
+function unwrapPasted(
+  before: Readonly<Record<string, string>>,
+  values: Readonly<Record<string, string>>,
+): Readonly<Record<string, string>> {
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]) => [
+      key,
+      (before[key] ?? '').trim() === '' ? unwrapPastedResult(value) : value,
+    ]),
+  );
+}
 
 const HANDLERS: Handlers = {
   level: (state, { level }) => ({ ...state, level }),
@@ -104,10 +132,17 @@ const HANDLERS: Handlers = {
     state.openStageId === null ? state : { ...state, openStageId: null, openJobId: null, openRound: null },
   demo: (state, { demo }) => ({ ...state, demo }),
   debug: (state, { debug }) => ({ ...state, debug }),
-  reset: (state) => ({ ...state, slotValues: {}, demo: true }),
-  slots: (state, { values }) => ({ ...state, slotValues: values }),
+  reset: (state) => ({ ...state, slotValues: {}, prompts: {}, demo: true }),
+  prompts: (state, { values }) => ({ ...state, prompts: values }),
+  slots: (state, { values }) => ({ ...state, slotValues: unwrapPasted(state.slotValues, values) }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
-  restore: (state, { results, demo }) => ({ ...state, slotValues: results, demo, uploadProblems: [] }),
+  restore: (state, { results, demo, prompts }) => ({
+    ...state,
+    slotValues: results,
+    prompts: prompts ?? {},
+    demo,
+    uploadProblems: [],
+  }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),
 };
 

@@ -3,8 +3,11 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The checks of the order and completeness of a stage's jobs: `needs` ids and cycles, slots that take a same-stage
- * output, an output on every job but the last, the goals and the stage summary. One sentence per problem.
+ * output, a template and an example on every job that hands on an output, the goals and the stage summary. One sentence per problem.
  */
+
+/** The ids that appear more than once, each repeat once. */
+export const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 const SUMMARY_WORDS = 8;
 
@@ -55,18 +58,25 @@ function cycleOf(stage: StageDef): string[] {
   return [];
 }
 
-/** Whether `task` is the final job of the last stage. */
-const isFinal = (file: WorkflowFile, stage: StageDef, task: TaskDef): boolean =>
-  stage === file.stages[file.stages.length - 1] && stage.jobs[stage.jobs.length - 1] === task;
-
-/** Only the final job of the last stage may have no output. A review is optional; one that exists needs its goal. */
-function completenessProblems(file: WorkflowFile, stage: StageDef, task: TaskDef): string[] {
+/** A job that hands on an output needs a template and an example, and has no doneLabel (only a checkbox job has one). */
+function outputProblems(task: TaskDef): string[] {
   const where = `Task "${task.id}"`;
-  const outputMissing = task.output === undefined && !isFinal(file, stage, task);
+  if (task.output === undefined) return [];
+  return [
+    ...(task.template === undefined ? [`${where} hands on an output but names no template.`] : []),
+    ...(task.details.example === undefined ? [`${where} hands on an output but gives no example.`] : []),
+    ...(task.doneLabel === undefined
+      ? []
+      : [`${where} has a doneLabel but hands on an output; only a checkbox job has one.`]),
+  ];
+}
+
+/** What each job must carry: the output fields when it hands one on, and the review goal when it has a review. A job with no output is a checkbox job. */
+function jobFieldProblems(task: TaskDef): string[] {
   const reviewGoalMissing = task.review !== undefined && task.goal.review === undefined;
   return [
-    ...(outputMissing ? [`${where} has no output; only the final job of the last stage may have none.`] : []),
-    ...(reviewGoalMissing ? [`${where} has a review but no review goal.`] : []),
+    ...outputProblems(task),
+    ...(reviewGoalMissing ? [`Task "${task.id}" has a review but no review goal.`] : []),
   ];
 }
 
@@ -82,8 +92,21 @@ export function jobOrderProblems(file: WorkflowFile): string[] {
       ...stage.jobs.flatMap((task) => [
         ...needsProblems(stage, task),
         ...sameStageProblems(stage, task),
-        ...completenessProblems(file, stage, task),
+        ...jobFieldProblems(task),
       ]),
     ];
   });
+}
+
+/**
+ * Outputs handed on twice, and gates held twice, by stages of the file as it runs in one mode: the same output or gate
+ * may sit on two stages only when they are marked for opposite modes, so the caller passes one mode's file.
+ */
+export function singletonProblems(file: WorkflowFile): string[] {
+  const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
+  const gates = file.stages.flatMap((stage) => (stage.gate === undefined ? [] : [String(stage.gate)]));
+  return [
+    ...dupes(outputs).map((name) => `The output "${name}" is handed on by two tasks.`),
+    ...dupes(gates).map((gate) => `The gate ${gate} is held by two stages that can run together.`),
+  ];
 }

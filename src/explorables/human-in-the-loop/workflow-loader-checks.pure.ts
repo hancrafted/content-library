@@ -1,9 +1,9 @@
 import { markerCount } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure.ts';
-import { unneededOutputs } from './workflow-loader-jobs.pure.ts';
-import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
+import { dupes, unneededOutputs } from './workflow-loader-jobs.pure.ts';
+import { blankProblems, limitProblems, missingSampleProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
 import { expandSections, unknownMarkers } from './workflow-markers.pure.ts';
-import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure.ts';
+import { producersFor, tasksOf, type Producer } from './workflow-outputs.pure.ts';
 import { slotSample } from './workflow-sample.pure.ts';
 import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -11,8 +11,6 @@ import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './wor
  * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
  * markers, and every sample and example against its template. One sentence per problem.
  */
-
-const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 export function templateProblems(file: WorkflowFile): string[] {
   return Object.entries(file.templates).flatMap(([key, source]) => {
@@ -25,13 +23,12 @@ export function templateProblems(file: WorkflowFile): string[] {
   });
 }
 
+/** Stage ids and task ids used twice anywhere in the file: a mode never makes two of them the same. */
 export function idProblems(file: WorkflowFile): string[] {
   const tasks = tasksOf(file);
-  const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
   return [
     ...dupes(file.stages.map((stage) => stage.id)).map((id) => `The stage id "${id}" is used twice.`),
     ...dupes(tasks.map((task) => task.id)).map((id) => `The task id "${id}" is used twice.`),
-    ...dupes(outputs).map((name) => `The output "${name}" is handed on by two tasks.`),
   ];
 }
 
@@ -131,19 +128,29 @@ function slotNamed(
   return scope.own.has(slot.id) ? [] : slotNameProblems(slot, task, scope.names.get(slot.id));
 }
 
+/** A slot that carries a sample: the sample against the template of the output it takes, and its marker count. */
+function filledSlotProblems(
+  file: WorkflowFile,
+  task: TaskDef,
+  at: { slot: SlotDef; scope: { names: ReadonlyMap<string, Producer> } },
+): string[] {
+  const { slot } = at;
+  const producer = at.scope.names.get(slot.id);
+  const template = slot.free ? undefined : producer?.task.template;
+  const markers = markersOf(slot, task, producer?.stage.foreach?.demo ?? 0);
+  return sampleProblems(slot, { file, task, template, markers });
+}
+
 function doSlotOf(
   file: WorkflowFile,
   task: TaskDef,
   scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
 ) {
   return (slot: SlotDef): string[] => {
-    const producer = scope.names.get(slot.id);
     const named = slotNamed(slot, task, scope);
-    if (slotSample(file, slot) === undefined)
-      return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
-    const template = slot.free ? undefined : producer?.task.template;
-    const markers = markersOf(slot, task, producer?.stage.foreach?.demo ?? 0);
-    return [...named, ...sampleProblems(slot, { file, task, template, markers })];
+    if (slot.blank) return [...named, ...blankProblems(slot, task)];
+    const missing = missingSampleProblems(file, slot, task);
+    return [...named, ...(missing.length > 0 ? missing : filledSlotProblems(file, task, { slot, scope }))];
   };
 }
 
@@ -189,16 +196,18 @@ function reviewSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMa
 function exampleProblems(file: WorkflowFile, task: TaskDef, stage: StageDef): string[] {
   const { example } = task.details;
   const where = `The example of task "${task.id}"`;
+  const { template } = task;
+  if (example === undefined || template === undefined) return [];
   const rounds = stage.foreach?.demo;
   if (typeof example === 'string') {
-    return againstTemplate(file, task.template, { source: example, what: where });
+    return againstTemplate(file, template, { source: example, what: where });
   }
   if (rounds === undefined) return [`${where} is a list but its stage does not repeat.`];
   if (example.length !== rounds) {
     return [`${where} needs ${rounds} examples, one per demo round, and has ${example.length}.`];
   }
   return example.flatMap((source, at) =>
-    againstTemplate(file, task.template, { source, what: `The example of round ${at + 1} of task "${task.id}"` }),
+    againstTemplate(file, template, { source, what: `The example of round ${at + 1} of task "${task.id}"` }),
   );
 }
 
@@ -219,7 +228,9 @@ function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[
   const stage = file.stages[index] as StageDef;
   const own = unneededOutputs(stage, task);
   const known =
-    task.template in file.templates ? [] : [`Task "${task.id}" names the unknown template "${task.template}".`];
+    task.template === undefined || task.template in file.templates
+      ? []
+      : [`Task "${task.id}" names the unknown template "${task.template}".`];
   return [
     ...known,
     ...doSlotProblems(file, task, { names, own }),

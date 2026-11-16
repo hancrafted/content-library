@@ -10,7 +10,7 @@ const task = (id: string): TaskDef =>
   file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
   joinPrompt({ sections: prompt.sections ?? [], slots: prompt.slots ?? [] }, {});
-const examples = (id: string): readonly string[] => [task(id).details.example].flat();
+const examples = (id: string): readonly string[] => [task(id).details.example ?? ''].flat();
 /** The repeated job with a review of each round, so the round's own review field can be tested; the fixture reviews only `ask`. */
 const reviewedLook = (): TaskDef => {
   const look = task('look');
@@ -180,6 +180,52 @@ describe('success cases', () => {
     // ASSERT
     expect(made.prompt.slots?.map((slot) => slot.id)).toEqual(['brief', 'note_result#2']);
     expect(text).not.toContain('{{note_result}}');
+  });
+
+  it('prints each skill as a /name line at the very top of the technical prompt, then a blank line and the first heading', () => {
+    // ARRANGE
+    const job = { ...task('ask'), skills: ['grilling', 'to-spec'] };
+    // ACT
+    const technical = joined(doPrompt(file, job, 'technical'));
+    const simple = joined(doPrompt(file, job, 'simple'));
+    // ASSERT
+    expect(technical.startsWith('/grilling\n/to-spec\n\n## ')).toBe(true);
+    expect(simple.startsWith('## ')).toBe(true);
+  });
+
+  it('leaves the technical prompt as it was when a job names no skills', () => {
+    // ARRANGE
+    const job = task('ask');
+    // ACT
+    const text = joined(doPrompt(file, job, 'technical'));
+    // ASSERT
+    expect(text.startsWith('## ')).toBe(true);
+  });
+
+  it('makes a then step after the do step for a job with a second technical prompt, with its own skill line', () => {
+    // ARRANGE
+    const then = { skills: ['to-spec'], sections: [{ heading: 'Task', text: 'Write the file for {{item}}.' }] };
+    const job = { ...task('look'), skills: ['grilling'], then };
+    // ACT
+    const technical = stepsOf(file, job, 'technical');
+    const simple = stepsOf(file, job, 'simple');
+    const text = technical[0]?.then && joined(technical[0].then.prompt);
+    // ASSERT
+    expect(technical[0]?.then?.id).toBe('then');
+    expect(text).toBe('/to-spec\n\n## Task\n\nWrite the file for {{item}}.');
+    expect(simple[0]?.then).toBeUndefined();
+  });
+
+  it("fills a round into the then step too, so its {{item}} is the round's", () => {
+    // ARRANGE
+    const then = { skills: ['to-spec'], sections: [{ heading: 'Task', text: 'Write the file for {{item}}.' }] };
+    const [step] = stepsOf(file, { ...task('look'), then }, 'technical');
+    // ACT
+    const number = 2;
+    const round = roundStep(step as NonNullable<typeof step>, { number, item: '### Roof' }, { previous: [] });
+    // ASSERT
+    expect(round.then && joined(round.then.prompt)).toContain('Write the file for ### Roof.');
+    expect(round.then?.chat).toBe(number);
   });
 });
 

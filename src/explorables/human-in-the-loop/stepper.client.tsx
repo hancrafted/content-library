@@ -85,6 +85,12 @@ interface Run {
   readonly copied: ReadonlySet<string>;
 }
 
+/** The second prompt of a do step, as the item's lead follows it. */
+const thenOf = (step: Item['doSteps'][number], copied: ReadonlySet<string>): NonNullable<PanelProgress['then']> => {
+  const key = panelKey('then', step);
+  return { key, copied: copied.has(key) };
+};
+
 function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelProgress[] {
   const { job, doSteps, reviewSteps } = item;
   const does = doSteps.map((step) => {
@@ -95,6 +101,7 @@ function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelPro
       copied: copied.has(key),
       done: filled(values, resultKey(step, job.task)),
       needsInput: needsInput(inputs, values),
+      ...(step.then && { then: thenOf(step, copied) }),
     };
   });
   const reviews = reviewSteps.map((step) => {

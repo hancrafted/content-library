@@ -1,12 +1,11 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ArrowDown, Connector } from './diagram-arrows';
 import { connectorInto, type Rounds } from './diagram-layout.pure';
 import type { DiagramProps, DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
 import { JobCard } from './job-card';
 import { MoveCircles } from './move-circles.client';
-import { GateBadge, gateLabelOf, Title } from './stage-card';
+import { GateBadge, gateLabelOf, stageCardClass, Title } from './stage-card';
 import { Count } from './state-mark';
 import { orderedJobs } from './workflow-order.pure';
 import type { JobState, Run, StageRun } from './workflow-run.pure';
@@ -78,10 +77,7 @@ function StageCard({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: Sta
   const gate = gateLabelOf(stage, slot, words);
   const run = runOfStage(ctx, stage);
   return (
-    <div
-      data-stage-card=""
-      className={cn('flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3', gate && 'shadow-sm')}
-    >
+    <div data-stage-card="" className={stageCardClass(stage, gate)}>
       <Title stage={stage} slot={slot} />
       {ctx.slots.initials === true && stage.moves.length > 0 && (
         <div className="relative z-10">

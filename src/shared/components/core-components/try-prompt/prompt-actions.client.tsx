@@ -3,7 +3,7 @@
 import { useMotion } from '@/shared/hooks/use-motion';
 import { cn } from '@/shared/lib/utils';
 import { Check, Copy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ButtonHTMLAttributes } from 'react';
 import { OUTLINED_ICON } from '../icon-button/icon-button.client';
 import styles from './prompt-actions.module.css';
 import type { PromptKit } from './try-prompt.types';
@@ -34,7 +34,10 @@ function useConfirmed() {
   return [at !== 0, () => setAt((now) => now + 1)] as const;
 }
 
-interface CopyButtonProps {
+interface CopyButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'aria-label' | 'type' | 'onClick' | 'title'
+> {
   readonly label: string;
   readonly done: string;
   readonly onCopy: () => Promise<boolean>;
@@ -42,10 +45,27 @@ interface CopyButtonProps {
   readonly lead?: boolean;
   /** A tooltip saying where the copied text goes. */
   readonly tip?: string;
+  /** The copy is the viewer's edited version: a dot follows the label. */
+  readonly edited?: boolean;
+}
+
+/** The data marks of the button. */
+function attrsOf({ confirmed, lead, edited }: Pick<CopyButtonProps, 'lead' | 'edited'> & { confirmed: boolean }) {
+  return {
+    'data-edited': edited || undefined,
+    'data-copied': confirmed,
+    'data-lead': lead || undefined,
+  };
+}
+
+/** A small dot after the label while the copy is the viewer's edit. */
+function EditedDot({ edited }: Pick<CopyButtonProps, 'edited'>) {
+  if (!edited) return null;
+  return <span aria-hidden="true" data-edited-dot="" className="size-1.5 rounded-full bg-current" />;
 }
 
 /** "Copy prompt": a press copies, and on success the icon turns into a tick and the label into "Copied", then back. */
-export function CopyButton({ label, done, onCopy, lead = false, tip }: CopyButtonProps) {
+export function CopyButton({ label, done, onCopy, lead = false, tip, edited, ...rest }: CopyButtonProps) {
   const motion = useMotion();
   const [confirmed, confirm] = useConfirmed();
   const Icon = confirmed ? Check : Copy;
@@ -53,15 +73,16 @@ export function CopyButton({ label, done, onCopy, lead = false, tip }: CopyButto
     <button
       type="button"
       {...motion}
+      {...rest}
       aria-label={label}
       title={tip}
-      data-copied={confirmed}
-      data-lead={lead || undefined}
+      {...attrsOf({ confirmed, lead, edited })}
       className={cn(WRITTEN_OUT, lead && LEAD)}
       onClick={() => void onCopy().then((ok) => ok && confirm())}
     >
       <Icon key={String(confirmed)} aria-hidden="true" className={cn('size-4', confirmed && styles.pop)} />
       <span className="hidden md:inline">{confirmed ? done : label}</span>
+      <EditedDot edited={edited} />
     </button>
   );
 }

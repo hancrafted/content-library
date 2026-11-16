@@ -45,6 +45,20 @@ const file = (): WorkflowFile => ({
 
 const researchOf = (results: Record<string, string>, demo: boolean) => runOf(file(), { results, demo }).stages[1]!;
 
+/** The Plan stage gains an optional `grade` job; the Report stage is optional too. */
+const withOptional = (): WorkflowFile => {
+  const base = file();
+  return {
+    ...base,
+    stages: [
+      { ...base.stages[0]!, jobs: [...base.stages[0]!.jobs, job('grade', { optional: true })] },
+      base.stages[1]!,
+      { ...base.stages[2]!, optional: true, jobs: [job('final', { optional: true, output: undefined })] },
+    ],
+  };
+};
+const planOf = (results: Record<string, string>) => runOf(withOptional(), { results, demo: true }).stages[0]!;
+
 describe('success cases', () => {
   it('makes one round per H3 under the named H2 of the pasted result, in document order, in full mode', () => {
     // ARRANGE
@@ -130,6 +144,38 @@ describe('success cases', () => {
     expect(last?.state).toBe('done');
   });
 
+  it('marks a checkbox job in the middle of a stage done by its box, and counts it with the stage', () => {
+    // ARRANGE
+    const base = file();
+    const boxed = job('box', { output: undefined, review: undefined });
+    const middle: WorkflowFile = {
+      ...base,
+      stages: [{ ...base.stages[0]!, jobs: [boxed, job('plan')] }, base.stages[1]!, base.stages[2]!],
+    };
+    const results = { [resultKey('plan', 'box')]: 'done' };
+    // ACT
+    const [first] = runOf(middle, { results, demo: true }).stages;
+    // ASSERT
+    expect(first?.jobs.map((each) => each.state)).toEqual(['done', 'open']);
+    expect(`${first?.done}/${first?.total}`).toBe('1/2');
+  });
+
+  it('keeps an optional checkbox job from blocking its stage when its box stays empty', () => {
+    // ARRANGE
+    const base = file();
+    const optionalBox = job('play', { output: undefined, review: undefined, optional: true });
+    const stage: StageDef = { ...base.stages[0]!, jobs: [job('plan'), optionalBox] };
+    const results = { 'plan.plan': PLAN };
+    // ACT
+    const [first] = runOf(
+      { ...base, stages: [stage, base.stages[1]!, base.stages[2]!] },
+      { results, demo: true },
+    ).stages;
+    // ASSERT
+    expect(first?.state).toBe('done');
+    expect(first?.total).toBe(1);
+  });
+
   it('counts the jobs whose result is in, per stage, rounds included', () => {
     // ARRANGE
     const results = {
@@ -206,6 +252,71 @@ describe('success cases', () => {
     // ASSERT
     expect(markers).toEqual({ plan: PLAN, look_2: 'two', 'final.done': 'done', 'research_result#1': 'own' });
     expect(back).toEqual(results);
+  });
+
+  it('leaves an open optional job out of the stage count', () => {
+    // ARRANGE
+    const results = { 'plan.plan': PLAN };
+    // ACT
+    const stage = planOf(results);
+    // ASSERT
+    expect([stage.done, stage.total]).toEqual([1, 1]);
+  });
+
+  it('leaves a done optional job out of the stage count too', () => {
+    // ARRANGE
+    const results = { 'plan.plan': PLAN, 'plan.grade': 'Graded.' };
+    // ACT
+    const stage = planOf(results);
+    // ASSERT
+    expect([stage.done, stage.total]).toEqual([1, 1]);
+  });
+
+  it('calls a stage done without its optional job, and keeps the optional job in its jobs', () => {
+    // ARRANGE
+    const results = { 'plan.plan': PLAN };
+    // ACT
+    const stage = planOf(results);
+    // ASSERT
+    expect(stage.state).toBe('done');
+    expect(stage.jobs.map((each) => [each.id, each.state])).toEqual([
+      ['plan', 'done'],
+      ['grade', 'open'],
+    ]);
+  });
+
+  it('does not let an unreviewed optional job pull a checked stage down', () => {
+    // ARRANGE
+    const results = { 'plan.plan': PLAN, 'plan.plan.checked': 'yes' };
+    // ACT
+    const stage = planOf(results);
+    // ASSERT
+    expect(stage.state).toBe('checked');
+  });
+
+  it('counts the jobs of an optional stage itself, since nothing in it is required', () => {
+    // ARRANGE
+    const results = { 'report.final': 'done' };
+    // ACT
+    const open = runOf(withOptional(), { results: {}, demo: true }).stages[2]!;
+    const done = runOf(withOptional(), { results, demo: true }).stages[2]!;
+    // ASSERT
+    expect([open.done, open.total, open.state]).toEqual([0, 1, 'open']);
+    expect([done.done, done.total, done.state]).toEqual([1, 1, 'done']);
+  });
+
+  it('leaves an optional job out of a round state and count in a repeated stage', () => {
+    // ARRANGE
+    const base = withOptional();
+    const research = { ...base.stages[1]!, jobs: [job('look'), job('rank', { optional: true })] };
+    const repeated = { ...base, stages: [base.stages[0]!, research, base.stages[2]!] };
+    const results = { 'plan.plan': PLAN, 'research.look#1': 'x', 'research.look#2': 'x' };
+    const rounds = 2;
+    // ACT
+    const stage = runOf(repeated, { results, demo: true }).stages[1]!;
+    // ASSERT
+    expect(stage.rounds.map((round) => round.state)).toEqual(Array(rounds).fill('done'));
+    expect([stage.done, stage.total]).toEqual([rounds, rounds]);
   });
 });
 

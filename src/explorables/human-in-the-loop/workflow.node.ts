@@ -2,9 +2,9 @@ import type { SlotValues } from '@/shared/components/core-components/try-prompt/
 import { joinPrompt } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { pairHash } from '../../shared/lib/pair-hash.pure.ts';
 import { SOURCE_CHARS } from './debug-footer.pure.ts';
-import { workflowOf } from './workflow-file-adapter.pure.ts';
+import { workflowInMode, workflowOf } from './workflow-file-adapter.pure.ts';
 import { loadWorkflow } from './workflow-loader.pure.ts';
-import type { TaskStep } from './workflow-prompts.pure';
+import type { StepKind, TaskStep } from './workflow-prompts.pure';
 import { roundStep } from './workflow-prompts.pure.ts';
 import type { WorkflowFile } from './workflow-schema.types';
 /*
@@ -29,7 +29,7 @@ export interface Round {
 /** Which prompt to render: a job, its do or review step, the level, demo mode, a round and the pasted values. */
 export interface RenderRequest {
   readonly job: string;
-  readonly step?: TaskStep['id'];
+  readonly step?: StepKind;
   readonly level?: ViewOptions['level'];
   /** Demo mode picks each limit's demo value and the demo-only sections; default on. */
   readonly demo?: boolean;
@@ -42,7 +42,11 @@ export type RenderResult = { readonly text: string } | { readonly problems: read
 
 /** The requested step of a job as the stepper shows it: in a round, with the share the stepper passes. */
 function requestedStep(job: JobModalView, request: RenderRequest): TaskStep | undefined {
-  const step = job.task.steps.find((each) => each.id === (request.step ?? 'do'));
+  const wanted = request.step ?? 'do';
+  const step =
+    wanted === 'then'
+      ? job.task.steps.find((each) => each.id === 'do')?.then
+      : job.task.steps.find((each) => each.id === wanted);
   if (step === undefined || request.round === undefined) return step;
   const share = { previous: job.task.previous, output: job.task.output, sameStage: job.task.sameStage };
   return roundStep(step, request.round, share);
@@ -50,7 +54,8 @@ function requestedStep(job: JobModalView, request: RenderRequest): TaskStep | un
 
 /** The job as the stepper shows it, at the requested level and mode. */
 function jobView(file: WorkflowFile, request: RenderRequest): JobModalView | undefined {
-  const view = workflowView(workflowOf(file), { level: request.level ?? 'simple', demo: request.demo ?? true });
+  const demo = request.demo ?? true;
+  const view = workflowView(workflowInMode(workflowOf(file), demo), { level: request.level ?? 'simple', demo });
   return view.stages.flatMap((stage) => stage.jobs).find((each) => each.id === request.job);
 }
 
