@@ -2,6 +2,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { slowTestsLogPath, slowTestsSince } from '../../../vitest-slow-tests.mts';
 
 const git = (cwd: string, ...args: string[]) => spawnSync('git', args, { cwd, encoding: 'utf8' });
 
@@ -96,4 +97,23 @@ export function mergeIntoBase(branch: string, base: string, cwd: string): 'merge
       `merging ${branch} into ${base} failed (conflict or dirty ${tree}):\n${merge.stdout}${merge.stderr}`,
     );
   });
+}
+
+/**
+ * The lines a finish prints about the fast-suite tests that ran past 5 s on `branch` since it branched off `base`
+ * (entries from the shared slow-tests log, see vitest-slow-tests.mts), so the orchestrator sees creeping tests
+ * in the merge output. Empty when there are none. Call it before merging: afterwards the merge-base is the tip.
+ */
+export function slowTestReport(branch: string, base: string, cwd: string): string[] {
+  const log = slowTestsLogPath(cwd);
+  const fork = git(cwd, 'merge-base', branch, base).stdout.trim();
+  if (log === null || fork === '') return [];
+  const since = new Date(git(cwd, 'log', '-1', '--format=%cI', fork).stdout.trim());
+  const entries = slowTestsSince(log, branch, since);
+  if (entries.length === 0) return [];
+  const count = entries.length === 1 ? '1 test' : `${entries.length} tests`;
+  return [
+    `! ${count} ran past 5 s on ${branch} since it branched off ${base}:`,
+    ...entries.map((e) => `  ${(e.ms / 1000).toFixed(1)} s  ${e.file} > ${e.test}  (${e.at})`),
+  ];
 }

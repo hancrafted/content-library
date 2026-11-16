@@ -1,7 +1,8 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { currentWorkers } from './vitest-workers.mts';
+import { SlowTestsLog } from './vitest-slow-tests.mts';
+import { currentLoad } from './vitest-workers.mts';
 
 const ROOT = import.meta.dirname;
 
@@ -67,6 +68,14 @@ const TRIGGERS = [
   'tests/fixtures/**',
 ];
 
+// Workers and the test timeout both follow the load measured now: 5 s idle, up to 20 s on a loaded machine, 5 s on
+// CI (vitest-workers.mts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
+// reporter's stdout clean.
+const load = await currentLoad();
+console.error(
+  `vitest: test timeout ${(load.testTimeout / 1000).toFixed(1)} s at load factor ${load.loadFactor.toFixed(1)} (${load.workers} workers)`,
+);
+
 // The fast suite, run by `npm run verify` and CI. `*.build.test.ts` needs a finished
 // `next build` and runs in its own lane: vitest.build.config.mts. `*.slow.test.ts` takes seconds
 // and runs in the slow lane: vitest.slow.config.mts.
@@ -79,7 +88,10 @@ export default defineConfig({
     },
   },
   test: {
-    maxWorkers: await currentWorkers(),
+    maxWorkers: load.workers,
+    testTimeout: load.testTimeout,
+    // Vitest's own default reporters, plus the log of every test over 5 s, which `wt:done` prints at merge.
+    reporters: [...configDefaults.reporters, new SlowTestsLog()],
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,

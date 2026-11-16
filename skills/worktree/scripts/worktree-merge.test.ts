@@ -3,7 +3,7 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSy
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { mergeIntoBase } from './worktree-merge.ts';
+import { mergeIntoBase, slowTestReport } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -164,6 +164,44 @@ describe('mergeIntoBase', () => {
       const result = mergeIntoBase('other', 'base', main);
       // ASSERT
       expect(result).toBe('merged');
+    });
+  });
+});
+
+/** One slow-tests log line, as the fast suite's reporter writes it. */
+const slowEntry = (test: string, branch: string, at: Date) =>
+  JSON.stringify({ test, file: 'src/walk.test.ts', ms: 6200, branch, at: at.toISOString() }) + '\n';
+
+describe('slowTestReport', () => {
+  describe('success cases', () => {
+    it('lists the slow tests the branch logged since its merge-base, and not older ones', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
+      const hour = 60 * 60 * 1000;
+      writeFileSync(
+        path.join(main, '.git', 'slow-tests.jsonl'),
+        slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - hour)) +
+          slowEntry('after the fork', 'work', new Date(forkedAt.getTime() + hour)) +
+          slowEntry('on another branch', 'other', new Date(forkedAt.getTime() + hour)),
+      );
+      const header = '! 1 test ran past 5 s on work since it branched off base:';
+      const line = `  6.2 s  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + hour).toISOString()})`;
+      // ACT
+      const report = slowTestReport('work', 'base', main);
+      // ASSERT
+      expect(report).toEqual([header, line]);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('prints nothing when the repository has no slow-tests log yet', () => {
+      // ARRANGE
+      const { main } = fixture();
+      // ACT
+      const report = slowTestReport('work', 'base', main);
+      // ASSERT
+      expect(report).toEqual([]);
     });
   });
 });
