@@ -154,7 +154,6 @@ stages:
         summary: What the task is for, decided
         goal:
           do: 'Let the AI ask what your task is for, then agree with it on the requirement categories that matter.'
-          review: 'Have a second chat check that the intent is complete before the grill starts from it.'
         output: categories
         template: categories
         slots:
@@ -193,6 +192,7 @@ stages:
             - Reader holds the words and depth you chose, and every question kept to them.
             - The categories are the ones you confirmed; the rest sit under Out of scope.
             - Nothing inside a category is decided yet; that is the next stage's job.
+            - The result holds the full intent — Goal, Reader and Categories with one H3 each — not a summary.
         instructions: 'Open a new chat, put your goal in the box and paste the prompt. Answer the calibration like "C1:1 C2:2" and each round like "Q1:2 Q2:3", confirm the categories it proposes, then copy the result.'
         skills: [grilling]
         do:
@@ -281,18 +281,6 @@ stages:
                 Write the file in this template. Your final reply holds nothing else: the first line is exactly "Result:"; then the file's content, verbatim, as one markdown code block that starts with ```markdown; the last line is the file's path.
 
                 {{template}}
-        review:
-          instructions: 'Paste the result into the box below and copy the prompt into another new chat. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into the first chat and keep the corrected result.'
-          slots:
-            - id: categories
-              mode: single
-              label: The intent to review
-              sample: *categories_example
-          checks:
-            - 'The result holds the full intent: Goal, Reader and Categories with one H3 per category, never a summary of it.'
-            - Reader holds two calibration answers, words and depth, each citing C1 or C2.
-            - Every category is an H3 with one Scope line and one Intent line citing its questions, such as (Q2).
-            - 'Nothing inside a category is decided beyond the cited answers; a point they leave open says "open".'
   - id: grill-demo
     only: demo
     title: Grill
