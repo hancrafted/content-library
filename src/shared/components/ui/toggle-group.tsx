@@ -1,7 +1,6 @@
+import { cn } from '@/shared/lib/utils';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import type * as React from 'react';
-
-import { cn } from '@/shared/lib/utils';
 
 /** A row of toggles, single or multiple choice; Radix gives it roving focus and `aria-pressed` or `aria-checked`. */
 function ToggleGroup({ className, ...props }: React.ComponentProps<typeof ToggleGroupPrimitive.Root>) {

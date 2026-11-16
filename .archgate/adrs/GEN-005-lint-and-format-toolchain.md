@@ -35,7 +35,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 4. A script that formats a generated file MUST use oxfmt.
 5. The lint config MUST be the TypeScript file `oxlint.config.mts` (oxlint 1.93 loads it under Node, experimental), never a committed JSON copy. It imports the design-token legacy list `src/shared/design-system/legacy.json` and the selector and token constants in `tools/lint/constants.ts`, so the list stays one file read by lint and Archgate (FE-011) and no glob is duplicated. A generator with a staleness test was the fallback and is not needed.
 6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins, and `@typescript-eslint/parser` stays as a dev dependency for the FE-013 rules test, which parses as Archgate does.
-7. The format config MUST be `.oxfmtrc.jsonc`, and what oxfmt skips MUST live in its `ignorePatterns` beside the reason, with no separate ignore file and no `.prettierrc` or `.prettierignore`. `sortImports` stays off until the import reorder lands as its own change (#615).
+7. The format config MUST be `.oxfmtrc.jsonc`, and what oxfmt skips MUST live in its `ignorePatterns` beside the reason, with no separate ignore file and no `.prettierrc` or `.prettierignore`. `sortImports` MUST be on: two blocks (`builtin`, `external`, `subpath`, `internal`, `unknown`; then `parent`, `sibling`, `index`), `ignoreCase: true`, `newlinesBetween: false`, the closest match to the former organize-imports order. oxfmt never removes an unused import; lint's `no-unused-vars` reports it (`tests/boundaries/oxlint-config.test.ts`).
 
 ### 2. Exact pins
 
@@ -91,7 +91,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 
 1. **Immature tools:** the plugin API and formatter output can shift between releases.
 2. **Output deltas:** union-type layout (about 20 TS files), a few HTML specs and one Markdown table format differently.
-3. **Import housekeeping:** unused imports are reported by lint, and the import reorder lands as its own commit.
+3. **Import housekeeping:** unused imports are reported by lint, and oxfmt sorts imports (the reorder landed as its own commit, #615).
 
 **Risks:**
 

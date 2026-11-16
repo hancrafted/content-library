@@ -1,5 +1,4 @@
 import { defineConfig } from 'oxlint';
-
 import * as C from './tools/lint/constants.ts';
 import { NATIVE_RULES, type RuleMap } from './tools/lint/native-rules.ts';
 

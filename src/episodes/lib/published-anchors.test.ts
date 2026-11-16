@@ -21,8 +21,8 @@ import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { formatAsRepo } from './oxfmt-format.ts';
 import { describe, expect, it } from 'vitest';
+import { formatAsRepo } from './oxfmt-format.ts';
 import { compositionOf, type ComposedPage } from './registry';
 
 /*
