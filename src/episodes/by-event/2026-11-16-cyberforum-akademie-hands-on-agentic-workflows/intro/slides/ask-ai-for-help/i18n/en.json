@@ -1,0 +1,46 @@
+{
+  "title": "Ask AI for help",
+  "caption": "Stuck? Ask the AI before you ask me: it is quicker, and the move works with every tool.",
+  "statement": "When you are stuck, paste what you see into an AI, say where you are, and ask for one next step.",
+  "flow": {
+    "stuck": {
+      "label": "Stuck",
+      "text": "An error, an odd answer, a button you can’t find."
+    },
+    "help": {
+      "label": "Help",
+      "text": "Paste what you see into the box under Help on any hands-on Slide."
+    },
+    "copy": {
+      "label": "Copy prompt",
+      "text": "It adds where you are and asks for plain words."
+    },
+    "next": {
+      "label": "One next step",
+      "text": "Paste it into an AI chat, try what it says."
+    }
+  },
+  "tryIt": "Try it now: Help sits at the top right of this Slide.",
+  "help": {
+    "button": "Help",
+    "label": "Where you're stuck",
+    "placeholder": "Paste what the AI answered, or describe where you're stuck…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm in a hands-on workshop: I'm turning an article into a quiz with an AI chat, and I'm stuck.\n\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm not technical. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    },
+    "step": "Learning to ask AI for help, before the hands-on starts"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Sell the move, not the button",
+      "description": "Asking AI to explain where you are stuck is a skill for every tool, not only today’s. The Help box only writes the prompt: where you are, what you see, plain words, one next step. Have everyone open Help once now, so they find it later."
+    }
+  }
+}

@@ -1,29 +1,29 @@
 {
   "title": "Im Fokus",
-  "caption": "Alles Angekündigte ist da, als Modell im Kopf oder live vorgeführt.",
+  "caption": "Alles Angekündigte ist am Nachmittag dabei, als Theorie oder mit eigenen Händen gemacht.",
   "announced": "Angekündigt",
-  "lands": "Wo es heute Abend landet",
+  "lands": "Wo es heute landet",
   "pairs": {
     "first": {
-      "term": "Grundlagen",
-      "lands": "Ein mentales Modell",
-      "detail": "Fünf Eigenschaften der KI, fünf Gegenzüge"
+      "term": "Agentische Workflows",
+      "lands": "Drei Theorie-Episoden",
+      "detail": "Was sie verlangen, geteilter Kontext und was einen Skill tragfähig macht"
     },
     "second": {
       "term": "Prompting",
-      "lands": "Live-Demo „Grill me“",
-      "detail": "Statt selbst zu formulieren, lasst ihr euch von der KI befragen: Prompting eine Ebene höher"
+      "lands": "Hands-on: Die KI interviewt dich",
+      "detail": "Statt den Prompt zu schreiben, lässt du dich von der KI befragen und machst aus den Antworten eine Spec"
     },
     "third": {
-      "term": "Workflows",
-      "lands": "Live-Demo: ein Workflow",
-      "detail": "Agentisch: eine große Aufgabe in Schritten, ihr prüft dazwischen"
+      "term": "Skills",
+      "lands": "Hands-on: dein eigener Quiz-Skill",
+      "detail": "Dein guter Durchlauf, aufgeschrieben, damit das nächste Quiz einen Schritt braucht"
     }
   },
   "notes": {
     "talking-points": {
       "header": "Alles Angekündigte ist da",
-      "description": "Jeder angekündigte Begriff kommt heute Abend vor: die Grundlagen als mentales Modell, Prompting in der Live-Demo „Grill me“, wo die KI uns befragt, statt dass wir formulieren, und Workflows in der zweiten Live-Demo."
+      "description": "Agentische Workflows kommen als drei Theorie-Episoden; Prompting und Skills macht ihr selbst, in den Hands-ons, an einem Quiz aus eurem eigenen Artikel."
     }
   }
 }

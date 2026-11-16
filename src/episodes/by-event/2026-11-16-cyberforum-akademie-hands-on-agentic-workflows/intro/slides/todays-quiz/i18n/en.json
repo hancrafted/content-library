@@ -1,0 +1,41 @@
+{
+  "title": "Today's quiz",
+  "caption": "What you build today: a quiz from one article, from intent to spec to page, then a skill that makes the next quiz in one go.",
+  "stage": "Before the break",
+  "timebox": "15 minutes",
+  "steps": {
+    "first": "Pick one article you’d like your team to learn from. No article? The Workflow names a sample source.",
+    "second": "Open an AI chat, ideally Gemini or Claude; ChatGPT and Copilot work too.",
+    "third": "Open the quiz Workflow: “Turn a source into a quiz” is already picked. Look, don’t start yet.",
+    "fourth": "Not working after five minutes? Come back to the room early and we sort it out."
+  },
+  "doneLabel": "Done looks like",
+  "done": "An article and an open AI chat, ready for the interview.",
+  "workflow": {
+    "label": "Open the quiz Workflow",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
+    "newTab": "opens in a new tab"
+  },
+  "help": {
+    "button": "Help",
+    "label": "Where you're stuck",
+    "placeholder": "Paste what the AI answered, or describe where you're stuck…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm in a hands-on workshop: I'm turning an article into a quiz with an AI chat, and I'm stuck.\n\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm not technical. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    },
+    "step": "Before the hands-on: picking an article and opening my AI chat"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Three stages, one quiz",
+      "description": "Show one or two example quizzes on screen share. The Workflow runs in stages: Requirements (clarify the intent), Grill (interview into a spec), Execute (build, play and fix the page), Improve (turn the run into a skill and try it)."
+    }
+  }
+}

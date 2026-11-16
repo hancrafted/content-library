@@ -51,7 +51,7 @@ function researchTask(locale: string): string {
 /**
  * What an agentic workflow is (picked Option 4a): the human-in-the-loop Explorable in its Stages view, running "Plan a
  * summer party". The path over it is bracketed as the part you design, each stage's handoff under it; one Research
- * round is zoomed below it as the part the agent steers, its task the Workflow's own and its steps its own call. The
+ * round is zoomed below it as the part the agent loops through, its task the Workflow's own and its steps the loop it runs until it is done. The
  * open phrase "minimal human intervention" closes the Slide as a question for the next Section.
  */
 export const whatAnAgenticWorkflowIsSlide = slide({

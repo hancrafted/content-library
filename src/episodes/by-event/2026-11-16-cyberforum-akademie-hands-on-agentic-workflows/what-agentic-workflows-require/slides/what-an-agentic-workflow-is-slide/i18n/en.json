@@ -1,6 +1,6 @@
 {
   "title": "What an agentic workflow is",
-  "caption": "A structured process in which AI agents make decisions, take actions and coordinate tasks, with minimal human intervention. <b>You design the path; the agent steers inside its task.</b>",
+  "caption": "A structured process in which AI agents make decisions, take actions and coordinate tasks, with minimal human intervention. <b>You design the path; the agent loops through its task; you steer at the checkpoints.</b>",
   "design": {
     "label": "You design this",
     "hint": "the stages, their order, what each hands over, where you sign off"
@@ -15,8 +15,8 @@
     "page": "one page: the party plan"
   },
   "steers": {
-    "label": "The agent steers this",
-    "task": "You set its task: {task} How it gets there is its own call.",
+    "label": "The agent loops here",
+    "task": "You set its task: {task} It loops through its steps until it thinks it is done.",
     "steps": {
       "search": "Search the web",
       "compare": "Compare 3 venues",
@@ -53,7 +53,7 @@
     },
     "two-levels-of-control": {
       "header": "Two levels of control",
-      "description": "Anthropic draws the line at who controls the steps: workflows are orchestrated through predefined code paths, agents direct their own process. Applying \u201cyou design the path, the agent steers inside its task\u201d to a team's process is an inference [1].",
+      "description": "Anthropic draws the line at who controls the steps: workflows are orchestrated through predefined code paths, agents direct their own process. Reading this as a path you design and steer, with tasks the agent runs in a loop, applied to a team's process, is an inference [1].",
       "sources": {
         "anthropic-building-effective-agents": { "title": "Anthropic, Building effective agents" }
       }
@@ -76,7 +76,7 @@
       "two-levels": {
         "title": "Two levels",
         "keywords": "",
-        "script": "Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent steers inside its own task, and that is the part you hand away."
+        "script": "Read it as two levels. On the first level you design the path, which means the tasks and what each task hands over to the next. On the second level the agent loops through its own task, and that is the part you hand away. Put together: you design the path; the agent loops through its task; you steer at the checkpoints. The one who steers is you, or later a harness."
       },
       "minimal-how-minimal": {
         "title": "Minimal, how minimal",
