@@ -1,140 +1,76 @@
-import { episodeRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, isEpisodeId, TEMPLATE_SLUGS } from '@/content-store/catalogue/record-routes';
-import { listEpisodes, listEvents } from '@/content-store/store';
-import { headerModeOf } from '@/episodes/components/slide-master/slide';
+import { episodeRefOf, explorablePageRef, guideRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
+import {
+  EPISODE_IDS,
+  EXPLORABLE_PAGE_SLUGS,
+  GUIDE_SLUGS,
+  isEpisodeId,
+  TEMPLATE_SLUGS,
+} from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
-import { sectionOf } from './episode.pure';
-import { compositionOf } from './registry';
+import { entryOf, type ComposedPage } from './composed-page';
+import { AUTHORED_HEADERS } from './composed-page-checks';
+import summaries from './page-summaries.generated.json';
+import { summaryOf } from './page-summary';
 
 /*
- * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
- * page or the ref of a Template. What every registered Episode shares: a record under its Episode id carrying its
- * folder's slug, its own text from its folder's `i18n/` (what the Title slide, the page metadata and the landing card
- * read), and Sections each opened by the Slide that names it. Each holds for every Episode the registry holds, so
- * adding or publishing one adds no row here. The one per-Episode fact is the header mode, a deliberate content
- * decision: only the Episodes built before the shared Slide header (design-ADR-0012) author their own.
+ * The cross-Episode half of the composition lookup (FE-002): the invariants that span pages, read from the page
+ * catalogue and the generated summaries `npm run registry` writes beside the registry, never from a composition. What a
+ * page's own composition holds (its slug, its own text, its Sections, its header mode, the Playlist anchors into it, its
+ * summary in step with it) is an Episode-level check (`composed-page-checks.ts`), run by each page folder's own
+ * `episode-checks.test.ts`, so this test imports no Episode.
  */
 
-/** Every Episode with a page, by its EpisodeRef, as the store serves it. */
-const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
+/** Every composed page the catalogue lists: each Episode with a page, each Template, Explorable page and Guide. */
+const CATALOGUE: readonly ComposedPage[] = [
+  ...EPISODE_IDS.map((id) => episodeRefOf(id)),
+  ...TEMPLATE_SLUGS.map((slug) => templateRef(slug)),
+  ...EXPLORABLE_PAGE_SLUGS.map((slug) => explorablePageRef(slug)),
+  ...GUIDE_SLUGS.map((slug) => guideRef(slug)),
+];
 
-/** Every Playlist entry that opens its Episode at an anchor, with the Event presenting it. */
-const ANCHORED = listEvents().flatMap(({ slug, playlist }) =>
-  playlist.episodes.flatMap(({ page, anchor }) =>
-    page === undefined || anchor === undefined ? [] : [{ label: `${page.id}#${anchor} in ${slug}`, page, anchor }],
-  ),
-);
-
-/** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included. */
-const AUTHORED_HEADERS = ['ai-token-economy', 'maintaining-markdown-for-ai'];
+/** The ids the generated summaries hold, by the catalogue's kind of page. */
+const INDEXED = [
+  ...Object.keys(summaries.episodes),
+  ...Object.keys(summaries.templates),
+  ...Object.keys(summaries.explorablePages),
+  ...Object.keys(summaries.guides),
+];
 
 describe('success cases', () => {
-  it.each(WITH_PAGE)("registers $id with a record carrying its folder's slug", (ref) => {
+  it.each(CATALOGUE)('indexes $id, so its page has a summary (else run `npm run registry`)', (page) => {
     // ARRANGE
-    const expectedSlug = ref.slug;
+    const expected = page.id;
     // ACT
-    const episode = compositionOf(ref);
+    const indexed = INDEXED.filter((id) => id === page.id);
     // ASSERT
-    expect(episode.slug).toBe(expectedSlug);
+    expect(indexed).toEqual([expected]);
   });
 
-  it.each(WITH_PAGE)('gives $id its own title, caption and description in en and de', (ref) => {
+  it('indexes no page the catalogue does not list (else run `npm run registry`)', () => {
     // ARRANGE
-    // A Title slide's optional Speaker notes and Voice script may sit beside them.
-    const expected = expect.objectContaining({
-      title: expect.any(String),
-      caption: expect.any(String),
-      description: expect.any(String),
-    });
+    const listed = CATALOGUE.map(({ id }) => id).sort();
     // ACT
-    const texts = (['en', 'de'] as const).map((locale) => compositionOf(ref).messages[locale]);
+    const indexed = [...INDEXED].sort();
     // ASSERT
-    expect(texts).toEqual([expected, expected]);
-    expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
+    expect(indexed).toEqual(listed);
   });
 
   it("reads an Episode's German text from its own folder", () => {
     // ARRANGE
     const expected = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
     // ACT
-    const { title } = compositionOf(episodeRef('ai-attention-span')).messages.de;
+    const { title } = summaryOf(episodeRefOf('ai-attention-span')).de;
     // ASSERT
     expect(title).toBe(expected);
   });
 
-  it('renders the shared Slide header on every Episode but the ones built before it, which author their own', () => {
+  it('names only Episodes the catalogue holds among those that author their own Slide header', () => {
     // ARRANGE
-    const expected = AUTHORED_HEADERS;
+    const slugs = new Set(EPISODE_IDS.map((id) => episodeRefOf(id).slug));
     // ACT
-    const authored = [
-      ...new Set(WITH_PAGE.filter((ref) => headerModeOf(compositionOf(ref)) === 'authored').map(({ slug }) => slug)),
-    ].sort();
+    const unknown = AUTHORED_HEADERS.filter((slug) => !slugs.has(slug));
     // ASSERT
-    expect(authored).toEqual(expected);
-  });
-
-  it.each(TEMPLATE_SLUGS)('finds the Template %s under its own slug', (slug) => {
-    // ARRANGE
-    const expected = slug;
-    // ACT
-    const page = compositionOf(templateRef(slug));
-    // ASSERT
-    expect(page.slug).toBe(expected);
-  });
-
-  it('composes the Workshop template as hook, agenda, scope, poll, About me as its own Section, and orga Slides after its Title slide', () => {
-    // ARRANGE
-    const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll'], ['about-me'], ['orga']];
-    // ACT
-    const sections = compositionOf(templateRef('workshop-template')).sections.map((section) =>
-      section.map(({ slug }) => slug),
-    );
-    // ASSERT
-    expect(sections).toEqual(expected);
-  });
-
-  it('composes the Explorable page template as play (the Explorable), then about with Why, How and What, after its Title slide', () => {
-    // ARRANGE
-    const expected = [
-      ['play', 'every-option-on'],
-      ['about', 'why-how-what'],
-    ];
-    // ACT
-    const sections = compositionOf(templateRef('explorable-page')).sections.map((section) =>
-      section.map(({ slug }) => slug),
-    );
-    // ASSERT
-    expect(sections).toEqual(expected);
-  });
-
-  it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode', () => {
-    // ARRANGE
-    const expected = [
-      ['grounding'],
-      ['agenda'],
-      ['in-scope', 'out-of-scope'],
-      ['poll'],
-      ['about-me'],
-      ['orga'],
-      ['check-in-1'],
-      ['check-in-2'],
-      ['check-in-3', 'disciplines-recap'],
-    ];
-    // ACT
-    const sections = compositionOf(
-      episodeRef('intro', '2026-10-28-cyberforum-akademie-intro-agentic-workflow'),
-    ).sections.map((section) => section.map(({ slug }) => slug));
-    // ASSERT
-    expect(sections).toEqual(expected);
-  });
-
-  it.each(ANCHORED)('opens $label at a Section the Episode has', ({ page, anchor }) => {
-    // ARRANGE
-    const { sections } = compositionOf(page);
-    // ACT
-    const section = sectionOf(sections, anchor);
-    // ASSERT
-    expect(section).toBeDefined();
+    expect(unknown).toEqual([]);
   });
 });
 
@@ -144,8 +80,8 @@ describe('failure cases', () => {
     const unregistered = 'non-existent-episode';
     // ACT
     const valid = isEpisodeId(unregistered);
-    // @ts-expect-error -- an Episode the registry does not hold has no composition
-    const lookup = () => compositionOf(episodeRef(unregistered));
+    // @ts-expect-error -- an Episode the registry does not hold has no entry
+    const lookup = () => summaryOf(episodeRefOf(unregistered));
     // ASSERT
     expect(valid).toBe(false);
     expect(lookup).toThrow(unregistered);
@@ -156,9 +92,19 @@ describe('failure cases', () => {
     const episode = 'ai-attention-span';
     // ACT
     // @ts-expect-error -- an Episode's slug names no Template
-    const lookup = () => compositionOf(templateRef(episode));
+    const lookup = () => summaryOf(templateRef(episode));
     // ASSERT
     expect(lookup).toThrow(episode);
+  });
+
+  it('names the page and what it lacks when a table holds no entry for it', () => {
+    // ARRANGE
+    const table = { standalone: {}, 'event-copy': {}, template: { grids: 'grids' }, 'explorable-page': {}, guide: {} };
+    const expected = 'No composition is registered for "timelines"';
+    // ACT
+    const lookup = () => entryOf(table, templateRef('timelines'), 'composition');
+    // ASSERT
+    expect(lookup).toThrow(expected);
   });
 });
 
@@ -169,7 +115,7 @@ describe('edge cases', () => {
     // ACT
     const valid = isEpisodeId(slug);
     // @ts-expect-error -- a Template's slug names no Episode
-    const lookup = () => compositionOf(episodeRef(slug));
+    const lookup = () => summaryOf(episodeRefOf(slug));
     // ASSERT
     expect(valid).toBe(expected);
     expect(lookup).toThrow(slug);
@@ -179,28 +125,9 @@ describe('edge cases', () => {
     // ARRANGE
     const deleted = 'slide-layouts';
     // ACT
-    // @ts-expect-error -- a deleted Template has no composition
-    const lookup = () => compositionOf(templateRef(deleted));
+    // @ts-expect-error -- a deleted Template has no entry
+    const lookup = () => summaryOf(templateRef(deleted));
     // ASSERT
     expect(lookup).toThrow(deleted);
-  });
-
-  it.each(WITH_PAGE)('opens each Section of $id with a Slide of its own, never one another Section opens', (ref) => {
-    // ARRANGE
-    const openers = compositionOf(ref).sections.map(([opener]) => opener.slug);
-    // ACT
-    const repeated = openers.filter((slug, index) => openers.indexOf(slug) !== index);
-    // ASSERT
-    expect(repeated).toEqual([]);
-  });
-
-  it.each(WITH_PAGE)('gives $id at least one Section, each holding at least its opener', (ref) => {
-    // ARRANGE
-    const { sections } = compositionOf(ref);
-    // ACT
-    const emptySections = sections.filter((section) => section.length === 0);
-    // ASSERT
-    expect(sections.length).toBeGreaterThan(0);
-    expect(emptySections).toEqual([]);
   });
 });

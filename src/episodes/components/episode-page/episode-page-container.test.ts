@@ -1,5 +1,3 @@
-import { explorablePageRef } from '@/content-store/catalogue/episode-id.pure';
-import { EXPLORABLE_PAGE_SLUGS } from '@/content-store/catalogue/record-routes';
 import {
   episode,
   slide,
@@ -9,7 +7,6 @@ import {
   type TitledSlide,
 } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { compositionOf } from '@/episodes/lib/registry';
 import { DRAWER_BESIDE_ATTR } from '@/shared/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
 import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
@@ -197,28 +194,6 @@ describe('success cases', () => {
       // ASSERT
       expect(sizes).toEqual(expected);
     });
-
-    it.each(EXPLORABLE_PAGE_SLUGS)(
-      'survives on the real Explorable page %s: every Section keeps its entry and flag',
-      async (slug) => {
-        // ARRANGE
-        const composition = compositionOf(explorablePageRef(slug));
-        const declared = composition.sections.filter((section) => section.sectionSlide === false);
-        // ACT
-        const content = await recordContent(composition, 'en', {
-          translatorOf,
-          id: slug,
-          route: `/explorables/${slug}`,
-        });
-        const flagged = content.slides.filter((entry) => entry.withoutSectionSlide === true);
-        const toc = tocSectionsOf(content.slides);
-        // ASSERT
-        expect({ flagged: flagged.length, entries: toc.length }).toEqual({
-          flagged: declared.length,
-          entries: composition.sections.length,
-        });
-      },
-    );
   });
 });
 

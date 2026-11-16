@@ -15,8 +15,9 @@ const ROOT = import.meta.dirname;
  *
  * Not listed: the `.ts` and `.tsx` files that scanner tests walk (no-daisyui, source-tree, the codegen registry,
  * factory-model-seam). Listing `src/**` would turn every edit into a full rerun; the full suite at pre-push and in CI
- * covers them. The Slide-folder checks need no trigger: each page folder's `episode-checks.test.ts` imports its Slides
- * through `import.meta.glob`, which `--changed` follows (ARCH-003 §4.7).
+ * covers them. The Episode-level and Run-level checks need no trigger: each page folder's `episode-checks.test.ts` and
+ * each Run's `run-checks.test.ts` import their folder's files through `import.meta.glob`, which `--changed` follows
+ * (ARCH-003 §4.7).
  */
 const TRIGGERS = [
   // The suite itself, and the plugin that turns `.yml` and `.jsonl` imports into text.
@@ -36,13 +37,14 @@ const TRIGGERS = [
   '.archgate/config.json',
   '.archgate/adrs/FE-013-content-store.md',
   '.archgate/adrs/FE-013-content-store.rules.ts',
-  // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging, verified-corpus and the Explorable's guide.
+  // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging and the Explorable's guide.
+  // A Run's staging files need none: its `run-checks.test.ts` imports them through `import.meta.glob` (ARCH-003 §4.7).
   'GLOSSARY.md',
   'docs/agents/*.md',
   'docs/design/*.md',
   'docs/features/*.md',
   'docs/features/explorables/agentic-workflow.md',
-  'docs/episodes/**',
+  'docs/episodes/runs.csv',
   'docs/llm-wiki/**',
   // Skills: SKILL.md frontmatter, the references and assets the staging tests read, the decision-page fixtures, and the scripts tests spawn.
   'skills/*/SKILL.md',
