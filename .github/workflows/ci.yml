@@ -59,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          # Full history: tests/docs/episode-staging.test.ts reads this repo's own `git log`.
+          # Full history: each Run's docs/episodes/<slug>/run-checks.test.ts reads this repo's own `git log`.
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:

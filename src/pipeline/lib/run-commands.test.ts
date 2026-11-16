@@ -574,6 +574,19 @@ describe('success cases', () => {
     expect(started).toEqual([firstFree]);
   });
 
+  it("copies the skill's Run checks test into the staging folder it opens", () => {
+    // ARRANGE
+    const ctx = context();
+    const asset = path.join(ctx.root, 'skills/new-episode/assets/run-checks.test.ts.txt');
+    mkdirSync(path.dirname(asset), { recursive: true });
+    writeFileSync(asset, '// the Run checks\n');
+    const expected = '// the Run checks\n';
+    // ACT
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'run-checks.test.ts'), 'utf8')).toBe(expected);
+  });
+
   it('stops both servers when the Run ends', () => {
     // ARRANGE
     const { ctx, stopped } = served();
@@ -772,6 +785,21 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("keeps a Run's own checks test when begin-run reopens its staging folder", () => {
+    // ARRANGE
+    const ctx = context();
+    const asset = path.join(ctx.root, 'skills/new-episode/assets/run-checks.test.ts.txt');
+    mkdirSync(path.dirname(asset), { recursive: true });
+    writeFileSync(asset, '// the new Run checks\n');
+    const own = path.join(ctx.root, 'docs/episodes', SLUG, 'run-checks.test.ts');
+    writeFileSync(own, '// the Run checks it already has\n');
+    const expected = '// the Run checks it already has\n';
+    // ACT
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(readFileSync(own, 'utf8')).toBe(expected);
+  });
+
   it.each(['error', 'crashed'])('ends the open agents crashed when an Attempt ends %s', (status) => {
     // ARRANGE
     const ctx = begun();

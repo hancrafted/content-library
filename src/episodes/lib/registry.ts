@@ -1,5 +1,5 @@
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
-import type { ComposedPage } from './composed-page';
+import { entryOf, type ComposedPage } from './composed-page';
 import { EPISODES, EXPLORABLE_PAGES, GUIDES, TEMPLATE_PAGES } from './episode-registry.generated';
 
 export type { ComposedPage } from './composed-page';
@@ -21,7 +21,5 @@ const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<st
  * does not hold is a bug, so it throws.
  */
 export function compositionOf(page: ComposedPage): EpisodeComposition {
-  const composition: EpisodeComposition | undefined = REGISTRY_BY_KIND[page.kind][page.id];
-  if (composition === undefined) throw new Error(`No composition is registered for "${page.id}"`);
-  return composition;
+  return entryOf(REGISTRY_BY_KIND, page, 'composition');
 }

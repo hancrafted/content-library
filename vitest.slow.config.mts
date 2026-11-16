@@ -10,7 +10,7 @@ const ROOT = import.meta.dirname;
 
 /**
  * What reruns the whole lane: the files the slow tests read from disk rather than import
- * (tests/docs/episode-staging.slow.test.ts and its fixture; the scenery's CSS modules that
+ * (the Spec tests' staging folders, skills and templates; the scenery's CSS modules that
  * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the lane's own config and the
  * installed packages.
  */
