@@ -138,7 +138,7 @@ Raw values sit on `:root` and `.dark`; `@theme inline` maps each utility to the 
 }
 ```
 
-Tailwind's default palette and size scale are not reset, because legacy files still use them. Checks ban them in new code instead: ESLint (`better-tailwindcss`, in `eslint.config.mjs`) rejects a class Tailwind does not generate (E1), a palette colour, off-role size or other weight (E2), and `text-hero` outside `HeroTitle` (E3); the Archgate rules in FE-011 (A1–A6) cover raw values in CSS and code, Slide token files, `globals.css` and the legacy list.
+Tailwind's default palette and size scale are not reset, because legacy files still use them. Checks ban them in new code instead: Lint (`better-tailwindcss`, in `oxlint.config.mts`) rejects a class Tailwind does not generate (E1), a palette colour, off-role size or other weight (E2), and `text-hero` outside `HeroTitle` (E3); the Archgate rules in FE-011 (A1–A6) cover raw values in CSS and code, Slide token files, `globals.css` and the legacy list.
 
 `cn` (`src/shared/lib/utils.ts`) runs tailwind-merge, which only knows Tailwind's default sizes. It is extended with the type roles, so `text-caption` stays beside a colour class such as `text-muted-foreground`. A new role joins that list, or tailwind-merge drops it as a clashing colour.
 
@@ -165,7 +165,7 @@ Edits are not saved. **Copy changed** exports only the tokens you changed, as a 
 
 ## Legacy
 
-The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/shared/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
+The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/shared/design-system/legacy.json`, which the lint config and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
 
 ## Motion
 

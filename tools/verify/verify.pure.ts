@@ -31,13 +31,13 @@ const PREFLIGHT = script('preflight');
 const BOUNDARIES = script('boundaries', 'lint:boundaries');
 const TYPECHECK = script('typecheck');
 const TEST = script('test');
-const LINT = { name: 'lint', command: 'eslint . && oxlint' };
+const LINT = { name: 'lint', command: 'oxlint' };
 const FORMAT = script('format', 'format:check');
 /** Tests that the uncommitted changes affect: the changed files and everything that imports them. */
 const TEST_CHANGED: Step = { name: 'test', command: 'vitest run --changed' };
 
 /**
- * `npm run verify`: the two health checks gate the rest, which run side by side. `lint` here is ESLint then oxlint (GEN-005, the expand step):
+ * `npm run verify`: the two health checks gate the rest, which run side by side. `lint` here is oxlint alone (GEN-005):
  * the `lint` script also runs the boundaries check, which is its own step so the two run side by side.
  */
 export const VERIFY_PLAN: Plan = {

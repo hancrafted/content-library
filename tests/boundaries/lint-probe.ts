@@ -1,13 +1,15 @@
 import { execFile } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
+import config from '../../oxlint.config.mts';
+
 /*
  * Probe helper for the lint boundary suites (GEN-005): lints one snippet through the repo's oxlint config as if it
  * sat at a virtual path. The config's per-file overrides are globs relative to the config, so the snippet is written
- * under a temporary mirror of the path, beside a copy of the config, with the installed plugins and the Tailwind
+ * under a temporary mirror of the path, beside the config written out as JSON, with the installed plugins and the Tailwind
  * entry stylesheet linked in.
  */
 
@@ -39,7 +41,7 @@ function ruleIdOf(code: string): string {
 export async function lintProbe(source: string, virtualPath: string): Promise<ProbeDiagnostic[]> {
   const mirror = mkdtempSync(path.join(tmpdir(), 'lint-probe-'));
   try {
-    copyFileSync(path.join(ROOT, '.oxlintrc.json'), path.join(mirror, '.oxlintrc.json'));
+    writeFileSync(path.join(mirror, '.oxlintrc.json'), JSON.stringify(config));
     symlinkSync(path.join(ROOT, 'node_modules'), path.join(mirror, 'node_modules'));
     mkdirSync(path.join(mirror, path.dirname(TAILWIND_ENTRY)), { recursive: true });
     symlinkSync(path.join(ROOT, TAILWIND_ENTRY), path.join(mirror, TAILWIND_ENTRY));

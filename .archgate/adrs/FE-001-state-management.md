@@ -4,8 +4,8 @@ id: FE-001
 title: 'State Management'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
-paths: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
+files: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'oxlint.config.mts', 'tools/lint/*.ts']
+paths: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'oxlint.config.mts', 'tools/lint/*.ts']
 description: 'Where state lives: application state in the URL, user preference in one localStorage key, hands-on progress in a second, the rest in memory. One module writes history, one writes storage.'
 ---
 
