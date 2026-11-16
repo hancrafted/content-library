@@ -1,6 +1,6 @@
 import os from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { currentWorkers, idleFraction, workersFor, type CpuTimes } from './vitest-workers.mts';
+import { currentLoad, currentWorkers, idleFraction, timeoutFor, workersFor, type CpuTimes } from './vitest-workers.mts';
 
 const cpu = (idle: number, busy: number): CpuTimes => ({ idle, busy });
 
@@ -47,5 +47,63 @@ describe('currentWorkers', () => {
 
     // ASSERT
     expect(workers).toBe(Math.max(cores - 1, 1));
+  });
+});
+
+describe('timeoutFor', () => {
+  it('keeps the 5 s default on an idle machine', () => {
+    // ARRANGE
+    const idle = 1;
+    // ACT
+    const timeout = timeoutFor(idle);
+    // ASSERT
+    expect(timeout).toBe(5_000);
+  });
+
+  it('scales the timeout in proportion to the load factor', () => {
+    // ARRANGE
+    const doubled = 2;
+    const tripled = 3;
+    // ACT
+    const timeouts = [timeoutFor(doubled), timeoutFor(tripled)];
+    // ASSERT
+    expect(timeouts).toEqual([10_000, 15_000]);
+  });
+
+  it('caps the timeout at 20 s however loaded the machine is', () => {
+    // ARRANGE
+    const saturated = 10;
+    // ACT
+    const timeout = timeoutFor(saturated);
+    // ASSERT
+    expect(timeout).toBe(20_000);
+  });
+});
+
+describe('currentLoad', () => {
+  it('keeps the 5 s timeout on a CI runner, so CI measures the test and not the machine', async () => {
+    // ARRANGE
+    const env = { CI: 'true' };
+    // ACT
+    const load = await currentLoad(env);
+    // ASSERT
+    expect(load.testTimeout).toBe(5_000);
+    expect(load.loadFactor).toBe(1);
+  });
+});
+
+describe('the vitest configs', () => {
+  it('lets the fast config take the load-aware timeout and log its slow tests, while the slow config keeps its own', async () => {
+    // ARRANGE
+    const slowLaneTimeout = 60_000;
+    const { SlowTestsLog } = await import('./vitest-slow-tests.mts');
+    // ACT
+    const fast = (await import('./vitest.config.mts')).default;
+    const slow = (await import('./vitest.slow.config.mts')).default;
+    // ASSERT
+    expect(fast.test?.testTimeout).toBeGreaterThanOrEqual(5_000);
+    expect(fast.test?.testTimeout).toBeLessThanOrEqual(20_000);
+    expect(fast.test?.reporters).toContainEqual(expect.any(SlowTestsLog));
+    expect(slow.test?.testTimeout).toBe(slowLaneTimeout);
   });
 });

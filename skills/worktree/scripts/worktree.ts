@@ -6,7 +6,7 @@ import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { mergeIntoBase } from './worktree-merge.ts';
+import { mergeIntoBase, slowTestReport } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
@@ -140,9 +140,12 @@ function deleteMerged(branch: string, base: string): void {
 }
 
 function mergeBeforeRemoval(branch: string, base: string): void {
+  // Read before the merge, which moves the merge-base up to the branch tip.
+  const slowTests = slowTestReport(branch, base, mainRoot());
   try {
     const result = mergeIntoBase(branch, base, mainRoot());
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
+    for (const line of slowTests) console.log(line);
   } catch (error) {
     fail(`${(error as Error).message}\n  nothing was removed`);
   }

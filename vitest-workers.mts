@@ -25,17 +25,41 @@ const sample = (): CpuTimes[] =>
 
 const SAMPLE_MS = 200;
 
+/** The fast suite's test timeout on an idle machine, and Vitest's own default: a fast test passes well inside it. */
+export const IDLE_TIMEOUT_MS = 5_000;
+/** However loaded the machine, a fast test that needs longer than this is broken, not slowed down. */
+const MAX_TIMEOUT_MS = 20_000;
+
 /**
- * The worker count for this machine right now, shared by the fast and slow vitest configs. It measures idle CPU
- * over a 200 ms window rather than reading `os.loadavg()`: on macOS the load average overcounts (load 10.6 on a
- * 16-core machine that was 86% idle) and lags a minute behind, including the caller's own just-finished runs.
- * A CI runner runs one job alone, so there it takes every core but one without measuring: the runner's own
- * start-up work would otherwise read as contention and shrink the pool.
+ * The fast suite's test timeout under a load factor (all the CPU time there is over the idle share of it: 1 on an
+ * idle machine, 4 when a quarter is idle): 5 s scaled by the factor, capped at 20 s, so a loaded run finishes.
  */
-export async function currentWorkers(env: Record<string, string | undefined> = process.env): Promise<number> {
-  if (env.CI) return Math.max(os.cpus().length - 1, 1);
+export function timeoutFor(loadFactor: number): number {
+  return Math.min(Math.round(IDLE_TIMEOUT_MS * Math.max(loadFactor, 1)), MAX_TIMEOUT_MS);
+}
+
+/** What a vitest run sizes itself by: the workers it may start, the load factor it measured and the timeout that gives. */
+export type Load = { workers: number; loadFactor: number; testTimeout: number };
+
+/**
+ * The load on this machine right now, shared by the fast and slow vitest configs. It measures idle CPU over a
+ * 200 ms window rather than reading `os.loadavg()`: on macOS the load average overcounts (load 10.6 on a 16-core
+ * machine that was 86% idle) and lags a minute behind, including the caller's own just-finished runs.
+ * A CI runner runs one job alone, so there it takes every core but one and the 5 s timeout without measuring: the
+ * runner's own start-up work would otherwise read as contention, and CI measures the test, not the machine.
+ */
+export async function currentLoad(env: Record<string, string | undefined> = process.env): Promise<Load> {
+  if (env.CI) return { workers: Math.max(os.cpus().length - 1, 1), loadFactor: 1, testTimeout: IDLE_TIMEOUT_MS };
   const before = sample();
   await new Promise((resolve) => setTimeout(resolve, SAMPLE_MS));
   const cores = before.length;
-  return workersFor(cores, cores * idleFraction(before, sample()));
+  const idle = idleFraction(before, sample());
+  // A saturated machine reads 0 idle: the floor keeps the factor finite, the cap in timeoutFor does the rest.
+  const loadFactor = 1 / Math.max(idle, 0.01);
+  return { workers: workersFor(cores, cores * idle), loadFactor, testTimeout: timeoutFor(loadFactor) };
+}
+
+/** The worker count for this machine right now (see currentLoad). */
+export async function currentWorkers(env: Record<string, string | undefined> = process.env): Promise<number> {
+  return (await currentLoad(env)).workers;
 }
