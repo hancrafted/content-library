@@ -79,7 +79,10 @@ describe('needsBuild', () => {
 
   describe('the CI workflow', () => {
     const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
-      jobs: Record<string, { needs?: string | string[]; if?: string; outputs?: Record<string, string> }>;
+      jobs: Record<
+        string,
+        { needs?: string | string[]; if?: string; outputs?: Record<string, string>; steps?: { run?: string }[] }
+      >;
     };
 
     it('gates the preview job on the export job and its changed output', () => {
@@ -91,6 +94,21 @@ describe('needsBuild', () => {
       expect(needs).toContain('export');
       expect(exportJob?.outputs).toHaveProperty('changed');
       expect(preview?.if).toContain('needs.export.outputs.changed');
+    });
+
+    it('runs the post-build suite in a build-test job beside the preview, not inside export', () => {
+      // ARRANGE
+      const { export: exportJob, preview, 'build-test': buildTest } = workflow.jobs;
+      const runs = (job?: { steps?: { run?: string }[] }) => (job?.steps ?? []).map((step) => step.run ?? '');
+      // ACT
+      const buildTestNeeds = [buildTest?.needs ?? []].flat();
+      const previewNeeds = [preview?.needs ?? []].flat();
+      // ASSERT
+      expect(buildTestNeeds).toEqual(['export']);
+      expect(buildTest?.if).toBeUndefined();
+      expect(previewNeeds).not.toContain('build-test');
+      expect(runs(buildTest)).toContain('npm run test:build');
+      expect(runs(exportJob)).not.toContain('npm run test:build');
     });
 
     it('keeps forks and Dependabot away from the preview', () => {
