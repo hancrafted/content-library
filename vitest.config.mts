@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { currentWorkers } from './vitest-workers.mts';
+import { currentWorkers } from './tools/verify/vitest-workers.pure.ts';
 
 const ROOT = import.meta.dirname;
 

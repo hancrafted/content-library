@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { currentWorkers } from './vitest-workers.mts';
+import { currentWorkers } from './tools/verify/vitest-workers.pure.ts';
 
 // The slow lane: `*.slow.test.ts`, tests that take seconds of real work or read the live repo from disk
 // (ARCH-003-testing §4). `npm run test:slow` runs it; pre-push runs only the affected ones, with `--changed`;
