@@ -1,9 +1,9 @@
 /// <reference path="../rules.d.ts" />
 
 // FE-005 — Static Export Contract. The parts of the contract that sit in
-// source text and that an import-based eslint rule cannot see: per-segment
+// source text and that an import-based lint rule cannot see: per-segment
 // exports, next.config keys, directives, segment exports, file names and
-// folder names. Banned module imports live in eslint.config.mjs instead.
+// folder names. Banned module imports live in the lint config instead.
 // Matched textually. Self-contained by design:
 // archgate forbids imports between rules files.
 const SRC_GLOB = 'src/**/*';
