@@ -36,8 +36,9 @@ export function modelNote(words: ModelWords, tier: ModelTier, review = false): M
   return { label: fillTemplate(words.model, { tier: name }), tip: review ? words.modelReviewTip : tip };
 }
 
-/** Which note a panel shows: a review always reads Low, a do or `then` prompt its job's tier, and none without one. */
+/** Which note a panel shows: none for a job without a tier; else a review reads Low, a do or `then` prompt the job's tier. */
 export function noteFor(panel: string, recommended: ModelTier | undefined) {
+  if (!recommended) return undefined;
   if (panel.startsWith('review')) return { tier: 'low', review: true } as const;
-  return recommended && ({ tier: recommended, review: false } as const);
+  return { tier: recommended, review: false } as const;
 }

@@ -38,7 +38,7 @@ describe('success cases', () => {
 
   it.each([
     ['review#0', 'high', { tier: 'low', review: true }],
-    ['review#2', undefined, { tier: 'low', review: true }],
+    ['review#2', 'low', { tier: 'low', review: true }],
     ['do#0', 'high', { tier: 'high', review: false }],
     ['then#0', 'medium', { tier: 'medium', review: false }],
   ] as const)('shows %s (job tier %s) as %j', (panel, recommended, expected) => {
@@ -52,6 +52,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('shows no note on a review of a job without a tier', () => {
+    // ARRANGE
+    const panel = 'review#0';
+    // ACT
+    const note = noteFor(panel, undefined);
+    // ASSERT
+    expect(note).toBeUndefined();
+  });
+
   it('shows no note on a do prompt of a job without a tier', () => {
     // ARRANGE
     const panel = 'do#0';
