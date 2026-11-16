@@ -7,7 +7,16 @@
   "tabWidth": 2,
   "arrowParens": "always",
   "endOfLine": "lf",
-  // Import sorting is its own change (#615); oxfmt would otherwise sort package.json keys too.
+  // Imports sorted case-insensitively in two blocks, as organize-imports did: packages and Node built-ins, then relative paths.
+  "sortImports": {
+    "groups": [
+      ["builtin", "external", "subpath", "internal", "unknown"],
+      ["parent", "sibling", "index"],
+    ],
+    "ignoreCase": true,
+    "newlinesBetween": false,
+  },
+  // oxfmt would otherwise sort package.json keys too.
   "sortPackageJson": false,
   // What oxfmt skips, beside .gitignore. Patterns are relative to this file.
   "ignorePatterns": [

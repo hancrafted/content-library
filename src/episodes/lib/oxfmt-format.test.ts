@@ -23,6 +23,19 @@ describe('success cases', () => {
     // ASSERT
     expect(out).toBe('{ "a": [1, 2] }\n');
   });
+
+  it('sorts imports case-insensitively, packages before relative paths, without blank lines between', async () => {
+    // ARRANGE
+    const source = `import { b } from './b';\nimport { Z } from 'zed';\nimport { a } from 'Alpha';\nimport { p } from '../p';\nexport const x = [a, b, p, Z];\n`;
+
+    // ACT
+    const out = await formatAsRepo('a.ts', source);
+
+    // ASSERT
+    expect(out).toBe(
+      `import { a } from 'Alpha';\nimport { Z } from 'zed';\nimport { p } from '../p';\nimport { b } from './b';\nexport const x = [a, b, p, Z];\n`,
+    );
+  });
 });
 
 describe('failure cases', () => {
