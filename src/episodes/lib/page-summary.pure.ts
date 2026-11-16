@@ -19,12 +19,17 @@ export interface LocaleSummary {
 /** A composed page's summary in every locale. */
 export type PageSummary = Readonly<Record<Locale, LocaleSummary>>;
 
-/** The title of the Section an anchor sits in: a section slide's own, or a page Slide's or an untitled Slide's Section. */
-export function sectionTitleAt(summary: LocaleSummary, anchor: string): string | undefined {
-  const holds = (section: TocSection) =>
-    section.id === anchor ||
-    [section, ...section.items].some(
+/**
+ * The title an anchor opens at: a Section's own for a section anchor, a page Slide's own for its anchor, and for an
+ * untitled Slide the title of the entry it is folded into. A Playlist entry's card shows it.
+ */
+export function anchorTitleAt(summary: LocaleSummary, anchor: string): string | undefined {
+  for (const section of summary.sections) {
+    if (section.id === anchor) return section.title;
+    const item = [section, ...section.items].find(
       ({ id, unlisted }) => id === anchor || unlisted?.some((slide) => slide.id === anchor),
     );
-  return summary.sections.find(holds)?.title;
+    if (item !== undefined) return item.title;
+  }
+  return undefined;
 }

@@ -1,7 +1,6 @@
-import { ArrowRight } from 'lucide-react';
-
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { ArrowRight } from 'lucide-react';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';

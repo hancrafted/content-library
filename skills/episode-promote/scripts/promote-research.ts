@@ -55,5 +55,5 @@ for (const { folder, to } of promoted.moves) {
 writeFileSync(indexFile, promoted.index);
 // Staging is not formatted; the wiki is, so the moved files take its format here.
 const touched = [indexFile, ...promoted.moves.map(({ to }) => path.join(WIKI, to))];
-execFileSync('npx', ['prettier', '--log-level', 'warn', '--write', ...touched], { stdio: 'inherit' });
+execFileSync('npx', ['oxfmt', ...touched], { stdio: 'inherit' });
 console.log(`moved ${promoted.moves.length} research folder(s) into ${wikiResearch}/ and listed them in ${indexFile}`);

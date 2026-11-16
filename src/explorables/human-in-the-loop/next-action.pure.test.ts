@@ -51,6 +51,24 @@ describe('success cases', () => {
       { key: 'do', action: 'answer' },
     ]);
   });
+
+  it('leads inside an optional job from the context to the copies to the answer, since only the job is optional', () => {
+    // ARRANGE
+    const then = (copied: boolean) => ({ key: 'then', copied });
+    const empty = [panel('do', { needsInput: true, then: then(false) })];
+    const typed = [panel('do', { then: then(false) })];
+    const first = [panel('do', { copied: true, then: then(false) })];
+    const both = [panel('do', { copied: true, then: then(true) })];
+    // ACT
+    const seen = [empty, typed, first, both].map(nextAction);
+    // ASSERT
+    expect(seen).toEqual([
+      { key: 'do', action: 'context' },
+      { key: 'do', action: 'copy' },
+      { key: 'then', action: 'copy' },
+      { key: 'do', action: 'answer' },
+    ]);
+  });
 });
 
 describe('failure cases', () => {

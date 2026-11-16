@@ -26,4 +26,4 @@ Skills written for this repo follow the Agent Skills specification ([agentskills
 ## Consequences
 
 - `new-episode` can now be invoked by the model, in Claude Code and in Codex (`agents/openai.yaml` drops `allow_implicit_invocation: false`).
-- Prettier, ESLint and `tsc` now cover all authored skills. The sample Episode fixture is excluded from Prettier, which would rewrite its `[n]: <url> "title"` definitions.
+- Format, lint and `tsc` now cover all authored skills. The sample Episode fixture is excluded from format, which would rewrite its `[n]: <url> "title"` definitions.

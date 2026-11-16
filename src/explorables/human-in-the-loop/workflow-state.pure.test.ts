@@ -19,6 +19,28 @@ describe('success cases', () => {
     expect(later.slotValues).toEqual(pasted);
   });
 
+  it('stores a pasted fenced result without its fence, Result line and path', () => {
+    // ARRANGE
+    const key = 'requirements.break-up';
+    const pasted = { [key]: 'Result:\n```markdown\n### Pricing\n```\n.scratch/task/intent.md' };
+    const expected = '### Pricing';
+    // ACT
+    const state = reduce(createState(start), { type: 'slots', values: pasted });
+    // ASSERT
+    expect(state.slotValues).toEqual({ [key]: expected });
+  });
+
+  it('does not unwrap typing under existing text', () => {
+    // ARRANGE
+    const key = 'requirements.break-up';
+    const typed = '```markdown\n### Pricing\n```';
+    const existing = reduce(createState(start), { type: 'slots', values: { [key]: '```markdown\n### Pricing' } });
+    // ACT
+    const state = reduce(existing, { type: 'slots', values: { [key]: typed } });
+    // ASSERT
+    expect(state.slotValues).toEqual({ [key]: typed });
+  });
+
   it('takes back a saved run: its results and its demo flag', () => {
     // ARRANGE
     const saved = { results: { 'a.b': 'text' }, demo: false };

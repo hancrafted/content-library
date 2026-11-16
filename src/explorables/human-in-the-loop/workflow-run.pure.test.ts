@@ -144,6 +144,38 @@ describe('success cases', () => {
     expect(last?.state).toBe('done');
   });
 
+  it('marks a checkbox job in the middle of a stage done by its box, and counts it with the stage', () => {
+    // ARRANGE
+    const base = file();
+    const boxed = job('box', { output: undefined, review: undefined });
+    const middle: WorkflowFile = {
+      ...base,
+      stages: [{ ...base.stages[0]!, jobs: [boxed, job('plan')] }, base.stages[1]!, base.stages[2]!],
+    };
+    const results = { [resultKey('plan', 'box')]: 'done' };
+    // ACT
+    const [first] = runOf(middle, { results, demo: true }).stages;
+    // ASSERT
+    expect(first?.jobs.map((each) => each.state)).toEqual(['done', 'open']);
+    expect(`${first?.done}/${first?.total}`).toBe('1/2');
+  });
+
+  it('keeps an optional checkbox job from blocking its stage when its box stays empty', () => {
+    // ARRANGE
+    const base = file();
+    const optionalBox = job('play', { output: undefined, review: undefined, optional: true });
+    const stage: StageDef = { ...base.stages[0]!, jobs: [job('plan'), optionalBox] };
+    const results = { 'plan.plan': PLAN };
+    // ACT
+    const [first] = runOf(
+      { ...base, stages: [stage, base.stages[1]!, base.stages[2]!] },
+      { results, demo: true },
+    ).stages;
+    // ASSERT
+    expect(first?.state).toBe('done');
+    expect(first?.total).toBe(1);
+  });
+
   it('counts the jobs whose result is in, per stage, rounds included', () => {
     // ARRANGE
     const results = {

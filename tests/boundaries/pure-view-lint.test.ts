@@ -1,23 +1,20 @@
-import { ESLint } from 'eslint';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { lintProbe } from './lint-probe';
 
 /*
- * Probe tests for the pure-view lint rule (FE-006, eslint.config.mjs): a `*-view.tsx` file takes no hook, handler,
+ * Probe tests for the pure-view lint rule (FE-006, .oxlintrc.json): a `*-view.tsx` file takes no hook, handler,
  * hook import or client directive, and a file of any other name may. Each probe lints a snippet through the real
  * config under a virtual path.
  */
 
-const ROOT = path.join(__dirname, '../..');
-const eslint = new ESLint({ cwd: ROOT });
 const VIEW = 'src/explorables/context-window/probe-view.tsx';
 const OTHER = 'src/explorables/context-window/probe.tsx';
 const TIMEOUT = 30_000;
 
 /** The messages the no-restricted-syntax rule raises for a snippet linted as `file`. */
 async function restricted(code: string, file: string): Promise<string[]> {
-  const [result] = await eslint.lintText(code, { filePath: path.join(ROOT, file) });
-  return result.messages.filter((m) => m.ruleId === 'no-restricted-syntax').map((m) => m.message);
+  const diagnostics = await lintProbe(code, file);
+  return diagnostics.filter((d) => d.ruleId === 'no-restricted-syntax').map((d) => d.message);
 }
 
 const HOOK = "import { useState } from 'react';\nexport const Probe = () => { useState(0); return <div />; };\n";

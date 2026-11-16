@@ -1,11 +1,11 @@
-import { ESLint } from 'eslint';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { lintProbe } from './lint-probe';
 
 /*
- * Probe tests for the design-token lint checks (FE-011, eslint.config.mjs): one planted violation per check must
- * fail, and the allowed forms must pass. Each probe lints a snippet through the real config under a virtual path,
+ * Probe tests for the design-token lint checks (FE-011, .oxlintrc.json): one planted violation per check must
+ * fail, and the allowed forms must pass. Each probe lints a snippet through the real oxlint config under a virtual path,
  * so the per-file exemptions (legacy list, HeroTitle file, the two relative sizes) are exercised too.
  */
 
@@ -13,7 +13,6 @@ const ROOT = path.join(__dirname, '../..');
 const LEGACY: string[] = JSON.parse(
   readFileSync(path.join(ROOT, 'src/shared/design-system/legacy.json'), 'utf8'),
 ).globs;
-const eslint = new ESLint({ cwd: ROOT });
 
 const SLIDE = 'src/episodes/templates/timelines/slides/probe/slide.tsx';
 const HERO_TITLE = 'src/episodes/components/slide-master/slide-master.tsx';
@@ -25,8 +24,8 @@ const markup = (classes: string) => `export const Probe = () => <div className="
 
 /** The better-tailwindcss rule ids a snippet breaks when linted as `file`. */
 async function broken(classes: string, file: string): Promise<string[]> {
-  const [result] = await eslint.lintText(markup(classes), { filePath: path.join(ROOT, file) });
-  return result.messages.filter((m) => m.ruleId?.startsWith('better-tailwindcss/')).map((m) => m.ruleId ?? '');
+  const diagnostics = await lintProbe(markup(classes), file);
+  return diagnostics.filter((d) => d.ruleId.startsWith('better-tailwindcss/')).map((d) => d.ruleId);
 }
 
 const E1 = 'better-tailwindcss/no-unknown-classes';

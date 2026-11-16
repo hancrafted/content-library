@@ -7,6 +7,9 @@ import { slug, visibility } from './fields';
  * anchor; an Episode may be listed again at another anchor.
  */
 
+/** A Section's anchor, or one Slide's inside it: `check-in-1`, `hands-on--make-it-a-skill`. */
+const SLIDE_ANCHOR = /^[a-z0-9]+(-[a-z0-9]+)*(--[a-z0-9]+(-[a-z0-9]+)*)?$/;
+
 const episodeId = z.string().describe("An Episode id: its slug, or `<event-slug>__<slug>` for an Event's copy");
 
 /** A Playlist entry written as the Episode id alone or with an anchor, parsed to one shape: `{ episode, anchor? }`. */
@@ -16,9 +19,13 @@ const entry = z
     z
       .object({
         episode: episodeId.describe('The Episode id the entry opens'),
-        anchor: slug
+        anchor: z
+          .string()
+          .regex(SLIDE_ANCHOR, 'must be a Section anchor or `<section>--<slide>`')
           .optional()
-          .describe("The anchor of the Section the entry opens in its Episode; none opens the Episode's top"),
+          .describe(
+            "The anchor the entry opens in its Episode: a Section's, or one Slide's as `<section>--<slide>`; none opens the Episode's top",
+          ),
       })
       .strict()
       .describe('An Episode, opened at one of its anchors'),

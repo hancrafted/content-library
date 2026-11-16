@@ -1,0 +1,24 @@
+{
+  "title": "Back to the board",
+  "caption": "The quiz Workflow, done by hand once, and now a skill: what to take into your week.",
+  "boardLabel": "Today’s Workflow",
+  "stages": {
+    "requirements": "Requirements: interview and spec",
+    "execute": "Execute: a quiz page a partner played",
+    "improve": "Improve: a skill that makes the next quiz"
+  },
+  "actionsLabel": "Your next steps",
+  "actions": {
+    "first": "Turn one article you’d like your team to learn from into a five-question quiz.",
+    "second": "Share your quiz page and your prompt with a partner, and compare what each of you got.",
+    "third": "Use your quiz skill on one more knowledge source at work this week."
+  },
+  "question": "What matters most when working with agents?",
+  "qa": "Questions and answers",
+  "notes": {
+    "talking-points": {
+      "header": "Land the learning goal",
+      "description": "Walk the board once: each stage was done by hand today, and the skill makes the next run one step. Ask the critical-thinking question, read the three next steps, then open the floor."
+    }
+  }
+}

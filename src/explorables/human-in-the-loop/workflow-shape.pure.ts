@@ -30,9 +30,10 @@ const section = obj(
   ['only', 'purpose', 'explain', 'techniques'],
 );
 const technique = obj({ id: str, tier: enumOf(TIERS), title: str, explain: str });
-const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
+const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool, blank: bool }, [
   'sample',
   'free',
+  'blank',
 ]);
 const limit = obj({ full: int, demo: int });
 const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(CHAT_MARK_NAMES) } }, [
@@ -47,6 +48,7 @@ const task = obj(
     goal: obj({ do: str, review: str }, ['review']),
     needs: ids,
     output: str,
+    doneLabel: str,
     template: str,
     slots: list(slot),
     instructions: str,
@@ -56,7 +58,7 @@ const task = obj(
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     limits: { t: 'rec', of: limit },
     openAIButtons: list(chatButton, 1),
-    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
+    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['example', 'techniques']),
     recommendedModel: enumOf(MODEL_TIERS),
     optional: bool,
   },
@@ -64,6 +66,8 @@ const task = obj(
     'summary',
     'needs',
     'output',
+    'doneLabel',
+    'template',
     'skills',
     'then',
     'review',

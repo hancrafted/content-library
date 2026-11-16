@@ -25,6 +25,8 @@ export interface TaskModalView {
   readonly steps: readonly TaskStep[];
   /** The name this task hands on: its result is saved under it (`name_K` for round K of a repeated stage). Absent: a checkbox marks it done. */
   readonly output?: string;
+  /** The words beside the checkbox of a job without an output; absent: the visual's `markDone` word. */
+  readonly doneLabel?: string;
   /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
   readonly previous: readonly string[];
   /** The outputs of the jobs of the same stage this job needs: in a repeated stage each round takes its own. */
@@ -80,6 +82,10 @@ function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds
   );
 }
 
+/** The examples a task shows: none for a checkbox job, one text, or one per demo round. */
+const examplesOf = (example: TaskDef['details']['example']): readonly string[] =>
+  example === undefined ? [] : typeof example === 'string' ? [example] : example;
+
 type TaskAt = { level: Level; stage: number } & Pick<ViewOptions, 'demo' | 'rounds'>;
 
 function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView {
@@ -94,10 +100,11 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
     id: task.id,
     steps: stepsOf(workflow.file, task, { runtime, ...options }),
     output: task.output,
+    doneLabel: task.doneLabel,
     sameStage,
     previous: [...producersFor(workflow.file, stageAt, task).keys()],
     why: task.details.why,
-    examples: typeof example === 'string' ? [example] : example,
+    examples: examplesOf(example),
     goodLooksLike: task.details.goodLooksLike,
     techniques: (task.details.techniques ?? []).flatMap((id) =>
       workflow.file.techniques.filter((each) => each.id === id),

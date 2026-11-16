@@ -11,7 +11,8 @@ export interface RunSource {
 }
 
 export type QueryResult =
-  { ok: true; columns: string[]; rows: Record<string, unknown>[] } | { ok: false; error: string };
+  | { ok: true; columns: string[]; rows: Record<string, unknown>[] }
+  | { ok: false; error: string };
 
 /** `spans` columns: the Span's own fields, dots in attribute names written as underscores, plus `episode`. */
 const SPAN_COLUMNS = [

@@ -14,7 +14,7 @@ on:
       - 'public/**'
       - 'package.json'
       - 'package-lock.json'
-      - 'next.config.ts'
+      - 'next.config.*'
       - 'tsconfig.json'
       - 'postcss.config.mjs'
       - 'raw-text-files.mts'

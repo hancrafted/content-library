@@ -1,7 +1,7 @@
 /// <reference path="../rules.d.ts" />
 
 // ARCH-003 — Testing. The two shape Disciplines under src/ that no eslint
-// selector expresses cheaply, matched by scanning lines (prettier fixes the
+// selector expresses cheaply, matched by scanning lines (the formatter fixes the
 // layout these patterns rely on: a top-level describe starts at column 0).
 //
 // `suite-three-blocks` — the file's top-level describe blocks are exactly

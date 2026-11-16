@@ -31,9 +31,24 @@ export const satRate = (m: Factory): number => {
 };
 
 export type CustomerMeasure =
-  'output' | 'sat' | 'headroom' | 'leadDays' | 'bugsPerWeek' | 'changesPerWeek' | 'own' | 'backlog';
+  | 'output'
+  | 'sat'
+  | 'headroom'
+  | 'leadDays'
+  | 'bugsPerWeek'
+  | 'changesPerWeek'
+  | 'own'
+  | 'backlog';
 export type CenterMeasure =
-  'weeksWaiting' | 'busy' | 'bugShare' | 'backlog' | 'done' | 'rework' | 'rush' | 'unread' | 'stall';
+  | 'weeksWaiting'
+  | 'busy'
+  | 'bugShare'
+  | 'backlog'
+  | 'done'
+  | 'rework'
+  | 'rush'
+  | 'unread'
+  | 'stall';
 
 export const CUSTOMER_MEASURES: Readonly<Record<CustomerMeasure, (m: Factory) => number>> = {
   output: (m) => (m.idealOut ? m.outRate / m.idealOut : 0),

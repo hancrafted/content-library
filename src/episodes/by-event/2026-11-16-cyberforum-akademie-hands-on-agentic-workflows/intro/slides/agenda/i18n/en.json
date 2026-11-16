@@ -1,47 +1,60 @@
 {
   "title": "Agenda",
-  "caption": "Two hours, times from the start: theory and live demo in turn, with a short check-in after each Episode.",
+  "caption": "Four hours, times from the start: three theory Episodes, each followed by a hands-on step, with two breaks.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
       "time": "0:00",
-      "title": "Welcome"
+      "title": "Welcome and orga"
     },
     "first": {
-      "time": "0:20",
-      "title": "Treat AI like a brilliant freelancer with amnesia"
+      "time": "0:25",
+      "title": "What agentic workflows require of people and organisations"
+    },
+    "break1": {
+      "time": "0:55",
+      "title": "Break: pick your article"
     },
     "grill": {
-      "time": "0:35",
-      "title": "Live demo: “Grill me”"
+      "time": "1:10",
+      "title": "Hands-on: the AI interviews you"
     },
     "second": {
-      "time": "0:50",
-      "title": "Why AI has a weird attention span you must learn to manage"
+      "time": "1:30",
+      "title": "From shared understanding to shared context"
     },
-    "workflow": {
-      "time": "1:15",
-      "title": "Live demo: an agentic workflow"
+    "quiz": {
+      "time": "1:50",
+      "title": "Hands-on: spec and quiz page"
     },
     "third": {
-      "time": "1:30",
-      "title": "Will AI reduce your work? It adds work: managing it."
+      "time": "2:10",
+      "title": "What lies below the waterline of sustainable AI skills"
+    },
+    "break2": {
+      "time": "2:40",
+      "title": "Break"
+    },
+    "skill": {
+      "time": "2:55",
+      "title": "Hands-on: make it a skill"
     },
     "qa": {
-      "time": "1:40",
-      "title": "Questions and buffer"
+      "time": "3:40",
+      "title": "Close, questions and answers"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theory",
-    "demo": "Demo",
+    "handsOn": "Hands-on",
+    "break": "Break",
     "close": "Wrap-up"
   },
   "notes": {
     "talking-points": {
-      "header": "Two hours, counted from 0:00",
-      "description": "20 minutes of welcome, then Episode 1 (15), the “Grill me” demo (15), Episode 2 (25), the agentic workflow (15) and Episode 3 (10); the last 20 minutes are questions and buffer. Each check-in belongs to its Episode’s time."
+      "header": "Four hours, counted from 0:00",
+      "description": "Welcome until 0:25, Episode 1 until 0:55, then a break to pick an article. The interview (20), Episode 2 (20), spec and quiz page (20), Episode 3 (30), a break, writing the skill (45), and the last 20 minutes for the close and questions."
     }
   }
 }

@@ -4,8 +4,8 @@ id: FE-001
 title: 'State Management'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
-paths: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
+files: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'oxlint.config.mts', 'tools/lint/*.ts']
+paths: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'oxlint.config.mts', 'tools/lint/*.ts']
 description: 'Where state lives: application state in the URL, user preference in one localStorage key, hands-on progress in a second, the rest in memory. One module writes history, one writes storage.'
 ---
 
@@ -95,7 +95,7 @@ Cause: no rule for where state lives or who writes it. Fix: class every piece of
 ## Compliance and Enforcement
 
 1. **Rule** `single-storage-key` (`FE-001-state-management.rules.ts`, error): every `getItem`/`setItem` under `src/` passes one of the two configured keys; `PREFS_KEY` and `PROGRESS_KEY` each equal `src/shared/config.yaml`.
-2. **Lint** (`eslint.config.mjs`): history writes refused outside `src/shared/lib/url-state.ts`.
+2. **Lint** (lint config): history writes refused outside `src/shared/lib/url-state.ts`.
 3. **Tests** (`npm run verify`): URL service driven against a fake window — intent, throttle, dispose, isolation.
 
 **Manual review duties:** new state classed per §1; no `location.hash` or `router.push('#…')` writes; storage touched only via the prefs module; progress keyed by hands-on and hash-checked on load and import (§3.3, §3.4).

@@ -6,7 +6,6 @@
  */
 
 import { bulb, giftBox, star } from './doc-gift.ts';
-
 import type { Colors, Ctx, DocKind } from './doc-types.ts';
 
 export type { Colors, Ctx, DocKind } from './doc-types.ts';

@@ -28,6 +28,7 @@ ui:
   stepCheckInfo: 'Review the result in a new conversation. If it fails, paste the feedback into the conversation of the previous step and update the result. Repeat until all checks pass.'
   copyExplanation: 'Copy explanation prompt'
   copyExplanationTip: 'Paste this prompt into a chat: the AI explains the prompt, why it is built this way and what you could improve, then offers to guide you through the exercise.'
+  typeFirst: Type your notes first
   editPrompt: Edit prompt
   editReset: Reset to default
   editedTip: 'Copies your edited version of this prompt. Reset in the editor brings back the original.'

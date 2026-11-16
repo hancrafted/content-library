@@ -16,7 +16,7 @@ import { createHash } from 'node:crypto';
  * evals, `scripts/` (the grader and its fixtures, run when the skill changes, never while a page is built) and
  * `agents/` (the skill's registry entry). None of them changes what a generated template must contain.
  *
- * The record is a `<meta>` in the template's head, so it survives Prettier, which reflows tags and comments.
+ * The record is a `<meta>` in the template's head, so it survives oxfmt, which reflows tags and comments.
  */
 
 /** The skill's files, by path relative to the skill folder, and the Spec calibration's text. */

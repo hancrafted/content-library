@@ -1,6 +1,7 @@
 import { episodeRefOf, matchEpisode, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import type { z } from 'zod';
+import type { Content, ContentInput, EpisodeEntry, Kind, ParsedContent } from './content-shapes';
 import { duplicates } from './duplicates';
 import { episodeRefusals, type LoadedEpisode } from './episode-refusals';
 import { eventRefusals } from './event-refusals';
@@ -12,8 +13,6 @@ import { guideSchema } from './schemas/guide.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
 import { templateSchema } from './schemas/template.schema';
 import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
-import { slugKindRefusals } from './slug-kind-refusals';
-
 /*
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
  * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
@@ -21,8 +20,7 @@ import { slugKindRefusals } from './slug-kind-refusals';
  * whole load throws. An Episode enters by the Episode id its folder gives it and is served with its EpisodeRef
  * (GLOSSARY), which every rule reads. A Template (design-ADR 0019) is checked against its composition folders.
  */
-
-import type { Content, ContentInput, EpisodeEntry, Kind, ParsedContent } from './content-shapes';
+import { slugKindRefusals } from './slug-kind-refusals';
 export type { Content, ContentInput, ParsedContent } from './content-shapes';
 
 /** One record kind as the parser reads it: its name in a sentence, the field naming a record, and its schema. */

@@ -4,8 +4,8 @@ id: FE-011
 title: 'Design Tokens'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx,css,json}']
-# prettier-ignore
+files: ['src/**/*.{ts,tsx,css,json}', 'oxlint.config.mts', 'tools/lint/*.ts']
+# oxfmt-ignore
 paths: ['src/episodes/**', 'src/explorables/**', 'src/events/**', 'src/page-assembly/landing/**', 'src/app/globals.css']
 description: 'Values, not shape: every colour, font size and font weight in the site and inside a Scene is a token reference — raw colours only in the global palette and a Slide token file, four type roles plus one hero exception, weights normal to semibold — while Scene markup, props and layout stay free; legacy files sit on a list that only shrinks.'
 ---
@@ -112,11 +112,11 @@ Reasons, values and the token reference: [`docs/design/design-system.md`](../../
 
 ## Compliance and Enforcement
 
-1. **Class-string lint** (ESLint `better-tailwindcss`, error): unregistered classes, palette and arbitrary colours, sizes outside the roles, breakpoint-prefixed sizes, other weights, `text-hero` outside `HeroTitle` (§3, §4).
+1. **Class-string lint** (`better-tailwindcss` lint plugin, error): unregistered classes, palette and arbitrary colours, sizes outside the roles, breakpoint-prefixed sizes, other weights, `text-hero` outside `HeroTitle` (§3, §4).
 2. **Archgate rules** (`FE-011-design-tokens.rules.ts`, error): raw colour, font size, weight or family in CSS or `.tsx`/`.ts` (§2, §4); a Slide token file declaring a global name or lacking a dark value (§2); `[data-episode=` in `globals.css` (§5); a dead legacy entry (§6).
 3. **Gate:** `archgate check` and the lint in `npm run verify`.
 
-**Rollout:** the rules file and its probe tests have landed and `rules: true`; the Archgate checks above are enforced. The class-string lint is enforced separately by ESLint.
+**Rollout:** the rules file and its probe tests have landed and `rules: true`; the Archgate checks above are enforced. The class-string lint is enforced separately by lint.
 
 **Manual review duties:** the legacy list only shrinks; a Scene's markup, props and layout stay unconstrained; Slides look right in light and dark; repeated Slide colours get promoted.
 

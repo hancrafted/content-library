@@ -6,7 +6,7 @@ import { execFile } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { format, resolveConfig } from 'prettier';
+import { formatAsRepo } from '../../../src/episodes/lib/oxfmt-format.ts';
 import { harvestReport, type Harvest } from '../../../src/pipeline/lib/harvest-report.pure.ts';
 
 const TEMPLATE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../assets/harvest-report.html');
@@ -22,9 +22,8 @@ try {
   const harvest = JSON.parse(readFileSync(source, 'utf8')) as Harvest;
   const page = harvestReport(readFileSync(TEMPLATE, 'utf8'), harvest);
   // Formatted like every committed file, so the Staging commit that carries the page passes the format gate.
-  const config = (await resolveConfig(out)) ?? {};
-  writeFileSync(out, await format(page, { ...config, filepath: out }));
-  writeFileSync(source, await format(JSON.stringify(harvest), { ...config, filepath: source }));
+  writeFileSync(out, await formatAsRepo(out, page));
+  writeFileSync(source, await formatAsRepo(source, JSON.stringify(harvest)));
 } catch (error) {
   console.error(`✖ ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);

@@ -550,7 +550,7 @@ Table 4: Overview of Agent Skill sources categorized by trust defaults, official
 | Source Trust default          | Examples          |                         | Who maintains it |
 | ----------------------------- | ----------------- | ----------------------- | ---------------- |
 |                               | google/agents-cli | 28                      | , google/        |
-| skills29                      |                   | , google-gemini/gemini  |                  |
+| skills29                      |                   | , google-gemini/gemini |                  |
 |                               | skills30          | , anthropics/skills     | 31 ,             |
 |                               | stripe/ai 32      | , microsoft/skills      | 33               |
 | Community skills Audit before |                   |                         |                  |

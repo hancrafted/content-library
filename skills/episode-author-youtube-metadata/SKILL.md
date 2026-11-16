@@ -24,5 +24,5 @@ Two branches:
      _Done when_ every fact has its source named in your notes.
 4. Write the description into `recording/youtube.<lang>.md` under `## Description`, in the template's block order, with the existing chapter block (markers included) left byte for byte as it is. If the block is absent, run `npm run youtube:chapters -- <episode>` first. Write the hook and summary as the speaker would say them, naming one or two keywords the title already carries.
 5. Write the pinned comment under `## Pinned comment`, as the template says. Leave `## Comment ID` as it is.
-6. Run `npm run youtube:recording -- <episode> --lang <lang>`, then `npx prettier --write` on the file. _Done when_ it reports no violations, the chapter block is unchanged in `git diff`, and the budgets of the template hold: count with `wc -m`, not by eye.
+6. Run `npm run youtube:recording -- <episode> --lang <lang>`, then `npx oxfmt` on the file. _Done when_ it reports no violations, the chapter block is unchanged in `git diff`, and the budgets of the template hold: count with `wc -m`, not by eye.
 7. End with the copy for Han: the description and the pinned comment as they are in the file, then the character counts of hook, summary and whole description, and any fact you could not source.

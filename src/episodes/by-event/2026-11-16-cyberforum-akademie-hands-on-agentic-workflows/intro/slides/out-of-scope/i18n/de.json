@@ -1,6 +1,6 @@
 {
   "title": "Nicht im Fokus",
-  "caption": "Keine Modell- oder Softwarewahl, kein Tool-Vergleich, kein Vibe Coding.",
+  "caption": "Keine Modell- oder Softwarewahl, kein Tool-Vergleich, kein Code.",
   "panel": {
     "title": "Bewusst beiseitegelegt",
     "line": "Damit niemand darauf wartet."
@@ -12,17 +12,17 @@
     },
     "second": {
       "title": "Tool-Vergleiche",
-      "reason": "Das Bild passt zu jedem Tool."
+      "reason": "Jeder Schritt geht in ChatGPT, Copilot, Gemini oder Claude."
     },
     "third": {
-      "title": "Vibe Coding",
-      "reason": "Kein Code heute, alles in normalen Worten."
+      "title": "Programmieren",
+      "reason": "Die KI schreibt die Quizseite; ihren Code liest du nie."
     }
   },
   "notes": {
     "talking-points": {
       "header": "Damit niemand wartet",
-      "description": "Wer benennt, was heute fehlt, hält die Erwartungen ehrlich: welches Modell oder welche Software, das klären wir gern in der Fragerunde; kein Tool-Wettstreit und kein Vibe Coding, alles in normalen Worten."
+      "description": "Welches Modell oder welche Software, klären wir gern in der Fragerunde. Kein Tool-Wettstreit: Jeder Schritt geht in den gängigen Chats. Kein Programmieren: Die KI schreibt die Seite."
     }
   }
 }
