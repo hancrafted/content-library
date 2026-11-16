@@ -1,8 +1,8 @@
 {
   "title": "Spec und Quizseite",
-  "caption": "Hands-on 1b: Mach den Grill zur Spezifikation fertig, bau die Quizseite, spiel und korrigier sie.",
+  "caption": "Hands-on: Mach den Grill zur Spezifikation fertig, bau die Quizseite, spiel und korrigier sie.",
   "stage": "Grill, dann Umsetzen",
-  "timebox": "20 Minuten",
+  "timebox": "30 Minuten",
   "steps": {
     "first": "Mach den Grill im offenen Chat fertig; er schreibt die Spezifikation.",
     "second": "Füg die Spezifikation wieder in den Workflow ein und zeichne sie ab.",

@@ -13,7 +13,7 @@
   "notes": {
     "talking-points": {
       "header": "Recording, tools, breaks",
-      "description": "Say this before the recording starts. Only the theory Episodes are recorded. Have an AI chat open, ideally Gemini or Claude, which build the HTML page best; ChatGPT and Copilot work too. Two breaks: at 0:55, to pick an article, and at 2:40."
+      "description": "Say this before the recording starts. Only the theory Episodes are recorded. Have an AI chat open, ideally Gemini or Claude, which build the HTML page best; ChatGPT and Copilot work too. Two breaks: at 1:20 and at 2:20."
     },
     "pause-first": {
       "header": "Pause first",

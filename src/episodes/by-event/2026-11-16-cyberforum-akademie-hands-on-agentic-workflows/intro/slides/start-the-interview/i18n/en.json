@@ -1,16 +1,16 @@
 {
   "title": "Start the interview",
-  "caption": "Hands-on 1a: clarify your intent with the AI, then start the grill and keep the chat open.",
+  "caption": "Hands-on: clarify your intent with the AI, then start the grill and keep the chat open.",
   "stage": "Requirements, then Grill",
-  "timebox": "20 minutes",
+  "timebox": "30 minutes",
   "steps": {
     "first": "Step “Clarify the intent”: put your goal in the box, paste the prompt into a new chat.",
     "second": "Answer each round like “1.2 2.3” (question.option), then confirm the three categories it marks ★.",
     "third": "Copy its result back into the Workflow.",
-    "fourth": "Step “Grill me and write the spec”: paste the prompt into a new chat and answer; leave it open for the next Episode."
+    "fourth": "Step “Grill me and write the spec”: paste the prompt into a new chat and answer until it has written the spec; keep the chat open."
   },
   "doneLabel": "Done looks like",
-  "done": "Your intent sits in the Workflow, and the grill has asked its first questions.",
+  "done": "Your intent sits in the Workflow, and the grill has written your spec.",
   "workflow": {
     "label": "Open the quiz Workflow",
     "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
@@ -34,8 +34,8 @@
   },
   "notes": {
     "talking-points": {
-      "header": "Twenty minutes, then theory",
-      "description": "Start the grill now and stop after about twenty minutes, mid-interview: the requirements Episode explains what the participants are doing, and they finish it right after. ChatGPT works; Gemini or Claude are better at the later HTML page."
+      "header": "Thirty minutes, then the break",
+      "description": "Let the participants run the interview through to the spec; the shared-context Episode after the break explains what they just did. ChatGPT works; Gemini or Claude are better at the later HTML page."
     }
   }
 }

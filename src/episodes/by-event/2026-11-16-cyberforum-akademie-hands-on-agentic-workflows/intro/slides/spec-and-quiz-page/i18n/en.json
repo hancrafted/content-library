@@ -1,8 +1,8 @@
 {
   "title": "Spec and quiz page",
-  "caption": "Hands-on 1b: finish the grill into a spec, build the quiz page, play it and fix it.",
+  "caption": "Hands-on: finish the grill into a spec, build the quiz page, play it and fix it.",
   "stage": "Grill, then Execute",
-  "timebox": "20 minutes",
+  "timebox": "30 minutes",
   "steps": {
     "first": "Finish the grill in the chat you left open; it writes the spec.",
     "second": "Paste the spec back into the Workflow and sign it off.",
