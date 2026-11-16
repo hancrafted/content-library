@@ -6,6 +6,7 @@ import { parse } from 'yaml';
 const WORKFLOW = '.github/workflows/ci.yml';
 
 interface Workflow {
+  jobs: Record<string, { steps: { run?: string }[] }>;
   on: { pull_request?: unknown; push?: { branches?: string[]; 'branches-ignore'?: string[] } };
   concurrency: { group: string; 'cancel-in-progress': boolean };
 }
@@ -41,5 +42,17 @@ describe('the CI workflow', () => {
     // ASSERT
     expect(concurrency.group).toContain(perRef);
     expect(concurrency['cancel-in-progress']).toBe(true);
+  });
+
+  it('runs the typecheck in a lane of its own, because next build skips it', async () => {
+    // ARRANGE
+    const { default: nextConfig } = await import('../../next.config');
+    // ACT
+    const lanesWithTypecheck = Object.values(workflow().jobs).filter((job) =>
+      job.steps.some((step) => step.run === 'npm run typecheck'),
+    );
+    // ASSERT
+    expect(nextConfig.typescript?.ignoreBuildErrors).toBe(true);
+    expect(lanesWithTypecheck).toHaveLength(1);
   });
 });
