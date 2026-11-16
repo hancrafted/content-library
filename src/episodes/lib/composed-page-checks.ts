@@ -21,7 +21,7 @@ import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
 import { placementMarkerFindings, publishedAnchorFindings } from './composed-page-files';
-import { repeatedIds } from './composed-page-render';
+import { containerLosses, repeatedIds } from './composed-page-render';
 import { placeSections, sectionOf } from './episode.pure';
 import { summaryOf } from './page-summary';
 import { anchorTitleAt } from './page-summary.pure';
@@ -231,5 +231,14 @@ export function composedPageChecks(dir: string, entry: PageEntry): PageCheck[] {
     ...composedChecks(page, loaded),
     ...(deck ? slideDeckChecks(dir, page, loaded) : []),
     ...(episode ? episodeOnlyChecks(page, loaded) : []),
+    ...(page.kind === 'explorable-page'
+      ? [
+          check(
+            'survives the container: every Section keeps its contents entry and its no-section-slide flag',
+            (composition) => containerLosses(page, composition),
+            loaded,
+          ),
+        ]
+      : []),
   ];
 }

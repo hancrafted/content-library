@@ -1,3 +1,5 @@
+import { tocSectionsOf } from '@/episodes/components/episode-page/episode-page-container.pure';
+import { recordContent } from '@/episodes/components/episode-page/record-content';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type EpisodeComposition, type Slide } from '@/episodes/components/slide-master/slide';
 import { createElement, Fragment } from 'react';
@@ -8,7 +10,8 @@ import { placeSections } from './episode.pure';
 /*
  * A copied Slide must never break `aria-labelledby` (#51): the same layout may sit twice on one page, so every DOM id
  * a Slide renders comes from `useId`, not from a string written in its Scene. These render one page's Slides twice
- * into one page, each copy with its own kit, for its Episode-level checks (`composed-page-checks.ts`).
+ * into one page, each copy with its own kit, and pass an Explorable page through the container, for its
+ * Episode-level checks (`composed-page-checks.ts`).
  */
 
 /** The Slides a page renders, in order: a Section without a section slide has none to render. */
@@ -48,4 +51,28 @@ export function repeatedIds(page: ComposedPage, composition: EpisodeComposition)
   return renderedSlides(composition).flatMap((slide) =>
     repeated(idsOf(twiceRendered(page, composition, slide))).map((id) => `${slide.slug}: id "${id}" repeats`),
   );
+}
+
+/** The translator stand-in: the only string `recordContent` reads from it is the Context reference label. */
+async function labelOnly() {
+  const read = () => 'opens speaker note';
+  return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
+}
+
+/** A Section an Explorable page loses through the container: its table-of-contents entry, or its no-section-slide flag. */
+export async function containerLosses(page: ComposedPage, composition: EpisodeComposition): Promise<string[]> {
+  const declared = composition.sections.filter((section) => section.sectionSlide === false).length;
+  const content = await recordContent(composition, 'en', {
+    translatorOf: labelOnly,
+    id: page.id,
+    route: `/explorables/${page.slug}`,
+  });
+  const flagged = content.slides.filter((entry) => entry.withoutSectionSlide === true).length;
+  const entries = tocSectionsOf(content.slides).length;
+  return [
+    ...(flagged === declared ? [] : [`${flagged} Slides flagged without a section slide, ${declared} declared`]),
+    ...(entries === composition.sections.length
+      ? []
+      : [`${entries} contents entries for ${composition.sections.length} Sections`]),
+  ];
 }
