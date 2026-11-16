@@ -58,6 +58,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
    - `eslint-plugin-better-tailwindcss`: 865 stars, 2.1M, pushed 2026-11-15. Misses stars; already admitted, only the host changes.
    - `eslint-plugin-check-file`: 616 stars, 1.6M, pushed 2026-09-13. Misses stars; already admitted, only the host changes.
    - `@typescript-eslint/parser` (kept for the FE-013 rules test, §1.6): 16.5k stars (shared typescript-eslint repo), organisation `typescript-eslint`, 181.7M, 2026-11-11. Clears; already admitted, only its job narrows to parsing a test fixture as Archgate does.
+   - `json5` (pinned `2.2.3`; reads `.oxfmtrc.jsonc` for `formatAsRepo` and the `ignorePatterns` test, so neither needs the TypeScript compiler API): 7.2k stars, organisation `json5`, 32 contributors, 322.7M, last release 2022-12-31, commits merged and collaborator replies 2026-11. Clears: recency holds through maintainer activity; already in the tree transitively.
 3. The oxc packages' risk is maturity, not popularity; §2 and §3.1 mitigate it, accepted knowingly.
 
 ## Do's and Don'ts
