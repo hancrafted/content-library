@@ -169,7 +169,6 @@ stages:
         summary: Wofür die Aufgabe da ist, entschieden
         goal:
           do: 'Lass dich von der KI fragen, wofür deine Aufgabe da ist, und einige dich mit ihr auf die Anforderungskategorien, die zählen.'
-          review: 'Lass einen zweiten Chat prüfen, ob die Absicht vollständig ist, bevor der Grill darauf aufbaut.'
         output: categories
         template: categories
         slots:
@@ -208,6 +207,7 @@ stages:
             - Lesende hält die Wörter und die Tiefe fest, die du gewählt hast, und jede Frage blieb dabei.
             - Die Kategorien sind die, die du bestätigt hast; der Rest steht unter Nicht im Umfang.
             - Innerhalb einer Kategorie ist noch nichts entschieden; das macht die nächste Stage.
+            - Das Ergebnis enthält die ganze Absicht — Ziel, Lesende und Kategorien mit je einer H3 — keine Zusammenfassung.
         instructions: 'Öffne einen neuen Chat, trag dein Ziel in das Feld ein und füge den Prompt ein. Beantworte die Kalibrierung wie "C1:1 C2:2" und jede Runde wie "Q1:2 Q2:3", bestätige die vorgeschlagenen Kategorien und kopiere dann das Ergebnis.'
         skills: [grilling]
         do:
@@ -296,18 +296,6 @@ stages:
                 Schreibe die Datei in dieser Vorlage. Deine letzte Antwort enthält nichts anderes: Die erste Zeile ist genau "Ergebnis:"; dann der Inhalt der Datei, wörtlich, als ein Markdown-Codeblock, der mit ```markdown beginnt; die letzte Zeile ist der Pfad der Datei.
 
                 {{template}}
-        review:
-          instructions: 'Füge das Ergebnis in das Feld unten ein und kopiere den Prompt in einen weiteren neuen Chat. Sagt er Bereit, geh weiter; sagt er Nachbessern nötig, füge seine Korrekturanweisung in den ersten Chat ein und behalte das korrigierte Ergebnis.'
-          slots:
-            - id: categories
-              mode: single
-              label: Die Absicht zum Prüfen
-              sample: *categories_example
-          checks:
-            - 'Das Ergebnis enthält die ganze Absicht: Ziel, Lesende und Kategorien mit einer H3 pro Kategorie, nie eine Zusammenfassung davon.'
-            - Lesende enthält zwei Antworten der Kalibrierung, Wörter und Tiefe, jede mit C1 oder C2.
-            - Jede Kategorie ist eine H3 mit einer Zeile Umfang und einer Zeile Absicht, die ihre Fragen nennt, etwa (Q2).
-            - 'Nichts innerhalb einer Kategorie ist über die genannten Antworten hinaus entschieden; ein Punkt, den sie offenlassen, heißt "offen".'
   - id: grill-demo
     only: demo
     title: Grill
