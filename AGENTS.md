@@ -8,7 +8,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Always use `/commit` to commit, `/tdd` and `/code-review` for implementation.
 - `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
 - Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
-- Use `npm run verify` frequently to verify that the changes are correct.
+- Use `npm run verify:quick` frequently for in-development feedback (lint, format, typecheck, tests your uncommitted changes affect); run `npm run verify` once before finishing, it is what CI will say.
 - Decision pages: invoke `/to-decision-html` for human decision review, including the Spec work in `/new-episode`; the calling workflow keeps its contracts and Gates.
 - Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
