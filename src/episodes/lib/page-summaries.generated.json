@@ -1225,7 +1225,7 @@
         "title": "What agentic workflows require of people and organisations",
         "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
         "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-        "minutes": 17.364285714285717,
+        "minutes": 17.614285714285717,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1252,12 +1252,12 @@
               {
                 "id": "what-an-agentic-workflow-is--what-an-agent-is",
                 "title": "What an agent is",
-                "minutes": 0.8714285714285714
+                "minutes": 0.8428571428571429
               },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "What an agentic workflow is",
-                "minutes": 0.7928571428571428
+                "minutes": 0.9857142857142857
               }
             ]
           },
@@ -1323,7 +1323,7 @@
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
                 "title": "From article to quiz",
-                "minutes": 1.6999999999999997
+                "minutes": 1.7857142857142856
               }
             ]
           }
@@ -1333,7 +1333,7 @@
         "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
         "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
         "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-        "minutes": 20.125000000000004,
+        "minutes": 20.458333333333336,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1356,12 +1356,12 @@
               {
                 "id": "what-an-agentic-workflow-is--what-an-agent-is",
                 "title": "Was ein Agent ist",
-                "minutes": 0.9666666666666667
+                "minutes": 0.9083333333333334
               },
               {
                 "id": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
                 "title": "Was ein agentischer Workflow ist",
-                "minutes": 0.8916666666666667
+                "minutes": 1.1333333333333333
               }
             ]
           },
@@ -1427,7 +1427,7 @@
               {
                 "id": "what-it-requires-of-the-organisation--from-article-to-quiz",
                 "title": "Vom Artikel zum Quiz",
-                "minutes": 1.9833333333333334
+                "minutes": 2.1333333333333333
               }
             ]
           }

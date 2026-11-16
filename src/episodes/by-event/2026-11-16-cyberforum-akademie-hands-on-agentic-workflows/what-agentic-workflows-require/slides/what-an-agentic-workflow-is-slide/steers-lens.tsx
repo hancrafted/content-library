@@ -57,7 +57,7 @@ const ZOOM = (
   </svg>
 );
 
-/** The lens's head: who steers, the agent dot in `ai`, and the Context marker. */
+/** The lens's head: who loops, the agent dot in `ai`, and the Context marker. */
 function LensHead({
   label,
   agent,
