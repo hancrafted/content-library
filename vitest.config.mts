@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
+import { currentWorkers } from './vitest-workers.mts';
 
 // The fast suite, run by `npm run verify` and CI. `*.build.test.ts` needs a finished
 // `next build` and runs in its own lane: vitest.build.config.mts. `*.slow.test.ts` takes seconds
@@ -14,6 +15,7 @@ export default defineConfig({
     },
   },
   test: {
+    maxWorkers: currentWorkers(),
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,
