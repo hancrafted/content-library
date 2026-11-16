@@ -102,6 +102,7 @@ ui:
   modelMediumTip: 'Die Arbeit erledigen: Schreiben, Code, einen Plan ausführen. Coding-Agent: Sonnet, Terra, Hydrogen. Chat: das Standardmodell.'
   modelLow: 'Niedrig · schnell'
   modelLowTip: 'Erkunden und zusammenfassen. Coding-Agent: Haiku, Luna. Chat: ein schnelles oder Instant-Modell.'
+  modelReviewTip: 'Diese Prüfung vergleicht das Ergebnis nur mit einer kurzen Liste, darum reicht ein schnelles Modell. Prüfungen im Allgemeinen, etwa von Code, Plänen oder Spezifikationen, brauchen oft ein Modell der Stufe Hoch.'
   openAIChats: Einen KI-Chat öffnen
   openAIChatTip: 'Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein'
   openAIButtons:

@@ -8,6 +8,7 @@ import { debugFooter } from './debug-footer.pure';
 import { ExplainButton } from './explain-button.client';
 import type { UiWords } from './human-in-the-loop.types';
 import { ModelNote } from './model-note.client';
+import { noteFor } from './model-tier.pure';
 import { CopyPrompt, EditToggle, PromptEditor, useOpen } from './prompt-editor.client';
 import { editKey, editOf, partsOf, promptText, rawPrompt, roundedEdit } from './prompt-edits.pure';
 import { Context } from './step-context.client';
@@ -62,11 +63,10 @@ interface ActionsProps {
   readonly panel: string;
 }
 
-/** The job's model note on its do and `then` prompts; its review, a fresh chat, shows none. */
+/** The model note of a panel: the job's tier on its do and `then` prompts, Low on its review. */
 function TaskModel({ panel, task, words }: Pick<ActionsProps, 'panel' | 'task'> & { readonly words: UiWords }) {
-  const tier = task.recommendedModel;
-  if (!tier || panel.startsWith('review')) return null;
-  return <ModelNote words={words} tier={tier} />;
+  const note = noteFor(panel, task.recommendedModel);
+  return note ? <ModelNote words={words} tier={note.tier} review={note.review} /> : null;
 }
 
 /** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */

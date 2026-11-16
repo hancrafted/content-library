@@ -144,6 +144,8 @@ export interface UiWords {
   readonly modelMediumTip: string;
   readonly modelLow: string;
   readonly modelLowTip: string;
+  /** The tooltip of the model note on a review step, which always reads Low: why, and that reviews in general need more. */
+  readonly modelReviewTip: string;
   /** Progress marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;
