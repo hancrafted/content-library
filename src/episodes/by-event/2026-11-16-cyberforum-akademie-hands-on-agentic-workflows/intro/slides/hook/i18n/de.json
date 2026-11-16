@@ -1,0 +1,11 @@
+{
+  "title": "Ein Projekt, keine Antwort",
+  "caption": "Worum es heute geht, in einem Satz.",
+  "statement": "Die meisten nutzen KI für Antworten. Heute nutzt du sie, um ein kleines Projekt durchzuziehen, von der ersten Frage bis zur fertigen Seite.",
+  "notes": {
+    "talking-points": {
+      "header": "Der rote Faden",
+      "description": "Ein agentischer Workflow ist ein Projekt, das du mit KI durchziehst. Heute machst du es einmal von Hand und dann einen Skill daraus, damit der nächste Durchlauf nur einen Schritt braucht."
+    }
+  }
+}

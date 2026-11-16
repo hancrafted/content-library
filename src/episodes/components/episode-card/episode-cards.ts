@@ -2,7 +2,7 @@ import { hasPage } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
 import { summaryOf } from '@/episodes/lib/page-summary';
-import { sectionTitleAt } from '@/episodes/lib/page-summary.pure';
+import { anchorTitleAt } from '@/episodes/lib/page-summary.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
@@ -62,7 +62,7 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
 }
 
 /**
- * The card of a Playlist entry that opens its Episode at an anchor: the title of the Section the anchor names, and
+ * The card of a Playlist entry that opens its Episode at an anchor: the title the anchor opens at (its Section's, or one Slide's), and
  * nothing else of the Episode's (no caption, Tags, date, video or reading time), since it is a step inside one. An
  * anchor the Episode does not have is a bug, so it throws.
  */
@@ -71,7 +71,7 @@ function atSection(
   { entry, anchor }: { entry: LoadedEpisode; anchor: string },
   locale: Locale,
 ): EpisodeCard {
-  const title = hasPage(entry.ref) ? sectionTitleAt(summaryOf(entry.ref)[locale], anchor) : undefined;
+  const title = hasPage(entry.ref) ? anchorTitleAt(summaryOf(entry.ref)[locale], anchor) : undefined;
   if (typeof title !== 'string') throw new Error(`The Episode "${entry.ref.id}" has no Section at "${anchor}"`);
   const { slug, route, href, status, leadTag, format, featuredRank } = card;
   return { slug, route, href, status, title, caption: '', leadTag, format, tags: [], featuredRank };

@@ -1,0 +1,41 @@
+{
+  "title": "Make it a skill",
+  "caption": "Hands-on 2: turn your run into a skill, then prove it on a new web page.",
+  "stage": "Improve",
+  "timebox": "45 minutes",
+  "steps": {
+    "first": "Step “Write the skill”: your spec and quiz note become a SKILL.md.",
+    "second": "Step “Try the skill”: give it a new web page and nothing else, then play the quiz it builds.",
+    "third": "Carry the lessons of that run back into your SKILL.md.",
+    "fourth": "Ahead? Run it once more on a PDF, or try step “Let an agent grade it”."
+  },
+  "doneLabel": "Done looks like",
+  "done": "A second quiz, built in one go from your skill.",
+  "workflow": {
+    "label": "Open the quiz Workflow",
+    "pick": "Today’s Workflow, “Turn a source into a quiz”, is already picked. Each step has its prompt to copy, for an AI chat or a coding agent; paste each result back into its box.",
+    "newTab": "opens in a new tab"
+  },
+  "help": {
+    "button": "Help",
+    "label": "Where you're stuck",
+    "placeholder": "Paste what the AI answered, or describe where you're stuck…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm in a hands-on workshop: I'm turning an article into a quiz with an AI chat, and I'm stuck.\n\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm not technical. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    },
+    "step": "Improve: Write the skill, then Try the skill"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "One step next time",
+      "description": "The red thread lands here: the run by hand took an afternoon, the skill takes one step. Anyone without a second article takes the fallback source from the Workflow."
+    }
+  }
+}

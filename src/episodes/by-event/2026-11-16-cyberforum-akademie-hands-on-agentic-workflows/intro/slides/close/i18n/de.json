@@ -1,0 +1,24 @@
+{
+  "title": "Zurück zum Board",
+  "caption": "Der Quiz-Workflow, einmal von Hand gemacht und jetzt ein Skill: was du in deine Woche mitnimmst.",
+  "boardLabel": "Der heutige Workflow",
+  "stages": {
+    "requirements": "Anforderungen: Interview und Spec",
+    "execute": "Umsetzen: eine Quizseite, die ein Partner gespielt hat",
+    "improve": "Verbessern: ein Skill, der das nächste Quiz macht"
+  },
+  "actionsLabel": "Deine nächsten Schritte",
+  "actions": {
+    "first": "Mach aus einem Artikel, aus dem dein Team lernen soll, ein Quiz mit fünf Fragen.",
+    "second": "Teil deine Quizseite und deinen Prompt mit einem Partner und vergleicht, was jeder bekommen hat.",
+    "third": "Nutz deinen Quiz-Skill diese Woche an einer weiteren Wissensquelle bei der Arbeit."
+  },
+  "question": "Worauf kommt es bei der Arbeit mit Agenten am meisten an?",
+  "qa": "Fragen und Antworten",
+  "notes": {
+    "talking-points": {
+      "header": "Das Lernziel landen",
+      "description": "Einmal über das Board gehen: Jede Stufe wurde heute von Hand gemacht, und der Skill macht den nächsten Durchlauf zu einem Schritt. Die Frage zum kritischen Denken stellen, die drei nächsten Schritte vorlesen, dann die Runde öffnen."
+    }
+  }
+}
