@@ -29,7 +29,7 @@ describe('success cases', () => {
     // ASSERT
     expect(stage.foreach?.demo).toBe(chats);
     expect(task.slots.map((slot) => slot.id)).toEqual(['brief']);
-    expect(proposal.templates[task.template]).toContain(heading);
+    expect(proposal.templates[task.template ?? '']).toContain(heading);
     expect(ask?.review?.checks.length).toBeGreaterThan(0);
   });
 

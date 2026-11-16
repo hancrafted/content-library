@@ -238,6 +238,44 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
+  it('loads a checkbox job anywhere in a stage, with the label of its own checkbox', () => {
+    // ARRANGE
+    const doneLabel = 'I opened the quiz and played it through';
+    const change = (file: File) => checking(file, { output: undefined, doneLabel, review: undefined });
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages[0]!.jobs[1]!.doneLabel).toBe(doneLabel);
+  });
+
+  it('loads a checkbox job without a template and an example, since it hands nothing on', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      checking(file, {
+        output: undefined,
+        review: undefined,
+        template: undefined,
+        details: { why: 'Because.', goodLooksLike: ['Clear.'] },
+      });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
+
+  it('loads a free slot marked blank without a sample, and gives it none', () => {
+    // ARRANGE
+    const blank = { id: 'plan', mode: 'single', label: 'Notes', free: true, blank: true };
+    const change = (file: File) => void (research(file).slots[0] = blank as never);
+    // ACT
+    const result = load(change);
+    const slot = 'file' in result ? result.file.stages[1]!.jobs[0]!.slots[0]! : undefined;
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect(slot && 'file' in result && slotSample(result.file, slot)).toBeUndefined();
+  });
+
   it('loads a stage summary of eight words and the goals of a job', () => {
     // ARRANGE
     const change = (file: File) =>
@@ -607,13 +645,46 @@ describe('failure cases', () => {
     );
   });
 
-  it('reports a job that has no output unless it is the final job of the last stage', () => {
+  it('reports a slot that takes what a checkbox job does not hand on', () => {
     // ARRANGE
-    const change = (file: File) => void delete (file.stages[0]!.jobs[0] as { output?: unknown }).output;
+    const change = (file: File) => {
+      checking(file, { output: undefined, review: undefined });
+      later(file, takes('checked'), '{{checked}}');
+    };
     // ACT
     const problems = problemsOf(load(change));
     // ASSERT
-    expect(problems).toContain('Task "plan" has no output; only the final job of the last stage may have none.');
+    expect(problems).toContain('Slot "checked" of task "compare" names no output of an earlier stage.');
+  });
+
+  it('reports a doneLabel on a job that hands on an output', () => {
+    // ARRANGE
+    const change = (file: File) => checking(file, { doneLabel: 'Done.' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Task "check" has a doneLabel but hands on an output; only a checkbox job has one.');
+  });
+
+  it('reports a job that hands on an output but names no template and gives no example', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      checking(file, { template: undefined, details: { why: 'Because.', goodLooksLike: ['Clear.'] } });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Task "check" hands on an output but names no template.');
+    expect(problems).toContain('Task "check" hands on an output but gives no example.');
+  });
+
+  it('reports a blank slot that is not a free input', () => {
+    // ARRANGE
+    const blank = { id: 'plan', mode: 'single', label: 'Plan', blank: true };
+    const change = (file: File) => void (research(file).slots[0] = blank as never);
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Slot "plan" of task "research" is blank but not a free input.');
   });
 
   it('reports a stage summary of more than eight words', () => {
@@ -1072,18 +1143,6 @@ describe('edge cases', () => {
     const problems = problemsOf(load(change));
     // ASSERT
     expect(problems).not.toContain(finalJob);
-  });
-
-  it('asks an output of a job of the last stage that is not its final job', () => {
-    // ARRANGE
-    const change = (file: File) => {
-      ending(file);
-      file.stages[2]!.jobs.unshift({ ...file.stages[2]!.jobs[0]!, id: 'early' } as never);
-    };
-    // ACT
-    const problems = problemsOf(load(change));
-    // ASSERT
-    expect(problems).toContain('Task "early" has no output; only the final job of the last stage may have none.');
   });
 
   it('reports a file that is valid YAML but not a mapping as shape problems', () => {

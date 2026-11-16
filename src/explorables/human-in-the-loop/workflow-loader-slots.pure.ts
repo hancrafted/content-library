@@ -1,6 +1,7 @@
 import { unknownCheckMarkers } from './workflow-markers.pure.ts';
 import type { Producer } from './workflow-outputs.pure';
-import type { SlotDef, StageDef, TaskDef } from './workflow-schema.types';
+import { slotSample } from './workflow-sample.pure.ts';
+import type { SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /* The checks of what a job's slots take and of the limits its prompts and checks name. One sentence per problem. */
 
@@ -35,4 +36,20 @@ export function limitProblems(task: TaskDef, stage: StageDef): string[] {
       .filter(([, limit]) => limit.demo > limit.full)
       .map(([name]) => `The limit "${name}" of task "${task.id}" has a demo value above its full value.`),
   ];
+}
+
+/** A blank slot is a free input and carries no sample. */
+function blankProblems(slot: SlotDef, task: TaskDef): string[] {
+  const where = `Slot "${slot.id}" of task "${task.id}"`;
+  return [
+    ...(slot.free ? [] : [`${where} is blank but not a free input.`]),
+    ...(slot.sample === undefined ? [] : [`${where} is blank but has a sample.`]),
+  ];
+}
+
+/** The problems of a slot that has no sample to check, or none when it has one: a blank slot, or a slot that lacks its sample. */
+export function bareProblems(file: WorkflowFile, slot: SlotDef, task: TaskDef): string[] | undefined {
+  if (slot.blank) return blankProblems(slot, task);
+  if (slotSample(file, slot) === undefined) return [`Slot "${slot.id}" of task "${task.id}" needs a sample.`];
+  return undefined;
 }

@@ -133,12 +133,14 @@ interface ResultProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly final: boolean;
+  readonly doneLabel?: string;
   readonly lead: boolean;
 }
 
-function Result({ name, kit, slots, final, lead }: ResultProps) {
+function Result({ name, kit, slots, final, doneLabel, lead }: ResultProps) {
   const { words } = kit;
-  if (final) return <CheckedBox name={name} label={words.markDone} slots={slots} mark="done" lead={lead} />;
+  if (final)
+    return <CheckedBox name={name} label={doneLabel ?? words.markDone} slots={slots} mark="done" lead={lead} />;
   return (
     <ContextField
       field={name}
@@ -212,6 +214,7 @@ function DoSteps(props: PanelProps) {
           kit={kit}
           slots={slots}
           final={task.output === undefined}
+          doneLabel={task.doneLabel}
           lead={lead === 'answer'}
         />
       </StepSection>

@@ -93,6 +93,8 @@ export interface SlotDef {
   readonly sample?: string | readonly string[];
   /** A free input: the user's own text (the task), not an earlier task's output, so it names no output and its sample is plain text. */
   readonly free?: boolean;
+  /** A free input that starts empty: it carries no sample and takes no scenario text, so the viewer types before the prompt runs. */
+  readonly blank?: boolean;
 }
 
 /** The optional "Review it" pair of a task: runs in a fresh chat, only reports, then writes a fix handoff for the first chat. */
@@ -109,7 +111,7 @@ export interface ReviewDef {
 export interface DetailsDef {
   readonly why: string;
   /** A markdown handoff of the task's template; a job of a repeated stage has one per demo round, in round order. */
-  readonly example: string | readonly string[];
+  readonly example?: string | readonly string[];
   readonly goodLooksLike: readonly string[];
   /** Ids from the `techniques` catalogue that the task's structure teaches; shown under "why it matters". */
   readonly techniques?: readonly string[];
@@ -139,12 +141,14 @@ export interface TaskDef {
   /** Ids of jobs of the same stage that run first; a slot may take their outputs. Without it, slots take earlier stages' outputs only. */
   readonly needs?: readonly string[];
   /**
-   * The id this task hands on; a later slot with this id takes it. A job of a repeated stage hands on `x_1` … `x_N`, one per demo round. Absent only on
-   * the final job of the last stage, which the viewer marks done with a checkbox.
+   * The id this task hands on; a later slot with this id takes it. A job of a repeated stage hands on `x_1` … `x_N`, one per demo round. Absent on a
+   * checkbox job, anywhere in the file: the viewer ticks its box instead of pasting a result, and no later slot can take it.
    */
   readonly output?: string;
-  /** Key into `templates`; shared by the do prompt, the reviewer and the loader. */
-  readonly template: string;
+  /** The words beside a checkbox job's box (a job without an `output`); absent: the visual's `markDone` word. */
+  readonly doneLabel?: string;
+  /** Key into `templates`; shared by the do prompt, the reviewer and the loader. Required on a job that hands on an output. */
+  readonly template?: string;
   /** Each `id` names the `output` of a task in an earlier stage (or `x_K` of a repeated stage). */
   readonly slots: readonly SlotDef[];
   /** One or two plain sentences on what the user does in the do step; shown above the slots in the popover. */

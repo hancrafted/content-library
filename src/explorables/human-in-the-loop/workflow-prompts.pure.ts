@@ -101,7 +101,7 @@ function promptSections(
   at: { sections: readonly SectionDef[]; skills?: readonly string[]; runtime: Runtime; options: PromptOptions },
 ): PromptSection[] {
   const { runtime, options } = at;
-  const fills = { template: fenced(file.templates[task.template] ?? ''), ...limitsOf(task, options) };
+  const fills = { template: fenced(file.templates[task.template ?? ''] ?? ''), ...limitsOf(task, options) };
   const shown = forMode(at.sections, options);
   const expanded = expandSections(shown, task.slots, widthsOf(file, task.slots, options));
   const body = expanded.map((section) => ({ ...section, text: resolve(section.text, fills) }));
@@ -137,7 +137,7 @@ export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode
     .map((check) => resolve(check, limits));
   const widths = widthsOf(file, review.slots, options);
   const fills = {
-    template: fenced(file.templates[task.template] ?? ''),
+    template: fenced(file.templates[task.template ?? ''] ?? ''),
     checks: numbered(checks),
     inputs: inputsOf(review.slots, (slot) => widths.get(slot.id) ?? 0),
   };
