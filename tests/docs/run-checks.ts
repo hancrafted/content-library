@@ -15,6 +15,7 @@ import {
   LLM_WIKI,
   outputsOf,
   pipelineContext,
+  readFolder,
   ROOT,
   rubricsWithoutHeading,
   subfolders,
@@ -23,16 +24,13 @@ import {
 /*
  * The Run-level checks (ARCH-003 §4.7): every staging check that holds inside one Run's staging folder,
  * `docs/episodes/<slug>/`, run on that folder alone. Each Run carries a `run-checks.test.ts` (copied from
- * `skills/new-episode/assets/run-checks.test.ts.txt` by begin-run) that hands its folder and its files here, so
- * `vitest --changed` runs only the checks of the Run an edit touched, and each test's cost stays one Run. The template's
+ * `skills/new-episode/assets/run-checks.test.ts.txt` by begin-run) that hands its folder here and globs its text files
+ * into its import graph, so `vitest --changed` runs only the checks of the Run an edit touched, and each test's cost stays one Run. The template's
  * and the sample Episode's checks, and the invariants that span Runs, stay in `episode-staging.test.ts`.
  *
  * A check returns findings and never throws, so a broken Run's test names what broke. Add a new Run-level check here:
  * every Run's test runs it without being edited.
  */
-
-/** A Run's files, as `import.meta.glob(…, { query: '?raw', import: 'default' })` returns them: lazy, by `./` path. */
-export type RunFiles = Readonly<Record<string, () => Promise<unknown>>>;
 
 /** One check: the test name it runs under, and its findings, empty when it holds. */
 export interface RunCheck {
@@ -47,11 +45,8 @@ const shown = (staging: string, findings: readonly Finding[]): string[] =>
   findings.map(({ file, message }) => `${staging}/${file}: ${message}`);
 
 /** The Run's files by their path inside its folder, `/`-separated, its checks test left out. */
-async function contentsOf(files: RunFiles): Promise<Record<string, string>> {
-  const entries = await Promise.all(
-    Object.entries(files).map(async ([key, load]) => [key.replace(/^\.\//, ''), String(await load())] as const),
-  );
-  return Object.fromEntries(entries.filter(([file]) => file !== RUN_CHECKS_TEST));
+function contentsOf(dir: string): Record<string, string> {
+  return Object.fromEntries(Object.entries(readFolder(dir)).filter(([file]) => file !== RUN_CHECKS_TEST));
 }
 
 /** Every research folder of the llm-wiki and of every Run but this one, as repo paths: folder names only. */
@@ -161,11 +156,14 @@ const CHECKS: readonly (readonly [string, (run: Run) => readonly string[]])[] = 
   ],
 ];
 
-/** The checks of the Run whose staging folder is `dir`, its files `files`. */
-export function runChecks(dir: string, files: RunFiles): RunCheck[] {
+/**
+ * The checks of the Run whose staging folder is `dir`, read from disk as the staging checks always read it. The Run's
+ * test globs its text files only to put them in its import graph, which `--changed` follows.
+ */
+export function runChecks(dir: string): RunCheck[] {
   const staging = path.relative(ROOT, dir).split(path.sep).join('/');
   return CHECKS.map(([name, findings]) => ({
     name,
-    findings: async () => findings({ staging, files: await contentsOf(files) }),
+    findings: async () => findings({ staging, files: contentsOf(dir) }),
   }));
 }

@@ -3,12 +3,13 @@ import { runChecks } from '../../../tests/docs/run-checks.ts';
 
 /*
  * The Run-level staging checks on this Run's folder alone (ARCH-003 §4.7, `tests/docs/run-checks.ts`). The glob puts
- * every file here in this test's import graph, so `vitest --changed` runs it when one of them changes. begin-run copies
- * this file from `skills/new-episode/assets/run-checks.test.ts.txt`; never edit one Run's copy.
+ * every text file the checks read in this test's import graph, so `vitest --changed` runs it when one of them changes;
+ * the checks read the folder from disk. begin-run copies this file from
+ * `skills/new-episode/assets/run-checks.test.ts.txt`; never edit one Run's copy.
  */
 
-const FILES = import.meta.glob(['./**/*', '!./run-checks.test.ts'], { query: '?raw', import: 'default' });
-const CHECKS = runChecks(import.meta.dirname, FILES);
+const FILES = import.meta.glob('./**/*.{md,yml,html,jsonl}', { import: 'default' });
+const CHECKS = runChecks(import.meta.dirname);
 
 describe('success cases', () => {
   it.each(CHECKS)('$name', async ({ findings }) => {
@@ -33,12 +34,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('leaves this test out of the files it checks', () => {
+  it('follows the per-run pipeline, so a pipeline edit reruns this test', () => {
     // ARRANGE
-    const self = './run-checks.test.ts';
+    const pipeline = './pipeline.yml';
     // ACT
     const files = Object.keys(FILES);
     // ASSERT
-    expect(files).not.toContain(self);
+    expect(files).toContain(pipeline);
   });
 });
