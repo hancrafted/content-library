@@ -1,11 +1,11 @@
 {
   "title": "Agenda",
-  "caption": "Four hours, times from the start: three theory Episodes, each followed by a check-in and a hands-on step, with two breaks.",
+  "caption": "Four hours, times from the start: three theory Episodes, each followed by a hands-on step, with two breaks.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
       "time": "0:00",
-      "title": "Welcome, orga and poll"
+      "title": "Welcome and orga"
     },
     "first": {
       "time": "0:25",
@@ -54,7 +54,7 @@
   "notes": {
     "talking-points": {
       "header": "Four hours, counted from 0:00",
-      "description": "Welcome until 0:25, Episode 1 until 0:55, then a break to pick an article. The interview (20), Episode 2 (20), spec and quiz page (20), Episode 3 (30), a break, writing the skill (45), and the last 20 minutes for the close and questions. Each check-in belongs to its Episode’s time."
+      "description": "Welcome until 0:25, Episode 1 until 0:55, then a break to pick an article. The interview (20), Episode 2 (20), spec and quiz page (20), Episode 3 (30), a break, writing the skill (45), and the last 20 minutes for the close and questions."
     }
   }
 }

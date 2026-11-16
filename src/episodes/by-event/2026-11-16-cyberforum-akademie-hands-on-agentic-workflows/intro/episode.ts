@@ -9,14 +9,13 @@ import { handsOnSection } from './sections/hands-on';
 import { hookSection } from './sections/hook';
 import { inScopeSection } from './sections/in-scope';
 import { orgaSection } from './sections/orga';
-import { pollSection } from './sections/poll';
 import { hero } from './slides/hero/slide';
 
 /*
  * The intro of the CyberForum Akademie hands-on workshop (Event 2026-11-16-cyberforum-akademie-hands-on-agentic-workflows),
  * adapted from the 2026-10-28 webinar's: the orga before the recording, the hook, agenda, scope, what today's AI can do
  * (`grounding`) and About me. Then the Sections the day returns to between its theory Episodes, grouped by kind: every
- * poll in `poll`, every hands-on step in `hands-on`, and the close. The Event's Playlist orders them by time, opening
+ * hands-on step in `hands-on`, and the close. The Event's Playlist orders them by time, opening
  * each at its Slide's anchor. Unlisted: it lives only under its Event.
  */
 export const cyberforumIntro = episode({
@@ -30,7 +29,6 @@ export const cyberforumIntro = episode({
     inScopeSection,
     groundingSection,
     aboutMeSection,
-    pollSection,
     handsOnSection,
     closeSection,
   ],

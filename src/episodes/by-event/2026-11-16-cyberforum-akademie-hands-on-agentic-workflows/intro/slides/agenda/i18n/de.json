@@ -1,11 +1,11 @@
 {
   "title": "Agenda",
-  "caption": "Vier Stunden, Zeiten ab Beginn: drei Theorie-Episoden, nach jeder ein Check-in und ein Hands-on-Schritt, mit zwei Pausen.",
+  "caption": "Vier Stunden, Zeiten ab Beginn: drei Theorie-Episoden, nach jeder ein Hands-on-Schritt, mit zwei Pausen.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
       "time": "0:00",
-      "title": "Begrüßung, Orga und Umfrage"
+      "title": "Begrüßung und Orga"
     },
     "first": {
       "time": "0:25",
@@ -54,7 +54,7 @@
   "notes": {
     "talking-points": {
       "header": "Vier Stunden, ab 0:00 gezählt",
-      "description": "Begrüßung bis 0:25, Episode 1 bis 0:55, dann eine Pause, um einen Artikel auszusuchen. Das Interview (20), Episode 2 (20), Spec und Quizseite (20), Episode 3 (30), eine Pause, den Skill schreiben (45) und die letzten 20 Minuten für Abschluss und Fragen. Jeder Check-in gehört zur Zeit seiner Episode."
+      "description": "Begrüßung bis 0:25, Episode 1 bis 0:55, dann eine Pause, um einen Artikel auszusuchen. Das Interview (20), Episode 2 (20), Spec und Quizseite (20), Episode 3 (30), eine Pause, den Skill schreiben (45) und die letzten 20 Minuten für Abschluss und Fragen."
     }
   }
 }

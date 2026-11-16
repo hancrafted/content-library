@@ -1168,7 +1168,7 @@
       "en": {
         "title": "Hands-on agentic workflows",
         "caption": "Run a small project with AI, from first question to finished quiz page, then make it a skill.",
-        "description": "How the four-hour workshop runs: orga, hook, agenda, scope, what today’s AI can do, the polls and check-ins, every hands-on step of the quiz Workflow, and the close.",
+        "description": "How the four-hour workshop runs: orga, hook, agenda, scope, what today’s AI can do, every hands-on step of the quiz Workflow, and the close.",
         "minutes": 0,
         "sections": [
           { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
@@ -1182,16 +1182,6 @@
           },
           { "id": "grounding", "title": "What today’s AI can do", "minutes": 0, "items": [] },
           { "id": "about-me", "title": "About me", "minutes": 0, "items": [] },
-          {
-            "id": "poll",
-            "title": "Polls",
-            "minutes": 0,
-            "items": [
-              { "id": "poll--check-in-1", "title": "Check-in: agentic workflows", "minutes": 0 },
-              { "id": "poll--check-in-2", "title": "Check-in: shared context", "minutes": 0 },
-              { "id": "poll--check-in-3", "title": "Check-in: sustainable skills", "minutes": 0 }
-            ]
-          },
           {
             "id": "hands-on",
             "title": "Hands-on",
@@ -1209,7 +1199,7 @@
       "de": {
         "title": "Hands-on: agentische Workflows",
         "caption": "Ein kleines Projekt mit KI durchziehen, von der ersten Frage bis zur fertigen Quizseite, dann einen Skill daraus machen.",
-        "description": "Wie der vierstündige Workshop abläuft: Orga, Einstieg, Agenda, Fokus, was heutige KI kann, die Umfragen und Check-ins, jeder Hands-on-Schritt des Quiz-Workflows und der Abschluss.",
+        "description": "Wie der vierstündige Workshop abläuft: Orga, Einstieg, Agenda, Fokus, was heutige KI kann, jeder Hands-on-Schritt des Quiz-Workflows und der Abschluss.",
         "minutes": 0,
         "sections": [
           { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
@@ -1223,16 +1213,6 @@
           },
           { "id": "grounding", "title": "Was heutige KI kann", "minutes": 0, "items": [] },
           { "id": "about-me", "title": "Über mich", "minutes": 0, "items": [] },
-          {
-            "id": "poll",
-            "title": "Umfragen",
-            "minutes": 0,
-            "items": [
-              { "id": "poll--check-in-1", "title": "Check-in: agentische Workflows", "minutes": 0 },
-              { "id": "poll--check-in-2", "title": "Check-in: geteilter Kontext", "minutes": 0 },
-              { "id": "poll--check-in-3", "title": "Check-in: nachhaltige Skills", "minutes": 0 }
-            ]
-          },
           {
             "id": "hands-on",
             "title": "Hands-on",
