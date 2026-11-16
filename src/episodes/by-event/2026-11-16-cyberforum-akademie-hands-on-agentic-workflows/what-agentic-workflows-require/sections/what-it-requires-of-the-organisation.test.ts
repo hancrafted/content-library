@@ -371,8 +371,8 @@ describe('edge cases', () => {
   it('says who loops and who steers on Slide 13 with the settled sentence, in English and German', () => {
     // ARRANGE
     const expected = {
-      en: 'You design the path; the agent loops through its task; you steer at the checkpoints.',
-      de: 'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Kontrollpunkten.',
+      en: 'You design the path; the agent loops through its task; you steer at the checkpoints',
+      de: 'Du gestaltest den Weg; der Agent läuft in einer Schleife durch seine Aufgabe; Du steuerst an den Checkpoints',
     };
     // ACT
     const actual = {
@@ -386,7 +386,7 @@ describe('edge cases', () => {
   it('never says the agent steers on Slide 13, in any word the Slide carries', () => {
     // ARRANGE
     const pattern =
-      /agent steers|steers each step|agent's to steer|Agent steuert|steuert jeden Schritt|jeden Schritt steuert/i;
+      /agent steers|steers each step|agent's to steer|Agent steuert|steuert jeden Schritt|jeden Schritt steuert|steuert innerhalb|entscheidet er selbst|entscheidet der Agent/i;
     const slide = SECTION.find(({ slug }) => slug === 'from-article-to-quiz');
     // ACT
     const found = pattern.test(JSON.stringify(slide?.messages));

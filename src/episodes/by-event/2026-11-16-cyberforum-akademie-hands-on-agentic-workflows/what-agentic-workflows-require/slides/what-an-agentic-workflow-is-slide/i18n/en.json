@@ -16,7 +16,7 @@
   },
   "steers": {
     "label": "The agent loops here",
-    "task": "You set its task: {task} How it gets there is its own call.",
+    "task": "You set its task: {task} It loops through its steps until it thinks it is done.",
     "steps": {
       "search": "Search the web",
       "compare": "Compare 3 venues",

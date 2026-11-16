@@ -1225,7 +1225,7 @@
         "title": "What agentic workflows require of people and organisations",
         "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
         "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-        "minutes": 17.700000000000003,
+        "minutes": 17.72857142857143,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1313,7 +1313,7 @@
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "Designed AI first",
-                "minutes": 0.9285714285714286
+                "minutes": 0.9571428571428571
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
@@ -1333,7 +1333,7 @@
         "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
         "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
         "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-        "minutes": 20.500000000000004,
+        "minutes": 20.525000000000002,
         "sections": [
           {
             "id": "a-thought-experiment",
@@ -1417,7 +1417,7 @@
               {
                 "id": "what-it-requires-of-the-organisation--designed-ai-first",
                 "title": "KI-first entworfen",
-                "minutes": 1.1083333333333334
+                "minutes": 1.1333333333333333
               },
               {
                 "id": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
