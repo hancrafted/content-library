@@ -1,4 +1,5 @@
-import { DoneBy } from '@/episodes/components/slide-shared/seam-sum/marks';
+import { CardHeader } from '@/episodes/components/slide-shared/seam-sum/card-header';
+import { tiltOf } from '@/episodes/components/slide-shared/seam-sum/tilt.pure';
 import { cn } from '@/shared/lib/utils';
 
 export interface Freelancer {
@@ -10,11 +11,13 @@ export interface PriceTrait {
   readonly slug: string;
   readonly initial: string;
   readonly name: string;
+  /** The German word beside the English name, as the pay-the-price slide sets it; empty where there is none. */
+  readonly gloss: string;
 }
 
 interface ManagerStackProps {
   readonly task: { readonly label: string; readonly text: string };
-  readonly freelancers: { readonly label: string; readonly cards: readonly Freelancer[]; readonly doneBy: string };
+  readonly freelancers: { readonly label: string; readonly cards: readonly Freelancer[] };
   /** The five traits: their letters sit on every card, their names once in the legend. */
   readonly price: { readonly label: string; readonly traits: readonly PriceTrait[] };
   readonly rule: string;
@@ -51,31 +54,15 @@ function LabelledLine({ label, children, className }: { label: string; children:
   );
 }
 
-/** One freelancer: the name pill, the person badge and the five PRICE letters. */
-function FreelancerCard(props: {
-  freelancer: Freelancer;
-  index: number;
-  doneBy: string;
-  price: ManagerStackProps['price'];
-}) {
-  const { freelancer, index, doneBy, price } = props;
+/** One freelancer: the name pill and the five PRICE letters; nothing is done yet, so no badge. */
+function FreelancerCard(props: { freelancer: Freelancer; index: number; price: ManagerStackProps['price'] }) {
+  const { freelancer, index, price } = props;
   return (
     <li
       data-freelancer={freelancer.slug}
-      className={cn(
-        'flex min-w-0 flex-col gap-3 rounded-sm bg-card p-3 shadow-md',
-        index % 2 === 0 ? 'rotate-1' : '-rotate-1',
-      )}
+      className={cn('flex min-w-0 flex-col gap-3 rounded-sm bg-card p-3 shadow-md', tiltOf(index))}
     >
-      <div className="flex flex-wrap items-center justify-between gap-1">
-        <span
-          data-card-label
-          className="rounded-full bg-foreground px-3 py-0.5 text-caption font-medium text-background"
-        >
-          {freelancer.label}
-        </span>
-        <DoneBy who="person" label={doneBy} />
-      </div>
+      <CardHeader label={freelancer.label} />
       <PriceChips price={price} />
     </li>
   );
@@ -87,20 +74,14 @@ function Freelancers({ freelancers, price }: Pick<ManagerStackProps, 'freelancer
     <section aria-label={freelancers.label} className="flex flex-col gap-4 rounded-2xl bg-muted p-5 shadow-inner">
       <ul className="grid grid-cols-1 gap-3 @xl:grid-cols-2 @4xl:grid-cols-4">
         {freelancers.cards.map((freelancer, index) => (
-          <FreelancerCard
-            key={freelancer.slug}
-            freelancer={freelancer}
-            index={index}
-            doneBy={freelancers.doneBy}
-            price={price}
-          />
+          <FreelancerCard key={freelancer.slug} freelancer={freelancer} index={index} price={price} />
         ))}
       </ul>
       <ul data-price-legend className="flex flex-wrap gap-x-5 gap-y-1 text-caption text-muted-foreground">
         {price.traits.map((trait) => (
           <li key={trait.slug}>
-            <b className="mr-1 text-foreground">{trait.initial}</b>
-            {trait.name}
+            <b className="text-foreground">{trait.initial}</b> {trait.name}
+            {trait.gloss !== '' && <> {trait.gloss}</>}
           </li>
         ))}
       </ul>

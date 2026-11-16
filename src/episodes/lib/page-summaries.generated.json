@@ -1225,17 +1225,17 @@
         "title": "What agentic workflows require of people and organisations",
         "caption": "Everyone delivered exactly what was asked, and none of it added up. An agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.",
         "description": "What an agent and an agentic workflow are, how far a person can step out of the loop for each task, the skills each person needs (plan back from the goal, agree contracts at the seams, review the result), and what the organisation must provide so the workflow is designed around the goal, not the org chart.",
-        "minutes": 17.242857142857144,
+        "minutes": 17.364285714285717,
         "sections": [
           {
             "id": "a-thought-experiment",
-            "title": "You're the manager",
-            "minutes": 0.7357142857142858,
+            "title": "A thought experiment",
+            "minutes": 0.8500000000000001,
             "items": [
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "The thought experiment",
-                "minutes": 1.2357142857142858
+                "minutes": 1.2428571428571429
               },
               {
                 "id": "a-thought-experiment--now-with-agents",
@@ -1333,17 +1333,17 @@
         "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
         "caption": "Alle haben genau geliefert, was verlangt war, und nichts davon passte zusammen. Ein agentischer Workflow ist ein Ziel, zerlegt in Übergaben, die Du prüfen kannst, gebaut um das Ziel, nicht um das Organigramm.",
         "description": "Was ein Agent und ein agentischer Workflow sind, wie weit sich ein Mensch bei jeder Aufgabe aus der Schleife nehmen kann, welche Fähigkeiten jede Person braucht (vom Ziel rückwärts planen, Verträge an den Nahtstellen vereinbaren, das Ergebnis prüfen) und was die Organisation bereitstellen muss, damit der Workflow um das Ziel gebaut wird, nicht um das Organigramm.",
-        "minutes": 19.975000000000005,
+        "minutes": 20.125000000000004,
         "sections": [
           {
             "id": "a-thought-experiment",
-            "title": "Du bist die Führungskraft",
-            "minutes": 0.85,
+            "title": "Ein Gedankenexperiment",
+            "minutes": 0.9833333333333334,
             "items": [
               {
                 "id": "a-thought-experiment--the-thought-experiment",
                 "title": "Das Gedankenexperiment",
-                "minutes": 1.525
+                "minutes": 1.5416666666666665
               },
               { "id": "a-thought-experiment--now-with-agents", "title": "Jetzt mit Agenten", "minutes": 0.925 }
             ]

@@ -48,20 +48,20 @@ interface SlideText {
 const textOf = (locale: Locale) => theThoughtExperiment.messages[locale] as unknown as SlideText;
 
 describe('success cases', () => {
-  it('shows the four cards, each ticked and done by a person, and the failed party they add up to', () => {
+  it('shows the four ticked cards and the failed party they add up to, with its two broken halves as chips', () => {
     // ARRANGE
     const expected = {
       cards: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
-      people: 4,
+      ticks: 4,
       result: ['Party, 20 June'],
       goal: ['Goal: everyone celebrates together and gets home safely'],
-      broken: ['✗ together Activities, Food & drinks', '✗ safely Travel, Venue'],
+      broken: ['✗ together', '✗ safely'],
     };
     // ACT
     const $ = sceneOf();
     const actual = {
       cards: textsOf($, '[data-failure-card] [data-card-label]'),
-      people: $('[data-failure-card] [data-done-by="person"]').length,
+      ticks: $('[data-failure-card] svg[aria-label="Done"]').length,
       result: textsOf($, '[data-sum-result] [data-result-title]'),
       goal: textsOf($, '[data-sum-result] [data-result-goal]'),
       broken: textsOf($, '[data-sum-result] [data-broken]'),
@@ -93,13 +93,13 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('adds the cause from the card each one met, ready for the lit card', () => {
+  it('shows the cause from the card each one met at rest, as one sentence per card', () => {
     // ARRANGE
     const expected = [
-      'Travel had set: Accessible bus, 10 wheelchair users',
-      'Food & drinks had set: Open bar until 01:00',
-      'Travel had set: Guest info: route and times only',
-      'Venue had set: Hut kitchen reads it as eggs allowed',
+      'Travel had set: accessible bus, 10 wheelchair users',
+      'Food & drinks had set: open bar until 01:00',
+      'Travel had set: guest info with route and times only',
+      'Venue had set: a hut kitchen that reads it as eggs allowed',
     ];
     // ACT
     const actual = textsOf(sceneOf(), '[data-failure-card] [data-cause]');
@@ -107,12 +107,12 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('opens the board’s Speaker note beside its label', () => {
+  it('opens the board’s Speaker note from the goal bar', () => {
     // ARRANGE
     const expected = ['Speaker note: A real version of the board'];
     // ACT
     const $ = sceneOf();
-    const actual = $('[data-sum-label] button')
+    const actual = $('[data-sum-result] button')
       .toArray()
       .map((node) => $(node).attr('aria-label'));
     // ASSERT
@@ -125,7 +125,7 @@ describe('success cases', () => {
       'everyone-delivered': {
         title: 'Everyone delivered',
         script:
-          'Now the day arrives, and every one of the four has done exactly what was asked. Activities booked a team-building event, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly.',
+          'Now the day arrives, and every one of the four has done exactly what was asked. Activities booked paintball for all 200, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly.',
       },
       'none-of-it-adds-up': {
         title: 'None of it adds up',
@@ -173,13 +173,18 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('shows no agent on the board: the four freelancers are people', () => {
+  it('keeps the reveal calm: no person or agent badge, no board detail line, no broken-by lists', () => {
     // ARRANGE
-    const expected = 0;
+    const expected = { badges: 0, labelRow: 0, brokenBy: 0 };
     // ACT
-    const actual = sceneOf()('[data-done-by="agent"]').length;
+    const $ = sceneOf();
+    const actual = {
+      badges: $('[data-done-by]').length,
+      labelRow: $('[data-sum-label]').length,
+      brokenBy: $('[data-broken] .text-muted-foreground').length,
+    };
     // ASSERT
-    expect(actual).toBe(expected);
+    expect(actual).toEqual(expected);
   });
 
   it('asks no question: the setup slide before it carries it, and the Voice script has no question segment', () => {
@@ -194,15 +199,23 @@ describe('failure cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('lights and dims nothing at rest: every card is fully shown', () => {
+  it('lights and dims nothing at rest, and the four focusable groups are named, never a bare list item', () => {
     // ARRANGE
-    const expected = { lit: 0, dimmed: 0, focusable: 4 };
+    const expected = {
+      lit: 0,
+      dimmed: 0,
+      focusable: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
+      focusableItems: 0,
+    };
     // ACT
     const $ = sceneOf();
     const actual = {
       lit: $('[data-lit]').length,
       dimmed: $('[data-dimmed]').length,
-      focusable: $('[data-failure-card][tabindex="0"]').length,
+      focusable: $('[data-failure-card][tabindex="0"][role="group"]')
+        .toArray()
+        .map((node) => $(node).attr('aria-label')),
+      focusableItems: $('li[tabindex]').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
@@ -210,12 +223,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('names the cards, the broken halves and the cause in German on the German page', () => {
+  it('names the cards, the broken halves and the cause sentence in German on the German page', () => {
     // ARRANGE
     const expected = {
       cards: ['Programm', 'Anreise', 'Location', 'Essen & Getränke'],
-      broken: ['✗ zusammen Programm, Essen & Getränke', '✗ sicher Anreise, Location'],
-      cause: 'Anreise hatte festgelegt: Barrierefreier Bus, 10 Rollstuhlnutzende',
+      broken: ['✗ zusammen', '✗ sicher'],
+      cause: 'Anreise hatte festgelegt: ein barrierefreier Bus, 10 Rollstuhlnutzende',
     };
     // ACT
     const $ = sceneOf('de');

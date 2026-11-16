@@ -63,7 +63,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: "You're the manager",
+        title: 'A thought experiment',
         caption: 'You hired four excellent freelancers for one party. You are the only link between them.',
         segments: ["Now you're the manager", 'Four PRICE freelancers', 'Your job'],
       },
@@ -102,7 +102,7 @@ describe('success cases', () => {
       'four-price-freelancers':
         'They are excellent, and they are the PRICE freelancers: probabilistic, relentless, informed, confident, and every word billed. And there is one rule: they talk to no one unless you tell them to. You are the only link between them.',
       'your-job':
-        'The goal is that everyone celebrates together and gets home safely. Your job: a plan so all four reach the goal. What do you do? (pause)',
+        'The goal is that everyone celebrates together and gets home safely. Your job: a plan so all four reach the goal. What do you do? (pause) Keep this question in mind for the whole Episode; we collect the answers at the end.',
     };
     // ACT
     const opener = OPENERS[0] as Slide;
@@ -119,6 +119,7 @@ describe('success cases', () => {
     const expected = {
       freelancers: ['Activities', 'Travel', 'Venue', 'Food & drinks'],
       chips: [5, 5, 5, 5],
+      doneBy: 0,
       rule: ['✗They talk to no one unless you tell them to.'],
       question: ['Your job: a plan so all four reach the goal. What do you do?'],
     };
@@ -129,6 +130,7 @@ describe('success cases', () => {
       chips: $('[data-freelancer]')
         .toArray()
         .map((card) => $(card).find('[data-price-chip]').length),
+      doneBy: $('[data-freelancer] [data-done-by]').length,
       rule: textsOf($, '[data-rule]'),
       question: textsOf($, '[data-question]'),
     };
@@ -232,7 +234,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'Du bist die Führungskraft',
+        title: 'Ein Gedankenexperiment',
         segments: ['Jetzt bist Du die Führungskraft', 'Vier PRICE-Freelancer', 'Dein Auftrag'],
       },
       { title: 'Was ein agentischer Workflow ist', segments: ['Die Sache benennen'] },
@@ -245,6 +247,39 @@ describe('edge cases', () => {
       const { title, segments } = scriptOf(slide, 'de');
       return { title, segments };
     });
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('titles the setup Slide with its Section for the table of contents and heads it "You\'re the manager" on screen', () => {
+    // ARRANGE
+    const expected = {
+      en: { toc: 'A thought experiment', heading: "You're the manager" },
+      de: { toc: 'Ein Gedankenexperiment', heading: 'Du bist die Führungskraft' },
+    };
+    // ACT
+    const opener = OPENERS[0] as Slide;
+    const read = (locale: Locale) => {
+      const { title, heading } = opener.messages[locale] as unknown as { title: string; heading: string };
+      return { toc: title, heading };
+    };
+    const actual = { en: read('en'), de: read('de') };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('names the PRICE traits in the setup legend as the pay-the-price slide does: the English name, then the German gloss', () => {
+    // ARRANGE
+    const expected = [
+      'P Probabilistic probabilistisch',
+      'R Relentless unermüdlich',
+      'I Informed informiert',
+      'C Confident selbstsicher',
+      'E Every word billed jedes Wort berechnet',
+    ];
+    // ACT
+    const $ = sceneOf('a-thought-experiment', 'de');
+    const actual = textsOf($, '[data-price-legend] li').map((text) => text.replace(/\s+/g, ' '));
     // ASSERT
     expect(actual).toEqual(expected);
   });

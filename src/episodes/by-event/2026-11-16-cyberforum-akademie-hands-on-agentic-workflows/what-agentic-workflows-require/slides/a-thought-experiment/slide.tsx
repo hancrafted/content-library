@@ -23,7 +23,6 @@ export const aThoughtExperiment = slide({
         task={{ label: t('task.label'), text: t('task.text') }}
         freelancers={{
           label: t('freelancers.label'),
-          doneBy: t('doneByPerson'),
           cards: FREELANCERS.map((slug) => ({ slug, label: t(`freelancers.${slug}`) })),
         }}
         price={{
@@ -32,6 +31,7 @@ export const aThoughtExperiment = slide({
             slug,
             initial: t(`price.${slug}.initial`),
             name: t(`price.${slug}.name`),
+            gloss: t(`price.${slug}.gloss`),
           })),
         }}
         rule={t('rule')}

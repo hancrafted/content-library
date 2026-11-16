@@ -1,5 +1,6 @@
 {
-  "title": "Du bist die Führungskraft",
+  "title": "Ein Gedankenexperiment",
+  "heading": "Du bist die Führungskraft",
   "caption": "Du hast vier hervorragende Freelancer für ein Fest beauftragt. Du bist die einzige Verbindung zwischen ihnen.",
   "task": {
     "label": "Aufgabe",
@@ -12,14 +13,33 @@
     "venue": "Location",
     "food": "Essen & Getränke"
   },
-  "doneByPerson": "Von einer Person erledigt",
   "price": {
     "label": "Fünf Eigenschaften",
-    "probabilistic": { "initial": "P", "name": "Probabilistic" },
-    "relentless": { "initial": "R", "name": "Relentless" },
-    "informed": { "initial": "I", "name": "Informed" },
-    "confident": { "initial": "C", "name": "Confident" },
-    "every-word-billed": { "initial": "E", "name": "Every word billed" }
+    "probabilistic": {
+      "initial": "P",
+      "name": "Probabilistic",
+      "gloss": "probabilistisch"
+    },
+    "relentless": {
+      "initial": "R",
+      "name": "Relentless",
+      "gloss": "unermüdlich"
+    },
+    "informed": {
+      "initial": "I",
+      "name": "Informed",
+      "gloss": "informiert"
+    },
+    "confident": {
+      "initial": "C",
+      "name": "Confident",
+      "gloss": "selbstsicher"
+    },
+    "every-word-billed": {
+      "initial": "E",
+      "name": "Every word billed",
+      "gloss": "jedes Wort berechnet"
+    }
   },
   "rule": "Sie sprechen mit niemandem, es sei denn, Du sagst es ihnen.",
   "goal": {
@@ -45,7 +65,7 @@
       "your-job": {
         "title": "Dein Auftrag",
         "keywords": "",
-        "script": "Das Ziel ist, dass alle zusammen feiern und sicher nach Hause kommen. Dein Auftrag: ein Plan, mit dem alle vier das Ziel erreichen. Was tust Du? (Pause)"
+        "script": "Das Ziel ist, dass alle zusammen feiern und sicher nach Hause kommen. Dein Auftrag: ein Plan, mit dem alle vier das Ziel erreichen. Was tust Du? (Pause) Behalte diese Frage für die ganze Episode im Kopf; die Antworten sammeln wir am Ende ein."
       }
     }
   }

@@ -1,15 +1,19 @@
 import { Cross } from '@/episodes/components/slide-shared/seam-sum/marks';
 import { FAIL_CHIP, type Half } from '@/episodes/components/slide-shared/seam-sum/types';
+import type { ReactNode } from 'react';
 
 interface PartyResultProps {
   readonly title: string;
   readonly goal: string;
-  readonly broken: readonly { readonly half: Half; readonly chip: string; readonly by: string }[];
+  /** The goal's two halves, each as the one sentence of its chip, such as "✗ together". */
+  readonly chips: readonly { readonly half: Half; readonly text: string }[];
   readonly fails: string;
+  /** Follows the goal, such as a Speaker note marker. */
+  readonly marker?: ReactNode;
 }
 
-/** "=" and the party the four cards add up to: its goal, failed, and which cards broke which half. */
-export function PartyResult({ title, goal, broken, fails }: PartyResultProps) {
+/** "=" and the party the four cards add up to: its goal, failed, and the two halves of it that broke. */
+export function PartyResult({ title, goal, chips, fails, marker }: PartyResultProps) {
   return (
     <div className="flex items-center gap-4 px-1">
       <span aria-hidden className="self-center text-subheading font-semibold text-muted-foreground">
@@ -23,13 +27,14 @@ export function PartyResult({ title, goal, broken, fails }: PartyResultProps) {
         <p data-result-title className="text-body font-semibold">
           {title}
         </p>
-        <p data-result-goal className="text-caption text-muted-foreground">
+        <p data-result-goal className="flex items-center gap-1.5 text-caption text-muted-foreground">
           {goal}
+          {marker}
         </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1">
-          {broken.map(({ half, chip, by }) => (
-            <li key={half} data-broken={half} className="flex items-center gap-2">
-              <span className={FAIL_CHIP}>{chip}</span> <span className="text-caption text-muted-foreground">{by}</span>
+          {chips.map(({ half, text }) => (
+            <li key={half} data-broken={half}>
+              <span className={FAIL_CHIP}>{text}</span>
             </li>
           ))}
         </ul>

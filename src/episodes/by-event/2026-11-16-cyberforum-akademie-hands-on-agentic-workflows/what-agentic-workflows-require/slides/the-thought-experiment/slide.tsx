@@ -1,6 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { Cross, DoneBy, Tick } from '@/episodes/components/slide-shared/seam-sum/marks';
+import { CardHeader } from '@/episodes/components/slide-shared/seam-sum/card-header';
+import { Cross, Tick } from '@/episodes/components/slide-shared/seam-sum/marks';
+import { tiltOf } from '@/episodes/components/slide-shared/seam-sum/tilt.pure';
 import { FAIL_CHIP, type Half } from '@/episodes/components/slide-shared/seam-sum/types';
 import { FailureFocus } from './failure-focus.client';
 import de from './i18n/de.json';
@@ -18,9 +20,9 @@ const CARDS = [
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
 /*
- * "The thought experiment" (Spec Option A, cards plus the cause on hover): the party board as a sum. Four cards, each
- * ticked by a person, add up to the party, which fails. Each card shows one fact and one result line at rest, so all
- * four failures read without a pointer; lighting one dims the other three and adds the cause from the card it met.
+ * "The thought experiment" (Spec Option A): the party board as a sum. Four cards, each ticked, add up to the party,
+ * which fails. Each card shows one fact, one result line and the cause from the card it met at rest, so all four
+ * failures read without a pointer; lighting one dims the other three. The Speaker note marker sits on the goal bar.
  * The setup slide carries the manager's question, so this Slide asks none. No stepping, no motion beyond the dimming.
  */
 export const theThoughtExperiment = slide({
@@ -41,31 +43,16 @@ export const theThoughtExperiment = slide({
   segments: [{ slug: 'everyone-delivered' }, { slug: 'none-of-it-adds-up' }],
   content: ({ t, Marker, target }) => (
     <SlideFrame>
-      <div
-        data-seam-sum
-        {...target('board')}
-        className="@container flex flex-col gap-4 rounded-xl bg-muted p-4 shadow-inner"
-      >
-        <p data-sum-label className="flex flex-wrap items-center gap-x-1.5 text-caption text-muted-foreground">
-          <span className="font-medium text-foreground">{t('board.label')}</span> <span aria-hidden>·</span>{' '}
-          <span>{t('board.detail')}</span>
-          <Marker note="a-real-version-of-the-board" placement="beside" />
-        </p>
+      <div {...target('board')} className="@container flex flex-col gap-4 rounded-xl bg-muted p-4 shadow-inner">
         <FailureFocus
           label={t('cardsLabel')}
-          items={CARDS.map(({ slug, breaks }) => ({
+          items={CARDS.map(({ slug, breaks }, index) => ({
             slug,
+            tilt: tiltOf(index),
+            label: t(`cards.${slug}.label`),
             body: (
               <>
-                <div className="flex flex-wrap items-center justify-between gap-1">
-                  <span
-                    data-card-label
-                    className="rounded-full bg-foreground px-3 py-0.5 text-caption font-medium text-background"
-                  >
-                    {t(`cards.${slug}.label`)}
-                  </span>
-                  <DoneBy who="person" label={t('doneByPerson')} />
-                </div>
+                <CardHeader label={t(`cards.${slug}.label`)} />
                 <div className="flex items-start gap-1.5">
                   <Tick label={t('done')} />
                   <p data-fact className="text-body leading-snug font-semibold break-words hyphens-auto">
@@ -83,23 +70,17 @@ export const theThoughtExperiment = slide({
                 </div>
               </>
             ),
-            cause: (
-              <>
-                <b className="font-medium text-foreground">{t(`cards.${slug}.causeCard`)}</b> {t('hadSet')}{' '}
-                {t(`cards.${slug}.cause`)}
-              </>
-            ),
+            cause: t.rich(`cards.${slug}.cause`, {
+              b: (chunks) => <b className="font-medium text-foreground">{chunks}</b>,
+            }),
           }))}
         />
         <PartyResult
           title={t('result.title')}
           goal={t('result.goal')}
           fails={t('fails')}
-          broken={HALVES.map((half) => ({
-            half,
-            chip: `✗ ${t(`halves.${half}`)}`,
-            by: t(`result.broken.${half}`),
-          }))}
+          chips={HALVES.map((half) => ({ half, text: t(`result.chips.${half}`) }))}
+          marker={<Marker note="a-real-version-of-the-board" placement="beside" />}
         />
       </div>
     </SlideFrame>

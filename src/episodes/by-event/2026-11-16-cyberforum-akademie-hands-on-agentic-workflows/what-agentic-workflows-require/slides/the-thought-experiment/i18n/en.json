@@ -1,56 +1,44 @@
 {
   "title": "The thought experiment",
   "caption": "Four excellent freelancers each deliver exactly what their note asked, and <b>none of it adds up</b>.",
-  "board": {
-    "label": "Shared board",
-    "detail": "their only channel: notes, no meetings, no calls"
-  },
   "cardsLabel": "Four ticked cards",
   "fails": "Fails",
   "breaks": {
     "together": "breaks “together”",
     "safely": "breaks “safely”"
   },
-  "halves": {
-    "together": "together",
-    "safely": "safely"
-  },
   "cards": {
     "activities": {
       "label": "Activities",
       "fact": "Paintball × 200",
       "result": "The 10 wheelchair users sit it out",
-      "causeCard": "Travel",
-      "cause": "Accessible bus, 10 wheelchair users"
+      "cause": "<b>Travel</b> had set: accessible bus, 10 wheelchair users"
     },
     "travel": {
       "label": "Travel",
       "fact": "Everyone carpools",
       "result": "The drivers have been drinking",
-      "causeCard": "Food & drinks",
-      "cause": "Open bar until 01:00"
+      "cause": "<b>Food & drinks</b> had set: open bar until 01:00"
     },
     "venue": {
       "label": "Venue",
       "fact": "Alpine hut, 1,800 m",
       "result": "Summer clothes, 6 °C at night",
-      "causeCard": "Travel",
-      "cause": "Guest info: route and times only"
+      "cause": "<b>Travel</b> had set: guest info with route and times only"
     },
     "food": {
       "label": "Food & drinks",
       "fact": "31 vegetarian",
       "result": "Indian colleagues can't eat",
-      "causeCard": "Venue",
-      "cause": "Hut kitchen reads it as eggs allowed"
+      "cause": "<b>Venue</b> had set: a hut kitchen that reads it as eggs allowed"
     }
   },
   "result": {
     "title": "Party, 20 June",
     "goal": "Goal: everyone celebrates together and gets home safely",
-    "broken": {
-      "together": "Activities, Food & drinks",
-      "safely": "Travel, Venue"
+    "chips": {
+      "together": "✗ together",
+      "safely": "✗ safely"
     }
   },
   "notes": {
@@ -69,7 +57,7 @@
       "everyone-delivered": {
         "title": "Everyone delivered",
         "keywords": "",
-        "script": "Now the day arrives, and every one of the four has done exactly what was asked. Activities booked a team-building event, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly."
+        "script": "Now the day arrives, and every one of the four has done exactly what was asked. Activities booked paintball for all 200, Travel arranged how everyone gets there, Venue found a place, and Food and drinks ordered dinner. Each card is ticked, and each freelancer met their own goal perfectly."
       },
       "none-of-it-adds-up": {
         "title": "None of it adds up",
@@ -78,7 +66,5 @@
       }
     }
   },
-  "doneByPerson": "Done by a person",
-  "hadSet": "had set:",
   "done": "Done"
 }
