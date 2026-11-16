@@ -1,10 +1,16 @@
 name: CI
 
-# Lint, typecheck, the fast suite, a full static build and the post-build export test on every pull request, so a
-# change that would break the Cloudflare Pages deploy fails before it merges. Three independent jobs run in parallel: each pays
-# for its own `npm ci`, and the run takes as long as the slowest lane instead of the sum of all steps.
+# Lint, typecheck, the fast suite, a full static build and the post-build export test on every pull request and every
+# pushed branch, so a change that would break the Cloudflare Pages deploy fails before it merges, and a branch pushed
+# without a PR is still checked. Three independent jobs run in parallel: each pays for its own `npm ci`, and the run
+# takes as long as the slowest lane instead of the sum of all steps.
+# A push to a branch with an open PR runs twice: once on the pushed commit (push) and once on the PR's merge commit
+# (pull_request). Their refs differ, so the concurrency group below cancels neither.
 on:
   pull_request:
+  push:
+    # Every branch, no tags: `push` with no filter also fires on tags.
+    branches: ['**']
 
 permissions:
   contents: read
@@ -13,6 +19,7 @@ env:
   # The production origin (FE-008). One of the places to change on a domain move: docs/features/hosting.md.
   SITE_URL: https://hancrafted.net
 
+# A newer run on the same ref cancels the older one.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

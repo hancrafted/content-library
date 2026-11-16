@@ -34,12 +34,12 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 3. oxfmt `printWidth` MUST be `120` explicitly; the default of 100 would reflow the repo.
 4. A script that formats a generated file MUST use oxfmt.
 5. The lint config MUST be the TypeScript file `oxlint.config.mts` (oxlint 1.93 loads it under Node, experimental), never a committed JSON copy. It imports the design-token legacy list `src/shared/design-system/legacy.json` and the selector and token constants in `tools/lint/constants.ts`, so the list stays one file read by lint and Archgate (FE-011) and no glob is duplicated. A generator with a staleness test was the fallback and is not needed.
-6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins, and `@typescript-eslint/parser` stays as a dev dependency for the FE-013 rules test, which parses as Archgate does.
+6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins. `@typescript-eslint/parser` is removed too: it pinned TypeScript below 6.1, and the FE-013 rules test now parses with `oxc-parser`.
 7. The format config MUST be `.oxfmtrc.jsonc`, and what oxfmt skips MUST live in its `ignorePatterns` beside the reason, with no separate ignore file and no `.prettierrc` or `.prettierignore`. `sortImports` MUST be on: two blocks (`builtin`, `external`, `subpath`, `internal`, `unknown`; then `parent`, `sibling`, `index`), `ignoreCase: true`, `newlinesBetween: false`, the closest match to the former organize-imports order. oxfmt never removes an unused import; lint's `no-unused-vars` reports it (`tests/boundaries/oxlint-config.test.ts`).
 
 ### 2. Exact pins
 
-1. oxlint and `oxlint-plugin-eslint` MUST pin `1.93.0`; oxfmt MUST pin `0.78.0`. The two JS plugins stay at their versions of record.
+1. oxlint and `oxlint-plugin-eslint` MUST pin `1.93.0`; oxfmt MUST pin `0.78.0`; `oxc-parser` MUST pin `0.150.0`, the version knip already installs. The two JS plugins stay at their versions of record.
 2. A pin MUST NOT become a range. A bump is a deliberate change that re-runs the lint probe suites and the format check.
 
 ### 3. Why the alpha plugin layer is acceptable
@@ -57,7 +57,8 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
    - `oxfmt`: same repo and organisation, 29.9M, 2026-11-09. Clears.
    - `eslint-plugin-better-tailwindcss`: 865 stars, 2.1M, pushed 2026-11-15. Misses stars; already admitted, only the host changes.
    - `eslint-plugin-check-file`: 616 stars, 1.6M, pushed 2026-09-13. Misses stars; already admitted, only the host changes.
-   - `@typescript-eslint/parser` (kept for the FE-013 rules test, §1.6): 16.5k stars (shared typescript-eslint repo), organisation `typescript-eslint`, 181.7M, 2026-11-11. Clears; already admitted, only its job narrows to parsing a test fixture as Archgate does.
+   - `oxc-parser` (the FE-013 rules test's parser, §1.6): 23.5k stars (shared oxc repo), organisation `oxc-project`, 104.9M, 2026-11-09. Clears.
+   - `json5` (pinned `2.2.3`; reads `.oxfmtrc.jsonc` for `formatAsRepo` and the `ignorePatterns` test, so neither needs the TypeScript compiler API): 7.2k stars, organisation `json5`, 32 contributors, 322.7M, last release 2022-12-31, commits merged and collaborator replies 2026-11. Clears: recency holds through maintainer activity; already in the tree transitively.
 3. The oxc packages' risk is maturity, not popularity; §2 and §3.1 mitigate it, accepted knowingly.
 
 ## Do's and Don'ts
@@ -68,7 +69,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 2. **DO** run non-native rules as oxlint JS plugins, selectors unchanged. (Decision 1.2)
 3. **DO** set oxfmt `printWidth: 120` explicitly. (Decision 1.3)
    **DO** keep the format config in `.oxfmtrc.jsonc` with ignores in `ignorePatterns`. (Decision 1.7)
-4. **DO** pin oxlint, `oxlint-plugin-eslint` and oxfmt exactly. (Decision 2.1)
+4. **DO** pin oxlint, `oxlint-plugin-eslint`, oxfmt and `oxc-parser` exactly. (Decision 2.1)
 5. **DO** re-run the probe suites and format check on a bump. (Decision 2.2)
 6. **DO** add an admission row here for any new tool or plugin. (Decision 4.1)
 
