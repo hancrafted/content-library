@@ -28,6 +28,7 @@ ui:
   stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
   copyExplanation: 'Erklär-Prompt kopieren'
   copyExplanationTip: 'Füge diesen Prompt in einen Chat ein: Die KI erklärt den Prompt, warum er so gebaut ist und was du verbessern kannst, und bietet dann an, dich durch die Übung zu führen.'
+  typeFirst: Schreibe zuerst deine Notizen
   editPrompt: Prompt bearbeiten
   editReset: Auf Standard zurücksetzen
   editedTip: 'Kopiert Deine bearbeitete Version dieses Prompts. Mit Zurücksetzen im Editor kommt das Original zurück.'

@@ -872,7 +872,7 @@ stages:
               text: *practice
             - heading: Format
               purpose: template
-              text: 'Deine letzte Antwort ist eine Zeile: "Ergebnis: quiz.html ist in deinem Browser offen; spiel es durch." Nenne in einer weiteren Zeile eine Regel der Spezifikation, die nicht zu dieser Quelle passte, falls es eine gibt.'
+              text: 'Deine letzte Antwort ist eine Zeile: "Weiter: quiz.html ist in deinem Browser offen; spiel es durch." Nenne in einer weiteren Zeile eine Regel der Spezifikation, die nicht zu dieser Quelle passte, falls es eine gibt.'
 
       - id: playtest
         recommendedModel: medium
@@ -1118,7 +1118,7 @@ stages:
             - heading: Format
               purpose: template
               text: |
-                Der Hauptteil von SKILL.md folgt unter dem Front Matter dieser Vorlage. Deine letzte Antwort ist eine Zeile: "Ergebnis: Der Skill liegt in .agents/skills/source-to-quiz/SKILL.md; probier ihn als Nächstes an einer neuen Quelle aus."
+                Der Hauptteil von SKILL.md folgt unter dem Front Matter dieser Vorlage. Deine letzte Antwort ist eine Zeile: "Weiter: Der Skill liegt in .agents/skills/source-to-quiz/SKILL.md; probier ihn als Nächstes an einer neuen Quelle aus."
 
                 {{template}}
       - id: try-skill
@@ -1210,4 +1210,4 @@ stages:
               text: *practice
             - heading: Format
               purpose: template
-              text: 'Deine letzte Antwort ist eine Zeile: "Ergebnis: Das neue Quiz ist in deinem Browser offen; spiel es." Nenne in einer weiteren Zeile einen Schritt des Skills, der nicht zu dieser Quelle passte, falls es einen gibt.'
+              text: 'Deine letzte Antwort ist eine Zeile: "Weiter: Das neue Quiz ist in deinem Browser offen; spiel es." Nenne in einer weiteren Zeile einen Schritt des Skills, der nicht zu dieser Quelle passte, falls es einen gibt.'

@@ -39,7 +39,7 @@ export function limitProblems(task: TaskDef, stage: StageDef): string[] {
 }
 
 /** A blank slot is a free input and carries no sample. */
-function blankProblems(slot: SlotDef, task: TaskDef): string[] {
+export function blankProblems(slot: SlotDef, task: TaskDef): string[] {
   const where = `Slot "${slot.id}" of task "${task.id}"`;
   return [
     ...(slot.free ? [] : [`${where} is blank but not a free input.`]),
@@ -47,9 +47,7 @@ function blankProblems(slot: SlotDef, task: TaskDef): string[] {
   ];
 }
 
-/** The problems of a slot that has no sample to check, or none when it has one: a blank slot, or a slot that lacks its sample. */
-export function bareProblems(file: WorkflowFile, slot: SlotDef, task: TaskDef): string[] | undefined {
-  if (slot.blank) return blankProblems(slot, task);
-  if (slotSample(file, slot) === undefined) return [`Slot "${slot.id}" of task "${task.id}" needs a sample.`];
-  return undefined;
+/** A slot that must carry a sample but lacks one. */
+export function missingSampleProblems(file: WorkflowFile, slot: SlotDef, task: TaskDef): string[] {
+  return slotSample(file, slot) === undefined ? [`Slot "${slot.id}" of task "${task.id}" needs a sample.`] : [];
 }

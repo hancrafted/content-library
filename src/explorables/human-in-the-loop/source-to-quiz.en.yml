@@ -872,7 +872,7 @@ stages:
               text: *practice
             - heading: Format
               purpose: template
-              text: 'Your final reply is one line: "Result: quiz.html is open in your browser; play it through." Name a rule of the spec that did not fit this source in one more line, if any.'
+              text: 'Your final reply is one line: "Next: quiz.html is open in your browser; play it through." Name a rule of the spec that did not fit this source in one more line, if any.'
 
       - id: playtest
         recommendedModel: medium
@@ -1118,7 +1118,7 @@ stages:
             - heading: Format
               purpose: template
               text: |
-                The body of SKILL.md follows this template, under the front matter. Your final reply is one line: "Result: the skill is at .agents/skills/source-to-quiz/SKILL.md; next, try it on a new source."
+                The body of SKILL.md follows this template, under the front matter. Your final reply is one line: "Next: the skill is at .agents/skills/source-to-quiz/SKILL.md; next, try it on a new source."
 
                 {{template}}
       - id: try-skill
@@ -1210,4 +1210,4 @@ stages:
               text: *practice
             - heading: Format
               purpose: template
-              text: 'Your final reply is one line: "Result: the new quiz is open in your browser; play it." Name a step of the skill that did not fit this source in one more line, if any.'
+              text: 'Your final reply is one line: "Next: the new quiz is open in your browser; play it." Name a step of the skill that did not fit this source in one more line, if any.'

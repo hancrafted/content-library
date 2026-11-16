@@ -1,5 +1,5 @@
 import { readTemplate } from './markdown-handoff.pure.ts';
-import { producersBefore } from './workflow-outputs.pure.ts';
+import { producersBefore, templateOf } from './workflow-outputs.pure.ts';
 import type { ForeachDef, StageDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -29,8 +29,7 @@ function overProblems(file: WorkflowFile, stage: StageDef, index: number): strin
   if (!over) return [`${where}; write it as <output>#<h2 slug>.`];
   const producer = producersBefore(file, index).get(over.output);
   if (!producer) return [`${where}, but no earlier stage hands on "${over.output}".`];
-  const template = file.templates[producer.task.template ?? ''];
-  const slugs = readTemplate(template ?? '').h2.map(slugOf);
+  const slugs = readTemplate(templateOf(file, producer.task)).h2.map(slugOf);
   return slugs.includes(over.slug) ? [] : [`${where}, but the template of "${over.output}" has no H2 "${over.slug}".`];
 }
 

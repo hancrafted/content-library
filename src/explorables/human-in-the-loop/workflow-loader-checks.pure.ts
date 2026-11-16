@@ -1,7 +1,7 @@
 import { markerCount } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure.ts';
 import { dupes, unneededOutputs } from './workflow-loader-jobs.pure.ts';
-import { bareProblems, limitProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
+import { blankProblems, limitProblems, missingSampleProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
 import { expandSections, unknownMarkers } from './workflow-markers.pure.ts';
 import { producersFor, tasksOf, type Producer } from './workflow-outputs.pure.ts';
 import { slotSample } from './workflow-sample.pure.ts';
@@ -128,19 +128,29 @@ function slotNamed(
   return scope.own.has(slot.id) ? [] : slotNameProblems(slot, task, scope.names.get(slot.id));
 }
 
+/** A slot that carries a sample: the sample against the template of the output it takes, and its marker count. */
+function filledSlotProblems(
+  file: WorkflowFile,
+  task: TaskDef,
+  at: { slot: SlotDef; scope: { names: ReadonlyMap<string, Producer> } },
+): string[] {
+  const { slot } = at;
+  const producer = at.scope.names.get(slot.id);
+  const template = slot.free ? undefined : producer?.task.template;
+  const markers = markersOf(slot, task, producer?.stage.foreach?.demo ?? 0);
+  return sampleProblems(slot, { file, task, template, markers });
+}
+
 function doSlotOf(
   file: WorkflowFile,
   task: TaskDef,
   scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
 ) {
   return (slot: SlotDef): string[] => {
-    const producer = scope.names.get(slot.id);
     const named = slotNamed(slot, task, scope);
-    const bare = bareProblems(file, slot, task);
-    if (bare) return [...named, ...bare];
-    const template = slot.free ? undefined : producer?.task.template;
-    const markers = markersOf(slot, task, producer?.stage.foreach?.demo ?? 0);
-    return [...named, ...sampleProblems(slot, { file, task, template, markers })];
+    if (slot.blank) return [...named, ...blankProblems(slot, task)];
+    const missing = missingSampleProblems(file, slot, task);
+    return [...named, ...(missing.length > 0 ? missing : filledSlotProblems(file, task, { slot, scope }))];
   };
 }
 

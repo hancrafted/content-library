@@ -71,8 +71,8 @@ function outputProblems(task: TaskDef): string[] {
   ];
 }
 
-/** A job with no output is a checkbox job. A review is optional; one that exists needs its goal. */
-function completenessProblems(task: TaskDef): string[] {
+/** What each job must carry: the output fields when it hands one on, and the review goal when it has a review. A job with no output is a checkbox job. */
+function jobFieldProblems(task: TaskDef): string[] {
   const reviewGoalMissing = task.review !== undefined && task.goal.review === undefined;
   return [
     ...outputProblems(task),
@@ -92,7 +92,7 @@ export function jobOrderProblems(file: WorkflowFile): string[] {
       ...stage.jobs.flatMap((task) => [
         ...needsProblems(stage, task),
         ...sameStageProblems(stage, task),
-        ...completenessProblems(task),
+        ...jobFieldProblems(task),
       ]),
     ];
   });

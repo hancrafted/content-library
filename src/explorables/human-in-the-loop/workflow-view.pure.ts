@@ -82,6 +82,10 @@ function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds
   );
 }
 
+/** The examples a task shows: none for a checkbox job, one text, or one per demo round. */
+const examplesOf = (example: TaskDef['details']['example']): readonly string[] =>
+  example === undefined ? [] : typeof example === 'string' ? [example] : example;
+
 type TaskAt = { level: Level; stage: number } & Pick<ViewOptions, 'demo' | 'rounds'>;
 
 function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView {
@@ -100,7 +104,7 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
     sameStage,
     previous: [...producersFor(workflow.file, stageAt, task).keys()],
     why: task.details.why,
-    examples: [example ?? []].flat(),
+    examples: examplesOf(example),
     goodLooksLike: task.details.goodLooksLike,
     techniques: (task.details.techniques ?? []).flatMap((id) =>
       workflow.file.techniques.filter((each) => each.id === id),
