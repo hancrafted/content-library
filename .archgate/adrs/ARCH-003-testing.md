@@ -42,7 +42,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 5. Verification runs at four levels, each with one job:
    - **Agent loop** (`npm run verify:quick`): whole-repo lint, whole-repo format check, typecheck, and the tests the uncommitted changes affect (`vitest run --changed`).
    - **Pre-commit** (`npm run verify:commit`): the commit-time checks, with the tests the change affects, never the whole suite.
-   - **Pre-push:** everything CI runs: the full fast suite (`npm run verify`) and the slow lane for what the branch changed. Running `build` and `test:build` when export-affecting paths changed is added by a follow-up ticket of the same epic.
+   - **Pre-push:** everything CI runs: the full fast suite (`npm run verify`) and the slow lane for what the branch changed. Plus `build` and `test:build` when the branch changed an export input since the merge-base with main (`needsBuild` in `tools/verify/needs-build.pure.ts`); a push to main always builds.
    - **CI:** everything, unchanged. `npm run verify` keeps meaning what CI will say.
 6. `--changed` follows imports, not disk reads. A fast test that reads a file from disk rather than importing it names that file as a rerun trigger in `vitest.config.mts`, as a slow test does in `vitest.slow.config.mts`, or a change to the file skips the test at the agent loop and at commit.
 
