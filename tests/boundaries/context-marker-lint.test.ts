@@ -1,23 +1,20 @@
-import { ESLint } from 'eslint';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { lintProbe } from './lint-probe';
 
 /*
- * Probe tests for the Context marker guard (design-ADR-0013, eslint.config.mjs): a call site must not hand a marker
+ * Probe tests for the Context marker guard (design-ADR-0013, .oxlintrc.json): a call site must not hand a marker
  * a `static` class, which would unposition the button and stretch its hit area over the whole Slide. Each probe lints
- * a snippet through the real config under a virtual Slide path.
+ * a snippet through the real oxlint config under a virtual Slide path.
  */
 
-const ROOT = path.join(__dirname, '../..');
-const eslint = new ESLint({ cwd: ROOT });
 const SLIDE = 'src/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
 const TIMEOUT = 30_000;
 
 /** The messages a marker call site draws from the guard when linted as a Slide. */
 async function refused(element: string): Promise<string[]> {
   const code = `export const Probe = () => ${element};\n`;
-  const [result] = await eslint.lintText(code, { filePath: path.join(ROOT, SLIDE) });
-  return result.messages.filter((m) => m.message.includes('hit area')).map((m) => m.ruleId ?? '');
+  const diagnostics = await lintProbe(code, SLIDE);
+  return diagnostics.filter((d) => d.message.includes('hit area')).map((d) => d.ruleId);
 }
 
 describe('failure cases', () => {

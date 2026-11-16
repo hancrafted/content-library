@@ -232,7 +232,7 @@ describe('edge cases', () => {
       const f = realistic(9);
       const seen: string[] = [];
       f.listen((what, _station, at) => {
-        if (what === 'request') seen.push(`${at?.belt.i}@${(at?.x as number).toFixed(6)}`);
+        if (what === 'request') seen.push(`${at?.belt.i}@${Number(at?.x).toFixed(6)}`);
       });
       f.set({ ...f.settings, mech: { ...f.settings.mech, rework } });
       f.step(weeks);
