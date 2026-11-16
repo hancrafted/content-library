@@ -21,7 +21,7 @@ if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
   echo "push to main"
   build=1
 elif base=$(git merge-base HEAD origin/main 2>/dev/null); then
-  git diff --name-only "$base" HEAD | node tools/verify/needs-build.ts && build=1 || build=0
+  git diff --name-only "$base" HEAD | npm run -s verify:needs-build && build=1 || build=0
 else
   build=1
 fi

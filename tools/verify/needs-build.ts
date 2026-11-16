@@ -1,5 +1,5 @@
 // Pre-push's build gate: reads changed paths, one per line, from stdin and exits 0 when the export needs a build,
-// 1 when it does not. The hook runs `git diff --name-only <merge-base> HEAD | node tools/verify/needs-build.ts`.
+// 1 when it does not. The hook runs `git diff --name-only <merge-base> HEAD | npm run -s verify:needs-build`.
 import { needsBuild } from './needs-build.pure.ts';
 
 const chunks: Buffer[] = [];
