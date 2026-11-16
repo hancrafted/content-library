@@ -174,7 +174,7 @@ const slowEntry = (test: string, branch: string, at: Date) =>
 
 describe('slowTestReport', () => {
   describe('success cases', () => {
-    it('lists the slow tests the branch logged since its merge-base, and not older ones', () => {
+    it("keeps only the merging branch's entries logged at or after its merge-base's committer date", () => {
       // ARRANGE
       const { main } = fixture();
       const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));

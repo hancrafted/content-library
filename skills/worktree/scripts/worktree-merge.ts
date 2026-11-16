@@ -100,8 +100,9 @@ export function mergeIntoBase(branch: string, base: string, cwd: string): 'merge
 }
 
 /**
- * The lines a finish prints about the fast-suite tests that ran past 5 s on `branch` since it branched off `base`
- * (entries from the shared slow-tests log, see vitest-slow-tests.mts), so the orchestrator sees creeping tests
+ * The lines a finish prints about the fast-suite tests that ran past 5 s on `branch` since it branched off `base`:
+ * the shared slow-tests log's entries (see vitest-slow-tests.mts) whose branch is `branch` and whose time is at or
+ * after the committer date of the merge-base of `branch` and `base`, so the orchestrator sees creeping tests
  * in the merge output. Empty when there are none. Call it before merging: afterwards the merge-base is the tip.
  */
 export function slowTestReport(branch: string, base: string, cwd: string): string[] {
