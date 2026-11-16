@@ -21,12 +21,13 @@ const TRIGGERS = [
   'vitest.config.mts',
   'package-lock.json',
   'raw-text-files.mts',
-  // Tool config that tests read: oxfmt, dependency-cruiser, tsconfig, the Claude hooks, markdown-harness and the deploy filter.
+  // Tool config that tests read: oxfmt, dependency-cruiser, tsconfig, the Claude hooks, markdown-harness, the CI triggers and the deploy filter.
   '.oxfmtrc.jsonc',
   '.dependency-cruiser.cjs',
   'tsconfig.json',
   '.claude/settings.json',
   'markdown-harness.config.yaml',
+  '.github/workflows/ci.yml',
   '.github/workflows/deploy-cloudflare.yml',
   '.archgate/adrs/FE-007-module-layering.md',
   // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging, verified-corpus and the Explorable's guide.

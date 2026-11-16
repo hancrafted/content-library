@@ -101,7 +101,7 @@ Every interactive element carries a stable `data-testid`. Select by it, never by
 
 ## Deploy
 
-`.github/workflows/deploy-cloudflare.yml` builds `out/` and deploys it to Cloudflare Pages: production on every push to `main`, a preview on every same-repo pull request. `.github/workflows/deploy.yml` publishes only redirect stubs for the old GitHub Pages URLs (temporary). `.github/workflows/ci.yml` runs lint, typecheck, tests and a build on pull requests. One-time setup and operations: `docs/features/hosting.md`.
+`.github/workflows/deploy-cloudflare.yml` builds `out/` and deploys it to Cloudflare Pages: production on every push to `main`, a preview on every same-repo pull request. `.github/workflows/deploy.yml` publishes only redirect stubs for the old GitHub Pages URLs (temporary). `.github/workflows/ci.yml` runs lint, typecheck, tests and a build on pull requests and on every pushed branch. One-time setup and operations: `docs/features/hosting.md`.
 
 ### `NEXT_PUBLIC_BASE_PATH`
 
