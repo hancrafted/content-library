@@ -55,4 +55,21 @@ describe('the CI workflow', () => {
     expect(nextConfig.typescript?.ignoreBuildErrors).toBe(true);
     expect(lanesWithTypecheck).toHaveLength(1);
   });
+
+  it('fails the fast-suite lane on any test over 3 s, from the JSON report its test run writes (ARCH-003 §4.4)', () => {
+    // ARRANGE
+    const report = 'fast-suite.json';
+    const budget = `node tools/test-budget/over-budget.ts ${report} 3000`;
+    const fastLane = Object.values(workflow().jobs).find((job) =>
+      job.steps.some((step) => step.run?.startsWith('npm test')),
+    );
+    // ACT
+    const runs = (fastLane?.steps ?? []).map((step) => step.run ?? '');
+    const testRun = runs.find((run) => run.startsWith('npm test'));
+    const budgetRun = runs.find((run) => run.includes('over-budget.ts'));
+    // ASSERT
+    expect(testRun).toContain(`--outputFile.json=${report}`);
+    expect(budgetRun).toContain(budget);
+    expect(budgetRun).toContain('exit 1');
+  });
 });
