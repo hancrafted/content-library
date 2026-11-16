@@ -4,8 +4,8 @@ id: GEN-005
 title: 'Lint and Format Toolchain'
 domain: general
 rules: false
-files: ['oxlint.config.mts', 'tools/lint/*.ts', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
-paths: ['oxlint.config.mts', 'tools/lint/*.ts', '.prettierrc.json', '.prettierignore', '.lintstagedrc.json']
+files: ['oxlint.config.mts', 'tools/lint/*.ts', '.oxfmtrc.jsonc', '.lintstagedrc.json']
+paths: ['oxlint.config.mts', 'tools/lint/*.ts', '.oxfmtrc.jsonc', '.lintstagedrc.json']
 description: 'Which tools lint and format the repo, their exact pins, why the alpha JS-plugin layer is acceptable, and the dependency-admission review of each package.'
 ---
 
@@ -35,6 +35,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 4. A script that formats a generated file MUST use oxfmt.
 5. The lint config MUST be the TypeScript file `oxlint.config.mts` (oxlint 1.93 loads it under Node, experimental), never a committed JSON copy. It imports the design-token legacy list `src/shared/design-system/legacy.json` and the selector and token constants in `tools/lint/constants.ts`, so the list stays one file read by lint and Archgate (FE-011) and no glob is duplicated. A generator with a staleness test was the fallback and is not needed.
 6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins, and `@typescript-eslint/parser` stays as a dev dependency for the FE-013 rules test, which parses as Archgate does.
+7. The format config MUST be `.oxfmtrc.jsonc`, and what oxfmt skips MUST live in its `ignorePatterns` beside the reason, with no separate ignore file and no `.prettierrc` or `.prettierignore`. `sortImports` stays off until the import reorder lands as its own change (#615).
 
 ### 2. Exact pins
 
@@ -65,6 +66,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 1. **DO** lint with oxlint and format with oxfmt, one config each. (Decision 1.1)
 2. **DO** run non-native rules as oxlint JS plugins, selectors unchanged. (Decision 1.2)
 3. **DO** set oxfmt `printWidth: 120` explicitly. (Decision 1.3)
+   **DO** keep the format config in `.oxfmtrc.jsonc` with ignores in `ignorePatterns`. (Decision 1.7)
 4. **DO** pin oxlint, `oxlint-plugin-eslint` and oxfmt exactly. (Decision 2.1)
 5. **DO** re-run the probe suites and format check on a bump. (Decision 2.2)
 6. **DO** add an admission row here for any new tool or plugin. (Decision 4.1)

@@ -51,7 +51,8 @@ export interface FailuresObservation {
   readonly save: FailedPath & { readonly success: string; readonly downloaded: boolean };
   /** null on an explain page. */
   readonly reset:
-    (FailedPath & { readonly success: string; readonly asked: boolean; readonly clearedOnConfirm: boolean }) | null;
+    | (FailedPath & { readonly success: string; readonly asked: boolean; readonly clearedOnConfirm: boolean })
+    | null;
 }
 
 /** Clears the status, runs the failing action, and records what it left behind. */

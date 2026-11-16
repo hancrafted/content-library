@@ -17,7 +17,7 @@ Han recorded the talk from the Voice script, and said something close to it. Thi
    - **A segment skipped live** (its content is absent from the window) keeps its authored text, word for word. A Slide whose start is unmatched is skipped whole, each of its segments the same.
    - **Speech that matches no segment** goes into the nearest segment of its Section, at the place it fits, and is listed. A Slide without segments (the Title slide) has nowhere to take speech: list its speech as unplaced and write no segment.
      _Done when_ every authored segment is rewritten, kept (listed as skipped), or reported as unplaced.
-4. Run `git diff --stat`. _Done when_ the only files changed are `i18n/<lang>.json` files of the owning Episode, and `git diff` of each shows only lines under `voiceScript`; restore anything else. Run `npx prettier --write` on the changed files, then `npm run youtube:voice-script` again for the reading time after.
+4. Run `git diff --stat`. _Done when_ the only files changed are `i18n/<lang>.json` files of the owning Episode, and `git diff` of each shows only lines under `voiceScript`; restore anything else. Run `npx oxfmt` on the changed files, then `npm run youtube:voice-script` again for the reading time after.
 5. End with the report for Han:
    - **Voice script diff per Slide**: Slide title, then each changed segment as `git diff --word-diff` output, trimmed to the changed words.
    - **Skipped segments**: Slide, segment key, why.

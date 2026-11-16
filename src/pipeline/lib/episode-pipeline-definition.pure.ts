@@ -116,7 +116,8 @@ export interface JobSource {
  * parser's complaint instead.
  */
 export type PipelineText =
-  { error: string } | { document: unknown; pipeline: Pipeline | null; sources: readonly JobSource[] };
+  | { error: string }
+  | { document: unknown; pipeline: Pipeline | null; sources: readonly JobSource[] };
 
 export function parsePipeline(yaml: string): PipelineText {
   let document: unknown;

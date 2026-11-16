@@ -110,7 +110,7 @@ export function chapterLines(chapters: readonly Chapter[]): string[] {
   return chapters.map(({ start, title }) => `${formatTimestamp(start)} ${title}`);
 }
 
-/** The chapters as the block between the markers, markers included; the blank line keeps Prettier from rewriting it. */
+/** The chapters as the block between the markers, markers included; the blank line keeps oxfmt from rewriting it. */
 export function chapterBlock(chapters: readonly Chapter[]): string {
   return [CHAPTER_START_MARKER, '', ...chapterLines(chapters), CHAPTER_END_MARKER].join('\n');
 }

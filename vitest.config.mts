@@ -22,7 +22,7 @@ const TRIGGERS = [
   'GLOSSARY.md',
   'markdown-harness.config.yaml',
   '.dependency-cruiser.cjs',
-  '.prettierignore',
+  '.oxfmtrc.jsonc',
   'src/app/globals.css',
   'src/shared/design-system/legacy.json',
   'src/episodes/components/slide-master/**',

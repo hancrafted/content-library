@@ -8,7 +8,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { format, resolveConfig } from 'prettier';
+import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { episodeText, type EpisodeText } from './episode-text';
@@ -38,8 +38,7 @@ function isNoindex(url: string): boolean {
 async function capturedText(file: string, built: EpisodeText): Promise<EpisodeText> {
   if (existsSync(file)) return JSON.parse(readFileSync(file, 'utf8')) as EpisodeText;
   mkdirSync(FIXTURE_DIR, { recursive: true });
-  const options = await resolveConfig(file);
-  writeFileSync(file, await format(JSON.stringify(built), { ...options, filepath: file }));
+  writeFileSync(file, await formatAsRepo(file, JSON.stringify(built)));
   throw new Error(`No captured text at ${file}: written from this build. Review it, commit it, and run again.`);
 }
 

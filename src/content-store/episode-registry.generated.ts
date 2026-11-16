@@ -4,9 +4,7 @@
 // `src/episodes/explorable-pages/<slug>/` an Explorable page, `src/episodes/guides/<slug>/` a Guide.
 import type { EpisodeSlugOf } from '@/content-store/catalogue/episode-id.pure';
 import type { EpisodeId } from '@/content-store/catalogue/record-routes';
-import { episodeMetadata as aiAttentionSpan } from '@/episodes/ai-attention-span/episode-metadata';
-import { episodeMetadata as aiGivesYouMoreWork } from '@/episodes/ai-gives-you-more-work/episode-metadata';
-import { episodeMetadata as aiTokenEconomy } from '@/episodes/ai-token-economy/episode-metadata';
+import type { EpisodeInput } from './schemas/episode.schema';
 import { episodeMetadata as _20261023AxelAgenticWorkflow__aiAttentionSpan } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/episode-metadata';
 import { episodeMetadata as _20261023AxelAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as _20261023AxelAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/episode-metadata';
@@ -21,13 +19,15 @@ import { episodeMetadata as _20261104IntroHitlWorkflows__onboardAiEveryTime } fr
 import { episodeMetadata as _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/episode-metadata';
 import { episodeMetadata as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode-metadata';
 import { episodeMetadata as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode-metadata';
+import { episodeMetadata as aiAttentionSpan } from '@/episodes/ai-attention-span/episode-metadata';
+import { episodeMetadata as aiGivesYouMoreWork } from '@/episodes/ai-gives-you-more-work/episode-metadata';
+import { episodeMetadata as aiTokenEconomy } from '@/episodes/ai-token-economy/episode-metadata';
 import { episodeMetadata as fromSharedUnderstandingToSharedContext } from '@/episodes/from-shared-understanding-to-shared-context/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from '@/episodes/never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from '@/episodes/onboard-ai-every-time/episode-metadata';
 import { episodeMetadata as whatAgenticWorkflowsRequire } from '@/episodes/what-agentic-workflows-require/episode-metadata';
 import { episodeMetadata as whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/episode-metadata';
-import type { EpisodeInput } from './schemas/episode.schema';
 
 /** Every Episode with a page, public or unlisted: its metadata by id, so a record's slug must be its folder's name. */
 export const EPISODE_METADATA = {
