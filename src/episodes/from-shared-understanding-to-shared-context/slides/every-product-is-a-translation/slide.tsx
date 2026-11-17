@@ -68,7 +68,6 @@ export const everyProductIsATranslation = slide({
   segments: [{ slug: 'a-new-pain' }, { slug: 'where-the-section-goes' }],
   content: ({ t }) => (
     <SlideFrame>
-      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
       <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 20 300 104" className="w-full" role="img" aria-label={t('label')}>
           {BOARDS.map(({ outcome, cx, darts, tone, edge }) => (
