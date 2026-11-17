@@ -6,14 +6,6 @@ import { settleValue } from '@/shared/lib/picker-sync.pure';
 import { useEffect, useRef, useState } from 'react';
 import { HexAlphaColorPicker } from 'react-colorful';
 
-/**
- * The picker's hex and its change handler. The picker works in hex and writes back
- * in the token's own format (`oklch(L C H)` stays oklch). It keeps its own hex while
- * dragged: converting through rounded oklch on every move would nudge the handle.
- * A drag emits faster than React hands the edit back, so the value arriving may be
- * one the picker wrote a moment ago; only a value it never wrote is read back.
- * Taking a stale one for an outside change reset the handle and looped.
- */
 function usePickerHex(value: string, original: string, onChange: (value: string) => void) {
   const [hex, setHex] = useState(() => pickerHexOf(value) ?? '');
   const pending = useRef<readonly string[]>([]);

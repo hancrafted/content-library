@@ -57,11 +57,6 @@ function HitList({ hits }: { hits: UsageHit[] }) {
   );
 }
 
-/**
- * A "Find usage" button under a token. It finds the elements in view that use the
- * token and lists them: hover outlines one, click scrolls to it. Nothing runs
- * until the button is pressed.
- */
 export function TokenUsage({ scope, token, theme }: { scope: Scope; token: Token; theme: Theme }) {
   const { usage, find } = useUsage(scope, token, theme);
   const [open, setOpen] = useState(true);

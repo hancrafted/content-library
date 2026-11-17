@@ -1,6 +1,3 @@
-// Finds where a token lands on a page from two plain snapshots of computed style,
-// taken before and after the token was set to a sentinel. The DOM adapter
-// (page-tokens.ts) takes the snapshots; nothing here touches the document.
 import type { TokenKind } from '@/shared/lib/token-discovery.pure';
 
 export const USAGE_PROPERTIES: readonly string[] = [
@@ -64,7 +61,6 @@ const INHERITED = new Set([
 const COLOUR_SENTINEL = 'color(srgb 1 0 1)';
 const SIZE_SENTINEL = '71.7px';
 
-/** Values no design would pick, per kind. A token of no known kind is tried as a colour, then as a length. */
 export function sentinelsFor(kind: TokenKind): string[] {
   switch (kind) {
     case 'colour':
@@ -95,12 +91,6 @@ export interface UsageDiff {
 
 const sampleKey = (sample: StyleSample) => `${sample.id}${sample.pseudo ?? ''}`;
 
-/**
- * The samples whose style differs between the two snapshots. A change an element
- * only inherited (its parent's same inherited property moved to the same value)
- * is not a use of its own and is dropped. Equality only: browsers serialise a
- * colour in different forms, so values are never compared by meaning.
- */
 export function diffUsage(before: readonly StyleSample[], after: readonly StyleSample[]): UsageDiff[] {
   const beforeByKey = new Map(before.map((sample) => [sampleKey(sample), sample]));
   const moved = after

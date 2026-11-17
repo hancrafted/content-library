@@ -1,6 +1,3 @@
-// The DOM side of token usage: sets a token to a sentinel, samples computed style
-// before and after, and hands the plain samples to the pure diff. Also the
-// outline and scroll the usage list drives. Reads and restores the page; adds nothing to it.
 import { carriers } from '@/shared/lib/page-tokens';
 import type { Scope } from '@/shared/lib/token-changes.pure';
 import { classifyToken, type Theme, type Token } from '@/shared/lib/token-discovery.pure';
@@ -60,7 +57,6 @@ function sample({ elements, pseudos }: Subjects): StyleSample[] {
   return [...own, ...generated];
 }
 
-/** Runs `probe` with transitions off, so a transitioning property reports its end value and nothing animates back from the sentinel. */
 function withoutTransitions<T>(probe: () => T): T {
   const style = document.createElement('style');
   style.textContent = '*, *::before, *::after { transition: none !important; }';
@@ -68,7 +64,6 @@ function withoutTransitions<T>(probe: () => T): T {
   try {
     return probe();
   } finally {
-    // Settle the restored style while transitions are still off, then let them back.
     void getComputedStyle(document.documentElement).color;
     style.remove();
   }
@@ -113,11 +108,6 @@ export interface UsageHit {
   properties: string[];
 }
 
-/**
- * One probe: samples computed style, sets the sentinel, samples again and puts the
- * page back, all in one task so nothing paints in between. Transitions are off for
- * its length, and a carrier's previous inline value is restored exactly.
- */
 function probeOnce(carrierList: HTMLElement[], token: Token, sentinel: string): UsageHit[] {
   const subjects = findSubjects();
   const { before, after } = withoutTransitions(() => {
@@ -144,12 +134,6 @@ function merge(hits: UsageHit[], more: UsageHit[]): UsageHit[] {
   return hits;
 }
 
-/**
- * The elements currently rendered whose style depends on the token: it is set to
- * an unmistakable value and whatever computed style moves is a use, which also
- * catches a token reached through another token or `color-mix`. Unmounted Slides
- * are not on the page and are not found. Runs when the browser is idle.
- */
 export function findTokenUsage(scope: Scope, token: Token, theme: Theme): Promise<UsageHit[]> {
   const schedule = window.requestIdleCallback ?? ((run: () => void) => window.setTimeout(run, 0));
   return new Promise((resolve) => {

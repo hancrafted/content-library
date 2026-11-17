@@ -75,12 +75,6 @@ function Trigger({
   );
 }
 
-/**
- * The dev-only design-system token editor: an icon button in the header that
- * drops a popover down. It edits the global tokens and the active Slide's own
- * tokens in the active theme, live. Nothing is saved; "Copy changed" exports the
- * changes as a prompt for an agent.
- */
 export default function TokenEditor() {
   const theme = useResolvedTheme();
   const [edits, setEdits] = useState<Edits>({});

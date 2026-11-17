@@ -1,12 +1,4 @@
-/*
- * The editor panel's own palette. It follows the site's light or dark theme but
- * does not read the site's tokens: the panel has to keep its look while those very
- * tokens are being edited. Every shadcn token the panel's primitives read is
- * redeclared here, so `bg-card` or `border-input` inside the panel resolves to this
- * set. This is the one token file outside a Slide folder (FE-011 rule exception,
- * named in the rules file): raw oklch values, each with a counterpart under
- * `:global(.dark)`.
- */
+/* decision: FE-011 §4 */
 .panel {
   --background: oklch(1 0 0);
   --foreground: oklch(0.2 0 0);

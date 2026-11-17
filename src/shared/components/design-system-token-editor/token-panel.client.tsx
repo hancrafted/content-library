@@ -171,12 +171,6 @@ interface TabState {
   onTab: (tab: Tab) => void;
 }
 
-/**
- * The popover body: scope tabs (Slide only while the page reports one), the theme row, the
- * grouped token list for the active theme, and the copy and reset actions. It
- * follows the site's light or dark theme with a palette of its own (see the CSS
- * module), so it keeps its look while the site's tokens are edited.
- */
 export function TokenPanel({ theme, tokens, edits, changes, onEdits, top, rowAddon }: PanelProps) {
   const [tab, setTab] = useState<Tab>('global');
   const shown: Tab = tab === 'slide' && tokens.currentSlide ? 'slide' : 'global';
