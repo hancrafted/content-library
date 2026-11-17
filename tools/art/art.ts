@@ -13,10 +13,7 @@ import { artStore } from './art-store.pure.ts';
 import { cssRules } from './css-rules.pure.ts';
 
 const ROOT = process.cwd();
-// Every `<Art>` the pages render draws inline, marked for the bake (`artMode`).
 process.env.ART_BUILD = '1';
-// `--workers N` bakes across N threads (default: the shared idle-CPU rule); `--out DIR` writes there instead of
-// `public/art`; `--only a,b` keeps the Slides of those pages (by page-name prefix), for the parallel-bake test.
 const { values: args } = parseArgs({
   options: { workers: { type: 'string' }, out: { type: 'string' }, only: { type: 'string' } },
 });
@@ -25,7 +22,6 @@ if (!Number.isInteger(workers) || workers < 1)
   throw new Error(`--workers must be a positive whole number, got "${args.workers}"`);
 const OUT = path.resolve(ROOT, args.out ?? 'public/art');
 const ONLY = args.only?.split(',');
-/** Slides per chunk: several chunks per worker, so one slow chunk never leaves the others idle. */
 const CHUNKS_PER_WORKER = 8;
 const ENTRY = '/src/episodes/components/art-build/art-pages.tsx';
 
@@ -34,10 +30,6 @@ interface ArtPage {
   readonly markup: () => string;
 }
 
-/**
- * A CSS-module class as the bake reads it: the module's file name, the local name and a hash of the module's path,
- * joined by `__`, so two Slides' `slide.module.css` never share a class. The compiled text (`?inline`) is named alike.
- */
 function scopedName(local: string, file: string) {
   const module = file.replace(/\?.*$/, '');
   const hash = createHash('sha256').update(path.relative(ROOT, module)).digest('hex').slice(0, 6);
@@ -63,10 +55,6 @@ async function moduleCss(): Promise<string> {
   return texts.join('\n');
 }
 
-/**
- * Every Slide's markup; a Slide that cannot render outside Next (a hero that needs its motion provider, a CommonJS
- * `next/image`) is named and skipped. A skipped Slide holding `<Art>` still fails `next build` on the missing name.
- */
 function renderAll(pages: readonly ArtPage[]) {
   const rendered: { readonly page: string; readonly markup: string }[] = [];
   const skipped: string[] = [];

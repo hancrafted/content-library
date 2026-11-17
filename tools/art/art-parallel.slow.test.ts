@@ -30,8 +30,7 @@ function bake(workers: string) {
   return files;
 }
 
-// Each bake is seconds of real work; the lane's 60 s test timeout is too short for two in a row.
-const TIMEOUT = 180_000;
+const TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS = 180_000;
 
 describe('success cases', () => {
   it(
@@ -47,7 +46,7 @@ describe('success cases', () => {
       expect(Object.keys(one).length).toBeGreaterThan(1);
       expect(several).toEqual(one);
     },
-    TIMEOUT,
+    TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS,
   );
 });
 
@@ -59,7 +58,8 @@ describe('failure cases', () => {
         cwd: ROOT,
         stdio: 'pipe',
       });
-    // ACT / ASSERT
+    // ACT
+    // ASSERT
     expect(run).toThrow(/--workers/);
   });
 });
@@ -76,6 +76,6 @@ describe('edge cases', () => {
       // ASSERT
       expect(oversized).toEqual(one);
     },
-    TIMEOUT,
+    TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS,
   );
 });

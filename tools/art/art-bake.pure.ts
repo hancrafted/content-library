@@ -19,8 +19,7 @@ const isInert = ([property, value]: readonly [string, string]) =>
   INERT.has(property) || (/^(animation|animation-name|transition)$/.test(property) && /^none\b/.test(value));
 const MOTION = /^(animation|transition|transform$|translate$|rotate$|scale$|offset)/;
 const INTERACTION = /:(hover|focus|active|checked|target)/;
-/** Elements a drawing may not hold: localized text, references by id, scripts and nested `<use>` stay on the page. */
-const REFUSED_TAGS = new Set(
+const TAGS_THAT_STAY_ON_THE_PAGE_OUTSIDE_ART = new Set(
   'text tspan foreignobject clippath mask lineargradient radialgradient pattern filter use image a style script'.split(
     ' ',
   ),
@@ -66,11 +65,7 @@ function cascadeOf($: cheerio.CheerioAPI, rules: readonly CssRule[], owner: Owne
 const paintIn = (cascade: Cascade, element: Element) =>
   new Map([...(cascade.get(element) ?? [])].map(([property, { value }]) => [property, value]));
 
-/**
- * The page states a `<use>` clone cannot see around its drawing: dark mode, and its Slide turning active. A drawing's
- * paint must read the same in each, so a change of state reaches it only through the custom properties its host sets.
- */
-function enterPageState($: cheerio.CheerioAPI) {
+function enterStatesACloneCannotSeeSoPaintReadsTheSameInEach($: cheerio.CheerioAPI) {
   $('html').addClass('dark');
   $('[data-zone]').attr('data-zone', 'active');
 }
@@ -79,7 +74,8 @@ const referencesId = ([attribute, value]: readonly [string, string]) =>
   attribute === 'id' || /url\(/.test(value) || /^(clip-path|mask|filter)$/.test(attribute);
 
 function checkElement(name: string, element: Element) {
-  if (REFUSED_TAGS.has(element.name.toLowerCase())) refuse(name, `<${element.name}> stays on the page, outside <Art>`);
+  if (TAGS_THAT_STAY_ON_THE_PAGE_OUTSIDE_ART.has(element.name.toLowerCase()))
+    refuse(name, `<${element.name}> stays on the page, outside <Art>`);
   const reference = Object.entries(element.attribs).find(referencesId);
   if (reference) refuse(name, `${reference[0]}="${reference[1]}" references by id; keep it on the page, outside <Art>`);
   const pageWide = (element.attribs.class ?? '').split(/\s+/).find((name) => name !== '' && !name.includes('__'));
@@ -140,7 +136,7 @@ export function bakeArt(markup: string, rules: readonly CssRule[]): ArtPiece[] {
   }
   const rest = cascadeOf($, rules, owner);
   dropUnstrokedGeometry(rest, owner, strokeContext($, rules));
-  enterPageState($);
+  enterStatesACloneCannotSeeSoPaintReadsTheSameInEach($);
   const stated = cascadeOf($, rules, owner);
   dropUnstrokedGeometry(stated, owner, strokeContext($, rules));
   refuseStatePaint(rest, stated, owner);

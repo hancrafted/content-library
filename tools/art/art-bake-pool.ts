@@ -24,10 +24,10 @@ function drain(worker: Worker, queue: Queue) {
       feed();
     });
     worker.on('error', reject);
-    // A worker that dies mid-chunk (out of memory, process.exit) posts neither a result nor an error.
-    worker.on('exit', (code) => {
+    const rejectWorkerThatDiedMidChunkWithoutResultOrError = (code: number) => {
       if (!finished) reject(new Error(`art bake worker exited with code ${code} before finishing its chunks`));
-    });
+    };
+    worker.on('exit', rejectWorkerThatDiedMidChunkWithoutResultOrError);
     feed();
   });
 }
