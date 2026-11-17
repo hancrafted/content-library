@@ -9,7 +9,7 @@
 
 import { type CheerioAPI } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
-import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
+import { OPTION, SECTION, TITLE_SLIDE, type SpecPage } from './episode-spec-page.pure.ts';
 import {
   anyPicked,
   checkOption,
@@ -17,7 +17,6 @@ import {
   FORM,
   type OptionCount,
   type Selection,
-  type SpecPage,
 } from './episode-spec-slide.pure.ts';
 import { unless } from './finding.pure.ts';
 
@@ -43,8 +42,8 @@ function checkSet(figure: Selection, sections: readonly string[]): string[] {
   ];
 }
 
-/** The rules of the Spec's one Title slide. */
-export function checkTitleSlide({ $, approved }: SpecPage): string[] {
+/** The rules of the Spec's one Title slide, on `page`; `approved` is whether Han approved the Spec. */
+export function checkTitleSlide({ $ }: SpecPage, approved: boolean): string[] {
   const articles = $(TITLE_SLIDE);
   if (articles.length === 0)
     return [

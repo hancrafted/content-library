@@ -6,7 +6,7 @@
  */
 
 import { type Cheerio, type CheerioAPI } from 'cheerio';
-import { OPTION } from './episode-spec-page.pure.ts';
+import { OPTION, type SpecPage } from './episode-spec-page.pure.ts';
 import { unless } from './finding.pure.ts';
 
 /** One element of a parsed page, read off cheerio's own types, and a selection of them. */
@@ -17,12 +17,6 @@ export type Selection = Cheerio<Element>;
 /** The review form's id, which every field names in its `form` attribute. */
 export const FORM = 'spec-review';
 const LETTERS = 'abc';
-
-/** What a Slide's rules read beside the Slide: the page and whether Han approved it. */
-export interface SpecPage {
-  $: CheerioAPI;
-  approved: boolean;
-}
 
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;
 const ARBITRARY = /\[[^\]]*\]/;
@@ -212,8 +206,14 @@ function checkMarkers(figure: Selection, slug: string, notes: readonly string[])
     );
 }
 
-/** The rules of one Slide, the `at`-th in page order. */
-export function checkSlide({ $, approved }: SpecPage, element: Element, at: number): string[] {
+/** A Slide's article and its place, the `at`-th in its page's order. */
+interface PlacedSlide {
+  element: Element;
+  at: number;
+}
+
+/** The rules of one Slide; `approved` is whether Han approved the Spec. */
+export function checkSlide({ $ }: SpecPage, approved: boolean, { element, at }: PlacedSlide): string[] {
   const slide = $(element);
   const slug = slide.attr('id') ?? '';
   const where = `The Slide {#${slug}}`;
