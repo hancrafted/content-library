@@ -3,11 +3,6 @@ import { isOptionalTask, producerIdsOf } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
 
-/*
- * A loaded file as the Workflow the diagram draws. Edges come from the slots: a task depends on the tasks whose
- * outputs its slots name.
- */
-
 function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
   return {
     id: task.id,
@@ -38,7 +33,6 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
   };
 }
 
-/** The Workflow of a loaded file; the stage with a sign-off card holds the focal job. */
 export function workflowOf(file: WorkflowFile): Workflow {
   const focal = file.stages.find((stage) => stage.card)?.jobs[0];
   return {
@@ -52,7 +46,6 @@ export function workflowOf(file: WorkflowFile): Workflow {
   };
 }
 
-/** The Workflow as the current mode runs it: the stages marked for the other mode are left out, edges and focal job included. */
 export function workflowInMode(workflow: Workflow, demo: boolean): Workflow {
   const file = fileInMode(workflow.file, modeOf(demo));
   return file === workflow.file ? workflow : workflowOf(file);

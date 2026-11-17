@@ -10,15 +10,12 @@ import { stepTitle } from './words.pure';
 interface SectionProps {
   readonly n: number;
   readonly title: string;
-  /** What to do in this step; shown only while the info toggle is on. */
   readonly info: string;
   readonly kit: StepKit;
-  /** Open at first; a step with nothing to do starts folded. */
   readonly open?: boolean;
   readonly children: ReactNode;
 }
 
-/** The step's title, the trigger that folds it. */
 function StepTitle({ n, title, kit }: Pick<SectionProps, 'n' | 'title' | 'kit'>) {
   return (
     <h4 className="text-body font-semibold">
@@ -33,7 +30,6 @@ function StepTitle({ n, title, kit }: Pick<SectionProps, 'n' | 'title' | 'kit'>)
   );
 }
 
-/** One numbered step, folded by its title: "Step 2: Title", its explanation when the info toggle is on, then its controls. */
 export function StepSection({ n, title, info, kit, open = true, children }: SectionProps) {
   return (
     <Collapsible defaultOpen={open} data-step-section={n} className="group/step flex min-w-0 flex-col">

@@ -4,10 +4,8 @@ import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useCallback, useEffect, useState, type RefObject } from 'react';
 import styles from './ai-capability.module.css';
 
-/** The Level cards of the list, without the layer rows that span them in a wide container. */
 const cards = (list: HTMLElement) => [...list.querySelectorAll<HTMLElement>(':scope > [data-level]')];
 
-/** The card whose centre sits nearest the list's centre: the one in view. */
 function centred(list: HTMLElement): number {
   const middle = list.scrollLeft + list.clientWidth / 2;
   const items = cards(list);
@@ -15,10 +13,6 @@ function centred(list: HTMLElement): number {
   return distances.indexOf(Math.min(...distances));
 }
 
-/**
- * The carousel the Levels become in a narrow container: which card is in view, whether the list is a carousel at all
- * (it scrolls sideways only when narrow), and a step to the previous or next card.
- */
 export function useCarousel(list: RefObject<HTMLElement | null>) {
   const { index, narrow } = usePosition(list);
   const step = useCallback(
@@ -36,7 +30,6 @@ export function useCarousel(list: RefObject<HTMLElement | null>) {
   return { index, narrow, step };
 }
 
-/** Where the carousel stands: the card in view, and whether the list scrolls sideways at all; kept on scroll and resize. */
 function usePosition(list: RefObject<HTMLElement | null>) {
   const [index, setIndex] = useState(0);
   const [narrow, setNarrow] = useState(false);
@@ -79,7 +72,6 @@ function Arrow(props: {
   );
 }
 
-/** Under the carousel: the arrow buttons and a dot per Level, the one in view filled. Hidden in a wide container. */
 export function CarouselNav(props: {
   readonly count: number;
   readonly index: number;

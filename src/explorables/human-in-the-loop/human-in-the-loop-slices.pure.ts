@@ -11,12 +11,7 @@ import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import { workflowView, type WorkflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
-/*
- * The parent's slicing: which Workflow is shown and what each part gets of the state, as plain props plus callbacks.
- * Pure, so the contract is testable without a browser (FE-012 §4: parts get slices, never the state or `dispatch`).
- */
-
-/** The shown Workflow: an uploaded one wins, then the chosen authored one, then the first. */
+// decision: FE-012 §4
 export function shownWorkflow(
   data: HumanInTheLoopData,
   state: Pick<WorkflowState, 'uploaded' | 'workflowId'>,
@@ -24,7 +19,6 @@ export function shownWorkflow(
   return state.uploaded ?? data.workflows.find((w) => w.id === state.workflowId) ?? data.workflows[0];
 }
 
-/** The saved run the shown Workflow belongs to: its id, key and source hash; none for an uploaded one, which is not kept. */
 export function progressTarget(
   data: HumanInTheLoopData,
   state: WorkflowState,
@@ -34,7 +28,6 @@ export function progressTarget(
   return id !== undefined && hash !== undefined ? { id, key: progressKeyOf(id), hash } : null;
 }
 
-/** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
 export function uploadEvent(yaml: string): WorkflowEvent {
   const result = loadWorkflow(yaml);
   return 'problems' in result
@@ -42,7 +35,6 @@ export function uploadEvent(yaml: string): WorkflowEvent {
     : { type: 'upload', workflow: workflowOf(result.file) };
 }
 
-/** The callbacks the parts send events up by. */
 export type Callbacks = Pick<
   ToolbarProps,
   'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onDemo' | 'onReset' | 'onDebug'
@@ -50,7 +42,6 @@ export type Callbacks = Pick<
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'> & { onPrompts: ModalProps['edits']['onChange'] };
 
-/** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
   return {
     onLevel: (level) => dispatch({ type: 'level', level }),
@@ -68,23 +59,16 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
   };
 }
 
-/** What is computed of the shown Workflow and the state: one run, and everything the parts show of it. */
 export interface WorkflowShown {
   readonly workflow: Workflow;
-  /** The run of the pasted results, computed once. */
   readonly run: Run;
-  /** `workflowView` of the Workflow for the state's level, widths taken from the run. */
   readonly view: WorkflowView;
-  /** The rounds each repeated stage plays now: only stages whose run holds rounds. The view widens these to the demo cap. */
   readonly played: Readonly<Record<string, number>>;
-  /** The rounds each repeated stage draws: the rounds played, else the stage's demo cap, so an empty stage still shows its cards. */
   readonly drawn: Readonly<Record<string, number>>;
 }
 
-/** What `showWorkflow` reads of the state. */
 export type ShownState = Pick<WorkflowState, 'level' | 'demo' | 'slotValues'>;
 
-/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's demo cap. */
 function drawnRounds(workflow: Workflow, run: Run): Record<string, number> {
   const counts = workflow.stages.flatMap((stage) => {
     const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
@@ -93,7 +77,6 @@ function drawnRounds(workflow: Workflow, run: Run): Record<string, number> {
   return Object.fromEntries(counts);
 }
 
-/** The one entry that computes the Run of the shown Workflow in the current mode (stages marked for the other mode are left out), and its view and rounds from that same run. */
 export function showWorkflow(whole: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
   const workflow = workflowInMode(whole, demo);
   const run = runOf(workflow.file, { results: slotValues, demo });
@@ -107,15 +90,11 @@ export function showWorkflow(whole: Workflow, { level, demo, slotValues }: Shown
   };
 }
 
-/** What the parent knows: the data it was given, its state, and what `showWorkflow` computed of the shown Workflow. */
 export interface Shown extends WorkflowShown {
   readonly data: HumanInTheLoopData;
   readonly state: WorkflowState;
-  /** What to tell the viewer about their saved progress, if anything. */
   readonly note: ProgressNote | null;
-  /** Save and load of the run; none for an uploaded Workflow. */
   readonly progress: ProgressActions | null;
-  /** Whether the Debug switch may show: development or `?debug`, known only on the client after mount. */
   readonly debugAvailable: boolean;
 }
 
@@ -125,7 +104,6 @@ export interface Slices {
   readonly modal: ModalProps;
 }
 
-/** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { run } = shown;
   const demoProps = demoPropsOf(shown, run.canChangeDemo, on);
@@ -137,7 +115,6 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
   };
 }
 
-/** The demo switch and Reset for both places that hold them: the toolbar and the popover. */
 function demoPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): DemoProps {
   const { controls, readonly } = data;
   const hasWork = !canChange || Object.keys(state.prompts).length > 0;
@@ -197,7 +174,6 @@ function toolbarOf(
   };
 }
 
-/** What every debug footer of the shown Workflow shares; the source is the short hash of its file pair, or `uploaded`. */
 function debugBase({ data, state, workflow }: Pick<Shown, 'data' | 'state' | 'workflow'>): DebugBase {
   const hash = state.uploaded ? undefined : data.hashes[workflow.id];
   return {

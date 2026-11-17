@@ -1,10 +1,5 @@
 import { fanGeometry, TITLE_Y, type Connector as ConnectorKind } from './diagram-layout.pure';
 
-/*
- * The hairlines both diagram views share: the arrow into a stage, the fans of a repeated stage's rounds and the
- * quarter-turned arrow where the stages stack.
- */
-
 export const STRAIGHT = (
   <svg viewBox="0 0 24 10" className="h-2.5 w-6" aria-hidden="true">
     <path d="M0 5h20" className="fill-none stroke-muted-foreground" strokeWidth="1.5" />
@@ -22,11 +17,6 @@ function Fan({ direction, branches }: { direction: 'out' | 'in'; branches: numbe
   );
 }
 
-/**
- * The hairline into a stage where the row runs across: straight, fanning out to its rounds, or fanning them back in.
- * It sits in the gap before the stage's lane, measured from the lane's top where the cards stand: a straight arrow
- * meets the stage's title line, a fan meets each round card.
- */
 export function Connector({ kind }: { kind: ConnectorKind }) {
   const straight = kind.kind === 'straight';
   return (
@@ -40,7 +30,6 @@ export function Connector({ kind }: { kind: ConnectorKind }) {
   );
 }
 
-/** Where the stages stack: a straight arrow turned a quarter, above the stage, since the cards then stack too. */
 export function ArrowDown() {
   return (
     <div
@@ -52,7 +41,6 @@ export function ArrowDown() {
   );
 }
 
-/** The arrow into a job card from the one above it, laid in the gap between the two cards. */
 export function JobArrow() {
   return (
     <div

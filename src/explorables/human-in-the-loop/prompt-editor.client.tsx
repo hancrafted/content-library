@@ -10,12 +10,6 @@ import { useState } from 'react';
 import { BlockedCopy } from './blocked-copy.client';
 import type { UiWords } from './human-in-the-loop.types';
 
-/*
- * The pencil beside Copy prompt and the editor it opens: a textarea of the step's prompt as markdown with its
- * `{{markers}}` raw, and Reset and Close over it. The pencil only shows or hides the editor; the edit itself is kept
- * (and copied) whether the editor is open or not.
- */
-
 const ROWS = 14;
 
 interface ToggleProps {
@@ -24,7 +18,6 @@ interface ToggleProps {
   readonly onToggle: () => void;
 }
 
-/** Icon-only, joined to Copy prompt in one button group; pressed while the editor is open. */
 export function EditToggle({ words, open, onToggle }: ToggleProps) {
   return (
     <Tooltip>
@@ -47,9 +40,7 @@ export function EditToggle({ words, open, onToggle }: ToggleProps) {
 
 interface EditorProps {
   readonly words: UiWords;
-  /** The text shown: the edit, else the YAML prompt. */
   readonly text: string;
-  /** Whether an edit exists: Reset is disabled without one. */
   readonly edited: boolean;
   readonly onText: (text: string) => void;
   readonly onReset: () => void;
@@ -87,15 +78,12 @@ export function useOpen() {
 
 interface CopyPromptProps {
   readonly words: UiWords;
-  /** An edit exists: Copy prompt shows a dot, and a tooltip saying it copies the edited version. */
   readonly edited: boolean;
   readonly lead: boolean;
-  /** A blank field of the step is still empty: Copy prompt is disabled. */
   readonly blocked?: boolean;
   readonly onCopy: () => Promise<boolean>;
 }
 
-/** Copy prompt of a step, marked while it copies the viewer's edit. */
 export function CopyPrompt({ words, edited, lead, blocked = false, onCopy }: CopyPromptProps) {
   const button = (
     <BlockedCopy words={words} label={words.copyPrompt} blocked={blocked} lead={lead} edited={edited} onCopy={onCopy} />

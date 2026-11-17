@@ -6,7 +6,6 @@ import { useId } from 'react';
 import type { ToolbarProps } from './part-props.types';
 import { offers } from './toolbar-controls.pure';
 
-/** One option of the picker: the title, and under it, muted, the one sentence the Workflow says about itself. */
 function Choice({ title, description }: { readonly title: string; readonly description?: string }) {
   return (
     <span className="flex flex-col items-start gap-0.5 text-left">
@@ -20,7 +19,6 @@ function Choice({ title, description }: { readonly title: string; readonly descr
   );
 }
 
-/** The picker's options: the Workflows, after an uploaded one that is none of them. */
 function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: boolean }) {
   return (
     <>
@@ -38,10 +36,8 @@ function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: b
   );
 }
 
-/** Whether the toolbar draws the picker: the Preset allows it and there is a choice. */
 export const hasPicker = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
 
-/** The use case picker: a visible label and a shadcn Select of the Workflows; an uploaded one joins as its own option. */
 export function Picker({ bar }: { readonly bar: ToolbarProps }) {
   const id = useId();
   if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;

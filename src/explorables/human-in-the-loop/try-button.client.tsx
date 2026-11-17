@@ -5,18 +5,11 @@ import { Play } from 'lucide-react';
 
 interface TryButtonProps {
   readonly label: string;
-  /** The stage's name, for `data-try` and the hidden suffix. */
   readonly stage: string;
-  /** The localised hidden suffix that says which stage, so a screen reader hears it. */
   readonly forStage: string;
   readonly onOpen: () => void;
 }
 
-/**
- * The one entry to a stage's modal: the whole column is the button, laid over it. Its visible face, "Practice it",
- * rises into the bottom of the column while the pointer is over the column or the button has keyboard focus; on a
- * touch screen, where nothing hovers, it always shows. It opens a dialog and holds no state of its own.
- */
 export function TryButton({ label, stage, forStage, onOpen }: TryButtonProps) {
   const motion = useMotion();
   return (

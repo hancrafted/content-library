@@ -55,14 +55,12 @@ function focusTitle(event: Event) {
   document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
 }
 
-/** What opened the modal: a stage's name, and the job whose card was pressed in the Jobs view. */
 interface Opener {
   readonly stage: string;
   readonly jobId: string | null;
   readonly round: number | null;
 }
 
-/** Closing returns focus to the stage's Practice it button, found by its name: the column re-renders while open. */
 function focusOpener(event: Event, opener: Opener | null) {
   if (!opener) return;
   const job = opener.jobId === null ? '' : `[data-try-job="${opener.jobId}"]`;

@@ -4,16 +4,9 @@ import type { LevelWords, Productivity } from './ai-capability.types';
 import { TRACK_TICKS, trackPercent } from './rows.pure';
 import type { Level } from './scene-frames.pure';
 
-/*
- * The three per-Level rows the toolbar adds to a column (pure views): Managing effort, Productivity increase and Adoption.
- * Each is one card in the column's grid row, so the four Levels' cards of one row end level. The column decides which
- * are shown; the two layer rows that span Levels live in layer-row-view.tsx.
- */
-
 const CARD = 'relative rounded-2xl border border-border bg-card px-4 py-3';
 const LABEL = 'text-caption font-medium tracking-wide text-muted-foreground uppercase';
 
-/** One icon per role, from a single sheet to a building, growing with what the Level compares to. */
 const ICONS: Record<Level, ReactNode> = {
   prompting: (
     <svg viewBox="0 0 24 30" className="h-6 w-auto" aria-hidden="true">
@@ -50,7 +43,6 @@ const ICONS: Record<Level, ReactNode> = {
   ),
 };
 
-/** The Managing effort row: what the Level asks you to manage, a task up to an organisation, as in a promotion. */
 export function EffortCellView(props: { readonly level: Level; readonly label: string; readonly scale: string }) {
   return (
     <div data-row="effort" className={`${CARD} ${styles.blend} flex items-center gap-3`}>
@@ -63,7 +55,6 @@ export function EffortCellView(props: { readonly level: Level; readonly label: s
   );
 }
 
-/** A dashed tag that marks a claim no study backs yet. */
 export function Hypothesis({ children }: { readonly children: string }) {
   return (
     <span className="rounded-full border border-dashed border-muted-foreground px-2 text-caption text-muted-foreground">
@@ -78,16 +69,13 @@ const span = ([low, high]: readonly [number, number]) => {
   return { left: `${left}%`, width: `${Math.max(trackPercent(high) - left, 1)}%` };
 };
 
-/** The last tick, the promise every ceiling is read against. */
 const PROMISE = TRACK_TICKS[TRACK_TICKS.length - 1];
 
-/** How each tick's label sits on its mark: 1× from the start, the promise ending at its tick. */
 const TICK_ALIGN: Record<(typeof TRACK_TICKS)[number], string> = {
   1: '',
   20: '-translate-x-full',
 };
 
-/** The log track from 1× to past the promise: the claimed range, the measured one under it, and the promise's tick. */
 function Track({ range, promise }: { readonly range: Productivity; readonly promise: string }) {
   return (
     <>
@@ -117,7 +105,6 @@ function Track({ range, promise }: { readonly range: Productivity; readonly prom
   );
 }
 
-/** The Productivity increase row: the claimed range, a hypothesis, on a log track to the 20× promise, and what was measured. */
 export function ProductivityCellView(props: {
   readonly words: Pick<LevelWords, 'productivity' | 'measured'>;
   readonly range: Productivity;
@@ -138,7 +125,6 @@ export function ProductivityCellView(props: {
   );
 }
 
-/** The Adoption row's shared labels: a Level no survey measures, and the leaders' expectation marked on one Level. */
 export interface AdoptionLabels {
   readonly noData: string;
   readonly hypothesis: string;
@@ -147,7 +133,6 @@ export interface AdoptionLabels {
   readonly expectationSource: string;
 }
 
-/** What leaders expect, marked on the Level they expect it at, tagged a hypothesis. */
 function Expectation({ labels }: { readonly labels: AdoptionLabels }) {
   return (
     <p className="mt-1 flex flex-col gap-1 border-t border-dashed border-border pt-2 text-caption">

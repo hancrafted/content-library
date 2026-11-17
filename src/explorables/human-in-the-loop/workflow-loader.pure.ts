@@ -14,15 +14,9 @@ import { fileInMode } from './workflow-mode.pure.ts';
 import { MODES, type WorkflowFile } from './workflow-schema.types.ts';
 import { shapeProblems } from './workflow-shape.pure.ts';
 
-/*
- * The loading seam of the new Workflow schema: one YAML text, written in one language, into a WorkflowFile or into
- * every problem found, one sentence each. The old schema loads through `workflow.pure.ts`, beside this one, until
- * the German files move over. Hand-written validation, no zod (ARCH-001).
- */
-
+// decision: ARCH-001 §1
 export type FileResult = { readonly file: WorkflowFile } | { readonly problems: readonly string[] };
 
-/** Whether a parsed document is written in the new schema: it carries `templates`. */
 export const isNewSchema = (source: string): boolean => {
   try {
     const doc: unknown = parse(source);

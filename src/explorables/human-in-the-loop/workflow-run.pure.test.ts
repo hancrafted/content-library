@@ -16,7 +16,6 @@ const job = (id: string, over: Partial<TaskDef> = {}): TaskDef => ({
   ...over,
 });
 
-/** Plan hands on `plan`; Research repeats per piece (demo cap 2); Report ends the run with a checkbox. */
 const file = (): WorkflowFile => ({
   id: 'demo',
   title: 'Demo',
@@ -45,7 +44,6 @@ const file = (): WorkflowFile => ({
 
 const researchOf = (results: Record<string, string>, demo: boolean) => runOf(file(), { results, demo }).stages[1]!;
 
-/** The Plan stage gains an optional `grade` job; the Report stage is optional too. */
 const withOptional = (): WorkflowFile => {
   const base = file();
   return {

@@ -11,11 +11,8 @@ import { needsInput, shownValue, type Entry } from './context-entries.pure';
 import type { UiWords } from './human-in-the-loop.types';
 import type { SlotState } from './step-kit.types';
 
-/** One-line inputs that fill the prompt; the eye opens one up into a textarea. */
-
 const EXPANDED_ROWS = 8;
 
-/** The label, with an info icon saying where the text lands in the prompt. */
 function FieldLabel({ id, label, info }: Pick<Entry, 'label' | 'info'> & { id: string }) {
   return (
     <div className="flex min-w-0 items-center gap-1">
@@ -58,19 +55,15 @@ function EyeToggle({ full, words, onToggle }: { full: boolean; words: UiWords; o
 }
 
 export interface FieldProps extends Omit<Entry, 'key'> {
-  /** The slot or result key the field fills, as `data-field`, so a test finds it. */
   readonly field: string;
   readonly value: string;
   readonly words: UiWords;
   readonly onValue: (value: string) => void;
-  /** The field is the next thing to fill: framed in the action colour. */
   readonly lead?: boolean;
 }
 
-/** The frame of a field or box the viewer should fill or tick next: one frame for every answer that leads. */
 export const LEAD_FRAME = 'border-(--info) ring-2 ring-(--info)';
 
-/** One line that scrolls sideways while folded, the full text while opened; framed when it leads. */
 const textareaClass = (full: boolean, lead: boolean) =>
   cn('resize-none', !full && 'overflow-hidden whitespace-pre', lead && LEAD_FRAME);
 
@@ -100,7 +93,6 @@ interface FieldsProps {
   readonly entries: readonly Entry[];
   readonly slots: SlotState;
   readonly words: UiWords;
-  /** Frame the fields that still need the viewer's text. */
   readonly lead?: boolean;
 }
 

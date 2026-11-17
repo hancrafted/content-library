@@ -12,7 +12,6 @@ import { LEVELS, type Level } from './scene-frames.pure';
 const SHOWN = 4;
 const STEP_MILLISECONDS = 900;
 
-/** The carousel's first token: while the model works it moves on one every beat, and wraps after the last token. */
 function useOffset(count: number, working: boolean): number {
   const [offset, setOffset] = useState(0);
   useEffect(() => {
@@ -23,7 +22,6 @@ function useOffset(count: number, working: boolean): number {
   return offset;
 }
 
-/** The word "token", glossed on hover and focus. */
 function Gloss({ words }: { readonly words: LlmWords }) {
   return (
     <span className={`${styles.gloss} relative z-10 inline-block`} tabIndex={0}>
@@ -64,7 +62,6 @@ function Typing({ tokens, working }: { readonly tokens: readonly string[]; reado
   );
 }
 
-/** One port per column on the band's top edge, under its wire; lit while a message travels that wire. */
 function Ports({ active }: { readonly active: Readonly<Record<Level, boolean>> }) {
   return (
     <div aria-hidden="true" className="absolute inset-x-0 -top-1.5 hidden grid-cols-4 gap-x-4 @3xl:grid">
@@ -80,7 +77,6 @@ function Ports({ active }: { readonly active: Readonly<Record<Level, boolean>> }
   );
 }
 
-/** The front: the sentence with "token" glossed and the turn hint on the left, the model writing at the bottom right. */
 function Front(props: {
   readonly words: LlmWords;
   readonly hint: string;
@@ -109,15 +105,10 @@ function Front(props: {
   );
 }
 
-/**
- * The model under every level: it predicts the next token; turned over, its definition and source. The parent owns
- * whether it is turned, and which wires are busy.
- */
 export function LlmBand(props: {
   readonly words: LlmWords;
   readonly labels: CardLabels;
   readonly active: Readonly<Record<Level, boolean>>;
-  /** The model writes tokens: a wire is busy, or the mouse is on a column. */
   readonly working: boolean;
   readonly flipped: boolean;
   readonly onFlip: () => void;

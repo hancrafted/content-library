@@ -31,7 +31,6 @@ describe('success cases', () => {
       [0.5, 1],
       [1, 0.4],
     ] as const;
-    // The span runs 1 to 3; the Workflows card shows 2 to 3, the fading half from full strength down.
     const shown = [2, 3] as const;
     const drawn = [
       { at: 0, strength: 1 },

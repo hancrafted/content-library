@@ -4,7 +4,6 @@ import { Bug } from 'lucide-react';
 import type { UiWords } from './human-in-the-loop.types';
 import { ToolButton } from './tool-button.client';
 
-/** The Debug icon toggle: the copy buttons add the footer instruction while it is on. Drawn only where it is available. */
 export function DebugToggle({
   words,
   debug,

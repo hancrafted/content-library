@@ -30,26 +30,20 @@ type Step = TaskModalView['steps'][number];
 export interface PanelProps {
   readonly step: Step;
   readonly task: TaskModalView;
-  /** A do step saves its result under the task's output; a review has none. */
   readonly kind: 'do' | 'review';
   readonly kit: StepKit;
   readonly slots: SlotState;
-  /** The number of this panel's first step: a review continues after the do steps. */
   readonly first: number;
-  /** The key a review's "I checked this result" is written to; only a review step shows the box. */
   readonly checkedAs?: string;
 }
 
-/** Where a do step saves its result: the task's output, or `output_K` for chat K of a fan-out. */
 export const resultKey = (step: Step, task: TaskModalView): string => {
   if (task.output === undefined) return `${task.id}.done`;
   return step.chat === undefined ? task.output : `${task.output}_${step.chat}`;
 };
 
-/** The name a step goes by in the item's lead: its kind and its chat. */
 export const panelKey = (kind: StepKind, step: Step): string => `${kind}#${step.chat ?? 0}`;
 
-/** What leads in this panel, if anything: its context, its Copy prompt, or its answer. */
 function leadOf(kit: StepKit, key: string) {
   const next = kit.lead?.next;
   return next?.key === key ? next.action : null;
@@ -61,17 +55,14 @@ interface ActionsProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly panel: string;
-  /** A blank field of the step this prompt belongs to is still empty: its copies are disabled. */
   readonly blocked?: boolean;
 }
 
-/** The model note of a panel: the job's tier on its do and `then` prompts, Low on its review. */
 function TaskModel({ panel, task, words }: Pick<ActionsProps, 'panel' | 'task'> & { readonly words: UiWords }) {
   const note = noteFor(panel, task.recommendedModel);
   return note ? <ModelNote words={words} tier={note.tier} review={note.review} /> : null;
 }
 
-/** The row: Copy prompt joined to the pencil, the AI chats, and at the right the copy of the explaining request. */
 function ActionRow({ step, task, kit, slots, panel, blocked, edit, editing }: RowProps) {
   const { words, debug } = kit;
   const plain = promptText(partsOf(step), slots.values, roundedEdit(edit, step));
@@ -108,7 +99,6 @@ interface RowProps extends ActionsProps {
   readonly editing: ReturnType<typeof useOpen>;
 }
 
-/** The row of buttons, and below it the editor while it is open. */
 function Actions(props: ActionsProps) {
   const { step, task, kit } = props;
   const editing = useOpen();
@@ -157,19 +147,16 @@ function Result({ name, kit, slots, final, doneLabel, lead }: ResultProps) {
   );
 }
 
-/** How many context steps a prompt has: one when it takes any input, none otherwise. */
 export function contextCount(step: Step, task: TaskModalView, kit: StepKit): number {
   const { own, earlier } = contextEntries(partsOf(step), task.previous, kit.words);
   return own.length + earlier.length > 0 ? 1 : 0;
 }
 
-/** Every input of a step's prompt, plain ones and earlier results alike. */
 export function entriesOfStep(step: Step, task: TaskModalView, kit: StepKit): Entry[] {
   const { own, earlier } = contextEntries(partsOf(step), task.previous, kit.words);
   return [...own, ...earlier];
 }
 
-/** Step 1, Provide context: folded while every field holds a value or a sample. */
 function ContextStep({ step, task, kit, slots, first }: PanelProps) {
   const { words } = kit;
   const { own, earlier } = contextEntries(partsOf(step), task.previous, words);
@@ -187,7 +174,6 @@ function ContextStep({ step, task, kit, slots, first }: PanelProps) {
   );
 }
 
-/** The second prompt of a job that calls a second skill, copied in the same session, so under the same model tier. */
 function ThenStep({ then, panel, blocked, ...rest }: ActionsProps & { readonly then: Step }) {
   const { kit } = rest;
   return (

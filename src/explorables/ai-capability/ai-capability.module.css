@@ -1,8 +1,4 @@
-/*
- * The levels timeline's motion and its one colour variable. Each column sets `--tone` from a global token, so its
- * card, scene, wire and dots share one colour; the classes in the parts read it as `bg-(--tone)`. No raw colours: every
- * value is a global token (FE-011). Under reduced motion nothing moves and every part shows its final frame.
- */
+/* decision: FE-011 §4 */
 .prompting {
   --tone: var(--info);
 }
@@ -89,7 +85,6 @@
   }
 }
 
-/* An added row blends in where it is switched on. */
 .blend {
   animation: blend 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -100,7 +95,6 @@
   }
 }
 
-/* The Productivity increase track: the claimed range in the Level's colour, fading out past the factory's open end. */
 .claimed {
   background: var(--tone);
 }
@@ -108,7 +102,6 @@
   background: linear-gradient(90deg, var(--tone), var(--muted));
 }
 
-/* The rail behind the dots, from the first level's colour to the last: its middle on the dots' centres (a dot is 1rem). */
 .rail::before {
   content: '';
   position: absolute;
@@ -120,7 +113,6 @@
   background: linear-gradient(90deg, var(--info), var(--brand-accent) 65%, var(--muted-foreground));
 }
 
-/* A flip card: both faces in one grid cell, the back turned away until the card flips. */
 .flip {
   perspective: 1200px;
 }
@@ -199,7 +191,6 @@
   }
 }
 
-/* The factory: one request slides in, one result slides out, smoke rises while it works. */
 .enter {
   animation: feed 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
@@ -253,7 +244,6 @@
   }
 }
 
-/* The next token the model is about to pick, blinking. */
 .next {
   animation: blink 1s steps(2) infinite;
 }
@@ -263,7 +253,6 @@
   }
 }
 
-/* The token gloss: shown on hover and focus. */
 .gloss .tip {
   opacity: 0;
   pointer-events: none;
@@ -278,7 +267,6 @@
   transform: translate(-50%, 0);
 }
 
-/* A workflow agent's loading bar: it fills while the agent waits on the model, one round trip long. */
 .load {
   transform-box: fill-box;
   transform-origin: left;
@@ -309,14 +297,9 @@
   }
 }
 
-/*
- * The toolbar, in the context window's look (context.module.css `.top` and `.show`), copied rather than shared: one
- * Explorable never imports another (FE-007). The copies drift until a chip group is promoted to core-components.
- * Narrow, it spans the width and its chips share it; from 48rem it fits its content.
- */
+/* decision: FE-007 §2 */
 .toolbar {
   position: sticky;
-  /* Under the floating site header's band, over the cards that scroll beneath. */
   top: calc(var(--header-block) + 0.25rem);
   z-index: 20;
   box-shadow: 0 0.35rem 0.6rem -0.4rem color-mix(in oklab, var(--foreground) 25%, transparent);
@@ -425,7 +408,6 @@
 .layerRow {
   gap: 0.25rem;
 }
-/* One lane per item: the eight tracks again, so the card sits on its half-Levels and its panel spans the row. */
 .lanes {
   display: flex;
   flex-direction: column;
@@ -481,7 +463,6 @@
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
-/* The disclosure caret points down while the card is open, right while it is closed. */
 .caret {
   flex: none;
   transition: transform 150ms ease-out;
@@ -489,7 +470,6 @@
 .layerCard[aria-expanded='false'] .caret {
   transform: rotate(-90deg);
 }
-/* A card too narrow for its drawing beside its words stacks them, and drops its one-liner. */
 .cardBody {
   display: flex;
   flex: 1 1 auto;

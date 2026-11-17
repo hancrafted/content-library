@@ -17,7 +17,6 @@ import type { DemoProps } from './progress-controls.types';
 
 export interface Props extends DemoProps {
   readonly words: UiWords;
-  /** Whether the confirmation is open; the part that holds the controls holds it. */
   readonly confirming: boolean;
   readonly onConfirming: (open: boolean) => void;
 }
@@ -30,7 +29,6 @@ function DemoSwitch({ words, demo, onDemo }: Props) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        {/* A span carries the tooltip: a disabled button fires no pointer events. */}
         <span tabIndex={locked ? 0 : -1} className="inline-flex">
           <button
             type="button"
@@ -76,17 +74,14 @@ function ResetButton({ words, demo, confirming, onConfirming }: Props) {
   );
 }
 
-/** The demo switch, if the Preset shows it: a control of the toolbar. */
 export function DemoToggle(props: Props) {
   return props.demo.show ? <DemoSwitch {...props} /> : null;
 }
 
-/** Reset, if the Preset shows it: set apart beside the toolbar, never one of its controls. */
 export function Reset(props: Props) {
   return props.demo.resetShow ? <ResetButton {...props} /> : null;
 }
 
-/** The confirmation state of a part that holds the controls, with the props the controls and the question share. */
 export function useDemoProps(words: UiWords, props: DemoProps): Props {
   const [confirming, onConfirming] = useState(false);
   return { words, ...props, confirming, onConfirming };
@@ -118,7 +113,6 @@ function ConfirmButtons({ words, onDownloadRun, onReset, onConfirming }: Props) 
   );
 }
 
-/** The question under the controls: download first, reset now, or cancel. Closes itself after either choice but Download. */
 export function ResetConfirm(props: Props) {
   const { words, demo, confirming } = props;
   if (!confirming || !demo.resetShow) return null;

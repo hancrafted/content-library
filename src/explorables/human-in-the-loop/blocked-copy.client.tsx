@@ -8,14 +8,12 @@ import type { UiWords } from './human-in-the-loop.types';
 interface BlockedCopyProps {
   readonly words: UiWords;
   readonly label: string;
-  /** A blank field of the step still waits for the viewer's text: a copy would carry a raw marker, so the button is disabled. */
   readonly blocked: boolean;
   readonly lead?: boolean;
   readonly edited?: boolean;
   readonly onCopy: () => Promise<boolean>;
 }
 
-/** A copy button that stays disabled until the blank field is typed in, and says why in a tooltip and to a screen reader. */
 export function BlockedCopy({ words, label, blocked, lead = false, edited, onCopy }: BlockedCopyProps) {
   const id = useId();
   const button = (

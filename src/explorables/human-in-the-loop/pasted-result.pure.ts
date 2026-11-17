@@ -7,14 +7,12 @@
 const LEAD = /^\s*(?:Result|Ergebnis):[ \t]*\r?\n/i;
 const OPEN = /^(`{3,})[^\n`]*\r?\n/;
 
-/** A single token that looks like a file path: it holds a slash or backslash, or ends in a file extension such as `.md`. */
 const PATH_LINE = /^(?=\S+$)(?:\S*[/\\]\S*|\S*\.[A-Za-z0-9]{1,5})$/;
 
 const looksLikePath = (line: string) => PATH_LINE.test(line.trim());
 
 const isFramed = (rest: readonly string[]) => rest.length === 0 || (rest.length === 1 && looksLikePath(rest[0] ?? ''));
 
-/** The index of the last bare fence line at least `length` backticks long, or -1. */
 function lastClosing(lines: readonly string[], length: number): number {
   const isClosing = (line: string) => /^`+$/.test(line.trim()) && line.trim().length >= length;
   return lines.map(isClosing).lastIndexOf(true);

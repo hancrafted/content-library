@@ -18,16 +18,6 @@ import { hasPicker, Picker } from './use-case-picker.client';
 import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
-/*
- * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select whose
- * options carry a muted description), a separator, then the controls in order: view (Stages · Jobs), the `</>` CLI
- * toggle, the Demo mode switch, the Debug toggle where it is available, save and load progress, download and upload of
- * the Workflow file, each icon with a tooltip. Save progress and Reset show once the run has work; Load always does.
- * Reset sits apart after the pill, as in the popover. The control registry says what shows; a readonly Preset also
- * drops the `</>` toggle, Demo mode, Debug and Reset. Under the pill sit Reset's confirmation and the notes. The parent
- * validates an upload; this part only reads the chosen file.
- */
-
 const UPLOAD_BUTTON = 'relative size-9 rounded-full focus-within:ring-[3px] focus-within:ring-ring/50';
 
 interface FileButtonProps {
@@ -38,7 +28,6 @@ interface FileButtonProps {
   readonly children: ReactNode;
 }
 
-/** An icon button that opens the file chooser and hands the text of the chosen file on. */
 function FileButton({ control, label, describedBy, onText, children }: FileButtonProps) {
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -110,7 +99,6 @@ function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; reado
   );
 }
 
-/** The Workflow file's own download and upload, after the progress file's. */
 function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
   const { controls, words } = bar;
   return (
@@ -134,7 +122,6 @@ function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; r
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: view, `</>`, Demo mode, Debug, progress save and load, download, upload. */
 function Icons({
   bar,
   describedBy,
@@ -164,7 +151,6 @@ const hasIcons = (bar: ToolbarProps) =>
   ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
   (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)));
 
-/** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
 function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
   return (
     <>

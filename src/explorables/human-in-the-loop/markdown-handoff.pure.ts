@@ -11,10 +11,8 @@ export interface MarkdownHandoff {
 
 const FRONT = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
 
-/** Whether the text opens with a YAML front matter block. */
 export const hasFrontMatter = (source: string): boolean => FRONT.test(source);
 
-/** The H1 and H2 headings of a markdown body; headings inside code fences do not count. */
 function headings(body: string): { h1: string[]; h2: string[] } {
   const found = { h1: [] as string[], h2: [] as string[] };
   let fenced = false;
@@ -27,7 +25,6 @@ function headings(body: string): { h1: string[]; h2: string[] } {
   return found;
 }
 
-/** The H1 and H2 headings of a markdown handoff. */
 export function readTemplate(source: string): MarkdownHandoff {
   const { h1, h2 } = headings(source.replace(FRONT, ''));
   return { h1: h1[0], h2 };
@@ -35,7 +32,6 @@ export function readTemplate(source: string): MarkdownHandoff {
 
 const isPlaceholder = (heading: string): boolean => /^<.+>$/.test(heading);
 
-/** Whether the sample's H2s follow the template's: literals in order, a placeholder taking one or more. */
 function sectionsMatch(template: readonly string[], sample: readonly string[]): boolean {
   const [head, ...rest] = template;
   if (head === undefined) return sample.length === 0;
@@ -45,7 +41,6 @@ function sectionsMatch(template: readonly string[], sample: readonly string[]): 
   );
 }
 
-/** Every way `source` departs from `template`, one sentence each; empty when it conforms. */
 export function handoffProblems(source: string, template: MarkdownHandoff): string[] {
   const read = readTemplate(source);
   const problems: string[] = [];

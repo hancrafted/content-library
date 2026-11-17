@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SCENES, finalFrame, onWire, type Frame } from './scene-frames.pure';
 
-/** The frames that send a message down to the model, and the dots each sends. */
 function downs(frames: readonly Frame[]): number[] {
   return frames.flatMap(({ dot }) => (dot?.dir === 'down' ? [dot.count] : []));
 }

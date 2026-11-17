@@ -1,18 +1,11 @@
 import type { Stage } from './workflow.types';
 
-/*
- * The geometry of the hairlines between stages, generated for N branches: a 24 wide box, measured from the top of the
- * stage's lane, the branches 60 apart.
- */
-
-/** Rounds drawn per repeated stage, by stage id. */
 export type Rounds = Readonly<Record<string, number>>;
 
 export type Connector = { readonly kind: 'straight' } | { readonly kind: 'out' | 'in'; readonly branches: number };
 
 export interface Fan {
   readonly height: number;
-  /** The y of each branch end, top to bottom. */
   readonly ys: readonly number[];
   readonly lines: string;
   readonly heads: string;
@@ -27,13 +20,10 @@ const WIDTH = 20;
  * stage card: the lane's padding (12), the card's border and padding (13) and half a title line (body, 25.6 / 2).
  */
 export const TITLE_Y = 38;
-/** The first round's card under a repeated stage's name: the lane's padding (12), the name's row (50), half a card (24). */
 const FIRST_BRANCH_Y = 86;
 
-/** The cards a stage draws side by side: one per round of a repeated stage, else one. */
 const widest = (stage: Stage, rounds: Rounds): number => Math.max(1, rounds[stage.id] ?? 1);
 
-/** The hairline into `stage`: out to its chats, back in from the previous stage's chats, else straight. */
 export function connectorInto(previous: Stage | undefined, stage: Stage, rounds: Rounds): Connector {
   const into = widest(stage, rounds);
   if (into > 1) return { kind: 'out', branches: into };
@@ -41,10 +31,6 @@ export function connectorInto(previous: Stage | undefined, stage: Stage, rounds:
   return from > 1 ? { kind: 'in', branches: from } : { kind: 'straight' };
 }
 
-/**
- * A fan of `branches` lines between the title line of a single stage card and the round cards of a repeated stage:
- * out from the title line to each round (`out`), or from each round back to the title line (`in`).
- */
 export function fanGeometry(direction: 'out' | 'in', branches: number): Fan {
   const join = TITLE_Y;
   const ys = Array.from({ length: branches }, (_, i) => FIRST_BRANCH_Y + i * PITCH);

@@ -16,7 +16,6 @@ import type { ModelTier } from './workflow-schema.types';
 interface ModelNoteProps {
   readonly words: ModelWords;
   readonly tier: ModelTier;
-  /** The note of a review step: its tooltip says why Low fits this check only. */
   readonly review?: boolean;
 }
 

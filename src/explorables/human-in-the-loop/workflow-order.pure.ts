@@ -5,7 +5,6 @@ import type { Job } from './workflow.types';
  * ids and cycles, so here a bad `needs` only costs order, never a job: each job is drawn once.
  */
 
-/** The jobs with each placed after the jobs it needs; jobs that need nothing of each other keep their file order. */
 export function orderedJobs(jobs: readonly Job[]): Job[] {
   const byId = new Map(jobs.map((each) => [each.id, each]));
   const placed = new Set<string>();

@@ -18,38 +18,29 @@ export interface LevelColumnProps {
   readonly scenes: SceneWords;
   readonly labels: CardLabels;
   readonly frame: Frame;
-  /** This column is the lit one. */
   readonly on: boolean;
-  /** Another column is lit, so this one steps back. */
   readonly dimmed: boolean;
-  /** Its scene is running, not resting on its last frame. */
   readonly moving: boolean;
   readonly flipped: boolean;
   readonly onLight: (level: Level | null) => void;
   readonly onFlip: (level: Level) => void;
   readonly target?: TargetProps;
   readonly marker?: ReactNode;
-  /** A Slide's marker beside the source line on the card's back. */
   readonly sourceMarker?: ReactNode;
-  /** The rows the toolbar adds, in stacking order, and what they need. */
   readonly shown: readonly Row[];
   readonly productivity: Productivity;
   readonly rowLabels: RowLabels;
-  /** The two layer rows, their slices drawn in this Level's card while the container is narrow. */
   readonly layers: Readonly<Record<LayerRow, LayerRowProps>>;
 }
 
-/** The labels the added rows share across the four Levels. */
 export interface RowLabels extends AdoptionLabels {
   readonly effort: string;
   readonly measured: string;
   readonly promise: string;
 }
 
-/** The Level whose Adoption cell carries what leaders expect. */
 const EXPECTED: Level = 'factory';
 
-/** One added row of this Level, by its key, handed only what the rows read. */
 function AddedRow(
   props: { readonly row: Exclude<Row, 'explain'> } & Pick<
     LevelColumnProps,
@@ -65,10 +56,8 @@ function AddedRow(
   return <LayerSlices {...props.layers[row]} level={level} />;
 }
 
-/** What an added row needs beyond the Level's words. */
 const pick = ({ productivity, layers }: LevelColumnProps) => ({ productivity, layers });
 
-/** Hover and focus light the column; leaving it puts the light out. */
 const lighting = (level: Level, onLight: LevelColumnProps['onLight']) => ({
   onPointerEnter: () => onLight(level),
   onPointerLeave: () => onLight(null),
@@ -76,7 +65,6 @@ const lighting = (level: Level, onLight: LevelColumnProps['onLight']) => ({
   onBlur: () => onLight(null),
 });
 
-/** The column's dot on the rail, centred over it, and its years. */
 function RailStop({ year }: { readonly year: string }) {
   return (
     <div className="flex flex-col items-center gap-1">
@@ -89,7 +77,6 @@ function RailStop({ year }: { readonly year: string }) {
   );
 }
 
-/** The column's card: the front names the stage and lifts when lit, the back gives its definition. */
 function Card(props: LevelColumnProps) {
   const { level, words } = props;
   return (

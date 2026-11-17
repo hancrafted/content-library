@@ -11,7 +11,6 @@ const task = (id: string): TaskDef =>
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
   joinPrompt({ sections: prompt.sections ?? [], slots: prompt.slots ?? [] }, {});
 const examples = (id: string): readonly string[] => [task(id).details.example ?? ''].flat();
-/** The repeated job with a review of each round, so the round's own review field can be tested; the fixture reviews only `ask`. */
 const reviewedLook = (): TaskDef => {
   const look = task('look');
   return {
@@ -26,7 +25,6 @@ const reviewedLook = (): TaskDef => {
     },
   };
 };
-/** The ranking job with a review of every note, for a review slot that takes several entries. */
 const reviewedRank = (): TaskDef => {
   const rank = task('rank');
   const note = rank.slots.find((slot) => slot.id === 'note');

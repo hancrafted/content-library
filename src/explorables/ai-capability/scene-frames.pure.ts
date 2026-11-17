@@ -4,45 +4,34 @@
  * travels the wire to the model (`down`) or back (`up`); a message names the word it shows by key.
  */
 
-/** The four levels, left to right: each owns one column, one scene and one wire to the model. */
 export const LEVELS = ['prompting', 'agents', 'workflows', 'factory'] as const;
 export type Level = (typeof LEVELS)[number];
 
-/** Who a chat line comes from: the person, the model, or a tool the agent reached for. */
 export interface Message {
   readonly from: 'me' | 'ai' | 'tool';
-  /** The word key the line shows, under the scene's words. */
   readonly key: string;
 }
 
-/** The agents of the workflow's graph: one, a fan-out of three, one. */
 export const NODES = ['a', 'b1', 'b2', 'b3', 'c'] as const;
 export type Node = (typeof NODES)[number];
 export type NodeState = 'idle' | 'active' | 'done';
 
-/** A request enters the factory, its message goes to the model and back, and it leaves as a result. */
 export type FactoryStep = 'enter' | 'down' | 'up' | 'leave';
 
-/** One factory request in flight: its id, its lane on the wire and its step now. */
 export interface Job {
   readonly id: number;
   readonly lane: number;
   readonly step: FactoryStep;
 }
 
-/** How many round trips an agent makes: one for the request, one for each tool it calls. */
 export const AGENT_LOOPS = 3;
 
 export interface Frame {
   readonly messages: readonly Message[];
-  /** A message on its way along the wire, and how many travel side by side. */
   readonly dot?: { readonly dir: 'down' | 'up'; readonly count: number };
-  /** The agent's loop counter: the round it is in, `done` at the end. */
   readonly loop?: number | 'done';
   readonly nodes?: Readonly<Record<Node, NodeState>>;
-  /** The factory's chimney smokes. */
   readonly running?: boolean;
-  /** The factory's requests in flight, each on its own lane of the wire. */
   readonly jobs?: readonly Job[];
   /** How long the frame holds, in ms. */
   readonly ms: number;
@@ -56,7 +45,6 @@ const me = (key: string): Message => ({ from: 'me', key });
 const ai = (key: string): Message => ({ from: 'ai', key });
 const tool = (key: string): Message => ({ from: 'tool', key });
 
-/** One round trip to the model under the messages shown so far: down, then up. */
 function roundTrip(messages: readonly Message[], extra: Partial<Frame> = {}, count = 1): Frame[] {
   return [
     { ...extra, messages, dot: { dir: 'down', count }, ms: TRAVEL },
@@ -78,7 +66,6 @@ function agents(): Frame[] {
   const asked = [me('agentPrompt')];
   const firstTool = [...asked, tool('tool1')];
   const secondTool = [...firstTool, tool('tool2')];
-  // Loop 1 sends the request and the model asks for a tool; loops 2 and 3 send each tool's result back.
   return [
     { messages: [], ms: READ },
     { messages: asked, ms: READ },
@@ -91,7 +78,6 @@ function agents(): Frame[] {
   ];
 }
 
-/** The graph with `active` and `done` agents set, the rest idle. */
 function graph(active: readonly Node[], done: readonly Node[]): Record<Node, NodeState> {
   const state = (node: Node): NodeState => (done.includes(node) ? 'done' : active.includes(node) ? 'active' : 'idle');
   return Object.fromEntries(NODES.map((node) => [node, state(node)])) as Record<Node, NodeState>;
@@ -128,7 +114,6 @@ const STEPS: readonly (readonly [FactoryStep, number])[] = [
   ['leave', 4],
 ];
 const LIFE = STEPS.reduce((sum, [, ticks]) => sum + ticks, 0);
-/** At most five requests in flight at once, one lane each. */
 const LANES = 5;
 const ARRIVING = 60;
 
@@ -147,16 +132,11 @@ interface Started {
   readonly start: number;
 }
 
-/** The request arriving at `tick`, if one is due and a lane is free. */
 function arrival(live: readonly Started[], id: number, tick: number): Started | null {
   const lane = Array.from({ length: LANES }, (_, each) => each).find((each) => !live.some((job) => job.lane === each));
   return lane === undefined ? null : { id, lane, start: tick };
 }
 
-/**
- * The factory: requests arrive at uneven times, up to five at once. Each enters, its message goes to the model and back,
- * and only then does it leave as a result. Its inside is never shown; still once played.
- */
 function factory(): Frame[] {
   const random = seeded(7);
   const frames: Frame[] = [];
@@ -184,7 +164,6 @@ export const SCENES: Readonly<Record<Level, readonly Frame[]>> = {
   factory: factory(),
 };
 
-/** What a scene shows once played through: its at-rest picture under reduced motion and in the static export. */
 export function finalFrame(level: Level): Frame {
   const frames = SCENES[level];
   const last = frames[frames.length - 1];
@@ -192,7 +171,6 @@ export function finalFrame(level: Level): Frame {
   return last;
 }
 
-/** A message on a wire: its key, its direction, its lane left or right of the middle and when it leaves. */
 export interface WireDot {
   readonly key: string;
   readonly dir: 'down' | 'up';
@@ -200,10 +178,8 @@ export interface WireDot {
   readonly delay: number;
 }
 
-/** Side by side, each message leaves a beat after the one before. */
 const STAGGER_MILLISECONDS = 100;
 
-/** The messages on a scene's wire this frame: a batch side by side, or each factory request on its own lane. */
 export function onWire(frame: Frame): WireDot[] {
   const { dot, jobs = [] } = frame;
   const batch = dot

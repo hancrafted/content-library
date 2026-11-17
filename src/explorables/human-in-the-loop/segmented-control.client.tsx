@@ -5,9 +5,7 @@ import { cn } from '@/shared/lib/utils';
 import type { SegmentOption } from './segment-option.types';
 
 interface SegmentedControlProps<T extends string> {
-  /** The control's name: its `data-control`, and the `data-<name>-option` each segment carries. */
   readonly name: string;
-  /** The accessible name of the group. */
   readonly label: string;
   readonly options: readonly SegmentOption<T>[];
   readonly value: T;
@@ -39,7 +37,6 @@ function Segment<T extends string>(props: { name: string; option: SegmentOption<
   );
 }
 
-/** A pill of segments, one pressed at a time: the one control the view and the Chat · CLI choice are both drawn with. */
 export function SegmentedControl<T extends string>({ name, label, options, value, onValue }: SegmentedControlProps<T>) {
   return (
     <div

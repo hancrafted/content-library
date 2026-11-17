@@ -1,12 +1,7 @@
 import { CHAT_MARK_NAMES } from '../../shared/components/core-components/chat-icons/chat-marks.pure.ts';
 import { MODEL_TIERS, MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
-/*
- * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
- * or missing, one sentence each. Hand-written, no zod (ARCH-001). Meaning (ids, markers, samples) is checked after
- * this, by the loader, on a file whose shape already holds.
- */
-
+// decision: ARCH-001 §1
 type Spec =
   | { readonly t: 'str' | 'int' | 'bool' | 'strs' | 'https' }
   | { readonly t: 'nullOr'; readonly of: Spec }
@@ -18,7 +13,6 @@ type Spec =
 const str: Spec = { t: 'str' };
 const int: Spec = { t: 'int' };
 const bool: Spec = { t: 'bool' };
-/** Text, or a non-empty list of texts. */
 const strs: Spec = { t: 'strs' };
 const enumOf = (of: readonly string[]): Spec => ({ t: 'enum', of });
 const list = (of: Spec, min = 0): Spec => ({ t: 'list', of, min });
@@ -95,7 +89,6 @@ const stage = obj(
   ['summary', 'foreach', 'moves', 'gate', 'only', 'card', 'optional'],
 );
 
-/** The Spec of a whole Workflow file. */
 export const FILE_SPEC: Spec = obj(
   {
     id: str,
@@ -189,5 +182,4 @@ function walk(value: unknown, spec: Spec, path: string): string[] {
   return (composite[spec.t] ?? scalarProblems)(value, spec, path);
 }
 
-/** Every field of `value` that does not fit the Workflow file shape. */
 export const shapeProblems = (value: unknown): string[] => walk(value, FILE_SPEC, '');

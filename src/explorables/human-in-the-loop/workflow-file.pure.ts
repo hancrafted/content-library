@@ -1,11 +1,8 @@
 import { stringify } from 'yaml';
 import type { Workflow } from './workflow.types';
 
-/* What the download control hands out: the Workflow as YAML under a name, loadable again by the upload control. */
-
 const WORKFLOW_FILE_TYPE = 'application/x-yaml';
 
-/** The file a download saves: the Workflow's id as a safe name, and its YAML text. */
 export function workflowFile(workflow: Workflow): {
   readonly name: string;
   readonly text: string;

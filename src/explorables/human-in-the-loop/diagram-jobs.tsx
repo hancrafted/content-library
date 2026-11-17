@@ -99,7 +99,6 @@ function StageCard({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: Sta
 const runOfStage = (ctx: Context, stage: Stage): StageRun | undefined =>
   ctx.run?.stages.find((each) => each.id === stage.id);
 
-/** The job cards of one list: a stage's jobs, or one round's. `states` is what the run says; none while the run has no work. */
 function Cards(props: {
   ctx: Context;
   stage: Stage;
@@ -130,7 +129,6 @@ function Cards(props: {
 const statesOf = (jobs: readonly { id: string; state: JobState }[]) =>
   new Map(jobs.map((each) => [each.id, each.state]));
 
-/** The viewer's rounds, one block each, titled by the H3 they work on. */
 function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun }) {
   return (
     <ol className="flex flex-col gap-3">
@@ -146,11 +144,9 @@ function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun
   );
 }
 
-/** How many rounds the bracket names: the run's, else the layout's count, else the stage's demo cap. */
 const roundCount = (ctx: Context, stage: Stage, held: StageRun | undefined): number =>
   held?.rounds.length ?? ctx.rounds[stage.id] ?? stage.foreach?.demo ?? 0;
 
-/** The bracket's words: "× each epic (2)", with the stage's own word for its item, else "round". */
 const bracketLabel = (ctx: Context, stage: Stage, count: number): string =>
   fillTemplate(ctx.words.repeats, { item: stage.foreach?.item ?? ctx.words.round, n: count });
 
@@ -166,7 +162,6 @@ function Jobs({ ctx, stage }: { ctx: Context; stage: Stage }) {
   );
 }
 
-/** The dashed bracket round a repeated stage's jobs, labelled with how many rounds it runs. */
 function Bracket({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div data-bracket="" className="mt-2 rounded-lg border border-dashed border-border p-2 pt-0">

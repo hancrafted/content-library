@@ -5,26 +5,18 @@ import type { AiCapabilityWords, LayerItemId, LayerRow, LayerSpan } from './ai-c
 import type { LayerRowProps, PlacedSpan } from './layer-row.client';
 import { spanRange } from './spans.pure';
 
-/*
- * The layer rows' state, held by the timeline's parent (FE-012 §4.1): which cards are open, and each row's slice of it,
- * the same object while nothing in it changes, so a memoised card redraws only when its `open` flips.
- */
-
+// decision: FE-012 §4.1
 export const LAYER_ROWS: readonly LayerRow[] = ['disciplines', 'oversight'];
 
-/** A layer row's items with their spans on the four Levels. */
 const place = (spans: readonly LayerSpan[]): readonly PlacedSpan[] =>
   spans.map((span) => Object.assign({}, span, { range: spanRange(span.from, span.to) }));
 
-/** The layer row whose placement no study backs yet. */
 const HYPOTHESIS: LayerRow = 'oversight';
 
 type LayerLight = ReturnType<typeof useLayerLight>;
 type Placed = Readonly<Record<LayerRow, readonly PlacedSpan[]>>;
-/** What every row of the two shares: the words, the labels and the callback. */
 type Shared = Pick<LayerRowProps, 'labels' | 'onToggle'> & { readonly words: AiCapabilityWords };
 
-/** The layer rows' disclosure: which cards are open, each on its own. */
 export function useLayerLight() {
   const [open, setOpen] = useState<readonly LayerItemId[]>([]);
   const onToggle = useCallback(
@@ -34,7 +26,6 @@ export function useLayerLight() {
   return useMemo(() => ({ open, onToggle }), [open, onToggle]);
 }
 
-/** One layer row's slice of the state: its spans, its words, which cards are open, and the callback. */
 const rowSlice = (
   row: LayerRow,
   { shared, placed, layer }: { readonly shared: Shared; readonly placed: Placed; readonly layer: LayerLight },
@@ -48,7 +39,6 @@ const rowSlice = (
   hypothesis: row === HYPOTHESIS ? shared.words.hypothesis : null,
 });
 
-/** Each layer row's slice of the state, the same object while nothing in it changes. */
 export function useLayerRows(
   layers: Readonly<Record<LayerRow, readonly LayerSpan[]>>,
   words: AiCapabilityWords,

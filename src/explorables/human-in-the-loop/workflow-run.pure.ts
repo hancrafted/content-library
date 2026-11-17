@@ -16,44 +16,33 @@ import type { ForeachDef, StageDef, TaskDef, WorkflowFile } from './workflow-sch
 
 export type Results = Readonly<Record<string, string>>;
 
-/** `open`: nothing pasted; `done`: its result is in; `checked`: its review was passed too. */
 export type JobState = 'open' | 'done' | 'checked';
 
 export interface RunInput {
   readonly results: Results;
-  /** Demo mode takes the first N rounds of a repeated stage; full mode takes every H3 pasted. */
   readonly demo: boolean;
 }
 
 export interface JobRun {
   readonly id: string;
-  /** Where the job's result is kept in `results`. */
   readonly key: string;
   readonly state: JobState;
 }
 
-/** One round of a repeated stage: the H3 it works on, and the stage's jobs run on it. */
 export interface RoundRun {
-  /** 1-based; the `k` of `stage.job#k`. */
   readonly number: number;
   readonly title: string;
-  /** The H3 section, as `{{item}}` fills it. */
   readonly item: string;
   readonly jobs: readonly JobRun[];
-  /** The least advanced state of its jobs. */
   readonly state: JobState;
 }
 
 export interface StageRun {
   readonly id: string;
-  /** The jobs of a stage that does not repeat; empty for a repeated stage, whose jobs are in its rounds. */
   readonly jobs: readonly JobRun[];
-  /** The rounds of a repeated stage; empty otherwise. */
   readonly rounds: readonly RoundRun[];
-  /** Jobs (in every round) whose result is in, out of every required job to do: "3/5". Optional jobs are not counted. */
   readonly done: number;
   readonly total: number;
-  /** The least advanced state of every required job of the stage, rounds included: `open` where it has none. */
   readonly state: JobState;
 }
 
@@ -63,15 +52,12 @@ export interface Run {
   readonly canChangeDemo: boolean;
 }
 
-/** The key of a job's result, or of round `round` of it. */
 export const resultKey = (stageId: string, jobId: string, round?: number): string =>
   `${stageId}.${jobId}${round === undefined ? '' : `#${round}`}`;
 
-/** The key that marks the job's review passed. */
 export const checkedKey = (stageId: string, jobId: string, round?: number): string =>
   `${stageId}.${jobId}.checked${round === undefined ? '' : `#${round}`}`;
 
-/** Whether the viewer put any text under `key`: the one test of "this is set" for results and checked marks alike. */
 export const filled = (results: Results, key: string): boolean => (results[key] ?? '').trim() !== '';
 
 /**
@@ -96,18 +82,15 @@ const RANK: Record<JobState, number> = { open: 0, done: 1, checked: 2 };
 const leastOf = (jobs: readonly JobRun[]): JobState =>
   jobs.reduce<JobState>((least, each) => (RANK[each.state] < RANK[least] ? each.state : least), 'checked');
 
-/** The job that hands on `output`, with the stage it belongs to. */
 function producerOf(file: WorkflowFile, output: string) {
   return file.stages
     .flatMap((stage) => stage.jobs.map((task) => ({ stage, task })))
     .find(({ task }) => task.output === output);
 }
 
-/** The items of the producing job's example, none when it has one per round instead of one text. */
 const exampleItems = (task: TaskDef, slug: string): Item[] =>
   typeof task.details.example === 'string' ? itemsUnder(task.details.example, slug) : [];
 
-/** The items a repeated stage takes from the result it repeats over, or from that job's example before any is pasted. */
 function itemsOf(file: WorkflowFile, foreach: ForeachDef, input: RunInput): Item[] {
   const over = overOf(foreach);
   const owner = over && producerOf(file, over.output);
@@ -142,25 +125,17 @@ function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRu
   return { id: stage.id, jobs, rounds, done, total: counted.length, state };
 }
 
-/** The rounds each repeated stage plays now, by stage id, as `workflowView` takes them. */
 export const roundsOf = (run: Run): Record<string, number> =>
   Object.fromEntries(
     run.stages.filter((stage) => stage.rounds.length > 0).map((stage) => [stage.id, stage.rounds.length]),
   );
 
-/** The run of a Workflow file: every stage's jobs, rounds and count, and whether demo mode may still change. */
 export function runOf(file: WorkflowFile, input: RunInput): Run {
   return {
     stages: file.stages.map((stage) => stageRun(file, stage, input)),
     canChangeDemo: !Object.keys(input.results).some((key) => filled(input.results, key)),
   };
 }
-
-/*
- * The prompts and the context fields name values by marker: `{{plan}}`, `{{look_2}}` (round 2 of the repeated job
- * `look`), `{{final.done}}`. The run keeps them by result key. These two translate a whole map either way; a value
- * that names no job's result (a free input, a review's own field) passes through under its own name.
- */
 
 interface Binding {
   readonly base: string;
@@ -185,7 +160,6 @@ function markerOf(bindings: readonly Binding[], key: string): string {
   return round ? key : found.marker;
 }
 
-/** The bare marker is the job's one result: of a plain job, or of a repeated job's single CLI orchestrator. */
 function keyOf(bindings: readonly Binding[], marker: string): string {
   const plain = bindings.find((each) => each.marker === marker);
   if (plain) return plain.base;
@@ -194,13 +168,11 @@ function keyOf(bindings: readonly Binding[], marker: string): string {
   return repeated ? `${repeated.base}#${round?.[2]}` : marker;
 }
 
-/** The results as the prompts' markers name them. */
 export function markerValuesOf(file: WorkflowFile, results: Results): Results {
   const bindings = bindingsOf(file);
   return Object.fromEntries(Object.entries(results).map(([key, value]) => [markerOf(bindings, key), value]));
 }
 
-/** Values by marker name back to the results map, keyed by result key. */
 export function resultsOf(file: WorkflowFile, values: Results): Results {
   const bindings = bindingsOf(file);
   return Object.fromEntries(Object.entries(values).map(([marker, value]) => [keyOf(bindings, marker), value]));

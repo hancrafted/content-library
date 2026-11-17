@@ -9,7 +9,6 @@ const section = { heading: 'Task', purpose: 'task', text: 'Do it.' };
 const details = (example: string | string[]) => ({ why: 'Because.', example, goodLooksLike: ['Clear.'] });
 const purposes = Object.fromEntries(['role', 'context', 'task', 'steps', 'template', 'scope'].map((p) => [p, `${p}.`]));
 
-/** A valid two-stage file: Plan hands on `plan`, Research repeats per piece of it, handing on research_1 and research_2. */
 function base() {
   return {
     id: 'demo',
@@ -75,7 +74,6 @@ function base() {
 
 type File = ReturnType<typeof base>;
 
-/** Adds a Compare stage after Research that takes `slot` and prompts with `text`. */
 function later(file: File, slot: object, text: string): void {
   const task = {
     ...file.stages[1]!.jobs[0]!,
@@ -106,7 +104,6 @@ type Research = File['stages'][1]['jobs'][0] & {
 };
 const research = (file: File): Research => file.stages[1]!.jobs[0]! as Research;
 
-/** A second job of the Plan stage that checks the plan: it takes `plan` and hands on `checked`, with `over` laid on top. */
 function checking(file: File, over: object = {}): void {
   const [plan] = file.stages[0]!.jobs;
   file.stages[0]!.jobs.push({
@@ -120,7 +117,6 @@ function checking(file: File, over: object = {}): void {
   } as never);
 }
 
-/** A last stage whose only job hands nothing on and has no review: the end of the run. */
 function ending(file: File, over: object = {}): void {
   const [plan] = file.stages[0]!.jobs;
   file.stages.push({
@@ -141,7 +137,6 @@ function ending(file: File, over: object = {}): void {
   });
 }
 
-/** Plan's second job `check` is optional and hands on `checked`; a later Compare stage takes `slot`. */
 const optionalCheck = (file: File) => checking(file, { optional: true });
 const takes = (id: string) => ({ id, mode: 'single', label: id, sample: PLAN });
 
@@ -1232,10 +1227,6 @@ describe('edge cases', () => {
   });
 });
 
-/**
- * The Plan stage exists twice, as a quick `demo` take and a thorough `full` one: both hand on `plan`, both hold gate 1.
- * Research, after them, takes `plan` in either mode.
- */
 function plannedTwice(file: File, over: { quick?: object; thorough?: object } = {}): void {
   const [plan] = file.stages;
   const quick = {

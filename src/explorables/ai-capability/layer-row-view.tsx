@@ -2,13 +2,6 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import type { ReactNode } from 'react';
 import type { LayerDefinition, LayerItemId, LayerItemWords } from './ai-capability.types';
 
-/*
- * The two layer rows' pure parts: the mini workflow each card draws, and the definitions an opened card shows (pure
- * views). One vocabulary for both rows: boxes are steps, the part an item acts on is drawn in the card's tone
- * (`currentColor`), the rest muted. The cards themselves and their state live in layer-row.client.tsx.
- */
-
-/** A step box; `on` fills it faintly in the card's tone, `dashed` marks a frame around it. */
 function Box(props: { x: number; y: number; w: number; h: number; on?: boolean; dashed?: boolean }) {
   const { x, y, w, h, on, dashed } = props;
   return (
@@ -25,7 +18,6 @@ function Box(props: { x: number; y: number; w: number; h: number; on?: boolean; 
   );
 }
 
-/** An arrow from one step to the next. */
 function Arrow({ x1, x2, y, on }: { x1: number; x2: number; y: number; on?: boolean }) {
   const tone = on ? 'stroke-current' : 'stroke-muted-foreground';
   return (
@@ -36,7 +28,6 @@ function Arrow({ x1, x2, y, on }: { x1: number; x2: number; y: number; on?: bool
   );
 }
 
-/** A person: a head and shoulders; faint when they stand outside the run. */
 function Person({ x, y, faint }: { x: number; y: number; faint?: boolean }) {
   return (
     <g
@@ -50,7 +41,6 @@ function Person({ x, y, faint }: { x: number; y: number; faint?: boolean }) {
   );
 }
 
-/** Three steps in a row, the workflow the Oversight cards share. */
 const STEPS = (on: boolean) => (
   <>
     <Box x={4} y={22} w={22} h={12} on={on} />
@@ -61,7 +51,6 @@ const STEPS = (on: boolean) => (
   </>
 );
 
-/** Input → model → output, the flow the AI disciplines cards share; `model` replaces the middle box. */
 const MODEL_FLOW = (input: ReactNode, model: ReactNode) => (
   <>
     {input}
@@ -167,7 +156,6 @@ const FLOWS: Record<LayerItemId, ReactNode> = {
   ),
 };
 
-/** A card's mini workflow, 120 by 40: where in a run the discipline acts, or where the person sits. */
 export function LayerFlowView({ id }: { readonly id: LayerItemId }) {
   return (
     <svg viewBox="0 0 120 40" className="h-10 w-26 shrink-0" aria-hidden="true">
@@ -176,13 +164,11 @@ export function LayerFlowView({ id }: { readonly id: LayerItemId }) {
   );
 }
 
-/** The labels the opened cards share. */
 export interface LayerDetailLabels {
   readonly newTab: string;
   readonly emerging: string;
 }
 
-/** One definition: who gives it, what it says, and a link to the page, opening in a new tab. */
 function Definition({ each, labels }: { readonly each: LayerDefinition; readonly labels: LayerDetailLabels }) {
   return (
     <li className="flex flex-col gap-0.5 border-l-3 border-(--hue) pl-3">
@@ -205,7 +191,6 @@ function Definition({ each, labels }: { readonly each: LayerDefinition; readonly
   );
 }
 
-/** The opened part of a layer card: each definition of the item, with the page it comes from (a pure view). */
 export function LayerPanelView(props: {
   readonly id: string;
   readonly item: LayerItemWords;
