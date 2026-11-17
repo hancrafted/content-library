@@ -4,8 +4,8 @@ id: GEN-006
 title: 'Comments'
 domain: general
 rules: true
-files: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/{software-ecology,context-window,human-in-the-loop,ai-capability},episodes/components/{slide-master,art-build,episode-browser,episode-page,episode-card,slide-shared}}}/**/*', '.archgate/adrs/*.rules*']
-paths: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/{software-ecology,context-window,human-in-the-loop,ai-capability},episodes/components/{slide-master,art-build,episode-browser,episode-page,episode-card,slide-shared}}}/**/*', '.archgate/adrs/*.rules*']
+files: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/{software-ecology,context-window,human-in-the-loop,ai-capability},episodes/{ai-*,from-*,ma*,n*,o*,what-a*,components/*}}}/**/*', '.archgate/adrs/*.rules*']
+paths: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/{software-ecology,context-window,human-in-the-loop,ai-capability},episodes/{ai-*,from-*,ma*,n*,o*,what-a*,components/*}}}/**/*', '.archgate/adrs/*.rules*']
 description: 'Governed code carries no prose comment, JSDoc included: a reason moves down a fixed ladder into a name, a type, a test, a pointer marker or the commit body, and only machine-read markers survive.'
 ---
 
