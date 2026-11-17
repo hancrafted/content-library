@@ -12,7 +12,7 @@ import { currentBranch, gitCommonDir } from './git.ts';
  * run the suite about 4 times slower than a developer's Mac, so 750 ms here is about 3 s there: a test heading for
  * CI's limit.
  */
-export const SLOW_TEST_MS = 750;
+export const SLOW_TEST_MILLISECONDS = 750;
 
 /** How long the log keeps an entry. */
 const KEEP_DAYS = 30;
@@ -33,7 +33,7 @@ export function slowTestsLogPath(cwd: string): string | null {
 export const testCount = (count: number): string => (count === 1 ? '1 test' : `${count} tests`);
 
 /**
- * A Vitest reporter that appends each test over SLOW_TEST_MS to the slow-tests log as it finishes, with the load
+ * A Vitest reporter that appends each test over SLOW_TEST_MILLISECONDS to the slow-tests log as it finishes, with the load
  * factor of the run. A test the load-aware timeout let pass is still a test creeping towards CI's limit. Logging
  * never fails a run: outside a git repository, or when the log cannot be written, the test goes unlogged.
  */
@@ -60,7 +60,7 @@ export class SlowTestsLog implements Reporter {
 
   onTestCaseResult(testCase: TestCase): void {
     const ms = Math.round(testCase.diagnostic()?.duration ?? 0);
-    if (this.log === null || ms <= SLOW_TEST_MS) return;
+    if (this.log === null || ms <= SLOW_TEST_MILLISECONDS) return;
     const entry: SlowTest = {
       test: testCase.fullName,
       file: testCase.module.relativeModuleId,

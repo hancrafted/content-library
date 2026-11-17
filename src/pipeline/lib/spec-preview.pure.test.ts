@@ -32,7 +32,7 @@ const CLEAN = `<!-- slide: spent -->${option('1a')}${option('1b')}`;
 const TITLE = `<!-- slide: top -->${option('0a')}${option('0b')}${option('0c')}`;
 
 /** The numbers of the toolbar asset, as the template carries them; these differ from the asset's, to show they are read. */
-const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, fitRoomMin: 300 };
+const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, 'fitRoomMin': 300 };
 
 const DESKTOP: Preset = { name: 'desktop', width: 1920, height: 800, blocking: true };
 const MOBILE: Preset = { name: 'mobile', width: 390, height: 800, blocking: false };

@@ -19,13 +19,13 @@ export interface WriterDeps {
   /** The trimmed stdout of `git <args>`. */
   git?: (...args: string[]) => string;
   /** The longest wait for the lock, in ms; `RUN_LOG_LOCK_WAIT_MS` still shortens it for tests. */
-  lockWaitMs?: number;
+  lockWaitMilliseconds?: number;
 }
 
 export type WriteResult = { ok: true; line: string } | { ok: false; errors: string[] };
 
-const STALE_LOCK_MS = 10_000;
-const LOCK_WAIT_MS = 15_000;
+const STALE_LOCK_MILLISECONDS = 10_000;
+const LOCK_WAIT_MILLISECONDS = 15_000;
 
 /** Another writer held the lock for the whole wait. A hook reports it on stderr and exits 1 (never 2, which blocks Claude Code). */
 export class LockTimeoutError extends Error {
@@ -39,7 +39,8 @@ export class LockTimeoutError extends Error {
 }
 
 /** The wait in ms: `RUN_LOG_LOCK_WAIT_MS` (tests), else the caller's, else the default. */
-const lockWait = (wanted?: number): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || wanted || LOCK_WAIT_MS;
+const lockWait = (wanted?: number): number =>
+  Number(process.env.RUN_LOG_LOCK_WAIT_MS) || wanted || LOCK_WAIT_MILLISECONDS;
 
 const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
@@ -57,7 +58,7 @@ function tryLock(lockFile: string, token: string): boolean {
 /** Removes a lock its holder never released. */
 function breakStaleLock(lockFile: string): void {
   try {
-    if (Date.now() - statSync(lockFile).mtimeMs > STALE_LOCK_MS) unlinkSync(lockFile);
+    if (Date.now() - statSync(lockFile).mtimeMs > STALE_LOCK_MILLISECONDS) unlinkSync(lockFile);
   } catch {
     // the holder released it between our checks
   }
@@ -73,9 +74,9 @@ function release(lockFile: string, token: string): void {
 }
 
 /** Runs `work` while holding the lock, and releases it however `work` ends. */
-function withLock<T>(lock: { file: string; waitMs?: number }, work: () => T): T {
+function withLock<T>(lock: { file: string; waitMilliseconds?: number }, work: () => T): T {
   const lockFile = lock.file;
-  const deadline = Date.now() + lockWait(lock.waitMs);
+  const deadline = Date.now() + lockWait(lock.waitMilliseconds);
   const token = randomBytes(16).toString('hex');
   while (!tryLock(lockFile, token)) {
     if (Date.now() > deadline) throw new LockTimeoutError(lockFile);
@@ -116,7 +117,7 @@ function withRunFacts(
 }
 
 /** What the line about to be written is stamped with: the injected clock, ids and git, resolved. */
-type ResolvedDeps = Required<Omit<WriterDeps, 'lockWaitMs'>>;
+type ResolvedDeps = Required<Omit<WriterDeps, 'lockWaitMilliseconds'>>;
 
 /** The trace a new line joins: a fresh one for a start-run, else the newest Run's; a message when there is no Run. */
 function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps): string | { error: string } {
@@ -160,6 +161,6 @@ export function appendEvent(at: LogLocation, event: unknown, deps: WriterDeps = 
     id: deps.id ?? ((bytes) => randomBytes(bytes).toString('hex')),
     git: deps.git ?? realGit,
   };
-  const lock = { file: `${path.resolve(at.root, at.file)}.lock`, waitMs: deps.lockWaitMs };
+  const lock = { file: `${path.resolve(at.root, at.file)}.lock`, waitMilliseconds: deps.lockWaitMilliseconds };
   return withLock(lock, () => appendLocked(at, event, src));
 }

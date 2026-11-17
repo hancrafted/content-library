@@ -60,7 +60,7 @@ export interface RunningAgent {
   job?: string;
   attempt?: number;
   role?: string;
-  elapsed_ms: number;
+  elapsedMilliseconds: number;
 }
 
 /** A span that crashed or was refused (the concurrency limit). */
@@ -76,7 +76,7 @@ export interface ProblemSpan {
 export interface WaitingGate {
   name: string;
   job?: string;
-  waiting_ms: number;
+  waitingMilliseconds: number;
 }
 
 export interface RunStatus {
@@ -132,9 +132,9 @@ export function runStatus(
   const open = (type: Span['type']) => spans.filter((span) => span.type === type && span.status === 'running');
   return {
     jobs: jobs.map(({ id }) => ({ id, state: stateOf(id) })),
-    running: open('agent').map((span) => ({ ...labelled(span), elapsed_ms: since(span) })),
+    running: open('agent').map((span) => ({ ...labelled(span), elapsedMilliseconds: since(span) })),
     problems: problemsOf(spans),
-    waiting: open('gate').map((span) => ({ ...labelled(span), waiting_ms: since(span) })),
+    waiting: open('gate').map((span) => ({ ...labelled(span), waitingMilliseconds: since(span) })),
     skillWarnings: skillWarningsOf(spans, jobs),
   };
 }
@@ -156,10 +156,13 @@ const spawnName = ({
 export function renderStatus({ jobs, running, problems, waiting, skillWarnings }: RunStatus): string {
   return [
     ...jobs.map(({ id, state }) => `${state.padEnd(8)}${id}`),
-    ...running.map((agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsed_ms)}`),
+    ...running.map(
+      (agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsedMilliseconds)}`,
+    ),
     ...problems.map((span) => `${span.status.padEnd(8)}${spawnName(span)}`),
     ...waiting.map(
-      (gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on the user ${formatDuration(gate.waiting_ms)}`,
+      (gate) =>
+        `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on the user ${formatDuration(gate.waitingMilliseconds)}`,
     ),
     ...skillWarnings.map(
       (span) => `${'warn'.padEnd(8)}${spawnName(span)} · skill not invoked: ${span.missing.join(', ')}`,

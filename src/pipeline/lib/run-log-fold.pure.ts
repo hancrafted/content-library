@@ -42,7 +42,7 @@ function openSpan(entry: RunLogLine, open: SpanStatus): Span {
     status: open,
     start_t: t,
     end_t: null,
-    duration_ms: null,
+    'duration_ms': null,
     summary: null,
     seq,
   } as Span;
@@ -81,7 +81,7 @@ function closeSpan(span: Span, entry: RunLogLine): void {
     status: entry.status as Status,
     summary: entry.summary ?? null,
     end_t: entry.t,
-    duration_ms: Date.parse(entry.t) - Date.parse(span.start_t),
+    'duration_ms': Date.parse(entry.t) - Date.parse(span.start_t),
   };
   Object.assign(span, Object.fromEntries(attributes), end);
   span.source ??= entry.source;

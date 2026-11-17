@@ -13,7 +13,7 @@ const span = (seq: number, over: Partial<Span>): Span => ({
   status: 'ok',
   start_t: 'x',
   end_t: null,
-  duration_ms: null,
+  'duration_ms': null,
   summary: null,
   seq,
   ...over,

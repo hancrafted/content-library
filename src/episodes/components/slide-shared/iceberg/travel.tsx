@@ -13,14 +13,20 @@ export interface TravelProps {
   readonly children: ReactNode;
 }
 
-const DEFAULT_DURATION_MS = 1600;
+const DEFAULT_DURATION_MILLISECONDS = 1600;
 
 /**
  * Moves its figures across the Scene once, when the Slide turns active (design-ADR 0025, Motion 3): positions belong
  * to the Slide, so moving between them is this, never a figure's own `motion`. An SVG group inside `ZoneScene`; its
  * rest state is `to`, so a still frame and reduced motion show the figures where they arrive.
  */
-export function Travel({ from, to = '0 0', duration = DEFAULT_DURATION_MS, delay = 0, children }: TravelProps) {
+export function Travel({
+  from,
+  to = '0 0',
+  duration = DEFAULT_DURATION_MILLISECONDS,
+  delay = 0,
+  children,
+}: TravelProps) {
   const style = {
     '--travel-from': from,
     '--travel-to': to,

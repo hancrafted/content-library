@@ -9,7 +9,7 @@ import en from './i18n/en.json';
 import { ControlRoom } from './room';
 import { SkillIndexSheet } from './skill-index-sheet';
 import styles from './slide.module.css';
-import { requestBubble, requestLines, WIDE_PICTURE_PX } from './speech.pure';
+import { requestBubble, requestLines, WIDE_PICTURE_PIXELS } from './speech.pure';
 
 const SPECIFICATION = { slug: 'agent-skills-specification', url: 'https://agentskills.io/specification' };
 const ANTHROPIC = {
@@ -37,7 +37,7 @@ const plain = (chunks: string) => chunks;
 
 /** The two lines from the captain's bubble to the index, in the overlay's 1000 by 640 units: dashed to the content line, primary to the moment. */
 function linesFrom(words: string) {
-  const { content, moment } = requestLines(requestBubble(words, WIDE_PICTURE_PX));
+  const { content, moment } = requestLines(requestBubble(words, WIDE_PICTURE_PIXELS));
   const at = ({ x, y }: { x: number; y: number }) => `${x.toFixed(1)} ${y.toFixed(1)}`;
   return {
     content: `M ${at(content)} C 470 ${content.y.toFixed(1)}, 460 150, 530 150`,

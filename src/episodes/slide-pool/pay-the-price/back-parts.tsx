@@ -50,7 +50,7 @@ export function BackSvg({ width, children }: { width: number; children: ReactNod
 }
 
 /** The caption role's size, in px; a label's size in user units scales it, so no font size is written here. */
-const CAPTION_PX = 14;
+const CAPTION_PIXELS = 14;
 
 /** A text label at `size` user units, centred on `x` by default, set in the caption role and scaled to fit. */
 export function Label({
@@ -69,7 +69,7 @@ export function Label({
   children: ReactNode;
 }) {
   return (
-    <g transform={`translate(${x} ${y}) scale(${size / CAPTION_PX})`}>
+    <g transform={`translate(${x} ${y}) scale(${size / CAPTION_PIXELS})`}>
       <text textAnchor={anchor} className={cn('text-caption', className)}>
         {children}
       </text>

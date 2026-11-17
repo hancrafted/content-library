@@ -81,7 +81,7 @@ export interface ToolbarConfig {
   /** The margin in px kept above and below a visual scaled to a fixed design size. */
   fitMargin: number;
   /** The least room in px a fixed design size is scaled into. */
-  fitRoomMin: number;
+  'fitRoomMin': number;
 }
 
 const TOOLBAR_NUMBERS: readonly (keyof ToolbarConfig)[] = ['navOpenWidth', 'toolbarHeight', 'fitMargin', 'fitRoomMin'];

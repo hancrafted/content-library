@@ -44,7 +44,7 @@ const MOTION_PARTS: Record<
 };
 
 /** The emote pops in this long after its figure's motion has ended. */
-const EMOTE_AFTER_MS = 100;
+const EMOTE_AFTER_MILLISECONDS = 100;
 
 interface GroupProps {
   readonly group: Group;
@@ -79,7 +79,7 @@ function emoteDelay(motion: Motion | undefined): CSSProperties | undefined {
   if (!MOTIONS.includes(motion)) {
     throw new Error(`Character has no motion "${motion}"; motions are ${MOTIONS.join(', ')}.`);
   }
-  return { '--emote-delay': `${MOTION_PARTS[motion].ms + EMOTE_AFTER_MS}ms` } as CSSProperties;
+  return { '--emote-delay': `${MOTION_PARTS[motion].ms + EMOTE_AFTER_MILLISECONDS}ms` } as CSSProperties;
 }
 
 /** The preset's look as data attributes, which `character.module.css` turns into its palette. */

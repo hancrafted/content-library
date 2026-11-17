@@ -162,7 +162,7 @@ describe('lock timeout', () => {
     // ARRANGE
     writeFileSync(path.join(wt, `${LOG}.lock`), 'held');
     // ACT
-    const result = hook('start', 's2', { RUN_LOG_LOCK_WAIT_MS: '200' });
+    const result = hook('start', 's2', { 'RUN_LOG_LOCK_WAIT_MS': '200' });
     // ASSERT
     expect(result.status).toBe(1);
     expect(result.stderr).toMatch(/run-log lock/);
@@ -263,7 +263,7 @@ describe('point facts (PostToolUse on Skill and Read, InstructionsLoaded)', () =
     // ARRANGE
     writeFileSync(path.join(wt, `${LOG}.lock`), 'held');
     // ACT
-    const result = skillHook('s2', { tool_input: { skill: 'tdd' } }, { RUN_LOG_LOCK_WAIT_MS: '200' });
+    const result = skillHook('s2', { tool_input: { skill: 'tdd' } }, { 'RUN_LOG_LOCK_WAIT_MS': '200' });
     // ASSERT
     expect(result.status).toBe(0);
     expect(result.stderr).toMatch(/run-log lock/);

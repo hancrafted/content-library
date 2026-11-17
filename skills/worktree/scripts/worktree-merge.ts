@@ -6,7 +6,7 @@ import { setTimeout as sleep } from 'node:timers/promises';
 import { type Timing, withLock } from '../../../tools/load/lock.ts';
 import {
   formatSlowTest,
-  SLOW_TEST_MS,
+  SLOW_TEST_MILLISECONDS,
   slowTestsLogPath,
   slowTestsSince,
   testCount,
@@ -71,7 +71,11 @@ export interface MergeContext {
  */
 export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn: () => T | Promise<T>): Promise<T> {
   const onWait = () => log(`… waiting for another merge into ${branch} to finish`);
-  return withLock(`wt-merge/${branch}`, { pollMs: 100, timeoutMs: 10 * 60 * 1000, cwd, onWait }, fn);
+  return withLock(
+    `wt-merge/${branch}`,
+    { pollMilliseconds: 100, timeoutMilliseconds: 10 * 60 * 1000, cwd, onWait },
+    fn,
+  );
 }
 
 /** A merge of `branch` into `base`, run from `cwd`, a directory inside the repository. */
@@ -116,7 +120,7 @@ function buildMerge(merge: Merge, baseTip: string): string {
 }
 
 /** How long a merge waits for a busy base, and how often it looks again. */
-const BUSY_WAIT: Timing = { pollMs: 5000, timeoutMs: 10 * 60 * 1000 };
+const BUSY_WAIT: Timing = { pollMilliseconds: 5000, timeoutMilliseconds: 10 * 60 * 1000 };
 
 /** One attempt's outcome: done, or the base's worktree busy with something (`detail` adds git's own words). */
 type Attempt = { done: 'merged' | 'already-merged' } | { tree: string; busy: string; detail: string };
@@ -148,19 +152,19 @@ function attempt(merge: Merge, built: { on: string; commit: string }): Attempt {
  * Merges `branch` into `base` with a merge commit. The commit is built outside any worktree (`buildMerge`), then
  * `base` fast-forwards to it inside the worktree that has `base` checked out, so a conflict changes nothing.
  * While that worktree is busy (a merge, rebase or cherry-pick in progress, or the fast-forward refused, say over
- * local changes), it waits and looks again every `pollMs`, logging one line, and rebuilds the commit when the
+ * local changes), it waits and looks again every `pollMilliseconds`, logging one line, and rebuilds the commit when the
  * base tip moved meanwhile. Holds the base's merge lock (`withMergeLock`) throughout, so merges into one base
  * serialize. Rejects, with the base left as it was, when the base is checked out nowhere, the merge conflicts or
- * the base stays busy past `timeoutMs`.
+ * the base stays busy past `timeoutMilliseconds`.
  */
 export function mergeIntoBase(
   branch: string,
   base: string,
   options: MergeContext & Partial<Timing>,
 ): Promise<'merged' | 'already-merged'> {
-  const { cwd, log, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
+  const { cwd, log, pollMilliseconds, timeoutMilliseconds } = { ...BUSY_WAIT, ...options };
   return withMergeLock(base, { cwd, log }, async () => {
-    const deadline = Date.now() + timeoutMs;
+    const deadline = Date.now() + timeoutMilliseconds;
     const built = { on: '', commit: '' };
     for (let round = 0; ; round++) {
       const outcome = attempt({ branch, base, cwd }, built);
@@ -168,13 +172,13 @@ export function mergeIntoBase(
       const { tree, busy, detail } = outcome;
       if (Date.now() >= deadline)
         throw new Error(
-          `${base} in ${tree} stayed busy with ${busy} for ${timeoutMs / 1000} s; finish it, then rerun${detail}`,
+          `${base} in ${tree} stayed busy with ${busy} for ${timeoutMilliseconds / 1000} s; finish it, then rerun${detail}`,
         );
       if (round === 0)
         log(
-          `… ${base} in ${tree} is busy with ${busy}; looking again every ${pollMs / 1000} s for up to ${timeoutMs / 60_000} min`,
+          `… ${base} in ${tree} is busy with ${busy}; looking again every ${pollMilliseconds / 1000} s for up to ${timeoutMilliseconds / 60_000} min`,
         );
-      await sleep(pollMs);
+      await sleep(pollMilliseconds);
     }
   });
 }
@@ -194,7 +198,7 @@ export function slowTestReport(branch: string, base: string, cwd: string): strin
   const entries = slowTestsSince(log, branch, since);
   if (entries.length === 0) return [];
   return [
-    `! ${testCount(entries.length)} ran past ${SLOW_TEST_MS} ms on ${branch} since it branched off ${base}:`,
+    `! ${testCount(entries.length)} ran past ${SLOW_TEST_MILLISECONDS} ms on ${branch} since it branched off ${base}:`,
     ...entries.map(formatSlowTest),
   ];
 }

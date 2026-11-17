@@ -12,7 +12,7 @@ import {
   type Verdict,
 } from '../../../src/pipeline/lib/check-sources.pure.ts';
 
-const TIMEOUT_MS = 20_000;
+const TIMEOUT_MILLISECONDS = 20_000;
 const CONCURRENCY = 8;
 const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
@@ -29,7 +29,7 @@ async function fetchOutcome(url: string): Promise<Outcome> {
   try {
     const response = await fetch(url, {
       redirect: 'follow',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      signal: AbortSignal.timeout(TIMEOUT_MILLISECONDS),
       headers: { 'user-agent': USER_AGENT, accept: 'text/html,application/xhtml+xml,application/pdf;q=0.9,*/*;q=0.8' },
     });
     void response.body?.cancel();

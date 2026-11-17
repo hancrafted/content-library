@@ -13,7 +13,7 @@ describe('success cases', () => {
   it('places a bar as a share of the track, measured from the year’s start', () => {
     // ARRANGE
     const bar = { lane: 'a', start: 3, end: 6 } as const;
-    const expected = { leftPct: 25, widthPct: 25 };
+    const expected = { leftPercent: 25, widthPercent: 25 };
     // ACT
     const box = barBox(bar);
     // ASSERT
@@ -83,7 +83,7 @@ describe('edge cases', () => {
   it('spans the whole track for a bar that runs all year', () => {
     // ARRANGE
     const bar = { lane: 'b', start: 0, end: 12 } as const;
-    const expected = { leftPct: 0, widthPct: 100 };
+    const expected = { leftPercent: 0, widthPercent: 100 };
     // ACT
     const box = barBox(bar);
     // ASSERT

@@ -6,8 +6,8 @@ import type { CSSProperties } from 'react';
  */
 
 /** How long the card takes to slide out, in milliseconds. */
-export const CARD_MS = 1100;
+export const CARD_MILLISECONDS = 1100;
 /** How long after the Slide turns active the card starts. */
-export const CARD_DELAY_MS = 300;
+export const CARD_DELAY_MILLISECONDS = 300;
 /** The skill's pill and leader wait for the card to arrive. */
-export const LATE_DELAY = { '--late-delay': `${CARD_DELAY_MS + CARD_MS}ms` } as CSSProperties;
+export const LATE_DELAY = { '--late-delay': `${CARD_DELAY_MILLISECONDS + CARD_MILLISECONDS}ms` } as CSSProperties;

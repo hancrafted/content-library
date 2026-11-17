@@ -26,7 +26,7 @@ const ZOOMED: StationId = 'review';
 /** The pile in front of Review, stack by stack: 28 documents in all. */
 const PILE = [2, 3, 4, 6, 6, 4, 3] as const;
 /** How long each stack waits after the one before it as the documents slide in. */
-const STACK_STAGGER_MS = 220;
+const STACK_STAGGER_MILLISECONDS = 220;
 
 /** The strip at the top that locates the zoomed station on the line: AI chips, the zoomed one ringed in `primary`. */
 function Locator({
@@ -125,7 +125,10 @@ export const whatHappensWithAi = slide({
               <FlowMotion label={t('pile')}>
                 <div className="flex items-end justify-center gap-1">
                   {PILE.map((count, stack) => (
-                    <div key={stack} style={{ '--flow-delay': `${stack * STACK_STAGGER_MS}ms` } as CSSProperties}>
+                    <div
+                      key={stack}
+                      style={{ '--flow-delay': `${stack * STACK_STAGGER_MILLISECONDS}ms` } as CSSProperties}
+                    >
                       <QueuePile count={count} size="lg" />
                     </div>
                   ))}

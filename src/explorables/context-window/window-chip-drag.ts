@@ -11,7 +11,7 @@ import { crossedChip } from './window-chip-drag.pure';
 
 const THRESHOLD = 4;
 /** How long after a drag ends the click it produces is still swallowed. */
-const CLICK_SWALLOW_MS = 60;
+const CLICK_SWALLOW_MILLISECONDS = 60;
 
 /** The chip under the pointer, other than the dragged one, once the pointer is past its middle on the way in. */
 export function chipUnder(
@@ -85,7 +85,7 @@ export function useChipDrag({ enabled, order, onMove }: Drag) {
       stop.current = null;
       // The click that ends a drag must not toggle the chip it ends on.
       swallow.current = true;
-      setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MS);
+      setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MILLISECONDS);
     });
   };
 

@@ -32,14 +32,14 @@ const wrapChars = (width: number) => Math.floor((width - PAD.x) / CAPTION.glyph)
 
 export interface SaysFitInput {
   /** Screen pixels per figure unit where the bubble hangs, before its own scale; 0 in a hidden picture. */
-  readonly unitPx: number;
+  readonly unitPixels: number;
   /** The Scene's `--says-scale`, 1 when unset. */
   readonly scale: number;
 }
 
 /** How much the bubble turns itself up so its words draw at least at their caption size; 1 when they already do. */
-export function saysFit({ unitPx, scale }: SaysFitInput): number {
-  const drawn = unitPx * scale;
+export function saysFit({ unitPixels, scale }: SaysFitInput): number {
+  const drawn = unitPixels * scale;
   if (!(drawn > 0)) return 1;
   return Math.max(1, 1 / drawn);
 }
@@ -72,13 +72,13 @@ export interface SaysBoxInput {
   /** The Scene's `--says-scale`, 1 when left out. */
   readonly saysScale?: number;
   /** Screen pixels per Scene unit at the width under test. */
-  readonly scenePx: number;
+  readonly scenePixels: number;
   /** The bubble's wrap width and lift, as the Character's `bubble` prop gives them. */
   readonly width?: number;
   readonly lift?: number;
 }
 
-/** The bubble's box in the Scene's units, at the width `scenePx` stands for, fit included. */
+/** The bubble's box in the Scene's units, at the width `scenePixels` stands for, fit included. */
 export function saysBox({
   words,
   mood,
@@ -86,7 +86,7 @@ export function saysBox({
   head,
   figureScale,
   saysScale = 1,
-  scenePx,
+  scenePixels,
   width: wrapWidth = SAYS_FRAME.width,
   lift = 0,
 }: SaysBoxInput): SaysBoxResult {
@@ -98,7 +98,7 @@ export function saysBox({
     width: Math.min(wrapWidth, longest * CAPTION.glyph + PAD.x),
     height: lines.length * CAPTION.lineHeight + PAD.y,
   };
-  const scale = saysScale * saysFit({ unitPx: scenePx * figureScale, scale: saysScale });
+  const scale = saysScale * saysFit({ unitPixels: scenePixels * figureScale, scale: saysScale });
   const width = css.width * scale * figureScale;
   const height = css.height * scale * figureScale;
   const place = saysPlace(mood);
@@ -108,7 +108,7 @@ export function saysBox({
 }
 
 /** The air a bubble keeps from its picture's edge, in screen pixels. */
-const ROOM_GAP_PX = 4;
+const ROOM_GAP_PIXELS = 4;
 
 export interface SaysRoomInput {
   /** The side the bubble rises on: 1 to the right of the head, its left edge anchored; -1 to the left, its right. */
@@ -126,7 +126,9 @@ export interface SaysRoomInput {
  */
 export function saysRoom({ side, bubble, picture }: SaysRoomInput): number | undefined {
   if (!(bubble.drawnPerCss > 0)) return undefined;
-  if (bubble.left >= picture.left + ROOM_GAP_PX && bubble.right <= picture.right - ROOM_GAP_PX) return undefined;
-  const room = side === 1 ? picture.right - ROOM_GAP_PX - bubble.left : bubble.right - picture.left - ROOM_GAP_PX;
+  if (bubble.left >= picture.left + ROOM_GAP_PIXELS && bubble.right <= picture.right - ROOM_GAP_PIXELS)
+    return undefined;
+  const room =
+    side === 1 ? picture.right - ROOM_GAP_PIXELS - bubble.left : bubble.right - picture.left - ROOM_GAP_PIXELS;
   return Math.max(0, room) / bubble.drawnPerCss;
 }

@@ -2,7 +2,7 @@
 // the screenshot size cap, the saved browser endpoint and the idle rule.
 import path from 'node:path';
 
-export const IDLE_MS = 10 * 60 * 1000;
+export const IDLE_MILLISECONDS = 10 * 60 * 1000;
 export const DEVICE_SCALE_FACTOR = 2;
 export const MAX_EDGE = 1568;
 
@@ -125,7 +125,7 @@ export function parseEndpoint(text: string): Endpoint | null {
 }
 
 export function isIdle(lastUse: number, now: number): boolean {
-  return now - lastUse >= IDLE_MS;
+  return now - lastUse >= IDLE_MILLISECONDS;
 }
 
 /**

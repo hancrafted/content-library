@@ -17,8 +17,8 @@ export interface OverBudget {
   ms: number;
 }
 
-/** Every test in `report` that took longer than `budgetMs`, slowest first. */
-export function overBudget(report: VitestJsonReport, budgetMs: number, root: string): OverBudget[] {
+/** Every test in `report` that took longer than `budgetMilliseconds`, slowest first. */
+export function overBudget(report: VitestJsonReport, budgetMilliseconds: number, root: string): OverBudget[] {
   return report.testResults
     .flatMap((result) =>
       result.assertionResults.map((test) => ({
@@ -27,6 +27,6 @@ export function overBudget(report: VitestJsonReport, budgetMs: number, root: str
         ms: test.duration ?? 0,
       })),
     )
-    .filter((test) => test.ms > budgetMs)
+    .filter((test) => test.ms > budgetMilliseconds)
     .sort((a, b) => b.ms - a.ms);
 }

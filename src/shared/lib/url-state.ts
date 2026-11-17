@@ -5,10 +5,10 @@ import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindo
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 
 /** At most one history write per interval: ~67 per 10 s, under WebKit's 100 (research §2). */
-export const WRITE_INTERVAL_MS = 150;
+export const WRITE_INTERVAL_MILLISECONDS = 150;
 
 /** Bounds intent suppression; expiry needs measured arrival evidence or reports timeout. */
-export const NAVIGATION_TIMEOUT_MS = 1000;
+export const NAVIGATION_TIMEOUT_MILLISECONDS = 1000;
 
 function hashOf(win: UrlWindow): string {
   const raw = win.location.hash.slice(1);
@@ -91,7 +91,7 @@ class UrlStateStore implements UrlState {
     const navigation = { id: request, target: id, status: 'navigating' } as const;
     this.flight = setTimeout(() => {
       this.finishNavigation(navigation.id, this.hasArrived(id) ? 'settled' : 'timed-out');
-    }, NAVIGATION_TIMEOUT_MS);
+    }, NAVIGATION_TIMEOUT_MILLISECONDS);
     const checkArrival = () => {
       if (this.hasArrived(id)) this.finishNavigation(navigation.id, 'settled');
     };
@@ -212,7 +212,7 @@ class UrlStateStore implements UrlState {
   private schedule(id: string) {
     this.pending = id;
     if (this.trailing !== null) return;
-    const wait = this.lastWrite + WRITE_INTERVAL_MS - Date.now();
+    const wait = this.lastWrite + WRITE_INTERVAL_MILLISECONDS - Date.now();
     if (wait <= 0) this.flush();
     else this.trailing = setTimeout(this.flush, wait);
   }

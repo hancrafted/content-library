@@ -10,14 +10,14 @@ import { LEVELS, type Level } from './scene-frames.pure';
 
 /** How many tokens the carousel shows at once, the newest last; the next one still a question after them. */
 const SHOWN = 4;
-const STEP_MS = 900;
+const STEP_MILLISECONDS = 900;
 
 /** The carousel's first token: while the model works it moves on one every beat, and wraps after the last token. */
 function useOffset(count: number, working: boolean): number {
   const [offset, setOffset] = useState(0);
   useEffect(() => {
     if (!working || prefersReducedMotion()) return;
-    const timer = window.setInterval(() => setOffset((now) => (now + 1) % (count - SHOWN + 1)), STEP_MS);
+    const timer = window.setInterval(() => setOffset((now) => (now + 1) % (count - SHOWN + 1)), STEP_MILLISECONDS);
     return () => window.clearInterval(timer);
   }, [count, working]);
   return offset;

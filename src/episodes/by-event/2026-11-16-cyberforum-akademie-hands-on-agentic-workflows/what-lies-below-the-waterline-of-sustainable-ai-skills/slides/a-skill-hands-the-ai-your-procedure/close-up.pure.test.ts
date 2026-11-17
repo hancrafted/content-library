@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CALLOUTS, CLOSE_UP, PHONE_SCENE_PX, clashes, closeUpLayout, type CalloutWords } from './close-up.pure';
+import { CALLOUTS, CLOSE_UP, PHONE_SCENE_PIXELS, clashes, closeUpLayout, type CalloutWords } from './close-up.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -41,7 +41,7 @@ describe('success cases', () => {
 
   it('keeps the phone-sized bubble off every number badge and inside the Scene, in both languages', () => {
     // ARRANGE
-    const phone = { scenePx: PHONE_SCENE_PX };
+    const phone = { scenePixels: PHONE_SCENE_PIXELS };
     // ACT
     const found = {
       en: clashes(closeUpLayout({ request: en.request, callouts: wordsOf(en), ...phone })),

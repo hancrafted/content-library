@@ -27,7 +27,7 @@ export const REQUEST_BUBBLE: BubblePlace = { lift: 24 };
 export const REQUEST_SAYS_SCALE = 0.5;
 
 /** The narrowest picture that lays the pill and the index over the room: the `@5xl` container, 64rem. */
-export const WIDE_PICTURE_PX = 1024;
+export const WIDE_PICTURE_PIXELS = 1024;
 
 /** A box in the overlay's 1000 by 640 units, from its top-left corner. */
 export interface OverlayBox {
@@ -47,8 +47,8 @@ const INDEX_LEFT = 548;
 /** The air the bubble keeps from what it must not cover, in overlay units. */
 const GAP = 6;
 
-/** The captain's bubble in the overlay, at a picture `picturePx` wide. */
-export function requestBubble(words: string, picturePx: number): OverlayBox {
+/** The captain's bubble in the overlay, at a picture `picturePixels` wide. */
+export function requestBubble(words: string, picturePixels: number): OverlayBox {
   const head = drawFigure(captain, 'point').anchor;
   const box = saysBox({
     words,
@@ -56,7 +56,7 @@ export function requestBubble(words: string, picturePx: number): OverlayBox {
     head: { x: (CAPTAIN_X + head.x) * CREW_SCALE, y: FLOOR + head.y * CREW_SCALE },
     figureScale: CREW_SCALE,
     saysScale: REQUEST_SAYS_SCALE,
-    scenePx: (picturePx / OVERLAY.width) * (1 / PER_OVERLAY),
+    scenePixels: (picturePixels / OVERLAY.width) * (1 / PER_OVERLAY),
   });
   return {
     x: box.x / PER_OVERLAY,

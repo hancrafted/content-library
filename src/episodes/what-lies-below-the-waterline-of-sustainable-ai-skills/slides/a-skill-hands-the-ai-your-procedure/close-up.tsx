@@ -11,7 +11,7 @@ import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot
 import { PolyBubble } from '@/shared/components/core-components/poly-bubble/poly-bubble';
 import { useId, type CSSProperties } from 'react';
 import { CabinWalls, ProjectBrief } from './cabin-art';
-import { CARD_DELAY_MS, CARD_MS, LATE_DELAY } from './card-motion';
+import { CARD_DELAY_MILLISECONDS, CARD_MILLISECONDS, LATE_DELAY } from './card-motion';
 import styles from './close-up.module.css';
 import {
   bridgeWindow,
@@ -171,7 +171,7 @@ function Cabin({ clipId }: { readonly clipId: string }) {
       <g transform={`translate(${CONSOLE.x + seat.x * CONSOLE.scale} ${FLOOR_Y}) scale(${CREW_SCALE})`}>
         <Character preset={pilot} pose="sit" flip />
       </g>
-      <Travel from={CARD_FROM} duration={CARD_MS} delay={CARD_DELAY_MS}>
+      <Travel from={CARD_FROM} duration={CARD_MILLISECONDS} delay={CARD_DELAY_MILLISECONDS}>
         <ProcedureCard />
       </Travel>
     </g>

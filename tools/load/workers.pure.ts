@@ -22,9 +22,9 @@ export function idleFraction(before: CpuTimes[], after: CpuTimes[]): number {
 }
 
 /** The fast suite's test timeout on an idle machine, and Vitest's own default: a fast test passes well inside it. */
-export const IDLE_TIMEOUT_MS = 5_000;
+export const IDLE_TIMEOUT_MILLISECONDS = 5_000;
 /** However loaded the machine, a fast test that needs longer than this is broken, not slowed down. */
-const MAX_TIMEOUT_MS = 20_000;
+const MAX_TIMEOUT_MILLISECONDS = 20_000;
 
 /**
  * The load factor a machine still counts as idle at. A quiet desktop reads 1.1 to 1.4 (background apps keep a
@@ -38,7 +38,10 @@ const IDLE_DEADBAND = 1.5;
  * it, capped at 20 s, so a loaded run finishes.
  */
 export function timeoutFor(loadFactor: number): number {
-  return Math.min(Math.round(IDLE_TIMEOUT_MS * Math.max(loadFactor / IDLE_DEADBAND, 1)), MAX_TIMEOUT_MS);
+  return Math.min(
+    Math.round(IDLE_TIMEOUT_MILLISECONDS * Math.max(loadFactor / IDLE_DEADBAND, 1)),
+    MAX_TIMEOUT_MILLISECONDS,
+  );
 }
 
 /** What a vitest run sizes itself by: the workers it may start, the load factor it measured and the timeout that gives. */

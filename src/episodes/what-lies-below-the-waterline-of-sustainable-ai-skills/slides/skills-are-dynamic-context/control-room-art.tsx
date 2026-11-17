@@ -27,7 +27,7 @@ export const ARRIVALS = ['card', 'frames', 'sonar', 'logs'] as const;
 export type Arrival = (typeof ARRIVALS)[number];
 /** When each arrival starts, in milliseconds after the Slide turns active; the window's blocks keep the same beat. */
 export const ARRIVAL_DELAY: Readonly<Record<Arrival, number>> = { card: 200, frames: 900, sonar: 1600, logs: 2300 };
-const ARRIVAL_MS = 700;
+const ARRIVAL_MILLISECONDS = 700;
 
 /** Where an overlay word sits over the room, in the Spec's units, as percentages of the visible box. */
 export const at = (x: number, y: number) => ({
@@ -46,7 +46,7 @@ const SCREEN = { x: 36, y: 34, width: 368, height: 212 } as const;
 /** One arrival dropping onto the desk on its beat. */
 function Lands({ arrival, children }: { readonly arrival: Arrival; readonly children: ReactNode }) {
   return (
-    <Travel from="0 -40%" duration={ARRIVAL_MS} delay={ARRIVAL_DELAY[arrival]}>
+    <Travel from="0 -40%" duration={ARRIVAL_MILLISECONDS} delay={ARRIVAL_DELAY[arrival]}>
       <g data-arrival={arrival}>{children}</g>
     </Travel>
   );

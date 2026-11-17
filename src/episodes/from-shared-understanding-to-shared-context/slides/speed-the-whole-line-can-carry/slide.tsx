@@ -14,7 +14,7 @@ const STATIONS: readonly StationId[] = ['sales', 'design', 'build', 'review', 'd
 /** Every station's pace in documents a day: 10 before AI, 20 with it, the same all along the line. */
 const PACE = { before: 10, after: 20 } as const;
 /** The documents wait for the bars to grow before they ride in. */
-const BARS_GROW_MS = 700;
+const BARS_GROW_MILLISECONDS = 700;
 
 /**
  * Speed the whole line can carry (Spec Option 3b): balance drawn as a chart, five equal bars at the new pace under
@@ -32,7 +32,7 @@ export const speedTheWholeLineCanCarry = slide({
   content: ({ t, target, marker }) => (
     <SlideFrame className="mt-10">
       <div className="flex flex-col gap-6 @container">
-        <FlowMotion label={t('chart.label')} delay={BARS_GROW_MS}>
+        <FlowMotion label={t('chart.label')} delay={BARS_GROW_MILLISECONDS}>
           <div className="flex flex-col gap-6 rounded-xl bg-muted p-5 @2xl:p-8">
             <PaceBars
               paces={STATIONS.map((id) => ({ id, label: t(`stations.${id}`), ...PACE }))}

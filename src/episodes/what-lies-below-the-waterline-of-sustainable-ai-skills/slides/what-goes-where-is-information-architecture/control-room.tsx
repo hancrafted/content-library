@@ -6,7 +6,7 @@ import {
   consoleLayout,
 } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
-import { NOTE_DELAY_MS, NOTE_MS } from './motion';
+import { NOTE_DELAY_MILLISECONDS, NOTE_MILLISECONDS } from './motion';
 import { Clipboard, Rules, Sheet, Text, TEXT_SCALE } from './papers';
 import { FLOOR_Y, RoomArt, VIEW_TOP } from './room-art';
 import styles from './where.module.css';
@@ -214,7 +214,7 @@ export function ControlRoom({ brief, card, plan, note }: ControlRoomProps) {
       <ProcedureCard title={card.title} steps={card.steps} />
       <DivePlan title={plan.title} hint={plan.hint} />
       <MovePath />
-      <Travel from={NOTE_FROM} duration={NOTE_MS} delay={NOTE_DELAY_MS}>
+      <Travel from={NOTE_FROM} duration={NOTE_MILLISECONDS} delay={NOTE_DELAY_MILLISECONDS}>
         <DepthNote text={note} />
       </Travel>
       <Pins />

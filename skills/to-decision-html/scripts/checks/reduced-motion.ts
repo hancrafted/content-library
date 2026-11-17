@@ -19,9 +19,9 @@ interface Observation {
   readonly moving: boolean;
 }
 
-const INSTANT_MS = 1;
+const INSTANT_MILLISECONDS = 1;
 // A fixed interval, not a wait: motion is change over time, so holding still is measured across it.
-const STILLNESS_MS = 500;
+const STILLNESS_MILLISECONDS = 500;
 const REDUCE = 'under prefers-reduced-motion: reduce';
 
 /** Runs in the page: every animation still running after load. */
@@ -60,7 +60,7 @@ const smoothScroll = (): boolean =>
 
 async function moving(page: Page): Promise<boolean> {
   const first = await page.screenshot();
-  await page.waitForTimeout(STILLNESS_MS);
+  await page.waitForTimeout(STILLNESS_MILLISECONDS);
   return !first.equals(await page.screenshot());
 }
 
@@ -79,13 +79,13 @@ export const check: Check<Observation> = {
   },
   judge: ({ animations, transitions, smoothScroll, moving: screenMoves }) => [
     ...animations
-      .filter(({ duration }) => duration > INSTANT_MS)
+      .filter(({ duration }) => duration > INSTANT_MILLISECONDS)
       .map(
         ({ facts, name, duration }) =>
           `${describeElement(facts)} still runs animation "${name}" (${duration}ms) ${REDUCE}`,
       ),
     ...transitions
-      .filter(({ duration }) => duration > INSTANT_MS)
+      .filter(({ duration }) => duration > INSTANT_MILLISECONDS)
       .map(
         ({ facts, property, duration }) =>
           `${describeElement(facts)} still transitions ${property} over ${duration}ms ${REDUCE}`,

@@ -22,8 +22,8 @@ import {
 
 /** How often a waiter looks again, and how long it waits before it gives up. */
 export interface Timing {
-  pollMs: number;
-  timeoutMs: number;
+  pollMilliseconds: number;
+  timeoutMilliseconds: number;
 }
 
 export interface LockOptions extends Timing {
@@ -44,7 +44,7 @@ export interface LockOptions extends Timing {
 }
 
 /** A takeover marker this old belongs to a waiter killed mid-takeover, which takes microseconds. */
-const MARKER_STALE_MS = 10_000;
+const MARKER_STALE_MILLISECONDS = 10_000;
 
 const errorCode = (error: unknown) => (error as NodeJS.ErrnoException).code;
 
@@ -65,7 +65,7 @@ function removeLock(lock: string): void {
  * waiter first claims the takeover by making a `takeover` directory inside the lock, which only one can; then checks
  * the lock still is the stale one, since it may have been replaced since it was read; then moves it aside with one
  * rename and deletes it. Only the claimant moves that lock, so no waiter moves a newer holder's lock away. A claim
- * left by a waiter killed mid-takeover is cleared after MARKER_STALE_MS.
+ * left by a waiter killed mid-takeover is cleared after MARKER_STALE_MILLISECONDS.
  */
 function takeOver(lock: string, staleOwner: string): boolean {
   const marker = path.join(lock, 'takeover');
@@ -74,7 +74,7 @@ function takeOver(lock: string, staleOwner: string): boolean {
   } catch (error) {
     // Gone meanwhile, or another waiter's takeover, unless that waiter was killed mid-takeover.
     const claimed = errorCode(error) === 'EEXIST' ? statSync(marker, { throwIfNoEntry: false })?.mtimeMs : undefined;
-    if (claimed !== undefined && Date.now() - claimed > MARKER_STALE_MS)
+    if (claimed !== undefined && Date.now() - claimed > MARKER_STALE_MILLISECONDS)
       rmSync(marker, { recursive: true, force: true });
     return false;
   }
@@ -97,15 +97,16 @@ function lockPath(name: string, cwd: string): string {
  * A `*.pending-*` or `*.stale-*` directory older than this was left by a process killed between making and removing
  * it. No waiter waits this long (the longest, the test lock, gives up after 15 minutes), so none is still in use.
  */
-const LEFTOVER_MS = 60 * 60 * 1000;
+const LEFTOVER_MILLISECONDS = 60 * 60 * 1000;
 
-/** Deletes the leftover directories in `locks` last changed more than LEFTOVER_MS before `now`. */
+/** Deletes the leftover directories in `locks` last changed more than LEFTOVER_MILLISECONDS before `now`. */
 function sweepLeftovers(locks: string, now: Date): void {
   for (const entry of readdirSync(locks)) {
     if (!/\.lock\.(pending|stale)-/.test(entry)) continue;
     const dir = path.join(locks, entry);
     const changed = statSync(dir, { throwIfNoEntry: false })?.mtimeMs;
-    if (changed !== undefined && now.getTime() - changed > LEFTOVER_MS) rmSync(dir, { recursive: true, force: true });
+    if (changed !== undefined && now.getTime() - changed > LEFTOVER_MILLISECONDS)
+      rmSync(dir, { recursive: true, force: true });
   }
 }
 
@@ -162,18 +163,18 @@ function retryNow(lock: string, owner: string | null, options: LockOptions): boo
 }
 
 async function acquire(claim: Claim, name: string, options: LockOptions): Promise<void> {
-  const deadline = Date.now() + options.timeoutMs;
+  const deadline = Date.now() + options.timeoutMilliseconds;
   let onWait = options.onWait;
   while (!take(claim)) {
     const owner = readOwner(claim.lock);
     if (retryNow(claim.lock, owner, options)) continue;
     if (Date.now() >= deadline)
       throw new Error(
-        `timed out after ${options.timeoutMs / 1000} s waiting for the lock "${name}" at ${claim.lock}, held by ${describeOwner(owner ?? '')}`,
+        `timed out after ${options.timeoutMilliseconds / 1000} s waiting for the lock "${name}" at ${claim.lock}, held by ${describeOwner(owner ?? '')}`,
       );
     onWait?.(parseOwner(owner ?? ''));
     onWait = undefined;
-    await sleep(options.pollMs);
+    await sleep(options.pollMilliseconds);
   }
 }
 
@@ -199,7 +200,7 @@ function onSignals(handle: (signal: NodeJS.Signals) => 'die' | 'carry-on'): () =
 /**
  * Runs `fn` holding the lock `name`, waiting while another process holds it, and releases it however `fn` ends:
  * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal (unless
- * `onSignal` lets `fn` wind down first). Throws after `timeoutMs` of waiting. Before taking it, deletes what killed
+ * `onSignal` lets `fn` wind down first). Throws after `timeoutMilliseconds` of waiting. Before taking it, deletes what killed
  * takers left behind (sweepLeftovers). Not reentrant: a process waits on its own lock like on anyone's.
  */
 export async function withLock<T>(name: string, options: LockOptions, fn: () => T | Promise<T>): Promise<T> {

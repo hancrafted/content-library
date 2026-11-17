@@ -201,7 +201,7 @@ export interface WireDot {
 }
 
 /** Side by side, each message leaves a beat after the one before. */
-const STAGGER_MS = 100;
+const STAGGER_MILLISECONDS = 100;
 
 /** The messages on a scene's wire this frame: a batch side by side, or each factory request on its own lane. */
 export function onWire(frame: Frame): WireDot[] {
@@ -211,7 +211,7 @@ export function onWire(frame: Frame): WireDot[] {
         key: `${dot.dir}-${index}`,
         dir: dot.dir,
         lane: index - (dot.count - 1) / 2,
-        delay: index * STAGGER_MS,
+        delay: index * STAGGER_MILLISECONDS,
       }))
     : [];
   const requests = jobs.flatMap(({ id, lane, step }) =>

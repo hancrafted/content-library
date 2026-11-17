@@ -16,8 +16,8 @@ describe('success cases', () => {
 
   it('starts the first of six phases just after 12 o’clock and sweeps one sixth of the face', () => {
     // ARRANGE
-    const halfGap = RING.gapDeg / 2;
-    const expected = { startDeg: halfGap, endDeg: 60 - halfGap, midDeg: 30 };
+    const halfGap = RING.gapDegrees / 2;
+    const expected = { startDegrees: halfGap, endDegrees: 60 - halfGap, midDegrees: 30 };
     // ACT
     const arc = phaseArc(0, SIX);
     // ASSERT
@@ -26,8 +26,8 @@ describe('success cases', () => {
 
   it('draws a phase as a clockwise arc on the ring from its start to its end', () => {
     // ARRANGE
-    const from = polarPoint(RING.gapDeg / 2, RING.radius);
-    const to = polarPoint(60 - RING.gapDeg / 2, RING.radius);
+    const from = polarPoint(RING.gapDegrees / 2, RING.radius);
+    const to = polarPoint(60 - RING.gapDegrees / 2, RING.radius);
     const expected = `M ${from.x} ${from.y} A ${RING.radius} ${RING.radius} 0 0 1 ${to.x} ${to.y}`;
     // ACT
     const { path } = phaseArc(0, SIX);
@@ -39,9 +39,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = 30;
     // ACT
-    const { labelTurnDeg } = phaseArc(0, SIX);
+    const { labelTurnDegrees } = phaseArc(0, SIX);
     // ASSERT
-    expect(labelTurnDeg).toBe(expected);
+    expect(labelTurnDegrees).toBe(expected);
   });
 
   it('pops a phase outward along its middle: the 3 o’clock phase moves straight right', () => {
@@ -103,9 +103,9 @@ describe('edge cases', () => {
     const bottom = 3;
     const expected = 30;
     // ACT
-    const { labelTurnDeg } = phaseArc(bottom, SIX);
+    const { labelTurnDegrees } = phaseArc(bottom, SIX);
     // ASSERT
-    expect(labelTurnDeg).toBe(expected);
+    expect(labelTurnDegrees).toBe(expected);
   });
 
   it('places a phase’s label on the ring at its middle', () => {

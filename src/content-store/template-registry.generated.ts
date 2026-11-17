@@ -13,8 +13,8 @@ import { template as workshopTemplate } from './templates/workshop-template';
 export const TEMPLATE_RECORDS = {
   'episode-template': episodeTemplate,
   'explorable-page': explorablePage,
-  grids: grids,
+  'grids': grids,
   'ice-berg': iceBerg,
-  timelines: timelines,
+  'timelines': timelines,
   'workshop-template': workshopTemplate,
 } as const satisfies { readonly [S in TemplateSlug]: TemplateInput & { readonly slug: S } };

@@ -10,7 +10,7 @@ import { createPortal } from 'react-dom';
 import { TokenPanel } from './token-panel.client';
 import { usageRowAddon } from './token-usage/index.client';
 
-const GAP_PX = 8;
+const GAP_PIXELS = 8;
 
 /** Closes on Escape (returning focus to the trigger) and on a press outside both the panel and the trigger. */
 function useDismiss(open: boolean, close: () => void, trigger: React.RefObject<HTMLButtonElement | null>) {
@@ -41,7 +41,7 @@ function usePopover(trigger: React.RefObject<HTMLButtonElement | null>) {
   const [top, setTop] = useState(0);
   useDismiss(open, () => setOpen(false), trigger);
   const toggle = () => {
-    if (!open && trigger.current) setTop(trigger.current.getBoundingClientRect().bottom + GAP_PX);
+    if (!open && trigger.current) setTop(trigger.current.getBoundingClientRect().bottom + GAP_PIXELS);
     setOpen((o) => !o);
   };
   return { open, top, toggle };

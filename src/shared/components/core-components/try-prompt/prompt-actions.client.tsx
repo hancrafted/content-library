@@ -21,14 +21,14 @@ const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:
 const LEAD = 'border-(--info) bg-(--info) text-(--info-foreground) hover:bg-(--info)/90 hover:text-(--info-foreground)';
 
 /** How long the copy button says "Copied" before it reads "Copy prompt" again. */
-const CONFIRM_MS = 1600;
+const CONFIRM_MILLISECONDS = 1600;
 
-/** Whether the last copy just succeeded: true for `CONFIRM_MS` after `confirm()`, then false again. */
+/** Whether the last copy just succeeded: true for `CONFIRM_MILLISECONDS` after `confirm()`, then false again. */
 function useConfirmed() {
   const [at, setAt] = useState(0);
   useEffect(() => {
     if (at === 0) return;
-    const timer = setTimeout(() => setAt(0), CONFIRM_MS);
+    const timer = setTimeout(() => setAt(0), CONFIRM_MILLISECONDS);
     return () => clearTimeout(timer);
   }, [at]);
   return [at !== 0, () => setAt((now) => now + 1)] as const;

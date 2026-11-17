@@ -14,7 +14,7 @@ const read = (name: string): string => readFileSync(new URL(name, FOLDER), 'utf8
 const USE_CASES = ['tire', 'gate', 'teams'] as const;
 const SEEDS = 10;
 /** Ten seeds of a six-beat tour take several seconds; a closed spiral piles more work to simulate. */
-const TOUR_TIMEOUT_MS = 60_000;
+const TOUR_TIMEOUT_MILLISECONDS = 60_000;
 
 const claimTours = USE_CASES.flatMap((useCase) =>
   loadUseCase(useCase, read)
@@ -37,6 +37,6 @@ describe('claim tours across seeds', () => {
         .map((b) => `beat ${b.i + 1}: ${b.passed} of ${b.of} seeds${b.lengthOk ? '' : `, ${b.length} weeks`}`);
       expect(failing).toEqual([]);
     },
-    TOUR_TIMEOUT_MS,
+    TOUR_TIMEOUT_MILLISECONDS,
   );
 });

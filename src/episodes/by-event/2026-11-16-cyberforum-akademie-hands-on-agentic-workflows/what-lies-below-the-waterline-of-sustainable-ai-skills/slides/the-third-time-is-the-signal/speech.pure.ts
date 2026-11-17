@@ -38,9 +38,9 @@ export const SPEECH: { readonly captain: BubblePlace; readonly pilot: Record<Day
  * The narrowest picture the comic draws, in CSS pixels: a third of the `@5xl` container (64rem) less its gaps, or half
  * of a `@2xl` one. Below about this width the shared bubble turns its words up and grows.
  */
-export const NARROWEST_PICTURE_PX = 320;
+export const NARROWEST_PICTURE_PIXELS = 320;
 /** The air the two bubbles keep between them, in CSS pixels. */
-const GAP_PX = 4;
+const GAP_PIXELS = 4;
 
 export interface SpeechWords {
   readonly day: Day;
@@ -52,7 +52,7 @@ export interface SpeechLayout {
   readonly captain: SaysBoxResult;
   readonly pilot: SaysBoxResult;
   /** Screen pixels per room unit. */
-  readonly scenePx: number;
+  readonly scenePixels: number;
 }
 
 const headOf = (x: number, anchor: { x: number; y: number }, flip: boolean) => ({
@@ -60,11 +60,11 @@ const headOf = (x: number, anchor: { x: number; y: number }, flip: boolean) => (
   y: ROOM_ART.floor + anchor.y * FIGURE_SCALE,
 });
 
-/** Both bubbles' boxes in the room, at a picture `picturePx` wide. */
-export function speechLayout(words: SpeechWords, picturePx: number): SpeechLayout {
-  const scenePx = picturePx / ROOM_ART.width;
+/** Both bubbles' boxes in the room, at a picture `picturePixels` wide. */
+export function speechLayout(words: SpeechWords, picturePixels: number): SpeechLayout {
+  const scenePixels = picturePixels / ROOM_ART.width;
   const mood = PILOT_MOOD[words.day];
-  const common = { figureScale: FIGURE_SCALE, scenePx };
+  const common = { figureScale: FIGURE_SCALE, scenePixels };
   return {
     captain: saysBox({
       ...common,
@@ -80,7 +80,7 @@ export function speechLayout(words: SpeechWords, picturePx: number): SpeechLayou
       facing: 'left',
       head: headOf(PILOT_X, drawFigure(pilot, 'sit', mood).anchor, true),
     }),
-    scenePx,
+    scenePixels,
   };
 }
 
@@ -90,9 +90,9 @@ const meet = (a: SaysBoxResult, b: SaysBoxResult, gap: number) =>
 const leaves = (box: SaysBoxResult) => box.x < 0 || box.y < 0 || box.x + box.width > ROOM_ART.width;
 
 /** `bubbles meet` when the two come within 4 px, `<who> leaves the picture` past its edges; empty when it holds. */
-export function speechClashes({ captain: lifted, pilot: seated, scenePx }: SpeechLayout): readonly string[] {
+export function speechClashes({ captain: lifted, pilot: seated, scenePixels }: SpeechLayout): readonly string[] {
   return [
-    ...(meet(lifted, seated, GAP_PX / scenePx) ? ['bubbles meet'] : []),
+    ...(meet(lifted, seated, GAP_PIXELS / scenePixels) ? ['bubbles meet'] : []),
     ...(leaves(lifted) ? ['captain leaves the picture'] : []),
     ...(leaves(seated) ? ['pilot leaves the picture'] : []),
   ];

@@ -5,12 +5,12 @@
  */
 import { useCallback, useLayoutEffect, useRef, type RefObject } from 'react';
 
-const HALF_MS = 100;
+const HALF_MILLISECONDS = 100;
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const fade = (el: HTMLElement, to: 0 | 1): Animation =>
-  el.animate([{ opacity: 1 - to }, { opacity: to }], { duration: HALF_MS, easing: 'ease', fill: 'both' });
+  el.animate([{ opacity: 1 - to }, { opacity: to }], { duration: HALF_MILLISECONDS, easing: 'ease', fill: 'both' });
 
 /** The floor for the view that just mounted: on the stage for the factory, left in the grid for the roles state. */
 const placeFor = (view: string, fl: HTMLElement, place: () => void) => {

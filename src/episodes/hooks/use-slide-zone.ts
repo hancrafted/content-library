@@ -6,7 +6,7 @@ import {
   type SlideZone,
   type ZoneStore,
 } from '@/episodes/lib/slide-zone.pure';
-import { ENTRANCE_MS } from '@/episodes/lib/typewriter.pure';
+import { ENTRANCE_MILLISECONDS } from '@/episodes/lib/typewriter.pure';
 import { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 
 /** The page's zone store, provided once per Episode page by `SlideZones` (FE-009 §5). */
@@ -52,7 +52,7 @@ export function useEntryOf(id: string | null): SlideEntry {
   const { entry, store } = useEntryState(id);
   useEffect(() => {
     if (entry !== 'entering' || id === null) return;
-    const timer = window.setTimeout(() => store.finishEntry(id), ENTRANCE_MS);
+    const timer = window.setTimeout(() => store.finishEntry(id), ENTRANCE_MILLISECONDS);
     return () => window.clearTimeout(timer);
   }, [entry, id, store]);
   return entry;

@@ -49,7 +49,7 @@ export interface Span {
   start_t: string;
   end_t: string | null;
   /** End minus start, in milliseconds; null while the span has no end. */
-  duration_ms: number | null;
+  'duration_ms': number | null;
   summary: string | null;
   seq: number;
   job?: string;
