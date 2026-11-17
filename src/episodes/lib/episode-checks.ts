@@ -3,6 +3,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
 import { composedPageChecks } from './composed-page-checks';
+import { readPage } from './composed-page-context';
 import { pageFolders } from './episode-folders';
 
 /*
@@ -13,7 +14,8 @@ import { pageFolders } from './episode-folders';
  *
  * A check returns findings and never throws, so a broken Episode's test names what broke. Add a new Episode-level
  * check here, to `slides` (one per Slide folder) or `folder` (one per page folder), or to `composed-page-checks.ts` when
- * it reads the page's composition: every per-Episode test runs it without being edited.
+ * it judges the page's composition, reading anything new it needs in `composed-page-context.ts`: every per-Episode test
+ * runs it without being edited.
  *
  * Accepted rerun gap (ARCH-003 §4.6): folder existence read from disk (a Slide folder without its slide.tsx, a parts/
  * or client/ folder, a marker no Section imports) is outside the globs, so `--changed` misses it until push and CI run
@@ -108,9 +110,13 @@ function slideFolderChecks(slidesDir: string, prefix: string, entries: GlobEntri
 
 /** The composition checks of the page folder `dir`, found by the one folder walker, never by reading its path. */
 function pageChecks(dir: string, page: GlobEntries): NamedCheck[] {
-  if (Object.keys(page).length === 0) return [];
+  const load = Object.values(page)[0];
+  if (load === undefined) return [];
   const found = pageFolders(ROOT).find((folder) => folder.dir === path.resolve(dir));
-  if (found !== undefined) return composedPageChecks(dir, found as ComposedPage, page);
+  if (found !== undefined) {
+    const ref = found as ComposedPage;
+    return composedPageChecks(ref, () => readPage(found.dir, ref, load));
+  }
   return [
     {
       name: 'sits where the folder walker finds a page folder, so its composition is checked',
