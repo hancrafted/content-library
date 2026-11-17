@@ -1,7 +1,3 @@
-// `npm run check:sources -- [--links] <file>...`: GETs every `sources[].resource` of the given research files
-// (with `--links`, every link in the files' text: a Workflow run's results or page) with a browser user agent,
-// following redirects, and prints one line per URL: ok, dead or unverifiable.
-// Exits 1 only when a link is dead; a 403 or a timeout may be a bot wall, so it is left to a human.
 import { readFileSync } from 'node:fs';
 import {
   classify,
