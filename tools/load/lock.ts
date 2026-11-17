@@ -2,7 +2,7 @@
 // `wt:done` and `wt:sync` merging into one base, and the test lock pre-push's tests queue on.
 //
 // The lock is a directory `locks/<name>.lock` in the git common directory, holding an `owner` file with the
-// holder's pid and process start time. It appears whole, by renaming a filled temporary directory into place, so
+// holder's pid, process start time, branch and the time it took the lock. It appears whole, by renaming a filled temporary directory into place, so
 // a lock never exists without its owner and only one of several takers gets it. A lock whose holder died, or whose
 // pid now belongs to another process (its start time differs), is stale and is taken over (see `takeOver`).
 import { spawnSync } from 'node:child_process';
@@ -16,14 +16,19 @@ export interface LockOptions {
   pollMs: number;
   /** How long a waiter waits before it throws. */
   timeoutMs: number;
-  /** Called once, when the lock is held by another process and this one starts to wait. */
-  onWait?: () => void;
+  /** Called once, when the lock is held by another process and this one starts to wait, with that holder if readable. */
+  onWait?: (holder: Holder | null) => void;
 }
 
-interface Owner {
+/** Who holds a lock, as its `owner` file records it. */
+export interface Holder {
   pid: number;
   /** The holder's process start time as `ps -o lstart` prints it, which tells a reused pid apart. */
   started: string;
+  /** The branch checked out where the holder took the lock; empty on a detached HEAD. */
+  branch: string;
+  /** When the holder took the lock, as an ISO date. */
+  since: string;
 }
 
 /** A takeover marker this old belongs to a waiter killed mid-takeover, which takes microseconds. */
@@ -50,9 +55,9 @@ function readOwner(lock: string): string | null {
   }
 }
 
-function parseOwner(ownerText: string): Owner | null {
+function parseOwner(ownerText: string): Holder | null {
   try {
-    return JSON.parse(ownerText) as Owner;
+    return JSON.parse(ownerText) as Holder;
   } catch {
     return null;
   }
@@ -61,7 +66,9 @@ function parseOwner(ownerText: string): Owner | null {
 /** The holder as an error message names it. */
 function describeOwner(ownerText: string): string {
   const owner = parseOwner(ownerText);
-  return owner === null ? 'no readable owner' : `pid ${owner.pid} (started ${owner.started})`;
+  if (owner === null) return 'no readable owner';
+  const branch = owner.branch ? ` on branch ${owner.branch}` : '';
+  return `pid ${owner.pid} (started ${owner.started})${branch} since ${owner.since}`;
 }
 
 /** Whether the holder is gone: dead, its pid reused by a process started at another time, or no owner at all. */
@@ -110,9 +117,13 @@ function lockPath(name: string, cwd: string): string {
   return path.join(common.stdout.trim(), 'locks', `${encodeURIComponent(name)}.lock`);
 }
 
-/** One call's claim on a lock: its own owner text, and the filled directory it renames into place to take it. */
+/**
+ * One call's claim on a lock: who it is, its owner text as last written, and the directory it renames into place
+ * to take it.
+ */
 interface Claim {
   lock: string;
+  me: Omit<Holder, 'since'>;
   mine: string;
   pending: string;
   held: boolean;
@@ -122,15 +133,19 @@ function prepare(name: string, cwd: string): Claim {
   const lock = lockPath(name, cwd);
   const started = startTime(process.pid);
   if (started === null) throw new Error("cannot read this process's start time with ps");
-  const mine = JSON.stringify({ pid: process.pid, started } satisfies Owner);
+  const branch = spawnSync('git', ['branch', '--show-current'], { cwd, encoding: 'utf8' }).stdout?.trim() ?? '';
   mkdirSync(path.dirname(lock), { recursive: true });
   const pending = mkdtempSync(`${lock}.pending-`);
-  writeFileSync(path.join(pending, 'owner'), mine);
-  return { lock, mine, pending, held: false };
+  return { lock, me: { pid: process.pid, started, branch }, mine: '', pending, held: false };
 }
 
-/** Takes the lock if it is free: the rename fails while another lock directory sits in place. */
+/**
+ * Takes the lock if it is free: the rename fails while another lock directory sits in place. The owner file is
+ * written into the still private directory first, stamped with this attempt's time, so `since` is when it took it.
+ */
 function take(claim: Claim): boolean {
+  claim.mine = JSON.stringify({ ...claim.me, since: new Date().toISOString() } satisfies Holder);
+  writeFileSync(path.join(claim.pending, 'owner'), claim.mine);
   try {
     renameSync(claim.pending, claim.lock);
     claim.held = true;
@@ -163,7 +178,7 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
       throw new Error(
         `timed out after ${options.timeoutMs / 1000} s waiting for the lock "${name}" at ${claim.lock}, held by ${describeOwner(owner ?? '')}`,
       );
-    onWait?.();
+    onWait?.(parseOwner(owner ?? ''));
     onWait = undefined;
     await sleep(options.pollMs);
   }

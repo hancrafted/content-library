@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { SlowTestsLog } from './vitest-slow-tests.mts';
-import { currentLoad } from './vitest-workers.mts';
+import { SlowTestsLog } from './tools/load/slow-tests.mts';
+import { currentLoad } from './tools/load/workers.mts';
 
 const ROOT = import.meta.dirname;
 
@@ -71,7 +71,7 @@ const TRIGGERS = [
 ];
 
 // Workers and the test timeout both follow the load measured now: 5 s idle, up to 20 s on a loaded machine, 5 s on
-// CI (vitest-workers.mts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
+// CI (tools/load/workers.mts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
 // reporter's stdout clean.
 const load = await currentLoad();
 console.error(
@@ -92,8 +92,9 @@ export default defineConfig({
   test: {
     maxWorkers: load.workers,
     testTimeout: load.testTimeout,
-    // Vitest's own default reporters, plus the log of every test over 5 s, which `wt:done` prints at merge.
-    reporters: [...configDefaults.reporters, new SlowTestsLog()],
+    // Vitest's own default reporters, plus the log of every test over 750 ms with its load factor, which
+    // `verify` and `wt:done` print (tools/load/slow-tests.mts).
+    reporters: [...configDefaults.reporters, new SlowTestsLog({ loadFactor: load.loadFactor })],
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,

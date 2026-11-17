@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { TestCase } from 'vitest/node';
-import { SlowTestsLog } from './vitest-slow-tests.mts';
+import { SlowTestsLog, trimSlowTests } from './slow-tests.mts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -33,19 +33,20 @@ const AT = new Date('2026-11-16T08:00:00.000Z');
 
 describe('SlowTestsLog', () => {
   describe('success cases', () => {
-    it('appends a test over 5 s to the log in the git common directory, shared by every worktree', () => {
+    it('appends a test over 750 ms, with the load factor it ran at, to the log in the git common directory', () => {
       // ARRANGE
       const { workTree, log } = fixture();
-      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT });
+      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT, loadFactor: 2.345 });
       const expected = {
         test: 'registry > walks it',
         file: 'src/registry.test.ts',
-        ms: 6200,
+        ms: 751,
+        loadFactor: 2.3,
         branch: 'work',
         at: AT.toISOString(),
       };
       // ACT
-      reporter.onTestCaseResult(finished('registry > walks it', 'src/registry.test.ts', 6200));
+      reporter.onTestCaseResult(finished('registry > walks it', 'src/registry.test.ts', 751));
       // ASSERT
       expect(
         readFileSync(log, 'utf8')
@@ -60,7 +61,7 @@ describe('SlowTestsLog', () => {
     it('logs nothing outside a git repository rather than failing the run', () => {
       // ARRANGE
       const outside = realpathSync(mkdtempSync(path.join(tmpdir(), 'no-repo-')));
-      const reporter = new SlowTestsLog({ cwd: outside, now: () => AT });
+      const reporter = new SlowTestsLog({ cwd: outside, now: () => AT, loadFactor: 1 });
       // ACT
       const report = () => reporter.onTestCaseResult(finished('a > b', 'a.test.ts', 6200));
       // ASSERT
@@ -69,12 +70,67 @@ describe('SlowTestsLog', () => {
   });
 
   describe('edge cases', () => {
-    it('leaves a test at or under 5 s out of the log', () => {
+    it('leaves a test at or under 750 ms out of the log', () => {
       // ARRANGE
       const { workTree, log } = fixture();
-      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT });
+      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT, loadFactor: 1 });
       // ACT
-      reporter.onTestCaseResult(finished('quick', 'q.test.ts', 5000));
+      reporter.onTestCaseResult(finished('quick', 'q.test.ts', 750));
+      // ASSERT
+      expect(existsSync(log)).toBe(false);
+    });
+  });
+});
+
+/** One log line for a test logged at `at`. */
+const line = (test: string, at: string) =>
+  JSON.stringify({ test, file: 'a.test.ts', ms: 900, loadFactor: 1.2, branch: 'work', at }) + '\n';
+
+describe('trimSlowTests', () => {
+  describe('success cases', () => {
+    it('keeps the entries of the last 30 days and drops the older ones', () => {
+      // ARRANGE
+      const { log } = fixture();
+      const now = new Date('2026-11-17T12:00:00.000Z');
+      writeFileSync(
+        log,
+        line('31 days old', '2026-10-17T11:59:59.000Z') +
+          line('exactly 30 days old', '2026-10-18T12:00:00.000Z') +
+          line('yesterday', '2026-11-16T12:00:00.000Z'),
+      );
+      const expectedTests = ['exactly 30 days old', 'yesterday'];
+      // ACT
+      trimSlowTests(log, now);
+      const kept = readFileSync(log, 'utf8')
+        .trim()
+        .split('\n')
+        .map((entry) => (JSON.parse(entry) as { test: string }).test);
+      // ASSERT
+      expect(kept).toEqual(expectedTests);
+    });
+  });
+
+  describe('failure cases', () => {
+    it('drops a line it cannot read', () => {
+      // ARRANGE
+      const { log } = fixture();
+      const now = new Date('2026-11-17T12:00:00.000Z');
+      writeFileSync(log, '{"test": "cut off mid-wri\n' + line('yesterday', '2026-11-16T12:00:00.000Z'));
+      const expected = line('yesterday', '2026-11-16T12:00:00.000Z');
+      // ACT
+      trimSlowTests(log, now);
+      // ASSERT
+      expect(readFileSync(log, 'utf8')).toBe(expected);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('creates no log when there is none yet', () => {
+      // ARRANGE
+      const { log } = fixture();
+      const now = new Date('2026-11-17T12:00:00.000Z');
+      // ACT
+      trimSlowTests(log, now);
       // ASSERT
       expect(existsSync(log)).toBe(false);
     });
