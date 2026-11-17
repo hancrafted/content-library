@@ -61,7 +61,6 @@ export interface PushFacts {
 
 const BUILD_PHASES: readonly (readonly Step[])[] = [[script('build')], [script('test:build')]];
 
-/** Why a push builds, or `null` when it need not: a push to main always builds, so CI's deploy never waits on a broken build. */
 function buildReason({ refs, mergeBase, changedPaths }: PushFacts): string | null {
   const remoteRefs = refs.split('\n').map((line) => line.trim().split(/\s+/)[2]);
   if (remoteRefs.includes('refs/heads/main')) return 'push to main: building';
@@ -102,12 +101,6 @@ function heldOnce(hold: Hold): { take: () => Promise<void>; release: () => Promi
   return { take, release };
 }
 
-/**
- * Wraps `exec` so the plan's `testLock` steps run inside one hold of the lock: taken as the first starts, kept
- * between them, let go once the last has finished. A step that cannot take the lock fails with the reason. Call
- * `release` once the plan ends: it lets go of a hold the plan left open by stopping before its last locked step,
- * and resolves once the lock is released.
- */
 export function holdAcrossLockedSteps(
   plan: Plan,
   exec: Exec,

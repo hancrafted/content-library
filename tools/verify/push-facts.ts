@@ -7,11 +7,6 @@ function git(cwd: string, args: string[], allowed: readonly number[] = [0]) {
   return { status: run.status, stdout: run.stdout.trim() };
 }
 
-/**
- * The merge-base of HEAD with origin/main, and every path changed from it to HEAD. Without a common ancestor
- * (git's exit 1) the merge-base is null and no paths are listed. Throws when origin/main is missing: run
- * `git fetch origin`.
- */
 export function changesSinceMain(cwd: string): { mergeBase: string | null; changedPaths: string[] } {
   const base = git(cwd, ['merge-base', 'HEAD', 'origin/main'], [0, 1]);
   if (base.status === 1) return { mergeBase: null, changedPaths: [] };
