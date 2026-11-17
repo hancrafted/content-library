@@ -9,7 +9,6 @@ export interface DraftColumn {
   readonly focus?: boolean;
 }
 
-/** Slide 1's card look for a step: a card, a shadow and a slight tilt, alternating so the notes read handwritten. */
 const tiltOf = (at: number) => (at % 4 === 0 || at % 4 === 3 ? '-rotate-1' : 'rotate-1');
 
 function Column({ column }: { column: DraftColumn }) {

@@ -51,10 +51,6 @@ function RoleBox({ role }: { role: Role }) {
   );
 }
 
-/**
- * The party committee as an org chart: its lead over three roles, each drawn with one disc per person, so the venue
- * scouts' ten read against the caterer's and the travel planner's one.
- */
 export function OrgChart({ label, lead, roles }: { label: ReactNode; lead: string; roles: readonly Role[] }) {
   return (
     <div className="flex min-w-0 flex-col gap-3">
