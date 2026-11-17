@@ -1,61 +1,12 @@
-import { execFileSync, spawn } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { existsSync, mkdirSync, readdirSync, readFileSync, utimesSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { psStartTime } from './lock-owner.ts';
+import { child, deadPid, FAST, gate, plantLock, repo } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
-
-/** A fresh repository with a linked worktree; the locks live in the git common directory both share. */
-function repo() {
-  const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'load-lock-')));
-  const main = path.join(root, 'main');
-  const linked = path.join(root, 'linked');
-  execFileSync('git', ['init', '-q', main]);
-  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '--allow-empty', '-m', 'init'], {
-    cwd: main,
-  });
-  execFileSync('git', ['worktree', 'add', '-q', '-b', 'linked', linked], { cwd: main });
-  return { root, main, linked, locks: path.join(main, '.git', 'locks') };
-}
-
-const FAST = { pollMs: 10, timeoutMs: 5000 };
-
-/** A promise and the function that settles it, so a test decides when a holder lets go. */
-function gate() {
-  let open: () => void = () => undefined;
-  const opened = new Promise<void>((resolve) => (open = resolve));
-  return { open, opened };
-}
-
-/** A pid that belonged to a process which has exited. */
-const deadPid = (): number =>
-  Number(execFileSync(process.execPath, ['-e', 'console.log(process.pid)'], { encoding: 'utf8' }).trim());
-
-/** Plants a lock as a holder that is gone would have left it. */
-function plantLock(lock: string, owner: { pid: number; started: string }): void {
-  mkdirSync(lock, { recursive: true });
-  writeFileSync(path.join(lock, 'owner'), JSON.stringify(owner));
-}
-
-const MODULE = path.join(import.meta.dirname, 'lock.ts');
-
-/** Runs `body` in its own Node process with `withLock` imported, as a second `wt:done` or `verify` would. */
-function child(body: string, args: string[], onLine?: (line: string, kill: (s: NodeJS.Signals) => void) => void) {
-  const code = `import { withLock } from ${JSON.stringify(MODULE)};\nimport fs from 'node:fs';\n${body}`;
-  return new Promise<{ code: number | null; signal: NodeJS.Signals | null; output: string }>((resolve) => {
-    const proc = spawn(process.execPath, ['--input-type=module', '-e', code, ...args]);
-    let output = '';
-    proc.stdout.on('data', (chunk: Buffer) => {
-      output += chunk.toString();
-      for (const line of chunk.toString().split('\n')) if (line) onLine?.(line, (s) => proc.kill(s));
-    });
-    proc.stderr.on('data', (chunk: Buffer) => (output += chunk.toString()));
-    proc.on('close', (exit, signal) => resolve({ code: exit, signal, output }));
-  });
-}
 
 describe('withLock', () => {
   describe('success cases', () => {
@@ -204,6 +155,40 @@ describe('withLock', () => {
         results.map((r) => r.output).join('\n'),
       ).toEqual(Array.from({ length: waiters }, () => 0));
       expect(readFileSync(log, 'utf8').trim().split('\n')).toEqual(expected);
+    });
+
+    it('keeps waiting rather than take over a lock whose holder ps could not be asked about', async () => {
+      // ARRANGE
+      const { main, locks } = repo();
+      plantLock(path.join(locks, 'base.lock'), { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
+      const psFailsForOthers = (pid: number) =>
+        pid === process.pid ? psStartTime(pid) : ({ state: 'unknown' } as const);
+      const expected = /timed out .*"base"/;
+      // ACT
+      const run = withLock('base', { ...FAST, cwd: main, timeoutMs: 50, startTimeOf: psFailsForOthers }, () => 'never');
+      // ASSERT
+      await expect(run).rejects.toThrow(expected);
+    });
+
+    it('deletes the pending and stale directories killed takers left over an hour ago, and only those', async () => {
+      // ARRANGE
+      const { main, locks } = repo();
+      const now = new Date('2026-11-17T12:00:00.000Z');
+      const leftovers = {
+        'base.lock.pending-old': new Date('2026-11-17T10:00:00.000Z'),
+        'base.lock.stale-old': new Date('2026-11-17T10:59:00.000Z'),
+        'base.lock.pending-recent': new Date('2026-11-17T11:30:00.000Z'),
+        'other.lock.stale-recent': new Date('2026-11-17T11:59:00.000Z'),
+      };
+      for (const [name, changed] of Object.entries(leftovers)) {
+        mkdirSync(path.join(locks, name), { recursive: true });
+        utimesSync(path.join(locks, name), changed, changed);
+      }
+      const expected = ['base.lock.pending-recent', 'other.lock.stale-recent'];
+      // ACT
+      await withLock('base', { ...FAST, cwd: main, now }, () => undefined);
+      // ASSERT
+      expect(readdirSync(locks).sort()).toEqual(expected);
     });
 
     it('keeps names apart that differ only in where a slash and a dash sit', async () => {
