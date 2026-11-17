@@ -1,8 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Presence only — archgate's reader resolves symlinks, so a copied body is indistinguishable
-// from a pointer, a review duty.
-// Self-contained by design: archgate forbids imports between rules files.
 // decision: GEN-002 §1.4
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const CLAUDE_RULES_GLOB = '.claude/rules/*.md';
@@ -32,8 +29,7 @@ function getFrontmatterValue(fm: string, key: string): string | null {
     .trim();
 }
 
-// Block-form counts as empty here by design — the inline flow form is required, and a block value parses as no scope at all.
-function hasNonEmptyPaths(fm: string): boolean {
+function hasNonEmptyInlineFlowPathsBlockFormCountsAsEmpty(fm: string): boolean {
   const val = getFrontmatterValue(fm, 'paths');
   return val !== null && val !== '' && !/^\[\s*\]$/.test(val);
 }
@@ -55,7 +51,7 @@ export default {
         for (const file of files) {
           const fm = extractFrontmatter(await ctx.readFile(file)) ?? '';
           const link = symlinkPathFor(file);
-          if (hasNonEmptyPaths(fm)) {
+          if (hasNonEmptyInlineFlowPathsBlockFormCountsAsEmpty(fm)) {
             expected.add(link);
             if (!entries.has(link)) {
               ctx.report.violation({
@@ -72,7 +68,8 @@ export default {
         }
         for (const entry of entries) {
           if (expected.has(entry)) continue;
-          if (!CLAUDE_ADR_LINK_RE.test(basename(entry))) continue; // hand-written, non-ADR-named rule file — leave it alone
+          const isHandWrittenNonAdrRuleFile = !CLAUDE_ADR_LINK_RE.test(basename(entry));
+          if (isHandWrittenNonAdrRuleFile) continue;
           ctx.report.violation({
             message: `Runtime symlink '${entry}' has no backing ADR with a non-empty paths: — remove the orphan (GEN-002 [adr-claude-rules-symlink]).`,
             file: entry,
