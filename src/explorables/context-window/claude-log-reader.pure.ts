@@ -5,12 +5,11 @@ import type { Block, Category, Reminder, Step, ToolCall } from './context.types'
 export interface LogOptions {
   readonly id: string;
   readonly start: { readonly id: string; readonly blocks: readonly Block[] };
-  /** The size of each memory file; without it, a memory file is sized by its text. */
-  readonly memory?: number;
+  readonly memorySizeTokens?: number;
 }
 
-/** A token estimate from text length, about four characters a token, and the unrounded share weight. */
-export const weight = (text: string): number => text.length / 4;
+const CHARACTERS_PER_TOKEN = 4;
+export const weight = (text: string): number => text.length / CHARACTERS_PER_TOKEN;
 export const estimate = (text: string): number => Math.max(1, Math.round(weight(text)));
 
 const HIDDEN_USER = /^\s*<(?:command-|local-command|system-reminder|task-notification|bash-)/;
@@ -98,7 +97,7 @@ export class LogReader {
   private readonly tools = new Map<string, Draft>();
 
   constructor(options: LogOptions) {
-    this.memorySize = options.memory;
+    this.memorySize = options.memorySizeTokens;
     const blocks = options.start.blocks.map((b) => ({ ...b }));
     this.steps.push({ id: options.start.id, kind: 'start', blocks, fields: {} });
     this.last = blocks.reduce((sum, b) => sum + b.tokens, 0);

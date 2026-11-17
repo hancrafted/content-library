@@ -10,7 +10,7 @@ const START = {
     { cat: 'systools', tokens: 200 },
   ],
 } as const;
-const OPTIONS: LogOptions = { id: 'party', start: START, memory: 50 };
+const OPTIONS: LogOptions = { id: 'party', start: START, memorySizeTokens: 50 };
 const DATE = 'Today is 27 June.';
 const CHAT: Chat = {
   id: 'party',

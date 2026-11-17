@@ -17,7 +17,11 @@ function openLog(text: string, chat: Chat): Chat | null {
   const start = chat.steps[0];
   if (!start) return null;
   const memory = chat.steps.find((s) => s.kind === 'memory')?.blocks[0]?.tokens;
-  const opened = fromClaudeLog(text, { id: 'opened', start: { id: start.id, blocks: start.blocks }, memory });
+  const opened = fromClaudeLog(text, {
+    id: 'opened',
+    start: { id: start.id, blocks: start.blocks },
+    memorySizeTokens: memory,
+  });
   return opened.steps.length > 1 ? opened : null;
 }
 

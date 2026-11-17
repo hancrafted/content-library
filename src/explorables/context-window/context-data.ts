@@ -146,7 +146,7 @@ function windowOf(config: Config, words: ContextWords, ref: WindowRef): WindowSi
 function chatsOf(en: Config, log: string): Record<string, Chat> {
   const start = startOf(en);
   const startStep: Step = { id: start.id, kind: 'start', blocks: start.blocks };
-  const full = fromClaudeLog(log, { id: 'summer-party', start, memory: en.memory });
+  const full = fromClaudeLog(log, { id: 'summer-party', start, memorySizeTokens: en.memory });
   return Object.fromEntries(
     Object.entries(en.chats).map(([id, spec]) => {
       if (!spec.log) return [id, blocksChat(id, spec.start === false ? null : startStep, spec.blocks ?? [])];

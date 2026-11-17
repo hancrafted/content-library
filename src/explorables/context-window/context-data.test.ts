@@ -18,7 +18,7 @@ function keyPaths(value: unknown, prefix = ''): string[] {
 function optionsOf(chat: Chat): LogOptions {
   const [start] = chat.steps;
   const memory = chat.steps.find((step) => step.kind === 'memory')?.blocks[0]?.tokens;
-  return { id: 'summer-party', start: { id: start?.id ?? '', blocks: start?.blocks ?? [] }, memory };
+  return { id: 'summer-party', start: { id: start?.id ?? '', blocks: start?.blocks ?? [] }, memorySizeTokens: memory };
 }
 
 describe('success cases', () => {
