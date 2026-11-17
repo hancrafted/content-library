@@ -55,7 +55,6 @@ function useTocState(props: {
   const active = activeEntry(order.owners, slide, props.topId);
   const atTop = slide === props.topId;
   const fraction = useFractionInto(slide, props.targetAttribute);
-  // The server cannot know the hash, so the table holds its loading box until the client has read it.
   const settled = useSettled(useHydrated() ? slide : null);
   const revealed = useRevealed(settled);
   const time = readingTime(
@@ -131,10 +130,6 @@ function MobilePanel({ panel }: { panel: ReturnType<typeof usePanel> }) {
   );
 }
 
-/**
- * A reusable, page-agnostic table of contents. Fixed panel from `md`, pill-and-drawer below it.
- * From `md` it can collapse to show only the numbers, widening the content area.
- */
 export function TableOfContents(props: TableOfContentsProps) {
   const panel = usePanel(props);
   const [collapsed, toggleCollapse] = useTocCollapse();

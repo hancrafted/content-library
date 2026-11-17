@@ -26,7 +26,6 @@ function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
   }, [dialog]);
 }
 
-/** Closes on a backdrop tap and on any link tap, so following an entry reveals the slide. */
 function closeOnDismiss(event: MouseEvent<HTMLDialogElement>) {
   const target = event.target as Element;
   if (target === event.currentTarget || target.closest('a')) event.currentTarget.close();
@@ -47,11 +46,6 @@ function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
   );
 }
 
-/**
- * Below `md`: a floating pill showing where the reader is, which slides the
- * table of contents in from the left as a native modal dialog — Escape, focus return and
- * an inert page come from the platform.
- */
 export function TocDrawer(props: DrawerProps & { children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useCloseAtDesktop(dialog);

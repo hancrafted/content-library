@@ -10,10 +10,6 @@ function slideBox(id: string | null): { top: number; height: number } | null {
   return rect ? { top: rect.top, height: rect.height } : null;
 }
 
-/**
- * Flags the Episode page and TOC aside when the TOC is collapsed, narrowing the left inset
- * so the content area grows. Before paint it adjusts scroll so the reading line stays steady.
- */
 export function TocCollapseFlag({ collapsed }: { collapsed: boolean }) {
   const slide = useActiveSlide();
   useLayoutEffect(() => {

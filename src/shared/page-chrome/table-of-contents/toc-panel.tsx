@@ -159,7 +159,6 @@ export function TocPanel(props: TocPanelProps) {
       className={cn(
         'relative flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl',
         'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',
-        // 3.625rem = 2rem marker + 2 × p-3 + 2px border: the numbers keep their place.
         props.collapsed ? 'w-[3.625rem]' : 'w-full',
         props.className,
       )}

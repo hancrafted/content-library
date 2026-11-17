@@ -1,9 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** Spring with a slight overshoot, so the arc lands rather than stops. */
 const SPRING = 'ease-[cubic-bezier(0.34,1.56,0.64,1)] duration-[220ms]';
-/** The section number's slot; sections without slides show the bare number in it. */
 export const SECTION_NUMBER =
   'grid size-8 shrink-0 place-items-center rounded-full text-caption leading-none tabular-nums';
 
@@ -30,10 +28,6 @@ function QuarterArc({ open, settled }: { open: boolean; settled: boolean }) {
   );
 }
 
-/**
- * The section number doubles as the disclosure: a quarter arc on its ring
- * points east while the section is closed and swings south once it opens.
- */
 export function NumberToggle(props: NumberToggleProps) {
   return (
     <button
