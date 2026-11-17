@@ -3,7 +3,7 @@ import type { FactoryNode } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 import type { AiQuality, Arrivals, Defect, Dials, Over, OwnSet, Settings, Strength } from './software-ecology.types';
 
-export const DTW = 1 / 480;
+export const WEEKS_PER_STEP = 1 / 480;
 export const SPEEDS = [0, 1, 2, 5, 10, 20] as const;
 export const DAYS = 5;
 /** Every handoff takes a quarter working day, whatever the belt length. */

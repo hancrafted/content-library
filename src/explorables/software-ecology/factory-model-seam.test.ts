@@ -112,7 +112,7 @@ describe('failure cases', () => {
     // ARRANGE
     const src = [
       "import { COMPL } from './factory-flow.pure.ts';",
-      "import { dials, DTW } from './factory-dials.pure.ts';",
+      "import { dials, WEEKS_PER_STEP } from './factory-dials.pure.ts';",
       'this.m.hook = this.hear;',
     ].join('\n');
     const expected = ['imports factory-flow', 'imports dials from factory-dials', 'reaches into the network'];
@@ -140,7 +140,7 @@ describe('edge cases', () => {
   it('lets a module read the settings constants and the handle’s own types', () => {
     // ARRANGE
     const src = [
-      "import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';",
+      "import { DAYS, WEEKS_PER_STEP, startSettings } from './factory-dials.pure.ts';",
       "import type { Floor, Snapshot } from './factory-model.pure.ts';",
       "import { RACK } from './stage-readouts.pure.ts';",
     ].join('\n');

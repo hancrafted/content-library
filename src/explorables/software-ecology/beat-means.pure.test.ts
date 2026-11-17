@@ -1,7 +1,7 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DTW } from './factory-dials.pure.ts';
+import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 
 const WEEK = stepsTo(1);
 const EIGHTH = WEEK / 8;
@@ -11,7 +11,7 @@ const clockModel = () => {
   const m = {
     k: 0,
     step: (weeks: number) => {
-      m.k += Math.round(weeks / DTW);
+      m.k += Math.round(weeks / WEEKS_PER_STEP);
     },
     read: () => ({ measures: { 'x.step': m.k } }),
   };

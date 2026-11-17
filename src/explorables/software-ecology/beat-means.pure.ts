@@ -1,16 +1,16 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
-import { DTW } from './factory-dials.pure.ts';
+import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 
-export const WINDOW = 2;
+export const WINDOW_WEEKS = 2;
 const SAMPLES_A_WEEK = 8;
 
 export type Values = Readonly<Record<string, number>>;
 
-export const stepsTo = (weeks: number): number => Math.round(weeks / DTW);
+export const stepsTo = (weeks: number): number => Math.round(weeks / WEEKS_PER_STEP);
 
 const sampleSteps = (x: { start: number; end: number; window?: number }): number[] => {
-  const w = Math.min(x.end - x.start, stepsTo(x.window ?? WINDOW)),
-    every = Math.max(1, Math.round(1 / SAMPLES_A_WEEK / DTW));
+  const w = Math.min(x.end - x.start, stepsTo(x.window ?? WINDOW_WEEKS)),
+    every = Math.max(1, Math.round(1 / SAMPLES_A_WEEK / WEEKS_PER_STEP));
   if (w <= 0) return [x.end];
   const out: number[] = [];
   for (let done = 0; done < w;) {
@@ -39,11 +39,11 @@ export const createSampler = (x: { start: number; end: number; window?: number; 
       const stop = r.k + r.n;
       let k = r.k;
       for (let next = at[got.length]; next !== undefined && next <= stop; next = at[got.length]) {
-        if (next > k) f.step((next - k) * DTW);
+        if (next > k) f.step((next - k) * WEEKS_PER_STEP);
         k = Math.max(k, next);
         got.push({ ...f.read({ measures: x.keys }).measures });
       }
-      if (stop > k) f.step((stop - k) * DTW);
+      if (stop > k) f.step((stop - k) * WEEKS_PER_STEP);
     },
     mean: () => meanOf(x.keys, got),
     get readings() {

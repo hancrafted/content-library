@@ -1,7 +1,7 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { drawDoc, readColors, type Colors } from './doc-sprites.ts';
 import type { Floor, FloorDoc, FloorList, FloorStation, FloorWork } from './factory-model.pure.ts';
-import { SPEED_1X } from './factory-run.pure.ts';
+import { WEEKS_PER_REAL_SECOND_AT_1X } from './factory-run.pure.ts';
 import { progressOf } from './paint-rack.ts';
 
 const BELT_CHIPS = 24;
@@ -50,7 +50,9 @@ const setBg = (el: HTMLElement, url: string) => {
 };
 
 const ringOf = (sv: FloorWork, x: { t: number; speed: number }): string =>
-  (sv.end - sv.start) / Math.max(1e-6, x.speed * SPEED_1X) < FAST_SECS ? '0.6' : progressOf(sv, x.t).toFixed(2);
+  (sv.end - sv.start) / Math.max(1e-6, x.speed * WEEKS_PER_REAL_SECOND_AT_1X) < FAST_SECS
+    ? '0.6'
+    : progressOf(sv, x.t).toFixed(2);
 
 const drawColumn = (col: HTMLElement, x: { n: FloorStation; t: number; speed: number }) => {
   const ring = col.querySelector<HTMLElement>('[data-r="ring"]'),

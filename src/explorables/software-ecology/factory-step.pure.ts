@@ -1,7 +1,7 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import {
   dials,
-  DTW,
+  WEEKS_PER_STEP,
   ownOf,
   productCo,
   Q,
@@ -203,7 +203,7 @@ const decayCustomer = (m: Factory, dt: number, fdec: number): void => {
   m.req *= fdec;
 };
 
-export const step = (m: Factory, dt = DTW): void => {
+export const step = (m: Factory, dt = WEEKS_PER_STEP): void => {
   const t0 = m.t,
     t1 = t0 + dt,
     fdec = Math.exp(-dt / TAU),

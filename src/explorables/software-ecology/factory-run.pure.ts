@@ -1,6 +1,6 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { type Sampler, type Values } from './beat-means.pure.ts';
-import { DAYS, DTW, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DAYS, WEEKS_PER_STEP, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
   DEFAULT_SEED,
@@ -16,14 +16,11 @@ import { startBacklogOf } from './start-backlog.pure.ts';
 import { startSettings } from './start-settings.pure.ts';
 import { unretired } from './use-case-preset-checks.pure.ts';
 
-/** Weeks a real second at 1×; 10× plays a working day in about 0.6 s. */
-export const SPEED_1X = 1 / 32;
+export const WEEKS_PER_REAL_SECOND_AT_1X = 1 / 32;
 export const DEFAULT_SPEED = 1;
-/** Model steps a frame at most; beyond that the frame drops time. */
-export const MAX_STEPS = 40;
-/** Warm-up steps a frame. */
-export const WARM_CHUNK = 2000;
-const WARM_STEPS = Math.round(WARM_WEEKS / DTW);
+export const MAX_STEPS_PER_FRAME = 40;
+export const WARM_STEPS_PER_FRAME = 2000;
+const WARM_STEPS = Math.round(WARM_WEEKS / WEEKS_PER_STEP);
 
 export const presetOf = (B: Bundle, wanted: string): Preset => {
   const ps = B.data.presets;
@@ -92,7 +89,7 @@ export class FactoryRun {
   }
 
   get k(): number {
-    return Math.round(this.f.weeks / DTW);
+    return Math.round(this.f.weeks / WEEKS_PER_STEP);
   }
 
   aim(to: Aim | null) {
@@ -139,7 +136,7 @@ export class FactoryRun {
     const k = this.k,
       s = this.aimed?.sampling;
     if (s) s.run(this.f, { k, n });
-    else if (n > 0) this.f.step(n * DTW);
+    else if (n > 0) this.f.step(n * WEEKS_PER_STEP);
   }
 
   finishWarm() {
@@ -150,7 +147,7 @@ export class FactoryRun {
   }
 
   private warmChunk() {
-    const n = Math.min(WARM_CHUNK, this.warmLeft);
+    const n = Math.min(WARM_STEPS_PER_FRAME, this.warmLeft);
     this.steps(n);
     this.warmLeft -= n;
     this.acc = 0;
@@ -161,7 +158,7 @@ export class FactoryRun {
     const stop = this.stopAt ?? Infinity,
       room = stop - this.k;
     let n = 0;
-    for (; this.acc >= DTW && n < MAX_STEPS && n < room; n++) this.acc -= DTW;
+    for (; this.acc >= WEEKS_PER_STEP && n < MAX_STEPS_PER_FRAME && n < room; n++) this.acc -= WEEKS_PER_STEP;
     this.steps(n);
     if (this.k >= stop) this.acc = 0;
   }
@@ -177,9 +174,9 @@ export class FactoryRun {
       this.warmChunk();
       return !this.warming;
     }
-    this.acc += dt * speed * SPEED_1X;
+    this.acc += dt * speed * WEEKS_PER_REAL_SECOND_AT_1X;
     this.stepDue();
-    if (this.acc >= DTW) {
+    if (this.acc >= WEEKS_PER_STEP) {
       this.dropped = Math.min(5, this.dropped + 1);
       this.acc = 0;
     } else if (this.dropped) this.dropped *= 0.995;

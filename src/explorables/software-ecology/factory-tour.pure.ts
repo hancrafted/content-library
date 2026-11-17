@@ -1,7 +1,7 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { createSampler, stepsTo } from './beat-means.pure.ts';
 import { beatsOf, stepsOf, type Beat } from './factory-beats.pure.ts';
-import { DAYS, DTW } from './factory-dials.pure.ts';
+import { DAYS, WEEKS_PER_STEP } from './factory-dials.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { settingsAfter, type Check } from './factory-scenario.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
@@ -112,10 +112,10 @@ export const tourCard = (t: Tour): string | undefined => stepOf(t).card;
 export const tourWeekOf = (t: Tour): number => stepOf(t).run;
 export const tourLength = (t: Tour): number => stepsOf(t.preset).length;
 
-export const tourWeeks = (run: FactoryRun, t: Tour): number => (t.t0k === null ? 0 : (run.k - t.t0k) * DTW);
+export const tourWeeks = (run: FactoryRun, t: Tour): number => (t.t0k === null ? 0 : (run.k - t.t0k) * WEEKS_PER_STEP);
 
 export const tourClock = (run: FactoryRun, t: Tour): { week: number; day: number } | null => {
   if (t.t0k === null) return null;
-  const d = Math.floor((run.k - t.t0k) * DTW * DAYS + 1e-9);
+  const d = Math.floor((run.k - t.t0k) * WEEKS_PER_STEP * DAYS + 1e-9);
   return { week: Math.floor(d / DAYS), day: (d % DAYS) + 1 };
 };

@@ -1,5 +1,5 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
-import { DTW } from './factory-dials.pure.ts';
+import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 import { floorOf } from './factory-floor-reads.pure.ts';
 import { buildFactory, DEFAULT_SEED } from './factory-network.pure.ts';
 import type { Floor, FloorEvent, FloorListener, Topology } from './factory-reads.types';
@@ -48,7 +48,7 @@ export const createFactory = (useCase: Bundle, settings: Settings, seed: number 
       return m.t;
     },
     step: (weeks) => {
-      for (let i = 0, n = Math.round(weeks / DTW); i < n; i++) step(m);
+      for (let i = 0, n = Math.round(weeks / WEEKS_PER_STEP); i < n; i++) step(m);
     },
     set: (s) => {
       m.s = s;

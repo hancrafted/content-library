@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
 import type { Snapshot } from './factory-model.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
-import { SPEED_1X, type FactoryRun } from './factory-run.pure.ts';
+import { WEEKS_PER_REAL_SECOND_AT_1X, type FactoryRun } from './factory-run.pure.ts';
 import type { PileStyle } from './paint-pile.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
@@ -69,7 +69,7 @@ const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number 
     now: x.now,
     reduced: x.reduced,
     warming: w ? x.live.words.warming(w.day, w.of) : null,
-    secsPerWeek: x.live.speed ? 1 / (x.live.speed * SPEED_1X) : 0,
+    secsPerWeek: x.live.speed ? 1 / (x.live.speed * WEEKS_PER_REAL_SECOND_AT_1X) : 0,
     blocked: x.live.words.blocked,
     pile: x.live.pile,
   };

@@ -1,7 +1,7 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
-import { createSampler, stepsTo, type Values, WINDOW } from './beat-means.pure.ts';
+import { createSampler, stepsTo, type Values, WINDOW_WEEKS } from './beat-means.pure.ts';
 import { type Beat, beatsOf, beatsOfSteps, stepsOf } from './factory-beats.pure.ts';
-import { DTW, WARM_WEEKS } from './factory-dials.pure.ts';
+import { WEEKS_PER_STEP, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
 import { applySet } from './scenario-set.pure.ts';
 import { judge } from './scenario-tests.pure.ts';
@@ -40,7 +40,7 @@ export function* playSteps(f: FactoryHandle, B: Bundle, steps: readonly TourStep
   let k = stepsTo(f.weeks);
   for (const b of beatsOfSteps(steps, k)) {
     f.set(settingsAfter(b.set, B, f.settings));
-    f.step((b.end - k) * DTW);
+    f.step((b.end - k) * WEEKS_PER_STEP);
     k = Math.max(k, b.end);
     yield b.step;
   }
@@ -78,7 +78,7 @@ const playTo = (B: Bundle, p: Preset, x: { seed: number; upTo: number }): Factor
 
 export const readBeats = (B: Bundle, p: Preset, x: { seed: number; window?: number }): BeatReading[] => {
   const settleKeys = keysIn(stepsOf(p), 'settles'),
-    window = x.window ?? WINDOW,
+    window = x.window ?? WINDOW_WEEKS,
     f = scenarioStart(B, p, x.seed);
   return beatsOf(p, stepsTo(f.weeks)).map((b) => {
     f.set(settingsAfter(b.set, B, f.settings));
