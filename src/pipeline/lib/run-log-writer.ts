@@ -54,8 +54,8 @@ function breakStaleLock(lockFile: string): void {
 function release(lockFile: string, token: string): void {
   try {
     if (readFileSync(lockFile, 'utf8') === token) unlinkSync(lockFile);
-  } catch {
-    // already gone
+  } catch (lockAlreadyGone) {
+    if ((lockAlreadyGone as NodeJS.ErrnoException).code !== 'ENOENT') throw lockAlreadyGone;
   }
 }
 

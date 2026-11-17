@@ -189,6 +189,30 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
     });
   });
 
+  describe('lock release', () => {
+    it('surfaces a lock it cannot read back at release instead of leaving it behind silently', () => {
+      // ARRANGE
+      const root = worktree();
+      appendEvent(at(root), START, deps());
+      const lock = path.join(root, `${FILE}.lock`);
+      const d = deps();
+      d.now = () => {
+        unlinkSync(lock);
+        mkdirSync(lock);
+        return '2026-10-14T09:00:00Z';
+      };
+      // ACT
+      const append = () =>
+        appendEvent(
+          at(root),
+          { kind: 'start', type: 'job', name: 'x', job: 'j', parent_span_id: '0123456789abcdef' },
+          d,
+        );
+      // ASSERT
+      expect(append).toThrow(/EISDIR/);
+    });
+  });
+
   describe('lock ownership', () => {
     it('leaves a lock another writer took after breaking ours in place when we release', () => {
       // ARRANGE
