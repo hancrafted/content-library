@@ -14,14 +14,6 @@ const STATIONS: readonly StationId[] = ['sales', 'design', 'build', 'review', 'd
 const PACE = { before: 10, after: 20 } as const;
 const BARS_GROW_MILLISECONDS = 700;
 
-/**
- * Speed the whole line can carry (Spec Option 3b): balance drawn as a chart, five equal bars at the new pace under
- * one line speed, each over the outline of its old pace, above the line running at that pace, every queue holding
- * one document, the customer's request in and the tire swing they wanted out. On the Slide's entrance, and on every
- * hover or focus of the board, the bars grow from the old level to the new one together, then the belts run until
- * each queue holds one. Last, one station up close: the shared bike bench, so the Episode's station is set up before
- * Slide 6 needs it.
- */
 export const speedTheWholeLineCanCarry = slide({
   slug: 'speed-the-whole-line-can-carry',
   messages: { en, de },
