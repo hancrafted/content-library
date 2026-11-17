@@ -1,16 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { eventTagChoices, groupEventsByMonth, matchingEvents } from './events-overview.pure';
 
-/*
- * The Events overview's sections and filter (design-ADR Events overview): Upcoming from the build day on, oldest
- * first, Past before it, newest first, each grouped by month; the search and Tag chips narrow both sections at once.
- * Dates, words and the build day are written out by hand.
- */
-
+// decision: docs/adr/0018-events-overview.md
 const BUILD_DAY = '2026-10-27';
 const card = (slug: string, date: string) => ({ slug, date });
 
-/** A card as the filter reads it: its title, description and Tags in the reader's locale. */
 interface Words {
   readonly title: string;
   readonly description: string;

@@ -103,7 +103,6 @@ export function PromotionOffice() {
   );
 }
 
-/** The tray's solid parts in tray coordinates, shared with the shadow that must leave them unshaded. */
 export const TRAY_OUTLINE = {
   back: 'M-8-35Q-12-45 0-45h260q10 0 18 10l105 119q9 11-3 17H85Z',
   wall: 'M-8-35 85 79v60q-8 3-15-7L-8 29q-4-5-4-15v-44Z',

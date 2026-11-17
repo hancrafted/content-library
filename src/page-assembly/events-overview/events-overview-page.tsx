@@ -7,11 +7,7 @@ import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
-/**
- * The Events overview, the page at /events: a title with a one-line intro, then every Event whose Playlist is public,
- * filterable by search and Tag, under Upcoming and Past, grouped by month (design-ADR Events overview). Page assembly
- * hands the Events area the Tags' words it owns.
- */
+// decision: docs/adr/0018-events-overview.md
 export async function EventsOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'eventsOverview' });
   const cards = eventCards(locale, PAGE_WORDS[locale].tags, { listedOnly: true });

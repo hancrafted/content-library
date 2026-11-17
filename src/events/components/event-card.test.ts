@@ -5,7 +5,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { EventCardView } from './event-card';
 
-/** The plain localized projection the Event browser hands to its card. */
 const CARD: EventCard = {
   slug: '2026-10-23-axel-agentic-workflow',
   route: '/events/2026-10-23-axel-agentic-workflow',

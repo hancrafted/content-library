@@ -25,7 +25,6 @@
   inherits: false;
   initial-value: 0deg;
 }
-/* Hover/focus trace: an orange 1px border grows from top-centre both ways round the card and meets at the bottom. */
 .case::after {
   content: '';
   position: absolute;
@@ -160,7 +159,6 @@
   padding: 0;
   list-style: none;
 }
-/* Phases sit directly on the card; hairlines split them and a small chip on each hairline carries the progress arrow. */
 .phase {
   position: relative;
   min-width: 0;
@@ -310,7 +308,6 @@
     .case:has(> details[open]):hover {
       transform: translateY(-4px);
     }
-    /* Micro-animations: while the pointer rests on a phase column, its pictogram wrapper keeps a low-amplitude loop. */
     .phase:hover [data-micro='jitter'] {
       animation: micro-jitter 1.4s ease-in-out infinite;
     }

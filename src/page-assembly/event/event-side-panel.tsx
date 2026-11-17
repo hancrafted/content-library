@@ -7,19 +7,17 @@ import type { ReactNode } from 'react';
 import type { EventT } from './event-translator';
 import en from './i18n/en.json';
 
-/** Whether an Event slug has its image alt in the Translation files, the keys `eventPage.imageAlt.<slug>`. */
 function hasImageAlt(slug: string): slug is keyof typeof en.eventPage.imageAlt {
   return slug in en.eventPage.imageAlt;
 }
 
-/** The image's alt text, a Translation key by Event slug; an Event with an image and no alt is a bug, so it throws. */
 function imageAlt(slug: string, t: EventT): string {
   if (!hasImageAlt(slug))
     throw new Error(`No Translation names the image of Event "${slug}": add eventPage.imageAlt.${slug}`);
   return t(`imageAlt.${slug}`);
 }
 
-/** An external link that opens a new tab and says so to screen readers (FE-003 §2). */
+// decision: FE-003 §2
 function ExternalLink({ url, newTab, children }: { url: string; newTab: string; children: ReactNode }) {
   return (
     <a
@@ -35,7 +33,6 @@ function ExternalLink({ url, newTab, children }: { url: string; newTab: string; 
   );
 }
 
-/** The partner's "View on …" link, when the Event has a listing. */
 function Listing({ record, t }: { record: ServedEvent; t: EventT }) {
   if (record.listing === undefined) return null;
   const name = ORGANIZERS[record.organizers[0]].name;
@@ -48,7 +45,6 @@ function Listing({ record, t }: { record: ServedEvent; t: EventT }) {
   );
 }
 
-/** The "See also" links, when the Event has references. */
 function References({ record, t }: { record: ServedEvent; t: EventT }) {
   if (record.references === undefined) return null;
   return (
@@ -67,7 +63,6 @@ function References({ record, t }: { record: ServedEvent; t: EventT }) {
   );
 }
 
-/** The image with its credit, when the Event has one. */
 function EventImage({ record, t }: { record: ServedEvent; t: EventT }) {
   if (record.image === undefined) return null;
   return (
@@ -84,11 +79,6 @@ function EventImage({ record, t }: { record: ServedEvent; t: EventT }) {
   );
 }
 
-/**
- * The top of the side panel, the image and the facts: right after the title in the DOM, so a stacked page and a
- * screen reader meet the Event's image and its date and place before the description. From `lg` it is the top of
- * the second column.
- */
 export function SidePanelTop({ record, t, facts }: { record: ServedEvent; t: EventT; facts: ReactNode }) {
   return (
     <div data-event-side-top className="mt-8 flex flex-col gap-6 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0">
@@ -98,11 +88,6 @@ export function SidePanelTop({ record, t, facts }: { record: ServedEvent; t: Eve
   );
 }
 
-/**
- * The rest of the side panel: the Organizers, the partner's listing and the references, after the main column in
- * the DOM and under the top in the second column from `lg`. The Organizers always show; the listing and the
- * references only when the Event has them, so an Event with neither gets a panel of facts and Organizers.
- */
 export function SidePanelBottom({ record, t }: { record: ServedEvent; t: EventT }) {
   return (
     <aside
@@ -117,7 +102,6 @@ export function SidePanelBottom({ record, t }: { record: ServedEvent; t: EventT 
   );
 }
 
-/** The Organizers, lead first, each a link to its page when the registry knows one. */
 function Organizers({ record, t }: { record: ServedEvent; t: EventT }) {
   return (
     <div data-event-organizers>

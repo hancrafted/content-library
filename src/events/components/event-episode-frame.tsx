@@ -11,51 +11,34 @@ import { EVENT_WORDS, eventCopy } from '../lib/event-words';
 import { isPastEvent } from '../lib/events.pure';
 import { PastNotice } from './past-notice';
 
-/**
- * What an Event adds around an Episode it presents at its own URL (design-ADR 0016, Routes and visibility), ready for
- * the Episode page container: the route the page is served at, a past Event's notice above the Title slide's title,
- * the Event's time under the title, and the Playlist walk after the last Slide.
- */
+// decision: docs/adr/0016-content-data-model.md
 export interface EventEpisodeFrame {
-  /** The logical path of the Episode under its Event; the contents and Slide links point there. */
   readonly route: string;
   readonly header: ReactNode;
   readonly footer: ReactNode;
-  /** The Event's time as the venue writes it, "17:00–19:00 CET"; under the title, none when the Event has none. */
   readonly time: string | undefined;
 }
 
-/**
- * What the frame reads of the Episode the page catalogue presents: the Event's slug and day, the Episode, its place.
- * Any Episode will do: the frame reads only its slug and hands it to `titleOf`, so `Id` is whatever page assembly holds.
- */
 interface FramedEpisode<Id extends string> {
   readonly event: Pick<PresentedEpisode['event'], 'slug' | 'date' | 'time'>;
   readonly episode: EpisodeRef<Id>;
-  readonly place: {
-    readonly previous?: EpisodeRef<Id>;
-    readonly next?: EpisodeRef<Id>;
-  };
+  readonly place: { readonly previous?: EpisodeRef<Id>; readonly next?: EpisodeRef<Id> };
 }
 
 interface FrameOptions<Id extends string> {
   readonly locale: Locale;
-  /** An Episode's title in `locale`, handed in by page assembly, so the Events area never reads an Episode itself. */
   readonly titleOf: (episode: EpisodeRef<Id>) => string;
-  /** The day the page is built; an Event dated before it is past. */
   readonly buildDay: IsoDate;
 }
 
-/** The insets every Slide wrapper takes, so the frame lines up with the Slides (FE-009 §2). */
+// decision: FE-009 §2
 const INSET = 'pl-(--inset-l) pr-(--inset-r)';
 
-/** One step of the walk through the Playlist: the Episode's title and the logical path of its page under the Event. */
 interface Step {
   readonly title: string;
   readonly route: string;
 }
 
-/** The words and places the header and the walk share, read once in the page's locale. */
 interface FrameParts {
   readonly locale: Locale;
   readonly labels: (typeof EVENT_WORDS)[Locale];
@@ -64,10 +47,6 @@ interface FrameParts {
   readonly next?: Step;
 }
 
-/**
- * The whole frame of one Episode's page under one Event, read in one locale: the one call page assembly makes for an
- * Event-scoped Episode page.
- */
 export function eventEpisodeFrame<Id extends string>(
   { event, episode, place }: FramedEpisode<Id>,
   { locale, titleOf, buildDay }: FrameOptions<Id>,
@@ -97,7 +76,6 @@ export function eventEpisodeFrame<Id extends string>(
 const STEP =
   'flex min-w-0 flex-col gap-1 rounded-sm text-body text-foreground underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-foreground/50 focus-visible:outline-none';
 
-/** One step of the walk: its cue, with an arrow pointing the way, over the title it opens. */
 function WalkStep(props: {
   walk: 'previous' | 'next' | 'back';
   cue: string;
@@ -125,10 +103,6 @@ function WalkStep(props: {
   );
 }
 
-/**
- * After the last Slide: the previous Episode of the Playlist and the next one, each when there is one; on the last
- * Episode the next step leads back to the Event, so the attendee is never stranded.
- */
 function PlaylistNav({ parts }: { parts: FrameParts }) {
   const { locale, labels, previous, next, event } = parts;
   const ahead = next

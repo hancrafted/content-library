@@ -11,7 +11,6 @@ const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, li
 const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
 const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
 
-/** Pages with the treatment the page catalogue gives them, as the sitemap reads them. */
 function treated(treatment: PageTreatment, ...pages: PageRef[]) {
   return pages.map((page) => ({ page, treatment }));
 }
@@ -49,9 +48,7 @@ describe('success cases', () => {
     const route = `/events/${EVENT}/`;
     const expected = {
       url: `${SITE}/de${route}`,
-      alternates: {
-        languages: { en: `${SITE}${route}`, de: `${SITE}/de${route}`, 'x-default': `${SITE}${route}` },
-      },
+      alternates: { languages: { en: `${SITE}${route}`, de: `${SITE}/de${route}`, 'x-default': `${SITE}${route}` } },
     };
     // ACT
     const entries = sitemapEntries(SITE, SITE_PAGES, undated);
@@ -85,11 +82,11 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('leaves out every page its treatment keeps out of the sitemap, in both locales', () => {
+  it('leaves out every page its treatment keeps out of the sitemap, in both locales, even an Event copy handed in as an Episode page it has no type for', () => {
     // ARRANGE
     const pages = [
       ...SITE_PAGES,
-      // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; were one handed in, it stays out
+      // @ts-expect-error
       ...treated(ABSENT, { kind: 'episode', episode: episodeRef('ai-attention-span', EVENT) }),
       ...treated(
         HIDDEN,

@@ -7,15 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { eventEpisodeFrame } from './event-episode-frame';
 
-/*
- * The frame an Event-scoped Episode page wears (design-ADR 0016, Routes and visibility), read at the one call page
- * assembly makes: the Episode's place in the Playlist, its past notice above the Title slide's title, and the
- * Playlist walk after the last Slide. The presented Episode is a fixture: three Episodes no repo folder holds, one of
- * them an Event's copy, in a Playlist of three, and their titles a stand-in for the function page assembly hands in.
- * Only the Event is a registered one, any of them: the frame reads its title from the Events area's words, which are
- * keyed by the Event registry's slugs.
- */
-
+// decision: docs/adr/0016-content-data-model.md
 const EVENT = EVENT_SLUGS[0];
 const FIRST = episodeRef('alpha');
 const MIDDLE = episodeRef('beta', EVENT);
@@ -26,7 +18,6 @@ const UPCOMING: IsoDate = '2026-11-06';
 const EVENT_TIME = '17:00–19:00 CET';
 const titleOf = (episode: { readonly slug: string }) => `Title of ${episode.slug}`;
 
-/** The served Event, the Episode and its place in the Playlist, as the page catalogue presents it, for an Event on `date`. */
 function presented(episode: (typeof PLAYLIST)[number], date: IsoDate) {
   const at = PLAYLIST.indexOf(episode);
   return {
@@ -41,14 +32,11 @@ function presented(episode: (typeof PLAYLIST)[number], date: IsoDate) {
   };
 }
 
-/** The frame of `episode` in English for an Event on `date`, built on `BUILD_DAY`. */
 const frameOf = (episode: (typeof PLAYLIST)[number], date: IsoDate = UPCOMING) =>
   eventEpisodeFrame(presented(episode, date), { locale: 'en', titleOf, buildDay: BUILD_DAY });
 
-/** One rendered part of the frame, to query. */
 const html = (part: ReactNode) => load(renderToStaticMarkup(part));
 
-/** A step of the Playlist walk, by its cue: the page it opens and the title it shows; none when the walk has none. */
 function stepOf(footer: ReactNode, walk: 'previous' | 'next' | 'back') {
   const link = html(footer)(`[data-playlist-${walk}]`);
   return link.length === 0 ? undefined : { href: link.attr('href'), title: link.children().last().text() };

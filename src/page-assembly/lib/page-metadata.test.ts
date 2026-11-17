@@ -3,7 +3,6 @@ import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
 
-/** An Episode's own page, as the page catalogue hands it: carrying the Episode's EpisodeRef. */
 const OWN_PAGE = { kind: 'episode', episode: episodeRef('ai-token-economy') } as const;
 
 const UNDER_EVENT = {
@@ -15,7 +14,6 @@ const UNDER_EVENT = {
 const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
 const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
 
-/** An Episode's copy as its record hands it to the route, with the treatment the page catalogue gives its page. */
 const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.', treatment: LISTED };
 
 describe('success cases', () => {
@@ -125,10 +123,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata(OWN_PAGE, locale, {
-      ...COPY,
-      treatment: { ...HIDDEN, listed: true },
-    });
+    const metadata = pageMetadata(OWN_PAGE, locale, { ...COPY, treatment: { ...HIDDEN, listed: true } });
     // ASSERT
     expect(metadata.robots).toEqual(expected);
   });
