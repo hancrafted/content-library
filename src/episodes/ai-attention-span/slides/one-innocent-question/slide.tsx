@@ -26,12 +26,6 @@ const TONES: Readonly<Record<(typeof SIZE_ROWS)[number]['key'], BarTone>> = {
   answer: 'ai',
 };
 
-/**
- * "One innocent question" (Spec Option 8a): the cornerstone on its Slide 8 Preset, Technical, one step on so the
- * one-line answer shows, the catering PDF read pinned, the conversation off and the panel open; below, a card in
- * plain words and size bars on one scale. The bars read the same chat the cornerstone draws, so their numbers agree
- * with it. Keeps `basic-page` and `motion: local`.
- */
 export const oneInnocentQuestion = slide({
   slug: 'one-innocent-question',
   messages: { en, de },
