@@ -53,7 +53,6 @@ export const creatingContextForAgents = slide({
   segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
   content: ({ t }) => (
     <SlideFrame>
-      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
       <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
           <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />
