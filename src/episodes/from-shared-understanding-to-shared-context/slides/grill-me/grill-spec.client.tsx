@@ -7,11 +7,6 @@ import { specSlides } from './grill-spec.pure';
 
 const TRIGGER = 'rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring';
 
-/**
- * The spec card's trigger: the card slides from the chat onto the bench on the Slide's first `active`, and again on
- * every mouse enter and keyboard focus, by mounting it afresh under `data-play`. The card holds nothing focusable,
- * since a replay mounts it again.
- */
 export function GrillSpec({ label, children }: { label: string; children: ReactNode }) {
   const entry = useSlideEntry();
   const [entryAtMount] = useState(entry);
