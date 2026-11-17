@@ -19,7 +19,6 @@ function menuPosition(trigger: HTMLElement, popup: HTMLElement) {
   };
 }
 
-/** Portal out of the rail, but stay inside a native dialog's top layer on mobile. */
 function usePosition(open: boolean, trigger: ElementRef, popup: ElementRef) {
   const [position, setPosition] = useState<{ left: number; top: number; maxWidth?: number }>({ left: 0, top: 0 });
   useLayoutEffect(() => {

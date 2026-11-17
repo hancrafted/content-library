@@ -4,7 +4,6 @@ import uiDe from './human-in-the-loop.config.de.yml';
 import uiEn from './human-in-the-loop.config.yml';
 import { WORKFLOW_IDS, uiWords, workflowFor } from './workflow-data';
 
-/** The dotted path of every leaf of a value, sorted. */
 const keyPaths = (value: unknown, prefix = ''): string[] =>
   typeof value === 'object' && value !== null
     ? Object.entries(value)

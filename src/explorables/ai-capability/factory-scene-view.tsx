@@ -1,7 +1,6 @@
 import styles from './ai-capability.module.css';
 import type { Frame } from './scene-frames.pure';
 
-/** The building: a chimney with smoke, a saw-tooth roof and a question mark where its inside would show. */
 function Building() {
   return (
     <svg viewBox="0 0 220 176" className="absolute inset-0 size-full" aria-hidden="true">
@@ -21,13 +20,8 @@ function Building() {
 }
 
 const BOX = 'absolute size-3 rounded-sm';
-/** Each request travels on its lane, one above the other, so five in flight stay apart. */
 const laneTop = (lane: number) => ({ top: `calc(50% + ${lane * 0.85}rem)` });
 
-/**
- * The factory (a pure view): a building with a question mark on it. Each request slides in at its door on its lane, its
- * message goes to the model and back, and only then does its result slide out. Its inside never opens.
- */
 export function FactorySceneView({ frame, label }: { readonly frame: Frame; readonly label: string }) {
   const jobs = frame.jobs ?? [];
   return (

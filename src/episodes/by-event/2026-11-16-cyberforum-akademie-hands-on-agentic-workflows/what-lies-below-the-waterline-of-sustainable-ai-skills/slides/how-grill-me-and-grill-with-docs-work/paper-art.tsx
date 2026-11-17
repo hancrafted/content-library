@@ -1,13 +1,6 @@
-/*
- * The sheets of "grill-with-docs keeps context beside the skill", lifted from the approved Spec's Option 19b (feedback
- * 3, decision 46): each sheet's faceted paper with its flat drop and edge, in the Spec's own units and tones
- * (`slide.module.css`). The words on them stay HTML.
- */
-
 type Tone = 'drop' | 'paper' | 'paper-lit' | 'paper-shade' | 'paper-edge';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** grill-with-docs's own sheet, the one that stays the same every run. */
 const NEST: Facets = [
   ['drop', 'M30 60L983 60L983 327L30 327Z'],
   ['paper-shade', 'M976 160.5L883 52L976 52ZM883 52L976 160.5L799.5 201.5Z'],
@@ -32,7 +25,6 @@ const NEST: Facets = [
   ['paper-edge', 'M24 315L976 315L976 318L24 318ZM973 52L976 52L976 318L973 318Z'],
 ];
 
-/** The grilling interview's sheet inside it. */
 const SHEET_GRILLING: Facets = [
   ['drop', 'M54 136L493 136L493 311L54 311Z'],
   ['paper-lit', 'M409.4 238.4L486 205.6L486 302Z'],
@@ -50,7 +42,6 @@ const SHEET_GRILLING: Facets = [
   ['paper-edge', 'M48 299L486 299L486 302L48 302ZM483 128L486 128L486 302L483 302Z'],
 ];
 
-/** domain-modeling's sheet inside it. */
 const SHEET_DOMAIN: Facets = [
   ['drop', 'M520 136L959 136L959 311L520 311Z'],
   ['paper-shade', 'M889 232.6L952 222.7L952 302Z'],
@@ -72,7 +63,6 @@ const SHEET_DOMAIN: Facets = [
   ['paper-edge', 'M514 299L952 299L952 302L514 302ZM949 128L952 128L952 302L949 302Z'],
 ];
 
-/** Monday's glossary. */
 const GLOSSARY_1: Facets = [
   ['drop', 'M38 446L271 446L271 707L38 707Z'],
   ['paper-lit', 'M214.1 518.8L171.1 438L264 438Z'],
@@ -91,7 +81,6 @@ const GLOSSARY_1: Facets = [
   ['paper-edge', 'M32 695L264 695L264 698L32 698ZM261 438L264 438L264 698L261 698Z'],
 ];
 
-/** Monday's decision records. */
 const DECISIONS_1: Facets = [
   ['drop', 'M286 446L453 446L453 613L286 613Z'],
   ['paper', 'M446 503.9L374.5 438L446 438Z'],
@@ -105,7 +94,6 @@ const DECISIONS_1: Facets = [
   ['paper-edge', 'M280 601L446 601L446 604L280 604ZM443 438L446 438L446 604L443 604Z'],
 ];
 
-/** Thursday's glossary. */
 const GLOSSARY_2: Facets = [
   ['drop', 'M564 446L797 446L797 707L564 707Z'],
   ['paper-shade', 'M790 520.1L790 614.4L711.1 552.6Z'],
@@ -125,7 +113,6 @@ const GLOSSARY_2: Facets = [
   ['paper-edge', 'M558 695L790 695L790 698L558 698ZM787 438L790 438L790 698L787 698Z'],
 ];
 
-/** Thursday's decision records. */
 const DECISIONS_2: Facets = [
   ['drop', 'M812 446L979 446L979 613L812 613Z'],
   ['paper', 'M972 527.1L859 496.9L972 438Z'],
@@ -141,7 +128,6 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
   return facets.map(([tone, d]) => <path key={d} d={d} data-tone={tone} vectorEffect="non-scaling-stroke" />);
 }
 
-/** Each sheet's facets and its paper's box in the Spec's units: the drop and the edge overhang it. */
 const PAPERS = {
   nest: { facets: NEST, box: '24 52 952 266' },
   grilling: { facets: SHEET_GRILLING, box: '48 128 438 174' },
@@ -154,7 +140,6 @@ const PAPERS = {
 
 export type PaperId = keyof typeof PAPERS;
 
-/** One sheet's faceted paper, stretched behind its words; its flat drop and edge overhang the sheet's box. */
 export function PaperArt({ paper }: { readonly paper: PaperId }) {
   const { facets, box } = PAPERS[paper];
   return (

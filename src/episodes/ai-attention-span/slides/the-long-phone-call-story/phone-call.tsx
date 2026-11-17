@@ -8,19 +8,13 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The four effects the call leaves: the start and end stay sharp, the middle blurs, the standout survives. */
 export type CallEffect = 'start' | 'middle' | 'standout' | 'end';
 
-/** One effect's words in the margin, its Context marker and the note target it carries. */
 export interface EffectCopy {
-  /** The effect in plain words, e.g. "The start stays sharp". */
   readonly title: string;
-  /** The cognitive-science term, linked to its Wikipedia article. */
   readonly term: string;
   readonly termHref: string;
-  /** The short plain explanation after the term. */
   readonly explanation: string;
-  /** The screen-reader hint that the link opens in a new tab. */
   readonly newTabHint: string;
   readonly marker: ReactNode;
   readonly target: TargetProps;
@@ -29,7 +23,6 @@ export interface EffectCopy {
 export interface PhoneCallCopy {
   readonly name: string;
   readonly duration: string;
-  /** The ten lines of the call, in order. */
   readonly bubbles: readonly string[];
   readonly punchline: string;
   readonly effects: Readonly<Record<CallEffect, EffectCopy>>;
@@ -37,12 +30,10 @@ export interface PhoneCallCopy {
 
 interface CallRow {
   readonly effect: CallEffect;
-  /** Whether the bracket carries the effect's label; the faded line after the cake carries none. */
   readonly labelled: boolean;
   readonly lines: readonly { readonly who: CallWho; readonly light: CallLight }[];
 }
 
-/** The call in rows, each a run of lines under one bracket: who speaks each line and how it reads at rest. */
 const ROWS: readonly CallRow[] = [
   {
     effect: 'start',
@@ -76,7 +67,6 @@ const ROWS: readonly CallRow[] = [
 
 const LINE_COUNT = ROWS.reduce((count, row) => count + row.lines.length, 0);
 
-/** The bracket in the margin: solid primary where the call stays sharp, dashed and muted where it blurs. */
 function EffectBracket({ effect }: { effect: CallEffect }) {
   const blurred = effect === 'middle';
   return (
@@ -118,7 +108,6 @@ function EffectLabel({ copy }: { copy: EffectCopy }) {
   );
 }
 
-/** Each row's first line index into the call's ten lines. */
 const ROW_STARTS = ROWS.reduce<number[]>(
   (starts, row, i) => [...starts, i === 0 ? 0 : starts[i - 1] + ROWS[i - 1].lines.length],
   [],
@@ -149,7 +138,6 @@ function CallHeader({ name, duration }: { name: string; duration: string }) {
   );
 }
 
-/** One run of lines under its bracket: the bubbles at the left, the bracket and its label in the margin. */
 function Row({ row, start, copy }: { row: CallRow; start: number; copy: PhoneCallCopy }) {
   return (
     <div data-effect={row.effect} className="grid grid-cols-12 gap-x-4 gap-y-2 @xl:gap-x-8">
@@ -168,11 +156,6 @@ function Row({ row, start, copy }: { row: CallRow; start: number; copy: PhoneCal
   );
 }
 
-/**
- * The call with your sister as one messenger thread, its effects bracketed in the margin and the punchline as the
- * brightest bubble (Spec Option 1a). Everything is shown at rest: no step, replay or entrance of its own beyond the
- * Slide's. Pointing at a bubble dims the other bubbles; the margin and the punchline stay as they are.
- */
 export function PhoneCall({ copy }: { copy: PhoneCallCopy }) {
   if (copy.bubbles.length !== LINE_COUNT) {
     throw new Error(`The phone call needs ten lines, one per bubble; got ${copy.bubbles.length}.`);

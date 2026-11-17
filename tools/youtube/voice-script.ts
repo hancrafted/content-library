@@ -1,7 +1,3 @@
-// `npm run youtube:voice-script -- <episode folder | page url | video id> [--lang de]`: the reading copy for
-// `/episode-transcript-to-voice-script`. Per Slide in composition order it prints the Slide's i18n file (flagged
-// `pool` when the Slide is the Slide pool's, shared), its window in the recording, its Voice script segments as
-// authored, the transcript text of the window, and the Voice script's reading time; then the Episode's total.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';

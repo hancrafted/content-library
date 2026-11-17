@@ -1,8 +1,4 @@
-/*
- * Where a tour caption sits (design-ADR 0024 §10), as the reference build's `placeTour` puts it: below its card when
- * there is room, else above, kept 8 px inside the stage, its tail pointing at the card's middle; without a card in
- * view, in the stage's top-left corner. Boxes are viewport coordinates; the result is relative to the stage. No DOM.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Rect } from './dash-placement.pure.ts';
 
 export interface TourPlace {
@@ -10,7 +6,6 @@ export interface TourPlace {
   readonly left: number;
   readonly top: number;
   readonly width: number;
-  /** The tail's offset from the caption's left edge. */
   readonly tail: number;
 }
 

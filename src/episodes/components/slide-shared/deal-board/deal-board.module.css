@@ -1,10 +1,3 @@
-/*
- * The deal board's geometry. Its lanes and the bracket row share one grid: wide enough, the lanes split the board's
- * width; narrower, each lane keeps a readable width and the row scrolls sideways inside its own box, with room around
- * it for the pills and the ring, so nothing is cut. The annotation row repeats the lanes' columns to stand over the
- * emphasised lane.
- */
-
 .board {
   --gap: 1.25rem;
   --lane-width: 10rem;
@@ -32,7 +25,6 @@
   width: max-content;
 }
 
-/* The list adds no box: its lanes are items of the grid, beside the bracket row. */
 .lanes {
   display: contents;
 }
@@ -53,7 +45,6 @@
   grid-column: var(--from) / var(--to);
 }
 
-/* Wrapping lanes: two to a row while the board is narrow, all in one row from 36rem, each as tall as its row. */
 .wrap .grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   row-gap: 2rem;
@@ -108,7 +99,6 @@
   }
 }
 
-/* A payment slot's outline: the success colour, for the money still to come. */
 .paymentSlot {
   border-color: var(--success);
 }

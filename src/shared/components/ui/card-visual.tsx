@@ -4,7 +4,6 @@ import styles from './card-visual.module.css';
 
 export type CardVisualPosition = 'left' | 'right' | 'top' | 'bottom' | 'none';
 
-/** Visual order is presentation only: the reading surface retains its natural heading and action order. */
 export function CardVisual({ visual, children }: { visual?: ReactNode; children: ReactNode }) {
   return (
     <>
@@ -28,7 +27,6 @@ interface PictureProps {
   accent: { wash: string; ink: string };
 }
 
-/** Existing non-graphic cards retain their own static media or corner illustration. */
 export function CardPicture(props: PictureProps) {
   if (!props.media) return props.linked && <CardArt {...props} />;
   return (

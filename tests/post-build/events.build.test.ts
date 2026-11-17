@@ -1,11 +1,4 @@
-// The Events, each read through the content store (design-ADR 0016, Delivery): every old Workshop link lands on its
-// Event, /events lists every Event whose Playlist is public, an Event's page shows its facts line, the past notice
-// above its Playlist, and the Playlist as numbered cards in order, each opening the Episode under the Event. The
-// header carries one Events entry, and the sitemap names the pages with their hreflang set. Each Episode an Event
-// presents has a page under the Event: its place in the Playlist, the walk to its neighbours and back to the Event,
-// the past notice above the title, and a canonical to its own /episodes/ page when it is public. An Event's copy lives
-// only under its Event: a public copy is its own canonical, and an unlisted one is never indexed.
-
+// decision: docs/adr/0016-content-data-model.md
 import { PAGE_CONTAINER } from '@/shared/components/page-header';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -30,23 +23,21 @@ const EVENTS = listEvents();
 const LISTED = EVENTS.filter((event) => event.playlist.visibility === 'public');
 const AXEL = EVENTS.find((event) => event.slug === '2026-10-23-axel-agentic-workflow');
 if (AXEL === undefined) throw new Error('The AXEL Event is missing from the content store');
-/** A Playlist entry the test expects a page for: a registered Episode's ref, or the test file is wrong. */
 const registered = ({ episode, page }: (typeof AXEL.playlist.episodes)[number]): EpisodeRef<EpisodeId> => {
   if (page === undefined) throw new Error(`"${episode.ref.id}" is no registered Episode`);
   return page;
 };
 const AXEL_EPISODES = AXEL.playlist.episodes.map(registered);
-/** The slugs AXEL's cards carry, in the order it taught them: its copies' folder names. Written out: the store is not the oracle. */
+// decision: ARCH-003 §1.2
 const AXEL_SLUGS = ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'];
 const TODAY = new Date().toISOString().slice(0, 10) as `${number}-${number}-${number}`;
 
-/** Every Workshop URL that was ever published, and the Event it became. Written out: the Workshop pages are gone. */
+// decision: ARCH-003 §1.2
 const LEGACY_WORKSHOPS: readonly { workshop: string; event: EventSlug }[] = [
   { workshop: 'axel-agentic-workflow-2026-10-23', event: '2026-10-23-axel-agentic-workflow' },
   { workshop: '2026-10-23-axel-agentic-workflow', event: '2026-10-23-axel-agentic-workflow' },
 ];
 
-/** Where the AXEL seminar took place, as its card writes it. */
 const PLACES: Record<Locale, string> = { en: 'Remote · Zoom', de: 'Online · Zoom' };
 
 const WORDS: Record<
@@ -364,9 +355,8 @@ describe('Event page', () => {
 
 describe('the 2026-10-28 Event', () => {
   const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow' satisfies EventSlug;
-  /** The Workshop template's copy, then the three Episodes AXEL taught, copied unedited. Written out: the store is not the oracle. */
+  // decision: ARCH-003 §1.2
   const SLUGS = ['intro', 'onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'] as const;
-  /** Each copy, the Event's own: its folder name under the Event's folder. */
   const EPISODES = SLUGS.map((slug) => episodeRef(slug, CYBERFORUM)) satisfies readonly EpisodeRef<EpisodeId>[];
   const FACTS = {
     en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', place: 'Remote · Zoom' },
@@ -436,10 +426,6 @@ describe('the 2026-10-28 Event', () => {
 });
 
 describe('Episode pages under an Event', () => {
-  /**
-   * Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports, each with
-   * the record the served Event lists it by.
-   */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
     event.playlist.episodes
       .flatMap(({ episode: record, page }) => (page === undefined ? [] : [{ record, episode: page }]))

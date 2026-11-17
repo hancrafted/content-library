@@ -14,17 +14,9 @@ import { Siphonophore } from './siphonophore';
 import { SunMoon } from './sun-moon';
 import { Whale } from './whale';
 
-/*
- * The slow half of fable-elements.test.ts: each Fable element's CSS module, read from disk, against its frozen
- * interface (decisions 15–17 and 19 of feedback 2). It mixes only from the tokens its JSDoc names, paints every tone
- * its drawing names, and moves only by transform or opacity, with no blur, filter or shadow. It reads the CSS rather
- * than importing it, so the slow lane names the modules as rerun triggers (vitest.slow.config.mts, ARCH-003 §4). The
- * ship's own check sits beside it, in deep-sea-expedition/ship.slow.test.ts.
- */
-
+// decision: ARCH-003 §4
 const HERE = import.meta.dirname;
 
-/** Each element, its CSS module and the global tokens it may mix from. */
 const ELEMENTS: readonly { name: string; element: ReactElement; file: string; tokens: readonly string[] }[] = [
   {
     name: 'Iceberg',

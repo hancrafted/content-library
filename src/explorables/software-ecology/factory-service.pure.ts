@@ -1,8 +1,4 @@
-/*
- * Service in the factory model (design-ADR 0024 §1, §3): event-time completion inside a step. A server picks the next
- * job, rolls its result as work starts (so the station can stamp it as the job ends), and on finishing sends it back,
- * hands on its spawns, or blocks while the next center's buffer is full.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Defect } from './defect.types';
 import {
   catches,
@@ -47,7 +43,6 @@ const serviceTime = (m: Factory, n: FactoryNode, mean: number): number => {
 interface Verdict {
   readonly bounce: boolean;
   readonly churn: number;
-  /** What the job's size is multiplied by: `redo` to send it back, 1 + `keepExtra` to keep and fix a bad input. */
   readonly grow: number;
 }
 const AS_IS: Verdict = { bounce: false, churn: 1, grow: 1 };
@@ -55,11 +50,9 @@ const AS_IS: Verdict = { bounce: false, churn: 1, grow: 1 };
 interface Judged {
   readonly elig: boolean;
   readonly t: number;
-  /** The station's catch of the arriving kind. */
   readonly chance: number;
 }
 
-/** An inspection sends bad work back, but passes more of it unread as its backlog fills. */
 const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   const p0 = x.elig ? x.chance : 0,
     k = 1 - pressureOf(m.s, n, firstOf(n.def.stampUnderPressure, 0.8)),
@@ -72,7 +65,6 @@ const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   return bounce ? { ...AS_IS, bounce, grow: constOf(m.s, 'redo') } : AS_IS;
 };
 
-/** A plain work center sends bad input back by chance; kept, it multiplies (churn) and takes longer. */
 const keepOrSendBack = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   if (x.elig && n.rr() < x.chance) return { bounce: true, churn: 1, grow: constOf(m.s, 'redo') };
   const c = mechOf(m.s, 'churn');
@@ -80,14 +72,12 @@ const keepOrSendBack = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   return { bounce: false, churn: c > 1 ? c : 1, grow: 1 + constOf(m.s, 'keepExtra') };
 };
 
-/** Counts a bad input for the unread share: only of the kinds this station's catch can catch (grill 11 Q219). */
 const countBad = (m: Factory, n: FactoryNode, x: { kind: Defect; bounce: boolean }): void => {
   if (!catches(m.s, n, x.kind)) return;
   n.rate.badIn += BUMP;
   if (!x.bounce) n.rate.badPass += BUMP;
 };
 
-/** What a work center does with the job it starts: work on it as it is, send it back, or keep a bad input. */
 const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdict => {
   const J = (n.server as Server).J;
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
@@ -99,13 +89,11 @@ const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdi
   return v;
 };
 
-/** The result is rolled when work starts, so the station can stamp it as the job ends. */
 const rollQuality = (n: FactoryNode, d: Dials, J: Job): number => {
   const fresh = !!(J.fl & (REDO | FROM_SRC)) || J.q === Q.GOOD;
   return fresh && n.rq() < effvNow(n, d) ? Q.GOOD : Q.BAD;
 };
 
-/** A ticket is passed on unanswered under pressure (`passesOn`), never redone work or work it sends back. */
 const passing = (m: Factory, x: { n: FactoryNode; J: Job; v: Verdict }): boolean =>
   !x.v.bounce && !(x.J.fl & REDO) && passesOn(m.s, x.n);
 
@@ -140,18 +128,15 @@ interface Hand {
   readonly fl: number;
   readonly main: number;
   readonly ai: number;
-  /** The defect flag of what it hands on bad: a kept bad input's kind, else the center's own. */
   readonly kind: number;
 }
 
-/** The first spawn's first document carries the request on, with the result rolled at the start. */
 const carryOn = (m: Factory, h: Hand, e: Belt): void => {
   const n = h.sv.n as FactoryNode;
   send(m, e, { c: 1, q: h.sv.preQ, ai: h.ai, fl: h.fl | h.main | (h.sv.preQ === Q.BAD ? h.kind : 0), b: 0, t0: h.t });
   n.rate.out[h.sv.preQ] += BUMP;
 };
 
-/** The other documents a spawn hands on, each good with the center's effectiveness when its input was good. */
 const besides = (m: Factory, h: Hand, x: { e: Belt; k: number }): void => {
   const n = h.sv.n as FactoryNode,
     { e, k } = x;
@@ -162,7 +147,6 @@ const besides = (m: Factory, h: Hand, x: { e: Belt; k: number }): void => {
   n.rate.out[0] += (k - g) * BUMP;
 };
 
-/** Where a spawn goes: the pass-on belt (only the first spawn has one) for a ticket passed on, else as it routes. */
 const beltFor = (h: Hand, x: { sp: SpawnRule; steady: boolean }): Pick => {
   const pass = h.sv.pass ? x.sp.pass : undefined;
   return pass ? { e: pass.e, base: 1 } : pickBelt(h.sv.n as FactoryNode, x.sp, x.steady);
@@ -175,12 +159,11 @@ const handOn = (m: Factory, h: Hand, x: { sp: SpawnRule }): void => {
   if (!base) return;
   const k = countOf(n, x.sp, { f: base * h.d.fanEff * h.sv.churn, steady });
   if (!k) return;
-  const first = x.sp === firstSpawn(n.spawns) ? 1 : 0; // the first spawn carries the job itself on
+  const first = x.sp === firstSpawn(n.spawns) ? 1 : 0;
   if (first) carryOn(m, h, e);
   if (k - first) besides(m, h, { e, k: k - first });
 };
 
-/** A job judged bad at the start rides back to its sender. */
 const bounceBack = (m: Factory, sv: Server, t: number): void => {
   const n = sv.n as FactoryNode;
   sendBack(m, m.edges[sv.J.e], { J: sv.J, t0: t });
@@ -189,7 +172,6 @@ const bounceBack = (m: Factory, sv: Server, t: number): void => {
   m.hook?.('done', n);
 };
 
-/** Redone work goes back out on the belt it came on. */
 const redone = (m: Factory, sv: Server, x: { t: number; ai: number }): void => {
   const n = sv.n as FactoryNode,
     J = sv.J;
@@ -198,7 +180,6 @@ const redone = (m: Factory, sv: Server, x: { t: number; ai: number }): void => {
   n.rate.out[sv.preQ] += BUMP;
 };
 
-/** The defect flag of what a center hands on bad: a kept bad input's first cause, else its own kind. */
 const badKind = (m: Factory, n: FactoryNode, qIn: number): number => {
   const J = (n.server as Server).J;
   return kindBit(qIn === Q.BAD ? kindOf(J.fl, m.edges[J.e].from.origin) : n.origin);
@@ -221,7 +202,6 @@ const finish = (m: Factory, sv: Server, t: number): boolean => {
   return true;
 };
 
-/** Finishes what the server holds when it ends by t1; false when it must wait (still working, or blocked). */
 const settle = (m: Factory, sv: Server, x: { t: number; t1: number }): number | null => {
   if (sv.blocked) {
     if (!finish(m, sv, x.t)) return null;
@@ -236,7 +216,6 @@ const settle = (m: Factory, sv: Server, x: { t: number; t1: number }): number | 
   return sv.end;
 };
 
-/** Runs one server from t0 to t1: finishes what ends inside, starts the next job, blocks when the next buffer is full. */
 export const runServer = (m: Factory, sv: Server, span: { t0: number; t1: number }): void => {
   let t: number | null = span.t0;
   for (let guard = 0; guard < 2000; guard++) {

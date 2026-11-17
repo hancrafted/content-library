@@ -12,13 +12,8 @@ function readTheme(): ResolvedTheme {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 
-// The static HTML is rendered without a theme; hydration must see the same value before switching.
-const serverTheme = (): ResolvedTheme => 'light';
+const themeDuringHydration = (): ResolvedTheme => 'light';
 
-/**
- * Returns the currently active DOM theme ('light' | 'dark') by observing
- * the 'dark' class on document.documentElement.
- */
 export function useResolvedTheme(): ResolvedTheme {
-  return useSyncExternalStore(subscribe, readTheme, serverTheme);
+  return useSyncExternalStore(subscribe, readTheme, themeDuringHydration);
 }

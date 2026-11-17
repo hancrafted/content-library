@@ -4,11 +4,9 @@ import { linkTarget, observeNavigation, observeRestoration } from './url-state-b
 import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 
-/** At most one history write per interval: ~67 per 10 s, under WebKit's 100 (research §2). */
-export const WRITE_INTERVAL_MS = 150;
+export const WRITE_INTERVAL_MILLISECONDS = 150;
 
-/** Bounds intent suppression; expiry needs measured arrival evidence or reports timeout. */
-export const NAVIGATION_TIMEOUT_MS = 1000;
+export const NAVIGATION_TIMEOUT_MILLISECONDS = 1000;
 
 function hashOf(win: UrlWindow): string {
   const raw = win.location.hash.slice(1);
@@ -35,7 +33,6 @@ class UrlStateStore implements UrlState {
   private detachLinks: (() => void) | null = null;
   private attached = false;
   private detachRestoration: (() => void) | null = null;
-  /** The path this page lives at, taken on first subscription: a router writes the URL after the first render. */
   private ownPath: string | null = null;
 
   constructor(
@@ -76,7 +73,6 @@ class UrlStateStore implements UrlState {
       this.watchRestoration();
     }
     this.listeners.add(listener);
-    // The URL may have moved since creation: a router writes it after the new page first renders.
     if (first && this.flight === null) this.resync();
     return () => {
       this.listeners.delete(listener);
@@ -91,7 +87,7 @@ class UrlStateStore implements UrlState {
     const navigation = { id: request, target: id, status: 'navigating' } as const;
     this.flight = setTimeout(() => {
       this.finishNavigation(navigation.id, this.hasArrived(id) ? 'settled' : 'timed-out');
-    }, NAVIGATION_TIMEOUT_MS);
+    }, NAVIGATION_TIMEOUT_MILLISECONDS);
     const checkArrival = () => {
       if (this.hasArrived(id)) this.finishNavigation(navigation.id, 'settled');
     };
@@ -169,12 +165,10 @@ class UrlStateStore implements UrlState {
     this.resync();
   };
 
-  /** Fragment-history restoration can leave an old page mounted on another path. */
   private isForeign(): boolean {
     return this.ownPath !== null && this.win.location.pathname !== this.ownPath;
   }
 
-  /** Adopts the hash the URL carries now, notifying only when it differs. */
   private resync() {
     if (this.isForeign() || this.pending !== null) return;
     const hash = hashOf(this.win);
@@ -208,11 +202,10 @@ class UrlStateStore implements UrlState {
     this.publishNavigation({ ...this.navigation, status });
   }
 
-  /** Writes now when the interval allows, else keeps only the latest value for a trailing flush. */
   private schedule(id: string) {
     this.pending = id;
     if (this.trailing !== null) return;
-    const wait = this.lastWrite + WRITE_INTERVAL_MS - Date.now();
+    const wait = this.lastWrite + WRITE_INTERVAL_MILLISECONDS - Date.now();
     if (wait <= 0) this.flush();
     else this.trailing = setTimeout(this.flush, wait);
   }
@@ -224,14 +217,17 @@ class UrlStateStore implements UrlState {
     this.pending = null;
     if (this.isForeign()) return;
     this.lastWrite = Date.now();
-    try {
-      this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
-    } catch {
-      // WebKit throws SecurityError past its history-write limit; subscribers stay correct while the URL lags.
-    }
+    this.replaceUrlUnlessHistoryLimitReached(id);
   };
 
-  /** The Title slide is the bare path: no `#`, query kept. */
+  private replaceUrlUnlessHistoryLimitReached(id: string) {
+    try {
+      this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'SecurityError')) throw error;
+    }
+  }
+
   private urlOf(id: string): string {
     if (id === TITLE_ANCHOR) return `${this.win.location.pathname}${this.win.location.search}`;
     return `#${encodeURIComponent(id)}`;

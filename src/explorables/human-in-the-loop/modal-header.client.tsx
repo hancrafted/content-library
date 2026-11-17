@@ -22,7 +22,6 @@ interface HeaderProps extends DemoProps {
   readonly onConfirming: (open: boolean) => void;
 }
 
-/** The toolbar under the title, one pill as the visual's: Help, the `</>` toggle, the Demo mode switch; Reset set apart after it. */
 function Toolbar(props: Omit<HeaderProps, 'stage'>) {
   const { words, level, onLevel, showContext, onContext } = props;
   return (
@@ -46,7 +45,6 @@ function Toolbar(props: Omit<HeaderProps, 'stage'>) {
   );
 }
 
-/** The title with Close alone at the top right; under them, the toolbar. */
 export function ModalHeader({ stage, ...actions }: HeaderProps) {
   return (
     <div className="flex shrink-0 flex-col gap-3">

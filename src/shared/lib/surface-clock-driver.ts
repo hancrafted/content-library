@@ -1,6 +1,5 @@
 import { createSurfaceClock, type SurfaceGeometry, type SurfaceNavigation } from './surface-clock';
 
-/** Browser-independent ports make scheduling observable without DOM or ambient time. Reads precede publication. */
 export interface SurfaceClockEnvironment {
   readonly navigation?: {
     getNavigation(): SurfaceNavigation | null;
@@ -14,7 +13,6 @@ export interface SurfaceClockEnvironment {
   cancelTimer(id: number): void;
 }
 
-/** One driver per page. Resize holds the cache until 500ms quiet; layout and controlled CSS edits request refresh. */
 class SurfaceDriver {
   private stopNavigation?: () => void;
   private disposed = false;
@@ -34,7 +32,6 @@ class SurfaceDriver {
   private navigationChanged = (navigation: SurfaceNavigation) => {
     if (this.disposed) return;
     if (navigation.status !== 'navigating') {
-      // Refresh settled layout before releasing suppression; resize still retains its geometry cache.
       this.dirty = true;
       if (this.frame !== undefined) this.environment.cancelFrame(this.frame);
       this.update();

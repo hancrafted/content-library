@@ -1,7 +1,3 @@
-/**
- * A rough tokenization heuristic and the session cost it implies, for the tokenizer playground.
- */
-
 export function tokenizeText(text: string): string[] {
   const words = text.trim().split(/\s+/).filter(Boolean);
   const tokens: string[] = [];

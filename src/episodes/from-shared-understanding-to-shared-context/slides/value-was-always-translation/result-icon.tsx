@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** What an intent was translated into: a boxed product, a service handshake, a lecture at a lectern. */
 export type ResultIcon = 'box' | 'handshake' | 'lectern';
 
 const LINE = { strokeWidth: 2.5, strokeLinejoin: 'round', strokeLinecap: 'round' } as const;
@@ -31,7 +30,6 @@ const DRAWING: Record<ResultIcon, ReactNode> = {
   ),
 };
 
-/** One result card's picture, in `foreground`: decorative, the card's words carry the meaning. */
 export function ResultIconSvg({ icon }: { icon: ResultIcon }) {
   return (
     <svg viewBox="0 0 64 64" className="size-14 shrink-0" aria-hidden="true">

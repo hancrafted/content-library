@@ -8,22 +8,22 @@ import { Flip } from './flip.client';
 import { CardBackView, TURN, type CardLabels } from './level-card-view';
 import { LEVELS, type Level } from './scene-frames.pure';
 
-/** How many tokens the carousel shows at once, the newest last; the next one still a question after them. */
-const SHOWN = 4;
-const STEP_MS = 900;
+const VISIBLE_TOKEN_COUNT = 4;
+const STEP_MILLISECONDS = 900;
 
-/** The carousel's first token: while the model works it moves on one every beat, and wraps after the last token. */
 function useOffset(count: number, working: boolean): number {
   const [offset, setOffset] = useState(0);
   useEffect(() => {
     if (!working || prefersReducedMotion()) return;
-    const timer = window.setInterval(() => setOffset((now) => (now + 1) % (count - SHOWN + 1)), STEP_MS);
+    const timer = window.setInterval(
+      () => setOffset((now) => (now + 1) % (count - VISIBLE_TOKEN_COUNT + 1)),
+      STEP_MILLISECONDS,
+    );
     return () => window.clearInterval(timer);
   }, [count, working]);
   return offset;
 }
 
-/** The word "token", glossed on hover and focus. */
 function Gloss({ words }: { readonly words: LlmWords }) {
   return (
     <span className={`${styles.gloss} relative z-10 inline-block`} tabIndex={0}>
@@ -38,13 +38,9 @@ function Gloss({ words }: { readonly words: LlmWords }) {
   );
 }
 
-/**
- * The model writing, as a carousel of fixed width: a few tokens, the newest popping in, the next one a question. It
- * writes only while a wire brings it work, so at rest it stands still with the scenes.
- */
 function Typing({ tokens, working }: { readonly tokens: readonly string[]; readonly working: boolean }) {
   const offset = useOffset(tokens.length, working);
-  const shown = tokens.slice(offset, offset + SHOWN);
+  const shown = tokens.slice(offset, offset + VISIBLE_TOKEN_COUNT);
   return (
     <p aria-hidden="true" className="flex w-80 max-w-full shrink-0 justify-end gap-1 self-end overflow-hidden">
       {shown.map((token, index) => (
@@ -64,7 +60,6 @@ function Typing({ tokens, working }: { readonly tokens: readonly string[]; reado
   );
 }
 
-/** One port per column on the band's top edge, under its wire; lit while a message travels that wire. */
 function Ports({ active }: { readonly active: Readonly<Record<Level, boolean>> }) {
   return (
     <div aria-hidden="true" className="absolute inset-x-0 -top-1.5 hidden grid-cols-4 gap-x-4 @3xl:grid">
@@ -80,7 +75,6 @@ function Ports({ active }: { readonly active: Readonly<Record<Level, boolean>> }
   );
 }
 
-/** The front: the sentence with "token" glossed and the turn hint on the left, the model writing at the bottom right. */
 function Front(props: {
   readonly words: LlmWords;
   readonly hint: string;
@@ -109,15 +103,10 @@ function Front(props: {
   );
 }
 
-/**
- * The model under every level: it predicts the next token; turned over, its definition and source. The parent owns
- * whether it is turned, and which wires are busy.
- */
 export function LlmBand(props: {
   readonly words: LlmWords;
   readonly labels: CardLabels;
   readonly active: Readonly<Record<Level, boolean>>;
-  /** The model writes tokens: a wire is busy, or the mouse is on a column. */
   readonly working: boolean;
   readonly flipped: boolean;
   readonly onFlip: () => void;

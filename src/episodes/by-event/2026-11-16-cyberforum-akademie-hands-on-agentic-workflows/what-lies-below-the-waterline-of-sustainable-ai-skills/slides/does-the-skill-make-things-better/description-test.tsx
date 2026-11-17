@@ -13,17 +13,13 @@ export interface Quote {
 }
 
 export interface DescriptionTestProps {
-  /** The card's head with its Context marker. */
   readonly title: ReactNode;
   readonly lead: { readonly chat: string; readonly coding: string };
-  /** The front matter the trigger set tests; code, not translated. */
   readonly frontMatter: { readonly name: string; readonly description: string };
   readonly should: { readonly label: string; readonly requests: readonly Request[] };
   readonly shouldNot: { readonly label: string; readonly requests: readonly Request[] };
   readonly nearMiss: string;
-  /** The reading locale's quotation marks around each request. */
   readonly quote: Quote;
-  /** The footnote with its Context marker. */
   readonly footnote: ReactNode;
   readonly target: { readonly 'data-target': string };
   readonly footnoteTarget: { readonly 'data-target': string };
@@ -37,7 +33,6 @@ interface RequestItemProps {
   readonly quote: Quote;
 }
 
-/** One request in the reading locale's quotation marks, a near-miss marked. */
 function RequestItem({ kind, text, near, nearMiss, quote }: RequestItemProps) {
   return (
     <li
@@ -67,7 +62,6 @@ interface RequestsProps {
   readonly quote: Quote;
 }
 
-/** One column of requests: those that should trigger the skill, or those that should not, a near-miss marked. */
 function Requests({ kind, label, requests, nearMiss, quote }: RequestsProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -86,7 +80,6 @@ function Requests({ kind, label, requests, nearMiss, quote }: RequestsProps) {
   );
 }
 
-/** The card's lead: the question in the Chat app view, the front matter under test in the Coding agent view. */
 function Lead({ lead, frontMatter }: Pick<DescriptionTestProps, 'lead' | 'frontMatter'>) {
   return (
     <>
@@ -106,10 +99,6 @@ function Lead({ lead, frontMatter }: Pick<DescriptionTestProps, 'lead' | 'frontM
   );
 }
 
-/**
- * The description test: does the AI reach for the skill at the right moment? A few requests each way, near-misses
- * included; the Coding agent view shows the front matter it tests and the eval's `should_trigger` columns.
- */
 export function DescriptionTest(props: DescriptionTestProps) {
   const { title, should, shouldNot, nearMiss, quote, footnote, target, footnoteTarget } = props;
   return (

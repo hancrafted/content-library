@@ -1,11 +1,4 @@
-// #51 post-build check: every exported Episode page, in every locale, shows the
-// reader exactly the text it showed before the Self-contained Slides move, under
-// the anchors `published-anchors.json` lists (none yet for an upcoming, `noindex`
-// Episode), with no Translation key left raw.
-// The expected text is a fixture file per page under `episode-text/`, captured
-// once from the build before anything moved; a page without one gets it written
-// and fails, so the capture is reviewed and committed, never silently accepted.
-
+// decision: FE-002 §5.2
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -21,20 +14,17 @@ const PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ slug, route, folder, isNo
 const FIXTURE_DIR = join(import.meta.dirname, 'episode-text');
 const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'episodes');
 
-/** A dotted Translation key path as next-intl prints a message it cannot find. */
 const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)\.[a-z0-9-]+\.[A-Za-z0-9.-]+/;
 
 function builtText(url: string): EpisodeText {
   return episodeText(exportedPage(url));
 }
 
-/** Whether the exported page asks search engines not to index it: an upcoming Episode's page does; a Template is public and does not. */
 function isNoindex(url: string): boolean {
   const page = exportedPage(url);
   return (page('meta[name="robots"]').attr('content') ?? '').includes('noindex');
 }
 
-/** The captured text of one page; writes a missing capture and throws so it is reviewed before it counts. */
 async function capturedText(file: string, built: EpisodeText): Promise<EpisodeText> {
   if (existsSync(file)) return JSON.parse(readFileSync(file, 'utf8')) as EpisodeText;
   mkdirSync(FIXTURE_DIR, { recursive: true });
@@ -62,11 +52,10 @@ describe.each(PAGES)('$url', ({ slug, folder, isNotEpisode, locale, url }) => {
     expect(actual).toEqual(expected);
   });
 
-  it('renders its Slides under exactly the published anchors, or binds none while upcoming', () => {
+  it('renders its Slides under exactly the published anchors, or binds none while upcoming and noindex, a Template always bound', () => {
     // ARRANGE
     const file = join(EPISODES_DIR, folder, 'published-anchors.json');
-    // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
-    // A Template is public and has no status: its anchors are bound.
+    // spec: docs/features/episode-publishing.md#steps
     if (isNoindex(url) && !isNotEpisode) {
       expect(existsSync(file)).toBe(false);
       return;

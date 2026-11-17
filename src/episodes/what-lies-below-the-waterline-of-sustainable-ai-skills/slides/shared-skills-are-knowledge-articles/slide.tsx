@@ -20,23 +20,14 @@ const KCS = {
 };
 const SPECIFICATION = { slug: 'agent-skills-specification', url: 'https://agentskills.io/specification' };
 
-/** The control block's three fields, with their `metadata` keys in the Coding agent view. */
 const FIELDS = [
   { slug: 'owner', codingKey: 'owner' },
   { slug: 'version', codingKey: 'version' },
   { slug: 'review', codingKey: 'next-review' },
 ] as const;
-/** The three AIs that run the shared skill; every one runs the version the control block names. */
 const READERS = ['yours', 'colleague', 'otherTeam'] as const;
-/** The skill both copies hold, by its folder name. */
 const SKILL = 'collect-sediment-sample';
 
-/**
- * "Shared skills are knowledge articles" (Spec Option 20b): the control room at Midnight, your notebook in your hand,
- * the same skill in the fleet manual with its control block stamped on, and the dotted reach to three AIs running
- * version 1.3. Overrules `grid-1x2` for one room drawing and a three-card row; keeps `motion: local`, the control block
- * stamping onto the page, then the reach lines drawing in, once.
- */
 export const sharedSkillsAreKnowledgeArticles = slide({
   slug: 'shared-skills-are-knowledge-articles',
   messages: { en, de },

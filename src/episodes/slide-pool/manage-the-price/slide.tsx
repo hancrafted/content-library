@@ -6,12 +6,6 @@ import { BRIEF, TRAITS } from './counter-matrix.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The second cornerstone (Spec Option 3c): the five BRIEF moves answer the five PRICE traits on one checklist board,
- * a tick wherever a move counters a trait, many to many, with the totals in the footer. The Slide header above shows
- * the heading and caption; the body is a Scene in `SlideFrame`. Each move's title carries the Context marker to its
- * Speaker note, and its row is that note's target.
- */
 export const manageThePrice = slide({
   slug: 'manage-the-price',
   messages: { en, de },

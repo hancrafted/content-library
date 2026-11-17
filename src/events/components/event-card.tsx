@@ -11,17 +11,13 @@ import { CalendarDays, MapPin, Video } from 'lucide-react';
 export interface EventCardProps {
   card: EventCard;
   locale: Locale;
-  /** The title's heading level, one below the heading the list sits under. */
   headingLevel: CardHeadingLevel;
-  /** The localized primary cue, resolved by the server and passed through the browser. */
   open: string;
-  /** Where the card sits in its grid. */
   className?: string;
 }
 
 const META = 'inline-flex items-center gap-2 text-caption text-muted-foreground';
 
-/** Where the Event takes place: a pin at a venue, a camera on a platform; a hybrid Event is at its venue first. */
 function Place({ place }: { place: EventPlace }) {
   const Icon = place.format === 'remote' ? Video : MapPin;
   return (
@@ -32,7 +28,6 @@ function Place({ place }: { place: EventPlace }) {
   );
 }
 
-/** The day, with the time beside it when the Event has one. */
 function When({ card }: { card: EventCard }) {
   return (
     <p className={`${META} font-medium text-foreground`}>
@@ -45,7 +40,6 @@ function When({ card }: { card: EventCard }) {
   );
 }
 
-/** One Event reading card: shared lead-Tag artwork, native link, Tags, place, date and time. */
 export function EventCardView({ card, locale, headingLevel, open, className }: EventCardProps) {
   return (
     <CardShell

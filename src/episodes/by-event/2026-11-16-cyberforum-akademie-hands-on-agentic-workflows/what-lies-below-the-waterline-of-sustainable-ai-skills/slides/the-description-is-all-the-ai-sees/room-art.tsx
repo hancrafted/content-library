@@ -1,18 +1,8 @@
 import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/facets';
 import styles from './slide.module.css';
 
-/*
- * The drawing lifted from the approved Spec's Option 11a (feedback 3, decision 46): the control room's faceted walls,
- * the window onto the new site with its sky, cloud, sea and marker buoy, the floor, the reading light and the shut
- * procedure cards (the manual's binder is `binder-art.tsx`). Facets keep the Spec's own numbers, in its 1200 by 540
- * space; their tones are this Slide's tokens in `slide.module.css`. The cast and the console stay the shared figures,
- * placed on top.
- */
-
-/** One facet: its tone, the token that fills it, and its outline. */
 export type Facet = readonly [tone: string, d: string];
 
-/** Where the Spec's 1200 by 540 drawing sits in the Scene's 1200 by 800 space: at its bottom, which the art box shows. */
 export const ART_TOP = 260;
 
 const ROOM: readonly Facet[] = [
@@ -201,7 +191,6 @@ const SHUT: readonly Facet[] = [
   ['clasp', 'M1009 281L1031 282.2L1029.4 312.2L1007.5 311Z'],
 ];
 
-/** The room behind the cast: walls, window and floor. */
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP})`}>
@@ -210,7 +199,6 @@ export function RoomArt() {
   );
 }
 
-/** The reading light from the console to the binder, and the shut cards fanned out behind it. */
 export function BinderSurround() {
   return (
     <g aria-hidden className={styles.art} transform={`translate(0 ${ART_TOP})`}>

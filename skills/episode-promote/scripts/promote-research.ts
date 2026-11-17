@@ -1,8 +1,3 @@
-// `npm run episode:promote-research -- docs/episodes/<staging-folder>`: moves every research folder the Run staged
-// into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md` (episode-promote step 7). Run
-// from the repo root, before Staging is deleted. It refuses, and changes nothing, when a staged folder holds no
-// research.md, its ID is already in the wiki, or its category is not in GLOSSARY.md.
-
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -53,7 +48,6 @@ for (const { folder, to } of promoted.moves) {
   renameSync(path.join(root, folder), path.join(WIKI, to));
 }
 writeFileSync(indexFile, promoted.index);
-// Staging is not formatted; the wiki is, so the moved files take its format here.
 const touched = [indexFile, ...promoted.moves.map(({ to }) => path.join(WIKI, to))];
 execFileSync('npx', ['oxfmt', ...touched], { stdio: 'inherit' });
 console.log(`moved ${promoted.moves.length} research folder(s) into ${wikiResearch}/ and listed them in ${indexFile}`);

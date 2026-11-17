@@ -2,12 +2,9 @@ import { FieldnoteReveal } from '@/page-assembly/landing/fieldnote-reveal.client
 import styles from '@/page-assembly/landing/fieldnote-sketch.module.css';
 import type { CSSProperties, ReactNode } from 'react';
 
-/** Motion vocabulary: `draw` traces a stroke, `pop` scales a mark in, `jitter` shakes friction, `fade` brings in context, `sweep` turns a hand. */
 type Kind = 'draw' | 'pop' | 'jitter' | 'fade' | 'sweep';
-/** What a wrapper does while its phase column is hovered (keyframes live with the case styles). */
 type Micro = 'jitter' | 'nudge' | 'retick' | 'pulse' | 'bob' | 'tick';
 
-/** `i` is the beat in the phase's story; each beat starts a little after the one before. */
 function motionProps(kind: Kind, i: number, cls?: string) {
   return {
     className: cls ? `${styles[kind]} ${cls}` : styles[kind],
@@ -16,7 +13,6 @@ function motionProps(kind: Kind, i: number, cls?: string) {
   };
 }
 
-/** Hover loops live on their own wrapper so they never touch the one-shot entrance animation on the child. */
 function Micro({ kind, i = 0, children }: { kind: Micro; i?: number; children: ReactNode }) {
   return (
     <g data-micro={kind} style={{ '--i': i } as CSSProperties}>
@@ -61,7 +57,6 @@ function Check({ x, y, i = 0 }: { x: number; y: number; i?: number }) {
   );
 }
 
-/** A horizontal arrow of the given length from (x, y); it nudges forward on hover. */
 function Arrow({ x, y, length, i }: { x: number; y: number; length: number; i: number }) {
   return (
     <g transform={`translate(${x} ${y})`}>
@@ -73,7 +68,6 @@ function Arrow({ x, y, length, i }: { x: number; y: number; length: number; i: n
 }
 
 const RIB: Record<string, ReactNode> = {
-  // Work piles up and every arrow points at one person.
   before: (
     <>
       <Paper x={24} y={22} i={0} kind="jitter" />
@@ -85,7 +79,6 @@ const RIB: Record<string, ReactNode> = {
       <path d="M152 82v-8a18 18 0 0 1 36 0v8" {...motionProps('draw', 5)} />
     </>
   ),
-  // Decisions are shared: three papers connect, each gets signed off.
   intervention: (
     <>
       <Micro kind="pulse">
@@ -99,7 +92,6 @@ const RIB: Record<string, ReactNode> = {
       <Check x={109} y={84} i={6} />
     </>
   ),
-  // The ring closes: four members, each owning their part, no centre.
   result: (
     <>
       <Micro kind="pulse">
@@ -121,7 +113,6 @@ const RIB: Record<string, ReactNode> = {
 };
 
 const AUDI: Record<string, ReactNode> = {
-  // The legacy spreadsheet is drawn row by row, dense and rigid.
   before: (
     <>
       <rect x="24" y="26" width="101" height="68" rx="3" {...motionProps('draw', 0)} />
@@ -134,7 +125,6 @@ const AUDI: Record<string, ReactNode> = {
       </Micro>
     </>
   ),
-  // The process is modelled as states with transitions, in order.
   intervention: (
     <>
       <rect x="22" y="42" width="49" height="36" rx="18" {...motionProps('draw', 0)} />
@@ -148,7 +138,6 @@ const AUDI: Record<string, ReactNode> = {
       <Check x={179} y={54} i={6} />
     </>
   ),
-  // The sign-off lands and the clock hand sweeps: time saved.
   result: (
     <>
       <rect x="28" y="24" width="120" height="70" rx="3" {...motionProps('draw', 0)} />
@@ -164,7 +153,6 @@ const AUDI: Record<string, ReactNode> = {
 };
 
 const SELFBITS: Record<string, ReactNode> = {
-  // Production on one side, paper orders on the other, no data path between them.
   before: (
     <>
       <Factory x={30} y={42} i={0} />
@@ -176,7 +164,6 @@ const SELFBITS: Record<string, ReactNode> = {
       </Micro>
     </>
   ),
-  // The interface is built, then the handheld; each gets signed off.
   intervention: (
     <>
       <rect x="24" y="25" width="144" height="70" rx="3" {...motionProps('draw', 0)} />
@@ -187,7 +174,6 @@ const SELFBITS: Record<string, ReactNode> = {
       <Check x={187} y={67} i={5} />
     </>
   ),
-  // The network is laid out, then five sites switch on one after another.
   result: (
     <>
       <Micro kind="pulse">
@@ -208,7 +194,6 @@ const SELFBITS: Record<string, ReactNode> = {
 
 const SKETCHES = { rib: RIB, audi: AUDI, selfbits: SELFBITS };
 
-/** Schematics describe the process; only the factory footprint represents a documented count. */
 export function FieldnoteSketch({
   story,
   phase,

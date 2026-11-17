@@ -5,12 +5,6 @@ import { readSpec } from './episode-spec-page.pure';
 import { checkSpec } from './episode-spec.pure';
 import { appendMetaVerified } from './staging-file.pure';
 
-/*
- * assembleSpec at its one seam: inputs by stage in, the page's HTML out. Each test reads the page the way Han and
- * the Spec contract do, by role attributes, never by the helpers inside the module.
- */
-
-/** A slotted Spec template: a page frame with the slots the assembler fills, the review form and two <template>s. */
 const TEMPLATE = `<!doctype html>
 <html lang="en" data-mode="decide">
   <head>
@@ -168,7 +162,6 @@ const FRAGMENTS = [
   `<!-- slide: trim-the-paste -->${option('3a', true)}${option('3b')}`,
 ];
 
-/** The fidelity the Spec calibration gives every item. */
 const FIDELITY = 'mock';
 
 const BASE = {

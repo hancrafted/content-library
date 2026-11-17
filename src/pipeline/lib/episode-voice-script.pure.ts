@@ -1,16 +1,9 @@
-/*
- * The write-voice-script check (design-ADR 0004): the job may rewrite the text
- * of Voice script items in the Dossier and nothing else. The rule lives in
- * references/write-voice-script.md prose; this compares two versions of the
- * file, and the staging test runs it on write-dossier's commit and its successor.
- */
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 import { type Finding } from './finding.pure';
 import { blocksOf, bodyLines, orderedList } from './staging-markdown.pure';
 
 const BEAT = /^\*\*(.+?)\*\*/;
 
-/** A Dossier's non-blank lines outside every Voice script block, and each Slide's Voice script beats. */
 function splitVoiceScript(dossier: string): { rest: string[]; beats: Map<string, string[]> } {
   const lines = bodyLines(dossier);
   const blocks = blocksOf(lines);
@@ -29,11 +22,6 @@ function splitVoiceScript(dossier: string): { rest: string[]; beats: Map<string,
   return { rest: lines.filter((line, index) => line.trim() !== '' && !inVoice.has(index)), beats };
 }
 
-/**
- * Checks what write-voice-script did to the Dossier write-dossier left: it may
- * rewrite the text of each Voice script item and nothing else, so every other
- * line, and every item's bold beat and order, stay as they were.
- */
 export function checkVoiceScriptDiff(draft: string, voiced: string): Finding[] {
   const before = splitVoiceScript(draft);
   const after = splitVoiceScript(voiced);

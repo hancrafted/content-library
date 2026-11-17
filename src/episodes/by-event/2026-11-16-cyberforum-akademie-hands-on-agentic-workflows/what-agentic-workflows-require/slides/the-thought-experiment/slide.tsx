@@ -9,7 +9,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PartyResult } from './party-result';
 
-/** Each card, the half of the goal its seam failure breaks, in board order. */
 const CARDS = [
   { slug: 'activities', breaks: 'together' },
   { slug: 'travel', breaks: 'safely' },
@@ -19,12 +18,6 @@ const CARDS = [
 
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
-/*
- * "The thought experiment" (Spec Option A): the party board as a sum. Four cards, each ticked, add up to the party,
- * which fails. Each card shows one fact, one result line and the cause from the card it met at rest, so all four
- * failures read without a pointer; lighting one dims the other three. The Speaker note marker sits on the goal bar.
- * The setup slide carries the manager's question, so this Slide asks none. No stepping, no motion beyond the dimming.
- */
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },

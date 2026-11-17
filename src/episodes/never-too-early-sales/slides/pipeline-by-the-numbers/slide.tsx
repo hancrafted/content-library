@@ -7,7 +7,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './pipeline-by-the-numbers.module.css';
 
-/** The 27 lead notes, in board order. */
 const LEADS = [
   'kraus',
   'novak',
@@ -38,7 +37,6 @@ const LEADS = [
   'ahmed',
 ] as const;
 
-/** The nine leads that became opportunities, each at the step it has reached. */
 const OPPORTUNITIES = [
   ['kraus', 'demo'],
   ['novak', 'proposal'],
@@ -51,14 +49,8 @@ const OPPORTUNITIES = [
   ['sato', 'demo'],
 ] as const;
 
-/** The one signed deal, in whole euros. */
 const DEAL_AMOUNT = 12_000;
 
-/*
- * The worked example counted on the board (Option 8b): 27 named lead notes, nine in Opportunity and one revenue note
- * in Deal, under the primary 27:1 bracket, with the cycle bar drawn to scale beneath. The Slide header above, the
- * body a Scene in `SlideFrame`; every number comes from the `PIPELINE` table.
- */
 export const pipelineByTheNumbers = slide({
   slug: 'pipeline-by-the-numbers',
   messages: { en, de },

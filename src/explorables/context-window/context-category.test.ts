@@ -9,8 +9,6 @@ import { createState, reduce } from './context-state.pure';
 import { stepView } from './context-step.pure';
 import type { RenderMode } from './context.types';
 
-/* The context category part: a bold title, the Messages group a collapsible in Technical only, and its place in the grid. */
-
 const noop = () => undefined;
 
 const render = (renderMode: RenderMode, locale = 'en') => {

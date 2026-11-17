@@ -14,7 +14,6 @@ import type { TocView } from './toc-view';
 
 const LEAVE_TO_BROWSER = () => undefined;
 
-/** Repeated anchor names on other pages must never highlight or scroll the current page. */
 function viewForPage(view: TocView, page: TocPage): TocView {
   const current = page.route === view.route;
   return {

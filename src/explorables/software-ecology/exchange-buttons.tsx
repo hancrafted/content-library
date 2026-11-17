@@ -4,11 +4,6 @@ import type { ExchangeWords } from './exchange-words.types';
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * Download YAML and Upload, at the foot of the Settings popover (feedback 08). Upload opens the file picker; the parent
- * reads the file. Dropping a file on the factory uploads it too.
- */
-
 export interface ExchangeButtonsProps {
   readonly words: ExchangeWords;
   readonly onDownload: () => void;
@@ -33,7 +28,6 @@ function FileButton(p: { icon: LucideIcon; label: string; tip: string; control: 
   );
 }
 
-/** The hidden file input Upload opens. */
 function FileInput({ file, onFile }: { file: RefObject<HTMLInputElement | null>; onFile: (f: File) => void }) {
   return (
     <input

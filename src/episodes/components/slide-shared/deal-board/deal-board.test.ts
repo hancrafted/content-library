@@ -3,7 +3,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DealBoard, OpenPipeline, type DealBoardProps } from './deal-board';
 
-/** A two-lane board with values, enough to read a total, a count and a deal note. */
 function board(extra: Partial<DealBoardProps> = {}): string {
   return renderToStaticMarkup(
     createElement(DealBoard, {
@@ -30,7 +29,6 @@ function board(extra: Partial<DealBoardProps> = {}): string {
   );
 }
 
-/** The visible text of rendered markup, tags dropped and whitespace collapsed. */
 function textOf(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')

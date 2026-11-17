@@ -1,12 +1,5 @@
 import type { ReactNode } from 'react';
 
-/*
- * The papers of Spec Option 14a's control room, drawn as the Option draws them (feedback 3, decision 46): a sheet with
- * its lit triangle and curled corner, ruled lines, caption-size words, and the wooden clipboard. Tones come from the
- * Slide token file through `data-tone` and `data-ink`.
- */
-
-/** Scene text is drawn at caption size and scaled with the drawing, so it reads at presenting width. */
 export const TEXT_SCALE = 1.15;
 
 interface Box {
@@ -50,10 +43,6 @@ export function Rules({
   return ys.map((y) => <line key={y} x1={x} x2={x + width} y1={y} y2={y} strokeWidth={3} data-tone="rule" />);
 }
 
-/**
- * A sheet of paper as the Option draws it: an offset drop, the lit triangle from the upper left, the plain half, and
- * a curled lower-right corner.
- */
 export function Sheet({ x, y, width, height }: Box) {
   const right = x + width;
   const bottom = y + height;
@@ -67,7 +56,6 @@ export function Sheet({ x, y, width, height }: Box) {
   );
 }
 
-/** A wooden clipboard lit from the upper left, its grey clip on top, and a sheet of paper clamped under it. */
 export function Clipboard({ x, y, width, height }: Box) {
   const right = x + width;
   const bottom = y + height;

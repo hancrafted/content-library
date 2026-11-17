@@ -3,12 +3,6 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { animatedProperties, blursAndShadows, globalsRead } from '../iceberg/scenery/fable-contract.test-support';
 
-/*
- * The ship's CSS module, read from disk, against its frozen interface (decisions 15–17 and 19 of feedback 2): it
- * mixes only from the tokens its JSDoc names and moves only by transform or opacity, with no blur, filter or shadow.
- * It reads the CSS rather than importing it, so the slow lane names it as a rerun trigger (vitest.slow.config.mts).
- */
-
 const css = () => readFileSync(path.join(import.meta.dirname, 'ship.module.css'), 'utf8');
 
 describe('success cases', () => {

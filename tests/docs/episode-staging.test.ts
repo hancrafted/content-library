@@ -11,13 +11,14 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   EPISODES,
+  isRunLogOfBranchInFlightThatNoRuleGoverns,
   knownVisuals,
   LLM_WIKI,
   llmWikiResearch,
   PENDING,
   pipelineContext,
   readFolder,
-  researchFoldersOnDisk,
+  researchFolderNamesAcrossRuns,
   ROOT,
   rubricsWithoutHeading,
   RUNS_CSV,
@@ -27,15 +28,7 @@ import {
   TEMPLATE_STAGING,
 } from './episode-staging.fixture.ts';
 
-/*
- * The cross-file checks (design-ADR 0004) applied to the real corpus: the new-episode skill's sample Episode and
- * pipeline template, the llm-wiki index against its research files, the runs CSV header, and the invariants that span
- * Runs, read from folder names only. markdown-harness checks each file alone; this test checks them against each other,
- * so a disagreement fails `npm run verify`. Each Run's own staging folder is checked by the `run-checks.test.ts` beside
- * it (`run-checks.ts`, ARCH-003 §4.7), never from here.
- */
-
-/** The pipeline template every Run's draft is copied from. */
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 const TEMPLATE_YAML = readFileSync(TEMPLATE, 'utf8');
 
 it('reads the history in full, so the Voice script check never passes on a shallow clone', () => {
@@ -151,7 +144,7 @@ describe('success cases', () => {
     // ARRANGE
     const categories = researchCategories(readFileSync(path.join(ROOT, 'GLOSSARY.md'), 'utf8'));
     // ACT
-    const findings = checkResearchFolders(researchFoldersOnDisk(), categories);
+    const findings = checkResearchFolders(researchFolderNamesAcrossRuns(), categories);
     // ASSERT
     expect(categories.length).toBeGreaterThan(0);
     expect(findings).toEqual([]);
@@ -213,6 +206,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("excuses only a branch in flight's run-log.md that is on disk, never another file or a missing one", () => {
+    // ARRANGE
+    const paths = ['docs/episodes/no-such-run/run-log.md', 'docs/episodes/runs.csv'];
+    const expected = [false, false];
+    // ACT
+    const excused = paths.map(isRunLogOfBranchInFlightThatNoRuleGoverns);
+    // ASSERT
+    expect(excused).toEqual(expected);
+  });
+
   it('keeps the pending list to files that are still missing', () => {
     // ARRANGE
     const pending = PENDING;

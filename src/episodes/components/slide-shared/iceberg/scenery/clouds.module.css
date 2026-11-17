@@ -1,5 +1,4 @@
-/* The clouds drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in clouds.tsx. */
-
+/* decision: FE-011 §4 */
 .clouds {
   --cloud-lit: var(--on-brand-accent);
   --cloud-shade: color-mix(in oklab, var(--info) 20%, var(--on-brand-accent));
@@ -25,12 +24,10 @@
   stroke-linejoin: round;
 }
 
-/* A far cloud is paler, so the layers read as depth even at rest. */
 .clouds [data-cloud-layer='far'] {
   opacity: 0.7;
 }
 
-/* The Surface's wind: three layers, each drifting at its own speed, only on the active Slide. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .wind {
     animation: cloud-drift-near 38s ease-in-out infinite alternate;

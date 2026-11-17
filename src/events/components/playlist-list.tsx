@@ -1,18 +1,12 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/**
- * One Playlist entry as page assembly hands it in: the card it built, ready to render with the list's own classes,
- * and whether it opens a page, so an Episode with no page yet gets a muted step number.
- */
 export interface PlaylistEntry {
   readonly key: string;
   readonly linked: boolean;
-  /** Renders the card page assembly built, with the classes that place it beside its step number. */
   readonly card: (className: string) => ReactNode;
 }
 
-/** The step number beside a card: filled for the emphasised first step, muted for an Episode with no page yet. */
 function StepNumber({ step, first, muted }: { step: number; first: boolean; muted: boolean }) {
   return (
     <span
@@ -29,7 +23,6 @@ function StepNumber({ step, first, muted }: { step: number; first: boolean; mute
   );
 }
 
-/** One Playlist entry: its step number and its card, the first one raised and ringed. */
 function PlaylistStep({ entry, step }: { entry: PlaylistEntry; step: number }) {
   const first = step === 1;
   return (
@@ -44,11 +37,6 @@ function PlaylistStep({ entry, step }: { entry: PlaylistEntry; step: number }) {
   );
 }
 
-/**
- * An Event's Playlist on its page: the entries in the Playlist's order, the first emphasised as where to start; the
- * step number is text beside each card, the list itself says the order. The cards arrive ready-made from page
- * assembly, so the Events area never builds an Episode card.
- */
 export function PlaylistList({ entries, title }: { entries: readonly PlaylistEntry[]; title: string }) {
   return (
     <section aria-labelledby="event-playlist" className="mt-14">

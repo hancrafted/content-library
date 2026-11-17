@@ -1,7 +1,4 @@
-/*
- * The Explorable's own words, as `software-ecology.config.yml` and its German twin hold them (FE-012 §1), and the
- * slices each part receives. A Slide overrides any of them through the server entry's `words` prop.
- */
+// decision: FE-012 §1
 import type { CompareWords } from './compare-words.types';
 import type { ExchangeWords } from './exchange-words.types';
 import type { OwnWorkWords } from './own-work.types';
@@ -13,7 +10,6 @@ export type { ExchangeWords } from './exchange-words.types';
 export type { SettingsWords, ToolbarWords } from './toolbar-words.types';
 export type { TourCheckWords, TourWords } from './tour-words.types';
 
-/** The Settings popover's Model column. */
 export interface ModelWords {
   readonly reality: string;
   readonly ideal: string;
@@ -34,7 +30,6 @@ export interface ModelWords {
   readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'reset', string>>;
 }
 
-/** The Settings popover's Display column. */
 export interface DisplayWords {
   readonly beltMotion: string;
   readonly beltMotionNote: string;
@@ -55,7 +50,6 @@ interface RowWords {
   readonly help: string;
 }
 
-/** A work center's dashboard. */
 export interface DashWords {
   readonly own: OwnWorkWords;
   readonly help: string;
@@ -99,7 +93,6 @@ export interface DashWords {
   readonly withAiHere: string;
 }
 
-/** The Customer's dashboard. */
 export interface CustDashWords {
   readonly requests: string;
   readonly arrivals: string;
@@ -111,9 +104,7 @@ export interface CustDashWords {
   readonly follow: string;
   readonly followTip: string;
   readonly good: string;
-  /** A bad release of a spec defect: the wrong thing was built. */
   readonly spec: string;
-  /** A bad release of a code defect: a bug. */
   readonly code: string;
   readonly complaint: string;
   readonly sizedFor: string;
@@ -208,14 +199,11 @@ export interface DockWords {
   readonly complaints: string;
 }
 
-/** The roles state: the cartoon's captions by panel id, and the words around the panels. */
 export interface CartoonWords {
   readonly captions: Readonly<Record<string, string>>;
   readonly blank: string;
-  /** "{role} · not a work center here", on a tile. */
   readonly notHere: string;
   readonly artefacts: string;
-  /** Why a tile is no work center, by panel id. */
   readonly jobs: Readonly<Record<string, string>>;
 }
 
@@ -236,6 +224,5 @@ export interface Words {
   readonly exchange: ExchangeWords;
 }
 
-/** Any word of the Explorable, key by key: what a Slide says differently. */
 export type WordsOverride = { readonly [K in keyof Words]?: DeepPartial<Words[K]> };
 type DeepPartial<T> = { readonly [K in keyof T]?: T[K] extends string ? string : DeepPartial<T[K]> };

@@ -5,10 +5,8 @@ import { FactorySceneView } from './factory-scene-view';
 import { onWire, type Frame, type Level } from './scene-frames.pure';
 import { WorkflowSceneView } from './workflow-scene-view';
 
-/** How far apart two lanes of the wire sit. */
 const LANE_REM = 0.9;
 
-/** The wire to the model, with the messages on their way down or back up, each on its lane. */
 function Wire({ frame }: { readonly frame: Frame }) {
   return (
     <div aria-hidden="true" data-wire="" className={`${styles.wire} relative mx-auto w-20`}>
@@ -25,10 +23,6 @@ function Wire({ frame }: { readonly frame: Frame }) {
   );
 }
 
-/**
- * A Level's scene, the interface it reaches the model through as the scene's footer, and its wire to the model (a pure
- * view): the frame decides what the scene and the wire show.
- */
 export function LevelSceneView(props: {
   readonly level: Level;
   readonly frame: Frame;

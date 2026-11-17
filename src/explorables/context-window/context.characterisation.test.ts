@@ -6,8 +6,6 @@ import { Context } from './context';
 import { CONTEXT_PRESETS, contextData, type ContextPresetId } from './context-data';
 import { createState, litKey, matcher, reduce, visibleStep } from './context-state.pure';
 
-/* Characterisation of today's behaviour, pinned before the Context rename (ticket T1). */
-
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
 

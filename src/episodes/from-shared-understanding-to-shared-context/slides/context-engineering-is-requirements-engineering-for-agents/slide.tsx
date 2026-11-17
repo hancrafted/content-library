@@ -14,13 +14,8 @@ const MA = { slug: 'ma-requirement-driven-llm-use', url: 'https://arxiv.org/abs/
 const CHEN = { slug: 'chen-promptware-engineering', url: 'https://arxiv.org/abs/2503.02400' };
 const OSMANI = { slug: 'osmani-new-sdlc', url: 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding' };
 
-/** The four parts of Google's definition, in its order, each read as what a requirement has always said. */
 const DEFINITION_PARTS = ['codebase', 'architecture', 'conventions', 'intent'] as const;
 
-/**
- * The four outcomes of the dartboard, each as the shared board it lands and the window that produced it: the same
- * boards Slide 6 draws, so one outcome looks the same on both.
- */
 const OUTCOMES = [
   { key: 'both', board: 'precise-accurate', quality: 'crisp', miss: false },
   { key: 'precise', board: 'precise-off', quality: 'crisp', miss: true },
@@ -28,7 +23,6 @@ const OUTCOMES = [
   { key: 'neither', board: 'neither', quality: 'vague', miss: true },
 ] as const;
 
-/** Down the column, from the window to the board it lands. */
 function UpArrow() {
   return (
     <svg viewBox="0 0 40 24" className="mx-auto h-6 w-10" aria-hidden="true">
@@ -43,12 +37,6 @@ function UpArrow() {
   );
 }
 
-/**
- * "Context engineering is requirements engineering for agents" (Spec Option 8a): Google's definition in the caption, its
- * four parts read as a requirement on a card (Han's feedback), then one bike order, four columns, each
- * dartboard standing over the context window that produces it. Overrules `grid-1x2` for the four columns; keeps
- * `motion: none`. The boards are the shared `Dartboard` and `Darts`; hover dims the other columns.
- */
 export const contextEngineeringIsRequirementsEngineeringForAgents = slide({
   slug: 'context-engineering-is-requirements-engineering-for-agents',
   messages: { en, de },

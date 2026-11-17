@@ -7,12 +7,7 @@ import { ManagerStack } from './manager-stack';
 const FREELANCERS = ['activities', 'travel', 'venue', 'food'] as const;
 const TRAITS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 
-/*
- * The section slide of "A thought experiment" (Spec Option A, Stack): "You're the manager", the sibling of
- * "You're the new hire" with the roles reversed. The slug stays `a-thought-experiment`, the Section's published
- * anchor (FE-002 §5), so shared links to the Section and its Slides still land. Its Voice script opens the Episode
- * and ends on the question, which the room answers before the reveal.
- */
+// decision: FE-002 §5
 export const aThoughtExperiment = slide({
   slug: 'a-thought-experiment',
   messages: { en, de },

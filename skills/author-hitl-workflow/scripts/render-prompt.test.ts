@@ -7,13 +7,11 @@ import { afterAll, describe, expect, it } from 'vitest';
 const SCRIPT = 'skills/author-hitl-workflow/scripts/render-prompt.ts';
 const FIXTURE = 'src/explorables/human-in-the-loop/workflow.fixture.en.yml';
 const dir = mkdtempSync(join(tmpdir(), 'render-prompt-'));
-/** A pasted value, written to a file the script reads. */
 const pasted = (name: string, text: string): string => {
   const path = join(dir, name);
   writeFileSync(path, text);
   return path;
 };
-/** The script run under plain node, as the skill runs it. */
 const render = (...args: string[]) => spawnSync('node', [SCRIPT, FIXTURE, ...args], { encoding: 'utf8' });
 
 afterAll(() => {

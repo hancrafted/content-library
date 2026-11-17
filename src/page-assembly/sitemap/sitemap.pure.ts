@@ -6,7 +6,6 @@ import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';
 import { servedUrl } from '@/shared/lib/static-routes';
 import type { MetadataRoute } from 'next';
 
-/** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
 function lastModifiedOf(
   page: PageRef,
   publishedOnOf: (episode: EpisodeRef<EpisodeId>) => IsoDate | undefined,
@@ -29,13 +28,6 @@ function lastModifiedOf(
   });
 }
 
-/**
- * The sitemap: one entry per page and locale whose treatment puts it in the sitemap, in the order given, each carrying
- * the full hreflang set, English canonical at the bare root and German at `/de`. Episode entries carry `lastModified`
- * from their publish date. The pages and treatments are the page catalogue's (`PAGES` in the content store), which
- * `pageMetadata` reads too, so the two cannot disagree: no dashboard, upcoming or unlisted Episode,
- * Episode under an Event, or Event whose Playlist is unlisted.
- */
 export function sitemapEntries(
   siteUrl: string,
   pages: readonly TreatedPage[],
@@ -58,7 +50,6 @@ export function sitemapEntries(
   });
 }
 
-/** `robots.txt`: crawl everything, and say where the sitemap is. Page-level `noindex` does the excluding. */
 export function robotsFor(siteUrl: string): MetadataRoute.Robots {
   return { rules: { userAgent: '*', allow: '/' }, sitemap: `${siteUrl}/sitemap.xml` };
 }

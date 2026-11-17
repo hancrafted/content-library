@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { scenarioLastStep } from './scenario-last-step';
 
-/* A state of the use-case file, played headless by id: the hero and the Why · How · What stills read `still` (grill 11 Q215). */
 describe('success cases', () => {
   it('plays the still state by id to its check’s week, AI at Engineering', () => {
     // ARRANGE

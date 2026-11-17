@@ -4,7 +4,6 @@ import { staleRegistryFiles, type SiteLoader } from './registry.ts';
 
 const ROOT = path.resolve(__dirname, '../..');
 
-/** Inside the fast suite the site's modules load as any test's do. */
 const load: SiteLoader = (repoPath) => import(path.join(ROOT, repoPath));
 
 describe('success cases', () => {

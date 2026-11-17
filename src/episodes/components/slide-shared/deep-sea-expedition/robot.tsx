@@ -19,15 +19,10 @@ import {
 export type { RobotAim, RobotMotion, RobotState } from './robot.pure';
 
 export interface RobotProps extends ActorProps {
-  /** Played once when the Slide turns active; the rest state is the motion's end state. */
   readonly motion?: RobotMotion;
-  /** The search lamp and its beam; on unless switched off. `beam-on` and `scan` need it on. */
   readonly lamp?: boolean;
-  /** Where the beam points; `ahead` unless the Slide looks at the seabed. */
   readonly aim?: RobotAim;
-  /** Faces left instead of right; its words stay readable. */
   readonly flip?: boolean;
-  /** Where the robot is in the Episode's story, marked as `data-robot-state` so a test can hold each Slide to it. */
   readonly state?: RobotState;
 }
 
@@ -102,13 +97,7 @@ function Moving({
   );
 }
 
-/**
- * The diving robot, the AI of "What lies below the waterline of sustainable AI skills" (design-ADR 0025): a low-poly
- * ROV with a float block, camera dome, search lamp and arm, about 80 by 60 units with (0, 0) at the top centre where
- * a cable would attach. An SVG group a Scene places inside its own `<svg>`, positioned by a `transform` or by
- * `Travel`. It implements the actor contract: `mood` and `says` pop in at its head anchor, above the dome, once its
- * own motion has played. Its motions stay inside the figure; moving across the Scene is `Travel`'s job.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function Robot({ motion, mood, says, lamp, aim = 'ahead', flip, state }: RobotProps) {
   const { lampLit, beam, beamMotion, bodyMotion } = robotLook({ motion, lamp });
   return (

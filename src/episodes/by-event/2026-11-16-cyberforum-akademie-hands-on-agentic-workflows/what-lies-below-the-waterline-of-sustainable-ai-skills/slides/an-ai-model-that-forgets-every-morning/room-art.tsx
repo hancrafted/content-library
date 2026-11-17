@@ -1,16 +1,8 @@
 import type { ReactNode } from 'react';
 
-/*
- * The control room's scenery, lifted from the approved Spec's Option 1a (feedback 3, decision 46): the faceted wall
- * and floor of the three mornings, the wall the framed photo hangs on with its wire and nail, and the wall clock at
- * 07:00, each in the Spec's own units and tones (`forgets.module.css`). Drawings only: the ship, robot, crew and
- * console on top of them stay the shared parts.
- */
-
 type Tone = 'room' | 'room-lit' | 'room-shade' | 'floor' | 'floor-lit';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** The mornings' wall as the Spec drew it, 360 by 276 down to the skirting, back to front. */
 const MORNING_WALL: Facets = [
   ['room', 'M138.9 0L226.3 0L140.5 97.9ZM360 61.9L360 152.6L303.3 118Z'],
   ['room-lit', 'M58.7 50.8L88 0L138.9 0Z'],
@@ -38,7 +30,6 @@ const MORNING_WALL: Facets = [
   ['room-shade', 'M0 270L360 270L360 276L0 276Z'],
 ];
 
-/** The mornings' floor, the Spec's boards from y 276 to 300. */
 const MORNING_FLOOR: Facets = [
   ['floor-lit', 'M360 300L314.7 276L360 276Z'],
   ['floor', 'M230.7 300L178 300L179.8 276ZM178 300L140.8 276L179.8 276Z'],
@@ -53,7 +44,6 @@ const MORNING_FLOOR: Facets = [
   ],
 ];
 
-/** The wall behind the framed photo, 360 by 212 as the Spec cropped it, back to front. */
 const PHOTO_WALL: Facets = [
   ['room-shade', 'M293 79L360 82L360 149Z'],
   ['room', 'M360 82L293 79L360 0ZM301 237L262 157L360 149Z'],
@@ -78,7 +68,6 @@ const PHOTO_WALL: Facets = [
   ['room', 'M85 108L44 48L147 0Z'],
 ];
 
-/** The Spec's room: 360 wide, the wall down to 276, the floor on to 300. */
 const SPEC_ROOM = { width: 360, floor: 276, bottom: 300 } as const;
 
 function FacetPaths({ facets }: { readonly facets: Facets }) {
@@ -86,17 +75,13 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
 }
 
 export interface MorningRoomProps {
-  /** The Scene's width, and where its floor starts and ends, in the Scene's units. */
   readonly width: number;
   readonly floorY: number;
   readonly bottom: number;
-  /** The clip that cuts the window out of the wall, by its id: the deck shows through there. */
   readonly clipId: string;
-  /** The wall's cut-out, drawn by the Slide: its own window. */
   readonly clip: ReactNode;
 }
 
-/** The faceted wall, clipped round the window, and the floor boards, stretched over the Scene. */
 export function MorningRoom({ width, floorY, bottom, clipId, clip }: MorningRoomProps) {
   const sx = width / SPEC_ROOM.width;
   const wall = `scale(${sx} ${floorY / SPEC_ROOM.floor})`;
@@ -118,11 +103,8 @@ export function MorningRoom({ width, floorY, bottom, clipId, clip }: MorningRoom
   );
 }
 
-/** The photo wall's box, the Spec's crop: the frame hangs inside it. */
 export const PHOTO_WALL_BOX = { width: 360, height: 212 } as const;
-/** The frame's outer edge and its moulding's width; the picture fills the inside, 216 by 144, three to two. */
 const FRAME = { x0: 46, y0: 26, x1: 286, y1: 194, t: 12 } as const;
-/** The picture inside the frame, as shares of the wall's box: where the Slide lays the photo. */
 export const PICTURE = {
   left: (FRAME.x0 + FRAME.t) / PHOTO_WALL_BOX.width,
   top: (FRAME.y0 + FRAME.t) / PHOTO_WALL_BOX.height,
@@ -130,7 +112,6 @@ export const PICTURE = {
   height: (FRAME.y1 - FRAME.y0 - 2 * FRAME.t) / PHOTO_WALL_BOX.height,
 } as const;
 
-/** A bevelled wooden frame: lit bevels top and left, shaded bottom and right (the Spec's `frame`). */
 function Frame() {
   const { x0, y0, x1, y1, t } = FRAME;
   return (
@@ -143,14 +124,12 @@ function Frame() {
         d={`M${x1} ${y0}L${x1} ${y1}L${x1 - t} ${y1 - t}L${x1 - t} ${y0 + t}ZM${x0} ${y1}L${x0 + t} ${y1 - t}L${x1 - t} ${y1 - t}L${x1} ${y1}Z`}
         data-tone="frame-shade"
       />
-      {/* The picture wire up to its nail, and the nail. */}
       <path d="M106 26L166 8L226 26L166 10Z" data-tone="frame-shade" />
       <path d="M163 5L169 5L169 11L163 11Z" data-tone="nail" />
     </g>
   );
 }
 
-/** The wall the photo hangs on: faceted, with the framed picture's frame and wire, and the clock beside it at 07:00. */
 export function PhotoWall() {
   return (
     <svg
@@ -166,7 +145,6 @@ export function PhotoWall() {
   );
 }
 
-/** The glass's glint over the photo's top-left corner, a share of the picture's own box. */
 export function PaneGlint() {
   return (
     <svg viewBox="0 0 216 144" aria-hidden className="pointer-events-none absolute inset-0 block h-full w-full">
@@ -179,7 +157,6 @@ const CLOCK_SIDES = 8;
 const LIT_SIDES: ReadonlySet<number> = new Set([5, 6, 7, 0]);
 const HOURS = 12;
 
-/** The ring's corners at a radius, from twelve o'clock clockwise. */
 const ring = (cx: number, cy: number, r: number) =>
   Array.from({ length: CLOCK_SIDES }, (_, index) => {
     const angle = -Math.PI / 2 + (index / CLOCK_SIDES) * 2 * Math.PI;
@@ -189,7 +166,6 @@ const ring = (cx: number, cy: number, r: number) =>
 const pts = (points: readonly (readonly [number, number])[]) =>
   points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
 
-/** One ring of facets: the rim's quads between two radii, or the face's wedges to the centre; lit to the upper left. */
 function ClockRing({ cx, cy, r, part }: { cx: number; cy: number; r: number; part: 'rim' | 'face' }) {
   const outer = ring(cx, cy, r);
   const inner = ring(cx, cy, r * 0.8);
@@ -205,7 +181,6 @@ function ClockRing({ cx, cy, r, part }: { cx: number; cy: number; r: number; par
   });
 }
 
-/** The faceted wall clock (the Spec's `clock`): an octagonal rim, a faceted face, the hands at `hour`:00. */
 export function Clock({ cx, cy, r, hour = 7 }: { cx: number; cy: number; r: number; hour?: number }) {
   const angle = -Math.PI / 2 + (hour / HOURS) * 2 * Math.PI;
   const tip = [cx + Math.cos(angle) * r * 0.45, cy + Math.sin(angle) * r * 0.45] as const;

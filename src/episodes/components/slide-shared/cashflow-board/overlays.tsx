@@ -5,7 +5,6 @@ import { lanePlacement } from './cashflow-board.pure';
 import type { BoardArrow, CashflowAnnotation } from './cashflow-board.types';
 import { placeOn } from './place-on';
 
-/** A stamp fallen across a column's middle slot, drawn as type. */
 export function Stamp({ label, column }: { label: string; column: number }) {
   return (
     <p data-cashflow="stamp" style={placeOn(column)} className={styles.stamp}>
@@ -19,15 +18,10 @@ export function Stamp({ label, column }: { label: string; column: number }) {
 const PILL =
   'rounded-full bg-primary py-1 text-caption font-medium whitespace-nowrap text-primary-foreground shadow-md';
 
-/** The arrow's label, a `primary` pill under its shaft. */
 function ArrowLabel({ label }: { label: string }) {
   return <span className={cn(styles.arrowLabel, PILL, 'px-3')}>{label}</span>;
 }
 
-/**
- * A shaft label's `primary` pill. With `points`, it carries a head toward the arrow's end, which a narrow board shows
- * where it cannot draw the shaft.
- */
 function ArrowPill({ label, points }: { label: string; points?: 'up' | 'down' }) {
   return (
     <span className={cn('inline-flex items-center gap-1.5 px-2.5', PILL)}>
@@ -41,7 +35,6 @@ function ArrowPill({ label, points }: { label: string; points?: 'up' | 'down' })
   );
 }
 
-/** Where the arrow sits: its first column, its span in either layout, its slot row, and whether it is drawn narrow. */
 function arrowPlacement([fromColumn, slot]: BoardArrow['from'], [toColumn]: BoardArrow['to']) {
   const a = lanePlacement(fromColumn);
   const b = lanePlacement(toColumn);
@@ -53,7 +46,6 @@ function arrowPlacement([fromColumn, slot]: BoardArrow['from'], [toColumn]: Boar
   return { style, 'data-narrow': a.narrowBand === b.narrowBand ? 'true' : 'false' };
 }
 
-/** Which way a narrow board's rows of lanes lie from the arrow's start to its end, when they differ. */
 function rowsBetween(from: BoardArrow['from'], to: BoardArrow['to']) {
   const start = lanePlacement(from[0]).narrowBand;
   const end = lanePlacement(to[0]).narrowBand;
@@ -61,10 +53,6 @@ function rowsBetween(from: BoardArrow['from'], to: BoardArrow['to']) {
   return end < start ? 'up' : 'down';
 }
 
-/**
- * A shaft's label standing on its own: on the shaft in the gap after column `gap` where the board is wide enough,
- * else in the slot under `from`, with a head toward `to`'s row on a narrow board that cannot draw the shaft.
- */
 function ShaftLabel({
   label,
   from,
@@ -92,11 +80,6 @@ function ShaftLabel({
   );
 }
 
-/**
- * A `primary` arrow along one slot row from the centre of one column to another's, under the notes it crosses, its
- * label on a pill below the shaft or, with `labelGap`, standing on its own. A narrow board draws the shaft only when
- * both ends share a row of lanes.
- */
 function ShaftArrow({ from, to, label, labelGap, stop }: BoardArrow) {
   const leftward = to[0] < from[0];
   return (
@@ -120,7 +103,6 @@ function ShaftArrow({ from, to, label, labelGap, stop }: BoardArrow) {
   );
 }
 
-/** The arc and its filled head, drawn leftwards; the stroke's path length is 1 for a `stroke-dashoffset` draw. */
 function Arc() {
   return (
     <svg viewBox="0 0 120 60" className={styles.curveSvg} aria-hidden="true">
@@ -137,7 +119,6 @@ function Arc() {
   );
 }
 
-/** The curved arrow's label: a tilted `primary` pill in the slot under the arrow's start. */
 function CurveLabel({ label, from: [column, slot] }: { label: string; from: BoardArrow['from'] }) {
   const pill =
     'inline-block -rotate-2 rounded-full bg-primary px-4 py-1.5 text-body font-semibold text-balance text-primary-foreground shadow-md';
@@ -148,11 +129,6 @@ function CurveLabel({ label, from: [column, slot] }: { label: string; from: Boar
   );
 }
 
-/**
- * A thick `primary` arc over the notes, across the gap beside the `from` cell toward `to`, its head filled; mirrored
- * for a rightward arrow. Its label is a pill in the slot under `from`. A narrow board draws the arc only when both
- * ends share a row of lanes.
- */
 function CurveArrow({ from, to, label }: BoardArrow) {
   const [column, slot] = from;
   return (
@@ -172,12 +148,10 @@ function CurveArrow({ from, to, label }: BoardArrow) {
   );
 }
 
-/** The board's arrow, as a straight shaft or, with `variant: 'curve'`, an arc. */
 export function Arrow(props: BoardArrow) {
   return props.variant === 'curve' ? <CurveArrow {...props} /> : <ShaftArrow {...props} />;
 }
 
-/** A `primary` call-out pointing up at its column. */
 function Callout({ text }: { text: ReactNode }) {
   return (
     <>
@@ -191,7 +165,6 @@ function Callout({ text }: { text: ReactNode }) {
   );
 }
 
-/** A bracket under the columns it spans, its text centred below. */
 function Bracket({ text }: { text: ReactNode }) {
   return (
     <>
@@ -209,7 +182,6 @@ function Bracket({ text }: { text: ReactNode }) {
   );
 }
 
-/** One call-out or bracket in the row under the lanes. */
 export function Annotation({ column, span = 1, kind, text }: CashflowAnnotation) {
   return (
     <div

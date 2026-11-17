@@ -118,12 +118,7 @@ function ModalContentBody({ modal, data }: { modal: ModalKey; data: ModalContent
   );
 }
 
-/**
- * A native `<dialog>` opened with `showModal()`: it lives in the top layer, so no
- * z-index and no Slide wrapper's `isolate` can trap it under the chrome (FE-009 §8).
- * The browser gives Escape, the focus trap and the inert page; a click on the
- * dialog's own box, outside the panel, closes it.
- */
+// decision: FE-009 §8
 export function MarkdownRolesModal({ modal, onClose }: { modal: ModalKey | null; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {

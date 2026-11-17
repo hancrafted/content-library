@@ -5,7 +5,6 @@ import { useRevealedOnView } from '@/shared/hooks/use-revealed-on-view';
 import { cn } from '@/shared/lib/utils';
 import { useRef, type ReactNode } from 'react';
 
-/** One-shot story motion for the sketch; before it is seen the strokes wait, and the text is never touched. */
 export function FieldnoteReveal({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const revealed = useRevealedOnView(ref);

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { jobGraph, parsePipeline, readPipeline, type Job } from './episode-pipeline-definition.pure';
 
-/** Jobs with only the needs and wants the graph reads. */
 function jobs(edges: Record<string, string[]>, wanted: Record<string, string[]> = {}): Job[] {
   return Object.entries(edges).map(([id, needs]) => ({
     id,
@@ -14,11 +13,6 @@ function jobs(edges: Record<string, string[]>, wanted: Record<string, string[]> 
     agents: [],
   }));
 }
-
-/*
- * The one Pipeline definition reader: a new-episode pipeline parsed once into its status, stages and jobs, the view
- * the schema check, the dashboard, the research-jobs check and the status script share.
- */
 
 const PIPELINE = `status: approved
 jobs:

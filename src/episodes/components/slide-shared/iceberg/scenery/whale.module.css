@@ -1,5 +1,4 @@
-/* The whale drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in whale.tsx. */
-
+/* decision: FE-011 §4 */
 .whale {
   --whale: color-mix(in oklab, var(--info) 40%, color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay)));
   --whale-belly: color-mix(in oklab, var(--bulb) 39%, color-mix(in oklab, var(--on-brand-accent) 89%, var(--overlay)));
@@ -61,7 +60,6 @@
   stroke-linejoin: round;
 }
 
-/* The Midnight loop: the whale glides slowly back and forth, only on the active Slide. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .glide {
     animation: whale-glide 30s ease-in-out infinite alternate;

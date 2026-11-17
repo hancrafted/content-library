@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { noteOfRef, useContextLinks, usePinnedNote } from './use-context-links';
 import { useActiveSlide } from './use-url-state';
 
-/** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -21,16 +20,11 @@ function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
   }, [open, toggle, close]);
 }
 
-/** What had focus when the drawer opened, or the trigger when nothing but the page did. */
 function focusedOr(fallback: HTMLElement | null): HTMLElement | null {
   const focused = document.activeElement;
   return focused instanceof HTMLElement && focused !== document.body ? focused : fallback;
 }
 
-/**
- * Focus enters the selected tab on open and returns to whatever opened the
- * drawer on close (the trigger when the shortcut opened it from nowhere).
- */
 function useFocusHandoff(open: boolean, tab: RefObject<HTMLElement | null>, fallback: RefObject<HTMLElement | null>) {
   const opener = useRef<HTMLElement | null>(null);
   const wasOpen = useRef(false);
@@ -44,10 +38,7 @@ function useFocusHandoff(open: boolean, tab: RefObject<HTMLElement | null>, fall
   }, [open, tab, fallback]);
 }
 
-/**
- * Sources sit in closed `<details>`, which print drops; open them for the print
- * job and put them back after (FE-010 §2).
- */
+// decision: FE-010 §2
 function usePrintDisclosure() {
   useEffect(() => {
     let opened: HTMLDetailsElement[] = [];
@@ -68,11 +59,7 @@ function usePrintDisclosure() {
   }, []);
 }
 
-/**
- * The layout mode and a setter that persists it (FE-001 §3). Starts on the default
- * and adopts the stored choice after mount, like the theme, so the static page
- * and the first client render agree.
- */
+// decision: FE-001 §3
 function useDrawerMode(): [DrawerMode, (mode: DrawerMode) => void] {
   const [mode, setModeState] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
   useEffect(() => {
@@ -85,19 +72,13 @@ function useDrawerMode(): [DrawerMode, (mode: DrawerMode) => void] {
   return [mode, setMode];
 }
 
-/** A note a context reference opened, and the item it was shown for (valid while that item stays current). */
 interface Revealed {
   readonly note: NoteRef;
   readonly item: string;
   readonly observed: string | null;
 }
 
-/**
- * State of the Context drawer: open, selected tab, layout mode (a stored
- * preference, FE-001 §3), and the item of the active Slide in the URL, falling
- * back to the first of the given ids. A context reference opens the drawer on
- * Notes at its note; that note's item is shown until the reading line moves on.
- */
+// decision: FE-001 §3
 export function useContextDrawer(ids: readonly string[]) {
   const observed = currentItemId(useActiveSlide(), ids);
   const [open, setOpen] = useState(false);

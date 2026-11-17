@@ -1,13 +1,7 @@
-// `npm run episode:backfill-identity -- <log.jsonl> [--write]`: the one-off repair for a run log written before
-// identity-at-stop existed. For every skill-spawned agent that ended without identity it reads the subagent's
-// meta.json (beside its transcript) and appends an `attrs` line that gives the fold that identity. Dry-run by
-// default: it lists what it would append and writes nothing; `--write` appends, through the writer, to the one log
-// named. Append-only and idempotent: a second run appends nothing. Run it only after the Run has ended.
 import { identityBackfill } from '../../../src/pipeline/lib/backfill-identity.pure.ts';
 import { readLog, readOrNull } from '../../../src/pipeline/lib/episode-run-log.ts';
 import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
 
-/** One line saying what was (or would be) appended, with the roles it gives and any span left alone. */
 function summary(events: readonly { role?: string }[], elsewhere: number, write: boolean): string {
   const roles = new Map<string, number>();
   for (const e of events) roles.set(String(e.role), (roles.get(String(e.role)) ?? 0) + 1);

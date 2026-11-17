@@ -1,6 +1,6 @@
 import type { EventInput } from '../schemas/event.schema';
 
-/** The CyberForum Akademie hands-on workshop on agentic workflows; its title and description are Translation keys by slug (FE-003). */
+// decision: FE-003 §4
 export const event = {
   slug: '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',
   date: '2026-11-16',

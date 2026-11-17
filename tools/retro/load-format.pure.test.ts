@@ -4,7 +4,6 @@ import { analyzeLoad, type LoadReport, type SessionLog } from './load.pure.ts';
 
 const WINDOW = { since: new Date('2026-11-15T08:00:00Z'), until: new Date('2026-11-16T08:00:00Z') };
 
-/** An assistant line calling Bash with `command`, as Claude Code logs it. */
 function bash(id: string, timestamp: string, command: string): string {
   return JSON.stringify({
     type: 'assistant',
@@ -13,7 +12,6 @@ function bash(id: string, timestamp: string, command: string): string {
   });
 }
 
-/** A user line carrying the result of tool call `id`, as Claude Code logs it. */
 function resultLine({
   id,
   timestamp,
@@ -32,7 +30,6 @@ function resultLine({
   });
 }
 
-/** The result of tool call `id` that failed with `text`. */
 function failed(id: string, timestamp: string, text: string): string {
   return resultLine({ id, timestamp, text, isError: true });
 }

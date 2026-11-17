@@ -12,13 +12,10 @@ export interface DescriptionCardProps {
   readonly kind: 'vague' | 'clear';
   readonly label: string;
   readonly tag: string;
-  /** The description in the quotation marks of its locale. */
   readonly text: string;
-  /** The same description as the front matter of the skill's file, for the Coding agent view. */
   readonly coding: SkillFile;
 }
 
-/** The description as the front matter of the skill's file: primary for the clear one, dark for the vague one. */
 function FrontMatter({ file, clear }: { readonly file: SkillFile; readonly clear: boolean }) {
   return (
     <InView view="coding" as="div" className="flex flex-col gap-1">
@@ -36,10 +33,6 @@ function FrontMatter({ file, clear }: { readonly file: SkillFile; readonly clear
   );
 }
 
-/**
- * One of the two descriptions for the same skill: the vague one dashed and muted, staying shut; the clear one ringed in
- * primary once today's task lights it. Hover raises the card and dims its neighbour.
- */
 export function DescriptionCard({ kind, label, tag, text, coding }: DescriptionCardProps) {
   const clear = kind === 'clear';
   return (

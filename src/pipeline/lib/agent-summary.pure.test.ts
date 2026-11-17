@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { verdictFirst } from './agent-summary.pure.ts';
 
-/* The stored agent summary: verdict first, absolute paths and an opening pasted draft out, then the cut. */
-
 const MAX = 200;
 const WT = '/Users/han/Developer/content-library/.worktrees/episode-x/docs/episodes/x/dossier.md';
 describe('success cases', () => {

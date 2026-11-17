@@ -52,7 +52,6 @@ function eventOrder(event: DashboardEvent): [number, number] {
   return event.line ? [Date.parse(event.line.t), event.line.seq] : [Number.MAX_SAFE_INTEGER, event.number];
 }
 
-/** Selects original events, not reconstructed spans, so every retry and verdict remains inspectable. */
 export function selectEvents(events: readonly DashboardEvent[], scope: EventScope = {}): DashboardEvent[] {
   const starts = startLines(events);
   const matches = ({ line }: DashboardEvent): boolean => {

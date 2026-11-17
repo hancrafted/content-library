@@ -1,16 +1,7 @@
-/*
- * The paper on the matrix's pictures that belongs to this Slide, lifted from the approved Spec's Option 18a (feedback
- * 3, decision 46): the index card in the Spec's construction (lit and plain halves, a folded corner, its red pin
- * stripe and ruled lines over a flat drop) and the dashed lead from the card box to the dive plan. The Spec draws the
- * card turned a few degrees; here it is drawn square and the Slide turns it. The pictures themselves are the shared
- * `SquarePicture`; these sit on them as its extras. Tones in `slide.module.css`.
- */
-
 import { cn } from '@/shared/lib/utils';
 
 type Tone = 'drop' | 'paper' | 'paper-lit' | 'paper-shade' | 'pin' | 'paper-rule';
 
-/** The card, 100 by 64 like the Spec's index cards; the drop overhangs its bottom right as the Spec's does. */
 const CARD: readonly (readonly [Tone, string])[] = [
   ['drop', 'M4 6L104 6L104 70L4 70Z'],
   ['paper-lit', 'M0 0L100 0L0 64Z'],
@@ -19,10 +10,8 @@ const CARD: readonly (readonly [Tone, string])[] = [
   ['pin', 'M6 6L60 6L60 10L6 10Z'],
 ];
 
-/** The ruled lines a blank card carries; a scribbled card has the captain's words on them instead. */
 const RULES = 'M6 26L92 26L92 28L6 28ZM6 40L80 40L80 42L6 42Z';
 
-/** An index card behind its words, stretched to the element it sits in; `ruled` draws its lines. */
 export function CardArt({ ruled = false }: { readonly ruled?: boolean }) {
   return (
     <svg
@@ -41,10 +30,6 @@ export function CardArt({ ruled = false }: { readonly ruled?: boolean }) {
   );
 }
 
-/**
- * The dashed lead from the card box to the pinned dive plan, in the shared picture's own 400 by 140 space and fill,
- * so it lands on the drawing. Hidden where the picture stacks its labels in flow (below `@2xl`), as the trip is.
- */
 export function PlanLead({ className }: { readonly className?: string }) {
   return (
     <svg

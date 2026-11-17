@@ -7,14 +7,7 @@ import { thoughtExperimentSection } from './sections/thought-experiment';
 import { whatFillsTheWindowSection } from './sections/what-fills-the-window';
 import { hero } from './slides/hero/slide';
 
-/*
- * The unlisted copy of `ai-attention-span` the AXEL seminar (Event 2026-10-23-axel-agentic-workflow) presented: its Slides,
- * Sections and copy taken with `cp -r`, Slide slugs kept, so the composition can drift from the public Episode
- * without touching it (vision rule 4). It lives only under its Event (design-ADR 0016).
- *
- * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
- * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.
- */
+// decision: docs/adr/0016-content-data-model.md
 export const axelAiAttentionSpan = episode({
   slug: 'ai-attention-span',
   messages: { en, de },

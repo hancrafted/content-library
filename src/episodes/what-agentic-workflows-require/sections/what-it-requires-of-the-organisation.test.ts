@@ -9,13 +9,6 @@ import { describe, expect, it } from 'vitest';
 import { whatAgenticWorkflowsRequire } from '../episode';
 import { whatItRequiresOfTheOrganisationSection } from './what-it-requires-of-the-organisation';
 
-/*
- * The page Slides of the Section "What it requires of the organisation", as the approved Spec gives them: Slide 10
- * "The org chart trap" (picked 10a), Slide 11 "Designed AI first" (11b), Slide 12 "What to look for in your team"
- * (12a) and Slide 13 "From article to quiz" (13c), each read as the page renders its Scene under the shared Slide
- * header.
- */
-
 const EPISODE = 'what-agentic-workflows-require';
 const SECTION = whatItRequiresOfTheOrganisationSection as readonly Slide[];
 const PAGE_SLIDES = SECTION.slice(1);
@@ -27,7 +20,6 @@ function slideOf(slug: string): Slide {
   return own;
 }
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No placed Slide "${slug}".`);
@@ -50,7 +42,6 @@ interface OwnMessages {
 
 const messagesOf = (slide: Slide, locale: Locale = 'en') => slide.messages[locale] as unknown as OwnMessages;
 
-/** The words of each match, its Context markers left out. */
 const textsOf = ($: ReturnType<typeof sceneOf>, selector: string) =>
   $(selector)
     .toArray()
@@ -60,7 +51,6 @@ const textsOf = ($: ReturnType<typeof sceneOf>, selector: string) =>
       return own.text().replace(/\s+/g, ' ').trim();
     });
 
-/** The notes a Scene's Context markers open, in document order. */
 const markersOf = ($: ReturnType<typeof sceneOf>) =>
   $('[data-context-ref]')
     .toArray()

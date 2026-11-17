@@ -5,7 +5,6 @@ import { Darts, type Point } from '@/episodes/components/slide-shared/dartboard/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Ten times the throws, scattered off the bull. */
 const SCATTER: readonly Point[] = [
   { x: 160, y: 40 },
   { x: 238, y: 50 },
@@ -16,8 +15,6 @@ const SCATTER: readonly Point[] = [
   { x: 212, y: 28 },
 ];
 
-// The section slide of "A thought experiment", echoing the Hero motif: the AI badge throws ten times as many darts,
-// and they scatter off the bull in `warning`. Its Voice script opens the Episode, since the Title slide has none.
 export const aThoughtExperiment = slide({
   slug: 'a-thought-experiment',
   messages: { en, de },

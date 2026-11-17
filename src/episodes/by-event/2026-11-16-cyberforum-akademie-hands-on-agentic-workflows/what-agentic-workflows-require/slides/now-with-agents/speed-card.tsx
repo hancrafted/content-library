@@ -1,4 +1,3 @@
-/** The speed card: every card done in the new time, the old time struck, and what the speed buys; the one `primary` fill. */
 export function SpeedCard({
   label,
   value,

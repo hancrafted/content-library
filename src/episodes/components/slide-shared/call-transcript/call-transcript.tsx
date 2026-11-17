@@ -1,20 +1,10 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/*
- * The phone-call transcript Slides 1, 2 and 6 draw, in the cornerstone's Simple-view bubble look: your message grey on
- * the right, the sister's in a bordered card on the left, the AI's reply as plain text, tool work as a grey line. A
- * static server part: a Slide hands it its lines and label and owns every word. Each bubble carries `data-light` and
- * `data-index`, so a Slide's own step leaf and CSS can fade or light bubbles without a second markup.
- */
-
-/** Who speaks a line. */
 export type CallWho = 'you' | 'sister' | 'ai' | 'tool';
 
-/** How a line reads at rest: lit, faded into the middle, or the standout that survives. */
 export type CallLight = 'lit' | 'faded' | 'standout';
 
-/** `md` for a transcript that is the Scene, `sm` for one beside another picture. */
 export type CallSize = 'md' | 'sm';
 
 export interface CallLine {
@@ -41,11 +31,9 @@ const LIGHT: Readonly<Record<CallLight, string>> = {
   standout: 'shadow-md ring-2 ring-primary ring-offset-2 ring-offset-background',
 };
 
-/** Fills fade with their bubble: a faded message of yours sits on a lighter grey. */
 const fadedFill = (who: CallWho, light: CallLight) =>
   light === 'faded' && who === 'you' ? 'bg-foreground/5 text-muted-foreground' : '';
 
-/** The classes of one bubble, for a Slide that places a bubble outside a transcript. */
 export function callBubbleClass(who: CallWho, light: CallLight, size: CallSize = 'md'): string {
   const plain = who === 'ai' || who === 'tool';
   return cn(
@@ -66,7 +54,6 @@ interface BubbleProps {
   readonly children: ReactNode;
 }
 
-/** One line of the call, as a list item of a transcript. */
 export function CallBubble({ who, light, size = 'md', index, children }: BubbleProps) {
   return (
     <li className={callBubbleClass(who, light, size)} data-who={who} data-light={light} data-index={index}>
@@ -77,13 +64,11 @@ export function CallBubble({ who, light, size = 'md', index, children }: BubbleP
 
 interface TranscriptProps {
   readonly lines: readonly CallLine[];
-  /** The transcript's accessible name, for example "Phone call with your sister". */
   readonly label: string;
   readonly size?: CallSize;
   readonly className?: string;
 }
 
-/** The call as an ordered list; pointing at one bubble dims the rest. */
 export function CallTranscript({ lines, label, size = 'md', className }: TranscriptProps) {
   return (
     <ol

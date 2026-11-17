@@ -13,12 +13,10 @@ import en from './i18n/en.json';
 import { OpenCommand } from './open-command.client';
 import { Approval, Choices, PermissionPrompt } from './permission-prompt';
 
-/* The homepage the skill opens; the Slide draws it, it links nowhere. */
 const HOMEPAGE = 'https://hancrafted.net';
 
 const CLAUDE_CODE_PERMISSIONS = { slug: 'claude-code-permissions', url: 'https://code.claude.com/docs/en/permissions' };
 
-/** A numbered half heading: "1 Say yes to the command", "2 Your browser opens hancrafted". */
 function HalfLabel({ index, children }: { index: number; children: ReactNode }) {
   return (
     <p className="flex items-center gap-2 text-body font-semibold">
@@ -30,7 +28,6 @@ function HalfLabel({ index, children }: { index: number; children: ReactNode }) 
   );
 }
 
-/** The one arrow from the prompt to the homepage, pointing down while the halves stack. */
 function Arrow() {
   return (
     <div className="flex justify-center @3xl:col-span-1 @3xl:pt-48" aria-hidden>
@@ -48,13 +45,6 @@ function Arrow() {
   );
 }
 
-/*
- * "Run your first skill" (Spec Option 7a, master grid-1x2, motion local): two halves in reading order, the AI agent's
- * permission prompt then the hancrafted homepage, joined by one arrow, "Yes" the single focal point. Pointing at one
- * half dims the other (`focus-group--dim-others`); no entrance, the wrapper plays it. The AI-agent pick swaps only the
- * prompt: Claude Code's dialog is drawn in its documented words (note "Claude Code's prompt"); the other AI agents'
- * wording is not verified, so their box says they ask in their own words instead of inventing it.
- */
 export const runYourFirstSkill = slide({
   slug: 'run-your-first-skill',
   messages: { en, de },

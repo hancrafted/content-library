@@ -53,7 +53,6 @@ const busyParts = (s: Busy, x: { w: StatusWords; titles: Readonly<Record<string,
   ...(s.behind ? [<span className="text-muted-foreground">{x.w.behind}</span>] : []),
 ];
 
-/** The status line under the stage: the bottleneck and how it drains, or that all is calm. */
 export const StatusLineView = memo(function StatusLineView(p: {
   status: Status;
   words: StatusWords;
@@ -78,7 +77,6 @@ export const StatusLineView = memo(function StatusLineView(p: {
   );
 });
 
-/** The legend: the four documents, the pile-up, merged riders and the handoff time. */
 export function LegendView({ words: w }: { readonly words: LegendWords }) {
   return (
     <div className={`${styles.legend} text-caption`} aria-label={w.label}>
@@ -105,7 +103,6 @@ export function LegendView({ words: w }: { readonly words: LegendWords }) {
   );
 }
 
-/** Under the stage: the status line and the legend, then the At the Customer panel. */
 export function BelowView(p: {
   readonly snap: Snapshot;
   readonly words: Words;

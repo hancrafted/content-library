@@ -5,42 +5,34 @@ import type { Story } from './drift.pure';
 import { HeroCanvas, HeroMotionButton, type MotionLabels } from './hero-motion.client';
 import { ShareLink, type ShareLinkLabels } from './share-link.client';
 
-/** A call to action: its words and where it goes. */
 export interface HeroAction {
   readonly label: string;
   readonly href: string;
 }
 
-/** The Slide master's inset frame, supplied by the composing Slide. */
 export interface HeroLayers {
   readonly Frame: ComponentType<{ className?: string; children: ReactNode }>;
 }
 
 export interface ExplorableHeroProps {
-  /** `SlideFrame`, from the Slide master. */
   readonly layers: HeroLayers;
-  /** The page's locale: the action links are localized again here, so every `href` goes through `localizePath` (FE-003). */
+  // decision: FE-003 §2
   readonly locale: Locale;
-  /** "Try it": the page's fully enabled Explorable. */
   readonly tryIt: HeroAction;
-  /** "Why it matters": the explanatory Slide. */
   readonly why: HeroAction;
   readonly share: { readonly title: string; readonly text: string; readonly labels: ShareLinkLabels };
   readonly motion: MotionLabels;
-  /** The lightweight, decorative tool preview that peeks up from the bottom edge. */
   readonly preview: ReactNode;
 }
 
 const ACTION =
   'inline-flex min-h-12 items-center justify-center rounded-full border px-6 text-body font-medium outline-offset-3 transition-colors focus-visible:outline-3 focus-visible:outline-foreground';
 
-/** A Slide link (`slideHref`) taken apart: the logical path and the anchor, for `localizePath`. */
 function partsOf(link: string) {
   const [path, anchor] = link.split('#');
   return { path: stripLocale(path), anchor };
 }
 
-/** "Try it" and "Why it matters": the Slide links of the page, localized again so every `href` goes through `localizePath`. */
 function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'why' | 'locale'>) {
   const go = partsOf(tryIt.href);
   const learn = partsOf(why.href);
@@ -62,11 +54,6 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
   );
 }
 
-/**
- * The Title hero's actions, team-share block and tool preview under the container's headline and lede.
- * Every string belongs to the composing Slide. Wrapper presentation supplies the surface, decoration
- * and motion context. The pause button shares the retained canvas's state.
- */
 export function ExplorableHero({ layers, locale, tryIt, why, share, motion, preview }: ExplorableHeroProps) {
   return (
     <layers.Frame className="gap-7 pb-0 md:pb-0">
@@ -89,7 +76,6 @@ function HeroPreview({ children }: { children: ReactNode }) {
   );
 }
 
-/** Decorative story art; its motion context and Slide identity belong to the wrapper. */
 export function HeroDecoration({ story }: { story: Story }) {
   return (
     <>

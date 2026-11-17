@@ -12,10 +12,6 @@ import en from './i18n/en.json';
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 const CONTEXT_ROT = { slug: 'hong-context-rot', url: 'https://www.trychroma.com/research/context-rot' };
 
-/**
- * The six habits in order; the ones a Speaker note backs carry the target it lights and the note its Context marker
- * opens, the others (break it down, read it, check the context) stand without one.
- */
 const HABITS = [
   { key: '1' },
   { key: '2', target: 'habit-one-chat', note: 'one-job-per-chat' },
@@ -25,7 +21,6 @@ const HABITS = [
   { key: '6' },
 ] as const satisfies readonly { key: string; target?: string; note?: string }[];
 
-/** One chat's bar under its name: the cornerstone's static mini bar, its numbers from the shared Preset. */
 function ChatBar({ name, children }: { name: string; children: ReactNode }) {
   return (
     <div className="flex w-72 max-w-full flex-col items-center gap-3 md:items-start">
@@ -35,7 +30,6 @@ function ChatBar({ name, children }: { name: string; children: ReactNode }) {
   );
 }
 
-/** The arrow from the handoff card into the fresh chat: down when the chats stack, right beside each other. */
 function Arrow({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center gap-1 text-caption text-primary">
@@ -54,12 +48,6 @@ function Arrow({ label }: { label: string }) {
   );
 }
 
-/**
- * Everyday habits (Spec Option 10a, six cards by Han's batch-2 item 11): the old summer-party chat and a fresh one as
- * the cornerstone's mini bars side by side, the handoff card crossing between them into the fresh chat's first
- * message, and the six habits as cards below, two rows of three. The card lights between the bars on the Slide's first
- * `active` and on every mouse enter and keyboard focus.
- */
 export const everydayHabits = slide({
   slug: 'everyday-habits',
   messages: { en, de },

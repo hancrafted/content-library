@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { everyProductIsATranslationSection } from './every-product-is-a-translation';
 
-/*
- * Section 2 of "From shared understanding to shared context", "Every product is a translation", as the approved Spec
- * gives it: Slides 4 to 6 built to the picked Options 4b, 5b and 6a, each with the Spec's Voice script, Speaker notes
- * and sources, a Context marker wherever the picked mock shows one, and the Scene facts the Option draws. Read through
- * the one interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const BROOKS = 'https://www.cgl.ucsf.edu/Outreach/pc204/NoSilverBullet.html';
 const REWORK =
   'https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md';
@@ -39,7 +32,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The notes a Slide's Context markers open: the caption's marker first, then the Scene's in document order. */
 function markersOf(slug: string) {
   const $ = sceneOf(slug);
   const scene = $('[data-context-ref]')
@@ -49,13 +41,11 @@ function markersOf(slug: string) {
   return caption === undefined ? scene : [caption, ...scene];
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = ['value-was-always-translation', 'defining-and-building', 'precision-and-accuracy'];
 
 describe('success cases', () => {
   it('lists Slides 4 to 6 after the section slide, in Spec order, titled by their Spec h3', () => {
     // ARRANGE
-    // Han's feedback retitles the section slide on the requirement it argues (the Spec's h2 was "Every product is a translation").
     const expected = [
       'Why precise and accurate requirements mattered before AI',
       'Value was always translation',
@@ -81,9 +71,8 @@ describe('success cases', () => {
     expect(titles).toEqual(expected);
   });
 
-  it('speaks the Spec Voice script word for word', () => {
+  it('speaks the Spec Voice script word for word, Slide 4’s second segment picturing the commuter the Slide shows, not a restaurant', () => {
     // ARRANGE
-    // Han's proofread replaces the restaurant picture in Slide 4's second segment with the commuter the Slide shows.
     const expected = {
       layer:
         'Take the commuter. His wish is “don’t arrive sweaty.” Someone has to turn that wish into a bike with a motor, or a lease with a shower at the office, or a talk on cycling to work in a suit. That turning is the work. The hard part is deciding what to build, not building it. That is my hypothesis from experience, not a measurement.',
@@ -173,9 +162,8 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('maps the Frame, Assemble and Test ride stations onto the line, so defining is Sales and Design and building is Build to Delivery', () => {
+  it('maps the Frame, Assemble and Test ride stations onto the line, so defining is Sales and Design and building is Build to Delivery, saying once how Slide 5’s new stations sit on the line Section 1 drew', () => {
     // ARRANGE
-    // Han's proofread: Slide 5 names new stations, so it says once how they sit on the line Section 1 drew.
     const expected = {
       en: 'Defining is Sales and Design, building is Build to Delivery.',
       de: 'Festlegen ist Vertrieb und Entwurf, Bauen ist Bau bis Versand.',

@@ -20,11 +20,6 @@ const SALESFORCE_STATE_OF_SALES = {
   url: 'https://assets.ctfassets.net/f43wltp2j5se/2gHMpCURXzpMW7PJ3SlWZJ/3cad8d7e8496abbd3c0f99d5c7f16ef4/salesforce-state-of-sales-report-6-ed.pdf',
 };
 
-/**
- * The Play Section's page Slide: the whole software ecology Explorable (master basic-page, no motion of its own). Its
- * Speaker notes sit on what they explain: the belts, quality assurance's rack and its passing-unread sign, Product
- * management and Analysis, the Fix the orders first entry beside the state row and the Sales card.
- */
 export const factory = slide({
   slug: 'factory',
   messages: { en, de },

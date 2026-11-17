@@ -42,8 +42,7 @@ const RUN: Run = {
     { id: 'c', jobs: [jobRun('c', 'done')], rounds: [], done: 1, total: 1, state: 'done' },
   ],
 };
-/** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
-const opened: string[] = [];
+const recordedOpens: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
   load(
     renderToStaticMarkup(
@@ -53,7 +52,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         readonly: false,
         view: 'stages',
         rounds: { b: 2 },
-        onOpenStage: (stageId) => void opened.push(stageId),
+        onOpenStage: (stageId) => void recordedOpens.push(stageId),
         ...props,
       }),
     ),

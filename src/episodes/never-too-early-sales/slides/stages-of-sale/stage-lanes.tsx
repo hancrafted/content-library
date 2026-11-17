@@ -2,7 +2,6 @@ import type { CSSProperties, ReactNode } from 'react';
 import { Note, type Lane } from './stage-notes';
 import styles from './stages-of-sale.module.css';
 
-/** A bracket over the lanes `from` to `to`, counted from 1. */
 export interface Bracket {
   slug: string;
   label: ReactNode;
@@ -17,7 +16,6 @@ interface Props {
   axis: { slug: string; label: string; emphasis?: boolean }[];
 }
 
-/** The arrow to the next lane: right in a row, down when the lanes stack; dashed into the wait after the sale. */
 function NextArrow({ dashed }: { dashed: boolean }) {
   const stroke = dashed ? 'fill-none stroke-muted-foreground' : 'fill-none stroke-foreground';
   return (
@@ -40,7 +38,6 @@ const LANE_SHAPE = {
   none: 'bg-muted',
 } as const;
 
-/** One stage: its pill, its notes, its footnote and the arrow on to the next stage. */
 function StageLane({ lane, last, nextFaint }: { lane: Lane; last: boolean; nextFaint: boolean }) {
   const faint = lane.emphasis === 'faint';
   const pill = faint
@@ -69,7 +66,6 @@ function StageLane({ lane, last, nextFaint }: { lane: Lane; last: boolean; nextF
   );
 }
 
-/** One bracket: its label over a drawn bracket, solid `primary` or dashed and muted. */
 function BracketMark({ bracket }: { bracket: Bracket }) {
   const primary = bracket.emphasis === 'primary';
   return (
@@ -96,7 +92,6 @@ function BracketMark({ bracket }: { bracket: Bracket }) {
   );
 }
 
-/** The brackets over the lanes: what is in your hands, and the calendar time after it. */
 function Brackets({ brackets }: { brackets: Bracket[] }) {
   return (
     <div className={styles.brackets}>
@@ -107,7 +102,6 @@ function Brackets({ brackets }: { brackets: Bracket[] }) {
   );
 }
 
-/** The axis line: a start dot in `primary` and an arrowhead at the end. */
 function AxisLine() {
   return (
     <div className="relative" aria-hidden="true">
@@ -125,7 +119,6 @@ function AxisLine() {
   );
 }
 
-/** The time axis under the lanes, one label per lane. */
 function Axis({ axis }: { axis: Props['axis'] }) {
   return (
     <div className="flex flex-col gap-2 pt-6">
@@ -141,12 +134,6 @@ function Axis({ axis }: { axis: Props['axis'] }) {
   );
 }
 
-/**
- * The stages of a sale as board lanes, left to right: Leads ringed in `primary` under its "in your hands" bracket,
- * Opportunities and Closing under the calendar-time bracket, and the dashed After-sale lane ending in the cash note; a
- * time axis under them all. Pointing at a lane dims the others. The lanes stand in a row when the Scene is wide enough;
- * narrower, they stack, the arrows turn down and the brackets drop.
- */
 export function StageLanes({ lanes, brackets, axis }: Props) {
   return (
     <div className={`${styles.stages} flex flex-col gap-3`}>

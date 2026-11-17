@@ -3,12 +3,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { EffortVenn } from './effort-venn';
 
-/** Every `id="..."` in rendered markup, in document order. */
 function idsOf(html: string): string[] {
   return [...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => id);
 }
 
-/** Every `url(#...)` reference in rendered markup. */
 function referencesOf(html: string): string[] {
   return [...html.matchAll(/url\(#([^)]+)\)/g)].map(([, id]) => id);
 }

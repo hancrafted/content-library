@@ -120,7 +120,8 @@ describe('needsBuild', () => {
     it('builds the post-build suite with the same env as the export it tests', () => {
       // ARRANGE
       const { export: exportJob, 'build-test': buildTest } = workflow.jobs;
-      // ACT / ASSERT
+      // ACT
+      // ASSERT
       expect(exportJob?.env).toBeDefined();
       expect(buildTest?.env).toEqual(exportJob?.env);
     });
@@ -128,14 +129,16 @@ describe('needsBuild', () => {
     it('keeps main out of the preview, since production publishes it', () => {
       // ARRANGE
       const condition = workflow.jobs.preview?.if ?? '';
-      // ACT / ASSERT
+      // ACT
+      // ASSERT
       expect(condition).toContain("github.ref != 'refs/heads/main'");
     });
 
     it('keeps forks and Dependabot away from the preview', () => {
       // ARRANGE
       const condition = workflow.jobs.preview?.if ?? '';
-      // ACT / ASSERT
+      // ACT
+      // ASSERT
       expect(condition).toContain('github.repository');
       expect(condition).toContain('dependabot[bot]');
     });

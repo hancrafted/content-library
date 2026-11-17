@@ -8,14 +8,6 @@ import { episodeMinutes, localizeSlide, type EpisodeContext, type LocalizedSlide
 import { episode, slide, withoutSectionSlide, type Slide } from './slide';
 import type { RuntimeKit } from './slide-base';
 
-/*
- * The Localized Slide is the one interface that turns a Slide and a locale
- * into what the page renders: these tests read it with real Slides and
- * next-intl's real translator, never the translator, kit or context reader
- * behind it.
- */
-
-// "Copy it once, so the next Episode starts from a working example." is 12 words; the German line is 10.
 const WHY = {
   en: {
     title: 'Why every Episode starts from a copy',
@@ -71,7 +63,6 @@ const WHY = {
 const SECTION = { en: { title: 'Foundations' }, de: { title: 'Grundlagen' } };
 const VISUAL = { en: { caption: 'A picture' }, de: { caption: 'Ein Bild' } };
 
-/** What a Scene saw of its kit, so a test reads it back from the content the Slide returned. */
 const seen = (kit: RuntimeKit): ReactNode => kit as unknown as ReactNode;
 const kitOf = (localized: LocalizedSlide): RuntimeKit => localized.content as unknown as RuntimeKit;
 
@@ -93,7 +84,6 @@ const retitled = slide({
 });
 const visual = slide({ slug: 'visual', messages: VISUAL, content: (kit) => seen(kit as never) });
 
-/** The Episode a test localizes into: the walk's real placement of these Sections. */
 function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide[]])[]): EpisodeContext {
   return {
     episode: 'ai-token-economy',
@@ -107,7 +97,6 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
   };
 }
 
-/** Every Slide of the Episode, localized in page order. */
 function localized(
   locale: Locale,
   sections: readonly (readonly [Slide, ...Slide[]])[] = [[foundations, whyATemplate, visual]],
@@ -116,7 +105,6 @@ function localized(
   return episode.placed.map((placed) => localizeSlide(placed as never, episode));
 }
 
-/** The heading `Title` builds, at the level the Slide's position gives it. */
 function headingOf(kit: RuntimeKit): ReactElement<{ as: string; 'data-target': string; children: ReactNode }> {
   return kit.Title({ children: 'x' }) as ReactElement<{ as: string; 'data-target': string; children: ReactNode }>;
 }
@@ -308,7 +296,7 @@ describe('success cases', () => {
 
   it("times a Slide from its own Voice script's words, script and bridge, in the page's locale", () => {
     // ARRANGE
-    const expected = { en: 13 / 140, de: 11 / 120 };
+    const expected = { en: (12 + 1) / 140, de: (10 + 1) / 120 };
     // ACT
     const minutes = { en: localized('en')[1].minutes, de: localized('de')[1].minutes };
     // ASSERT

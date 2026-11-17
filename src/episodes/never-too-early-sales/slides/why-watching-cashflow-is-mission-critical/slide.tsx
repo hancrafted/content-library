@@ -5,8 +5,6 @@ import { DealEcho } from '@/episodes/components/slide-shared/deal-board/deal-ech
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Why watching cashflow is mission critical": the Hero motif's board, still empty, its payment
-// lane ringed on a cash note reading €0.
 export const whyWatchingCashflowIsMissionCritical = slide({
   slug: 'why-watching-cashflow-is-mission-critical',
   messages: { en, de },

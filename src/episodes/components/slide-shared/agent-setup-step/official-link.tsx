@@ -1,14 +1,9 @@
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { cn } from '@/shared/lib/utils';
 
-/**
- * A link to the vendor's own page (Visual language "Official links"): a labelled pill with an external-link mark,
- * never a pasted URL. `filled` is the step's one thing to do; `outlined` leaves the `primary` fill to something else.
- */
 export interface OfficialLinkProps {
   readonly label: string;
   readonly url: string;
-  /** Said after the label to assistive tech: the link opens a new tab. */
   readonly newTab: string;
   readonly variant: 'filled' | 'outlined';
 }

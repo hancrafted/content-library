@@ -1,10 +1,4 @@
-/*
- * The page-level Chat app / Coding agent view (design-ADR 0025, Interaction 1). The switch writes the page's view onto
- * `<html data-agent-view>`; words of the other view hide. Only `display: none` is set, never a shown value, so an
- * element keeps its own layout (`flex`, `grid`) in the view it belongs to. Chat app is the view without the attribute,
- * so the static page and a reload show it.
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 :global(html:not([data-agent-view='coding'])) .inView[data-view='coding'],
 :global(html[data-agent-view='coding']) .inView[data-view='chat'] {
   display: none;

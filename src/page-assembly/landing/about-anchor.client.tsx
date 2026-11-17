@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 
-/** The method rail adds pin spacing during hydration, after the browser follows the initial hash. */
 export function AboutAnchor() {
   useEffect(() => {
     if (window.location.hash !== '#about') return;

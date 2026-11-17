@@ -1,6 +1,6 @@
 import { externalHref } from '@/shared/lib/external-link.pure';
 
-/** The strings the video link reads: its accessible name and the new-tab notice (FE-003 §2.2). */
+// decision: FE-003 §2.2
 export interface VideoLabels {
   readonly watchVideo: string;
   readonly newTab: string;
@@ -10,7 +10,6 @@ const LABELLED =
 const ICON =
   'relative z-20 -m-2.5 inline-flex size-11 items-center justify-center rounded-full text-youtube transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100';
 
-/** A direct YouTube link for a card, raised above the card's stretched title link. */
 export function YoutubeLink({
   url,
   labels,

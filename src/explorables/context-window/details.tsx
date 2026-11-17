@@ -7,12 +7,9 @@ import { Moves } from './moves.client';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 
-/* The details part: it tells what the lit part is. Attention is a part of its own (attention.tsx). */
-
 const stepById = (card: Card, id: string | null | undefined) =>
   id ? card.chat.steps[(card.stepOf.get(id) ?? 0) - 1] : undefined;
 
-/** Explain's card for what is lit: a step not in the window yet, a category, a step or block, or the step on screen. */
 function ExplainCard({ card }: { readonly card: Card }) {
   const ghost = stepById(card, card.ghost);
   if (ghost) return <GhostCard v={card} step={ghost} />;
@@ -28,7 +25,6 @@ export function Details(p: DetailsProps) {
   const match = useMemo(() => matcher(p.lit), [p.lit]);
   const handlers = useLighting(p);
   const card: Card = { ...p, tech: say.tech, match };
-  // A new key replays the card's entrance when what it explains changes; stepping alone does not.
   const key = panelKey({ depth: p.renderMode, lit: p.lit, ghost: p.ghost });
   return (
     <Moves as="section" trigger={key} className={styles.panel} aria-label={say.words.details} {...handlers}>

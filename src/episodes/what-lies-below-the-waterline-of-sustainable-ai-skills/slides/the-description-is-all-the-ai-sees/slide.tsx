@@ -15,7 +15,6 @@ const OPTIMIZING = {
 };
 const PIROLLI = { slug: 'pirolli-card-information-foraging', url: 'https://doi.org/10.1037/0033-295X.106.4.643' };
 
-/** The index rows, in the mock's order; two vague among the clear ones, the sediment sample the focal entry. */
 const ENTRIES = [
   { slug: 'samples', vague: true },
   { slug: 'collect-sediment-sample', vague: false },
@@ -23,14 +22,8 @@ const ENTRIES = [
   { slug: 'run-camera-survey', vague: false },
 ] as const;
 const FOCAL = 'collect-sediment-sample';
-/** Both descriptions are drafts of the same skill file. */
 const SKILL_PATH = 'collect-sediment-sample/SKILL.md';
 
-/**
- * "The description is the trigger" (Spec Option 11a): the control room from the pilot's chair, the manual's index open
- * in front of every closed card. Overrules `grid-1x2` for one picture with its close-up, the art on top and an 8 + 4
- * grid below; keeps `motion: local`, the clear entry lighting up as the captain names the task.
- */
 export const theDescriptionIsAllTheAiSees = slide({
   slug: 'the-description-is-all-the-ai-sees',
   messages: { en, de },

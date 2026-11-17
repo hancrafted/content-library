@@ -9,11 +9,7 @@ const AGENTS = {
   url: 'https://www.anthropic.com/engineering/building-effective-agents',
 };
 
-/**
- * The recap after the last check-in: the disciplines timeline again (Preset `recap`), workflows lit, so the evening
- * closes where the live demo worked. Its note restates the one distinction the demo rests on: a workflow's path is
- * fixed in advance, an agent picks its own (LLM-0018 finding 7).
- */
+// evidence: docs/llm-wiki/research/LLM/LLM-0018__ai-layers-model-to-factory/research.md
 export const disciplinesRecap = slide({
   slug: 'disciplines-recap',
   messages: { en, de },

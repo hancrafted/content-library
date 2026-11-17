@@ -9,13 +9,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { aThoughtExperimentSection } from './a-thought-experiment';
 
-/*
- * Section 1, "A thought experiment", as the approved Spec gives it: its section slide, then Slides 1 and 2 built to
- * the picked Options 1a and 2a, each titled, scripted and noted as the Spec writes it. Slide 1 is the comic of three
- * identical mornings in the control room ending on the empty procedure card; Slide 2 the cutaway of the research ship
- * with its three numbered callouts and tiles (design-ADR 0025: ZoneScene, Ship, Console, Robot and the cast).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const EPISODE = episodeRef(
   'what-lies-below-the-waterline-of-sustainable-ai-skills',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',
@@ -40,7 +34,6 @@ const slideOf = (slug: string) => {
   return own;
 };
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" placed.`);

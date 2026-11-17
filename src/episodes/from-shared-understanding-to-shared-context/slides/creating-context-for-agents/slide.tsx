@@ -5,7 +5,6 @@ import { Darts, type DartTone, type Point } from '@/episodes/components/slide-sh
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Each interview round's cluster, closing on the bull: loose and dulled, then `ai`, then on target. */
 const ROUNDS: readonly { round: string; tone: DartTone; r: number; darts: readonly Point[] }[] = [
   {
     round: 'round1',
@@ -39,8 +38,6 @@ const ROUNDS: readonly { round: string; tone: DartTone; r: number; darts: readon
   },
 ];
 
-// The section slide of "Creating context for agents", echoing the Hero motif: each interview round moves the cluster
-// closer to the bull, and the last one becomes the spec.
 export const creatingContextForAgents = slide({
   slug: 'creating-context-for-agents',
   messages: { en, de },
@@ -56,7 +53,6 @@ export const creatingContextForAgents = slide({
   segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
   content: ({ t }) => (
     <SlideFrame>
-      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
       <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
           <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />

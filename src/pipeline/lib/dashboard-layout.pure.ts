@@ -122,7 +122,6 @@ function stageGap(ranked: ReturnType<typeof rankedJobs>, terminal: boolean) {
   );
 }
 
-/** Jobs occupy forward stage gaps; needs/wants determine ranks, forks, joins and exits. */
 export function dashboardLayout(stages: readonly DashboardStage[]) {
   let x = GRAPH_LAYOUT.stageNode / 2 + GRAPH_LAYOUT.nodeInset;
   const layout = stages.map((stage, index) => {

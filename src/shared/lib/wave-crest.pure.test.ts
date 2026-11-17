@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { crestPath, waveCrest } from './wave-crest.pure';
 
-/*
- * The `bubbles` transition's wave front: an irregular, faceted crest above the rising water, with taller and lower
- * peaks on a long swell. Seeded, so the static HTML and every visit draw the same crest.
- */
-
 describe('success cases', () => {
   it('draws the same crest for the same seed, left to right inside its box', () => {
     // ARRANGE

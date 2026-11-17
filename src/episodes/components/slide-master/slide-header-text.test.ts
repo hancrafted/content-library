@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { RuntimeTranslator } from './slide-base';
 import { captionNoteOf, captionNotesOf } from './slide-header-text';
 
-/** A translator over flat keys. */
 function translator(messages: Record<string, string>): RuntimeTranslator {
   return Object.assign((key: string) => messages[key], { has: (key: string) => key in messages }) as never;
 }

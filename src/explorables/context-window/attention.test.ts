@@ -10,7 +10,6 @@ import type { AttentionLayout } from './context.types';
 
 const noop = () => undefined;
 
-/** The Attention part for the summer party's chat (Slide 7's Preset; Slide 4 has too few rows left to pin) at one layout, as server markup, parsed. */
 const render = (layout: AttentionLayout, renderMode: 'simple' | 'technical' = 'simple') => {
   const data = contextViewData({ preset: 'slide-7', locale: 'en' });
   const { chat } = data;

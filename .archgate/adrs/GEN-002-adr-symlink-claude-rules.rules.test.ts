@@ -1,8 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for GEN-002-adr-symlink-claude-rules.rules.ts — pass and fail path
-// for the single rule, in both directions (missing entry and orphan entry).
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './GEN-002-adr-symlink-claude-rules.rules';
 
@@ -24,12 +21,10 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${escaped}$`);
 }
 
-// `symlinks` model archgate's behavior: ctx.glob lists them but ctx.readFile
-// throws (archgate does not follow symlinks). Regular entries live in `files`.
-function makeCtx(files: Record<string, string>, opts?: { symlinks?: string[] }) {
+function makeCtx(files: Record<string, string>, opts?: { unreadableSymlinks?: string[] }) {
   const violations: Reported[] = [];
-  const symlinks = opts?.symlinks ?? [];
-  const allPaths = [...Object.keys(files), ...symlinks];
+  const unreadableSymlinks = opts?.unreadableSymlinks ?? [];
+  const allPaths = [...Object.keys(files), ...unreadableSymlinks];
   const ctx = {
     projectRoot: '/repo',
     scopedFiles: allPaths,
@@ -40,7 +35,7 @@ function makeCtx(files: Record<string, string>, opts?: { symlinks?: string[] }) 
     },
     async readFile(path: string) {
       if (path in files) return files[path];
-      if (symlinks.includes(path)) throw new Error(`ELOOP: not followed: ${path}`);
+      if (unreadableSymlinks.includes(path)) throw new Error(`ELOOP: not followed: ${path}`);
       throw new Error(`ENOENT: ${path}`);
     },
     report: {
@@ -72,10 +67,6 @@ function passingFiles(): Record<string, string> {
   return { [ADR_PATH]: SCOPED_ADR };
 }
 
-// Every message the rule can emit, named here so an assertion below reads as a
-// claim about the rule rather than a regex a reader has to decode. Joining the
-// messages before matching keeps the failure output rich: it prints what the
-// rule DID say, which `.some(...)` collapsed to a bare `false`.
 const NO_SYMLINK = /no runtime symlink/;
 const UNSCOPED_ENTRY = /a runtime entry exists/;
 const ORPHAN_ENTRY = /has no backing ADR/;
@@ -83,12 +74,12 @@ const PROVENANCE = '(GEN-002 [adr-claude-rules-symlink])';
 
 const rule = ruleSet.rules['adr-claude-rules-symlink'];
 
-const messagesOf = (violations: Reported[]) => violations.map((v) => v.message).join('\n');
+const joinedMessagesOf = (violations: Reported[]) => violations.map((v) => v.message).join('\n');
 
 describe('adr-claude-rules-symlink', () => {
   it('passes when a scoped ADR has a runtime symlink', async () => {
     // ARRANGE
-    const { ctx, violations } = makeCtx(passingFiles(), { symlinks: [LINK_PATH] });
+    const { ctx, violations } = makeCtx(passingFiles(), { unreadableSymlinks: [LINK_PATH] });
     // ACT
     await rule.check(ctx);
     // ASSERT
@@ -101,35 +92,46 @@ describe('adr-claude-rules-symlink', () => {
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(messagesOf(violations)).toMatch(NO_SYMLINK);
+    expect(joinedMessagesOf(violations)).toMatch(NO_SYMLINK);
   });
 
   it('fails when an ADR with empty paths still has a runtime entry', async () => {
     // ARRANGE
     const files = passingFiles();
     files[ADR_PATH] = SCOPED_ADR.replace('paths: [".archgate/adrs/**/*.md"]', 'paths: []');
-    const { ctx, violations } = makeCtx(files, { symlinks: [LINK_PATH] });
+    const { ctx, violations } = makeCtx(files, { unreadableSymlinks: [LINK_PATH] });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(messagesOf(violations)).toMatch(UNSCOPED_ENTRY);
+    expect(joinedMessagesOf(violations)).toMatch(UNSCOPED_ENTRY);
+  });
+
+  it('treats block-form paths as no scope, so a runtime entry for it is refused', async () => {
+    // ARRANGE
+    const files = passingFiles();
+    files[ADR_PATH] = SCOPED_ADR.replace('paths: [".archgate/adrs/**/*.md"]', 'paths:\n  - ".archgate/adrs/**/*.md"');
+    const { ctx, violations } = makeCtx(files, { unreadableSymlinks: [LINK_PATH] });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(joinedMessagesOf(violations)).toMatch(UNSCOPED_ENTRY);
   });
 
   it('fails on an orphaned ADR-named runtime symlink', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx(passingFiles(), {
-      symlinks: [LINK_PATH, '.claude/rules/gen-999-ghost.md'],
+      unreadableSymlinks: [LINK_PATH, '.claude/rules/gen-999-ghost.md'],
     });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(messagesOf(violations)).toMatch(ORPHAN_ENTRY);
+    expect(joinedMessagesOf(violations)).toMatch(ORPHAN_ENTRY);
   });
 
   it('leaves a hand-written, non-ADR-named rule file alone', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx(passingFiles(), {
-      symlinks: [LINK_PATH, '.claude/rules/house-style.md'],
+      unreadableSymlinks: [LINK_PATH, '.claude/rules/house-style.md'],
     });
     // ACT
     await rule.check(ctx);
@@ -143,6 +145,6 @@ describe('adr-claude-rules-symlink', () => {
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(messagesOf(violations)).toContain(PROVENANCE);
+    expect(joinedMessagesOf(violations)).toContain(PROVENANCE);
   });
 });

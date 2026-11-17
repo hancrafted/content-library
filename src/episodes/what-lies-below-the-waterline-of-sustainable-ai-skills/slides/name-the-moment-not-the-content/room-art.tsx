@@ -3,14 +3,6 @@ import { cn } from '@/shared/lib/utils';
 import styles from './slide.module.css';
 import { ART_SCALE, ART_TOP } from './speech.pure';
 
-/*
- * The drawing lifted from the approved Spec's Option 12a (feedback 3, decision 46): the control room's faceted walls
- * and floor, and the skill index sheet's faceted paper and clip. Facets keep the Spec's own numbers, in its 1000 by 640
- * space; their tones are this Slide's tokens in `slide.module.css`. The cast and the console stay the shared figures,
- * placed on top; the sheet's words stay real text over its paper.
- */
-
-/** One facet: its tone, the token that fills it, and its outline. */
 type Facet = readonly [tone: string, d: string];
 
 const ROOM: readonly Facet[] = [
@@ -100,7 +92,6 @@ const CLIP: readonly Facet[] = [
   ['clip-dark', 'M736 14L742 14L746 32L740 32ZM774 14L780 14L776 32L770 32ZM736 12L780 12L780 16L736 16Z'],
 ];
 
-/** The room behind the cast: faceted walls and floor. */
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP}) scale(${ART_SCALE})`}>
@@ -109,7 +100,6 @@ export function RoomArt() {
   );
 }
 
-/** The index sheet's faceted paper and its edge, stretched to the sheet. */
 export function SheetPaper() {
   return (
     <svg
@@ -123,7 +113,6 @@ export function SheetPaper() {
   );
 }
 
-/** The clip that holds the sheet to the wall, over the sheet's top edge. */
 export function SheetClip() {
   return (
     <svg

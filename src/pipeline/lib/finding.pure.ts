@@ -1,9 +1,3 @@
-/*
- * What the Episode checks report: the staging folder's cross-file checks and
- * the pipeline schema check both answer with a list of findings.
- */
-
-/** What a check found wrong, keyed by the rule it broke. */
 export type FindingKind =
   | 'spine'
   | 'brief-slide'
@@ -27,17 +21,14 @@ export type FindingKind =
 
 export interface Finding {
   kind: FindingKind;
-  /** The file the finding is about, relative to the folder checked. */
   file: string;
   message: string;
 }
 
-/** The finding (or message), unless the rule holds. */
 export function unless<T>(holds: boolean, finding: T): T[] {
   return holds ? [] : [finding];
 }
 
-/** Each value the list holds more than once, named once, in the order it first repeats. */
 export function repeated<T>(values: readonly T[]): T[] {
   return [...new Set(values.filter((value, at) => values.indexOf(value) !== at))];
 }

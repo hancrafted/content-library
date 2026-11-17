@@ -1,7 +1,3 @@
-// `node skills/new-episode/scripts/approve.ts <file> [--by <actor>] [--stamp <producer/model>]`: appends `{ by, at: <now UTC> }`
-// to a staging file's `verified` list, an HTML Spec's in its meta block; never typed by hand. `by` defaults to
-// `human:han` (the user's approval at a gate); the orchestrator passes `--by process:markdown-harness` for a machine-confirmed pass.
-// `--stamp` also writes `generated: { by, at }` with the same clock time, so no agent types a timestamp.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { utcSeconds } from '../../../src/pipeline/lib/staging-file.pure.ts';
 import { approveText, parseApproveArgs } from '../../../src/pipeline/lib/verified.pure.ts';

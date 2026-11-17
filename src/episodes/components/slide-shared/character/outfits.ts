@@ -1,12 +1,6 @@
-/**
- * The torso of the one human body plan, per outfit, as facet tables (see `body-plan.ts`). `b` widens the shoulders by
- * build; the officer's jacket follows the Spec's woman captain (`woman.py`), the flight jacket and the freelancer's
- * sweater share its cut.
- */
 import type { FacetSpec } from './body-plan';
 import type { Preset } from './preset';
 
-/** How far each build moves the shoulders out from the average. */
 export const BUILD_WIDTH: Readonly<Record<Preset['build'], number>> = { slim: -1, average: 0, broad: 2.5 };
 
 function base(b: number, hem: number): FacetSpec[] {
@@ -62,13 +56,11 @@ const OUTFITS: Readonly<Record<Preset['outfit'], (b: number) => FacetSpec[]>> = 
   freelancer,
 };
 
-/** The `kind: 'ai'` mark: one tag in the `ai` meaning colour on the chest, with a glint. */
 const AI_BADGE: readonly FacetSpec[] = [
   ['body', 'ai-tag', 'ai-tag', [3, -63, 9, -63.4, 9.2, -57.4, 3.2, -57]],
   ['body', 'ai-tag-glint', 'glint', [4, -61.6, 8.2, -61.9, 8.2, -61.1, 4, -60.8]],
 ];
 
-/** The neck and torso a preset wears, and the ai tag when it is an AI agent. */
 export function torsoFacets(preset: Preset): FacetSpec[] {
   const facets = OUTFITS[preset.outfit](BUILD_WIDTH[preset.build]);
   return preset.kind === 'ai' ? [...facets, ...AI_BADGE] : facets;

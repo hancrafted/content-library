@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { localesByRoute } from './page-locales';
 
-/*
- * The locales page chrome's toggle offers, read from the page catalogue: only a page not exported in every locale is
- * named, so every other page keeps both.
- */
-
 describe('success cases', () => {
   it('offers the English-only dashboard in English alone', () => {
     // ARRANGE

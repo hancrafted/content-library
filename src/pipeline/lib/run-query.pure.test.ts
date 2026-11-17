@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { fold, type RunLogLine } from './run-log.pure.ts';
 import { queryRuns, runsCsv } from './run-query.pure.ts';
 
-/*
- * The run query seam: folded spans and scores in, SQL answers and the runs CSV out.
- * The in-memory database is real; nothing here touches the disk or the clock.
- */
-
 const T = 'a'.repeat(32);
 const T2 = 'e'.repeat(32);
 const ID = (n: number): string => n.toString(16).padStart(16, '0');

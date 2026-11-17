@@ -4,7 +4,6 @@ import { logIn } from '../slides/log-in/slide';
 import { startTheAgentInsideThatFolder } from '../slides/start-the-agent-inside-that-folder/slide';
 import { yourFolder } from '../slides/your-folder/slide';
 
-/** Placement marker of the Section "Your folder": its section slide, then its page Slides in Spec order. */
 export const yourFolderSection: Section = [
   yourFolder,
   downloadAndUnzipTheStarterFolder,

@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import { StepIcon, type StepSlug } from './step-icon';
 
-/** The four steps, in the order the voice names them. */
 export const STEP_SLUGS: readonly StepSlug[] = ['s1', 's2', 's3', 's4'];
 
 interface Step {
@@ -10,11 +9,6 @@ interface Step {
   detail: string;
 }
 
-/**
- * The lane of this week's four steps: one wide lane under a dark pill, four neutral paper notes at alternating
- * tilts, each a number, a small drawing, a title and a detail line. Four in a row when the lane is wide, two by two
- * when it is not. A step lifts when pointed at.
- */
 export function StartSteps({ label, steps }: { label: string; steps: readonly Step[] }) {
   return (
     <section className="relative rounded-xl border bg-muted px-4 pt-12 pb-6 @min-[38rem]:px-8 @min-[38rem]:pb-8">

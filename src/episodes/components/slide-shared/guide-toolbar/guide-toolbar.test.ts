@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { GuideToolbar } from './guide-toolbar';
 
-/*
- * The Guide's one toolbar, as the static export renders it: before the viewer picks, so on the defaults (Mac, Claude
- * Code). Both groups always show, in one fixed order; `active` says which the Slide's content differs by.
- */
-
 const LABELS = { os: 'Your computer', agent: 'AI agent' };
 
 const toolbar = (active: readonly ('os' | 'agent')[]) =>

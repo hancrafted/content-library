@@ -6,11 +6,7 @@ import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * Poll v1's baseline questions as keys of `questions`, the picture of AI first so no ladder primes it,, with their answers' Translation keys in poll order. The wording is frozen: it is the
- * question register of research AIE-0016 (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md),
- * and a change to it is a new poll version there first.
- */
+// evidence: docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md
 const QUESTIONS = [
   {
     key: 'model',
@@ -67,7 +63,6 @@ const QUESTIONS = [
   tone: PollTone;
 }[];
 
-// A live poll on directpoll: the QR (drawn at build time from `poll.voteUrl`) on a filled panel with the anonymity notice, the baseline questions printed as text beside it, and a button that loads the Result page only after the click. The Slide header shows the title and caption; the Scene holds the poll.
 export const poll = slide({
   slug: 'poll',
   messages: { en, de },

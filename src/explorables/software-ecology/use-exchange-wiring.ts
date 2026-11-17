@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { useMemo, useState } from 'react';
 import { NO_OVERLAYS, type Overlays, type PageState } from './exchange-file.pure.ts';
 import type { ExchangeWords } from './exchange-words.types';
@@ -9,12 +10,6 @@ import { useExchange, type ExchangeActions, type Loaded } from './use-exchange.t
 import type { FactoryView } from './use-factory.ts';
 import type { TourActions } from './use-tour.ts';
 
-/*
- * The exchange file wired into the client parent (design-ADR 0024 §11): the use cases a visitor uploaded beside the
- * shipped ones, the page state Download saves, and what loading a file sets. The parent owns the state.
- */
-
-/** The shipped use cases with the uploaded ones in their place, or after them: an upload replaces a use case by id. */
 export function useUploads(shipped: readonly Bundle[]) {
   const [own, setOwn] = useState<readonly Bundle[]>([]);
   const [overlays, setOverlays] = useState<Overlays>(NO_OVERLAYS);
@@ -31,7 +26,6 @@ export function useUploads(shipped: readonly Bundle[]) {
 
 type Uploads = ReturnType<typeof useUploads>;
 
-/** What of the parent's parts the exchange file reads and sets. */
 export interface ExchangeParts {
   readonly B: Bundle;
   readonly view: ViewId;
@@ -54,7 +48,6 @@ const pageOf = (x: ExchangeParts, f: FactoryView): PageState => ({
   s: f.controls.settings,
 });
 
-/** A loaded file shows as the reference build's `importText` leaves the page: its use case, its state, its view. */
 const loadInto = (x: ExchangeParts, y: { f: FactoryView; tour: TourActions }) => (up: Loaded) => {
   const { bundle, page } = up;
   x.dash.dismiss();

@@ -4,17 +4,14 @@ import { cn } from '@/shared/lib/utils';
 import styles from './metro-map.module.css';
 import { CANVAS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
 
-/** Lanes are thick, bends round over this many canvas units. */
 const BEND_RADIUS = 18;
 
 const LANE_CLASS: Record<Lane, string> = { a: styles.laneA, b: styles.laneB, c: styles.laneC };
 
-/** A lane's two theme colours as custom properties (the Slide's token file), so one class picks the theme's value. */
 export function laneClass(lane: Lane): string {
   return LANE_CLASS[lane];
 }
 
-/** One lane, dimmed when another lane is lit. */
 function LaneLine({ lane, lit }: { lane: Lane; lit: boolean }) {
   return (
     <g
@@ -30,7 +27,6 @@ function LaneLine({ lane, lit }: { lane: Lane; lit: boolean }) {
   );
 }
 
-/** The three lanes on the canvas; the SVG is decoration, the legend and station buttons carry the meaning. */
 export function MetroLines({ lit }: { lit: readonly Lane[] }) {
   return (
     <svg

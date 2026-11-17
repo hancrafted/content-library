@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkFragment } from './episode-spec-fragment.pure.ts';
 
-/*
- * The contract's findings on a designer's fragment. The pick checkbox is added by assembly, ticked on the recommended
- * Option as the assembler ticks it, so a fragment is judged as the page it becomes. Fragments are hand-written here.
- */
-
 function option(id: string, mark: string): string {
   return `<figure data-spec="option" data-option="${id}"${mark}>
   <div data-spec="mock" class="bg-card text-foreground"><div class="h-4 w-1/2 bg-accent"></div></div>

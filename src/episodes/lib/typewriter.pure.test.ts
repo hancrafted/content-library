@@ -110,5 +110,4 @@ describe('edge cases', () => {
   });
 });
 
-/** Every character starts typing within this many milliseconds; the caret's last blink fills the rest of 1.5s. */
 const TYPE_BUDGET_FOR_TEST = 1200;

@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Title slide's hero Scene, picked Option B (plain numbered cards): the problem as an abstract picture. Four
- * ticked cards numbered 1 to 4 add up to a broken goal, and "Goal" is the only word on it. Read as the Title slide
- * renders it, with no Section placed beside it.
- */
-
 const sceneOf = (locale: Locale) =>
   load(
     renderToStaticMarkup(

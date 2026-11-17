@@ -1,8 +1,5 @@
-// What pre-push asks git before it plans (pushPlan in verify.pure.ts): where HEAD left main, and what it changed
-// since. A git failure throws, naming the command, so the push fails rather than planning on half the facts.
 import { spawnSync } from 'node:child_process';
 
-/** Runs git in `cwd`; throws on any exit `allowed` does not list, naming the command and what git said. */
 function git(cwd: string, args: string[], allowed: readonly number[] = [0]) {
   const run = spawnSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   if (run.status === null || !allowed.includes(run.status))
@@ -10,11 +7,6 @@ function git(cwd: string, args: string[], allowed: readonly number[] = [0]) {
   return { status: run.status, stdout: run.stdout.trim() };
 }
 
-/**
- * The merge-base of HEAD with origin/main, and every path changed from it to HEAD. Without a common ancestor
- * (git's exit 1) the merge-base is null and no paths are listed. Throws when origin/main is missing: run
- * `git fetch origin`.
- */
 export function changesSinceMain(cwd: string): { mergeBase: string | null; changedPaths: string[] } {
   const base = git(cwd, ['merge-base', 'HEAD', 'origin/main'], [0, 1]);
   if (base.status === 1) return { mergeBase: null, changedPaths: [] };

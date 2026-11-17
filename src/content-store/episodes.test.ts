@@ -6,23 +6,13 @@ import { describe, expect, it } from 'vitest';
 import { FEATURED } from './featured';
 import { episodePublishedOn, episodeStatus, listEpisodes } from './store';
 
-/*
- * The store's Episode read API the Episode browser depends on (#40): one metadata
- * entry per Episode folder, an Event's copies included, so no Episode silently drops out. The
- * Episode registry derives the entries from the folders the one folder walker finds; the first test checks that
- * every Episode it finds, and only those, is in the store, by its Episode id.
- */
-
 const ROOT = process.cwd();
 const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** Every Episode folder the walker finds, by Episode id. */
 const FOLDERS = new Map(episodeFolders(ROOT).map((folder) => [folder.id, folder]));
 
-/** Every Episode with a page, its ref narrowed to a registered Episode's, as the getters take it. */
 const WITH_PAGE = listEpisodes().flatMap((episode) => (hasPage(episode.ref) ? [{ ...episode, ref: episode.ref }] : []));
 
-/** Only a date that survives a round trip is one: `2026-02-30` has the shape but is not a day. */
 function isCalendarDate(value: string): boolean {
   const parsed = new Date(`${value}T00:00:00Z`);
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
@@ -201,7 +191,7 @@ describe('failure cases', () => {
     // ARRANGE
     const unlisted = episodeRef('not-an-episode');
     // ACT
-    // @ts-expect-error -- an Episode the registry does not hold has no status to read
+    // @ts-expect-error
     const read = () => episodeStatus(unlisted);
     // ASSERT
     expect(read).toThrow(/not-an-episode/);
@@ -211,7 +201,7 @@ describe('failure cases', () => {
     // ARRANGE
     const unlisted = episodeRef('not-an-episode');
     // ACT
-    // @ts-expect-error -- an Episode the registry does not hold has no release date to read
+    // @ts-expect-error
     const read = () => episodePublishedOn(unlisted);
     // ASSERT
     expect(read).toThrow(/not-an-episode/);

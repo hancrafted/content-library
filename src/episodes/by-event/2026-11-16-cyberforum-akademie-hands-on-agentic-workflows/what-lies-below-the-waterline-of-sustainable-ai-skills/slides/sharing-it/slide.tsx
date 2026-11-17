@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Sharing it", echoing the Hero motif (picked Title-slide Option 0a). The owner band, at Midnight: the card in the institute's fleet manual.
 export const sharingIt = slide({
   slug: 'sharing-it',
   messages: { en, de },

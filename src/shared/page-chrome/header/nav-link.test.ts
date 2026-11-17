@@ -3,16 +3,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NavLink } from './nav-link.client';
 
-/*
- * NavLink states its own `aria-current` and `data-active` after the props it is handed (#409), so a wrapping menu link
- * that passes its own cannot override them. Every header link goes through it: the Dashboard, Events and Explorables
- * as plain links, Episodes and Resources inside Learn.
- */
-
 const path = vi.hoisted(() => ({ current: '/' }));
 vi.mock('next/navigation', () => ({ usePathname: () => path.current }));
 
-/** The link as a visitor at `pathname` sees it: its `aria-current` and `data-active`, as markup writes them. */
 function stateAt(pathname: string, props: Record<string, unknown> = {}, section = '/events') {
   path.current = pathname;
   const html = renderToStaticMarkup(createElement(NavLink, { section, href: section, ...props }, 'Link'));

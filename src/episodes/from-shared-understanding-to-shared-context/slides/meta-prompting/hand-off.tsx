@@ -3,10 +3,6 @@ export interface HandOffProps {
   readonly note: string;
 }
 
-/**
- * The hand-off between the rooms, in `primary`: one arrow, the fresh chat, and only the work order crossing. It points
- * down while the rooms stack and across once they sit side by side.
- */
 export function HandOff({ label, note }: HandOffProps) {
   return (
     <div data-hand-off className="flex flex-col items-center justify-center gap-3 @4xl:col-span-2">

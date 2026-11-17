@@ -1,21 +1,18 @@
 import type { ReactNode } from 'react';
 import styles from './stages-of-sale.module.css';
 
-/** A paper note in a lane: a step and title with a line of text, a list, chips or a signature; a title alone is a strip. */
 export interface StageNote {
   slug: string;
   step?: string;
   title: string;
   text?: ReactNode;
   kind?: 'neutral' | 'cash';
-  /** The small mono word over a cash note's title. */
   kindLabel?: string;
   list?: { slug: string; company: string; contact: string }[];
   chips?: string[];
   signature?: string;
 }
 
-/** One stage as a lane under a dark pill; `primary` rings it, `faint` dashes it as the wait after the sale. */
 export interface Lane {
   slug: string;
   label: string;
@@ -28,7 +25,6 @@ export interface Lane {
 
 const TILT = ['-rotate-1', 'rotate-1', 'rotate-2', '-rotate-2'] as const;
 
-/** The strip of tape on a Leads note, or the pin on any other full note. */
 function Fastener({ tape, index }: { tape: boolean; index: number }) {
   return tape ? (
     <span
@@ -43,7 +39,6 @@ function Fastener({ tape, index }: { tape: boolean; index: number }) {
   );
 }
 
-/** The invented lead list: company left, contact right, dashed rules between. */
 function LeadList({ list }: { list: NonNullable<StageNote['list']> }) {
   return (
     <ul role="list" className="mt-3 flex flex-col text-caption text-foreground">
@@ -60,7 +55,6 @@ function LeadList({ list }: { list: NonNullable<StageNote['list']> }) {
   );
 }
 
-/** The ways to make first contact, as outlined chips. */
 function Chips({ chips }: { chips: string[] }) {
   return (
     <ul role="list" className="mt-3 flex flex-wrap gap-2">
@@ -73,7 +67,6 @@ function Chips({ chips }: { chips: string[] }) {
   );
 }
 
-/** A drawn signature on a line, its word under it. */
 function Signature({ label }: { label: string }) {
   return (
     <>
@@ -91,7 +84,6 @@ function Signature({ label }: { label: string }) {
   );
 }
 
-/** The cash at the end of the wait: a yellow note with its kind, its title and when it arrives. */
 function CashNote({ note, tilt }: { note: StageNote; tilt: string }) {
   return (
     <li className={`${styles.cash} mt-auto p-4 shadow-md ${tilt}`}>
@@ -102,7 +94,6 @@ function CashNote({ note, tilt }: { note: StageNote; tilt: string }) {
   );
 }
 
-/** A note with a title alone, as a strip: paper, or dashed in the faint lane. */
 function Strip({ note, tilt, faint }: { note: StageNote; tilt: string; faint: boolean }) {
   const strip = faint
     ? 'border border-dashed border-border bg-card/60 px-4 py-3 text-caption text-muted-foreground'
@@ -110,7 +101,6 @@ function Strip({ note, tilt, faint }: { note: StageNote; tilt: string; faint: bo
   return <li className={`${strip} ${tilt}`}>{note.title}</li>;
 }
 
-/** A full note: fastened, its step and title, a line of text and whatever it carries. */
 function FullNote({ note, index, tilt, tape }: { note: StageNote; index: number; tilt: string; tape: boolean }) {
   return (
     <li className={`relative bg-card p-4 shadow-md ${tilt}`}>
@@ -125,7 +115,6 @@ function FullNote({ note, index, tilt, tape }: { note: StageNote; index: number;
   );
 }
 
-/** One note of a lane, drawn by what it carries. */
 export function Note({ note, index, lane }: { note: StageNote; index: number; lane: Lane }) {
   const tilt = TILT[index % TILT.length];
   if (note.kind === 'cash') return <CashNote note={note} tilt={tilt} />;

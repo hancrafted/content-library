@@ -1,7 +1,7 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { judge, parseTest, validTest } from './scenario-tests.pure.ts';
 
-/* The tests a scenario's `expect:` and `settles:` hold its readings to (design-ADR 0024 §10). */
 describe('success cases', () => {
   it('parses a comparison, a range with an en dash or a hyphen, and a trend', () => {
     // ARRANGE

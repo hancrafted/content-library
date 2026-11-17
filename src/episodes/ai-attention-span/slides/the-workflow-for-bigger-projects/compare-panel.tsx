@@ -9,15 +9,12 @@ const TONES = {
 
 interface ComparePanelProps {
   readonly title: string;
-  /** `before`: the one long chat, muted and centred; `after`: the workflow, lit by its accent border. */
   readonly tone: keyof typeof TONES;
-  /** A Context marker after the title. */
   readonly marker?: ReactNode;
   readonly target?: TargetProps;
   readonly children: ReactNode;
 }
 
-/** One side of the before-and-after: its title, then what it shows. `.before` and `.after` are the motion's hooks. */
 export function ComparePanel({ title, tone, marker, target, children }: ComparePanelProps) {
   return (
     <div {...target} className={TONES[tone]}>

@@ -2,12 +2,6 @@ import { overOf } from './workflow-foreach.pure.ts';
 import { isOptionalTask, producersBefore, producersFor, type Producer } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * The checks of optional jobs and stages: skipping one may never starve a required job or feed it sample data. An
- * optional stage holds optional jobs only; no required job takes an optional job's output, by slot, `needs` or the
- * output its stage repeats over. An optional job may draw on any earlier output. One sentence per problem.
- */
-
 const isOptionalProducer = (producer: Producer | undefined): boolean =>
   producer !== undefined && isOptionalTask(producer.task);
 

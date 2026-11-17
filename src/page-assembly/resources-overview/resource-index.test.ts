@@ -4,11 +4,6 @@ import { describe, expect, it } from 'vitest';
 import { resourceIndex } from './resource-index';
 import { RESOURCE_KINDS } from './resource-index.pure';
 
-/*
- * The Resource index over the real records: it is a projection of the page catalogue, so it holds a page exactly when
- * the catalogue lists it, in every locale the page is exported in.
- */
-
 const KINDS = new Set<string>(['episode', 'event', 'explorable-page', 'guide', 'template']);
 const listedUrls = () =>
   PAGES.filter(({ page, treatment }) => KINDS.has(page.kind) && treatment.listed).flatMap(({ page }) =>
@@ -54,9 +49,8 @@ describe('success cases', () => {
     expect(leaked).toEqual([]);
   });
 
-  it('has entries of every Resource kind the catalogue lists a page of', () => {
+  it('has entries of every Resource kind the catalogue lists a page of, so a Guide is expected only once one is listed', () => {
     // ARRANGE
-    // No Guide exists until the first is scaffolded, so a kind with no listed page is not expected yet.
     const guideListed = PAGES.some(({ page, treatment }) => page.kind === 'guide' && treatment.listed);
     const expected = RESOURCE_KINDS.filter((kind) => kind !== 'guide' || guideListed);
     // ACT

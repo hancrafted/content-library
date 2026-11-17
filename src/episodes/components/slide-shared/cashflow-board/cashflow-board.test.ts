@@ -5,7 +5,6 @@ import { CashflowBoard, CashLeft, type CashflowBoardProps } from './cashflow-boa
 
 const LABELS = { board: 'Cashflow board', cash: 'Cash', cost: 'Cost', revenue: 'Revenue', ghost: 'Was here' };
 
-/** A two-month board with a cost, a big targeted note and a ghost, enough to see every kind drawn. */
 function board(extra: Partial<CashflowBoardProps> = {}): string {
   return renderToStaticMarkup(
     createElement(CashflowBoard, {
@@ -27,7 +26,6 @@ function board(extra: Partial<CashflowBoardProps> = {}): string {
   );
 }
 
-/** The visible text of rendered markup, tags dropped and whitespace collapsed. */
 function textOf(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')

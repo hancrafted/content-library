@@ -4,11 +4,9 @@ import type { ReactNode } from 'react';
 export interface WorkOrderProps {
   readonly title: string;
   readonly rows: readonly { readonly slug: string; readonly term: string; readonly value: string }[];
-  /** "Written from your answers", its Context marker beside it. */
   readonly source: ReactNode;
 }
 
-/** The one clean work order, in `primary`, its icon in `machine`: what the AI worker reads. Raises on hover. */
 export function WorkOrder({ title, rows, source }: WorkOrderProps) {
   return (
     <article

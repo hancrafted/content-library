@@ -5,20 +5,12 @@ import type { ReactNode } from 'react';
 export interface FieldCardProps {
   readonly name: string;
   readonly value: string;
-  /** The field's `metadata` key, shown in the Coding agent view in place of its value; code, not translated. */
   readonly codingKey: string;
-  /** What the field is for. */
   readonly job: ReactNode;
-  /** Where the field comes from, with its Context marker. */
   readonly source?: ReactNode;
-  /** A note's target, when one names the card. */
   readonly 'data-target'?: string;
 }
 
-/**
- * One field of the control block with its job: the name, its value as a pill (its `metadata` key in the Coding agent
- * view), what it is for, and where it comes from. Hover raises the card and dims its neighbours.
- */
 export function FieldCard({ name, value, codingKey, job, source, ...rest }: FieldCardProps) {
   return (
     <li {...rest} className="focus-group__item card-hover card-hover--raise">

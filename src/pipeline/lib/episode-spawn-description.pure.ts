@@ -10,7 +10,6 @@ export interface ParsedDescription {
 const ID = JOB_ID.source.slice(1, -1);
 const DESCRIPTION = new RegExp(`^(${ID})#([1-9]\\d*)/(${ID})(?:/#([1-9]\\d*))?$`);
 
-/** The shared spawn label grammar, usable by both the adapter and local browser readers. */
 export function parseDescription(description: string): ParsedDescription | null {
   const m = DESCRIPTION.exec(description);
   if (m === null) return null;

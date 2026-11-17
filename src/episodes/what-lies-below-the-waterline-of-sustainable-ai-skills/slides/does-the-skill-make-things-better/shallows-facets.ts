@@ -1,12 +1,3 @@
-/*
- * The test dive's shallows, lifted facet by facet from Spec Option 22a (feedback 3, decision 46), in the Spec's own
- * 560 by 330 units: the faceted sky and clouds, the surface water with its lit waterline and a light ray, the Sunlit
- * water below and the seabed with its rocks; the silt the without-skill run stirs up, the empty place of the card, the
- * written procedure card and the bubbles of the with-skill run. Tones live in `shallows-art.module.css`; the ship and
- * robot are the shared cast, placed on top.
- */
-
-/** A tone of the drawing; `shallows-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'sky-1'
   | 'sky-2'
@@ -37,7 +28,6 @@ export type ArtTone =
 
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The shallows both runs dive into, back to front. */
 export const SHALLOWS_FACETS: readonly ArtFacet[] = [
   ['sky-1', 'M49 17L0 42L0 0Z'],
   [
@@ -180,7 +170,6 @@ export const SHALLOWS_FACETS: readonly ArtFacet[] = [
   ['glow', 'M6 111L554 111L554 113L6 113Z'],
 ];
 
-/** The cloud of sediment the robot stirs up when it settles into the seabed. */
 export const SILT: readonly ArtFacet[] = [
   ['silt-lit', 'M309 272L300 283L280 286L264 278L264 265L280 258L300 260Z'],
   ['silt', 'M284 268L274 282L250 285L231 275L231 260L250 251L274 254Z'],
@@ -191,10 +180,8 @@ export const SILT: readonly ArtFacet[] = [
   ['silt-lit', 'M272 282L262 296L237 300L218 290L218 275L237 265L262 268Z'],
 ];
 
-/** The card's empty place at the upper left, where the without-skill run has none. */
 export const NO_CARD: readonly ArtFacet[] = [['card-ghost', 'M20 20L96 16L100 102L24 106Z']];
 
-/** The written procedure card at the upper left: the skill the with-skill run holds. */
 export const CARD: readonly ArtFacet[] = [
   ['drop', 'M25 27L102 23L107 110L30 114Z'],
   ['paper-lit', 'M20 20L96 16L24 106Z'],
@@ -206,7 +193,6 @@ export const CARD: readonly ArtFacet[] = [
   ],
 ];
 
-/** The bubbles rising from the hovering robot. */
 export const BUBBLES: readonly ArtFacet[] = [
   ['bubble', 'M282 177L280 181L276 181L274 177L276 174L280 174Z'],
   ['glint', 'M276 176L278 174L278 176Z'],

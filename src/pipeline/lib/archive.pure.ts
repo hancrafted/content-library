@@ -1,7 +1,3 @@
-// The Design archive (GLOSSARY.md) of one Episode, from its Staging: one page holding every Slide of the approved
-// Spec with every Option, the picked one marked, in the Spec's own frame. The dashboard is archive-dashboard.pure.ts.
-// Pure: Staging's text in, `{ path: html }` out; the CLI (`skills/episode-promote/scripts/archive.ts`) reads and writes the disk.
-
 import { load, type CheerioAPI } from 'cheerio';
 import { escapeHtml, htmlPage } from './archive-html.pure.ts';
 import {
@@ -18,28 +14,19 @@ import { readSpec, SPEC_FILE } from './episode-spec-page.pure.ts';
 import type { Selection } from './episode-spec-slide.pure.ts';
 
 export interface ArchiveInput {
-  /** The Staging folder, repo-relative, as the Spec's build notes name it: `docs/episodes/<folder>`. */
   staging: string;
-  /** `spec/spec.html`. */
   spec: string;
-  /** Every `feedback/NN/feedback.md`, keyed by its Staging-relative path. */
   feedback: Readonly<Record<string, string>>;
-  /** `events.jsonl`. */
   events: string;
-  /** The Episode page's own additions to the Spec's styles and `design.css`: the skill's `archive-episode.css`. */
   style: string;
 }
 
 export interface Archive {
-  /** The Episode's slug, from the Spec's `<h1 id>`: its folder under `design-archive/`. */
   slug: string;
-  /** Pages keyed by their path under `design-archive/`: the Episode's one page, `<slug>/index.html`. */
   pages: Record<string, string>;
-  /** The design reference images the page cites, Staging-relative; the CLI copies each to `design-archive/<slug>/`. */
   references: string[];
 }
 
-/** One archive section, `data-archive="<name>"`, holding `items`; nothing when there are none. */
 function archiveSection(name: string, heading: string, items: readonly string[]): string {
   if (items.length === 0) return '';
   return `<section class="spec-card" data-archive="${name}"><h4>${heading}</h4>${items.join('\n')}</section>`;
@@ -65,18 +52,11 @@ function referenceList(images: readonly string[]): string {
   return archiveSection('references', 'Design references', figures);
 }
 
-/** Recommended is a bare attribute or "true" (the Specs before the generated template), never "false". */
 function isRecommended(figure: Selection): boolean {
   const value = figure.attr('data-recommended');
   return value !== undefined && value !== 'false';
 }
 
-/**
- * The Spec's Options, tabbed for a page with no review form and no script: a radio input and label per Option ahead
- * of the figures, and the stylesheet's `:checked` rules show one figure. A tab carries the Option's id, its ✓ when
- * the Spec marks it picked and its Recommended flag, once; a Slide opens on its picked Option, else its recommended
- * one, else its first.
- */
 function tabbedOptions(article: string): string {
   const $ = load(article, null, false);
   $('.spec-options').each((_, element) => {
@@ -109,7 +89,6 @@ interface EpisodeContext {
   style: string;
 }
 
-/** One Slide on the Episode page: the Spec's article, then its references, feedback and prompts. */
 function slideBlock(slide: SlidePage, context: EpisodeContext): { html: string; images: string[] } {
   const article = tabbedOptions(slide.article.replaceAll(`${context.staging}/reference/`, 'reference/'));
   const images = citedImages(article);
@@ -124,13 +103,11 @@ function slideBlock(slide: SlidePage, context: EpisodeContext): { html: string; 
 }
 
 interface Group {
-  /** The Section's slug; none for the Title slide's group. */
   section?: string;
   title: string;
   slides: SlidePage[];
 }
 
-/** The Slides grouped as the Spec's outline groups them: the Title slide under Episode, then each Section. */
 function groups($: CheerioAPI, slides: readonly SlidePage[]): Group[] {
   const result: Group[] = [];
   for (const slide of slides) {
@@ -164,7 +141,6 @@ interface EpisodePage {
   references: string[];
 }
 
-/** The Episode's one page: the masthead, then each group's Slides, the Spec's styles and the archive's own in the head. */
 function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: EpisodeContext): EpisodePage {
   const references = new Set<string>();
   const grouped = groups($, slides);

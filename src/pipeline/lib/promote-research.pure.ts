@@ -1,8 +1,4 @@
-// Promotion's research move (episode-promote step 7): every research file a Run staged moves into the llm-wiki and
-// gets its index line, whether or not a Slide cites it (design-ADR-0004). Pure: the index, the glossary, the wiki's
-// folders and the staged files in, the moves and the rewritten index out; `skills/episode-promote/scripts/promote-research.ts` reads and writes the
-// disk. It throws, before any move, on anything it would otherwise lose or overwrite.
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 import { checkResearchFolders, INDEX_ENTRY, researchCategoryNames } from './research-folder.pure.ts';
 import { frontmatterField } from './staging-file.pure.ts';
 
@@ -10,9 +6,7 @@ const WIKI_RESEARCH = 'docs/llm-wiki/research';
 const HEADING = /^### .* \(([A-Z]+)\)$/;
 
 export interface ResearchMove {
-  /** The staged folder, `<category>-<####>__<question-slug>`, under the Staging's `research/`. */
   folder: string;
-  /** Its path relative to `docs/llm-wiki/`. */
   to: string;
 }
 
@@ -22,13 +16,9 @@ interface Section {
 }
 
 export interface PromotionInput {
-  /** `docs/llm-wiki/index.md`. */
   index: string;
-  /** `GLOSSARY.md`, whose `## Research categories` names each category's heading. */
   glossary: string;
-  /** Every research folder already on disk in the llm-wiki, as a repo path. */
   wiki: readonly string[];
-  /** Each staged research folder and its `research.md`, or null when it holds none. */
   research: Readonly<Record<string, string | null>>;
 }
 
@@ -36,7 +26,6 @@ function categoryOf(folder: string): string {
   return folder.split('-')[0];
 }
 
-/** The research folder an index line links to. */
 function folderOf(line: string): string {
   return (INDEX_ENTRY.exec(line)?.[1] ?? '').split('/').at(-2) ?? '';
 }
@@ -47,7 +36,6 @@ function entry(folder: string, markdown: string): string {
   return `- [${title}](research/${categoryOf(folder)}/${folder}/research.md) — ${description}`;
 }
 
-/** The index split into the lines above its first category heading and one Section per category. */
 function parseIndex(index: string): { preamble: string[]; sections: Map<string, Section> } {
   const lines = index.replace(/\n$/, '').split('\n');
   const first = lines.findIndex((line) => HEADING.test(line));
@@ -76,7 +64,6 @@ function render(preamble: string[], sections: Map<string, Section>): string {
   return body.length === 0 ? `${preamble.join('\n')}\n` : `${top}${body.join('\n\n')}\n`;
 }
 
-/** Throws on a staged folder with no research.md, a bad name, an unknown category or an ID the wiki already holds. */
 function refuse(input: PromotionInput, index: Map<string, Section>): void {
   const empty = Object.keys(input.research).filter((folder) => input.research[folder] === null);
   const listed = [...index.values()].flatMap(({ entries }) =>
@@ -93,7 +80,6 @@ function refuse(input: PromotionInput, index: Map<string, Section>): void {
   if (problems.length > 0) throw new Error(problems.join('\n'));
 }
 
-/** The moves that bring every staged research folder into the llm-wiki, and the index that lists them. */
 export function promoteResearch(input: PromotionInput): { moves: ResearchMove[]; index: string } {
   const [researchIndex, raw] = input.index.split(/\n*(?=^## Raw$)/m);
   const { preamble, sections } = parseIndex(researchIndex);

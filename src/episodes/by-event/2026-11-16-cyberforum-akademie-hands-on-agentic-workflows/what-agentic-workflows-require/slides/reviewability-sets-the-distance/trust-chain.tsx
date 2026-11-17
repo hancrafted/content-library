@@ -2,7 +2,6 @@ import { OversightPill } from '@/episodes/components/slide-shared/oversight-pill
 import type { ReactNode } from 'react';
 import { Callout } from './callout';
 
-/** One link of the chain: its number and its label. */
 function ChainLink({ n, label, children }: { n: 1 | 2 | 3; label: string; children?: ReactNode }) {
   return (
     <div
@@ -18,7 +17,6 @@ function ChainLink({ n, label, children }: { n: 1 | 2 | 3; label: string; childr
   );
 }
 
-/** The arrow between two links: points right where the chain runs in a row, down where it stacks. */
 function ChainArrow() {
   return (
     <svg viewBox="0 0 28 16" className="w-7 shrink-0 self-center rotate-90 @4xl:rotate-0" aria-hidden="true">
@@ -31,14 +29,9 @@ export interface TrustChainProps {
   readonly review: string;
   readonly trust: string;
   readonly step: string;
-  /** The three levels, short, shown under "Step out". */
   readonly levels: readonly [string, string, string];
 }
 
-/**
- * The slide's argument in three linked boxes (decision page "chain shape", Option A): engineering for review builds
- * trust, and earned trust lets you step out. The pills under the last link are the levels of the Slide before.
- */
 export function TrustChain({ review, trust, step, levels }: TrustChainProps) {
   return (
     <div className="flex flex-col items-stretch gap-2 @4xl:flex-row @4xl:items-stretch">

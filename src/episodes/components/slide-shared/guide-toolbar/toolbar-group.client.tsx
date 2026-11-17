@@ -7,19 +7,16 @@ import { useId } from 'react';
 
 export type { PickName };
 
-/** One option of a group: the value the page shares and the product name the button shows. */
 export interface ToolbarOption {
   readonly id: string;
   readonly name: string;
 }
 
 export interface ToolbarGroupProps {
-  /** Which page-wide pick the group sets. */
   readonly pick: PickName;
   readonly label: string;
   readonly options: readonly ToolbarOption[];
   readonly fallback: string;
-  /** Whether this Slide's content differs by the pick; the other group stays in place, dimmed and not operable. */
   readonly active: boolean;
 }
 
@@ -36,10 +33,6 @@ interface OptionProps {
   readonly onPick: (id: string) => void;
 }
 
-/**
- * One option: a native radio, hidden, inside its pill, so the arrow keys move the pick. The mark and the name from `md`
- * up; a phone shows the mark alone, named by `aria-label`. An option with no mark always shows its name.
- */
 function Option({ group, pick, option, checked, disabled, onPick }: OptionProps) {
   const Mark = MARKS[pick][option.id];
   return (
@@ -69,10 +62,7 @@ function Option({ group, pick, option, checked, disabled, onPick }: OptionProps)
   );
 }
 
-/**
- * One group of the Guide toolbar, a radiogroup on the page-wide pick (`usePagePick`, FE-001 §1, transient): every
- * Slide of the Guide follows it and a reload forgets it. An inactive group stays drawn, `aria-disabled`.
- */
+// decision: FE-001 §1
 export function ToolbarGroup({ pick, label, options, fallback, active }: ToolbarGroupProps) {
   const [value, setValue] = usePagePick(pick, fallback);
   const group = useId();

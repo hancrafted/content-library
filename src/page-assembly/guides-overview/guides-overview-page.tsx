@@ -13,7 +13,6 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
 import { getTranslations } from 'next-intl/server';
 
-/** One public Guide as its card draws it: its words from its composition, its Tags' names from page assembly. */
 function guideCards(locale: Locale) {
   const tagWords = PAGE_WORDS[locale].tags;
   return listedGuides().map(({ page, tags }) => {
@@ -41,7 +40,6 @@ interface GuideCardViewProps {
   open: string;
 }
 
-/** One text-only Guide reading card: kind, native title link, description, Tags and its optional YouTube action. */
 function GuideCardView({ card, kindLabel, locale, videoLabels, open }: GuideCardViewProps) {
   return (
     <CardShell
@@ -68,10 +66,7 @@ function GuideCardView({ card, kindLabel, locale, videoLabels, open }: GuideCard
   );
 }
 
-/**
- * The Guides overview, the page at /guides (design-ADR 0019 as amended by #450): a title with a one-line intro, then a
- * text-only reading card linking each public Guide.
- */
+// decision: docs/adr/0019-resources-overview.md
 export async function GuidesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'guidesOverview' });
   const cards = guideCards(locale);

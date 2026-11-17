@@ -1,16 +1,10 @@
 'use client';
-
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { withMech, withStrength } from './factory-settings.pure.ts';
 import { STRENGTH_RANGE, strengthDefault, STRENGTHS } from './mechanics.pure.ts';
 import { SliderControl, SwitchField, Value } from './settings-field.client';
 import type { ToolbarWords } from './software-ecology-words.types';
 import type { Mechanic, Settings, Strength } from './software-ecology.types';
-
-/*
- * The Settings popover's Mechanics column (feature guide, Interaction 3): what bad work does downstream. A switch field
- * per mechanic, Rework, Churn and Complaints, its tooltip saying what it does, and under Rework and Churn the strength
- * slider the use-case file gave it, disabled while the mechanic is off (feedback 09).
- */
 
 export interface MechanicsMenuProps {
   readonly settings: Settings;

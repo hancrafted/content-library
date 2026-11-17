@@ -5,14 +5,12 @@ import { Note } from '@/episodes/components/slide-shared/party-board/note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The dashed team boxes above the board: the venue team of ten and Food & drinks of one. */
 const TEAMS = [
   { key: 'venue', x: 8 },
   { key: 'food', x: 186 },
 ] as const;
 const TEAM_WIDTH = 166;
 
-/** The four cards chained to the goal, left to right, each tilted slightly. */
 const CHAIN = [
   { key: 'activities', x: 4, width: 78, tilt: 1 },
   { key: 'travel', x: 90, width: 62, tilt: -1 },
@@ -21,9 +19,6 @@ const CHAIN = [
 ] as const;
 const GOAL = { x: 316, y: 96, width: 40, height: 52 };
 
-// The section slide of "What it requires of the organisation", echoing the Hero motif (picked Title-slide Option 0b):
-// the dashed team boxes above, and below the four cards chained to the goal, their seams following the goal, not the
-// teams.
 export const whatItRequiresOfTheOrganisation = slide({
   slug: 'what-it-requires-of-the-organisation',
   messages: { en, de },

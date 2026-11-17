@@ -1,6 +1,5 @@
-// `npm run art` (FE-005 §5, design-ADR 0025): renders every composed page's Slides through Vite's SSR loader, bakes
-// each `<Art>` drawing with its CSS-module paint, and writes the content-hashed files and their manifest to
-// `public/art/`, which `next build` copies into the export. Runs as `prebuild`; the folder is build output, ignored by git.
+// decision: FE-005 §5
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 import { createHash } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -14,10 +13,7 @@ import { artStore } from './art-store.pure.ts';
 import { cssRules } from './css-rules.pure.ts';
 
 const ROOT = process.cwd();
-// Every `<Art>` the pages render draws inline, marked for the bake (`artMode`).
 process.env.ART_BUILD = '1';
-// `--workers N` bakes across N threads (default: the shared idle-CPU rule); `--out DIR` writes there instead of
-// `public/art`; `--only a,b` keeps the Slides of those pages (by page-name prefix), for the parallel-bake test.
 const { values: args } = parseArgs({
   options: { workers: { type: 'string' }, out: { type: 'string' }, only: { type: 'string' } },
 });
@@ -26,20 +22,14 @@ if (!Number.isInteger(workers) || workers < 1)
   throw new Error(`--workers must be a positive whole number, got "${args.workers}"`);
 const OUT = path.resolve(ROOT, args.out ?? 'public/art');
 const ONLY = args.only?.split(',');
-/** Slides per chunk: several chunks per worker, so one slow chunk never leaves the others idle. */
 const CHUNKS_PER_WORKER = 8;
 const ENTRY = '/src/episodes/components/art-build/art-pages.tsx';
 
-/** What the entry yields for each Slide: where it comes from, and its markup on demand. */
 interface ArtPage {
   readonly page: string;
   readonly markup: () => string;
 }
 
-/**
- * A CSS-module class as the bake reads it: the module's file name, the local name and a hash of the module's path,
- * joined by `__`, so two Slides' `slide.module.css` never share a class. The compiled text (`?inline`) is named alike.
- */
 function scopedName(local: string, file: string) {
   const module = file.replace(/\?.*$/, '');
   const hash = createHash('sha256').update(path.relative(ROOT, module)).digest('hex').slice(0, 6);
@@ -57,7 +47,6 @@ const server = await createViteServer({
   css: { modules: { generateScopedName: scopedName } },
 });
 
-/** Every CSS module the rendered pages imported, compiled, in the order the loader met them. */
 async function moduleCss(): Promise<string> {
   const ids = [...server.moduleGraph.idToModuleMap.keys()].filter((id) => /\.module\.css$/.test(id));
   const texts = await Promise.all(
@@ -66,10 +55,6 @@ async function moduleCss(): Promise<string> {
   return texts.join('\n');
 }
 
-/**
- * Every Slide's markup; a Slide that cannot render outside Next (a hero that needs its motion provider, a CommonJS
- * `next/image`) is named and skipped. A skipped Slide holding `<Art>` still fails `next build` on the missing name.
- */
 function renderAll(pages: readonly ArtPage[]) {
   const rendered: { readonly page: string; readonly markup: string }[] = [];
   const skipped: string[] = [];

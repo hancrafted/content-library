@@ -6,11 +6,6 @@ import { Console, type ConsoleProps } from './console';
 import { consoleLayout } from './console.pure';
 import { PilotAtConsole } from './pilot-at-console';
 
-/*
- * The control-room console: an SVG group a Scene places in its own `<svg>`. A Slide shows its own content on the
- * first screen by passing children, clipped to the glass.
- */
-
 const SCREEN_SLOT = '[data-slot="screen"]';
 const SLOT = '[data-slot]';
 const SCREEN = '[data-screen]';

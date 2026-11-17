@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for ARCH-003-testing.rules.ts — pass and fail path for
-// `suite-three-blocks`, `test-body-aaa` and `assert-no-magic`, plus their easy-to-get-wrong
-// boundaries: nested describes, it.each, combined and lowercase markers, and
-// the src/ scope.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './ARCH-003-testing.rules';
 
@@ -14,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. The rules
-// glob `src/**/*.test.ts` and the browser tests in `tests/browser/` and `skills/`; the double matches those shapes.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -249,6 +242,17 @@ describe('test-body-aaa', () => {
     });
   }
 
+  it('counts a marker in a helper between tests toward the test above it', async () => {
+    // ARRANGE
+    const helper = `// ARRANGE\nconst shared = 1;\n`;
+    const source = block('success cases', `${test('t')}${helper}`);
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+  });
+
   it('judges each test on its own markers, not its neighbour’s', async () => {
     // ARRANGE
     const source = block('success cases', test('good') + test('bad', `    expect(1).toBe(1);\n`));
@@ -279,7 +283,7 @@ describe('assert-no-magic', () => {
       test('t', `    // ARRANGE\n    const a = 1;\n    // ACT\n    const b = a;\n    // ASSERT\n${assertion}\n`),
     );
 
-  it('passes the exempt numbers, named constants, strings, regexes, comments and digits inside identifiers', async () => {
+  it('passes the exempt numbers, named constants, strings (a scan cannot tell an expected string from a magic one), regexes, comments and digits inside identifiers', async () => {
     // ARRANGE
     const assertion = [
       '    expect(b).toBe(a);',

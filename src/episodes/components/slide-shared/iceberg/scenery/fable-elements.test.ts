@@ -12,17 +12,9 @@ import { Siphonophore } from './siphonophore';
 import { SunMoon } from './sun-moon';
 import { Whale } from './whale';
 
-/*
- * The frozen interfaces of the scenery's Fable elements (decisions 15–17 of feedback 2): each element's props, the box
- * its drawing keeps, its hooks and its motion names, so a Fable redraw that changes only the drawing and its CSS
- * module keeps these green. The tokens each palette mixes from and the motion rules (decision 19) are read from the
- * CSS on disk, in fable-elements.slow.test.ts; the ship's in deep-sea-expedition/.
- */
-
 const draw = (element: ReactElement) => load(renderToStaticMarkup(createElement('svg', null, element)));
 const ONE = [{ x: 0, y: 0, s: 1 }];
 
-/** Each element drawn once at the origin, at size 1, beside the box its JSDoc freezes. */
 const BOXES = [
   {
     name: 'Iceberg',
@@ -71,7 +63,6 @@ const BOXES = [
   },
 ] as const;
 
-/** Each element's root hook, its members' hook, and the motion names it may carry. */
 const HOOKS = [
   {
     name: 'Iceberg',

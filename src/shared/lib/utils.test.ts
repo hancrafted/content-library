@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { cn } from './utils';
 
-/* `cn` merges class strings, keeping the last of two classes that set the same thing (FE-011 §3 type roles included). */
-
+// decision: FE-011 §3
 describe('success cases', () => {
   it('keeps a type role beside a text colour', () => {
     // ARRANGE

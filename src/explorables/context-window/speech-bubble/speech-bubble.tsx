@@ -1,25 +1,17 @@
+// decision: FE-006 §1
 import type { ReactNode } from 'react';
 import { Sparkle } from '../../../shared/components/core-components/glyphs/glyphs';
 import { AttentionFaces, type FaceLevel } from './attention-faces';
 import styles from './speech-bubble.module.css';
 
-/*
- * The "Your attention span" card as a speech bubble from the AI: its Sparkle avatar with a tail into the bubble, the
- * punchline in its voice, on a Section opener a poll line with three numbered emoji faces over whatever sits under it (the session bar, as
- * `children`). The bubble pops in once when the Slide mounts, off under reduced motion; no client code (FE-006). The part owns no words: the Slide passes them.
- */
-
 interface Poll {
-  /** The Section's poll line, "So, how's your attention?". */
   readonly line: string;
   readonly labels: Readonly<Record<FaceLevel, string>>;
 }
 
 interface Props {
   readonly punchline: string;
-  /** Absent on the Title slide, where the audience is still fresh. */
   readonly poll?: Poll;
-  /** The bar and what sits under it. */
   readonly children: ReactNode;
 }
 

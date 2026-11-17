@@ -1,10 +1,3 @@
-/*
- * The Graph view model: every node the pipeline dashboard draws, resolved once. A Stage node carries its label,
- * worded state, counts, activity and selection; a Job node its agents, attention, fan-out label and ticket lanes.
- * The graph, its popovers and the drawer read these nodes instead of re-deriving them from the projection, and the
- * geometry that places them comes from the same call, so a drawn node always has its place.
- */
-
 import { graphGeometry } from './dashboard-graph-geometry.pure';
 import type { DashboardJob, DashboardView } from './dashboard-projection.pure';
 import {
@@ -18,28 +11,23 @@ import {
 import { parseDescription } from './episode-spawn-description.pure';
 import type { Span } from './run-log.schema.pure';
 
-/** The message-file words a node is labelled with. */
 export interface GraphLabels {
   stageNames: Readonly<Record<string, string>>;
   gate: string;
   complete: string;
 }
 
-/** What the drawer shows: a stage, and one of its Jobs when a Job was picked. */
 export interface GraphSelection {
   stage: string;
   job?: string;
 }
 
-/** What the drawer shows, and whether the Job network is drawn instead of the Stage view. */
 export interface GraphOptions {
   selection: GraphSelection | null;
   showJobs: boolean;
 }
 
-/** One node on a Job's branch: a configured agent, or the Job itself when it configures none. */
 export interface AgentNode {
-  /** `<job>:<index>`, the id Graph geometry gives the node at the same place on the branch. */
   id: string;
   role: string;
   label: string;
@@ -49,15 +37,11 @@ export interface AgentNode {
 
 export interface JobNode {
   id: string;
-  /** The stage the Job is drawn in. */
   stage: string;
   job: DashboardJob;
   selected: boolean;
-  /** Waiting on Han, ended badly, or holding a reviewer line only Han can judge. */
   attention: boolean;
-  /** A template Job's `foreach` heading: the item it writes one Job per; absent on a real Job. */
   fanOut?: string;
-  /** The tickets the current Run's sessions name, in order of first sight; never inferred. */
   tickets: number[];
   agents: AgentNode[];
 }
@@ -67,14 +51,11 @@ export interface StageNode extends DashboardStage {
   stateLabel: string;
   selected: boolean;
   complete: boolean;
-  /** The Jobs running or waiting on Han. */
   active: string[];
-  /** Sessions of the current Run still running. */
   sessions: number;
   nodes: JobNode[];
 }
 
-/** A stage's title from the message files' `stageNames`; an id they do not name is title-cased. */
 function stageTitle(id: string, names: GraphLabels['stageNames']): string {
   return (
     names[id] ??
@@ -98,7 +79,6 @@ function inCurrentAttempt(agent: Span, latest: Span | undefined, earlier: Readon
   return !earlier.has(agent.parent_span_id ?? '') && Date.parse(agent.start_t) >= Date.parse(latest.start_t);
 }
 
-/** A configured node never borrows a successful role from another Run or an earlier Attempt. */
 function currentAgent(job: DashboardJob, role: string): Span | undefined {
   if (!job.span) return undefined;
   const trace = job.span.trace_id;

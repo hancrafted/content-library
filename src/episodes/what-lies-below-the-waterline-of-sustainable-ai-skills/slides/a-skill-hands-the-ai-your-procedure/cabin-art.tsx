@@ -1,17 +1,9 @@
-/*
- * The cabin's walls in the close-up, lifted from the approved Spec's Option 2a (feedback 3, decision 46): its faceted
- * control-room wall in three tones, lit from the upper left, and the ceiling's cut edge, in the Spec's own units
- * (x 366 to 916, wall from y 112 down to the floor at 302). `CabinWalls` maps them into the close-up; every tone is a
- * token in `close-up.module.css`. A drawing, not a figure: the crew, console and robot stay the shared parts.
- */
 import { CLOSE_UP, FLOOR_Y } from './close-up.pure';
 
 type WallTone = 'room' | 'room-lit' | 'room-shade' | 'house-shade';
 
-/** The Spec room's frame: its left and right walls, ceiling and floor line. */
 const SPEC_ROOM = { left: 366, right: 916, top: 112, floor: 302 } as const;
 
-/** The wall's facets as the Spec drew them, back to front, then the ceiling's cut edge. */
 const WALL_FACETS: readonly (readonly [WallTone, string])[] = [
   ['room-shade', 'M604 316L557 317L618 236Z'],
   ['room', 'M557 317L525 261L618 236Z'],
@@ -45,7 +37,6 @@ const WALL_FACETS: readonly (readonly [WallTone, string])[] = [
   ],
 ];
 
-/** The Spec room stretched to fill the close-up from its top edge down to the cabin floor. */
 const SCALE = {
   x: CLOSE_UP.width / (SPEC_ROOM.right - SPEC_ROOM.left),
   y: (FLOOR_Y - CLOSE_UP.y) / (SPEC_ROOM.floor - SPEC_ROOM.top),
@@ -59,10 +50,8 @@ const MATRIX = [
   CLOSE_UP.y - SPEC_ROOM.top * SCALE.y,
 ].join(' ');
 
-/** The floor under the crew: a lit edge, then the boards to the close-up's bottom. */
 const FLOOR_EDGE = 6;
 
-/** The cabin's faceted wall and its floor, filling the close-up. */
 export function CabinWalls() {
   const floor = CLOSE_UP.y + CLOSE_UP.height - FLOOR_Y;
   return (
@@ -78,10 +67,6 @@ export function CabinWalls() {
   );
 }
 
-/*
- * The project brief, framed on the wall, as the Spec drew it at (776, 134), 110 by 102: a bevelled frame, the paper,
- * its dark title band, five ruled lines and a red pin. `ProjectBrief` places it, unstretched, on the close-up's wall.
- */
 const SPEC_BRIEF = { x: 776, y: 134, width: 110 } as const;
 const BRIEF_FACETS: readonly (readonly [string, string])[] = [
   ['frame-lit', 'M886 134L776 134L782 140L880 140ZM886 134L880 140L880 230L886 236Z'],
@@ -95,7 +80,6 @@ const BRIEF_FACETS: readonly (readonly [string, string])[] = [
   ['pin', 'M834 132L828 132L828 138L834 138Z'],
 ];
 
-/** The framed project brief, its top-left corner at `x`, `y`, `width` wide in the Scene's units. */
 export function ProjectBrief({ x, y, width }: { readonly x: number; readonly y: number; readonly width: number }) {
   const scale = width / SPEC_BRIEF.width;
   return (

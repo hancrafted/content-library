@@ -89,9 +89,9 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
 export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition & { readonly slug: S } } = {
   'episode-template': episodeTemplate,
   'explorable-page': explorablePage,
-  grids: grids,
+  'grids': grids,
   'ice-berg': iceBerg,
-  timelines: timelines,
+  'timelines': timelines,
   'workshop-template': workshopTemplate,
 };
 

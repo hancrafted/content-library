@@ -1,16 +1,10 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { checksShown, headless, playStep, shown } from './factory-tour.fixture.ts';
 import { backTour, nextTour, startTour, tourClock, type Tour } from './factory-tour.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * A guided tour as the page drives it: frames of real time at the tour's speed, a stop on each step's model step, the
- * checks read there. It must read what the headless runner reads, step by step (design-ADR 0024 §10, §12). Tire
- * swing's shipped tours take seconds each and are judged in factory-tour.pure.slow.test.ts.
- */
-
-/** Tire swing with a tour of its own: In practice, then AI at Engineering writing twice the work (the retired AI-unbalanced tour). */
 const PROBE: Preset = {
   id: 'probe',
   view: 'factory',

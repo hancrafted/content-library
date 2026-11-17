@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatAnAgenticWorkflowIsSection } from './what-an-agentic-workflow-is';
 
-/*
- * The Section "What an agentic workflow is", as the approved Spec gives it: its section slide, then Slide 3 "What an
- * agent is" (picked Option 3a, the AI capability Explorable with the Agents card turned to Anthropic's cited
- * definition) and Slide 4 "What an agentic workflow is" (picked Option 4a, the human-in-the-loop Explorable running the
- * summer party, the path you design above it and the task the agent steers zoomed below it).
- */
-
 const EPISODE = 'what-agentic-workflows-require';
 const SECTION = whatAnAgenticWorkflowIsSection as readonly [Slide, ...Slide[]];
 const SLIDES: readonly Slide[] = SECTION;
@@ -22,14 +15,12 @@ const PLACED = placeSections<Slide>([SECTION]).flat();
 const AGENT = 'what-an-agent-is';
 const WORKFLOW = 'what-an-agentic-workflow-is-slide';
 
-/** A Slide of the Section by slug. */
 function slideOf(slug: string): Slide {
   const own = SLIDES.find((each) => each.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
   return own;
 }
 
-/** A Slide as the page localizes it: its shared header's text and its Scene. */
 function localizedOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No placed Slide "${slug}".`);
@@ -42,7 +33,6 @@ function localizedOf(slug: string, locale: Locale = 'en') {
   });
 }
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, localizedOf(slug, locale).content)));
 }
@@ -57,13 +47,11 @@ interface SlideText {
 
 const textOf = (slug: string, locale: Locale = 'en') => slideOf(slug).messages[locale] as unknown as SlideText;
 
-/** A Slide's Voice script in order, segment title and script. */
 const scriptOf = (slug: string) => {
   const text = textOf(slug);
   return slideOf(slug).segments.map(({ slug: segment }) => text.voiceScript.segments[segment]);
 };
 
-/** A Slide's Speaker notes in order: header and the URLs of their sources. */
 const notesOf = (slug: string) => {
   const text = textOf(slug);
   return slideOf(slug).notes.map((note) => ({

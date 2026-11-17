@@ -4,12 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 
-// A real loopback socket on port 0, against ARCH-003 §1.1: the spec (#211) asks for the POST → file round trip end to end.
-/*
- * The Spec server against a real temp Episode folder on port 0: it serves the Spec, saves a valid review (the page's
- * feedback lines) as the next feedback round and redirects back, and answers an invalid one with 400 and writes nothing.
- */
-
+// decision: ARCH-003 §1.1
 const NOW = new Date('2026-10-15T10:40:05Z');
 const SPEC = `<!doctype html>
 <html lang="en"><head><title>Spec · Budget</title><link rel="stylesheet" href="design.css" /></head>
@@ -42,7 +37,6 @@ afterEach(async () => {
   for (const folder of folders.splice(0)) rmSync(folder, { recursive: true, force: true });
 });
 
-/** An Episode folder holding the Spec and feedback round 1, served on a free port. */
 async function serve(): Promise<{ folder: string; base: string }> {
   const folder = mkdtempSync(path.join(os.tmpdir(), 'spec-server-'));
   folders.push(folder);
@@ -55,7 +49,6 @@ async function serve(): Promise<{ folder: string; base: string }> {
   return { folder, base: `http://127.0.0.1:${server.port}` };
 }
 
-/** Posts what the page posts: its feedback lines in the `feedback` field, one item per line. */
 function post(base: string, ...lines: string[]): Promise<Response> {
   const body = new URLSearchParams([['feedback', lines.join('\n')]]);
   return fetch(`${base}/`, { method: 'POST', body, redirect: 'manual' });
@@ -155,9 +148,9 @@ describe('success cases', () => {
     };
     // ACT
     new Function(...Object.keys(page), script)(...Object.values(page));
-    await tick(); // sees version a
-    onEdit?.(); // the user ticks a pick
-    await tick(); // version b arrives
+    await tick();
+    onEdit?.();
+    await tick();
     // ASSERT
     expect(reloads).toBe(0);
     expect(notices.join(' ')).toMatch(asksToSave);

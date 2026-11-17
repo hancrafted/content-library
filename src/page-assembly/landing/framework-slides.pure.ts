@@ -1,19 +1,12 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/**
- * The landing rail's PROOF cards: data only. The copy (title, claim, note) lives in
- * `landing/i18n/{en,de}.json` under `landing.method.cards.<id>`; the title stays English
- * in both locales, so the letters spell PROOF on `/de` too.
- */
 interface SlideBase {
   step: string;
   letter: string;
   iconName: 'users' | 'undo-2' | 'car' | 'hand-helping' | 'refresh-cw';
-  /** The evidence behind the card, an About-case anchor such as `#about-rib`. None in 1.0. */
   proof?: { href: string; label: string };
 }
 
-/** A card whose copy carries a `note`; `href` fills the note's `<link>` tag, per locale. */
 interface NotedSlide extends SlideBase {
   id: 'people-first' | 'reason-backwards' | 'obsolete-by-design';
   note: { href?: Record<Locale, string> };

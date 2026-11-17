@@ -18,7 +18,6 @@ function departingPaper(paper: SVGGElement, index: number) {
   return { wrapper, sheet };
 }
 
-/** A checked sheet lifts clear of the tray walls, then is thrown off the desk to the right. */
 function checkedExit(timeline: gsap.core.Timeline, sheet: SVGGElement, index: number) {
   const exit = paperExit(index, Math.random);
   const check = sheet.querySelector('[data-paper-check]');
@@ -30,7 +29,6 @@ function checkedExit(timeline: gsap.core.Timeline, sheet: SVGGElement, index: nu
   timeline.to(sheet, { y: exit.drop, rotation: exit.spin, duration: exit.throwTime, ease: 'power1.in' }, thrownAt);
 }
 
-/** Falling paper accelerates while gliding side to side; each glide tilts and flattens the sheet. */
 function overflowExit(timeline: gsap.core.Timeline, sheet: SVGGElement, flight: Overflow) {
   const glides = Array.from({ length: flight.swings + 1 }, (_, swing) => (swing === 0 ? 0 : swing % 2 ? 1 : -1));
   timeline.to(sheet, { y: 790, duration: flight.duration, ease: 'power1.in' }, 0);

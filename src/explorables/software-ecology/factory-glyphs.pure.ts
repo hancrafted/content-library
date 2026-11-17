@@ -1,8 +1,4 @@
-/*
- * The factory's glyphs and icons (design-ADR 0024 §15), as the reference build draws them: SVG markup in a 24-unit box,
- * stroked in the current colour. Glyphs name a role; icons a sign or a toolbar action. Static, trusted strings.
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export const GLYPH: Readonly<Record<string, string>> = {
   customer: '<circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />',
   sales: '<path d="M3 12l9-9h8v8l-9 9z" /><circle cx="16" cy="8" r="1.5" />',

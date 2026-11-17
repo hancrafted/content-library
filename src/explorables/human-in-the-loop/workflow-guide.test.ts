@@ -2,11 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadWorkflow } from './workflow-loader.pure';
 
-/*
- * docs/features/explorables/agentic-workflow.md carries a complete one-stage Workflow file, written from the guide alone. This
- * loads that block, so the guide cannot drift from the loader.
- */
-
+// spec: docs/features/explorables/agentic-workflow.md#a-complete-one-stage-file
 const GUIDE = new URL('../../../docs/features/explorables/agentic-workflow.md', import.meta.url);
 
 const fixture = (): string => {

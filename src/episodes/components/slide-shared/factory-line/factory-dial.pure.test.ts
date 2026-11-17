@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { dialGeometry } from './factory-dial.pure';
 
-/*
- * A factory dial: a half-circle gauge on a 64 by 42 face, its arc and needle turned from the left end (0) to the right
- * end (1). The worked values are the approved Spec's mock of Slide 1, where the efficiency dial is cranked to 0.88.
- */
-
 describe('success cases', () => {
   it('ends the arc and the needle where the mock draws the efficiency dial cranked to 0.88', () => {
     // ARRANGE

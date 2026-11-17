@@ -9,14 +9,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { writeItFromAGoodRun } from './slide';
 
-/*
- * "Write it from a good run", picked Option 10b: the interview path as one day in four panels, the notes lane joining
- * at the skill card, the first step under them. The robot dives in the Sunlit ZoneScene; the crew and the console
- * are the shared cast (design-ADR-0025).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const slideUnderTest = writeItFromAGoodRun as unknown as Slide;
-/** A hand-written stand-in for the Section's section slide, so the Slide is placed as a page Slide. */
 const opener = slide({
   slug: 'when-to-write-one',
   messages: { en: { title: 'When to write one' }, de: { title: 'Wann Du einen schreibst' } },
@@ -58,7 +52,6 @@ describe('success cases', () => {
     const expected = {
       panels: ['1', '2', '3', '4'],
       focal: '3',
-      // The first two steps carry their Context marker, rendered as its bracketed icon.
       steps: [
         'A run that worked ()',
         'The AI interviews you ()',

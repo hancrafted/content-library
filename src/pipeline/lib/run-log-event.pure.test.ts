@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createLogFold, fold, record, skillUses, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
-/*
- * An `event` line (design-ADR-0010): one point fact on the span that made it, named from a closed set with typed
- * attributes. The writer seam validates it; the fold, in batch and appended line by line, attaches it to that span as
- * `events`, and `skillUses` reads the skills off them.
- */
-
+// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
 const TRACE = 'a'.repeat(32);
 const RUN_SPAN = 'b'.repeat(16);
 const AGENT_SPAN = 'c'.repeat(16);

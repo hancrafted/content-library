@@ -3,14 +3,13 @@ import { mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { gate } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 import { TEST_LOCK } from './test-lock.ts';
 
-// A commit hook exports GIT_DIR and friends, and CI sets CI: either would change what these runs see.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_') || name === 'CI') delete process.env[name];
+dropGitEnvironment(process.env, ['CI']);
 
-/** A fresh repository on branch `work`, where each run appends to `order.txt`. */
 function repo() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'test-lock-')));
   execFileSync('git', ['init', '-q', '-b', 'work', root]);
@@ -22,20 +21,16 @@ function repo() {
 
 const MODULE = path.join(import.meta.dirname, 'test-lock.ts');
 
-/**
- * Runs withTestLock in its own Node process in `cwd`, as another worktree's `verify` would, with short timings: its
- * run marks its start in `order.txt`, says `started`, holds on for `holdMs`, then marks its end.
- */
 function taker(
   cwd: string,
   id: string,
-  options: { holdMs?: number; timeoutMs?: number; env?: Record<string, string> },
+  options: { holdMilliseconds?: number; timeoutMilliseconds?: number; env?: Record<string, string> },
 ) {
   const run = `fs.appendFileSync('order.txt', 'start-${id}\\n'); console.log('started');
-    await new Promise((resolve) => setTimeout(resolve, ${options.holdMs ?? 0}));
+    await new Promise((resolve) => setTimeout(resolve, ${options.holdMilliseconds ?? 0}));
     fs.appendFileSync('order.txt', 'end-${id}\\n');`;
   const code = `import { withTestLock } from ${JSON.stringify(MODULE)}; import fs from 'node:fs';
-    await withTestLock(async () => { ${run} }, { pollMs: 20, timeoutMs: ${options.timeoutMs ?? 10_000} });`;
+    await withTestLock(async () => { ${run} }, { pollMilliseconds: 20, timeoutMilliseconds: ${options.timeoutMilliseconds ?? 10_000} });`;
   const proc = spawn(process.execPath, ['--input-type=module', '-e', code], {
     cwd,
     env: { ...process.env, ...options.env },
@@ -56,11 +51,10 @@ function taker(
   return { pid: proc.pid, runStarted, waiting, done };
 }
 
-/** Holds the test lock in this process until the returned `release` is called. */
 async function holdTestLock(root: string) {
   const released = gate();
   const holding = gate();
-  const holder = withLock(TEST_LOCK, { cwd: root, pollMs: 20, timeoutMs: 10_000 }, async () => {
+  const holder = withLock(TEST_LOCK, { cwd: root, pollMilliseconds: 20, timeoutMilliseconds: 10_000 }, async () => {
     holding.open();
     await released.opened;
   });
@@ -80,7 +74,7 @@ describe('withTestLock', () => {
       const { root, order } = repo();
       const expectedOrder = ['start-first', 'end-first', 'start-second', 'end-second'];
       // ACT
-      const first = taker(root, 'first', { holdMs: 300 });
+      const first = taker(root, 'first', { holdMilliseconds: 300 });
       await first.runStarted;
       const second = taker(root, 'second', {});
       const results = await Promise.all([first.done, second.done]);
@@ -114,7 +108,7 @@ describe('withTestLock', () => {
       const expectedError = new RegExp(`"${TEST_LOCK}".* held by pid ${process.pid} .*on branch work`);
       const expectedCode = 1;
       // ACT
-      const result = await taker(root, 'never', { timeoutMs: 100 }).done;
+      const result = await taker(root, 'never', { timeoutMilliseconds: 100 }).done;
       await release();
       // ASSERT
       expect(result.code).toBe(expectedCode);
@@ -130,7 +124,7 @@ describe('withTestLock', () => {
       const release = await holdTestLock(root);
       const expectedOrder = ['start-ci', 'end-ci'];
       // ACT
-      const result = await taker(root, 'ci', { env: { CI: 'true' }, timeoutMs: 100 }).done;
+      const result = await taker(root, 'ci', { env: { CI: 'true' }, timeoutMilliseconds: 100 }).done;
       await release();
       // ASSERT
       expect(result.code).toBe(0);

@@ -11,7 +11,6 @@ function scopeLine(change: Change): string {
   return `Slide \`${scope.id}\` (${where})`;
 }
 
-/** The prompt "Copy changed" puts on the clipboard: exactly the changed tokens, grouped by scope. */
 export function formatChangePrompt(changes: readonly Change[]): string {
   if (changes.length === 0) return '';
   const groups = new Map<string, Change[]>();

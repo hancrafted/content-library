@@ -2,11 +2,7 @@ import { localeKeyDrift, mergeTranslationFiles } from '@/shared/i18n/merge-trans
 import { describe, expect, it } from 'vitest';
 import { TRANSLATION_OWNERS, TRANSLATIONS } from './translations';
 
-/*
- * The site's Translation files, one pair per owner (FE-003 §4): every owner's German file has its English file's keys,
- * and no namespace has two owners, so the merged set next-intl serves holds every owner's namespaces once.
- */
-
+// decision: FE-003 §4
 describe('success cases', () => {
   it("finds every owner's German file holding exactly its English keys", () => {
     // ARRANGE

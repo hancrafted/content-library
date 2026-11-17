@@ -9,8 +9,6 @@ import type { Step } from './context.types';
 import { Moves } from './moves.client';
 import { Rich, tint } from './window-bits';
 
-/* The detail panel's cards: a step, a category, a step not in the window yet, a step no longer in it. */
-
 export const crossedText = (v: Pick<Card, 'words'>, r: Readout): string | null =>
   r.crossed ? fill(v.words.crossed, { who: r.crossed.who }) : null;
 
@@ -64,7 +62,6 @@ function Lists({ v, step }: { readonly v: Card; readonly step: Step }) {
   );
 }
 
-/** One figure of a card's stat row: the number, and what it counts. */
 function Stat({
   value,
   label,
@@ -84,7 +81,6 @@ function Stat({
 
 const explanation = (v: Card, step: Step) => (v.tech ? storyOf(v, step).technical : storyOf(v, step).simple);
 
-/** A step's explanation at the view's depth, its code block in Technical, and a compaction's lists. */
 function Explained({ v, step }: { readonly v: Card; readonly step: Step }) {
   const pre = v.tech ? storyOf(v, step).pre : undefined;
   return (
@@ -98,7 +94,6 @@ function Explained({ v, step }: { readonly v: Card; readonly step: Step }) {
   );
 }
 
-/** A pinned step the timeline has not reached: where it will land. */
 export function GhostCard({ v, step }: { readonly v: Card; readonly step: Step }) {
   return (
     <>
@@ -124,7 +119,6 @@ function GoneCard({ v, step }: { readonly v: Card; readonly step: Step }) {
   );
 }
 
-/** A lit step or one block of it: what it added, and what it is. */
 export function StepCard({
   v,
   step,
@@ -168,7 +162,6 @@ function categoryOf(v: Card, key: string): { label: string; colour: string | und
   return { label: v.words.messages, colour: undefined };
 }
 
-/** A lit category: its tokens, its share, how many steps fill it, and the newest of them explained. */
 export function CategoryCard({ v, lit }: { readonly v: Card; readonly lit: string }) {
   const { label, colour } = categoryOf(v, lit);
   const blocks = v.frame.blocks.filter((b) => v.match(b.id, b.cat));
@@ -190,7 +183,6 @@ export function CategoryCard({ v, lit }: { readonly v: Card; readonly lit: strin
   );
 }
 
-/** Nothing lit: the step on screen, what it added, how full the window is. */
 export function RestCard({ v, r }: { readonly v: Card; readonly r: Readout }) {
   const step = v.chat.steps[v.vis - 1];
   if (!step) return null;

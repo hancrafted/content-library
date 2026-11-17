@@ -1,11 +1,6 @@
-// The Event registry (GLOSSARY): what `npm run registry` writes from the Event files. An Event is its file,
-// `src/content-store/events/<slug>.ts`, so the slug list and the store's Event records are derived from the files, one
-// generated file per tier (FE-007: lib may not import the store). Each file is checked in, so `tsc` reads the slugs
-// and records where they are written, and a fast test fails when one is stale. The disk side lives in registry.ts.
-
+// decision: FE-007 §2
 import type { RegistryFile } from './episode-registry.pure.ts';
 
-/** Where each tier's Event registry lives. */
 export const EVENT_REGISTRY_PATHS = {
   slugs: 'src/content-store/catalogue/event-slugs.generated.ts',
   records: 'src/content-store/event-registry.generated.ts',
@@ -16,16 +11,13 @@ const HEADER = [
   '// `src/content-store/events/<slug>.ts` is an Event, named after its slug.',
 ].join('\n');
 
-/** A slug as a record's `slug` field allows: lowercase words joined by hyphens. */
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The identifier a slug is imported under: `2026-10-23-axel` → `_20261023Axel`. */
 function identifierOf(slug: string): string {
   const camel = slug.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
   return /^[0-9]/.test(camel) ? `_${camel}` : camel;
 }
 
-/** The Event slugs the files name, in code-point order, so the registry is the same on every machine. */
 function slugsOf(files: readonly string[]): string[] {
   const records = files.filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'));
   const misnamed = records.filter((file) => !SLUG.test(file.slice(0, -'.ts'.length)));
@@ -57,7 +49,6 @@ ${entries.join('\n')}
 `;
 }
 
-/** The two Event registry files for the given entries of `src/content-store/events/`. */
 export function eventRegistryFiles(files: readonly string[]): readonly RegistryFile[] {
   const slugs = slugsOf(files);
   return [

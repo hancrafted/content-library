@@ -8,20 +8,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 
-/*
- * The section slides of "What lies below the waterline of sustainable AI skills", as the approved Spec gives them: one
- * per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one
- * echo of picked Title-slide Option 0a: the Section's place in the Episode over its card at its zone's depth, and the
- * depth gauge naming its zone, over its zone drawn by ZoneScene with the robot on its cable, full-bleed behind the Slide as its rear
- * decoration, like the Title slide's hero (design-ADR-0025).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const SECTIONS = whatLiesBelowTheWaterlineOfSustainableAiSkills.sections;
 const OPENERS = SECTIONS.map(([opener]) => opener as Slide);
 const PLACED = placeSections<Slide>(SECTIONS.map(([opener]) => [opener as Slide])).flat();
 
-/** A section slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No section slide "${slug}".`);
@@ -35,12 +27,10 @@ function sceneOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
 }
 
-/** A section slide's rear decoration, the full-bleed drawing behind it, as static HTML. */
 function rearOf(slide: Slide) {
   return load(renderToStaticMarkup(createElement(Fragment, null, slide.presentation?.rear)));
 }
 
-/** A section slide's title and Voice script segment titles in one locale. */
 function scriptOf(slide: Slide, locale: Locale) {
   const messages = slide.messages[locale] as {
     title: string;

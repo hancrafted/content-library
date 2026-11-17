@@ -1,40 +1,28 @@
-/*
- * The scenery's geometry: which parts of the iceberg show, how deep its keel reaches, and where a school, a bloom of
- * jellies or a column of bubbles sits. Deterministic: a seed, never `Math.random`, so every render of a Slide draws
- * the same sea.
- */
 import { ICEBERG_HALF_WIDTH, KEEL_DEPTH, TIP_HEIGHT } from './iceberg-placement.pure';
 
-/** Which part of the iceberg a Scene shows: all of it, only what floats above the waterline, or only the keel below. */
 export type IcebergPart = 'whole' | 'tip' | 'keel';
 
 export interface IcebergLayers {
   readonly tip: boolean;
   readonly keel: boolean;
-  /** The bright line where the ice meets the water, drawn whenever the tip is. */
   readonly glow: boolean;
 }
 
-/** The iceberg's layers for a part. */
 export function icebergLayers(part: IcebergPart): IcebergLayers {
   return { tip: part !== 'keel', keel: part !== 'tip', glow: part !== 'keel' };
 }
 
-/** The depth scale that puts the keel's point at `keelY` when the waterline sits at `waterline`. */
 export function depthScaleForKeel(waterline: number, keelY: number): number {
   if (keelY <= waterline) throw new Error(`The keel must sit below the waterline (${waterline}), got ${keelY}.`);
   return (keelY - waterline) / KEEL_DEPTH;
 }
 
 export interface IcebergExtent {
-  /** Above the waterline, negative, in the Scene's units. */
   readonly top: number;
-  /** Below the waterline, positive, in the Scene's units. */
   readonly bottom: number;
   readonly halfWidth: number;
 }
 
-/** How far the drawn part reaches from the waterline, so a Scene can frame it. */
 export function icebergExtent(part: IcebergPart, scale = 1, depthScale = 1): IcebergExtent {
   if (scale <= 0 || depthScale <= 0)
     throw new Error(`An iceberg needs a positive scale, got ${scale} and ${depthScale}.`);
@@ -46,7 +34,6 @@ export function icebergExtent(part: IcebergPart, scale = 1, depthScale = 1): Ice
   };
 }
 
-/** A seeded generator in [0, 1): mulberry32, small and good enough to scatter fish. */
 export function seededRandom(seed: number): () => number {
   let state = seed >>> 0;
   return () => {
@@ -58,7 +45,6 @@ export function seededRandom(seed: number): () => number {
   };
 }
 
-/** Where one creature of a group sits, relative to the group's centre, and how large it is. */
 export interface Placement {
   readonly x: number;
   readonly y: number;
@@ -68,17 +54,13 @@ export interface Placement {
 export interface ScatterOptions {
   readonly count: number;
   readonly seed: number;
-  /** Half the group's width and height. */
   readonly spread: readonly [number, number];
-  /** The least distance two members keep, across and down, so none overlap. */
   readonly gap: readonly [number, number];
-  /** The size range around 1. */
   readonly sizes?: readonly [number, number];
 }
 
 const TRIES_PER_MEMBER = 12;
 
-/** Scatters `count` members in a box without overlaps, as `parts.py` `school` does; fewer if crowded. */
 export function scatter({ count, seed, spread, gap, sizes = [0.8, 1.15] }: ScatterOptions): readonly Placement[] {
   if (!Number.isInteger(count) || count < 0)
     throw new Error(`A group needs a whole count of zero or more, got ${count}.`);
@@ -94,7 +76,6 @@ export function scatter({ count, seed, spread, gap, sizes = [0.8, 1.15] }: Scatt
   return placed;
 }
 
-/** A polygon as an SVG `points` value, one decimal. */
 export function toPoints(points: readonly (readonly [number, number])[]): string {
   return points.map(([x, y]) => `${round(x)},${round(y)}`).join(' ');
 }
@@ -108,7 +89,6 @@ export interface RayOptions {
   readonly seed: number;
 }
 
-/** Sun shafts slanting down to the right from the waterline, as `parts.py` `rays`: thin translucent wedges. */
 export function rayWedges({ count, spread, length, seed }: RayOptions): readonly string[] {
   if (!Number.isInteger(count) || count < 0) throw new Error(`Rays need a whole count of zero or more, got ${count}.`);
   const random = seededRandom(seed);
@@ -125,7 +105,6 @@ export function rayWedges({ count, spread, length, seed }: RayOptions): readonly
   });
 }
 
-/** One facet of a low-poly disc: a polygon and whether it faces the light at the upper left. */
 export interface DiscFacet {
   readonly points: string;
   readonly lit: boolean;
@@ -133,7 +112,6 @@ export interface DiscFacet {
 
 const SUN_SIDES = 12;
 
-/** The sun as a fan of triangles around its centre; the facets toward the upper left are lit. */
 export function sunFacets(r: number): readonly DiscFacet[] {
   return Array.from({ length: SUN_SIDES }, (_, k) => {
     const a0 = (k * 2 * Math.PI) / SUN_SIDES;
@@ -150,19 +128,13 @@ export function sunFacets(r: number): readonly DiscFacet[] {
   });
 }
 
-/** True for a direction toward the upper left, where every scene's light comes from. */
 const facesLight = (dx: number, dy: number) => -0.55 * dx - 0.75 * dy > 0;
 
 const CRESCENT_STEPS = 6;
 
-/**
- * A waxing crescent of radius `r`: the disc less a second disc pushed to the upper right, as the landing window's
- * moon mask draws it. Built as quads between the outer rim and the cut's rim, from horn to horn, so it needs no mask.
- */
 export function crescentFacets(r: number): readonly DiscFacet[] {
   const cut = { x: r * 0.52, y: -r * 0.32, r: r * 0.9 };
   const [hornA, hornB] = circleCrossings(r, cut);
-  // The outer rim runs the long way round, away from the cut; the inner rim is the cut's arc inside the disc.
   const outerFrom = Math.atan2(hornA[1], hornA[0]);
   let outerTo = Math.atan2(hornB[1], hornB[0]);
   const away = Math.atan2(-cut.y, -cut.x);
@@ -189,7 +161,6 @@ export function crescentFacets(r: number): readonly DiscFacet[] {
 
 type Point = readonly [number, number];
 
-/** Where the disc of radius `r` at the origin crosses the cut circle. */
 function circleCrossings(r: number, cut: { x: number; y: number; r: number }): readonly [Point, Point] {
   const d = Math.hypot(cut.x, cut.y);
   const a = (r * r - cut.r * cut.r + d * d) / (2 * d);
@@ -204,14 +175,12 @@ function circleCrossings(r: number, cut: { x: number; y: number; r: number }): r
 
 const TAU = 2 * Math.PI;
 
-/** The end angle reached from `from` by the arc that passes through `via`. */
 function longWayRound(from: number, to: number, via: number): number {
   const span = (((to - from) % TAU) + TAU) % TAU;
   const viaSpan = (((via - from) % TAU) + TAU) % TAU;
   return viaSpan < span ? from + span : from + span - TAU;
 }
 
-/** The end angle reached from `from` by the shorter arc. */
 function shortWayRound(from: number, to: number): number {
   let span = (((to - from) % TAU) + TAU) % TAU;
   if (span > Math.PI) span -= TAU;

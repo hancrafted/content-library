@@ -3,12 +3,7 @@ import { parseDashboardPipeline, projectDashboard } from './dashboard-projection
 import { fold } from './run-log.pure';
 import type { RunLogLine } from './run-log.schema.pure';
 
-/*
- * Monitoring chips per Job (design-ADR 0009): every skill and check `pipeline.yml` names for a Job, read from the
- * Job's current Run and latest Attempt through the projection the dashboard renders. The replay cutoff's share is
- * tested through the Dashboard timeline.
- */
-
+// decision: docs/adr/0009-skill-invocations-are-logged-as-point-records.md
 const RUN_START = Date.parse('2026-10-14T10:00:00Z');
 const minute = (count: number) => new Date(RUN_START + count * 60_000).toISOString();
 
@@ -91,7 +86,6 @@ const check = (span_id: string, name: string, value: string): Fields => ({
 const ended = (span_id: string, skills_invoked?: string[]): Fields =>
   ({ kind: 'end', span_id, status: 'ok', ...(skills_invoked && { skills_invoked }) }) as Fields;
 
-/** Each agent row as `<type>:<skill>=<state>`, then the Job box's aggregate as `job:<skill>=<state>`. */
 const rowsOf = (log: RunLogLine[], source = pipeline) => {
   const { chips } = projectDashboard(source, fold(log, { live: 'unfinished' })).jobs[0];
   return [

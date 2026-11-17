@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GUIDE_REGISTRY_PATH, guideRegistryFile } from './guide-registry.pure.ts';
 
-/* The Guide record registry `npm run registry` writes from the files in `src/content-store/guides/`. */
-
 describe('success cases', () => {
   it('maps each Guide record file by its slug, typed against the Guide compositions', () => {
     // ARRANGE

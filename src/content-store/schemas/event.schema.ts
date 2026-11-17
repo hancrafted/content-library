@@ -1,22 +1,16 @@
 import { z } from 'zod';
 import { AUDIENCES, closed, EVENT_FORMATS, EVENT_KINDS, isoDate, ORGANIZER_IDS, PLATFORMS, slug, tags } from './fields';
 
-/*
- * An Event: a dated workshop or webinar that presents one Playlist. It owns no Slides and holds no text: its title
- * and description are Translation keys by slug (FE-003), and it has no visibility of its own (design-ADR 0016). It
- * owns its copies of Episodes, each in its folder `episodes/by-event/<event-slug>/<slug>/` (decision 8).
- */
-
+// decision: FE-003 §4
+// decision: docs/adr/0016-content-data-model.md
 const organizer = closed(ORGANIZER_IDS);
 const ORGANIZERS_REQUIRED = 'is required, one Organizer or more, the first its lead';
 
-/** A URL held in data: only `https` passes, as `externalHref` will hold it again at render (FE-003 §1.4). */
+// decision: FE-003 §2.2
 const httpsUrl = z.string().refine((url) => URL.canParse(url) && url.startsWith('https://'), 'must be an https URL');
 
-/** Where an Event's image lives under `public/`. */
 const IMAGE_FOLDER = '/images/events/';
 
-/** The formats that meet at a venue, and those that meet on a platform: hybrid does both. */
 const AT_VENUE: readonly string[] = ['onsite', 'hybrid'];
 const ON_PLATFORM: readonly string[] = ['remote', 'hybrid'];
 
@@ -26,10 +20,8 @@ interface Place {
   readonly platform?: string;
 }
 
-/** The formats that need each place field: a venue onsite and hybrid, a platform remote and hybrid. */
 const NEEDED_BY = { venue: AT_VENUE, platform: ON_PLATFORM } as const;
 
-/** One place field's refusal, if any: required by the format and missing, or set where the format has none. */
 function placeIssue(event: Place, field: keyof typeof NEEDED_BY): { path: string[]; message: string } | undefined {
   const needed = NEEDED_BY[field].includes(event.format);
   const given = event[field] !== undefined;
@@ -39,12 +31,10 @@ function placeIssue(event: Place, field: keyof typeof NEEDED_BY): { path: string
   return undefined;
 }
 
-/** What is wrong with where an Event takes place. */
 function placeIssues(event: Place) {
   return [placeIssue(event, 'venue'), placeIssue(event, 'platform')].filter((issue) => issue !== undefined);
 }
 
-/** A start, or a start and an end, then an optional time zone: `17:00`, `17:00–19:00`, `17:00–19:00 CET`. */
 const CLOCK = /^\d{2}:\d{2}(–\d{2}:\d{2})?( [A-Z]{2,5})?$/;
 
 export const eventSchema = z
@@ -119,8 +109,6 @@ export const eventSchema = z
   })
   .describe('A dated occasion that presents one Playlist and owns no Slides and no text');
 
-/** An Event record, as the store loads it. */
 export type Event = z.infer<typeof eventSchema>;
 
-/** An Event record as its file writes it, before the store parses it. */
 export type EventInput = z.input<typeof eventSchema>;

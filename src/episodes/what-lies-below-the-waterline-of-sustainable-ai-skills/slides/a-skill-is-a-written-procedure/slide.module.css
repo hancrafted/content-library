@@ -1,12 +1,5 @@
-/*
- * The Slide's token file: the control-room wall, the clipboard, its papers, the sleeve and the extras in its pocket,
- * lifted from the approved Spec's Option 3a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011;
- * dark mode is tuned later). `--info` colours the clip, the arm preset and the console's edge, as the Spec's machine blue;
- * `primary` marks the use-when line.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .scene {
   --robot-lit: color-mix(in oklab, var(--info) 78%, oklch(1 0 0));
   --robot: var(--info);

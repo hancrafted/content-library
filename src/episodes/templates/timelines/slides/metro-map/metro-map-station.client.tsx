@@ -22,14 +22,12 @@ export interface StationHandlers {
 interface StationProps {
   station: Station;
   copy: StationCopy;
-  /** Whether a lane this station serves is lit. */
   lit: boolean;
   expanded: boolean;
   popoverId: string;
   handlers: StationHandlers;
 }
 
-/** A station: a ring on the map that opens its popover, with its date and title beside it. */
 export function MetroStation({ station, copy, lit, expanded, popoverId, handlers }: StationProps) {
   return (
     <li
@@ -52,7 +50,6 @@ export function MetroStation({ station, copy, lit, expanded, popoverId, handlers
   );
 }
 
-/** A single stop is a ring in its lane's colour; an interchange is a larger white capsule with a dark outline spanning its lanes. */
 function StationRing({ station, expanded }: { station: Station; expanded: boolean }) {
   const interchange = isInterchange(station);
   return (
@@ -72,7 +69,6 @@ function StationRing({ station, expanded }: { station: Station; expanded: boolea
   );
 }
 
-/** A single stop takes its lane's colours; an interchange grows to span every lane it joins. */
 function ringStyle(station: Station): CSSProperties | undefined {
   return isInterchange(station) ? { height: `${0.5 + stationLanes(station).length * 0.75}rem` } : undefined;
 }

@@ -13,8 +13,6 @@ interface HalfProps {
   side: 'start' | 'end';
 }
 
-// One half of the split: the two halves face each other across the hairline (mirrored alignment from md up), and
-// pointing at one dims the other (`focus-group--dim-others`). CSS only, so no client widget.
 function Half({ index, title, caption, side }: HalfProps) {
   const id = `grid-1x2-${useId()}`;
   const facing = side === 'start' ? 'md:items-end md:text-right md:pr-10' : 'md:items-start md:text-left md:pl-10';
@@ -38,8 +36,6 @@ function Half({ index, title, caption, side }: HalfProps) {
   );
 }
 
-// Split comparison: two equal halves divided by a single vertical hairline instead of boxed cards (dividers over
-// cards when cards would add noise). Stacks below md, where the hairline turns horizontal.
 export const grid1x2 = slide({
   slug: 'grid-1x2',
   messages: { en, de },

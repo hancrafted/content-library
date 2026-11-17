@@ -1,4 +1,4 @@
 import { resolveSiteUrl } from './site-url.pure';
 
-/** The absolute URL this build is served from (FE-008 §3). Read once, at build time. */
+// decision: FE-008 §3
 export const SITE_URL = resolveSiteUrl(process.env);

@@ -15,12 +15,6 @@ import { theAisAttentionSpanSection } from './the-ais-attention-span';
 import { thoughtExperimentSection } from './thought-experiment';
 import { whatFillsTheWindowSection } from './what-fills-the-window';
 
-/*
- * The satirical "Your attention" bar on the Title slide and the four Section openers, and the closing Slide that
- * fills it: what each Scene says on the bar and under it, read as the page renders it, with the Voice script of each
- * changed Slide held to the screen.
- */
-
 const PLACED = placeSections<Slide>([
   thoughtExperimentSection,
   theAisAttentionSpanSection,

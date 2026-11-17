@@ -1,12 +1,7 @@
 import { z } from 'zod';
 import { TEMPLATE_TYPES, slug, tags, visibility } from './fields';
 
-/*
- * A Template: an Episode template, a Master slide or a Theme, a page that is not an Episode, shaped
- * like an Episode (design-ADR 0019). Its composition is the folder `episodes/templates/<slug>/`, which also holds its
- * title, caption and description in its own Translation files. Its route is worked out from its type and slug, never stored.
- */
-
+// decision: docs/adr/0019-resources-overview.md
 const type = z.enum(TEMPLATE_TYPES, {
   error: (issue) =>
     issue.input === undefined
@@ -31,8 +26,6 @@ export const templateSchema = z
   })
   .describe('A page that is not an Episode, shaped like one: its type and slug give its URL');
 
-/** A Template record, as the store loads it. */
 export type Template = z.infer<typeof templateSchema>;
 
-/** A Template record as its file writes it, before the store parses it. */
 export type TemplateInput = z.input<typeof templateSchema>;

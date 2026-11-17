@@ -11,7 +11,6 @@ const NONAKA = {
 const SZULANSKI = { slug: 'szulanski-internal-stickiness', url: 'https://doi.org/10.1002/smj.4250171105' };
 const GOURLAY = { slug: 'gourlay-critique-of-nonaka', url: 'https://doi.org/10.1111/j.1467-6486.2006.00637.x' };
 
-/** The two elements the Speaker notes explain: the unwritten zone and the hand-off card. */
 const HIDDEN = 'hidden';
 const HANDOVER = 'handover';
 
@@ -19,12 +18,6 @@ const OBVIOUS = ['budget', 'stay', 'signoff'] as const;
 const RIDERS = ['dietary', 'accessibility'] as const;
 const UNWRITTEN = ['lastTime', 'unwrittenRules', 'suppliers'] as const;
 
-/**
- * "You're the new hire" (Spec Option 1a): the summer party for 200 across Europe as one tall stack, no AI on it so it
- * stays reusable. The obvious questions, the ones nobody thinks to ask, then a full-width band where the rail turns
- * and the roles switch: you now hand the party over, in the one dark card. Keeps `basic-page` for its header only and
- * `motion: none`; the question lists dim their siblings on hover.
- */
 export const youAreTheNewHire = slide({
   slug: 'you-are-the-new-hire',
   messages: { en, de },

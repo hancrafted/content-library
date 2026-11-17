@@ -2,12 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { sectionTitleBottom, sectionTitleLift, SURFACE_WATERLINE, visibleSpan } from '../iceberg/zone-scene.pure';
 import { echoShipSpan, SHIP_REACH } from './echo-layout.pure';
 
-/*
- * Where a Surface section slide sets the research ship (feedback 3, decisions 45 and 48; Han's Image 30): the drawing
- * fills the Slide from the top, the title keeps its own band above the ship at every width, and the ship stays in view
- * on a phone, where the Scene shows only its middle.
- */
-
 const BOXES = [
   { width: 1920, height: 900 },
   { width: 1440, height: 786 },

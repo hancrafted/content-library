@@ -1,11 +1,3 @@
-/*
- * The control room of "Shared skills are knowledge articles", lifted facet by facet from Spec Option 20b (feedback 3,
- * decision 46), in the Spec's 1200 by 560 units, floor line at 486, lit from the upper left: the faceted wall and floor,
- * the porthole onto the Midnight water with its bubbles, the institute's shelf of manuals, and the fleet manual open on
- * its lectern, binder rings and faceted page. The captain, the AIs and their consoles are the shared cast, on top.
- */
-
-/** A tone of the drawing; `room-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'room'
   | 'room-lit'
@@ -38,7 +30,6 @@ export type ArtTone =
 
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The wall, the floor and the porthole, back to front. */
 export const ROOM: readonly ArtFacet[] = [
   ['room', 'M754 394L803 173L954 303Z'],
   ['room-lit', 'M792 0L664 121L677 0ZM664 121L792 0L803 173Z'],
@@ -106,7 +97,6 @@ export const ROOM: readonly ArtFacet[] = [
   ['sea-midnight-lit', 'M1080 53L1097 36L1120 30L1120 76Z'],
 ];
 
-/** The porthole's bubbles and glass glint, and the shelf of manuals over the lectern. */
 export const SHELF: readonly ArtFacet[] = [
   ['bubble', 'M1146 96L1144 99.5L1140 99.5L1138 96L1140 92.5L1144 92.5Z'],
   ['glint', 'M1140 95.2L1141.6 93.4L1141.8 95.2Z'],
@@ -144,7 +134,6 @@ export const SHELF: readonly ArtFacet[] = [
   ['paper-lit', 'M713 80L733 80L733 94L713 94Z'],
 ];
 
-/** The fleet manual on its lectern: the post, the green covers, the faceted page and the binder rings. */
 export const MANUAL: readonly ArtFacet[] = [
   ['post-shade', 'M520 486L560 486L572 400L508 400Z'],
   ['post-lit', 'M520 486L540 486L544 400L508 400Z'],

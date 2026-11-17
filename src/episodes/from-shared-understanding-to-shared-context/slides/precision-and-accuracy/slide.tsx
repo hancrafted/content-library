@@ -12,10 +12,8 @@ const MUND = { slug: 'mund-quality-of-requirements-specifications', url: 'https:
 
 const WRONG_OUTPUT = 'missing-requirements-show-up-as-wrong-output';
 
-/** The quadrant in reading order: tight row on top, the intent hit on the right. */
 const QUADRANT: readonly Outcome[] = ['precise-off', 'precise-accurate', 'neither', 'accurate-scattered'];
 
-/** An axis arrow, stretched along its axis: up for precision, right for accuracy. */
 function AxisArrow({ direction }: { direction: 'up' | 'right' }) {
   const up = direction === 'up';
   return (
@@ -37,12 +35,6 @@ function AxisArrow({ direction }: { direction: 'up' | 'right' }) {
   );
 }
 
-/**
- * "Precision and accuracy" (Spec Option 6a): a copy of the `grid-2x2` Master slide's quadrant whose axes carry the
- * meaning, precision up and accuracy right. Each cell pairs its dartboard, the shared `Dartboard` and `Darts`, with the
- * work order that lands at the bike bench, so the boards and the documents stand side by side in one frame. Keeps
- * `motion: none`; the cells dim each other on hover. Like the Master slide, the axes hide where the cells stack.
- */
 export const precisionAndAccuracy = slide({
   slug: 'precision-and-accuracy',
   messages: { en, de },

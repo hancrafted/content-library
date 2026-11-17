@@ -1,10 +1,4 @@
-/*
- * The documents on the canvas (design-ADR 0024 §15), drawn as the reference build draws them: a sheet with a folded
- * corner, a red minus when bad, a red warning when a complaint or rework, and an AI-made one in the `ai` tint with a
- * star. Colours come from the design tokens at runtime, so both themes follow the site. The eight kinds are drawn once
- * into a sprite sheet at the current scale; a frame only copies them.
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { bulb, giftBox, star } from './doc-gift.ts';
 import type { Colors, Ctx, DocKind } from './doc-types.ts';
 
@@ -12,7 +6,6 @@ export type { Colors, Ctx, DocKind } from './doc-types.ts';
 
 const mix = (a: string, pct: number, b: string) => `color-mix(in oklab, ${a} ${pct}%, ${b})`;
 
-/** Reads every colour through one hidden probe element. */
 export const readColors = (doc: Document): Colors => {
   const probe = doc.createElement('span');
   probe.hidden = true;
@@ -48,10 +41,8 @@ const DW = 9,
   DH = 11.5,
   DF = 3;
 
-/** A drawn document's height in sprite units, at `s: 1.05` on a sprite cell: what `makeSheet` draws. */
 export const DOC_H = DH * 1.05;
 
-/** The bulb's glyph spans y -2.3 to 3.9 around its point, so this centres it on the sheet's (0, 0). */
 export const BULB_AT = { x: 0, y: -0.8 };
 
 const sheetPath = (c: Ctx) => {
@@ -113,7 +104,6 @@ const marks = (c: Ctx, C: Colors, d: DocKind) => {
   }
 };
 
-/** A sheet with a folded corner in the page's ink: filling when in work, else with its marks. */
 const sheetDoc = (p: { c: Ctx; C: Colors }, d: DocKind, fill?: number) => {
   const { c, C } = p;
   sheetPath(c);
@@ -126,7 +116,6 @@ const sheetDoc = (p: { c: Ctx; C: Colors }, d: DocKind, fill?: number) => {
   if (d.ai) star(c, { x: -DW / 2 + 0.3, y: -DH / 2 + 0.3, r: 3.4 }, C.ai);
 };
 
-/** Draws one document at (x, y), scale `s`; `fill` (0 to 1) draws a document in work, filling from the bottom. */
 export const drawDoc = (
   p: { c: Ctx; C: Colors },
   at: { x: number; y: number; s: number; fill?: number },
@@ -142,9 +131,7 @@ export const drawDoc = (
   c.restore();
 };
 
-/** A sprite cell, in layout units. */
 export const SPR = 15;
-/** The sprite of a kind: quality, AI, warning; then own work (a lightbulb) and a release (a gift box). */
 export const spriteIdx = (k: {
   readonly q: number;
   readonly ai: number | boolean;
@@ -153,12 +140,9 @@ export const spriteIdx = (k: {
   readonly gift?: boolean;
 }): number => (k.gift ? GIFT : 0) + (k.own ? 8 : 0) + (k.warn ? 4 : 0) + (k.ai ? 2 : 0) + k.q;
 
-/** A sprite index at or above this is a gift box. */
 export const GIFT = 16;
-/** The kinds of document sprite: quality, AI, warning, own work, and plain or gift. */
 export const KINDS = 32;
 
-/** The thirty-two kinds drawn once at `px` pixels a cell. */
 export const makeSheet = (doc: Document, C: Colors, px: number): HTMLCanvasElement => {
   const sheet = doc.createElement('canvas');
   sheet.width = px * KINDS;
@@ -172,7 +156,6 @@ export const makeSheet = (doc: Document, C: Colors, px: number): HTMLCanvasEleme
   return sheet;
 };
 
-/** A "×n" badge for documents riding together. */
 export const badge = (c: Ctx, C: Colors, at: { x: number; y: number; n: number }) => {
   const t = `×${at.n}`;
   c.font = `700 8.5px ${C.font}`;
@@ -186,7 +169,6 @@ export const badge = (c: Ctx, C: Colors, at: { x: number; y: number; n: number }
   c.fillText(t, at.x + 3, at.y + 3);
 };
 
-/** A canvas text in the page font. */
 export interface LabelAt {
   readonly text: string;
   readonly x: number;

@@ -1,9 +1,3 @@
-/*
- * Site 7's water in "Beside the skill", lifted from the approved Spec's Option 17a (feedback 3, decision 46): the sea
- * deepening from the Surface through Sunlit to Twilight, the sun's shafts, the seabed at 120 m and the waterline's
- * glow, in the Spec's own units and tones (`slide.module.css`). The sky, the ship and the robot stay the shared parts.
- */
-
 type Tone =
   | 'sea-surface'
   | 'sea-surface-lit'
@@ -19,7 +13,6 @@ type Tone =
   | 'glow-soft';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** The water at site 7, deepening from the Surface through Sunlit to Twilight, and the sun's shafts. */
 const SEA: Facets = [
   [
     'sea-surface-lit',
@@ -107,7 +100,6 @@ const SEA: Facets = [
   ],
 ];
 
-/** The seabed at 120 m. */
 const BED: Facets = [
   ['bed', 'M37 399L23 372L47 373ZM325 381L331 404L293 382Z'],
   ['bed-shade', 'M26 420L37 399L54 420Z'],
@@ -161,7 +153,6 @@ const BED: Facets = [
   ['bed-shade', 'M204 400L236 400L235 420Z'],
 ];
 
-/** The waterline's glow. */
 const GLOW: Facets = [
   ['glow-soft', 'M0 99L600 101L600 107L0 109Z'],
   ['glow', 'M6 102.6L594 103L594 105L6 105.4Z'],
@@ -171,21 +162,15 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
   return facets.map(([tone, d]) => <path key={d} d={d} data-tone={tone} vectorEffect="non-scaling-stroke" />);
 }
 
-/** The Spec's waterline and seabed line in its 600 by 420 dive, and where the Scene draws them. */
 const SPEC = { width: 600, waterline: 104, bedTop: 370, bottom: 420 } as const;
 
 export interface DiveWaterProps {
-  /** The Scene's width, its waterline, the seabed's top and the Scene's floor, in the Scene's units. */
   readonly width: number;
   readonly waterline: number;
   readonly bedTop: number;
   readonly bottom: number;
 }
 
-/**
- * Site 7's water and seabed, stretched into the Scene: the sea's three zones from the waterline to the seabed's line,
- * the seabed from there to the Scene's floor, and the waterline's glow over both.
- */
 export function DiveWater({ width, waterline, bedTop, bottom }: DiveWaterProps) {
   const sx = width / SPEC.width;
   const seaY = (bedTop - waterline) / (SPEC.bedTop - SPEC.waterline);

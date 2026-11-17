@@ -11,8 +11,8 @@ const ROOT = import.meta.dirname;
 /**
  * What reruns the whole lane: the files the slow tests read from disk rather than import
  * (the Spec tests' staging folders, skills and templates; the scenery's CSS modules that
- * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the FE-013 rule the archgate CLI test
- * copies, the lane's own config and the installed packages. tools/art/art-parallel.slow.test.ts spawns
+ * src/episodes/components/slide-shared/iceberg/scenery/*.slow.test.ts read), the FE-013 and GEN-006 rules the archgate CLI
+ * tests copy, the lane's own config and the installed packages. tools/art/art-parallel.slow.test.ts spawns
  * `npm run art`'s real entry, which `--changed` cannot follow: it reruns when the branch changes the bake
  * (`tools/art/**`) or the loader it uses (`raw-text-files.mts`). A change to the pages it renders is the nightly
  * run's to catch.
@@ -33,9 +33,10 @@ const TRIGGERS = [
   'raw-text-files.mts',
   'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
   'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
-  // The FE-013 rule the archgate CLI test copies into its fixture project.
+  // The FE-013 and GEN-006 rules the archgate CLI tests copy into their fixture projects.
   '.archgate/config.json',
   '.archgate/adrs/FE-013-content-store.*',
+  '.archgate/adrs/GEN-006-comments.*',
 ];
 
 export default defineConfig({

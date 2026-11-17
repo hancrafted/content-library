@@ -3,7 +3,6 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The session's opening statement: one soft card with an accent rail, the line the room hears first. The Slide header shows the title and caption; the Scene holds the statement.
 export const hook = slide({
   slug: 'hook',
   messages: { en, de },

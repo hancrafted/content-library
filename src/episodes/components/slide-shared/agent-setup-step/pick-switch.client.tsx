@@ -3,11 +3,7 @@
 import { usePagePick, type PickName } from '@/episodes/hooks/use-page-pick';
 import type { ReactNode } from 'react';
 
-/**
- * Shows the one case the page's pick names (FE-001 §1, transient), each case drawn on the server, so a Slide's
- * words and links stay server-rendered and only the choice runs in the browser. Before the viewer picks, and in the
- * static HTML, it shows `fallback`'s case.
- */
+// decision: FE-001 §1
 export function PickSwitch({
   name,
   fallback,

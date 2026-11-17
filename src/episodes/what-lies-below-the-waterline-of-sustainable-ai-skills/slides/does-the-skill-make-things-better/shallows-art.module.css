@@ -1,12 +1,5 @@
-/*
- * The test dive's own tones, lifted from Spec Option 22a (feedback 3, decision 46): sky, clouds, surface and Sunlit
- * water, the light ray and lit waterline, the seabed, the silt, the procedure card and the bubbles. Raw colours live
- * only here, each with its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own
- * fill so neighbours meet without a seam; the translucent ones are not, so they do not double at their edges.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .art {
   --art-glow-soft: oklch(0.95 0.07 205 / 0.55);
   --art-glow: oklch(0.99 0.03 200);

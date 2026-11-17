@@ -13,11 +13,6 @@ const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://ar
 const WORKERS = 'workers';
 const LOOP_NOTE = 'loop-note';
 
-/**
- * The human in the loop workflow: the project-plan Workflow whole (its columns, connectors and the fan-out to the
- * worker chats and back in), only without bold first letters and the acronym unnamed. The loop strip did not fit
- * beside it at 1280x800, so its message (planner chat, worker chats, you checking) lives in the caption.
- */
 export const humanInTheLoopWorkflow = slide({
   slug: 'human-in-the-loop-workflow',
   messages: { en, de },

@@ -1,13 +1,4 @@
-/*
- * `ZoneScene`'s water and sky (design-ADR 0025, Colour tokens): the Scene sets `--zone` and `--water` from each
- * zone's one global token (`zoneToken` in `zones.pure.ts`, the one zone-to-token mapping), `--zone-<zone>` in
- * `globals.css`, light and dark there, so Han tunes a zone once. Facets mix it toward white for the lit side.
- * No raw colour here and no meaning colour: `machine`, `human` and `ai` stay for their meanings.
- *
- * Motion: the scenery parts carry their own ambient loops; this pauses every one of them while the document is hidden,
- * which the Scene's client leaf reports as `data-document="hidden"` (CSS alone cannot see a background tab).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .water {
   --band: var(--water);
 }
@@ -28,13 +19,6 @@
   animation-play-state: paused;
 }
 
-/*
- * A Surface Section title (feedback 3, decision 48): the drawing fills the box from the top, so its whole sky shows at
- * the top edge, and moves down by `--lift` only when what reaches above the waterline would cross the title's last
- * line; its sky runs on above it. `sectionTitleLift` in `zone-scene.pure.ts` is the same sum, which its tests pin:
- * the title's bottom from the header band, the slide header's padding and the heading role, a rem of air, then the least lift that
- * clears it whether the box's width or its height decides the drawing's scale. The Scene's box is the size container.
- */
 .lifted {
   container-type: size;
 }

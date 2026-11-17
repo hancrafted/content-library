@@ -4,12 +4,10 @@ import type { FactoryStillState } from '@/explorables/software-ecology/stills.pu
 import { fillTemplate } from '@/shared/lib/template.pure';
 
 export interface DashboardStillWords {
-  /** "· AI leaves it", after the effectiveness the AI switch does not change. */
   readonly aiLeavesIt: string;
   readonly people: string;
   readonly tools: string;
   readonly withAiHere: string;
-  /** "Traffic light: {level}", the light's name. */
   readonly light: string;
 }
 
@@ -29,7 +27,6 @@ const SIGNAL_BG: Readonly<Record<Level, string>> = {
 };
 type Parts = readonly (readonly [string, number])[];
 type Pct = (n: number) => string;
-/** The bars' full width: the most the efficiency reads with AI on. */
 const BAR_MAX = 250;
 
 function Trend({ line, primary }: { line: string; primary?: boolean }) {
@@ -60,7 +57,6 @@ function List({ items, dot }: { items: readonly string[]; dot: string }) {
   );
 }
 
-/** The traffic light and the AI switch, off: AI works at Engineering only. */
 function Status({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   return (
     <div className="flex items-center gap-2">
@@ -77,7 +73,6 @@ function Status({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) 
   );
 }
 
-/** The role's glyph and title, what it does, its traffic light and its AI switch, off. */
 function Head({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   return (
     <div className="flex items-start justify-between gap-2">
@@ -103,7 +98,6 @@ function Head({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   );
 }
 
-/** Output and outcome, each with its trend; outcome is the dial AI leaves alone, so it carries the focus. */
 function Tiles({ d, w, number }: { d: Dashboard; w: DashWords; number: Intl.NumberFormat }) {
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
@@ -129,7 +123,6 @@ function Tiles({ d, w, number }: { d: Dashboard; w: DashWords; number: Intl.Numb
   );
 }
 
-/** A bar of `BAR_MAX` percent, its parts laid end to end. */
 function Bar({ parts }: { parts: Parts }) {
   return (
     <div className="flex h-1.5 overflow-hidden rounded-full bg-border">
@@ -140,7 +133,6 @@ function Bar({ parts }: { parts: Parts }) {
   );
 }
 
-/** One dial: its name, its value as set and a note beside it, over its bar. */
 function Dial(p: { label: string; value: string; note: string; noteClass: string; parts: Parts }) {
   return (
     <>
@@ -155,7 +147,6 @@ function Dial(p: { label: string; value: string; note: string; noteClass: string
   );
 }
 
-/** The two dials as set, and what AI would make of each: efficiency rises, effectiveness stays. */
 function Dials({ d, w, words, pct }: { d: Dashboard; w: DashWords; words: DashboardStillWords; pct: Pct }) {
   const { eff, effv, aiSpeed } = d.r.dials,
     effAi = Math.round(eff * aiSpeed);
@@ -182,7 +173,6 @@ function Dials({ d, w, words, pct }: { d: Dashboard; w: DashWords; words: Dashbo
   );
 }
 
-/** The role's people, tools and artefacts, and what AI does there. */
 function Highlights({ d, words }: { d: Dashboard; words: DashboardStillWords }) {
   return (
     <>
@@ -208,11 +198,6 @@ function Highlights({ d, words }: { d: Dashboard; words: DashboardStillWords }) 
   );
 }
 
-/**
- * A work center's dashboard as a still, read from the Explorable's model at the still's moment: its role, traffic
- * light and signal, output and outcome with their trends, the two dials with what AI would make of them, and the
- * role's people, tools and what AI does there. The Explorable's own words; the still's few in `words`.
- */
 export function DashboardStill({
   state,
   words,

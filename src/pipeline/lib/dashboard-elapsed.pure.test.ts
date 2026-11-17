@@ -17,7 +17,7 @@ function span(fields: Partial<Span>): Span {
     status: 'running',
     start_t: iso(0),
     end_t: null,
-    duration_ms: null,
+    'duration_ms': null,
     summary: null,
     seq: 1,
     ...fields,
@@ -47,7 +47,7 @@ function job(fields: Partial<DashboardJob>): DashboardJob {
 describe('success cases', () => {
   it('gives an ended span its measured duration, whatever the moment shown', () => {
     // ARRANGE
-    const ended = span({ status: 'ok', end_t: iso(7), duration_ms: minutes(7) });
+    const ended = span({ status: 'ok', end_t: iso(7), 'duration_ms': minutes(7) });
     const expected = { ms: minutes(7), open: false };
     // ACT
     const elapsed = spanElapsed(ended, START + minutes(30));
@@ -91,7 +91,7 @@ describe('failure cases', () => {
     const agent = span({});
     const ended = job({
       state: 'ok',
-      span: span({ span_id: 'job', type: 'job', status: 'ok', end_t: iso(3), duration_ms: minutes(3) }),
+      span: span({ span_id: 'job', type: 'job', status: 'ok', end_t: iso(3), 'duration_ms': minutes(3) }),
       agents: [agent],
     });
     // ACT

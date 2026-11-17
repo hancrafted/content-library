@@ -1,4 +1,3 @@
-/** A person, in the meaning colour `human`, standing with their feet at `y`. */
 export function Person({ cx, y }: { cx: number; y: number }) {
   return (
     <g data-person>

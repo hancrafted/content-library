@@ -16,7 +16,6 @@ function centres(layout: Layout, showJobs: boolean) {
   return { fractions: positions.map((position) => position / total), total };
 }
 
-/** Each Stage centre, Run end included, at its stage index fraction along the shared replay rail. */
 function railStops(fractions: readonly number[]): RailStop[] {
   const left = fractions[0];
   const width = fractions.at(-1)! - left || 1;
@@ -26,7 +25,6 @@ function railStops(fractions: readonly number[]): RailStop[] {
   }));
 }
 
-/** The Stage rail on screen: a place, 0 to 1 by Stage index, to where it is drawn between the first Stage and the Run end, and back. */
 function railOnScreen(fractions: readonly number[]) {
   const stops = railStops(fractions);
   return {
@@ -70,11 +68,6 @@ function stageBranches(stage: Layout['stages'][number]) {
   }));
 }
 
-/**
- * The one owner of graph geometry: Stage and Job node positions, edge paths, where the Stage rail
- * is drawn, and the CSS variables the stylesheet consumes without re-deriving them.
- * Positions are ready to apply as styles; `showJobs` switches between the Stage view and the Job network.
- */
 export function graphGeometry(stages: readonly DashboardStage[], showJobs: boolean) {
   const layout = dashboardLayout(stages);
   const { fractions, total } = centres(layout, showJobs);

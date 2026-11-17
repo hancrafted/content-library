@@ -4,15 +4,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { CheckedBox } from './checked-box.client';
 
-/** Every map the box asked to write; a static render ticks nothing, so a recording closure stands in for a spy. */
-const changes: Record<string, string>[] = [];
+const recordedChanges: Record<string, string>[] = [];
 const render = (values: Record<string, string>) =>
   load(
     renderToStaticMarkup(
       createElement(CheckedBox, {
         name: 'a.b.checked',
         label: 'I checked this result',
-        slots: { values, onChange: (next) => void changes.push(next) },
+        slots: { values, onChange: (next) => void recordedChanges.push(next) },
       }),
     ),
   );

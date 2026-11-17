@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/* Slide 4 folds "answers get worse: context rot" into its caption, so no row of its own is left. */
-
 describe('success cases', () => {
   it.each([
     ['en', en, /<b>context rot<\/b>/],

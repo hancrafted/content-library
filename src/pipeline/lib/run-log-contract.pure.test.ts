@@ -2,12 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createLogFold, fold, lineErrors, parseLog, record, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
-/*
- * The line contract (design-ADR-0010): an envelope, the typed keys of a kind and nothing else at the top level, and an
- * optional `payload` of harness extras, namespaced and bounded. A log written before the contract still holds and folds
- * as it did: the dogfood Run's log is the fixture.
- */
-
+// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
 const TRACE = 'a'.repeat(32);
 const SPAN = 'b'.repeat(16);
 const STAMP: Stamp = { t: '2026-10-14T09:00:00Z', seq: 7, traceId: TRACE, spanId: 'd'.repeat(16) };
@@ -59,7 +54,7 @@ describe('success cases', () => {
       status: 'ok',
       start_t: '2026-10-14T16:24:58Z',
       end_t: '2026-10-14T21:36:51Z',
-      duration_ms: 18713000,
+      'duration_ms': 18713000,
       'gen_ai.usage.input_tokens': 1597,
     };
     // ACT

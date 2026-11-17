@@ -2,10 +2,8 @@ export const LOCALES = ['en', 'de'] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
-/** The default locale is served unprefixed: the bare path is its canonical URL. */
 export const DEFAULT_LOCALE: Locale = 'en';
 
-/** Locales that live under a `/<locale>` path segment. */
 export const PREFIXED_LOCALES: readonly Locale[] = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
 
 export function isLocale(value: unknown): value is Locale {
@@ -23,12 +21,10 @@ function prefixOf(pathname: string): Locale | undefined {
   return PREFIXED_LOCALES.find((locale) => locale === first);
 }
 
-/** The locale a pathname belongs to: a prefixed locale's segment, else the default locale. */
 export function localeFromPathname(pathname: string): Locale {
   return prefixOf(pathname) ?? DEFAULT_LOCALE;
 }
 
-/** The locale-neutral logical path: `/de/episode/x` → `/episode/x`, `/de` → `/`. */
 export function stripLocale(pathname: string): string {
   const path = normalize(pathname);
   const prefix = prefixOf(path);
@@ -40,35 +36,23 @@ function prefixPath(path: string, locale: Locale): string {
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
 
-/**
- * The URL of a logical path in a locale: unprefixed for the default locale.
- * `fragment` (without `#`) targets an anchor on that page, e.g. a slide.
- */
 export function localizePath(logicalPath: string, locale: Locale, fragment?: string): string {
   const url = prefixPath(normalize(logicalPath), locale);
   return fragment ? `${url}#${fragment}` : url;
 }
 
-/** Whether a pathname sits inside a logical section: the section's own path or anything beneath it. */
 export function isSectionActive(pathname: string, section: string): boolean {
   const logical = stripLocale(pathname);
   const base = normalize(section);
   return logical === base || logical.startsWith(`${base}/`);
 }
 
-/** Whether a pathname sits inside any of the logical sections. */
 export function isAnySectionActive(pathname: string, sections: readonly string[]): boolean {
   return sections.some((section) => isSectionActive(pathname, section));
 }
 
-/**
- * The locales of each page not exported in every locale, by logical path: what a locale switch offers there. A page
- * the map leaves out is exported in every locale. The page catalogue knows which pages these are; page chrome is
- * handed the map.
- */
 export type LocalesByRoute = Readonly<Record<string, readonly Locale[]>>;
 
-/** The locales the page at a pathname, in any locale, is exported in. */
 export function localesAt(pathname: string, localesByRoute: LocalesByRoute): readonly Locale[] {
   const route = stripLocale(pathname);
   return Object.hasOwn(localesByRoute, route) ? localesByRoute[route] : LOCALES;

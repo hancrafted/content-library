@@ -22,7 +22,6 @@ const SQUIRE_HM = { slug: 'squire-legacy-of-hm', url: 'https://pmc.ncbi.nlm.nih.
 const SQUIRE_SYSTEMS = { slug: 'squire-memory-systems', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4355270/' };
 const SWE_SKILLS = { slug: 'swe-skills-bench', url: 'https://arxiv.org/abs/2603.15401' };
 
-/** The skill file both dives read, in the Coding agent view: path and front matter are code, never translated. */
 const SKILL_PATH = 'collect-sediment-sample/SKILL.md';
 const FRONT_MATTER = [
   '---',
@@ -33,17 +32,11 @@ const FRONT_MATTER = [
   '…',
 ];
 
-/** The two halves: what changed the reader, the dive it gave, and who reads the card in the porthole. */
 const HALVES: readonly { half: 'update' | 'switch'; outcome: DiveOutcome; reader: DiveReader }[] = [
   { half: 'update', outcome: 'short', reader: 'same-pilot' },
   { half: 'switch', outcome: 'silt', reader: 'other-school' },
 ];
 
-/**
- * "The model changes, the skill doesn't" (Spec Option 24a): the same skill card drops into two dives that end apart,
- * a model update and a different model or agent, beside Lehman's laws and the note on new readers. Keeps `grid-1x2`
- * as a copy holding one Scene per half; keeps `motion: local`, both robots descending once.
- */
 export const theModelChangesTheSkillDoesnT = slide({
   slug: 'the-model-changes-the-skill-doesn-t',
   messages: { en, de },
@@ -75,7 +68,6 @@ export const theModelChangesTheSkillDoesnT = slide({
           <p className="text-caption text-muted-foreground">{t('card.description')}</p>
         </InView>
         <InView view="coding" as="div" className="font-mono text-caption">
-          {/* One block of lines, not one element per line: the front matter's two `---` fences are equal lines. */}
           <span translate="no" className="block whitespace-pre-wrap">
             {FRONT_MATTER.join('\n')}
           </span>

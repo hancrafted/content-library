@@ -8,13 +8,7 @@ import chromeEn from '@/shared/page-chrome/i18n/en.json';
 import { getTranslations } from 'next-intl/server';
 import { checkDrawerStrings, contextItemsOf, NOT_DRAWER_STRINGS } from './context-drawer-input.pure';
 
-/*
- * THE SEAM, with `context-drawer-input.pure.ts`: the one place the Context
- * drawer's translated chrome is read from the Translation file and an Episode record is
- * turned into `ContextDrawerInput`.
- */
-
-/** Page chrome's Translation files, which own the Context drawer's words. */
+// decision: FE-010 §8
 const PAGE_CHROME_WORDS = { en: chromeEn, de: chromeDe } as const;
 
 export async function contextDrawerInput(

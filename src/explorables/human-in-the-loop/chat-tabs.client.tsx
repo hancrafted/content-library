@@ -75,7 +75,6 @@ function TabList({
   );
 }
 
-/** One panel for a single chat; for a fan-out a tab per chat, every panel mounted so what is pasted survives a switch. */
 export function ChatTabs({ steps, task, kind, kit, slots, first, checkedAs }: TabsProps) {
   const [selected, setSelected] = useState(0);
   const id = useId();

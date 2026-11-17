@@ -23,7 +23,6 @@ interface GraphProps {
   view: DashboardView;
   events: readonly DashboardEvent[];
   stale: boolean;
-  /** The moment shown; while replaying it stands still, so activity animation pauses. */
   moment: Moment;
   outputs: EpisodeOutputs;
   copy: DashboardCopy;

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkDealBoard, dealCount, laneTotal, pipelineTotal, type DealLane } from './deal-board.pure';
 
-/** Two lanes of Slide 4's Monday board: Lead in with three deals, Contact made with two. */
 const LANES: readonly DealLane[] = [
   {
     slug: 'lead-in',

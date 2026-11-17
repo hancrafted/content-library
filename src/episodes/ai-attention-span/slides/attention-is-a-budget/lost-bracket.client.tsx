@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { middleBand, type Box } from './middle-band.pure';
 
-/** Where the band sits until it is measured: roughly the middle of the attention card. */
 const FALLBACK = { top: '35%', height: '30%' };
 
 const boxesOf = (rows: Iterable<Element>, origin: number): Box[] =>
@@ -17,7 +16,6 @@ interface Band {
   readonly height: string;
 }
 
-/** The measured band of the host's attention rows, re-measured on resize and when the list's rows change. */
 function useBand(root: RefObject<HTMLDivElement | null>): Band {
   const [band, setBand] = useState<Band>(FALLBACK);
   useEffect(() => {
@@ -46,7 +44,6 @@ function useBand(root: RefObject<HTMLDivElement | null>): Band {
   return band;
 }
 
-/** A right-pointing curly brace stretched over the band's height. */
 function Bracket() {
   return (
     <svg
@@ -68,10 +65,6 @@ function Bracket() {
   );
 }
 
-/**
- * The "Lost in the middle" bracket and card: a curly bracket spans the attention list's middle rows (those marked
- * `data-attention-bucket="middle"`, else the middle third) and the card sits beside it.
- */
 export function LostBracket({ children }: { readonly children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const band = useBand(root);

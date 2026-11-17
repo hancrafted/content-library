@@ -1,8 +1,3 @@
-// Brand symbol post-build check (`npm run test:build`, after `npm run build`):
-// every exported page links the favicon and the Apple touch icon under the base
-// path, both files land in `out/`, and the header brand renders the symbol with
-// the favicon's geometry. `src/app/icon.svg` is the geometry's source of truth.
-
 import { load } from 'cheerio';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';

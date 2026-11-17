@@ -3,7 +3,6 @@ import type { Chat } from '@/explorables/context-window/context.types';
 import { describe, expect, it } from 'vitest';
 import { SIZE_ROWS, sizeBars } from './size-bars.pure';
 
-/** A hand-written chat: a question, a search with its call and result, and a one-line answer. */
 const CHAT: Chat = {
   id: 'stand-in',
   steps: [

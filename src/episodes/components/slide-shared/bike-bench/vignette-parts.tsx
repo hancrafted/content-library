@@ -1,10 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 
-/* The pieces the bench vignettes are drawn from, in the vignettes' 240 by 140 units. */
-
 export const LINE = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
 
-/** A sheet with a folded corner at (x, y), 100 wide and 120 tall, its title line and four text lines in `tone`. */
 export function Sheet({ x, y, tone, mark }: { x: number; y: number; tone: 'machine' | 'muted'; mark?: number }) {
   const edge = tone === 'machine' ? 'stroke-machine' : 'stroke-muted-foreground';
   const faint = tone === 'machine' ? 'stroke-machine/40' : 'stroke-muted-foreground/40';
@@ -29,7 +26,6 @@ export function Sheet({ x, y, tone, mark }: { x: number; y: number; tone: 'machi
   );
 }
 
-/** A screw, upright, its head at (x, y). */
 export function Screw({ x, y }: { x: number; y: number }) {
   return (
     <>
@@ -43,7 +39,6 @@ export function Screw({ x, y }: { x: number; y: number }) {
   );
 }
 
-/** A wall of wrenches, at each x, in `tone`. */
 export function Wrenches({ xs, tone }: { xs: readonly number[]; tone: 'warning' | 'foreground' }) {
   const stroke = tone === 'warning' ? 'stroke-(--warning)' : 'stroke-foreground';
   return (
@@ -59,7 +54,6 @@ export function Wrenches({ xs, tone }: { xs: readonly number[]; tone: 'warning' 
   );
 }
 
-/** A small bike, its back wheel at (x, y) with radius r; `base` sets the wheelbase, else it scales with r. */
 export function Bike({ x, y, r, base }: { x: number; y: number; r: number; base?: number }) {
   const k = r / 16;
   const front = x + (base ?? 37 * k);
@@ -77,7 +71,6 @@ export function Bike({ x, y, r, base }: { x: number; y: number; r: number; base?
   );
 }
 
-/** A colleague dropping by, their question bubble above them, at column x. */
 export function Colleague({ x, bubbleY }: { x: number; bubbleY: number }) {
   return (
     <>

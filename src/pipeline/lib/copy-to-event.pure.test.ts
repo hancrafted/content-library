@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { copyEntryId, insertPlaylistEntry, unlistedCopyMetadata } from './copy-to-event.pure.ts';
 
-/*
- * `copy-to-event.ts`: what the copy of an Episode into an Event's Playlist changes in text.
- * Copying folders and running the registry is the script's job.
- */
-
 const PLAYLIST = `export const playlist = {
   id: 'p',
   visibility: 'public',

@@ -1,17 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { fold, record, renderTree, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
-/*
- * The run event log's writer seam: an event and an explicit stamp in, one
- * validated line (or the reasons it is malformed) out.
- */
-
 const TRACE = 'a'.repeat(32);
 const RUN_SPAN = 'b'.repeat(16);
 const JOB_SPAN = 'c'.repeat(16);
 const STAMP: Stamp = { t: '2026-10-14T09:00:00Z', seq: 7, traceId: TRACE, spanId: JOB_SPAN };
 
-/** A hand-written log of one Run: a job with a failed then a passed attempt, a crashed agent and a gate. */
 const T = 'b'.repeat(32);
 const line = (seq: number, t: string, rest: Record<string, unknown>): RunLogLine =>
   ({ seq, t, trace_id: T, ...rest }) as unknown as RunLogLine;
@@ -315,7 +309,7 @@ describe('success cases', () => {
         status: 'ok',
         summary: 'done',
         end_t: '2026-10-14T09:01:00Z',
-        duration_ms: 60_000,
+        'duration_ms': 60_000,
       };
       // ACT
       const span = fold(lines(attrs)).spans[0];
@@ -619,7 +613,7 @@ describe('edge cases', () => {
       ];
       const expected = {
         start_t: '2026-10-14T10:00:00Z',
-        duration_ms: 65_000,
+        'duration_ms': 65_000,
         'gen_ai.input.messages': 'the prompt',
       };
       // ACT
@@ -661,7 +655,7 @@ describe('edge cases', () => {
         status: 'ok',
         start_t: '2026-10-14T16:07:54Z',
         end_t: '2026-10-14T16:07:55Z',
-        duration_ms: 1000,
+        'duration_ms': 1000,
       };
       // ACT
       const { spans, orphans } = fold(lines);

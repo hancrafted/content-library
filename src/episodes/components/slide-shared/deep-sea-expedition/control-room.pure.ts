@@ -1,19 +1,12 @@
-/**
- * The control room's geometry: its faceted wall and floor, drawn for any room size from one set of proportions, and
- * where its window and wall clock hang (design-ADR 0025, "Scene figures are deep modules").
- */
-
-/** A room's drawing space: `floor` is the line figures stand on, `height` the bottom of the floor below it. */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export interface RoomSize {
   readonly width: number;
   readonly height: number;
   readonly floor: number;
 }
 
-/** The room the comic panels draw: 300 by 180, figures standing at 158. */
 export const ROOM: RoomSize = { width: 300, height: 180, floor: 158 };
 
-/** The wall's lit and shaded planes and the floor's two tones, lit from the upper left. */
 export type RoomTone = 'lit' | 'mid' | 'shade' | 'floor' | 'floor-lit';
 
 export interface RoomFacet {
@@ -23,10 +16,6 @@ export interface RoomFacet {
 
 type Point = readonly [x: number, y: number];
 
-/**
- * The wall facets as shares of the width and the floor line, so a wider or taller room keeps the same planes. Taken
- * from the comic panels' 300-unit room.
- */
 const WALL: readonly { readonly tone: RoomTone; readonly points: readonly Point[] }[] = [
   {
     tone: 'lit',
@@ -86,7 +75,6 @@ const WALL: readonly { readonly tone: RoomTone; readonly points: readonly Point[
 const round = (value: number) => Math.round(value * 100) / 100;
 const pointsAttr = (points: readonly Point[]) => points.map(([x, y]) => `${round(x)},${round(y)}`).join(' ');
 
-/** The room's wall planes, then its floor and the floor's lit patch, in drawing order. */
 export function roomFacets({ width, height, floor }: RoomSize): readonly RoomFacet[] {
   const wall = WALL.map(({ tone, points }) => ({
     tone,
@@ -117,10 +105,8 @@ export function roomFacets({ width, height, floor }: RoomSize): readonly RoomFac
   ];
 }
 
-/** The window's frame is 92 units wide; it hangs 12 units in from the right edge, and needs as much wall on its left. */
 const WINDOW_SPAN = 104;
 
-/** The window onto the deck sits in the wall's top right corner; a room narrower than two spans has no wall for it. */
 export function windowAt({ width }: RoomSize): { readonly x: number; readonly y: number } {
   if (width < WINDOW_SPAN * 2) throw new Error(`A ${width}-unit room is too narrow to hang its window in.`);
   return { x: width - WINDOW_SPAN, y: 10 };

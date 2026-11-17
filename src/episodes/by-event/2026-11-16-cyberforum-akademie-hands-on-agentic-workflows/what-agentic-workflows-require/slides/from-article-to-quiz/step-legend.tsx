@@ -1,14 +1,12 @@
 import { Pin } from '@/episodes/components/slide-shared/pin/pin';
 import type { ReactNode } from 'react';
 
-/** One step to take: the pin that marks it on the workflow and its words, its lead set off in semibold. */
 export interface Step {
   readonly slug: string;
   readonly pin: 1 | 2 | 3 | 4;
   readonly text: ReactNode;
 }
 
-/** The four steps as the workflow's legend, each beside its pin; pointing at one dims the others. */
 export function StepLegend({ steps }: { steps: readonly Step[] }) {
   return (
     <ol

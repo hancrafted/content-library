@@ -1,10 +1,10 @@
+// decision: FE-007 §2
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_SPOKEN_LANGUAGE, SPOKEN_LANGUAGES } from './transcript.pure.ts';
 import { WORDS_PER_MINUTE } from './voice-script.pure.ts';
 
-// Tools may not import `src/shared/` (FE-007 §2), so these tables are copies: the test reads the site's source text.
 const SHARED_LIB = path.resolve(__dirname, '../../src/shared/lib');
 
 function siteSource(file: string): string {

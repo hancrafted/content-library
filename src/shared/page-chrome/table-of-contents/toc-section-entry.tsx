@@ -70,7 +70,6 @@ function SectionItems({ view, section, collapsed }: { view: TocView; section: To
         open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
       )}
     >
-      {/* From `md` the list always keeps the expanded panel's width, so its items never rewrap while the panel narrows or widens. */}
       <ol className={cn('ml-10 min-h-0 overflow-hidden', !view.nested && 'md:min-w-[12.875rem]')}>
         {section.items.map((item) => (
           <ItemEntry key={item.id} view={view} item={item} />
