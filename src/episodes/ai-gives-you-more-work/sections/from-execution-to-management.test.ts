@@ -25,7 +25,7 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
 }
 
 function rulesOf(slug: string): { selector: string; body: string }[] {
-  const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8')
+  const css = readFileSync(join(__dirname, '../../slide-pool', slug, 'reveal-steps.module.css'), 'utf8')
     .replaceAll(/\/\*[\s\S]*?\*\//g, '')
     .replaceAll(/@media[^{]*\{/g, '');
   return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector = '', body = '']) => ({
