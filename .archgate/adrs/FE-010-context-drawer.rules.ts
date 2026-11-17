@@ -1,8 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Placement, focus and the rendered slot are held by the post-build
-// test. Matched textually. Self-contained by design:
-// archgate forbids imports between rules files.
 // decision: FE-010 §1
 // decision: FE-010 §2
 const CSS_FILE = 'src/app/globals.css';
