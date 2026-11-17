@@ -4,7 +4,6 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The four outcomes, the shared board's names; the Slide lays them out in the quadrant's reading order. */
 export type Outcome = PrecisionOutcome;
 
 const SHEETS: Record<Outcome, { readonly crisp: boolean; readonly miss: boolean }> = {
@@ -70,10 +69,6 @@ function OutcomeText({ outcome, words, marker }: { outcome: Outcome; words: Outc
   );
 }
 
-/**
- * One cell of the quadrant: the outcome's dartboard beside the work order that lands at the bike bench and what the
- * bench makes of it. The precise and accurate cell is outlined in `primary`, the one to look at.
- */
 export function OutcomeCell(props: {
   outcome: Outcome;
   words: OutcomeWords;
