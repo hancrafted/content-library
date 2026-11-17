@@ -18,13 +18,8 @@ export interface TagLabel extends Labelled<TagId> {
 // decision: FE-006 §4
 export interface EpisodeCard {
   readonly slug: string;
-  /**
-   * The Episode's locale-neutral logical path; `null` while it is only announced.
-   * A JSX `href` must be `{localizePath(card.route, locale)}` (FE-003), so a leaf
-   * that draws a link reads this, not `href`.
-   */
+  // decision: FE-003 §2
   readonly route: string | null;
-  /** The same link already localized, for what is not a JSX `href`: a data attribute, `router.push`. */
   readonly href: string | null;
   readonly status: EpisodeStatus;
   readonly title: string;
@@ -45,13 +40,6 @@ export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
 
 type Identified<E> = E & { readonly ref: EpisodeRef };
 
-/**
- * The Episode a card draws, keyed on its status: a published one carries its
- * copy from the registry, so `tsc` refuses one without it; an upcoming one
- * reads its own from the Episode browser's Translation keys, unless it already has a page
- * and so its own `i18n/` (`copy`), which it then carries as a published one does.
- * Its page is looked up by its Episode id, so an Event's copy never opens its original.
- */
 export type CardEntry =
   | Identified<PublishedEpisode & { readonly copy: EpisodeCopy }>
   | Identified<UpcomingEpisode & { readonly copy?: EpisodeCopy }>;
@@ -101,7 +89,6 @@ function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCar
   };
 }
 
-/** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
 export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
   const copy = copyOf(entry, ctx);

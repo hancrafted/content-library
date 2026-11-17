@@ -173,7 +173,7 @@ describe('failure cases', () => {
 
   it('rejects at compile time a published card without the copy its record holds, so it never reads a stale key', () => {
     // ARRANGE
-    // @ts-expect-error -- a published Episode's card needs its copy from the registry
+    // @ts-expect-error
     const build = () => episodeCard(PUBLISHED_METADATA, { locale: 'en', read, minutes: 42 });
     // ACT
     const built = typeof build;

@@ -36,7 +36,6 @@ interface FooterProps {
   showFormat: boolean;
 }
 
-/** Native actions stay separate from metadata, keeping their hit areas stable as labels wrap. */
 function CardFooter({ card, variant, labels, showFormat }: FooterProps) {
   return (
     <div data-card-footer className="mt-auto flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-4">
@@ -63,7 +62,6 @@ export interface EpisodeCardProps {
   labels: CardLabels;
   showFormat: boolean;
   className?: string;
-  /** Position of the decorative graphic panel; left by default on every browsing surface. */
   visualPosition?: CardVisualPosition;
 }
 
