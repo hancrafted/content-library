@@ -27,18 +27,9 @@ const AI_NOTES = {
   onboard: 'new-session-new-contributor',
   chunks: 'splitting-tasks-lengthens-them',
 } as const;
-/**
- * The disclosure (Option 3b): the three upper halves at rest, then each lower half, then the closing line. The closing
- * line states the Slide's claim, so it shows at full strength from rest and its step only gives it emphasis.
- */
 const FIRST_AI_HALF = 2;
 const CLOSING = 5;
 
-/**
- * Practise it today, at work (Option 3b): three tall exhibits side by side, each a moment at work above a "same move"
- * line and its reflection with AI below, in Slide 1's frame and wall label, so the Slide compares them. The line on the
- * shared discipline and the closing line hang under the row. Overrules `master: grid-3x1`, keeps `motion: local`.
- */
 export const practiseItTodayAtWork = slide({
   slug: 'practise-it-today-at-work',
   messages: { en, de },

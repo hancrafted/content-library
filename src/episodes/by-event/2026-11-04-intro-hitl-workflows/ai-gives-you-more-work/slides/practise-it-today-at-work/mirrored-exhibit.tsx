@@ -22,12 +22,6 @@ export interface MirroredExhibitProps {
 const SIDE_LABEL = 'text-caption font-semibold tracking-widest uppercase';
 const SUBGRID = '@min-[40rem]:grid @min-[40rem]:grid-rows-subgrid';
 
-/**
- * One moment at work over its reflection with AI, like a picture over its mirror image: a framed pair split by a
- * "same move" line, its wall label centred under it. From the width three columns fit, each exhibit spans four shared
- * rows (work half, line, AI half, label), so the three frames are one height, their lines sit on one level and the
- * labels are one height. The AI half shows from `reveal`.
- */
 export function MirroredExhibit({ slug, label, work, ai, words, reveal, target }: MirroredExhibitProps) {
   return (
     <li data-target={target} className={`focus-group__item flex flex-col @min-[40rem]:row-span-4 ${SUBGRID}`}>
