@@ -27,4 +27,22 @@ describe('oxlint config', () => {
     // ASSERT
     expect(diagnostics.map((d) => d.ruleId)).toContain('no-unused-vars');
   });
+
+  it('lets a bare ts-expect-error through, the one directive form tsc reads that GEN-006 admits', async () => {
+    // ARRANGE
+    const source = "export function f(n: number) {\n  return n;\n}\n// @ts-expect-error\nf('a');\n";
+    // ACT
+    const diagnostics = await lintProbe(source, 'src/shared/lib/expect-error-probe.ts');
+    // ASSERT
+    expect(diagnostics.map((d) => d.ruleId)).not.toContain('typescript/ban-ts-comment');
+  });
+
+  it('still reports a ts-ignore, which silences the next line without proving an error is there', async () => {
+    // ARRANGE
+    const source = "export function f(n: number) {\n  return n;\n}\n// @ts-ignore\nf('a');\n";
+    // ACT
+    const diagnostics = await lintProbe(source, 'src/shared/lib/ignore-probe.ts');
+    // ASSERT
+    expect(diagnostics.map((d) => d.ruleId)).toContain('typescript/ban-ts-comment');
+  });
 });

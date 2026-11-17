@@ -141,6 +141,18 @@ describe('runPlan', () => {
       expect(command).toBe(expectedTest);
     });
 
+    it('commit plan checks only the staged files against the ADRs, while the verify plan checks the whole repo', () => {
+      // ARRANGE
+      const expectedCommitArchgate = 'archgate check --staged';
+      const expectedVerifyArchgate = 'npm run -s archgate:full';
+      // ACT
+      const commitArchgate = commandOf(COMMIT_PLAN, 'archgate');
+      const verifyArchgate = commandOf(VERIFY_PLAN, 'archgate');
+      // ASSERT
+      expect(commitArchgate).toBe(expectedCommitArchgate);
+      expect(verifyArchgate).toBe(expectedVerifyArchgate);
+    });
+
     it('only the full fast suite of the verify plan queues on the test lock', () => {
       // ARRANGE
       const expectedLocked = [{ plan: 'verify', step: 'test' }];

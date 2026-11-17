@@ -70,7 +70,7 @@ export const NATIVE_RULES: RuleMap = {
   'prefer-spread': 'error',
   'no-array-constructor': 'error',
   'no-unused-expressions': 'error',
-  'typescript/ban-ts-comment': 'error',
+  'typescript/ban-ts-comment': ['error', { 'ts-expect-error': false }],
   'typescript/no-duplicate-enum-values': 'error',
   'typescript/no-empty-object-type': 'error',
   'typescript/no-explicit-any': 'error',
