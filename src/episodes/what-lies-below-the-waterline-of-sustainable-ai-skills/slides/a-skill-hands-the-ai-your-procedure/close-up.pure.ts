@@ -1,9 +1,3 @@
-/*
- * The layout of "A skill hands the AI your procedure" in `ZoneScene`'s 1200 by 800 space (feedback 3, item 7): the
- * whole research ship at the Surface with the robot in the water, and a close-up of its bridge, the cabin, beside it.
- * The callout labels sit in the sky above the close-up, the captain's speech bubble inside it; `clashes` names any
- * label the bubble would cover, so a longer line or a moved figure fails the Slide's test, not Han's eye.
- */
 import { drawFigure } from '@/episodes/components/slide-shared/character/poses.pure';
 import { saysBox } from '@/episodes/components/slide-shared/character/says.pure';
 import { captain } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
@@ -48,19 +42,15 @@ export const LEADER_END: Readonly<Record<CalloutSlug, readonly [number, number]>
   project: [BRIEF.x + BRIEF.width / 2, BRIEF.y],
 };
 
-/*
- * How big the HTML words draw, in CSS pixels (globals.css: body 16 px at 1.6 line height, caption 14 px at 1.5). The
- * glyph widths are generous averages for the sans face, so a box measured here is never smaller than the one drawn.
- */
-const BODY = { size: 16, leading: 1.6, glyph: 9 } as const;
-const CAPTION = { size: 14, leading: 1.5, glyph: 7.5 } as const;
+const BODY_TEXT = { size: 16, leading: 1.6, glyph: 9 } as const;
+const CAPTION_TEXT = { size: 14, leading: 1.5, glyph: 7.5 } as const;
 const NARROWEST_FULL_LABEL_PIXELS = 896;
-/** The Scene on a 375 px phone: the viewport less the Content area's 1rem insets. */
-const PHONE_SCENE_WIDTH_PIXELS = 343;
+const PHONE_VIEWPORT_PIXELS = 375;
+const CONTENT_INSET_PIXELS = 16;
+const PHONE_SCENE_WIDTH_PIXELS = PHONE_VIEWPORT_PIXELS - 2 * CONTENT_INSET_PIXELS;
 export const FULL_LABEL_SCENE_PIXELS = NARROWEST_FULL_LABEL_PIXELS / SCENE.width;
 export const PHONE_SCENE_PIXELS = PHONE_SCENE_WIDTH_PIXELS / SCENE.width;
-/** A label's padding and border (`px-3 py-1 border-2`); a narrow Scene's badge shows its number, one glyph wide. */
-const LABEL_PAD = { x: 24 + 4, y: 8 + 4 } as const;
+const LABEL_PADDING_AND_BORDER = { x: 24 + 4, y: 8 + 4 } as const;
 const NUMBER_GLYPH = 9;
 
 export interface CalloutWords {
@@ -78,7 +68,6 @@ export interface CloseUpWords {
 export interface CloseUpLayout {
   readonly labels: readonly { readonly slug: CalloutSlug; readonly box: Box }[];
   readonly says: Box;
-  /** Where the bubble must stay: the close-up where labels show their words, the whole Scene on a phone. */
   readonly bounds: Box;
   readonly scenePixels: number;
 }
@@ -86,11 +75,14 @@ export interface CloseUpLayout {
 function labelBox(at: { x: number; y: number }, words: CalloutWords, scenePixels: number): Box {
   const full = scenePixels >= FULL_LABEL_SCENE_PIXELS;
   const px = full
-    ? Math.max(words.term.length * BODY.glyph, words.scene.length * CAPTION.glyph) + LABEL_PAD.x
-    : NUMBER_GLYPH + LABEL_PAD.x;
-  const textHeight = full ? BODY.size * BODY.leading + CAPTION.size * CAPTION.leading : CAPTION.size * CAPTION.leading;
+    ? Math.max(words.term.length * BODY_TEXT.glyph, words.scene.length * CAPTION_TEXT.glyph) +
+      LABEL_PADDING_AND_BORDER.x
+    : NUMBER_GLYPH + LABEL_PADDING_AND_BORDER.x;
+  const textHeight = full
+    ? BODY_TEXT.size * BODY_TEXT.leading + CAPTION_TEXT.size * CAPTION_TEXT.leading
+    : CAPTION_TEXT.size * CAPTION_TEXT.leading;
   const width = px / scenePixels;
-  const height = (textHeight + LABEL_PAD.y) / scenePixels;
+  const height = (textHeight + LABEL_PADDING_AND_BORDER.y) / scenePixels;
   return { x: at.x - width / 2, y: at.y - height, width, height };
 }
 
@@ -124,7 +116,6 @@ export function closeUpLayout({
 const overlap = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
-/** The air the bubble keeps from a label, in CSS pixels, so the two never read as touching. */
 const LABEL_GAP_PIXELS = 4;
 const grow = (box: Box, by: number): Box => ({
   x: box.x - by,
@@ -139,11 +130,6 @@ const inside = (box: Box, bounds: Box) =>
   box.x + box.width <= bounds.x + bounds.width &&
   box.y + box.height <= bounds.y + bounds.height;
 
-/**
- * What breaks the layout, in words: `says covers <label>` when the bubble covers a label or comes within 4 px of it, `<label> covers <label>`
- * when two labels meet, `<label> leaves the scene` past its edges, and `says leaves its bounds` past the close-up (or,
- * on a phone, the Scene). Empty when the layout holds.
- */
 export function clashes({ labels, says, bounds, scenePixels }: CloseUpLayout): readonly string[] {
   const gap = LABEL_GAP_PIXELS / scenePixels;
   const covered = labels.filter(({ box }) => overlap(grow(box, gap), says)).map(({ slug }) => `says covers ${slug}`);

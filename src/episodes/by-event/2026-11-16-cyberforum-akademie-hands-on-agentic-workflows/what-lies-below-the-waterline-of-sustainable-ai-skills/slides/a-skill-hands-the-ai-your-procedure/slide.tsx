@@ -15,7 +15,6 @@ const SKILLS_OVERVIEW = {
 };
 const NOTE = 'a-skill-spares-you-the-repeat';
 
-/** The example skill's folder name and the project instructions file: code, so never translated. */
 const SKILL_NAME = 'collect-sediment-sample';
 const SKILL_FILE = `${SKILL_NAME}/SKILL.md`;
 const PROJECT_FILE = 'AGENTS.md';

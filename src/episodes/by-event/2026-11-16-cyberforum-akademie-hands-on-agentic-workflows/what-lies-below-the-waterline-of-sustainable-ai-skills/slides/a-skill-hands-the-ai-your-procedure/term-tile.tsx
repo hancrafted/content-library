@@ -29,7 +29,6 @@ export function TermTile({ term, focal = false, chat, code }: TermTileProps) {
   );
 }
 
-/** A file as a coding agent sees it: its path, then its text. The text is code, never translated. */
 export function CodeFile({ path, text }: { readonly path: string; readonly text: string }) {
   return (
     <div className="min-w-0 rounded-md bg-muted">

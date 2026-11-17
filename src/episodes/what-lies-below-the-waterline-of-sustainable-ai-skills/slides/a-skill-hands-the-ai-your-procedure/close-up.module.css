@@ -119,10 +119,7 @@
   stroke: var(--primary);
 }
 
-/*
- * The Slide's one emphasis motion (Spec Option 2a): the card slides out of the manual (`Travel`), then its pill and
- * leader appear last. The base rule is the rest state, so a still frame and reduced motion show both at once.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .late {
     animation: late-in 360ms ease-out var(--late-delay, 0ms) both;
