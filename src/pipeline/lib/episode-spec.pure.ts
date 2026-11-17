@@ -26,8 +26,8 @@
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
-import { load, type CheerioAPI } from 'cheerio';
-import { OPTION, SECTION, SLIDE, SPEC_FILE, TITLE_SLIDE } from './episode-spec-page.pure.ts';
+import { type CheerioAPI } from 'cheerio';
+import { OPTION, parseSpec, SECTION, SLIDE, SPEC_FILE, TITLE_SLIDE, type SpecHtml } from './episode-spec-page.pure.ts';
 import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
 import { checkTitleSlide } from './episode-spec-title.pure.ts';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
@@ -112,21 +112,33 @@ export type SpecStage = 'early' | 'options';
  * which is how a Brief- or Dossier-stage assembly looks; `options` otherwise, so a page with a Title slide, an Option
  * or no Slide at all gets the whole contract.
  */
-export function specStage(html: string): SpecStage {
-  const $ = load(html);
+export function specStage(html: SpecHtml): SpecStage {
+  const $ = parseSpec(html);
   const hasSlides = $(SLIDE).length > 0;
   return hasSlides && $(OPTION).length === 0 && $(TITLE_SLIDE).length === 0 ? 'early' : 'options';
+}
+
+/** The Dossier left beside an approved Spec, which the approval commit deletes. */
+function staleDossier(isApproved: boolean, dossier: string | undefined): string[] {
+  return unless(
+    !isApproved || dossier === undefined,
+    'dossier.md still sits beside the approved Spec: the Spec is the only source now, so delete it in the approval commit.',
+  );
 }
 
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
- * maps a path relative to the folder to its text.
+ * maps a path relative to the folder to its text; `page` is that Spec already parsed, when the caller has it.
  */
-export function checkSpec(files: Readonly<Record<string, string>>, stage: SpecStage = 'options'): Finding[] {
+export function checkSpec(
+  files: Readonly<Record<string, string>>,
+  stage: SpecStage = 'options',
+  page?: CheerioAPI,
+): Finding[] {
   const html = files[SPEC_FILE];
   if (html === undefined) return [];
-  const $ = load(html);
+  const $ = page ?? parseSpec(html);
   const meta = metaBlockText(html);
   const isApproved = metaGateTier(html) === 'approved';
   const dossier = files[DOSSIER_FILE];
@@ -135,10 +147,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, stage: SpecSt
     ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
     ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
   ];
-  const stale = unless(
-    !isApproved || dossier === undefined,
-    'dossier.md still sits beside the approved Spec: the Spec is the only source now, so delete it in the approval commit.',
-  );
+  const stale = staleDossier(isApproved, dossier);
   return [
     ...messages.map((message): Finding => ({ kind: 'spec', file: SPEC_FILE, message })),
     ...stale.map((message): Finding => ({ kind: 'spec', file: DOSSIER_FILE, message })),

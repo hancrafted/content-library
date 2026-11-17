@@ -1,4 +1,4 @@
-import type { ComposedPage } from './composed-page';
+import { entryOf, type ComposedPage } from './composed-page';
 import summaries from './page-summaries.generated.json';
 import type { PageSummary } from './page-summary.pure';
 
@@ -20,7 +20,5 @@ const SUMMARIES_BY_KIND: Readonly<Record<ComposedPage['kind'], Summaries>> = {
  * bug, so it throws.
  */
 export function summaryOf(page: ComposedPage): PageSummary {
-  const summary: PageSummary | undefined = SUMMARIES_BY_KIND[page.kind][page.id];
-  if (summary === undefined) throw new Error(`No summary is registered for "${page.id}"`);
-  return summary;
+  return entryOf(SUMMARIES_BY_KIND, page, 'summary');
 }

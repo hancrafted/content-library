@@ -20,6 +20,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Always use `/writing-for-agents` when creating or editing skills; it is recommended for writing or editing any Markdown.
 - Skills: author a new one in `skills/<name>/`, symlinked from `.claude/skills/` and `.agents/skills/`, then review it once with `/skill-creator:skill-creator`. The format and gate are in `docs/adr/0006-skills-follow-agentskills.md`.
 - Worktrees: `npm run wt:new -- <branch>` and `npm run wt:done -- <branch>` (the `worktree` skill). They override any worktree path a handoff names.
+- Branch names: an orchestrator works on `<type>/<slug>` (`<type>` a Conventional Commits type or `episode`); each subagent it starts works on `<type>/<slug>--<issue>-<task>`, or `<type>/<slug>--<task>` without a ticket, created with `--base <type>/<slug>` and finished as the `worktree` skill says, which overrides any skill's merger or PR step.
 
 ## Testing
 

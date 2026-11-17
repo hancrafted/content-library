@@ -23,6 +23,8 @@ function useLevelMove() {
 
 interface LevelMoveProps {
   readonly label: string;
+  /** The numbered callout, steady across replays. */
+  readonly callout?: ReactNode;
   /** The former level's pill: stays put. */
   readonly from: ReactNode;
   /** The arrow and the new level's pill: replay, so they hold nothing focusable. */
@@ -36,7 +38,7 @@ interface LevelMoveProps {
  * mounting the moving part afresh. `data-play` is the CSS hook; the keyframes and reduced motion live in the Slide's
  * CSS module, whose base rules are the end state.
  */
-export function LevelMove({ label, from, arrow, to }: LevelMoveProps) {
+export function LevelMove({ label, callout, from, arrow, to }: LevelMoveProps) {
   const { plays, replays, replay, onFocus } = useLevelMove();
   return (
     <div
@@ -49,6 +51,7 @@ export function LevelMove({ label, from, arrow, to }: LevelMoveProps) {
       data-play={plays ? '' : undefined}
       className={`${styles.move} ${TRIGGER}`}
     >
+      {callout}
       {from}
       <Fragment key={replays}>
         <span className={styles.arrow}>{arrow}</span>

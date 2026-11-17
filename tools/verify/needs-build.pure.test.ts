@@ -125,6 +125,13 @@ describe('needsBuild', () => {
       expect(buildTest?.env).toEqual(exportJob?.env);
     });
 
+    it('keeps main out of the preview, since production publishes it', () => {
+      // ARRANGE
+      const condition = workflow.jobs.preview?.if ?? '';
+      // ACT / ASSERT
+      expect(condition).toContain("github.ref != 'refs/heads/main'");
+    });
+
     it('keeps forks and Dependabot away from the preview', () => {
       // ARRANGE
       const condition = workflow.jobs.preview?.if ?? '';

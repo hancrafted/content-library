@@ -7,7 +7,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { createViteServer } from 'vitest/node';
 import { rawTextFiles } from '../../raw-text-files.mts';
-import { currentWorkers } from '../verify/workers.ts';
+import { currentLoad } from '../load/workers.ts';
 import { bakeInWorkers } from './art-bake-pool.ts';
 import { bakeChunk, chunksOf, mergeChunks } from './art-chunks.pure.ts';
 import { artStore } from './art-store.pure.ts';
@@ -21,7 +21,7 @@ process.env.ART_BUILD = '1';
 const { values: args } = parseArgs({
   options: { workers: { type: 'string' }, out: { type: 'string' }, only: { type: 'string' } },
 });
-const workers = args.workers === undefined ? await currentWorkers() : Number(args.workers);
+const workers = args.workers === undefined ? (await currentLoad()).workers : Number(args.workers);
 if (!Number.isInteger(workers) || workers < 1)
   throw new Error(`--workers must be a positive whole number, got "${args.workers}"`);
 const OUT = path.resolve(ROOT, args.out ?? 'public/art');

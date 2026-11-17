@@ -90,7 +90,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 2. **Lint:** `no-restricted-imports` bans the three modules under `src/` (§3).
 3. **Post-build test** (`npm run test:build`, CI and deploy, before upload): every page the page catalogue builds × its locales has a file in `out/`; prints the page count so an empty walk can't pass.
 4. **Unit test:** the generated Episode routes match the page catalogue's param lists, none stale or left over (§1.2).
-5. **Build:** `npm run build` in CI fails on many request-time APIs. `next build` skips its own TypeScript pass (`typescript.ignoreBuildErrors`); type-checking lives in the `static` CI lane (`npm run typecheck`) and `npm run verify` at pre-push.
+5. **Build:** `npm run build` in CI fails on many request-time APIs. `next build` skips its own TypeScript pass, so a type error is caught by the typecheck instead: GEN-005-lint-and-format-toolchain §2.4 owns that rule.
 6. **Post-build test:** every manifest URL exists in `out/art/`, every art `<use>` in an exported page resolves to a file there, and `_headers` serves `/art/*` immutable (§5).
 
 **Manual review duties:** new dependencies checked for request-time Next.js APIs; a new kind of page is listed by the page catalogue, which derives its pages and static params from the records, so the post-build test expects it.

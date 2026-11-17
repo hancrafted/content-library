@@ -80,7 +80,11 @@ const notesOf = (slide: Slide) =>
 describe('success cases', () => {
   it('places Slides 5 and 6 after the section slide, in Spec order, under their Spec titles', () => {
     // ARRANGE
-    const expected = ['How far you step out', 'In, on or out of the loop', 'Reviewability sets the distance'];
+    const expected = [
+      'How far you step out',
+      'In, on or out of the loop',
+      'Trust lets you step out; review builds the trust',
+    ];
     // ACT
     const actual = SLIDES.map((slide) => messagesOf(slide).title);
     // ASSERT
@@ -195,10 +199,11 @@ describe('success cases', () => {
   it('scripts Slide 6 in the Spec’s Voice script, verbatim', () => {
     // ARRANGE
     const expected = [
-      'The rule — You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at.',
-      'Hypothesis, said openly — The rule that you can step out only as far as you can check is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law.',
-      'Risk too — Checkability is only half of it. What a wrong result can do also helps set the level, so the more damage a wrong result can cause, the more a person stays in.',
-      'Make it checkable — That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop.',
+      'The rule — Trust is what lets you step out of the loop, and you only trust a result you can check. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at.',
+      'Hypothesis, said openly — That rule is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law.',
+      'Review builds the trust — So the engineering comes first: you build the check in before the agent starts, a test the result can pass. When it passes, that is evidence, and evidence is what builds the trust. A feeling that the agent is good does not.',
+      'Risk sets the bar — Risk sets how much trust a task needs. The guest list needs little, a missing name is one email. The venue and the activity need a lot, because a wrong result can leave two hundred people at a place that does not fit.',
+      'The activity moves — Now look at the activity. It needed trust three and had one, so a person stayed in. Give it its check, everyone can join, wheelchair access, no fitness needed, and once the check passes the trust is earned and the task moves from in the loop to on the loop.',
     ];
     // ACT
     const actual = scriptOf(slideOf(DISTANCE));
@@ -226,11 +231,12 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws Slide 6 as the party board in workflow order, each task as far out as its risk and its check allow', () => {
+  it('draws Slide 6 as the party board in workflow order, each task as far out as its earned trust covers its need', () => {
     // ARRANGE
     const expected = {
       tasks: ['Guest list', 'Venue', 'Activity'],
-      risk: ['1', '3', '3'],
+      needed: ['1', '3', '3'],
+      earned: ['1', '3', '3'],
       levels: ['Out of the loop', 'On the loop', 'On the loop'],
       handoffs: ['200 guests', 'venue, date', 'programme'],
       goal: 'Goal 20 June: everyone celebrates together and gets home safely',
@@ -239,9 +245,12 @@ describe('success cases', () => {
     const $ = sceneOf(DISTANCE);
     const actual = {
       tasks: textsOf($, '[data-task-note] [data-task-label]'),
-      risk: $('[data-task-note] [data-risk-meter]')
+      needed: $('[data-task-note] [data-risk-meter]')
         .toArray()
         .map((node) => $(node).attr('data-risk-meter')),
+      earned: $('[data-task-note] [data-trust-meter]')
+        .toArray()
+        .map((node) => $(node).attr('data-trust-meter')),
       levels: textsOf($, '[data-task-note] [data-oversight-pill]:not([data-former])'),
       handoffs: textsOf($, '[data-handoff]'),
       goal: textsOf($, '[data-goal-note] p').join(' '),
@@ -257,6 +266,7 @@ describe('success cases', () => {
       check: {
         heading: 'Its check, built in',
         checks: ['Everyone can join', 'Wheelchair access', 'No fitness needed'],
+        meaning: 'A test the result can pass, set before the agent starts.',
       },
     };
     // ACT
@@ -264,8 +274,9 @@ describe('success cases', () => {
     const actual = {
       move: textsOf($, '[data-level-move] [data-oversight-pill]'),
       check: {
-        heading: textsOf($, '[data-check-card] [data-check-heading]')[0],
+        heading: textsOf($, '[data-check-card] [data-check-title]')[0],
         checks: textsOf($, '[data-check-card] li'),
+        meaning: textsOf($, '[data-check-card] [data-check-meaning]')[0],
       },
     };
     // ASSERT
@@ -289,6 +300,38 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('opens Slide 6 with the chain engineer for review, earned trust, step out, and numbers it with the board', () => {
+    // ARRANGE
+    const expected = {
+      links: ['Engineer for review', 'Earned trust', 'Step out'],
+      pills: ['In', 'On', 'Out'],
+      callouts: ['1', '2', '3', '2', '3', '1'],
+    };
+    // ACT
+    const $ = sceneOf(DISTANCE);
+    const actual = {
+      links: textsOf($, '[data-chain-link] [data-chain-label]'),
+      pills: textsOf($, '[data-chain-link] [data-oversight-pill]'),
+      callouts: textsOf($, '[data-callout]'),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('numbers the board’s check card 1, the activity’s earned trust 2 and its level move 3', () => {
+    // ARRANGE
+    const expected = { check: '1', earned: '2', move: '3' };
+    // ACT
+    const $ = sceneOf(DISTANCE);
+    const actual = {
+      check: $('[data-check-card] [data-callout]').text(),
+      earned: $('[data-task-note]:has([data-level-move]) [data-trust-meter] ~ [data-callout]').text(),
+      move: $('[data-task-note]:has([data-level-move]) [data-level-move] [data-callout]').text(),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -306,6 +349,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('titles and chains Slide 6 in German on the German page', () => {
+    // ARRANGE
+    const expected = {
+      title: 'Vertrauen erlaubt den Schritt nach außen; Prüfung baut das Vertrauen auf',
+      links: ['Prüfbar bauen', 'Verdientes Vertrauen', 'Nach außen treten'],
+      pills: ['In', 'An', 'Außen'],
+    };
+    // ACT
+    const actual = {
+      title: messagesOf(slideOf(DISTANCE), 'de').title,
+      links: textsOf(sceneOf(DISTANCE, 'de'), '[data-chain-link] [data-chain-label]'),
+      pills: textsOf(sceneOf(DISTANCE, 'de'), '[data-chain-link] [data-oversight-pill]'),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('labels the activity’s move in German on the German page', () => {
     // ARRANGE
     const expected = ['In', 'An der Schleife'];

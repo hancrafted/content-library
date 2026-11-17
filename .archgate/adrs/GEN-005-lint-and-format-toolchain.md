@@ -34,13 +34,15 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 3. oxfmt `printWidth` MUST be `120` explicitly; the default of 100 would reflow the repo.
 4. A script that formats a generated file MUST use oxfmt.
 5. The lint config MUST be the TypeScript file `oxlint.config.mts` (oxlint 1.93 loads it under Node, experimental), never a committed JSON copy. It imports the design-token legacy list `src/shared/design-system/legacy.json` and the selector and token constants in `tools/lint/constants.ts`, so the list stays one file read by lint and Archgate (FE-011) and no glob is duplicated. A generator with a staleness test was the fallback and is not needed.
-6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins, and `@typescript-eslint/parser` stays as a dev dependency for the FE-013 rules test, which parses as Archgate does.
+6. ESLint, typescript-eslint, `@next/eslint-plugin-next`, `eslint-config-prettier` and the ESLint config are removed. The `better-tailwindcss` and `check-file` plugins stay as oxlint JS plugins. `@typescript-eslint/parser` is removed too: it pinned TypeScript below 6.1, and the FE-013 rules test now parses with `oxc-parser`.
 7. The format config MUST be `.oxfmtrc.jsonc`, and what oxfmt skips MUST live in its `ignorePatterns` beside the reason, with no separate ignore file and no `.prettierrc` or `.prettierignore`. `sortImports` MUST be on: two blocks (`builtin`, `external`, `subpath`, `internal`, `unknown`; then `parent`, `sibling`, `index`), `ignoreCase: true`, `newlinesBetween: false`, the closest match to the former organize-imports order. oxfmt never removes an unused import; lint's `no-unused-vars` reports it (`tests/boundaries/oxlint-config.test.ts`).
 
 ### 2. Exact pins
 
-1. oxlint and `oxlint-plugin-eslint` MUST pin `1.93.0`; oxfmt MUST pin `0.78.0`. The two JS plugins stay at their versions of record.
+1. oxlint and `oxlint-plugin-eslint` MUST pin `1.93.0`; oxfmt MUST pin `0.78.0`; `oxc-parser` MUST pin `0.150.0`, the version knip already installs. The two JS plugins stay at their versions of record.
 2. A pin MUST NOT become a range. A bump is a deliberate change that re-runs the lint probe suites and the format check.
+3. A pre-release pin MAY be used for a dev-only tool only when its output matches the stable version's on this repository, recorded as a parity run in its §4 admission row, and an open tracking issue moves it to the stable release. A runtime dependency MUST NOT be pinned to a pre-release.
+4. `typescript` MUST pin `7.1.0-beta` and `dependency-cruiser` MUST pin `18.8.0-beta-2`, both under §2.3: dependency-cruiser's TypeScript 7 support targets the 7.1 API, and on `7.0.2` it falls back and reports 23 false boundaries violations. One `typescript` is installed, with no alias package; `npm run typecheck` calls its `tsc`, and `next build` skips its own check (`typescript.ignoreBuildErrors`) because the typecheck runs before every build at pre-push and in CI's static lane.
 
 ### 3. Why the alpha plugin layer is acceptable
 
@@ -57,7 +59,10 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
    - `oxfmt`: same repo and organisation, 29.9M, 2026-11-09. Clears.
    - `eslint-plugin-better-tailwindcss`: 865 stars, 2.1M, pushed 2026-11-15. Misses stars; already admitted, only the host changes.
    - `eslint-plugin-check-file`: 616 stars, 1.6M, pushed 2026-09-13. Misses stars; already admitted, only the host changes.
-   - `@typescript-eslint/parser` (kept for the FE-013 rules test, §1.6): 16.5k stars (shared typescript-eslint repo), organisation `typescript-eslint`, 181.7M, 2026-11-11. Clears; already admitted, only its job narrows to parsing a test fixture as Archgate does.
+   - `oxc-parser` (the FE-013 rules test's parser, §1.6): 23.5k stars (shared oxc repo), organisation `oxc-project`, 104.9M, 2026-11-09. Clears.
+   - `json5` (pinned `2.2.3`; reads `.oxfmtrc.jsonc` for `formatAsRepo` and the `ignorePatterns` test, so neither needs the TypeScript compiler API): 7.2k stars, organisation `json5`, 32 contributors, 322.7M, last release 2022-12-31, commits merged and collaborator replies 2026-11. Clears: recency holds through maintainer activity; already in the tree transitively.
+   - `typescript` (pinned `7.1.0-beta`, §2.4): organisation `microsoft`, already admitted; only the major moves. Parity run 2026-11-16, 7.1.0-beta against 6.0.3, `tsc -p tsconfig.json --noEmit --pretty false`, cold: byte-identical output on the clean tree (exit 0, no diagnostics) and with planted errors in a Slide `slide.tsx` (TS2322), `vitest.config.mts` (TS2322, TS2353) and a new `.ts` file (TS2339): the same 4 diagnostics at the same line and column, exit 2. Timing, median of 3, on a machine loaded by other agents' worktrees (load average 12 to 19, 15-minute 25): cold 20.8 s to 2.6 s, warm 3.0 s to 1.0 s. Tracking: [#652](https://github.com/hancrafted/content-library/issues/652).
+   - `dependency-cruiser` (pinned `18.8.0-beta-2`, §2.4): already admitted; only the release moves. Parity run 2026-11-16, `depcruise src skills tools -T json`, stable 18.5.0 on TypeScript 6.0.3 against the beta on TypeScript 7.1.0-beta: 0 violations, 3,937 modules and 12,474 dependencies in both, and every dependency edge (source, resolved path, dependency types, validity, rules) identical. Tracking: [#653](https://github.com/hancrafted/content-library/issues/653).
 3. The oxc packages' risk is maturity, not popularity; §2 and §3.1 mitigate it, accepted knowingly.
 
 ## Do's and Don'ts
@@ -68,7 +73,8 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 2. **DO** run non-native rules as oxlint JS plugins, selectors unchanged. (Decision 1.2)
 3. **DO** set oxfmt `printWidth: 120` explicitly. (Decision 1.3)
    **DO** keep the format config in `.oxfmtrc.jsonc` with ignores in `ignorePatterns`. (Decision 1.7)
-4. **DO** pin oxlint, `oxlint-plugin-eslint` and oxfmt exactly. (Decision 2.1)
+4. **DO** pin oxlint, `oxlint-plugin-eslint`, oxfmt and `oxc-parser` exactly. (Decision 2.1)
+   **DO** record a parity run against the stable version and link the tracking issue before pinning a dev tool to a pre-release. (Decision 2.3)
 5. **DO** re-run the probe suites and format check on a bump. (Decision 2.2)
 6. **DO** add an admission row here for any new tool or plugin. (Decision 4.1)
 
@@ -77,6 +83,7 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 1. **DON'T** add a second linter or formatter beside these. (Decision 1.1)
 2. **DON'T** shell out to the retired tools from a script. (Decision 1.4)
 3. **DON'T** loosen a pin to a range. (Decision 2.2)
+   **DON'T** install a second TypeScript through an alias package, or let `next build` typecheck again. (Decision 2.4)
 4. **DON'T** weaken a rule to land the switch. (Decision 3.2)
 
 ## Consequences
@@ -98,13 +105,14 @@ Lint rules here are ADR enforcers, so a linter that cannot host them is not a ca
 
 1. **A plugin breaks or stops firing on upgrade.** **Mitigation:** exact pins and probe suites that fail when a planted violation goes unreported.
 2. **A formatter default changes.** **Mitigation:** options that matter are explicit, and the pin moves only on a deliberate bump.
-3. **Upstream drops the JS-plugin layer.** **Mitigation:** ESLint-ecosystem plugins make a return a config move; a superseding ADR records it.
+3. **A pre-release pin stays or drifts from stable.** **Mitigation:** §2.3 admits it only on a recorded parity run, and its tracking issue moves it to the stable release; a further beta bump re-runs the parity run.
+4. **Upstream drops the JS-plugin layer.** **Mitigation:** ESLint-ecosystem plugins make a return a config move; a superseding ADR records it.
 
 ## Compliance and Enforcement
 
 No Archgate rule. Range shape and suppression are enforced by the dependency-range and no-inline-suppression rules; the probe suites, the verify and CI static-lane commands, and lint-staged at commit enforce the rest.
 
-**Manual review duties:** a new pin is exact (§2); a new tool or plugin has an admission row (§4); no rule is weakened (§3.2).
+**Manual review duties:** a new pin is exact (§2); a pre-release pin has its parity run and tracking issue (§2.3); a new tool or plugin has an admission row (§4); no rule is weakened (§3.2).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

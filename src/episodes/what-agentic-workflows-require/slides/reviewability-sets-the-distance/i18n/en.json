@@ -1,8 +1,8 @@
 {
-  "title": "Reviewability sets the distance",
-  "caption": "A task's level is set by what a wrong result can do and by how well you can <b>check the result</b>; making it checkable moves it out.",
+  "title": "Trust lets you step out; review builds the trust",
+  "caption": "A task steps out only as far as the trust it has earned covers the trust it needs; <b>a check built in</b> is what earns it.",
   "board": {
-    "label": "Summer party · each task as far out as its risk and its check allow"
+    "label": "Summer party · each task steps out as far as its earned trust covers what it needs"
   },
   "agent": "Agent",
   "tasks": {
@@ -26,10 +26,6 @@
       "move": "The activity moves from in the loop to on the loop"
     }
   },
-  "risk": {
-    "label": "If wrong:",
-    "value": "risk {value} of 3"
-  },
   "levels": {
     "was": "In",
     "in": "In the loop",
@@ -42,7 +38,8 @@
       "join": "Everyone can join",
       "access": "Wheelchair access",
       "fitness": "No fitness needed"
-    }
+    },
+    "meaning": "A test the result can pass, set before the agent starts."
   },
   "handoffs": {
     "guests": "200 guests",
@@ -53,7 +50,7 @@
     "label": "Goal",
     "text": "20 June: everyone celebrates together and gets home safely"
   },
-  "hedge": "My hypothesis: weighing risk and checkability together is a synthesis, <risk>not one source's rule</risk>, and the evidence for checkability <software>comes mostly from software</software>.",
+  "hedge": "My hypothesis: weighing risk and earned trust together is a synthesis, <risk>not one source's rule</risk>, and the evidence that checks build trust <software>comes mostly from software</software>.",
   "notes": {
     "software-is-easy-to-check": {
       "header": "Software is easy to check",
@@ -86,14 +83,18 @@
       "header": "Oversight follows risk in the rules",
       "description": "the EU AI Act requires oversight measures \"commensurate with the risks, level of autonomy and context of use\" of a high-risk system [1].",
       "sources": {
-        "eu-ai-act-article-14": { "title": "EU AI Act (Regulation 2024/1689), Article 14 Human oversight" }
+        "eu-ai-act-article-14": {
+          "title": "EU AI Act (Regulation 2024/1689), Article 14 Human oversight"
+        }
       }
     },
     "risk-as-a-tool-rating": {
       "header": "Risk as a tool rating",
       "description": "OpenAI tells builders to rate each tool low, medium or high by factors such as read-only versus write access, reversibility and financial impact, and to trigger human oversight for sensitive, irreversible or high-stakes actions until confidence in the agent grows [1].",
       "sources": {
-        "openai-practical-guide-to-building-agents": { "title": "OpenAI, A practical guide to building agents" }
+        "openai-practical-guide-to-building-agents": {
+          "title": "OpenAI, A practical guide to building agents"
+        }
       }
     },
     "risk-is-one-input-not-the-rule": {
@@ -111,23 +112,45 @@
       "the-rule": {
         "title": "The rule",
         "keywords": "",
-        "script": "You can step out of the loop only as far as you can check the result. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at."
+        "script": "Trust is what lets you step out of the loop, and you only trust a result you can check. Where checking costs as much as doing the work yourself, stepping out does not save you anything, it only means you accept a risk that nobody looks at."
       },
       "hypothesis-said-openly": {
         "title": "Hypothesis, said openly",
         "keywords": "",
-        "script": "The rule that you can step out only as far as you can check is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law."
+        "script": "That rule is my hypothesis, and I say so openly; the evidence for it comes mostly from software, so treat it as a good bet and not as a law."
       },
-      "risk-too": {
-        "title": "Risk too",
+      "review-builds-the-trust": {
+        "title": "Review builds the trust",
         "keywords": "",
-        "script": "Checkability is only half of it. What a wrong result can do also helps set the level, so the more damage a wrong result can cause, the more a person stays in."
+        "script": "So the engineering comes first: you build the check in before the agent starts, a test the result can pass. When it passes, that is evidence, and evidence is what builds the trust. A feeling that the agent is good does not."
       },
-      "make-it-checkable": {
-        "title": "Make it checkable",
+      "risk-sets-the-bar": {
+        "title": "Risk sets the bar",
         "keywords": "",
-        "script": "That makes the check the lever you control. Give the activity a test it can pass, such as everyone can join, wheelchair access, no fitness needed, and the same task can move from in the loop to on the loop."
+        "script": "Risk sets how much trust a task needs. The guest list needs little, a missing name is one email. The venue and the activity need a lot, because a wrong result can leave two hundred people at a place that does not fit."
+      },
+      "the-activity-moves": {
+        "title": "The activity moves",
+        "keywords": "",
+        "script": "Now look at the activity. It needed trust three and had one, so a person stayed in. Give it its check, everyone can join, wheelchair access, no fitness needed, and once the check passes the trust is earned and the task moves from in the loop to on the loop."
       }
     }
+  },
+  "chain": {
+    "review": "Engineer for review",
+    "trust": "Earned trust",
+    "step": "Step out",
+    "levels": {
+      "in": "In",
+      "on": "On",
+      "out": "Out"
+    }
+  },
+  "trust": {
+    "needed": "Trust needed:",
+    "neededValue": "trust needed {value} of 3",
+    "earned": "Trust earned:",
+    "earnedValue": "trust earned {value} of 3",
+    "was": "(was {value})"
   }
 }

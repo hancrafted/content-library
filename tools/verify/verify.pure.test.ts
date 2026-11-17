@@ -141,6 +141,20 @@ describe('runPlan', () => {
       expect(command).toBe(expectedTest);
     });
 
+    it('only the full fast suite of the verify plan queues on the test lock', () => {
+      // ARRANGE
+      const expectedLocked = [{ plan: 'verify', step: 'test' }];
+      // ACT
+      const locked = [VERIFY_PLAN, QUICK_PLAN, COMMIT_PLAN].flatMap((plan) =>
+        plan.phases
+          .flat()
+          .filter((step) => step.testLock)
+          .map((step) => ({ plan: plan.label, step: step.name })),
+      );
+      // ASSERT
+      expect(locked).toEqual(expectedLocked);
+    });
+
     it('verify plan keeps CI parity: it runs the whole suite', () => {
       // ARRANGE
       const expectedTest = 'npm run -s test';
