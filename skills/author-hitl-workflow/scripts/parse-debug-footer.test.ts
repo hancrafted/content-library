@@ -15,8 +15,7 @@ const parse = (...args: string[]) => spawnSync('node', [SCRIPT, ...args], { enco
 const reply = (source: string): string =>
   `Done.\n\n[hitl-debug] workflow=trip "Trip" · stage=brief "Brief" · job=ask "Ask" · prompt=copy · step=do · level=chat · demo=on · locale=en · source=${source}`;
 const [english, german] = [saved('trip.en.yml', 'id: trip\n'), saved('trip.de.yml', 'id: trip\n# de\n')];
-/** The short hash of the pair above, worked out with `shasum -a 256` over the length-prefixed pair. */
-const PAIR_SOURCE = 'b30e20cd';
+const SHASUM_256_SOURCE_OF_THE_LENGTH_PREFIXED_PAIR = 'b30e20cd';
 
 afterAll(() => {
   rmSync(dir, { recursive: true, force: true });
@@ -25,9 +24,9 @@ afterAll(() => {
 describe('success cases', () => {
   it('prints where the reply came from, and that the pair has not changed since', () => {
     // ARRANGE
-    const expected = { job: { id: 'ask', title: 'Ask' }, source: PAIR_SOURCE };
+    const expected = { job: { id: 'ask', title: 'Ask' }, source: SHASUM_256_SOURCE_OF_THE_LENGTH_PREFIXED_PAIR };
     // ACT
-    const run = parse(saved('same.md', reply(PAIR_SOURCE)), english, german);
+    const run = parse(saved('same.md', reply(SHASUM_256_SOURCE_OF_THE_LENGTH_PREFIXED_PAIR)), english, german);
     const read = JSON.parse(run.stdout) as { scope: object; changed: boolean };
     // ASSERT
     expect(read.scope).toMatchObject(expected);

@@ -35,12 +35,10 @@ const date = /date: '(\d{4}-\d{2}-\d{2})'/.exec(event)?.[1] ?? fail(`${eventSlug
 const playlistId = /playlist: '([^']+)'/.exec(event)?.[1] ?? fail(`${eventSlug} names no playlist`);
 const playlistFile = path.join(root, 'src/content-store/playlists', `${playlistId}.ts`);
 const id = copyEntryId(eventSlug, slug);
-// Compute before any write, so a refusal leaves the tree as it was.
 const original = readFileSync(playlistFile, 'utf8');
-const playlist = insertPlaylistEntry(original, id, position);
+const playlistComputedBeforeAnyWrite = insertPlaylistEntry(original, id, position);
 
-/** A refusal after the first write puts the tree back, so the script can run again. */
-function rollBack(message: string): never {
+function rollBackSoScriptCanRunAgain(message: string): never {
   rmSync(target, { recursive: true, force: true });
   writeFileSync(playlistFile, original);
   run('npm', ['run', 'registry']);
@@ -51,21 +49,17 @@ cpSync(source, target, { recursive: true });
 rmSync(path.join(target, 'brief.md'), { force: true });
 const metadataFile = path.join(target, 'episode-metadata.ts');
 writeFileSync(metadataFile, unlistedCopyMetadata(readFileSync(metadataFile, 'utf8'), date));
-writeFileSync(playlistFile, playlist);
+writeFileSync(playlistFile, playlistComputedBeforeAnyWrite);
 
 function run(command: string, commandArgs: string[]) {
   return spawnSync(command, commandArgs, { cwd: root, encoding: 'utf8' });
 }
 
 const registry = run('npm', ['run', 'registry']);
-if (registry.status !== 0) rollBack(`npm run registry failed:\n${registry.stdout}${registry.stderr}`);
+if (registry.status !== 0)
+  rollBackSoScriptCanRunAgain(`npm run registry failed:\n${registry.stdout}${registry.stderr}`);
 
-/**
- * Writes the copy's `published-anchors.json` when it has none, from the reader the composition checks use. The copy's
- * `episode.ts` imports Slides, JSON and aliases plain node cannot load, so Vitest's module runner loads it, as
- * `npm run registry` loads the compositions.
- */
-async function writeAnchorsSnapshot(): Promise<void> {
+async function writeAnchorsSnapshotThroughVitestModuleRunner(): Promise<void> {
   const vitest = await createVitest('test', { config: path.join(root, 'vitest.config.mts'), watch: false });
   try {
     const context = await vitest.import<{ missingPublishedSnapshot: typeof missingPublishedSnapshot }>(
@@ -81,9 +75,11 @@ async function writeAnchorsSnapshot(): Promise<void> {
 }
 
 try {
-  await writeAnchorsSnapshot();
+  await writeAnchorsSnapshotThroughVitestModuleRunner();
 } catch (error) {
-  rollBack(`could not write ${id}'s published-anchors.json: ${error instanceof Error ? error.message : String(error)}`);
+  rollBackSoScriptCanRunAgain(
+    `could not write ${id}'s published-anchors.json: ${error instanceof Error ? error.message : String(error)}`,
+  );
 }
 
 const entry = position === undefined ? 'last' : `place ${position}`;

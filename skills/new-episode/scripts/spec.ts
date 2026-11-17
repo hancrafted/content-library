@@ -40,8 +40,9 @@ if (arg === undefined || extra.length > 0 || (port !== undefined && !Number.isIn
 }
 const folder = episodeFolder(arg);
 const spec = path.join(folder, SPEC_FILE);
-// --watch: begin-run starts this server before the Spec exists, so wait for spec.html instead of refusing.
-while (values.watch && !existsSync(spec)) await new Promise((resolve) => setTimeout(resolve, 1000));
+const beginRunStartsThisServerBeforeTheSpecExists = values.watch;
+while (beginRunStartsThisServerBeforeTheSpecExists && !existsSync(spec))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 if (!existsSync(spec)) {
   console.error(`✖ ${path.relative(ROOT, spec)} does not exist`);
   process.exit(1);

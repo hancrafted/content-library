@@ -55,12 +55,11 @@ export function diffFolder(planned: Map<string, string>, current: Map<string, st
   return { changed, added, removed };
 }
 
-/** The kinds of file a voice session can use: docs and authored skills. */
-const UPLOADABLE = ['docs/**/*.md', 'skills/*/SKILL.md'];
+const FILES_A_VOICE_SESSION_CAN_USE = ['docs/**/*.md', 'skills/*/SKILL.md'];
 
 export function proposeCandidates(touched: string[], listed: string[], atRef: string[]): string[] {
   const held = new Set(listed);
   const present = new Set(atRef);
-  const fits = (file: string) => UPLOADABLE.some((glob) => path.matchesGlob(file, glob));
+  const fits = (file: string) => FILES_A_VOICE_SESSION_CAN_USE.some((glob) => path.matchesGlob(file, glob));
   return [...new Set(touched)].filter((file) => fits(file) && present.has(file) && !held.has(file)).sort();
 }
