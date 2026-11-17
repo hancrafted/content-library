@@ -28,13 +28,6 @@ const AMBIG_SWE = { slug: 'vijayvargiya-ambig-swe', url: 'https://arxiv.org/abs/
 
 const RULES = ['outcome', 'external', 'orphan'] as const;
 
-/**
- * "Plan back from the goal" (Spec Option 7b): the goal breaks into two subgoals and each into the notes that must be
- * true before it, read right to left on the party board. Under "together", the venue and its kitchen, outside your
- * control; under "gets home safely", the two tasks nobody owned, each with the fixed mark, resolving Slide 1's drinking
- * drivers and cold guests. The three rules sit beside a call-out naming the method as well known. Keeps `basic-page`
- * and `motion: none`; no hover, the tree is read whole.
- */
 export const planBackFromTheGoal = slide({
   slug: 'plan-back-from-the-goal',
   messages: { en, de },

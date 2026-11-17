@@ -39,13 +39,6 @@ const AVIATION = 'aviation-supplied-the-concept-not-the-words';
 const LEVELS: readonly Level[] = ['in', 'on', 'out'];
 const ICONS = { in: 'gate', on: 'eye', out: 'log' } as const;
 
-/**
- * "In, on or out of the loop" (Spec Option 5b): the three levels of human oversight as a spectrum of three cards, in to
- * out, each under its shared oversight pill with its full name, definition and role; under each card the one task,
- * booking the venue, as it runs at that level, the task strip leading to the goal note at the right edge; then the two
- * opposing forces, risk and speed, and where the terms were borrowed from. Keeps `basic-page` and `motion: none`; the
- * cards dim each other on hover.
- */
 export const inOnOrOutOfTheLoop = slide({
   slug: 'in-on-or-out-of-the-loop',
   messages: { en, de },

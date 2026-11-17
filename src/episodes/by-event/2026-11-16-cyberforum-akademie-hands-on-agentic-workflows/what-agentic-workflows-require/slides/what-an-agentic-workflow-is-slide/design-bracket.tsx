@@ -1,9 +1,5 @@
 import type { ReactNode } from 'react';
 
-/**
- * The first level, the path you design: a solid `primary` pill, what the path is made of beside it, its Context marker,
- * and a bracket over the full width of the diagram under it.
- */
 export function DesignBracket(props: { readonly label: string; readonly hint: string; readonly marker: ReactNode }) {
   return (
     <div data-design-bracket="" className="flex flex-col gap-3">

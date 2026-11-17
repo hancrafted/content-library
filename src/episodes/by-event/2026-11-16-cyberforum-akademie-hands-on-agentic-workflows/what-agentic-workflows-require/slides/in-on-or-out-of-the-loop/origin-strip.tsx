@@ -1,13 +1,11 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
-/** One origin of the borrowed terms, as a filled pill, with its Context marker beside it. */
 export interface Origin {
   readonly text: string;
   readonly marker: ReactNode;
 }
 
-/** Where the three terms were borrowed from: the words from one field, the concept from another. */
 export function OriginStrip({
   label,
   origins,

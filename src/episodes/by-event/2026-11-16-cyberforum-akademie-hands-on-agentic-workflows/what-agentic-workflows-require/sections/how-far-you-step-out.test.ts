@@ -9,13 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { howFarYouStepOutSection } from './how-far-you-step-out';
 
-/*
- * Section 3, "How far you step out", as the approved Spec gives it: its section slide, then Slide 5 built to picked
- * Option 5b (three level cards over one venue booking at each level) and Slide 6 to picked Option 6b (the party board
- * in workflow order, each task as far out as its risk and its check allow), each titled, scripted and noted as the
- * Spec writes it.
- */
-
 const SLIDES = howFarYouStepOutSection as readonly Slide[];
 const PLACED = placeSections<Slide>([howFarYouStepOutSection]).flat();
 const LEVELS = 'in-on-or-out-of-the-loop';
@@ -38,7 +31,6 @@ const slideOf = (slug: string) => {
   return own;
 };
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" placed.`);
@@ -63,14 +55,12 @@ const markersOf = ($: ReturnType<typeof sceneOf>) =>
     .toArray()
     .map((marker) => $(marker).attr('data-context-ref'));
 
-/** Each Slide's Voice script, segment by segment: `title — script`. */
 const scriptOf = (slide: Slide, locale: Locale = 'en') =>
   slide.segments.map((segment) => {
     const own = messagesOf(slide, locale).voiceScript.segments[segment.slug];
     return `${own?.title} — ${own?.script}`;
   });
 
-/** Each Slide's Speaker notes: header and source URLs. */
 const notesOf = (slide: Slide) =>
   slide.notes.map((note) => ({
     header: messagesOf(slide).notes?.[note.slug]?.header,

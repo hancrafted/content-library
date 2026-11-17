@@ -5,12 +5,10 @@ import { HandsOnStep } from '@/episodes/components/slide-shared/hands-on-step/ha
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The page holding every hands-on instruction: the Human in the loop Explorable, where the quiz Workflow is picked. */
 const WORKFLOW_PATH = '/explorables/human-in-the-loop';
 
 const STEPS = ['steps.first', 'steps.second', 'steps.third', 'steps.fourth'] as const;
 
-// Hands-on 1a, Workflow stage Requirements up to the grill. The Scene points to the quiz Workflow and lists the steps; Help in the header turns being stuck into a prompt for an AI.
 export const startTheInterview = slide({
   slug: 'start-the-interview',
   messages: { en, de },

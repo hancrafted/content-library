@@ -11,7 +11,6 @@ const MEYER = {
 };
 const EIFFEL = { slug: 'eiffel-design-by-contract', url: 'https://www.eiffel.com/values/design-by-contract/' };
 
-/** The handoff arrow from Food & drinks to the kitchen, stretched to the seam's width on the wide board. */
 function HandoffArrow() {
   return (
     <svg viewBox="0 0 400 24" className="hidden h-6 w-full @4xl:block" preserveAspectRatio="none" aria-hidden="true">
@@ -26,12 +25,6 @@ function HandoffArrow() {
   );
 }
 
-/**
- * "Contracts at the seams" (Spec Option 8a): the one seam zoomed, Food & drinks on the left, the venue's kitchen on the
- * right as an external note, and the contract card pinned on the arrow between them, "vegetarian" defined in its
- * Receives line and the how left to the kitchen below it. The fixed dinner sits where Slide 1's egg dishes were. Keeps
- * `basic-page` and `motion: none`; the card lifts on hover while it is read.
- */
 export const contractsAtTheSeams = slide({
   slug: 'contracts-at-the-seams',
   messages: { en, de },
