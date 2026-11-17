@@ -1,15 +1,9 @@
 /// <reference path="../rules.d.ts" />
 
-// GEN-002 — Runtime Rule Loading: the .claude/rules symlink set that loads a
-// governing ADR into agent context on Read. One entry per ADR with a non-empty
-// paths:, none for an unscoped ADR, and no orphan left behind. Presence only —
-// archgate's reader resolves symlinks, so a copied body is indistinguishable
-// from a pointer (GEN-002 §1.4, a review duty).
-// Self-contained by design: archgate forbids imports between rules files.
+// decision: GEN-002 §1.4
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const CLAUDE_RULES_GLOB = '.claude/rules/*.md';
 const ADR_BASENAME_RE = /^([A-Z]+-\d{3})-.+\.md$/;
-// Lowercased ADR-shaped basename, as it appears under .claude/rules/.
 const CLAUDE_ADR_LINK_RE = /^[a-z]+-\d{3}-.+\.md$/;
 
 function basename(p: string): string {
@@ -35,15 +29,11 @@ function getFrontmatterValue(fm: string, key: string): string | null {
     .trim();
 }
 
-// A non-empty `paths:` is present when the key exists with a value that is not
-// an empty flow array `[]`. Block-form counts as empty here by design — GEN-001
-// requires the inline flow form, and a block value parses as no scope at all.
-function hasNonEmptyPaths(fm: string): boolean {
+function hasNonEmptyInlineFlowPathsBlockFormCountsAsEmpty(fm: string): boolean {
   const val = getFrontmatterValue(fm, 'paths');
   return val !== null && val !== '' && !/^\[\s*\]$/.test(val);
 }
 
-// Expected runtime entry path for an ADR file: the basename, lowercased.
 function symlinkPathFor(file: string): string {
   return `.claude/rules/${basename(file).toLowerCase()}`;
 }
@@ -61,7 +51,7 @@ export default {
         for (const file of files) {
           const fm = extractFrontmatter(await ctx.readFile(file)) ?? '';
           const link = symlinkPathFor(file);
-          if (hasNonEmptyPaths(fm)) {
+          if (hasNonEmptyInlineFlowPathsBlockFormCountsAsEmpty(fm)) {
             expected.add(link);
             if (!entries.has(link)) {
               ctx.report.violation({
@@ -78,7 +68,8 @@ export default {
         }
         for (const entry of entries) {
           if (expected.has(entry)) continue;
-          if (!CLAUDE_ADR_LINK_RE.test(basename(entry))) continue; // hand-written, non-ADR-named rule file — leave it alone
+          const isHandWrittenNonAdrRuleFile = !CLAUDE_ADR_LINK_RE.test(basename(entry));
+          if (isHandWrittenNonAdrRuleFile) continue;
           ctx.report.violation({
             message: `Runtime symlink '${entry}' has no backing ADR with a non-empty paths: — remove the orphan (GEN-002 [adr-claude-rules-symlink]).`,
             file: entry,

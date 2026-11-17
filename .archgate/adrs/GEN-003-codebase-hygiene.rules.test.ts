@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for GEN-003-codebase-hygiene.rules.ts — pass and fail path for
-// every rule, plus the two boundaries each is easy to get wrong: the comment
-// opener that separates a live directive from prose naming one, and the src/
-// scope. Directive forms appear as string data, never as comments in this file.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './GEN-003-codebase-hygiene.rules';
 
@@ -14,16 +9,12 @@ interface Reported {
   line?: number;
 }
 
-// Minimal glob -> RegExp for the double below. A '**' segment spans any number
-// of path segments including none, so 'src/**/*' matches 'src/a.ts' as well as
-// 'src/p/lib/a.ts'; a lone '*' spans one segment's characters.
 function globToRegExp(pattern: string): RegExp {
   const segments = pattern.split('/');
   let body = '';
   segments.forEach((segment, index) => {
     const separator = index === 0 ? '' : '/';
     if (segment === '**') {
-      // Absorb the trailing separator so '**' can span zero segments too.
       body += index === segments.length - 1 ? `${separator}.*` : `${separator}(?:[^/]+/)*`;
       return;
     }
@@ -36,9 +27,6 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${body}$`);
 }
 
-// Stands in for archgate's RuleContext: a line-based grepFiles over an
-// in-memory file set, and a report sink that keeps violations and drops the
-// tiers this ADR does not use (every rule runs at error).
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -78,12 +66,10 @@ function makeCtx(files: Record<string, string>) {
 
 const SRC_FILE = 'src/packages/config-contract/lib/config.types.ts';
 
-// Assembled rather than written literally, so this file never carries a live
-// directive of its own.
-const DISABLE = `eslint-${'disable'}`;
-const ENABLE = `eslint-${'enable'}`;
-const OX_DISABLE = `oxlint-${'disable'}`;
-const OX_ENABLE = `oxlint-${'enable'}`;
+const ASSEMBLED_DISABLE = `eslint-${'disable'}`;
+const ASSEMBLED_ENABLE = `eslint-${'enable'}`;
+const ASSEMBLED_OX_DISABLE = `oxlint-${'disable'}`;
+const ASSEMBLED_OX_ENABLE = `oxlint-${'enable'}`;
 
 const rule = ruleSet.rules['no-eslint-disable'];
 
@@ -97,21 +83,21 @@ describe('no-eslint-disable', () => {
     expect(violations).toEqual([]);
   });
 
-  // One case per directive form named in GEN-003 §2.1.
+  // decision: GEN-003 §1.1
   const forms: [label: string, source: string][] = [
-    ['line-comment next-line', `// ${DISABLE}-next-line no-console\nconsole.log(1);\n`],
-    ['line-comment same-line', `console.log(1); // ${DISABLE}-line no-console\n`],
-    ['block-comment file-wide', `/* ${DISABLE} */\nexport const a = 1;\n`],
-    ['block-comment rule-scoped', `/* ${DISABLE} no-console */\nconsole.log(1);\n`],
-    ['paired enable', `export const a = 1;\n/* ${ENABLE} no-console */\n`],
-    ['oxlint line-comment next-line', `// ${OX_DISABLE}-next-line no-console\nconsole.log(1);\n`],
-    ['oxlint line-comment same-line', `console.log(1); // ${OX_DISABLE}-line no-console\n`],
-    ['oxlint line-comment file-wide', `// ${OX_DISABLE}\nexport const a = 1;\n`],
-    ['oxlint block-comment file-wide', `/* ${OX_DISABLE} */\nexport const a = 1;\n`],
-    ['oxlint block-comment rule-scoped', `/* ${OX_DISABLE} no-console */\nconsole.log(1);\n`],
-    ['oxlint block-comment next-line', `/* ${OX_DISABLE}-next-line no-console */\nconsole.log(1);\n`],
-    ['oxlint paired enable', `export const a = 1;\n/* ${OX_ENABLE} no-console */\n`],
-    ['oxlint line-comment paired enable', `export const a = 1;\n// ${OX_ENABLE} no-console\n`],
+    ['line-comment next-line', `// ${ASSEMBLED_DISABLE}-next-line no-console\nconsole.log(1);\n`],
+    ['line-comment same-line', `console.log(1); // ${ASSEMBLED_DISABLE}-line no-console\n`],
+    ['block-comment file-wide', `/* ${ASSEMBLED_DISABLE} */\nexport const a = 1;\n`],
+    ['block-comment rule-scoped', `/* ${ASSEMBLED_DISABLE} no-console */\nconsole.log(1);\n`],
+    ['paired enable', `export const a = 1;\n/* ${ASSEMBLED_ENABLE} no-console */\n`],
+    ['oxlint line-comment next-line', `// ${ASSEMBLED_OX_DISABLE}-next-line no-console\nconsole.log(1);\n`],
+    ['oxlint line-comment same-line', `console.log(1); // ${ASSEMBLED_OX_DISABLE}-line no-console\n`],
+    ['oxlint line-comment file-wide', `// ${ASSEMBLED_OX_DISABLE}\nexport const a = 1;\n`],
+    ['oxlint block-comment file-wide', `/* ${ASSEMBLED_OX_DISABLE} */\nexport const a = 1;\n`],
+    ['oxlint block-comment rule-scoped', `/* ${ASSEMBLED_OX_DISABLE} no-console */\nconsole.log(1);\n`],
+    ['oxlint block-comment next-line', `/* ${ASSEMBLED_OX_DISABLE}-next-line no-console */\nconsole.log(1);\n`],
+    ['oxlint paired enable', `export const a = 1;\n/* ${ASSEMBLED_OX_ENABLE} no-console */\n`],
+    ['oxlint line-comment paired enable', `export const a = 1;\n// ${ASSEMBLED_OX_ENABLE} no-console\n`],
   ];
 
   for (const [label, source] of forms) {
@@ -128,7 +114,7 @@ describe('no-eslint-disable', () => {
 
   it('reports the line the directive sits on', async () => {
     // ARRANGE
-    const source = `export const a = 1;\nexport const b = 2;\n// ${DISABLE}-next-line no-console\nconsole.log(1);\n`;
+    const source = `export const a = 1;\nexport const b = 2;\n// ${ASSEMBLED_DISABLE}-next-line no-console\nconsole.log(1);\n`;
     const expectedLine = 3;
     const { ctx, violations } = makeCtx({ [SRC_FILE]: source });
     // ACT
@@ -139,7 +125,7 @@ describe('no-eslint-disable', () => {
 
   it('passes on prose naming a directive away from the comment opener', async () => {
     // ARRANGE
-    const source = `// Suppression stays unspent, so never write ${DISABLE} here.\nexport const a = 1;\n`;
+    const source = `// Suppression stays unspent, so never write ${ASSEMBLED_DISABLE} here.\nexport const a = 1;\n`;
     const { ctx, violations } = makeCtx({ [SRC_FILE]: source });
     // ACT
     await rule.check(ctx);
@@ -149,7 +135,7 @@ describe('no-eslint-disable', () => {
 
   it('passes on prose naming an oxlint directive away from the comment opener', async () => {
     // ARRANGE
-    const source = `// Suppression stays unspent, so never write ${OX_DISABLE} here.\nexport const a = 1;\n`;
+    const source = `// Suppression stays unspent, so never write ${ASSEMBLED_OX_DISABLE} here.\nexport const a = 1;\n`;
     const { ctx, violations } = makeCtx({ [SRC_FILE]: source });
     // ACT
     await rule.check(ctx);
@@ -159,7 +145,7 @@ describe('no-eslint-disable', () => {
 
   it('leaves a directive outside src/ alone', async () => {
     // ARRANGE
-    const source = `/* ${DISABLE} */\nexport default [];\n`;
+    const source = `/* ${ASSEMBLED_DISABLE} */\nexport default [];\n`;
     const { ctx, violations } = makeCtx({ '.oxlintrc.json': source });
     // ACT
     await rule.check(ctx);
@@ -170,7 +156,7 @@ describe('no-eslint-disable', () => {
   it('carries the GEN-003 provenance tag in its messages', async () => {
     // ARRANGE
     const provenance = '(GEN-003 [no-eslint-disable])';
-    const source = `/* ${DISABLE} */\nexport const a = 1;\n`;
+    const source = `/* ${ASSEMBLED_DISABLE} */\nexport const a = 1;\n`;
     const { ctx, violations } = makeCtx({ [SRC_FILE]: source });
     // ACT
     await rule.check(ctx);

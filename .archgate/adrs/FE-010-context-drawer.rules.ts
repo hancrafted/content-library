@@ -1,10 +1,7 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-010 — Context Drawer. The two parts of the decision that sit in file text:
-// the stylesheet reveals the context slot in print, and the drawer code never
-// goes modal. Placement, focus and the rendered slot are held by the post-build
-// test. Matched textually. Self-contained by design:
-// archgate forbids imports between rules files.
+// decision: FE-010 §1
+// decision: FE-010 §2
 const CSS_FILE = 'src/app/globals.css';
 const DRAWER_GLOB = 'src/shared/page-chrome/context-drawer/**/*';
 
@@ -18,7 +15,6 @@ function lineAt(source: string, index: number): number {
   return source.slice(0, index).split('\n').length;
 }
 
-// The text of each `@media print { ... }` block, found by brace depth.
 function printBlocks(css: string): string[] {
   const blocks: string[] = [];
   for (const start of css.matchAll(PRINT_START_RE)) {
