@@ -1,7 +1,3 @@
-// Post-build check of the Explorable pages (spec #404): the public, indexed pages at /explorables/<slug>/ in both
-// locales, each an Episode-shaped page; the overview that lists them; the redirects that keep the old
-// /explorable-explanations/ links working.
-
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -11,7 +7,7 @@ import { exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exporte
 
 const basePath = resolveBasePath();
 
-/** The Explorable pages and their URLs, written out: the spec's table, plus software ecology, is the expectation. */
+// decision: ARCH-003 §1.2
 const SLUGS = ['context-window', 'human-in-the-loop', 'ai-capability', 'software-ecology'] as const;
 const PAGES = SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({
@@ -58,7 +54,7 @@ describe.each(PAGES)('the Explorable page $url title slide', ({ url }) => {
 });
 
 describe.each(PAGES)('retained presentation at $url', ({ url }) => {
-  it('retains the rear story and outgoing effect outside removable content with independent navigation', () => {
+  it('retains the rear story, its drift canvas or glow layers, and outgoing effect outside removable content with independent navigation', () => {
     // ARRANGE
     const $ = exportedPage(url);
     const title = $('#top');
@@ -68,7 +64,6 @@ describe.each(PAGES)('retained presentation at $url', ({ url }) => {
     const expectedEntrance = 'title-departure';
     // ACT
     const edge = title.children('[data-transition-edge]');
-    // The rear story: the drift canvas, or on a glow-only hero (software ecology) its two glow layers.
     const rear = title.children().filter((_, node) => $(node).find('[data-hero-motion], .hero-glow').length > 0);
     // ASSERT
     expect(edge.attr('data-transition-edge')).toBe(expectedEdge);
@@ -146,8 +141,7 @@ describe('the old /explorable-explanations/ URLs', () => {
   });
 });
 
-describe('the renamed /explorables/ai-disciplines/ URL', () => {
-  // Renamed to ai-capability; the old path redirects so shared links keep working, and keeps its published anchor.
+describe('the renamed /explorables/ai-disciplines/ URL, kept working for shared links', () => {
   it.each(LOCALES)('redirects with a 301 to /explorables/ai-capability/ for %s', (locale) => {
     // ARRANGE
     const expected = {

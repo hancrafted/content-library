@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest';
 import config from '../../oxlint.config.mts';
 import { lintProbe } from './lint-probe.ts';
 
-// GEN-005 §1.5: the design-token legacy list is one file that lint and Archgate both read (FE-011).
+// decision: GEN-005 §1.5
+// decision: FE-011 §6.1
 describe('oxlint config', () => {
   it('exempts exactly the globs of the legacy list from the token vocabulary', () => {
     // ARRANGE
@@ -16,8 +17,8 @@ describe('oxlint config', () => {
     expect(legacy?.rules).toHaveProperty(['better-tailwindcss/no-restricted-classes']);
   });
 
-  // GEN-005 §1: oxfmt sorts imports but never removes one, so lint is what reports a dead import.
-  it('reports an import nothing uses', async () => {
+  // decision: GEN-005 §1.1
+  it('reports an import nothing uses, since oxfmt sorts imports but never removes one', async () => {
     // ARRANGE
     const source = "import { unused } from './other.ts';\nexport const a = 1;\n";
 

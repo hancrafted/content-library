@@ -1,6 +1,4 @@
-// Hosting files Cloudflare Pages reads from the root of the export: they must land in out/ and say what the
-// hosting doc promises. Pages ignores a malformed rule silently, so the content is asserted, not just the file.
-
+// spec: docs/features/hosting.md#how-it-deploys
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -9,7 +7,7 @@ import { OUT_DIR } from './exported-pages';
 
 const read = (file: string) => readFileSync(join(OUT_DIR, file), 'utf8');
 
-describe('hosting files in the export', () => {
+describe('hosting files in the export, asserted by content since Pages ignores a malformed rule silently', () => {
   it('ships _headers and _redirects at the root of out/', () => {
     // ARRANGE
     const files = ['_headers', '_redirects'];

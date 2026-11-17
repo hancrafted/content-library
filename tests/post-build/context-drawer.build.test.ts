@@ -1,7 +1,4 @@
-// FE-010 post-build check: every exported Episode carries its Speaker notes and
-// Voice script in the static HTML, drawer closed, and the stylesheet prints
-// them. Reads the files exactly as a visitor, a crawler or a print job gets them.
-
+// decision: FE-010 §2
 import { type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -15,10 +12,6 @@ const PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ slug, route }) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(route, locale) })),
 );
 
-/**
- * Whether the page holds a page Slide: one whose anchor is `<section>--<slide>`. A page of the Title slide and
- * section slides alone, as an Episode built Section by Section starts, carries no Speaker note yet.
- */
 function holdsPageSlide($: CheerioAPI): boolean {
   return $('[data-slot="slides"] [data-slide*="--"]').length > 0;
 }
@@ -27,7 +20,6 @@ function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
   return $(`#context-panel-${panel} [data-context-for="${anchor}"]`);
 }
 
-/** The elements a note's short target names inside its own Slide: its scoped `data-target`. */
 function targetsOf($: CheerioAPI, owner: string, target: string) {
   return $(`[data-slot="slides"] [data-slide="${owner}"]`).find(`[data-target="${target}"]`);
 }

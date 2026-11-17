@@ -1,7 +1,6 @@
-// Scene art in the export (FE-005 §5, FE-009 §4, design-ADR 0025): `npm run art` wrote every drawing to out/art/
-// under a content hash, every page's `<use>` points at a file that is there, reaches the static HTML without an `href`
-// so its Scene's client root loads it, and every file is the cross-browser form: no stylesheet, no class, no hook.
-
+// decision: FE-005 §5
+// decision: FE-009 §4
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -10,14 +9,12 @@ import { EXPORTED_PAGES, exportedPage, OUT_DIR, resolveBasePath } from './export
 const ART_DIR = join(OUT_DIR, 'art');
 const manifest = JSON.parse(readFileSync(join(ART_DIR, 'manifest.json'), 'utf8')) as Record<string, string | null>;
 const files = readdirSync(ART_DIR).filter((file) => file.endsWith('.svg'));
-/** The art file a `<use>` URL names, without the base path and the fragment. */
 const fileOf = (url: string) =>
   url
     .slice(resolveBasePath().length)
     .replace(/^\/art\//, '')
     .replace(/#.*$/, '');
 
-/** Every art `<use>` of every exported page: its page, its URL, its `href`, and whether a Scene root loads it. */
 const uses = EXPORTED_PAGES.flatMap(({ url }) => {
   const $ = exportedPage(url);
   return $('use[data-art]')

@@ -4,14 +4,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The brief-grill skill carries the Brief template that Claude Code and a
- * Claude Desktop voice session both fill in. The template lives in the skill,
- * where `mh check` never looks, so this test lifts it out and runs it against
- * the Brief rule: a template that drifts from the rule fails here, not in the
- * first real Brief.
- */
-
 const ROOT = path.join(__dirname, '../..');
 const GUIDE = path.join(ROOT, 'skills/brief-grill/SKILL.md');
 const MH = path.join(ROOT, 'node_modules/@hancrafted/markdown-harness/dist/packages/cli/cli.js');
@@ -23,7 +15,6 @@ function briefTemplate(): string {
   return match[1];
 }
 
-// Runs `mh check` over one folder holding the template as brief.md and returns its summary.
 function checkAsBrief(markdown: string): unknown {
   const folder = mkdtempSync(path.join(tmpdir(), 'brief-template-'));
   try {
@@ -48,7 +39,7 @@ function checkAsBrief(markdown: string): unknown {
   }
 }
 
-describe('the Brief template in the brief-grill skill', () => {
+describe('the Brief template in the brief-grill skill, lifted out where mh check never looks', () => {
   describe('success cases', () => {
     it('passes the Brief rule in mh check', () => {
       // ARRANGE

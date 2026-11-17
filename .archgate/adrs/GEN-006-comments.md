@@ -4,8 +4,8 @@ id: GEN-006
 title: 'Comments'
 domain: general
 rules: true
-files: ['.archgate/adrs/GEN-006-comments.rules*.ts']
-paths: ['.archgate/adrs/GEN-006-comments.rules*.ts']
+files: ['tests/**/*', '.archgate/adrs/GEN-006-comments.rules*.ts']
+paths: ['tests/**/*', '.archgate/adrs/GEN-006-comments.rules*.ts']
 description: 'Governed code carries no prose comment, JSDoc included: a reason moves down a fixed ladder into a name, a type, a test, a pointer marker or the commit body, and only machine-read markers survive.'
 ---
 

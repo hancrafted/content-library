@@ -1,8 +1,4 @@
-// FE-002 post-build check: every exported Episode page, in every locale, has
-// the structure EpisodePageContainer promises. It is the final net under the
-// typed record, the derivation test and the heading lint, and reads the HTML
-// exactly as a visitor or crawler receives it.
-
+// decision: FE-002 §1.1
 import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -16,15 +12,13 @@ const PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ slug, route, folder }) =>
   LOCALES.map((locale) => ({ slug, route, folder, locale, url: localizePath(route, locale) })),
 );
 
-/** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
+// decision: FE-002 §2.2
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
   'episode-template': ['next-steps--what-comes-next'],
 };
 
-/** Episodes whose Title slide carries its own Voice script: the drawer shows that script there, not its explainer. */
 const TITLE_SCRIPTED: readonly string[] = ['onboard-ai-every-time'];
 
-/** The scripts of an Episode's Title slide Voice script segments in `locale`, from its own Translation file. */
 function titleScripts(folder: string, locale: string): string[] {
   const file = join(import.meta.dirname, '..', '..', 'src', 'episodes', folder, 'i18n', `${locale}.json`);
   const messages = JSON.parse(readFileSync(file, 'utf8'));
@@ -39,7 +33,6 @@ function slotsOf($: CheerioAPI, selector: string): (string | undefined)[] {
     .map((child) => $(child).attr('data-slot'));
 }
 
-/** Each slide's `h2` and `h3` counts, section by section, in page order. */
 function headingsBySlide($: CheerioAPI): { h2: number; h3: number }[][] {
   return $('[data-slot="slides"] > section[data-section]')
     .toArray()
@@ -64,7 +57,6 @@ function tocFragments($: CheerioAPI): string[] {
     .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
 }
 
-/** Every Slide wrapper under one Section, with its id: the Section's own slide first. */
 function wrapperIdsBySection($: CheerioAPI): { section: string; ids: string[] }[] {
   return $('[data-slot="slides"] > section[data-section]')
     .toArray()
@@ -102,8 +94,7 @@ describe('episode structure', () => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
-    // A walk over zero pages passes silently, so the count is printed as a diagnostic.
-    console.info(`episode structure: walking ${PAGES.length} Episode pages`);
+    console.info(`episode structure: walking ${PAGES.length} Episode pages, since a walk over none passes silently`);
   });
 
   describe.each(PAGES)('$url', ({ slug, route, folder, locale, url }) => {
@@ -142,7 +133,7 @@ describe('episode structure', () => {
       expect((heading.attr('href') ?? '').split('#')[1]).toBe('top');
     });
 
-    it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale", () => {
+    it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale, unless the Title slide shows its own Voice script there", () => {
       // ARRANGE
       const $ = exportedPage(url);
       const translation = JSON.parse(
@@ -152,7 +143,6 @@ describe('episode structure', () => {
         ),
       );
       const explainer = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
-      // A Title slide with its own Voice script shows it instead, so neither tab explains the drawer.
       const expected = TITLE_SCRIPTED.includes(slug) ? ['', ''] : [explainer, explainer];
       // ACT
       const item = (tab: string) => $(`#context-panel-${tab} [data-context-for="top"]`);
@@ -220,7 +210,7 @@ describe('episode structure', () => {
       expect(levels).toEqual(expected);
     });
 
-    it('links the table of contents to every titled slide anchor, in page order', () => {
+    it("links the table of contents to every titled slide anchor, in page order, the heading's link to the Title slide first", () => {
       // ARRANGE
       const $ = exportedPage(url);
       const untitled = UNTITLED[slug] ?? [];
@@ -230,7 +220,7 @@ describe('episode structure', () => {
       const topActions = $('[data-testid="toc"] [data-toc-action]')
         .toArray()
         .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
-      // ASSERT: the heading's link to the Title slide comes first
+      // ASSERT
       expect(fragments).toEqual(anchors);
       expect(fragments[0]).toBe(TITLE_ANCHOR);
       expect(topActions).toEqual([]);
@@ -307,14 +297,14 @@ describe('episode structure', () => {
       expect((inTitle.attr('class') ?? '').split(/\s+/)).not.toContain('hidden');
     });
 
-    it('holds one talk slot in the Title slide, beside the launcher, when the Episode has a recording, and no iframe', () => {
+    it('holds one talk slot in the Title slide, beside the launcher, when the Episode has a recording, hidden until the player opens and loading nothing with the page', () => {
       // ARRANGE
       const $ = exportedPage(url);
       const launchers = $('[data-slot="title-slide"] #talk-launcher').length;
       // ACT
       const slots = $('[data-slot="title-slide"] [data-slot="talk-slot"]');
       const everywhere = $('[data-slot="talk-slot"]').length;
-      // ASSERT: a recording shows as the launcher; the slot is hidden until the player opens, and nothing loads with the page
+      // ASSERT
       expect(slots).toHaveLength(launchers);
       expect(everywhere).toBe(launchers);
       expect(slots.attr('hidden')).toBe(launchers ? 'hidden' : undefined);
@@ -349,13 +339,13 @@ describe('episode structure', () => {
       expect(clipping).toEqual([]);
     });
 
-    it('prerenders every Slide with its content mounted, inside one mount per wrapper', () => {
+    it('prerenders every Slide with its content mounted, inside one mount per wrapper, so deep links, print and crawlers see every Slide', () => {
       // ARRANGE
       const $ = exportedPage(url);
       // ACT
       const wrappers = $('[data-slide]').toArray();
       const mounts = wrappers.map((wrapper) => $(wrapper).children('[data-slot="slide-mount"]'));
-      // ASSERT: no Slide is far in the static HTML, so deep links, print and crawlers see everything
+      // ASSERT
       expect(wrappers.length).toBeGreaterThan(0);
       for (const mount of mounts) {
         expect(mount.length).toBe(1);
@@ -376,10 +366,10 @@ describe('episode structure', () => {
       expect(duplicates).toEqual([]);
     });
 
-    it('requests nothing from YouTube before the reader presses play', () => {
+    it('requests nothing from YouTube before the reader presses play, through an embed, a source or a stylesheet', () => {
       // ARRANGE
       const youtube = /youtube(-nocookie)?\.com|youtu\.be/;
-      // ACT: a plain link (the header's channel link) requests nothing; embeds, sources and stylesheets do
+      // ACT
       const $page = exportedPage(url);
       const iframes = $page('iframe').length;
       const requested = $page('[src], link[href]')
@@ -415,7 +405,7 @@ describe('print stylesheet', () => {
 });
 
 describe('talk player stylesheet', () => {
-  it('emits the rule that reserves the table of contents room while the player is docked', () => {
+  it('emits the rule that reserves the table of contents room while the player is docked, its class written out so Tailwind can read it', () => {
     // ARRANGE
     const css = cssFiles(join(OUT_DIR, '_next', 'static'))
       .map((file) => readFileSync(file, 'utf8'))
@@ -423,7 +413,7 @@ describe('talk player stylesheet', () => {
       .replace(/\s+/g, '');
     // ACT
     const hasRule = /\[data-talk-docked=(["']?)true\1\][^{}]*\{[^}]*--toc-reserve:12\.5625rem/.test(css);
-    // ASSERT: Tailwind only emits a class it can read written out, so interpolating it would silently drop the rule
+    // ASSERT
     expect(hasRule).toBe(true);
   });
 });

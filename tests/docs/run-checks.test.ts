@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { researchFoldersOfRun, researchIdFindings } from './run-checks.ts';
+import { isPlannedResearchOutput, researchFoldersOfRun, researchIdFindings } from './run-checks.ts';
 
 const FOLDER = 'LLM-0099__two-runs-plan-the-same-question';
 const planning = (staging: string): string =>
@@ -39,5 +39,19 @@ describe('edge cases', () => {
     const own = researchFoldersOfRun([], planning('docs/episodes/a'), wiki);
     // ASSERT
     expect(own).toEqual([]);
+  });
+
+  it("counts a draft's write-research foreach glob as no planned folder, only a named research.md", () => {
+    // ARRANGE
+    const outputs = [
+      'docs/episodes/a/research/*/research.md',
+      `docs/episodes/a/research/${FOLDER}/research.md`,
+      `docs/episodes/a/research/${FOLDER}/notes.md`,
+    ];
+    const expected = [false, true, false];
+    // ACT
+    const planned = outputs.map(isPlannedResearchOutput);
+    // ASSERT
+    expect(planned).toEqual(expected);
   });
 });

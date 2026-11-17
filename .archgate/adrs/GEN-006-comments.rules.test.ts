@@ -210,13 +210,13 @@ describe('no-comments', () => {
         'Non-exported declaration JSDoc',
         TS,
         'export const a = 1;\n\n/** The answer. */\nconst b = 2;\n',
-        'Delete it if it restates the code; otherwise rename',
+        'An ADR it cites becomes a `// decision: <ID> §<n>` pointer; an issue number moves to the commit body',
       ],
       [
         'In-body comment',
         TS,
         'export function f() {\n  // add one\n  return 1;\n}\n',
-        'Extract a named constant or function that says it, or add a pointer marker',
+        'in a test, fold it into the it or describe name',
       ],
       [
         'In-body comment',
@@ -228,7 +228,7 @@ describe('no-comments', () => {
         'File header comment',
         TS,
         '// This module does things.\n\nexport const a = 1;\n',
-        'Delete it, or add a pointer marker',
+        'Each ADR section it cites becomes one `// decision:` pointer above the first import',
       ],
       [
         'File header comment',
@@ -264,7 +264,7 @@ describe('no-comments', () => {
         'Comment in an empty catch',
         TS,
         'export function f() {\n  try {\n    g();\n  } catch {\n    // ignore\n  }\n}\n',
-        'Why is there a try? Remove it if nothing throws, or handle the error explicitly',
+        'in a fix: commit of its own with a test first',
       ],
       [
         'Comment in an empty catch',
@@ -312,7 +312,7 @@ describe('no-comments', () => {
       it(`reports the ${label} marker with text after it`, async () => {
         // ARRANGE
         const planted = { [file]: source };
-        const expectedHelp = 'Strip the text after the marker';
+        const expectedHelp = 'In a test the text goes into the it name';
         // ACT
         const violations = await check(planted);
         // ASSERT
