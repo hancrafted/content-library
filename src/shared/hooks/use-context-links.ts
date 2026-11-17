@@ -21,11 +21,6 @@ export function noteOfRef(ref: NoteRef): HTMLElement | null {
   return document.querySelector<HTMLElement>(noteSelector(ref));
 }
 
-/**
- * The page element a note explains: the `data-target` it names, inside the
- * element of the note's item (the Slide wrapper), so two Slides may both say
- * `prose`.
- */
 function targetOfNote(note: Element): HTMLElement | null {
   const item = note.closest(ITEM_SELECTOR)?.getAttribute(CONTEXT_ITEM_ATTR) ?? '';
   const target = note.getAttribute(NOTE_TARGET_ATTR) ?? '';
@@ -37,11 +32,6 @@ function refButton(from: EventTarget | null): Element | null {
   return from instanceof Element ? from.closest(`[${CONTEXT_REF_ATTR}]`) : null;
 }
 
-/**
- * The note a context reference names: its own slug, in the item whose element
- * holds the reference. Found by walking up to the nearest ancestor that is a
- * drawer item's element, so the drawer needs no knowledge of Slides.
- */
 function refOf(from: EventTarget | null): NoteRef | null {
   const button = refButton(from);
   const note = button?.getAttribute(CONTEXT_REF_ATTR);
@@ -60,12 +50,7 @@ function counterpart(from: EventTarget | null): Element | null {
   return ref ? noteOfRef(ref) : null;
 }
 
-/**
- * Hovering or focusing a note lights up the page element it explains, and a
- * context reference lights up its note, by `data-context-active` (CSS draws it
- * without shifting layout). Clicking a context reference calls `reveal`.
- * Delegated from `document`, so the Slides stay server components (FE-006).
- */
+// decision: FE-006 §1
 export function useContextLinks(reveal: (ref: NoteRef) => void) {
   useEffect(() => {
     const set = (on: boolean) => (event: Event) => {
@@ -94,7 +79,6 @@ export function useContextLinks(reveal: (ref: NoteRef) => void) {
   }, [reveal]);
 }
 
-/** Scrolls the drawer's body, and only it, so `note` sits as near its top as the content allows. */
 function scrollToTop(note: HTMLElement): void {
   const body = note.closest<HTMLElement>(`[${CONTEXT_SCROLL_ATTR}]`);
   if (!body) return;
@@ -105,7 +89,6 @@ function scrollToTop(note: HTMLElement): void {
   });
 }
 
-/** Pins a note (so it stays lit, at the top of the drawer) while `ref` is set; unpins when it clears. */
 export function usePinnedNote(ref: NoteRef | null) {
   useEffect(() => {
     if (!ref) return;
@@ -117,10 +100,6 @@ export function usePinnedNote(ref: NoteRef | null) {
   }, [ref]);
 }
 
-/**
- * A citation marker's click: open its note's Sources and focus source n. The
- * markers are server-rendered buttons; the card delegates the click here.
- */
 export function revealCitation(event: { target: EventTarget | null }): void {
   if (!(event.target instanceof Element)) return;
   const marker = event.target.closest(`[${CITATION_ATTR}]`);

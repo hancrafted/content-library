@@ -56,7 +56,6 @@ interface PileScene {
   flights: ReturnType<typeof createPaperFlights>;
 }
 
-/** Until the promise is readable the reader cannot act on it, so the pile only grows. */
 function currentPull(state: PileState): PilePull {
   if (!state.ready) return 'none';
   return state.draining === 'none' ? state.proximity : state.draining;

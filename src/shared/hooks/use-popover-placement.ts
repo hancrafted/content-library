@@ -16,16 +16,11 @@ export interface PopoverPlacementInput {
 }
 
 export interface PlacedPopover {
-  /** The Episode portal root to `createPortal` into (FE-009 §8), so no Slide wrapper's stacking context traps the popover under the chrome. */
+  // decision: FE-009 §8
   root: HTMLElement;
   placement: PopoverPlacement;
 }
 
-/**
- * Re-places on every scroll (any scroller, so captured) and resize, and
- * closes on Esc or a press outside the anchor and the popover. Returns the
- * cleanup.
- */
 function follow(
   { anchor, slot, onClose }: Pick<PopoverPlacementInput, 'anchor' | 'slot' | 'onClose'>,
   place: () => void,
@@ -48,11 +43,6 @@ function follow(
   };
 }
 
-/**
- * Places a Slide's popover beside its anchor and keeps it there while the
- * page scrolls or resizes; Esc or a press outside the anchor and popover
- * closes it. Null until the portal root and the first placement exist.
- */
 export function usePopoverPlacement({
   anchor,
   side,

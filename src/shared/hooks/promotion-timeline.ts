@@ -18,7 +18,6 @@ function sceneElements(root: HTMLElement) {
   if (!envelope || !caption || !actions || buttons.length !== 1) {
     throw new Error('Promotion animation requires an envelope, a caption and one action.');
   }
-  // Each caption word flies on its own; the split is reverted once the animation is over.
   const split = SplitText.create(caption, { type: 'words', aria: 'none' });
   const words = split.words.filter((word): word is HTMLElement => word instanceof HTMLElement);
   return { root, envelope, caption, actions, buttons, words, split, restoreFocus: false };
@@ -97,7 +96,6 @@ function disposer(scene: Scene, timeline: gsap.core.Timeline, pile: Pile) {
     if (scene.split.isSplit) scene.split.revert();
     scene.actions.inert = false;
     scene.root.removeAttribute('data-animated');
-    // The copy stays put from here on; without the mark the pre-hydration rule would hide it again.
     scene.root.setAttribute('data-hero-settled', '');
   };
   return { dispose, isStopped: () => stopped };
@@ -135,7 +133,6 @@ export function createPromotionTimeline(root: HTMLElement) {
   root.dataset.animated = 'arriving';
   scene.actions.inert = true;
   const timeline = gsap.timeline();
-  // Measure destinations before applying the entrance transforms.
   releaseContents(timeline, scene);
   gsap.set([...scene.words, ...scene.buttons], { opacity: 0 });
   animateEnvelope(timeline, root);

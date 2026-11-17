@@ -14,7 +14,6 @@ interface BrowserState {
   mountedBefore: boolean;
   sequence: number;
 }
-/** Created per mounted page, never a process-wide singleton. */
 export function createInkBrowser() {
   const elements = new Map<HTMLElement, string>();
   const state: BrowserState = {

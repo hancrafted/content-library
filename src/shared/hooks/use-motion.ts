@@ -50,17 +50,9 @@ function useMotionState() {
   return { phase, begin, start, end, cancel };
 }
 
-/*
- * The motion contract of ARCH-003 §5: an element whose CSS transitions or keyframe animations move it reports
- * `data-motion="running"` from the render in which `trigger` (the state that sets the motion off) changes, or when a
- * hover, focus or press may start one, and `"settled"` once the last of its own transitions and animations has ended
- * or been cancelled. When none starts within a couple of animation frames (reduced motion, nothing to animate) it
- * settles on its own. A browser test waits on the page itself, never on a timer. Only the element's own motion
- * counts; its children's bubble. The counting is `use-motion.pure.ts`.
- */
+// decision: ARCH-003 §5
 export function useMotion(trigger?: unknown): MotionProps {
   const { phase, begin, start, end, cancel } = useMotionState();
-  // Layout effect: running is set before the browser paints the changed state, so no frame shows it settled.
   useLayoutEffect(() => {
     begin();
     return cancel;
