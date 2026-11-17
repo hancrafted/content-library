@@ -4,15 +4,7 @@ import { inExcludedRegion, slideKeyTarget } from '@/episodes/lib/slide-key-targe
 import { useActiveSlide, useUrlState } from '@/shared/hooks/use-url-state';
 import { useEffect, useRef } from 'react';
 
-/**
- * Arrow-key navigation between Slides, owned by the Episode page container.
- * ← and → scroll the previous or next Slide wrapper into view (smooth, instant
- * under reduced motion; the wrapper's scroll margin applies). The URL service
- * owns intent, scrolling and arrival (FE-001 §2). Focus stays where it is.
- * `ids` starts with the Title slide's. Renders nothing.
- *
- * The listener binds once; the active Slide is read from a ref at press time.
- */
+// decision: FE-001 §2
 export function SlideKeys({ ids }: { ids: readonly string[] }) {
   const url = useUrlState();
   const active = useRef<string | null>(null);

@@ -10,7 +10,6 @@ import type { UrlState } from '@/shared/lib/url-state';
 import { useEffect, useRef } from 'react';
 import { publishTitleDeparture, readTitleReveal, type TitleRevealRange } from './title-departure';
 
-/** Only runtime inputs cross the client boundary, never Slide declarations, kits or Scene functions. */
 export interface SurfaceDescriptor {
   readonly effect?: keyof typeof INK_PROFILES;
   readonly id: string;
@@ -71,7 +70,6 @@ function rangeOffsets(scope?: CSSStyleDeclaration) {
   return { startOffset: read('--slide-transition-start-offset'), endOffset: read('--slide-transition-end-offset') };
 }
 
-/** Discrete global tone and continuous local progress have distinct publication scopes. */
 function publish(root: HTMLElement, surfaces: readonly SurfaceDescriptor[], clock: SurfaceClock) {
   const signals = ownSignals(document.documentElement);
   const writeTone = (tone: SurfaceTone) => signals.attribute('data-page-tone', tone);
@@ -165,7 +163,6 @@ function observe(
   };
 }
 
-/** Page-owned attachment: cached stable wrappers, one passive scroll listener, no active-Slide authority. */
 function geometry(root: HTMLElement, surfaces: readonly SurfaceDescriptor[], samplingLine?: number) {
   return {
     surfaces: readSurfaces(surfaces, root),

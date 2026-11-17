@@ -51,7 +51,6 @@ function EventTime({ time }: { time: string | undefined }) {
   );
 }
 
-/** Title-only navigation policy, independent of configured surface sampling. */
 function ToneMark({ appearance, geometricTone }: Pick<TitleSlideProps, 'appearance' | 'geometricTone'>) {
   return appearance.tone === 'inverse' ? <TitleTone tone={appearance.tone} geometricTone={geometricTone} /> : null;
 }
@@ -99,7 +98,6 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
     caption: props.caption,
     leading: props.notice,
     entrance,
-    // Without a hero Scene the header sits centred over the glow; with one, header and hero sit together, centred.
     className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',
     children: (
       <>
@@ -110,16 +108,8 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
   };
 }
 
-/**
- * The Episode's opening slide and the page's only `h1` (FE-002). Rendered by
- * `EpisodePageContainer`, never by a page file, and not listed in the table
- * of contents. Its wrapper carries the reserved id `top`, which the table of
- * contents heading links to. The Episode's recording joins it when youtubeId is provided, labelled with its
- * language when it is an Event recording.
- *
- * On the shared header it types in like every Slide header on page load
- * (design-ADR-0012), over the record's hero Scene or, without one, the shared glow.
- */
+// decision: FE-002 §1
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function TitleSlide(props: TitleSlideProps) {
   const { youtubeId, talkLabels, recording, hero, title } = props;
   const launcher = youtubeId && talkLabels && (

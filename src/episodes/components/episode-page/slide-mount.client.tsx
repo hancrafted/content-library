@@ -13,7 +13,6 @@ function useMeasuredHeight(mounted: boolean) {
   useEffect(() => {
     const element = box.current;
     if (!mounted || !element) return;
-    // The observer reports the first size right after layout, so mounting forces no synchronous layout read.
     const observer = new ResizeObserver(([entry]) => {
       if (entry) height.current = entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height;
     });
@@ -33,7 +32,6 @@ interface SlideMountViewProps {
   className?: string;
 }
 
-/** Identity only: retained decoration and removable Scenes read the same existing page zone store. */
 export function SlideIdentity({ id, children }: { id?: string | null; children: ReactNode }) {
   return <SlideIdContext value={id ?? null}>{children}</SlideIdContext>;
 }
@@ -55,16 +53,9 @@ export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, 
   );
 }
 
-/**
- * The Slide frame's mount (FE-009 §4), inside the server-rendered wrapper.
- * Renders its children outside `far` only, and holds the last measured height
- * while they are gone, so unmounting never moves the scroll height. Provides
- * the Slide id (the Title slide has none and is never far), so
- * `useSlideZone()` below it reads this Slide's zone. On the shared header it
- * also carries the Slide's entrance state for the play-once CSS (design-ADR-0012).
- * It loads the Scene art its content draws (`<Art>`, design-ADR 0025) once the
- * Slide is seen outside `far`.
- */
+// decision: FE-009 §4
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function SlideMount({
   id,
   mode,

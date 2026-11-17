@@ -94,10 +94,6 @@ function LauncherButton({ youtubeId, title, labels, recording, hidden }: Launche
   );
 }
 
-/**
- * The Title slide's launcher while the talk is closed; while it plays, the 16:9 talk slot takes its place.
- * Both stay in the static HTML (one hidden), so the slot is there for the player to follow once it opens.
- */
 export function TalkLauncher({
   youtubeId,
   title,
@@ -113,7 +109,6 @@ export function TalkLauncher({
   return (
     <>
       <LauncherButton youtubeId={youtubeId} title={title} labels={labels} recording={recording} hidden={isOpen} />
-      {/* mt-16: the strip above the frame where the player's 2rem header sits, plus a gap. */}
       <div
         ref={registerSlot}
         data-slot="talk-slot"
@@ -158,7 +153,6 @@ function TalkPlayerControls({ isDocked, labels }: { isDocked: boolean; labels: T
   );
 }
 
-/** Opaque on purpose: Slide text must not show through the controls. (This theme has no card token, so bg-background.) */
 function TalkPlayerHeader({ isDocked, labels }: { isDocked: boolean; labels: TalkPlayerLabels }) {
   return (
     <div className="flex h-8 items-center justify-between border-b border-border bg-background px-3 text-body">
@@ -189,12 +183,7 @@ function TalkPlayerFrame({ youtubeId, title }: { youtubeId: string; title: strin
 
 const HOST = 'overflow-hidden rounded-xl border border-border bg-background shadow-2xl';
 
-/**
- * The talk player (FE-009 §8, chrome). Its host is one element, `absolute` against the page while undocked and `fixed` only when docked, that is never re-parented, so
- * the video never reloads: it follows the Title slide's talk slot, and from `lg` docks bottom-left under the table
- * of contents when the active Slide leaves `top`. Below `lg` it never docks, so it follows the slot off screen with
- * the page. While the slot is unmounted (far from the Title slide) an undocked host parks out of sight, still playing.
- */
+// decision: FE-009 §8
 export function TalkPlayer({
   youtubeId,
   title,

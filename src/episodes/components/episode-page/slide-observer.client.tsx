@@ -27,12 +27,6 @@ function trackCrossing(intersecting: Set<string>, entries: readonly Intersection
   }
 }
 
-/**
- * The reading-line threshold: whichever wrapper spans the line is active. It
- * tells the zone store and reports to the URL service. The Title slide is the
- * first id, so scrolling back up to it makes it active and clears the previous
- * Slide. Only a gap between wrappers reports nothing, and the last id stays.
- */
 function readingLineObserver(
   ids: readonly string[],
   zones: ZoneStore | null,
@@ -57,12 +51,8 @@ function approachObserver(ids: readonly string[], zones: ZoneStore | null): Inte
   });
 }
 
-/**
- * The one viewport observer of an Episode page (FE-009 §5), and the only
- * caller of `urlState.reportReading` (FE-001 §2). A `rootMargin` belongs to an
- * observer, so its two thresholds are two instances made here and nowhere
- * else. `ids` starts with the Title slide's. Renders nothing.
- */
+// decision: FE-009 §5
+// decision: FE-001 §2
 export function SlideObserver({ ids }: { ids: readonly string[] }) {
   const zones = useContext(ZoneStoreContext);
   const url = useUrlState();

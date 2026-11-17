@@ -25,13 +25,6 @@ import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { slideSizeOf } from './episode-page-container.pure';
 
-/*
- * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
- * Title slide's text and every Slide, localized, in page order. The table of
- * contents, the Context drawer and the Slide wrappers all fold this one list,
- * each Slide under the id its position gives it.
- */
-
 export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 
 export interface PageContext {
@@ -42,11 +35,8 @@ export interface PageContext {
 
 export interface TitleAppearance {
   readonly tone: 'normal' | 'inverse';
-  /** Legacy wrapper tokens are present only without an authored Title presentation. */
   readonly legacyTone?: PageTone;
-  /** Authored mechanics carry the resolved tone; decorative JSX remains server-side. */
   readonly presentation?: SlidePresentation;
-  /** Selected only for a toned legacy Title with a first Slide and no resolved outgoing edge. */
   readonly inkTarget?: string;
 }
 
@@ -65,12 +55,6 @@ export interface EpisodeContent {
   readonly entrance: SlideEntrance;
 }
 
-/**
- * One locale of an Episode record, walked once (`placeSections`);
- * `translatorOf` serves only the site-wide Context reference and marker labels. The walk's
- * ids are also every kit's `slideHref` targets, so a link cannot drift from
- * the anchor it points at.
- */
 export async function recordContent(
   record: EpisodeComposition,
   locale: Locale,
@@ -87,7 +71,6 @@ export async function recordContent(
     tocEntrance: record.tocEntrance,
     transitions,
     title: lines.heading ?? title,
-    // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
     caption: lines.caption ?? caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),

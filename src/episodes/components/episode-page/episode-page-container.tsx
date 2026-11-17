@@ -124,7 +124,6 @@ function titleSlideOf(
   };
 }
 
-/** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
 function translatorOf(locale: Locale): TranslatorOf {
   return async (namespace) =>
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
@@ -179,7 +178,6 @@ function tocPropsOf(content: EpisodeContent, props: EpisodePageContainerProps, s
   };
 }
 
-/** Navigation presentation is independent of header tone and of the selected edge renderer. */
 async function EpisodeToc(props: ReturnType<typeof tocPropsOf>) {
   const labels = await tocLabelsOf(props.locale);
   const policy = tocEntranceOf(props.content);
