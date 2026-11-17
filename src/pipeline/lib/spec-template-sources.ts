@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { type TemplateSources } from './episode-spec-template-fresh.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-const SKILL = path.join(ROOT, 'skills/to-decision-html');
+const SKILL = path.join(ROOT, '.agents/skills/to-review');
 
 /** The Spec template asset, which records the hash. */
 export const TEMPLATE_FILE = path.join(ROOT, 'skills/new-episode/assets/spec-template.html');

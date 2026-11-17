@@ -670,7 +670,7 @@ jobs:
       life and iceberg ZoneScene draws, under src/episodes/components/slide-shared/. Spawn four Opus subagents at medium
       effort in parallel (Character with its three presets; Robot; Ship and Console; sea life and iceberg), each owning
       its files, developing the approved Spec's low-poly figures. Then one Sonnet subagent builds the cast gallery with
-      /to-decision-html at .scratch/<slug>/cast/gallery.html, rendering the real components to static markup in every
+      /to-review at .scratch/<slug>/cast/gallery.html, rendering the real components to static markup in every
       preset, pose and mood, light and dark, beside the Spec's low-poly figure, its Save writing
       .scratch/<slug>/cast/feedback.md. Stop for Han's picks; redraw what he does not pick; the job ends ok only when
       every figure has his pick. Fable redraws are decided by Han after the first gallery."
@@ -688,7 +688,7 @@ jobs:
         skills:
           - tdd
           - codebase-design
-          - to-decision-html
+          - to-review
           - visual-check
           - commit
         references:

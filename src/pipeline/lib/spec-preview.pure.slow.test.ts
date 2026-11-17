@@ -12,7 +12,7 @@ import { previewPage, readPresets, toolbarConfigOf } from './spec-preview.pure.t
 const SKILL = path.join(import.meta.dirname, '../../../skills/new-episode');
 const CALIBRATION = path.join(SKILL, 'references/spec-calibration.md');
 const TEMPLATE = path.join(SKILL, 'assets/spec-template.html');
-const TOOLBAR = path.join(SKILL, '../to-decision-html/assets/toolbar.html');
+const TOOLBAR = path.join(import.meta.dirname, '../../../.agents/skills/to-review/assets/toolbar.html');
 /** The one preset offered with no width: the full column. */
 const FULL_COLUMN = ['fit'];
 /** The pixel the dropdown rule's breakpoint sits under the width the navigation opens at. */

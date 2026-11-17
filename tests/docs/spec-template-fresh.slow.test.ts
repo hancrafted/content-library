@@ -5,13 +5,13 @@ import { describe, expect, it } from 'vitest';
 
 /*
  * The committed Spec template against the skill and the calibration it records a hash of. A change to
- * `skills/to-decision-html` or to the Spec calibration fails here until the template is regenerated and its hash
+ * `.agents/skills/to-review` or to the Spec calibration fails here until the template is regenerated and its hash
  * recorded (grilling Q8 of #556). It reads the live repo from disk, so it is a slow test (ARCH-003-testing §4.4):
  * `src/pipeline/lib/episode-spec-template-fresh.pure.test.ts` holds the fast half.
  */
 
 describe('success cases', () => {
-  it('finds the committed template generated from the current to-decision-html and Spec calibration', () => {
+  it('finds the committed template generated from the current to-review and Spec calibration', () => {
     // ARRANGE
     const template = readFileSync(TEMPLATE_FILE, 'utf8');
     // ACT
