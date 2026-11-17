@@ -6,7 +6,7 @@ import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { mergeIntoBase, slowTestReport } from './worktree-merge.ts';
+import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
@@ -50,7 +50,9 @@ function create(branch: string, base: string | null): void {
 /** Processes whose cwd sits inside the worktree. */
 function processesIn(target: string): Proc[] {
   // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
-  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], { encoding: 'utf8' });
+  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], {
+    encoding: 'utf8',
+  });
   return parseLsof(stdout, target);
 }
 
@@ -143,7 +145,7 @@ async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
   const slowTests = slowTestReport(branch, base, mainRoot());
   try {
-    const result = await mergeIntoBase(branch, base, mainRoot());
+    const result = await mergeIntoBase(branch, base, { cwd: mainRoot() });
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
     for (const line of slowTests) console.log(line);
   } catch (error) {
@@ -185,18 +187,23 @@ async function finish(branch: string, base: string | null, kill: boolean): Promi
   syncMain(mainRoot());
 }
 
-/** Fetches origin, then merges origin/main (or the base) into the current worktree's branch. */
-function sync(base: string | null): void {
+/**
+ * Fetches origin, then merges origin/main (or the base) into the current worktree's branch, holding that branch's
+ * merge lock, so a `wt:done --base` into this branch waits instead of merging alongside.
+ */
+async function sync(base: string | null): Promise<void> {
   const branch = capture('git', ['branch', '--show-current']);
   const dirty = capture('git', ['status', '--porcelain']) !== '';
   const plan = planSync({ branch, base, dirty });
   if ('error' in plan) fail(plan.error);
   stream('git', ['fetch', 'origin']);
-  try {
-    stream('git', ['merge', plan.target]);
-  } catch {
-    fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
-  }
+  // Fails only once the lock is released: process.exit inside it would skip the release.
+  const merged = await withMergeLock(
+    branch,
+    process.cwd(),
+    () => spawnSync('git', ['merge', plan.target], { stdio: 'inherit' }).status === 0,
+  );
+  if (!merged) fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
   console.log(`✔ ${branch} merged with ${plan.target}`);
 }
 
@@ -211,5 +218,5 @@ else if (args.command === 'new') {
   const refusal = refuseNewBranch(args, localBranchExists);
   if (refusal !== null) fail(refusal);
   create(args.branch, args.base);
-} else if (args.command === 'sync') sync(args.base);
+} else if (args.command === 'sync') await sync(args.base);
 else await finish(args.branch, args.base, args.kill);
