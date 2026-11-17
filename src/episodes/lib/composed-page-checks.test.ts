@@ -91,6 +91,7 @@ describe('success cases', () => {
     // ASSERT
     expect(found).toEqual(expected);
   });
+
   it('lists only Episodes whose folders still exist among those that author their own header', () => {
     // ARRANGE
     // The generated id list is the Episode folders' names (`npm run registry`): no Episode is imported to read it.

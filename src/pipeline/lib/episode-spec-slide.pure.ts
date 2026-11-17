@@ -206,7 +206,7 @@ function checkMarkers(figure: Selection, slug: string, notes: readonly string[])
     );
 }
 
-/** A Slide's article and its place, the `at`-th in its page's order. */
+/** A Slide's article and its place, the `at`-th in Spec order: its pages' Slides in page order, main page first. */
 interface PlacedSlide {
   element: Element;
   at: number;
@@ -224,7 +224,7 @@ export function checkSlide({ $ }: SpecPage, approved: boolean, { element, at }: 
   return [
     ...unless(
       slide.attr('data-number') === String(at + 1),
-      `${where} is numbered ${slide.attr('data-number')}, but it is Slide ${at + 1} in page order.`,
+      `${where} is numbered ${slide.attr('data-number')}, but it is Slide ${at + 1} in Spec order.`,
     ),
     ...checkOptionMarks(figures, where, {
       number: Number(slide.attr('data-number')),

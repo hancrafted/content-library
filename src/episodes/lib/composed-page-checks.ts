@@ -54,7 +54,8 @@ export interface CheckedPage {
 /** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included (design-ADR-0012). */
 const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
-const MARKERS_DIR = 'sections';
+/** The folder of a page's Section markers, beside its `episode.ts`. */
+export const MARKERS_DIR = 'sections';
 
 type Read = () => Promise<CheckedPage>;
 

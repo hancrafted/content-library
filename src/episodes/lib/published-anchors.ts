@@ -14,10 +14,14 @@ import { formatAsRepo } from './oxfmt-format.ts';
 
 const SNAPSHOT_FILE = 'published-anchors.json';
 
-/** A page folder's snapshot: its anchors, or, when it has none, the file to create and its content, ready to paste. */
-export type PublishedSnapshot =
-  | { readonly anchors: readonly string[] }
-  | { readonly missing: { readonly file: string; readonly contents: string } };
+/** The snapshot a page folder lacks: the file to create and its content, ready to paste. */
+export interface MissingSnapshot {
+  readonly file: string;
+  readonly contents: string;
+}
+
+/** A page folder's snapshot: its anchors, or, when it has none, the one to create. */
+export type PublishedSnapshot = { readonly anchors: readonly string[] } | { readonly missing: MissingSnapshot };
 
 /** What the published-anchor check reads of a page's context: its status and its snapshot. */
 interface PublishedContext {

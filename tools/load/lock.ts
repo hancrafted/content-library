@@ -31,12 +31,6 @@ export interface LockOptions extends Timing {
   cwd?: string;
   /** Called once, when the lock is held by another process and this one starts to wait, with that holder if readable. */
   onWait?: (holder: Holder | null) => void;
-  /**
-   * Called on SIGINT or SIGTERM while `fn` runs, instead of releasing the lock and dying: `fn` is to wind down (a
-   * child it forwards the signal to exits), and the lock is released once it settles. While waiting for the lock, a
-   * signal still releases and dies.
-   */
-  onSignal?: (signal: NodeJS.Signals) => void;
   /** How a pid's start time is read. Default: `ps` (psStartTime). */
   startTimeOf?: (pid: number) => ProcessStart;
   /** The time a leftover directory's age is measured against (see sweepLeftovers). Default: the current time. */
@@ -180,12 +174,12 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
 const SIGNALS = ['SIGINT', 'SIGTERM'] as const;
 
 /**
- * Runs `handle` on SIGINT or SIGTERM; when it answers `die`, stops listening and lets the process die by that
- * signal; on `carry-on`, keeps listening. Returns the uninstaller.
+ * Runs `handle` on SIGINT or SIGTERM, then stops listening and lets the process die by that signal. Returns the
+ * uninstaller.
  */
-function onSignals(handle: (signal: NodeJS.Signals) => 'die' | 'carry-on'): () => void {
+function onSignals(handle: () => void): () => void {
   const handler = (signal: NodeJS.Signals) => {
-    if (handle(signal) === 'carry-on') return;
+    handle();
     for (const s of SIGNALS) process.removeListener(s, handler);
     // Die by the signal, as the process would have without this handler, unless someone else handles it.
     if (process.listenerCount(signal) === 0) process.kill(process.pid, signal);
@@ -198,27 +192,16 @@ function onSignals(handle: (signal: NodeJS.Signals) => 'die' | 'carry-on'): () =
 
 /**
  * Runs `fn` holding the lock `name`, waiting while another process holds it, and releases it however `fn` ends:
- * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal (unless
- * `onSignal` lets `fn` wind down first). Throws after `timeoutMs` of waiting. Before taking it, deletes what killed
+ * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal. Throws after `timeoutMs` of waiting. Before taking it, deletes what killed
  * takers left behind (sweepLeftovers). Not reentrant: a process waits on its own lock like on anyone's.
  */
 export async function withLock<T>(name: string, options: LockOptions, fn: () => T | Promise<T>): Promise<T> {
   const claim = prepare(name, options.cwd ?? process.cwd(), options);
-  let running = false;
-  const stopListening = onSignals((signal) => {
-    if (running && options.onSignal !== undefined) {
-      options.onSignal(signal);
-      return 'carry-on';
-    }
-    release(claim);
-    return 'die';
-  });
+  const stopListening = onSignals(() => release(claim));
   try {
     await acquire(claim, name, options);
-    running = true;
     return await fn();
   } finally {
-    running = false;
     release(claim);
     // A signal that arrived during synchronous work in `fn` is dispatched only once the event loop turns: turn it
     // once while the handler is still installed, so the process dies by that signal instead of carrying on.

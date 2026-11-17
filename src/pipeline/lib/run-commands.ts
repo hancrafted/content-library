@@ -6,11 +6,11 @@
 // clock, ids, git and the transcript lookup are injectable.
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { RUN_CHECKS_TEST } from '../../shared/lib/folder-check.ts';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
 import { beginAgent, endAgent } from './run-agent-commands.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
+import { RUN_CHECKS_TEST } from './run-checks-file.ts';
 import { USAGE } from './run-help.pure.ts';
 import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
