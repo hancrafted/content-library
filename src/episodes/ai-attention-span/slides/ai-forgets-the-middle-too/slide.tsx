@@ -22,12 +22,6 @@ const budget = (chunks: ReactNode) => (
 );
 const muted = (chunks: ReactNode) => <span className="text-muted-foreground">{chunks}</span>;
 
-/*
- * "AI forgets the middle too" (Spec Option 2a): the sister thread and the summer-party chat side by side on
- * `SlideFrame`, aligned on three bands, so the same lighting lands on both. The Slide header above shows the title
- * and caption. The start, middle and end pills open their Speaker notes; the footnote opens "Planted facts, not chat
- * products" and "The strength varies". The context window is not named here.
- */
 export const aiForgetsTheMiddleToo = slide({
   slug: 'ai-forgets-the-middle-too',
   messages: { en, de },
