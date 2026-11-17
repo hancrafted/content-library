@@ -14,7 +14,6 @@ const SECTION = slide({
   content: () => null,
 });
 
-/** The Scene as the page renders it; the section slide is a stand-in, so the test reaches no Episode file. */
 function sceneOf(locale: Locale = 'en') {
   const placed = placeSections<Slide>([[SECTION, nowWithAgents]]).flat();
   const localized = localizeSlide(placed[1] as never, {
