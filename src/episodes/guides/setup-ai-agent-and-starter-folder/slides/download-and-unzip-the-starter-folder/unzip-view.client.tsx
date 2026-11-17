@@ -13,7 +13,6 @@ export interface UnzipWords {
   readonly lastWeek: string;
   readonly menuLabel: string;
   readonly action: Readonly<Record<Os, string>>;
-  /** The menu items around the action, before and after it, per OS that unzips from a menu. */
   readonly menu: Readonly<Record<'windows' | 'linux', { before: readonly string[]; after: readonly string[] }>>;
 }
 
@@ -38,7 +37,6 @@ function ZipIcon() {
   );
 }
 
-/** The menu items around the action, muted: drawn so the viewer recognises the menu, never to click. */
 function MenuItems({ items }: { items: readonly string[] }) {
   return items.map((item) => (
     <li key={item} className="rounded-md px-3 py-1.5 text-muted-foreground">
@@ -69,7 +67,6 @@ function UnzipMenu({ label, before, action, after }: UnzipMenuProps) {
   );
 }
 
-/** Mac: no menu, a pointer double-clicking the zip row, labelled. */
 function DoubleClick({ label }: { label: string }) {
   return (
     <p className="absolute top-24 left-12 flex items-center gap-2 text-caption font-semibold text-primary">
@@ -104,11 +101,6 @@ function DownloadsList({ words }: { words: UnzipWords }) {
   );
 }
 
-/**
- * The first half's Downloads window with the zip just landed in it, and how the picked OS unzips it: on Mac a
- * double-click, on Windows and Linux the zip's right-click menu with its action. The Windows warning shows on Windows
- * only. The menu sits inside the window, inside the half, so nothing clips.
- */
 export function UnzipView({ words, warning }: { words: UnzipWords; warning: ReactNode }) {
   const [pick] = usePagePick('os', 'mac');
   const os = osOf(pick);

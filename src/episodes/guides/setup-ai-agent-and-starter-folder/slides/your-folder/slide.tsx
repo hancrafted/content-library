@@ -5,7 +5,6 @@ import { TermLine, TitleTerminal } from '@/episodes/components/slide-shared/titl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The starter folder's files the Scene shows; file names, not words. */
 const FILES = ['AGENTS.md', 'GLOSSARY.md', 'skills/'] as const;
 
 export const yourFolder = slide({

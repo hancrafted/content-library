@@ -6,5 +6,4 @@ export const DEFAULT_OS: OsPick = 'mac';
 const known = <T extends string>(picks: readonly T[], value: string, fallback: T): T =>
   (picks as readonly string[]).includes(value) ? (value as T) : fallback;
 
-/** The page's operating-system pick, or the default for a value no toolbar offers. */
 export const osOf = (value: string): OsPick => known(OS_PICKS, value, DEFAULT_OS);

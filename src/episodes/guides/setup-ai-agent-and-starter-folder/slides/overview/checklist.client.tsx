@@ -9,7 +9,6 @@ import { TicksContext, useTicks } from './ticks.client';
 
 export interface ChecklistStep {
   readonly n: StepNumber;
-  /** The step's name: its Section's title, word for word, so the checklist and the Sections read as the same steps. */
   readonly title: string;
   readonly boxes: Readonly<Partial<Record<BoxId, string>>>;
 }
@@ -32,7 +31,6 @@ export interface ChecklistProps {
   readonly hrefs: Readonly<Record<StepNumber, LinkParts>>;
   readonly locale: Locale;
   readonly intro: ReactNode;
-  /** The rest of the right column, under the "Start at" card. */
   readonly children: ReactNode;
 }
 
@@ -57,7 +55,6 @@ interface StepItemProps {
   readonly toggle: (id: BoxId) => void;
 }
 
-/** The real, labelled checkboxes of one step, each target 44px high. */
 function BoxList({ step, ticked, toggle }: Omit<StepItemProps, 'start'>) {
   return (
     <ul className="ml-11 flex flex-col">

@@ -42,11 +42,6 @@ function render(locale: Locale, picks: Record<string, string> = {}): string {
 
 const scene = (locale: Locale, picks: Record<string, string> = {}) => load(render(locale, picks));
 
-/*
- * Log in (feedback round 2): the second command is the AI agent's launch line, and the Slide first says to open a NEW
- * terminal window, with the "command not found" failure and its fix.
- */
-
 describe('success cases', () => {
   it('speaks its two Voice script segments, in order', () => {
     // ARRANGE

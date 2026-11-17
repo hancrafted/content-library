@@ -1,11 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/*
- * Move 1's drawing: a file-manager surface (`bg-muted`) with the folder tile, its right-click menu and, on Mac, the
- * submenu, as `bg-card shadow-md` cards; the path to click in `primary`. Drawn, not clickable.
- */
-
 const MENU = 'flex flex-col gap-0.5 rounded-xl border border-border bg-card p-1.5 text-caption shadow-md';
 
 function FolderTile({ name }: { name: string }) {

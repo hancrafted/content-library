@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { setUpTheMattPocockSkillsYourself } from './slide';
 
-/*
- * Set up the Matt Pocock skills yourself (Spec Option 8a), read through the one interface the page reads a Slide by:
- * localized into the Guide on the shared Slide header, its Voice script as the drawer gets it and its Scene as the page
- * renders it. The section slide is a stand-in, so the test reaches no Guide file.
- */
-
 const SECTION = slide({
   slug: 'the-technical-route',
   messages: { en: { title: 'The technical route' }, de: { title: 'Der technische Weg' } },

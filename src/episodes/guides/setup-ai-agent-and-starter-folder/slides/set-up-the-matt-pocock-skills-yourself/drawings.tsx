@@ -5,7 +5,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ArrowIcon, CheckboxIcon, DownloadIcon, ExternalIcon } from './icons';
 
-/** A labelled pill to a vendor's own page, with the external-link mark: never a pasted URL (Visual language). */
 export function OfficialLink({ url, newTab, children }: { url: string; newTab: string; children: ReactNode }) {
   return (
     <a
@@ -21,7 +20,6 @@ export function OfficialLink({ url, newTab, children }: { url: string; newTab: s
   );
 }
 
-/** One group the installer offers: its name (not translated), what it holds, and whether to tick it. */
 export interface PickerGroup {
   readonly name: string;
   readonly holds: string;
@@ -44,7 +42,6 @@ function PickerLine({ group }: { group: PickerGroup }) {
   );
 }
 
-/** A still drawing of the skills installer's question: the groups it offers, the one to keep ticked. */
 export function SkillPicker({ question, groups }: { question: string; groups: readonly PickerGroup[] }) {
   return (
     <div
@@ -101,11 +98,6 @@ function GlossaryEntry({ label, entry, words }: { label: string; entry: string; 
   );
 }
 
-/**
- * Our two pieces for this route: the dashed download pill for the check skill folder, and the hancrafted entry to
- * paste into `GLOSSARY.md`. The pill is drawn but links nowhere (`data-placeholder`): the small zip does not exist
- * yet, so it becomes a link once the artifact sits in `public/`.
- */
 export function CheckBundle({
   bundle,
   glossaryEntry,

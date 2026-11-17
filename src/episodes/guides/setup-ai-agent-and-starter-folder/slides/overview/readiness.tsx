@@ -77,7 +77,6 @@ function Check({ className }: { className: string }) {
 
 const DONE_DISC = 'grid shrink-0 place-items-center rounded-full bg-(--success) text-(--success-foreground)';
 
-/** Takes the "I ran the check skill" tick back, so the checklist shows again. */
 function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
   return (
     <button
@@ -183,10 +182,6 @@ function Watch({ words, watch, locale }: Pick<ViewBodyProps, 'words' | 'watch' |
   );
 }
 
-/**
- * The Overview Scene body for one view: pure and presentational, so the test renders each view directly. `normal`
- * shows the checklist; `ready` replaces it with the recap card; `missing` puts the recap above the checklist.
- */
 export function ViewBody({ view, words, watch, locale, normal, stuck, onReopen }: ViewBodyProps) {
   if (view.kind === 'normal') return <>{normal}</>;
   return (

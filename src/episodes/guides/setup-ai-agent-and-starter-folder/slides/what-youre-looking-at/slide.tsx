@@ -10,12 +10,6 @@ import en from './i18n/en.json';
 
 const BERRY = { slug: 'berry-shellonyou', url: 'https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf' };
 
-/**
- * What you're looking at (Feedback round 2): the open terminal drawn as five parts with a dotted callout to each, and
- * the explanation of the one the viewer points at, focuses, taps or steps to. The cursor blinks, the command types
- * itself in once and the output appears, all CSS and all off under reduced motion. The OS group of the toolbar is live
- * (the prompt follows it); the reassurance sits under the picture.
- */
 export const whatYoureLookingAt = slide({
   slug: 'what-youre-looking-at',
   messages: { en, de },

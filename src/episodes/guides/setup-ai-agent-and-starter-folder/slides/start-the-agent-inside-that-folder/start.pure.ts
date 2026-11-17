@@ -29,7 +29,6 @@ export function terminalPrompt(os: string): TerminalPrompt {
   return PROMPTS[osOf(os)];
 }
 
-/** Windows uses the actual copied path rather than assuming a Downloads location. */
 export function fallbackCommand(os: string): string | null {
   return osOf(os) === 'windows' ? null : `cd Downloads/${FOLDER}`;
 }

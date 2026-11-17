@@ -1,8 +1,3 @@
-/*
- * The Guide's two page-wide picks as this Slide reads them. A copy of the same file in the Section's other step
- * Slide: a Slide folder imports no other, so copies drift until promoted.
- */
-
 export const OPERATING_SYSTEMS = ['mac', 'windows', 'linux'] as const;
 export const AI_AGENTS = ['claude-code', 'antigravity', 'codex', 'copilot'] as const;
 

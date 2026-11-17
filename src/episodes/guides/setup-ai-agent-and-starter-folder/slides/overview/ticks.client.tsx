@@ -10,7 +10,7 @@ export interface Ticks {
 
 export const TicksContext = createContext<Ticks | null>(null);
 
-/** The ticked boxes: transient client state (FE-001), so a reload starts clean. */
+// decision: FE-001 §1
 export function useTicks(): Ticks {
   const [ticked, setTicked] = useState<ReadonlySet<BoxId>>(new Set());
   const toggle = (id: BoxId) =>

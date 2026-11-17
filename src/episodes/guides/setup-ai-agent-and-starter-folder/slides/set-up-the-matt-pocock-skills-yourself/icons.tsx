@@ -1,8 +1,3 @@
-/*
- * The Slide's small marks, drawn as in Option 8a's mock: plain SVG, no client code, so both the server parts and the
- * client widgets of this folder can draw them.
- */
-
 export function ExternalIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true">

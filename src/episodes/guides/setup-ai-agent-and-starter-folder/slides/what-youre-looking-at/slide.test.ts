@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatYoureLookingAt } from './slide';
 
-/*
- * What you're looking at, read through the one interface the page reads a Slide by: localized into a stand-in Guide on
- * the shared Slide header. Its Scene renders as the static export renders it: before the viewer points at anything,
- * so on the first part (the prompt) and the toolbar's defaults (Mac, Claude Code). Which part is active is
- * `anatomy.pure.ts`'s.
- */
-
 const SECTION = slide({
   slug: 'your-terminal',
   messages: { en: { title: 'Your terminal' }, de: { title: 'Dein Terminal' } },

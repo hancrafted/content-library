@@ -171,11 +171,7 @@ function Explanation({ words, active, onActive }: Pick<DrawingProps, 'words' | '
   );
 }
 
-/**
- * The drawn terminal window with a dotted callout to each part, and the explanation of the active part under it.
- * Pointing at, focusing or tapping a part makes it active; Previous and Next walk the tour for a keyboard or a
- * touch screen. The only state is the active part (FE-001); the prompt follows the page's operating system pick.
- */
+// decision: FE-001 §1
 export function Anatomy({ words }: { words: AnatomyWords }) {
   const [active, setActive] = useState<Part>(FIRST_PART);
   const [os] = usePagePick('os', 'mac');

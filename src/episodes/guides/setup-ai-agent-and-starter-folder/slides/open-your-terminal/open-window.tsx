@@ -2,17 +2,12 @@ import type { ReactNode } from 'react';
 
 export interface OpenWindowProps {
   readonly title: string;
-  /** What the terminal prints before it waits; none when it prints nothing. */
   readonly lines: readonly string[];
   readonly prompt: string;
   readonly marker?: ReactNode;
   readonly target?: { readonly 'data-target'?: string };
 }
 
-/**
- * The Visual language's terminal window as it looks once open and waiting: a three-dot title bar, what it printed in
- * muted text, then the prompt and a still cursor in `primary` (nothing loops at rest).
- */
 export function OpenWindow({ title, lines, prompt, marker, target }: OpenWindowProps) {
   return (
     <div

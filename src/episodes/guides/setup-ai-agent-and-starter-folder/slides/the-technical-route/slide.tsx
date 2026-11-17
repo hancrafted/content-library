@@ -4,7 +4,6 @@ import { TermLine, TitleTerminal } from '@/episodes/components/slide-shared/titl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "The technical route", Title-slide Option 0b's theme: the command that installs the skills by hand. A bonus, not a step.
 export const theTechnicalRoute = slide({
   slug: 'the-technical-route',
   messages: { en, de },

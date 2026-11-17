@@ -13,15 +13,10 @@ export function WindowDots() {
 interface PermissionPromptProps {
   readonly title: string;
   readonly typed: string;
-  /** What comes back before the prompt, muted. */
   readonly lookup: string;
   readonly children: ReactNode;
 }
 
-/**
- * The AI agent's terminal window at the moment it asks: the typed skill, the lookup it ran, then the approval box.
- * The `ai` glow marks the AI agent's window only (Visual language "Accent").
- */
 export function PermissionPrompt({ title, typed, lookup, children }: PermissionPromptProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card ring-4 ring-ai/15">
@@ -41,7 +36,6 @@ export function PermissionPrompt({ title, typed, lookup, children }: PermissionP
 }
 
 interface ApprovalProps {
-  /** The approval's heading, such as Claude Code's "Bash command"; absent where the wording is not verified. */
   readonly heading?: string;
   readonly corner: ReactNode;
   readonly command: ReactNode;

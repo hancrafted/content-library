@@ -9,12 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { openYourTerminal } from './slide';
 
-/*
- * Open your terminal (Spec Option 2a), read through the one interface the page reads a Slide by: localized into a
- * stand-in Guide on the shared Slide header. Its Scene renders as the static export renders it: before the viewer
- * picks, so on the toolbar's defaults (Mac, Claude Code). Which pick shows which view is `os-pick.pure.ts`'s.
- */
-
 const SECTION = slide({
   slug: 'your-terminal',
   messages: { en: { title: 'Your terminal' }, de: { title: 'Dein Terminal' } },

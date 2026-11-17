@@ -13,10 +13,6 @@ const AKADEMIE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/
 const FREELANCER = ['context-engineering', 'agentic-ai', 'agentic-workflow'] as const;
 const ATTENTION = ['context-engineering', 'agentic-workflow'] as const;
 
-/*
- * English readers get the AXEL copies, German readers the Akademie copies: linked, never copied, each in its own
- * language. The freelancer Episode first, then the attention span. Titles, captions and dates are the Episodes' own.
- */
 const WATCH: Readonly<Record<Locale, readonly WatchEpisode[]>> = {
   en: [
     {

@@ -9,7 +9,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 const NODE_DOWNLOAD = 'https://nodejs.org/en/download';
-/** The exact lines to type: never translated. */
 const ADD_SKILLS = 'npx skills@latest add mattpocock/skills';
 const SETUP_SKILL = '/setup-matt-pocock-skills';
 const CHECK_SKILL = '/hancrafted-check-setup';
@@ -17,11 +16,6 @@ const MAIN_GROUP = 'mattpocock-skills';
 const OTHER_GROUP = 'Other';
 const GLOSSARY_ENTRY = "**hancrafted**:\nHan's workshop homepage, https://hancrafted.net";
 
-/*
- * Bonus, "Set up the Matt Pocock skills yourself" (Spec Option 8a): a five-row recipe card, the reason on the left
- * and the exact line on the right, with Help in the header. No toolbar: nothing here differs by operating system or AI
- * agent. The rows are a `focus-group--dim-others`, so Han can point at one while presenting. No motion of its own.
- */
 export const setUpTheMattPocockSkillsYourself = slide({
   slug: 'set-up-the-matt-pocock-skills-yourself',
   messages: { en, de },

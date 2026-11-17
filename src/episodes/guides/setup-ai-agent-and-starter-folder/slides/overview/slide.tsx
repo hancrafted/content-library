@@ -32,11 +32,6 @@ function ArrowRight() {
   );
 }
 
-/**
- * Overview (Spec Option 1a, reshaped by feedback round 2): four steps as an interactive checklist, the viewer ticks what
- * they already have and the top card on the right names the first step still open and links to its first Slide. The
- * technical route stays a link to the last Section. No toolbar; ticks live in the client part and die on reload.
- */
 export const overview = slide({
   slug: 'overview',
   messages: { en, de },
@@ -137,9 +132,3 @@ export const overview = slide({
     );
   },
 });
-
-/*
- * Needs human: the check skill must open
- * https://hancrafted.net/guides/setup-ai-agent-and-starter-folder/?skills=<true|false>&local-setup=<true|false>#your-terminal--overview
- * and the GLOSSARY entry holds that URL; the skill and the glossary entry do not exist yet.
- */

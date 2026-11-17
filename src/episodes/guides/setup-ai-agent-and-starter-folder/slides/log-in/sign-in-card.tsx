@@ -13,7 +13,6 @@ function BrowserBar({ page }: { page: string }) {
   );
 }
 
-/** The drawn sign-in card in the browser window: a picture of the step, not a screenshot of the vendor's page. */
 export function SignInCard({
   page,
   title,
