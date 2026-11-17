@@ -1,9 +1,7 @@
-import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { type Timing, withLock } from '../../../tools/load/lock.ts';
-import { git } from './git.ts';
+import { capture, git } from './git.ts';
 
 const gitDirOf = (tree: string) => git(tree, ['rev-parse', '--absolute-git-dir']).stdout.trim();
 
@@ -16,10 +14,7 @@ function rebasing(tree: string): string | null {
 }
 
 function checkoutOfCountingRebase(base: string, cwd: string): string | null {
-  const listing = execFileSync('git', ['worktree', 'list', '--porcelain'], {
-    cwd,
-    encoding: 'utf8',
-  });
+  const listing = capture('git', ['worktree', 'list', '--porcelain'], cwd);
   for (const entry of listing.split('\n\n')) {
     const lines = entry.split('\n');
     const dir = lines.find((line) => line.startsWith('worktree '))?.slice('worktree '.length);
@@ -43,12 +38,30 @@ function busyWith(tree: string): string | null {
   return IN_PROGRESS.find(([name]) => existsSync(path.join(gitDir, name)))?.[1] ?? null;
 }
 
+export interface Timing {
+  pollMilliseconds: number;
+  timeoutMilliseconds: number;
+}
+
+export type WithLock = <T>(
+  name: string,
+  options: Timing & { cwd?: string; onWait?: () => void },
+  fn: () => T | Promise<T>,
+) => Promise<T>;
+
+export const noLock: WithLock = (_name, _options, fn) => Promise.resolve().then(fn);
+
 export interface MergeContext {
   cwd: string;
   log: (line: string) => void;
+  withLock: WithLock;
 }
 
-export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn: () => T | Promise<T>): Promise<T> {
+export function withMergeLock<T>(
+  branch: string,
+  { cwd, log, withLock }: MergeContext,
+  fn: () => T | Promise<T>,
+): Promise<T> {
   const onWait = () => log(`… waiting for another merge into ${branch} to finish`);
   return withLock(
     `wt-merge/${branch}`,
@@ -90,7 +103,10 @@ function buildMerge(merge: Merge, baseTip: string): string {
   return commit.stdout.trim();
 }
 
-const BUSY_WAIT: Timing = { pollMilliseconds: 5000, timeoutMilliseconds: 10 * 60 * 1000 };
+const BUSY_WAIT: Timing = {
+  pollMilliseconds: 5000,
+  timeoutMilliseconds: 10 * 60 * 1000,
+};
 
 type Attempt = { done: 'merged' | 'already-merged' } | { tree: string; busy: string; detail: string };
 
@@ -101,7 +117,10 @@ function attempt(merge: Merge, mergeBuiltOnBaseTip: { on: string; commit: string
   if (tree === null) throw new Error(`${base} is not checked out in any worktree; check it out, then rerun`);
   const baseTip = git(cwd, ['rev-parse', '--verify', `refs/heads/${base}`]).stdout.trim();
   if (mergeBuiltOnBaseTip.on !== baseTip)
-    Object.assign(mergeBuiltOnBaseTip, { on: baseTip, commit: buildMerge(merge, baseTip) });
+    Object.assign(mergeBuiltOnBaseTip, {
+      on: baseTip,
+      commit: buildMerge(merge, baseTip),
+    });
   const busy = busyWith(tree);
   if (busy !== null) return { tree, busy, detail: '' };
   const forward = git(tree, ['merge', '--ff-only', mergeBuiltOnBaseTip.commit]);
@@ -118,8 +137,11 @@ export function mergeIntoBase(
   base: string,
   options: MergeContext & Partial<Timing>,
 ): Promise<'merged' | 'already-merged'> {
-  const { cwd, log, pollMilliseconds, timeoutMilliseconds } = { ...BUSY_WAIT, ...options };
-  return withMergeLock(base, { cwd, log }, async () => {
+  const { cwd, log, withLock, pollMilliseconds, timeoutMilliseconds } = {
+    ...BUSY_WAIT,
+    ...options,
+  };
+  return withMergeLock(base, { cwd, log, withLock }, async () => {
     const deadline = Date.now() + timeoutMilliseconds;
     const mergeBuiltOnBaseTip = { on: '', commit: '' };
     for (let round = 0; ; round++) {

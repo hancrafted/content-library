@@ -7,7 +7,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Do not edit`CLAUDE.md`, it is a symlink to `AGENTS.md`.
 - Always use `/commit` to commit, `/tdd` and `/code-review` for implementation.
 - `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
-- Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
+- Worktrees, branch names and handoffs (any multi-agent work, a pasted handoff included): the `/drive` skill; its project state is `docs/drive/`. Any skill bound to a DRIVE phase in `docs/drive/binding.yml` runs inside it.
 - Use `npm run verify:quick` frequently for in-development feedback (lint, format, typecheck, tests your uncommitted changes affect); run `npm run verify` once before finishing, it is what CI will say.
 - Decision pages: invoke `/to-review` for human decision review, including the Spec work in `/new-episode`; the calling workflow keeps its contracts and Gates.
 - Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
@@ -19,8 +19,6 @@ This project is a localized Next.js application which serves to visualize theory
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
 - Always use `/writing-for-agents` when creating or editing skills; it is recommended for writing or editing any Markdown.
 - Skills: author a new one in `skills/<name>/`, symlinked from `.claude/skills/` and `.agents/skills/`, then review it once with `/skill-creator:skill-creator`. The format and gate are in `docs/adr/0006-skills-follow-agentskills.md`.
-- Worktrees: `npm run wt:new -- <branch>` and `npm run wt:done -- <branch>` (the `worktree` skill). They override any worktree path a handoff names.
-- Branch names: an orchestrator works on `<type>/<slug>` (`<type>` a Conventional Commits type or `episode`); each subagent it starts works on `<type>/<slug>--<issue>-<task>`, or `<type>/<slug>--<task>` without a ticket, created with `--base <type>/<slug>` and finished as the `worktree` skill says, which overrides any skill's merger or PR step.
 
 ## Testing
 

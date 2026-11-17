@@ -3,9 +3,8 @@ import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, statS
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
-import { deadPid, plantLock } from '../../../tools/load/lock.fixture.ts';
-import type { Timing } from '../../../tools/load/lock.ts';
-import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
+import { withLock } from './lock.fixture.ts';
+import { forkDateBeforeMerge, mergeIntoBase, type Timing, withMergeLock } from './worktree-merge.ts';
 
 function dropGitVariablesACommitHookExports(): void {
   for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -82,11 +81,14 @@ function midMerge(main: string, baseTree: string): void {
 const inGitDir = (tree: string, name: string) =>
   existsSync(git(tree, 'rev-parse', '--path-format=absolute', '--git-path', name));
 
-const SHORT_WAITS_FOR_A_BUSY_BASE: Timing = { pollMilliseconds: 50, timeoutMilliseconds: 4000 };
+const SHORT_WAITS_FOR_A_BUSY_BASE: Timing = {
+  pollMilliseconds: 50,
+  timeoutMilliseconds: 4000,
+};
 
 function merging(cwd: string) {
   const lines: string[] = [];
-  return { cwd, lines, log: (line: string) => void lines.push(line) };
+  return { cwd, lines, withLock, log: (line: string) => void lines.push(line) };
 }
 
 async function waitingOnBusyBase(lines: string[]): Promise<void> {
@@ -94,9 +96,10 @@ async function waitingOnBusyBase(lines: string[]): Promise<void> {
 }
 
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
+const LOCK = path.join(import.meta.dirname, 'lock.fixture.ts');
 
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
-  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log }));`;
+  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; import { withLock } from ${JSON.stringify(LOCK)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log, withLock }));`;
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ['--input-type=module', '-e', code, branch, cwd], {
       encoding: 'utf8',
@@ -198,7 +201,11 @@ describe('mergeIntoBase', () => {
       git(path.join(path.dirname(baseTree), 'onto-tree'), 'commit', '-aqm', 'edit a on onto');
       expect(() => git(baseTree, 'rebase', 'onto')).toThrow();
       // ACT
-      const run = mergeIntoBase('work', 'base', { ...merging(main), pollMilliseconds: 50, timeoutMilliseconds: 300 });
+      const run = mergeIntoBase('work', 'base', {
+        ...merging(main),
+        pollMilliseconds: 50,
+        timeoutMilliseconds: 300,
+      });
       // ASSERT
       await expect(run).rejects.toThrow(/rebase/);
       expect(inGitDir(baseTree, 'rebase-merge')).toBe(true);
@@ -206,7 +213,7 @@ describe('mergeIntoBase', () => {
   });
 
   describe('edge cases', () => {
-    it('waits for a wt:sync holding the merge lock of the base before merging into it', async () => {
+    it('waits for a sync holding the merge lock of the base before merging into it', async () => {
       // ARRANGE
       const { main } = fixture();
       let child: Promise<{ code: number | null; output: string }> | undefined;
@@ -222,24 +229,15 @@ describe('mergeIntoBase', () => {
       expect(result?.output).toMatch(/waiting for another merge into base/);
     });
 
-    it('takes over a merge lock left by a process that was killed mid-merge', async () => {
-      // ARRANGE
-      const { main } = fixture();
-      const lock = path.join(main, '.git', 'locks', 'wt-merge%2Fbase.lock');
-      plantLock(lock, { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
-      // ACT
-      const result = await mergeIntoBase('work', 'base', merging(main));
-      // ASSERT
-      expect(result).toBe('merged');
-      expect(existsSync(lock)).toBe(false);
-    });
-
     it('waits while the base is mid-merge, keeps the hand-resolved file, then merges once that merge is committed', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
       const context = merging(main);
-      const run = mergeIntoBase('work', 'base', { ...context, ...SHORT_WAITS_FOR_A_BUSY_BASE });
+      const run = mergeIntoBase('work', 'base', {
+        ...context,
+        ...SHORT_WAITS_FOR_A_BUSY_BASE,
+      });
       await waitingOnBusyBase(context.lines);
       expect(readFileSync(path.join(baseTree, 'a.txt'), 'utf8')).toBe('resolved by hand');
       expect(inGitDir(baseTree, 'MERGE_HEAD')).toBe(true);
@@ -257,7 +255,10 @@ describe('mergeIntoBase', () => {
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
       const context = merging(main);
-      const run = mergeIntoBase('work', 'base', { ...context, ...SHORT_WAITS_FOR_A_BUSY_BASE });
+      const run = mergeIntoBase('work', 'base', {
+        ...context,
+        ...SHORT_WAITS_FOR_A_BUSY_BASE,
+      });
       await waitingOnBusyBase(context.lines);
       // ACT
       git(baseTree, 'merge', '--abort');

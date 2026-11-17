@@ -1,0 +1,41 @@
+# The `drive` CLI's project config (design-ADR 0027): every value the CLI would otherwise hard-code.
+# Hooks are shell commands run from the main checkout with DRIVE_ROOT, DRIVE_BRANCH, DRIVE_BASE (empty without
+# --base), DRIVE_WORKTREE and, for afterMerge, DRIVE_FORKED_AT (when the branch forked, ISO) in the environment.
+worktree:
+  dir: .worktrees
+  baseBranch: main
+  remote: origin
+  # How a hint names the CLI: this repo's package script. `npm run wt:new|done|sync` are aliases of the same command.
+  invoke: npm run drive -- worktree
+  install:
+    - npm ci
+    - npx husky
+  preflight: npm run preflight
+  # The repo's own lock module (exports withLock); the skill owns no locking.
+  lock: tools/load/lock.ts
+  # Before removal; a failure stops the finish with the worktree intact.
+  beforeRemove:
+    - node tools/load/drive-hooks.ts stop-servers
+  # After the branch merged into its base; a failure is only reported.
+  afterMerge:
+    - node tools/load/drive-hooks.ts slow-tests
+  # After the worktree is gone; a failure is only reported.
+  afterRemove:
+    - node tools/load/drive-hooks.ts remove-context
+    - node tools/load/drive-hooks.ts trim-slow-tests
+# Subagents at once: the lower of `default` and `harnessCap`, the rest queue. `harnessCap` records the agent
+# harness's own limit beside it; `drive` never writes harness settings.
+parallel:
+  default: 3
+  harnessCap: 20
+# Model tiers: the Binding names a tier per phase (mid | top); each provider entry maps a tier to its model.
+# The harness resolves a tier through its own provider entry.
+models:
+  claude:
+    mid: sonnet
+    top: opus
+# Decision docs: paths and globs that change only on a `decisions/*` branch.
+decisionDocs:
+  - docs/adr/**
+  - docs/features/**
+  - '**/GLOSSARY*.md'

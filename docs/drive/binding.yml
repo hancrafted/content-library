@@ -1,0 +1,105 @@
+# The Binding (design-ADR 0027): which skills serve each DRIVE phase (n:m), the model tier each phase's Subagents run on,
+# and the agent type every agent uses. `drive setup` seeds it and adds newly installed skills; you own every edit.
+# `skills` and `model` (a tier, mid or top, mapped to models in project.yml) per phase are yours to change;
+# `seen` lists the skills setup has already offered, so one you
+# remove here is not added back.
+
+agentType: archgate:developer
+phases:
+  define:
+    model: mid
+    skills:
+      - grill-me
+      - grill-with-docs
+      - grilling
+      - research
+  reason:
+    model: top
+    skills:
+      - codebase-design
+      - domain-modeling
+      - grill-with-docs
+      - handoff
+      - improve-codebase-architecture
+      - prototype
+      - to-review
+      - to-spec
+      - to-tickets
+      - wayfinder
+  implement:
+    model: mid
+    skills:
+      - diagnosing-bugs
+      - implement
+      - tdd
+  verify:
+    model: top
+    skills:
+      - code-review
+      - improve-codebase-architecture
+      - pr
+      - visual-check
+  evolve:
+    model: mid
+    skills:
+      - improve-codebase-architecture
+      - retro
+      - to-review
+      - writing-for-agents
+seen:
+  - ask-matt
+  - author-hitl-workflow
+  - banner-design
+  - brand
+  - brief-grill
+  - claude-project-context
+  - cleanup
+  - code-review
+  - codebase-design
+  - commit
+  - design
+  - design-system
+  - diagnosing-bugs
+  - domain-modeling
+  - ecology-eval
+  - episode-add-youtube
+  - episode-author-youtube-metadata
+  - episode-match-slide-starts
+  - episode-post-production
+  - episode-promote
+  - episode-transcript-to-voice-script
+  - grill-me
+  - grill-with-docs
+  - grilling
+  - handoff
+  - implement
+  - implement-spec
+  - improve-codebase-architecture
+  - linkedin-author-post
+  - markdown-harness
+  - new-episode
+  - performance-optimization
+  - pipeline-feedback
+  - playwright-cli
+  - pr
+  - prototype
+  - research
+  - retro
+  - setup-matt-pocock-skills
+  - slides
+  - tdd
+  - teach
+  - to-review
+  - to-questionnaire
+  - to-spec
+  - to-tickets
+  - triage
+  - ui-styling
+  - ui-ux-pro-max
+  - vercel-react-best-practices
+  - visual-check
+  - wait-what
+  - wayfinder
+  - web-design-guidelines
+  - wizard
+  - writing-for-agents

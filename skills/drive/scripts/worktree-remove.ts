@@ -34,7 +34,10 @@ function unsavedLeftovers(target: string, branch: string, cwd: string): string[]
     const entries = level.flatMap((dir) =>
       readdirSync(path.join(target, dir), { withFileTypes: true })
         .filter((entry) => !FINDER_METADATA.has(entry.name))
-        .map((entry) => ({ rel: dir + entry.name + (entry.isDirectory() ? '/' : ''), entry })),
+        .map((entry) => ({
+          rel: dir + entry.name + (entry.isDirectory() ? '/' : ''),
+          entry,
+        })),
     );
     const skip = ignored(
       entries.map((e) => e.rel),

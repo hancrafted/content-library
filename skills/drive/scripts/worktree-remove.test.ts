@@ -11,7 +11,10 @@ function dropGitVariablesACommitHookExports(): void {
 dropGitVariablesACommitHookExports();
 
 const git = (cwd: string, ...args: string[]): string =>
-  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
+  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+    cwd,
+    encoding: 'utf8',
+  }).trim();
 
 const write = (file: string, content: string) => {
   mkdirSync(path.dirname(file), { recursive: true });

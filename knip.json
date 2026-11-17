@@ -5,6 +5,7 @@
     "src/page-assembly/i18n-request.ts",
     "src/episodes/components/art-build/art-pages.tsx",
     "skills/*/scripts/*.pure.ts",
+    "tools/load/drive-hooks.ts",
     "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts"
   ],
   "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "tools/**/*.ts"],

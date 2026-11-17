@@ -31,10 +31,16 @@ export const describeProc = (proc: Proc): string => `pid ${proc.pid} (${proc.com
 
 export type SyncPlan = { error: string } | { target: string };
 
-export function planSync(input: { branch: string; base: string | null; dirty: boolean }): SyncPlan {
-  const target = input.base ?? 'origin/main';
+export function planSync(input: {
+  branch: string;
+  base: string | null;
+  dirty: boolean;
+  baseBranch: string;
+  remote: string;
+}): SyncPlan {
+  const target = input.base ?? `${input.remote}/${input.baseBranch}`;
   if (input.branch === '') return { error: 'detached HEAD: check out a branch first' };
-  if (input.branch === 'main') return { error: 'run wt:sync inside a worktree, not on main' };
+  if (input.branch === input.baseBranch) return { error: `run sync inside a worktree, not on ${input.baseBranch}` };
   if (input.dirty) return { error: 'the working tree is dirty; commit or stash first' };
   if (input.branch === target) return { error: `${input.branch} cannot merge itself` };
   return { target };

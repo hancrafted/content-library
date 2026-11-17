@@ -47,7 +47,12 @@ describe('lineage', () => {
 describe('planSync', () => {
   it('merges origin/main by default and the base when given', () => {
     // ARRANGE
-    const clean = { branch: 'feat/x', dirty: false };
+    const clean = {
+      branch: 'feat/x',
+      dirty: false,
+      baseBranch: 'main',
+      remote: 'origin',
+    };
     // ACT
     const plans = [planSync({ ...clean, base: null }), planSync({ ...clean, base: 'episode/y' })];
     // ASSERT
@@ -56,10 +61,11 @@ describe('planSync', () => {
 
   it('refuses a dirty tree, main and a detached HEAD', () => {
     // ARRANGE
+    const where = { baseBranch: 'main', remote: 'origin' };
     const inputs = [
-      { branch: 'feat/x', base: null, dirty: true },
-      { branch: 'main', base: null, dirty: false },
-      { branch: '', base: null, dirty: false },
+      { branch: 'feat/x', base: null, dirty: true, ...where },
+      { branch: 'main', base: null, dirty: false, ...where },
+      { branch: '', base: null, dirty: false, ...where },
     ];
     // ACT
     const plans = inputs.map(planSync);
