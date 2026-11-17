@@ -7,12 +7,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Title slide's hero Scene, picked Option 0b: the party board zoomed onto one seam, Food & drinks handing
- * "31 vegetarian" to the venue's kitchen, with the contract card as the focal part and the goal note at the right
- * edge. Read as the Title slide renders it, with no Section placed beside it.
- */
-
 const sceneOf = (locale: Locale) =>
   load(
     renderToStaticMarkup(

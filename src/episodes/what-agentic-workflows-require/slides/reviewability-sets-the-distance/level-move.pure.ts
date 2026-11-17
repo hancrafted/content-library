@@ -1,11 +1,9 @@
 import type { SlideEntry } from '@/episodes/lib/slide-zone.pure';
 
-/** What decides whether the activity's pill slides: the Slide's entrance when it mounted, now, and the replays. */
 export interface LevelMoveState {
   /** The Slide's entrance when the move mounted: `done` means the Slide entered before, so it does not play again. */
   readonly entryAtMount: SlideEntry;
   readonly entry: SlideEntry;
-  /** How many times the pointer or keyboard focus has entered the move. */
   readonly replays: number;
 }
 

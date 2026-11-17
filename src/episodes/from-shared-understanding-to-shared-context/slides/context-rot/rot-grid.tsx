@@ -12,7 +12,6 @@ export interface RotColumn {
 export interface RotRow {
   readonly label: string;
   readonly when: string;
-  /** `strong` edges the dynamic row in full `machine`, `faint` the static one in `machine/40`. */
   readonly edge: 'strong' | 'faint';
   readonly target?: { 'data-target': string };
   readonly cells: readonly { mess: MessId; text: string; marker?: ReactNode }[];
@@ -24,7 +23,6 @@ const TILT = [
   ['rotate-1', '', '-rotate-1', '-rotate-1'],
 ];
 
-/** One mess at the bench: its vignette and its plain label, the column's label repeated above it on a phone. */
 function Cell({ column, cell, tilt }: { column: RotColumn; cell: RotRow['cells'][number]; tilt: string }) {
   return (
     <div
@@ -49,7 +47,6 @@ function Cell({ column, cell, tilt }: { column: RotColumn; cell: RotRow['cells']
   );
 }
 
-/** The header row: the names' credit, then the four plain mess labels with their terms, from the `3xl` width. */
 function Header({ credit, columns }: { credit: ReactNode; columns: readonly RotColumn[] }) {
   return (
     <div className="grid gap-4 @3xl:grid-cols-12">
@@ -69,7 +66,6 @@ function Header({ credit, columns }: { credit: ReactNode; columns: readonly RotC
   );
 }
 
-/** One row: its label and when it lands, edged in `machine`, then its four cells. */
 function Row({ row, rowIndex, columns }: { row: RotRow; rowIndex: number; columns: readonly RotColumn[] }) {
   return (
     <div {...row.target} className="grid gap-4 @3xl:grid-cols-12">
@@ -96,11 +92,6 @@ function Row({ row, rowIndex, columns }: { row: RotRow; rowIndex: number; column
   );
 }
 
-/**
- * The rot grid: four plain mess labels across, each with its term as a small caption, static and dynamic down, each
- * cell a bench vignette with its mess in `warning`. A row header plus four equal columns; below the `3xl` container
- * width one column per row, the column label repeated in each cell. Hovering a cell dims the others.
- */
 export function RotGrid(props: { credit: ReactNode; columns: readonly RotColumn[]; rows: readonly RotRow[] }) {
   return (
     <div className="flex flex-col gap-3 rounded-xl bg-muted p-4 shadow-md @3xl:p-6">

@@ -6,7 +6,6 @@ import { funnelPlays } from './funnel-motion.pure';
 
 const TRIGGER = 'rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring';
 
-/** Whether the dots play, how often they have been replayed, and the replay itself. */
 function useFunnelPlay() {
   const entry = useSlideEntry();
   const [entryAtMount] = useState(entry);
@@ -35,7 +34,6 @@ export function FunnelMotion({
   children: ReactNode;
 }) {
   const { plays, replays, replay } = useFunnelPlay();
-  // A click focuses the trigger after the pointer has already entered it: only keyboard focus replays.
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {
     if (event.currentTarget.matches(':focus-visible')) replay();
   };

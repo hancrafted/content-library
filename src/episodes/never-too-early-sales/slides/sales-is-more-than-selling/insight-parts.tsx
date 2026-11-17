@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** The "ask about the last time" exchange: the question asked, the answer given. */
 export function Exchange({ ask, answer }: { ask: ReactNode; answer: string }) {
   return (
     <div className="mt-4 flex flex-col gap-2">
@@ -10,7 +9,6 @@ export function Exchange({ ask, answer }: { ask: ReactNode; answer: string }) {
   );
 }
 
-/** What a note is relevant to, as chips; a dropped one is struck through. */
 export function Chips({ items }: { items: { label: string; dropped?: boolean }[] }) {
   return (
     <ul className="mt-4 flex flex-wrap gap-2 text-caption">
@@ -25,7 +23,6 @@ export function Chips({ items }: { items: { label: string; dropped?: boolean }[]
 
 const DOTS = [52, 100, 148] as const;
 
-/** The first hire branching into a team of three. */
 function TeamBranch({ label }: { label: string }) {
   return (
     <g>

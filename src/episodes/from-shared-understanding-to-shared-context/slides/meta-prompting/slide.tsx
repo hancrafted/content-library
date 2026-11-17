@@ -11,7 +11,6 @@ import { WorkOrder } from './work-order';
 const LI = { slug: 'li-eliciting-human-preferences', url: 'https://arxiv.org/abs/2310.11589' };
 const REPROMPT = { slug: 'shi-reprompt', url: 'https://arxiv.org/abs/2601.16507' };
 
-/** The interview in the office, turn by turn. */
 const EXCHANGE = [
   { slug: 'q1', who: 'ai' },
   { slug: 'a1', who: 'human' },
@@ -19,16 +18,10 @@ const EXCHANGE = [
   { slug: 'a2', who: 'human' },
 ] as const;
 
-/** The work order's rows, in the order the mock reads them. */
 const ROWS = ['goal', 'who', 'must', 'done'] as const;
 
 const MARKED = 'inline-flex items-center gap-1 text-caption';
 
-/**
- * "Meta prompting" (Spec Option 13a): two rooms on one floor. The planning office, a separate chat, keeps its questions
- * and drafts; only one crisp work order crosses to the bike bench. Keeps `grid-1x2` as the idea but builds a Scene of
- * two unequal rooms with the hand-off between them; keeps `motion: none`, the work order raises on hover.
- */
 export const metaPrompting = slide({
   slug: 'meta-prompting',
   messages: { en, de },

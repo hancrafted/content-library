@@ -4,7 +4,6 @@ import { speedTheWholeLineCanCarry } from '../slides/speed-the-whole-line-can-ca
 import { whatHappensWithAi } from '../slides/what-happens-with-ai/slide';
 import { whatTheCustomerReallyWanted } from '../slides/what-the-customer-really-wanted/slide';
 
-/** Placement marker of the Section "A thought experiment": its Slides in Spec order, section slide first. */
 export const aThoughtExperimentSection: Section = [
   aThoughtExperiment,
   whatTheCustomerReallyWanted,

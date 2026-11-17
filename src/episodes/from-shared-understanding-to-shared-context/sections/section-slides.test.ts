@@ -8,17 +8,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fromSharedUnderstandingToSharedContext } from '../episode';
 
-/*
- * The section slides of "From shared understanding to shared context", as the approved Spec gives them: one per Section,
- * in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one echo of the
- * dartboard (picked Title-slide Option 0c). The Spec gives these Slides no Speaker notes.
- */
-
 const SECTIONS = fromSharedUnderstandingToSharedContext.sections;
 const OPENERS = SECTIONS.map(([opener]) => opener as Slide);
 const PLACED = placeSections<Slide>(SECTIONS.map(([opener]) => [opener as Slide])).flat();
 
-/** A section slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No section slide "${slug}".`);
@@ -32,7 +25,6 @@ function sceneOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
 }
 
-/** A section slide's title and Voice script segment titles in one locale. */
 function scriptOf(slide: Slide, locale: Locale) {
   const messages = slide.messages[locale] as {
     title: string;

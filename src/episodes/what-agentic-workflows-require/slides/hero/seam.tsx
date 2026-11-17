@@ -1,25 +1,20 @@
 import { ContractCard, type ContractTermsProps } from '@/episodes/components/slide-shared/contract-card/contract-card';
 import { cn } from '@/shared/lib/utils';
 
-/** A card on the board: the team that holds it, its fact and a detail line. */
 export interface SeamNote {
   readonly team: string;
   readonly fact: string;
   readonly detail: string;
-  /** The agent badge's label, when an agent does this task. */
   readonly agent?: string;
 }
 
 export interface SeamProps {
   readonly from: SeamNote;
-  /** The receiving card; `external` names its tag when it lies outside your control. */
   readonly to: SeamNote & { readonly external?: { readonly tag: string; readonly label: string } };
-  /** The handoff arrow's accessible name. */
   readonly handoff: string;
   readonly contract?: ContractTermsProps;
 }
 
-/** The agent badge on a card's corner: a spark in the meaning colour `ai`. */
 function AgentBadge({ label }: { label: string }) {
   return (
     <span
@@ -34,7 +29,6 @@ function AgentBadge({ label }: { label: string }) {
   );
 }
 
-/** The external tag: a dashed outline pill for a dependency outside your control. */
 function ExternalTag({ tag, label }: { tag: string; label: string }) {
   return (
     <span
@@ -48,7 +42,6 @@ function ExternalTag({ tag, label }: { tag: string; label: string }) {
   );
 }
 
-/** One sticky card of the seam, tilted slightly, its badge on the top edge. */
 function SeamCard({ note, tilt }: { note: SeamProps['to']; tilt: string }) {
   const corner = note.external ? (
     <ExternalTag {...note.external} />
@@ -79,7 +72,6 @@ function SeamCard({ note, tilt }: { note: SeamProps['to']; tilt: string }) {
   );
 }
 
-/** The handoff arrow, its dot marking the seam where the contract sits. */
 function HandoffArrow({ label }: { label: string }) {
   return (
     <svg viewBox="0 0 400 40" className="w-full" role="img" aria-label={label}>
@@ -96,11 +88,6 @@ function HandoffArrow({ label }: { label: string }) {
   );
 }
 
-/**
- * One seam of the party board, zoomed: the card that hands over, the handoff arrow with the contract agreed on it, and
- * the card that receives. Laid out on the board's twelve columns, three for each card and four for the seam, leaving
- * the last two for the goal note the Scene adds.
- */
 export function Seam({ from, to, handoff, contract }: SeamProps) {
   return (
     <>

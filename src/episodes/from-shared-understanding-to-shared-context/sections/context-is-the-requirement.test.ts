@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { contextIsTheRequirementSection } from './context-is-the-requirement';
 
-/*
- * Section 3 of "From shared understanding to shared context", "Context is the requirement", as the approved Spec
- * gives it: Slides 7 to 12 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context
- * marker wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one
- * interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const ANTHROPIC = 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents';
 const OSMANI = 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding';
 const IBM = 'https://www.youtube.com/watch?v=BwXremQ-i6I';
@@ -37,7 +30,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The notes a Slide's Context markers open, in document order; a note may carry several markers. */
 function markersOf(slug: string) {
   const $ = sceneOf(slug);
   return $('[data-context-ref]')
@@ -45,7 +37,6 @@ function markersOf(slug: string) {
     .map((marker) => $(marker).attr('data-context-ref'));
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
   'what-the-ai-actually-sees',
   'context-engineering-is-requirements-engineering-for-agents',
@@ -112,7 +103,6 @@ describe('success cases', () => {
     const expected = [
       ['The window has an attention budget'],
       [
-        // Han's feedback adds Google's definition as the caption's note, ahead of the Spec's four.
         'Google’s definition',
         'The definition',
         'Input quality tracks output quality',
@@ -225,7 +215,6 @@ describe('failure cases', () => {
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      // A caption note's marker sits in the shared header, outside the Scene.
       return localized(slug).notes.map(({ target }) =>
         target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
       );

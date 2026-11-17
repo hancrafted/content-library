@@ -5,7 +5,6 @@ export interface Stone {
   readonly slug: string;
   readonly title: string;
   readonly detail: string;
-  /** A Context marker after the title. */
   readonly marker?: ReactNode;
   readonly target?: string;
 }
@@ -13,7 +12,6 @@ export interface Stone {
 /** Each stone's lift, so the four read as a path across, not a list. */
 const LIFT = ['@min-[56rem]:mt-10', '@min-[56rem]:mt-4', '@min-[56rem]:mt-0', '@min-[56rem]:mt-6'];
 
-/** The dashed arc over the stones, from one room to the other. */
 function Arc() {
   return (
     <svg

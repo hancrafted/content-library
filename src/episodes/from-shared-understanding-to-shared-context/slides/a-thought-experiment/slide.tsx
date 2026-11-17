@@ -5,7 +5,6 @@ import { Darts, type Point } from '@/episodes/components/slide-shared/dartboard/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Ten times the throws, scattered off the bull. */
 const SCATTER: readonly Point[] = [
   { x: 160, y: 40 },
   { x: 238, y: 50 },

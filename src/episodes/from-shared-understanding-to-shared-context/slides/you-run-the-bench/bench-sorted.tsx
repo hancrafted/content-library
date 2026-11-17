@@ -3,7 +3,6 @@ interface Sorted {
   readonly text: string;
 }
 
-/** What you put on the bench, edged in `machine`, and what you held back, in `warning`. */
 export function BenchSorted({ onBench, heldBack }: { onBench: Sorted; heldBack: Sorted }) {
   return (
     <div className="grid gap-3 @lg:grid-cols-2">

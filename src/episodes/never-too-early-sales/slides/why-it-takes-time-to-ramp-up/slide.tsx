@@ -4,10 +4,6 @@ import { DayOneBoard } from './day-one-board';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The founder's board on day one (Option 9b): preparation not written yet, an unknown market, and the two metrics
- * still "?", stamped "Day one". A Scene from `SlideFrame` under the Slide header.
- */
 export const whyItTakesTimeToRampUp = slide({
   slug: 'why-it-takes-time-to-ramp-up',
   messages: { en, de },

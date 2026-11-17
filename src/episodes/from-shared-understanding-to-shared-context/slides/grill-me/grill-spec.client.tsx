@@ -17,7 +17,6 @@ export function GrillSpec({ label, children }: { label: string; children: ReactN
   const [entryAtMount] = useState(entry);
   const [replays, setReplays] = useState(0);
   const replay = () => setReplays((count) => count + 1);
-  // A click focuses the trigger after the pointer has already entered it: only keyboard focus replays.
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {
     if (event.currentTarget.matches(':focus-visible')) replay();
   };

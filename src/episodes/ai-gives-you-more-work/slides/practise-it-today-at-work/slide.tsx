@@ -22,9 +22,7 @@ const SOURCES = {
   },
 } as const;
 
-/** The three moments, in the order the voice takes them. */
 const ROWS: readonly PairSlug[] = ['handoff', 'onboard', 'chunks'];
-/** The AI side's note and target, where the mock marks one. */
 const AI_NOTES = {
   onboard: 'new-session-new-contributor',
   chunks: 'splitting-tasks-lengthens-them',

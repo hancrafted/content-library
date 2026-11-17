@@ -16,7 +16,6 @@ const ANTHROPIC = {
   url: 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
 };
 
-/** The four fixes in Slide 11's column order, each from its mess to its clean state. */
 const FIXES = [
   { key: 'validate', before: 'wrong-screw', after: 'checked-sheet' },
   { key: 'compact', before: 'binder', after: 'one-page' },

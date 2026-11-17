@@ -18,7 +18,6 @@ const COLUMNS = ['poisoning', 'distraction', 'confusion', 'clash'] as const;
 const STATIC = ['wrong-screw', 'binder', 'wrenches', 'two-sheets'] as const;
 const DYNAMIC = ['mislabelled-box', 'colleagues', 'crates', 'rush-vs-check'] as const;
 
-/** The dynamic cells whose mess the confusion-and-clash numbers measure. */
 const MEASURED: readonly string[] = ['colleagues', 'crates'];
 
 /**

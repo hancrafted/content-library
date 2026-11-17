@@ -6,7 +6,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { TeamTag } from './team-tag';
 
-/** The middle of the seam, where its labels sit. */
 const MID = 180;
 
 // The section slide of "A thought experiment", echoing the Hero motif (picked Title-slide Option 0b): the seam broken.

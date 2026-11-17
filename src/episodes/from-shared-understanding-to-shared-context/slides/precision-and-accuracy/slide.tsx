@@ -15,7 +15,6 @@ const WRONG_OUTPUT = 'missing-requirements-show-up-as-wrong-output';
 /** The quadrant in reading order: tight row on top, the intent hit on the right. */
 const QUADRANT: readonly Outcome[] = ['precise-off', 'precise-accurate', 'neither', 'accurate-scattered'];
 
-/** An axis arrow, stretched along its axis: up for precision, right for accuracy. */
 function AxisArrow({ direction }: { direction: 'up' | 'right' }) {
   const up = direction === 'up';
   return (

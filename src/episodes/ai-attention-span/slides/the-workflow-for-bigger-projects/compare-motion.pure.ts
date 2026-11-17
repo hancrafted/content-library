@@ -1,11 +1,9 @@
 import type { SlideEntry } from '@/episodes/lib/slide-zone.pure';
 
-/** What decides whether the comparison plays: the Slide's entrance when the panels mounted, now, and the replays. */
 export interface CompareMotionState {
   /** The Slide's entrance when the panels mounted: `done` means the Slide entered before, so it does not play again. */
   readonly entryAtMount: SlideEntry;
   readonly entry: SlideEntry;
-  /** How many times the pointer or keyboard focus has entered the comparison. */
   readonly replays: number;
 }
 

@@ -1,6 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 
-/** The AI worker's badge: a spark on a rounded tile, in `ai`. Decorative; the words beside it name it. */
 export function AiSpark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 40" className={cn('shrink-0', className)} aria-hidden="true">
@@ -10,7 +9,6 @@ export function AiSpark({ className }: { className?: string }) {
   );
 }
 
-/** You, the person who answers, in `human`. Decorative. */
 export function PersonFigure({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 40" className={cn('shrink-0', className)} aria-hidden="true">

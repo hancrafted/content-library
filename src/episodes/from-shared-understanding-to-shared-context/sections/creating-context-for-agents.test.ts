@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { creatingContextForAgentsSection } from './creating-context-for-agents';
 
-/*
- * Section 4 of "From shared understanding to shared context", "Creating context for agents", as the approved Spec
- * gives it: Slides 13 to 15 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context
- * marker wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one
- * interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const LI = 'https://arxiv.org/abs/2310.11589';
 const REPROMPT = 'https://arxiv.org/abs/2601.16507';
 const AMBIG_SWE = 'https://arxiv.org/abs/2502.13069';
@@ -40,7 +33,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = ['meta-prompting', 'grill-me', 'brief'];
 
 describe('success cases', () => {
@@ -134,7 +126,6 @@ describe('failure cases', () => {
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      // A caption note's marker sits in the shared header, outside the Scene.
       return localized(slug).notes.map(({ target }) =>
         target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
       );

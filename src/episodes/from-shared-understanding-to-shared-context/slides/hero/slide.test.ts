@@ -6,11 +6,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Title slide's hero Scene, picked Option 0c: what you hand the agent sets the aim, AI speeds the throw, and every
- * document lands on the bull. Read as the Title slide renders it, with no Section placed beside it.
- */
-
 const sceneOf = (locale: Locale) =>
   load(
     renderToStaticMarkup(
@@ -28,7 +23,6 @@ const sceneOf = (locale: Locale) =>
     ),
   );
 
-/** The centre of each document dart, from its path's top-left corner and its 20 by 24 page. */
 function hitCentres($: ReturnType<typeof sceneOf>) {
   return $('[data-hit]')
     .toArray()

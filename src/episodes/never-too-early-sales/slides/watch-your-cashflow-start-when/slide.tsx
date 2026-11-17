@@ -13,7 +13,6 @@ import { StartSteps, STEP_SLUGS } from './start-steps';
 
 const STARTUP_FUNDING = { slug: 'startup-funding', url: 'https://www.paulgraham.com/startupfunding.html' };
 
-/** A dashed drop from the Q1 lane down to the steps, with the line that ties them. */
 function Drop({ text }: { text: string }) {
   return (
     <div className="grid grid-cols-2 items-center gap-x-3 px-3 @min-[38rem]:grid-cols-4 @min-[38rem]:gap-x-6 @min-[38rem]:px-8">

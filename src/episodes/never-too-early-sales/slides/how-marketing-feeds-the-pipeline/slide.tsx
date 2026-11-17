@@ -14,7 +14,6 @@ const GTM_BENCHMARKS = {
 
 const LEAD_IN = 'lead-in';
 
-/** The compact pipeline: Lead in takes what marketing sends; the other stages hold invented companies. */
 const PIPELINE = [
   { slug: 'leadIn', deals: [] },
   { slug: 'contact', deals: ['orbit', 'pinecrest'] },
@@ -23,17 +22,10 @@ const PIPELINE = [
   { slug: 'negotiation', deals: ['vela'] },
 ] as const;
 
-/** What lands in Lead in on its own: an inbound form, an online checkout, a booked demo. */
 const INCOMING = ['form', 'checkout', 'demo'] as const;
 
 const SOURCES = ['content', 'ads', 'web'] as const;
 
-/**
- * How marketing feeds the pipeline (Spec Option 5a): a funnel of our own drawing narrows from three marketing notes
- * into the ringed Lead in lane of the compact deal board, where the inbound examples sit; a bracket under the other
- * lanes says sales works what lands there. The dots travel the funnel one at a time on the Slide's first `active` and
- * on every mouse enter and keyboard focus.
- */
 export const howMarketingFeedsThePipeline = slide({
   slug: 'how-marketing-feeds-the-pipeline',
   messages: { en, de },

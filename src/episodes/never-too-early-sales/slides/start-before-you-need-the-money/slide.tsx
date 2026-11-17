@@ -4,8 +4,6 @@ import { DealEcho } from '@/episodes/components/slide-shared/deal-board/deal-ech
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Start before you need the money": the Hero motif's board full, and the revenue note landed
-// in the ringed payment lane.
 export const startBeforeYouNeedTheMoney = slide({
   slug: 'start-before-you-need-the-money',
   messages: { en, de },

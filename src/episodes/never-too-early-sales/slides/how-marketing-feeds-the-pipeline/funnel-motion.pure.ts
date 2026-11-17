@@ -1,11 +1,9 @@
 import type { SlideEntry } from '@/episodes/lib/slide-zone.pure';
 
-/** What decides whether the funnel's dots travel: the Slide's entrance when the funnel mounted, now, and the replays. */
 export interface FunnelMotionState {
   /** The Slide's entrance when the funnel mounted: `done` means the Slide entered before, so it does not play again. */
   readonly entryAtMount: SlideEntry;
   readonly entry: SlideEntry;
-  /** How many times the pointer has entered the funnel. */
   readonly replays: number;
 }
 

@@ -6,14 +6,12 @@ import styles from './what-is-a-sales-pipeline.module.css';
 interface BoardNote {
   name: string;
   state?: string;
-  /** Written amount of a signed deal; marks the note as revenue. */
   amount?: string;
 }
 
 interface Stage {
   id: 'lead' | 'opportunity' | 'deal';
   label: string;
-  /** Twelfths of the board's width: the lanes narrow like a funnel. */
   span: 5 | 4 | 3;
   notes: readonly BoardNote[];
 }
@@ -32,7 +30,6 @@ interface PipelineBoardProps {
   cycle: { caption: ReactNode; target: TargetProps };
 }
 
-/** A lane's width on the 12-column board, once the board is wide enough; stacked below that. */
 const SPAN: Record<Stage['span'], string> = {
   5: '@2xl:col-span-5',
   4: '@2xl:col-span-4',
@@ -44,11 +41,6 @@ const TILT = ['-rotate-1', 'rotate-1', 'rotate-1', '-rotate-2', '-rotate-1', 'ro
 
 const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background';
 
-/**
- * One pipeline board read three ways: the lanes are the funnel, the primary bracket over Lead and Opportunity is the
- * conversion rate, and the arrow under the board is the sales cycle; pointing at a lane dims the others. A server part
- * with plain props.
- */
 export function PipelineBoard({ stages, conversion, funnel, cycle }: PipelineBoardProps) {
   return (
     <div className="@container flex flex-col gap-2">
@@ -65,7 +57,6 @@ export function PipelineBoard({ stages, conversion, funnel, cycle }: PipelineBoa
   );
 }
 
-/** The conversion bracket over Lead and Opportunity, and the funnel's annotation over Deal. */
 function Terms({ conversion, funnel }: Pick<PipelineBoardProps, 'conversion' | 'funnel'>) {
   return (
     <div className="grid grid-cols-1 gap-4 @2xl:grid-cols-12 @2xl:items-end @2xl:gap-6">
@@ -94,7 +85,6 @@ function Terms({ conversion, funnel }: Pick<PipelineBoardProps, 'conversion' | '
   );
 }
 
-/** The board: a muted, inset surface with a dot pattern. */
 function BoardSurface({ children }: { children: ReactNode }) {
   const dots = `pipeline-dots-${useId()}`;
   return (
@@ -112,7 +102,6 @@ function BoardSurface({ children }: { children: ReactNode }) {
   );
 }
 
-/** One lane: its pill and count, then its notes. */
 function Lane({ stage }: { stage: Stage }) {
   return (
     <div
@@ -131,7 +120,6 @@ function Lane({ stage }: { stage: Stage }) {
   );
 }
 
-/** A note on the board: neutral paper, or the revenue tint for the signed deal. */
 function Note({ note, tilt }: { note: BoardNote; tilt?: string }) {
   const revenue = note.amount !== undefined;
   return (
@@ -167,7 +155,6 @@ function DealNote({ note }: { note: BoardNote }) {
   );
 }
 
-/** The way across the board: an arrow from first contact to the money, drawn under the lanes. */
 function CycleArrow({ caption, target }: { caption: ReactNode; target: TargetProps }) {
   return (
     <div {...target} className="flex flex-col gap-2">

@@ -14,14 +14,11 @@ interface Segment {
 interface CycleBarProps {
   total: string;
   segments: readonly Segment[];
-  /** Whole months from the first lead, one tick each. */
   ticks: readonly number[];
   months: number;
 }
 
-/** User units per month in the bar's viewBox. */
 const MONTH = 120;
-/** Gap between two segments, in user units. */
 const GAP = 4;
 
 const FILL: Record<SegmentId, string> = {
@@ -61,14 +58,12 @@ export function CycleBar({ total, segments, ticks, months }: CycleBarProps) {
   );
 }
 
-/** One stage's span of the bar, half a gap shorter at each inner edge. */
 function SegmentRect({ segment, first, last }: { segment: Segment; first: boolean; last: boolean }) {
   const x = segment.start * MONTH + (first ? 0 : GAP / 2);
   const end = segment.end * MONTH - (last ? 0 : GAP / 2);
   return <rect x={x} y="6" width={end - x} height="14" className={FILL[segment.id]} />;
 }
 
-/** A label under its segment: the first starts at the bar's left edge, the others centre on their segment. */
 function SegmentLabel({ segment, first, months }: { segment: Segment; first: boolean; months: number }) {
   const centre = `${(((segment.start + segment.end) / 2 / months) * 100).toFixed(2)}%`;
   return (

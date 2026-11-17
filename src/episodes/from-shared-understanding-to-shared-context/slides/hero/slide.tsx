@@ -5,7 +5,6 @@ import styles from './hero.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Where the four document darts land: all on the bull. */
 const HITS = [
   { x: 346, y: 196 },
   { x: 368, y: 190 },

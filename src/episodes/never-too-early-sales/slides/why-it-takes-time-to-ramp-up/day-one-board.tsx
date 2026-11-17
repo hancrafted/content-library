@@ -19,7 +19,6 @@ interface DayOneBoardProps {
   hints: Record<Column, string>;
   close: ReactNode;
   targets: Record<Column, TargetProps>;
-  /** Context markers beside each lane's pill. */
   markers: Record<Column, ReactNode>;
 }
 
@@ -28,11 +27,6 @@ const BLANK_TILT = ['-rotate-1', 'rotate-1', '-rotate-1'];
 const QUESTION_TILT = ['rotate-1', '-rotate-2', 'rotate-1'];
 const METRIC_TILT = ['-rotate-1', 'rotate-2'];
 
-/**
- * The founder's board on day one: dashed notes for material not written yet, question notes for the unknown market and
- * two dark "?" notes for the metrics, stamped "Day one" over its corner; pointing at a lane dims the others. A server
- * part with plain props.
- */
 export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
   return (
     <div className="@container flex flex-col gap-10">
@@ -49,7 +43,6 @@ export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
   );
 }
 
-/** The three lanes, in the order the voice reads them. */
 function Lanes({ preparation, questions, metrics, ...lane }: Omit<DayOneBoardProps, 'stamp' | 'close'>) {
   const laneOf = (column: Column) => ({
     label: lane.columns[column],
@@ -78,7 +71,6 @@ function Lanes({ preparation, questions, metrics, ...lane }: Omit<DayOneBoardPro
   );
 }
 
-/** The board: a muted, inset surface with a dot pattern, the stamp lying over its corner. */
 function BoardSurface({ stamp, children }: { stamp: string; children: ReactNode }) {
   const dots = `day-one-dots-${useId()}`;
   return (
@@ -125,14 +117,12 @@ function Lane({ label, hint, target, marker, children }: LaneProps) {
   );
 }
 
-/** An open question about the market, answered only by real conversations. */
 function QuestionNote({ question, tilt }: { question: string; tilt?: string }) {
   return (
     <p className={cn('rounded-sm bg-card p-4 text-body font-medium text-foreground shadow-md', tilt)}>{question}</p>
   );
 }
 
-/** Material not written yet: a dashed outline with its headline and items. */
 function BlankNote({ note, tilt }: { note: PreparationNote; tilt?: string }) {
   return (
     <div
@@ -148,7 +138,6 @@ function BlankNote({ note, tilt }: { note: PreparationNote; tilt?: string }) {
   );
 }
 
-/** A metric you plan with, still blank: the one thing to look at. */
 function MetricNote({ metric, index }: { metric: { label: string; unknown: string }; index: number }) {
   return (
     <div

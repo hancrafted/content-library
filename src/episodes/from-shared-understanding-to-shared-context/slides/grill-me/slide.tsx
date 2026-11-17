@@ -9,18 +9,11 @@ import { SpecCard } from './spec-card';
 
 const AMBIG_SWE = { slug: 'vijayvargiya-ambig-swe', url: 'https://arxiv.org/abs/2502.13069' };
 const LABAN = { slug: 'laban-lost-in-multi-turn', url: 'https://arxiv.org/abs/2505.06120' };
-/** Where grill-me comes from: Matt Pocock's own skill collection and his video on it, the author's primary sources. */
 const POCOCK_SKILLS = { slug: 'pocock-skills', url: 'https://github.com/mattpocock/skills' };
 const POCOCK_VIDEO = { slug: 'pocock-skills-video', url: 'https://www.youtube.com/watch?v=M6mYodf0dJM' };
 
-/** The spec's rows, in the order the mock reads them. */
 const SPEC_ROWS = ['for', 'must', 'bookedBy', 'out', 'done'] as const;
 
-/**
- * "Grill-me" (Spec Option 14a): the interview as a real chat, rounds of numbered questions with one answer each, ending
- * in the spec, which slides from the chat onto a clean bench. Keeps `basic-page` and `motion: local`: the spec card's
- * slide plays on first entry and replays on hover or focus; the card raises on hover.
- */
 export const grillMe = slide({
   slug: 'grill-me',
   messages: { en, de },

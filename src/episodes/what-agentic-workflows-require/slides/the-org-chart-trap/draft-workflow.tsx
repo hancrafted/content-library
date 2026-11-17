@@ -2,12 +2,10 @@ import { GoalNote } from '@/episodes/components/slide-shared/party-notes/goal-no
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** One column of the draft: a discipline's label and the steps it drew for itself. */
 export interface DraftColumn {
   readonly slug: string;
   readonly label: string;
   readonly steps: readonly string[];
-  /** The column the Scene leads the eye to: the Slide's one primary fill, its steps two to a row. */
   readonly focus?: boolean;
 }
 
@@ -42,10 +40,6 @@ function Column({ column }: { column: DraftColumn }) {
   );
 }
 
-/**
- * The committee's draft AI workflow, one column per discipline sized by its headcount, and the goal at the right edge
- * with no step leading back from it.
- */
 export function DraftWorkflow(props: {
   label: ReactNode;
   columns: readonly DraftColumn[];

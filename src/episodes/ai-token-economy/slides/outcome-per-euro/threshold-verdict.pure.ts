@@ -1,7 +1,3 @@
-/**
- * Which model wins outcome per euro at a given quality threshold.
- */
-
 export interface ThresholdVerdict {
   readonly winner: 'cheap' | 'premium';
   readonly verdict: string;

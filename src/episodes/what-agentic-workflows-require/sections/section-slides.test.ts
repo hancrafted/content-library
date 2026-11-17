@@ -8,19 +8,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatAgenticWorkflowsRequire } from '../episode';
 
-/*
- * The section slides of "What agentic workflows require of people and organisations", as the approved Spec gives
- * them: one per Section, in Spec order, each titled by its Section's h2, carrying its Voice script segment, and each
- * Scene one echo of picked Title-slide Option 0b, the seam from Food & drinks to the venue's kitchen at its Section's
- * state.
- */
-
 const EPISODE = 'what-agentic-workflows-require';
 const SECTIONS = whatAgenticWorkflowsRequire.sections;
 const OPENERS = SECTIONS.map(([opener]) => opener as Slide);
 const PLACED = placeSections<Slide>(SECTIONS.map(([opener]) => [opener as Slide])).flat();
 
-/** A section slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No section slide "${slug}".`);
@@ -40,7 +32,6 @@ interface ScriptMessages {
   voiceScript: { segments: Record<string, { title: string; script: string }> };
 }
 
-/** A section slide's title, caption and Voice script segment titles in one locale. */
 function scriptOf(slide: Slide, locale: Locale) {
   const messages = slide.messages[locale] as unknown as ScriptMessages;
   return {

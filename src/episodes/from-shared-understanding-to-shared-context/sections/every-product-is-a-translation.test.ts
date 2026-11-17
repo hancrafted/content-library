@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { everyProductIsATranslationSection } from './every-product-is-a-translation';
 
-/*
- * Section 2 of "From shared understanding to shared context", "Every product is a translation", as the approved Spec
- * gives it: Slides 4 to 6 built to the picked Options 4b, 5b and 6a, each with the Spec's Voice script, Speaker notes
- * and sources, a Context marker wherever the picked mock shows one, and the Scene facts the Option draws. Read through
- * the one interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const BROOKS = 'https://www.cgl.ucsf.edu/Outreach/pc204/NoSilverBullet.html';
 const REWORK =
   'https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md';
@@ -39,7 +32,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The notes a Slide's Context markers open: the caption's marker first, then the Scene's in document order. */
 function markersOf(slug: string) {
   const $ = sceneOf(slug);
   const scene = $('[data-context-ref]')
@@ -49,13 +41,11 @@ function markersOf(slug: string) {
   return caption === undefined ? scene : [caption, ...scene];
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = ['value-was-always-translation', 'defining-and-building', 'precision-and-accuracy'];
 
 describe('success cases', () => {
   it('lists Slides 4 to 6 after the section slide, in Spec order, titled by their Spec h3', () => {
     // ARRANGE
-    // Han's feedback retitles the section slide on the requirement it argues (the Spec's h2 was "Every product is a translation").
     const expected = [
       'Why precise and accurate requirements mattered before AI',
       'Value was always translation',

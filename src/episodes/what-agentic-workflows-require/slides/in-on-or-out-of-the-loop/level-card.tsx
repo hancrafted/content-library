@@ -2,12 +2,10 @@ import { OversightPill } from '@/episodes/components/slide-shared/oversight-pill
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
-/** How far a person steps out of the loop for a task. */
 export type Level = 'in' | 'on' | 'out';
 
 type RoleIcon = 'gate' | 'eye' | 'log';
 
-/** The role's icon: a gate for the gatekeeper, an eye for the pilot, a log under a lens for the auditor. */
 function RoleGlyph({ icon }: { icon: RoleIcon }) {
   return (
     <svg viewBox="0 0 40 40" className="w-10 shrink-0" aria-hidden="true">
@@ -45,7 +43,6 @@ export interface LevelCardProps {
   readonly abbr: string;
   readonly definition: string;
   readonly role: { readonly name: string; readonly does: string; readonly icon: RoleIcon };
-  /** A Context marker beside the level's name. */
   readonly marker?: ReactNode;
   readonly targetProps?: TargetProps;
 }
@@ -85,7 +82,6 @@ export function LevelCard({ level, label, name, abbr, definition, role, marker, 
   );
 }
 
-/** The level cards side by side over one row grid (name, definition, role), stacked where the Slide is narrow. */
 export function LevelGrid({ label, children }: { label: string; children: ReactNode }) {
   return (
     <ol

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** The definition's open term, set apart in a dashed chip: the phrase, the question it leaves and its Context markers. */
 export function MinimalChip(props: { readonly term: string; readonly question: string; readonly markers: ReactNode }) {
   return (
     <p

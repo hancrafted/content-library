@@ -19,7 +19,6 @@ const WEB_FETCH = source(
 );
 const OPENAI_WEB_SEARCH = source('openai-web-search', 'https://developers.openai.com/api/docs/guides/tools-web-search');
 
-/** Each row's colour: what you typed, what the AI wrote, what it searched and what it read. */
 const TONES: Readonly<Record<(typeof SIZE_ROWS)[number]['key'], BarTone>> = {
   question: 'you',
   searches: 'searched',
