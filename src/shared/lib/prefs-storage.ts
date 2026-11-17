@@ -11,12 +11,13 @@ export function readPrefs(): Prefs {
 }
 
 /** Merges `patch` into the single prefs key. */
-export function writePrefs(patch: Prefs): void {
+export function writePrefs(patch: Prefs): boolean {
   try {
     const raw = window.localStorage.getItem(PREFS_KEY);
     window.localStorage.setItem(PREFS_KEY, mergePrefs(raw, patch));
+    return true;
   } catch {
-    // Storage disabled (private mode, quota): the preference lasts for this page only.
+    return false;
   }
 }
 
