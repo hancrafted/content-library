@@ -6,17 +6,12 @@ import en from './i18n/en.json';
 
 type Tone = 'theory' | 'demo';
 
-/**
- * The announced terms, as keys of `pairs`, and the kind of block each lands in, matching the agenda's colours (theory
- * blue, demo orange): the tone tints its arrow, its landing card and its icon. Add or drop a pair in both Translation files.
- */
 const PAIRS = [
   { key: 'first', tone: 'theory' },
   { key: 'second', tone: 'demo' },
   { key: 'third', tone: 'demo' },
 ] as const satisfies readonly { key: string; tone: Tone }[];
 
-/** What a tone looks like, spelled out so Tailwind finds each class: the arrow, the landing card. */
 const LOOK: Record<Tone, { arrow: string; card: string }> = {
   theory: { arrow: 'stroke-(--info)', card: 'border-(--info)/50 border-l-(--info) bg-(--info)/15' },
   demo: { arrow: 'stroke-brand-accent', card: 'border-brand-accent/60 border-l-brand-accent bg-brand-accent/15' },

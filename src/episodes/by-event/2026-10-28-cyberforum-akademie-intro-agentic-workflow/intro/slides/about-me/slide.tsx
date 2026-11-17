@@ -13,11 +13,6 @@ const STAGES = [
   { slug: 'ai', year: '2026' },
 ] as const;
 
-/**
- * About me for a mixed crowd: trust through accomplishments, told as the value chain Han has worked, AI enablement
- * last and first in view. Hovering a stage brings in its two proofs. The facts come from his CV, LinkedIn profile and
- * the landing page's About cases; the note says so.
- */
 export const aboutMe = slide({
   slug: 'about-me',
   messages: { en, de },

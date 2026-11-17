@@ -17,7 +17,6 @@ function HandIcon({ className }: { className: string }) {
   );
 }
 
-// How the session runs, in two rules: the recording against the questions, the second with its order (hand, pause, ask). The Slide header shows the title and caption; the Scene holds the two cards. The note "pause first" is for the presenter and has no marker on the Slide.
 export const orga = slide({
   slug: 'orga',
   messages: { en, de },

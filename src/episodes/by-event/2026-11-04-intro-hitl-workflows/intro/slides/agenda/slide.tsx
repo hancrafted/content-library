@@ -5,10 +5,6 @@ import en from './i18n/en.json';
 
 type Kind = 'start' | 'theory' | 'demo' | 'close';
 
-/**
- * The session's blocks in order, as keys of `blocks` and the kind each is: the kind picks its colour. Add
- * or drop a block here and in both Translation files; `n` numbers an Episode's block ("Episode 1").
- */
 const BLOCKS: readonly {
   key: 'welcome' | 'first' | 'grill' | 'second' | 'workflow' | 'third' | 'qa';
   kind: Kind;
