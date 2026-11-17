@@ -12,7 +12,6 @@ export interface ValueChainProps {
   readonly statementAccent: string;
   readonly rail: string;
   readonly proofLabel: string;
-  /** The booking call to action; `href` must be https. */
   readonly booking: { readonly label: string; readonly href: string; readonly newTabHint: string };
   readonly stages: readonly ValueChainStage[];
 }
