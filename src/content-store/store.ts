@@ -18,6 +18,7 @@ import { GUIDE_RECORDS } from './guide-registry.generated';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieHandsOnAgenticWorkflowsPlaylist } from './playlists/cyberforum-akademie-hands-on-agentic-workflows';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
+import { playlist as cyberforumExiDigitalAgenticWorkflowsPlaylist } from './playlists/cyberforum-exi-digital-agentic-workflows';
 import { playlist as introHitlWorkflowsPlaylist } from './playlists/intro-hitl-workflows';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
 import type { EpisodeStatus } from './schemas/episode.schema';
@@ -52,6 +53,7 @@ const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieHandsOnAgenticWorkflowsPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
+  cyberforumExiDigitalAgenticWorkflowsPlaylist,
   introHitlWorkflowsPlaylist,
 ];
 

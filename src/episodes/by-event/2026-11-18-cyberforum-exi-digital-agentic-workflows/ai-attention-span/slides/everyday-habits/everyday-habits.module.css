@@ -1,0 +1,20 @@
+/*
+ * The two chats' bars with the handoff card between them. While the bars play (`data-play`, once on the Slide's first
+ * `active` and on every mouse enter and keyboard focus) the card lights: it rises from a dim outline to its accent
+ * border, as if handed across from the old chat. The base rules are the lit card, which is also what reduced motion
+ * shows.
+ */
+
+@keyframes light {
+  from {
+    opacity: 0.35;
+    border-color: var(--border);
+    transform: translateX(-1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bars[data-play] .card {
+    animation: light 700ms ease-out 250ms backwards;
+  }
+}

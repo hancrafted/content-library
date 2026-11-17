@@ -1,0 +1,49 @@
+/*
+ * Before and after. While the comparison plays (`data-play`, once on the Slide's first `active` and on every mouse
+ * enter and keyboard focus) the one long chat on the left fades back to its muted panel as the workflow on the right
+ * lights its accent border. A replay alternates `data-play` between `a` and `b`, two names for the same keyframes, so
+ * the animation restarts without remounting the panels. The base rules are the end state, which is also what reduced
+ * motion shows.
+ */
+
+@keyframes fade-a {
+  from {
+    background-color: var(--card);
+  }
+}
+
+@keyframes fade-b {
+  from {
+    background-color: var(--card);
+  }
+}
+
+@keyframes light-a {
+  from {
+    border-color: var(--border);
+  }
+}
+
+@keyframes light-b {
+  from {
+    border-color: var(--border);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .compare[data-play='a'] .before {
+    animation: fade-a 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='b'] .before {
+    animation: fade-b 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='a'] .after {
+    animation: light-a 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='b'] .after {
+    animation: light-b 900ms ease-out 200ms backwards;
+  }
+}
