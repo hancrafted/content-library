@@ -11,11 +11,7 @@ function Hint({ hint }: { hint: string }) {
   );
 }
 
-/**
- * The pill that opens the drawer, bottom-right as the table of contents' pill
- * sits bottom-left. The shortcut hint is visible from `md` and announced everywhere
- * (FE-010 §5). It is `invisible` while the card is open, which covers its corner.
- */
+// decision: FE-010 §5
 export function DrawerTrigger(props: {
   label: string;
   text: string;
@@ -30,7 +26,6 @@ export function DrawerTrigger(props: {
       ref={props.ref}
       type="button"
       data-slot="context-trigger"
-      // The name starts with the visible text, pill and shortcut, as WCAG 2.5.3 asks; the action follows.
       aria-label={`${props.text} ${SHORTCUT_LABEL} (${props.label})`}
       aria-expanded={props.open}
       aria-controls={props.controls}

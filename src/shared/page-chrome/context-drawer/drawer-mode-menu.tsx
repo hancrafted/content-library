@@ -7,7 +7,6 @@ import type { DrawerStrings } from './context-drawer-input';
 
 type ModeMenuLabels = DrawerStrings['menu'];
 
-/** Closes when a pointer lands outside `wrapper`, since a menu item button does not always take focus on click. */
 function useDismissOutside(open: boolean, wrapper: RefObject<HTMLElement | null>, close: () => void) {
   useEffect(() => {
     if (!open) return;
@@ -29,7 +28,6 @@ function arrowTo(event: KeyboardEvent, itemId: Itemize) {
   document.getElementById(itemId(next))?.focus();
 }
 
-/** Escape closes the menu alone: stopped here, it never reaches the drawer's handler on `window`. */
 function menuKeyHandler(menu: {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -127,11 +125,6 @@ function Popover(props: {
   );
 }
 
-/**
- * The "more" menu in the card's head: pick how the card sits beside the Slides.
- * A menu button with `menuitemradio` items. Hidden below `xl`, where the card
- * is always an overlay.
- */
 export function ModeMenu(props: { labels: ModeMenuLabels; mode: DrawerMode; onChange: (mode: DrawerMode) => void }) {
   const { labels, mode } = props;
   const menu = useModeMenu(mode);
