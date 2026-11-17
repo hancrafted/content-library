@@ -22,10 +22,7 @@
   stroke: var(--cable);
 }
 
-/*
- * The one emphasis motion: the two scores fill in, segment by segment, the without-skill run first, once on entry. The
- * base rule is the filled rest state, which reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .segment {
     animation: fill-in 300ms ease-out var(--seg-delay) both;
