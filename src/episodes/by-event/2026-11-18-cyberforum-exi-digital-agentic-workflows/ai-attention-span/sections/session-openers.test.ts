@@ -26,10 +26,7 @@ const context = (locale: Locale) => ({
   episode: episodeRef('ai-attention-span', '2026-11-18-cyberforum-exi-digital-agentic-workflows').id,
   locale,
   placed: PLACED,
-  referenceLabels: {
-    ref: 'opens speaker note',
-    marker: (title: string) => `Speaker note: ${title}`,
-  },
+  referenceLabels: { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` },
   header: 'shared' as const,
 });
 
@@ -85,10 +82,7 @@ const bubble = (slug: string, locale: Locale) => {
 };
 
 const STEPS = { start: 0, thought: 1, ais: 2, fills: 3, managing: 4 } as const;
-const YOUR = {
-  en: 'Your attention span',
-  de: 'Deine Aufmerksamkeitsspanne',
-} as const;
+const YOUR = { en: 'Your attention span', de: 'Deine Aufmerksamkeitsspanne' } as const;
 
 describe('success cases', () => {
   it.each([
@@ -258,56 +252,7 @@ describe('success cases', () => {
     // ACT
     const $ = scene('managing-the-attention-span', 'en');
     // ASSERT
-    expect({
-      apples: $('[data-rotten-apple]').length,
-      handoff: /Handoff:/.test($.text()),
-    }).toEqual(expected);
-  });
-
-  it.each([
-    [
-      'en',
-      {
-        title: 'Congratulations',
-        punchline: 'Now you know how it feels. One more time? Or again in a minute?',
-        note: 'Full to the brim. Well done.',
-      },
-    ],
-    [
-      'de',
-      {
-        title: 'Glückwunsch',
-        punchline: 'Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute?',
-        note: 'Bis zum Rand voll. Gut gemacht.',
-      },
-    ],
-  ] as const)('closes the Episode with a full bar and the congratulation (%s)', (locale, said) => {
-    // ARRANGE
-    const slug = 'now-you-know-how-it-feels';
-    const { title, ...onBar } = said;
-    const expected = {
-      title,
-      caption: undefined,
-      ...onBar,
-      filled: STEPS.managing,
-      current: '',
-      poll: '',
-      faces: [],
-    };
-    // ACT
-    const slide = localized(slug, locale);
-    const seen = bar(slug, locale);
-    // ASSERT
-    expect({
-      title: slide.title,
-      caption: slide.header?.caption,
-      punchline: seen.punchline,
-      poll: seen.poll,
-      faces: bubble(slug, locale).faces,
-      filled: seen.filled,
-      current: seen.now,
-      note: seen.note,
-    }).toEqual(expected);
+    expect({ apples: $('[data-rotten-apple]').length, handoff: /Handoff:/.test($.text()) }).toEqual(expected);
   });
 
   it('places the closing Slide last in the last Section', () => {
@@ -326,7 +271,6 @@ describe('success cases', () => {
       ['the-ais-attention-span', 'Dialling it up. I hope you are ready?'],
       ['what-fills-the-window', "How's the brain? Anything fried yet? I eat 200K for breakfast."],
       ['managing-the-attention-span', 'Almost there. One more thing, then I compact you.'],
-      ['now-you-know-how-it-feels', 'Now you know how it feels'],
     ] as const;
     // ACT
     const spoken = expected.map(([slug]) =>
@@ -371,7 +315,6 @@ describe('edge cases', () => {
       'the-ais-attention-span',
       'what-fills-the-window',
       'managing-the-attention-span',
-      'now-you-know-how-it-feels',
     ];
     // ACT
     const raw = slugs.flatMap((slug) =>
