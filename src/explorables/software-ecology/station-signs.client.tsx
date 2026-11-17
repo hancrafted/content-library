@@ -5,10 +5,6 @@ import styles from './software-ecology.module.css';
 import type { StationCardProps } from './station-card-view';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * The red signs above a station card (rework, churn, passing unread and the rest). Each names itself in the site's one
- * tooltip, on hover and on keyboard focus; a sign that is off is hidden and out of the tab order.
- */
 export function StationSigns({
   id,
   signs,

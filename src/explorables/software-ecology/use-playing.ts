@@ -1,8 +1,4 @@
-/*
- * Whether the factory may run: its Slide is the active one (the Slide mount's `data-zone`, read, never observed by
- * intersection: FE-009), the page is visible, and the reader did not ask for reduced motion. A stage outside any
- * Slide mount, an Explorable page on its own, counts as active.
- */
+// decision: FE-009 §4
 import { useEffect, useState, type RefObject } from 'react';
 
 const MOUNT = '[data-slot="slide-mount"]';
@@ -10,7 +6,6 @@ const REDUCE = '(prefers-reduced-motion: reduce)';
 
 const activeOf = (mount: Element | null): boolean => !mount || mount.getAttribute('data-zone') === 'active';
 
-/** Watches one source of "may run" and reports it; returns the unsubscribe. */
 const watchZone = (mount: Element | null, on: (v: boolean) => void): (() => void) => {
   on(activeOf(mount));
   if (!mount) return () => undefined;

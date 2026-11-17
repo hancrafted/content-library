@@ -1,7 +1,3 @@
-/*
- * The words and choices the client parent hands its parts: the use case's words, the run's warm-up words, the state
- * row's states, the Scenarios menu's entries with their "what to watch" lines and tour lengths, and the use cases.
- */
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo } from 'react';
 import { stepsOf } from './factory-beats.pure.ts';
@@ -12,7 +8,6 @@ import type { Bundle, CatalogWords, Locale } from './software-ecology.types';
 import { presetName, scenarioWords, titlesOf, useCaseName, type WordsIn } from './use-case-words.pure.ts';
 import type { FactoryWords } from './use-factory.ts';
 
-/** The states on the toolbar's row; the Scenarios menu holds the rest. */
 const BUILT_IN = 'built in';
 
 export const MAIN_STATES = ['roles', 'ideal', 'realistic'];
@@ -55,7 +50,6 @@ export function useChoices(p: ChoicesIn, B: Bundle) {
     () =>
       p.bundles.map((b) => ({
         id: b.data.id,
-        // an uploaded use case says so, as the reference build's picker does
         name: useCaseName({ ...w, B: b }) + (b.source === BUILT_IN ? '' : ` ${p.words.toolbar.fromFile}`),
       })),
     [p.bundles, w, p.words.toolbar.fromFile],

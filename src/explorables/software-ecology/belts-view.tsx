@@ -1,13 +1,8 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { memo } from 'react';
 import type { LabelPlace } from './factory-labels.pure.ts';
 import { BELT_W, offsetD, RET, RETURN_W, type BeltLayout, type FactoryLayout } from './factory-layout.pure.ts';
 import styles from './software-ecology.module.css';
-
-/*
- * The belts as SVG (design-ADR 0024 §14): rails, surface and slats, the junction plates, and each rework lane, shown
- * only while work is sent back on it. A belt marked `over` crosses the others on a bridge, drawn on top. Ported from
- * the reference build's `beltSvg` and `renderFactory`.
- */
 
 const SW = BELT_W - 4;
 
@@ -47,7 +42,6 @@ function Belts({ belts, retOn }: { belts: readonly BeltLayout[]; retOn: Readonly
 
 const viewBox = (l: FactoryLayout) => `0 ${l.top} ${l.width} ${l.height}`;
 
-/** The belts under the cards. */
 export const BeltsView = memo(function BeltsView({
   layout,
   retOn,
@@ -71,11 +65,9 @@ export interface BeltLabel {
   readonly key: string;
   readonly at: LabelPlace;
   readonly label: string;
-  /** "· 12 a week · ↩ 3 changes requested", filled. */
   readonly rate: string;
 }
 
-/** Each belt's hover label over the canvas: the belt's name and its rates, shown while the pointer is on the belt. */
 export function BeltLabelsView({ layout, labels }: { layout: FactoryLayout; labels: readonly BeltLabel[] }) {
   return (
     <svg viewBox={viewBox(layout)} className={styles.overlay} aria-hidden="true">

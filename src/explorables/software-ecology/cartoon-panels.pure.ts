@@ -1,22 +1,9 @@
-/*
- * The tire swing cartoon's ten panels, line drawings in a 160 × 110 box, ported unchanged from the reference build's
- * `PANELS` (its 15-panels.js). A panel names the role it shows (`node`, matched against a work center's role and,
- * for the tiles, against the use case's node ids); words come from the config's `cartoon` keys by panel id. Only a
- * use case with `panels: true` shows them. Strokes are `currentColor`; `data-art` marks the parts the stylesheet fills.
- */
-
 export interface CartoonPanel {
-  /** The key of its caption in the config's `cartoon.captions`. */
   readonly id: string;
-  /** The role (catalog id) it shows; the Customer panels have none. */
   readonly node?: string;
-  /** The closing panel: what the customer really needed. */
   readonly target?: boolean;
-  /** Documentation: the cartoon's empty frame, drawn by the view with its word. */
   readonly blank?: boolean;
-  /** Support: the branch is broken. */
   readonly broken?: boolean;
-  /** The panel's own strokes, SVG markup over the tree. */
   readonly art: string;
 }
 
@@ -71,14 +58,11 @@ export const PANELS: readonly CartoonPanel[] = [
   { id: 'needed', target: true, art: `<path d="M88 18 V62" />${tire(88, 70)}` },
 ];
 
-/** The Customer's own panel: how the customer explained it. */
 export const CUSTOMER_PANEL = PANELS[0] as CartoonPanel;
 
-/** The panel a node shows: the Customer's first, a work center's by its role. */
 export const panelFor = (n: { kind: string; roleId: string }): CartoonPanel | undefined =>
   n.kind === 'customer' ? CUSTOMER_PANEL : PANELS.find((p) => p.node === n.roleId);
 
-/** A panel's strokes: the tree, its branch whole or broken, and its own drawing. */
 export const panelArt = (p: CartoonPanel): string => (p.blank ? '' : `${tree(!p.broken)}${p.art}`);
 
 export const panelById = (id: string): CartoonPanel | undefined => PANELS.find((p) => p.id === id);

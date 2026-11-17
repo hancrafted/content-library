@@ -1,12 +1,6 @@
-/*
- * Sampled belt paths (design-ADR 0024 §19): a polyline of corners becomes a path with rounded corners, sampled every
- * three layout units, with its cumulative length, so the painter finds the point at any distance along it. Corners
- * that are junctions stay square. A line-for-line port of the reference build's `sample`, `at` and `offsetD`.
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export type Pt = readonly [number, number];
 
-/** A sampled path: its points, the length up to each, its whole length and its SVG `d`. */
 export interface Path {
   readonly pts: readonly Pt[];
   readonly cum: readonly number[];
@@ -14,14 +8,12 @@ export interface Path {
   readonly d: string;
 }
 
-/** Belt corner radius, in layout units. */
 export const R = 14;
 
 export const keyOf = (p: Pt): string => `${Math.round(p[0])},${Math.round(p[1])}`;
 
 const dist = (a: Pt, b: Pt): number => Math.hypot(b[0] - a[0], b[1] - a[1]);
 
-/** Pushes points every three units to (x, y), skipping a repeat. */
 const liner = (out: Pt[]) => {
   const push = (x: number, y: number) => {
     const l = out[out.length - 1];
@@ -41,7 +33,6 @@ interface Corner {
   readonly next: Pt;
 }
 
-/** A rounded corner at `c` between `a` and `next`: where it starts and ends. */
 const rounded = ({ a, c, next }: Corner) => {
   const l1 = dist(a, c),
     l2 = dist(c, next),
@@ -65,7 +56,6 @@ const lengths = (out: readonly Pt[]): number[] => {
   return cum;
 };
 
-/** Samples a polyline into a path; a corner in `J` stays square. */
 export const sample = (raw: readonly Pt[], J: ReadonlyMap<string, Pt> = new Map()): Path => {
   const pts: Pt[] = raw.filter((p, i) => i === 0 || dist(raw[i - 1] as Pt, p) > 0.01).map((p) => [p[0], p[1]]);
   const out: Pt[] = [],
@@ -92,7 +82,6 @@ export const sample = (raw: readonly Pt[], J: ReadonlyMap<string, Pt> = new Map(
   return { pts: out, cum, L: cum[cum.length - 1] as number, d };
 };
 
-/** The point at distance `s` along a path, and its left normal: [x, y, nx, ny]. Written into one shared array. */
 const AT: [number, number, number, number] = [0, 0, 0, 1];
 export const at = (path: Path, s: number): readonly [number, number, number, number] => {
   const { pts, cum, L } = path;
@@ -118,14 +107,12 @@ export const at = (path: Path, s: number): readonly [number, number, number, num
   return AT;
 };
 
-/** The points of a path moved `off` along its normal. */
 export const offsetPts = (path: Path, off: number): Pt[] =>
   path.pts.map((_, i) => {
     const [x, y, nx, ny] = at(path, path.cum[i] as number);
     return [x + nx * off, y + ny * off];
   });
 
-/** The SVG `d` of a path moved `off` along its normal. */
 export const offsetD = (path: Path, off: number): string =>
   offsetPts(path, off)
     .map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`)

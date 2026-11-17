@@ -1,7 +1,3 @@
-/*
- * What a use-case file's presets, tours and saved state must hold (schema software-ecology-factory/5), ported from the
- * reference build's validate(), messages and order unchanged.
- */
 import { SPEEDS } from './factory-dials.pure.ts';
 import { validKey } from './factory-model.pure.ts';
 import { OWN_RATE_MAX } from './own-work.types.ts';
@@ -23,13 +19,10 @@ import {
   type Sink,
 } from './use-case-checks.pure.ts';
 
-/** Swing and Roles merged into the roles state (feedback 08); `swing` is the retired id and view. */
 export const RETIRED_STATE = 'swing';
 export const ROLES_STATE = 'roles';
-/** An id or view naming the retired `swing`, as the roles state; anything else as it is. */
 export const unretired = <T>(v: T): T | typeof ROLES_STATE => (v === RETIRED_STATE ? ROLES_STATE : v);
 
-/** `swing` is retired: `use-case-file.ts` reads it as `roles` (`unretired`) before these checks run. */
 export const VIEWS = [ROLES_STATE, 'factory'];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =
@@ -41,7 +34,6 @@ const compareOk = (ids: Set<string>) => (v: unknown) =>
   Array.isArray(v) && v.length <= 3 && v.every((x) => ids.has(x as string));
 const unknownIds = (v: unknown, ids: Set<string>): string[] => Object.keys(mapOf(v)).filter((id) => !ids.has(id));
 
-/** A map of something: the map, its path, the work center ids. */
 interface At {
   readonly x: Map_;
   readonly p: string;
@@ -71,7 +63,6 @@ const expectProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
 
 const settlesOk = (t: unknown): boolean => validTest(String(t)) && !['rises', 'falls'].includes(String(t).trim());
 
-/** Han's claim, a words key, and `settles:`, a bound or range read 40 weeks after the beat. */
 const claimProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
   if (!absentOr(st.claim, isWord)) E(`${at.p}.claim: a words key, such as clean-line`);
   if (!absentOr(st.settles, isMap)) E(`${at.p}.settles: a map { "qa.weeksWaiting": "<0.5" }`);
@@ -82,7 +73,6 @@ const claimProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
   }
 };
 
-/** One tour step or check; returns the week it runs to when valid, else the week before. */
 const stepProblems = (raw: unknown, at: Omit<At, 'x'> & { last: number }, E: Sink): number => {
   if (!isMap(raw)) return (E(`${at.p}: a map { set, run, card, expect }`), at.last);
   const runs = isNum(raw.run, 0.5, 200) && raw.run > at.last;
@@ -161,7 +151,6 @@ const stateCenters = (st: Map_, ids: Set<string>, E: Sink): void => {
   }
 };
 
-/** The saved state of an exchange file. */
 const stateSources = (st: Map_, sources: Set<string>, E: Sink): void => {
   if (!absentOr(st.sources, isMap)) E('state.sources: a map { <source id>: { rate, arrivals } }');
   for (const [id, o] of Object.entries(mapOf(st.sources))) {

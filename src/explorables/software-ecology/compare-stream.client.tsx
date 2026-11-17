@@ -1,5 +1,5 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { streamOf, type StreamPart } from './compare-stream.pure.ts';
@@ -14,14 +14,6 @@ import { cardsOf, type CardPart } from './stage-parts.pure.ts';
 import { LEVEL_RED, type ColumnReadout, type StationReadout } from './stage-readouts.pure.ts';
 import { beltWords, type WordsIn } from './use-case-words.pure.ts';
 
-/*
- * The compare stream (design-ADR 0024 §17), as the reference build's `renderCompare` lays it out: a title and Exit
- * compare, an overview strip of the whole line with the compared work centers marked, and the columns in flow order,
- * each its station above its dashboard, a live belt between neighbours and a "+n stations" gap otherwise. The rings,
- * the documents in work and the riders on the belts are drawn every frame by `compare-live.ts`; the rest follows the
- * readouts.
- */
-
 export interface CompareStreamProps {
   readonly topo: Topology;
   readonly layout: FactoryLayout;
@@ -32,20 +24,16 @@ export interface CompareStreamProps {
   readonly stations: Readonly<Record<string, StationReadout>>;
   readonly columns: Readonly<Record<string, ColumnReadout>>;
   readonly belts: Readonly<Record<string, { readonly rate: number }>>;
-  /** A column's dashboard, below its station. */
   readonly dashboard: (id: string) => ReactNode;
   readonly onExit: () => void;
-  /** The stream's root, which the frame loop draws into. */
   readonly root: RefObject<HTMLElement | null>;
 }
 
-/** Text the SVG strip scales from the caption role to its layout units. */
 const STRIP_TEXT = 'scale(1.86)';
 const NODE_HEAD = 18;
 
 type StripProps = Pick<CompareStreamProps, 'topo' | 'layout' | 'ids' | 'stations' | 'words'> & { titles: Titles };
 
-/** One node of the strip: its box, and its title while it is compared; amber while it backs up two weeks. */
 function StripNode({ n, p }: { n: TopoNode; p: StripProps }) {
   const [x, y, w, h] = boxOf(n.def),
     on = p.ids.includes(n.id);
@@ -89,7 +77,6 @@ interface StationProps {
   readonly card: CardWords;
 }
 
-/** The station's head: glyph, title and its damage signs. */
 function StationHead(p: StationProps) {
   return (
     <div className={styles.csHead}>
@@ -112,7 +99,6 @@ function StationHead(p: StationProps) {
   );
 }
 
-/** The station's line: the front of its backlog as documents, and the box with the ring and the document in work. */
 function StationLine({ col }: { col?: ColumnReadout }) {
   return (
     <div className={styles.csLine}>
@@ -165,7 +151,6 @@ function Gap({ part, p }: { part: Exclude<StreamPart, { kind: 'column' }>; p: Co
   );
 }
 
-/** A column: its station above its dashboard. */
 function Column({ id, p, cards }: { id: string; p: CompareStreamProps; cards: Titles }) {
   const c = cards[id];
   return (

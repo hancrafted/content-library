@@ -1,20 +1,12 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The factory model's seam (design-ADR 0024 §1): outside the model, every module reaches the network through the
- * handle `createFactory` returns — its Snapshot, Topology and Floor — never the network itself, its flags or the
- * modules that step it. The model is `factory-model.pure.ts` and the modules listed in MODEL; tests may use its
- * internal seam (`buildFactory`).
- */
 const DIR = import.meta.dirname;
-/** Where else the model is drawn: the software ecology page's Slides, whose stills read it through the same handle. */
 const SLIDES = join(DIR, '../../episodes/explorable-pages/software-ecology');
-/** How a module names one of the Explorable's own: relative from inside it, by its alias path from a Slide. */
 const OWN = String.raw`(?:\./|@/explorables/software-ecology/)`;
 
-/** The model: its interface module and what only it (and its own tests) may reach. */
 const MODEL = new Set([
   'factory-model.pure.ts',
   'factory-network.pure.ts',
@@ -44,7 +36,6 @@ const MODEL = new Set([
   'factory-random.pure.ts',
 ]);
 
-/** Modules that hold or step the network: never imported from outside the model. */
 const INTERNAL = [
   'factory-network',
   'factory-floor-reads',
@@ -66,7 +57,6 @@ const INTERNAL = [
   'factory.types',
 ];
 
-/** Names of `factory-dials` that read a work center of the network or a document's quality. */
 const NETWORK_READS = ['Q', 'dials', 'speedOf', 'rushOf', 'effvNow', 'aiOn', 'srcRate'];
 
 const internalImports = (src: string): string[] =>
@@ -86,7 +76,6 @@ const dialsNames = (src: string): string[] =>
     .filter((name) => NETWORK_READS.includes(name))
     .map((name) => `imports ${name} from factory-dials`);
 
-/** What a source file does that only the model may: each breach as `<what>: <text>`. */
 const breachesOf = (src: string): string[] => [
   ...internalImports(src),
   ...dialsNames(src),
@@ -94,7 +83,6 @@ const breachesOf = (src: string): string[] => [
   ...(/\.m\.|\brun\.m\b|\.hook\s*=/.test(src) ? ['reaches into the network'] : []),
 ];
 
-/** Every source file outside the model, by its path from the Explorable's folder: its own, then the Slides'. */
 const outside = () => [
   ...readdirSync(DIR)
     .filter((f) => /\.tsx?$/.test(f) && !/\.test\.ts$/.test(f) && !MODEL.has(f))
@@ -124,7 +112,7 @@ describe('failure cases', () => {
     // ARRANGE
     const src = [
       "import { COMPL } from './factory-flow.pure.ts';",
-      "import { dials, DTW } from './factory-dials.pure.ts';",
+      "import { dials, WEEKS_PER_STEP } from './factory-dials.pure.ts';",
       'this.m.hook = this.hear;',
     ].join('\n');
     const expected = ['imports factory-flow', 'imports dials from factory-dials', 'reaches into the network'];
@@ -152,7 +140,7 @@ describe('edge cases', () => {
   it('lets a module read the settings constants and the handle’s own types', () => {
     // ARRANGE
     const src = [
-      "import { DAYS, DTW, startSettings } from './factory-dials.pure.ts';",
+      "import { DAYS, WEEKS_PER_STEP, startSettings } from './factory-dials.pure.ts';",
       "import type { Floor, Snapshot } from './factory-model.pure.ts';",
       "import { RACK } from './stage-readouts.pure.ts';",
     ].join('\n');

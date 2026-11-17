@@ -1,5 +1,5 @@
 'use client';
-
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { fillTemplate } from '@/shared/lib/template.pure';
 import {
   aiHookOf,
@@ -14,20 +14,12 @@ import { Field, Segmented, SliderControl, Value } from './settings-field.client'
 import type { ModelWords } from './software-ecology-words.types';
 import type { AiQuality, Bundle, Company, Settings } from './software-ecology.types';
 
-/*
- * The Settings popover's Model column (feature guide, Interaction 3): Ideal to Realistic, where AI works, the company
- * and the AI quality effect, each one form field (feedback 09). Ported from the reference build's `renderModel`; each
- * control writes new settings up through `onSettings`. Reset to default sits in the popover's foot.
- */
-
 export interface ModelMenuProps {
   readonly B: Bundle;
   readonly settings: Settings;
   readonly words: ModelWords;
-  /** Off, each preset's AI set (titled), everywhere. */
   readonly aiChoices: readonly AiChoice[];
   readonly onSettings: (s: Settings) => void;
-  /** Back to what the use-case file defines for the active state. */
   readonly onReset: () => void;
 }
 

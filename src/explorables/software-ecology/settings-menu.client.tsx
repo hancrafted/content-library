@@ -1,5 +1,5 @@
 'use client';
-
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { RotateCcw, X } from 'lucide-react';
 import { useId, type ReactNode } from 'react';
 import { DisplayMenu, type DisplayMenuProps } from './display-menu';
@@ -11,13 +11,6 @@ import type { SettingsWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * The Settings popover's body (feature guide, Interaction 3; feedback 08 merged the Model menu and the ⋮ menu into it,
- * feedback 09 laid it out again): a header with the title and a close button; two columns, Model, and Mechanics over
- * Display, that stack below 800 px; and the foot with Reset to default on the left, Download YAML and Upload on the
- * right. The sections' descriptions are help tooltips.
- */
-
 export interface SettingsMenuProps {
   readonly words: SettingsWords;
   readonly model: ModelMenuProps;
@@ -27,7 +20,6 @@ export interface SettingsMenuProps {
   readonly onClose: () => void;
 }
 
-/** A section: its bold title, with a help icon when it has a description, and its form fields. */
 function Section(p: {
   readonly title: string;
   readonly control: string;

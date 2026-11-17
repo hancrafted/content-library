@@ -1,6 +1,4 @@
-/* The exchange file's words, keyed by the Explorable config pair's `exchange:` (FE-012 §1). */
-
-/** Download YAML, Upload, the drop hint, and the message after either. */
+// decision: FE-012 §1
 export interface ExchangeWords {
   readonly download: string;
   readonly downloadTip: string;
@@ -12,7 +10,6 @@ export interface ExchangeWords {
   readonly broken: string;
   readonly unstable: string;
   readonly loaded: string;
-  /** Appended to `loaded` when rushing or the worst case would overload a work center (Q122). */
   readonly rush: string;
   readonly worst: string;
 }

@@ -1,15 +1,10 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { COMPARE_MAX, type CompareState } from './compare-stream.pure.ts';
 import { Glyph } from './factory-glyph-view';
 import type { CompareWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
-
-/*
- * Compare mode on the toolbar (design-ADR 0024 §17), an icon button since feedback 08, as the reference build's `renderCompareWidget`
- * draws it: the Compare toggle; while picking or comparing, three slots (a picked work center's glyph removes it),
- * then Show, or Exit once the stream is shown; and the hint beside it. Every change goes up through a callback.
- */
 
 export interface CompareSlot {
   readonly id: string;
@@ -20,9 +15,7 @@ export interface CompareSlot {
 export interface CompareWidgetProps {
   readonly words: CompareWords;
   readonly state: CompareState;
-  /** The picked work centers, in pick order. */
   readonly slots: readonly CompareSlot[];
-  /** Compare: toggles picking, or exits the stream. */
   readonly onToggle: () => void;
   readonly onRemove: (id: string) => void;
   readonly onShow: () => void;
@@ -54,7 +47,6 @@ function Slots(p: CompareWidgetProps) {
   );
 }
 
-/** While picking: Show, once a work center is picked; while the stream is shown: Exit. */
 function Go(p: CompareWidgetProps) {
   const cls = `${styles.tbtn} ${styles.tbtnSolid} text-caption`;
   return p.state.open ? (

@@ -1,14 +1,9 @@
-/*
- * Where each belt's hover label sits (design-ADR 0024 §19): on its longest straight runs first, clear of the cards and
- * of the labels placed before it. The width is estimated from the text, as the reference build does, so the places
- * are the same in every locale's length.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { boxOf, type FactoryLayout, type Pt } from './factory-layout.pure.ts';
 import type { NodeDef } from './factory-model.pure.ts';
 
 type Box = readonly [number, number, number, number];
 
-/** A label's anchor point and its text anchor. */
 export interface LabelPlace {
   readonly x: number;
   readonly y: number;
@@ -51,10 +46,6 @@ const candidates = (c: readonly Pt[], w: number): Cand[] =>
 const hits = (boxes: readonly Box[], b: Box): boolean =>
   boxes.some((q) => b[0] < q[2] && b[2] > q[0] && b[1] < q[3] && b[3] > q[1]);
 
-/**
- * Places every belt's label; `textOf` gives the text the width is estimated from (the reference build measures the
- * label with "· 12 a week · ↩" and its sent-back words).
- */
 export const placeLabels = (
   layout: FactoryLayout,
   cards: readonly NodeDef[],

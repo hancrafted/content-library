@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { stepsOf } from './factory-beats.pure.ts';
 import { AI_AT_ENG, SEEDS, withTour } from './factory-scenario.fixture.ts';
@@ -6,11 +7,6 @@ import { judge } from './scenario-tests.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
-/*
- * Every `expect:` of every scenario step, run on the model alone with the default seed and read once at the step's end:
- * the value each measure reads must equal, to two decimals, with no starting backlogs and no pass-on under pressure, what the reference build (docs/episodes/software-ecology/prototype/flow.html) read in
- * its headless run, checks7c.out.txt rows 1–88. [use case, preset, step (1-based; a check is step 1), measure, value]
- */
 const REFERENCE: readonly (readonly [string, string, number, string, string])[] = [
   ['tire', 'ideal', 1, 'customer.output', '1.02'],
   ['tire', 'ideal', 1, 'customer.headroom', '1.45'],
@@ -37,16 +33,11 @@ const REFERENCE: readonly (readonly [string, string, number, string, string])[] 
   ['teams', 'realistic', 1, 'plat.weeksWaiting', '0.25'],
 ];
 
-/** The weeks the reference build's steps ran to; feedback 09 moved some later, so the seeded piles have drained. */
 const REFERENCE_WEEKS: Readonly<Record<string, readonly number[]>> = {
   'tire/realistic': [12],
   'gate/realistic': [12],
   'teams/realistic': [12],
 };
-/**
- * The use case as the reference build had it: no starting backlogs (feedback 09 added them on top of the model) and no
- * pass-on under pressure (grill 11 Q220).
- */
 const withoutKey = <T extends object>(o: T, key: string): T =>
   Object.fromEntries(Object.entries(o).filter(([k]) => k !== key)) as T;
 const unloaded = (useCase: string): Bundle => {
@@ -91,11 +82,6 @@ const valueOf = (r: Reading): string | undefined =>
     [r.step - 1]?.checks.find((c) => c.key === r.key)
     ?.v.toFixed(2);
 
-/**
- * The states judged on the default seed alone: every check, and every tour without a claim. A tour whose beats carry
- * Han's claims is judged across ten seeds in `npm run test:build` (tests/post-build/ecology-scenarios.build.test.ts), by
- * the judge `npm run ecology:sim` runs (design-ADR 0024 §12), where a beat passes on 8 of 10 seeds, so one seed may fail it.
- */
 const SCENARIOS = BUILTIN.flatMap((id) =>
   builtinBundle(id)
     .data.presets.filter((p) => p.check ?? (p.tour && !p.tour.some((st) => st.claim)))

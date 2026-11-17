@@ -1,11 +1,10 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { wordsFor } from './software-ecology-data';
 import { TourBox } from './tour-box.client';
-
-/* Eval hooks of the tour box (design-ADR 0024 §14): close, back and next each name themselves `tour.<field>`. */
 
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';

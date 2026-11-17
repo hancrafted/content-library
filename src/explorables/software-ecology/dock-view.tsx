@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { memo } from 'react';
 import { ReleaseCells, shelfGrid } from './customer-card-view';
@@ -42,7 +43,6 @@ function Satisfaction({ sat, w }: { sat: number; w: DockWords }) {
   );
 }
 
-/** At the Customer, below the stage (design-ADR 0024 §14): the last twenty releases, output against Ideal, satisfaction and the verdict. */
 export const DockView = memo(function DockView({
   r,
   words: w,

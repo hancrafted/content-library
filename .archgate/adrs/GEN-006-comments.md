@@ -4,8 +4,8 @@ id: GEN-006
 title: 'Comments'
 domain: general
 rules: true
-files: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared}}/**/*', '.archgate/adrs/*.rules*']
-paths: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared}}/**/*', '.archgate/adrs/*.rules*']
+files: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/software-ecology}}/**/*', '.archgate/adrs/*.rules*']
+paths: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables/software-ecology}}/**/*', '.archgate/adrs/*.rules*']
 description: 'Governed code carries no prose comment, JSDoc included: a reason moves down a fixed ladder into a name, a type, a test, a pointer marker or the commit body, and only machine-read markers survive.'
 ---
 

@@ -1,12 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import type { FloorBelt, FloorDoc, FloorStation } from './factory-model.pure.ts';
 import { ScreenTimes } from './paint-belts.ts';
-import { glyphAt, OWN_DROP_SECS, rackX, settle, slotY, Stations } from './paint-station.ts';
+import { glyphAt, OWN_DROP_SECONDS, rackX, settle, slotY, Stations } from './paint-station.ts';
 
-/*
- * What the station painter does for the feedback 10 documents (design-ADR 0024 §14, §15): an own ticket drops from the
- * station's glyph into its slot in 0.4 s; a release lands at the Customer in 1.2 s, an answer in 0.6 s.
- */
 const doc = (o: Partial<FloorDoc> = {}): FloorDoc => ({
   c: 1,
   t0: 0,
@@ -37,7 +34,7 @@ describe('success cases', () => {
     // ACT
     st.hear('own', n);
     const start = { ...st.of(n).q[0] };
-    clock.now = 1000 + OWN_DROP_SECS * 1000;
+    clock.now = 1000 + OWN_DROP_SECONDS * 1000;
     settle(n, st.of(n), { ease: 0, now: clock.now });
     const end = { ...st.of(n).q[0] };
     // ASSERT
@@ -72,10 +69,10 @@ describe('edge cases', () => {
     // ACT
     st.hear('own', n);
     const start = { ...st.of(n).q[0] };
-    clock.now = 1000 + OWN_DROP_SECS * 500;
+    clock.now = 1000 + OWN_DROP_SECONDS * 500;
     settle(n, st.of(n), { ease: 0, now: clock.now });
     const mid = { ...st.of(n).q[0] };
-    clock.now = 1000 + OWN_DROP_SECS * 1000;
+    clock.now = 1000 + OWN_DROP_SECONDS * 1000;
     settle(n, st.of(n), { ease: 0, now: clock.now });
     const end = { ...st.of(n).q[0] };
     const still = new Stations(layout, { now: 0, reduced: true }, new ScreenTimes());

@@ -1,9 +1,4 @@
-/*
- * The model's Snapshot (design-ADR 0024 §1, §14): what a read of the factory gives at one moment — the clock, every
- * station, the Customer card, each belt's rates and rework lane, the status line, the dashboards on show, the compare
- * stream's columns and any measure a scenario names. Plain data, so React redraws only the parts whose slice changed.
- * Model-side: only `factory-model.pure.ts` calls it; everything else reads the Snapshot through the handle.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import {
   customerDashboardOf,
   dashboardOf,
@@ -34,27 +29,19 @@ export interface BeltReadout {
 }
 
 export interface Snapshot {
-  /** The working day shown on the clock, from 1. */
   readonly day: number;
-  /** Warm-up progress, in days, or null once the line runs. */
   readonly warming: { readonly day: number; readonly of: number } | null;
   readonly stations: Readonly<Record<string, StationReadout>>;
   readonly customer: CustomerReadout & { readonly headroom: number };
   readonly belts: Readonly<Record<string, BeltReadout>>;
   readonly status: Status;
-  /** The dashboards on show (an open popover, the compare stream's columns), by work center. */
   readonly dashboards: Readonly<Record<string, DashboardReadout>>;
-  /** The Customer's dashboard while it is open. */
   readonly customerDash: CustomerDashboard | null;
-  /** The compare stream's stations, by work center, while it is shown. */
   readonly columns: Readonly<Record<string, ColumnReadout>>;
-  /** The measures asked for, by key (`customer.output`, `qa.weeksWaiting`): what a scenario's `expect:` judges. */
   readonly measures: Readonly<Record<string, number>>;
-  /** Conservation and a state hash, when asked for: the model's own checks. */
   readonly audit: Audit | null;
 }
 
-/** Documents created = received + waiting + on belts + in work (`gap` 0), and a hash of the whole state. */
 export interface Audit {
   readonly created: number;
   readonly consumed: number;
@@ -65,25 +52,17 @@ export interface Audit {
   readonly hash: string;
 }
 
-/** What else a read covers: the dashboards on show, and whether their charts are redrawn this time. */
 export interface ReadOptions {
   readonly watch?: readonly string[];
-  /** Charts redraw at half the readouts' rate; otherwise the last read's trends stay. */
   readonly charts?: boolean;
   readonly prev?: Snapshot;
-  /** The work centers in the compare stream. */
   readonly stream?: readonly string[];
-  /** Measures to read, by key: `customer.<measure>` or `<center>.<measure>`. */
   readonly measures?: readonly string[];
-  /** Read conservation and the state hash. */
   readonly audit?: boolean;
-  /** The run's warm-up progress in days, or null once the line runs. */
   readonly warming?: Snapshot['warming'];
-  /** How far the frames fell behind (0 on time), for the status line. */
   readonly dropped?: number;
 }
 
-/** The headroom from the expected flows, solved again only when the settings change (a control writes new ones). */
 const SOLVED = new WeakMap<Factory['s'], { readonly headroom: number; readonly gain: number }>();
 const solvedOf = (m: Factory) => {
   let h = SOLVED.get(m.s);
@@ -94,7 +73,6 @@ const solvedOf = (m: Factory) => {
   return h;
 };
 
-/** A dashboard keeps its last trends between chart redraws. */
 const keepTrends = (d: DashboardReadout, prev: DashboardReadout | undefined): DashboardReadout =>
   prev
     ? {
@@ -125,7 +103,6 @@ const columnsOf = (m: Factory, ids: readonly string[] = []): Snapshot['columns']
 
 const auditOf = (m: Factory): Audit => ({ ...conservation(m), hash: stateHash(m) });
 
-/** What a read covers beyond the stage: the dashboards and columns on show, measures and the audit. */
 const extrasOf = (m: Factory, o: ReadOptions) => ({
   dashboards: dashboardsOf(m, o),
   customerDash: o.watch?.includes('customer') ? customerDashboardOf(m, { s: m.s, gain: solvedOf(m).gain }) : null,

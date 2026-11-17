@@ -1,10 +1,4 @@
-/*
- * What a station shows on the canvas, kept in step with the model (design-ADR 0024 §14): the rack of six slots on
- * the left beneath the title row, filling from the bottom, and the document in work. Documents slide in from the belt, down the rack, into
- * work and out onto the next belt; nothing appears or vanishes abruptly. The floor's events (the handle's `listen`)
- * report arrivals, starts and ends; each frame eases every document toward its place. Ported from the reference build's `visHook`, `landAll` and
- * `settle`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { spriteIdx } from './doc-sprites.ts';
 import { BOT, HALF, HEAD, TOP, workAt, type FactoryLayout } from './factory-layout.pure.ts';
 import type {
@@ -22,25 +16,19 @@ import { RACK } from './stage-readouts.pure.ts';
 
 export const RACK_W = 44,
   RACK_PAD = 5;
-/** Six slots from the title row's foot to the card's bottom, a pad of RACK_PAD each side. */
 export const SLOT = (TOP + BOT - HEAD - 2 * RACK_PAD) / RACK;
-/** A document in the rack, relative to one on a belt. */
 export const RACK_S = 1.15;
 
 type At = Pick<NodeDef, 'x' | 'y'>;
 export const rackX = (d: At): number => d.x - HALF + RACK_PAD + RACK_W / 2;
 export const slotY = (d: At, i: number): number => d.y + BOT - RACK_PAD - SLOT / 2 - i * SLOT;
 
-/** Where an own ticket pops out: the middle of the station's glyph, at the card's top left. */
 export const GLYPH_PAD = 7,
   GLYPH_SIZE = 16;
 export const glyphAt = (d: At): Pt => [d.x - HALF + GLYPH_PAD + GLYPH_SIZE / 2, d.y - TOP + HEAD / 2];
-/** An own ticket drops from the glyph into its rack slot in this long, in real seconds. */
-export const OWN_DROP_SECS = 0.4;
-/** An own ticket's size as it leaves the glyph, relative to its size in the rack. */
+export const OWN_DROP_SECONDS = 0.4;
 const POP_S = 0.5;
 
-/** A drawn document: its kind, place, scale and opacity; a dropping one also its start and when it left. */
 export interface Sprite {
   k: number;
   x: number;
@@ -53,18 +41,15 @@ export interface Ghost extends Sprite {
   life: number;
 }
 
-/** A document the model delivered while its handoff still plays on screen. */
 export interface Landing {
   readonly e: FloorBelt;
   readonly back: boolean;
-  /** The station it joins; null for the Customer, which keeps nothing. */
   readonly n: FloorStation | null;
   readonly c: number;
   readonly k: number;
   vr: number;
 }
 
-/** A station's drawn state. */
 export interface StationVis {
   q: Sprite[];
   work: Sprite | null;
@@ -74,11 +59,9 @@ export interface StationVis {
 
 const doc = (k: number, at: Pt, s: number): Sprite => ({ k, x: at[0], y: at[1], s, a: 1 });
 const faint = (k: number, at: Pt, s: number): Sprite => ({ ...doc(k, at, s), a: 0 });
-/** A waiting document's sprite: rework and complaint-born work carry the warning mark. */
 export const runKind = (r: DocMarks): number =>
   spriteIdx({ q: r.good ? 1 : 0, ai: r.ai, warn: r.redo || r.complaint, own: r.own });
 
-/** The drawn state of every station, the landings in flight, and the listener the floor calls. */
 export class Stations {
   readonly vis = new Map<FloorStation, StationVis>();
   readonly lands: Landing[] = [];
@@ -101,7 +84,6 @@ export class Stations {
     return pts[pts.length - 1] ?? [e.to.def.x, e.to.def.y];
   }
 
-  /** The floor's events: a delivery lands, an own ticket appears, a job starts or ends. */
   readonly hear: FloorListener = (what, n, at) => {
     if (what === 'arrive' || what === 'front') this.arrive(n, { belt: at?.belt, x: at?.x, back: what === 'front' });
     else if (n) this.change(what, n);
@@ -116,7 +98,6 @@ export class Stations {
     } else if (what === 'done') this.of(n).work = null;
   }
 
-  /** An own ticket pops out of the glyph and drops straight into its slot: no belt; at once under reduced motion. */
   private pop(n: FloorStation) {
     const d = n.node.def,
       v = this.of(n),
@@ -139,12 +120,10 @@ export class Stations {
     if (n) this.of(n).land.push(l);
   }
 
-  /** A document at once in the rack, where its belt ends; the Customer keeps nothing. */
   private place(n: FloorStation | null, x: { k: number; at: Pt }) {
     if (n) this.of(n).q.push(doc(x.k, x.at, 1));
   }
 
-  /** A landing that reached the end of its belt joins the rack where the belt ends. */
   landAll() {
     for (let i = this.lands.length - 1; i >= 0; i--) {
       const l = this.lands[i] as Landing;
@@ -160,7 +139,6 @@ export class Stations {
   }
 }
 
-/** The rack in step with the model: as many as wait (six at most, less the ones still landing), each of its kind. */
 const syncRack = (n: FloorStation, v: StationVis) => {
   const landing = v.land.reduce((a, l) => a + l.c, 0),
     want = Math.max(0, Math.min(n.waiting - landing, RACK)),
@@ -194,10 +172,9 @@ const easeWork = (n: FloorStation, v: StationVis, ease: number) => {
   easeTo(v.work, { x: wx, y: wy, s: WORK_S }, ease);
 };
 
-/** A dropping ticket falls straight down to its slot over OWN_DROP_SECS, speeding up as it falls. */
 const drop = (d: Sprite, to: { x: number; y: number; s: number }, now: number) => {
   const dr = d.drop as NonNullable<Sprite['drop']>,
-    u = Math.min(1, (now - dr.t0) / (OWN_DROP_SECS * 1000)),
+    u = Math.min(1, (now - dr.t0) / (OWN_DROP_SECONDS * 1000)),
     fall = u * u;
   d.x = dr.from[0] + (to.x - dr.from[0]) * u;
   d.y = dr.from[1] + (to.y - dr.from[1]) * fall;
@@ -206,7 +183,6 @@ const drop = (d: Sprite, to: { x: number; y: number; s: number }, now: number) =
   if (u >= 1) d.drop = undefined;
 };
 
-/** Each frame: keep the rack in step with the model and ease every document toward its place. */
 export const settle = (n: FloorStation, v: StationVis, x: { ease: number; now: number }) => {
   const at = n.node.def,
     ease = x.ease;

@@ -1,9 +1,8 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { stepsTo } from './beat-means.pure.ts';
 import { beatsOf, stepsOf } from './factory-beats.pure.ts';
 import type { Preset } from './software-ecology.types';
-
-/* The beat plan (design-ADR 0024 §10, §12): the stops and sample windows the tour and the judge share. */
 
 const preset = (steps: object[]): Preset => ({ id: 'p', tour: steps }) as unknown as Preset;
 

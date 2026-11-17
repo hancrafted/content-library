@@ -5,13 +5,11 @@ import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const warmed = (preset: string) => new FactoryRun({ B: builtinBundle('tire'), preset, now: true });
-/** In practice with AI at Engineering writing twice the work, warmed with it: the AI compare scenario's start. */
 const aiAtEngineering = () => {
   const B = builtinBundle('tire');
   const s = { ...startSettings(B, presetOf(B, 'realistic')), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
   return new FactoryRun({ B, preset: 'realistic', now: true, s });
 };
-/** A work center's dashboard, as a read of the run gives it. */
 const dashboardOf = (run: FactoryRun, id: string): DashboardReadout => {
   const d = run.read({ watch: [id] }).dashboards[id];
   if (!d) throw new Error(`no ${id}`);

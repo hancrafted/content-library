@@ -3,10 +3,6 @@ import { bulb } from './doc-gift.ts';
 import { BULB_AT } from './doc-sprites.ts';
 import type { Colors, Ctx } from './doc-types.ts';
 
-/*
- * The own-work lightbulb sits in the middle of its document (feedback 11): a recording canvas gathers the vertical
- * extent of everything the bulb draws, in sprite units around the document's centre (0, 0).
- */
 const COLORS = { bulb: 'yellow', bulbEdge: 'gold', fg: 'black' } as unknown as Colors;
 
 const extentOf = (at: { x: number; y: number }) => {

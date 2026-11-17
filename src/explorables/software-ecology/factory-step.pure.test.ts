@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { createFactory, type FactoryHandle } from './factory-model.pure.ts';
 import { withCompany, withOwn } from './factory-settings.pure.ts';
@@ -5,10 +6,6 @@ import type { Bundle, Settings } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * Own work (design-ADR 0024 §2, §17; feedback 10, grill Q171–Q177): nodes with a `source` in the file write tickets of
- * their own under Product company, at the rate and arrivals the file or the node's dashboard sets.
- */
 const B: Bundle = builtinBundle('tire');
 const SEED = 7;
 const WEEKS = 40;
@@ -16,7 +13,6 @@ const realistic = (): Settings => startSettings(B, B.data.presets.find((p) => p.
 const product = (): Settings => ({ ...realistic(), company: 'product' });
 const SOURCE_NODES = (B.data.sources ?? []).map((x) => x.at);
 
-/** Runs `weeks` and counts the own tickets that arrived, by work center. */
 const arrivalsOf = (s: Settings, weeks = WEEKS): Record<string, number> => {
   const f = createFactory(B, s, SEED),
     seen: Record<string, number> = {};
@@ -37,7 +33,6 @@ const customerRequests = (s: Settings): number => {
   return n;
 };
 
-/** Runs half the weeks, emits at `id` (when given), runs the rest: the own tickets and requests heard, and the waiting own tickets. */
 const emitRun = (s: Settings, id: string | null) => {
   const f = createFactory(B, s, SEED),
     heard = { own: [] as string[], request: 0 };

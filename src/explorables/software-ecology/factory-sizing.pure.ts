@@ -1,10 +1,4 @@
-/*
- * Sizing and the stability contract (design-ADR 0024 §4). Every work center gets the capacity that keeps it 70 % busy
- * in Ideal; on top, a coping margin so Realistic stays busy but coping while centers rush: the file's bottleneck (or the
- * person it belongs to) at RHO_BN at Realistic, every other center at RHO_OTHER (Q121). A file is refused when sizing
- * for Realistic alone would need more than SIZE_MAX times a center's Ideal capacity (Q115), or when a load reaches
- * capacity at Realistic; full rushing and the worst case only warn.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { RHO_IDEAL, RUSH_TO } from './factory-dials.pure.ts';
 import { solve, type SolveResult } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
@@ -27,14 +21,12 @@ const apply = (n: FactoryNode, need: Need, rho: number): void => {
   n.mu = Math.max(n.muIdeal, need.wr / rho);
 };
 
-/** The load each center may carry at Realistic: the bottleneck (and its person's other centers) more than the rest. */
 const rhoFor = (m: Factory): ((n: FactoryNode) => number) => {
   const bn = m.nodes.get(m.B.data.bottleneck ?? ''),
     bp = bn?.def.person;
   return (n) => (n === bn || (bp && n.def.person === bp) ? RHO_BN : RHO_OTHER);
 };
 
-/** Each person's summed load, over the centers they run, in center order. */
 const perPerson = (m: Factory, need: (n: FactoryNode) => Need): Record<string, Need> => {
   const per: Record<string, Need> = {};
   for (const n of m.centers) {
@@ -47,7 +39,6 @@ const perPerson = (m: Factory, need: (n: FactoryNode) => Need): Record<string, N
   return per;
 };
 
-/** Sizes every work center's capacity from the Ideal and Realistic solves; a person's is the sum. */
 export const size = (m: Factory): void => {
   const rhoAt = rhoFor(m);
   for (const n of m.centers) n.mu = 1;
@@ -108,7 +99,6 @@ const overloads = (m: Factory, r: SolveResult, tail: string): string[] => {
   ];
 };
 
-/** The stability contract at Realistic: nominal must hold or the file is refused; rushing and the worst case warn. */
 export const stability = (m: Factory, s: Settings = realisticSettings(m.B, m.s.company)): Stability => {
   const nominal = solve(m, s, { worst: false, rush: false }),
     rush = solve(m, s, { worst: false, rush: true }),

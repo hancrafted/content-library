@@ -1,10 +1,6 @@
-/*
- * Builds the factory network from a use case (design-ADR 0024 §1, §5): one node per work center and the Customer,
- * one belt per from-to pair the Customer or a spawn rule names, loops found by depth-first search, spawn rules resolved
- * to belts, one server per work center or per person. It knows who hands work to whom, never where anything is drawn.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { kindChancesOf, kindTargets } from './defect.pure.ts';
-import { HANDOFF } from './factory-dials.pure.ts';
+import { HANDOFF_WEEKS } from './factory-dials.pure.ts';
 import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
 import type { Belt, BeltKind, CustomerNode, FactoryNode, NodeKind, Server, SpawnRule } from './factory.types';
@@ -18,7 +14,6 @@ export interface Pair {
   readonly k: string;
 }
 
-/** Every Customer target a file or its presets name: mix, good and bad follow-ups. */
 const custTargets = (uc: UseCaseData): string[] => {
   const t = new Set<string>();
   for (const c of [uc.customer, ...uc.presets.map((p) => p.customer ?? {})])
@@ -30,7 +25,6 @@ const custTargets = (uc: UseCaseData): string[] => {
 const spawnTargets = (c: CenterDef): string[] =>
   c.spawns.flatMap((sp) => (sp.choose ? sp.choose.map((ch) => ch.to) : [sp.to ?? '']));
 
-/** The belts of a use case as from-to pairs, in build order: Customer targets first, then every spawn's. */
 export const beltsOf = (uc: UseCaseData): Pair[] => {
   const pairs: Pair[] = [],
     seen = new Set<string>();
@@ -52,7 +46,6 @@ interface NodeSpec {
   readonly role: RoleDef;
 }
 
-/** A node at index `idx`; its streams are the reference build's `streams(seed, idx + 1)`. */
 export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode => ({
   id: spec.def.id,
   idx,
@@ -113,7 +106,7 @@ export const makeBelt = (p: Pair, i: number, net: { nodes: Map<string, FactoryNo
     rate: 0,
     backRate: 0,
     retOn: false,
-    T: HANDOFF,
+    T: HANDOFF_WEEKS,
     aiSize: A.kind === 'role' ? (A.role.aiSize ?? 1) : 1,
   };
   A.outs.push(e);
@@ -121,7 +114,6 @@ export const makeBelt = (p: Pair, i: number, net: { nodes: Map<string, FactoryNo
   return e;
 };
 
-/** Loops: a belt that closes a cycle (work flowing back upstream) never carries rework. */
 export const markLoops = (nodes: Iterable<FactoryNode>, cust: FactoryNode, edges: Belt[]): void => {
   const state = new Map<FactoryNode, number>();
   const dfs = (n: FactoryNode): void => {
@@ -139,7 +131,6 @@ export const markLoops = (nodes: Iterable<FactoryNode>, cust: FactoryNode, edges
   for (const e of edges) e.returns = e.kind === 'role' && !e.loop;
 };
 
-/** One spawn rule, resolved to belts. */
 const resolveSpawn = (c: CenterDef, sp: CenterDef['spawns'][number], edgeOf: (k: string) => Belt): SpawnRule =>
   sp.choose
     ? {
@@ -148,7 +139,6 @@ const resolveSpawn = (c: CenterDef, sp: CenterDef['spawns'][number], edgeOf: (k:
       }
     : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p };
 
-/** Spawn rules, resolved to belts; a center's `escalate` rides on its first spawn. */
 export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] => {
   const spawns = c.spawns.map((sp) => resolveSpawn(c, sp, edgeOf)),
     first = firstSpawn(spawns),
@@ -174,7 +164,6 @@ const newServer = (id: string): Server => ({
   pass: false,
 });
 
-/** Servers: one per work center, or one per person who runs several. */
 export const makeServers = (centers: FactoryNode[]): Server[] => {
   const servers: Server[] = [],
     byPerson = new Map<string, Server>();
@@ -192,7 +181,6 @@ export const makeServers = (centers: FactoryNode[]): Server[] => {
   return servers;
 };
 
-/** Flow order for the compare stream: longest path from the Customer, loops and releases ignored. */
 export const flowOrder = (nodes: Map<string, FactoryNode>, edges: Belt[], cust: FactoryNode): string[] => {
   const rank = new Map<string, number>([['customer', 0]]);
   for (let it = 0; it < nodes.size; it++)

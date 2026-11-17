@@ -1,8 +1,4 @@
-/*
- * The factory network of a use case (design-ADR 0024 §1, §5): its nodes, belts, servers and own-ticket sources, its
- * counters at day 0, sized for its settings. Model-internal: `createFactory` wraps it; the model's own tests reach it
- * through `buildFactory`, its internal seam.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { perKind } from './defect.pure.ts';
 import {
   asCustomer,
@@ -52,7 +48,6 @@ const sources = (B: Bundle, nodes: Map<string, FactoryNode>, seed: number): Tick
     ...streams(seed, 200 + i),
   }));
 
-/** The clock, counters and averages of a model at day 0. */
 const counters = () => ({
   pool: [] as Factory['pool'],
   t: 0,
@@ -82,10 +77,6 @@ const counters = () => ({
   idealReq: 0,
 });
 
-/**
- * Builds the network of a use case at the given settings, sized, empty at day 0. The model's internal seam: its own
- * tests reach the network through it; everything else goes through `createFactory`.
- */
 export const buildFactory = (B: Bundle, s: Settings, seed: number = DEFAULT_SEED): Factory => {
   const { nodes, edges, cust } = network(B, seed);
   const centers = [...nodes.values()].filter((n) => n.kind === 'role');
