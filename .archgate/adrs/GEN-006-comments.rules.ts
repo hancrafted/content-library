@@ -72,21 +72,24 @@ const LABELS = Object.keys(TARGETS) as Label[];
 const HELP = {
   exportDoc: [
     'Exported declaration JSDoc',
-    'Move the contract into the type and a test named for it, then delete the comment.',
+    'Move the contract into the type and a test named for it, then delete the comment; a doc that restates the name just goes.',
   ],
   localDoc: [
     'Non-exported declaration JSDoc',
-    'Delete it if it restates the code; otherwise rename so the name says it.',
+    'Delete it if it restates the code; otherwise rename so the name says it. An ADR it cites becomes a `// decision: <ID> §<n>` pointer; an issue number moves to the commit body.',
   ],
   body: [
     'In-body comment',
-    'Extract a named constant or function that says it, or add a pointer marker on the line above.',
+    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding; in a test, fold it into the it or describe name.',
   ],
   header: [
     'File header comment',
-    'Delete it, or add a pointer marker; a module says what it is through its name and its doc.',
+    'Delete it, or add a pointer marker; a module says what it is through its name and its doc. Each ADR section it cites becomes one `// decision:` pointer above the first import; what a test file pins belongs in its it and describe names.',
   ],
-  trailing: ['Marker with trailing text', 'Strip the text after the marker; move the text down the ladder.'],
+  trailing: [
+    'Marker with trailing text',
+    'Strip the text after the marker; move the text down the ladder. In a test the text goes into the it name; `// ARRANGE / ACT` is two markers short, so write each marker bare on its own line.',
+  ],
   directive: [
     'Lint directive',
     'Turn the rule off in the lint config behind a files: glob, with its reason (GEN-005), or fix the code.',
@@ -98,7 +101,7 @@ const HELP = {
   jsx: ['JSX comment', 'Delete it, or extract a component named for it.'],
   catch: [
     'Comment in an empty catch',
-    'Why is there a try? Remove it if nothing throws, or handle the error explicitly.',
+    'Why is there a try? Remove it if nothing throws, or handle the error explicitly, in a fix: commit of its own with a test first.',
   ],
 } as const;
 
