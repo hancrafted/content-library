@@ -17,7 +17,6 @@ export interface DealBracket {
 export interface DealBoardProps<Slug extends string = string> {
   readonly label: string;
   readonly lanes: readonly DealLane<Slug>[];
-  /** The locale euros are written in. */
   readonly locale: string;
   readonly countLabel?: (count: number) => string;
   readonly emphasis?: Slug;

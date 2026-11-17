@@ -57,7 +57,6 @@ interface OpenPipelineProps {
   locale: string;
 }
 
-/** The open pipeline, pinned as a note: a mono label, the sum of every deal in euros and the deal count. */
 export function OpenPipeline({ label, total, deals, locale }: OpenPipelineProps) {
   return (
     <div data-deal="summary" className="rotate-2 bg-card px-5 py-3 text-right shadow-md">

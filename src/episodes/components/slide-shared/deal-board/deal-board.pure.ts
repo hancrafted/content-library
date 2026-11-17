@@ -2,7 +2,6 @@ export interface Deal {
   readonly slug: string;
   readonly company: string;
   readonly contact?: string;
-  /** In euros. */
   readonly value?: number;
   readonly tag?: string;
   readonly ringed?: boolean;
@@ -35,14 +34,12 @@ interface DealBoardPlacements {
   readonly bracket?: { readonly from: number; readonly to: number };
 }
 
-/** Throws when a bracket end is not a lane from 1 to `count`. */
 function checkBracketLane(lane: number, count: number): void {
   if (!Number.isInteger(lane) || lane < 1 || lane > count) {
     throw new Error(`The bracket reaches lane ${lane}; the deal board has lanes 1 to ${count}.`);
   }
 }
 
-/** Throws when the emphasis names no lane, or a bracket reaches a lane the board does not have. */
 export function checkDealBoard({ lanes, emphasis, bracket }: DealBoardPlacements): void {
   if (emphasis !== undefined && !lanes.some((lane) => lane.slug === emphasis)) {
     throw new Error(`The deal board has no lane "${emphasis}" to emphasise.`);
