@@ -16,9 +16,7 @@ describe('static export', () => {
     const expectedFiles = EXPORTED_PAGES.map((page) => exportedFile(page.url));
     // ACT
     const missing = expectedFiles.filter((file) => !existsSync(join(OUT_DIR, file)));
-    console.info(
-      `static export: walked ${expectedFiles.length} pages, ${missing.length} missing, since a walk over none passes silently`,
-    );
+    console.info(`static export: walked ${expectedFiles.length} pages, ${missing.length} missing`);
     // ASSERT
     expect(missing).toEqual([]);
   });

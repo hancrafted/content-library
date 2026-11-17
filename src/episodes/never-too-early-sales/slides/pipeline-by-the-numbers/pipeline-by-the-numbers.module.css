@@ -1,3 +1,4 @@
+/* decision: FE-011 §2 */
 .scene {
   --note-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
 }

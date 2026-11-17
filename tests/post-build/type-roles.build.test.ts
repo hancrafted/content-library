@@ -40,7 +40,7 @@ describe('type roles in the export', () => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
-    console.info(`type roles: walking ${EPISODE_PAGES.length} Episode pages, since a walk over none passes silently`);
+    console.info(`type roles: walking ${EPISODE_PAGES.length} Episode pages`);
   });
 
   describe('success cases', () => {

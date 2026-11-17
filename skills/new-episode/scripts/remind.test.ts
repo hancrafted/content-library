@@ -3,6 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from '../../../tools/load/git-environment.fixture.ts';
 
 const SCRIPT = path.resolve(import.meta.dirname, 'remind.ts');
 const dirs: string[] = [];
@@ -11,16 +12,11 @@ afterEach(() => {
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-const remindFrom = (projectDir: string) =>
-  spawnSync('node', [SCRIPT], {
-    encoding: 'utf8',
-    env: {
-      ...(Object.fromEntries(
-        Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')),
-      ) as NodeJS.ProcessEnv),
-      CLAUDE_PROJECT_DIR: projectDir,
-    },
-  });
+const remindFrom = (projectDir: string) => {
+  const env: NodeJS.ProcessEnv = { ...process.env, CLAUDE_PROJECT_DIR: projectDir };
+  dropGitEnvironment(env);
+  return spawnSync('node', [SCRIPT], { encoding: 'utf8', env });
+};
 
 describe('remind', () => {
   describe('edge cases', () => {

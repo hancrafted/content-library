@@ -64,12 +64,12 @@ Existing comments retired in sweeps, one folder at a time; every authored code f
 1. Shape: `// <label>: <target>`, or `/* <label>: <target> */` in CSS. One target, on its own line, directly above the code; pointers may stack.
 2. Labels, closed:
 
-   | Label        | Target                                                       |
-   | ------------ | ------------------------------------------------------------ |
-   | `decision:`  | an Archgate ADR section, `FE-009 §4.3`, or a design-ADR path |
-   | `spec:`      | a `docs/features/` heading, `hosting.md#deploy-target`       |
-   | `evidence:`  | a repo research doc                                          |
-   | `tech-debt:` | an issue URL in this repo                                    |
+   | Label        | Target                                                                |
+   | ------------ | --------------------------------------------------------------------- |
+   | `decision:`  | an Archgate ADR section, `FE-009 §4.3`, or a design-ADR path          |
+   | `spec:`      | a `docs/features/` heading, `docs/features/hosting.md#how-it-deploys` |
+   | `evidence:`  | a repo research doc                                                   |
+   | `tech-debt:` | an issue URL in this repo                                             |
 
 3. An ADR section is `<ID> §<n>[.<m>]`: Decision anchor n, item m. A doc anchor is GitHub's heading slug.
 4. Every target is checked offline; a missing one fails. An external URL fails: an outside fact enters through a research doc and `evidence:`, so its trust is judged once.

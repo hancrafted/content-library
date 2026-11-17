@@ -3,6 +3,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from '../../tools/load/git-environment.fixture.ts';
 
 const REPO = path.resolve(import.meta.dirname, '../..');
 const ARCHGATE = path.join(REPO, 'node_modules/.bin/archgate');
@@ -22,9 +23,8 @@ const write = (root: string, file: string, text: string) => {
   writeFileSync(path.join(root, file), text);
 };
 
-const envOutsideAnyGitHook = Object.fromEntries(
-  Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')),
-) as NodeJS.ProcessEnv;
+const envOutsideAnyGitHook: NodeJS.ProcessEnv = { ...process.env };
+dropGitEnvironment(envOutsideAnyGitHook);
 
 const git = (root: string, ...args: string[]) =>
   execFileSync('git', ['-c', 'user.name=probe', '-c', 'user.email=probe@example.com', ...args], {

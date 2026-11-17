@@ -94,7 +94,7 @@ describe('episode structure', () => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
-    console.info(`episode structure: walking ${PAGES.length} Episode pages, since a walk over none passes silently`);
+    console.info(`episode structure: walking ${PAGES.length} Episode pages`);
   });
 
   describe.each(PAGES)('$url', ({ slug, route, folder, locale, url }) => {

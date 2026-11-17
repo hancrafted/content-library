@@ -26,6 +26,8 @@ const POINTER_OPEN = /^\s*(decision|spec|evidence|tech-debt):(.*)$/s;
 const URL_OPEN = /^https?:\/\//;
 const THIS_REPO_URL = /^https:\/\/github\.com\/hancrafted\/content-library\//;
 
+const GENERIC_ARROW_PARAMETERS = /^[A-Za-z_$][\w$]*>\s*\((?:[^()]|\([^()]*\))*\)\s*(?::[^=]*)?=>/;
+
 const SCRIPT_EXTENSION = /\.(?:[cm]?[jt]s|[jt]sx)$/;
 const JSX_EXTENSION = /\.[jt]sx$/;
 const CSS_EXTENSION = /\.css$/;
@@ -54,7 +56,7 @@ const TARGETS = {
   },
   spec: {
     grammar: /(docs\/features\/[^\s#]+\.md)#(\S+)/,
-    takes: 'a docs/features/ heading, `spec: docs/features/hosting.md#deploy-target`',
+    takes: 'a docs/features/ heading, `spec: docs/features/hosting.md#how-it-deploys`',
   },
   evidence: {
     grammar: /(docs\/(?:[^\s#]+\/)?research\/[^\s#]+\.md)/,
@@ -80,7 +82,7 @@ const HELP = {
   ],
   body: [
     'In-body comment',
-    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body. A catch that only swallows an error becomes a small named function (`matchesUnlessSelectorUnreadable`) when the lint rejects an unused binding; around `process.kill` only ESRCH is safe to ignore. A unit or a sum of measured parts in it is a full-word suffix on the name, the sum computed from named parts; a script that deletes comments must skip string literals and pointer markers, and a rename must leave public names and contract strings alone.',
+    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body. A catch that only swallows an error becomes a small named function (`matchesUnlessSelectorUnreadable`) when the lint rejects an unused binding. A unit or a sum of measured parts in it is a full-word suffix on the name, the sum computed from named parts.',
   ],
   header: [
     'File header comment',
@@ -138,7 +140,12 @@ interface Finding {
   text: string;
 }
 
-const frame = (mode: Frame['mode'], nested = true, closing = false): Frame => ({ mode, depth: 0, nested, closing });
+const frame = (mode: Frame['mode'], nested = true, closing = false): Frame => ({
+  mode,
+  depth: 0,
+  nested,
+  closing,
+});
 const top = (s: Scan) => s.stack[s.stack.length - 1];
 
 function shebangEnd(src: string): number {
@@ -150,7 +157,12 @@ function shebangEnd(src: string): number {
 function readLineComment(s: Scan): void {
   const found = s.src.indexOf('\n', s.i);
   const end = found < 0 ? s.src.length : found;
-  s.comments.push({ block: false, start: s.i, end, body: s.src.slice(s.i + 2, end) });
+  s.comments.push({
+    block: false,
+    start: s.i,
+    end,
+    body: s.src.slice(s.i + 2, end),
+  });
   s.i = end;
 }
 
@@ -158,7 +170,12 @@ function readBlockComment(s: Scan): void {
   const close = s.src.indexOf('*/', s.i + 2);
   const bodyEnd = close < 0 ? s.src.length : close;
   const end = close < 0 ? s.src.length : close + 2;
-  s.comments.push({ block: true, start: s.i, end, body: s.src.slice(s.i + 2, bodyEnd) });
+  s.comments.push({
+    block: true,
+    start: s.i,
+    end,
+    body: s.src.slice(s.i + 2, bodyEnd),
+  });
   s.i = end;
 }
 
@@ -198,6 +215,7 @@ function startsJsx(s: Scan): boolean {
   const rest = s.src.slice(s.i + 1, s.i + 120);
   if (rest.startsWith('>')) return true;
   if (/^[A-Za-z_$][\w$.:-]*(?:\s+extends\b|\s*,)/.test(rest)) return false;
+  if (GENERIC_ARROW_PARAMETERS.test(rest)) return false;
   return /^[A-Za-z_$]/.test(rest);
 }
 
@@ -216,6 +234,10 @@ function readWord(s: Scan): void {
 }
 
 function stepPunctuation(s: Scan, ch: string): void {
+  if ((ch === '+' || ch === '-') && s.src[s.i + 1] === ch) {
+    s.i += 2;
+    return;
+  }
   if (ch === '/') {
     if (s.valueBefore) s.i++;
     else skipRegex(s);
@@ -308,20 +330,34 @@ const STEP: Record<Frame['mode'], (s: Scan) => void> = {
 };
 
 function scanScript(src: string, jsx: boolean): Comment[] {
-  const s: Scan = { src, i: shebangEnd(src), jsx, valueBefore: false, comments: [], stack: [frame('code', false)] };
+  const s: Scan = {
+    src,
+    i: shebangEnd(src),
+    jsx,
+    valueBefore: false,
+    comments: [],
+    stack: [frame('code', false)],
+  };
   while (s.i < src.length) STEP[top(s).mode](s);
   return s.comments;
 }
 
 function scanCss(src: string): Comment[] {
-  const s: Scan = { src, i: 0, jsx: false, valueBefore: false, comments: [], stack: [] };
+  const s: Scan = {
+    src,
+    i: 0,
+    jsx: false,
+    valueBefore: false,
+    comments: [],
+    stack: [],
+  };
   while (s.i < src.length) {
     const ch = src[s.i];
-    if (readCommentAt(s)) continue;
-    if (ch === '"' || ch === "'") skipQuoted(s, ch, true);
+    if (src.startsWith('/*', s.i)) readBlockComment(s);
+    else if (ch === '"' || ch === "'") skipQuoted(s, ch, true);
     else s.i++;
   }
-  return s.comments.filter((c) => c.block);
+  return s.comments;
 }
 
 function blankComments(src: string, comments: Comment[]): string {
@@ -531,7 +567,11 @@ export default {
         const changed = new Set(ctx.changedFiles);
         for (const file of ctx.scopedFiles.filter((f) => changed.has(f) && governed(f))) {
           for (const finding of await findingsIn(ctx, file)) {
-            ctx.report.violation({ message: finding.text, file, line: finding.line });
+            ctx.report.violation({
+              message: finding.text,
+              file,
+              line: finding.line,
+            });
           }
         }
       },

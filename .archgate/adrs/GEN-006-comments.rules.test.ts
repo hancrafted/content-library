@@ -419,7 +419,9 @@ describe('no-comments', () => {
 
     it('reports a tech-debt pointer to another repo’s issue as an external URL', async () => {
       // ARRANGE
-      const planted = { [TS]: '// tech-debt: https://github.com/other/repo/issues/1\nexport const a = 1;\n' };
+      const planted = {
+        [TS]: '// tech-debt: https://github.com/other/repo/issues/1\nexport const a = 1;\n',
+      };
       // ACT
       const violations = await check(planted);
       // ASSERT
@@ -429,7 +431,9 @@ describe('no-comments', () => {
 
     it('reports a pointer that does not sit directly above code', async () => {
       // ARRANGE
-      const planted = { [TS]: 'export const a = 1;\n// decision: FE-009 §4\n\nexport const b = 2;\n' };
+      const planted = {
+        [TS]: 'export const a = 1;\n// decision: FE-009 §4\n\nexport const b = 2;\n',
+      };
       const expectedHelp = 'on its own line, directly above the code it explains';
       // ACT
       const violations = await check(planted);
@@ -440,7 +444,9 @@ describe('no-comments', () => {
 
     it('reports a pointer trailing code on its line', async () => {
       // ARRANGE
-      const planted = { [TS]: 'export const a = 1; // decision: FE-009 §4\nexport const b = 2;\n' };
+      const planted = {
+        [TS]: 'export const a = 1; // decision: FE-009 §4\nexport const b = 2;\n',
+      };
       const expectedHelp = 'on its own line, directly above the code it explains';
       // ACT
       const violations = await check(planted);
@@ -451,7 +457,9 @@ describe('no-comments', () => {
 
     it('reports a pointer in block form outside CSS', async () => {
       // ARRANGE
-      const planted = { [TS]: '/* decision: FE-009 §4 */\nexport const a = 1;\n' };
+      const planted = {
+        [TS]: '/* decision: FE-009 §4 */\nexport const a = 1;\n',
+      };
       const expectedHelp = 'write it as // decision:';
       // ACT
       const violations = await check(planted);
@@ -462,7 +470,9 @@ describe('no-comments', () => {
 
     it('reports a CSS pointer to a missing target', async () => {
       // ARRANGE
-      const planted = { [CSS]: '/* decision: FE-009 §9 */\n.a {\n  color: red;\n}\n' };
+      const planted = {
+        [CSS]: '/* decision: FE-009 §9 */\n.a {\n  color: red;\n}\n',
+      };
       // ACT
       const violations = await check(planted);
       // ASSERT
@@ -472,7 +482,9 @@ describe('no-comments', () => {
 
     it('reports the line each comment opens on', async () => {
       // ARRANGE
-      const planted = { [TS]: 'export const a = `x\ny`;\n/*\n * b\n */\nexport const b = 2; // c\n' };
+      const planted = {
+        [TS]: 'export const a = `x\ny`;\n/*\n * b\n */\nexport const b = 2; // c\n',
+      };
       const expectedLines = [3, 6];
       // ACT
       const violations = await check(planted);
@@ -483,7 +495,10 @@ describe('no-comments', () => {
     it('reports a registry row the ADR table lacks, and one it adds', async () => {
       // ARRANGE
       const drifted = REGISTRY_TABLE.replace('`// ARRANGE`, ', '') + '\n| `// #__PURE__` | the bundler |';
-      const planted = { [TS]: 'export const a = 1;\n', [ADR]: adrWith(drifted) };
+      const planted = {
+        [TS]: 'export const a = 1;\n',
+        [ADR]: adrWith(drifted),
+      };
       const expectedMissing = 'missing from the ADR table: `// ARRANGE`';
       const expectedExtra = 'missing from the rule: `// #__PURE__`';
       // ACT
@@ -497,6 +512,28 @@ describe('no-comments', () => {
   });
 
   describe('edge cases', () => {
+    const hiddenBehindLexerGuess: [label: string, file: string, source: string][] = [
+      ['a slash after a postfix increment', TS, 'let i = 1;\nexport const h = i++ / 2; // x\n'],
+      ['a slash after a postfix decrement', TS, 'let i = 1;\nexport const h = i-- / 2; // x\n'],
+      ['a generic arrow type alias in a .tsx file', TSX, 'export type F = <T>(x: T) => T; // x\n'],
+      [
+        'a generic arrow type in a parameter in a .tsx file',
+        TSX,
+        'export const f = (cb: <K>(k: K) => void) => cb; // x\n',
+      ],
+      ['a protocol-relative url in CSS', CSS, '.a {\n  background: url(//x.png) /* x */;\n}\n'],
+    ];
+    for (const [label, file, source] of hiddenBehindLexerGuess) {
+      it(`still reports the comment after ${label}`, async () => {
+        // ARRANGE
+        const planted = { [file]: source };
+        // ACT
+        const violations = await check(planted);
+        // ASSERT
+        expect(violations).toHaveLength(1);
+      });
+    }
+
     const outOfScope: [label: string, file: string, scope: Scope][] = [
       ['a file outside the files: globs', 'src/other.ts', { scoped: [] }],
       ['a file the commit does not stage', TS, { changed: [] }],
