@@ -8,15 +8,17 @@ import { Flip } from './flip.client';
 import { CardBackView, TURN, type CardLabels } from './level-card-view';
 import { LEVELS, type Level } from './scene-frames.pure';
 
-/** How many tokens the carousel shows at once, the newest last; the next one still a question after them. */
-const SHOWN = 4;
+const VISIBLE_TOKEN_COUNT = 4;
 const STEP_MILLISECONDS = 900;
 
 function useOffset(count: number, working: boolean): number {
   const [offset, setOffset] = useState(0);
   useEffect(() => {
     if (!working || prefersReducedMotion()) return;
-    const timer = window.setInterval(() => setOffset((now) => (now + 1) % (count - SHOWN + 1)), STEP_MILLISECONDS);
+    const timer = window.setInterval(
+      () => setOffset((now) => (now + 1) % (count - VISIBLE_TOKEN_COUNT + 1)),
+      STEP_MILLISECONDS,
+    );
     return () => window.clearInterval(timer);
   }, [count, working]);
   return offset;
@@ -36,13 +38,9 @@ function Gloss({ words }: { readonly words: LlmWords }) {
   );
 }
 
-/**
- * The model writing, as a carousel of fixed width: a few tokens, the newest popping in, the next one a question. It
- * writes only while a wire brings it work, so at rest it stands still with the scenes.
- */
 function Typing({ tokens, working }: { readonly tokens: readonly string[]; readonly working: boolean }) {
   const offset = useOffset(tokens.length, working);
-  const shown = tokens.slice(offset, offset + SHOWN);
+  const shown = tokens.slice(offset, offset + VISIBLE_TOKEN_COUNT);
   return (
     <p aria-hidden="true" className="flex w-80 max-w-full shrink-0 justify-end gap-1 self-end overflow-hidden">
       {shown.map((token, index) => (

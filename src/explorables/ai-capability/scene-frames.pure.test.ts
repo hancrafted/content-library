@@ -134,7 +134,7 @@ describe('edge cases', () => {
     // ARRANGE
     const scenes = Object.values(SCENES);
     // ACT
-    const still = scenes.flat().filter(({ ms }) => !(ms > 0));
+    const still = scenes.flat().filter(({ holdMilliseconds }) => !(holdMilliseconds > 0));
     // ASSERT
     expect(still).toEqual([]);
   });

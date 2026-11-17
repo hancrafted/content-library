@@ -49,7 +49,7 @@ export function useScenePlayer(ref: RefObject<Element | null>, autoplay: boolean
     if (frame === undefined) return;
     const timer = window.setTimeout(
       () => setPlay((current) => advance(current, lit !== null && current.queue.length === 1)),
-      frame.ms,
+      frame.holdMilliseconds,
     );
     return () => window.clearTimeout(timer);
   }, [frame, lit]);
