@@ -67,9 +67,7 @@ describe('page metadata', () => {
     }
     pages = SELF_CANONICAL.map((page) => readLinks(exportedFile(page.url)));
     const alternateCount = pages.reduce((sum, page) => sum + Object.keys(page.alternates).length, 0);
-    console.info(
-      `page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}, since a walk over none passes silently`,
-    );
+    console.info(`page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}`);
   });
 
   it('gives every page exactly one canonical, pointing at the page itself', () => {
