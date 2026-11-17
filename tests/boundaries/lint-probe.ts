@@ -26,6 +26,13 @@ export interface ProbeDiagnostic {
 interface RawDiagnostic {
   code: string;
   message: string;
+  filename: string;
+}
+
+/** A snippet and the virtual path, relative to the repo root, it is linted at. */
+export interface Probe {
+  source: string;
+  virtualPath: string;
 }
 
 /** `better-tailwindcss(no-unknown-classes)` becomes `better-tailwindcss/no-unknown-classes`; `eslint-js(x)` and `eslint(x)` become `x`. */
@@ -38,23 +45,40 @@ function ruleIdOf(code: string): string {
 
 /** The diagnostics a snippet draws when linted at `virtualPath`, relative to the repo root. */
 export async function lintProbe(source: string, virtualPath: string): Promise<ProbeDiagnostic[]> {
+  const [diagnostics] = await lintProbes([{ source, virtualPath }]);
+  return diagnostics;
+}
+
+/**
+ * The diagnostics each probe draws, in the probes' order, from one oxlint run. A run's cost is starting oxlint and its
+ * plugins (about a second), not the files it lints, so a test that probes several paths pays it once. Paths must differ.
+ */
+export async function lintProbes(probes: readonly Probe[]): Promise<ProbeDiagnostic[][]> {
+  const paths = probes.map((p) => p.virtualPath);
+  if (new Set(paths).size !== paths.length) throw new Error(`lintProbes: each probe needs its own path: ${paths}`);
   const mirror = mkdtempSync(path.join(tmpdir(), 'lint-probe-'));
   try {
     writeFileSync(path.join(mirror, '.oxlintrc.json'), JSON.stringify(config));
     symlinkSync(path.join(ROOT, 'node_modules'), path.join(mirror, 'node_modules'));
     mkdirSync(path.join(mirror, path.dirname(TAILWIND_ENTRY)), { recursive: true });
     symlinkSync(path.join(ROOT, TAILWIND_ENTRY), path.join(mirror, TAILWIND_ENTRY));
-    mkdirSync(path.join(mirror, path.dirname(virtualPath)), { recursive: true });
-    writeFileSync(path.join(mirror, virtualPath), source);
+    for (const { source, virtualPath } of probes) {
+      mkdirSync(path.join(mirror, path.dirname(virtualPath)), { recursive: true });
+      writeFileSync(path.join(mirror, virtualPath), source);
+    }
     // oxlint exits 1 when it reports an error; the JSON on stdout is the answer either way.
-    const { stdout } = await run(OXLINT, ['-c', '.oxlintrc.json', '-f', 'json', virtualPath], { cwd: mirror }).catch(
+    const { stdout } = await run(OXLINT, ['-c', '.oxlintrc.json', '-f', 'json', ...paths], { cwd: mirror }).catch(
       (error: { stdout?: string }) => {
         if (!error.stdout) throw error;
         return { stdout: error.stdout };
       },
     );
     const { diagnostics } = JSON.parse(stdout) as { diagnostics: RawDiagnostic[] };
-    return diagnostics.map((d) => ({ ruleId: ruleIdOf(d.code), message: d.message }));
+    return paths.map((file) =>
+      diagnostics
+        .filter((d) => path.normalize(d.filename) === path.normalize(file))
+        .map((d) => ({ ruleId: ruleIdOf(d.code), message: d.message })),
+    );
   } finally {
     rmSync(mirror, { recursive: true, force: true });
   }

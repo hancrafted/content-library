@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { lintProbe } from './lint-probe';
+import { lintProbe, lintProbes, type ProbeDiagnostic } from './lint-probe';
 
 /*
  * Probe tests for the design-token lint checks (FE-011, .oxlintrc.json): one planted violation per check must
@@ -24,9 +24,17 @@ const markup = (classes: string) => `export const Probe = () => <div className="
 
 /** The better-tailwindcss rule ids a snippet breaks when linted as `file`. */
 async function broken(classes: string, file: string): Promise<string[]> {
-  const diagnostics = await lintProbe(markup(classes), file);
-  return diagnostics.filter((d) => d.ruleId.startsWith('better-tailwindcss/')).map((d) => d.ruleId);
+  return tailwindRules(await lintProbe(markup(classes), file));
 }
+
+/** The rule ids each `[file, classes]` probe breaks, from one lint run: a run costs about a second, however many files. */
+async function brokenEach(probes: [file: string, classes: string][]): Promise<string[][]> {
+  const results = await lintProbes(probes.map(([virtualPath, classes]) => ({ source: markup(classes), virtualPath })));
+  return results.map(tailwindRules);
+}
+
+const tailwindRules = (diagnostics: ProbeDiagnostic[]): string[] =>
+  diagnostics.filter((d) => d.ruleId.startsWith('better-tailwindcss/')).map((d) => d.ruleId);
 
 const E1 = 'better-tailwindcss/no-unknown-classes';
 const E2 = 'better-tailwindcss/no-restricted-classes';
@@ -128,7 +136,10 @@ describe('E2 no-restricted-classes', () => {
       // ARRANGE
       const marker = 'text-[0.7em]';
       // ACT
-      const [inFile, elsewhere] = [await broken(marker, CITATION), await broken(marker, SLIDE)];
+      const [inFile, elsewhere] = await brokenEach([
+        [CITATION, marker],
+        [SLIDE, marker],
+      ]);
       // ASSERT
       expect([inFile, elsewhere]).toEqual([[], [E2]]);
     },
@@ -141,7 +152,10 @@ describe('E2 no-restricted-classes', () => {
       // ARRANGE
       const code = 'text-[0.9em]';
       // ACT
-      const [inFile, elsewhere] = [await broken(code, INLINE_CODE), await broken(code, SLIDE)];
+      const [inFile, elsewhere] = await brokenEach([
+        [INLINE_CODE, code],
+        [SLIDE, code],
+      ]);
       // ASSERT
       expect([inFile, elsewhere]).toEqual([[], [E2]]);
     },
@@ -157,7 +171,7 @@ describe('E2 no-restricted-classes', () => {
         [INLINE_CODE, 'text-[0.7em]'],
       ];
       // ACT
-      const rules = await Promise.all(swapped.map(([file, classes]) => broken(classes, file)));
+      const rules = await brokenEach(swapped);
       // ASSERT
       expect(rules).toEqual([[E2], [E2]]);
     },
