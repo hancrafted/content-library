@@ -1,13 +1,5 @@
-/*
- * The link between a Slide and its Speaker note items in the Context drawer
- * (FE-010 §4, §8). Both sides render, and the delegated listeners find each
- * other, by the data attributes and selectors below, so neither side can drift
- * from the other. Everything is scoped by the drawer item's id, which is the id
- * of the Slide's element: a note's `target` is a short name, marked
- * `data-target` inside that element, and a Context reference names its note by
- * slug, inside the same element. Strings only: the DOM queries live in
- * `src/shared/hooks/use-context-links.ts`.
- */
+// decision: FE-010 §4
+// decision: FE-010 §8
 
 export const CONTEXT_REF_ATTR = 'data-context-ref';
 export const TARGET_ATTR = 'data-target';
@@ -27,7 +19,6 @@ export const CONTEXT_SCROLL_ATTR = 'data-context-scroll';
 
 export const NOTE_SELECTOR = `[data-slot="context"] [${NOTE_TARGET_ATTR}]`;
 
-/** A CSS string literal: `"` and `\` escaped, so a value never ends the attribute selector early. */
 function quoted(value: string): string {
   return `"${value.replace(/["\\]/g, '\\$&')}"`;
 }

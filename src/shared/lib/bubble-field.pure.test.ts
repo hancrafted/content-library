@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bubbleField } from './bubble-field.pure';
 
-/*
- * The `bubbles` transition's field of air bubbles: round, separate bubbles that rise through the outgoing Slide's
- * trailing edge as the edge's progress runs from 0 to 1. Each bubble enters below the host's bottom once progress
- * passes its start and has left through the top by full progress, so none stands still at either end.
- */
-
 describe('success cases', () => {
   it('lays out the same separate bubbles every time, spread across the width', () => {
     // ARRANGE

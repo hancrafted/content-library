@@ -36,10 +36,6 @@ function prefixPath(path: string, locale: Locale): string {
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
 
-/**
- * The URL of a logical path in a locale: unprefixed for the default locale.
- * `fragment` (without `#`) targets an anchor on that page, e.g. a slide.
- */
 export function localizePath(logicalPath: string, locale: Locale, fragment?: string): string {
   const url = prefixPath(normalize(logicalPath), locale);
   return fragment ? `${url}#${fragment}` : url;
@@ -55,11 +51,6 @@ export function isAnySectionActive(pathname: string, sections: readonly string[]
   return sections.some((section) => isSectionActive(pathname, section));
 }
 
-/**
- * The locales of each page not exported in every locale, by logical path: what a locale switch offers there. A page
- * the map leaves out is exported in every locale. The page catalogue knows which pages these are; page chrome is
- * handed the map.
- */
 export type LocalesByRoute = Readonly<Record<string, readonly Locale[]>>;
 
 export function localesAt(pathname: string, localesByRoute: LocalesByRoute): readonly Locale[] {

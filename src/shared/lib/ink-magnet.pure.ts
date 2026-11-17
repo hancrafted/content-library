@@ -20,10 +20,8 @@ export interface InkField {
   droplets: InkCircle[];
 }
 
-// Within this gap the ink stops reaching out and starts flowing into the button instead.
 const FILL_REACH = 96;
 const MAX_STRETCH = 80;
-// Droplets along the stretch, from the anchored bead to a tip that pulls free once the stretch is long.
 const BEADS = [
   { along: 0, size: 1 },
   { along: 0.42, size: 0.7 },
@@ -51,11 +49,6 @@ function farthestCorner({ width, height }: Size, point: Point) {
   return Math.hypot(Math.max(point.x, width - point.x), Math.max(point.y, height - point.y));
 }
 
-/**
- * The ink the pointer pulls on, in the button's own pixels (origin top-left). From `reach` away a
- * bead swells on the nearest edge and stretches toward the pointer; within FILL_REACH the ink flows
- * in from that edge; over the button it floods outward from the pointer.
- */
 export function inkMagnet(size: Size, point: Point, reach: number): InkField {
   if (!(reach > 0)) throw new RangeError('Reach must be a positive distance.');
   if (!(size.width > 0 && size.height > 0)) throw new RangeError('Button must have a positive width and height.');

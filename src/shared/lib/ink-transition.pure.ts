@@ -13,7 +13,6 @@ export function inkScale(variant: keyof typeof INK_PROFILES, progress: number) {
   return progress < 0.02 ? (progress / 0.02) * knee : knee + ((progress - 0.02) / 0.98) * (1 - knee);
 }
 
-/** Effects whose water rises by translation, so a crest drawn on its top edge keeps its shape. */
 const TRANSLATED = new Set<keyof typeof INK_PROFILES>(['bubbles']);
 
 export function inkTransform(variant: keyof typeof INK_PROFILES, progress: number) {

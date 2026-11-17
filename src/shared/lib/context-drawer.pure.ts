@@ -1,7 +1,4 @@
-/*
- * The Context drawer's content shapes and pure logic (FE-010). The shapes are
- * content, never design: no field carries layout, style, placement or markup.
- */
+// decision: FE-010 §3
 
 import type { DrawerMode } from './prefs.pure';
 
@@ -12,7 +9,6 @@ export interface NoteSource {
 }
 
 export interface SpeakerNoteItem {
-  /** Stable key identity for the Translation file; never a position. */
   readonly slug: string;
   readonly header: string;
   readonly description: string;
@@ -44,7 +40,6 @@ export interface KeyEventLike {
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
-/** Whether the card sits beside the Slides, widening the Foreground's right inset, which changes at once rather than animating. */
 export function sitsBeside(mode: DrawerMode, open: boolean): boolean {
   return open && mode === 'beside';
 }
@@ -58,7 +53,6 @@ export function drawerIds(tab: DrawerTab): { tab: string; panel: string } {
   return { tab: `context-tab-${tab}`, panel: `${DRAWER_PANEL_ID}-${tab}` };
 }
 
-/** Shown on the trigger (from `md`); matched on `event.code` so a layout cannot move it. */
 export const SHORTCUT_LABEL = 'Alt+N';
 
 export function matchesShortcut(event: KeyEventLike): boolean {

@@ -1,28 +1,20 @@
-/*
- * The `bubbles` transition's air bubbles (docs/features/slide-transitions.md): round, separate bubbles that rise
- * through the outgoing Slide's trailing edge as the edge's progress runs from 0 to 1. Deterministic, so the static
- * HTML and every visit draw the same field; the page's clock moves it through `--surface-edge-progress`, never a frame.
- */
+// spec: slide-transitions.md#named-transition-interface
 
 export interface Bubble {
   readonly x: number;
   readonly size: number;
   readonly start: number;
   readonly rise: number;
-  /** Its sway's phase, in radians, so neighbours never sway in step. */
   readonly phase: number;
 }
 
 const GOLDEN = 0.618_033_988_75;
 const SIZES = [12, 28, 16, 40, 10, 22, 34, 14, 18, 44, 24] as const;
-/** The host heights a bubble still has to climb at full progress, so even the largest has left through the top. */
 const EXIT = 1.2;
 
-/** Rounds to `places` decimals, or up to them, so a field written into every edge of the page stays short. */
 const round = (value: number, places: number) => Math.round(value * 10 ** places) / 10 ** places;
 const roundUp = (value: number, places: number) => Math.ceil(value * 10 ** places) / 10 ** places;
 
-/** The fractional part: a low-discrepancy step, so bubbles spread across the width without clumping. */
 const fraction = (value: number) => value - Math.floor(value);
 
 export function bubbleField(count: number): readonly Bubble[] {
@@ -35,7 +27,6 @@ export function bubbleField(count: number): readonly Bubble[] {
       x: round(2 + fraction(index * GOLDEN) * 96, 1),
       size: SIZES[index % SIZES.length]!,
       start,
-      // Rounded up, so even the largest bubble still leaves through the top.
       rise: roundUp((EXIT / (1 - start)) * speed, 3),
       phase: round(fraction(index * GOLDEN * 5) * 2 * Math.PI, 2),
     };

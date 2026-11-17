@@ -1,8 +1,3 @@
-// Colour conversion for the dev-only token editor's picker: reads a token's colour
-// (oklch, hex or hsl) as the hex the picker works in, and writes a picked hex back
-// in the token's own format. sRGB only; an oklch colour outside it is clamped.
-// No DOM, no React.
-
 interface Rgba {
   r: number;
   g: number;
@@ -72,7 +67,6 @@ function parseHex(digits: string): Rgba {
   return { r: byte(0), g: byte(2), b: byte(4), a: full.length === 8 ? byte(6) : 1 };
 }
 
-// CIE Lab (D50) to Oklab, through XYZ: the form a browser serves an oklch colour in once a build has rewritten it.
 function labToOklch(lab: number, a: number, b: number) {
   const fy = (lab + 16) / 116;
   const [fx, fz] = [fy + a / 500, fy - b / 200];
@@ -151,19 +145,11 @@ function oklchString({ l, c, h, a }: { l: number; c: number; h: number; a: numbe
   return `oklch(${trim(l, 3)} ${trim(chroma, 3)} ${hue}${alpha})`;
 }
 
-/**
- * A colour the browser served in a form the author did not write (`lab()`, from a
- * build that rewrote `oklch()`) as `oklch()` again; anything else comes back as it was.
- */
 export function normaliseColour(value: string): string {
   const lab = parseLab(value.trim());
   return lab ? oklchString(lab) : value;
 }
 
-/**
- * A picked hex written in the format of the token it replaces: a hex token stays
- * hex, anything else (oklch, hsl) becomes `oklch(L C H)`, alpha as a percentage.
- */
 export function formatLike(original: string, pickedHex: string): string {
   const picked = parseColour(pickedHex);
   if (!picked) return original;

@@ -121,7 +121,6 @@ export function inkFrame(state: InkState, input: InkInput, neighbours: InkHost[]
 
 function positionFlight(state: InkState, shapes: InkShape[], goals: InkShape[]) {
   if (!state.inside || !state.host.primary) return;
-  // The trajectory owns position; a second easing pass would delay arrival beyond the travel duration.
   shapes.forEach((shape, index) => {
     const goal = goals[index];
     if (!goal) return;
