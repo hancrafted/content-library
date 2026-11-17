@@ -72,7 +72,7 @@ addEventListener('load', () => {
 });
 </script>`;
 
-/** The numbers of the toolbar asset (`to-decision-html/assets/toolbar.html`), which the template carries as JSON. */
+/** The numbers of the toolbar asset (`.agents/skills/to-review/assets/toolbar.html`), which the template carries as JSON. */
 export interface ToolbarConfig {
   /** The window width from which the page's script opens its navigation. */
   navOpenWidth: number;
