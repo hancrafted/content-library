@@ -1,6 +1,6 @@
 import type { EventInput } from '../schemas/event.schema';
 
-/** The CyberForum EXI Digital workshop on agentic workflows for founders; its title and description are Translation keys by slug (FE-003). */
+// decision: FE-003 §4
 export const event = {
   slug: '2026-11-18-cyberforum-exi-digital-agentic-workflows',
   date: '2026-11-18',
