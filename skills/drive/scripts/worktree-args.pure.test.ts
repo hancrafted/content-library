@@ -158,11 +158,13 @@ describe('new on a subagent branch', () => {
       newArgs(['feat/x']),
       newArgs(['feat/x--613-oxlint', '--base', 'feat/x']),
       newArgs(['episode/y--section-close', '--base', 'episode/y']),
+      newArgs(['decisions/drive-glossary']),
+      newArgs(['decisions/drive--3-term', '--base', 'decisions/drive']),
     ];
     // ACT
     const refusals = cases.map((args) => refuseNewBranch(args, () => true, NAMING));
     // ASSERT
-    expect(refusals).toEqual([null, null, null]);
+    expect(refusals).toEqual([null, null, null, null, null]);
   });
 
   it('refuses a missing parent and names the command that creates it', () => {
