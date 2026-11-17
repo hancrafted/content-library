@@ -13,8 +13,7 @@ const CONFIG = 'src/shared/config.yaml';
 const KEY = 'hancrafted:prefs';
 const PROGRESS = 'hancrafted:progress';
 
-// Marks the config file as absent; a default parameter would swallow `undefined`.
-const MISSING = Symbol('missing');
+const ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED = Symbol('missing');
 
 function makeCtx(
   files: Record<string, string>,
@@ -35,7 +34,8 @@ function makeCtx(
       throw new Error(`ENOENT: ${path}`);
     },
     async readYAML(path: string) {
-      if (path !== CONFIG || config === MISSING) throw new Error(`ENOENT: ${path}`);
+      if (path !== CONFIG || config === ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED)
+        throw new Error(`ENOENT: ${path}`);
       return { frontmatter: null, content: config };
     },
     report: {
@@ -118,7 +118,7 @@ describe('single-storage-key', () => {
   });
 
   const badConfigs: [label: string, config: unknown][] = [
-    ['a missing config', MISSING],
+    ['a missing config', ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED],
     ['an empty key', { localStorageKey: '', progressStorageKey: PROGRESS }],
     ['a non-string key', { localStorageKey: 1, progressStorageKey: PROGRESS }],
     ['a missing progress key', { localStorageKey: KEY }],

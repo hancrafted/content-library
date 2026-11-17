@@ -1,8 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Accepted trade-off: a third legitimate key breaks this rule, and the
-// ADR is amended first. Self-contained by design: archgate forbids imports
-// between rules files.
 // decision: FE-001 §3
 const CONFIG_PATH = 'src/shared/config.yaml';
 const SOURCE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
@@ -18,10 +15,7 @@ interface Key {
   readonly value: string;
 }
 
-// The first argument up to its `,` or `)`. A template interpolation such as
-// `${JSON.stringify(PREFS_KEY)}` is cut at its first `)`, which still names the
-// constant — the form the pre-paint theme script uses.
-const CALL_RE = /localStorage\s*\.\s*(?:getItem|setItem)\s*\(\s*([^,)]*)/g;
+const STORAGE_CALL_FIRST_ARGUMENT_CUT_AT_FIRST_PAREN_RE = /localStorage\s*\.\s*(?:getItem|setItem)\s*\(\s*([^,)]*)/g;
 const LITERAL_RE = /^(['"`])(.*)\1$/;
 const PROVENANCE = '(FE-001 [single-storage-key])';
 
@@ -56,7 +50,7 @@ function lineAt(source: string, index: number): number {
 
 function checkCalls(ctx: RuleContext, file: string, source: string, keys: readonly Key[]): void {
   const allowed = keys.map(({ value }) => `'${value}'`).join(' or ');
-  for (const call of source.matchAll(CALL_RE)) {
+  for (const call of source.matchAll(STORAGE_CALL_FIRST_ARGUMENT_CUT_AT_FIRST_PAREN_RE)) {
     if (usesKey(call[1], keys)) continue;
     ctx.report.violation({
       message: `localStorage call passes '${call[1].trim()}', not ${allowed} from ${CONFIG_PATH} — pass PREFS_KEY or PROGRESS_KEY, or read and write through src/shared/lib/prefs-storage.ts ${PROVENANCE}.`,
