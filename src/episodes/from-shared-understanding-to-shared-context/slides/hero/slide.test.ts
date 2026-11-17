@@ -58,9 +58,8 @@ describe('success cases', () => {
     expect(inside).toEqual(expected);
   });
 
-  it('names the handover, the aim, the AI, the speed and the intent in English', () => {
+  it('names the handover, the aim, the AI, the speed and the intent in English, the handover reading “What you hand the AI (the agent)” with the everyday word first', () => {
     // ARRANGE
-    // Han's proofread names the agent by its everyday word first: the handover reads "What you hand the AI (the agent)".
     const expected = [
       'The intent',
       'What you',
@@ -93,9 +92,8 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('breaks the German handover onto three lines, as the English does', () => {
+  it('breaks the German handover “Was Du der KI (dem Agenten) übergibst” onto three lines, as the English does', () => {
     // ARRANGE
-    // Han's proofread: "Was Du der KI (dem Agenten) übergibst", on three lines.
     const expected = ['Was Du der KI', '(dem Agenten)', 'übergibst'];
     // ACT
     const $ = sceneOf('de');

@@ -20,7 +20,6 @@ const WORK_ORDER_LINES = [
   [214, 34],
 ] as const;
 
-/** The work order you hand the agent, raised on hover so the presenter can point at it, and its label. */
 function Handover({ handover, aim }: Pick<AimBoardProps, 'handover' | 'aim'>) {
   return (
     <>
@@ -58,7 +57,6 @@ function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
       <text x={150} y={189} textAnchor="middle" className="fill-card text-caption font-semibold">
         {ai}
       </text>
-      {/* Over the badge, nudged right so the longer German label clears the work order's edge (x 94) and the board. */}
       <text x={164} y={146} textAnchor="middle" className="fill-ai text-caption font-semibold">
         {speed}
       </text>

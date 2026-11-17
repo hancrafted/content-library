@@ -12,13 +12,6 @@ const HITS = [
   { x: 376, y: 214 },
 ] as const;
 
-/**
- * The Title slide's hero Scene (the record's `title`), the Hero motif of picked Option 0c: the dartboard. What you
- * hand the agent sets the aim, AI speeds every throw, and the documents land on the bull, the intent. The shared header
- * renders the `h1` and this Slide's caption above it; from `xl` the board sits beside it in the right column, as the mock shows (`hero.module.css`).
- * Each section slide echoes the board. On the inverse surface the board sits on a `data-tone-flip` card, so its
- * darts keep the page's own contrast. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
