@@ -3,11 +3,7 @@ import { describe, expect, it } from 'vitest';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The Tags' words, `tags.<id>.name` and `.tooltip`, which page assembly owns because the Episode and Event cards
- * both draw them (FE-003 §4): one pair per Tag in the closed vocabulary, in both locales, and none for any other.
- */
-
+// decision: FE-003 §4
 const FILES = { en, de } as const;
 type Words = Record<string, { name?: string; tooltip?: string } | undefined>;
 

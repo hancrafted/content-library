@@ -4,8 +4,6 @@ import { PAPER_PILE_ORIGIN, pileShadowPath } from '@/shared/lib/paper-pile.pure'
 function ShadowMaterials() {
   return (
     <defs>
-      {/* Fixed user-space extents: a bounding-box region would resize, and flicker, as the shadow grows. */}
-      {/* sRGB keeps the blur from tinting a near-transparent black; linearRGB shows colour fringes. */}
       <filter
         id="hero-pile-shadow-blur"
         filterUnits="userSpaceOnUse"
@@ -21,7 +19,6 @@ function ShadowMaterials() {
         <stop stopColor="#000" stopOpacity=".42" />
         <stop offset="1" stopColor="#000" stopOpacity=".03" />
       </linearGradient>
-      {/* The tray's own outlines cut it out, so the shadow meets its edges without a gap. */}
       <mask id="hero-pile-shadow-mask" maskUnits="userSpaceOnUse" x="-1200" y="-1200" width="2400" height="2400">
         <rect x="-1200" y="-1200" width="2400" height="2400" fill="#fff" />
         <path d={TRAY_OUTLINE.back} fill="#000" />
@@ -32,7 +29,6 @@ function ShadowMaterials() {
   );
 }
 
-/** One shadow for tray and pile, cast forward by the window light; drawn above the envelope it falls on. */
 export function PileShadow() {
   const { x, y } = PAPER_PILE_ORIGIN;
   return (

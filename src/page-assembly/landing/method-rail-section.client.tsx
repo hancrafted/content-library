@@ -47,11 +47,9 @@ function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: 
   const { startX, endX } = getRailBounds(track);
   applyThemeToContainer(container, options.progressRef.current);
 
-  // The stepper and the colours follow the timeline's own progress, not the scroll position: `scrub` eases the
-  // track behind the scrollbar, and reading the scroll would run the stepper ahead of the slide on screen.
-  const tl: gsap.core.Timeline = gsap.timeline({
+  const timelineDrivingStepper: gsap.core.Timeline = gsap.timeline({
     onUpdate: () => {
-      const p = tl.progress();
+      const p = timelineDrivingStepper.progress();
       options.progressRef.current = p;
       applyThemeToContainer(container, p);
       options.onProgress(p);
@@ -66,8 +64,8 @@ function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: 
       invalidateOnRefresh: true,
     },
   });
-  tl.fromTo(track, { x: () => startX() }, { x: () => endX(), duration: 1, ease: 'none' }, 0);
-  return tl;
+  timelineDrivingStepper.fromTo(track, { x: () => startX() }, { x: () => endX(), duration: 1, ease: 'none' }, 0);
+  return timelineDrivingStepper;
 }
 
 function useRailScrub(options: ScrubOptions) {

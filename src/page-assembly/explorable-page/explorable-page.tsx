@@ -12,18 +12,13 @@ import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
-/** An Explorable page: the page reference carrying its composition's ref. */
 export type BuiltExplorablePage = PageOf<'explorable-page'>;
 
-/** The page the page catalogue builds at `/explorables/<slug>/`, else the 404. */
 export function explorablePageOf(params: RouteParams<ExplorablePageParams>): BuiltExplorablePage {
   return explorablePageAt(params) ?? notFound();
 }
 
-/**
- * An Explorable page (FE-007 §1): an `episode()` composition rendered through the one Episode container, so it has the
- * table of contents, the Context drawer and, from its record's `youtube`, the Video its Title slide plays.
- */
+// decision: FE-007 §1
 export function ExplorablePage({ page, locale }: { page: BuiltExplorablePage; locale: Locale }) {
   const { explorablePage } = page;
   return (
@@ -37,7 +32,7 @@ export function ExplorablePage({ page, locale }: { page: BuiltExplorablePage; lo
   );
 }
 
-/** An Explorable page's title, description and treatment for `pageMetadata` (FE-008): its words are its composition's. */
+// decision: FE-008 §1
 export function explorablePageCopy(page: BuiltExplorablePage, locale: Locale): PageCopy {
   const { title, description } = compositionOf(page.explorablePage).messages[locale];
   return { title, description, treatment: treatmentOf(page) };

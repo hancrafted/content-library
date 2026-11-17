@@ -1,5 +1,4 @@
-// [x, y, size]: a sprinkle of distant stars, none brighter than the old single dot.
-const STARS = [
+const STARS: readonly (readonly [x: number, y: number, size: number])[] = [
   [1040, 160, 1.2],
   [1078, 212, 0.7],
   [1112, 148, 0.9],
@@ -68,7 +67,6 @@ function SkyMaterials() {
         <stop stopColor="var(--hero-moon)" stopOpacity=".45" />
         <stop offset="1" stopColor="var(--hero-moon)" stopOpacity="0" />
       </radialGradient>
-      {/* One crescent shape, so the glow behind it never outlines a dark disc. */}
       <mask id="hero-moon-crescent">
         <circle cx="1300" cy="235" r="40" fill="#fff" />
         <circle cx="1321" cy="222" r="36" fill="#000" />
@@ -108,7 +106,6 @@ function NightSky() {
   );
 }
 
-/** The window sits where the pile grows, so clearing the workload reveals the outside. */
 export function OfficeWindow() {
   return (
     <g data-office-window>

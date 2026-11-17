@@ -20,12 +20,10 @@ import {
   type ResourceSelection,
 } from './resources-overview.pure';
 
-/** The strings the overview's leaf draws, resolved on the server so it takes plain values (FE-006 §4). */
+// decision: FE-006 §4
 export interface ResourceBrowserLabels {
   readonly open: string;
-  /** The line when no Resource exists. */
   readonly none: string;
-  /** The line when Resources exist but the filter hides them all. */
   readonly noMatch: string;
   readonly search: string;
   readonly searchPlaceholder: string;
@@ -35,26 +33,22 @@ export interface ResourceBrowserLabels {
   readonly grid: string;
   readonly list: string;
   readonly reset: string;
-  /** The kind names, as the kind filter writes them in plural ("Master slides"). */
   readonly kindNames: Readonly<Record<ResourceKind, string>>;
 }
 
 type View = 'grid' | 'list';
 
-/** With scripts off the controls cannot work, so the stylesheet drops them and shows every Resource. */
 const NO_SCRIPT_CSS = '[data-resource-controls]{display:none}[data-resource-item][hidden]{display:revert!important}';
 
 interface BrowserProps {
   cards: ResourceCard[];
-  /** The Tags' order, the vocabulary's, so the chips read as on the other overviews. */
   vocabulary: readonly TagId[];
-  /** The closed list of kinds, in the order the filter offers them. */
   kinds: readonly ResourceKind[];
   locale: Locale;
   labels: ResourceBrowserLabels;
 }
 
-/** The visitor's selection and view, and the handlers that change them; all in memory (FE-001). */
+// decision: FE-001 §1.3
 function useResourceBrowser(cards: readonly ResourceCard[]) {
   const [selection, setSelection] = useState<ResourceSelection>(NO_SELECTION);
   const [view, setView] = useState<View>('grid');
@@ -78,7 +72,6 @@ function useResourceBrowser(cards: readonly ResourceCard[]) {
 
 type Browse = ReturnType<typeof useResourceBrowser>;
 
-/** The grid or list switch: one choice always on, so a click on the current one keeps it. */
 function ViewSwitch({ browse, labels }: { browse: Browse; labels: ResourceBrowserLabels }) {
   return (
     <ToggleGroup
@@ -98,7 +91,6 @@ function ViewSwitch({ browse, labels }: { browse: Browse; labels: ResourceBrowse
   );
 }
 
-/** The way back to every Resource, shown only while a filter is on. */
 function ResetButton({ browse, label }: { browse: Browse; label: string }) {
   if (!browse.active) return null;
   return (
@@ -118,7 +110,6 @@ interface ControlsProps extends Omit<BrowserProps, 'locale'> {
   browse: Browse;
 }
 
-/** The search, the kind and Tag chips, the view switch, and the way back to everything while a filter is on. */
 function Controls({ browse, cards, vocabulary, kinds, labels }: ControlsProps) {
   return (
     <div data-resource-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
@@ -150,12 +141,7 @@ function Controls({ browse, cards, vocabulary, kinds, labels }: ControlsProps) {
   );
 }
 
-/**
- * The Resources overview's interactive part: a search, the kind and Tag chips and the grid or list switch, then
- * every Resource as a card. Every Resource is in the server HTML; filtering only toggles `hidden`, so find-in-page
- * and a visit without scripts still see all of them. The selection and the view are transient (FE-001): a reload
- * starts afresh.
- */
+// decision: FE-001 §1.3
 export function ResourceBrowser({ cards, vocabulary, kinds, locale, labels }: BrowserProps) {
   const browse = useResourceBrowser(cards);
   const empty = cards.length === 0 ? labels.none : browse.visible.size === 0 ? labels.noMatch : null;

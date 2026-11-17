@@ -3,15 +3,8 @@ import { describe, expect, it } from 'vitest';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The Event page's image alt lives in the Translation files, not in the Event file (design-ADR 0016): every Event
- * with an image has a non-empty `eventPage.imageAlt.<slug>` in both locales, read through the content store.
- */
-
-const ALTS: Record<string, Record<string, string>> = {
-  en: en.eventPage.imageAlt,
-  de: de.eventPage.imageAlt,
-};
+// decision: docs/adr/0016-content-data-model.md
+const ALTS: Record<string, Record<string, string>> = { en: en.eventPage.imageAlt, de: de.eventPage.imageAlt };
 
 describe('success cases', () => {
   it.each(['en', 'de'])('gives every Event with an image a non-empty alt in %s', (locale) => {

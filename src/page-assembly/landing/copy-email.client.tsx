@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const COPIED_FOR_MILLISECONDS = 2000;
 
-/** Copies `text` and reports it for two seconds; "Copied" is transient (FE-001), so nothing is stored. */
+// decision: FE-001 §1
 function useCopied(text: string) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -38,10 +38,7 @@ function CopyButton({ copied, copy, label }: { copied: boolean; copy: () => void
   );
 }
 
-/**
- * The email address as selectable text with a copy button. A `mailto:` link is not one of the three href shapes
- * FE-003 §2 admits, so the address is offered to copy instead.
- */
+// decision: FE-003 §2
 export function CopyEmail({
   email,
   labels,

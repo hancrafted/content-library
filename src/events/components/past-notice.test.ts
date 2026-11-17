@@ -3,17 +3,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { PastNotice } from './past-notice';
 
-/*
- * The past notice (design-ADR 0016, Past Event): one fixed line, drawn only when the Event's date lies before the
- * build day. The fast half of the test in Han's words; its past half also runs post-build on the exported AXEL page,
- * but no upcoming Event is guaranteed at build time, so the upcoming half lives here.
- */
-
+// decision: docs/adr/0016-content-data-model.md
 const TEXT =
   'This Event has already taken place. The content below is kept up to date and may differ from the recording.';
 const BUILD_DAY = '2026-10-25';
 
-/** The notice's static HTML for an Event on `date`, built on `BUILD_DAY`. */
 function render(date: `${number}-${number}-${number}`) {
   return renderToStaticMarkup(createElement(PastNotice, { date, buildDay: BUILD_DAY, text: TEXT }));
 }

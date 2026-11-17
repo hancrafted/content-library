@@ -10,7 +10,6 @@ interface Stub {
   readonly publishedOn?: string;
 }
 
-/** A public, published Episode no Event owns. */
 const episode = (slug: string, tags: readonly string[], publishedOn: string): Stub => ({
   slug,
   ref: { kind: 'standalone' },
@@ -19,7 +18,6 @@ const episode = (slug: string, tags: readonly string[], publishedOn: string): St
   tags,
   publishedOn,
 });
-/** The Event: its Tags and the slugs its Playlist lists (a copy keeps its original's slug). */
 const event = (tags: readonly string[], ...listed: string[]) => ({
   tags,
   playlist: { episodes: listed.map((slug) => ({ episode: { slug } })) },

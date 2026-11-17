@@ -25,7 +25,6 @@ function ContactActions({ t, newTab }: { t: ContactT; newTab: string }) {
   );
 }
 
-/** The landing page's close: book a get-to-know call or write an email, above the site's footer bar. */
 export async function ContactFooter({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.contact' });
   const newTab = (await getTranslations({ locale, namespace: 'nav' }))('newTab');

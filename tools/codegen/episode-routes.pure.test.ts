@@ -80,6 +80,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('writes every route without a header comment, so the registry staleness test is its only guard', () => {
+    // ARRANGE
+    const files = episodeRouteFiles([ICEBERG, EVENT_COPY]);
+    // ACT
+    const commented = files.filter(({ text }) => /^\s*\/[/*]/m.test(text));
+    // ASSERT
+    expect(commented).toEqual([]);
+  });
+
   it('knows every route it writes for a generated one, so `npm run registry` can remove it once its page is gone', () => {
     // ARRANGE
     const files = episodeRouteFiles([ICEBERG, EVENT_COPY]);
