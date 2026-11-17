@@ -94,14 +94,19 @@ describe('success cases', () => {
   it('reads one page, the Spec file, and the whole-Spec facts from its meta block', () => {
     // ARRANGE
     const html = `<!doctype html><html><head>${META}</head><body></body></html>`;
-    const expected = { files: ['spec/spec.html'], main: 'spec/spec.html', approved: false, hasMeta: true };
+    const expected = {
+      files: ['spec/spec.html'],
+      main: 'spec/spec.html',
+      approved: false,
+      meta: expect.stringContaining('"type": "spec"'),
+    };
     // ACT
     const spec = specOf(html);
     const found = {
       files: spec.pages.map(({ file }) => file),
       main: spec.main.file,
       approved: spec.approved,
-      hasMeta: spec.meta?.includes('"type": "spec"'),
+      meta: spec.meta,
     };
     // ASSERT
     expect(found).toEqual(expected);

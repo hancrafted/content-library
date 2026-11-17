@@ -11,6 +11,9 @@ import { publishedAnchorFindings, readPublishedSnapshot } from './published-anch
 /** A folder no page lives in, so it holds no snapshot. */
 const NO_SNAPSHOT = path.join(import.meta.dirname, 'no-such-episode');
 
+/** Where that folder's snapshot would be written. */
+const NO_SNAPSHOT_FILE = path.join(NO_SNAPSHOT, 'published-anchors.json');
+
 /** A composition of one Section, `foundations`, with one page Slide, `why`. */
 const COMPOSITION = { sections: [[{ slug: 'foundations' }, { slug: 'why' }] as const] };
 
@@ -58,7 +61,7 @@ describe('failure cases', () => {
     const produced = ['demo--why', 'demo', 'demo--how'];
     const expected = {
       missing: {
-        file: path.join(NO_SNAPSHOT, 'published-anchors.json'),
+        file: NO_SNAPSHOT_FILE,
         contents: '["demo", "demo--how", "demo--why"]\n',
       },
     };
@@ -119,7 +122,7 @@ describe('edge cases', () => {
     const snapshot = await readPublishedSnapshot(NO_SNAPSHOT, produced);
     // ASSERT
     expect(snapshot).toEqual({
-      missing: { file: path.join(NO_SNAPSHOT, 'published-anchors.json'), contents: expected },
+      missing: { file: NO_SNAPSHOT_FILE, contents: expected },
     });
   });
 });
