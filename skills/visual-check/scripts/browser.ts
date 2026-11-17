@@ -1,5 +1,3 @@
-// The shared chrome-headless-shell: install, start once (even across parallel
-// callers), find again, stop, and end after IDLE_MILLISECONDS without a call.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -11,13 +9,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.
 const CACHE = path.join(ROOT, '.cache', 'inspect-page');
 const ENDPOINT = path.join(CACHE, 'endpoint');
 const LAST_USE = path.join(CACHE, 'last-use');
-// The binary is shared by every worktree (one 217 MB download); the browser instance stays per worktree.
-const SHARED = path.join(
+const SHARED_BINARY_CACHE_FOR_ALL_WORKTREES = path.join(
   mainCheckout(execFileSync('git', ['rev-parse', '--git-common-dir'], { cwd: ROOT, encoding: 'utf8' }).trim(), ROOT),
   '.cache',
   'inspect-page-shared',
 );
-const BINARY = path.join(SHARED, 'binary');
+const BINARY = path.join(SHARED_BINARY_CACHE_FOR_ALL_WORKTREES, 'binary');
 const LOCK = path.join(CACHE, 'start.lock');
 const ENTRY = path.join(path.dirname(fileURLToPath(import.meta.url)), 'inspect-page.ts');
 
@@ -30,29 +27,28 @@ const alive = (pid: number): boolean => {
   }
 };
 
-/** Records a call, which postpones the idle exit. */
 export const touch = (): void => writeFileSync(LAST_USE, String(Date.now()));
 
 const savedEndpoint = (): Endpoint | null =>
   existsSync(ENDPOINT) ? parseEndpoint(readFileSync(ENDPOINT, 'utf8')) : null;
 
-// Pinned so the browser every run drives is the one this skill was checked against; bump both together.
-const PUPPETEER_BROWSERS = '@puppeteer/browsers@3.2.4';
-const HEADLESS_SHELL = 'chrome-headless-shell@155.0.8059.79';
+const PINNED_PUPPETEER_BROWSERS = '@puppeteer/browsers@3.2.4';
+const PINNED_HEADLESS_SHELL = 'chrome-headless-shell@155.0.8059.79';
 
-/** Downloads the pinned browser into the shared cache; returns the binary's final path. */
-function installShared(): string {
-  // Install beside the final dir, then rename into place: a concurrent first download from another worktree
-  // either wins the rename or is discarded, and nobody ever sees a half-written install.
-  mkdirSync(SHARED, { recursive: true });
-  const staging = path.join(SHARED, `browser.${process.pid}.tmp`);
-  const final = path.join(SHARED, 'browser');
+function installIntoStagingThenRenameAtomically(): string {
+  mkdirSync(SHARED_BINARY_CACHE_FOR_ALL_WORKTREES, { recursive: true });
+  const staging = path.join(SHARED_BINARY_CACHE_FOR_ALL_WORKTREES, `browser.${process.pid}.tmp`);
+  const final = path.join(SHARED_BINARY_CACHE_FOR_ALL_WORKTREES, 'browser');
   let installed: string;
   try {
-    const output = execFileSync('npx', ['--yes', PUPPETEER_BROWSERS, 'install', HEADLESS_SHELL, '--path', staging], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'inherit'],
-    });
+    const output = execFileSync(
+      'npx',
+      ['--yes', PINNED_PUPPETEER_BROWSERS, 'install', PINNED_HEADLESS_SHELL, '--path', staging],
+      {
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'inherit'],
+      },
+    );
     const stagedBinary = output
       .trim()
       .split('\n')
@@ -70,18 +66,16 @@ function installShared(): string {
   return installed;
 }
 
-/** CHROME_PATH, else the cached chrome-headless-shell, installed on first use. */
 function resolveBinary(): string {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
   if (existsSync(BINARY) && existsSync(readFileSync(BINARY, 'utf8'))) return readFileSync(BINARY, 'utf8');
-  const installed = installShared();
+  const installed = installIntoStagingThenRenameAtomically();
   const tmp = `${BINARY}.${process.pid}.tmp`;
   writeFileSync(tmp, installed);
   renameSync(tmp, BINARY);
   return installed;
 }
 
-/** Ends the browser and its watchdog; false when none was recorded. */
 export function stopBrowser(): boolean {
   const endpoint = savedEndpoint();
   rmSync(ENDPOINT, { force: true });
@@ -90,7 +84,6 @@ export function stopBrowser(): boolean {
   return true;
 }
 
-/** The watchdog process body: stops the browser once no call has touched LAST_USE for IDLE_MILLISECONDS. */
 export async function watch(browserPid: number): Promise<void> {
   let idle = false;
   while (alive(browserPid) && !idle) {
@@ -130,8 +123,7 @@ async function startBrowser(): Promise<Endpoint> {
   return endpoint;
 }
 
-/** Under the start lock: reuse what answers, else replace the stale browser. */
-async function reuseOrStart(): Promise<Endpoint> {
+async function reuseOrStartUnderStartLock(): Promise<Endpoint> {
   const saved = savedEndpoint();
   if (saved && (await responds(saved))) return saved;
   if (saved) stopBrowser();
@@ -147,7 +139,6 @@ function tryLock(): boolean {
   }
 }
 
-/** The running browser's endpoint; starts one, once across parallel callers, when none answers. */
 export async function ensureBrowser(): Promise<Endpoint> {
   mkdirSync(CACHE, { recursive: true });
   for (let attempt = 0; attempt < 600; attempt++) {
@@ -158,7 +149,7 @@ export async function ensureBrowser(): Promise<Endpoint> {
       continue;
     }
     try {
-      return await reuseOrStart();
+      return await reuseOrStartUnderStartLock();
     } finally {
       rmSync(LOCK, { recursive: true, force: true });
     }

@@ -8,7 +8,7 @@ const kept: FailedPath = {
   fallback: true,
 };
 const passing: FailuresObservation = {
-  controls: { comment: true, copy: 1, save: 1, resetAll: 1, status: 1 },
+  controls: { hasCommentField: true, copy: 1, save: 1, resetAll: 1, status: 1 },
   draftStored: true,
   copy: { ...kept, success: 'Copied the prompt.' },
   save: { ...kept, status: 'Save failed.', success: 'Download started.', downloaded: false },
@@ -139,7 +139,7 @@ describe('failures', () => {
 
     it('leaves a page without a comment field to the checks that require one', () => {
       // ARRANGE
-      const observation = { ...passing, controls: { ...passing.controls, comment: false }, draftStored: false };
+      const observation = { ...passing, controls: { ...passing.controls, hasCommentField: false }, draftStored: false };
 
       // ACT
       const problems = check.judge(observation);

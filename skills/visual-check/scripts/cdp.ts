@@ -1,5 +1,3 @@
-// A minimal DevTools-protocol client over Node's built-in WebSocket: one
-// browser-level connection, with a Send per flattened target session.
 export type Send = (method: string, params?: object) => Promise<Record<string, unknown>>;
 interface Message {
   id?: number;
@@ -10,13 +8,11 @@ interface Message {
 }
 
 export interface Connection {
-  /** A Send for the browser itself, or for the target session given. */
   sender: (sessionId?: string) => Send;
   events: EventTarget;
   socket: WebSocket;
 }
 
-/** The event name `events` dispatches for a session's protocol event. */
 export const eventName = (sessionId: string, method: string): string => `${sessionId}:${method}`;
 
 export async function connect(port: number): Promise<Connection> {

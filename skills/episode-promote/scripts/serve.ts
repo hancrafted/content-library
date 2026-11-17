@@ -1,6 +1,3 @@
-// `npm run design-archive [-- <port>]`: serves `design-archive/` on localhost (default 4400) and opens its index, so
-// the Design archive (GLOSSARY.md) is browsed over http. Local only; the archive is never deployed.
-
 import { execFile } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
@@ -23,7 +20,6 @@ if (!existsSync(path.join(ROOT, 'index.html'))) {
   process.exit(1);
 }
 
-/** The file a request path names inside the archive, a folder resolved to its `index.html`; none outside it. */
 function archiveFile(url: string | undefined): string | undefined {
   const file = path.join(ROOT, decodeURIComponent(new URL(url ?? '/', 'http://localhost').pathname));
   if (file !== ROOT && !file.startsWith(ROOT + path.sep)) return undefined;

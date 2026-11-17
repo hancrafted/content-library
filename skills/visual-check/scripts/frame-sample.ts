@@ -1,6 +1,3 @@
-// Frame-time sampling from the shell: opens Playwright's Chromium, optionally slows its CPU through the DevTools
-// protocol (`Emulation.setCPUThrottlingRate`), pastes `frame-sampler.js` into the page and prints one JSON entry per
-// CPU rate x target. See ../SKILL.md, "Frame time".
 import { chromium, type CDPSession, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -36,7 +33,6 @@ const targets = [
   ...values.ambient.map((id) => ({ kind: 'ambient', id })),
 ];
 
-/** One CPU rate: every target sampled in turn, at that slowdown. */
 async function sampleAt(page: Page, cdp: CDPSession, rate: number) {
   await cdp.send('Emulation.setCPUThrottlingRate', { rate });
   const entries = [];

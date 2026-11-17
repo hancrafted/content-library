@@ -1,5 +1,3 @@
-// Serves the static export (`out/`) on a fixed port with Node's own HTTP server,
-// so a visual check never needs `npx serve`, `sleep` or `pkill`. See ../SKILL.md.
 import { execFileSync } from 'node:child_process';
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
@@ -26,7 +24,6 @@ if (!existsSync(outDir)) {
   process.exit(1);
 }
 
-/** `trailingSlash: true` exports every page as `<route>/index.html`. */
 function resolveFile(urlPath: string): string | undefined {
   const candidate = path.join(outDir, decodeURIComponent(urlPath));
   if (!candidate.startsWith(outDir)) return undefined;

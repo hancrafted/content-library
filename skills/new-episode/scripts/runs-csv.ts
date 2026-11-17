@@ -1,6 +1,3 @@
-// `npm run episode:runs-csv -- [log.jsonl|glob ...]`: updates docs/episodes/runs.csv from the run logs (live and
-// archived by default), one row per agent span: rows of Runs the logs hold are regenerated, rows of Runs no log
-// holds stay. The CSV is a report over the logs; never edit it by hand.
 import { writeFileSync } from 'node:fs';
 import { readOrNull, readRuns } from '../../../src/pipeline/lib/episode-run-log.ts';
 import { runsCsv } from '../../../src/pipeline/lib/run-query.pure.ts';

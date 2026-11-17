@@ -1,5 +1,3 @@
-// One URL x theme on its own tab: load, probe, report its health (sideways scroll, broken images), optionally
-// screenshot. The tab is closed afterwards and nothing else in the shared browser is touched.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -13,7 +11,6 @@ interface Box {
   height: number;
 }
 
-/** Count, first box and chosen computed styles for each selector. */
 function probeExpression(selectors: string[], styles: string[]): string {
   return `(${JSON.stringify(selectors)}).map((selector) => {
     const all = document.querySelectorAll(selector);
@@ -29,11 +26,7 @@ function probeExpression(selectors: string[], styles: string[]): string {
   })`;
 }
 
-/**
- * Whether the page scrolls sideways at this width, and the images that did not load, by their source. A lazy or
- * still-loading image is made eager and waited for (at most 5 s), so a slow image is not reported as broken.
- */
-const HEALTH = `(async () => {
+const HEALTH_WAITING_UP_TO_5_SECONDS_FOR_LAZY_IMAGES = `(async () => {
   const images = [...document.images];
   const settled = (image) => image.complete || new Promise((done) => {
     image.addEventListener('load', done, { once: true });
@@ -55,8 +48,8 @@ async function load(tab: Tab, job: Job, args: InspectArgs): Promise<void> {
     deviceScaleFactor: DEVICE_SCALE_FACTOR,
     mobile: false,
   });
-  // The site's theme defaults to the system preference, so emulating it sets the theme a fresh reader sees.
-  if (job.theme)
+  const emulateSystemPreferenceBecauseSiteThemeDefaultsToIt = job.theme;
+  if (emulateSystemPreferenceBecauseSiteThemeDefaultsToIt)
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: job.theme }] });
   await send('Page.enable');
   const loaded = new Promise((resolve) =>
@@ -75,8 +68,8 @@ interface Tab {
 
 async function clipBox(send: Send, args: InspectArgs): Promise<Box> {
   if (!args.clip) return { x: 0, y: 0, width: args.width, height: args.height };
-  // Scroll the element in first: an Episode mounts a Slide's content only near the viewport.
-  await evaluate(send, `document.querySelector(${JSON.stringify(args.clip)})?.scrollIntoView({ block: 'start' })`);
+  const scrollInFirstBecauseSlidesMountNearTheViewport = `document.querySelector(${JSON.stringify(args.clip)})?.scrollIntoView({ block: 'start' })`;
+  await evaluate(send, scrollInFirstBecauseSlidesMountNearTheViewport);
   await delay(args.wait);
   const [found] = await evaluate<{ box?: Box }[]>(send, probeExpression([args.clip], []));
   if (!found.box) throw new Error(`--clip selector matched nothing: ${args.clip}`);
@@ -110,7 +103,7 @@ export async function inspect(connection: Connection, args: InspectArgs, job: Jo
     const send = connection.sender(sessionId);
     await load({ send, events: connection.events, sessionId }, job, args);
     const probes = await evaluate<unknown[]>(send, probeExpression(args.probes, args.styles));
-    const health = await evaluate<unknown>(send, HEALTH);
+    const health = await evaluate<unknown>(send, HEALTH_WAITING_UP_TO_5_SECONDS_FOR_LAZY_IMAGES);
     const image = job.out ? await screenshot(send, args, job.out) : undefined;
     return {
       url: job.url,

@@ -1,9 +1,3 @@
-// `npm run episode:archive -- docs/episodes/<staging-folder>`: files the Staging's Spec Options into the Design
-// archive (GLOSSARY.md): `design-archive/<slug>/` gets one page, `index.html`, holding every Slide, the design
-// reference images it cites and the Spec's compiled `design.css`; `design-archive/index.html`, the dashboard, is
-// regenerated from every archived Episode. Run from the repo root, before Staging is deleted. Rerunning replaces the
-// Episode's folder.
-
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { archivedEpisode, archiveIndex } from '../../../src/pipeline/lib/archive-dashboard.pure.ts';
@@ -11,7 +5,6 @@ import { designArchive } from '../../../src/pipeline/lib/archive.pure.ts';
 import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
 
 const ARCHIVE = 'design-archive';
-/** The archive pages' own styles, kept beside the skill's other page assets. */
 const asset = (name: string): string => readFileSync(path.join(import.meta.dirname, '../assets', name), 'utf8');
 const staging = process.argv[2]?.replace(/\/$/, '');
 if (!staging || !existsSync(path.join(staging, 'spec/spec.html'))) {
@@ -52,8 +45,6 @@ for (const reference of references) {
   mkdirSync(path.dirname(to), { recursive: true });
   copyFileSync(from, to);
 }
-// The Spec's markup holds every class the archive pages use, and `globals.css` keeps `design-archive/` out of
-// Tailwind's scan, so the archive's design.css is the Spec's, compiled where Tailwind still sees it.
 copyFileSync(await buildDesignCss(path.join(staging, 'spec')), path.join(ARCHIVE, slug, 'design.css'));
 
 const episodes = readdirSync(ARCHIVE, { withFileTypes: true })

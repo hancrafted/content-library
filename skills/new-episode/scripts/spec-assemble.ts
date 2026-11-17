@@ -1,5 +1,4 @@
-// `npm run episode:spec-assemble -- <slug | Episode folder> [--forbid <word,word…>]`: builds `spec/spec.html` from
-// what exists (design-ADR 0011). The assembly is `assembleSpecFolder`; this file reads argv and the clock and prints.
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { parseSpecAssembleArgs } from '../../../src/pipeline/lib/episode-forbid.pure.ts';
 import { assembleSpecFolder } from '../../../src/pipeline/lib/spec-assemble.ts';
 

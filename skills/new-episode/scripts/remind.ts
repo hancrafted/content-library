@@ -1,6 +1,3 @@
-// SessionStart hook, matcher `compact`: prints a reminder only when an `episode/*` worktree has
-// jobs not done; silent otherwise. It reads each Episode's state through the same `readEpisodeStatus`
-// that `npm run episode:status` uses.
 import { execFileSync } from 'node:child_process';
 import {
   episodeBranches,
@@ -23,6 +20,6 @@ function episodeRuns(): EpisodeRun[] {
 try {
   const text = unfinishedReminder(episodeRuns());
   if (text !== null) console.log(text);
-} catch {
-  // A hook must never fail the session: say nothing when git or a file is unreadable.
+} catch (error) {
+  console.error(`episode reminder skipped: ${(error as Error).message}`);
 }
