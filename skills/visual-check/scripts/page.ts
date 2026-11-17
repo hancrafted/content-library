@@ -26,14 +26,16 @@ function probeExpression(selectors: string[], styles: string[]): string {
   })`;
 }
 
-const HEALTH_WAITING_UP_TO_5_SECONDS_FOR_LAZY_IMAGES = `(async () => {
+const LAZY_IMAGE_WAIT_MILLISECONDS = 5000;
+
+const HEALTH_EXPRESSION_AFTER_LAZY_IMAGES_SETTLE = `(async () => {
   const images = [...document.images];
   const settled = (image) => image.complete || new Promise((done) => {
     image.addEventListener('load', done, { once: true });
     image.addEventListener('error', done, { once: true });
   });
   for (const image of images) image.loading = 'eager';
-  await Promise.race([Promise.all(images.map(settled)), new Promise((done) => setTimeout(done, 5000))]);
+  await Promise.race([Promise.all(images.map(settled)), new Promise((done) => setTimeout(done, ${LAZY_IMAGE_WAIT_MILLISECONDS}))]);
   return {
     overflowX: document.documentElement.scrollWidth > innerWidth,
     brokenImages: images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src),
@@ -48,9 +50,11 @@ async function load(tab: Tab, job: Job, args: InspectArgs): Promise<void> {
     deviceScaleFactor: DEVICE_SCALE_FACTOR,
     mobile: false,
   });
-  const emulateSystemPreferenceBecauseSiteThemeDefaultsToIt = job.theme;
-  if (emulateSystemPreferenceBecauseSiteThemeDefaultsToIt)
-    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: job.theme }] });
+  const emulatedColorScheme = job.theme;
+  if (emulatedColorScheme)
+    await send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'prefers-color-scheme', value: emulatedColorScheme }],
+    });
   await send('Page.enable');
   const loaded = new Promise((resolve) =>
     tab.events.addEventListener(eventName(tab.sessionId, 'Page.loadEventFired'), resolve, { once: true }),
@@ -68,8 +72,8 @@ interface Tab {
 
 async function clipBox(send: Send, args: InspectArgs): Promise<Box> {
   if (!args.clip) return { x: 0, y: 0, width: args.width, height: args.height };
-  const scrollInFirstBecauseSlidesMountNearTheViewport = `document.querySelector(${JSON.stringify(args.clip)})?.scrollIntoView({ block: 'start' })`;
-  await evaluate(send, scrollInFirstBecauseSlidesMountNearTheViewport);
+  const scrollClipIntoViewExpression = `document.querySelector(${JSON.stringify(args.clip)})?.scrollIntoView({ block: 'start' })`;
+  await evaluate(send, scrollClipIntoViewExpression);
   await delay(args.wait);
   const [found] = await evaluate<{ box?: Box }[]>(send, probeExpression([args.clip], []));
   if (!found.box) throw new Error(`--clip selector matched nothing: ${args.clip}`);
@@ -103,7 +107,7 @@ export async function inspect(connection: Connection, args: InspectArgs, job: Jo
     const send = connection.sender(sessionId);
     await load({ send, events: connection.events, sessionId }, job, args);
     const probes = await evaluate<unknown[]>(send, probeExpression(args.probes, args.styles));
-    const health = await evaluate<unknown>(send, HEALTH_WAITING_UP_TO_5_SECONDS_FOR_LAZY_IMAGES);
+    const health = await evaluate<unknown>(send, HEALTH_EXPRESSION_AFTER_LAZY_IMAGES_SETTLE);
     const image = job.out ? await screenshot(send, args, job.out) : undefined;
     return {
       url: job.url,
