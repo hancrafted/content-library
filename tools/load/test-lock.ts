@@ -1,8 +1,3 @@
-// The test lock: the full test runs of several worktrees on this machine queue on it, so they take turns instead of
-// slowing each other past their timeouts. One place takes it: `verify` (tools/verify/verify.ts), around its steps
-// marked `testLock`, held once from the first to the last: the fast suite, and at a push the slow lane after it.
-// Build, test:build and pre-commit never take it, and CI never does: a runner runs one job alone. Inside the lock the
-// load-aware workers and timeout still apply (workers.ts), as a fallback for load the lock does not see.
 import type { Holder } from './lock-owner.ts';
 import { type Timing, withLock } from './lock.ts';
 

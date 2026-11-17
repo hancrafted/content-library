@@ -1,12 +1,12 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, utimesSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { psStartTime } from './lock-owner.ts';
 import { child, deadPid, FAST, gate, plantLock, repo } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+dropGitEnvironment(process.env);
 
 describe('withLock', () => {
   describe('success cases', () => {

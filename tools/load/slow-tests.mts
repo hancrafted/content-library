@@ -4,12 +4,9 @@ import path from 'node:path';
 import type { Reporter, TestCase } from 'vitest/node';
 import { currentBranch, gitCommonDir } from './git.ts';
 
-/**
- * A fast test that runs past this is logged. CI fails a fast test over 3 s (ARCH-003-testing §4.4), and CI's runners
- * run the suite about 4 times slower than a developer's Mac, so 750 ms here is about 3 s there: a test heading for
- * CI's limit.
- */
-const SLOW_TEST_MILLISECONDS = 750;
+const CI_FAST_TEST_LIMIT_MILLISECONDS = 3_000;
+const CI_SLOWDOWN_FACTOR_OVER_A_DEVELOPER_MAC = 4;
+const SLOW_TEST_MILLISECONDS = CI_FAST_TEST_LIMIT_MILLISECONDS / CI_SLOWDOWN_FACTOR_OVER_A_DEVELOPER_MAC;
 
 const KEEP_DAYS = 30;
 
@@ -108,12 +105,6 @@ export function slowTestReport({
   ];
 }
 
-/**
- * Rewrites the log of the repository `cwd` sits in with only the entries logged in the KEEP_DAYS before `now`,
- * dropping unreadable lines; leaves a missing log missing and does nothing outside a git repository. The new log
- * replaces the old by rename, so a reader never sees half of it; an entry a test run appends between the read and
- * the rename is lost, which costs one line of a diagnostic log.
- */
 export function trimSlowTests({ cwd, now }: { cwd: string; now: Date }): void {
   const log = slowTestsLogPath(cwd);
   const entries = log === null ? null : readSlowTests(log);

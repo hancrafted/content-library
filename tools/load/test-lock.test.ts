@@ -3,12 +3,12 @@ import { mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { gate } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 import { TEST_LOCK } from './test-lock.ts';
 
-// A commit hook exports GIT_DIR and friends, and CI sets CI: either would change what these runs see.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_') || name === 'CI') delete process.env[name];
+dropGitEnvironment(process.env, ['CI']);
 
 function repo() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'test-lock-')));

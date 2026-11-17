@@ -19,15 +19,14 @@ export function idleFraction(before: CpuTimes[], after: CpuTimes[]): number {
 }
 
 export const IDLE_TIMEOUT_MILLISECONDS = 5_000;
-/** However loaded the machine, a fast test that needs longer than this is broken, not slowed down. */
-const MAX_TIMEOUT_MILLISECONDS = 20_000;
+const MAX_TIMEOUT_BEYOND_WHICH_A_FAST_TEST_IS_BROKEN_MILLISECONDS = 20_000;
 
 const IDLE_DEADBAND = 1.5;
 
 export function timeoutFor(loadFactor: number): number {
   return Math.min(
     Math.round(IDLE_TIMEOUT_MILLISECONDS * Math.max(loadFactor / IDLE_DEADBAND, 1)),
-    MAX_TIMEOUT_MILLISECONDS,
+    MAX_TIMEOUT_BEYOND_WHICH_A_FAST_TEST_IS_BROKEN_MILLISECONDS,
   );
 }
 
@@ -38,7 +37,7 @@ export interface Load {
 }
 
 export function loadFromIdle(cores: number, idle: number): Load {
-  // A saturated machine reads 0 idle: the floor keeps the factor finite, the cap in timeoutFor does the rest.
-  const loadFactor = 1 / Math.max(idle, 0.01);
+  const IDLE_FLOOR_KEEPING_SATURATED_LOAD_FACTOR_FINITE = 0.01;
+  const loadFactor = 1 / Math.max(idle, IDLE_FLOOR_KEEPING_SATURATED_LOAD_FACTOR_FINITE);
   return { workers: workersFor(cores, cores * idle), loadFactor, testTimeout: timeoutFor(loadFactor) };
 }

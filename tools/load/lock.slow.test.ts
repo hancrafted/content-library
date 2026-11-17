@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { child, FAST, repo } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+dropGitEnvironment(process.env);
 
 const RELAY = `for (let i = 0; i < 30; i++)
   await withLock('base', { cwd: process.argv[1], pollMilliseconds: 1, timeoutMilliseconds: 20000 }, () => undefined);`;

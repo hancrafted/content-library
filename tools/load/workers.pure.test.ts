@@ -27,7 +27,6 @@ describe('idleFraction', () => {
   it('is the idle share of the time that passed across all CPUs', () => {
     const before = [cpu(100, 100), cpu(100, 100)];
     const after = [cpu(190, 110), cpu(170, 130)];
-    // idle +160 of +200 total
     expect(idleFraction(before, after)).toBeCloseTo(0.8);
   });
 
@@ -67,7 +66,7 @@ describe('timeoutFor', () => {
 
 describe('loadFromIdle', () => {
   it('gives a normally idle machine the 5 s timeout', () => {
-    // ARRANGE: 16 cores, 80% idle over the sample window (load factor 1.25)
+    // ARRANGE
     const before = Array.from({ length: 16 }, () => cpu(1_000, 1_000));
     const after = Array.from({ length: 16 }, () => cpu(1_080, 1_020));
     // ACT

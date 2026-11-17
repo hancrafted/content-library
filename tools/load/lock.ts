@@ -1,11 +1,3 @@
-// A named lock shared by this clone and its worktrees, so work that must not overlap runs one at a time:
-// `wt:done` and `wt:sync` merging into one base, and the test lock pre-push's tests queue on.
-//
-// The lock is a directory `locks/<name>.lock` in the git common directory, holding an `owner` file with the
-// holder's pid, process start time, branch and the time it took the lock. It appears whole, by renaming a filled temporary directory into place, so
-// a lock never exists without its owner and only one of several takers gets it. A lock whose holder died, or whose
-// pid now belongs to another process (its start time differs), is stale and is taken over (see `takeOver`). A lock
-// leaves by the same rename, moved aside whole before it is deleted, so no taker ever finds it half gone.
 import { mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -36,31 +28,17 @@ const MARKER_STALE_MILLISECONDS = 10_000;
 
 const errorCode = (error: unknown) => (error as NodeJS.ErrnoException).code;
 
-/**
- * Removes the lock directory `lock` without a moment where it exists half empty: one rename moves it aside to a
- * `<lock>.stale-*` directory, which is then deleted. Deleting in place would empty it first, and a taker could
- * rename its own directory onto the empty one, or read no owner, call it stale and take it over, before the last
- * rmdir fails on what the taker put there.
- */
 function removeLock(lock: string): void {
   const aside = mkdtempSync(`${lock}.stale-`);
   renameSync(lock, path.join(aside, 'lock'));
   rmSync(aside, { recursive: true, force: true });
 }
 
-/**
- * Removes a lock found stale with owner `staleOwner`, unless another waiter already is, and says whether it did. A
- * waiter first claims the takeover by making a `takeover` directory inside the lock, which only one can; then checks
- * the lock still is the stale one, since it may have been replaced since it was read; then moves it aside with one
- * rename and deletes it. Only the claimant moves that lock, so no waiter moves a newer holder's lock away. A claim
- * left by a waiter killed mid-takeover is cleared after MARKER_STALE_MILLISECONDS.
- */
 function takeOver(lock: string, staleOwner: string): boolean {
   const marker = path.join(lock, 'takeover');
   try {
     mkdirSync(marker);
   } catch (error) {
-    // Gone meanwhile, or another waiter's takeover, unless that waiter was killed mid-takeover.
     const claimed = errorCode(error) === 'EEXIST' ? statSync(marker, { throwIfNoEntry: false })?.mtimeMs : undefined;
     if (claimed !== undefined && Date.now() - claimed > MARKER_STALE_MILLISECONDS)
       rmSync(marker, { recursive: true, force: true });
@@ -80,10 +58,6 @@ function lockPath(name: string, cwd: string): string {
   return path.join(common, 'locks', `${encodeURIComponent(name)}.lock`);
 }
 
-/**
- * A `*.pending-*` or `*.stale-*` directory older than this was left by a process killed between making and removing
- * it. No waiter waits this long (the longest, the test lock, gives up after 15 minutes), so none is still in use.
- */
 const LEFTOVER_MILLISECONDS = 60 * 60 * 1000;
 
 function sweepLeftovers(locks: string, now: Date): void {
@@ -115,10 +89,6 @@ function prepare(name: string, cwd: string, options: LockOptions): Claim {
   return { lock, identity, ownerText: '', pending, held: false };
 }
 
-/**
- * Takes the lock if it is free: the rename fails while another lock directory sits in place. The owner file is
- * written into the still private directory first, stamped with this attempt's time, so `since` is when it took it.
- */
 function take(claim: Claim): boolean {
   claim.ownerText = JSON.stringify({ ...claim.identity, since: new Date().toISOString() } satisfies Holder);
   writeFileSync(path.join(claim.pending, 'owner'), claim.ownerText);
@@ -160,11 +130,12 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
 
 const SIGNALS = ['SIGINT', 'SIGTERM'] as const;
 
+const turnEventLoopOnceSoASignalFromSynchronousWorkIsDispatched = () => new Promise((resolve) => setImmediate(resolve));
+
 function onSignals(handle: () => void): () => void {
   const handler = (signal: NodeJS.Signals) => {
     handle();
     for (const s of SIGNALS) process.removeListener(s, handler);
-    // Die by the signal, as the process would have without this handler, unless someone else handles it.
     if (process.listenerCount(signal) === 0) process.kill(process.pid, signal);
   };
   for (const s of SIGNALS) process.on(s, handler);
@@ -181,9 +152,7 @@ export async function withLock<T>(name: string, options: LockOptions, fn: () => 
     return await fn();
   } finally {
     release(claim);
-    // A signal that arrived during synchronous work in `fn` is dispatched only once the event loop turns: turn it
-    // once while the handler is still installed, so the process dies by that signal instead of carrying on.
-    await new Promise((resolve) => setImmediate(resolve));
+    await turnEventLoopOnceSoASignalFromSynchronousWorkIsDispatched();
     stopListening();
   }
 }
