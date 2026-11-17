@@ -5,13 +5,16 @@ import path from 'node:path';
 import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
 import { CONFIG_PATH, harnessCapFrom } from './config.pure.ts';
 import { run } from './git.ts';
-import { fail } from './project.ts';
+import { driveEntry, fail } from './project.ts';
 import {
   addGuardToHook,
   decisionDocGlobs,
   detectEnforcers,
+  type EnforcerFacts,
   guardCommand,
+  detectPackageManager,
   guardCiLine,
+  guardHookLine,
   installCommands,
   LEARNINGS_STUB,
   parseSetupArgs,
@@ -23,7 +26,7 @@ import {
 
 export const LOCKFILE = 'skills-lock.json';
 const AUTHORED_DIR = 'skills';
-const INSTALLED_DIR = '.agents/skills';
+const INSTALLED_DIRS = ['.agents/skills', '.claude/skills'];
 const SELF = 'drive';
 const DRIVE_DIR = path.dirname(CONFIG_PATH);
 
@@ -63,12 +66,12 @@ function lockedSkills(root: string): DetectedSkill[] {
   }));
 }
 
-/** Skills from the lockfile and the two skill folders; an authored skill is one with a SKILL.md under `skills/`. */
+/** Skills from the lockfile and the skill folders (`skills/`, `.agents/skills/`, `.claude/skills/`); an authored skill is one with a SKILL.md under `skills/`. */
 export function detectSkills(root: string): DetectedSkill[] {
   const authored = subfolders(path.join(root, AUTHORED_DIR))
     .filter((name) => existsSync(path.join(root, AUTHORED_DIR, name, 'SKILL.md')))
     .map((name): DetectedSkill => ({ name, origin: 'authored', source: null }));
-  const folders = subfolders(path.join(root, INSTALLED_DIR)).map((name): DetectedSkill => ({
+  const folders = INSTALLED_DIRS.flatMap((dir) => subfolders(path.join(root, dir))).map((name): DetectedSkill => ({
     name,
     origin: 'installed',
     source: null,
@@ -77,11 +80,15 @@ export function detectSkills(root: string): DetectedSkill[] {
   return mergeDetected([authored, lockedSkills(root), folders], SELF);
 }
 
-function enforcerFacts(root: string) {
+function enforcerFacts(root: string): EnforcerFacts {
   let scripts: Record<string, string> = {};
   try {
     scripts =
-      (JSON.parse(read(path.join(root, 'package.json')) ?? '{}') as { scripts?: Record<string, string> }).scripts ?? {};
+      (
+        JSON.parse(read(path.join(root, 'package.json')) ?? '{}') as {
+          scripts?: Record<string, string>;
+        }
+      ).scripts ?? {};
   } catch {
     // An unreadable package.json shows no scripts.
   }
@@ -94,18 +101,25 @@ function enforcerFacts(root: string) {
       return [];
     }
   });
-  return { scripts, hooks, adrChecker: existsSync(path.join(root, '.archgate', 'adrs')) };
+  return {
+    scripts,
+    packageManager: detectPackageManager(readdirSync(root)),
+    hooks,
+    adrChecker: existsSync(path.join(root, '.archgate', 'adrs')),
+  };
 }
 
-/** Glossary files at most four folders deep, skipping dot folders and dependencies. */
-function findGlossaries(dir: string, depth = 0): string[] {
-  if (depth > 4) return [];
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+/** Whether a glossary file exists at most four folders deep, skipping dot folders and dependencies. */
+function hasGlossary(dir: string, depth = 0): boolean {
+  if (depth > 4) return false;
+  return readdirSync(dir, { withFileTypes: true }).some((entry) => {
     if (entry.isDirectory())
-      return entry.name.startsWith('.') || entry.name === 'node_modules'
-        ? []
-        : findGlossaries(path.join(dir, entry.name), depth + 1);
-    return entry.name.startsWith('GLOSSARY') && entry.name.endsWith('.md') ? [entry.name] : [];
+      return (
+        !entry.name.startsWith('.') &&
+        entry.name !== 'node_modules' &&
+        hasGlossary(path.join(dir, entry.name), depth + 1)
+      );
+    return entry.name.startsWith('GLOSSARY') && entry.name.endsWith('.md');
   });
 }
 
@@ -114,19 +128,28 @@ function baseBranch(root: string): string {
   return head.status === 0 ? head.stdout.trim().replace(/^origin\//, '') : 'main';
 }
 
-function projectFacts(root: string): ProjectFacts {
+function projectFacts(root: string, entry: string): ProjectFacts {
   const folders = CATALOG.decisionFolders.filter((folder) => isFolder(path.join(root, folder)));
   return {
     baseBranch: baseBranch(root),
     harnessCap: harnessCapFrom(process.env),
     install: installCommands(readdirSync(root)),
-    decisionDocs: decisionDocGlobs(folders, findGlossaries(root)),
+    driveEntry: entry,
+    decisionDocs: decisionDocGlobs(folders, hasGlossary(root)),
   };
 }
 
-/** Writes `docs/drive/` under `root`; returns the files it created or changed, relative to `root`. */
-export function setup(root: string, options: SeedOptions = {}, notes: string[] = []): string[] {
+export interface SetupResult {
+  /** The files it created or changed, relative to the root. */
+  written: string[];
+  /** What the Operator still has to do by hand. */
+  notes: string[];
+}
+
+/** Writes `docs/drive/` under `root`. `scriptsDir` is where the CLI runs from; tests move it to place the skill. */
+export function setup(root: string, options: SeedOptions = {}, scriptsDir: string = import.meta.dirname): SetupResult {
   const written: string[] = [];
+  const notes: string[] = [];
   const write = (relative: string, text: string) => {
     const file = path.join(root, relative);
     if (read(file) === text) return;
@@ -137,37 +160,36 @@ export function setup(root: string, options: SeedOptions = {}, notes: string[] =
   const createdOnly = (relative: string, text: string) => {
     if (!existsSync(path.join(root, relative))) write(relative, text);
   };
-  const facts = projectFacts(root);
+  const entry = driveEntry(root, scriptsDir);
+  const facts = projectFacts(root, entry);
   write(
     `${DRIVE_DIR}/binding.yml`,
     updateBinding(read(path.join(root, DRIVE_DIR, 'binding.yml')), detectSkills(root), options),
   );
   write(CONFIG_PATH, updateProjectConfig(read(path.join(root, CONFIG_PATH)), facts));
   write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
-  const note = wireGuard(root, facts, write);
+  const note = wireGuard(root, { entry, baseBranch: facts.baseBranch }, write);
   if (note !== null) notes.push(note);
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
   createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
-  return written;
+  return { written, notes };
 }
 
 const HOOK = '.husky/pre-commit';
 
 /**
- * Wires the Decision-doc guard into a husky pre-commit hook and returns null. Without husky nothing is written: it
- * returns the one line to add to the project's CI instead.
+ * Wires the Decision-doc guard into a husky pre-commit hook and returns null. It returns the line to add by hand
+ * instead, and writes nothing, when there is no husky hook (the line is for CI) or the skill sits outside the repo
+ * (a path written into the repo would leave it). Only husky is wired; other hook managers get the printed line.
  */
 function wireGuard(
   root: string,
-  facts: Pick<ProjectFacts, 'baseBranch'>,
+  { entry, baseBranch }: { entry: string; baseBranch: string },
   write: (relative: string, text: string) => void,
 ): string | null {
-  const entry = path
-    .relative(root, path.join(import.meta.dirname, 'drive.ts'))
-    .split(path.sep)
-    .join('/');
   const hook = read(path.join(root, HOOK));
-  if (hook === null) return guardCiLine(guardCommand(entry, `origin/${facts.baseBranch}`));
+  if (hook === null) return guardCiLine(guardCommand(entry, `origin/${baseBranch}`));
+  if (path.isAbsolute(entry)) return guardHookLine(HOOK, guardCommand(entry));
   write(HOOK, addGuardToHook(hook, guardCommand(entry)));
   return null;
 }
@@ -185,13 +207,13 @@ export function runSetup(args: readonly string[]): void {
   const options = parseSetupArgs(args);
   if ('error' in options) fail(options.error);
   const root = path.resolve(run('git', ['rev-parse', '--show-toplevel']).stdout.trim() || process.cwd());
-  let written: string[] = [];
-  const notes: string[] = [];
+  let result: SetupResult;
   try {
-    written = setup(root, options, notes);
+    result = setup(root, options);
   } catch (error) {
     fail((error as Error).message);
   }
+  const { written, notes } = result;
   console.log(
     written.length === 0 ? `✔ ${DRIVE_DIR}/ is up to date` : written.map((file) => `✔ wrote ${file}`).join('\n'),
   );

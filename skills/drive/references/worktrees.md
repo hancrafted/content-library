@@ -1,6 +1,6 @@
 # Worktrees and merges
 
-The `drive worktree` commands, for the Orchestrator and every Subagent. Below, `drive worktree` stands for the command `worktree.invoke` names in `docs/drive/project.yml`, or `node scripts/drive.ts worktree` from this skill's folder; every project value (worktree folder, base branch, remote, install and preflight commands, lock module, hooks) is in that file's `worktree` section. Each refusal prints the command that fixes it: run that command.
+The `drive worktree` commands, for the Orchestrator and every Subagent. Below, `drive worktree` stands for the command `worktree.invoke` names in `docs/drive/project.yml`, or, when the config names none, `node <this skill's path from the repo root>/scripts/drive.ts worktree`, which setup seeds as `invoke`; every project value (worktree folder, base branch, remote, install and preflight commands, lock module, hooks) is in that file's `worktree` section. Each refusal prints the command that fixes it: run that command.
 
 ## new
 

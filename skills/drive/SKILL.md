@@ -73,4 +73,5 @@ _Done when:_ CI passes on the last push, every finding has a verdict with a reas
 ## 5. Evolve (fortify)
 
 After the last push passes CI, at the latest after the merge and before cleanup, run **Fortify**: [references/fortify.md](references/fortify.md).
+
 _Done when:_ the picked quick win is merged, at most one `fortify` ticket is open and it is the architectural pick (or the pick waits in `docs/drive/learnings.md`), and every option and correction is in `learnings.md` with its recurrence count. Then clean up the merged branches and worktrees.

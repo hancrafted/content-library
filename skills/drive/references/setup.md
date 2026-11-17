@@ -18,9 +18,9 @@ Skills are found in the skills lockfile and in the project's skill folders, auth
 
 `drive guard [--against <ref>]` fails when a change touches a path listed in `decisionDocs` and the branch does not start with `decisions/<topic>` (which covers its Task branches `decisions/<topic>--…`), naming the file and the rule. Without `--against` it checks the staged changes, so it runs at commit time; with it, `HEAD` against its merge-base with `<ref>`, for CI. Setup wires it into the pre-commit hook, or into CI when the project has no hooks; check after setup that it runs. A Subagent that needs a Decision doc changed proposes it under **Terms** instead.
 
-## Model presets
+## Models
 
-The skill ships one preset per phase, which setup seeds into a new Binding: `define` sonnet, `reason` opus, `implement` sonnet, `verify` opus, `evolve` sonnet; the larger model where judgement over design and review decides the outcome. Change a phase's `model` in `binding.yml` when experience shows its Subagents need more or less, and log why in `docs/drive/learnings.md`. The Orchestrator's own session override, when the Operator gives one, beats every preset for that session.
+Setup seeds each phase's `model` from `PHASE_MODELS` in `scripts/binding.pure.ts`, beside the vendor catalog in `catalog/catalog.json`. The rule: the judgement-heavy phases, reason and verify, get the larger model; the rest get the smaller one. Change a phase's `model` in `binding.yml` when experience shows its Subagents need more or less, and log why in `docs/drive/learnings.md`. The Orchestrator's own session override, when the Operator gives one, beats the Binding for that session.
 
 ## After setup
 

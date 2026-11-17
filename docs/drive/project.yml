@@ -5,7 +5,7 @@ worktree:
   dir: .worktrees
   baseBranch: main
   remote: origin
-  # How a hint names the CLI: this repo's package script.
+  # How a hint names the CLI: this repo's package script. `npm run wt:new|done|sync` are aliases of the same command.
   invoke: npm run drive -- worktree
   install:
     - npm ci

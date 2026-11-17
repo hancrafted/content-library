@@ -1,8 +1,8 @@
 // What `drive setup` writes besides the Binding: the project config's missing sections, the list of detected
 // Enforcers and the two stub documents. Pure: facts in, file text out.
 import { Document, type YAMLMap } from 'yaml';
-import { CATALOG, type SeedOptions } from './binding.pure.ts';
-import { DEFAULTS, PARALLEL_DEFAULTS } from './config.pure.ts';
+import { type SeedOptions } from './binding.pure.ts';
+import { defaultsFor, PARALLEL_DEFAULTS } from './config.pure.ts';
 import { openMapping } from './yaml.pure.ts';
 
 export type EnforcerKind = 'adr-checker' | 'linter' | 'type-checker' | 'test-runner' | 'formatter' | 'check' | 'hook';
@@ -14,9 +14,13 @@ export interface Enforcer {
   command: string;
 }
 
-/** What the repo shows about its checks: the package scripts, its hook files and whether an ADR checker is set up. */
+export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
+
+/** What the repo shows about its checks: the package scripts and their package manager, its hook files and whether an
+ * ADR checker is set up. */
 export interface EnforcerFacts {
   scripts: Readonly<Record<string, string>>;
+  packageManager: PackageManager;
   hooks: readonly string[];
   adrChecker: boolean;
 }
@@ -42,11 +46,15 @@ function classifyScript(name: string, body: string): EnforcerKind | null {
 }
 
 /** The Enforcers a repo shows, in a stable order: ADR checker, scripts by name, then hooks. */
-export function detectEnforcers({ scripts, hooks, adrChecker }: EnforcerFacts): Enforcer[] {
+export function detectEnforcers({ scripts, packageManager, hooks, adrChecker }: EnforcerFacts): Enforcer[] {
   const adr: Enforcer[] = adrChecker ? [{ kind: 'adr-checker', name: 'archgate', command: 'archgate check' }] : [];
   const fromScripts = Object.entries(scripts)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name, body]) => ({ kind: classifyScript(name, body), name, command: `npm run ${name}` }))
+    .map(([name, body]) => ({
+      kind: classifyScript(name, body),
+      name,
+      command: `${packageManager} run ${name}`,
+    }))
     .filter((found): found is Enforcer => found.kind !== null);
   const fromHooks = [...hooks].sort().map((hook): Enforcer => ({ kind: 'hook', name: hook, command: hook }));
   return [...adr, ...fromScripts, ...fromHooks];
@@ -62,20 +70,31 @@ export function renderEnforcers(enforcers: readonly Enforcer[]): string {
   return doc.toString();
 }
 
-/** The install command a lockfile in the repo implies, or none. */
-export function installCommands(files: readonly string[]): string[] {
-  const has = (name: string) => files.includes(name);
-  if (has('package-lock.json')) return ['npm ci'];
-  if (has('pnpm-lock.yaml')) return ['pnpm install --frozen-lockfile'];
-  if (has('yarn.lock')) return ['yarn install --frozen-lockfile'];
-  if (has('bun.lock') || has('bun.lockb')) return ['bun install --frozen-lockfile'];
-  return [];
-}
+/** The lockfiles that tell a package manager, in the order they are tried, with the install each implies. */
+const LOCKFILES: readonly (readonly [string, PackageManager, string])[] = [
+  ['package-lock.json', 'npm', 'npm ci'],
+  ['pnpm-lock.yaml', 'pnpm', 'pnpm install --frozen-lockfile'],
+  ['yarn.lock', 'yarn', 'yarn install --frozen-lockfile'],
+  ['bun.lock', 'bun', 'bun install --frozen-lockfile'],
+  ['bun.lockb', 'bun', 'bun install --frozen-lockfile'],
+];
 
-/** Globs for the Decision docs this repo has: its decision and feature folders, and glossary files anywhere. */
-export function decisionDocGlobs(folders: readonly string[], glossaries: readonly string[]): string[] {
-  const globs = CATALOG.decisionFolders.filter((folder) => folders.includes(folder)).map((folder) => `${folder}/**`);
-  return glossaries.length > 0 ? [...globs, '**/GLOSSARY*.md'] : globs;
+const lockfileOf = (files: readonly string[]) => LOCKFILES.find(([name]) => files.includes(name));
+
+/** The package manager a lockfile in the repo implies; npm without one. */
+export const detectPackageManager = (files: readonly string[]): PackageManager => lockfileOf(files)?.[1] ?? 'npm';
+
+/** The install command a lockfile in the repo implies, or none. */
+export const installCommands = (files: readonly string[]): string[] => {
+  const found = lockfileOf(files);
+  return found === undefined ? [] : [found[2]];
+};
+
+/** Globs for the Decision docs this repo has: `folders` are the decision folders it has, `hasGlossary` whether a
+ * glossary file exists anywhere. */
+export function decisionDocGlobs(folders: readonly string[], hasGlossary: boolean): string[] {
+  const globs = folders.map((folder) => `${folder}/**`);
+  return hasGlossary ? [...globs, '**/GLOSSARY*.md'] : globs;
 }
 
 export interface ProjectFacts {
@@ -83,6 +102,8 @@ export interface ProjectFacts {
   /** The agent harness's own limit on Subagents, recorded beside the project's default. */
   harnessCap: number;
   install: readonly string[];
+  /** The CLI's `drive.ts` as `driveEntry` gives it; the default `worktree.invoke` runs it. */
+  driveEntry: string;
   decisionDocs: readonly string[];
 }
 
@@ -111,20 +132,39 @@ const DECISION_DOCS_NOTE = ' Decision docs: paths and globs that change only on 
  */
 export function updateProjectConfig(existing: string | null, facts: ProjectFacts): string {
   const { doc, root } = openMapping(existing, 'project config');
-  const { baseBranch, harnessCap, install, decisionDocs } = facts;
-  const worktree = { ...DEFAULTS, baseBranch, install };
-  const seeded = { dir: worktree.dir, baseBranch, remote: worktree.remote, invoke: worktree.invoke, install };
+  const { baseBranch, harnessCap, install, decisionDocs, driveEntry } = facts;
+  const worktree = { ...defaultsFor(driveEntry), baseBranch, install };
+  const seeded = {
+    dir: worktree.dir,
+    baseBranch,
+    remote: worktree.remote,
+    invoke: worktree.invoke,
+    install,
+  };
   if (!root.has('worktree')) root.set('worktree', doc.createNode(seeded));
-  addSection(doc, root, { key: 'parallel', value: { ...PARALLEL_DEFAULTS, harnessCap }, comment: PARALLEL_NOTE });
-  addSection(doc, root, { key: 'decisionDocs', value: [...decisionDocs], comment: DECISION_DOCS_NOTE });
+  addSection(doc, root, {
+    key: 'parallel',
+    value: { ...PARALLEL_DEFAULTS, harnessCap },
+    comment: PARALLEL_NOTE,
+  });
+  addSection(doc, root, {
+    key: 'decisionDocs',
+    value: [...decisionDocs],
+    comment: DECISION_DOCS_NOTE,
+  });
   return doc.toString();
 }
 
 /** The options of `drive setup [--agent-type <type>] [--model <model>]`, or a usage error. */
 export function parseSetupArgs(args: readonly string[]): SeedOptions | { error: string } {
-  const usage = { error: 'usage: drive setup [--agent-type <type>] [--model <model>]' };
+  const usage = {
+    error: 'usage: drive setup [--agent-type <type>] [--model <model>]',
+  };
   const options: SeedOptions = {};
-  const keys: Record<string, keyof SeedOptions> = { '--agent-type': 'agentType', '--model': 'model' };
+  const keys: Record<string, keyof SeedOptions> = {
+    '--agent-type': 'agentType',
+    '--model': 'model',
+  };
   for (let i = 0; i < args.length; i += 2) {
     const key = keys[args[i] ?? ''];
     const value = args[i + 1];
@@ -150,9 +190,19 @@ export function addGuardToHook(hook: string, command: string): string {
   return lines.join('\n').replace(/\n*$/, '\n');
 }
 
-/** What setup prints when the repo has no husky hook: the one line for the project's CI to run. */
+/** What setup prints when it cannot wire the guard itself: where to add the one line. `where` says why and where. */
+export const guardLineNote = (where: string, command: string): string => `! ${where}:\n    ${command}`;
+
+/** Without a husky hook: the line for the project's CI. */
 export const guardCiLine = (command: string): string =>
-  `! no .husky/pre-commit: add this line to your CI so Decision docs change only on a decisions/* branch:\n    ${command}`;
+  guardLineNote(
+    'no .husky/pre-commit: add this line to your CI so Decision docs change only on a decisions/* branch',
+    command,
+  );
+
+/** With a husky hook the skill's path would leave the repo: the line for the hook, left unwritten. */
+export const guardHookLine = (hook: string, command: string): string =>
+  guardLineNote(`the drive skill sits outside this repo, so ${hook} was left alone: add this line to it`, command);
 
 export const PROFILES_STUB = `# Drive profiles
 
@@ -164,8 +214,13 @@ and the implementer's, which every Subagent brief points at. Write only what is 
 ## Implementer
 `;
 
+/** The shape of `references/fortify.md`'s learnings format: its header and two sections. The format's description
+ * stays in that file. */
 export const LEARNINGS_STUB = `# Drive learnings
 
-One entry per Operator correction, logged at once, and per Fortify option that was not picked, with a recurrence
-count. Fortify reads this file for past proposals.
+Format: the drive skill's references/fortify.md, "The learnings file".
+
+## Failure modes
+
+## Corrections
 `;

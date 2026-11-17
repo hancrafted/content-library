@@ -50,34 +50,36 @@ export function harnessCapFrom(env: Readonly<Record<string, string | undefined>>
   return Number.isInteger(count) && count >= 1 ? count : PARALLEL_DEFAULTS.harnessCap;
 }
 
-export const DEFAULTS: WorktreeConfig = {
+/** The worktree section's defaults. `entry` is the CLI's `drive.ts`, relative to the repo root (absolute when the skill
+ * sits outside it): the default `invoke` is a command a human can paste and run. */
+export const defaultsFor = (entry: string): WorktreeConfig => ({
   dir: '.worktrees',
   baseBranch: 'main',
   remote: 'origin',
-  invoke: 'drive worktree',
+  invoke: `node ${entry} worktree`,
   install: [],
   preflight: null,
   lock: null,
   beforeRemove: [],
   afterMerge: [],
   afterRemove: [],
-};
+});
 
 const isTextList = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === 'string');
 
-const KEYS = Object.keys(DEFAULTS) as (keyof WorktreeConfig)[];
+const KEYS = Object.keys(defaultsFor('')) as (keyof WorktreeConfig)[];
 
 /** What is wrong with one key's value, or null; an absent key takes its default. */
 function problem(key: keyof WorktreeConfig, value: unknown): string | null {
   if (value === undefined || value === null) return null;
-  if (Array.isArray(DEFAULTS[key]))
+  if (Array.isArray(defaultsFor('')[key]))
     return isTextList(value) ? null : `worktree.${key} must be a list of shell commands`;
   return isText(value) ? null : `worktree.${key} must be a non-empty string`;
 }
 
 /** The `worktree` section as a config, or the first thing wrong with it. */
-function readWorktree(section: Record<string, unknown>): WorktreeConfig | { error: string } {
+function readWorktree(section: Record<string, unknown>, entry: string): WorktreeConfig | { error: string } {
   const unknown = Object.keys(section).find((key) => !(KEYS as string[]).includes(key));
   if (unknown !== undefined)
     return {
@@ -86,13 +88,14 @@ function readWorktree(section: Record<string, unknown>): WorktreeConfig | { erro
   const wrong = KEYS.map((key) => problem(key, section[key])).find((message) => message !== null);
   if (wrong !== undefined && wrong !== null) return { error: wrong };
   return {
-    ...DEFAULTS,
+    ...defaultsFor(entry),
     ...Object.fromEntries(Object.entries(section).filter(([, value]) => value != null)),
   };
 }
 
-/** Parses the text of the config file; an empty file or a missing `worktree` section gives the defaults. */
-export function parseConfig(text: string): DriveConfig | { error: string } {
+/** Parses the text of the config file; an empty file or a missing `worktree` section gives the defaults, whose
+ * `invoke` runs the CLI at `entry` (see `defaultsFor`). */
+export function parseConfig(text: string, entry: string): DriveConfig | { error: string } {
   let doc: unknown;
   try {
     doc = parse(text);
@@ -103,14 +106,14 @@ export function parseConfig(text: string): DriveConfig | { error: string } {
   }
   const root = doc ?? {};
   if (!isRecord(root)) return { error: `${CONFIG_PATH} must be a mapping` };
-  return readProject(root);
+  return readProject(root, entry);
 }
 
 /** The config's sections, or the first thing wrong with them. */
-function readProject(root: Record<string, unknown>): DriveConfig | { error: string } {
+function readProject(root: Record<string, unknown>, entry: string): DriveConfig | { error: string } {
   const section = root.worktree ?? {};
   if (!isRecord(section)) return { error: `worktree in ${CONFIG_PATH} must be a mapping` };
-  const worktree = readWorktree(section);
+  const worktree = readWorktree(section, entry);
   if ('error' in worktree) return worktree;
   const parallel = readParallel(root.parallel);
   if ('error' in parallel) return parallel;

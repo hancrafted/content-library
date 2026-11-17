@@ -23,6 +23,9 @@ const LOCK = (skills: Record<string, string>) =>
       Object.entries(skills).map(([name, source]) => [name, { source, sourceType: 'github' }]),
     ),
   });
+/** Where the skill sits in a repo that holds it, so the guard may be wired with a path inside the repo. */
+const INSIDE = (root: string) => path.join(root, 'skills', 'drive', 'scripts');
+const ENTRY = 'skills/drive/scripts/drive.ts';
 const SKILL = '---\nname: x\ndescription: x\n---\n';
 const VENDOR = CATALOG.source;
 
@@ -63,6 +66,16 @@ describe('drive setup', () => {
       expect(result.agentType).toBe('general-purpose');
     });
 
+    it('finds a skill that sits only in .claude/skills', () => {
+      // ARRANGE
+      const root = repo({ '.claude/skills/tdd/SKILL.md': SKILL });
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(detectSkills(root)).toEqual([{ name: 'tdd', origin: 'installed', source: null }]);
+      expect(binding(root).phases.implement.skills).toEqual(['tdd']);
+    });
+
     it('matches a skill found only in the installed folder to the catalog by name', () => {
       // ARRANGE
       const root = repo({ '.agents/skills/tdd/SKILL.md': SKILL });
@@ -76,7 +89,7 @@ describe('drive setup', () => {
       // ARRANGE
       const root = repo({});
       // ACT
-      const written = setup(root);
+      const { written } = setup(root);
       // ASSERT
       expect(written.sort()).toEqual([
         'docs/drive/binding.yml',
@@ -85,7 +98,7 @@ describe('drive setup', () => {
         'docs/drive/profiles.md',
         'docs/drive/project.yml',
       ]);
-      expect(parseConfig(text(root, 'docs/drive/project.yml'))).toMatchObject({
+      expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({
         parallel: { default: 3, harnessCap: harnessCapFrom(process.env) },
         worktree: { baseBranch: 'main' },
       });
@@ -93,6 +106,15 @@ describe('drive setup', () => {
   });
 
   describe('enforcers', () => {
+    it('runs the scripts with the package manager its lockfile implies', () => {
+      // ARRANGE
+      const root = repo({ 'package.json': JSON.stringify({ scripts: { lint: 'eslint .' } }), 'pnpm-lock.yaml': '' });
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(text(root, 'docs/drive/enforcers.yml')).toContain('pnpm run lint');
+    });
+
     it('lists the checks the repo runs for Fortify to choose from', () => {
       // ARRANGE
       const root = repo({
@@ -126,7 +148,7 @@ describe('drive setup', () => {
       // ASSERT
       expect(binding(root).agentType).toBe('mine');
       expect(binding(root).phases.verify.skills).toEqual(['code-review']);
-      expect(parseConfig(text(root, 'docs/drive/project.yml'))).toMatchObject({ parallel: { default: 2 } });
+      expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({ parallel: { default: 2 } });
       expect(text(root, 'docs/drive/learnings.md')).toContain('- a correction');
     });
 
@@ -135,7 +157,7 @@ describe('drive setup', () => {
       const root = repo({ 'skills-lock.json': LOCK({ tdd: VENDOR }) });
       setup(root);
       // ACT
-      const written = setup(root);
+      const { written } = setup(root);
       // ASSERT
       expect(written).toEqual([]);
     });
@@ -155,20 +177,30 @@ describe('drive setup', () => {
       // ARRANGE
       const root = repo({ '.husky/pre-commit': 'npm run verify:commit\n' });
       // ACT
-      setup(root);
-      setup(root);
+      setup(root, {}, INSIDE(root));
+      setup(root, {}, INSIDE(root));
       // ASSERT
       const hook = text(root, '.husky/pre-commit').split('\n');
       expect(hook.filter((line) => line.includes('drive.ts guard'))).toHaveLength(1);
       expect(hook.at(-2)).toBe('npm run verify:commit');
     });
 
+    it('never writes a hook line whose path leaves the repo, and prints the line to add instead', () => {
+      // ARRANGE
+      const root = repo({ '.husky/pre-commit': 'npm run verify:commit\n' });
+      // ACT
+      const { written, notes } = setup(root);
+      // ASSERT
+      expect(text(root, '.husky/pre-commit')).toBe('npm run verify:commit\n');
+      expect(written).not.toContain('.husky/pre-commit');
+      expect(notes.join('\n')).toMatch(/sits outside this repo[^\n]*\n\s+node \/[^\n]*drive\.ts guard$/);
+    });
+
     it('writes no workflow without husky and hands back the one CI line instead', () => {
       // ARRANGE
       const root = repo({ '.github/workflows/ci.yml': 'name: ci\n', 'package-lock.json': '{}' });
-      const notes: string[] = [];
       // ACT
-      const written = setup(root, {}, notes);
+      const { written, notes } = setup(root, {}, INSIDE(root));
       // ASSERT
       expect(written.filter((file) => file.startsWith('.husky') || file.startsWith('.github'))).toEqual([]);
       expect(notes.join('\n')).toMatch(/drive\.ts guard --against origin\/main/);
