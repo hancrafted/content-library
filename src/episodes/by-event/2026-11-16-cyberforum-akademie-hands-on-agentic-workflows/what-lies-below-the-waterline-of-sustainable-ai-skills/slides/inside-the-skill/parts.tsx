@@ -80,7 +80,6 @@ export function StepCell({ n, text, pointer, long, focus, last }: StepCellProps)
 export interface CardHeadProps {
   readonly label: string;
   readonly title: string;
-  /** The skill's folder and its file, as the Coding agent view names the card: code, so never translated. */
   readonly root: string;
   readonly file: string;
 }

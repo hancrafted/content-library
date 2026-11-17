@@ -62,10 +62,6 @@
   stroke: var(--scenery-wall-shade);
 }
 
-/*
- * The console's edge along the foot (Spec Option 16a): a thin lit rim over the console's lit face, its left third
- * lighter still, as the Option's lit facet. A fixed height, so a tall Scene never thickens it.
- */
 .consoleEdge {
   background:
     linear-gradient(var(--robot-glint) 0 3px, transparent 3px),
@@ -196,11 +192,7 @@
   background: linear-gradient(150deg, var(--paper-lit) 0 42%, var(--pg) 42%);
 }
 
-/*
- * The one emphasis motion (Spec Option 16a): step 4 fades in already filled `primary` (opacity only: its words turn
- * light with the fill, so no fill can fade in under them), then the species guide slides out of the sleeve
- * to the right. The base rules are the end state, so a still frame and reduced motion show it lit and slid out.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .lit {
     animation: step-lit 500ms ease-out 300ms both;

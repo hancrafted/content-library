@@ -24,7 +24,6 @@ const ANTHROPIC_BEST_PRACTICES = {
   url: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices',
 };
 
-/** The skill's folder, as Slide 3 names it: paths and pointer code are never translated. */
 const ROOT = 'collect-sediment-sample/';
 const PATHS = {
   arm: 'scripts/arm-preset.py',
