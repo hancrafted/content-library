@@ -3,14 +3,12 @@ import type { ComponentType, ReactNode } from 'react';
 
 export type PresentationStyle = Readonly<Record<`--${string}`, string | number>>;
 
-/** Self-contained CSS scope: include local token definitions and theme variants in this class. */
 export interface SlideTransition {
   readonly effect: TransitionStyle;
   readonly className?: string;
   readonly style?: PresentationStyle;
 }
 
-/** Build-time winner, distinct from the wrapper that retains its rendering surface. */
 export interface ResolvedSlideTransition {
   readonly id: string;
   readonly outgoing: string;
@@ -20,9 +18,7 @@ export interface ResolvedSlideTransition {
   readonly targetStyle?: PresentationStyle;
 }
 
-/** Optional mechanics; Scene JSX and layout remain independent. Colour overrides retain the declared tone's contrast. */
 export interface SlidePresentation {
-  /** Shared context around retained slots and removable primary content; renders no layout of its own. */
   readonly Provider?: ComponentType<{ children: ReactNode }>;
   readonly enter?: SlideTransition;
   readonly leave?: SlideTransition;

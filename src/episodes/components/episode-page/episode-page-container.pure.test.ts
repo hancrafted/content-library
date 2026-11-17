@@ -3,7 +3,6 @@ import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
 import { eyebrowsOf, fillsHeaderBand, sourceFolderOf } from './episode-page-container.pure';
 
-/** A table-of-contents Section with page Slides of these ids, each titled after its id. */
 function section(id: string, title: string, items: readonly string[]): TocSection {
   return { id, title, minutes: 0, items: items.map((item) => ({ id: item, title: item, minutes: 0 })) };
 }

@@ -4,7 +4,6 @@ import { ownTranslator, slideTextOf, type LocalizedSlide } from './localized-sli
 import type { Slide } from './slide';
 import { requireTitle } from './slide-header-text';
 
-/** Navigation metadata only: no Scene or header action is rendered. */
 export type LocalizedSlideOutline = Pick<LocalizedSlide, 'id' | 'minutes'> &
   ({ readonly level: 'h2'; readonly title: string } | { readonly level: 'h3'; readonly title?: string });
 
