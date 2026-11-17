@@ -19,7 +19,6 @@ const KEYS: readonly CurveKey[] = ['start', 'recent', 'middle', 'newest'];
 const TOTAL = 100;
 const PRECISION = 6;
 
-/** The share each bucket got from a run of `n` rows. */
 function perBucket(n: number, curve: Curve = DEFAULT_CURVE) {
   const weights = curveWeights(ids(n), curve);
   const out: Record<CurveKey, number> = { start: 0, recent: 0, middle: 0, newest: 0 };
@@ -313,9 +312,9 @@ describe('edge cases', () => {
     expect(larger).toEqual(eight);
   });
 
-  it('redistributes an empty bucket’s share proportionally over the others', () => {
+  it('redistributes an empty bucket’s share proportionally over the others: 6 rows hold only start and newest, no recent or middle', () => {
     // ARRANGE
-    const rows = 6; // start + newest only: no recent, no middle
+    const rows = 6;
     const expected = { start: (20 / 55) * 100, newest: (35 / 55) * 100 };
     // ACT
     const got = perBucket(rows);

@@ -1,7 +1,5 @@
 import type { Block, Category, Chat, Step } from './context.types';
 
-/* A static bar's chat written as block rows in the config, turned into steps. Pure. */
-
 const MINI_STEP: Readonly<Partial<Record<Category, (id: string, blocks: Block[]) => Step>>> = {
   memory: (id, blocks) => ({ id, kind: 'memory', path: 'CLAUDE.md', blocks }),
   tool_use: (id, blocks) => ({ id, kind: 'tool', calls: [], blocks }),
@@ -9,10 +7,6 @@ const MINI_STEP: Readonly<Partial<Record<Category, (id: string, blocks: Block[])
   assistant: (id, blocks) => ({ id, kind: 'ai', text: '', blocks }),
 };
 
-/**
- * A mini chat: the starting instructions (unless left out), then one step per block row. A tool call and the result
- * right after it share one step; a result after a result is a step of its own.
- */
 export function blocksChat(id: string, start: Step | null, rows: readonly [Category, number][]): Chat {
   const steps: Step[] = start ? [start] : [];
   rows.forEach(([cat, tokens], i) => {

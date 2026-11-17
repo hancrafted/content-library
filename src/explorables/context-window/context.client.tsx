@@ -13,9 +13,6 @@ import type { Chat, Part } from './context.types';
 import { useWindowEvents } from './use-window-events';
 import { useReorderRepair } from './window-reorder';
 
-/* The cornerstone's one client leaf: it holds the view state and renders every part from it. */
-
-/** A Claude Code log read in the browser, sized against the chat's own starting instructions. */
 function openLog(text: string, chat: Chat): Chat | null {
   const start = chat.steps[0];
   if (!start) return null;
@@ -26,7 +23,6 @@ function openLog(text: string, chat: Chat): Chat | null {
 
 function sentenceOf(m: Model): string {
   const { words, locale } = m.data;
-  // The sentence follows the committed step, never a preview: the status line is silent while scrubbing.
   const r = readoutAt(m.view.frames, m.view.committed, m.view.window);
   const step = m.chat.steps[m.view.committed - 1];
   const values = {
@@ -48,7 +44,6 @@ function useModel(data: ContextViewData, chat: Chat): Model {
   return { data, chat, state, dispatch, view };
 }
 
-/** The root's data attributes, which the stylesheet reads for every part. */
 function rootAttrs(m: Model) {
   return {
     'data-cornerstone': m.data.preset.id,
@@ -58,7 +53,6 @@ function rootAttrs(m: Model) {
   };
 }
 
-/** Opening a log swaps the chat and steps to its end; a file that holds no chat says so. */
 function useUpload(data: ContextViewData) {
   const [chat, setChat] = useState(data.chat);
   const [note, setNote] = useState('');

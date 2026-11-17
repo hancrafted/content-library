@@ -3,7 +3,6 @@ import { toClaudeLog } from './claude-log-writer.pure';
 import { fromClaudeLog, type LogOptions } from './claude-log.pure';
 import type { Chat } from './context.types';
 
-// One small chat with every kind of step: the round trip has to carry each of them.
 const START = {
   id: 'm1',
   blocks: [
@@ -65,7 +64,7 @@ const usage = (context: number, output: number) => ({
 const blocksOf = (chat: Chat, id: string) => chat.steps.find((step) => step.id === id)?.blocks;
 
 describe('success cases', () => {
-  it('reads back the chat it wrote, step for step', () => {
+  it('reads back a chat holding every kind of step as it wrote it, step for step', () => {
     // ARRANGE
     const expected = CHAT;
     // ACT

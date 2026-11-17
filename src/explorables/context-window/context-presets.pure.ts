@@ -4,8 +4,6 @@ import { ATTENTION_LAYOUTS, PARTS } from './context-state.pure';
 import { framesOf, type Frame } from './context.pure';
 import type { Chat, Preset, WindowSize } from './context.types';
 
-/* The Preset validator: each problem is one sentence naming its Preset and what is wrong. */
-
 function pinnedProblems(preset: Preset, chat: Chat): string[] {
   if (!preset.pinned || preset.pinned.includes(':')) return [];
   const id = preset.pinned.split('@')[0];
@@ -42,7 +40,6 @@ function shapeProblems(preset: Preset, chat: Chat): string[] {
   ];
 }
 
-/** The fill stays out of the buffer, except on the step right before a compaction, which must enter it. */
 function fillProblems(chat: Chat, frames: readonly Frame[], window: WindowSize): string[] {
   const limit = window.tokens - window.bufferTokens;
   return frames.flatMap((frame, i) => {
@@ -63,7 +60,6 @@ function windowProblems(chat: Chat, frames: readonly Frame[], window: WindowSize
   ];
 }
 
-/** What is wrong with a Preset against its chat. */
 export function presetProblems(preset: Preset, chat: Chat | undefined): string[] {
   if (!chat) return [`${preset.id}: unknown chat "${preset.chat}"`];
   const frames = framesOf(chat);

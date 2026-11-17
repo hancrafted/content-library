@@ -4,14 +4,11 @@ import { fill, k, type Say } from './context-view';
 import styles from './context.module.css';
 import { HeadToggles } from './head-toggles';
 
-/* The context-window head: `Context window (64%)   128K of [200K | 1M]` and the icon buttons the Preset offers. */
-
 interface Part {
   readonly p: ContextWindowProps;
   readonly say: Say;
 }
 
-/** `Context window (64%)`: the part's name and how full it is. */
 function Title({ p, say }: Part) {
   const percent = percentText((p.frame.used / p.window.tokens) * 100, say.locale);
   return (
@@ -34,7 +31,6 @@ function WindowSwitch({ p, say }: Part) {
   );
 }
 
-/** `128K of [200K | 1M]`: the used tokens, then the window as a switch, or as plain text without one. */
 function Meter({ p, say }: Part) {
   const used = k(say, p.frame.used).toUpperCase();
   const [before = '', after = ''] = fill(say.words.meterOf, { used }).split('{window}');

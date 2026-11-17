@@ -10,8 +10,6 @@ import type { Category } from './context.types';
 import { Moves } from './moves.client';
 import { Glyph, tint } from './window-bits';
 
-/* The context window in Technical: Claude Code's /context grid of 100 boxes. */
-
 const flag = (on: boolean) => (on ? '' : undefined);
 
 type Kind = 'used' | 'free' | 'buffer';
@@ -23,7 +21,6 @@ interface Morphing {
   readonly delay: number;
 }
 
-/** Morphs only the boxes that changed between free and used since the last render; entering fills from empty. */
 function useMorphs(kinds: readonly Kind[]): readonly Morphing[] {
   const last = useRef<readonly Kind[] | null>(null);
   const before = last.current ?? kinds.map((kind) => (kind === 'buffer' ? 'buffer' : 'free'));
@@ -37,7 +34,6 @@ function useMorphs(kinds: readonly Kind[]): readonly Morphing[] {
   });
 }
 
-/** How a box takes part: the first box of a block is its button, the rest repeat it, free and buffer boxes are inert. */
 type Role = 'button' | 'repeat' | 'inert';
 
 interface BoxProps {
@@ -47,7 +43,6 @@ interface BoxProps {
   readonly tab: boolean;
   readonly morph: Morph | undefined;
   readonly delay: number;
-  /** The box's step number in the chat. */
   readonly stepNo: number;
   readonly on: boolean;
   readonly pressed: boolean;
@@ -92,7 +87,6 @@ const Box = memo(function Box(props: BoxProps) {
   );
 });
 
-/** Each box's role: the first box of every block is the one that takes focus and a click. */
 function rolesOf(boxes: readonly GridBox[]): readonly Role[] {
   const seen = new Set<string>();
   return boxes.map((box) => {
@@ -104,7 +98,6 @@ function rolesOf(boxes: readonly GridBox[]): readonly Role[] {
   });
 }
 
-/** The values only a used box has: its step, whether it is lit and whether it is pinned. */
 function usedOf(
   box: GridBox,
   from: { match: (id: string, cat: Category) => boolean; pinned: string | null; stepOf: ReadonlyMap<string, number> },
@@ -123,7 +116,6 @@ interface GridProps {
   readonly onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
 }
 
-/** Claude Code's /context grid: 100 boxes, one tab stop, arrows move between messages. */
 export function Grid({ p, say, onKeyDown }: GridProps) {
   const { frame, window, lit, pinned, stepOf } = p;
   const boxes = useMemo(() => gridBoxes(frame, window), [frame, window]);

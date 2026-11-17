@@ -10,13 +10,11 @@ import type { Chat } from './context.types';
 import logDe from './summer-party.de.jsonl';
 import logEn from './summer-party.jsonl';
 
-/** Every key path of a parsed YAML tree, arrays by index. */
 function keyPaths(value: unknown, prefix = ''): string[] {
   if (typeof value !== 'object' || value === null) return [prefix];
   return Object.entries(value).flatMap(([key, child]) => keyPaths(child, prefix ? `${prefix}.${key}` : key));
 }
 
-/** The options the build reads a log with: the config's starting instructions and memory, as the chat holds them. */
 function optionsOf(chat: Chat): LogOptions {
   const [start] = chat.steps;
   const memory = chat.steps.find((step) => step.kind === 'memory')?.blocks[0]?.tokens;

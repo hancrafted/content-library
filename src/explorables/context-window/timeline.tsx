@@ -7,12 +7,9 @@ import { Moves } from './moves.client';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
 
-/* The timeline: one mark per step, the committed step as a thumb, a hovered one as a ghost with its event. */
-
 const INSET = 14;
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
 
-/** The step under the pointer, along the track whichever way it runs. */
 function stepAt(track: HTMLElement, event: PointerEvent, steps: number): number {
   const r = track.getBoundingClientRect();
   const vertical = r.height > r.width;
@@ -22,7 +19,6 @@ function stepAt(track: HTMLElement, event: PointerEvent, steps: number): number 
   return Math.round(Math.max(0, Math.min(1, ratio)) * (steps - 1)) + 1;
 }
 
-/** Hover previews (a mouse only); pressing commits where the pointer is; dragging keeps committing. */
 function usePointer(p: TimelineProps) {
   const track = useRef<HTMLDivElement>(null);
   const steps = p.chat.steps.length;
@@ -91,7 +87,6 @@ function Marks({ p, say, f }: PartProps) {
   ));
 }
 
-/** The range input under the track: the keyboard's and the screen reader's way along the timeline. */
 const rangeAttrs = (p: TimelineProps, say: Say) => ({
   type: 'range',
   className: styles.range,
@@ -105,7 +100,6 @@ const rangeAttrs = (p: TimelineProps, say: Say) => ({
   onChange: (event: ChangeEvent<HTMLInputElement>) => p.onCommit(Number(event.target.value)),
 });
 
-/** The filled part of the rail and the thumb on it: both travel to the step on a transition. */
 function Fill({ step, at }: { readonly step: number; readonly at: number }) {
   return <Moves as="span" trigger={step} className={styles.fill} aria-hidden="true" style={vars({ '--f': at })} />;
 }

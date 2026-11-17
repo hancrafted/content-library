@@ -2,9 +2,6 @@ import type { CSSProperties, ReactNode } from 'react';
 import { richParts } from './context-format.pure';
 import styles from './context.module.css';
 
-/* Small pieces every part of the cornerstone uses: inline markup, the /context glyphs, a colour variable. */
-
-/** A story text with its inline `code` and **bold**. */
 export function Rich({ text }: { readonly text: string }): ReactNode {
   return richParts(text).map((part, i) => {
     if (part.kind === 'code')
@@ -23,11 +20,9 @@ export function Rich({ text }: { readonly text: string }): ReactNode {
   });
 }
 
-/** The colour variable `--k` a block, row or dot takes its tint from. */
 export const tint = (token: string, extra: Record<string, string | number> = {}): CSSProperties =>
   ({ '--k': `var(${token})`, ...extra }) as CSSProperties;
 
-/** Custom properties for position and size, which CSS reads as numbers. */
 export const vars = (values: Record<string, string | number>): CSSProperties => values as CSSProperties;
 
 export type GlyphKind = 'used' | 'free' | 'buffer';
@@ -56,7 +51,6 @@ const GLYPHS: Readonly<Record<GlyphKind, ReactNode>> = {
   ),
 };
 
-/** A symbol Claude Code's /context draws: a used box, a free one, one kept for the autocompact buffer. */
 export function Glyph({ kind }: { readonly kind: GlyphKind }) {
   return (
     <svg className={styles.g} viewBox="0 0 16 16" aria-hidden="true">

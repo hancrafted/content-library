@@ -4,50 +4,29 @@ import type { ContextViewData } from './context-view';
 import { categoriesOf, framesOf, goneAt, type Frame } from './context.pure';
 import type { Category, Chat, WindowSize } from './context.types';
 
-/*
- * The step view: what more than one part reads at the step on screen, derived from the Preset, the chat and the view
- * state. A derivation only one part uses stays in that part; view transitions stay in context-state.pure.ts.
- */
-
-/** The slice of the view data the step view reads. */
 export type StepSource = Pick<ContextViewData, 'preset' | 'chat' | 'notes' | 'overrides'>;
 
-/** What a chat holds at every step, the same objects for as long as the chat is the same one. */
 interface ChatModel {
-  /** The window after each step, index 0 for step 1. */
   readonly frames: readonly Frame[];
-  /** The categories the chat ever holds, so rows stay fixed while it steps. */
   readonly present: ReadonlySet<Category>;
-  /** The 1-based step of each step id. */
   readonly stepOf: ReadonlyMap<string, number>;
 }
 
 export interface StepView extends ChatModel {
-  /** The step on screen: the preview while scrubbing, else the committed one. */
   readonly vis: number;
-  /** The committed step: what the timeline and the status line announce, never a preview. */
   readonly committed: number;
-  /** The window after the step on screen. */
   readonly frame: Frame;
-  /** The window size the reader switched to, the Preset's first at rest. */
   readonly window: WindowSize;
-  /** The readout of the step on screen: its fill, its growth and the highest line it crossed. */
   readonly readout: Readout;
-  /** The units of attention over the steps in the window: the Preset's own split where it names this step, else the curve. */
   readonly attention: readonly Attention[];
-  /** The Preset's own split is in force, so the curve's sliders would change nothing. */
   readonly overridden: boolean;
-  /** The key every part lights: the hovered one, else the pinned one. */
   readonly lit: string | null;
-  /** A pinned step the screen has not reached yet, drawn as a ghost. */
   readonly ghost: string | null;
-  /** The 0-based indices of the steps a compaction or clearing removed from the window by the step on screen. */
   readonly gone: ReadonlySet<number>;
 }
 
 const EMPTY_FRAME: Frame = { blocks: [], used: 0, byCategory: {}, inWindow: [] };
 
-// Memoised items take a frame's blocks as props: rebuilding them on every hover would redraw every item.
 const chatModels = new WeakMap<Chat, ChatModel>();
 
 function chatModelOf(chat: Chat): ChatModel {
@@ -62,7 +41,6 @@ function chatModelOf(chat: Chat): ChatModel {
   return model;
 }
 
-// The compressed Attention list refits its heights on a new array, so a hover must hand back the one it had.
 const lastAttention = new WeakMap<Chat, { readonly input: AttentionInput; readonly attention: readonly Attention[] }>();
 
 const sameInput = (a: AttentionInput, b: AttentionInput) =>

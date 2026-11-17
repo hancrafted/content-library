@@ -1,5 +1,7 @@
 'use client';
 
+// decision: FE-009 §8
+// decision: FE-001 §1
 import { usePopoverPlacement } from '@/shared/hooks/use-popover-placement';
 import { popoverBox, type PopoverRules } from '@/shared/lib/popover-placement.pure';
 import { useCallback, useId, useState, type KeyboardEvent } from 'react';
@@ -12,12 +14,6 @@ import styles from './context.module.css';
 import type { AttentionLayout } from './context.types';
 import { ControlIcon } from './control-icons';
 import { Moves } from './moves.client';
-
-/*
- * The "⋯" button of the Attention head and its popover: four labelled sliders for the distribution, always summing
- * to 100 (a pen turns them into number inputs the check normalises to 100), and the layout of the part. The popover is portaled into the Episode portal root (FE-009 §8) so no stacking context traps it. The state
- * is the parent's and transient (FE-001).
- */
 
 const SLOT = 'attention-menu';
 const RULES: PopoverRules = { maxWidth: 320, gap: 8, minRoom: 260 };
@@ -89,7 +85,6 @@ function Popover({ id, anchor, onClose, ...rest }: PopoverProps) {
   );
 }
 
-/** The ⋯ button, and the popover while it is open. */
 export function AttentionMenu(props: AttentionMenuProps) {
   const id = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);

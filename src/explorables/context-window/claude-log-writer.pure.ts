@@ -1,17 +1,10 @@
 import { framesOf } from './context.pure';
 import type { Category, Chat, Step } from './context.types';
 
-/*
- * Writes a chat as a Claude Code session log that `fromClaudeLog` reads back to the same chat, given the chat's start
- * and memory size as options. A chat must open with its starting instructions; each reminder's tokens must be its
- * text's estimate, and it must end on a reply, so a request after every message measures it.
- */
-
 type Json = Record<string, unknown>;
 type StepOf<K extends Step['kind']> = Extract<Step, { kind: K }>;
 
 interface Pen {
-  /** The context before this step, and after it. */
   readonly before: number;
   readonly after: number;
   usage(context: number, output: number): Json;
@@ -74,7 +67,6 @@ const reminderLines = (step: Step): Json[] =>
     attachment: { type: reminder.kind, content: reminder.text },
   }));
 
-/** A request's usage: the part of its context the last request already sent counts as a cache read. */
 function usageWriter() {
   let cached = 0;
   return (context: number, output: number): Json => {
@@ -89,7 +81,6 @@ function usageWriter() {
   };
 }
 
-/** Writes a chat as a Claude Code session log, one JSON object a line. */
 export function toClaudeLog(chat: Chat): string {
   if (chat.steps[0]?.kind !== 'start') throw new Error(`chat "${chat.id}" must open with a start step`);
   const frames = framesOf(chat);

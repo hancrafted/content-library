@@ -1,7 +1,5 @@
 import type { KeyboardEvent } from 'react';
 
-/* Roving focus inside the bar and the grid: one tab stop each, the arrows move between the parts in the window. */
-
 const STEP: Readonly<Record<string, number>> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
 
 export function rove(event: KeyboardEvent<HTMLElement>) {

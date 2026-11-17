@@ -1,9 +1,3 @@
-/*
- * The control registry: one typed definition per control, in code. A Preset's `controls` map holds id -> overrides,
- * merged key by key over the defaults; `'*'` may carry only `show`. Icons are names here (pure, no React); the UI
- * maps a name to its lucide icon.
- */
-
 export type ControlId =
   | 'parts'
   | 'technical'
@@ -18,7 +12,6 @@ export type ControlId =
   | 'attentionMenu';
 
 export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'panel-right' | 'ellipsis';
-/** The words a control reads from ContextWords; the UI indexes the words with them, so the compiler checks each. */
 export type WordKey =
   | 'showParts'
   | 'technical'
@@ -37,20 +30,15 @@ export type WordKey =
   | 'attentionMenu'
   | 'attentionMenuTip';
 
-/** The state a toggle flips: a shown-state key of the parent. */
 export type Flips = 'technical' | 'zone' | 'conversationTechnical' | 'windowTechnical' | 'categoryTechnical';
 
-/** The parts that have a Simple and a Technical view of their own, so a Technical toggle in their head. */
 export type ModePart = 'conversation' | 'context-window' | 'category';
 
 interface Base {
   readonly id: ControlId;
   readonly placement: 'toolbar' | 'head';
-  /** The part whose head draws a head control. */
   readonly owner?: ModePart | 'attention';
-  /** The fields a Preset may override on this control, besides `show`. */
   readonly fields: readonly ('on' | 'reorder')[];
-  /** Shown unless the Preset says otherwise. */
   readonly show: boolean;
 }
 interface Described extends Base {
@@ -63,12 +51,9 @@ export type ControlDef =
   | (Base & { readonly type: 'segmented'; readonly label: WordKey })
   | (Described & { readonly type: 'action'; readonly run: 'download' | 'upload' })
   | (Base & { readonly type: 'chips'; readonly label: WordKey })
-  /** A button in the Attention head that opens its distribution sliders. */
   | (Described & { readonly type: 'menu' })
-  /** Not a button: the head's usage figures (the percent and "used of window"), which a Preset may hide. */
   | (Base & { readonly type: 'readout' });
 
-/** One local Technical toggle per part that has both views; the toolbar's Technical sets every part. */
 const modeControl = (owner: ModePart, id: ModeId): ControlDef => ({
   id,
   type: 'toggle',
@@ -90,7 +75,6 @@ const MODE_CONTROLS: readonly ControlDef[] = [
   modeControl('category', 'categoryTechnical'),
 ];
 
-/** The control that sets one part's own renderMode. */
 export const modeControlOf = (part: ModePart): ControlId =>
   MODE_CONTROLS.find((def) => def.owner === part)?.id ?? 'technical';
 
@@ -160,10 +144,8 @@ export const CONTROLS: readonly ControlDef[] = [
 export const CONTROL_IDS: readonly ControlId[] = CONTROLS.map((def) => def.id);
 const BY_ID = new Map<string, ControlDef>(CONTROLS.map((def) => [def.id, def]));
 
-/** What a Preset may say about one control. */
 export interface ControlSetting {
   readonly show?: boolean;
-  /** The state a toggle starts in, for a toggle whose state the Preset has no other field for. */
   readonly on?: boolean;
   readonly reorder?: boolean;
 }
@@ -178,14 +160,12 @@ export type ResolvedControl = ControlDef & {
   readonly reorder?: boolean;
 };
 
-/** The registry's definition of a control, whatever a Preset says about it. */
 export function defOf(id: ControlId): ControlDef {
   const def = BY_ID.get(id);
   if (!def) throw new Error(`context window: unknown control "${id}"`);
   return def;
 }
 
-/** A control as the Preset sets it: the registry's default, then `'*'`, then the control's own overrides. */
 export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
   const def = defOf(id);
   const star = def.type === 'readout' ? undefined : preset.controls['*']?.show;
@@ -194,11 +174,6 @@ export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
 
 export const offers = (preset: HasControls, id: ControlId): boolean => controlOf(preset, id).show;
 
-/**
- * The Preset's map over the config defaults, key by key. `'*'` is folded into every control the Preset does not
- * name itself, so an explicit control beats `'*'` and `'*'` beats the defaults. A readout (the head's usage figures)
- * is no button: `'*'` leaves it alone.
- */
 export function mergeControls(defaults: ControlMap, own: ControlMap): ControlMap {
   const star = own['*'];
   const merged = Object.fromEntries(
@@ -220,7 +195,6 @@ function settingProblems(id: string, setting: object, allowed: readonly string[]
   });
 }
 
-/** What is wrong with a Preset's `controls` map; `windows` is how many window sizes the Preset has. */
 export function controlProblems(controls: ControlMap, windows: number): string[] {
   const problems = Object.entries(controls).flatMap(([id, setting]) => {
     if (id === '*') {

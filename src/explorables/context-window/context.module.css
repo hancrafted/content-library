@@ -1,13 +1,10 @@
-/*
- * The context window cornerstone, ported from the prototype's cornerstone block. Every colour derives from a global
- * token (FE-011 §2); type size and weight come from Tailwind roles on the markup (FE-011 §3, §4.2).
- */
-
+/* decision: FE-011 §2 */
+/* decision: FE-011 §3 */
+/* decision: FE-011 §4 */
 .root,
 .bars,
 .session,
 .barView {
-  /* "What the AI read": the one local hue, teal between the success and info tokens. */
   --cs-read: color-mix(in oklch, color-mix(in oklch, var(--success) 72%, var(--info)) 82%, var(--card));
   --cs-sub: color-mix(in oklch, var(--muted-foreground) 72%, var(--foreground));
   --cs-border: color-mix(in oklch, var(--border), var(--foreground) 7%);
@@ -29,7 +26,6 @@
   --cs-t-tool_result: var(--cs-read);
   --cs-t-summary: color-mix(in oklch, var(--ai) 50%, var(--machine));
   --cs-s-summary: var(--cs-t-summary);
-  /* Terminal (Technical chat): dark in both themes, like Claude Code in a terminal. */
   --cs-term-ink: var(--background);
   --cs-term-bg: color-mix(in oklch, var(--foreground) 90%, var(--machine));
   --cs-term-fg: color-mix(in oklch, var(--cs-term-ink) 94%, var(--cs-term-bg));
@@ -107,7 +103,6 @@
   transition: background-color var(--hov) var(--ease-out);
 }
 
-/* ── One toolbar: parts · Technical · Explain/Attention · meter · log ── */
 .top {
   display: flex;
   align-items: center;
@@ -255,7 +250,6 @@
     opacity var(--hov) var(--ease-out),
     display var(--hov) allow-discrete;
 }
-/* A hidden tip leaves layout: an invisible box still widens the page. */
 .icon[data-tip]:is(:hover, :focus-visible)::after {
   display: block;
   opacity: 1;
@@ -277,7 +271,6 @@
   cursor: pointer;
 }
 
-/* ── Main row: chat · timeline · context · panel ── */
 .main {
   display: grid;
   grid-template-columns: var(--cols, minmax(16rem, 1.15fr) 3.5rem 26rem minmax(15rem, 1fr));
@@ -299,8 +292,6 @@
   margin-bottom: 0.4rem;
   color: var(--cs-sub);
 }
-/* Every part's title shares one baseline and colour: pinned to the head's top at the icon buttons' height, so
- * a head that wraps (the window's meter in a narrow column) never sinks its neighbour's title. */
 .head {
   align-items: flex-start;
 }
@@ -321,7 +312,6 @@
   box-shadow: var(--cs-shadow);
 }
 
-/* ── Chat: a messenger ── */
 .chat {
   grid-area: chat;
   display: flex;
@@ -353,7 +343,6 @@
   gap: 0.9rem;
   overscroll-behavior: contain;
 }
-/* Once seen, the hint only hides: taking its room away would resize the chat and jump the page under the pointer. */
 .hint[data-seen] {
   visibility: hidden;
 }
@@ -385,7 +374,6 @@
     scale var(--in) var(--ease-out) var(--d, 0ms),
     display var(--out) allow-discrete;
 }
-/* A bubble arriving fades and lifts in; one leaving fades out before it is hidden. */
 @starting-style {
   .ready .msg {
     opacity: 0;
@@ -485,7 +473,6 @@
 .msg[data-on] {
   outline-color: var(--primary);
 }
-/* Attention: bubbles fade with their share; a gap the AI may fill gets a dashed note. */
 .root[data-fade]:not([data-lit]) .msg {
   opacity: var(--att-o, 1);
 }
@@ -495,11 +482,9 @@
   background: var(--muted);
   color: var(--foreground);
 }
-/* The note stays while something is lit: it leaving would shrink the chat and jump the page under the pointer. */
 .root[data-fade] .msg[data-faded][data-may-fill] .note {
   display: block;
 }
-/* After a compaction, earlier bubbles stay readable but are no longer in the context. */
 .msg[data-gone] {
   opacity: 0.5;
   outline: 1.5px dashed var(--cs-sub);
@@ -508,7 +493,6 @@
 .chat[data-depth='simple'] .msg:is([data-role='compact'], [data-role='cleared']) {
   display: none;
 }
-/* Technical: the chat becomes a Claude Code session in a terminal. */
 .chat[data-depth='technical'] .phone {
   background: var(--cs-term-bg);
   color: var(--cs-term-fg);
@@ -606,7 +590,6 @@
   }
 }
 
-/* ── Timeline: a drawn scrubber over a transparent native range (keyboard and screen reader) ── */
 .tl {
   grid-area: timeline;
   display: flex;
@@ -736,15 +719,12 @@
   padding-top: 0.35rem;
 }
 
-/* ── Context view: a fixed-height bar beside the usage list ── */
 .ctx {
-  /* The bar, then the smart-zone labels when shown. */
   --ctx-cols: 3rem 5.5rem;
   grid-area: ctx;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  /* The smart-zone lines reach 2px past the bar: with no part before it (the card's edge) that must stay inside. */
   padding-inline: 2px;
 }
 .title {
@@ -771,19 +751,16 @@
   width: 2rem;
   height: 2rem;
 }
-/* The head sits at the column's right edge: its tips open leftwards from the icon's edge. */
 .headEnd .icon[data-tip]::after {
   left: auto;
   right: 0;
   translate: none;
 }
-/* A button at the right of a popover opens its tip leftwards from its edge, inside the popover. */
 .icon.tipStart[data-tip]::after {
   left: auto;
   right: 0;
   translate: none;
 }
-/* The bar or grid keeps its lighting handlers on a wrapper that adds no box of its own. */
 .own {
   display: contents;
 }
@@ -857,7 +834,6 @@
   transition-timing-function: var(--ease-in);
 }
 .block[data-hot] {
-  /* Grows by transform only, so no other block moves: a tiny block a few px, a big one barely. */
   transform: scaleY(calc(1 + 1.5 / max(var(--z), 1)));
   transform-origin: center;
   z-index: 2;
@@ -967,7 +943,6 @@
 span.row {
   cursor: default;
 }
-/* The Messages group of the Technical category: a collapsible whose summary is the group's own row. */
 .messages > summary {
   list-style: none;
   cursor: pointer;
@@ -1035,7 +1010,6 @@ summary.row:hover {
   min-height: 1.5rem;
   padding-block: 0.18rem;
 }
-/* Claude Code /context glyphs: used, free, autocompact buffer. */
 .g {
   display: block;
   width: 100%;
@@ -1098,7 +1072,6 @@ summary.row:hover {
   }
 }
 
-/* ── Loupe: the blocks around the pointer, each big enough to hover and click ── */
 .lens {
   position: absolute;
   left: 0;
@@ -1124,7 +1097,6 @@ summary.row:hover {
   animation: cs-in var(--in) var(--ease-out);
 }
 .loupeTail {
-  /* The bridge: a strip over the gap between the bar and the zoom, part of the zoom's hit area. */
   position: absolute;
   top: 0;
   bottom: 0;
@@ -1188,7 +1160,6 @@ summary.row:hover {
   color: var(--cs-sub);
 }
 
-/* ── Detail panel ── */
 .panel {
   grid-area: panel;
   display: flex;
@@ -1270,7 +1241,6 @@ summary.row:hover {
   flex-direction: column;
   overflow: hidden;
 }
-/* The rows: a list that scrolls, the first and last three pinned, or compressed to bars once the list is full. */
 .att {
   --row: 1.5rem;
   display: flex;
@@ -1296,7 +1266,6 @@ summary.row:hover {
   height: var(--row);
   background: var(--card);
 }
-/* Pinned: the first and last three rows stay in view while the middle scrolls between them. */
 .attRow[data-pin='top'] {
   position: sticky;
   top: calc(var(--slot) * (var(--row) + 3px));
@@ -1307,7 +1276,6 @@ summary.row:hover {
   bottom: calc(var(--slot) * (var(--row) + 3px));
   z-index: 1;
 }
-/* Compressed: the row is the bar, at its natural height until the list is full; the dock script sets the heights. */
 .att[data-layout='compressed'] .attRow {
   overflow: hidden;
   transition: height var(--hov, 140ms) var(--ease-out);
@@ -1317,7 +1285,6 @@ summary.row:hover {
   padding: 0;
   transition: opacity var(--hov, 140ms) var(--ease-out);
 }
-/* A row too thin to show its name whole hides it, so no row shows a sliver of text cut through. */
 .att[data-layout='compressed'] .attRow[data-tight] .attName {
   opacity: 0;
 }
@@ -1347,14 +1314,12 @@ summary.row:hover {
   text-align: start;
   cursor: pointer;
 }
-/* The bar track has a fixed width; its right end is the axis, the attention the whole track stands for. */
 .attBar {
   position: relative;
   height: 0.55rem;
   border-radius: 999px;
   background: var(--muted);
 }
-/* The vertical axis line at the track's right end, drawn row by row so it reads as one line down the list. */
 .attBar::after {
   content: '';
   position: absolute;
@@ -1369,7 +1334,6 @@ summary.row:hover {
   top: 0;
   bottom: -1px;
 }
-/* Above the list, the same columns as a row: the current axis maximum sits on the line. */
 .attAxis {
   display: grid;
   grid-template-columns: minmax(6rem, 2fr) 1fr 1.75rem;
@@ -1405,8 +1369,6 @@ summary.row:hover {
   color: var(--cs-sub);
   text-align: end;
 }
-/* The hover/focus readout at the right of the bar: out of flow, so showing it moves nothing, and on a compressed
- * row it may spill past the row's clipping so even a thin row shows it. */
 .attPct {
   position: absolute;
   right: 0;
@@ -1438,9 +1400,6 @@ summary.row:hover {
   padding: 0.05rem 0.5rem;
 }
 
-/* ── Narrow: controls, chat, a row with the timeline and the bar horizontal, usage, panel ── */
-/* A grid too wide for one row (five parts or more, see context-columns.pure.ts) takes its two-row layout on a container
- * narrower than its one-row minimum; a phone stacks every part in the block below instead. */
 @container (min-width: 48rem) and (max-width: 82rem) {
   .main[data-wrap] {
     grid-template-columns: var(--cols-wrap);
@@ -1618,7 +1577,6 @@ summary.row:hover {
   }
 }
 
-/* ── Static bars: the view drawn horizontally, a figure per bar ── */
 .bars {
   display: flex;
   flex-direction: column;
@@ -1680,7 +1638,6 @@ summary.row:hover {
 .bar[data-orientation='horizontal'] .line[data-crossed] {
   border-left-color: var(--primary);
 }
-/* Upright: the base bar's own drawing, restated so a narrow container's horizontal timeline bar does not reach it. */
 .bar[data-orientation='vertical'] {
   width: 100%;
   height: var(--bar-h, 100%);
@@ -1694,9 +1651,6 @@ summary.row:hover {
   height: max(calc(var(--z) * 1%), 2px);
   cursor: default;
 }
-/* Labelled: a list read top to bottom on a grid its asides share, so an aside spans exactly its part's rows. Each
- * track grows by its share of the window (fractions of one) but never below its words; the window's box is drawn
- * behind the list, and the free space closes it. Sizes are illustrative. */
 .bars:has(.listed),
 .bars figure:has(.listed) {
   flex: 1 0 auto;
@@ -1748,14 +1702,12 @@ summary.row:hover {
   background: color-mix(in oklch, var(--k) 32%, var(--card));
   box-shadow: inset 4px 0 0 var(--k);
 }
-/* The ringed block is the one the Slide is about: solid primary, taller, lifted, as a pulled card. */
 .bar[data-labelled] .block[data-ring] {
   min-height: 4.5rem;
   color: var(--primary-foreground);
   background: var(--primary);
   box-shadow: var(--cs-shadow);
 }
-/* The line between two parts of a labelled bar. */
 .split {
   border-top: 4px solid var(--foreground);
   margin-block: 0.25rem;
@@ -1791,7 +1743,6 @@ summary.row:hover {
   white-space: nowrap;
 }
 
-/* The session bar: one segment per Section sized by its share; filled up to the current one, which is named. */
 .session {
   margin: 0;
   display: flex;
@@ -1824,8 +1775,6 @@ summary.row:hover {
   background: var(--cs-free);
   box-shadow: inset 0 0 0 1px var(--cs-border);
 }
-/* Each segment takes a soft tint from calm to hot, the joke being a human's attention running hot: success, info,
- * warning, destructive. Filled segments are pale, the current one stronger. */
 .sessionPart[data-tone='0'] {
   --tone: var(--success);
 }
@@ -1847,10 +1796,8 @@ summary.row:hover {
   box-shadow: none;
   outline: 2px solid color-mix(in oklch, var(--tone) 72%, var(--card));
   outline-offset: 2px;
-  /* Above its later siblings, whose backgrounds would otherwise paint over the ring's far edge. */
   z-index: 1;
 }
-/* In progress: the current segment breathes; the settled ones before it stay solid. Reduced motion keeps the ring. */
 @keyframes sessionPulse {
   50% {
     background: color-mix(in oklch, var(--tone) 40%, var(--card));
@@ -1891,7 +1838,6 @@ summary.row:hover {
   text-transform: uppercase;
 }
 
-/* The Attention menu's edit mode: a compact number field, spinner hidden, no validation until the check saves. */
 .curveInput {
   width: 4.25rem;
   padding: 0.2rem 0.4rem;
@@ -1911,7 +1857,6 @@ summary.row:hover {
   outline: 2px solid var(--ring);
   outline-offset: 1px;
 }
-/* The Attention menu's layout choice: three buttons, one checked. */
 .layoutChoice {
   display: flex;
   border: 1px solid var(--border);
@@ -1934,7 +1879,6 @@ summary.row:hover {
   outline: 2px solid var(--ring);
   outline-offset: -2px;
 }
-/* The Attention menu's slider: the native range, so the keyboard and the screen reader work as for any slider. */
 .curveSlider {
   width: 100%;
   accent-color: var(--primary);
