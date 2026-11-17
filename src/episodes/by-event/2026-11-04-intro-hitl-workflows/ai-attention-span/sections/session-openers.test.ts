@@ -26,7 +26,10 @@ const context = (locale: Locale) => ({
   episode: episodeRef('ai-attention-span', '2026-11-04-intro-hitl-workflows').id,
   locale,
   placed: PLACED,
-  referenceLabels: { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` },
+  referenceLabels: {
+    ref: 'opens speaker note',
+    marker: (title: string) => `Speaker note: ${title}`,
+  },
   header: 'shared' as const,
 });
 
@@ -82,7 +85,10 @@ const bubble = (slug: string, locale: Locale) => {
 };
 
 const STEPS = { start: 0, thought: 1, ais: 2, fills: 3, managing: 4 } as const;
-const YOUR = { en: 'Your attention span', de: 'Deine Aufmerksamkeitsspanne' } as const;
+const YOUR = {
+  en: 'Your attention span',
+  de: 'Deine Aufmerksamkeitsspanne',
+} as const;
 
 describe('success cases', () => {
   it.each([
@@ -252,7 +258,10 @@ describe('success cases', () => {
     // ACT
     const $ = scene('managing-the-attention-span', 'en');
     // ASSERT
-    expect({ apples: $('[data-rotten-apple]').length, handoff: /Handoff:/.test($.text()) }).toEqual(expected);
+    expect({
+      apples: $('[data-rotten-apple]').length,
+      handoff: /Handoff:/.test($.text()),
+    }).toEqual(expected);
   });
 
   it.each([
@@ -276,7 +285,15 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'now-you-know-how-it-feels';
     const { title, ...onBar } = said;
-    const expected = { title, caption: undefined, ...onBar, filled: STEPS.managing, current: '', poll: '', faces: [] };
+    const expected = {
+      title,
+      caption: undefined,
+      ...onBar,
+      filled: STEPS.managing,
+      current: '',
+      poll: '',
+      faces: [],
+    };
     // ACT
     const slide = localized(slug, locale);
     const seen = bar(slug, locale);

@@ -26,7 +26,11 @@ interface SpecSlide {
   readonly slug: string;
   readonly title: string;
   readonly script: readonly { title: string; script: string }[];
-  readonly notes: readonly { header: string; description: string; urls: readonly string[] }[];
+  readonly notes: readonly {
+    header: string;
+    description: string;
+    urls: readonly string[];
+  }[];
 }
 
 function specSlides(): SpecSlide[] {
@@ -58,7 +62,9 @@ function specSlides(): SpecSlide[] {
     });
 }
 
-const RETITLED = { 'what-happens-when-the-bar-fills-up': 'What happens when the context fills up' } as const;
+const RETITLED = {
+  'what-happens-when-the-bar-fills-up': 'What happens when the context fills up',
+} as const;
 const ADDED_NOTES = ['Context rot'];
 
 const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?: string; script: string }>>>> = {
@@ -117,7 +123,10 @@ function localized(slide: Slide, locale: 'en' | 'de' = 'en') {
     episode: 'ai-attention-span',
     locale,
     placed,
-    referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
+    referenceLabels: {
+      ref: 'opens speaker note',
+      marker: (title) => `Speaker note: ${title}`,
+    },
     header: 'shared',
   });
 }
@@ -145,7 +154,10 @@ describe('success cases', () => {
       'what-we-learned-so-far',
     ];
     // ACT
-    const slugs = { spec: specSlides().map(({ slug }) => slug), built: pageSlides.map((slide) => slide.slug) };
+    const slugs = {
+      spec: specSlides().map(({ slug }) => slug),
+      built: pageSlides.map((slide) => slide.slug),
+    };
     // ASSERT
     expect(slugs).toEqual({ spec: expected, built: expected });
   });
@@ -155,7 +167,10 @@ describe('success cases', () => {
     const expected = specSlides().map(({ slug, title, script }) => ({
       slug,
       title: RETITLED[slug as keyof typeof RETITLED] ?? title,
-      script: script.map((item) => ({ ...item, ...REWRITTEN_SCRIPT[slug]?.[item.title] })),
+      script: script.map((item) => ({
+        ...item,
+        ...REWRITTEN_SCRIPT[slug]?.[item.title],
+      })),
     }));
     // ACT
     const actual = pageSlides.map((slide) => {
@@ -163,7 +178,10 @@ describe('success cases', () => {
       return {
         slug: slide.slug,
         title: text.title,
-        script: text.voiceScript.map((segment) => ({ title: segment.title, script: segment.script })),
+        script: text.voiceScript.map((segment) => ({
+          title: segment.title,
+          script: segment.script,
+        })),
       };
     });
     // ASSERT
@@ -185,7 +203,12 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(actual.map((notes) => notes.map(({ header, description }) => ({ header, description })))).toEqual(
-      expected.map((notes) => notes.map(({ header, description }) => ({ header, description: squash(description) }))),
+      expected.map((notes) =>
+        notes.map(({ header, description }) => ({
+          header,
+          description: squash(description),
+        })),
+      ),
     );
     expected.forEach((notes, slide) =>
       notes.forEach((note, index) => expect(actual[slide][index].urls).toEqual(expect.arrayContaining([...note.urls]))),
@@ -246,7 +269,14 @@ describe('success cases', () => {
 
   it('draws Slide 5 without the strip card, with the Lost in the middle label inside the cornerstone column, bracketed, with no arrow', () => {
     // ARRANGE
-    const expected = { strips: 0, label: 1, brackets: 1, arrows: 0, labelAfterContext: true, labelInsideTarget: true };
+    const expected = {
+      strips: 0,
+      label: 1,
+      brackets: 1,
+      arrows: 0,
+      labelAfterContext: true,
+      labelInsideTarget: true,
+    };
     // ACT
     const $ = scene('attention-is-a-budget');
     const label = $('[data-lost-label]');
@@ -263,7 +293,10 @@ describe('success cases', () => {
 
   it('titles Slide 4 on the context filling up and ends its caption on a marker to the context-rot note', () => {
     // ARRANGE
-    const expected = { title: 'What happens when the context fills up', note: 'what-is-context-rot' };
+    const expected = {
+      title: 'What happens when the context fills up',
+      note: 'what-is-context-rot',
+    };
     // ACT
     const text = localized(bySlug('what-happens-when-the-bar-fills-up'));
     // ASSERT
