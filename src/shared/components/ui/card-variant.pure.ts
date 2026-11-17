@@ -8,7 +8,6 @@ export type CardVariant = 'lead' | 'compact' | 'event';
 /** The level a card's title is drawn at; the page that places the card picks it so no level is skipped under the heading above. */
 export type CardHeadingLevel = 2 | 3 | 4;
 
-/** The cue that says a card opens: a filled button, a hover-only arrow, or "coming soon" on a card with nowhere to go. */
 export type OpenCue = 'button' | 'arrow' | 'coming-soon';
 
 const LINKED_CUES: Record<CardVariant, Exclude<OpenCue, 'coming-soon'>> = {
@@ -17,12 +16,10 @@ const LINKED_CUES: Record<CardVariant, Exclude<OpenCue, 'coming-soon'>> = {
   event: 'arrow',
 };
 
-/** What a card opens: the locale-neutral path of its page, `null` while what it shows has none. */
 export interface CardRoute {
   readonly route: string | null;
 }
 
-/** A card is a link once what it shows has a page; an announced-only Episode has no route. */
 export function isLinked(card: CardRoute): boolean {
   return card.route !== null;
 }

@@ -6,7 +6,6 @@ function pixels(value: string) {
   return Number.isFinite(number) ? number : 0;
 }
 
-/** Computed margins are pixels; root padding is pixels or scrollport-height percentages. Auto/invalid values are zero. */
 export function anchorOffset({ margin, padding, viewport }: { margin: string; padding: string; viewport: number }) {
   const text = padding.trim();
   const percentage = /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?%$/i.test(text);
@@ -14,7 +13,6 @@ export function anchorOffset({ margin, padding, viewport }: { margin: string; pa
   return pixels(margin) + (Number.isFinite(value) ? value : 0);
 }
 
-/** A document-coordinate landing within measured scroll limits; non-finite offsets contribute zero. */
 export function anchorLanding({ top, offset = 0, maximum }: { top: number; offset?: number; maximum: number }) {
   return Math.max(0, Math.min(top - (Number.isFinite(offset) ? offset : 0), maximum));
 }

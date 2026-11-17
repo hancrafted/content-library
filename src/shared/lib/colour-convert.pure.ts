@@ -132,14 +132,12 @@ const byteHex = (n: number) =>
     .toString(16)
     .padStart(2, '0');
 
-/** The colour as `#rrggbb`, or `#rrggbbaa` when translucent: what the picker holds. `null` if the value is not a colour this reads. */
 export function toPickerHex(value: string): string | null {
   const rgba = parseColour(value);
   if (!rgba) return null;
   return `#${byteHex(rgba.r)}${byteHex(rgba.g)}${byteHex(rgba.b)}${rgba.a < 1 ? byteHex(rgba.a) : ''}`;
 }
 
-/** Rounds to `places` and drops trailing zeros: `0.50` -> `0.5`. */
 const trim = (n: number, places: number) => String(parseFloat(n.toFixed(places)));
 
 function oklchText({ r, g, b, a }: Rgba): string {

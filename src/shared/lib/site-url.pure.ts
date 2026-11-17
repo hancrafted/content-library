@@ -1,4 +1,3 @@
-/** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
 
 /**

@@ -4,7 +4,6 @@ import type { Ref } from 'react';
 
 interface SearchInputProps {
   query: string;
-  /** The field's accessible name, and the hint it shows while empty. */
   label: string;
   placeholder: string;
   onChange: (query: string) => void;
@@ -13,7 +12,6 @@ interface SearchInputProps {
   data: Record<`data-${string}`, string>;
 }
 
-/** A labelled search field on the shadcn input: every keystroke narrows the list below it. */
 export function SearchInput({ query, label, placeholder, onChange, inputRef, data }: SearchInputProps) {
   return (
     <label className="relative block w-full sm:w-72 sm:shrink-0">

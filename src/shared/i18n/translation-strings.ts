@@ -3,7 +3,6 @@ import type { Messages } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { translationStrings, type TranslationNode } from './translation-strings.pure';
 
-/** A top-level Translation file namespace made only of strings, such as `tableOfContents` or `contextDrawer`. */
 type StringNamespace = { [N in keyof Messages]: Messages[N] extends TranslationNode ? N : never }[keyof Messages];
 
 /**

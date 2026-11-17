@@ -6,7 +6,6 @@ import { copyText, type TextClipboard } from './clipboard';
  * Explorable): it answers whether the clipboard took the text, so the button confirms only a real copy.
  */
 
-/** A clipboard that keeps what it is given. */
 function keepingClipboard(): TextClipboard & { kept: string[] } {
   const kept: string[] = [];
   return { kept, writeText: async (text) => void kept.push(text) };

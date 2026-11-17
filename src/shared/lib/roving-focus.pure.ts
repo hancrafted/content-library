@@ -15,8 +15,6 @@ function walker(previous: string, next: string): ItemAfter {
   };
 }
 
-/** APG tabs: horizontal arrows wrap, Home and End jump. */
 export const tabAfter: ItemAfter = walker('ArrowLeft', 'ArrowRight');
 
-/** APG menu: vertical arrows wrap, Home and End jump. */
 export const menuItemAfter: ItemAfter = walker('ArrowUp', 'ArrowDown');

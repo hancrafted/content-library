@@ -1,16 +1,13 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { MOTION_AT_REST, arm, frame, settle, start as start_, type MotionState } from './use-motion.pure';
 
-/** What an animating element spreads on itself: `data-motion` and the ref that listens to its own motion events. */
 export interface MotionProps {
   readonly 'data-motion': 'running' | 'settled';
   readonly ref: (element: HTMLElement | SVGElement | null) => void | (() => void);
 }
 
-/** Events that may start a motion with no state change of the component: a hover or focus transition in CSS. */
 const MAY_START = ['pointerenter', 'pointerleave', 'pointerdown', 'focus', 'blur'] as const;
 
-/** Listens on `element` for the motion events that count, and returns the way to stop. */
 function listen(element: Element, on: { start: () => void; end: () => void; may: () => void }): () => void {
   const own = (fn: () => void) => (event: Event) => event.target === element && fn();
   const listeners: [string, EventListener][] = [
@@ -28,7 +25,6 @@ function listen(element: Element, on: { start: () => void; end: () => void; may:
   };
 }
 
-/** The motion state, an animation-frame wait that settles it when nothing starts, and the three moves on it. */
 function useMotionState() {
   const state = useRef<MotionState>(MOTION_AT_REST);
   const frameId = useRef(0);

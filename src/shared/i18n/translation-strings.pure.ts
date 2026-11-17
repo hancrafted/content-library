@@ -1,9 +1,7 @@
-/** A Translation file subtree whose leaves are all strings: what a namespace of chrome labels looks like. */
 export interface TranslationNode {
   readonly [key: string]: string | TranslationNode;
 }
 
-/** How to read a namespace: `read` translates one full key; `omit` names top-level keys to leave out. */
 export interface TranslationRead<K extends string> {
   readonly read: (key: string) => string;
   readonly omit?: readonly K[];

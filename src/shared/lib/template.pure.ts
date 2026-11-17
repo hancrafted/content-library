@@ -1,4 +1,3 @@
-/** A value a template placeholder takes. */
 export type TemplateValues = Readonly<Record<string, string | number>>;
 
 const PLACEHOLDER_RE = /\{(\w+)\}/g;

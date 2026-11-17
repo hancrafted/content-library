@@ -1,6 +1,5 @@
 import { Badge } from './badge';
 
-/** One label a card lists: its id for tests and probes, its text, and the tooltip that explains it. */
 export interface BadgeItem {
   readonly id: string;
   readonly label: string;

@@ -11,7 +11,6 @@ import {
 } from './url-state';
 import { createUrlNavigationBrowser } from './url-state-browser';
 
-/** Only the service's ports: a URL, recorded history writes, and events. */
 function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];

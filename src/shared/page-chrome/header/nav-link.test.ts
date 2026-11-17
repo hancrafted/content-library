@@ -12,7 +12,6 @@ import { NavLink } from './nav-link.client';
 const path = vi.hoisted(() => ({ current: '/' }));
 vi.mock('next/navigation', () => ({ usePathname: () => path.current }));
 
-/** The link as a visitor at `pathname` sees it: its `aria-current` and `data-active`, as markup writes them. */
 function stateAt(pathname: string, props: Record<string, unknown> = {}, section = '/events') {
   path.current = pathname;
   const html = renderToStaticMarkup(createElement(NavLink, { section, href: section, ...props }, 'Link'));

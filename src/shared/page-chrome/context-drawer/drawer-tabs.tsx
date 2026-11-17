@@ -13,7 +13,6 @@ export interface TabSpec<T extends string> {
  * transitions the inherited `visibility`, so on open the tab stays `hidden` for
  * its first frames and the drawer's focus move on open is dropped (FE-010 §5).
  */
-/** Dressed like the site header's nav links: a ghost button, the selected one on `accent`. */
 function TabButton<T extends string>(props: {
   tab: TabSpec<T>;
   selected: boolean;
@@ -45,7 +44,6 @@ function TabButton<T extends string>(props: {
   );
 }
 
-/** Arrow, Home and End keys move selection and focus together (automatic activation). */
 function tabKeyHandler<T extends string>(props: {
   tabs: readonly TabSpec<T>[];
   selected: T;

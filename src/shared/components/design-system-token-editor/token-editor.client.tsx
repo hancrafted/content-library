@@ -12,7 +12,6 @@ import { usageRowAddon } from './token-usage/index.client';
 
 const GAP_PIXELS = 8;
 
-/** Closes on Escape (returning focus to the trigger) and on a press outside both the panel and the trigger. */
 function useDismiss(open: boolean, close: () => void, trigger: React.RefObject<HTMLButtonElement | null>) {
   useEffect(() => {
     if (!open) return;
@@ -35,7 +34,6 @@ function useDismiss(open: boolean, close: () => void, trigger: React.RefObject<H
   }, [open, close, trigger]);
 }
 
-/** Open state and the panel's top edge, taken from the button when it opens: the header is sticky and wraps on a phone. */
 function usePopover(trigger: React.RefObject<HTMLButtonElement | null>) {
   const [open, setOpen] = useState(false);
   const [top, setTop] = useState(0);

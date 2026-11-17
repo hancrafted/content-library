@@ -1,4 +1,4 @@
-/** Structured data as plain data: a schema.org document, built by page assembly (FE-008 §6). */
+// decision: FE-008 §6
 interface StructuredData {
   readonly '@context': string;
 }

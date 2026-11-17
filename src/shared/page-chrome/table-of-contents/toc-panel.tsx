@@ -47,7 +47,6 @@ function SectionList({ view, sections, toggleLabel, collapsed }: SectionListProp
   );
 }
 
-/** Sections, folded away while the loading box shows. */
 function TocBody(props: {
   view: TocView;
   sections: readonly TocSection[];
@@ -148,7 +147,6 @@ function PanelContents(props: TocPanelProps) {
   );
 }
 
-/** The bounded panel: contextual heading, border progress and the numbered outline. */
 export function TocPanel(props: TocPanelProps) {
   const view = { ...props.view, idPrefix: useId() };
   return (

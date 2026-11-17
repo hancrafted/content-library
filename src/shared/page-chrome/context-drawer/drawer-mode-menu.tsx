@@ -5,7 +5,6 @@ import { Check, Ellipsis } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 import type { DrawerStrings } from './context-drawer-input';
 
-/** The menu's slice of the drawer's strings. */
 type ModeMenuLabels = DrawerStrings['menu'];
 
 /** Closes when a pointer lands outside `wrapper`, since a menu item button does not always take focus on click. */
@@ -52,7 +51,6 @@ function menuKeyHandler(menu: {
   };
 }
 
-/** Open state, the ids it needs and its keyboard handling, kept apart from the markup. */
 function useModeMenu(mode: DrawerMode) {
   const [open, setOpen] = useState(false);
   const wrapper = useRef<HTMLDivElement>(null);

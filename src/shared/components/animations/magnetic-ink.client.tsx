@@ -19,7 +19,6 @@ function InkSession({ children }: { children: ReactNode }) {
   return <InkPageContext value={page}>{children}</InkPageContext>;
 }
 
-/** An existing host remains native and server-rendered; the adapter adds decoration after mounting. */
 export function MagneticInk({ children, kind = 'button' }: { children: ReactNode; kind?: InkOptions['kind'] }) {
   const attachment = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLElement>(null);

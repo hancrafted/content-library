@@ -12,13 +12,11 @@ interface NumberToggleProps {
   controls: string;
   label: string;
   testId: string;
-  /** Motion stays off until the first observation has painted. */
   settled: boolean;
   onToggle: () => void;
   children: ReactNode;
 }
 
-/** Closed: the arc covers the ring's east quarter. Open: it swings to the south one. */
 function QuarterArc({ open, settled }: { open: boolean; settled: boolean }) {
   return (
     <span

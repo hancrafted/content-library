@@ -21,7 +21,6 @@ function observePageBox(element: Element | null, measured: (box: PageBox | null,
   return () => observer.disconnect();
 }
 
-/** How far the reading line has travelled through the active element, sampled once per frame; 1 at the page end. */
 export function useFractionInto(active: string | null, targetAttribute: string): number {
   // Keyed by the entry it was measured on, so a new active entry never borrows the previous one's fraction.
   const [sample, setSample] = useState({ active, fraction: 0 });

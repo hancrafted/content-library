@@ -1,6 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 
-/** The AI sparkle, the Visual language's mark on a job the AI does. */
 export function Sparkle({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" className={cn('shrink-0', className)} aria-hidden="true">

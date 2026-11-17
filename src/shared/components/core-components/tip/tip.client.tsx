@@ -11,13 +11,9 @@ import styles from './tip.module.css';
  */
 
 interface TipProps {
-  /** Plain text, or a short node (a line and a list); the bubble is hidden from assistive technology either way. */
   readonly text: ReactNode;
-  /** The bubble hangs below the control, or above it. */
   readonly place?: 'below' | 'above';
-  /** Which edge of the control the bubble lines up with; `end` keeps a control at the right edge from widening the page. */
   readonly align?: 'start' | 'center' | 'end';
-  /** Extra classes for the host, e.g. `flex-1` where the control fills a row. */
   readonly className?: string;
   readonly children: ReactNode;
 }

@@ -8,7 +8,6 @@ export function drawRoll(roll: Roll): number {
   return sample;
 }
 
-/** A sheet gliding off the far desk edge: it waits, then falls in a zigzag with its own sway, tilt and drift. */
 export function paperOverflow(roll: Roll) {
   return {
     delay: 1 + drawRoll(roll) * 3,

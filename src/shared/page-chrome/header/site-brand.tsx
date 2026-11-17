@@ -5,7 +5,6 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import styles from './header.module.css';
 
-/** Brand symbol plus site name; both lead to the landing page. */
 export async function SiteBrand({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'brand' });
   return (

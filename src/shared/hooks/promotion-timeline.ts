@@ -42,7 +42,6 @@ function launchTime(scene: Scene, target: HTMLElement) {
   return ENVELOPE_BURST_AT + 0.18 + scene.words.length * WORD_STAGGER + buttonIndex * BUTTON_STAGGER;
 }
 
-/** Each piece explodes out of the envelope along its own bowed arc straight to its resting place. */
 function contentFlight(timeline: gsap.core.Timeline, scene: Scene, target: HTMLElement) {
   const at = launchTime(scene, target);
   const destination = target.getBoundingClientRect();

@@ -17,7 +17,6 @@ import {
 } from '@/shared/lib/context-link.pure';
 import { useEffect } from 'react';
 
-/** The Speaker note item a Context reference names, inside the drawer. */
 export function noteOfRef(ref: NoteRef): HTMLElement | null {
   return document.querySelector<HTMLElement>(noteSelector(ref));
 }
@@ -34,7 +33,6 @@ function targetOfNote(note: Element): HTMLElement | null {
   return scope?.querySelector<HTMLElement>(targetSelector(target)) ?? null;
 }
 
-/** The context reference button `from` sits in, if any. */
 function refButton(from: EventTarget | null): Element | null {
   return from instanceof Element ? from.closest(`[${CONTEXT_REF_ATTR}]`) : null;
 }
@@ -54,7 +52,6 @@ function refOf(from: EventTarget | null): NoteRef | null {
   return null;
 }
 
-/** The element on the other side of a note and its Slide element, for whichever one `from` sits in. */
 function counterpart(from: EventTarget | null): Element | null {
   if (!(from instanceof Element)) return null;
   const note = from.closest(NOTE_SELECTOR);

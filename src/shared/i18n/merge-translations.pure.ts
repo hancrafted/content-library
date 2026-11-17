@@ -1,8 +1,6 @@
 import { LOCALES, type Locale } from '../lib/locale.pure';
 
-/** One owner's Translation files: the folder they sit in and each locale's parsed file, typed by the English one. */
 export interface TranslationOwner<T extends object = object> {
-  /** The repo-relative folder holding `en.json` and `de.json`, as an error names it. */
   readonly folder: string;
   readonly files: Readonly<Record<Locale, T>>;
 }
@@ -17,7 +15,6 @@ export function translationOwner<T extends object>(folder: string, en: T, de: No
 
 type Intersection<U> = (U extends unknown ? (u: U) => void : never) extends (i: infer I) => void ? I : never;
 
-/** The merged message set's type: every owner's English file at once. */
 export type MergedMessages<O extends readonly TranslationOwner[]> = Intersection<O[number]['files']['en']>;
 
 const fileOf = (owner: TranslationOwner, locale: Locale) => `${owner.folder}/${locale}.json`;

@@ -14,7 +14,6 @@ interface InkCircle {
   r: number;
 }
 
-/** What the pointer draws out of the button: `strength` 0 far to 1 over it. */
 export interface InkField {
   strength: number;
   fill: InkCircle;
@@ -32,12 +31,10 @@ const BEADS = [
   { along: 1.1, size: 0.42 },
 ];
 
-/** How many droplets the field draws; the markup renders this many. */
 export const INK_DROPLETS = BEADS.length;
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
-/** The nearest point on the pill's edge, the outward direction toward the pointer and the gap to it. */
 function pillContact({ width, height }: Size, point: Point) {
   const radius = height / 2;
   const spine = { x: Math.max(radius, Math.min(width - radius, point.x)), y: radius };
@@ -69,7 +66,6 @@ export function inkMagnet(size: Size, point: Point, reach: number): InkField {
   return inkAtContact(contact, strength, size.height);
 }
 
-/** The reusable geometry for an outside rounded-surface contact; the caller owns the surface shape. */
 export function inkAtContact(
   contact: { x: number; y: number; nx: number; ny: number; gap: number },
   strength: number,

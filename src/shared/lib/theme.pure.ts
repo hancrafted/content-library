@@ -4,7 +4,6 @@ export const DARK_QUERY = '(prefers-color-scheme: dark)';
 
 export type ResolvedTheme = 'light' | 'dark';
 
-/** The theme actually shown: `system` defers to the OS preference. */
 export function resolveTheme(theme: Theme, systemPrefersDark: boolean): ResolvedTheme {
   if (theme === 'system') return systemPrefersDark ? 'dark' : 'light';
   return theme;

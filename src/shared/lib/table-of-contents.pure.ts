@@ -3,7 +3,6 @@
  * sections are open, how much reading time is left. No DOM, no React.
  */
 
-/** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
 export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
 
 export type TocScope = 'page' | 'collection';
@@ -11,24 +10,18 @@ export type TocScope = 'page' | 'collection';
 /** Initial scope only; a visitor's override is transient, never a stored preference. */
 export const TOC_DEFAULT_SCOPE: TocScope = 'page';
 
-/** One link; `id` equals the target's data-attribute value and URL fragment. */
 export interface TocItem {
   id: string;
   title: string;
-  /** Reading time of the target slide, in minutes. */
-  /** Total reading time this entry stands for: its own Slide plus every Slide in `unlisted`. */
   minutes: number;
-  /** Untitled Slides folded into this entry, in page order: listed nowhere, but this entry stays current while they are. */
   unlisted?: readonly UnlistedSlide[];
 }
 
-/** An untitled Slide: its id and its own reading time. */
 export interface UnlistedSlide {
   id: string;
   minutes: number;
 }
 
-/** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
 }
@@ -40,7 +33,6 @@ export interface TocPage {
   readonly sections: readonly TocSection[];
 }
 
-/** Related pages in navigation order; page chrome knows only their titles, routes and outlines. */
 export interface TocCollection {
   readonly title: string;
   readonly route: string;
@@ -92,12 +84,10 @@ export function activeEntry(
   return owners[slide] ?? slide;
 }
 
-/** The id of the section that is the active entry or holds it. */
 export function ownerOf(sections: readonly TocSection[], active: string | null): string | undefined {
   return sections.find((section) => section.id === active || section.items.some((item) => item.id === active))?.id;
 }
 
-/** `1`, `2`, … — numbering lives in the table of contents only. */
 export function sectionNumber(index: number): string {
   return String(index + 1);
 }
@@ -168,7 +158,6 @@ export function sectionProgress(
 export interface ReadingTime {
   total: number;
   remaining: number;
-  /** Elapsed share, 0 to 1: time-weighted, or equally weighted by Slide when no reading time exists. */
   progress: number;
 }
 

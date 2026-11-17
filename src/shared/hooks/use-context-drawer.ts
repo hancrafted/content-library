@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { noteOfRef, useContextLinks, usePinnedNote } from './use-context-links';
 import { useActiveSlide } from './use-url-state';
 
-/** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -21,7 +20,6 @@ function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
   }, [open, toggle, close]);
 }
 
-/** What had focus when the drawer opened, or the trigger when nothing but the page did. */
 function focusedOr(fallback: HTMLElement | null): HTMLElement | null {
   const focused = document.activeElement;
   return focused instanceof HTMLElement && focused !== document.body ? focused : fallback;
@@ -85,7 +83,6 @@ function useDrawerMode(): [DrawerMode, (mode: DrawerMode) => void] {
   return [mode, setMode];
 }
 
-/** A note a context reference opened, and the item it was shown for (valid while that item stays current). */
 interface Revealed {
   readonly note: NoteRef;
   readonly item: string;

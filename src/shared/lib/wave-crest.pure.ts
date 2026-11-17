@@ -4,29 +4,22 @@
  * crest; never `Math.random`.
  */
 
-/** One crest vertex: x from the box's left, y from its top; the box's bottom (`y = height`) is the water below. */
 export type CrestPoint = readonly [x: number, y: number];
 
 export interface CrestOptions {
-  /** Picks the crest; the same seed always draws the same one. */
   readonly seed: number;
-  /** The box's width, in the drawing's units. */
   readonly width: number;
-  /** The box's height: the tallest peak nearly reaches its top, every valley sits near its bottom. */
   readonly height: number;
   /** How many peaks, at least two, so a tall one and a low one can stand side by side. */
   readonly peaks: number;
 }
 
-/** Peak heights, as fractions of the box, from the lowest to the tallest; each peak takes one, shuffled. */
 const LOWEST_PEAK = 0.3;
 const TALLEST_PEAK = 0.97;
 /** How far a valley dips below the box's bottom edge, as a fraction of the box: it never quite reaches the water. */
 const VALLEY = [0.03, 0.14] as const;
-/** How unevenly the peaks are spaced: each peak's width is the even share times a factor in this range. */
 const SPACING = [0.65, 1.35] as const;
 
-/** A seeded generator in [0, 1): mulberry32. */
 function seeded(seed: number): () => number {
   let state = seed >>> 0;
   return () => {
@@ -54,7 +47,6 @@ function peakHeights(peaks: number, random: () => number): number[] {
   return ladder;
 }
 
-/** Where along a peak's span its facets break, before jitter: a low-poly swell of five facets a side. */
 const FACETS = [0.12, 0.26, 0.4, 0.5, 0.62, 0.76, 0.9] as const;
 
 /** A swell's rise at `t` in 0..1: a rounded bump, leaning by `lean` so one face is steeper, as wind pushes it. */
@@ -95,7 +87,6 @@ export function waveCrest({ seed, width, height, peaks }: CrestOptions): readonl
   return points;
 }
 
-/** The crest as one closed SVG path: along the vertices, then down to the box's bottom and back. */
 export function crestPath(points: readonly CrestPoint[], height: number): string {
   const first = points[0]!;
   const last = points.at(-1)!;

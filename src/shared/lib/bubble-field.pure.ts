@@ -4,15 +4,10 @@
  * HTML and every visit draw the same field; the page's clock moves it through `--surface-edge-progress`, never a frame.
  */
 
-/** One bubble: where it rises, how big it is, when it enters and how fast it climbs. */
 export interface Bubble {
-  /** Its left edge, in percent of the host's width. */
   readonly x: number;
-  /** Its diameter in CSS pixels. */
   readonly size: number;
-  /** The edge progress at which it enters at the host's bottom. */
   readonly start: number;
-  /** Host heights it climbs per unit of progress; it has left through the top by full progress. */
   readonly rise: number;
   /** Its sway's phase, in radians, so neighbours never sway in step. */
   readonly phase: number;
@@ -30,7 +25,6 @@ const roundUp = (value: number, places: number) => Math.ceil(value * 10 ** place
 /** The fractional part: a low-discrepancy step, so bubbles spread across the width without clumping. */
 const fraction = (value: number) => value - Math.floor(value);
 
-/** `count` bubbles, spread across the width, entering one after another through the first half of the edge. */
 export function bubbleField(count: number): readonly Bubble[] {
   if (!Number.isInteger(count) || count < 1)
     throw new Error(`A bubble field needs a whole number of bubbles, at least one; got ${count}.`);

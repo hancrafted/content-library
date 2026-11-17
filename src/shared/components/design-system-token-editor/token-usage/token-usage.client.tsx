@@ -8,7 +8,6 @@ import { findTokenUsage, outlineElement, scrollToElement, type UsageHit } from '
 
 type Usage = { state: 'idle' } | { state: 'running' } | { state: 'done'; hits: UsageHit[] };
 
-/** Runs the lookup on demand, drops a late answer after unmount, and clears the outline when the row goes. */
 function useUsage(scope: Scope, token: Token, theme: Theme) {
   const [usage, setUsage] = useState<Usage>({ state: 'idle' });
   const alive = useRef(true);

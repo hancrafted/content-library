@@ -14,7 +14,6 @@ export interface SurfaceClockEnvironment {
   cancelTimer(id: number): void;
 }
 
-/** One driver per page. Resize holds the cache until 500ms quiet; layout and controlled CSS edits request refresh. */
 class SurfaceDriver {
   private stopNavigation?: () => void;
   private disposed = false;

@@ -62,7 +62,6 @@ function SocialLink({ id, url, name, newTab, description, header }: ProfileProps
   );
 }
 
-/** Icon links to the social profiles; the accessible name is "<network> (<newTab hint>)". */
 export async function SocialLinks({
   locale,
   className,

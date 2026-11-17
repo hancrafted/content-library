@@ -124,7 +124,6 @@ function dismissOnDestination(event: MouseEvent<HTMLDialogElement>) {
   if (target.closest('[data-testid="site-nav"] a, [data-testid="brand"]')) event.currentTarget.close();
 }
 
-/** One copy of every link, with native modal focus trapping, Escape and focus return on mobile. */
 export function HeaderMenu(props: HeaderMenuProps) {
   const menu = useHeaderDialog();
   const navigation = (

@@ -22,11 +22,8 @@ export type PolyBubbleMotion = (typeof POLY_BUBBLE_MOTIONS)[number];
 export const POLY_BUBBLE_TOKENS = ['--poly-bubble-tint', '--on-brand-accent', '--foreground'] as const;
 
 export interface PolyBubbleProps {
-  /** How many sides its outline has: 6, 7 or 8. Default 7. */
   readonly sides?: 6 | 7 | 8;
-  /** Written to `data-motion`; see `POLY_BUBBLE_MOTIONS`. */
   readonly motion?: PolyBubbleMotion;
-  /** Inside an SVG host: the anchor box's left, top and side, in the host's units. In HTML, size it with CSS. */
   readonly x?: number;
   readonly y?: number;
   readonly size?: number;
@@ -34,7 +31,6 @@ export interface PolyBubbleProps {
   readonly style?: CSSProperties;
 }
 
-/** Each drawing's facet points, worked out once: body, shade, lit, glint. */
 const drawing = (sides: 6 | 7 | 8) => {
   const { outline, shade, lit, glint } = polyBubbleFacets(sides);
   return [outline, shade, lit, glint].map(toPoints);

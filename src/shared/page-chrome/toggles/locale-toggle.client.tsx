@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
 
-/** The fragment the reader is at, read at click time: the toggle sits outside the Episode page and its service. */
 function currentFragment(): string | undefined {
   return window.location.hash.slice(1) || undefined;
 }

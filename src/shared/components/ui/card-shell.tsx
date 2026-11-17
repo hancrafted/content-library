@@ -11,7 +11,6 @@ import visualStyles from './card-visual.module.css';
 
 /* One native frame and stretched title link; visual panels, static media and corner art share it. */
 
-/** A colour token's name (`--tag-agentic-ai`, `--primary`): the card draws its icon, ink, wash and edge from it. */
 export type AccentToken = `--${string}`;
 
 /**
@@ -26,15 +25,11 @@ export const ACCENT = {
 } as const;
 
 interface VariantClasses {
-  /** The frame's corner radius, padding and height. */
   readonly frame: string;
-  /** Where the large faded icon sits and how big it is. */
   readonly art: string;
   readonly title: string;
   readonly caption: string;
-  /** Pulls the media strip out to the frame's edges, cancelling its padding. */
   readonly media: string;
-  /** Moves the cue to the footer's start (the lead's button) or leaves it at the end. */
   readonly cue: string;
 }
 
@@ -73,9 +68,7 @@ const UPCOMING_FRAME = 'border-dashed border-border bg-muted/40';
 
 interface ShellProps {
   variant: CardVariant;
-  /** False for an announced-only card: muted, no wash, no icon, no hover. */
   linked: boolean;
-  /** The colour token the card draws its accent from: a Tag's (`--tag-agentic-ai`) or the site's `--primary`. */
   accent: AccentToken;
   icon: LucideIcon;
   /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
@@ -93,7 +86,6 @@ interface ShellProps {
   visualPosition?: CardVisualPosition;
 }
 
-/** The card's frame: the shadcn card surface as an `<article>`, its accent token set once for every part inside. */
 export function CardShell(props: ShellProps) {
   const frame = <CardFrame {...props} />;
   return props.ink && props.linked ? <MagneticInk kind="card">{frame}</MagneticInk> : frame;
@@ -145,7 +137,6 @@ function CardContents(props: ShellProps) {
 interface TitleProps {
   variant: CardVariant;
   title: string;
-  /** The locale-neutral path of what the card opens; `null` draws a plain heading. */
   route: string | null;
   locale: Locale;
   level: CardHeadingLevel;
@@ -199,7 +190,6 @@ interface CueProps {
   ink?: boolean;
 }
 
-/** What says the card opens, for the eye only: the title's stretched link is the real target. */
 export function CardCue({ cue, variant, open, comingSoon, ink = false }: CueProps) {
   const place = VARIANTS[variant].cue;
   if (cue === 'coming-soon') {
@@ -242,7 +232,6 @@ function InkCue({ open }: { open: string }) {
   );
 }
 
-/** The quiet arrow of a linked card: hover-only on a pointer, always shown on touch. */
 export function CardArrow({ variant }: { variant: CardVariant }) {
   return <ArrowUpRight aria-hidden data-open-cue="arrow" className={`${ARROW} ${VARIANTS[variant].cue}`} />;
 }

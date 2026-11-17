@@ -58,7 +58,6 @@ function edgesOf(input: SurfaceGeometry): SurfaceEdge[] {
   });
 }
 
-/** First item strictly above a document coordinate, in a sorted numeric index. */
 function upperBound<T>(items: readonly T[], position: number, valueOf: (item: T) => number) {
   let low = 0;
   let high = items.length;
@@ -176,7 +175,6 @@ class PageSurfaceClock {
   }
 }
 
-/** Transient, DOM-independent presentation. It owns neither navigation nor active identity. */
 export function createSurfaceClock(refresh?: () => void) {
   return new PageSurfaceClock(refresh);
 }

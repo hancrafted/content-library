@@ -13,7 +13,6 @@ import { createContext, useContext, type ReactNode } from 'react';
  */
 
 interface Homes {
-  /** The slugs of the Explorable pages the link may reach. */
   readonly slugs: readonly string[];
   readonly locale: Locale;
   readonly label: string;
@@ -25,7 +24,6 @@ export function ExplorableHomesProvider({ slugs, locale, label, children }: Home
   return <HomesContext value={{ slugs, locale, label }}>{children}</HomesContext>;
 }
 
-/** The link to the Explorable page of `slug`; nothing when it has no page, or when the page is the one showing it. */
 export function ExploreItLink({ slug }: { readonly slug: string }) {
   const context = useContext(HomesContext);
   if (context === undefined || !context.slugs.includes(slug)) return null;

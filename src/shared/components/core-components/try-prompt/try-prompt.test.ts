@@ -49,7 +49,6 @@ function render(props: {
   return renderToStaticMarkup(createElement(TryPrompt, { prompt, kit: KIT, values }));
 }
 
-/** The prompt as it is copied, carried on the body. */
 function shown(html: string): string {
   const match = /data-prompt-text="([^"]*)"/.exec(html);
   return (match?.[1] ?? '').replaceAll('&quot;', '"').replaceAll('&#x27;', "'").replaceAll('&amp;', '&');

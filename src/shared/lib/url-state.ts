@@ -4,10 +4,8 @@ import { linkTarget, observeNavigation, observeRestoration } from './url-state-b
 import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 
-/** At most one history write per interval: ~67 per 10 s, under WebKit's 100 (research §2). */
 export const WRITE_INTERVAL_MILLISECONDS = 150;
 
-/** Bounds intent suppression; expiry needs measured arrival evidence or reports timeout. */
 export const NAVIGATION_TIMEOUT_MILLISECONDS = 1000;
 
 function hashOf(win: UrlWindow): string {
@@ -168,7 +166,6 @@ class UrlStateStore implements UrlState {
     this.resync();
   };
 
-  /** Fragment-history restoration can leave an old page mounted on another path. */
   private isForeign(): boolean {
     return this.ownPath !== null && this.win.location.pathname !== this.ownPath;
   }

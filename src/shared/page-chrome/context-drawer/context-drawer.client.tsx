@@ -160,7 +160,6 @@ function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly 
   );
 }
 
-/** The active Slide's box in the viewport, or `null` when it is not on the page. */
 function slideBox(id: string | null): { top: number; height: number } | null {
   const rect = id === null ? undefined : document.getElementById(id)?.getBoundingClientRect();
   return rect ? { top: rect.top, height: rect.height } : null;
@@ -188,7 +187,6 @@ function BesideFlag({ beside }: { beside: boolean }) {
   return null;
 }
 
-/** Pointer-only dismiss for narrow screens; Escape and the close button serve the keyboard. */
 function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <div

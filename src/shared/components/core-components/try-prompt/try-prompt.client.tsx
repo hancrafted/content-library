@@ -55,7 +55,6 @@ function Toggle({
   );
 }
 
-/** The sections a prompt shows: its own, or its text as the one section. */
 function sectionsOf(prompt: PromptView): readonly PromptSection[] {
   if (prompt.sections) return prompt.sections;
   return [{ text: prompt.text }];
@@ -92,7 +91,6 @@ function useSlotValues({ values, onChange }: TryPromptProps) {
   return { current, onValue };
 }
 
-/** The row above the text: the disclosure toggle and the icon buttons. */
 function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
   const command = prompt.kind === 'command';
   const { words } = kit;

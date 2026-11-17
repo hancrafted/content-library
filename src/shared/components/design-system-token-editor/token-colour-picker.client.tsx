@@ -36,14 +36,12 @@ function usePickerHex(value: string, original: string, onChange: (value: string)
   return [hex, pick] as const;
 }
 
-/** A real colour picker for one token, with an alpha slider and a hex readout. */
 export function TokenColourPicker({
   value,
   original,
   onChange,
 }: {
   value: string;
-  /** The token's declared value, which fixes the format a pick is written in. */
   original: string;
   onChange: (value: string) => void;
 }) {

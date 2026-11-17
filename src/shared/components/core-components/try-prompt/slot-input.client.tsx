@@ -54,7 +54,6 @@ function UploadButton({ label, onValue }: { label: string; onValue: (value: stri
   );
 }
 
-/** The hint of an empty field: its sample's H1 and line count. */
 function hintOf(sample: string | undefined, words: TryPromptWords): string | undefined {
   if (sample === undefined) return undefined;
   const { title, lines } = sampleSummary(sample);

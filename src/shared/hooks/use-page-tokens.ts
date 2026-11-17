@@ -57,7 +57,6 @@ export function useLiveEdits({ globals, slides }: PageTokens, edits: Edits, them
   }, [globals, slides, edits, theme]);
 }
 
-/** Every changed token across the global scope and each Slide seen. */
 export function changedTokens(tokens: PageTokens, edits: Edits): Change[] {
   return [tokens.globals, ...Object.values(tokens.slides)].flatMap((set) => diffTokens(set.scope, set.tokens, edits));
 }

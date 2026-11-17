@@ -6,7 +6,6 @@ const SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home
 const INTERRUPTION_EVENTS = ['wheel', 'touchstart', 'pointerdown'] as const;
 const RESTORATION_EVENTS = ['popstate', 'hashchange'] as const;
 
-/** A traversal's optional hashchange repeats its popstate destination within the same browser task. */
 export function observeRestoration(win: UrlWindow, onRestore: () => void): () => void {
   let destination: string | null = null;
   let expiry: ReturnType<typeof setTimeout> | undefined;
@@ -35,7 +34,6 @@ export function observeRestoration(win: UrlWindow, onRestore: () => void): () =>
   };
 }
 
-/** Event wiring only: the URL authority decides correlation and terminal outcomes. */
 export function observeNavigation(win: UrlWindow, onPosition: () => void, onInterrupt: () => void): () => void {
   const onKey = (event: Event) => {
     if (!event.defaultPrevented && 'key' in event && SCROLL_KEYS.has(String(event.key))) onInterrupt();
@@ -57,7 +55,6 @@ function isOwnedClick(link: UrlLink): boolean {
   return link.button === 0 && !excluded.some(Boolean) && (!link.target || link.target === '_self');
 }
 
-/** Fragment candidate only; the authority verifies that the page has this stable target. */
 export function linkTarget(location: UrlWindow['location'], link: UrlLink): string | null {
   if (!isOwnedClick(link) || !link.href.includes('#')) return null;
   try {
@@ -111,7 +108,6 @@ function subscribeLinks(win: Window, listener: (link: UrlLink) => boolean): () =
   return () => win.document.removeEventListener('click', onClick, true);
 }
 
-/** DOM operations for the URL authority; the container supplies its stable target attribute. */
 export function createUrlNavigationBrowser(win: Window, targetAttribute: string): UrlNavigationBrowser {
   const targetOf = (id: string) => {
     const target = win.document.getElementById(id);

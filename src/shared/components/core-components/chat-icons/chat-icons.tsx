@@ -35,7 +35,6 @@ function GeminiMark({ className }: MarkProps) {
   );
 }
 
-/** Each mark by its name. */
 export const CHAT_MARKS: Record<ChatMarkName, (props: MarkProps) => React.JSX.Element> = {
   chatgpt: ChatGptMark,
   gemini: GeminiMark,
@@ -71,7 +70,6 @@ function LinuxMark({ className }: MarkProps) {
   );
 }
 
-/** The Guide toolbar's operating systems by their pick value. */
 export const OS_MARKS: Record<'mac' | 'windows' | 'linux', (props: MarkProps) => React.JSX.Element> = {
   mac: AppleMark,
   windows: WindowsMark,
@@ -111,7 +109,6 @@ function CodexMark({ className }: MarkProps) {
   );
 }
 
-/** The AI agents whose mark is simple enough to draw; the others show their name alone. */
 export const AGENT_MARKS: Partial<Record<string, (props: MarkProps) => React.JSX.Element>> = {
   'claude-code': ClaudeCodeMark,
   codex: CodexMark,

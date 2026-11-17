@@ -1,7 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from '@/shared/components/ui/toggle-group';
 import { cn } from '@/shared/lib/utils';
 
-/** One filter choice: its id, its name and how many items carry it. */
 export interface ToggleOption {
   readonly id: string;
   readonly label: string;
@@ -11,7 +10,6 @@ export interface ToggleOption {
 interface TagTogglesProps {
   options: readonly ToggleOption[];
   selected: readonly string[];
-  /** The group's accessible name ("Filter by tag"). */
   label: string;
   onChange: (selected: string[]) => void;
 }

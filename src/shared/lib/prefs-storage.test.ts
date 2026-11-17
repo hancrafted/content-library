@@ -2,7 +2,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { readPrefs, readProgress, removeProgress, writePrefs, writeProgress } from './prefs-storage';
 import { PROGRESS_KEY } from './progress.pure';
 
-/** A hand-written Storage over a map; `full` makes every write throw as a full quota does. */
 function fakeStorage(items: Record<string, string> = {}, full = false) {
   return {
     items,

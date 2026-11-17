@@ -7,7 +7,6 @@
 
 export const READING_LINE = 0.35;
 
-/** An IntersectionObserver `rootMargin` that shrinks the viewport to the reading line. */
 export function readingLineMargin(): string {
   return `-${READING_LINE * 100}% 0px -${(1 - READING_LINE) * 100}% 0px`;
 }
@@ -26,9 +25,7 @@ export function activeId(
   return crossing ?? previous ?? order[0] ?? null;
 }
 
-/** The active Slide's box in the viewport, before or after chrome changes the Slides' width. */
 export interface SlideBox {
-  /** Its top, from the viewport top. */
   readonly top: number;
   readonly height: number;
 }
@@ -46,7 +43,6 @@ export function keepReadingScroll(before: SlideBox, after: SlideBox, line: numbe
   return after.top + progress * after.height - anchor;
 }
 
-/** A box's place on the page, measured once: its top from the document top, and its height. */
 export interface PageBox {
   readonly top: number;
   readonly height: number;

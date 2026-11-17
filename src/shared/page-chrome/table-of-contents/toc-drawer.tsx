@@ -17,7 +17,6 @@ const CLOSE =
 const PILL =
   'fixed bottom-4 left-4 z-40 flex cursor-pointer min-h-11 max-w-[calc(100vw-9.5rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
 
-/** The drawer is a narrow-screen affordance; widening past `md` hands over to the sticky panel. */
 function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 48rem)');
@@ -38,7 +37,6 @@ interface DrawerProps {
   where: { number: string; title: string } | null;
 }
 
-/** Where the reader is, at a glance; tapping it opens the drawer. */
 function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
   return (
     <button type="button" aria-haspopup="dialog" data-testid="toc-open" className={PILL} onClick={props.onOpen}>

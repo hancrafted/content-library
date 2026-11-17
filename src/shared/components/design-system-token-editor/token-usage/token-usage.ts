@@ -18,7 +18,6 @@ const OUTLINE = 'data-token-usage-outline';
 const PSEUDOS = ['::before', '::after'] as const;
 type Pseudo = (typeof PSEUDOS)[number];
 
-/** An element the page renders, outside the editor's own panel and outline. */
 function isRendered(element: Element): boolean {
   if (element.closest(`${PANEL}, [${OUTLINE}]`)) return false;
   if (['SCRIPT', 'STYLE', 'LINK', 'META', 'NOSCRIPT', 'TEMPLATE'].includes(element.tagName)) return false;
@@ -31,7 +30,6 @@ function readStyles(style: CSSStyleDeclaration): Record<string, string> {
 
 interface Subjects {
   elements: Element[];
-  /** Pseudo-elements that generate a box; their sample ids follow the elements'. */
   pseudos: { host: number; pseudo: Pseudo }[];
 }
 
@@ -76,7 +74,6 @@ function withoutTransitions<T>(probe: () => T): T {
   }
 }
 
-/** Sets the token inline on each carrier and returns what puts the exact previous inline value (or its absence) back. */
 function setSentinel(carrierList: HTMLElement[], name: string, sentinel: string): () => void {
   const saved = carrierList.map((element) => ({
     element,
@@ -111,10 +108,8 @@ function labelOf(element: Element): string {
 
 export interface UsageHit {
   element: Element;
-  /** The nearest two markers, or the tag. */
   label: string;
   pseudo?: Pseudo;
-  /** The computed properties that moved. */
   properties: string[];
 }
 
@@ -182,7 +177,6 @@ function placeOutline() {
   });
 }
 
-/** Outlines an element with an overlay that touches nothing on the page; `null` removes it. */
 export function outlineElement(element: Element | null) {
   outlined = element;
   if (!element) {
@@ -209,7 +203,6 @@ export function outlineElement(element: Element | null) {
   placeOutline();
 }
 
-/** Brings an element into the middle of the view. */
 export function scrollToElement(element: Element) {
   element.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
 }

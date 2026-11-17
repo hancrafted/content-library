@@ -3,7 +3,6 @@ import { bubbleField } from '@/shared/lib/bubble-field.pure';
 import type { CSSProperties } from 'react';
 import styles from './bubble-rise.module.css';
 
-/** About forty bubbles of mixed sizes (Iceberg feedback-2 grill, decision 12). */
 const FIELD = bubbleField(40);
 const SIDES = [6, 7, 8] as const;
 

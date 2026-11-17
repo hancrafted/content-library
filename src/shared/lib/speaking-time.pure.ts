@@ -11,12 +11,10 @@ import { fillTemplate } from './template.pure';
 /** Speaking pace per locale: German words run longer, so fewer fit in a minute. */
 const WORDS_PER_MINUTE: Readonly<Record<Locale, number>> = { en: 140, de: 120 };
 
-/** A rich-text tag as the Translation file writes it: `<em>`, `</ref>`. */
 const TAG = /<\/?[a-z][\w-]*>/gi;
 /** A word holds at least one letter or digit, so a lone dash or ellipsis is not one. */
 const WORD = /[\p{L}\p{N}]/u;
 
-/** The spoken words in a Translation string, its rich-text tags stripped. */
 export function wordsIn(text: string): number {
   return text
     .replace(TAG, '')
@@ -24,20 +22,17 @@ export function wordsIn(text: string): number {
     .filter((token) => WORD.test(token)).length;
 }
 
-/** What a speaker reads aloud for one Voice script segment. */
 export interface SpokenSegment {
   readonly script: string;
   /** Read at the segment's close, so it counts toward its span. */
   readonly bridge?: string;
 }
 
-/** Start and end of a segment, in minutes into its Slide. */
 export interface Span {
   readonly from: number;
   readonly to: number;
 }
 
-/** Each segment's span, one after the other from 0: the last `to` is the Slide's minutes. */
 export function segmentSpans(segments: readonly SpokenSegment[], locale: Locale): Span[] {
   const spans: Span[] = [];
   for (const { script, bridge = '' } of segments) {
@@ -47,7 +42,6 @@ export function segmentSpans(segments: readonly SpokenSegment[], locale: Locale)
   return spans;
 }
 
-/** Sums of fractions drift by far less than a millionth of a minute: trim that noise before rounding up. */
 const FLOAT_NOISE_STEPS = 1e6;
 
 /** Minutes as the reader sees them: whole, rounded up so the last minute never reads as zero too early. */
@@ -61,7 +55,6 @@ export function hasReadingTime(totalMinutes: number): boolean {
   return totalMinutes > 0;
 }
 
-/** "12 min left" per plural category, `{count}` standing for the whole minutes. */
 export type RemainingTemplates = Readonly<Record<'one' | 'other', string>>;
 
 /** "12 min left" in the reader's locale, rounded up so the last minute never reads as zero too early. */

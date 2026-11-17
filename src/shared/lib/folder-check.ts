@@ -5,10 +5,8 @@
  * the test its folders carry.
  */
 
-/** Modules as `import.meta.glob` returns them, lazy, by path: a page's `./episode.ts`, or its Slides' entries. */
 export type GlobEntries = Readonly<Record<string, () => Promise<unknown>>>;
 
-/** One check: the test name it runs under, and its findings, empty when it holds. */
 export interface NamedCheck {
   readonly name: string;
   readonly findings: () => Promise<readonly string[]>;

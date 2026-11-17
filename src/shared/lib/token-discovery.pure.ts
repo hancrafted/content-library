@@ -3,12 +3,9 @@
 
 export type Theme = 'light' | 'dark';
 
-/** One CSS style rule, reduced to what token discovery reads. */
 export interface RuleSnapshot {
   selector: string;
-  /** Custom-property declarations only, name to value. */
   declarations: Record<string, string>;
-  /** Name of the `@layer` block the rule sits in, if any. */
   layer?: string;
 }
 
@@ -16,7 +13,6 @@ export interface Token {
   name: string;
   light: string;
   dark: string;
-  /** Slide tokens only: the selector of the rule that declares it, to find the element carrying it. It tells apart one name declared under several selectors. */
   target?: string;
 }
 
@@ -32,7 +28,6 @@ export function classifyToken(name: string, value: string): TokenKind {
   return 'other';
 }
 
-/** A selector part that targets the root element in the light or dark theme. */
 function rootTheme(part: string): Theme | null {
   if (part === ':root' || part === 'html') return 'light';
   if (part === '.dark' || part === ':root.dark' || part === 'html.dark') return 'dark';
@@ -78,7 +73,6 @@ class TokenBook {
   }
 }
 
-/** The theme a rule's selector list declares root tokens for; dark wins when it names both. */
 function ruleTheme(selector: string): Theme | null {
   const themes = splitSelector(selector).map(rootTheme);
   if (themes.includes('dark')) return 'dark';
@@ -89,7 +83,6 @@ function ownDeclarations(rule: RuleSnapshot): [string, string][] {
   return Object.entries(rule.declarations).filter(([name]) => !isToolingName(name));
 }
 
-/** The global tokens: custom properties declared on `:root` (light) and `.dark` (dark). */
 export function discoverGlobalTokens(rules: readonly RuleSnapshot[]): Token[] {
   const book = new TokenBook();
   for (const rule of rules.filter((r) => r.layer !== 'theme')) {
@@ -100,7 +93,6 @@ export function discoverGlobalTokens(rules: readonly RuleSnapshot[]): Token[] {
   return book.list();
 }
 
-/** The non-root selector parts of a rule that apply inside the Slide, split from their `.dark` prefix. */
 function slideParts(selector: string, appliesInSlide: (selector: string) => boolean) {
   return splitSelector(selector)
     .filter((part) => !rootTheme(part))

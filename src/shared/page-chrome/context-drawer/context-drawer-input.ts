@@ -9,16 +9,11 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-d
  * it came from.
  */
 
-/** One thing the drawer can show notes and script for, current while its element spans the reading line. */
 export interface ContextItem {
-  /** The DOM id of the element whose visibility makes this item current. The drawer matches it against the active Slide id as given. */
   readonly id: string;
-  /** Names the item in the drawer's head and, in print, above its entry; none for an untitled Slide. */
   readonly title?: string;
-  /** Each note's `target` names the element it explains by `data-target`, inside the element with this item's `id`. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly script: readonly VoiceScriptSegment[];
-  /** Pre-translated text shown on both tabs in place of the empty message, for an item that explains the drawer itself. */
   readonly explainer?: string;
 }
 
@@ -32,7 +27,6 @@ export interface DrawerStrings {
   readonly tabs: { readonly notes: string; readonly script: string };
   readonly menu: { readonly label: string; readonly layout: string; readonly beside: string; readonly over: string };
   readonly empty: { readonly notes: string; readonly script: string };
-  /** Said to assistive tech after a source link, e.g. `opens in a new tab`. */
   readonly opensInNewTab: string;
   readonly keywords: string;
   readonly bridge: string;
@@ -45,9 +39,7 @@ export interface DrawerStrings {
  */
 export interface ContextDrawerLabels {
   readonly strings: DrawerStrings;
-  /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
   readonly sources: (count: number) => string;
-  /** The accessible name of citation marker `n`, e.g. `Source 2`. */
   readonly citation: (number: number) => string;
 }
 

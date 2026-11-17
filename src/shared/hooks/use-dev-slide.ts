@@ -10,7 +10,6 @@ import { useActiveSlide } from './use-url-state';
  * beyond that hand-over, and nothing here parses the hash or polls.
  */
 
-/** The active Slide as the open page reports it: its id, and the source folder the page names. */
 export interface DevSlide {
   readonly id: string;
   readonly folder: string;
@@ -37,12 +36,10 @@ function subscribe(listener: () => void) {
 
 const noSlide = () => null;
 
-/** The Slide the open page reports as active; `null` on a page that reports none. */
 export function useDevSlide(): DevSlide | null {
   return useSyncExternalStore(subscribe, () => slide, noSlide);
 }
 
-/** Inside a page: reports the active Slide, and the source folder the page names, to the relay; clears it on unmount. */
 export function useReportActiveSlide(folder: string) {
   const active = useActiveSlide();
   useEffect(() => {

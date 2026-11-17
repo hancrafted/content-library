@@ -3,7 +3,6 @@
 // (page-tokens.ts) takes the snapshots; nothing here touches the document.
 import type { TokenKind } from '@/shared/lib/token-discovery.pure';
 
-/** The computed properties a token can reach. Layout-resolved ones (width, height, offsets) are left out: a font or spacing sentinel moves them everywhere. */
 export const USAGE_PROPERTIES: readonly string[] = [
   'color',
   'background-color',
@@ -81,7 +80,6 @@ export function sentinelsFor(kind: TokenKind): string[] {
   }
 }
 
-/** The computed style of one element, or of its `::before` or `::after`; a pseudo-element's parent is its host. */
 export interface StyleSample {
   id: number;
   parent: number | null;
@@ -124,7 +122,6 @@ export function diffUsage(before: readonly StyleSample[], after: readonly StyleS
   });
 }
 
-/** The markers an element can carry, read from `data-slot`, `data-slide`, `data-section` and `data-testid`. */
 export interface Markers {
   tag: string;
   slot?: string;
@@ -135,7 +132,6 @@ export interface Markers {
 
 const markerOf = (m: Markers) => m.slot ?? m.slide ?? m.section ?? m.testid;
 
-/** Names an element by its nearest two markers, outermost first; the tag when nothing on the way up carries one. `chain` runs from the element to its ancestors. */
 export function usageLabel(chain: readonly Markers[]): string {
   const found = chain.flatMap((m) => markerOf(m) ?? []).slice(0, 2);
   return found.length > 0 ? found.reverse().join(' › ') : (chain[0]?.tag ?? '');

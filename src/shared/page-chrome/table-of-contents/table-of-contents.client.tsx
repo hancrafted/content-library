@@ -33,7 +33,6 @@ export type { TocLabels } from './toc-heading';
 const NOTHING = () => undefined;
 const NEVER_CHANGES = () => NOTHING;
 
-/** False in prerendered HTML and during hydration, true after: the URL's hash is only known to the client. */
 function useHydrated(): boolean {
   return useSyncExternalStore(
     NEVER_CHANGES,
@@ -42,7 +41,6 @@ function useHydrated(): boolean {
   );
 }
 
-/** Active entry, open sections and reading time, all derived from the active Slide in the URL. */
 function useTocState(props: {
   locale: Locale;
   route: string;
@@ -88,10 +86,8 @@ export interface TableOfContentsProps {
   locale: Locale;
   page: TocPageContext;
   sections: readonly TocSection[];
-  /** The whole reading time in minutes, as the landing card quotes it; 0 shows no time. */
   total: number;
   targetAttribute: string;
-  /** The id of the Slide at the top of the page: no entry is current there, and the heading links to it. */
   topId: string;
   labels: TocLabels;
   collection?: TocCollection;

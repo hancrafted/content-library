@@ -76,7 +76,6 @@ function Actions({ changes, onReset }: { changes: Change[]; onReset: () => void 
   );
 }
 
-/** The second row: which theme's values an edit changes, as the site's sun or moon. */
 function ThemeRow({ theme }: { theme: Theme }) {
   const ThemeIcon = theme === 'dark' ? Moon : Sun;
   return (
@@ -110,13 +109,11 @@ function Scope({ slideId, children }: { slideId?: string; children: React.ReactN
 
 export interface PanelProps {
   theme: Theme;
-  /** The page's tokens; `currentSlide` is `null` on a page that reports no Slide, where the Slide tab is off. */
   tokens: PageTokens;
   edits: Edits;
   changes: Change[];
   onEdits: (next: Edits) => void;
   top: number;
-  /** Extra UI under each token row, supplied by the editor's root. */
   rowAddon?: RowAddon;
 }
 
@@ -140,7 +137,6 @@ function ScopeContents({ tokens, ...list }: ListScope & { tokens: PageTokens }) 
   );
 }
 
-/** The scope tabs and what each shows. The Slide tab exists only while the page reports a Slide. */
 function ScopeTabs({
   tab,
   onTab,

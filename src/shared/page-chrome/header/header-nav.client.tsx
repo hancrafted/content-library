@@ -163,7 +163,6 @@ function isMobile() {
   return !window.matchMedia('(min-width: 64rem)').matches;
 }
 
-/** Hover previews Learn; a click pins it. Mobile shows the same links as an expanded list. */
 export function HeaderNav(nav: HeaderNavProps) {
   const menu = useLearnMenu();
   const mobile = useSyncExternalStore(subscribeToLayout, isMobile, () => false);

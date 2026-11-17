@@ -8,15 +8,10 @@ import {
 import { useLayoutEffect, useState } from 'react';
 
 export interface PopoverPlacementInput {
-  /** The element the popover points at. */
   anchor: HTMLElement;
-  /** The side to open on when it has room there. */
   side: PopoverSide;
-  /** The Slide's widths and gaps, from `@/shared/lib/popover-placement.pure`. */
   rules: PopoverRules;
-  /** The popover's `data-slot`: a press inside it or on the anchor keeps it open. */
   slot: string;
-  /** Called on Esc or a press elsewhere; keep it stable (`useCallback`). */
   onClose: () => void;
 }
 

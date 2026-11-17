@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 const ATTRIBUTE = 'data-agent-view';
 
-/** Transient page state: Slide unmounts keep it; a reload or another page starts in Chat app. */
 export function useAgentView(enabled: boolean): AgentViewControl {
   const [value, choose] = useState<AgentView>('chat');
   useEffect(() => {

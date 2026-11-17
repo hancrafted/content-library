@@ -1,7 +1,5 @@
-/** The one clipboard call a copy needs: the browser's `navigator.clipboard`, or a stand-in. */
 export type TextClipboard = Pick<Clipboard, 'writeText'>;
 
-/** The browser's clipboard, or `null` where there is none (no `navigator`, or no clipboard on it). */
 function browserClipboard(): TextClipboard | null {
   return globalThis.navigator?.clipboard ?? null;
 }

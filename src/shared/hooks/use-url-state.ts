@@ -1,10 +1,9 @@
 import type { UrlState } from '@/shared/lib/url-state';
 import { createContext, useContext, useSyncExternalStore, type MouseEvent } from 'react';
 
-/** The page's URL-state service, provided once per Episode page by `UrlStateProvider` (FE-001 §2). */
+// decision: FE-001 §2
 export const UrlStateContext = createContext<UrlState | null>(null);
 
-/** The page's service, or `null` outside an Episode page and during prerender. For `navigateTo`/`reportReading` callers. */
 export function useUrlState(): UrlState | null {
   return useContext(UrlStateContext);
 }

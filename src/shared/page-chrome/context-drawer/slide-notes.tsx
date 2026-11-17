@@ -16,7 +16,6 @@ import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 const CITATION =
   "relative inline-block cursor-pointer rounded-sm px-px [font:inherit] text-foreground after:absolute after:-inset-1.5 after:content-[''] hover:bg-accent focus-visible:outline-2 print:cursor-auto print:hover:bg-transparent";
 
-/** A citation marker: a superscript button the drawer's delegated click turns into "open source n". Plain text in print. */
 function Citation({ number, labels }: { number: number; labels: ContextDrawerLabels }) {
   return (
     <sup className="mx-px align-super text-[0.7em] leading-none tabular-nums">
@@ -27,7 +26,6 @@ function Citation({ number, labels }: { number: number; labels: ContextDrawerLab
   );
 }
 
-/** The description with its `[n]` markers turned into citation buttons. */
 function Description({ text, labels }: { text: string; labels: ContextDrawerLabels }) {
   return (
     <p className="text-body leading-relaxed text-muted-foreground">
@@ -101,7 +99,7 @@ function Note({ note, labels }: { note: SpeakerNoteItem; labels: ContextDrawerLa
   );
 }
 
-/** One Slide's Speaker notes, its explainer, or the empty state. Server-rendered into the page (FE-010 §2). */
+// decision: FE-010 §2
 export function SlideNotes({
   notes,
   labels,

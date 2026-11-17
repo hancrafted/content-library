@@ -18,18 +18,15 @@ export interface Viewport {
   readonly height: number;
 }
 
-/** The Slide's own numbers: how wide the popover grows, how far it keeps from its anchor, and the least room a side needs. */
 export interface PopoverRules {
   readonly maxWidth: number;
   readonly gap: number;
-  /** The least room the preferred side needs before the popover flips to the other side. */
   readonly minRoom: number;
 }
 
 export interface PopoverRequest extends PopoverRules {
   readonly anchor: Box;
   readonly viewport: Viewport;
-  /** The side the popover opens on when it has room there. */
   readonly side: PopoverSide;
 }
 
@@ -41,11 +38,9 @@ type PlacementOn<S extends PopoverSide, Edge> = Edge & {
   readonly side: S;
   readonly left: number;
   readonly width: number;
-  /** The arrow's x inside the popover, pointing at the anchor's centre. */
   readonly arrowX: number;
 };
 
-/** Space kept between a popover and the viewport edge, the same for every Slide. */
 const MARGIN = 16;
 
 function assertRules({ maxWidth, gap, minRoom }: PopoverRules): void {
