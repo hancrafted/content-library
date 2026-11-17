@@ -15,14 +15,32 @@
   },
   "rows": {
     "before": {
-      "memory": { "thing": "Die angepinnte Arbeitsanweisung", "name": "Memory-Dateien" },
-      "system": { "thing": "Die festen Regeln", "name": "System-Prompt" },
-      "initial": { "thing": "Der erste Arbeitsauftrag", "name": "Erster Prompt" }
+      "memory": {
+        "thing": "Die angepinnte Arbeitsanweisung",
+        "name": "Memory-Dateien"
+      },
+      "system": {
+        "thing": "Die festen Regeln",
+        "name": "System-Prompt"
+      },
+      "initial": {
+        "thing": "Der erste Arbeitsauftrag",
+        "name": "Erster Prompt"
+      }
     },
     "during": {
-      "retrieval": { "thing": "Teile aus dem Lager geholt", "name": "Retrieval" },
-      "web": { "thing": "Ein Anruf beim Lieferanten", "name": "Websuche" },
-      "folder": { "thing": "Die Mappe zum aktuellen Auftrag", "name": "Projektordner" }
+      "retrieval": {
+        "thing": "Teile aus dem Lager geholt",
+        "name": "Retrieval"
+      },
+      "web": {
+        "thing": "Ein Anruf beim Lieferanten",
+        "name": "Websuche"
+      },
+      "folder": {
+        "thing": "Die Mappe zum aktuellen Auftrag",
+        "name": "Projektordner"
+      }
     }
   },
   "notes": {
@@ -41,12 +59,12 @@
       "before-the-shift": {
         "title": "Vor der Schicht",
         "keywords": "",
-        "script": "Statischer Kontext ist alles, was Du einrichtest, bevor die Arbeit beginnt. Stell Dir die Werkbank vor der Schicht vor: die Arbeitsanweisung, die festen Regeln und der erste Arbeitsauftrag. Für einen Agenten heißt das: Memory-Dateien, System-Prompts und Dein erster Prompt."
+        "script": "Hier unterscheiden wir zwischen zwei Arten von Kontext: dem statischen und dem dynamischen. Ich habe dafür eine Analogie aus der Werkstatt einer Fahrradfertigung gewählt. Stell Dir vor, der Arbeiter dort wäre ein KI-Agent, der vor der Schicht an der Werkstatt ankommt. Dann hat er bestimmte Informationen parat, sobald er anfängt zu arbeiten, zum Beispiel, wie die Werkstatt aufzuräumen ist. Das sind Informationen, die fest an diesem Arbeitsplatz vorhanden sind. Der KI-Agent oder der Mensch, der vorbeikommt, arbeitet sich jedes Mal darin ein und bekommt sie zur Verfügung gestellt. Das ist statisch, das ist immer da."
       },
       "during-the-shift": {
         "title": "Während der Schicht",
         "keywords": "",
-        "script": "Dynamischer Kontext ist das, was während der Schicht dazukommt. Jemand holt Teile aus dem Lager, ruft einen Lieferanten an, öffnet die Mappe zum aktuellen Auftrag. Für einen Agenten heißt das: Retrieval, Websuche und Dein Projektordner, die er sich selbst holt, während er arbeitet."
+        "script": "Während der Session, also während der Schicht, in der der Mitarbeiter oder die KI arbeitet, kommen weitere Informationen dazu. Aus dem Lager kann die Nachricht kommen, dass Teile fehlen und nachbestellt werden müssen, sodass der Arbeitsauftrag nicht gefertigt werden kann. Es kann sein, dass an diesem Arbeitsplatz ein Prototyp aufgebaut werden soll, der hier üblicherweise nicht gefertigt wird, und dann kommen zusätzliche Anforderungen oder Anweisungen dazu. Oder der Mitarbeiter muss schnell etwas recherchieren, weil er eine Frage hat, etwa wie zwei Teile zusammenzufügen sind. Das ist dynamischer Kontext: alle Informationen, die sich die KI während einer Session aufbaut."
       },
       "why-it-matters": {
         "title": "Warum das wichtig ist",

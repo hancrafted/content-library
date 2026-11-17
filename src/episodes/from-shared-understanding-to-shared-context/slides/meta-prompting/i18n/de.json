@@ -20,10 +20,22 @@
   "workOrder": {
     "title": "Arbeitsauftrag · Frühjahrs-Servicewoche",
     "rows": {
-      "goal": { "term": "Ziel", "value": "Leihflotte gewartet, 40 Termine gebucht" },
-      "who": { "term": "Wer", "value": "Empfang bucht, zwei Mechaniker" },
-      "must": { "term": "Muss", "value": "Bremsen und Reifen an jedem Rad" },
-      "done": { "term": "Fertig, wenn", "value": "Kalender voll bis 1. März" }
+      "goal": {
+        "term": "Ziel",
+        "value": "Leihflotte gewartet, 40 Termine gebucht"
+      },
+      "who": {
+        "term": "Wer",
+        "value": "Empfang bucht, zwei Mechaniker"
+      },
+      "must": {
+        "term": "Muss",
+        "value": "Bremsen und Reifen an jedem Rad"
+      },
+      "done": {
+        "term": "Fertig, wenn",
+        "value": "Kalender voll bis 1. März"
+      }
     },
     "source": "Aus Deinen Antworten geschrieben"
   },
@@ -57,17 +69,17 @@
       "separate-session": {
         "title": "Eigene Sitzung",
         "keywords": "",
-        "script": "Meta-Prompting heißt: Ein KI-Chat schreibt den Auftrag für einen anderen. Die eigene Sitzung erstellt den Kontext für Dich, und der soll aussagekräftig sein: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht."
+        "script": "Ich kann mir die Anforderungen in einer separaten Session mit der KI erst erarbeiten und mir daraus den perfekten Prompt ausgeben lassen. Das ist Meta-Prompting."
       },
       "fresh-chat-clean-work-order": {
         "title": "Frischer Chat, sauberer Arbeitsauftrag",
         "keywords": "",
-        "script": "Dann nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Die Werkbank ist der Ort, an dem der Kontext der KI liegt, und sie bekommt einen sauberen Arbeitsauftrag, nicht das ganze Gespräch, das zu ihm geführt hat."
+        "script": "Nimm an, ich stecke mitten in einem Interview und habe eine Frage, weil etwas Technisches erwähnt wurde, wovon ich nicht viel weiß. Dann sollte ich es mir vielleicht nicht in derselben Session erklären lassen. Das könnte zu einem Gespräch führen, das den Kontext so ausweitet, dass ein Teil davon für den Agenten nicht brauchbar ist. Stattdessen kann ich mir von der KI eine Zusammenfassung erstellen lassen, einen sogenannten Hand-off, und mir das dann in einer separaten Session erklären lassen. Dafür lernen wir bei den Agenten noch ein paar Tricks kennen, zum Beispiel diesen Slash-by-the-way-Befehl, auf den wir gleich noch einmal zurückkommen."
       },
       "why-a-separate-office": {
         "title": "Warum ein eigenes Büro",
         "keywords": "",
-        "script": "Warum ein eigenes Büro? Weil der Planungschat voller Fragen, halber Ideen und Entwürfe ist, und in der Sprache der Werkbank ist das Context Rot. Der Arbeitsauftrag ist es nicht. Also halte Büro und Werkbank getrennt."
+        "script": "Grundsätzlich geht es um die Frage: Was gehört in die aktuelle Session? Und bei allem, was nicht dazu beiträgt, dass der Kontext sauber bleibt: Wie kann ich diesen Kontext herausziehen, um trotzdem weiterarbeiten zu können?"
       }
     }
   }

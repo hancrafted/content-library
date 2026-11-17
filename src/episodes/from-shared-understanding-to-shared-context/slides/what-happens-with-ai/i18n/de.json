@@ -63,12 +63,12 @@
       "every-station-faster": {
         "title": "Jede Station schneller",
         "keywords": "",
-        "script": "Geben wir also jeder Station eine KI. Jede arbeitet schneller, das klingt nach einer guten Nachricht. Aber das Band war immer nur so schnell wie seine langsamste Station, und diese Station kommt mit dem, was ankommt, nicht mehr hinterher. Genau das zeigen Studien an Softwareteams gerade."
+        "script": "Wenn wir jetzt KI aktivieren, liegt es am nächsten, dass die Entwickler davon profitieren. Warum sollten sie nicht schneller werden? Und in der Tat können das die meisten: Die KI produziert schneller Code, und das ist auch ohne große Kenntnisse nicht das Problem. Aber wie das Schaubild zeigt: Code zu produzieren war in diesem Beispiel aus Sicht der ganzen Organisation nie der Engpass. Es gab immer irgendwo Engpässe, und vor der KI waren gerade in Softwareunternehmen häufig die Entwickler der Engpass, weil das Codeschreiben Zeit gekostet hat."
       },
       "moving-bottleneck": {
         "title": "Der wandernde Engpass",
         "keywords": "",
-        "script": "Lange Zeit war das Herstellen selbst der langsame Teil, denn ein Mensch schafft nur so viel an einem Tag, und dieses Tempo hat alles danach bestimmt. KI nimmt diese Grenze weg. Die Kosten sind nicht verschwunden, sie sind zur nächsten Station gewandert, und dort wachsen sie weiter."
+        "script": "Die Simulation zeigt: Geben wir allen Ingenieuren in der Abteilung KI, und sie können sie perfekt bedienen, haben wir trotzdem keine zwei-, drei- oder vierfache Produktivität, weil sich der Engpass im System einfach nach hinten verschiebt. Auf einmal ist die Qualitätssicherung diejenige, die nicht mehr hinterherkommt. Obwohl wir an einer Stelle KI eingeführt haben, haben wir den Engpass nur verschoben. Das ist eine der Erklärungen, warum sich viele Firmen auch drei Jahre nach der Einführung von KI schwertun, damit im echten Leben Produktivität zu steigern. In diesem Beispiel wird die Qualitätssicherung mit Arbeit überflutet und winkt die Entwicklung zum Beispiel einfach durch. Das kann dazu führen, dass am Ende mehr Bugs beim Kunden ankommen, die wiederum mehr Supportaufwand erzeugen und wieder bei den Ingenieuren landen. Ein kleiner Teufelskreis. Und selbst wenn wir auf magische Art die Qualitätssicherung und den Review-Prozess mit KI lösen, kann sich der Engpass weiter verschieben, nach hinten oder womöglich auch nach vorne."
       }
     }
   }

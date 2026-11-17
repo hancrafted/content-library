@@ -63,12 +63,12 @@
       "precision": {
         "title": "Präzision",
         "keywords": "",
-        "script": "Fangen wir mit Präzision an. Ein Dokument ist präzise, wenn jemand anderes es umsetzen könnte, ohne Dir eine einzige Frage zu stellen. Nichts bleibt zu raten."
+        "script": "Ich habe dafür eine sehr klassische Analogie mitgebracht, die Dartscheibe mit den Begriffen Präzision und Genauigkeit: Accuracy ist die Genauigkeit, Precision die Präzision. Und das ist schon vor KI wichtig, dass wir uns um Anforderungen kümmern. Bin ich mit meiner Anforderung präzise, schweift die KI womöglich weniger ab und rennt weniger in Ecken, die in die falsche Richtung führen."
       },
       "accuracy": {
         "title": "Genauigkeit",
         "keywords": "",
-        "script": "Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein enger Cluster heißt: Jeder, der es baut, landet am selben Ort. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt."
+        "script": "Wenn ich eine Anforderung sowohl präzise als auch genau definiere, hat die KI viel bessere Chancen, in die richtige Richtung zu arbeiten. Genau bedeutet: in der Mitte der Dartscheibe, ich habe das Problem getroffen. Ich weiß genau, was der Kunde braucht und was das richtige Produkt oder das richtige Problem ist. Das Konzept von Präzision und Genauigkeit bei Anforderungen war schon immer relevant, wir sind hier noch vor der KI, und es war immer ein Übersetzungsgeschäft. Wer ein besseres Domänenverständnis hatte, die Sprache des Kunden sprach und die Anforderungen aus dem Kunden herauskitzeln und aufschreiben konnte, trug in der Wertschöpfungskette dazu bei, dass am Ende das richtige Ergebnis herauskam."
       },
       "art-not-a-science": {
         "title": "Kunst, keine Wissenschaft",

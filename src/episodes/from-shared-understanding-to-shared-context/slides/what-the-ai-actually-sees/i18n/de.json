@@ -18,12 +18,12 @@
       "callback": {
         "title": "Rückblick",
         "keywords": "",
-        "script": "Wenn Du die Episode zum Kontextfenster gesehen hast, kennst Du das Kontextfenster schon. Was die KI über Deine Aufgabe weiß, ist das, was im Fenster steht, und dieses Fenster ist wie ein Schreibtisch, der sich mit jeder Nachricht füllt."
+        "script": "Wie wirkt sich das auf die KI aus? In der KI haben wir dafür den Begriff Kontext. Hier siehst Du noch einmal die kleine App, die ich in der vorigen Episode, dem Impulsvortrag, schon etwas genauer erklärt habe. Links ist ein Chatfenster, das ist das, was die meisten Menschen sehen, wenn sie mit KI arbeiten: ein Chatfenster mit einem Verlauf. Die KI hat aber ein sogenanntes Kontextfenster. Das ist ihr limitierter Arbeitsspeicher in der Session, und er füllt sich mit dem Verlauf."
       },
       "not-your-mind": {
         "title": "Nicht Deine Gedanken",
         "keywords": "",
-        "script": "Die KI kann keine Gedanken lesen. Sie arbeitet mit dem, was im Fenster steht. Was sie über Deine Aufgabe wissen muss, weiß sie nur, wenn es im Fenster steht."
+        "script": "Was ich der KI in dieses limitierte Kontextfenster gebe, bestimmt, wie gut sie auf ein Ziel hinarbeitet. Schweife ich in derselben Chat-Session plötzlich ab und frage, ob ich nebenbei noch drei Urlaubstage nehmen kann, obwohl ich eigentlich eine Analyse für Maschinendaten angefangen habe, liegen in ihrem Gedächtnis Informationen, die nicht zu einem richtigen Ergebnis beitragen. Im Gegenteil, sie können die KI sogar verwirren. Zusätzlich dazu, dass die KI die richtigen Anforderungen bekommt, müssen wir also dafür sorgen, dass der Inhalt einer einzelnen Session, die Informationen, die wir erarbeiten und der KI übergeben, so präzise und akkurat wie möglich ist, damit die KI sauber in die richtige Richtung arbeitet. Das ist die Übertragung: Halten wir die Anforderungen in diesem Kontext präzise und akkurat, haben wir sehr gute Chancen, dass die KI die gewünschten Ergebnisse liefert."
       }
     }
   }

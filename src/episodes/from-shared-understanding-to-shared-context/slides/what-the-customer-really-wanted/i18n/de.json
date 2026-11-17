@@ -22,12 +22,12 @@
       "cartoon-to-balanced-line": {
         "title": "Vom Cartoon zum ausgeglichenen Band",
         "keywords": "",
-        "script": "Stell Dir jetzt vor, der Cartoon wird zu einem echten Fließband. Die Arbeit kommt in gleichmäßigem Takt herein, jede Station hält mit der nächsten Schritt, der Ausstoß ist stetig und die Qualität hoch. Wenn Deine Organisation so arbeiten würde, bräuchtest Du diese Episode nicht."
+        "script": "Dafür habe ich eine kleine Simulations-App gebaut. Sie zeigt zunächst das Idealbild einer Organisation. Der Kunde stellt Anforderungen, zum Beispiel für neue Features. Sie gehen an das Produktmanagement, vielleicht berät der Vertrieb noch zu Pilotprojekten, oder es kommen Supportanfragen herein. Business-Analysten, Designer und Architekten überführen die Anforderung des Kunden in technische oder produktgestalterische Anforderungen. Das Engineering bearbeitet sie, am Ende wird das Ergebnis noch einmal geprüft und an den Kunden geliefert. Das ist ein sehr vereinfachtes, aber sehr typisches Bild einer Organisation."
       },
       "reality": {
         "title": "Die Wirklichkeit",
         "keywords": "",
-        "script": "Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Effizienz, Effektivität und Vervielfachung sind die drei Regler an diesem Band: Dreh sie alle hoch, und das Band hört auf zu fließen. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
+        "script": "So reibungslos funktioniert die Realität natürlich nicht. Oft gibt es Engpässe an bestimmten Stellen, an denen sich die Aufgaben auftürmen und Dinge langsamer werden. Du kannst noch so sehr versuchen, die Kapazität zu erhöhen oder mehr Leute einzustellen, und es wird trotzdem nicht schneller. Das ist die Realität der meisten, und irgendwie funktioniert trotzdem alles. Das Gedankenexperiment geht darauf ein: Wir hören ständig, KI erzeuge zehnfache Produktivität. Und doch ist das in Unternehmen und Teams auch nach zweieinhalb Jahren nicht eingetreten, obwohl die großen KI-Anbieter seit etwa zwei Jahren sagen, Ingenieure brauche man nicht mehr. Ich habe dazu damals ein kleines Szenario durchsimuliert. Der Gedanke: Wir lassen das System mit zwanzigfacher Geschwindigkeit laufen und lassen es sich einpendeln. Ist es perfekt, sind die Teams gut aufeinander abgestimmt, jeder liefert, was die vorherige Station angefragt hat, und alles ist schön."
       }
     }
   }

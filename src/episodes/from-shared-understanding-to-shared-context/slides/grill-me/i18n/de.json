@@ -99,7 +99,7 @@
       "matt-pococks-skill": {
         "title": "Der Skill von Matt Pocock",
         "keywords": "",
-        "script": "Grill-me ist eine fertige Anleitung, die Matt Pocock einen Skill nennt, und sie bringt die KI dazu, Dich zu befragen, bevor sie loslegt, in Runden statt Frage für Frage, damit Du in Deinem eigenen Fluss antworten kannst. Das funktioniert, weil die Lücken, die Du gelassen hast, mit Deinen eigenen Antworten gefüllt werden. Statt zu raten, was Du gemeint hast, fragt sie Dich, und am Ende schreibt sie die Aufgabe als Spec auf, als einseitigen Arbeitsauftrag."
+        "script": "Jetzt möchte ich noch kurz auf Grill-me eingehen, das wir schon angefangen haben. Grill-me folgt genau dem Prinzip des Meta-Promptings: Ich muss mir nicht von vornherein alles selbst ausgedacht haben. Je präziser und akkurater ich am Anfang Informationen liefere, desto besser läuft zwar die Interview-Session ab. Aber der Mensch ist faul und möchte nicht jedes Mal alle Anforderungen selbst ausdenken. Wenn ich der KI auf der Meta-Prompting-Ebene einfach eine allgemeine Anforderung in einem kompakten Satz gebe, kann ich mich Schritt für Schritt interviewen lassen und damit zwei Dinge gleichzeitig erledigen. Erstens bekomme ich eine Liste möglicher Anforderungen, die ich selbst noch gar nicht bedacht hatte, ich denke also in die Breite. Die KI kann mir helfen, Anforderungen zu definieren, die ich selbst gar nicht formulieren könnte, weil sie fachfremd für mich sind. Zweitens fülle ich das Kontextfenster mit wirklich hochwertigem Kontext, High-Signal-Context, den ich in einem Prompt zusammenfassen kann, mit dem dann ein anderer KI-Agent die Ausführung übernimmt. Diesen Skill und diese Methode hat Matt Pocock vor etwa sechs bis acht Monaten veröffentlicht, und das war einer der Wendepunkte in der Community. Er ist regelrecht viral gegangen und hat auf GitHub inzwischen 300.000 Stars. GitHub ist die Open-Source-Plattform, auf der kostenlos Coding-Ressourcen verfügbar sind, und mit 300.000 Stars ist das eines der Top-10-Projekte weltweit, und dabei sind es nur Skills. Dieser Grill-me-Skill war einer der initialen Auslöser, und die Technik dahinter, das Meta-Prompting, hat dazu geführt, dass wir auf einmal viel schneller und einfacher zu sauberen Anforderungen gekommen sind."
       },
       "next-30-minutes": {
         "title": "Die nächsten 30 Minuten",
@@ -109,7 +109,7 @@
       "actionable-one": {
         "title": "Erste Handlungsempfehlung",
         "keywords": "",
-        "script": "Das Erste zum Mitnehmen also: Lass Dich vor Deiner nächsten komplexen Aufgabe von der KI in Runden von Fragen interviewen, und mach aus dem Ergebnis eine Spec."
+        "script": "Das ist der Inhalt dieser Episode: Es ist wichtig, dass wir saubere, also präzise und akkurate Anforderungen definieren können. Und über KI, über Meta-Prompting, kommen wir viel einfacher, schneller und auch spaßiger zu diesen Anforderungen, ohne dass wir uns vorher alles selbst überlegen müssen."
       }
     }
   }

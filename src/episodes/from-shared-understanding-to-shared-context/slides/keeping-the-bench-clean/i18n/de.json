@@ -78,7 +78,7 @@
       "fresh-chat": {
         "title": "Frischer Chat",
         "keywords": "",
-        "script": "Manchmal ist die sauberste Lösung eine saubere Werkbank. Starte einen frischen Chat und nimm nur das Ergebnis mit, nicht die ganze Vorgeschichte. Das ist die zweite Handlungsempfehlung, und darauf komme ich im letzten Abschnitt zurück."
+        "script": "Wir müssen also dafür sorgen, dass das Kontextfenster sauber bleibt. Der größte Ansatz dafür, und deshalb sind Agent-Workflows für komplexe Aufgaben so wichtig, ist die Frage: Was gehört in den aktuellen Chat, also in dieses Kontextfenster, und was gehört in einen neuen Agenten mit einem frischen Kontextfenster? Darin liegt eigentlich die ganze Magie. Damit ein Agent sauber und präzise arbeitet, muss sein Kontext möglichst akkurat und präzise bleiben. Dafür können wir nicht beliebig verschiedene Prompts aus verschiedenen Bereichen und Abstraktionsebenen im selben Chat lassen. Hast Du diese Frage einmal verinnerlicht, kannst Du Dir überlegen: Was gehört in eine neue Session, zu einem neuen Agenten, in einen neuen Schritt im Workflow, und was kann ich in einer alten oder längeren Session lassen?"
       }
     }
   }

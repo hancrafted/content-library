@@ -45,12 +45,12 @@
       "one-fast-station-is-not-the-goal": {
         "title": "Eine schnelle Station ist nicht das Ziel",
         "keywords": "",
-        "script": "Stell Dir dasselbe Band noch einmal vor, aber diesmal läuft es schneller und bleibt trotzdem im Gleichgewicht. Die Warteschlangen bleiben kurz und jeder Arbeitsplatz hält mit seinem Nachbarn Schritt. Das ist das Ziel: dauerhaft mehr von dem, was die ganze Organisation schafft, nicht eine einzelne sehr schnelle Station. Jetzt zoomen wir in eine Station: die Fahrradwerkbank. Behalte diese eine Station im Blick; wir kommen auf sie zurück."
+        "script": "Das ist auch die Aussage in Reden sehr bekannter Fachleute, zum Beispiel von Google: Wir reden bei Optimierung nicht von einzelnen Stellen, sondern müssen ganzheitlich und systemisch denken. Das erfordert einen ganz anderen Ansatz, als zu sagen: Du und Du bekommt KI, arbeitet schneller, dann sind wir alle schneller. Der Kern ist die Frage, wie wir alle gleichzeitig anheben. Dafür müssen wir uns überlegen, welche Schraube, welcher Hebel das gesamte System anhebt."
       },
       "bridge": {
         "title": "Die Überleitung",
         "keywords": "",
-        "script": "Tempo allein reicht nicht. Was an der ersten Station ankommt, bestimmt die Arbeit aller folgenden. Ist es unklar, bauen alle schneller das Falsche, und die Prüfung hat mehr abzufangen. Was dort ankommt, ist die Anforderung, und das wirft die naheliegende Frage auf: Was macht eine Anforderung gut?"
+        "script": "Im Beispiel haben wir sämtliche Stationen hinten mit KI versorgt, und trotzdem gibt es viele Fehler. KI ist ein Beschleuniger und löst nicht magischerweise alle Probleme der Firma. Vor allem löst sie an der vorderen Stelle nichts, wenn die Anforderungen schlecht sind. Sind sie von Anfang an unklar, zieht sich das durch die ganze Wertschöpfung, und es wird viel schneller Müll produziert. KI ist kein magischer Fix, der auf einmal alles besser macht, sondern zunächst nur ein Beschleuniger. Dafür gibt es den Begriff Garbage in, Garbage out. Deshalb müssen wir möglichst früh in der Wertschöpfungskette dafür sorgen, dass die Anforderungen klar definiert werden, damit sich der Flüsterpost-Effekt hinten nicht exponentiell auftürmt. Gleichzeitig müssen wir uns überlegen, wie wir schrittweise nicht nur einzelne Knotenpunkte mit KI versorgen, sondern das Ganze ganzheitlich betrachten. Das gilt für agentische Workflows nicht nur in ganzen Organisationen, sondern auch innerhalb eines Workflows, den eine einzelne Person ausführt. Wenn ich in einem Zwischenschritt KI einsetze, wie wirkt sich das auf die Aufgaben davor und danach aus, vor allem auf die Prüfbarkeit? Darum geht es in dieser Episode."
       }
     }
   }
