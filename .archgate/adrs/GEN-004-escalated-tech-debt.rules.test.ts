@@ -8,6 +8,7 @@
 
 import { describe, expect, it } from 'vitest';
 import ruleSet from './GEN-004-escalated-tech-debt.rules';
+import commentsRuleSet from './GEN-006-comments.rules';
 
 interface Reported {
   message: string;
@@ -40,11 +41,11 @@ function globToRegExp(pattern: string): RegExp {
 // Stands in for archgate's RuleContext: a line-based grepFiles over an
 // in-memory file set, and a report sink that keeps violations and drops the
 // tiers this ADR does not use (every rule runs at error).
-function makeCtx(files: Record<string, string>) {
+function makeCtx(files: Record<string, string>, scoped: string[] = Object.keys(files)) {
   const violations: Reported[] = [];
   const ctx = {
     projectRoot: '/repo',
-    scopedFiles: Object.keys(files),
+    scopedFiles: scoped,
     changedFiles: [],
     async glob(pattern: string) {
       const re = globToRegExp(pattern);
@@ -79,6 +80,7 @@ function makeCtx(files: Record<string, string>) {
 
 const FILE = 'src/shared/lib/legacy-parser.ts';
 const ISSUE = 'https://github.com/hancrafted/content-library/issues/317';
+const WORKFLOW = '.github/workflows/ci.yml';
 
 // Assembled rather than written literally, so this file never carries a live
 // marker of its own.
@@ -102,19 +104,52 @@ describe('tech-debt-links-issue', () => {
     expect(violations).toEqual([]);
   });
 
-  it('passes on a marker whose line links an issue', async () => {
-    // ARRANGE
-    const files = { [FILE]: `// ${MARK}: fenced parser, ${ISSUE}\nexport const a = 1;\n` };
-    // ACT
-    const violations = await run(files);
-    // ASSERT
-    expect(violations).toEqual([]);
-  });
+  const pointers: [label: string, file: string, source: string][] = [
+    ['line pointer', FILE, `// ${MARK}: ${ISSUE}\nexport const a = 1;\n`],
+    ['indented line pointer', FILE, `function f() {\n  // ${MARK}: ${ISSUE}\n  return 1;\n}\n`],
+    ['YAML hash pointer', WORKFLOW, `jobs:\n  build:\n    # ${MARK}: ${ISSUE}\n    runs-on: ubuntu-latest\n`],
+    ['shell hash pointer', 'tools/sync.sh', `# ${MARK}: ${ISSUE}\nrsync -a a b\n`],
+    ['CSS block pointer', 'src/shared/ui/a.module.css', `/* ${MARK}: ${ISSUE} */\n.a { color: red; }\n`],
+  ];
+
+  for (const [label, file, source] of pointers) {
+    it(`passes on a ${label} holding only this repo's issue URL`, async () => {
+      // ARRANGE
+      const files = { [file]: source };
+      // ACT
+      const violations = await run(files);
+      // ASSERT
+      expect(violations).toEqual([]);
+    });
+  }
+
+  const prose: [label: string, file: string, source: string][] = [
+    ['old prose-style fence', FILE, `// ${MARK}: fenced parser, ${ISSUE}\n`],
+    ['prose after the URL', FILE, `// ${MARK}: ${ISSUE} fenced parser\n`],
+    ['YAML prose-style fence', WORKFLOW, `# ${MARK}: pinned runner, ${ISSUE}\n`],
+    ['pointer beside code', FILE, `const a = 1; // ${MARK}: ${ISSUE}\n`],
+    ['pointer to another repo', FILE, `// ${MARK}: https://github.com/org/repo/issues/12\n`],
+  ];
+
+  for (const [label, file, source] of prose) {
+    it(`fails on a ${label}, naming the pointer form`, async () => {
+      // ARRANGE
+      const files = { [file]: source };
+      // ACT
+      const violations = await run(files);
+      // ASSERT
+      expect(violations).toHaveLength(1);
+      expect(violations[0].message).toContain(`${MARK}: https://github.com/hancrafted/content-library/issues/<n>`);
+      expect(violations[0].message).toContain('the issue holds the cost');
+    });
+  }
 
   const unlinked: [label: string, file: string, source: string][] = [
     ['line comment', FILE, `// ${MARK}: fenced parser\n`],
     ['block comment', FILE, `/* ${MARK}: fenced parser */\n`],
     ['hash comment', 'tools/sync.sh', `# ${MARK}: fenced script\n`],
+    ['YAML hash comment', WORKFLOW, `# ${MARK}:\n`],
+    ['bare line marker', FILE, `// ${MARK}\n`],
     ['marker beside code', FILE, `const a = 1; // ${MARK}: fenced\n`],
     ['bare issue number, no link', FILE, `// ${MARK}: see #317\n`],
   ];
@@ -128,6 +163,7 @@ describe('tech-debt-links-issue', () => {
       // ASSERT
       expect(violations).toHaveLength(1);
       expect(violations[0].file).toBe(file);
+      expect(violations[0].message).toContain('file the issue');
     });
   }
 
@@ -150,6 +186,17 @@ describe('tech-debt-links-issue', () => {
     expect(violations).toEqual([]);
   });
 
+  it('leaves a file outside the ADR scope alone', async () => {
+    // ARRANGE
+    const outside = '.archgate/adrs/XX-001-probe.rules.test.ts';
+    const files = { [outside]: `const s = '// ${MARK}: ${ISSUE}\\nexport const a = 1;';\n` };
+    const { ctx, violations } = makeCtx(files, []);
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
   it('leaves a markdown file alone', async () => {
     // ARRANGE
     const files = { 'docs/notes.md': `# ${MARK}: heading, no link\n` };
@@ -167,5 +214,35 @@ describe('tech-debt-links-issue', () => {
     const violations = await run(files);
     // ASSERT
     expect(violations[0].message).toContain(provenance);
+  });
+
+  describe('agrees with the comments rule on a TS pointer', () => {
+    async function commentsVerdict(source: string): Promise<boolean> {
+      const { ctx, violations } = makeCtx({ [FILE]: source });
+      await commentsRuleSet.rules['no-comments'].check(
+        Object.assign(ctx, { scopedFiles: [FILE], changedFiles: [FILE] }),
+      );
+      return violations.every((v) => v.file !== FILE);
+    }
+
+    const samples: [label: string, source: string][] = [
+      ['bare pointer', `// ${MARK}: ${ISSUE}\nexport const a = 1;\n`],
+      ['prose-style fence', `// ${MARK}: fenced parser, ${ISSUE}\nexport const a = 1;\n`],
+      ['text after the URL', `// ${MARK}: ${ISSUE} fenced parser\nexport const a = 1;\n`],
+      ['another repo', `// ${MARK}: https://github.com/org/repo/issues/12\nexport const a = 1;\n`],
+      ['no URL', `// ${MARK}:\nexport const a = 1;\n`],
+    ];
+
+    for (const [label, source] of samples) {
+      it(`gives the same verdict on a ${label}`, async () => {
+        // ARRANGE
+        const files = { [FILE]: source };
+        // ACT
+        const passesHere = (await run(files)).length === 0;
+        const passesThere = await commentsVerdict(source);
+        // ASSERT
+        expect(passesHere).toBe(passesThere);
+      });
+    }
   });
 });
