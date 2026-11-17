@@ -13,9 +13,18 @@
     "label": "Worin sie übersetzt wurde",
     "statement": "Drei Übersetzungen.",
     "items": {
-      "product": { "kind": "Produkt", "name": "E-Bike" },
-      "service": { "kind": "Dienstleistung", "name": "Bike-Leasing mit Dusche im Büro" },
-      "lecture": { "kind": "Vortrag", "name": "Im Anzug mit dem Rad zur Arbeit" }
+      "product": {
+        "kind": "Produkt",
+        "name": "E-Bike"
+      },
+      "service": {
+        "kind": "Dienstleistung",
+        "name": "Bike-Leasing mit Dusche im Büro"
+      },
+      "lecture": {
+        "kind": "Vortrag",
+        "name": "Im Anzug mit dem Rad zur Arbeit"
+      }
     }
   },
   "notes": {
@@ -43,7 +52,7 @@
       "every-effort-is-a-translation": {
         "title": "Jede Arbeit ist eine Übersetzung",
         "keywords": "",
-        "script": "Was auch immer Du machst, ein Produkt, eine Dienstleistung oder einen Vortrag, Du tust immer dasselbe: Du übersetzt, was ein Mensch wollte, in etwas, das das eigentliche Problem löst. Das Produkt ist nur die letzte Form dieser Absicht."
+        "script": "Der Wert, den wir heute unseren Kunden und Partnern liefern, war in jedem Feld schon immer Übersetzungsarbeit: die Übersetzung eines menschlichen Problems, eines Intents, in mögliche Lösungen, die sich durch Menschen oder durch Technik lösen ließen. Die Softwareentwicklung wäre zum Beispiel völlig unnötig, wenn der Kunde auf magische Art selbst auf Rechenleistung zugreifen könnte, um seine Probleme zu lösen. Die ganze Disziplin dient einzig dazu, ein Problem in etwas Technisches zu übersetzen, das auf Rechenleistung und Kapazität zugreifen kann. Und wenn ich mit KI arbeite, geht es im Grunde darum, der KI klar verständlich zu machen, was mein Intent ist: Was möchte ich überhaupt erreichen, und was ist das richtige Problem, das ich lösen will?"
       },
       "a-translation-layer": {
         "title": "Eine Übersetzungsschicht",

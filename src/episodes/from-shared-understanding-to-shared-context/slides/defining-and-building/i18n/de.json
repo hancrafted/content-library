@@ -57,7 +57,7 @@
       "two-halves": {
         "title": "Zwei Hälften",
         "keywords": "",
-        "script": "Jede Arbeit teilt sich in zwei Hälften: festlegen, was entstehen soll, und es bauen. KI beschleunigt das Bauen enorm. Beim Festlegen kann sie nur raten, was in Deinem Kopf ist, es sei denn, sie fragt. Am Band von vorhin ist Festlegen Vertrieb und Entwurf, und Bauen ist Bau bis Versand."
+        "script": "In der Softwareentwicklung geht es mehr und mehr in zwei konvergierende Rollen, und das wird in anderen Branchen ähnlich sein. Links steht der Definer, der am Produkt die Anforderungen ausarbeitet, rechts der Builder, der das Ganze baut und an den Kunden ausliefert. Links waren früher vielleicht Vertrieb, Consultant, Business-Analyst, UX-Designer und Product Manager, und all das verschmilzt in diesem einen Schritt, aus einer Anforderung etwas Spezifisches zu machen, das sich nach rechts umsetzen lässt. Rechts stehen die Builder, die Engineers, die nach und nach weniger Code schreiben oder selbst etwas fertigen. Sie kümmern sich vielmehr um die Maschinerie, mit der KI-Agenten das Ergebnis erzeugen, damit es am Ende dem Kunden geliefert wird und die Anforderungen erfüllt."
       },
       "foreshadow": {
         "title": "Vorausblick",

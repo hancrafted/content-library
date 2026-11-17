@@ -4,10 +4,22 @@
   "caption": "Eine vollere Werkbank kann eine schlechtere sein: <b>vier Arten von Chaos, vor der Schicht eingerichtet oder währenddessen angekommen.</b>",
   "credit": "Namen nach Drew Breunig und IBM",
   "columns": {
-    "poisoning": { "label": "Ein falscher Fakt, der hängen bleibt", "term": "Poisoning" },
-    "distraction": { "label": "Zu viel, was nicht hierher gehört", "term": "Distraction" },
-    "confusion": { "label": "Zu viele ähnliche Werkzeuge", "term": "Confusion" },
-    "clash": { "label": "Zwei Anweisungen, die sich widersprechen", "term": "Clash" }
+    "poisoning": {
+      "label": "Ein falscher Fakt, der hängen bleibt",
+      "term": "Poisoning"
+    },
+    "distraction": {
+      "label": "Zu viel, was nicht hierher gehört",
+      "term": "Distraction"
+    },
+    "confusion": {
+      "label": "Zu viele ähnliche Werkzeuge",
+      "term": "Confusion"
+    },
+    "clash": {
+      "label": "Zwei Anweisungen, die sich widersprechen",
+      "term": "Clash"
+    }
   },
   "rows": {
     "static": {
@@ -84,12 +96,12 @@
       "dynamic-row": {
         "title": "Dynamische Zeile",
         "keywords": "",
-        "script": "Dieselben vier kommen auch während der Schicht an. Eine falsch beschriftete Schraubenkiste, Kollegen, die mit Fragen vorbeikommen, zehn Kisten mit ähnlichen Teilen, jemand ruft „Mach schnell“, während die Anweisung an der Wand sagt „Prüf jedes Teil“. Die Namen dafür sind Poisoning, Distraction, Confusion und Clash. Die Namen sind das Etikett, die Werkbank ist das Bild."
+        "script": "Ich habe vorhin gesagt, dass es viele Möglichkeiten gibt, den Kontext zuzumüllen. Der Fachbegriff dafür ist Context Rot, das Verfaulen des Kontexts. Die vier Beispiele Poisoning, Distraction, Confusion und Clash stammen von IBM. Es gibt auch andere Begriffe, Context Rot ist als Begriff relativ etabliert, aber die Definition von IBM finde ich relativ gut. Der wichtigste Fall, den ich schon als Beispiel genannt habe, ist Poisoning: Entweder im Auftrag, also im statischen Kontext, oder während der Session habe ich dem KI-Agenten eine falsche Instruktion oder einen falschen Prompt gegeben."
       },
       "more-context-worse-result": {
         "title": "Mehr Kontext, schlechteres Ergebnis",
         "keywords": "",
-        "script": "Mehr ist nicht sicherer. Eine vollere Werkbank kann eine schlechtere Werkbank sein. Noch ein Dokument dazuzulegen, nur zur Sicherheit, ist genau der Anfang der meisten dieser Probleme."
+        "script": "Das kann natürlich aus Versehen einmal passieren. Wenn ich aber nicht aktiv darüber nachdenke und die ganze KI-Session als ein langes Chatfenster behandle, führe ich verschiedene Aufgaben, verschiedene Abstraktionsebenen und verschiedene Informationen einfach im selben Chatfenster weiter. Dann müllt der gesamte Kontext zu, und die KI wird dadurch verwirrt."
       }
     }
   }

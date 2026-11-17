@@ -15,7 +15,7 @@
       "the-claim": {
         "title": "Die These",
         "keywords": "",
-        "script": "Deshalb die These: Lass die KI fragen, und Du antwortest. Du weißt gut, was Du willst, wenn Dir jemand die richtige Frage stellt. Weniger gut bist Du darin, alles ungefragt aufzuschreiben."
+        "script": "Die Technik dafür, vor allem in dem Human-in-the-Loop-Prozess, den wir gerade üben, ist hauptsächlich Meta-Prompting. Das Schöne daran: Ich muss nicht selbst dafür sorgen, der KI auf Anhieb perfekte, akkurate und präzise Anforderungen zu geben."
       }
     }
   }

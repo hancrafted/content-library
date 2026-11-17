@@ -19,7 +19,10 @@
         "title": "Was auf der Werkbank landet",
         "hint": "Weise sie ein wie eine neue Kollegin am ersten Tag."
       },
-      "heading": { "title": "Wohin die Arbeit geht", "hint": "Lenk nach, wenn sie abdriftet." }
+      "heading": {
+        "title": "Wohin die Arbeit geht",
+        "hint": "Lenk nach, wenn sie abdriftet."
+      }
     }
   },
   "notYours": {
@@ -51,7 +54,7 @@
       "human-manages-the-context": {
         "title": "Der Mensch steuert den Kontext",
         "keywords": "",
-        "script": "Du führst die Werkbank. Du bestimmst, was darauf landet und was die KI sich holen darf, und Du lenkst sie in die richtige Richtung. Stell Dir die KI wie eine neue Kollegin vor: Wie würdest Du sie an ihrem ersten Tag einweisen, und womit würdest Du sie gar nicht erst belasten?"
+        "script": "Wenn wir mit KI-Agenten arbeiten, wollen wir dafür sorgen, dass das gesamte Kontextfenster mit präzisen und akkuraten Informationen gefüllt ist, damit der KI-Arbeiter möglichst gut arbeiten kann. Dann müssen wir uns überlegen, wie diese Informationen zustande kommen, wie wir sie pflegen und wie wir sie der KI bereitstellen. In einem Chatfenster läuft das über Prompts: Wir schicken Prompts hin und her. Je nachdem, welchen Prompt wir senden, zieht sich der KI-Agent auch selbst Informationen zusammen, zum Beispiel über einen Web-Aufruf."
       },
       "not-how-the-ai-works-inside": {
         "title": "Nicht, wie die KI innen arbeitet",
