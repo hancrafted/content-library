@@ -7,17 +7,14 @@ import { ThreadPair, type Band, type BandCopy } from './thread-pair';
 
 const LIU = { slug: 'liu-lost-in-the-middle', url: 'https://arxiv.org/abs/2307.03172' };
 
-/** The Speaker note each band's pill opens. */
 const BAND_NOTES = {
   start: 'a-built-in-pull-to-the-start',
   middle: 'measured-even-for-long-input-models',
   end: 'two-position-effects',
 } as const satisfies Record<Band, string>;
 
-/** The pill's Context marker on its dark pill. */
 const ON_PILL = 'text-background/70 hover:text-foreground focus-visible:text-foreground';
 
-/** The budget in the Episode's one budget tint. */
 const budget = (chunks: ReactNode) => (
   <span data-budget className="rounded-md bg-(--warning)/25 px-1 font-semibold whitespace-nowrap">
     {chunks}
@@ -25,12 +22,6 @@ const budget = (chunks: ReactNode) => (
 );
 const muted = (chunks: ReactNode) => <span className="text-muted-foreground">{chunks}</span>;
 
-/*
- * "AI forgets the middle too" (Spec Option 2a): the sister thread and the summer-party chat side by side on
- * `SlideFrame`, aligned on three bands, so the same lighting lands on both. The Slide header above shows the title
- * and caption. The start, middle and end pills open their Speaker notes; the footnote opens "Planted facts, not chat
- * products" and "The strength varies". The context window is not named here.
- */
 export const aiForgetsTheMiddleToo = slide({
   slug: 'ai-forgets-the-middle-too',
   messages: { en, de },

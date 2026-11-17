@@ -6,7 +6,6 @@ import { PhoneCall, type CallEffect, type EffectCopy } from './phone-call';
 
 const MURDOCK = { slug: 'murdock-serial-position', url: 'https://doi.org/10.1037/h0045106' };
 
-/** The effects in the order the margin shows them, each with the Speaker note its Context marker opens. */
 const EFFECT_NOTES = {
   start: 'why-the-start-sticks',
   middle: 'recall-is-u-shaped',
@@ -16,12 +15,6 @@ const EFFECT_NOTES = {
 
 const BUBBLES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const;
 
-/*
- * "The long phone call" (Spec Option 1a): the call with your sister as one messenger thread on `SlideFrame`, its
- * three effects bracketed in the margin and the punchline as the brightest bubble. The Slide header above shows the
- * title and caption. Each effect's name carries the Context marker to its Speaker note, and the footnote opens "Lab
- * lists, not phone calls".
- */
 export const theLongPhoneCallStory = slide({
   slug: 'the-long-phone-call-story',
   messages: { en, de },
