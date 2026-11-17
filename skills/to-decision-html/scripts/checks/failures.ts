@@ -1,7 +1,3 @@
-// Failure never costs input or tells a false success. With a comment typed, a denied clipboard, a refused download
-// and, on a decide page, a cancelled Reset all each leave the field and its draft intact, and each failure reports
-// something other than that control's success message. A failed copy or save also shows the prompt for copying by
-// hand. An explain page has no Reset all, because it has no picks or Next action to restore.
 import type { Page } from '@playwright/test';
 import type { Check } from '../grader/check.ts';
 import { controlProblem } from '../grader/feedback.pure.ts';
@@ -24,38 +20,31 @@ import {
   typeComment,
 } from '../grader/feedback.ts';
 
-/** What one failure left behind. */
 export interface FailedPath {
   readonly fieldKept: boolean;
   readonly draftKept: boolean;
-  /** The status the failure reported; '' when it reported nothing. */
   readonly status: string;
-  /** Whether the prompt is shown for copying by hand. */
   readonly fallback: boolean;
 }
 
+type PathWithSuccessStatus = FailedPath & { readonly success: string };
+
 export interface FailuresObservation {
   readonly controls: {
-    /** Without a comment field there is no input to keep; export and explain-controls report it. */
-    readonly comment: boolean;
+    readonly hasCommentField: boolean;
     readonly copy: number;
     readonly save: number;
-    /** null on an explain page. */
     readonly resetAll: number | null;
     readonly status: number;
   };
-  /** Whether typing the comment stored a draft under a key naming the page id. */
   readonly draftStored: boolean;
-  /** Each path also records the status its success reported, to tell a failure apart from a false success. */
-  readonly copy: FailedPath & { readonly success: string };
+  readonly copy: PathWithSuccessStatus;
   readonly save: FailedPath & { readonly success: string; readonly downloaded: boolean };
-  /** null on an explain page. */
   readonly reset:
     | (FailedPath & { readonly success: string; readonly asked: boolean; readonly clearedOnConfirm: boolean })
     | null;
 }
 
-/** Clears the status, runs the failing action, and records what it left behind. */
 async function afterFailure(page: Page, pageId: string, fail: () => Promise<unknown>): Promise<FailedPath> {
   await restoreCommentSoEachPathStartsFromSameInput(page);
   await clearStatusSoNextReadAnswersNextAction(page);
@@ -68,7 +57,6 @@ async function afterFailure(page: Page, pageId: string, fail: () => Promise<unkn
   };
 }
 
-/** Runs the action that should succeed and returns the status it reported. */
 async function afterSuccess(page: Page, succeed: () => Promise<unknown>): Promise<string> {
   await restoreCommentSoEachPathStartsFromSameInput(page);
   await clearStatusSoNextReadAnswersNextAction(page);
@@ -88,12 +76,11 @@ async function copyPath(page: Page, pageId: string): Promise<Observed['copy']> {
 async function savePath(page: Page, pageId: string): Promise<Observed['save']> {
   const success = await afterSuccess(page, () => save(page));
   await breakSave(page);
-  // A download starts on the click itself, so listening while the status settles is enough; no timeout to wait out.
   let downloaded = false;
-  const onDownload = (): void => void (downloaded = true);
-  page.on('download', onDownload);
+  const recordDownloadStartedByTheClickItself = (): void => void (downloaded = true);
+  page.on('download', recordDownloadStartedByTheClickItself);
   const failed = await afterFailure(page, pageId, () => page.locator('[data-save]').click());
-  page.off('download', onDownload);
+  page.off('download', recordDownloadStartedByTheClickItself);
   return { ...failed, success, downloaded };
 }
 
@@ -112,7 +99,7 @@ async function observePaths(page: Page, pageId: string, decide: boolean): Promis
   return { draftStored, copy, save: saved, reset: decide ? await resetPath(page, pageId) : null };
 }
 
-const BLANK: FailedPath & { success: string } = {
+const BLANK: PathWithSuccessStatus = {
   fieldKept: false,
   draftKept: false,
   status: '',
@@ -120,8 +107,7 @@ const BLANK: FailedPath & { success: string } = {
   success: '',
 };
 
-/** What a page without the controls to exercise yields; `judge` then reports only the missing controls. */
-const unexercised = (decide: boolean): Observed => ({
+const unexercisedLeavingJudgeToReportMissingControls = (decide: boolean): Observed => ({
   draftStored: false,
   copy: BLANK,
   save: { ...BLANK, downloaded: false },
@@ -137,7 +123,6 @@ function controlProblems({ controls }: FailuresObservation): string[] {
   ];
 }
 
-/** A failure may stay silent (when `silentAllowed`), but never repeat its success message. */
 function statusProblems(
   name: string,
   { status, success }: { status: string; success: string },
@@ -147,8 +132,7 @@ function statusProblems(
   return status === success ? [`${name} reported the success message "${success}"`] : [];
 }
 
-/** What a failure of `name` must not do: lose input, or report nothing or success. */
-function pathProblems(name: string, path: FailedPath & { success: string }, silentAllowed = false): string[] {
+function pathProblems(name: string, path: PathWithSuccessStatus, silentAllowed = false): string[] {
   return [
     ...(path.fieldKept ? [] : [`after ${name} the comment field lost its text`]),
     ...(path.draftKept ? [] : [`after ${name} the draft lost the comment`]),
@@ -175,19 +159,23 @@ export const check: Check<FailuresObservation> = {
     const { pageId } = await identityOf(page);
     const decide = mode !== 'explain';
     const controls = {
-      comment: (await commentField(page).count()) > 0,
+      hasCommentField: (await commentField(page).count()) > 0,
       copy: await countOf(page, '[data-copy-prompt]'),
       save: await countOf(page, '[data-save]'),
       resetAll: decide ? await countOf(page, '[data-reset-all]') : null,
       status: await countOf(page, STATUS),
     };
     const ready =
-      controls.comment && [controls.copy, controls.save, controls.status, controls.resetAll].every((n) => n !== 0);
-    return { controls, ...(ready ? await observePaths(page, pageId, decide) : unexercised(decide)) };
+      controls.hasCommentField &&
+      [controls.copy, controls.save, controls.status, controls.resetAll].every((n) => n !== 0);
+    return {
+      controls,
+      ...(ready ? await observePaths(page, pageId, decide) : unexercisedLeavingJudgeToReportMissingControls(decide)),
+    };
   },
   judge(observation) {
     const controls = controlProblems(observation);
-    if (controls.length > 0 || !observation.controls.comment) return controls;
+    if (controls.length > 0 || !observation.controls.hasCommentField) return controls;
     const { draftStored, copy, save, reset } = observation;
     return [
       ...(draftStored
