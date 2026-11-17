@@ -21,6 +21,7 @@ phases:
       - handoff
       - improve-codebase-architecture
       - prototype
+      - to-decision-html
       - to-spec
       - to-tickets
       - wayfinder
@@ -41,6 +42,7 @@ phases:
     skills:
       - improve-codebase-architecture
       - retro
+      - to-decision-html
       - writing-for-agents
 seen:
   - ask-matt

@@ -1,6 +1,14 @@
 # Drive learnings
 
-One entry per Operator correction, logged at once, and per Fortify option that was not picked, with a recurrence
-count. Fortify reads this file for past proposals.
+One entry per failure mode with its recurrence count, and every Operator correction verbatim. Format: the drive skill's references/fortify.md, "The learnings file".
 
-- Enforcer detection covers Node repos only (package.json scripts, husky, .archgate); non-Node manifests (pyproject, uv, Cargo, go.mod) are not detected yet. Deferred from review checkpoint 2.
+## Failure modes
+
+### Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** test-runner: test, architectural
+- **Status:** proposed
+- **Evidence:** drive: deferred from review checkpoint 2; detection reads only package.json scripts, husky and .archgate
+
+## Corrections
