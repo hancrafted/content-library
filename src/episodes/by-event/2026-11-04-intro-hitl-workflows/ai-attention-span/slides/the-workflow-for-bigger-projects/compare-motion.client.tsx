@@ -6,7 +6,6 @@ import { workflowLights } from './compare-motion.pure';
 
 const TRIGGER = 'rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring';
 
-/** The `data-play` value: absent at rest, then `a` and `b` in turn, so each replay restarts the keyframes. */
 function useComparePlay() {
   const entry = useSlideEntry();
   const [entryAtMount] = useState(entry);
@@ -16,12 +15,7 @@ function useComparePlay() {
   return { play: plays ? (replays % 2 === 0 ? 'a' : 'b') : undefined, replay };
 }
 
-/**
- * The comparison's trigger (design-ADR-0012 §9): the one long chat fades back as the workflow lights, once on the
- * Slide's first `active` and again on every mouse enter and keyboard focus. Only the `data-play` attribute toggles,
- * off and on again across a replay, so the panels and the Context markers in them stay mounted and keep focus. The
- * keyframes and reduced motion live in the Slide's CSS module.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function CompareMotion({
   label,
   className,
