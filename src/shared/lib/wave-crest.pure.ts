@@ -1,8 +1,4 @@
-/*
- * The `bubbles` transition's wave front (docs/features/slide-transitions.md): an irregular, faceted crest riding on
- * the rising water, taller and lower peaks on a long swell. Seeded, so the static HTML and every visit draw the same
- * crest; never `Math.random`.
- */
+// spec: slide-transitions.md#named-transition-interface
 
 export type CrestPoint = readonly [x: number, y: number];
 
@@ -10,13 +6,11 @@ export interface CrestOptions {
   readonly seed: number;
   readonly width: number;
   readonly height: number;
-  /** How many peaks, at least two, so a tall one and a low one can stand side by side. */
   readonly peaks: number;
 }
 
 const LOWEST_PEAK = 0.3;
 const TALLEST_PEAK = 0.97;
-/** How far a valley dips below the box's bottom edge, as a fraction of the box: it never quite reaches the water. */
 const VALLEY = [0.03, 0.14] as const;
 const SPACING = [0.65, 1.35] as const;
 
@@ -34,7 +28,6 @@ function seeded(seed: number): () => number {
 const between = (random: () => number, [low, high]: readonly [number, number]) => low + random() * (high - low);
 const round = (value: number) => Math.round(value * 10) / 10;
 
-/** Peak heights from the lowest to the tallest, evenly stepped, then shuffled so tall and low neighbour each other. */
 function peakHeights(peaks: number, random: () => number): number[] {
   const ladder = Array.from(
     { length: peaks },
@@ -49,13 +42,8 @@ function peakHeights(peaks: number, random: () => number): number[] {
 
 const FACETS = [0.12, 0.26, 0.4, 0.5, 0.62, 0.76, 0.9] as const;
 
-/** A swell's rise at `t` in 0..1: a rounded bump, leaning by `lean` so one face is steeper, as wind pushes it. */
 const swell = (t: number, lean: number) => Math.sin(Math.PI * t ** lean) ** 1.6;
 
-/**
- * The crest's vertices, left to right from `x = 0` to `x = width`: per peak a valley and a rounded swell broken into
- * flat facets in the Iceberg style's low-poly manner, each peak its own height and lean.
- */
 export function waveCrest({ seed, width, height, peaks }: CrestOptions): readonly CrestPoint[] {
   if (!Number.isInteger(peaks) || peaks < 2 || !(width > 0) || !(height > 0))
     throw new Error(

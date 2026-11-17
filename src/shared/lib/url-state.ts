@@ -73,7 +73,6 @@ class UrlStateStore implements UrlState {
       this.watchRestoration();
     }
     this.listeners.add(listener);
-    // The URL may have moved since creation: a router writes it after the new page first renders.
     if (first && this.flight === null) this.resync();
     return () => {
       this.listeners.delete(listener);

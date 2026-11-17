@@ -29,7 +29,6 @@ export interface SurfaceSnapshot {
   readonly tone: SurfaceTone;
   readonly edges: readonly SurfaceEdge[];
 }
-/** Presentation consumes correlation/status only, never target or active identity. */
 export interface SurfaceNavigation {
   readonly id: number;
   readonly status: 'navigating' | 'settled' | 'interrupted' | 'timed-out' | 'superseded';

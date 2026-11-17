@@ -103,7 +103,6 @@ function subscribeLinks(win: Window, listener: (link: UrlLink) => boolean): () =
     });
     if (handled) event.preventDefault();
   };
-  // Capture owns fragment intent before a client router can perform its own scroll.
   win.document.addEventListener('click', onClick, true);
   return () => win.document.removeEventListener('click', onClick, true);
 }

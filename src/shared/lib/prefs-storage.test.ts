@@ -17,7 +17,6 @@ const install = (storage: object) => Object.assign(globalThis, { window: { local
 const entry = { hash: 'h', demo: true, results: { 'a.b': 'text' } };
 const KEY = 'human-in-the-loop/x';
 
-/** What `window` was before any test: put back after each, so no test leaks an ambient `window` into the next. */
 const ambient = Object.getOwnPropertyDescriptor(globalThis, 'window');
 
 afterEach(() => {

@@ -1,7 +1,6 @@
 // decision: FE-001 §3
 export const PROGRESS_KEY = 'hancrafted:progress';
 
-/** What is saved of one hands-on's run: the hash of its source, so an edited source never loads old results. */
 export interface ProgressEntry {
   readonly hash: string;
   readonly demo: boolean;
@@ -40,7 +39,6 @@ export function isEntry(value: unknown): value is ProgressEntry {
   );
 }
 
-/** The entry as it is stored and compared: an empty `prompts` is left out, so a run without edits looks as it always did. */
 export function normalizedEntry<T extends Omit<ProgressEntry, 'hash'>>(entry: T): T {
   const { prompts, ...rest } = entry;
   return (prompts !== undefined && Object.keys(prompts).length > 0 ? entry : rest) as T;

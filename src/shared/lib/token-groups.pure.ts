@@ -1,9 +1,6 @@
-// What the dev-only token editor shows around a token: the one-line description of a
-// global token and the designer-convention groups it is listed in (shadcn / Material
-// style: a colour beside its `-foreground` pair). No DOM, no React.
 import { classifyToken, type Token } from './token-discovery.pure';
 
-/** Tag colours are named by the store's vocabulary, which shared code never reads (FE-007 §2.6): one description fits them all. */
+// decision: FE-007 §2.6
 const TAG_PREFIX = '--tag-';
 const TAG_DESCRIPTION = 'Colour of one Tag: icon, ink and wash of the cards it leads.';
 
@@ -83,7 +80,6 @@ export interface TokenGroup {
   tokens: Token[];
 }
 
-/** Each group lists exact names in display order; typography is matched by family prefix instead. */
 const GROUPS: readonly { label: string; names?: readonly string[]; prefixes?: readonly string[] }[] = [
   {
     label: 'Brand',

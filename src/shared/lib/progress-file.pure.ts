@@ -1,14 +1,8 @@
 import { Document, isMap, isScalar, parse, Scalar } from 'yaml';
 import { isEntry, isRecord, isText, normalizedEntry, type ProgressEntry } from './progress.pure';
 
-/*
- * The YAML half of hands-on progress: the file a viewer downloads to keep a run and uploads to resume it. The stored
- * entry, its key and its hash verdict stay in `progress.pure.ts`.
- */
-
 const FILE_TYPE = 'application/x-yaml';
 
-/** Block-literal style for every result and prompt edit, so a pasted Markdown result reads as it is. */
 function blockTexts(doc: Document, field: 'results' | 'prompts'): void {
   const texts = doc.get(field, true);
   if (!isMap(texts)) return;

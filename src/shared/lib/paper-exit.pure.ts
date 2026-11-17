@@ -1,7 +1,6 @@
 import { drawRoll, type Roll } from './paper-overflow.pure';
 import { PAPER_PILE_ORIGIN } from './paper-pile.pure';
 
-/** How far above the pile origin a sheet must rise before it clears the tray walls. */
 export const TRAY_RIM_CLEARANCE = 150;
 
 export function paperExit(index: number, roll: Roll) {

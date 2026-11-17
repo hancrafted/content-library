@@ -1,9 +1,3 @@
-/*
- * Where a Slide's popover lands in the viewport, beside the element that
- * opened it. One rule for every popover Slide; each Slide passes its own
- * widths and gaps. No DOM, no React.
- */
-
 export type PopoverSide = 'above' | 'below';
 
 export interface Box {
@@ -49,12 +43,6 @@ function assertRules({ maxWidth, gap, minRoom }: PopoverRules): void {
   }
 }
 
-/**
- * Where a popover opens for an anchor (viewport coordinates): on the
- * preferred side, flipped when that side has less than `minRoom`, centred
- * on the anchor and clamped inside the viewport. `above` sets `bottom`, so
- * the popover grows upward whatever its height.
- */
 export function placePopover(request: PopoverRequest): PopoverPlacement {
   const { anchor, viewport, side, maxWidth, gap, minRoom } = request;
   assertRules({ maxWidth, gap, minRoom });
@@ -71,7 +59,6 @@ export function placePopover(request: PopoverRequest): PopoverPlacement {
     : { side: placed, top: anchor.top + anchor.height + gap, left, width, arrowX };
 }
 
-/** The fixed CSS box for a placement: `bottom` above the anchor so it grows upward, `top` below it. */
 export type PopoverBox =
   | { readonly bottom: number; readonly left: number; readonly width: number }
   | { readonly top: number; readonly left: number; readonly width: number };

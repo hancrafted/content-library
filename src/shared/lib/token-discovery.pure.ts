@@ -1,6 +1,3 @@
-// Finds design tokens in a plain snapshot of the loaded stylesheets. The DOM
-// adapter (page-tokens.ts) builds the snapshot; nothing here touches it.
-
 export type Theme = 'light' | 'dark';
 
 export interface RuleSnapshot {
@@ -51,12 +48,10 @@ interface Entry {
   target?: string;
 }
 
-/** Accumulates values per token; a theme never declared falls back to the other one at the end. */
 class TokenBook {
   private readonly tokens = new Map<string, { name: string; light?: string; dark?: string; target?: string }>();
 
   add({ name, theme, value, target }: Entry) {
-    // A Slide token declared under several selectors is one token per selector.
     const key = `${name}|${target ?? ''}`;
     const entry = this.tokens.get(key) ?? { name, ...(target ? { target } : {}) };
     entry[theme] = value;
@@ -103,11 +98,6 @@ function slideParts(selector: string, appliesInSlide: (selector: string) => bool
     .filter(({ scoped }) => appliesInSlide(scoped));
 }
 
-/**
- * The current Slide's own tokens: custom properties declared by rules whose
- * selector applies to an element inside the Slide. `appliesInSlide` answers that
- * for one selector (the adapter asks the DOM); a `.dark` prefix marks the dark value.
- */
 export function discoverSlideTokens(
   rules: readonly RuleSnapshot[],
   appliesInSlide: (selector: string) => boolean,

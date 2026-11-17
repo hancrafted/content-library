@@ -9,10 +9,6 @@ export function resolveTheme(theme: Theme, systemPrefersDark: boolean): Resolved
   return theme;
 }
 
-/**
- * An inline script that applies the stored theme before first paint, so a
- * statically exported page never flashes the wrong theme. Reads `PREFS_KEY` only.
- */
 export function buildThemeInitScript(): string {
   return [
     '(function(){try{',
