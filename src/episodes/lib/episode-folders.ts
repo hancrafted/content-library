@@ -31,6 +31,8 @@ export const EPISODES_DIR = 'src/episodes';
 
 /** The file that makes a page folder an Episode: its metadata record. */
 export const METADATA_FILE = 'episode-metadata.ts';
+/** The test every page folder and the Slide pool carries, running `episode-checks.ts` on it (ARCH-003 §4.7). */
+export const EPISODE_CHECKS_TEST = 'episode-checks.test.ts';
 
 /**
  * Passed on for `tools/` and the tests inside an Episode's folder, which FE-007 lets reach `src/` only through an

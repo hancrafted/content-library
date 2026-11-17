@@ -3,9 +3,15 @@ import type { EpisodeComposition } from '@/episodes/components/slide-master/slid
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
-import type { CheckedPage, PageContext, PlaylistAnchor, SectionMarker } from './composed-page-checks';
+import {
+  MARKERS_DIR,
+  type CheckedPage,
+  type PageContext,
+  type PlaylistAnchor,
+  type SectionMarker,
+} from './composed-page-checks';
 import { summaryOf } from './page-summary';
-import { producedAnchors, readPublishedSnapshot } from './published-anchors';
+import { producedAnchors, readPublishedSnapshot, type MissingSnapshot } from './published-anchors';
 
 /*
  * The production reader of a page folder's context for its composition checks (`composed-page-checks.ts`): every read
@@ -14,14 +20,19 @@ import { producedAnchors, readPublishedSnapshot } from './published-anchors';
  * page folder whose test hands over its `episode.ts`.
  */
 
-const MARKERS_DIR = 'sections';
+/**
+ * The values a loaded module exports that carry every one of `keys`, read as `T`: how a page's `episode.ts` and a
+ * Slide's entry are told apart from their other exports. `keys` names the fields that make a value a `T`.
+ */
+export function exportsCarrying<T extends object>(module: unknown, keys: readonly (keyof T & string)[]): T[] {
+  return Object.values(module as object).filter(
+    (value): value is T => typeof value === 'object' && value !== null && keys.every((key) => key in value),
+  );
+}
 
 /** The composition an `episode.ts` module exports: its one value carrying Sections and own text. */
 function compositionIn(module: unknown): EpisodeComposition {
-  const found = Object.values(module as object).find(
-    (value): value is EpisodeComposition =>
-      typeof value === 'object' && value !== null && 'sections' in value && 'messages' in value,
-  );
+  const [found] = exportsCarrying<EpisodeComposition>(module, ['sections', 'messages']);
   if (found === undefined) throw new Error('episode.ts exports no composition');
   return found;
 }
@@ -64,7 +75,7 @@ async function markersIn(dir: string): Promise<SectionMarker[] | undefined> {
 export async function missingPublishedSnapshot(
   dir: string,
   load: () => Promise<unknown>,
-): Promise<{ readonly file: string; readonly contents: string } | undefined> {
+): Promise<MissingSnapshot | undefined> {
   const snapshot = await readPublishedSnapshot(dir, producedAnchors(compositionIn(await load())));
   return 'missing' in snapshot ? snapshot.missing : undefined;
 }

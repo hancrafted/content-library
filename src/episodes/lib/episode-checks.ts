@@ -3,7 +3,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
 import { composedPageChecks } from './composed-page-checks';
-import { readPage } from './composed-page-context';
+import { exportsCarrying, readPage } from './composed-page-context';
 import { pageFolders } from './episode-folders';
 
 /*
@@ -50,15 +50,8 @@ function subfolders(dir: string): string[] {
 }
 
 /** The Slides an entry module exports: each carries its slug and its own messages. */
-function slidesOf(module: unknown): { slug: string }[] {
-  return Object.values(module as object).filter(
-    (value): value is { slug: string } =>
-      typeof value === 'object' && value !== null && 'slug' in value && 'messages' in value,
-  );
-}
-
-function declaresNotes(value: unknown): value is DeclaringSlide {
-  return typeof value === 'object' && value !== null && 'slug' in value && 'notes' in value && 'messages' in value;
+function slidesOf(module: unknown): { slug: string; messages: unknown }[] {
+  return exportsCarrying(module, ['slug', 'messages']);
 }
 
 /** The slug check: the folder holds the one Slide it is named after. */
@@ -79,16 +72,16 @@ function notesCheck(shown: string, load: () => Promise<unknown>): NamedCheck {
   return {
     name: `${shown} keeps under notes.* only the Speaker notes its Slide declares, in every locale (FE-010 §3.1)`,
     findings: async () =>
-      Object.values((await load()) as object)
-        .filter(declaresNotes)
-        .flatMap(({ slug, notes, messages }) => {
+      exportsCarrying<DeclaringSlide>(await load(), ['slug', 'notes', 'messages']).flatMap(
+        ({ slug, notes, messages }) => {
           const declared = new Set(notes.map((note) => note.slug));
           return Object.entries(messages).flatMap(([locale, strings]) =>
             Object.keys(strings.notes ?? {})
               .filter((key) => !declared.has(key))
               .map((key) => `${slug} ${locale}: notes.${key} is no declared Speaker note`),
           );
-        }),
+        },
+      ),
   };
 }
 
@@ -114,6 +107,8 @@ function pageChecks(dir: string, page: GlobEntries): NamedCheck[] {
   if (load === undefined) return [];
   const found = pageFolders(ROOT).find((folder) => folder.dir === path.resolve(dir));
   if (found !== undefined) {
+    // Sound: the walker reads the ref off disk, so its id is a plain string, and the registry's id lists come from this
+    // same walk. A folder the registry has not caught up with reaches no lookup unguarded: its summary check names it.
     const ref = found as ComposedPage;
     return composedPageChecks(ref, () => readPage(found.dir, ref, load));
   }

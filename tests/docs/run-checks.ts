@@ -6,8 +6,9 @@ import { checkStagingFolder } from '@/pipeline/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/pipeline/lib/episode-voice-script.pure';
 import { type Finding } from '@/pipeline/lib/finding.pure';
 import { checkResearchFolders, researchCategories } from '@/pipeline/lib/research-folder.pure';
+import { RUN_CHECKS_TEST } from '@/pipeline/lib/run-checks-file';
 import { gateTier, verifiedProblems } from '@/pipeline/lib/staging-file.pure';
-import { RUN_CHECKS_TEST, type NamedCheck } from '@/shared/lib/folder-check';
+import { type NamedCheck } from '@/shared/lib/folder-check';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import {
