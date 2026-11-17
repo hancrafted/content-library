@@ -3,7 +3,7 @@
 // A step marked `testLock` runs holding the test lock (tools/load/test-lock.ts). The full plan then prints the tests
 // over 750 ms its run logged, with the load factor, and still passes: CI's 3 s budget is the only gate.
 import { currentBranch } from '../load/git.ts';
-import { formatSlowTest, SLOW_TEST_MS, slowTestsLogPath, slowTestsSince, testCount } from '../load/slow-tests.mts';
+import { slowTestReport } from '../load/slow-tests.mts';
 import { withTestLock } from '../load/test-lock.ts';
 import { runCommand } from './run-command.ts';
 import { COMMIT_PLAN, QUICK_PLAN, runPlan, VERIFY_PLAN, type Exec } from './verify.pure.ts';
@@ -17,12 +17,9 @@ const passed = await runPlan(plan, exec, (text) => console.log(text));
 if (plan === VERIFY_PLAN) printSlowTests(startedAt);
 if (!passed) process.exit(1);
 
-/** The fast-suite tests over SLOW_TEST_MS this run logged on this branch; nothing when there are none. */
+/** The fast-suite tests over 750 ms this run logged on this branch; nothing when there are none. */
 function printSlowTests(since: Date): void {
-  const log = slowTestsLogPath(process.cwd());
-  if (log === null) return;
-  const entries = slowTestsSince(log, currentBranch(process.cwd()), since);
-  if (entries.length === 0) return;
-  console.log(`! ${testCount(entries.length)} ran past ${SLOW_TEST_MS} ms (CI fails at 3 s):`);
-  for (const entry of entries) console.log(formatSlowTest(entry));
+  const cwd = process.cwd();
+  const report = slowTestReport({ cwd, branch: currentBranch(cwd), since, note: 'CI fails at 3 s' });
+  for (const line of report) console.log(line);
 }

@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { TestCase } from 'vitest/node';
-import { SlowTestsLog, trimSlowTests } from './slow-tests.mts';
+import { SlowTestsLog, slowTestReport, trimSlowTests } from './slow-tests.mts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -82,55 +82,128 @@ describe('SlowTestsLog', () => {
   });
 });
 
-/** One log line for a test logged at `at`. */
-const line = (test: string, at: string) =>
-  JSON.stringify({ test, file: 'a.test.ts', ms: 900, loadFactor: 1.2, branch: 'work', at }) + '\n';
+/** Logs one test over 750 ms (1240 ms unless `ms` says) from `cwd`, as the fast suite's reporter would at `at`. */
+function logSlow(cwd: string, test: string, { at, ms = 1240 }: { at: Date; ms?: number }): void {
+  new SlowTestsLog({ cwd, now: () => at, loadFactor: 2.4 }).onTestCaseResult(finished(test, 'src/walk.test.ts', ms));
+}
+
+const HOUR = 60 * 60 * 1000;
+
+describe('slowTestReport', () => {
+  describe('success cases', () => {
+    it("prints a header naming the count, branch and the caller's note, then the branch's entries since the time given", () => {
+      // ARRANGE
+      const { main, workTree } = fixture();
+      const since = new Date('2026-11-16T08:00:00.000Z');
+      logSlow(workTree, 'before', { at: new Date(since.getTime() - HOUR) });
+      logSlow(workTree, 'at the start', { at: since });
+      logSlow(main, 'on main', { at: new Date(since.getTime() + HOUR) });
+      logSlow(workTree, 'later', { at: new Date(since.getTime() + HOUR), ms: 900 });
+      const expected = [
+        '! 2 tests ran past 750 ms on work (CI fails at 3 s):',
+        '  1.2 s at load 2.4  src/walk.test.ts > at the start  (2026-11-16T08:00:00.000Z)',
+        '  0.9 s at load 2.4  src/walk.test.ts > later  (2026-11-16T09:00:00.000Z)',
+      ];
+      // ACT
+      const report = slowTestReport({ cwd: main, branch: 'work', since, note: 'CI fails at 3 s' });
+      // ASSERT
+      expect(report).toEqual(expected);
+    });
+  });
+
+  describe('failure cases', () => {
+    it('prints nothing outside a git repository', () => {
+      // ARRANGE
+      const outside = realpathSync(mkdtempSync(path.join(tmpdir(), 'no-repo-')));
+      // ACT
+      const report = slowTestReport({ cwd: outside, branch: 'work', since: AT, note: 'CI fails at 3 s' });
+      // ASSERT
+      expect(report).toEqual([]);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('prints nothing when there is no log yet, or the branch logged nothing since', () => {
+      // ARRANGE
+      const { main, workTree } = fixture();
+      const before = slowTestReport({ cwd: main, branch: 'work', since: AT, note: 'n' });
+      logSlow(workTree, 'earlier', { at: new Date(AT.getTime() - HOUR) });
+      // ACT
+      const after = slowTestReport({ cwd: main, branch: 'work', since: AT, note: 'n' });
+      // ASSERT
+      expect(before).toEqual([]);
+      expect(after).toEqual([]);
+    });
+
+    it('says "1 test" for one entry', () => {
+      // ARRANGE
+      const { main, workTree } = fixture();
+      logSlow(workTree, 'only', { at: AT });
+      const expectedHeader = '! 1 test ran past 750 ms on work (since it branched off base):';
+      // ACT
+      const [header] = slowTestReport({ cwd: main, branch: 'work', since: AT, note: 'since it branched off base' });
+      // ASSERT
+      expect(header).toBe(expectedHeader);
+    });
+  });
+});
+
+/** The test names left in the log, oldest first. */
+const loggedTests = (log: string) =>
+  readFileSync(log, 'utf8')
+    .trim()
+    .split('\n')
+    .map((entry) => (JSON.parse(entry) as { test: string }).test);
 
 describe('trimSlowTests', () => {
   describe('success cases', () => {
     it('keeps the entries of the last 30 days and drops the older ones', () => {
       // ARRANGE
-      const { log } = fixture();
+      const { workTree, log } = fixture();
       const now = new Date('2026-11-17T12:00:00.000Z');
-      writeFileSync(
-        log,
-        line('31 days old', '2026-10-17T11:59:59.000Z') +
-          line('exactly 30 days old', '2026-10-18T12:00:00.000Z') +
-          line('yesterday', '2026-11-16T12:00:00.000Z'),
-      );
+      logSlow(workTree, '31 days old', { at: new Date('2026-10-17T11:59:59.000Z') });
+      logSlow(workTree, 'exactly 30 days old', { at: new Date('2026-10-18T12:00:00.000Z') });
+      logSlow(workTree, 'yesterday', { at: new Date('2026-11-16T12:00:00.000Z') });
       const expectedTests = ['exactly 30 days old', 'yesterday'];
       // ACT
-      trimSlowTests(log, now);
-      const kept = readFileSync(log, 'utf8')
-        .trim()
-        .split('\n')
-        .map((entry) => (JSON.parse(entry) as { test: string }).test);
+      trimSlowTests({ cwd: workTree, now });
       // ASSERT
-      expect(kept).toEqual(expectedTests);
+      expect(loggedTests(log)).toEqual(expectedTests);
     });
   });
 
   describe('failure cases', () => {
     it('drops a line it cannot read', () => {
       // ARRANGE
-      const { log } = fixture();
+      const { workTree, log } = fixture();
       const now = new Date('2026-11-17T12:00:00.000Z');
-      writeFileSync(log, '{"test": "cut off mid-wri\n' + line('yesterday', '2026-11-16T12:00:00.000Z'));
-      const expected = line('yesterday', '2026-11-16T12:00:00.000Z');
+      writeFileSync(log, '{"test": "cut off mid-wri\n');
+      logSlow(workTree, 'yesterday', { at: new Date('2026-11-16T12:00:00.000Z') });
+      const expectedTests = ['yesterday'];
       // ACT
-      trimSlowTests(log, now);
+      trimSlowTests({ cwd: workTree, now });
       // ASSERT
-      expect(readFileSync(log, 'utf8')).toBe(expected);
+      expect(loggedTests(log)).toEqual(expectedTests);
+    });
+
+    it('does nothing outside a git repository', () => {
+      // ARRANGE
+      const outside = realpathSync(mkdtempSync(path.join(tmpdir(), 'no-repo-')));
+      const now = new Date('2026-11-17T12:00:00.000Z');
+      // ACT
+      const trim = () => trimSlowTests({ cwd: outside, now });
+      // ASSERT
+      expect(trim).not.toThrow();
     });
   });
 
   describe('edge cases', () => {
     it('creates no log when there is none yet', () => {
       // ARRANGE
-      const { log } = fixture();
+      const { workTree, log } = fixture();
       const now = new Date('2026-11-17T12:00:00.000Z');
       // ACT
-      trimSlowTests(log, now);
+      trimSlowTests({ cwd: workTree, now });
       // ASSERT
       expect(existsSync(log)).toBe(false);
     });
