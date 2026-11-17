@@ -3,26 +3,14 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import styles from './tip.module.css';
 
-/*
- * The one tooltip of the visual (toolbar icons, BRIEF circles, prompt icons, the modal X). It shows
- * on hover and on keyboard focus, stays while the pointer moves onto it, and Escape dismisses it without moving the
- * pointer or focus (WCAG 1.4.13). The host wraps the control; the control keeps its own accessible name, so the
- * bubble is hidden from assistive technology and never carries information the name does not.
- */
-
 interface TipProps {
-  /** Plain text, or a short node (a line and a list); the bubble is hidden from assistive technology either way. */
   readonly text: ReactNode;
-  /** The bubble hangs below the control, or above it. */
   readonly place?: 'below' | 'above';
-  /** Which edge of the control the bubble lines up with; `end` keeps a control at the right edge from widening the page. */
   readonly align?: 'start' | 'center' | 'end';
-  /** Extra classes for the host, e.g. `flex-1` where the control fills a row. */
   readonly className?: string;
   readonly children: ReactNode;
 }
 
-/** While a tip shows, Escape dismisses it first and never reaches the dialog or anything else behind it. */
 function useDismissOnEscape(shown: boolean, dismiss: () => void) {
   useEffect(() => {
     if (!shown) return;

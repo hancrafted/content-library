@@ -8,15 +8,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { theThoughtExperimentSection } from './the-thought-experiment';
 
-/*
- * The Section "The thought experiment" as the CyberForum webinar presents it, read through the page's own interface:
- * each Slide localized into this Episode and its Scene rendered. German keeps the English acronym, so the chips
- * spell PRICE in both locales.
- */
-
 const PLACED = placeSections<Slide>([theThoughtExperimentSection]).flat();
 
-/** A Slide's Scene as the page renders it, with the shared Slide header. */
 function sceneOf(slug: string, locale: Locale) {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);

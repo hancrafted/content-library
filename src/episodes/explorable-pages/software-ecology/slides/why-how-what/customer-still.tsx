@@ -5,7 +5,6 @@ import { fillTemplate } from '@/shared/lib/template.pure';
 import { GlyphAt, type Formats } from './still-parts';
 
 const CELL = 18;
-/** Where the readouts start under the grid, and the room each takes: its label, then its value right-aligned under it. */
 const ROWS = { top: 122, step: 32, value: 15 };
 
 const cellClass = (r: Release | null) => {
@@ -13,7 +12,6 @@ const cellClass = (r: Release | null) => {
   return r.good ? 'fill-(--success)/35' : 'fill-destructive/40';
 };
 
-/** The last twenty releases as a grid of 4 rows by 5 columns: good, bad, and a red warning on one that brought a complaint. */
 function Releases({ releases, x, y }: { releases: readonly (Release | null)[]; x: number; y: number }) {
   return (
     <g>
@@ -31,7 +29,6 @@ function Releases({ releases, x, y }: { releases: readonly (Release | null)[]; x
   );
 }
 
-/** The Customer card's readouts, label left and value right. */
 function rowsOf(state: FactoryStillState, f: Formats): [string, string][] {
   const c = state.customer,
     w = state.words.customer;
@@ -43,7 +40,6 @@ function rowsOf(state: FactoryStillState, f: Formats): [string, string][] {
   ];
 }
 
-/** The Customer card's readouts, a row each from `y`. */
 function Readouts({ state, f, x, w, y }: { state: FactoryStillState; f: Formats; x: number; w: number; y: number }) {
   return rowsOf(state, f).map(([label, value], i) => (
     <g key={label}>
@@ -62,7 +58,6 @@ function Readouts({ state, f, x, w, y }: { state: FactoryStillState; f: Formats;
   ));
 }
 
-/** The Customer card, the still's focal point: its releases, output relative to ideal and the readouts under them. */
 export function CustomerStill({ state, f }: { state: FactoryStillState; f: Formats }) {
   const c = state.customer,
     [x, y, w, h] = c.box;

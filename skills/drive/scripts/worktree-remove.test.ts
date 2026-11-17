@@ -5,18 +5,22 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { removeWorktree } from './worktree-remove.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+function dropGitVariablesACommitHookExports(): void {
+  for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+}
+dropGitVariablesACommitHookExports();
 
 const git = (cwd: string, ...args: string[]): string =>
-  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
+  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+    cwd,
+    encoding: 'utf8',
+  }).trim();
 
 const write = (file: string, content: string) => {
   mkdirSync(path.dirname(file), { recursive: true });
   writeFileSync(file, content);
 };
 
-/** A repo whose `work` branch is checked out at `.worktrees/work`, with an ignored node_modules installed. */
 function fixture() {
   const main = path.join(realpathSync(mkdtempSync(path.join(tmpdir(), 'wt-remove-'))), 'main');
   git(path.dirname(main), 'init', '-q', '-b', 'main', main);
@@ -33,7 +37,6 @@ function fixture() {
 
 const listed = (main: string, target: string) => git(main, 'worktree', 'list', '--porcelain').includes(target);
 
-/** What a `git worktree remove` cut short by Finder leaves: git's record gone, a partial checkout and a .DS_Store. */
 function interruptedRemoval(main: string, target: string): void {
   rmSync(path.join(target, '.git'));
   rmSync(path.join(target, 'a.txt'));

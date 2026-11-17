@@ -2,7 +2,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { Bike, Colleague, LINE, Screw, Sheet, Wrenches } from './vignette-parts';
 
-/** The four messes set up before the shift, then the four arriving during it, in the rot grid's column order. */
 export const MESS_IDS = [
   'wrong-screw',
   'binder',
@@ -14,7 +13,6 @@ export const MESS_IDS = [
   'rush-vs-check',
 ] as const;
 
-/** The cleaned-up state of each static mess, in the same column order. */
 export const CLEAN_IDS = ['checked-sheet', 'one-page', 'three-wrenches', 'one-sheet'] as const;
 
 export type MessId = (typeof MESS_IDS)[number];
@@ -157,11 +155,7 @@ const DRAWINGS: Record<VignetteId, ReactNode> = {
   ),
 };
 
-/**
- * One small scene cropped from the bike bench, 240 by 140: a mess, its trouble in `warning` and the rest `machine`
- * and `foreground`, or the clean state a fix leaves, with no `warning` in it. A server SVG; shared because the rot
- * grid and the cleanup Slide both draw the messes (FE-007).
- */
+// decision: FE-007 §5
 export function BenchVignette({ id, label, className }: { id: VignetteId; label: string; className?: string }) {
   return (
     <svg

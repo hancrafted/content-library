@@ -1,5 +1,5 @@
 'use client';
-
+// spec: docs/features/explorables/software-ecology.md#interaction
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { useState, type ReactNode } from 'react';
 import { CompareWidget, type CompareWidgetProps } from './compare-widget';
@@ -30,7 +30,6 @@ export interface ToolbarProps {
   readonly useCases: readonly Choice[];
   readonly useCase: string;
   readonly onUseCase: (id: string) => void;
-  /** The use case's one-line description: the picker's tooltip, since the toolbar carries no description line. */
   readonly sub: string;
   readonly speed: number;
   readonly onSpeed: (n: number) => void;
@@ -39,10 +38,8 @@ export interface ToolbarProps {
   readonly clockAt: ClockAt;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
-  /** Every state off the row, for the Scenarios menu, and the markers a Slide places beside its entries. */
   readonly scenarios: readonly ScenarioChoice[];
   readonly scenarioMarkers?: Readonly<Partial<Record<string, ReactNode>>>;
-  /** The state has a tour; a tour is on. */
   readonly canTour: boolean;
   readonly touring: boolean;
   readonly onTour: () => void;
@@ -50,9 +47,7 @@ export interface ToolbarProps {
   readonly model: ModelMenuProps;
   readonly mechanics: MechanicsMenuProps;
   readonly display: DisplayMenuProps;
-  /** Compare mode: the toggle, the picked slots, Show and Exit. */
   readonly compare: CompareWidgetProps;
-  /** Download YAML and Upload, at the Settings popover's foot. */
   readonly exchange: ExchangeButtonsProps;
 }
 
@@ -63,13 +58,9 @@ interface MenuState {
   readonly opener: Opener;
 }
 
-/** The circled digits before the three state steps' names. */
 const STEP_MARKS = ['①', '②', '③'] as const;
 
-/** A close never undoes the other menu's open: the outside click that opens one closes only the other. */
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
-
-/** One state button; the active one carries a dot once a dial was turned after picking it. */
 
 interface StateButtonProps {
   readonly s: Choice;
@@ -106,7 +97,6 @@ function StateButton(p: StateButtonProps) {
   );
 }
 
-/** The three steps, Who does what, In theory and In practice, numbered, as one segmented group; the Scenarios menu; Tour; the markers a Slide places. */
 function States(p: ToolbarProps & MenuState) {
   return (
     <div className={styles.states} role="group" aria-label={p.words.states} {...p.statesTarget}>
@@ -138,7 +128,6 @@ function States(p: ToolbarProps & MenuState) {
   );
 }
 
-/** The use case picker: the factory glyph and the name; its tooltip is the use case's description. */
 function UseCase(p: Pick<ToolbarProps, 'words' | 'useCases' | 'useCase' | 'onUseCase' | 'sub'>) {
   return (
     <ToolTip tip={p.sub}>
@@ -162,7 +151,6 @@ function UseCase(p: Pick<ToolbarProps, 'words' | 'useCases' | 'useCase' | 'onUse
   );
 }
 
-/** The one Settings button and its popover: Model, Mechanics and Display in two columns, Reset and the file at the foot. */
 function Settings(p: ToolbarProps & MenuState) {
   const w = p.settingsWords;
   return (
@@ -192,12 +180,7 @@ function Settings(p: ToolbarProps & MenuState) {
   );
 }
 
-/**
- * The toolbar, one row at laptop width (feature guide, Interaction 1; feedback 08): the states, Scenarios, Tour and a
- * Slide's markers; Compare; Pause, speed, Clear and the clock; the use case; Settings. Below laptop width it wraps.
- */
 export function FactoryToolbar(p: ToolbarProps) {
-  // the Scenarios, speed and Settings menus: one open at a time
   const [open, setOpen] = useState<MenuId>(null);
   const opener: Opener = (id) => (on) => setOpen((cur) => nextMenu(cur, id, on));
   return (

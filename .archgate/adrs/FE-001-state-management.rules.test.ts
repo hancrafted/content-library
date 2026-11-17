@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-001-state-management.rules.ts — pass and fail path for
-// `single-storage-key`: calls passing either kind's constant or literal, calls
-// passing anything else, a drifted constant, and a missing or empty config.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-001-state-management.rules';
 
@@ -17,11 +13,8 @@ const CONFIG = 'src/shared/config.yaml';
 const KEY = 'hancrafted:prefs';
 const PROGRESS = 'hancrafted:progress';
 
-// Marks the config file as absent; a default parameter would swallow `undefined`.
-const MISSING = Symbol('missing');
+const ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED = Symbol('missing');
 
-// Stands in for archgate's RuleContext. `config` is the already-parsed YAML
-// document, or MISSING for an absent file, so no YAML parser is needed.
 function makeCtx(
   files: Record<string, string>,
   config: unknown = { localStorageKey: KEY, progressStorageKey: PROGRESS },
@@ -41,7 +34,8 @@ function makeCtx(
       throw new Error(`ENOENT: ${path}`);
     },
     async readYAML(path: string) {
-      if (path !== CONFIG || config === MISSING) throw new Error(`ENOENT: ${path}`);
+      if (path !== CONFIG || config === ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED)
+        throw new Error(`ENOENT: ${path}`);
       return { frontmatter: null, content: config };
     },
     report: {
@@ -124,7 +118,7 @@ describe('single-storage-key', () => {
   });
 
   const badConfigs: [label: string, config: unknown][] = [
-    ['a missing config', MISSING],
+    ['a missing config', ABSENT_FILE_NOT_A_DEFAULT_PARAMETER_UNDEFINED],
     ['an empty key', { localStorageKey: '', progressStorageKey: PROGRESS }],
     ['a non-string key', { localStorageKey: 1, progressStorageKey: PROGRESS }],
     ['a missing progress key', { localStorageKey: KEY }],

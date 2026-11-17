@@ -9,9 +9,6 @@ import {
 } from './episode-spec-page.pure';
 import { appendMetaVerified } from './staging-file.pure';
 
-/* A Spec read from a staging folder's files: its whole-Spec facts, and its Slides off the markup alone. */
-
-/** The Spec of a staging folder holding only `html` as its Spec page. */
 function specOf(html: string): Spec {
   return readSpec({ 'spec/spec.html': html });
 }

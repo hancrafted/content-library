@@ -2,18 +2,11 @@ import { ChevronDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { DoneMark } from '../agent-setup-step/done-mark';
 
-/*
- * The one reading order every Guide step follows, top to bottom: the toolbar, what to do (an action the viewer can
- * click or copy), what done looks like (this strip), then the optional help folded away (`MoreHelp`).
- */
-
 interface DoneStripProps {
-  /** The strip's label, for example "Done looks like". */
   readonly label: string;
   readonly children: ReactNode;
 }
 
-/** What the viewer sees when the step worked: a green tick and the result, placed right under the action. */
 export function DoneStrip({ label, children }: DoneStripProps) {
   return (
     <div className="flex flex-col gap-1 rounded-lg border border-(--success) bg-(--success)/10 p-4" data-done-strip="">
@@ -31,7 +24,6 @@ interface MoreHelpProps {
   readonly children: ReactNode;
 }
 
-/** Optional explanation or help, closed until the viewer opens it. */
 export function MoreHelp({ title, children }: MoreHelpProps) {
   return (
     <details className="group rounded-lg border border-border bg-background px-4 py-1" data-more-help="">
@@ -45,13 +37,10 @@ export function MoreHelp({ title, children }: MoreHelpProps) {
 }
 
 interface StepDoneBadgeProps {
-  /** Whether the check skill reported the setup as working. */
   readonly ready: boolean;
-  /** The badge's words, for example "Done, no need to repeat". */
   readonly label: string;
 }
 
-/** Beside a step's "Step n" pill once the check reported ready, so a viewer scrolling past the ready card does not redo the step. */
 export function StepDoneBadge({ ready, label }: StepDoneBadgeProps) {
   if (!ready) return null;
   return (

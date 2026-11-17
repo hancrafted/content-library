@@ -16,14 +16,12 @@ const ANTHROPIC_RESEARCH = {
   url: 'https://www.anthropic.com/engineering/multi-agent-research-system',
 };
 
-/** The faded draft's columns and their step counts, as Slide 10 drew them. */
 const BEFORE = [
   { slug: 'venue', steps: 14 },
   { slug: 'catering', steps: 1 },
   { slug: 'travel', steps: 1 },
 ] as const;
 
-/** The down arrow from the faded draft to the board redrawn below it. */
 function DownArrow() {
   return (
     <svg viewBox="0 0 24 24" className="size-6 shrink-0" aria-hidden="true">
@@ -38,12 +36,6 @@ function DownArrow() {
   );
 }
 
-/**
- * "Designed AI first" (Spec Option 11b): Slide 10's draft faded on top, the party board redrawn from the goal below,
- * five notes with a contract card under each, and the three tips as a legend whose pins sit where each acts: the goal
- * (1), the Food & drinks contract that Slide 8 zooms (2) and the merged travel note (3). Keeps `basic-page` and
- * `motion: none`; the notes dim the others on hover.
- */
 export const designedAiFirst = slide({
   slug: 'designed-ai-first',
   messages: { en, de },

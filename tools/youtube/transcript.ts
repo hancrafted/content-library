@@ -1,6 +1,3 @@
-// `npm run youtube:transcript -- <youtube url | video id | episode folder | page url>`: asks which language was
-// spoken, fetches YouTube's captions in it with yt-dlp, and stores them unedited in the Episode's Recording folder.
-// Pure half: `transcript.pure.ts`; the Episode lookup: `episode-resolver.pure.ts`.
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

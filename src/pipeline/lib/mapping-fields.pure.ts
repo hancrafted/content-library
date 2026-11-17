@@ -1,9 +1,3 @@
-/*
- * Validation of a parsed YAML mapping against a list of fields: which keys
- * must be present, which may be, and what each value must be. Each problem is
- * a message after the caller's `where`, so the caller names the mapping.
- */
-
 export type Mapping = Record<string, unknown>;
 
 export function isMapping(value: unknown): value is Mapping {
@@ -18,17 +12,14 @@ export function isStringList(value: unknown): value is string[] {
   return Array.isArray(value) && value.every(isString);
 }
 
-/** The strings of a list, or none when the value is no list of strings (its own finding). */
 export function stringsOf(value: unknown): string[] {
   return isStringList(value) ? value : [];
 }
 
-/** One key of a mapping: whether it must be present, and what its value must be. */
 export interface Field {
   key: string;
   required: boolean;
   valid: (value: unknown) => boolean;
-  /** Completes "<where> has <key> <value>; …" when the value is not valid. */
   rule: string;
 }
 
@@ -40,12 +31,10 @@ export function optional(fieldOf: Field): Field {
   return { ...fieldOf, required: false };
 }
 
-/** The field, required only when the condition holds and optional otherwise. */
 export function requiredWhen(condition: boolean, fieldOf: Field): Field {
   return { ...fieldOf, required: condition };
 }
 
-/** Missing required keys, then unknown keys, then invalid values, each as a message after `where`. */
 export function checkMapping(where: string, mapping: Mapping, fields: readonly Field[]): string[] {
   const keys = fields.map(({ key }) => key);
   return [

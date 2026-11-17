@@ -1,8 +1,4 @@
-/*
- * The exchange file (design-ADR 0024 §11): Download writes the page's current state as one YAML holding the use case's
- * data keys, the roles it uses, `state` and every language under `i18n`. Ported from the reference build's `exportDoc`,
- * so the file reads as flow.html's and survives Upload and Download byte for byte.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { badOut } from './defect.pure.ts';
 import { stringifyExchange } from './exchange-writer.pure.ts';
 import type {
@@ -19,14 +15,12 @@ import { custOf } from './start-settings.pure.ts';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';
 
-/** Follow an order and Isolate: kept in the file for later, no effect yet. */
 export interface Overlays {
   readonly follow: boolean;
   readonly isolate: boolean;
 }
 export const NO_OVERLAYS: Overlays = { follow: false, isolate: false };
 
-/** What the page shows that the file keeps: the state, the view, speed, belt motion, the compare set and the settings. */
 export interface PageState {
   readonly preset: string;
   readonly view: ViewId;
@@ -54,7 +48,6 @@ const DATA_KEYS = [
   'presets',
 ] as const;
 
-/** The reference build's comments per key: `#path` above the key, `path` beside it. */
 const NOTES: Readonly<Record<string, string>> = {
   '#schema':
     'Software ecology factory. Edit any value, save, and drop the file back on the page to run the factory from it. A file is refused if any work center would be over capacity at Realistic.',
@@ -83,7 +76,6 @@ const NOTES: Readonly<Record<string, string>> = {
   '#i18n': 'Words per locale. Titles of centers default to their role title.',
 };
 
-/** A dial override's name in the file, by its name in the settings. */
 export const OVER_OUT: Readonly<Record<keyof Over, string>> = {
   eff: 'efficiency',
   effv: 'effectiveness',
@@ -113,7 +105,6 @@ const centersOut = (over: Settings['over']): Doc => {
   return out;
 };
 
-/** The own-work settings the visitor set, by source id: `rate` and `arrivals`; nothing when none is set. */
 const ownOut = (own: Settings['own']): Doc => {
   const out: Doc = {};
   for (const [id, o] of Object.entries(own)) {
@@ -147,7 +138,6 @@ const stateOf = (B: Bundle, page: PageState): Doc => {
   };
 };
 
-/** One locale's words: the use case's own, each state's name, the scenarios and every used role's words filled in. */
 const wordsIn = (B: Bundle, x: { l: Locale; used: readonly string[]; catalogs: Catalogs }): Doc => {
   const presets = B.data.presets,
     cat = x.catalogs[x.l];
@@ -163,7 +153,6 @@ const wordsIn = (B: Bundle, x: { l: Locale; used: readonly string[]; catalogs: C
   return w;
 };
 
-/** The exchange document of the page's current state. */
 export const exchangeDoc = (B: Bundle, page: PageState, catalogs: Catalogs): Doc => {
   const uc = B.data as unknown as Doc;
   const used = [...new Set(['customer', ...B.data.centers.map((c) => c.role)])];
@@ -179,9 +168,7 @@ export const exchangeDoc = (B: Bundle, page: PageState, catalogs: Catalogs): Doc
   };
 };
 
-/** The exchange file's text, as Download YAML writes it. */
 export const exportExchange = (B: Bundle, page: PageState, catalogs: Catalogs): string =>
   stringifyExchange(exchangeDoc(B, page, catalogs), NOTES);
 
-/** The name Download gives the file. */
 export const exchangeName = (B: Bundle): string => `software-ecology-${B.data.id}.yaml`;

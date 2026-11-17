@@ -2,13 +2,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * `docs/design/slide-library.md` lists every Master slide: one `##` per Slide folder of the Master slide Templates (`timelines`, `grids`), each with
- * a Shows, a When and a Motion line (slide-authoring-context decision 15). The `##` that is not a Master slide is named below.
- */
-
 const ROOT = path.resolve(__dirname, '../..');
-/** The Master slide Templates, `master-slide` records of the content store (design-ADR 0019). */
+// decision: docs/adr/0019-resources-overview.md
 const MASTER_SLIDE_TEMPLATES = ['timelines', 'grids'];
 const LIBRARY_DOC = path.join(ROOT, 'docs/design/slide-library.md');
 const MOTIONS_DIR = path.join(ROOT, 'src/episodes/components/slide-shared/motions');
@@ -22,7 +17,6 @@ function masterSlideFolders(): string[] {
   ).sort();
 }
 
-/** Each `##` section of the doc: its heading with backticks stripped, and its body. */
 function sections(): { heading: string; body: string }[] {
   const text = readFileSync(LIBRARY_DOC, 'utf8');
   return text

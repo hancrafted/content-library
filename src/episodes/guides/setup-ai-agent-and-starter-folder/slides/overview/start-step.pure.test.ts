@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BOXES, isStepDone, startStep, type BoxId } from './start-step.pure';
 
-/* The plain logic behind the Overview checklist: which step "Start at step N" names. */
-
 const ids = (...list: BoxId[]) => new Set<BoxId>(list);
 
 describe('success cases', () => {

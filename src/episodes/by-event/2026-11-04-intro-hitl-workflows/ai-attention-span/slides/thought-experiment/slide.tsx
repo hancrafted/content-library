@@ -4,8 +4,6 @@ import { AttentionBubblePreset } from '@/explorables/context-window/context';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The opener of the Section "Thought experiment": the session bar from the shared `session` plan, filled up to and
-// including this Section, which it names.
 export const thoughtExperiment = slide({
   slug: 'thought-experiment',
   messages: { en, de },

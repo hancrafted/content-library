@@ -5,7 +5,6 @@ export interface LocaleParams {
   params: Promise<{ locale: string }>;
 }
 
-/** Only the prefixed locales are built under `[locale]`; the default locale lives at the root. */
 export function prefixedLocaleParams() {
   return PREFIXED_LOCALES.map((locale) => ({ locale }));
 }

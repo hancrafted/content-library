@@ -1,7 +1,4 @@
-// Post-build check of the Guides (design-ADR 0019 as amended by #450): the overview at /guides/ in both locales,
-// indexed, in the sitemap and reached from the Learn group; every Guide the catalogue builds is an Episode-shaped page
-// at /guides/<slug>/, indexed and canonical at its own URL, and listed on the overview.
-
+// decision: docs/adr/0019-resources-overview.md
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -23,7 +20,6 @@ const CARD_ACTIONS = {
   de: { open: 'Anleitung öffnen', video: 'Auf YouTube ansehen', newTab: 'öffnet in einem neuen Tab' },
 } as const;
 
-/** Every public Guide the catalogue lists, by route. */
 const LISTED_GUIDES = PAGES.filter(({ page, treatment }) => page.kind === 'guide' && treatment.listed).map(({ page }) =>
   routeOf(page),
 );

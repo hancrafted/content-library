@@ -1,18 +1,17 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { TestCase } from 'vitest/node';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { SlowTestsLog, slowTestReport, trimSlowTests } from './slow-tests.mts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+dropGitEnvironment(process.env);
 
 const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
 
-/** A repo whose branch `work` is checked out in a second worktree, as a subagent's would be. */
 function fixture() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'slow-tests-')));
   const main = path.join(root, 'main');
@@ -25,7 +24,6 @@ function fixture() {
   return { main, workTree, log: path.join(main, '.git', 'slow-tests.jsonl') };
 }
 
-/** A hand-built stand-in for the finished test case Vitest hands a reporter: only what the log reads. */
 const finished = (fullName: string, file: string, duration: number) =>
   ({ fullName, module: { relativeModuleId: file }, diagnostic: () => ({ duration }) }) as unknown as TestCase;
 
@@ -67,6 +65,17 @@ describe('SlowTestsLog', () => {
       // ASSERT
       expect(report).not.toThrow();
     });
+
+    it('loses the entry rather than fail the run when the log cannot be written', () => {
+      // ARRANGE
+      const { workTree, log } = fixture();
+      mkdirSync(log);
+      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT, loadFactor: 1 });
+      // ACT
+      const report = () => reporter.onTestCaseResult(finished('a > b', 'a.test.ts', 6200));
+      // ASSERT
+      expect(report).not.toThrow();
+    });
   });
 
   describe('edge cases', () => {
@@ -82,7 +91,6 @@ describe('SlowTestsLog', () => {
   });
 });
 
-/** Logs one test over 750 ms (1240 ms unless `ms` says) from `cwd`, as the fast suite's reporter would at `at`. */
 function logSlow(cwd: string, test: string, { at, ms = 1240 }: { at: Date; ms?: number }): void {
   new SlowTestsLog({ cwd, now: () => at, loadFactor: 2.4 }).onTestCaseResult(finished(test, 'src/walk.test.ts', ms));
 }
@@ -148,7 +156,6 @@ describe('slowTestReport', () => {
   });
 });
 
-/** The test names left in the log, oldest first. */
 const loggedTests = (log: string) =>
   readFileSync(log, 'utf8')
     .trim()

@@ -1,8 +1,7 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { wordsFor } from './software-ecology-data';
 import { checkText } from './tour-checks.pure.ts';
-
-/* A tour's checks in plain words (design-ADR 0024 §10): a translated label per measure, never the code form. */
 
 const TITLES = { qa: 'Quality assurance', eng: 'Engineer', customer: 'Customer' };
 const en = { words: wordsFor('en').tour.checks, titles: TITLES, locale: 'en' as const };

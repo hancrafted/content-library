@@ -5,11 +5,6 @@ import { describe, expect, it } from 'vitest';
 import type { EmoteProps } from './actor';
 import { Emote } from './emote';
 
-/*
- * The emote every actor shows at its head anchor: one cartoon mark per mood, and a speech bubble for `says`. A figure
- * passes its own anchor, so the mark and the bubble follow the head in every pose.
- */
-
 const emote = (props: EmoteProps) => {
   const $ = load(renderToStaticMarkup(createElement('svg', null, createElement(Emote, props))));
   return {

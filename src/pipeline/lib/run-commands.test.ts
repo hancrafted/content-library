@@ -7,11 +7,6 @@ import { runCommand, type RunContext } from './run-commands.ts';
 import { appendEvent } from './run-log-writer.ts';
 import { queryRuns } from './run-query.pure.ts';
 
-/*
- * The run-scoped commands against a real temp worktree: names in, lines and marker out. Clock, ids, git,
- * session id and the orchestrator transcript are injected.
- */
-
 const SLUG = 'demo';
 const SESSION = 'sess-1';
 const JOBS = ['brief-grill', 'write-dossier', 'open-pr', 'write-spec', 'a'];
@@ -53,7 +48,6 @@ afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
-/** An agent span the hook adapter would have started under the open Attempt of a Job. */
 const startAgent = (ctx: RunContext, job: string, role: string): void => {
   const attempt = spans(ctx).find((s) => s.type === 'attempt' && s.job === job && s.end_t === null);
   appendEvent(
@@ -90,7 +84,6 @@ const agents = (ctx: RunContext) => spans(ctx).filter((s) => s.type === 'agent')
 const TEMPLATE =
   'status: draft\nstages: [brief]\njobs:\n  - id: brief-grill\n    stage: brief\n    outputs: [docs/episodes/<slug>/brief.md]\n';
 
-/** A worktree with the template and no pipeline yet; ports 4000 and 4001 are taken. */
 function served(taken: readonly number[] = [4000, 4001]) {
   const ctx = context();
   rmSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'));

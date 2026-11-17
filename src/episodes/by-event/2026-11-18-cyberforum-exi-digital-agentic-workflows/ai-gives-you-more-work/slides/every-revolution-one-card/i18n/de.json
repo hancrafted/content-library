@@ -1,0 +1,158 @@
+{
+  "title": "Jede Revolution, eine Karte",
+  "caption": "Jede Maschine hat die vorhersehbare Arbeit übernommen, und die Menschen sind aufgestiegen: Die Arbeit hat sich verändert, nicht verkleinert. KI übernimmt als erste einen Teil des Denkens, deshalb <b>ist dieser Schritt der größte</b>.",
+  "layers": {
+    "machine": "Maschine",
+    "people": "↑ Menschen",
+    "ai": "KI · übernimmt einen Teil des Denkens",
+    "aiPeople": "↑ Du steigst auf"
+  },
+  "exhibits": {
+    "farming": {
+      "title": "Ackerbau",
+      "era": "Antike · der Pflug",
+      "line": "Das erste Werkzeug, das das Graben übernahm.",
+      "machine": "Der Pflug gräbt",
+      "people": "Die Bäuerin plant die Ernte"
+    },
+    "steam": {
+      "title": "Die Dampfmaschine",
+      "era": "18. und 19. Jahrhundert · die Fabrik",
+      "line": "Die Kraft übernahm das Heben; die Belegschaft teilte sich.",
+      "machine": "Die Maschine hebt",
+      "people": "Der Arbeiter plant die Linie"
+    },
+    "computer": {
+      "title": "Der Computer",
+      "era": "Ab den 1950ern · das Büro",
+      "line": "Die Maschine übernahm das Rechnen und das Ablegen.",
+      "machine": "Der Computer rechnet",
+      "people": "Menschen bewerten und beraten"
+    },
+    "ai": {
+      "title": "KI",
+      "era": "Heute · der Schreibtisch",
+      "line": "Die erste Maschine, die einen Teil des Denkens übernimmt.",
+      "machine": "KI entwirft und denkt mit",
+      "people": "Du managst sie wie ein Team"
+    }
+  },
+  "ai": {
+    "capabilities": {
+      "language": "Sprache",
+      "reasoning": "Schlussfolgern",
+      "ideas": "Ideen"
+    },
+    "taskLength": "Aufgaben von rund 50 Minuten, Verdopplung alle 7 Monate",
+    "variance": "Gleicher Prompt, andere Antworten",
+    "team": "Ein Mensch, Arbeit für ein ganzes Team"
+  },
+  "fork": {
+    "stayed": "↙ Andere blieben an der Linie",
+    "rose": "↗ Manche lernten dazu und leiteten das Werk"
+  },
+  "forkOpen": {
+    "title": "Die Gabelung, wieder offen",
+    "beside": "Neben ihr arbeiten",
+    "manage": "Sie wie ein Team managen"
+  },
+  "notes": {
+    "cheaper-unit-more-work": {
+      "header": "Billiger pro Stück heißt nicht weniger Arbeit insgesamt",
+      "description": "Jevons argumentierte, dass Watts Erfindungen Wärme einsparten und dass jede weitere Verbesserung den Kohleverbrauch beschleunigen würde; unabhängig davon sank in Schottland die Kohle pro Tonne Eisen auf unter ein Drittel, während der Gesamtverbrauch etwa auf das Zehnfache stieg [1].",
+      "sources": {
+        "jevons-coal-question": { "title": "Jevons, The Coal Question (1865)" }
+      }
+    },
+    "tool-lifts-the-tasks": {
+      "header": "Das Werkzeug hebt die Aufgaben an, die Menschen bleiben",
+      "description": "Als sich die Zahl der Geldautomaten vervierfachte, sank die Zahl der Kassierer pro Filiale um mehr als ein Drittel; die Zahl der Filialen stieg aber um mehr als 40 Prozent, und die Kassierer wechselten in die Kundenbetreuung [1].",
+      "sources": {
+        "autor-still-so-many-jobs": {
+          "title": "Autor, Why Are There Still So Many Jobs? The History and Future of Workplace Automation"
+        }
+      }
+    },
+    "plough-is-the-weaker-card": {
+      "header": "Der Pflug ist die schwächere Karte",
+      "description": "Boserup zeigt, dass der Pflug oft eher verhinderte, dass der Ertrag pro Arbeitsstunde sank, als ihn zu steigern; die zusätzliche Arbeit kam daher, dass das Land öfter bestellt wurde [1].",
+      "sources": {
+        "boserup-agricultural-growth": { "title": "Boserup, The Conditions of Agricultural Growth" }
+      }
+    },
+    "some-workers-did-rise": {
+      "header": "Manche Arbeiter stiegen auf, auf mehreren Wegen",
+      "description": "Ein zeitgenössischer Verteidiger des Fabriksystems behauptete, verlässliche, geschickte Arbeiter könnten zum Aufseher, Manager oder Teilhaber aufsteigen, und 18 Prozent einer Stichprobe britischer Mechaniker und Ingenieure wurden angestellte Ingenieure und Manager; die Fabrikbesitzer fanden ihre Manager aber auf vielen Wegen, und keine Quelle misst, wie viele aus der Werkhalle kamen [1][2].",
+      "sources": {
+        "ure-philosophy-of-manufactures": { "title": "Ure, The Philosophy of Manufactures (1835)" },
+        "meisenzahl-mokyr-invention": {
+          "title": "Meisenzahl and Mokyr, The Rate and Direction of Invention in the British Industrial Revolution: Incentives and Institutions"
+        }
+      }
+    },
+    "steam-shifted-the-skill-mix": {
+      "header": "Dampf veränderte den Qualifikationsmix einer Region",
+      "description": "Englische Grafschaften mit mehr Dampfmaschinen hatten einen größeren Anteil qualifizierter Arbeiter; keine gefundene Studie verfolgt, ob einzelne Anwender aufstiegen, und die Belege zu Schulbildung und Löhnen jener Zeit sind gemischt [1].",
+      "sources": {
+        "de-pleijt-steam-human-capital": {
+          "title": "de Pleijt, Nuvolari and Weisdorf, Human Capital Formation During the First Industrial Revolution: Evidence from the use of Steam Engines"
+        }
+      }
+    },
+    "ai-completes-longer-tasks": {
+      "header": "KI erledigt immer längere Aufgaben selbstständig",
+      "description": "Die Aufgabenlänge, die ein führendes Modell mit 50 Prozent Erfolg erledigt, lag Anfang 2025 bei etwa 50 Minuten und hat sich seit 2019 ungefähr alle sieben Monate verdoppelt [1].",
+      "sources": {
+        "kwa-long-tasks": { "title": "Kwa et al., Measuring AI Ability to Complete Long Tasks (METR)" }
+      }
+    },
+    "gain-is-conditional": {
+      "header": "Der Gewinn ist echt, aber an Bedingungen geknüpft",
+      "description": "758 BCG-Beraterinnen und -Berater mit KI erledigten innerhalb der Fähigkeitsgrenze des Modells 12,2 Prozent mehr Aufgaben, 25,1 Prozent schneller und mit über 40 Prozent höherer Qualität, lagen bei einer Aufgabe außerhalb dieser Grenze aber 19 Prozentpunkte seltener richtig; ein Versuch mit 16 erfahrenen Entwicklern fand mit den Werkzeugen von Anfang 2025 eine Verlangsamung um 19 Prozent [1][2].",
+      "sources": {
+        "dellacqua-jagged-frontier": {
+          "title": "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013 (SSRN 4573321)"
+        },
+        "becker-early-2025-ai": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "same-prompt-answers-differently": {
+      "header": "Derselbe Prompt kann anders antworten",
+      "description": "Über fünf Modelle und acht Aufgaben, je zehnmal mit Einstellungen ausgeführt, die deterministisch sein sollten, schwankte die Genauigkeit zwischen den Durchläufen um bis zu 15 Prozent, anders als bei einem Pflug oder einer Dampfmaschine [1].",
+      "sources": {
+        "atil-llm-stability": { "title": "Atil et al., LLM Stability: A detailed analysis with some surprises" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-revolution-one-card": {
+        "title": "Jede Revolution, eine Karte",
+        "keywords": "",
+        "script": "Um das zu verstehen, schau Dir die drei Maschinen an, die Du schon kennst: den Pflug, die Dampfmaschine und den Computer. Jede hat die vorhersehbare Arbeit übernommen, das Heben, das Graben, das Rechnen, und die Menschen sind zu dem Teil gewechselt, den keine Maschine konnte: bewerten, entscheiden und koordinieren."
+      },
+      "the-climb": {
+        "title": "Der Aufstieg",
+        "keywords": "",
+        "script": "Jetzt schau, was unter jeder Karte passiert. Der Pflug gräbt, also plant die Bäuerin die Ernte. Die Maschine hebt, also plant der Arbeiter die Linie. Jedes Mal hat die Maschine mehr übernommen, und Du bist eine Ebene aufgestiegen. Die Arbeit ist also nicht verschwunden, sie hat sich verändert."
+      },
+      "the-fork-no-judgment": {
+        "title": "Die Gabelung, ohne Wertung",
+        "keywords": "",
+        "script": "Hier gabelt sich der Weg, und ich sage das ohne Wertung. Stell Dir zwei Menschen im selben Werk am selben Montag vor, einer noch an der Linie und einer am Leitstand, und beide leisten ehrliche Arbeit. Entscheidend für Dich ist: Ein solcher Umbruch öffnet diese Tür, und ob Du hindurchgehst, entscheidest Du."
+      },
+      "now-it-thinks": {
+        "title": "Jetzt denkt sie mit",
+        "keywords": "",
+        "script": "Neu ist diesmal, dass KI das erste Werkzeug ist, das selbst einen Teil der unvorhersehbaren Arbeit übernimmt. Sie arbeitet in natürlicher Sprache, sie schlussfolgert, sie ist kreativ, sie sammelt Ideen. Zum ersten Mal managst Du also etwas, das mitdenkt."
+      },
+      "biggest-step": {
+        "title": "Der größte Schritt",
+        "keywords": "",
+        "script": "Das ist der größte Schritt an dieser Wand, denn ein einzelner Mensch kann jetzt Aufgaben erledigen, für die es früher ein ganzes Team brauchte. Die Gabelung unter der KI-Karte ist noch offen, und was jetzt kommt, ist meine Hypothese: Sie öffnet sich wieder, für alle, die hindurchgehen wollen."
+      }
+    }
+  }
+}

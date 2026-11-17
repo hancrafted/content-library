@@ -4,63 +4,39 @@ import type { ChatButtonDef, ModelTier, Runtime, TaskDef, TechniqueDef } from '.
 import type { Level } from './workflow-state.pure';
 import type { Job, Stage, Workflow } from './workflow.types';
 
-/*
- * The view seam: what a stage's "Try it" modal shows for a Workflow at a level. Pure, so the modal's information
- * architecture (numbered steps on one side, details on the other) and Simple vs Technical are testable without a
- * browser. It holds no words of its own: every label is the Workflow file's, and the parts bring the chrome words.
- */
-
 export interface ViewOptions {
   readonly level: Level;
-  /** Demo mode: the limits the prompts name take their demo values. Default on. */
   readonly demo?: boolean;
-  /** The rounds each repeated stage plays now, by stage id (from the run); a `{{id_*}}` marker expands into as many. */
   readonly rounds?: Readonly<Record<string, number>>;
 }
 
-/** What a task shows: its steps (do, then review), and why, examples and what good looks like. */
 export interface TaskModalView {
-  /** The job's id: a job without an output is marked done under it. */
   readonly id: string;
   readonly steps: readonly TaskStep[];
-  /** The name this task hands on: its result is saved under it (`name_K` for round K of a repeated stage). Absent: a checkbox marks it done. */
   readonly output?: string;
-  /** The words beside the checkbox of a job without an output; absent: the visual's `markDone` word. */
   readonly doneLabel?: string;
-  /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
   readonly previous: readonly string[];
-  /** The outputs of the jobs of the same stage this job needs: in a repeated stage each round takes its own. */
   readonly sameStage: readonly string[];
   readonly why: string;
-  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a repeated stage one per demo round. */
   readonly examples: readonly string[];
   readonly goodLooksLike: readonly string[];
-  /** The techniques the task's structure teaches, from the file's catalogue, shown under "why it matters". */
   readonly techniques: readonly TechniqueDef[];
-  /** The AI chats the job's prompts open in; absent: the visual's default buttons. */
   readonly openAIButtons?: readonly ChatButtonDef[];
-  /** The model tier the job is best run with; absent: the step shows no model note. */
   readonly recommendedModel?: ModelTier;
 }
 
-/** One job inside a stage's modal. */
 export interface JobModalView {
   readonly id: string;
   readonly title: string;
-  /** The one-sentence goal of the do step (the stepper's title) and, when the job has a review, of the review. */
   readonly goal: TaskDef['goal'];
-  /** The job may be skipped: none of its steps leads the stepper. */
   readonly optional: boolean;
   readonly task: TaskModalView;
 }
 
-/** A stage's "Try it" modal: its jobs, in order. */
 export interface StageView {
   readonly id: string;
   readonly name: string;
-  /** The one-line learning goal under the title. */
   readonly goal?: string;
-  /** Whether the stepper plays the jobs once per round: the stage repeats and the level is Simple. */
   readonly repeats: boolean;
   readonly jobs: readonly JobModalView[];
 }
@@ -70,7 +46,6 @@ export interface WorkflowView {
   readonly stages: readonly StageView[];
 }
 
-/** How many entries a `{{id_*}}` over each multiple slot of the job expands into: the larger of the demo cap and the rounds played. */
 function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds?: ViewOptions['rounds'] }) {
   const names = producersFor(workflow.file, at.stage, task);
   return new Map(
@@ -82,7 +57,6 @@ function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds
   );
 }
 
-/** The examples a task shows: none for a checkbox job, one text, or one per demo round. */
 const examplesOf = (example: TaskDef['details']['example']): readonly string[] =>
   example === undefined ? [] : typeof example === 'string' ? [example] : example;
 
@@ -114,13 +88,11 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
   };
 }
 
-/** Whether the stepper plays the stage once per round: always at Simple; at Technical only when the stage opts in and demo mode is off. */
 const repeatsAt = (stage: Stage, level: Level, demo: boolean | undefined): boolean => {
   if (stage.foreach === undefined) return false;
   return level === 'simple' || (stage.foreach.technical === 'rounds' && demo === false);
 };
 
-/** The view model of a Workflow for a level: one modal per stage. */
 export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOptions): WorkflowView {
   return {
     title: workflow.title,

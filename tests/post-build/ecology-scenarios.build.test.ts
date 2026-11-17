@@ -1,8 +1,4 @@
-// Post-build check of the software ecology Explorable's claim tours (design-ADR 0024 §12, grill 11 Q217): every tour
-// whose beats carry Han's claims is judged across ten seeds by the judge `npm run ecology:sim` runs, and every beat
-// holds on 8 of them within its 6 to 9 weeks. It needs no `out/`; it sits here because ten seeds a scenario are too
-// slow for the fast suite, which judges only checks and claim-free tours on one seed.
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadUseCase, simulate } from '../../src/explorables/software-ecology/ecology-sim.node';
@@ -10,11 +6,9 @@ import { loadUseCase, simulate } from '../../src/explorables/software-ecology/ec
 const FOLDER = new URL('../../src/explorables/software-ecology/', import.meta.url);
 const read = (name: string): string => readFileSync(new URL(name, FOLDER), 'utf8');
 
-/** The use cases that ship, written out. */
 const USE_CASES = ['tire', 'gate', 'teams'] as const;
 const SEEDS = 10;
-/** Ten seeds of a six-beat tour take several seconds; a closed spiral piles more work to simulate. */
-const TOUR_TIMEOUT_MS = 60_000;
+const TOUR_TIMEOUT_MILLISECONDS = 60_000;
 
 const claimTours = USE_CASES.flatMap((useCase) =>
   loadUseCase(useCase, read)
@@ -37,6 +31,6 @@ describe('claim tours across seeds', () => {
         .map((b) => `beat ${b.i + 1}: ${b.passed} of ${b.of} seeds${b.lengthOk ? '' : `, ${b.length} weeks`}`);
       expect(failing).toEqual([]);
     },
-    TOUR_TIMEOUT_MS,
+    TOUR_TIMEOUT_MILLISECONDS,
   );
 });

@@ -1,7 +1,5 @@
 @import 'tailwindcss';
-/* Tracked skill symlinks under .agents point into ~/.claude; Turbopack refuses to scan outside the repo. */
 @source not '../../.agents';
-/* The Design archive holds rejected Options' markup; its classes must not reach the site's CSS. */
 @source not '../../design-archive';
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -17,7 +15,6 @@
   --header: oklch(0.985 0.002 247.8);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  /* Status colours, each 4.5:1 as text on the page and card surfaces and with its -foreground as text on a fill of it (light and dark both). Danger is --destructive. */
   --success: oklch(0.5 0.13 150);
   --success-foreground: oklch(0.985 0 0);
   --warning: oklch(0.52 0.12 65);
@@ -34,10 +31,9 @@
   --machine: oklch(0.58 0.16 242);
   --human: oklch(0.55 0.18 290);
   --ai: oklch(0.6 0.14 62);
-  /* Own work's lightbulb: a clear yellow (#FACC15) with a darker golden outline, on the card paper. Not a mix of --warning: that is amber (hue 65 to 80) and in light a dark brown (L 0.52), and mixing toward white only dulls its chroma, so it never reads as a bright yellow at hue 95. */
   --bulb: oklch(0.86 0.18 95);
   --bulb-edge: oklch(0.6 0.15 85);
-  /* Tag colours, one per Tag (design-ADR Tags replace Topics): a card's icon, ink and wash. Each reads 4.5:1 on the page. */
+  /* decision: docs/adr/0015-tags-replace-topics.md */
   --tag-context-engineering: oklch(0.5 0.134 242.749);
   --tag-agentic-ai: oklch(0.491 0.27 292.581);
   --tag-markdown: oklch(0.514 0.222 16.935);
@@ -45,32 +41,22 @@
   --tag-sales: oklch(0.508 0.118 165.612);
   --tag-agentic-workflow: oklch(0.205 0 0);
   --tag-overview: oklch(0.205 0 0);
-  /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
   --brand-accent: oklch(0.636 0.171 41.8);
   --on-brand-accent: oklch(1 0 0);
-  /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/features/episode-chrome.md). */
   --selected: oklch(0.4 0 0);
   --selected-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  /* The outline between a note and the Slide element it explains: 3:1 against the surface, light and dark. */
   --highlight-target: oklch(0.5 0.19 260);
-  /* YouTube's brand red: the talk player's icon and tint. */
   --youtube: oklch(0.628 0.258 29.2);
-  /* The scrim behind a modal drawer and the video frame's backdrop; callers set the opacity (`bg-overlay/40`). */
   --overlay: oklch(0 0 0);
-  /* The Iceberg style's five zones (docs/design/design-guide.md#iceberg), light fading with depth: one value per zone, so
-     Han tunes a zone once and every Slide that names it follows. One palette in both themes (Han, 2026-11-14): `.dark`
-     repeats these values. Surface and Sunlit carry dark text (`--zone-abyss`), Twilight down light text, at AA. */
   --zone-surface: oklch(0.95 0.03 225);
   --zone-sunlit: oklch(0.84 0.07 225);
   --zone-twilight: oklch(0.54 0.1 240);
   --zone-midnight: oklch(0.36 0.08 250);
   --zone-abyss: oklch(0.2 0.045 260);
-  /* The Iceberg style's scenery (design-ADR 0025, Colour tokens): the Spec's tones for the sky, the sea by zone, the
-     seabed and the room (wall, floor, window) that several Slides repeat, so each is tuned once. A tone one Slide
-     alone draws stays in its token file. Lit, base and shade facets, light from the upper left. */
+  /* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
   --scenery-sky-1: oklch(0.76 0.08 240);
   --scenery-sky-2: oklch(0.8 0.07 236);
   --scenery-sky-3: oklch(0.845 0.058 230);
@@ -100,9 +86,8 @@
   --scenery-window-frame-lit: oklch(0.62 0.07 60);
   --scenery-window-frame-shade: oklch(0.44 0.05 55);
   --scenery-window-glint: oklch(1 0 0 / 0.35);
-  /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
+  /* decision: FE-010 §7 */
   --drawer-width: 26rem;
-  /* Type roles (docs/design/design-system.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
   --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
   --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
   --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
@@ -272,14 +257,6 @@
   }
 }
 
-/*
- * A note and the page element it explains light each other up while one is
- * hovered or focused, or a note is pinned open by a context reference: a soft
- * background tint over the whole item, with no border, outline or ring. A
- * background takes no space, so nothing shifts. The page element, which has no
- * padding of its own, gets the same tint spread 0.25rem past its box by a
- * shadow. Screen only.
- */
 @media screen {
   [data-context-active],
   [data-context-pinned] {
@@ -291,7 +268,7 @@
   }
 }
 
-/* Context drawer (FE-010): print reveals every Slide's notes and script, whether or not the drawer was ever opened. */
+/* decision: FE-010 §2 */
 @media print {
   [data-slot='context'],
   [data-slot='context'] [data-context-panel] {
@@ -312,7 +289,6 @@
   [data-slot='context'] {
     grid-column: 1 / -1;
   }
-  /* Closed sources print too, even where beforeprint never fires (headless PDF export). */
   [data-slot='context'] details::details-content {
     content-visibility: visible;
     display: block;
@@ -324,15 +300,8 @@
   }
 }
 
-/*
- * Hover vocabulary (design-ADR-0012 §8): the shared ways a Scene draws the audience's
- * focus while the presenter points with the mouse, and discloses detail
- * progressively. Each state also applies on keyboard focus; under reduced
- * motion it applies at once, without a transition. A Scene reuses these; a new
- * pattern is added here first. Catalogue: docs/design/design-system.md.
- */
+/* decision: docs/adr/0012-slide-header-and-play-once-motion.md */
 @layer components {
-  /* A card that answers the pointer: `--raise` lifts it a step with a shadow, `--outline` rings it in the accent. */
   .card-hover {
     transition:
       translate 200ms ease-out,
@@ -346,10 +315,6 @@
     border-color: var(--brand-accent);
   }
 
-  /*
-   * Items of one group: with `--dim-others`, pointing at one dims its siblings so the audience follows it. Keyboard
-   * focus counts; focus a click leaves behind does not, so closing a dialog its item opened dims nothing.
-   */
   .focus-group__item {
     transition: opacity 200ms ease-out;
   }
@@ -358,7 +323,6 @@
     opacity: 0.4;
   }
 
-  /* Secondary figures (a percentage, a count) hidden until the pointer enters: still in the DOM, and printed. */
   .hover-reveal__detail {
     opacity: 0;
     transition: opacity 200ms ease-out;
@@ -381,21 +345,12 @@
   }
 }
 
-/*
- * Slide entrance (design-ADR-0012): the first time a Slide is active its header
- * types in and its Scene fades up, once. `SlideMount` carries `data-entry`
- * (`pending`, `entering`, `done`) on Episodes on the shared header. Only with
- * JavaScript (the `js` class, set in <head> before first paint) does a pending
- * Slide start hidden, so without it nothing is; print and reduced motion show
- * everything at once, with no caret. A `done` Slide carries no animation, so a
- * remount after `far` shows it settled.
- */
+/* decision: docs/adr/0012-slide-header-and-play-once-motion.md */
 @media screen and (prefers-reduced-motion: no-preference) {
   .js [data-entry='pending'] > [data-slot='slide-header'],
   .js [data-entry='pending'] > [data-slot='slide-scene'] > * {
     opacity: 0;
   }
-  /* The Foreground rises 1.5rem as it fades in; the Backdrop fades in place. */
   [data-entry='entering'] > [data-slot='slide-scene'] > * {
     animation: slide-rise 400ms ease-out backwards;
   }
@@ -403,7 +358,6 @@
   [data-entry='entering'] > [data-entrance='fade'] {
     animation: slide-fade 400ms ease-out backwards;
   }
-  /* Typewriter: each character appears at its own `--d`; the caret sits on it for `--h`, blinking. */
   [data-entry='entering'] > [data-entrance='typewriter'] [data-char] {
     position: relative;
     animation: slide-fade 1ms step-end var(--d) backwards;
@@ -424,7 +378,6 @@
   }
 }
 
-/* Keyframes */
 @keyframes slide-rise {
   from {
     opacity: 0;
@@ -432,11 +385,6 @@
   }
 }
 
-/*
- * The human-in-the-loop diagram crossfades when the viewer changes its view (issue #383: "View changes
- * crossfade, and not at all under reduced motion"). `data-view-fade` is `on` only after a change, so the first paint
- * and a reload stay still; the diagram is keyed by its view, so each change replays it.
- */
 @media screen and (prefers-reduced-motion: no-preference) {
   [data-view-fade='on'] {
     animation: slide-fade 250ms ease-out;
@@ -575,7 +523,6 @@
   }
 }
 
-/* S2 Flow & Arrows */
 .s2-arrow-group {
   transition:
     opacity 300ms ease,
@@ -632,18 +579,11 @@
   }
 }
 
-/*
- * Page tone (FE-004 §5.4). `--tone-paper` and `--tone-ink` are the page's own `primary` pair as they resolve in the
- * active theme, kept under names the scope below can read without a cycle. A Title slide that declares
- * `tone: 'inverse'` carries `data-tone`, and while it is the active Slide the container marks `<html>`: both scopes
- * remap the text tokens to the inverse pair, so the Slide and the site header read as one dark (or, in the dark theme,
- * light) surface. `--background` stays the page's own, so what follows the Slide can match it.
- */
+/* decision: FE-004 §5.4 */
 :root,
 .dark {
   --tone-paper: var(--primary);
   --tone-ink: var(--primary-foreground);
-  /* The floating header's whole band: its 1rem top margin and its 3.875rem bar, so a Slide run up under it leaves no seam. */
   --header-block: 4.875rem;
 }
 
@@ -660,7 +600,6 @@ html[data-page-tone='inverse'] [data-testid='site-header'] {
   color: var(--tone-ink);
 }
 
-/* The header also swaps the surfaces its toggles, logo and buttons draw on, so each item keeps its contrast pair. */
 html[data-page-tone='inverse'] [data-testid='site-header'] {
   --background: var(--tone-paper);
   --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
@@ -669,8 +608,6 @@ html[data-page-tone='inverse'] [data-testid='site-header'] {
   --selected-foreground: var(--tone-paper);
 }
 
-/* An inverse Title slide keeps its headline to a readable measure, so the art has room beside it. */
-/* The toned Title slide runs up under the floating header, so its copy starts below the header's band. */
 [data-tone='inverse'][data-slot='title-slide'] {
   padding-top: calc(var(--header-block) + 1rem);
 }
@@ -683,7 +620,6 @@ html[data-page-tone='inverse'] [data-testid='site-header'] {
   max-width: 40rem;
 }
 
-/* A part that sits on an inverse Slide but is drawn for the page's own tone, such as a tool preview, flips back. */
 [data-tone='inverse'] [data-tone-flip] {
   --foreground: var(--tone-paper);
   --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);

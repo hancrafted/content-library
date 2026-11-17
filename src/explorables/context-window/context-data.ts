@@ -24,12 +24,6 @@ import { blocksChat } from './mini-chat.pure';
 import logDe from './summer-party.de.jsonl';
 import logEn from './summer-party.jsonl';
 
-/*
- * The cornerstone's data at build time: the config pair and the chat log of one locale, parsed, cut into chats and
- * checked. Runs on the server only (the data files are bundled as text); a Slide reaches it through the server entry.
- */
-
-/** Every interactive Preset id, one per Slide state of the Spec's picked Options. A test holds it to the config. */
 export const CONTEXT_PRESETS = [
   'slide-3',
   'slide-4',
@@ -43,7 +37,6 @@ export const CONTEXT_PRESETS = [
   'slide-9-after',
   'gallery-full',
 ] as const;
-/** Every static bar Preset id. */
 export const MINI_PRESETS = [
   'slide-10-old',
   'slide-10-fresh',
@@ -64,11 +57,9 @@ export interface ContextData {
   readonly words: ContextWords;
   readonly story: Readonly<Record<string, StepStory>>;
   readonly notes: Readonly<Record<string, StepNotes>>;
-  /** Attention overrides per chat, then per step. */
   readonly attention: Readonly<Record<string, Readonly<Record<string, Readonly<Record<string, number>>>>>>;
 }
 
-/** The session bar's plan: its Sections in order, each with its share of the whole (they add up to 100). */
 export interface SessionPlan {
   readonly sections: readonly { readonly id: string; readonly share: number }[];
 }
@@ -90,7 +81,6 @@ interface Config {
         readonly log?: string;
         readonly steps?: number;
         readonly blocks?: readonly [Category, number][];
-        /** `false`: the mini chat holds only its own blocks, without the shared starting instructions. */
         readonly start?: false;
       }
     >
@@ -156,7 +146,7 @@ function windowOf(config: Config, words: ContextWords, ref: WindowRef): WindowSi
 function chatsOf(en: Config, log: string): Record<string, Chat> {
   const start = startOf(en);
   const startStep: Step = { id: start.id, kind: 'start', blocks: start.blocks };
-  const full = fromClaudeLog(log, { id: 'summer-party', start, memory: en.memory });
+  const full = fromClaudeLog(log, { id: 'summer-party', start, memorySizeTokens: en.memory });
   return Object.fromEntries(
     Object.entries(en.chats).map(([id, spec]) => {
       if (!spec.log) return [id, blocksChat(id, spec.start === false ? null : startStep, spec.blocks ?? [])];
@@ -179,7 +169,6 @@ function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
 
 type MiniConfig = Config['minis'][string]['bars'][number];
 
-/** What a bar leaves out of the config falls back: no light picked, no ring, not discarded. */
 const LIGHT_DEFAULTS = { lit: null, litFrom: null, ring: [] as readonly string[], discarded: false };
 
 function miniBarOf(bar: MiniConfig, words: ContextWords, chats: Record<string, Chat>): MiniBar {
@@ -223,7 +212,6 @@ function build(en: Config, local: LocaleConfig, log: string): ContextData {
 
 const cache = new Map<ContextLocale, ContextData>();
 
-/** The cornerstone's data in one locale, parsed once per build. */
 export function contextData(locale: ContextLocale): ContextData {
   const hit = cache.get(locale);
   if (hit) return hit;
@@ -234,5 +222,4 @@ export function contextData(locale: ContextLocale): ContextData {
   return data;
 }
 
-/** The raw config pair, for the test that keeps the German keys equal to the English ones. */
 export const rawConfigs = (): { en: unknown; de: unknown } => ({ en: parse(configEn), de: parse(configDe) });

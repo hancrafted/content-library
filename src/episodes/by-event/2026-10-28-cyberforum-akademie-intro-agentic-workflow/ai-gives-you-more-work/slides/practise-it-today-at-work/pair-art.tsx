@@ -28,7 +28,6 @@ function Person({ x, y }: { x: number; y: number }) {
   );
 }
 
-/** A chat window with its title bar. */
 function ChatWindow() {
   return (
     <>
@@ -99,7 +98,6 @@ const AI = {
   ),
 } as const;
 
-/** The small drawing of one side of a pair: the moment at work, or its reflection with AI. */
 export function PairArt({ slug, side }: { slug: PairSlug; side: 'work' | 'ai' }) {
   const Art = side === 'work' ? WORK[slug] : AI[slug];
   return (

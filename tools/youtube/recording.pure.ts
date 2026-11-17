@@ -1,6 +1,3 @@
-// The Recording model of the post-production tools (`npm run youtube:*`): the schemas of the files in an Episode's
-// Recording folder and one validation entry point, `validateRecording`, which `verify` runs over every Recording
-// folder. Pure: the shell (`recording.ts`) reads the folder from disk. New Recording files add their rules here.
 import {
   chapterLines,
   deriveChapters,
@@ -13,40 +10,28 @@ import {
 import { lastChapterProblems, VIDEO_FILE, videoViolations } from './recording-video.pure.ts';
 import { chapterBlockLines, parseYoutubeFile, publishedDescription, YOUTUBE_FILE } from './youtube-file.pure.ts';
 
-/** An Episode's Slides in composition order: the Title slide, then each Section's Slides, as Slide slugs. */
 export interface Composition {
   readonly slides: readonly string[];
-  /** The Title slide's slug, when the Episode has one. */
   readonly titleSlide?: string;
-  /** Each Section's Slide slugs in order. */
   readonly sections: readonly (readonly string[])[];
-  /** Language → Slide slug → the Slide's title, for the YouTube chapter titles. */
   readonly titles: Readonly<Record<string, Readonly<Record<string, string>>>>;
 }
 
-/** The files of a Recording folder: file name (inside `recording/`) → its text. */
 export type RecordingFolder = Readonly<Record<string, string>>;
 
 export interface Violation {
-  /** The Recording folder file the violation sits in. */
   readonly file: string;
   readonly message: string;
 }
 
-/** The content of `slide-starts.<lang>.json`; the Section starts are derived from it, never stored. */
 interface SlideStarts {
   readonly videoId: string;
-  /** Slide slug → the second it starts. */
   readonly starts: Readonly<Record<string, number>>;
-  /** The Slides not found in the recording. */
   readonly unmatched: readonly string[];
-  /** The Slides in `starts` whose title was not heard: the start is inferred and Han reviews it. Absent means none. */
   readonly guessed?: readonly string[];
-  /** YouTube chapters inside a Section, merged into the Section chapters. Absent means none. */
   readonly extraChapters?: readonly Chapter[];
 }
 
-/** YouTube's rules for chapters (YouTube Help 9884579) and descriptions (12948449). */
 const MIN_CHAPTER_SECONDS = 10;
 const MAX_DESCRIPTION_CHARACTERS = 5000;
 
@@ -80,7 +65,6 @@ function shapeProblems(json: Record<string, unknown>): string[] {
   return problems;
 }
 
-/** The Slide starts in `text`, or the reasons it is no Slide starts file. */
 function parseSlideStarts(text: string): { value: SlideStarts } | { problems: string[] } {
   let json: unknown;
   try {
@@ -226,7 +210,6 @@ function youtubeViolations(composition: Composition, recording: RecordingFolder,
   return messages.map((message) => ({ file, message }));
 }
 
-/** Every rule the Recording folder of an Episode with this `composition` breaks, none when it is sound. */
 export function validateRecording(composition: Composition, recording: RecordingFolder): Violation[] {
   const files = Object.keys(recording);
   return [

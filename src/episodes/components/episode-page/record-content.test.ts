@@ -18,13 +18,6 @@ import { recordContent, type TranslatorOf } from './record-content';
 import { SlideWrapper } from './slide-wrapper';
 import { TitleSlide } from './title-slide';
 
-/*
- * Stand-in for next-intl's site-wide translator: reads the real Translation
- * files and returns each string as written (no ICU formatting), so these tests
- * read structure and keys, never wording. A missing key throws, as in the
- * static build. A Slide never reaches it: the kit builds its
- * translator from the Slide's own messages.
- */
 function translatorOf(locale: Locale): TranslatorOf {
   return async (namespace) => {
     const read = (key: string): string => {

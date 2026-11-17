@@ -49,7 +49,6 @@ function frameHosts(states: Map<string, InkState>, input: InkInput) {
   return { hosts: result, moving: [...result.values()].some((view) => view.moving) };
 }
 
-/** One page's transient registrations. It owns no browser, navigation or persisted state. */
 export function createMagneticInk() {
   const hosts = new Map<string, InkState>();
   return {

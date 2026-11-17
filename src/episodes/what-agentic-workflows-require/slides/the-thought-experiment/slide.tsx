@@ -4,7 +4,6 @@ import { SeamSum, type Half, type SeamSumCard } from '@/episodes/components/slid
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Each card, the half of the goal its seam failure breaks, in board order. */
 const CARDS = [
   { slug: 'activities', breaks: 'together' },
   { slug: 'travel', breaks: 'safely' },
@@ -14,12 +13,6 @@ const CARDS = [
 
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
-/*
- * "The thought experiment" (Spec Option 1c): the party board as a sum. Four cards, each ticked by a person against its
- * own goal, add up plus by plus to the party, which fails; each card carries its failure at the seam with another card
- * and the half of the goal it breaks. The manager's question sits under it as the one `primary` banner. The marks stay
- * unexplained; later Slides resolve them. No motion: the sum reads in a still frame.
- */
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },

@@ -3,3 +3,9 @@
 # which runs on our own source files and never ships in the static export.
 # The expiry forces a re-check; drop this entry as soon as a patched release lands.
 CVE-2026-93687 exp:2026-12-31
+
+# picomatch 4.0.7 and 2.3.2 are the newest releases of their lines; CVE-2026-112366 has no fixed version yet.
+# It needs an attacker-supplied glob; every glob here comes from our own config and dev tooling
+# (vitest, knip, lint-staged, dependency-cruiser, micromatch, next-intl's file watcher), never from a visitor,
+# and none of it ships in the static export. Drop this entry as soon as a patched release lands.
+CVE-2026-112366 exp:2026-12-31

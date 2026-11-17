@@ -3,12 +3,6 @@ import type { PlaylistInput } from '../schemas/playlist.schema';
 const EVENT = '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows';
 const INTRO = `${EVENT}__intro`;
 
-/**
- * The CyberForum Akademie hands-on workshop in the order the afternoon runs: its intro, then each theory Episode
- * followed by the hands-on step it leads into, each a Slide of the intro opened by its anchor, and the
- * intro's close last. The intro groups its hands-on Slides in `hands-on`; this list orders them by time. Public,
- * so the Event is listed and indexed.
- */
 export const playlist = {
   id: 'cyberforum-akademie-hands-on-agentic-workflows',
   visibility: 'public',

@@ -4,7 +4,6 @@ import { artName } from '../art/art.pure';
 import styles from './control-room.module.css';
 import { ROOM, roomFacets, windowAt, type RoomSize } from './control-room.pure';
 
-/** The hour the window shows: day, a low sun at dusk on the left, or at dawn on the right. */
 export type RoomTime = 'day' | 'dusk' | 'dawn';
 
 const SKY: Record<RoomTime, string | undefined> = {
@@ -13,7 +12,6 @@ const SKY: Record<RoomTime, string | undefined> = {
   dawn: styles.skyDawn,
 };
 
-/** The window onto the deck at its hour: sky, a low sun at dusk and dawn, sea, frame and mullion. */
 function RoomWindow({ time, size }: { readonly time: RoomTime; readonly size: RoomSize }) {
   const { x, y } = windowAt(size);
   return (
@@ -27,7 +25,6 @@ function RoomWindow({ time, size }: { readonly time: RoomTime; readonly size: Ro
   );
 }
 
-/** The wall clock: the days pass under it. */
 function WallClock() {
   return (
     <g data-wall-clock transform="translate(26 44)">
@@ -39,22 +36,13 @@ function WallClock() {
 }
 
 export interface ControlRoomProps {
-  /** The room's drawing space; the comic panels' 300 by 180 room, floor at 158, when left out. */
   readonly size?: RoomSize;
-  /** The hour the window onto the deck shows, or `false` for a bare wall. */
   readonly time?: RoomTime | false;
-  /** The wall clock at the left; `false` leaves it off. */
   readonly clock?: boolean;
-  /** The Scene's own cast, console and props, drawn in front of the room and standing on `size.floor`. */
   readonly children?: ReactNode;
 }
 
-/**
- * The control room the pilot's console stands in (design-ADR 0025, "Scene figures are deep modules"): a faceted wall
- * lit from the upper left, the floor, the window onto the deck at its hour and the wall clock. Scenery only: it draws
- * no figure; a Scene places its cast and the `Console` as children on the floor line, and draws its own props (a
- * pinned card, a binder) the same way. An SVG group with no motion, placed in the Scene's own `<svg>`.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function ControlRoom({ size = ROOM, time = 'day', clock = true, children }: ControlRoomProps) {
   return (
     <g data-control-room className={styles.room}>

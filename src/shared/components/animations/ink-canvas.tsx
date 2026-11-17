@@ -11,7 +11,6 @@ interface InkCanvasProps {
   filterId?: string;
 }
 
-/** The filtered, bottom-origin ink surface. Progress consumers own only its scale. */
 export function InkCanvas({
   inkScaleRef,
   color,

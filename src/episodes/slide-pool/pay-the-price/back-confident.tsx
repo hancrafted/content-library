@@ -1,14 +1,12 @@
 import { BackSvg, beat, Who, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** The three pieces that fit, each with its delay. */
 const PIECES = [
   { x: 2, y: 2, d: 0.2 },
   { x: 24, y: 2, d: 0.45 },
   { x: 2, y: 24, d: 0.7 },
 ] as const;
 
-/** Three pieces fit; a triangle wider than the square slot lodges crooked in it. */
 function Puzzle({ fill }: { fill: string }) {
   return (
     <g transform="translate(6 13)">
@@ -40,7 +38,6 @@ function Puzzle({ fill }: { fill: string }) {
   );
 }
 
-/** Then a speech bubble (an AI chat bubble on the right) lands, and a checkmark draws in it. */
 function SureBubble({ ai }: BackProps) {
   const ink = ai ? 'stroke-ai' : 'stroke-foreground';
   return (
@@ -69,10 +66,6 @@ function SureBubble({ ai }: BackProps) {
   );
 }
 
-/**
- * Confident: three puzzle pieces fit, a triangle wider than the square slot lodges crooked in it, then a
- * speech bubble with a checkmark lands, sure of itself.
- */
 export function ConfidentBack({ ai }: BackProps) {
   return (
     <BackSvg width={158}>

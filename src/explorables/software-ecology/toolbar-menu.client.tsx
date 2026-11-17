@@ -14,15 +14,6 @@ import { placeSettings, type SettingsPlace } from './settings-placement.pure.ts'
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * A toolbar dropdown, as the reference build's `wireMenu` makes its menus: its button toggles it, a click outside or
- * Escape closes it, and Escape hands focus back to its button. Escape closes an open menu before anything else, so it
- * stops there. Which menu is open belongs to the toolbar: one at a time. A `window` menu (the Settings popover) is
- * fixed to the window and placed by `placeSettings`, so it stays inside it (feedback 08); a `below` menu hangs under
- * its button.
- */
-
-/** A menu button's text and its ▾. */
 export const MenuFace = ({ text }: { readonly text: string }) => (
   <>
     <span>{text}</span>
@@ -33,30 +24,16 @@ export const MenuFace = ({ text }: { readonly text: string }) => (
 export interface ToolbarMenuProps {
   readonly open: boolean;
   readonly onOpen: (open: boolean) => void;
-  /** What the button shows: a glyph, a text and its ▾. */
   readonly face: ReactNode;
-  /** The button's name when its face is a glyph alone. */
   readonly ariaLabel?: string;
-  /** The site's tooltip on the button; none when empty. */
   readonly tip: string;
-  /** The menu group's name. */
   readonly label: string;
-  /** The button's eval hook, `toolbar.<name>`. */
   readonly control: string;
-  /** The button's classes. */
   readonly buttonClass: string;
-  /** Pressed while one of its entries is on (the Scenarios button). */
   readonly pressed?: boolean;
-  /** `menu` for a list of choices, `dialog` for a panel of controls (the Settings popover). */
   readonly role: 'menu' | 'dialog';
-  /**
-   * `below` hangs under the button (the default); `window` is fixed to the window, up to 760 px wide and kept inside
-   * it (the Settings popover).
-   */
   readonly placement?: 'below' | 'window';
-  /** Extra classes on the menu box. */
   readonly menuClass?: string;
-  /** The menu's body; a function gets `close`, which closes the menu and hands focus back to its button. */
   readonly children: ReactNode | ((close: () => void) => ReactNode);
 }
 
@@ -84,7 +61,6 @@ function useDismiss(p: ToolbarMenuProps, anchor: RefObject<HTMLDivElement | null
   return btn;
 }
 
-/** The Settings popover's box while it is open, placed again on every resize and scroll. */
 function usePlace(open: boolean, on: boolean, btn: RefObject<HTMLButtonElement | null>): SettingsPlace | null {
   const [place, setPlace] = useState<SettingsPlace | null>(null);
   const again = useCallback(() => {

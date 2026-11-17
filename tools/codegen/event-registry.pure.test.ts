@@ -4,7 +4,6 @@ import { EVENT_REGISTRY_PATHS, eventRegistryFiles } from './event-registry.pure.
 const AXEL = '2026-10-23-axel-agentic-workflow.ts';
 const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow.ts';
 
-/** The text of one generated file. */
 function fileAt(files: readonly string[], path: string): string {
   return eventRegistryFiles(files).find((file) => file.path === path)?.text ?? '';
 }

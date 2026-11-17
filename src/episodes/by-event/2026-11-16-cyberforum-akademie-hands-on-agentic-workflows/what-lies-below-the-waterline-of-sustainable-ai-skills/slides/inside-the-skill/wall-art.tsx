@@ -1,18 +1,10 @@
 import styles from './inside.module.css';
 
-/*
- * The control-room wall behind the card, lifted from Spec Option 16a (feedback 3, decision 46): the wall in many
- * facets lit from the upper left. The Option draws it in a 1000 by 690 box; here it fills `ZoneScene`'s 1200 by 800
- * space, which the Scene crops to its box. The console's edge along the foot is `ConsoleEdge`, a thin strip of fixed
- * height: drawn here, the Scene's crop scaled it up to a heavy band on tall Scenes. Tones live in the Slide token file.
- */
-
 const SCALE_X = 1200 / 1000;
 const SCALE_Y = 800 / 698;
 
 type Tone = 'room' | 'room-lit' | 'room-shade';
 
-/** The Option's facets, merged per tone and drawn in this order: wall, its lit and shaded planes. */
 const FACETS: readonly (readonly [Tone, string])[] = [
   [
     'room',
@@ -28,7 +20,6 @@ const FACETS: readonly (readonly [Tone, string])[] = [
   ],
 ];
 
-/** The wall, as the Scene's only drawing; the card and its files lie over it as HTML. */
 export function WallArt() {
   return (
     <g data-wall-art className={styles.wall}>
@@ -41,7 +32,6 @@ export function WallArt() {
   );
 }
 
-/** The console's edge along the Scene's foot, as the Option draws it: a lit rim over the console, lit at the left. */
 export function ConsoleEdge() {
   return (
     <span

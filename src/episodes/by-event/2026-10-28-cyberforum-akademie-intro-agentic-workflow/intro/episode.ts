@@ -12,13 +12,7 @@ import { orgaSection } from './sections/orga';
 import { pollSection } from './sections/poll';
 import { hero } from './slides/hero/slide';
 
-/*
- * The opening Episode the CyberForum Akademie webinar (Event 2026-10-28-cyberforum-akademie-intro-agentic-workflow)
- * presents: a copy of the Workshop template (docs/features/events.md, "Add an Event"), its hook renamed `grounding`
- * because it grounds: the three layers of the evening. Then the agenda, the scope, a poll, About me (the value chain) as its
- * own Section, and the organisation. Then one check-in Section per theory Episode, which the Event's Playlist
- * links to by anchor between the Episodes. Unlisted: it lives only under its Event.
- */
+// spec: docs/features/events.md#add-an-event
 export const cyberforumIntro = episode({
   slug: 'intro',
   messages: { en, de },

@@ -12,10 +12,8 @@ const BOEHM = {
 };
 const NASA_IVV = { slug: 'nasa-ivv-overview', url: 'https://www.nasa.gov/ivv-overview/' };
 
-/** The contract lines the paintball note is checked against; each passed. */
 const CHECKS = ['headcount', 'budget', 'date'] as const;
 
-/** The paintball note's line forking into the two checks below it, drawn only where the checks sit side by side. */
 function Fork() {
   return (
     <svg viewBox="0 0 120 80" className="hidden h-20 w-full @4xl:block" preserveAspectRatio="none" aria-hidden="true">
@@ -29,12 +27,6 @@ function Fork() {
   );
 }
 
-/**
- * "Reviewing the result" (Spec Option 9a): the paintball note forks into two checks side by side. Verification reads it
- * against its contract, the contract card's check variant, three ticks in foreground; validation reads it against the
- * goal, one cross where Travel's accessible bus already said ten colleagues use wheelchairs, and the fix written back
- * into the contract. Keeps `basic-page` and `motion: none`; no hover, both checks are read side by side.
- */
 export const reviewingTheResult = slide({
   slug: 'reviewing-the-result',
   messages: { en, de },

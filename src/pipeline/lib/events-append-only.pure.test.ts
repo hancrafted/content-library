@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { eventLogDeletions } from './events-append-only.pure.ts';
 
-/*
- * The append-only guard: given the staged diff (`git diff --cached -U0`), which Episode `events.jsonl`
- * files lose lines. Diffs here are hand-written.
- */
-
 const LOG = 'docs/episodes/x/events.jsonl';
 
 const diff = (file: string, body: string) =>

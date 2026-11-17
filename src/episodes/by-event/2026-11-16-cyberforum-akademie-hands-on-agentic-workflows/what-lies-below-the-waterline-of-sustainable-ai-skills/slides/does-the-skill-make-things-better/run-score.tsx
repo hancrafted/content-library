@@ -12,15 +12,12 @@ export interface RunScoreProps {
   readonly run: 'without' | 'with';
   readonly label: string;
   readonly checks: readonly RunCheck[];
-  /** Spoken names of a passed and a failed check, for the icons. */
   readonly verdict: { readonly pass: string; readonly fail: string };
 }
 
-/** The gap between two segments filling in, and the head start of the with-skill run over its neighbour (ms). */
-const SEGMENT_STEP = 150;
-const RUN_DELAY = { without: 300, with: 1100 } as const;
+const SEGMENT_STEP_MILLISECONDS = 150;
+const RUN_DELAY_MILLISECONDS = { without: 300, with: 1100 } as const;
 
-/** The score's bar: one segment per check, the passed ones filled in, one after the other. */
 function ScoreBar({ run, checks, passed }: Pick<RunScoreProps, 'run' | 'checks'> & { readonly passed: number }) {
   return (
     <div aria-hidden className="grid grid-cols-4 gap-1.5">
@@ -28,7 +25,9 @@ function ScoreBar({ run, checks, passed }: Pick<RunScoreProps, 'run' | 'checks'>
         <span
           key={label}
           data-motion={index < passed ? 'fill' : undefined}
-          style={{ '--seg-delay': `${RUN_DELAY[run] + index * SEGMENT_STEP}ms` } as CSSProperties}
+          style={
+            { '--seg-delay': `${RUN_DELAY_MILLISECONDS[run] + index * SEGMENT_STEP_MILLISECONDS}ms` } as CSSProperties
+          }
           className={cn(
             'h-2.5 rounded-full border border-muted-foreground',
             index < passed && styles.segment,
@@ -40,7 +39,6 @@ function ScoreBar({ run, checks, passed }: Pick<RunScoreProps, 'run' | 'checks'>
   );
 }
 
-/** The checks, each marked pass or fail. */
 function Checks({ checks, verdict }: Pick<RunScoreProps, 'checks' | 'verdict'>) {
   return (
     <ul className="flex flex-col gap-1">
@@ -60,10 +58,6 @@ function Checks({ checks, verdict }: Pick<RunScoreProps, 'checks' | 'verdict'>) 
   );
 }
 
-/**
- * One run's score, an illustration of the viewer's own test: passed checks out of all, a bar of one segment per check
- * that fills in once on entry (the without-skill run first), and the checks themselves, each marked pass or fail.
- */
 export function RunScore({ run, label, checks, verdict }: RunScoreProps) {
   const passed = checks.filter(({ pass }) => pass).length;
   return (

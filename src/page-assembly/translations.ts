@@ -28,14 +28,7 @@ import pageCopyEn from './lib/i18n/en.json';
 import resourcesOverviewDe from './resources-overview/i18n/de.json';
 import resourcesOverviewEn from './resources-overview/i18n/en.json';
 
-/*
- * The site's message set, merged from every owner's Translation files (FE-003 §4). Page assembly sits above every
- * owner (templates, product areas, page chrome), so this root file is the one place that may import them all; only
- * the next-intl request config and tests import it. Code reads the merged set through next-intl, and its own words
- * from its own folder.
- */
-
-/** Every owner's `i18n/` pair. A namespace two of them define fails this module's load: the fast suite and the build. */
+// decision: FE-003 §4
 export const TRANSLATION_OWNERS = [
   translationOwner('src/shared/page-chrome/i18n', chromeEn, chromeDe),
   translationOwner('src/page-assembly/lib/i18n', pageCopyEn, pageCopyDe),
@@ -52,16 +45,10 @@ export const TRANSLATION_OWNERS = [
   translationOwner('src/episodes/components/episode-page/i18n', episodePageEn, episodePageDe),
 ] as const;
 
-/** The merged English files: the type every `t('…')` key is checked against. */
 export type Messages = MergedMessages<typeof TRANSLATION_OWNERS>;
 
 export const TRANSLATIONS: Record<Locale, Messages> = mergeTranslationFiles(TRANSLATION_OWNERS);
 
-/**
- * Types every `t('…')` key and `locale` argument against the merged set; elsewhere, `Messages` from `next-intl` is
- * this type. The empty import loads `next-intl` into every program, so the augmentation applies even where no other
- * file imports its main entry; without it `next-intl/server` translators silently accept any key.
- */
 declare module 'next-intl' {
   interface AppConfig {
     Locale: Locale;

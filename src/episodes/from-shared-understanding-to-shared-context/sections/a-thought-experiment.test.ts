@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { aThoughtExperimentSection } from './a-thought-experiment';
 
-/*
- * Section 1, "A thought experiment", as the approved Spec gives it: its section slide, then Slides 1 to 3 built to the
- * picked Options 1c, 2c and 3b, each titled, scripted and noted as the Spec writes it, and each Scene drawing the
- * factory line its Option shows.
- */
-
 const SLIDES = aThoughtExperimentSection as readonly Slide[];
 const PLACED = placeSections<Slide>([aThoughtExperimentSection]).flat();
 
@@ -32,7 +26,6 @@ const slideOf = (slug: string) => {
   return own;
 };
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" placed.`);

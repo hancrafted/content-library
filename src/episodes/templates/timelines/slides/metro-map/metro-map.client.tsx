@@ -12,10 +12,6 @@ interface Open {
   anchor: HTMLElement;
 }
 
-/**
- * What is lit: a hover or focus previews a lane or station, a legend click
- * pins a lane, an open station pins its lanes. A preview wins over a pin.
- */
 function useMapFocus() {
   const [preview, setPreview] = useState<MapFocus>(null);
   const [pinnedLane, setPinnedLane] = useState<Lane | null>(null);
@@ -49,7 +45,6 @@ export interface MetroMapProps {
   items: Record<Station, StationCopy>;
 }
 
-/** Three lanes that branch apart and merge at interchanges; the legend and stations light their lanes, a station opens its story. */
 export function MetroMap({ label, lanes, items }: MetroMapProps) {
   const baseId = useId();
   const state = useMapFocus();
@@ -78,7 +73,6 @@ interface CanvasProps {
   baseId: string;
 }
 
-/** The map itself: scrolls sideways on a phone rather than squeezing the stations into each other. */
 function MetroCanvas({ label, items, state, baseId }: CanvasProps) {
   return (
     <div className="-mx-4 overflow-x-auto px-4 py-14 md:mx-0 md:px-0">
@@ -102,7 +96,6 @@ function MetroCanvas({ label, items, state, baseId }: CanvasProps) {
   );
 }
 
-/** The legend names each lane in text; hovering previews a lane, a click pins it until clicked again. */
 function MetroLegend({ lanes, state }: { lanes: Record<Lane, string>; state: MapState }) {
   const { setPreview, pinnedLane, togglePin } = state;
   const clear = () => setPreview(null);

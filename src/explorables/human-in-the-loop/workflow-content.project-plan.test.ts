@@ -8,12 +8,6 @@ import { slotSample } from './workflow-sample.pure';
 import type { TaskDef } from './workflow-schema.types';
 import { workflowView } from './workflow-view.pure';
 
-/*
- * The project-plan Workflow held to the decisions of epic #372: six stages that teach a discipline each, jobs in
- * `needs` order, caps of demo mode next to their full values, prompts without the scenario, a practice run and a
- * subagent per round in the CLI prompts, and the summer party as the sample of the first job only.
- */
-
 const DISCIPLINES = ['Project planning', 'Requirements engineering', 'Project management', 'Quality assurance'];
 const LOCALES = ['en', 'de'] as const;
 const { file } = workflowFor('project-plan', 'en');

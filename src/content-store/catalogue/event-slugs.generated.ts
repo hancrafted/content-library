@@ -7,4 +7,5 @@ export const EVENT_SLUGS = [
   '2026-10-28-cyberforum-akademie-intro-agentic-workflow',
   '2026-11-04-intro-hitl-workflows',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',
+  '2026-11-18-cyberforum-exi-digital-agentic-workflows',
 ] as const;

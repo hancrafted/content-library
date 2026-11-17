@@ -1,9 +1,4 @@
-/*
- * The Episode's tripartite palette (FE-002 §7): machine, human and AI. The
- * Episode references the global `machine`, `human` and `ai` tokens directly
- * (`text-machine`), so this file re-declares no global token name; the
- * Episode's own names live here, scoped by the page's `data-episode` wrapper.
- */
+/* decision: FE-002 §7 */
 [data-episode='maintaining-markdown-for-ai'] {
   --palette-machine: var(--machine);
   --palette-human: var(--human);

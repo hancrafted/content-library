@@ -1,7 +1,3 @@
-// Explorable page shape (#416): every Explorable page and the page template, in both locales, is a Title slide, the
-// Section `play` (the Explorable), then the Section `about` (one Why, How, What slide whose columns carry the cited
-// Speaker notes its page expects). No Preset gallery Slide remains.
-
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -13,24 +9,13 @@ const SHAPED = EXPORTED_EPISODE_SHAPED_PAGES.filter(
 );
 const COLUMNS = ['why', 'how', 'what'];
 type ColumnNotes = Readonly<Record<'why' | 'how' | 'what', number>>;
-/** One cited Speaker note a column, unless the page's approved Spec Option says otherwise (below). */
 const DEFAULT_NOTES: ColumnNotes = { why: 1, how: 1, what: 1 };
-/**
- * Pages whose columns carry other counts: the AI disciplines page cites the evidence behind its hero's "20x" headline
- * in a second Why note; the software ecology page's Why and What each cite two sources in a note of their own, and its
- * How column, which makes no sourced claim, none (its approved Spec, Option 2b).
- */
 const COLUMN_NOTES: Readonly<Record<string, ColumnNotes>> = {
   'ai-capability': { why: 2, how: 1, what: 1 },
   'software-ecology': { why: 2, how: 0, what: 2 },
 };
-/**
- * Pages whose hero rear is the two glow layers alone, with no drift canvas: the software ecology hero has no drift
- * story, its motif lives in the factory preview (its approved Spec, Title-slide Option 0a's build notes).
- */
 const GLOW_ONLY_PAGES: readonly string[] = ['software-ecology'];
 const TEMPLATE_FOLDER = 'templates/explorable-page';
-/** What only the page template may ship: its placeholder source URL and its "Replace with ..." words. */
 const PLACEHOLDER = /example\.com\/replace-with-a-source|replace with/i;
 const exportedHtml = (url: string) => readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8');
 
@@ -121,10 +106,9 @@ describe('explorable page shape', () => {
       expect(name).toBeTruthy();
     });
 
-    it('draws its background on its canvas layers inside the Backdrop and requests nothing from the network', () => {
+    it('draws its background on its three canvas layers inside the Backdrop, none on a glow-only hero, and requests nothing from the network', () => {
       // ARRANGE
       const $ = exportedPage(url);
-      // The faint field, its blurred half and the accent beat: one drawing, three layers; none on a glow-only hero.
       const layers = GLOW_ONLY_PAGES.includes(slug) ? 0 : 3;
       // ACT
       const canvases = $('[data-slot="title-slide"] [data-slot="slide-backdrop"] canvas').length;

@@ -1816,6 +1816,420 @@
         ]
       }
     },
+    "2026-11-18-cyberforum-exi-digital-agentic-workflows__ai-attention-span": {
+      "en": {
+        "title": "Why AI has a weird attention span you must learn to manage",
+        "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
+        "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+        "minutes": 20.3,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Thought experiment",
+            "minutes": 0.6571428571428571,
+            "items": [
+              {
+                "id": "thought-experiment--the-long-phone-call-story",
+                "title": "The long phone call",
+                "minutes": 1.4285714285714286
+              },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "AI forgets the middle too",
+                "minutes": 1.5999999999999999
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "The AI's attention span",
+            "minutes": 0.34285714285714286,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "The context window",
+                "minutes": 1.0571428571428572
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "What happens when the context fills up",
+                "minutes": 2.25
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Attention is a budget",
+                "minutes": 2.2142857142857144
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "What we learned so far",
+                "minutes": 1.0571428571428572
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "What fills the window",
+            "minutes": 0.29285714285714287,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "What's really in the context window",
+                "minutes": 1.1500000000000001
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "One innocent question",
+                "minutes": 1.3285714285714285
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "The chat looks the same. The window doesn't.",
+                "minutes": 0.8714285714285714
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Managing the attention span",
+            "minutes": 0.21428571428571427,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Everyday habits",
+                "minutes": 1.5999999999999999
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "The workflow for bigger projects",
+                "minutes": 1.8928571428571428
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human in the loop workflow",
+                "minutes": 1.9
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Congratulations",
+                "minutes": 0.44285714285714284
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+        "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
+        "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+        "minutes": 30.174999999999997,
+        "sections": [
+          {
+            "id": "thought-experiment",
+            "title": "Gedankenexperiment",
+            "minutes": 0.8083333333333333,
+            "items": [
+              { "id": "thought-experiment--the-long-phone-call-story", "title": "Das lange Telefonat", "minutes": 1.9 },
+              {
+                "id": "thought-experiment--ai-forgets-the-middle-too",
+                "title": "Auch die KI vergisst die Mitte",
+                "minutes": 2.3499999999999996
+              }
+            ]
+          },
+          {
+            "id": "the-ais-attention-span",
+            "title": "Die Aufmerksamkeitsspanne der KI",
+            "minutes": 0.475,
+            "items": [
+              {
+                "id": "the-ais-attention-span--the-context-window",
+                "title": "Das Kontextfenster",
+                "minutes": 2.0416666666666665
+              },
+              {
+                "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+                "title": "Was passiert, wenn der Kontext voll wird",
+                "minutes": 2.7083333333333335
+              },
+              {
+                "id": "the-ais-attention-span--attention-is-a-budget",
+                "title": "Aufmerksamkeit ist ein Budget",
+                "minutes": 3.958333333333334
+              },
+              {
+                "id": "the-ais-attention-span--what-we-learned-so-far",
+                "title": "Was wir bisher gelernt haben",
+                "minutes": 1.6166666666666667
+              }
+            ]
+          },
+          {
+            "id": "what-fills-the-window",
+            "title": "Was das Fenster füllt",
+            "minutes": 0.39166666666666666,
+            "items": [
+              {
+                "id": "what-fills-the-window--whats-really-in-the-window",
+                "title": "Was wirklich im Kontextfenster steckt",
+                "minutes": 2.033333333333333
+              },
+              {
+                "id": "what-fills-the-window--one-innocent-question",
+                "title": "Eine harmlose Frage",
+                "minutes": 2.0666666666666664
+              },
+              {
+                "id": "what-fills-the-window--you-cant-watch-the-meter",
+                "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+                "minutes": 1.85
+              }
+            ]
+          },
+          {
+            "id": "managing-the-attention-span",
+            "title": "Die Aufmerksamkeitsspanne managen",
+            "minutes": 0.275,
+            "items": [
+              {
+                "id": "managing-the-attention-span--everyday-habits",
+                "title": "Gewohnheiten für jeden Tag",
+                "minutes": 1.6333333333333333
+              },
+              {
+                "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+                "title": "Der Workflow für größere Projekte",
+                "minutes": 2.3166666666666664
+              },
+              {
+                "id": "managing-the-attention-span--human-in-the-loop-workflow",
+                "title": "Human-in-the-Loop-Workflow",
+                "minutes": 3.2249999999999996
+              },
+              {
+                "id": "managing-the-attention-span--now-you-know-how-it-feels",
+                "title": "Glückwunsch",
+                "minutes": 0.525
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-18-cyberforum-exi-digital-agentic-workflows__ai-gives-you-more-work": {
+      "en": {
+        "title": "Will AI reduce your work? It adds work: managing it.",
+        "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+        "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+        "minutes": 5.421428571428572,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "From execution to management",
+            "minutes": 0.8642857142857143,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Every revolution, one card",
+                "minutes": 1.7857142857142856
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "You were promoted",
+                "minutes": 1.3214285714285714
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Practise it today, at work",
+                "minutes": 1.45
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+        "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+        "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+        "minutes": 6.116666666666667,
+        "sections": [
+          {
+            "id": "from-execution-to-management",
+            "title": "Von der Ausführung zum Management",
+            "minutes": 0.9666666666666667,
+            "items": [
+              {
+                "id": "from-execution-to-management--every-revolution-one-card",
+                "title": "Jede Revolution, eine Karte",
+                "minutes": 1.9666666666666668
+              },
+              {
+                "id": "from-execution-to-management--you-were-promoted",
+                "title": "Du wurdest befördert",
+                "minutes": 1.5166666666666666
+              },
+              {
+                "id": "from-execution-to-management--practise-it-today-at-work",
+                "title": "Üb es heute, bei der Arbeit",
+                "minutes": 1.6666666666666667
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-18-cyberforum-exi-digital-agentic-workflows__intro": {
+      "en": {
+        "title": "Agentic workflows: solving complex tasks with AI",
+        "caption": "A picture in your head of how the AI ticks, whatever the tool.",
+        "description": "What the workshop covers and leaves out, and how it runs: three layers, the agenda, the scope, a poll and the organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rapid evolution of AI disciplines", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "In scope",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Out of scope", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Where do you stand?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "About me", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: freelancer with amnesia", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: the attention span", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: from doing to managing",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Where today's demo sits", "minutes": 0 }]
+          }
+        ]
+      },
+      "de": {
+        "title": "Agentic Workflows: komplexe Aufgaben mit KI lösen",
+        "caption": "Ein Bild im Kopf, wie die KI tickt, egal mit welchem Tool.",
+        "description": "Was der Workshop behandelt und auslässt, und wie es abläuft: drei Ebenen, die Agenda, der Fokus, eine Umfrage und die Organisation.",
+        "minutes": 0,
+        "sections": [
+          { "id": "grounding", "title": "Rasante Entwicklung der KI-Disziplinen", "minutes": 0, "items": [] },
+          { "id": "agenda", "title": "Agenda", "minutes": 0, "items": [] },
+          {
+            "id": "in-scope",
+            "title": "Im Fokus",
+            "minutes": 0,
+            "items": [{ "id": "in-scope--out-of-scope", "title": "Nicht im Fokus", "minutes": 0 }]
+          },
+          { "id": "poll", "title": "Wo steht ihr?", "minutes": 0, "items": [] },
+          { "id": "about-me", "title": "Über mich", "minutes": 0, "items": [] },
+          { "id": "orga", "title": "Organisation", "minutes": 0, "items": [] },
+          { "id": "check-in-1", "title": "Check-in: Freelancer mit Amnesie", "minutes": 0, "items": [] },
+          { "id": "check-in-2", "title": "Check-in: die Aufmerksamkeitsspanne", "minutes": 0, "items": [] },
+          {
+            "id": "check-in-3",
+            "title": "Check-in: vom Ausführen zum Managen",
+            "minutes": 0,
+            "items": [{ "id": "check-in-3--disciplines-recap", "title": "Wo die Demo von heute steht", "minutes": 0 }]
+          }
+        ]
+      }
+    },
+    "2026-11-18-cyberforum-exi-digital-agentic-workflows__onboard-ai-every-time": {
+      "en": {
+        "title": "Treat AI like a brilliant freelancer with amnesia",
+        "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+        "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+        "minutes": 6.95,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "The thought experiment",
+            "minutes": 0.5,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "You're the new hire",
+                "minutes": 1.0857142857142856
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Five traits, or you pay the price",
+                "minutes": 0.8071428571428572
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "What happens with one prompt",
+                "minutes": 1.8214285714285714
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "How do we work with this freelancer?",
+            "minutes": 0.16428571428571428,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Five moves against five traits",
+                "minutes": 0.5928571428571429
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Your first human-in-the-loop agentic workflow",
+                "minutes": 1.6642857142857144
+              }
+            ]
+          }
+        ]
+      },
+      "de": {
+        "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+        "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
+        "description": "Die fünf Eigenschaften, die KI teuer machen, und die fünf Schritte, mit denen Du sie im Griff behältst: Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+        "minutes": 9.675,
+        "sections": [
+          {
+            "id": "the-thought-experiment",
+            "title": "Das Gedankenexperiment",
+            "minutes": 0.43333333333333335,
+            "items": [
+              {
+                "id": "the-thought-experiment--you-are-the-new-hire",
+                "title": "Du bist die neue Kraft",
+                "minutes": 1.4333333333333333
+              },
+              {
+                "id": "the-thought-experiment--pay-the-price",
+                "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
+                "minutes": 2.1083333333333334
+              },
+              {
+                "id": "the-thought-experiment--one-prompt",
+                "title": "Was ein einziger Prompt bewirkt",
+                "minutes": 2.2333333333333334
+              }
+            ]
+          },
+          {
+            "id": "five-moves-to-brief-a-freelancer",
+            "title": "Wie arbeiten wir mit diesem Freelancer?",
+            "minutes": 0.8333333333333334,
+            "items": [
+              {
+                "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+                "title": "Fünf Schritte gegen fünf Eigenschaften",
+                "minutes": 0.3416666666666667
+              },
+              {
+                "id": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+                "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+                "minutes": 1.9083333333333334
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ai-attention-span": {
       "en": {
         "title": "Why AI has a weird attention span you must learn to manage",

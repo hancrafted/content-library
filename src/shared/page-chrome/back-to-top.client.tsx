@@ -15,7 +15,6 @@ function scrollToStart() {
   });
 }
 
-/** Returns to the document start, including any framing above its Title slide. */
 export function BackToTop(props: {
   label: string;
   locale: Locale;
@@ -55,7 +54,6 @@ function subscribeToScroll(notify: () => void) {
 const pastStart = () => window.scrollY > window.innerHeight;
 const AT_START = () => false;
 
-/** CSS suppresses the fallback wherever page chrome already provides its own action. */
 export function SiteBackToTop({ label }: { label: string }) {
   const visible = useSyncExternalStore(subscribeToScroll, pastStart, AT_START);
   if (!visible) return null;

@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 
 const TILT = { left: '-rotate-2', right: 'rotate-1', none: '' } as const;
 
-/** What holds a note to the board: a tape strip, or on the emphasised note a pin. */
 function Fastener({ pinned }: { pinned: boolean }) {
   return pinned ? (
     <span
@@ -26,7 +25,6 @@ interface NoteProps {
   'data-target'?: string;
 }
 
-/** A note on the board: taped down, or with `emphasis` filled in `primary`, pinned and titled larger. */
 export function Note({ index, title, body, tilt, emphasis = false, className, children, ...target }: NoteProps) {
   const fill = emphasis ? 'bg-primary p-8 text-primary-foreground shadow-xl' : 'bg-card p-6 shadow-md';
   return (

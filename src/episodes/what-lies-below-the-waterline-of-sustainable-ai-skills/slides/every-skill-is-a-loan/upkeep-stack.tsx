@@ -8,7 +8,6 @@ export interface UpkeepStackProps {
   readonly alt: string;
   readonly writing: { readonly label: string; readonly hint: string };
   readonly keeping: { readonly label: string; readonly hint: string };
-  /** The paid blocks, bottom first, each lighting with its entry; then the next, not yet paid. */
   readonly blocks: readonly { readonly key: string; readonly label: string }[];
   readonly next: { readonly key: string; readonly label: string };
   readonly note: string;
@@ -25,11 +24,6 @@ function Caption({ label, hint }: { readonly label: string; readonly hint: strin
   );
 }
 
-/**
- * Writing weighed against keeping it right (Option 23b): one thin slab for the five minutes, a stack of one block per
- * fix, the Spec's faceted blocks with their lit tops beside it, each block lighting with its entry on the statement, and a dashed outline for the next. Heights are
- * illustration, labelled as such.
- */
 export function UpkeepStack({ label, alt, writing, keeping, blocks, next, note }: UpkeepStackProps) {
   return (
     <div className={cn('rounded-xl p-5', styles.glass)}>

@@ -3,11 +3,6 @@ import type { Theme } from '@/shared/lib/prefs.pure';
 import { DARK_QUERY, resolveTheme } from '@/shared/lib/theme.pure';
 import { useCallback, useEffect, useState } from 'react';
 
-/**
- * The chosen theme and a setter that persists it. `null` until mounted, since a
- * static page cannot know the stored choice at build time. While `system` is
- * chosen, OS theme changes apply live.
- */
 export function useTheme(): [Theme | null, (theme: Theme) => void] {
   const [theme, setThemeState] = useState<Theme | null>(null);
 

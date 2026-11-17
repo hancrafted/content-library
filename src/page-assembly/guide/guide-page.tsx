@@ -8,19 +8,13 @@ import { ROUTES } from '@/shared/lib/static-routes';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
-/** A Guide: the page reference carrying its composition's ref. */
 export type BuiltGuide = PageOf<'guide'>;
 
-/** The page the page catalogue builds at `/guides/<slug>/`, else the 404. */
 export function guideOf(params: RouteParams<GuideParams>): BuiltGuide {
   return guideAt(params) ?? notFound();
 }
 
-/**
- * A Guide (design-ADR 0019 as amended by #450): an `episode()` composition rendered through the one Episode container,
- * so it has the table of contents, the Context drawer, the page-wide toolbar picks and, from its record's `youtube`,
- * the Video its Title slide plays.
- */
+// decision: docs/adr/0019-resources-overview.md
 export async function GuidePage({ page, locale }: { page: BuiltGuide; locale: Locale }) {
   const { guide } = page;
   const composition = compositionOf(guide);
@@ -41,7 +35,7 @@ export async function GuidePage({ page, locale }: { page: BuiltGuide; locale: Lo
   );
 }
 
-/** A Guide's title, description and treatment for `pageMetadata` (FE-008): its words are its composition's. */
+// decision: FE-008 §1
 export function guideCopy(page: BuiltGuide, locale: Locale): PageCopy {
   const { title, description } = compositionOf(page.guide).messages[locale];
   return { title, description, treatment: treatmentOf(page) };

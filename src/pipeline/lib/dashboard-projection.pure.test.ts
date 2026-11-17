@@ -247,7 +247,7 @@ describe('edge cases', () => {
     const expectedOpenState = 'gate';
     const expectedClosedState = 'ok';
     const expectedAgent = {
-      duration_ms: 41103,
+      'duration_ms': 41103,
       'gen_ai.usage.input_tokens': 3132,
       'gen_ai.usage.output_tokens': 3411,
       'gen_ai.usage.cache_read.input_tokens': 169450,

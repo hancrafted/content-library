@@ -8,26 +8,19 @@ import { LOCALES } from '@/shared/lib/locale.pure';
 import { duplicates } from './duplicates';
 import type { Episode } from './schemas/episode.schema';
 
-/*
- * The store's refusals of one Episode (FE-013 Decision 3, design-ADR 0016 decisions 3, 4 and 9): where it lives, its
- * tags, whether an Event gives it an address, and its Video. Each sentence names the Episode by its Episode id. The
- * cross-record rules that call them sit in `refusals.ts`.
- */
-
-/** An Episode's record as the store serves it: with its EpisodeRef (GLOSSARY), its id read as `ref.id`. */
+// decision: FE-013 §3
+// decision: docs/adr/0016-content-data-model.md
 export type LoadedEpisode = Episode & { readonly ref: EpisodeRef };
 
 const LOCALE_LIST: readonly string[] = LOCALES;
 const NOT_A_LOCALE = `is not one of the site's locales (${LOCALE_LIST.join(', ')})`;
 
-/** Why an unlisted Episode's per-locale `youtube` is refused: it holds more than one Video, or the wrong shape. */
 function unlistedPerLocale(keys: readonly string[]): string {
   if (keys.length > 1)
     return `youtube holds ${keys.length} videos (${keys.join(', ')}), but an unlisted Episode carries at most one Video, its Event recording with its language`;
   return 'youtube is one video per locale, but an unlisted Episode carries one recording with its language';
 }
 
-/** What is wrong with an Episode's Video for its visibility: one recording if unlisted, one per locale if public. */
 function videoRefusals({ visibility, youtube }: Episode): string[] {
   if (youtube === undefined) return [];
   if ('language' in youtube)
@@ -44,7 +37,6 @@ function videoRefusals({ visibility, youtube }: Episode): string[] {
   ];
 }
 
-/** What is wrong with where an Episode lives: a reserved slug, a slug its folder does not carry, an Event that is not. */
 function folderRefusals({ slug, visibility, ref }: LoadedEpisode, events: ReadonlySet<string>): string[] {
   const owner = matchEpisode(ref, { standalone: () => undefined, 'event-copy': ({ event }) => event });
   const checks: readonly (readonly [boolean, string])[] = [
@@ -59,7 +51,6 @@ function folderRefusals({ slug, visibility, ref }: LoadedEpisode, events: Readon
   return checks.flatMap(([refused, sentence]) => (refused ? [sentence] : []));
 }
 
-/** Every refusal of one Episode on its own: where it lives, its tags, its address and its Video. */
 export function episodeRefusals(
   episode: LoadedEpisode,
   listedByEvents: ReadonlySet<string>,

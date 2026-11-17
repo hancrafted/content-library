@@ -4,8 +4,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { CentreSpine } from './vertical-center-spine';
 
-// Timeline down one centre spine, entries alternating left and right. Every motion is CSS scroll-driven, so the
-// Scene needs no client widget; without support or under reduced motion it rests in its final state.
 export const verticalCenterSpine = slide({
   slug: 'vertical-center-spine',
   messages: { en, de },

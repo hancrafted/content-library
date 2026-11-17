@@ -4,7 +4,6 @@ import { planBackFromTheGoal } from '../slides/plan-back-from-the-goal/slide';
 import { reviewingTheResult } from '../slides/reviewing-the-result/slide';
 import { whatItRequiresOfEachPerson } from '../slides/what-it-requires-of-each-person/slide';
 
-/** Placement marker of the Section "What it requires of each person": its Slides in Spec order, section slide first. */
 export const whatItRequiresOfEachPersonSection: Section = [
   whatItRequiresOfEachPerson,
   planBackFromTheGoal,

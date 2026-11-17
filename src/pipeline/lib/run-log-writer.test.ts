@@ -1,14 +1,18 @@
 import { fork } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  unlinkSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appendEvent, type WriterDeps } from './run-log-writer.ts';
-
-/*
- * The run-log writer against a real temp folder: stamping, seq, trace choice, git facts for start-run,
- * validation errors, and concurrent appends staying whole lines. Clock, ids and git are injected.
- */
 
 const START = { kind: 'start-run', harness: 'claude-code', 'gen_ai.request.model': 'opus' };
 const FILE = 'docs/episodes/demo/events.jsonl';
@@ -170,6 +174,45 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
     });
   });
 
+  describe('lock failures', () => {
+    it('surfaces a stale lock it cannot remove instead of waiting out the lock timeout', () => {
+      // ARRANGE
+      const root = worktree();
+      const lock = path.join(root, `${FILE}.lock`);
+      mkdirSync(lock);
+      const longAgo = new Date(Date.now() - 60_000);
+      utimesSync(lock, longAgo, longAgo);
+      // ACT
+      const append = () => appendEvent(at(root), START, { ...deps(), lockWaitMilliseconds: 500 });
+      // ASSERT
+      expect(append).toThrow(/EISDIR|EPERM/);
+    });
+  });
+
+  describe('lock release', () => {
+    it('surfaces a lock it cannot read back at release instead of leaving it behind silently', () => {
+      // ARRANGE
+      const root = worktree();
+      appendEvent(at(root), START, deps());
+      const lock = path.join(root, `${FILE}.lock`);
+      const d = deps();
+      d.now = () => {
+        unlinkSync(lock);
+        mkdirSync(lock);
+        return '2026-10-14T09:00:00Z';
+      };
+      // ACT
+      const append = () =>
+        appendEvent(
+          at(root),
+          { kind: 'start', type: 'job', name: 'x', job: 'j', parent_span_id: '0123456789abcdef' },
+          d,
+        );
+      // ASSERT
+      expect(append).toThrow(/EISDIR/);
+    });
+  });
+
   describe('lock ownership', () => {
     it('leaves a lock another writer took after breaking ours in place when we release', () => {
       // ARRANGE
@@ -177,7 +220,6 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
       appendEvent(at(root), START, deps());
       const lock = path.join(root, `${FILE}.lock`);
       const d = deps();
-      // while A holds the lock, B breaks it as stale and takes it
       d.now = () => {
         unlinkSync(lock);
         writeFileSync(lock, 'writer-b-token');

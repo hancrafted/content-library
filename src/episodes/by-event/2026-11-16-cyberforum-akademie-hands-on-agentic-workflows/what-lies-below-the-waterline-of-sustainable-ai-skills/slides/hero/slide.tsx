@@ -15,18 +15,17 @@ import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The ship right of centre, clear of the title on the left and of the iceberg on the right. */
 const SHIP_X = 700;
 const { waterline: WATERLINE } = HERO_DEPTH;
 const ANCHORS = shipAnchors();
-/** The pill hangs just under the water below the robot, as the Spec's mock sets it. */
 const MARKER = { x: SHIP_X + ANCHORS.aFrameTip.x, y: WATERLINE + 36 };
-/** The robot hangs from the A-frame just above the water, its lamp shining down. */
 const ROBOT_HANG = -56;
-/** The crew at the ship's scale, seen through the bridge windows. */
 const CREW_SCALE = 0.42;
 
-/** The research ship on the waterline, the crew on its bridge, the robot lowered on its cable from the A-frame. */
+function HeaderSpacer() {
+  return <div aria-hidden="true" data-hero-room className="flex-1" />;
+}
+
 function Dive() {
   const { aFrameTip, bridge } = ANCHORS;
   return (
@@ -62,14 +61,6 @@ function Dive() {
   );
 }
 
-/**
- * The Title slide's hero Scene (the record's `title`), the Hero motif of picked Option 0a, full screen (Han's feedback
- * 1): the whole depth is one drawing in the Slide's Backdrop, edge to edge and under the hidden table of contents, so
- * the shared header's `h1` and lede sit in its sky. The research ship on the waterline has lowered its diving robot
- * from the A-frame to hang just above the water, the slim depth gauge at the right edge names the Surface, and one
- * pill marks the robot as the Surface. Each section slide echoes the scene one zone deeper
- * (`slide-shared/waterline-echo/`). Its file inset follows the persistent page-chrome view selection.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
@@ -82,10 +73,7 @@ export const hero = slide({
     ];
     return (
       <>
-        {/* An empty box takes the Slide's free height, so the shared header sits at the top, in the sky. The drawing
-            and its words sit beside it, never in it: the entrance lifts each child of the Scene, and a lifted frame
-            would hold them to its own inset box, so they position against the Slide wrapper, full-bleed. */}
-        <div aria-hidden="true" data-hero-room className="flex-1" />
+        <HeaderSpacer />
         <HeroDepthScene
           layers={{ Backdrop: SlideBackdrop }}
           label={t('label')}

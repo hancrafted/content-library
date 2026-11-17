@@ -6,18 +6,9 @@ import { FAIL_CHIP, type SeamSumProps } from './types';
 
 export type { Half, SeamSumCard } from './types';
 
-/*
- * The party board as a sum: four cards, each ticked against its own goal, add up plus by plus to the party, which
- * fails. Each card carries its failure at a seam: the fact, a chip naming the other card and what it held, the result
- * and the half of the goal it breaks. Takes every word from its Scene. `compact` is the narrow form: the own goal
- * shortens to the Scene's "met" line, a stamp may sit beside it, and the result line drops. Shared because the
- * person board and its agent replay draw the same sum (FE-007 §5). Four across once the board is wide enough (the
- * compact form sooner), else stacked, plus signs between.
- */
-
+// decision: FE-007 §5
 const SIGN = 'self-center text-subheading font-semibold text-muted-foreground';
 
-/** The four cards with a plus sign before each but the first. */
 function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'> & { compact: boolean }) {
   return (
     <ul
@@ -47,7 +38,6 @@ function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'
   );
 }
 
-/** "=" and the party the cards add up to: its goal, failed, and which cards broke which half. */
 function SumResult({ result, words }: Pick<SeamSumProps, 'result' | 'words'>) {
   return (
     <div className="flex items-center gap-4 px-1">
@@ -78,7 +68,6 @@ function SumResult({ result, words }: Pick<SeamSumProps, 'result' | 'words'>) {
   );
 }
 
-/** The four cards, the sum signs and the party they add up to, on the muted board. */
 export function SeamSum({ label, cards, result, words, compact = false }: SeamSumProps) {
   return (
     <div

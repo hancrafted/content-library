@@ -16,7 +16,6 @@ function header(extra: Partial<SlideHeaderProps> = {}): string {
   );
 }
 
-/** The characters of the typed caption that carry the emphasis mark, joined. */
 function emphasisedCharacters(html: string): string {
   return [...html.matchAll(/<span data-char=""[^>]*data-emphasis=""[^>]*>(.)<\/span>/g)].map(([, c]) => c).join('');
 }

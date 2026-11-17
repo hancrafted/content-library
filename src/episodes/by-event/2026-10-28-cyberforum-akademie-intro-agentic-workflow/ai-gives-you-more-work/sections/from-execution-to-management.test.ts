@@ -10,15 +10,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fromExecutionToManagementSection } from './from-execution-to-management';
 
-/*
- * The Section "From execution to management", as the approved Spec gives it: its section slide, then three page
- * Slides in Spec order, each built to its picked Option (1a, 2a, 3b). Every Context marker a picked Option's mock
- * shows outside the shared caption is a marker on the Slide, opening the Speaker note its build notes name.
- */
-
 const PLACED = placeSections<Slide>([fromExecutionToManagementSection]).flat();
 
-/** A Slide's Scene as the page renders it, with the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en'): string {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
@@ -32,7 +25,6 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
   return renderToStaticMarkup(localized.content);
 }
 
-/** The disclosure stylesheet of a page Slide, as its rules: each selector with its declarations. */
 function rulesOf(slug: string): { selector: string; body: string }[] {
   const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8')
     .replaceAll(/\/\*[\s\S]*?\*\//g, '')
@@ -43,7 +35,6 @@ function rulesOf(slug: string): { selector: string; body: string }[] {
   }));
 }
 
-/** How many Context markers open each note, by note slug. */
 function markersOf(html: string): Record<string, number> {
   const counts: Record<string, number> = {};
   for (const [, note] of html.matchAll(/data-context-ref="([^"]+)"/g)) counts[note] = (counts[note] ?? 0) + 1;

@@ -115,7 +115,6 @@ function Scrubber({ replay, range, copy, geometry }: ScrubProps) {
   );
 }
 
-/** The progress track itself is the native keyboard- and pointer-operable scrubber. */
 export function TimeTravel(props: Omit<ScrubProps, 'range'>) {
   return props.replay.range ? <Scrubber {...props} range={props.replay.range} /> : null;
 }

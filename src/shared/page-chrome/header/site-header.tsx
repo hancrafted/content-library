@@ -50,10 +50,6 @@ function themeLabels(t: HeaderT) {
   };
 }
 
-/**
- * The site's one call to action, so every page offers it and the landing hero needs only one button.
- * It stays in the header row while closed and moves into the mobile menu's utilities while open.
- */
 function ContactButton({ label, newTab }: { label: string; newTab: string }) {
   return (
     <Button asChild size="sm" className="min-h-11 shrink-0 rounded-full px-3.5">
@@ -98,12 +94,6 @@ function HeaderSettings({ locale, localesByRoute, t }: Omit<HeaderProps, 'navSec
   );
 }
 
-/**
- * A floating, translucent bar, one row at every width. It is sticky rather than fixed, so it keeps its place in the
- * document flow: every page starts below it with no per-page offset. Below `lg` the nav, profiles and toggles fold
- * into a centered mobile menu. The locale toggle offers each page's
- * locales from `localesByRoute`, handed down from the layout.
- */
 export async function SiteHeader({ locale, localesByRoute, navSections }: HeaderProps) {
   const t = await getTranslations({ locale });
   return (

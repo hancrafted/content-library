@@ -10,22 +10,11 @@ const ANTHROPIC = {
 };
 const WILLISON = { slug: 'willison-agent-definition', url: 'https://simonwillison.net/2025/Sep/18/agents/' };
 
-/** The Agents column, the one the two notes explain. */
 const AGENTS = 'agents';
 
-/**
- * The cited-definition marker, set off from the dark back face: a large bubble on a primary rim and an accent ring,
- * lifted over the card's top edge.
- */
 const PROMINENT =
   '-translate-y-4 size-9 border-2 border-primary bg-background text-primary shadow-md ring-2 ring-brand-accent hover:bg-background hover:text-primary [&_svg]:size-5';
 
-/**
- * What an agent is (picked Option 3a): the AI capability Explorable on its `agents` Preset, Agents lit and its card
- * resting back side up on Anthropic's definition, word for word as the Speaker note cites it, with the prominent marker
- * to that note on the card and the shorter form beside its source. The caption keeps the Episode's own sentence. The
- * scenes play the summer party; every other word is the Explorable's own.
- */
 export const whatAnAgentIs = slide({
   slug: 'what-an-agent-is',
   messages: { en, de },

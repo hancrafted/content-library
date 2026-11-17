@@ -2,11 +2,6 @@ import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { filledMarkup, fillIn, templateOf, type Slot } from './episode-spec-template.pure.ts';
 
-/*
- * The Spec template's slots at their seam: markup in, markup out. A `data-slot` element takes markup, is handed over
- * to a function or is dropped, and a slot the assembler does not know throws.
- */
-
 const NOTHING = () => undefined;
 const PAGE = '<main><h1 data-slot="heading">Old</h1><p data-slot="lede">Old</p></main>';
 const ITEM_TEMPLATE = '<template data-template="item"><article><h3 data-slot="title"></h3></article></template>';

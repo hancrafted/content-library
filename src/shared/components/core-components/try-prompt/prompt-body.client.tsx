@@ -17,18 +17,10 @@ import {
 import { SlotInput } from './slot-input.client';
 import type { TryPromptWords } from './try-prompt.types';
 
-/*
- * The opened prompt as two panels, each a disclosure: "What to do" (open by default: the step's instructions and its
- * slot fields; absent when it has neither) and "Prompt preview" (closed by default: each section under its H2 and
- * purpose marker). Nothing in it sets a width: text wraps, so the box never outgrows the modal.
- */
-
-/** The tier's word: the caller's, or the tier's own key. */
 function tierWord(tier: string, words: TryPromptWords): string {
   return (tier === 'basic' ? words.tierBasic : tier === 'advanced' ? words.tierAdvanced : undefined) ?? tier;
 }
 
-/** The techniques of a section, one line each: title, tier, and what it is. */
 function TechniqueLines({ techniques, words }: Pick<MarkerProps, 'techniques' | 'words'>) {
   return (
     <ul className="mt-1 list-none space-y-1 p-0">
@@ -41,7 +33,6 @@ function TechniqueLines({ techniques, words }: Pick<MarkerProps, 'techniques' | 
   );
 }
 
-/** The marker beside a section's H2: its purpose, with the explanation and the section's techniques as the tooltip. */
 function PurposeMarker({ purpose, text, techniques, words }: MarkerProps) {
   const spoken = [text, ...techniques.map((each) => `${tierWord(each.tier, words)}: ${each.title}. ${each.explain}`)];
   const tip = (
@@ -121,7 +112,6 @@ interface PanelProps {
   readonly children: ReactNode;
 }
 
-/** A disclosure: a full-width toggle with `aria-expanded`, and the panel it shows or hides. */
 function Panel({ name, title, initiallyOpen, children }: PanelProps) {
   const [open, setOpen] = useState(initiallyOpen);
   const panel = useId();
@@ -150,7 +140,6 @@ function Panel({ name, title, initiallyOpen, children }: PanelProps) {
   );
 }
 
-/** The panel of what the visitor does: the step's instructions, then its slot fields. */
 function Todo({
   instructions,
   parts,
@@ -181,7 +170,6 @@ export function PromptBody({ id, open, purposes, techniques, ...rest }: BodyProp
   const plain = parts.sections.length === 1 && only?.heading === undefined;
   const todo = instructions !== undefined || parts.slots.length > 0;
   return (
-    // `data-prompt-text` carries the prompt as it is copied, for the page's tests and tools.
     <div
       id={id}
       hidden={!open}

@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Dartboard, type DartboardProps } from './dartboard';
 
-/*
- * The dartboard, the Hero motif of "From shared understanding to shared context": evenly spaced rings around a bull in
- * `primary`. The Title slide, every section slide and the precision and accuracy Slides draw it.
- */
-
 const board = (props: DartboardProps) => {
   const $ = load(renderToStaticMarkup(createElement('svg', null, createElement(Dartboard, props))));
   const rings = $('[data-ring]')

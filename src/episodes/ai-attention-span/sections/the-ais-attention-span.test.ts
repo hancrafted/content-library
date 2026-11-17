@@ -10,17 +10,11 @@ import { describe, expect, it } from 'vitest';
 import { aiAttentionSpan } from '../episode';
 import { theAisAttentionSpanSection } from './the-ais-attention-span';
 
-/*
- * The Section "The AI's attention span" against its approved Spec: its Slides in Spec order, each Voice script item
- * and Speaker note word for word, and each Slide's Context markers where the picked Option's mock puts them.
- */
-
 const SPEC = path.join(process.cwd(), 'docs/episodes/ai-attention-span/spec/spec.html');
 const SECTION = 'the-ais-attention-span';
 
 const spec: CheerioAPI = load(readFileSync(SPEC, 'utf8'));
 const squash = (text: string) => text.replace(/\s+/g, ' ').trim();
-/** A list item's own text after its `<strong>` title and the dash, without its nested source list. */
 function itemText($item: ReturnType<CheerioAPI>): string {
   const copy = $item.clone();
   copy.find('ul, ol').remove();
@@ -35,7 +29,6 @@ interface SpecSlide {
   readonly notes: readonly { header: string; description: string; urls: readonly string[] }[];
 }
 
-/** Each page Slide of the Section in the Spec, in order. */
 function specSlides(): SpecSlide[] {
   return spec(`section#${SECTION} article[data-spec="slide"]`)
     .toArray()
@@ -65,14 +58,9 @@ function specSlides(): SpecSlide[] {
     });
 }
 
-/** Where Han's feedback batch 2 departs from the Spec: Slide 4's retitle and its added context-rot note. */
 const RETITLED = { 'what-happens-when-the-bar-fills-up': 'What happens when the context fills up' } as const;
 const ADDED_NOTES = ['Context rot'];
 
-/**
- * Voice script items Han's batch-2 decisions re-wrote to match the new screen (items 6 and the Slide 5 fix), by Slide
- * and Spec title; each is the new words, the Spec's segment order and the rest of the Spec's script kept.
- */
 const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?: string; script: string }>>>> = {
   'what-happens-when-the-bar-fills-up': {
     'The start helps, but is no guarantee': {
@@ -199,7 +187,6 @@ describe('success cases', () => {
     expect(actual.map((notes) => notes.map(({ header, description }) => ({ header, description })))).toEqual(
       expected.map((notes) => notes.map(({ header, description }) => ({ header, description: squash(description) }))),
     );
-    // Every Spec source is cited; Slide 5's "The U-shape is measured" also cites Lost in the Middle, as its build notes add.
     expected.forEach((notes, slide) =>
       notes.forEach((note, index) => expect(actual[slide][index].urls).toEqual(expect.arrayContaining([...note.urls]))),
     );

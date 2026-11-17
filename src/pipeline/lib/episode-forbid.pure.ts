@@ -1,8 +1,3 @@
-/*
- * The `--forbid` check of `episode:spec-assemble`: a rename leaves old terms behind in the Brief, the Dossier and the
- * title Slide. Takes file text and returns one finding per file line holding a term (case-insensitive, literal).
- */
-
 import { parseArgs } from 'node:util';
 
 export interface ForbiddenHit {
@@ -11,7 +6,6 @@ export interface ForbiddenHit {
   term: string;
 }
 
-/** Splits `--forbid`'s value on commas; blanks are dropped. */
 export const parseForbidden = (value: string): string[] =>
   value
     .split(',')
@@ -34,7 +28,6 @@ export type SpecAssembleArgs = { episode: string; forbid: string[] | undefined }
 
 const USAGE = 'usage: npm run episode:spec-assemble -- <slug | Episode folder> [--forbid <word,word…>]';
 
-/** The command line of `episode:spec-assemble`: one Episode and an optional, non-empty `--forbid` list. */
 export function parseSpecAssembleArgs(argv: readonly string[]): SpecAssembleArgs {
   try {
     const { values, positionals } = parseArgs({

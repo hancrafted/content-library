@@ -9,7 +9,6 @@ import type { MouseEvent, ReactNode } from 'react';
 export interface TocLabels {
   title: string;
   progress: string;
-  /** Time left, per plural category; `{count}` stands for the whole minutes. */
   remaining: RemainingTemplates;
   toggle: string;
   loading: string;
@@ -78,7 +77,6 @@ function BackLink(props: Pick<HeadingDetailsProps, 'page' | 'locale' | 'collapse
   );
 }
 
-/** Navigation out of the page above its own title, which returns to the document start. */
 export function TocHeading(props: {
   labels: TocLabels;
   locale: Locale;

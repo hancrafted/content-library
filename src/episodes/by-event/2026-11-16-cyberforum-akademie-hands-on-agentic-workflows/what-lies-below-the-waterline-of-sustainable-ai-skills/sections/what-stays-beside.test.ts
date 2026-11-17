@@ -9,13 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatStaysBesideSection } from './what-stays-beside';
 
-/*
- * Section 6 of "What lies below the waterline of sustainable AI skills", "What stays beside" (its h2 "What context
- * stays beside"), as the approved Spec gives it: Slides 17 to 19 in Spec order, each with the Spec's Voice script,
- * Speaker notes and sources, a Context marker wherever its picked Option's mock shows one, and the Scene facts the
- * Option draws. Read through the one interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const BEST_PRACTICES = 'https://agentskills.io/skill-creation/best-practices';
 const CLAUDE_SKILLS = 'https://code.claude.com/docs/en/skills';
 const CODEX_SKILLS = 'https://learn.chatgpt.com/docs/build-skills';
@@ -45,7 +38,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = ['beside-the-skill', 'who-uses-it-and-where', 'how-grill-me-and-grill-with-docs-work'];
 
 describe('success cases', () => {
@@ -157,7 +149,6 @@ describe('success cases', () => {
 
   it('places a Context marker for each note wherever the picked Options show one, in reading order', () => {
     // ARRANGE
-    // The caption's marker sits in the shared header, outside the Scene; the Scene holds the rest.
     const expected = [
       [
         'a-skill-teaches-the-class-of-problem',
@@ -305,7 +296,6 @@ describe('edge cases', () => {
 
   it('shows each Context marker of Who uses it, and where only in the views its picked Option shows it', () => {
     // ARRANGE
-    // "both" is a marker outside any view; the footer's "Where a skill is stored" marker is the Coding agent's alone.
     const expected = [
       { note: 'where-a-skill-is-stored', view: 'both' },
       { note: 'evals-matter-once-a-skill-is-shared', view: 'chat' },

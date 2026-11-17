@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 export interface MoreIsNotSaferProps {
   readonly label: string;
-  /** The label row's Context marker. */
   readonly marker: ReactNode;
   readonly alone: ReactNode;
   readonly together: ReactNode;
@@ -10,7 +9,6 @@ export interface MoreIsNotSaferProps {
   readonly target: { 'data-target': string };
 }
 
-/** The stat card: one rule followed alone against nineteen at once, its detail revealed on hover. */
 export function MoreIsNotSafer({ label, marker, alone, together, detail, target }: MoreIsNotSaferProps) {
   return (
     <div {...target} className="hover-reveal rotate-1 rounded-xl bg-card p-5 shadow-md">

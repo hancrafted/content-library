@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-013-content-store.rules.ts — the executable spec the store
-// ticket turned green: pass and fail for each rule, a missing store entry, and the edges: a moved diagram, a `%% store:` line outside
-// the diagram, nested and extended shapes, prose naming a type, and helper types.
-
 import { parseSync } from 'oxc-parser';
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-013-content-store.rules';
@@ -14,7 +10,6 @@ interface Reported {
   line?: number;
 }
 
-/** A glob as a RegExp: `**​/`, `*` and `{a,b}`, the forms the rules use. */
 function globRegExp(glob: string): RegExp {
   let re = '';
   for (let i = 0; i < glob.length; i++) {
@@ -31,8 +26,7 @@ function globRegExp(glob: string): RegExp {
   return new RegExp(`^${re}$`);
 }
 
-/** oxc-parser gives offsets only; the rule reads ESTree `loc.start.line`, so add it. */
-function withLoc<T>(source: string, tree: T): T {
+function withEstreeLocFromOffsets<T>(source: string, tree: T): T {
   const starts = [0];
   for (let i = 0; i < source.length; i++) if (source[i] === '\n') starts.push(i + 1);
   const lineOf = (offset: number) => {
@@ -57,9 +51,6 @@ function withLoc<T>(source: string, tree: T): T {
   return tree;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. `ast` parses the source itself with oxc-parser,
-// so no TypeScript version is pinned here. Archgate parses transpiled output, whose lines drift from the source's
-// where types are erased; that mapping is checked through the real CLI in tests/archgate/fe-013-content-store.cli.slow.test.ts.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -76,7 +67,10 @@ function makeCtx(files: Record<string, string>) {
     },
     async ast(path: string) {
       const source = await this.readFile(path);
-      return withLoc(source, parseSync(path, source, { lang: path.endsWith('x') ? 'tsx' : 'ts', range: true }).program);
+      return withEstreeLocFromOffsets(
+        source,
+        parseSync(path, source, { lang: path.endsWith('x') ? 'tsx' : 'ts', range: true }).program,
+      );
     },
     report: {
       violation: (detail: Reported) => violations.push(detail),

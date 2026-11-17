@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DTW, SPEEDS, WARM_WEEKS } from './factory-dials.pure.ts';
-import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
+import { WEEKS_PER_STEP, SPEEDS, WARM_WEEKS } from './factory-dials.pure.ts';
+import {
+  FactoryRun,
+  MAX_STEPS_PER_FRAME,
+  presetOf,
+  WEEKS_PER_REAL_SECOND_AT_1X,
+  startSpeedOf,
+  WARM_STEPS_PER_FRAME,
+} from './factory-run.pure.ts';
 import { scenarioStart } from './factory-scenario.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/** Tire swing with one more state: from day 0, at 20×, as a scenario may start. */
 const withClearFast = (): Bundle => {
   const B = builtinBundle('tire');
   const p: Preset = { id: 'clear-fast', view: 'factory', reality: 100, start: 'clear', speed: 20 };
@@ -29,10 +35,10 @@ describe('success cases', () => {
   it('warms across frames in chunks, then runs at the chosen speed', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'realistic', now: false });
-    const frames = Math.ceil(WARM_WEEKS / DTW / WARM_CHUNK);
+    const frames = Math.ceil(WARM_WEEKS / WEEKS_PER_STEP / WARM_STEPS_PER_FRAME);
     const second = 1,
       speed = 10,
-      expected = WARM_WEEKS + second * speed * SPEED_1X,
+      expected = WARM_WEEKS + second * speed * WEEKS_PER_REAL_SECOND_AT_1X,
       digits = 2;
     // ACT
     let ended = false;
@@ -49,7 +55,7 @@ describe('failure cases', () => {
     // ARRANGE
     const run = new FactoryRun({ B: builtinBundle('tire'), preset: 'ideal', now: true });
     const t0 = run.weeks,
-      longest = MAX_STEPS * DTW,
+      longest = MAX_STEPS_PER_FRAME * WEEKS_PER_STEP,
       digits = 6;
     // ACT
     run.advance(10, 10);
@@ -65,7 +71,7 @@ describe('edge cases', () => {
     const perSecond = 1 / 32,
       speeds = [0, 1, 2, 5, 10, 20];
     // ACT
-    const seen = { x1: SPEED_1X, all: [...SPEEDS] };
+    const seen = { x1: WEEKS_PER_REAL_SECOND_AT_1X, all: [...SPEEDS] };
     // ASSERT
     expect(seen).toEqual({ x1: perSecond, all: speeds });
   });
@@ -163,7 +169,7 @@ describe('edge cases', () => {
     // ARRANGE
     const B = builtinBundle('tire'),
       p = presetOf(B, id);
-    const frames = Math.ceil(WARM_WEEKS / DTW / WARM_CHUNK),
+    const frames = Math.ceil(WARM_WEEKS / WEEKS_PER_STEP / WARM_STEPS_PER_FRAME),
       digits = 6;
     // ACT
     const run = new FactoryRun({ B, preset: id, now: false, seed });

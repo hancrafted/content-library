@@ -5,7 +5,6 @@ import { Note } from '@/episodes/components/slide-shared/party-board/note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The board's four cards, left to right; the Food & drinks and Venue pair outlined, the seam zoomed below. */
 const CARDS = [
   { key: 'activities', x: 8, width: 76, look: 'card' },
   { key: 'travel', x: 92, width: 64, look: 'card' },
@@ -13,8 +12,6 @@ const CARDS = [
   { key: 'venue', x: 256, width: 80, look: 'outlined' },
 ] as const;
 
-// The section slide of "What an agentic workflow is", echoing the Hero motif (picked Title-slide Option 0b): the
-// board's four cards with the Food & drinks to Venue pair zoomed below as one seam, the part of the workflow you design.
 export const whatAnAgenticWorkflowIs = slide({
   slug: 'what-an-agentic-workflow-is',
   messages: { en, de },

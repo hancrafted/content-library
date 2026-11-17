@@ -20,11 +20,7 @@ function browseLabels(t: BrowserT): BrowseLabels {
     tagFilter: t('tagFilter'),
     showAll: t.raw('showAll') as string,
     showFewer: t('showFewer'),
-    results: {
-      none: t('results.none'),
-      one: t('results.one'),
-      other: t.raw('results.other') as string,
-    },
+    results: { none: t('results.none'), one: t('results.one'), other: t.raw('results.other') as string },
     empty: t('empty'),
     reset: t('reset'),
   };
@@ -35,7 +31,6 @@ type PageT = Awaited<ReturnType<typeof getTranslations<'episodesPage'>>>;
 const REFERENCE_LINK =
   'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
 
-/** The Templates are no Episodes, so one link under the browse grid leads to the Resources overview. */
 function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   return (
     <nav
@@ -51,18 +46,12 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   );
 }
 
-/**
- * The Episode overview, the page at /episodes (FE-007 §1): lists every published Episode, and in dev mode or a
- * pull request's preview also lists Upcoming Episodes as a GUI entry point (#85, `upcomingListed`). One link to the Resources closes the page.
- */
+// decision: FE-007 §1
 export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
   const listUpcoming = upcomingListed(process.env);
   const tBrowser = await getTranslations({ locale, namespace: 'episodeBrowser' });
   const tPage = await getTranslations({ locale, namespace: 'episodesPage' });
-  const cards = await episodeCards(locale, {
-    includeDrafts: listUpcoming,
-    linkDrafts: listUpcoming,
-  });
+  const cards = await episodeCards(locale, { includeDrafts: listUpcoming, linkDrafts: listUpcoming });
 
   return (
     <main data-testid="episodes-index-page" className={PAGE_CONTAINER}>

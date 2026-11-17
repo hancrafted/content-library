@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { hasDesignLink, inlineDesignCss } from './spec-inline.pure.ts';
 
-/* A Spec page carries its compiled design.css in a <style> instead of a sibling file, so it opens from anywhere. */
-
 const PAGE = `<html><head><title>S</title>
 <link rel="stylesheet" href="design.css" />
 <script>1</script></head><body></body></html>`;

@@ -13,17 +13,12 @@ import { guideSchema } from './schemas/guide.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
 import { templateSchema } from './schemas/template.schema';
 import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
-/*
- * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
- * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
- * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
- * whole load throws. An Episode enters by the Episode id its folder gives it and is served with its EpisodeRef
- * (GLOSSARY), which every rule reads. A Template (design-ADR 0019) is checked against its composition folders.
- */
+// decision: FE-013 §3
+// decision: docs/adr/0016-content-data-model.md
+// decision: docs/adr/0019-resources-overview.md
 import { slugKindRefusals } from './slug-kind-refusals';
 export type { Content, ContentInput, ParsedContent } from './content-shapes';
 
-/** One record kind as the parser reads it: its name in a sentence, the field naming a record, and its schema. */
 interface Reader<T> {
   readonly kind: Kind;
   readonly key: 'slug' | 'id';
@@ -32,7 +27,6 @@ interface Reader<T> {
 
 const EPISODE_READER: Reader<Episode> = { kind: 'Episode', key: 'slug', schema: episodeSchema };
 
-/** A field of the raw record, read before parsing, so even a malformed record is named. */
 function rawField(raw: unknown, key: string): unknown {
   return typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>)[key] : undefined;
 }
@@ -42,7 +36,6 @@ function nameOf(raw: unknown, key: 'slug' | 'id'): string {
   return typeof value === 'string' && value !== '' ? value : `(no ${key})`;
 }
 
-/** What is wrong with one field: a missing or unknown `status` in its own words, else Zod's message. */
 function issueText(issue: z.core.$ZodIssue, raw: unknown): string {
   const field = issue.path.map(String).join('.') || 'record';
   if (issue.code !== 'invalid_union' || field !== 'status') return `${field} ${issue.message}`;
@@ -51,7 +44,6 @@ function issueText(issue: z.core.$ZodIssue, raw: unknown): string {
   return `status is ${seen}, but must be published or upcoming`;
 }
 
-/** Each record parsed by its schema, or the sentences that refuse it, each named by `name` or its own key. */
 function parseAll<T>(
   { kind, key, schema }: Reader<T>,
   raws: readonly unknown[],
@@ -71,7 +63,6 @@ function uniqueness(kind: Kind, names: readonly string[], field: 'slug' | 'id'):
   return duplicates(names).map((name) => `${kind} ${name}: ${field} is used by more than one ${kind}`);
 }
 
-/** Why a Playlist may not list an Event's copy: an Event other than its owner presents the Playlist, or none does. */
 function foreignCopy(episode: EpisodeRef, presenters: readonly string[]): string | undefined {
   return matchEpisode(episode, {
     standalone: () => undefined,
@@ -84,7 +75,6 @@ function foreignCopy(episode: EpisodeRef, presenters: readonly string[]): string
   });
 }
 
-/** Whether no Event owns the Episode. */
 function isStandalone(episode: EpisodeRef): boolean {
   return matchEpisode(episode, { standalone: () => true, 'event-copy': () => false });
 }
@@ -95,7 +85,6 @@ function playlistRefusals(
   presenters: readonly string[],
 ): string[] {
   const own = (sentence: string) => `Playlist ${playlist.id}: ${sentence}`;
-  // An Episode listed again at an anchor is one Episode: each refusal below names it once.
   const ids = [...new Set(playlist.episodes.map(({ episode }) => episode))];
   const unknown = ids.filter((id) => !episodes.has(id));
   const listed = ids.flatMap((id) => episodes.get(id) ?? []);
@@ -118,7 +107,6 @@ function playlistRefusals(
   ];
 }
 
-/** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
 function crossRecordRefusals(content: ParsedContent, unserved: readonly string[]): string[] {
   const { episodes, events, playlists, featured } = content;
   const presented = new Set(events.map((event) => event.playlist));
@@ -146,18 +134,11 @@ function crossRecordRefusals(content: ParsedContent, unserved: readonly string[]
   ];
 }
 
-/**
- * The Event served with its Playlist resolved, or the sentence refusing it: a Playlist that does not exist. A slug the
- * Playlist names that no Episode carries is the Playlist's own refusal, so the load throws before the resolved list is
- * read.
- */
 function serve(
   event: Event,
   playlists: ReadonlyMap<string, Playlist>,
   episodes: ReadonlyMap<string, LoadedEpisode>,
 ): { served: ServedEvent[]; refused: string[] } {
-  // Every Event the store loads is an entry of the generated Event registry, keyed by its slug (`tsc` holds key =
-  // slug), so its slug names a page; the parse keeps the value the record's file wrote.
   const slug = event.slug as EventSlug;
   const playlist = playlists.get(event.playlist);
   if (playlist === undefined)
@@ -166,10 +147,6 @@ function serve(
   return { served: [{ ...event, slug, playlist: served }], refused: [] };
 }
 
-/**
- * The records checked against each other and every Event served with the Playlist it presents, or the sentences
- * refusing them. Run only over records that all parsed, so a refusal never rests on a record that is itself refused.
- */
 export function checkRecords(content: ParsedContent): { content: Content; refused: string[] } {
   const playlists = new Map(content.playlists.map((playlist) => [playlist.id, playlist]));
   const episodes = new Map(content.episodes.map((episode) => [episode.ref.id, episode]));
@@ -191,7 +168,6 @@ export function checkRecords(content: ParsedContent): { content: Content; refuse
   };
 }
 
-/** Each Episode's record parsed by its schema and given the EpisodeRef its entry's id names, named by that id when refused. */
 function parseEpisodes(entries: readonly EpisodeEntry[]): { parsed: LoadedEpisode[]; refused: string[] } {
   const each = entries.map(({ id, record }) => ({ id, ...parseAll(EPISODE_READER, [record], () => id) }));
   return {
@@ -200,7 +176,6 @@ function parseEpisodes(entries: readonly EpisodeEntry[]): { parsed: LoadedEpisod
   };
 }
 
-/** The kinds served by slug and composed like an Episode, each parsed by its schema: Templates, Explorable pages, Guides. */
 function parseComposedKinds(input: ContentInput) {
   return {
     templates: parseAll({ kind: 'Template', key: 'slug', schema: templateSchema }, input.templates),
@@ -212,7 +187,6 @@ function parseComposedKinds(input: ContentInput) {
   };
 }
 
-/** Every record parsed by its schema, with the sentences refusing the ones that do not parse. */
 export function parseRecords(input: ContentInput): { content: ParsedContent; refused: string[] } {
   const episodes = parseEpisodes(input.episodes);
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);

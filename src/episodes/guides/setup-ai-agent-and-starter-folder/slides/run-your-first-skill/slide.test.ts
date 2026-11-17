@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { runYourFirstSkill } from './slide';
 
-/*
- * "Run your first skill" (Spec Option 7a), read through the one interface the page reads a Slide by: localized on the
- * shared Slide header, its notes and Voice script as the drawer gets them, and its Scene as the page renders it under
- * the page's toolbar picks. The section slide is a stand-in, so the test reaches no Episode file.
- */
-
 const SECTION = slide({
   slug: 'your-first-skill',
   messages: { en: { title: 'Your first skill' }, de: { title: 'Dein erster Skill' } },
@@ -31,7 +25,6 @@ function localized(locale: Locale): LocalizedSlide {
   });
 }
 
-/** The Scene as the page renders it before the viewer picks: Mac and Claude Code, the page picks' defaults. */
 const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
 
 describe('success cases', () => {

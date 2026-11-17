@@ -10,13 +10,6 @@ import { describe, expect, it } from 'vitest';
 import de from '../episode-browser/i18n/de.json';
 import en from '../episode-browser/i18n/en.json';
 
-/*
- * The Episode browser's central lists against the Episodes that exist (#40):
- * Featured names published Episodes, each Tag in the closed vocabulary (whose
- * use the content store refuses outside it) has an icon a card can draw, and every string a card
- * reads is translated; the Tags' own words are page assembly's (`src/page-assembly/lib/tag-words.test.ts`).
- */
-
 const TRANSLATIONS = { en, de } as const;
 const FEATURED = featuredIds();
 

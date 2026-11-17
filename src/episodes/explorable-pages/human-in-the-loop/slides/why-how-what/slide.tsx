@@ -24,7 +24,6 @@ interface ColumnCopy {
   caption: ReactNode;
 }
 
-/** One column of the Grids Master slide `grid-1x3`, copied: its accent stub on the hairline, the word, then claim and caption. */
 function Column({ cell, targetProps }: { cell: ColumnCopy; targetProps: TargetProps }) {
   const id = `column-${useId()}`;
   return (
@@ -52,10 +51,6 @@ function Column({ cell, targetProps }: { cell: ColumnCopy; targetProps: TargetPr
   );
 }
 
-/**
- * The page's one text Slide, Why, How and What in three columns from the Grids Master slide `grid-1x3` (a copy, vision
- * rule 4). The columns stack Why first on a phone. Each column's claim carries a Speaker note that cites research.
- */
 export const whyHowWhat = slide({
   slug: 'why-how-what',
   messages: { en, de },

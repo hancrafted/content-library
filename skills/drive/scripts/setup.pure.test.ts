@@ -57,14 +57,25 @@ describe('detectEnforcers', () => {
   });
 
   it('finds nothing in an empty repo', () => {
-    // ARRANGE / ACT / ASSERT
-    expect(detectEnforcers({ scripts: {}, packageManager: 'npm', hooks: [], adrChecker: false })).toEqual([]);
+    // ARRANGE
+    // ACT
+    // ASSERT
+    expect(
+      detectEnforcers({
+        scripts: {},
+        packageManager: 'npm',
+        hooks: [],
+        adrChecker: false,
+      }),
+    ).toEqual([]);
   });
 });
 
 describe('installCommands and decisionDocGlobs', () => {
   it('names the install for the lockfile present, and the decision docs for the folders present', () => {
-    // ARRANGE / ACT / ASSERT
+    // ARRANGE
+    // ACT
+    // ASSERT
     expect(installCommands(['package-lock.json', 'yarn.lock'])).toEqual(['npm ci']);
     expect(installCommands(['pnpm-lock.yaml'])).toEqual(['pnpm install --frozen-lockfile']);
     expect(installCommands(['README.md'])).toEqual([]);
@@ -78,10 +89,14 @@ describe('the package manager', () => {
     // ARRANGE
     const scripts = { lint: 'eslint .' };
     const commands = (files: string[]) =>
-      detectEnforcers({ scripts, packageManager: detectPackageManager(files), hooks: [], adrChecker: false }).map(
-        (found) => found.command,
-      );
-    // ACT / ASSERT
+      detectEnforcers({
+        scripts,
+        packageManager: detectPackageManager(files),
+        hooks: [],
+        adrChecker: false,
+      }).map((found) => found.command);
+    // ACT
+    // ASSERT
     expect(commands(['pnpm-lock.yaml'])).toEqual(['pnpm run lint']);
     expect(commands(['yarn.lock'])).toEqual(['yarn run lint']);
     expect(commands(['bun.lockb'])).toEqual(['bun run lint']);
@@ -93,7 +108,9 @@ describe('the package manager', () => {
 
 describe('REVIEW_STUB', () => {
   it('is an empty template naming each calibration answer a decision page needs', () => {
-    // ARRANGE / ACT / ASSERT
+    // ARRANGE
+    // ACT
+    // ASSERT
     expect(REVIEW_STUB).toContain('# Drive review');
     for (const heading of ['Mode', 'Audience', 'Layout', 'Depth', 'Fidelity', 'Feedback route', 'Review width'])
       expect(REVIEW_STUB).toContain(`## ${heading}`);
@@ -102,7 +119,9 @@ describe('REVIEW_STUB', () => {
 
 describe('parseSetupArgs', () => {
   it('reads --agent-type and --tier, and rejects a tier that is not mid or top', () => {
-    // ARRANGE / ACT / ASSERT
+    // ARRANGE
+    // ACT
+    // ASSERT
     expect(parseSetupArgs(['--agent-type', 'team:dev', '--tier', 'top'])).toEqual({
       agentType: 'team:dev',
       tier: 'top',
@@ -115,7 +134,9 @@ describe('parseSetupArgs', () => {
 
 describe('LEARNINGS_STUB', () => {
   it('carries the header and the two sections of the format in references/fortify.md', () => {
-    // ARRANGE / ACT / ASSERT
+    // ARRANGE
+    // ACT
+    // ASSERT
     expect(LEARNINGS_STUB).toContain('# Drive learnings');
     expect(LEARNINGS_STUB).toContain('"The learnings file"');
     expect(LEARNINGS_STUB.indexOf('## Failure modes')).toBeGreaterThan(0);
@@ -125,7 +146,8 @@ describe('LEARNINGS_STUB', () => {
 
 describe('updateProjectConfig', () => {
   it('seeds a missing file with the worktree, the parallel default beside the harness cap, and the decision docs', () => {
-    // ARRANGE / ACT
+    // ARRANGE
+    // ACT
     const text = updateProjectConfig(null, FACTS);
     const config = parseConfig(text, FACTS.driveEntry);
     // ASSERT
@@ -138,21 +160,28 @@ describe('updateProjectConfig', () => {
   });
 
   it('seeds the models each tier resolves to for the claude provider', () => {
-    // ARRANGE / ACT
+    // ARRANGE
+    // ACT
     const config = parseConfig(updateProjectConfig(null, FACTS), FACTS.driveEntry);
     // ASSERT
-    expect(config).toMatchObject({ models: { claude: { mid: 'sonnet', top: 'opus' } } });
+    expect(config).toMatchObject({
+      models: { claude: { mid: 'sonnet', top: 'opus' } },
+    });
   });
 
   it('seeds an invoke that runs the CLI at its entry', () => {
-    // ARRANGE / ACT
+    // ARRANGE
+    // ACT
     const config = parseConfig(updateProjectConfig(null, FACTS), FACTS.driveEntry);
     // ASSERT
-    expect(config).toMatchObject({ worktree: { invoke: 'node skills/drive/scripts/drive.ts worktree' } });
+    expect(config).toMatchObject({
+      worktree: { invoke: 'node skills/drive/scripts/drive.ts worktree' },
+    });
   });
 
   it('records the harness cap it is given beside the default', () => {
-    // ARRANGE / ACT
+    // ARRANGE
+    // ACT
     const config = parseConfig(updateProjectConfig(null, { ...FACTS, harnessCap: 7 }), FACTS.driveEntry);
     // ASSERT
     expect(config).toMatchObject({ parallel: { default: 3, harnessCap: 7 } });

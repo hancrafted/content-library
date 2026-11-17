@@ -9,7 +9,6 @@ import { POPOVER_RULES, type Lane } from './metro-map.pure';
 
 const SLOT = 'metro-popover';
 
-/** The lanes stopping here, as coloured ticks with their names: the popover says which lines change here. */
 function LaneTicks({ lanes, names }: { lanes: readonly Lane[]; names: Record<Lane, string> }) {
   return (
     <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-3 text-body text-muted-foreground">
@@ -32,7 +31,7 @@ interface PopoverProps {
   onClose: () => void;
 }
 
-/** A station's date, title and caption, portaled into the Episode portal root (FE-009 §8) so the chrome never covers it. */
+// decision: FE-009 §8
 export function MetroPopover({ id, anchor, copy, lanes, laneNames, onClose }: PopoverProps) {
   const placed = usePopoverPlacement({ anchor, side: 'below', rules: POPOVER_RULES, slot: SLOT, onClose });
   if (placed === null) return null;

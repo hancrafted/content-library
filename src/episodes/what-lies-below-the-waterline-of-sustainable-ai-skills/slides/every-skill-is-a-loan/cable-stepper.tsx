@@ -12,7 +12,6 @@ export interface StatementEntry {
   readonly key: ClampIcon;
   readonly month: string;
   readonly term: string;
-  /** The scene beneath the AI term; day one has none. */
   readonly scene: string;
   readonly chat: string;
   readonly coding: { readonly lead: string; readonly code: readonly string[] };
@@ -29,7 +28,6 @@ export interface CableStepperProps {
 
 const stepOf = (step: number) => ({ '--step': step }) as CSSProperties;
 
-/** An entry's words: its AI term and when, the scene beneath, and what it costs in each view. */
 function EntryBody({ entry }: { readonly entry: StatementEntry }) {
   const { key, month, term, scene, chat, coding, focal } = entry;
   const soft = focal ? 'text-muted-foreground' : styles.soft;
@@ -59,7 +57,6 @@ function EntryBody({ entry }: { readonly entry: StatementEntry }) {
   );
 }
 
-/** An entry's card: glass over the water, or paper for the focal entry, appearing at its step. */
 function EntryCard({ entry, step }: { readonly entry: StatementEntry; readonly step: number }) {
   const frame = 'min-w-0 flex-1 rounded-xl p-4';
   return entry.focal ? (
@@ -73,7 +70,6 @@ function EntryCard({ entry, step }: { readonly entry: StatementEntry; readonly s
   );
 }
 
-/** The robot at the cable's end, its lamp on, drawn by the shared `Robot` in a small drawing of its own. */
 function CableEnd({ label }: { readonly label: string }) {
   return (
     <svg viewBox="-55 -40 140 150" role="img" aria-label={label} className="relative z-10 w-24 shrink-0">
@@ -85,7 +81,6 @@ function CableEnd({ label }: { readonly label: string }) {
   );
 }
 
-/** The cable's end: the robot with its lamp on, beside a dashed entry for the next fix, still to come. */
 function NextEntry({
   next,
   robotLabel,
@@ -110,11 +105,6 @@ function NextEntry({
   );
 }
 
-/**
- * The skill's running statement (Option 23b), a copy of the `vertical-stepper` master: its spine is the robot's cable,
- * each step a clamp with its glyph, every entry open at rest, the latest the focal mark on paper. The robot hangs at
- * the cable's end beside a dashed entry for the next fix. Each clamp is the Spec's faceted plate holding its entry's prop.
- */
 export function CableStepper({ label, entries, next, robotLabel }: CableStepperProps) {
   return (
     <ol aria-label={label} className="focus-group focus-group--dim-others relative flex flex-col gap-5">

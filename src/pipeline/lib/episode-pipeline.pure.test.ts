@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkPipeline, type PipelineContext } from './episode-pipeline.pure';
 
-/*
- * In-memory pipelines: a small one that passes, then one change per test that
- * breaks exactly one schema rule. The context is a hand-written stand-in for
- * the disk: the skills that exist and the repo paths that exist.
- */
-
 const SKILL_FOLDER = 'skills/new-episode';
 
 const CONTEXT: PipelineContext = {
@@ -53,7 +47,6 @@ jobs:
 
 const FILE = 'pipeline.yml';
 
-/** A template commit, as a per-run pipeline's `template` names it. */
 const SHA = '6426e9c5b0c0f0e1d2a3b4c5d6e7f8091a2b3c4d';
 
 function check(yaml: string, context: PipelineContext = CONTEXT): string[] {

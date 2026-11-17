@@ -14,15 +14,9 @@ import { fileInMode } from './workflow-mode.pure.ts';
 import { MODES, type WorkflowFile } from './workflow-schema.types.ts';
 import { shapeProblems } from './workflow-shape.pure.ts';
 
-/*
- * The loading seam of the new Workflow schema: one YAML text, written in one language, into a WorkflowFile or into
- * every problem found, one sentence each. The old schema loads through `workflow.pure.ts`, beside this one, until
- * the German files move over. Hand-written validation, no zod (ARCH-001).
- */
-
+// decision: ARCH-001 §1
 export type FileResult = { readonly file: WorkflowFile } | { readonly problems: readonly string[] };
 
-/** Whether a parsed document is written in the new schema: it carries `templates`. */
 export const isNewSchema = (source: string): boolean => {
   try {
     const doc: unknown = parse(source);
@@ -53,11 +47,6 @@ export function loadWorkflow(source: string): FileResult {
   return unique.length > 0 ? { problems: unique } : { file };
 }
 
-/**
- * Everything that reads a chain of stages, run on the file as each mode runs it: a stage marked for one mode is checked
- * only among the stages of that mode, so a dependency on a stage of the other mode is refused. A file with no marked
- * stage is the same in both modes and is checked once.
- */
 function modeProblems(file: WorkflowFile): string[] {
   const marked = file.stages.some((stage) => stage.only !== undefined);
   const views = marked ? MODES.map((mode) => fileInMode(file, mode)) : [file];

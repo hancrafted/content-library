@@ -4,7 +4,6 @@ import { archivedEpisode, archiveIndex } from './archive-dashboard.pure.ts';
 import { EVENTS, FEEDBACK, SPEC } from './archive.fixture.ts';
 import { designArchive } from './archive.pure.ts';
 
-/** The skill's dashboard stylesheet, read from its assets by the CLI; any text stands in for it here. */
 const STYLE = '.archive-probe { margin: 0; }';
 const ZETA = { slug: 'zeta', title: 'Zeta', slides: 2, options: 4, picked: ['0a', '1b'] };
 const CASH = { slug: 'cash-first', title: 'Cash first', slides: 3, options: 5, picked: ['0b'] };

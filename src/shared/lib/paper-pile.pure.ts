@@ -2,13 +2,8 @@ export const PAPER_CAPACITY = 96;
 export const PAPER_PILE_ORIGIN = { x: 975, y: 546, step: 7 };
 export type PaperDrain = 'none' | 'primary';
 const RATES = { none: 10, primary: -80 / 3 };
-// Right beside the button the pile drains gently, so the reader sees it react before reaching it.
 const NEAR_RATE = -10;
 
-/**
- * What pulls on the pile: the promise button drains it at full speed; otherwise a number is the
- * pointer's proximity to that button (0 far, 1 over it), blending growth into a gentle drain.
- */
 export type PilePull = PaperDrain | number;
 
 function pullRate(pull: PilePull) {
@@ -26,11 +21,6 @@ export function advancePaperPile(papers: number, elapsedSeconds: number, pull: P
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
-/**
- * The tray's shadow in tray coordinates. The window light sits behind and to the right,
- * so the shadow falls forward: its right edge drops almost straight down and its left
- * edge fans out to the left. It lengthens as the pile grows.
- */
 export function pileShadowPath(papers: number): string {
   if (!Number.isFinite(papers) || papers < 0) {
     throw new RangeError('Paper count must be finite and non-negative.');

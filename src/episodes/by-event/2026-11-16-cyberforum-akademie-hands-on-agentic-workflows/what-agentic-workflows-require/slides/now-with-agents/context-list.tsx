@@ -2,11 +2,9 @@ import type { ReactNode } from 'react';
 
 export interface ContextListProps {
   readonly title: string;
-  /** One line each; `note` is the Context marker that follows it. */
   readonly items: readonly { readonly slug: string; readonly text: string; readonly note: ReactNode }[];
 }
 
-/** What no agent was told: a card note with one line per gap, each followed by its Context marker. */
 export function ContextList({ title, items }: ContextListProps) {
   return (
     <div data-context-list className="flex flex-col gap-2 rounded-sm border border-border bg-card p-4 shadow-md">

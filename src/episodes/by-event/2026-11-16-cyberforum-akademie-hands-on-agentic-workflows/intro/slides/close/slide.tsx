@@ -4,13 +4,10 @@ import { Check } from 'lucide-react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The quiz Workflow's three stages, as keys of `stages`, all done by the close. */
 const STAGES = ['requirements', 'execute', 'improve'] as const;
 
-/** The Brief's three Actionables, as keys of `actions`. */
 const ACTIONS = ['first', 'second', 'third'] as const;
 
-// The close lands the learning goal: the quiz Workflow ticked off on the left, the three next steps on the right, then the critical-thinking question and Q&A below. The Slide header shows the title and caption.
 export const close = slide({
   slug: 'close',
   messages: { en, de },

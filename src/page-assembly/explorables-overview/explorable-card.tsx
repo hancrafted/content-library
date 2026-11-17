@@ -6,18 +6,14 @@ import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/** One Explorable page as its card draws it, strings read in one locale on the server: plain values only (FE-006 §4). */
+// decision: FE-006 §4
 export interface ExplorableCard {
   readonly slug: string;
-  /** The Explorable page's locale-neutral logical path. */
   readonly route: string;
-  /** The kind's name in the reader's locale ("Explorable"). */
   readonly typeLabel: string;
-  /** The selected concept diagram, independent of the Explorable's hero story. */
   readonly artwork: CardArtworkName;
   readonly title: string;
   readonly description: string;
-  /** The page's first Tag, which gives its card the icon and accent. */
   readonly leadTag: TagId;
   readonly tags: readonly { readonly id: TagId; readonly label: string; readonly tooltip: string }[];
 }
@@ -29,7 +25,6 @@ interface CardViewProps {
   className?: string;
 }
 
-/** One Explorable page with top artwork, a clean reading surface and native whole-card navigation. */
 export function ExplorableCardView(props: CardViewProps) {
   const { card, className } = props;
   return (

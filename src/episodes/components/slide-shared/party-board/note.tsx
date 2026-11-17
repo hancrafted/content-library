@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** A note's line spacing, in board units. */
 const LINE = 16;
 
 export interface Box {
@@ -10,14 +9,8 @@ export interface Box {
   readonly height: number;
 }
 
-/**
- * How a note looks: a plain card; `external`, a dashed outline for a dependency outside your control; `fail`, the
- * failed mark (`destructive` outline and cross); `outlined`, a `primary` outline for the pair a Scene points at;
- * `goal`, the goal note, the board's one solid `primary` fill.
- */
 type NoteLook = 'card' | 'external' | 'fail' | 'outlined' | 'goal';
 
-/** Each look's card, outline and shadow; a dashed external note casts none. */
 const LOOKS: Record<
   NoteLook,
   { card: string; text: string; shadow?: string; strokeWidth?: number; strokeDasharray?: string; mark?: 'fail' }
@@ -47,20 +40,14 @@ const LOOKS: Record<
 
 interface NoteProps {
   readonly box: Box;
-  /** The note's text, one or two short lines. */
   readonly lines: readonly string[];
   readonly look?: NoteLook;
-  /** Degrees; a slight tilt gives the handwritten feel. */
   readonly tilt?: number;
-  /** Whether the card was delivered: a small tick in its top-left corner. */
   readonly ticked?: boolean;
-  /** A corner badge, such as `<AgentBadge>`. */
   readonly badge?: ReactNode;
-  /** Data attributes a Scene marks the note with. */
   readonly data?: Readonly<Record<`data-${string}`, string | true>>;
 }
 
-/** Lines of text centred on `cx`, stacked around `cy`; a reader gets them as one run, a space between lines. */
 function Lines({ cx, cy, lines, className }: { cx: number; cy: number; lines: readonly string[]; className: string }) {
   const top = cy - ((lines.length - 1) * LINE) / 2 + 5;
   return (
@@ -74,7 +61,6 @@ function Lines({ cx, cy, lines, className }: { cx: number; cy: number; lines: re
   );
 }
 
-/** The delivered tick in a note's top-left corner. */
 function Delivered({ box }: { box: Box }) {
   return (
     <path
@@ -87,7 +73,6 @@ function Delivered({ box }: { box: Box }) {
   );
 }
 
-/** The failed mark's cross on a note's top-right corner, in `destructive`. */
 function Cross({ box }: { box: Box }) {
   const cx = box.x + box.width - 4;
   const cy = box.y - 2;
@@ -104,7 +89,6 @@ function Cross({ box }: { box: Box }) {
   );
 }
 
-/** A sticky note: its shadow, the card and its text, tilted slightly, with the delivered tick, failed mark and badge. */
 export function Note({ box, lines, look = 'card', tilt = 0, ticked = false, badge, data }: NoteProps) {
   const { x, y, width, height } = box;
   const { card, text, shadow, strokeWidth, strokeDasharray, mark } = LOOKS[look];

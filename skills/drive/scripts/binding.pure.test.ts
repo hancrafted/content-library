@@ -10,10 +10,17 @@ import {
   updateBinding,
 } from './binding.pure.ts';
 
-const installed = (name: string, source = 'other/skills'): DetectedSkill => ({ name, origin: 'installed', source });
-const authored = (name: string): DetectedSkill => ({ name, origin: 'authored', source: null });
+const installed = (name: string, source = 'other/skills'): DetectedSkill => ({
+  name,
+  origin: 'installed',
+  source,
+});
+const authored = (name: string): DetectedSkill => ({
+  name,
+  origin: 'authored',
+  source: null,
+});
 
-/** A skill from the catalog's own source, whatever it is. */
 const known = (name: string) => installed(name, CATALOG.source);
 
 const binding = (text: string) => {
@@ -58,7 +65,8 @@ describe('updateBinding', () => {
     });
 
     it('seeds the agent type, and one tier per phase from the options or the per-phase presets', () => {
-      // ARRANGE / ACT
+      // ARRANGE
+      // ACT
       const seeded = binding(updateBinding(null, [], { agentType: 'team:dev', tier: 'top' }));
       const defaults = binding(updateBinding(null, []));
       // ASSERT
@@ -69,7 +77,8 @@ describe('updateBinding', () => {
     });
 
     it('presets mid for define, implement and evolve and top for reason and verify', () => {
-      // ARRANGE / ACT
+      // ARRANGE
+      // ACT
       const result = binding(updateBinding(null, []));
       // ASSERT
       expect(PHASES.map((phase) => result.phases[phase].model)).toEqual(['mid', 'top', 'mid', 'top', 'mid']);
@@ -77,7 +86,11 @@ describe('updateBinding', () => {
 
     it('matches a skill found only by folder, which names no source, to the catalog by name', () => {
       // ARRANGE
-      const byFolder: DetectedSkill = { name: 'tdd', origin: 'installed', source: null };
+      const byFolder: DetectedSkill = {
+        name: 'tdd',
+        origin: 'installed',
+        source: null,
+      };
       // ACT
       const result = binding(updateBinding(null, [byFolder]));
       // ASSERT
@@ -127,7 +140,9 @@ describe('updateBinding', () => {
     });
 
     it('refuses text that is not a binding', () => {
-      // ARRANGE / ACT / ASSERT
+      // ARRANGE
+      // ACT
+      // ASSERT
       expect(() => updateBinding('a: [', [])).toThrow('not valid YAML');
       expect(() => updateBinding('- a', [])).toThrow('must be a mapping');
     });
@@ -171,6 +186,8 @@ describe('readBinding tiers', () => {
     // ACT
     const result = readBinding(text);
     // ASSERT
-    expect(result).toEqual({ error: 'phases.implement.model must be a tier: mid or top' });
+    expect(result).toEqual({
+      error: 'phases.implement.model must be a tier: mid or top',
+    });
   });
 });

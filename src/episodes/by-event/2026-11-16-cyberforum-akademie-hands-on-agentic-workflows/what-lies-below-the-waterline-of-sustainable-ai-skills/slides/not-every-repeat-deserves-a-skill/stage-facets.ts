@@ -1,10 +1,3 @@
-/*
- * The stage of "Not every repeat deserves a skill", lifted facet by facet from Spec Option 9a (feedback 3, decision
- * 46), in the Spec's 1000 by 600 stage units: the wall, the binder, the index sheet with its clip and the check card
- * with its pin. The shared Console and pilot stand in front of the wall; the Spec's own desk and pilot are left out.
- */
-
-/** A tone of the drawing; `stage-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'room-shade'
   | 'room-lit'
@@ -26,10 +19,8 @@ export type ArtTone =
   | 'pin'
   | 'glint';
 
-/** One facet: its tone and its SVG path. */
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The faceted control-room wall behind the whole stage, lit from the upper left. */
 export const WALL: readonly ArtFacet[] = [
   ['room-shade', 'M344.6 600L503.3 484.7L524 600ZM918.4 148.5L1000 228.5L831.1 235.3Z'],
   ['room-lit', 'M683.9 239.3L559.3 357.3L461.6 277.5Z'],
@@ -76,7 +67,6 @@ export const WALL: readonly ArtFacet[] = [
   ['room', 'M245.8 600L303.9 514L344.6 600ZM303.9 514L245.8 600L128.3 446.8ZM245.8 600L131.3 600L128.3 446.8Z'],
 ];
 
-/** The fat ring binder, its thin card tabs sticking out, the never-tested ones stamped red; bottom edge at y 500. */
 export const BINDER: readonly ArtFacet[] = [
   ['tab', 'M186 376L191 376L188.6 354L183.6 354Z'],
   ['stamp', 'M192.5 376L197.5 376L199.9 340L194.9 340Z'],
@@ -126,7 +116,6 @@ export const BINDER: readonly ArtFacet[] = [
   ['binder-shade', 'M248 487L245.1 494.1L238 497L230.9 494.1L228 487L230.9 479.9L238 477L245.1 479.9Z'],
 ];
 
-/** The index sheet's paper, x 350 to 676, y 30 to 640. */
 export const SHEET: readonly ArtFacet[] = [
   ['paper', 'M676 152.4L548.8 30L676 30ZM548.8 30L676 152.4L504.9 107.4Z'],
   ['paper-shade', 'M426.9 561.3L459.6 640L350 640ZM578.3 499L459.6 640L426.9 561.3Z'],
@@ -157,14 +146,12 @@ export const SHEET: readonly ArtFacet[] = [
   ['paper-edge', 'M350 637L676 637L676 640L350 640ZM673 30L676 30L676 640L673 640Z'],
 ];
 
-/** The clip the index sheet hangs from, over its top edge. */
 export const CLIP: readonly ArtFacet[] = [
   ['robot-shade', 'M479 28L547 28L543 50L483 50Z'],
   ['robot-lit', 'M479 28L517 28L505 50L483 50Z'],
   ['robot-dark', 'M491 12L497 12L501 30L495 30ZM529 12L535 12L531 30L525 30ZM491 10L535 10L535 14L491 14Z'],
 ];
 
-/** The check card's paper, x 706 to 976, y 36 to 560. */
 export const CARD: readonly ArtFacet[] = [
   ['paper', 'M976 240.7L976 355.9L846.9 300Z'],
   [
@@ -192,7 +179,6 @@ export const CARD: readonly ArtFacet[] = [
   ['paper-edge', 'M706 557L976 557L976 560L706 560ZM973 36L976 36L976 560L973 560Z'],
 ];
 
-/** The pin holding the check card to the wall. */
 export const PIN: readonly ArtFacet[] = [
   ['pin', 'M834 46L841 39L848 46L841 53Z'],
   ['glint', 'M834 46L841 39L841 46Z'],

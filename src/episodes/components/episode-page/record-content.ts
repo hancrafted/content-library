@@ -25,38 +25,21 @@ import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { slideSizeOf } from './episode-page-container.pure';
 
-/*
- * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
- * Title slide's text and every Slide, localized, in page order. The table of
- * contents, the Context drawer and the Slide wrappers all fold this one list,
- * each Slide under the id its position gives it.
- */
-
-/** One locale's site-wide translator for a namespace, read by runtime key: next-intl in the page, a stand-in in tests. */
 export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 
-/** What the page lends the Episode: the site-wide translator, and the route it is served at when not its own. */
 export interface PageContext {
   readonly translatorOf: TranslatorOf;
-  /** The page's Episode id, or the slug of its Template or Explorable page: an Event's copy is named by its id, never by its slug alone. */
   readonly id: ComposedId;
-  /** The logical path the page is served at, which `slideHref` links on: the Episode's own unless an Event presents it. */
   readonly route?: string;
 }
 
-/** Composition's Title appearance, consumed without authored compatibility decisions. */
 export interface TitleAppearance {
-  /** Semantic tone for header sampling and Title-only navigation. */
   readonly tone: 'normal' | 'inverse';
-  /** Legacy wrapper tokens are present only without an authored Title presentation. */
   readonly legacyTone?: PageTone;
-  /** Authored mechanics carry the resolved tone; decorative JSX remains server-side. */
   readonly presentation?: SlidePresentation;
-  /** Selected only for a toned legacy Title with a first Slide and no resolved outgoing edge. */
   readonly inkTarget?: string;
 }
 
-/** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
   readonly agentView?: true;
   readonly titleAppearance: TitleAppearance;
@@ -64,24 +47,14 @@ export interface EpisodeContent {
   readonly transitions: ReadonlyMap<string, ResolvedSlideTransition>;
   readonly title: string;
   readonly caption?: string;
-  /** The whole reading time in minutes (`episodeMinutes`): the total the table of contents counts down from. */
   readonly minutes: number;
   readonly slides: readonly LocalizedSlide[];
-  /** The Title slide's own Speaker notes and Voice script; both empty for an Episode that gives it none. */
   readonly titleContext: SlideContext;
-  /** The record's authored Title slide Scene, rendered; absent for the shared glow. */
   readonly hero?: ReactNode;
-  /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
   readonly header: HeaderMode;
   readonly entrance: SlideEntrance;
 }
 
-/**
- * One locale of an Episode record, walked once (`placeSections`);
- * `translatorOf` serves only the site-wide Context reference and marker labels. The walk's
- * ids are also every kit's `slideHref` targets, so a link cannot drift from
- * the anchor it points at.
- */
 export async function recordContent(
   record: EpisodeComposition,
   locale: Locale,
@@ -98,7 +71,6 @@ export async function recordContent(
     tocEntrance: record.tocEntrance,
     transitions,
     title: lines.heading ?? title,
-    // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
     caption: lines.caption ?? caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),

@@ -11,7 +11,6 @@ const at = (preset: string) => {
     p = B.data.presets.find((x) => x.id === preset)!;
   return scenarioStart(B, p, SEED);
 };
-/** In practice, AI at the engineer writing twice the work, eight weeks on. */
 const flooded = (): FactoryHandle => {
   const f = at('realistic');
   f.set(settingsAfter({ ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, builtinBundle('tire'), f.settings));

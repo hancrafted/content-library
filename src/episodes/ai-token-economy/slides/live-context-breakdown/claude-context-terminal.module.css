@@ -1,5 +1,3 @@
-/* The terminal is an inverted surface (bg-foreground): light mode needs the bright values, dark mode the deep ones. Its status, error and agent colours use local names tuned for the inverted surface; the global status tokens are tuned for the page surface. */
-
 .scene {
   --term-success: oklch(0.78 0.16 150);
   --term-warning: oklch(0.82 0.15 80);

@@ -11,10 +11,8 @@ const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
 const RESEARCH = 'research';
 const PAGE = 'page';
-/** The caption's "One fresh chat per step": the claim the fresh-session note backs. */
 const CAPTION = 'caption';
 
-/** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
 const GRILLING = {
   command: '/grilling',
   url: 'https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling',
@@ -27,16 +25,10 @@ const TO_SPEC = {
 type Reply = 'start' | 'a1' | 'reframe' | 'a2' | 'a3' | 'spec';
 type Asked = 'q1' | 'q2' | 'q2Analogy' | 'q3';
 
-/** The replies that invoke a skill; the questions sit apart, since each has two options and a recommendation. */
 const SKILLS: Partial<Record<Reply, typeof GRILLING>> = { start: GRILLING, spec: TO_SPEC };
 
-/** The question you had not thought of. */
 const FORGOTTEN: Asked = 'q3';
 
-/**
- * The worked chat in order: you start a grilling, the AI asks one numbered question at a time, you ask for an analogy
- * when a question is jargon (meta-prompting), the last question is the one you forgot, and you end with a spec.
- */
 const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'start'],
   ['question', 'q1'],
@@ -50,15 +42,8 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-/** The stages the Slide words a popover for: the keys of its own `stages` messages. */
 type StageId = keyof typeof en.stages;
 
-/**
- * Your first human-in-the-loop agentic workflow: the whole summer party walked through BRIEF as the `summer-party`
- * Workflow, opening in the Stages view. Four stage cards carry their BRIEF letters, the worked Interview chat of the Plan
- * stage opens from under the diagram (a `<dialog>` cannot sit in a stage title), Requirements is the gate you sign off before research, Research is one fresh chat per ticket, and
- * Page is the second gate. Every stage name opens a two-line popover. The markup reads as an ordered list of stages.
- */
 export const firstHumanInTheLoopAgenticWorkflow = slide({
   slug: 'first-human-in-the-loop-agentic-workflow',
   messages: { en, de },

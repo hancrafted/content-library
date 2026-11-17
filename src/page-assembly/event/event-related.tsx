@@ -13,7 +13,6 @@ interface RelatedProps {
   t: EventT;
 }
 
-/** Other Episodes the visitor may like, as compact cards; no heading and no section when there are none. */
 export function RelatedEpisodes({ cards, locale, labels, t }: RelatedProps) {
   if (cards.length === 0) return null;
   const showFormat = showsFormat(cards);

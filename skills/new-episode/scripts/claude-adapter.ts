@@ -1,12 +1,4 @@
-// SubagentStart / SubagentStop hook (`claude-adapter.ts start|stop`), and the point-fact hooks (design-ADR-0010):
-// PostToolUse on the Skill tool (`skill`) and the Read tool (`read`), and InstructionsLoaded (`instructions`). A plugin
-// over the core writer. It acts only
-// when some worktree's `.scratch/active-run` lists the hook's session; otherwise it prints nothing and exits 0, so
-// a retro or review session never touches a run's log. The mapping lives in src/pipeline/lib/claude-adapter.pure.ts; the line is
-// written by src/pipeline/lib/run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
-// A lock timeout is the one failure it reports: a line on stderr and exit 1, which Claude Code does not treat as
-// blocking (exit 2 would block SubagentStop). A point-fact hook waits only 2 s, reports it too, and exits 0: what it
-// records already happened. `--lock-wait-ms=<ms>` after the mode sets a point-fact hook's wait instead (tests pass a short one).
+// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import {
@@ -23,8 +15,7 @@ import { LockTimeoutError, appendEvent } from '../../../src/pipeline/lib/run-log
 import { agentModel } from './agent-definition.ts';
 import { findRun } from './run-root.ts';
 
-/** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */
-const POINT_LOCK_WAIT_MS = 2_000;
+const POINT_LOCK_WAIT_MILLISECONDS = 2_000;
 const LOCK_WAIT_FLAG = '--lock-wait-ms=';
 type PointMode = 'skill' | 'read' | 'instructions';
 type Mode = PointMode | 'start' | 'stop';
@@ -36,11 +27,9 @@ const POINT_HANDLERS: Record<PointMode, (input: PointInput) => ReturnType<typeof
   instructions: adaptInstructions,
 };
 
-/** The worktree whose marker lists the hook's session, scanned from the payload's cwd. */
 const runOf = (payload: { cwd?: string; session_id: string }) =>
   findRun(payload.cwd ?? process.env.CLAUDE_PROJECT_DIR ?? process.cwd(), payload.session_id);
 
-/** The checkout the hook ran in: the nearest folder up from its cwd holding `.git` (a worktree's is a file). */
 function repoRootOf(cwd: string): string {
   for (let dir = path.resolve(cwd); ; dir = path.dirname(dir)) {
     if (existsSync(path.join(dir, '.git'))) return dir;
@@ -56,21 +45,23 @@ const realPath = (file: string | undefined): string | null => {
   }
 };
 
-/** Where a loaded file really lives (a rule's symlink followed), spelled under `repoRoot` as the hook spells paths. */
 function resolvedUnder(repoRoot: string, file: string | undefined): string | null {
   const [real, realRoot] = [realPath(file), realPath(repoRoot)];
   return real === null || realRoot === null ? null : path.resolve(repoRoot, path.relative(realRoot, real));
 }
 
-/** Skill, Read or InstructionsLoaded: one `event` line on the span that made the call, when there is one. */
-function pointFact(mode: PointMode, payload: ToolHookPayload & InstructionsHookPayload, lockWaitMs: number): void {
+function pointFact(
+  mode: PointMode,
+  payload: ToolHookPayload & InstructionsHookPayload,
+  lockWaitMilliseconds: number,
+): void {
   const run = runOf(payload);
   if (run === null) return;
   const { root, marker } = run;
   const input = { payload, marker: run.text, log: readLog(marker.log, root).lines };
   const repoRoot = repoRootOf(payload.cwd ?? root);
   const line = POINT_HANDLERS[mode]({ ...input, repoRoot, resolvedPath: resolvedUnder(repoRoot, payload.file_path) });
-  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMs });
+  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMilliseconds });
 }
 
 function subagent(event: 'start' | 'stop', payload: HookPayload): void {
@@ -91,10 +82,9 @@ function subagent(event: 'start' | 'stop', payload: HookPayload): void {
   appendEvent({ root, file: marker.log }, line);
 }
 
-/** A point-fact hook's lock wait: `--lock-wait-ms=<ms>` among `args` when it is a positive whole number, else 2 s. */
 function pointLockWait(args: readonly string[]): number {
   const ms = Number(args.find((arg) => arg.startsWith(LOCK_WAIT_FLAG))?.slice(LOCK_WAIT_FLAG.length));
-  return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MS;
+  return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MILLISECONDS;
 }
 
 function isPointMode(value: string | undefined): value is PointMode {
@@ -105,7 +95,6 @@ function isMode(value: string | undefined): value is Mode {
   return value === 'start' || value === 'stop' || isPointMode(value);
 }
 
-/** Only a point-fact hook takes the lock wait from `args`; a subagent hook takes the writer's default wait. */
 function main(mode: Mode, args: readonly string[]): void {
   const payload = JSON.parse(readFileSync(0, 'utf8')) as AdapterPayload;
   if (isPointMode(mode)) pointFact(mode, payload, pointLockWait(args));
@@ -120,5 +109,4 @@ try {
     process.stderr.write(`new-episode adapter: ${error.message}\n`);
     process.exitCode = isPointMode(mode) ? 0 : 1;
   }
-  // Any other failure: a hook must never fail the session or the run, so the line is simply missing.
 }

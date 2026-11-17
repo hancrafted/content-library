@@ -2,10 +2,8 @@ import { Cross, DoneBy, Tick } from '@/episodes/components/slide-shared/seam-sum
 import { cn } from '@/shared/lib/utils';
 
 interface GoalSumProps {
-  /** The Scene's accessible name: four ticked cards that do not add up to the goal. */
   readonly label: string;
   readonly cards: readonly { readonly number: number; readonly doneBy: string; readonly done: string }[];
-  /** The only word on the visual. */
   readonly goal: string;
   readonly broken: string;
 }
@@ -18,7 +16,6 @@ function Sign({ children }: { children: string }) {
   );
 }
 
-/** A ticked card: who did it, the tick, its number. Nothing to read. */
 function TickedCard({ number, doneBy, done, tilt }: { number: number; doneBy: string; done: string; tilt: string }) {
   return (
     <div
@@ -41,7 +38,6 @@ function TickedCard({ number, doneBy, done, tilt }: { number: number; doneBy: st
   );
 }
 
-/** The crack through the goal card. */
 function Crack() {
   return (
     <svg viewBox="0 0 60 80" aria-hidden preserveAspectRatio="xMidYMid meet" className="absolute inset-0 size-full p-2">
@@ -56,7 +52,6 @@ function Crack() {
   );
 }
 
-/** The goal, broken: a card with a crack through it and the failure cross on its corner. */
 function BrokenGoal({ goal, broken }: Pick<GoalSumProps, 'goal' | 'broken'>) {
   return (
     <div
@@ -72,10 +67,6 @@ function BrokenGoal({ goal, broken }: Pick<GoalSumProps, 'goal' | 'broken'>) {
   );
 }
 
-/**
- * The Title slide's picture (Spec Option B, plain numbered cards): four ticked cards add up to a goal that is
- * broken. Abstract on purpose: no party, no names, and "Goal" is the only word on it.
- */
 export function GoalSum({ label, cards, goal, broken }: GoalSumProps) {
   return (
     <div

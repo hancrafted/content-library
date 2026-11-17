@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { INK_PROFILES, inkScale, inkTransform } from './ink-transition.pure';
 
-/*
- * The ink's progress curve per named effect: a quick jump to the profile's knee in the first 2% of progress, so the
- * edge shows at once, then a straight run to full. The `bubbles` profile carries the Iceberg style's Section-title
- * descent; its water rises by translation, so the crest riding on it keeps its shape, while every other effect
- * scales its ink up from the bottom.
- */
-
 describe('success cases', () => {
   it('names a bubbles profile beside the others, with its own filter overscan and knee', () => {
     // ARRANGE

@@ -12,7 +12,6 @@ export async function generateMetadata({ params }: LocaleParams) {
   return siteMetadata(await resolveLocale(params), SITE_URL);
 }
 
-/** Root layout for prefixed locales (`/de`). */
 export default async function PrefixedLocaleLayout({ children, params }: LocaleParams & { children: ReactNode }) {
   return (
     <SiteShell locale={await resolveLocale(params)} localesByRoute={localesByRoute()} navSections={templateSections()}>

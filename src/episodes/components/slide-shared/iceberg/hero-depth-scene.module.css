@@ -1,14 +1,3 @@
-/*
- * The Title slide's hero (`HeroDepthScene`): the drawing starts `--hero-lift` below the top and takes the rest of the
- * Slide's height, centred across, its sky and water bleeding past both sides and its sky up above it (`overflow:
- * visible`, clipped by the scene box), so one scale maps it: the height left over the drawing's. The lift is
- * `heroLift` in `hero-depth.pure.ts`: zero on a tall window; on a short one, just enough that the title's last line
- * ends above the ship's masthead, from `heroLiftStyle`'s share and line counts and the type tokens. The frame and the
- * overlay are size containers covering the same box, so `cq` units read that box: a point (x, y) of the drawing sits
- * at `50cqw + (x - width / 2) * scale` across and `lift + y * scale` down. The depth gauge sits at the right inset,
- * below the title's lines and clear of the ship in the drawing's middle.
- */
-
 .frame {
   container-type: size;
 }
@@ -75,7 +64,6 @@
   white-space: nowrap;
 }
 
-/* On a phone the gauge does not fit beside the drawing; the pill still marks the Surface. */
 @media (width < 48rem) {
   .gauge {
     display: none;

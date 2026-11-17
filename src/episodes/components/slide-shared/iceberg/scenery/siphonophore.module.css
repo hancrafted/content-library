@@ -1,5 +1,4 @@
-/* The siphonophore drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in siphonophore.tsx. */
-
+/* decision: FE-011 §4 */
 .siphonophore {
   --siph-float: color-mix(in oklab, color-mix(in oklab, var(--info) 30%, var(--on-brand-accent)) 85%, transparent);
   --siph-bell-lit: color-mix(in oklab, color-mix(in oklab, var(--info) 20%, var(--on-brand-accent)) 75%, transparent);
@@ -52,7 +51,6 @@
   fill: var(--siph-glint);
 }
 
-/* The colony sways from its float, slowly, only on the active Slide. */
 .sway {
   transform-box: view-box;
   transform-origin: 0 0;
@@ -64,7 +62,6 @@
   }
 }
 
-/* It starts and ends level, where it is drawn, so the loop never jumps when it starts. */
 @keyframes siphonophore-sway {
   0%,
   100% {

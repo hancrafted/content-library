@@ -4,13 +4,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { Seam } from './seam';
 
-/**
- * The Title slide's hero Scene (the record's `title`), the Hero motif of picked Option 0b: the party board zoomed onto
- * one seam, Food & drinks handing "31 vegetarian" to the venue's kitchen, with the contract card agreed at the seam as
- * the focal part and the goal note at the right edge. The shared header renders the `h1` and this Slide's caption
- * above it. Each section slide echoes the same seam at its Section's state. The empty Backdrop is the Title slide's
- * one Backdrop, holding no glow, so the board stays the one thing to look at.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

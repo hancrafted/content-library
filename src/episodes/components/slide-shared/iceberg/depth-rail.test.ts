@@ -5,11 +5,6 @@ import { describe, expect, it } from 'vitest';
 import { DepthRail } from './depth-rail';
 import type { Zone } from './zones.pure';
 
-/*
- * The slim rail every page Slide carries at its left edge, and a section slide on phones (design guide, Iceberg): one
- * tile per Section in its zone's colour, from the Surface down, the Slide's own Section lit.
- */
-
 const SECTIONS: readonly Zone[] = [
   'surface',
   'surface',

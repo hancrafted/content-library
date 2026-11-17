@@ -13,12 +13,6 @@ const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord
 
 const MARCH = 'march';
 
-/**
- * The cashflow board once more (Spec Option 6a): the same notes as the first board, with the million moved from April
- * into March beside the cost, ringed, a dashed outline left where it was and a `primary` arrow labelled "one month
- * earlier". Each column's Cash left footer states its balance, so no cash note repeats it; the March lane carries
- * the Context marker of its Speaker note.
- */
 export const watchYourCashflowRevenuePulledIn = slide({
   slug: 'watch-your-cashflow-revenue-pulled-in',
   messages: { en, de },

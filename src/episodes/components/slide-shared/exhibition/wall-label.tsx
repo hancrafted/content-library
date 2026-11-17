@@ -1,9 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 
-/**
- * The museum label under an exhibit: flat on the wall, narrower than its frame and centred under it, no box border.
- * The title, then the era (or whatever stands in its place) in muted text, then one italic line under a hairline.
- */
 export function WallLabel({
   title,
   era,

@@ -1,14 +1,8 @@
 import type { TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
 
-/*
- * The smallest Job, Stage and Workflow the diagram and the state can draw, for tests that need a shape and no
- * content. The file and the task are empty shells: nothing here is a shipped Workflow.
- */
-
 const SECTION = { heading: 'Task', purpose: 'task', text: 'Do it.' } as const;
 
-/** A task with one prompt per runtime and no slots. */
 export const TASK: TaskDef = {
   id: 'j',
   title: 'J',
@@ -20,7 +14,6 @@ export const TASK: TaskDef = {
   details: { why: 'Why.', example: 'Example.', goodLooksLike: ['Good.'] },
 };
 
-/** A job that depends on nothing, takes and hands on nothing. */
 export const JOB: Job = {
   id: 'j',
   title: 'J',
@@ -64,7 +57,6 @@ export const flow = (stages: readonly Stage[], focalJobId?: string): Workflow =>
   file: FILE,
 });
 
-/** Two stages for the optional marks: `a` holds a required and an optional job, `b` is an optional stage. */
 export const optionalFlow = (): Workflow =>
   flow([
     stage('a', [job({ id: 'must' }), job({ id: 'extra', optional: true })]),

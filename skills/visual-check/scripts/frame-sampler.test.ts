@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import './frame-sampler.js';
 
-/*
- * The frame sampler's statistics: from requestAnimationFrame deltas, how many frames, how many were dropped (over
- * 25 ms, a frame missed at 60 fps; vsync jitter around 16.7 ms is not one), their share and the 95th-percentile delta. The sampling itself needs a browser and is checked
- * there.
- */
-
 interface Stats {
   frames: number;
   droppedFrames: number;

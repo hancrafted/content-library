@@ -1,10 +1,5 @@
 import type { ChatMarkName } from './chat-marks.pure';
 
-/*
- * Small marks for the "open in a chat tool" buttons, drawn here because no icon set ships brand marks: a six-petal
- * rosette for ChatGPT, a four-point star for Gemini. Decorative: the buttons carry the names.
- */
-
 interface MarkProps {
   readonly className?: string;
 }
@@ -35,17 +30,10 @@ function GeminiMark({ className }: MarkProps) {
   );
 }
 
-/** Each mark by its name. */
 export const CHAT_MARKS: Record<ChatMarkName, (props: MarkProps) => React.JSX.Element> = {
   chatgpt: ChatGptMark,
   gemini: GeminiMark,
 };
-
-/*
- * Marks for the Guide toolbar's two groups, drawn here for the same reason: an Apple apple, the four Windows panes, a
- * Tux silhouette, and, where a mark is simple enough to draw honestly, an AI agent's (Claude Code's spark, Codex's
- * prompt). Single-colour on `currentColor`, decorative: the toolbar button carries the name.
- */
 
 function AppleMark({ className }: MarkProps) {
   return (
@@ -71,7 +59,6 @@ function LinuxMark({ className }: MarkProps) {
   );
 }
 
-/** The Guide toolbar's operating systems by their pick value. */
 export const OS_MARKS: Record<'mac' | 'windows' | 'linux', (props: MarkProps) => React.JSX.Element> = {
   mac: AppleMark,
   windows: WindowsMark,
@@ -111,7 +98,6 @@ function CodexMark({ className }: MarkProps) {
   );
 }
 
-/** The AI agents whose mark is simple enough to draw; the others show their name alone. */
 export const AGENT_MARKS: Partial<Record<string, (props: MarkProps) => React.JSX.Element>> = {
   'claude-code': ClaudeCodeMark,
   codex: CodexMark,

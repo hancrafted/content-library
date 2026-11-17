@@ -1,12 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { GIFT, spriteIdx } from './doc-sprites.ts';
 import type { FloorDoc } from './factory-model.pure.ts';
 import { docKind, handoffSecs } from './paint-belts.ts';
 
-/*
- * What the belts draw for the feedback 10 documents (design-ADR 0024 §14): a release is a gift box, a bad one with a
- * bug; own work wears a lightbulb.
- */
 const doc = (o: Partial<FloorDoc> = {}): FloorDoc => ({
   c: 1,
   t0: 0,

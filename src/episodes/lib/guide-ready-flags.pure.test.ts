@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { isReady, parseReadyFlags } from './guide-ready-flags.pure';
 
-/* The two flags the check skill puts on the Guide link, `?skills=true&local-setup=true`, read once for every Slide. */
-
 describe('success cases', () => {
   it('reads both flags from the query string', () => {
     // ARRANGE

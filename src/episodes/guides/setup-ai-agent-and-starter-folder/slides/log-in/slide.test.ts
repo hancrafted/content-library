@@ -40,13 +40,7 @@ function render(locale: Locale, picks: Record<string, string> = {}): string {
   return renderToStaticMarkup(withPagePicks(content, picks));
 }
 
-/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
 const scene = (locale: Locale, picks: Record<string, string> = {}) => load(render(locale, picks));
-
-/*
- * Log in (feedback round 2): the second command is the AI agent's launch line, and the Slide first says to open a NEW
- * terminal window, with the "command not found" failure and its fix.
- */
 
 describe('success cases', () => {
   it('speaks its two Voice script segments, in order', () => {

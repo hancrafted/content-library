@@ -2,21 +2,12 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * DaisyUI is not installed, so its class names render nothing. A leftover is a
- * silent bug: the element just loses its colour. Colours come from the shadcn
- * tokens in globals.css; a Slide's own status colours (success, warning, info)
- * are variables in its CSS module, read as `text-(--success)`.
- */
-
 const SRC = path.join(__dirname, '../../src');
 const SOURCE = /\.(tsx?|css|mdx?)$/;
 
-// A DaisyUI colour utility: base-100/200/300/content, neutral(-content), or a bare status colour.
-const COLOUR =
+const DAISYUI_COLOUR_UTILITY =
   /\b(?:bg|text|border|ring|fill|stroke|from|to|via|divide|outline|shadow)-(?:base-(?:100|200|300|content)|neutral-content|neutral|success|error|warning|info)(?![\w-])/g;
-// A DaisyUI component or shape class used as a class name.
-const COMPONENT =
+const DAISYUI_COMPONENT_OR_SHAPE_CLASS =
   /(?<![\w-])(?:badge(?:-[a-z]+)?|btn(?:-[a-z]+)?|rounded-box|rounded-field|input-bordered|range-(?:primary|sm)|card-body)(?![\w-])/g;
 
 function sourceFiles(dir: string): string[] {
@@ -27,16 +18,15 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
-// `card` alone is plain English in prose and identifiers, so it only counts as a class of its own in a className attribute.
-const CARD_CLASS = /(?:className|class)="(?:[^"]* )?card[ "]/g;
+const CARD_ONLY_AS_CLASS_ATTRIBUTE_CLASS = /(?:className|class)="(?:[^"]* )?card[ "]/g;
 
-// A module specifier or a shadcn `data-slot` value names a file or a part, never a class: `'./badge'`, `"badge"` after `data-slot=`.
-const NOT_CLASSES = /(?:from |import\(|data-slot=)\s*$/;
+const BEFORE_MODULE_SPECIFIER_OR_DATA_SLOT = /(?:from |import\(|data-slot=)\s*$/;
 
-/** The quoted strings of a file that could hold class names: every one but a module specifier or a `data-slot` value. */
 function classCandidates(text: string): string[] {
   return [...text.matchAll(/"[^"\n]*"|'[^'\n]*'|`[^`]*`/g)]
-    .filter((match) => !NOT_CLASSES.test(text.slice(Math.max(0, match.index - 12), match.index)))
+    .filter(
+      (match) => !BEFORE_MODULE_SPECIFIER_OR_DATA_SLOT.test(text.slice(Math.max(0, match.index - 12), match.index)),
+    )
     .map((match) => match[0]);
 }
 
@@ -47,15 +37,18 @@ function offenders(): string[] {
       const text = readFileSync(file, 'utf8');
       const strings = classCandidates(text);
       const hits = [
-        ...strings.flatMap((chunk) => [...(chunk.match(COLOUR) ?? []), ...(chunk.match(COMPONENT) ?? [])]),
-        ...(text.match(CARD_CLASS) ?? []).map(() => 'card'),
+        ...strings.flatMap((chunk) => [
+          ...(chunk.match(DAISYUI_COLOUR_UTILITY) ?? []),
+          ...(chunk.match(DAISYUI_COMPONENT_OR_SHAPE_CLASS) ?? []),
+        ]),
+        ...(text.match(CARD_ONLY_AS_CLASS_ATTRIBUTE_CLASS) ?? []).map(() => 'card'),
       ];
       return hits.map((hit) => `${path.relative(SRC, file)}: ${hit}`);
     });
 }
 
 describe('success cases', () => {
-  it('leaves no DaisyUI class name in src', () => {
+  it('leaves no DaisyUI class name in src, since DaisyUI is not installed and a leftover silently renders nothing', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
@@ -70,7 +63,7 @@ describe('failure cases', () => {
     // ARRANGE
     const sample = 'text-base-content/70 bg-error border-neutral-content';
     // ACT
-    const hits = sample.match(COLOUR);
+    const hits = sample.match(DAISYUI_COLOUR_UTILITY);
     // ASSERT
     expect(hits).toEqual(['text-base-content', 'bg-error', 'border-neutral-content']);
   });
@@ -89,7 +82,7 @@ describe('failure cases', () => {
     // ARRANGE
     const sample = 'border-neutral-900 bg-destructive text-(--success) text-foreground';
     // ACT
-    const hits = sample.match(COLOUR);
+    const hits = sample.match(DAISYUI_COLOUR_UTILITY);
     // ASSERT
     expect(hits).toBeNull();
   });

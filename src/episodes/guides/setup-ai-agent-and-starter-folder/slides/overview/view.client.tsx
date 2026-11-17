@@ -8,11 +8,7 @@ import { TicksContext, useTicks } from './ticks.client';
 
 const NO_FLAGS: ReadyFlags = { skills: undefined, localSetup: undefined };
 
-/**
- * Reads the real query string after mount (the static export has no server): the normal view ships in the HTML and
- * switches once the page has hydrated. The ticks live here, so ticking "I ran hancrafted-check-setup" shows the same
- * ready view as the flags do. All of it is transient client state (FE-001).
- */
+// decision: FE-001 §1
 export function OverviewView(props: Omit<ViewBodyProps, 'view' | 'onReopen'>) {
   const [flags, setFlags] = useState<ReadyFlags>(NO_FLAGS);
   const ticks = useTicks();

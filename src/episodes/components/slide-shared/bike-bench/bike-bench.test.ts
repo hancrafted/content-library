@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { BikeBench, type BikeBenchProps } from './bike-bench';
 
-/*
- * The bike assembly bench, the reference drawing of "From shared understanding to shared context": read through its
- * rendered SVG, by the items it marks with `data-bench-item`.
- */
-
 const render = (props: BikeBenchProps) => load(renderToStaticMarkup(createElement(BikeBench, props)));
 
 const itemsOf = ($: ReturnType<typeof render>) =>

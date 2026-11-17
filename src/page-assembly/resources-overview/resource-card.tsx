@@ -7,22 +7,15 @@ import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { ResourceKind } from './resource-index.pure';
 
-/**
- * One Resource as its card draws it, strings read in one locale on the server: plain values only, so the client
- * leaf can take it (FE-006 §4).
- */
+// decision: FE-006 §4
 export interface ResourceCard {
   readonly slug: string;
-  /** The Resource page's locale-neutral logical path. */
   readonly route: string;
   readonly kind: ResourceKind;
-  /** The kind's name in the reader's locale ("Master slide"). */
   readonly kindLabel: string;
-  /** The Explorable's selected concept diagram; other kinds select by Tag or have no artwork. */
   readonly artwork?: CardArtworkName;
   readonly title: string;
   readonly description: string;
-  /** The Resource's first Tag, which gives its card the icon and accent. */
   readonly leadTag: TagId;
   readonly tags: readonly { readonly id: TagId; readonly label: string; readonly tooltip: string }[];
 }
@@ -38,10 +31,6 @@ function dataOf(card: ResourceCard) {
   return { 'data-resource-card': card.slug, 'data-resource-kind': card.kind, 'data-lead-tag': card.leadTag };
 }
 
-/**
- * One Resource as a card, laid out as an Episode card is: the lead Tag's icon and accent, its kind, the title as the
- * card's one link, the description, the Tags and the cue that it opens.
- */
 export function ResourceCardView(props: CardViewProps) {
   const { card, className } = props;
   const visual = resourceVisual(card);

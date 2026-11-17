@@ -1,4 +1,3 @@
-/** A numbered pin, as the still's SVG pins draw it: a dark circle with its number. */
 export function PinNumber({ n }: { n: number }) {
   return (
     <span

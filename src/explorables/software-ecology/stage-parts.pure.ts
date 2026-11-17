@@ -1,7 +1,3 @@
-/*
- * The stage's fixed parts for one run, in words: each card's box, title, glyph and possible signs, and each belt's
- * label and where it sits. Computed once a run; the readouts that change come from the snapshot.
- */
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { kindChancesOf, kindTargets } from './defect.pure.ts';
 import { placeLabels, type LabelPlace } from './factory-labels.pure.ts';
@@ -27,7 +23,6 @@ export interface BeltPart {
   readonly back: string;
 }
 
-/** Centers a complaint can reach: named in the Customer's or any preset's `bad` chances. */
 const complaintsTo = (topo: Topology): Set<string> =>
   new Set(
     [topo.B.data.customer, ...topo.B.data.presets.map((p) => p.customer ?? {})].flatMap((c) =>
@@ -70,7 +65,6 @@ export const beltsOf = (x: { topo: Topology; layout: FactoryLayout; w: WordsIn; 
   }));
 };
 
-/** A belt's rates on its label: "· 12 a week · ↩ 3 changes requested". */
 export const rateText = (b: BeltPart, r: BeltReadout | undefined, stage: StageWords): string => {
   const back = Math.round(r?.back ?? 0);
   const week = `· ${fillTemplate(stage.aWeek, { n: Math.round(r?.rate ?? 0) })}`;

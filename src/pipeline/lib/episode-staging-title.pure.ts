@@ -1,14 +1,9 @@
 import { type Finding } from './finding.pure';
 import { type Block } from './staging-markdown.pure';
 
-/* A Visual under the h1 is the Visual check's finding, not this one's. */
 const TITLE_BLOCKS = ['Speaker notes', 'Voice script'];
 
-/**
- * The Title slide's block (the h1 and its h4s): no prose, and only the optional
- * Speaker notes and Voice script, which the writing jobs leave out and a
- * feedback round adds (FE-004 §6). Each is checked like any Slide's.
- */
+// decision: FE-004 §6
 export function checkTitleSlide(blocks: readonly Block[]): Finding[] {
   const finding = (message: string): Finding => ({ kind: 'title-slide', file: 'dossier.md', message });
   const end = blocks.findIndex(({ heading }, index) => index > 0 && heading.level <= 3);

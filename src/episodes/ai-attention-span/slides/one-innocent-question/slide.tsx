@@ -19,7 +19,6 @@ const WEB_FETCH = source(
 );
 const OPENAI_WEB_SEARCH = source('openai-web-search', 'https://developers.openai.com/api/docs/guides/tools-web-search');
 
-/** Each row's colour: what you typed, what the AI wrote, what it searched and what it read. */
 const TONES: Readonly<Record<(typeof SIZE_ROWS)[number]['key'], BarTone>> = {
   question: 'you',
   searches: 'searched',
@@ -27,12 +26,6 @@ const TONES: Readonly<Record<(typeof SIZE_ROWS)[number]['key'], BarTone>> = {
   answer: 'ai',
 };
 
-/**
- * "One innocent question" (Spec Option 8a): the cornerstone on its Slide 8 Preset, Technical, one step on so the
- * one-line answer shows, the catering PDF read pinned, the conversation off and the panel open; below, a card in
- * plain words and size bars on one scale. The bars read the same chat the cornerstone draws, so their numbers agree
- * with it. Keeps `basic-page` and `motion: local`.
- */
 export const oneInnocentQuestion = slide({
   slug: 'one-innocent-question',
   messages: { en, de },

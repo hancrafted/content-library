@@ -1,15 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { CALLOUTS, CLOSE_UP, PHONE_SCENE_PX, clashes, closeUpLayout, type CalloutWords } from './close-up.pure';
+import { CALLOUTS, CLOSE_UP, PHONE_SCENE_PIXELS, clashes, closeUpLayout, type CalloutWords } from './close-up.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-
-/*
- * The cabin close-up's layout (feedback 3, item 7 and decision 45): the captain's speech bubble never covers a callout
- * label, the labels never cover each other or leave the Scene, and the bubble stays inside the close-up, in both
- * languages, at the narrowest Scene where the labels show their full words. On a phone the shared bubble turns its
- * words up to their caption size (decision 53), so it outgrows the close-up: there it keeps off the number badges and
- * inside the Scene.
- */
 
 type Messages = typeof en;
 const wordsOf = (messages: Messages): Record<CalloutWords['slug'], CalloutWords> =>
@@ -41,7 +33,7 @@ describe('success cases', () => {
 
   it('keeps the phone-sized bubble off every number badge and inside the Scene, in both languages', () => {
     // ARRANGE
-    const phone = { scenePx: PHONE_SCENE_PX };
+    const phone = { scenePixels: PHONE_SCENE_PIXELS };
     // ACT
     const found = {
       en: clashes(closeUpLayout({ request: en.request, callouts: wordsOf(en), ...phone })),

@@ -5,12 +5,6 @@ import { describe, expect, it } from 'vitest';
 import { DepthGauge } from './depth-gauge';
 import type { ZoneLabelWords } from './zone-words.pure';
 
-/*
- * The slim depth gauge at the right edge of the Title slide and every section slide (design guide, Iceberg): the five
- * zone colours as one thin strip, and only the zone the Slide sits in named, in its plain word; depth and ocean term
- * open in its popover.
- */
-
 const TWILIGHT: ZoneLabelWords = { name: 'Twilight', metres: '200–1,000 m', science: 'mesopelagic' };
 const SURFACE: ZoneLabelWords = { name: 'Surface', metres: '0 m', science: 'the sea surface and the air above it' };
 const ABYSS: ZoneLabelWords = { name: 'Abyss', metres: '4,000–6,000 m', science: 'abyssopelagic' };

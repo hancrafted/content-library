@@ -1,16 +1,5 @@
-/*
- * The Slide's token file: the control room split by a bulkhead, the manual, the pulled card and the index board,
- * lifted from the approved Spec's Option 7a (feedback 3, decision 46) with the Spec's own light and dark values (FE-011;
- * dark mode is tuned later). `--machine`, `--human` and `--ai` stay for their meanings; the cast draws its own. The call
- * line and the scan line are the primary colour, as in the Spec.
- *
- * Motion (`motion: local`, one emphasis): the highlight lands on the Collect sediment sample index line, and only then
- * the dashed scan line from the console to it fades in; both by opacity alone (decision 19). It plays once when the Slide's mount turns `[data-zone='active']`;
- * the rest state is the end state, so reduced motion shows the highlight resting on the line. Nothing loops.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .scene {
   --bulk-lit: oklch(0.56 0.03 250);
   --bulk-shade: oklch(0.36 0.03 258);
@@ -168,10 +157,6 @@
   stroke: var(--robot-lit);
 }
 
-/*
- * The captain drawn once per view, as `InView` does for words: the other view's drawing hides. The captain stands at
- * room scale, 2.2 times the figure, so the shared bubble turns its words down to read at caption size.
- */
 .inView {
   --says-scale: 0.5;
 }
@@ -196,7 +181,6 @@
   }
 }
 
-/* The line fades in already lit, and the scan line fades in after it: opacity alone (decision 19). */
 @keyframes highlight-lands {
   from {
     opacity: 0;

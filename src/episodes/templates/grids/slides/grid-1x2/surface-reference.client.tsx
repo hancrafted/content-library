@@ -39,7 +39,6 @@ function followMotion(element: HTMLElement, active: boolean) {
   };
 }
 
-/** Retained imperative decoration follows the existing Slide zone, document visibility and reduced-motion preference. */
 export function SurfaceReferenceDrift({ className }: { className: string }) {
   const zone = useSlideZone();
   const element = useRef<HTMLDivElement>(null);

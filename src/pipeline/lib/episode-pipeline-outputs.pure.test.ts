@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkOutputs, type OutputScope } from './episode-pipeline-outputs.pure';
 
-/*
- * The outputs check on hand-built job mappings: where a job writes, whether an approved per-run pipeline has
- * expanded its fan-out, and whether a job writing markdown queries the rules' intents first.
- */
-
 const WHERE = 'Job "write-dossier"';
 const STAGING = 'docs/episodes/demo';
 const DRAFT: OutputScope = { staging: STAGING, expanded: false };

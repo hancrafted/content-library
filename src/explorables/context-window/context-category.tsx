@@ -14,10 +14,6 @@ import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { Glyph, tint } from './window-bits';
 
-/* The context category: usage by category, one row per category. Its own part: it lights and pins through its own
- * callbacks, whether the parent places it beside the window (Simple) or beneath it (Technical). In Technical the
- * Messages group is a collapsible, closed at first, to save vertical room; in Simple there is none. */
-
 function rowLabel(say: Say, row: UsageRow): string {
   if (row.kind === 'cat') return say.words.categories[row.cat];
   if (row.kind === 'simple') return say.words.simpleCategories[row.simple];
@@ -58,7 +54,6 @@ interface RowProps {
   readonly pressed: boolean;
 }
 
-/** A row with a key is a button that lights and pins its category; free space and the buffer are plain. */
 const Row = memo(function Row({ say, row, windowTokens, on, pressed }: RowProps) {
   const Tag = row.key ? 'button' : 'span';
   const press = row.key ? { type: 'button' as const, 'data-part': row.key, 'aria-pressed': pressed } : {};
@@ -104,7 +99,6 @@ function Rows({ say, rows, windowTokens, lit, pinned, litCats }: RowsProps) {
   ));
 }
 
-/** The Messages group and its rows as a collapsible, closed until opened: the summary is the group's own row. */
 function Messages(props: RowsProps & { readonly group: UsageRow }) {
   const { group, ...rows } = props;
   return (
@@ -124,7 +118,6 @@ function Messages(props: RowsProps & { readonly group: UsageRow }) {
   );
 }
 
-/** Technical: top rows, the Messages collapsible, the free space and buffer. Simple: every row, no collapsible. */
 function Body(props: RowsProps) {
   const group = props.rows.find((row) => row.kind === 'group');
   if (!props.say.tech || !group) return <Rows {...props} />;

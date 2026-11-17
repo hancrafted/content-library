@@ -1,8 +1,3 @@
-// Pins agent navigation (spec #348, #358): every top-level folder of `src/` but the routes and the site Translation
-// files, and `tools/`, carries a pointer-only `AGENTS.md` with a `CLAUDE.md` symlink beside it. Every pointer it holds
-// must resolve: a path in backticks exists, an ADR id names an ADR, an ADR section names a heading of that ADR, and a
-// dependency-cruiser rule name in backticks names a rule. A stale pointer fails here, not in an agent's session.
-
 import { existsSync, lstatSync, readdirSync, readFileSync, readlinkSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
@@ -16,16 +11,14 @@ const RULE_NAMES = new Set([...config.forbidden, ...config.required].map(({ name
 const ADRS = '.archgate/adrs';
 const ADR_FILES = readdirSync(ADRS).filter((file) => file.endsWith('.md'));
 
-/** The routes are the framework zone, not an area. */
-const NOT_AN_AREA = new Set(['app']);
+const ROUTES_FRAMEWORK_ZONE_NOT_AN_AREA = new Set(['app']);
 const HOMES = [
   ...readdirSync('src', { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !NOT_AN_AREA.has(entry.name))
+    .filter((entry) => entry.isDirectory() && !ROUTES_FRAMEWORK_ZONE_NOT_AN_AREA.has(entry.name))
     .map(({ name }) => `src/${name}`),
   'tools',
 ];
 
-/** A path in backticks (it holds a `/`) that does not exist, or a rule name in backticks that names no rule. */
 function brokenQuoted(text: string, exists: (path: string) => boolean): string[] {
   return [...text.matchAll(/`([^`\s]+)`/g)].flatMap(([, token]) => {
     if (token.includes('/')) return exists(token.replace(/\/$/, '')) ? [] : [`path: ${token}`];
@@ -33,15 +26,12 @@ function brokenQuoted(text: string, exists: (path: string) => boolean): string[]
   });
 }
 
-/** The ADR file an id names, if any. */
 const adrFile = (id: string) => ADR_FILES.find((file) => file.startsWith(`${id}-`));
 
-/** An ADR id that names no ADR. */
 function brokenAdrIds(text: string): string[] {
   return [...text.matchAll(/\b([A-Z]{2,4}-\d{3})\b/g)].flatMap(([, id]) => (adrFile(id) ? [] : [`adr: ${id}`]));
 }
 
-/** An ADR section, `FE-007-module-layering §2 "Import direction" and §5 "…"`, that names no heading of that ADR. */
 function brokenSections(text: string): string[] {
   return [...text.matchAll(/\b([A-Z]{2,4}-\d{3})[\w-]*((?:,? (?:and )?§\d+ "[^"]+")+)/g)].flatMap(
     ([, id, sections]) => {
@@ -54,7 +44,6 @@ function brokenSections(text: string): string[] {
   );
 }
 
-/** Every pointer in one `AGENTS.md` that does not resolve, as `<kind>: <pointer>`. */
 function brokenPointers(text: string, exists: (path: string) => boolean): string[] {
   return [...brokenQuoted(text, exists), ...brokenAdrIds(text), ...brokenSections(text)];
 }

@@ -1,10 +1,5 @@
 import type { Facet } from './dive-facets';
 
-/**
- * The model update's dive as the Spec drew it (Option 24a, feedback 3, decision 46), 560 by 420: the faceted sky and
- * its clouds, the water from the Surface down through every zone to the Abyss, the light rays and the rocky seabed, in
- * the Spec's order, back to front.
- */
 export const UPDATE_SEA: readonly Facet[] = [
   [
     'sky-1',

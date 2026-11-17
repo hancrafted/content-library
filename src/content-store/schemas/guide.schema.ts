@@ -1,13 +1,7 @@
 import { z } from 'zod';
 import { slug, tags, visibility, YOUTUBE_ID } from './fields';
 
-/*
- * A Guide: a step-by-step page that takes a viewer through a setup, one step per Slide, ending in a working result
- * they can check (GLOSSARY, design-ADR 0019 as amended by #450). Its slug names its composition folder
- * `episodes/guides/<slug>/`, which holds its title, caption and description in its own Translation files. It is no
- * Episode: no status, no release date, no Format. Its route is worked out from its slug, never stored.
- */
-
+// decision: docs/adr/0019-resources-overview.md
 export const guideSchema = z
   .object({
     slug: slug.describe(
@@ -28,8 +22,6 @@ export const guideSchema = z
   })
   .describe('A Guide: a step-by-step page; its slug gives its URL');
 
-/** A Guide record, as the store loads it. */
 export type Guide = z.infer<typeof guideSchema>;
 
-/** A Guide record as its file writes it, before the store parses it. */
 export type GuideInput = z.input<typeof guideSchema>;

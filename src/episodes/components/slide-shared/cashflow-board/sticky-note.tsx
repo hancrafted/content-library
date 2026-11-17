@@ -15,14 +15,12 @@ interface StickyNoteProps {
   locale: string;
 }
 
-/** The note's list item attributes: its kind, its target and the custom property its tilt reads. */
 function placement({ note, column, slot }: StickyNoteProps) {
   const style = { '--tilt': `${tiltOf(column, slot)}deg` } as CSSProperties;
   const ring = note.ring ? 'true' : undefined;
   return { 'data-cashflow': 'note', 'data-kind': note.kind, 'data-target': note.target, 'data-ring': ring, style };
 }
 
-/** A dashed outline where a note used to be, its label in mono. */
 function Ghost(props: StickyNoteProps) {
   return (
     <li {...placement(props)} className={cn(styles.note, props.note.big && styles.big)}>
@@ -33,13 +31,11 @@ function Ghost(props: StickyNoteProps) {
   );
 }
 
-/** The note's amount; a big note writes a short amount, such as €0, at heading size. */
 function Amount({ text, big }: { text: string; big: boolean }) {
   const size = big && text.length <= 4 ? 'text-heading' : 'text-body';
   return <span className={cn('font-semibold text-foreground tabular-nums', size)}>{text}</span>;
 }
 
-/** One square of paper: its kind in small mono at the top, its euro amount at the bottom, at its slot's tilt. */
 export function StickyNote(props: StickyNoteProps) {
   const { note, labels, locale } = props;
   if (note.kind === 'ghost') return <Ghost {...props} />;

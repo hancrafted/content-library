@@ -3,7 +3,6 @@ export type RoomSlug = 'execution' | 'management';
 const SHEET = { className: 'fill-card stroke-foreground/50', strokeWidth: 2 } as const;
 const TILE = { width: 32, height: 24, rx: 5, className: 'fill-card stroke-ai', strokeWidth: 2.5 } as const;
 
-/** A person at a desk, a page in front of them and a stack of papers beside: doing the work yourself. */
 function Execution() {
   return (
     <>
@@ -22,7 +21,6 @@ function Execution() {
   );
 }
 
-/** A person over three AI tiles, each with its spark: managing the work. */
 function Management() {
   return (
     <>
@@ -42,7 +40,6 @@ function Management() {
   );
 }
 
-/** The picture in a room's frame. */
 export function RoomArt({ slug }: { slug: RoomSlug }) {
   return (
     <svg viewBox="0 0 160 110" className="w-full" aria-hidden="true">

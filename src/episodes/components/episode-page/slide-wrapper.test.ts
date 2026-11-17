@@ -197,7 +197,7 @@ describe('failure cases', () => {
     // ACT
     const html = renderToStaticMarkup(wrapper);
 
-    // ASSERT: no overflow clipping or inner scrollbars
+    // ASSERT
     expect(html).not.toContain('overflow-hidden');
     expect(html).not.toContain('overflow-auto');
     expect(html).not.toContain('overflow-scroll');
@@ -213,10 +213,9 @@ describe('edge cases', () => {
     // ACT
     const html = renderToStaticMarkup(wrapper);
 
-    // ASSERT: self-contained positioning
+    // ASSERT
     expect(html).toContain('relative');
     expect(html).toContain('w-full');
-    // Rhythm is owned by ContentArea, wrapper sets no outer margins
     expect(html).not.toMatch(/(?:^|\s)(m|my|mt|mb)-\d+/);
     expect(html).not.toMatch(/(?:^|\s)gap-/);
     expect(html).not.toContain('border-b');

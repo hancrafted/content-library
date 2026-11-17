@@ -4,11 +4,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PromptToPlan, TRAITS } from './prompt-to-plan';
 
-/**
- * "What happens with one prompt" (practice round, .scratch/onboard-ai-every-time/handoff.md): one short prompt in one chat, one
- * long polished answer out, and each PRICE trait wired to the mark it left in them; the callout says
- * what that costs you. Its last segment is the Section's Bridge.
- */
 export const onePrompt = slide({
   slug: 'one-prompt',
   messages: { en, de },

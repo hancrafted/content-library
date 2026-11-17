@@ -14,20 +14,12 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills as episode } from './episode';
 import { hero } from './slides/hero/slide';
 
-/*
- * The robot story table against the Episode itself (feedback 3, decision 42): every Slide that draws the robot has its
- * row, in the Episode's order, so the story's rule that the robot never climbs back out of the water holds for the
- * Slides as they render. A Slide that adds or drops the robot adds or drops its row. Each Slide renders once; the
- * judgement is `storyAgainstSlides`, and the story's own rules are tested beside it.
- */
-
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const LABELS = { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` };
 const PLACED = placeSections<Slide>(episode.sections).flat();
 
 const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, null, node));
 
-/** The state each robot in `markup` carries, `unmarked` for a robot drawn without one. */
 function robotsIn(markup: string): readonly string[] {
   const $ = load(markup);
   return $('[data-robot]')
@@ -35,7 +27,6 @@ function robotsIn(markup: string): readonly string[] {
     .map((robot) => $(robot).attr('data-robot-state') ?? 'unmarked');
 }
 
-/** Every Slide's robots, content and rear decoration, Title slide first, each Slide rendered once. */
 function drawnSlides(): readonly DrawnSlide[] {
   const context = { episode: EPISODE, locale: 'en', referenceLabels: LABELS, header: 'shared' } as const;
   const title = localizeTitleScene(hero, { ...context, placed: [] });
@@ -47,7 +38,6 @@ function drawnSlides(): readonly DrawnSlide[] {
 }
 
 let rendered: StoryFindings | undefined;
-/** The story against this Episode's Slides, rendered on first use and shared by every test. */
 function findings(): StoryFindings {
   rendered ??= storyAgainstSlides(drawnSlides());
   return rendered;

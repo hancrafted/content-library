@@ -1,13 +1,8 @@
-/** A row's vertical extent in one coordinate space. */
 export interface Box {
   readonly top: number;
   readonly height: number;
 }
 
-/**
- * The vertical band the "Lost in the middle" bracket spans: the rows the attention list marks as middle, or, when it
- * marks none, the middle third of all its rows (at least one).
- */
 export function middleBand(all: readonly Box[], marked: readonly Box[]): Box | null {
   const rows = marked.length > 0 ? marked : middleThird(all);
   const first = rows[0];

@@ -14,12 +14,6 @@ import { itemsOf, openItemOf, type Item } from './stepper-items.pure';
 import { filled, type StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
 
-/*
- * The vertical stepper of a stage's modal: one numbered item per job (per round of a repeated stage, titled by its H3), titled by its goal in one sentence. An open item
- * lists its steps (context, prompt and result, check) with minimal chrome. The first is open at first. Built on the
- * shadcn Accordion: one item open at a time, closable.
- */
-
 function Marker({ done, at }: { done: boolean; at: number }) {
   return (
     <span
@@ -63,11 +57,9 @@ function Review({ item, kit, slots, first }: Omit<StepItemProps, 'at'> & { first
 interface Where {
   readonly stage: StageView;
   readonly debug: DebugBase | null;
-  /** How many rounds the stage plays, for the debug footer's `round=n/total`. */
   readonly rounds: number;
 }
 
-/** The kit of one item: while debug mode is on it knows where the item sits, for the footer of its copy buttons. */
 function kitOf(kit: StepKit, { item, stage, debug, rounds }: Pick<StepItemProps, 'item'> & Where): StepKit {
   if (!debug) return kit;
   const { job, round } = item;
@@ -79,13 +71,11 @@ function kitOf(kit: StepKit, { item, stage, debug, rounds }: Pick<StepItemProps,
   return { ...kit, debug: scopeOf(debug, at) };
 }
 
-/** Where each step of an item stands, in order: its do chats, then its review chats. */
 interface Run {
   readonly values: SlotState['values'];
   readonly copied: ReadonlySet<string>;
 }
 
-/** The second prompt of a do step, as the item's lead follows it. */
 const thenOf = (step: Item['doSteps'][number], copied: ReadonlySet<string>): NonNullable<PanelProgress['then']> => {
   const key = panelKey('then', step);
   return { key, copied: copied.has(key) };
@@ -111,7 +101,6 @@ function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelPro
   return [...does, ...reviews];
 }
 
-/** The item's lead: which of its controls the viewer should use next, from the run and the prompts copied so far. */
 function useLead(item: Item, kit: StepKit, values: SlotState['values']): StepKit {
   const [copied, setCopied] = useState<ReadonlySet<string>>(() => new Set());
   const onCopied = (panel: string) => setCopied((now) => (now.has(panel) ? now : new Set(now).add(panel)));
@@ -129,7 +118,6 @@ function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepIt
         <Marker done={item.state !== 'open'} at={at} />
         {item.round ? `${item.round.title}: ${job.goal.do}` : job.goal.do}
       </AccordionTrigger>
-      {/* One column for every step of the item, its chat tabs and review goal: the one gap between steps. */}
       <AccordionContent className="flex flex-col gap-5.5 sm:pl-7">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
         <Review item={item} kit={kit} slots={slots} first={reviewAt} />
@@ -140,15 +128,11 @@ function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepIt
 
 interface StepperProps {
   readonly stage: StageView;
-  /** What the run says of this stage: each job's state and, in a repeated stage, its rounds. */
   readonly run: StageRun;
   readonly kit: StepKit;
   readonly slots: SlotState;
-  /** The job whose card opened the modal: its first item starts open. */
   readonly jobId?: string | null;
-  /** The round of that job's card, in a repeated stage: its item starts open instead. */
   readonly round?: number | null;
-  /** What the footer of a debug copy shares; null while debug mode is off. */
   readonly debug: DebugBase | null;
 }
 

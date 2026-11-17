@@ -6,13 +6,9 @@ import { focusOf, litOf, release, type FocusState } from './focus.pure';
 
 export interface FocusItem {
   readonly slug: string;
-  /** The card's hand-placed tilt class, from the shared `tiltOf`. */
   readonly tilt: string;
-  /** The card's name, for assistive technology: the focusable group is named by it. */
   readonly label: string;
-  /** What the card shows at rest: every failure stays readable. */
   readonly body: ReactNode;
-  /** The cause, shown at rest on every card. */
   readonly cause: ReactNode;
 }
 
@@ -31,7 +27,6 @@ interface CardProps {
   readonly onFocusVisible: (slug: string | null) => void;
 }
 
-/** One failure card: a named, focusable group that shows its body and cause at rest and lights or dims as the group says. */
 function FocusCard({ item, focus, onHover, onFocusVisible }: CardProps) {
   const { slug } = item;
   return (
@@ -63,12 +58,6 @@ function FocusCard({ item, focus, onHover, onFocusVisible }: CardProps) {
   );
 }
 
-/**
- * The four failures as a focus group: pointing at one, or tabbing onto it, lights it and dims the other three
- * (`focusOf`, as ai-capability dims its Levels). Everything, the cause included, is readable at rest; lighting adds
- * emphasis, never content. Pointer and keyboard focus are kept apart, so a pointer leaving one card never puts out the
- * light of the card that holds focus. The focus a click leaves behind does not count, only `:focus-visible` does.
- */
 export function FailureFocus({ label, items }: FailureFocusProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);

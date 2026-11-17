@@ -1,17 +1,10 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import type { Rect } from './dash-placement.pure.ts';
 import type { TourWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { placeTour, type TourPlace } from './tour-placement.pure.ts';
-
-/*
- * The guided tour's caption box (design-ADR 0024 §10), as the reference build's `renderTour` draws it: the scenario's
- * name with its step and week, "Running to week 8…" while it runs, then the step's caption and its checks in plain
- * words, and Close, Back and Next (Finish on the last step). It sits on the stage at the step's card, below it or
- * above, and follows it on any resize; while the compare stream is shown, at the card's column (`[data-col]`).
- */
 
 export interface TourCheckRow {
   readonly text: string;
@@ -21,16 +14,13 @@ export interface TourCheckRow {
 export interface TourBoxProps {
   readonly words: TourWords;
   readonly name: string;
-  /** "· step 2 of 3 · week 8" */
   readonly head: string;
-  /** While the step runs: "Running to week 8… week 5"; null once it shows. */
   readonly running: string | null;
   readonly caption: string;
   readonly checks: readonly TourCheckRow[];
   readonly card?: string;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly wrap: RefObject<HTMLElement | null>;
-  /** Changes when the compare stream opens, closes or changes its columns, so the box finds its card again. */
   readonly stream?: string;
   readonly canBack: boolean;
   readonly last: boolean;
@@ -44,7 +34,6 @@ const rectOf = (el: Element): Rect => {
   return { left: r.left, top: r.top, width: r.width, height: r.height };
 };
 
-/** The card's column in the compare stream, else its card on the floor; none while it is not shown. */
 const cardOf = (id: string, x: { wrap: HTMLElement; floor: HTMLElement | null }): Rect | null => {
   const el = x.wrap.querySelector(`[data-col="${id}"]`) ?? x.floor?.querySelector(`[data-id="${id}"]`);
   const r = el ? rectOf(el) : null;
@@ -94,7 +83,6 @@ function Body(p: TourBoxProps) {
   );
 }
 
-/** Close; Back and Next (Finish on the last step) once the step shows. */
 function Buttons(p: TourBoxProps) {
   const shown = p.running === null;
   return (

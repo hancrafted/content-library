@@ -5,17 +5,14 @@ import type { ReactNode } from 'react';
 export interface TermCardProps {
   readonly n: number;
   readonly term: string;
-  /** What the term is in the story, shown in the Chat app view. */
   readonly scene: string;
   readonly kind: string;
   readonly line: string;
-  /** The term as files, shown in the Coding agent view; code, not translated. */
   readonly code: readonly string[];
   readonly focal?: boolean;
   readonly marker?: ReactNode;
 }
 
-/** The card's number, in primary on the focal card. */
 function Badge({ n, focal }: { readonly n: number; readonly focal: boolean }) {
   return (
     <span
@@ -29,7 +26,6 @@ function Badge({ n, focal }: { readonly n: number; readonly focal: boolean }) {
   );
 }
 
-/** The term as files, in the Coding agent view; code, not translated. */
 function CodeLines({ code }: { readonly code: readonly string[] }) {
   return (
     <InView view="coding" as="div">
@@ -43,10 +39,6 @@ function CodeLines({ code }: { readonly code: readonly string[] }) {
   );
 }
 
-/**
- * Where the choice is made: one of the two places, numbered, with what it holds and what it does to the choice. Hover
- * raises the card and dims its neighbour; the project instructions are the focal card, ringed in primary.
- */
 export function TermCard({ n, term, scene, kind, line, code, focal = false, marker }: TermCardProps) {
   return (
     <li
@@ -73,7 +65,6 @@ export function TermCard({ n, term, scene, kind, line, code, focal = false, mark
   );
 }
 
-/** One pass-rate bar: a full 0–100 track, the rate filled, its value at the end. */
 function PassRateBar({ value, lead }: { readonly value: number; readonly lead: boolean }) {
   return (
     <p className="flex items-center gap-2">
@@ -86,10 +77,6 @@ function PassRateBar({ value, lead }: { readonly value: number; readonly lead: b
   );
 }
 
-/**
- * Vercel's agent evals as two pass-rate bars, each on a full 0–100 track with its value at the end: the skill by
- * default first, then with a line in `AGENTS.md` telling the agent to use it, in primary.
- */
 export function VercelBars({
   rows,
 }: {

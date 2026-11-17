@@ -124,31 +124,25 @@ function titleSlideOf(
   };
 }
 
-/** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
 function translatorOf(locale: Locale): TranslatorOf {
   return async (namespace) =>
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
 }
 
-/** Each page Slide's Eyebrow on the shared header, its counter read "Page n of N" in the page's language. */
 async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly TocSection[]) {
   if (mode !== 'shared') return new Map<string, EyebrowText>();
   const t = await getTranslations({ locale, namespace: 'slideHeader' });
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
-/** What an Event adds to an Episode it presents: its notice in the Title slide and Playlist walk after the last Slide. */
 export interface EpisodeFrame {
-  /** The logical path the page is served at under the Event; the contents and Slide links point there. */
   readonly route: string;
   readonly header: ReactNode;
   readonly footer: ReactNode;
-  /** The Event's time, "17:00–19:00 CET", under the title; none when the Event has none. */
   readonly time: string | undefined;
   readonly navigation?: TocCollection;
 }
 
-/** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
 async function pageHeaderOf(
   content: EpisodeContent,
   locale: Locale,
@@ -165,12 +159,9 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
-  /** The page's ref (an Episode, a Template or an Explorable page) as the store served it: its id is `data-episode`, its folder the token editor's source. */
   page: ComposedPage;
   episode: EpisodeComposition;
-  /** The Episode's Video in this locale, from the content store; none for a Template or before upload. */
   video?: Video;
-  /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;
   tocPage?: TocPageContext;
 }
@@ -187,7 +178,6 @@ function tocPropsOf(content: EpisodeContent, props: EpisodePageContainerProps, s
   };
 }
 
-/** Navigation presentation is independent of header tone and of the selected edge renderer. */
 async function EpisodeToc(props: ReturnType<typeof tocPropsOf>) {
   const labels = await tocLabelsOf(props.locale);
   const policy = tocEntranceOf(props.content);
@@ -214,7 +204,7 @@ async function EpisodeToc(props: ReturnType<typeof tocPropsOf>) {
   );
 }
 
-/** The one Episode shell: localized wrappers, chrome and page-owned services (FE-002, FE-001). */
+// decision: FE-002 §1
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const { locale, page, episode, video, frame = OWN_PAGE } = props;
   const { id } = page;

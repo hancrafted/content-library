@@ -1,7 +1,6 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { cells, fi, KIND_CELLS, NF_ } from './flow-cells.pure.ts';
-
-/* The flow-cell index (design-ADR 0024 §4): one slot per defect kind, quality, failure demand, times sent back and content. */
 
 describe('success cases', () => {
   it('lays a belt out as one spec half and one code half', () => {

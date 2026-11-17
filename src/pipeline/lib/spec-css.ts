@@ -1,7 +1,3 @@
-// The Spec's design.css: the site's globals.css through Tailwind, scanning one folder for classes, so the page renders
-// with the real tokens and only the utilities its markup uses. Every writer of a Spec page compiles it beside the page:
-// a design.css compiled before the Options existed holds none of their classes.
-
 import tailwind from '@tailwindcss/postcss';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -12,7 +8,6 @@ import { inlineDesignCss } from './spec-inline.pure.ts';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const GLOBALS = path.join(ROOT, 'src/app/globals.css');
 
-/** Compiles `<folder>/design.css` from the classes in `folder` and returns its path. */
 export async function buildDesignCss(folder: string): Promise<string> {
   const out = path.join(folder, 'design.css');
   const result = await postcss([tailwind({ base: folder })]).process(readFileSync(GLOBALS, 'utf8'), {
@@ -23,7 +18,6 @@ export async function buildDesignCss(folder: string): Promise<string> {
   return out;
 }
 
-/** Compiles the design.css for the page's folder and writes the page with that css inline, so it stands alone. */
 export async function inlineSpecPage(page: string): Promise<void> {
   const css = readFileSync(await buildDesignCss(path.dirname(page)), 'utf8');
   writeFileSync(page, inlineDesignCss(readFileSync(page, 'utf8'), css));

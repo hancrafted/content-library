@@ -8,11 +8,7 @@ import {
   type FilterableResource,
 } from './resources-overview.pure';
 
-/*
- * The Resources overview's filter (design-ADR 0019): a search over title, description and Tag names, any chosen
- * Tag, any chosen kind; the groups combine with AND. Words are written out by hand, in one locale.
- */
-
+// decision: docs/adr/0019-resources-overview.md
 interface Words {
   readonly title: string;
   readonly description: string;

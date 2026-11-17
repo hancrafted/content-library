@@ -1,5 +1,3 @@
-// The `drive` CLI: `drive worktree <new|done|sync> ...`, `drive setup` and `drive guard`. Project values come from the project's
-// config file.
 import { runGuard } from './guard.ts';
 import { runSetup } from './setup.ts';
 import { runWorktree } from './worktree.ts';

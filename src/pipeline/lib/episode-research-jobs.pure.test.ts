@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkResearchJobs } from './episode-research-jobs.pure';
 
-/*
- * A research plan that lists two research jobs, one new and one refresh, against per-run pipelines with one
- * write-research job per listed folder, and with one too few or one no item asks for.
- */
-
 const FIRST = 'AIE-0003__why-the-first-claim-holds-up';
 const SECOND = 'AIE-0001__why-the-second-claim-holds-up';
 

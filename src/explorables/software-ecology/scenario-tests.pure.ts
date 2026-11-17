@@ -1,16 +1,10 @@
-/*
- * The tests a scenario's `expect:` and `settles:` hold its readings to (design-ADR 0024 §10): ">2", "<0.5", ">=1",
- * "<=3", "0.9–1.1" (en dash or hyphen), "rises" or "falls" (against the beat before).
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export type Comparison = '>' | '<' | '>=' | '<=';
-/** A test, parsed: a comparison with a bound, a range, or a trend against the step before. */
 export type Test =
   | { readonly kind: 'compare'; readonly op: Comparison; readonly k: number }
   | { readonly kind: 'range'; readonly lo: number; readonly hi: number }
   | { readonly kind: 'rises' | 'falls' };
 
-/** Parses a test, or null when it is not one. */
 export const parseTest = (test: string): Test | null => {
   const t = String(test).trim();
   if (t === 'rises' || t === 'falls') return { kind: t };
@@ -27,7 +21,6 @@ const COMPARE: Readonly<Record<Comparison, (v: number, k: number) => boolean>> =
   '<=': (v, k) => v <= k,
 };
 
-/** Judges one value against a test; `prev` is the same measure at the step before (for rises / falls). */
 export const judge = (v: number, test: string, prev?: number): boolean => {
   const t = parseTest(test);
   if (!t) throw new Error(`unknown test "${test}"`);

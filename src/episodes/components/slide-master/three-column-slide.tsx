@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { SlideCaption, SlideFrame, SlideProse, SlideTitle } from './slide-master';
 
 export interface SlideColumn {
-  /** The column's stable slug, never its position; also the target a Speaker note names it by. */
   slug: string;
   title: ReactNode;
   prose: ReactNode;
@@ -17,10 +16,6 @@ function Column({ column }: { column: SlideColumn }) {
   );
 }
 
-/**
- * A page slide: title and caption up top, exactly three columns below. Pass
- * the kit's `<Title>` as `title`; `caption` and each column's slug are targets.
- */
 export function ThreeColumnSlide({
   title,
   caption,

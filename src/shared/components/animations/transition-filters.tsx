@@ -119,10 +119,6 @@ function WaveFilter({ id }: { id: string }) {
   );
 }
 
-/**
- * The `bubbles` water line for the landing's `LiquidInkTransition` only: a long, low swell. The Episode page draws
- * its `bubbles` edge with `WaveFront` instead, a filter-free faceted crest.
- */
 function BubblesFilter({ id }: { id: string }) {
   return (
     <filter id={id} x="-10%" y="-10%" width="120%" height="120%">

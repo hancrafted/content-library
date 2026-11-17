@@ -2,14 +2,9 @@ import { readingFraction, type PageBox } from '@/shared/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
-/** How long the compact loading box holds after mount, so the table never visibly settles into place. */
-const REVEAL_AFTER_MS = 300;
+const REVEAL_AFTER_MILLISECONDS = 300;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
-/**
- * Calls back with the element's page box and the document height whenever either resizes. A ResizeObserver reports
- * after layout, so reading boxes there forces no synchronous layout; the returned function stops observing.
- */
 function observePageBox(element: Element | null, measured: (box: PageBox | null, documentHeight: number) => void) {
   const root = document.documentElement;
   const observer = new ResizeObserver(() => {
@@ -21,9 +16,7 @@ function observePageBox(element: Element | null, measured: (box: PageBox | null,
   return () => observer.disconnect();
 }
 
-/** How far the reading line has travelled through the active element, sampled once per frame; 1 at the page end. */
 export function useFractionInto(active: string | null, targetAttribute: string): number {
-  // Keyed by the entry it was measured on, so a new active entry never borrows the previous one's fraction.
   const [sample, setSample] = useState({ active, fraction: 0 });
   useEffect(() => {
     const element = active ? document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`) : null;
@@ -32,7 +25,6 @@ export function useFractionInto(active: string | null, targetAttribute: string):
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const view = { scrollY: window.scrollY, viewportHeight: window.innerHeight, documentHeight };
-        // Hundredths are plenty for a progress bar and skip re-renders between them.
         setSample({ active, fraction: Math.round(readingFraction(box, view) * 100) / 100 });
       });
     };
@@ -52,7 +44,6 @@ export function useFractionInto(active: string | null, targetAttribute: string):
   return sample.active === active ? sample.fraction : 0;
 }
 
-/** True two frames after the first observation, once the restored scroll position has painted without motion. */
 export function useSettled(observed: string | null): boolean {
   const [settled, setSettled] = useState(false);
   useEffect(() => {
@@ -69,24 +60,18 @@ export function useSettled(observed: string | null): boolean {
   return settled;
 }
 
-/** True once 300ms have passed since mount and the first observation has painted; until then the table shows its loading box. */
 export function useRevealed(settled: boolean): boolean {
   const [elapsed, setElapsed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setElapsed(true), REVEAL_AFTER_MS);
+    const timer = setTimeout(() => setElapsed(true), REVEAL_AFTER_MILLISECONDS);
     return () => clearTimeout(timer);
   }, []);
   return elapsed && settled;
 }
 
-/**
- * Open sections plus a chevron toggle. Toggles are remembered only while the
- * reader stays in the same section; scrolling into another one resets them.
- */
 export function useOpenSections(sections: readonly TocSection[], active: string | null) {
   const [owner] = openSectionIds(sections, active, NOTHING_TOGGLED);
   const [state, setState] = useState({ owner, toggled: NOTHING_TOGGLED });
-  // Adjusting state during render (not in an effect) drops stale toggles before they ever paint.
   if (state.owner !== owner) setState({ owner, toggled: NOTHING_TOGGLED });
   const toggled = state.owner === owner ? state.toggled : NOTHING_TOGGLED;
   const toggle = (id: string) => {
@@ -97,10 +82,7 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
   return { open: openSectionIds(sections, active, toggled), toggle };
 }
 
-/**
- * Whether the table of contents chrome is collapsed. Transient (FE-001): a reload always
- * starts expanded, so the static page and the first client render agree.
- */
+// decision: FE-001 §1
 export function useTocCollapse(): [boolean, () => void] {
   const [collapsed, setCollapsed] = useState(false);
   const toggle = () => setCollapsed((prev) => !prev);

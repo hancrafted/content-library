@@ -1,0 +1,104 @@
+{
+  "title": "What's really in the context window",
+  "caption": "The chat is only the part you see. Before your first word, the context window already holds instructions and notes about you.",
+  "illustrative": "Token counts illustrative",
+  "cards": {
+    "start": {
+      "title": "Starting instructions",
+      "lead": "<marker>Text placed before your first message, before you type anything.</marker>",
+      "cost": "<marker>The longer they get, the more room they take and the less closely they are followed.</marker>"
+    },
+    "memory": {
+      "title": "Memory",
+      "lead": "<marker>Short notes about you, saved earlier and put back in front of the AI, so a new chat already knows you.</marker>",
+      "apps": "<marker>Claude and Gemini keep memory across chats too.</marker>"
+    }
+  },
+  "named": {
+    "heading": "Named today, not explained",
+    "items": {
+      "files": "Files the AI read",
+      "web": "Web pages",
+      "tools": "Results from tools and connectors",
+      "reminders": "System reminders"
+    },
+    "pastChats": "<marker>Past chats are fetched only when asked, not loaded up front</marker>."
+  },
+  "notes": {
+    "nothing-carries-over-by-itself": {
+      "header": "Nothing carries over by itself",
+      "description": "a model holds nothing between requests; memory across chats exists only when an application stores notes outside the model and puts them back into the context [1].",
+      "sources": {
+        "han-llm-memory-between-chats": {
+          "title": "Han, Why does an LLM forget everything between chats? (earlier research file, excludes consumer chat apps)"
+        }
+      }
+    },
+    "documented-for-claude-code": {
+      "header": "Documented for Claude Code",
+      "description": "its instructions and its saved notes are loaded at the start of every conversation, and Claude treats them as context, not enforced configuration [1].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
+      }
+    },
+    "loading-has-a-cost": {
+      "header": "Loading has a cost",
+      "description": "longer instruction files consume more context and reduce adherence, and only the first 200 lines or 25KB of the notes index load at the start [1].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
+      }
+    },
+    "chat-apps-document-the-effect": {
+      "header": "Chat apps document the effect",
+      "description": "Claude's app saves memory as topics so the next conversation already knows what changed [1], and Gemini remembers information you share, even in new chats [2]; that the apps load it at the start is an inference.",
+      "sources": {
+        "anthropic-chat-search-and-memory": {
+          "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
+        },
+        "google-gemini-memory": {
+          "title": "Google, Manage what Gemini remembers about you and customize responses"
+        }
+      }
+    },
+    "not-every-feature-preloads": {
+      "header": "Not every feature preloads",
+      "description": "Claude's past-chat search is fetched on request [1], and ChatGPT looks for relevant context only when it is likely to improve a response [2].",
+      "sources": {
+        "anthropic-chat-search-and-memory": {
+          "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
+        },
+        "openai-chatgpt-memory": {
+          "title": "OpenAI, Memory in ChatGPT"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "more-than-the-chat": {
+        "title": "More than the chat",
+        "keywords": "",
+        "script": "What you see in the chat is only part of what the AI reads. Here is the context window itself, without the chat: the bar is the window, the list names what fills it, and the card explains the part you point at. Use the toggles to switch the window and the list between plain and technical."
+      },
+      "starting-instructions": {
+        "title": "Starting instructions",
+        "keywords": "",
+        "script": "First, the starting instructions: text placed in front of your first message, before you type a single word. That way the AI is already briefed before you say anything."
+      },
+      "memory": {
+        "title": "Memory",
+        "keywords": "",
+        "script": "Second, memory: short notes about you, saved earlier and put back in front of the AI, which is why a new chat already knows a few things about you. It is useful, and it is one more thing in the window."
+      },
+      "the-rest": {
+        "title": "The rest",
+        "keywords": "",
+        "script": "The rest are attached files, web pages the AI read, and results from tools and connectors. I only name them today. What matters is that they all share the same window as your chat."
+      }
+    }
+  }
+}

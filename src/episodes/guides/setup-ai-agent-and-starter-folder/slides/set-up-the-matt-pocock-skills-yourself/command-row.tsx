@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The five rows of the recipe, by their Translation keys, in Spec order. */
 export type RowKey = 'node' | 'add' | 'setup' | 'check' | 'run';
 
 interface CommandRowProps {
@@ -9,12 +8,10 @@ interface CommandRowProps {
   readonly n: number;
   readonly title: string;
   readonly reason: ReactNode;
-  /** The row the recipe leads to: its number filled in `primary`. */
   readonly focal?: boolean;
   readonly children: ReactNode;
 }
 
-/** The row's left side: its number in a circle, its title and the one-line reason. */
 function RowLead({ n, title, reason, focal }: Omit<CommandRowProps, 'rowKey' | 'children'>) {
   return (
     <div className="flex gap-4 @3xl:col-span-5">
@@ -37,11 +34,6 @@ function RowLead({ n, title, reason, focal }: Omit<CommandRowProps, 'rowKey' | '
   );
 }
 
-/**
- * One row of the recipe card: its number, title and reason on the left, what to do on the right (an exact line, a
- * link, a drawing). Each row is a `focus-group__item`, so pointing at one dims the others while Han presents. Stacks
- * below a wide container.
- */
 export function CommandRow({ rowKey, focal = false, children, ...lead }: CommandRowProps) {
   return (
     <li

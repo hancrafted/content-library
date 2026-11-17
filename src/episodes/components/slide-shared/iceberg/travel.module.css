@@ -1,9 +1,3 @@
-/*
- * `Travel`: one move across the Scene, from `--travel-from` to `--travel-to`, played once under the Slide mount's
- * `[data-zone='active']` and replayed on re-entry. Percentages are of the Scene's drawing (`view-box`). The base rule
- * is the rest state, so reduced motion simply never starts the move.
- */
-
 .travel {
   transform-box: view-box;
   translate: var(--travel-to);

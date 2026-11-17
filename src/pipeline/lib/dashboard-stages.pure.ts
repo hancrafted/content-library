@@ -1,7 +1,6 @@
 import type { DashboardJob } from './dashboard-projection.pure';
 import type { Span } from './run-log.schema.pure';
 
-/** The grouping for a pipeline that lists no `stages`: Runs scaffolded before the stages layer existed. */
 const LEGACY_STAGES = [
   { id: 'brief', jobs: ['brief-grill'] },
   {
@@ -25,7 +24,6 @@ export const isComplete = (state: DashboardState): boolean => state === 'ok' || 
 export const needsAttention = (state: DashboardState): boolean =>
   ['gate', 'error', 'refused', 'crashed'].includes(state);
 
-/** A Job waiting on Han or ended badly, or whose latest Attempt's reviewer left a line only Han can judge. */
 export function jobNeedsAttention(job: Pick<DashboardJob, 'state' | 'attempts' | 'scores'>): boolean {
   if (needsAttention(job.state)) return true;
   const latest = job.attempts.reduce<Span | undefined>(
@@ -48,10 +46,6 @@ function groupState(states: DashboardState[]): DashboardState {
   );
 }
 
-/**
- * Jobs grouped by their `stage` in the pipeline's `stages` order, a listed stage without Jobs kept as not planned
- * yet; a pipeline listing no stages falls back to the legacy grouping. The Jobs and their dependencies stay unchanged.
- */
 export function projectStages(jobs: readonly DashboardJob[], order: readonly string[] = []) {
   const groups = new Map<string, DashboardJob[]>(order.map((id) => [id, []]));
   for (const job of jobs) {
@@ -77,7 +71,6 @@ export function projectStages(jobs: readonly DashboardJob[], order: readonly str
 
 export type DashboardStage = ReturnType<typeof projectStages>['stages'][number];
 
-/** A missing end is not proof of activity once its Job or Attempt has ended; raw folded evidence stays intact. */
 export function agentState(job: DashboardJob, agent: Span): DashboardState {
   if (agent.status !== 'running') return agent.status;
   if (job.span && job.span.end_t !== null) return 'unclosed';

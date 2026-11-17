@@ -7,11 +7,8 @@ import en from './i18n/en.json';
 import { OversightPills } from './oversight-pills';
 import { Person } from './person';
 
-/** The middle of the seam, where the person stands over its check. */
 const MID = 180;
 
-// The section slide of "How far you step out", echoing the Hero motif (picked Title-slide Option 0b): a person on the
-// loop over the seam, checking what crosses it, under the oversight pills with on selected.
 export const howFarYouStepOut = slide({
   slug: 'how-far-you-step-out',
   messages: { en, de },

@@ -1,10 +1,4 @@
-// The Episode registry (GLOSSARY): what `npm run registry` writes from the Episode folders. An Episode is
-// its folder, `src/episodes/<slug>/` or, for an Event's copy, `src/episodes/by-event/<event>/<slug>/`,
-// so the id list, the store's metadata records and the compositions are derived from the folders, keyed by Episode id,
-// one generated file per tier (FE-007: lib may not import the store or a component). The Templates,
-// `src/episodes/templates/<slug>/`, are listed and composed the same way, by slug, apart from the Episodes. Each file is
-// checked in, so `tsc` reads the records where they are written, and a fast test fails when one is stale. The disk
-// side lives in registry.ts, which walks the folders with the one folder walker (`src/episodes/lib/episode-folders.ts`).
+// decision: FE-007 §2
 import {
   EXPLORABLE_PAGES_FOLDER,
   GUIDES_FOLDER,
@@ -13,35 +7,25 @@ import {
   type PageFolder,
 } from '../../src/episodes/lib/episode-folders.ts';
 
-/**
- * One page folder the walker found: its Episode id (a Template's slug), its path under the Episodes folder,
- * `templates/<slug>` for a Template, its entries, and its `episode.ts` text.
- */
 export type EpisodeFolder = Pick<PageFolder, 'id' | 'folder' | 'files'> & { readonly episodeSource?: string };
 
-/** One generated file: its path from the repository root, and its whole text. */
 export interface RegistryFile {
   readonly path: string;
   readonly text: string;
 }
 
-/** Where each tier's registry lives. */
 export const REGISTRY_PATHS = {
   ids: 'src/content-store/catalogue/episode-ids.generated.ts',
   metadata: 'src/content-store/episode-registry.generated.ts',
   compositions: 'src/episodes/lib/episode-registry.generated.ts',
 } as const;
 
-/** A Template's folder under the Episodes folder starts with this, one folder each. */
 const TEMPLATES_PREFIX = `${TEMPLATES_FOLDER}/`;
 
-/** An Explorable page's folder under the Episodes folder starts with this, one folder each. */
 const EXPLORABLE_PAGES_PREFIX = `${EXPLORABLE_PAGES_FOLDER}/`;
 
-/** A Guide's folder under the Episodes folder starts with this, one folder each. */
 const GUIDES_PREFIX = `${GUIDES_FOLDER}/`;
 
-/** The folders of pages that are no Episode: listed and composed by slug, never in the Episode ids. */
 const NOT_EPISODE_PREFIXES = [TEMPLATES_PREFIX, EXPLORABLE_PAGES_PREFIX, GUIDES_PREFIX];
 
 const RECORD_FILE = 'episode.ts';
@@ -56,7 +40,6 @@ const ID_TYPES = [
   "import type { EpisodeId } from '@/content-store/catalogue/record-routes';",
 ].join('\n');
 
-/** An Episode with a page: its id, its folder, the identifier it is imported under, and the name its `episode.ts` exports. */
 interface RegisteredEpisode {
   readonly id: string;
   readonly folder: string;
@@ -64,13 +47,11 @@ interface RegisteredEpisode {
   readonly exported: string;
 }
 
-/** The identifier an id is imported under: `ai-token-economy` → `aiTokenEconomy`, `2026-…-axel__intro` → `_2026…Axel__intro`. */
 function identifierOf(id: string): string {
   const camel = id.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
   return /^[0-9]/.test(camel) ? `_${camel}` : camel;
 }
 
-/** The one Episode record an `episode.ts` exports, as `export const <name> = episode({`. */
 export function exportedRecord(folder: EpisodeFolder): string {
   const names = [...(folder.episodeSource ?? '').matchAll(/export const (\w+)\s*=\s*episode\(/g)].map(
     ([, name]) => name,
@@ -82,13 +63,11 @@ export function exportedRecord(folder: EpisodeFolder): string {
   return names[0];
 }
 
-/** Code-point order of ids, so the registry is the same on every machine whatever its locale. */
 function byId(a: { readonly id: string }, b: { readonly id: string }): number {
   if (a.id === b.id) return 0;
   return a.id < b.id ? -1 : 1;
 }
 
-/** One map entry per Episode, keyed by its id. */
 function entries(episodes: readonly { readonly id: string; readonly local: string }[]): string {
   return episodes.map(({ id, local }) => `  '${id}': ${local},`).join('\n');
 }
@@ -97,7 +76,6 @@ function importOf({ local, exported }: RegisteredEpisode, from: string): string 
   return `import { ${exported === local ? local : `${exported} as ${local}`} } from '${from}';`;
 }
 
-/** Every kind of composed page the walker found, each registered in id order. */
 interface Registered {
   readonly episodes: readonly RegisteredEpisode[];
   readonly templates: readonly RegisteredEpisode[];
@@ -152,7 +130,6 @@ export const UPCOMING_METADATA: Readonly<Record<string, EpisodeInput>> = { ${upc
 `;
 }
 
-/** One map of compositions keyed by slug, typed against its kind's slug list: a page that is no Episode. */
 function slugMap(map: { name: string; slugType: string; doc: string }, pages: readonly RegisteredEpisode[]): string {
   const { name, slugType, doc } = map;
   return `/** ${doc} */
@@ -188,11 +165,6 @@ function registered(each: EpisodeFolder): RegisteredEpisode {
   return { id: each.id, folder: each.folder, local: identifierOf(each.id), exported: exportedRecord(each) };
 }
 
-/**
- * The three registry files for the given folders. A folder under `templates/`, `explorable-pages/` or `guides/` is a
- * Template, an Explorable page or a Guide, listed and composed by its slug and kept out of the Episodes. Elsewhere a folder without `episode-metadata.ts` is no Episode and is left out;
- * one with metadata but no `episode.ts` is an upcoming Episode without a page. Order is id.
- */
 export function episodeRegistryFiles(folders: readonly EpisodeFolder[]): readonly RegistryFile[] {
   const under = (prefix: string) =>
     folders

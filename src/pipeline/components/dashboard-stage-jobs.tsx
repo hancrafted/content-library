@@ -147,7 +147,6 @@ function JobBranch(props: BranchProps) {
   );
 }
 
-/** Parallel Jobs fan out around the spine; dependency layers and configured agent order run left to right. */
 export function StageJobs({
   stage,
   onSelectJob,

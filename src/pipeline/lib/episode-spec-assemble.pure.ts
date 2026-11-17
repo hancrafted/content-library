@@ -1,12 +1,4 @@
-/*
- * `assembleSpec(inputs) → html` (design-ADR 0011): the Spec page's whole structure, so agents supply content only,
- * the designers' fragments and the Visual language. It fills the Spec template (`assets/spec-template.html`), whose
- * slots, attributes and feedback locks the Spec calibration lists (`skills/new-episode/references/spec-calibration.md`),
- * and builds what the template has no slot markup for: the outline, the intro cards and the Section bands.
- * Inputs are optional by stage and the page renders what exists: the Brief alone gives Slide cards, plus the Dossier
- * the words, plus fragments the Options. It refuses an approved Spec.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { load } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { briefCardMarkup } from './episode-spec-assemble-brief.pure.ts';
@@ -26,28 +18,20 @@ import { briefSource, dossierSlug, dossierSource, mergedSource, type Source } fr
 import { fillIn, templateOf, type Slot } from './episode-spec-template.pure.ts';
 
 export interface SpecInputs {
-  /** The Spec template asset: a page frame with `data-slot` elements and an item and an Option `<template>`. */
   template: string;
-  /** `generated` of the meta block: the caller's stamp, never invented here. */
   generated: { by: string; at: string };
   brief: string;
   dossier?: string;
-  /** The designers' fragment files, each `<!-- slide: <slug> -->` markers then Option figures. */
   fragments?: readonly string[];
-  /** Markup inside the Visual language and Episode page cards. */
   visualLanguage?: string;
   episodePage?: string;
-  /** Every feedback round's `feedback.md`, oldest first. */
   feedback?: readonly string[];
-  /** The current `spec.html`, if any; assembly refuses when it is approved. */
   existing?: string;
   locale?: string;
 }
 
-/** The picks that lock a Slide: its latest feedback item with exactly one pick, by Slide slug. */
 const PICK_LINE = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · design — picked: (none|\d+[a-z](?:, \d+[a-z])*)/;
 
-/** A feedback line's Slide slug and the Options it picked, none for a line of another form. */
 function pickOf(line: string): { slug: string; picks: string[] } | undefined {
   const item = PICK_LINE.exec(line);
   if (item === null) return undefined;
@@ -67,7 +51,6 @@ function locksOf(rounds: readonly string[]): Map<string, string> {
   return locks;
 }
 
-/** What the items of a page come from: the designers' fragments by Slide slug, Han's locked picks and the template. */
 interface SlideSources {
   fragments: Map<string, string>;
   locks: Map<string, string>;
@@ -119,19 +102,16 @@ function titleArticle(html: string, { locks, templates }: SlideSources): string 
   return itemMarkup(item, templates.item);
 }
 
-/** One context card of the intro: its anchor, its name in the outline and its markup. */
 interface IntroCard {
   id: string;
   label: string;
   html: string;
 }
 
-/** A context card: a section holding a collapsible, closed by default, named by its anchor. */
 function introCard(id: string, label: string, body: string): IntroCard {
   return { id, label, html: `<section id="${id}" class="spec-card">\n${collapsible(label, body)}\n</section>` };
 }
 
-/** The intro cards: Brief, Style, Visual language and Episode page, as far as the inputs hold them. */
 function introCards(inputs: SpecInputs, source: Source): IntroCard[] {
   const note = `<textarea class="spec-note" form="${FORM}" name="note:visual-language" placeholder="Note on the Visual language"></textarea>`;
   const cards: IntroCard[] = [{ id: 'brief', label: 'Brief', html: briefCardMarkup(inputs.brief) }];
@@ -142,7 +122,6 @@ function introCards(inputs: SpecInputs, source: Source): IntroCard[] {
   return cards.filter(({ html }) => html !== '');
 }
 
-/** The outline's list: the context cards, the Title slide, then each Section with its Slides. */
 function outline(source: Source, hasTitle: boolean, cards: readonly IntroCard[]): string {
   let number = 0;
   const group = (name: string, links: readonly string[]) =>
@@ -199,12 +178,10 @@ function metaJson(inputs: SpecInputs, title: string): string {
   return `\n${JSON.stringify(meta, null, 2)}\n`;
 }
 
-/** The designers' fragments by Slide slug. */
 function fragmentsBySlug(files: readonly string[]): Map<string, string> {
   return new Map(files.flatMap((file) => fragmentSlides(file).map(({ slug, html }) => [slug, html.trim()] as const)));
 }
 
-/** What fills the page frame's slots: the title, meta block, outline, masthead, intro cards and every item. */
 function frameSlots(inputs: SpecInputs, source: Source, sources: SlideSources): Record<string, Slot> {
   const titleOptions = sources.fragments.get(TITLE_ANCHOR);
   const title = titleOptions === undefined ? '' : titleArticle(titleOptions, sources);
@@ -225,7 +202,6 @@ function frameSlots(inputs: SpecInputs, source: Source, sources: SlideSources): 
   };
 }
 
-/** The Spec page for whatever the inputs hold; throws when `existing` is an approved Spec. */
 export function assembleSpec(inputs: SpecInputs): string {
   if (inputs.existing !== undefined && readSpec({ [SPEC_FILE]: inputs.existing }).approved)
     throw new Error('the Spec is approved: an approved Spec cannot be assembled again');
@@ -237,8 +213,8 @@ export function assembleSpec(inputs: SpecInputs): string {
   $('template').remove();
   const sources = { fragments: fragmentsBySlug(inputs.fragments ?? []), locks: locksOf(rounds), templates };
   fillIn($, frameSlots(inputs, source, sources));
-  // The Gate round: the draft after n saved feedback rounds is round n + 1.
   const pageId = source.slug ?? dossierSlug(source.title);
-  $('html').attr({ 'data-page-id': pageId, 'data-revision': String(rounds.length + 1) });
+  const gateRoundAfterSavedFeedbackRounds = rounds.length + 1;
+  $('html').attr({ 'data-page-id': pageId, 'data-revision': String(gateRoundAfterSavedFeedbackRounds) });
   return `${$.html()}\n`;
 }

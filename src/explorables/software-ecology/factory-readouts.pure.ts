@@ -1,6 +1,4 @@
-/*
- * Readouts of the factory model (design-ADR 0024 §1, §10): the measures a scenario's `expect:` names, the traffic light of a work center, conservation and a state hash for the checks.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { DAYS, dials, rushOf, stallOf } from './factory-dials.pure.ts';
 import { solve } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
@@ -9,7 +7,6 @@ export const backlogOf = (m: Factory): number => m.centers.reduce((a, n) => a + 
 const inWork = (m: Factory): number => m.servers.reduce((a, sv) => a + (sv.busy || sv.blocked ? 1 : 0), 0);
 const inTransit = (m: Factory): number => m.edges.reduce((a, e) => a + e.inT + e.backT, 0);
 
-/** Documents created = received by the Customer or finished + waiting + on belts + in work. */
 export const conservation = (m: Factory) => {
   const backlog = backlogOf(m),
     transit = inTransit(m),
@@ -24,7 +21,6 @@ export const conservation = (m: Factory) => {
   };
 };
 
-/** Satisfaction over the averaged releases: good ones minus complaints, out of all. */
 export const satRate = (m: Factory): number => {
   const t = m.rel[0] + m.rel[1];
   return t > 0.05 ? Math.max(0, m.rel[1] - m.compl) / t : 1;
@@ -73,7 +69,6 @@ export const CENTER_MEASURES: Readonly<Record<CenterMeasure, (n: FactoryNode, m:
   unread: (n) => (n.rate.badIn > 0.05 ? n.rate.badPass / n.rate.badIn : 0),
 };
 
-/** A hash of the whole state, for the determinism check. */
 export const stateHash = (m: Factory): string => {
   let h = 2166136261;
   const add = (x: number) => {

@@ -1,5 +1,3 @@
-// The real corpus the staging checks read: the new-episode skill's sample Episode and template, the llm-wiki, a Run's
-// staging folder under docs/episodes/ (for run-checks.ts), and the history git keeps of them.
 import { type PipelineContext } from '@/pipeline/lib/episode-pipeline.pure';
 import { type KnownVisuals } from '@/pipeline/lib/episode-staging.pure';
 import { execFileSync } from 'node:child_process';
@@ -12,27 +10,18 @@ export const EPISODES = path.join(ROOT, 'docs/episodes');
 export const SAMPLE = path.join(ROOT, 'skills/new-episode/assets/sample-episode');
 export const LLM_WIKI = path.join(ROOT, 'docs/llm-wiki');
 export const RUNS_CSV = path.join(EPISODES, 'runs.csv');
-/** Installed skills, then the ones authored here (design-ADR 0006). */
+// decision: docs/adr/0006-skills-follow-agentskills.md
 export const SKILL_FOLDERS = [path.join(ROOT, '.agents/skills'), path.join(ROOT, 'skills')];
 export const SKILL_FOLDER = 'skills/new-episode';
 export const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
 
-/*
- * Files the template reads that later tickets create: #86 the llm-wiki index,
- * #88 the human-profile guides. The template alone tolerates them while they
- * are missing; a per-run pipeline never does. Delete an entry when its file
- * lands: a test fails until you do.
- */
 export const PENDING: readonly string[] = [];
-/** Files a frozen per-run pipeline may still name: of retired jobs (scaffold-pipeline, #229) or replaced assets. */
-export const RETIRED: readonly string[] = [
+export const READS_A_FROZEN_PER_RUN_PIPELINE_KEEPS: readonly string[] = [
   `${SKILL_FOLDER}/references/scaffold-pipeline.md`,
-  // The Spec template replaced these two assets (#562); an approved per-run pipeline keeps the reads it was approved with.
   `${SKILL_FOLDER}/assets/spec-frame.html`,
   `${SKILL_FOLDER}/assets/spec-review.html`,
 ];
 
-/** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 export function readFolder(folder: string): Record<string, string> {
   const entries = readdirSync(folder, { recursive: true, withFileTypes: true }).filter((entry) => entry.isFile());
   return Object.fromEntries(
@@ -43,20 +32,12 @@ export function readFolder(folder: string): Record<string, string> {
   );
 }
 
-/** The names in `folder` ending in `suffix`, with the suffix cut off. */
 export function namesEndingIn(folder: string, suffix: string): string[] {
   return readdirSync(folder)
     .filter((name) => name.endsWith(suffix))
     .map((name) => name.slice(0, -suffix.length));
 }
 
-/**
- * What a Dossier `Visual` may name: the frame components in the Slide master
- * (`basic-page-slide.tsx` is `basic-page`), the Master slide Templates' Slide
- * folders. A library motion is a CSS module in `slide-shared/motions/`, which
- * a Slide's CSS module may `composes:` from; its name is the file name without
- * `.module.css`. The folder is empty today, so `motions` is too.
- */
 export function knownVisuals(): KnownVisuals {
   const masterSlides = ['timelines', 'grids'].flatMap((template) =>
     readdirSync(path.join(ROOT, `src/episodes/templates/${template}/slides`), { withFileTypes: true })
@@ -69,7 +50,6 @@ export function knownVisuals(): KnownVisuals {
   };
 }
 
-/** The folders directly in `folder`, as absolute paths in name order; none when it is missing. */
 export function subfolders(folder: string): string[] {
   return existsSync(folder)
     ? readdirSync(folder, { withFileTypes: true })
@@ -79,7 +59,6 @@ export function subfolders(folder: string): string[] {
     : [];
 }
 
-/** The llm-wiki research files, keyed by their path relative to the index. */
 export function llmWikiResearch(): Record<string, string> {
   const research = path.join(LLM_WIKI, 'research');
   if (!existsSync(research)) return {};
@@ -90,46 +69,36 @@ export function llmWikiResearch(): Record<string, string> {
   );
 }
 
-/**
- * Every research folder on disk, as a repo path: each Run's under `docs/episodes/<slug>/research/` and each llm-wiki
- * category's. It reads folder names only, never a Run's files: the cross-Run half of the research-folder check, while
- * each Run checks its own and the folders its pipeline will write (`run-checks.ts`).
- */
-export function researchFoldersOnDisk(): string[] {
+export function researchFolderNamesAcrossRuns(): string[] {
   const runs = subfolders(EPISODES).flatMap((run) => subfolders(path.join(run, 'research')));
   const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
   return [...runs, ...llmWiki].map((folder) => path.relative(ROOT, folder));
 }
 
-/** The template's staging folder: `<slug>` stands for the Episode a tailored copy names. */
 export const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 
-/** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
-export const governance = new Map<string, boolean>();
+export const mhQueryAnswerCacheByPath = new Map<string, boolean>();
 
-/** Every output the pipelines' jobs name, in order. */
 export const outputsOf = (yamls: readonly string[]): string[] =>
   yamls.flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs.flatMap((job) => job.outputs ?? []));
 
-/**
- * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. A
- * lookup outside the cache batches every markdown output `yamls` name, so one pipeline's outputs cost one spawn.
- */
-export function governed(file: string, yamls: readonly string[]): boolean {
-  if (governance.has(file)) return governance.get(file) === true;
+export function governedByBatchedMhQuery(file: string, yamls: readonly string[]): boolean {
+  if (mhQueryAnswerCacheByPath.has(file)) return mhQueryAnswerCacheByPath.get(file) === true;
   const files = [
-    ...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md') && !governance.has(output))]),
+    ...new Set([
+      file,
+      ...outputsOf(yamls).filter((output) => output.endsWith('.md') && !mhQueryAnswerCacheByPath.has(output)),
+    ]),
   ];
   const answer = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', '--batch', ...files], { cwd: ROOT });
   const { results } = (JSON.parse(String(answer)) as { result: { results: { governance: string }[] } }).result;
-  files.forEach((each, at) => governance.set(each, results[at].governance === 'governed'));
-  return governance.get(file) === true;
+  files.forEach((each, at) => mhQueryAnswerCacheByPath.set(each, results[at].governance === 'governed'));
+  return mhQueryAnswerCacheByPath.get(file) === true;
 }
 
-/**
- * What a pipeline may name: the skills installed under `.agents/skills/` and authored under `skills/`, the files in
- * the repo, the staging folder its outputs sit in, and the outputs a rule governs, answered in one batch over `yamls`.
- */
+export const isRunLogOfBranchInFlightThatNoRuleGoverns = (file: string): boolean =>
+  file.endsWith('/run-log.md') && existsSync(path.join(ROOT, file));
+
 export function pipelineContext(
   pending: readonly string[],
   staging: string,
@@ -154,14 +123,12 @@ export function pipelineContext(
     exists,
     staging,
     perRun: staging !== TEMPLATE_STAGING,
-    // A branch in flight keeps writing its run-log.md, which no rule governs any more.
-    governs: (file) => (file.endsWith('/run-log.md') && exists(file)) || governed(file, yamls),
+    governs: (file) => isRunLogOfBranchInFlightThatNoRuleGoverns(file) || governedByBatchedMhQuery(file, yamls),
     pending,
-    retired: RETIRED,
+    retired: READS_A_FROZEN_PER_RUN_PIPELINE_KEEPS,
   };
 }
 
-/** A heading's anchor as GitHub renders it: `## Rubric` is `rubric`. */
 export function anchorOf(heading: string): string {
   return heading
     .trim()
@@ -170,11 +137,6 @@ export function anchorOf(heading: string): string {
     .replace(/ /g, '-');
 }
 
-/**
- * Every reviewer `rubric: <file>#<heading>` in a pipeline whose file has no
- * such heading, as `<job>: <rubric>`. The schema check already proves the file
- * exists; this proves the reviewer finds its pass/fail lines in it.
- */
 export function rubricsWithoutHeading(yaml: string): string[] {
   const { jobs } = parse(yaml) as { jobs: { id: string; agents: { rubric?: string }[] }[] };
   return jobs.flatMap(({ id, agents }) =>
@@ -193,7 +155,6 @@ export function rubricsWithoutHeading(yaml: string): string[] {
   );
 }
 
-/** How many commits in the checked-out history carry the `Agent: <job>` trailer; 0 when the clone is too shallow to see them. */
 export function commitsWithTrailer(job: string): number {
   const hashes = execFileSync('git', ['log', '--format=%H', '-E', `--grep=^Agent: ${job}$`], {
     cwd: ROOT,
@@ -202,17 +163,6 @@ export function commitsWithTrailer(job: string): number {
   return hashes.split('\n').filter((hash) => hash !== '').length;
 }
 
-/**
- * A staging folder's Dossier as write-dossier and then write-voice-script
- * committed it, found by the `Agent: <job>` trailer of their commits. The
- * trailer exists since #107. A folder whose Run has not committed both yet has
- * nothing to compare (undefined), and neither has one whose latest
- * write-dossier commit is not behind its latest write-voice-script commit: a
- * reopened write-dossier waits for its write-voice-script pass. But when no
- * commit in the whole history carries a trailer, the history is unreadable (a
- * shallow clone), so this throws rather than let the Voice script check pass
- * on nothing.
- */
 export function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
   const file = `${folder}/dossier.md`;
   const git = (args: string[]): string => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });

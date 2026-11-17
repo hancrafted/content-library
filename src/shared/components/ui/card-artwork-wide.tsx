@@ -45,7 +45,6 @@ const FACTORY = (
   </>
 );
 
-/** Wide static compositions; callers choose their meaning and accent. Translations center the drawn bounds. */
 export const WIDE_CARD_ARTWORK = {
   'intention-capacity': (
     <g transform="translate(6.5 0)">

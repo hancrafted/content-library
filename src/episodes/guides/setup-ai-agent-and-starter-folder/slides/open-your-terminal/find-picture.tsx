@@ -5,7 +5,6 @@ export interface FindPictureProps {
   readonly query: string;
   readonly result: string;
   readonly resultKind: string;
-  /** A dimmer hit under the right one, as Spotlight lists it. */
   readonly other?: string;
 }
 
@@ -52,7 +51,6 @@ function Hit({ result, resultKind }: Pick<FindPictureProps, 'result' | 'resultKi
   );
 }
 
-/** The Linux app grid: the Terminal tile picked among the other apps. */
 function AppGrid({ result }: { result: string }) {
   return (
     <div className="mt-2 grid grid-cols-3 gap-2" aria-hidden="true">
@@ -67,10 +65,6 @@ function AppGrid({ result }: { result: string }) {
   );
 }
 
-/**
- * Where the viewer finds the terminal on their system, drawn as their screen shows it: Spotlight on a Mac, the Start
- * search on Windows, the app grid on Linux, the right hit picked.
- */
 export function FindPicture({ os, query, result, resultKind, other }: FindPictureProps) {
   return (
     <div data-find={os} className="rounded-2xl border border-border bg-muted p-3 shadow-md">

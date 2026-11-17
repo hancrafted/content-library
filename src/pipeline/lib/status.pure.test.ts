@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { fold, type Folded, type RunLogLine } from './run-log.pure.ts';
 import { outputApproved, renderStatus, runStatus, type GateReaders } from './status.pure.ts';
 
-/*
- * A run's state read back from its event log: a small per-run pipeline and
- * span fixtures, folded as the status CLI folds events.jsonl.
- */
-
 const PIPELINE = `status: approved
 jobs:
   - { id: brief-grill, needs: [] }
@@ -21,7 +16,6 @@ const TRACE = 'a'.repeat(32);
 const NOW = '2026-10-12T10:00:00Z';
 const at = (minute: number): string => `2026-10-12T09:${String(minute).padStart(2, '0')}:00Z`;
 
-/** Builds log lines with a rising sequence number; span ids are hand-named so fixtures read as a story. */
 function log(...events: Record<string, unknown>[]): RunLogLine[] {
   return events.map((event, index) => ({ trace_id: TRACE, seq: index + 1, ...event }) as RunLogLine);
 }
@@ -46,6 +40,21 @@ const withReaders = (pipeline: string, folded: Folded, readers: GateReaders) =>
 const states = (folded: Folded, pipeline = PIPELINE) =>
   runStatus(pipeline, folded, { now: NOW }).jobs.map(({ state }) => state);
 describe('success cases', () => {
+  it('reads every job of a needs cycle as waiting instead of overflowing the stack', () => {
+    // ARRANGE
+    const cycle = `status: approved
+jobs:
+  - { id: first, needs: [second] }
+  - { id: second, needs: [first] }
+`;
+    const folded = live(log());
+    const expected = ['waiting', 'waiting'];
+    // ACT
+    const result = states(folded, cycle);
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
   it('marks jobs whose span ended ok done, jobs whose needs are done ready, and the rest waiting', () => {
     // ARRANGE
     const folded = live(log(...job('brief-grill', 0, 'ok'), ...job('retrieval', 10, 'ok')));
@@ -100,7 +109,7 @@ describe('success cases', () => {
         ]),
       ),
     );
-    const expected = [{ name: 'ag1', job: 'retrieval', attempt: 2, role: 'implementor', elapsed_ms: 480_000 }];
+    const expected = [{ name: 'ag1', job: 'retrieval', attempt: 2, role: 'implementor', elapsedMilliseconds: 480_000 }];
     // ACT
     const status = runStatus(PIPELINE, folded, { now: NOW });
     // ASSERT
@@ -111,7 +120,7 @@ describe('success cases', () => {
   it('lists a gate span with no end as waiting on the user, with how long since it opened', () => {
     // ARRANGE
     const folded = live(log(...job('brief-grill', 0, 'ok'), start('gate-1', 'gate', [40, { job: 'brief-grill' }])));
-    const expected = [{ name: 'gate-1', job: 'brief-grill', waiting_ms: 1_200_000 }];
+    const expected = [{ name: 'gate-1', job: 'brief-grill', waitingMilliseconds: 1_200_000 }];
     // ACT
     const { waiting } = runStatus(PIPELINE, folded, { now: NOW });
     // ASSERT

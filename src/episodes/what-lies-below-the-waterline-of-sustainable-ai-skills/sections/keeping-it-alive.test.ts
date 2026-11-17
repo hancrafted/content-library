@@ -9,13 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { keepingItAliveSection } from './keeping-it-alive';
 
-/*
- * Section 8 of "What lies below the waterline of sustainable AI skills", "Keeping it alive", as the approved Spec gives
- * it: Slides 23 to 26 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context marker
- * wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one interface the
- * page reads a Slide by: localized on the shared Slide header.
- */
-
 const CUNNINGHAM = 'https://c2.com/doc/oopsla92.html';
 const LEHMAN = 'https://users.ece.utexas.edu/~perry/work/papers/feast1.pdf';
 const HERRAIZ = 'https://doi.org/10.1145/2543581.2543595';
@@ -47,7 +40,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** A Slide as the page shows it: the shared Slide header above its Scene, as the Slide wrapper renders the two. */
 function pageOf(slug: string, locale: Locale = 'en') {
   const { id, level, header, content } = localized(slug, locale);
   if (header === undefined) throw new Error(`Slide "${slug}" has no shared header.`);
@@ -55,7 +47,6 @@ function pageOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, heading, content)));
 }
 
-/** The values of one attribute over every element a selector finds, in document order. */
 function valuesOf(slug: string, selector: string, attribute: string) {
   const $ = sceneOf(slug);
   return $(selector)
@@ -63,7 +54,6 @@ function valuesOf(slug: string, selector: string, attribute: string) {
     .map((element) => $(element).attr(attribute));
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
   'every-skill-is-a-loan',
   'the-model-changes-the-skill-doesn-t',
@@ -195,7 +185,6 @@ describe('success cases', () => {
 
   it('places a Context marker for each note wherever the picked Options show one, in reading order', () => {
     // ARRANGE
-    // The caption's marker sits in the shared header, outside the Scene; the Scene holds the rest.
     const expected = [
       ['skill-upkeep-as-technical-debt'],
       [

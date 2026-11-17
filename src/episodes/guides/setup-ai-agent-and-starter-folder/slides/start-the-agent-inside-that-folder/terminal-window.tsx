@@ -2,10 +2,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import type { TerminalPrompt } from './start.pure';
 
-/**
- * The Visual language's terminal window: softly rounded, a three-dot title bar, monospace lines. The window the AI
- * agent runs in carries the `ai` edge (Accent: the `ai` colour marks the AI agent itself, never decoration).
- */
 export function TerminalWindow({ title, ai = false, children }: { title: string; ai?: boolean; children: ReactNode }) {
   return (
     <div
@@ -25,7 +21,6 @@ export function TerminalWindow({ title, ai = false, children }: { title: string;
   );
 }
 
-/** A prompt line: the folder name highlighted in `primary`, the check the viewer matches on their own screen. */
 export function PromptLine({ prompt, highlight = false }: { prompt: TerminalPrompt; highlight?: boolean }) {
   return (
     <span className="text-muted-foreground">

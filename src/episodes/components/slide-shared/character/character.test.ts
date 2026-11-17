@@ -6,11 +6,6 @@ import { Character, type CharacterProps } from './character';
 import type { Preset } from './preset';
 import { aiAgent } from './shared-presets';
 
-/*
- * The Character a Scene places: one body plan in a pose, a motion that plays once on the active Slide, and the emote at
- * its own head, mirrored with the figure but never its words.
- */
-
 const captainLike: Preset = {
   kind: 'human',
   build: 'slim',

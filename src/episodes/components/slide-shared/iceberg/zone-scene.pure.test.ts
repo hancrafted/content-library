@@ -11,11 +11,6 @@ import {
   zoneSceneParts,
 } from './zone-scene.pure';
 
-/*
- * What `ZoneScene` draws for a zone: the one prop a Slide names decides the sky, the rays, the seabed, the iceberg's
- * part and the zone's one ambient loop; and the faceted water it all sits in, the same on every render.
- */
-
 describe('success cases', () => {
   it('draws each zone with its own scenery and its one ambient loop, from the Surface down', () => {
     // ARRANGE
@@ -100,7 +95,6 @@ describe('success cases', () => {
       { width: 1440, height: 900 },
       { width: 1920, height: 1080 },
     ];
-    // The table of contents floats over the left fifth of a desktop Slide.
     const tocClear = 1200 / 5;
     const { x, halfWidth, scale } = TITLE_LOOP_AT.bubbles;
     const column = { left: x - halfWidth * scale, right: x + halfWidth * scale };

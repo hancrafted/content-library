@@ -24,12 +24,10 @@ const CAPTION = 'caption';
 const RESEARCH = 'research';
 const MINIMAL = 'minimal';
 
-/** The summer party's four stages, in order: each hands its work to the next. */
 const STAGES = ['plan', 'requirements', 'research', 'page'] as const;
 
-/** Every toolbar control but the use-case picker and the Stages · Jobs switch, hidden. */
 const HIDDEN = { show: false } as const;
-const CONTROLS = {
+const CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH = {
   level: HIDDEN,
   demo: HIDDEN,
   debug: HIDDEN,
@@ -40,7 +38,6 @@ const CONTROLS = {
   reset: HIDDEN,
 };
 
-/** The task you set the agent in the Research stage: the Workflow's own goal for its research job. */
 function researchTask(locale: string): string {
   const workflow = workflowFor('summer-party', locale === 'de' ? 'de' : 'en');
   const task = workflow.stages.find(({ id }) => id === RESEARCH)?.jobs[0]?.task.goal.do;
@@ -48,12 +45,6 @@ function researchTask(locale: string): string {
   return locale === 'de' ? task : task.charAt(0).toLowerCase() + task.slice(1);
 }
 
-/**
- * What an agentic workflow is (picked Option 4a): the human-in-the-loop Explorable in its Stages view, running "Plan a
- * summer party". The path over it is bracketed as the part you design, each stage's handoff under it; one Research
- * round is zoomed below it as the part the agent loops through, its task the Workflow's own and its steps the loop it runs until it is done. The
- * open phrase "minimal human intervention" closes the Slide as a question for the next Section.
- */
 export const whatAnAgenticWorkflowIsSlide = slide({
   slug: 'what-an-agentic-workflow-is-slide',
   messages: { en, de },
@@ -80,7 +71,7 @@ export const whatAnAgenticWorkflowIsSlide = slide({
           workflow="summer-party"
           locale={locale}
           view="stages"
-          controls={CONTROLS}
+          controls={CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH}
           diagram={{
             label: t('diagramLabel'),
             initials: false,

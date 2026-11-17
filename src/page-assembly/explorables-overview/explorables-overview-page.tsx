@@ -10,7 +10,6 @@ import { cn } from '@/shared/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ExplorableCardView, type ExplorableCard } from './explorable-card';
 
-/** Every public Explorable page as a card: its words from its composition, its Tags' names from page assembly. */
 function explorableCards(locale: Locale, typeLabel: string): ExplorableCard[] {
   const tagWords = PAGE_WORDS[locale].tags;
   return listedExplorablePages().map(({ page, tags }) => {
@@ -28,10 +27,6 @@ function explorableCards(locale: Locale, typeLabel: string): ExplorableCard[] {
   });
 }
 
-/**
- * The Explorables overview, the page at /explorables (spec #404): a title with a one-line intro, then a card linking
- * each public Explorable page, as the Resources overview's first cut draws its cards.
- */
 export async function ExplorablesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'explorablesOverview' });
   const cards = explorableCards(locale, t('typeLabel'));

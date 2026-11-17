@@ -1,7 +1,4 @@
-/*
- * A tour step's `set` applied to the settings (design-ADR 0024 §10): dials per center, the Customer, where AI works, the
- * reality.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { firstOf } from './factory-dials.pure.ts';
 import type { Bundle, Cust, Over, Settings, StepSet } from './software-ecology.types';
@@ -23,7 +20,6 @@ const setDials = (dials: StepSet['dials'], s: Settings): void => {
   }
 };
 
-/** The Customer after a step's changes: given fields replace, the rest stay as they are now. */
 const setCustomer = (c: NonNullable<StepSet['customer']>, cu: Cust): Cust => ({
   ...cu,
   mix: { ...firstOf(c.mix, cu.mix) },
@@ -33,7 +29,6 @@ const setCustomer = (c: NonNullable<StepSet['customer']>, cu: Cust): Cust => ({
   ...(c.arrivals ? { mode: c.arrivals } : {}),
 });
 
-/** Applies a step's `set` to the settings in place: dials per center, the Customer, where AI works, the reality. */
 export const applySet = (set: StepSet | undefined, m: { readonly B: Bundle }, s: Settings): void => {
   if (!set) return;
   if (set.reality !== undefined) s.reality = set.reality;

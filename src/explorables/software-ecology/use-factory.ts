@@ -1,14 +1,10 @@
-/*
- * Runs the factory in the browser (design-ADR 0024 §14): builds a run for the use case and preset, warms it behind
- * "Warming up", drives it by real time at the chosen speed and paints every frame; the DOM readouts follow four times a
- * second. It pauses outside the active Slide (the Slide mount's `data-zone`, FE-009), on a hidden page and under
- * reduced motion, where it warms at once and shows one steady frame. Reached only from the Explorable's client leaf.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: FE-009 §4
 import { useCallback, useEffect, useMemo, useRef, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
 import type { Snapshot } from './factory-model.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
-import { SPEED_1X, type FactoryRun } from './factory-run.pure.ts';
+import { WEEKS_PER_REAL_SECOND_AT_1X, type FactoryRun } from './factory-run.pure.ts';
 import type { PileStyle } from './paint-pile.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
@@ -21,7 +17,6 @@ export type { FactoryControls };
 const READ_SECS = 0.25;
 
 export interface FactoryWords {
-  /** "Warming up · day {day} of {of}", filled. */
   readonly warming: (day: number, of: number) => string;
   readonly blocked: string;
 }
@@ -34,9 +29,7 @@ export interface FactoryView {
   readonly canvas: RefObject<HTMLCanvasElement | null>;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly controls: FactoryControls;
-  /** Reduced motion: one steady frame, no frame loop. */
   readonly reduced: boolean;
-  /** Places the floor on the stage and paints one frame now: after a switch into the factory view. */
   repaint(): void;
 }
 
@@ -46,7 +39,6 @@ const placeFloor = (floor: HTMLDivElement | null, fit: { k: number; ox: number; 
   if (floor.style.transform !== tf) floor.style.transform = tf;
 };
 
-/** Paints one frame, sizing the canvas to its stage first. */
 const paint = (x: { v: Pick<FactoryView, 'stage' | 'canvas' | 'floor'>; painter: FactoryPainter; at: DrawAt }) => {
   const st = x.v.stage.current,
     cv = x.v.canvas.current,
@@ -61,18 +53,13 @@ const paint = (x: { v: Pick<FactoryView, 'stage' | 'canvas' | 'floor'>; painter:
 type Painted = Pick<FactoryView, 'stage' | 'canvas' | 'floor'>;
 type DrawAt = Parameters<FactoryPainter['draw']>[1];
 interface Live {
-  /** The factory view is shown: time runs. In the roles state only the warm-up runs, as in the reference build. */
   readonly flowing: boolean;
   readonly speed: number;
   readonly words: FactoryWords;
   readonly pile: PileStyle;
-  /** The dashboards on show, read with every readout. */
   readonly watch: readonly string[];
-  /** The work centers in the compare stream, read with every readout. */
   readonly stream: readonly string[];
-  /** Called after every frame's advance: a tour step stops here. */
   readonly onFrame?: (run: FactoryRun) => void;
-  /** Called after every painted frame: the compare stream draws its live parts here. */
   readonly onDraw?: (run: FactoryRun, speed: number) => void;
 }
 
@@ -82,13 +69,12 @@ const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number 
     now: x.now,
     reduced: x.reduced,
     warming: w ? x.live.words.warming(w.day, w.of) : null,
-    secsPerWeek: x.live.speed ? 1 / (x.live.speed * SPEED_1X) : 0,
+    secsPerWeek: x.live.speed ? 1 / (x.live.speed * WEEKS_PER_REAL_SECOND_AT_1X) : 0,
     blocked: x.live.words.blocked,
     pile: x.live.pile,
   };
 };
 
-/** Paints one frame and lets the compare stream draw its live parts. */
 const show = (x: {
   run: FactoryRun;
   painter: FactoryPainter;
@@ -101,7 +87,6 @@ const show = (x: {
   x.live.onDraw?.(x.run, x.live.speed);
 };
 
-/** Outside the active Slide or under reduced motion: one steady frame, warmed at once when it must be still. */
 function useStill(x: {
   run: FactoryRun;
   painter: FactoryPainter;
@@ -121,7 +106,6 @@ function useStill(x: {
   }, [playing, reduced, run, painter, v, live, read]);
 }
 
-/** In the active Slide: every frame advances the run and paints; the readouts follow four times a second. */
 function useLoop(x: {
   run: FactoryRun;
   painter: FactoryPainter;
@@ -153,7 +137,6 @@ function useLoop(x: {
   }, [playing, run, painter, v, live, read]);
 }
 
-/** The settings the frame loop reads every frame, kept current without restarting it. */
 function useLive(now: Live): RefObject<Live> {
   const live = useRef<Live>(now);
   useEffect(() => {
@@ -167,14 +150,10 @@ export interface FactoryOptions {
   readonly preset: string;
   readonly words: FactoryWords;
   readonly pile?: PileStyle;
-  /** False in the roles state: the model only finishes warming. */
   readonly flowing?: boolean;
-  /** Work centers (or `customer`) whose dashboards are on show. */
   readonly watch?: readonly string[];
-  /** Work centers in the compare stream. */
   readonly stream?: readonly string[];
   readonly onFrame?: (run: FactoryRun) => void;
-  /** After every painted frame: the compare stream draws its live parts. */
   readonly onDraw?: (run: FactoryRun, speed: number) => void;
 }
 
@@ -217,7 +196,6 @@ function useViews() {
   return useMemo(() => ({ stage, canvas, floor }), []);
 }
 
-/** A dial turned while paused shows at once: the readouts re-read after every settings change. */
 const withRead = (base: FactoryControls, reread: () => void): FactoryControls => ({
   ...base,
   setSettings: (n) => {

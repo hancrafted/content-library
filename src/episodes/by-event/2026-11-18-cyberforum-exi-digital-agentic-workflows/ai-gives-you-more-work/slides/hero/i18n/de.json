@@ -1,0 +1,15 @@
+{
+  "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
+  "label": "Eine Treppe aus vier Stufen, die KI-Stufe die höchste",
+  "axis": "Wie komplex die Aufgabe ist, die ein Mensch übernimmt",
+  "steps": {
+    "farming": "Ackerbau",
+    "steam": "Dampfmaschine",
+    "computer": "Computer",
+    "ai": "KI",
+    "aiNote": "entwirft und denkt mit"
+  },
+  "goal": "Sie managen",
+  "legend": "Mit jeder Stufe übernimmt die Maschine die untere Arbeit, und Du steigst eine Ebene auf.",
+  "legendAi": "Die KI-Stufe ist die höchste bisher."
+}

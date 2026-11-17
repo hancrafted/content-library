@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { placeSettings } from './settings-placement.pure.ts';
 
-/** A 1440 × 900 window, the Settings button at the toolbar's right end. */
 const LAPTOP = { width: 1440, height: 900 };
 const BUTTON = { left: 1180, top: 120, width: 36, height: 36 };
 

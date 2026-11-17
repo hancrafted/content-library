@@ -1,5 +1,5 @@
 'use client';
-
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useEffect, useRef } from 'react';
 import { SPEEDS } from './factory-dials.pure.ts';
@@ -10,13 +10,6 @@ import styles from './software-ecology.module.css';
 import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * The toolbar's time controls (feature guide, Interaction 1; feedback 08): Pause, a speed menu of 1×, 2×, 5×, 10× and 20×
- * (the page starts at 1×), Clear and the clock, plain text. Pause gives back the speed last picked; a tour sets 20×
- * between its steps and gives the viewer's speed back when it ends.
- */
-
-/** The clock's numbers: a tour has a week and a day, a free run only a day; none while the line warms. */
 export interface ClockAt {
   readonly week?: number;
   readonly day?: number;
@@ -28,14 +21,11 @@ export interface TimeControlsProps {
   readonly onSpeed: (n: number) => void;
   readonly onClear: () => void;
   readonly clock: string;
-  /** The clock as numbers, for the eval read-outs: the tour's week and day, else the working day. */
   readonly clockAt: ClockAt;
-  /** The speed menu is open; the toolbar keeps one menu open at a time. */
   readonly open: boolean;
   readonly onOpen: (open: boolean) => void;
 }
 
-/** The speed a paused run resumes at: the running one, else the last one running, the page's 1× at first. */
 function useResume(speed: number) {
   const last = useRef(speed || DEFAULT_SPEED);
   useEffect(() => {
@@ -47,7 +37,6 @@ function useResume(speed: number) {
 function PauseButton(p: TimeControlsProps & { resume: number }) {
   const paused = !p.speed,
     name = paused ? p.words.play : p.words.pause;
-  // the button names what it does next, and its tooltip says the same
   return (
     <ToolTip tip={name}>
       <button

@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { memo, type ComponentType } from 'react';
@@ -6,15 +7,10 @@ import type { CardWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { SignKind, StationReadout } from './stage-readouts.pure.ts';
 
-/** A card's box on the floor, in layout units: x, y, width, height. */
 export type Box = readonly [number, number, number, number];
 
 export const boxStyle = (b: Box) => ({ left: b[0], top: b[1], width: b[2], height: b[3] });
 
-/**
- * A station card as a button that opens its dashboard; the floor hears its click, Enter and Space. `toured`: a tour
- * caption points at it.
- */
 export const openerProps = (label: string | undefined, open: boolean | undefined, toured?: boolean) =>
   label
     ? {
@@ -27,7 +23,6 @@ export const openerProps = (label: string | undefined, open: boolean | undefined
       }
     : { 'data-open': open, 'data-toured': toured || undefined };
 
-/** What the signs above a station card need. */
 export type SignsProps = Pick<StationCardProps, 'id' | 'signs' | 'r' | 'words' | 'targets'>;
 
 export interface StationCardProps {
@@ -36,24 +31,14 @@ export interface StationCardProps {
   readonly title: string;
   readonly icon: string;
   readonly inspection: boolean;
-  /** The signs this station can show, in order. */
   readonly signs: readonly SignKind[];
   readonly r: StationReadout;
-  /**
-   * The signs above the card, a client leaf the floor passes in: each sign carries the site's tooltip (a `*-view` file
-   * renders on the server and holds no hook, FE-006). A component, not an element, so the memoised card stays still.
-   */
   readonly Signs: ComponentType<SignsProps>;
   readonly words: CardWords;
-  /** Context targets by spot: `card`, `rack`, or a sign's kind. The floor carries no Context marker (feedback 10). */
   readonly targets?: Readonly<Partial<Record<string, TargetProps>>>;
-  /** "{title}: open its dashboard", the card's name as a button; the floor handles the click. */
   readonly label?: string;
-  /** Its dashboard is open. */
   readonly open?: boolean;
-  /** A tour caption points at it. */
   readonly toured?: boolean;
-  /** Picked for the compare stream. */
   readonly picked?: boolean;
 }
 
@@ -70,7 +55,6 @@ function Status({ r, words }: Pick<StationCardProps, 'r' | 'words'>) {
   );
 }
 
-/** The rack's place on the card, for a Context target; the canvas draws the rack itself. */
 function RackSpot({ targets }: Pick<StationCardProps, 'targets'>) {
   return targets?.rack ? <div className={styles.rackSpot} {...targets.rack} /> : null;
 }
@@ -89,7 +73,6 @@ function Head(p: Pick<StationCardProps, 'icon' | 'title' | 'inspection' | 'words
   );
 }
 
-/** AI at work: chevrons racing out along the outbound belt. */
 function Turbo() {
   return (
     <span className={styles.turbo} aria-hidden="true">
@@ -102,7 +85,6 @@ function Turbo() {
   );
 }
 
-/** A work center on the floor (design-ADR 0024 §14): head, the status line and its signs; the canvas draws the rack and the work. */
 export const StationCardView = memo(function StationCardView(p: StationCardProps) {
   return (
     <div

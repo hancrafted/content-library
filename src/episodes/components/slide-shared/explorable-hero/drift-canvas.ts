@@ -1,13 +1,10 @@
 import { momentOf, paintBeat, paintField } from './drift-paint';
 import { areaOf, type Area, type Box, type Story } from './drift.pure';
 
-/** The drawing's pixel ratio is capped: the art is faint hairlines and blur, so a retina canvas would cost four times the fill for no visible gain. */
 const MAX_RATIO = 1;
 
-/** The safe top of the art: under the floating header band and the pause button. */
 const ART_TOP = 96;
 
-/** What the canvas needs from one measurement of the hero. */
 interface Frame {
   readonly width: number;
   readonly height: number;
@@ -16,7 +13,6 @@ interface Frame {
   readonly accent: string;
 }
 
-/** A mounted drift: draw it at a time, and take it down. */
 export interface Drift {
   readonly draw: () => void;
   readonly dispose: () => void;
@@ -27,11 +23,8 @@ function boxOf(element: Element, origin: DOMRect): Box {
   return { x: box.x - origin.x, y: box.y - origin.y, width: box.width, height: box.height };
 }
 
-/** Sizes both surfaces to the hero at the current pixel ratio and reads the headline, lede and tokens once. */
 function measure(surfaces: readonly HTMLCanvasElement[], hero: HTMLElement): Frame {
   const bounds = hero.getBoundingClientRect();
-  // The canvas covers the hero's first screen only (the art never reaches further), so each frame repaints a
-  // viewport, not the whole tall Slide.
   const own = surfaces[0].getBoundingClientRect();
   const ratio = Math.min(window.devicePixelRatio || 1, MAX_RATIO);
   for (const surface of surfaces) {
@@ -58,7 +51,6 @@ function measure(surfaces: readonly HTMLCanvasElement[], hero: HTMLElement): Fra
   };
 }
 
-/** Draws the ambient field on its canvas (faded to `FIELD_INK` by CSS) and the accent beat on the other: no offscreen copy. */
 function drawFrame(
   contexts: { field: CanvasRenderingContext2D; soft: CanvasRenderingContext2D; beat: CanvasRenderingContext2D },
   frame: Frame,
@@ -77,7 +69,6 @@ function drawFrame(
   for (const pen of Object.values(contexts)) pen.restore();
 }
 
-/** Re-measures on a pixel-ratio change, which a resize observer does not see; returns its teardown. */
 function watchPixelRatio(onChange: () => void): () => void {
   let query: MediaQueryList | undefined;
   const changed = () => {
@@ -98,24 +89,18 @@ function readyPens(contexts: Record<'beat' | 'field' | 'soft', CanvasRenderingCo
   return beat && field && soft ? { beat, field, soft } : undefined;
 }
 
-/** Watches the hero's own size, the canvas's, and its Foreground's (which an open drawer narrows without resizing the hero). */
 function watchSizes(resize: ResizeObserver, hero: HTMLElement, canvas: HTMLCanvasElement) {
   for (const watched of [hero, canvas, hero.querySelector('[data-hero-motion-button]')?.parentElement]) {
     if (watched) resize.observe(watched);
   }
 }
 
-/** What one drift is drawn from: the story, whether it is the static end state, and the loop's timeline. */
 export interface DriftScene {
   readonly story: Story;
   readonly staticFrame: boolean;
   readonly seconds: () => number;
 }
 
-/**
- * Mounts Message drift on `canvas`, sized to the `hero` Slide wrapper that holds it: the canvas stays out of layout,
- * scales with the device pixel ratio and re-measures on resize.
- */
 export function mountDrift(
   canvases: { beat: HTMLCanvasElement; field: HTMLCanvasElement; soft: HTMLCanvasElement },
   hero: HTMLElement,

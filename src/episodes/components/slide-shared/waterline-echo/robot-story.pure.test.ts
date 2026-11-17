@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ROBOT_STORY, robotAt, storyAgainstSlides, storyBreaks, type RobotBeat } from './robot-story.pure';
 
-/*
- * Where the diving robot is on each Slide of "What lies below the waterline of sustainable AI skills" that shows it, in
- * story order (feedback 3, decision 42): on deck, hanging from the A-frame, in the water at a depth, or on the seabed,
- * and once it is in the water it never climbs back to the A-frame or the deck until it is recovered at the very end.
- */
-
 describe('success cases', () => {
   it("lists the Slides that draw the robot in the Episode's order, and finds no stray state when each matches its row", () => {
     // ARRANGE

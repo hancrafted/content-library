@@ -1,6 +1,3 @@
-// `npm run episode:spec -- <slug | Episode folder>`: serves the Spec (self-contained: spec-assemble inlined its css) for review on `--port`, else the first free port from 4000, never 4382
-// (the dashboard's). Saving the review writes the next feedback round (spec-server.ts).
-
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +10,6 @@ const FIRST_PORT = 4000;
 const LAST_PORT = 4100;
 const DASHBOARD_PORT = 4382;
 
-/** A bare slug names `docs/episodes/<slug>`; anything with a slash is an Episode folder path. */
 function episodeFolder(arg: string): string {
   return arg.includes('/') ? path.resolve(arg) : path.join(ROOT, 'docs/episodes', arg);
 }
@@ -44,8 +40,9 @@ if (arg === undefined || extra.length > 0 || (port !== undefined && !Number.isIn
 }
 const folder = episodeFolder(arg);
 const spec = path.join(folder, SPEC_FILE);
-// --watch: begin-run starts this server before the Spec exists, so wait for spec.html instead of refusing.
-while (values.watch && !existsSync(spec)) await new Promise((resolve) => setTimeout(resolve, 1000));
+const beginRunStartsThisServerBeforeTheSpecExists = values.watch;
+while (beginRunStartsThisServerBeforeTheSpecExists && !existsSync(spec))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 if (!existsSync(spec)) {
   console.error(`✖ ${path.relative(ROOT, spec)} does not exist`);
   process.exit(1);

@@ -13,38 +13,29 @@ import { CircleQuestionMark } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { helpPrompt } from './help-prompt.pure';
 
-/** The Help button's and panel's words, from the Slide's own Translation file. */
 export interface HelpWords {
-  /** The button's name, "Help", and the panel's accessible name. */
   readonly button: string;
-  /** The textarea's accessible name. */
   readonly label: string;
   readonly placeholder: string;
   readonly copy: string;
   readonly copied: string;
-  /** The tooltip on Copy prompt: where the prompt goes. */
   readonly copyTip: string;
-  /** The prompt template: `{os}`, `{agent}`, `{step}` and `{error}`. */
   readonly prompt: string;
-  /** What the prompt says when nothing was typed. */
   readonly noError: string;
   readonly chats: ChatButtonsWords;
 }
 
-/** Each pick's product names by value, and the value read until the viewer picks. */
 export interface HelpPicks {
   readonly os: { readonly fallback: string; readonly names: Readonly<Record<string, string>> };
   readonly agent: { readonly fallback: string; readonly names: Readonly<Record<string, string>> };
 }
 
 export interface HelpPanelProps {
-  /** The step the prompt names: "Step 3: Install your AI agent". */
   readonly step: string;
   readonly words: HelpWords;
   readonly picks: HelpPicks;
 }
 
-/** The page's OS and AI agent as names, or the defaults before the viewer picks. */
 function usePickedNames(picks: HelpPicks) {
   const [os] = usePagePick('os', picks.os.fallback);
   const [agent] = usePagePick('agent', picks.agent.fallback);
@@ -121,12 +112,7 @@ function HelpActions({ words, onCopy }: { words: HelpWords; onCopy: () => Promis
   );
 }
 
-/**
- * The Slide's Help (Visual language "Help"): a button at the right end of the title row and, closed until it is
- * pressed, a panel under the header that pushes the Scene down. The panel holds a field for a question or a pasted
- * error, Copy prompt, and the AI chats to paste into. The prompt wraps the field with the page's OS and AI agent and
- * `step`. The field is transient (FE-001 §1): it lives here only, and keeps its text while the panel is closed.
- */
+// decision: FE-001 §1
 export function HelpPanel({ step, words, picks }: HelpPanelProps) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');

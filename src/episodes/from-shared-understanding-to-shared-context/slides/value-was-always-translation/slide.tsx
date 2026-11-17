@@ -8,14 +8,12 @@ import { ResultIconSvg, type ResultIcon } from './result-icon';
 
 const BROOKS = { slug: 'brooks-no-silver-bullet', url: 'https://www.cgl.ucsf.edu/Outreach/pc204/NoSilverBullet.html' };
 
-/** The three forms one intent was translated into, each a paper card tilted its own way. */
 const RESULTS: readonly { slug: 'product' | 'service' | 'lecture'; icon: ResultIcon; tilt: string }[] = [
   { slug: 'product', icon: 'box', tilt: '-rotate-1' },
   { slug: 'service', icon: 'handshake', tilt: 'rotate-1' },
   { slug: 'lecture', icon: 'lectern', tilt: '-rotate-1' },
 ];
 
-/** A half's mono index and label, its dot in the meaning colour of what the half holds. */
 function HalfLabel({ index, label, dot }: { index: string; label: string; dot: string }) {
   return (
     <span className="flex items-center gap-3 font-mono text-caption text-muted-foreground uppercase">
@@ -25,7 +23,6 @@ function HalfLabel({ index, label, dot }: { index: string; label: string; dot: s
   );
 }
 
-/** The round arrow badge on the hairline, the translation: it points down where the halves stack, right where they face. */
 function TranslationArrow() {
   return (
     <span
@@ -46,13 +43,6 @@ function TranslationArrow() {
   );
 }
 
-/**
- * "Value was always translation" (Spec Option 4b): a copy of the `grid-1x2` Master slide's facing halves, hairline and
- * mono index, each half's title and caption replaced by a picture. One customer's intent on the left, the product,
- * service and lecture it was translated into on the right, and the round `primary` arrow on the hairline as the
- * translation. Keeps `motion: none`; the result cards dim each other on hover. The caption's last Context marker is
- * the header's; the first sits beside the translated half's label, since the shared header ends a caption on one.
- */
 export const valueWasAlwaysTranslation = slide({
   slug: 'value-was-always-translation',
   messages: { en, de },

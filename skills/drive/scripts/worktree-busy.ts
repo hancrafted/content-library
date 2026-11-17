@@ -1,16 +1,13 @@
-// What still runs in a worktree about to be removed: who holds it, and `--kill`, which stops them.
 import { capture, run } from './git.ts';
 import { fail } from './project.ts';
 import { describeProc, killable, lineage, parseLsof, type Proc } from './worktree-process.pure.ts';
+import { signalProcess } from './worktree-signal.ts';
 
-/** Processes whose cwd sits inside the worktree. */
 function processesIn(target: string): Proc[] {
-  // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
-  const { stdout } = run('lsof', ['-d', 'cwd', '-Fpcn']);
-  return parseLsof(stdout, target);
+  const { stdout: lsofStdoutWhateverItsExitCode } = run('lsof', ['-d', 'cwd', '-Fpcn']);
+  return parseLsof(lsofStdoutWhateverItsExitCode, target);
 }
 
-/** This process and its ancestors (the agent's shell among them), which --kill never touches. */
 function protectedPids(): Set<number> {
   const parentOf = new Map<number, number>();
   for (const line of capture('ps', ['-axo', 'pid=,ppid=']).split('\n')) {
@@ -30,29 +27,19 @@ const isAlive = (pid: number): boolean => {
   }
 };
 
-/** SIGTERM, a short wait, then SIGKILL for whatever is left. */
 function killProcesses(procs: Proc[]): void {
-  const signal = (proc: Proc, sig: NodeJS.Signals) => {
-    try {
-      process.kill(proc.pid, sig);
-    } catch {
-      // already gone
-    }
-  };
-  for (const proc of procs) signal(proc, 'SIGTERM');
+  for (const proc of procs) signalProcess(proc.pid, 'SIGTERM');
   const deadline = Date.now() + 3000;
   while (Date.now() < deadline && procs.some((p) => isAlive(p.pid))) run('sleep', ['0.1']);
-  for (const proc of procs.filter((p) => isAlive(p.pid))) signal(proc, 'SIGKILL');
+  for (const proc of procs.filter((p) => isAlive(p.pid))) signalProcess(proc.pid, 'SIGKILL');
   for (const proc of procs) console.log(`✔ stopped ${describeProc(proc)}`);
 }
 
-/** Whether this runs from inside the worktree: the finish removes the folder it would run in. */
 export function insideWorktree(target: string): boolean {
   return (process.cwd() + '/').startsWith(target + '/');
 }
 
-/** Refuses while something still runs in the worktree; with `kill`, stops it first. Run last, once every other guard passed. */
-export function refuseWhileBusy(target: string, kill: boolean): void {
+export function refuseWhileBusyLastBeforeRemoval(target: string, kill: boolean): void {
   let busy = processesIn(target);
   if (kill && busy.length > 0) {
     killProcesses(killable(busy, protectedPids()));

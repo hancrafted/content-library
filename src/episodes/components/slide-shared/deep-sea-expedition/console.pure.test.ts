@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CONSOLE_DESK_HEIGHT, consoleLayout, maxMugs, MIN_CONSOLE_WIDTH } from './console.pure';
 
-/*
- * The control-room console: desk, screens, mugs and the seat anchor, from the approved Spec's console. (0, 0) is the
- * desk top's front-left corner; the seat is the floor point under the pilot's chair.
- */
-
 describe('success cases', () => {
   it('seats the pilot left of the desk on the floor, two screens side by side at a third of the width each', () => {
     // ARRANGE

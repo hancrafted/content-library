@@ -1,5 +1,4 @@
-/* The fish-school drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in fish-school.tsx. */
-
+/* decision: FE-011 §4 */
 .school {
   --fish-lit: color-mix(in oklab, var(--bulb) 72%, color-mix(in oklab, var(--on-brand-accent) 97%, var(--overlay)));
   --fish-shade: color-mix(in oklab, var(--bulb) 78%, color-mix(in oklab, var(--on-brand-accent) 41%, var(--overlay)));
@@ -32,7 +31,6 @@
   stroke-linejoin: round;
 }
 
-/* The Sunlit loop: the school sways as one, only on the active Slide, resting where it is drawn otherwise. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .sway {
     animation: school-sway 9s ease-in-out infinite alternate;

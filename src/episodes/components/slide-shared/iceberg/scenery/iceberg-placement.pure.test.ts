@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { placeIceberg, placeIcebergInBands } from './iceberg-placement.pure';
 import { icebergExtent } from './scenery.pure';
 
-/*
- * The one iceberg placement every Scene uses (the title hero, `ZoneScene`, `WholeDepthScene`): the body floats in the
- * Sunlit zone and the keel's point only touches the Twilight zone, a fifth of the way into it, at any scale.
- */
-
 describe('success cases', () => {
   it('reaches the keel a fifth of the way into the Twilight zone, whatever the berg scale', () => {
     // ARRANGE
@@ -39,7 +34,6 @@ describe('success cases', () => {
       { zone: 'midnight', top: 885, bottom: 960 },
     ] as const;
     const frame = { x: 1000, waterline: 710, scale: 0.5 };
-    // The keel ends a fifth of the 75-deep Twilight band below 810, at 825: 115 under the waterline.
     const expected = { ...frame, depthScale: expect.closeTo(1.15) };
     // ACT
     const placed = placeIcebergInBands(bands, frame);

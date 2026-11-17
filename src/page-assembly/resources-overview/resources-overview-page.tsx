@@ -12,7 +12,6 @@ import { RESOURCE_KINDS } from './resource-index.pure';
 
 type OverviewT = Awaited<ReturnType<typeof getTranslations<'resourcesOverview'>>>;
 
-/** Every Resource the index holds in this locale as a card: the Tags' names come from page assembly. */
 function resourceCards(locale: Locale, t: OverviewT): ResourceCard[] {
   const tagWords = PAGE_WORDS[locale].tags;
   return resourceIndex()
@@ -55,11 +54,7 @@ function browserLabels(t: OverviewT): ResourceBrowserLabels {
   };
 }
 
-/**
- * The Resources overview, the page at /resources (design-ADR 0019, `docs/features/resources.md`): a title with a
- * one-line intro, then every Resource the Resource index holds as a card, filterable by search, kind and Tag, as a
- * grid or a list. This template reads the index and hands the client leaf plain strings.
- */
+// decision: docs/adr/0019-resources-overview.md
 export async function ResourcesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'resourcesOverview' });
   return (

@@ -9,19 +9,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { nowWithAgents } from './slide';
 
-/*
- * "Now with agents", picked Option 2a: Slide 1's sum replayed with an agent on every card, each stamped 2 min, the
- * same four failures in the same places in the compact card form, and beside it the speed card and what no agent was
- * told, one Context marker per line. Read as the page renders the Scene under the shared Slide header.
- */
-
 const SECTION = slide({
   slug: 'a-thought-experiment',
   messages: { en: { title: 'A thought experiment' }, de: { title: 'Ein Gedankenexperiment' } },
   content: () => null,
 });
 
-/** The Scene as the page renders it; the section slide is a stand-in, so the test reaches no Episode file. */
 function sceneOf(locale: Locale = 'en') {
   const placed = placeSections<Slide>([[SECTION, nowWithAgents]]).flat();
   const localized = localizeSlide(placed[1] as never, {

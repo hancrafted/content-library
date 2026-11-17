@@ -1,21 +1,17 @@
-// The worktree lifecycle, `drive worktree <command>`: `new <branch>` makes a checkout, `done <branch> [--kill]`
-// removes it and fast-forwards the local base branch, `sync` merges the remote base branch into the current branch.
-// With `--base <branch>` each works against that branch instead, and `done` merges into it first. Every
-// project-specific value comes from the project's config file.
 import { spawnSync } from 'node:child_process';
 import { capture, git, stream } from './git.ts';
 import { fail, loadProject, type Project, runAfter, runHooks, worktreePath } from './project.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { insideWorktree, refuseWhileBusy } from './worktree-busy.ts';
-import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
+import { insideWorktree, refuseWhileBusyLastBeforeRemoval } from './worktree-busy.ts';
+import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { planSync } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
 function create(project: Project, branch: string, base: string | null): void {
   const { config } = project;
   const target = worktreePath(project, branch);
-  // A local base may not be pushed yet, so only the remote base branch is fetched.
-  if (base === null) stream('git', ['fetch', config.remote]);
+  const branchesFromRemoteBase = base === null;
+  if (branchesFromRemoteBase) stream('git', ['fetch', config.remote]);
   stream('git', ['worktree', 'add', target, '-b', branch, base ?? project.remoteBase]);
   for (const command of config.install)
     if (spawnSync(command, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)
@@ -37,8 +33,7 @@ function deleteBranch(branch: string): void {
   }
 }
 
-/** Checked before anything is removed, so a refusal leaves the worktree intact. */
-function refuseUnpushedBase(project: Project): void {
+function refuseUnpushedBaseBeforeAnyRemoval(project: Project): void {
   const { remote, baseBranch } = project.config;
   stream('git', ['fetch', remote]);
   const unpushed = capture('git', ['log', '--oneline', `${project.remoteBase}..${baseBranch}`]);
@@ -53,17 +48,14 @@ function syncBase(project: Project): void {
   console.log(`✔ local ${baseBranch} fast-forwarded to ${project.remoteBase}`);
 }
 
-/** The branch is merged into its base by now, so it goes. */
-function deleteMerged(branch: string, base: string): void {
+function forceDeleteMergedBranch(branch: string, base: string): void {
   capture('git', ['branch', '-D', branch]);
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
 }
 
-/** Merges the branch into its base, then runs the project's after-merge hooks (a slow-test report, say). */
 async function mergeBeforeRemoval(project: Project, finishing: Finish & { base: string }): Promise<void> {
   const { branch, base, target } = finishing;
-  // Read before the merge, which moves the merge-base up to the branch tip.
-  const forkedAt = forkDate(branch, base, project.root);
+  const forkedAt = forkDateBeforeMerge(branch, base, project.root);
   try {
     const result = await mergeIntoBase(branch, base, {
       cwd: project.root,
@@ -95,7 +87,6 @@ function removeCheckout(project: Project, target: string, branch: string): void 
   }
 }
 
-/** The branch being finished, its base (null for the config's base branch) and its folder. */
 interface Finish {
   branch: string;
   base: string | null;
@@ -109,28 +100,22 @@ async function finish(
   const target = worktreePath(project, branch);
   const hook = { branch, base, worktree: target, forkedAt: null };
   if (insideWorktree(target)) fail(`run this from the main checkout, not from inside ${target}`);
-  if (base === null) refuseUnpushedBase(project);
-  // Merged before anything is removed, so a failure leaves the worktree and branch intact.
+  if (base === null) refuseUnpushedBaseBeforeAnyRemoval(project);
   else await mergeBeforeRemoval(project, { branch, base, target });
-  // Every refusing guard has passed; stopping processes comes last, just before removal.
   if (!runHooks(project, project.config.beforeRemove, hook))
     fail('a hook before the removal failed; nothing was removed');
-  refuseWhileBusy(target, kill);
+  refuseWhileBusyLastBeforeRemoval(target, kill);
   removeCheckout(project, target, branch);
   console.log(`✔ removed ${target}`);
   runAfter(project, project.config.afterRemove, hook);
   if (base !== null) {
-    deleteMerged(branch, base);
+    forceDeleteMergedBranch(branch, base);
     return;
   }
   deleteBranch(branch);
   syncBase(project);
 }
 
-/**
- * Fetches the remote, then merges its base branch (or the --base branch) into the current worktree's branch, holding
- * that branch's merge lock, so a `done --base` into this branch waits instead of merging alongside.
- */
 async function sync(project: Project, base: string | null): Promise<void> {
   const { baseBranch, remote } = project.config;
   const branch = capture('git', ['branch', '--show-current']);
@@ -138,22 +123,20 @@ async function sync(project: Project, base: string | null): Promise<void> {
   const plan = planSync({ branch, base, dirty, baseBranch, remote });
   if ('error' in plan) fail(plan.error);
   stream('git', ['fetch', remote]);
-  // Fails only once the lock is released: process.exit inside it would skip the release.
-  const merged = await withMergeLock(
+  const mergedReportedAfterLockRelease = await withMergeLock(
     branch,
     { cwd: process.cwd(), log: console.log, withLock: project.withLock },
     () => spawnSync('git', ['merge', plan.target], { stdio: 'inherit' }).status === 0,
   );
-  if (!merged) fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
+  if (!mergedReportedAfterLockRelease)
+    fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
   console.log(`✔ ${branch} merged with ${plan.target}`);
 }
 
-/** Whether a local branch of that name exists. */
 function localBranchExists(branch: string): boolean {
   return git(process.cwd(), ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
 }
 
-/** `drive worktree <argv>`. */
 export async function runWorktree(argv: readonly string[]): Promise<void> {
   const project = await loadProject();
   const args = parseArgs(argv, project.config.invoke);

@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { anchorIndex, dockHeights, falloff, MIN_ROW, pointerIndex, REACH, restHeights } from './attention-dock.pure';
+import {
+  anchorIndex,
+  dockHeights,
+  falloff,
+  MIN_ROW_PIXELS,
+  pointerIndex,
+  REACH,
+  restHeights,
+} from './attention-dock.pure';
 
 const sum = (values: readonly number[]) => values.reduce((a, b) => a + b, 0);
 const UNITS = [15, 4, 1, 2, 10, 3, 2, 4, 2, 2, 6, 4, 2, 4, 2, 1, 3, 3, 6, 9, 15];
@@ -53,7 +61,7 @@ describe('success cases', () => {
     // ASSERT
     expect(edges).toEqual(edges.map(() => FULL));
     expect(Math.max(...rest.slice(edge, -edge))).toBeLessThanOrEqual(FULL);
-    expect(Math.min(...rest.slice(edge, -edge))).toBeGreaterThanOrEqual(MIN_ROW);
+    expect(Math.min(...rest.slice(edge, -edge))).toBeGreaterThanOrEqual(MIN_ROW_PIXELS);
     expect(near(sum(rest), total)).toBe(true);
   });
 
@@ -132,8 +140,8 @@ describe('failure cases', () => {
     const rest = restHeights(units, { max: total, natural: FULL });
     const docked = dockHeights(rest, 0, FULL);
     // ASSERT
-    expect(Math.min(...rest)).toBeGreaterThanOrEqual(MIN_ROW);
-    expect(Math.min(...docked)).toBeGreaterThanOrEqual(MIN_ROW - EPS);
+    expect(Math.min(...rest)).toBeGreaterThanOrEqual(MIN_ROW_PIXELS);
+    expect(Math.min(...docked)).toBeGreaterThanOrEqual(MIN_ROW_PIXELS - EPS);
     expect(near(sum(rest), total)).toBe(true);
   });
 

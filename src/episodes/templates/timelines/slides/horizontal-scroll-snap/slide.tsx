@@ -4,8 +4,6 @@ import { HorizontalScrollSnap } from './horizontal-scroll-snap.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Timeline as a horizontal story: a snapping track of tall cards wider than the Slide, with a progress bar and
-// previous/next below. Scroll and snap are native CSS; the widget only follows the position.
 export const horizontalScrollSnap = slide({
   slug: 'horizontal-scroll-snap',
   messages: { en, de },

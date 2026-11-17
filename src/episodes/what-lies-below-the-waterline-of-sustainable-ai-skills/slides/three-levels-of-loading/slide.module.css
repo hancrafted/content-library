@@ -1,17 +1,5 @@
-/*
- * The Slide's token file: the control room lifted from the approved Spec's Option 4b (feedback 3, decision 46), its
- * wall, floor, window, shelf, cards, side table and the lamp's light, with the Spec's own light and dark values (FE-011;
- * dark mode is tuned later). `--info` colours only the arm preset, as the shared robot's hull; `--human` and `--ai` stay for
- * their meanings.
- *
- * Motion (`motion: local`, one emphasis): a soft light moves left to right in loading order, the halo on the shelf with
- * card 1, then on the propped card with card 2, then the ceiling lamp switches on over the sleeve and card 3 keeps its
- * ring. It plays once when the Slide's mount turns `[data-zone='active']`; the rest state is the end state, so reduced
- * motion shows the lamp on and card 3 ringed.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .scene {
   --halo: oklch(0.97 0.08 200 / 0.38);
   --shelf-shade: oklch(0.42 0.05 55);
@@ -261,7 +249,6 @@
   position: relative;
 }
 
-/* The level's ring: drawn once, shown and hidden by opacity alone (decision 19). */
 .level::after {
   position: absolute;
   inset: -4px;

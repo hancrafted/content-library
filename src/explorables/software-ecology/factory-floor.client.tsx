@@ -1,5 +1,5 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
@@ -16,13 +16,6 @@ import type { WordsIn } from './use-case-words.pure.ts';
 import type { FactoryView } from './use-factory.ts';
 import { WorkCenterCard } from './work-center-card';
 
-/*
- * The floor of the stage, the cards' layer: in the factory every work center as a station on the line, in the roles
- * state every card at its factory cell with the cartoon tiles in the empty ones (design-ADR 0024 §13). Rendered by
- * the client parent; a card click goes up through `onCard`.
- */
-
-/** Context targets and markers a Slide places, by spot (see `SoftwareEcologyClientProps`). */
 export type Spots<T> = Readonly<Partial<Record<string, T>>>;
 
 const spotsFor = <T,>(spots: Spots<T> | undefined, prefix: string): Spots<T> =>
@@ -32,20 +25,17 @@ const spotsFor = <T,>(spots: Spots<T> | undefined, prefix: string): Spots<T> =>
       .map(([k, v]) => [k.slice(prefix.length), v]),
   );
 
-/** A Slide's Context targets and markers by spot, as the client parent receives them. */
 export interface SpotProps {
   readonly targets?: Spots<TargetProps>;
   readonly markers?: Spots<ReactNode>;
 }
 
-/** Each card's own Context targets, once per run, so a memoised card redraws only when its readout changes. */
 const useCardSpots = (cards: readonly CardPart[], spots: SpotProps) =>
   useMemo(
     () => Object.fromEntries(cards.map((c) => [c.id, { targets: spotsFor(spots.targets, `${c.id}:`) }])),
     [cards, spots.targets],
   );
 
-/** A belt's Context target, where its label sits; the floor draws no marker (feedback 10). */
 function BeltSpots({ belts, spots }: { belts: readonly BeltPart[]; spots: SpotProps }) {
   return belts.map((b) => {
     const t = spots.targets?.[`belt:${b.key}`];
@@ -61,11 +51,8 @@ export interface FloorProps {
   readonly words: Words;
   readonly spots: SpotProps;
   readonly onCard: (id: string, shift: boolean) => void;
-  /** The card whose dashboard is open. */
   readonly open?: string | null;
-  /** The card a tour caption points at. */
   readonly toured?: string;
-  /** The work centers picked for the compare stream. */
   readonly picked?: readonly string[];
 }
 
@@ -92,7 +79,6 @@ function CustomerStation(p: FloorProps) {
   );
 }
 
-/** The factory view: the Customer and every work center as stations on the line. */
 function StationCards(p: FloorProps) {
   const own = useCardSpots(p.cards, p.spots);
   return (
@@ -122,14 +108,11 @@ function StationCards(p: FloorProps) {
   );
 }
 
-/** The targets a station places on its rack or signs, for its cartoon card. */
 const stationTargets = (spots: SpotProps, id: string): TargetProps[] =>
   Object.entries(spotsFor(spots.targets, `${id}:`)).flatMap(([k, t]) => (k !== 'card' && t ? [t] : []));
 
-/** A card's own spot: the Customer's, or `<id>:card`. */
 const cardSpot = (c: CartoonCardPart) => (c.kind === 'customer' ? 'customer' : `${c.id}:card`);
 
-/** The Context targets of a work center the roles state does not draw (Quality assurance): hidden, so each still resolves once. */
 function HiddenTargets({ ids, spots }: { ids: readonly string[]; spots: SpotProps }) {
   return ids.flatMap((id) =>
     [spots.targets?.[`${id}:card`], ...stationTargets(spots, id)].flatMap((t) =>
@@ -138,7 +121,6 @@ function HiddenTargets({ ids, spots }: { ids: readonly string[]; spots: SpotProp
   );
 }
 
-/** The roles state: every card at its factory cell, the cartoon tiles in the empty ones. */
 function CartoonCards(p: FloorProps) {
   const m = p.f.run.topology,
     words = p.words.cartoon;
@@ -164,7 +146,6 @@ function CartoonCards(p: FloorProps) {
   );
 }
 
-/** The station cards stay handler-free views: the floor hears their clicks and Enter or Space on a focused card. */
 const stationOf = (e: { target: EventTarget }) =>
   (e.target as Element).closest<HTMLElement>('[data-id][role="button"]');
 

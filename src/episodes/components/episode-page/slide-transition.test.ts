@@ -5,13 +5,6 @@ import { describe, expect, it } from 'vitest';
 import type { ResolvedSlideTransition } from '../slide-master/slide-presentation';
 import { SlideTransition } from './slide-transition';
 
-/*
- * The outgoing Slide's trailing edge as the server renders it (docs/features/slide-transitions.md). The Iceberg
- * style's `bubbles` edge is a filter-free wave front painted in the incoming Slide's surface; its faceted bubbles are
- * drawn by the browser once the edge is about to play, never written into the page. Every other effect keeps its
- * filtered ink.
- */
-
 const edge = (effect: ResolvedSlideTransition['declaration']['effect']): ResolvedSlideTransition => ({
   id: `intro->${effect}`,
   outgoing: 'intro',

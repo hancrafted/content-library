@@ -4,23 +4,30 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+function dropGitVariablesACommitHookExports(): void {
+  for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+}
+dropGitVariablesACommitHookExports();
 
 const CLI = path.join(import.meta.dirname, 'drive.ts');
 
 const git = (cwd: string, ...args: string[]): string =>
-  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
+  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+    cwd,
+    encoding: 'utf8',
+  }).trim();
 
 const guard = (cwd: string, ...args: string[]) =>
-  spawnSync(process.execPath, [CLI, 'guard', ...args], { cwd, encoding: 'utf8' });
+  spawnSync(process.execPath, [CLI, 'guard', ...args], {
+    cwd,
+    encoding: 'utf8',
+  });
 
 const put = (root: string, file: string, text: string) => {
   mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
   writeFileSync(path.join(root, file), text);
 };
 
-/** A throwaway repo on `main` whose config guards glossaries and feature docs. */
 function repo(): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-guard-')));
   git(root, 'init', '-q', '-b', 'main');

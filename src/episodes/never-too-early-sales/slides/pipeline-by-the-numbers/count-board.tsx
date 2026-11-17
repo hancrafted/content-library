@@ -6,7 +6,6 @@ import styles from './pipeline-by-the-numbers.module.css';
 interface CountNote {
   name: string;
   state?: string;
-  /** Written amount of the signed deal; marks the note as revenue. */
   amount?: string;
 }
 
@@ -15,40 +14,28 @@ interface CountStage {
   label: string;
   duration: string;
   notes: readonly CountNote[];
-  /** The badge between this lane and the next, e.g. `3:1`. */
   ratioToNext?: string;
-  /** Context markers beside the lane's pill. */
   markers?: ReactNode;
-  /** A Context marker under the badge to the next lane. */
   ratioMarker?: ReactNode;
 }
 
 interface CountBoardProps {
   stages: readonly CountStage[];
   total: { ratio: string; caption: ReactNode };
-  /** Under the one deal: the opportunities that did not close. */
   others: string;
   targets: { opportunity: TargetProps; ratioOppDeal: TargetProps };
 }
 
-/** Lane widths in board order: Lead half, Opportunity a third, Deal a sixth, once the board is wide enough. */
 const BASIS: Record<CountStage['id'], string> = {
   lead: '@4xl:basis-1/2',
   opportunity: '@4xl:basis-1/3',
   deal: '@4xl:basis-1/6',
 };
 
-/** Paper tilt cycles note by note, so the board reads as hand-pinned. */
 const TILT = ['-rotate-2', 'rotate-1', 'rotate-2', '-rotate-1', 'rotate-1', '-rotate-2', 'rotate-1', '-rotate-1'];
 
-/** Pill over a lane: dark on the board's paper. */
 const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background';
 
-/**
- * The count board: 27 named notes in Lead, nine in Opportunity and one revenue note in Deal, under the primary 27:1
- * pill and its bracket. Lanes sit side by side once the board is wide enough and stack below that; pointing at a lane
- * dims the others. A server part with plain props.
- */
 export function CountBoard({ stages, total, others, targets }: CountBoardProps) {
   return (
     <div className="@container flex flex-col gap-6">
@@ -75,7 +62,6 @@ export function CountBoard({ stages, total, others, targets }: CountBoardProps) 
   );
 }
 
-/** The one thing to look at: the 27:1 pill over a primary bracket spanning the whole board. */
 function TotalBracket({ ratio, caption }: CountBoardProps['total']) {
   return (
     <div className="flex flex-col items-center gap-1">
@@ -97,7 +83,6 @@ function TotalBracket({ ratio, caption }: CountBoardProps['total']) {
   );
 }
 
-/** The board: a muted, inset surface with a dot pattern. */
 function BoardSurface({ children }: { children: ReactNode }) {
   const dots = `count-dots-${useId()}`;
   return (
@@ -115,7 +100,6 @@ function BoardSurface({ children }: { children: ReactNode }) {
   );
 }
 
-/** The ratio badge and arrow between two lanes; the arrow turns down when the lanes stack. */
 function RatioBadge({ ratio, target, marker }: { ratio: string; target?: TargetProps; marker?: ReactNode }) {
   return (
     <div {...target} className="flex shrink-0 items-center justify-center gap-1 @4xl:flex-col">
@@ -130,7 +114,6 @@ function RatioBadge({ ratio, target, marker }: { ratio: string; target?: TargetP
   );
 }
 
-/** One lane: its pill and duration, then its notes. Deal's duration sits under its pill, as its lane is narrow. */
 function Lane({ stage, target, children }: { stage: CountStage; target?: TargetProps; children: ReactNode }) {
   const duration = <span className="font-mono text-caption text-muted-foreground">{stage.duration}</span>;
   return (
@@ -161,7 +144,6 @@ function LaneNotes({ stage, others }: { stage: CountStage; others: string }) {
   return <DealNotes notes={stage.notes} others={others} />;
 }
 
-/** The 27 names. */
 function LeadNotes({ notes }: { notes: readonly CountNote[] }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-2 text-caption font-medium text-foreground @4xl:grid-cols-5">
@@ -180,7 +162,6 @@ function LeadNotes({ notes }: { notes: readonly CountNote[] }) {
   );
 }
 
-/** The nine that became opportunities. */
 function OpportunityNotes({ notes }: { notes: readonly CountNote[] }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-2 text-caption text-foreground @4xl:grid-cols-3">
@@ -198,7 +179,6 @@ function OpportunityNotes({ notes }: { notes: readonly CountNote[] }) {
   );
 }
 
-/** The one signed deal, in the revenue tint, and the rest still talking or lost. */
 function DealNotes({ notes, others }: { notes: readonly CountNote[]; others: string }) {
   return (
     <div className="my-auto flex flex-col gap-3">

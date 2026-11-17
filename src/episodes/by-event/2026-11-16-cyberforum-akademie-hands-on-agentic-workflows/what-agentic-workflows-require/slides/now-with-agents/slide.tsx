@@ -6,7 +6,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { SpeedCard } from './speed-card';
 
-/** Each card, the half of the goal its seam failure breaks, in board order: the same places as on Slide 1. */
 const CARDS = [
   { slug: 'activities', breaks: 'together' },
   { slug: 'travel', breaks: 'safely' },
@@ -16,7 +15,6 @@ const CARDS = [
 
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
-/** Each line of what no agent was told, and the Speaker note its Context marker opens. */
 const CONTEXT = [
   { slug: 'public-text', note: 'a-model-can-learn-from-public-text-alone' },
   { slug: 'own-talk', note: 'customer-conversations-are-not-training-data' },
@@ -24,11 +22,6 @@ const CONTEXT = [
   { slug: 'with-the-task', note: 'the-context-must-be-supplied' },
 ] as const;
 
-/*
- * "Now with agents" (Spec Option 2a): Slide 1's sum replayed, an agent on every card, each stamped 2 min, the same four
- * failures in the same places in the compact card form. Beside it the speed card, the one `primary` fill, and what no
- * agent was told, one Context marker per line. No motion: the stamps and failures show at rest.
- */
 export const nowWithAgents = slide({
   slug: 'now-with-agents',
   messages: { en, de },

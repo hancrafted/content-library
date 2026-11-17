@@ -14,22 +14,10 @@ const ANTHROPIC_AGENTS = {
   url: 'https://www.anthropic.com/engineering/building-effective-agents',
 };
 
-/**
- * The Workflow the Explorable runs. The summer-party Workflow stands in for the quiz Workflow, whose stages it shares
- * (Plan, Requirements, Research, Page); the Slide swaps this one value when the quiz Workflow lands.
- */
-const WORKFLOW: WorkflowId = 'summer-party';
+const SUMMER_PARTY_WORKFLOW_STANDING_IN_FOR_QUIZ_WORKFLOW: WorkflowId = 'summer-party';
 
-/** A handoff between two stages, keyed as its contract's words are. */
 type Handoff = 'planRequirements' | 'requirementsResearch' | 'researchPage';
 
-/**
- * "From article to quiz" (Spec Option 13c): the human-in-the-loop Explorable full width in its own look, its Stages view
- * at Chat level with Demo mode on. Each stage carries its level as the shared oversight pill, and a contract card sits
- * after each stage it hands off from. Four pins mark the parts that show each step: the Plan level (1), the first
- * contract (2), the goal (3) and the Page stage's marks (4). The steps sit below as the legend. Keeps `basic-page` and
- * `motion: none`.
- */
 export const fromArticleToQuiz = slide({
   slug: 'from-article-to-quiz',
   messages: { en, de },
@@ -43,7 +31,6 @@ export const fromArticleToQuiz = slide({
   content: ({ t, locale, Marker, target }) => {
     const level = (key: 'in' | 'on') => <OversightPill label={t(`levels.${key}`)} />;
     const terms = { receives: t('terms.receives'), delivers: t('terms.delivers'), checkedBy: t('terms.checkedBy') };
-    /** The contract card of a handoff, set after the stage it leaves; the first carries pin 2. */
     const contract = (handoff: Handoff, pin?: 2) => (
       <div className="relative">
         <ContractCard
@@ -65,7 +52,7 @@ export const fromArticleToQuiz = slide({
             <span data-quiz-goal>{t('goal')}</span>
           </p>
           <HumanInTheLoop
-            workflow={WORKFLOW}
+            workflow={SUMMER_PARTY_WORKFLOW_STANDING_IN_FOR_QUIZ_WORKFLOW}
             locale={locale}
             view="stages"
             diagram={{

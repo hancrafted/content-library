@@ -6,14 +6,12 @@ import en from './i18n/en.json';
 
 type Tone = 'ai' | 'info' | 'brand-accent';
 
-/** The three announced terms, as keys of `pairs`: each tone tints its arrow, its landing card and its icon. Add or drop a pair in both Translation files. */
 const PAIRS = [
   { key: 'first', tone: 'ai' },
   { key: 'second', tone: 'info' },
   { key: 'third', tone: 'brand-accent' },
 ] as const satisfies readonly { key: string; tone: Tone }[];
 
-/** What a tone looks like, spelled out so Tailwind finds each class: the arrow, the landing card. */
 const LOOK: Record<Tone, { arrow: string; card: string }> = {
   ai: { arrow: 'stroke-ai', card: 'border-ai/60 border-l-ai bg-ai/20' },
   info: { arrow: 'stroke-(--info)', card: 'border-(--info)/50 border-l-(--info) bg-(--info)/15' },
@@ -23,7 +21,6 @@ const LOOK: Record<Tone, { arrow: string; card: string }> = {
   },
 };
 
-/** One small drawing per pair, in its tone: a network, a stack of pages, a play button. */
 const ICONS: Record<(typeof PAIRS)[number]['key'], ReactNode> = {
   first: (
     <svg viewBox="0 0 32 32" className="size-10 flex-none" aria-hidden="true">
@@ -50,7 +47,6 @@ const ICONS: Record<(typeof PAIRS)[number]['key'], ReactNode> = {
   ),
 };
 
-// What the session covers, as a mapping read left to right: each announced term against where it lands. The Slide header shows the title and caption; the Scene holds the mapping.
 export const inScope = slide({
   slug: 'in-scope',
   messages: { en, de },

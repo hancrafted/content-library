@@ -1,8 +1,3 @@
-// `node skills/author-hitl-workflow/scripts/parse-debug-footer.ts <reply.md> [<en.yml> <de.yml>]`: reads the
-// `[hitl-debug]` footer a viewer's pasted reply ends with and prints where it came from as JSON: the Workflow, stage,
-// job, round, step, level, demo mode, locale and source hash. `changed` says whether the Workflow pair (by default the
-// repo's `<id>.en.yml` and `<id>.de.yml`) has changed since the reply; it is left out for an uploaded Workflow.
-// Exits 1 when the reply has no readable footer.
 import { existsSync, readFileSync } from 'node:fs';
 import { parseDebugFooter, sourceOf } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
 

@@ -4,11 +4,6 @@ import { drawFigure, facetsOf, partIds, POSES, type FigureDrawing } from './pose
 import type { Preset } from './preset';
 import { aiAgent } from './shared-presets';
 
-/*
- * One body plan, every preset in every pose: `drawFigure` maps a preset, a pose and a mood to the facets a Character
- * draws, the head anchor its emote sits at, and the pivots its motions turn on.
- */
-
 const officer: Preset = {
   kind: 'human',
   build: 'slim',

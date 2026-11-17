@@ -1,4 +1,3 @@
-/** Byte positions include the buffered tail; only complete newline-terminated records are decoded. */
 export function createLogStream() {
   let offset = 0;
   let tail = new Uint8Array();

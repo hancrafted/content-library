@@ -2,10 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { frontmatterValue } from './staging-file.pure.ts';
 import { approveText, parseApproveArgs } from './verified.pure.ts';
 
-/*
- * The `skills/new-episode/scripts/approve.ts` command line and the entry it appends; the gate tiers are tested in src/pipeline/lib/staging-file.pure.test.ts.
- */
-
 const GENERATED = '2026-10-12T09:00:00Z';
 const HAN = { by: 'human:han', at: '2026-10-12T09:30:00Z' };
 

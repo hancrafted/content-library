@@ -1,10 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { catalogWordsFor } from './software-ecology-data';
 import type { Bundle, Preset } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 import { beatCaption } from './use-case-words.pure.ts';
-
-/* A beat's caption in the tour box: its own caption line, else Han's claim the beat names (design-ADR 0024 §20). */
 
 const PROBE: Preset = {
   id: 'probe',

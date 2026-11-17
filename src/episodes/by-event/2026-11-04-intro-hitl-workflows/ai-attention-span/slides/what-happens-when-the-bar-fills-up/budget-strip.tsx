@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 export interface BudgetStripProps {
   readonly firstKicker: string;
-  /** The first message's budget sentence, its figure set off by the Slide. */
   readonly first: ReactNode;
   readonly planKicker: string;
   readonly plan: ReactNode;
@@ -12,12 +11,10 @@ export interface BudgetStripProps {
   readonly caveat: ReactNode;
 }
 
-/** A budget figure: the number the reader compares across the arrow. */
 export function BudgetFigure({ children }: { readonly children: ReactNode }) {
   return <b className="rounded bg-(--warning)/25 px-1 font-semibold whitespace-nowrap">{children}</b>;
 }
 
-/** The arrow from the faded budget to the plan: dashed, pointing down on a phone and right from `lg`. */
 function Arrow() {
   return (
     <div className="flex items-center justify-center lg:col-span-1">
@@ -41,11 +38,6 @@ function Arrow() {
   );
 }
 
-/**
- * The budget against the plan, under the cornerstone: the first message's budget in a dashed card (faded, the AI may
- * fill it), an arrow, the plan's total with the "forgotten" chip, and a tray naming why the budget got little
- * attention and what the studies measure.
- */
 export function BudgetStrip(props: BudgetStripProps) {
   return (
     <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">

@@ -1,37 +1,25 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-011 — Design Tokens: the checks the class-string lint cannot see. Raw values in CSS, in style objects and
-// SVG attributes, a Slide token file that shadows a global token or lacks a dark value, an Episode selector in the
-// global stylesheet, and a dead entry on the legacy list. Each check is one rule, A1..A6 in the ticket.
-// Self-contained by design: archgate forbids imports between rules files.
-
 const LEGACY_FILE = 'src/shared/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
-// Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` and a pool Slide's under
-// `episodes/slide-pool/<slide>/` too.
 const SLIDE_MODULE_GLOBS = ['src/episodes/**/slides/**/*.module.css', 'src/episodes/slide-pool/**/*.module.css'];
-// The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
-// site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
-// token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.
-const EDITOR_PANEL_MODULE = 'src/shared/components/design-system-token-editor/token-panel.module.css';
+// decision: FE-011 §2
+const TOKEN_EDITOR_PANEL_FIXED_PALETTE_MODULE =
+  'src/shared/components/design-system-token-editor/token-panel.module.css';
 const CODE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 const CSS_GLOB = 'src/**/*.css';
 
-// Tests assert on literal values (a contrast table, a fixture); they are not shipped styling.
-const TEST_FILE_RE = /\.(?:test|spec)\.tsx?$/;
+const LITERAL_ASSERTING_TEST_FILE_RE = /\.(?:test|spec)\.tsx?$/;
 
-// FE-011 §3.5: two relative sizes stay allowed, one file each.
+// decision: FE-011 §3.5
 const RELATIVE_SIZE_ALLOWED: Record<string, string> = {
   'src/shared/page-chrome/context-drawer/slide-notes.tsx': '0.7em',
   'src/episodes/components/slide-master/rich-tags.tsx': '0.9em',
 };
 
-// A hex colour has 3, 4, 6 or 8 digits. "Invoice #0042" has four, so a bare hex is never enough: it must sit where a
-// colour sits (alone in a string, in a function or list argument, or after a colour-ish property) — see CODE_COLOUR_RE.
 const HEX = '#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z_-])';
 const COLOUR_FN = String.raw`\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb)\(\s*[-+.\d]`;
-// The full CSS named-colour list (`transparent`, `currentColor` and `inherit` are not colours and stay allowed).
-const NAMED_COLOURS = [
+const NAMED_COLOURS_EXCLUDING_TRANSPARENT_CURRENTCOLOR_AND_INHERIT = [
   'aliceblue',
   'antiquewhite',
   'aqua',
@@ -181,37 +169,35 @@ const NAMED_COLOURS = [
   'yellow',
   'yellowgreen',
 ];
-const NAMED = NAMED_COLOURS.join('|');
+const NAMED = NAMED_COLOURS_EXCLUDING_TRANSPARENT_CURRENTCOLOR_AND_INHERIT.join('|');
 const COLOUR_PROP = String.raw`(?:color|fill|stroke|background(?:Color)?|floodColor|stopColor|border(?:Color)?|outline(?:Color)?|boxShadow|textShadow)`;
 
-// In a CSS value, a `#` can only be a colour, so the bare hex is enough there.
-const CSS_COLOUR_RE = new RegExp(`${HEX}|${COLOUR_FN}`);
-// A named colour is a value token: not part of an identifier (`red-pulse`, `.white`, `--black`), not a function name
-// (`tan(`), not inside a string or `url()`. Custom-property names after `var(` are blanked first.
-const NAMED_RE = new RegExp(String.raw`(?<![\w#.-])(?:${NAMED})(?![\w-]|\s*\()`, 'i');
+const BARE_HEX_OR_COLOUR_FUNCTION_IN_CSS_VALUE_RE = new RegExp(`${HEX}|${COLOUR_FN}`);
+const NAMED_COLOUR_TOKEN_NOT_IDENTIFIER_FUNCTION_STRING_OR_URL_RE = new RegExp(
+  String.raw`(?<![\w#.-])(?:${NAMED})(?![\w-]|\s*\()`,
+  'i',
+);
 
-/** True when a CSS value holds a raw colour: hex, colour function, or a CSS named colour at any depth (color-mix too). */
 function cssValueHasColour(value: string): boolean {
-  if (CSS_COLOUR_RE.test(value)) return true;
+  if (BARE_HEX_OR_COLOUR_FUNCTION_IN_CSS_VALUE_RE.test(value)) return true;
   const bare = value
     .replace(/(['"])(?:(?!\1).)*\1/g, '""')
     .replace(/url\([^)]*\)/gi, 'url()')
     .replace(/var\(\s*--[\w-]+/gi, 'var(');
-  return NAMED_RE.test(bare);
+  return NAMED_COLOUR_TOKEN_NOT_IDENTIFIER_FUNCTION_STRING_OR_URL_RE.test(bare);
 }
 const CODE_COLOUR_RES = [
-  new RegExp(`(['"\`])${HEX}\\1`), // fill="#0af"
-  new RegExp(String.raw`[(,]\s*${HEX}`), // linear-gradient(#fff, #000)
-  new RegExp(String.raw`\[${HEX}\]`), // text-[#ff0000]
-  new RegExp(COLOUR_FN), // rgba(10, 14, 26, 0.12)
-  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"\`][^'"\`]*${HEX}`), // color: 'x #fff'
-  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"](?:${NAMED})['"]`, 'i'), // color: 'red', fill="white"
-  new RegExp(String.raw`\b(?:color-mix|[a-z-]*gradient)\([^)]*(?<![\w#.-])(?:${NAMED})(?![\w-])`, 'i'), // 'color-mix(in oklab, black 80%, white)'
+  new RegExp(`(['"\`])${HEX}\\1`),
+  new RegExp(String.raw`[(,]\s*${HEX}`),
+  new RegExp(String.raw`\[${HEX}\]`),
+  new RegExp(COLOUR_FN),
+  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"\`][^'"\`]*${HEX}`),
+  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"](?:${NAMED})['"]`, 'i'),
+  new RegExp(String.raw`\b(?:color-mix|[a-z-]*gradient)\([^)]*(?<![\w#.-])(?:${NAMED})(?![\w-])`, 'i'),
 ];
 const CODE_FONT_RE = /\b(?:fontSize|fontWeight|fontFamily)\s*[:=]|\bfont-(?:size|weight|family)\s*:/;
 const CSS_FONT_RE = /(?:^|[;{\s])font-(?:size|weight|family)\s*:/;
 
-/** Blank out comments, keeping every newline and offset so a match maps back to its line. */
 function stripComments(source: string, kind: 'css' | 'code'): string {
   const blank = (match: string) => match.replace(/[^\n]/g, ' ');
   const stripped = source.replace(/\/\*[\s\S]*?\*\//g, blank);
@@ -229,7 +215,6 @@ interface Declaration {
   line: number;
 }
 
-/** Every `property: value` of a stylesheet with the selector of the innermost rule that holds it. */
 function declarations(css: string): Declaration[] {
   const found: Declaration[] = [];
   for (const rule of css.matchAll(/([^{};]+)\{([^{}]*)\}/g)) {
@@ -250,7 +235,7 @@ const isRootOrDark = (selector: string) => /^(?::root|\.dark)$/.test(selector);
 const isDarkSelector = (selector: string) => selector.includes(':global(.dark)');
 const lightForm = (selector: string) => selector.replace(/:global\(\.dark\)\s*/g, '').trim();
 
-/** Paths matched by the legacy list, which FE-011 §6 exempts from §2–§4. */
+// decision: FE-011 §6
 async function legacyFiles(ctx: RuleContext): Promise<Set<string>> {
   const entry = (await ctx.readJSON(LEGACY_FILE)) as { globs: string[] };
   const matched = await Promise.all(entry.globs.map((glob) => ctx.glob(glob)));
@@ -260,7 +245,7 @@ async function legacyFiles(ctx: RuleContext): Promise<Set<string>> {
 async function governed(ctx: RuleContext, globs: string[]): Promise<string[]> {
   const legacy = await legacyFiles(ctx);
   const all = (await Promise.all(globs.map((glob) => ctx.glob(glob)))).flat();
-  return all.filter((file) => !legacy.has(file) && !TEST_FILE_RE.test(file));
+  return all.filter((file) => !legacy.has(file) && !LITERAL_ASSERTING_TEST_FILE_RE.test(file));
 }
 
 async function slideModules(ctx: RuleContext, extra: string[] = []): Promise<string[]> {
@@ -271,7 +256,6 @@ async function slideModules(ctx: RuleContext, extra: string[] = []): Promise<str
   return files.filter((file) => !legacy.has(file));
 }
 
-/** Names declared on the global palette and theme: `--primary`, `--color-primary`, … */
 async function globalTokenNames(ctx: RuleContext): Promise<Set<string>> {
   const css = stripComments(await ctx.readFile(GLOBALS), 'css');
   return new Set(
@@ -288,14 +272,14 @@ function allowedRelativeSize(file: string, line: string): boolean {
 
 export default {
   rules: {
-    // A1 — §2.1. A raw colour belongs in the global :root/.dark blocks or a Slide token file, nowhere else.
+    // decision: FE-011 §2.1
     'no-raw-colour-in-css': {
       description:
         'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only under :root / .dark in globals.css and in a Slide token file (a CSS module in an Episode Slide folder), plus the token editor panel module. Named colours (black, chocolate, …) count; transparent, currentColor and inherit do not. Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
         const globbed = (await Promise.all(SLIDE_MODULE_GLOBS.map((glob) => ctx.glob(glob)))).flat();
-        const slides = new Set([...globbed, EDITOR_PANEL_MODULE]);
+        const slides = new Set([...globbed, TOKEN_EDITOR_PANEL_FIXED_PALETTE_MODULE]);
         for (const file of await governed(ctx, [CSS_GLOB])) {
           if (slides.has(file)) continue;
           const css = stripComments(await ctx.readFile(file), 'css');
@@ -312,7 +296,8 @@ export default {
       },
     },
 
-    // A2 — §4.1, §4.2. Colour, font size, weight and family are never written in code or in a CSS module.
+    // decision: FE-011 §4.1
+    // decision: FE-011 §4.2
     'no-raw-value-in-code': {
       description:
         'No raw colour, font-size, font-weight or font-family in .ts/.tsx (style objects, SVG attributes, .pure.ts tables) and no font-size, font-weight or font-family in a CSS module. Two relative sizes stay allowed, one file each: the citation marker at 0.7em and inline code at 0.9em. Legacy files and tests are exempt.',
@@ -345,7 +330,7 @@ export default {
       },
     },
 
-    // A3 — §2.2. A Slide token file adds Slide-local names; it never redeclares a global one.
+    // decision: FE-011 §2.2
     'slide-token-no-global-name': {
       description:
         'A Slide token file (a CSS module in an Episode Slide folder) MUST NOT declare a custom property that globals.css already declares (--primary, --machine, …). Legacy files are exempt.',
@@ -366,13 +351,13 @@ export default {
       },
     },
 
-    // A4 — §2.3. Every raw colour in a Slide token file has a value under :global(.dark) for the same selector and property.
+    // decision: FE-011 §2.3
     'slide-token-dark-counterpart': {
       description:
         'Every raw colour a Slide token file (or the token editor panel module) declares MUST have a dark counterpart: the same property on the same selector under :global(.dark). Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
-        for (const file of await slideModules(ctx, [EDITOR_PANEL_MODULE])) {
+        for (const file of await slideModules(ctx, [TOKEN_EDITOR_PANEL_FIXED_PALETTE_MODULE])) {
           const decls = declarations(stripComments(await ctx.readFile(file), 'css'));
           const dark = new Set(
             decls.filter((d) => isDarkSelector(d.selector)).map((d) => `${lightForm(d.selector)}|${d.property}`),
@@ -390,7 +375,7 @@ export default {
       },
     },
 
-    // A5 — §5.1. globals.css holds tokens, not Episode styling.
+    // decision: FE-011 §5.1
     'no-episode-selector-in-globals': {
       description:
         'globals.css MUST NOT hold an Episode selector ([data-episode=…]); Episode styling lives with the Episode.',
@@ -408,7 +393,7 @@ export default {
       },
     },
 
-    // A6 — §6.2. The legacy list only shrinks; an entry that matches no file is dead.
+    // decision: FE-011 §6.2
     'no-dead-legacy-entry': {
       description:
         'Every glob in src/shared/design-system/legacy.json MUST match at least one file. A migrated or deleted file takes its entry with it.',

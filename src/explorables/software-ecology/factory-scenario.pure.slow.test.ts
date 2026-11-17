@@ -1,11 +1,9 @@
+// decision: ARCH-003 §4
+// decision: ARCH-003 §4.4
 import { describe, expect, it } from 'vitest';
 import { AI_AT_ENG, SEEDS, withTour } from './factory-scenario.fixture.ts';
 import { judgeScenario } from './factory-scenario.pure.ts';
 
-/*
- * The slow half of factory-scenario.pure.test.ts: a judge that runs every seed 40 weeks past its beat (seconds). It
- * runs in the slow lane, `npm run test:slow` (ARCH-003-testing §4).
- */
 describe('success cases', () => {
   it('checks settles after the beat’s settings run 40 weeks more', () => {
     // ARRANGE

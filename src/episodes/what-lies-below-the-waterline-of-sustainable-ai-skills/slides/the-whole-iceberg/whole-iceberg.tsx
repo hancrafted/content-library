@@ -15,8 +15,8 @@ import {
   NODES,
   passesAt,
   RISE,
-  RISE_DELAY_MS,
-  RISE_MS,
+  RISE_DELAY_MILLISECONDS,
+  RISE_MILLISECONDS,
   ROBOT_REST_Y,
   ROBOT_START_Y,
   SHIP_X,
@@ -24,10 +24,8 @@ import {
 } from './rise';
 
 const ANCHORS = shipAnchors();
-/** The crew at the ship's scale, seen through the bridge windows. */
 const CREW_SCALE = 0.42;
 const ROBOT_SCALE = 0.8;
-/** The open manual on the foredeck, and where its leader meets the index page in the sky. */
 const MANUAL = { x: SHIP_X + ANCHORS.deck.fore.x - 8, y: WHOLE_DEPTH.waterline + ANCHORS.deck.fore.y };
 const PAGE_EDGE = { x: 600, y: 175 };
 const NODE = 7;
@@ -35,7 +33,6 @@ const HALO = 13;
 
 const diamond = (x: number, y: number, r: number) => `${x},${y - r} ${x + r},${y} ${x},${y + r} ${x - r},${y}`;
 
-/** The dashed trail the robot took up from the seabed, a node at each zone lighting as it passes; the Surface's stays unlit. */
 function RiseTrail() {
   return (
     <g data-rise-trail className={styles.trail}>
@@ -57,16 +54,14 @@ function RiseTrail() {
   );
 }
 
-/**
- * The robot rising on its cable from the seabed to its rest under the A-frame. The cable hangs from the A-frame tip
- * and stretches down to the robot's start, shortening on the robot's clock as the robot rises with its `Travel`.
- */
+const ROBOT_RISE_FROM = `0 ${(RISE / WHOLE_DEPTH.height) * 100}%`;
+
 function RisingRobot() {
   const reach = ROBOT_REST_Y - A_FRAME_Y;
   const clock = {
     '--cable-from': (reach + RISE) / reach,
-    '--rise-duration': `${RISE_MS}ms`,
-    '--rise-delay': `${RISE_DELAY_MS}ms`,
+    '--rise-duration': `${RISE_MILLISECONDS}ms`,
+    '--rise-delay': `${RISE_DELAY_MILLISECONDS}ms`,
   } as CSSProperties;
   return (
     <>
@@ -80,7 +75,7 @@ function RisingRobot() {
         style={clock}
         className={styles.cable}
       />
-      <Travel from={`0 ${(RISE / WHOLE_DEPTH.height) * 100}%`} duration={RISE_MS} delay={RISE_DELAY_MS}>
+      <Travel from={ROBOT_RISE_FROM} duration={RISE_MILLISECONDS} delay={RISE_DELAY_MILLISECONDS}>
         <g transform={`translate(${TRAIL_X} ${ROBOT_REST_Y}) scale(${ROBOT_SCALE})`}>
           <Robot state={robotAt('the-whole-iceberg').state} lamp={false} />
         </g>
@@ -89,7 +84,6 @@ function RisingRobot() {
   );
 }
 
-/** The manual open on the foredeck, the Spec's faceted pages and spine, with a dotted leader up to the index page. */
 function OpenManual() {
   const { x, y } = MANUAL;
   return (
@@ -100,11 +94,6 @@ function OpenManual() {
   );
 }
 
-/**
- * "The whole iceberg" (Option 26a) as one Scene, Surface to Abyss: the ship on the waterline with the captain and the
- * pilot on the bridge, the manual open on the foredeck, the robot rising on its cable from the seabed up the trail to
- * the A-frame, and the whole iceberg to the right. The Slide's words go in `overlay`, on the water at their depths.
- */
 export function WholeIceberg({ label, overlay }: { readonly label: string; readonly overlay: ReactNode }) {
   return (
     <WholeDepthScene label={label} overlay={overlay} className="@container overflow-hidden rounded-2xl shadow-md">

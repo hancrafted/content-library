@@ -2,12 +2,6 @@ import { useCallback, useEffect, useRef, type Dispatch, type KeyboardEvent, type
 import type { ViewEvent } from './context-state.pure';
 import { revealBubble } from './window-reveal';
 
-/*
- * The parent's side of lighting: the callbacks the parts call, a click outside the parts that unpins, and Escape that
- * clears. Hovering a part lights it and clicking pins it (the parts report it, see use-lighting.ts); lighting is never
- * locked by a Preset.
- */
-
 interface Host {
   readonly hover: string | null;
   readonly pinned: string | null;
@@ -15,7 +9,6 @@ interface Host {
   readonly root: RefObject<HTMLElement | null>;
 }
 
-/** Unpins when a click lands outside every part, the toolbar and the timeline. */
 function useOutsideClick({ pinned, dispatch, root }: Host) {
   const current = useRef(pinned);
   useEffect(() => {
@@ -40,7 +33,6 @@ export function useWindowEvents(host: Host) {
   useEffect(() => {
     hover.current = host.hover;
   }, [host.hover]);
-  // Stable callbacks: a part that holds them in a memoised item does not redraw because the parent did.
   const onLight = useCallback(
     (key: string | null) => {
       if (key === hover.current) return;

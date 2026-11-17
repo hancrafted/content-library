@@ -1,19 +1,12 @@
 import { producersOf } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * The checks of the order and completeness of a stage's jobs: `needs` ids and cycles, slots that take a same-stage
- * output, a template and an example on every job that hands on an output, the goals and the stage summary. One sentence per problem.
- */
-
-/** The ids that appear more than once, each repeat once. */
 export const dupes = (ids: readonly string[]): string[] => ids.filter((id, at) => ids.indexOf(id) !== at);
 
 const SUMMARY_WORDS = 8;
 
 const wordCount = (text: string): number => text.trim().split(/\s+/).length;
 
-/** Outputs of the other jobs of the stage that `task` does not need: a slot may not take them. */
 export function unneededOutputs(stage: StageDef, task: TaskDef): ReadonlySet<string> {
   const names = new Set<string>();
   for (const job of stage.jobs) {
@@ -40,7 +33,6 @@ function needsProblems(stage: StageDef, task: TaskDef): string[] {
     .map((id) => `Job "${task.id}" needs "${id}", which is not a job of its stage.`);
 }
 
-/** The jobs on a cycle of `needs`, in the order met, or none. */
 function cycleOf(stage: StageDef): string[] {
   const needs = new Map(stage.jobs.map((job) => [job.id, job.needs ?? []]));
   const visit = (id: string, path: readonly string[]): string[] => {
@@ -58,7 +50,6 @@ function cycleOf(stage: StageDef): string[] {
   return [];
 }
 
-/** A job that hands on an output needs a template and an example, and has no doneLabel (only a checkbox job has one). */
 function outputProblems(task: TaskDef): string[] {
   const where = `Task "${task.id}"`;
   if (task.output === undefined) return [];
@@ -71,7 +62,6 @@ function outputProblems(task: TaskDef): string[] {
   ];
 }
 
-/** What each job must carry: the output fields when it hands one on, and the review goal when it has a review. A job with no output is a checkbox job. */
 function jobFieldProblems(task: TaskDef): string[] {
   const reviewGoalMissing = task.review !== undefined && task.goal.review === undefined;
   return [
@@ -98,10 +88,6 @@ export function jobOrderProblems(file: WorkflowFile): string[] {
   });
 }
 
-/**
- * Outputs handed on twice, and gates held twice, by stages of the file as it runs in one mode: the same output or gate
- * may sit on two stages only when they are marked for opposite modes, so the caller passes one mode's file.
- */
 export function singletonProblems(file: WorkflowFile): string[] {
   const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
   const gates = file.stages.flatMap((stage) => (stage.gate === undefined ? [] : [String(stage.gate)]));

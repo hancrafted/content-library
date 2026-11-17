@@ -21,8 +21,8 @@ function key(overrides: Partial<KeyEventLike>): KeyEventLike {
 }
 
 describe('success cases', () => {
-  it('scrolls so the reading line stays as far into the active Slide when the drawer narrows the Slides and they grow', () => {
-    // ARRANGE: the reading line 350 px down sits 850 px into a 2000 px Slide; the content above grows and the Slide to 3000 px.
+  it('scrolls so the reading line stays as far into the active Slide when the drawer narrows the Slides and a 2000 px Slide, its line 350 px down sitting 850 px in, grows to 3000 px', () => {
+    // ARRANGE
     const before = { top: -500, height: 2000 };
     const after = { top: 738, height: 3000 };
     const expected = 1663;
@@ -32,8 +32,8 @@ describe('success cases', () => {
     expect(delta).toBe(expected);
   });
 
-  it('keeps the reading line inside the active Slide near its end when the drawer closes and the Slide shrinks', () => {
-    // ARRANGE: the line sits 1950 px into a 2000 px Slide, which shrinks to 1500 px; it must land 1462.5 px in, not past its end.
+  it('keeps the reading line inside the active Slide near its end when the drawer closes and a 2000 px Slide shrinks to 1500 px with the line 1950 px in, landing 1462.5 px in', () => {
+    // ARRANGE
     const before = { top: -1600, height: 2000 };
     const after = { top: -1600, height: 1500 };
     const expected = -487.5;
@@ -202,8 +202,8 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps the Slide top in place when the Slide starts below the reading line', () => {
-    // ARRANGE: the Slide starts 500 px down, below the line at 350 px, so the reader is at its start, not inside it.
+  it('keeps the Slide top in place when the Slide starts 500 px down, below the line at 350 px, so the reader is at its start, not inside it', () => {
+    // ARRANGE
     const before = { top: 500, height: 900 };
     const after = { top: 780, height: 1400 };
     const expected = 280;

@@ -6,14 +6,8 @@ import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The four Levels, in time order; their words are the Slide's own. */
 const DISCIPLINES = ['prompting', 'agents', 'workflows', 'factory'] as const;
 
-/**
- * The Title slide's hero Scene for the AI capability page (the record's `title`): its own headline and lede, the
- * Explorable hero over a drift of bubbles in which one climbs four tiers and gains a chip at each, and a preview of the
- * four Levels wired down to one language model.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

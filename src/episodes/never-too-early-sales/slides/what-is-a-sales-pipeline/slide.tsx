@@ -5,14 +5,8 @@ import en from './i18n/en.json';
 import { PipelineBoard } from './pipeline-board';
 import styles from './what-is-a-sales-pipeline.module.css';
 
-/** The one signed deal on the board, in whole euros. */
 const DEAL_AMOUNT = 12_000;
 
-/*
- * Funnel, conversion rate and sales cycle as three readings of one drawn pipeline board (Option 7b): the lanes are the
- * funnel, the primary bracket over Lead and Opportunity is the conversion rate, and the arrow under the board is the
- * cycle. A Scene from `SlideFrame` under the Slide header.
- */
 export const whatIsASalesPipeline = slide({
   slug: 'what-is-a-sales-pipeline',
   messages: { en, de },

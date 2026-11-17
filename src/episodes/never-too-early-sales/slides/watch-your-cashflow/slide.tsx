@@ -12,12 +12,6 @@ import en from './i18n/en.json';
 const STARTUP_FUNDING = { slug: 'startup-funding', url: 'https://www.paulgraham.com/startupfunding.html' };
 const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord.html' };
 
-/**
- * The cashflow board, January to April: two months of cash run out in February, March's cost lands on an empty
- * account under a Bankrupt stamp, and the million arrives in April, one month late. Each column's Cash left footer
- * states its balance, so no cash note repeats it. The March lane is ringed and two brackets read the timing; Context
- * markers sit in the March lane, after "Two months of cash" and beside February's Cash left.
- */
 export const watchYourCashflow = slide({
   slug: 'watch-your-cashflow',
   messages: { en, de },
@@ -50,7 +44,6 @@ export const watchYourCashflow = slide({
       { label: t('months.apr'), notes: [null, { kind: 'revenue', amount: 1000000, big: true }, null] },
     ];
     const balances = cashLeft(months);
-    // February's footer states the €0 the board turns on, so it carries the zero-cash target and its marker.
     const zero = {
       target: target('zero-cash')['data-target'],
       marker: <Marker note="default-alive-test" placement="beside" />,

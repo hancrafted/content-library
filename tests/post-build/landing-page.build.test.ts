@@ -26,35 +26,32 @@ describe('landing page post-build structure', () => {
     }
   });
 
-  it.each(LANDING_PAGES)('renders the complete landing structure for locale $locale', ({ url }) => {
-    const $ = getPage(url);
+  it.each(LANDING_PAGES)(
+    'renders the complete landing structure for locale $locale, its identified sections in page order after the id-less hero',
+    ({ url }) => {
+      const $ = getPage(url);
 
-    // Root container
-    expect($('main[data-testid="landing-page"]').length).toBe(1);
+      expect($('main[data-testid="landing-page"]').length).toBe(1);
 
-    // Blurry liquid ink transition filter definition
-    expect($('#ink-edge-liquid').length).toBe(1);
+      expect($('#ink-edge-liquid').length).toBe(1);
 
-    // Services / horizontal rail section
-    expect($('#services').length).toBe(1);
+      expect($('#services').length).toBe(1);
 
-    // All 5 framework slides present in the HTML
-    const desktopSlides = $('#services [data-method="true"] article[data-method-slide]');
-    expect(desktopSlides.length).toBe(5);
+      const desktopSlides = $('#services [data-method="true"] article[data-method-slide]');
+      expect(desktopSlides.length).toBe(5);
 
-    const steps = desktopSlides.map((_, el) => $(el).attr('data-method-slide')).get();
-    expect(steps).toEqual(['01', '02', '03', '04', '05']);
+      const steps = desktopSlides.map((_, el) => $(el).attr('data-method-slide')).get();
+      expect(steps).toEqual(['01', '02', '03', '04', '05']);
 
-    // About remains a destination after the method rail.
-    expect($('#about').length).toBe(1);
-    expect($('#narrative-bridge').length).toBe(0);
+      expect($('#about').length).toBe(1);
+      expect($('#narrative-bridge').length).toBe(0);
 
-    // The identified sections stand in page order, after the id-less hero
-    const sections = $('main > section[id]')
-      .map((_, el) => $(el).attr('id'))
-      .get();
-    expect(sections).toEqual(['episodes', 'services', 'about']);
-  });
+      const sections = $('main > section[id]')
+        .map((_, el) => $(el).attr('id'))
+        .get();
+      expect(sections).toEqual(['episodes', 'services', 'about']);
+    },
+  );
 
   it.each(LANDING_PAGES)('shows every About outcome in a collapsible case summary for $locale', ({ url, locale }) => {
     // ARRANGE

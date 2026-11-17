@@ -7,11 +7,6 @@ import { producersFor, tasksOf, type Producer } from './workflow-outputs.pure.ts
 import { slotSample } from './workflow-sample.pure.ts';
 import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
- * markers, and every sample and example against its template. One sentence per problem.
- */
-
 export function templateProblems(file: WorkflowFile): string[] {
   return Object.entries(file.templates).flatMap(([key, source]) => {
     const read = readTemplate(source);
@@ -23,7 +18,6 @@ export function templateProblems(file: WorkflowFile): string[] {
   });
 }
 
-/** Stage ids and task ids used twice anywhere in the file: a mode never makes two of them the same. */
 export function idProblems(file: WorkflowFile): string[] {
   const tasks = tasksOf(file);
   return [
@@ -32,7 +26,6 @@ export function idProblems(file: WorkflowFile): string[] {
   ];
 }
 
-/** Technique ids used twice in the catalogue, and every reference to an id the catalogue lacks. */
 export function techniqueProblems(file: WorkflowFile): string[] {
   const known = new Set(file.techniques.map((entry) => entry.id));
   const unknown = (where: string, ids: readonly string[] | undefined): string[] =>
@@ -50,7 +43,6 @@ export function techniqueProblems(file: WorkflowFile): string[] {
   ];
 }
 
-/** A sample or example `source` held up to the template `key`. */
 function againstTemplate(
   file: WorkflowFile,
   key: string,
@@ -63,19 +55,16 @@ function againstTemplate(
   return handoffProblems(source, readTemplate(template)).map((problem) => `${what} ${problem}.`);
 }
 
-/** What a slot's samples are held to: the file and task, its template (none for a free input), its marker count. */
 interface SampleBasis {
   readonly file: WorkflowFile;
   readonly task: TaskDef;
   readonly template: string | undefined;
   readonly markers: number;
-  /** `slot` or `review slot`, as the problem names it. */
   readonly noun?: string;
 }
 
 const plural = (count: number, word: string): string => `${count} ${word}${count === 1 ? '' : 's'}`;
 
-/** The entries of a multiple slot's list: their count against its markers, each against the template. */
 function entryProblems(slot: SlotDef, list: readonly string[], basis: SampleBasis): string[] {
   const { file, task, template } = basis;
   const where = `Slot "${slot.id}" of task "${task.id}"`;
@@ -93,7 +82,6 @@ function entryProblems(slot: SlotDef, list: readonly string[], basis: SampleBasi
   );
 }
 
-/** The sample of one slot: a lone text for a single slot, a list of one per marker for a multiple slot. */
 function sampleProblems(slot: SlotDef, basis: SampleBasis): string[] {
   const { file, task, template } = basis;
   const sample = slotSample(file, slot);
@@ -111,7 +99,6 @@ function sampleProblems(slot: SlotDef, basis: SampleBasis): string[] {
   return againstTemplate(file, template, { source: sample, what });
 }
 
-/** The markers a multiple slot has in a task's prompts: the most any runtime's sections number. */
 function markersOf(slot: SlotDef, task: TaskDef, width: number): number {
   const asSlot = { id: slot.id, mode: slot.mode, label: slot.label };
   const widths = new Map([[slot.id, width]]);
@@ -128,7 +115,6 @@ function slotNamed(
   return scope.own.has(slot.id) ? [] : slotNameProblems(slot, task, scope.names.get(slot.id));
 }
 
-/** A slot that carries a sample: the sample against the template of the output it takes, and its marker count. */
 function filledSlotProblems(
   file: WorkflowFile,
   task: TaskDef,
@@ -165,13 +151,11 @@ function doSlotProblems(
   ];
 }
 
-/** A review slot that names no output is a fresh id, and may not reuse one. */
 function clashProblems(slot: SlotDef, task: TaskDef, used: ReadonlySet<string>): string[] {
   const clash = slot.id !== task.output && used.has(slot.id);
   return clash ? [`Review slot "${slot.id}" of task "${task.id}" clashes with another id.`] : [];
 }
 
-/** One review slot: a fresh id may not clash, a named output is taken in the right mode, a sample fits a template. */
 function reviewSlotOf(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<string, Producer>) {
   const used = new Set(tasksOf(file).flatMap((t) => [t.output ?? '', ...t.slots.map((slot) => slot.id)]));
   return (slot: SlotDef): string[] => {
@@ -192,7 +176,6 @@ function reviewSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMa
   return (task.review?.slots ?? []).flatMap(reviewSlotOf(file, task, names));
 }
 
-/** The example of a task: one text, or in a repeated stage a list with one per demo round; each against its template. */
 function exampleProblems(file: WorkflowFile, task: TaskDef, stage: StageDef): string[] {
   const { example } = task.details;
   const where = `The example of task "${task.id}"`;

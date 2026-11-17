@@ -6,7 +6,6 @@ const STROKES = {
   equals: { d: 'M12 30 C 30 28, 50 31, 68 29 M12 52 C 30 50, 50 53, 68 51', stroke: 'stroke-primary' },
 } as const;
 
-/** A marker-drawn plus or equals between the notes; the sentence it stands for is the board's hidden label. */
 export function Operator({ symbol, className }: { symbol: keyof typeof STROKES; className?: string }) {
   const { d, stroke } = STROKES[symbol];
   return (
@@ -16,7 +15,6 @@ export function Operator({ symbol, className }: { symbol: keyof typeof STROKES; 
   );
 }
 
-/** The brace gathering the two insight notes under one pill. */
 export function Brace({ label, className }: { label: string; className?: string }) {
   return (
     <div className={cn('flex-col items-center', className)}>
@@ -34,7 +32,6 @@ export function Brace({ label, className }: { label: string; className?: string 
   );
 }
 
-/** The caveat on the equals: a curved arrow up at it and the note beside. */
 export function MarginNote({ text, className }: { text: ReactNode; className?: string }) {
   return (
     <div className={cn('flex items-start justify-center gap-3 pt-2', className)}>

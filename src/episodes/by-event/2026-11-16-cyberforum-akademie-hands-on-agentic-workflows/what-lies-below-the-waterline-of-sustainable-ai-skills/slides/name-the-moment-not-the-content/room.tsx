@@ -9,22 +9,14 @@ import { CAPTAIN_X, CREW_SCALE, FLOOR, REQUEST_BUBBLE } from './speech.pure';
 const CONSOLE_WIDTH = 92;
 const CONSOLE_X = 225;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
-/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
 const PILOT_REACH = 24;
 
-/** What the captain says in each view: the request in the Chat app, the prompt in the Coding agent. */
 export interface Request {
   readonly chat: string;
   readonly coding: string;
 }
 
-/**
- * The control room on the day of the dive (Option 12a): the captain stands and gestures at the left, saying your
- * request in the shared Character's own bubble (decision 53), the pilot sits at the console facing the index on the
- * wall; no window, since the robot is not this Slide's subject. The captain is drawn once per view and the other view's
- * drawing hides, so the bubble's words follow the page's view. Figures are the shared cast (design-ADR 0025); the walls
- * and floor are this Slide's drawing (`room-art`).
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function ControlRoom({ request }: { readonly request: Request }) {
   return (
     <g>

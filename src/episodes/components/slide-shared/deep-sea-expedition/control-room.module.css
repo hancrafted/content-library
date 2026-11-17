@@ -1,10 +1,4 @@
-/*
- * The control room's palette: the faceted wall, the floor, the window onto the deck at its hour and the wall clock.
- * No raw colour (FE-011): every tone mixes theme-stable tokens (`--on-brand-accent` white, `--overlay` black) with a hue
- * from `--info` (blue) or `--bulb` (warm); the window's sea and day sky are the zone tokens. No meaning colour lends a
- * hue. Facets are lit from the upper left: `lit`, `mid`, `shade`.
- */
-
+/* decision: FE-011 §4 */
 .room {
   --room-lit: color-mix(in oklab, var(--info) 8%, var(--on-brand-accent));
   --room-mid: color-mix(in oklab, var(--info) 16%, var(--on-brand-accent));

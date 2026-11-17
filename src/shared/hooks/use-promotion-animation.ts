@@ -12,7 +12,6 @@ function mountAnimation(element: HTMLElement, animation: RefObject<Timeline | nu
   const active = createPromotionTimeline(element);
   animation.current = active;
   active.setDraining(draining.current);
-  // Resizing during flight must not strand a word at an obsolete caption position.
   window.addEventListener('resize', active.finish);
   window.addEventListener('beforeprint', active.finish);
   const stopVisibility = watchVisibility(element, active);

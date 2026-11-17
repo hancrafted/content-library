@@ -3,24 +3,16 @@ import type { EpisodeId } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { eventPlaylistCards, type PlaylistCard } from './event-playlist.pure';
 
-/** A hand-written stand-in for the card fields an Event's Playlist reads. */
 type Stub = PlaylistCard & { readonly slug: string };
-const linked = (slug: string): Stub => ({
-  slug,
-  route: `/episodes/${slug}`,
-  href: `/episodes/${slug}`,
-});
+const linked = (slug: string): Stub => ({ slug, route: `/episodes/${slug}`, href: `/episodes/${slug}` });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
-/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's EpisodeRef when it has one. */
 const entry = (slug: string, page?: EpisodeRef<EpisodeId>, anchor?: string) => ({
   episode: { slug },
   ...(page === undefined ? {} : { page }),
   ...(anchor === undefined ? {} : { anchor }),
 });
-/** The AXEL seminar presenting the given Episodes, in this order. */
 const axel = (...episodes: ReturnType<typeof entry>[]) =>
   ({ slug: '2026-10-23-axel-agentic-workflow', playlist: { episodes } }) as const;
-/** A card for each Episode, linked to its own page. */
 const linkedCard = (episode: { slug: string }): Stub => linked(episode.slug);
 
 describe('success cases', () => {

@@ -1,10 +1,4 @@
-/*
- * The activity's level move. While it plays (`data-play`, once on the Slide's first `active` and on every mouse enter
- * and keyboard focus) the arrow draws out of the dashed "In" pill and the new pill slides in behind it, as if the
- * pinned check card had pushed the task one level out. The base rules are the end state, which is also what reduced
- * motion shows.
- */
-
+/* decision: docs/adr/0012-slide-header-and-play-once-motion.md */
 .arrow,
 .to {
   display: inline-flex;

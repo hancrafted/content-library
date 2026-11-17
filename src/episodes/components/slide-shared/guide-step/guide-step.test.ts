@@ -4,8 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DoneStrip, MoreHelp, StepDoneBadge } from './guide-step';
 
-/* The step frame's two pieces as the static export renders them: the result strip and the closed help. */
-
 describe('success cases', () => {
   it('renders the done strip with its label and result', () => {
     // ARRANGE
