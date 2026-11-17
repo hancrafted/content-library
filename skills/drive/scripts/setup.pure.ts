@@ -136,6 +136,40 @@ export function parseSetupArgs(args: readonly string[]): SetupOptions | { error:
   return options;
 }
 
+/** The guard command for a hook or CI step: `drive.ts` is the CLI's entry, relative to the repo root. */
+export const guardCommand = (driveEntry: string, against: string | null = null): string =>
+  `node ${driveEntry} guard${against === null ? '' : ` --against ${against}`}`;
+
+/** True when a hook or workflow text already runs the guard. */
+export const runsGuard = (text: string): boolean => /drive\.ts guard\b/.test(text);
+
+/** A commit hook with the guard line added before its other commands; the text itself when it already runs it. */
+export function addGuardToHook(hook: string, command: string): string {
+  if (runsGuard(hook)) return hook;
+  const lines = hook.split('\n');
+  const first = lines.findIndex((line) => line.trim() !== '' && !line.trim().startsWith('#'));
+  lines.splice(first === -1 ? lines.length : first, 0, command);
+  return lines.join('\n').replace(/\n*$/, '\n');
+}
+
+/** A CI workflow that runs the guard against the base branch of a pull request. */
+export function guardWorkflow(command: string, install: readonly string[]): string {
+  return `# Written by \`drive setup\`: Decision docs change only on a decisions/* branch.
+name: Decision docs
+on: pull_request
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+${[...install, command].map((step) => `      - run: ${step}\n`).join('')}`;
+}
+
 export const PROFILES_STUB = `# Drive profiles
 
 Project rules that extend the Profiles the \`/drive\` skill ships: the architect's, which the Orchestrator reasons by,

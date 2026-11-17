@@ -7,14 +7,18 @@ import { CONFIG_PATH } from './config.pure.ts';
 import { run } from './git.ts';
 import { fail } from './project.ts';
 import {
+  addGuardToHook,
   decisionDocGlobs,
   DOC_FOLDERS,
   detectEnforcers,
+  guardCommand,
+  guardWorkflow,
   installCommands,
   LEARNINGS_STUB,
   parseSetupArgs,
   PROFILES_STUB,
   renderEnforcers,
+  runsGuard,
   type SetupOptions,
   updateProjectConfig,
 } from './setup.pure.ts';
@@ -141,9 +145,34 @@ export function setup(root: string, options: SetupOptions = {}): string[] {
   );
   write(CONFIG_PATH, updateProjectConfig(read(path.join(root, CONFIG_PATH)), facts));
   write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(enforcers));
+  wireGuard(root, facts, write);
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
   createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
   return written;
+}
+
+const HOOK = '.husky/pre-commit';
+const WORKFLOW = '.github/workflows/drive-guard.yml';
+
+/**
+ * Wires the Decision-doc guard where the project already runs checks: a husky pre-commit hook gets the guard line;
+ * without husky, a pull-request workflow runs it when the repo has workflows. Otherwise nothing is written.
+ */
+function wireGuard(
+  root: string,
+  facts: { baseBranch: string; install: readonly string[] },
+  write: (relative: string, text: string) => void,
+): void {
+  const entry = path
+    .relative(root, path.join(import.meta.dirname, 'drive.ts'))
+    .split(path.sep)
+    .join('/');
+  const hook = read(path.join(root, HOOK));
+  if (hook !== null) return write(HOOK, addGuardToHook(hook, guardCommand(entry)));
+  if (!isFolder(path.join(root, '.github', 'workflows'))) return;
+  const workflow = read(path.join(root, WORKFLOW));
+  if (workflow !== null && runsGuard(workflow)) return;
+  write(WORKFLOW, guardWorkflow(guardCommand(entry, `origin/${facts.baseBranch}`), facts.install));
 }
 
 const isFolder = (dir: string): boolean => {

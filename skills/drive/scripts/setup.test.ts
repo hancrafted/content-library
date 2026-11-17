@@ -140,4 +140,39 @@ describe('drive setup', () => {
       expect(() => setup(root)).toThrow('skills-lock.json is not valid JSON');
     });
   });
+
+  describe('the Decision-doc guard', () => {
+    it('adds the guard to an existing husky pre-commit hook once', () => {
+      // ARRANGE
+      const root = repo({ '.husky/pre-commit': 'npm run verify:commit\n' });
+      // ACT
+      setup(root);
+      setup(root);
+      // ASSERT
+      const hook = text(root, '.husky/pre-commit').split('\n');
+      expect(hook.filter((line) => line.includes('drive.ts guard'))).toHaveLength(1);
+      expect(hook.at(-2)).toBe('npm run verify:commit');
+    });
+
+    it('writes a pull-request workflow when there is no husky hook but there are workflows', () => {
+      // ARRANGE
+      const root = repo({ '.github/workflows/ci.yml': 'name: ci\n', 'package-lock.json': '{}' });
+      // ACT
+      setup(root);
+      // ASSERT
+      const workflow = text(root, '.github/workflows/drive-guard.yml');
+      expect(workflow).toContain('on: pull_request');
+      expect(workflow).toContain('npm ci');
+      expect(workflow).toMatch(/drive\.ts guard --against origin\/main/);
+    });
+
+    it('wires nothing when the repo has neither husky nor workflows', () => {
+      // ARRANGE
+      const root = repo({ 'README.md': 'x' });
+      // ACT
+      const written = setup(root);
+      // ASSERT
+      expect(written.filter((file) => file.startsWith('.husky') || file.startsWith('.github'))).toEqual([]);
+    });
+  });
 });

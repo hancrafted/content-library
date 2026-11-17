@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { CONFIG_PATH, parseConfig, type WorktreeConfig } from './config.pure.ts';
+import { CONFIG_PATH, type DriveConfig, parseConfig, type WorktreeConfig } from './config.pure.ts';
 import { capture } from './git.ts';
 import { noLock, type WithLock } from './worktree-merge.ts';
 
@@ -28,17 +28,23 @@ export interface Project {
   withLock: WithLock;
 }
 
-/** The config of the checkout this runs in, and the lock module it names, if any. */
-export async function loadProject(): Promise<Project> {
-  const root = capture('git', ['rev-parse', '--show-toplevel']);
+/** The config under `root`; no config file gives the defaults. Exits with the message when the file is invalid. */
+export function loadConfig(root: string): DriveConfig {
   let text = '';
   try {
     text = readFileSync(path.join(root, CONFIG_PATH), 'utf8');
   } catch {
-    // No config: the defaults, which hold no lock, no install steps and no hooks.
+    // No config: the defaults, which hold no lock, no install steps, no hooks and no Decision docs.
   }
   const parsed = parseConfig(text);
   if ('error' in parsed) fail(parsed.error);
+  return parsed;
+}
+
+/** The config of the checkout this runs in, and the lock module it names, if any. */
+export async function loadProject(): Promise<Project> {
+  const root = capture('git', ['rev-parse', '--show-toplevel']);
+  const parsed = loadConfig(root);
   const { worktree: config } = parsed;
   let withLock = noLock;
   if (config.lock !== null) {
