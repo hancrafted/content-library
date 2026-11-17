@@ -65,8 +65,8 @@ export function stepView(data: StepSource, chat: Chat, state: ViewState): StepVi
   const { frames } = model;
   const vis = Math.min(visibleStep(state), chat.steps.length);
   const window = windowOf(data, state);
-  // A log the reader opened has steps of its own, so the Preset's split never applies to it.
-  const override = chat === data.chat ? data.overrides[String(vis)] : undefined;
+  const chatIsThePresetsOwn = chat === data.chat;
+  const override = chatIsThePresetsOwn ? data.overrides[String(vis)] : undefined;
   const { falloff } = data.preset.attention;
   const attention = attentionOf(chat, frames, {
     step: vis,

@@ -67,15 +67,18 @@ export function useChipDrag({ enabled, order, onMove }: Drag) {
   const stop = useRef<(() => void) | null>(null);
   useEffect(() => () => stop.current?.(), []);
 
+  const swallowTheClickThatEndsTheDrag = () => {
+    swallow.current = true;
+    setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MILLISECONDS);
+  };
+
   const onPointerDown = (part: Part) => (event: PointerEvent<HTMLElement>) => {
     if (!enabled || event.pointerType !== 'mouse' || event.button !== 0) return;
     stop.current = follow({ part, x: event.clientX, y: event.clientY }, live, (started) => {
       setDragging(started ? part : null);
       if (started) return;
       stop.current = null;
-      // The click that ends a drag must not toggle the chip it ends on.
-      swallow.current = true;
-      setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MILLISECONDS);
+      swallowTheClickThatEndsTheDrag();
     });
   };
 

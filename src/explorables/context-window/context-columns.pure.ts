@@ -33,11 +33,11 @@ function wrapped(shown: readonly (readonly [Part, Column])[], height: number): W
   const below = shown.filter(([part]) => FLEXIBLE.includes(part)).map(([, column]) => column);
   const above = shown.filter(([part]) => !FLEXIBLE.includes(part)).map(([, column]) => column);
   if (shown.length < WRAP_FROM || below.length === 0 || above.length < 2) return {};
+  const secondRowAsTallAsFirst = `${height}rem ${height}rem`;
   return {
     '--cols-wrap': above.map(([col]) => col).join(' '),
     '--areas-wrap': `'${above.map(([, area]) => area).join(' ')}' '${secondRow(above.length, below).join(' ')}'`,
-    // The second row as tall as the first, so the attention list keeps the height an Episode gives it.
-    '--rows-wrap': `${height}rem ${height}rem`,
+    '--rows-wrap': secondRowAsTallAsFirst,
   };
 }
 

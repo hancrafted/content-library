@@ -9,8 +9,7 @@ import { loupeFrame, loupePlacement, loupeRows } from './loupe.pure';
 import { Moves } from './moves.client';
 import { tint, vars } from './window-bits';
 
-// Long enough to cross the tail's bridge from the bar at a slow pace.
-const LEAVE_MILLISECONDS = 400;
+const LEAVE_DELAY_TO_CROSS_TAIL_BRIDGE_MILLISECONDS = 400;
 
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
 
@@ -31,7 +30,7 @@ export function useLoupe(bar: RefObject<HTMLDivElement | null>, enabled: boolean
   };
   const leave = () => {
     clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setAt(null), LEAVE_MILLISECONDS);
+    timer.current = window.setTimeout(() => setAt(null), LEAVE_DELAY_TO_CROSS_TAIL_BRIDGE_MILLISECONDS);
   };
   const stay = () => clearTimeout(timer.current);
   return { at: enabled ? at : null, handlers: { onPointerMove, onPointerLeave: leave }, leave, stay };
