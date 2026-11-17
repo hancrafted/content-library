@@ -1,6 +1,3 @@
-// Syncs the context folders in the main checkout: `main/` from main and, on a
-// branch, `<branch-slug>/` from that branch's last commit. Without `--apply` it
-// only reports; the judgement lives in plan.pure.ts. See ../SKILL.md.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -16,7 +13,6 @@ const FIRST_LOOKBACK_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
 const git = (args: string[], cwd?: string): string =>
   execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 
-/** The main checkout, wherever this runs from: worktrees share its git dir. */
 const mainRoot = path.dirname(git(['rev-parse', '--path-format=absolute', '--git-common-dir']).trim());
 const contextRoot = path.join(mainRoot, 'docs', 'claude-project-context');
 const here = git(['rev-parse', '--show-toplevel']).trim();
@@ -36,14 +32,12 @@ if (branch === '') console.log('! detached HEAD: syncing main/ only');
 else if (branch !== 'main')
   targets.push({ ref: branch, folder: path.join(contextRoot, slug(branch)), checkouts: [here] });
 
-/** Every listed file at the ref, read from the ref's own list. */
 function listedAt(ref: string, atRef: string[]): string[] {
   const list = atRef.includes(LIST) ? LIST : OLD_LIST;
   const entries = parseList(git(['show', `${ref}:${list}`]));
   return expandEntries(entries, (entry) => atRef.filter((file) => path.matchesGlob(file, entry)));
 }
 
-/** The folder's files, by flat name; the stamp and other dotfiles stay out. */
 function readFolder(folder: string): Map<string, string> {
   const current = new Map<string, string>();
   if (!existsSync(folder)) return current;
@@ -62,7 +56,6 @@ function lastSync(folder: string): Date {
 
 const EDITING_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 
-/** The files one Claude Code log line edited: its tool calls that write a file. */
 function editedIn(line: string): string[] {
   let entry: { message?: { content?: unknown } };
   try {
@@ -107,7 +100,6 @@ function sessionPaths(checkouts: string[], since: Date): string[] {
     .map((file) => path.relative(owner(file) ?? '', file));
 }
 
-/** Paths committed since `since`; a branch counts only its own commits, not main's. */
 function commitPaths(ref: string, since: Date): string[] {
   const range = ref === 'main' ? 'main' : `main..${ref}`;
   return git(['log', `--since=${since.toISOString()}`, '--name-only', '--format=', range])

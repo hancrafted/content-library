@@ -16,7 +16,6 @@ const write = (file: string, content: string) => {
   writeFileSync(file, content);
 };
 
-/** A repo whose `work` branch is checked out at `.worktrees/work`, with an ignored node_modules installed. */
 function fixture() {
   const main = path.join(realpathSync(mkdtempSync(path.join(tmpdir(), 'wt-remove-'))), 'main');
   git(path.dirname(main), 'init', '-q', '-b', 'main', main);
@@ -33,7 +32,6 @@ function fixture() {
 
 const listed = (main: string, target: string) => git(main, 'worktree', 'list', '--porcelain').includes(target);
 
-/** What a `git worktree remove` cut short by Finder leaves: git's record gone, a partial checkout and a .DS_Store. */
 function interruptedRemoval(main: string, target: string): void {
   rmSync(path.join(target, '.git'));
   rmSync(path.join(target, 'a.txt'));

@@ -1,5 +1,3 @@
-// One URL x theme on its own tab: load, probe, report its health (sideways scroll, broken images), optionally
-// screenshot. The tab is closed afterwards and nothing else in the shared browser is touched.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -13,7 +11,6 @@ interface Box {
   height: number;
 }
 
-/** Count, first box and chosen computed styles for each selector. */
 function probeExpression(selectors: string[], styles: string[]): string {
   return `(${JSON.stringify(selectors)}).map((selector) => {
     const all = document.querySelectorAll(selector);

@@ -1,5 +1,3 @@
-// The page opens with a banner header: the <h1> and a sentence saying what the page is for. A <header> inside
-// sectioning content belongs to that section, so it is no banner.
 import { load, type CheerioAPI } from 'cheerio';
 import type { Check } from '../grader/check.ts';
 

@@ -1,8 +1,5 @@
-// The context folder's judgement: listed files in, flat copy plan out.
-// Reading the list and touching the filesystem is sync.ts's job.
 import path from 'node:path';
 
-/** One file in a context folder: its flat name there and its path in the repo. */
 export interface Copy {
   name: string;
   source: string;
@@ -24,7 +21,6 @@ export function expandEntries(entries: string[], match: (entry: string) => strin
   });
 }
 
-// A skill's file is always SKILL.md, so it flattens to its folder's name instead.
 function flatName(file: string): string {
   const name = path.basename(file);
   return name === 'SKILL.md' ? `${path.basename(path.dirname(file))}.md` : name;
@@ -41,14 +37,12 @@ export function planCopies(files: string[]): Copy[] {
   return files.map((file) => ({ name: flatName(file), source: file }));
 }
 
-/** What a sync would do to one context folder, by flat name. */
 export interface FolderDiff {
   changed: string[];
   added: string[];
   removed: string[];
 }
 
-/** Planned and current folder contents, each keyed by flat name. */
 export function diffFolder(planned: Map<string, string>, current: Map<string, string>): FolderDiff {
   const changed: string[] = [];
   const added: string[] = [];
@@ -64,10 +58,6 @@ export function diffFolder(planned: Map<string, string>, current: Map<string, st
 /** The kinds of file a voice session can use: docs and authored skills. */
 const UPLOADABLE = ['docs/**/*.md', 'skills/*/SKILL.md'];
 
-/**
- * Files that sessions or commits touched and the list does not hold yet.
- * `listed` is the expanded list and `atRef` every file at the synced ref.
- */
 export function proposeCandidates(touched: string[], listed: string[], atRef: string[]): string[] {
   const held = new Set(listed);
   const present = new Set(atRef);

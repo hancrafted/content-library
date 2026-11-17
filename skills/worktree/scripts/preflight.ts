@@ -1,5 +1,3 @@
-// Gathers the real facts about this checkout and fails `verify` when it is
-// unhealthy. The judgement lives in preflight.pure.ts; this file only observes.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync } from 'node:fs';
 import path from 'node:path';

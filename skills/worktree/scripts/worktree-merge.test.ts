@@ -16,7 +16,6 @@ const git = (cwd: string, ...args: string[]): string =>
     encoding: 'utf8',
   }).trim();
 
-/** A repo with `base` checked out in a worktree and `work` holding one extra commit in its own worktree. */
 function fixture() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'wt-merge-')));
   const main = path.join(root, 'main');
@@ -38,7 +37,6 @@ function fixture() {
   return { root, main, baseTree, workTree };
 }
 
-/** A second branch, `other`, off `base` with its own commit in its own worktree. */
 function addOtherBranch(root: string, main: string): void {
   const otherTree = path.join(root, 'other-tree');
   git(main, 'worktree', 'add', '-q', otherTree, '-b', 'other', 'base');
@@ -47,7 +45,6 @@ function addOtherBranch(root: string, main: string): void {
   git(otherTree, 'commit', '-qm', 'other');
 }
 
-/** Commits a different `a.txt` on `work` and on `base`, so merging them conflicts. */
 function conflictOnA(baseTree: string, workTree: string): void {
   writeFileSync(path.join(workTree, 'a.txt'), 'from work');
   git(workTree, 'commit', '-aqm', 'edit a');
@@ -55,7 +52,6 @@ function conflictOnA(baseTree: string, workTree: string): void {
   git(baseTree, 'commit', '-aqm', 'edit a on base');
 }
 
-/** Every byte a merge could touch in a worktree: its files, its index and its branch tip. */
 function snapshot(tree: string): Record<string, string> {
   const files: Record<string, string> = {};
   for (const name of readdirSync(tree, { recursive: true, encoding: 'utf8' })) {
@@ -82,27 +78,23 @@ function midMerge(main: string, baseTree: string): void {
   writeFileSync(path.join(baseTree, 'a.txt'), 'resolved by hand');
 }
 
-/** Whether `name` (MERGE_HEAD, rebase-merge, …) exists in the worktree's git dir. */
 const inGitDir = (tree: string, name: string) =>
   existsSync(git(tree, 'rev-parse', '--path-format=absolute', '--git-path', name));
 
 /** Short waits, so a test of a busy base takes well under a second. */
 const FAST: Timing = { pollMilliseconds: 50, timeoutMilliseconds: 4000 };
 
-/** Where a merge runs, with a log sink that keeps every line the merge logs. */
 function merging(cwd: string) {
   const lines: string[] = [];
   return { cwd, lines, log: (line: string) => void lines.push(line) };
 }
 
-/** Resolves once the merge has logged into `lines` that the base is busy. */
 async function waitingOnBusyBase(lines: string[]): Promise<void> {
   await vi.waitFor(() => expect(lines.join('\n')).toMatch(/busy/));
 }
 
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
 
-/** Runs mergeIntoBase in its own process, as a second `wt:done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
   const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log }));`;
   return new Promise((resolve) => {

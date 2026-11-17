@@ -1,12 +1,9 @@
-// The pure parts of `npm run inspect-page`: arguments, the url x theme job list,
-// the screenshot size cap, the saved browser endpoint and the idle rule.
 import path from 'node:path';
 
 export const IDLE_MILLISECONDS = 10 * 60 * 1000;
 export const DEVICE_SCALE_FACTOR = 2;
 export const MAX_EDGE = 1568;
 
-/** The main checkout: the parent of `git rev-parse --git-common-dir`, the same from every worktree. */
 export const mainCheckout = (commonDir: string, cwd: string): string => path.dirname(path.resolve(cwd, commonDir));
 
 export type Theme = 'light' | 'dark';
@@ -28,7 +25,6 @@ export interface InspectArgs {
 export interface Job {
   url: string;
   theme: Theme | null;
-  /** Where to save this job's screenshot. */
   out?: string;
 }
 
@@ -93,10 +89,6 @@ export function expandJobs(urls: readonly string[], themes: readonly (Theme | nu
   return urls.flatMap((url) => themes.map((theme) => ({ url, theme })));
 }
 
-/**
- * The `clip.scale` for a capture at device pixel ratio 2 whose longest edge is
- * capped at MAX_EDGE pixels, and the resulting image size.
- */
 export function fitScale(box: { width: number; height: number }): {
   scale: number;
   pixels: { width: number; height: number };

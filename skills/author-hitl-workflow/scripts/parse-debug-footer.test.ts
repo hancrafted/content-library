@@ -6,15 +6,12 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 const SCRIPT = 'skills/author-hitl-workflow/scripts/parse-debug-footer.ts';
 const dir = mkdtempSync(join(tmpdir(), 'parse-debug-footer-'));
-/** A file the script reads. */
 const saved = (name: string, text: string): string => {
   const path = join(dir, name);
   writeFileSync(path, text);
   return path;
 };
-/** The script run under plain node, as the skill runs it. */
 const parse = (...args: string[]) => spawnSync('node', [SCRIPT, ...args], { encoding: 'utf8' });
-/** A reply ending in a footer whose source is `source`. */
 const reply = (source: string): string =>
   `Done.\n\n[hitl-debug] workflow=trip "Trip" · stage=brief "Brief" · job=ask "Ask" · prompt=copy · step=do · level=chat · demo=on · locale=en · source=${source}`;
 const [english, german] = [saved('trip.en.yml', 'id: trip\n'), saved('trip.de.yml', 'id: trip\n# de\n')];

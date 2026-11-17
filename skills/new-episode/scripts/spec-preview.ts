@@ -1,11 +1,3 @@
-// `npm run episode:spec-preview -- <fragment.html>`: a designer sees and checks its own mock as the user will. It wraps the
-// fragment in the Spec template's page, set to each render preset the way the page's toolbar sets it, compiles
-// design.css for it, runs the Spec contract rules the staging test runs, renders every Option at every render preset
-// of the Spec calibration through `npm run inspect-page` and measures text overflow. Always renders; prints one `✖`
-// line per violation (an overflow names its Option and preset, and fails only at the presets the calibration marks),
-// one `⚠` line per overflow that only reports and one `screenshot` line per Option and preset; exits 1 on any `✖`.
-// The renders run a few at a time against inspect-page's one shared browser: each is a short node process.
-
 import { spawn } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -29,16 +21,13 @@ interface InspectJson {
   probes: { count: number }[];
 }
 
-/** The screenshot path and overflow count in inspect-page's JSON for one Option. */
 function readShot(json: string): Rendered {
   const [entry] = JSON.parse(json) as [InspectJson];
   return { path: entry.image.path, overflow: entry.probes.reduce((sum, probe) => sum + probe.count, 0) };
 }
 
-/** How many inspect-page processes run at once: enough to hide page-load waits, few enough for a loaded machine. */
 const PARALLEL = 4;
 
-/** One Option at one preset through inspect-page: its screenshot path and how many elements overflow it. */
 function inspect(url: string, { id, preset }: Shot, out: string): Promise<Rendered> {
   const stage = `.spec-stage[data-option="${id}"]`;
   const args = [
@@ -59,7 +48,6 @@ function inspect(url: string, { id, preset }: Shot, out: string): Promise<Render
   });
 }
 
-/** Runs the jobs `PARALLEL` at a time and settles each, so one failed render does not stop the others. */
 async function settleAll<T>(jobs: (() => Promise<T>)[]): Promise<PromiseSettledResult<T>[]> {
   const results = new Array<PromiseSettledResult<T>>(jobs.length);
   let next = 0;
@@ -87,7 +75,6 @@ mkdirSync(dir, { recursive: true });
 
 const template = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-template.html'), 'utf8');
 const presets = readPresets(readFileSync(path.join(ROOT, 'skills/new-episode/references/spec-calibration.md'), 'utf8'));
-// One page per preset: the preset is set on `<html>`, as the page's toolbar sets it.
 for (const preset of presets)
   writeFileSync(path.join(dir, `index.${preset.name}.html`), previewPage(template, fragment, preset));
 await buildDesignCss(dir);

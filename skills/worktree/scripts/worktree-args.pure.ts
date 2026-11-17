@@ -1,19 +1,9 @@
-// The worktree script's arguments: `new|done <branch> [--base <branch>] [--kill]`
-// and `sync [--base <branch>]`. Without --base a worktree branches from origin/main
-// and finishing it syncs local main; with it, both work against that branch instead.
-// --kill (done only) stops the processes that hold the worktree.
-
 export interface WorktreeArgs {
   command: 'new' | 'done' | 'sync';
-  /** Empty for `sync`, which works on the current worktree's branch. */
   branch: string;
-  /** The branch to start from and merge into, or null for origin/main. */
   base: string | null;
-  /** `done` only: stop the processes that block removal. */
   kill: boolean;
-  /** A subagent branch's parent, everything before its first `--`; null for an orchestrator branch. */
   parent: string | null;
-  /** The ticket in `<parent>--<issue>-<task>`; null without one. The cleanup skill matches branches to issues by it. */
   issue: number | null;
 }
 
@@ -22,7 +12,6 @@ interface Owner {
   issue: number | null;
 }
 
-/** Reads who owns a branch: `<type>/<slug>` is an orchestrator's, `<parent>--[<issue>-]<task>` a subagent's. */
 function readOwner(branch: string): Owner | { error: string } {
   const split = branch.indexOf('--');
   if (split === -1) return { parent: null, issue: null };
@@ -36,7 +25,6 @@ function readOwner(branch: string): Owner | { error: string } {
 const USAGE =
   'usage: npm run wt:new -- <branch> [--base <branch>]  |  npm run wt:done -- <branch> [--base <branch>] [--kill]  |  npm run wt:sync [-- --base <branch>]';
 
-/** A branch name, not a missing argument or a flag in its place. */
 function isBranch(value: string | undefined): value is string {
   return value !== undefined && value !== '' && !value.startsWith('--');
 }
@@ -49,7 +37,6 @@ interface Flags {
   kill: boolean;
 }
 
-/** Splits the tokens after the command into flags and positional words. */
 function readFlags(tokens: readonly string[]): Flags | { error: string } {
   const flags: Flags = { positional: [], base: null, kill: false };
   for (let i = 0; i < tokens.length; i++) {
@@ -86,10 +73,6 @@ export function parseArgs(argv: readonly string[]): WorktreeArgs | { error: stri
   };
 }
 
-/**
- * Why `wt:new` refuses this branch, or null. A subagent branch starts from its parent:
- * the parent must exist, must not be main, and must be the --base. Each refusal names the fix.
- */
 export function refuseNewBranch(args: WorktreeArgs, branchExists: (branch: string) => boolean): string | null {
   const { branch, parent, base } = args;
   if (parent === null) return null;

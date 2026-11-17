@@ -1,5 +1,3 @@
-// The shared chrome-headless-shell: install, start once (even across parallel
-// callers), find again, stop, and end after IDLE_MILLISECONDS without a call.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -30,7 +28,6 @@ const alive = (pid: number): boolean => {
   }
 };
 
-/** Records a call, which postpones the idle exit. */
 export const touch = (): void => writeFileSync(LAST_USE, String(Date.now()));
 
 const savedEndpoint = (): Endpoint | null =>
@@ -40,7 +37,6 @@ const savedEndpoint = (): Endpoint | null =>
 const PUPPETEER_BROWSERS = '@puppeteer/browsers@3.2.4';
 const HEADLESS_SHELL = 'chrome-headless-shell@155.0.8059.79';
 
-/** Downloads the pinned browser into the shared cache; returns the binary's final path. */
 function installShared(): string {
   // Install beside the final dir, then rename into place: a concurrent first download from another worktree
   // either wins the rename or is discarded, and nobody ever sees a half-written install.
@@ -70,7 +66,6 @@ function installShared(): string {
   return installed;
 }
 
-/** CHROME_PATH, else the cached chrome-headless-shell, installed on first use. */
 function resolveBinary(): string {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
   if (existsSync(BINARY) && existsSync(readFileSync(BINARY, 'utf8'))) return readFileSync(BINARY, 'utf8');
@@ -81,7 +76,6 @@ function resolveBinary(): string {
   return installed;
 }
 
-/** Ends the browser and its watchdog; false when none was recorded. */
 export function stopBrowser(): boolean {
   const endpoint = savedEndpoint();
   rmSync(ENDPOINT, { force: true });
@@ -90,7 +84,6 @@ export function stopBrowser(): boolean {
   return true;
 }
 
-/** The watchdog process body: stops the browser once no call has touched LAST_USE for IDLE_MILLISECONDS. */
 export async function watch(browserPid: number): Promise<void> {
   let idle = false;
   while (alive(browserPid) && !idle) {
@@ -147,7 +140,6 @@ function tryLock(): boolean {
   }
 }
 
-/** The running browser's endpoint; starts one, once across parallel callers, when none answers. */
 export async function ensureBrowser(): Promise<Endpoint> {
   mkdirSync(CACHE, { recursive: true });
   for (let attempt = 0; attempt < 600; attempt++) {

@@ -1,7 +1,3 @@
-// `npm run episode:copy-to-event -- <slug> <event-slug> [--position <n>]`: copies the Episode `src/episodes/<slug>/` whole
-// into the Event as an unlisted copy under `src/episodes/by-event/<event-slug>/<slug>/` (docs/features/events.md, "Unlisted
-// Episodes"), publishes it on the Event's date, lists it in the Event's Playlist (last, unless --position names a
-// 1-based place), runs the registry and writes the copy's published-anchors.json, so its Event-scoped page is built.
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,3 @@
-// `node skills/new-episode/scripts/spec-inline.ts <spec.html …>`: makes each existing Spec page self-contained: compiles its design.css
-// from the classes the page uses and writes it into the page in place of the `design.css` link. A page that already
-// holds its css is left as it is. `spec-assemble` does this on every build; this is for pages built before it did.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { inlineSpecPage } from '../../../src/pipeline/lib/spec-css.ts';

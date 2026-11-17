@@ -1,4 +1,3 @@
-// Merging a finished branch into its --base, before its worktree is removed.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -6,10 +5,8 @@ import { setTimeout as sleep } from 'node:timers/promises';
 import { type Timing, withLock } from '../../../tools/load/lock.ts';
 import { git } from './git.ts';
 
-/** A worktree's own git dir, where git keeps its merge, rebase and cherry-pick state. */
 const gitDirOf = (tree: string) => git(tree, ['rev-parse', '--absolute-git-dir']).stdout.trim();
 
-/** The branch a worktree is rebasing, from `rebase-merge/head-name` or `rebase-apply/head-name`, or null. */
 function rebasing(tree: string): string | null {
   for (const dir of ['rebase-merge', 'rebase-apply']) {
     const headName = path.join(gitDirOf(tree), dir, 'head-name');
@@ -37,7 +34,6 @@ function checkoutOf(base: string, cwd: string): string | null {
   return null;
 }
 
-/** What a merge, rebase or cherry-pick in progress leaves in a worktree's git dir, and how to name it. */
 const IN_PROGRESS = [
   ['MERGE_HEAD', 'a merge'],
   ['REBASE_HEAD', 'a rebase'],
@@ -46,13 +42,11 @@ const IN_PROGRESS = [
   ['CHERRY_PICK_HEAD', 'a cherry-pick'],
 ] as const;
 
-/** What keeps `tree` busy (a merge, rebase or cherry-pick in progress), or null when nothing does. */
 function busyWith(tree: string): string | null {
   const gitDir = gitDirOf(tree);
   return IN_PROGRESS.find(([name]) => existsSync(path.join(gitDir, name)))?.[1] ?? null;
 }
 
-/** Where a merge runs from (a directory inside the repository) and where its progress lines go. */
 export interface MergeContext {
   cwd: string;
   log: (line: string) => void;
@@ -71,7 +65,6 @@ export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn:
   );
 }
 
-/** A merge of `branch` into `base`, run from `cwd`, a directory inside the repository. */
 interface Merge {
   branch: string;
   base: string;
@@ -112,10 +105,8 @@ function buildMerge(merge: Merge, baseTip: string): string {
   return commit.stdout.trim();
 }
 
-/** How long a merge waits for a busy base, and how often it looks again. */
 const BUSY_WAIT: Timing = { pollMilliseconds: 5000, timeoutMilliseconds: 10 * 60 * 1000 };
 
-/** One attempt's outcome: done, or the base's worktree busy with something (`detail` adds git's own words). */
 type Attempt = { done: 'merged' | 'already-merged' } | { tree: string; busy: string; detail: string };
 
 /**

@@ -15,7 +15,6 @@ interface Observation {
   readonly animations: readonly (Motion & { readonly name: string })[];
   readonly transitions: readonly (Motion & { readonly property: string })[];
   readonly smoothScroll: boolean;
-  /** Two screenshots half a second apart differ. */
   readonly moving: boolean;
 }
 
@@ -24,7 +23,6 @@ const INSTANT_MILLISECONDS = 1;
 const STILLNESS_MILLISECONDS = 500;
 const REDUCE = 'under prefers-reduced-motion: reduce';
 
-/** Runs in the page: every animation still running after load. */
 function runningAnimations(kit: Kit): Observation['animations'] {
   return document
     .getAnimations()
@@ -40,7 +38,6 @@ function runningAnimations(kit: Kit): Observation['animations'] {
     });
 }
 
-/** Runs in the page: every element set to transition a property that moves it, with that transition's duration. */
 function motionTransitions(kit: Kit): Observation['transitions'] {
   const MOVES = /^(all|transform|translate|rotate|scale|top|right|bottom|left|inset.*|margin.*)$/;
   const ms = (time: string) => parseFloat(time) * (time.trim().endsWith('ms') ? 1 : 1000);

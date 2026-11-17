@@ -1,10 +1,7 @@
-// Whether the page honoured the fidelity its calibration asked for: every item's data-fidelity is that one rung.
-// The page cannot say what was asked, so the grader must be told; untold, the check skips.
 import { load } from 'cheerio';
 import { FIDELITY_RUNGS, type Check, type FidelityRung } from '../grader/check.ts';
 
 interface Observation {
-  /** The rung the calibration asked for every item. */
   readonly fidelity: FidelityRung;
   readonly html: string;
 }

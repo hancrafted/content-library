@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkScope } from './scope.pure.ts';
 
-/*
- * pipeline-feedback commits machinery feedback on a run branch, then cherry-picks it to `main`.
- * Only the skill, the pipeline area, the docs and the glossary may ride along; an Episode's files never do.
- */
 describe('checkScope', () => {
   it('accepts the skill folder, docs and the glossary', () => {
     const paths = [

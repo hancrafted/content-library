@@ -1,15 +1,9 @@
-// Prints DOM numbers as JSON and, with --out, saves screenshots, by driving one
-// shared chrome-headless-shell over the DevTools protocol (Node's built-in
-// WebSocket, no dependency). The first call starts the browser detached; later
-// calls, parallel ones too, connect to it and use their own tab. A watchdog
-// process ends it after 10 idle minutes. See ../SKILL.md.
 import path from 'node:path';
 import { ensureBrowser, stopBrowser, touch, watch } from './browser.ts';
 import { connect } from './cdp.ts';
 import { expandJobs, parseArgs, type Job } from './inspect-page.pure.ts';
 import { inspect } from './page.ts';
 
-/** With several jobs each needs its own file: `shot.png` becomes `shot-<n>-<theme>.png`. */
 function outFor(out: string | undefined, job: Job, index: number): string | undefined {
   if (!out) return undefined;
   const { dir, name, ext } = path.parse(out);

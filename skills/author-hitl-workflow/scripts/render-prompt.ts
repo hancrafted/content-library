@@ -1,9 +1,3 @@
-// `node skills/author-hitl-workflow/scripts/render-prompt.ts <workflow.yml> <job> [options] [<marker>=<file>...]`:
-// prints one prompt of a Workflow file exactly as the page copies it (debug footer left out), so a local run
-// pastes the same text a viewer would. Options: --review (the review step), --then (the second technical prompt of a job that calls a second skill), --full (a full run, not demo),
-// --level=chat|cli (the chat prompt, the default, or the CLI one), --round=<n>:<item-file> (round n of a repeated stage, its H3 block).
-// Each <marker>=<file> fills a slot with a file's text: idea=idea.md, note_1=a.md, verdict_result#2=v.md.
-// Exits 1 with every problem on stderr.
 import { readFileSync } from 'node:fs';
 import type { RenderRequest } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
 import { LEVEL_OF, renderPrompt } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
@@ -11,7 +5,6 @@ import { LEVEL_OF, renderPrompt } from '../../../src/explorables/human-in-the-lo
 type Options = Omit<RenderRequest, 'job' | 'values'>;
 const read = (path: string): string => readFileSync(path, 'utf8').trim();
 
-/** Each flag, and the request field its value sets. */
 const FLAGS: Readonly<Record<string, (value: string) => Options>> = {
   '--review': () => ({ step: 'review' }),
   '--then': () => ({ step: 'then' }),
@@ -28,7 +21,6 @@ const FLAGS: Readonly<Record<string, (value: string) => Options>> = {
   },
 };
 
-/** One `--flag` or `--flag=value` as the request field it sets, or none for an unknown flag. */
 function optionOf(arg: string): Options | undefined {
   const [flag = '', value = ''] = arg.split(/=(.*)/s);
   return FLAGS[flag]?.(value);

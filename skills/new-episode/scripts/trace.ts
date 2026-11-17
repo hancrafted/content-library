@@ -1,6 +1,3 @@
-// `npm run episode:trace -- <slug|events.jsonl> [span-id]`: prints the Run's span tree from the Episode's log
-// with statuses, durations, models and tokens, or the subtree under a span id. A span with no end line reads
-// as running only while the active-run marker names its Run, and crashed otherwise.
 import { existsSync } from 'node:fs';
 import { episodeLogPath, readLog } from '../../../src/pipeline/lib/episode-run-log.ts';
 import { renderTree } from '../../../src/pipeline/lib/run-log.pure.ts';

@@ -4,10 +4,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-/*
- * The hook adapter as Claude Code runs it: a process fed a payload on stdin, in a real git repository with a
- * worktree. The root is the worktree whose marker lists the payload's session, not CLAUDE_PROJECT_DIR.
- */
 const ADAPTER = path.resolve(import.meta.dirname, 'claude-adapter.ts');
 const TRACE = '0123456789abcdef0123456789abcdef';
 const JOB_SPAN = 'aaaaaaaaaaaaaaaa';
@@ -54,7 +50,6 @@ function withMarker(root: string, sessions: string[]): void {
   writeFileSync(path.join(root, '.scratch/active-run'), marker(sessions));
 }
 
-/** Runs the adapter from `main`, as the harness would with the main checkout as its project dir. */
 function hook(event: 'start' | 'stop', session: string, env: Record<string, string> = {}) {
   const transcript = path.join(dir, 'session.jsonl');
   const payload = { session_id: session, transcript_path: transcript, cwd: main, agent_id: 'a1' };
@@ -170,7 +165,6 @@ describe('lock timeout', () => {
   });
 });
 
-/** Runs one of the adapter's point-fact modes, from the orchestrator (no agent id) or a subagent. */
 function pointHook(mode: string, session: string, payload: Record<string, unknown> & { env?: Record<string, string> }) {
   const { env = {}, ...fields } = payload;
   const transcript = path.join(dir, 'session.jsonl');

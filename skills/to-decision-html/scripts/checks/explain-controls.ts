@@ -1,9 +1,6 @@
-// An explain page's controls: settled decisions rendered without pick controls, though reviewer tools may stay, with
-// open reflection prompts and a "Questions?" comment field.
 import { load, type CheerioAPI } from 'cheerio';
 import type { Check } from '../grader/check.ts';
 
-/** The decide page's hooks for choosing: an Option, and the Next action. Present at all, they offer a pick. */
 const PICK_HOOKS = ['[data-option]', '[data-next-action]'] as const;
 const CHOICE_INPUTS = ['input[type="radio"]', 'input[type="checkbox"]', 'select'] as const;
 /**

@@ -1,4 +1,3 @@
-// The worktree scripts' one way to run git: never throws, so each caller reads `status` and decides.
 import { spawnSync } from 'node:child_process';
 
 /** Runs `git <args>` in `cwd`, with `input` on stdin; a large buffer, since `ls-files` output can be long. */
