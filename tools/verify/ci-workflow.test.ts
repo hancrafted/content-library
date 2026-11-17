@@ -40,6 +40,17 @@ interface DeployJob {
 
 const read = (file: string): Workflow =>
   parse(readFileSync(path.join(import.meta.dirname, '../..', file), 'utf8')) as Workflow;
+/**
+ * Evaluates the one expression shape this workflow uses, `${{ <ref> ==|!= '<literal>' && '<a>' || '<b>' }}`, the way
+ * Actions does: `&&`/`||` return an operand, and an empty string is falsy, so `x && '' || 'true'` is always 'true'.
+ */
+function evaluate(expression: string | undefined, context: Record<string, string>): string {
+  const match = /^\$\{\{ (\S+) (==|!=) '([^']*)' && '([^']*)' \|\| '([^']*)' \}\}$/.exec(expression ?? '');
+  if (!match) throw new Error(`unsupported expression: ${expression}`);
+  const [, key, operator, literal, whenTrue, otherwise] = match;
+  const condition = (context[key!] === literal) === (operator === '==');
+  return condition && whenTrue ? whenTrue : otherwise!;
+}
 const workflow = (): Workflow => read(WORKFLOW);
 const deployWorkflow = (): Workflow => read(DEPLOY_WORKFLOW);
 
@@ -125,7 +136,7 @@ describe('the Cloudflare deploy workflow', () => {
 
   it('publishes the artifact of the CI run that tested the commit: no checkout, no install, no build', () => {
     // ARRANGE
-    const { steps } = deployWorkflow().jobs.deploy as unknown as { steps: Step[] };
+    const { steps } = deployWorkflow().jobs.deploy ?? { steps: [] };
     // ACT
     const download = steps.find((step) => step.uses?.startsWith('actions/download-artifact@'));
     const runs = steps.map((step) => step.run ?? '').join('\n');
@@ -156,12 +167,15 @@ describe('the Cloudflare deploy workflow', () => {
 
   it('builds the production shape on main and the preview shape elsewhere', () => {
     // ARRANGE
-    const shape = "${{ github.ref == 'refs/heads/main' && '' || 'true' }}";
-    // ACT
     const { export: build, 'build-test': buildTest } = workflow().jobs;
-    // ASSERT
-    expect(build?.env?.LIST_UPCOMING_EPISODES).toBe(shape);
-    expect(buildTest?.env?.LIST_UPCOMING_EPISODES).toBe(shape);
+    // ACT
+    const listed = (job: typeof build, ref: string) =>
+      evaluate(job?.env?.LIST_UPCOMING_EPISODES, { 'github.ref': ref });
+    // ASSERT: the app lists Upcoming Episodes only when the variable is exactly 'true'
+    for (const job of [build, buildTest]) {
+      expect(listed(job, 'refs/heads/main')).not.toBe('true');
+      expect(listed(job, 'refs/heads/feat/x')).toBe('true');
+    }
   });
 
   it('reports the required check from a gate job that fails unless build and post-build tests both succeeded', () => {

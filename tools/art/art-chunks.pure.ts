@@ -17,8 +17,21 @@ export interface BakedChunk {
   readonly refusals: readonly (readonly [message: string, page: string])[];
 }
 
+/** A unit of parallel work: contiguous rendered Slides. */
+export type Chunk = readonly RenderedSlide[];
+
+/** The message the main thread sends a bake worker, and the one it answers with. */
+export interface BakeRequest {
+  readonly id: number;
+  readonly slides: Chunk;
+}
+export interface BakeResponse {
+  readonly id: number;
+  readonly baked: BakedChunk;
+}
+
 /** Bakes each Slide of a chunk; a Slide the bake refuses is recorded, not thrown, so the merge can report all at once. */
-export function bakeChunk(slides: readonly RenderedSlide[], rules: readonly CssRule[]): BakedChunk {
+export function bakeChunk(slides: Chunk, rules: readonly CssRule[]): BakedChunk {
   const pieces: ArtPiece[] = [];
   const refusals: [string, string][] = [];
   for (const { page, markup } of slides) {

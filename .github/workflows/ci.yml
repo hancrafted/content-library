@@ -88,7 +88,7 @@ jobs:
       # Build as the Cloudflare Pages deploy does, from the domain root, so a base-path bug fails here, not at deploy.
       NEXT_PUBLIC_BASE_PATH: ''
       # A preview lists and links Upcoming Episodes on /episodes, so a draft can be reviewed there; production never does.
-      LIST_UPCOMING_EPISODES: ${{ github.ref == 'refs/heads/main' && '' || 'true' }}
+      LIST_UPCOMING_EPISODES: ${{ github.ref != 'refs/heads/main' && 'true' || '' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_PATH: ''
-      LIST_UPCOMING_EPISODES: ${{ github.ref == 'refs/heads/main' && '' || 'true' }}
+      LIST_UPCOMING_EPISODES: ${{ github.ref != 'refs/heads/main' && 'true' || '' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -164,7 +164,7 @@ jobs:
   preview:
     name: deploy to Cloudflare Pages (preview)
     needs: export
-    if: needs.export.outputs.changed == 'true' && github.ref != 'refs/heads/main' && (github.event.pull_request.head.repo.full_name || github.repository) == github.repository && github.actor != 'dependabot[bot]'
+    if: needs.export.outputs.changed == 'true' && github.ref != 'refs/heads/main' && github.repository == 'hancrafted/content-library' && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     environment:
       name: preview
@@ -179,7 +179,7 @@ jobs:
       - name: Pick Pages branch
         id: branch
         env:
-          BRANCH: ${{ github.head_ref || github.ref_name }}
+          BRANCH: ${{ github.ref_name }}
         run: echo "name=$(printf '%s' "$BRANCH" | tr -c 'A-Za-z0-9-' '-')" >> "$GITHUB_OUTPUT"
       - name: Deploy to Cloudflare Pages
         id: deploy

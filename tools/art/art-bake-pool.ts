@@ -1,11 +1,11 @@
 // Bakes chunks of Slides across worker threads, each chunk to the next free worker; results come back by chunk
 // index, so the order the workers finish in never reaches the merge.
 import { Worker } from 'node:worker_threads';
-import type { BakedChunk, RenderedSlide } from './art-chunks.pure.ts';
+import type { BakedChunk, BakeRequest, BakeResponse, Chunk } from './art-chunks.pure.ts';
 import type { CssRule } from './css-rules.pure.ts';
 
 interface Queue {
-  chunks: readonly (readonly RenderedSlide[])[];
+  chunks: readonly Chunk[];
   baked: BakedChunk[];
   next: number;
 }
@@ -20,9 +20,9 @@ function drain(worker: Worker, queue: Queue) {
         finished = true;
         return void worker.terminate().then(() => resolve());
       }
-      worker.postMessage({ id, slides: queue.chunks[id] });
+      worker.postMessage({ id, slides: queue.chunks[id]! } satisfies BakeRequest);
     };
-    worker.on('message', ({ id, baked }: { id: number; baked: BakedChunk }) => {
+    worker.on('message', ({ id, baked }: BakeResponse) => {
       queue.baked[id] = baked;
       feed();
     });
@@ -36,7 +36,7 @@ function drain(worker: Worker, queue: Queue) {
 }
 
 export async function bakeInWorkers(
-  chunks: readonly (readonly RenderedSlide[])[],
+  chunks: readonly Chunk[],
   rules: readonly CssRule[],
   workers: number,
 ): Promise<BakedChunk[]> {
