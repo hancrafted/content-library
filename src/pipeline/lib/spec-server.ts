@@ -6,7 +6,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
-import { SPEC_FILE, specBriefKeys, specSlides, specTitleSlideOptions } from './episode-spec-page.pure.ts';
+import { readSpec, SPEC_FILE, specBriefKeys, specTitleSlideOptions } from './episode-spec-page.pure.ts';
 import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
@@ -81,13 +81,13 @@ function existingRounds(folder: string): string[] {
 
 async function save(response: ServerResponse, request: IncomingMessage, options: SpecServerOptions): Promise<void> {
   const lines = new URLSearchParams(await readBody(request)).get(FEEDBACK_FIELD) ?? '';
-  const html = readFileSync(path.join(options.folder, SPEC_FILE), 'utf8');
+  const spec = readSpec({ [SPEC_FILE]: readFileSync(path.join(options.folder, SPEC_FILE), 'utf8') });
   const round = nextRound(existingRounds(options.folder));
   const result = reviewToFeedback({
     lines,
-    slides: specSlides(html),
-    brief: specBriefKeys(html),
-    titleSlide: specTitleSlideOptions(html),
+    slides: spec.slides,
+    brief: specBriefKeys(spec),
+    titleSlide: specTitleSlideOptions(spec),
     round,
     now: options.now(),
   });
