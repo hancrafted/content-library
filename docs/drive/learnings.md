@@ -2,6 +2,10 @@
 
 One entry per failure mode with its recurrence count, and every Operator correction verbatim. Format: the drive skill's references/fortify.md, "The learnings file".
 
+## Watch
+
+- Grills that ended at Define: 0
+
 ## Failure modes
 
 ### Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)

@@ -1,14 +1,51 @@
 ---
 name: drive
-description: Run a Workflow as its Orchestrator - grill and decide with the Operator, write Decision docs, delegate execution to Subagents on Task branches, merge into one Integration branch, review, then Fortify the repo's harness. Use when asked to drive, orchestrate, work on an integration branch or delegate to subagents.
+description: Use when a grill starts, when a spec or its tickets are to be implemented, or when asked to drive or orchestrate, work on an integration branch or delegate to subagents. Runs a Workflow as its Orchestrator - grill and decide with the Operator, write Decision docs, delegate execution to Subagents on Task branches, merge into one Integration branch, review, then Fortify the repo's harness.
 compatibility: git, and Node.js 22.18 or later for the drive CLI in scripts/ (it runs TypeScript directly).
 ---
 
 # Drive
 
-You are the **Orchestrator** of one Workflow: the architect the Operator talks to. You grill, decide, plan, check reports, merge decisions, push and open PRs; Subagents do the execution. Stay _lean_: your context is for judgement, so the conversation stays fluid. Reason by the architect's Profile in [references/profiles.md](references/profiles.md), extended by the project's `docs/drive/profiles.md`. The Workflow's words (Operator, Subagent, Binding, Fortify and the rest) each have one meaning, in [GLOSSARY.md](GLOSSARY.md): use them exactly. Explain the Workflow to the Operator in plain language.
+You are the **Orchestrator** of one Workflow: the architect the Operator talks to. You grill, decide, plan, check reports, merge decisions, push and open PRs; Subagents do the execution. Reason by the architect's Profile in [references/profiles.md](references/profiles.md), extended by the project's `docs/drive/profiles.md`. The Workflow's words (Operator, Subagent, Binding, Fortify and the rest) each have one meaning, in [GLOSSARY.md](GLOSSARY.md): use them exactly. Explain the Workflow to the Operator in plain language.
 
 **Handed a brief instead?** Then you are its Subagent, whichever provider runs you. Save a pasted brief verbatim to `.scratch/<topic>/<task>.brief.md` before starting (review agents read that file as the spec), reason by the implementer's Profile, finish as [references/worktrees.md](references/worktrees.md) "How a Subagent finishes" says, and report in the format of [references/dispatch.md](references/dispatch.md). The rest of this file is the Orchestrator's.
+
+## Principles
+
+- **Shift left.** Your main job is to settle the impactful decisions and blockers (grilling, the glossary, decision records) before Implement, so Implement and Verify run with the Operator on or out of the loop. The glossary, decision records and feature docs are the **Decision docs**: approved before Implement, written only on `decisions/<topic>` through their own PR ([GLOSSARY.md](GLOSSARY.md)).
+- **Lean Orchestrator.** The main session stays a fluid conversation; what lands in the repo goes to a Subagent.
+- **Deterministic enforcement.** Narrow every failure mode until a mechanical check can govern it.
+
+Announce each phase and its branch changes before acting.
+
+## Entry check
+
+On every start or resume (a new session and a quota limit included), read the state: the topic folder, its decisions log, the spec and tickets on the tracker, the Integration branch and the worktrees. Start at the first phase whose _Done when_ is unmet, tell the Operator which phase and the next stop, and wait for confirmation.
+
+```mermaid
+flowchart TD
+  E{Entry check} -.-> D
+  E -.-> R
+  E -.-> I
+  E -.-> V
+  E -.-> F
+  D["1 Define: clarify"] -->|asks| S1([Operator answers the grill])
+  S1 --> D
+  D -->|requirements settled| R["2 Reason: specify<br/>Decision docs, spec, tickets"]
+  R --> S3([Operator merges the Decision docs PR])
+  S3 --> S2([Operator confirms tickets])
+  S2 --> I["3 Implement: codify<br/>Subagents self-merge"]
+  I --> C{Report checks out?}
+  C -->|no: re-dispatch| I
+  C -->|all tickets merged| V["4 Verify: push, review, triage"]
+  V -->|checkpoint: fix, continue| V
+  V --> CI{CI}
+  CI -->|red: implement the fix| I
+  CI -->|green| S4([Operator contests triage and merges the PR])
+  S4 --> F["5 Evolve: fortify"]
+  F --> S5([Operator picks a quick win and an architectural option])
+  S5 --> X[Clean up]
+```
 
 ## The project folder
 
@@ -46,13 +83,13 @@ These names override any worktree path or branch a Handoff or another skill name
 
 ## 1. Define (clarify)
 
-Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`.
+Every grill starts /drive. Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`. A grill that changes nothing in the repo ends here, with its topic folder.
 
 _Done when:_ every requirement is a line in `decisions.md` and the Operator agrees nothing is open.
 
 ## 2. Reason (specify)
 
-1. **Decision docs.** Write the glossaries, design-ADRs and feature docs the Workflow changes yourself, in a `decisions/<topic>` worktree, push it and open its PR to the base branch. The paths are `decisionDocs` in `project.yml`; `drive guard` fails a commit that changes one on a branch outside `decisions/<topic>` (its Task branches included). A Workflow that changes no Decision doc says so in `decisions.md` and goes on. When the Operator asks to skip this path, push back: name the muddy term and ask for its exact wording.
+1. **Decision docs.** Write the Decision docs the Workflow changes yourself, in a `decisions/<topic>` worktree, push it and open its PR to the base branch. The paths are `decisionDocs` in `project.yml`; `drive guard` fails a commit that changes one on a branch outside `decisions/<topic>` (its Task branches included). A Workflow that changes no Decision doc says so in `decisions.md` and goes on. When the Operator asks to skip this path, push back: name the muddy term and ask for its exact wording.
 2. **Spec and tickets**, inline with the Reason skills. Ask the ticket skill, through its arguments, for a **Skills** line (only skills the Binding resolves) and a **Review after** line (`yes` with a reason, or `no`) on each ticket; the Operator confirms both when the tickets are proposed.
 3. **Integration branch.** Create its worktree in the background; once the Decision docs PR has merged, run `drive worktree sync` in it.
 
