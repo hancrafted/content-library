@@ -15,9 +15,9 @@ const EPISODE_HOOKS = '^src/episodes/hooks/';
 // out of them for `npm run registry`; no page imports it (FE-004 §4).
 const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
-// The tests that run over every composed Episode and Template through those registries, rendering Slides.
-const REGISTRY_TESTS =
-  '^src/episodes/lib/(page-summary|placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
+// The Episode-level checks that read one page's composition (ARCH-003 §4.7): like the registries they sit above the
+// Episode they check, rendering its Slides and reading the store; only each page folder's own test imports them.
+const EPISODE_CHECKS = '^src/episodes/lib/composed-page-(checks|render)\\.ts$';
 // A generated Episode route (FE-007 §1.3): `npm run registry` writes one per Episode page under each locale's route
 // group, at `episodes/<slug>/` or `events/<event>/episodes/<slug>/`, and it imports its own Episode's record.
 const GENERATED_EPISODE_ROUTE = [
@@ -322,7 +322,7 @@ module.exports = {
       severity: 'error',
       comment:
         "A lib/ tier folder (src/shared/lib/ or an area's) imports no React — not runtime, not types — so every lib module stays a plain module a vitest test imports, and a skill script runs under plain node, without a DOM (FE-007).",
-      from: { path: TIER_LIB, pathNot: REGISTRY_TESTS },
+      from: { path: TIER_LIB, pathNot: EPISODE_CHECKS },
       to: { path: '(^|/)node_modules/(@types/)?(react|react-dom)/' },
     },
     {
@@ -338,7 +338,7 @@ module.exports = {
       severity: 'error',
       comment:
         "A lib/ tier folder (src/shared/lib/ or an area's) is the bottom tier of its folder: it MUST NOT import src/app, page assembly, a component, page chrome, a hook, an Episode's folder or the content store — except the store's schemas and catalogue, the leaves that name records and their ids. Shared lib reaches neither (shared-knows-no-domain). The composition registries in src/episodes/lib/ import every Episode's record and sit above it (FE-007).",
-      from: { path: TIER_LIB, pathNot: [COMPOSITION_REGISTRY, REGISTRY_TESTS] },
+      from: { path: TIER_LIB, pathNot: [COMPOSITION_REGISTRY, EPISODE_CHECKS] },
       to: {
         path: [
           '^src/(app|page-assembly)/',

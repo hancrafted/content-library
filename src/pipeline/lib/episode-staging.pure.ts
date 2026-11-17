@@ -5,7 +5,8 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
+import { type CheerioAPI } from 'cheerio';
+import { parseSpec, SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
 import { checkSpec, specStage } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
@@ -148,13 +149,16 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
+  // Parsed once: a Spec with its inline SVG mocks takes longer to parse than every check that reads it.
+  const html = files[SPEC_FILE];
+  const spec = html === undefined ? undefined : parseSpec(html);
   return [
     ...checkStagingOrder(files),
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...checkSpec(files, specStage(files[SPEC_FILE] ?? '')),
-    ...checkFeedbackRounds(files),
+    ...(spec === undefined ? [] : checkSpec(files, specStage(spec), spec)),
+    ...checkFeedbackRounds(files, spec),
   ];
 }
 
@@ -162,9 +166,8 @@ export function checkStagingFolder(files: Readonly<Record<string, string>>, know
  * The feedback rounds, keyed by the Dossier's Sections and page Slides while it exists and by the Spec's once its
  * Gate deleted the Dossier; none before either exists.
  */
-function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
+function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: CheerioAPI | undefined): Finding[] {
   const dossier = files['dossier.md'];
-  const spec = files[SPEC_FILE];
   if (dossier !== undefined) {
     const blocks = blocksOf(bodyLines(dossier));
     return checkFeedback(files, { anchors: slideAnchors(blocks), sections: sectionSlugs(blocks), source: 'Dossier' });

@@ -1,7 +1,8 @@
 import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
-import { currentWorkers } from './vitest-workers.mts';
+import { SlowTestsLog } from './tools/load/slow-tests.mts';
+import { currentLoad } from './tools/load/workers.mts';
 
 const ROOT = import.meta.dirname;
 
@@ -13,29 +14,37 @@ const ROOT = import.meta.dirname;
  * of every fast test, not by grep. A new fast test that reads another path adds it here.
  *
  * Not listed: the `.ts` and `.tsx` files that scanner tests walk (no-daisyui, source-tree, the codegen registry,
- * factory-model-seam, slide-folders). Listing `src/**` would turn every edit into a full rerun; the full suite at
- * pre-push and in CI covers them.
+ * factory-model-seam). Listing `src/**` would turn every edit into a full rerun; the full suite at pre-push and in CI
+ * covers them. The Episode-level and Run-level checks need no trigger: each page folder's `episode-checks.test.ts` and
+ * each Run's `run-checks.test.ts` import their folder's files through `import.meta.glob`, which `--changed` follows
+ * (ARCH-003 §4.7).
  */
 const TRIGGERS = [
   // The suite itself, and the plugin that turns `.yml` and `.jsonl` imports into text.
   'vitest.config.mts',
   'package-lock.json',
   'raw-text-files.mts',
-  // Tool config that tests read: oxfmt, dependency-cruiser, tsconfig, the Claude hooks, markdown-harness and the deploy filter.
+  // Tool config that tests read: oxfmt, dependency-cruiser, tsconfig, the Claude hooks, markdown-harness, the CI triggers and the deploy filter.
   '.oxfmtrc.jsonc',
   '.dependency-cruiser.cjs',
   'tsconfig.json',
   '.claude/settings.json',
   'markdown-harness.config.yaml',
+  '.github/workflows/ci.yml',
   '.github/workflows/deploy-cloudflare.yml',
   '.archgate/adrs/FE-007-module-layering.md',
-  // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging, verified-corpus and the Explorable's guide.
+  // The files the FE-013 CLI test copies into its fixture project root and hands to `archgate check`.
+  '.archgate/config.json',
+  '.archgate/adrs/FE-013-content-store.md',
+  '.archgate/adrs/FE-013-content-store.rules.ts',
+  // Documents under markdown-harness checks: frontmatter-keys, slide-library, episode-staging and the Explorable's guide.
+  // A Run's staging files need none: its `run-checks.test.ts` imports them through `import.meta.glob` (ARCH-003 §4.7).
   'GLOSSARY.md',
   'docs/agents/*.md',
   'docs/design/*.md',
   'docs/features/*.md',
   'docs/features/explorables/agentic-workflow.md',
-  'docs/episodes/**',
+  'docs/episodes/runs.csv',
   'docs/llm-wiki/**',
   // Skills: SKILL.md frontmatter, the references and assets the staging tests read, the decision-page fixtures, and the scripts tests spawn.
   'skills/*/SKILL.md',
@@ -61,6 +70,14 @@ const TRIGGERS = [
   'tests/fixtures/**',
 ];
 
+// Workers and the test timeout both follow the load measured now: 5 s idle, up to 20 s on a loaded machine, 5 s on
+// CI (tools/load/workers.mts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
+// reporter's stdout clean.
+const load = await currentLoad();
+console.error(
+  `vitest: test timeout ${(load.testTimeout / 1000).toFixed(1)} s at load factor ${load.loadFactor.toFixed(1)} (${load.workers} workers)`,
+);
+
 // The fast suite, run by `npm run verify` and CI. `*.build.test.ts` needs a finished
 // `next build` and runs in its own lane: vitest.build.config.mts. `*.slow.test.ts` takes seconds
 // and runs in the slow lane: vitest.slow.config.mts.
@@ -73,7 +90,11 @@ export default defineConfig({
     },
   },
   test: {
-    maxWorkers: await currentWorkers(),
+    maxWorkers: load.workers,
+    testTimeout: load.testTimeout,
+    // Vitest's own default reporters, plus the log of every test over 750 ms with its load factor, which
+    // `verify` and `wt:done` print (tools/load/slow-tests.mts).
+    reporters: [...configDefaults.reporters, new SlowTestsLog({ loadFactor: load.loadFactor })],
     include: ['**/*.{test,spec}.ts'],
     exclude: [
       ...configDefaults.exclude,

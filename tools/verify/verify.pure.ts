@@ -1,10 +1,14 @@
 // The verify runner's judgement: which checks run, in which phase, and what to print. The process side lives in
 // verify.ts; this file runs a plan against whatever `Exec` it is handed.
 
-/** One check: the name a failure reports, and the shell command that runs it. */
+/**
+ * One check: the name a failure reports, the shell command that runs it, and whether it runs holding the test lock
+ * (tools/load/test-lock.ts), which pre-push's test runs queue on.
+ */
 export interface Step {
   name: string;
   command: string;
+  testLock?: true;
 }
 
 /** A named check run: its phases run in order, and the steps of one phase run at the same time. */
@@ -30,7 +34,8 @@ function script(name: string, scriptName: string = name): Step {
 const PREFLIGHT = script('preflight');
 const BOUNDARIES = script('boundaries', 'lint:boundaries');
 const TYPECHECK = script('typecheck');
-const TEST = script('test');
+/** The full fast suite, queued on the test lock so the pushes of several worktrees take turns. */
+const TEST: Step = { ...script('test'), testLock: true };
 const LINT = { name: 'lint', command: 'oxlint' };
 const FORMAT = script('format', 'format:check');
 /** Tests that the uncommitted changes affect: the changed files and everything that imports them. */

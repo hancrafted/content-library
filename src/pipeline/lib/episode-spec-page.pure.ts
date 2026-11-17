@@ -6,7 +6,7 @@
  * the new-episode scripts run it under bare node.
  */
 
-import { load } from 'cheerio';
+import { load, type CheerioAPI } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 
 /** The Spec page, relative to the Episode's staging folder. */
@@ -16,6 +16,17 @@ export const SLIDE = 'article[data-spec="slide"]';
 export const OPTION = 'figure[data-spec="option"]';
 export const TITLE_SLIDE = 'article[data-spec="title-slide"]';
 
+/**
+ * The Spec page as text or already parsed. A caller that reads one page several times parses it once and passes the
+ * page: parsing a Spec with its inline SVG mocks costs far more than any read of it.
+ */
+export type SpecHtml = string | CheerioAPI;
+
+/** The parsed Spec page: `html` itself when it is parsed already. */
+export function parseSpec(html: SpecHtml): CheerioAPI {
+  return typeof html === 'string' ? load(html) : html;
+}
+
 /** One Slide of the Spec: the Section it sits in, its slug and its Option ids in page order. */
 export interface SpecSlide {
   section: string;
@@ -24,8 +35,8 @@ export interface SpecSlide {
 }
 
 /** The Spec's Slides inside a Section, in page order; a Slide in no Section has no anchor, so it is no Slide here. */
-export function specSlides(html: string): SpecSlide[] {
-  const $ = load(html);
+export function specSlides(html: SpecHtml): SpecSlide[] {
+  const $ = parseSpec(html);
   return $(`${SECTION} ${SLIDE}`)
     .toArray()
     .map((slide) => ({
@@ -39,13 +50,13 @@ export function specSlides(html: string): SpecSlide[] {
 }
 
 /** The page Slide anchors of a Spec, `<section id>--<slide id>` in page order, as feedback items key them. */
-export function specSlideAnchors(html: string): string[] {
+export function specSlideAnchors(html: SpecHtml): string[] {
   return specSlides(html).map(({ section, slug }) => `${section}--${slug}`);
 }
 
 /** The Section slugs of a Spec in page order, each the anchor feedback items key its section slide by. */
-export function specSectionSlugs(html: string): string[] {
-  const $ = load(html);
+export function specSectionSlugs(html: SpecHtml): string[] {
+  const $ = parseSpec(html);
   return $(SECTION)
     .toArray()
     .map((section) => $(section).attr('id') ?? '');

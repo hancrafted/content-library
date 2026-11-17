@@ -1,6 +1,11 @@
 import { localizeSlide, localizeTitleScene } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
-import { ROBOT_STORY, robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
+import {
+  ROBOT_STORY,
+  storyAgainstSlides,
+  type DrawnSlide,
+  type StoryFindings,
+} from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import { load } from 'cheerio';
 import { createElement, Fragment, type ReactNode } from 'react';
@@ -12,7 +17,8 @@ import { hero } from './slides/hero/slide';
 /*
  * The robot story table against the Episode itself (feedback 3, decision 42): every Slide that draws the robot has its
  * row, in the Episode's order, so the story's rule that the robot never climbs back out of the water holds for the
- * Slides as they render. A Slide that adds or drops the robot adds or drops its row.
+ * Slides as they render. A Slide that adds or drops the robot adds or drops its row. Each Slide renders once; the
+ * judgement is `storyAgainstSlides`, and the story's own rules are tested beside it.
  */
 
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
@@ -20,56 +26,31 @@ const LABELS = { ref: 'opens speaker note', marker: (title: string) => `Speaker 
 const PLACED = placeSections<Slide>(episode.sections).flat();
 
 const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, null, node));
-const drawsRobot = (markup: string) => load(markup)('[data-robot]').length > 0;
 
-/** Every Slide's drawn markup, content and rear decoration, Title slide first, by slug. */
-function drawnSlides(): readonly { readonly slug: string; readonly markup: string }[] {
-  const title = localizeTitleScene(hero, {
-    episode: EPISODE,
-    locale: 'en',
-    placed: [],
-    referenceLabels: LABELS,
-    header: 'shared',
-  });
-  const pages = PLACED.map((entry) => {
-    const own = localizeSlide(entry, {
-      episode: EPISODE,
-      locale: 'en',
-      placed: PLACED,
-      referenceLabels: LABELS,
-      header: 'shared',
-    });
-    return { slug: entry.slide.slug, markup: html(own.content) + html(entry.slide.presentation?.rear) };
-  });
-  return [{ slug: hero.slug, markup: html(title) }, ...pages];
+/** The state each robot in `markup` carries, `unmarked` for a robot drawn without one. */
+function robotsIn(markup: string): readonly string[] {
+  const $ = load(markup);
+  return $('[data-robot]')
+    .toArray()
+    .map((robot) => $(robot).attr('data-robot-state') ?? 'unmarked');
 }
 
-/** The states each robot a Slide draws carries, `unmarked` for a robot drawn without one. */
-const drawnStates = (markup: string) =>
-  load(markup)('[data-robot]')
-    .toArray()
-    .map((robot) => load(markup)(robot).attr('data-robot-state') ?? 'unmarked');
-
-/** The slugs of every Slide whose content or rear decoration draws the robot, Title slide first. */
-function slidesWithRobot(): readonly string[] {
-  const title = localizeTitleScene(hero, {
-    episode: EPISODE,
-    locale: 'en',
-    placed: [],
-    referenceLabels: LABELS,
-    header: 'shared',
+/** Every Slide's robots, content and rear decoration, Title slide first, each Slide rendered once. */
+function drawnSlides(): readonly DrawnSlide[] {
+  const context = { episode: EPISODE, locale: 'en', referenceLabels: LABELS, header: 'shared' } as const;
+  const title = localizeTitleScene(hero, { ...context, placed: [] });
+  const pages = PLACED.map((entry) => {
+    const own = localizeSlide(entry, { ...context, placed: PLACED });
+    return { slug: entry.slide.slug, robots: robotsIn(html(own.content) + html(entry.slide.presentation?.rear)) };
   });
-  const pages = PLACED.filter((entry) => {
-    const own = localizeSlide(entry, {
-      episode: EPISODE,
-      locale: 'en',
-      placed: PLACED,
-      referenceLabels: LABELS,
-      header: 'shared',
-    });
-    return drawsRobot(html(own.content) + html(entry.slide.presentation?.rear));
-  }).map((entry) => entry.slide.slug);
-  return [...(drawsRobot(html(title)) ? [hero.slug] : []), ...pages];
+  return [{ slug: hero.slug, robots: robotsIn(html(title)) }, ...pages];
+}
+
+let rendered: StoryFindings | undefined;
+/** The story against this Episode's Slides, rendered on first use and shared by every test. */
+function findings(): StoryFindings {
+  rendered ??= storyAgainstSlides(drawnSlides());
+  return rendered;
 }
 
 describe('success cases', () => {
@@ -77,7 +58,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = ROBOT_STORY.map(({ slide }) => slide);
     // ACT
-    const drawn = slidesWithRobot();
+    const { drawn } = findings();
     // ASSERT
     expect(drawn).toEqual(expected);
   });
@@ -88,32 +69,19 @@ describe('failure cases', () => {
     // ARRANGE
     const expected: readonly string[] = [];
     // ACT
-    const strays = drawnSlides().flatMap(({ slug, markup }) =>
-      drawnStates(markup)
-        .filter((state) => ROBOT_STORY.some((row) => row.slide === slug) && state !== robotAt(slug).state)
-        .map((state) => `${slug} draws ${state}, its row says ${robotAt(slug).state}`),
-    );
+    const { strays } = findings();
     // ASSERT
     expect(strays).toEqual(expected);
-  });
-
-  it('has no row for a Slide the Episode does not hold', () => {
-    // ARRANGE
-    const held = new Set([hero.slug, ...PLACED.map(({ slide }) => slide.slug)]);
-    // ACT
-    const strays = ROBOT_STORY.filter(({ slide }) => !held.has(slide)).map(({ slide }) => slide);
-    // ASSERT
-    expect(strays).toEqual([]);
   });
 });
 
 describe('edge cases', () => {
-  it('lists each Slide once, even a Slide that draws the robot twice', () => {
+  it('has no row for a Slide the Episode does not hold', () => {
     // ARRANGE
-    const slugs = ROBOT_STORY.map(({ slide }) => slide);
+    const expected: readonly string[] = [];
     // ACT
-    const repeated = slugs.filter((slug, index) => slugs.indexOf(slug) !== index);
+    const { unheld } = findings();
     // ASSERT
-    expect(repeated).toEqual([]);
+    expect(unheld).toEqual(expected);
   });
 });

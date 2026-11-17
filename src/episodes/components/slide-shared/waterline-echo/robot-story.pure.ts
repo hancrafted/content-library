@@ -64,3 +64,38 @@ export function storyBreaks(story: readonly RobotBeat[]): readonly string[] {
     return climbsOut || earlyRecovery ? [slide] : [];
   });
 }
+
+/** One Slide as it renders: its slug and the `data-robot-state` of each robot it draws, `unmarked` for none. */
+export interface DrawnSlide {
+  readonly slug: string;
+  readonly robots: readonly string[];
+}
+
+/** What the story says against an Episode's rendered Slides. */
+export interface StoryFindings {
+  /** The Slides that draw the robot, in the Episode's order: the story's rows, in its order, when it holds. */
+  readonly drawn: readonly string[];
+  /** Each robot a Slide with a row draws in another state than its row. */
+  readonly strays: readonly string[];
+  /** The rows for a Slide the Episode does not hold. */
+  readonly unheld: readonly string[];
+}
+
+/** The robot story against an Episode's Slides, Title slide first, each rendered once. */
+export function storyAgainstSlides(
+  slides: readonly DrawnSlide[],
+  story: readonly RobotBeat[] = ROBOT_STORY,
+): StoryFindings {
+  const held = new Set(slides.map(({ slug }) => slug));
+  return {
+    drawn: slides.filter(({ robots }) => robots.length > 0).map(({ slug }) => slug),
+    strays: slides.flatMap(({ slug, robots }) => {
+      const row = story.find(({ slide }) => slide === slug);
+      if (row === undefined) return [];
+      return robots
+        .filter((state) => state !== row.state)
+        .map((state) => `${slug} draws ${state}, its row says ${row.state}`);
+    }),
+    unheld: story.filter(({ slide }) => !held.has(slide)).map(({ slide }) => slide),
+  };
+}
