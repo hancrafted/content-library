@@ -1,9 +1,5 @@
 import type { ArtManifest } from '@/episodes/lib/art-manifest';
 
-/**
- * The URL a `<use>` of the named art points at, or `null` for art that stays inline; a name the art build never drew
- * fails the build, naming it.
- */
 export function artUrl(name: string, manifest: ArtManifest, basePath: string): string | null {
   const url = manifest[name];
   if (url === undefined) {
