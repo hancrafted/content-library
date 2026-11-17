@@ -8,7 +8,7 @@ import { controlProblem } from '../grader/feedback.pure.ts';
 import {
   awaitStatus,
   breakSave,
-  clearStatus,
+  clearStatusSoNextReadAnswersNextAction,
   commentField,
   copyPrompt,
   countOf,
@@ -17,7 +17,7 @@ import {
   fieldKept,
   identityOf,
   resetAll,
-  restoreComment,
+  restoreCommentSoEachPathStartsFromSameInput,
   save,
   standInClipboard,
   STATUS,
@@ -57,8 +57,8 @@ export interface FailuresObservation {
 
 /** Clears the status, runs the failing action, and records what it left behind. */
 async function afterFailure(page: Page, pageId: string, fail: () => Promise<unknown>): Promise<FailedPath> {
-  await restoreComment(page);
-  await clearStatus(page);
+  await restoreCommentSoEachPathStartsFromSameInput(page);
+  await clearStatusSoNextReadAnswersNextAction(page);
   await fail();
   return {
     status: await awaitStatus(page),
@@ -70,8 +70,8 @@ async function afterFailure(page: Page, pageId: string, fail: () => Promise<unkn
 
 /** Runs the action that should succeed and returns the status it reported. */
 async function afterSuccess(page: Page, succeed: () => Promise<unknown>): Promise<string> {
-  await restoreComment(page);
-  await clearStatus(page);
+  await restoreCommentSoEachPathStartsFromSameInput(page);
+  await clearStatusSoNextReadAnswersNextAction(page);
   await succeed();
   return awaitStatus(page);
 }

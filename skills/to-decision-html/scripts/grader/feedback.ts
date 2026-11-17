@@ -3,11 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { COMMENT, COMMENT_MARK } from './feedback.pure.ts';
 
 export const COMMENT_FIELD = ':is([data-item], [data-questions]) textarea:not([readonly], [disabled])';
-/**
- * The ceiling for a control to show its outcome. Every wait below ends as soon as the outcome shows (a clipboard
- * write, a download, a status message); only a page that never shows one waits this long.
- */
-const OUTCOME_TIMEOUT_MILLISECONDS = 1500;
+const OUTCOME_WAIT_CEILING_MILLISECONDS = 1500;
 
 export interface Identity {
   readonly pageId: string;
@@ -49,7 +45,7 @@ export async function copyPrompt(page: Page): Promise<string | null> {
     const written = await page.waitForFunction(
       () => (window as unknown as { __graderClipboard?: string }).__graderClipboard,
       undefined,
-      { timeout: OUTCOME_TIMEOUT_MILLISECONDS },
+      { timeout: OUTCOME_WAIT_CEILING_MILLISECONDS },
     );
     return (await written.jsonValue()) as string;
   } catch {
@@ -65,7 +61,7 @@ export interface Download {
 export async function save(page: Page): Promise<Download | null> {
   try {
     const [download] = await Promise.all([
-      page.waitForEvent('download', { timeout: OUTCOME_TIMEOUT_MILLISECONDS }),
+      page.waitForEvent('download', { timeout: OUTCOME_WAIT_CEILING_MILLISECONDS }),
       page.locator('[data-save]').click(),
     ]);
     return { filename: download.suggestedFilename(), text: await readFile(await download.path(), 'utf8') };
@@ -76,8 +72,7 @@ export async function save(page: Page): Promise<Download | null> {
 
 export const STATUS = '[role="status"], [role="alert"], [aria-live]';
 
-/** Empties every status message, so the next one read is the page's answer to the next action. */
-export async function clearStatus(page: Page): Promise<void> {
+export async function clearStatusSoNextReadAnswersNextAction(page: Page): Promise<void> {
   await page.evaluate((selector) => {
     for (const region of document.querySelectorAll(selector)) region.textContent = '';
   }, STATUS);
@@ -90,7 +85,7 @@ export async function awaitStatus(page: Page): Promise<string> {
       .filter(Boolean)
       .join(' ');
   try {
-    await page.waitForFunction(read, STATUS, { timeout: OUTCOME_TIMEOUT_MILLISECONDS });
+    await page.waitForFunction(read, STATUS, { timeout: OUTCOME_WAIT_CEILING_MILLISECONDS });
   } catch {
     return '';
   }
@@ -99,8 +94,7 @@ export async function awaitStatus(page: Page): Promise<string> {
 
 export const fieldKept = async (page: Page): Promise<boolean> => (await commentField(page).inputValue()) === COMMENT;
 
-/** Puts the comment back when a path lost it, so each path starts from the same input. */
-export async function restoreComment(page: Page): Promise<void> {
+export async function restoreCommentSoEachPathStartsFromSameInput(page: Page): Promise<void> {
   if (!(await fieldKept(page))) await commentField(page).fill(COMMENT);
 }
 
