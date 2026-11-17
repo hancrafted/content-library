@@ -5,8 +5,7 @@ import { lintProbe } from './lint-probe';
 const SLIDE = 'src/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
 const TIMEOUT = 30_000;
 
-/** The messages a marker call site draws from the guard when linted as a Slide. */
-async function refused(element: string): Promise<string[]> {
+async function hitAreaGuardRulesAtSlide(element: string): Promise<string[]> {
   const code = `export const Probe = () => ${element};\n`;
   const diagnostics = await lintProbe(code, SLIDE);
   return diagnostics.filter((d) => d.message.includes('hit area')).map((d) => d.ruleId);
@@ -26,7 +25,7 @@ describe('failure cases', () => {
       // ARRANGE
       const expected = ['no-restricted-syntax'];
       // ACT
-      const rules = await refused(element);
+      const rules = await hitAreaGuardRulesAtSlide(element);
       // ASSERT
       expect(rules).toEqual(expected);
     },
@@ -45,7 +44,7 @@ describe('success cases', () => {
       // ARRANGE
       const expected: string[] = [];
       // ACT
-      const rules = await refused(element);
+      const rules = await hitAreaGuardRulesAtSlide(element);
       // ASSERT
       expect(rules).toEqual(expected);
     },

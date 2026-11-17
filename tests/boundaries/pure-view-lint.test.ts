@@ -6,8 +6,7 @@ const VIEW = 'src/explorables/context-window/probe-view.tsx';
 const OTHER = 'src/explorables/context-window/probe.tsx';
 const TIMEOUT = 30_000;
 
-/** The messages the no-restricted-syntax rule raises for a snippet linted as `file`. */
-async function restricted(code: string, file: string): Promise<string[]> {
+async function noRestrictedSyntaxMessages(code: string, file: string): Promise<string[]> {
   const diagnostics = await lintProbe(code, file);
   return diagnostics.filter((d) => d.ruleId === 'no-restricted-syntax').map((d) => d.message);
 }
@@ -32,7 +31,7 @@ describe('failure cases', () => {
       // ARRANGE
       const expected = true;
       // ACT
-      const messages = await restricted(code, VIEW);
+      const messages = await noRestrictedSyntaxMessages(code, VIEW);
       // ASSERT
       expect(messages.some((m) => m.includes(fragment))).toBe(expected);
     },
@@ -47,7 +46,7 @@ describe('success cases', () => {
       // ARRANGE
       const expected: string[] = [];
       // ACT
-      const messages = await restricted(PURE, VIEW);
+      const messages = await noRestrictedSyntaxMessages(PURE, VIEW);
       // ASSERT
       expect(messages).toEqual(expected);
     },
@@ -60,7 +59,7 @@ describe('success cases', () => {
       // ARRANGE
       const expected: string[] = [];
       // ACT
-      const messages = await restricted(HANDLER, OTHER);
+      const messages = await noRestrictedSyntaxMessages(HANDLER, OTHER);
       // ASSERT
       expect(messages).toEqual(expected);
     },

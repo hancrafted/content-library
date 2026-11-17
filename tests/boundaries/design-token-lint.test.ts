@@ -73,8 +73,7 @@ const PROBES: Record<string, ProbeEntry> = {
   'hero in its file': { virtualPath: HERO_TITLE, classes: 'font-semibold text-hero' },
 };
 
-/** The swapped relative sizes: their files are exempt by exact path, already probed in the first run. */
-const SWAPPED_PROBES: Record<string, ProbeEntry> = {
+const SECOND_RUN_SWAPPED_EXACT_PATH_PROBES: Record<string, ProbeEntry> = {
   'citation file swapped': { virtualPath: CITATION, classes: 'text-[0.9em]' },
   'inline code file swapped': { virtualPath: INLINE_CODE, classes: 'text-[0.7em]' },
 };
@@ -95,7 +94,7 @@ async function lintTable(table: Record<string, ProbeEntry>): Promise<[key: strin
 const broken = new Map<string, string[]>();
 
 beforeAll(async () => {
-  const runs = await Promise.all([lintTable(PROBES), lintTable(SWAPPED_PROBES)]);
+  const runs = await Promise.all([lintTable(PROBES), lintTable(SECOND_RUN_SWAPPED_EXACT_PATH_PROBES)]);
   for (const [key, rules] of runs.flat()) broken.set(key, rules);
 }, TIMEOUT);
 

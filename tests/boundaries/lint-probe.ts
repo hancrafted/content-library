@@ -52,11 +52,10 @@ export async function lintProbes(probes: readonly Probe[]): Promise<ProbeDiagnos
       mkdirSync(path.join(mirror, path.dirname(virtualPath)), { recursive: true });
       writeFileSync(path.join(mirror, virtualPath), source);
     }
-    // oxlint exits 1 when it reports an error; the JSON on stdout is the answer either way.
     const { stdout } = await run(OXLINT, ['-c', '.oxlintrc.json', '-f', 'json', ...paths], { cwd: mirror }).catch(
-      (error: { stdout?: string }) => {
-        if (!error.stdout) throw error;
-        return { stdout: error.stdout };
+      (exitOneOnReportedErrorStillCarryingJson: { stdout?: string }) => {
+        if (!exitOneOnReportedErrorStillCarryingJson.stdout) throw exitOneOnReportedErrorStillCarryingJson;
+        return { stdout: exitOneOnReportedErrorStillCarryingJson.stdout };
       },
     );
     const { diagnostics } = JSON.parse(stdout) as { diagnostics: RawDiagnostic[] };

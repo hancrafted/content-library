@@ -11,11 +11,10 @@ const RULE_NAMES = new Set([...config.forbidden, ...config.required].map(({ name
 const ADRS = '.archgate/adrs';
 const ADR_FILES = readdirSync(ADRS).filter((file) => file.endsWith('.md'));
 
-/** The routes are the framework zone, not an area. */
-const NOT_AN_AREA = new Set(['app']);
+const ROUTES_FRAMEWORK_ZONE_NOT_AN_AREA = new Set(['app']);
 const HOMES = [
   ...readdirSync('src', { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !NOT_AN_AREA.has(entry.name))
+    .filter((entry) => entry.isDirectory() && !ROUTES_FRAMEWORK_ZONE_NOT_AN_AREA.has(entry.name))
     .map(({ name }) => `src/${name}`),
   'tools',
 ];

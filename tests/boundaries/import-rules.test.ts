@@ -113,8 +113,7 @@ const PIPELINE = 'src/pipeline';
 // decision: FE-007 §1.3
 const OWN_ROUTE = 'src/app/(en)/episodes/probe/page.tsx';
 const EVENT_ROUTE = 'src/app/[locale]/events/2026-01-01-probe/episodes/probe/page.tsx';
-/** A hand-written route, which reaches no area at all. */
-const LIST_ROUTE = 'src/app/(en)/probe-list/page.tsx';
+const HAND_WRITTEN_ROUTE_REACHING_NO_AREA = 'src/app/(en)/probe-list/page.tsx';
 
 // decision: FE-007 §2
 // decision: FE-007 §3
@@ -183,7 +182,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   ],
   [`${DASHBOARD}/reaches-hook.tsx`]: [`${PIPELINE}/hooks/use-run`],
   [EVENT_ROUTE]: ['src/episodes/lib/registry', `${LANDING}/landing-page`],
-  [LIST_ROUTE]: ['src/episodes/probe/episode', `${LANDING}/landing-page`],
+  [HAND_WRITTEN_ROUTE_REACHING_NO_AREA]: ['src/episodes/probe/episode', `${LANDING}/landing-page`],
   [`${EVENTS}/lib/reaches-episodes.pure.ts`]: ['src/episodes/lib/probe.pure'],
   [`${EVENTS}/components/reaches-episodes.tsx`]: [
     'src/episodes/lib/registry',
@@ -572,7 +571,7 @@ describe('failure cases', () => {
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${EVENTS}/index.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> src/explorables/index.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
-      `route-reaches-components-only-via-roots: ${LIST_ROUTE} -> src/episodes/probe/episode.ts`,
+      `route-reaches-components-only-via-roots: ${HAND_WRITTEN_ROUTE_REACHING_NO_AREA} -> src/episodes/probe/episode.ts`,
       `shared-knows-no-domain: src/shared/components/reaches-events.tsx -> ${EVENTS}/components/probe-card.tsx`,
       'shared-knows-no-domain: src/shared/lib/reaches-domain.pure.ts -> src/content-store/schemas/fields.ts',
       'shared-knows-no-domain: src/shared/lib/reaches-domain.pure.ts -> src/content-store/store.ts',
