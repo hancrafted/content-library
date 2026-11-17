@@ -159,10 +159,7 @@
   background: color-mix(in oklab, var(--bulb) 35%, transparent);
 }
 
-/*
- * The bracket draws once the robots have stopped (Spec Option 15b). The base rule is the rest state, so a still frame
- * and reduced motion show it at once.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .late {
     animation: late-in 420ms ease-out var(--late-delay, 0ms) both;

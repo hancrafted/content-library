@@ -15,7 +15,6 @@ const OVERRIDE = 'project-details-hard-coded-into-a-skill-can-override-the-task'
 const STEPS = ['check-gear', 'descend', 'lower-arm', 'identify'] as const;
 const COUPLED_STEP = 'descend';
 
-/** The skill as a coding agent holds it: code, so never translated. */
 const SKILL_FILE = 'collect-sediment-sample/SKILL.md';
 const SKILL_LINES = ['1. Check arm and tubes.'] as const;
 const CODED_STEP = '2. Descend to 40 m.';
