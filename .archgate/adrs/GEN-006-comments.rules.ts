@@ -54,7 +54,7 @@ const TARGETS = {
   },
   spec: {
     grammar: /(docs\/features\/[^\s#]+\.md)#(\S+)/,
-    takes: 'a docs/features/ heading, `spec: docs/features/hosting.md#deploy-target`',
+    takes: 'a docs/features/ heading, `spec: docs/features/hosting.md#how-it-deploys`',
   },
   evidence: {
     grammar: /(docs\/(?:[^\s#]+\/)?research\/[^\s#]+\.md)/,
