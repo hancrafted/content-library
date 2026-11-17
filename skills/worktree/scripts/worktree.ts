@@ -141,7 +141,7 @@ function deleteMerged(branch: string, base: string): void {
 
 async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
-  const slowTests = slowTestReport(branch, base, mainRoot());
+  const slowTests = slowTestReport(branch, base, { cwd: mainRoot(), now: new Date() });
   try {
     const result = await mergeIntoBase(branch, base, mainRoot());
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);

@@ -170,25 +170,42 @@ describe('mergeIntoBase', () => {
 
 /** One slow-tests log line, as the fast suite's reporter writes it. */
 const slowEntry = (test: string, branch: string, at: Date) =>
-  JSON.stringify({ test, file: 'src/walk.test.ts', ms: 6200, branch, at: at.toISOString() }) + '\n';
+  JSON.stringify({ test, file: 'src/walk.test.ts', ms: 1200, loadFactor: 2.4, branch, at: at.toISOString() }) + '\n';
+
+const HOUR = 60 * 60 * 1000;
+const DAY = 24 * HOUR;
 
 describe('slowTestReport', () => {
   describe('success cases', () => {
+    it('trims the shared log to the last 30 days as it reads it', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
+      const now = new Date(forkedAt.getTime() + 2 * HOUR);
+      const log = path.join(main, '.git', 'slow-tests.jsonl');
+      const recent = slowEntry('on another branch', 'other', new Date(now.getTime() - DAY));
+      writeFileSync(log, slowEntry('long ago', 'other', new Date(now.getTime() - 31 * DAY)) + recent);
+      // ACT
+      slowTestReport('work', 'base', { cwd: main, now });
+      // ASSERT
+      expect(readFileSync(log, 'utf8')).toBe(recent);
+    });
+
     it("keeps only the merging branch's entries logged at or after its merge-base's committer date", () => {
       // ARRANGE
       const { main } = fixture();
       const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
-      const hour = 60 * 60 * 1000;
+      const now = new Date(forkedAt.getTime() + 2 * HOUR);
       writeFileSync(
         path.join(main, '.git', 'slow-tests.jsonl'),
-        slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - hour)) +
-          slowEntry('after the fork', 'work', new Date(forkedAt.getTime() + hour)) +
-          slowEntry('on another branch', 'other', new Date(forkedAt.getTime() + hour)),
+        slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - HOUR)) +
+          slowEntry('after the fork', 'work', new Date(forkedAt.getTime() + HOUR)) +
+          slowEntry('on another branch', 'other', new Date(forkedAt.getTime() + HOUR)),
       );
-      const header = '! 1 test ran past 5 s on work since it branched off base:';
-      const line = `  6.2 s  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + hour).toISOString()})`;
+      const header = '! 1 test ran past 750 ms on work since it branched off base:';
+      const line = `  1.2 s at load 2.4  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + HOUR).toISOString()})`;
       // ACT
-      const report = slowTestReport('work', 'base', main);
+      const report = slowTestReport('work', 'base', { cwd: main, now });
       // ASSERT
       expect(report).toEqual([header, line]);
     });
@@ -198,8 +215,9 @@ describe('slowTestReport', () => {
     it('prints nothing when the repository has no slow-tests log yet', () => {
       // ARRANGE
       const { main } = fixture();
+      const now = new Date('2026-11-17T12:00:00.000Z');
       // ACT
-      const report = slowTestReport('work', 'base', main);
+      const report = slowTestReport('work', 'base', { cwd: main, now });
       // ASSERT
       expect(report).toEqual([]);
     });

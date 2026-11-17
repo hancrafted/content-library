@@ -1,6 +1,6 @@
 import os from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { currentLoad, idleFraction, loadFromIdle, timeoutFor, workersFor, type CpuTimes } from './vitest-workers.mts';
+import { currentLoad, idleFraction, loadFromIdle, timeoutFor, workersFor, type CpuTimes } from './workers.mts';
 
 const cpu = (idle: number, busy: number): CpuTimes => ({ idle, busy });
 
@@ -124,10 +124,10 @@ describe('the vitest configs', () => {
   it('lets the fast config take the load-aware timeout and log its slow tests, while the slow config keeps its own', async () => {
     // ARRANGE
     const slowLaneTimeout = 60_000;
-    const { SlowTestsLog } = await import('./vitest-slow-tests.mts');
+    const { SlowTestsLog } = await import('./slow-tests.mts');
     // ACT
-    const fast = (await import('./vitest.config.mts')).default;
-    const slow = (await import('./vitest.slow.config.mts')).default;
+    const fast = (await import('../../vitest.config.mts')).default;
+    const slow = (await import('../../vitest.slow.config.mts')).default;
     // ASSERT
     expect(fast.test?.testTimeout).toBeGreaterThanOrEqual(5_000);
     expect(fast.test?.testTimeout).toBeLessThanOrEqual(20_000);

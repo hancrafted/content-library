@@ -1,7 +1,13 @@
 // Merging a finished branch into its --base, before its worktree is removed.
 import { execFileSync } from 'node:child_process';
 import { withLock } from '../../../tools/load/lock.ts';
-import { slowTestsLogPath, slowTestsSince } from '../../../vitest-slow-tests.mts';
+import {
+  formatSlowTest,
+  SLOW_TEST_MS,
+  slowTestsLogPath,
+  slowTestsSince,
+  trimSlowTests,
+} from '../../../tools/load/slow-tests.mts';
 import { git } from './git.ts';
 
 /** The worktree that has `base` checked out, from `git worktree list --porcelain`. */
@@ -38,21 +44,24 @@ export function mergeIntoBase(branch: string, base: string, cwd: string): Promis
 }
 
 /**
- * The lines a finish prints about the fast-suite tests that ran past 5 s on `branch` since it branched off `base`:
- * the shared slow-tests log's entries (see vitest-slow-tests.mts) whose branch is `branch` and whose time is at or
+ * The lines a finish prints about the fast-suite tests that ran past 750 ms on `branch` since it branched off `base`:
+ * the shared slow-tests log's entries (see tools/load/slow-tests.mts) whose branch is `branch` and whose time is at or
  * after the committer date of the merge-base of `branch` and `base`, so the orchestrator sees creeping tests
- * in the merge output. Empty when there are none. Call it before merging: afterwards the merge-base is the tip.
+ * in the merge output. Empty when there are none. First trims the log to the 30 days before `now`. Call it before
+ * merging: afterwards the merge-base is the tip.
  */
-export function slowTestReport(branch: string, base: string, cwd: string): string[] {
+export function slowTestReport(branch: string, base: string, { cwd, now }: { cwd: string; now: Date }): string[] {
   const log = slowTestsLogPath(cwd);
+  if (log === null) return [];
+  trimSlowTests(log, now);
   const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
-  if (log === null || fork === '') return [];
+  if (fork === '') return [];
   const since = new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
   const entries = slowTestsSince(log, branch, since);
   if (entries.length === 0) return [];
   const count = entries.length === 1 ? '1 test' : `${entries.length} tests`;
   return [
-    `! ${count} ran past 5 s on ${branch} since it branched off ${base}:`,
-    ...entries.map((e) => `  ${(e.ms / 1000).toFixed(1)} s  ${e.file} > ${e.test}  (${e.at})`),
+    `! ${count} ran past ${SLOW_TEST_MS} ms on ${branch} since it branched off ${base}:`,
+    ...entries.map(formatSlowTest),
   ];
 }
