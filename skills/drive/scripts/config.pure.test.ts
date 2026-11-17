@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULTS, harnessCapFrom, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
+import { defaultsFor, harnessCapFrom, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
+
+const ENTRY = 'skills/drive/scripts/drive.ts';
 
 describe('parseConfig', () => {
   describe('success cases', () => {
@@ -21,7 +23,7 @@ describe('parseConfig', () => {
         'decisionDocs: [docs/words.md]',
       ].join('\n');
       // ACT
-      const config = parseConfig(text);
+      const config = parseConfig(text, ENTRY);
       // ASSERT
       expect(config).toEqual({
         worktree: {
@@ -41,13 +43,22 @@ describe('parseConfig', () => {
       });
     });
 
+    it('defaults invoke to a command that runs the CLI at the entry it is given', () => {
+      // ARRANGE / ACT
+      const config = parseConfig('', 'tools/drive/scripts/drive.ts');
+      // ASSERT
+      expect(config).toMatchObject({ worktree: { invoke: 'node tools/drive/scripts/drive.ts worktree' } });
+    });
+
     it('fills the defaults for an empty file, a missing section and missing keys', () => {
       // ARRANGE
       const texts = ['', 'other: 1', 'worktree: {}'];
       // ACT
-      const configs = texts.map(parseConfig);
+      const configs = texts.map((text) => parseConfig(text, ENTRY));
       // ASSERT
-      expect(configs).toEqual(texts.map(() => ({ worktree: DEFAULTS, parallel: PARALLEL_DEFAULTS, decisionDocs: [] })));
+      expect(configs).toEqual(
+        texts.map(() => ({ worktree: defaultsFor(ENTRY), parallel: PARALLEL_DEFAULTS, decisionDocs: [] })),
+      );
     });
   });
 
@@ -65,7 +76,7 @@ describe('parseConfig', () => {
         'decisionDocs: x',
       ];
       // ACT
-      const errors = texts.map((text) => parseConfig(text));
+      const errors = texts.map((text) => parseConfig(text, ENTRY));
       // ASSERT
       expect(errors.every((config) => 'error' in config)).toBe(true);
       expect(errors.map((config) => ('error' in config ? config.error : ''))).toEqual([

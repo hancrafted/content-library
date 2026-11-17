@@ -13,6 +13,16 @@ export function fail(message: string): never {
   process.exit(1);
 }
 
+/**
+ * The CLI's `drive.ts` as a command path: relative to `root` with `/`, or absolute when the skill sits outside the
+ * repo, so a path written into the repo never leaves it. A relative result is therefore a path inside the repo.
+ */
+export function driveEntry(root: string, scriptsDir: string = import.meta.dirname): string {
+  const relative = path.relative(root, path.join(scriptsDir, 'drive.ts'));
+  const inside = relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative);
+  return (inside ? relative : path.resolve(root, relative)).split(path.sep).join('/');
+}
+
 /** The main checkout, wherever this runs from: worktrees share its git dir. */
 function mainRoot(): string {
   return path.dirname(path.resolve(capture('git', ['rev-parse', '--git-common-dir'])));
@@ -36,7 +46,7 @@ export function loadConfig(root: string): DriveConfig {
   } catch {
     // No config: the defaults, which hold no lock, no install steps, no hooks and no Decision docs.
   }
-  const parsed = parseConfig(text);
+  const parsed = parseConfig(text, driveEntry(root));
   if ('error' in parsed) fail(parsed.error);
   return parsed;
 }

@@ -119,6 +119,39 @@ describe('drive worktree', () => {
       expect(readFileSync(path.join(main, 'after.txt'), 'utf8').trim()).toBe('after');
     });
 
+    it('done removes the folder when Finder drops a .DS_Store into it during teardown', () => {
+      // ARRANGE: a git that, as `worktree remove` runs, leaves the folder behind holding only a .DS_Store
+      const { main, root } = fixture();
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      const realGit = execFileSync('which', ['git'], { encoding: 'utf8' }).trim();
+      const shim = path.join(root, 'bin', 'git');
+      mkdirSync(path.dirname(shim), { recursive: true });
+      writeFileSync(
+        shim,
+        [
+          '#!/bin/sh',
+          `"${realGit}" "$@" || exit $?`,
+          'if [ "$1" = worktree ] && [ "$2" = remove ]; then',
+          '  mkdir -p "$3" && touch "$3/.DS_Store"',
+          '  echo "error: failed to delete: Directory not empty" >&2',
+          '  exit 1',
+          'fi',
+        ].join('\n'),
+        { mode: 0o755 },
+      );
+      // ACT
+      const result = spawnSync(process.execPath, [CLI, 'worktree', 'done', 'feat/x--1-task', '--base', 'feat/x'], {
+        cwd: main,
+        encoding: 'utf8',
+        env: { ...process.env, PATH: `${path.dirname(shim)}${path.delimiter}${process.env.PATH}` },
+      });
+      // ASSERT
+      expect(result.status, result.stderr).toBe(0);
+      expect(existsSync(tree)).toBe(false);
+      expect(git(main, 'branch', '--list', 'feat/x--1-task')).toBe('');
+    });
+
     it('done without --base removes the worktree and fast-forwards local main from the remote', () => {
       // ARRANGE
       const { main, root } = fixture();
