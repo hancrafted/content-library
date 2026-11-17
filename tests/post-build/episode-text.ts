@@ -21,12 +21,14 @@ export interface EpisodeText {
   readonly script: readonly TextRegion[];
 }
 
+const CHROME_ACTIONS_ADDED_AFTER_THE_MIGRATION_CAPTURE = '[data-toc-actions]';
+
 function textOf(element: unknown): string {
   const parts: string[] = [];
   const walk = (node: DomNode): void => {
     if (node.type === 'text') parts.push(node.data ?? '');
-    // A typed Slide header repeats its visually hidden text character by character: the hidden copy counts once.
-    if (node.type === 'tag' && node.attribs?.['data-typed'] === undefined) node.children?.forEach(walk);
+    const typedHeaderRepeatingHiddenTextByCharacter = node.attribs?.['data-typed'] !== undefined;
+    if (node.type === 'tag' && !typedHeaderRepeatingHiddenTextByCharacter) node.children?.forEach(walk);
   };
   walk(element as DomNode);
   return parts.join(' ').replace(/\s+/g, ' ').trim();
@@ -46,8 +48,7 @@ export function episodeText($: CheerioAPI): EpisodeText {
       .toArray()
       .map((toc) => {
         const outline = $(toc).clone();
-        // The migration capture pins the outline, not subsequently added chrome actions.
-        outline.find('[data-toc-actions]').remove();
+        outline.find(CHROME_ACTIONS_ADDED_AFTER_THE_MIGRATION_CAPTURE).remove();
         return textOf(outline.get(0));
       })
       .join(' '),

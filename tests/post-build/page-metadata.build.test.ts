@@ -54,8 +54,7 @@ function oneWayAlternates(page: PageLinks, byFile: ReadonlyMap<string, PageLinks
     .map(([lang, href]) => `${page.file} → ${lang} ${href}`);
 }
 
-/** The absolute URL a crawler should see for a page: trailing slash, as Cloudflare Pages serves it unredirected. */
-function servedUrl(url: string): string {
+function trailingSlashUrlCloudflarePagesServesUnredirected(url: string): string {
   return url === '/' ? `${SITE_URL}/` : `${SITE_URL}${url}/`;
 }
 
@@ -77,7 +76,7 @@ describe('page metadata', () => {
     // ARRANGE
     const expected = SELF_CANONICAL.map((page) => ({
       file: exportedFile(page.url),
-      canonicals: [servedUrl(page.url)],
+      canonicals: [trailingSlashUrlCloudflarePagesServesUnredirected(page.url)],
     }));
     // ACT
     const actual = pages.map(({ file, canonicals }) => ({ file, canonicals }));

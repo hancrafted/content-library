@@ -62,18 +62,13 @@ export function exportedFile(url: string): string {
   return nextConfig.trailingSlash ? join(path, 'index.html') : `${path}.html`;
 }
 
-const parsedPages = new Map<string, CheerioAPI>();
+const pagesParsedOncePerTestFileAndSharedReadOnly = new Map<string, CheerioAPI>();
 
-/**
- * The exported page for a URL, parsed once per test file and shared by every test in it: a page is
- * read dozens of times, and re-parsing it per test dominated the post-build lane. Read only — a test
- * that mutates the document would leak into the next one.
- */
 export function exportedPage(url: string): CheerioAPI {
-  let page = parsedPages.get(url);
+  let page = pagesParsedOncePerTestFileAndSharedReadOnly.get(url);
   if (page === undefined) {
     page = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
-    parsedPages.set(url, page);
+    pagesParsedOncePerTestFileAndSharedReadOnly.set(url, page);
   }
   return page;
 }
