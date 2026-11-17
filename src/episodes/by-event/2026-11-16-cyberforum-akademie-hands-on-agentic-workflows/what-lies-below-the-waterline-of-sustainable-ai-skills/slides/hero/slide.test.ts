@@ -124,8 +124,9 @@ describe('success cases', () => {
 
   it('draws the water under the waterline at half the facet density before feedback 2, its bleed faceted too', () => {
     // ARRANGE
-    // 72 across one 1200-wide drawing before (decision 8); now 40 a drawing's width, over the three widths of the bleed.
-    const expected = 120;
+    const trianglesPerDrawing = 40;
+    const drawingWidths = 3;
+    const expected = trianglesPerDrawing * drawingWidths;
     // ACT
     const $ = sceneOf('en');
     const triangles = $('[data-depth-band] [data-band="water"] polygon').length;

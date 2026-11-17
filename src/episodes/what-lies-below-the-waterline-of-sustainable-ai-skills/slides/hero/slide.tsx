@@ -22,6 +22,10 @@ const MARKER = { x: SHIP_X + ANCHORS.aFrameTip.x, y: WATERLINE + 36 };
 const ROBOT_HANG = -56;
 const CREW_SCALE = 0.42;
 
+function HeaderSpacer() {
+  return <div aria-hidden="true" data-hero-room className="flex-1" />;
+}
+
 function Dive() {
   const { aFrameTip, bridge } = ANCHORS;
   return (
@@ -69,10 +73,7 @@ export const hero = slide({
     ];
     return (
       <>
-        {/* An empty box takes the Slide's free height, so the shared header sits at the top, in the sky. The drawing
-            and its words sit beside it, never in it: the entrance lifts each child of the Scene, and a lifted frame
-            would hold them to its own inset box, so they position against the Slide wrapper, full-bleed. */}
-        <div aria-hidden="true" data-hero-room className="flex-1" />
+        <HeaderSpacer />
         <HeroDepthScene
           layers={{ Backdrop: SlideBackdrop }}
           label={t('label')}
