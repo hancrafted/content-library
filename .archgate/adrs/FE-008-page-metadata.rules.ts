@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Canonical/hreflang
-// correctness lives in tests/post-build/page-metadata.build.test.ts, over the
-// built HTML. Matched textually. Self-contained by
-// design: archgate forbids imports between rules files.
 // decision: FE-008 §1
 // decision: FE-008 §4
 const APP_GLOB = 'src/app/**/*';
