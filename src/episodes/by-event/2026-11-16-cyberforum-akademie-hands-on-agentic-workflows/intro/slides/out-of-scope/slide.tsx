@@ -9,6 +9,14 @@ const ITEMS = [
   { key: 'third', tilt: '-rotate-1' },
 ] as const;
 
+function DrawnCross() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5">
+      <path d="M6 6l12 12M18 6L6 18" className="fill-none stroke-current" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export const outOfScope = slide({
   slug: 'out-of-scope',
   messages: { en, de },
@@ -44,15 +52,7 @@ export const outOfScope = slide({
                 aria-hidden="true"
                 className="flex size-12 flex-none items-center justify-center rounded-full bg-(--warning) text-warning-foreground"
               >
-                {/* A drawn cross, not the × glyph: a glyph sits on the font's baseline, never in the circle's middle. */}
-                <svg viewBox="0 0 24 24" className="size-5">
-                  <path
-                    d="M6 6l12 12M18 6L6 18"
-                    className="fill-none stroke-current"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <DrawnCross />
               </span>
               <div>
                 <p className="text-subheading font-semibold">{t(`items.${key}.title`)}</p>
