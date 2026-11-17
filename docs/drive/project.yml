@@ -23,3 +23,14 @@ worktree:
   afterRemove:
     - node tools/load/drive-hooks.ts remove-context
     - node tools/load/drive-hooks.ts trim-slow-tests
+# Subagents at once: the lower of `default` and `harnessCap`, the rest queue. `harnessCap` records the agent
+# harness's own limit beside it; `drive` never writes harness settings.
+parallel:
+  default: 3
+  harnessCap: 20
+# Decision docs: paths and globs that change only on a `decisions/*` branch.
+decisionDocs:
+  - docs/adr/**
+  - docs/design/**
+  - docs/features/**
+  - '**/GLOSSARY*.md'

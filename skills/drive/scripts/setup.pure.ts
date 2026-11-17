@@ -1,0 +1,153 @@
+// What `drive setup` writes besides the Binding: the project config's missing sections, the list of detected
+// Enforcers and the two stub documents. Pure: facts in, file text out.
+import { Document, isMap, parseDocument, type YAMLMap } from 'yaml';
+import { DEFAULTS, PARALLEL_DEFAULTS } from './config.pure.ts';
+
+export type EnforcerKind = 'adr-checker' | 'linter' | 'type-checker' | 'test-runner' | 'formatter' | 'check' | 'hook';
+
+/** A deterministic check the project already runs, which Fortify may choose to govern a failure mode. */
+export interface Enforcer {
+  kind: EnforcerKind;
+  name: string;
+  command: string;
+}
+
+/** What the repo shows about its checks: the package scripts, its hook files and whether an ADR checker is set up. */
+export interface EnforcerFacts {
+  scripts: Readonly<Record<string, string>>;
+  hooks: readonly string[];
+  adrChecker: boolean;
+}
+
+/** The first kind whose pattern matches; most specific first. A script's name is read before its command. */
+const SCRIPT_KINDS: readonly (readonly [EnforcerKind, RegExp])[] = [
+  ['type-checker', /\b(tsc|typecheck|type-check|mypy|pyright)\b/],
+  ['formatter', /\b(format|prettier|oxfmt)\b/],
+  ['linter', /\b(lint|oxlint|eslint|biome|ruff)\b/],
+  ['test-runner', /\b(vitest|jest|pytest|mocha|test)\b/],
+  ['check', /^check\b/],
+];
+
+/** The kind of one package script, or null when it is no check: a staged-files runner or a watch mode. */
+function classifyScript(name: string, body: string): EnforcerKind | null {
+  if (name.startsWith('lint-staged') || name.endsWith(':watch')) return null;
+  const byName = SCRIPT_KINDS.find(([, pattern]) => pattern.test(name));
+  return (byName ?? SCRIPT_KINDS.find(([, pattern]) => pattern.test(body)))?.[0] ?? null;
+}
+
+/** The Enforcers a repo shows, in a stable order: ADR checker, scripts by name, then hooks. */
+export function detectEnforcers({ scripts, hooks, adrChecker }: EnforcerFacts): Enforcer[] {
+  const adr: Enforcer[] = adrChecker ? [{ kind: 'adr-checker', name: 'archgate', command: 'archgate check' }] : [];
+  const fromScripts = Object.entries(scripts)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([name, body]) => ({ kind: classifyScript(name, body), name, command: `npm run ${name}` }))
+    .filter((found): found is Enforcer => found.kind !== null);
+  const fromHooks = [...hooks].sort().map((hook): Enforcer => ({ kind: 'hook', name: hook, command: hook }));
+  return [...adr, ...fromScripts, ...fromHooks];
+}
+
+/** The enforcers file: wholly generated, so every run rewrites it. */
+export function renderEnforcers(enforcers: readonly Enforcer[]): string {
+  const doc = new Document({ enforcers });
+  doc.commentBefore = [
+    ' The Enforcers `drive setup` detected, for Fortify to choose from (see the Drive glossary).',
+    ' Generated: every run rewrites this file. To change what Fortify may pick, change the repo, then re-run setup.',
+  ].join('\n');
+  return doc.toString();
+}
+
+/** The install command a lockfile in the repo implies, or none. */
+export function installCommands(files: readonly string[]): string[] {
+  const has = (name: string) => files.includes(name);
+  if (has('package-lock.json')) return ['npm ci'];
+  if (has('pnpm-lock.yaml')) return ['pnpm install --frozen-lockfile'];
+  if (has('yarn.lock')) return ['yarn install --frozen-lockfile'];
+  if (has('bun.lock') || has('bun.lockb')) return ['bun install --frozen-lockfile'];
+  return [];
+}
+
+export const DOC_FOLDERS = ['docs/adr', 'docs/adrs', 'docs/decisions', 'docs/design', 'docs/features'];
+
+/** Globs for the Decision docs this repo has: its decision and feature folders, and glossary files anywhere. */
+export function decisionDocGlobs(folders: readonly string[], glossaries: readonly string[]): string[] {
+  const globs = DOC_FOLDERS.filter((folder) => folders.includes(folder)).map((folder) => `${folder}/**`);
+  return glossaries.length > 0 ? [...globs, '**/GLOSSARY*.md'] : globs;
+}
+
+export interface ProjectFacts {
+  baseBranch: string;
+  install: readonly string[];
+  decisionDocs: readonly string[];
+}
+
+interface Section {
+  key: string;
+  value: unknown;
+  comment: string;
+}
+
+/** Adds `key: value` with a comment above it, unless the file already has the key. */
+function addSection(doc: Document, root: YAMLMap, { key, value, comment }: Section): void {
+  if (root.has(key)) return;
+  const name = doc.createNode(key);
+  name.commentBefore = comment;
+  root.set(name, doc.createNode(value));
+}
+
+const PARALLEL_NOTE =
+  ' Subagents at once: the lower of `default` and `harnessCap`, the rest queue. `harnessCap` records the agent\n' +
+  " harness's own limit beside it; `drive` never writes harness settings.";
+const DECISION_DOCS_NOTE = ' Decision docs: paths and globs that change only on a `decisions/*` branch.';
+
+/**
+ * The project config after a setup run. A missing file is seeded; an existing one keeps every value and comment and
+ * only gains the sections it lacks. Throws a message when the existing text is not a mapping.
+ */
+export function updateProjectConfig(existing: string | null, facts: ProjectFacts): string {
+  const doc = existing === null ? new Document({}) : parseDocument(existing);
+  if (doc.errors.length > 0) throw new Error(`project config is not valid YAML: ${doc.errors[0]?.message}`);
+  if (doc.contents === null) doc.contents = doc.createNode({}) as YAMLMap;
+  if (!isMap(doc.contents)) throw new Error('project config must be a mapping');
+  const { baseBranch, install, decisionDocs } = facts;
+  const worktree = { ...DEFAULTS, baseBranch, install };
+  const seeded = { dir: worktree.dir, baseBranch, remote: worktree.remote, invoke: worktree.invoke, install };
+  if (!doc.contents.has('worktree')) doc.contents.set('worktree', doc.createNode(seeded));
+  addSection(doc, doc.contents, { key: 'parallel', value: { ...PARALLEL_DEFAULTS }, comment: PARALLEL_NOTE });
+  addSection(doc, doc.contents, { key: 'decisionDocs', value: [...decisionDocs], comment: DECISION_DOCS_NOTE });
+  return doc.toString();
+}
+
+export interface SetupOptions {
+  agentType?: string;
+  model?: string;
+}
+
+/** The options of `drive setup [--agent-type <type>] [--model <model>]`, or a usage error. */
+export function parseSetupArgs(args: readonly string[]): SetupOptions | { error: string } {
+  const usage = { error: 'usage: drive setup [--agent-type <type>] [--model <model>]' };
+  const options: SetupOptions = {};
+  const keys: Record<string, keyof SetupOptions> = { '--agent-type': 'agentType', '--model': 'model' };
+  for (let i = 0; i < args.length; i += 2) {
+    const key = keys[args[i] ?? ''];
+    const value = args[i + 1];
+    if (key === undefined || value === undefined || value.startsWith('--')) return usage;
+    options[key] = value;
+  }
+  return options;
+}
+
+export const PROFILES_STUB = `# Drive profiles
+
+Project rules that extend the Profiles the \`/drive\` skill ships: the architect's, which the Orchestrator reasons by,
+and the implementer's, which every Subagent brief points at. Write only what is specific to this project.
+
+## Architect
+
+## Implementer
+`;
+
+export const LEARNINGS_STUB = `# Drive learnings
+
+One entry per Operator correction, logged at once, and per Fortify option that was not picked, with a recurrence
+count. Fortify reads this file for past proposals.
+`;
