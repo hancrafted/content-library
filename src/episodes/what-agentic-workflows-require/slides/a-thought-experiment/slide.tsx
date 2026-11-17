@@ -8,9 +8,6 @@ import { TeamTag } from './team-tag';
 
 const MID = 180;
 
-// The section slide of "A thought experiment", echoing the Hero motif (picked Title-slide Option 0b): the seam broken.
-// "31 vegetarian" goes across and egg dishes come back; the kitchen's card carries the failed mark and the half of the
-// goal it breaks. Its Voice script opens the Episode, since the Title slide has none.
 export const aThoughtExperiment = slide({
   slug: 'a-thought-experiment',
   messages: { en, de },
