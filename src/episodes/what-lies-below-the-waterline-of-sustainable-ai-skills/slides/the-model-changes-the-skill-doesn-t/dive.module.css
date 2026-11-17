@@ -219,7 +219,7 @@
   border: 1.5px dashed var(--background);
 }
 
-/* The silt cloud billows up once the robot has hit the seabed; its rest state is the cloud, as reduced motion shows. */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .silt {
     animation: billow 900ms ease-out 1700ms both;

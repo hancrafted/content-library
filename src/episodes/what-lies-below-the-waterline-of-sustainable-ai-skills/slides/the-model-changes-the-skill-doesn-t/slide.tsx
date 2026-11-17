@@ -22,7 +22,6 @@ const SQUIRE_HM = { slug: 'squire-legacy-of-hm', url: 'https://pmc.ncbi.nlm.nih.
 const SQUIRE_SYSTEMS = { slug: 'squire-memory-systems', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4355270/' };
 const SWE_SKILLS = { slug: 'swe-skills-bench', url: 'https://arxiv.org/abs/2603.15401' };
 
-/** The skill file both dives read, in the Coding agent view: path and front matter are code, never translated. */
 const SKILL_PATH = 'collect-sediment-sample/SKILL.md';
 const FRONT_MATTER = [
   '---',
