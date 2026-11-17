@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { type TemplateSources } from './episode-spec-template-fresh.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-const SKILL = path.join(ROOT, '.agents/skills/to-review');
+/** The installed to-review skill (hancrafted/skills, pinned in skills-lock.json). */
+export const SKILL_DIR = path.join(ROOT, '.agents/skills/to-review');
 
 /** The Spec template asset, which records the hash. */
 export const TEMPLATE_FILE = path.join(ROOT, 'skills/new-episode/assets/spec-template.html');
@@ -17,15 +18,15 @@ const SKILL_FOLDERS = ['references', 'assets'];
 
 /** The files under one folder of the skill, as paths relative to the skill folder. */
 function filesUnder(folder: string): string[] {
-  return readdirSync(path.join(SKILL, folder), { recursive: true, withFileTypes: true })
+  return readdirSync(path.join(SKILL_DIR, folder), { recursive: true, withFileTypes: true })
     .filter((entry) => entry.isFile())
-    .map((entry) => path.relative(SKILL, path.join(entry.parentPath, entry.name)).replaceAll(path.sep, '/'));
+    .map((entry) => path.relative(SKILL_DIR, path.join(entry.parentPath, entry.name)).replaceAll(path.sep, '/'));
 }
 
 /** `SKILL.md`, every file under `references/` and `assets/`, keyed by path relative to the skill folder, plus the calibration. */
 export function readTemplateSources(): TemplateSources {
   const files = ['SKILL.md', ...SKILL_FOLDERS.flatMap(filesUnder)];
-  const skill = Object.fromEntries(files.map((file) => [file, readFileSync(path.join(SKILL, file), 'utf8')]));
+  const skill = Object.fromEntries(files.map((file) => [file, readFileSync(path.join(SKILL_DIR, file), 'utf8')]));
   const calibration = readFileSync(path.join(ROOT, 'skills/new-episode/references/spec-calibration.md'), 'utf8');
   return { skill, calibration };
 }

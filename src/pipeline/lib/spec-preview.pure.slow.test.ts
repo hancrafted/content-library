@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { previewPage, readPresets, toolbarConfigOf } from './spec-preview.pure.ts';
+import { SKILL_DIR } from './spec-template-sources.ts';
 
 /*
  * The slow half of spec-preview.pure.test.ts: the checked-in Spec calibration and Spec template, read from disk,
@@ -12,7 +13,7 @@ import { previewPage, readPresets, toolbarConfigOf } from './spec-preview.pure.t
 const SKILL = path.join(import.meta.dirname, '../../../skills/new-episode');
 const CALIBRATION = path.join(SKILL, 'references/spec-calibration.md');
 const TEMPLATE = path.join(SKILL, 'assets/spec-template.html');
-const TOOLBAR = path.join(import.meta.dirname, '../../../.agents/skills/to-review/assets/toolbar.html');
+const TOOLBAR = path.join(SKILL_DIR, 'assets/toolbar.html');
 /** The one preset offered with no width: the full column. */
 const FULL_COLUMN = ['fit'];
 /** The pixel the dropdown rule's breakpoint sits under the width the navigation opens at. */
