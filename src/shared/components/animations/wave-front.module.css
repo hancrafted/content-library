@@ -1,9 +1,4 @@
-/*
- * `WaveFront`: the water fills its canvas and rises by its transform alone; the crests sit on its top edge, twice the
- * host's width, and drift a quarter of their width in opposite directions as `--surface-edge-progress` runs from 0 to
- * 1. Each crest is shorter than the canvas's bleed below the host, so no crest shows before the edge starts. Colours
- * are the water's own colour, the back swell paler, the foam mixed with the light (FE-011: no raw colour).
- */
+/* decision: FE-011 §4 */
 
 .canvas {
   position: absolute;
