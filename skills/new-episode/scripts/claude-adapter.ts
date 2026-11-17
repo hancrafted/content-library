@@ -6,7 +6,7 @@
 // written by src/pipeline/lib/run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
 // A lock timeout is the one failure it reports: a line on stderr and exit 1, which Claude Code does not treat as
 // blocking (exit 2 would block SubagentStop). A point-fact hook waits only 2 s, reports it too, and exits 0: what it
-// records already happened.
+// records already happened. `--lock-wait-ms=<ms>` after the mode sets a point-fact hook's wait instead (tests pass a short one).
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import {
@@ -25,6 +25,7 @@ import { findRun } from './run-root.ts';
 
 /** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */
 const POINT_LOCK_WAIT_MS = 2_000;
+const LOCK_WAIT_FLAG = '--lock-wait-ms=';
 type PointMode = 'skill' | 'read' | 'instructions';
 type Mode = PointMode | 'start' | 'stop';
 type AdapterPayload = HookPayload & ToolHookPayload & InstructionsHookPayload;
@@ -62,14 +63,14 @@ function resolvedUnder(repoRoot: string, file: string | undefined): string | nul
 }
 
 /** Skill, Read or InstructionsLoaded: one `event` line on the span that made the call, when there is one. */
-function pointFact(mode: PointMode, payload: ToolHookPayload & InstructionsHookPayload): void {
+function pointFact(mode: PointMode, payload: ToolHookPayload & InstructionsHookPayload, lockWaitMs: number): void {
   const run = runOf(payload);
   if (run === null) return;
   const { root, marker } = run;
   const input = { payload, marker: run.text, log: readLog(marker.log, root).lines };
   const repoRoot = repoRootOf(payload.cwd ?? root);
   const line = POINT_HANDLERS[mode]({ ...input, repoRoot, resolvedPath: resolvedUnder(repoRoot, payload.file_path) });
-  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMs: POINT_LOCK_WAIT_MS });
+  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMs });
 }
 
 function subagent(event: 'start' | 'stop', payload: HookPayload): void {
@@ -90,26 +91,32 @@ function subagent(event: 'start' | 'stop', payload: HookPayload): void {
   appendEvent({ root, file: marker.log }, line);
 }
 
-const HANDLERS: Record<Mode, (payload: AdapterPayload) => void> = {
+const HANDLERS: Record<Mode, (payload: AdapterPayload, pointLockWaitMs: number) => void> = {
   start: (payload) => subagent('start', payload),
   stop: (payload) => subagent('stop', payload),
-  skill: (payload) => pointFact('skill', payload),
-  read: (payload) => pointFact('read', payload),
-  instructions: (payload) => pointFact('instructions', payload),
+  skill: (payload, wait) => pointFact('skill', payload, wait),
+  read: (payload, wait) => pointFact('read', payload, wait),
+  instructions: (payload, wait) => pointFact('instructions', payload, wait),
 };
+
+/** A point-fact hook's lock wait: `--lock-wait-ms=<ms>` among `args` when it is a positive whole number, else 2 s. */
+function pointLockWait(args: readonly string[]): number {
+  const ms = Number(args.find((arg) => arg.startsWith(LOCK_WAIT_FLAG))?.slice(LOCK_WAIT_FLAG.length));
+  return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MS;
+}
 
 function isMode(value: string | undefined): value is Mode {
   return value !== undefined && Object.hasOwn(HANDLERS, value);
 }
 
-function main(mode: Mode): void {
+function main(mode: Mode, args: readonly string[]): void {
   const payload = JSON.parse(readFileSync(0, 'utf8')) as AdapterPayload;
-  HANDLERS[mode](payload);
+  HANDLERS[mode](payload, pointLockWait(args));
 }
 
 const mode = process.argv[2];
 try {
-  if (isMode(mode)) main(mode);
+  if (isMode(mode)) main(mode, process.argv.slice(3));
 } catch (error) {
   if (error instanceof LockTimeoutError) {
     process.stderr.write(`new-episode adapter: ${error.message}\n`);
