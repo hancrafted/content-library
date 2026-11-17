@@ -1,0 +1,73 @@
+{
+  "title": "Das Kontextfenster",
+  "caption": "Mit jeder Nachricht geht der ganze Chat mit, und der Platz ist begrenzt: das Kontextfenster.",
+  "cards": {
+    "resend": {
+      "kicker": "Mit jeder Nachricht",
+      "body": "<keeps>Die KI bekommt den ganzen Chat noch einmal</keeps>, <replies>ihre eigenen Antworten eingeschlossen</replies>."
+    },
+    "limit": {
+      "kicker": "Die Grenze",
+      "body": "Der Platz dafür ist begrenzt. Diese Grenze ist das <b>Kontextfenster</b>."
+    },
+    "apps": {
+      "kicker": "In Chat-Apps",
+      "body": "<marker>Apps können das Fenster auf ihre eigene Art verwalten.</marker>"
+    }
+  },
+  "illustrative": "Zahlen zur Veranschaulichung",
+  "notes": {
+    "the-model-keeps-nothing": {
+      "header": "Das Modell behält nichts",
+      "description": "die Messages-API ist zustandslos: Zwischen zwei Anfragen hält sie kein Gespräch fest, und wer sie aufruft, schickt die früheren Nachrichten von Nutzer und Assistent mit der neuen mit [1].",
+      "sources": {
+        "anthropic-messages-api": { "title": "Anthropic, Messages API reference" }
+      }
+    },
+    "replies-feed-back-in": {
+      "header": "Antworten fließen zurück",
+      "description": "die Antwort des Modells wird Teil der Eingabe für die nächste Runde [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    },
+    "both-directions-count": {
+      "header": "Beide Richtungen zählen",
+      "description": "das Kontextfenster hält den bisherigen Gesprächsverlauf und dazu die neu erzeugte Ausgabe [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    },
+    "apps-may-differ": {
+      "header": "Apps können abweichen",
+      "description": "die Quellen beschreiben die Entwickler-API; dass eine Chat-App den Verlauf erneut schickt, ist ein Schluss daraus, und Chat-Oberflächen wie claude.ai können das Fenster stattdessen verwalten, indem sie die ältesten Inhalte zuerst entfernen [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-type-one-line": {
+        "title": "Du tippst eine Zeile",
+        "keywords": "",
+        "script": "Du tippst eine kurze Zeile, sagen wir: Finde drei Locations in Lissabon. Aber was die KI bekommt, ist das ganze bisherige Gespräch, von Deiner ersten Nachricht bis zur letzten, und sie bekommt all das mit jeder einzelnen Nachricht, die Du schickst."
+      },
+      "there-is-a-size-limit": {
+        "title": "Es gibt eine Größengrenze",
+        "keywords": "",
+        "script": "Das ist ein technischer Begriff, auf Englisch Context Window, aber er ist relativ einfach erklärt: Stell Dir einen Fortschrittsbalken vor. Wichtig ist, dass dieser Balken begrenzt ist, er ist nicht unendlich. Dahinter steckt Speicher, den die Firmen da draußen bereitstellen, und Speicher kostet Geld, deshalb ist er limitiert. Mit unserem Chatverlauf füllt sich dieser Speicher nach und nach. Das ist genau wie bei unserer Aufmerksamkeit: Je länger Du mir zuhörst, desto mehr schwindet sie. Es ist schon spät, Du hattest einen langen Arbeitstag, und da kann es gut sein, dass Deine Aufmerksamkeitsspanne schon ziemlich voll ist. Genauso funktioniert es bei der KI: Mit zunehmender Konversation füllt sich das Fenster."
+      },
+      "the-term-to-keep": {
+        "title": "Der Begriff zum Merken",
+        "keywords": "",
+        "script": "Das war's. Mehr musst Du an dieser Stelle gar nicht wissen: Das ist das Kontextfenster, mehr ist es nicht. Für alle, die es aus der Entwicklerwelt kennen, so sieht dieselbe Ansicht in Claude aus. Sie ist ähnlich, aber für das Konzept ist es gleich: Etwas füllt sich, und das Ding ist begrenzt. Interessant ist jetzt, was passiert, wenn es voll wird."
+      },
+      "context-engineering": {
+        "title": "Context Engineering",
+        "keywords": "",
+        "script": "Für den Umgang damit gibt es einen Namen: Context Engineering. Es heißt, der KI den richtigen Kontext zur richtigen Zeit zu geben, nicht den meisten Kontext, sondern den richtigen. Genau den verwalten wir heute."
+      }
+    }
+  }
+}

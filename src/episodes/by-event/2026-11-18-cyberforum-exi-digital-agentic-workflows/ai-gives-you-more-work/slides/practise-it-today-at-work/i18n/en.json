@@ -1,0 +1,107 @@
+{
+  "title": "Practise it today, at work",
+  "caption": "The skills you use with colleagues are the skills you use with AI, so <b>you can practise them at work, today</b>.",
+  "sides": {
+    "work": "At work",
+    "ai": "With AI"
+  },
+  "sameMove": "same move",
+  "rows": {
+    "handoff": {
+      "title": "01 · The handoff",
+      "era": "Handing over · before a vacation",
+      "line": "Context first, then the task.",
+      "work": "Hand off work to a colleague, or before a vacation",
+      "workDetail": "a proper handoff, with enough context to carry on without you",
+      "ai": "Start a new chat with that context",
+      "aiDetail": "the same handoff, pasted in first"
+    },
+    "onboard": {
+      "title": "02 · The new teammate",
+      "era": "Day one · a new hire",
+      "line": "Every new session starts on day one.",
+      "work": "Onboard a new team member",
+      "workDetail": "nothing carries over unless you say it",
+      "ai": "Open a new AI session",
+      "aiDetail": "tell it what you would tell a new hire"
+    },
+    "chunks": {
+      "title": "03 · Chunks and seams",
+      "era": "Kick-off · a complex project",
+      "line": "The seams carry the overall goal.",
+      "work": "Break a big project into chunks",
+      "workDetail": "define the seams, so each chunk feeds the overall goal",
+      "ai": "Split the work into AI tasks",
+      "aiDetail": "one task per chunk, the seams as the handover"
+    }
+  },
+  "discipline": "Briefing, giving context and checking: the same skill on both sides",
+  "closing": "More complex projects are now within reach",
+  "notes": {
+    "briefing-context-checking": {
+      "header": "Briefing, context and checking are the discipline",
+      "description": "Dell'Acqua [1] finds AI helps less experienced people on bounded tasks inside the model's competence; that effective delegation rests on briefing, supplying context and verifying is this project's inference from the research file, not a finding of the study.",
+      "sources": {
+        "dellacqua-jagged-frontier": {
+          "title": "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013, September 2023 (SSRN 4573321)"
+        }
+      }
+    },
+    "new-session-new-contributor": {
+      "header": "A new AI session is a new contributor",
+      "description": "Experienced developers described AI as a new contributor lacking tacit knowledge of the repository, which is hard to hand over as context, and spent about 9 percent of their time reviewing and cleaning its output [1].",
+      "sources": {
+        "becker-early-2025-ai": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "experience-predicts-results": {
+      "header": "Experience with the tool predicts results",
+      "description": "Users with six months or more of tenure show a success rate about 3 to 5 points higher within the same task cluster and delegate less by directive; Anthropic notes learning by doing fits the data but is not proven [1].",
+      "sources": {
+        "anthropic-learning-curves": {
+          "title": "Anthropic, Anthropic Economic Index report: Learning Curves (March 2026)"
+        }
+      }
+    },
+    "splitting-tasks-lengthens-them": {
+      "header": "Splitting tasks lengthens what you can finish",
+      "description": "Users split tasks into steps and pick tasks they expect to work, which accounts for part of the long task lengths seen in practice [1].",
+      "sources": {
+        "anthropic-economic-index-primitives": {
+          "title": "Anthropic, Economic Index: New building blocks for AI use (January 2026)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "practise-on-people": {
+        "title": "Practise on people",
+        "keywords": "",
+        "script": "The good news is that you don't have to wait for a new tool to practise this. You can practise on people, today, at work, so the people skills you already have become your AI skills."
+      },
+      "the-handoff": {
+        "title": "The handoff",
+        "keywords": "",
+        "script": "Take the handoff. Next time you hand work to a colleague, before a vacation or any other time, give them a proper handoff with enough context to carry on without you. That is the same move as starting a new chat with the context in it."
+      },
+      "the-new-teammate": {
+        "title": "The new teammate",
+        "keywords": "",
+        "script": "Or take the new teammate. When you onboard someone, treat it like opening a new AI session: nothing carries over unless you say it, so tell them what you would tell the AI."
+      },
+      "chunks-and-seams": {
+        "title": "Chunks and seams",
+        "keywords": "",
+        "script": "Then the big project. When you get a complex one, break it into smaller chunks and define the seams between them, so that each task contributes to the overall goal. Do that, and you can hand the chunks to people or to AI, and stay prolific without losing the thread."
+      },
+      "an-invitation": {
+        "title": "An invitation",
+        "keywords": "",
+        "script": "Which brings it back to our coffee question. More complex projects are now within reach, which is not a burden, it is an invitation to grow, so which of these three rows will you start with this week?"
+      }
+    }
+  }
+}
