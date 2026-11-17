@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -60,6 +60,17 @@ describe('SlowTestsLog', () => {
       // ARRANGE
       const outside = realpathSync(mkdtempSync(path.join(tmpdir(), 'no-repo-')));
       const reporter = new SlowTestsLog({ cwd: outside, now: () => AT, loadFactor: 1 });
+      // ACT
+      const report = () => reporter.onTestCaseResult(finished('a > b', 'a.test.ts', 6200));
+      // ASSERT
+      expect(report).not.toThrow();
+    });
+
+    it('loses the entry rather than fail the run when the log cannot be written', () => {
+      // ARRANGE
+      const { workTree, log } = fixture();
+      mkdirSync(log);
+      const reporter = new SlowTestsLog({ cwd: workTree, now: () => AT, loadFactor: 1 });
       // ACT
       const report = () => reporter.onTestCaseResult(finished('a > b', 'a.test.ts', 6200));
       // ASSERT

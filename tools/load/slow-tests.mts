@@ -54,11 +54,15 @@ export class SlowTestsLog implements Reporter {
       branch: this.branch,
       at: this.now().toISOString(),
     };
-    try {
-      appendFileSync(this.log, JSON.stringify(entry) + '\n');
-    } catch {
-      // A read-only or vanished common dir loses one entry, never the run.
-    }
+    appendUnlessLogUnwritable(this.log, entry);
+  }
+}
+
+function appendUnlessLogUnwritable(log: string, entry: SlowTest): void {
+  try {
+    appendFileSync(log, JSON.stringify(entry) + '\n');
+  } catch {
+    return;
   }
 }
 
