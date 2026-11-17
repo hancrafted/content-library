@@ -1,12 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/*
- * The party board drawn as HTML, for a Scene that lays its notes out on a grid: the sticky note, the external note,
- * the doer badge and the marks. Each takes plain props and its words from the Scene. Shared because the page Slides of
- * one Episode pin the same notes to their boards (FE-007 §5); `note.tsx` draws the same note as SVG.
- */
-
+// decision: FE-007 §5
 export type Mark = 'fixed' | 'failed' | 'passed';
 
 const STROKE: Record<Mark, string> = {

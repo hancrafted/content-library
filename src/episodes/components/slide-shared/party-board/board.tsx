@@ -1,12 +1,6 @@
 import type { ReactNode } from 'react';
 
-/*
- * The party board drawn as SVG: a planning whiteboard a Scene fills with sticky notes (`note.tsx`), handoff arrows,
- * the agent badge and the tick. Each part takes plain props and its words from the Scene. Shared because several
- * section slides draw the same board at their own state, and each part here is drawn by two or more of them
- * (FE-007 §5).
- */
-
+// decision: FE-007 §5
 const BOARD = { width: 360, height: 180 } as const;
 
 export function Board({ label, children }: { label: string; children: ReactNode }) {
