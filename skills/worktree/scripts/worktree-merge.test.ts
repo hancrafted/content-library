@@ -55,7 +55,7 @@ const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
 
 /** Runs mergeIntoBase in its own process, as a second `wt:done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
-  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(mergeIntoBase(process.argv[1], 'base', process.argv[2]));`;
+  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', process.argv[2]));`;
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ['--input-type=module', '-e', code, branch, cwd], {
       encoding: 'utf8',
@@ -69,24 +69,24 @@ function mergeInChild(branch: string, cwd: string): Promise<{ code: number | nul
 
 describe('mergeIntoBase', () => {
   describe('success cases', () => {
-    it('merges the branch into a base checked out in another worktree', () => {
+    it('merges the branch into a base checked out in another worktree', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       // ACT
-      const result = mergeIntoBase('work', 'base', main);
+      const result = await mergeIntoBase('work', 'base', main);
       // ASSERT
       expect(result).toBe('merged');
       expect(existsSync(path.join(baseTree, 'work.txt'))).toBe(true);
       expect(() => git(main, 'merge-base', '--is-ancestor', 'work', 'base')).not.toThrow();
     });
 
-    it('reports an already merged branch without a new commit', () => {
+    it('reports an already merged branch without a new commit', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
-      mergeIntoBase('work', 'base', main);
+      await mergeIntoBase('work', 'base', main);
       const head = git(baseTree, 'rev-parse', 'HEAD');
       // ACT
-      const result = mergeIntoBase('work', 'base', main);
+      const result = await mergeIntoBase('work', 'base', main);
       // ASSERT
       expect(result).toBe('already-merged');
       expect(git(baseTree, 'rev-parse', 'HEAD')).toBe(head);
@@ -109,15 +109,15 @@ describe('mergeIntoBase', () => {
       expect(() => git(main, 'merge-base', '--is-ancestor', 'other', 'base')).not.toThrow();
     });
 
-    it('takes over a merge lock left by a process that was killed mid-merge', () => {
+    it('takes over a merge lock left by a process that was killed mid-merge', async () => {
       // ARRANGE
       const { main } = fixture();
-      const lock = path.join(main, '.git', 'wt-merge-base.lock');
-      mkdirSync(lock);
-      const dead = execFileSync(process.execPath, ['-e', 'console.log(process.pid)'], { encoding: 'utf8' }).trim();
-      writeFileSync(path.join(lock, 'pid'), dead);
+      const lock = path.join(main, '.git', 'locks', 'wt-merge%2Fbase.lock');
+      mkdirSync(lock, { recursive: true });
+      const dead = Number(execFileSync(process.execPath, ['-e', 'console.log(process.pid)'], { encoding: 'utf8' }));
+      writeFileSync(path.join(lock, 'owner'), JSON.stringify({ pid: dead, started: 'Thu Jan  1 00:00:00 1970' }));
       // ACT
-      const result = mergeIntoBase('work', 'base', main);
+      const result = await mergeIntoBase('work', 'base', main);
       // ASSERT
       expect(result).toBe('merged');
       expect(existsSync(lock)).toBe(false);
@@ -125,19 +125,19 @@ describe('mergeIntoBase', () => {
   });
 
   describe('failure cases', () => {
-    it('throws when the base is checked out nowhere, merging nothing', () => {
+    it('throws when the base is checked out nowhere, merging nothing', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       git(main, 'worktree', 'remove', baseTree);
       const before = git(main, 'rev-parse', 'base');
       // ACT
-      const run = () => mergeIntoBase('work', 'base', main);
+      const run = mergeIntoBase('work', 'base', main);
       // ASSERT
-      expect(run).toThrow(/not checked out/);
+      await expect(run).rejects.toThrow(/not checked out/);
       expect(git(main, 'rev-parse', 'base')).toBe(before);
     });
 
-    it('aborts a conflicting merge and leaves the base clean', () => {
+    it('aborts a conflicting merge and leaves the base clean', async () => {
       // ARRANGE
       const { main, baseTree, workTree } = fixture();
       writeFileSync(path.join(workTree, 'a.txt'), 'from work');
@@ -145,13 +145,13 @@ describe('mergeIntoBase', () => {
       writeFileSync(path.join(baseTree, 'a.txt'), 'from base');
       git(baseTree, 'commit', '-aqm', 'edit a on base');
       // ACT
-      const run = () => mergeIntoBase('work', 'base', main);
+      const run = mergeIntoBase('work', 'base', main);
       // ASSERT
-      expect(run).toThrow(/conflict/i);
+      await expect(run).rejects.toThrow(/conflict/i);
       expect(git(baseTree, 'status', '--porcelain')).toBe('');
     });
 
-    it('releases the merge lock when the merge fails, so the next merge into the base runs', () => {
+    it('releases the merge lock when the merge fails, so the next merge into the base runs', async () => {
       // ARRANGE
       const { root, main, baseTree, workTree } = fixture();
       addOtherBranch(root, main);
@@ -159,9 +159,9 @@ describe('mergeIntoBase', () => {
       git(workTree, 'commit', '-aqm', 'edit a');
       writeFileSync(path.join(baseTree, 'a.txt'), 'from base');
       git(baseTree, 'commit', '-aqm', 'edit a on base');
-      expect(() => mergeIntoBase('work', 'base', main)).toThrow(/conflict/i);
+      await expect(mergeIntoBase('work', 'base', main)).rejects.toThrow(/conflict/i);
       // ACT
-      const result = mergeIntoBase('other', 'base', main);
+      const result = await mergeIntoBase('other', 'base', main);
       // ASSERT
       expect(result).toBe('merged');
     });

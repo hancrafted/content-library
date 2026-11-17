@@ -139,11 +139,11 @@ function deleteMerged(branch: string, base: string): void {
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
 }
 
-function mergeBeforeRemoval(branch: string, base: string): void {
+async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
   const slowTests = slowTestReport(branch, base, mainRoot());
   try {
-    const result = mergeIntoBase(branch, base, mainRoot());
+    const result = await mergeIntoBase(branch, base, mainRoot());
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
     for (const line of slowTests) console.log(line);
   } catch (error) {
@@ -164,12 +164,12 @@ function removeCheckout(target: string, branch: string): void {
   }
 }
 
-function finish(branch: string, base: string | null, kill: boolean): void {
+async function finish(branch: string, base: string | null, kill: boolean): Promise<void> {
   const target = worktreePath(branch);
   refuseInsideWorktree(target);
   if (base === null) refuseUnpushedMain();
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.
-  else mergeBeforeRemoval(branch, base);
+  else await mergeBeforeRemoval(branch, base);
   // Every refusing guard has passed; stopping processes comes last, just before removal.
   // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
   for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
@@ -212,4 +212,4 @@ else if (args.command === 'new') {
   if (refusal !== null) fail(refusal);
   create(args.branch, args.base);
 } else if (args.command === 'sync') sync(args.base);
-else finish(args.branch, args.base, args.kill);
+else await finish(args.branch, args.base, args.kill);
