@@ -213,8 +213,8 @@ export function assembleSpec(inputs: SpecInputs): string {
   $('template').remove();
   const sources = { fragments: fragmentsBySlug(inputs.fragments ?? []), locks: locksOf(rounds), templates };
   fillIn($, frameSlots(inputs, source, sources));
-  // The Gate round: the draft after n saved feedback rounds is round n + 1.
   const pageId = source.slug ?? dossierSlug(source.title);
-  $('html').attr({ 'data-page-id': pageId, 'data-revision': String(rounds.length + 1) });
+  const gateRoundAfterSavedFeedbackRounds = rounds.length + 1;
+  $('html').attr({ 'data-page-id': pageId, 'data-revision': String(gateRoundAfterSavedFeedbackRounds) });
   return `${$.html()}\n`;
 }

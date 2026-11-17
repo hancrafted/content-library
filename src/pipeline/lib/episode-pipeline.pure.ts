@@ -142,14 +142,15 @@ function readsOf(sources: readonly JobSource[]): Map<string, string[]> {
 }
 
 function checkJobs(document: Mapping, sources: readonly JobSource[], context: PipelineContext): string[] {
-  // The reader returns a Pipeline only for a document with a job list.
-  const raw = document.jobs as unknown[];
+  const jobListTheReaderGuarantees = document.jobs as unknown[];
   const stages = isStringList(document.stages) ? document.stages : null;
   const expanded = context.perRun && document.status === 'approved';
   const jobs = sources.map(({ job }) => job);
   const { byId, duplicates, missing, cycle } = jobGraph(jobs);
   return [
-    ...raw.flatMap((job, index) => unless(isMapping(job), `Job ${index + 1} must be a mapping.`)),
+    ...jobListTheReaderGuarantees.flatMap((job, index) =>
+      unless(isMapping(job), `Job ${index + 1} must be a mapping.`),
+    ),
     ...sources.flatMap((source) =>
       checkJob({ job: source.job.id, where: `Job "${source.job.id}"`, byId, jobs, context, expanded }, source),
     ),

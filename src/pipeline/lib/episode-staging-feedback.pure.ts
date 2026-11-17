@@ -15,8 +15,8 @@ export interface FeedbackAnchors {
 }
 
 function unknownAnchor(anchor: string, { anchors, sections, source }: FeedbackAnchors): string[] {
-  // Every Episode has a Title slide, so its anchor is always known.
-  if (anchor === TITLE_ANCHOR) return [];
+  const everyEpisodeHasATitleSlide = anchor === TITLE_ANCHOR;
+  if (everyEpisodeHasATitleSlide) return [];
   if (!anchor.includes('--'))
     return unless(sections.includes(anchor), `Feedback anchor "${anchor}" is no section slide in the ${source}.`);
   return unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the ${source}.`);

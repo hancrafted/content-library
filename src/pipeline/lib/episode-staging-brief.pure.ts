@@ -121,12 +121,11 @@ function longest(runs: readonly number[][]): number[] {
 function movedTitles(planned: readonly string[], kept: readonly string[]): string[] {
   const common = kept.filter((title) => planned.includes(title));
   const rank = common.map((title) => planned.indexOf(title));
-  // runs[i] is the longest in-order run of positions in `common` that ends at i.
-  const runs = rank.reduce<number[][]>(
+  const longestInOrderRunEndingAt = rank.reduce<number[][]>(
     (done, value, index) => [...done, [...longest(done.filter((_, at) => rank[at] < value)), index]],
     [],
   );
-  const inOrder = new Set(longest(runs));
+  const inOrder = new Set(longest(longestInOrderRunEndingAt));
   return common.filter((_, index) => !inOrder.has(index));
 }
 

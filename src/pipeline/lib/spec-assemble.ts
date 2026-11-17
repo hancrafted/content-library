@@ -95,13 +95,12 @@ async function written(sources: Sources, html: string): Promise<SpecAssembleRepo
   const specPath = path.join(folder, SPEC_FILE);
   mkdirSync(path.dirname(specPath), { recursive: true });
   writeFileSync(specPath, html);
-  // The css holds only the classes it was compiled from, so it follows every write of the page; inlined, the page needs no sibling file.
   await inlineSpecPage(specPath);
   const options = fragments.length > 0;
   const stage = options ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
   const spec = readSpec({ [SPEC_FILE]: html });
-  // The stage assembled to, not the one read off the page: a Spec assembled with Options is held to the whole contract.
-  const findings = checkSpec(spec, dossier, options ? 'options' : 'early');
+  const contractStageOfAssembly = options ? 'options' : 'early';
+  const findings = checkSpec(spec, dossier, contractStageOfAssembly);
   const done = `✔ ${path.relative(ROOT, specPath)} assembled to the ${stage} stage`;
   return { out: [done, ...findings.map(({ message }) => `✖ ${message}`)], err: [], failed: findings.length > 0 };
 }
