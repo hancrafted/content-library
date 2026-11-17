@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { CopyIcon, TickIcon } from './copy-icons';
 
 /** How long a copy button shows its tick before it shows the copy mark again. */
-const CONFIRM_MS = 1600;
+const CONFIRM_MILLISECONDS = 1600;
 
 /** The words a copy button says: its name, and what its live region announces after a copy. */
 export interface CopyWords {
@@ -21,12 +21,12 @@ const BUTTON = {
   big: 'gap-2 rounded-md bg-primary px-5 py-3 text-body font-semibold text-primary-foreground hover:opacity-90',
 } as const;
 
-/** Whether a copy just happened, for a moment: true after `confirm()`, and false again after `CONFIRM_MS`. */
+/** Whether a copy just happened, for a moment: true after `confirm()`, and false again after `CONFIRM_MILLISECONDS`. */
 function useConfirmed() {
   const [at, setAt] = useState(0);
   useEffect(() => {
     if (at === 0) return;
-    const timer = setTimeout(() => setAt(0), CONFIRM_MS);
+    const timer = setTimeout(() => setAt(0), CONFIRM_MILLISECONDS);
     return () => clearTimeout(timer);
   }, [at]);
   return [at !== 0, () => setAt((now) => now + 1)] as const;

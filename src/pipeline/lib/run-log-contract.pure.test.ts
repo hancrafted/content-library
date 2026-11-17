@@ -59,7 +59,7 @@ describe('success cases', () => {
       status: 'ok',
       start_t: '2026-10-14T16:24:58Z',
       end_t: '2026-10-14T21:36:51Z',
-      duration_ms: 18713000,
+      'duration_ms': 18713000,
       'gen_ai.usage.input_tokens': 1597,
     };
     // ACT

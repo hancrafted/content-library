@@ -1,5 +1,5 @@
 import type { TextRange } from '@/episodes/lib/caption-emphasis.pure';
-import { ENTRANCE_MS, typewriterSchedule } from '@/episodes/lib/typewriter.pure';
+import { ENTRANCE_MILLISECONDS, typewriterSchedule } from '@/episodes/lib/typewriter.pure';
 import { cn } from '@/shared/lib/utils';
 import { Fragment, type ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
@@ -11,9 +11,12 @@ import { typedLength, TypedText } from './typed-text';
 
 /** Each part's delays (Eyebrow, title, caption), and when the part after each one starts typing. */
 function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly number[]) {
-  if (entrance !== 'typewriter') return { delays: lengths.map(() => undefined), ends: lengths.map(() => ENTRANCE_MS) };
+  if (entrance !== 'typewriter')
+    return { delays: lengths.map(() => undefined), ends: lengths.map(() => ENTRANCE_MILLISECONDS) };
   const delays = typewriterSchedule(lengths, seed);
-  const ends = delays.map((_, index) => delays.slice(index + 1).find((part) => part.length > 0)?.[0] ?? ENTRANCE_MS);
+  const ends = delays.map(
+    (_, index) => delays.slice(index + 1).find((part) => part.length > 0)?.[0] ?? ENTRANCE_MILLISECONDS,
+  );
   return { delays, ends };
 }
 

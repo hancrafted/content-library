@@ -27,7 +27,7 @@ export function tocReserveRem(): number {
 }
 
 /** The glide matches the Context drawer card's motion (FE-010 §7). */
-export const GLIDE_MS = 250;
+export const GLIDE_MILLISECONDS = 250;
 export const GLIDE_EASING = 'ease-out';
 
 const PX_PER_REM = 16;
@@ -75,8 +75,8 @@ export function placementOf(input: {
       translate: 'none',
     };
   }
-  const headerPx = HEADER_REM * PX_PER_REM;
-  const translate = slot ? `${slot.left + scroll.x}px ${slot.top + scroll.y - headerPx}px` : '0px -100vh';
+  const headerPixels = HEADER_REM * PX_PER_REM;
+  const translate = slot ? `${slot.left + scroll.x}px ${slot.top + scroll.y - headerPixels}px` : '0px -100vh';
   return { position: 'absolute', left: '0px', top: '0px', bottom: 'auto', width: `${slot?.width ?? 0}px`, translate };
 }
 

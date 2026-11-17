@@ -3,7 +3,7 @@ import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.
 import { useEffect, useState } from 'react';
 
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
-const REVEAL_AFTER_MS = 300;
+const REVEAL_AFTER_MILLISECONDS = 300;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
 /**
@@ -73,7 +73,7 @@ export function useSettled(observed: string | null): boolean {
 export function useRevealed(settled: boolean): boolean {
   const [elapsed, setElapsed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setElapsed(true), REVEAL_AFTER_MS);
+    const timer = setTimeout(() => setElapsed(true), REVEAL_AFTER_MILLISECONDS);
     return () => clearTimeout(timer);
   }, []);
   return elapsed && settled;

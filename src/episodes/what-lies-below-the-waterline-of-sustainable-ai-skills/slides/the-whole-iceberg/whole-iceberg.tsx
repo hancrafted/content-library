@@ -15,8 +15,8 @@ import {
   NODES,
   passesAt,
   RISE,
-  RISE_DELAY_MS,
-  RISE_MS,
+  RISE_DELAY_MILLISECONDS,
+  RISE_MILLISECONDS,
   ROBOT_REST_Y,
   ROBOT_START_Y,
   SHIP_X,
@@ -57,6 +57,8 @@ function RiseTrail() {
   );
 }
 
+const ROBOT_RISE_FROM = `0 ${(RISE / WHOLE_DEPTH.height) * 100}%`;
+
 /**
  * The robot rising on its cable from the seabed to its rest under the A-frame. The cable hangs from the A-frame tip
  * and stretches down to the robot's start, shortening on the robot's clock as the robot rises with its `Travel`.
@@ -65,8 +67,8 @@ function RisingRobot() {
   const reach = ROBOT_REST_Y - A_FRAME_Y;
   const clock = {
     '--cable-from': (reach + RISE) / reach,
-    '--rise-duration': `${RISE_MS}ms`,
-    '--rise-delay': `${RISE_DELAY_MS}ms`,
+    '--rise-duration': `${RISE_MILLISECONDS}ms`,
+    '--rise-delay': `${RISE_DELAY_MILLISECONDS}ms`,
   } as CSSProperties;
   return (
     <>
@@ -80,7 +82,7 @@ function RisingRobot() {
         style={clock}
         className={styles.cable}
       />
-      <Travel from={`0 ${(RISE / WHOLE_DEPTH.height) * 100}%`} duration={RISE_MS} delay={RISE_DELAY_MS}>
+      <Travel from={ROBOT_RISE_FROM} duration={RISE_MILLISECONDS} delay={RISE_DELAY_MILLISECONDS}>
         <g transform={`translate(${TRAIL_X} ${ROBOT_REST_Y}) scale(${ROBOT_SCALE})`}>
           <Robot state={robotAt('the-whole-iceberg').state} lamp={false} />
         </g>

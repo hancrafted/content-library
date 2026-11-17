@@ -36,7 +36,7 @@ export interface DrawIn {
   readonly pile: PileStyle;
 }
 
-const SHEET_PX = 15 * 2;
+const SHEET_PIXELS = 15 * 2;
 const EASE_SECS = 0.07;
 
 const lanesFor = (e: FloorBelt, b: BeltLayout): readonly [Lane, Lane] => {
@@ -115,7 +115,7 @@ export class FactoryPainter {
       this.C = readColors(c.canvas.ownerDocument);
       this.sheet = null;
     }
-    const px = Math.max(8, Math.round(SHEET_PX * this.fit.k * this.dpr));
+    const px = Math.max(8, Math.round(SHEET_PIXELS * this.fit.k * this.dpr));
     if (!this.sheet || this.px !== px) {
       this.px = px;
       this.sheet = makeSheet(c.canvas.ownerDocument, this.C, px);

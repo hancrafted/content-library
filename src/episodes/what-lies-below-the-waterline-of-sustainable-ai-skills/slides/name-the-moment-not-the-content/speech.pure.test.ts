@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { requestBubble, requestClashes, requestLines, WIDE_PICTURE_PX } from './speech.pure';
+import { requestBubble, requestClashes, requestLines, WIDE_PICTURE_PIXELS } from './speech.pure';
 
 /*
  * Your request on the day of the dive, in the captain's shared `says` bubble (decision 53): on the wide room, where
@@ -16,7 +16,7 @@ describe('success cases', () => {
     // ARRANGE
     const words = plain(en.request.text);
     // ACT
-    const found = requestClashes(requestBubble(words, WIDE_PICTURE_PX));
+    const found = requestClashes(requestBubble(words, WIDE_PICTURE_PIXELS));
     // ASSERT
     expect(found).toEqual([]);
   });
@@ -25,7 +25,7 @@ describe('success cases', () => {
     // ARRANGE
     const words = plain(de.request.text);
     // ACT
-    const found = requestClashes(requestBubble(words, WIDE_PICTURE_PX));
+    const found = requestClashes(requestBubble(words, WIDE_PICTURE_PIXELS));
     // ASSERT
     expect(found).toEqual([]);
   });
@@ -45,7 +45,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it("starts both lines on the bubble's right edge, the dashed one above the matching one", () => {
     // ARRANGE
-    const box = requestBubble(plain(en.request.text), WIDE_PICTURE_PX);
+    const box = requestBubble(plain(en.request.text), WIDE_PICTURE_PIXELS);
     // ACT
     const { content, moment } = requestLines(box);
     // ASSERT

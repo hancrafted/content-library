@@ -92,7 +92,7 @@ function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
       className="group cursor-pointer outline-none transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none"
     >
       <PhaseArc path={arc.path} shown={shown} />
-      <PhaseLabel at={arc.labelAt} turnDeg={arc.labelTurnDeg} shown={shown}>
+      <PhaseLabel at={arc.labelAt} turnDegrees={arc.labelTurnDegrees} shown={shown}>
         {copy.date}
       </PhaseLabel>
     </g>
@@ -101,20 +101,20 @@ function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
 
 interface PhaseLabelProps {
   at: { x: number; y: number };
-  turnDeg: number;
+  turnDegrees: number;
   shown: boolean;
   children: string;
 }
 
 /** The phase's date, turned to follow the ring. */
-function PhaseLabel({ at, turnDeg, shown, children }: PhaseLabelProps) {
+function PhaseLabel({ at, turnDegrees, shown, children }: PhaseLabelProps) {
   return (
     <text
       x={at.x}
       y={at.y}
       dy="0.35em"
       textAnchor="middle"
-      transform={`rotate(${turnDeg} ${at.x} ${at.y})`}
+      transform={`rotate(${turnDegrees} ${at.x} ${at.y})`}
       className={cn(
         'pointer-events-none font-mono text-body font-semibold tracking-[0.12em] uppercase transition-[fill] duration-500',
         shown ? 'fill-foreground dark:fill-background' : 'fill-foreground',

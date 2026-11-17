@@ -4,7 +4,7 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { Travel } from '@/episodes/components/slide-shared/iceberg/travel';
 import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
-import { DESCENT_MS, LATE_DELAY } from './motion';
+import { DESCENT_MILLISECONDS, LATE_DELAY } from './motion';
 import styles from './one-job.module.css';
 import { depthY, sceneX, WaterColumnArt } from './water-column-art';
 
@@ -112,7 +112,7 @@ function Dive({ x, reaches }: { readonly x: number; readonly reaches: boolean })
   return (
     <>
       <line x1={tip.x} y1={tip.y} x2={tip.x} y2={ROBOT_TOP} strokeWidth={3} data-tone="cable" />
-      <Travel from={DESCENT_FROM} duration={DESCENT_MS}>
+      <Travel from={DESCENT_FROM} duration={DESCENT_MILLISECONDS}>
         <g transform={`translate(${tip.x} ${ROBOT_TOP}) scale(${ROBOT_SCALE})`}>
           <Robot
             state={robotAt('one-skill-one-job').state}

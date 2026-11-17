@@ -37,9 +37,12 @@ interface BarProps {
 /** One phase: a pill from its start to its end, filled up to today and hatched beyond. */
 export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarProps) {
   const bar = GANTT_BARS[item];
-  const { leftPct, widthPct } = barBox(bar);
+  const { leftPercent, widthPercent } = barBox(bar);
   return (
-    <li style={{ left: `${leftPct}%`, width: `${widthPct}%` }} className="absolute inset-y-0 flex items-center px-0.5">
+    <li
+      style={{ left: `${leftPercent}%`, width: `${widthPercent}%` }}
+      className="absolute inset-y-0 flex items-center px-0.5"
+    >
       <button
         type="button"
         aria-label={`${copy.title}, ${copy.date}`}

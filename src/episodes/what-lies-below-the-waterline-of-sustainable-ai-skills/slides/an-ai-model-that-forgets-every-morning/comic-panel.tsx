@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import styles from './forgets.module.css';
 
 /** The strip's panels appear this far apart once the Slide turns active (Spec Option 1a: 0.5 s). */
-const PANEL_STEP_MS = 500;
+const PANEL_STEP_MILLISECONDS = 500;
 
 export interface ComicPanelProps {
   /** The panel's place in the strip, from 0: it appears that many steps after the first. */
@@ -38,7 +38,7 @@ function PanelHeader({ label }: { readonly label: NonNullable<ComicPanelProps['l
  * at one dims the others. It appears in its turn when the Slide turns active; at rest every panel shows.
  */
 export function ComicPanel({ index, label, className, children, data }: ComicPanelProps) {
-  const delay = { '--panel-delay': `${index * PANEL_STEP_MS}ms` } as CSSProperties;
+  const delay = { '--panel-delay': `${index * PANEL_STEP_MILLISECONDS}ms` } as CSSProperties;
   return (
     <li
       data-panel

@@ -100,7 +100,7 @@ describe('success cases', () => {
         ]),
       ),
     );
-    const expected = [{ name: 'ag1', job: 'retrieval', attempt: 2, role: 'implementor', elapsed_ms: 480_000 }];
+    const expected = [{ name: 'ag1', job: 'retrieval', attempt: 2, role: 'implementor', elapsedMilliseconds: 480_000 }];
     // ACT
     const status = runStatus(PIPELINE, folded, { now: NOW });
     // ASSERT
@@ -111,7 +111,7 @@ describe('success cases', () => {
   it('lists a gate span with no end as waiting on the user, with how long since it opened', () => {
     // ARRANGE
     const folded = live(log(...job('brief-grill', 0, 'ok'), start('gate-1', 'gate', [40, { job: 'brief-grill' }])));
-    const expected = [{ name: 'gate-1', job: 'brief-grill', waiting_ms: 1_200_000 }];
+    const expected = [{ name: 'gate-1', job: 'brief-grill', waitingMilliseconds: 1_200_000 }];
     // ACT
     const { waiting } = runStatus(PIPELINE, folded, { now: NOW });
     // ASSERT

@@ -101,10 +101,10 @@ export function rowAt(state: FlipState, trait: Trait) {
 }
 
 /** How long a back holds its last frame before it replays. */
-export const HOLD_MS = 1500;
+export const HOLD_MILLISECONDS = 1500;
 
 /** Each back's beat, from the prototype (`build2.py`); Every word billed is its five-item scan schedule's length. */
-export const BEAT_MS: Readonly<Record<Trait, number>> = {
+export const BEAT_MILLISECONDS: Readonly<Record<Trait, number>> = {
   probabilistic: 2600,
   relentless: 3600,
   informed: 3600,
@@ -113,11 +113,11 @@ export const BEAT_MS: Readonly<Record<Trait, number>> = {
 };
 
 /** When the wipe blanks the rows, after every row has shown. */
-const BLANK_MS = 900;
+const BLANK_MILLISECONDS = 900;
 
 /** The next event the clock fires and in how many ms: the pointed row's replay, or the wipe's blank; `null` at rest. */
 export function nextTimer(state: Pick<FlipState, 'open' | 'blank'>): { ms: number; event: FlipEvent } | null {
   if (state.open === null) return null;
-  if (state.open === 'closing') return state.blank ? null : { ms: BLANK_MS, event: { type: 'blank' } };
-  return { ms: BEAT_MS[state.open] + HOLD_MS, event: { type: 'replay', target: state.open } };
+  if (state.open === 'closing') return state.blank ? null : { ms: BLANK_MILLISECONDS, event: { type: 'blank' } };
+  return { ms: BEAT_MILLISECONDS[state.open] + HOLD_MILLISECONDS, event: { type: 'replay', target: state.open } };
 }

@@ -19,10 +19,10 @@ export const GREETING_BUBBLE: BubblePlace = { width: 140 };
 /** Low enough that the bubble's own fit sets the words at caption size on every picture up to about 500 px. */
 export const GREETING_SAYS_SCALE = 0.5;
 /** The narrowest picture the Slide draws: a quarter of its `@5xl` container (64rem) less the gaps. */
-export const NARROWEST_PICTURE_PX = 240;
+export const NARROWEST_PICTURE_PIXELS = 240;
 
-/** The greeting's box in the panel's units, at a picture `picturePx` wide. */
-export function greetingBox(words: string, picturePx: number): SaysBoxResult {
+/** The greeting's box in the panel's units, at a picture `picturePixels` wide. */
+export function greetingBox(words: string, picturePixels: number): SaysBoxResult {
   const anchor = drawFigure(pilot, 'sit', MORNING_PILOT.mood).anchor;
   return saysBox({
     ...GREETING_BUBBLE,
@@ -32,6 +32,6 @@ export function greetingBox(words: string, picturePx: number): SaysBoxResult {
     head: { x: MORNING_PILOT.x - anchor.x * FIGURE_SCALE, y: PANEL_ART.floor + anchor.y * FIGURE_SCALE },
     figureScale: FIGURE_SCALE,
     saysScale: GREETING_SAYS_SCALE,
-    scenePx: picturePx / PANEL_ART.width,
+    scenePixels: picturePixels / PANEL_ART.width,
   });
 }

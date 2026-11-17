@@ -4,14 +4,14 @@ import { Button } from '@/shared/components/ui/button';
 import { Check, Copy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const COPIED_FOR_MS = 2000;
+const COPIED_FOR_MILLISECONDS = 2000;
 
 /** Copies `text` and reports it for two seconds; "Copied" is transient (FE-001), so nothing is stored. */
 function useCopied(text: string) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     if (!copied) return;
-    const timer = setTimeout(() => setCopied(false), COPIED_FOR_MS);
+    const timer = setTimeout(() => setCopied(false), COPIED_FOR_MILLISECONDS);
     return () => clearTimeout(timer);
   }, [copied]);
   const copy = () => {

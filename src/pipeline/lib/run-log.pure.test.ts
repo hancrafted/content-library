@@ -315,7 +315,7 @@ describe('success cases', () => {
         status: 'ok',
         summary: 'done',
         end_t: '2026-10-14T09:01:00Z',
-        duration_ms: 60_000,
+        'duration_ms': 60_000,
       };
       // ACT
       const span = fold(lines(attrs)).spans[0];
@@ -619,7 +619,7 @@ describe('edge cases', () => {
       ];
       const expected = {
         start_t: '2026-10-14T10:00:00Z',
-        duration_ms: 65_000,
+        'duration_ms': 65_000,
         'gen_ai.input.messages': 'the prompt',
       };
       // ACT
@@ -661,7 +661,7 @@ describe('edge cases', () => {
         status: 'ok',
         start_t: '2026-10-14T16:07:54Z',
         end_t: '2026-10-14T16:07:55Z',
-        duration_ms: 1000,
+        'duration_ms': 1000,
       };
       // ACT
       const { spans, orphans } = fold(lines);

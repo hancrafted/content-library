@@ -16,7 +16,7 @@ import { tint, vars } from './window-bits';
  */
 
 // Long enough to cross the tail's bridge from the bar at a slow pace.
-const LEAVE_MS = 400;
+const LEAVE_MILLISECONDS = 400;
 
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
 
@@ -38,7 +38,7 @@ export function useLoupe(bar: RefObject<HTMLDivElement | null>, enabled: boolean
   };
   const leave = () => {
     clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setAt(null), LEAVE_MS);
+    timer.current = window.setTimeout(() => setAt(null), LEAVE_MILLISECONDS);
   };
   const stay = () => clearTimeout(timer.current);
   return { at: enabled ? at : null, handlers: { onPointerMove, onPointerLeave: leave }, leave, stay };

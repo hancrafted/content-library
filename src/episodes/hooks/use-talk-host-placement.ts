@@ -1,6 +1,6 @@
 import {
   GLIDE_EASING,
-  GLIDE_MS,
+  GLIDE_MILLISECONDS,
   TALK_DOCKED_ATTR,
   flipTransform,
   placementOf,
@@ -40,7 +40,10 @@ let gliding: Animation | undefined;
 function glide(host: HTMLElement, first: Rect | null, last: Rect) {
   const from = first && flipTransform(first, last);
   if (!from || prefersReducedMotion()) return;
-  gliding = host.animate([{ transform: from }, { transform: 'none' }], { duration: GLIDE_MS, easing: GLIDE_EASING });
+  gliding = host.animate([{ transform: from }, { transform: 'none' }], {
+    duration: GLIDE_MILLISECONDS,
+    easing: GLIDE_EASING,
+  });
 }
 
 /**

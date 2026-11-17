@@ -40,8 +40,8 @@ export const GANTT_BARS: Record<GanttItem, Bar> = {
 export const TODAY = 7;
 
 export interface BarBox {
-  readonly leftPct: number;
-  readonly widthPct: number;
+  readonly leftPercent: number;
+  readonly widthPercent: number;
 }
 
 function assertRange({ start, end }: Bar): void {
@@ -53,7 +53,7 @@ function assertRange({ start, end }: Bar): void {
 /** Where a bar sits on its lane's track, as shares of the track's width. */
 export function barBox(bar: Bar): BarBox {
   assertRange(bar);
-  return { leftPct: (bar.start / AXIS_MONTHS) * 100, widthPct: ((bar.end - bar.start) / AXIS_MONTHS) * 100 };
+  return { leftPercent: (bar.start / AXIS_MONTHS) * 100, widthPercent: ((bar.end - bar.start) / AXIS_MONTHS) * 100 };
 }
 
 /** How much of a bar lies left of `today`: 0 before it starts, 1 once it has ended. */

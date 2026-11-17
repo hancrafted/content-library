@@ -28,7 +28,7 @@ export interface ExchangeIn {
   readonly onLoad: (up: Loaded) => void;
 }
 
-const REVOKE_MS = 1000;
+const REVOKE_MILLISECONDS = 1000;
 
 const save = (text: string, file: string) => {
   const a = document.createElement('a');
@@ -37,7 +37,7 @@ const save = (text: string, file: string) => {
   document.body.append(a);
   a.click();
   a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), REVOKE_MS);
+  setTimeout(() => URL.revokeObjectURL(a.href), REVOKE_MILLISECONDS);
 };
 
 const hasFiles = (e: DragEvent) => [...(e.dataTransfer?.types ?? [])].includes('Files');

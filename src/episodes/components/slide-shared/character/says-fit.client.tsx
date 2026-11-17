@@ -29,7 +29,7 @@ function viewBoxScale(root: SVGSVGElement): number {
  * CSS motion (the emote's pop, a panel sliding in) is left out on purpose: a measure taken mid-animation would turn
  * the words up for good.
  */
-function unitPx(node: SVGGraphicsElement): number {
+function unitPixels(node: SVGGraphicsElement): number {
   const root = node.ownerSVGElement;
   return root ? transformScale(node, root) * viewBoxScale(root) : 0;
 }
@@ -75,7 +75,7 @@ export function SaysFit({ side, children }: { readonly side: 1 | -1; readonly ch
     if (!node || !root) return;
     const measure = () => {
       const scale = Number.parseFloat(getComputedStyle(node).getPropertyValue('--says-scale')) || 1;
-      setFit(saysFit({ unitPx: unitPx(node), scale }));
+      setFit(saysFit({ unitPixels: unitPixels(node), scale }));
       requestAnimationFrame(() => fitRoom(node, side));
     };
     measure();
