@@ -28,7 +28,6 @@ const STORED = 'where-a-skill-is-stored';
 const INFERENCE = 'the-skill-scope-matrix-is-an-inference';
 const EVALS = 'evals-matter-once-a-skill-is-shared';
 
-/** Paths are code: the same in every locale, never translated. */
 const CODE = {
   inline: 'SKILL.md',
   personal: '~/.claude/skills/<name>/SKILL.md',
