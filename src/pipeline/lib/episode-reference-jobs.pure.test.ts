@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkReferenceJobs } from './episode-reference-jobs.pure';
 
-/*
- * A Brief's `## Episode Design Reference` against the outputs of a per-run pipeline's
- * convert-references job: one design-reference.md per listed file, no more.
- */
-
 function brief(...references: string[]): string {
   const list = references.map((reference) => `- [A deck](${reference})`).join('\n');
   const section = references.length === 0 ? '' : `## Episode Design Reference\n\n${list}\n\n`;

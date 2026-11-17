@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkMapping, field, isString, optional, requiredWhen } from './mapping-fields.pure';
 
-/*
- * One small field list, then one mapping per test: the order of findings
- * (missing, unknown, invalid) is part of the contract callers print.
- */
-
 const FIELDS = [
   field('id', isString, 'it must be a name'),
   optional(field('note', isString, 'it must be text')),

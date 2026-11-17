@@ -1,10 +1,4 @@
-/*
- * Cross-file checks for an Episode staging folder (design-ADR 0004): the rules
- * markdown-harness cannot see because they span two files or sit inside a
- * list item. Each check takes file text and returns findings; reading the disk
- * is the caller's job, so every rule tests against an in-memory folder.
- */
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 import { readSpec, specSectionSlugs, specSlideAnchors, type Spec } from './episode-spec-page.pure';
 import { checkSpec, DOSSIER_FILE } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
@@ -27,7 +21,6 @@ import {
   type ListItem,
 } from './staging-markdown.pure';
 
-/** The names a Dossier `Visual` may use: frame components and slide-master Slides, and motion effects. */
 export interface KnownVisuals {
   masters: readonly string[];
   motions: readonly string[];
@@ -47,7 +40,6 @@ function checkSlugs(dossier: readonly Heading[]): Finding[] {
 
 const VISUAL_LINE = /^master: (\S+) · motion: (\S.*)$/;
 const TITLE_LINE = /^title: \S.*$/;
-/** Motion entries: `none` stands alone, `local` is motion in the Slide's own folder, any other is a library motion. */
 const NO_MOTION = 'none';
 const LOCAL_MOTION = 'local';
 
@@ -143,10 +135,6 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
   });
 }
 
-/**
- * Checks one staging folder's files against each other. `files` maps a path
- * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
- */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   const spec = readSpec(files);
   return [
@@ -159,10 +147,6 @@ export function checkStagingFolder(files: Readonly<Record<string, string>>, know
   ];
 }
 
-/**
- * The feedback rounds, keyed by the Dossier's Sections and page Slides while it exists and by the Spec's once its
- * Gate deleted the Dossier; none before either exists.
- */
 function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: Spec | undefined): Finding[] {
   const dossier = files[DOSSIER_FILE];
   if (dossier !== undefined) {
@@ -174,7 +158,6 @@ function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: Spec
   return [];
 }
 
-/** The checks that read the Dossier; none until it exists. */
 function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   const dossier = files[DOSSIER_FILE];
   if (dossier === undefined) return [];
@@ -187,13 +170,6 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
   ];
 }
 
-/**
- * Checks the llm-wiki index against its research files: one entry per file,
- * each entry's description byte-identical to the file's frontmatter
- * `description`. `research` maps a path relative to the index's folder
- * (`research/<category>/<ID>__<question-slug>/research.md`) to its text. While the index does
- * not exist (`undefined`), there is nothing to check.
- */
 export function checkResearchIndex(index: string | undefined, research: Readonly<Record<string, string>>): Finding[] {
   if (index === undefined) return [];
   const entries = index
@@ -219,11 +195,9 @@ export function checkResearchIndex(index: string | undefined, research: Readonly
   return [...perFile, ...dangling];
 }
 
-/** The header row of `docs/episodes/runs.csv`, one row per agent run below it. */
 export const RUNS_CSV_HEADER =
   'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at';
 
-/** Checks that the runs CSV's first line is exactly {@link RUNS_CSV_HEADER}. */
 export function checkRunsCsv(csv: string): Finding[] {
   const header = csv.split('\n')[0];
   if (header === RUNS_CSV_HEADER) return [];

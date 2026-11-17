@@ -1,26 +1,16 @@
-/*
- * The dev-server ports of a new-episode pipeline (design-ADR-0008, Ports): customize-pipeline gives each Build job of
- * the run its own port, its agent serves the Episode there with `next dev`, and the dashboard links it. Whether a
- * port is a whole number in range is the field check's finding; this checks what the ports say together.
- */
-
+// decision: docs/adr/0008-pipeline-jobs-belong-to-stages.md
 import type { Job } from './episode-pipeline-definition.pure';
 import { repeated } from './finding.pure';
 
-/** The stage whose jobs serve a dev server. */
 const BUILD_STAGE = 'build';
-/** The dashboard's own dev port (`npx next dev -p 4382`); no job is assigned it. */
 export const DASHBOARD_PORT = 4382;
-/** The build Job that serves the Episode on the pipeline's `dev_port` and so carries no `port` of its own. */
 const DEV_PORT_JOB = 'implement-episode-init';
 
-/** A per-run pipeline or the template, and whether it is approved with every `foreach` expanded. */
 export interface PortScope {
   perRun: boolean;
   expanded: boolean;
 }
 
-/** What one job's port says on its own: a port in the template, outside the build stage, or the dashboard's. */
 function portFindings({ id, stage, port }: Job & { port: number }, perRun: boolean): string[] {
   return [
     ...(perRun

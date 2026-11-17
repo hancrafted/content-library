@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { pidFile, stopServers } from './servers.ts';
 
 const roots: string[] = [];
@@ -15,6 +15,7 @@ function worktree(pids: Record<number, number>): string {
   return root;
 }
 afterEach(() => {
+  vi.restoreAllMocks();
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
@@ -60,6 +61,33 @@ describe('failure cases', () => {
     expect(stopped).toEqual([]);
     expect(killed).toEqual([]);
     expect(existsSync(pidFile(root, 'demo', DEV))).toBe(true);
+  });
+
+  describe('process kill', () => {
+    const refusedWith = (code: string) => () => {
+      throw Object.assign(new Error(`kill ${code}`), { code });
+    };
+
+    it('treats a server group that already stopped as stopped and removes its pid file', () => {
+      // ARRANGE
+      const root = worktree({ [DEV]: DEV_PID });
+      vi.spyOn(process, 'kill').mockImplementation(refusedWith('ESRCH'));
+      // ACT
+      const stopped = stopServers(root, { port: DEV });
+      // ASSERT
+      expect(stopped).toEqual([DEV]);
+      expect(existsSync(pidFile(root, 'demo', DEV))).toBe(false);
+    });
+
+    it('surfaces a kill the system refused instead of reporting the server stopped', () => {
+      // ARRANGE
+      const root = worktree({ [DEV]: DEV_PID });
+      vi.spyOn(process, 'kill').mockImplementation(refusedWith('EPERM'));
+      // ACT
+      const stop = () => stopServers(root, { port: DEV });
+      // ASSERT
+      expect(stop).toThrow(/EPERM/);
+    });
   });
 });
 

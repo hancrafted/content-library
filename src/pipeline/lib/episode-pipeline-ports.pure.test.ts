@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { Job } from './episode-pipeline-definition.pure';
 import { checkPorts } from './episode-pipeline-ports.pure';
 
-/*
- * The port check on hand-built jobs: each Build job of an approved per-run pipeline names the dev-server port its
- * agent serves the Episode on, and the dashboard links it.
- */
-
 function job(id: string, stage: string, port?: number): Job {
   return {
     id,

@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { Span } from './run-log.pure.ts';
 import { openSpan, scoreTarget } from './run-spans.pure.ts';
 
-/* The span lookups over plain spans: open-ness, narrowing and what a Score target names. */
-
 const span = (seq: number, over: Partial<Span>): Span => ({
   trace_id: 't',
   span_id: `s${seq}`,

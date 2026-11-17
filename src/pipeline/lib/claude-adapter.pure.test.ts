@@ -10,10 +10,6 @@ import {
 import { parseMarker } from './marker.pure.ts';
 import type { RunLogLine } from './run-log.pure.ts';
 
-/*
- * The Claude Code adapter: a SubagentStart/SubagentStop payload, the subagent's meta.json and transcript, and
- * the active-run marker in; the run-log event to append, or none, out.
- */
 const JOB_SPAN = 'aaaaaaaaaaaaaaaa';
 const AGENT_SPAN = 'bbbbbbbbbbbbbbbb';
 const TRACE = '0123456789abcdef0123456789abcdef';

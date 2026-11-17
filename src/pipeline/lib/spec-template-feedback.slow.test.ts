@@ -3,14 +3,8 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { reviewToFeedback } from './spec-feedback.pure.ts';
 
-/*
- * The Spec template's page script is the one formatter of the review's feedback lines (design-ADR 0011): Save posts
- * them, the server validates and writes them, and Copy as prompt copies them. The template holds the functions
- * under test between marker comments; this evaluates them on their own source and runs the formatter's lines through
- * the server's reader, so the page and the server cannot drift apart. It reads the template from disk, so it is a
- * slow test (ARCH-003-testing §4.4); `skills/**` is a rerun trigger in `vitest.slow.config.mts`.
- */
-
+// decision: ARCH-003 §4.4
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const TEMPLATE = readFileSync(path.join(__dirname, '../../../skills/new-episode/assets/spec-template.html'), 'utf8');
 
 type Field = readonly [string, string];
@@ -21,7 +15,6 @@ interface Item {
 type FeedbackLines = (items: readonly Item[], fields: readonly Field[]) => string[];
 type DraftKey = (root: { dataset: { pageId: string; revision: string } }) => string;
 
-/** The template's function between its `// <name>:start` and `// <name>:end` markers, evaluated on its own source. */
 function pageFunction<T>(name: string, binding: string): T {
   const start = `// ${name}:start`;
   const source = TEMPLATE.slice(TEMPLATE.indexOf(start) + start.length, TEMPLATE.indexOf(`// ${name}:end`));
@@ -44,7 +37,6 @@ const ROUND = 1;
 
 const feedbackLines = () => pageFunction<FeedbackLines>('feedback-lines', 'feedbackLines');
 
-/** The item lines of the file the server writes: everything after the h1. */
 function serverLines(lines: readonly string[], titleSlide: string[] | undefined = TITLE) {
   const result = reviewToFeedback({
     lines: lines.join('\n'),

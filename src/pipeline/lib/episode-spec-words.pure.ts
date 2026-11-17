@@ -1,20 +1,13 @@
-/*
- * The Spec contract's rules for spoken and cited words (design-ADR 0011): every
- * Voice script item a `<strong>` title then its text, every Speaker note
- * citation `[n]` resolved by a nested `data-source="n"`, wherever the list sits.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { type CheerioAPI } from 'cheerio';
 import { SLIDE } from './episode-spec-page.pure.ts';
 import { type Element, type Selection } from './episode-spec-slide.pure.ts';
 import { unless } from './finding.pure.ts';
 
-/** The slug a Voice script or Speaker notes list belongs to: its Slide, its Section or the page section. */
 function ownerOf(list: Selection): string {
   return list.closest(`${SLIDE}, section[id]`).attr('id') ?? 'spec';
 }
 
-/** An item's own text: without its nested lists and, when asked, its title. */
 function ownText($: CheerioAPI, item: Element, withoutTitle: boolean): string {
   const copy = $(item).clone();
   copy.find('ul, ol').remove();
@@ -22,7 +15,6 @@ function ownText($: CheerioAPI, item: Element, withoutTitle: boolean): string {
   return copy.text().replace(/\s+/g, ' ').trim();
 }
 
-/** Each item of every list matching `selector`, with the slug it belongs to and its `<strong>` title. */
 function itemsOf($: CheerioAPI, selector: `ol[${string}]`): { owner: string; item: Element; title: string }[] {
   return $(selector)
     .toArray()

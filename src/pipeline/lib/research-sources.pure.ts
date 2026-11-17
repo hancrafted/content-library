@@ -14,7 +14,6 @@ interface Body {
   footnotes: Set<string>;
 }
 
-/** What the body cites as `[n]` and defines as `[n]: <url> "title"`, outside code fences and inline code. */
 function readBody(markdown: string): Body {
   const body: Body = { cited: new Set(), defined: new Map(), footnotes: new Set() };
   let fenced = false;
@@ -48,7 +47,6 @@ function sourcesOf(markdown: string): Source[] {
 
 type Report = (message: string) => Finding;
 
-/** Findings on the ids themselves: each is an integer, and together they are 1..n. */
 function idFindings(sources: readonly Source[], report: Report): Finding[] {
   const bad = sources.flatMap((source, index) =>
     Number.isInteger(source.id)
@@ -67,7 +65,6 @@ function idFindings(sources: readonly Source[], report: Report): Finding[] {
     : [report(`The source ids are [${ids.join(', ')}]: they must be the numbers 1..${sources.length}, each once.`)];
 }
 
-/** Findings on one source id: cited, defined, and defined with the source's own URL. */
 function sourceFindings(id: number, resource: string, body: Body): string[] {
   const url = body.defined.get(id);
   if (!body.cited.has(id)) return [`The source [${id}] is cited by no [${id}]: cite it in a Finding, or remove it.`];
@@ -81,11 +78,7 @@ function sourceFindings(id: number, resource: string, body: Body): string[] {
     : [`The definition [${id}] points to ${url} but the source's resource is ${resource}: make them equal.`];
 }
 
-/**
- * A research file's frontmatter `sources` and its `[n]` citations agree (design-ADR 0005): ids are the numbers
- * 1..n, every cited `[n]` is a source with a definition, every source is cited, and each definition's URL is
- * the source's `resource`.
- */
+// decision: docs/adr/0005-frontmatter-follows-okf.md
 export function checkResearchSources(file: string, markdown: string): Finding[] {
   const sources = sourcesOf(markdown);
   const body = readBody(markdown);

@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkResearchSources } from './research-sources.pure';
 
-/*
- * In-memory research files: frontmatter `sources` against the `[n]` citations and
- * `[n]: <url> "title"` definitions of the body, built to break one rule per test.
- */
-
 const FILE = 'research/recall/research.md';
 
 interface Source {

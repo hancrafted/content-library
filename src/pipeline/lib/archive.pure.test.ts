@@ -5,7 +5,6 @@ import { EVENTS, FEEDBACK, SPEC } from './archive.fixture.ts';
 import { designArchive } from './archive.pure.ts';
 
 const STAGING = 'docs/episodes/cash-first-run-2';
-/** The skill's page stylesheet, read from its assets by the CLI; any text stands in for it here. */
 const STYLE = '.archive-probe { margin: 0; }';
 const INPUT = { staging: STAGING, spec: SPEC, feedback: FEEDBACK, events: EVENTS, style: STYLE };
 
