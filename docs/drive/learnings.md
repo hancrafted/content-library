@@ -34,7 +34,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 1 (last: 2026-11-17, drive)
 - **Enforcer:** hook: new PreToolUse hook on `wt:new` that requires a fresh phase marker written by a new `drive status`, architectural
 - **Status:** proposed
-- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide
+- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide; fortify-decision AR-1 proposes this hook (picks skipped 2026-11-17, count kept at 1: same Workflow)
 
 ### Workflow progress lives only in the session, so a quota reset ends it
 
@@ -42,6 +42,48 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** test-runner: new test for a resume command that rebuilds the Workflow's state from `decisions.md` and the branches, architectural
 - **Status:** proposed
 - **Evidence:** drive: the Operator asked to resume automatically after a quota reset; the Orchestrator added a cron watchdog that dies with the session
+
+### A slow test hangs past its timeout and blocks `wt:done` until the process tree is killed by hand
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** test-runner: test:slow test that starts a background process in a temp worktree and asserts `wt:done` names and ends it, quick win
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: a vitest slow run hung 7+ minutes in a Subagent worktree, `wt:done` refused, the Orchestrator killed the tree by hand; `vitest.slow.config.mts` already sets `testTimeout: 60_000` and did not stop it (fortify-decision QW-1)
+
+### `wt:new` leaves its branch and folder behind when `npm ci` fails
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** test-runner: test:slow test that injects an install failure and asserts no branch or folder remains, quick win
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: the first `wt:new -- decisions/drive` ended in a stack trace, the rerun said "branch already exists", `npm ci` was rerun by hand in the half-made worktree (fortify-decision QW-2)
+
+### The main checkout is found with `core.bare=true` and nothing reports it
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** check: new check in `npm run preflight` plus a temp-repo test, quick win
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: mid-run the main checkout had `core.bare=true`, cause unknown (a test may have leaked into the real repo); a Subagent reset it by hand (fortify-decision QW-3)
+
+### The Binding names a skill that main has renamed, and no check fails
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** test-runner: new test (or `drive setup` check) that fails when a skill named in the Binding is not installed, quick win
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: main renamed `to-decision-html` to `to-review`; `docs/drive/binding.yml` kept the old name with all checks green; the Orchestrator found it by hand in merge 283abde8 (fortify-decision QW-4)
+
+### A Subagent stops before committing and merging its Task branch
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** hook: new SubagentStop hook that blocks while the Task branch is unmerged, with an escape for a reported blocker, architectural
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: twice a Subagent stopped ("waiting on monitor") before merging and needed a SendMessage to finish (fortify-decision AR-2)
+
+### Parallel tickets edit the same file and the rules are relayed by hand
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** check: new dispatch check that fails when two parallel tickets declare the same file, architectural
+- **Status:** proposed (unpicked, picks skipped 2026-11-17)
+- **Evidence:** drive: #667 and #668 both edited `learnings.md`, parallel fix Subagents shared it and `binding.yml`; rules relayed by SendMessage and one sync conflicted (fortify-decision AR-3)
 
 ## Corrections
 
