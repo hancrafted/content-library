@@ -1,13 +1,9 @@
-// FE-002 post-build check: a Section may declare it has no section slide. The Explorable pages do; their table of
-// contents still lists the Section and its anchor opens the first Slide, while an Episode that keeps its section
-// slides renders as before.
-
+// decision: FE-002 §2.2
 import { existsSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 
-/** The Explorable pages and their page template switch the section slide off in every Section. */
 const TEMPLATE = 'templates/explorable-page';
 const EXPLORABLE_PAGES = EXPORTED_EPISODE_SHAPED_PAGES.filter(
   ({ folder }) => folder.startsWith('explorable-pages/') || folder === TEMPLATE,

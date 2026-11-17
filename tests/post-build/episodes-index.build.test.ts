@@ -1,7 +1,3 @@
-// Post-build check for Issue #85:
-// 1. /episodes index page: lists browse grid; a production build leaves out Upcoming drafts, a preview build lists them.
-// 2. /episode/<slug> legacy stubs: forward with <meta http-equiv="refresh"> and declare canonical pointing to /episodes/<slug>.
-
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -29,27 +25,29 @@ const DRAFT_SLUGS: readonly string[] = [];
 const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };
 
 describe('/episodes index page', () => {
-  it.each(LOCALES)('renders the browse grid on the /episodes page for %s', (locale) => {
-    // ARRANGE
-    const url = localizePath(ROUTES.episodes, locale);
-    const $ = exportedPage(url);
+  it.each(LOCALES)(
+    'renders the browse grid on the /episodes page for %s, listing Upcoming drafts only in a preview build',
+    (locale) => {
+      // ARRANGE
+      const url = localizePath(ROUTES.episodes, locale);
+      const $ = exportedPage(url);
 
-    // ACT
-    const browse = $('[data-episode-browse]');
-    const cards = $('[data-episode-browse] [data-episode-card]');
-    const cardSlugs = cards.toArray().map((card) => $(card).attr('data-episode-slug'));
+      // ACT
+      const browse = $('[data-episode-browse]');
+      const cards = $('[data-episode-browse] [data-episode-card]');
+      const cardSlugs = cards.toArray().map((card) => $(card).attr('data-episode-slug'));
 
-    // ASSERT
-    expect(browse.length).toBe(1);
-    // In production build, only published episodes appear in the browse grid
-    for (const slug of PUBLISHED_SLUGS) {
-      expect(cardSlugs).toContain(slug);
-    }
-    for (const slug of DRAFT_SLUGS) {
-      if (UPCOMING_LISTED) expect(cardSlugs).toContain(slug);
-      else expect(cardSlugs).not.toContain(slug);
-    }
-  });
+      // ASSERT
+      expect(browse.length).toBe(1);
+      for (const slug of PUBLISHED_SLUGS) {
+        expect(cardSlugs).toContain(slug);
+      }
+      for (const slug of DRAFT_SLUGS) {
+        if (UPCOMING_LISTED) expect(cardSlugs).toContain(slug);
+        else expect(cardSlugs).not.toContain(slug);
+      }
+    },
+  );
 
   it('dates every published card in the /episodes browse grid with its release day', () => {
     // ARRANGE
@@ -212,11 +210,12 @@ describe('legacy /episode/<slug> stubs', () => {
   );
 
   it.each(STUB_PAGES)('exports static stub file for $legacyUrl', ({ legacyUrl }) => {
-    // ARRANGE & ACT
+    // ARRANGE
     const file = join(OUT_DIR, exportedFile(legacyUrl));
-
+    // ACT
+    const exported = existsSync(file);
     // ASSERT
-    expect(existsSync(file)).toBe(true);
+    expect(exported).toBe(true);
   });
 
   it.each(STUB_PAGES)(

@@ -2,13 +2,6 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * DaisyUI is not installed, so its class names render nothing. A leftover is a
- * silent bug: the element just loses its colour. Colours come from the shadcn
- * tokens in globals.css; a Slide's own status colours (success, warning, info)
- * are variables in its CSS module, read as `text-(--success)`.
- */
-
 const SRC = path.join(__dirname, '../../src');
 const SOURCE = /\.(tsx?|css|mdx?)$/;
 
@@ -33,7 +26,6 @@ const CARD_CLASS = /(?:className|class)="(?:[^"]* )?card[ "]/g;
 // A module specifier or a shadcn `data-slot` value names a file or a part, never a class: `'./badge'`, `"badge"` after `data-slot=`.
 const NOT_CLASSES = /(?:from |import\(|data-slot=)\s*$/;
 
-/** The quoted strings of a file that could hold class names: every one but a module specifier or a `data-slot` value. */
 function classCandidates(text: string): string[] {
   return [...text.matchAll(/"[^"\n]*"|'[^'\n]*'|`[^`]*`/g)]
     .filter((match) => !NOT_CLASSES.test(text.slice(Math.max(0, match.index - 12), match.index)))
@@ -55,7 +47,7 @@ function offenders(): string[] {
 }
 
 describe('success cases', () => {
-  it('leaves no DaisyUI class name in src', () => {
+  it('leaves no DaisyUI class name in src, since DaisyUI is not installed and a leftover silently renders nothing', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT

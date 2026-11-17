@@ -1,9 +1,5 @@
-// FE-013's line mapping through the real archgate CLI. Archgate transpiles a schema before parsing it, so erased types
-// shift the tree's lines, and the rule maps them back to the source. Only archgate's own transpile shows that drift:
-// oxc and swc reformat while transpiling, so the unit test beside the rules parses the source and cannot catch it.
-// Lives here, not in .archgate/adrs/: GEN-001 admits only an ADR's own files there. A slow test (ARCH-003 §4.4): the CLI
-// run took 2.9 s on CI, against the fast lane's 3 s budget.
-
+// decision: GEN-001 §2
+// decision: ARCH-003 §4.4
 import { execFileSync } from 'node:child_process';
 import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

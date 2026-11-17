@@ -3,15 +3,9 @@ import { readTemplateSources, TEMPLATE_FILE } from '@/pipeline/lib/spec-template
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The committed Spec template against the skill and the calibration it records a hash of. A change to
- * `skills/to-decision-html` or to the Spec calibration fails here until the template is regenerated and its hash
- * recorded (grilling Q8 of #556). It reads the live repo from disk, so it is a slow test (ARCH-003-testing §4.4):
- * `src/pipeline/lib/episode-spec-template-fresh.pure.test.ts` holds the fast half.
- */
-
+// decision: ARCH-003 §4.4
 describe('success cases', () => {
-  it('finds the committed template generated from the current to-decision-html and Spec calibration', () => {
+  it('finds the committed template generated from the current to-decision-html and Spec calibration, so a change to either fails until the template is regenerated', () => {
     // ARRANGE
     const template = readFileSync(TEMPLATE_FILE, 'utf8');
     // ACT

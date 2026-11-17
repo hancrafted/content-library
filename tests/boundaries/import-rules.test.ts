@@ -1,21 +1,3 @@
-// Pins the import rules `npm run lint:boundaries` enforces, each asserted here once. Every probe below sits in one
-// throwaway tree, with a tsconfig of its own so the `@/` alias resolves as it does in the repo, and every forbidden rule
-// of `.dependency-cruiser.cjs` runs over it in one cruise, as the gate runs them over `src/`, `skills/` and `tools/`.
-// A rule that stopped firing, or started firing on a legal import, fails here, not in review. The probes come in five
-// groups, one per concern; each group's violations are asserted whole, so a stray one in any group fails too:
-// - areas (spec #348, #354, #358, FE-007 §2 and §3, FE-006 §3.1): layers import only downward, product areas never
-//   import each other but for a Slide showing an Explorable, page assembly reaches an area only through its
-//   tier folders, an area's lib/ imports no React and no upper tier, its hooks/ are reached only from a client leaf,
-//   shared knows no domain, and `src/` and `skills/`/`tools/` meet only through an area's `lib/` or the store's entry.
-// - the content store (FE-013 Decision 1, FE-007 §2): records are read only through the store's entry, which sits
-//   below the areas, its one upward edge an Episode's metadata.
-// - Slide folders and slide-shared parts (#51, FE-007 §5, FE-006 §5): a Slide, an Event copy's too, imports only its
-//   own files and the shared locations; client leaves reach only hooks and lib; core components are a leaf.
-// - the Slide pool (FE-004 §3, FE-007 §5): only a Section reaches a pool Slide, through the alias; never as its section
-//   slide, never from the Episode file (the Title slide), never from another Slide.
-// - Explorables (design-ADR 0016 decision 6, FE-012): one folder each in their own area, apart from
-//   slide-shared, which they never import; only a Slide or page assembly imports one.
-
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
 import extractTSConfig from 'dependency-cruiser/config-utl/extract-ts-config';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -27,7 +9,6 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') as {
   forbidden: (IForbiddenRuleType & { name: string; comment: string })[];
 };
-/** Every rule a probe below breaks: each must fire, and no other may. */
 const PINNED = [
   'areas-never-import-each-other',
   'client-never-imports-content-store',
@@ -62,7 +43,6 @@ const PINNED = [
   'store-entry-only',
   'toc-reached-only-from-container',
 ];
-/** The area rules, each of which explains itself by FE-006 or FE-007. */
 const AREA_RULES = [
   'layers-never-import-app',
   'page-assembly-reached-only-from-app',
@@ -78,12 +58,9 @@ const AREA_RULES = [
   'skills-and-tools-reach-src-through-area-lib-or-store-entry',
 ];
 
-/** A probe file's imports: each a repo-root path without its extension, an `@/` alias or a bare package name. */
 type Edges = readonly string[];
-/** A probe file's imports, or its source written out, for an import edges cannot say (a type-only one). */
 type Probe = Edges | { readonly source: string };
 
-/** A module importing each target, by a relative path, its alias or its package name. */
 function importing(from: string, targets: Edges): string {
   const lines = targets.map((target, i) => {
     if (target.startsWith('@/') || !target.includes('/')) return `import * as m${i} from '${target}';`;
@@ -97,20 +74,17 @@ function isWritten(probe: Probe): probe is { readonly source: string } {
   return 'source' in probe;
 }
 
-/** One file two groups both probe: what either imports, or refused when either writes its source out. */
 function merged(file: string, before: Probe, probe: Probe): Probe {
   if (isWritten(before) || isWritten(probe))
     throw new Error(`Probe ${file} is written out by two groups: give it one.`);
   return [...new Set([...before, ...probe])];
 }
 
-/** The source a probe file holds. */
 function sourceOf(file: string, probe: Probe): string {
   if (isWritten(probe)) return probe.source;
   return probe.length === 0 ? 'export const leaf = 1;' : importing(file, probe);
 }
 
-/** The probe tree: every group's files, a file two groups share importing what either gives it. */
 function tree(groups: readonly Readonly<Record<string, Probe>>[]): Record<string, string> {
   const files = new Map<string, Probe>();
   for (const [file, probe] of groups.flatMap((group) => Object.entries(group))) {
@@ -122,13 +96,11 @@ function tree(groups: readonly Readonly<Record<string, Probe>>[]): Record<string
 
 const SLIDE = 'src/episodes/probe/slides/probe-slide';
 const STRAY_SLIDE = 'src/episodes/probe/slides/stray-slide/slide.tsx';
-/** An Event's copy, under `by-event/<event>/<slug>/`: the Slide fence holds there, and the alias reaches the pool. */
 const COPY = 'src/episodes/by-event/2026-01-01-probe/probe';
 const PART = 'src/episodes/components/slide-shared/probe-visual';
 const CORE = 'src/shared/components/core-components';
 const POOL = 'src/episodes/slide-pool';
 const POOLED = '@/episodes/slide-pool/pooled/slide';
-/** The Episode whose Sections, Slides and Title slide reach the pool. */
 const POOL_EPISODE = 'src/episodes/pooling';
 const EXPLORABLE = 'src/explorables/probe-explorable';
 const STORE = 'src/content-store';
@@ -138,15 +110,16 @@ const EVENT = 'src/page-assembly/event';
 const DASHBOARD = 'src/page-assembly/dashboard';
 const EVENTS = 'src/events';
 const PIPELINE = 'src/pipeline';
-/** A generated Episode route (FE-007 §1.3): one per Episode page, its own page and one under an Event. */
+// decision: FE-007 §1.3
 const OWN_ROUTE = 'src/app/(en)/episodes/probe/page.tsx';
 const EVENT_ROUTE = 'src/app/[locale]/events/2026-01-01-probe/episodes/probe/page.tsx';
 /** A hand-written route, which reaches no area at all. */
 const LIST_ROUTE = 'src/app/(en)/probe-list/page.tsx';
 
-/** Product areas, layers, and where `src/` meets `skills/` and `tools/`. */
+// decision: FE-007 §2
+// decision: FE-007 §3
+// decision: FE-006 §3.1
 const AREAS: Readonly<Record<string, Probe>> = {
-  // Leaves: the targets the probes below reach.
   'node_modules/react/index.js': [],
   'src/app/page.tsx': [],
   'src/shared/components/ui/button.tsx': [],
@@ -167,7 +140,6 @@ const AREAS: Readonly<Record<string, Probe>> = {
   'src/explorables/probe/workflow.node.ts': [],
   'src/page-assembly/landing/card.tsx': [],
   'skills/probe/scripts/helper.ts': [],
-  // Legal: each file below draws only edges the rules allow.
   [`${STORE}/store.ts`]: [
     'src/episodes/probe/episode-metadata',
     'src/content-store/schemas/fields',
@@ -202,7 +174,6 @@ const AREAS: Readonly<Record<string, Probe>> = {
   'tools/probe/helper.ts': ['src/episodes/lib/probe.pure'],
   'skills/probe/scripts/run.ts': [`${PIPELINE}/lib/run-log.pure`, 'src/content-store/store'],
   'skills/probe/scripts/render.ts': ['src/explorables/probe/workflow.node'],
-  // Breaks: each file below draws edges the rules refuse.
   [STRAY_SLIDE]: [`${EVENTS}/components/event-card`],
   [`${LANDING}/reaches-past-tiers.tsx`]: [
     'src/episodes/probe/episode',
@@ -246,7 +217,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   ],
 };
 
-/** The content store: its entry, records, refusals and schemas, and who may read them. */
+// decision: FE-013 §1
 const CONTENT_STORE: Readonly<Record<string, Probe>> = {
   'node_modules/zod/index.js': [],
   'node_modules/react/index.js': [],
@@ -270,7 +241,6 @@ const CONTENT_STORE: Readonly<Record<string, Probe>> = {
     source: "import type { x } from '../../content-store/schemas/episode.schema';\nexport type X = typeof x;",
   },
   'src/episodes/lib/types-from-schema.pure.ts': [SCHEMA],
-  // Breaks.
   [`${STORE}/reaches-slide-master.ts`]: ['src/episodes/components/slide-master/slide'],
   [`${STORE}/reaches-ui.ts`]: ['src/shared/components/ui/button'],
   [`${STORE}/reaches-react.ts`]: ['react'],
@@ -287,7 +257,8 @@ const CONTENT_STORE: Readonly<Record<string, Probe>> = {
   'src/shared/hooks/use-store.ts': [`${STORE}/store`],
 };
 
-/** A Slide's folder, an Event copy's Slide, a slide-shared part and the core components. */
+// decision: FE-007 §5
+// decision: FE-006 §5
 const SLIDES: Readonly<Record<string, Probe>> = {
   'src/episodes/components/slide-master/slide.ts': [],
   'src/episodes/components/slide-shared/statement.tsx': [],
@@ -328,7 +299,6 @@ const SLIDES: Readonly<Record<string, Probe>> = {
   [`${CORE}/probe-sibling/probe-sibling.tsx`]: [],
   [`${PART}/uses-core.client.tsx`]: [`${CORE}/probe-core/probe-core`],
   [`${SLIDE}/uses-core.tsx`]: [`${CORE}/probe-core/probe-core`],
-  // Breaks.
   [`${SLIDE}/reaches-other-slide.tsx`]: ['src/episodes/probe/slides/other-slide/slide'],
   [`${SLIDE}/reaches-episode.tsx`]: ['src/episodes/probe/probe'],
   [`${SLIDE}/reaches-toc.tsx`]: ['src/shared/page-chrome/table-of-contents/toc'],
@@ -342,7 +312,7 @@ const SLIDES: Readonly<Record<string, Probe>> = {
   [`${CORE}/probe-core/reaches-ui.tsx`]: ['src/shared/components/ui/button'],
 };
 
-/** The Slide pool and the Sections, Slides and Episode files around it. */
+// decision: FE-004 §3
 const SLIDE_POOL: Readonly<Record<string, Probe>> = {
   'src/episodes/components/slide-master/slide.ts': [],
   'src/shared/hooks/use-probe.ts': [],
@@ -354,7 +324,6 @@ const SLIDE_POOL: Readonly<Record<string, Probe>> = {
   [`${POOL_EPISODE}/slides/own/slide.tsx`]: [],
   [`${POOL_EPISODE}/sections/opener.ts`]: [`${POOL_EPISODE}/slides/opener/slide`, POOLED],
   [`${COPY}/sections/opener.ts`]: [POOLED],
-  // Breaks.
   [`${POOL}/pooled/reaches-other-pool-slide.tsx`]: [`${POOL}/other/slide`],
   [`${POOL}/pooled/reaches-episode-slide.tsx`]: [`${POOL_EPISODE}/slides/own/slide`],
   [`${POOL}/pooled/reaches-master.client.tsx`]: ['src/episodes/components/slide-master/slide'],
@@ -364,7 +333,7 @@ const SLIDE_POOL: Readonly<Record<string, Probe>> = {
   [`${POOL_EPISODE}/episode.ts`]: [POOLED],
 };
 
-/** An Explorable's folder, and who may import it. */
+// decision: docs/adr/0016-content-data-model.md
 const EXPLORABLES: Readonly<Record<string, Probe>> = {
   'src/episodes/components/slide-shared/statement.tsx': [],
   'src/shared/components/ui/button.tsx': [],
@@ -385,7 +354,6 @@ const EXPLORABLES: Readonly<Record<string, Probe>> = {
   ],
   [`${SLIDE}/slide.tsx`]: [`${EXPLORABLE}/probe-explorable`],
   'src/page-assembly/probe-template/probe-template.tsx': [`${EXPLORABLE}/probe-explorable`],
-  // Breaks.
   [`${EXPLORABLE}/reaches-other.client.tsx`]: ['src/explorables/other-explorable/other'],
   [`${EXPLORABLE}/reaches-statement.tsx`]: ['src/episodes/components/slide-shared/statement'],
   [`${EXPLORABLE}/reaches-statement.client.tsx`]: ['src/episodes/components/slide-shared/statement'],
@@ -398,13 +366,11 @@ const TSCONFIG = JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*
 let root = '';
 let output: IReporterOutput;
 
-/** Every violation as `<rule>: <from> -> <to>`, sorted. */
 function violations(): string[] {
   if (typeof output.output === 'string') throw new Error('dependency-cruiser returned a report, not a result.');
   return output.output.summary.violations.map(({ rule, from, to }) => `${rule.name}: ${from} -> ${to}`).sort();
 }
 
-/** The violations drawn from any of the given probe files. */
 function from(files: readonly string[]): string[] {
   return violations().filter((line) => files.some((file) => line.includes(`: ${file} ->`)));
 }

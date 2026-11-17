@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { lintProbe } from './lint-probe';
 
-/*
- * Probe tests for the Context marker guard (design-ADR-0013, .oxlintrc.json): a call site must not hand a marker
- * a `static` class, which would unposition the button and stretch its hit area over the whole Slide. Each probe lints
- * a snippet through the real oxlint config under a virtual Slide path.
- */
-
+// decision: docs/adr/0013-context-markers.md
 const SLIDE = 'src/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
 const TIMEOUT = 30_000;
 
@@ -26,7 +21,7 @@ describe('failure cases', () => {
     ['a template literal', '<Marker note="n" className={`ml-1 static`} />'],
     ['a helper call', "<Marker note=\"n\" className={cn('ml-1', 'static')} />"],
   ])(
-    'refuses %s',
+    'refuses %s, which would stretch the marker hit area over the whole Slide',
     async (_name, element) => {
       // ARRANGE
       const expected = ['no-restricted-syntax'];

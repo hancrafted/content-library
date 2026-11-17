@@ -5,13 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The frontmatter keys design-ADR 0005 settles, checked on the real corpus and
- * the real markdown-harness config: a title equal to the h1 on every guide and
- * the glossary (the staging files are checked in episode-staging.test.ts), and
- * a datetime that must carry its UTC offset.
- */
-
+// decision: docs/adr/0005-frontmatter-follows-okf.md
 const ROOT = path.join(__dirname, '../..');
 const MH = path.join(ROOT, 'node_modules/.bin/mh');
 const CONFIG = path.join(ROOT, 'markdown-harness.config.yaml');
@@ -32,7 +26,6 @@ function guides(): string[] {
 const FEATURE_GUIDE = (staleAfter: string): string =>
   ['---', 'type: feature-guide', 'title: Chrome', `stale_after: ${staleAfter}`, '---', '', '# Chrome', ''].join('\n');
 
-/** `mh check` over a throwaway root holding one feature guide, under the repo's own config. */
 function checkGuide(markdown: string): { status: number | null; violations: number } {
   const root = mkdtempSync(path.join(tmpdir(), 'mh-datetime-'));
   mkdirSync(path.join(root, 'docs/features'), { recursive: true });

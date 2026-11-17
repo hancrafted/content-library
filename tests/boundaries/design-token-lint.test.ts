@@ -3,17 +3,7 @@ import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { lintProbes, type ProbeDiagnostic } from './lint-probe';
 
-/*
- * Probe tests for the design-token lint checks (FE-011, .oxlintrc.json): one planted violation per check must
- * fail, and the allowed forms must pass. Each probe lints a snippet through the real oxlint config under a virtual path,
- * so the per-file exemptions (legacy list, HeroTitle file, the two relative sizes) are exercised too.
- *
- * Starting oxlint costs about a second, so the suite lints its whole probe table in `beforeAll` and each test looks its
- * probe up by key. A run needs one path per probe: a folder probed more than once takes numbered file names, which its
- * glob overrides still match. The two relative-size files are exempt by exact path, so their second probe lints in a
- * concurrent second run.
- */
-
+// decision: FE-011 §4
 const ROOT = path.join(__dirname, '../..');
 const LEGACY: string[] = JSON.parse(
   readFileSync(path.join(ROOT, 'src/shared/design-system/legacy.json'), 'utf8'),
@@ -44,7 +34,6 @@ const SLIDE_TOKEN_FORMS = [
   'bg-[color-mix(in_oklch,var(--lane)_38%,transparent)]',
 ];
 
-/** Classes probed in an ordinary Slide file, by key; each gets its own numbered file in the Slide folder. */
 const AT_SLIDE: Record<string, string> = {
   phantom: 'p-4 btn-phantom',
   registered: 'flex bg-primary text-muted-foreground text-heading font-semibold bg-(--loop-edge)',
@@ -55,7 +44,6 @@ const AT_SLIDE: Record<string, string> = {
   'hero elsewhere': 'text-hero',
 };
 
-/** Classes probed in every legacy file set, by key; each gets its own numbered file under the glob's folder. */
 const IN_LEGACY: Record<string, string> = {
   'legacy phantom': 'btn-phantom',
   'legacy exempt': 'text-sm text-red-500 font-bold',
@@ -68,7 +56,6 @@ interface ProbeEntry {
   classes: string;
 }
 
-/** Every probe of the first run, by key; each path is unique. */
 const PROBES: Record<string, ProbeEntry> = {
   ...Object.fromEntries(
     Object.entries(AT_SLIDE).map(([key, classes], i) => [
@@ -97,7 +84,6 @@ const markup = (classes: string) => `export const Probe = () => <div className="
 const tailwindRules = (diagnostics: ProbeDiagnostic[]): string[] =>
   diagnostics.filter((d) => d.ruleId.startsWith('better-tailwindcss/')).map((d) => d.ruleId);
 
-/** The rule ids each probe of `table` breaks, by key, from one lint run. */
 async function lintTable(table: Record<string, ProbeEntry>): Promise<[key: string, rules: string[]][]> {
   const entries = Object.entries(table);
   const results = await lintProbes(
@@ -113,7 +99,6 @@ beforeAll(async () => {
   for (const [key, rules] of runs.flat()) broken.set(key, rules);
 }, TIMEOUT);
 
-/** The better-tailwindcss rule ids the probe `key` breaks. */
 function rulesOf(key: string): string[] {
   const rules = broken.get(key);
   if (!rules) throw new Error(`no probe named ${key}`);

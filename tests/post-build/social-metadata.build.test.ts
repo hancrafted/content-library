@@ -1,5 +1,4 @@
-// FE-008 §6 post-build check: social cards and structured data as crawlers see them in the built HTML.
-
+// decision: FE-008 §6.1
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -25,11 +24,18 @@ describe('social cards', () => {
   });
 
   it('types the landing page as a website and an Episode as an article, with locales', () => {
-    // ARRANGE / ACT / ASSERT
-    expect(meta('/', 'og:type').attr('content')).toBe('website');
-    expect(meta('/de', 'og:locale').attr('content')).toBe('de_DE');
-    expect(meta('/episodes/ai-attention-span', 'og:type').attr('content')).toBe('article');
-    expect(meta('/episodes/ai-attention-span', 'og:locale:alternate').attr('content')).toBe('de_DE');
+    // ARRANGE
+    const episode = '/episodes/ai-attention-span';
+    // ACT
+    const landingType = meta('/', 'og:type').attr('content');
+    const germanLocale = meta('/de', 'og:locale').attr('content');
+    const episodeType = meta(episode, 'og:type').attr('content');
+    const episodeAlternate = meta(episode, 'og:locale:alternate').attr('content');
+    // ASSERT
+    expect(landingType).toBe('website');
+    expect(germanLocale).toBe('de_DE');
+    expect(episodeType).toBe('article');
+    expect(episodeAlternate).toBe('de_DE');
   });
 });
 
@@ -57,15 +63,19 @@ describe('one URL per page', () => {
 
 describe('structured data', () => {
   it('gives the landing page a Person and a WebSite', () => {
-    // ARRANGE / ACT
-    const types = jsonLd('/').flatMap((block) => block['@graph'].map((node) => node['@type']));
+    // ARRANGE
+    const landing = '/';
+    // ACT
+    const types = jsonLd(landing).flatMap((block) => block['@graph'].map((node) => node['@type']));
     // ASSERT
     expect(types).toEqual(['Person', 'WebSite']);
   });
 
   it('gives a published Episode an Article, with a VideoObject only where a recording exists', () => {
-    // ARRANGE / ACT
-    const withVideo = jsonLd('/episodes/ai-token-economy').flatMap((block) => block['@graph'].map((n) => n['@type']));
+    // ARRANGE
+    const recorded = '/episodes/ai-token-economy';
+    // ACT
+    const withVideo = jsonLd(recorded).flatMap((block) => block['@graph'].map((n) => n['@type']));
     const withoutVideo = jsonLd('/episodes/ai-attention-span').flatMap((block) =>
       block['@graph'].map((n) => n['@type']),
     );

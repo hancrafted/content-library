@@ -1,11 +1,5 @@
-// The text an Episode page shows a reader, region by region, read from the
-// exported HTML: what the Self-contained Slides migration (#51) must leave
-// unchanged. Text nodes are joined by one space, so a word boundary the markup
-// drew still counts; markup, classes and ids generated at render do not.
-
 import type { CheerioAPI } from 'cheerio';
 
-/** The least of a parsed node the walk reads: text nodes carry `data`, elements `children` and `attribs`. */
 interface DomNode {
   readonly type: string;
   readonly data?: string;
@@ -13,13 +7,11 @@ interface DomNode {
   readonly children?: readonly DomNode[];
 }
 
-/** One region's text, keyed by the anchor or slot it belongs to. */
 export interface TextRegion {
   readonly id: string;
   readonly text: string;
 }
 
-/** Everything an Episode page says, in page order. */
 export interface EpisodeText {
   readonly title: string;
   readonly description: string;
@@ -46,7 +38,6 @@ function regions($: CheerioAPI, selector: string, idAttribute: string): TextRegi
     .map((element) => ({ id: $(element).attr(idAttribute) ?? '', text: textOf(element) }));
 }
 
-/** The reader-facing text of one exported Episode page. */
 export function episodeText($: CheerioAPI): EpisodeText {
   return {
     title: $('head > title').text(),

@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { lintProbe } from './lint-probe';
 
-/*
- * Probe tests for the pure-view lint rule (FE-006, .oxlintrc.json): a `*-view.tsx` file takes no hook, handler,
- * hook import or client directive, and a file of any other name may. Each probe lints a snippet through the real
- * config under a virtual path.
- */
-
+// decision: FE-012 §4.5
 const VIEW = 'src/explorables/context-window/probe-view.tsx';
 const OTHER = 'src/explorables/context-window/probe.tsx';
 const TIMEOUT = 30_000;

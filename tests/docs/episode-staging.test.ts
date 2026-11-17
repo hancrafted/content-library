@@ -27,15 +27,7 @@ import {
 } from './episode-staging.fixture.ts';
 import { RUN_CHECKS_TEST } from './run-checks.ts';
 
-/*
- * The cross-file checks (design-ADR 0004) applied to the real corpus: the new-episode skill's sample Episode and
- * pipeline template, the llm-wiki index against its research files, the runs CSV header, and the invariants that span
- * Runs, read from folder names only. markdown-harness checks each file alone; this test checks them against each other,
- * so a disagreement fails `npm run verify`. Each Run's own staging folder is checked by the `run-checks.test.ts` beside
- * it (`run-checks.ts`, ARCH-003 §4.7), never from here.
- */
-
-/** The pipeline template every Run's draft is copied from. */
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 const TEMPLATE_YAML = readFileSync(TEMPLATE, 'utf8');
 
 it('reads the history in full, so the Voice script check never passes on a shallow clone', () => {

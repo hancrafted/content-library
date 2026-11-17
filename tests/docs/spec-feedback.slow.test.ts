@@ -5,13 +5,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { reviewToFeedback } from '../../src/pipeline/lib/spec-feedback.pure.ts';
 
-/*
- * A Spec review round carrying the `page` and `next` lines, as the review form saves it, against the markdown-harness
- * `feedback` rule: the rule governs the file's frontmatter and h1, so a round the server writes must keep passing it.
- * It spawns `mh check` over the live config, so it is a slow test (ARCH-003-testing §4.4); the config is a rerun
- * trigger in `vitest.slow.config.mts`.
- */
-
+// decision: ARCH-003 §4.4
 const ROOT = path.join(__dirname, '../..');
 const MH = path.join(ROOT, 'node_modules/@hancrafted/markdown-harness/dist/packages/cli/cli.js');
 const NOW = new Date('2026-10-15T10:40:05Z');
@@ -32,7 +26,6 @@ function savedRound(): string {
   return result.text;
 }
 
-// Runs `mh check` over one folder holding the round as feedback/01/feedback.md and returns its summary.
 function checkAsFeedback(markdown: string): unknown {
   const folder = mkdtempSync(path.join(tmpdir(), 'spec-feedback-'));
   try {

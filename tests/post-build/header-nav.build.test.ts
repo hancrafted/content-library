@@ -1,7 +1,3 @@
-// Post-build check of the header's navigation (spec #404): Explorables, Events, Learn (Episodes, Guides, Resources, plus
-// Content pipeline in English only); one copy of every link; Learn as a menu trigger with no page of its own; the active
-// state on an Episode, a Resource and an Explorable page.
-
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
 import { ROUTES } from '../../src/shared/lib/static-routes';
@@ -29,7 +25,6 @@ const LABELS: Record<
   },
 };
 
-/** The header nav of an exported page, as its links' test ids in document order and the active test ids. */
 function nav(url: string) {
   const $ = exportedPage(url);
   const scope = $('[data-testid="site-nav"]');

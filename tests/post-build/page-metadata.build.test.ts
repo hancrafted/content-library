@@ -1,27 +1,18 @@
-// FE-008 post-build check: every exported page that is its own canonical carries
-// one canonical pointing at itself, and hreflang alternates that resolve to
-// exported files and link back. A public Episode under an Event credits its own
-// page instead, with no alternates: events.build.test.ts checks those. A public
-// Event copy has no page of its own, so its page under its Event is its canonical.
-// Reads the built HTML, so it judges what crawlers see, not what the code meant.
-
+// decision: FE-008 §1.2
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { EXPORTED_PAGES, exportedFile, OUT_DIR } from './exported-pages';
 
-/** The pages that are their own canonical, each carrying its hreflang set. */
 const SELF_CANONICAL = EXPORTED_PAGES.filter(({ selfCanonical }) => selfCanonical);
 
-// The deploy passes its SITE_URL here too, so a build that lost its
-// SITE_URL — and emitted localhost canonicals — fails against the workflow's value.
+// decision: FE-008 §3.1
 const SITE_URL = resolveSiteUrl(process.env);
 
 interface PageLinks {
   file: string;
   canonicals: string[];
-  /** hreflang → absolute href. */
   alternates: Record<string, string>;
 }
 
@@ -45,14 +36,12 @@ function readLinks(file: string): PageLinks {
   return links;
 }
 
-/** The exported file an absolute same-site URL lands on, or undefined when it leaves the site. */
 function fileForHref(href: string): string | undefined {
   if (!href.startsWith(`${SITE_URL}/`)) return undefined;
   const path = href.slice(SITE_URL.length).replace(/\/+$/, '') || '/';
   return exportedFile(path);
 }
 
-/** The alternates of a page whose target does not name the page back under the page's own language. */
 function oneWayAlternates(page: PageLinks, byFile: ReadonlyMap<string, PageLinks>): string[] {
   const self = page.canonicals[0];
   const ownLang = Object.entries(page.alternates).find(([lang, href]) => lang !== 'x-default' && href === self)?.[0];
@@ -78,9 +67,10 @@ describe('page metadata', () => {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
     pages = SELF_CANONICAL.map((page) => readLinks(exportedFile(page.url)));
-    // A reciprocity walk over zero pages passes silently, so the count is printed as a diagnostic.
     const alternateCount = pages.reduce((sum, page) => sum + Object.keys(page.alternates).length, 0);
-    console.info(`page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}`);
+    console.info(
+      `page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}, since a walk over none passes silently`,
+    );
   });
 
   it('gives every page exactly one canonical, pointing at the page itself', () => {
