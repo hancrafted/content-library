@@ -230,11 +230,7 @@
   stroke: var(--paper-shade);
 }
 
-/*
- * The one emphasis motion: once the captain's bubble has popped in, the clear index entry fills from paper to primary
- * and the clear description card takes its ring. The base rules are the lit rest state, which reduced motion and a
- * still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .lit {
   background: var(--primary);
   color: var(--primary-foreground);
