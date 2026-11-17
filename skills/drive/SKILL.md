@@ -52,7 +52,7 @@ _Done when:_ every requirement is a line in `decisions.md` and the Operator agre
 
 ## 2. Reason (specify)
 
-1. **Decision docs.** Write the new or changed terms, design decisions and feature wording yourself, in a `decisions/<topic>` worktree, push it and open its PR to the base branch. The paths are `decisionDocs` in `project.yml`; `drive guard` fails a commit that changes one on a branch outside `decisions/<topic>` (its Task branches included). A Workflow that changes no Decision doc says so in `decisions.md` and goes on. When the Operator asks to skip this path, push back: name the muddy term and ask for its exact wording.
+1. **Decision docs.** Write the glossaries, design-ADRs and feature docs the Workflow changes yourself, in a `decisions/<topic>` worktree, push it and open its PR to the base branch. The paths are `decisionDocs` in `project.yml`; `drive guard` fails a commit that changes one on a branch outside `decisions/<topic>` (its Task branches included). A Workflow that changes no Decision doc says so in `decisions.md` and goes on. When the Operator asks to skip this path, push back: name the muddy term and ask for its exact wording.
 2. **Spec and tickets**, inline with the Reason skills. Ask the ticket skill, through its arguments, for a **Skills** line (only skills the Binding resolves) and a **Review after** line (`yes` with a reason, or `no`) on each ticket; the Operator confirms both when the tickets are proposed.
 3. **Integration branch.** Create its worktree in the background; once the Decision docs PR has merged, run `drive worktree sync` in it.
 

@@ -20,7 +20,7 @@ Skills are found in the skills lockfile and in the project's skill folders, auth
 
 ## Model presets
 
-Setup seeds every phase with the same model, a capable mid-size one. Change a phase's `model` in `binding.yml` when experience shows its Subagents need more (a design-heavy Reason phase) or less (mechanical Verify chores), and log why in `docs/drive/learnings.md`. The Orchestrator's own session override, when the Operator gives one, beats every preset for that session.
+The skill ships one preset per phase, which setup seeds into a new Binding: `define` sonnet, `reason` opus, `implement` sonnet, `verify` opus, `evolve` sonnet; the larger model where judgement over design and review decides the outcome. Change a phase's `model` in `binding.yml` when experience shows its Subagents need more or less, and log why in `docs/drive/learnings.md`. The Orchestrator's own session override, when the Operator gives one, beats every preset for that session.
 
 ## After setup
 
