@@ -17,19 +17,12 @@ function useHandoffLight() {
 interface HandoffMotionProps {
   readonly label: string;
   readonly className?: string;
-  /** The old chat's bar: never replays. */
   readonly before: ReactNode;
-  /** The handoff card and its arrow: replays, so it holds nothing focusable. */
   readonly card: ReactNode;
-  /** The fresh chat's bar: never replays. */
   readonly after: ReactNode;
 }
 
-/**
- * The bars' trigger (design-ADR-0012 §9): the handoff card between the two chats lights once on the Slide's first
- * `active`, and again on every mouse enter and keyboard focus, by mounting the card (`card`) afresh. The bars either
- * side stay mounted. `data-play` is the CSS hook; the keyframes and reduced motion live in the Slide's CSS module.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function HandoffMotion({ label, className, before, card, after }: HandoffMotionProps) {
   const { lights, replays, replay } = useHandoffLight();
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {
