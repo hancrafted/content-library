@@ -4,7 +4,6 @@ export interface WindowCardProps {
   readonly label: string;
   readonly order: string;
   readonly verdict: string;
-  /** A clear window is crisp; a vague one is drawn dulled toward `muted-foreground`, never a hue of its own. */
   readonly quality: 'crisp' | 'vague';
   readonly miss: boolean;
 }

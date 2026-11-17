@@ -16,10 +16,6 @@ const OSMANI = { slug: 'osmani-new-sdlc', url: 'https://www.kaggle.com/whitepape
 
 const DEFINITION_PARTS = ['codebase', 'architecture', 'conventions', 'intent'] as const;
 
-/**
- * The four outcomes of the dartboard, each as the shared board it lands and the window that produced it: the same
- * boards Slide 6 draws, so one outcome looks the same on both.
- */
 const OUTCOMES = [
   { key: 'both', board: 'precise-accurate', quality: 'crisp', miss: false },
   { key: 'precise', board: 'precise-off', quality: 'crisp', miss: true },
