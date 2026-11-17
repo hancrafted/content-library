@@ -6,11 +6,6 @@ import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * The check-in's questions as keys of `questions`, with their answers' Translation keys in poll order: poll v1's `ai-gives-you-more-work.seen`, `ai-gives-you-more-work.known`, `baseline.model_after` and `baseline.shift`. The wording is
- * frozen in the question register of research AIE-0016
- * (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md); a change is a new poll version there first.
- */
 const QUESTIONS = [
   {
     key: 'seen',
@@ -52,7 +47,6 @@ const QUESTIONS = [
   tone: PollTone;
 }[];
 
-// A check-in after the Episode ai-gives-you-more-work: the way back into the poll (QR from `poll.voteUrl`) on a filled panel for anyone whose phone closed the tab, the questions printed as text beside it, and the Result page loaded only after the click. The Slide header shows the title and caption; the Scene holds the check-in.
 export const checkIn3 = slide({
   slug: 'check-in-3',
   messages: { en, de },

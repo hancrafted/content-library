@@ -12,13 +12,6 @@ import { orgaSection } from './sections/orga';
 import { pollSection } from './sections/poll';
 import { hero } from './slides/hero/slide';
 
-/*
- * The opening Episode the CyberForum EXI Digital workshop (Event 2026-11-18-cyberforum-exi-digital-agentic-workflows)
- * presents: a copy of the Workshop template (docs/features/events.md, "Add an Event"), its hook renamed `grounding`
- * because it grounds: the three layers of the evening. Then the agenda, the scope, a poll, About me (the value chain) as its
- * own Section, and the organisation. Then one check-in Section per theory Episode, which the Event's Playlist
- * links to by anchor between the Episodes. Unlisted: it lives only under its Event.
- */
 export const cyberforumIntro = episode({
   slug: 'intro',
   messages: { en, de },

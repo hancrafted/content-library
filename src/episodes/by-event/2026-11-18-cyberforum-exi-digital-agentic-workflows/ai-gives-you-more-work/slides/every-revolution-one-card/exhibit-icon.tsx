@@ -2,7 +2,6 @@ export type ExhibitSlug = 'farming' | 'steam' | 'computer' | 'ai';
 
 const STROKE = { strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
 
-/** The plough over a dashed furrow. */
 function Plough() {
   return (
     <g className="fill-none stroke-machine" {...STROKE}>
@@ -14,7 +13,6 @@ function Plough() {
   );
 }
 
-/** A flywheel driven by a boiler with its chimney and smoke. */
 function SteamEngine() {
   return (
     <g className="fill-none stroke-machine" {...STROKE}>
@@ -29,7 +27,6 @@ function SteamEngine() {
   );
 }
 
-/** A screen of text lines on its stand. */
 function Computer() {
   return (
     <g className="fill-none stroke-machine" {...STROKE}>
@@ -40,7 +37,6 @@ function Computer() {
   );
 }
 
-/** Two speech bubbles, a prompt and its answer, with a spark. */
 function Ai() {
   return (
     <g className="fill-none stroke-ai" {...STROKE}>
@@ -54,7 +50,6 @@ function Ai() {
 
 const ICONS = { farming: Plough, steam: SteamEngine, computer: Computer, ai: Ai } as const;
 
-/** The machine of an exhibit, drawn in its meaning colour: `machine` for the three revolutions, `ai` for AI. */
 export function ExhibitIcon({ slug }: { slug: ExhibitSlug }) {
   const Icon = ICONS[slug];
   const lead = slug === 'ai';

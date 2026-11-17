@@ -12,7 +12,6 @@ import en from './i18n/en.json';
 const MURDOCK = { slug: 'murdock-serial-position', url: 'https://doi.org/10.1037/h0045106' };
 const LIU = { slug: 'liu-lost-in-the-middle', url: 'https://arxiv.org/abs/2307.03172' };
 
-/** The call of Slide 1 in ten lines: the start and the end lit, the middle faded, Pepper's cake the standout. */
 const CALL = [
   { slug: 'holidays', who: 'you', light: 'lit' },
   { slug: 'mums-phone', who: 'sister', light: 'lit' },
@@ -26,10 +25,8 @@ const CALL = [
   { slug: 'bye', who: 'you', light: 'lit' },
 ] as const satisfies readonly { slug: string; who: CallWho; light: CallLight }[];
 
-/** The two learnings under the AI side, as keys of `chat.learnings`. */
 const LEARNINGS = ['middle', 'compaction'] as const;
 
-/** The equals glyph between the two pictures: the same shape. */
 function Equals() {
   return (
     <svg viewBox="0 0 80 40" className="w-20" aria-hidden="true">
@@ -38,12 +35,6 @@ function Equals() {
   );
 }
 
-/**
- * "What we learned so far" (Spec Option 6a, reworked by Han's batch-2 item 6): human attention on the left, the call
- * transcript of Slide 1 faded in the middle with the primacy and recency line; AI attention (context window) on the
- * right, the cornerstone's /context grid in Technical with its own local </> to switch to Simple, and the two
- * learnings; an equals sign between, and the closing line as a full-width band. Keeps `basic-page`, `motion: none`.
- */
 export const whatWeLearnedSoFar = slide({
   slug: 'what-we-learned-so-far',
   messages: { en, de },

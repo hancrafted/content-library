@@ -3,7 +3,6 @@ import type { PlaylistInput } from '../schemas/playlist.schema';
 const EVENT = '2026-11-18-cyberforum-exi-digital-agentic-workflows';
 const INTRO = `${EVENT}__intro`;
 
-/** The Episodes the CyberForum EXI Digital workshop presents, in teaching order: its intro, then each theory Episode followed by its check-in in the intro. Public, so the Event is listed and indexed. */
 export const playlist = {
   id: 'cyberforum-exi-digital-agentic-workflows',
   visibility: 'public',
