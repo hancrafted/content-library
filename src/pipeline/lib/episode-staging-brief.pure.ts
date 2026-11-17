@@ -1,42 +1,21 @@
-/*
- * The Brief's checks (design-ADR 0004) beyond markdown-harness: its spine,
- * the `## Slides` Han settles in the Brief grill and write-dossier keeps,
- * read inside each list item and across to the Dossier and the event log's notes; and
- * the headings the grill left `Not settled.`.
- */
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 import { type Finding } from './finding.pure';
 import { fold, parseLog } from './run-log-fold.pure';
 import { blocksOf, bodyLines, orderedList, type Block } from './staging-markdown.pure';
 
-/** One page Slide of the Brief's spine. */
 interface BriefSlide {
-  /** The Section's h3 title. */
   section: string;
-  /** The item text as written, for messages. */
   text: string;
-  /** The bold title, or null when the item is not of the Slide entry's shape. */
   title: string | null;
-  /** The research question numbers after `_Research:_`, none when the item names none. */
   research: number[];
-  /** The leading `(A)` or `(B)`, or null for an untagged item. */
   thread: string | null;
 }
 
-/**
- * `(A) **title** — purpose. _Visual:_ idea. _Research:_ 1, 2`, the tag and
- * research optional. A title holds no `{`, so a Dossier `{#slug}` stays out.
- */
 const SLIDE_ITEM = /^(?:\([AB]\) )?\*\*([^*{}]+)\*\* — \S.*_Visual:_ \S.*$/;
-/** Read apart from the shape, so a malformed item still counts as citing its questions. */
 const RESEARCH = / _Research:_ ([\d, ]+)$/;
 const THREAD_TAG = /^\(([AB])\) /;
 const THREADS = ['A', 'B'];
 
-/**
- * With Threads, the spine tells both in turns, so each tag appears at least
- * once; without them, no Slide carries a tag.
- */
 function checkThreads(slides: readonly BriefSlide[], hasThreads: boolean): Finding[] {
   if (!hasThreads) {
     return slides
@@ -55,7 +34,6 @@ function checkThreads(slides: readonly BriefSlide[], hasThreads: boolean): Findi
   }));
 }
 
-/** The h3 blocks under `## Slides`, up to the next h2. */
 function sectionBlocks(blocks: readonly Block[]): Block[] {
   const start = blocks.findIndex(({ heading }) => heading.level === 2 && heading.text === 'Slides');
   if (start === -1) return [];
@@ -75,7 +53,6 @@ function briefSlides(blocks: readonly Block[]): BriefSlide[] {
   );
 }
 
-/** How many ordered items sit under `## Research questions`. */
 function researchQuestions(blocks: readonly Block[]): number {
   const block = blocks.find(({ heading }) => heading.level === 2 && heading.text === 'Research questions');
   return block === undefined ? 0 : orderedList(block.body).items.length;
@@ -117,7 +94,6 @@ function checkShapes(slides: readonly BriefSlide[]): Finding[] {
 
 const SLUG = / \{#[a-z0-9-]+\}$/;
 
-/** The Dossier's page Slide titles, in order, without their `{#slug}`. */
 function dossierTitles(dossier: string): string[] {
   return blocksOf(bodyLines(dossier))
     .filter(({ heading }) => heading.level === 3 && heading.slug !== null)
@@ -126,7 +102,6 @@ function dossierTitles(dossier: string): string[] {
 
 const SPINE_CHANGE = /^(.+?) — \S/;
 
-/** The titles named by `spine-change` notes the event log holds for write-dossier, each `<Slide title> — <why>`. */
 function spineChanges(events: string | undefined): string[] {
   if (events === undefined) return [];
   const { spans } = fold(parseLog(events).lines, {});
@@ -143,10 +118,6 @@ function longest(runs: readonly number[][]): number[] {
   return runs.reduce<number[]>((best, run) => (run.length > best.length ? run : best), []);
 }
 
-/**
- * The titles both lists hold that the Dossier took out of the Brief's order:
- * every common title outside a longest run the two lists share in order.
- */
 function movedTitles(planned: readonly string[], kept: readonly string[]): string[] {
   const common = kept.filter((title) => planned.includes(title));
   const rank = common.map((title) => planned.indexOf(title));
@@ -163,11 +134,6 @@ function spineFinding(message: string): Finding {
   return { kind: 'brief-spine', file: 'dossier.md', message };
 }
 
-/**
- * write-dossier keeps the Brief's spine: the Brief's Slide titles and the
- * Dossier's page Slide titles are the same list, except the titles a
- * `spine-change` note on write-dossier names.
- */
 function checkSpine(slides: readonly BriefSlide[], dossier: string | undefined, events: string | undefined): Finding[] {
   if (dossier === undefined) return [];
   const planned = slides.flatMap(({ title }) => title ?? []);
@@ -194,13 +160,6 @@ function checkSpine(slides: readonly BriefSlide[], dossier: string | undefined, 
   ];
 }
 
-/**
- * Checks a staging folder's Brief beyond markdown-harness: its Slide entries,
- * their research numbers and Thread tags, and the Dossier's hold on the spine.
- * `files` maps a path relative to the
- * folder (`brief.md`, `dossier.md`, `events.jsonl`) to its text; without a
- * Brief there is nothing to check.
- */
 export function checkBrief(files: Readonly<Record<string, string>>): Finding[] {
   const brief = files['brief.md'];
   if (brief === undefined) return [];
@@ -216,11 +175,6 @@ export function checkBrief(files: Readonly<Record<string, string>>): Finding[] {
 }
 
 const NOT_SETTLED = 'Not settled.';
-/**
- * The Brief headings whose body is only `Not settled.`, the marker the Brief
- * grill writes when time runs out. markdown-harness accepts it as prose, so
- * the orchestrator asks this before it starts on a Brief.
- */
 export function unsettledBriefSections(brief: string): string[] {
   return blocksOf(bodyLines(brief))
     .filter(({ body }) => {

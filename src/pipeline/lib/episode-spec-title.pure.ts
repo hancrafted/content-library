@@ -1,12 +1,4 @@
-/*
- * The Spec contract's rules for the Title slide (design-ADR 0011): one
- * `<article data-spec="title-slide" id="top">` with three Options, each a set of
- * the Title slide's mock and, under it, one section slide per Section in Spec
- * order (`ol[data-spec="echoes"]` of `li[data-spec="echo" data-section]`), so Han
- * judges the Hero motif across the Episode at once. Picking an Option picks the set. It sits
- * before the first Section, as the Title slide opens the Episode.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { type CheerioAPI } from 'cheerio';
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { OPTION, SECTION, specSectionSlugs, TITLE_SLIDE, type Spec } from './episode-spec-page.pure.ts';
@@ -23,7 +15,6 @@ import { unless } from './finding.pure.ts';
 const TITLE_SLIDE_OPTIONS: OptionCount = { min: 3, max: 3, words: 'three' };
 const WHERE = `The Title slide {#${TITLE_ANCHOR}}`;
 
-/** The Title slide's mock and its section slides, one per Section of the Spec in order. */
 function checkSet(figure: Selection, sections: readonly string[]): string[] {
   const where = `Option ${figure.attr('data-option') ?? ''} of {#${TITLE_ANCHOR}}`;
   const echoes = figure
@@ -42,7 +33,6 @@ function checkSet(figure: Selection, sections: readonly string[]): string[] {
   ];
 }
 
-/** The rules of the Spec's one Title slide, which sits on its main page, held once for the whole Spec. */
 export function checkTitleSlide(spec: Spec): string[] {
   const { $ } = spec.main;
   const articles = $(TITLE_SLIDE);
@@ -57,7 +47,6 @@ export function checkTitleSlide(spec: Spec): string[] {
   return [...checkOrder($, articles), ...checkTitleOptions($, articles, spec)];
 }
 
-/** The Title slide opens the Episode, so it sits before the first Section of its page, and so of the Spec. */
 function checkOrder($: CheerioAPI, article: Selection): string[] {
   const first = $(SECTION).first();
   if (first.length === 0) return [];

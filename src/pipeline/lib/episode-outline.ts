@@ -1,18 +1,11 @@
-// An Episode's Slides in order, read from its code folder: the Title slide and each Section's Slide folders, from
-// `episode.ts` and its Section placement markers (`sections/*.ts`) or its inline Section arrays. It reads the source
-// text, not the modules, so it runs under plain node without the app's `@/` aliases.
-
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 export interface EpisodeOutline {
-  /** The Title slide's folder under `slides/`; none when the Episode has no Title slide. */
   title?: string;
-  /** Each Section's Slide folders under `slides/`, section slide first. */
   sections: string[][];
 }
 
-/** `import { name } from './path'` → name → path, for every named import in `source`. */
 function imports(source: string): Map<string, string> {
   const named = new Map<string, string>();
   for (const [, names, from] of source.matchAll(/import\s*\{([^}]*)\}\s*from\s*'([^']+)'/g)) {
@@ -24,17 +17,12 @@ function imports(source: string): Map<string, string> {
   return named;
 }
 
-/**
- * The Slide an import path names, by folder: `./slides/<folder>/slide` or `../slides/<folder>/slide`, or a pool Slide,
- * `@/episodes/slide-pool/<folder>/slide`, named by its pool folder (its i18n lives under `slide-pool/`, not `slides/`).
- */
 function slideFolder(from: string | undefined, name: string, file: string): string {
   const folder = from === undefined ? undefined : /(?:slides|slide-pool)\/([^/]+)\/slide$/.exec(from)?.[1];
   if (folder === undefined) throw new Error(`${file}: ${name} is not imported from a slides/<folder>/slide module`);
   return folder;
 }
 
-/** The text between the bracket at `open` and its matching close. */
 function bracketed(source: string, open: number): string {
   let depth = 0;
   for (let at = open; at < source.length; at += 1) {

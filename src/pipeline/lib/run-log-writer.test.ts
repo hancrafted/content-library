@@ -5,11 +5,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appendEvent, type WriterDeps } from './run-log-writer.ts';
 
-/*
- * The run-log writer against a real temp folder: stamping, seq, trace choice, git facts for start-run,
- * validation errors, and concurrent appends staying whole lines. Clock, ids and git are injected.
- */
-
 const START = { kind: 'start-run', harness: 'claude-code', 'gen_ai.request.model': 'opus' };
 const FILE = 'docs/episodes/demo/events.jsonl';
 const at = (root: string) => ({ root, file: FILE });

@@ -8,7 +8,6 @@ import { useEpisodeOutputs } from './use-episode-outputs';
 type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<DirectoryHandle> };
 type Selection = { folder: EpisodeFolder; demo: boolean } & Awaited<ReturnType<typeof openEpisode>>;
 
-/** The recorded Run under public/dashboard-demo/, made by tools/demo/dashboard-demo.ts. */
 const DEMO_FILES = ['pipeline.yml', 'events.jsonl'] as const;
 const DEMO_NAME = 'Demo · onboard-ai-every-time';
 
@@ -18,7 +17,6 @@ async function demoFile(name: string): Promise<string> {
   return response.text();
 }
 
-/** Opens the recorded Run in memory, its clock stopped at the last event, so it reads as finished, not running. */
 async function openDemo(): Promise<Selection> {
   const [pipeline, events] = await Promise.all(DEMO_FILES.map(demoFile));
   const folder = createMemoryFolder(DEMO_NAME, { 'pipeline.yml': pipeline, 'events.jsonl': events });
@@ -85,7 +83,6 @@ function useEpisodePolling(selection: Selection | undefined): Polled | undefined
   return observed?.selection === selection ? observed : selection?.initial;
 }
 
-/** Folder handles, source data and errors are transient; a reload returns to the picker. */
 export function useEpisodeDashboard() {
   const picker = useFolderSelection();
   const polled = useEpisodePolling(picker.selection);

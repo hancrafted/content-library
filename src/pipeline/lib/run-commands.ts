@@ -1,9 +1,3 @@
-// The run-scoped commands: how the orchestrator drives an Episode's Run by names (a job id, an attempt number, a gate
-// name) and never by span id. Each command writes its line through the run-log writer, resolves parents and targets from
-// the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal detail
-// of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it; end-run records the
-// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support. Real disk;
-// clock, ids, git and the transcript lookup are injectable.
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
@@ -25,10 +19,9 @@ export type CommandResult = { ok: true; output: string } | { ok: false; error: s
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
 
-/** The skill's copy of the test each Run's staging folder carries (ARCH-003 §4.7). */
+// decision: ARCH-003 §4.7
 const RUN_CHECKS_ASSET = `skills/new-episode/assets/${RUN_CHECKS_TEST}.txt`;
 
-/** Copies the skill's Run checks test into the staging folder, keeping one the Run already has. */
 function giveRunItsChecks(root: string, staging: string): void {
   const asset = path.join(root, RUN_CHECKS_ASSET);
   const own = path.join(root, staging, RUN_CHECKS_TEST);
@@ -49,7 +42,6 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   return `Run begun (${line.run_id})${serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' })}`;
 }
 
-/** Statuses a Run may end with while spans are open; they then read crashed. */
 const ABANDONING: readonly Status[] = ['error', 'crashed'];
 
 function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
@@ -94,7 +86,6 @@ function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): strin
   return warning === '' ? `Job ${job} ended` : `Job ${job} ended (${warning})`;
 }
 
-/** Brings an earlier Run's ok Job over as a linked `reused` Job span; a second call changes nothing. */
 function reuse(ctx: RunContext, p: Params<'job'>): string {
   const job = need(p.job, 'job');
   const declared = declaredJobs(ctx.root, ctx.slug);
@@ -191,7 +182,6 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
   return `Score ${name}=${raw} on ${target}`;
 }
 
-/** A command: the names of its positional parameters, and what it does with them. */
 interface Command {
   params: readonly string[];
   run: (ctx: RunContext, positional: Record<string, string | undefined>, opts: Opts) => string;
@@ -224,7 +214,6 @@ const COMMANDS: Record<string, Command> = {
   archive: command([], (ctx) => archiveEpisodeLog(ctx.slug, ctx.root)),
 };
 
-/** Runs one command (`argv` after the slug) and returns what to print, or why it was refused. */
 export function runCommand(ctx: RunContext, argv: readonly string[]): CommandResult {
   try {
     const [name = '', ...rest] = argv;

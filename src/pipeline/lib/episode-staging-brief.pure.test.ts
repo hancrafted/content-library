@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkBrief, unsettledBriefSections } from './episode-staging-brief.pure';
 
-/*
- * In-memory staging folders: a Brief whose spine is well formed, then one
- * change per test that breaks exactly one rule.
- */
-
 const SLIDES = `## Slides
 
 ### Why it forgets
@@ -66,7 +61,6 @@ type: dossier
 
 const TRACE = 'a1b2';
 
-/** An events.jsonl whose write-dossier Job carries one typed note per `[type, text]` pair. */
 function eventLog(...notes: [string, string][]): string {
   const base = { trace_id: TRACE, t: '2026-10-12T11:00:00Z' };
   const job = {

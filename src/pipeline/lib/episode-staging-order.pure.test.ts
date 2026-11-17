@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkStagingOrder } from './episode-staging-order.pure';
 
-/*
- * In-memory staging files: a feedback round, a research file and a run log
- * that each record order, built to break exactly one order rule per test.
- */
-
 const FEEDBACK_PATH = 'feedback/01/feedback.md';
 
 function feedback(round: number): string {

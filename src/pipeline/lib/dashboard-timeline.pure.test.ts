@@ -24,7 +24,6 @@ const job = (id: string, stage: string, listed: { needs?: string[]; skills?: str
   retries: 2,
   agents: [{ ...agent, skills: listed.skills ?? [] }],
 });
-/** Draft, then a fan-out of two parallel research Jobs, then publish. */
 const PIPELINE = JSON.stringify({
   status: 'approved',
   stages: ['brief', 'research', 'pr'],
@@ -38,13 +37,11 @@ const PIPELINE = JSON.stringify({
 
 type Fields = Omit<RunLogLine, 't' | 'seq' | 'trace_id'>;
 const TRACE = 'a'.repeat(32);
-/** Span ids are 16 hex characters; each name gets the next one, the same name always the same id. */
 const ids = new Map<string, string>();
 const id = (name: string) => {
   if (!ids.has(name)) ids.set(name, (ids.size + 1).toString(16).padStart(16, '0'));
   return ids.get(name)!;
 };
-/** A start line; an Attempt `draft#1` is span `draft-1` and a gate `draft#gate` span `draft-gate`. */
 const start = (type: string, name: string, extra: { parent?: string; [key: string]: unknown } = {}) => {
   const { parent = 'run', ...rest } = extra;
   return {
@@ -91,7 +88,6 @@ const check = (span: string, name: string, value: string) =>
   ({ kind: 'score', span_id: id(span), name: 'check', value, source: `check:${name}` }) as Fields;
 const endRun = (span = 'run') => ({ kind: 'end-run', span_id: id(span), status: 'ok' }) as Fields;
 
-/** Draft fails its first Attempt and passes its retry, its agent's skills and check, behind a gate; research fans out; the Run ends at minute 31. */
 const RUN: [number, Fields][] = [
   [0, startRun()],
   [1, start('job', 'draft')],
@@ -123,7 +119,6 @@ const jsonl = (entries: readonly [number, Fields][]) =>
     )
     .join('\n') + '\n';
 
-/** One poll of an in-memory Episode folder holding the pipeline and these events, read at `readAt`. */
 async function polled(entries: readonly [number, Fields][], readAt: number) {
   const folder = createMemoryFolder('example', { 'pipeline.yml': PIPELINE, 'events.jsonl': jsonl(entries) });
   return createEpisodeReader(folder, () => readAt).poll();

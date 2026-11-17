@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { fold, type Folded, type RunLogLine } from './run-log.pure.ts';
 import { outputApproved, renderStatus, runStatus, type GateReaders } from './status.pure.ts';
 
-/*
- * A run's state read back from its event log: a small per-run pipeline and
- * span fixtures, folded as the status CLI folds events.jsonl.
- */
-
 const PIPELINE = `status: approved
 jobs:
   - { id: brief-grill, needs: [] }
@@ -21,7 +16,6 @@ const TRACE = 'a'.repeat(32);
 const NOW = '2026-10-12T10:00:00Z';
 const at = (minute: number): string => `2026-10-12T09:${String(minute).padStart(2, '0')}:00Z`;
 
-/** Builds log lines with a rising sequence number; span ids are hand-named so fixtures read as a story. */
 function log(...events: Record<string, unknown>[]): RunLogLine[] {
   return events.map((event, index) => ({ trace_id: TRACE, seq: index + 1, ...event }) as RunLogLine);
 }

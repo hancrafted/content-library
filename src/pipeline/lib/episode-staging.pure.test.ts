@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from './episode-staging.pure';
 
-/*
- * In-memory staging folders: a small Dossier, then one change per test that
- * breaks exactly one rule.
- */
-
 const KNOWN_VISUALS: KnownVisuals = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
 
 const SLIDE_BLOCK = `#### Visual

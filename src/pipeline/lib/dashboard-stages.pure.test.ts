@@ -13,7 +13,6 @@ function fixtureView() {
   return projectDashboard(parseDashboardPipeline(fixture('pipeline.yml')), log.snapshot());
 }
 
-/** A running Job with two Attempts, the later one `a2`, and the rubric Scores given. */
 function reviewedJob(scores: Pick<Score, 'span_id' | 'value'>[]): DashboardJob {
   const base = fixtureView().jobs[0];
   const attempt = { ...base.span!, type: 'attempt' as const, status: 'ok' as const };

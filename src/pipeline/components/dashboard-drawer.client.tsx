@@ -35,7 +35,6 @@ function DrawerHead({ detail, copy, title }: Pick<DrawerProps, 'detail' | 'copy'
   );
 }
 
-/** The Context drawer's floating-card pattern, without its Episode-specific content or preferences. */
 export function DashboardDrawer({ detail, selection, outputs, openLog, copy }: DrawerProps) {
   const title = selection?.title ?? copy.drawer.title;
   return (

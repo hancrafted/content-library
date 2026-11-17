@@ -1,12 +1,9 @@
-// The agent-span commands: begin-agent and end-agent record an agent on any harness, by its spawn description. The
-// Claude Code adapter enriches the same span by name (src/pipeline/lib/claude-adapter.pure.ts). Real disk; run-commands.ts registers them.
 import { parseDescription } from './episode-spawn-description.pure.ts';
 import { endEvent, need, refuse, type Opts, type Params } from './run-args.pure.ts';
 import type { LogEvent } from './run-log.pure.ts';
 import { isOpen, latest, openSpan } from './run-spans.pure.ts';
 import { openView, viewOf, write, type RunContext } from './run-view.ts';
 
-/** Opens a typed agent span named by its spawn description under the Job's open Attempt; a repeat changes nothing. */
 export function beginAgent(ctx: RunContext, p: Params<'agent'>, opts: Opts): string {
   const name = need(p.agent, 'agent');
   const who = parseDescription(name) ?? refuse(`"${name}" is not <job>#<n>/<role>[/#<ticket>]`);
@@ -27,7 +24,6 @@ export function beginAgent(ctx: RunContext, p: Params<'agent'>, opts: Opts): str
   return `Agent ${name} begun`;
 }
 
-/** Ends the agent span of that name: the open one, else the latest, so a harness adapter that ended it first can be overridden. */
 export function endAgent(ctx: RunContext, p: Params<'agent' | 'status' | 'summary'>): string {
   const name = need(p.agent, 'agent');
   const { spans } = viewOf(ctx);

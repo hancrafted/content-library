@@ -1,20 +1,14 @@
-// The Design archive's dashboard, `design-archive/index.html`: every archived Episode as a card under the totals, each
-// read back from its own page so the dashboard needs nothing but the pages on disk.
-
 import { load } from 'cheerio';
 import { escapeHtml, htmlPage } from './archive-html.pure.ts';
 
 export interface ArchivedEpisode {
   slug: string;
   title: string;
-  /** Slides on the Episode's page, the Title slide counted. */
   slides: number;
   options: number;
-  /** The picked Option ids, in Slide order. */
   picked: string[];
 }
 
-/** What the dashboard shows of an archived Episode, read back from its page. */
 export function archivedEpisode(slug: string, page: string): ArchivedEpisode {
   const $ = load(page);
   return {
@@ -38,10 +32,6 @@ function episodeCard({ slug, title, slides, options, picked }: ArchivedEpisode):
 </a></li>`;
 }
 
-/**
- * `design-archive/index.html`: the dashboard of every archived Episode, totals first, Episodes sorted by slug. `style`
- * is its look, the skill's `archive-dashboard.css`.
- */
 export function archiveIndex(episodes: readonly ArchivedEpisode[], style: string): string {
   const sorted = [...episodes].sort((a, b) => a.slug.localeCompare(b.slug));
   const total = (key: 'slides' | 'options') => sorted.reduce((sum, episode) => sum + episode[key], 0);

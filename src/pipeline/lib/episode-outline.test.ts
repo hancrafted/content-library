@@ -4,7 +4,6 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episodeOutline } from './episode-outline.ts';
 
-/** Writes an Episode folder from `files` (path → source) into a fresh temp folder and returns its path. */
 function episodeFolder(slug: string, files: Record<string, string>): string {
   const folder = path.join(mkdtempSync(path.join(tmpdir(), 'episode-outline-')), slug);
   for (const [file, source] of Object.entries(files)) {

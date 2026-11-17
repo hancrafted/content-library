@@ -3,16 +3,11 @@ export interface ScrubJob {
   end: number | null;
 }
 
-/**
- * A point on a replay rail: `at` (a moment in epoch milliseconds, or a stage index fraction as Graph geometry lays
- * them) and the position, 0 to 1, it sits at along the rail.
- */
 export interface RailStop {
   at: number;
   position: number;
 }
 
-/** The replayed span of a Run, epoch milliseconds from `start` to `end`. */
 export interface ReplayRange {
   start: number;
   end: number;
@@ -24,7 +19,6 @@ export function snapScrubPosition(position: number, stageCount: number): number 
   return Math.abs(stage - position) <= Math.min(0.008, 0.08 / gaps) ? stage : position;
 }
 
-/** Only observed ends supply partial replay progress; open work never borrows an estimated end. */
 export function jobProgress(job: ScrubJob, at: number): number {
   if (job.start === null || job.end === null || at < job.start) return 0;
   const end = job.end;
@@ -67,7 +61,6 @@ function validateRange(range: ReplayRange) {
   }
 }
 
-/** Equal Job shares within each stage gap; parallel Jobs contribute together. No duration is predicted. */
 export function scrubTimeline(stages: readonly (readonly ScrubJob[])[], range: ReplayRange): RailStop[] {
   validateRange(range);
   const times = new Set([range.start, range.end]);
@@ -98,7 +91,6 @@ export function scrubPosition(timeline: readonly RailStop[], at: number): number
   return interpolate(at, a, b);
 }
 
-/** Plateaus choose their latest observed moment; reaching the observed leading edge means Live. */
 export function scrubTime(timeline: readonly RailStop[], position: number): number {
   const last = timeline.at(-1)!;
   if (position >= last.position) return last.at;

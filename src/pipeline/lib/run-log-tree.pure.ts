@@ -1,8 +1,5 @@
-// `renderTree`: prints folded spans as an indented tree with statuses, durations, models, tokens and scores.
-
 import type { Folded, Score, Span } from './run-log.schema.pure.ts';
 
-/** `90000` as `1m30s`; null as `…` (still open). */
 export function formatDuration(ms: number | null): string {
   if (ms === null) return '…';
   const seconds = Math.round(ms / 1000);
@@ -12,7 +9,6 @@ export function formatDuration(ms: number | null): string {
   return `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}m`;
 }
 
-/** The model a span was asked for and the one it ran on; both, joined by an arrow, when they differ. */
 function modelOf(span: Span): string | undefined {
   const asked = span['gen_ai.request.model'];
   const ran = span['gen_ai.response.model'];
@@ -45,17 +41,12 @@ function describeScore(score: Score): string {
   return `↳ ${score.name} ${score.value} · ${score.source}${score.rubric ? ` · ${score.rubric}` : ''}`;
 }
 
-/** The spans a render starts from: with `rootId` that one span, otherwise every span whose parent is absent. */
 function rootsOf(spans: readonly Span[], rootId: string | undefined): Span[] {
   if (rootId !== undefined) return spans.filter((span) => span.span_id === rootId);
   const known = new Set(spans.map((span) => span.span_id));
   return spans.filter((span) => span.parent_span_id === null || !known.has(span.parent_span_id));
 }
 
-/**
- * The span tree as text, children by start time. Scores print under the span they judge. With `rootId`, only
- * that span's subtree; null when no such span exists.
- */
 export function renderTree(folded: Folded, rootId?: string): string | null {
   const roots = rootsOf(folded.spans, rootId);
   if (roots.length === 0) return null;

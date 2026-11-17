@@ -1,12 +1,6 @@
-/*
- * The words a Spec is assembled from (design-ADR 0011): the Brief's `## Slides` spine, and once it exists the
- * Dossier's Sections, Slides, Visual ideas, Voice scripts and Speaker notes, read into one tree. Line-level, like
- * staging-markdown.pure.ts; nothing here renders.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { bodyLines } from './staging-markdown.pure.ts';
 
-/** One ordered-list item with its nested `- ` lines. */
 export interface Item {
   text: string;
   subs: string[];
@@ -15,9 +9,7 @@ export interface Item {
 export interface SourceSlide {
   title: string;
   slug: string;
-  /** The Brief's purpose sentence for the Slide, when the Brief has it. */
   purpose?: string;
-  /** Paragraphs of the Visual idea: the Dossier's, or the Brief's one-liner. */
   visual: string[];
   notes?: Item[];
   voice?: Item[];
@@ -37,12 +29,10 @@ export interface Source {
   sections: SourceSection[];
 }
 
-/** An ordered-list marker, `1. `: the one definition the Brief card's list detection builds on. */
 export const ORDERED_MARKER = /^\d+\. /;
 const HEADING = /^(#{1,4}) (.*?)(?: \{#([a-z0-9-]+)\})?$/;
 const BRIEF_ITEM = /^(?:\d+\. )?(?:\([AB]\) )?\*\*([^*]+)\*\* — (.*?)(?: _Visual:_ (.*?))?(?: _Research:_ [\d, ]+)?$/;
 
-/** A title as the Dossier's anchors slug it: lowercase words joined by single hyphens. */
 export function dossierSlug(title: string): string {
   return title
     .toLowerCase()
@@ -52,7 +42,6 @@ export function dossierSlug(title: string): string {
 
 const group = (match: RegExpExecArray, at: number): string => match[at] ?? '';
 
-/** A wrapped line continues the item's last nested line, or its text when it has none. */
 function continueItem(item: Item, text: string): void {
   if (item.subs.length > 0) item.subs[item.subs.length - 1] += ` ${text}`;
   else item.text += ` ${text}`;
@@ -67,14 +56,12 @@ function addLine(items: Item[], line: string): void {
   else continueItem(last, line.trim());
 }
 
-/** An ordered list's items with nested children; wrapped lines join their item. */
 export function itemsOf(lines: readonly string[]): Item[] {
   const items: Item[] = [];
   for (const line of lines) addLine(items, line);
   return items;
 }
 
-/** The lines under the first heading line equal to `heading`, up to the next heading of any level. */
 function under(lines: readonly string[], heading: string): string[] {
   const start = lines.indexOf(heading);
   if (start === -1) return [];
@@ -98,7 +85,6 @@ function briefSlide(line: string): SourceSlide | undefined {
   };
 }
 
-/** The Brief's `## Slides` h3 blocks as Sections of Slides. */
 function briefSections(lines: readonly string[]): SourceSection[] {
   const start = lines.indexOf('## Slides');
   const rest = start === -1 ? [] : lines.slice(start + 1);
@@ -114,7 +100,6 @@ function briefSections(lines: readonly string[]): SourceSection[] {
   return sections;
 }
 
-/** The Brief's spine as Sections of Slides, slugged from their titles; Slide purposes and one-line visual ideas. */
 export function briefSource(brief: string): Source {
   const lines = bodyLines(brief);
   const style = under(lines, '## Style').join(' ').replace(/\s+/g, ' ').trim();
@@ -128,7 +113,6 @@ export function briefSource(brief: string): Source {
 type Block = 'visual' | 'notes' | 'voice';
 const BLOCKS: Record<string, Block> = { Visual: 'visual', 'Speaker notes': 'notes', 'Voice script': 'voice' };
 
-/** Where the Dossier walk stands: the open Section and Slide, the open h4 block and its lines so far. */
 interface Cursor {
   section?: SourceSection;
   slide?: SourceSlide;
@@ -143,7 +127,6 @@ const paragraphsOf = (lines: readonly string[]): string[] =>
     .map((paragraph) => paragraph.replace(/\s*\n\s*/g, ' ').trim())
     .filter(Boolean);
 
-/** Stores the open block's lines on the Slide or Section that owns them. */
 function flush(cursor: Cursor): void {
   const { section, slide, block, buffer } = cursor;
   const owner = slide ?? section;
@@ -155,7 +138,6 @@ function flush(cursor: Cursor): void {
   else if (block === 'notes') slide.notes = itemsOf(buffer);
 }
 
-/** A heading's text and its `{#slug}`, when it has one. */
 interface Named {
   text: string;
   slug: string | undefined;
@@ -182,7 +164,6 @@ function openHeading(source: Source, cursor: Cursor, heading: RegExpExecArray): 
   else if (level === 4) cursor.block = BLOCKS[text];
 }
 
-/** The Dossier's spine with its words; an h2 without a slug is material outside the spine and is left out. */
 export function dossierSource(dossier: string): Source {
   const source: Source = { title: 'Episode', sections: [] };
   const cursor: Cursor = { buffer: [] };
@@ -199,7 +180,6 @@ export function dossierSource(dossier: string): Source {
   return source;
 }
 
-/** The Dossier's spine with the Brief's purposes laid on its Slides in spine order, and the Brief's Style. */
 export function mergedSource(brief: Source, dossier: Source): Source {
   const purposes = brief.sections.flatMap(({ slides }) => slides.map(({ purpose }) => purpose));
   const briefVisuals = brief.sections.flatMap(({ slides }) => slides.map(({ visual }) => visual));

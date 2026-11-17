@@ -1,5 +1,3 @@
-// `record`: builds and validates one run-log line from an event and an explicit stamp. `lineErrors`: validates a stored line.
-
 import {
   EVENT_ATTRIBUTES,
   EVENT_NAMES,
@@ -93,7 +91,6 @@ const ATTRIBUTE_CHECKS: Record<string, Check> = {
   adr: matching(/^[A-Z]+-\d{3}-[a-z0-9-]+$/, 'an ADR id and slug, GEN-002-adr-symlink-claude-rules'),
 };
 
-/** A span line's `source` says whether a number was measured; a score's `source` names the judge. */
 const SOURCES: Record<'span' | 'score', Check> = {
   span: oneOf(['measured', 'typed']),
   score: matching(SCORE_SOURCE, 'agent:<job>/<role>, check:<name> or human:<name>'),
@@ -112,23 +109,19 @@ interface Keys {
 
 const STARTS: readonly Kind[] = ['start', 'start-run'];
 
-/** What an event handed to the writer must and may carry: the stored keys less what the writer stamps, plus a measured `t`. */
 function inputKeys(kind: Kind): Keys {
   const { required, optional } = LINE_KEYS[kind];
   const stamped = STARTS.includes(kind) ? ['span_id'] : [];
   return { required: required.filter((key) => !stamped.includes(key)), optional: [...optional, 't', 'payload'] };
 }
 
-/** What a stored line must and may carry: its kind's keys and the envelope. */
 function storedKeys(kind: Kind): Keys {
   const { required, optional } = LINE_KEYS[kind];
   return { required: [...required, 't', 'seq', 'trace_id'], optional: [...optional, 'payload', 'payload_truncated'] };
 }
 
-/** What a start line of each span type cannot omit: which Job, Attempt and role it belongs to. */
 const NEEDED_BY_TYPE: Record<string, string[]> = { job: ['job'], attempt: ['job', 'attempt'], agent: ['job', 'role'] };
 
-/** An event's attributes against its name's: none unknown, none missing, each well-formed. */
 function attributeErrors(name: EventName, attributes: Fields): string[] {
   const { required, optional } = EVENT_ATTRIBUTES[name] as Keys;
   const known = new Set([...required, ...optional]);
@@ -182,13 +175,11 @@ function stampErrors(kind: Kind, stamp: Stamp): string[] {
   return checks.filter(([ok]) => !ok).map(([, message]) => message);
 }
 
-/** The OpenTelemetry operation a start line performs, when it does not say so itself. */
 function operationOf(kind: Kind, type: unknown): Fields {
   if (kind === 'start-run') return { 'gen_ai.operation.name': 'invoke_workflow' };
   return kind === 'start' && type === 'agent' ? { 'gen_ai.operation.name': 'invoke_agent' } : {};
 }
 
-/** A payload over PAYLOAD_MAX_BYTES is dropped whole, and the line says so. */
 function boundedPayload(fields: Fields): Fields {
   if (fields.payload === undefined) return {};
   return bytesOf(fields.payload) > PAYLOAD_MAX_BYTES ? { payload_truncated: true } : { payload: fields.payload };
@@ -207,12 +198,6 @@ function build(kind: Kind, fields: Fields, stamp: Stamp): RunLogLine {
 const kindOf = (fields: Fields): Kind | null => (KINDS.includes(fields.kind as Kind) ? (fields.kind as Kind) : null);
 const KIND_ERROR = `kind must be one of ${KINDS.join(', ')}`;
 
-/**
- * Builds one validated line from an event and a stamp, or lists why it is malformed. Deterministic: the same
- * event and stamp give the same line. A start takes its `span_id` from the stamp, so the writer decides ids;
- * every other kind must name the span it belongs to. A key its kind does not take is refused; a payload over
- * PAYLOAD_MAX_BYTES is dropped and the line marked `payload_truncated`.
- */
 export function record(event: unknown, stamp: Stamp): RecordResult {
   if (!isObject(event)) return { ok: false, errors: ['event must be a JSON object'] };
   const kind = kindOf(event);
@@ -221,7 +206,6 @@ export function record(event: unknown, stamp: Stamp): RecordResult {
   return errors.length > 0 ? { ok: false, errors } : { ok: true, line: build(kind, event, stamp) };
 }
 
-/** Why a line read back from events.jsonl breaks the contract; empty when it holds. */
 export function lineErrors(line: unknown): string[] {
   if (!isObject(line)) return ['line must be a JSON object'];
   const kind = kindOf(line);

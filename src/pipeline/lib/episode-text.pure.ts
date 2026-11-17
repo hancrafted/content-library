@@ -1,10 +1,6 @@
-// An Episode's words as one markdown reading copy (design-ADR 0004: generated on demand, never committed): each
-// Section's section slide at h2, its page Slides at h3, each with its caption, Voice script and Speaker notes with
-// their sources. Pure: the Slides' i18n messages in Section order in, markdown out; `skills/episode-promote/scripts/episode-text.ts` reads the disk.
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 interface Segment {
   title?: string;
-  /** Read by the Voice script view, never printed here. */
   keywords?: string;
   script?: string;
 }
@@ -15,7 +11,6 @@ interface Note {
   sources?: Record<string, { title?: string }>;
 }
 
-/** The keys of a Slide's `i18n/<locale>.json` this copy reads; every other key is on-screen text it leaves out. */
 export interface SlideMessages {
   title?: string;
   caption?: string;
@@ -25,7 +20,6 @@ export interface SlideMessages {
 
 export interface EpisodeWords {
   episode: { title: string; caption?: string };
-  /** Each Section's Slides, section slide first. */
   sections: { slug: string; messages: SlideMessages }[][];
 }
 

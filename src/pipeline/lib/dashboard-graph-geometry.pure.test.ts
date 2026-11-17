@@ -5,12 +5,6 @@ import { parseDashboardPipeline, projectDashboard } from './dashboard-projection
 import { projectStages } from './dashboard-stages.pure';
 import { createLogFold } from './run-log.pure';
 
-/**
- * Three Stages without Jobs in the Job network, laid out from GRAPH_LAYOUT by hand: the first centre sits at half a
- * Stage node plus the node inset (24 + 6 = 30); an inner Stage spans the minimum gap (96); the last spans half a Stage
- * node, a Job node and edge padding to the Run end (24 + 14 + 8 = 46) plus the same to it (8 + 14 + 8 = 30), 76; and
- * the canvas runs half an end node and edge padding past the Run end (8 + 8). Centres 30, 126, 222; Run end 298; 314 wide.
- */
 const EMPTY_STAGES = projectStages([], ['brief', 'research', 'pr']).stages;
 const EMPTY_WIDTH = 314;
 

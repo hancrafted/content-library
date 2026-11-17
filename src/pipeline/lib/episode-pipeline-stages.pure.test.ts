@@ -2,10 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { Job } from './episode-pipeline-definition.pure';
 import { checkStages } from './episode-pipeline-stages.pure';
 
-/*
- * The stage check on hand-built jobs: the ordered stage list a pipeline declares, and the stage each job names.
- */
-
 const STAGES = ['brief', 'setup', 'research'];
 
 function job(id: string, stage: string | undefined, edges: { needs?: string[]; wants?: string[] } = {}): Job {
