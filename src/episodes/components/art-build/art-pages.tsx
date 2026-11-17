@@ -11,12 +11,8 @@ import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { createElement, Fragment, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-/*
- * The art build's view of the site (FE-005 §5, design-ADR 0025): every composed page's Slides in every locale,
- * rendered outside Next as `next dev` renders them, so each `<Art>` draws inline in a `data-art-source` group the bake
- * can find. `npm run art` loads this one module through Vite's SSR loader; nothing in the site imports it.
- */
-
+// decision: FE-005 §5
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export interface ArtPage {
   readonly page: string;
   readonly markup: () => string;
@@ -34,11 +30,10 @@ const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, n
 
 function* pageSlides(id: ComposedId, composition: EpisodeComposition, locale: Locale): Generator<ArtPage> {
   const placed = placeSections<Slide>(composition.sections).flat();
-  // Links never reach a drawing, so every page takes one stand-in route.
-  const route = `/${id}`;
+  const standInRoute = `/${id}`;
   const episode: EpisodeContext = {
     episode: id,
-    route,
+    route: standInRoute,
     locale,
     placed,
     referenceLabels: LABELS,
