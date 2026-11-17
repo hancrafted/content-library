@@ -5,8 +5,9 @@
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { createVitest } from 'vitest/node';
+import type { missingPublishedSnapshot } from '../../../src/episodes/lib/composed-page-context.ts';
 import {
-  anchorsFileFromFailure,
   copyEntryId,
   insertPlaylistEntry,
   unlistedCopyMetadata,
@@ -63,13 +64,30 @@ function run(command: string, commandArgs: string[]) {
 const registry = run('npm', ['run', 'registry']);
 if (registry.status !== 0) rollBack(`npm run registry failed:\n${registry.stdout}${registry.stderr}`);
 
-const anchors = path.join(target, 'published-anchors.json');
-if (!existsSync(anchors)) {
-  const test = run('npx', ['vitest', 'run', 'src/episodes/lib/published-anchors.test.ts']);
-  const asked = anchorsFileFromFailure(`${test.stdout}${test.stderr}`, id);
-  if (!asked)
-    rollBack(`the anchors test did not ask for ${id}'s published-anchors.json:\n${test.stdout}${test.stderr}`);
-  writeFileSync(asked.file, asked.content);
+/**
+ * Writes the copy's `published-anchors.json` when it has none, from the reader the composition checks use. The copy's
+ * `episode.ts` imports Slides, JSON and aliases plain node cannot load, so Vitest's module runner loads it, as
+ * `npm run registry` loads the compositions.
+ */
+async function writeAnchorsSnapshot(): Promise<void> {
+  const vitest = await createVitest('test', { config: path.join(root, 'vitest.config.mts'), watch: false });
+  try {
+    const context = await vitest.import<{ missingPublishedSnapshot: typeof missingPublishedSnapshot }>(
+      path.join(root, 'src/episodes/lib/composed-page-context.ts'),
+    );
+    const missing = await context.missingPublishedSnapshot(target, () =>
+      vitest.import(path.join(target, 'episode.ts')),
+    );
+    if (missing !== undefined) writeFileSync(missing.file, missing.contents);
+  } finally {
+    await vitest.close();
+  }
+}
+
+try {
+  await writeAnchorsSnapshot();
+} catch (error) {
+  rollBack(`could not write ${id}'s published-anchors.json: ${error instanceof Error ? error.message : String(error)}`);
 }
 
 const entry = position === undefined ? 'last' : `place ${position}`;
