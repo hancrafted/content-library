@@ -12,8 +12,8 @@ function readTheme(): ResolvedTheme {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 
-const serverTheme = (): ResolvedTheme => 'light';
+const themeDuringHydration = (): ResolvedTheme => 'light';
 
 export function useResolvedTheme(): ResolvedTheme {
-  return useSyncExternalStore(subscribe, readTheme, serverTheme);
+  return useSyncExternalStore(subscribe, readTheme, themeDuringHydration);
 }
