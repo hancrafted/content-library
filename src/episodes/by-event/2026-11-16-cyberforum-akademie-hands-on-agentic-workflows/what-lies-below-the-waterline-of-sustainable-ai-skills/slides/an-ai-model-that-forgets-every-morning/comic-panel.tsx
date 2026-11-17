@@ -6,7 +6,6 @@ import styles from './forgets.module.css';
 const PANEL_STEP_MILLISECONDS = 500;
 
 export interface ComicPanelProps {
-  /** The panel's place in the strip, from 0: it appears that many steps after the first. */
   readonly index: number;
   readonly label?: { readonly chat: string; readonly coding: string };
   readonly className?: string;

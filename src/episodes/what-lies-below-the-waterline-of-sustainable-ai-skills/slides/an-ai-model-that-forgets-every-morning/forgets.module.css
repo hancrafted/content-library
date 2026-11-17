@@ -89,11 +89,7 @@
   fill: var(--clock-hand);
 }
 
-/*
- * The strip's one emphasis motion (Spec Option 1a): the panels appear one after another, each `--panel-delay` after the
- * Slide turns active. The base rule is the rest state, so a still frame and reduced motion show every panel at once.
- * Each morning's speech bubbles read `--emote-delay` from here, so they pop in after their own panel.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .panel {
   --says-scale: 0.5;
   --emote-delay: calc(var(--panel-delay, 0ms) + 450ms);
