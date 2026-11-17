@@ -15,8 +15,12 @@ const LEFT = (SCENE_WIDTH - ROOM.width * SCALE) / 2;
 
 export const ARRIVALS = ['card', 'frames', 'sonar', 'logs'] as const;
 export type Arrival = (typeof ARRIVALS)[number];
-/** When each arrival starts, in milliseconds after the Slide turns active; the window's blocks keep the same beat. */
-export const ARRIVAL_DELAY: Readonly<Record<Arrival, number>> = { card: 200, frames: 900, sonar: 1600, logs: 2300 };
+export const ARRIVAL_DELAY_MILLISECONDS: Readonly<Record<Arrival, number>> = {
+  card: 200,
+  frames: 900,
+  sonar: 1600,
+  logs: 2300,
+};
 const ARRIVAL_MILLISECONDS = 700;
 
 export const at = (x: number, y: number) => ({
@@ -31,7 +35,7 @@ const SCREEN = { x: 36, y: 34, width: 368, height: 212 } as const;
 
 function Lands({ arrival, children }: { readonly arrival: Arrival; readonly children: ReactNode }) {
   return (
-    <Travel from="0 -40%" duration={ARRIVAL_MILLISECONDS} delay={ARRIVAL_DELAY[arrival]}>
+    <Travel from="0 -40%" duration={ARRIVAL_MILLISECONDS} delay={ARRIVAL_DELAY_MILLISECONDS[arrival]}>
       <g data-arrival={arrival}>{children}</g>
     </Travel>
   );
@@ -53,7 +57,6 @@ function CameraFeed() {
   );
 }
 
-/** Everything the dive brings in, landing on the desk one after another: the card, the frames, the sonar trace, the logs. */
 function Arrivals() {
   return (
     <>
@@ -73,11 +76,6 @@ function Arrivals() {
   );
 }
 
-/**
- * The control room at the end of the dive, as one drawing inside `ZoneScene`: the wall screen with the robot's live
- * feed; the project brief and the manual on the wall; the pilot at the desk with his notebook; and, landing one after
- * another, everything the dive brought in.
- */
 export function ControlRoomArt() {
   return (
     <g transform={`translate(${LEFT} 0) scale(${SCALE})`} className={styles.art}>

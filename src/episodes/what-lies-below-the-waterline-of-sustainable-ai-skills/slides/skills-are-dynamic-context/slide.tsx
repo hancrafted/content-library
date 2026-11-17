@@ -6,7 +6,7 @@ import { atDepth } from '@/episodes/components/slide-shared/waterline-echo/depth
 import { ContextBarsPreset } from '@/explorables/context-window/context';
 import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { ARRIVAL_DELAY, ARRIVALS, at, CARD, ControlRoomArt, ROOM } from './control-room-art';
+import { ARRIVAL_DELAY_MILLISECONDS, ARRIVALS, at, CARD, ControlRoomArt, ROOM } from './control-room-art';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './slide.module.css';
@@ -28,7 +28,7 @@ const ROWS = ['system', 'skills', 'memory', 'instructions', 'frames', 'sonar', '
 type Row = (typeof ROWS)[number];
 const STATIC_ROWS = ROWS.indexOf('instructions');
 const ARRIVAL_BEATS = Object.fromEntries(
-  ARRIVALS.map((arrival) => [`--arrive-${arrival}`, `${ARRIVAL_DELAY[arrival]}ms`]),
+  ARRIVALS.map((arrival) => [`--arrive-${arrival}`, `${ARRIVAL_DELAY_MILLISECONDS[arrival]}ms`]),
 ) as CSSProperties;
 type Pill = 'feed' | 'index' | 'orders' | 'card' | 'frames' | 'sonar' | 'logs';
 const PILLS: readonly { readonly pill: Pill; readonly x: number; readonly y: number }[] = [
