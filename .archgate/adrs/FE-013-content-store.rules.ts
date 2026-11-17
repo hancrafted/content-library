@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Fail-closed loading and the refusals are held by the store's tests. Self-contained by
-// design: archgate forbids imports between rules files.
-// `type-from-schema` matches text: archgate
-// transpiles TypeScript before parsing, so interfaces and type aliases never reach
-// the tree; strings and comments are blanked first, so prose never matches.
 // decision: FE-013 §1
 // decision: FE-013 §2
 const STORE_ENTRY = 'src/content-store/store.ts';
@@ -53,7 +48,6 @@ function storeLine(model: string): { kinds: string[]; at: number } | undefined {
   return undefined;
 }
 
-/** The source with every comment, string and template literal blanked, offsets and line breaks kept. */
 function blankText(source: string): string {
   const blank = (text: string) => text.replace(/[^\n]/g, ' ');
   let out = '';
@@ -139,11 +133,11 @@ function describedChain(value: Node): boolean {
   return false;
 }
 
-/**
- * archgate's TypeScript tree is transpiled, so its lines drift up wherever types were
- * erased. The real line is the first match of `pattern` at or below the hint.
- */
-function sourceLine(source: string, hint: number | undefined, pattern: RegExp): number | undefined {
+function realLineAtOrBelowTranspiledHint(
+  source: string,
+  hint: number | undefined,
+  pattern: RegExp,
+): number | undefined {
   if (hint === undefined) return undefined;
   const lines = source.split('\n');
   for (let i = hint - 1; i < lines.length; i++) if (pattern.test(lines[i])) return i + 1;
@@ -250,7 +244,11 @@ export default {
           walk(tree, (node) => {
             const shape = shapeArgument(node);
             if (shape === undefined) return;
-            const line = sourceLine(source, node.loc?.start.line, /\b(?:z\.\w*[oO]bject|\.(?:safeE|e)xtend)\s*\(/);
+            const line = realLineAtOrBelowTranspiledHint(
+              source,
+              node.loc?.start.line,
+              /\b(?:z\.\w*[oO]bject|\.(?:safeE|e)xtend)\s*\(/,
+            );
             if (shape === null || shape.type !== 'ObjectExpression') {
               ctx.report.violation({
                 message: `An object shape is passed by reference — write it inline so each field's .describe() is checked (FE-013 [field-described]).`,
@@ -264,7 +262,11 @@ export default {
               ctx.report.violation({
                 message: `Field '${keyName(property)}' has no .describe() on its own chain — say what it means to the site (FE-013 [field-described]).`,
                 file,
-                line: sourceLine(source, property.loc?.start.line, propertyPattern(keyName(property))),
+                line: realLineAtOrBelowTranspiledHint(
+                  source,
+                  property.loc?.start.line,
+                  propertyPattern(keyName(property)),
+                ),
               });
             }
           });
