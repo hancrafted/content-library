@@ -41,7 +41,6 @@ function TeamBranch({ label }: { label: string }) {
   );
 }
 
-/** You, repeated by a first sales hire, branching into a team: portrait, so its labels stay readable in a narrow note. */
 export function RepeatPath({ you, repeat, hire, team }: { you: string; repeat: string; hire: string; team: string }) {
   const label = 'fill-muted-foreground text-caption';
   return (
