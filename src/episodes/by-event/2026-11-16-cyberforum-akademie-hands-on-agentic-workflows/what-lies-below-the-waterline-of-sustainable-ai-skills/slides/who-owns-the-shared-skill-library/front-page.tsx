@@ -8,7 +8,6 @@ import styles from './slide.module.css';
 export interface FrontRow {
   readonly slug: string;
   readonly term: string;
-  /** The Context marker after the term. */
   readonly marker: ReactNode;
   readonly scene?: string;
   readonly chat: ReactNode;
