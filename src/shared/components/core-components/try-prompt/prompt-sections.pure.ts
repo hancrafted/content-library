@@ -1,8 +1,3 @@
-/*
- * The pure half of TryPrompt: sections joined into one markdown prompt, with `{{marker}}`s filled from the pasted
- * values and the slots' samples. Core owns its own types; a caller's schema maps onto them structurally.
- */
-
 export interface PromptSection {
   readonly heading?: string;
   readonly purpose?: string;

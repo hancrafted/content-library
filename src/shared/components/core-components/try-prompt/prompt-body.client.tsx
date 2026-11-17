@@ -17,12 +17,6 @@ import {
 import { SlotInput } from './slot-input.client';
 import type { TryPromptWords } from './try-prompt.types';
 
-/*
- * The opened prompt as two panels, each a disclosure: "What to do" (open by default: the step's instructions and its
- * slot fields; absent when it has neither) and "Prompt preview" (closed by default: each section under its H2 and
- * purpose marker). Nothing in it sets a width: text wraps, so the box never outgrows the modal.
- */
-
 function tierWord(tier: string, words: TryPromptWords): string {
   return (tier === 'basic' ? words.tierBasic : tier === 'advanced' ? words.tierAdvanced : undefined) ?? tier;
 }
@@ -176,7 +170,6 @@ export function PromptBody({ id, open, purposes, techniques, ...rest }: BodyProp
   const plain = parts.sections.length === 1 && only?.heading === undefined;
   const todo = instructions !== undefined || parts.slots.length > 0;
   return (
-    // `data-prompt-text` carries the prompt as it is copied, for the page's tests and tools.
     <div
       id={id}
       hidden={!open}

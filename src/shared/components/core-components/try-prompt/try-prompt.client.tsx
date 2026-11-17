@@ -12,16 +12,7 @@ import type { PromptKit, PromptView } from './try-prompt.types';
 export type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sections.pure';
 export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
-/*
- * One prompt as a disclosure, collapsed unless `defaultOpen`: a row with the label and two
- * buttons (copy prompt, open in ChatGPT), and the prompt text below when opened. Whether it is open is local to
- * this leaf (it passes the reload test, FE-001).
- *
- * A prompt may come as sections: opened, each shows its H2 and, when it has a purpose with an explanation, a marker
- * whose tooltip says what that part teaches. Its paste-in slots take a paste or a markdown upload and fill the
- * `{{markers}}` of the text; an empty slot leaves its sample. The pasted values are uncontrolled here and become
- * the parent's when it passes `values`/`onChange`. Copy and "open in" use the joined prompt, markers filled.
- */
+// decision: FE-001 §1
 
 function Chevron({ open }: { open: boolean }) {
   const motion = useMotion(open);
@@ -63,10 +54,8 @@ function sectionsOf(prompt: PromptView): readonly PromptSection[] {
 interface TryPromptProps {
   readonly prompt: PromptView;
   readonly kit: PromptKit;
-  /** Pasted values by marker name; with `values` the parent owns them, otherwise this leaf does. */
   readonly values?: SlotValues;
   readonly onChange?: (values: SlotValues) => void;
-  /** Opens the prompt at first: the first prompt of a modal, so the viewer sees what to do without a click. */
   readonly defaultOpen?: boolean;
 }
 
@@ -79,7 +68,6 @@ interface RowProps {
   readonly onToggle: () => void;
 }
 
-/** The pasted values: the parent's when it passes them, this leaf's own otherwise. */
 function useSlotValues({ values, onChange }: TryPromptProps) {
   const [own, setOwn] = useState<SlotValues>({});
   const current = values ?? own;

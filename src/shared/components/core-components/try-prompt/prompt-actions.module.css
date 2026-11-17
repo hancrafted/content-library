@@ -1,4 +1,3 @@
-/* The copy button's confirmation: the tick pops in once, where motion is welcome. */
 @media (prefers-reduced-motion: no-preference) {
   .pop {
     animation: pop 220ms ease-out;

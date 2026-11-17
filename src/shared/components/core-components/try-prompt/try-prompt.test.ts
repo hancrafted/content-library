@@ -10,7 +10,6 @@ import {
   type TryPromptWords,
 } from './try-prompt.client';
 
-/** Any link: the prompt row offers none, so no prompt ever travels in a URL; the caller adds its chat buttons. */
 const LINK = 'href=';
 const PREFILL = '?q=';
 const WORDS: TryPromptWords = {

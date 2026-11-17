@@ -8,15 +8,8 @@ import { OUTLINED_ICON } from '../icon-button/icon-button.client';
 import styles from './prompt-actions.module.css';
 import type { PromptKit } from './try-prompt.types';
 
-/*
- * The copy button of a prompt row, written out next to its icon: "Copy prompt", which confirms a copy with a tick and
- * "Copied" for a moment. The row carries no chat link: the caller adds the chats to paste into, so a prompt never
- * travels in a URL. No tooltips: the words are on the button.
- */
-
 const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
 
-/** The button the viewer should press next: filled in the action colour, so the eye lands on it. */
 const LEAD = 'border-(--info) bg-(--info) text-(--info-foreground) hover:bg-(--info)/90 hover:text-(--info-foreground)';
 
 const CONFIRM_MILLISECONDS = 1600;
