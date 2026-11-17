@@ -3,7 +3,6 @@ import type { ArrowCells, Note } from './cashflow-board.pure';
 
 export interface CashflowColumn {
   readonly label: string;
-  /** Three slots, top to bottom; `null` leaves a slot empty. */
   readonly notes: readonly (Note | null)[];
   readonly footer?: ReactNode;
   readonly marker?: ReactNode;
@@ -31,7 +30,6 @@ export interface BoardArrow extends ArrowCells {
 export interface CashflowBoardProps {
   readonly columns: readonly CashflowColumn[];
   readonly labels: BoardLabels;
-  /** The locale euros are written in. */
   readonly locale: string;
   readonly stamp?: { readonly label: string; readonly column: number };
   readonly arrow?: BoardArrow;

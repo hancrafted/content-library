@@ -1,6 +1,5 @@
 export type NoteKind = 'cash' | 'cost' | 'revenue' | 'ghost';
 
-/** One sticky note. `amount` is in euros and never signed: the board prints a cost's minus itself. */
 export interface Note {
   readonly kind: NoteKind;
   readonly amount?: number;
@@ -9,7 +8,6 @@ export interface Note {
   readonly target?: string;
 }
 
-/** A column's three slots, top to bottom; `null` is an empty slot. */
 export interface NoteSlots {
   readonly notes: readonly (Note | null)[];
 }
@@ -46,7 +44,6 @@ export function cashLeft(columns: readonly NoteSlots[]): number[] {
   });
 }
 
-/** Euros as the locale writes money, whole euros, with a true minus sign (U+2212) on a negative amount. */
 export function formatEuro(amount: number, locale: string): string {
   const written = new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -56,7 +53,6 @@ export function formatEuro(amount: number, locale: string): string {
   return written.replace('-', '\u2212');
 }
 
-/** The tilt in degrees of the note in a column and slot, both counted from 1. */
 export function tiltOf(column: number, slot: number): number {
   return TILTS[(column - 1) % TILTS.length][(slot - 1) % 3];
 }
@@ -123,7 +119,6 @@ function checkArrow({ from, to, labelGap }: NonNullable<BoardPlacements['arrow']
   checkColumn(labelGap + 1, count, "the column after the arrow's label gap");
 }
 
-/** Throws when an overlay names a column or slot the board does not have, so a bad board fails the build. */
 export function checkBoard({ count, stamp, arrow, highlight, annotations = [] }: BoardPlacements): void {
   if (stamp) checkColumn(stamp.column, count, 'the stamp');
   if (highlight !== undefined) checkColumn(highlight, count, 'the highlight');
