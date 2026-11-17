@@ -33,12 +33,6 @@ function Drop({ text }: { text: string }) {
   );
 }
 
-/**
- * The cashflow board a third time, by quarter: cash hits zero in Q2 and revenue only lands in Q3, so a `primary`
- * arrow drags it back to the ringed Q1 lane, "Start early!". Each column's Cash left footer states its balance, so no
- * cash note repeats it; Q2's carries the Context marker of its Speaker note. Under the board, a dashed drop from Q1
- * leads to a lane of this week's four steps.
- */
 export const watchYourCashflowStartWhen = slide({
   slug: 'watch-your-cashflow-start-when',
   messages: { en, de },
@@ -66,7 +60,6 @@ export const watchYourCashflowStartWhen = slide({
       { label: t('quarters.q4'), notes: [spent, earned, null] },
     ];
     const balances = cashLeft(quarters);
-    // Q2's footer states the €0 the arrow answers, so it carries the q2-cash-zero target and its marker.
     const zero = {
       target: target('q2-cash-zero')['data-target'],
       marker: <Marker note="even-a-yes-arrives-late" placement="beside" />,
