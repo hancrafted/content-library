@@ -20,6 +20,6 @@ function episodeRuns(): EpisodeRun[] {
 try {
   const text = unfinishedReminder(episodeRuns());
   if (text !== null) console.log(text);
-} catch {
-  // A hook must never fail the session: say nothing when git or a file is unreadable.
+} catch (error) {
+  console.error(`episode reminder skipped: ${(error as Error).message}`);
 }
