@@ -43,7 +43,6 @@ interface PanelProps {
   readonly coding: ReactNode;
 }
 
-/** One comic panel: its AI head, the morning's picture, and the card row; the view switch swaps words, never the art. */
 function ComicPanel({ heading, focal, picture, chip, chat, coding }: PanelProps) {
   return (
     <li

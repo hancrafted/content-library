@@ -1,9 +1,3 @@
-/*
- * Where the captain and the pilot stand in the morning room, and where their speech goes (decision 53): the shared
- * `says` bubble, never an HTML one. They face each other, so their bubbles rise towards each other; the captain's is
- * lifted above the pilot's, and both wrap narrow enough to stay in the 360-unit room. `speechClashes` names what
- * breaks, so a longer line fails the Slide's test, not Han's eye.
- */
 import type { BubblePlace, Mood } from '@/episodes/components/slide-shared/character/actor';
 import { drawFigure } from '@/episodes/components/slide-shared/character/poses.pure';
 import { saysBox, type SaysBoxResult } from '@/episodes/components/slide-shared/character/says.pure';
@@ -72,7 +66,6 @@ const meet = (a: SaysBoxResult, b: SaysBoxResult, gap: number) =>
 
 const leaves = (box: SaysBoxResult) => box.x < 0 || box.y < 0 || box.x + box.width > ROOM_ART.width;
 
-/** `bubbles meet` when the two come within 4 px, `<who> leaves the picture` past its edges; empty when it holds. */
 export function speechClashes({ captain: lifted, pilot: seated, scenePixels }: SpeechLayout): readonly string[] {
   return [
     ...(meet(lifted, seated, GAP_PIXELS / scenePixels) ? ['bubbles meet'] : []),
