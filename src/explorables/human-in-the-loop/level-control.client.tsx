@@ -12,7 +12,6 @@ interface LevelControlProps {
   readonly onLevel: (level: Level) => void;
 }
 
-/** The `</>` icon toggle: off is Chat (the default), on is CLI, which shows the setup and the /skill commands. */
 export function LevelControl({ words, level, onLevel }: LevelControlProps) {
   return (
     <ToolButton

@@ -4,12 +4,6 @@ import { Button } from '@/shared/components/ui/button';
 import type { UiWords } from './human-in-the-loop.types';
 import type { ProgressNote as Note } from './progress-controls.types';
 
-/*
- * The note over the toolbar about saved progress. Stale: the saved run belongs to an older Workflow; the viewer keeps it
- * as a file or discards it. Unsaved: the browser refused the write, so the viewer is asked to download their progress.
- */
-
-/** What each kind of note says and offers: its text, its download button and whether it can be discarded. */
 const KINDS = {
   stale: { text: 'noteStale', download: 'downloadOldProgress', discard: true },
   unsaved: { text: 'noteUnsaved', download: 'downloadProgress', discard: false },

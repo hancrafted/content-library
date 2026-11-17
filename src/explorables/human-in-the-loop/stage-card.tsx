@@ -8,36 +8,24 @@ import { StageProgress, StateMark } from './state-mark';
 import type { RoundRun, StageRun } from './workflow-run.pure';
 import type { Stage } from './workflow.types';
 
-/*
- * The stage card of the Stages view, the one card that replaces the five job views: the stage's title, its short
- * summary, a labelled "checked" mark where its jobs are reviewed, and its gate badge. Static: the column's "Try it"
- * button opens the modal, and the name opens a popover only where the Slide gives one.
- */
-
 const CARD = 'rounded-xl border border-border bg-card';
 
 export const NAME_BUTTON =
   'relative z-10 cursor-pointer rounded-sm text-left outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
 
-/** A popover's copy with the name of the stage it explains as its title. */
 export const popoverOf = (copy: PopoverCopy | undefined, stageName: string): NodeCopy | undefined =>
   copy && { title: stageName, ...copy };
 
-/** A card the viewer may skip is drawn with a dashed border; the "optional" tag says it in words (job cards only). */
 export const dashedIf = (optional: boolean): string | false => optional && 'border-dashed';
 
-/** The classes of a stage's card: a gate lifts it, an optional stage draws it dashed. */
 export const stageCardClass = (stage: Stage, gate: string | undefined): string =>
   cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm', dashedIf(stage.optional));
 
-/** Whether any job of the stage is checked against its criteria in a fresh chat. */
 export const isChecked = (stage: Stage): boolean => stage.jobs.some((job) => job.reviewed);
 
-/** The label of a stage's gate on a card: the Slide's word, else the visual's gate word with the number. */
 export const gateLabelOf = (stage: Stage, slot: StageSlot, words: UiWords): string | undefined =>
   stage.gate === undefined ? undefined : (slot.gateLabel ?? words.gate.replace('{n}', String(stage.gate)));
 
-/** The "checked" mark: an icon and its word, so the review habit is never carried by the icon alone. */
 export function CheckedMark({ word }: { readonly word: string }) {
   return (
     <span data-checked="" className="inline-flex items-center gap-1 text-caption font-medium text-muted-foreground">
@@ -65,12 +53,10 @@ export function Title({ stage, slot }: { readonly stage: Stage; readonly slot: S
   );
 }
 
-/** The gate's badge: where the human decides whether the work goes on. */
 export function GateBadge({ gate }: { readonly gate: string }) {
   return <Pill mark="data-gate">{gate}</Pill>;
 }
 
-/** The small rounded label of a card: the gate mark, a job's "optional" tag. `mark` is the data attribute that names it. */
 export function Pill({
   mark,
   children,
@@ -88,7 +74,6 @@ export function Pill({
   );
 }
 
-/** The mark of a stage whose run has no work: a labelled "checked" where a job is reviewed. */
 const ReviewedMark = ({ stage, words }: { stage: Stage; words: UiWords }) =>
   isChecked(stage) ? <CheckedMark word={words.checked} /> : null;
 
@@ -109,10 +94,6 @@ function Marks(props: {
   );
 }
 
-/**
- * One stage as a card: title, BRIEF letters, summary, the checked mark, the gate badge and the Slide's marker. Where the run has work
- * (`run`), the card says instead how many jobs are done and where the stage stands.
- */
 export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean; run?: StageRun }) {
   const { stage, slot, words, moves, run } = props;
   const gate = gateLabelOf(stage, slot, words);
@@ -134,11 +115,6 @@ export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords
   );
 }
 
-/**
- * One round of a repeated stage: one card height, so with the column's gap the branches stand one fan pitch apart. The
- * stage's name above the rounds carries its popover and aside. Where the run has the round, the card is titled by its
- * pasted H3 and says where the round stands.
- */
 export function BranchCard(props: { stage: Stage; round: number; words: UiWords; run?: RoundRun }) {
   const { stage, round, words, run } = props;
   return (

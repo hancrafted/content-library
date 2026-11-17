@@ -553,7 +553,6 @@ describe('edge cases', () => {
     for (const part of Object.values(slices)) expect(Object.keys(part)).not.toContain('state');
   });
 
-  /** The fixture with its repeated `each` stage marked for one mode. */
   const marked = (only: 'demo' | 'full'): Workflow => {
     const loaded = loadWorkflow(fixtureEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));

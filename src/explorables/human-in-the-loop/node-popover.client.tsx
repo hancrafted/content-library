@@ -24,10 +24,7 @@ interface NodePopoverProps {
   children: ReactNode;
 }
 
-/**
- * A pipeline node, stage or job, as a button that opens its two-line popover: what goes in, what comes out. The
- * popover is portaled into the Episode portal root (FE-009 §8), as the metro map's is, so the chrome never covers it.
- */
+// decision: FE-009 §8
 export function NodePopover({ copy, className, children }: NodePopoverProps) {
   const id = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);

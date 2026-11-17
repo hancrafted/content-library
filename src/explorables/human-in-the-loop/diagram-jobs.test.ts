@@ -29,8 +29,7 @@ const words = {
   repeats: '× each {item} ({n})',
   round: 'round',
 } as UiWords;
-/** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
-const opened: string[] = [];
+const recordedOpens: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
   load(
     renderToStaticMarkup(
@@ -40,7 +39,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         readonly: false,
         view: 'jobs',
         rounds: { b: 3 },
-        onOpenStage: (stageId) => void opened.push(stageId),
+        onOpenStage: (stageId) => void recordedOpens.push(stageId),
         ...props,
       }),
     ),

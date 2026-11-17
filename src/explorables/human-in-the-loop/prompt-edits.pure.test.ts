@@ -8,7 +8,6 @@ import fixtureEn from './workflow.fixture.en.yml';
 const file = parse(fixtureEn) as WorkflowFile;
 const taskOf = (id: string): TaskDef =>
   file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
-/** The repeated job with its review, to play two rounds of it. */
 const reviewedLook = (): TaskDef => ({
   ...taskOf('look'),
   review: { slots: [{ id: 'note_result', mode: 'single', label: 'Result' }], checks: ['Check {{item}}.'] },

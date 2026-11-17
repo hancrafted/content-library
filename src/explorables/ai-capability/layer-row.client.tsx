@@ -8,19 +8,11 @@ import { Hypothesis } from './row-cells-view';
 import { LEVELS, type Level } from './scene-frames.pure';
 import { fadeStops, sliceOf, type Range } from './spans.pure';
 
-/*
- * The two layer rows, AI disciplines and Oversight, in one look: each item a collapsible card spanning the Level edges
- * it covers, one lane per item, with a mini workflow, its name and a one-liner. A click opens the card to the
- * definitions of the item and the pages they come from. Wide, the row spans the four columns; narrow, each Level's card
- * shows its slice. The parent owns which cards are open (FE-012 §4.1); a card only gets its `open` boolean.
- */
-
-/** A layer item with its span on the four Levels, worked out once. */
+// decision: FE-012 §4.1
 export interface PlacedSpan extends LayerSpan {
   readonly range: Range;
 }
 
-/** What one layer row hands its cards: the items, their words, which are open, and the callback. */
 export interface LayerRowProps {
   readonly row: LayerRow;
   readonly spans: readonly PlacedSpan[];
@@ -28,27 +20,21 @@ export interface LayerRowProps {
   readonly open: readonly LayerItemId[];
   readonly onToggle: (id: LayerItemId) => void;
   readonly labels: LayerDetailLabels;
-  /** The tag a row's claims carry: Oversight's placement is a hypothesis; none for a row backed by its sources. */
   readonly hypothesis: string | null;
 }
 
-/** How strong a card's tone gets at full strength, in percent over the card colour. */
-const TINT = 24;
-/** How far a narrow slice indents per percent its span starts into the Level: less than its share, so it stays wide. */
-const INDENT = 0.4;
+const TINT_PERCENT = 24;
+const INDENT_RATIO = 0.4;
 
-/** A card's tint along its drawn part: its strength stops as a gradient of its tone over the card colour. */
 function tint(span: PlacedSpan, shown: Range): CSSProperties {
   const stops = fadeStops(span.stops, span.range, shown).map(
-    ({ at, strength }) => `color-mix(in oklch, var(--hue) ${Math.round(strength * TINT)}%, var(--card)) ${at}%`,
+    ({ at, strength }) => `color-mix(in oklch, var(--hue) ${Math.round(strength * TINT_PERCENT)}%, var(--card)) ${at}%`,
   );
   return { backgroundImage: `linear-gradient(90deg, ${stops.join(', ')})` };
 }
 
-/** The 8 half-Level tracks of the wide row: a span from 1.5 to 4 runs from line 4 to line 9. */
-const tracks = ([from, to]: Range): CSSProperties => ({ gridColumn: `${from * 2 + 1} / ${to * 2 + 1}` });
+const halfLevelTracks = ([from, to]: Range): CSSProperties => ({ gridColumn: `${from * 2 + 1} / ${to * 2 + 1}` });
 
-/** What a card shows: its mini workflow, its name (tagged when emerging) and its one-liner. */
 function CardFace({
   span,
   words,
@@ -74,34 +60,32 @@ function CardFace({
   );
 }
 
-/** A card's place and tint: on its tracks when wide, indented by its offset when narrow. */
 function cardStyle(props: ItemProps): CSSProperties {
   const shown: Range = [props.shownFrom, props.shownTo];
-  const at = props.offset === undefined ? tracks(shown) : { marginLeft: `${props.offset * INDENT}%` };
+  const at =
+    props.offsetPercent === undefined
+      ? halfLevelTracks(shown)
+      : { marginLeft: `${props.offsetPercent * INDENT_RATIO}%` };
   return { ...at, ...tint(props.span, shown) };
 }
 
-/** What a layer item takes: its card, and the panel under it while it is open. */
 interface ItemProps {
   readonly span: PlacedSpan;
   readonly words: LayerItemWords;
   readonly open: boolean;
-  /** The drawn part of the span, on the 0 to 4 axis; wide, it is the whole span on its tracks. */
   readonly shownFrom: number;
   readonly shownTo: number;
-  /** Narrow, how far into the Level's card the slice starts, in percent; wide, none. */
-  readonly offset?: number;
+  readonly offsetPercent?: number;
   readonly continues?: boolean;
   readonly panelId: string;
   readonly labels: LayerDetailLabels;
   readonly onToggle: LayerRowProps['onToggle'];
 }
 
-/** One collapsible layer item: its card, a button that opens it, and the definitions under it; memoised. */
 const LayerItem = memo(function LayerItem(props: ItemProps) {
   const { span, open } = props;
   return (
-    <div className={`${styles[span.tone]} ${props.offset === undefined ? styles.lane : styles.slice}`}>
+    <div className={`${styles[span.tone]} ${props.offsetPercent === undefined ? styles.lane : styles.slice}`}>
       <button
         type="button"
         data-layer-item={span.id}
@@ -128,13 +112,11 @@ const LayerItem = memo(function LayerItem(props: ItemProps) {
   );
 });
 
-/** An item's span with its words. */
 interface Entry {
   readonly span: PlacedSpan;
   readonly words: LayerItemWords;
 }
 
-/** What every item of a row shares, and its own `open`: the props an item takes but its place. */
 const itemOf = (props: LayerRowProps, { span, words }: Entry, where: string) => ({
   span,
   words,
@@ -144,7 +126,6 @@ const itemOf = (props: LayerRowProps, { span, words }: Entry, where: string) => 
   onToggle: props.onToggle,
 });
 
-/** The line under a row: its hypothesis tag, if it has one, and its hint. */
 function Hint(props: LayerRowProps) {
   return (
     <div className="flex flex-wrap items-baseline gap-2 px-1 pt-1">
@@ -154,7 +135,6 @@ function Hint(props: LayerRowProps) {
   );
 }
 
-/** A layer row in a wide container: one lane per item across the four columns, the hint under it. */
 export function LayerRowWide(props: LayerRowProps & { readonly line: number }) {
   return (
     <li
@@ -181,7 +161,6 @@ export function LayerRowWide(props: LayerRowProps & { readonly line: number }) {
   );
 }
 
-/** A layer row inside one Level's card in a narrow container: the items that reach this Level, each its slice. */
 export function LayerSlices(props: LayerRowProps & { readonly level: Level }) {
   return (
     <div data-row={props.row} className={`${styles.slices} ${styles.blend}`}>
@@ -195,9 +174,9 @@ export function LayerSlices(props: LayerRowProps & { readonly level: Level }) {
             key={span.id}
             {...itemOf(props, { span, words }, props.level)}
             continues={slice.continues}
-            shownFrom={at + slice.left / 100}
-            shownTo={at + (slice.left + slice.width) / 100}
-            offset={slice.left}
+            shownFrom={at + slice.leftPercent / 100}
+            shownTo={at + (slice.leftPercent + slice.widthPercent) / 100}
+            offsetPercent={slice.leftPercent}
           />
         );
       })}

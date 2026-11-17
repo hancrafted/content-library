@@ -10,13 +10,6 @@ import { TryButton } from './try-button.client';
 import type { Run, StageRun } from './workflow-run.pure';
 import type { Stage, Workflow } from './workflow.types';
 
-/**
- * The Stages view, the high-level one: the Workflow as one ordered list of stage cards, left to right where the Scene is wide enough
- * and top to bottom where it is narrow. A repeated stage fans out into one branch card per round and back in after it;
- * a gated stage has a dashed arc under it that sends the work back. Pointing at a stage dims the others; the whole
- * column opens its modal. Once the run has work, each card also says how many of its jobs are done and where it stands,
- * and a repeated stage's round cards are titled by the H3s the viewer pasted.
- */
 export function DiagramStages(props: {
   workflow: Workflow;
   slots?: DiagramSlots;
@@ -46,14 +39,12 @@ export function DiagramStages(props: {
   );
 }
 
-/** What every stage column reads: the Workflow, the Slide's slots, the words, the rounds and the "Try it" wiring. */
 interface Context {
   workflow: Workflow;
   slots: DiagramSlots;
   words: UiWords;
   readonly: boolean;
   rounds: Rounds;
-  /** What the viewer has done, once the run has work: the cards then show counts, marks and the pasted round titles. */
   run?: Run;
   onOpenStage: (stageId: string) => void;
 }
@@ -87,10 +78,6 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
   );
 }
 
-/**
- * A lane with the Slide's content after it: the lane keeps its own box, so the "Try it" button covers the lane alone,
- * and the content sits below it in the column.
- */
 function LaneWithAfter({ lane, after }: { lane: ReactNode; after: ReactNode }) {
   return (
     <>
@@ -102,10 +89,6 @@ function LaneWithAfter({ lane, after }: { lane: ReactNode; after: ReactNode }) {
   );
 }
 
-/**
- * A stage's lane, with the connector from the stage before. Where the column opens a modal the lane keeps room at its
- * foot for the rising "Practice it" button, and answers the pointer.
- */
 function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: ConnectorKind | undefined }) {
   const { ctx, stage, slot, into } = props;
   const opens = !ctx.readonly;
@@ -133,10 +116,6 @@ function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: C
   );
 }
 
-/**
- * A repeated stage's head: its name, then its BRIEF letters where the Slide draws them, like every other stage, and the
- * Slide's marker under them.
- */
 function BranchesHead({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: StageSlot }) {
   return (
     <div data-stage-head="" className="flex min-h-[50px] flex-col gap-1.5 px-3 pt-[13px] pb-2">
@@ -151,10 +130,6 @@ function BranchesHead({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: 
   );
 }
 
-/**
- * A repeated stage: its name and BRIEF letters on top, at the height of every other stage's title, then its rounds as parallel cards,
- * indented as branches where the stages stack, then its summary in the flow, above the lane's room for "Practice it".
- */
 function Branches({ ctx, stage, branches }: { ctx: Context; stage: Stage; branches: number }) {
   const slot = ctx.slots.stages?.[stage.id] ?? {};
   const run = runOfStage(ctx, stage);
