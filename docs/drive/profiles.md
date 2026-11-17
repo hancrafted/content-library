@@ -5,4 +5,15 @@ and the implementer's, which every Subagent brief points at. Write only what is 
 
 ## Architect
 
+- The Operator is Han. Read `docs/steering/product-vision.md` before a decision; a change that trades architecture or
+  agent legibility for delivery is escalated to him first (Archgate ADR GEN-004).
+- Archgate ADRs in `.archgate/adrs/` bind every agent; `agentType` in `binding.yml` makes each Subagent honour them.
+- Branch types: `episode` and `post-production` are `<type>`s beside the Conventional Commits types and
+  `decisions`; Episode Runs (`/new-episode`) and post-production use them.
+
 ## Implementer
+
+- Run `archgate check` with the project's verification; an ADR violation blocks the merge, a warning goes in the
+  report.
+- `drive worktree done --base` prints the fast-suite tests that ran past 750 ms on your branch, with the load factor:
+  tests creeping towards CI's 3 s limit. Name any of yours under **Trade-offs**.

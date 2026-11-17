@@ -13,7 +13,7 @@ phases:
       - grilling
       - research
   reason:
-    model: sonnet
+    model: opus
     skills:
       - codebase-design
       - domain-modeling
@@ -29,10 +29,9 @@ phases:
     skills:
       - diagnosing-bugs
       - implement
-      - implement-spec
       - tdd
   verify:
-    model: sonnet
+    model: opus
     skills:
       - code-review
       - improve-codebase-architecture
