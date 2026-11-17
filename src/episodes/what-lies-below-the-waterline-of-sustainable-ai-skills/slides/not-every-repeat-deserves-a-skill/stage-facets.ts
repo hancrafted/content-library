@@ -64,7 +64,6 @@ export const WALL: readonly ArtFacet[] = [
   ['room', 'M246 600L304 514L345 600ZM304 514L246 600L128 447ZM246 600L131 600L128 447Z'],
 ];
 
-/** The fat ring binder, its thin card tabs sticking out, the never-tested ones stamped red; bottom edge at y 500. */
 export const BINDER: readonly ArtFacet[] = [
   ['tab', 'M186 376L191 376L189 354L184 354Z'],
   ['stamp', 'M193 376L198 376L200 340L195 340Z'],

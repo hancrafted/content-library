@@ -52,10 +52,6 @@ export function FastenerArt({ piece, className }: PieceProps & { readonly piece:
   );
 }
 
-/**
- * The fat ring binder of Spec Option 9a bursting with thin card tabs, the never-tested ones stamped red: an SVG group
- * standing on `(x, y)` in its Scene's units at `scale`.
- */
 export function StuffedBinder({ x, y, scale }: { readonly x: number; readonly y: number; readonly scale: number }) {
   return (
     <g

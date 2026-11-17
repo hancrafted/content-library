@@ -1,10 +1,4 @@
-/*
- * The Slide's one emphasis motion (Spec Option 9a): the index grows line by line until it runs off the page, each
- * stamp landing on its line, the needed entry ending up seventh, buried; then, once all `--entries` (set inline from
- * the list) have grown, the needed entry, filled primary with its "needed" tag, pulses once. Played once when the Slide's mount turns
- * `[data-zone='active']`. The base rules are the end state, so a still frame and reduced motion show the full list.
- */
-
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .index {
   --grow-step: 140ms;
 }
