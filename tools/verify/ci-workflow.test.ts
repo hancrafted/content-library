@@ -6,11 +6,28 @@ import { parse } from 'yaml';
 const WORKFLOW = '.github/workflows/ci.yml';
 const DEPLOY_WORKFLOW = '.github/workflows/deploy-cloudflare.yml';
 
+interface Step {
+  uses?: string;
+  run?: string;
+  with?: Record<string, unknown>;
+}
+
 interface Workflow {
   name: string;
-  jobs: Record<string, { if?: string; steps: { uses?: string; run?: string; with?: Record<string, unknown> }[] }>;
+  jobs: Record<
+    string,
+    {
+      name?: string;
+      if?: string;
+      needs?: string[];
+      env?: Record<string, string>;
+      steps: Step[];
+    }
+  >;
+  permissions?: Record<string, string>;
   on: {
     pull_request?: unknown;
+    workflow_dispatch?: { inputs?: Record<string, { required?: boolean }> };
     push?: { branches?: string[]; 'branches-ignore'?: string[] };
     workflow_run?: { workflows?: string[]; types?: string[]; branches?: string[] };
   };
@@ -23,6 +40,17 @@ interface DeployJob {
 
 const read = (file: string): Workflow =>
   parse(readFileSync(path.join(import.meta.dirname, '../..', file), 'utf8')) as Workflow;
+/**
+ * Evaluates the one expression shape this workflow uses, `${{ <ref> ==|!= '<literal>' && '<a>' || '<b>' }}`, the way
+ * Actions does: `&&`/`||` return an operand, and an empty string is falsy, so `x && '' || 'true'` is always 'true'.
+ */
+function evaluate(expression: string | undefined, context: Record<string, string>): string {
+  const match = /^\$\{\{ (\S+) (==|!=) '([^']*)' && '([^']*)' \|\| '([^']*)' \}\}$/.exec(expression ?? '');
+  if (!match) throw new Error(`unsupported expression: ${expression}`);
+  const [, key, operator, literal, whenTrue, otherwise] = match;
+  const condition = (context[key!] === literal) === (operator === '==');
+  return condition && whenTrue ? whenTrue : otherwise!;
+}
 const workflow = (): Workflow => read(WORKFLOW);
 const deployWorkflow = (): Workflow => read(DEPLOY_WORKFLOW);
 
@@ -87,9 +115,9 @@ describe('the CI workflow', () => {
 });
 
 describe('the Cloudflare deploy workflow', () => {
-  it('deploys production only after CI completes on main: no push trigger, previews and the manual run stay', () => {
+  it('deploys production only after CI completes on main: no push trigger and no pull_request trigger, the manual run stays', () => {
     // ARRANGE
-    const triggers = ['pull_request', 'workflow_dispatch', 'workflow_run'];
+    const triggers = ['workflow_dispatch', 'workflow_run'];
     const ciCompletedOnMain = { workflows: [workflow().name], types: ['completed'], branches: ['main'] };
     // ACT
     const { on } = deployWorkflow();
@@ -100,31 +128,78 @@ describe('the Cloudflare deploy workflow', () => {
 
   it('builds after a CI run only when that run succeeded, so a failed or cancelled CI never deploys', () => {
     // ARRANGE
-    const ciRun = "github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'";
     // ACT
-    const gate = deployWorkflow().jobs.build?.if;
+    const gate = deployWorkflow().jobs.deploy?.if;
     // ASSERT
-    expect(gate).toContain(ciRun);
+    expect(gate).toContain("github.event.workflow_run.conclusion == 'success'");
   });
 
-  it('builds the commit CI tested, not whatever main points at by the time CI finishes', () => {
+  it('publishes the artifact of the CI run that tested the commit: no checkout, no install, no build', () => {
     // ARRANGE
-    const testedCommit = '${{ github.event.workflow_run.head_sha }}';
+    const { steps } = deployWorkflow().jobs.deploy ?? { steps: [] };
     // ACT
-    const checkout = deployWorkflow().jobs.build?.steps.find((step) => step.uses?.startsWith('actions/checkout@'));
+    const download = steps.find((step) => step.uses?.startsWith('actions/download-artifact@'));
+    const runs = steps.map((step) => step.run ?? '').join('\n');
     // ASSERT
-    expect(checkout?.with?.ref).toBe(testedCommit);
+    expect(download?.with?.['run-id']).toBe('${{ steps.run.outputs.id }}');
+    expect(steps.some((step) => step.uses?.startsWith('actions/checkout@'))).toBe(false);
+    expect(runs).not.toMatch(/npm (ci|run build)/);
   });
 
-  it('treats every event but a pull request as production, so a run started by CI never lands in a preview', () => {
+  it('lets a manual run name a CI run to redeploy, and reads that run through actions: read', () => {
     // ARRANGE
-    const pullRequestElseProduction =
-      /\$\{\{ github\.event_name == 'pull_request' && .+ \|\| '(production|https:\/\/hancrafted\.net)' \}\}$/;
+    const { on, permissions } = deployWorkflow();
+    // ACT
+    const input = on.workflow_dispatch?.inputs?.['run-id'];
+    // ASSERT
+    expect(input?.required).toBe(false);
+    expect(permissions?.actions).toBe('read');
+  });
+
+  it("keeps main's export for 30 days so an older run can be redeployed, and other refs' for a day", () => {
+    // ARRANGE
+    const upload = workflow().jobs.export?.steps.find((step) => step.uses?.startsWith('actions/upload-artifact@'));
+    // ACT
+    const retention = String(upload?.with?.['retention-days']);
+    // ASSERT
+    expect(retention).toContain("refs/heads/main' && 30 || 1");
+  });
+
+  it('builds the production shape on main and the preview shape elsewhere', () => {
+    // ARRANGE
+    const { export: build, 'build-test': buildTest } = workflow().jobs;
+    // ACT
+    const listed = (job: typeof build, ref: string) =>
+      evaluate(job?.env?.LIST_UPCOMING_EPISODES, { 'github.ref': ref });
+    // ASSERT: the app lists Upcoming Episodes only when the variable is exactly 'true'
+    for (const job of [build, buildTest]) {
+      expect(listed(job, 'refs/heads/main')).not.toBe('true');
+      expect(listed(job, 'refs/heads/feat/x')).toBe('true');
+    }
+  });
+
+  it('reports the required check from a gate job that fails unless build and post-build tests both succeeded', () => {
+    // ARRANGE
+    const { gate } = workflow().jobs;
+    // ACT
+    const run = gate?.steps.map((step) => step.run ?? '').join('\n');
+    // ASSERT
+    expect(gate?.name).toBe('build, post-build tests');
+    expect(gate?.needs).toEqual(['export', 'build-test']);
+    expect(gate?.if).toBe('always()');
+    expect(run).toContain('"$BUILD" = success');
+    expect(run).toContain('"$POST_BUILD" = success');
+    expect(Object.values(workflow().jobs).filter((job) => job.name === 'build, post-build tests')).toHaveLength(1);
+  });
+
+  it('deploys every event as production, so a run started by CI never lands in a preview, and never cancels one', () => {
+    // ARRANGE
     const { concurrency, jobs } = deployWorkflow();
     const { environment } = jobs.deploy as unknown as DeployJob;
     // ACT
-    const switches = [concurrency.group, environment.name, environment.url];
+    const target = [concurrency.group, environment.name, environment.url];
     // ASSERT
-    for (const expression of switches) expect(expression).toMatch(pullRequestElseProduction);
+    expect(target).toEqual(['cloudflare-pages-production', 'production', 'https://hancrafted.net']);
+    expect(concurrency['cancel-in-progress']).toBe(false);
   });
 });

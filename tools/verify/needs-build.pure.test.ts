@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { EXPORT_PATHS, needsBuild } from './needs-build.pure.ts';
+import { needsBuild } from './needs-build.pure.ts';
 
-const WORKFLOW = '.github/workflows/deploy-cloudflare.yml';
+const WORKFLOW = '.github/workflows/ci.yml';
 
 describe('needsBuild', () => {
   describe('success cases', () => {
@@ -77,16 +77,67 @@ describe('needsBuild', () => {
     });
   });
 
-  describe('the deploy workflow', () => {
-    it('filters pull requests by the same paths, minus the workflow file itself', () => {
+  describe('the CI workflow', () => {
+    const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
+      jobs: Record<
+        string,
+        {
+          needs?: string | string[];
+          if?: string;
+          env?: Record<string, string>;
+          outputs?: Record<string, string>;
+          steps?: { run?: string }[];
+        }
+      >;
+    };
+
+    it('gates the preview job on the export job and its changed output', () => {
       // ARRANGE
-      const workflow = parse(readFileSync(path.join(import.meta.dirname, '../..', WORKFLOW), 'utf8')) as {
-        on: { pull_request: { paths: string[] } };
-      };
+      const { export: exportJob, preview } = workflow.jobs;
       // ACT
-      const filter = workflow.on.pull_request.paths.filter((entry) => entry !== WORKFLOW);
+      const needs = [preview?.needs ?? []].flat();
       // ASSERT
-      expect([...filter].sort()).toEqual([...EXPORT_PATHS].sort());
+      expect(needs).toContain('export');
+      expect(exportJob?.outputs).toHaveProperty('changed');
+      expect(preview?.if).toContain('needs.export.outputs.changed');
+    });
+
+    it('runs the post-build suite in a build-test job beside the preview, not inside export', () => {
+      // ARRANGE
+      const { export: exportJob, preview, 'build-test': buildTest } = workflow.jobs;
+      const runs = (job?: { steps?: { run?: string }[] }) => (job?.steps ?? []).map((step) => step.run ?? '');
+      // ACT
+      const buildTestNeeds = [buildTest?.needs ?? []].flat();
+      const previewNeeds = [preview?.needs ?? []].flat();
+      // ASSERT
+      expect(buildTestNeeds).toEqual(['export']);
+      expect(buildTest?.if).toBeUndefined();
+      expect(previewNeeds).not.toContain('build-test');
+      expect(runs(buildTest)).toContain('npm run test:build');
+      expect(runs(exportJob)).not.toContain('npm run test:build');
+    });
+
+    it('builds the post-build suite with the same env as the export it tests', () => {
+      // ARRANGE
+      const { export: exportJob, 'build-test': buildTest } = workflow.jobs;
+      // ACT / ASSERT
+      expect(exportJob?.env).toBeDefined();
+      expect(buildTest?.env).toEqual(exportJob?.env);
+    });
+
+    it('keeps main out of the preview, since production publishes it', () => {
+      // ARRANGE
+      const condition = workflow.jobs.preview?.if ?? '';
+      // ACT / ASSERT
+      expect(condition).toContain("github.ref != 'refs/heads/main'");
+    });
+
+    it('keeps forks and Dependabot away from the preview', () => {
+      // ARRANGE
+      const condition = workflow.jobs.preview?.if ?? '';
+      // ACT / ASSERT
+      expect(condition).toContain('github.repository');
+      expect(condition).toContain('dependabot[bot]');
     });
   });
 });

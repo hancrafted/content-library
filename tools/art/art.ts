@@ -4,16 +4,30 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { parseArgs } from 'node:util';
 import { createViteServer } from 'vitest/node';
 import { rawTextFiles } from '../../raw-text-files.mts';
-import { bakeArt } from './art-bake.pure.ts';
-import { artStore, type ArtPiece } from './art-store.pure.ts';
-import { cssRules, type CssRule } from './css-rules.pure.ts';
+import { currentLoad } from '../load/workers.ts';
+import { bakeInWorkers } from './art-bake-pool.ts';
+import { bakeChunk, chunksOf, mergeChunks } from './art-chunks.pure.ts';
+import { artStore } from './art-store.pure.ts';
+import { cssRules } from './css-rules.pure.ts';
 
 const ROOT = process.cwd();
 // Every `<Art>` the pages render draws inline, marked for the bake (`artMode`).
 process.env.ART_BUILD = '1';
-const OUT = path.join(ROOT, 'public/art');
+// `--workers N` bakes across N threads (default: the shared idle-CPU rule); `--out DIR` writes there instead of
+// `public/art`; `--only a,b` keeps the Slides of those pages (by page-name prefix), for the parallel-bake test.
+const { values: args } = parseArgs({
+  options: { workers: { type: 'string' }, out: { type: 'string' }, only: { type: 'string' } },
+});
+const workers = args.workers === undefined ? (await currentLoad()).workers : Number(args.workers);
+if (!Number.isInteger(workers) || workers < 1)
+  throw new Error(`--workers must be a positive whole number, got "${args.workers}"`);
+const OUT = path.resolve(ROOT, args.out ?? 'public/art');
+const ONLY = args.only?.split(',');
+/** Slides per chunk: several chunks per worker, so one slow chunk never leaves the others idle. */
+const CHUNKS_PER_WORKER = 8;
 const ENTRY = '/src/episodes/components/art-build/art-pages.tsx';
 
 /** What the entry yields for each Slide: where it comes from, and its markup on demand. */
@@ -71,29 +85,15 @@ function renderAll(pages: readonly ArtPage[]) {
   return rendered;
 }
 
-/** Bakes every rendered Slide's drawings; every refusal is reported once, naming the first Slide it came from. */
-function bakeAll(rendered: readonly { readonly page: string; readonly markup: string }[], rules: readonly CssRule[]) {
-  const refusals = new Map<string, string>();
-  const pieces = rendered.flatMap(({ page, markup }): ArtPiece[] => {
-    try {
-      return bakeArt(markup, rules).map((piece) => ({ ...piece, from: page }));
-    } catch (error) {
-      const message = (error as Error).message;
-      if (!refusals.has(message)) refusals.set(message, page);
-      return [];
-    }
-  });
-  if (refusals.size > 0) {
-    const lines = [...refusals].map(([message, page]) => `- ${page}: ${message}`);
-    throw new Error(`npm run art refused ${refusals.size} drawings:\n${lines.join('\n')}`);
-  }
-  return pieces;
-}
-
 try {
   const { artPages } = (await server.ssrLoadModule(ENTRY)) as { artPages: () => Iterable<ArtPage> };
-  const rendered = renderAll([...artPages()]);
-  const store = artStore(bakeAll(rendered, cssRules(await moduleCss())));
+  const pages = [...artPages()].filter(({ page }) => ONLY === undefined || ONLY.some((id) => page.startsWith(id)));
+  const rendered = renderAll(pages);
+  const rules = cssRules(await moduleCss());
+  const chunks = chunksOf(rendered, Math.max(1, Math.ceil(rendered.length / (workers * CHUNKS_PER_WORKER))));
+  const baked =
+    workers === 1 ? chunks.map((chunk) => bakeChunk(chunk, rules)) : await bakeInWorkers(chunks, rules, workers);
+  const store = artStore(mergeChunks(baked));
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
   for (const { file, text } of store.files) writeFileSync(path.join(OUT, file), text);

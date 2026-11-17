@@ -101,7 +101,7 @@ Every interactive element carries a stable `data-testid`. Select by it, never by
 
 ## Deploy
 
-`.github/workflows/deploy-cloudflare.yml` builds `out/` and deploys it to Cloudflare Pages: production once CI passes on `main`, a preview on every same-repo pull request. `.github/workflows/deploy.yml` publishes only redirect stubs for the old GitHub Pages URLs (temporary). `.github/workflows/ci.yml` runs lint, typecheck, tests and a build on every pushed branch; a PR shows that run as its checks. A ruleset on `main` requires CI's three jobs to pass before a merge, and the production deploy waits for CI on the merged commit. One-time setup and operations: `docs/features/hosting.md`.
+The site deploys to Cloudflare Pages: CI builds once per pushed commit, previews a branch that changes an export input, and `deploy-cloudflare.yml` publishes `main` after CI passes. How, and the one-time setup: `docs/features/hosting.md`.
 
 ### `NEXT_PUBLIC_BASE_PATH`
 
