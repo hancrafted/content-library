@@ -22,8 +22,15 @@ const write = (root: string, file: string, text: string) => {
   writeFileSync(path.join(root, file), text);
 };
 
+const envOutsideAnyGitHook = Object.fromEntries(
+  Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')),
+) as NodeJS.ProcessEnv;
+
 const git = (root: string, ...args: string[]) =>
-  execFileSync('git', ['-c', 'user.name=probe', '-c', 'user.email=probe@example.com', ...args], { cwd: root });
+  execFileSync('git', ['-c', 'user.name=probe', '-c', 'user.email=probe@example.com', ...args], {
+    cwd: root,
+    env: envOutsideAnyGitHook,
+  });
 
 function projectWithGen006(): string {
   const root = mkdtempSync(path.join(tmpdir(), 'gen006-'));
@@ -44,6 +51,7 @@ function checkStaged(root: string): Violation[] {
   try {
     out = execFileSync(ARCHGATE, ['check', '--staged', '--adr', 'GEN-006', '--output', 'json'], {
       cwd: root,
+      env: envOutsideAnyGitHook,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
