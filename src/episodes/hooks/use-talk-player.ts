@@ -2,7 +2,6 @@ import { useSyncExternalStore } from 'react';
 
 export interface TalkPlayerState {
   readonly isOpen: boolean;
-  /** The Title slide's talk slot, where the player sits while undocked; `null` until it has mounted. */
   readonly slot: HTMLElement | null;
 }
 

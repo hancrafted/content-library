@@ -7,16 +7,11 @@ export interface PagePicks {
   readonly setPick: (name: PickName, value: string) => void;
 }
 
-/** The page's picks, provided once per Episode page by the container's `PagePicksProvider` (FE-001 §1, transient). */
+// decision: FE-001 §1
 export const PagePicksContext = createContext<PagePicks | null>(null);
 
 const NO_PICK = () => undefined;
 
-/**
- * One page-wide pick, such as a Guide's operating system: its value and the call that sets it for every Slide of the
- * page. Reads `fallback` until the viewer picks, and outside an Episode page, where setting it does nothing. The one
- * way a Slide or a slide-shared part reads a pick, never mirroring it into its own state.
- */
 export function usePagePick(name: PickName, fallback: string): readonly [string, (value: string) => void] {
   const page = useContext(PagePicksContext);
   const value = page?.picks[name] ?? fallback;
