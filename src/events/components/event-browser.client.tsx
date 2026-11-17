@@ -21,13 +21,12 @@ import { cn } from '@/shared/lib/utils';
 import { LayoutGrid, List } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-/** The strings the overview's leaf draws, resolved on the server so it takes plain values (FE-006 §4). */
+// decision: FE-006 §4
 export interface EventBrowserLabels {
   readonly upcoming: string;
   readonly past: string;
   readonly noUpcoming: string;
   readonly noPast: string;
-  /** A section that holds Events, all of which the filter hides. */
   readonly noMatch: string;
   readonly search: string;
   readonly searchPlaceholder: string;
@@ -41,21 +40,17 @@ export interface EventBrowserLabels {
 
 type View = 'grid' | 'list';
 
-/** With scripts off the controls cannot work, so the stylesheet drops them and shows every Event. */
 const NO_SCRIPT_CSS =
   '[data-event-controls]{display:none}[data-event-item][hidden],[data-event-month][hidden]{display:revert!important}';
 
 interface BrowserProps {
   cards: EventCard[];
-  /** The Tags' order, the vocabulary's, so the chips read as on the Episode overview. */
   vocabulary: readonly TagId[];
-  /** The day the site was built: an Event before it is past, the same day as its page decides. */
   buildDay: string;
   locale: Locale;
   labels: EventBrowserLabels;
 }
 
-/** The calendar day block beside a card in the list view: the day of the month over its weekday. */
 function DayBlock({ card }: { card: EventCard }) {
   return (
     <div aria-hidden className="flex w-14 shrink-0 flex-col items-center pt-5 text-center">
@@ -73,7 +68,6 @@ interface MonthProps {
   open: string;
 }
 
-/** One month: its heading, then its Events as a card grid or as calendar rows; hidden when the filter keeps none. */
 function Month({ group, visible, view, locale, open }: MonthProps) {
   const shown = group.items.some((card) => visible.has(card.slug));
   return (
@@ -94,9 +88,7 @@ function Month({ group, visible, view, locale, open }: MonthProps) {
 interface SectionProps {
   id: 'upcoming' | 'past';
   title: string;
-  /** The line when the calendar puts no Event here. */
   empty: string;
-  /** The line when Events are here but the filter hides them all. */
   noMatch: string;
   groups: readonly MonthGroup<EventCard>[];
   visible: ReadonlySet<string>;
@@ -105,7 +97,6 @@ interface SectionProps {
   open: string;
 }
 
-/** Upcoming or Past: its heading, its months, and one line saying whether the calendar or the filter left it empty. */
 function Section({ id, title, empty, noMatch, groups, visible, view, locale, open }: SectionProps) {
   const any = groups.some((group) => group.items.some((card) => visible.has(card.slug)));
   return (
@@ -125,7 +116,7 @@ function Section({ id, title, empty, noMatch, groups, visible, view, locale, ope
   );
 }
 
-/** The visitor's selection and view, the Events they keep, and the handlers that change them; all in memory (FE-001). */
+// decision: FE-001 §1.3
 function useEventBrowser(cards: readonly EventCard[]) {
   const [selection, setSelection] = useState<EventSelection>(NO_SELECTION);
   const [view, setView] = useState<View>('grid');
@@ -148,7 +139,6 @@ function useEventBrowser(cards: readonly EventCard[]) {
 
 type Browse = ReturnType<typeof useEventBrowser>;
 
-/** The grid or list switch: one choice always on, so a click on the current one keeps it. */
 function ViewSwitch({ browse, labels }: { browse: Browse; labels: EventBrowserLabels }) {
   return (
     <ToggleGroup
@@ -168,7 +158,6 @@ function ViewSwitch({ browse, labels }: { browse: Browse; labels: EventBrowserLa
   );
 }
 
-/** The way back to every Event, shown only while a filter is on. */
 function ResetButton({ browse, label }: { browse: Browse; label: string }) {
   if (!browse.active) return null;
   return (
@@ -191,7 +180,6 @@ interface ControlsProps {
   labels: EventBrowserLabels;
 }
 
-/** The search, the Tag chips, the view switch, and the way back to everything while a filter is on. */
 function Controls({ browse, cards, vocabulary, labels }: ControlsProps) {
   return (
     <div data-event-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
@@ -215,11 +203,7 @@ function Controls({ browse, cards, vocabulary, labels }: ControlsProps) {
   );
 }
 
-/**
- * The Events overview's interactive part: a search, the Tag chips and the grid or list switch, then Upcoming and Past
- * grouped by month. Every Event is in the server HTML; filtering only toggles `hidden`, so find-in-page and a visit
- * without scripts still see all of them. The selection and the view are transient (FE-001): a reload starts afresh.
- */
+// decision: FE-001 §1.3
 export function EventBrowser({ cards, vocabulary, buildDay, locale, labels }: BrowserProps) {
   const browse = useEventBrowser(cards);
   const sections = groupEventsByMonth(cards, buildDay, locale);

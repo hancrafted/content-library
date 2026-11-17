@@ -6,18 +6,13 @@ import { ROUTES, servedUrl } from '@/shared/lib/static-routes';
 import { OG_IMAGE } from './page-metadata.pure';
 import { PAGE_WORDS } from './page-words';
 
-/*
- * schema.org JSON-LD as plain data (FE-008 §6): the landing page's Person and WebSite, an Episode's Article and,
- * where a recording exists, its VideoObject. A component renders the result; nothing here knows React.
- */
-
+// decision: FE-008 §6
 type Node = Record<string, unknown> & { readonly '@type': string };
 export interface JsonLd {
   readonly '@context': 'https://schema.org';
   readonly '@graph': readonly Node[];
 }
 
-/** What an Episode page hands in: its copy, its release date and its recording in this locale. */
 export interface EpisodeLdInput {
   readonly slug: EpisodeId;
   readonly title: string;
@@ -55,7 +50,6 @@ export function landingJsonLd(siteUrl: string, locale: Locale): JsonLd {
   };
 }
 
-/** The VideoObject of an Episode's recording, embedded through the no-cookie player. */
 function videoNode(
   episode: EpisodeLdInput & { youtube: string; publishedOn: IsoDate },
   locale: Locale,
@@ -73,7 +67,6 @@ function videoNode(
   };
 }
 
-/** An Episode's Article and VideoObject; undefined without a release date: an upcoming Episode has none. */
 export function episodeJsonLd(siteUrl: string, locale: Locale, episode: EpisodeLdInput): JsonLd | undefined {
   const { publishedOn, youtube } = episode;
   if (publishedOn === undefined) return undefined;

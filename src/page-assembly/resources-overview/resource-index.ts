@@ -13,7 +13,6 @@ import { eventCopy } from '@/events/lib/event-words';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { ResourceEntry, ResourceKind } from './resource-index.pure';
 
-/** One listed page with its record's Tags and the words it says of itself, before it is spread over its locales. */
 interface Listed {
   readonly kind: ResourceKind;
   readonly slug: string;
@@ -22,7 +21,6 @@ interface Listed {
   readonly words: (locale: Locale) => Pick<ResourceEntry, 'title' | 'description'>;
 }
 
-/** The Episodes the overview lists that have a page of their own; an announced one with no page yet has no URL to list. */
 function listedEpisodePages(): Listed[] {
   return listedEpisodes().flatMap(({ ref, tags }: LoadedEpisode): Listed[] =>
     hasPage(ref)
@@ -82,11 +80,6 @@ function listedTemplatePages(): Listed[] {
   }));
 }
 
-/**
- * The Resource index: every listed page of every kind, one entry per locale the page is exported in, projected from
- * the page catalogue's lists and never stored, so it cannot hold a page the site does not list. Title and description
- * are each composition's or Event's own words.
- */
 export function resourceIndex(): ResourceEntry[] {
   const listed = [
     ...listedEpisodePages(),

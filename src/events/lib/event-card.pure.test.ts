@@ -1,14 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { eventCard } from './event-card.pure';
 
-/*
- * One Event's card (design-ADR 0016, Delivery): its words from the Events area's Translation files, its date and
- * Episode count in the reader's locale. The words are the AXEL seminar's, written out by hand; an Event's words are
- * keyed by the Event registry's slugs, so the card is built for that registered Event.
- */
-
+// decision: docs/adr/0016-content-data-model.md
 const SLUG = '2026-10-23-axel-agentic-workflow';
-/** A Playlist entry as the served Event lists it: only its Episode's slug read here, and the anchor it opens at. */
 const listed = (slug: string, anchor?: string) => ({ episode: { slug }, ...(anchor === undefined ? {} : { anchor }) });
 const RECORD = {
   slug: SLUG,
@@ -18,7 +12,6 @@ const RECORD = {
   platform: 'zoom',
   playlist: { episodes: [listed('alpha'), listed('beta'), listed('gamma')] },
 } as const;
-/** The Tags' names and tooltips as page assembly reads them from their Translation files, written out by hand. */
 const TAG_WORDS = {
   'context-engineering': { name: 'Context engineering', tooltip: 'Right context, right time' },
   'agentic-ai': { name: 'Agentic AI', tooltip: 'AI that plans and acts' },
@@ -139,7 +132,7 @@ describe('failure cases', () => {
     const unknown = { ...RECORD, slug: 'no-such-event' };
     const expected = 'No words name the Event "no-such-event" in en';
     // ACT
-    // @ts-expect-error -- an Event's words are keyed by the registered slugs only
+    // @ts-expect-error
     const build = () => eventCard(unknown, 'en', TAG_WORDS);
     // ASSERT
     expect(build).toThrow(expected);

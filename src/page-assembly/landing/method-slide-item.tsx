@@ -2,7 +2,6 @@ import type { FrameworkSlideData } from '@/page-assembly/landing/framework-slide
 import { Car, HandHelping, RefreshCw, Undo2, Users, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-/** A PROOF card with its copy resolved for the page's locale. */
 export type MethodCard = Pick<FrameworkSlideData, 'id' | 'step' | 'letter' | 'iconName'> & {
   title: string;
   claim: string;

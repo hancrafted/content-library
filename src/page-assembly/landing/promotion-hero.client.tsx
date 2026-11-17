@@ -43,10 +43,7 @@ function usePromiseInteraction() {
 
 const EPISODES_SECTION = 'episodes';
 
-/**
- * Glides to the Episodes section on this page instead of jumping; a modified click keeps the link's own behaviour.
- * The URL is left alone (FE-001 §2): the section is a place on the page, not state to share.
- */
+// decision: FE-001 §2
 const isPlainClick = (event: MouseEvent) =>
   event.button === 0 && !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
 
@@ -127,7 +124,6 @@ function SceneControls({ labels, burst }: { labels: PromotionHeroProps['labels']
 
 export function PromotionHero(props: PromotionHeroProps) {
   const root = useRef<HTMLElement>(null);
-  // Transient: the illustrated workload is not the reader's application state.
   const { draining, events } = usePromiseInteraction();
   const { burst, finish, setProximity } = usePromotionAnimation(root, draining);
   const ink = {

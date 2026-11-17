@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 
 type MethodT = Awaited<ReturnType<typeof getTranslations<'landing.method'>>>;
 
-/** The note's `<link>` target in this locale, plus the screen-reader notice that it opens a new tab (FE-003 §2.2). */
+// decision: FE-003 §2.2
 interface NoteLink {
   locale: Locale;
   newTab: string;
@@ -30,7 +30,6 @@ function cardNote(slide: FrameworkSlideData, t: MethodT, { locale, newTab }: Not
   });
 }
 
-/** Resolves the PROOF cards' copy on the server and hands it to the scroll-driven rail. */
 export async function MethodSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.method' });
   const newTab = (await getTranslations({ locale, namespace: 'nav' }))('newTab');

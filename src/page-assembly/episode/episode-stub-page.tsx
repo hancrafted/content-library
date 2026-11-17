@@ -3,10 +3,6 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import { localizePath } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
-/**
- * Static stub for legacy /episode/<slug> paths (#85).
- * Forwards with <meta http-equiv="refresh"> to /episodes/<slug> and declares the new URL canonical.
- */
 export function EpisodeStubPage({ slug, locale }: { slug: string; locale: Locale }) {
   if (!isEpisodesPathSlug(slug)) notFound();
   const target = localizePath(episodeRoute(slug), locale);

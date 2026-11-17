@@ -27,7 +27,6 @@
   transform-box: view-box;
   transform-origin: 187px 60px;
 }
-/* Final state is the default; motion only applies when allowed. Held back while the sketch is below the fold. */
 @media (prefers-reduced-motion: no-preference) {
   .draw {
     stroke-dasharray: 1;

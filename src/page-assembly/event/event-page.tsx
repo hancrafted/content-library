@@ -23,10 +23,6 @@ import { RelatedEpisodes } from './event-related';
 import { SidePanelBottom, SidePanelTop } from './event-side-panel';
 import type { EventT } from './event-translator';
 
-/**
- * An Event page's title and description in one locale, for its metadata, with its treatment: an Event whose Playlist
- * is unlisted is `noindex` and out of the sitemap.
- */
 export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
   const { title, description } = eventCopy(slug, locale);
   return { title, description, treatment: treatmentOf({ kind: 'event', event: slug }) };
@@ -41,7 +37,6 @@ function Fact({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode 
   );
 }
 
-/** The day as the reader's locale writes it, with the start time when the Event has one. */
 function DateFact({ card }: { card: EventCard }) {
   return (
     <Fact icon={CalendarDays}>
@@ -59,10 +54,6 @@ interface FactsProps {
   t: EventT;
 }
 
-/**
- * The facts, stacked in the side panel: the kind, the date with the time when the Event has one, where it takes
- * place, the Audience and the Episode count.
- */
 function Facts({ card, record, t }: FactsProps) {
   return (
     <ul data-event-facts className="flex flex-col gap-2 text-body text-muted-foreground">
@@ -83,10 +74,8 @@ function Facts({ card, record, t }: FactsProps) {
   );
 }
 
-/** The Playlist's Episodes as entries of the Playlist list, each card a compact Episode card built here. */
 function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: CardLabels): PlaylistEntry[] {
   return cards.map((card) => ({
-    // An Episode listed again at an anchor shares its slug, so its route (anchor and all) keys it.
     key: card.route ?? card.slug,
     linked: card.route !== null,
     card: (className: string) => (
@@ -112,7 +101,6 @@ interface MainColumnProps {
   t: EventT;
 }
 
-/** The main column: the description, the past notice, the Playlist and the related Episodes. */
 function MainColumn({ card, record, entries, related, locale, t }: MainColumnProps) {
   return (
     <div className="lg:col-start-1 lg:row-span-2 lg:row-start-2">
@@ -128,7 +116,6 @@ interface LayoutProps extends Omit<MainColumnProps, 'related' | 'entries'> {
   main: Pick<MainColumnProps, 'entries' | 'related'>;
 }
 
-/** The page's two-column frame: the title, the side panel's top, the main column and the side panel's rest. */
 function EventLayout({ main, ...column }: LayoutProps) {
   const { card, record, t } = column;
   return (
@@ -149,14 +136,7 @@ function EventLayout({ main, ...column }: LayoutProps) {
   );
 }
 
-/**
- * An Event's own page, (design-ADR 0016, Routes and visibility): two columns from `lg`. The main column holds the
- * title, description, for a past Event the notice, the Episodes its Playlist presents
- * as a numbered list of compact cards, and other Episodes to watch. The side panel holds the image, the facts, the
- * Organizers, the listing and the references. Every part sits once in the DOM, in the order a screen reader and the
- * stacked page read it: the image and facts right after the title, the Organizers, listing and references after the
- * main column. The grid only places those two groups in the second column; nothing is reordered visually.
- */
+// decision: docs/adr/0016-content-data-model.md
 export async function EventPage({ slug, locale }: { slug: string; locale: Locale }) {
   const record = findEvent(slug);
   if (record === undefined) notFound();

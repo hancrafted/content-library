@@ -18,7 +18,6 @@ function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }
   );
 }
 
-/** A small mono heading with a hairline running out to the edge: names a part of the section without competing with its h2. */
 function PartHeading({ children }: { children: string }) {
   return (
     <h3 className="mb-6 flex items-center gap-4 font-mono text-xs font-semibold uppercase tracking-widest text-foreground">
@@ -28,10 +27,6 @@ function PartHeading({ children }: { children: string }) {
   );
 }
 
-/**
- * The landing's Episodes section: a Spotlight of the hottest
- * published Episodes to click straight into, plus a link to browse all Episodes; the Resources have their own overview.
- */
 export async function EpisodesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale });
   const labels = cardLabels((key) => t(`episodeBrowser.${key}`));

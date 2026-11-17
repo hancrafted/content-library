@@ -1,13 +1,9 @@
 import type { TagId } from '@/content-store/schemas/fields';
 import type { ResourceKind } from './resource-index.pure';
 
-/*
- * The Resources overview's filter (design-ADR 0019, mirroring the Events overview's): a search over title,
- * description and Tag names, Tag chips and a kind filter. A chosen group keeps a Resource that matches any of its
- * choices; the search and the two groups combine with AND. The state is transient (FE-001). No React (FE-007 §3).
- */
-
-/** What the visitor narrowed the overview to; nothing chosen keeps every Resource. */
+// decision: FE-007 §3
+// decision: FE-001 §1.3
+// decision: docs/adr/0019-resources-overview.md
 export interface ResourceSelection {
   readonly query: string;
   readonly tags: readonly string[];
@@ -16,7 +12,6 @@ export interface ResourceSelection {
 
 export const NO_SELECTION: ResourceSelection = { query: '', tags: [], kinds: [] };
 
-/** What the filter reads of a card: its slug, kind, words and Tags, in the reader's locale. */
 export interface FilterableResource {
   readonly slug: string;
   readonly kind: string;
@@ -25,7 +20,6 @@ export interface FilterableResource {
   readonly tags: readonly { readonly id: string; readonly label: string }[];
 }
 
-/** One chip: the Tag or kind, its name and how many Resources carry it. */
 export interface ResourceChoice {
   readonly id: string;
   readonly label: string;
@@ -34,7 +28,6 @@ export interface ResourceChoice {
 
 const fold = (text: string) => text.trim().toLocaleLowerCase();
 
-/** The slugs of the Resources the selection keeps, in the order given. */
 export function matchingResources(
   cards: readonly FilterableResource[],
   selection: ResourceSelection,
@@ -49,7 +42,6 @@ export function matchingResources(
   return new Set(kept.map((card) => card.slug));
 }
 
-/** A chip for each Tag at least one Resource carries, in the vocabulary's order, with how many carry it. */
 export function resourceTagChoices(
   cards: readonly FilterableResource[],
   vocabulary: readonly TagId[],
@@ -60,7 +52,6 @@ export function resourceTagChoices(
   });
 }
 
-/** A chip for each kind at least one Resource has, in the closed order, named by `names`, with how many have it. */
 export function resourceKindChoices(
   cards: readonly FilterableResource[],
   kinds: readonly ResourceKind[],

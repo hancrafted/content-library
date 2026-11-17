@@ -4,20 +4,13 @@ import { cn } from '@/shared/lib/utils';
 import { History } from 'lucide-react';
 
 interface PastNoticeProps {
-  /** The Event's date. */
   date: IsoDate;
-  /** The day the page is built; an Event dated before it is past. */
   buildDay: IsoDate;
-  /** The fixed line, read from `events.pastNotice` in the page's locale. */
   text: string;
   className?: string;
 }
 
-/**
- * The past Event's notice (design-ADR 0016, Past Event): one fixed line saying the content is kept up to date and may
- * differ from the recording, as a bordered, warning-tinted note. It sits above the Playlist on the Event page; an
- * upcoming Event renders nothing. Not dismissible, no date.
- */
+// decision: docs/adr/0016-content-data-model.md
 export function PastNotice({ date, buildDay, text, className }: PastNoticeProps) {
   if (!isPastEvent(date, buildDay)) return null;
   return (
