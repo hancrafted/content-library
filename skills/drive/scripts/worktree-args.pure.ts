@@ -1,11 +1,21 @@
-// The worktree command's arguments: `new|done <branch> [--base <branch>] [--kill]`
-// `sync [--base <branch>]` and `preflight`. Without --base a worktree branches from the config's remote base branch
+// The worktree command's arguments: `new|done <branch> [--base <branch>] [--kill]` and
+// `sync [--base <branch>]`. Without --base a worktree branches from the config's remote base branch
 // and finishing it syncs the local one; with it, both work against that branch instead.
 // --kill (done only) stops the processes that hold the worktree.
 
+import type { WorktreeConfig } from './config.pure.ts';
+
+/** The commands that take no branch: they work on the current worktree. */
+const BRANCHLESS = ['sync'] as const;
+const COMMANDS = ['new', 'done', ...BRANCHLESS] as const;
+type Command = (typeof COMMANDS)[number];
+
+const isCommand = (word: string | undefined): word is Command => (COMMANDS as readonly string[]).includes(word ?? '');
+const isBranchless = (command: Command): boolean => (BRANCHLESS as readonly string[]).includes(command);
+
 export interface WorktreeArgs {
-  command: 'new' | 'done' | 'sync' | 'preflight';
-  /** Empty for `sync` and `preflight`, which work on the current worktree. */
+  command: Command;
+  /** Empty for `sync`, which works on the current worktree. */
   branch: string;
   /** The branch to start from and merge into, or null for the config's remote base branch. */
   base: string | null;
@@ -28,27 +38,26 @@ function readOwner(branch: string): Owner | { error: string } {
   if (split === -1) return { parent: null, issue: null };
   const task = branch.slice(split + 2);
   if (task === '')
-    return { error: `'${branch}' needs <parent>--<task>: the parent before the first --, the task after it` };
+    return {
+      error: `'${branch}' needs <parent>--<task>: the parent before the first --, the task after it`,
+    };
   const ticket = /^(\d+)-./.exec(task);
-  return { parent: branch.slice(0, split), issue: ticket === null ? null : Number(ticket[1]) };
+  return {
+    parent: branch.slice(0, split),
+    issue: ticket === null ? null : Number(ticket[1]),
+  };
 }
 
 /** What the config says about the command line: how a hint names the CLI, and the branch worktrees start from. */
-export interface Naming {
-  /** The command that runs `drive worktree`, as a hint prints it. */
-  invoke: string;
-  baseBranch: string;
-}
+export type Naming = Pick<WorktreeConfig, 'invoke' | 'baseBranch'>;
 
 const usage = (invoke: string) =>
-  `usage: ${invoke} new <branch> [--base <branch>]  |  ${invoke} done <branch> [--base <branch>] [--kill]  |  ${invoke} sync [--base <branch>]  |  ${invoke} preflight`;
+  `usage: ${invoke} new <branch> [--base <branch>]  |  ${invoke} done <branch> [--base <branch>] [--kill]  |  ${invoke} sync [--base <branch>]`;
 
 /** A branch name, not a missing argument or a flag in its place. */
 function isBranch(value: string | undefined): value is string {
   return value !== undefined && value !== '' && !value.startsWith('--');
 }
-
-const COMMANDS: readonly string[] = ['new', 'done', 'sync', 'preflight'];
 
 interface Flags {
   positional: string[];
@@ -68,19 +77,14 @@ function readFlags(tokens: readonly string[]): Flags | { error: string } {
   return flags;
 }
 
-/** The commands that take no branch: they work on the current worktree. */
-const BRANCHLESS = ['sync', 'preflight'];
-
-function checkShape(command: string, flags: Flags, invoke: string): string | null {
-  if (!COMMANDS.includes(command)) return `unknown command '${command}'; expected new, done, sync or preflight`;
+function checkShape(command: Command, flags: Flags, invoke: string): string | null {
   const branches = flags.positional.filter((word) => isBranch(word));
-  if (flags.positional.length !== branches.length || branches.length !== (BRANCHLESS.includes(command) ? 0 : 1))
+  if (flags.positional.length !== branches.length || branches.length !== (isBranchless(command) ? 0 : 1))
     return usage(invoke);
   return checkFlags(command, flags);
 }
 
-function checkFlags(command: string, flags: Flags): string | null {
-  if (flags.base !== null && command === 'preflight') return '--base does not apply to preflight';
+function checkFlags(command: Command, flags: Flags): string | null {
   return flags.kill && command !== 'done' ? '--kill belongs to done' : null;
 }
 
@@ -88,13 +92,17 @@ export function parseArgs(argv: readonly string[], invoke: string): WorktreeArgs
   const [command, ...tokens] = argv;
   const flags = readFlags(tokens);
   if ('error' in flags) return flags;
+  if (!isCommand(command))
+    return {
+      error: `unknown command '${command}'; expected new, done or sync`,
+    };
   const error = checkShape(command, flags, invoke);
   if (error !== null) return { error };
   const branch = flags.positional[0] ?? '';
   const owner = readOwner(branch);
   if ('error' in owner) return owner;
   return {
-    command: command as WorktreeArgs['command'],
+    command,
     branch,
     base: flags.base,
     kill: flags.kill,

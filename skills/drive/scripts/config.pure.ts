@@ -1,6 +1,9 @@
-// The project config the `drive` CLI reads from docs/drive/project.yml (design-ADR 0027): every repo-specific value
+// The project config the `drive` CLI reads from its config file (design-ADR 0027): every repo-specific value
 // the worktree commands would otherwise hard-code. Pure: text in, a validated config or an error out.
 import { parse } from 'yaml';
+
+/** Where a project's config lives, relative to its checkout. */
+export const CONFIG_PATH = 'docs/drive/project.yml';
 
 export interface WorktreeConfig {
   /** Where worktrees live, relative to the main checkout; a branch's folder is its name with `/` as `-`. */
@@ -12,7 +15,7 @@ export interface WorktreeConfig {
   invoke: string;
   /** Shell commands run in a new worktree, in order. */
   install: string[];
-  /** The shell command `drive worktree preflight` runs, or null. */
+  /** The shell command `new` runs in the new worktree after install, or null. */
   preflight: string | null;
   /** A module, relative to the repo, exporting `withLock` (see WithLock); null runs merges without a lock. */
   lock: string | null;
@@ -61,24 +64,32 @@ function problem(key: keyof WorktreeConfig, value: unknown): string | null {
 /** The `worktree` section as a config, or the first thing wrong with it. */
 function readWorktree(section: Record<string, unknown>): WorktreeConfig | { error: string } {
   const unknown = Object.keys(section).find((key) => !(KEYS as string[]).includes(key));
-  if (unknown !== undefined) return { error: `unknown worktree key '${unknown}'; expected ${KEYS.join(', ')}` };
+  if (unknown !== undefined)
+    return {
+      error: `unknown worktree key '${unknown}'; expected ${KEYS.join(', ')}`,
+    };
   const wrong = KEYS.map((key) => problem(key, section[key])).find((message) => message !== null);
   if (wrong !== undefined && wrong !== null) return { error: wrong };
-  return { ...DEFAULTS, ...Object.fromEntries(Object.entries(section).filter(([, value]) => value != null)) };
+  return {
+    ...DEFAULTS,
+    ...Object.fromEntries(Object.entries(section).filter(([, value]) => value != null)),
+  };
 }
 
-/** Parses the text of docs/drive/project.yml; an empty file or a missing `worktree` section gives the defaults. */
+/** Parses the text of the config file; an empty file or a missing `worktree` section gives the defaults. */
 export function parseConfig(text: string): DriveConfig | { error: string } {
   let doc: unknown;
   try {
     doc = parse(text);
   } catch (error) {
-    return { error: `docs/drive/project.yml is not valid YAML: ${(error as Error).message}` };
+    return {
+      error: `${CONFIG_PATH} is not valid YAML: ${(error as Error).message}`,
+    };
   }
   const root = doc ?? {};
-  if (!isRecord(root)) return { error: 'docs/drive/project.yml must be a mapping' };
+  if (!isRecord(root)) return { error: `${CONFIG_PATH} must be a mapping` };
   const section = root.worktree ?? {};
-  if (!isRecord(section)) return { error: 'worktree in docs/drive/project.yml must be a mapping' };
+  if (!isRecord(section)) return { error: `worktree in ${CONFIG_PATH} must be a mapping` };
   const worktree = readWorktree(section);
   return 'error' in worktree ? worktree : { worktree };
 }

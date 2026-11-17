@@ -8,14 +8,20 @@ import { describe, expect, it } from 'vitest';
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
 
 const CLI = path.join(import.meta.dirname, 'drive.ts');
-const LOCK = path.join(import.meta.dirname, '../../../tools/load/lock.ts');
+const LOCK = path.join(import.meta.dirname, 'lock.fixture.ts');
 
 const git = (cwd: string, ...args: string[]): string =>
-  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
+  execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+    cwd,
+    encoding: 'utf8',
+  }).trim();
 
 /** Runs `drive worktree <args>` in `cwd`. */
 const drive = (cwd: string, ...args: string[]) =>
-  spawnSync(process.execPath, [CLI, 'worktree', ...args], { cwd, encoding: 'utf8' });
+  spawnSync(process.execPath, [CLI, 'worktree', ...args], {
+    cwd,
+    encoding: 'utf8',
+  });
 
 const driveAsync = (cwd: string, ...args: string[]): Promise<{ status: number | null; out: string }> =>
   new Promise((resolve) => {
@@ -33,7 +39,7 @@ const CONFIG = (lock: string) =>
     '  baseBranch: main',
     '  invoke: drive worktree',
     '  install: [touch installed]',
-    '  preflight: echo preflight-ran',
+    '  preflight: echo preflight-ran > ../preflight-$(basename $PWD).txt',
     `  lock: ${lock}`,
     '  beforeRemove: ["echo before $DRIVE_BRANCH > $DRIVE_ROOT/before.txt"]',
     '  afterMerge: ["echo $DRIVE_BASE $DRIVE_BRANCH > $DRIVE_ROOT/merged.txt"]',
@@ -103,7 +109,7 @@ describe('drive worktree', () => {
       // ACT
       const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
       // ASSERT
-      expect(result.status).toBe(0);
+      expect(result.status, result.stderr).toBe(0);
       expect(existsSync(tree)).toBe(false);
       expect(existsSync(path.join(trees, 'feat-x', 'feat-x--1-task.txt'))).toBe(true);
       expect(git(main, 'rev-list', '--merges', '--count', 'feat/x')).toBe('1');
@@ -145,7 +151,7 @@ describe('drive worktree', () => {
       expect(existsSync(path.join(main, '.trees', 'feat-x', 'feat-x--2-b.txt'))).toBe(true);
     });
 
-    it('sync merges the base into the worktree branch, and preflight runs the configured command', () => {
+    it('sync merges the base into the worktree branch', () => {
       // ARRANGE
       const { main, trees } = fixture();
       drive(main, 'new', 'feat/x');
@@ -155,15 +161,52 @@ describe('drive worktree', () => {
       git(path.join(trees, 'feat-x'), 'commit', '-qm', 'base moves');
       // ACT
       const synced = drive(tree, 'sync', '--base', 'feat/x');
-      const preflight = drive(main, 'preflight');
       // ASSERT
       expect(synced.status).toBe(0);
       expect(existsSync(path.join(tree, 'base.txt'))).toBe(true);
-      expect(preflight.stdout).toContain('preflight-ran');
+    });
+
+    it('runs the configured preflight in the new worktree after install', () => {
+      // ARRANGE
+      const { main, trees } = fixture();
+      // ACT
+      const result = drive(main, 'new', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(0);
+      expect(readFileSync(path.join(trees, 'preflight-feat-x.txt'), 'utf8')).toContain('preflight-ran');
+    });
+
+    it('warns that merges are not serialized when the config has no lock', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(config, readFileSync(config, 'utf8').replace(/ {2}lock: .*\n?/, ''));
+      git(main, 'commit', '-qam', 'no lock');
+      git(main, 'push', '-q', 'origin', 'main');
+      // ACT
+      const result = drive(main, 'new', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(0);
+      expect(result.stderr).toContain('merges into a base are not serialized');
     });
   });
 
   describe('failure cases', () => {
+    it('reports a failing preflight, exits non-zero and leaves the worktree in place', () => {
+      // ARRANGE
+      const { main, trees } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(config, readFileSync(config, 'utf8').replace(/ {2}preflight: .*/, '  preflight: exit 4'));
+      git(main, 'commit', '-qam', 'failing preflight');
+      git(main, 'push', '-q', 'origin', 'main');
+      // ACT
+      const result = drive(main, 'new', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain('preflight failed');
+      expect(existsSync(path.join(trees, 'feat-x'))).toBe(true);
+    });
+
     it('refuses a subagent branch without its parent as --base and names the configured invocation', () => {
       // ARRANGE
       const { main } = fixture();

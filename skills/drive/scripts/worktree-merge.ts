@@ -1,9 +1,8 @@
 // Merging a finished branch into its --base, before its worktree is removed.
-import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { git } from './git.ts';
+import { capture, git } from './git.ts';
 
 /** A worktree's own git dir, where git keeps its merge, rebase and cherry-pick state. */
 const gitDirOf = (tree: string) => git(tree, ['rev-parse', '--absolute-git-dir']).stdout.trim();
@@ -22,10 +21,7 @@ function rebasing(tree: string): string | null {
  * detached worktree that is rebasing `base` counts too.
  */
 function checkoutOf(base: string, cwd: string): string | null {
-  const listing = execFileSync('git', ['worktree', 'list', '--porcelain'], {
-    cwd,
-    encoding: 'utf8',
-  });
+  const listing = capture('git', ['worktree', 'list', '--porcelain'], cwd);
   for (const entry of listing.split('\n\n')) {
     const lines = entry.split('\n');
     const dir = lines.find((line) => line.startsWith('worktree '))?.slice('worktree '.length);
@@ -58,7 +54,7 @@ export interface Timing {
 }
 
 /**
- * The project's named lock, in the shape of tools/load/lock.ts's `withLock`; the config names the module, so the
+ * The project's named lock, as the module the config names exports it (`withLock`), so the
  * skill owns no locking. Runs `fn` holding the lock `name`, which a directory inside the repository (`cwd`) scopes.
  */
 export type WithLock = <T>(
@@ -174,7 +170,10 @@ export function mergeIntoBase(
   base: string,
   options: MergeContext & Partial<Timing>,
 ): Promise<'merged' | 'already-merged'> {
-  const { cwd, log, withLock, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
+  const { cwd, log, withLock, pollMs, timeoutMs } = {
+    ...BUSY_WAIT,
+    ...options,
+  };
   return withMergeLock(base, { cwd, log, withLock }, async () => {
     const deadline = Date.now() + timeoutMs;
     const built = { on: '', commit: '' };

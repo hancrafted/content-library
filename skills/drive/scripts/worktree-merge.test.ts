@@ -3,8 +3,7 @@ import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, statS
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
-import { deadPid, plantLock } from '../../../tools/load/lock.fixture.ts';
-import { withLock } from '../../../tools/load/lock.ts';
+import { withLock } from './lock.fixture.ts';
 import { forkDate, mergeIntoBase, type Timing, withMergeLock } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
@@ -101,7 +100,7 @@ async function waitingOnBusyBase(lines: string[]): Promise<void> {
 }
 
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
-const LOCK = path.join(import.meta.dirname, '../../../tools/load/lock.ts');
+const LOCK = path.join(import.meta.dirname, 'lock.fixture.ts');
 
 /** Runs mergeIntoBase in its own process, as a second `done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
@@ -208,7 +207,11 @@ describe('mergeIntoBase', () => {
       git(path.join(path.dirname(baseTree), 'onto-tree'), 'commit', '-aqm', 'edit a on onto');
       expect(() => git(baseTree, 'rebase', 'onto')).toThrow();
       // ACT
-      const run = mergeIntoBase('work', 'base', { ...merging(main), pollMs: 50, timeoutMs: 300 });
+      const run = mergeIntoBase('work', 'base', {
+        ...merging(main),
+        pollMs: 50,
+        timeoutMs: 300,
+      });
       // ASSERT
       await expect(run).rejects.toThrow(/rebase/);
       expect(inGitDir(baseTree, 'rebase-merge')).toBe(true);
@@ -230,18 +233,6 @@ describe('mergeIntoBase', () => {
       const result = await child;
       expect(result?.code, result?.output).toBe(0);
       expect(result?.output).toMatch(/waiting for another merge into base/);
-    });
-
-    it('takes over a merge lock left by a process that was killed mid-merge', async () => {
-      // ARRANGE
-      const { main } = fixture();
-      const lock = path.join(main, '.git', 'locks', 'wt-merge%2Fbase.lock');
-      plantLock(lock, { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
-      // ACT
-      const result = await mergeIntoBase('work', 'base', merging(main));
-      // ASSERT
-      expect(result).toBe('merged');
-      expect(existsSync(lock)).toBe(false);
     });
 
     it('waits while the base is mid-merge, keeps the hand-resolved file, then merges once that merge is committed', async () => {

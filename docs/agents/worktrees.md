@@ -5,7 +5,7 @@ title: Worktrees
 
 # Worktrees
 
-`npm run wt:new|done|sync` are aliases of `drive worktree new|done|sync`, the CLI in `skills/drive/scripts/` (`npm run drive -- worktree <command>`). Every value specific to this repo (worktree folder, base branch, install steps, the lock module, what runs before and after a finish) is in `docs/drive/project.yml`; `npm run drive -- worktree preflight` runs its `preflight` command.
+`npm run wt:new|done|sync` are aliases of `drive worktree new|done|sync`, the CLI in `skills/drive/scripts/` (`npm run drive -- worktree <command>`). Every value specific to this repo (worktree folder, base branch, install steps, the lock module, what runs before and after a finish) is in `docs/drive/project.yml`; `new` runs its `preflight` command after the install steps.
 
 Worktrees live in `.worktrees/<branch with / as ->`, branched from freshly fetched `origin/main`. This overrides any worktree path a handoff names (`../cl-…` included).
 
