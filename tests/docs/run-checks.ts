@@ -1,4 +1,3 @@
-import type { NamedCheck } from '@/episodes/lib/composed-page-checks';
 import { checkPipeline } from '@/pipeline/lib/episode-pipeline.pure';
 import { checkReferenceJobs } from '@/pipeline/lib/episode-reference-jobs.pure';
 import { checkResearchJobs } from '@/pipeline/lib/episode-research-jobs.pure';
@@ -8,6 +7,7 @@ import { checkVoiceScriptDiff } from '@/pipeline/lib/episode-voice-script.pure';
 import { type Finding } from '@/pipeline/lib/finding.pure';
 import { checkResearchFolders, researchCategories } from '@/pipeline/lib/research-folder.pure';
 import { gateTier, verifiedProblems } from '@/pipeline/lib/staging-file.pure';
+import { RUN_CHECKS_TEST, type NamedCheck } from '@/shared/lib/folder-check';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import {
@@ -32,9 +32,6 @@ import {
  * A check returns findings and never throws, so a broken Run's test names what broke. Add a new Run-level check here:
  * every Run's test runs it without being edited.
  */
-
-/** The test file beside every Run, which the checks never read as a staging file. */
-export const RUN_CHECKS_TEST = 'run-checks.test.ts';
 
 const shown = (staging: string, findings: readonly Finding[]): string[] =>
   findings.map(({ file, message }) => `${staging}/${file}: ${message}`);

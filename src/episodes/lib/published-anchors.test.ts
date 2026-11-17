@@ -1,38 +1,51 @@
-import { episodeRef, guideRef, templateRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
-import { EXPLORABLE_PAGE_SLUGS, GUIDE_SLUGS } from '@/content-store/catalogue/record-routes';
-import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
+import { episodeRef, guideRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { boundPages, isBound, lostAnchors, publishedAnchorsOf } from './published-anchors';
+import { publishedAnchorFindings, readPublishedSnapshot } from './published-anchors';
 
 /*
- * Published anchors (FE-002): the parts each page folder's Episode-level checks read to hold its snapshot. Whether
- * every bound page still produces its published anchors runs per page folder (`composed-page-checks.ts`).
+ * Published anchors (FE-002): reading a page folder's snapshot, and judging it against the anchors a composition
+ * produces. Each page folder's composition checks run both for its own folder (`composed-page-checks.ts`).
  */
+
+/** A folder no page lives in, so it holds no snapshot. */
+const NO_SNAPSHOT = path.join(import.meta.dirname, 'no-such-episode');
+
+/** A composition of one Section, `foundations`, with one page Slide, `why`. */
+const COMPOSITION = { sections: [[{ slug: 'foundations' }, { slug: 'why' }] as const] };
 
 describe('success cases', () => {
   it('binds a Template and a Guide, which have no status, and a published Episode', () => {
     // ARRANGE
     const pages = [templateRef('episode-template'), guideRef('setup-ai-agent-and-starter-folder')];
     const published = episodeRef('maintaining-markdown-for-ai');
-    const expected = [true, true, true];
+    const snapshot = { anchors: ['foundations--gone'] };
+    const expected = [1, 1, 1];
     // ACT
-    const bound = [...pages.map((page) => isBound(page, undefined)), isBound(published, 'published')];
+    const found = [
+      ...pages.map(
+        (page) => publishedAnchorFindings(page, { status: undefined, published: snapshot }, COMPOSITION).length,
+      ),
+      publishedAnchorFindings(published, { status: 'published', published: snapshot }, COMPOSITION).length,
+    ];
     // ASSERT
-    expect(bound).toEqual(expected);
+    expect(found).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
   it('names a published anchor the walk stopped producing and says it was shared', () => {
     // ARRANGE
-    const published = ['foundations', 'foundations--why'];
-    const produced = ['foundations'];
-    const expectedAnchor = 'foundations--why';
+    const snapshot = { anchors: ['foundations', 'foundations--gone'] };
+    const expectedAnchor = 'foundations--gone';
     const expectedShared = 'published anchor';
     const expectedAdvice = 'Remove it from published-anchors.json only deliberately.';
     // ACT
-    const [message, ...rest] = lostAnchors({ slug: 'demo', published, produced });
+    const [message, ...rest] = publishedAnchorFindings(
+      templateRef('grids'),
+      { status: undefined, published: snapshot },
+      COMPOSITION,
+    );
     // ASSERT
     expect(message).toContain(expectedAnchor);
     expect(message).toContain(expectedShared);
@@ -40,42 +53,49 @@ describe('failure cases', () => {
     expect(rest).toEqual([]);
   });
 
-  it('fails an Episode that has no published-anchors.json and prints the sorted file as oxfmt writes it', async () => {
+  it('reads no snapshot from a folder without one, and hands the sorted file as oxfmt writes it', async () => {
     // ARRANGE
-    const unregistered = episodeRef('no-such-episode');
     const produced = ['demo--why', 'demo', 'demo--how'];
-    const expectedFile = path.join('no-such-episode', 'published-anchors.json');
-    const expectedJson = '\n["demo", "demo--how", "demo--why"]\n\n';
+    const expected = {
+      missing: {
+        file: path.join(NO_SNAPSHOT, 'published-anchors.json'),
+        contents: '["demo", "demo--how", "demo--why"]\n',
+      },
+    };
     // ACT
-    const read = publishedAnchorsOf(unregistered, produced);
+    const snapshot = await readPublishedSnapshot(NO_SNAPSHOT, produced);
     // ASSERT
-    await expect(read).rejects.toThrow(expectedFile);
-    await expect(read).rejects.toThrow(expectedJson);
+    expect(snapshot).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('skips an upcoming Episode with a page and binds a published one', () => {
+  it('leaves an upcoming Episode unbound, so its anchors may still move', () => {
     // ARRANGE
-    const episodes: { ref: EpisodeRef; status: EpisodeStatus }[] = [
-      { ref: episodeRef('maintaining-markdown-for-ai'), status: 'published' },
-      { ref: episodeRef('ai-token-economy'), status: 'upcoming' },
-    ];
-    const expected = ['episode-template', ...EXPLORABLE_PAGE_SLUGS, ...GUIDE_SLUGS, 'maintaining-markdown-for-ai'];
+    const snapshot = { anchors: ['foundations--gone'] };
+    const expected: string[] = [];
     // ACT
-    const bound = boundPages(episodes, ['episode-template']).map(({ id }) => id);
+    const found = publishedAnchorFindings(
+      episodeRef('ai-token-economy'),
+      { status: 'upcoming', published: snapshot },
+      COMPOSITION,
+    );
     // ASSERT
-    expect(bound).toEqual(expected);
+    expect(found).toEqual(expected);
   });
 
   it('allows a new anchor the snapshot does not list', () => {
     // ARRANGE
-    const published = ['foundations'];
-    const produced = ['foundations', 'foundations--brand-new'];
+    const snapshot = { anchors: ['foundations'] };
+    const expected: string[] = [];
     // ACT
-    const lost = lostAnchors({ slug: 'demo', published, produced });
+    const found = publishedAnchorFindings(
+      templateRef('grids'),
+      { status: undefined, published: snapshot },
+      COMPOSITION,
+    );
     // ASSERT
-    expect(lost).toEqual([]);
+    expect(found).toEqual(expected);
   });
 
   it('prints a list too long for one line one anchor per line, as oxfmt writes it', async () => {
@@ -86,7 +106,7 @@ describe('edge cases', () => {
       'why-context-runs-out--the-fullness-gauge',
       'why-context-runs-out--levers',
     ];
-    const expectedJson = [
+    const expected = [
       '[',
       '  "why-context-runs-out",',
       '  "why-context-runs-out--levers",',
@@ -96,8 +116,10 @@ describe('edge cases', () => {
       '',
     ].join('\n');
     // ACT
-    const read = publishedAnchorsOf(episodeRef('no-such-episode'), produced);
+    const snapshot = await readPublishedSnapshot(NO_SNAPSHOT, produced);
     // ASSERT
-    await expect(read).rejects.toThrow(expectedJson);
+    expect(snapshot).toEqual({
+      missing: { file: path.join(NO_SNAPSHOT, 'published-anchors.json'), contents: expected },
+    });
   });
 });

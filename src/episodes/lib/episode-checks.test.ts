@@ -1,8 +1,8 @@
+import type { GlobEntries } from '@/shared/lib/folder-check';
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { GlobEntries } from './composed-page-checks';
 import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-checks';
 
 /*
@@ -10,6 +10,9 @@ import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-ch
  * entries handed over as `import.meta.glob` would, a loader per `slide.tsx`. Each check reports findings, never throws,
  * so a broken Episode names what broke.
  */
+
+/** The page glob of a fixture folder, which holds Slide folders but no `episode.ts`. */
+const NO_PAGE: GlobEntries = {};
 
 const made: string[] = [];
 
@@ -51,6 +54,7 @@ describe('success cases', () => {
     const checks = episodeChecks(
       dir,
       entries({ hero: { hero: slide('hero') }, 'the-spine': { theSpine: slide('the-spine', ['source']) } }),
+      NO_PAGE,
     );
     const expected: string[] = [];
     // ACT
@@ -67,7 +71,9 @@ describe('success cases', () => {
       'slides/hero keeps under notes.* only the Speaker notes its Slide declares, in every locale (FE-010 §3.1)',
     ];
     // ACT
-    const names = episodeChecks(dir, entries({ hero: { hero: slide('hero') } })).slides.map(({ name }) => name);
+    const names = episodeChecks(dir, entries({ hero: { hero: slide('hero') } }), NO_PAGE).slides.map(
+      ({ name }) => name,
+    );
     // ASSERT
     expect(names).toEqual(expected);
   });
@@ -79,7 +85,7 @@ describe('failure cases', () => {
     const dir = fixture(['slides/hero']);
     const expected = ['slides/hero declares [heading], not [hero]'];
     // ACT
-    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('heading') } })));
+    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('heading') } }), NO_PAGE));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -89,7 +95,7 @@ describe('failure cases', () => {
     const dir = fixture(['slides/hero', 'slides/orphan/i18n']);
     const expected = ['slides/orphan has no slide.tsx'];
     // ACT
-    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('hero') } })));
+    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('hero') } }), NO_PAGE));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -103,7 +109,7 @@ describe('failure cases', () => {
     ];
     // ACT
     const found = await findingsOf(
-      episodeChecks(dir, entries({ hero: { hero: slide('hero', ['source'], ['source', 'stray']) } })),
+      episodeChecks(dir, entries({ hero: { hero: slide('hero', ['source'], ['source', 'stray']) } }), NO_PAGE),
     );
     // ASSERT
     expect(found).toEqual(expected);
@@ -114,7 +120,7 @@ describe('failure cases', () => {
     const dir = fixture(['slides/hero', 'parts', 'client']);
     const expected = ['parts', 'client'];
     // ACT
-    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('hero') } })));
+    const found = await findingsOf(episodeChecks(dir, entries({ hero: { hero: slide('hero') } }), NO_PAGE));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -127,7 +133,7 @@ describe('edge cases', () => {
     const expected = ['slides/hero declares [hero, extra], not [hero]'];
     // ACT
     const found = await findingsOf(
-      episodeChecks(dir, entries({ hero: { hero: slide('hero'), extra: slide('extra') } })),
+      episodeChecks(dir, entries({ hero: { hero: slide('hero'), extra: slide('extra') } }), NO_PAGE),
     );
     // ASSERT
     expect(found).toEqual(expected);
