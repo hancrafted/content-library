@@ -2,13 +2,11 @@ import { AgentTag } from '@/episodes/components/slide-shared/party-notes/agent-t
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
+import type { Trust } from './trust.pure';
 
-/** How much damage a wrong result can do, on a three-step scale. */
-export type RiskValue = 1 | 2 | 3;
+const STEPS: readonly Trust[] = [1, 2, 3];
 
-const STEPS: readonly RiskValue[] = [1, 2, 3];
-
-/** The "If wrong" meter: three squares, filled up to the task's risk. `value` reads out what the squares show. */
+/** The "trust needed" meter: three squares, filled up to the task's risk. `value` reads out what the squares show. */
 export function RiskMeter({
   label,
   value,
@@ -16,7 +14,7 @@ export function RiskMeter({
   marker,
 }: {
   label: string;
-  value: RiskValue;
+  value: Trust;
   valueLabel: string;
   marker?: ReactNode;
 }) {
@@ -36,6 +34,46 @@ export function RiskMeter({
   );
 }
 
+/** One square of the trust-earned meter: filled when earned, dashed while still short of the need, else empty. */
+function trustSquare(step: Trust, earned: Trust, needed: Trust): string {
+  if (step <= earned) return 'size-3 rounded-sm bg-foreground';
+  if (step <= needed) return 'size-3 rounded-sm border border-dashed border-muted-foreground';
+  return 'size-3 rounded-sm border border-foreground';
+}
+
+/**
+ * The "trust earned" meter: three squares, filled up to what the task's check has proved. Squares still short of the
+ * trust needed are dashed, the gap its check has yet to close. `was` is the value before the check, when it changed.
+ */
+export function TrustMeter({
+  label,
+  value,
+  needed,
+  valueLabel,
+  was,
+  marker,
+}: {
+  label: string;
+  value: Trust;
+  needed: Trust;
+  valueLabel: string;
+  was?: string;
+  marker?: ReactNode;
+}) {
+  return (
+    <p className="flex flex-wrap items-center gap-2 text-caption">
+      <span className="font-semibold">{label}</span>
+      <span data-trust-meter={value} role="img" aria-label={valueLabel} className="flex gap-1">
+        {STEPS.map((step) => (
+          <span key={step} className={trustSquare(step, value, needed)} />
+        ))}
+      </span>
+      {marker}
+      {was === undefined ? null : <span className="text-muted-foreground">{was}</span>}
+    </p>
+  );
+}
+
 /** A muted caption line of a note, left out when the note has none. */
 function Aside({ text }: { text: string | undefined }) {
   return text === undefined ? null : <p className="text-caption text-muted-foreground">{text}</p>;
@@ -46,8 +84,10 @@ export interface TaskNoteProps {
   readonly fact: string;
   /** What the task was before it got its check, under the fact. */
   readonly was?: string;
-  /** The risk meter. */
+  /** The trust-needed meter, set by risk. */
   readonly risk: ReactNode;
+  /** The trust-earned meter, set by the check. */
+  readonly trust: ReactNode;
   readonly ifWrong: string;
   readonly checkedBy?: string;
   /** The task's level: its oversight pill, or the move of its pill. */
@@ -62,7 +102,7 @@ export interface TaskNoteProps {
  * checks it, then the level its risk and its check allow.
  */
 export function TaskNote(props: TaskNoteProps) {
-  const { label, fact, was, risk, ifWrong, checkedBy, level, agent, className, targetProps } = props;
+  const { label, fact, was, risk, trust, ifWrong, checkedBy, level, agent, className, targetProps } = props;
   return (
     <div
       data-task-note
@@ -77,6 +117,7 @@ export function TaskNote(props: TaskNoteProps) {
       <Aside text={was} />
       {risk}
       <Aside text={ifWrong} />
+      {trust}
       <Aside text={checkedBy} />
       {level}
     </div>
@@ -106,6 +147,10 @@ export interface Check {
 export interface CheckCardProps {
   readonly heading: string;
   readonly checks: readonly Check[];
+  /** One line saying what a check is. */
+  readonly meaning: string;
+  /** The callout on the heading strip. */
+  readonly callout?: ReactNode;
   readonly className?: string;
   readonly targetProps?: TargetProps;
 }
@@ -122,7 +167,7 @@ function CheckItem({ text, marker }: Check) {
 }
 
 /** The check pinned to a task: its heading strip, the Slide's one `primary` fill, over empty boxes it can pass. */
-export function CheckCard({ heading, checks, className, targetProps }: CheckCardProps) {
+export function CheckCard({ heading, checks, meaning, callout, className, targetProps }: CheckCardProps) {
   return (
     <div
       data-check-card
@@ -131,15 +176,19 @@ export function CheckCard({ heading, checks, className, targetProps }: CheckCard
     >
       <div
         data-check-heading
-        className="rounded-t-md bg-primary px-4 py-1 text-caption font-semibold text-primary-foreground uppercase"
+        className="flex items-center gap-2 rounded-t-md bg-primary px-4 py-1 text-caption font-semibold text-primary-foreground uppercase"
       >
-        {heading}
+        {callout}
+        <span data-check-title>{heading}</span>
       </div>
       <ul className="flex flex-col gap-1 p-3 text-body">
         {checks.map((check) => (
           <CheckItem key={check.text} {...check} />
         ))}
       </ul>
+      <p data-check-meaning className="px-3 pb-3 text-caption text-muted-foreground">
+        {meaning}
+      </p>
     </div>
   );
 }

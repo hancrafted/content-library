@@ -1,5 +1,5 @@
-// The real corpus the staging checks read, for the staging tests in both lanes: the staging folders under
-// docs/episodes/, the new-episode skill's sample Episode and template, the llm-wiki, and the history git keeps of them.
+// The real corpus the staging checks read: the new-episode skill's sample Episode and template, the llm-wiki, a Run's
+// staging folder under docs/episodes/ (for run-checks.ts), and the history git keeps of them.
 import { type PipelineContext } from '@/pipeline/lib/episode-pipeline.pure';
 import { type KnownVisuals } from '@/pipeline/lib/episode-staging.pure';
 import { execFileSync } from 'node:child_process';
@@ -69,14 +69,14 @@ export function knownVisuals(): KnownVisuals {
   };
 }
 
-/** The sample Episode and every staging folder, by the path a failure names. */
-export function stagingFolders(): Record<string, string> {
-  const staging = existsSync(EPISODES)
-    ? readdirSync(EPISODES, { withFileTypes: true })
+/** The folders directly in `folder`, as absolute paths in name order; none when it is missing. */
+export function subfolders(folder: string): string[] {
+  return existsSync(folder)
+    ? readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
-        .map(({ name }) => path.join(EPISODES, name))
+        .map(({ name }) => path.join(folder, name))
+        .sort()
     : [];
-  return Object.fromEntries([SAMPLE, ...staging].map((folder) => [path.relative(ROOT, folder), folder]));
 }
 
 /** The llm-wiki research files, keyed by their path relative to the index. */
@@ -91,28 +91,14 @@ export function llmWikiResearch(): Record<string, string> {
 }
 
 /**
- * Every research folder in the repo, as a repo path: those on disk in each
- * staging folder and in each llm-wiki category folder, and those a per-run
- * pipeline will write.
+ * Every research folder on disk, as a repo path: each Run's under `docs/episodes/<slug>/research/` and each llm-wiki
+ * category's. It reads folder names only, never a Run's files: the cross-Run half of the research-folder check, while
+ * each Run checks its own and the folders its pipeline will write (`run-checks.ts`).
  */
-export function researchFolders(): string[] {
-  const subfolders = (folder: string): string[] =>
-    existsSync(folder)
-      ? readdirSync(folder, { withFileTypes: true })
-          .filter((entry) => entry.isDirectory())
-          .map(({ name }) => path.join(folder, name))
-      : [];
-  const staging = Object.values(stagingFolders()).flatMap((folder) => subfolders(path.join(folder, 'research')));
+export function researchFoldersOnDisk(): string[] {
+  const runs = subfolders(EPISODES).flatMap((run) => subfolders(path.join(run, 'research')));
   const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
-  const onDisk = [...staging, ...llmWiki].map((folder) => path.relative(ROOT, folder));
-  const planned = outputsOf(Object.values(perRunPipelines()))
-    // A draft keeps write-research's foreach glob; only a named folder is a planned one.
-    .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
-    .map((output) => path.dirname(output));
-  // A planned staging folder that Promotion already moved into the llm-wiki, under the same name, is that wiki folder.
-  const promoted = new Set(llmWiki.map((folder) => path.basename(folder)));
-  const unpromoted = planned.filter((folder) => !promoted.has(path.basename(folder)));
-  return [...onDisk, ...unpromoted];
+  return [...runs, ...llmWiki].map((folder) => path.relative(ROOT, folder));
 }
 
 /** The template's staging folder: `<slug>` stands for the Episode a tailored copy names. */
@@ -122,17 +108,18 @@ export const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 export const governance = new Map<string, boolean>();
 
 /** Every output the pipelines' jobs name, in order. */
-const outputsOf = (yamls: readonly string[]): string[] =>
+export const outputsOf = (yamls: readonly string[]): string[] =>
   yamls.flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs.flatMap((job) => job.outputs ?? []));
 
 /**
- * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. The first
- * lookup batches every markdown output the template and per-run pipelines name; only a path outside them spawns again.
+ * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. A
+ * lookup outside the cache batches every markdown output `yamls` name, so one pipeline's outputs cost one spawn.
  */
-export function governed(file: string): boolean {
+export function governed(file: string, yamls: readonly string[]): boolean {
   if (governance.has(file)) return governance.get(file) === true;
-  const yamls = governance.size === 0 ? [readFileSync(TEMPLATE, 'utf8'), ...Object.values(perRunPipelines())] : [];
-  const files = [...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md'))])];
+  const files = [
+    ...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md') && !governance.has(output))]),
+  ];
   const answer = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', '--batch', ...files], { cwd: ROOT });
   const { results } = (JSON.parse(String(answer)) as { result: { results: { governance: string }[] } }).result;
   files.forEach((each, at) => governance.set(each, results[at].governance === 'governed'));
@@ -141,9 +128,13 @@ export function governed(file: string): boolean {
 
 /**
  * What a pipeline may name: the skills installed under `.agents/skills/` and authored under `skills/`, the files in
- * the repo, the staging folder its outputs sit in, and the outputs a rule governs.
+ * the repo, the staging folder its outputs sit in, and the outputs a rule governs, answered in one batch over `yamls`.
  */
-export function pipelineContext(pending: readonly string[], staging: string): PipelineContext {
+export function pipelineContext(
+  pending: readonly string[],
+  staging: string,
+  yamls: readonly string[],
+): PipelineContext {
   const skillFiles = SKILL_FOLDERS.flatMap((folder) =>
     readdirSync(folder, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
@@ -164,20 +155,10 @@ export function pipelineContext(pending: readonly string[], staging: string): Pi
     staging,
     perRun: staging !== TEMPLATE_STAGING,
     // A branch in flight keeps writing its run-log.md, which no rule governs any more.
-    governs: (file) => (file.endsWith('/run-log.md') && exists(file)) || governed(file),
+    governs: (file) => (file.endsWith('/run-log.md') && exists(file)) || governed(file, yamls),
     pending,
     retired: RETIRED,
   };
-}
-
-/** Every per-run pipeline, by the path a failure names. */
-export function perRunPipelines(): Record<string, string> {
-  return Object.fromEntries(
-    Object.keys(stagingFolders())
-      .map((folder) => `${folder}/pipeline.yml`)
-      .filter((file) => file.startsWith('docs/') && existsSync(path.join(ROOT, file)))
-      .map((file) => [file, readFileSync(path.join(ROOT, file), 'utf8')]),
-  );
 }
 
 /** A heading's anchor as GitHub renders it: `## Rubric` is `rubric`. */

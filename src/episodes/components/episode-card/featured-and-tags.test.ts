@@ -4,7 +4,7 @@ import { TAG_ICONS } from '@/content-store/schemas/tag-looks';
 import { featuredIds, listEpisodes } from '@/content-store/store';
 import { FILTER_TAGS } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { leadTagOf } from '@/episodes/lib/episode-metadata.pure';
-import { compositionOf } from '@/episodes/lib/registry';
+import { summaryOf } from '@/episodes/lib/page-summary';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import { describe, expect, it } from 'vitest';
 import de from '../episode-browser/i18n/de.json';
@@ -104,7 +104,7 @@ describe('failure cases', () => {
     const missing = [
       ...FORMATS.filter((id) => !episodeBrowser.formats[id]).map((id) => `formats.${id}`),
       ...listEpisodes().flatMap(({ ref, slug, status }) => {
-        const copy = hasPage(ref) ? compositionOf(ref).messages[locale] : upcomingCopy[slug];
+        const copy = hasPage(ref) ? summaryOf(ref)[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];

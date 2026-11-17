@@ -5,9 +5,11 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
-import { parseArgs } from './worktree-args.pure.ts';
-import { mergeIntoBase } from './worktree-merge.ts';
+import { slowTestsLogPath, trimSlowTests } from '../../../tools/load/slow-tests.mts';
+import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
+import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
+import { removeWorktree } from './worktree-remove.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -49,7 +51,9 @@ function create(branch: string, base: string | null): void {
 /** Processes whose cwd sits inside the worktree. */
 function processesIn(target: string): Proc[] {
   // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
-  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], { encoding: 'utf8' });
+  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], {
+    encoding: 'utf8',
+  });
   return parseLsof(stdout, target);
 }
 
@@ -138,28 +142,47 @@ function deleteMerged(branch: string, base: string): void {
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
 }
 
-function mergeBeforeRemoval(branch: string, base: string): void {
+async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
+  // Read before the merge, which moves the merge-base up to the branch tip.
+  const slowTests = slowTestReport(branch, base, mainRoot());
   try {
-    const result = mergeIntoBase(branch, base, mainRoot());
+    const result = await mergeIntoBase(branch, base, { cwd: mainRoot(), log: console.log });
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
+    for (const line of slowTests) console.log(line);
   } catch (error) {
     fail(`${(error as Error).message}\n  nothing was removed`);
   }
 }
 
-function finish(branch: string, base: string | null, kill: boolean): void {
+function removeCheckout(target: string, branch: string): void {
+  try {
+    const result = removeWorktree(target, branch, mainRoot());
+    if (result === 'leftovers-cleared')
+      console.log(
+        `✔ cleared what an interrupted removal left in ${target} (Finder metadata, ignored or committed files)`,
+      );
+    if (result === 'gone') console.log(`✔ ${target} was already removed`);
+  } catch (error) {
+    fail((error as Error).message);
+  }
+}
+
+async function finish(branch: string, base: string | null, kill: boolean): Promise<void> {
   const target = worktreePath(branch);
   refuseInsideWorktree(target);
   if (base === null) refuseUnpushedMain();
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.
-  else mergeBeforeRemoval(branch, base);
+  else await mergeBeforeRemoval(branch, base);
   // Every refusing guard has passed; stopping processes comes last, just before removal.
   // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
   for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
   refuseWhileBusy(target, kill);
-  stream('git', ['worktree', 'remove', target]);
+  removeCheckout(target, branch);
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
+  // Every finish keeps the slow-tests log to its last 30 days, with or without a base.
+  const slowTestsLog = slowTestsLogPath(mainRoot());
+  if (slowTestsLog !== null) trimSlowTests(slowTestsLog, new Date());
   if (base !== null) {
     deleteMerged(branch, base);
     return;
@@ -168,23 +191,36 @@ function finish(branch: string, base: string | null, kill: boolean): void {
   syncMain(mainRoot());
 }
 
-/** Fetches origin, then merges origin/main (or the base) into the current worktree's branch. */
-function sync(base: string | null): void {
+/**
+ * Fetches origin, then merges origin/main (or the base) into the current worktree's branch, holding that branch's
+ * merge lock, so a `wt:done --base` into this branch waits instead of merging alongside.
+ */
+async function sync(base: string | null): Promise<void> {
   const branch = capture('git', ['branch', '--show-current']);
   const dirty = capture('git', ['status', '--porcelain']) !== '';
   const plan = planSync({ branch, base, dirty });
   if ('error' in plan) fail(plan.error);
   stream('git', ['fetch', 'origin']);
-  try {
-    stream('git', ['merge', plan.target]);
-  } catch {
-    fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
-  }
+  // Fails only once the lock is released: process.exit inside it would skip the release.
+  const merged = await withMergeLock(
+    branch,
+    { cwd: process.cwd(), log: console.log },
+    () => spawnSync('git', ['merge', plan.target], { stdio: 'inherit' }).status === 0,
+  );
+  if (!merged) fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
   console.log(`✔ ${branch} merged with ${plan.target}`);
+}
+
+/** Whether a local branch of that name exists. */
+function localBranchExists(branch: string): boolean {
+  return spawnSync('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
 }
 
 const args = parseArgs(process.argv.slice(2));
 if ('error' in args) fail(args.error);
-else if (args.command === 'new') create(args.branch, args.base);
-else if (args.command === 'sync') sync(args.base);
-else finish(args.branch, args.base, args.kill);
+else if (args.command === 'new') {
+  const refusal = refuseNewBranch(args, localBranchExists);
+  if (refusal !== null) fail(refusal);
+  create(args.branch, args.base);
+} else if (args.command === 'sync') await sync(args.base);
+else await finish(args.branch, args.base, args.kill);

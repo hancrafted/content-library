@@ -1,8 +1,8 @@
 {
-  "title": "Prüfbarkeit bestimmt den Abstand",
-  "caption": "Die Stufe einer Aufgabe hängt davon ab, was ein falsches Ergebnis anrichten kann und wie gut Du <b>das Ergebnis prüfen</b> kannst; wer sie prüfbar macht, rückt sie nach außen.",
+  "title": "Vertrauen erlaubt den Schritt nach außen; Prüfung baut das Vertrauen auf",
+  "caption": "Eine Aufgabe rückt nur so weit nach außen, wie ihr verdientes Vertrauen das nötige Vertrauen deckt; <b>eine eingebaute Prüfung</b> verdient es.",
   "board": {
-    "label": "Sommerfest · jede Aufgabe so weit außen, wie ihr Risiko und ihre Prüfung es erlauben"
+    "label": "Sommerfest · jede Aufgabe rückt so weit nach außen, wie ihr verdientes Vertrauen das nötige deckt"
   },
   "agent": "Agent",
   "tasks": {
@@ -26,10 +26,6 @@
       "move": "Das Programm rückt von in der Schleife zu an der Schleife"
     }
   },
-  "risk": {
-    "label": "Wenn falsch:",
-    "value": "Risiko {value} von 3"
-  },
   "levels": {
     "was": "In",
     "in": "In der Schleife",
@@ -42,7 +38,8 @@
       "join": "Alle können mitmachen",
       "access": "Rollstuhlgerecht",
       "fitness": "Keine Fitness nötig"
-    }
+    },
+    "meaning": "Ein Test, den das Ergebnis bestehen kann, festgelegt, bevor der Agent startet."
   },
   "handoffs": {
     "guests": "200 Gäste",
@@ -53,7 +50,7 @@
     "label": "Ziel",
     "text": "20. Juni: Alle feiern zusammen und kommen sicher nach Hause"
   },
-  "hedge": "Meine Hypothese: Risiko und Prüfbarkeit zusammen abzuwägen ist eine Synthese, <risk>nicht die Regel einer einzelnen Quelle</risk>, und die Belege für Prüfbarkeit <software>stammen vor allem aus der Software</software>.",
+  "hedge": "Meine Hypothese: Risiko und verdientes Vertrauen zusammen abzuwägen ist eine Synthese, <risk>nicht die Regel einer einzelnen Quelle</risk>, und die Belege, dass Prüfungen Vertrauen aufbauen, <software>stammen vor allem aus der Software</software>.",
   "notes": {
     "software-is-easy-to-check": {
       "header": "Software lässt sich leicht prüfen",
@@ -95,7 +92,9 @@
       "header": "Risiko als Bewertung eines Werkzeugs",
       "description": "OpenAI rät, jedes Werkzeug als niedrig, mittel oder hoch einzustufen, nach Faktoren wie Lese- oder Schreibzugriff, Umkehrbarkeit und finanzieller Wirkung, und für heikle, unumkehrbare oder folgenschwere Aktionen menschliche Aufsicht auszulösen, bis das Vertrauen in den Agenten wächst [1].",
       "sources": {
-        "openai-practical-guide-to-building-agents": { "title": "OpenAI, A practical guide to building agents" }
+        "openai-practical-guide-to-building-agents": {
+          "title": "OpenAI, A practical guide to building agents"
+        }
       }
     },
     "risk-is-one-input-not-the-rule": {
@@ -113,23 +112,45 @@
       "the-rule": {
         "title": "Die Regel",
         "keywords": "",
-        "script": "Du kannst Dich nur so weit aus der Schleife herausnehmen, wie Du das Ergebnis prüfen kannst. Wo das Prüfen so viel kostet, wie die Arbeit selbst zu machen, sparst Du durch das Herausnehmen nichts, Du nimmst nur ein Risiko in Kauf, auf das niemand schaut."
+        "script": "Vertrauen ist es, was Dich aus der Schleife heraustreten lässt, und Du vertraust nur einem Ergebnis, das Du prüfen kannst. Wo das Prüfen so viel kostet, wie die Arbeit selbst zu machen, sparst Du durch das Herausnehmen nichts, Du nimmst nur ein Risiko in Kauf, auf das niemand schaut."
       },
       "hypothesis-said-openly": {
         "title": "Hypothese, offen gesagt",
         "keywords": "",
-        "script": "Die Regel, dass Du Dich nur so weit herausnehmen kannst, wie Du prüfen kannst, ist meine Hypothese, und das sage ich offen; die Belege dafür stammen vor allem aus der Software, also nimm sie als gute Wette und nicht als Gesetz."
+        "script": "Diese Regel ist meine Hypothese, und das sage ich offen; die Belege dafür stammen vor allem aus der Software, also nimm sie als gute Wette und nicht als Gesetz."
       },
-      "risk-too": {
-        "title": "Auch das Risiko",
+      "review-builds-the-trust": {
+        "title": "Prüfbarkeit baut das Vertrauen auf",
         "keywords": "",
-        "script": "Prüfbarkeit ist nur die eine Hälfte. Was ein falsches Ergebnis anrichten kann, bestimmt die Stufe mit: Je mehr Schaden ein falsches Ergebnis anrichten kann, desto mehr bleibt ein Mensch drin."
+        "script": "Also kommt zuerst die Ingenieursarbeit: Du baust die Prüfung ein, bevor der Agent startet, einen Test, den das Ergebnis bestehen kann. Besteht es ihn, ist das ein Beleg, und ein Beleg baut Vertrauen auf. Das Gefühl, der Agent sei gut, tut das nicht."
       },
-      "make-it-checkable": {
-        "title": "Mach es prüfbar",
+      "risk-sets-the-bar": {
+        "title": "Das Risiko setzt die Latte",
         "keywords": "",
-        "script": "Damit ist die Prüfung der Hebel, den Du in der Hand hast. Gib dem Programm einen Test, den es bestehen kann, etwa alle können mitmachen, rollstuhlgerecht, keine Fitness nötig, und dieselbe Aufgabe kann von in der Schleife zu an der Schleife rücken."
+        "script": "Das Risiko bestimmt, wie viel Vertrauen eine Aufgabe braucht. Die Gästeliste braucht wenig, ein fehlender Name ist eine E-Mail. Location und Programm brauchen viel, denn ein falsches Ergebnis kann zweihundert Menschen an einem Ort lassen, der nicht passt."
+      },
+      "the-activity-moves": {
+        "title": "Das Programm rückt",
+        "keywords": "",
+        "script": "Schau jetzt auf das Programm. Es brauchte Vertrauen drei und hatte eins, also blieb ein Mensch drin. Gib ihm seine Prüfung, alle können mitmachen, rollstuhlgerecht, keine Fitness nötig, und sobald die Prüfung besteht, ist das Vertrauen verdient und die Aufgabe rückt von in der Schleife zu an der Schleife."
       }
     }
+  },
+  "chain": {
+    "review": "Prüfbar bauen",
+    "trust": "Verdientes Vertrauen",
+    "step": "Nach außen treten",
+    "levels": {
+      "in": "In",
+      "on": "An",
+      "out": "Außen"
+    }
+  },
+  "trust": {
+    "needed": "Nötiges Vertrauen:",
+    "neededValue": "nötiges Vertrauen {value} von 3",
+    "earned": "Verdientes Vertrauen:",
+    "earnedValue": "verdientes Vertrauen {value} von 3",
+    "was": "(war {value})"
   }
 }

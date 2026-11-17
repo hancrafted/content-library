@@ -4,7 +4,7 @@
 // of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it; end-run records the
 // orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support. Real disk;
 // clock, ids, git and the transcript lookup are injectable.
-import { existsSync, mkdirSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
@@ -24,13 +24,26 @@ export type CommandResult = { ok: true; output: string } | { ok: false; error: s
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
 
+/** The test each Run's staging folder carries, so its staging checks run on that folder alone (ARCH-003 §4.7). */
+const RUN_CHECKS_TEST = 'run-checks.test.ts';
+const RUN_CHECKS_ASSET = `skills/new-episode/assets/${RUN_CHECKS_TEST}.txt`;
+
+/** Copies the skill's Run checks test into the staging folder, keeping one the Run already has. */
+function giveRunItsChecks(root: string, staging: string): void {
+  const asset = path.join(root, RUN_CHECKS_ASSET);
+  const own = path.join(root, staging, RUN_CHECKS_TEST);
+  if (existsSync(asset) && !existsSync(own)) copyFileSync(asset, own);
+}
+
 function beginRun(ctx: RunContext, opts: Opts): string {
   const sessionId = sessionOf(ctx);
   const model = opts.model ?? refuse('begin-run needs --model <the model you run on>');
   const { current, lines } = readEpisodeLog(ctx.slug, ctx.root);
   if (current !== null && !hasEnded(lines, current))
     refuse(`Run ${current.run_id} has not ended: resume it, or run end-run crashed first`);
-  mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
+  const staging = path.dirname(episodeLogPath(ctx.slug));
+  mkdirSync(path.join(ctx.root, staging), { recursive: true });
+  giveRunItsChecks(ctx.root, staging);
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
   return `Run begun (${line.run_id})${serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' })}`;

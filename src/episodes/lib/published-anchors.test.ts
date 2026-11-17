@@ -1,121 +1,25 @@
-import {
-  episodeRef,
-  explorablePageRef,
-  folderOf,
-  guideRef,
-  templateRef,
-  type EpisodeRef,
-  type ExplorablePageRef,
-  type GuideRef,
-  type TemplateRef,
-} from '@/content-store/catalogue/episode-id.pure';
-import {
-  EXPLORABLE_PAGE_SLUGS,
-  GUIDE_SLUGS,
-  hasPage,
-  TEMPLATE_SLUGS,
-  type TemplateSlug,
-} from '@/content-store/catalogue/record-routes';
+import { episodeRef, guideRef, templateRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { EXPLORABLE_PAGE_SLUGS, GUIDE_SLUGS } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
-import { listEpisodes } from '@/content-store/store';
-import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
-import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { formatAsRepo } from './oxfmt-format.ts';
-import { compositionOf, type ComposedPage } from './registry';
+import { boundPages, isBound, lostAnchors, publishedAnchorsOf } from './published-anchors';
 
 /*
- * Published anchors (FE-002): every Slide anchor an Episode has ever put in a
- * URL stays reachable. `<episode>/published-anchors.json` snapshots them; a
- * Slide may be added freely, but an anchor in the snapshot MUST still be
- * produced by the walk (`placeSections`). Anchors come from the record's
- * Section lists alone, so they cannot differ by locale.
+ * Published anchors (FE-002): the parts each page folder's Episode-level checks read to hold its snapshot. Whether
+ * every bound page still produces its published anchors runs per page folder (`composed-page-checks.ts`).
  */
-
-/** A page whose anchors may be bound: an Episode, a Template, an Explorable page or a Guide. */
-type Page = EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef;
-
-/** The snapshot in the page's folder: an Event's copy's under its Event, a Template's under `templates/`. */
-function snapshotPath(page: Page): string {
-  return path.join(__dirname, '..', folderOf(page), 'published-anchors.json');
-}
-
-/** The file to paste for a new Episode: its anchors sorted, formatted with the repo's oxfmt config so `format:check` accepts it. */
-async function snapshotFile(file: string, produced: readonly string[]): Promise<string> {
-  return formatAsRepo(file, JSON.stringify([...new Set(produced)].sort()));
-}
-
-/** The snapshot's anchors, or a thrown file to paste when the Episode has none. */
-async function publishedAnchorsOf(page: Page, produced: readonly string[]): Promise<string[]> {
-  const file = snapshotPath(page);
-  if (!existsSync(file)) {
-    const contents = await snapshotFile(file, produced);
-    throw new Error(
-      `Episode "${page.id}" has no published-anchors.json. Create ${file} with this content:\n${contents}\n`,
-    );
-  }
-  return JSON.parse(readFileSync(file, 'utf8')) as string[];
-}
-
-/** One message per published anchor the walk no longer produces. */
-function lostAnchors(walk: { slug: string; published: readonly string[]; produced: readonly string[] }): string[] {
-  const { slug, published, produced } = walk;
-  return published
-    .filter((anchor) => !produced.includes(anchor))
-    .map(
-      (anchor) =>
-        `Episode "${slug}" no longer produces the anchor "${anchor}". It is a published anchor: a shared link may point at it. Remove it from published-anchors.json only deliberately.`,
-    );
-}
-
-/**
- * The pages whose anchors are bound: every Episode with a page but an upcoming one, whose anchors bind when it is
- * published (docs/features/episode-publishing.md), and every Template, Explorable page and Guide, which has no status and is always bound.
- */
-function boundPages(
-  episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
-  tooling: readonly TemplateSlug[],
-): ComposedPage[] {
-  const bound = episodes.flatMap(({ ref, status }) => (status !== 'upcoming' && hasPage(ref) ? [ref] : []));
-  return [
-    ...tooling.map(templateRef),
-    ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef),
-    ...GUIDE_SLUGS.map(guideRef),
-    ...bound,
-  ];
-}
-
-/** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
-function producedAnchors(page: ComposedPage): string[] {
-  return placeSections<SlideOutline>(compositionOf(page).sections).flatMap((section) => section.map(({ id }) => id));
-}
 
 describe('success cases', () => {
-  it('still produces every published anchor of every registered Episode', async () => {
+  it('binds a Template and a Guide, which have no status, and a published Episode', () => {
     // ARRANGE
-    const cases = boundPages(listEpisodes(), TEMPLATE_SLUGS);
+    const pages = [templateRef('episode-template'), guideRef('setup-ai-agent-and-starter-folder')];
+    const published = episodeRef('maintaining-markdown-for-ai');
+    const expected = [true, true, true];
     // ACT
-    const lostPerEpisode = await Promise.all(
-      cases.map(async (page) => {
-        const produced = producedAnchors(page);
-        return lostAnchors({ slug: page.id, published: await publishedAnchorsOf(page, produced), produced });
-      }),
-    );
-    const lost = lostPerEpisode.flat();
+    const bound = [...pages.map((page) => isBound(page, undefined)), isBound(published, 'published')];
     // ASSERT
-    expect(lost).toEqual([]);
-  });
-
-  it('keeps each published-anchors.json a sorted array of unique strings', async () => {
-    // ARRANGE
-    const snapshots = await Promise.all(
-      boundPages(listEpisodes(), TEMPLATE_SLUGS).map((page) => publishedAnchorsOf(page, producedAnchors(page))),
-    );
-    // ACT
-    const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());
-    // ASSERT
-    expect(unsorted).toEqual([]);
+    expect(bound).toEqual(expected);
   });
 });
 
