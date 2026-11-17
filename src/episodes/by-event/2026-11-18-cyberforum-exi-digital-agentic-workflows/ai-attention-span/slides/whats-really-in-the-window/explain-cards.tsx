@@ -2,13 +2,11 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/* The cornerstone's two machine parts the Slide explains, in its colours: the starting instructions and memory. */
 const SWATCH = {
   start: 'bg-machine',
   memory: 'bg-machine/45',
 } as const;
 
-/** One part of the window explained in plain words: its swatch and name, what it is, and what it costs. */
 export function ExplainCard({
   swatch,
   title,
@@ -37,7 +35,6 @@ export function ExplainCard({
   );
 }
 
-/** The parts the Slide only names: a dashed box listing them, and the one line on past chats. */
 export function NamedList({
   heading,
   items,

@@ -1,6 +1,7 @@
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { existsSync, lstatSync } from 'node:fs';
 import path from 'node:path';
+import { fullStdoutOf } from './full-stdout.ts';
 import { findViolations, type CheckoutFacts } from './preflight.pure.ts';
 
 function git(...args: string[]): string {
@@ -27,14 +28,10 @@ function hooksInstalled(root: string): boolean {
 }
 
 function archgateFullScopeTotal(root: string): number {
-  const { stdout: stdoutEvenWhenAnAdrCheckFails } = spawnSync(
+  const stdoutEvenWhenAnAdrCheckFails = fullStdoutOf(
     'npm',
     ['run', '-s', 'archgate:full', '--', '--output', 'json'],
-    {
-      cwd: root,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    },
+    root,
   );
   try {
     return (JSON.parse(stdoutEvenWhenAnAdrCheckFails) as { total: number }).total;

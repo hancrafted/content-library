@@ -5,7 +5,6 @@ import { BOOKING_URL } from '@/shared/lib/contact';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The stages oldest first, each with the year it began; their words are in `i18n/`. AI enablement, last, leads. */
 const STAGES = [
   { slug: 'sales', year: '2012' },
   { slug: 'build', year: '2018' },
@@ -14,11 +13,6 @@ const STAGES = [
   { slug: 'ai', year: '2026' },
 ] as const;
 
-/**
- * About me for a mixed crowd: trust through accomplishments, told as the value chain Han has worked, AI enablement
- * last and first in view. Hovering a stage brings in its two proofs. The facts come from his CV, LinkedIn profile and
- * the landing page's About cases; the note says so.
- */
 export const aboutMe = slide({
   slug: 'about-me',
   messages: { en, de },
