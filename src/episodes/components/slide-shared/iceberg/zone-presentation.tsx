@@ -12,7 +12,7 @@ export interface ZonePresentationInput {
 
 export type ZoneStyle = Readonly<Record<`--${string}`, string>> & { readonly '--slide-surface'?: string };
 
-// decision: docs/adr/0022-slide-presentation-and-transition-clock.md
+// decision: docs/decision-records/0022-slide-presentation-and-transition-clock.md
 export interface ZonePresentation {
   readonly style: ZoneStyle;
   readonly enter?: {

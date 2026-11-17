@@ -13,7 +13,7 @@ description: 'An Explorable may own one locale pair of data and default words in
 
 ## Context
 
-> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable lives in its own folder, `src/explorables/<name>/` in the Explorables product area, apart from plain shared parts; the rules below are unchanged.
+> Amended by the Decision record _Content data model_ (docs/decision-records/0016-content-data-model.md): an Explorable lives in its own folder, `src/explorables/<name>/` in the Explorables product area, apart from plain shared parts; the rules below are unchanged.
 
 An **Explorable** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
 

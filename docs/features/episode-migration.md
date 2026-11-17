@@ -74,7 +74,7 @@ export const theLostMiddle = slide({
 });
 ```
 
-- The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([design-ADR-0012](../adr/0012-slide-header-and-play-once-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The frame layouts (`SectionSlide`, `BasicPageSlide`, `ThreeColumnSlide` in `src/episodes/components/slide-master/`) author their own header, for an Episode whose record sets `header: 'authored'`.
+- The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([Decision record 0012](../adr/0012-slide-header-and-play-once-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The frame layouts (`SectionSlide`, `BasicPageSlide`, `ThreeColumnSlide` in `src/episodes/components/slide-master/`) author their own header, for an Episode whose record sets `header: 'authored'`.
 - A section slide's Scene echoes the Hero motif; the Title slide's hero visual is a Slide folder set as the record's `title` (see `episode-template/slides/hero/` and `foundations/`).
 - No entrance motion in a Scene: the wrapper fades it up once. Hover emphasis reuses the shared classes in [the design system](../design/design-system.md#hover-vocabulary).
 - A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.
@@ -112,7 +112,7 @@ Done when: each widget's pure logic has a passing test.
 
 ## 7. Compose and snapshot
 
-- `episodes/<ep>/sections/<section-slug>.ts`, one per Section, `<section-slug>` the slug of its section slide: export that Section's Slide list, `[sectionSlide, ...pages]`, in order ([FE-004 §3](../../.archgate/adrs/FE-004-slide-architecture.md#3-each-module-owns-one-thing), [design-ADR-0008](../adr/0008-pipeline-jobs-belong-to-stages.md)). A page Slide is listed there, never in the Episode file. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry in its Section's module.
+- `episodes/<ep>/sections/<section-slug>.ts`, one per Section, `<section-slug>` the slug of its section slide: export that Section's Slide list, `[sectionSlide, ...pages]`, in order ([FE-004 §3](../../.archgate/adrs/FE-004-slide-architecture.md#3-each-module-owns-one-thing), [Decision record 0008](../adr/0008-pipeline-jobs-belong-to-stages.md)). A page Slide is listed there, never in the Episode file. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry in its Section's module.
 - `episodes/<ep>/episode.ts`: import each Section's list and fill `sections: [...]` with them, in Section order, in `episode({ slug, youtube, messages: { en, de }, sections })`.
 - To feature it, edit the three Episode ids in `FEATURED` in `src/content-store/featured.ts`.
 - Do not write `published-anchors.json`: the published-anchor check skips an upcoming Episode, and the publish step writes the file ([Episode publishing](episode-publishing.md)).

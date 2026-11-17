@@ -2,7 +2,7 @@
 # docs/episodes/setup-ai-agent-and-starter-folder/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and finalizes it by setting
-# `status: approved` (design-ADR-0008).
+# `status: approved` (Decision record 0008).
 #
 # Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -139,11 +139,11 @@ jobs:
         session: orchestrator
 
   # A one-off: the guide is a new Resource kind, so the Resources overview
-  # design-ADR changes before the Spec is written.
+  # Decision record changes before the Spec is written.
   - id: amend-resources-overview
     stage: setup
     intent: >-
-      Amend docs/adr/0019-resources-overview.md (design-ADR) so the closed Resource kind list gains `guide` at /guides/<slug>, built through the Episode pipeline, and the Brief's Format rule (markdown-harness staging-brief-body) allows it; follow docs/agents/domain.md for design-ADRs. This is a decision that needs Han: return the proposed amendment text and open question as a `needs-human:` note, do not decide alone.
+      Amend docs/decision-records/0019-resources-overview.md (Decision record) so the closed Resource kind list gains `guide` at /guides/<slug>, built through the Episode pipeline, and the Brief's Format rule (markdown-harness staging-brief-body) allows it; follow docs/agents/domain.md for Decision records. This is a decision that needs Han: return the proposed amendment text and open question as a `needs-human:` note, do not decide alone.
     needs: [customize-pipeline]
     isolation: worktree
     outputs: []
@@ -154,7 +154,7 @@ jobs:
         skills: [domain-modeling]
         references:
           [
-            docs/adr/0019-resources-overview.md,
+            docs/decision-records/0019-resources-overview.md,
             docs/agents/domain.md,
             docs/episodes/setup-ai-agent-and-starter-folder/brief.md,
           ]
@@ -344,7 +344,7 @@ jobs:
         model: opus
 
   # The Spec: one static HTML page with two or three Options per Slide beside
-  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # its words (Decision record 0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
   # alone. The user picks an Option per Slide through `npm run episode:spec`; every
   # review round is a new Attempt, and the user approves the Spec at the gate.

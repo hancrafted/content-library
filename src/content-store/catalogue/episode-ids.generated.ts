@@ -34,7 +34,7 @@ export const EPISODE_IDS = [
   'what-lies-below-the-waterline-of-sustainable-ai-skills',
 ] as const;
 
-/** Every Template, by slug: an authoring bench served at `/episodes/<slug>/`, no Episode (design-ADR 0019). */
+/** Every Template, by slug: an authoring bench served at `/episodes/<slug>/`, no Episode (Decision record 0019). */
 export const TEMPLATE_SLUGS = [
   'episode-template',
   'explorable-page',
@@ -52,5 +52,5 @@ export const EXPLORABLE_PAGE_SLUGS = [
   'software-ecology',
 ] as const;
 
-/** Every Guide, by slug: a step-by-step page served at `/guides/<slug>/`, no Episode (design-ADR 0019, #450). */
+/** Every Guide, by slug: a step-by-step page served at `/guides/<slug>/`, no Episode (Decision record 0019, #450). */
 export const GUIDE_SLUGS = ['setup-ai-agent-and-starter-folder'] as const;

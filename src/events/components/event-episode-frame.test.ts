@@ -7,7 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { eventEpisodeFrame } from './event-episode-frame';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const EVENT = EVENT_SLUGS[0];
 const FIRST = episodeRef('alpha');
 const MIDDLE = episodeRef('beta', EVENT);

@@ -24,7 +24,7 @@ Write the plan by its rule (`npx mh query --intents docs/episodes/<slug>/researc
 - refresh: AIE-0008__why-fresh-sessions-restore-focus, question 2, refreshes docs/llm-wiki/research/AIE/AIE-0002__why-fresh-sessions-restore-focus/research.md.
 ```
 
-Each item names the research folder the job writes. A refresh takes the next free number of its category, because the staging test refuses a research ID used twice; whether it should overwrite the stale file instead is open (design-ADR-0008). With every question reused, `## Research jobs` holds one item, `- none: every question reused.`, and the Research stage stays empty.
+Each item names the research folder the job writes. A refresh takes the next free number of its category, because the staging test refuses a research ID used twice; whether it should overwrite the stale file instead is open (Decision record 0008). With every question reused, `## Research jobs` holds one item, `- none: every question reused.`, and the Research stage stays empty.
 
 ## Done when
 

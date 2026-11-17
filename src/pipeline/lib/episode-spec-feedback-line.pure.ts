@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { BRIEF_KEYS } from './episode-spec-brief.pure.ts';
 

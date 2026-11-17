@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { copyKinds } from './defect.pure.ts';
 import { fileMechanics } from './mechanics.pure.ts';
 import type {

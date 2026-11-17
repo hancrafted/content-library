@@ -3,7 +3,7 @@ import type { ResourceKind } from './resource-index.pure';
 
 // decision: FE-007 §3
 // decision: FE-001 §1.3
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export interface ResourceSelection {
   readonly query: string;
   readonly tags: readonly string[];

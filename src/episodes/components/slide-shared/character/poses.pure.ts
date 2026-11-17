@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 import { MOODS, type HeadAnchor, type Mood } from './actor';
 import {
   anchorY,

@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { gateTier } from './staging-file.pure.ts';
 import { bodyLines } from './staging-markdown.pure.ts';
 

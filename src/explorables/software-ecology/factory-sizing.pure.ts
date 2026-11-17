@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { RHO_IDEAL, RUSH_TO } from './factory-dials.pure.ts';
 import { solve, type SolveResult } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';

@@ -1,5 +1,5 @@
 // decision: FE-005 §5
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 import * as cheerio from 'cheerio';
 import { select, type ArtNode, type Bid, type Cascade, type Element, type OwnerOf } from './art-dom.pure.ts';
 import type { ArtPiece } from './art-store.pure.ts';

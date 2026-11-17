@@ -1,4 +1,4 @@
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure';
 import { SPEC_LINE_FORM, specLine } from './episode-spec-feedback-line.pure';
 import { unless, type Finding } from './finding.pure';

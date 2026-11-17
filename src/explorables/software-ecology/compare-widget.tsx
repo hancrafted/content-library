@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { COMPARE_MAX, type CompareState } from './compare-stream.pure.ts';
 import { Glyph } from './factory-glyph-view';

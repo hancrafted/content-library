@@ -14,7 +14,7 @@ function useFunnelPlay() {
   return { plays: funnelPlays({ entryAtMount, entry, replays }), replays, replay };
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function FunnelMotion({
   label,
   className,

@@ -2,7 +2,7 @@ import { compositionRefusals } from './composition-refusals';
 import type { Guide } from './schemas/guide.schema';
 
 // decision: FE-013 §3
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export function guideRefusals(guides: readonly Guide[], compositions: readonly string[]): string[] {
   return compositionRefusals({
     noun: 'Guide',

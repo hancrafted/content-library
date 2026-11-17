@@ -158,7 +158,7 @@ function EmoteMark({ mood, facing }: { readonly mood: Mood; readonly facing: Emo
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Emote({ mood, says, at, facing, bubble }: EmoteProps) {
   const words = (says ?? '').trim();
   if (!mood && !words) return null;

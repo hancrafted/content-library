@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import type { Job } from './episode-pipeline-definition.pure';
 import { ancestors } from './episode-pipeline-graph.pure';
 import { SPEC_FILE } from './episode-spec-page.pure';
@@ -28,7 +28,7 @@ function checkStageJobs(byId: ReadonlyMap<string, Job>, staging: string): string
   return [
     ...unless(
       !byId.has('write-design-spec'),
-      'Job "write-design-spec" is retired; write-spec designs the Slides and writes the one Spec page (design-ADR-0011).',
+      'Job "write-design-spec" is retired; write-spec designs the Slides and writes the one Spec page (Decision record 0011).',
     ),
     ...unless(
       voice === undefined || !voice.gate,
@@ -58,11 +58,11 @@ function checkSpecReads(spec: Job | undefined, reads: ReadonlyMap<string, readon
   return [
     ...unless(
       paths.includes(CALIBRATION),
-      `Job "write-spec" does not read ${CALIBRATION}; the Spec calibration holds what every Spec shares (design-ADR-0011).`,
+      `Job "write-spec" does not read ${CALIBRATION}; the Spec calibration holds what every Spec shares (Decision record 0011).`,
     ),
     ...RETIRED_ASSETS.filter((asset) => paths.includes(asset)).map(
       (asset) =>
-        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (design-ADR-0011).`,
+        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (Decision record 0011).`,
     ),
   ];
 }

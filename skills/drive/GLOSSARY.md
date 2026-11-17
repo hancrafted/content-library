@@ -62,13 +62,19 @@ _Avoid_: scratchpad (a session's own, lost with it), workspace
 **Decisions log**: the file in the topic folder where the Orchestrator writes each settled term and decision in its exact wording the moment it settles, and each Operator correction at once. Decision docs and the Fortify evidence are written from it.
 _Avoid_: notes, minutes, handoff
 
-**Decision docs**: the glossary, design-ADRs and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through its own PR to the base branch; a Subagent proposes terms in its report.
+**Decision docs**: the glossary, Decision records and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through its own PR to the base branch; a Subagent proposes terms in its report.
 _Avoid_: specs (a spec lives on the tracker), docs, documentation
 
 ## Binding
 
-**Binding**: a project's mapping of the DRIVE phases to the skills it has, the model each phase's Subagents run on and the agent type every agent uses. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
+**Binding**: a project's mapping of the DRIVE phases to the skills it has, the Model tier each phase's Subagents run on and the agent type every agent uses. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
 _Avoid_: config, mapping, registry
 
 **Enforcer**: a deterministic check a project already runs that can govern a failure mode: types, lint, tests, an ADR checker's rule, a hook. A narrow LLM judge counts only when its verdict can be checked. Fortify picks from the project's Enforcers.
 _Avoid_: guardrail, gate, linter
+
+**Model tier**: the class of model a Subagent runs on, `mid` or `top`, named in the Binding per phase. The project maps each tier to each provider's model, so the Binding states intent and stays provider-neutral. A decision page runs on `top` when any item needs rendering, a mockup, a visual prototype or interaction, otherwise on `mid`.
+_Avoid_: model, model class, size
+
+**Review file**: the project's calibration answers for every decision page: mode, audience, layout, depth, fidelity, feedback route. `/drive` hands it to the decision-page skill as the caller's inputs, so that skill asks no calibration questions.
+_Avoid_: review config, page settings, calibration

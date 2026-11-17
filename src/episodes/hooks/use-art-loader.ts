@@ -2,7 +2,7 @@ import { setArtHrefs } from '@/episodes/lib/art-href.pure';
 import { useEffect, type RefObject } from 'react';
 
 // decision: FE-009 §4
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function useArtLoader(root: RefObject<HTMLElement | null>, loads: boolean): void {
   useEffect(() => {
     const element = root.current;

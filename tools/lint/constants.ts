@@ -15,7 +15,7 @@ export const CSS_HOOK_CLASSES = [
   '^s2-flow-dash$',
   '^is-active$',
   '^dark$',
-  // decision: docs/adr/0012-slide-header-and-play-once-motion.md
+  // decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
   '^card-hover(--raise|--outline)?$',
   '^focus-group(--dim-others|__item)?$',
   '^hover-reveal(__detail)?$',
@@ -69,12 +69,12 @@ export const NEW_OBSERVER = {
   selector: "NewExpression[callee.name='IntersectionObserver']",
   message: 'The Slide observer is the only IntersectionObserver; read the active Slide with useActiveSlide() (FE-009).',
 };
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0013-context-markers.md
 export const NO_STATIC_MARKER = {
   selector:
     "JSXOpeningElement[name.name=/^(Marker|ContextMarker)$/] > JSXAttribute[name.name='className'] :matches(Literal[value=/(^|\\s|:|!)static(\\s|$)/], TemplateElement[value.raw=/(^|\\s|:|!)static(\\s|$)/])",
   message:
-    'A Context marker keeps its own hit area: a `static` class would stretch it over the whole Slide. Use placement="beside" for a marker in the flow of a label (design-ADR-0013).',
+    'A Context marker keeps its own hit area: a `static` class would stretch it over the whole Slide. Use placement="beside" for a marker in the flow of a label (Decision record 0013).',
 };
 export const CLIENT_DIRECTIVE_MISSING = {
   selector: `Program:not(:has(> ExpressionStatement[directive='use client']))`,

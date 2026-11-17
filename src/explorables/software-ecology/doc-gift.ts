@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Colors, Ctx, DocKind } from './doc-types.ts';
 
 export const star = (c: Ctx, at: { x: number; y: number; r: number }, color: string) => {

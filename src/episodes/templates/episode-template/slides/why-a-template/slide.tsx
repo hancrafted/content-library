@@ -4,8 +4,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { SpineStepper } from './spine-stepper.client';
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0013-context-markers.md
 export const whyATemplate = slide({
   slug: 'why-a-template',
   messages: { en, de },

@@ -1,4 +1,4 @@
-# design-ADR 0006: authored skills follow the Agent Skills specification. Run by `npm run check:skills`
+# Decision record 0006: authored skills follow the Agent Skills specification. Run by `npm run check:skills`
 # with --root skills, so installed skills in .agents/skills/ are never governed. skills/skills.test.ts
 # checks that each name matches its folder, which a field rule cannot.
 frontmatter:

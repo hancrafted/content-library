@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { GIFT, spriteIdx } from './doc-sprites.ts';
 import type { FloorDoc } from './factory-model.pure.ts';

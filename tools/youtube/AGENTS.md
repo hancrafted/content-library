@@ -3,12 +3,12 @@
 The post-production tools: the Episode resolver, and the `youtube:*` entry points that work on an Episode's Recording folder. Each tool's `npm run` name is in `package.json`; its tests sit beside it.
 
 - Imports: FE-007-module-layering §2 "Import direction"; rules `skills-and-tools-reach-src-through-area-lib-or-store-entry`, `src-never-imports-skills-or-tools`.
-- Why the repo writes YouTube metadata: `docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md`.
+- Why the repo writes YouTube metadata: `docs/decision-records/0020-post-production-writes-youtube-metadata-from-the-repo.md`.
 - Tests: ARCH-003-testing.
 
 ## Commands
 
-Each takes `<episode folder | page url | video id>` and infers the language from the Recording folder's file names (`--lang en|de` when several exist); the rules are decision 7 of the design-ADR above. `--dry-run` and `--force` belong to `youtube:apply` alone.
+Each takes `<episode folder | page url | video id>` and infers the language from the Recording folder's file names (`--lang en|de` when several exist); the rules are decision 7 of the Decision record above. `--dry-run` and `--force` belong to `youtube:apply` alone.
 
 | Command                | Reads                                  | Writes                                                                    |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------------------- |

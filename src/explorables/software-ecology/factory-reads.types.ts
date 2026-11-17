@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { DocMarks } from './factory-docs.pure.ts';
 import type { Belt, NodeDef } from './factory.types';
 import type { Bundle, RoleDef } from './software-ecology.types';

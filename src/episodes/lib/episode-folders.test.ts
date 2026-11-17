@@ -11,7 +11,7 @@ import {
   type PageFolder,
 } from './episode-folders';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 function tree(entries: readonly string[]): string {
   const root = mkdtempSync(path.join(tmpdir(), 'episode-folders-'));
   const episodes = path.join(root, 'src/episodes');

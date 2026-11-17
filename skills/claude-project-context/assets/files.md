@@ -13,7 +13,7 @@ Documents the Claude Desktop project holds. One path or glob per line, relative 
 - `docs/agents/*.md`
 - `docs/features/*.md`
 - `docs/features/explorables/*.md`
-- `docs/adr/*.md`
+- `docs/decision-records/*.md`
 - `docs/design/*.md`
 - `docs/profile/*.md`
 - `docs/llm-wiki/index.md`

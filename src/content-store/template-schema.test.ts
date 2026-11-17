@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { TEMPLATE_TYPES } from './schemas/fields';
 import { templateSchema } from './schemas/template.schema';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const TEMPLATE = { slug: 'timelines', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 
 function withoutKey(record: Record<string, unknown>, key: string): Record<string, unknown> {

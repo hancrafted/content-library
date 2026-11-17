@@ -102,7 +102,7 @@ const CORE_COMPONENTS = '^src/shared/components/core-components/';
 const SLIDE_SHARED_CLIENT = '^src/episodes/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
 
 // An Explorable lives in its own folder of the Explorables product area, apart from plain
-// shared parts (design-ADR 0016 decision 6); its client leaf sits in that folder, the capture group names it.
+// shared parts (Decision record 0016 decision 6); its client leaf sits in that folder, the capture group names it.
 const EXPLORABLES = '^src/explorables/';
 const EXPLORABLE_CLIENT = '^src/explorables/([^/]+)/.+\\.client\\.tsx$';
 
@@ -264,7 +264,7 @@ module.exports = {
       name: 'explorable-reaches-shared-ui-and-lib',
       severity: 'error',
       comment:
-        'src/explorables/ holds the Explorables several Slides show. An Explorable takes serializable props: its server files reach only other Explorables, the core components (src/shared/components/core-components/), the UI kit (src/shared/components/ui/) and lib — never another product area (a Slide, an Episode, slide-shared, the Slide master) (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
+        'src/explorables/ holds the Explorables several Slides show. An Explorable takes serializable props: its server files reach only other Explorables, the core components (src/shared/components/core-components/), the UI kit (src/shared/components/ui/) and lib — never another product area (a Slide, an Episode, slide-shared, the Slide master) (FE-012, FE-007 §5, Decision record 0016 decision 6).',
       from: { path: EXPLORABLES, pathNot: ['\\.test\\.ts$', EXPLORABLE_CLIENT] },
       to: {
         pathNot: [EXPLORABLES, CORE_COMPONENTS, SHARED_UI, SHARED_LIB, 'node_modules'],

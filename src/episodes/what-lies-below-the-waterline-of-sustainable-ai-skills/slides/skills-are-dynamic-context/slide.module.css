@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 /* decision: FE-011 §2 */
 .scene {
   --robot-shade: color-mix(in oklab, var(--info) 68%, oklch(0.22 0.06 270));

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { boxOf, layoutFactory, offsetD, RET, workAt, type FactoryLayout } from './factory-layout.pure';
 import type { DocMarks, FloorDoc, FloorList, FloorStation, Snapshot } from './factory-model.pure';
 import { at, type Path } from './factory-paths.pure';

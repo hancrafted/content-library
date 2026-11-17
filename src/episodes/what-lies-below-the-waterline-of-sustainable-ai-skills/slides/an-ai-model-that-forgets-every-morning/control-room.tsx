@@ -14,7 +14,7 @@ import { useId } from 'react';
 import styles from './forgets.module.css';
 import { Clock, MorningRoom } from './room-art';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const WINDOW = { x: 620, y: 70, width: 380, height: 240 } as const;
 const FLOOR_Y = 770;
 const CREW_SCALE = 4.4;

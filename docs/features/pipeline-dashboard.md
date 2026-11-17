@@ -186,7 +186,7 @@ A written output is a button that opens the file as plain text in a new tab; one
 not on disk yet reads **not written yet** and is disabled, not an error. A glob
 output of a draft is shown as text. A path outside the folder is never opened.
 
-A Build Job with a `port` (design-ADR-0008, Ports) shows **Preview :<port>**
+A Build Job with a `port` (Decision record 0008, Ports) shows **Preview :<port>**
 in its drawer and its node popover, a button opening `http://localhost:<port>` in a
 new tab, while its server is meant to run: `implement-episode-init`'s once it
 has started, a Section Job's only while the Job is open, since the orchestrator
@@ -207,7 +207,7 @@ words for screen readers and on hover. It reads only the Job's current Run and
 latest Attempt, so a retry starts its chips over, and the replay cutoff applies.
 
 Each agent row of the card holds its own state: a skill is run when a
-`skill.invoke` event (design-ADR-0010) or a `skills_invoked` names it on a span answering to
+`skill.invoke` event (Decision record 0010) or a `skills_invoked` names it on a span answering to
 that agent, an agent span by role or, for an orchestrator-session agent only,
 the Job span; skipped once each such span ended with `skills_invoked` known and
 without it; an unknown `skills_invoked` keeps it pending. On the Job span only

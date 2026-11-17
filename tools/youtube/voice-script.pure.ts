@@ -1,4 +1,4 @@
-// decision: docs/adr/0002-reading-time-from-voice-script.md
+// decision: docs/decision-records/0002-reading-time-from-voice-script.md
 import type { SpokenLanguage } from './transcript.pure.ts';
 
 export interface Cue {

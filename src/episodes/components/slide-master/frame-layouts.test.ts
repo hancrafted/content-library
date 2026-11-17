@@ -5,7 +5,7 @@ import { BasicPageSlide } from './basic-page-slide';
 import { SectionSlide } from './section-slide';
 import { ThreeColumnSlide } from './three-column-slide';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 function targetsOf(html: string): string[] {
   return [...html.matchAll(/data-target="([^"]*)"/g)].map(([, target]) => target);
 }

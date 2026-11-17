@@ -3,7 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = path.resolve(__dirname, '../..');
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const MASTER_SLIDE_TEMPLATES = ['timelines', 'grids'];
 const LIBRARY_DOC = path.join(ROOT, 'docs/design/slide-library.md');
 const MOTIONS_DIR = path.join(ROOT, 'src/episodes/components/slide-shared/motions');

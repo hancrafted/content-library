@@ -1,4 +1,4 @@
-// decision: docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md
+// decision: docs/decision-records/0020-post-production-writes-youtube-metadata-from-the-repo.md
 import { createHash } from 'node:crypto';
 import { publishedDescription, type YoutubeFile } from './youtube-file.pure.ts';
 

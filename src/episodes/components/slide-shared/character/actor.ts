@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export const MOODS = ['confused', 'surprised', 'happy', 'thinking', 'blank'] as const;
 export type Mood = (typeof MOODS)[number];
 

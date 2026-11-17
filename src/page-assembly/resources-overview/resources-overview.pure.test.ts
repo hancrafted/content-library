@@ -8,7 +8,7 @@ import {
   type FilterableResource,
 } from './resources-overview.pure';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 interface Words {
   readonly title: string;
   readonly description: string;

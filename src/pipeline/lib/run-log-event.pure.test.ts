@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createLogFold, fold, record, skillUses, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
-// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
+// decision: docs/decision-records/0010-run-log-lines-are-a-typed-union-with-point-events.md
 const TRACE = 'a'.repeat(32);
 const RUN_SPAN = 'b'.repeat(16);
 const AGENT_SPAN = 'c'.repeat(16);

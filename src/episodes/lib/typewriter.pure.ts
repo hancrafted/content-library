@@ -1,4 +1,4 @@
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 const NOMINAL_MILLISECONDS = [22, 45, 10] as const;
 
 const PAUSE_MILLISECONDS = 120;

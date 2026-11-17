@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 export const SPEC = `<!doctype html><html><head><title>Spec</title><style>.spec-card{padding:1rem}</style>
 <link rel="stylesheet" href="design.css" /><script>/* option tabs */</script>
 <script type="application/json" id="spec-meta">{"type":"spec"}</script></head><body>

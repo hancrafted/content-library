@@ -76,7 +76,7 @@ describe('success cases', () => {
 
   it('describes a scenery tone by its family', () => {
     // ARRANGE
-    const expected = 'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (design-ADR 0025).';
+    const expected = 'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (Decision record 0025).';
     // ACT
     const text = describeToken('--scenery-floor-lit');
     // ASSERT

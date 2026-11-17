@@ -11,7 +11,7 @@ function isPublished<E extends Episode>(episode: E): episode is E & PublishedEpi
   return episode.status === 'published';
 }
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export function overviewOrder<E extends Episode & { readonly ref: EpisodeRef }>(
   episodes: readonly E[],
   featured: readonly string[],

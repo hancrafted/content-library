@@ -32,4 +32,4 @@ Q165: yes, drift is ok.
 10. **Settings:** ~760 px, two columns. Header "Settings" bold + ✕. Model | Mechanics, then Display. Footer: "Reset to default" left; Download YAML, Upload right. Bold section titles, thin rules. Descriptions move into help tooltips. Stacks below 800 px.
 11. **One form field:** label + (?) help on one line, the control full width beneath: segmented control for choices, slider with its value on the label line, switch on the label line (with a strength slider beneath, disabled while off). Lucide icons at 16 px where they help.
 12. **Reset to default** resets to what the use-case file defines for the active state. Every setting is definable in the YAML: add the missing ones (pile-up style; starting backlogs; display defaults).
-13. Drift from flow.html is accepted for these points; record them in design-ADR 0024 and the feature guide.
+13. Drift from flow.html is accepted for these points; record them in Decision record 0024 and the feature guide.

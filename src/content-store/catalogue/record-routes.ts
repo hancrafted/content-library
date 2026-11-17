@@ -19,7 +19,7 @@ export function hasPage(episode: EpisodeRef): episode is EpisodeRef<EpisodeId> {
   return isEpisodeId(episode.id);
 }
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export { TEMPLATE_SLUGS };
 
 export type TemplateSlug = (typeof TEMPLATE_SLUGS)[number];
@@ -28,7 +28,7 @@ export { EXPLORABLE_PAGE_SLUGS };
 
 export type ExplorablePageSlug = (typeof EXPLORABLE_PAGE_SLUGS)[number];
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export { GUIDE_SLUGS };
 
 export type GuideSlug = (typeof GUIDE_SLUGS)[number];

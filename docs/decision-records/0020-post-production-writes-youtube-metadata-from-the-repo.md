@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 status: accepted
 ---
 
@@ -37,5 +37,5 @@ Nothing from a recording stayed in the repo, and the description was written by 
 
 ## Related
 
-- `design-ADR-0006` (Skills follow AgentSkills): the judgment steps are skills, the deterministic steps are tools.
-- `design-ADR-0017` (Source tree follows the product): the tools sit in the tools folder, not in a skill's `scripts/`.
+- `Decision record 0006` (Skills follow AgentSkills): the judgment steps are skills, the deterministic steps are tools.
+- `Decision record 0017` (Source tree follows the product): the tools sit in the tools folder, not in a skill's `scripts/`.

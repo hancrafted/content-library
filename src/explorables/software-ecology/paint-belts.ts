@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { badge, DOC_H, GIFT, KINDS, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
 import { BELT_W, RETURN_W } from './factory-layout.pure.ts';
 import type { FloorDoc, FloorList } from './factory-model.pure.ts';

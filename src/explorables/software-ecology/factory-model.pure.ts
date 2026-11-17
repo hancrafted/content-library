@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 import { floorOf } from './factory-floor-reads.pure.ts';
 import { buildFactory, DEFAULT_SEED } from './factory-network.pure.ts';

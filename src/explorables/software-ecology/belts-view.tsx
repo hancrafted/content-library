@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { memo } from 'react';
 import type { LabelPlace } from './factory-labels.pure.ts';
 import { BELT_W, offsetD, RET, RETURN_W, type BeltLayout, type FactoryLayout } from './factory-layout.pure.ts';

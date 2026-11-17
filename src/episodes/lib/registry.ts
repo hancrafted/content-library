@@ -13,7 +13,7 @@ const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<st
 };
 
 // decision: FE-004 §4
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export function compositionOf(page: ComposedPage): EpisodeComposition {
   return entryOf(REGISTRY_BY_KIND, page, 'composition');
 }

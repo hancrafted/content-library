@@ -35,7 +35,7 @@ export interface CheckedPage {
   readonly context: PageContext;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
 export const MARKERS_DIR = 'sections';

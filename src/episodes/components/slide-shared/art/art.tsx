@@ -12,7 +12,7 @@ interface ArtProps {
   readonly children: ReactNode;
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 // decision: FE-009 §4
 export function Art({ name, className, transform, children }: ArtProps) {
   const art = artMode();

@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 .room {
   --cable: oklch(0.28 0.02 260);
   --ink: oklch(0.975 0.01 230);

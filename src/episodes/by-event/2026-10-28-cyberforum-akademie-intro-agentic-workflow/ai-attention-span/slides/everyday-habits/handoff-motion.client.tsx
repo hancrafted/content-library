@@ -22,7 +22,7 @@ interface HandoffMotionProps {
   readonly after: ReactNode;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function HandoffMotion({ label, className, before, card, after }: HandoffMotionProps) {
   const { lights, replays, replay } = useHandoffLight();
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {

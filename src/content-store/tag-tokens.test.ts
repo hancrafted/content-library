@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { TAG_IDS } from './schemas/fields';
 import { TAG_ICONS } from './schemas/tag-looks';
 
-// decision: docs/adr/0015-tags-replace-topics.md
+// decision: docs/decision-records/0015-tags-replace-topics.md
 const css = readFileSync(join(__dirname, '../app/globals.css'), 'utf8');
 const THEMES = [':root', '.dark'] as const;
 const READABLE = 4.5;

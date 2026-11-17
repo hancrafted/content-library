@@ -11,7 +11,7 @@ const CONSOLE_X = 183;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
 const PILOT_REACH = 24;
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ControlRoom({ says }: { readonly says: string }) {
   return (
     <g>

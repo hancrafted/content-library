@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 import { seededRandom, toPoints } from './scenery/scenery.pure';
 
 export const WATER_CELL = 240;

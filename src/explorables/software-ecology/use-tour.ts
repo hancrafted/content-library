@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 // decision: FE-001 §1
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FactoryRun } from './factory-run.pure.ts';

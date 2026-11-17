@@ -136,7 +136,7 @@ function EventLayout({ main, ...column }: LayoutProps) {
   );
 }
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export async function EventPage({ slug, locale }: { slug: string; locale: Locale }) {
   const record = findEvent(slug);
   if (record === undefined) notFound();

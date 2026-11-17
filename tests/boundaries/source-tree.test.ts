@@ -1,4 +1,4 @@
-// decision: docs/adr/0017-source-tree-follows-the-product.md
+// decision: docs/decision-records/0017-source-tree-follows-the-product.md
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 

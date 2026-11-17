@@ -2,7 +2,7 @@ import type { EpisodeId } from './catalogue/record-routes';
 import { duplicates } from './duplicates';
 import type { LoadedEpisode } from './episode-refusals';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const FEATURED = [
   'onboard-ai-every-time',
   'ai-attention-span',

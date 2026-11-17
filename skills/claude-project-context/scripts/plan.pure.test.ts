@@ -3,15 +3,18 @@ import { diffFolder, expandEntries, parseList, planCopies, proposeCandidates } f
 
 describe('parseList', () => {
   it('reads backticked bullet entries and ignores prose', () => {
-    expect(parseList('# Title\n\nProse.\n\n- `AGENTS.md`\n- docs/adr/*.md\n')).toEqual(['AGENTS.md', 'docs/adr/*.md']);
+    expect(parseList('# Title\n\nProse.\n\n- `AGENTS.md`\n- docs/decision-records/*.md\n')).toEqual([
+      'AGENTS.md',
+      'docs/decision-records/*.md',
+    ]);
   });
 });
 
 describe('planCopies', () => {
   it('flattens each file to its base name, keeping its repo path as the source', () => {
-    expect(planCopies(['AGENTS.md', 'docs/adr/0001-a.md'])).toEqual([
+    expect(planCopies(['AGENTS.md', 'docs/decision-records/0001-a.md'])).toEqual([
       { name: 'AGENTS.md', source: 'AGENTS.md' },
-      { name: '0001-a.md', source: 'docs/adr/0001-a.md' },
+      { name: '0001-a.md', source: 'docs/decision-records/0001-a.md' },
     ]);
   });
 
@@ -32,10 +35,13 @@ describe('planCopies', () => {
 
 describe('expandEntries', () => {
   it("concatenates each entry's matches in list order", () => {
-    const matches: Record<string, string[]> = { 'AGENTS.md': ['AGENTS.md'], 'docs/adr/*.md': ['docs/adr/0001-a.md'] };
-    expect(expandEntries(['AGENTS.md', 'docs/adr/*.md'], (entry) => matches[entry] ?? [])).toEqual([
+    const matches: Record<string, string[]> = {
+      'AGENTS.md': ['AGENTS.md'],
+      'docs/decision-records/*.md': ['docs/decision-records/0001-a.md'],
+    };
+    expect(expandEntries(['AGENTS.md', 'docs/decision-records/*.md'], (entry) => matches[entry] ?? [])).toEqual([
       'AGENTS.md',
-      'docs/adr/0001-a.md',
+      'docs/decision-records/0001-a.md',
     ]);
   });
 

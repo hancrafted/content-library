@@ -82,7 +82,7 @@ function makeCtx(files: Record<string, string>) {
 }
 
 const STORE = 'src/content-store/store.ts';
-const MODEL = 'docs/adr/0016-content-data-model.md';
+const MODEL = 'docs/decision-records/0016-content-data-model.md';
 const schema = (kind: string) => `src/content-store/schemas/${kind}.schema.ts`;
 const diagram = (line: string) =>
   `# Content data model\n\n\`\`\`mermaid\nerDiagram\n    ${line}\n    %% planned: SHARED_SLIDE\n\`\`\`\n`;

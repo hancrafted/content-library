@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { passShareOf } from './factory-dials.pure.ts';
 import type { Belt, ChooseRule, FactoryNode, SpawnRule } from './factory.types';
 import { firstSpawn } from './first-spawn.pure.ts';

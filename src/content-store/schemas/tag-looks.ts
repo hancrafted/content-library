@@ -1,6 +1,6 @@
 import type { TagId } from './fields';
 
-// decision: docs/adr/0015-tags-replace-topics.md
+// decision: docs/decision-records/0015-tags-replace-topics.md
 // decision: FE-013 §1.4
 export const TAG_ICONS = {
   'context-engineering': 'hourglass',

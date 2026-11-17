@@ -30,7 +30,7 @@ export function keptHeight(zone: SlideZone, measured: number): number {
   return isMounted(zone) ? 0 : measured;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export type SlideEntry = 'pending' | 'entering' | 'done';
 
 export interface ZoneStore {

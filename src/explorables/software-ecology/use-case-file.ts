@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { parse } from 'yaml';
 import { z } from 'zod';
 import type { Bundle, Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';

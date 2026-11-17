@@ -11,9 +11,9 @@ import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } fr
 import { slideKit, type ReferenceLabels } from './slide-kit';
 import type { SlidePresentation } from './slide-presentation';
 
-// decision: docs/adr/0001-the-slide-is-a-self-contained-folder.md
+// decision: docs/decision-records/0001-the-slide-is-a-self-contained-folder.md
 // decision: FE-010 §6
-// decision: docs/adr/0002-reading-time-from-voice-script.md
+// decision: docs/decision-records/0002-reading-time-from-voice-script.md
 interface SlideText {
   readonly presentation?: SlidePresentation;
   readonly slug: string;
@@ -33,7 +33,7 @@ interface Placement {
 export type LocalizedSlide = Placement &
   Omit<SlideText, 'title'> & {
     readonly content: ReactNode;
-    // decision: docs/adr/0012-slide-header-and-play-once-motion.md
+    // decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
     readonly header?: SlideHeaderText;
     readonly withoutSectionSlide?: true;
   } & (
@@ -132,7 +132,7 @@ export function titleContext(
   return contextOf(specs, ownTranslator({ ...record.messages[locale] }, locale), locale);
 }
 
-// decision: docs/adr/0002-reading-time-from-voice-script.md
+// decision: docs/decision-records/0002-reading-time-from-voice-script.md
 export function episodeMinutes(record: EpisodeComposition, locale: Locale): number {
   return record.sections
     .flat()

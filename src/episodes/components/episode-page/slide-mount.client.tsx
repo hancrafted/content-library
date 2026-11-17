@@ -54,8 +54,8 @@ export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, 
 }
 
 // decision: FE-009 §4
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function SlideMount({
   id,
   mode,

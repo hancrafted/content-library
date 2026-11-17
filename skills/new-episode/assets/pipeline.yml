@@ -2,7 +2,7 @@
 # docs/episodes/<slug>/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and finalizes it by setting
-# `status: approved` (design-ADR-0008).
+# `status: approved` (Decision record 0008).
 #
 # Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -238,7 +238,7 @@ jobs:
         model: opus
 
   # The Spec: one static HTML page with two or three Options per Slide beside
-  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # its words (Decision record 0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
   # alone. The user picks an Option per Slide through `npm run episode:spec`; every
   # review round is a new Attempt, and the user approves the Spec at the gate.

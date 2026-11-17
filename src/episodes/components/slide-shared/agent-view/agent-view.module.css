@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 :global(html:not([data-agent-view='coding'])) .inView[data-view='coding'],
 :global(html[data-agent-view='coding']) .inView[data-view='chat'] {
   display: none;

@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { parseSpecAssembleArgs } from '../../../src/pipeline/lib/episode-forbid.pure.ts';
 import { assembleSpecFolder } from '../../../src/pipeline/lib/spec-assemble.ts';
 

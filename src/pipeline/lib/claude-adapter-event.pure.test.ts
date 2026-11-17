@@ -9,7 +9,7 @@ import {
 } from './claude-adapter-event.pure.ts';
 import type { RunLogLine } from './run-log.pure.ts';
 
-// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
+// decision: docs/decision-records/0010-run-log-lines-are-a-typed-union-with-point-events.md
 const TRACE = '0123456789abcdef0123456789abcdef';
 const RUN_SPAN = 'cccccccccccccccc';
 const JOB_SPAN = 'aaaaaaaaaaaaaaaa';

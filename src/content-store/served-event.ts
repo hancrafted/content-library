@@ -4,7 +4,7 @@ import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
 import type { Playlist, StoredPlaylistEntry } from './schemas/playlist.schema';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export interface PlaylistPlace {
   readonly position: number;
   readonly count: number;

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { identityBackfill } from './backfill-identity.pure.ts';
 import { fold, type RunLogLine } from './run-log.pure.ts';
 
-// decision: docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
+// decision: docs/decision-records/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
 const TRACE = 'a'.repeat(32);
 const OLD_TRACE = 'f'.repeat(32);
 const ID = (n: number): string => n.toString(16).padStart(16, '0');

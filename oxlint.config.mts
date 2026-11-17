@@ -192,7 +192,7 @@ export default defineConfig({
     { files: ['**/*.test.ts'], rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' } },
     {
       // The rule guards the Pages Router; an App Router root layout renders its own <head>, which carries the
-      // pre-paint `js` class script (design-ADR-0012 §5).
+      // pre-paint `js` class script (Decision record 0012 §5).
       files: ['src/shared/page-chrome/site-shell.tsx'],
       rules: { 'nextjs/no-head-element': 'off' },
     },

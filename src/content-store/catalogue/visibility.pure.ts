@@ -1,7 +1,7 @@
 import type { Episode, EpisodeStatus } from '../schemas/episode.schema';
 import { matchPage, type EpisodeId, type PageRef } from './record-routes';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 // decision: FE-008 §5
 export interface PageFacts {
   readonly visibility?: Episode['visibility'];

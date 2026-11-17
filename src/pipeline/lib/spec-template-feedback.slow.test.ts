@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { reviewToFeedback } from './spec-feedback.pure.ts';
 
 // decision: ARCH-003 §4.4
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const TEMPLATE = readFileSync(path.join(__dirname, '../../../skills/new-episode/assets/spec-template.html'), 'utf8');
 
 type Field = readonly [string, string];

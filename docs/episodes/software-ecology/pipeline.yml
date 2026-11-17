@@ -2,7 +2,7 @@
 # docs/episodes/software-ecology/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and finalizes it by setting
-# `status: approved` (design-ADR-0008).
+# `status: approved` (Decision record 0008).
 #
 # Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -348,7 +348,7 @@ jobs:
           - docs/episodes/software-ecology/research/AIE-0020__software-roles-shift-to-spec-and-review/research.md
           - docs/episodes/software-ecology/research/SWE-0002__unclear-requirements-cause-rework/research.md
           - docs/episodes/software-ecology/research/LLM-0022__context-rot-from-muddy-context/research.md
-          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
           - docs/features/explorables/software-ecology.md
         model: inherit
       - type: reviewer
@@ -395,7 +395,7 @@ jobs:
         model: opus
 
   # The Spec: one static HTML page with two or three Options per Slide beside
-  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # its words (Decision record 0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
   # alone. The user picks an Option per Slide through `npm run episode:spec`; every
   # review round is a new Attempt, and the user approves the Spec at the gate.
@@ -421,7 +421,7 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
           - docs/features/explorables/software-ecology.md
           - docs/features/explorables/README.md
         model: opus
@@ -436,7 +436,7 @@ jobs:
           - docs/episodes/software-ecology/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
           - docs/features/explorables/software-ecology.md
           - docs/features/explorables/README.md
         rubric: references/write-spec.md#rubric
@@ -501,7 +501,7 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/software-ecology/spec/spec.html
-          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
           - docs/features/explorables/software-ecology.md
           - docs/features/explorables/README.md
           - .archgate/adrs/FE-012-explorables.md
@@ -522,7 +522,7 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/software-ecology/spec/spec.html
-          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
           - docs/features/explorables/software-ecology.md
           - docs/features/explorables/README.md
           - .archgate/adrs/FE-012-explorables.md
@@ -533,7 +533,7 @@ jobs:
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
-    intent: 'Build Section 1 of the Brief, "Play": the Play slide holding the whole software ecology Explorable (src/explorables/software-ecology/) with its toolbar, to its picked Spec Option. Han chose (architecture grill Q22) that this Section builds the Explorable itself inside the Run, the feature way: /to-spec from the design-ADR, the feature guide and the picked Option, then /to-tickets, then /tdd per ticket, in this job''s worktree. The design-ADR binds the model, the use-case files and the rendering. Han (2026-11-11): the converged prototype docs/episodes/software-ecology/prototype/flow.html is the reference build, and the Explorable must look and behave identical to it: the same model (port source/src/30-model.js and 35-scenario.js with the same seeded streams, so every expect in source/checks7c.out.txt reproduces its value), the same use-case YAML (schema /5), the same toolbar, cards, rack, pile-ups, tours, dashboards and timing; the only differences are the ones the Spec and design-ADR settle (module split, tour claims in plain words, readout colours). The reviewer compares the built Explorable side by side with flow.html in Chrome, state by state (Swing, Roles, Ideal, Realistic, every Tire swing scenario and tour step, a dashboard, Model popover, ⋮ menu), and any visible or behavioural difference not settled by the Spec is a failed line.'
+    intent: 'Build Section 1 of the Brief, "Play": the Play slide holding the whole software ecology Explorable (src/explorables/software-ecology/) with its toolbar, to its picked Spec Option. Han chose (architecture grill Q22) that this Section builds the Explorable itself inside the Run, the feature way: /to-spec from the Decision record, the feature guide and the picked Option, then /to-tickets, then /tdd per ticket, in this job''s worktree. The Decision record binds the model, the use-case files and the rendering. Han (2026-11-11): the converged prototype docs/episodes/software-ecology/prototype/flow.html is the reference build, and the Explorable must look and behave identical to it: the same model (port source/src/30-model.js and 35-scenario.js with the same seeded streams, so every expect in source/checks7c.out.txt reproduces its value), the same use-case YAML (schema /5), the same toolbar, cards, rack, pile-ups, tours, dashboards and timing; the only differences are the ones the Spec and Decision record settle (module split, tour claims in plain words, readout colours). The reviewer compares the built Explorable side by side with flow.html in Chrome, state by state (Swing, Roles, Ideal, Realistic, every Tire swing scenario and tour step, a dashboard, Model popover, ⋮ menu), and any visible or behavioural difference not settled by the Spec is a failed line.'
     port: 4002
   - id: implement-section-why-how-and-what
     stage: build

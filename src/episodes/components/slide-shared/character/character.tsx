@@ -81,7 +81,7 @@ const looks = (preset: Preset) => ({
   'data-prop': preset.prop,
 });
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Character({ preset, pose = 'stand', motion, mood, says, flip = false, bubble }: CharacterProps) {
   const delay = emoteDelay(motion);
   const drawing = drawFigure(preset, pose, mood);

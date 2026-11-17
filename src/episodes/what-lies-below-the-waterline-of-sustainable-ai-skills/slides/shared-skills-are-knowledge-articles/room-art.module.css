@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 /* decision: FE-011 §2 */
 .art {
   --art-glint: oklch(1 0 0);

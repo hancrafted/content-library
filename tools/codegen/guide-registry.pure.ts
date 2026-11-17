@@ -1,4 +1,4 @@
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 import type { RegistryFile } from './episode-registry.pure.ts';
 
 export const GUIDE_REGISTRY_PATH = 'src/content-store/guide-registry.generated.ts';

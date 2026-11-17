@@ -35,7 +35,7 @@ function useEntryState(id: string | null): { entry: SlideEntry; store: ZoneStore
   return { entry, store };
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function useEntryOf(id: string | null): SlideEntry {
   const { entry, store } = useEntryState(id);
   useEffect(() => {
@@ -46,7 +46,7 @@ export function useEntryOf(id: string | null): SlideEntry {
   return entry;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function useSlideEntry(): SlideEntry {
   return useEntryState(useContext(SlideIdContext)).entry;
 }

@@ -1,5 +1,5 @@
 'use client';
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, type ReactNode } from 'react';
 import { dialRowsOf, num, type DialKey, type DialRow } from './dash-rows.pure.ts';

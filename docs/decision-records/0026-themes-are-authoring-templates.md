@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Themes are authoring Templates
 status: accepted
 ---

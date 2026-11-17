@@ -64,7 +64,7 @@ describe('success cases', () => {
     expect(found).toEqual(expected);
   });
 
-  it('counts words and minutes as design-ADR 0002 does: tags and dashes are no words, 120 per minute in German, 140 in English', () => {
+  it('counts words and minutes as Decision record 0002 does: tags and dashes are no words, 120 per minute in German, 140 in English', () => {
     // ARRANGE
     const scripts = ['Eins <b>zwei</b> drei – vier.', 'fünf sechs'];
     const expected = { words: 6, de: 6 / 120, en: 6 / 140 };

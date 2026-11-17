@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { dials } from './factory-dials.pure.ts';
 import { Q } from './factory-docs.pure.ts';
 import type { Floor, FloorBelt, FloorList, FloorRun, FloorStation, FloorWork, TopoNode } from './factory-reads.types';

@@ -31,7 +31,7 @@ const DOCS: Record<string, string> = {
   [ADR]: adrWith(REGISTRY_TABLE),
   '.archgate/adrs/FE-009-slide-wrapper-and-scene.md':
     '# Scene\n\n## Decision\n\n### 1. Wrapper\n\n1. One.\n\n### 4. Scene\n\n1. One.\n2. Two.\n3. Three.\n\n## Consequences\n\n### 7. Not a decision\n',
-  'docs/adr/0017-source-tree-follows-the-product.md': '# Source tree\n',
+  'docs/decision-records/0017-source-tree-follows-the-product.md': '# Source tree\n',
   'docs/features/hosting.md': '# Hosting\n\n## Deploy target\n\n## `wrangler` & Pages\n\n## Deploy target\n',
   'docs/llm-wiki/research/LLM/LLM-0001__llm-output-nondeterminism/research.md': '# Research\n',
 };
@@ -115,9 +115,9 @@ describe('no-comments', () => {
       ['decision: to an ADR §', TS, '// decision: FE-009 §4\nexport const a = 1;\n'],
       ['decision: to an ADR §n.m', TS, '// decision: FE-009 §4.3\nexport const a = 1;\n'],
       [
-        'decision: to a design-ADR',
+        'decision: to a Decision record',
         TS,
-        '// decision: docs/adr/0017-source-tree-follows-the-product.md\nexport const a = 1;\n',
+        '// decision: docs/decision-records/0017-source-tree-follows-the-product.md\nexport const a = 1;\n',
       ],
       [
         'spec: to a docs/features/ anchor',
@@ -337,9 +337,9 @@ describe('no-comments', () => {
         'FE-009 has no Decision §7',
       ],
       [
-        'a design-ADR that does not exist',
-        '// decision: docs/adr/0999-gone.md\nexport const a = 1;\n',
-        'docs/adr/0999-gone.md does not exist',
+        'a Decision record that does not exist',
+        '// decision: docs/decision-records/0999-gone.md\nexport const a = 1;\n',
+        'docs/decision-records/0999-gone.md does not exist',
       ],
       [
         'a feature doc that does not exist',

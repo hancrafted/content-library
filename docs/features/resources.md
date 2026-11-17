@@ -6,7 +6,7 @@ stale_after: 2027-04-28T00:00:00Z
 
 # Resources
 
-Read before changing the header's Learn menu, the Resource index or the `/resources/` overview. Terms: `GLOSSARY.md` (Resource, Resource index, Template, Guide). Decision record: `docs/adr/0019-resources-overview.md`. Specs: #404, #450 (Guides).
+Read before changing the header's Learn menu, the Resource index or the `/resources/` overview. Terms: `GLOSSARY.md` (Resource, Resource index, Template, Guide). Decision record: `docs/decision-records/0019-resources-overview.md`. Specs: #404, #450 (Guides).
 
 A **Resource** is every public, listed item: an Episode, an Event, an Explorable page, a Guide, an Episode template, a Master slide or a Theme.
 
@@ -32,7 +32,7 @@ A projection over the page catalogue's lists, never stored: `resourceIndex()` in
 
 ## Kind filter
 
-`/resources/` (`ResourcesOverviewPage`, design-ADR 0019) renders the index for the visitor's locale as cards, with a search, a kind filter, Tag chips and a grid or list switch. The kind filter is the shared `TagToggles` chip control, one chip per kind with its count (`data-resource-kind-filter`); chips combine with OR within the kind group, and the search, kinds and Tags combine with AND (`resources-overview.pure.ts`). Every card is in the server HTML; filtering only toggles `hidden`. Tests: `tests/post-build/resources.build.test.ts` (every kind with a listed page, chips and counts, both locales). Manually check that a chip narrows to one kind. UX taste of the menu and the filter is held by review only, the product vision's known gap.
+`/resources/` (`ResourcesOverviewPage`, Decision record 0019) renders the index for the visitor's locale as cards, with a search, a kind filter, Tag chips and a grid or list switch. The kind filter is the shared `TagToggles` chip control, one chip per kind with its count (`data-resource-kind-filter`); chips combine with OR within the kind group, and the search, kinds and Tags combine with AND (`resources-overview.pure.ts`). Every card is in the server HTML; filtering only toggles `hidden`. Tests: `tests/post-build/resources.build.test.ts` (every kind with a listed page, chips and counts, both locales). Manually check that a chip narrows to one kind. UX taste of the menu and the filter is held by review only, the product vision's known gap.
 
 ## Guides
 
@@ -40,6 +40,6 @@ A Guide (#450) is its own record kind: records in `src/content-store/guides/<slu
 
 ## Today
 
-Themes are authoring Templates at `/themes/<slug>/`, composed and registered with the other Templates, not a new record kind. Before changing a Theme or its gallery controls, read `docs/adr/0026-themes-are-authoring-templates.md`. Ice berg explores the Waterline cast through ten Slides; shared figures stay in their existing modules, specimen presentation in `slide-shared/figure-gallery/`. The teaching Episode gains no replay controls.
+Themes are authoring Templates at `/themes/<slug>/`, composed and registered with the other Templates, not a new record kind. Before changing a Theme or its gallery controls, read `docs/decision-records/0026-themes-are-authoring-templates.md`. Ice berg explores the Waterline cast through ten Slides; shared figures stay in their existing modules, specimen presentation in `slide-shared/figure-gallery/`. The teaching Episode gains no replay controls.
 
 The Template record kind (#412) is `src/content-store/templates/` with compositions in `src/episodes/templates/`; `npm run registry` regenerates `template-registry.generated.ts`. The three Explorable pages live at `/explorables/` (`docs/features/explorables/README.md`). The Learn menu and the Resource index are built (#404, #413).

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { FactoryRun } from './factory-run.pure.ts';
 import { runScenario } from './factory-scenario.pure.ts';
 import { nextTour, tickTour, TOUR_SPEED, tourChecks, type Tour } from './factory-tour.pure.ts';

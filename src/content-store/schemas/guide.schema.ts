@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { slug, tags, visibility, YOUTUBE_ID } from './fields';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const guideSchema = z
   .object({
     slug: slug.describe(
