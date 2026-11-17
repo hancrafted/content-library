@@ -144,7 +144,12 @@ describe('/episodes index page', () => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
-    const withVideo = ['maintaining-markdown-for-ai', 'ai-token-economy', 'never-too-early-sales'];
+    const withVideo = [
+      'maintaining-markdown-for-ai',
+      'ai-token-economy',
+      'never-too-early-sales',
+      'from-shared-understanding-to-shared-context',
+    ];
 
     // ACT
     const linked = $('[data-episode-card]:has([data-episode-video])')
