@@ -1,15 +1,12 @@
 import { isEmphasised, runsOf, type TextRange } from '@/episodes/lib/caption-emphasis.pure';
 import type { CSSProperties } from 'react';
 
-/** How an emphasised run of header text is set off: semibold, in `primary`. */
 const EMPHASIS_CLASS = 'font-semibold text-primary';
 
-/** Characters typed one by one: whitespace takes no turn. */
 export function typedLength(text: string): number {
   return Array.from(text.replace(/\s+/g, '')).length;
 }
 
-/** A typed character's custom properties: when it appears (`--d`) and how long the caret sits on it (`--h`). */
 function charStyle(delay: number, hold: number): CSSProperties {
   return { '--d': `${delay.toFixed(1)}ms`, '--h': `${Math.max(hold, 0).toFixed(1)}ms` } as CSSProperties;
 }
@@ -20,7 +17,6 @@ interface TypedProps {
   readonly delays: readonly number[];
   /** When the character after this text's last one appears, so the caret moves on then. */
   readonly next: number;
-  /** The runs of `text` to set off. */
   readonly emphasis?: readonly TextRange[];
 }
 
@@ -29,7 +25,6 @@ interface TypedProps {
  * wraps only between words. CSS (`globals.css`, the typewriter) reveals each
  * at its `--d` and shows the caret on it for `--h`.
  */
-/** The text's words and the whitespace between them, each with the index of its first character in the text. */
 function partsOf(text: string): { part: string; offset: number }[] {
   let offset = 0;
   return text
@@ -42,7 +37,6 @@ function partsOf(text: string): { part: string; offset: number }[] {
     });
 }
 
-/** One typed character's span, set off when it lies in an emphasised run. */
 function TypedCharacter({
   character,
   style,
@@ -89,7 +83,6 @@ function TypedCharacters({ text, delays, next, emphasis = [] }: TypedProps) {
   );
 }
 
-/** Untyped text, its emphasised runs set off. */
 function PlainText({ text, emphasis = [] }: { text: string; emphasis?: readonly TextRange[] }) {
   return runsOf(text, emphasis).map((run, key) =>
     run.emphasis ? (

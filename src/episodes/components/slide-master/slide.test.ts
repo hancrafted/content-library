@@ -24,7 +24,6 @@ const DE: typeof EN = {
 };
 const UNTITLED = { en: { statement: 'Now replace the words.' }, de: { statement: 'Jetzt die Wörter ersetzen.' } };
 
-/** A kit that records what a Slide asked for, standing in for the container's. */
 function recordingKit(): { kit: RuntimeKit; calls: string[] } {
   const calls: string[] = [];
   const t = Object.assign((key: string) => (calls.push(`t:${key}`), key), {

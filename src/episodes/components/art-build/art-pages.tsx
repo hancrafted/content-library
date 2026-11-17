@@ -17,7 +17,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
  * can find. `npm run art` loads this one module through Vite's SSR loader; nothing in the site imports it.
  */
 
-/** One Slide, by where it comes from for an error to name, and its drawn markup: its Scene, rear and front decoration. */
 export interface ArtPage {
   readonly page: string;
   readonly markup: () => string;
@@ -33,7 +32,6 @@ const COMPOSITIONS: Readonly<Record<ComposedId, EpisodeComposition>> = {
 
 const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, null, node));
 
-/** Every Slide of one composed page in one locale, Title slide first. */
 function* pageSlides(id: ComposedId, composition: EpisodeComposition, locale: Locale): Generator<ArtPage> {
   const placed = placeSections<Slide>(composition.sections).flat();
   // Links never reach a drawing, so every page takes one stand-in route.
@@ -57,7 +55,6 @@ function* pageSlides(id: ComposedId, composition: EpisodeComposition, locale: Lo
   }
 }
 
-/** Every Slide of every composed page: Episodes and their Event copies, Templates, Explorable pages and Guides. */
 export function* artPages(): Generator<ArtPage> {
   for (const [id, composition] of Object.entries(COMPOSITIONS) as [ComposedId, EpisodeComposition][]) {
     for (const locale of LOCALES) yield* pageSlides(id, composition, locale);

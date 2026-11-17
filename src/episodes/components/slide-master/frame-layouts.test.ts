@@ -11,7 +11,6 @@ import { ThreeColumnSlide } from './three-column-slide';
  * (docs/features/episode-chrome.md, "Which targets exist").
  */
 
-/** The `data-target` values a rendered frame carries, in document order. */
 function targetsOf(html: string): string[] {
   return [...html.matchAll(/data-target="([^"]*)"/g)].map(([, target]) => target);
 }

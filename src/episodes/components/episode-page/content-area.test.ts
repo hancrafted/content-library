@@ -4,7 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { ContentArea } from './content-area';
 
-/** The Content area with one Slide inside, as static HTML. */
 function renderArea(): string {
   return renderToStaticMarkup(createElement(ContentArea, null, createElement('div', null, 'slide')));
 }

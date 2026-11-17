@@ -1,11 +1,6 @@
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { YoutubeLink, type VideoLabels } from '@/shared/components/ui/youtube-link';
 
-/**
- * The places the Episode is also published, one icon link each, in a row of
- * the card's last row, so further channels (LinkedIn, Medium) can join without
- * crowding the card's head. Drawn only when the Episode is published somewhere.
- */
 export function EpisodeLinks({ card, labels }: { card: EpisodeCard; labels: VideoLabels }) {
   if (card.youtubeUrl === undefined) return null;
   return (

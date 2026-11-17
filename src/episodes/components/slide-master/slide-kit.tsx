@@ -8,38 +8,27 @@ import { DEFAULT_RICH_TAGS } from './rich-tags';
 import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { SlideTitle } from './slide-master';
 
-/** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
 export const ON_SCREEN_TITLE_KEY = 'heading';
 
-/** What assistive tech hears for a Context reference, in the page's locale. */
 export interface ReferenceLabels {
-  /** Said after an underlined phrase, e.g. `opens speaker note`. */
   readonly ref: string;
-  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
   readonly marker: (title: string) => string;
 }
 
-/** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
   readonly episode: ComposedId;
-  /** The logical path the page is served at, when an Event presents the Episode; absent, the Episode's own. */
   readonly route?: string;
   readonly locale: Locale;
-  /** Each Slide slug's placed id, from the walk (`placeSections`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;
   readonly referenceLabels: ReferenceLabels;
 }
 
-/** What the container knows about one placed Slide when it builds its kit. */
 export interface SlideKitInput {
   readonly t: RuntimeTranslator;
-  /** From the Slide's position: `h2` opens a Section, `h3` follows (FE-002 §4). */
+  // decision: FE-002 §4
   readonly level: SlideLevel;
-  /** The slugs of the notes the Slide declares; `ref` takes only these. */
   readonly notes: readonly string[];
-  /** The Slide's id, named in the error a bad `ref`, `slideHref` or `template` throws. */
   readonly slideId: string;
-  /** Set when something else renders this Slide's heading: `Title` then throws this, failing the build. */
   readonly titleTaken?: string;
 }
 
@@ -53,7 +42,6 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
 }
 
-/** `slideHref`: the localized link to a Slide of this Episode, by the anchor the walk placed it at. */
 function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['slideHref'] {
   return (slug) => {
     const anchor = episode.anchors.get(slug);
@@ -62,7 +50,6 @@ function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['sli
   };
 }
 
-/** `template`: a string leaf of the Slide's keys as written, for a client component to fill. */
 function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template'] {
   return (key) => {
     const value = t.raw(key);

@@ -16,7 +16,6 @@ export interface TalkPlayerLabels {
   readonly close: string;
 }
 
-/** An Event recording's language, named in the page's language before play: "Recorded in German". */
 export interface RecordingLanguage {
   readonly language: Locale;
   readonly label: string;
@@ -30,7 +29,6 @@ function subscribeWide(listener: () => void) {
   return () => query.removeEventListener('change', listener);
 }
 
-/** True from Tailwind's `lg` up, where the player may dock; false while prerendering. */
 function useWide(): boolean {
   return useSyncExternalStore(
     subscribeWide,
@@ -52,7 +50,6 @@ function TalkLauncherBadge() {
 const LAUNCHER =
   'group mt-8 flex w-full max-w-md items-center gap-3 rounded-2xl border border-border bg-background/95 px-4 py-3 text-left shadow-xs transition-all hover:border-secondary hover:bg-secondary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary cursor-pointer';
 
-/** The language an Event recording was made in, named before play; nothing for a per-locale video. */
 function RecordedIn({ recording }: { recording: RecordingLanguage | undefined }) {
   if (recording === undefined) return null;
   return (
@@ -110,7 +107,6 @@ export function TalkLauncher({
   youtubeId: string;
   title: string;
   labels: TalkPlayerLabels;
-  /** An Event recording's language, labelled on the launcher; none for a public Episode's per-locale video. */
   recording?: RecordingLanguage;
 }) {
   const { isOpen } = useTalkPlayer();

@@ -20,7 +20,6 @@ export function readTitleReveal(root: HTMLElement): TitleRevealRange {
   return { start: 0, end: 1 };
 }
 
-/** The ToC hosts that read the progress: `[data-toc-entrance]` inside the Episode page. */
 const TOC_HOSTS = '[data-toc-entrance]';
 
 /**

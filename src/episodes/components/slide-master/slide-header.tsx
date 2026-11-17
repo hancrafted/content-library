@@ -9,7 +9,6 @@ import type { CaptionNote } from './slide-header-text';
 import { HeroTitle, SlideTitle } from './slide-master';
 import { typedLength, TypedText } from './typed-text';
 
-/** Each part's delays (Eyebrow, title, caption), and when the part after each one starts typing. */
 function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly number[]) {
   if (entrance !== 'typewriter')
     return { delays: lengths.map(() => undefined), ends: lengths.map(() => ENTRANCE_MILLISECONDS) };
@@ -23,25 +22,18 @@ function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly num
 export interface SlideHeaderProps {
   /** The Slide's id: seeds the typing pace, so it is the same on every load. */
   readonly seed: string;
-  /** The heading level the Slide's position gives it (FE-002 §4); `h1` is the Title slide's. */
+  // decision: FE-002 §4
   readonly level: 'h1' | 'h2' | 'h3';
   readonly title: string;
   readonly caption?: string;
-  /** The caption's `<b>` runs, set off in `primary` semibold. */
   readonly captionEmphasis?: readonly TextRange[];
-  /** A Context marker after the caption, to the Speaker note that explains a term in it. */
   readonly captionNote?: CaptionNote;
-  /** Several Context markers after the caption, in order, when it rests on several Speaker notes. */
   readonly captionNotes?: readonly CaptionNote[];
-  /** Page Slides only; a section slide and the Title slide have none. */
   readonly eyebrow?: EyebrowText;
-  /** A Slide's header action (a Help button and its panel), right-aligned in the title row; its panel wraps full width under it. */
   readonly action?: ReactNode;
   readonly entrance?: SlideEntrance;
   readonly className?: string;
-  /** Content above the title, within the Slide header. */
   readonly leading?: ReactNode;
-  /** Rendered after the caption, e.g. the Title slide's talk launcher. */
   readonly children?: ReactNode;
 }
 
@@ -72,7 +64,6 @@ function CaptionMarkers({ markers }: { readonly markers: readonly CaptionNote[] 
   ));
 }
 
-/** The title and its caption, half a gap apart so they read as one; the Slide's action sits at the row's right end. */
 function TitleGroup({
   level,
   title,
@@ -99,7 +90,6 @@ function TitleGroup({
   );
 }
 
-/** The title group, and beside it the Slide's action (a Help button; its panel wraps full width under the row). */
 function TitleRow({ action, children }: { action: ReactNode; children: ReactNode }) {
   if (!action) return children;
   return (

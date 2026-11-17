@@ -14,7 +14,6 @@ const EPISODE = {
 const EXPLAINER = 'How the drawer works';
 const titleItem = { id: 'top', notes: [], script: [], explainer: EXPLAINER };
 
-/* The drawer's items come from the Slides `recordContent` returns; these Slides carry one note and one segment. */
 const WHY = {
   title: 'Why',
   notes: { n: { header: 'H', description: 'D' } },
@@ -40,7 +39,6 @@ async function translatorOf(): Promise<RuntimeTranslator> {
   return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
 }
 
-/** The drawer's items for an Episode of these Sections, as the adapter builds them. */
 async function itemsOf(sections: readonly Section[]) {
   const record = episode({ slug: 'ai-token-economy', messages: EPISODE, sections });
   return contextItemsOf(

@@ -25,19 +25,17 @@ import { cn } from '@/shared/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-/** The strings the search box and the Tag filter draw. */
 export interface FilterLabels {
   readonly search: string;
   readonly searchPlaceholder: string;
   readonly tagFilter: string;
 }
 
-/** The one Tag a toggle group's new value adds or removes, against the current selection. */
 function toggledTag(selected: readonly TagId[], next: readonly string[]): TagId | undefined {
   return [...selected, ...(next as TagId[])].find((id) => selected.includes(id) !== next.includes(id));
 }
 
-/** The strings the Browse block draws, resolved on the server so the leaf takes plain values (FE-006 §4). */
+// decision: FE-006 §4
 export interface BrowseLabels extends CardLabels, FilterLabels {
   readonly showAll: string;
   readonly showFewer: string;
@@ -46,10 +44,6 @@ export interface BrowseLabels extends CardLabels, FilterLabels {
   readonly reset: string;
 }
 
-/**
- * With scripts off the chips cannot work and the cap cannot lift, so the
- * stylesheet drops the controls and shows every card the cap folded away.
- */
 const NO_SCRIPT_CSS = '[data-browse-controls]{display:none}[data-browse-item][hidden]{display:flex!important}';
 
 function EmptyState({ labels, onReset }: { labels: BrowseLabels; onReset: () => void }) {
@@ -137,7 +131,6 @@ function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabe
   );
 }
 
-/** The live result count, with the way back to everything while a filter is on. */
 function ResultsLine({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -193,7 +186,6 @@ interface BrowseProps {
   cards: EpisodeCard[];
   locale: Locale;
   labels: BrowseLabels;
-  /** The cards' heading level, one below the heading the block sits under. */
   headingLevel: CardHeadingLevel;
 }
 

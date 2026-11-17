@@ -11,11 +11,9 @@ import { cn } from '@/shared/lib/utils';
 const BUTTON =
   "relative cursor-pointer rounded-sm text-muted-foreground transition-colors after:absolute after:-inset-1.5 after:content-[''] hover:bg-accent hover:text-foreground focus-visible:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none print:hidden";
 
-/* Inline: the icon at text size, in parentheses, on the baseline, so the line keeps its height. */
 const INLINE = 'inline p-0 align-baseline whitespace-nowrap [font:inherit]';
 const INLINE_ICON = 'inline-block size-[0.9em] align-[-0.1em]';
 
-/* Element: a round chip in the element's top-right corner, unless the caller places it. */
 const ELEMENT = 'absolute top-2 right-2 grid size-6 place-items-center rounded-full';
 const ELEMENT_ICON = 'size-3.5';
 
@@ -26,7 +24,6 @@ type Placement = 'inline' | 'element' | 'beside';
 
 const FORMS: Record<Placement, string> = { inline: INLINE, element: ELEMENT, beside: BESIDE };
 
-/** A `static` class, at any breakpoint or with `!`: it would unposition the button. */
 const STATIC = /^(?:[\w@-]+:)*!?static$/;
 
 /**

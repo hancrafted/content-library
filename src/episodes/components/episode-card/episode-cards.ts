@@ -8,14 +8,12 @@ import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
-/** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
   if (entry.status !== 'published' || !hasPage(entry.ref)) return undefined;
   const total = summaryOf(entry.ref)[locale].minutes;
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
-/** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string } {
   if (!hasPage(entry.ref)) return {};
   const id = episodeVideo(entry.ref, locale)?.id;
@@ -36,7 +34,6 @@ function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
   throw new Error(`The published Episode "${ref.id}" has no page to read its title and caption from`);
 }
 
-/** The Episode's Featured slot, 1 first; none when it holds no slot. */
 function featuredRankOf(id: string): { featuredRank?: number } {
   const slot = (featuredIds() as readonly string[]).indexOf(id);
   return slot === -1 ? {} : { featuredRank: slot + 1 };

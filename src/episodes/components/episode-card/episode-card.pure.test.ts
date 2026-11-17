@@ -3,10 +3,8 @@ import type { PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/
 import { describe, expect, it } from 'vitest';
 import { episodeCard } from './episode-card.pure';
 
-/** A stand-in for next-intl's `t`: answers each full key with a fixed sentence naming the key. */
 const read = (key: string) => `[${key}]`;
 
-/** A published Episode's copy, as the registry reads it from the Episode's record. */
 const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
 
 const PUBLISHED_METADATA: PublishedEpisode & { readonly ref: EpisodeRef } = {
@@ -19,7 +17,6 @@ const PUBLISHED_METADATA: PublishedEpisode & { readonly ref: EpisodeRef } = {
   publishedOn: '2026-10-09',
 };
 
-/** The published Episode as the card reads it: its metadata with its copy from the registry. */
 const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 
 const UPCOMING: UpcomingEpisode & { readonly ref: EpisodeRef } = {

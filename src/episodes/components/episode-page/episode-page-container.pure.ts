@@ -18,7 +18,6 @@ export function slideSizeOf(slide: Pick<LocalizedSlide, 'level' | 'withoutSectio
   return slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page';
 }
 
-/** One table-of-contents entry while the fold builds it: its items still open to more. */
 type OpenSection = TocSection & { items: TocItem[] };
 
 /**
@@ -71,7 +70,6 @@ export function eyebrowsOf(
   );
 }
 
-/** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
 export { TOC_COLLAPSED_ATTR };
 
 /*
@@ -90,7 +88,6 @@ export const INSET_CLASSES =
  */
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
 
-/** What decides whether a Title slide fills the floating header's band: its tone and its own surface. */
 export interface TitleBand {
   readonly tone: 'normal' | 'inverse';
   readonly presentation?: { readonly style?: { readonly '--slide-surface'?: string } };
@@ -105,16 +102,10 @@ export function fillsHeaderBand({ tone, presentation }: TitleBand): boolean {
   return tone === 'inverse' || presentation?.style?.['--slide-surface'] !== undefined;
 }
 
-/** The page's own classes: a page whose Title fills the header's band runs up under the floating header, any other starts below it. */
 export function pageClassOf(title: TitleBand): string {
   return `${fillsHeaderBand(title) ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
 }
 
-/**
- * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
- * an Event's copy's under its Event, a Template's under `templates/`, an Explorable page's under `explorable-pages/` or a
- * Guide's under `guides/`.
- */
 export function sourceFolderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef): string {
   return `src/episodes/${folderOf(page)}`;
 }

@@ -22,37 +22,26 @@ import type { SlidePresentation } from './slide-presentation';
  * follow its own Voice script.
  */
 
-/** A Slide's text in one locale, before an Episode places it. */
 interface SlideText {
   readonly presentation?: SlidePresentation;
   readonly slug: string;
-  /** Plain text for the table of contents; a purely visual Slide has none and is not listed (FE-002). */
   readonly title?: string;
-  /** Spoken reading time in minutes: where its Voice script's last segment ends, 0 without one. */
   readonly minutes: number;
-  /** Speaker notes (FE-010); each `target` is the short name of an element of this Slide. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly voiceScript: readonly VoiceScriptSegment[];
 }
 
-/** The Speaker notes and Voice script a Slide, or the Title slide, carries: what the Context drawer reads. */
 export type SlideContext = Pick<LocalizedSlide, 'notes' | 'voiceScript'>;
 
-/** Where the walk put a Slide: its wrapper id and its Section's slug. */
 interface Placement {
   readonly id: string;
   readonly section: string;
 }
 
-/**
- * One Slide of an Episode page, localized and placed: its text, its Scene
- * rendered with its kit, and its place. A section slide always has a title,
- * since it names its Section in the table of contents.
- */
 export type LocalizedSlide = Placement &
   Omit<SlideText, 'title'> & {
     readonly content: ReactNode;
-    /** The Slide header's text: set for a titled Slide of an Episode on the shared header (design-ADR-0012). */
+    // decision: docs/adr/0012-slide-header-and-play-once-motion.md
     readonly header?: SlideHeaderText;
     readonly withoutSectionSlide?: true;
   } & (
@@ -60,17 +49,12 @@ export type LocalizedSlide = Placement &
     | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
   );
 
-/** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
   readonly episode: ComposedId;
-  /** The logical path the page is served at, when an Event presents the Episode: what `slideHref` links on. */
   readonly route?: string;
   readonly locale: Locale;
-  /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];
-  /** What assistive tech hears for a Context reference: the underline's suffix and a marker's name. */
   readonly referenceLabels: ReferenceLabels;
-  /** Whether the Slide wrapper renders each Slide's header or its Scene does (the record's `header`). */
   readonly header: HeaderMode;
 }
 
@@ -128,14 +112,12 @@ function segmentOf(read: Read, spec: SegmentSpec): UntimedSegment {
   };
 }
 
-/** A Slide's Voice script, each segment timed after the last from its own words in `locale`. */
 function voiceScriptOf(read: Read, specs: readonly SegmentSpec[], locale: Locale): VoiceScriptSegment[] {
   const segments = specs.map((spec) => segmentOf(read, spec));
   const spans = segmentSpans(segments, locale);
   return segments.map((segment, index) => ({ ...segment, ...spans[index] }));
 }
 
-/** The Speaker notes, Voice script and reading time a Slide, or the Title slide, declares over its own messages. */
 function contextOf(
   specs: { readonly notes: readonly NoteSpec[]; readonly segments: readonly SegmentSpec[] },
   t: RuntimeTranslator,
@@ -209,7 +191,6 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
   return slide.content(kit);
 }
 
-/** The title a Section takes from the Slide that names it: its section slide, or the one it declares it has not. */
 const sectionTitleOf = (namer: Slide, locale: Locale) =>
   requireTitle(namer.slug, slideTextOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
 

@@ -10,7 +10,7 @@ const PHRASE =
 const BUTTON =
   'group/ref inline cursor-pointer rounded-sm p-0 text-left align-baseline focus-visible:outline-2 focus-visible:outline-offset-2 print:cursor-auto';
 
-/** The underlined phrase: a native button the drawer's delegated listener hears (FE-010 §4). */
+// decision: FE-010 §4
 function RefButton({ note, label, children }: { note: string; label: string; children: ReactNode }) {
   return (
     <button type="button" {...{ [CONTEXT_REF_ATTR]: note }} className={BUTTON}>
@@ -29,12 +29,7 @@ function RefButton({ note, label, children }: { note: string; label: string; chi
  * without JavaScript the phrase still reads, and print shows it as plain text.
  * A Slide reaches it through its kit's `ref`.
  */
-export function ContextRef(props: {
-  note: string;
-  /** Said to assistive tech after the phrase, e.g. `opens speaker note`. */
-  label: string;
-  children: ReactNode;
-}) {
+export function ContextRef(props: { note: string; label: string; children: ReactNode }) {
   return (
     <RefButton note={props.note} label={props.label}>
       {props.children}

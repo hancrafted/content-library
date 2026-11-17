@@ -23,22 +23,14 @@ import type { SlidePresentation } from './slide-presentation';
  * Episode is one import and one list entry.
  */
 
-/** A Slide's own Translation file, as `import en from './i18n/en.json'` types it. */
 export type SlideMessages = Readonly<Record<string, unknown>>;
 
 type KeysOf<T> = T extends object ? keyof T & string : never;
 
-/** The note slugs a Slide's own file translates: `notes.<note>`. */
 export type OwnNoteSlug<M> = M extends { readonly notes: infer N } ? KeysOf<N> : never;
-/** The segment slugs a Slide's own file translates: `voiceScript.segments.<segment>`. */
 export type OwnSegmentSlug<M> = M extends { readonly voiceScript: { readonly segments: infer G } } ? KeysOf<G> : never;
-/** A dotted key to a string leaf of a Slide's own file: what `template` reads. */
 export type OwnTemplateKey<M> = MessageKeys<M, NestedKeyOf<M>>;
 
-/**
- * next-intl's translator over a Slide's own file: a key outside it fails
- * `tsc`. Its `t.rich` already knows the default `em`, `b` and `code` tags.
- */
 export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTranslator<M>>;
 
 /**
@@ -50,47 +42,28 @@ export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTra
  */
 export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly t: OwnTranslator<M>;
-  /** The page's locale, for formatting a number or date the Translation file does not hold. */
   readonly locale: Locale;
-  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
   readonly slideHref: (slug: string) => string;
-  /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
   readonly template: (key: OwnTemplateKey<M>) => string;
-  /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
   readonly ref: (note: N['slug']) => RichTag;
-  /**
-   * The `t.rich` tag that follows a phrase with a Context marker to one of this Slide's notes: `phrase (icon)`;
-   * `className` recolours it on a surface the muted default does not suit.
-   */
   readonly marker: (note: N['slug'], className?: string) => RichTag;
-  /** A Context marker on an element, to one of this Slide's notes; the element must be `relative` unless `className` places it. */
   readonly Marker: MarkerComponent<N['slug']>;
-  /** Marks the element one of this Slide's notes explains. */
   readonly target: (name: N['target']) => TargetProps;
   readonly Title: TitleComponent;
 }
 
-/**
- * A Slide, as the Episode record holds it. Static data: its
- * Scene renders only when the container calls `content`, with a translator it
- * builds from `messages` for the page's locale.
- */
 export interface Slide<S extends string = string, M extends SlideMessages = SlideMessages> {
   readonly presentation?: SlidePresentation;
   readonly slug: S;
   readonly messages: PerLocale<M>;
   readonly notes: readonly NoteSpec[];
   readonly segments: readonly SegmentSpec[];
-  /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
-  /** The slugs of the notes whose Context markers follow the caption, in order, when it needs several; never beside `captionNote`. */
   readonly captionNotes?: readonly string[];
-  /** The Slide's header action, drawn right-aligned in the title row, and the panel it opens under the header. */
   readonly headerAction?: (kit: RuntimeKit) => ReactNode;
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
-/** A Slide whose own file holds a `title`: the only kind that may open a Section. */
 export type TitledSlide = Slide<string, { readonly title: string }>;
 
 /**
@@ -104,9 +77,7 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly messages: { readonly en: M; readonly de: NoInfer<M> };
   readonly notes?: readonly N[];
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
-  /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
-  /** Several of the Slide's notes, each with its own Context marker after the caption, in order; use it instead of `captionNote`. */
   readonly captionNotes?: readonly N['slug'][];
   /**
    * An action beside the title, such as a Guide's Help button: the Slide header renders it right-aligned in the title
@@ -117,7 +88,6 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
-/** The note or notes a Slide's caption ends on, as the record keeps them: one note or several, never both. */
 function captionOf(spec: {
   readonly slug: string;
   readonly captionNote?: string;
@@ -130,7 +100,6 @@ function captionOf(spec: {
   return { ...(captionNote !== undefined && { captionNote }), ...(captionNotes !== undefined && { captionNotes }) };
 }
 
-/** Declares a Slide; its own Translation files type `t`, `template`, notes and segments. */
 export function slide<
   const S extends string,
   M extends SlideMessages,
@@ -151,7 +120,6 @@ export function slide<
   };
 }
 
-/** A Section of Slides: its section slide, which names it, then its page Slides. */
 export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
 
 /**
@@ -161,23 +129,18 @@ export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
  */
 export const withoutSectionSlide = markWithoutSectionSlide as (section: readonly [TitledSlide, ...Slide[]]) => Section;
 
-/** The tone a Title slide may declare: the page's inverse, which its header and Contents panel follow. */
 export type PageTone = 'inverse';
 
-/** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {
   readonly title: string;
   readonly caption: string;
   readonly description: string;
-  /** The Title slide's optional Speaker notes and Voice script, laid out as in a Slide's own file (`notes.<note>`, `voiceScript.segments.<segment>`). */
   readonly notes?: Readonly<Record<string, unknown>>;
   readonly voiceScript?: Readonly<Record<string, unknown>>;
 }
 
-/** How a Slide header enters the first time its Slide is active (design-ADR-0012). */
 export type SlideEntrance = 'typewriter' | 'fade' | 'none';
 
-/** Who renders each Slide's header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
 export type HeaderMode = 'shared' | 'authored';
 
 /**
@@ -189,7 +152,6 @@ export type HeaderMode = 'shared' | 'authored';
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
-  /** Offers the page-wide Chat app / Coding agent choice in the table-of-contents menu. */
   readonly agentView?: true;
   /** Configured pages reveal navigation on Title departure by default; visible-from-start bypasses only that entrance. */
   readonly tocEntrance?: 'title-departure' | 'visible-from-start';
@@ -197,10 +159,8 @@ export interface EpisodeComposition<Ep extends string = string> {
   readonly transitionPrecedence?: 'enter' | 'leave';
   /** Viewport pixels for semantic tone sampling; absent, the page header's measured lower edge. */
   readonly surfaceSamplingLine?: number;
-  /** Its folder's name: unique among its siblings, so an Event's copy usually keeps its original's (its id holds the Event). */
   readonly slug: Ep;
   readonly messages: PerLocale<EpisodeMessages>;
-  /** The Title slide's Speaker notes and Voice script segments, when its text holds them. */
   readonly notes?: readonly NoteSpec[];
   readonly segments?: readonly SegmentSpec[];
   /**
@@ -221,17 +181,14 @@ export interface EpisodeComposition<Ep extends string = string> {
    * `'authored'` leaves them to each Scene, which renders the kit's `Title`.
    */
   readonly header?: 'authored';
-  /** The Slide header's entrance, once per Episode; `'typewriter'` when absent. */
   readonly entrance?: SlideEntrance;
   readonly sections: readonly Section[];
 }
 
-/** An Episode's header mode, read once from its record: the shared header unless the record sets `header: 'authored'`. */
 export function headerModeOf(record: Pick<EpisodeComposition, 'header'>): HeaderMode {
   return record.header ?? 'shared';
 }
 
-/** An Episode record from its own text and its Sections; each Section's first Slide names it. */
 export function episode<Ep extends string>(record: EpisodeComposition<Ep>): EpisodeComposition<Ep> {
   return record;
 }

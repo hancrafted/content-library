@@ -14,7 +14,6 @@ import { checkDrawerStrings, contextItemsOf, NOT_DRAWER_STRINGS } from './contex
  * turned into `ContextDrawerInput`.
  */
 
-/** Page chrome's Translation files, which own the Context drawer's words. */
 const PAGE_CHROME_WORDS = { en: chromeEn, de: chromeDe } as const;
 
 export async function contextDrawerInput(

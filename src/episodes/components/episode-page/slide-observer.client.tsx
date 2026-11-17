@@ -7,7 +7,6 @@ import { activeId, readingLineMargin } from '@/shared/lib/reading-line.pure';
 import type { UrlState } from '@/shared/lib/url-state';
 import { useContext, useEffect } from 'react';
 
-/** One observer over every Slide wrapper, narrowed by `rootMargin`. */
 function observeWrappers(
   ids: readonly string[],
   rootMargin: string,
@@ -52,7 +51,6 @@ function readingLineObserver(
   });
 }
 
-/** The approach threshold: a wider margin that decides `near`, touching nothing but the zone store. */
 function approachObserver(ids: readonly string[], zones: ZoneStore | null): IntersectionObserver {
   return observeWrappers(ids, APPROACH_ROOT_MARGIN, (entries) => {
     for (const entry of entries) zones?.setNear(entry.target.id, entry.isIntersecting);

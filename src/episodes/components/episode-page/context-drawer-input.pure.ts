@@ -64,7 +64,6 @@ function checkCitations(slide: string, note: SpeakerNoteItem): void {
   }
 }
 
-/** Throws on a malformed Slide context, so a broken Episode fails `next dev` and the static build. */
 export function checkContext(
   slide: string,
   notes: readonly SpeakerNoteItem[],

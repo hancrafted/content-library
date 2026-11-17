@@ -71,7 +71,6 @@ const WHY = {
 const SECTION = { en: { title: 'Foundations' }, de: { title: 'Grundlagen' } };
 const VISUAL = { en: { caption: 'A picture' }, de: { caption: 'Ein Bild' } };
 
-/** What a Scene saw of its kit, so a test reads it back from the content the Slide returned. */
 const seen = (kit: RuntimeKit): ReactNode => kit as unknown as ReactNode;
 const kitOf = (localized: LocalizedSlide): RuntimeKit => localized.content as unknown as RuntimeKit;
 
@@ -93,7 +92,6 @@ const retitled = slide({
 });
 const visual = slide({ slug: 'visual', messages: VISUAL, content: (kit) => seen(kit as never) });
 
-/** The Episode a test localizes into: the walk's real placement of these Sections. */
 function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide[]])[]): EpisodeContext {
   return {
     episode: 'ai-token-economy',
@@ -107,7 +105,6 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
   };
 }
 
-/** Every Slide of the Episode, localized in page order. */
 function localized(
   locale: Locale,
   sections: readonly (readonly [Slide, ...Slide[]])[] = [[foundations, whyATemplate, visual]],
@@ -116,7 +113,6 @@ function localized(
   return episode.placed.map((placed) => localizeSlide(placed as never, episode));
 }
 
-/** The heading `Title` builds, at the level the Slide's position gives it. */
 function headingOf(kit: RuntimeKit): ReactElement<{ as: string; 'data-target': string; children: ReactNode }> {
   return kit.Title({ children: 'x' }) as ReactElement<{ as: string; 'data-target': string; children: ReactNode }>;
 }

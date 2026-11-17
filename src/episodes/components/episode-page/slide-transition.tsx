@@ -34,7 +34,6 @@ export function SlideTransition({ edge }: { edge: ResolvedSlideTransition }) {
   );
 }
 
-/** The effect inside the destination scope: the Iceberg style's filter-free wave front, or a filtered ink. */
 function EdgeEffect({
   effect,
   filterId,

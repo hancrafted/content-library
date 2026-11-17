@@ -2,13 +2,7 @@ import type { TagId } from '@/content-store/schemas/fields';
 import type { EpisodeCard, Labelled } from '@/episodes/components/episode-card/episode-card.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 
-/*
- * What the Episodes section decides before it draws anything: which published
- * Episodes spotlight, which cards the Browse grid shows for a selection and a
- * search query, and what each filter chip counts. No React (FE-007 §3), so the leaf only wires
- * state to these answers.
- */
-
+// decision: FE-007 §3
 /** The Tags the overview offers as filter chips, in order (design-ADR Tags replace Topics); search still matches every Tag name. */
 export const FILTER_TAGS = [
   'context-engineering',
@@ -30,19 +24,16 @@ export interface BrowseSelection {
   readonly tags: readonly TagId[];
   /** The text the visitor typed into search; blank lifts the search. */
   readonly query: string;
-  /** True once the visitor asked for every match instead of the first {@link BROWSE_CAP}. */
   readonly expanded: boolean;
 }
 
 export const INITIAL_SELECTION: BrowseSelection = { tags: [], query: '', expanded: false };
 
-/** The selection with the Tag pressed, or released if it was already pressed. */
 export function toggleTag(selection: BrowseSelection, tag: TagId): BrowseSelection {
   const tags = selection.tags.includes(tag) ? selection.tags.filter((id) => id !== tag) : [...selection.tags, tag];
   return { ...selection, tags };
 }
 
-/** Whether a Tag is pressed or a query typed, i.e. whether "Reset filters" has anything to lift. */
 export function hasActiveFilters(selection: BrowseSelection): boolean {
   return selection.tags.length > 0 || fold(selection.query) !== '';
 }
@@ -90,17 +81,12 @@ function matches(card: EpisodeCard, selection: BrowseSelection): boolean {
 }
 
 export interface BrowseView {
-  /** Cards that fit the selection, before the cap. */
   readonly matching: number;
-  /** Slugs to show, in card order. */
   readonly visible: ReadonlySet<string>;
-  /** Matches folded away by the cap. */
   readonly overflow: number;
-  /** True when the matches outnumber the cap, so the fold control has something to fold or unfold. */
   readonly foldable: boolean;
 }
 
-/** Which cards the grid shows: every match, until the cap folds the tail unless the visitor expanded it. */
 export function browseView(
   cards: readonly EpisodeCard[],
   selection: BrowseSelection,

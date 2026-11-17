@@ -1,6 +1,5 @@
 import { TypedText, typedLength } from './typed-text';
 
-/** A page Slide's Eyebrow: computed by the container from the table of contents, never authored. */
 export interface EyebrowText {
   readonly section: string;
   readonly position: number;
@@ -9,21 +8,15 @@ export interface EyebrowText {
   readonly label?: string;
 }
 
-/** The counter as the eyebrow shows it, in brackets. */
 function counterOf({ position, count }: EyebrowText): string {
   return `(${position}/${count})`;
 }
 
-/** The Eyebrow's characters in typing order: the Section title, then `(n/N)`. */
 export function eyebrowLength(eyebrow: EyebrowText): number {
   return typedLength(`${eyebrow.section}${counterOf(eyebrow)}`);
 }
 
-/**
- * The Eyebrow (design-ADR-0012): the line above a page Slide's title, its Section on
- * its place among that Section's page Slides in brackets, `(n/N)`, right after
- * it, as one line. Small, uppercase, muted, in the body font. `delays` types it in.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function SlideEyebrow({
   eyebrow,
   delays,

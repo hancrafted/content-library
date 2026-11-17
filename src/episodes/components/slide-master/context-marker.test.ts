@@ -6,7 +6,6 @@ import { ContextMarker } from './context-marker';
 
 type MarkerProps = Parameters<typeof ContextMarker>[0];
 
-/** The marker's button, parsed from the server markup the page ships. */
 function render(props: MarkerProps) {
   return load(renderToStaticMarkup(createElement(ContextMarker, props)))('button');
 }

@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-/** What a part takes besides its content: the `data-target` a Slide kit's `target(…)` returns. */
 interface PartProps {
   'data-target'?: string;
   children: ReactNode;

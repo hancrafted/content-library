@@ -11,16 +11,13 @@ import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { VideoLabels } from '@/shared/components/ui/youtube-link';
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/** The strings a card draws that are not on the card itself. */
 export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
 }
 
-/** Reads one of the card's own labels, a key of the Episode browser's Translation files (`episodeBrowser.<key>`). */
 export type CardLabelRead = (key: 'open' | 'comingSoon' | 'watchVideo' | 'newTab') => string;
 
-/** The card's own labels, read from the Episode browser's Translation file; the one builder every page that draws cards uses. */
 export function cardLabels(t: CardLabelRead): CardLabels {
   return {
     open: t('open'),
@@ -61,19 +58,15 @@ function CardFooter({ card, variant, labels, showFormat }: FooterProps) {
 export interface EpisodeCardProps {
   card: EpisodeCard;
   variant: CardVariant;
-  /** The title's heading level, one below the heading the card sits under. */
   headingLevel: CardHeadingLevel;
   locale: Locale;
   labels: CardLabels;
-  /** Whether the card names its Format; see `showsFormat`. */
   showFormat: boolean;
-  /** Where the card sits in its grid. */
   className?: string;
   /** Position of the decorative graphic panel; left by default on every browsing surface. */
   visualPosition?: CardVisualPosition;
 }
 
-/** The card's own data attributes, the hooks tests and probes read. */
 function dataOf(card: EpisodeCard) {
   return {
     'data-episode-card': '',
@@ -84,11 +77,6 @@ function dataOf(card: EpisodeCard) {
   };
 }
 
-/**
- * One Episode as a card, in the landing page's style: the lead Tag's accent and
- * icon, title, caption, Tags, release date and video. A published card is a link
- * as a whole; an announced-only one is muted and goes nowhere.
- */
 export function EpisodeCardView(props: EpisodeCardProps) {
   const { card, variant } = props;
   return (

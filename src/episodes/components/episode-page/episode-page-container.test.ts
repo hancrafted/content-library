@@ -29,7 +29,6 @@ const EPISODE = {
   de: { title: 'Seitenvorlage', caption: 'c', description: 'd' },
 };
 
-/** A Voice script one segment long that reads for `minutes` in English. */
 function scriptOf(minutes: number) {
   const script = Array.from({ length: minutes * 140 }, () => 'word').join(' ');
   return { voiceScript: { segments: { s: { title: 't', keywords: 'k', script } } } };
@@ -55,13 +54,11 @@ function untitled(slug: string, minutes: number): Slide {
   });
 }
 
-/** The site-wide translator stand-in: the only string `recordContent` reads from it is the Context reference label. */
 async function translatorOf(): Promise<RuntimeTranslator> {
   const read = () => 'opens speaker note';
   return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
 }
 
-/** The Slides of an Episode of these Sections, as the container hands them to the table of contents. */
 async function slidesOf(sections: readonly Section[]) {
   return (
     await recordContent(episode({ slug: 'ai-token-economy', messages: EPISODE, sections }), 'en', {

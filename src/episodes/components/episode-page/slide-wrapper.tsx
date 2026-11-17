@@ -15,11 +15,8 @@ export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
   readonly transition?: ResolvedSlideTransition;
   readonly presentation?: SlidePresentation;
   readonly size?: keyof typeof MIN_HEIGHT;
-  /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (design-ADR-0012). */
   readonly mode?: HeaderMode;
-  /** The Slide header the wrapper renders above the Scene on `shared`; absent for an untitled Slide. */
   readonly header?: SlideHeaderProps;
-  /** Under a header, the Scene's frame fills the rest of the Slide (`fill`) or hugs its content (`hug`, the Title slide's hero). */
   readonly scene?: 'fill' | 'hug';
 }
 
@@ -147,7 +144,6 @@ function FrontLayer({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presen
     </SlideIdentity>
   ) : null;
 }
-/** On the shared header: the Slide header, then the Scene in a `display: contents` box the entrance CSS reaches. */
 function SharedContent({ header, scene = 'fill', children }: Pick<SlideWrapperProps, 'header' | 'scene' | 'children'>) {
   return (
     <>
