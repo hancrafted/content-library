@@ -5,14 +5,11 @@ import type { ReactNode } from 'react';
 interface PartyResultProps {
   readonly title: string;
   readonly goal: string;
-  /** The goal's two halves, each as the one sentence of its chip, such as "✗ together". */
   readonly chips: readonly { readonly half: Half; readonly text: string }[];
   readonly fails: string;
-  /** Follows the goal, such as a Speaker note marker. */
   readonly marker?: ReactNode;
 }
 
-/** "=" and the party the four cards add up to: its goal, failed, and the two halves of it that broke. */
 export function PartyResult({ title, goal, chips, fails, marker }: PartyResultProps) {
   return (
     <div className="flex items-center gap-4 px-1">

@@ -9,19 +9,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { theThoughtExperiment } from './slide';
 
-/*
- * "The thought experiment", picked Option A (cards plus the cause on hover): four ticked cards add up to the failed
- * party. At rest each card shows one fact, one result line and the half of the goal it breaks; the cause from the card
- * it met is in the DOM for the lit card. Read as the page renders the Scene under the shared Slide header.
- */
-
 const SECTION = slide({
   slug: 'a-thought-experiment',
   messages: { en: { title: 'A thought experiment' }, de: { title: 'Ein Gedankenexperiment' } },
   content: () => null,
 });
 
-/** The Scene as the page renders it; the section slide is a stand-in, so the test reaches no Episode file. */
 function sceneOf(locale: Locale = 'en') {
   const placed = placeSections<Slide>([[SECTION, theThoughtExperiment]]).flat();
   const localized = localizeSlide(placed[1] as never, {

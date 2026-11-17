@@ -15,12 +15,6 @@ const LEE = {
 };
 const TOMASEV = { slug: 'tomasev-intelligent-delegation', url: 'https://arxiv.org/abs/2602.11865' };
 
-/**
- * "What to look for in your team" (Spec Option 12a), on screen Slide 1's question "What did you need to do?": a copy of
- * the `grid-1x2` master on the board, two halves split by a hairline. On the left each skill to build in each person
- * points at the failures it fixed, all four marked fixed; on the right the four things the organisation gives, the
- * oversight policy as the shared in/on/out pills. Keeps `motion: none`; each half's list dims the others on hover.
- */
 export const whatToLookForInYourTeam = slide({
   slug: 'what-to-look-for-in-your-team',
   messages: { en, de },

@@ -10,12 +10,6 @@ import { describe, expect, it } from 'vitest';
 import { whatAgenticWorkflowsRequire } from '../episode';
 import { whatItRequiresOfEachPersonSection } from './what-it-requires-of-each-person';
 
-/*
- * The page Slides of the Section "What it requires of each person", as the approved Spec gives them: Slide 7 "Plan back
- * from the goal" (picked 7b), Slide 8 "Contracts at the seams" (8a) and Slide 9 "Reviewing the result" (9a), each read
- * as the page renders its Scene under the shared Slide header.
- */
-
 const EPISODE = episodeRef(
   'what-agentic-workflows-require',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',
@@ -30,7 +24,6 @@ function slideOf(slug: string): Slide {
   return own;
 }
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No placed Slide "${slug}".`);
@@ -58,7 +51,6 @@ const textsOf = ($: ReturnType<typeof sceneOf>, selector: string) =>
     .toArray()
     .map((node) => $(node).text().replace(/\s+/g, ' ').trim());
 
-/** The notes a Scene's Context markers open, in document order. */
 const markersOf = ($: ReturnType<typeof sceneOf>) =>
   $('[data-context-ref]')
     .toArray()

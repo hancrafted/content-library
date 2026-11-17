@@ -3,7 +3,6 @@ import { AgentTag } from '@/episodes/components/slide-shared/party-notes/agent-t
 import { cn } from '@/shared/lib/utils';
 import type { Level } from './level-card';
 
-/** A down arrow: the cards above run the task below. */
 function DownArrow() {
   return (
     <svg viewBox="0 0 24 24" className="size-6 shrink-0" aria-hidden="true">
@@ -12,7 +11,6 @@ function DownArrow() {
   );
 }
 
-/** The one task every level runs: its label chip and the card and task it names. */
 export function ExampleTask({ card, task, label }: { card: string; task: string; label: string }) {
   return (
     <>
@@ -29,7 +27,6 @@ export function ExampleTask({ card, task, label }: { card: string; task: string;
 
 const TILT: Record<Level, string> = { in: '-rotate-1', on: 'rotate-1', out: '-rotate-1' };
 
-/** The task as it runs at one level: an agent's note under that level's pill, what the agent does and what you get. */
 export function TaskExample({
   level,
   label,

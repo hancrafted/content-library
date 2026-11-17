@@ -4,10 +4,8 @@ import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-h
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The move in four steps, as keys of `flow`, left to right. */
 const FLOW = ['stuck', 'help', 'copy', 'next'] as const;
 
-// Teaches the one move every hands-on relies on: stuck, paste what you see, copy the prompt, one next step. The statement above, the four steps as a row, and Help live in this Slide's own header to try at once.
 export const askAiForHelp = slide({
   slug: 'ask-ai-for-help',
   messages: { en, de },

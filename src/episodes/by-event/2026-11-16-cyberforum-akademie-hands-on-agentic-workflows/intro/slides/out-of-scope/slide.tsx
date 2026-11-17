@@ -3,14 +3,12 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The set-aside items, as keys of `items`, with the tilt that makes each note sit in the tray: add or drop one in both Translation files. */
 const ITEMS = [
   { key: 'first', tilt: '-rotate-1' },
   { key: 'second', tilt: 'rotate-1' },
   { key: 'third', tilt: '-rotate-1' },
 ] as const;
 
-// What the session leaves out: a dark "set aside" panel beside a tray of tilted notes, so the list reads as handled, not forbidden. The Slide header shows the title and caption; the Scene holds the panel and the tray.
 export const outOfScope = slide({
   slug: 'out-of-scope',
   messages: { en, de },
