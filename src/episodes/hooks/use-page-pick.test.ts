@@ -3,13 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { PagePicksContext, usePagePick, type PagePicks, type PickName } from './use-page-pick';
 
-/*
- * The page picks (FE-001 §1, transient): what the viewer picked in a page-wide toolbar, a Guide's operating system
- * and AI agent, read by every Slide of the page through `usePagePick`. The Episode container's provider holds them in
- * React state; these tests hand the context a value directly, since the suite renders without a DOM.
- */
-
-/** A Slide part that prints the pick it reads. */
+// decision: FE-001 §1
 function Probe({ name, fallback }: { name: PickName; fallback: string }) {
   const [value] = usePagePick(name, fallback);
   return createElement('output', null, value);

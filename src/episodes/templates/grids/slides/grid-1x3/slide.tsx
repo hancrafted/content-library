@@ -12,7 +12,6 @@ interface ColumnCopy {
   caption: string;
 }
 
-// One column: its accent stub on the hairline, the numeral, then title and caption; the id labels the column.
 function Column({ cell }: { cell: ColumnCopy }) {
   const id = `grid-1x3-${useId()}`;
   return (
@@ -35,9 +34,6 @@ function Column({ cell }: { cell: ColumnCopy }) {
   );
 }
 
-// Three feature columns, each on its own hairline: each column carries an oversized numeral, then its title and caption.
-// A short accent stub sits on the hairline above each column and runs the full column width on hover. The motion is
-// CSS only, so no client widget; under reduced motion the bar jumps.
 export const grid1x3 = slide({
   slug: 'grid-1x3',
   messages: { en, de },

@@ -9,15 +9,12 @@ interface QuadrantCopy {
   index: string;
   title: string;
   caption: string;
-  /** Where the title sits: the quadrant's outer corner. */
   place: string;
-  /** Where the faint index sits: the inner corner by the origin. */
   indexPlace: string;
   tint: string;
   dot: string;
 }
 
-// One quadrant of the matrix; the id labels it.
 function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
   const id = `grid-2x2-${useId()}`;
   return (
@@ -41,10 +38,6 @@ function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
   );
 }
 
-// A consulting quadrant matrix inside an outlined card: an axis cross splits four quadrants, and each quadrant sets its
-// title and caption in its outer corner with a faint index in the inner corner by the origin. Hovering a quadrant tints
-// it and lights the two axis arms that border it; the motion is CSS only, so no client widget. Below `sm` the quadrants
-// stack as outlined cards and the axis cross hides.
 export const grid2x2 = slide({
   slug: 'grid-2x2',
   messages: { en, de },
@@ -93,7 +86,6 @@ export const grid2x2 = slide({
         dot: 'bg-foreground',
       },
     ];
-    // Each arm of the axis cross lights in the colour of whichever neighbouring quadrant is hovered.
     const arm =
       'pointer-events-none absolute hidden bg-foreground/15 transition-colors duration-300 motion-reduce:transition-none sm:block';
     return (

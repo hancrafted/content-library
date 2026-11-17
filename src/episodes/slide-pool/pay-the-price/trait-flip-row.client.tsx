@@ -6,9 +6,6 @@ import { Card, type BackLabels, type FlipRow } from './trait-flip-card.client';
 import styles from './trait-flip.module.css';
 import { rowAt, type FlipEvent, type FlipState, type FlipTarget } from './trait-flip.pure';
 
-/* The trait flip's pieces: a row's chip, cards and backs, and the closing line. `trait-flip.client.tsx` holds the state. */
-
-/** Pointing at or focusing a control opens its target; leaving or blurring it closes it; a tap opens it. */
 function controlHandlers(target: FlipTarget, dispatch: Dispatch<FlipEvent>) {
   return {
     onPointerEnter: (event: PointerEvent) => event.pointerType !== 'touch' && dispatch({ type: 'open', target }),
@@ -22,7 +19,6 @@ function controlHandlers(target: FlipTarget, dispatch: Dispatch<FlipEvent>) {
   };
 }
 
-/** A hairline arrow from the chip out to one side: muted towards the freelancer, `ai` towards the AI. */
 function Arrow({ toAi }: { toAi: boolean }) {
   return (
     <svg
@@ -47,7 +43,6 @@ interface ChipProps {
   handlers: ReturnType<typeof controlHandlers>;
 }
 
-/** The chip: the acronym's letter large, the full name under it, a gloss under that where one is set; the control that brings in its row. */
 function Chip({ row, expanded, handlers }: ChipProps) {
   const asideId = useId();
   return (
@@ -79,7 +74,6 @@ function Chip({ row, expanded, handlers }: ChipProps) {
   );
 }
 
-/** The centre track: the chip between its two arrows, drawn once its cards show. */
 function ChipTrack({ row, expanded, dispatch }: { row: FlipRow; expanded: boolean; dispatch: Dispatch<FlipEvent> }) {
   return (
     <div className="flex items-center justify-center gap-1 @3xl:order-2 @3xl:w-60 @3xl:shrink-0">
@@ -90,7 +84,6 @@ function ChipTrack({ row, expanded, dispatch }: { row: FlipRow; expanded: boolea
   );
 }
 
-/** One row: the chip between its arrows, the freelancer's card and the AI's; stacked on a narrow Slide. */
 export function Row({
   row,
   state,
@@ -122,7 +115,6 @@ export function Row({
   );
 }
 
-/** The closing line: a button that shows and wipes every row back to day one, its Context marker beside it. */
 export function ClosingLine({
   text,
   marker,

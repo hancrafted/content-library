@@ -1,28 +1,15 @@
-/*
- * The typewriter entrance's timing (design-ADR-0012): when each character of a Slide
- * header appears. The pace is irregular, a bit faster then a bit slower, like
- * a person typing, but seeded by the Slide's id, so it is the same on every
- * load and in the static HTML. No DOM, no React: the header renders the
- * delays as CSS custom properties and CSS plays them.
- */
-
-/** Milliseconds per character before jitter: the Eyebrow quick, the title deliberate, the caption fast. */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 const NOMINAL_MILLISECONDS = [22, 45, 10] as const;
 
-/** The breath between one typed part and the next. */
 const PAUSE_MILLISECONDS = 120;
 
-/** Every character starts within this; the caret's last blink fills the rest of the 1.5s entrance. */
 export const TYPE_BUDGET_MILLISECONDS = 1200;
 
-/** The whole header settled, caret gone: when the Slide's entrance is done. */
 export const ENTRANCE_MILLISECONDS = 1500;
 
-/** The jitter's spread: a character's weight lies between these before normalising. */
 const WEIGHT_MINIMUM = 0.45;
 const WEIGHT_SPREAD = 1.1;
 
-/** FNV-1a: a string to a 32-bit seed. */
 function hash(seed: string): number {
   let value = 0x811c9dc5;
   for (let index = 0; index < seed.length; index += 1) {
@@ -32,7 +19,6 @@ function hash(seed: string): number {
   return value >>> 0;
 }
 
-/** mulberry32: a small seeded generator of numbers in [0, 1). */
 function generator(seed: number): () => number {
   let state = seed;
   return () => {
@@ -43,7 +29,6 @@ function generator(seed: number): () => number {
   };
 }
 
-/** `count` positive weights from `seed`, uneven but deterministic, normalised to a mean of one. */
 export function seededJitter(seed: string, count: number): number[] {
   if (!Number.isInteger(count) || count < 0) throw new Error(`Jitter count "${count}" is not a whole number ≥ 0.`);
   const next = generator(hash(seed));
@@ -52,12 +37,6 @@ export function seededJitter(seed: string, count: number): number[] {
   return raw.map((weight) => weight / mean);
 }
 
-/**
- * The delay in milliseconds of every character of each typed part, in order
- * (Eyebrow, title, caption): each part starts after the last one ends and a
- * pause; a header too long for the budget is typed proportionally faster, so
- * every character starts within `TYPE_BUDGET_MILLISECONDS`. An empty part takes no time.
- */
 export function typewriterSchedule(lengths: readonly number[], seed: string): number[][] {
   for (const length of lengths) {
     if (!Number.isInteger(length) || length < 0) throw new Error(`Part length "${length}" is not a whole number ≥ 0.`);

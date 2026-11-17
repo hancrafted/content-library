@@ -9,12 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { openYourTerminal } from './slide';
 
-/*
- * Open your terminal (Spec Option 2a), read through the one interface the page reads a Slide by: localized into a
- * stand-in Guide on the shared Slide header. Its Scene renders as the static export renders it: before the viewer
- * picks, so on the toolbar's defaults (Mac, Claude Code). Which pick shows which view is `os-pick.pure.ts`'s.
- */
-
 const SECTION = slide({
   slug: 'your-terminal',
   messages: { en: { title: 'Your terminal' }, de: { title: 'Dein Terminal' } },
@@ -34,11 +28,9 @@ function localized(locale: Locale): LocalizedSlide {
   });
 }
 
-/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
 const scene = (locale: Locale, picks: Record<string, string> = {}) =>
   load(renderToStaticMarkup(withPagePicks(createElement(Fragment, null, localized(locale).content), picks)));
 
-/** The Help button and panel the Slide gives the header, as the header renders them. */
 const help = (locale: Locale) =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).header?.action)));
 

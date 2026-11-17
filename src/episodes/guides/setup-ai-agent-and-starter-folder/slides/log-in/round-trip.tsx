@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** One stop of the round trip: its numbered label over its picture; `lit` marks the stop the viewer acts in. */
 function Stop({ label, lit = false, children }: { label: string; lit?: boolean; children: ReactNode }) {
   return (
     <div className="flex min-w-0 flex-col gap-2">
@@ -16,7 +15,6 @@ function Stop({ label, lit = false, children }: { label: string; lit?: boolean; 
   );
 }
 
-/** The two arrows between the terminal and the browser: out muted, the way back in `primary`. */
 function Arrows({ out, back }: { out: string; back: string }) {
   return (
     <div className="flex items-center justify-center gap-6 md:flex-col md:gap-10 md:self-center">
@@ -44,7 +42,6 @@ function Arrows({ out, back }: { out: string; back: string }) {
   );
 }
 
-/** What the round trip shows: three pictures and their words, the browser stop the one lit. */
 export interface RoundTripProps {
   readonly labels: { readonly terminal: string; readonly browser: string; readonly back: string };
   readonly arrows: { readonly out: string; readonly back: string };
@@ -53,10 +50,6 @@ export interface RoundTripProps {
   readonly back: ReactNode;
 }
 
-/**
- * The login as a round trip (Option 4a): the terminal sends the viewer to the browser and expects them back. On a
- * phone the stops stack, the arrows turned to point down the page.
- */
 export function RoundTrip({ labels, arrows, terminal, browser, back }: RoundTripProps) {
   return (
     <div className="grid items-start gap-4 md:grid-cols-12" data-round-trip="">

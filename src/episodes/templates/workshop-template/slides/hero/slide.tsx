@@ -3,15 +3,8 @@ import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/sl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The three steps, as keys of `flow.steps`: add or drop one in both Translation files. */
 const STEPS = ['first', 'second', 'third'] as const;
 
-/**
- * The Title slide's hero Scene (the record's `title`): the engine feeds a chain of steps, a prompt built into each
- * one and a person checking between them. Soft tints and hairline borders, no solid fills: the colour carries the
- * structure (ai the engine, info the steps, brand-accent the prompt, human the person), the title above stays the
- * focus. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

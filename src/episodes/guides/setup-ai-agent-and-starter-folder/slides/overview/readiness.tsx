@@ -17,7 +17,6 @@ export interface ReadinessWords {
   readonly reopen: string;
 }
 
-/** An unlisted Episode to watch while waiting, as its card draws it. */
 export type WatchLink = Omit<WatchCardProps, 'locale'>;
 
 export interface ViewBodyProps {
@@ -25,11 +24,8 @@ export interface ViewBodyProps {
   readonly words: ReadinessWords;
   readonly watch: readonly WatchLink[];
   readonly locale: Locale;
-  /** The normal checklist with its "Start at" card. */
   readonly normal: ReactNode;
-  /** The Help note, shown under the ready card, where the checklist is gone. */
   readonly stuck: ReactNode;
-  /** Set when the ready view came from ticking the check skill: takes the tick back and shows the checklist again. */
   readonly onReopen?: () => void;
 }
 
@@ -81,7 +77,6 @@ function Check({ className }: { className: string }) {
 
 const DONE_DISC = 'grid shrink-0 place-items-center rounded-full bg-(--success) text-(--success-foreground)';
 
-/** Takes the "I ran the check skill" tick back, so the checklist shows again. */
 function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
   return (
     <button
@@ -96,7 +91,6 @@ function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
   );
 }
 
-/** The three lines of what is done, each with a green check. */
 function RecapList({ recap }: { recap: readonly string[] }) {
   return (
     <ul className="flex flex-col gap-2">
@@ -112,7 +106,6 @@ function RecapList({ recap }: { recap: readonly string[] }) {
   );
 }
 
-/** The ready card: a green check and a prominent title over the three done lines. */
 function ReadyCard({
   words,
   onReopen,
@@ -140,7 +133,6 @@ function ReadyCard({
   );
 }
 
-/** The missing card: one line per reported piece, each done or open. */
 function MissingCard({ flags, words }: { flags: ReadyFlags; words: ReadinessWords }) {
   const { skills, localSetup } = flags;
   return (
@@ -159,7 +151,6 @@ function MissingCard({ flags, words }: { flags: ReadyFlags; words: ReadinessWord
   );
 }
 
-/** The recap card: three done lines when ready, one line per reported piece when something is missing. */
 function RecapCard({
   view,
   words,
@@ -191,10 +182,6 @@ function Watch({ words, watch, locale }: Pick<ViewBodyProps, 'words' | 'watch' |
   );
 }
 
-/**
- * The Overview Scene body for one view: pure and presentational, so the test renders each view directly. `normal`
- * shows the checklist; `ready` replaces it with the recap card; `missing` puts the recap above the checklist.
- */
 export function ViewBody({ view, words, watch, locale, normal, stuck, onReopen }: ViewBodyProps) {
   if (view.kind === 'normal') return <>{normal}</>;
   return (

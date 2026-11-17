@@ -37,13 +37,7 @@ function render(locale: Locale, picks: Record<string, string> = {}): string {
   return renderToStaticMarkup(withPagePicks(content, picks));
 }
 
-/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
 const scene = (locale: Locale, picks: Record<string, string> = {}) => load(render(locale, picks));
-
-/*
- * Install your AI agent (feedback round 2): the first command typed is the install line, shown with a big Copy button,
- * with the official docs one button away for every AI agent and what might happen under it.
- */
 
 describe('success cases', () => {
   it('speaks its four Voice script segments, in order', () => {

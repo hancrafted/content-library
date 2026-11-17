@@ -4,7 +4,6 @@ import { barBox, elapsedShare, GANTT_BARS, GANTT_LANES, laneClashes, TOOLTIP_RUL
 
 const DESKTOP = { width: 1440, height: 900 };
 
-/** Where the shared popover maths open a bar's tooltip under this Slide's rules: above the bar by preference. */
 function placeTooltip(anchor: Box, viewport: Viewport) {
   return placePopover({ anchor, viewport, side: 'above', ...TOOLTIP_RULES });
 }

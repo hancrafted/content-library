@@ -7,12 +7,9 @@ import { useContext, type ReactNode } from 'react';
 import { BOXES, isStepDone, startStep, type BoxId, type StepNumber } from './start-step.pure';
 import { TicksContext, useTicks } from './ticks.client';
 
-/** One step of the checklist, its words already in the viewer's language. */
 export interface ChecklistStep {
   readonly n: StepNumber;
-  /** The step's name: its Section's title, word for word, so the checklist and the Sections read as the same steps. */
   readonly title: string;
-  /** The label of each box of this step, by box id. */
   readonly boxes: Readonly<Partial<Record<BoxId, string>>>;
 }
 
@@ -23,7 +20,6 @@ export interface ChecklistWords {
   readonly open: string;
 }
 
-/** A Slide link as `localizePath` takes it: the path and its anchor. */
 export interface LinkParts {
   readonly path: string;
   readonly anchor: string | undefined;
@@ -32,12 +28,9 @@ export interface LinkParts {
 export interface ChecklistProps {
   readonly steps: readonly ChecklistStep[];
   readonly words: ChecklistWords;
-  /** Where each step's "Start at step N" lands: the localized href of its first Slide. */
   readonly hrefs: Readonly<Record<StepNumber, LinkParts>>;
   readonly locale: Locale;
-  /** Marks the intro line the head-start note hangs on. */
   readonly intro: ReactNode;
-  /** The rest of the right column, under the "Start at" card. */
   readonly children: ReactNode;
 }
 
@@ -62,7 +55,6 @@ interface StepItemProps {
   readonly toggle: (id: BoxId) => void;
 }
 
-/** The real, labelled checkboxes of one step, each target 44px high. */
 function BoxList({ step, ticked, toggle }: Omit<StepItemProps, 'start'>) {
   return (
     <ul className="ml-11 flex flex-col">
@@ -83,7 +75,6 @@ function BoxList({ step, ticked, toggle }: Omit<StepItemProps, 'start'>) {
   );
 }
 
-/** One step: its number (filled when done, ringed when it is where to start) and its boxes. */
 function StepItem({ step, ticked, start, toggle }: StepItemProps) {
   const done = isStepDone(step.n, ticked);
   const ring = start === step.n ? 'border-2 border-primary' : 'border border-border text-muted-foreground';
@@ -109,7 +100,6 @@ function StepItem({ step, ticked, start, toggle }: StepItemProps) {
   );
 }
 
-/** The top card: names the first open step and links to its first Slide; with everything ticked, points at step 4. */
 function StartCard({
   step,
   allDone,
@@ -141,10 +131,7 @@ function StartCard({
   );
 }
 
-/**
- * The Overview's checklist and its "Start at step N" card: the viewer ticks what they already have, the card names the
- * first step with an open box and links to its first Slide. Ticks are transient (FE-001): they live until a reload.
- */
+// decision: FE-001 §1
 export function Checklist({ steps, words, hrefs, locale, intro, children }: ChecklistProps) {
   const own = useTicks();
   const { ticked, toggle } = useContext(TicksContext) ?? own;

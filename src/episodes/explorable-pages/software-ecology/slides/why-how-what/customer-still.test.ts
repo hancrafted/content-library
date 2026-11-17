@@ -6,10 +6,6 @@ import { describe, expect, it } from 'vitest';
 import { CustomerStill } from './customer-still';
 import { formatsOf } from './still-parts';
 
-/*
- * The Customer card of the still, read as rendered text. Its lead time must read as the Explorable's Customer card
- * reads it (one decimal below ten days, whole days above), so a viewer comparing the two sees one number.
- */
 const readouts = (leadDays: number | null) => {
   const state = stillOf('tire', 'still', 'en');
   const html = renderToStaticMarkup(

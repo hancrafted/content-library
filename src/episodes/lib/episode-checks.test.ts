@@ -5,13 +5,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-checks';
 
-/*
- * The Episode-level checks on a fixture Episode folder built per test: Slide folders under `slides/`, and the server
- * entries handed over as `import.meta.glob` would, a loader per `slide.tsx`. Each check reports findings, never throws,
- * so a broken Episode names what broke.
- */
-
-/** The page glob of a fixture folder, which holds Slide folders but no `episode.ts`. */
 const NO_PAGE: GlobEntries = {};
 
 const made: string[] = [];
@@ -20,7 +13,6 @@ afterEach(() => {
   for (const dir of made.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-/** A fixture page folder holding `folders` (relative paths), as an Episode's own test sees it. */
 function fixture(folders: readonly string[]): string {
   const dir = mkdtempSync(path.join(tmpdir(), 'episode-checks-'));
   made.push(dir);
@@ -28,20 +20,17 @@ function fixture(folders: readonly string[]): string {
   return dir;
 }
 
-/** A Slide record as a server entry exports it: its slug, its declared notes, its messages per locale. */
 function slide(slug: string, notes: readonly string[] = [], noteKeys: readonly string[] = notes) {
   const strings = { notes: Object.fromEntries(noteKeys.map((key) => [key, { text: key }])) };
   return { slug, notes: notes.map((note) => ({ slug: note })), messages: { en: strings, de: strings } };
 }
 
-/** Server entries keyed as `import.meta.glob('./slides/*\/slide.tsx')` keys them. */
 function entries(modules: Record<string, object>, prefix = './slides/'): GlobEntries {
   return Object.fromEntries(
     Object.entries(modules).map(([folder, module]) => [`${prefix}${folder}/slide.tsx`, async () => module]),
   );
 }
 
-/** Every finding of every check, Slide checks first. */
 async function findingsOf(checks: EpisodeChecks): Promise<string[]> {
   const all = await Promise.all([...checks.slides, ...checks.folder].map(({ findings }) => findings()));
   return all.flat();

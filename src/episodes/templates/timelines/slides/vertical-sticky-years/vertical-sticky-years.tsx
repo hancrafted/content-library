@@ -16,12 +16,6 @@ const TONE: Record<ChipTone, string> = {
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/**
- * Sticky years: a changelog. Each year pins in a narrow left column while its entries scroll past on the right,
- * separated by hairlines, and unpins when its group ends. The year whose group spans the reading line is lit (CSS
- * scroll-driven, see the module); hovering an entry tints its row and slides in an arrow. Below `md` the year pins as
- * a band above its entries. A server part: the Slide reads its strings and passes them in.
- */
 export function StickyYears({ label, entries }: { label: string; entries: YearEntry[] }) {
   return (
     <ol aria-label={label} className="border-b border-border">
@@ -80,7 +74,6 @@ function EntryRow({ entry }: { entry: PlacedEntry }) {
   );
 }
 
-/** The entry's tone glyph and number, decorative: the row's title carries the meaning. */
 function EntryBadge({ entry }: { entry: PlacedEntry }) {
   return (
     <span

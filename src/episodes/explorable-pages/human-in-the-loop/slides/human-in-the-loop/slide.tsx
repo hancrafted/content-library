@@ -5,11 +5,6 @@ import { HumanInTheLoop } from '@/explorables/human-in-the-loop/human-in-the-loo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * The human in the loop workflow in its own words: the source-to-quiz Workflow in its Stages view (the other
- * use cases one pill away), every toolbar control and every stage's "Try it", with a readme on the Slide. The AI attention span Episode
- * shows it with that Slide's words on top.
- */
 export const humanInTheLoop = slide({
   slug: 'human-in-the-loop',
   messages: { en, de },

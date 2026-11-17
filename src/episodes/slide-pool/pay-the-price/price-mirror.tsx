@@ -10,7 +10,6 @@ interface PriceMirrorProps {
   labels: BackLabels;
 }
 
-/** The column heads: the freelancer on a neutral pill, the AI on the one `ai` pill, the five traits between them. */
 function ColumnHeads({ columns }: Pick<PriceMirrorProps, 'columns'>) {
   return (
     <div className="flex gap-3">
@@ -39,11 +38,6 @@ function ColumnHeads({ columns }: Pick<PriceMirrorProps, 'columns'>) {
   );
 }
 
-/**
- * The PRICE mirror (Spec Option 2a, after the design reference's page 1): the freelancer left, the five trait chips
- * down the centre spelling P R I C E, the AI right on its soft `ai` edge, one list item per row so a screen reader
- * reads trait, freelancer and AI together; the closing line under it. The trait flip discloses it a row at a time.
- */
 export function PriceMirror({ columns, rows, closing, closingMarker, labels }: PriceMirrorProps) {
   return (
     <div className="@container flex flex-col gap-8">

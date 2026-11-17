@@ -4,12 +4,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { SlideIdContext, useSlideEntry, ZoneStoreContext } from './use-slide-zone';
 
-/** A Scene part that prints the entrance it reads. */
 function EntryProbe() {
   return createElement('output', null, useSlideEntry());
 }
 
-/** The probe inside Slide `id` of a page whose zone store is `store`. */
 function inSlide(store: ReturnType<typeof createZoneStore>, id: string) {
   return createElement(
     ZoneStoreContext,

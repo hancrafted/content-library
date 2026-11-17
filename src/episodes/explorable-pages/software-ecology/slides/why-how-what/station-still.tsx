@@ -3,7 +3,6 @@ import type { StillDoc, StillStation } from '@/explorables/software-ecology/stil
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { Doc, GlyphAt, type Formats } from './still-parts';
 
-/** Where a station's waiting count shows its weeks of work: red from two weeks, amber from one, plain below. */
 const LEVEL_CLASS = ['fill-muted-foreground', 'fill-(--warning) font-semibold', 'fill-destructive font-semibold'];
 
 const cardClass = (s: StillStation, ringed: boolean) => {
@@ -12,7 +11,6 @@ const cardClass = (s: StillStation, ringed: boolean) => {
   return s.waiting > RACK ? 'fill-card stroke-destructive' : 'fill-card stroke-border';
 };
 
-/** The rack of six slots at the card's left, filled from the bottom; a full rack's top slot red. */
 function Rack({ s }: { s: StillStation }) {
   const full = s.waiting > RACK,
     { x, w, topY, slot } = s.rackAt;
@@ -39,7 +37,6 @@ function Rack({ s }: { s: StillStation }) {
   );
 }
 
-/** A full rack's surplus, "+n", over the rack. */
 function Overflow({ s, template, f }: { s: StillStation; template: string; f: Formats }) {
   if (s.waiting <= RACK) return null;
   return (
@@ -51,11 +48,9 @@ function Overflow({ s, template, f }: { s: StillStation; template: string; f: Fo
 
 export interface StationWords {
   readonly waiting: string;
-  /** "+{n}" past a full rack. */
   readonly overflow: string;
 }
 
-/** A work center as the Explorable's factory view draws it: card, rack, glyph and title, the document in work, its waiting count. */
 export function Station(p: { s: StillStation; words: StationWords; f: Formats; ringed?: boolean }) {
   const { s, words, f } = p,
     ringed = !!p.ringed;
@@ -86,7 +81,6 @@ export function Station(p: { s: StillStation; words: StationWords; f: Formats; r
   );
 }
 
-/** The turbo on the AI work center's out belt, and how many tasks it now hands on per task. */
 export function Turbo({ s, label }: { s: StillStation; label: string }) {
   const [x, y, w, h] = s.box;
   const start = x + w + 8,
@@ -111,10 +105,8 @@ export function Turbo({ s, label }: { s: StillStation; label: string }) {
   );
 }
 
-/** At most this many documents draw the pile-up; one stands for about twenty waiting. */
 const PILE = { max: 10, per: 20, rows: [4, 3, 2, 1] };
 
-/** The surplus a full rack cannot hold, heaped at the end of the belt into it, AI-made as the work that fills it. */
 export function Pile({ end, surplus }: { end: readonly [number, number]; surplus: number }) {
   const n = Math.min(PILE.max, Math.ceil(surplus / PILE.per));
   const docs: StillDoc[] = PILE.rows

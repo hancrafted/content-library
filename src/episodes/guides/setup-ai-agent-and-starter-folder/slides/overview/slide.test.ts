@@ -12,12 +12,6 @@ import { ViewBody, type ReadinessWords } from './readiness';
 import { decideView } from './ready-state.pure';
 import { overview } from './slide';
 
-/*
- * Overview (Spec Option 1a, the checklist of feedback round 2), read through the one interface the page reads a Slide by: localized into a stand-in Guide
- * on the shared Slide header, its notes and Voice script as the drawer gets them and its Scene as the page renders it.
- * The section slides are stand-ins, so the test reaches no Guide file; the card and the technical link land on them.
- */
-
 const standIn = (slug: string, title: string) =>
   slide({ slug, messages: { en: { title }, de: { title } }, content: () => null });
 
@@ -64,7 +58,6 @@ const card = (route: string, title: string) => ({
 });
 const WATCH = [card('/episode/a', 'Titel A'), card('/episode/b', 'Titel B')];
 
-/** The view body as the client part hands it the view read from a query string. */
 function viewOf(search: string, onReopen?: () => void) {
   const html = renderToStaticMarkup(
     createElement(ViewBody, {

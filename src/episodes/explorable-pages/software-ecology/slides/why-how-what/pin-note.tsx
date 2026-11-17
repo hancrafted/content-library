@@ -3,7 +3,6 @@ import { useId, type ReactNode } from 'react';
 import { PinNumber } from './pin-number';
 
 export interface PinNoteProps {
-  /** The pin's number; a note that points at no part of the still has none. */
   readonly n?: number;
   readonly slug: 'why' | 'how' | 'what';
   readonly word: string;
@@ -12,7 +11,6 @@ export interface PinNoteProps {
   readonly targetProps?: TargetProps;
 }
 
-/** One numbered answer beside the still: its pin's number and word, the claim, then the caption with its markers. */
 export function PinNote({ n, slug, word, title, caption, targetProps }: PinNoteProps) {
   const id = `pin-note-${useId()}`;
   return (

@@ -2,13 +2,11 @@ import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { describe, expect, it } from 'vitest';
 import { placeSections, sectionOf, withoutSectionSlide, type SectionList, type SlideOutline } from './episode.pure';
 
-/** A Section as a Slide record lists it: its section slide's slug first, then its page Slides'. */
 function list(...slugs: [string, ...string[]]): readonly [SlideOutline, ...SlideOutline[]] {
   const [first, ...rest] = slugs;
   return [{ slug: first }, ...rest.map((slug) => ({ slug }))];
 }
 
-/** What a reader of placed Slides sees: each id and the slug of the record it came from. */
 function idsAndSlugs(sections: readonly (readonly [SlideOutline, ...SlideOutline[]])[]): [string, string][] {
   return placeSections(sections).flatMap((section) =>
     section.map(({ id, slide }): [string, string] => [id, slide.slug]),

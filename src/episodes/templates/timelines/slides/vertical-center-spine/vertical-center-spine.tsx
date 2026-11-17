@@ -11,12 +11,6 @@ type Side = 'left' | 'right';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/**
- * Centre spine: entries alternate left and right of one vertical spine, each card joined to a node on it. The spine
- * fills as the page scrolls and each node lights as the fill reaches it (CSS scroll-driven, see the module); hovering
- * an entry lights its node and connector. Below `md` every card sits right of a spine on the left. Document order is
- * top to bottom whatever the side. A server part: the Slide reads its strings and passes them in.
- */
 export function CentreSpine({ label, entries }: { label: string; entries: SpineEntry[] }) {
   return (
     <div className={cn(styles.track, 'relative')}>
@@ -54,7 +48,6 @@ function SpineItem({ entry, index, count, side }: { entry: SpineEntry; index: nu
   );
 }
 
-/** The entry's year: small beside the card below `md`, a large numeral across the spine from it above. */
 function SpineDate({ date, side }: { date: string; side: Side }) {
   return (
     <p
@@ -70,7 +63,6 @@ function SpineDate({ date, side }: { date: string; side: Side }) {
   );
 }
 
-/** The node on the spine and the connector to the card, both lighting on hover. */
 function SpineNode({ side }: { side: Side }) {
   return (
     <span aria-hidden="true" className="relative col-start-1 row-span-2 row-start-1 md:col-start-2 md:row-span-1">

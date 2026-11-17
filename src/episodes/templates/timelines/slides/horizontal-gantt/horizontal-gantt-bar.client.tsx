@@ -5,14 +5,12 @@ import type { FocusEvent, MouseEvent } from 'react';
 import type { BarCopy } from './horizontal-gantt-tooltip.client';
 import { barBox, elapsedShare, GANTT_BARS, TODAY, type GanttItem, type GanttLane } from './horizontal-gantt.pure';
 
-/** Each lane's colour, set as `--lane` so the bar, its swatch and its tooltip share it; the tokens carry dark values. */
 export const LANE_CLASS: Record<GanttLane, string> = {
   a: '[--lane:var(--primary)]',
   b: '[--lane:var(--foreground)]',
   c: '[--lane:var(--muted-foreground)]',
 };
 
-/** The bar's still-planned part: a hatch in its lane colour, so progress reads by texture as well as tint. */
 const HATCH =
   'bg-[repeating-linear-gradient(135deg,color-mix(in_oklch,var(--lane)_22%,transparent)_0_6px,color-mix(in_oklch,var(--lane)_8%,transparent)_6px_12px)]';
 
@@ -27,14 +25,12 @@ export interface BarHandlers {
 interface BarProps {
   item: GanttItem;
   copy: BarCopy;
-  /** Set while this bar's tooltip is open. */
   expanded: boolean;
   dimmed: boolean;
   tipId: string;
   handlers: BarHandlers;
 }
 
-/** One phase: a pill from its start to its end, filled up to today and hatched beyond. */
 export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarProps) {
   const bar = GANTT_BARS[item];
   const { leftPercent, widthPercent } = barBox(bar);
@@ -60,7 +56,6 @@ export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarP
   );
 }
 
-/** The pill itself: the lane's hatch, the share of the phase already passed, the lane dot and the title. */
 function BarFace({ item, title }: { item: GanttItem; title: string }) {
   const bar = GANTT_BARS[item];
   return (

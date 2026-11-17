@@ -1,9 +1,3 @@
-/*
- * Grid 3 × 3: the crosshair. Hovering a tile tints every other tile that shares its row or column, so the wall reads
- * like a dashboard lookup. Only at three columns (`lg`), where rows and columns on screen match the 3 × 3 data;
- * at two or one columns the tiles reflow and a crosshair would point at the wrong neighbours.
- */
-
 @media (width >= 64rem) {
   .wall:has([data-row='1']:hover) [data-row='1']:not(:hover),
   .wall:has([data-row='2']:hover) [data-row='2']:not(:hover),

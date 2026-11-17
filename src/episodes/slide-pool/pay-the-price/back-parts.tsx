@@ -2,18 +2,10 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './trait-flip.module.css';
 
-/*
- * What every back shares, from the prototype (`build2.py`): the 200 × 72 canvas, the freelancer, the AI chat icon with
- * its star, and a label sized from a type role. An element the beat moves sits inside its own `<g>`, never on a
- * `transform` attribute, so the CSS animation never replaces where the element is placed.
- */
-
-/** Which side of the row a back draws: the freelancer's world on the left, the AI's on the right. */
 export interface BackProps {
   ai: boolean;
 }
 
-/** The beat's timing variables: `d` the delay in seconds, `tx`/`ty`/`fx` offsets in px, `s` an end scale, `t` a duration. */
 export function beat(vars: {
   d?: number;
   tx?: number;
@@ -32,10 +24,6 @@ export function beat(vars: {
   } as CSSProperties;
 }
 
-/**
- * A back's canvas: as wide as its drawing at rest, `width` × 72 user units, shrinking with its card. A tight canvas
- * sits flush against the chip side of its card, so both sides of a row rest at the same inset from their border.
- */
 export function BackSvg({ width, children }: { width: number; children: ReactNode }) {
   return (
     <svg
@@ -49,10 +37,8 @@ export function BackSvg({ width, children }: { width: number; children: ReactNod
   );
 }
 
-/** The caption role's size, in px; a label's size in user units scales it, so no font size is written here. */
 const CAPTION_PIXELS = 14;
 
-/** A text label at `size` user units, centred on `x` by default, set in the caption role and scaled to fit. */
 export function Label({
   x,
   y,
@@ -77,7 +63,6 @@ export function Label({
   );
 }
 
-/** The freelancer: a head and shoulders in hairline. */
 export function Person({ x, y, className }: { x: number; y: number; className?: string }) {
   return (
     <g transform={`translate(${x} ${y})`}>
@@ -94,7 +79,6 @@ export function Person({ x, y, className }: { x: number; y: number; className?: 
   );
 }
 
-/** The AI: always the chat icon with the AI star. */
 export function AiIcon({ x, y, className }: { x: number; y: number; className?: string }) {
   return (
     <g transform={`translate(${x} ${y})`}>
@@ -111,7 +95,6 @@ export function AiIcon({ x, y, className }: { x: number; y: number; className?: 
   );
 }
 
-/** Who the side is about: the freelancer, or the AI. */
 export function Who({ ai, x, y, className }: BackProps & { x: number; y: number; className?: string }) {
   return ai ? <AiIcon x={x} y={y} className={className} /> : <Person x={x} y={y} className={className} />;
 }
