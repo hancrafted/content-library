@@ -26,16 +26,16 @@ const MINIMAL = 'minimal';
 
 const STAGES = ['plan', 'requirements', 'research', 'page'] as const;
 
-const HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH = { show: false } as const;
-const CONTROLS = {
-  level: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  demo: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  debug: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  download: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  upload: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  progressDownload: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  progressUpload: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
-  reset: HIDDEN_TOOLBAR_CONTROL_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH,
+const HIDDEN = { show: false } as const;
+const CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH = {
+  level: HIDDEN,
+  demo: HIDDEN,
+  debug: HIDDEN,
+  download: HIDDEN,
+  upload: HIDDEN,
+  progressDownload: HIDDEN,
+  progressUpload: HIDDEN,
+  reset: HIDDEN,
 };
 
 function researchTask(locale: string): string {
@@ -71,7 +71,7 @@ export const whatAnAgenticWorkflowIsSlide = slide({
           workflow="summer-party"
           locale={locale}
           view="stages"
-          controls={CONTROLS}
+          controls={CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH}
           diagram={{
             label: t('diagramLabel'),
             initials: false,

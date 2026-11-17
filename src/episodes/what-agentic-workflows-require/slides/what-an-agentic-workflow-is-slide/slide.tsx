@@ -27,7 +27,7 @@ const MINIMAL = 'minimal';
 const STAGES = ['plan', 'requirements', 'research', 'page'] as const;
 
 const HIDDEN = { show: false } as const;
-const CONTROLS = {
+const CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH = {
   level: HIDDEN,
   demo: HIDDEN,
   debug: HIDDEN,
@@ -71,7 +71,7 @@ export const whatAnAgenticWorkflowIsSlide = slide({
           workflow="summer-party"
           locale={locale}
           view="stages"
-          controls={CONTROLS}
+          controls={CONTROLS_EXCEPT_USE_CASE_PICKER_AND_STAGES_JOBS_SWITCH}
           diagram={{
             label: t('diagramLabel'),
             initials: false,
