@@ -32,6 +32,8 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${source}$`);
 }
 
+const NO_CONFIG = Symbol('no config');
+
 function makeCtx(files: Record<string, string>, opts?: { config?: unknown }) {
   const violations: Reported[] = [];
   const warnings: Reported[] = [];
@@ -49,6 +51,7 @@ function makeCtx(files: Record<string, string>, opts?: { config?: unknown }) {
       throw new Error(`ENOENT: ${path}`);
     },
     async readJSON(path: string) {
+      if (path === '.archgate/config.json' && opts?.config === NO_CONFIG) throw new Error(`ENOENT: ${path}`);
       if (path === '.archgate/config.json') return opts?.config ?? { domains: {} };
       throw new Error(`ENOENT: ${path}`);
     },
@@ -122,6 +125,20 @@ describe('adr-frontmatter', () => {
     await rules['adr-frontmatter'].check(ctx);
     // ASSERT
     expect(violations).toEqual([]);
+  });
+
+  it('accepts a built-in domain and refuses a custom one when .archgate/config.json is absent', async () => {
+    // ARRANGE
+    const files = passingFiles();
+    files[ADR_PATH] = VALID_ADR.replace('domain: general', 'domain: invented');
+    const { ctx, violations } = makeCtx(files, { config: NO_CONFIG });
+    const withBuiltIn = makeCtx(passingFiles(), { config: NO_CONFIG });
+    // ACT
+    await rules['adr-frontmatter'].check(ctx);
+    await rules['adr-frontmatter'].check(withBuiltIn.ctx);
+    // ASSERT
+    expect(violations.some((v) => /'invented' is not a registered domain/.test(v.message))).toBe(true);
+    expect(withBuiltIn.violations).toEqual([]);
   });
 
   it("fails when type is not 'adr'", async () => {

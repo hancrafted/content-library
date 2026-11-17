@@ -30,6 +30,15 @@ const REQUIRED_SECTIONS = [
 const DOS_HEADING_RE = /^### Do's[ \t]*$/;
 const DONTS_HEADING_RE = /^### Don'ts[ \t]*$/;
 
+async function registeredDomainsOrBuiltInsWhenConfigIsMissing(ctx: RuleContext): Promise<string[]> {
+  try {
+    const cfg = (await ctx.readJSON('.archgate/config.json')) as { domains?: Record<string, string> };
+    return [...BUILTIN_DOMAINS, ...Object.keys(cfg?.domains ?? {})];
+  } catch {
+    return BUILTIN_DOMAINS;
+  }
+}
+
 function basename(p: string): string {
   return p.split('/').pop() ?? p;
 }
@@ -196,13 +205,7 @@ export default {
         'ADR frontmatter: type/id/title/domain/rules/files/description present non-empty, type: adr leads, id matches filename prefix, domain registered, rules:true ⇔ sibling .rules.ts.',
       severity: 'error',
       async check(ctx) {
-        let registered = BUILTIN_DOMAINS;
-        try {
-          const cfg = (await ctx.readJSON('.archgate/config.json')) as { domains?: Record<string, string> };
-          registered = [...BUILTIN_DOMAINS, ...Object.keys(cfg?.domains ?? {})];
-        } catch {
-          // config.json optional — built-ins only
-        }
+        const registered = await registeredDomainsOrBuiltInsWhenConfigIsMissing(ctx);
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         const allRules = await ctx.glob(RULES_GLOB);
         for (const file of files) {
