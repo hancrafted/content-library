@@ -1,4 +1,7 @@
 # Drive learnings
 
-One entry per Operator correction, logged at once, and per Fortify option that was not picked, with a recurrence
-count. Fortify reads this file for past proposals.
+One entry per failure mode with its recurrence count, and every Operator correction verbatim. Format: the drive skill's references/fortify.md, "The learnings file".
+
+## Failure modes
+
+## Corrections
