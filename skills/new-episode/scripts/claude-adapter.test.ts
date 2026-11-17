@@ -10,8 +10,7 @@ const JOB_SPAN = 'aaaaaaaaaaaaaaaa';
 const RUN_SPAN = 'cccccccccccccccc';
 const LOG = 'events.jsonl';
 
-/** The environment without the GIT_* variables a git hook sets, which would point every git call at the hooked repository. */
-const cleanEnv = (): NodeJS.ProcessEnv =>
+const environmentWithoutGitVariables = (): NodeJS.ProcessEnv =>
   Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))) as NodeJS.ProcessEnv;
 
 let dir: string;
@@ -23,7 +22,7 @@ const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.email=t@t', '-c', 'user.name=t', ...args], {
     cwd,
     encoding: 'utf8',
-    env: cleanEnv(),
+    env: environmentWithoutGitVariables(),
   });
 
 const marker = (sessions: string[]): string =>
@@ -56,7 +55,7 @@ function hook(event: 'start' | 'stop', session: string, env: Record<string, stri
   return spawnSync('node', [ADAPTER, event], {
     input: JSON.stringify(payload),
     encoding: 'utf8',
-    env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main, ...env },
+    env: { ...environmentWithoutGitVariables(), CLAUDE_PROJECT_DIR: main, ...env },
   });
 }
 
@@ -172,7 +171,7 @@ function pointHook(mode: string, session: string, payload: Record<string, unknow
   return spawnSync('node', [ADAPTER, mode], {
     input: JSON.stringify(input),
     encoding: 'utf8',
-    env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main, ...env },
+    env: { ...environmentWithoutGitVariables(), CLAUDE_PROJECT_DIR: main, ...env },
   });
 }
 const skillHook = (session: string, payload: Record<string, unknown>, env: Record<string, string> = {}) =>
@@ -272,7 +271,7 @@ describe('point facts (PostToolUse on Skill and Read, InstructionsLoaded)', () =
     const result = spawnSync('node', [ADAPTER, 'skill', shortWait], {
       input: JSON.stringify({ ...input, tool_input: { skill: 'tdd' } }),
       encoding: 'utf8',
-      env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main },
+      env: { ...environmentWithoutGitVariables(), CLAUDE_PROJECT_DIR: main },
       timeout: 8_000,
     });
     // ASSERT
@@ -282,7 +281,11 @@ describe('point facts (PostToolUse on Skill and Read, InstructionsLoaded)', () =
 
   it('exits 0 and writes nothing for a payload that is not JSON', () => {
     // ACT
-    const result = spawnSync('node', [ADAPTER, 'skill'], { input: 'not json', encoding: 'utf8', env: cleanEnv() });
+    const result = spawnSync('node', [ADAPTER, 'skill'], {
+      input: 'not json',
+      encoding: 'utf8',
+      env: environmentWithoutGitVariables(),
+    });
     // ASSERT
     expect(result.status).toBe(0);
     expect(linesOf(wt)).toHaveLength(2);
