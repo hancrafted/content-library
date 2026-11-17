@@ -125,6 +125,23 @@ describe('success cases', () => {
     expect(text).not.toContain('{{');
   });
 
+  it('leaves a check about one round out of the technical review, which reviews every round at once', () => {
+    // ARRANGE
+    const aboutOneRound = 'The note for {{item}} is one line.';
+    const base = reviewedLook();
+    const job = {
+      ...base,
+      review: { slots: base.review?.slots ?? [], checks: [aboutOneRound, 'Every finding is one line.'] },
+    };
+    // ACT
+    const simple = joined(reviewPrompt(file, job, 'simple'));
+    const technical = joined(reviewPrompt(file, job, 'technical'));
+    // ASSERT
+    expect(simple).toContain('The note for {{item}} is one line.');
+    expect(technical).not.toContain('The note for {{item}} is one line.');
+    expect(technical).toContain('Every finding is one line.');
+  });
+
   it('lists each entry of a multiple review slot under its own label and numbered marker, each with its own sample', () => {
     // ARRANGE
     const rank = reviewedRank();

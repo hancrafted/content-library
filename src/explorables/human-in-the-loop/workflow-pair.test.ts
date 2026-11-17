@@ -43,10 +43,6 @@ const taskShape = (task: TaskDef) => ({
   recommendedModel: task.recommendedModel,
 });
 
-/**
- * What a `foreach.over` points at, as structure: the output and which H2 of its template, by position. The slug is
- * a word of one language (`categories`, German `kategorien`), so only its place among the H2s must match.
- */
 const overShape = (file: WorkflowFile, over: string) => {
   const [output = '', slug = ''] = over.split('#');
   const key = file.stages.flatMap((stage) => stage.jobs).find((task) => task.output === output)?.template ?? '';

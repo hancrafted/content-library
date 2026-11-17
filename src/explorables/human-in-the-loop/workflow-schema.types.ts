@@ -18,10 +18,6 @@ export type Tier = (typeof TIERS)[number];
 export const MODEL_TIERS = ['high', 'medium', 'low'] as const;
 export type ModelTier = (typeof MODEL_TIERS)[number];
 
-/**
- * One prompt technique of the catalogue. The catalogue is data, written once at the top of a Workflow file: adding a
- * technique is a new entry, never a schema change. Sections and tasks name techniques by `id`.
- */
 export interface TechniqueDef {
   readonly id: string;
   readonly tier: Tier;
@@ -46,7 +42,6 @@ export interface SectionDef {
   readonly purpose?: Purpose;
   readonly explain?: string;
   readonly techniques?: readonly string[];
-  /** Markdown with markers. General instructions only: scenario facts arrive through slots, never written here. */
   readonly text: string;
 }
 

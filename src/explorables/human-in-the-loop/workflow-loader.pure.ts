@@ -47,11 +47,6 @@ export function loadWorkflow(source: string): FileResult {
   return unique.length > 0 ? { problems: unique } : { file };
 }
 
-/**
- * Everything that reads a chain of stages, run on the file as each mode runs it: a stage marked for one mode is checked
- * only among the stages of that mode, so a dependency on a stage of the other mode is refused. A file with no marked
- * stage is the same in both modes and is checked once.
- */
 function modeProblems(file: WorkflowFile): string[] {
   const marked = file.stages.some((stage) => stage.only !== undefined);
   const views = marked ? MODES.map((mode) => fileInMode(file, mode)) : [file];

@@ -88,10 +88,6 @@ export function jobOrderProblems(file: WorkflowFile): string[] {
   });
 }
 
-/**
- * Outputs handed on twice, and gates held twice, by stages of the file as it runs in one mode: the same output or gate
- * may sit on two stages only when they are marked for opposite modes, so the caller passes one mode's file.
- */
 export function singletonProblems(file: WorkflowFile): string[] {
   const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
   const gates = file.stages.flatMap((stage) => (stage.gate === undefined ? [] : [String(stage.gate)]));

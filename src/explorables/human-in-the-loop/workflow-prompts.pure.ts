@@ -106,10 +106,6 @@ export function thenPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode):
   return viewOf({ sections, slots: [] }, file);
 }
 
-/**
- * The prompt of the review step: the general reviewer joined with the task's checks, inputs and template. A check that
- * names `{{item}}` is about one round; the CLI prompt reviews every round at once, so it leaves those checks out.
- */
 export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode = 'simple'): PromptView {
   const { runtime, options } = modeOf(mode);
   const review = task.review ?? { slots: [], checks: [] };

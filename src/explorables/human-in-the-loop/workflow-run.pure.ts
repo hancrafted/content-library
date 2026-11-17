@@ -3,17 +3,6 @@ import { isOptionalTask } from './workflow-outputs.pure';
 import { itemsUnder, type Item } from './workflow-run-items.pure';
 import type { ForeachDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * The run model: the one seam for progress. From a loaded Workflow file, what the viewer pasted (`results`) and the
- * demo flag it says every job's state, every repeated stage's rounds and every stage's count. The stepper, the
- * diagram views and the toolbar read from here and never derive progress themselves.
- *
- * Results are one flat map keyed `stage.job`, or `stage.job#k` for round k of a repeated stage. A job that hands on
- * nothing is done when its key holds any text (the checkbox writes `done`). A job's review is checked when the key
- * `stage.job.checked` (`stage.job.checked#k`) holds any text. At CLI level a repeated stage's one orchestrator keeps its
- * result and check under the bare `stage.job` keys, which count for every round.
- */
-
 export type Results = Readonly<Record<string, string>>;
 
 export type JobState = 'open' | 'done' | 'checked';
@@ -48,7 +37,6 @@ export interface StageRun {
 
 export interface Run {
   readonly stages: readonly StageRun[];
-  /** Demo mode may change only while nothing is pasted: the shape of a run never changes under the viewer. */
   readonly canChangeDemo: boolean;
 }
 
@@ -60,10 +48,6 @@ export const checkedKey = (stageId: string, jobId: string, round?: number): stri
 
 export const filled = (results: Results, key: string): boolean => (results[key] ?? '').trim() !== '';
 
-/**
- * A round of a repeated stage reads its own key, then the stage's single key: at CLI level one orchestrator runs every
- * round, so its one result and its one check stand for all of them.
- */
 const keysFor = (own: string, shared: string, round: number | undefined): string[] =>
   round === undefined ? [own] : [own, shared];
 
@@ -100,10 +84,6 @@ function itemsOf(file: WorkflowFile, foreach: ForeachDef, input: RunInput): Item
   return input.demo ? shown.slice(0, foreach.demo) : shown;
 }
 
-/**
- * The jobs a stage's count and state go by: its required ones. An optional job is left out entirely, so a stage is
- * done without it. In an optional stage every job is optional, so there its own jobs count.
- */
 const countedRuns = (stage: StageDef, runs: readonly JobRun[]): readonly JobRun[] => {
   if (stage.optional) return runs;
   const optional = new Set(stage.jobs.filter(isOptionalTask).map((task) => task.id));

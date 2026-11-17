@@ -1,10 +1,5 @@
 import type { Job } from './workflow.types';
 
-/*
- * The order a stage's jobs are drawn in: after the jobs they `needs`, else in file order. The loader refuses unknown
- * ids and cycles, so here a bad `needs` only costs order, never a job: each job is drawn once.
- */
-
 export function orderedJobs(jobs: readonly Job[]): Job[] {
   const byId = new Map(jobs.map((each) => [each.id, each]));
   const placed = new Set<string>();

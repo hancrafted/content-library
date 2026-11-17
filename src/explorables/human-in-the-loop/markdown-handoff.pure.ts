@@ -1,9 +1,3 @@
-/*
- * The markdown handoff: one H1, then H2 sections, and no front matter, because a chat app such as ChatGPT cannot be
- * relied on to write it. A template is a handoff with the sections left empty; a sample or example is checked against
- * its template's H2 headings. An H2 written `<like this>` in a template stands for one or more sections of any title.
- */
-
 export interface MarkdownHandoff {
   readonly h1: string | undefined;
   readonly h2: readonly string[];

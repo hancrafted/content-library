@@ -1,13 +1,6 @@
 import { markerNamesIn, unknownMarkers } from './workflow-markers.pure.ts';
 import type { SectionDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * The checks of technical prompts that call skills. A skill is named in `skills` and printed as a `/<name>` line at the
- * top of the prompt, so a bare slash call inside section text is refused, while one inside backticks is text for the
- * user to type; a second skill goes in `then`. A technical prompt names `{{item}}` only in a stage that plays rounds at
- * the Technical level. One sentence per problem.
- */
-
 const NAME = '[a-z][a-z0-9-]*';
 const SKILL_NAME = new RegExp(`^${NAME}$`);
 
