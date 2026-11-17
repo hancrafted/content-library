@@ -1,9 +1,8 @@
 import type { defineConfig } from 'oxlint';
 
-/** The rule map oxlint's config accepts, plugin rules included. */
 export type RuleMap = NonNullable<Parameters<typeof defineConfig>[0]['rules']>;
 
-/** Native oxlint rules for every TS file (GEN-005): the js, typescript-eslint recommended and stylistic sets, plus the complexity and size caps. */
+// decision: GEN-005 §1
 export const NATIVE_RULES: RuleMap = {
   'constructor-super': 'off',
   'for-direction': 'error',

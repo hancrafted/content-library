@@ -1,6 +1,5 @@
-// `npm run art` (FE-005 §5, design-ADR 0025): renders every composed page's Slides through Vite's SSR loader, bakes
-// each `<Art>` drawing with its CSS-module paint, and writes the content-hashed files and their manifest to
-// `public/art/`, which `next build` copies into the export. Runs as `prebuild`; the folder is build output, ignored by git.
+// decision: FE-005 §5
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 import { createHash } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -30,7 +29,6 @@ const ONLY = args.only?.split(',');
 const CHUNKS_PER_WORKER = 8;
 const ENTRY = '/src/episodes/components/art-build/art-pages.tsx';
 
-/** What the entry yields for each Slide: where it comes from, and its markup on demand. */
 interface ArtPage {
   readonly page: string;
   readonly markup: () => string;
@@ -57,7 +55,6 @@ const server = await createViteServer({
   css: { modules: { generateScopedName: scopedName } },
 });
 
-/** Every CSS module the rendered pages imported, compiled, in the order the loader met them. */
 async function moduleCss(): Promise<string> {
   const ids = [...server.moduleGraph.idToModuleMap.keys()].filter((id) => /\.module\.css$/.test(id));
   const texts = await Promise.all(

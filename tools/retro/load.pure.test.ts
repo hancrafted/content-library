@@ -3,7 +3,6 @@ import { analyzeLoad, type SessionLog } from './load.pure.ts';
 
 const WINDOW = { since: new Date('2026-11-15T08:00:00Z'), until: new Date('2026-11-16T08:00:00Z') };
 
-/** An assistant line calling Bash with `command`, as Claude Code logs it. */
 function bash(id: string, timestamp: string, command: string): string {
   return JSON.stringify({
     type: 'assistant',
@@ -12,7 +11,6 @@ function bash(id: string, timestamp: string, command: string): string {
   });
 }
 
-/** A user line carrying the result of tool call `id`, as Claude Code logs it. */
 function resultLine({
   id,
   timestamp,
@@ -31,12 +29,10 @@ function resultLine({
   });
 }
 
-/** The result of tool call `id` that succeeded with `text`. */
 function result(id: string, timestamp: string, text: string): string {
   return resultLine({ id, timestamp, text, isError: false });
 }
 
-/** The result of tool call `id` that failed with `text`. */
 function failed(id: string, timestamp: string, text: string): string {
   return resultLine({ id, timestamp, text, isError: true });
 }
@@ -155,7 +151,6 @@ describe('success cases', () => {
 
   it('reports the most logs open at once, and the most main sessions open at once', () => {
     // ARRANGE
-    /** A log stamped once at `from` and once at `to`. */
     const span = (subagent: boolean, from: string, to: string): SessionLog => ({
       subagent,
       lines: [JSON.stringify({ type: 'user', timestamp: from }), JSON.stringify({ type: 'user', timestamp: to })],

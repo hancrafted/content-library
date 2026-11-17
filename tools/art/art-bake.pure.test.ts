@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { bakeArt } from './art-bake.pure.ts';
 import { cssRules } from './css-rules.pure.ts';
 
-/** A page as the art build renders it: the figure's host inline, its drawing inside `<g data-art-source>`. */
 const page = (drawing: string, host = 'robot-module__figure') =>
   `<div><div data-zone="near"><svg viewBox="0 0 10 10"><g class="${host}">` +
   `<g data-art-source="robot/hull">${drawing}</g></g></svg></div></div>`;

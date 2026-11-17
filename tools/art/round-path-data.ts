@@ -1,7 +1,3 @@
-// `npm run art:round -- [--decimals <n>] <file>…`: rounds the coordinates of every quoted SVG path string in the
-// given files (Scene art JSON, facet modules, art components) in place, to integers unless `--decimals` says
-// otherwise, then formats each as oxfmt would, since shorter strings rewrap. What counts as a path string:
-// round-path-data.pure.ts.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
 import { roundPathData } from './round-path-data.pure.ts';

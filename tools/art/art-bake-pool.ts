@@ -1,5 +1,3 @@
-// Bakes chunks of Slides across worker threads, each chunk to the next free worker; results come back by chunk
-// index, so the order the workers finish in never reaches the merge.
 import { Worker } from 'node:worker_threads';
 import type { BakedChunk, BakeRequest, BakeResponse, Chunk } from './art-chunks.pure.ts';
 import type { CssRule } from './css-rules.pure.ts';
@@ -10,7 +8,6 @@ interface Queue {
   next: number;
 }
 
-/** Feeds one worker chunks from the shared queue until it is empty; rejects if the worker fails or exits early. */
 function drain(worker: Worker, queue: Queue) {
   return new Promise<void>((resolve, reject) => {
     let finished = false;

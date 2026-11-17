@@ -1,5 +1,3 @@
-// The shell half shared by the `youtube:*` commands that call the YouTube Data API (`apply`, `pull`): checks the
-// `.env` safety rule, reads the credentials and connects. Exits on any problem. Setup: tools/youtube/AGENTS.md.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -13,7 +11,6 @@ function git(...args: string[]): boolean {
   return spawnSync('git', args, { cwd: ROOT, stdio: 'ignore' }).status === 0;
 }
 
-/** A YouTube client authorised from the repo's `.env`; exits when the file is unsafe or incomplete. */
 export async function connectFromEnv(): Promise<YoutubeClient> {
   const envPath = path.join(ROOT, ENV_FILE);
   const problem = envProblem({

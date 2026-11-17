@@ -1,10 +1,7 @@
-// `npm run youtube:voice-script`: the pure half — the transcript read as timed lines, cut into a window per Slide,
-// and the reading time of a Voice script. The shell (`voice-script.ts`) reads the disk; the judgment (the rewrite)
-// is `/episode-transcript-to-voice-script`.
+// decision: docs/adr/0002-reading-time-from-voice-script.md
 import type { SpokenLanguage } from './transcript.pure.ts';
 
 export interface Cue {
-  /** Seconds into the video at which the line first appears. */
   readonly start: number;
   readonly text: string;
 }
@@ -34,10 +31,6 @@ export function parseCues(vtt: string): Cue[] {
   return cues;
 }
 
-/**
- * The transcript text of each Slide: the lines from its start up to the next matched start. A Slide with no start
- * (unmatched) gets no speech, and the Slide before it runs on to the next matched start.
- */
 export function cutBySlide(
   cues: readonly Cue[],
   slides: readonly string[],
@@ -62,7 +55,6 @@ export function cutBySlide(
 const TAG = /<\/?[a-z][\w-]*>/gi;
 const WORD = /[\p{L}\p{N}]/u;
 
-/** The spoken words of Voice script texts, rich-text tags stripped, counted as the site counts them. */
 export function spokenWords(texts: readonly string[]): number {
   return texts.reduce(
     (sum, text) =>
@@ -75,7 +67,6 @@ export function spokenWords(texts: readonly string[]): number {
   );
 }
 
-/** Minutes the Voice script texts take to read at the language's pace, unrounded. */
 export function readingMinutes(texts: readonly string[], language: SpokenLanguage): number {
   return spokenWords(texts) / WORDS_PER_MINUTE[language];
 }

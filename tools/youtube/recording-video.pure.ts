@@ -1,19 +1,14 @@
-// The video facts file of the Recording model: `video.<lang>.json`, written by `youtube:transcript` from what YouTube
-// reports about the recording, and the rule that needs it: the last YouTube chapter lasts at least 10 seconds.
 import type { Chapter } from './chapters.pure.ts';
 import type { Violation } from './recording.pure.ts';
 
-/** The files `video.<lang>.json`. */
 export const VIDEO_FILE = /^video\.[a-z]{2}\.json$/;
 
 /** YouTube's minimum chapter length (YouTube Help 9884579). */
 const MIN_CHAPTER_SECONDS = 10;
 const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 
-/** The content of `video.<lang>.json`: what the video is, as YouTube reports it. */
 interface VideoFacts {
   readonly videoId: string;
-  /** The video's length in seconds. */
   readonly durationSeconds: number;
 }
 
@@ -46,7 +41,6 @@ export function videoViolations(file: string, text: string): Violation[] {
   return 'problems' in parsed ? parsed.problems.map((message) => ({ file, message })) : [];
 }
 
-/** The problem of a last chapter shorter than YouTube's minimum for the video's length; `text` is the video file, if any. */
 export function lastChapterProblems(chapters: readonly Chapter[], text: string | undefined): string[] {
   const last = chapters.at(-1);
   const parsed = text === undefined ? undefined : parseVideoFacts(text);

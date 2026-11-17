@@ -1,6 +1,3 @@
-// `npm run retro:load [-- --hours <n>]`: prints how agents loaded the machine over the last n hours (default 24),
-// mined from this repository's Claude Code session logs, its worktrees' and their subagents' included. It only reads
-// the logs and writes nothing but stdout. The judgement lives in load.pure.ts, the layout in load-format.pure.ts.
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';

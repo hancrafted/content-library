@@ -1,8 +1,3 @@
-// `npm run registry` writes the Episode registry from the Episode folders and the Event, Template, Explorable page and Guide registries from
-// their record files, formatted as oxfmt would; then, from the page catalogue, one route per Episode page, and from
-// the compositions, the page summaries. The fast suite fails while a checked-in file is stale: a registry or a route in
-// registry.test.ts, a summary in src/episodes/lib/page-summary.test.ts. What each holds: episode-registry.pure.ts,
-// event-registry.pure.ts, episode-routes.pure.ts and page-summaries.pure.ts.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createVitest } from 'vitest/node';
@@ -29,7 +24,6 @@ const EXPLORABLE_PAGES_DIR = 'src/content-store/explorable-pages';
 const EXPLORABLES_DIR = 'src/explorables';
 const GUIDES_DIR = 'src/content-store/guides';
 
-/** Every page folder the one folder walker finds, an Event's copies included, with its entries and `episode.ts` text. */
 function readEpisodeFolders(root: string): EpisodeFolder[] {
   return pageFolders(root).map(({ id, folder, dir, files }) => {
     const record = path.join(dir, 'episode.ts');
@@ -38,7 +32,6 @@ function readEpisodeFolders(root: string): EpisodeFolder[] {
   });
 }
 
-/** Every file directly under a record folder of the content store; none while the folder does not exist yet. */
 function readFilesIn(root: string, dir: string): string[] {
   if (!existsSync(path.join(root, dir))) return [];
   return readdirSync(path.join(root, dir), { withFileTypes: true })
@@ -46,17 +39,12 @@ function readFilesIn(root: string, dir: string): string[] {
     .map(({ name }) => name);
 }
 
-/** The folders directly under a directory: each Explorable is one. */
 function readFoldersIn(root: string, dir: string): string[] {
   return readdirSync(path.join(root, dir), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
 }
 
-/**
- * Loads a module of the site by its path from the repository root, aliases, JSON and JSX resolved as the site resolves
- * them: Vitest's module runner under `npm run registry`, a plain `import()` inside the fast suite.
- */
 export type SiteLoader = <T>(repoPath: string) => Promise<T>;
 
 type Store = Pick<
@@ -64,7 +52,6 @@ type Store = Pick<
   'episodesPathParams' | 'episodesPathPageAt' | 'eventEpisodeParams' | 'eventEpisodePageAt'
 >;
 
-/** Every Episode page the page catalogue builds, each with its Episode's folder and record, for its own route. */
 async function episodeRoutes(root: string, load: SiteLoader): Promise<EpisodeRoute[]> {
   const catalogue = await load<Store>('src/content-store/store.ts');
   const folders = new Map(readEpisodeFolders(root).map((folder) => [folder.id, folder]));
@@ -83,13 +70,11 @@ async function episodeRoutes(root: string, load: SiteLoader): Promise<EpisodeRou
   ];
 }
 
-/** The folders directly under a directory, but a dynamic `[segment]`; none while it does not exist. */
 function staticFoldersIn(root: string, dir: string): string[] {
   if (!existsSync(path.join(root, dir))) return [];
   return readFoldersIn(root, dir).filter((name) => !name.startsWith('['));
 }
 
-/** Every route file on disk `npm run registry` wrote: an Episode's own page's and an Episode's under its Event. */
 function generatedRoutesOnDisk(root: string): string[] {
   return ROUTE_GROUPS.flatMap((group) => [
     ...staticFoldersIn(root, `${group}/episodes`).map((slug) => `${group}/episodes/${slug}/page.tsx`),
@@ -103,13 +88,11 @@ function generatedRoutesOnDisk(root: string): string[] {
   );
 }
 
-/** The generated routes on disk the page catalogue no longer builds a page for. */
 function obsoleteRoutes(root: string, routes: readonly RegistryFile[]): string[] {
   const current = new Set(routes.map((file) => file.path));
   return generatedRoutesOnDisk(root).filter((file) => !current.has(file));
 }
 
-/** Removes a route file and every folder it leaves empty, up to its route group. */
 function removeRoute(root: string, file: string): void {
   rmSync(path.join(root, file));
   for (let dir = path.dirname(file); !(ROUTE_GROUPS as readonly string[]).includes(dir); dir = path.dirname(dir)) {
@@ -118,7 +101,6 @@ function removeRoute(root: string, file: string): void {
   }
 }
 
-/** The registry files the folders and record files give, read as plain text. */
 function sourceFiles(root: string): RegistryFile[] {
   return [
     ...episodeRegistryFiles(readEpisodeFolders(root)),
@@ -129,7 +111,6 @@ function sourceFiles(root: string): RegistryFile[] {
   ];
 }
 
-/** The summaries the compositions give, read through the site's own module graph once the source registries are current. */
 async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   const summaries = await load<{ compositionSummaries: typeof compositionSummaries }>(
     'src/episodes/lib/composition-summaries.ts',
@@ -137,7 +118,6 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
-/** Files in the repository's oxfmt style, so `format:check` passes them. */
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
   return Promise.all(
     files.map(async (file) => {
@@ -156,10 +136,6 @@ function staleOf(root: string, files: readonly RegistryFile[]): RegistryFile[] {
   return files.filter((file) => onDisk(root, file) !== file.text);
 }
 
-/**
- * The registry and route files whose checked-in text differs from what the folders and the page catalogue give, and
- * the generated routes no page needs any more: none when every one is current.
- */
 export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
   const routes = await formatted(root, episodeRouteFiles(await episodeRoutes(root, load)));
   const stale = staleOf(root, [...(await formatted(root, sourceFiles(root))), ...routes]);

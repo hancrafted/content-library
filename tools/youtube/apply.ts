@@ -1,8 +1,3 @@
-// `npm run youtube:apply -- <episode folder | page url> [--lang en|de] [--dry-run] [--force]`: writes the Episode's
-// `recording/youtube.<lang>.md` to its YouTube video (description update, pinned-comment post) and stores the posted
-// comment's ID and the fingerprint of the sent description in that file. It refuses a description edited on YouTube
-// since its last apply unless `--force`. `--dry-run` reads the remote state and prints the plan, writing nothing.
-// Exits non-zero on any refusal, so a CI job can call it. Pure half: `apply.pure.ts`; setup of the credentials: tools/youtube/AGENTS.md.
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { descriptionFingerprint, planApply } from './apply.pure.ts';

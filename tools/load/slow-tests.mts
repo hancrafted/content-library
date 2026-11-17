@@ -1,7 +1,4 @@
-// The slow-tests log: every fast-suite test that ran past 750 ms, one JSON line each, in the git common directory so
-// every worktree of the repository writes to the one file. The fast config reports into it (SlowTestsLog). Its
-// readers ask two questions, both from a working directory: what a branch logged since a time (slowTestReport:
-// `verify` since its run started, `wt:done` since the branch forked) and keep the last 30 days (trimSlowTests).
+// decision: ARCH-003 §4.4
 import { appendFileSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Reporter, TestCase } from 'vitest/node';
@@ -14,29 +11,17 @@ import { currentBranch, gitCommonDir } from './git.ts';
  */
 const SLOW_TEST_MILLISECONDS = 750;
 
-/** How long the log keeps an entry. */
 const KEEP_DAYS = 30;
 
-/**
- * One logged test: its full name, its file relative to the repo root, how long it ran, the load factor the run
- * measured (tools/load/workers.ts; absent in entries logged before it was recorded), where and when.
- */
 type SlowTest = { test: string; file: string; ms: number; loadFactor?: number; branch: string; at: string };
 
-/** The log's path for the repository `cwd` sits in, or null outside a git repository. */
 function slowTestsLogPath(cwd: string): string | null {
   const commonDir = gitCommonDir(cwd);
   return commonDir === null ? null : path.join(commonDir, 'slow-tests.jsonl');
 }
 
-/** How many tests, as the slow-tests lines say it: `1 test`, `3 tests`. */
 const testCount = (count: number): string => (count === 1 ? '1 test' : `${count} tests`);
 
-/**
- * A Vitest reporter that appends each test over SLOW_TEST_MILLISECONDS to the slow-tests log as it finishes, with the load
- * factor of the run. A test the load-aware timeout let pass is still a test creeping towards CI's limit. Logging
- * never fails a run: outside a git repository, or when the log cannot be written, the test goes unlogged.
- */
 export class SlowTestsLog implements Reporter {
   private readonly log: string | null;
   private readonly branch: string;
@@ -77,7 +62,6 @@ export class SlowTestsLog implements Reporter {
   }
 }
 
-/** The log's entries, oldest first; none when there is no log yet. Unreadable lines are skipped. */
 function readSlowTests(log: string): SlowTest[] | null {
   let text: string;
   try {
@@ -94,17 +78,11 @@ function readSlowTests(log: string): SlowTest[] | null {
   });
 }
 
-/** One entry as a report prints it: time, load factor when logged, test and when it ran. */
 function formatSlowTest(entry: SlowTest): string {
   const load = entry.loadFactor === undefined ? '' : ` at load ${entry.loadFactor.toFixed(1)}`;
   return `  ${(entry.ms / 1000).toFixed(1)} s${load}  ${entry.file} > ${entry.test}  (${entry.at})`;
 }
 
-/**
- * The lines to print about the tests `branch` logged at or after `since`, in the log of the repository `cwd` sits
- * in: a header naming the count, the branch and the caller's `note` (`CI fails at 3 s`), then one line per entry,
- * oldest first. Empty when there are none, no log yet, or `cwd` is outside a git repository.
- */
 export function slowTestReport({
   cwd,
   branch,

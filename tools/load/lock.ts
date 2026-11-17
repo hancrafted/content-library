@@ -20,24 +20,18 @@ import {
   readOwner,
 } from './lock-owner.ts';
 
-/** How often a waiter looks again, and how long it waits before it gives up. */
 export interface Timing {
   pollMilliseconds: number;
   timeoutMilliseconds: number;
 }
 
 export interface LockOptions extends Timing {
-  /** A directory inside the repository; its git common directory holds the lock. Default: the current directory. */
   cwd?: string;
-  /** Called once, when the lock is held by another process and this one starts to wait, with that holder if readable. */
   onWait?: (holder: Holder | null) => void;
-  /** How a pid's start time is read. Default: `ps` (psStartTime). */
   startTimeOf?: (pid: number) => ProcessStart;
-  /** The time a leftover directory's age is measured against (see sweepLeftovers). Default: the current time. */
   now?: Date;
 }
 
-/** A takeover marker this old belongs to a waiter killed mid-takeover, which takes microseconds. */
 const MARKER_STALE_MILLISECONDS = 10_000;
 
 const errorCode = (error: unknown) => (error as NodeJS.ErrnoException).code;
@@ -80,7 +74,6 @@ function takeOver(lock: string, staleOwner: string): boolean {
   return true;
 }
 
-/** The lock directory for `name` in the git common directory of `cwd`; names are escaped whole, so `a/b-c` ≠ `a-b/c`. */
 function lockPath(name: string, cwd: string): string {
   const common = gitCommonDir(cwd);
   if (common === null) throw new Error(`no git repository at ${cwd}`);
@@ -93,7 +86,6 @@ function lockPath(name: string, cwd: string): string {
  */
 const LEFTOVER_MILLISECONDS = 60 * 60 * 1000;
 
-/** Deletes the leftover directories in `locks` last changed more than LEFTOVER_MILLISECONDS before `now`. */
 function sweepLeftovers(locks: string, now: Date): void {
   for (const entry of readdirSync(locks)) {
     if (!/\.lock\.(pending|stale)-/.test(entry)) continue;
@@ -104,10 +96,6 @@ function sweepLeftovers(locks: string, now: Date): void {
   }
 }
 
-/**
- * One call's claim on a lock: the holder it would record, its owner file's text as last written, and the directory
- * it renames into place to take it.
- */
 interface Claim {
   lock: string;
   identity: Omit<Holder, 'since'>;
@@ -144,14 +132,12 @@ function take(claim: Claim): boolean {
   }
 }
 
-/** Removes what this claim made: the lock if it holds it (and it is still its own), and its unused directory. */
 function release(claim: Claim): void {
   rmSync(claim.pending, { recursive: true, force: true });
   if (claim.held && readOwner(claim.lock) === claim.ownerText) removeLock(claim.lock);
   claim.held = false;
 }
 
-/** Whether to try again at once, because the lock went or was taken over, rather than wait a poll. */
 function retryNow(lock: string, owner: string | null, options: LockOptions): boolean {
   return owner === null || (isStale(owner, options.startTimeOf ?? psStartTime) && takeOver(lock, owner));
 }
@@ -174,10 +160,6 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
 
 const SIGNALS = ['SIGINT', 'SIGTERM'] as const;
 
-/**
- * Runs `handle` on SIGINT or SIGTERM, then stops listening and lets the process die by that signal. Returns the
- * uninstaller.
- */
 function onSignals(handle: () => void): () => void {
   const handler = (signal: NodeJS.Signals) => {
     handle();
@@ -191,11 +173,6 @@ function onSignals(handle: () => void): () => void {
   };
 }
 
-/**
- * Runs `fn` holding the lock `name`, waiting while another process holds it, and releases it however `fn` ends:
- * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal. Throws after `timeoutMilliseconds` of waiting. Before taking it, deletes what killed
- * takers left behind (sweepLeftovers). Not reentrant: a process waits on its own lock like on anyone's.
- */
 export async function withLock<T>(name: string, options: LockOptions, fn: () => T | Promise<T>): Promise<T> {
   const claim = prepare(name, options.cwd ?? process.cwd(), options);
   const stopListening = onSignals(() => release(claim));

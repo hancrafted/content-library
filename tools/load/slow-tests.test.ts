@@ -12,7 +12,6 @@ for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete
 const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
 
-/** A repo whose branch `work` is checked out in a second worktree, as a subagent's would be. */
 function fixture() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'slow-tests-')));
   const main = path.join(root, 'main');
@@ -25,7 +24,6 @@ function fixture() {
   return { main, workTree, log: path.join(main, '.git', 'slow-tests.jsonl') };
 }
 
-/** A hand-built stand-in for the finished test case Vitest hands a reporter: only what the log reads. */
 const finished = (fullName: string, file: string, duration: number) =>
   ({ fullName, module: { relativeModuleId: file }, diagnostic: () => ({ duration }) }) as unknown as TestCase;
 
@@ -82,7 +80,6 @@ describe('SlowTestsLog', () => {
   });
 });
 
-/** Logs one test over 750 ms (1240 ms unless `ms` says) from `cwd`, as the fast suite's reporter would at `at`. */
 function logSlow(cwd: string, test: string, { at, ms = 1240 }: { at: Date; ms?: number }): void {
   new SlowTestsLog({ cwd, now: () => at, loadFactor: 2.4 }).onTestCaseResult(finished(test, 'src/walk.test.ts', ms));
 }
@@ -148,7 +145,6 @@ describe('slowTestReport', () => {
   });
 });
 
-/** The test names left in the log, oldest first. */
 const loggedTests = (log: string) =>
   readFileSync(log, 'utf8')
     .trim()

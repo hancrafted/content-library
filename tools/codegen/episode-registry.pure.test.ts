@@ -9,7 +9,6 @@ const WITH_PAGE: EpisodeFolder = {
   episodeSource:
     "import { episode } from '@/episodes/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
 };
-/** The id the registry keys an Event's copy by, as its folder `by-event/2026-10-23-axel/ai-token-economy/` gives it. */
 const COPY_ID = episodeRef('ai-token-economy', '2026-10-23-axel').id;
 const COPY: EpisodeFolder = {
   id: COPY_ID,
@@ -37,7 +36,6 @@ const GUIDE: EpisodeFolder = {
   episodeSource: 'export const setupAiAgentAndStarterFolder = episode({\n',
 };
 
-/** The text of one generated file. */
 function fileAt(folders: readonly EpisodeFolder[], path: string): string {
   return episodeRegistryFiles(folders).find((file) => file.path === path)?.text ?? '';
 }

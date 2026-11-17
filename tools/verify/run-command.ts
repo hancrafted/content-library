@@ -1,5 +1,3 @@
-// The verify runner's process adapter: runs one step's shell command and buffers everything it prints, so steps
-// running side by side never interleave their output.
 import { spawn } from 'node:child_process';
 import type { Step, StepRun } from './verify.pure.ts';
 

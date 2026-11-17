@@ -1,8 +1,5 @@
-// What pre-push asks git before it plans (pushPlan in verify.pure.ts): where HEAD left main, and what it changed
-// since. A git failure throws, naming the command, so the push fails rather than planning on half the facts.
 import { spawnSync } from 'node:child_process';
 
-/** Runs git in `cwd`; throws on any exit `allowed` does not list, naming the command and what git said. */
 function git(cwd: string, args: string[], allowed: readonly number[] = [0]) {
   const run = spawnSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   if (run.status === null || !allowed.includes(run.status))

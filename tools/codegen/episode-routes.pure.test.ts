@@ -9,7 +9,6 @@ const ICEBERG = {
 const EVENT = '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows';
 const EVENT_COPY = { event: EVENT, slug: 'intro', folder: `by-event/${EVENT}/intro`, exported: 'cyberforumIntro' };
 
-/** The text of one generated file. */
 function fileAt(routes: Parameters<typeof episodeRouteFiles>[0], path: string): string {
   return episodeRouteFiles(routes).find((file) => file.path === path)?.text ?? '';
 }
