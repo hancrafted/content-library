@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { POLY_BUBBLE_MOTIONS, POLY_BUBBLE_TOKENS, PolyBubble, type PolyBubbleProps } from './poly-bubble';
 
-/*
- * `PolyBubble`'s frozen interface (decisions 13 and 16 of the Iceberg feedback-2 grill): a redraw may change its
- * drawing, never its anchor box, its `data-motion` names, its tokens or its hook. These tests stay green across it.
- */
-
 const render = (props: PolyBubbleProps = {}) => load(renderToStaticMarkup(createElement(PolyBubble, props)))('svg');
 
 describe('success cases', () => {

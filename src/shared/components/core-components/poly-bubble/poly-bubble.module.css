@@ -1,9 +1,4 @@
-/*
- * `PolyBubble`'s colours: three tones of one tint plus a glint, flat fills, light from the upper left. Facets are
- * picked by drawing order (body, shade, lit, glint), so the page carries no per-facet attribute; the body's stroke is
- * the rim, half covered where a facet meets it. No raw colour (FE-011): every tone is mixed from
- * `--poly-bubble-tint`, the light `--on-brand-accent` and `--foreground`. No filter, blur or shadow.
- */
+/* decision: FE-011 §4 */
 
 .bubble {
   --poly-bubble-water: var(--poly-bubble-tint, var(--info));

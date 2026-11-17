@@ -1,10 +1,5 @@
 import type { ChatMarkName } from './chat-marks.pure';
 
-/*
- * Small marks for the "open in a chat tool" buttons, drawn here because no icon set ships brand marks: a six-petal
- * rosette for ChatGPT, a four-point star for Gemini. Decorative: the buttons carry the names.
- */
-
 interface MarkProps {
   readonly className?: string;
 }
@@ -39,12 +34,6 @@ export const CHAT_MARKS: Record<ChatMarkName, (props: MarkProps) => React.JSX.El
   chatgpt: ChatGptMark,
   gemini: GeminiMark,
 };
-
-/*
- * Marks for the Guide toolbar's two groups, drawn here for the same reason: an Apple apple, the four Windows panes, a
- * Tux silhouette, and, where a mark is simple enough to draw honestly, an AI agent's (Claude Code's spark, Codex's
- * prompt). Single-colour on `currentColor`, decorative: the toolbar button carries the name.
- */
 
 function AppleMark({ className }: MarkProps) {
   return (

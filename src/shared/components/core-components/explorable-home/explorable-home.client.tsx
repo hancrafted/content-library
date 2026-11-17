@@ -5,13 +5,6 @@ import { ROUTES } from '@/shared/lib/static-routes';
 import Link from 'next/link';
 import { createContext, useContext, type ReactNode } from 'react';
 
-/*
- * The "Explore it →" link of an Explorable shown in a Slide. The page container knows which Explorable pages exist
- * and in which locale, and provides them once, with the link's words; an Explorable's server entry places the link
- * by its own slug. The provider is the one client leaf: a server component cannot read context, and the link has to
- * sit inside the Explorable, which no Slide passes anything to.
- */
-
 interface Homes {
   readonly slugs: readonly string[];
   readonly locale: Locale;
