@@ -11,10 +11,6 @@ function Figure({ x, y }: { x: number; y: number }) {
 
 const LINE_FIGURES = [18, 42, 66, 90, 114];
 
-/**
- * The steam fork: one line splits, a few figures rise to the control desk and the rest stay on the line, all drawn in
- * the same `fill-foreground/70`, so neither branch reads as better.
- */
 function SteamFork({ stayed, rose }: { stayed: ReactNode; rose: ReactNode }) {
   return (
     <>

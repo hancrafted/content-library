@@ -70,12 +70,6 @@ function PeopleLayer({ lead, layer }: { lead: boolean; layer: Layer }) {
   );
 }
 
-/**
- * One exhibit on the wall: a framed card, the machine's work on top and where people moved up below, its wall label
- * centred under it and whatever hangs beneath. A standard exhibit spans four shared rows of the wall (machine layer,
- * people layer, label, under-label) from the width its three columns fit, so the three frames are one height and their
- * seams line up; the lead exhibit, AI, stands apart and is taller by design.
- */
 export function Exhibit({ slug, title, era, line, size, machine, people, target, children }: ExhibitProps) {
   const lead = size === 'lead';
   const subgrid = '@min-[40rem]:grid @min-[40rem]:grid-rows-subgrid';
