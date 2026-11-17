@@ -14,7 +14,6 @@ const CUNNINGHAM = { slug: 'cunningham-wycash', url: 'https://c2.com/doc/oopsla9
 
 const ENTRIES: readonly ClampIcon[] = ['written', 'sites', 'arm', 'overlap'];
 const FOCAL: ClampIcon = 'overlap';
-/** Where the debt sits in the Coding agent view: file lines, never translated. */
 const CODE: Record<ClampIcon, readonly string[]> = {
   written: [
     '---',

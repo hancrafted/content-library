@@ -247,11 +247,7 @@
   border: 2px dashed var(--glass-edge);
 }
 
-/*
- * The one emphasis motion: the statement grows one entry at a time. The cable pays out to the next clamp, the entry
- * appears and its block in the stack lights in sync, day one to the latest, once on entry. The base rules are the end
- * state, which a still frame and reduced motion show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .cable {
     background: linear-gradient(to right, var(--cable-lit) 45%, var(--cable) 45%);
