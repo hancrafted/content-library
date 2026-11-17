@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-013-content-store.rules.ts — the executable spec the store
-// ticket turned green: pass and fail for each rule, a missing store entry, and the edges: a moved diagram, a `%% store:` line outside
-// the diagram, nested and extended shapes, prose naming a type, and helper types.
-
 import { parseSync } from 'oxc-parser';
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-013-content-store.rules';
@@ -14,7 +10,6 @@ interface Reported {
   line?: number;
 }
 
-/** A glob as a RegExp: `**​/`, `*` and `{a,b}`, the forms the rules use. */
 function globRegExp(glob: string): RegExp {
   let re = '';
   for (let i = 0; i < glob.length; i++) {

@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for GEN-003-codebase-hygiene.rules.ts — pass and fail path for
-// every rule, plus the two boundaries each is easy to get wrong: the comment
-// opener that separates a live directive from prose naming one, and the src/
-// scope. Directive forms appear as string data, never as comments in this file.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './GEN-003-codebase-hygiene.rules';
 
@@ -14,9 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Minimal glob -> RegExp for the double below. A '**' segment spans any number
-// of path segments including none, so 'src/**/*' matches 'src/a.ts' as well as
-// 'src/p/lib/a.ts'; a lone '*' spans one segment's characters.
 function globToRegExp(pattern: string): RegExp {
   const segments = pattern.split('/');
   let body = '';
@@ -36,9 +28,6 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${body}$`);
 }
 
-// Stands in for archgate's RuleContext: a line-based grepFiles over an
-// in-memory file set, and a report sink that keeps violations and drops the
-// tiers this ADR does not use (every rule runs at error).
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -97,7 +86,7 @@ describe('no-eslint-disable', () => {
     expect(violations).toEqual([]);
   });
 
-  // One case per directive form named in GEN-003 §2.1.
+  // decision: GEN-003 §1.1
   const forms: [label: string, source: string][] = [
     ['line-comment next-line', `// ${DISABLE}-next-line no-console\nconsole.log(1);\n`],
     ['line-comment same-line', `console.log(1); // ${DISABLE}-line no-console\n`],

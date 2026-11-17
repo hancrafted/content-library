@@ -1,24 +1,18 @@
 /// <reference path="../rules.d.ts" />
 
-// ARCH-003 — Testing. The two shape Disciplines under src/ that no eslint
-// selector expresses cheaply, matched by scanning lines (the formatter fixes the
-// layout these patterns rely on: a top-level describe starts at column 0).
-//
-// `suite-three-blocks` — the file's top-level describe blocks are exactly
-// `success cases`, `failure cases` and `edge cases`, once each (§2.1).
-// `test-body-aaa` — every it/test body carries `// ARRANGE`, `// ACT` and
-// `// ASSERT`, uppercase, once each, in that order, one marker per comment
-// (§3.1). A body runs from its `it(`/`test(` line to the next test or describe
+// The formatter fixes the layout these patterns rely on: a top-level describe starts at column 0.
+// A body runs from its `it(`/`test(` line to the next test or describe
 // line, so markers in a helper between tests count toward the test above it.
-// `assert-no-magic` — the `// ASSERT` block holds no number literal other than
-// `0`, `1`, `-1` (§3.2). String literals are NOT flagged: a string expected
+// String literals are NOT flagged: a string expected
 // value (`toBe('far')`, `toContain('grid')`) is the hand-written expected value
-// ARCH-003 §1.2 asks for, and a scan cannot tell it from a magic string, so the
+// a scan cannot tell from a magic string, so the
 // string half of §3.2 stays a review duty. The block runs from `// ASSERT` to the test's closing line, the
 // first line at or left of the test's own indent that opens with `}`.
-// Self-contained: archgate forbids imports
-// between rules files.
-// Unit and browser tests under src/, plus the browser tests outside it (§2, §3). Post-build tests stay free-form.
+// Self-contained: archgate forbids imports between rules files.
+// decision: ARCH-003 §1.2
+// decision: ARCH-003 §2.1
+// decision: ARCH-003 §3.1
+// decision: ARCH-003 §3.2
 const TEST_GLOBS = ['src/**/*.test.ts', 'tests/browser/**/*.browser.test.ts', 'skills/**/*.browser.test.ts'];
 
 async function testFiles(ctx: RuleContext): Promise<string[]> {
@@ -83,8 +77,6 @@ interface Magic {
   literal: string;
 }
 
-// Scan one ASSERT block's text for number literals, skipping strings,
-// comments, regex literals and identifiers that merely contain digits.
 function magicIn(text: string, firstLine: number): Magic[] {
   const found: Magic[] = [];
   let line = firstLine;
@@ -213,7 +205,8 @@ export default {
           });
         }
         for (const file of files) {
-          // A slow file and its fast sibling test one subject: the pair holds the three blocks between them (§2.1).
+          // A slow file and its fast sibling test one subject: the pair holds the three blocks between them.
+          // decision: ARCH-003 §2.1
           const held = [...(blocksOf.get(file) ?? []), ...(blocksOf.get(laneSibling(file)) ?? [])];
           const missing = BLOCKS.filter((name) => !held.includes(name));
           if (missing.length > 0) {

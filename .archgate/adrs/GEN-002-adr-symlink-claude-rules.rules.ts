@@ -1,15 +1,12 @@
 /// <reference path="../rules.d.ts" />
 
-// GEN-002 — Runtime Rule Loading: the .claude/rules symlink set that loads a
-// governing ADR into agent context on Read. One entry per ADR with a non-empty
-// paths:, none for an unscoped ADR, and no orphan left behind. Presence only —
-// archgate's reader resolves symlinks, so a copied body is indistinguishable
-// from a pointer (GEN-002 §1.4, a review duty).
+// Presence only — archgate's reader resolves symlinks, so a copied body is indistinguishable
+// from a pointer, a review duty.
 // Self-contained by design: archgate forbids imports between rules files.
+// decision: GEN-002 §1.4
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const CLAUDE_RULES_GLOB = '.claude/rules/*.md';
 const ADR_BASENAME_RE = /^([A-Z]+-\d{3})-.+\.md$/;
-// Lowercased ADR-shaped basename, as it appears under .claude/rules/.
 const CLAUDE_ADR_LINK_RE = /^[a-z]+-\d{3}-.+\.md$/;
 
 function basename(p: string): string {
@@ -35,15 +32,12 @@ function getFrontmatterValue(fm: string, key: string): string | null {
     .trim();
 }
 
-// A non-empty `paths:` is present when the key exists with a value that is not
-// an empty flow array `[]`. Block-form counts as empty here by design — GEN-001
-// requires the inline flow form, and a block value parses as no scope at all.
+// Block-form counts as empty here by design — the inline flow form is required, and a block value parses as no scope at all.
 function hasNonEmptyPaths(fm: string): boolean {
   const val = getFrontmatterValue(fm, 'paths');
   return val !== null && val !== '' && !/^\[\s*\]$/.test(val);
 }
 
-// Expected runtime entry path for an ADR file: the basename, lowercased.
 function symlinkPathFor(file: string): string {
   return `.claude/rules/${basename(file).toLowerCase()}`;
 }

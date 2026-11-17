@@ -1,23 +1,20 @@
 /// <reference path="../rules.d.ts" />
 
-// GEN-003 — Codebase Hygiene: repo-wide Disciplines binding every file under
-// src/ whatever its language. One Discipline so far; add an anchor per rule.
-//
-// `no-eslint-disable` — inline lint suppression stays unspent, whichever directive
-// family the linter honours (eslint-* and oxlint-*). The lint config is the single source of truth for what this repo enforces; a directive comment
+// The lint config is the single source of truth for what this repo enforces; a directive comment
 // forks that truth at one line and does it invisibly, since `npm run verify`
-// stays green while the rule stops holding at that site (GEN-003 §1).
-// Self-contained by design: archgate forbids imports
-// between rules files.
+// stays green while the rule stops holding at that site.
+// Self-contained by design: archgate forbids imports between rules files.
+// decision: GEN-003 §1
 const SRC_GLOB = 'src/**/*';
 
 // A lint directive is only live as the FIRST token of a comment, so the
 // opener must sit immediately before the keyword — prose naming a directive is
 // not one, which is what keeps this ADR's own vocabulary writable. Matched
 // textually rather than through ctx.ast(), so the ban reaches every language
-// under src/, including files the linter is not configured to lint (GEN-003 §2.4).
+// under src/, including files the linter is not configured to lint.
 // `enable` rides along: once every disable is gone it is dead weight pointing
-// at a suppression that is not there (GEN-003 §2.1).
+// at a suppression that is not there.
+// decision: GEN-003 §1.1
 const DIRECTIVE_RE = /(?:\/\/|\/\*)[ \t]*(?:eslint|oxlint)-(?:disable|enable)\b/;
 
 export default {

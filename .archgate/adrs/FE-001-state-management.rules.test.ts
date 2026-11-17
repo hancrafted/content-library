@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-001-state-management.rules.ts — pass and fail path for
-// `single-storage-key`: calls passing either kind's constant or literal, calls
-// passing anything else, a drifted constant, and a missing or empty config.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-001-state-management.rules';
 
@@ -20,8 +16,6 @@ const PROGRESS = 'hancrafted:progress';
 // Marks the config file as absent; a default parameter would swallow `undefined`.
 const MISSING = Symbol('missing');
 
-// Stands in for archgate's RuleContext. `config` is the already-parsed YAML
-// document, or MISSING for an absent file, so no YAML parser is needed.
 function makeCtx(
   files: Record<string, string>,
   config: unknown = { localStorageKey: KEY, progressStorageKey: PROGRESS },

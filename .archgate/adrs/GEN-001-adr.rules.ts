@@ -1,12 +1,8 @@
 /// <reference path="../rules.d.ts" />
 
-// GEN-001 — ADR Contract: the meta-rules governing ADR markdown files under
-// .archgate/adrs/ and their companion .rules.ts files — frontmatter bundle and
-// order, the six canonical sections, the size budget, the shape grammar, and
-// the rules-file duties. The .claude/rules runtime-loading channel is GEN-002's.
-// All rules run at error (§5.3); there is no migration epoch — an ADR
-// conforms fully or the build fails. Further rules or a tier change land only by
+// There is no migration epoch: an ADR conforms fully or the build fails. Further rules or a tier change land only by
 // deliberate ADR amendment.
+// decision: GEN-001 §5.3
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const RULES_GLOB = '.archgate/adrs/*.rules.ts';
 const ADRS_DIR = '.archgate/adrs/';
@@ -14,12 +10,10 @@ const ADR_BASENAME_RE = /^([A-Z]+-\d{3})-.+\.md$/;
 const RULES_BASENAME_RE = /^[A-Z]+-\d{3}-.+\.rules\.ts$/;
 const RULES_TEST_BASENAME_RE = /^[A-Z]+-\d{3}-.+\.rules\.test\.ts$/;
 const BUILTIN_DOMAINS = ['architecture', 'backend', 'data', 'frontend', 'general'];
-// `description` is required here and not upstream: it is the text `.archgate/INDEX.md`
-// carries for each ADR, so an absent one silently empties an index entry.
 const REQUIRED_KEYS = ['type', 'id', 'title', 'domain', 'rules', 'files', 'description'];
-// The two glob-valued keys adr-glob-inline governs; both must be flow lists.
 const GLOB_KEYS = ['files', 'paths'];
-// GEN-001 §4.1 — Windsurf's published cap, the strictest hard limit among the
+// decision: GEN-001 §4.2
+// Windsurf's published cap, the strictest hard limit among the
 // five vendors that publish one. Counted in code points, matching `wc -m`.
 const MAX_ADR_CHARS = 12_000;
 const REQUIRED_SECTIONS = [
@@ -81,7 +75,6 @@ function stripFences(content: string): string {
     .join('\n');
 }
 
-// Section body from `## <name>` to the next `## ` heading (fences stripped).
 function getSection(content: string, heading: string): string | null {
   const lines = stripFences(content).split('\n');
   const esc = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -104,7 +97,6 @@ function getSection(content: string, heading: string): string | null {
 const DECISION_MARKER_RE = /\(📜 Rule: `([a-z0-9-]+)`\)/g;
 const DD_MARKER_RE = /\(Decision (\d+), 📜 Rule: `([a-z0-9-]+)`\)/g;
 
-// Map ruleId → anchor numbers where its Decision-side marker appears.
 function decisionMarkers(section: string): Map<string, number[]> {
   const found = new Map<string, number[]>();
   const lines = section.split('\n');
@@ -122,7 +114,6 @@ function decisionMarkers(section: string): Map<string, number[]> {
   return found;
 }
 
-// Map ruleId → back-referenced Decision numbers from Do's/Don'ts markers.
 function ddMarkers(section: string): Map<string, number[]> {
   const found = new Map<string, number[]>();
   for (const m of section.matchAll(DD_MARKER_RE)) {
@@ -133,7 +124,6 @@ function ddMarkers(section: string): Map<string, number[]> {
   return found;
 }
 
-// Rule keys declared in a companion .rules.ts source — the `'<id>': {` entries.
 function ruleKeysOf(rulesSource: string): string[] {
   const keys: string[] = [];
   const re = /["']([a-z0-9-]+)["'][ \t]*:[ \t]*\{/g;
@@ -142,12 +132,10 @@ function ruleKeysOf(rulesSource: string): string[] {
   return keys;
 }
 
-// Quoted entries of an inline flow list body — `'a', "b"` → ['a', 'b'].
 function flowListEntries(body: string): string[] {
   return [...body.matchAll(/(["'])(.*?)\1/g)].map((m) => m[2]).filter((e) => e.length > 0);
 }
 
-// Sequentiality helper: numbers must read 1, 2, 3, … with no gap or restart.
 function checkSequential(nums: number[]): boolean {
   return nums.every((n, i) => n === i + 1);
 }
@@ -168,7 +156,6 @@ function checkDecisionNumbering(section: string): DecisionFindings {
       else nums.push(Number(m[1]));
     }
     if (!checkSequential(nums)) messages.push(`Decision anchors are not sequential from 1 (found ${nums.join(',')})`);
-    // First-level items inside anchors: unordered bullets flagged; ordered lists restart at 1 per anchor.
     let seq: number[] = [];
     let seenAnchor = false;
     for (const line of lines) {

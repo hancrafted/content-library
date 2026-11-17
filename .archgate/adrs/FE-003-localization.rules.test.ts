@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-003-localization.rules.ts — pass and fail path for
-// `href-via-localize-path`, plus its easy-to-get-wrong boundaries: `hrefLang`,
-// a value wrapped onto the next line, and the .tsx scope.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-003-localization.rules';
 
@@ -13,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. The rule
-// only globs `src/**/*.tsx`, so the double matches that one shape.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {

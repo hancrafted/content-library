@@ -1,15 +1,12 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-013 — Content Store. The parts of the decision that sit in file text: the
-// content-model diagram names exactly the kinds the store loads, a record's type is
-// inferred from its schema, and every schema field is described. Fail-closed
-// loading and the refusals are held by the store's tests. Self-contained by
+// Fail-closed loading and the refusals are held by the store's tests. Self-contained by
 // design: archgate forbids imports between rules files.
-//
-// `field-described` walks the AST. `type-from-schema` matches text: archgate
+// `type-from-schema` matches text: archgate
 // transpiles TypeScript before parsing, so interfaces and type aliases never reach
 // the tree; strings and comments are blanked first, so prose never matches.
-
+// decision: FE-013 §1
+// decision: FE-013 §2
 const STORE_ENTRY = 'src/content-store/store.ts';
 const MODEL_FILE = 'docs/adr/0016-content-data-model.md';
 const SCHEMA_GLOB = 'src/content-store/schemas/*.schema.ts';
@@ -29,12 +26,10 @@ function isTest(file: string): boolean {
   return /\.test\.tsx?$/.test(file);
 }
 
-/** `EVENT` → `event`, `SHARED_SLIDE` → `shared-slide`: the schema file's basename. */
 function kindFile(entity: string): string {
   return entity.trim().toLowerCase().replace(/_/g, '-');
 }
 
-/** `SHARED_SLIDE` → `SharedSlide`: the name a hand-written type for the kind would carry. */
 function kindType(entity: string): string {
   return entity
     .trim()
@@ -44,7 +39,6 @@ function kindType(entity: string): string {
     .join('');
 }
 
-/** The `%% store:` line inside the model's mermaid blocks: its kinds and its offset in the file. */
 function storeLine(model: string): { kinds: string[]; at: number } | undefined {
   for (const block of model.matchAll(MERMAID_RE)) {
     const line = STORE_LINE_RE.exec(block[1]);
@@ -86,7 +80,6 @@ function blankText(source: string): string {
   return out;
 }
 
-/** Hand-written record shapes: `interface Episode…`, `type …Record = {`, `= Readonly<{`, `satisfies {`. */
 function handTypes(text: string, names: RegExp, metadataFile: boolean): { at: number; what: string }[] {
   const found: { at: number; what: string }[] = [];
   const declared = /\b(interface|type)\s+([A-Za-z_$][\w$]*)(?:<[^>=]*>)?\s*(=\s*(?:Readonly\s*<\s*)?\{)?/g;
@@ -120,7 +113,6 @@ function memberName(callee: Node): { object: Node; name: string } | undefined {
   return property.type === 'Identifier' ? { object: callee.object as Node, name: property.name as string } : undefined;
 }
 
-/** The shape argument of `z.object({…})`, `z.strictObject`, `z.looseObject`, `x.extend({…})`, `x.safeExtend({…})`. */
 function shapeArgument(node: Node): Node | undefined | null {
   if (node.type !== 'CallExpression') return undefined;
   const member = memberName(node.callee as Node);
@@ -132,7 +124,6 @@ function shapeArgument(node: Node): Node | undefined | null {
   return shape ?? null;
 }
 
-/** Whether `.describe(` sits on the field's own chain — `z.string().describe('…').optional()` — not inside an argument. */
 function describedChain(value: Node): boolean {
   let node: Node | undefined = value;
   while (node) {

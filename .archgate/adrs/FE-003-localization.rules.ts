@@ -1,20 +1,15 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-003 — Localization.
-//
-// `href-via-localize-path` (§2) — every JSX `href` under src/ is
-// `localizePath(...)`, or an external link: an `https://` literal or
-// `externalHref(...)` on a tag carrying target="_blank" and rel with noopener
-// and noreferrer. An `href` spread in (`{...{ href: x }}`) is refused, since
+// An `href` spread in (`{...{ href: x }}`) is refused, since
 // it would hide the value from this check. Matched textually over whole files,
 // so a value wrapped onto the next line is still seen.
 // Self-contained by design: archgate forbids imports between rules files.
+// decision: FE-003 §2
 const TSX_GLOB = 'src/**/*.tsx';
 
 // `href=` as an attribute name; `hrefLang=` never matches because the name
 // must end at `href`.
 const HREF_RE = /\bhref\s*=\s*/g;
-// An object spread whose first key is `href`, as in `{...{ href: x }}`.
 const SPREAD_HREF_RE = /\.\.\.\s*\{\s*['"]?href['"]?\s*:/g;
 const LOCALIZED_VALUE_RE = /^\{\s*localizePath\(/;
 const EXTERNAL_VALUE_RE = /^(?:(["'])https:\/\/[^"']*\1|\{\s*(?:(["'])https:\/\/[^"']*\2|externalHref\())/;

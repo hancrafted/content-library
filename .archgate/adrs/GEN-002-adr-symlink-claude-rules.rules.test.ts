@@ -1,8 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for GEN-002-adr-symlink-claude-rules.rules.ts — pass and fail path
-// for the single rule, in both directions (missing entry and orphan entry).
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './GEN-002-adr-symlink-claude-rules.rules';
 

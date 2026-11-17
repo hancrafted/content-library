@@ -1,11 +1,11 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-005 — Static Export Contract. The parts of the contract that sit in
-// source text and that an import-based lint rule cannot see: per-segment
-// exports, next.config keys, directives, segment exports, file names and
-// folder names. Banned module imports live in the lint config instead.
+// Banned module imports live in the lint config instead.
 // Matched textually. Self-contained by design:
 // archgate forbids imports between rules files.
+// decision: FE-005 §1
+// decision: FE-005 §2
+// decision: FE-005 §4
 const SRC_GLOB = 'src/**/*';
 const ROOT_GLOB = '*';
 // Next.js accepts any of these names; a legal rename must not crash the rule.

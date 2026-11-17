@@ -1,19 +1,12 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-001 — State Management. Storage Discipline (§3).
-//
-// `single-storage-key` — one localStorage key per kind: preferences and
-// hands-on progress, each named once in src/shared/config.yaml (FE-001 §3). Every
-// getItem/setItem call under src/ must pass one of them, either as its constant
-// (`PREFS_KEY`, `PROGRESS_KEY`) or as the literal itself, and every constant
-// declaration must equal its configured key, so the config and the code cannot
-// drift. Accepted trade-off: a third legitimate key breaks this rule, and the
+// Accepted trade-off: a third legitimate key breaks this rule, and the
 // ADR is amended first. Self-contained by design: archgate forbids imports
 // between rules files.
+// decision: FE-001 §3
 const CONFIG_PATH = 'src/shared/config.yaml';
 const SOURCE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 
-/** Each kind's config field and the constant that names it in code. */
 const KINDS = [
   { field: 'localStorageKey', constant: 'PREFS_KEY' },
   { field: 'progressStorageKey', constant: 'PROGRESS_KEY' },
@@ -34,7 +27,6 @@ const PROVENANCE = '(FE-001 [single-storage-key])';
 
 const declarationRe = (constant: string) => new RegExp(`\\b${constant}\\s*=\\s*(['"\`])(.*?)\\1`, 'g');
 
-/** The configured keys, or the config fields that are missing or empty. */
 async function readConfiguredKeys(ctx: RuleContext): Promise<{ keys: Key[]; missing: string[] }> {
   let content: Record<string, unknown> | null = null;
   try {
