@@ -155,11 +155,7 @@ const DRAWINGS: Record<VignetteId, ReactNode> = {
   ),
 };
 
-/**
- * One small scene cropped from the bike bench, 240 by 140: a mess, its trouble in `warning` and the rest `machine`
- * and `foreground`, or the clean state a fix leaves, with no `warning` in it. A server SVG; shared because the rot
- * grid and the cleanup Slide both draw the messes (FE-007).
- */
+// decision: FE-007 §5
 export function BenchVignette({ id, label, className }: { id: VignetteId; label: string; className?: string }) {
   return (
     <svg

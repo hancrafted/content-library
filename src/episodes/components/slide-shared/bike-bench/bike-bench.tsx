@@ -157,14 +157,7 @@ function Workers() {
   );
 }
 
-/**
- * The bike assembly bench, the reference drawing of "From shared understanding to shared context", seen from the
- * front: what was set up before the shift on its left (the tool wall, the pinned instruction sheet, the work order,
- * the parts box) and, with `arrivals`, what lands during it on its right (the folder, the belt with its boxes, a
- * colleague's note, the phone, the crate of parts). The objects are `machine`, what the AI reads. A server SVG with
- * one `data-bench-item` group per item; `highlight` lights some and dims the rest. Shared because Slides 9 to 12 draw
- * it, and Slides 6 and 13 reuse it (FE-007).
- */
+// decision: FE-007 §5
 export function BikeBench({ label, arrivals = false, worker = 'none', highlight, layer, className }: BikeBenchProps) {
   const items: readonly BenchItem[] = arrivals ? [...BEFORE, ...DURING] : BEFORE;
   const missing = highlight?.find((item) => !items.includes(item));
