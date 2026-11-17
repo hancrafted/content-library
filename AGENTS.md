@@ -56,4 +56,4 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 
 ### Domain docs
 
-Multi-context: `GLOSSARY-MAP.md` at the root points to each context's `GLOSSARY.md` (content library, Factory). When an engineering skill says "ADR", it means a **design-ADR**: it goes in `docs/adr/` with `type: design-adr` front matter. Archgate ADRs in `.archgate/adrs/` are separate, and engineering skills never write them. See `docs/agents/domain.md`.
+Multi-context: `GLOSSARY-MAP.md` at the root points to each context's `GLOSSARY.md` (content library, Factory, Drive). When an engineering skill says "ADR", it means a **design-ADR**: it goes in `docs/adr/` with `type: design-adr` front matter. Archgate ADRs in `.archgate/adrs/` are separate, and engineering skills never write them. See `docs/agents/domain.md`.
