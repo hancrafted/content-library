@@ -5,9 +5,10 @@ import {
   detectEnforcers,
   detectPackageManager,
   installCommands,
-  LEARNINGS_STUB,
+  parseSetupArgs,
   updateProjectConfig,
 } from './setup.pure.ts';
+import { LEARNINGS_STUB, REVIEW_STUB } from './stubs.pure.ts';
 
 const FACTS = {
   baseBranch: 'trunk',
@@ -90,6 +91,28 @@ describe('the package manager', () => {
   });
 });
 
+describe('REVIEW_STUB', () => {
+  it('is an empty template naming each calibration answer a decision page needs', () => {
+    // ARRANGE / ACT / ASSERT
+    expect(REVIEW_STUB).toContain('# Drive review');
+    for (const heading of ['Mode', 'Audience', 'Layout', 'Depth', 'Fidelity', 'Feedback route', 'Review width'])
+      expect(REVIEW_STUB).toContain(`## ${heading}`);
+  });
+});
+
+describe('parseSetupArgs', () => {
+  it('reads --agent-type and --tier, and rejects a tier that is not mid or top', () => {
+    // ARRANGE / ACT / ASSERT
+    expect(parseSetupArgs(['--agent-type', 'team:dev', '--tier', 'top'])).toEqual({
+      agentType: 'team:dev',
+      tier: 'top',
+    });
+    expect(parseSetupArgs(['--tier', 'opus'])).toEqual({
+      error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
+    });
+  });
+});
+
 describe('LEARNINGS_STUB', () => {
   it('carries the header and the two sections of the format in references/fortify.md', () => {
     // ARRANGE / ACT / ASSERT
@@ -112,6 +135,13 @@ describe('updateProjectConfig', () => {
       decisionDocs: ['docs/adr/**'],
     });
     expect(text).toContain('never writes harness settings');
+  });
+
+  it('seeds the models each tier resolves to for the claude provider', () => {
+    // ARRANGE / ACT
+    const config = parseConfig(updateProjectConfig(null, FACTS), FACTS.driveEntry);
+    // ASSERT
+    expect(config).toMatchObject({ models: { claude: { mid: 'sonnet', top: 'opus' } } });
   });
 
   it('seeds an invoke that runs the CLI at its entry', () => {

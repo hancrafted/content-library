@@ -1,6 +1,7 @@
 // The project config the `drive` CLI reads from its config file (design-ADR 0027): every repo-specific value
 // the worktree commands would otherwise hard-code. Pure: text in, a validated config or an error out.
 import { parse } from 'yaml';
+import { readModels, type ModelsConfig } from './models.pure.ts';
 import { isRecord, isText } from './yaml.pure.ts';
 
 /** Where a project's config lives, relative to its checkout. */
@@ -40,6 +41,8 @@ export interface DriveConfig {
   parallel: ParallelConfig;
   /** Paths or globs of the Decision docs, which change only on a `decisions/*` branch. */
   decisionDocs: string[];
+  /** The models behind each provider's tiers; the Binding names tiers, the harness's provider entry resolves them. */
+  models: ModelsConfig;
 }
 
 export const PARALLEL_DEFAULTS: ParallelConfig = { default: 3, harnessCap: 20 };
@@ -115,11 +118,19 @@ function readProject(root: Record<string, unknown>, entry: string): DriveConfig 
   if (!isRecord(section)) return { error: `worktree in ${CONFIG_PATH} must be a mapping` };
   const worktree = readWorktree(section, entry);
   if ('error' in worktree) return worktree;
+  const rest = readRest(root);
+  return 'error' in rest ? rest : { worktree, ...rest };
+}
+
+/** The sections beside `worktree`, or the first thing wrong with them. */
+function readRest(root: Record<string, unknown>): Omit<DriveConfig, 'worktree'> | { error: string } {
   const parallel = readParallel(root.parallel);
   if ('error' in parallel) return parallel;
   const docs = root.decisionDocs ?? [];
   if (!isTextList(docs)) return { error: 'decisionDocs must be a list of paths' };
-  return { worktree, parallel, decisionDocs: docs };
+  const models = readModels(root.models, CONFIG_PATH);
+  if ('error' in models) return models;
+  return { parallel, models: models.models, decisionDocs: docs };
 }
 
 const isCount = (value: unknown): value is number => Number.isInteger(value) && (value as number) >= 1;

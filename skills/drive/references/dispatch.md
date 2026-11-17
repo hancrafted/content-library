@@ -6,15 +6,17 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 
 1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: tell the Operator before dispatching.
 2. **Ownership.** Give each concurrent ticket the paths it owns, and name the paths it must leave alone. Two tickets that need one file run one after the other.
-3. **Model.** Pass the model explicitly on every dispatch, from `binding.yml`; an inherited model is a bug. The Operator's override for this session wins.
+3. **Model.** Pass the model explicitly on every dispatch; an inherited model is a bug. The Operator's override for this session wins. The Binding names a **Model tier** (`mid` or `top`); resolve it to a model through this harness's provider entry under `models` in `project.yml` (Claude Code: `models.claude`).
 
-   | Work                       | Model of the phase |
-   | -------------------------- | ------------------ |
-   | implementation, fixes      | `implement`        |
-   | decision page              | `reason`           |
-   | Fortify's decision page    | `evolve`           |
-   | log mining, review support | `verify`           |
-   | Fortify evidence           | `evolve`           |
+   | Work                       | Tier                       |
+   | -------------------------- | -------------------------- |
+   | implementation, fixes      | `implement`'s              |
+   | decision page, Reason      | by the fidelity rule below |
+   | decision page, Fortify     | by the fidelity rule below |
+   | log mining, review support | `verify`'s                 |
+   | Fortify evidence           | `evolve`'s                 |
+
+   The fidelity rule for a decision page, read from `docs/drive/review.md` and the items' rungs, applied as written: every item at `diagram` or below runs on `mid`; any item at rendering, mockup, visual prototype or interaction runs the whole page on `top`.
 
 4. **Agent type.** Start every Subagent as `agentType` from `binding.yml`.
 5. **Cap.** Run at most the lower of `parallel.default` and `parallel.harnessCap` from `project.yml` at once; queue the rest and start the next the moment one finishes.
@@ -23,6 +25,15 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 Dispatch a ticket the moment its last blocker is merged and checked.
 
 A Subagent's report with no **Merge** line means it stopped early: resume that Subagent (`SendMessage`, or the provider's equivalent) with only its remaining steps, and leave its finished work alone.
+
+## A decision page
+
+Reason's pages and Fortify's page share one task shape. The brief passes `docs/drive/review.md` as the page skill's caller inputs, so it skips calibration, and names the items. The Subagent's _Done when_:
+
+1. the page is built in the mode `review.md` gives for this use;
+2. it holds a screenshot at two widths (the review width and a narrower one), in light and dark, taken with the Binding's `visual-check` skill when a phase binds it under `verify`, else with the page skill's own verification;
+3. it read at most one image per iteration, the DOM numbers first, and fixed each defect found (mid-word wraps, clipped text, a missing control) before reporting;
+4. its report says what it checked at each width and theme.
 
 ## The shared brief
 

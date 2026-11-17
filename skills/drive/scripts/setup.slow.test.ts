@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } fro
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CATALOG, PHASE_MODELS, readBinding } from './binding.pure.ts';
+import { CATALOG, PHASE_TIERS, readBinding } from './binding.pure.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -47,7 +47,7 @@ describe('drive setup, spawned', () => {
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout).toContain('✔ wrote docs/drive/binding.yml');
     expect(binding(root).agentType).toBe('team:dev');
-    expect(binding(root).phases.implement).toEqual({ model: PHASE_MODELS.implement, skills: ['tdd'], inline: false });
+    expect(binding(root).phases.implement).toEqual({ model: PHASE_TIERS.implement, skills: ['tdd'], inline: false });
     expect(binding(root).phases.verify.skills).toEqual(['code-review']);
     expect(readFileSync(path.join(root, 'docs/drive/project.yml'), 'utf8')).toContain('pnpm install --frozen-lockfile');
     expect(readFileSync(path.join(root, 'docs/drive/enforcers.yml'), 'utf8')).toContain('pnpm run lint');

@@ -7,13 +7,18 @@ import { isRecord, isText, openMapping } from './yaml.pure.ts';
 export const PHASES = ['define', 'reason', 'implement', 'verify', 'evolve'] as const;
 export type Phase = (typeof PHASES)[number];
 
-/** The model each phase's Subagents run on when nothing else says so: reasoning and verifying take the stronger one. */
-export const PHASE_MODELS: Readonly<Record<Phase, string>> = {
-  define: 'sonnet',
-  reason: 'opus',
-  implement: 'sonnet',
-  verify: 'opus',
-  evolve: 'sonnet',
+/** A Model tier: `mid` the everyday model, `top` the strongest; `project.yml` maps each to a provider's model. */
+export const TIERS = ['mid', 'top'] as const;
+export type Tier = (typeof TIERS)[number];
+export const isTier = (value: unknown): value is Tier => (TIERS as readonly unknown[]).includes(value);
+
+/** The tier each phase's Subagents run on when nothing else says so: reasoning and verifying take the top one. */
+export const PHASE_TIERS: Readonly<Record<Phase, Tier>> = {
+  define: 'mid',
+  reason: 'top',
+  implement: 'mid',
+  verify: 'top',
+  evolve: 'mid',
 };
 export const DEFAULT_AGENT_TYPE = 'general-purpose';
 
@@ -46,7 +51,8 @@ export function mergeDetected(groups: readonly (readonly DetectedSkill[])[], exc
 }
 
 export interface PhaseBinding {
-  model: string;
+  /** The Model tier; `project.yml` resolves it to a model per provider. */
+  model: Tier;
   skills: string[];
   /** No skill bound: the Orchestrator does the phase itself. */
   inline: boolean;
@@ -59,13 +65,15 @@ export interface Binding {
 
 export interface SeedOptions {
   agentType?: string;
-  model?: string;
+  /** Seeds every phase with this tier instead of its preset. */
+  tier?: Tier;
 }
 
 const HEADER = [
-  " The Binding (design-ADR 0027): which skills serve each DRIVE phase (n:m), the model each phase's Subagents run on,",
+  " The Binding (design-ADR 0027): which skills serve each DRIVE phase (n:m), the model tier each phase's Subagents run on,",
   ' and the agent type every agent uses. `drive setup` seeds it and adds newly installed skills; you own every edit.',
-  ' `skills` and `model` per phase are yours to change; `seen` lists the skills setup has already offered, so one you',
+  ' `skills` and `model` (a tier, mid or top, mapped to models in project.yml) per phase are yours to change;',
+  ' `seen` lists the skills setup has already offered, so one you',
   ' remove here is not added back.',
 ].join('\n');
 
@@ -96,7 +104,7 @@ function seedMissing(doc: Document, root: YAMLMap, seed: SeedOptions): void {
   const phases = mapAt(root, 'phases', doc);
   for (const phase of PHASES) {
     const node = mapAt(phases, phase, doc);
-    if (!node.has('model')) node.set('model', seed.model ?? PHASE_MODELS[phase]);
+    if (!node.has('model')) node.set('model', seed.tier ?? PHASE_TIERS[phase]);
     seqAt(node, 'skills', doc);
   }
 }
@@ -146,7 +154,7 @@ export function updateBinding(
 function readPhase(phase: Phase, value: unknown): PhaseBinding | { error: string } {
   if (!isRecord(value)) return { error: `phases.${phase} must be a mapping` };
   const skills = value.skills ?? [];
-  if (!isText(value.model)) return { error: `phases.${phase}.model must be a non-empty string` };
+  if (!isTier(value.model)) return { error: `phases.${phase}.model must be a tier: ${TIERS.join(' or ')}` };
   if (!Array.isArray(skills) || !skills.every((item) => typeof item === 'string'))
     return { error: `phases.${phase}.skills must be a list of skill names` };
   return { model: value.model, skills: skills as string[], inline: skills.length === 0 };

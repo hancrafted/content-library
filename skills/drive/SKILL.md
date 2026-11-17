@@ -51,9 +51,9 @@ flowchart TD
 
 Every project fact lives in `docs/drive/`; this skill knows none. Read it before anything else:
 
-- `binding.yml`: the **Binding**, each DRIVE phase's skills (`phases.<phase>.skills`), the model its Subagents run on (`phases.<phase>.model`) and the agent type every agent uses (`agentType`). A phase with no bound skill is done inline by you. Within a phase, pick a skill by its description.
-- `project.yml`: the project settings for worktrees (`worktree.*`), the parallel cap (`parallel.*`) and the Decision docs' paths (`decisionDocs`).
-- `profiles.md`: the project's rules for each Profile. `learnings.md`: past corrections and Fortify proposals. `enforcers.yml`: the Enforcers Fortify picks from.
+- `binding.yml`: the **Binding**, each DRIVE phase's skills (`phases.<phase>.skills`), the Model tier its Subagents run on (`phases.<phase>.model`, `mid` or `top`) and the agent type every agent uses (`agentType`). A phase with no bound skill is done inline by you. Within a phase, pick a skill by its description.
+- `project.yml`: the project settings for worktrees (`worktree.*`), the parallel cap (`parallel.*`), the models behind each provider's tiers (`models`) and the Decision docs' paths (`decisionDocs`).
+- `profiles.md`: the project's rules for each Profile. `learnings.md`: past corrections and Fortify proposals. `enforcers.yml`: the Enforcers Fortify picks from. `review.md`: the calibration answers for every decision page.
 
 No folder yet, or a skill installed since setup: run setup first, [references/setup.md](references/setup.md).
 
@@ -90,8 +90,9 @@ _Done when:_ every requirement is a line in `decisions.md` and the Operator agre
 ## 2. Reason (specify)
 
 1. **Decision docs.** Write the Decision docs the Workflow changes yourself, in a `decisions/<topic>` worktree, push it and open its PR to the base branch. The paths are `decisionDocs` in `project.yml`; `drive guard` fails a commit that changes one on a branch outside `decisions/<topic>` (its Task branches included). A Workflow that changes no Decision doc says so in `decisions.md` and goes on. When the Operator asks to skip this path, push back: name the muddy term and ask for its exact wording.
-2. **Spec and tickets**, inline with the Reason skills. Ask the ticket skill, through its arguments, for a **Skills** line (only skills the Binding resolves) and a **Review after** line (`yes` with a reason, or `no`) on each ticket; the Operator confirms both when the tickets are proposed.
-3. **Integration branch.** Create its worktree in the background; once the Decision docs PR has merged, run `drive worktree sync` in it.
+2. **Decision pages.** A page that settles open choices is a delegated task, [references/dispatch.md](references/dispatch.md) "A decision page", with `docs/drive/review.md` as the page skill's inputs.
+3. **Spec and tickets**, inline with the Reason skills. Ask the ticket skill, through its arguments, for a **Skills** line (only skills the Binding resolves) and a **Review after** line (`yes` with a reason, or `no`) on each ticket; the Operator confirms both when the tickets are proposed.
+4. **Integration branch.** Create its worktree in the background; once the Decision docs PR has merged, run `drive worktree sync` in it.
 
 _Done when:_ the Decision docs PR is merged (or none was needed), the Integration branch holds it, and every ticket is on the tracker with confirmed Skills and Review after lines.
 

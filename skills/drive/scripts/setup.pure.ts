@@ -1,7 +1,7 @@
 // What `drive setup` writes besides the Binding: the project config's missing sections, the list of detected
 // Enforcers and the two stub documents. Pure: facts in, file text out.
 import { Document, type YAMLMap } from 'yaml';
-import { type SeedOptions } from './binding.pure.ts';
+import { isTier, type SeedOptions } from './binding.pure.ts';
 import { defaultsFor, PARALLEL_DEFAULTS } from './config.pure.ts';
 import { openMapping } from './yaml.pure.ts';
 
@@ -124,6 +124,11 @@ function addSection(doc: Document, root: YAMLMap, { key, value, comment }: Secti
 const PARALLEL_NOTE =
   ' Subagents at once: the lower of `default` and `harnessCap`, the rest queue. `harnessCap` records the agent\n' +
   " harness's own limit beside it; `drive` never writes harness settings.";
+const MODELS_NOTE =
+  ' Model tiers: the Binding names a tier per phase (mid | top); each provider entry maps a tier to its model.\n' +
+  ' The harness resolves a tier through its own provider entry.';
+/** The provider and models setup seeds. */
+export const DEFAULT_MODELS = { claude: { mid: 'sonnet', top: 'opus' } } as const;
 const DECISION_DOCS_NOTE = ' Decision docs: paths and globs that change only on a `decisions/*` branch.';
 
 /**
@@ -147,6 +152,7 @@ export function updateProjectConfig(existing: string | null, facts: ProjectFacts
     value: { ...PARALLEL_DEFAULTS, harnessCap },
     comment: PARALLEL_NOTE,
   });
+  addSection(doc, root, { key: 'models', value: DEFAULT_MODELS, comment: MODELS_NOTE });
   addSection(doc, root, {
     key: 'decisionDocs',
     value: [...decisionDocs],
@@ -155,21 +161,19 @@ export function updateProjectConfig(existing: string | null, facts: ProjectFacts
   return doc.toString();
 }
 
-/** The options of `drive setup [--agent-type <type>] [--model <model>]`, or a usage error. */
+/** The options of `drive setup [--agent-type <type>] [--tier mid|top]`, or a usage error. */
 export function parseSetupArgs(args: readonly string[]): SeedOptions | { error: string } {
   const usage = {
-    error: 'usage: drive setup [--agent-type <type>] [--model <model>]',
+    error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
   };
   const options: SeedOptions = {};
-  const keys: Record<string, keyof SeedOptions> = {
-    '--agent-type': 'agentType',
-    '--model': 'model',
-  };
   for (let i = 0; i < args.length; i += 2) {
-    const key = keys[args[i] ?? ''];
+    const flag = args[i];
     const value = args[i + 1];
-    if (key === undefined || value === undefined || value.startsWith('--')) return usage;
-    options[key] = value;
+    if (value === undefined || value.startsWith('--')) return usage;
+    if (flag === '--agent-type') options.agentType = value;
+    else if (flag === '--tier' && isTier(value)) options.tier = value;
+    else return usage;
   }
   return options;
 }
@@ -203,24 +207,3 @@ export const guardCiLine = (command: string): string =>
 /** With a husky hook the skill's path would leave the repo: the line for the hook, left unwritten. */
 export const guardHookLine = (hook: string, command: string): string =>
   guardLineNote(`the drive skill sits outside this repo, so ${hook} was left alone: add this line to it`, command);
-
-export const PROFILES_STUB = `# Drive profiles
-
-Project rules that extend the Profiles the \`/drive\` skill ships: the architect's, which the Orchestrator reasons by,
-and the implementer's, which every Subagent brief points at. Write only what is specific to this project.
-
-## Architect
-
-## Implementer
-`;
-
-/** The shape of `references/fortify.md`'s learnings format: its header and two sections. The format's description
- * stays in that file. */
-export const LEARNINGS_STUB = `# Drive learnings
-
-Format: the drive skill's references/fortify.md, "The learnings file".
-
-## Failure modes
-
-## Corrections
-`;

@@ -28,6 +28,12 @@ worktree:
 parallel:
   default: 3
   harnessCap: 20
+# Model tiers: the Binding names a tier per phase (mid | top); each provider entry maps a tier to its model.
+# The harness resolves a tier through its own provider entry.
+models:
+  claude:
+    mid: sonnet
+    top: opus
 # Decision docs: paths and globs that change only on a `decisions/*` branch.
 decisionDocs:
   - docs/adr/**

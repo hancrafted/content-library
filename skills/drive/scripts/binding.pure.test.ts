@@ -4,7 +4,7 @@ import {
   type DetectedSkill,
   INLINE_NOTE,
   mergeDetected,
-  PHASE_MODELS,
+  PHASE_TIERS,
   PHASES,
   readBinding,
   updateBinding,
@@ -57,15 +57,22 @@ describe('updateBinding', () => {
       expect(PHASES.every((phase) => result.phases[phase].inline)).toBe(true);
     });
 
-    it('seeds the agent type, and one model per phase from the options or the per-phase presets', () => {
+    it('seeds the agent type, and one tier per phase from the options or the per-phase presets', () => {
       // ARRANGE / ACT
-      const seeded = binding(updateBinding(null, [], { agentType: 'team:dev', model: 'haiku' }));
+      const seeded = binding(updateBinding(null, [], { agentType: 'team:dev', tier: 'top' }));
       const defaults = binding(updateBinding(null, []));
       // ASSERT
       expect(seeded.agentType).toBe('team:dev');
-      expect(PHASES.map((phase) => seeded.phases[phase].model)).toEqual(PHASES.map(() => 'haiku'));
+      expect(PHASES.map((phase) => seeded.phases[phase].model)).toEqual(PHASES.map(() => 'top'));
       expect(defaults.agentType).toBe('general-purpose');
-      expect(PHASES.map((phase) => defaults.phases[phase].model)).toEqual(PHASES.map((phase) => PHASE_MODELS[phase]));
+      expect(PHASES.map((phase) => defaults.phases[phase].model)).toEqual(PHASES.map((phase) => PHASE_TIERS[phase]));
+    });
+
+    it('presets mid for define, implement and evolve and top for reason and verify', () => {
+      // ARRANGE / ACT
+      const result = binding(updateBinding(null, []));
+      // ASSERT
+      expect(PHASES.map((phase) => result.phases[phase].model)).toEqual(['mid', 'top', 'mid', 'top', 'mid']);
     });
 
     it('matches a skill found only by folder, which names no source, to the catalog by name', () => {
@@ -84,14 +91,14 @@ describe('updateBinding', () => {
       const first = updateBinding(null, [known('tdd')]);
       const edited = first
         .replace('agentType: general-purpose', 'agentType: team:dev # mine')
-        .replace(/(implement:\n\s+model: )\w+/, '$1haiku');
+        .replace(/(implement:\n\s+model: )\w+/, '$1top');
       // ACT
       const second = updateBinding(edited, [known('tdd'), known('code-review')]);
       // ASSERT
       const result = binding(second);
       expect(second).toContain('# mine');
       expect(result.agentType).toBe('team:dev');
-      expect(result.phases.implement.model).toBe('haiku');
+      expect(result.phases.implement.model).toBe('top');
       expect(result.phases.verify.skills).toEqual(['code-review']);
       expect(result.phases.verify.inline).toBe(false);
     });
@@ -105,7 +112,7 @@ describe('updateBinding', () => {
       const bound = updateBinding(removed, [known('tdd'), known('pr')]);
       // ASSERT
       expect(same.phases.implement.skills).toEqual([]);
-      expect(bound).toContain(`verify:\n    model: ${PHASE_MODELS.verify}\n    skills:\n      - pr`);
+      expect(bound).toContain(`verify:\n    model: ${PHASE_TIERS.verify}\n    skills:\n      - pr`);
       expect(bound.match(/none bound/g)).toHaveLength(4);
       expect(binding(bound).phases.verify.skills).toEqual(['pr']);
     });
@@ -154,5 +161,16 @@ describe('readBinding', () => {
       { error: 'agentType must be a non-empty string' },
       { error: 'binding must be a mapping' },
     ]);
+  });
+});
+
+describe('readBinding tiers', () => {
+  it('rejects a model that is not a tier, naming the phase', () => {
+    // ARRANGE
+    const text = updateBinding(null, []).replace(/(implement:\n\s+model: )\w+/, '$1sonnet');
+    // ACT
+    const result = readBinding(text);
+    // ASSERT
+    expect(result).toEqual({ error: 'phases.implement.model must be a tier: mid or top' });
   });
 });

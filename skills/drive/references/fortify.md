@@ -19,13 +19,13 @@ You log each Operator correction the moment it is made, under **Corrections** in
    - the Enforcers in `docs/drive/enforcers.yml`;
    - the open tickets labelled `fortify` on the tracker.
 
-   It maps each correction and finding to a failure mode, matching existing entries in `learnings.md` first ([matching](#matching-a-prior-proposal)), and lists the candidates, each with its prior count. In the same task it copies every correction into `learnings.md` and raises the counts its corrections recur, then merges into the Integration branch.
+   It maps each correction and finding to a failure mode, matching existing entries in `learnings.md` first ([matching](#matching-a-prior-proposal)), and lists the candidates, each with every field of [the field table](#the-decision-page). It fills **Existing state** by checking the current code and config for the proposed fix: a fix that already exists drops out or is reframed as a gap in it, with the file and date it appeared. In the same task it copies every correction into `learnings.md` and raises the counts its corrections recur, then merges into the Integration branch.
 
-   _Done when:_ every correction is in `learnings.md`, mapped to one failure mode, and the evidence file lists each candidate with its evidence, Enforcer and prior count.
+   _Done when:_ every correction is in `learnings.md`, mapped to one failure mode, and the evidence file lists each candidate with all fields of the table, its Existing state checked against the code.
 
-3. **Decision page.** One Subagent builds it, with the Binding's decision-page skill when `evolve` has one, in mode _decide_, its feedback returning by that skill's route. The shape is [The decision page](#the-decision-page).
+3. **Decision page.** One Subagent builds it as [dispatch.md](dispatch.md) "A decision page" says: the Binding's decision-page skill when `evolve` has one, in mode _decide_, with `docs/drive/review.md` as its calibration. The shape is [The decision page](#the-decision-page).
 
-   _Done when:_ the page holds 2–3 options per category, each with all four fields, and the Operator has its path.
+   _Done when:_ the page holds 2–3 options per category, each with every field of the table, its screenshots are checked and its defects fixed as dispatch.md says, and the Operator has its path.
 
 4. **The Operator picks** one quick win and one architectural option, and on an open `fortify` ticket, replace or wait. The Operator may pick none in a category; log that like an unpicked option.
 
@@ -79,14 +79,20 @@ One page, mode _decide_, the most consequential item first:
 3. **Architectural options**: 2–3 options, each a ticket's worth of work.
 4. **The open `fortify` ticket**, when there is one: replace or wait, beside the new architectural options.
 
-Every option carries four fields:
+Every option carries these fields, in this order of reading (the page leads with the name, the principle and the before/after; the rest sits collapsed):
 
-| Field        | What it holds                                                                    |
-| ------------ | -------------------------------------------------------------------------------- |
-| Failure mode | one narrow line a check can decide: what went wrong, not a theme                 |
-| Evidence     | the correction lines, `learnings.md` entries and review findings it rests on     |
-| Enforcer     | the check that would catch it next time, from `enforcers.yml` or a new one named |
-| Prior count  | its count in `learnings.md`, 0 when new, and its status when not `proposed`      |
+| Field          | What it holds                                                                                             |
+| -------------- | --------------------------------------------------------------------------------------------------------- |
+| Name           | the problem in plain words a cold reader grasps, never a code identifier                                  |
+| Failure mode   | one narrow line a check can decide: what went wrong, not a theme (the `learnings.md` heading)             |
+| What happened  | when, what failed and what it cost, from the correction lines, `learnings.md` entries and review findings |
+| Existing state | what the current code and config already hold toward the fix, checked, with file and date                 |
+| Principle      | the engineering principle the fix applies, so the change reads as an application of it                    |
+| Before / after | one concrete case of the repo as it is and as it would be, shown as a diagram or ordered steps            |
+| Enforcer       | the check that would catch it next time, from `enforcers.yml` or a new one named                          |
+| Cost           | the work to build it and what it adds to every run afterwards                                             |
+| Door           | two-way (cheap to undo) or one-way, with the undo named                                                   |
+| Prior count    | its count in `learnings.md`, 0 when new, and its status when not `proposed`                               |
 
 Rank Enforcers deterministic first: types, lint, tests, an ADR checker's rule, a hook. A narrow LLM judge qualifies only when its verdict can be checked; a rule in prose with no check is not an Enforcer.
 

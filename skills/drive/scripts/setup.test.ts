@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } fro
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CATALOG, PHASE_MODELS, readBinding } from './binding.pure.ts';
+import { CATALOG, PHASE_TIERS, readBinding } from './binding.pure.ts';
 import { harnessCapFrom, parseConfig } from './config.pure.ts';
 import { detectSkills, setup } from './setup.ts';
 
@@ -46,7 +46,7 @@ describe('drive setup', () => {
       // ASSERT
       const result = binding(root);
       expect(result.agentType).toBe('team:dev');
-      expect(result.phases.implement).toEqual({ model: PHASE_MODELS.implement, skills: ['tdd'], inline: false });
+      expect(result.phases.implement).toEqual({ model: PHASE_TIERS.implement, skills: ['tdd'], inline: false });
       expect(result.phases.verify.skills).toEqual(['code-review']);
       expect(result.phases.define.inline).toBe(true);
       expect(result.phases.evolve.inline).toBe(true);
@@ -97,6 +97,7 @@ describe('drive setup', () => {
         'docs/drive/learnings.md',
         'docs/drive/profiles.md',
         'docs/drive/project.yml',
+        'docs/drive/review.md',
       ]);
       expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({
         parallel: { default: 3, harnessCap: harnessCapFrom(process.env) },
@@ -150,6 +151,18 @@ describe('drive setup', () => {
       expect(binding(root).phases.verify.skills).toEqual(['code-review']);
       expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({ parallel: { default: 2 } });
       expect(text(root, 'docs/drive/learnings.md')).toContain('- a correction');
+    });
+
+    it('keeps a review.md the Operator filled in', () => {
+      // ARRANGE
+      const root = repo({});
+      setup(root);
+      writeFileSync(path.join(root, 'docs/drive/review.md'), '# Drive review\n\nmode: decide\n');
+      // ACT
+      const { written } = setup(root);
+      // ASSERT
+      expect(written).not.toContain('docs/drive/review.md');
+      expect(text(root, 'docs/drive/review.md')).toContain('mode: decide');
     });
 
     it('writes nothing when nothing changed', () => {
