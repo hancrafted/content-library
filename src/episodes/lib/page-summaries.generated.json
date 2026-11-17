@@ -106,22 +106,18 @@
         "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
         "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
         "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
-        "minutes": 23.058333333333334,
+        "minutes": 30.066666666666663,
         "sections": [
           {
             "id": "thought-experiment",
             "title": "Gedankenexperiment",
             "minutes": 0.8083333333333333,
             "items": [
-              {
-                "id": "thought-experiment--the-long-phone-call-story",
-                "title": "Das lange Telefonat",
-                "minutes": 1.8166666666666667
-              },
+              { "id": "thought-experiment--the-long-phone-call-story", "title": "Das lange Telefonat", "minutes": 1.9 },
               {
                 "id": "thought-experiment--ai-forgets-the-middle-too",
                 "title": "Auch die KI vergisst die Mitte",
-                "minutes": 1.7166666666666668
+                "minutes": 2.3499999999999996
               }
             ]
           },
@@ -133,22 +129,22 @@
               {
                 "id": "the-ais-attention-span--the-context-window",
                 "title": "Das Kontextfenster",
-                "minutes": 1.1916666666666664
+                "minutes": 2.0416666666666665
               },
               {
                 "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
                 "title": "Was passiert, wenn der Kontext voll wird",
-                "minutes": 2.5083333333333333
+                "minutes": 2.7083333333333335
               },
               {
                 "id": "the-ais-attention-span--attention-is-a-budget",
                 "title": "Aufmerksamkeit ist ein Budget",
-                "minutes": 2.5250000000000004
+                "minutes": 3.958333333333334
               },
               {
                 "id": "the-ais-attention-span--what-we-learned-so-far",
                 "title": "Was wir bisher gelernt haben",
-                "minutes": 1.1749999999999998
+                "minutes": 1.6166666666666667
               }
             ]
           },
@@ -160,17 +156,17 @@
               {
                 "id": "what-fills-the-window--whats-really-in-the-window",
                 "title": "Was wirklich im Kontextfenster steckt",
-                "minutes": 1.2999999999999998
+                "minutes": 2.033333333333333
               },
               {
                 "id": "what-fills-the-window--one-innocent-question",
                 "title": "Eine harmlose Frage",
-                "minutes": 1.5083333333333333
+                "minutes": 2.0666666666666664
               },
               {
                 "id": "what-fills-the-window--you-cant-watch-the-meter",
                 "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
-                "minutes": 1.0333333333333334
+                "minutes": 1.85
               }
             ]
           },
@@ -182,17 +178,17 @@
               {
                 "id": "managing-the-attention-span--everyday-habits",
                 "title": "Gewohnheiten für jeden Tag",
-                "minutes": 1.8416666666666668
+                "minutes": 1.6333333333333333
               },
               {
                 "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
                 "title": "Der Workflow für größere Projekte",
-                "minutes": 2.033333333333333
+                "minutes": 2.3166666666666664
               },
               {
                 "id": "managing-the-attention-span--human-in-the-loop-workflow",
                 "title": "Human-in-the-Loop-Workflow",
-                "minutes": 2.0416666666666665
+                "minutes": 3.2249999999999996
               },
               {
                 "id": "managing-the-attention-span--now-you-know-how-it-feels",
@@ -2336,22 +2332,18 @@
         "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
         "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt.",
         "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
-        "minutes": 23.058333333333334,
+        "minutes": 30.066666666666663,
         "sections": [
           {
             "id": "thought-experiment",
             "title": "Gedankenexperiment",
             "minutes": 0.8083333333333333,
             "items": [
-              {
-                "id": "thought-experiment--the-long-phone-call-story",
-                "title": "Das lange Telefonat",
-                "minutes": 1.8166666666666667
-              },
+              { "id": "thought-experiment--the-long-phone-call-story", "title": "Das lange Telefonat", "minutes": 1.9 },
               {
                 "id": "thought-experiment--ai-forgets-the-middle-too",
                 "title": "Auch die KI vergisst die Mitte",
-                "minutes": 1.7166666666666668
+                "minutes": 2.3499999999999996
               }
             ]
           },
@@ -2363,22 +2355,22 @@
               {
                 "id": "the-ais-attention-span--the-context-window",
                 "title": "Das Kontextfenster",
-                "minutes": 1.1916666666666664
+                "minutes": 2.0416666666666665
               },
               {
                 "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
                 "title": "Was passiert, wenn der Kontext voll wird",
-                "minutes": 2.5083333333333333
+                "minutes": 2.7083333333333335
               },
               {
                 "id": "the-ais-attention-span--attention-is-a-budget",
                 "title": "Aufmerksamkeit ist ein Budget",
-                "minutes": 2.5250000000000004
+                "minutes": 3.958333333333334
               },
               {
                 "id": "the-ais-attention-span--what-we-learned-so-far",
                 "title": "Was wir bisher gelernt haben",
-                "minutes": 1.1749999999999998
+                "minutes": 1.6166666666666667
               }
             ]
           },
@@ -2390,17 +2382,17 @@
               {
                 "id": "what-fills-the-window--whats-really-in-the-window",
                 "title": "Was wirklich im Kontextfenster steckt",
-                "minutes": 1.2999999999999998
+                "minutes": 2.033333333333333
               },
               {
                 "id": "what-fills-the-window--one-innocent-question",
                 "title": "Eine harmlose Frage",
-                "minutes": 1.5083333333333333
+                "minutes": 2.0666666666666664
               },
               {
                 "id": "what-fills-the-window--you-cant-watch-the-meter",
                 "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
-                "minutes": 1.0333333333333334
+                "minutes": 1.85
               }
             ]
           },
@@ -2412,17 +2404,17 @@
               {
                 "id": "managing-the-attention-span--everyday-habits",
                 "title": "Gewohnheiten für jeden Tag",
-                "minutes": 1.8416666666666668
+                "minutes": 1.6333333333333333
               },
               {
                 "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
                 "title": "Der Workflow für größere Projekte",
-                "minutes": 2.033333333333333
+                "minutes": 2.3166666666666664
               },
               {
                 "id": "managing-the-attention-span--human-in-the-loop-workflow",
                 "title": "Human-in-the-Loop-Workflow",
-                "minutes": 2.0416666666666665
+                "minutes": 3.2249999999999996
               },
               {
                 "id": "managing-the-attention-span--now-you-know-how-it-feels",
