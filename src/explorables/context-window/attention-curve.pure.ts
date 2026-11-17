@@ -9,8 +9,7 @@ export interface Falloff {
   readonly newest: readonly number[];
 }
 export const DEFAULT_FALLOFF: Falloff = { start: [70, 20, 10], newest: [50, 30, 20] };
-/** How far a start row's weight may wander, as a fraction, by the seeded random (0.15 is 85% to 115%). */
-const START_JITTER = 0.15;
+const START_WEIGHT_JITTER_FRACTION = 0.15;
 
 export const EDGE = 3;
 const RECENT_SPAN = 7;
@@ -56,7 +55,7 @@ function startWeights(count: number, falloff: readonly number[], ids: readonly s
   const next = random(seedOf(['start', ...ids]));
   return Array.from({ length: count }, (_, i) => {
     const base = falloff[i] ?? falloff.at(-1) ?? 1;
-    return base * (1 - START_JITTER + next() * 2 * START_JITTER);
+    return base * (1 - START_WEIGHT_JITTER_FRACTION + next() * 2 * START_WEIGHT_JITTER_FRACTION);
   });
 }
 

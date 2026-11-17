@@ -12,8 +12,7 @@ import type { Attention } from './context-usage.pure';
 
 const rows = (list: HTMLElement) => Array.from(list.querySelectorAll<HTMLElement>('[data-row]'));
 
-/** A row under this share of a full row cannot show its name without being cut through: the name hides. */
-const TIGHT = 0.9;
+const NAME_HIDDEN_BELOW_FULL_ROW_RATIO = 0.9;
 
 function apply(list: HTMLElement, heights: readonly number[]) {
   const full = fullRow(list);
@@ -21,7 +20,7 @@ function apply(list: HTMLElement, heights: readonly number[]) {
     const h = heights[i];
     if (h === undefined) return;
     row.style.height = `${h}px`;
-    if (h < full * TIGHT) row.setAttribute('data-tight', '');
+    if (h < full * NAME_HIDDEN_BELOW_FULL_ROW_RATIO) row.setAttribute('data-tight', '');
     else row.removeAttribute('data-tight');
   });
 }

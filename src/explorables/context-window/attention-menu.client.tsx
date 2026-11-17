@@ -67,6 +67,7 @@ function Popover({ id, anchor, onClose, ...rest }: PopoverProps) {
   const placed = usePopoverPlacement({ anchor, side: 'below', rules: RULES, slot: SLOT, onClose });
   if (placed === null) return null;
   const { root, placement } = placed;
+  const returnFocusToAnchorOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && anchor.focus();
   return createPortal(
     <div
       id={id}
@@ -75,8 +76,7 @@ function Popover({ id, anchor, onClose, ...rest }: PopoverProps) {
       data-slot={SLOT}
       data-side={placement.side}
       style={popoverBox(placement)}
-      // The hook closes on Esc; a key pressed inside the popover also hands the focus back to the button.
-      onKeyDown={(event: KeyboardEvent) => event.key === 'Escape' && anchor.focus()}
+      onKeyDown={returnFocusToAnchorOnEscape}
       className="pointer-events-auto fixed grid gap-3 rounded-xl border border-border bg-background p-4 text-foreground shadow-lg"
     >
       <Panel {...rest} />

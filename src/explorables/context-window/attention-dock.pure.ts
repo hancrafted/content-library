@@ -1,5 +1,4 @@
-/** A row never gets thinner than this, in px: the bar must stay visible even when the text cannot be read. */
-export const MIN_ROW = 4;
+export const MIN_ROW_PIXELS = 4;
 export const REACH = 3;
 
 const sum = (values: readonly number[]) => values.reduce((a, b) => a + b, 0);
@@ -20,7 +19,7 @@ export function restHeights(units: readonly number[], { max, natural, edge = 0 }
   const room = max - (units.length - free.length) * natural;
   const smallest = Math.min(...free.filter((u) => u > 0), Infinity);
   const at = (scale: number) =>
-    units.map((u, i) => (fixed(i) ? natural : Math.min(natural, Math.max(MIN_ROW, u * scale))));
+    units.map((u, i) => (fixed(i) ? natural : Math.min(natural, Math.max(MIN_ROW_PIXELS, u * scale))));
   const sumFree = (scale: number) => sum(at(scale)) - (units.length - free.length) * natural;
   let low = 0;
   let high = Number.isFinite(smallest) ? natural / smallest : 1;
@@ -37,12 +36,11 @@ export function falloff(distance: number): number {
   return d >= REACH ? 0 : (1 + Math.cos((d / REACH) * Math.PI)) / 2;
 }
 
-/** The continuous row index under a pointer `y` px down the resting layout: row 1 halfway down is 1.5. */
-export function pointerIndex(rest: readonly number[], y: number): number {
+export function pointerIndex(rest: readonly number[], yPixels: number): number {
   let top = 0;
   for (let i = 0; i < rest.length; i++) {
     const height = rest[i] ?? 0;
-    if (y < top + height) return i + (height > 0 ? (y - top) / height : 0);
+    if (yPixels < top + height) return i + (height > 0 ? (yPixels - top) / height : 0);
     top += height;
   }
   return Math.max(0, rest.length - 1);
@@ -53,7 +51,7 @@ export function dockHeights(rest: readonly number[], at: number | null, full: nu
   const weights = rest.map((_, i) => falloff(i - at));
   const grown = rest.map((h, i) => h + (Math.max(h, full) - h) * (weights[i] ?? 0));
   const extra = sum(grown) - sum(rest);
-  const give = grown.map((h, i) => Math.max(0, h - MIN_ROW) * (1 - (weights[i] ?? 0)));
+  const give = grown.map((h, i) => Math.max(0, h - MIN_ROW_PIXELS) * (1 - (weights[i] ?? 0)));
   const room = sum(give);
   if (room <= 0) return [...rest];
   const scale = Math.min(1, extra / room);
