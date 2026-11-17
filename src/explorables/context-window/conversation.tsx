@@ -11,14 +11,10 @@ import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { vars } from './window-bits';
 
-/* The conversation part: a messenger in Simple, a Claude Code terminal in Technical. */
-
-/** A bubble's opacity in the Attention view: its share of attention against the strongest few. */
 const attentionOpacity = (units: number, max: number) => 0.3 + 0.7 * Math.min(1, units / Math.min(8, max));
 
 const flag = (on: boolean) => (on ? '' : undefined);
 
-/** What one bubble needs, as values: a hover flips `on`, nothing else, so only the bubbles lit or unlit redraw. */
 interface BubbleProps {
   readonly say: Say;
   readonly step: Step;
@@ -61,7 +57,6 @@ const Message = memo(function Message(props: BubbleProps) {
   );
 });
 
-/** Enter and Space pin a bubble like a click: a bubble is a div, since a tool card nests inside it. */
 function pressKey(event: KeyboardEvent<HTMLDivElement>) {
   const target = event.target as HTMLElement;
   if ((event.key === 'Enter' || event.key === ' ') && target.dataset.role) {
@@ -70,7 +65,6 @@ function pressKey(event: KeyboardEvent<HTMLDivElement>) {
   }
 }
 
-/** Every step change scrolls to the newest bubble: bottom-aligned, or its top when it is taller than the view. */
 function useNewest(vis: number, tech: boolean) {
   const scroll = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -108,7 +102,6 @@ function TerminalBar({ title }: { readonly title: string }) {
   );
 }
 
-/** The bubbles: each one's `on` is computed here, from the lit key, and is all that changes on a hover. */
 function Bubbles(props: ConversationProps & { readonly say: Say }) {
   const { say, chat, vis, attention, gone, lit, ghost, pinned, notes } = props;
   const match = useMemo(() => matcher(lit), [lit]);
@@ -132,7 +125,6 @@ function Bubbles(props: ConversationProps & { readonly say: Say }) {
   ));
 }
 
-/** The chat's head: its name, and the scrub hint until the reader has used a control. */
 function Head({ say, p }: { readonly say: Say; readonly p: ConversationProps }) {
   return (
     <div className={styles.head}>

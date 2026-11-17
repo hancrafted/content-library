@@ -17,9 +17,6 @@ import type { useWindowEvents } from './use-window-events';
 import { vars } from './window-bits';
 import { Toolbar } from './window-toolbar';
 
-/* The parent's side of the parts: each one is handed its own slice of the Model and the callbacks that send events up. */
-
-/** The parent's inputs and the step view derived from them: each part is handed its slice, never all of it. */
 export interface Model {
   readonly data: ContextViewData;
   readonly chat: Chat;
@@ -28,7 +25,6 @@ export interface Model {
   readonly view: StepView;
 }
 
-/** What every part reads of the lit key, and the callbacks it reports lighting through. */
 function lightingOf(m: Model) {
   return { lit: m.view.lit, ghost: m.view.ghost, pinned: m.state.pinned };
 }
@@ -83,7 +79,6 @@ function TimelinePart({ m, valueText }: { readonly m: Model; readonly valueText:
   );
 }
 
-/** What each toggle shows and flips: the one place that decides, read by the toolbar and the head alike. */
 function flipOf(m: Model, flips: Flips): Flip {
   const { state, dispatch } = m;
   const mode = (id: PartId | null): Flip => {
@@ -104,7 +99,6 @@ function flipOf(m: Model, flips: Flips): Flip {
   return by[flips]();
 }
 
-/** The icon buttons of one part's head that the Preset offers, each with the state its registry entry flips. */
 function headToggles(m: Model, owner: ModePart): HeadToggle[] {
   return CONTROLS.flatMap((def) =>
     def.type === 'toggle' && def.placement === 'head' && def.owner === owner && offers(m.data.preset, def.id)
@@ -196,7 +190,6 @@ function AttentionPart({ m, events }: PartProps) {
   );
 }
 
-/** The grid's children by part. Each carries its part id as its key, so a reorder moves the DOM nodes, never remounts. */
 const PIECES: Readonly<Partial<Record<Part, (p: PartProps & { readonly sentence: string }) => ReactNode>>> = {
   chat: (p) => <ConversationPart key="chat" m={p.m} events={p.events} />,
   timeline: (p) => (p.m.state.parts.timeline ? <TimelinePart key="timeline" m={p.m} valueText={p.sentence} /> : null),
@@ -206,7 +199,6 @@ const PIECES: Readonly<Partial<Record<Part, (p: PartProps & { readonly sentence:
   attention: (p) => (p.m.state.parts.attention ? <AttentionPart key="attention" m={p.m} events={p.events} /> : null),
 };
 
-/** The grid: every shown part in its own slot, in the order the reader gave. */
 export function Parts({ m, events, sentence }: PartProps & { readonly sentence: string }) {
   const grid = columns(m.state.parts, m.state, m.data.preset.height);
   return (

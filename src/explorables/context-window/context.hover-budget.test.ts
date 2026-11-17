@@ -11,12 +11,6 @@ import { ContextWindow } from './context-window';
 import type { RenderMode } from './context.types';
 import { Conversation } from './conversation';
 
-/*
- * The hover budget: moving the pointer from one step to the next may change only the items that light or unlight, in
- * every part. A part computes one `on` boolean per item, so the items whose markup differs between two lit keys are the
- * items a memoised item redraws; everything else keeps its props.
- */
-
 const noop = () => undefined;
 
 const harness = (renderMode: RenderMode) => {
@@ -82,7 +76,6 @@ const harness = (renderMode: RenderMode) => {
   return { chat, markup };
 };
 
-/** The items (`[data-part]`) whose markup differs between two renders, by position. */
 const flips = (from: string, to: string): number => {
   const items = (html: string) =>
     load(html)('[data-part]')

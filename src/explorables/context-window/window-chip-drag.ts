@@ -1,19 +1,11 @@
+// spec: docs/features/explorables/context-window.md#reordering-the-parts
 import { useEffect, useRef, useState, type MouseEvent, type PointerEvent } from 'react';
 import type { Part } from './context.types';
 import { crossedChip } from './window-chip-drag.pure';
 
-/*
- * Mouse drag and drop of the part chips, on native pointer events. A drag starts after the pointer moves a few pixels
- * from a chip pressed with the primary mouse button; every chip the pointer then crosses past its middle takes the
- * dragged chip's place, so the order follows the pointer live. There is no keyboard or touch alternative (Han's
- * decision; docs/features/explorables/context-window.md names the WCAG 2.5.7 gap).
- */
-
 const THRESHOLD = 4;
-/** How long after a drag ends the click it produces is still swallowed. */
 const CLICK_SWALLOW_MILLISECONDS = 60;
 
-/** The chip under the pointer, other than the dragged one, once the pointer is past its middle on the way in. */
 export function chipUnder(
   order: readonly Part[],
   dragged: Part,
@@ -36,7 +28,6 @@ interface Live {
   readonly onMove: (part: Part, before: Part) => void;
 }
 
-/** Follows one press until the button is released; returns the function that ends it, and calls `done(moved)`. */
 function follow(press: { part: Part; x: number; y: number }, live: { current: Live }, done: (moved: boolean) => void) {
   const { part } = press;
   let moving = false;
@@ -59,7 +50,6 @@ function follow(press: { part: Part; x: number; y: number }, live: { current: Li
   return end;
 }
 
-/** The capture handler that drops the one click a drag ends on, once. */
 const swallowClick = (swallow: { current: boolean }) => (event: MouseEvent<HTMLElement>) => {
   if (!swallow.current) return;
   swallow.current = false;
@@ -77,15 +67,18 @@ export function useChipDrag({ enabled, order, onMove }: Drag) {
   const stop = useRef<(() => void) | null>(null);
   useEffect(() => () => stop.current?.(), []);
 
+  const swallowTheClickThatEndsTheDrag = () => {
+    swallow.current = true;
+    setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MILLISECONDS);
+  };
+
   const onPointerDown = (part: Part) => (event: PointerEvent<HTMLElement>) => {
     if (!enabled || event.pointerType !== 'mouse' || event.button !== 0) return;
     stop.current = follow({ part, x: event.clientX, y: event.clientY }, live, (started) => {
       setDragging(started ? part : null);
       if (started) return;
       stop.current = null;
-      // The click that ends a drag must not toggle the chip it ends on.
-      swallow.current = true;
-      setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MILLISECONDS);
+      swallowTheClickThatEndsTheDrag();
     });
   };
 

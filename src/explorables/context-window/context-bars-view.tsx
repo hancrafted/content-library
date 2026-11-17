@@ -7,15 +7,10 @@ import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { Chat, MiniBar, MiniPreset } from './context.types';
 
-/* Static bars: one figure per bar, drawn with the pure view, horizontally unless asked. Server-rendered, no interaction. */
-
-/** How a Slide asks for its bars: upright, and with its own words in each block. */
 export interface BarsLayout {
   readonly orientation?: BarOrientation;
-  /** A Slide's words for each block of every bar, in block order (see `ContextBarView`). */
   readonly labels?: readonly ReactNode[];
   readonly free?: ReactNode;
-  /** How each labelled bar splits into parts, with what stands beside each (see `ContextBarView`). */
   readonly parts?: readonly BarPart[];
 }
 
@@ -32,7 +27,6 @@ interface FigureProps extends Pick<Props, 'words' | 'locale' | 'orientation' | '
   readonly window: MiniPreset['window'];
 }
 
-/** The caption's figure: a chat's `128K of 200K · 64%`. */
 function figureText({ window, words, locale }: FigureProps, used: number): string {
   return fill(words.mini.usedOf, {
     used: shortTokens(used, locale).toUpperCase(),

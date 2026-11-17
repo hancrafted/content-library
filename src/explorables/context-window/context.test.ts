@@ -5,7 +5,6 @@ import { describe, expect, it } from 'vitest';
 import { Context, ContextBarsPreset, contextViewData, SessionBarPreset } from './context';
 import { CONTEXT_PRESETS, type ContextPresetId, type MiniPresetId } from './context-data';
 
-/** The server markup a Slide ships for a Preset, parsed. */
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
 const renderMini = (preset: MiniPresetId, locale = 'en') =>
