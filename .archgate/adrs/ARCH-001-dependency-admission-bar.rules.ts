@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// The four-signal admission bar (stars, contributors, downloads, recency) is deliberately not
-// checked here: every signal is a live network fact and this check path is
-// hermetic, so that half stays a review duty, permanently.
-// Self-contained by design: archgate forbids imports between rules files.
 // decision: ARCH-001 §1
 // decision: ARCH-001 §2
 const PACKAGE_JSON = 'package.json';
@@ -28,7 +24,7 @@ export default {
         try {
           raw = await ctx.readFile(PACKAGE_JSON);
         } catch {
-          return; // no package.json in scope — nothing for this rule to check
+          return;
         }
         let pkg: Record<string, unknown>;
         try {
