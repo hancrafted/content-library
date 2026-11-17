@@ -1,11 +1,5 @@
-/*
- * The maths of the Explorable hero's Message drift: a field of faint bubbles and, every few seconds, one subject beat in
- * the accent colour. Pure, so the timeline, the end state and the layout test without a canvas.
- */
-
 export type Story = 'context-window' | 'human-in-the-loop' | 'ai-capability';
 
-/** One ambient cycle, the gap between subject beats and a beat's length, in seconds. */
 export const LOOP_SECONDS = 18;
 export const BEAT_EVERY_SECONDS = 6;
 export const BEAT_SECONDS = 1.5;
@@ -20,7 +14,6 @@ export const ease = (value: number) => {
 };
 export const mix = (a: number, b: number, p: number) => a + (b - a) * p;
 
-/** Where the loop's subject beat is at `seconds`: how far it has run (0 to 1) and how strongly it shows. */
 export function beatOf(seconds: number): { progress: number; strength: number } {
   const beatTime = (seconds + BEAT_EVERY_SECONDS - 2) % BEAT_EVERY_SECONDS;
   return {
@@ -100,7 +93,6 @@ export interface Pose {
   readonly alpha: number;
   readonly check: number;
   readonly chips: number;
-  /** Blur in pixels. */
   readonly blur: number;
 }
 

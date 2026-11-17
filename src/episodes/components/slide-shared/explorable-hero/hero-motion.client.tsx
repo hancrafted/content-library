@@ -97,7 +97,6 @@ interface CanvasRefs {
   readonly soft: RefObject<HTMLCanvasElement | null>;
 }
 
-/** What the loop shares with the mounted drift: the drift to draw and the timeline's seconds. */
 interface Shared {
   drift: Drift | undefined;
   seconds: number;
