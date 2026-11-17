@@ -5,7 +5,7 @@ import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { deadPid, plantLock } from '../../../tools/load/lock.fixture.ts';
 import type { Timing } from '../../../tools/load/lock.ts';
-import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
+import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -282,41 +282,30 @@ describe('mergeIntoBase', () => {
   });
 });
 
-/** One slow-tests log line, as the fast suite's reporter writes it. */
-const slowEntry = (test: string, branch: string, at: Date) =>
-  JSON.stringify({ test, file: 'src/walk.test.ts', ms: 1200, loadFactor: 2.4, branch, at: at.toISOString() }) + '\n';
-
-const HOUR = 60 * 60 * 1000;
-
-describe('slowTestReport', () => {
+describe('forkDate', () => {
   describe('success cases', () => {
-    it("keeps only the merging branch's entries logged at or after its merge-base's committer date", () => {
+    it("gives the committer date of the branch's merge-base with its base", () => {
       // ARRANGE
       const { main } = fixture();
-      const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
-      writeFileSync(
-        path.join(main, '.git', 'slow-tests.jsonl'),
-        slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - HOUR)) +
-          slowEntry('after the fork', 'work', new Date(forkedAt.getTime() + HOUR)) +
-          slowEntry('on another branch', 'other', new Date(forkedAt.getTime() + HOUR)),
-      );
-      const header = '! 1 test ran past 750 ms on work since it branched off base:';
-      const line = `  1.2 s at load 2.4  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + HOUR).toISOString()})`;
+      const forkCommit = git(main, 'rev-parse', 'base');
+      const expected = new Date(git(main, 'show', '-s', '--format=%cI', forkCommit));
       // ACT
-      const report = slowTestReport('work', 'base', main);
+      const forked = forkDate('work', 'base', main);
       // ASSERT
-      expect(report).toEqual([header, line]);
+      expect(forked).toEqual(expected);
     });
   });
 
   describe('edge cases', () => {
-    it('prints nothing when the repository has no slow-tests log yet', () => {
+    it('gives null when the branch shares no history with the base', () => {
       // ARRANGE
       const { main } = fixture();
+      git(main, 'checkout', '-q', '--orphan', 'unrelated');
+      git(main, 'commit', '-q', '--allow-empty', '-m', 'unrelated root');
       // ACT
-      const report = slowTestReport('work', 'base', main);
+      const forked = forkDate('unrelated', 'base', main);
       // ASSERT
-      expect(report).toEqual([]);
+      expect(forked).toBeNull();
     });
   });
 });
