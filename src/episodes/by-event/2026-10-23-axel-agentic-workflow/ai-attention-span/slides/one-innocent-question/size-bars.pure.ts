@@ -6,18 +6,12 @@ export interface SizeRow<K extends string = string> {
   readonly category: Category;
 }
 
-/** A drawn bar: its tokens, and its length as a percent of the largest row. */
 export interface SizeBar<K extends string = string> {
   readonly key: K;
   readonly tokens: number;
   readonly percent: number;
 }
 
-/**
- * The four rows of "One innocent question", on the summer party: the question (m10), the two web searches' extracts
- * (m8), the catering PDF read (m11) and the one-line answer (m12). The tokens come from the chat the cornerstone
- * draws, so the bars and the live grid always agree.
- */
 export const SIZE_ROWS = [
   { key: 'question', step: 'm10', category: 'user' },
   { key: 'searches', step: 'm8', category: 'tool_result' },
