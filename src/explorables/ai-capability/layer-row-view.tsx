@@ -62,8 +62,7 @@ const MODEL_FLOW = (input: ReactNode, model: ReactNode) => (
 );
 const MODEL = <Box x={50} y={18} w={26} h={20} />;
 
-/** Each card's drawing, hoisted: built once, never per render. */
-const FLOWS: Record<LayerItemId, ReactNode> = {
+const HOISTED_FLOWS: Record<LayerItemId, ReactNode> = {
   prompt: MODEL_FLOW(
     <>
       <Box x={4} y={20} w={30} h={16} on />
@@ -159,7 +158,7 @@ const FLOWS: Record<LayerItemId, ReactNode> = {
 export function LayerFlowView({ id }: { readonly id: LayerItemId }) {
   return (
     <svg viewBox="0 0 120 40" className="h-10 w-26 shrink-0" aria-hidden="true">
-      {FLOWS[id]}
+      {HOISTED_FLOWS[id]}
     </svg>
   );
 }

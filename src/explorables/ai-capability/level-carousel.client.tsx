@@ -52,7 +52,6 @@ function usePosition(list: RefObject<HTMLElement | null>) {
   return { index, narrow };
 }
 
-/** An arrow button, a 44 px target, faded at the carousel's end. */
 function Arrow(props: {
   readonly label: string;
   readonly glyph: string;

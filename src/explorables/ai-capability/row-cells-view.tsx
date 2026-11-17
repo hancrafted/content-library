@@ -63,8 +63,7 @@ export function Hypothesis({ children }: { readonly children: string }) {
   );
 }
 
-/** A range on the track, from its low end to its high end, as a left offset and a width in percent. */
-const span = ([low, high]: readonly [number, number]) => {
+const spanInPercent = ([low, high]: readonly [number, number]) => {
   const left = trackPercent(low);
   return { left: `${left}%`, width: `${Math.max(trackPercent(high) - left, 1)}%` };
 };
@@ -81,9 +80,9 @@ function Track({ range, promise }: { readonly range: Productivity; readonly prom
     <>
       <div aria-hidden="true" className="relative h-5">
         <span className="absolute inset-x-0 top-2 h-1 rounded-full bg-muted" />
-        <span className={`${styles.claimed} absolute top-1.5 h-2 rounded-full`} style={span(range.claimed)} />
+        <span className={`${styles.claimed} absolute top-1.5 h-2 rounded-full`} style={spanInPercent(range.claimed)} />
         {range.measured && (
-          <span className="absolute top-4 h-1 rounded-full bg-foreground" style={span(range.measured)} />
+          <span className="absolute top-4 h-1 rounded-full bg-foreground" style={spanInPercent(range.measured)} />
         )}
         <span
           className="absolute inset-y-0 border-l-2 border-dotted border-destructive"
@@ -149,11 +148,6 @@ function Expectation({ labels }: { readonly labels: AdoptionLabels }) {
   );
 }
 
-/**
- * The Adoption row: how many people work at this Level, with the population it was measured in, since every Level's
- * number comes from a different survey. No bars, so no one compares across populations. The Level leaders expect
- * carries their expectation, tagged a hypothesis.
- */
 export function AdoptionCellView(props: {
   readonly words: LevelWords['adoption'];
   readonly expected: boolean;

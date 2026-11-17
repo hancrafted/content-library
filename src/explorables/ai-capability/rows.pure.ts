@@ -2,10 +2,6 @@
 export const ROWS = ['effort', 'productivity', 'adoption', 'disciplines', 'oversight', 'explain'] as const;
 export type Row = (typeof ROWS)[number];
 
-/**
- * The toolbar's chips: Explain first, since the page opens with it, then the rows in stacking order. Its row still
- * stacks last, above the model band, so its wire never crosses another row.
- */
 export const CHIP_ORDER: readonly Row[] = ['explain', ...ROWS.filter((row) => row !== 'explain')];
 
 export const OPENING_ROWS: readonly Row[] = ['explain'];

@@ -33,8 +33,8 @@ describe('success cases', () => {
   it('puts a shown row on the grid line under the rail stop, the card and the rows above it', () => {
     // ARRANGE
     const shown = ['effort', 'disciplines', 'explain'] as const;
-    // Line 1 holds the rail stops, line 2 the cards, line 3 Managing effort.
-    const disciplinesLine = 4;
+    const lineOfLastShownRowAbove = 3;
+    const disciplinesLine = lineOfLastShownRowAbove + 1;
     // ACT
     const line = gridLine(shown, 'disciplines');
     // ASSERT
@@ -54,13 +54,12 @@ describe('success cases', () => {
   it('places 1× at the start of the productivity track and the 20× promise near its end, on a log scale', () => {
     // ARRANGE
     const promise = 20;
-    // log(20) / log(30), the track running from 1× to 30×
-    const promiseAt = 88.08;
+    const logOf20OverLogOf30InPercent = 88.08;
     // ACT
     const placed = [trackPercent(1), trackPercent(promise)];
     // ASSERT
     expect(placed[0]).toBe(0);
-    expect(placed[1]).toBeCloseTo(promiseAt, 1);
+    expect(placed[1]).toBeCloseTo(logOf20OverLogOf30InPercent, 1);
   });
 });
 

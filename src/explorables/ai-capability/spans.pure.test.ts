@@ -16,8 +16,8 @@ describe('success cases', () => {
   it("cuts a span to one Level's card, marking that it carries on into the next card", () => {
     // ARRANGE
     const range = [1.5, 4] as const;
-    const agentsSlice = { left: 50, width: 50, continues: true };
-    const factorySlice = { left: 0, width: 100, continues: false };
+    const agentsSlice = { leftPercent: 50, widthPercent: 50, continues: true };
+    const factorySlice = { leftPercent: 0, widthPercent: 100, continues: false };
     // ACT
     const cuts = [sliceOf(range, 'agents'), sliceOf(range, 'factory')];
     // ASSERT

@@ -7,8 +7,7 @@ export interface SpanEnd {
   readonly at: Edge;
 }
 
-/** A span's strength along its length: [where, 0 to 1 along the span; how strong, 0 to 1]. */
-export type Stops = readonly (readonly [number, number])[];
+export type Stops = readonly (readonly [alongRatio: number, strengthRatio: number])[];
 
 export type Range = readonly [number, number];
 
@@ -20,10 +19,9 @@ export function spanRange(from: SpanEnd, to: SpanEnd): [number, number] {
   return [position(from), position(to)];
 }
 
-/** One Level's cut of a span, in percent of its card, and whether the span runs on into the next card. */
 export interface Slice {
-  readonly left: number;
-  readonly width: number;
+  readonly leftPercent: number;
+  readonly widthPercent: number;
   readonly continues: boolean;
 }
 
@@ -32,7 +30,7 @@ export function sliceOf([from, to]: Range, level: Level): Slice | null {
   const low = Math.max(from, start);
   const high = Math.min(to, start + 1);
   if (high <= low) return null;
-  return { left: (low - start) * 100, width: (high - low) * 100, continues: to > start + 1 };
+  return { leftPercent: (low - start) * 100, widthPercent: (high - low) * 100, continues: to > start + 1 };
 }
 
 const EVEN: Stops = [

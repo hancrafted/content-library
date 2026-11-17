@@ -23,20 +23,17 @@ export interface LayerRowProps {
   readonly hypothesis: string | null;
 }
 
-/** How strong a card's tone gets at full strength, in percent over the card colour. */
-const TINT = 24;
-/** How far a narrow slice indents per percent its span starts into the Level: less than its share, so it stays wide. */
-const INDENT = 0.4;
+const TINT_PERCENT = 24;
+const INDENT_RATIO = 0.4;
 
 function tint(span: PlacedSpan, shown: Range): CSSProperties {
   const stops = fadeStops(span.stops, span.range, shown).map(
-    ({ at, strength }) => `color-mix(in oklch, var(--hue) ${Math.round(strength * TINT)}%, var(--card)) ${at}%`,
+    ({ at, strength }) => `color-mix(in oklch, var(--hue) ${Math.round(strength * TINT_PERCENT)}%, var(--card)) ${at}%`,
   );
   return { backgroundImage: `linear-gradient(90deg, ${stops.join(', ')})` };
 }
 
-/** The 8 half-Level tracks of the wide row: a span from 1.5 to 4 runs from line 4 to line 9. */
-const tracks = ([from, to]: Range): CSSProperties => ({ gridColumn: `${from * 2 + 1} / ${to * 2 + 1}` });
+const halfLevelTracks = ([from, to]: Range): CSSProperties => ({ gridColumn: `${from * 2 + 1} / ${to * 2 + 1}` });
 
 function CardFace({
   span,
@@ -65,7 +62,10 @@ function CardFace({
 
 function cardStyle(props: ItemProps): CSSProperties {
   const shown: Range = [props.shownFrom, props.shownTo];
-  const at = props.offset === undefined ? tracks(shown) : { marginLeft: `${props.offset * INDENT}%` };
+  const at =
+    props.offsetPercent === undefined
+      ? halfLevelTracks(shown)
+      : { marginLeft: `${props.offsetPercent * INDENT_RATIO}%` };
   return { ...at, ...tint(props.span, shown) };
 }
 
@@ -75,8 +75,7 @@ interface ItemProps {
   readonly open: boolean;
   readonly shownFrom: number;
   readonly shownTo: number;
-  /** Narrow, how far into the Level's card the slice starts, in percent; wide, none. */
-  readonly offset?: number;
+  readonly offsetPercent?: number;
   readonly continues?: boolean;
   readonly panelId: string;
   readonly labels: LayerDetailLabels;
@@ -86,7 +85,7 @@ interface ItemProps {
 const LayerItem = memo(function LayerItem(props: ItemProps) {
   const { span, open } = props;
   return (
-    <div className={`${styles[span.tone]} ${props.offset === undefined ? styles.lane : styles.slice}`}>
+    <div className={`${styles[span.tone]} ${props.offsetPercent === undefined ? styles.lane : styles.slice}`}>
       <button
         type="button"
         data-layer-item={span.id}
@@ -175,9 +174,9 @@ export function LayerSlices(props: LayerRowProps & { readonly level: Level }) {
             key={span.id}
             {...itemOf(props, { span, words }, props.level)}
             continues={slice.continues}
-            shownFrom={at + slice.left / 100}
-            shownTo={at + (slice.left + slice.width) / 100}
-            offset={slice.left}
+            shownFrom={at + slice.leftPercent / 100}
+            shownTo={at + (slice.leftPercent + slice.widthPercent) / 100}
+            offsetPercent={slice.leftPercent}
           />
         );
       })}
