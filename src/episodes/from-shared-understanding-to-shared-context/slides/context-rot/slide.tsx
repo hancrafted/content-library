@@ -20,11 +20,6 @@ const DYNAMIC = ['mislabelled-box', 'colleagues', 'crates', 'rush-vs-check'] as 
 
 const MEASURED: readonly string[] = ['colleagues', 'crates'];
 
-/**
- * "Context rot" (Spec Option 11a), on screen "Context rot at the bench": the four kinds of mess across, static and
- * dynamic down, eight bench vignettes with the mess in `warning` and the four terms as small captions only.
- * Overrules `grid-2x2`: the library has no 2x4, so a Scene from `SlideFrame`. Keeps `motion: none`.
- */
 export const contextRot = slide({
   slug: 'context-rot',
   messages: { en, de },

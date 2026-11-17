@@ -17,7 +17,6 @@ export interface RotRow {
   readonly cells: readonly { mess: MessId; text: string; marker?: ReactNode }[];
 }
 
-/** The tilt each cell's card takes, by row and column, so the cells read as pinned up by hand. */
 const TILT = [
   ['-rotate-1', 'rotate-1', '', '-rotate-1'],
   ['rotate-1', '', '-rotate-1', '-rotate-1'],
