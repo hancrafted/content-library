@@ -1,3 +1,4 @@
+import type { ComposedId } from '@/content-store/catalogue/record-routes';
 import { tocSectionsOf } from '@/episodes/components/episode-page/episode-page-container.pure';
 import { recordContent } from '@/episodes/components/episode-page/record-content';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
@@ -21,13 +22,13 @@ export function renderedSlides(composition: EpisodeComposition): Slide[] {
 }
 
 /** A Slide's Scene as its page renders it in English, rendered twice into one page, each copy with its own kit. */
-export function twiceRendered(page: ComposedPage, composition: EpisodeComposition, slide: Slide): string {
+export function twiceRendered(id: ComposedId, composition: EpisodeComposition, slide: Slide): string {
   const placed = placeSections<Slide>(composition.sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
-  if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${page.id}".`);
+  if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${id}".`);
   const scene = () =>
     localizeSlide(own, {
-      episode: page.id,
+      episode: id,
       locale: 'en',
       placed,
       referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
@@ -49,7 +50,7 @@ function repeated(ids: readonly string[]): string[] {
 /** Every DOM id a rendered Slide repeats when it sits twice on one page. */
 export function repeatedIds(page: ComposedPage, composition: EpisodeComposition): string[] {
   return renderedSlides(composition).flatMap((slide) =>
-    repeated(idsOf(twiceRendered(page, composition, slide))).map((id) => `${slide.slug}: id "${id}" repeats`),
+    repeated(idsOf(twiceRendered(page.id, composition, slide))).map((id) => `${slide.slug}: id "${id}" repeats`),
   );
 }
 

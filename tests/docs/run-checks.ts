@@ -1,4 +1,3 @@
-import type { NamedCheck } from '@/episodes/lib/composed-page-checks';
 import { checkPipeline } from '@/pipeline/lib/episode-pipeline.pure';
 import { checkReferenceJobs } from '@/pipeline/lib/episode-reference-jobs.pure';
 import { checkResearchJobs } from '@/pipeline/lib/episode-research-jobs.pure';
@@ -7,7 +6,9 @@ import { checkStagingFolder } from '@/pipeline/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/pipeline/lib/episode-voice-script.pure';
 import { type Finding } from '@/pipeline/lib/finding.pure';
 import { checkResearchFolders, researchCategories } from '@/pipeline/lib/research-folder.pure';
+import { RUN_CHECKS_TEST } from '@/pipeline/lib/run-checks-file';
 import { gateTier, verifiedProblems } from '@/pipeline/lib/staging-file.pure';
+import { type NamedCheck } from '@/shared/lib/folder-check';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import {
@@ -23,8 +24,6 @@ import {
 } from './episode-staging.fixture.ts';
 
 // decision: ARCH-003 §4.7
-export const RUN_CHECKS_TEST = 'run-checks.test.ts';
-
 const shown = (staging: string, findings: readonly Finding[]): string[] =>
   findings.map(({ file, message }) => `${staging}/${file}: ${message}`);
 

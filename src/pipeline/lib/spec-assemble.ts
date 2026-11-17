@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findForbidden } from './episode-forbid.pure.ts';
 import { assembleSpec } from './episode-spec-assemble.pure.ts';
-import { SPEC_FILE } from './episode-spec-page.pure.ts';
+import { readSpec, SPEC_FILE } from './episode-spec-page.pure.ts';
 import { checkSpec } from './episode-spec.pure.ts';
 import { inlineSpecPage } from './spec-css.ts';
 import { utcSeconds } from './staging-file.pure.ts';
@@ -112,10 +112,9 @@ async function written(sources: Sources, html: string): Promise<SpecAssembleRepo
   await inlineSpecPage(specPath);
   const options = fragments.length > 0;
   const stage = options ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
-  const findings = checkSpec(
-    { [SPEC_FILE]: html, ...(dossier === undefined ? {} : { 'dossier.md': dossier }) },
-    options ? 'options' : 'early',
-  );
+  const spec = readSpec({ [SPEC_FILE]: html });
+  // The stage assembled to, not the one read off the page: a Spec assembled with Options is held to the whole contract.
+  const findings = checkSpec(spec, dossier, options ? 'options' : 'early');
   const done = `✔ ${path.relative(ROOT, specPath)} assembled to the ${stage} stage`;
   return { out: [done, ...findings.map(({ message }) => `✖ ${message}`)], err: [], failed: findings.length > 0 };
 }

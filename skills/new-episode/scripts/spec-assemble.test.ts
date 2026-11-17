@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { specStage } from '../../../src/pipeline/lib/episode-spec.pure.ts';
+import { readSpec } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
 
 // A real subprocess (ARCH-003 §1.1): the ticket (#228) asks for the command's page, exit code and refusal end to end.
 /* `npm run episode:spec-assemble` on a temp Episode folder: reads what exists and writes `spec/spec.html`. */
@@ -69,13 +69,13 @@ describe('success cases', () => {
     expect(load(html)('article[data-spec="slide"]#spent-attention[data-item="spent-attention"]')).toHaveLength(1);
   });
 
-  it('writes a Brief-stage Spec that specStage classifies early', () => {
+  it('writes a Brief-stage Spec that readSpec reads as early', () => {
     // ARRANGE
     const folder = episode({ 'brief.md': BRIEF });
     const expected = 'early';
     // ACT
     const run = assemble(folder);
-    const stage = specStage(readFileSync(path.join(folder, 'spec/spec.html'), 'utf8'));
+    const { stage } = readSpec({ 'spec/spec.html': readFileSync(path.join(folder, 'spec/spec.html'), 'utf8') });
     // ASSERT
     expect(run.status).toBe(0);
     expect(stage).toBe(expected);

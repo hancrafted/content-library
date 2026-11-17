@@ -26,16 +26,15 @@
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
-import { type CheerioAPI } from 'cheerio';
-import { OPTION, parseSpec, SECTION, SLIDE, SPEC_FILE, TITLE_SLIDE, type SpecHtml } from './episode-spec-page.pure.ts';
-import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
+import { SECTION, SLIDE, type Spec, type SpecPage, type SpecStage } from './episode-spec-page.pure.ts';
+import { checkSlide, FORM } from './episode-spec-slide.pure.ts';
 import { checkTitleSlide } from './episode-spec-title.pure.ts';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
 import { unless, type Finding } from './finding.pure.ts';
-import { metaBlockText, metaGateTier } from './staging-file.pure.ts';
 import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
-const DOSSIER_FILE = 'dossier.md';
+/** The Dossier, relative to the Episode's staging folder. */
+export const DOSSIER_FILE = 'dossier.md';
 const META_FIELDS = ['type', 'title', 'status', 'generated', 'locale', 'brief'];
 
 function checkMeta(text: string | undefined): string[] {
@@ -76,46 +75,51 @@ function checkSlugsAgree(kind: 'Section' | 'Slide', wanted: readonly string[], p
   ];
 }
 
-function checkAgainstDossier($: CheerioAPI, dossier: string): string[] {
+function checkAgainstDossier(spec: Spec, dossier: string): string[] {
   const ids = (selector: string) =>
-    $(selector)
-      .toArray()
-      .map((element) => $(element).attr('id') ?? '');
+    spec.pages.flatMap(({ $ }) =>
+      $(selector)
+        .toArray()
+        .map((element) => $(element).attr('id') ?? ''),
+    );
   return [
     ...checkSlugsAgree('Section', dossierSlugs(dossier, 2), ids(SECTION)),
     ...checkSlugsAgree('Slide', dossierSlugs(dossier, 3), ids(SLIDE)),
   ];
 }
 
-/** The Title slide, every Slide, the review fields and the words of the page. */
-function checkSlides(page: SpecPage): string[] {
-  const { $ } = page;
+/** The rules held once for the whole Spec: its Title slide and its Visual language, both on its main page. */
+function checkWholeSpec(spec: Spec): string[] {
   return [
-    ...checkTitleSlide(page),
-    ...$(SLIDE)
-      .toArray()
-      .flatMap((element, at) => checkSlide(page, element, at)),
+    ...checkTitleSlide(spec),
     ...unless(
-      $(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
+      spec.main.$(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
       `The Visual language has no <textarea form="${FORM}" name="note:visual-language">.`,
     ),
+  ];
+}
+
+/** The Slides and the words of one page, its first Slide the `first`-th in Spec order. */
+function checkPage(page: SpecPage, approved: boolean, first: number): string[] {
+  const { $ } = page;
+  return [
+    ...$(SLIDE)
+      .toArray()
+      .flatMap((element, at) => checkSlide(page, approved, { element, at: first + at })),
     ...checkVoiceScripts($),
     ...checkCitations($),
   ];
 }
 
-/** `early`: a Brief- or Dossier-stage Spec, before the designers' Options exist, so only what that stage holds is checked. */
-export type SpecStage = 'early' | 'options';
-
-/**
- * The stage a Spec page is at, read from the page: `early` when it holds Slides but no Option and no Title slide,
- * which is how a Brief- or Dossier-stage assembly looks; `options` otherwise, so a page with a Title slide, an Option
- * or no Slide at all gets the whole contract.
- */
-export function specStage(html: SpecHtml): SpecStage {
-  const $ = parseSpec(html);
-  const hasSlides = $(SLIDE).length > 0;
-  return hasSlides && $(OPTION).length === 0 && $(TITLE_SLIDE).length === 0 ? 'early' : 'options';
+/** Each page's findings, its Slides numbered on from the pages before it. */
+function checkPages(spec: Spec): { file: string; messages: string[] }[] {
+  const firsts = spec.pages.map((_, index) =>
+    spec.pages.slice(0, index).reduce((count, { $ }) => count + $(SLIDE).length, 0),
+  );
+  return spec.pages.map((page, index) => ({
+    file: page.file,
+    messages: checkPage(page, spec.approved, firsts[index]),
+  }));
 }
 
 /** The Dossier left beside an approved Spec, which the approval commit deletes. */
@@ -127,29 +131,24 @@ function staleDossier(isApproved: boolean, dossier: string | undefined): string[
 }
 
 /**
- * Checks a staging folder's Spec page against the Spec contract, and against
- * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
- * maps a path relative to the folder to its text; `page` is that Spec already parsed, when the caller has it.
+ * Checks a Spec against the Spec contract, and against the Dossier while one exists (`dossier`, its text). The stage
+ * is the Spec's own; Spec assembly passes the stage it assembled to instead. Whole-Spec findings name the main page,
+ * Slide and word findings the page they sit on.
  */
-export function checkSpec(
-  files: Readonly<Record<string, string>>,
-  stage: SpecStage = 'options',
-  page?: CheerioAPI,
-): Finding[] {
-  const html = files[SPEC_FILE];
-  if (html === undefined) return [];
-  const $ = page ?? parseSpec(html);
-  const meta = metaBlockText(html);
-  const isApproved = metaGateTier(html) === 'approved';
-  const dossier = files[DOSSIER_FILE];
-  const messages = [
-    ...checkMeta(meta),
-    ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
-    ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
-  ];
-  const stale = staleDossier(isApproved, dossier);
+export function checkSpec(spec: Spec, dossier: string | undefined, stage: SpecStage = spec.stage): Finding[] {
+  const main = spec.main.file;
+  const finding =
+    (file: string) =>
+    (message: string): Finding => ({ kind: 'spec', file, message });
   return [
-    ...messages.map((message): Finding => ({ kind: 'spec', file: SPEC_FILE, message })),
-    ...stale.map((message): Finding => ({ kind: 'spec', file: DOSSIER_FILE, message })),
+    ...checkMeta(spec.meta).map(finding(main)),
+    ...(dossier === undefined || spec.approved ? [] : checkAgainstDossier(spec, dossier)).map(finding(main)),
+    ...(stage === 'early'
+      ? []
+      : [
+          ...checkWholeSpec(spec).map(finding(main)),
+          ...checkPages(spec).flatMap(({ file, messages }) => messages.map(finding(file))),
+        ]),
+    ...staleDossier(spec.approved, dossier).map(finding(DOSSIER_FILE)),
   ];
 }

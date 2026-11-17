@@ -5,7 +5,7 @@ title: Domain Docs
 
 # Domain Docs
 
-How engineering skills should consume this repo's domain documentation when exploring the codebase. This repo is **multi-context**: `GLOSSARY-MAP.md` at the root lists each context's glossary (the content library, the Factory).
+How engineering skills should consume this repo's domain documentation when exploring the codebase. This repo is **multi-context**: `GLOSSARY-MAP.md` at the root lists each context's glossary (the content library, the Factory, Drive).
 
 ## Two kinds of ADR
 
@@ -50,6 +50,7 @@ If `GLOSSARY.md` or `docs/adr/` doesn't exist, **proceed silently**. Don't flag 
 ├── GLOSSARY-MAP.md                ← lists the contexts
 ├── GLOSSARY.md                    ← content library
 ├── tools/factory/GLOSSARY.md      ← Factory
+├── skills/drive/GLOSSARY.md       ← Drive (ships with the /drive skill)
 ├── docs/adr/                      ← design-ADRs (engineering skills)
 │   ├── 0001-some-decision.md
 │   └── 0002-another-decision.md

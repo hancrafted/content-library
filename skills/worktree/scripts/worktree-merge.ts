@@ -4,13 +4,6 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { type Timing, withLock } from '../../../tools/load/lock.ts';
-import {
-  formatSlowTest,
-  SLOW_TEST_MILLISECONDS,
-  slowTestsLogPath,
-  slowTestsSince,
-  testCount,
-} from '../../../tools/load/slow-tests.mts';
 import { git } from './git.ts';
 
 /** A worktree's own git dir, where git keeps its merge, rebase and cherry-pick state. */
@@ -184,21 +177,11 @@ export function mergeIntoBase(
 }
 
 /**
- * The lines a finish prints about the fast-suite tests that ran past 750 ms on `branch` since it branched off `base`:
- * the shared slow-tests log's entries (see tools/load/slow-tests.mts) whose branch is `branch` and whose time is at or
- * after the committer date of the merge-base of `branch` and `base`, so the orchestrator sees creeping tests
- * in the merge output. Empty when there are none. Call it before merging: afterwards the merge-base is the tip.
+ * The committer date of the merge-base of `branch` and `base`: when the branch forked, as far as the slow-tests log
+ * is concerned. Null when the two share no history. Ask before merging: afterwards the merge-base is the tip.
  */
-export function slowTestReport(branch: string, base: string, cwd: string): string[] {
-  const log = slowTestsLogPath(cwd);
-  if (log === null) return [];
+export function forkDate(branch: string, base: string, cwd: string): Date | null {
   const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
-  if (fork === '') return [];
-  const since = new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
-  const entries = slowTestsSince(log, branch, since);
-  if (entries.length === 0) return [];
-  return [
-    `! ${testCount(entries.length)} ran past ${SLOW_TEST_MILLISECONDS} ms on ${branch} since it branched off ${base}:`,
-    ...entries.map(formatSlowTest),
-  ];
+  if (fork === '') return null;
+  return new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
 }

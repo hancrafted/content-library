@@ -66,11 +66,3 @@ export function unlistedCopyMetadata(source: string, eventDate: string): string 
   else out = out.replace(/\n(\} as const)/, `\n  publishedOn: '${eventDate}',\n$1`);
   return out;
 }
-
-/** The file and content the published-anchors test asks to create for Episode `id`, read from its failure message. */
-export function anchorsFileFromFailure(message: string, id: string): { file: string; content: string } | undefined {
-  const match = new RegExp(
-    `Episode "${id}" has no published-anchors\\.json\\. Create (\\S+) with this content:\\n(\\[[\\s\\S]*?\\]\\n)`,
-  ).exec(message);
-  return match ? { file: match[1], content: match[2] } : undefined;
-}

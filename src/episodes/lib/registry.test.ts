@@ -8,7 +8,6 @@ import {
 } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { entryOf, type ComposedPage } from './composed-page';
-import { AUTHORED_HEADERS } from './composed-page-checks';
 import summaries from './page-summaries.generated.json';
 import { summaryOf } from './page-summary';
 
@@ -62,15 +61,6 @@ describe('success cases', () => {
     const { title } = summaryOf(episodeRefOf('ai-attention-span')).de;
     // ASSERT
     expect(title).toBe(expected);
-  });
-
-  it('names only Episodes the catalogue holds among those that author their own Slide header', () => {
-    // ARRANGE
-    const slugs = new Set(EPISODE_IDS.map((id) => episodeRefOf(id).slug));
-    // ACT
-    const unknown = AUTHORED_HEADERS.filter((slug) => !slugs.has(slug));
-    // ASSERT
-    expect(unknown).toEqual([]);
   });
 });
 
