@@ -1,27 +1,28 @@
 // The worktree lifecycle, `drive worktree <command>`: `new <branch>` makes a checkout, `done <branch> [--kill]`
-// removes it and fast-forwards the local base branch, `sync` merges the remote base branch into the current branch,
-// `preflight` runs the project's health check. With `--base <branch>` the first three work against that branch
-// instead, and `done` merges into it first. Every project-specific value comes from docs/drive/project.yml.
-import { execFileSync, spawnSync } from 'node:child_process';
-import { capture, fail, loadProject, mainRoot, type Project, runAfter, runHooks, worktreePath } from './project.ts';
+// removes it and fast-forwards the local base branch, `sync` merges the remote base branch into the current branch.
+// With `--base <branch>` each works against that branch instead, and `done` merges into it first. Every
+// project-specific value comes from the project's config file.
+import { spawnSync } from 'node:child_process';
+import { capture, git, stream } from './git.ts';
+import { fail, loadProject, type Project, runAfter, runHooks, worktreePath } from './project.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
 import { insideWorktree, refuseWhileBusy } from './worktree-busy.ts';
 import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { planSync } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
-/** Runs a command with its output streamed to the terminal; throws when it fails. */
-const stream = (cmd: string, args: string[], cwd?: string) => execFileSync(cmd, args, { cwd, stdio: 'inherit' });
-
 function create(project: Project, branch: string, base: string | null): void {
   const { config } = project;
   const target = worktreePath(project, branch);
-  // A local base (an Episode's integration branch) may not be pushed yet, so only the remote base branch is fetched.
+  // A local base may not be pushed yet, so only the remote base branch is fetched.
   if (base === null) stream('git', ['fetch', config.remote]);
   stream('git', ['worktree', 'add', target, '-b', branch, base ?? project.remoteBase]);
   for (const command of config.install)
     if (spawnSync(command, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)
       fail(`install step failed in ${target}: ${command}`);
+  const { preflight } = config;
+  if (preflight !== null && spawnSync(preflight, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)
+    fail(`preflight failed in ${target}: ${preflight}\n  the worktree is left in place`);
   console.log(`✔ worktree ready: ${target}\n  next: cd ${target}`);
 }
 
@@ -44,10 +45,10 @@ function refuseUnpushedBase(project: Project): void {
   if (unpushed) fail(`local ${baseBranch} holds unpushed commits; push or move them, then rerun:\n${unpushed}`);
 }
 
-function syncBase(project: Project, root: string): void {
+function syncBase(project: Project): void {
   const { remote, baseBranch } = project.config;
-  if (capture('git', ['branch', '--show-current'], root) === baseBranch)
-    stream('git', ['merge', '--ff-only', project.remoteBase], root);
+  if (capture('git', ['branch', '--show-current'], project.root) === baseBranch)
+    stream('git', ['merge', '--ff-only', project.remoteBase], project.root);
   else stream('git', ['fetch', remote, `${baseBranch}:${baseBranch}`]);
   console.log(`✔ local ${baseBranch} fast-forwarded to ${project.remoteBase}`);
 }
@@ -62,10 +63,10 @@ function deleteMerged(branch: string, base: string): void {
 async function mergeBeforeRemoval(project: Project, finishing: Finish & { base: string }): Promise<void> {
   const { branch, base, target } = finishing;
   // Read before the merge, which moves the merge-base up to the branch tip.
-  const forkedAt = forkDate(branch, base, mainRoot());
+  const forkedAt = forkDate(branch, base, project.root);
   try {
     const result = await mergeIntoBase(branch, base, {
-      cwd: mainRoot(),
+      cwd: project.root,
       log: console.log,
       withLock: project.withLock,
     });
@@ -73,12 +74,17 @@ async function mergeBeforeRemoval(project: Project, finishing: Finish & { base: 
   } catch (error) {
     fail(`${(error as Error).message}\n  nothing was removed`);
   }
-  runAfter(project.config.afterMerge, { branch, base, worktree: target, forkedAt });
+  runAfter(project, project.config.afterMerge, {
+    branch,
+    base,
+    worktree: target,
+    forkedAt,
+  });
 }
 
-function removeCheckout(target: string, branch: string): void {
+function removeCheckout(project: Project, target: string, branch: string): void {
   try {
-    const result = removeWorktree(target, branch, mainRoot());
+    const result = removeWorktree(target, branch, project.root);
     if (result === 'leftovers-cleared')
       console.log(
         `✔ cleared what an interrupted removal left in ${target} (Finder metadata, ignored or committed files)`,
@@ -89,33 +95,36 @@ function removeCheckout(target: string, branch: string): void {
   }
 }
 
-/** The branch being finished, its base (null for the config's base branch), its folder and whether --kill was given. */
+/** The branch being finished, its base (null for the config's base branch) and its folder. */
 interface Finish {
   branch: string;
   base: string | null;
   target: string;
-  kill: boolean;
 }
 
-async function finish(project: Project, { branch, base, kill }: Omit<Finish, 'target'>): Promise<void> {
+async function finish(
+  project: Project,
+  { branch, base, kill }: Omit<Finish, 'target'> & { kill: boolean },
+): Promise<void> {
   const target = worktreePath(project, branch);
-  const hook = { branch, base, worktree: target };
+  const hook = { branch, base, worktree: target, forkedAt: null };
   if (insideWorktree(target)) fail(`run this from the main checkout, not from inside ${target}`);
   if (base === null) refuseUnpushedBase(project);
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.
-  else await mergeBeforeRemoval(project, { branch, base, target, kill });
+  else await mergeBeforeRemoval(project, { branch, base, target });
   // Every refusing guard has passed; stopping processes comes last, just before removal.
-  if (!runHooks(project.config.beforeRemove, hook)) fail('a hook before the removal failed; nothing was removed');
-  refuseWhileBusy(target, kill, fail);
-  removeCheckout(target, branch);
+  if (!runHooks(project, project.config.beforeRemove, hook))
+    fail('a hook before the removal failed; nothing was removed');
+  refuseWhileBusy(target, kill);
+  removeCheckout(project, target, branch);
   console.log(`✔ removed ${target}`);
-  runAfter(project.config.afterRemove, hook);
+  runAfter(project, project.config.afterRemove, hook);
   if (base !== null) {
     deleteMerged(branch, base);
     return;
   }
   deleteBranch(branch);
-  syncBase(project, mainRoot());
+  syncBase(project);
 }
 
 /**
@@ -139,29 +148,20 @@ async function sync(project: Project, base: string | null): Promise<void> {
   console.log(`✔ ${branch} merged with ${plan.target}`);
 }
 
-/** Runs the project's preflight command in the current checkout and exits with its status. */
-function preflight(project: Project): never {
-  const { preflight: command } = project.config;
-  if (command === null) fail('no worktree.preflight in docs/drive/project.yml');
-  process.exit(spawnSync(command, { shell: true, stdio: 'inherit' }).status ?? 1);
-}
-
 /** Whether a local branch of that name exists. */
 function localBranchExists(branch: string): boolean {
-  return spawnSync('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
+  return git(process.cwd(), ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
 }
 
 /** `drive worktree <argv>`. */
 export async function runWorktree(argv: readonly string[]): Promise<void> {
   const project = await loadProject();
-  const { invoke, baseBranch } = project.config;
-  const args = parseArgs(argv, invoke);
+  const args = parseArgs(argv, project.config.invoke);
   if ('error' in args) fail(args.error);
   else if (args.command === 'new') {
-    const refusal = refuseNewBranch(args, localBranchExists, { invoke, baseBranch });
+    const refusal = refuseNewBranch(args, localBranchExists, project.config);
     if (refusal !== null) fail(refusal);
     create(project, args.branch, args.base);
   } else if (args.command === 'sync') await sync(project, args.base);
-  else if (args.command === 'preflight') preflight(project);
   else await finish(project, args);
 }

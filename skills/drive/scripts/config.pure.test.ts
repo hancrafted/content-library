@@ -11,9 +11,9 @@ describe('parseConfig', () => {
         '  baseBranch: trunk',
         '  remote: upstream',
         '  invoke: make wt',
-        '  install: [npm ci]',
-        '  preflight: make doctor',
-        '  lock: tools/lock.ts',
+        '  install: [setup]',
+        '  preflight: check-health',
+        '  lock: locks/mutex.ts',
         '  beforeRemove: [stop]',
         '  afterMerge: [report]',
         '  afterRemove: [tidy]',
@@ -27,9 +27,9 @@ describe('parseConfig', () => {
           baseBranch: 'trunk',
           remote: 'upstream',
           invoke: 'make wt',
-          install: ['npm ci'],
-          preflight: 'make doctor',
-          lock: 'tools/lock.ts',
+          install: ['setup'],
+          preflight: 'check-health',
+          lock: 'locks/mutex.ts',
           beforeRemove: ['stop'],
           afterMerge: ['report'],
           afterRemove: ['tidy'],
@@ -50,7 +50,7 @@ describe('parseConfig', () => {
   describe('failure cases', () => {
     it('names the key that has the wrong type or is unknown', () => {
       // ARRANGE
-      const texts = ['worktree:\n  install: npm ci', 'worktree:\n  dir: 3', 'worktree:\n  instal: []', '- a', 'a: ['];
+      const texts = ['worktree:\n  install: setup', 'worktree:\n  dir: 3', 'worktree:\n  instal: []', '- a', 'a: ['];
       // ACT
       const errors = texts.map((text) => parseConfig(text));
       // ASSERT

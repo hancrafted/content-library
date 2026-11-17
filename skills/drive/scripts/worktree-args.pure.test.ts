@@ -8,7 +8,14 @@ describe('success cases', () => {
   it('reads a command and branch, based on origin/main by default', () => {
     // ARRANGE
     const argv = ['new', 'feat/12-thing'];
-    const expected = { command: 'new', branch: 'feat/12-thing', base: null, kill: false, parent: null, issue: null };
+    const expected = {
+      command: 'new',
+      branch: 'feat/12-thing',
+      base: null,
+      kill: false,
+      parent: null,
+      issue: null,
+    };
     // ACT
     const args = parseArgs(argv, INVOKE);
     // ASSERT
@@ -84,9 +91,30 @@ describe('--kill and sync', () => {
     const parsed = argvs.map((argv) => parseArgs(argv, INVOKE));
     // ASSERT
     expect(parsed).toEqual([
-      { command: 'done', branch: 'feat/x', base: null, kill: true, parent: null, issue: null },
-      { command: 'sync', branch: '', base: null, kill: false, parent: null, issue: null },
-      { command: 'sync', branch: '', base: 'episode/y', kill: false, parent: null, issue: null },
+      {
+        command: 'done',
+        branch: 'feat/x',
+        base: null,
+        kill: true,
+        parent: null,
+        issue: null,
+      },
+      {
+        command: 'sync',
+        branch: '',
+        base: null,
+        kill: false,
+        parent: null,
+        issue: null,
+      },
+      {
+        command: 'sync',
+        branch: '',
+        base: 'episode/y',
+        kill: false,
+        parent: null,
+        issue: null,
+      },
     ]);
   });
 
@@ -99,26 +127,15 @@ describe('--kill and sync', () => {
 });
 
 describe('failure cases', () => {
-  it('refuses a branch or --base on preflight', () => {
-    // ARRANGE
-    const argvs = [
-      ['preflight', 'feat/x'],
-      ['preflight', '--base', 'feat/x'],
-    ];
-    // ACT
-    const errors = argvs.map((argv) => parseArgs(argv, INVOKE));
-    // ASSERT
-    expect(errors.every((error) => 'error' in error)).toBe(true);
-  });
-
   it('names the usage when the branch, the command or the base value is missing', () => {
     // ARRANGE
-    const argvs = [['new'], ['new', '--base', 'main'], ['make', 'feat/x'], ['new', 'feat/x', '--base']];
-    const usage = `usage: ${INVOKE} new <branch> [--base <branch>]  |  ${INVOKE} done <branch> [--base <branch>] [--kill]  |  ${INVOKE} sync [--base <branch>]  |  ${INVOKE} preflight`;
+    const argvs = [['new'], ['new', '--base', 'main'], ['make', 'feat/x'], ['preflight'], ['new', 'feat/x', '--base']];
+    const usage = `usage: ${INVOKE} new <branch> [--base <branch>]  |  ${INVOKE} done <branch> [--base <branch>] [--kill]  |  ${INVOKE} sync [--base <branch>]`;
     const expected = [
       usage,
       usage,
-      "unknown command 'make'; expected new, done, sync or preflight",
+      "unknown command 'make'; expected new, done or sync",
+      "unknown command 'preflight'; expected new, done or sync",
       '--base needs a branch name',
     ];
     // ACT
@@ -180,13 +197,4 @@ describe('new on a subagent branch', () => {
       "'feat/x--613-oxlint' starts from its parent; run: npm run drive -- worktree new feat/x--613-oxlint --base feat/x";
     expect(refusals).toEqual([fix, fix]);
   });
-});
-
-it('parses preflight without a branch', () => {
-  // ARRANGE
-  const argv = ['preflight'];
-  // ACT
-  const args = parseArgs(argv, INVOKE);
-  // ASSERT
-  expect(args).toMatchObject({ command: 'preflight', branch: '', base: null });
 });

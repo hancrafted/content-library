@@ -1,15 +1,12 @@
 // What still runs in a worktree about to be removed: who holds it, and `--kill`, which stops them.
-import { execFileSync, spawnSync } from 'node:child_process';
+import { capture, run } from './git.ts';
+import { fail } from './project.ts';
 import { describeProc, killable, lineage, parseLsof, type Proc } from './worktree-process.pure.ts';
-
-const capture = (cmd: string, args: string[]): string => execFileSync(cmd, args, { encoding: 'utf8' }).trim();
 
 /** Processes whose cwd sits inside the worktree. */
 function processesIn(target: string): Proc[] {
   // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
-  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], {
-    encoding: 'utf8',
-  });
+  const { stdout } = run('lsof', ['-d', 'cwd', '-Fpcn']);
   return parseLsof(stdout, target);
 }
 
@@ -44,18 +41,18 @@ function killProcesses(procs: Proc[]): void {
   };
   for (const proc of procs) signal(proc, 'SIGTERM');
   const deadline = Date.now() + 3000;
-  while (Date.now() < deadline && procs.some((p) => isAlive(p.pid))) spawnSync('sleep', ['0.1']);
+  while (Date.now() < deadline && procs.some((p) => isAlive(p.pid))) run('sleep', ['0.1']);
   for (const proc of procs.filter((p) => isAlive(p.pid))) signal(proc, 'SIGKILL');
   for (const proc of procs) console.log(`✔ stopped ${describeProc(proc)}`);
 }
 
-/** Why the finish cannot run from here, or null: it removes the folder it would run in. */
+/** Whether this runs from inside the worktree: the finish removes the folder it would run in. */
 export function insideWorktree(target: string): boolean {
   return (process.cwd() + '/').startsWith(target + '/');
 }
 
 /** Refuses while something still runs in the worktree; with `kill`, stops it first. Run last, once every other guard passed. */
-export function refuseWhileBusy(target: string, kill: boolean, fail: (message: string) => never): void {
+export function refuseWhileBusy(target: string, kill: boolean): void {
   let busy = processesIn(target);
   if (kill && busy.length > 0) {
     killProcesses(killable(busy, protectedPids()));
