@@ -37,7 +37,7 @@ Each Build Job serves its worktree with `next dev` on its own port, and the dash
 
 - The names `implement-episode-init` and `implement-section-<section-slug>`, and the stage ids.
 - `customize-pipeline` needs `retrieval` but only wants `convert-references`, so a missing conversion tool still leaves the design references out instead of blocking the Episode, as before.
-- The `implement-section` reviewer runs in the orchestrator session: `code-review` spawns subagents, which a subagent cannot.
+- The `implement-section` reviewer runs in the orchestrator session, where `code-review` spawns its subagents. Corrected 2026-11-17: Claude Code now lets a subagent spawn subagents, three levels deep by default (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`), so the reason is no longer that a subagent cannot; the placement stands because the reviewer stays fresh and apart from the agents that wrote the output.
 - A refresh Job writes a new numbered research folder, because the research-folder check refuses an ID used twice (see Open).
 - `implement-section-<section-slug>` takes its slug from the Brief's Slides h3 title in kebab case, since `customize-pipeline` runs before the Dossier exists, and `implement-episode-init` names each Section's placement marker by the same slug, never the Dossier h2's `{#slug}`, so a job id always names the marker it owns.
 
