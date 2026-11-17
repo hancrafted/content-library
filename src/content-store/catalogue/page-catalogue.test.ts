@@ -10,13 +10,6 @@ import { loadContent } from '../store';
 import { episodeRef, templateRef } from './episode-id.pure';
 import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-catalogue';
 
-/*
- * The page catalogue (GLOSSARY): every page the site has, each with its treatment, the static params the routes
- * export, and the page a route's params name. Each test hands it records through the store's own load, as the store
- * does with the record files, and asks it what callers ask. Slugs are registered ones: only a registered Episode has a
- * page.
- */
-
 const PUBLIC = {
   slug: 'onboard-ai-every-time',
   status: 'published',
@@ -25,9 +18,7 @@ const PUBLIC = {
   tags: ['agentic-workflow'],
   publishedOn: '2026-10-20',
 } as const;
-/** The AXEL seminar's unlisted copy of ai-attention-span, in its Event's folder `by-event/<event>/ai-attention-span/`. */
 const UNLISTED = { ...PUBLIC, slug: 'ai-attention-span', visibility: 'unlisted' } as const;
-/** An Episode announced before its folder holds a page: its slug is no registered Episode yet. */
 const UPCOMING = {
   slug: 'specs-an-agent-can-follow',
   status: 'upcoming',
@@ -37,7 +28,6 @@ const UPCOMING = {
 } as const;
 const AXEL = '2026-10-23-axel-agentic-workflow';
 const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
-/** The pages' EpisodeRefs: the public Episode no Event owns, and the AXEL seminar's copy. */
 const PUBLIC_REF = episodeRef(PUBLIC.slug);
 const COPY = episodeRef(UNLISTED.slug, AXEL);
 const PLAYLIST = { id: 'axel', visibility: 'public', episodes: [PUBLIC.slug, COPY.id] } as const;
@@ -52,7 +42,6 @@ const EVENT = {
   platform: 'zoom',
   playlist: 'axel',
 } as const;
-/** The records as the generated registry hands them in, each Episode under the id its folder gives it. */
 const own = (record: { readonly slug: string }) => ({ id: record.slug, record });
 const copy = (record: object) => ({ id: COPY.id, record });
 const RECORDS = {
@@ -76,7 +65,7 @@ describe('success cases', () => {
   it("I flip an Event's copy from unlisted to public by changing one field: it is published at its Event URL only.", () => {
     // ARRANGE
     const flipped = { ...RECORDS, episodes: [own(PUBLIC), copy({ ...UNLISTED, visibility: 'public' })] };
-    // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
+    // @ts-expect-error
     const ownPage: PageRef = { kind: 'episode', episode: COPY };
     const underEvent: PageRef = { kind: 'event-episode', event: AXEL, episode: COPY };
     const seenIn = (input: Parameters<typeof loadContent>[0]) => {
@@ -299,7 +288,7 @@ describe('failure cases', () => {
 
   it("resolves no page under /episodes/ for an Event's copy, which is never exported there, or a slug the records hold no page for", () => {
     // ARRANGE
-    // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
+    // @ts-expect-error
     const unexported: PageRef = { kind: 'episode', episode: COPY };
     const params = [COPY.id, UNLISTED.slug, 'ai-token-economy', 'no-such-episode'].map((episode) => ({ episode }));
     // ACT
@@ -428,10 +417,7 @@ describe('edge cases', () => {
   });
 });
 
-/*
- * Templates (design-ADR 0019): a Template's page is built from its record, at `/<type plural>/<slug>/`, public and
- * indexed. The slugs are registered ones: only a composition folder gives a Template a page.
- */
+// decision: docs/adr/0019-resources-overview.md
 const SIX = {
   'episode-template': 'episode-template',
   'workshop-template': 'episode-template',
@@ -460,10 +446,7 @@ const WITH_TEMPLATES = {
   explorables: [...THREE_EXPLORABLE_PAGES, 'speech-bubble'],
 };
 
-/*
- * Guides (design-ADR 0019 as amended by #450): a Guide's page is built from its record at `/guides/<slug>/`. Its slug
- * is cast: the repo holds no Guide yet, so no registered Guide slug exists for a test to name.
- */
+// decision: docs/adr/0019-resources-overview.md
 const GUIDE = {
   slug: 'setup-ai-agent-and-starter-folder' as GuideSlug,
   tags: ['agentic-workflow'],

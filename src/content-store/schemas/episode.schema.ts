@@ -1,12 +1,7 @@
 import { z } from 'zod';
 import { FORMATS, isoDate, slug, tags, visibility, YOUTUBE_ID } from './fields';
 
-/*
- * What an Episode declares about itself, in its own folder (`episodes/<slug>/episode-metadata.ts`, or
- * `episodes/by-event/<event-slug>/<slug>/` for an Event's copy): its overview entry, its visibility and its Video. Its
- * Episode id is its folder's, never written here. Ids and dates only; titles and captions stay Translation keys (FE-003).
- */
-
+// decision: FE-003 §4
 const shared = z.object({
   slug: slug.describe(
     "The Episode slug: its folder's name and the last part of its URL, unique among its siblings; an Event's copy usually keeps its original's",
@@ -48,10 +43,8 @@ export const episodeSchema = z
   ])
   .describe('What an Episode declares about itself: its overview entry, its visibility and its Video');
 
-/** An Episode's metadata record, as the store loads it. */
 export type Episode = z.infer<typeof episodeSchema>;
 
-/** An Episode's metadata record as its file writes it, before the store parses it. */
 export type EpisodeInput = z.input<typeof episodeSchema>;
 
 export type EpisodeStatus = Episode['status'];

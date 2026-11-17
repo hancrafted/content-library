@@ -6,40 +6,26 @@ import type { Playlist } from './schemas/playlist.schema';
 import type { Template } from './schemas/template.schema';
 import type { ServedEvent } from './served-event';
 
-/*
- * The shapes the store's load passes between its stages (FE-013): records as their files write them, parsed by their
- * schemas, and parsed and checked with each Event served.
- */
-
-/** One Episode as the generated registry hands it in: the id its folder gives it, and its record as its file writes it. */
+// decision: FE-013 §1
 export interface EpisodeEntry {
   readonly id: string;
   readonly record: unknown;
 }
 
-/** Every record kind as its file writes it, before parsing: what the store loads. */
 export interface ContentInput {
   readonly episodes: readonly EpisodeEntry[];
   readonly events: readonly unknown[];
   readonly playlists: readonly unknown[];
-  /** The Template records, and the slugs of the composition folders they are checked against: both are always given. */
   readonly templates: readonly unknown[];
   readonly templateCompositions: readonly string[];
-  /**
-   * The Explorable page records, the slugs of their composition folders and the slugs of the Explorables
-   * (`src/explorables/<slug>/`) they are checked against: all are always given.
-   */
   readonly explorablePages: readonly unknown[];
   readonly explorablePageCompositions: readonly string[];
   readonly explorables: readonly string[];
-  /** The Guide records and the slugs of the composition folders they are checked against: both are always given. */
   readonly guides: readonly unknown[];
   readonly guideCompositions: readonly string[];
-  /** The Featured slots by Episode id, checked against the Episodes when given (`./featured.ts`). */
   readonly featured?: readonly string[];
 }
 
-/** Every record kind, parsed by its schema, before the cross-record rules: an Event names its Playlist by id. */
 export interface ParsedContent {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly Event[];
@@ -54,7 +40,6 @@ export interface ParsedContent {
   readonly featured?: readonly string[];
 }
 
-/** Every record kind, parsed and checked, each Event served with the Playlist it presents. */
 export interface Content {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly ServedEvent[];
