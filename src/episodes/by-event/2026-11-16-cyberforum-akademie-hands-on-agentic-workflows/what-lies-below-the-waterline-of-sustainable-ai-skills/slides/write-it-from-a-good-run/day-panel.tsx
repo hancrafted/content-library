@@ -5,7 +5,6 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './slide.module.css';
 
-/** The context window a panel's picture ends on: full in the evening, empty the next morning. */
 export function ContextGauge({ label, state }: { readonly label: string; readonly state: 'full' | 'empty' }) {
   return (
     <ZoneCard
@@ -35,11 +34,9 @@ interface DayPanelProps {
   readonly chat?: ReactNode;
   readonly coding?: ReactNode;
   readonly focal?: boolean;
-  /** Marks the panel as the element one of the Slide's notes explains. */
   readonly marked?: TargetProps;
 }
 
-/** The panel's number badge, primary on the panel in focus, and its AI step. */
 function StepHeading({ n, step, focal }: Pick<DayPanelProps, 'n' | 'step' | 'focal'>) {
   return (
     <p className="flex items-center gap-2 text-body font-semibold">
@@ -56,7 +53,6 @@ function StepHeading({ n, step, focal }: Pick<DayPanelProps, 'n' | 'step' | 'foc
   );
 }
 
-/** One panel of the day: its picture, its numbered AI step, the story's hour, and each view's extra. */
 export function DayPanel({ n, step, time, ai, picture, chat, coding, focal, marked }: DayPanelProps) {
   return (
     <li

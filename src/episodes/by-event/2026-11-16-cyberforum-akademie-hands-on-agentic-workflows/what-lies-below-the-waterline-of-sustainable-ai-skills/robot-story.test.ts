@@ -31,7 +31,6 @@ const PLACED = placeSections<Slide>(episode.sections).flat();
 
 const html = (node: ReactNode) => renderToStaticMarkup(createElement(Fragment, null, node));
 
-/** The state each robot in `markup` carries, `unmarked` for a robot drawn without one. */
 function robotsIn(markup: string): readonly string[] {
   const $ = load(markup);
   return $('[data-robot]')
@@ -39,7 +38,6 @@ function robotsIn(markup: string): readonly string[] {
     .map((robot) => $(robot).attr('data-robot-state') ?? 'unmarked');
 }
 
-/** Every Slide's robots, content and rear decoration, Title slide first, each Slide rendered once. */
 function drawnSlides(): readonly DrawnSlide[] {
   const context = { episode: EPISODE, locale: 'en', referenceLabels: LABELS, header: 'shared' } as const;
   const title = localizeTitleScene(hero, { ...context, placed: [] });
@@ -51,7 +49,6 @@ function drawnSlides(): readonly DrawnSlide[] {
 }
 
 let rendered: StoryFindings | undefined;
-/** The story against this Episode's Slides, rendered on first use and shared by every test. */
 function findings(): StoryFindings {
   rendered ??= storyAgainstSlides(drawnSlides());
   return rendered;

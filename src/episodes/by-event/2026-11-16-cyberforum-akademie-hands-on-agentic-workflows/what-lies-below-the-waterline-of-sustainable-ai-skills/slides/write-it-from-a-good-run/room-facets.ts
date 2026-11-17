@@ -1,13 +1,3 @@
-/*
- * The control room of "Write it from a good run", lifted facet by facet from Spec Option 10b (feedback 3, decision
- * 46), in the Spec's 300 by 236 panel units, figures standing on the floor line at 210: its faceted wall and floor, the
- * card he writes at the console, the wall clock and the card pinned up the next morning. The Spec's console and people
- * are left out: the shared Console and cast stand in front of it.
- */
-
-/** A tone of the drawing; `day-art.module.css` gives each its fill. */
-
-/** A panel picture's drawing space, the Spec's: 300 by 236, figures standing on the floor line at 210. */
 export const PANEL_ART = { width: 300, height: 236, floor: 210 } as const;
 
 export type ArtTone =
@@ -28,10 +18,8 @@ export type ArtTone =
   | 'cloth-dark'
   | 'pin';
 
-/** One facet: its tone and its SVG path. */
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** Panels 2 to 4: the control room's faceted wall and floor. */
 export const ROOM_WALL: readonly ArtFacet[] = [
   ['room-lit', 'M251 0L230 52L171 0Z'],
   ['room', 'M130 206L70 206L120 148ZM197 155L130 206L120 148ZM197 155L230 52L255 115ZM69 90L147 43L120 148Z'],
@@ -57,7 +45,6 @@ export const ROOM_WALL: readonly ArtFacet[] = [
   ['floor', 'M106 236L74 236L70 206ZM74 236L37 236L70 206Z'],
 ];
 
-/** Panel 3: the card he writes at the console, glowing in the screen light; in panel units. */
 export const WRITTEN_CARD: readonly ArtFacet[] = [
   ['card-glow', 'M214 138L226 124L262 124L274 138L262 152L226 152Z'],
   ['paper-lit', 'M221.2 127.6L261.1 124.4L222.9 149.6Z'],
@@ -69,7 +56,6 @@ export const WRITTEN_CARD: readonly ArtFacet[] = [
   ],
 ];
 
-/** Panel 4: the wall clock: the night has passed. */
 export const WALL_CLOCK: readonly ArtFacet[] = [
   ['robot-lit', 'M30 32L39.9 36.1L37.9 38.1L30 34.8Z'],
   [
@@ -86,7 +72,6 @@ export const WALL_CLOCK: readonly ArtFacet[] = [
   ['cloth-dark', 'M29.2 45.5L26.8 51.5L30.8 46.5ZM29.2 46L30 36.5L30.8 46Z'],
 ];
 
-/** Panel 4: the written card pinned to the wall, still there the next morning. */
 export const PINNED_CARD: readonly ArtFacet[] = [
   ['card-glow', 'M56 66L68 36L104 36L116 66L104 96L68 96Z'],
   ['paper-lit', 'M67.3 29.2L109.2 30.9L64.8 91.1Z'],

@@ -1,10 +1,3 @@
-/*
- * Panel 1 of "Write it from a good run", lifted facet by facet from Spec Option 10b (feedback 3, decision 46), in the
- * Spec's 300 by 236 panel units: the sky over the surface, the Sunlit water with its light rays, the seabed and the
- * thrusters' bubbles. The Spec's robot is left out: the shared Robot hangs in front of this background.
- */
-
-/** A tone of the drawing; `day-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'sky-2'
   | 'sky-1'
@@ -23,10 +16,8 @@ export type ArtTone =
   | 'bubble'
   | 'glint';
 
-/** One facet: its tone and its SVG path. */
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** Panel 1: the sky over the surface, the Sunlit water with its light rays, and the faceted seabed. */
 export const DIVE: readonly ArtFacet[] = [
   ['sky-2', 'M176 0L228 8L178 11ZM54 10L0 10L0 0Z'],
   ['sky-1', 'M144 10L176 0L178 11Z'],
@@ -106,7 +97,6 @@ export const DIVE: readonly ArtFacet[] = [
   ['bed-shade', 'M66 218L63 236L46 218ZM63 236L39 236L46 218ZM63 236L66 218L80 236Z'],
 ];
 
-/** Panel 1: the bubbles rising from the robot's thrusters. */
 export const DIVE_BUBBLES: readonly ArtFacet[] = [
   ['bubble', 'M199 96L198 99L194 99L193 96L194 93L198 93Z'],
   ['glint', 'M194 95L196 94L196 95Z'],

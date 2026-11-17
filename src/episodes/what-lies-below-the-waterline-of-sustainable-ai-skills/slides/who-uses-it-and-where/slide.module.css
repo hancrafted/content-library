@@ -1,10 +1,4 @@
-/*
- * Slide token file of "Who uses it, and where" (FE-011 §2): the index cards on the matrix's pictures in the approved
- * Spec Option 18a's own tones (feedback 3, decision 46), and the one emphasis motion around the shared skill scope
- * matrix. Dark values are the Spec's; dark mode is tuned later (decision 32). The scribble is `--human`, the
- * captain's own hand.
- */
-
+/* decision: FE-011 §2 */
 .art {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.965 0.01 88);
@@ -49,12 +43,10 @@
   fill: var(--pin);
 }
 
-/* The "Dive plan" label is written on the sheet's light paper, so it keeps the Spec's dark paper ink in both themes. */
 .paperInk {
   color: var(--ink-paper);
 }
 
-/* Where the picture stacks its labels in flow over the wall (the matrix's narrow layout), the label brings its paper. */
 @container (width < 42rem) {
   .paperInk {
     padding-inline: 0.5rem;
@@ -63,17 +55,14 @@
   }
 }
 
-/* The dashed lead from the card box to the dive plan, drawn in ink like the Spec's. */
 .art [data-tone='lead'] {
   stroke: var(--foreground);
 }
 
-/* The captain's scribble on the personal card: in his hand, the `human` colour, on the card's own paper (a light tone). */
 .scribble {
   color: var(--human);
 }
 
-/* The rest state: the personal label dimmed, the shared one lit. */
 .start {
   opacity: 0.6;
 }

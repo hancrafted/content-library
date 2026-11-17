@@ -13,7 +13,6 @@
   transform-origin: left center;
 }
 
-/* Panel 4's gauge rests empty: the run is forgotten. */
 .drop {
   scale: 0 1;
 }
@@ -39,7 +38,6 @@
   }
 }
 
-/* The arrows grow in by opacity and scale alone (decision 19). */
 @keyframes draw {
   from {
     opacity: 0;

@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "What context goes inside", echoing the Hero motif (picked Title-slide Option 0a). The card in its sleeve, in twilight: each extra tied to the step that uses it.
 export const whatGoesInside = slide({
   slug: 'what-goes-inside',
   messages: { en, de },

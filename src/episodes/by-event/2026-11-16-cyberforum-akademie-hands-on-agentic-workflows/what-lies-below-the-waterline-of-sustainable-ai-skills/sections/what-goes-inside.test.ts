@@ -10,19 +10,12 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 import { whatGoesInsideSection } from './what-goes-inside';
 
-/*
- * Section 5, "What context goes inside", as the approved Spec gives it: its section slide, then Slides 14 to 16 built
- * to the picked Options 14a, 15b and 16a, each titled, scripted and noted as the Spec writes it. Slide 14 is the
- * control room with one fact and its three homes; Slide 15 the two dives under one skill card; Slide 16 the procedure
- * card in its sleeve with a supporting file level with each step (design-ADR 0025: ZoneScene, Travel and the cast).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const EPISODE = episodeRef(
   'what-lies-below-the-waterline-of-sustainable-ai-skills',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',
 ).id;
 const SLIDES = whatGoesInsideSection as readonly Slide[];
-/** The whole Episode is placed, so Slide 16's `slideHref` to Slide 4 in Section 2 resolves. */
 const PLACED = placeSections<Slide>(whatLiesBelowTheWaterlineOfSustainableAiSkills.sections).flat();
 const WHERE = 'what-goes-where-is-information-architecture';
 const COUPLING = 'one-skill-one-job';
@@ -44,7 +37,6 @@ const slideOf = (slug: string) => {
   return own;
 };
 
-/** A Slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" placed.`);
@@ -59,10 +51,8 @@ function sceneOf(slug: string, locale: Locale = 'en') {
 }
 
 const MARKER = '[data-context-ref]';
-/** The `primary` classes an element carries: the Options' one emphasis colour. */
 const primaryOf = (element: ReturnType<ReturnType<typeof load>>) =>
   (element.attr('class') ?? '').split(/\s+/).filter((name) => name.endsWith('-primary'));
-/** An element's words without its Context markers. */
 const wordsOf = (element: ReturnType<ReturnType<typeof load>>) => {
   const copy = element.clone();
   copy.find(MARKER).remove();

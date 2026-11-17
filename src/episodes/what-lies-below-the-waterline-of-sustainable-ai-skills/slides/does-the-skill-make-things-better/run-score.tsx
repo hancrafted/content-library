@@ -12,7 +12,6 @@ export interface RunScoreProps {
   readonly run: 'without' | 'with';
   readonly label: string;
   readonly checks: readonly RunCheck[];
-  /** Spoken names of a passed and a failed check, for the icons. */
   readonly verdict: { readonly pass: string; readonly fail: string };
 }
 
@@ -40,7 +39,6 @@ function ScoreBar({ run, checks, passed }: Pick<RunScoreProps, 'run' | 'checks'>
   );
 }
 
-/** The checks, each marked pass or fail. */
 function Checks({ checks, verdict }: Pick<RunScoreProps, 'checks' | 'verdict'>) {
   return (
     <ul className="flex flex-col gap-1">
@@ -60,10 +58,6 @@ function Checks({ checks, verdict }: Pick<RunScoreProps, 'checks' | 'verdict'>) 
   );
 }
 
-/**
- * One run's score, an illustration of the viewer's own test: passed checks out of all, a bar of one segment per check
- * that fills in once on entry (the without-skill run first), and the checks themselves, each marked pass or fail.
- */
 export function RunScore({ run, label, checks, verdict }: RunScoreProps) {
   const passed = checks.filter(({ pass }) => pass).length;
   return (

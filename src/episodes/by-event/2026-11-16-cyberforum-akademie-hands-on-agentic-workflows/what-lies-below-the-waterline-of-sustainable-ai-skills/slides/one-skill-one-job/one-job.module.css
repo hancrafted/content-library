@@ -1,18 +1,10 @@
-/*
- * Slide token file of "A project detail couples a skill to one project" (FE-011 §2): the water column, its rock and
- * light in the tones of Spec Option 15b, each with its dark value from the Option; the ruler, the cables, the leaders,
- * the bracket and the labels over the water, mixed from global tokens. `primary` marks the shortfall (its bracket and pill) and the coupling card (in slide.tsx), as Option 15b
- * draws them; no meaning colour on scenery.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .dives {
   --tag: var(--card);
   --tag-ink: var(--card-foreground);
   --tick: var(--card);
   --cable: color-mix(in oklab, var(--foreground) 70%, var(--card));
-  /* The water, light, rock and bubbles of Spec Option 15b (feedback 3, decision 46). */
   --glow: oklch(0.99 0.03 200);
   --glow-soft: oklch(0.95 0.07 205 / 0.55);
 }
@@ -22,7 +14,6 @@
   --glow-soft: oklch(0.75 0.1 205 / 0.45);
 }
 
-/* The water column's facets: each stroked in its own fill, so no hairline shows between neighbours. */
 .facets [data-tone] {
   stroke-width: 0.6;
   stroke-linejoin: round;
@@ -93,7 +84,6 @@
   stroke: none;
 }
 
-/* Labels keep a readable size: the drawing scales down with its column, so a narrow column scales its labels up. */
 .tag {
   scale: var(--tag-scale, 1.5);
 }
@@ -128,7 +118,6 @@
   stroke: var(--cable);
 }
 
-/* The leaders from the card to the ships: dashed in the page's ground, as the Option draws them. */
 .dives [data-tone='leader'] {
   fill: none;
   stroke: var(--background);
@@ -153,13 +142,11 @@
   stroke: var(--primary);
 }
 
-/* The page's ground: a halo under the bracket, so it reads over water and rock, and the dashed lead from the robot. */
 .dives [data-tone='bracket-halo'] {
   fill: none;
   stroke: var(--background);
 }
 
-/* The project detail scribbled into the card, in the bulb's yellow highlighter, in either view. */
 .card {
   --scribble: color-mix(in oklab, var(--bulb) 55%, var(--card));
 }

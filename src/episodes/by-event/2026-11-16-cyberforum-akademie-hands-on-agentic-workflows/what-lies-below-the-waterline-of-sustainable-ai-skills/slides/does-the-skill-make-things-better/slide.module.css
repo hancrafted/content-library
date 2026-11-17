@@ -1,9 +1,4 @@
-/*
- * "Does the skill make things better?" (Option 22a): the gauge, the cable and the score fill. The shallows themselves
- * are `shallows-art.module.css`, lifted from the Spec. No raw colour here (FE-011): the gauge is `--on-brand-accent`
- * as white, the cable a mix of it or `--overlay`; the ship and robot keep the shared figures' own colours.
- */
-
+/* decision: FE-011 §2 */
 .gauge,
 .cable {
   --gauge: var(--on-brand-accent);

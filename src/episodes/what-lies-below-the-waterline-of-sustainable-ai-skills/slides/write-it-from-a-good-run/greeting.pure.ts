@@ -10,18 +10,13 @@ import { saysBox, type SaysBoxResult } from '@/episodes/components/slide-shared/
 import { pilot } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { PANEL_ART } from './room-facets';
 
-/** The figures at the Spec's size in its 300 by 236 panel. */
 export const FIGURE_SCALE = 1.2;
-/** Where the pilot sits the next morning, turned to the captain, and how he looks: blank. */
 export const MORNING_PILOT = { x: 212, mood: 'blank' satisfies Mood } as const;
-/** The greeting wraps at 140 caption pixels, about 16 characters. */
 export const GREETING_BUBBLE: BubblePlace = { width: 140 };
 /** Low enough that the bubble's own fit sets the words at caption size on every picture up to about 500 px. */
 export const GREETING_SAYS_SCALE = 0.5;
-/** The narrowest picture the Slide draws: a quarter of its `@5xl` container (64rem) less the gaps. */
 export const NARROWEST_PICTURE_PIXELS = 240;
 
-/** The greeting's box in the panel's units, at a picture `picturePixels` wide. */
 export function greetingBox(words: string, picturePixels: number): SaysBoxResult {
   const anchor = drawFigure(pilot, 'sit', MORNING_PILOT.mood).anchor;
   return saysBox({

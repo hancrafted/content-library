@@ -1,13 +1,5 @@
-/** One facet: the token that fills it, and its outline. */
 export type Facet = readonly [tone: string, d: string];
 
-/*
- * The control room at night as the approved Spec drew it (Option 25b, feedback 3, decision 46), in its 1000 by 590
- * space: the faceted night wall, each sheet's faceted paper, the clipboard clip and the pin. Each sheet keeps its own
- * box, which `room-art.tsx` stretches to the HTML sheet it backs.
- */
-
-/** The night wall's lit, plain and shaded facets; they tile the room, so each tone draws as one path. */
 export const NIGHT: readonly Facet[] = [
   [
     'night',
@@ -49,7 +41,6 @@ export const BEFORE_PAPER: readonly Facet[] = [
 ];
 export const BEFORE_BOX = '22 30 296 600';
 
-/** The task log, on its clipboard: paper from 336, 40 to 548, 360. */
 export const LOG_PAPER: readonly Facet[] = [
   ['paper-lit', 'M467.7 40L406.7 158.3L336 40Z'],
   ['paper', 'M548 184.7L434 257.8L406.7 158.3Z'],

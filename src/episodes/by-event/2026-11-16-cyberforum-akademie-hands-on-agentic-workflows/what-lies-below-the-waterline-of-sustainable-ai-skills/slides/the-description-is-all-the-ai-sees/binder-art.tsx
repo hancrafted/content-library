@@ -3,11 +3,6 @@ import { cn } from '@/shared/lib/utils';
 import { type Facet } from './room-art';
 import styles from './slide.module.css';
 
-/*
- * The manual's binder lifted from the approved Spec's Option 11a (feedback 3, decision 46): its green cover with the
- * rings, and the index page's faceted paper, each stretched to the HTML box it backs, so the index keeps real text.
- */
-
 const BINDER: readonly Facet[] = [
   ['book-lit', 'M640 46L948 46L640 486Z'],
   ['book', 'M948 46L948 486L640 486Z'],
@@ -35,7 +30,6 @@ const PAPER: readonly Facet[] = [
   ['paper-lit', 'M652 167.6L821.9 62L823.1 276.7Z'],
 ];
 
-/** The binder's green cover and its rings, stretched to the index it holds. */
 export function BinderCover() {
   return (
     <svg
@@ -49,7 +43,6 @@ export function BinderCover() {
   );
 }
 
-/** The index page's faceted paper, stretched to the page. */
 export function PaperFacets() {
   return (
     <svg

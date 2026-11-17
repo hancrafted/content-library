@@ -9,7 +9,6 @@ import { saysBox } from '@/episodes/components/slide-shared/character/says.pure'
 import { captain } from '@/episodes/components/slide-shared/deep-sea-expedition/cast';
 import { CONSOLE_DESK_HEIGHT } from '@/episodes/components/slide-shared/deep-sea-expedition/console.pure';
 
-/** A box in the Scene's units, from its top-left corner. */
 export interface Box {
   readonly x: number;
   readonly y: number;
@@ -20,45 +19,29 @@ export interface Box {
 const SCENE = { width: 1200, height: 800 } as const;
 const WATERLINE = 400;
 
-/** The ship, zoomed out: its waterline amidships, and its scale against its own units. */
 export const SHIP = { x: 300, scale: 1.3 } as const;
 
-/** The close-up of the cabin, a framed window onto the ship's bridge, right of the ship. */
 export const CLOSE_UP: Box = { x: 600, y: 175, width: 580, height: 420 };
-/** The cabin's floor line inside the close-up; the floor runs from here to the close-up's bottom. */
 export const FLOOR_Y = 560;
 
-/** One scale for the crew inside the close-up; the console is drawn smaller, as in the room it stands in. */
 export const CREW_SCALE = 1.9;
 export const CONSOLE = { x: 625, width: 110, scale: 0.9 } as const;
 export const DESK_TOP = FLOOR_Y - CONSOLE_DESK_HEIGHT * CONSOLE.scale;
-/** Where the captain stands, facing the pilot. */
 export const CAPTAIN_X = 1010;
-/**
- * The shared speech bubble's words drawn at caption size, turned down to read at Slide size in the close-up: the
- * drawing hands this number to the shared bubble as `--says-scale`, and the layout measures with it.
- */
 export const SAYS_SCALE = 0.6;
 
-/** The project brief framed on the cabin wall, the dive manual open on the desk, the procedure card out of it. */
 export const BRIEF: Box = { x: 1075, y: 250, width: 94, height: 87 };
 export const MANUAL: Box = { x: 680, y: DESK_TOP - 8, width: 44, height: 8 };
 export const CARD = { x: 612, y: 300, width: 70, height: 80, tilt: -6 } as const;
 
-/** The three things to remember, numbered in the Voice script's order. */
 export type CalloutSlug = 'skill' | 'description' | 'project';
 
-/**
- * Each callout's place, in the Scene's units: the middle of its label's foot, where its leader starts. The labels sit
- * in the sky over the close-up, clear of the ship's mast and high enough that a phone's bubble keeps off them.
- */
 export const CALLOUTS: readonly { readonly slug: CalloutSlug; readonly at: { x: number; y: number } }[] = [
   { slug: 'skill', at: { x: 470, y: 130 } },
   { slug: 'description', at: { x: 700, y: 130 } },
   { slug: 'project', at: { x: 1020, y: 130 } },
 ];
 
-/** Where each leader ends: on the card's top, on the manual's index, on the brief's top. */
 export const LEADER_END: Readonly<Record<CalloutSlug, readonly [number, number]>> = {
   skill: [CARD.x + CARD.width / 2, CARD.y],
   description: [MANUAL.x + MANUAL.width / 2, MANUAL.y],
@@ -71,18 +54,15 @@ export const LEADER_END: Readonly<Record<CalloutSlug, readonly [number, number]>
  */
 const BODY = { size: 16, leading: 1.6, glyph: 9 } as const;
 const CAPTION = { size: 14, leading: 1.5, glyph: 7.5 } as const;
-/** The narrowest Scene that shows a label's full words: the Slide's `@4xl` container, 56rem. */
 const NARROWEST_FULL_LABEL_PIXELS = 896;
 /** The Scene on a 375 px phone: the viewport less the Content area's 1rem insets. */
 const PHONE_SCENE_WIDTH_PIXELS = 343;
-/** Screen pixels per Scene unit at the two widths the layout is held at. */
 export const FULL_LABEL_SCENE_PIXELS = NARROWEST_FULL_LABEL_PIXELS / SCENE.width;
 export const PHONE_SCENE_PIXELS = PHONE_SCENE_WIDTH_PIXELS / SCENE.width;
 /** A label's padding and border (`px-3 py-1 border-2`); a narrow Scene's badge shows its number, one glyph wide. */
 const LABEL_PAD = { x: 24 + 4, y: 8 + 4 } as const;
 const NUMBER_GLYPH = 9;
 
-/** The words a callout shows: the AI term at body size, the scene's word beneath at caption size. */
 export interface CalloutWords {
   readonly slug: CalloutSlug;
   readonly term: string;
@@ -90,10 +70,8 @@ export interface CalloutWords {
 }
 
 export interface CloseUpWords {
-  /** What the captain asks for. */
   readonly request: string;
   readonly callouts: Readonly<Record<CalloutSlug, CalloutWords>>;
-  /** Screen pixels per Scene unit; the narrowest Scene with full labels when left out. */
   readonly scenePixels?: number;
 }
 
@@ -102,11 +80,9 @@ export interface CloseUpLayout {
   readonly says: Box;
   /** Where the bubble must stay: the close-up where labels show their words, the whole Scene on a phone. */
   readonly bounds: Box;
-  /** Screen pixels per Scene unit the layout was measured at. */
   readonly scenePixels: number;
 }
 
-/** A label's box at `scenePixels`, centred on its foot: its full words, or its number badge below `@4xl`. */
 function labelBox(at: { x: number; y: number }, words: CalloutWords, scenePixels: number): Box {
   const full = scenePixels >= FULL_LABEL_SCENE_PIXELS;
   const px = full
@@ -118,7 +94,6 @@ function labelBox(at: { x: number; y: number }, words: CalloutWords, scenePixels
   return { x: at.x - width / 2, y: at.y - height, width, height };
 }
 
-/** The captain's speech bubble in the Scene: rising left of her head, as the shared `Emote` draws a figure facing left. */
 function saysIn(request: string, scenePixels: number): Box {
   const head = drawFigure(captain, 'point').anchor;
   return saysBox({
@@ -133,7 +108,6 @@ function saysIn(request: string, scenePixels: number): Box {
 
 const SCENE_BOX: Box = { x: 0, y: 0, width: SCENE.width, height: SCENE.height };
 
-/** Every box the Slide's words take in the Scene at `scenePixels`, for the captain's line and the three callouts. */
 export function closeUpLayout({
   request,
   callouts,
@@ -186,7 +160,6 @@ export function clashes({ labels, says, bounds, scenePixels }: CloseUpLayout): r
   return [...covered, ...crowded, ...outside, ...escaped];
 }
 
-/** The ship's bridge window in the Scene, where the close-up's lens lines start: a box around the ship's own window. */
 export function bridgeWindow(window: Box): Box {
   return {
     x: SHIP.x + window.x * SHIP.scale,

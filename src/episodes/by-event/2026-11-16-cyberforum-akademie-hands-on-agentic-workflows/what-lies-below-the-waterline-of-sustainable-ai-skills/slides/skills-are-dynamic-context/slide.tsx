@@ -24,12 +24,9 @@ const COPILOT_INSTRUCTIONS = {
 };
 const CLAUDE_SKILLS = { slug: 'anthropic-claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 
-/** The window's blocks top to bottom, as the Explorable's `waterline-dive` bar holds them: static, then dynamic. */
 const ROWS = ['system', 'skills', 'memory', 'instructions', 'frames', 'sonar', 'logs'] as const;
 type Row = (typeof ROWS)[number];
-/** The window's static part: system prompt, skill index and memory; the rest is dynamic. */
 const STATIC_ROWS = ROWS.indexOf('instructions');
-/** Each dynamic block stacks onto the window on the beat its object lands on the desk (slide.module.css). */
 const ARRIVAL_BEATS = Object.fromEntries(
   ARRIVALS.map((arrival) => [`--arrive-${arrival}`, `${ARRIVAL_DELAY[arrival]}ms`]),
 ) as CSSProperties;
@@ -44,7 +41,6 @@ const PILLS: readonly { readonly pill: Pill; readonly x: number; readonly y: num
   { pill: 'logs', x: 654, y: 371 },
 ];
 
-/** One block's words: its AI term, and the scene's word or the file behind it on the right. */
 function BlockWords(props: { readonly term: string; readonly chat: string; readonly coding: string }) {
   return (
     <>
@@ -61,7 +57,6 @@ function BlockWords(props: { readonly term: string; readonly chat: string; reado
   );
 }
 
-/** A bracket beside one part of the window, naming it static or dynamic, as tall as the part's rows. */
 function Bracket({
   label,
   children,
@@ -71,7 +66,6 @@ function Bracket({
   readonly label: ReactNode;
   readonly children: ReactNode;
   readonly dynamic?: boolean;
-  /** The `data-target` a Speaker note lights, from the kit's `target(…)`. */
   readonly 'data-target'?: string;
 }) {
   return (
@@ -90,12 +84,6 @@ function Bracket({
   );
 }
 
-/**
- * "Skills are static and dynamic context" (Spec Option 5b): the control room at the end of the dive beside the context
- * window Explorable's `waterline-dive` bar standing upright, static on top and dynamic below, each block carrying this
- * Slide's words, with a bracket naming each part. Overrules `grid-2x1` loosely for room, window and brackets over one
- * footer; keeps `motion: local`, each object landing on the desk as its block stacks onto the window.
- */
 export const skillsAreDynamicContext = slide({
   slug: 'skills-are-dynamic-context',
   messages: { en, de },

@@ -9,7 +9,6 @@
   --grow-step: 140ms;
 }
 
-/* The sheet fades out at its foot, as if it ran on past the stage; only the mask's alpha counts, not its colour. */
 .sheet {
   mask-image: linear-gradient(to bottom, var(--foreground) 70%, transparent);
 }
@@ -44,7 +43,6 @@
   }
 }
 
-/* A pulse by scale alone (decision 19): the entry grows already filled, and pulses once the list has grown. */
 @keyframes find {
   50% {
     scale: 1.04;

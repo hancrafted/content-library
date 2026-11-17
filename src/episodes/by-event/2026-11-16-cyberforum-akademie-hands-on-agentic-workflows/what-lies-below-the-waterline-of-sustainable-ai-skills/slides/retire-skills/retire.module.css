@@ -1,13 +1,4 @@
-/*
- * "Retire skills" (Option 25b): the control room at night, its porthole onto the Abyss, the archive crate and the one
- * emphasis motion. The drawing's tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens on
- * `.art` for the facets `room-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode
- * (feedback 2, decision 32). The rivets and the clipboard's clip are steel, mixed from `--muted-foreground`, never a meaning colour. `--primary` marks the one
- * line you need.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .room {
   --cable: oklch(0.28 0.02 260);
   --ink: oklch(0.975 0.01 230);
@@ -228,7 +219,6 @@
   color: var(--ink);
 }
 
-/* The close-up shrinks from the top: its top edge stays put while the index closes up into the short card. */
 .closeUp {
   transform-origin: top;
 }

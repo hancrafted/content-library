@@ -35,7 +35,6 @@ const COPILOT_MCP = { slug: 'github-copilot-mcp', url: 'https://docs.github.com/
 const DAY_3 = { slug: 'google-day-3-agent-skills', url: 'https://www.kaggle.com/whitepaper-agent-skills' };
 const DAY_1 = { slug: 'google-day-1-new-sdlc', url: 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding' };
 
-/** Each thing's file in the Coding agent view; paths are code and stay untranslated. */
 const PATHS: Readonly<Record<Thing, string | undefined>> = {
   personal: '~/.claude/CLAUDE.md',
   project: 'AGENTS.md',
@@ -58,18 +57,11 @@ const MARKED: Readonly<Partial<Record<Thing, NoteSlug>>> = {
   connectors: 'connectors-reach-skills-know-how',
 };
 
-/** A Slide link (`slideHref`) taken apart into its logical path and anchor, so the `href` goes through `localizePath`. */
 function partsOf(link: string) {
   const [path = '', anchor] = link.split('#');
   return { path: stripLocale(path), anchor };
 }
 
-/**
- * "Instructions, skills and connectors" (Spec Option 6a): the control room as one picture, its four things numbered
- * where they stand, then one row per thing, its cartoon panel on the left and on the right its AI label, its static or
- * dynamic tag linking back to the Slide on dynamic context, and what it does (or, in the Coding agent view, its file).
- * Overrules `three-column`; keeps `motion: none`. Skills carries the focus.
- */
 export const instructionsSkillsAndConnectors = slide({
   slug: 'instructions-skills-and-connectors',
   messages: { en, de },

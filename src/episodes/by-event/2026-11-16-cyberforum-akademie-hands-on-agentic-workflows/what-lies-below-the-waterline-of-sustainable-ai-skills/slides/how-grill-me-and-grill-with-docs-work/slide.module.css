@@ -1,12 +1,5 @@
-/*
- * Slide token file of "grill-with-docs keeps context beside the skill" (FE-011 §2): the sheets' faceted paper, the
- * read-back current and its bubbles, the light shafts and the seabed in the approved Spec Option 19b's own tones
- * (feedback 3, decision 46), then the arrows, the step tiles and the one emphasis motion. Dark values are the Spec's;
- * dark mode is tuned later (decision 32). `--primary` is the new glossary row, the one focal fill.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .art {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.972 0.009 88);
@@ -29,7 +22,6 @@
   --glint: oklch(0.98 0.01 230);
 }
 
-/* Each opaque facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
 .art [data-tone] {
   stroke-width: 0.6;
   stroke-linejoin: round;
@@ -75,7 +67,6 @@
   stroke: var(--scenery-seabed-shade);
 }
 
-/* The see-through tones, unstroked: the drop, the current, the bubbles and the light shafts. */
 .art [data-tone='drop'] {
   fill: var(--drop);
   stroke: none;
@@ -101,17 +92,14 @@
   stroke: none;
 }
 
-/* The sheets' words read on the Spec's light paper. */
 .paper {
   color: var(--card-foreground);
 }
 
-/* The procedure tiles: highlighted on the paper, as the Spec marks them. */
 .step {
   background: color-mix(in oklab, var(--warning) 25%, transparent);
 }
 
-/* The procedure lines of the Coding agent view, highlighted as a reader marks them. */
 .highlight {
   background: color-mix(in oklab, var(--warning) 25%, transparent);
 }

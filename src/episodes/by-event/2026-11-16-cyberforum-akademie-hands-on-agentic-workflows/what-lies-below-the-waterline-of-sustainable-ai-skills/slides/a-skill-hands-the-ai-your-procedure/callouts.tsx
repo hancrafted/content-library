@@ -7,19 +7,11 @@ import { CALLOUTS, type CalloutSlug } from './close-up.pure';
 const PERCENT = 100;
 
 export interface CalloutWords {
-  /** The AI term, numbered: `1 · Skill`. */
   readonly term: string;
-  /** The scene's word for it: `procedure card`. */
   readonly scene: string;
-  /** The number alone, for a Scene too narrow for the label. */
   readonly number: string;
 }
 
-/**
- * The three callouts over the Scene (Spec Option 2a): each names the AI term at body size and the scene's word beneath
- * at caption size, the skill's pill in `primary` as the focal mark, appearing last. Where the Scene is narrow, each
- * shrinks to its number; the tiles below carry the words.
- */
 export function Callouts({ words }: { readonly words: Readonly<Record<CalloutSlug, CalloutWords>> }) {
   return CALLOUTS.map(({ slug, at }) => {
     const focal = slug === 'skill';

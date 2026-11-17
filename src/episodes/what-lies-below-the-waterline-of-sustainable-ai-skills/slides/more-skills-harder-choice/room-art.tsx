@@ -2,20 +2,8 @@ import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/f
 import { cn } from '@/shared/lib/utils';
 import styles from './slide.module.css';
 
-/*
- * The drawing lifted from the approved Spec's Option 13a (feedback 3, decision 46): the control room's faceted walls
- * and floor, the skill index board's frame and its paper cards, and the project brief pinned to the wall. Facets keep
- * the Spec's own numbers, in its 1200 by 500 space; their tones are this Slide's tokens in `slide.module.css`. The
- * pilot and the console stay the shared figures, placed on top; the cards' and the brief's words stay real text.
- */
-
-/** One facet: its tone, the token that fills it, and its outline. */
 type Facet = readonly [tone: string, d: string];
 
-/**
- * How the Spec's 1200 by 500 room fills the Scene's art box, 1200 by 600 at the Scene's bottom: stretched a fifth taller,
- * which its random wall facets take without showing it.
- */
 export const ART_TOP = 200;
 export const ART_STRETCH = 1.2;
 
@@ -79,7 +67,6 @@ const PIN: readonly Facet[] = [
   ['glint', 'M1002 42L1009 42L1004 54Z'],
 ];
 
-/** A lifted prop stretched to the HTML box it backs. */
 function Backdrop({ viewBox, facets }: { readonly viewBox: string; readonly facets: readonly Facet[] }) {
   return (
     <svg
@@ -93,7 +80,6 @@ function Backdrop({ viewBox, facets }: { readonly viewBox: string; readonly face
   );
 }
 
-/** The room behind the pilot: faceted walls and floor. */
 export function RoomArt() {
   return (
     <g aria-hidden data-room-art className={styles.art} transform={`translate(0 ${ART_TOP}) scale(1 ${ART_STRETCH})`}>
@@ -102,22 +88,18 @@ export function RoomArt() {
   );
 }
 
-/** The index board's faceted frame. */
 export function BoardFrame() {
   return <Backdrop viewBox="470 44 388 244" facets={BOARD} />;
 }
 
-/** One index card's faceted paper. */
 export function CardPaper() {
   return <Backdrop viewBox="488 62 172 46" facets={CARD} />;
 }
 
-/** The brief's faceted paper. */
 export function WallPaper() {
   return <Backdrop viewBox="868 46 282 306" facets={WALL} />;
 }
 
-/** The pin that holds the brief to the wall, over its top edge. */
 export function WallPin() {
   return (
     <svg

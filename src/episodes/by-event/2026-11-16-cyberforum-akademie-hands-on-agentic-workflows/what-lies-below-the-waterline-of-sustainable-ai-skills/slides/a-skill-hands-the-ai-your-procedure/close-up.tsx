@@ -30,32 +30,19 @@ import {
   SHIP,
 } from './close-up.pure';
 
-/*
- * Spec Option 2a, zoomed out (feedback 3, item 7): the whole research ship at the Surface, the robot on its cable in the
- * water, and beside it a close-up of the ship's bridge, the cabin: the pilot at the console, the captain asking, the
- * project brief on the wall and one procedure card slid out of the dive manual. A lens ring on the bridge window and
- * two lines tie the close-up to the ship. The walls are lifted from the Spec (`cabin-art.tsx`); the ship, console, robot
- * and crew come from `slide-shared/`. Every place is in `close-up.pure.ts`, where the overlap test reads it.
- */
-
 const ANCHORS = shipAnchors();
 const ROBOT = robotAt('a-skill-hands-the-ai-your-procedure');
-/** The robot hangs this deep on its cable from the A-frame, under the waterline. */
 const ROBOT_DEPTH = 590;
 const ROBOT_SCALE = 1.2;
-/** Three air bubbles rising beside the cable from the robot, as in the Spec: offset from the robot, and size. */
 const ROBOT_BUBBLES = [
   { dx: 26, dy: -46, size: 16 },
   { dx: 36, dy: -92, size: 11 },
   { dx: 24, dy: -128, size: 8 },
 ] as const;
-/** The close-up's frame: the cut superstructure, then its ink edge; the corners rounded like a lens's view. */
 const FRAME = { width: 14, edge: 3, radius: 24 } as const;
 const LENS_PAD = 6;
-/** Where the card starts, as a share of the Scene: down in the manual on the desk. */
 const CARD_FROM = '6% 24%';
 
-/** The robot on its cable from the A-frame's tip, in the water, its lamp lit: the story has it diving here. */
 function RobotOnCable() {
   if (ROBOT.state !== 'in-water') return null;
   const tip = { x: SHIP.x + ANCHORS.aFrameTip.x * SHIP.scale, y: SURFACE_WATERLINE + ANCHORS.aFrameTip.y * SHIP.scale };
@@ -72,7 +59,6 @@ function RobotOnCable() {
   );
 }
 
-/** The ring round the ship's bridge window, and the two lines that open from it to the close-up's corners. */
 function lensRing() {
   const window = bridgeWindow(ANCHORS.window);
   return {
@@ -83,7 +69,6 @@ function lensRing() {
   };
 }
 
-/** The lens lines, drawn behind the ship so they leave its hull whole. */
 function LensLines() {
   const ring = lensRing();
   const right = ring.x + ring.width;
@@ -111,12 +96,10 @@ function LensLines() {
   );
 }
 
-/** The lens ring on the bridge window, over the ship. */
 function LensRing() {
   return <rect data-lens {...lensRing()} rx={6} strokeWidth={3} data-tone="lens" />;
 }
 
-/** The dive manual, open at its index on the desk: one index line per skill. */
 function Manual() {
   const { x, y, width, height } = MANUAL;
   const half = width / 2;
@@ -137,7 +120,6 @@ function Manual() {
   );
 }
 
-/** The procedure card, out of the manual and tilted over the console: a title and three steps. */
 function ProcedureCard() {
   const { x, y, width, height, tilt } = CARD;
   return (
@@ -159,7 +141,6 @@ function ProcedureCard() {
   );
 }
 
-/** The cabin: its walls, the brief, the console and manual, the pilot and the card, clipped to the close-up's frame. */
 function Cabin({ clipId }: { readonly clipId: string }) {
   const seat = consoleLayout({ width: CONSOLE.width, flip: true }).seat;
   return (
@@ -178,7 +159,6 @@ function Cabin({ clipId }: { readonly clipId: string }) {
   );
 }
 
-/** The leader lines from each callout down to what it names; the skill's in `primary`, appearing last. */
 function Leaders() {
   return CALLOUTS.map(({ slug, at }) => {
     const [x2, y2] = LEADER_END[slug];
@@ -201,11 +181,9 @@ function Leaders() {
 }
 
 export interface CloseUpProps {
-  /** What the captain asks for. */
   readonly request: string;
 }
 
-/** The ship, the robot in the water and the cabin close-up, as children of a Surface `ZoneScene`. */
 export function CloseUp({ request }: CloseUpProps) {
   const clipId = `skill-hands-close-up-${useId()}`;
   const frame = { x: CLOSE_UP.x, y: CLOSE_UP.y, width: CLOSE_UP.width, height: CLOSE_UP.height, rx: FRAME.radius };
@@ -224,10 +202,6 @@ export function CloseUp({ request }: CloseUpProps) {
       <rect {...frame} strokeWidth={FRAME.width} data-tone="cut" />
       <rect {...frame} strokeWidth={FRAME.edge} data-tone="cut-edge" />
       <Leaders />
-      {/*
-        The captain stands inside the frame but outside its clip, over the leaders: on a phone her bubble outgrows the
-        close-up, and its words stay on top.
-      */}
       <g transform={`translate(${CAPTAIN_X} ${FLOOR_Y}) scale(${CREW_SCALE})`}>
         <Character preset={captain} pose="point" flip says={request} />
       </g>

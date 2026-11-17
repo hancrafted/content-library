@@ -17,10 +17,6 @@ const FOWLER_YAGNI = { slug: 'fowler-yagni', url: 'https://martinfowler.com/blik
 const CLAUDE_CODE_SKILLS = { slug: 'anthropic-claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 const CODEX_SKILLS = { slug: 'openai-codex-build-skills', url: 'https://learn.chatgpt.com/docs/build-skills' };
 
-/**
- * The skill index, in the order it grew: the entry you need is the seventh, buried. The coding names are folder names,
- * code, not translated; `collect-sediment-sample` is the name Slide 3 gives the skill.
- */
 const ENTRIES = [
   { key: 'rinseCameraDome', name: 'rinse-camera-dome', tilt: 'rotate-2', untested: true },
   { key: 'sampleOld', name: 'sample-old' },

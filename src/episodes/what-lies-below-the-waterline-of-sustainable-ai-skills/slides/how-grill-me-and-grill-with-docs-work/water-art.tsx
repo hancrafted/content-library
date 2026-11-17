@@ -1,14 +1,6 @@
-/*
- * The water of "grill-with-docs keeps context beside the skill", lifted from the approved Spec's Option 19b (feedback
- * 3, decision 46): the faceted read-back current with its bubbles, and the Twilight water's light shafts and seabed,
- * in the Spec's own units and tones (`slide.module.css`). The Twilight water and its jellies stay the shared
- * `ZoneScene`.
- */
-
 type Tone = 'current' | 'current-lit' | 'bubble' | 'glint' | 'ray' | 'bed' | 'bed-lit' | 'bed-shade';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** The light shafts slanting through the Twilight water. */
 const RAY: Facets = [
   [
     'ray',
@@ -16,7 +8,6 @@ const RAY: Facets = [
   ],
 ];
 
-/** The seabed along the bottom of the Scene. */
 const BED: Facets = [
   ['bed', 'M1002 782L984 764L1002 763ZM746 748L780 748L748 782Z'],
   ['bed-shade', 'M100 762L63 782L66 760Z'],
@@ -72,7 +63,6 @@ const BED: Facets = [
   ['bed-lit', 'M888 744L879 750L880 737Z'],
 ];
 
-/** The read-back current, faceted, and the bubbles rising beside its start. */
 const CURRENT: Facets = [
   ['current-lit', 'M441 566L460 568L458 584Z'],
   ['current', 'M441 566L458 584L439 582ZM457 568L474 564L478 580Z'],
@@ -95,18 +85,14 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
   return facets.map(([tone, d]) => <path key={d} d={d} data-tone={tone} vectorEffect="non-scaling-stroke" />);
 }
 
-/** The current's box in the Spec's units, from Monday's files up to Thursday's run, its bubbles below. */
 export const CURRENT_BOX = '436 402 112 284';
 
-/** The faceted read-back current and its bubbles, in the Spec's units: draw it in `CURRENT_BOX`. */
 export function CurrentArt() {
   return <FacetPaths facets={CURRENT} />;
 }
 
-/** The Spec's Scene, 1000 by 780; the Episode's is 1200 by 800, filled from the bottom. */
 const SPEC = { width: 1000, height: 780 } as const;
 
-/** The Twilight water's light shafts and the seabed, scaled from the Spec's Scene into `ZoneScene`'s, bottoms level. */
 export function TwilightFloor({ width, height }: { readonly width: number; readonly height: number }) {
   const scale = width / SPEC.width;
   return (

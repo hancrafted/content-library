@@ -6,14 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Title slide's hero Scene, picked Option 0a: the research ship on the waterline has lowered its diving robot to
- * hang just above the water, where the ruler marks the Surface. Read as the Title slide renders it, with no Section
- * placed beside it. The whole depth is one full-bleed drawing in the Backdrop, so the title and lede sit in its sky
- * (Han's feedback 1); the ruler and the pill stay reader content over it. The scenery comes from
- * the Iceberg style, the ship, crew and robot from the cast (design-ADR-0025).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const sceneOf = (locale: Locale) =>
   load(
     renderToStaticMarkup(

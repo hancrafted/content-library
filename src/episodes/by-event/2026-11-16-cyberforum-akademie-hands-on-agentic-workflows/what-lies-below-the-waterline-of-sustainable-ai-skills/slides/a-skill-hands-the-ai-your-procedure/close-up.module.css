@@ -1,12 +1,5 @@
-/*
- * Slide token file of "A skill hands the AI your procedure" (FE-011 §2): the cabin close-up's wall, floor, frame,
- * brief, manual and card, in the approved Spec Option 2a's own tones (feedback 3, decision 46). Dark values are the
- * Spec's; dark mode is tuned later (decision 32). `primary` marks the one thing to look at, the skill; no meaning
- * colour on scenery.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .closeUp {
   --house-lit: oklch(0.985 0.005 90);
   --house: oklch(0.92 0.012 85);
@@ -31,7 +24,6 @@
   --cover: oklch(0.4 0.03 255);
 }
 
-/* Each facet strokes in its own fill, so neighbouring facets meet without a hairline seam (as the Spec draws them). */
 .closeUp [data-tone='room'] {
   fill: var(--scenery-wall);
   stroke: var(--scenery-wall);
@@ -47,13 +39,11 @@
   stroke: var(--scenery-wall-shade);
 }
 
-/* The cabin's own shade; the ship's deck house takes the same tone through its own properties, below. */
 .closeUp [data-cabin] [data-tone='house-shade'] {
   fill: var(--house-shade);
   stroke: var(--house-shade);
 }
 
-/* The ship's deck house in the cabin's shade, edged in it, as the close-up draws it (its drawing is an art asset). */
 .closeUp g[data-ship] {
   --ship-house-shade: var(--house-shade);
   --ship-house-shade-edge: var(--house-shade);
@@ -104,7 +94,6 @@
   fill: var(--cover);
 }
 
-/* The close-up's frame: the ship's white superstructure cut open, outlined in ink. */
 .closeUp [data-tone='cut'] {
   fill: none;
   stroke: var(--house);
@@ -115,7 +104,6 @@
   stroke: var(--foreground);
 }
 
-/* The lens: a ring round the bridge window on the ship and the two lines that open from it to the close-up. */
 .closeUp [data-tone='lens'] {
   fill: none;
   stroke: var(--foreground);

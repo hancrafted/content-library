@@ -1,13 +1,10 @@
-/** One facet: the token that fills it, and its outline. */
 export type Facet = readonly [tone: string, d: string];
 
-/** The waterline's glow, the lit line between the sky and the sea, across the Spec's 560 by 420 dive. */
 export const GLOW: readonly Facet[] = [
   ['glow-soft', 'M0 61L560 63L560 69L0 71Z'],
   ['glow', 'M6 65L554 65L554 67L6 67Z'],
 ];
 
-/** The cabin's faceted wall behind the porthole, which the porthole's circle clips; the reader brings its own chair. */
 export const CABIN: readonly Facet[] = [
   ['room', 'M102 97L92 133L77 102Z'],
   ['room-shade', 'M92 133L102 97L118 111Z'],
@@ -26,7 +23,6 @@ export const CABIN: readonly Facet[] = [
   ['room-lit', 'M18 146L36 123L37 166ZM40 66L18 87L18 66ZM46 99L18 87L40 66ZM18 87L46 99L18 121Z'],
 ];
 
-/** The porthole's faceted brass rim around the circle at 68, 116, lit at the upper left, and its rivets. */
 export const PORT: readonly Facet[] = [
   [
     'port-shade',
@@ -44,7 +40,6 @@ export const PORT: readonly Facet[] = [
   ],
 ];
 
-/** The silt the robot stirs up where it hits the seabed: faceted puffs, lit and plain. */
 export const SILT: readonly Facet[] = [
   ['silt', 'M268 354L252 369L226 369L213 354L229 340L256 340Z'],
   ['silt-lit', 'M335 376L325 390L300 390L294 376L302 363L328 363Z'],

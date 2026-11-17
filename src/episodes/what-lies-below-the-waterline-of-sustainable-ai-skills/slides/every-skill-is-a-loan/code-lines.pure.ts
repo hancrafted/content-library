@@ -1,4 +1,3 @@
-/** One file line as the Coding agent view shows it, with a key no other line of its block shares. */
 export interface KeyedLine {
   readonly key: string;
   readonly line: string;

@@ -31,14 +31,12 @@ const PATHS = {
   decisions: 'docs/adr/',
   command: '/grill-with-docs',
 } as const;
-/** Each decision record: its entry in the Chat app view, its file in the Coding agent view. */
 const DECISIONS = [
   { entry: '0', file: '0001-depth-from-dive-plan.md' },
   { entry: '1', file: '0002-label-cores-by-site.md' },
 ] as const;
 
 const STEPS = ['0', '1', '2', '3'] as const;
-/** Monday settles two terms and one decision; Thursday reads them and adds the third term and a second decision. */
 type TermSlug = 'site' | 'divePlan' | 'core';
 const RUNS: readonly { n: 1 | 2; terms: readonly TermSlug[]; decisions: number }[] = [
   { n: 1, terms: ['site', 'divePlan'], decisions: 1 },
@@ -46,7 +44,6 @@ const RUNS: readonly { n: 1 | 2; terms: readonly TermSlug[]; decisions: number }
 ];
 const NEW_TERM: TermSlug = 'core';
 
-/** A dashed "runs" arrow down from the skill to a run, with its label. */
 function RunsArrow({ label }: { readonly label: string }) {
   return (
     <div className="flex items-center gap-2 pl-[20%]">
@@ -59,7 +56,6 @@ function RunsArrow({ label }: { readonly label: string }) {
   );
 }
 
-/** The read-back current: Monday's files carried into the start of Thursday's run, the Spec's faceted current. */
 function ReadBackCurrent({ label }: { readonly label: string }) {
   return (
     <div className="flex items-center justify-center @3xl:items-stretch">
@@ -76,13 +72,6 @@ function ReadBackCurrent({ label }: { readonly label: string }) {
   );
 }
 
-/**
- * "grill-with-docs keeps context beside the skill" (Spec Option 19b): one skill against two runs, outside the control
- * room, on the real files, its sheets, current, light shafts and seabed lifted from the Spec (`paper-art.tsx`, `water-art.tsx`). Overrules `three-column` for a Scene from `SlideFrame`: grill-with-docs spans the top as one
- * sheet holding the two skills it runs; Monday's and Thursday's runs sit beneath it, each writing a glossary and
- * decision records beside it. Keeps `motion: local`, recast: the current carries Monday's files in, then Thursday's
- * glossary gains "Core", its row filling primary.
- */
 export const howGrillMeAndGrillWithDocsWork = slide({
   slug: 'how-grill-me-and-grill-with-docs-work',
   messages: { en, de },

@@ -33,17 +33,11 @@ const FRONT_MATTER = [
   '…',
 ];
 
-/** The two halves: what changed the reader, the dive it gave, and who reads the card in the porthole. */
 const HALVES: readonly { half: 'update' | 'switch'; outcome: DiveOutcome; reader: DiveReader }[] = [
   { half: 'update', outcome: 'short', reader: 'same-pilot' },
   { half: 'switch', outcome: 'silt', reader: 'other-school' },
 ];
 
-/**
- * "The model changes, the skill doesn't" (Spec Option 24a): the same skill card drops into two dives that end apart,
- * a model update and a different model or agent, beside Lehman's laws and the note on new readers. Keeps `grid-1x2`
- * as a copy holding one Scene per half; keeps `motion: local`, both robots descending once.
- */
 export const theModelChangesTheSkillDoesnT = slide({
   slug: 'the-model-changes-the-skill-doesn-t',
   messages: { en, de },
@@ -75,7 +69,6 @@ export const theModelChangesTheSkillDoesnT = slide({
           <p className="text-caption text-muted-foreground">{t('card.description')}</p>
         </InView>
         <InView view="coding" as="div" className="font-mono text-caption">
-          {/* One block of lines, not one element per line: the front matter's two `---` fences are equal lines. */}
           <span translate="no" className="block whitespace-pre-wrap">
             {FRONT_MATTER.join('\n')}
           </span>

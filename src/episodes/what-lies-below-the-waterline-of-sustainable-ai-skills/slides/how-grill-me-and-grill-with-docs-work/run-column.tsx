@@ -8,12 +8,10 @@ export interface GlossaryTerm {
   readonly slug: string;
   readonly chat: { readonly name: string; readonly text: string; readonly avoid?: string };
   readonly coding: { readonly name: string; readonly text: string; readonly avoid?: string };
-  /** The term this run adds: its row fills primary once the current has carried Monday's files in. */
   readonly isNew?: boolean;
 }
 
 export interface ProjectFileProps {
-  /** The Spec's sheet this file's paper is cut from. */
   readonly paper: PaperId;
   readonly kind: { readonly chat: string; readonly coding: string };
   readonly beside: string;
@@ -22,7 +20,6 @@ export interface ProjectFileProps {
   readonly children: ReactNode;
 }
 
-/** A file's heading, led by its AI term or its path, with the "+1 term" tag when the run grew it. */
 function FileHeading({ kind, tag }: Pick<ProjectFileProps, 'kind' | 'tag'>) {
   return (
     <h5 className="flex items-center justify-between gap-2 border-b border-border pb-1 font-semibold text-muted-foreground">
@@ -39,7 +36,6 @@ function FileHeading({ kind, tag }: Pick<ProjectFileProps, 'kind' | 'tag'>) {
   );
 }
 
-/** One file a run writes beside the skill: the Spec's faceted sheet led by its AI term, the "Beside the skill" label under it. */
 export function ProjectFile({ paper, kind, beside, focus = false, tag, children }: ProjectFileProps) {
   return (
     <div className="flex flex-col items-start gap-2">
@@ -90,7 +86,6 @@ function TermItem({ term: { slug, chat, coding, isNew } }: { readonly term: Glos
   );
 }
 
-/** The glossary's terms; a new one is the run's one focal row. */
 export function GlossaryTerms({
   heading,
   terms,
@@ -125,7 +120,6 @@ export interface RunColumnProps {
   readonly children: ReactNode;
 }
 
-/** One run of grill-with-docs: its chip saying what it does with the files beside, then the files it leaves there. */
 export function RunColumn({ n, label, lead, after, target, children }: RunColumnProps) {
   return (
     <section data-run={n} className="flex flex-col gap-3">

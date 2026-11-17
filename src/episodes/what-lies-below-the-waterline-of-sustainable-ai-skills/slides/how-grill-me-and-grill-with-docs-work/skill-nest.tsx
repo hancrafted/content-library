@@ -4,11 +4,9 @@ import { PaperArt, type PaperId } from './paper-art';
 import styles from './slide.module.css';
 
 export interface SkillSheetProps {
-  /** The Spec's sheet this skill's paper is cut from. */
   readonly paper: PaperId;
   readonly kind: string;
   readonly path: string;
-  /** Plain steps in the Chat app view; the file's own lines, highlighted, in the Coding agent view. */
   readonly steps: readonly { readonly chat: string; readonly coding: string }[];
 }
 
@@ -18,7 +16,6 @@ export interface SkillNestProps {
   readonly inner: readonly SkillSheetProps[];
 }
 
-/** One skill grill-with-docs runs: its steps as tiles, or its lines as the file writes them. */
 function SkillSheet({ paper, kind, path, steps }: SkillSheetProps) {
   return (
     <section data-skill-sheet={path} className={cn(styles.paper, 'relative isolate flex flex-col gap-2 p-3')}>
@@ -43,11 +40,6 @@ function SkillSheet({ paper, kind, path, steps }: SkillSheetProps) {
   );
 }
 
-/**
- * The one skill on top (Option 19b): grill-with-docs as one sheet holding the two skills it runs, the grilling
- * interview and domain-modeling, under the dark "Stays the same every run" label. Containment shows that a skill runs
- * other skills.
- */
 export function SkillNest({ outer, stays, inner }: SkillNestProps) {
   return (
     <section data-skill-nest className={cn(styles.paper, 'relative isolate flex flex-col gap-3 p-4')}>

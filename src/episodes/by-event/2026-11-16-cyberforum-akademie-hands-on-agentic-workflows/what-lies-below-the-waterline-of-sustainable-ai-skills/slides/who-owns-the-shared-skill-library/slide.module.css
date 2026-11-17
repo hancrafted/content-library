@@ -1,10 +1,4 @@
-/*
- * "Who owns the shared skill library" (Option 21a): the robot's cable and the zoom beam's edges. The drawing's own tones
- * (Abyss band, halo, binder, dark corner) are `library-art.module.css`, lifted from the Spec. No raw colour here
- * (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white, with `--zone-midnight`;
- * the robot keeps the shared figure's own colours.
- */
-
+/* decision: FE-011 §2 */
 .scene {
   --beam-edge: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
   --cable: color-mix(in oklab, var(--on-brand-accent) 45%, var(--zone-midnight));

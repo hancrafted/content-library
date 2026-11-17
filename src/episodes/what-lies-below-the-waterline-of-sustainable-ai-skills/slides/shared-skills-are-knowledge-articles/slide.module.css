@@ -1,9 +1,4 @@
-/*
- * "Shared skills are knowledge articles" (Option 20b): the reach to the AIs and the one emphasis motion. The room's
- * own tones are `room-art.module.css`, lifted from the Spec. The reach is drawn in the Spec's lead blue, its one raw
- * colour, with the Spec's dark value (FE-011).
- */
-
+/* decision: FE-011 §2 */
 .reach {
   --reach-lead: oklch(0.62 0.17 255);
 }

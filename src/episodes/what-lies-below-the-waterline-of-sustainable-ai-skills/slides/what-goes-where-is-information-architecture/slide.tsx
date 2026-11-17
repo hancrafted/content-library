@@ -27,16 +27,9 @@ const CODE = {
     ['# CONTEXT.md', 'Site 4: 40 m'],
   ],
 } as const;
-/** The card's steps by role (FE-002 §5.1); step 2's depth is the dashed slot. */
+// decision: FE-002 §5.1
 const STEPS = ['check-gear', 'descend', 'lower-arm', 'identify'] as const;
 
-/**
- * "What context goes where" (Spec Option 14a): the information-architecture concept card, then the control room with
- * one fact, today's site depth, and its three homes, each numbered by a pin, and the three home cards beneath in one
- * row with their plain costs. No home wins; the focal mark is the verdict line. `master: grid-1x2` is overruled to a
- * Scene, as the build notes say; `motion: local` is kept: the depth note travels from the card's slot onto the dive
- * plan, then the verdict lights; at rest the note sits on the plan.
- */
 export const whatGoesWhereIsInformationArchitecture = slide({
   slug: 'what-goes-where-is-information-architecture',
   messages: { en, de },

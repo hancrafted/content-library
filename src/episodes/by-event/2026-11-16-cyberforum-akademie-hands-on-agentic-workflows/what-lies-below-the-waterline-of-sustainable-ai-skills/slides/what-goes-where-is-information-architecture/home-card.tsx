@@ -2,7 +2,6 @@ import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** One cost line: a benefit in full ink with a plus, a cost in muted ink with a minus. */
 export interface Cost {
   readonly good: boolean;
   readonly text: ReactNode;
@@ -11,7 +10,6 @@ export interface Cost {
 export interface HomeCardProps {
   readonly n: string;
   readonly term: string;
-  /** Where the home sits in the story, in the Chat app view. */
   readonly scene: string;
   readonly load: Cost;
   readonly fit: Cost;
@@ -64,7 +62,6 @@ function Row({
   );
 }
 
-/** Where the home sits: in the story for the Chat app view, or the file and its lines for the Coding agent view. */
 function Where({ scene, coding }: Pick<HomeCardProps, 'scene' | 'coding'>) {
   return (
     <div className="min-w-0">
@@ -90,12 +87,6 @@ function Where({ scene, coding }: Pick<HomeCardProps, 'scene' | 'coding'>) {
   );
 }
 
-/**
- * One of the three homes for the depth (Spec Option 14a's `HomeCard`): its pin number and AI term, where it sits in
- * the story or which file holds it, then its two plain costs across two fixed rows, "When loaded" and "Fits", which
- * line up across the three cards. No home wins: no card is ringed. A `focus-group__item`, so pointing at one while
- * presenting dims the other two.
- */
 export function HomeCard({ n, term, scene, load, fit, rows, marks, coding }: HomeCardProps) {
   return (
     <li

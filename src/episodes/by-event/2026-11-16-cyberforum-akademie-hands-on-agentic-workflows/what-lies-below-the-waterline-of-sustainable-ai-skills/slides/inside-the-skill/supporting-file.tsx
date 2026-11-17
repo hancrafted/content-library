@@ -4,11 +4,6 @@ import type { ReactNode } from 'react';
 import { GuideTab } from './card-art';
 import styles from './inside.module.css';
 
-/*
- * A supporting file of Spec Option 16a, level with the step that uses it: a script or template as its object beside
- * its words, or the lit reference file as a book open on its contents page (feedback 3, decision 46).
- */
-
 export interface SupportingFileProps {
   readonly step: number;
   readonly kind: string;
@@ -16,13 +11,10 @@ export interface SupportingFileProps {
   readonly hint: string;
   readonly path: string;
   readonly focal?: boolean;
-  /** A reference file opens on its contents page. */
   readonly contents?: { readonly head: string; readonly rows: readonly { label: string; page: string }[] };
-  /** The file drawn as an object beside its words (`card-art.tsx`); the lit reference file is a book instead. */
   readonly art?: ReactNode;
 }
 
-/** The reference file's contents page, open where the guide slid out. */
 function ContentsPage({ contents }: { readonly contents: NonNullable<SupportingFileProps['contents']> }) {
   return (
     <div className="mt-1 border-t border-border pt-2">
@@ -39,7 +31,6 @@ function ContentsPage({ contents }: { readonly contents: NonNullable<SupportingF
   );
 }
 
-/** The file's AI term as a pill; the lit file's fills `primary`. */
 function KindPill({ kind, focal }: { readonly kind: string; readonly focal: boolean }) {
   return (
     <p>
@@ -56,7 +47,6 @@ function KindPill({ kind, focal }: { readonly kind: string; readonly focal: bool
   );
 }
 
-/** The file's words: its AI term, the scene's name, its hint or its path, and a reference file's contents page. */
 function FileWords({ kind, name, hint, path, focal, contents }: Omit<SupportingFileProps, 'step' | 'art'>) {
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -73,7 +63,6 @@ function FileWords({ kind, name, hint, path, focal, contents }: Omit<SupportingF
   );
 }
 
-/** The lit reference file as a book: its faceted cover and spine around the open page, its fish tab on top. */
 function GuideBook({ step, ...words }: Omit<SupportingFileProps, 'focal' | 'art'>) {
   return (
     <div
@@ -95,11 +84,6 @@ function GuideBook({ step, ...words }: Omit<SupportingFileProps, 'focal' | 'art'
   );
 }
 
-/**
- * One supporting file, led by its AI term, the scene's name beneath, its path in the Coding agent view. A script or
- * template stands as its object beside its words; the lit reference file is a book: its faceted cover and spine
- * around the open page, its fish tab on top, ringed in `primary`.
- */
 export function SupportingFile({ step, focal = false, art, ...words }: SupportingFileProps) {
   if (focal) return <GuideBook step={step} {...words} />;
   return (

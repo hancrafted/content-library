@@ -5,7 +5,6 @@ import type { ReactNode } from 'react';
 import styles from './retire.module.css';
 import { CrateArt, SheetPaper } from './room-art';
 
-/** Words that differ by view: the skill as the chat app names it, or its folder. */
 export interface ByView {
   readonly chat: string;
   readonly coding: string;
@@ -47,7 +46,6 @@ function SheetHead({
 export interface BeforeLine {
   readonly folder: string;
   readonly label: string;
-  /** How often a task used it this season; 0 is unused. */
   readonly uses: number;
   readonly usesLabel: string;
 }
@@ -101,7 +99,6 @@ export interface LogRow {
   readonly skill: ByView;
 }
 
-/** The season's task log: what each task actually used, the record the index is read against. */
 export function TaskLog(props: {
   readonly heading: string;
   readonly season: string;
@@ -132,7 +129,6 @@ export function TaskLog(props: {
   );
 }
 
-/** The archive crate (the Spec's, `room-art.tsx`): the retired cards standing in it, its label naming the date and that a card can come back. */
 export function ArchiveCrate({ lines }: { readonly lines: readonly ByView[] }) {
   return (
     <div className="focus-group__item">
@@ -155,7 +151,6 @@ export interface AfterLine {
   readonly needed?: boolean;
 }
 
-/** One line of the short index; the one you need lit in `primary`. */
 function AfterLineItem({ line, neededLabel }: { readonly line: AfterLine; readonly neededLabel: string }) {
   const { folder, label, needed } = line;
   return (
@@ -170,7 +165,6 @@ function AfterLineItem({ line, neededLabel }: { readonly line: AfterLine; readon
   );
 }
 
-/** The short index left behind: seven lines, the one you need lit and back in view. */
 export function AfterIndex(props: {
   readonly heading: ByView;
   readonly count: ByView;

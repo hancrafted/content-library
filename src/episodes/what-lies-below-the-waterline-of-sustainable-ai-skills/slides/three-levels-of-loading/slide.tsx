@@ -25,7 +25,6 @@ const GEMINI_CLI = {
 const NNG = { slug: 'nngroup-progressive-disclosure', url: 'https://www.nngroup.com/articles/progressive-disclosure/' };
 
 const SKILL = 'collect-sediment-sample';
-/** The extras' words under their drawings on the side table, at the Spec's places. */
 const EXTRA_LABELS = [
   { key: 'guide', x: 893 },
   { key: 'label', x: 1012 },
@@ -33,12 +32,6 @@ const EXTRA_LABELS = [
 ] as const;
 const FILES = ['references/species-guide.md', 'assets/label-template.md', 'scripts/arm-preset.py'];
 
-/**
- * "How AI discovers and reads a skill" (Spec Option 4b): the concept first, Nielsen Norman Group's definition of
- * progressive disclosure quoted above three steps; then the example, a skill's three loading levels as one row of
- * cards above one control room read left to right (the manual's index, the propped card, the sleeve under the lamp).
- * Overrules `vertical-stepper` for this horizontal Scene; keeps `motion: local`, the light moving in loading order.
- */
 export const threeLevelsOfLoading = slide({
   slug: 'three-levels-of-loading',
   messages: { en, de },

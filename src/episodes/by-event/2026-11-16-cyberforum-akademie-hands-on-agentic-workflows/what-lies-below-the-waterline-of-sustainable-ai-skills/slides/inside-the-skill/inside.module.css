@@ -1,12 +1,5 @@
-/*
- * Slide token file of "Inside the skill" (FE-011 §2): the control-room wall, the paper card in its clear sleeve, the
- * species guide's book and the file objects, in the tones of Spec Option 16a (feedback 3, decision 46), each with its
- * dark value from the Option; the machine tones mix the global `--info`, as the shared robot's hull. `primary` marks only the lit step 4, its
- * arrow, and the species guide's ring and pill; no meaning colour on scenery.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .scene {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.972 0.009 88);
@@ -139,10 +132,6 @@
   fill: var(--fish-shade);
 }
 
-/*
- * The card in its clear sleeve: the sleeve's pale edge around faceted paper. Each row lays its own lit and shaded
- * facet across the paper, at its own angle, so the card reads as one faceted sheet.
- */
 .step {
   border-color: var(--sleeve-edge);
   background: linear-gradient(
@@ -180,13 +169,11 @@
   --facet-shade: 84%;
 }
 
-/* The ruled line under each step, as on the Option's card. */
 .rule {
   border-bottom: 1px solid var(--border);
   border-radius: 0;
 }
 
-/* The slot the species guide slid out of: a pale band on the sleeve's right edge, level with step 4. */
 .slotMark {
   position: absolute;
   inset-block: 0.75rem;
@@ -195,12 +182,10 @@
   background: var(--sleeve);
 }
 
-/* The trail the guide leaves as it slides out: pale streaks of the sleeve. */
 .trail > span {
   background: var(--trail);
 }
 
-/* The species guide as a book: its faceted cover around the page, its spine darker down the left. */
 .book {
   background:
     linear-gradient(90deg, var(--guide-shade) 0 0.5rem, transparent 0.5rem),

@@ -4,24 +4,16 @@ import type { ReactNode } from 'react';
 import { SleeveClip } from './card-art';
 import styles from './inside.module.css';
 
-/*
- * The parts of Spec Option 16a, one row per step: the step on the faceted paper card in its clear sleeve, the
- * supporting file it uses level with it, drawn as an object (`card-art.tsx`), and the rules for long files beside.
- * Markup is this Slide's own (FE-007 §4); colours come from the Slide token file.
- */
-
+// decision: FE-007 §4
 export interface StepCellProps {
   readonly n: number;
   readonly text: string;
-  /** The step's pointer to its file, as the chat app reads it and as the coding agent's file says it. */
   readonly pointer?: { readonly chat: string; readonly coding: string };
-  /** A step that runs long: its first lines, then how many more. */
   readonly long?: { readonly text: string; readonly more: string };
   readonly focus?: boolean;
   readonly last?: boolean;
 }
 
-/** A step's pointer to its file, in each view. */
 function Pointer({ pointer }: { readonly pointer: NonNullable<StepCellProps['pointer']> }) {
   return (
     <>
@@ -35,7 +27,6 @@ function Pointer({ pointer }: { readonly pointer: NonNullable<StepCellProps['poi
   );
 }
 
-/** A long step's first lines, then how many more. */
 function LongLines({ long }: { readonly long: NonNullable<StepCellProps['long']> }) {
   return (
     <div className="relative flex flex-col gap-1 pr-5">
@@ -51,7 +42,6 @@ function LongLines({ long }: { readonly long: NonNullable<StepCellProps['long']>
   );
 }
 
-/** The step's lit marks and classes: step 4 fills `primary` and is marked for the drawer and browser checks. */
 function rowLook(focus: boolean, last: boolean) {
   const tone = focus ? cn(styles.lit, 'bg-primary text-primary-foreground') : undefined;
   return cn('flex flex-col gap-1 rounded-md px-2 py-2', !focus && !last && styles.rule, tone);
@@ -71,7 +61,6 @@ function stepLook(focus: boolean, last: boolean) {
   };
 }
 
-/** One step on the procedure card; the card's sleeve shows at both sides, its foot under the last step. */
 export function StepCell({ n, text, pointer, long, focus, last }: StepCellProps) {
   const look = stepLook(focus === true, last === true);
   return (
@@ -96,7 +85,6 @@ export interface CardHeadProps {
   readonly file: string;
 }
 
-/** The card's head inside the sleeve: what the card is and its title, or its folder and `SKILL.md` for a coding agent. */
 export function CardHead({ label, title, root, file }: CardHeadProps) {
   return (
     <div
@@ -125,7 +113,6 @@ export function CardHead({ label, title, root, file }: CardHeadProps) {
   );
 }
 
-/** The arrow from a step to its file: dashed, or solid `primary` for the lit step, with its head. Wide screens only. */
 export function StepArrow({ focal = false, long = false }: { readonly focal?: boolean; readonly long?: boolean }) {
   return (
     <span
@@ -148,7 +135,6 @@ export function StepArrow({ focal = false, long = false }: { readonly focal?: bo
   );
 }
 
-/** The trail the species guide leaves as it slides out of the sleeve: two pale streaks. Wide screens only. */
 export function SlideTrail() {
   return (
     <span
@@ -162,7 +148,6 @@ export function SlideTrail() {
   );
 }
 
-/** One of the two rules for long files: a white card. */
 export function SkillNote({ children, ...props }: { readonly children: ReactNode; readonly 'data-target'?: string }) {
   return (
     <p {...props} className="rounded-lg bg-card p-4 text-body text-card-foreground shadow-md">
@@ -171,7 +156,6 @@ export function SkillNote({ children, ...props }: { readonly children: ReactNode
   );
 }
 
-/** The skill's folder in the Coding agent view, every file one level under SKILL.md. Paths are code. */
 export function SkillTree({
   label,
   root,

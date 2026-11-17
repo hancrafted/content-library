@@ -1,12 +1,4 @@
-/*
- * "The model changes, the skill doesn't" (Option 24a): each dive's tones, the cables, yesterday's ghost and the gap
- * bracket. The tones are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets
- * `dive-art.tsx` lifts; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32).
- * `--primary` marks the one gap to look at.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .art {
   --glow: oklch(0.99 0.03 200);
   --glow-soft: oklch(0.95 0.07 205 / 0.55);

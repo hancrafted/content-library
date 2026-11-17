@@ -1,10 +1,5 @@
-/** One facet: the token that fills it, and its outline. */
 export type Facet = readonly [tone: string, d: string];
 
-/**
- * The Spec's sea for Option 23b, 900 by 780 (feedback 3, decision 46): the Midnight edge's lit and plain facets above,
- * the Abyss below, the marine snow, then the faceted seabed and its rocks in the Spec's own order, back to front.
- */
 export const SEA: readonly Facet[] = [
   [
     'sea-midnight',

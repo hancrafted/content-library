@@ -12,14 +12,11 @@ import { PANEL_ART } from './room-facets';
 
 const FLOOR = PANEL_ART.floor;
 const DESK_TOP = FLOOR - CONSOLE_DESK_HEIGHT;
-/** The robot on its cable, 2 m above the seabed, at the Spec's size. */
 const ROBOT = { x: 150, y: 110, scale: 1.25 } as const;
-/** The written card on the evening console: the Spec drew it on a lower desk, so it drops onto ours. */
 const CARD_DROP = -6;
 
 const viewBox = `0 0 ${PANEL_ART.width} ${PANEL_ART.height}`;
 
-/** Panel 1: this morning's run went well, the robot holding 2 m over the seabed, lamp down. */
 export function RunPicture({ label, depth }: { readonly label: string; readonly depth: string }) {
   return (
     <div className="relative">
@@ -44,15 +41,9 @@ export type RoomPanel = 'interview' | 'writing' | 'next-morning';
 
 interface Figure {
   readonly x: number;
-  /** Faces left, towards the captain. */
   readonly flip?: boolean;
 }
 
-/**
- * Each room panel's hour and cast, as Spec Option 10b stands them: in the afternoon the pilot turns from his console
- * to ask the captain why; at dusk he writes the card alone at his console; the next morning the card hangs on the wall
- * by the clock and he greets the captain as a stranger.
- */
 const ROOM_PANELS: Record<
   RoomPanel,
   {
@@ -92,11 +83,9 @@ const ROOM_PANELS: Record<
 interface RoomPictureProps {
   readonly panel: RoomPanel;
   readonly label: string;
-  /** What the pilot says, in the next morning's panel only. */
   readonly greeting?: string;
 }
 
-/** The console and cast of one room panel; the pilot greets the captain in his shared bubble the next morning. */
 function RoomCast({ panel, greeting }: { readonly panel: RoomPanel; readonly greeting?: string }) {
   const own = ROOM_PANELS[panel];
   return (
@@ -122,11 +111,6 @@ function RoomCast({ panel, greeting }: { readonly panel: RoomPanel; readonly gre
   );
 }
 
-/**
- * Panels 2 to 4, in the control room. The room is this Slide's own drawing (`RoomArt`, Spec Option 10b); the people
- * and the console are the shared figures. The next morning's greeting is the pilot's shared speech bubble
- * (`greeting.pure.ts`, decision 53).
- */
 export function RoomPicture({ panel, label, greeting }: RoomPictureProps) {
   const own = ROOM_PANELS[panel];
   return (

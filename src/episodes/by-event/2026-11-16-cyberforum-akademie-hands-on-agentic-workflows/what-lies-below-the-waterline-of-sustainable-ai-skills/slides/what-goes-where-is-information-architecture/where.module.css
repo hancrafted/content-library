@@ -1,11 +1,5 @@
-/*
- * Slide token file of "What context goes where" (FE-011 §2): the control room's wall and floor, the papers on it and
- * the note that travels, in the tones of Spec Option 14a (feedback 3, decision 46), each with its dark value from the
- * Option. `primary` marks only the one focal thing, the verdict line (in slide.tsx); no meaning colour on scenery.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .room {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.965 0.01 88);
@@ -46,7 +40,6 @@
   --note-shade: oklch(0.7 0.12 88);
 }
 
-/* The wall's and floor's facets: each stroked in its own fill, so no hairline shows between neighbours. */
 .facets [data-tone] {
   stroke-width: 0.6;
   stroke-linejoin: round;

@@ -9,13 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { sharingItSection } from './sharing-it';
 
-/*
- * Section 7 of "What lies below the waterline of sustainable AI skills", "Sharing it", as the approved Spec gives it:
- * Slides 20 to 22 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context marker
- * wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one interface the
- * page reads a Slide by: localized on the shared Slide header.
- */
-
 const ENTERPRISE = 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/enterprise';
 const KCS = 'https://library.serviceinnovation.org/KCS/KCS_v6/KCS_v6_Practices_Guide/030/040/010/030';
 const SPECIFICATION = 'https://agentskills.io/specification';
@@ -45,7 +38,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The Slide as the page renders it: the shared Slide header, its caption and caption marker, above the Scene. */
 function slideOf(slug: string) {
   const { header, content } = localized(slug);
   if (header === undefined) throw new Error(`Slide "${slug}" has no shared header.`);
@@ -53,7 +45,6 @@ function slideOf(slug: string) {
   return load(renderToStaticMarkup(createElement(Fragment, null, heading, content)));
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
   'shared-skills-are-knowledge-articles',
   'who-owns-the-shared-skill-library',

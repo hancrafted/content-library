@@ -18,14 +18,12 @@ const MOLLICK = {
 };
 const CLAUDE_MEMORY = { slug: 'anthropic-claude-code-memory', url: 'https://code.claude.com/docs/en/memory' };
 
-/** The three mornings, in order: only the mug count on the console changes. */
 const MORNINGS = [
   { day: 'd1', mugs: 1 },
   { day: 'd2', mugs: 2 },
   { day: 'd3', mugs: 3 },
 ] as const;
 
-/** The panels' places in the strip's 12 columns, wide enough: photo and two mornings, then the third and the question. */
 const SPAN = {
   photo: '@5xl:col-span-4',
   d1: '@5xl:col-span-4',

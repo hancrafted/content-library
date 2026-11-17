@@ -30,7 +30,6 @@ const GPT_41 = {
 };
 const SYCOPHANCY = { slug: 'sharma-sycophancy', url: 'https://arxiv.org/abs/2310.13548' };
 
-/** The skill's name, as Slide 3 gives it: code, not translated. */
 const SKILL_NAME = 'collect-sediment-sample';
 const PANELS = ['first', 'second', 'third'] as const;
 const STEPS = ['hold', 'camera', 'lower', 'identify', 'seal', 'label'] as const;
@@ -38,7 +37,6 @@ const STEPS = ['hold', 'camera', 'lower', 'identify', 'seal', 'label'] as const;
 interface PanelProps {
   readonly heading: string;
   readonly focal?: boolean;
-  /** The morning's picture: with the crew's speech in the Chat app view, without it in the Coding agent view. */
   readonly picture: { readonly chat: ReactNode; readonly coding: ReactNode };
   readonly chip: string;
   readonly chat: ReactNode;
@@ -90,13 +88,6 @@ function ComicPanel({ heading, focal, picture, chip, chat, coding }: PanelProps)
   );
 }
 
-/**
- * "The third time is the signal" (picked Option 8a): a callback to the first Slide's comic, three mornings in the
- * control room, each headed by what happens with the AI, the first Slide's empty card filling until the third panel
- * holds it written with its green good-result line. Keeps `master: grid-1x3` as three comic panels with a card row,
- * and `motion: local`, the one emphasis motion of the card filling line by line. In the Coding agent view the
- * speech gives way to a session chip and the cards to two sessions that start fresh and the new `SKILL.md`.
- */
 export const theThirdTimeIsTheSignal = slide({
   slug: 'the-third-time-is-the-signal',
   messages: { en, de },

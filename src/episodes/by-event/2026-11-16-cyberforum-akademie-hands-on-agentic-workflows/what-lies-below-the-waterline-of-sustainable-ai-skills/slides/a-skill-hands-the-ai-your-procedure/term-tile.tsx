@@ -3,19 +3,12 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 export interface TermTileProps {
-  /** The AI term, numbered as its callout: `1 · Skill`. */
   readonly term: string;
-  /** The skill's tile is the focal one, bordered and titled in `primary`. */
   readonly focal?: boolean;
-  /** What the tile shows in the Chat app view, and in the Coding agent view. */
   readonly chat: ReactNode;
   readonly code: ReactNode;
 }
 
-/**
- * One of the three things to remember (Spec Option 2a): the numbered AI term, then the term as a chat app shows it or
- * as a coding agent's file holds it, in the page's view. A `focus-group__item`, so Han can point at each in turn.
- */
 export function TermTile({ term, focal = false, chat, code }: TermTileProps) {
   return (
     <li
@@ -46,7 +39,6 @@ export function CodeFile({ path, text }: { readonly path: string; readonly text:
   );
 }
 
-/** The quiet line under a tile's example: what the term is for. */
 export function Gloss({ children }: { readonly children: ReactNode }) {
   return <p className="text-caption text-muted-foreground">{children}</p>;
 }

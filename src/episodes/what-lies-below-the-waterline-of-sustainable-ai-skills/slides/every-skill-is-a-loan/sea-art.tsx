@@ -4,17 +4,8 @@ import type { CSSProperties } from 'react';
 import styles from './loan.module.css';
 import { SEA, type Facet } from './sea-facets';
 
-/*
- * The drawing lifted from the approved Spec's Option 23b (feedback 3, decision 46): the faceted water from the Midnight
- * edge down into the Abyss, its marine snow and the faceted seabed with its rocks, each clamp's faceted plate and the
- * prop it holds, and the stack's blocks. Facets keep the Spec's own numbers; their tones are this Slide's tokens in
- * `loan.module.css`. The robot stays the shared figure; the statement's and the stack's words stay real text. The
- * Spec's flat paper shadows (`drop`) are left out: the Episode draws no drop shadows (feedback 2, decision 19).
- */
-
 export type ClampIcon = 'written' | 'sites' | 'arm' | 'overlap';
 
-/** Each clamp's faceted hexagon plate, lit from the upper left, in the clamp's own 56 by 56 units. */
 const PLATE: readonly Facet[] = [
   ['plate-lit', 'M28 28L28 1L51 15Z'],
   ['plate', 'M28 28L51 15L51 42Z'],
@@ -23,7 +14,6 @@ const PLATE: readonly Facet[] = [
   ['plate-lit', 'M28 28L5 15L28 1Z'],
 ];
 
-/** What each clamp holds: the skill's card, the site list struck through, the robot's arm, two overlapping cards. */
 const PROPS: Record<ClampIcon, readonly Facet[]> = {
   written: [
     ['tab-a', 'M29 8L38 8L38 13L29 13Z'],
@@ -63,7 +53,6 @@ const PROPS: Record<ClampIcon, readonly Facet[]> = {
   ],
 };
 
-/** One faceted block of the stack, 102 by 42 with its top and side; the writing slab is the same block, 20 high. */
 const BLOCK: readonly Facet[] = [
   ['block-lit', 'M0 6L92 6L0 42Z'],
   ['block', 'M92 6L92 42L0 42Z'],
@@ -77,7 +66,6 @@ const SLAB: readonly Facet[] = [
   ['glint', 'M0 6L10 0L102 0L92 6Z'],
 ];
 
-/** The water, snow and seabed behind the whole stage, stretched to it as the Spec does. */
 export function SeaArt() {
   return (
     <svg
@@ -92,7 +80,6 @@ export function SeaArt() {
   );
 }
 
-/** One clamp on the robot's cable: its faceted plate and the prop for its entry. */
 export function ClampArt({ icon, label }: { readonly icon: ClampIcon; readonly label: string }) {
   return (
     <svg viewBox="0 0 56 56" role="img" aria-label={label} className={cn(styles.art, 'relative z-10 size-14 shrink-0')}>
@@ -102,7 +89,6 @@ export function ClampArt({ icon, label }: { readonly icon: ClampIcon; readonly l
   );
 }
 
-/** A block of the stack, or the thin writing slab. */
 export function BlockArt({
   slab,
   className,
