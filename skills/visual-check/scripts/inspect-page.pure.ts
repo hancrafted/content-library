@@ -7,11 +7,11 @@ export const MAX_EDGE = 1568;
 export const mainCheckout = (commonDir: string, cwd: string): string => path.dirname(path.resolve(cwd, commonDir));
 
 export type Theme = 'light' | 'dark';
+export type ThemeOrBrowserDefault = Theme | null;
 
 export interface InspectArgs {
   urls: string[];
-  /** One entry per requested theme, or [null] for the browser default. */
-  themes: (Theme | null)[];
+  themes: ThemeOrBrowserDefault[];
   width: number;
   height: number;
   clip?: string;
@@ -24,7 +24,7 @@ export interface InspectArgs {
 
 export interface Job {
   url: string;
-  theme: Theme | null;
+  theme: ThemeOrBrowserDefault;
   out?: string;
 }
 
@@ -53,14 +53,14 @@ function collectFlags(argv: readonly string[]): { raw: RawFlags; stop: boolean }
   return { raw, stop };
 }
 
-function parseThemes(values: string[] = []): (Theme | null)[] | { error: string } {
+function parseThemes(values: string[] = []): ThemeOrBrowserDefault[] | { error: string } {
   const names = values.flatMap((value) => value.split(',')).filter(Boolean);
   const bad = names.find((name) => name !== 'light' && name !== 'dark');
   if (bad) return { error: `--theme must be light or dark, got ${bad}` };
   return names.length > 0 ? (names as Theme[]) : [null];
 }
 
-function buildArgs(raw: RawFlags, themes: (Theme | null)[], stop: boolean): InspectArgs {
+function buildArgs(raw: RawFlags, themes: ThemeOrBrowserDefault[], stop: boolean): InspectArgs {
   const last = (flag: string, fallback?: string): string | undefined => raw[flag]?.at(-1) ?? fallback;
   return {
     urls: raw['--url'] ?? [],
@@ -85,7 +85,7 @@ export function parseArgs(argv: readonly string[]): InspectArgs | { error: strin
   return buildArgs(flags.raw, themes, flags.stop);
 }
 
-export function expandJobs(urls: readonly string[], themes: readonly (Theme | null)[]): Job[] {
+export function expandJobs(urls: readonly string[], themes: readonly ThemeOrBrowserDefault[]): Job[] {
   return urls.flatMap((url) => themes.map((theme) => ({ url, theme })));
 }
 
@@ -120,10 +120,6 @@ export function isIdle(lastUse: number, now: number): boolean {
   return now - lastUse >= IDLE_MILLISECONDS;
 }
 
-/**
- * Chrome's launch flags. A Linux CI runner (Ubuntu 24.04) forbids the unprivileged user namespace Chrome's sandbox
- * needs, so Chrome exits before it writes its debugging port; there the sandbox goes, as Playwright's own launch does.
- */
 export function chromeFlags(profile: string, host: { platform: string; ci: boolean }): string[] {
   const flags = ['--remote-debugging-port=0', `--user-data-dir=${profile}`, '--hide-scrollbars', 'about:blank'];
   return host.platform === 'linux' && host.ci ? ['--no-sandbox', ...flags] : flags;
