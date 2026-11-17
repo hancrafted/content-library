@@ -23,21 +23,19 @@ const BOX: Record<NodeState, string> = {
   done: 'fill-(--success) stroke-(--success)',
 };
 
-/** The node label drawn smaller than the caption role, by scaling the text: it must fit a node 44 units wide. */
-const LABEL_SCALE = 0.6;
+const FITS_44_UNIT_NODE_LABEL_SCALE_RATIO = 0.6;
 
 function AgentNode({ node, state, label }: { readonly node: Node; readonly state: NodeState; readonly label: string }) {
   const [x, y] = AT[node];
   return (
     <g data-node={node} data-state={state} transform={`translate(${x - 22},${y - 14})`}>
-      {/* An opaque card under the box, so the edges never show through an active agent's translucent tone. */}
       <rect width="44" height="28" rx="6" className="fill-card" />
       <rect width="44" height="28" rx="6" strokeWidth="1.5" className={`transition-colors ${BOX[state]}`} />
       {state === 'done' ? (
         <path d="M15 14l5 5 9-10" className="fill-none stroke-background" strokeWidth="2.5" />
       ) : (
         <text
-          transform={`translate(22 14) scale(${LABEL_SCALE})`}
+          transform={`translate(22 14) scale(${FITS_44_UNIT_NODE_LABEL_SCALE_RATIO})`}
           textAnchor="middle"
           dominantBaseline="central"
           className="fill-foreground text-caption font-semibold"

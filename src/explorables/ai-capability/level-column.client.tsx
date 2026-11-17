@@ -101,10 +101,6 @@ function Card(props: LevelColumnProps) {
   );
 }
 
-/**
- * One Level's column: its dot and years on the rail, its card, the rows the toolbar adds, its scene and its wire to the
- * model. Memoised, so a hover redraws only the columns whose `on` or `dimmed` flipped, and the playing one.
- */
 export const LevelColumn = memo(function LevelColumn(props: LevelColumnProps) {
   const { level, words } = props;
   return (

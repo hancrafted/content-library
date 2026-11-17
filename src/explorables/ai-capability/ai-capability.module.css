@@ -13,12 +13,6 @@
   --tone: var(--ai);
 }
 
-/*
- * Narrow container (a phone, a 9:16 Short): the Levels are a carousel, one card per Level, its rows stacked inside.
- * Wide container: four columns that share rows through a subgrid, so each row's cards, the scenes and the wires end
- * level; `--rows` is the column's row count, which grows with each row the toolbar adds. The container decides, not the
- * window: a Slide on a desktop can be narrower than the browser.
- */
 .columns {
   display: flex;
   gap: 0.75rem;
@@ -76,7 +70,6 @@
   .narrow {
     display: none;
   }
-  /* The column keeps an empty cell for a layer row, so its subgrid rows stay in step; the wide row draws over it. */
   .columns .slices > * {
     display: none;
   }
@@ -134,8 +127,6 @@
   transform: rotateY(180deg);
 }
 
-/* A message on the wire: down to the model or back up, gone once it arrives. Longhands only: the CSS-module compiler
- * reads a shorthand without a name as `animation: none`. */
 .wire {
   --wire: 1.75rem;
   height: var(--wire);
@@ -391,11 +382,6 @@
   }
 }
 
-/*
- * The two layer rows, AI disciplines and Oversight: one card per item, one lane each, on eight half-Level tracks, so a
- * span may start or end mid-Level. `--hue` is the card's tone, a global token; its tint fades along the card with the
- * strength stops the view sets inline as a gradient of `--hue` over `--card`.
- */
 .info {
   --hue: var(--info);
 }
