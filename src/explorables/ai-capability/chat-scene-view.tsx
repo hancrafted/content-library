@@ -3,7 +3,6 @@ import styles from './ai-capability.module.css';
 import type { SceneWords } from './ai-capability.types';
 import { AGENT_LOOPS, type Frame, type Message } from './scene-frames.pure';
 
-/** The tool an agent reached for, by the word key that names it: a globe for the web, a lens for a search. */
 const TOOL_ICONS: Record<string, ReactNode> = {
   tool1: (
     <svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="2" aria-hidden="true">
@@ -30,7 +29,6 @@ function loopLabel(loop: Frame['loop'], words: SceneWords): string | null {
   return loop === 'done' ? words.loopDone : `${words.loop} ${loop}/${AGENT_LOOPS}`;
 }
 
-/** The window's title bar: three dots on the left, an agent's loop counter on the right. */
 function ChatHeader({ loop }: { readonly loop: string | null }) {
   return (
     <div className="flex h-6 shrink-0 items-center justify-between px-2">
@@ -48,10 +46,6 @@ function ChatHeader({ loop }: { readonly loop: string | null }) {
   );
 }
 
-/**
- * A chat window (a pure view): the person's message, the tools an agent reached for and the model's answer, each line
- * popping in as its frame shows it; on an agent, the loop counter in the corner.
- */
 export function ChatSceneView({ frame, words }: { readonly frame: Frame; readonly words: SceneWords }) {
   const loop = loopLabel(frame.loop, words);
   return (

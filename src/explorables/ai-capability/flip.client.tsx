@@ -4,10 +4,6 @@ import { useMotion } from '@/shared/hooks/use-motion';
 import type { ReactNode } from 'react';
 import styles from './ai-capability.module.css';
 
-/**
- * One face: what it shows, and over it the stretched button that turns the card, so no positioned content covers the
- * button; a link, a marker or a gloss on the face sits above it (`z-10`). Inert while it faces away.
- */
 function Face(props: {
   readonly away: boolean;
   readonly back?: boolean;
@@ -30,10 +26,6 @@ function Face(props: {
   );
 }
 
-/**
- * A card that turns over: the front faces the reader until the stretched button turns it, the back shows what the front
- * names. The hidden face is inert, so its link is never reached by Tab while it faces away. The parent owns `flipped`.
- */
 export function Flip(props: {
   readonly flipped: boolean;
   readonly onFlip: () => void;

@@ -6,7 +6,6 @@ import { TitleSlide } from './title-slide';
 
 const TEXT = { title: 'Page template', caption: 'The smallest Episode.' };
 
-/** The Title slide's static HTML on the shared header, with or without an authored hero Scene. */
 function render(hero?: string) {
   const props = {
     ...TEXT,

@@ -4,7 +4,6 @@ import type { EpisodeCard } from '@/episodes/components/episode-card/episode-car
 import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/** A broad lead beside readable companion cards; it fills the row when alone. */
 function placement(isLead: boolean, sideCount: number): string {
   if (!isLead) return sideCount === 1 ? 'md:col-span-2 lg:col-span-1' : '';
   if (sideCount === 0) return 'md:col-span-2';
@@ -15,15 +14,9 @@ interface SpotlightProps {
   cards: readonly EpisodeCard[];
   locale: Locale;
   labels: CardLabels;
-  /** The cards' heading level, one below the heading the Spotlight sits under. */
   headingLevel: CardHeadingLevel;
 }
 
-/**
- * The hottest published Episodes as an asymmetric bento: a lead card and up to
- * two beside it. Static, never rotating; an upcoming Episode never reaches it,
- * because the selection only takes published cards. DOM order is reading order.
- */
 export function EpisodeSpotlight({ cards, locale, labels, headingLevel }: SpotlightProps) {
   const { lead, side } = spotlightOf(cards);
   if (lead === null) return null;

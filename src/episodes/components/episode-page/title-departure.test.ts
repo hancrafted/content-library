@@ -2,7 +2,6 @@ import { createSurfaceClock } from '@/shared/lib/surface-clock';
 import { describe, expect, it } from 'vitest';
 import { publishTitleDeparture } from './title-departure';
 
-/** The slice of an element the signals touch: its inline style and its attributes. */
 function fakeElement(hosts: readonly HTMLElement[] = []) {
   const style = new Map<string, string>();
   const attributes = new Map<string, string>();

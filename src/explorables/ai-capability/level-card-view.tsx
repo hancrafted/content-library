@@ -2,7 +2,6 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import type { ReactNode } from 'react';
 import type { LevelWords } from './ai-capability.types';
 
-/** The labels both faces of every card share. */
 export interface CardLabels {
   readonly definition: string;
   readonly flip: string;
@@ -10,7 +9,6 @@ export interface CardLabels {
   readonly newTab: string;
 }
 
-/** The turn icon beside the hint: the card turns over on a click. */
 export const TURN = (
   <svg viewBox="0 0 24 24" className="size-3.5 fill-none stroke-current" strokeWidth="2" aria-hidden="true">
     <path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -20,10 +18,6 @@ export const TURN = (
 const FRONT =
   'flex h-full flex-col gap-1 rounded-2xl border px-4 py-3 transition-[box-shadow,border-color] duration-300';
 
-/**
- * A card's front (a pure view): the stage's name, its one line and the hint that it turns, with a Slide's marker on top.
- * Lit, it takes its colour and a shadow (its column lifts the card); an emerging stage is drawn dashed, its shape not settled yet.
- */
 export function CardFrontView(props: {
   readonly words: LevelWords;
   readonly labels: CardLabels;
@@ -46,13 +40,8 @@ export function CardFrontView(props: {
   );
 }
 
-/** What a card's back shows: a definition and its source. */
 export type Defined = Pick<LevelWords, 'definition' | 'sourceLabel' | 'sourceUrl'>;
 
-/**
- * A card's back (a pure view): the definition and the source it is taken from, opening in a new tab. A Slide's card
- * marker sits on top, as on the front, and its source marker beside the source line.
- */
 export function CardBackView(props: {
   readonly words: Defined;
   readonly labels: CardLabels;

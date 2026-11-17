@@ -1,9 +1,4 @@
-/*
- * The control registry (FE-012 §4.4): one typed definition per toolbar control, in code. A Slide's Preset `controls`
- * map holds id -> overrides, laid over the definition key by key, as the context window's `context-controls.pure.ts`
- * does. The pill toolbar draws them in registry order: the Workflow pills, a separator, then the icon buttons.
- */
-
+// decision: FE-012 §4.4
 export type ControlId =
   | 'picker'
   | 'view'
@@ -18,9 +13,7 @@ export type ControlId =
 
 export interface ControlDef {
   readonly id: ControlId;
-  /** `pills` is the Workflow picker, `segmented` the view control, `switch` demo mode and the `</>` and Debug icon toggles, `action` an icon button that does one thing. */
   readonly type: 'pills' | 'segmented' | 'switch' | 'action';
-  /** The keys of the visual's labels the control reads: its accessible name and its tooltip (`UiWords` keys). */
   readonly label:
     | 'workflow'
     | 'view'
@@ -43,7 +36,6 @@ export interface ControlDef {
     | 'progressLoad'
     | 'download'
     | 'upload';
-  /** Shown unless the Preset says otherwise. */
   readonly show: boolean;
 }
 
@@ -60,7 +52,6 @@ export const CONTROLS: readonly ControlDef[] = [
   { id: 'reset', type: 'action', label: 'reset', tip: 'resetTip', show: true },
 ];
 
-/** What a Preset may say about one control. */
 export interface ControlSetting {
   readonly show?: boolean;
 }
@@ -68,19 +59,16 @@ export type ControlMap = Readonly<Partial<Record<ControlId, ControlSetting>>>;
 
 const BY_ID = new Map<ControlId, ControlDef>(CONTROLS.map((def) => [def.id, def]));
 
-/** The registry's definition of a control, whatever a Preset says about it. */
 export function defOf(id: ControlId): ControlDef {
   const def = BY_ID.get(id);
   if (!def) throw new Error(`human in the loop: unknown control "${id}"`);
   return def;
 }
 
-/** A control as the Preset sets it: the registry's definition, then the Preset's own overrides. */
 export const controlOf = (controls: ControlMap, id: ControlId): ControlDef => ({ ...defOf(id), ...controls[id] });
 
 const PRACTICE = new Set<ControlId>(['level', 'demo', 'reset', 'debug', 'progressDownload', 'progressUpload']);
 
-/** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the `</>` toggle, demo mode, Debug, saving and loading progress, and Reset. */
 export function offers(controls: ControlMap, id: ControlId, readonly = false): boolean {
   return controlOf(controls, id).show && !(readonly && PRACTICE.has(id));
 }

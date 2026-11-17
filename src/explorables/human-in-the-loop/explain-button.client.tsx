@@ -4,14 +4,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import { BlockedCopy } from './blocked-copy.client';
 import type { StepKit } from './step-kit.types';
 
-/** Copy explanation prompt: the prompt wrapped in a request to explain it. It never leads. */
 export function ExplainButton({
   kit,
   blocked = false,
   onCopy,
 }: {
   kit: StepKit;
-  /** A blank field of the step is still empty: the button is disabled. */
   blocked?: boolean;
   onCopy: () => Promise<boolean>;
 }) {

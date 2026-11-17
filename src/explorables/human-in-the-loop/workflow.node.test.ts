@@ -3,8 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderPrompt } from './workflow.node';
 
 const fixture = readFileSync(new URL('./workflow.fixture.en.yml', import.meta.url), 'utf8');
-/** A rendered prompt that holds `part`, so a result of problems fails the assertion instead of reading as empty text. */
-const holding = (part: string) => ({ text: expect.stringContaining(part) as unknown });
+const renderedTextContaining = (part: string) => ({ text: expect.stringContaining(part) as unknown });
 
 describe('success cases', () => {
   it("renders a job's demo prompt with its slots filled, its demo limit and its template fenced", () => {
@@ -51,8 +50,8 @@ describe('success cases', () => {
     // ACT
     const result = renderPrompt(fixture, { job: 'ask', step: 'review', values: { brief_result: brief } });
     // ASSERT
-    expect(result).toMatchObject(holding(check));
-    expect(result).toMatchObject(holding(input));
+    expect(result).toMatchObject(renderedTextContaining(check));
+    expect(result).toMatchObject(renderedTextContaining(input));
   });
 
   it("fills a job's same-stage input from the job it needs", () => {
@@ -61,7 +60,7 @@ describe('success cases', () => {
     // ACT
     const result = renderPrompt(fixture, { job: 'finish', values: { ranking } });
     // ASSERT
-    expect(result).toMatchObject(holding(ranking));
+    expect(result).toMatchObject(renderedTextContaining(ranking));
   });
 });
 
@@ -104,9 +103,9 @@ describe('edge cases', () => {
     // ACT
     const result = renderPrompt(fixture, { job: 'ask', demo: false, values: { idea: 'x' } });
     // ASSERT
-    expect(result).toMatchObject(holding(limit));
-    expect(result).toMatchObject(holding(full));
-    expect(result).not.toMatchObject(holding(demo));
+    expect(result).toMatchObject(renderedTextContaining(limit));
+    expect(result).toMatchObject(renderedTextContaining(full));
+    expect(result).not.toMatchObject(renderedTextContaining(demo));
   });
 
   it("fills a round's do prompt with its item and its own result of the job it needs", () => {
@@ -116,8 +115,8 @@ describe('edge cases', () => {
     // ACT
     const result = renderPrompt(fixture, { job: 'judge', round, values: { note_2: note } });
     // ASSERT
-    expect(result).toMatchObject(holding(round.item));
-    expect(result).toMatchObject(holding(note));
+    expect(result).toMatchObject(renderedTextContaining(round.item));
+    expect(result).toMatchObject(renderedTextContaining(note));
   });
 
   it("fills a round's review with the shared earlier result and the round's own result", () => {
@@ -133,8 +132,8 @@ describe('edge cases', () => {
       values: { brief, 'verdict_result#2': verdict },
     });
     // ASSERT
-    expect(result).toMatchObject(holding(brief));
-    expect(result).toMatchObject(holding(verdict));
+    expect(result).toMatchObject(renderedTextContaining(brief));
+    expect(result).toMatchObject(renderedTextContaining(verdict));
   });
 
   it('expands a multiple slot into one fenced block per round', () => {
@@ -143,7 +142,7 @@ describe('edge cases', () => {
     // ACT
     const result = renderPrompt(fixture, { job: 'rank', values: { note_1: notes[0]!, note_2: notes[1]! } });
     // ASSERT
-    expect(result).toMatchObject(holding(notes[0]!));
-    expect(result).toMatchObject(holding(notes[1]!));
+    expect(result).toMatchObject(renderedTextContaining(notes[0]!));
+    expect(result).toMatchObject(renderedTextContaining(notes[1]!));
   });
 });

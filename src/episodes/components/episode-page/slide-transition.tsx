@@ -11,10 +11,8 @@ import { TransitionBubbles } from './transition-bubbles.client';
 
 const TARGET_SURFACE = 'var(--slide-transition-target-surface)';
 
-/** Stable server host, outside SlideMount and inside the outgoing Slide's identity and local layers. */
 export function SlideTransition({ edge }: { edge: ResolvedSlideTransition }) {
   const { declaration } = edge;
-  // Slide anchors are kebab-case; the separator makes the ordered pair unambiguous.
   const filterId = `ink-edge-${edge.outgoing}_${edge.incoming}`;
   return (
     <SlideIdentity id={edge.outgoing}>
@@ -34,7 +32,6 @@ export function SlideTransition({ edge }: { edge: ResolvedSlideTransition }) {
   );
 }
 
-/** The effect inside the destination scope: the Iceberg style's filter-free wave front, or a filtered ink. */
 function EdgeEffect({
   effect,
   filterId,

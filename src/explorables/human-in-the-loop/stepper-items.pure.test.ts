@@ -16,7 +16,6 @@ const allItemsFor = (level: 'simple' | 'technical', results: Record<string, stri
   const run = runOf(loaded.file, { results, demo }).stages.find((each) => each.id === EACH)!;
   return itemsOf(stage, run);
 };
-/** The items of the stage's first job, `look`; the stage's other job, `judge`, plays each round after it. */
 const itemsFor = (level: 'simple' | 'technical', results: Record<string, string>, demo = true) =>
   allItemsFor(level, results, demo).filter((item) => item.job.id === 'look');
 

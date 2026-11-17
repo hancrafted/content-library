@@ -47,7 +47,6 @@ const MIXED: EpisodeCard[] = [
   card('u2', { status: 'upcoming', format: { id: 'short', label: 'Short' } }),
 ];
 
-/** Cards that differ in one searchable field each, so a query names the field it reaches. */
 const SEARCHABLE: EpisodeCard[] = [
   card('by-title', { title: 'Why sales never waits' }),
   card('by-caption', { caption: 'Revenue arrives months after the costs' }),

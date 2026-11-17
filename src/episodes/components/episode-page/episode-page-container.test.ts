@@ -19,17 +19,11 @@ import {
 } from './episode-page-container.pure';
 import { recordContent } from './record-content';
 
-/*
- * The table of contents folds the Slides `recordContent` returns, so these
- * tests build real Slides whose Voice scripts read for whole minutes: 140
- * English words a minute.
- */
 const EPISODE = {
   en: { title: 'Page template', caption: 'c', description: 'd' },
   de: { title: 'Seitenvorlage', caption: 'c', description: 'd' },
 };
 
-/** A Voice script one segment long that reads for `minutes` in English. */
 function scriptOf(minutes: number) {
   const script = Array.from({ length: minutes * 140 }, () => 'word').join(' ');
   return { voiceScript: { segments: { s: { title: 't', keywords: 'k', script } } } };
@@ -55,13 +49,11 @@ function untitled(slug: string, minutes: number): Slide {
   });
 }
 
-/** The site-wide translator stand-in: the only string `recordContent` reads from it is the Context reference label. */
 async function translatorOf(): Promise<RuntimeTranslator> {
   const read = () => 'opens speaker note';
   return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
 }
 
-/** The Slides of an Episode of these Sections, as the container hands them to the table of contents. */
 async function slidesOf(sections: readonly Section[]) {
   return (
     await recordContent(episode({ slug: 'ai-token-economy', messages: EPISODE, sections }), 'en', {
@@ -149,11 +141,6 @@ describe('success cases', () => {
     expect(owned).toEqual(expected);
   });
 
-  /*
-   * A Section declares it has no section slide with a property on its array, which a spread, a `map` or a `slice` drops.
-   * The flag must survive each place the container walks a Section: the placement, the localized Slide, the table of
-   * contents and the Slide wrapper's size.
-   */
   describe('a Section without a section slide', () => {
     const tour = () =>
       withoutSectionSlide([titled('tour', 'Tour', 1), titled('first', 'First', 2), untitled('second', 3)]);
@@ -243,7 +230,6 @@ describe('edge cases', () => {
 
   it('widen the right inset on the very attribute the drawer sets when it sits beside the Slides', () => {
     // ARRANGE
-    // Tailwind needs the class written out, so the two sides are tied here.
     const prefix = `xl:data-[${DRAWER_BESIDE_ATTR.replace('data-', '')}=true]:`;
     // ACT
     const matching = INSET_CLASSES.split(/\s+/).filter((name) => name.startsWith(prefix));
@@ -277,7 +263,7 @@ describe('edge cases', () => {
     const expected = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:${tocReserveRem()}rem]`;
     // ACT
     const reserve = TOC_RESERVE_CLASS;
-    // ASSERT: 2rem header + 17rem * 9/16 frame + 1rem gap
+    // ASSERT
     expect(reserve).toBe(expected);
   });
 });

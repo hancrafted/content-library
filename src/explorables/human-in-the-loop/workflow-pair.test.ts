@@ -5,12 +5,7 @@ import { slugOf } from './workflow-foreach.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
-/*
- * FE-012-explorables §1.3: both files of a pair hold the same structure and only the words differ. The
- * structure is the stage, task and slot ids, each job's `needs`, `limits` and goals, a stage's summary, the slot modes and sample counts, the section count, purposes and modes, the
- * fan-out and the example counts; strings are ignored.
- */
-
+// decision: FE-012 §1.3
 const fileOf = (id: (typeof WORKFLOW_IDS)[number], locale: 'en' | 'de'): WorkflowFile => {
   const { file } = workflowFor(id, locale);
   if (!file) throw new Error(`${id} (${locale}) has no file`);
@@ -22,7 +17,6 @@ const count = (value: string | readonly string[] | undefined): number | undefine
 
 const sectionShape = (section: SectionDef) => [section.purpose, section.only, section.techniques ?? []];
 const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, slot.blank ?? false, count(slot.sample)];
-/** The second technical prompt of a task as structure: its skills and its sections, none when absent. */
 const thenShape = ({ then }: TaskDef) => then && { skills: then.skills, sections: then.sections.map(sectionShape) };
 const taskShape = (task: TaskDef) => ({
   id: task.id,
@@ -49,10 +43,6 @@ const taskShape = (task: TaskDef) => ({
   recommendedModel: task.recommendedModel,
 });
 
-/**
- * What a `foreach.over` points at, as structure: the output and which H2 of its template, by position. The slug is
- * a word of one language (`categories`, German `kategorien`), so only its place among the H2s must match.
- */
 const overShape = (file: WorkflowFile, over: string) => {
   const [output = '', slug = ''] = over.split('#');
   const key = file.stages.flatMap((stage) => stage.jobs).find((task) => task.output === output)?.template ?? '';
@@ -60,7 +50,6 @@ const overShape = (file: WorkflowFile, over: string) => {
   return [output, slugs.indexOf(slug)];
 };
 
-/** What must match across the pair. */
 const structureOf = (file: WorkflowFile) => ({
   id: file.id,
   description: Boolean(file.description),
@@ -168,7 +157,6 @@ describe('success cases', () => {
 });
 
 const EACH = WORKFLOW_IDS.flatMap((id) => (['en', 'de'] as const).map((locale) => [id, locale] as const));
-/** The tests that name the vacation Workflow's jobs. */
 const VACATION = EACH.filter(([id]) => id === 'vacation');
 const taskOf = (file: WorkflowFile, id: string): TaskDef => {
   const found = file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id);

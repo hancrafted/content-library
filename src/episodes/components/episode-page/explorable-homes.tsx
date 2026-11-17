@@ -6,10 +6,6 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
-/**
- * Tells every Explorable shown inside the page which Explorable pages it can link to, and in which words: the built
- * pages from the content store, less the page itself, so an Explorable page does not link to its own primary.
- */
 export async function ExplorableHomes({
   page,
   locale,

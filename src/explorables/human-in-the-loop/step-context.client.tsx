@@ -15,7 +15,6 @@ interface ContextProps {
   readonly lead?: boolean;
 }
 
-/** The inputs that fill the prompt: the plain ones, then the results of earlier steps folded away with their count. */
 export function Context({ own, earlier, slots, words, lead }: ContextProps) {
   return (
     <div data-part="context" className="flex min-w-0 flex-col gap-3">
