@@ -24,7 +24,6 @@ const ANTHROPIC = {
   url: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices',
 };
 
-/** The index board's eight cards, by skill folder, left to right and row by row; four near-twins among them. */
 const CARDS = [
   { folder: 'sample', twin: true },
   { folder: 'collect-water-sample', twin: false },
@@ -35,23 +34,14 @@ const CARDS = [
   { folder: 'log-dive', twin: false },
   { folder: 'collect-mud-sample', twin: true },
 ] as const;
-/** The wall's short list; its first line is lit and led to its card. */
 const WALL = ['collect-sediment-sample', 'film-transect', 'log-dive'] as const;
 const LIT = WALL[0];
-/** Vercel's pass rates: the skill by default, then with a line in AGENTS.md telling the agent to use it. */
 const PASS_RATES = [
   { slug: 'default', value: 53 },
   { slug: 'agents-md-line', value: 79 },
 ] as const;
-/** The naming rule's examples: the Episode's own skill folders. */
 const NAMES = ['collect-sediment-sample', 'film-transect', 'log-dive'] as const;
 
-/**
- * "More skills, harder choice" (Spec Option 13a): the index crowded with near-twins over a guessing pilot, and the
- * project brief on the wall whose short list settles it. Overrules `grid-1x2`: the index and the wall are two objects of
- * one room, then the two term cards, the evidence strip and the naming rule; keeps `motion: local`, the twins fading
- * back as the wall's first line lights and its leader draws, once.
- */
 export const moreSkillsHarderChoice = slide({
   slug: 'more-skills-harder-choice',
   messages: { en, de },

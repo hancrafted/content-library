@@ -1,13 +1,5 @@
-/*
- * The control room's own tones, lifted from Spec Option 20b (feedback 3, decision 46): the faceted wall and floor, the
- * porthole onto the Midnight water, the shelf of manuals, and the fleet manual's green covers, faceted page, binder
- * rings and lectern post (the post in steel, mixed from a neutral token). Raw colours live only here, each with
- * its dark value from the Spec (FE-011); dark mode is tuned later. Each facet is stroked in its own fill so neighbours
- * meet without a seam; the translucent ones are not, so they do not double at their edges.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .art {
   --art-glint: oklch(1 0 0);
   --art-shelf: oklch(0.55 0.06 60);

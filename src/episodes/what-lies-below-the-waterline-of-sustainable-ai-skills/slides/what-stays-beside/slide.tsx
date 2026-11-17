@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "What context stays beside", echoing the Hero motif (picked Title-slide Option 0a). The project file beside the card, in twilight: the depth lives in today's dive plan, not in the card.
 export const whatStaysBeside = slide({
   slug: 'what-stays-beside',
   messages: { en, de },

@@ -6,24 +6,18 @@ import { SCENE_HEIGHT } from '@/episodes/components/slide-shared/iceberg/zone-sc
 import { ROOM_ART, RoomArt } from './room-art';
 import styles from './slide.module.css';
 
-/** The Spec's room sits on the Scene's bottom edge, where the Scene's `slice` anchors it. */
 const ROOM_TOP = SCENE_HEIGHT - ROOM_ART.height;
-/** Where the reach leaves the manual's page, in the Spec's units. */
 const PAGE_EDGE = { x: 762, y: 300 } as const;
-/** Each AI's desk top, one row per AI, where the Spec stacks the three consoles; its reach ends just left of it. */
 const DESK_ROWS = [200, 316, 432] as const;
 const DESK_X = 892;
 const REACH_END = 824;
-/** The consoles are drawn smaller, stacked up the wall as the Spec draws them. */
 const CONSOLE_SCALE = 0.6;
 const CONSOLE_WIDTH = 200;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
 const CAPTAIN = { x: 150, scale: 2.7 } as const;
 
-/** You, the captain, with your own notebook in hand: the cast's captain carrying the clipboard prop. */
 const captainWithNotebook: Preset = { ...captain, prop: 'clipboard' };
 
-/** One AI at its console: the pilot, seated, its screens running the shared version. */
 function Reader({ desk }: { readonly desk: number }) {
   return (
     <g transform={`translate(${DESK_X} ${desk}) scale(${CONSOLE_SCALE})`}>
@@ -35,7 +29,6 @@ function Reader({ desk }: { readonly desk: number }) {
   );
 }
 
-/** The dotted lines from the manual's page to each reader, drawn in once after the control block is stamped. */
 function ReachLines() {
   const { x, y } = PAGE_EDGE;
   return (
@@ -56,12 +49,7 @@ function ReachLines() {
   );
 }
 
-/**
- * The control room at Midnight (Option 20b): you at the left with your notebook, the fleet manual on its lectern under
- * the institute's shelf, and three AIs at their consoles up the right wall, each reached from the manual's page. The
- * room is this Slide's own drawing (`room-art.tsx`), in the Spec's units; the figures and consoles are the shared cast
- * (design-ADR 0025).
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function ControlRoom() {
   return (
     <g transform={`translate(0 ${ROOM_TOP})`}>

@@ -1,14 +1,9 @@
-/** How many blank steps the card offers. */
 const STEPS = 4;
 
 export interface EmptyProcedureCardProps {
   readonly labels: { readonly card: string; readonly title: string; readonly useWhen: string; readonly steps: string };
 }
 
-/**
- * The empty procedure card the strip ends on (Spec Option 1a): a title line, a use-when line and four blank steps,
- * dashed in `primary` so the eye lands on it, left untagged so the question stays open.
- */
 export function EmptyProcedureCard({ labels }: EmptyProcedureCardProps) {
   return (
     <div

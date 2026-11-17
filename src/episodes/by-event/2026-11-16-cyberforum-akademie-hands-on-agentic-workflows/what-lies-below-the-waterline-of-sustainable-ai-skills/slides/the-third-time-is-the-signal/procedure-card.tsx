@@ -18,7 +18,6 @@ function Label({ label }: { readonly label: CardLabel }) {
 
 const FIELD = 'mt-3 border-b-2 border-dashed border-border pb-1 text-caption';
 
-/** The empty card of the first Slide: blank fields, and the open question of what is needed. */
 export function EmptyCard({
   label,
   fields,
@@ -53,7 +52,6 @@ interface DraftStep {
   readonly struck?: boolean;
 }
 
-/** The draft's steps in plain ink, a wrong one struck through. */
 function DraftSteps({ steps }: { readonly steps: readonly DraftStep[] }) {
   return (
     <ol className="mt-3 flex flex-col gap-2 text-caption">
@@ -78,7 +76,6 @@ interface DraftCardProps {
   readonly question: string;
 }
 
-/** The draft: a title, steps in plain ink with one struck through, and the good result still a question. */
 export function DraftCard({ label, title, useWhen, steps, question }: DraftCardProps) {
   return (
     <ZoneCard
@@ -94,10 +91,8 @@ export function DraftCard({ label, title, useWhen, steps, question }: DraftCardP
   );
 }
 
-/** A line's place in the fill: the card writes itself line by line. */
 const line = (index: number) => ({ '--line': index }) as CSSProperties;
 
-/** The written steps, numbered, and the green good-result line last. */
 function WrittenSteps({ steps, goodResult }: { readonly steps: readonly string[]; readonly goodResult: string }) {
   return (
     <>
@@ -132,7 +127,6 @@ interface WrittenCardProps {
   readonly goodResult: string;
 }
 
-/** The written card: use-when line, six numbered steps, and the green good-result line; it fills line by line. */
 export function WrittenCard({ label, title, useWhen, steps, goodResult }: WrittenCardProps) {
   return (
     <ZoneCard data-card="written" className="flex h-full flex-col rounded-lg border-2 border-primary p-4 shadow-md">

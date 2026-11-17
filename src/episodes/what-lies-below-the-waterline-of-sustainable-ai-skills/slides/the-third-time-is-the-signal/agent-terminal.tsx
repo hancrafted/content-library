@@ -2,7 +2,6 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './slide.module.css';
 
-/** One line of a session: what you typed, or what the agent answered. */
 export interface TerminalRow {
   readonly who: 'you' | 'agent';
   readonly text: string;
@@ -15,7 +14,6 @@ const Dots = () => (
   </>
 );
 
-/** A coding-agent session, Session 1 or 2: you ask, the agent asks the same question again, you answer. */
 export function AgentTerminal({ title, rows }: { readonly title: string; readonly rows: readonly TerminalRow[] }) {
   return (
     <div
@@ -50,7 +48,6 @@ export interface SkillFileProps {
   readonly footer: ReactNode;
 }
 
-/** The file's front matter: its name and its description, between the dashes. */
 function FrontMatter({ name, description }: { readonly name: string; readonly description: string }) {
   return (
     <>
@@ -68,7 +65,6 @@ function FrontMatter({ name, description }: { readonly name: string; readonly de
   );
 }
 
-/** Session 3: the new file `SKILL.md`, its front matter and steps typing in line by line. */
 export function SkillFile({ path, badge, name, description, body, goodResult, footer }: SkillFileProps) {
   const line = (index: number) => ({ '--line': index }) as CSSProperties;
   return (

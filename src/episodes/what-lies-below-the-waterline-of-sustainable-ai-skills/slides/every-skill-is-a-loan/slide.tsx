@@ -12,10 +12,8 @@ import { UpkeepStack } from './upkeep-stack';
 
 const CUNNINGHAM = { slug: 'cunningham-wycash', url: 'https://c2.com/doc/oopsla92.html' };
 
-/** The statement's entries, day one to the latest; the overlapping description is the focal mark. */
 const ENTRIES: readonly ClampIcon[] = ['written', 'sites', 'arm', 'overlap'];
 const FOCAL: ClampIcon = 'overlap';
-/** Where the debt sits in the Coding agent view: file lines, never translated. */
 const CODE: Record<ClampIcon, readonly string[]> = {
   written: [
     '---',
@@ -33,14 +31,8 @@ const CODE: Record<ClampIcon, readonly string[]> = {
     '  site and need to survey the seabed.',
   ],
 };
-/** One block in the stack per fix, bottom first, named as the entries are. */
 const BLOCKS = ['sites', 'arm', 'overlap'] as const;
 
-/**
- * "Every skill is a loan" (Spec Option 23b): the skill's running statement hung on the robot's cable in the Abyss,
- * beside writing weighed against keeping it right, and Ward Cunningham's technical debt. Keeps `vertical-stepper` as a
- * copy, every step open at rest; keeps `motion: local`, the statement growing one entry at a time.
- */
 export const everySkillIsALoan = slide({
   slug: 'every-skill-is-a-loan',
   messages: { en, de },

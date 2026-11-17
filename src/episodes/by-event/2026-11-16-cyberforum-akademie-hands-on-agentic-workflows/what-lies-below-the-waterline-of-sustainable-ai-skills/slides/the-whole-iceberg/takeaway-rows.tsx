@@ -7,7 +7,6 @@ import { NODES, passesAt } from './rise';
 
 export interface TakeawayLine {
   readonly text: string;
-  /** The Actionable this line carries, numbered as the step cards below are. */
   readonly step?: 1 | 2 | 3;
 }
 
@@ -15,17 +14,12 @@ export interface TakeawayRow {
   readonly zone: Zone;
   readonly name: string;
   readonly lines: readonly TakeawayLine[];
-  /** A Context marker after the row, where the picked Option shows one. */
   readonly marker?: ReactNode;
 }
 
 const TOPS = new Map(depthBands().map(({ zone, top }) => [zone, top]));
 const NODE_Y = new Map(NODES.map(({ zone, y }) => [zone, y]));
 
-/**
- * A step's chip: `primary`, the focal colour, on light water; inverted to the page background on water dark in both
- * themes (Midnight), where `primary` would sink into it.
- */
 function StepChip({ zone, step }: { readonly zone: Zone; readonly step: number }) {
   const chip = isDarkZone(zone) ? 'inverse' : 'primary';
   return (
@@ -35,7 +29,6 @@ function StepChip({ zone, step }: { readonly zone: Zone; readonly step: number }
   );
 }
 
-/** One zone's takeaway, written straight on its water: the zone's name, then its two lines, each led by its step. */
 function Row({ row: { zone, name, lines, marker } }: { readonly row: TakeawayRow }) {
   const place = {
     '--top': TOPS.get(zone),
@@ -66,11 +59,6 @@ function Row({ row: { zone, name, lines, marker } }: { readonly row: TakeawayRow
   );
 }
 
-/**
- * Each Section's takeaway at its depth (Option 26a): on a wide Scene, every row sits on its own zone's water in the
- * one picture, beside the trail's node, in light ink where the water is dark; on a narrow one the rows follow the
- * picture, each on its zone's water. Each row lights as the robot rises past it, the Abyss first.
- */
 export function TakeawayRows({ label, rows }: { readonly label: string; readonly rows: readonly TakeawayRow[] }) {
   return (
     <ol

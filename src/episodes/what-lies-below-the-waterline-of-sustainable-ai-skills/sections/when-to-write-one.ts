@@ -4,7 +4,6 @@ import { theThirdTimeIsTheSignal } from '../slides/the-third-time-is-the-signal/
 import { whenToWriteOne } from '../slides/when-to-write-one/slide';
 import { writeItFromAGoodRun } from '../slides/write-it-from-a-good-run/slide';
 
-/** Placement marker of the Section "When to write one": its Slides in Spec order, section slide first. */
 export const whenToWriteOneSection: Section = [
   whenToWriteOne,
   theThirdTimeIsTheSignal,

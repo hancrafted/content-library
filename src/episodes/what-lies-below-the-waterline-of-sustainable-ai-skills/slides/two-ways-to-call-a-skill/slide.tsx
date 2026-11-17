@@ -38,17 +38,10 @@ const VERCEL = {
 };
 const DAY_3 = { slug: 'google-day-3-agent-skills', url: 'https://www.kaggle.com/whitepaper-agent-skills' };
 
-/** The three skills of the index, by folder name: code, never translated. */
 const ENTRY_KEYS = ['0', '1', '2'] as const;
 const CALL = `/${SLUGS[0]}`;
 const MENTION = `@${SLUGS[0]}`;
 
-/**
- * "Two ways to call a skill" (Spec Option 7a): one drawing split by a bulkhead carries both halves, called by name on
- * the left and picked from its description on the right, and two cards below keep the 1×2 grid; the 56% figure sits in
- * the right card it measures. Overrules `grid-1x2` for the Scene; keeps `motion: local`, the highlight landing on the
- * index line before the scan line draws.
- */
 export const twoWaysToCallASkill = slide({
   slug: 'two-ways-to-call-a-skill',
   messages: { en, de },

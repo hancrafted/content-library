@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "When to write one", echoing the Hero motif (picked Title-slide Option 0a). The third card, in sunlight, and the grounding line the borrowed principles of Sections 3 to 8 rest on.
 export const whenToWriteOne = slide({
   slug: 'when-to-write-one',
   messages: { en, de },

@@ -6,13 +6,10 @@ import type { ReactNode } from 'react';
 import { SheetClip, SheetPaper } from './room-art';
 import styles from './slide.module.css';
 
-/** One description for the skill, in both views. */
 interface Description {
   readonly tag: string;
   readonly verdict: string;
-  /** The description as a line of the index. */
   readonly text: ReactNode;
-  /** The same description as the `description:` value of the skill's front matter. */
   readonly coding: ReactNode;
 }
 
@@ -20,7 +17,6 @@ interface Moment extends Description {
   readonly notFor: ReactNode;
   readonly notForCoding: string;
   readonly hedge: ReactNode;
-  /** The Context marker beside the tag, once per view. */
   readonly marker: ReactNode;
 }
 
@@ -49,7 +45,6 @@ function SheetHeading({ heading }: { readonly heading: Heading }) {
   );
 }
 
-/** The content description: muted, its verdict that it says nothing about when. */
 function ContentLine({ name, content }: { readonly name: string; readonly content: Description }) {
   return (
     <div data-description="content" className="rounded-lg border border-border px-4 py-3">
@@ -64,7 +59,6 @@ function ContentLine({ name, content }: { readonly name: string; readonly conten
   );
 }
 
-/** The moment description: ringed in primary, "matches", its optional "not for" half dashed. */
 function MomentLine({ name, moment }: { readonly name: string; readonly moment: Moment }) {
   return (
     <div data-description="moment" data-match="" className={cn('rounded-lg bg-card px-4 py-3 shadow-md', styles.ring)}>
@@ -88,7 +82,6 @@ function MomentLine({ name, moment }: { readonly name: string; readonly moment: 
   );
 }
 
-/** The content description as a front-matter line, dimmed. */
 function ContentDraft({ content }: { readonly content: Description }) {
   return (
     <div className="opacity-60">
@@ -100,7 +93,6 @@ function ContentDraft({ content }: { readonly content: Description }) {
   );
 }
 
-/** The Coding agent view: the two drafts of the skill's front matter, the content one dimmed. */
 function FrontMatterDrafts({ slug, coding, content, moment }: Omit<SkillIndexSheetProps, 'name' | 'chat' | 'target'>) {
   return (
     <InView view="coding" as="div" className="relative flex flex-col gap-3">
@@ -129,11 +121,6 @@ function FrontMatterDrafts({ slug, coding, content, moment }: Omit<SkillIndexShe
   );
 }
 
-/**
- * The skill index on the wall, the Spec's faceted sheet held by its clip: two descriptions for the same skill, the content one muted with its
- * "says nothing about when" verdict, the moment one ringed in primary with "matches" and its optional "not for" half
- * dashed. In the Coding agent view the two become drafts of the skill's front matter.
- */
 export function SkillIndexSheet({
   name,
   slug,

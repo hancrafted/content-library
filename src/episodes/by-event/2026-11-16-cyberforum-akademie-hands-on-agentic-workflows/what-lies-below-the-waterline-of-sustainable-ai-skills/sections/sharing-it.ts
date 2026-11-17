@@ -4,7 +4,6 @@ import { sharedSkillsAreKnowledgeArticles } from '../slides/shared-skills-are-kn
 import { sharingIt } from '../slides/sharing-it/slide';
 import { whoOwnsTheSharedSkillLibrary } from '../slides/who-owns-the-shared-skill-library/slide';
 
-/** Placement marker of the Section "Sharing it": its Slides in Spec order, section slide first. */
 export const sharingItSection: Section = [
   sharingIt,
   sharedSkillsAreKnowledgeArticles,

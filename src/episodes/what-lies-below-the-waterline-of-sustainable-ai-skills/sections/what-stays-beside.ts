@@ -4,7 +4,6 @@ import { howGrillMeAndGrillWithDocsWork } from '../slides/how-grill-me-and-grill
 import { whatStaysBeside } from '../slides/what-stays-beside/slide';
 import { whoUsesItAndWhere } from '../slides/who-uses-it-and-where/slide';
 
-/** Placement marker of the Section "What stays beside": its Slides in Spec order, section slide first. */
 export const whatStaysBesideSection: Section = [
   whatStaysBeside,
   besideTheSkill,

@@ -9,12 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 import { whatASkillIsSection } from './what-a-skill-is';
 
-/*
- * The Section "What a skill is" as the approved Spec gives it: its section slide, then five page Slides in Spec order,
- * each titled by its Spec h3, scripted segment by segment and annotated with the Spec's Speaker notes and sources.
- * Each Scene is composed from ZoneScene and the cast (design-ADR-0025) and carries both views' words.
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const PLACED = placeSections<Slide>(whatLiesBelowTheWaterlineOfSustainableAiSkills.sections).flat();
 const PAGE_SLUGS = [

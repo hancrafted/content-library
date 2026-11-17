@@ -28,7 +28,6 @@ const STORED = 'where-a-skill-is-stored';
 const INFERENCE = 'the-skill-scope-matrix-is-an-inference';
 const EVALS = 'evals-matter-once-a-skill-is-shared';
 
-/** Paths are code: the same in every locale, never translated. */
 const CODE = {
   inline: 'SKILL.md',
   personal: '~/.claude/skills/<name>/SKILL.md',
@@ -37,17 +36,14 @@ const CODE = {
   references: 'references/',
 } as const;
 
-/** The squares in reading order, each with its care on the rule of thumb's scale and its picture. */
 const SQUARES: readonly { id: SquareId; care: Care; picture: PictureKind }[] = [
   { id: 'pp', care: 1, picture: 'notebook' },
   { id: 'pg', care: 2, picture: 'toolkit' },
   { id: 'sp', care: 3, picture: 'binder' },
   { id: 'sg', care: 4, picture: 'fleet' },
 ];
-/** The square the card travels to and the Slide looks at. */
 const FOCUS: SquareId = 'sg';
 
-/** A dark label at one end of the card's trip: the personal start, the shared arrival. */
 function TripLabel({ end, children }: { readonly end: 'start' | 'arrival'; readonly children: string }) {
   return (
     <p
@@ -62,11 +58,6 @@ function TripLabel({ end, children }: { readonly end: 'start' | 'arrival'; reado
   );
 }
 
-/**
- * "Who uses it, and where" (Spec Option 18a): the skill scope matrix, a rule of thumb. Keeps `grid-2x2` as picture
- * squares with the axis heads outside; keeps `motion: local`: one card travels once along the dashed path from the
- * notebook into the fleet manual, where the owner tag swings on.
- */
 export const whoUsesItAndWhere = slide({
   slug: 'who-uses-it-and-where',
   messages: { en, de },

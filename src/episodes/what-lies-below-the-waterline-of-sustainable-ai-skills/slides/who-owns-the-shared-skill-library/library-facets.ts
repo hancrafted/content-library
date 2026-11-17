@@ -1,11 +1,3 @@
-/*
- * The drawing of "Who owns the shared skill library", lifted facet by facet from Spec Option 21a (feedback 3, decision
- * 46), each part in its own Spec units: the Abyss band under the Midnight water (1200 by 720), the faceted halo of the
- * zoom beam (120 by 600), the fleet manual's binder with its index tabs, faceted page and rings (640 by 620), and the
- * page's faceted dark corner (240 by 200). The robot is the shared cast; the words are HTML over the drawing.
- */
-
-/** A tone of the drawing; `library-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'sea-abyss'
   | 'sea-abyss-lit'
@@ -28,7 +20,6 @@ export type ArtTone =
 
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The Abyss band at the bottom of the water, where the robot hangs: 1200 by 720 units. */
 export const ABYSS: readonly ArtFacet[] = [
   ['sea-abyss', 'M538 473L598 478L573 622ZM1043 598L1059 720L860 609ZM682 720L505 720L573 622Z'],
   ['sea-abyss-lit', 'M101 629L0 720L0 481Z'],
@@ -55,7 +46,6 @@ export const ABYSS: readonly ArtFacet[] = [
   ['sea-abyss-lit', 'M289 597L298 471L358 469ZM238 473L298 471L289 597Z'],
 ];
 
-/** The zoom beam's faceted halo between the square and the page: 120 by 600 units. */
 export const HALO: readonly ArtFacet[] = [
   ['halo', 'M120 107L55 75L120 0ZM30 312L67 232L120 270Z'],
   ['halo-core', 'M67 232L0 214L0 138Z'],
@@ -66,7 +56,6 @@ export const HALO: readonly ArtFacet[] = [
   ['halo', 'M92 510L120 512L120 600ZM120 512L92 510L120 424Z'],
 ];
 
-/** The binder: its shadow, green covers, index tabs, faceted page and binder rings: 640 by 620 units. */
 export const BINDER: readonly ArtFacet[] = [
   ['drop', 'M10 14L640 10L640 620L14 620Z'],
   ['book-lit', 'M0 0L630 4L0 608Z'],
@@ -116,7 +105,6 @@ export const BINDER: readonly ArtFacet[] = [
   ['ring-shade', 'M12 546L36 544L36 549L12 551Z'],
 ];
 
-/** The page's lower corner, left dark in three faceted tones: 240 by 200 units. */
 export const DARK_CORNER: readonly ArtFacet[] = [
   ['dark-1', 'M202 32L199 97L135 88ZM42 165L65 200L0 200Z'],
   ['dark-3', 'M65 200L97 164L130 200Z'],

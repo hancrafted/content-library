@@ -1,9 +1,4 @@
-/*
- * "Does the skill make things better?" (Option 22a): the gauge, the cable and the score fill. The shallows themselves
- * are `shallows-art.module.css`, lifted from the Spec. No raw colour here (FE-011): the gauge is `--on-brand-accent`
- * as white, the cable a mix of it or `--overlay`; the ship and robot keep the shared figures' own colours.
- */
-
+/* decision: FE-011 §2 */
 .gauge,
 .cable {
   --gauge: var(--on-brand-accent);
@@ -27,10 +22,7 @@
   stroke: var(--cable);
 }
 
-/*
- * The one emphasis motion: the two scores fill in, segment by segment, the without-skill run first, once on entry. The
- * base rule is the filled rest state, which reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .segment {
     animation: fill-in 300ms ease-out var(--seg-delay) both;

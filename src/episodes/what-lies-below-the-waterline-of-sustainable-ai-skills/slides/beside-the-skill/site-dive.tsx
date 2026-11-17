@@ -14,15 +14,12 @@ import { useId, type CSSProperties, type ReactNode } from 'react';
 import { DiveWater } from './dive-art';
 import styles from './slide.module.css';
 
-/** Scene units per metre of depth: the waterline at 0 m, the seabed at 120 m above the Scene's floor. */
 const UNITS_PER_METRE = 2.6;
 const SHIP_X = 760;
 const SHIP_SCALE = 1.3;
 const ROBOT_SCALE = 1.6;
-/** The robot's drawn height and half width at scale 1, from its facets. */
 const ROBOT_HEIGHT = 59;
 const ROBOT_HALF_WIDTH = 40;
-/** The descent: it starts once the line on the wall has drawn, and settles before the check appears. */
 const DESCENT = { delay: 1200, duration: 2200 } as const;
 
 const depthY = (metres: number) => SURFACE_WATERLINE + metres * UNITS_PER_METRE;
@@ -30,15 +27,12 @@ const ANCHORS = shipAnchors();
 const CABLE_X = SHIP_X + ANCHORS.aFrameTip.x * SHIP_SCALE;
 const CABLE_TOP = SURFACE_WATERLINE + ANCHORS.aFrameTip.y * SHIP_SCALE;
 const ROBOT_DRAWN_HEIGHT = ROBOT_HEIGHT * ROBOT_SCALE;
-/** Where the robot starts, just under the ship, as a share of the Scene's height above its rest. */
 const START_DEPTH_M = 6;
-/** The seabed's ridge rises a little above its line; drawn this much higher, the robot's skids rest in it. */
 const SEABED_RISE = 6;
 
 export interface SiteDiveProps {
   readonly label: string;
   readonly seabedM: number;
-  /** Where Slide 15's dive stopped: its dashed outline is centred on this depth's tick. */
   readonly ghostM: number;
   readonly ticks: readonly number[];
   readonly words: {
@@ -73,7 +67,6 @@ interface DiveGeometry {
   readonly seabed: number;
   readonly robotTop: number;
   readonly ghostTop: number;
-  /** How far up the robot starts, as a share of the Scene's height. */
   readonly startShift: number;
 }
 
@@ -88,10 +81,6 @@ function geometryOf(seabedM: number, ghostM: number): DiveGeometry {
   };
 }
 
-/**
- * The check that pops in once the robot has settled on the seabed: an outline mark, like the wall's tags, so primary
- * stays on the step, the line, today's row and the seabed pill.
- */
 function Check({ x, y, label }: { readonly x: number; readonly y: number; readonly label: string }) {
   return (
     <p
@@ -110,7 +99,6 @@ function Check({ x, y, label }: { readonly x: number; readonly y: number; readon
   );
 }
 
-/** The words on the drawing: the depth ticks, the site, the ghost's note, the seabed and the check. */
 function DiveLabels({ props, at: g }: { readonly props: SiteDiveProps; readonly at: DiveGeometry }) {
   const { words, ticks, ghostM } = props;
   const beside = CABLE_X + ROBOT_HALF_WIDTH * ROBOT_SCALE;
@@ -139,7 +127,6 @@ function DiveLabels({ props, at: g }: { readonly props: SiteDiveProps; readonly 
   );
 }
 
-/** The depth ticks and the dashed outline where Slide 15's dive stopped. */
 function Marks({ ticks, ghostTop }: { readonly ticks: readonly number[]; readonly ghostTop: number }) {
   return (
     <g aria-hidden>
@@ -161,7 +148,6 @@ function Marks({ ticks, ghostTop }: { readonly ticks: readonly number[]; readonl
   );
 }
 
-/** The robot on its cable, descending once from under the ship; the cable is clipped at the A-frame's tip. */
 function Descent({ at: g }: { readonly at: DiveGeometry }) {
   const clip = useId();
   return (
@@ -188,12 +174,6 @@ function Descent({ at: g }: { readonly at: DiveGeometry }) {
   );
 }
 
-/**
- * Site 7 in cross-section (Option 17a, right half): the ship on the Surface over the Spec's water deepening from the
- * Surface to Twilight (`dive-art.tsx`), the depth ticks, the dashed outline
- * where Slide 15's dive stopped at 40 m, and the robot descending on its cable to the seabed at 120 m, where the check
- * appears. The Scene is drawn at 3 by 2, its own aspect, so the HTML labels sit on the drawing at every width.
- */
 export function SiteDive(props: SiteDiveProps) {
   const g = geometryOf(props.seabedM, props.ghostM);
   return (

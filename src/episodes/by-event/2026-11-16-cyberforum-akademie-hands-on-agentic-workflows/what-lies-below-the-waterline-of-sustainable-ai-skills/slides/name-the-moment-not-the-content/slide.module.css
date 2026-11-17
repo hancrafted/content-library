@@ -1,12 +1,4 @@
-/*
- * "Name the trigger, not the content" (Option 12a): the room's tones and the one emphasis motion. The tones are the
- * approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from it; dark
- * values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). The sheet's clip is steel,
- * mixed from `--muted-foreground`, never a meaning colour; `--primary` marks the match.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .art {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.972 0.009 88);
@@ -92,17 +84,12 @@
   stroke: var(--clip-shade);
 }
 
-/*
- * The one emphasis motion: the primary line draws from your request to the moment description, then the moment entry's
- * ring and its "matches" verdict appear. The base rules are the drawn rest state, which reduced motion and a still
- * frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .match {
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
 }
 
-/* The ring: drawn once on a layer of its own, shown by opacity alone (decision 19). */
 .ring {
   position: relative;
 }
@@ -130,7 +117,6 @@
   }
 }
 
-/* The match line fades in: opacity alone (decision 19). */
 @keyframes draw {
   from {
     opacity: 0;
@@ -149,10 +135,6 @@
   }
 }
 
-/*
- * The captain drawn once per view, as `InView` does for words: the other view's drawing hides. The crew stands at room
- * scale, 2.3 times the figure, so the shared bubble turns its words down (`REQUEST_SAYS_SCALE`) to read at caption size.
- */
 .inView {
   --says-scale: 0.5;
 }

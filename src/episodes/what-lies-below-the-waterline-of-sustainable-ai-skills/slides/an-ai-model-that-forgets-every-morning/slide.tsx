@@ -18,14 +18,12 @@ const MOLLICK = {
 };
 const CLAUDE_MEMORY = { slug: 'anthropic-claude-code-memory', url: 'https://code.claude.com/docs/en/memory' };
 
-/** The three mornings, in order: only the mug count on the console changes. */
 const MORNINGS = [
   { day: 'd1', mugs: 1 },
   { day: 'd2', mugs: 2 },
   { day: 'd3', mugs: 3 },
 ] as const;
 
-/** The panels' places in the strip's 12 columns, wide enough: photo and two mornings, then the third and the question. */
 const SPAN = {
   photo: '@5xl:col-span-4',
   d1: '@5xl:col-span-4',
@@ -36,13 +34,6 @@ const SPAN = {
 
 const PERCENT = 100;
 
-/**
- * "An AI model that forgets every morning" (Spec Option 1a): a five-panel comic in the low-poly Iceberg register. The
- * framed photo of you and your pilot of ten years, untagged (Han's note on 1a); three identical mornings in the control room, each a
- * Surface `ZoneScene` where only the coffee mugs pile up; then "What would you do?" beside an empty procedure card.
- * Keeps `master: grid-bento` and `motion: local`: the panels appear one after another on entry, at rest all show. The
- * Coding agent view turns the mornings into sessions and adds the fresh-context-window line to the footer.
- */
 export const anAiModelThatForgetsEveryMorning = slide({
   slug: 'an-ai-model-that-forgets-every-morning',
   messages: { en, de },

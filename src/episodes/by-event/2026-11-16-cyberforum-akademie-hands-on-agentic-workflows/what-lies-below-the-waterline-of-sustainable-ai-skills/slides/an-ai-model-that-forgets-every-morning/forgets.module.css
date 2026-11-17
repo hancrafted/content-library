@@ -1,12 +1,5 @@
-/*
- * Slide token file of "An AI model that forgets every morning" (FE-011 §2): the control room's faceted wall, floor,
- * window and picture frame, and the wall clock, in the approved Spec Option 1a's own tones (feedback 3, decision 46),
- * and the strip's one motion. Dark values are the Spec's; dark mode is tuned later (decision 32). No meaning colour
- * here: `ai` marks only the pilot's tag.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .room {
   --nail: oklch(0.28 0.02 260);
   --clock-rim-lit: color-mix(in oklab, var(--muted-foreground) 78%, oklch(1 0 0));
@@ -25,7 +18,6 @@
   --clock-hand: oklch(0.2 0.02 265);
 }
 
-/* Each wall and floor facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
 .room [data-tone='room'] {
   fill: var(--scenery-wall);
   stroke: var(--scenery-wall);
@@ -59,7 +51,6 @@
   fill: var(--scenery-window-frame-shade);
 }
 
-/* The mornings' window: a wooden frame and its mullion. */
 .room [data-tone='window'] {
   fill: none;
   stroke: var(--scenery-window-frame-shade);
@@ -98,13 +89,8 @@
   fill: var(--clock-hand);
 }
 
-/*
- * The strip's one emphasis motion (Spec Option 1a): the panels appear one after another, each `--panel-delay` after the
- * Slide turns active. The base rule is the rest state, so a still frame and reduced motion show every panel at once.
- * Each morning's speech bubbles read `--emote-delay` from here, so they pop in after their own panel.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .panel {
-  /* A comic close-up: the crew is drawn at 4.4 to 5 times room scale, so the shared bubble's words are turned down. */
   --says-scale: 0.5;
   --emote-delay: calc(var(--panel-delay, 0ms) + 450ms);
 }

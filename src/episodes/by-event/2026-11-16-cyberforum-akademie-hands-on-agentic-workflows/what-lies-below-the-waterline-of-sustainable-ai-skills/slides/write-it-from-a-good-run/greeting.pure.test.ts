@@ -4,11 +4,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PANEL_ART } from './room-facets';
 
-/*
- * The next morning's greeting (decision 53): the pilot's shared speech bubble, past his empty thought cloud, stays
- * inside the panel's picture in both languages, from the narrowest picture of the four-panel row up.
- */
-
 const inside = (box: { x: number; y: number; width: number }) =>
   box.x >= 0 && box.y >= 0 && box.x + box.width <= PANEL_ART.width;
 

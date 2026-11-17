@@ -12,20 +12,17 @@ export interface SkillWallProps {
   readonly card: {
     readonly title: ViewWords;
     readonly description: ViewWords;
-    /** The four steps; the focal one points to the project file. */
     readonly steps: readonly ViewWords[];
     readonly focal: number;
   };
   readonly plan: {
     readonly title: ViewWords;
     readonly sub: string;
-    /** One row per site, level with the steps: today's row sits beside the focal step. */
     readonly rows: readonly { readonly site: string; readonly label: string; readonly today: boolean }[];
     readonly today: string;
   };
 }
 
-/** Grid rows of the wall: the tag, the sheets' heading and sub line, then one row per step, then the label. */
 const HEAD_ROW = 2;
 const FIRST_STEP_ROW = 4;
 
@@ -55,7 +52,6 @@ interface Rows {
 
 const PILL = 'w-fit rounded-full border border-foreground bg-card px-3 text-caption font-semibold';
 
-/** The sheets' faceted paper, their tape and flat drop (`wall-art.tsx`), drawn first so the words sit on them. */
 function Sheets({ rows }: { readonly rows: Rows }) {
   return (
     <>
@@ -69,7 +65,6 @@ function Sheets({ rows }: { readonly rows: Rows }) {
   );
 }
 
-/** The steps, one grid row each, so the focal step sits level with today's row. */
 function Steps({ card }: { readonly card: SkillWallProps['card'] }) {
   return (
     <ol className="contents">
@@ -91,7 +86,6 @@ function Steps({ card }: { readonly card: SkillWallProps['card'] }) {
   );
 }
 
-/** The skill's sheet: its tag, title, description and steps, the focal step ringed in primary. */
 function SkillCells({ tag, card }: { readonly tag: string; readonly card: SkillWallProps['card'] }) {
   return (
     <>
@@ -113,7 +107,6 @@ function SkillCells({ tag, card }: { readonly tag: string; readonly card: SkillW
   );
 }
 
-/** One row per site, level with the steps; today's fills primary. */
 function SiteRows({ plan }: { readonly plan: SkillWallProps['plan'] }) {
   return (
     <>
@@ -136,7 +129,6 @@ function SiteRows({ plan }: { readonly plan: SkillWallProps['plan'] }) {
   );
 }
 
-/** The project file: its heading, today's dive plan beneath, and one row per site, today's filled primary. */
 function PlanCells({ tag, plan }: { readonly tag: string; readonly plan: SkillWallProps['plan'] }) {
   return (
     <>
@@ -158,7 +150,6 @@ function PlanCells({ tag, plan }: { readonly tag: string; readonly plan: SkillWa
   );
 }
 
-/** The dotted lead from the focal step to its label, and the primary line from the step to today's row. */
 function Leads({ rows, pointsTo }: { readonly rows: Rows; readonly pointsTo: string }) {
   return (
     <>
@@ -184,12 +175,6 @@ function Leads({ rows, pointsTo }: { readonly rows: Rows; readonly pointsTo: str
   );
 }
 
-/**
- * The control-room wall of Option 17a: the Spec's faceted wall and floor, the skill's sheet taped on the left, today's
- * dive plan, the project file, taped on the right. The focal step and the Site 7 row share one grid row, so the
- * primary line between them stays level at
- * every width and in either view. A dotted lead ties the "Points to a project file" label to the step.
- */
 export function SkillWall({ skillTag, fileTag, pointsTo, card, plan }: SkillWallProps) {
   const last = FIRST_STEP_ROW + card.steps.length - 1;
   const rows = { last, focal: FIRST_STEP_ROW + card.focal, label: last + 1 };

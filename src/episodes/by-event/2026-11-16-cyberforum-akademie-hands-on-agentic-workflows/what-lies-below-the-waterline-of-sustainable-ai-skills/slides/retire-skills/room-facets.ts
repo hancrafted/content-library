@@ -1,13 +1,5 @@
-/** One facet: the token that fills it, and its outline. */
 export type Facet = readonly [tone: string, d: string];
 
-/*
- * The control room at night as the approved Spec drew it (Option 25b, feedback 3, decision 46), in its 1000 by 590
- * space: the faceted night wall, each sheet's faceted paper, the clipboard clip and the pin. Each sheet keeps its own
- * box, which `room-art.tsx` stretches to the HTML sheet it backs.
- */
-
-/** The night wall's lit, plain and shaded facets; they tile the room, so each tone draws as one path. */
 export const NIGHT: readonly Facet[] = [
   [
     'night',
@@ -23,7 +15,6 @@ export const NIGHT: readonly Facet[] = [
   ],
 ];
 
-/** The index before, on its clipboard: paper from 22, 30 to 318, 630. */
 export const BEFORE_PAPER: readonly Facet[] = [
   ['paper-lit', 'M136.6 30L139.3 123L22 30ZM22 285.8L203.1 238L125.6 325.5Z'],
   ['paper-shade', 'M203.1 238L318 144.9L318 283.4ZM318 144.9L203.1 238L139.3 123ZM211.9 474.8L230.2 630L150 568.5Z'],
@@ -49,7 +40,6 @@ export const BEFORE_PAPER: readonly Facet[] = [
 ];
 export const BEFORE_BOX = '22 30 296 600';
 
-/** The task log, on its clipboard: paper from 336, 40 to 548, 360. */
 export const LOG_PAPER: readonly Facet[] = [
   ['paper-lit', 'M467.7 40L406.7 158.3L336 40Z'],
   ['paper', 'M548 184.7L434 257.8L406.7 158.3Z'],
@@ -68,7 +58,6 @@ export const LOG_PAPER: readonly Facet[] = [
 ];
 export const LOG_BOX = '336 40 212 320';
 
-/** The index after, pinned to the wall: paper from 676, 30 to 976, 432. */
 export const AFTER_PAPER: readonly Facet[] = [
   ['paper', 'M905.6 105.7L755.5 30L874.6 30Z'],
   ['paper-lit', 'M905.6 105.7L874.6 30L976 30Z'],
@@ -92,7 +81,6 @@ export const AFTER_PAPER: readonly Facet[] = [
 ];
 export const AFTER_BOX = '676 30 300 402';
 
-/** The clipboard's clip, the before sheet's, which the log's repeats: its box is 136, 10 to 204, 50. */
 export const CLIP: readonly Facet[] = [
   ['clip-shade', 'M136 28L204 28L200 50L140 50Z'],
   ['clip-lit', 'M136 28L174 28L162 50L140 50Z'],
@@ -100,7 +88,6 @@ export const CLIP: readonly Facet[] = [
 ];
 export const CLIP_BOX = '136 10 68 40';
 
-/** The red pin holding the index after, with its glint: its box is 819, 33 to 833, 47. */
 export const PIN: readonly Facet[] = [
   ['pin', 'M819 40L826 33L833 40L826 47Z'],
   ['glint', 'M819 40L826 33L826 40Z'],

@@ -1,13 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import styles from './inside.module.css';
 
-/*
- * The objects on and beside the card, lifted from Spec Option 16a (feedback 3, decision 46): the arm preset as a small
- * machine with its arm drawn on its face, the label template as a tag on its string, and the coloured tab with a fish
- * on the species guide's spine, and the clip holding the sleeve to the wall. Tones live in the Slide token file.
- */
-
-/** The script: the arm preset, a small machine with its arm drawn on its face and its lamps along the foot. */
 export function ScriptArt() {
   return (
     <svg viewBox="480 212 90 80" aria-hidden className={cn(styles.objects, 'h-12 w-auto shrink-0')}>
@@ -28,7 +21,6 @@ export function ScriptArt() {
   );
 }
 
-/** The template: the label template, a paper tag on its string. */
 export function TemplateArt() {
   return (
     <svg viewBox="464 573 112 60" aria-hidden className={cn(styles.objects, 'h-12 w-auto shrink-0')}>
@@ -46,7 +38,6 @@ export function TemplateArt() {
   );
 }
 
-/** The species guide's tab with its fish, standing on the book's top edge. */
 export function GuideTab() {
   return (
     <svg viewBox="658 280 70 20" aria-hidden className={cn(styles.objects, 'h-5 w-auto')}>
@@ -63,7 +54,6 @@ export function GuideTab() {
   );
 }
 
-/** The clip that holds the sleeve to the wall, standing on the card's top edge. */
 export function SleeveClip() {
   return (
     <svg viewBox="193 24 72 44" aria-hidden className={cn(styles.objects, 'h-10 w-auto')}>

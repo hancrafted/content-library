@@ -8,13 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { notEveryRepeatDeservesASkill } from './slide';
 
-/*
- * "Not every repeat deserves a skill", picked Option 9a: the pilot at his console beside a stuffed binder, the skill
- * index running off the stage with stamped entries and the needed one buried seventh, and the three-question check.
- */
-
 const slideUnderTest = notEveryRepeatDeservesASkill as unknown as Slide;
-/** A hand-written stand-in for the Section's section slide, so the Slide is placed as a page Slide. */
 const opener = slide({
   slug: 'when-to-write-one',
   messages: { en: { title: 'When to write one' }, de: { title: 'Wann Du einen schreibst' } },
