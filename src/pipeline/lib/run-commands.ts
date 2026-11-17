@@ -10,6 +10,7 @@ import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from '.
 import { declaredJobs } from './episode-status.ts';
 import { beginAgent, endAgent } from './run-agent-commands.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
+import { RUN_CHECKS_TEST } from './run-checks-file.ts';
 import { USAGE } from './run-help.pure.ts';
 import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
@@ -24,8 +25,7 @@ export type CommandResult = { ok: true; output: string } | { ok: false; error: s
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
 
-/** The test each Run's staging folder carries, so its staging checks run on that folder alone (ARCH-003 §4.7). */
-const RUN_CHECKS_TEST = 'run-checks.test.ts';
+/** The skill's copy of the test each Run's staging folder carries (ARCH-003 §4.7). */
 const RUN_CHECKS_ASSET = `skills/new-episode/assets/${RUN_CHECKS_TEST}.txt`;
 
 /** Copies the skill's Run checks test into the staging folder, keeping one the Run already has. */

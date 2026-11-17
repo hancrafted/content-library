@@ -16,8 +16,9 @@ const EPISODE_HOOKS = '^src/episodes/hooks/';
 const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The Episode-level checks that read one page's composition (ARCH-003 §4.7): like the registries they sit above the
-// Episode they check, rendering its Slides and reading the store; only each page folder's own test imports them.
-const EPISODE_CHECKS = '^src/episodes/lib/composed-page-(checks|render)\\.ts$';
+// Episode they check, rendering its Slides (and, in the checks' own test, a Scene) and reading the store; only each page
+// folder's own test imports them.
+const EPISODE_CHECKS = '^src/episodes/lib/composed-page-(checks|context|render)(\\.test)?\\.ts$';
 // A generated Episode route (FE-007 §1.3): `npm run registry` writes one per Episode page under each locale's route
 // group, at `episodes/<slug>/` or `events/<event>/episodes/<slug>/`, and it imports its own Episode's record.
 const GENERATED_EPISODE_ROUTE = [

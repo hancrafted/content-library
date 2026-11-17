@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { COMMIT_PLAN, QUICK_PLAN, runPlan, VERIFY_PLAN, type Exec, type Plan } from './verify.pure.ts';
+import {
+  COMMIT_PLAN,
+  holdAcrossLockedSteps,
+  pushPlan,
+  QUICK_PLAN,
+  runPlan,
+  VERIFY_PLAN,
+  type Exec,
+  type Hold,
+  type Plan,
+} from './verify.pure.ts';
 
 /** A stand-in for the process adapter: each step exits with the code `codes` names (0 by default) and logs its run. */
 function fakeExec(codes: Readonly<Record<string, number>> = {}, outputs: Readonly<Record<string, string>> = {}) {
@@ -120,12 +130,13 @@ describe('runPlan', () => {
 
     it('quick plan runs whole-repo lint and format, typecheck and the tests of uncommitted changes', () => {
       // ARRANGE
+      const expectedLabel = 'verify:quick';
       const expectedSteps = ['lint', 'format', 'typecheck', 'test'];
       const expectedTest = 'vitest run --changed';
       // ACT
       const steps = QUICK_PLAN.phases.flat().map((step) => step.name);
       // ASSERT
-      expect(QUICK_PLAN.label).toBe('verify:quick');
+      expect(QUICK_PLAN.label).toBe(expectedLabel);
       expect(steps).toEqual(expectedSteps);
       expect(commandOf(QUICK_PLAN, 'test')).toBe(expectedTest);
       expect(commandOf(QUICK_PLAN, 'lint')).toBe(commandOf(VERIFY_PLAN, 'lint'));
@@ -162,6 +173,191 @@ describe('runPlan', () => {
       const command = commandOf(VERIFY_PLAN, 'test');
       // ASSERT
       expect(command).toBe(expectedTest);
+    });
+  });
+});
+
+/** What git hands pre-push on stdin for a push of `local` to `remote`. */
+const pushed = (local: string, remote: string) => `refs/heads/${local} 1111111 refs/heads/${remote} 2222222\n`;
+
+const MERGE_BASE = 'abc1234';
+
+/** The plan's steps after the verify plan's own, as `name: command`, with the test lock marked. */
+const tail = (plan: Plan) =>
+  plan.phases
+    .slice(VERIFY_PLAN.phases.length)
+    .map((phase) => phase.map((step) => `${step.name}: ${step.command}${step.testLock ? ' [test lock]' : ''}`));
+
+describe('pushPlan', () => {
+  describe('success cases', () => {
+    it('runs the verify plan, then the slow lane for what changed since the merge-base, then the build for an export change', () => {
+      // ARRANGE
+      const facts = { refs: pushed('feat/x', 'feat/x'), mergeBase: MERGE_BASE, changedPaths: ['src/app/page.tsx'] };
+      const expectedLabel = 'verify:push';
+      const expectedTail = [
+        ['slow: npm run -s test:slow -- --changed abc1234 --passWithNoTests [test lock]'],
+        ['build: npm run -s build'],
+        ['test:build: npm run -s test:build'],
+      ];
+      const expectedNotes = ['an export input changed since abc1234: building'];
+      // ACT
+      const { plan, notes } = pushPlan(facts);
+      // ASSERT
+      expect(plan.label).toBe(expectedLabel);
+      expect(plan.phases.slice(0, VERIFY_PLAN.phases.length)).toEqual(VERIFY_PLAN.phases);
+      expect(tail(plan)).toEqual(expectedTail);
+      expect(notes).toEqual(expectedNotes);
+    });
+
+    it('builds on a push to main, even when nothing the export reads changed', () => {
+      // ARRANGE
+      const facts = { refs: pushed('main', 'main'), mergeBase: MERGE_BASE, changedPaths: ['docs/a.md'] };
+      const expectedBuild = [['build: npm run -s build'], ['test:build: npm run -s test:build']];
+      const expectedNotes = ['push to main: building'];
+      // ACT
+      const { plan, notes } = pushPlan(facts);
+      // ASSERT
+      expect(tail(plan).slice(1)).toEqual(expectedBuild);
+      expect(notes).toEqual(expectedNotes);
+    });
+
+    it('skips the build for a docs-only branch, and still runs the slow lane for what it changed', () => {
+      // ARRANGE
+      const facts = { refs: pushed('docs/x', 'docs/x'), mergeBase: MERGE_BASE, changedPaths: ['docs/a.md'] };
+      const expectedTail = [['slow: npm run -s test:slow -- --changed abc1234 --passWithNoTests [test lock]']];
+      const expectedNotes = ['no export input changed since abc1234: skipping the build'];
+      // ACT
+      const { plan, notes } = pushPlan(facts);
+      // ASSERT
+      expect(tail(plan)).toEqual(expectedTail);
+      expect(notes).toEqual(expectedNotes);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('runs the whole slow lane and builds when HEAD has no merge-base with main', () => {
+      // ARRANGE
+      const facts = { refs: pushed('orphan', 'orphan'), mergeBase: null, changedPaths: [] };
+      const expectedTail = [
+        ['slow: npm run -s test:slow [test lock]'],
+        ['build: npm run -s build'],
+        ['test:build: npm run -s test:build'],
+      ];
+      const expectedNotes = [
+        'no merge-base with origin/main: running the whole slow lane',
+        'no merge-base with origin/main: building',
+      ];
+      // ACT
+      const { plan, notes } = pushPlan(facts);
+      // ASSERT
+      expect(tail(plan)).toEqual(expectedTail);
+      expect(notes).toEqual(expectedNotes);
+    });
+
+    it('reads a push to main from the remote ref, not from the local branch name', () => {
+      // ARRANGE
+      const facts = { refs: pushed('main', 'feat/x'), mergeBase: MERGE_BASE, changedPaths: ['docs/a.md'] };
+      const expectedNotes = ['no export input changed since abc1234: skipping the build'];
+      // ACT
+      const { notes } = pushPlan(facts);
+      // ASSERT
+      expect(notes).toEqual(expectedNotes);
+    });
+  });
+});
+
+/** A stand-in for the test lock: logs when it is taken and released, and fails to take it when `refuse` says so. */
+function fakeHold(log: string[], refuse?: string): Hold {
+  return async (fn) => {
+    if (refuse !== undefined) throw new Error(refuse);
+    log.push('take');
+    try {
+      await fn();
+    } finally {
+      log.push('release');
+    }
+  };
+}
+
+const step = (name: string, testLock?: true) => ({ name, command: name, ...(testLock ? { testLock } : {}) });
+
+const LOCKED_PLAN: Plan = {
+  label: 'verify:push',
+  phases: [[step('lint'), step('test', true)], [step('slow', true)], [step('build')]],
+};
+
+describe('holdAcrossLockedSteps', () => {
+  describe('success cases', () => {
+    it('takes the lock once for the first locked step and holds it through the last, never around the build', async () => {
+      // ARRANGE
+      const { exec: inner, log } = fakeExec();
+      const { exec, release } = holdAcrossLockedSteps(LOCKED_PLAN, inner, fakeHold(log));
+      const expectedLog = [
+        'start lint',
+        'take',
+        'start test',
+        'end lint',
+        'end test',
+        'start slow',
+        'end slow',
+        'release',
+        'start build',
+        'end build',
+      ];
+      // ACT
+      await runPlan(LOCKED_PLAN, exec, () => undefined);
+      await release();
+      // ASSERT
+      expect(log).toEqual(expectedLog);
+    });
+  });
+
+  describe('failure cases', () => {
+    it('lets go once the plan stops before its last locked step', async () => {
+      // ARRANGE
+      const { exec: inner, log } = fakeExec({ lint: 1 });
+      const { exec, release } = holdAcrossLockedSteps(LOCKED_PLAN, inner, fakeHold(log));
+      const expectedBefore: string[] = [];
+      const expectedAfter = ['release'];
+      // ACT
+      await runPlan(LOCKED_PLAN, exec, () => undefined);
+      const beforeRelease = log.filter((entry) => entry === 'release');
+      await release();
+      const afterRelease = log.filter((entry) => entry === 'release');
+      // ASSERT
+      expect(beforeRelease).toEqual(expectedBefore);
+      expect(afterRelease).toEqual(expectedAfter);
+    });
+
+    it('fails a locked step that cannot take the lock, naming why, without running it', async () => {
+      // ARRANGE
+      const { exec: inner, log } = fakeExec();
+      const reason = 'timed out waiting for lock "test"';
+      const { exec, release } = holdAcrossLockedSteps(LOCKED_PLAN, inner, fakeHold(log, reason));
+      const printed: string[] = [];
+      const expectedBlock = `✖ test (0.0s)\n${reason}\n`;
+      const neverStarted = 'start test';
+      // ACT
+      const passed = await runPlan(LOCKED_PLAN, exec, (text) => printed.push(text));
+      await release();
+      // ASSERT
+      expect(passed).toBe(false);
+      expect(log).not.toContain(neverStarted);
+      expect(printed).toContain(expectedBlock);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('never takes the lock for a plan without a locked step', async () => {
+      // ARRANGE
+      const { exec: inner, log } = fakeExec();
+      const { exec, release } = holdAcrossLockedSteps(QUICK_PLAN, inner, fakeHold(log));
+      const taken = 'take';
+      // ACT
+      await runPlan(QUICK_PLAN, exec, () => undefined);
+      await release();
+      // ASSERT
+      expect(log).not.toContain(taken);
     });
   });
 });

@@ -5,9 +5,8 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { type CheerioAPI } from 'cheerio';
-import { parseSpec, SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
-import { checkSpec, specStage } from './episode-spec.pure';
+import { readSpec, specSectionSlugs, specSlideAnchors, type Spec } from './episode-spec-page.pure';
+import { checkSpec, DOSSIER_FILE } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
@@ -41,7 +40,7 @@ function checkSlugs(dossier: readonly Heading[]): Finding[] {
     .filter(({ slug, text }) => slug === null && SLUG_ATTEMPT.test(text))
     .map(({ text }): Finding => ({
       kind: 'spine',
-      file: 'dossier.md',
+      file: DOSSIER_FILE,
       message: `Dossier heading "${text}" has a malformed slug: a slug is lowercase letters, digits and hyphens, as {#my-slide}.`,
     }));
 }
@@ -103,7 +102,7 @@ function checkVisuals(blocks: readonly Block[], known: KnownVisuals): Finding[] 
       : [
           `${where} does not belong: the Title slide and section slides carry no Visual, they use the kit's title and section layouts with motion: none.`,
         ];
-    return messages.map((message): Finding => ({ kind: 'visual', file: 'dossier.md', message }));
+    return messages.map((message): Finding => ({ kind: 'visual', file: DOSSIER_FILE, message }));
   });
 }
 
@@ -140,7 +139,7 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
       ...strays.map((line) => `${where} hold a line outside the ordered list: "${line}".`),
       ...items.flatMap((item) => checkSpeakerNote(where, item)),
     ];
-    return messages.map((message): Finding => ({ kind: 'speaker-note', file: 'dossier.md', message }));
+    return messages.map((message): Finding => ({ kind: 'speaker-note', file: DOSSIER_FILE, message }));
   });
 }
 
@@ -149,15 +148,13 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  // Parsed once: a Spec with its inline SVG mocks takes longer to parse than every check that reads it.
-  const html = files[SPEC_FILE];
-  const spec = html === undefined ? undefined : parseSpec(html);
+  const spec = readSpec(files);
   return [
     ...checkStagingOrder(files),
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...(spec === undefined ? [] : checkSpec(files, specStage(spec), spec)),
+    ...(spec === undefined ? [] : checkSpec(spec, files[DOSSIER_FILE])),
     ...checkFeedbackRounds(files, spec),
   ];
 }
@@ -166,8 +163,8 @@ export function checkStagingFolder(files: Readonly<Record<string, string>>, know
  * The feedback rounds, keyed by the Dossier's Sections and page Slides while it exists and by the Spec's once its
  * Gate deleted the Dossier; none before either exists.
  */
-function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: CheerioAPI | undefined): Finding[] {
-  const dossier = files['dossier.md'];
+function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: Spec | undefined): Finding[] {
+  const dossier = files[DOSSIER_FILE];
   if (dossier !== undefined) {
     const blocks = blocksOf(bodyLines(dossier));
     return checkFeedback(files, { anchors: slideAnchors(blocks), sections: sectionSlugs(blocks), source: 'Dossier' });
@@ -179,7 +176,7 @@ function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: Chee
 
 /** The checks that read the Dossier; none until it exists. */
 function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  const dossier = files['dossier.md'];
+  const dossier = files[DOSSIER_FILE];
   if (dossier === undefined) return [];
   const dossierBlocks = blocksOf(bodyLines(dossier));
   return [

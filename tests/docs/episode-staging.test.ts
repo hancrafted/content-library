@@ -3,6 +3,7 @@ import { checkPipeline } from '@/pipeline/lib/episode-pipeline.pure';
 import { unsettledBriefSections } from '@/pipeline/lib/episode-staging-brief.pure';
 import { checkResearchIndex, checkRunsCsv, checkStagingFolder } from '@/pipeline/lib/episode-staging.pure';
 import { checkResearchFolders, researchCategories } from '@/pipeline/lib/research-folder.pure';
+import { RUN_CHECKS_TEST } from '@/pipeline/lib/run-checks-file';
 import { gateTier, verifiedProblems } from '@/pipeline/lib/staging-file.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -25,7 +26,6 @@ import {
   TEMPLATE,
   TEMPLATE_STAGING,
 } from './episode-staging.fixture.ts';
-import { RUN_CHECKS_TEST } from './run-checks.ts';
 
 /*
  * The cross-file checks (design-ADR 0004) applied to the real corpus: the new-episode skill's sample Episode and
