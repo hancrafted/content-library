@@ -11,19 +11,10 @@ import { Clipboard, Rules, Sheet, Text, TEXT_SCALE } from './papers';
 import { FLOOR_Y, RoomArt, VIEW_TOP } from './room-art';
 import styles from './where.module.css';
 
-/*
- * The control room of Spec Option 14a, in `ZoneScene`'s 1200 by 800 space, drawn for a 2:1 box, so everything sits
- * in the lower 600 units: the captain points at the project brief on the wall, the pilot sits at the long console with
- * the procedure card leaning on it, and today's dive plan hangs on its wooden clipboard. One fact, the site depth,
- * travels once from the card's dashed slot along the dashed arrow onto the dive plan. The room (`room-art.tsx`), brief,
- * card, clipboard and arrow are this Slide's own, lifted from the Option (feedback 3, decision 46); the crew and the
- * console come from `slide-shared/` (design-ADR 0025).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const CAPTAIN_X = 110;
 const CAPTAIN_SCALE = 2;
 const CONSOLE_X = 470;
-/** As wide as the Option's long console, so the procedure card can lean on its right half. */
 const CONSOLE_WIDTH = 230;
 const CONSOLE_SCALE = 1.4;
 const PILOT_SCALE = 1.8;
@@ -31,34 +22,25 @@ const DESK_TOP = FLOOR_Y - CONSOLE_DESK_HEIGHT * CONSOLE_SCALE;
 
 const BRIEF = { x: 180, y: 300, width: 190, height: 210, tilt: -1.2 } as const;
 const BRIEF_SLOT = { x: 196, y: 420, width: 148, height: 40 } as const;
-/** The card leans on the console's right half, its foot on the desk, as in the Option. */
 const CARD = { x: 630, y: DESK_TOP - 224, width: 280, height: 220, tilt: -2 } as const;
 const CARD_SLOT = { x: CARD.x + 152, y: CARD.y + 88, width: 100, height: 28 } as const;
 const BOARD = { x: 975, y: 330, width: 210, height: 310 } as const;
-/** Where the depth note rests on the dive plan. */
 const NOTE = { x: 1000, y: 500, width: 150, height: 48, tilt: -3 } as const;
-/** The note starts in the card's slot: its offset from the rest place, as a share of the Scene. */
 const NOTE_FROM = `${((CARD_SLOT.x - NOTE.x) / 1200) * 100}% ${((CARD_SLOT.y - NOTE.y) / 800) * 100}%`;
 const STEP_GAP = 32;
 
-/** The three numbered pins, one per home, in the order of the cards beneath. */
 export const PINS = [
   { n: '1', x: CARD.x + 8, y: CARD.y - 4 },
   { n: '2', x: BRIEF.x - 2, y: BRIEF.y - 4 },
   { n: '3', x: BOARD.x - 2, y: BOARD.y - 4 },
 ] as const;
 
-/**
- * Where each Coding agent file pill sits over the drawing, as a share of the 2:1 box (the visible part of the Scene,
- * from y = 200 down): under the card, the brief and the clipboard.
- */
 export const PILL_PLACES = [
   { x: CARD.x + CARD.width / 2, y: CARD.y + CARD.height + 18 },
   { x: BRIEF.x + BRIEF.width / 2, y: BRIEF.y + BRIEF.height + 14 },
   { x: BOARD.x + BOARD.width / 2, y: BOARD.y + BOARD.height + 14 },
 ].map(({ x, y }) => ({ left: `${(x / 1200) * 100}%`, top: `${((y - VIEW_TOP) / (800 - VIEW_TOP)) * 100}%` }));
 
-/** The project brief pinned to the wall, a touch askew, its depth slot empty. */
 function WallBrief({ title, slot }: { readonly title: string; readonly slot: string }) {
   const { x, y, width, height, tilt } = BRIEF;
   const pin = x + width * 0.5;
@@ -83,7 +65,6 @@ function WallBrief({ title, slot }: { readonly title: string; readonly slot: str
   );
 }
 
-/** The procedure card leaning on the console: its skill band, title and four steps, step 2's depth an empty dashed slot. */
 function ProcedureCard({ title, steps }: { readonly title: string; readonly steps: readonly string[] }) {
   const { x, y, width, height, tilt } = CARD;
   return (
@@ -103,7 +84,6 @@ function ProcedureCard({ title, steps }: { readonly title: string; readonly step
   );
 }
 
-/** Today's dive plan on its wooden clipboard: the project file the skill reads. */
 function DivePlan({ title, hint }: { readonly title: string; readonly hint: string }) {
   const { x, y, width } = BOARD;
   return (
@@ -120,7 +100,6 @@ function DivePlan({ title, hint }: { readonly title: string; readonly hint: stri
   );
 }
 
-/** The depth note, at rest on the dive plan, its lower edge in shade and its corner curled; `Travel` brings it from the card's slot. */
 function DepthNote({ text }: { readonly text: string }) {
   const { x, y, width, height, tilt } = NOTE;
   const right = x + width;
@@ -147,7 +126,6 @@ function DepthNote({ text }: { readonly text: string }) {
   );
 }
 
-/** The dashed arrow the note travels along, from the card's slot to the dive plan, ending in an open chevron. */
 function MovePath() {
   const from = { x: CARD_SLOT.x + CARD_SLOT.width, y: CARD_SLOT.y + 8 };
   const to = { x: NOTE.x - 8, y: NOTE.y + 10 };
@@ -192,10 +170,8 @@ export interface ControlRoomProps {
   readonly note: string;
 }
 
-/** The Spec's pilot sits with his hands on the desk: his chair rolls this far in from the shared console's seat. */
 const PILOT_REACH = 24;
 
-/** The whole room, as children of a `ZoneScene`. */
 export function ControlRoom({ brief, card, plan, note }: ControlRoomProps) {
   const seat = consoleLayout({ width: CONSOLE_WIDTH }).seat;
   return (

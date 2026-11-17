@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { agentOf, openCommand, osOf } from './first-skill.pure';
 
-/*
- * The plain logic behind "Run your first skill" (Spec Option 7a): the command the permission prompt shows for the
- * page's OS pick, and how the page's picks read.
- */
-
 describe('success cases', () => {
   it('shows the command that opens the homepage on each operating system', () => {
     // ARRANGE

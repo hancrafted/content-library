@@ -54,7 +54,6 @@ interface PickOptionsProps {
   readonly title: string;
   readonly badge: string;
   readonly describe: (agent: string, option: string) => string;
-  /** What follows the sign-in, per AI agent id. */
   readonly after: Readonly<Record<string, readonly ReactNode[]>>;
 }
 
@@ -65,7 +64,6 @@ interface AgentOptionsProps {
   readonly after: readonly ReactNode[];
 }
 
-/** One AI agent's sign-in options in the vendor's order, then what follows the sign-in. */
 function AgentOptions({ agent, badge, describe, after }: AgentOptionsProps) {
   return (
     <div className="flex flex-col gap-3">
@@ -79,7 +77,6 @@ function AgentOptions({ agent, badge, describe, after }: AgentOptionsProps) {
   );
 }
 
-/** "Which option do I pick?": the agent's real sign-in options in the vendor's order, one marked, then what follows. */
 export function PickOptions({ title, badge, describe, after }: PickOptionsProps) {
   return (
     <details className="group rounded-lg border border-border bg-background p-4" data-pick="">

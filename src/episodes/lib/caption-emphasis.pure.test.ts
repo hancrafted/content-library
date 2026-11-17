@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EMPHASIS_CLOSE, EMPHASIS_OPEN, isEmphasised, runsOf, splitEmphasis } from './caption-emphasis.pure';
 
-/** A caption as `t.markup` writes it, `<b>` chunks wrapped in the two marks. */
 function marked(...parts: readonly string[]): string {
   return parts.map((part, index) => (index % 2 === 1 ? `${EMPHASIS_OPEN}${part}${EMPHASIS_CLOSE}` : part)).join('');
 }

@@ -42,7 +42,6 @@ function Pill({ words, tone }: { readonly words: ViewWords; readonly tone: 'prim
   );
 }
 
-/** One index row: the skill's name over its description, or its `name:` line in the Coding agent view. */
 function IndexRow({ entry: { slug, name, description, vague, focal } }: { readonly entry: IndexEntry }) {
   return (
     <li
@@ -62,12 +61,6 @@ function IndexRow({ entry: { slug, name, description, vague, focal } }: { readon
   );
 }
 
-/**
- * The manual's index in close-up, the one page the pilot can read, in the Spec's green binder with its rings: each skill
- * a name over its one-line description, the clear entry lit as the task arrives. Real text on the card, so it reads at
- * any width; in the Coding agent view each
- * name becomes the `name:` line of its `SKILL.md`.
- */
 export function ManualIndex(props: ManualIndexProps) {
   const { heading, headingNote, headingCoding, loaded, closed, entries, className } = props;
   return (

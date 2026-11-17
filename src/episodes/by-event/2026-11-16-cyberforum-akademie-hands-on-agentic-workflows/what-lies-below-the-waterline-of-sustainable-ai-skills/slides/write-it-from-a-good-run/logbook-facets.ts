@@ -1,22 +1,13 @@
-/*
- * The notes lane's picture, lifted facet by facet from Spec Option 10b (feedback 3, decision 46), in the Spec's 330 by
- * 176 units: three logbook pages pinned to the faceted wall, and on the chart table under them the open logbook, a
- * pencil and a loose page. The Spec's paper shadows (`drop`) are left out (decision 19).
- */
-
 import type { ArtTone } from './room-facets';
 
-/** The picture's drawing space, the Spec's. */
 export const LOGBOOK_ART = { width: 330, height: 176 } as const;
 
-/** Where each pinned page's date sits, in the picture's units, and its tilt; the dates are the Slide's words. */
 export const PAGE_DATES = [
   { x: 22, y: 38, tilt: -3 },
   { x: 124, y: 40, tilt: 2 },
   { x: 226, y: 38, tilt: 0 },
 ] as const;
 
-/** The tones the room has, plus the chart table's wood, the pencil and the logbook's cover. */
 export type LogbookTone = ArtTone | 'wood-lit' | 'wood' | 'wood-shade' | 'pencil' | 'cover' | 'cover-shade';
 
 export type LogbookFacet = readonly [tone: LogbookTone, d: string];

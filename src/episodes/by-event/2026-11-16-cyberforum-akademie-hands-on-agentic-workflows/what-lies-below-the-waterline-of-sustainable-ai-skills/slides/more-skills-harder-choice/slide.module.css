@@ -1,12 +1,4 @@
-/*
- * "More skills, harder choice" (Option 13a): the room's tones, the near-twins and the one emphasis motion. The tones
- * are the approved Spec's own (feedback 3, decision 46), this Slide's tokens for the facets `room-art.tsx` lifts from
- * it; dark values are the Spec's dark ones, tuned later with dark mode (feedback 2, decision 32). `--primary` marks the
- * one wall line and its card.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .art {
   --bulk-lit: oklch(0.56 0.03 250);
   --bulk: oklch(0.46 0.03 254);
@@ -99,15 +91,11 @@
   stroke: var(--glint);
 }
 
-/* A near-twin card: dashed and at 65% ink at rest, the end state of its fade. */
 .twin {
   opacity: 0.65;
 }
 
-/*
- * The one emphasis motion: the near-twins fade back while the wall's first line fills primary and its leader draws to
- * the one card. The base rules are the rest state, which reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .lit {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -142,7 +130,6 @@
   }
 }
 
-/* The line fades in already lit, the leader after it: opacity alone (decision 19). */
 @keyframes light-up {
   from {
     opacity: 0;

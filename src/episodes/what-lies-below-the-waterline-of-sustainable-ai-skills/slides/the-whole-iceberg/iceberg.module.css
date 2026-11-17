@@ -1,13 +1,5 @@
-/*
- * "The whole iceberg" (Option 26a): the trail, the robot's cable, the open manual, the takeaway rows written on the
- * water and the one emphasis motion. No raw colour (FE-011): the trail and its nodes mix `--on-brand-accent` (white),
- * the cable mixes the Abyss with `--overlay` (black), the manual's pages and spine mix white and `--bulb-edge`'s ochre.
- * Words on light water take `--card-foreground`, which turns light with the dark theme's water; words on water dark
- * in both themes take white. `--primary` marks the three steps, inverted to `--background` on Midnight water.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .trail {
   --trail: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
   --node: color-mix(in oklab, var(--on-brand-accent) 92%, var(--zone-surface));
@@ -25,7 +17,6 @@
   fill: var(--node);
 }
 
-/* The Surface's node floats in the sky above the A-frame, where the robot never rises: it stays unlit. */
 .unlit {
   opacity: 0.35;
 }
@@ -48,11 +39,6 @@
   opacity: 0.6;
 }
 
-/*
- * The props lifted from the Spec (`index-art.tsx`): the paper of the index page and the manual, the manual's spine and
- * the trail's bubbles, in the Spec's own tones (feedback 3, decision 46); dark values are the Spec's dark ones. The
- * paper stays light in both themes, as in the Spec, so its words take the Spec's paper ink in both.
- */
 .art {
   --glint: oklch(1 0 0);
   --paper: oklch(0.965 0.01 88);
@@ -104,8 +90,6 @@
   stroke: var(--spine);
 }
 
-/* The index page's words on its paper, and the mark beside the skill named by its moment. */
-/* Two classes, so the page's paper replaces the card's own background. */
 .index.paper {
   --ink-paper: oklch(0.24 0.03 255);
   --ink-paper-soft: oklch(0.48 0.03 250);
@@ -114,8 +98,7 @@
   color: var(--ink-paper);
 }
 
-:global(.dark) /* Two classes, so the page's paper replaces the card's own background. */
-.index.paper {
+:global(.dark) .index.paper {
   --ink-paper: oklch(0.2 0.03 255);
   --ink-paper-soft: oklch(0.4 0.03 250);
 }
@@ -133,12 +116,10 @@
   background: var(--primary);
 }
 
-/* The index page: below the picture on a narrow Scene, in the sky right of the ship, clear of the berg, on a wide one. */
 .index {
   margin: 0.75rem;
 }
 
-/* The takeaway rows: on a narrow Scene each follows the picture on its own zone's water. */
 .rows {
   display: flex;
   flex-direction: column;
@@ -218,11 +199,6 @@
   color: var(--primary);
 }
 
-/*
- * A Scene wide enough to hold the words on the water: each row sits on its zone's band in the one picture, the name
- * left of the trail (x 18 to 208), the lines right of its node (from x 272), clear of the berg. Positions are the
- * drawing's units (`--units` across) read against the Scene's width, as the drawing keeps its proportions.
- */
 @container (width >= 44rem) {
   .rows {
     position: absolute;
@@ -245,7 +221,6 @@
   }
 }
 
-/* Wide enough for each line on its own: the two lines of a takeaway stack, their step chips in one column. */
 @container (width >= 64rem) {
   .index {
     position: absolute;
@@ -273,10 +248,6 @@
   }
 }
 
-/*
- * Below the wide Scene the index page is not in the sky, so its leader from the manual goes too; on the water the
- * zone's name keeps the whole column, without its tile.
- */
 @container (width < 64rem) {
   .leader {
     display: none;
@@ -289,17 +260,12 @@
   }
 }
 
-/*
- * The one emphasis motion, once on entry: the robot rises on its cable from the seabed to the A-frame (its `Travel`)
- * and each takeaway and its node light as it passes, the Abyss first and the Surface last. The base rules are the end
- * state, every row lit and the robot home, as reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .light {
     animation: light 500ms ease-out var(--light-delay) both;
   }
 
-  /* The same easing as `Travel`, so the cable's end stays on the robot as it rises. */
   :global([data-zone='active']) .cable {
     animation: pay-in var(--rise-duration) cubic-bezier(0.33, 0, 0.2, 1) var(--rise-delay) both;
   }

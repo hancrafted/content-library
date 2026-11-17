@@ -1,9 +1,3 @@
-/*
- * The drawn window's three bits of motion: the cursor blinks, the command types itself in once, the output fades in
- * after it. The base rules are the finished picture (command typed, output shown, cursor solid), which is also what
- * reduced motion shows; the motion only plays under no-preference.
- */
-
 @keyframes blink {
   50% {
     opacity: 0;
@@ -23,7 +17,6 @@
   }
 }
 
-/* The typed command is ten characters, "echo hello"; the width is what the typing grows. */
 .command {
   width: 10ch;
 }

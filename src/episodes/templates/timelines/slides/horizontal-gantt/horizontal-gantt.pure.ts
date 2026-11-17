@@ -1,32 +1,21 @@
-/*
- * The phase bars' data and geometry: which lane each bar sits in, the months
- * it spans, where it lands on the track, how far "today" has eaten into it,
- * and how wide its tooltip grows. No DOM, no React.
- */
-
 import type { PopoverRules } from '@/shared/lib/popover-placement.pure';
 
-/** The axis runs one year, in months; a quarter is three of them. */
 export const AXIS_MONTHS = 12;
 
-/** The lanes, top to bottom; each names its Translation key under `lanes.<key>`. */
 export const GANTT_LANES = ['a', 'b', 'c'] as const;
 
 export type GanttLane = (typeof GANTT_LANES)[number];
 
 export interface Bar {
   readonly lane: GanttLane;
-  /** Months from the year's start. */
   readonly start: number;
   readonly end: number;
 }
 
-/** The phase bars; each names its Translation keys under `items.<key>`. */
 export const GANTT_ITEMS = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
 
 export type GanttItem = (typeof GANTT_ITEMS)[number];
 
-/** Placeholder months, chosen so the bars overlap across lanes and never within one; they match the `items.*.date` quarters. */
 export const GANTT_BARS: Record<GanttItem, Bar> = {
   a: { lane: 'a', start: 0, end: 2.5 },
   b: { lane: 'b', start: 1, end: 5.5 },
@@ -36,7 +25,6 @@ export const GANTT_BARS: Record<GanttItem, Bar> = {
   f: { lane: 'b', start: 9.5, end: 12 },
 };
 
-/** Where the "today" marker stands, in months from the year's start. */
 export const TODAY = 7;
 
 export interface BarBox {
@@ -50,19 +38,16 @@ function assertRange({ start, end }: Bar): void {
   }
 }
 
-/** Where a bar sits on its lane's track, as shares of the track's width. */
 export function barBox(bar: Bar): BarBox {
   assertRange(bar);
   return { leftPercent: (bar.start / AXIS_MONTHS) * 100, widthPercent: ((bar.end - bar.start) / AXIS_MONTHS) * 100 };
 }
 
-/** How much of a bar lies left of `today`: 0 before it starts, 1 once it has ended. */
 export function elapsedShare(bar: Bar, today: number): number {
   assertRange(bar);
   return Math.min(Math.max((today - bar.start) / (bar.end - bar.start), 0), 1);
 }
 
-/** Every pair of bars that share a lane and overlap; touching end to start is not an overlap. */
 export function laneClashes<K extends string>(bars: Readonly<Record<K, Bar>>): [K, K][] {
   const entries = Object.entries(bars) as [K, Bar][];
   return entries.flatMap(([key, bar], index) =>
@@ -73,12 +58,8 @@ export function laneClashes<K extends string>(bars: Readonly<Record<K, Bar>>): [
   );
 }
 
-/** The tooltip's widths and gaps for the shared popover placement (`@/shared/lib/popover-placement.pure`); it prefers to open above its bar. */
 export const TOOLTIP_RULES: PopoverRules = {
-  /** The widest a tooltip grows; a phone narrows it to the viewport minus its margins. */
   maxWidth: 272,
-  /** Space kept between a tooltip and its bar. */
   gap: 10,
-  /** The least room above a bar before its tooltip flips below. */
   minRoom: 140,
 };

@@ -22,7 +22,6 @@ const START_PAGES: Readonly<Record<AiAgent, string>> = {
   copilot: 'https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-copilot-cli',
 };
 
-// The menu is an example, not a promise about every Windows configuration; the alternative stays in closed help.
 export const startTheAgentInsideThatFolder = slide({
   slug: 'start-the-agent-inside-that-folder',
   messages: { en, de },

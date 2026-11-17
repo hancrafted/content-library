@@ -1,9 +1,3 @@
-/*
- * The control-room wall of "Beside the skill", lifted from the approved Spec's Option 17a (feedback 3, decision 46):
- * the faceted wall and floor boards behind the two sheets, and the sheets' faceted paper with their tape and flat
- * drop, in the Spec's own units and tones (`slide.module.css`). The words on the sheets stay HTML.
- */
-
 type Tone =
   | 'room'
   | 'room-lit'
@@ -20,7 +14,6 @@ type Tone =
   | 'plan-shade';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** The control-room wall and its floor boards, as the Spec drew them: 600 by 420, the wall down to 380. */
 const WALL: Facets = [
   ['room', 'M532 316L386 380L490 212Z'],
   ['room-shade', 'M532 316L600 228L600 380ZM600 228L532 316L490 212Z'],
@@ -48,7 +41,6 @@ const WALL: Facets = [
   ['floor-lit', 'M527 420L532 380L600 420ZM68 380L74 420L0 420ZM161 420L74 420L68 380Z'],
 ];
 
-/** The skill's taped-up sheet, its shadow and folded corner, in the Spec's units. */
 const SKILL_SHEET: Facets = [
   ['drop', 'M26 44L340 40L344 337L30 341Z'],
   ['paper-lit', 'M20 36L332 32L24 332Z'],
@@ -57,7 +49,6 @@ const SKILL_SHEET: Facets = [
   ['tape', 'M155 23L201 31L201 45L155 37Z'],
 ];
 
-/** Today's dive plan: faceted paper, its ruled lines and its tape, in the Spec's units. */
 const PLAN_SHEET: Facets = [
   ['drop', 'M370 78L596 78L596 309L370 309Z'],
   ['plan', 'M588 233L541 209L588 181ZM588 233L506 267L541 209Z'],
@@ -86,7 +77,6 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
   return facets.map(([tone, d]) => <path key={d} d={d} data-tone={tone} vectorEffect="non-scaling-stroke" />);
 }
 
-/** The faceted wall and floor behind the sheets, stretched over the wall's box. Decoration only. */
 export function WallArt({ className }: { readonly className?: string }) {
   return (
     <svg aria-hidden viewBox="0 0 600 420" preserveAspectRatio="none" data-wall-art className={className}>
@@ -95,13 +85,11 @@ export function WallArt({ className }: { readonly className?: string }) {
   );
 }
 
-/** Each sheet's paper as the Spec cut it: its box in the Spec's units, so its tape and drop overhang the edges. */
 const SHEETS = {
   skill: { facets: SKILL_SHEET, box: '20.2 32.1 315.6 299.8' },
   plan: { facets: PLAN_SHEET, box: '364 70 224 230' },
 } as const;
 
-/** One sheet's faceted paper, stretched behind its words; the tape and the drop overhang the sheet's box. */
 export function SheetArt({ sheet, className }: { readonly sheet: keyof typeof SHEETS; readonly className?: string }) {
   const { facets, box } = SHEETS[sheet];
   return (

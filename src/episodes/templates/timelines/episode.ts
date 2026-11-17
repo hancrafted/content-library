@@ -11,11 +11,7 @@ import { verticalCenterSpine } from './slides/vertical-center-spine/slide';
 import { verticalStepper } from './slides/vertical-stepper/slide';
 import { verticalStickyYears } from './slides/vertical-sticky-years/slide';
 
-/*
- * The Timelines Master slide, a Template (design-ADR 0019): a Title slide, then one Section of reusable Slide
- * layouts. Each Slide is one folder under `slides/` holding its Scene, widgets, CSS module and own Translation files;
- * the Template's title, caption and description sit in `i18n/`. Copy a Slide to start from it (design guide, Slide library).
- */
+// decision: docs/adr/0019-resources-overview.md
 export const timelines = episode({
   slug: 'timelines',
   messages: { en, de },

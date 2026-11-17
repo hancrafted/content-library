@@ -24,20 +24,18 @@ const ANTHROPIC_BEST_PRACTICES = {
   url: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices',
 };
 
-/** The skill's folder, as Slide 3 names it: paths and pointer code are never translated. */
 const ROOT = 'collect-sediment-sample/';
 const PATHS = {
   arm: 'scripts/arm-preset.py',
   guide: 'references/species-guide.md',
   label: 'assets/label-template.md',
 } as const;
-/** Each step's pointer in the Coding agent view, keyed by the step's role (FE-002 §5.1). */
+// decision: FE-002 §5.1
 const CODING_POINTERS = {
   'lower-arm': `Run ${PATHS.arm}.`,
   identify: `Read ${PATHS.guide}, starting with its contents.`,
   label: `Fill in ${PATHS.label}.`,
 } as const;
-/** A Slide link (`slideHref`) taken apart into its logical path and anchor, so the `href` goes through `localizePath`. */
 function partsOf(link: string) {
   const [path = '', anchor] = link.split('#');
   return { path: stripLocale(path), anchor };
@@ -49,19 +47,10 @@ const CHAPTERS = [
   { slug: 'crustaceans', page: 22 },
   { slug: 'unknown', page: 30 },
 ] as const;
-/** The lit step: its row fills `primary`, its arrow turns solid and its file slides out. */
 const FOCUS = 4;
 
-/** An empty cell of the three-column grid, there only to keep each file level with its step on wide screens. */
 const Gap = () => <div aria-hidden className="hidden @4xl:block" />;
 
-/**
- * "Inside the skill" (Spec Option 16a): keeps `master: three-column` (instructions, supporting files, rules for long
- * files), each file level with the step that uses it, on the control-room wall lifted from the Option (feedback 3,
- * decision 46). Keeps `motion: local`: step 4 fills
- * `primary`, its arrow turns solid and the species guide slides out of the sleeve, once on entry; at rest it shows slid
- * out. The rows are a grid rather than the build notes' inline SVG, so every word reads at phone width too.
- */
 export const insideTheSkill = slide({
   slug: 'inside-the-skill',
   messages: { en, de },
@@ -126,7 +115,6 @@ export const insideTheSkill = slide({
           overlay={
             <>
               <div className="focus-group focus-group--dim-others grid gap-x-4 p-4 @4xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)_minmax(0,3fr)] @4xl:grid-rows-[repeat(6,auto)_1fr_auto] @4xl:p-8">
-                {/* Row: the column heads, and the key under "Supporting files". */}
                 <p className="pb-3 text-body font-semibold">{t('columns.instructions')}</p>
                 <div {...target('files-head')} className="flex flex-col gap-1 pb-3">
                   <p className="text-body font-semibold">{t('columns.files')}</p>
@@ -140,7 +128,6 @@ export const insideTheSkill = slide({
                   </p>
                 </div>
                 <Gap />
-                {/* Row: the card's head in its sleeve. */}
                 <CardHead label={t('card.label')} title={t('card.title')} root={ROOT} file="SKILL.md" />
                 <Gap />
                 <Gap />
@@ -171,10 +158,6 @@ export const insideTheSkill = slide({
                   </p>
                 </div>
                 <StepCell n={FOCUS} text={t('steps.identify')} pointer={pointer('identify')} focus />
-                {/*
-                The species guide and the first rule are taller than step 4: on wide screens they span step 4's row
-                and step 5's, which alone grows (`1fr`), so steps 3 to 5 stay close as the Option draws them.
-              */}
                 <div className="relative flex items-center gap-2 py-2 pl-6 @4xl:col-start-2 @4xl:row-span-2 @4xl:row-start-6 @4xl:mb-6 @4xl:items-start @4xl:pl-0 @4xl:[&>[data-arrow]]:mt-7">
                   <StepArrow focal />
                   <SlideTrail />

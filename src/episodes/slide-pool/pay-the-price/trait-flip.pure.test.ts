@@ -35,10 +35,13 @@ describe('success cases', () => {
   });
 
   it('loops the pointed row: each beat and hold later the timer replays it', () => {
-    // ARRANGE: Probabilistic's beat runs 2.6 s and holds 1.5 s, so it replays every 4.1 s.
+    // ARRANGE
     const open = run([{ type: 'open', target: 'probabilistic' }]);
     const replayEvery = 4100;
-    const expected = { timer: { ms: replayEvery, event: { type: 'replay', target: 'probabilistic' } }, pass: 2 };
+    const expected = {
+      timer: { milliseconds: replayEvery, event: { type: 'replay', target: 'probabilistic' } },
+      pass: 2,
+    };
     // ACT
     const timer = nextTimer(open);
     const pass = rowAt(flip(open, timer!.event), 'probabilistic').pass;
@@ -47,14 +50,14 @@ describe('success cases', () => {
   });
 
   it('wipes every row, entered or skipped: shows all, then blanks them, and holds until the line is left', () => {
-    // ARRANGE: Relentless was entered, Informed skipped; the blank lands 900 ms after the line opens.
+    // ARRANGE
     const wiping = run([
       { type: 'open', target: 'relentless' },
       { type: 'open', target: 'closing' },
     ]);
     const blankAfter = 900;
     const expected = {
-      timer: { ms: blankAfter, event: { type: 'blank' } },
+      timer: { milliseconds: blankAfter, event: { type: 'blank' } },
       wiping: [
         { shown: true, blank: false },
         { shown: true, blank: false },

@@ -22,17 +22,9 @@ const GOOGLE_WHITEPAPER = {
   url: 'https://www.kaggle.com/whitepaper-agent-skills',
 };
 
-/** The skill's name and file, as Slides 3 and 6 give them: code, not translated. */
 const SKILL_NAME = 'collect-sediment-sample';
 const QUESTIONS = ['depth', 'order', 'failure'] as const;
 
-/**
- * "Write it from a good run" (picked Option 10b): two paths into one skill. Above, the interview path as one day in
- * four panels: the run that worked, the AI interviewing you for the why, the AI writing the skill that evening while
- * the run is in its context window, and the next morning starting fresh with the card on the wall. Below, the notes
- * lane joins at the skill card. `master: grid-1x2` and `motion: local` are overruled, as the Option says, for this
- * Scene and its one emphasis motion: the day plays panel by panel and both arrows draw into the card.
- */
 export const writeItFromAGoodRun = slide({
   slug: 'write-it-from-a-good-run',
   messages: { en, de },

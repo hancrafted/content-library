@@ -5,7 +5,6 @@ import { TermLine, TitleTerminal } from '@/episodes/components/slide-shared/titl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Your terminal", Title-slide Option 0b's theme: an empty terminal window with a still cursor, waiting.
 export const yourTerminal = slide({
   slug: 'your-terminal',
   messages: { en, de },

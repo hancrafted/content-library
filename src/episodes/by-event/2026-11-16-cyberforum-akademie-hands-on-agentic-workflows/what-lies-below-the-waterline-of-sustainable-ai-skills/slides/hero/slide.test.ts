@@ -7,14 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Title slide's hero Scene, picked Option 0a: the research ship on the waterline has lowered its diving robot to
- * hang just above the water, where the ruler marks the Surface. Read as the Title slide renders it, with no Section
- * placed beside it. The whole depth is one full-bleed drawing in the Backdrop, so the title and lede sit in its sky
- * (Han's feedback 1); the ruler and the pill stay reader content over it. The scenery comes from
- * the Iceberg style, the ship, crew and robot from the cast (design-ADR-0025).
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const sceneOf = (locale: Locale) =>
   load(
     renderToStaticMarkup(
@@ -131,8 +124,9 @@ describe('success cases', () => {
 
   it('draws the water under the waterline at half the facet density before feedback 2, its bleed faceted too', () => {
     // ARRANGE
-    // 72 across one 1200-wide drawing before (decision 8); now 40 a drawing's width, over the three widths of the bleed.
-    const expected = 120;
+    const trianglesPerDrawing = 40;
+    const drawingWidths = 3;
+    const expected = trianglesPerDrawing * drawingWidths;
     // ACT
     const $ = sceneOf('en');
     const triangles = $('[data-depth-band] [data-band="water"] polygon').length;

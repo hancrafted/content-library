@@ -8,7 +8,6 @@ import { BENTO_TILES, type GridBentoCell } from './grid-bento.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Literal span classes per tile, so Tailwind sees them; the footprints themselves live in `BENTO_TILES`.
 const SPAN: Record<GridBentoCell, string> = {
   c1: 'sm:col-span-2 sm:row-span-2',
   c2: 'sm:col-span-2',
@@ -18,7 +17,6 @@ const SPAN: Record<GridBentoCell, string> = {
   c6: 'sm:col-span-2',
 };
 
-// A small accent mark per supporting tile; the lead carries the gradient instead.
 const MARK: Record<GridBentoCell, string> = {
   c1: '',
   c2: 'bg-primary',
@@ -28,13 +26,9 @@ const MARK: Record<GridBentoCell, string> = {
   c6: 'bg-primary',
 };
 
-// Pointing at a tile lifts it (`card-hover--raise`) and dims its siblings (`focus-group--dim-others`); CSS only.
 const TILE =
   'card-hover card-hover--raise relative isolate flex flex-col overflow-hidden rounded-2xl border border-border p-5 md:p-6';
 
-// A bento grid on four columns (two from `sm`, one on phones): a 2×2 lead tile with a slowly turning gradient, then
-// five supporting tiles of varied spans that pack the grid with no hole (`packTiles` proves it). The lead's gradient
-// plays only while the Slide is active and rests under reduced motion.
 export const gridBento = slide({
   slug: 'grid-bento',
   messages: { en, de },
@@ -66,7 +60,6 @@ export const gridBento = slide({
   },
 });
 
-/** The 2×2 lead: a large title set bottom-left over the drifting gradient. Not a control. */
 function LeadTile({ title, caption }: { title: string; caption: string }) {
   const id = `grid-bento-${useId()}`;
   return (
@@ -83,7 +76,6 @@ function LeadTile({ title, caption }: { title: string; caption: string }) {
   );
 }
 
-/** A supporting tile: an accent mark and a faint index on top, title and caption at the bottom. Not a control. */
 function SupportTile(props: { cell: GridBentoCell; index: number; title: string; caption: string }) {
   const { cell, index, title, caption } = props;
   const id = `grid-bento-${useId()}`;

@@ -11,15 +11,6 @@ import { entryOf, type ComposedPage } from './composed-page';
 import summaries from './page-summaries.generated.json';
 import { summaryOf } from './page-summary';
 
-/*
- * The cross-Episode half of the composition lookup (FE-002): the invariants that span pages, read from the page
- * catalogue and the generated summaries `npm run registry` writes beside the registry, never from a composition. What a
- * page's own composition holds (its slug, its own text, its Sections, its header mode, the Playlist anchors into it, its
- * summary in step with it) is an Episode-level check (`composed-page-checks.ts`), run by each page folder's own
- * `episode-checks.test.ts`, so this test imports no Episode.
- */
-
-/** Every composed page the catalogue lists: each Episode with a page, each Template, Explorable page and Guide. */
 const CATALOGUE: readonly ComposedPage[] = [
   ...EPISODE_IDS.map((id) => episodeRefOf(id)),
   ...TEMPLATE_SLUGS.map((slug) => templateRef(slug)),
@@ -27,7 +18,6 @@ const CATALOGUE: readonly ComposedPage[] = [
   ...GUIDE_SLUGS.map((slug) => guideRef(slug)),
 ];
 
-/** The ids the generated summaries hold, by the catalogue's kind of page. */
 const INDEXED = [
   ...Object.keys(summaries.episodes),
   ...Object.keys(summaries.templates),
@@ -70,7 +60,7 @@ describe('failure cases', () => {
     const unregistered = 'non-existent-episode';
     // ACT
     const valid = isEpisodeId(unregistered);
-    // @ts-expect-error -- an Episode the registry does not hold has no entry
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRefOf(unregistered));
     // ASSERT
     expect(valid).toBe(false);
@@ -81,7 +71,7 @@ describe('failure cases', () => {
     // ARRANGE
     const episode = 'ai-attention-span';
     // ACT
-    // @ts-expect-error -- an Episode's slug names no Template
+    // @ts-expect-error
     const lookup = () => summaryOf(templateRef(episode));
     // ASSERT
     expect(lookup).toThrow(episode);
@@ -104,7 +94,7 @@ describe('edge cases', () => {
     const expected = false;
     // ACT
     const valid = isEpisodeId(slug);
-    // @ts-expect-error -- a Template's slug names no Episode
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRefOf(slug));
     // ASSERT
     expect(valid).toBe(expected);
@@ -115,7 +105,7 @@ describe('edge cases', () => {
     // ARRANGE
     const deleted = 'slide-layouts';
     // ACT
-    // @ts-expect-error -- a deleted Template has no entry
+    // @ts-expect-error
     const lookup = () => summaryOf(templateRef(deleted));
     // ASSERT
     expect(lookup).toThrow(deleted);

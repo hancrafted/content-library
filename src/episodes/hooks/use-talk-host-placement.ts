@@ -22,21 +22,18 @@ function place(host: HTMLElement, slot: HTMLElement | null, docked: boolean): Re
   return boxOf(host);
 }
 
-/** Where the talk host stands: the element, the slot it follows while undocked, and whether it is docked. */
 interface Target {
   host: HTMLElement | null;
   slot: HTMLElement | null;
   docked: boolean;
 }
 
-/** True when the dock state changed since the last placement; the first placement is no switch. */
 function switched(before: boolean | null, docked: boolean): boolean {
   return before !== null && before !== docked;
 }
 
 let gliding: Animation | undefined;
 
-/** Glides the host from its old box to its new one by animating `transform` alone, unless the reader asked for less motion. */
 function glide(host: HTMLElement, first: Rect | null, last: Rect) {
   const from = first && flipTransform(first, last);
   if (!from || prefersReducedMotion()) return;
@@ -46,10 +43,6 @@ function glide(host: HTMLElement, first: Rect | null, last: Rect) {
   });
 }
 
-/**
- * Re-measures the undocked host's page position on resize, slot and body resize, and font load, coalesced into one
- * frame. Not on scroll: the host is absolute against the page and scrolls with it.
- */
 function useFollowSlot(target: Target) {
   const { host, slot, docked } = target;
   useEffect(() => {
@@ -72,10 +65,6 @@ function useFollowSlot(target: Target) {
   }, [host, slot, docked]);
 }
 
-/**
- * Places the one talk host: over the slot while undocked, bottom-left while docked, with a
- * transform-only glide between the two. The host is never re-parented, so the video keeps playing.
- */
 export function useTalkHostPlacement(target: Target) {
   const { host, slot, docked } = target;
   const wasDocked = useRef<boolean | null>(null);
@@ -85,7 +74,6 @@ export function useTalkHostPlacement(target: Target) {
       return;
     }
     gliding?.cancel();
-    // FLIP: the old viewport box, then the switch of position, then the new box.
     const first = wasDocked.current === null ? null : boxOf(host);
     const last = place(host, slot, docked);
     if (switched(wasDocked.current, docked)) glide(host, first, last);
@@ -94,14 +82,12 @@ export function useTalkHostPlacement(target: Target) {
   useFollowSlot(target);
 }
 
-/** Marks the Episode page while the card is docked, so the table of contents leaves it room. */
 export function useDockedPageMark(docked: boolean) {
   useEffect(() => {
     if (!docked) return;
     const page = document.querySelector('[data-slot="episode-page"]');
     const root = document.documentElement;
     page?.setAttribute(TALK_DOCKED_ATTR, 'true');
-    // Keyboard focus scrolled into view clears the docked card, never lands under it.
     root.style.scrollPaddingBottom = `${tocReserveRem()}rem`;
     return () => {
       page?.removeAttribute(TALK_DOCKED_ATTR);

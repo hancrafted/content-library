@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { watchFor } from './watch.pure';
 
-/* English links the AXEL Episodes, German the Akademie ones; the freelancer comes first in both. */
-
 describe('success cases', () => {
   it('links the AXEL freelancer and attention-span Episodes in English', () => {
     // ARRANGE

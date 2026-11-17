@@ -4,13 +4,11 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import { cn } from '@/shared/lib/utils';
 import { useRef, type ReactNode } from 'react';
 
-/** A skill the turn invokes: its slash command, linked to where the skill is published. */
 export interface ChatSkill {
   command: string;
   url: string;
 }
 
-/** One turn of the worked chat: a question from the AI (its two options and a recommendation), or your reply. */
 export interface ChatTurnCopy {
   slug: string;
   speaker: 'ai' | 'you';
@@ -18,12 +16,10 @@ export interface ChatTurnCopy {
   skill?: ChatSkill;
   options?: readonly string[];
   recommended?: string;
-  /** The question you had not thought of. */
   forgotten?: boolean;
 }
 
 export interface InterviewChatCopy {
-  /** The AI sparkle, drawn by the server entry from the shared glyphs. */
   sparkle: ReactNode;
   open: string;
   title: string;
@@ -33,16 +29,10 @@ export interface InterviewChatCopy {
   you: string;
   recommended: string;
   newTab: string;
-  /** The worked chat: you start a grilling, the AI asks one numbered question at a time, you end with a spec. */
   turns: readonly ChatTurnCopy[];
 }
 
-/**
- * "See the chat" opens the Interview's worked chat in a native `<dialog>` via `showModal()`: the top layer, so no
- * z-index and no Slide wrapper's `isolate` traps it under the chrome (FE-009 §8). The browser gives Escape, the focus
- * trap and the inert page; a press on the backdrop closes it. Bubbles are tool-neutral: the AI left, you right. The
- * chat scrolls inside the card, so a long chat never runs past the viewport.
- */
+// decision: FE-009 §8
 export function InterviewChat({ copy }: { copy: InterviewChatCopy }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const close = () => dialog.current?.close();
@@ -121,7 +111,6 @@ function ChatHeader({
   );
 }
 
-/** A slash command as a link to the skill's source, opening a new tab. */
 function SkillLink({ skill, newTab }: { skill: ChatSkill; newTab: string }) {
   return (
     <a
@@ -136,7 +125,6 @@ function SkillLink({ skill, newTab }: { skill: ChatSkill; newTab: string }) {
   );
 }
 
-/** A question's two options and the AI's recommendation, under its text. */
 function Question({
   options,
   recommended,
@@ -181,7 +169,6 @@ function ChatTurn({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy 
   );
 }
 
-/** What a turn says: its text, after the skill command it invokes, then a question's options. */
 function TurnBody({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy }) {
   return (
     <>

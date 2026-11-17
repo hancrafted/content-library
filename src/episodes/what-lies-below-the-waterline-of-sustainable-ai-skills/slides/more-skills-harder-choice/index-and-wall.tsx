@@ -10,7 +10,6 @@ interface ViewWords {
 }
 
 export interface IndexCard {
-  /** The skill's folder name, the card's name in the Coding agent view; code, not translated. */
   readonly folder: string;
   readonly name: string;
   readonly twin: boolean;
@@ -32,7 +31,6 @@ function Pill({ words, tone }: { readonly words: ViewWords; readonly tone: 'prim
   );
 }
 
-/** One card of the board: a near-twin dashed and faded back, the led card ringed in primary. */
 function BoardCard({ card: { folder, name, twin }, led }: { readonly card: IndexCard; readonly led: boolean }) {
   return (
     <li
@@ -59,15 +57,10 @@ function BoardCard({ card: { folder, name, twin }, led }: { readonly card: Index
 export interface SkillIndexBoardProps {
   readonly label: ViewWords;
   readonly cards: readonly IndexCard[];
-  /** The folder of the one card the wall list leads to. */
   readonly target: string;
   readonly className?: string;
 }
 
-/**
- * The skill index board over the console, the Spec's faceted frame of paper cards: eight cards, the four near-twins dashed and faded back, the one card the wall
- * list leads to ringed in primary. In the Coding agent view each card shows its skill folder.
- */
 export function SkillIndexBoard({ label, cards, target, className }: SkillIndexBoardProps) {
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
@@ -84,7 +77,6 @@ export function SkillIndexBoard({ label, cards, target, className }: SkillIndexB
   );
 }
 
-/** One line of the wall's list, numbered in the Chat app view, a Markdown list item in the Coding agent view. */
 function WallItem({ folder, name, n, lit }: { folder: string; name: string; n: number; lit: boolean }) {
   return (
     <li
@@ -111,10 +103,6 @@ export interface WallBriefProps {
   readonly className?: string;
 }
 
-/**
- * The project brief pinned to the wall, the project instructions, always loaded: a short list of three skills, its first line
- * lit. In the Coding agent view it is `AGENTS.md` with a `## Skills` list.
- */
 export function WallBrief({ chat, coding, items, lit, pill, className }: WallBriefProps) {
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>

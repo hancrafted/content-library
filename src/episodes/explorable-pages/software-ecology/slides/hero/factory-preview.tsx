@@ -1,17 +1,12 @@
 import { DocIcon } from '@/explorables/software-ecology/doc-icon-view';
 import { RACK_SLOTS, rackOf, type Rack, type Release } from './factory-preview.pure';
 
-/** One work center as the preview draws it: its words, its backlog and what marks it. */
 export interface PreviewCenter {
   readonly key: string;
   readonly label: string;
-  /** Documents in its backlog. */
   readonly waiting: number;
-  /** AI is on here: its document in work and its out belt turn orange, with the turbo. */
   readonly ai?: boolean;
-  /** Its rack is full: the card turns red and its label reads its weeks of work waiting. */
   readonly full?: boolean;
-  /** It is the inspection: a `human` shield in its corner. */
   readonly inspection?: boolean;
 }
 
@@ -19,15 +14,12 @@ export interface PreviewCustomer {
   readonly label: string;
   readonly output: string;
   readonly satisfied: string;
-  /** The last twenty releases, oldest first, filling a grid of 4 rows by 5 columns. */
   readonly releases: readonly Release[];
 }
 
 export interface FactoryPreviewProps {
   readonly customer: PreviewCustomer;
-  /** The main path a request rides, left to right. */
   readonly centers: readonly PreviewCenter[];
-  /** The full rack's "+n", already worded. */
   readonly overflow: string;
 }
 
@@ -37,9 +29,7 @@ const SLOT = { x: 6, width: 13, height: 7, step: 9 };
 const CUSTOMER_RIGHT = 100;
 
 const leftOf = (index: number) => CARD.first + index * (CARD.width + CARD.gap);
-/** Where the belt into the work center at `index` starts: the Customer's edge, or the previous card's. */
 const beltStartOf = (index: number) => (index === 0 ? CUSTOMER_RIGHT : leftOf(index - 1) + CARD.width);
-/** The rack slot `slot`, counted from the bottom. */
 const slotY = (slot: number) => CARD.y + 58 - slot * SLOT.step;
 
 function labelClass({ full, ai }: PreviewCenter) {
@@ -47,14 +37,12 @@ function labelClass({ full, ai }: PreviewCenter) {
   return ai ? 'fill-ai' : 'fill-muted-foreground';
 }
 
-/** A rack slot's fill: waiting work tinted orange when AI made it, the top slot red when the rack is full. */
 function slotClass(slot: number, rack: Rack, ai: boolean) {
   if (rack.full && slot === RACK_SLOTS - 1) return 'fill-destructive/25 stroke-destructive';
   if (slot >= rack.filled) return 'fill-none stroke-machine/40';
   return ai ? 'fill-ai/40 stroke-ai/60' : 'fill-foreground/25 stroke-foreground/30';
 }
 
-/** The rack of six slots on the card's left, with "+n" beside a full one. */
 function RackSlots({ left, rack, ai, overflow }: { left: number; rack: Rack; ai: boolean; overflow: string }) {
   return (
     <>
@@ -79,7 +67,6 @@ function RackSlots({ left, rack, ai, overflow }: { left: number; rack: Rack; ai:
   );
 }
 
-/** The inspection's shield, `human`, in the card's top-right corner. */
 function Shield({ left }: { left: number }) {
   return (
     <path
@@ -93,7 +80,6 @@ function Shield({ left }: { left: number }) {
 interface CenterProps {
   readonly center: PreviewCenter;
   readonly index: number;
-  /** Its input comes from the AI work center: its waiting work is AI-made. */
   readonly aiIn: boolean;
   readonly overflow: string;
 }
@@ -127,7 +113,6 @@ function Center({ center, index, aiIn, overflow }: CenterProps) {
   );
 }
 
-/** The turbo on an AI work center's out belt, and the AI-made documents it pushes on and piles at the belt's end. */
 function Turbo({ index }: { index: number }) {
   const start = leftOf(index) + CARD.width + 2;
   return (
@@ -145,7 +130,6 @@ function Turbo({ index }: { index: number }) {
       ))}
       <DocIcon quality="good" ai x={start + 1} y={69} />
       <DocIcon quality="bad" ai x={start + 9} y={72} />
-      {/* The pile-up at the belt's end: the waiting documents themselves. */}
       <DocIcon quality="good" ai x={start - 2} y={90} />
       <DocIcon quality="good" ai x={start + 10} y={96} />
       <DocIcon quality="bad" ai x={start + 2} y={108} />
@@ -155,7 +139,6 @@ function Turbo({ index }: { index: number }) {
   );
 }
 
-/** The Customer's card: its last releases as a grid, its output beside them and its satisfaction under them. */
 function Customer({ customer }: { customer: PreviewCustomer }) {
   return (
     <g>
@@ -184,7 +167,6 @@ function Customer({ customer }: { customer: PreviewCustomer }) {
   );
 }
 
-/** The release belt over the top, from the last work center back to the Customer, with three releases on it. */
 function ReleaseBelt({ last }: { last: number }) {
   return (
     <g>
@@ -202,7 +184,6 @@ function ReleaseBelt({ last }: { last: number }) {
   );
 }
 
-/** The belts into each work center; up to the AI work center each carries one plain document. */
 function Belts({ centers, aiAt }: { centers: readonly PreviewCenter[]; aiAt: number }) {
   return centers.map((center, index) => (
     <g key={center.key}>
@@ -219,12 +200,6 @@ function Belts({ centers, aiAt }: { centers: readonly PreviewCenter[]; aiAt: num
   ));
 }
 
-/**
- * The Title slide's preview of the software ecology factory, in the steady frame of the Visual language: the Customer
- * on the left, the main path a request rides as a row of work centers with their racks, the belts between them, and
- * the release belt over the top back to the Customer. Static, server-rendered and decorative: the `ToolPreview` around
- * it names the picture.
- */
 export function FactoryPreview({ customer, centers, overflow }: FactoryPreviewProps) {
   const aiAt = centers.findIndex((center) => center.ai);
   return (

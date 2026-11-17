@@ -7,10 +7,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { yourFolder } from './slide';
 
-/*
- * The Slide in Title-slide Option 0b's terminal theme, read through the interface the page reads a Slide by.
- */
-
 function localized(locale: Locale): LocalizedSlide {
   const placed = placeSections<Slide>([[yourFolder]]).flat();
   return localizeSlide(placed[0] as never, {

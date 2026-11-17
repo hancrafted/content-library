@@ -9,16 +9,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { UnzipView } from './unzip-view.client';
 
-/*
- * The zip's file name and the folder's files are names, not words, so they stay out of the Translation files. The zip
- * lives in public/ with its files at the zip's root and no top folder: Windows' Extract All names the folder after the
- * zip, so a top folder would nest hancrafted-workshop-starter\\hancrafted-workshop-starter and the next Slide's path
- * would break. Its skills are real folders, not symlinks, because Windows extracts a symlink as a plain text file.
- * Build it from the folder, not from its parent: `cd hancrafted-workshop-starter && zip -qr -X ../<zip> .`.
- */
 const ZIP = 'hancrafted-workshop-starter.zip';
 const FOLDER = 'hancrafted-workshop-starter';
-/** One file for both locales, so its URL is the default locale's bare path. */
 const ZIP_PATH = `/${ZIP}`;
 
 function DownloadIcon() {
@@ -56,7 +48,6 @@ function FileIcon({ folder = false }: { folder?: boolean }) {
   );
 }
 
-/** One half's mono index line, as the grid-1x2 Master slide draws it. */
 function HalfIndex({ index, accent, children }: { index: string; accent: string; children: ReactNode }) {
   return (
     <h4 className="flex items-center gap-3 font-mono text-caption font-normal text-muted-foreground">
@@ -66,7 +57,6 @@ function HalfIndex({ index, accent, children }: { index: string; accent: string;
   );
 }
 
-/** A row of the unzipped folder: its file name, bold for the skills folder, and what it is for. */
 function FolderRow({ name, note, folder = false }: { name: string; note?: string; folder?: boolean }) {
   return (
     <li className="flex items-center gap-3 rounded-lg px-3 py-2">
@@ -77,9 +67,6 @@ function FolderRow({ name, note, folder = false }: { name: string; note?: string
   );
 }
 
-// Step 3 (first Slide), Option 5a: a copy of the grid-1x2 Master slide, download on the left and the unzipped folder on the right,
-// hover dimming the other half. The OS toolbar group is live, since the unzip gesture differs by OS (the build notes overrule
-// the Visual's "neither toolbar shows"); the AI-agent group is dimmed. Help sits in the header.
 export const downloadAndUnzipTheStarterFolder = slide({
   slug: 'download-and-unzip-the-starter-folder',
   messages: { en, de },

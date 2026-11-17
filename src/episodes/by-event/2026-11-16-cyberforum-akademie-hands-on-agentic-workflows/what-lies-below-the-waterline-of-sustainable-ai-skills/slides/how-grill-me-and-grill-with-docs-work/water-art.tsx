@@ -1,14 +1,6 @@
-/*
- * The water of "grill-with-docs keeps context beside the skill", lifted from the approved Spec's Option 19b (feedback
- * 3, decision 46): the faceted read-back current with its bubbles, and the Twilight water's light shafts and seabed,
- * in the Spec's own units and tones (`slide.module.css`). The Twilight water and its jellies stay the shared
- * `ZoneScene`.
- */
-
 type Tone = 'current' | 'current-lit' | 'bubble' | 'glint' | 'ray' | 'bed' | 'bed-lit' | 'bed-shade';
 type Facets = readonly (readonly [Tone, string])[];
 
-/** The light shafts slanting through the Twilight water. */
 const RAY: Facets = [
   [
     'ray',
@@ -16,7 +8,6 @@ const RAY: Facets = [
   ],
 ];
 
-/** The seabed along the bottom of the Scene. */
 const BED: Facets = [
   ['bed', 'M1002 782L984 763.6L1002 762.7ZM746 747.7L780 748.2L748.2 782Z'],
   ['bed-shade', 'M100 761.6L63.4 782L66 760Z'],
@@ -75,7 +66,6 @@ const BED: Facets = [
   ['bed-lit', 'M888.1 744.4L879 750.4L880 736.5Z'],
 ];
 
-/** The read-back current, faceted, and the bubbles rising beside its start. */
 const CURRENT: Facets = [
   ['current-lit', 'M440.8 566L459.8 568L458.1 584Z'],
   ['current', 'M440.8 566L458.1 584L439.2 582ZM457.1 568.2L473.9 564.2L477.6 579.8Z'],
@@ -98,18 +88,14 @@ function FacetPaths({ facets }: { readonly facets: Facets }) {
   return facets.map(([tone, d]) => <path key={d} d={d} data-tone={tone} vectorEffect="non-scaling-stroke" />);
 }
 
-/** The current's box in the Spec's units, from Monday's files up to Thursday's run, its bubbles below. */
 export const CURRENT_BOX = '436 402 112 284';
 
-/** The faceted read-back current and its bubbles, in the Spec's units: draw it in `CURRENT_BOX`. */
 export function CurrentArt() {
   return <FacetPaths facets={CURRENT} />;
 }
 
-/** The Spec's Scene, 1000 by 780; the Episode's is 1200 by 800, filled from the bottom. */
 const SPEC = { width: 1000, height: 780 } as const;
 
-/** The Twilight water's light shafts and the seabed, scaled from the Spec's Scene into `ZoneScene`'s, bottoms level. */
 export function TwilightFloor({ width, height }: { readonly width: number; readonly height: number }) {
   const scale = width / SPEC.width;
   return (

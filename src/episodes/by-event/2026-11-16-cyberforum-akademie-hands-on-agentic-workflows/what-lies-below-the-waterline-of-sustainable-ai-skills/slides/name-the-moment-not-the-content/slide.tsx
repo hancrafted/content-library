@@ -22,20 +22,16 @@ const OPTIMIZING = {
 };
 const GOOGLE = { slug: 'google-agent-skills-whitepaper', url: 'https://www.kaggle.com/whitepaper-agent-skills' };
 
-/** The skill both descriptions belong to; its folder name is code, not translated. */
 const SKILL = 'collect-sediment-sample';
 
-/** The words of the request and of the moment description that match by meaning, underlined in primary. */
 const matched = (chunks: ReactNode) => (
   <span className="underline decoration-primary decoration-2 underline-offset-4">{chunks}</span>
 );
 const matchedOnDark = (chunks: ReactNode) => (
   <span className="underline decoration-background decoration-2 underline-offset-4">{chunks}</span>
 );
-/** The request as the captain's bubble says it: plain words, since the shared bubble takes text only. */
 const plain = (chunks: string) => chunks;
 
-/** The two lines from the captain's bubble to the index, in the overlay's 1000 by 640 units: dashed to the content line, primary to the moment. */
 function linesFrom(words: string) {
   const { content, moment } = requestLines(requestBubble(words, WIDE_PICTURE_PIXELS));
   const at = ({ x, y }: { x: number; y: number }) => `${x.toFixed(1)} ${y.toFixed(1)}`;
@@ -46,11 +42,6 @@ function linesFrom(words: string) {
   };
 }
 
-/**
- * "Name the trigger, not the content" (Spec Option 12a): your request on the day of the dive, and the skill index with two
- * descriptions for the same skill; one primary line runs from the request to the moment description only. Overrules
- * `grid-1x2` for one path in one room; keeps `motion: local`, the line drawing and the match ringing once.
- */
 export const nameTheMomentNotTheContent = slide({
   slug: 'name-the-moment-not-the-content',
   messages: { en, de },

@@ -11,22 +11,15 @@ import { TwoDives } from './two-dives';
 
 const COUPLING = 'coupling-as-first-written';
 const OVERRIDE = 'project-details-hard-coded-into-a-skill-can-override-the-task';
-/** The card's steps by role (FE-002 §5.1); the descent holds the project detail. */
+// decision: FE-002 §5.1
 const STEPS = ['check-gear', 'descend', 'lower-arm', 'identify'] as const;
 const COUPLED_STEP = 'descend';
 
-/** The skill as a coding agent holds it: code, so never translated. */
 const SKILL_FILE = 'collect-sediment-sample/SKILL.md';
 const SKILL_LINES = ['1. Check arm and tubes.'] as const;
 const CODED_STEP = '2. Descend to 40 m.';
 const SKILL_TAIL = ['3. Lower the arm.', '4. Identify the catch.'] as const;
 
-/**
- * "A project detail couples a skill to one project" (Spec Option 15b): one wide water column under one pinned skill
- * card, the same card lowering two robots, and one side card for coupling, ringed in `primary`. `master: grid-1x2` is
- * overruled to a Scene (8 of 12 columns) beside the card; `motion: local` is kept: both robots descend together, site
- * 4's touches the shelf, site 7's stops at 40 m, and the "80 m short" bracket draws; at rest the end state shows.
- */
 export const oneSkillOneJob = slide({
   slug: 'one-skill-one-job',
   messages: { en, de },

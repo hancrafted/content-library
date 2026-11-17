@@ -18,17 +18,14 @@ const ENTERPRISE = {
 };
 const SKILLDEX = { slug: 'skilldex', url: 'https://arxiv.org/abs/2604.16911' };
 
-/** The zones from the Surface down, and which takeaway line carries which of the three steps. */
 const ZONES: readonly Zone[] = ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'];
 const STEPS: Partial<Record<Zone, readonly [TakeawayLine['step'], TakeawayLine['step']]>> = {
   sunlit: [1, 2],
   midnight: [3, undefined],
 };
-/** The short index: the skill named by its moment, and the two skills Slide 19 shows. Names are code. */
 const FOCAL_SKILL = 'collect-sediment-sample';
 const OTHER_SKILLS = ['grilling', 'domain-modeling'] as const;
 const SKILL_HOME = '~/.claude/skills/<name>/';
-/** The front matter in short lines, so the index page fits the sky beside the ship. */
 const FRONT_MATTER = [
   '---',
   `name: ${FOCAL_SKILL}`,
@@ -37,16 +34,9 @@ const FRONT_MATTER = [
   '  and need a sample from the seabed.',
   '---',
 ];
-/** The three step cards, by role, in the Brief's order. */
 const STEP_CARDS = ['third-time', 'the-moment', 'before-sharing'] as const;
 const CALLS = [`Claude Code: /${FOCAL_SKILL}`, `Codex: $${FOCAL_SKILL}`];
 
-/**
- * "The whole iceberg" (Spec Option 26a): one Scene from the Surface to the Abyss with each Section's takeaway written
- * on the water at its depth, the ship on top with the robot rising home on its cable and the manual open at a short
- * index in the sky beside it, and the three steps below. Overrules `horizontal-rail` for a Scene; keeps
- * `motion: local`, each row lighting as the robot rises past it.
- */
 export const theWholeIceberg = slide({
   slug: 'the-whole-iceberg',
   messages: { en, de },

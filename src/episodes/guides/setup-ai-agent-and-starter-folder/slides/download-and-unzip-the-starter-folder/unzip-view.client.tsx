@@ -5,7 +5,6 @@ import type { ReactNode } from 'react';
 import { osOf, type Os } from './picks.pure';
 import { unzipGesture } from './unzip.pure';
 
-/** What the Downloads window and the unzip gesture say, in the viewer's language. */
 export interface UnzipWords {
   readonly downloads: string;
   readonly zip: string;
@@ -13,9 +12,7 @@ export interface UnzipWords {
   readonly older: string;
   readonly lastWeek: string;
   readonly menuLabel: string;
-  /** The gesture's label per OS: "Double-click" on Mac, the menu action on Windows and Linux. */
   readonly action: Readonly<Record<Os, string>>;
-  /** The menu items around the action, before and after it, per OS that unzips from a menu. */
   readonly menu: Readonly<Record<'windows' | 'linux', { before: readonly string[]; after: readonly string[] }>>;
 }
 
@@ -40,7 +37,6 @@ function ZipIcon() {
   );
 }
 
-/** The menu items around the action, muted: drawn so the viewer recognises the menu, never to click. */
 function MenuItems({ items }: { items: readonly string[] }) {
   return items.map((item) => (
     <li key={item} className="rounded-md px-3 py-1.5 text-muted-foreground">
@@ -56,7 +52,6 @@ interface UnzipMenuProps {
   readonly after: readonly string[];
 }
 
-/** The drawn right-click menu on the zip, its action in `primary`: the one thing to click. */
 function UnzipMenu({ label, before, action, after }: UnzipMenuProps) {
   return (
     <ul
@@ -72,7 +67,6 @@ function UnzipMenu({ label, before, action, after }: UnzipMenuProps) {
   );
 }
 
-/** Mac: no menu, a pointer double-clicking the zip row, labelled. */
 function DoubleClick({ label }: { label: string }) {
   return (
     <p className="absolute top-24 left-12 flex items-center gap-2 text-caption font-semibold text-primary">
@@ -89,7 +83,6 @@ function DoubleClick({ label }: { label: string }) {
   );
 }
 
-/** The Downloads folder's list: the zip just landed, highlighted, above an older file. */
 function DownloadsList({ words }: { words: UnzipWords }) {
   return (
     <ul className="flex flex-col gap-1 p-3 pb-52 text-caption">
@@ -108,11 +101,6 @@ function DownloadsList({ words }: { words: UnzipWords }) {
   );
 }
 
-/**
- * The first half's Downloads window with the zip just landed in it, and how the picked OS unzips it: on Mac a
- * double-click, on Windows and Linux the zip's right-click menu with its action. The Windows warning shows on Windows
- * only. The menu sits inside the window, inside the half, so nothing clips.
- */
 export function UnzipView({ words, warning }: { words: UnzipWords; warning: ReactNode }) {
   const [pick] = usePagePick('os', 'mac');
   const os = osOf(pick);

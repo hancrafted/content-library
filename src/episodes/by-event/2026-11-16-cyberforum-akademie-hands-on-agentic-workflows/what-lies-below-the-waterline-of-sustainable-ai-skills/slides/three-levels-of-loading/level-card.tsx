@@ -6,7 +6,6 @@ import styles from './slide.module.css';
 
 export type Level = 'index' | 'card' | 'extras';
 
-/** A level's number in its badge, then its plain label. */
 function LevelHeading({ n, label }: { readonly n: number; readonly label: string }) {
   return (
     <p className="flex items-center gap-3 text-body font-semibold">
@@ -18,7 +17,6 @@ function LevelHeading({ n, label }: { readonly n: number; readonly label: string
   );
 }
 
-/** One loading level, numbered, its plain label first; the words beneath follow the page's view. */
 export function LevelCard(props: {
   readonly level: Level;
   readonly n: number;
@@ -48,7 +46,6 @@ export function LevelCard(props: {
   );
 }
 
-/** A number badge over the drawing, tying a level card to its place in the room. */
 export function Badge({ n, x, y }: { readonly n: number; readonly x: number; readonly y: number }) {
   return (
     <span

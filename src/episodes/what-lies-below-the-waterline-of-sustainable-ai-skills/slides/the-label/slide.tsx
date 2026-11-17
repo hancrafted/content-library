@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "The description", echoing the Hero motif (picked Title-slide Option 0a). The description line, deeper in sunlight: the lamp's beam falls on it.
 export const theLabel = slide({
   slug: 'the-label',
   messages: { en, de },

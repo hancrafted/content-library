@@ -14,14 +14,12 @@ const BEST_PRACTICES = {
 const CLAUDE_SKILLS = { slug: 'claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 const NOTE = 'a-skill-teaches-the-class-of-problem';
 
-/** Paths and variables are code: the same in every locale, never translated. */
 const SKILL_PATH = 'collect-sediment-sample/SKILL.md';
 const PROJECT_FILE = 'CONTEXT.md';
 const PROJECT_DIR = '${CLAUDE_PROJECT_DIR}';
 const SCHEMA = 'references/schema.yaml';
 
 const STEPS = ['0', '1', '2', '3'] as const;
-/** Step 2 points to the project file; Site 7 is today's row, level with it. */
 const FOCAL_STEP = 1;
 const SITES = [
   { site: 'site4', today: false },
@@ -31,12 +29,6 @@ const SEABED_M = 120;
 const GHOST_M = 40;
 const TICKS = [40, 80, 120];
 
-/**
- * "Beside the skill" (Spec Option 17a): the mistake of Slide 15, fixed. Keeps `grid-1x2`: on the left the skill's step
- * points to today's dive plan, a project file it reads when it runs; on the right the same skill at site 7 reaches
- * the seabed at 120 m. Keeps `motion: local`: the line draws to the Site 7 row, the row fills, the robot descends past
- * the dashed 40 m outline and the check appears.
- */
 export const besideTheSkill = slide({
   slug: 'beside-the-skill',
   messages: { en, de },

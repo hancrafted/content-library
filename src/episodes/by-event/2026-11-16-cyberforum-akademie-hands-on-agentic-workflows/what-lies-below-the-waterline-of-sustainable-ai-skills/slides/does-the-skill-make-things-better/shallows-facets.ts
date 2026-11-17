@@ -1,12 +1,3 @@
-/*
- * The test dive's shallows, lifted facet by facet from Spec Option 22a (feedback 3, decision 46), in the Spec's own
- * 560 by 330 units: the faceted sky and clouds, the surface water with its lit waterline and a light ray, the Sunlit
- * water below and the seabed with its rocks; the silt the without-skill run stirs up, the empty place of the card, the
- * written procedure card and the bubbles of the with-skill run. Tones live in `shallows-art.module.css`; the ship and
- * robot are the shared cast, placed on top.
- */
-
-/** A tone of the drawing; `shallows-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'sky-1'
   | 'sky-2'
@@ -37,7 +28,6 @@ export type ArtTone =
 
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The shallows both runs dive into, back to front. */
 export const SHALLOWS_FACETS: readonly ArtFacet[] = [
   ['sky-1', 'M49 17L0 42L0 0Z'],
   [
@@ -180,7 +170,6 @@ export const SHALLOWS_FACETS: readonly ArtFacet[] = [
   ['glow', 'M6 111L554 111L554 113L6 113Z'],
 ];
 
-/** The cloud of sediment the robot stirs up when it settles into the seabed. */
 export const SILT: readonly ArtFacet[] = [
   ['silt-lit', 'M308.6 271.7L299.8 283.1L279.9 285.9L263.9 278.1L263.9 265.4L279.9 257.5L299.8 260.3Z'],
   ['silt', 'M284.4 267.8L273.8 281.5L249.9 284.8L230.8 275.4L230.8 260.2L249.9 250.8L273.8 254.1Z'],
@@ -191,10 +180,8 @@ export const SILT: readonly ArtFacet[] = [
   ['silt-lit', 'M272.3 282.4L261.5 296.4L237.1 299.8L217.5 290.2L217.5 274.6L237.1 265L261.5 268.4Z'],
 ];
 
-/** The card's empty place at the upper left, where the without-skill run has none. */
 export const NO_CARD: readonly ArtFacet[] = [['card-ghost', 'M19.9 20L95.8 16.2L100.1 102L24.2 105.8Z']];
 
-/** The written procedure card at the upper left: the skill the with-skill run holds. */
 export const CARD: readonly ArtFacet[] = [
   ['drop', 'M25.2 26.7L102.1 22.8L106.5 109.7L29.6 113.6Z'],
   ['paper-lit', 'M19.9 20L95.8 16.2L24.2 105.8Z'],
@@ -206,7 +193,6 @@ export const CARD: readonly ArtFacet[] = [
   ],
 ];
 
-/** The bubbles rising from the hovering robot. */
 export const BUBBLES: readonly ArtFacet[] = [
   ['bubble', 'M282 177L280 180.5L276 180.5L274 177L276 173.5L280 173.5Z'],
   ['glint', 'M276 176.2L277.6 174.4L277.8 176.2Z'],

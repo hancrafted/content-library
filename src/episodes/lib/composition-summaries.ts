@@ -7,12 +7,7 @@ import { EPISODES, EXPLORABLE_PAGES, GUIDES, TEMPLATE_PAGES } from './episode-re
 import { placeSections } from './episode.pure';
 import type { LocaleSummary, PageSummary } from './page-summary.pure';
 
-/*
- * The summaries `npm run registry` writes to `page-summaries.generated.ts`, worked out from every composition. Like the
- * composition registries it imports every page's Slides, so it sits above them; only the registry script and the tests
- * read it, never a page (FE-004 §4).
- */
-
+// decision: FE-004 §4
 function localeSummary(composition: EpisodeComposition, locale: Locale): LocaleSummary {
   const { title, caption, description } = composition.messages[locale];
   const sections = tocSectionsOf(
@@ -33,7 +28,6 @@ function summariesOf(registry: Readonly<Record<string, EpisodeComposition>>): Re
   );
 }
 
-/** Every composed page's summary, by kind and then by id, in the registries' order. */
 export interface CompositionSummaries {
   readonly episodes: Record<string, PageSummary>;
   readonly templates: Record<string, PageSummary>;

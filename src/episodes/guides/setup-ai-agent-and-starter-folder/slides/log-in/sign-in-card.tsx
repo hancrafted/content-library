@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** The browser window's title bar: three dots and the page address. */
 function BrowserBar({ page }: { page: string }) {
   return (
     <div className="flex items-center gap-2 border-b border-border bg-muted px-4 py-2" aria-hidden="true">
@@ -14,7 +13,6 @@ function BrowserBar({ page }: { page: string }) {
   );
 }
 
-/** The drawn sign-in card in the browser window: a picture of the step, not a screenshot of the vendor's page. */
 export function SignInCard({
   page,
   title,

@@ -3,12 +3,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { NARROWEST_PICTURE_PIXELS, speechClashes, speechLayout, type SpeechWords } from './speech.pure';
 
-/*
- * The morning's speech (decision 53): the captain and the pilot face each other, so their shared bubbles stack, the
- * captain's lifted above the pilot's. Neither covers the other or leaves the picture, on any morning, in either
- * language, at the narrowest picture the comic draws, where the words are at their caption size.
- */
-
 const PANELS = ['first', 'second', 'third'] as const;
 const DAYS = { first: 1, second: 2, third: 3 } as const;
 type Messages = typeof en;

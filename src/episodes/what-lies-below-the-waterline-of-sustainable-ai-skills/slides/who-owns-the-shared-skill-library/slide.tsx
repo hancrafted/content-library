@@ -29,7 +29,6 @@ const TIERS = 'shared-skills-are-tiered-by-audience';
 const COST = 'token-cost-and-model-fit-are-per-skill-facts';
 const JUDGEMENT = 'skill-governance-still-being-worked-out-is-a-judgement';
 
-/** The front page's lines in the Voice script's order, each with the note its Context marker opens. */
 const ROWS = [
   { slug: 'add', note: ADDS, scene: false },
   { slug: 'tier', note: TIERS, scene: true },
@@ -37,7 +36,6 @@ const ROWS = [
   { slug: 'models', note: COST, scene: true },
   { slug: 'retire', note: ADDS, scene: false },
 ] as const;
-/** The `metadata` map a `SKILL.md` might carry by convention; front matter, not translated. */
 const FRONT_MATTER = [
   '---',
   'name: collect-sediment-sample',
@@ -51,7 +49,6 @@ const FRONT_MATTER = [
   '---',
 ];
 
-/** The robot on its cable, lamp lit, in the Abyss band at the lower left of the water, where the Spec hangs it. */
 function DepthMarker() {
   return (
     <g aria-hidden>
@@ -64,7 +61,6 @@ function DepthMarker() {
   );
 }
 
-/** The faceted beam that opens the square into the page, between the two on a wide Slide (Spec Option 21a's halo). */
 function ZoomBeam() {
   return (
     <div className="relative hidden @5xl:block">
@@ -84,12 +80,6 @@ function ZoomBeam() {
   );
 }
 
-/**
- * "Who owns the shared skill library" (Spec Option 21a): Slide 18's matrix returns, cropped onto its shared, general
- * square, and a beam opens that square into the shared library's front page, its lower corner left dark. Overrules
- * `grid-2x2` for one Midnight Scene holding matrix, beam and page; keeps `motion: local`, the zoom into the square,
- * once on entry.
- */
 export const whoOwnsTheSharedSkillLibrary = slide({
   slug: 'who-owns-the-shared-skill-library',
   messages: { en, de },

@@ -23,12 +23,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { notes } from './notes';
 
-/*
- * Step 2, first Slide: the first command a first-timer types is the install command of their AI agent. The exact
- * line for the picked system and AI agent sits in a command box with a big Copy button; the vendor's official docs
- * are one button away regardless, because some install pages need scrolling with no anchor. Under it, per AI agent,
- * what might happen, each pointing to Help (in the header). Only the vendor's bare minimum: nothing that goes stale.
- */
 export const installYourAiAgent = slide({
   slug: 'install-your-ai-agent',
   messages: { en, de },
@@ -65,7 +59,6 @@ export const installYourAiAgent = slide({
     const key = (chunks: ReactNode) => (
       <kbd className="rounded border border-border bg-muted px-1.5 font-mono text-foreground">{chunks}</kbd>
     );
-    // Needs human: Windows installer output and Antigravity's final output are unverified, so they say nothing specific.
     const end = {
       'claude-code': [t.rich('end.claude-code.one', { code, key }), t.rich('end.claude-code.two', { code, key })],
       codex: [t.rich('end.codex.one', { code, key }), t.rich('end.codex.two', { code, key })],

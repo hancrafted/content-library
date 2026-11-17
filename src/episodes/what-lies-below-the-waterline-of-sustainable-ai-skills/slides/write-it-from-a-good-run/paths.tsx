@@ -7,7 +7,6 @@ import artStyles from './day-art.module.css';
 import { LOGBOOK, LOGBOOK_ART, PAGE_DATES } from './logbook-facets';
 import styles from './slide.module.css';
 
-/** The skill's name and file, as Slides 3 and 6 give them: code, not translated. */
 const SKILL_NAME = 'collect-sediment-sample';
 
 interface NotesLaneProps {
@@ -20,7 +19,6 @@ interface NotesLaneProps {
   readonly targetProps: TargetProps;
 }
 
-/** One pinned page's date, laid over the drawing where the Spec writes it. */
 function PageDate({ page, index }: { readonly page: string; readonly index: number }) {
   const date = PAGE_DATES[index];
   if (!date) return null;
@@ -39,10 +37,6 @@ function PageDate({ page, index }: { readonly page: string; readonly index: numb
   );
 }
 
-/**
- * The logbook pages of earlier dives, pinned up, each with its date, over the open logbook and a pencil on the chart
- * table: Spec Option 10b's drawing (`logbook-facets.ts`), its dates the Slide's words laid over it.
- */
 function Logbook({ label, pages }: { readonly label: string; readonly pages: readonly string[] }) {
   return (
     <div
@@ -67,7 +61,6 @@ function Logbook({ label, pages }: { readonly label: string; readonly pages: rea
   );
 }
 
-/** The second path: your logbook pages from earlier dives, written up into the same skill, its arrow into the card. */
 export function NotesLane({ heading, story, chat, coding, tip, logbook, targetProps }: NotesLaneProps) {
   return (
     <div data-notes-lane className="flex items-center gap-3 @5xl:col-span-2">
@@ -100,7 +93,6 @@ interface SkillCardProps {
   readonly file: readonly string[];
 }
 
-/** The one card both sources fold into: steps with their why, and what counts as failure; in the coding view, SKILL.md. */
 export function SkillCard({ label, title, steps, failedIf, file }: SkillCardProps) {
   return (
     <ZoneCard data-skill-card className="w-full rounded-lg border-2 border-foreground p-4 shadow-md">

@@ -1,9 +1,5 @@
 import type { Facet } from './dive-facets';
 
-/**
- * The switched reader's dive as the Spec drew it (Option 24a, feedback 3, decision 46), 560 by 420: the same depth from
- * sky to seabed, its own clouds and rocks, in the Spec's order, back to front.
- */
 export const SWITCH_SEA: readonly Facet[] = [
   [
     'sky-1',

@@ -4,8 +4,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { StickyYears } from './vertical-sticky-years';
 
-// Timeline as a changelog: each year pins on the left while its entries scroll past on the right. Pinning is CSS
-// sticky and the reading-line highlight CSS scroll-driven, so the Scene needs no client widget.
 export const verticalStickyYears = slide({
   slug: 'vertical-sticky-years',
   messages: { en, de },

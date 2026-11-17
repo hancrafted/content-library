@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { workshopTemplate } from './episode';
 
-/*
- * What this page composes, Section by Section, as slugs: a content decision the Episode-level checks
- * (`episode-checks.test.ts`) cannot know, so it is written out here, beside the page.
- */
-
-/** The page's Sections as the slugs of their Slides, section slide first. */
 const SECTIONS = workshopTemplate.sections.map((section) => section.map(({ slug }) => slug));
 
 describe('success cases', () => {

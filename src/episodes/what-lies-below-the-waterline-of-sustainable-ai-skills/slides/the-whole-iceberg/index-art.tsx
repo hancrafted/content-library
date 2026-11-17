@@ -2,17 +2,8 @@ import { ToneFacets } from '@/episodes/components/slide-shared/iceberg/scenery/f
 import { cn } from '@/shared/lib/utils';
 import styles from './iceberg.module.css';
 
-/*
- * The props lifted from the approved Spec's Option 26a (feedback 3, decision 46): the index page's faceted paper, the
- * manual's faceted pages and spine, and the bubbles beside the trail's nodes. Facets keep the Spec's numbers; their
- * tones are this Slide's tokens on `.art` in `iceberg.module.css`. The sky, the water, the berg and the seabed stay the
- * shared `WholeDepthScene`, the ship, crew and robot the shared figures. The Spec's flat paper shadow (`drop`) stays
- * out: the Episode draws no drop shadows (feedback 2, decision 19).
- */
-
 type Facet = readonly [tone: string, d: string];
 
-/** The index page in the sky, in the Spec's box. */
 const PAGE_BOX = '620 133 328 264';
 const PAGE: readonly Facet[] = [
   ['paper-lit', 'M620 143L819 137L626 321Z'],
@@ -20,7 +11,6 @@ const PAGE: readonly Facet[] = [
   ['paper-shade', 'M926 388L947 367L948 387Z'],
 ];
 
-/** The index page's paper, stretched to the HTML page it backs. */
 export function IndexPaper() {
   return (
     <svg
@@ -34,7 +24,6 @@ export function IndexPaper() {
   );
 }
 
-/** The manual open on deck, its spine's foot at the Spec's 528, 369. */
 const MANUAL_FOOT = { x: 528, y: 369 } as const;
 const MANUAL: readonly Facet[] = [
   ['paper-shade', 'M501 367L528 369L528 358L498 354Z'],
@@ -44,7 +33,6 @@ const MANUAL: readonly Facet[] = [
   ['spine', 'M526 369L530 369L529 357L527 357Z'],
 ];
 
-/** The manual's pages and spine, its spine's foot at `x`, `y`. */
 export function ManualArt({ x, y }: { readonly x: number; readonly y: number }) {
   return (
     <g aria-hidden className={styles.art} transform={`translate(${x - MANUAL_FOOT.x} ${y - MANUAL_FOOT.y})`}>
@@ -53,7 +41,6 @@ export function ManualArt({ x, y }: { readonly x: number; readonly y: number }) 
   );
 }
 
-/** The Spec's trail at x 225, and a bubble beside each node below the waterline, from the Sunlit node down. */
 const SPEC_TRAIL_X = 225;
 const SPEC_NODES = [510, 589, 671, 752] as const;
 const BUBBLES: readonly (readonly Facet[])[] = [
@@ -75,7 +62,6 @@ const BUBBLES: readonly (readonly Facet[])[] = [
   ],
 ];
 
-/** The bubbles beside the trail's nodes, each kept where the Spec put it against its node. */
 export function TrailBubbles({ trailX, nodes }: { readonly trailX: number; readonly nodes: readonly number[] }) {
   return (
     <g aria-hidden className={styles.art} data-trail-bubbles>

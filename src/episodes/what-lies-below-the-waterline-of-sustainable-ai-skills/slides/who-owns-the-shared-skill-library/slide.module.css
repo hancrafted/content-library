@@ -1,10 +1,4 @@
-/*
- * "Who owns the shared skill library" (Option 21a): the robot's cable and the zoom beam's edges. The drawing's own tones
- * (Abyss band, halo, binder, dark corner) are `library-art.module.css`, lifted from the Spec. No raw colour here
- * (FE-011): every tone mixes global tokens that carry no meaning, `--on-brand-accent` as white, with `--zone-midnight`;
- * the robot keeps the shared figure's own colours.
- */
-
+/* decision: FE-011 §2 */
 .scene {
   --beam-edge: color-mix(in oklab, var(--on-brand-accent) 70%, transparent);
   --cable: color-mix(in oklab, var(--on-brand-accent) 45%, var(--zone-midnight));
@@ -23,10 +17,7 @@
   stroke: var(--cable);
 }
 
-/*
- * The one emphasis motion, the zoom into the shared, general square: the beam widens out of the square and the front
- * page scales up from it, once, on entry. The base rules are the open rest state, which reduced motion shows.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .zoomBeam {
     animation: widen 700ms cubic-bezier(0.33, 0, 0.2, 1) 300ms both;

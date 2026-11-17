@@ -9,14 +9,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { theThirdTimeIsTheSignal } from './slide';
 
-/*
- * "The third time is the signal", picked Option 8a: three mornings in the control room, the empty card, the draft and
- * the written card with its good result; in the Coding agent view two sessions that start fresh and the new SKILL.md.
- * The people and the console are the shared cast (design-ADR-0025); the room is the Slide's own.
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const slideUnderTest = theThirdTimeIsTheSignal as unknown as Slide;
-/** A hand-written stand-in for the Section's section slide, so the Slide is placed as a page Slide. */
 const opener = slide({
   slug: 'when-to-write-one',
   messages: { en: { title: 'When to write one' }, de: { title: 'Wann Du einen schreibst' } },

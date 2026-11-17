@@ -1,11 +1,4 @@
-/*
- * The Slide's one emphasis motion (Spec Option 8a): the first Slide's empty card fills with steps, line by line, on the
- * third panel's card, ending on the green good-result line; in the Coding agent view the same lines type into SKILL.md.
- * It plays once when the Slide's mount turns `[data-zone='active']` and replays on re-entry; there is no replay control
- * (design-ADR-0025 Motion 1). The base rule is the filled end state, so a still frame and reduced motion show the card
- * written.
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .fill {
   --fill-step: 260ms;
 }

@@ -19,17 +19,11 @@ interface TooltipProps {
   anchor: HTMLElement;
   copy: BarCopy;
   lane: string;
-  /** The class that sets the lane's colour as the `--lane` custom property. */
   laneClass: string;
   onClose: () => void;
 }
 
-/**
- * A bar's date range and caption, portaled into the Episode portal root
- * (FE-009 §8) so the Slide wrapper's stacking context never traps it under
- * the chrome. It opens above the bar and flips below when there is no room;
- * a press inside it keeps it open, as for every Slide popover.
- */
+// decision: FE-009 §8
 export function GanttTooltip({ id, anchor, copy, lane, laneClass, onClose }: TooltipProps) {
   const placed = usePopoverPlacement({ anchor, side: 'above', rules: TOOLTIP_RULES, slot: SLOT, onClose });
   if (placed === null) return null;

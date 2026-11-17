@@ -3,12 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { summaryOf } from './page-summary';
 import { anchorTitleAt } from './page-summary.pure';
 
-/*
- * The light summary (FE-004 §4): what a page says of itself, read without importing its Slides. That it says exactly
- * what its composition says, for every composed page, and names a Playlist anchor as the composition does, is an
- * Episode-level check (`composed-page-checks.ts`), run by each page folder's own `episode-checks.test.ts`.
- */
-
+// decision: FE-004 §4
 describe('success cases', () => {
   it("reads an Episode's German title without its Slides", () => {
     // ARRANGE
@@ -48,7 +43,7 @@ describe('failure cases', () => {
     // ARRANGE
     const unregistered = 'non-existent-episode';
     // ACT
-    // @ts-expect-error -- an Episode the registry does not hold has no summary
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRef(unregistered));
     // ASSERT
     expect(lookup).toThrow(unregistered);
@@ -94,7 +89,7 @@ describe('edge cases', () => {
     // ARRANGE
     const template = 'workshop-template';
     // ACT
-    // @ts-expect-error -- a Template's slug names no Episode
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRef(template));
     // ASSERT
     expect(lookup).toThrow(template);

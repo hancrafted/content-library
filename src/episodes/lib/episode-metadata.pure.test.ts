@@ -5,7 +5,6 @@ import { leadTagOf, overviewOrder } from './episode-metadata.pure';
 
 type Identified = Episode & { readonly ref: EpisodeRef };
 
-/** Five hand-placed Episodes: three published, two upcoming, each no Event owns, so its id is its slug. */
 const RECORDS: readonly Episode[] = [
   {
     slug: 'never-too-early-sales',

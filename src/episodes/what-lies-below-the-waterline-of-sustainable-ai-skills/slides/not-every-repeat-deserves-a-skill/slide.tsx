@@ -17,10 +17,6 @@ const FOWLER_YAGNI = { slug: 'fowler-yagni', url: 'https://martinfowler.com/blik
 const CLAUDE_CODE_SKILLS = { slug: 'anthropic-claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 const CODEX_SKILLS = { slug: 'openai-codex-build-skills', url: 'https://learn.chatgpt.com/docs/build-skills' };
 
-/**
- * The skill index, in the order it grew: the entry you need is the seventh, buried. The coding names are folder names,
- * code, not translated; `collect-sediment-sample` is the name Slide 3 gives the skill.
- */
 const ENTRIES = [
   { key: 'rinseCameraDome', name: 'rinse-camera-dome', tilt: 'rotate-2', untested: true },
   { key: 'sampleOld', name: 'sample-old' },
@@ -43,16 +39,8 @@ const ENTRIES = [
 
 const QUESTIONS = ['repeat', 'rules', 'cost'] as const;
 
-/** An empty check box drawn before each question. */
 const Box = () => <span aria-hidden className="size-5 shrink-0 rounded-sm border-2 border-foreground" />;
 
-/**
- * "Not every repeat deserves a skill" (picked Option 9a): the pilot at his console beside a binder bursting with thin
- * cards, the skill index spilling off the stage with several entries stamped "never tested" and the one you need
- * buried seventh, and beside it the three-question check. `master: grid-1x2` is overruled for a Scene from
- * `SlideFrame`, as the Option says, so the index can run off the stage; `motion: local` keeps the index growing line
- * by line. In the Coding agent view the lines become folder names and the verdict a SKILL.md you do not write.
- */
 export const notEveryRepeatDeservesASkill = slide({
   slug: 'not-every-repeat-deserves-a-skill',
   messages: { en, de },

@@ -3,12 +3,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { requestBubble, requestClashes, requestLines, WIDE_PICTURE_PIXELS } from './speech.pure';
 
-/*
- * Your request on the day of the dive, in the captain's shared `says` bubble (decision 53): on the wide room, where
- * the match pill and the skill index lie over the picture, the bubble covers neither and stays inside the picture, in
- * either language, and the two lines to the index start at its right edge.
- */
-
 const plain = (text: string) => text.replace(/<\/?match>/g, '');
 
 describe('success cases', () => {

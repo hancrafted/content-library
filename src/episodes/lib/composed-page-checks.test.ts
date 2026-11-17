@@ -9,12 +9,6 @@ import { authoredHeaderStrays, composedPageChecks, type PageContext } from './co
 import { withoutSectionSlide } from './episode.pure';
 import type { LocaleSummary } from './page-summary.pure';
 
-/*
- * The composition checks judge a page's composition against its context, handed in here by hand: no store, no
- * generated summary and no folder on disk. Each check gets a failure planted through the context or the composition.
- */
-
-/** A Slide with its title in both locales, or none, and a Scene that renders `scene`. */
 function slideOf(slug: string, title: string | undefined, scene: () => ReactNode = () => null): Slide {
   const messages = title === undefined ? {} : { title };
   return { slug, messages: { en: messages, de: messages }, notes: [], segments: [], content: scene };
@@ -24,12 +18,10 @@ const INTRO = [slideOf('intro', 'Intro'), slideOf('detail', 'Detail')] as unknow
 
 const OWN_TEXT = { title: 'Demo', caption: 'A demo', description: 'A demo page' };
 
-/** The composition of `page`, named after its folder, with one Section, `intro`, unless `fields` says otherwise. */
 function compositionOf(page: ComposedPage, fields: Partial<EpisodeComposition> = {}): EpisodeComposition {
   return { slug: page.slug, messages: { en: OWN_TEXT, de: OWN_TEXT }, sections: [INTRO], ...fields };
 }
 
-/** The summary `npm run registry` writes for `compositionOf(page)` in one locale, by hand. */
 const SUMMARY: LocaleSummary = {
   ...OWN_TEXT,
   minutes: 0,
@@ -38,7 +30,6 @@ const SUMMARY: LocaleSummary = {
   ],
 };
 
-/** A context that agrees with `compositionOf(page)`, unless `fields` says otherwise. */
 function contextOf(fields: Partial<PageContext> = {}): PageContext {
   return {
     status: 'published',
@@ -54,19 +45,16 @@ const EPISODE = episodeRef('ai-attention-span');
 const TEMPLATE = templateRef('grids');
 const EXPLORABLE = explorablePageRef('context-window');
 
-/** The checks of `page`, judging `composition` against `context`. */
 function checksOf(page: ComposedPage, composition: EpisodeComposition, context: PageContext): NamedCheck[] {
   return composedPageChecks(page, async () => ({ composition, context }));
 }
 
-/** The findings of the one check whose name starts with `name`. */
 async function findingsOf(checks: readonly NamedCheck[], name: string): Promise<readonly string[]> {
   const found = checks.find((check) => check.name.startsWith(name));
   if (found === undefined) throw new Error(`No check named "${name}…" among ${checks.map((check) => check.name)}`);
   return found.findings();
 }
 
-/** Every finding of every check. */
 async function allFindingsOf(checks: readonly NamedCheck[]): Promise<string[]> {
   return (await Promise.all(checks.map(({ findings }) => findings()))).flat();
 }
@@ -94,11 +82,10 @@ describe('success cases', () => {
 
   it('lists only Episodes whose folders still exist among those that author their own header', () => {
     // ARRANGE
-    // The generated id list is the Episode folders' names (`npm run registry`): no Episode is imported to read it.
-    const folders = EPISODE_IDS.map((id) => episodeRefOf(id).slug);
+    const generatedIdFolderNames = EPISODE_IDS.map((id) => episodeRefOf(id).slug);
     const expected: string[] = [];
     // ACT
-    const strays = authoredHeaderStrays(folders);
+    const strays = authoredHeaderStrays(generatedIdFolderNames);
     // ASSERT
     expect(strays).toEqual(expected);
   });

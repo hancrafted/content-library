@@ -5,10 +5,8 @@ import { TermLine, TitleTerminal } from '@/episodes/components/slide-shared/titl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The starter folder's files the Scene shows; file names, not words. */
 const FILES = ['AGENTS.md', 'GLOSSARY.md', 'skills/'] as const;
 
-// The section slide of "Your folder", Title-slide Option 0b's theme: the prompt inside the starter folder and what the folder holds. The folder is opened from the folder, so there is no `cd`.
 export const yourFolder = slide({
   slug: 'your-folder',
   messages: { en, de },

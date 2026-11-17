@@ -6,7 +6,6 @@ import { WaterlineEcho } from '@/episodes/components/slide-shared/waterline-echo
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Keeping it alive", echoing the Hero motif (picked Title-slide Option 0a). The running tag, in the Abyss, the robot on the seabed: keeping a skill right costs something every month.
 export const keepingItAlive = slide({
   slug: 'keeping-it-alive',
   messages: { en, de },

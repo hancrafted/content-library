@@ -1,12 +1,4 @@
-/*
- * "Every skill is a loan" (Option 23b): the statement hung on the robot's cable over the Abyss. The tones are the
- * approved Spec's own (feedback 3, decision 46): the drawing's facet tokens on `.art`, which `sea-art.tsx` lifts, and
- * the words, glass, paper and cable on `.stage`. Dark values are the Spec's dark ones, tuned later with dark mode
- * (feedback 2, decision 32). The robot's tones mix `--info`, as the shared robot's do.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
 .stage {
   --ink: oklch(0.975 0.01 230);
   --ink-soft: color-mix(in oklab, oklch(0.975 0.01 230) 70%, transparent);
@@ -255,11 +247,7 @@
   border: 2px dashed var(--glass-edge);
 }
 
-/*
- * The one emphasis motion: the statement grows one entry at a time. The cable pays out to the next clamp, the entry
- * appears and its block in the stack lights in sync, day one to the latest, once on entry. The base rules are the end
- * state, which a still frame and reduced motion show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .cable {
     background: linear-gradient(to right, var(--cable-lit) 45%, var(--cable) 45%);

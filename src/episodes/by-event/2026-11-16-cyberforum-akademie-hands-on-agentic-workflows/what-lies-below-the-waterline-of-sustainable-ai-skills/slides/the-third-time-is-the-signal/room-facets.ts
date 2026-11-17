@@ -1,13 +1,3 @@
-/*
- * The control room of "The third time is the signal", lifted facet by facet from Spec Option 8a (feedback 3, decision
- * 46): a 360 by 280 room, floor line at 256, lit from the upper left. The Spec's robot on the deck is left out: by this
- * Slide the robot is in the water (ROBOT_STORY), so the window shows the A-frame and its cable only. The shared Console
- * and cast stand in front of it.
- */
-
-/** A tone of the drawing; `room-art.module.css` gives each its fill. */
-
-/** The room's drawing space, the Spec's: 360 by 280, figures standing on the floor line at 256. */
 export const ROOM_ART = { width: 360, height: 280, floor: 256 } as const;
 
 export type ArtTone =
@@ -38,10 +28,8 @@ export type ArtTone =
   | 'paper-lit'
   | 'paper-edge';
 
-/** One facet: its tone and its SVG path. */
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** The wall, the floor, the window onto the deck (sky, clouds, sea, rail, A-frame) and the wall clock. */
 export const ROOM: readonly ArtFacet[] = [
   ['room-shade', 'M295.8 155.3L360 76.9L360 127Z'],
   ['room-lit', 'M0 199.2L60.9 252L0 252Z'],
@@ -175,7 +163,6 @@ export const ROOM: readonly ArtFacet[] = [
   ['cloth-dark', 'M29.2 139.5L27.1 145.1L30.8 140.5ZM29.2 140L30 131.2L30.8 140Z'],
 ];
 
-/** The written procedure card the captain holds out on day 3, in room units. */
 export const WRITTEN_CARD: readonly ArtFacet[] = [
   ['paper', 'M150 192L118 192L150 150Z'],
   ['paper-lit', 'M150 150L118 192L118 150Z'],

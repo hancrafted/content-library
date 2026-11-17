@@ -18,18 +18,8 @@ import {
   type Facet,
 } from './room-facets';
 
-/*
- * The drawing lifted from the approved Spec's Option 25b (feedback 3, decision 46): the night wall, each sheet's
- * faceted paper with its clipboard clip or pin, the archive crate with the retired cards standing in it, and the
- * porthole's rim and the water it shows. Facets keep the Spec's numbers; their tones are this Slide's tokens in
- * `retire.module.css`. The pilot, the console and the robot stay the shared figures; the sheets' words stay real text.
- * The Spec's flat paper shadows (`drop`) stay out: the Episode draws no drop shadows (feedback 2, decision 19).
- */
-
-/** The Spec's room, 1000 by 590, stretched to the Scene's 1200 by 800 drawing. */
 const ROOM_STRETCH = `scale(${1200 / 1000} ${800 / 590})`;
 
-/** The night wall over the whole Scene, in the Scene's own drawing. */
 export function NightWall() {
   return (
     <g aria-hidden data-room-art transform={ROOM_STRETCH} className={styles.art}>
@@ -46,7 +36,6 @@ const SHEETS: Record<Sheet, { readonly box: string; readonly paper: readonly Fac
   after: { box: AFTER_BOX, paper: AFTER_PAPER },
 };
 
-/** A sheet's faceted paper, stretched to the HTML sheet it backs, with its clip or its pin above the top edge. */
 export function SheetPaper({ sheet }: { readonly sheet: Sheet }) {
   const { box, paper } = SHEETS[sheet];
   const hold =
@@ -69,10 +58,6 @@ export function SheetPaper({ sheet }: { readonly sheet: Sheet }) {
   );
 }
 
-/**
- * The archive crate: the retired cards standing in it, each dropping in at its turn, in front of them the crate's
- * planks and the label's paper; the label's words sit over the paper.
- */
 export function CrateArt({ label }: { readonly label: ReactNode }) {
   return (
     <div className="relative aspect-[266/147] w-full">
@@ -85,7 +70,6 @@ export function CrateArt({ label }: { readonly label: ReactNode }) {
         ))}
         <ToneFacets facets={CRATE_FRONT} />
       </svg>
-      {/* The label's paper, from 375, 426 to 575, 498 in the crate's box. */}
       <div className="absolute top-[41.5%] left-[9.4%] flex h-[49%] w-[75.2%] flex-col items-center justify-center text-center">
         {label}
       </div>
@@ -93,7 +77,6 @@ export function CrateArt({ label }: { readonly label: ReactNode }) {
   );
 }
 
-/** The porthole onto the Abyss: the water it shows, clipped to the glass, the robot inside, and the rim over it. */
 export function PortholeArt({ clipId, robot }: { readonly clipId: string; readonly robot: ReactNode }) {
   return (
     <g aria-hidden className={styles.art}>

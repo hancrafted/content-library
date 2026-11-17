@@ -14,7 +14,6 @@ export interface ToggletipCopy {
   caption: string;
 }
 
-/** Points from the toggletip's edge at the label's centre. */
 function ToggletipArrow({ side, x }: { side: RailSide; x: number }) {
   return (
     <span
@@ -28,11 +27,7 @@ function ToggletipArrow({ side, x }: { side: RailSide; x: number }) {
   );
 }
 
-/**
- * A dot's caption, portaled into the Episode portal root (FE-009 §8) so no
- * Slide wrapper's stacking context traps it under the chrome. It opens on
- * its label's side, flipping when that side has no room.
- */
+// decision: FE-009 §8
 interface ToggletipProps {
   id: string;
   anchor: HTMLElement;

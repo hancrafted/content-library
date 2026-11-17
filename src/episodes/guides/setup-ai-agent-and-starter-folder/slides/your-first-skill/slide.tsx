@@ -5,7 +5,6 @@ import { PermissionAsk, TitleTerminal } from '@/episodes/components/slide-shared
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Your first skill", Title-slide Option 0b's theme: the skill typed in the AI agent and its permission question with Yes chosen.
 export const yourFirstSkill = slide({
   slug: 'your-first-skill',
   messages: { en, de },

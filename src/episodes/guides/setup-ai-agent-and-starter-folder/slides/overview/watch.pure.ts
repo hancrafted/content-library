@@ -1,13 +1,10 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/** An unlisted Episode offered while a viewer waits, with its words in the viewer's language. */
 export interface WatchEpisode {
   readonly path: string;
   readonly title: string;
   readonly caption: string;
-  /** The release day, `YYYY-MM-DD`. */
   readonly day: string;
-  /** The Tag ids the Episode carries, lead first. */
   readonly tags: readonly ('context-engineering' | 'agentic-ai' | 'agentic-workflow')[];
 }
 
@@ -16,10 +13,6 @@ const AKADEMIE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/
 const FREELANCER = ['context-engineering', 'agentic-ai', 'agentic-workflow'] as const;
 const ATTENTION = ['context-engineering', 'agentic-workflow'] as const;
 
-/*
- * English readers get the AXEL copies, German readers the Akademie copies: linked, never copied, each in its own
- * language. The freelancer Episode first, then the attention span. Titles, captions and dates are the Episodes' own.
- */
 const WATCH: Readonly<Record<Locale, readonly WatchEpisode[]>> = {
   en: [
     {
@@ -57,7 +50,6 @@ const WATCH: Readonly<Record<Locale, readonly WatchEpisode[]>> = {
   ],
 };
 
-/** The Episodes to watch in the meantime, for a locale. */
 export function watchFor(locale: Locale): readonly WatchEpisode[] {
   return WATCH[locale];
 }
