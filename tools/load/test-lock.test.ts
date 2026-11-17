@@ -1,8 +1,9 @@
 import { execFileSync, spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, realpathSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gate } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 import { TEST_LOCK } from './test-lock.ts';
 
@@ -29,9 +30,10 @@ const marked = (id: string, ms: number) =>
 function run(
   cwd: string,
   command: readonly string[],
-  options: { env?: Record<string, string>; timeoutMs?: number } = {},
+  options: { env?: Record<string, string>; timeoutMs?: number; flags?: string[] } = {},
 ) {
-  const args = [CLI, '--poll-ms', '20', '--timeout-ms', String(options.timeoutMs ?? 10_000), '--', ...command];
+  const flags = options.flags ?? ['--poll-ms', '20', '--timeout-ms', String(options.timeoutMs ?? 10_000)];
+  const args = [CLI, ...flags, '--', ...command];
   const proc = spawn(process.execPath, args, { cwd, env: { ...process.env, ...options.env } });
   let stdout = '';
   let stderr = '';
@@ -42,10 +44,10 @@ function run(
     if (stdout.includes('started')) started();
   });
   proc.stderr.on('data', (chunk: Buffer) => (stderr += chunk.toString()));
-  const done = new Promise<{ code: number | null; stderr: string }>((resolve) =>
-    proc.on('close', (code) => resolve({ code, stderr })),
+  const done = new Promise<{ code: number | null; signal: NodeJS.Signals | null; stderr: string }>((resolve) =>
+    proc.on('close', (code, signal) => resolve({ code, signal, stderr })),
   );
-  return { pid: proc.pid, commandStarted, done };
+  return { pid: proc.pid, commandStarted, done, kill: (signal: NodeJS.Signals) => proc.kill(signal) };
 }
 
 const lines = (file: string) => readFileSync(file, 'utf8').trim().split('\n');
@@ -86,25 +88,40 @@ describe('test-lock', () => {
     it('fails after its timeout without running the command, naming the lock and its holder', async () => {
       // ARRANGE
       const { root, order } = repo();
-      let release: () => void = () => undefined;
-      const released = new Promise<void>((resolve) => (release = resolve));
-      let held: () => void = () => undefined;
-      const holding = new Promise<void>((resolve) => (held = resolve));
+      const released = gate();
+      const holding = gate();
       const holder = withLock(TEST_LOCK, { cwd: root, pollMs: 20, timeoutMs: 10_000 }, async () => {
-        held();
-        await released;
+        holding.open();
+        await released.opened;
       });
-      await holding;
+      await holding.opened;
       const expectedError = new RegExp(`"${TEST_LOCK}".* held by pid ${process.pid} .*on branch work`);
       const expectedCode = 1;
       // ACT
       const result = await run(root, marked('never', 0), { timeoutMs: 100 }).done;
-      release();
+      released.open();
       await holder;
       // ASSERT
       expect(result.code).toBe(expectedCode);
       expect(result.stderr).toMatch(expectedError);
       expect(() => lines(order)).toThrow();
+    });
+
+    it.each([
+      ['--timeout-ms', 'soon'],
+      ['--poll-ms', '0'],
+      ['--timeout-ms', '-5'],
+    ])('refuses %s=%s without running the command', async (flag, value) => {
+      // ARRANGE
+      const { root, order } = repo();
+      const expectedCode = 2;
+      const expectedError = `${flag} takes a positive number of milliseconds, not "${value}"`;
+      // ACT
+      const result = await run(root, marked('never', 0), { flags: [`${flag}=${value}`] }).done;
+      // ASSERT
+      expect(result.code).toBe(expectedCode);
+      expect(result.stderr).toContain(expectedError);
+      expect(existsSync(order)).toBe(false);
     });
   });
 
@@ -112,23 +129,52 @@ describe('test-lock', () => {
     it('never takes the lock on CI: the command runs while another process holds it', async () => {
       // ARRANGE
       const { root, order } = repo();
-      let release: () => void = () => undefined;
-      const released = new Promise<void>((resolve) => (release = resolve));
-      let held: () => void = () => undefined;
-      const holding = new Promise<void>((resolve) => (held = resolve));
+      const released = gate();
+      const holding = gate();
       const holder = withLock(TEST_LOCK, { cwd: root, pollMs: 20, timeoutMs: 10_000 }, async () => {
-        held();
-        await released;
+        holding.open();
+        await released.opened;
       });
-      await holding;
+      await holding.opened;
       const expectedOrder = ['start-ci', 'end-ci'];
       // ACT
       const result = await run(root, marked('ci', 0), { env: { CI: 'true' }, timeoutMs: 100 }).done;
-      release();
+      released.open();
       await holder;
       // ASSERT
       expect(result.code).toBe(0);
       expect(lines(order)).toEqual(expectedOrder);
+    });
+
+    it('passes a SIGTERM on to the command and keeps the lock until the command has exited, exiting as it did', async () => {
+      // ARRANGE
+      const { root, order } = repo();
+      const lock = path.join(root, '.git', 'locks', `${TEST_LOCK}.lock`);
+      const script = `trap '[ -d "${lock}" ] && echo lock-held >> order.txt; exit 7' TERM; echo started; while :; do sleep 0.02; done`;
+      const expectedCode = 7;
+      const expectedOrder = ['lock-held'];
+      // ACT
+      const cli = run(root, ['sh', '-c', script]);
+      await cli.commandStarted;
+      cli.kill('SIGTERM');
+      const result = await cli.done;
+      // ASSERT
+      expect(result.code, result.stderr).toBe(expectedCode);
+      expect(lines(order)).toEqual(expectedOrder);
+      expect(existsSync(lock)).toBe(false);
+    });
+
+    it('dies by the signal that killed the command', async () => {
+      // ARRANGE
+      const { root } = repo();
+      const signal = 'SIGTERM';
+      // ACT
+      const cli = run(root, ['sh', '-c', 'echo started; while :; do sleep 0.02; done']);
+      await cli.commandStarted;
+      cli.kill(signal);
+      const result = await cli.done;
+      // ASSERT
+      expect(result.signal, result.stderr).toBe(signal);
     });
 
     it("exits with the command's own exit code", async () => {

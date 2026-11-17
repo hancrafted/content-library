@@ -15,9 +15,10 @@ else
   node tools/load/test-lock.ts -- npm run -s test:slow </dev/null || exit 1
 fi
 
-# The build lanes catch export failures, CI's most common. A push to main triggers the Pages deploy, so it always
-# builds. A branch builds only when it changed an export input since main (`needsBuild`, tools/verify/needs-build.pure.ts),
-# so docs- and skills-only pushes stay fast. Without a merge-base, the branch builds.
+# The build lanes catch export failures, CI's most common. A push to main starts CI, and the Pages deploy follows
+# CI's success, so it always builds: a broken build caught here never holds up the deploy. A branch builds only
+# when it changed an export input since main (`needsBuild`, tools/verify/needs-build.pure.ts), so docs- and
+# skills-only pushes stay fast. Without a merge-base, the branch builds.
 if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
   echo "push to main"
   build=1

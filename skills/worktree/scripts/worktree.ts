@@ -5,6 +5,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
+import { slowTestsLogPath, trimSlowTests } from '../../../tools/load/slow-tests.mts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
 import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
@@ -143,9 +144,9 @@ function deleteMerged(branch: string, base: string): void {
 
 async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
-  const slowTests = slowTestReport(branch, base, { cwd: mainRoot(), now: new Date() });
+  const slowTests = slowTestReport(branch, base, mainRoot());
   try {
-    const result = await mergeIntoBase(branch, base, { cwd: mainRoot() });
+    const result = await mergeIntoBase(branch, base, { cwd: mainRoot(), log: console.log });
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
     for (const line of slowTests) console.log(line);
   } catch (error) {
@@ -179,6 +180,9 @@ async function finish(branch: string, base: string | null, kill: boolean): Promi
   removeCheckout(target, branch);
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
+  // Every finish keeps the slow-tests log to its last 30 days, with or without a base.
+  const slowTestsLog = slowTestsLogPath(mainRoot());
+  if (slowTestsLog !== null) trimSlowTests(slowTestsLog, new Date());
   if (base !== null) {
     deleteMerged(branch, base);
     return;
@@ -200,7 +204,7 @@ async function sync(base: string | null): Promise<void> {
   // Fails only once the lock is released: process.exit inside it would skip the release.
   const merged = await withMergeLock(
     branch,
-    process.cwd(),
+    { cwd: process.cwd(), log: console.log },
     () => spawnSync('git', ['merge', plan.target], { stdio: 'inherit' }).status === 0,
   );
   if (!merged) fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);

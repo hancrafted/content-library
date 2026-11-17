@@ -91,27 +91,25 @@ function subagent(event: 'start' | 'stop', payload: HookPayload): void {
   appendEvent({ root, file: marker.log }, line);
 }
 
-const HANDLERS: Record<Mode, (payload: AdapterPayload, pointLockWaitMs: number) => void> = {
-  start: (payload) => subagent('start', payload),
-  stop: (payload) => subagent('stop', payload),
-  skill: (payload, wait) => pointFact('skill', payload, wait),
-  read: (payload, wait) => pointFact('read', payload, wait),
-  instructions: (payload, wait) => pointFact('instructions', payload, wait),
-};
-
 /** A point-fact hook's lock wait: `--lock-wait-ms=<ms>` among `args` when it is a positive whole number, else 2 s. */
 function pointLockWait(args: readonly string[]): number {
   const ms = Number(args.find((arg) => arg.startsWith(LOCK_WAIT_FLAG))?.slice(LOCK_WAIT_FLAG.length));
   return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MS;
 }
 
-function isMode(value: string | undefined): value is Mode {
-  return value !== undefined && Object.hasOwn(HANDLERS, value);
+function isPointMode(value: string | undefined): value is PointMode {
+  return value !== undefined && Object.hasOwn(POINT_HANDLERS, value);
 }
 
+function isMode(value: string | undefined): value is Mode {
+  return value === 'start' || value === 'stop' || isPointMode(value);
+}
+
+/** Only a point-fact hook takes the lock wait from `args`; a subagent hook takes the writer's default wait. */
 function main(mode: Mode, args: readonly string[]): void {
   const payload = JSON.parse(readFileSync(0, 'utf8')) as AdapterPayload;
-  HANDLERS[mode](payload, pointLockWait(args));
+  if (isPointMode(mode)) pointFact(mode, payload, pointLockWait(args));
+  else subagent(mode, payload);
 }
 
 const mode = process.argv[2];
@@ -120,7 +118,7 @@ try {
 } catch (error) {
   if (error instanceof LockTimeoutError) {
     process.stderr.write(`new-episode adapter: ${error.message}\n`);
-    process.exitCode = isMode(mode) && Object.hasOwn(POINT_HANDLERS, mode) ? 0 : 1;
+    process.exitCode = isPointMode(mode) ? 0 : 1;
   }
   // Any other failure: a hook must never fail the session or the run, so the line is simply missing.
 }

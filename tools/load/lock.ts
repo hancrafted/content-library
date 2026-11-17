@@ -4,31 +4,43 @@
 // The lock is a directory `locks/<name>.lock` in the git common directory, holding an `owner` file with the
 // holder's pid, process start time, branch and the time it took the lock. It appears whole, by renaming a filled temporary directory into place, so
 // a lock never exists without its owner and only one of several takers gets it. A lock whose holder died, or whose
-// pid now belongs to another process (its start time differs), is stale and is taken over (see `takeOver`).
-import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+// pid now belongs to another process (its start time differs), is stale and is taken over (see `takeOver`). A lock
+// leaves by the same rename, moved aside whole before it is deleted, so no taker ever finds it half gone.
+import { mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { setTimeout as sleep } from 'node:timers/promises';
+import { currentBranch, gitCommonDir } from './git.ts';
+import {
+  describeOwner,
+  type Holder,
+  isStale,
+  parseOwner,
+  type ProcessStart,
+  psStartTime,
+  readOwner,
+} from './lock-owner.ts';
 
-export interface LockOptions {
-  /** A directory inside the repository; its git common directory holds the lock. Default: the current directory. */
-  cwd?: string;
-  /** How often a waiter looks again. */
+/** How often a waiter looks again, and how long it waits before it gives up. */
+export interface Timing {
   pollMs: number;
-  /** How long a waiter waits before it throws. */
   timeoutMs: number;
-  /** Called once, when the lock is held by another process and this one starts to wait, with that holder if readable. */
-  onWait?: (holder: Holder | null) => void;
 }
 
-/** Who holds a lock, as its `owner` file records it. */
-export interface Holder {
-  pid: number;
-  /** The holder's process start time as `ps -o lstart` prints it, which tells a reused pid apart. */
-  started: string;
-  /** The branch checked out where the holder took the lock; empty on a detached HEAD. */
-  branch: string;
-  /** When the holder took the lock, as an ISO date. */
-  since: string;
+export interface LockOptions extends Timing {
+  /** A directory inside the repository; its git common directory holds the lock. Default: the current directory. */
+  cwd?: string;
+  /** Called once, when the lock is held by another process and this one starts to wait, with that holder if readable. */
+  onWait?: (holder: Holder | null) => void;
+  /**
+   * Called on SIGINT or SIGTERM while `fn` runs, instead of releasing the lock and dying: `fn` is to wind down (a
+   * child it forwards the signal to exits), and the lock is released once it settles. While waiting for the lock, a
+   * signal still releases and dies.
+   */
+  onSignal?: (signal: NodeJS.Signals) => void;
+  /** How a pid's start time is read. Default: `ps` (psStartTime). */
+  startTimeOf?: (pid: number) => ProcessStart;
+  /** The time a leftover directory's age is measured against (see sweepLeftovers). Default: the current time. */
+  now?: Date;
 }
 
 /** A takeover marker this old belongs to a waiter killed mid-takeover, which takes microseconds. */
@@ -36,45 +48,16 @@ const MARKER_STALE_MS = 10_000;
 
 const errorCode = (error: unknown) => (error as NodeJS.ErrnoException).code;
 
-/** The start time of a running process, or null when no process has that pid. */
-function startTime(pid: number): string | null {
-  const ps = spawnSync('ps', ['-o', 'lstart=', '-p', String(pid)], {
-    encoding: 'utf8',
-    env: { ...process.env, LC_ALL: 'C' },
-  });
-  const started = ps.stdout?.trim().replace(/\s+/g, ' ') ?? '';
-  return ps.status === 0 && started !== '' ? started : null;
-}
-
-/** The owner file's text, `''` when the lock exists without a readable one, or null when there is no lock. */
-function readOwner(lock: string): string | null {
-  try {
-    return readFileSync(path.join(lock, 'owner'), 'utf8');
-  } catch {
-    return existsSync(lock) ? '' : null;
-  }
-}
-
-function parseOwner(ownerText: string): Holder | null {
-  try {
-    return JSON.parse(ownerText) as Holder;
-  } catch {
-    return null;
-  }
-}
-
-/** The holder as an error message names it. */
-function describeOwner(ownerText: string): string {
-  const owner = parseOwner(ownerText);
-  if (owner === null) return 'no readable owner';
-  const branch = owner.branch ? ` on branch ${owner.branch}` : '';
-  return `pid ${owner.pid} (started ${owner.started})${branch} since ${owner.since}`;
-}
-
-/** Whether the holder is gone: dead, its pid reused by a process started at another time, or no owner at all. */
-function isStale(ownerText: string): boolean {
-  const owner = parseOwner(ownerText);
-  return owner === null || startTime(owner.pid) !== owner.started;
+/**
+ * Removes the lock directory `lock` without a moment where it exists half empty: one rename moves it aside to a
+ * `<lock>.stale-*` directory, which is then deleted. Deleting in place would empty it first, and a taker could
+ * rename its own directory onto the empty one, or read no owner, call it stale and take it over, before the last
+ * rmdir fails on what the taker put there.
+ */
+function removeLock(lock: string): void {
+  const aside = mkdtempSync(`${lock}.stale-`);
+  renameSync(lock, path.join(aside, 'lock'));
+  rmSync(aside, { recursive: true, force: true });
 }
 
 /**
@@ -99,44 +82,54 @@ function takeOver(lock: string, staleOwner: string): boolean {
     rmSync(marker, { recursive: true, force: true });
     return false;
   }
-  const aside = mkdtempSync(`${lock}.stale-`);
-  renameSync(lock, path.join(aside, 'lock'));
-  rmSync(aside, { recursive: true, force: true });
+  removeLock(lock);
   return true;
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 /** The lock directory for `name` in the git common directory of `cwd`; names are escaped whole, so `a/b-c` ≠ `a-b/c`. */
 function lockPath(name: string, cwd: string): string {
-  const common = spawnSync('git', ['rev-parse', '--path-format=absolute', '--git-common-dir'], {
-    cwd,
-    encoding: 'utf8',
-  });
-  if (common.status !== 0) throw new Error(`no git repository at ${cwd}: ${common.stderr.trim()}`);
-  return path.join(common.stdout.trim(), 'locks', `${encodeURIComponent(name)}.lock`);
+  const common = gitCommonDir(cwd);
+  if (common === null) throw new Error(`no git repository at ${cwd}`);
+  return path.join(common, 'locks', `${encodeURIComponent(name)}.lock`);
 }
 
 /**
- * One call's claim on a lock: who it is, its owner text as last written, and the directory it renames into place
- * to take it.
+ * A `*.pending-*` or `*.stale-*` directory older than this was left by a process killed between making and removing
+ * it. No waiter waits this long (the longest, the test lock, gives up after 15 minutes), so none is still in use.
+ */
+const LEFTOVER_MS = 60 * 60 * 1000;
+
+/** Deletes the leftover directories in `locks` last changed more than LEFTOVER_MS before `now`. */
+function sweepLeftovers(locks: string, now: Date): void {
+  for (const entry of readdirSync(locks)) {
+    if (!/\.lock\.(pending|stale)-/.test(entry)) continue;
+    const dir = path.join(locks, entry);
+    const changed = statSync(dir, { throwIfNoEntry: false })?.mtimeMs;
+    if (changed !== undefined && now.getTime() - changed > LEFTOVER_MS) rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/**
+ * One call's claim on a lock: the holder it would record, its owner file's text as last written, and the directory
+ * it renames into place to take it.
  */
 interface Claim {
   lock: string;
-  me: Omit<Holder, 'since'>;
-  mine: string;
+  identity: Omit<Holder, 'since'>;
+  ownerText: string;
   pending: string;
   held: boolean;
 }
 
-function prepare(name: string, cwd: string): Claim {
+function prepare(name: string, cwd: string, options: LockOptions): Claim {
   const lock = lockPath(name, cwd);
-  const started = startTime(process.pid);
-  if (started === null) throw new Error("cannot read this process's start time with ps");
-  const branch = spawnSync('git', ['branch', '--show-current'], { cwd, encoding: 'utf8' }).stdout?.trim() ?? '';
+  const self = (options.startTimeOf ?? psStartTime)(process.pid);
+  if (self.state !== 'running') throw new Error("cannot read this process's start time with ps");
   mkdirSync(path.dirname(lock), { recursive: true });
+  sweepLeftovers(path.dirname(lock), options.now ?? new Date());
   const pending = mkdtempSync(`${lock}.pending-`);
-  return { lock, me: { pid: process.pid, started, branch }, mine: '', pending, held: false };
+  const identity = { pid: process.pid, started: self.started, branch: currentBranch(cwd) };
+  return { lock, identity, ownerText: '', pending, held: false };
 }
 
 /**
@@ -144,8 +137,8 @@ function prepare(name: string, cwd: string): Claim {
  * written into the still private directory first, stamped with this attempt's time, so `since` is when it took it.
  */
 function take(claim: Claim): boolean {
-  claim.mine = JSON.stringify({ ...claim.me, since: new Date().toISOString() } satisfies Holder);
-  writeFileSync(path.join(claim.pending, 'owner'), claim.mine);
+  claim.ownerText = JSON.stringify({ ...claim.identity, since: new Date().toISOString() } satisfies Holder);
+  writeFileSync(path.join(claim.pending, 'owner'), claim.ownerText);
   try {
     renameSync(claim.pending, claim.lock);
     claim.held = true;
@@ -159,13 +152,13 @@ function take(claim: Claim): boolean {
 /** Removes what this claim made: the lock if it holds it (and it is still its own), and its unused directory. */
 function release(claim: Claim): void {
   rmSync(claim.pending, { recursive: true, force: true });
-  if (claim.held && readOwner(claim.lock) === claim.mine) rmSync(claim.lock, { recursive: true, force: true });
+  if (claim.held && readOwner(claim.lock) === claim.ownerText) removeLock(claim.lock);
   claim.held = false;
 }
 
 /** Whether to try again at once, because the lock went or was taken over, rather than wait a poll. */
-function retryNow(lock: string, owner: string | null): boolean {
-  return owner === null || (isStale(owner) && takeOver(lock, owner));
+function retryNow(lock: string, owner: string | null, options: LockOptions): boolean {
+  return owner === null || (isStale(owner, options.startTimeOf ?? psStartTime) && takeOver(lock, owner));
 }
 
 async function acquire(claim: Claim, name: string, options: LockOptions): Promise<void> {
@@ -173,7 +166,7 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
   let onWait = options.onWait;
   while (!take(claim)) {
     const owner = readOwner(claim.lock);
-    if (retryNow(claim.lock, owner)) continue;
+    if (retryNow(claim.lock, owner, options)) continue;
     if (Date.now() >= deadline)
       throw new Error(
         `timed out after ${options.timeoutMs / 1000} s waiting for the lock "${name}" at ${claim.lock}, held by ${describeOwner(owner ?? '')}`,
@@ -186,10 +179,13 @@ async function acquire(claim: Claim, name: string, options: LockOptions): Promis
 
 const SIGNALS = ['SIGINT', 'SIGTERM'] as const;
 
-/** Runs `cleanup` on SIGINT or SIGTERM, then lets the process die by that signal; returns the uninstaller. */
-function onSignals(cleanup: () => void): () => void {
+/**
+ * Runs `handle` on SIGINT or SIGTERM; when it answers `die`, stops listening and lets the process die by that
+ * signal; on `carry-on`, keeps listening. Returns the uninstaller.
+ */
+function onSignals(handle: (signal: NodeJS.Signals) => 'die' | 'carry-on'): () => void {
   const handler = (signal: NodeJS.Signals) => {
-    cleanup();
+    if (handle(signal) === 'carry-on') return;
     for (const s of SIGNALS) process.removeListener(s, handler);
     // Die by the signal, as the process would have without this handler, unless someone else handles it.
     if (process.listenerCount(signal) === 0) process.kill(process.pid, signal);
@@ -202,16 +198,27 @@ function onSignals(cleanup: () => void): () => void {
 
 /**
  * Runs `fn` holding the lock `name`, waiting while another process holds it, and releases it however `fn` ends:
- * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal. Throws after
- * `timeoutMs` of waiting. Not reentrant: a process waits on its own lock like on anyone's.
+ * on return, on a throw, and on SIGINT or SIGTERM, after which the process still dies by that signal (unless
+ * `onSignal` lets `fn` wind down first). Throws after `timeoutMs` of waiting. Before taking it, deletes what killed
+ * takers left behind (sweepLeftovers). Not reentrant: a process waits on its own lock like on anyone's.
  */
 export async function withLock<T>(name: string, options: LockOptions, fn: () => T | Promise<T>): Promise<T> {
-  const claim = prepare(name, options.cwd ?? process.cwd());
-  const stopListening = onSignals(() => release(claim));
+  const claim = prepare(name, options.cwd ?? process.cwd(), options);
+  let running = false;
+  const stopListening = onSignals((signal) => {
+    if (running && options.onSignal !== undefined) {
+      options.onSignal(signal);
+      return 'carry-on';
+    }
+    release(claim);
+    return 'die';
+  });
   try {
     await acquire(claim, name, options);
+    running = true;
     return await fn();
   } finally {
+    running = false;
     release(claim);
     // A signal that arrived during synchronous work in `fn` is dispatched only once the event loop turns: turn it
     // once while the handler is still installed, so the process dies by that signal instead of carrying on.

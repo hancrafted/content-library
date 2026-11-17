@@ -2,14 +2,15 @@
 // every worktree of the repository writes to the one file. The fast config reports into it (SlowTestsLog); `verify`
 // prints what its run added, and the worktree script's finish step reads it back (slowTestsSince), prints what the
 // merging branch added and trims it to the last 30 days (trimSlowTests).
-import { spawnSync } from 'node:child_process';
 import { appendFileSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Reporter, TestCase } from 'vitest/node';
+import { currentBranch, gitCommonDir } from './git.ts';
 
 /**
- * A fast test that runs past this is logged. CI fails a fast test over 3 s (ARCH-003-testing §4.4), and a loaded
- * machine runs the suite about 4 times slower than CI, so 750 ms here is a test heading for CI's limit.
+ * A fast test that runs past this is logged. CI fails a fast test over 3 s (ARCH-003-testing §4.4), and CI's runners
+ * run the suite about 4 times slower than a developer's Mac, so 750 ms here is about 3 s there: a test heading for
+ * CI's limit.
  */
 export const SLOW_TEST_MS = 750;
 
@@ -22,16 +23,14 @@ const KEEP_DAYS = 30;
  */
 export type SlowTest = { test: string; file: string; ms: number; loadFactor?: number; branch: string; at: string };
 
-const git = (cwd: string, ...args: string[]) => spawnSync('git', args, { cwd, encoding: 'utf8' });
-
 /** The log's path for the repository `cwd` sits in, or null outside a git repository. */
 export function slowTestsLogPath(cwd: string): string | null {
-  const commonDir = git(cwd, 'rev-parse', '--path-format=absolute', '--git-common-dir');
-  return commonDir.status === 0 ? path.join(commonDir.stdout.trim(), 'slow-tests.jsonl') : null;
+  const commonDir = gitCommonDir(cwd);
+  return commonDir === null ? null : path.join(commonDir, 'slow-tests.jsonl');
 }
 
-/** The branch checked out at `cwd`; empty on a detached HEAD or outside a repository. */
-export const currentBranch = (cwd: string): string => git(cwd, 'branch', '--show-current').stdout?.trim() ?? '';
+/** How many tests, as the slow-tests lines say it: `1 test`, `3 tests`. */
+export const testCount = (count: number): string => (count === 1 ? '1 test' : `${count} tests`);
 
 /**
  * A Vitest reporter that appends each test over SLOW_TEST_MS to the slow-tests log as it finishes, with the load

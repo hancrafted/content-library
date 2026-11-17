@@ -2,13 +2,14 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { withLock } from '../../../tools/load/lock.ts';
+import { setTimeout as sleep } from 'node:timers/promises';
+import { type Timing, withLock } from '../../../tools/load/lock.ts';
 import {
   formatSlowTest,
   SLOW_TEST_MS,
   slowTestsLogPath,
   slowTestsSince,
-  trimSlowTests,
+  testCount,
 } from '../../../tools/load/slow-tests.mts';
 import { git } from './git.ts';
 
@@ -58,12 +59,18 @@ function busyWith(tree: string): string | null {
   return IN_PROGRESS.find(([name]) => existsSync(path.join(gitDir, name)))?.[1] ?? null;
 }
 
+/** Where a merge runs from (a directory inside the repository) and where its progress lines go. */
+export interface MergeContext {
+  cwd: string;
+  log: (line: string) => void;
+}
+
 /**
  * Runs `fn` holding the merge lock of `branch` (tools/load/lock.ts), which every merge into `branch` holds:
- * `wt:done --base` merging into it and `wt:sync` run on it. Prints one line while it waits for another holder.
+ * `wt:done --base` merging into it and `wt:sync` run on it. Logs one line while it waits for another holder.
  */
-export function withMergeLock<T>(branch: string, cwd: string, fn: () => T | Promise<T>): Promise<T> {
-  const onWait = () => console.log(`… waiting for another merge into ${branch} to finish`);
+export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn: () => T | Promise<T>): Promise<T> {
+  const onWait = () => log(`… waiting for another merge into ${branch} to finish`);
   return withLock(`wt-merge/${branch}`, { pollMs: 100, timeoutMs: 10 * 60 * 1000, cwd, onWait }, fn);
 }
 
@@ -109,14 +116,7 @@ function buildMerge(merge: Merge, baseTip: string): string {
 }
 
 /** How long a merge waits for a busy base, and how often it looks again. */
-export interface BusyWait {
-  pollMs: number;
-  timeoutMs: number;
-}
-
-const BUSY_WAIT: BusyWait = { pollMs: 5000, timeoutMs: 10 * 60 * 1000 };
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const BUSY_WAIT: Timing = { pollMs: 5000, timeoutMs: 10 * 60 * 1000 };
 
 /** One attempt's outcome: done, or the base's worktree busy with something (`detail` adds git's own words). */
 type Attempt = { done: 'merged' | 'already-merged' } | { tree: string; busy: string; detail: string };
@@ -148,7 +148,7 @@ function attempt(merge: Merge, built: { on: string; commit: string }): Attempt {
  * Merges `branch` into `base` with a merge commit. The commit is built outside any worktree (`buildMerge`), then
  * `base` fast-forwards to it inside the worktree that has `base` checked out, so a conflict changes nothing.
  * While that worktree is busy (a merge, rebase or cherry-pick in progress, or the fast-forward refused, say over
- * local changes), it waits and looks again every `pollMs`, printing one line, and rebuilds the commit when the
+ * local changes), it waits and looks again every `pollMs`, logging one line, and rebuilds the commit when the
  * base tip moved meanwhile. Holds the base's merge lock (`withMergeLock`) throughout, so merges into one base
  * serialize. Rejects, with the base left as it was, when the base is checked out nowhere, the merge conflicts or
  * the base stays busy past `timeoutMs`.
@@ -156,10 +156,10 @@ function attempt(merge: Merge, built: { on: string; commit: string }): Attempt {
 export function mergeIntoBase(
   branch: string,
   base: string,
-  options: { cwd: string } & Partial<BusyWait>,
+  options: MergeContext & Partial<Timing>,
 ): Promise<'merged' | 'already-merged'> {
-  const { cwd, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
-  return withMergeLock(base, cwd, async () => {
+  const { cwd, log, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
+  return withMergeLock(base, { cwd, log }, async () => {
     const deadline = Date.now() + timeoutMs;
     const built = { on: '', commit: '' };
     for (let round = 0; ; round++) {
@@ -171,7 +171,7 @@ export function mergeIntoBase(
           `${base} in ${tree} stayed busy with ${busy} for ${timeoutMs / 1000} s; finish it, then rerun${detail}`,
         );
       if (round === 0)
-        console.log(
+        log(
           `… ${base} in ${tree} is busy with ${busy}; looking again every ${pollMs / 1000} s for up to ${timeoutMs / 60_000} min`,
         );
       await sleep(pollMs);
@@ -183,21 +183,18 @@ export function mergeIntoBase(
  * The lines a finish prints about the fast-suite tests that ran past 750 ms on `branch` since it branched off `base`:
  * the shared slow-tests log's entries (see tools/load/slow-tests.mts) whose branch is `branch` and whose time is at or
  * after the committer date of the merge-base of `branch` and `base`, so the orchestrator sees creeping tests
- * in the merge output. Empty when there are none. First trims the log to the 30 days before `now`. Call it before
- * merging: afterwards the merge-base is the tip.
+ * in the merge output. Empty when there are none. Call it before merging: afterwards the merge-base is the tip.
  */
-export function slowTestReport(branch: string, base: string, { cwd, now }: { cwd: string; now: Date }): string[] {
+export function slowTestReport(branch: string, base: string, cwd: string): string[] {
   const log = slowTestsLogPath(cwd);
   if (log === null) return [];
-  trimSlowTests(log, now);
   const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
   if (fork === '') return [];
   const since = new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
   const entries = slowTestsSince(log, branch, since);
   if (entries.length === 0) return [];
-  const count = entries.length === 1 ? '1 test' : `${entries.length} tests`;
   return [
-    `! ${count} ran past ${SLOW_TEST_MS} ms on ${branch} since it branched off ${base}:`,
+    `! ${testCount(entries.length)} ran past ${SLOW_TEST_MS} ms on ${branch} since it branched off ${base}:`,
     ...entries.map(formatSlowTest),
   ];
 }

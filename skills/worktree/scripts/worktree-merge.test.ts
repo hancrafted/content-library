@@ -1,17 +1,10 @@
 import { execFileSync, spawn } from 'node:child_process';
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  realpathSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { deadPid, plantLock } from '../../../tools/load/lock.fixture.ts';
+import type { Timing } from '../../../tools/load/lock.ts';
 import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
@@ -94,19 +87,24 @@ const inGitDir = (tree: string, name: string) =>
   existsSync(git(tree, 'rev-parse', '--path-format=absolute', '--git-path', name));
 
 /** Short waits, so a test of a busy base takes well under a second. */
-const FAST = { pollMs: 50, timeoutMs: 4000 };
+const FAST: Timing = { pollMs: 50, timeoutMs: 4000 };
 
-/** Resolves once mergeIntoBase has printed that the base is busy, with console.log silenced meanwhile. */
-async function waitingOnBusyBase(): Promise<void> {
-  const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-  await vi.waitFor(() => expect(log.mock.calls.flat().join('\n')).toMatch(/busy/));
+/** Where a merge runs, with a log sink that keeps every line the merge logs. */
+function merging(cwd: string) {
+  const lines: string[] = [];
+  return { cwd, lines, log: (line: string) => void lines.push(line) };
+}
+
+/** Resolves once the merge has logged into `lines` that the base is busy. */
+async function waitingOnBusyBase(lines: string[]): Promise<void> {
+  await vi.waitFor(() => expect(lines.join('\n')).toMatch(/busy/));
 }
 
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
 
 /** Runs mergeIntoBase in its own process, as a second `wt:done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
-  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2] }));`;
+  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log }));`;
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ['--input-type=module', '-e', code, branch, cwd], {
       encoding: 'utf8',
@@ -119,14 +117,12 @@ function mergeInChild(branch: string, cwd: string): Promise<{ code: number | nul
 }
 
 describe('mergeIntoBase', () => {
-  afterEach(() => vi.restoreAllMocks());
-
   describe('success cases', () => {
     it('merges the branch into a base checked out in another worktree', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       // ACT
-      const result = await mergeIntoBase('work', 'base', { cwd: main });
+      const result = await mergeIntoBase('work', 'base', merging(main));
       // ASSERT
       expect(result).toBe('merged');
       expect(existsSync(path.join(baseTree, 'work.txt'))).toBe(true);
@@ -136,10 +132,10 @@ describe('mergeIntoBase', () => {
     it('reports an already merged branch without a new commit', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
-      await mergeIntoBase('work', 'base', { cwd: main });
+      await mergeIntoBase('work', 'base', merging(main));
       const head = git(baseTree, 'rev-parse', 'HEAD');
       // ACT
-      const result = await mergeIntoBase('work', 'base', { cwd: main });
+      const result = await mergeIntoBase('work', 'base', merging(main));
       // ASSERT
       expect(result).toBe('already-merged');
       expect(git(baseTree, 'rev-parse', 'HEAD')).toBe(head);
@@ -161,13 +157,70 @@ describe('mergeIntoBase', () => {
       expect(() => git(main, 'merge-base', '--is-ancestor', 'work', 'base')).not.toThrow();
       expect(() => git(main, 'merge-base', '--is-ancestor', 'other', 'base')).not.toThrow();
     });
+  });
 
+  describe('failure cases', () => {
+    it('throws when the base is checked out nowhere, merging nothing', async () => {
+      // ARRANGE
+      const { main, baseTree } = fixture();
+      git(main, 'worktree', 'remove', baseTree);
+      const before = git(main, 'rev-parse', 'base');
+      // ACT
+      const run = mergeIntoBase('work', 'base', merging(main));
+      // ASSERT
+      await expect(run).rejects.toThrow(/not checked out/);
+      expect(git(main, 'rev-parse', 'base')).toBe(before);
+    });
+
+    it("names the conflicting paths and leaves the base's files, index and tip byte-identical", async () => {
+      // ARRANGE
+      const { main, baseTree, workTree } = fixture();
+      conflictOnA(baseTree, workTree);
+      const before = snapshot(baseTree);
+      // ACT
+      const run = mergeIntoBase('work', 'base', merging(main));
+      // ASSERT
+      await expect(run).rejects.toThrow(/conflict[\s\S]*a\.txt/i);
+      expect(snapshot(baseTree)).toEqual(before);
+    });
+
+    it('releases the merge lock when the merge fails, so the next merge into the base runs', async () => {
+      // ARRANGE
+      const { root, main, baseTree, workTree } = fixture();
+      addOtherBranch(root, main);
+      conflictOnA(baseTree, workTree);
+      await expect(mergeIntoBase('work', 'base', merging(main))).rejects.toThrow(/conflict/i);
+      // ACT
+      const result = await mergeIntoBase('other', 'base', merging(main));
+      // ASSERT
+      expect(result).toBe('merged');
+    });
+
+    it('gives up after the timeout while the base is mid-rebase, leaving the rebase in progress', async () => {
+      // ARRANGE
+      const { main, baseTree } = fixture();
+      git(main, 'branch', 'onto', 'base');
+      writeFileSync(path.join(baseTree, 'a.txt'), 'from base');
+      git(baseTree, 'commit', '-aqm', 'edit a on base');
+      git(main, 'worktree', 'add', '-q', path.join(path.dirname(baseTree), 'onto-tree'), 'onto');
+      writeFileSync(path.join(path.dirname(baseTree), 'onto-tree', 'a.txt'), 'from onto');
+      git(path.join(path.dirname(baseTree), 'onto-tree'), 'commit', '-aqm', 'edit a on onto');
+      expect(() => git(baseTree, 'rebase', 'onto')).toThrow();
+      // ACT
+      const run = mergeIntoBase('work', 'base', { ...merging(main), pollMs: 50, timeoutMs: 300 });
+      // ASSERT
+      await expect(run).rejects.toThrow(/rebase/);
+      expect(inGitDir(baseTree, 'rebase-merge')).toBe(true);
+    });
+  });
+
+  describe('edge cases', () => {
     it('waits for a wt:sync holding the merge lock of the base before merging into it', async () => {
       // ARRANGE
       const { main } = fixture();
       let child: Promise<{ code: number | null; output: string }> | undefined;
       // ACT
-      await withMergeLock('base', main, async () => {
+      await withMergeLock('base', merging(main), async () => {
         child = mergeInChild('work', main);
         await new Promise((resolve) => setTimeout(resolve, 500));
         // ASSERT
@@ -182,28 +235,21 @@ describe('mergeIntoBase', () => {
       // ARRANGE
       const { main } = fixture();
       const lock = path.join(main, '.git', 'locks', 'wt-merge%2Fbase.lock');
-      mkdirSync(lock, { recursive: true });
-      const dead = Number(
-        execFileSync(process.execPath, ['-e', 'console.log(process.pid)'], {
-          encoding: 'utf8',
-        }),
-      );
-      writeFileSync(path.join(lock, 'owner'), JSON.stringify({ pid: dead, started: 'Thu Jan  1 00:00:00 1970' }));
+      plantLock(lock, { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
       // ACT
-      const result = await mergeIntoBase('work', 'base', { cwd: main });
+      const result = await mergeIntoBase('work', 'base', merging(main));
       // ASSERT
       expect(result).toBe('merged');
       expect(existsSync(lock)).toBe(false);
     });
-  });
 
-  describe('a busy base', () => {
     it('waits while the base is mid-merge, keeps the hand-resolved file, then merges once that merge is committed', async () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
-      const run = mergeIntoBase('work', 'base', { cwd: main, ...FAST });
-      await waitingOnBusyBase();
+      const context = merging(main);
+      const run = mergeIntoBase('work', 'base', { ...context, ...FAST });
+      await waitingOnBusyBase(context.lines);
       expect(readFileSync(path.join(baseTree, 'a.txt'), 'utf8')).toBe('resolved by hand');
       expect(inGitDir(baseTree, 'MERGE_HEAD')).toBe(true);
       // ACT
@@ -219,8 +265,9 @@ describe('mergeIntoBase', () => {
       // ARRANGE
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
-      const run = mergeIntoBase('work', 'base', { cwd: main, ...FAST });
-      await waitingOnBusyBase();
+      const context = merging(main);
+      const run = mergeIntoBase('work', 'base', { ...context, ...FAST });
+      await waitingOnBusyBase(context.lines);
       // ACT
       git(baseTree, 'merge', '--abort');
       writeFileSync(path.join(baseTree, 'c.txt'), 'c');
@@ -232,66 +279,6 @@ describe('mergeIntoBase', () => {
       expect(git(main, 'rev-parse', 'base^1')).toBe(moved);
       expect(git(main, 'rev-parse', 'base^2')).toBe(git(main, 'rev-parse', 'work'));
     });
-
-    it('gives up after the timeout while the base is mid-rebase, leaving the rebase in progress', async () => {
-      // ARRANGE
-      const { main, baseTree } = fixture();
-      git(main, 'branch', 'onto', 'base');
-      writeFileSync(path.join(baseTree, 'a.txt'), 'from base');
-      git(baseTree, 'commit', '-aqm', 'edit a on base');
-      git(main, 'worktree', 'add', '-q', path.join(path.dirname(baseTree), 'onto-tree'), 'onto');
-      writeFileSync(path.join(path.dirname(baseTree), 'onto-tree', 'a.txt'), 'from onto');
-      git(path.join(path.dirname(baseTree), 'onto-tree'), 'commit', '-aqm', 'edit a on onto');
-      expect(() => git(baseTree, 'rebase', 'onto')).toThrow();
-      vi.spyOn(console, 'log').mockImplementation(() => undefined);
-      // ACT
-      const run = mergeIntoBase('work', 'base', {
-        cwd: main,
-        pollMs: 50,
-        timeoutMs: 300,
-      });
-      // ASSERT
-      await expect(run).rejects.toThrow(/rebase/);
-      expect(inGitDir(baseTree, 'rebase-merge')).toBe(true);
-    });
-  });
-
-  describe('failure cases', () => {
-    it('throws when the base is checked out nowhere, merging nothing', async () => {
-      // ARRANGE
-      const { main, baseTree } = fixture();
-      git(main, 'worktree', 'remove', baseTree);
-      const before = git(main, 'rev-parse', 'base');
-      // ACT
-      const run = mergeIntoBase('work', 'base', { cwd: main });
-      // ASSERT
-      await expect(run).rejects.toThrow(/not checked out/);
-      expect(git(main, 'rev-parse', 'base')).toBe(before);
-    });
-
-    it("names the conflicting paths and leaves the base's files, index and tip byte-identical", async () => {
-      // ARRANGE
-      const { main, baseTree, workTree } = fixture();
-      conflictOnA(baseTree, workTree);
-      const before = snapshot(baseTree);
-      // ACT
-      const run = mergeIntoBase('work', 'base', { cwd: main });
-      // ASSERT
-      await expect(run).rejects.toThrow(/conflict[\s\S]*a\.txt/i);
-      expect(snapshot(baseTree)).toEqual(before);
-    });
-
-    it('releases the merge lock when the merge fails, so the next merge into the base runs', async () => {
-      // ARRANGE
-      const { root, main, baseTree, workTree } = fixture();
-      addOtherBranch(root, main);
-      conflictOnA(baseTree, workTree);
-      await expect(mergeIntoBase('work', 'base', { cwd: main })).rejects.toThrow(/conflict/i);
-      // ACT
-      const result = await mergeIntoBase('other', 'base', { cwd: main });
-      // ASSERT
-      expect(result).toBe('merged');
-    });
   });
 });
 
@@ -300,29 +287,13 @@ const slowEntry = (test: string, branch: string, at: Date) =>
   JSON.stringify({ test, file: 'src/walk.test.ts', ms: 1200, loadFactor: 2.4, branch, at: at.toISOString() }) + '\n';
 
 const HOUR = 60 * 60 * 1000;
-const DAY = 24 * HOUR;
 
 describe('slowTestReport', () => {
   describe('success cases', () => {
-    it('trims the shared log to the last 30 days as it reads it', () => {
-      // ARRANGE
-      const { main } = fixture();
-      const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
-      const now = new Date(forkedAt.getTime() + 2 * HOUR);
-      const log = path.join(main, '.git', 'slow-tests.jsonl');
-      const recent = slowEntry('on another branch', 'other', new Date(now.getTime() - DAY));
-      writeFileSync(log, slowEntry('long ago', 'other', new Date(now.getTime() - 31 * DAY)) + recent);
-      // ACT
-      slowTestReport('work', 'base', { cwd: main, now });
-      // ASSERT
-      expect(readFileSync(log, 'utf8')).toBe(recent);
-    });
-
     it("keeps only the merging branch's entries logged at or after its merge-base's committer date", () => {
       // ARRANGE
       const { main } = fixture();
       const forkedAt = new Date(git(main, 'log', '-1', '--format=%cI', git(main, 'merge-base', 'work', 'base')));
-      const now = new Date(forkedAt.getTime() + 2 * HOUR);
       writeFileSync(
         path.join(main, '.git', 'slow-tests.jsonl'),
         slowEntry('before the fork', 'work', new Date(forkedAt.getTime() - HOUR)) +
@@ -332,7 +303,7 @@ describe('slowTestReport', () => {
       const header = '! 1 test ran past 750 ms on work since it branched off base:';
       const line = `  1.2 s at load 2.4  src/walk.test.ts > after the fork  (${new Date(forkedAt.getTime() + HOUR).toISOString()})`;
       // ACT
-      const report = slowTestReport('work', 'base', { cwd: main, now });
+      const report = slowTestReport('work', 'base', main);
       // ASSERT
       expect(report).toEqual([header, line]);
     });
@@ -342,9 +313,8 @@ describe('slowTestReport', () => {
     it('prints nothing when the repository has no slow-tests log yet', () => {
       // ARRANGE
       const { main } = fixture();
-      const now = new Date('2026-11-17T12:00:00.000Z');
       // ACT
-      const report = slowTestReport('work', 'base', { cwd: main, now });
+      const report = slowTestReport('work', 'base', main);
       // ASSERT
       expect(report).toEqual([]);
     });
