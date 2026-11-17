@@ -18,7 +18,7 @@ import { type Timing, withLock } from './lock.ts';
 export const TEST_LOCK = 'test';
 
 /** How often a waiter looks again, and how long it waits before it fails. */
-const TIMING: Timing = { pollMs: 2_000, timeoutMs: 15 * 60 * 1000 };
+const TIMING: Timing = { pollMilliseconds: 2_000, timeoutMilliseconds: 15 * 60 * 1000 };
 
 /** How long ago `since` was, as the waiting line prints it: `42 s`, `3 min 5 s`. */
 function age(since: string, now: Date): string {
@@ -45,10 +45,15 @@ export interface TestLockOptions extends Partial<Timing> {
  * after 15 minutes of waiting, naming the lock and its holder. With `CI` set it runs `fn` at once, lock-free.
  */
 export function withTestLock<T>(fn: () => T | Promise<T>, options: TestLockOptions = {}): Promise<T> {
-  const { env = process.env, cwd = process.cwd(), pollMs = TIMING.pollMs, timeoutMs = TIMING.timeoutMs } = options;
+  const {
+    env = process.env,
+    cwd = process.cwd(),
+    pollMilliseconds = TIMING.pollMilliseconds,
+    timeoutMilliseconds = TIMING.timeoutMilliseconds,
+  } = options;
   if (env.CI) return Promise.resolve().then(fn);
   const onWait = (holder: Holder | null) => console.error(waitingLine(holder, new Date()));
-  return withLock(TEST_LOCK, { cwd, pollMs, timeoutMs, onWait, onSignal: options.onSignal }, fn);
+  return withLock(TEST_LOCK, { cwd, pollMilliseconds, timeoutMilliseconds, onWait, onSignal: options.onSignal }, fn);
 }
 
 /** How a command ended: its exit code, or the signal that killed it. */
@@ -73,7 +78,7 @@ function runHoldingTestLock([file, ...args]: string[], timing: Partial<Timing>):
 }
 
 /** A `--poll-ms` or `--timeout-ms` value as milliseconds; throws unless it is a positive number. */
-function positiveMs(flag: string, value: string | undefined): number | undefined {
+function positiveMilliseconds(flag: string, value: string | undefined): number | undefined {
   if (value === undefined) return undefined;
   const ms = Number(value);
   if (!Number.isFinite(ms) || ms <= 0)
@@ -92,8 +97,8 @@ function parseCommandLine(args: string[]): { command: string[]; timing: Partial<
   });
   if (positionals.length === 0) throw new Error('no command given');
   const timing = {
-    pollMs: positiveMs('poll-ms', values['poll-ms']),
-    timeoutMs: positiveMs('timeout-ms', values['timeout-ms']),
+    pollMilliseconds: positiveMilliseconds('poll-ms', values['poll-ms']),
+    timeoutMilliseconds: positiveMilliseconds('timeout-ms', values['timeout-ms']),
   };
   return { command: positionals, timing };
 }

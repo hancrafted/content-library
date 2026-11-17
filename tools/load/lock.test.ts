@@ -16,7 +16,7 @@ describe('withLock', () => {
       const expected = 'merged';
       // ACT
       const first = await withLock('base', { ...FAST, cwd: main }, () => expected);
-      const second = await withLock('base', { ...FAST, cwd: main, timeoutMs: 0 }, () => expected);
+      const second = await withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => expected);
       // ASSERT
       expect(first).toBe(expected);
       expect(second).toBe(expected);
@@ -68,7 +68,7 @@ describe('withLock', () => {
       };
       // ACT
       const failed = await withLock('base', { ...FAST, cwd: main }, fails).catch((error: Error) => error.message);
-      const after = await withLock('base', { ...FAST, cwd: main, timeoutMs: 0 }, () => next);
+      const after = await withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => next);
       // ASSERT
       expect(failed).toBe(message);
       expect(after).toBe(next);
@@ -86,7 +86,7 @@ describe('withLock', () => {
       await held.opened;
       const expected = new RegExp(`timed out .*"base".* held by pid ${process.pid}`);
       // ACT
-      const run = withLock('base', { ...FAST, cwd: main, timeoutMs: 50 }, () => 'never');
+      const run = withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 50 }, () => 'never');
       // ASSERT
       await expect(run).rejects.toThrow(expected);
       holder.open();
@@ -96,7 +96,7 @@ describe('withLock', () => {
     it('releases the lock and dies by the signal when interrupted while holding it, even mid synchronous work', async () => {
       // ARRANGE
       const { main, locks } = repo();
-      const body = `await withLock('base', { cwd: process.argv[1], pollMs: 10, timeoutMs: 5000 }, () => {
+      const body = `await withLock('base', { cwd: process.argv[1], pollMilliseconds: 10, timeoutMilliseconds: 5000 }, () => {
         fs.writeSync(1, 'held\\n');
         Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 300);
       });
@@ -119,7 +119,7 @@ describe('withLock', () => {
       plantLock(path.join(locks, 'base.lock'), { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
       const expected = 'taken over';
       // ACT
-      const result = await withLock('base', { ...FAST, cwd: main, timeoutMs: 0 }, () => expected);
+      const result = await withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => expected);
       // ASSERT
       expect(result).toBe(expected);
     });
@@ -130,7 +130,7 @@ describe('withLock', () => {
       plantLock(path.join(locks, 'base.lock'), { pid: process.pid, started: 'Thu Jan  1 00:00:00 1970' });
       const expected = 'taken over';
       // ACT
-      const result = await withLock('base', { ...FAST, cwd: main, timeoutMs: 0 }, () => expected);
+      const result = await withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => expected);
       // ASSERT
       expect(result).toBe(expected);
     });
@@ -140,7 +140,7 @@ describe('withLock', () => {
       const { root, main, locks } = repo();
       plantLock(path.join(locks, 'base.lock'), { pid: deadPid(), started: 'Thu Jan  1 00:00:00 1970' });
       const log = path.join(root, 'holders.log');
-      const body = `await withLock('base', { cwd: process.argv[1], pollMs: 5, timeoutMs: 10000 }, () => {
+      const body = `await withLock('base', { cwd: process.argv[1], pollMilliseconds: 5, timeoutMilliseconds: 10000 }, () => {
         fs.appendFileSync(process.argv[2], 'start\\n');
         Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 50);
         fs.appendFileSync(process.argv[2], 'end\\n');
@@ -165,7 +165,11 @@ describe('withLock', () => {
         pid === process.pid ? psStartTime(pid) : ({ state: 'unknown' } as const);
       const expected = /timed out .*"base"/;
       // ACT
-      const run = withLock('base', { ...FAST, cwd: main, timeoutMs: 50, startTimeOf: psFailsForOthers }, () => 'never');
+      const run = withLock(
+        'base',
+        { ...FAST, cwd: main, timeoutMilliseconds: 50, startTimeOf: psFailsForOthers },
+        () => 'never',
+      );
       // ASSERT
       await expect(run).rejects.toThrow(expected);
     });
@@ -203,7 +207,7 @@ describe('withLock', () => {
       await held.opened;
       const expected = 'not blocked';
       // ACT
-      const second = await withLock('a-b/c', { ...FAST, cwd: main, timeoutMs: 0 }, () => expected);
+      const second = await withLock('a-b/c', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => expected);
       // ASSERT
       expect(second).toBe(expected);
       holder.open();

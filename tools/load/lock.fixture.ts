@@ -7,7 +7,7 @@ import path from 'node:path';
 import type { Timing } from './lock.ts';
 
 /** Short waits, so a test of a waiting taker takes milliseconds. */
-export const FAST: Timing = { pollMs: 10, timeoutMs: 5000 };
+export const FAST: Timing = { pollMilliseconds: 10, timeoutMilliseconds: 5000 };
 
 /** A fresh repository with a linked worktree; the locks live in the git common directory both share. */
 export function repo() {

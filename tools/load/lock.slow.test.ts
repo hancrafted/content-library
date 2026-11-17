@@ -7,7 +7,7 @@ for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete
 
 /** What each taker runs: the lock taken and given back over and over, as fast as it goes. */
 const RELAY = `for (let i = 0; i < 30; i++)
-  await withLock('base', { cwd: process.argv[1], pollMs: 1, timeoutMs: 20000 }, () => undefined);`;
+  await withLock('base', { cwd: process.argv[1], pollMilliseconds: 1, timeoutMilliseconds: 20000 }, () => undefined);`;
 
 describe('withLock', () => {
   describe('edge cases', () => {
@@ -19,7 +19,7 @@ describe('withLock', () => {
       const free = 'free';
       // ACT
       const results = await Promise.all(Array.from({ length: takers }, () => child(RELAY, [main])));
-      const after = await withLock('base', { ...FAST, cwd: main, timeoutMs: 0 }, () => free);
+      const after = await withLock('base', { ...FAST, cwd: main, timeoutMilliseconds: 0 }, () => free);
       // ASSERT
       expect(
         results.map((r) => r.code),

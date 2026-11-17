@@ -30,9 +30,9 @@ const marked = (id: string, ms: number) =>
 function run(
   cwd: string,
   command: readonly string[],
-  options: { env?: Record<string, string>; timeoutMs?: number; flags?: string[] } = {},
+  options: { env?: Record<string, string>; timeoutMilliseconds?: number; flags?: string[] } = {},
 ) {
-  const flags = options.flags ?? ['--poll-ms', '20', '--timeout-ms', String(options.timeoutMs ?? 10_000)];
+  const flags = options.flags ?? ['--poll-ms', '20', '--timeout-ms', String(options.timeoutMilliseconds ?? 10_000)];
   const args = [CLI, ...flags, '--', ...command];
   const proc = spawn(process.execPath, args, { cwd, env: { ...process.env, ...options.env } });
   let stdout = '';
@@ -90,7 +90,7 @@ describe('test-lock', () => {
       const { root, order } = repo();
       const released = gate();
       const holding = gate();
-      const holder = withLock(TEST_LOCK, { cwd: root, pollMs: 20, timeoutMs: 10_000 }, async () => {
+      const holder = withLock(TEST_LOCK, { cwd: root, pollMilliseconds: 20, timeoutMilliseconds: 10_000 }, async () => {
         holding.open();
         await released.opened;
       });
@@ -98,7 +98,7 @@ describe('test-lock', () => {
       const expectedError = new RegExp(`"${TEST_LOCK}".* held by pid ${process.pid} .*on branch work`);
       const expectedCode = 1;
       // ACT
-      const result = await run(root, marked('never', 0), { timeoutMs: 100 }).done;
+      const result = await run(root, marked('never', 0), { timeoutMilliseconds: 100 }).done;
       released.open();
       await holder;
       // ASSERT
@@ -131,14 +131,14 @@ describe('test-lock', () => {
       const { root, order } = repo();
       const released = gate();
       const holding = gate();
-      const holder = withLock(TEST_LOCK, { cwd: root, pollMs: 20, timeoutMs: 10_000 }, async () => {
+      const holder = withLock(TEST_LOCK, { cwd: root, pollMilliseconds: 20, timeoutMilliseconds: 10_000 }, async () => {
         holding.open();
         await released.opened;
       });
       await holding.opened;
       const expectedOrder = ['start-ci', 'end-ci'];
       // ACT
-      const result = await run(root, marked('ci', 0), { env: { CI: 'true' }, timeoutMs: 100 }).done;
+      const result = await run(root, marked('ci', 0), { env: { CI: 'true' }, timeoutMilliseconds: 100 }).done;
       released.open();
       await holder;
       // ASSERT

@@ -87,7 +87,7 @@ const inGitDir = (tree: string, name: string) =>
   existsSync(git(tree, 'rev-parse', '--path-format=absolute', '--git-path', name));
 
 /** Short waits, so a test of a busy base takes well under a second. */
-const FAST: Timing = { pollMs: 50, timeoutMs: 4000 };
+const FAST: Timing = { pollMilliseconds: 50, timeoutMilliseconds: 4000 };
 
 /** Where a merge runs, with a log sink that keeps every line the merge logs. */
 function merging(cwd: string) {
@@ -207,7 +207,7 @@ describe('mergeIntoBase', () => {
       git(path.join(path.dirname(baseTree), 'onto-tree'), 'commit', '-aqm', 'edit a on onto');
       expect(() => git(baseTree, 'rebase', 'onto')).toThrow();
       // ACT
-      const run = mergeIntoBase('work', 'base', { ...merging(main), pollMs: 50, timeoutMs: 300 });
+      const run = mergeIntoBase('work', 'base', { ...merging(main), pollMilliseconds: 50, timeoutMilliseconds: 300 });
       // ASSERT
       await expect(run).rejects.toThrow(/rebase/);
       expect(inGitDir(baseTree, 'rebase-merge')).toBe(true);
