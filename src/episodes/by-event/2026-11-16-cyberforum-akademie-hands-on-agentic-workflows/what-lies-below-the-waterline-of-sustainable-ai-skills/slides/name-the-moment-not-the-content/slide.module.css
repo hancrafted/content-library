@@ -84,11 +84,7 @@
   stroke: var(--clip-shade);
 }
 
-/*
- * The one emphasis motion: the primary line draws from your request to the moment description, then the moment entry's
- * ring and its "matches" verdict appear. The base rules are the drawn rest state, which reduced motion and a still
- * frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .match {
   stroke-dasharray: 1;
   stroke-dashoffset: 0;

@@ -1,9 +1,3 @@
-/*
- * Where your request goes in the control room (decision 53): the captain's shared `says` bubble, never an HTML one.
- * The room is a 1200 by 800 Scene shown bottom-aligned at 25 by 16, so its visible part is the Spec's 1000 by 640
- * space, the overlay's, in which the match pill and the skill index lie over the picture on a wide Slide. `requestBubble`
- * measures the bubble there; `requestClashes` names what it would cover, so a longer request fails the test.
- */
 import type { BubblePlace } from '@/episodes/components/slide-shared/character/actor';
 import { drawFigure } from '@/episodes/components/slide-shared/character/poses.pure';
 import { saysBox } from '@/episodes/components/slide-shared/character/says.pure';
@@ -32,7 +26,6 @@ const PER_OVERLAY = ART_SCALE;
 
 const PILL: OverlayBox = { x: 250, y: 330, width: 450, height: 34 };
 const INDEX_LEFT = 548;
-/** The air the bubble keeps from what it must not cover, in overlay units. */
 const GAP = 6;
 
 export function requestBubble(words: string, picturePixels: number): OverlayBox {
