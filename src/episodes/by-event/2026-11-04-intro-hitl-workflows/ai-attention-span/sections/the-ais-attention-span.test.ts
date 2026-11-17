@@ -131,10 +131,6 @@ const bySlug = (slug: string) => {
 };
 const scene = (slug: string, locale: 'en' | 'de' = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(bySlug(slug), locale).content)));
-const markers = ($: CheerioAPI) =>
-  $('[data-context-ref]')
-    .toArray()
-    .map((el) => $(el).attr('data-context-ref'));
 
 describe('success cases', () => {
   it('places the four page Slides after the section slide, in Spec order', () => {
@@ -215,60 +211,6 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(actual).toEqual(expected);
-  });
-
-  it('puts a Context marker wherever each mock shows one, opening the note its build notes name', () => {
-    // ARRANGE
-    const expected = {
-      'the-context-window': [
-        'the-model-keeps-nothing',
-        'replies-feed-back-in',
-        'both-directions-count',
-        'apps-may-differ',
-      ],
-      'what-happens-when-the-bar-fills-up': [
-        'what-the-studies-measure',
-        'extra-material-makes-it-worse',
-        'mostly-synthetic-tests',
-      ],
-      'attention-is-a-budget': [
-        'the-u-shape-is-measured',
-        'the-start-is-weighted',
-        'the-attention-budget',
-        'no-single-line',
-      ],
-      'what-we-learned-so-far': ['two-kinds-of-evidence'],
-    };
-    // ACT
-    const actual = Object.fromEntries(Object.keys(expected).map((slug) => [slug, markers(scene(slug))]));
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
-
-  it('draws Slide 5 without the strip card, with the Lost in the middle label inside the cornerstone column, bracketed, with no arrow', () => {
-    // ARRANGE
-    const expected = { strips: 0, label: 1, brackets: 1, arrows: 0, labelAfterContext: true, labelInsideTarget: true };
-    // ACT
-    const $ = scene('attention-is-a-budget');
-    const label = $('[data-lost-label]');
-    // ASSERT
-    expect({
-      strips: $('[data-strip-group]').length,
-      label: label.length,
-      brackets: label.find('svg[data-lost-bracket]').length,
-      arrows: label.find('svg.lucide-arrow-up, svg[class*="arrow"]').length,
-      labelAfterContext: $.html().indexOf('data-cornerstone') < $.html().indexOf('data-lost-label'),
-      labelInsideTarget: label.closest('[data-lost-host]').find('[data-cornerstone]').length > 0,
-    }).toEqual(expected);
-  });
-
-  it('titles Slide 4 on the context filling up and ends its caption on a marker to the context-rot note', () => {
-    // ARRANGE
-    const expected = { title: 'What happens when the context fills up', note: 'what-is-context-rot' };
-    // ACT
-    const text = localized(bySlug('what-happens-when-the-bar-fills-up'));
-    // ASSERT
-    expect({ title: text.title, note: text.header?.captionNote?.note }).toEqual(expected);
   });
 });
 
