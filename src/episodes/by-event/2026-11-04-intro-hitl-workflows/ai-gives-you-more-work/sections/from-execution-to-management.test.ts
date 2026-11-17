@@ -1,4 +1,8 @@
+import { everyRevolutionOneCard } from '@/episodes/slide-pool/every-revolution-one-card/slide';
+import { practiseItTodayAtWork } from '@/episodes/slide-pool/practise-it-today-at-work/slide';
+import { youWerePromoted } from '@/episodes/slide-pool/you-were-promoted/slide';
 import { describe, expect, it } from 'vitest';
+import { fromExecutionToManagement } from '../slides/from-execution-to-management/slide';
 import { fromExecutionToManagementSection } from './from-execution-to-management';
 
 describe('success cases', () => {
@@ -18,22 +22,23 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('lists no Slide twice', () => {
+  it('uses the shared pool Slides themselves, never a local copy of one', () => {
     // ARRANGE
-    const slugs = fromExecutionToManagementSection.map((each) => each.slug);
+    const expected = [everyRevolutionOneCard, youWerePromoted, practiseItTodayAtWork];
     // ACT
-    const repeated = slugs.filter((slug, index) => slugs.indexOf(slug) !== index);
+    const pages = fromExecutionToManagementSection.slice(1);
     // ASSERT
-    expect(repeated).toEqual([]);
+    expect(pages).toHaveLength(expected.length);
+    pages.forEach((page, index) => expect(page).toBe(expected[index]));
   });
 });
 
 describe('edge cases', () => {
-  it('opens the Section with its section slide', () => {
+  it("opens the Section with the copy's own section slide", () => {
     // ARRANGE
-    const expected = 'from-execution-to-management';
+    const expected = fromExecutionToManagement;
     // ACT
-    const first = fromExecutionToManagementSection[0]?.slug;
+    const first = fromExecutionToManagementSection[0];
     // ASSERT
     expect(first).toBe(expected);
   });
