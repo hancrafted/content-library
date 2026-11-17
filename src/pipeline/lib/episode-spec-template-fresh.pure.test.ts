@@ -8,7 +8,7 @@ import {
 
 /*
  * The Spec template records a hash of the sources it was generated from; the check compares the record with the
- * current sources, so a change to `to-decision-html` or the Spec calibration fails until the template is regenerated.
+ * current sources, so a change to `to-review` or the Spec calibration fails until the template is regenerated.
  */
 
 const SOURCES: TemplateSources = {
