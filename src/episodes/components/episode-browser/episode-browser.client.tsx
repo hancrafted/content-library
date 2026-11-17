@@ -84,7 +84,7 @@ function FoldButton({ expanded, total, labels, onToggle }: FoldProps) {
   );
 }
 
-/** The visitor's selection, the grid it yields and the handlers that change it; all transient, in memory (FE-001). */
+// decision: FE-001 §1
 function useBrowse(cards: readonly EpisodeCard[]) {
   const [selection, setSelection] = useState<BrowseSelection>(INITIAL_SELECTION);
   const search = useRef<HTMLInputElement>(null);
@@ -189,13 +189,6 @@ interface BrowseProps {
   headingLevel: CardHeadingLevel;
 }
 
-/**
- * The Browse block: a search box, Tag chips, a Format control when there is more than one
- * Format, and a grid of every Episode card. The grid is in the server HTML in
- * full; filtering and the cap only toggle `hidden`, so find-in-page and a
- * script-less visit still see all of it. Leaving the page and coming back
- * starts from All again.
- */
 export function EpisodeBrowser({ cards, locale, labels, headingLevel }: BrowseProps) {
   const browse = useBrowse(cards);
   const { view, selection } = browse;

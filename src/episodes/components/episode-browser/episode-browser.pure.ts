@@ -3,7 +3,6 @@ import type { EpisodeCard, Labelled } from '@/episodes/components/episode-card/e
 import { fillTemplate } from '@/shared/lib/template.pure';
 
 // decision: FE-007 §3
-/** The Tags the overview offers as filter chips, in order (design-ADR Tags replace Topics); search still matches every Tag name. */
 export const FILTER_TAGS = [
   'context-engineering',
   'agentic-ai',
@@ -12,17 +11,13 @@ export const FILTER_TAGS = [
   'sales',
 ] as const satisfies readonly TagId[];
 
-/** A grid longer than this folds behind "Show all"; with 9 Episodes today the fold is not yet visible. */
 export const BROWSE_CAP = 9;
 
-/** Lead plus two companions: the bento holds three, as the Featured slots do. */
 export const SPOTLIGHT_SIZE = 3;
 
-/** The visitor's choices in the Browse grid; transient, held in memory only (FE-001). */
+// decision: FE-001 §1
 export interface BrowseSelection {
-  /** The Tags the visitor pressed; a card needs any one of them, and none pressed lifts the filter. */
   readonly tags: readonly TagId[];
-  /** The text the visitor typed into search; blank lifts the search. */
   readonly query: string;
   readonly expanded: boolean;
 }
@@ -38,7 +33,6 @@ export function hasActiveFilters(selection: BrowseSelection): boolean {
   return selection.tags.length > 0 || fold(selection.query) !== '';
 }
 
-/** The cards newest first, ties by slug, then the upcoming ones in the order given. */
 export function newestFirst(cards: readonly EpisodeCard[]): EpisodeCard[] {
   const published = cards
     .filter((card) => card.status === 'published')
@@ -51,7 +45,6 @@ export interface Spotlight {
   readonly side: readonly EpisodeCard[];
 }
 
-/** The published cards holding a Featured slot, by rank: one lead and the rest beside it; upcoming cards never qualify. */
 export function spotlightOf(cards: readonly EpisodeCard[], size: number = SPOTLIGHT_SIZE): Spotlight {
   const ranked = cards
     .filter((card) => card.status === 'published' && card.featuredRank !== null)
@@ -60,12 +53,10 @@ export function spotlightOf(cards: readonly EpisodeCard[], size: number = SPOTLI
   return { lead, side };
 }
 
-/** Folds case and accents away, so "befahigung" finds "Befähigung". */
 function fold(text: string): string {
   return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 }
 
-/** The text a query searches: the title, caption and every Tag name in the reader's locale, so a Tag's tooltip is left out. */
 function searchText(card: EpisodeCard): string {
   return fold([card.title, card.caption, ...card.tags.map((tag) => tag.label)].join('\n'));
 }
@@ -106,13 +97,6 @@ export interface TagOption extends Labelled<TagId> {
   readonly count: number;
 }
 
-/**
- * One chip per filter Tag any card carries, in vocabulary order, counting what
- * pressing it alone would show under the typed query; an Episode with two Tags
- * counts in both. The pressed Tags do not change a count, so the row neither
- * jumps nor shrinks as the visitor widens the OR, and a chip the query
- * empties stays, at zero.
- */
 export function tagChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): TagOption[] {
   const labels = new Map<TagId, string>();
   for (const { id, label } of cards.flatMap((card) => card.tags)) labels.set(id, label);
@@ -124,7 +108,6 @@ export function tagChoices(cards: readonly EpisodeCard[], selection: BrowseSelec
   });
 }
 
-/** Whether a card names its Format: only once the cards span two Formats, since one Format tells the visitor nothing. */
 export function showsFormat(cards: readonly EpisodeCard[]): boolean {
   return new Set(cards.map((card) => card.format.id)).size >= 2;
 }
@@ -135,7 +118,6 @@ export interface ResultsLabels {
   readonly other: string;
 }
 
-/** The sentence for the live region: German and English both put exactly 1 in the singular. */
 export function resultsText(labels: ResultsLabels, count: number): string {
   if (count === 0) return labels.none;
   return count === 1 ? labels.one : fillTemplate(labels.other, { count });

@@ -17,11 +17,6 @@ interface SpotlightProps {
   headingLevel: CardHeadingLevel;
 }
 
-/**
- * The hottest published Episodes as an asymmetric bento: a lead card and up to
- * two beside it. Static, never rotating; an upcoming Episode never reaches it,
- * because the selection only takes published cards. DOM order is reading order.
- */
 export function EpisodeSpotlight({ cards, locale, labels, headingLevel }: SpotlightProps) {
   const { lead, side } = spotlightOf(cards);
   if (lead === null) return null;
