@@ -1,6 +1,6 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { kindChancesOf, kindTargets } from './defect.pure.ts';
-import { HANDOFF } from './factory-dials.pure.ts';
+import { HANDOFF_WEEKS } from './factory-dials.pure.ts';
 import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
 import type { Belt, BeltKind, CustomerNode, FactoryNode, NodeKind, Server, SpawnRule } from './factory.types';
@@ -106,7 +106,7 @@ export const makeBelt = (p: Pair, i: number, net: { nodes: Map<string, FactoryNo
     rate: 0,
     backRate: 0,
     retOn: false,
-    T: HANDOFF,
+    T: HANDOFF_WEEKS,
     aiSize: A.kind === 'role' ? (A.role.aiSize ?? 1) : 1,
   };
   A.outs.push(e);

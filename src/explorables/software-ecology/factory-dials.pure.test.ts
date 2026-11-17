@@ -1,6 +1,6 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
-import { catches, passShareOf, pressureOf, RED } from './factory-dials.pure.ts';
+import { catches, passShareOf, pressureOf, RED_WEEKS_WAITING } from './factory-dials.pure.ts';
 import type { FactoryNode } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 import type { CenterDef, Settings } from './software-ecology.types';
@@ -24,7 +24,7 @@ describe('success cases', () => {
 
   it('passes nothing on below the drowning mark, where the pile turns red', () => {
     // ARRANGE
-    const weeks = [0, 1, RED - 0.01, RED];
+    const weeks = [0, 1, RED_WEEKS_WAITING - 0.01, RED_WEEKS_WAITING];
     // ACT
     const shares = weeks.map((w) => passShareOf(S, station(w), 0.8));
     // ASSERT
@@ -37,7 +37,7 @@ describe('success cases', () => {
       expected = PRESSURE * strength * 0.5,
       digits = 9;
     // ACT
-    const share = passShareOf(S, station(RED * 1.5), strength);
+    const share = passShareOf(S, station(RED_WEEKS_WAITING * 1.5), strength);
     // ASSERT
     expect(share).toBeCloseTo(expected, digits);
   });
@@ -55,7 +55,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('passes nothing on at a strength of 0, however deep the pile', () => {
     // ARRANGE
-    const deep = station(RED * 10);
+    const deep = station(RED_WEEKS_WAITING * 10);
     // ACT
     const share = passShareOf(S, deep, 0);
     // ASSERT
@@ -66,7 +66,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('caps the bite and the pass-on share at all of it', () => {
     // ARRANGE
-    const deep = station(RED * 10);
+    const deep = station(RED_WEEKS_WAITING * 10);
     // ACT
     const both = [pressureOf(S, deep, 2), passShareOf(S, deep, 2)];
     // ASSERT

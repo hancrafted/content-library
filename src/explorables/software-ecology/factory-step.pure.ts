@@ -6,11 +6,11 @@ import {
   productCo,
   Q,
   RET_HIDE,
-  RET_SHOW,
+  REWORK_LANE_SHOW_ABOVE_PER_WEEK,
   speedOf,
   srcRate,
-  TAU,
-  TAU_OUT,
+  RATE_AVERAGING_WEEKS,
+  CUSTOMER_AVERAGING_WEEKS,
 } from './factory-dials.pure.ts';
 import { Run } from './factory-docs.pure.ts';
 import { BUMP, deliver, deliverBack, FAIL, FROM_SRC, MAIN, OWN, pushBack, send } from './factory-flow.pure.ts';
@@ -184,13 +184,13 @@ const decayBelts = (m: Factory, fdec: number): void => {
   for (const e of m.edges) {
     e.rate *= fdec;
     e.backRate *= fdec;
-    if (!e.retOn && e.backRate > RET_SHOW) e.retOn = true;
+    if (!e.retOn && e.backRate > REWORK_LANE_SHOW_ABOVE_PER_WEEK) e.retOn = true;
     else if (e.retOn && e.backRate < RET_HIDE) e.retOn = false;
   }
 };
 
 const decayCustomer = (m: Factory, dt: number, fdec: number): void => {
-  const odec = Math.exp(-dt / TAU_OUT);
+  const odec = Math.exp(-dt / CUSTOMER_AVERAGING_WEEKS);
   m.wipAvg += (m.wip - m.wipAvg) * (1 - odec);
   m.mainRate *= odec;
   m.ownRate *= odec;
@@ -206,7 +206,7 @@ const decayCustomer = (m: Factory, dt: number, fdec: number): void => {
 export const step = (m: Factory, dt = WEEKS_PER_STEP): void => {
   const t0 = m.t,
     t1 = t0 + dt,
-    fdec = Math.exp(-dt / TAU),
+    fdec = Math.exp(-dt / RATE_AVERAGING_WEEKS),
     a = 1 - Math.exp(-dt / 0.25);
   for (const n of m.centers) m.dc[n.idx] = dials(n, m.s);
   requests(m, t0, t1);

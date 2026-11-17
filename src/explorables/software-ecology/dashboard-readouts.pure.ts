@@ -1,6 +1,14 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { DEFECTS, kindChancesOf } from './defect.pure.ts';
-import { AMBER, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
+import {
+  AMBER_WEEKS_WAITING,
+  dials,
+  fileOwnOf,
+  ownOf,
+  productCo,
+  RED_WEEKS_WAITING,
+  speedOf,
+} from './factory-dials.pure.ts';
 import type { Dials, Factory, FactoryNode } from './factory.types';
 import type { OwnSet } from './own-work.types';
 import type { Cust, Defect, Settings } from './software-ecology.types';
@@ -51,8 +59,7 @@ export interface DashboardReadout {
   };
 }
 
-/** Blocked share above which a work center reads red. */
-const BLOCKED = 0.2;
+const BLOCKED_SHARE_RED_ABOVE = 0.2;
 const REWORK_HEAVY = 0.2;
 const STARVED = 0.6;
 const UNREAD = 0.5;
@@ -62,7 +69,7 @@ type Check = (n: FactoryNode) => Signal | null;
 const reworkShare = (n: FactoryNode) => (n.rate.arr > 0.05 ? n.rate.rwIn / n.rate.arr : 0);
 
 const CHECKS: readonly Check[] = [
-  (n) => (n.u.blocked > BLOCKED ? { kind: 'backing', level: 'red', n: 0 } : null),
+  (n) => (n.u.blocked > BLOCKED_SHARE_RED_ABOVE ? { kind: 'backing', level: 'red', n: 0 } : null),
   (n) => (n.lvl === 2 ? { kind: 'bottleneck', level: 'red', n: n.Ws } : null),
   (n) => (n.lvl === 1 ? { kind: 'overloaded', level: 'amber', n: n.Ws } : null),
   (n) =>
@@ -88,7 +95,7 @@ export const leadTimeOf = (n: FactoryNode): number | null => {
 };
 
 const drainFor = (n: FactoryNode, s: Settings): DashboardReadout['drain'] => {
-  if (n.Ws < AMBER * 0.85 && n.lvl === 0) return null;
+  if (n.Ws < AMBER_WEEKS_WAITING * 0.85 && n.lvl === 0) return null;
   const dr = drainOf(n, s);
   return dr.grow > 0.05 ? { kind: 'grow', n: dr.grow } : { kind: 'clears', weeks: dr.weeks };
 };
@@ -118,7 +125,7 @@ const trends = (n: FactoryNode) => {
   return {
     out: sparkPaths(h.out, ideal, Math.max(ideal * 2.2, ...h.out, 1)),
     good: sparkPaths(h.good, 100, 100),
-    wait: sparkPaths(h.wait, AMBER, Math.max(RED * 1.5, ...h.wait)),
+    wait: sparkPaths(h.wait, AMBER_WEEKS_WAITING, Math.max(RED_WEEKS_WAITING * 1.5, ...h.wait)),
   };
 };
 

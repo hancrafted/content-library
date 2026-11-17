@@ -6,23 +6,17 @@ import type { AiQuality, Arrivals, Defect, Dials, Over, OwnSet, Settings, Streng
 export const WEEKS_PER_STEP = 1 / 480;
 export const SPEEDS = [0, 1, 2, 5, 10, 20] as const;
 export const DAYS = 5;
-/** Every handoff takes a quarter working day, whatever the belt length. */
-export const HANDOFF = 0.25 / DAYS;
+export const HANDOFF_WEEKS = 0.25 / DAYS;
 export const WARM_WEEKS = 60;
 export const RHO_IDEAL = 0.7;
-/** An AI work center finishes work this much faster, unless its dials say otherwise. */
-export const AI_SPEED = 2.5;
+export const AI_SPEED_FACTOR = 2.5;
 export const CV = 0.3;
-/** Rates are averaged over about two weeks. */
-export const TAU = 2;
-/** The Customer's output and satisfaction over about six weeks. */
-export const TAU_OUT = 6;
+export const RATE_AVERAGING_WEEKS = 2;
+export const CUSTOMER_AVERAGING_WEEKS = 6;
 export const MAX_TOKENS = 4000;
-/** Weeks of work waiting: amber from one week, red from two. */
-export const AMBER = 1;
-export const RED = 2;
-/** A rework lane shows above 0.3 sent back a week, hides below 0.1. */
-export const RET_SHOW = 0.3;
+export const AMBER_WEEKS_WAITING = 1;
+export const RED_WEEKS_WAITING = 2;
+export const REWORK_LANE_SHOW_ABOVE_PER_WEEK = 0.3;
 export const RET_HIDE = 0.1;
 export { Q } from './factory-docs.pure.ts';
 
@@ -55,7 +49,7 @@ export const dials = (n: FactoryNode, s: Settings): Dials => {
   const ai = !!firstOf<boolean>(o.ai, d0.ai, aiOn(n, s));
   const effv = Math.max(5, Math.min(100, base + (ai ? AI_QUALITY[s.aiq] : 0)));
   const fan = firstOf(o.fan, d0.fanout, n.role.fan);
-  const aiSpeed = firstOf(o.aiSpeed, d0.aiSpeed, AI_SPEED),
+  const aiSpeed = firstOf(o.aiSpeed, d0.aiSpeed, AI_SPEED_FACTOR),
     aiExtra = firstOf(o.aiExtra, d0.aiExtra, 1);
   const fanEff = fan * (ai ? aiExtra : 1),
     effEff = Math.round(eff * (ai ? aiSpeed : 1));
@@ -81,10 +75,10 @@ export const stallOf = (n: FactoryNode, d: Dials): number => {
 };
 const bite = (s: Pick<Settings, 'consts'>, strength: number, press: number): number =>
   Math.min(1, constOf(s, 'pressure') * strength * press);
-export const pressAt = (weeks: number): number => Math.min(1, Math.max(0, weeks) / RED);
+export const pressAt = (weeks: number): number => Math.min(1, Math.max(0, weeks) / RED_WEEKS_WAITING);
 export const pressureOf = (s: Settings, n: FactoryNode, strength: number): number => bite(s, strength, pressAt(n.Ws));
 export const passShareOf = (s: Settings, n: FactoryNode, strength: number): number =>
-  bite(s, strength, pressAt(n.Ws - RED));
+  bite(s, strength, pressAt(n.Ws - RED_WEEKS_WAITING));
 export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100) * (d.ai ? d.aiSpeed : 1);
 export const rushOf = (n: FactoryNode): number =>
   RUSH_MAX * Math.max(0, Math.min(1, (n.Ws - RUSH_FROM) / (RUSH_TO - RUSH_FROM)));

@@ -1,11 +1,11 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Defect } from './defect.types';
-import { MAX_TOKENS, TAU, TAU_OUT } from './factory-dials.pure.ts';
+import { MAX_TOKENS, RATE_AVERAGING_WEEKS, CUSTOMER_AVERAGING_WEEKS } from './factory-dials.pure.ts';
 import { COMPL, FAIL, FROM_SRC, kindOf, MAIN, OWN, Q, REDO, Run, SENT, Token } from './factory-docs.pure.ts';
 import type { Belt, Doc, Factory, FactoryNode, Job } from './factory.types';
 
 export { FAIL, FROM_SRC, MAIN, OWN, REDO } from './factory-docs.pure.ts';
-export const BUMP = 1 / TAU;
+export const BUMP = 1 / RATE_AVERAGING_WEEKS;
 
 export const SHELF = 20;
 
@@ -72,7 +72,7 @@ export const send = (m: Factory, e: Belt, x: Doc): void => {
   if (x.c <= 0) return;
   m.created += x.c;
   e.inT += x.c;
-  e.rate += x.c / TAU;
+  e.rate += x.c / RATE_AVERAGING_WEEKS;
   if (m.tokens >= MAX_TOKENS && merged(m, e, x)) return;
   e.fwd.push(token(m, x, e.T));
   m.tokens++;
@@ -83,7 +83,7 @@ export const sendBack = (m: Factory, e: Belt, x: { J: Job; t0: number }): void =
   e.back.push(token(m, { c: 1, q: Q.BAD, ai: x.J.ai, fl, b: x.J.b + 1, t0: x.t0 }, e.T));
   e.backT++;
   m.tokens++;
-  e.backRate += 1 / TAU;
+  e.backRate += 1 / RATE_AVERAGING_WEEKS;
 };
 
 const inTurn = (acc: Record<string, number>, list: Record<string, number>): string | null => {
@@ -113,10 +113,10 @@ const followUp = (m: Factory, list: Record<string, number>, q: number): Belt | n
 const countOutput = (m: Factory, x: Token): void => {
   if (x.q !== Q.GOOD || x.fl & FAIL) return;
   if (x.fl & OWN) {
-    m.ownRate += 1 / TAU_OUT;
+    m.ownRate += 1 / CUSTOMER_AVERAGING_WEEKS;
     m.ownN++;
   } else {
-    m.outRate += 1 / TAU_OUT;
+    m.outRate += 1 / CUSTOMER_AVERAGING_WEEKS;
     m.outN++;
   }
 };
@@ -128,7 +128,7 @@ const complaintTo = (m: Factory, k: Defect): Belt | null =>
 
 const release = (m: Factory, x: Token): void => {
   const k = kindOf(x.fl, 'code');
-  m.rel[x.q] += 1 / TAU_OUT;
+  m.rel[x.q] += 1 / CUSTOMER_AVERAGING_WEEKS;
   const fe = x.q === Q.GOOD ? followUp(m, m.cs.good, TURNS.good) : complaintTo(m, k);
   const compl = !!fe && x.q === Q.BAD;
   m.shelf.push({ q: x.q, ai: x.ai, compl });
@@ -137,8 +137,8 @@ const release = (m: Factory, x: Token): void => {
   m.wip++;
   m.fu += BUMP;
   if (!compl) return;
-  m.compl += 1 / TAU_OUT;
-  m.complK[k] += 1 / TAU_OUT;
+  m.compl += 1 / CUSTOMER_AVERAGING_WEEKS;
+  m.complK[k] += 1 / CUSTOMER_AVERAGING_WEEKS;
 };
 
 const toCustomer = (m: Factory, e: Belt, x: Token): void => {
@@ -147,7 +147,7 @@ const toCustomer = (m: Factory, e: Belt, x: Token): void => {
   if (!(x.fl & MAIN)) return;
   for (let i = 0; i < x.c; i++) {
     m.wip--;
-    m.mainRate += 1 / TAU_OUT;
+    m.mainRate += 1 / CUSTOMER_AVERAGING_WEEKS;
     countOutput(m, x);
     if (e.release) release(m, x);
   }

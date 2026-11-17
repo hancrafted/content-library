@@ -1,6 +1,6 @@
 // decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
-import { RED } from './factory-dials.pure.ts';
+import { RED_WEEKS_WAITING } from './factory-dials.pure.ts';
 import { passesOn } from './factory-routing.pure.ts';
 import type { Belt, FactoryNode, SpawnRule } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
@@ -29,7 +29,8 @@ const station = (weeks: number, x: { under?: number; roll?: number } = {}) => {
 const takeUp = (s: Settings, n: FactoryNode, times: number): boolean[] =>
   Array.from({ length: times }, () => passesOn(s, n));
 
-const weeksFor = (share: number): number => RED + (share / constOf(IDEAL, 'pressure')) * RED;
+const weeksFor = (share: number): number =>
+  RED_WEEKS_WAITING + (share / constOf(IDEAL, 'pressure')) * RED_WEEKS_WAITING;
 
 describe('success cases', () => {
   it('takes turns in Ideal: every other ticket at a share of a half', () => {
@@ -53,7 +54,7 @@ describe('success cases', () => {
 
   it('passes on by the first spawn only: a pass-on on a later spawn never fires', () => {
     // ARRANGE
-    const { n, draws } = station(RED * 10);
+    const { n, draws } = station(RED_WEEKS_WAITING * 10);
     n.spawns.push({ e: BELT, n: 1, pass: { e: BELT, under: 1 } });
     // ACT
     const passed = takeUp(REALISTIC, n, 3);
@@ -66,7 +67,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('never passes on at a station without escalate, however deep its pile', () => {
     // ARRANGE
-    const { n, draws } = station(RED * 10);
+    const { n, draws } = station(RED_WEEKS_WAITING * 10);
     // ACT
     const passed = takeUp(REALISTIC, n, 3);
     // ASSERT
@@ -78,7 +79,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('draws nothing and carries nothing over below the drowning mark, so its routing is unchanged', () => {
     // ARRANGE
-    const { n, draws } = station(RED, { under: 1 });
+    const { n, draws } = station(RED_WEEKS_WAITING, { under: 1 });
     // ACT
     const passed = [...takeUp(REALISTIC, n, 3), ...takeUp(IDEAL, n, 3)];
     // ASSERT
