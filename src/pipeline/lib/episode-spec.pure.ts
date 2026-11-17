@@ -26,13 +26,11 @@
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
-import { type CheerioAPI } from 'cheerio';
-import { OPTION, parseSpec, SECTION, SLIDE, SPEC_FILE, TITLE_SLIDE, type SpecHtml } from './episode-spec-page.pure.ts';
-import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
+import { SECTION, SLIDE, type Spec, type SpecPage, type SpecStage } from './episode-spec-page.pure.ts';
+import { checkSlide, FORM } from './episode-spec-slide.pure.ts';
 import { checkTitleSlide } from './episode-spec-title.pure.ts';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
 import { unless, type Finding } from './finding.pure.ts';
-import { metaBlockText, metaGateTier } from './staging-file.pure.ts';
 import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
 const DOSSIER_FILE = 'dossier.md';
@@ -76,25 +74,27 @@ function checkSlugsAgree(kind: 'Section' | 'Slide', wanted: readonly string[], p
   ];
 }
 
-function checkAgainstDossier($: CheerioAPI, dossier: string): string[] {
+function checkAgainstDossier(spec: Spec, dossier: string): string[] {
   const ids = (selector: string) =>
-    $(selector)
-      .toArray()
-      .map((element) => $(element).attr('id') ?? '');
+    spec.pages.flatMap(({ $ }) =>
+      $(selector)
+        .toArray()
+        .map((element) => $(element).attr('id') ?? ''),
+    );
   return [
     ...checkSlugsAgree('Section', dossierSlugs(dossier, 2), ids(SECTION)),
     ...checkSlugsAgree('Slide', dossierSlugs(dossier, 3), ids(SLIDE)),
   ];
 }
 
-/** The Title slide, every Slide, the review fields and the words of the page. */
-function checkSlides(page: SpecPage): string[] {
+/** The Title slide, every Slide, the review fields and the words of one page; `approved` is the whole Spec's. */
+function checkSlides(page: SpecPage, approved: boolean): string[] {
   const { $ } = page;
   return [
-    ...checkTitleSlide(page),
+    ...checkTitleSlide(page, approved),
     ...$(SLIDE)
       .toArray()
-      .flatMap((element, at) => checkSlide(page, element, at)),
+      .flatMap((element, at) => checkSlide(page, approved, { element, at })),
     ...unless(
       $(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
       `The Visual language has no <textarea form="${FORM}" name="note:visual-language">.`,
@@ -102,20 +102,6 @@ function checkSlides(page: SpecPage): string[] {
     ...checkVoiceScripts($),
     ...checkCitations($),
   ];
-}
-
-/** `early`: a Brief- or Dossier-stage Spec, before the designers' Options exist, so only what that stage holds is checked. */
-export type SpecStage = 'early' | 'options';
-
-/**
- * The stage a Spec page is at, read from the page: `early` when it holds Slides but no Option and no Title slide,
- * which is how a Brief- or Dossier-stage assembly looks; `options` otherwise, so a page with a Title slide, an Option
- * or no Slide at all gets the whole contract.
- */
-export function specStage(html: SpecHtml): SpecStage {
-  const $ = parseSpec(html);
-  const hasSlides = $(SLIDE).length > 0;
-  return hasSlides && $(OPTION).length === 0 && $(TITLE_SLIDE).length === 0 ? 'early' : 'options';
 }
 
 /** The Dossier left beside an approved Spec, which the approval commit deletes. */
@@ -127,29 +113,21 @@ function staleDossier(isApproved: boolean, dossier: string | undefined): string[
 }
 
 /**
- * Checks a staging folder's Spec page against the Spec contract, and against
- * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
- * maps a path relative to the folder to its text; `page` is that Spec already parsed, when the caller has it.
+ * Checks a Spec against the Spec contract, and against the Dossier while one exists (`dossier`, its text). The stage
+ * is the Spec's own; Spec assembly passes the stage it assembled to instead. Meta findings name the main page, Slide
+ * findings the page they sit on.
  */
-export function checkSpec(
-  files: Readonly<Record<string, string>>,
-  stage: SpecStage = 'options',
-  page?: CheerioAPI,
-): Finding[] {
-  const html = files[SPEC_FILE];
-  if (html === undefined) return [];
-  const $ = page ?? parseSpec(html);
-  const meta = metaBlockText(html);
-  const isApproved = metaGateTier(html) === 'approved';
-  const dossier = files[DOSSIER_FILE];
-  const messages = [
-    ...checkMeta(meta),
-    ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
-    ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
-  ];
-  const stale = staleDossier(isApproved, dossier);
+export function checkSpec(spec: Spec, dossier: string | undefined, stage: SpecStage = spec.stage): Finding[] {
+  const main = spec.pages[0].file;
+  const finding =
+    (file: string) =>
+    (message: string): Finding => ({ kind: 'spec', file, message });
   return [
-    ...messages.map((message): Finding => ({ kind: 'spec', file: SPEC_FILE, message })),
-    ...stale.map((message): Finding => ({ kind: 'spec', file: DOSSIER_FILE, message })),
+    ...checkMeta(spec.meta).map(finding(main)),
+    ...(dossier === undefined || spec.approved ? [] : checkAgainstDossier(spec, dossier)).map(finding(main)),
+    ...(stage === 'early'
+      ? []
+      : spec.pages.flatMap((page) => checkSlides(page, spec.approved).map(finding(page.file)))),
+    ...staleDossier(spec.approved, dossier).map(finding(DOSSIER_FILE)),
   ];
 }

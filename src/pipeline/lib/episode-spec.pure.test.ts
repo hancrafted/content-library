@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { readSpec, type SpecStage } from './episode-spec-page.pure';
 import { checkSpec } from './episode-spec.pure';
+import { type Finding } from './finding.pure';
 import { appendMetaVerified } from './staging-file.pure';
 
 /*
@@ -186,6 +188,12 @@ function folder(files: Record<string, string> = {}): Record<string, string> {
   return { 'dossier.md': DOSSIER, 'spec/spec.html': spec(), ...files };
 }
 
+/** The Spec contract's findings on a staging folder, as the staging check runs it: none before a Spec exists. */
+function check(files: Readonly<Record<string, string>>, stage?: SpecStage): Finding[] {
+  const spec = readSpec(files);
+  return spec === undefined ? [] : checkSpec(spec, files['dossier.md'], stage);
+}
+
 function messages(findings: readonly { message: string }[]): string[] {
   return findings.map(({ message }) => message);
 }
@@ -195,7 +203,7 @@ describe('success cases', () => {
     // ARRANGE
     const files = folder();
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -507,7 +515,7 @@ describe('failure cases', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': spec(shape) });
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual([expected]);
   });
@@ -520,7 +528,7 @@ describe('failure cases', () => {
       'The Spec Slide {#quiet} is no Slide in the Dossier: its id must be the Dossier h3 slug.',
     ];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -583,7 +591,7 @@ describe('failure cases', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': spec(shape) });
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toContain(expected);
   });
@@ -603,7 +611,7 @@ describe('failure cases', () => {
       'Option 1b of {#spent} has a Context marker for "Attention is finite", which is no Speaker note of the Slide: name the note by its title in data-note.',
     ];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -613,7 +621,7 @@ describe('failure cases', () => {
     const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }) };
     const expected = ['The Title slide {#top} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -625,7 +633,7 @@ describe('failure cases', () => {
     };
     const expected = ['The Slide {#middle} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -640,8 +648,8 @@ describe('failure cases', () => {
     };
     // ACT
     const found = {
-      before: messages(checkSpec({ 'spec/spec.html': unapproved })),
-      after: messages(checkSpec({ 'spec/spec.html': approved })),
+      before: messages(check({ 'spec/spec.html': unapproved })),
+      after: messages(check({ 'spec/spec.html': approved })),
     };
     // ASSERT
     expect(found).toEqual(expected);
@@ -660,7 +668,7 @@ describe('failure cases', () => {
       'dossier.md still sits beside the approved Spec: the Spec is the only source now, so delete it in the approval commit.',
     ];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -670,7 +678,7 @@ describe('failure cases', () => {
     const files = folder({ 'spec/spec.html': spec({ meta: '' }) });
     const expected = [{ kind: 'spec', file: 'spec/spec.html' }];
     // ACT
-    const found = checkSpec(files).map(({ kind, file }) => ({ kind, file }));
+    const found = check(files).map(({ kind, file }) => ({ kind, file }));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -681,7 +689,16 @@ describe('edge cases', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': bareSpec() });
     // ACT
-    const findings = checkSpec(files, 'early');
+    const findings = check(files, 'early');
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('reads the stage off the Spec when no stage is passed', () => {
+    // ARRANGE
+    const files = folder({ 'spec/spec.html': bareSpec() });
+    // ACT
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -691,7 +708,7 @@ describe('edge cases', () => {
     const files = folder({ 'spec/spec.html': bareSpec({ meta: '', slides: [bare('spent', 1)] }) });
     // ACT
     const expectedFindings = 2;
-    const found = messages(checkSpec(files, 'early'));
+    const found = messages(check(files, 'early'));
     // ASSERT
     expect(found).toHaveLength(expectedFindings);
     expect(found.join('\n')).toContain('no meta block');
@@ -702,7 +719,7 @@ describe('edge cases', () => {
     // ARRANGE
     const files = { 'dossier.md': DOSSIER };
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -716,7 +733,7 @@ describe('edge cases', () => {
       }),
     });
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -731,7 +748,7 @@ describe('edge cases', () => {
       'spec/spec.html': spec({ slides: [slide('spent', 1, { options: explicit }), slide('middle', 2)] }),
     });
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -742,7 +759,7 @@ describe('edge cases', () => {
       'spec/spec.html': spec({ slides: [slide('spent', 1, { options: SPENT_3 }), picked('middle', 2)] }),
     });
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -757,7 +774,7 @@ describe('edge cases', () => {
       }),
     };
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -767,7 +784,7 @@ describe('edge cases', () => {
     const stale = meta({ verified: [{ by: 'human:han', at: '2026-10-12T11:00:00Z' }] });
     const files = folder({ 'spec/spec.html': spec({ meta: stale }) });
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -777,7 +794,7 @@ describe('edge cases', () => {
     const chrome = '<style>.page { color: #222; width: calc(100% - 2rem); }</style><div class="max-w-[72rem]"></div>';
     const files = folder({ 'spec/spec.html': spec().replace('</body>', `${chrome}</body>`) });
     // ACT
-    const findings = checkSpec(files);
+    const findings = check(files);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -791,7 +808,7 @@ describe('edge cases', () => {
     const files = folder({ 'spec/spec.html': html });
     const expected = ['A Voice script item of {#episode-page} has no <strong> title: "No title."'];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
@@ -807,7 +824,7 @@ describe('edge cases', () => {
       'The Spec Section {#forgets} is no Section in the Dossier: its id must be the Dossier h2 slug.',
     ];
     // ACT
-    const found = messages(checkSpec(files));
+    const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
   });
