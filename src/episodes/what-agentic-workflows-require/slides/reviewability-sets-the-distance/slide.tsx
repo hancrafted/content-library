@@ -44,16 +44,6 @@ function MoveArrow() {
   );
 }
 
-/**
- * "Trust lets you step out; review builds the trust" (Spec Option 6b, redesigned from the decision page of 2026-11-16):
- * a chain of three linked boxes, engineer for review, earned trust, step out, over the party board in workflow order.
- * Each note shows the trust it needs (set by what a wrong result can do) beside the trust it has earned (set by its
- * check), and its level follows from the two (`trustLevel`). The activity needed 3 and had 1, so a person stayed in;
- * its check card is pinned to it, the trust is earned, and its pill slides from in to on on the Slide's first `active`
- * and on hover or focus. Numbered callouts 1 to 3 join the chain to the check card, the earned-trust meter and the
- * moving pill. Keeps `basic-page` and the slug, so the published anchor holds. The check boxes stay empty: the
- * `success` tick is reserved for a later Slide.
- */
 export const reviewabilitySetsTheDistance = slide({
   slug: 'reviewability-sets-the-distance',
   messages: { en, de },

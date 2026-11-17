@@ -23,17 +23,11 @@ interface LevelMoveProps {
   readonly label: string;
   readonly callout?: ReactNode;
   readonly from: ReactNode;
-  /** The arrow and the new level's pill: replay, so they hold nothing focusable. */
   readonly arrow: ReactNode;
   readonly to: ReactNode;
 }
 
-/**
- * The activity's level move, its trigger (design-ADR-0012 §9): the pill slides from the dashed former level along the
- * arrow to its new level once on the Slide's first `active`, and again on every mouse enter and keyboard focus, by
- * mounting the moving part afresh. `data-play` is the CSS hook; the keyframes and reduced motion live in the Slide's
- * CSS module, whose base rules are the end state.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function LevelMove({ label, callout, from, arrow, to }: LevelMoveProps) {
   const { plays, replays, replay, onFocus } = useLevelMove();
   return (
