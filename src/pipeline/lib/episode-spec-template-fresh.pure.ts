@@ -49,7 +49,7 @@ export function templateStaleFindings(template: string, sources: TemplateSources
   const current = templateHash(sources);
   if (recorded === current) return [];
   return [
-    `The Spec template is stale: to-decision-html or the Spec calibration changed since it was generated ` +
+    `The Spec template is stale: to-review or the Spec calibration changed since it was generated ` +
       `(recorded ${recorded}, current ${current}). ${HOW}`,
   ];
 }

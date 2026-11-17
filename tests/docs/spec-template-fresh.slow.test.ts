@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.4
 describe('success cases', () => {
-  it('finds the committed template generated from the current to-decision-html and Spec calibration, so a change to either fails until the template is regenerated', () => {
+  it('finds the committed template generated from the current to-review and Spec calibration, so a change to either fails until the template is regenerated', () => {
     // ARRANGE
     const template = readFileSync(TEMPLATE_FILE, 'utf8');
     // ACT

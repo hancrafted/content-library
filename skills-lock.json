@@ -7,6 +7,13 @@
       "skillPath": "skills/engineering/ask-matt/SKILL.md",
       "computedHash": "7ff2383b40fe9d8f3e753d267d964fb2b44d120a948fd2a57c3b26ddfc318370"
     },
+    "cleanup": {
+      "source": "hancrafted/skills",
+      "commit": "47fef9d6721fb74dfa3aac257917e33e2673613c",
+      "sourceType": "github",
+      "skillPath": "skills/cleanup/SKILL.md",
+      "computedHash": "7ef0bed5a6ef66cb19adc1e7e112e8b8ccbd87883a4f6a668b57dd528b9b2ed9"
+    },
     "code-review": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -138,6 +145,13 @@
       "sourceType": "github",
       "skillPath": "skills/productivity/to-questionnaire/SKILL.md",
       "computedHash": "0bcb2b31a45a3d176daa07c16d6532ee7819b802de081090c3fa856702767b13"
+    },
+    "to-review": {
+      "source": "hancrafted/skills",
+      "commit": "47fef9d6721fb74dfa3aac257917e33e2673613c",
+      "sourceType": "github",
+      "skillPath": "skills/to-review/SKILL.md",
+      "computedHash": "2889099c2b5fb578198a425a3613ac8e2e50fbb596e661af7f94198ead365220"
     },
     "to-spec": {
       "source": "mattpocock/skills",

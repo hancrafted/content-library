@@ -51,7 +51,6 @@ const TRIGGERS = [
   '.agents/skills/*/SKILL.md',
   'skills/*/references/*.md',
   'skills/*/assets/**',
-  'skills/to-decision-html/scripts/fixtures/**',
   'skills/author-hitl-workflow/scripts/*.ts',
   'skills/new-episode/scripts/claude-adapter.ts',
   'skills/new-episode/scripts/spec-assemble.ts',

@@ -3,12 +3,13 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { previewPage, readPresets, toolbarConfigOf } from './spec-preview.pure.ts';
+import { SKILL_DIR } from './spec-template-sources.ts';
 
 // decision: ARCH-003 §4.4
 const SKILL = path.join(import.meta.dirname, '../../../skills/new-episode');
 const CALIBRATION = path.join(SKILL, 'references/spec-calibration.md');
 const TEMPLATE = path.join(SKILL, 'assets/spec-template.html');
-const TOOLBAR = path.join(SKILL, '../to-decision-html/assets/toolbar.html');
+const TOOLBAR = path.join(SKILL_DIR, 'assets/toolbar.html');
 const FULL_COLUMN = ['fit'];
 const BREAKPOINT_GAP = 1;
 const REM = 16;
