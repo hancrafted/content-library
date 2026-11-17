@@ -9,13 +9,12 @@ export function readPrefs(): Prefs {
   }
 }
 
-export function writePrefs(patch: Prefs): boolean {
+export function writePrefs(patch: Prefs): void {
   try {
     const raw = window.localStorage.getItem(PREFS_KEY);
     window.localStorage.setItem(PREFS_KEY, mergePrefs(raw, patch));
-    return true;
   } catch {
-    return false;
+    return;
   }
 }
 

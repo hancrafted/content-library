@@ -49,25 +49,25 @@ describe('success cases', () => {
     expect(readProgress('other')).toEqual(entry);
   });
 
-  it('reports a preference write that storage took, and reads it back', () => {
+  it('reads back a preference write that storage took', () => {
     // ARRANGE
     install(fakeStorage());
     // ACT
-    const saved = writePrefs({ theme: 'dark' });
+    writePrefs({ theme: 'dark' });
     // ASSERT
-    expect(saved).toBe(true);
     expect(readPrefs()).toEqual({ theme: 'dark' });
   });
 });
 
 describe('failure cases', () => {
-  it('reports a preference write that storage refuses, so the preference lasts for this page only', () => {
+  it('lets a preference that storage refuses last for this page only', () => {
     // ARRANGE
     install(fakeStorage({}, true));
     // ACT
-    const saved = writePrefs({ theme: 'dark' });
+    const write = () => writePrefs({ theme: 'dark' });
     // ASSERT
-    expect(saved).toBe(false);
+    expect(write).not.toThrow();
+    expect(readPrefs()).toEqual({});
   });
 
   it('reports a write that storage refuses, so the viewer can be told to download', () => {

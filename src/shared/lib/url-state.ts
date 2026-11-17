@@ -220,12 +220,11 @@ class UrlStateStore implements UrlState {
     this.replaceUrlUnlessHistoryLimitReached(id);
   };
 
-  private replaceUrlUnlessHistoryLimitReached(id: string): boolean {
+  private replaceUrlUnlessHistoryLimitReached(id: string) {
     try {
       this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
-      return true;
-    } catch {
-      return false;
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'SecurityError')) throw error;
     }
   }
 

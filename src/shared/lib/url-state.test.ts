@@ -630,6 +630,20 @@ describe('failure cases', () => {
     });
   });
 
+  describe('a history write that fails for another reason than the WebKit limit', () => {
+    it('is not swallowed', () => {
+      // ARRANGE
+      const { state, win } = setup();
+      win.history.replaceState = () => {
+        throw new TypeError('not a URL');
+      };
+      // ACT
+      const reading = () => state.reportReading('a');
+      // ASSERT
+      expect(reading).toThrow(TypeError);
+    });
+  });
+
   describe('a page that is no longer on screen', () => {
     it('neither adopts the hash nor writes when Back lands on another path', () => {
       // ARRANGE
