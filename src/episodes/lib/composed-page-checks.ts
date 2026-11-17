@@ -111,6 +111,12 @@ function headerDrift(page: ComposedPage, composition: EpisodeComposition): strin
   ];
 }
 
+/** AUTHORED_HEADERS names no Episode folder in `folders` holds: the half of {@link headerDrift} no page folder sees. */
+export function authoredHeaderStrays(folders: readonly string[]): string[] {
+  const strays = AUTHORED_HEADERS.filter((slug) => !folders.includes(slug));
+  return strays.map((slug) => `AUTHORED_HEADERS names ${slug}, which no Episode folder holds: remove it`);
+}
+
 /** No Section, an empty one, or a Slide that opens two. */
 function sectionFindings({ sections }: EpisodeComposition): string[] {
   const openers = sections.map(([opener]) => opener?.slug);

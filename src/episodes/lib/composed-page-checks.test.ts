@@ -1,10 +1,11 @@
-import { episodeRef, explorablePageRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, episodeRefOf, explorablePageRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
+import { EPISODE_IDS } from '@/content-store/catalogue/record-routes';
 import type { EpisodeComposition, Section, Slide } from '@/episodes/components/slide-master/slide';
 import type { NamedCheck } from '@/shared/lib/folder-check';
 import { createElement, type ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
 import type { ComposedPage } from './composed-page';
-import { composedPageChecks, type PageContext } from './composed-page-checks';
+import { authoredHeaderStrays, composedPageChecks, type PageContext } from './composed-page-checks';
 import { withoutSectionSlide } from './episode.pure';
 import type { LocaleSummary } from './page-summary.pure';
 
@@ -90,9 +91,29 @@ describe('success cases', () => {
     // ASSERT
     expect(found).toEqual(expected);
   });
+  it('lists only Episodes whose folders still exist among those that author their own header', () => {
+    // ARRANGE
+    // The generated id list is the Episode folders' names (`npm run registry`): no Episode is imported to read it.
+    const folders = EPISODE_IDS.map((id) => episodeRefOf(id).slug);
+    const expected: string[] = [];
+    // ACT
+    const strays = authoredHeaderStrays(folders);
+    // ASSERT
+    expect(strays).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('names an Episode that authors its own header after its folder is deleted', () => {
+    // ARRANGE
+    const folders = ['ai-token-economy'];
+    const expected = ['AUTHORED_HEADERS names maintaining-markdown-for-ai, which no Episode folder holds: remove it'];
+    // ACT
+    const strays = authoredHeaderStrays(folders);
+    // ASSERT
+    expect(strays).toEqual(expected);
+  });
+
   it('names a record whose slug is not its folder', async () => {
     // ARRANGE
     const checks = checksOf(EPISODE, compositionOf(EPISODE, { slug: 'other' }), contextOf());
