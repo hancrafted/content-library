@@ -201,11 +201,10 @@ export function runsCsv(sources: readonly RunSource[], existing = ''): string {
   const result = queryRuns(sources, RUNS_SQL);
   const generated: Row[] = result.ok ? result.rows : [];
   const held = new Set(generated.map((row) => runKey(row.run)));
-  // Kept rows are read by the column names of the file's own header, so a CSV written before a column existed still lines up.
-  const [header = [], ...records] = csvRecords(existing);
+  const [headerOfExistingFile = [], ...records] = csvRecords(existing);
   const kept: Row[] = records
     .filter((fields) => !held.has(runKey(fields[0])))
-    .map((fields) => Object.fromEntries(header.map((column, at) => [column, fields[at]])));
+    .map((fields) => Object.fromEntries(headerOfExistingFile.map((column, at) => [column, fields[at]])));
   const rows = [...kept, ...generated].sort((a, b) => runKey(a.run).localeCompare(runKey(b.run)));
   const body = rows.map((row) => RUNS_CSV_COLUMNS.map((column) => csvField(row[column])).join(','));
   return `${[RUNS_CSV_COLUMNS.join(','), ...body].join('\n')}\n`;

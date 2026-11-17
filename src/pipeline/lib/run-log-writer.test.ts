@@ -172,7 +172,6 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
       appendEvent(at(root), START, deps());
       const lock = path.join(root, `${FILE}.lock`);
       const d = deps();
-      // while A holds the lock, B breaks it as stale and takes it
       d.now = () => {
         unlinkSync(lock);
         writeFileSync(lock, 'writer-b-token');

@@ -145,8 +145,8 @@ function fieldErrors(kind: Kind, fields: Fields, keys: Keys): string[] {
   const { required, optional } = keys;
   const known = new Set(['kind', ...required, ...optional]);
   const byType = kind === 'start' ? (NEEDED_BY_TYPE[fields.type as string] ?? []) : [];
-  // a skill-spawned agent filed under the Run, because several Jobs were open, belongs to no one Job
-  const needed = [...required, ...byType.filter((key) => key !== 'job' || fields.role !== 'skill-spawned')];
+  const skillSpawnedUnderRunBelongsToNoOneJob = fields.role === 'skill-spawned';
+  const needed = [...required, ...byType.filter((key) => key !== 'job' || !skillSpawnedUnderRunBelongsToNoOneJob)];
   const unknown = Object.keys(fields)
     .filter((key) => !known.has(key))
     .map((key) => `${key} is not a field of a ${kind} line`);
