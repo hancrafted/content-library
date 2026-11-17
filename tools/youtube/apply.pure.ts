@@ -35,10 +35,6 @@ function descriptionPlan(file: YoutubeFile, remote: string, force: boolean): Des
   return edited && !force ? { action: 'refuse', reason: EDITED_ON_YOUTUBE } : { action: 'update', text: local };
 }
 
-/**
- * The writes that bring the video to the local copy: the description when it differs, the comment when not yet posted.
- * A description edited on YouTube since the last apply is refused unless `force`: the edit is input for Learn first.
- */
 export function planApply(file: YoutubeFile, remoteDescription: string, options: { force?: boolean } = {}): ApplyPlan {
   const description = descriptionPlan(file, remoteDescription, options.force ?? false);
   const comment: CommentPlan =

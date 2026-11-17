@@ -32,7 +32,6 @@ interface SlideStarts {
   readonly extraChapters?: readonly Chapter[];
 }
 
-/** YouTube's rules for chapters (YouTube Help 9884579) and descriptions (12948449). */
 const MIN_CHAPTER_SECONDS = 10;
 const MAX_DESCRIPTION_CHARACTERS = 5000;
 

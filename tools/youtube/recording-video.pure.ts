@@ -3,7 +3,6 @@ import type { Violation } from './recording.pure.ts';
 
 export const VIDEO_FILE = /^video\.[a-z]{2}\.json$/;
 
-/** YouTube's minimum chapter length (YouTube Help 9884579). */
 const MIN_CHAPTER_SECONDS = 10;
 const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 

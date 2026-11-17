@@ -14,10 +14,6 @@ export function transcriptFile(language: SpokenLanguage): string {
   return `${RECORDING_FOLDER}/transcript.${language}.vtt`;
 }
 
-/**
- * The caption file yt-dlp wrote for a video among `files`, or undefined when YouTube had none. yt-dlp names an
- * uploaded track `<id>.<lang>.vtt` and an automatic one `<id>.<lang>.vtt` or `<id>.<lang>-orig.vtt`; the plain one wins.
- */
 export function captionFile(files: readonly string[], videoId: string, language: SpokenLanguage): string | undefined {
   const plain = `${videoId}.${language}.vtt`;
   if (files.includes(plain)) return plain;

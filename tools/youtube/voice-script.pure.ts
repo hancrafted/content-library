@@ -6,16 +6,11 @@ export interface Cue {
   readonly text: string;
 }
 
-/** Spoken words per minute (design-ADR 0002). `src/shared/lib/speaking-time.pure.ts` holds the site's copy; tools cannot import it under plain node, so change both together. */
 export const WORDS_PER_MINUTE: Readonly<Record<SpokenLanguage, number>> = { en: 140, de: 120 };
 
 const TIMING = /^(\d+):(\d\d):(\d\d)\.(\d{3}) -->/;
 const INLINE_TAG = /<[^>]*>/g;
 
-/**
- * The lines of YouTube's rolling auto-captions, each once. A cue repeats the previous line and adds a new one with
- * inline word timings (`<00:00:01.959>`); only the line with those tags is new, so the repeats drop out.
- */
 export function parseCues(vtt: string): Cue[] {
   const cues: Cue[] = [];
   let start: number | undefined;

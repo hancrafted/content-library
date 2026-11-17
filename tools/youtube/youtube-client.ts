@@ -3,7 +3,6 @@ import type { Credentials } from './apply.pure.ts';
 const API = 'https://www.googleapis.com/youtube/v3';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
-/** The writable snippet fields; `videos.update` replaces the snippet, so all of it is sent back. */
 export type Snippet = Record<string, unknown> & { description: string };
 
 async function call(url: string, init: RequestInit): Promise<Record<string, unknown>> {

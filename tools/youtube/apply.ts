@@ -52,7 +52,6 @@ if (plan.comment.action === 'post') console.log(`--- comment ---\n${plan.comment
 if (dryRun) process.exit(0);
 
 if (plan.description.action === 'update') await client.updateDescription(videoId, snippet, plan.description.text);
-// Fingerprint what YouTube stores, read back after the write: YouTube may normalise the text it was sent.
 const shown =
   plan.description.action === 'update' ? (await client.readSnippet(videoId)).description : snippet.description;
 let next = { ...file, appliedFingerprint: descriptionFingerprint(shown) };

@@ -1,13 +1,3 @@
-// The format of `recording/youtube.<lang>.md`, the copy `youtube:apply` writes to a video. Pure parse/serialize, shared
-// by `youtube:chapters` (rewrites the block), the authoring skill (writes the text) and apply (reads all three parts).
-//
-//   ## Description        the video description; holds the generated block between the chapter markers
-//   ## Pinned comment     the comment text
-//   ## Comment ID         the posted comment's ID, empty until apply posted one
-//   ## Applied fingerprint  optional: the fingerprint of the description apply last sent, so it can see Studio edits
-//
-// The markers are `<!-- chapters:start -->` / `<!-- chapters:end -->`; they are for the repo and never reach YouTube:
-// send `publishedDescription(file)`, not `file.description`.
 import { CHAPTER_END_MARKER, CHAPTER_START_MARKER } from './chapters.pure.ts';
 
 export interface YoutubeFile {
