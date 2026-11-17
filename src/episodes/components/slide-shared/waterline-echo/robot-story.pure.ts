@@ -1,9 +1,3 @@
-/*
- * Where the diving robot is on each Slide of "What lies below the waterline of sustainable AI skills" that shows it,
- * in story order (feedback 3, decision 42): the one table the section slides and the page Slides read, so no Slide
- * hoists the robot back to the A-frame after an earlier one has it in the water. The shared `Robot` knows none of
- * this; it draws whatever a Slide places. Shared beside `WATERLINE_SECTIONS` because Slides of every Section read it.
- */
 import type { RobotState } from '../deep-sea-expedition/robot.pure';
 import type { Zone } from '../iceberg/zones.pure';
 
@@ -39,7 +33,6 @@ export const ROBOT_STORY: readonly RobotBeat[] = [
   { slide: 'the-whole-iceberg', state: 'recovered' },
 ];
 
-/** The robot on a Slide; refused for a Slide the story has no row for. */
 export function robotAt(slide: string, story: readonly RobotBeat[] = ROBOT_STORY): RobotBeat {
   const beat = story.find((own) => own.slide === slide);
   if (beat === undefined) throw new Error(`No robot in the story on "${slide}"; add its row to ROBOT_STORY.`);

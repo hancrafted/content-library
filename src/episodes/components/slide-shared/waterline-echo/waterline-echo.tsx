@@ -23,14 +23,6 @@ export interface WaterlineEchoProps {
   readonly children?: ReactNode;
 }
 
-/**
- * A section slide's words over its echo of the Hero motif of "What lies below the waterline of sustainable AI skills"
- * (picked Title-slide Option 0a): the Section's place in the Episode, the Section's card leading with its AI statement, and the slim
- * depth gauge at the right edge naming the Section's zone; on a phone the gauge gives way to the thin rail. The drawing itself, the
- * zone with the robot at the Section's depth, is the section slide's full-bleed rear decoration (`atDepth`), so these
- * words stay in the Foreground, inset clear of the table of contents. Shared because all eight section slides draw it.
- * Both view lines render; the page-level view switch shows one.
- */
 export function WaterlineEcho({ section, place, zones, gaugeLabel, ...card }: WaterlineEchoProps) {
   const zone = zoneOf(WATERLINE_SECTIONS, section);
   const where = fillTemplate(place, { number: section + 1, total: WATERLINE_SECTIONS.length });

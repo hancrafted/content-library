@@ -3,11 +3,6 @@ import { zoneOf, type Zone } from '../iceberg/zones.pure';
 import { EchoDrawing } from './echo-drawing';
 import { robotAt } from './robot-story.pure';
 
-/**
- * The zone each Section of "What lies below the waterline of sustainable AI skills" sits in, as the approved Spec
- * assigns them: Surface 1–2, Sunlit 3–4, Twilight 5–6, Midnight 7, Abyss 8. Shared because every Slide of the Episode
- * names its Section on the depth gauge and the rail.
- */
 export const WATERLINE_SECTIONS: readonly Zone[] = [
   'surface',
   'surface',
