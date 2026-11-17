@@ -137,6 +137,30 @@ _Avoid_: State, configuration, variant
 **Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
+**Agentic workflow**: in the brief-or-pay-the-price Explorable, several agents working towards one goal: ordered **Stages**, each holding nodes (one agent's piece), joined by edges that hand work on to the goal. A **Scenario** defines one; the Explorable's Workflow view draws it. Not the human-in-the-loop **Workflow**, a way of working one chat at a time; that Explorable's authoring guide is named `agentic-workflow.md` for historical reasons.
+_Avoid_: Workflow (in this Explorable's code and docs), pipeline, graph
+
+**Scenario**: one file that defines an Agentic workflow for the brief-or-pay-the-price Explorable: its Stages, nodes, edges, Cells and Annotations, with every word in English and German. DRIVE is the first; a viewer picks among them. Authoring guide: `docs/features/explorables/brief-or-pay-the-price-scenarios.md`.
+_Avoid_: Workflow file (the human-in-the-loop Explorable's), use case
+
+**PRICE**: the five traits of an AI agent, an amnesiac freelancer's traits: **P**robabilistic, **R**elentless, **I**nformed, **C**onfident, **E**very word billed. One agent's problem set; **BRIEF** answers it.
+_Avoid_: AI weaknesses, limits
+
+**BRIEF**: the five moves that brief one agent, each countering PRICE traits: **B**reak it down, **R**equirements first, **I**nterview yourself with AI, **E**valuate each step, **F**resh start for each piece. Which move counters which trait is the brief-or-pay-the-price Explorable's counters table.
+_Avoid_: Prompt tips, rules
+
+**BRACE**: the five principles of an Agentic workflow, applying across its Stages: **B**ackwards from the goal, **R**esolve dependencies early, **A**utonomy through intent, **C**ontracts at the seams, **E**ngineer trust. Not a counter to a Scenario's Stages: Stages are a process, BRACE its principles.
+_Avoid_: Workflow rules
+
+**Mirror**: a definition view of the brief-or-pay-the-price Explorable (PRICE, BRIEF, a Scenario's Stages, BRACE): acronym chips down the middle, each revealing a freelancer card on the left and an AI card on the right, in the pay-the-price Slide's grammar.
+_Avoid_: Flip card, definition list
+
+**Cell**: one BRIEF move against one PRICE trait, in the brief-or-pay-the-price Explorable's Agent matrix, and the zoom level that shows it: the trait's problem over the move's fix, with evidence. A node in a Scenario marks its own Cells, each with an example; a Cell outside the counters table renders as "in this context".
+_Avoid_: Square, pairing
+
+**Annotation**: one drawn element a Scenario attaches to a BRACE letter (a highlight, arrow, group, tag, chip or mark), so the Workflow view shows how that principle applies to that Agentic workflow. BRACE steps are cumulative.
+_Avoid_: Overlay, lens
+
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero or cover for the Slide itself; **Hero motif** names the Episode's recurring visual idea the Title slide sets, never the Slide
 
@@ -225,7 +249,7 @@ _Avoid_: Session, execution, pipeline run
 **Job**: one step of the per-run pipeline, such as writing the Dossier, which a Run does once or repeats until it passes. Each Job belongs to one Stage.
 _Avoid_: Task, step
 
-**Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
+**Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job. In the brief-or-pay-the-price Explorable, a **Stage** is instead one ordered phase of a Scenario's Agentic workflow (DRIVE's Define … Evolve), a column of its nodes; the file you are in decides which.
 _Avoid_: Phase, step
 
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
