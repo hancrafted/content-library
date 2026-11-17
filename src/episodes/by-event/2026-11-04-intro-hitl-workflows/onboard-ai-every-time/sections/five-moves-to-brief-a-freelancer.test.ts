@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fiveMovesToBriefAFreelancerSection } from './five-moves-to-brief-a-freelancer';
 
-/*
- * The Section "How do we work with this freelancer?" as the Intro HITL Workflows Event presents it, read through the page's own
- * interface: each Slide localized into this Episode and its Scene rendered. German keeps the English acronyms, so the
- * moves spell BRIEF and the traits PRICE; the Workflow is the summer party, drawn in stages.
- */
-
 const PLACED = placeSections<Slide>([fiveMovesToBriefAFreelancerSection]).flat();
 
 function localizedOf(slug: string, locale: Locale) {
