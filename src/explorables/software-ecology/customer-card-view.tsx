@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { memo, type CSSProperties } from 'react';
@@ -14,21 +15,16 @@ export interface CustomerCardProps {
   readonly r: Snapshot['customer'];
   readonly words: CustomerWords;
   readonly target?: TargetProps;
-  /** "{title}: open its settings", the card's name as a button. */
   readonly label?: string;
-  /** Its dashboard is open. */
   readonly open?: boolean;
-  /** A tour caption points at it. */
   readonly toured?: boolean;
 }
 
-/** The shelf grid's size as CSS custom properties: `SHELF_ROWS` down, `SHELF_COLS` across. */
 export const shelfGrid = {
   '--shelf-cols': SHELF_COLS,
   '--shelf-rows': SHELF_ROWS,
 } as CSSProperties;
 
-/** The twenty release cells, newest first: good or bad, a complaint marked. */
 export function ReleaseCells({ releases }: { readonly releases: readonly (Release | null)[] }) {
   return releases.map((s, i) => (
     <i key={i} data-q={s ? (s.good ? 'good' : 'bad') : undefined}>
@@ -37,7 +33,6 @@ export function ReleaseCells({ releases }: { readonly releases: readonly (Releas
   ));
 }
 
-/** A lead time as the Customer card shows it: one decimal below ten days, whole days above, a dash before any release. */
 export const leadTimeText = (d: number | null, words: CustomerWords) =>
   d === null ? '–' : fillTemplate(words.days, { n: d < 10 ? d.toFixed(1) : Math.round(d) });
 
@@ -98,7 +93,6 @@ function Head({ title }: { readonly title: string }) {
   );
 }
 
-/** The Customer on the floor (design-ADR 0024 §14): its last twenty releases, output against Ideal, and its readouts. */
 export const CustomerCardView = memo(function CustomerCardView(p: CustomerCardProps) {
   const { r, words: w } = p;
   return (

@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { formatVerdict, parseSimArgs, simulate } from './ecology-sim.node.ts';
 
-/** This folder's files, as the shell reads them. */
 const read = (name: string): string => readFileSync(new URL(`./${name}`, import.meta.url), 'utf8');
 
 describe('success cases', () => {

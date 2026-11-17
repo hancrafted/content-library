@@ -1,9 +1,4 @@
-/*
- * What a work center's dashboard shows (design-ADR 0024 §7, §17): the traffic light and its signals, how its backlog
- * drains, three trends, the dials as set and in effect, and "How it flows" in plain numbers. The Customer's dashboard
- * reads its settings and the follow-ups a request brings. Plain data the views turn into words; ported from the
- * reference build's `signals`, `leadTime`, `drainText`, `sparkline` and `syncDashboard`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { DEFECTS, kindChancesOf } from './defect.pure.ts';
 import { AMBER, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
 import type { Dials, Factory, FactoryNode } from './factory.types';
@@ -18,39 +13,31 @@ export type SignalKind = 'backing' | 'bottleneck' | 'overloaded' | 'rework' | 'u
 export interface Signal {
   readonly kind: SignalKind;
   readonly level: Level;
-  /** Weeks of work waiting (bottleneck, overloaded) or the share coming back, in % (rework). */
   readonly n: number;
 }
 
-/** A trend's three SVG paths in a 100 × 34 box. */
 export interface TrendPaths {
   readonly line: string;
   readonly area: string;
   readonly ref: string;
 }
 
-/** One source of own work at a work center (Product company): its tickets a week and arrivals, now and in the file. */
 export interface OwnReadout {
   readonly id: string;
-  /** The settings now: the visitor's, else the file's. */
   readonly now: Required<OwnSet>;
-  /** The file's own values, where Reset to default goes. */
   readonly file: Required<OwnSet>;
 }
 
 export interface DashboardReadout {
   readonly id: string;
-  /** The work center's own-work sources; none under Service provider or where the file names no source here. */
   readonly own: readonly OwnReadout[];
   readonly light: Level;
   readonly signals: readonly Signal[];
-  /** How the backlog drains, or null while under a week of work waits. */
   readonly drain:
     | { readonly kind: 'grow'; readonly n: number }
     | { readonly kind: 'clears'; readonly weeks: number }
     | null;
   readonly out: { readonly now: number; readonly paths: TrendPaths };
-  /** Share good in %, or null while too little leaves. */
   readonly good: { readonly now: number | null; readonly paths: TrendPaths };
   readonly wait: { readonly now: number; readonly level: number; readonly paths: TrendPaths };
   readonly dials: Dials;
@@ -60,7 +47,6 @@ export interface DashboardReadout {
     readonly arriving: number;
     readonly capacity: number;
     readonly backlog: number;
-    /** Weeks a job spends here by Little's law, or null while the backlog is not steady. */
     readonly lead: number | null;
   };
 }
@@ -75,7 +61,6 @@ type Check = (n: FactoryNode) => Signal | null;
 
 const reworkShare = (n: FactoryNode) => (n.rate.arr > 0.05 ? n.rate.rwIn / n.rate.arr : 0);
 
-/** The reference build's checks, in its order. */
 const CHECKS: readonly Check[] = [
   (n) => (n.u.blocked > BLOCKED ? { kind: 'backing', level: 'red', n: 0 } : null),
   (n) => (n.lvl === 2 ? { kind: 'bottleneck', level: 'red', n: n.Ws } : null),
@@ -92,7 +77,6 @@ export const signalsOf = (n: FactoryNode): { level: Level; list: Signal[] } => {
   return { level, list: L.length ? L : [{ kind: 'ok', level: 'green', n: 0 }] };
 };
 
-/** Little's law holds only while the backlog is steady: the average backlog now against four weeks ago. */
 export const leadTimeOf = (n: FactoryNode): number | null => {
   const h = n.hist.L;
   if (h.length < 9) return null;
@@ -109,7 +93,6 @@ const drainFor = (n: FactoryNode, s: Settings): DashboardReadout['drain'] => {
   return dr.grow > 0.05 ? { kind: 'grow', n: dr.grow } : { kind: 'clears', weeks: dr.weeks };
 };
 
-/** A line chart over the last 16 weeks in a 100 × 34 box, with a dashed reference line. */
 export const sparkPaths = (data: readonly (number | null)[], ref: number | null, max: number): TrendPaths => {
   const pts = data
     .map((v, i) => [data.length > 1 ? (i / (data.length - 1)) * 100 : 0, v] as const)
@@ -123,7 +106,6 @@ export const sparkPaths = (data: readonly (number | null)[], ref: number | null,
   return { line, area: `${line} L${last[0].toFixed(1)} 34 L${first[0].toFixed(1)} 34 Z`, ref: refPath };
 };
 
-/** The efficiency slider is logarithmic: positions 0 … 200 are 10 % … 1000 %. */
 export const effToPos = (v: number): number => Math.round(Math.log10(v / 10) * 100);
 export const posToEff = (p: number): number => {
   const v = 10 * 10 ** (p / 100);
@@ -140,7 +122,6 @@ const trends = (n: FactoryNode) => {
   };
 };
 
-/** The sources of own work at `n` and their settings now: none under Service provider (all own work is off). */
 export const ownReadoutsOf = (m: Factory, n: FactoryNode, s: Settings): OwnReadout[] => {
   if (!productCo(s)) return [];
   const mode = custOf(m, s).mode;
@@ -179,26 +160,20 @@ export const dashboardOf = (n: FactoryNode, s: Settings, own: readonly OwnReadou
 
 export interface CustomerDashboard {
   readonly cust: Cust;
-  /** The rate the file sizes Ideal for. */
   readonly base: number;
-  /** The rate slider's top: four times the file's rate, at least 30. */
   readonly max: number;
   readonly mix: readonly string[];
   readonly good: readonly string[];
-  /** Each defect kind with a center a bad release of it can send a complaint to. */
   readonly bad: readonly { readonly defect: Defect; readonly to: string }[];
-  /** New requests one request brings, from the expected flows. */
   readonly gain: number;
   readonly complaints: boolean;
 }
 
-/** The work centers the Customer sends to that its file or a preset gives a `kind` value. */
 const targetsOf = (m: Factory, cu: Cust, kind: 'mix' | 'good'): string[] =>
   m.cust.outs
     .map((e) => e.to.id)
     .filter((to) => to in cu[kind] || m.B.data.presets.some((p) => p.customer?.[kind] && to in p.customer[kind]));
 
-/** Per defect kind, the work centers a bad release's complaint can reach, at the settings or in a preset. */
 const badTargetsOf = (m: Factory, cu: Cust): { defect: Defect; to: string }[] => {
   const files = m.B.data.presets.map((p) => kindChancesOf(p.customer?.bad));
   return DEFECTS.flatMap((defect) =>
@@ -209,7 +184,6 @@ const badTargetsOf = (m: Factory, cu: Cust): { defect: Defect; to: string }[] =>
   );
 };
 
-/** The Customer's dashboard at `s`; `gain` comes from the expected flows, solved once per settings. */
 export const customerDashboardOf = (m: Factory, x: { s: Settings; gain: number }): CustomerDashboard => {
   const s = x.s;
   const cu = custOf(m, s),

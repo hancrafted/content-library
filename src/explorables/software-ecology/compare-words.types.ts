@@ -1,6 +1,4 @@
-/* The compare words, keyed by the Explorable config pair's `compare:` (FE-012 §1). */
-
-/** Compare mode in the toolbar and the compare stream on the stage. */
+// decision: FE-012 §1
 export interface CompareWords {
   readonly label: string;
   readonly button: string;
@@ -10,7 +8,6 @@ export interface CompareWords {
   readonly removeFrom: string;
   readonly show: string;
   readonly exit: string;
-  /** The hints beside the widget, by `CompareNote`. */
   readonly pick: string;
   readonly max: string;
   readonly title: string;

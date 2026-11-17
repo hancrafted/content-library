@@ -1,8 +1,4 @@
-/*
- * One step of the factory model (design-ADR 0024 §1): the Customer's requests, own tickets, deliveries off the belts,
- * service, then the averages every readout reads. Fixed steps of DTW weeks; the order of draws is the reference
- * build's, so the same seed gives the same run.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import {
   dials,
   DTW,
@@ -27,7 +23,6 @@ import { custOf } from './start-settings.pure.ts';
 
 const nextGap = (c: Streams, mode: Arrivals, r: number): number => (mode === 'steady' ? 1 / r : expo(c.ra, 1 / r));
 
-/** Smooth weighted round robin: the mix in strict turns. */
 const inTurn = (cur: Record<string, number>, ent: [string, number][], W_: number): string => {
   let best = -Infinity,
     pick = '';
@@ -50,7 +45,6 @@ const byWeight = (ent: [string, number][], r: number): string => {
   return ent[ent.length - 1][0];
 };
 
-/** Where the next request goes: the mix in strict turns when steady, by chance when random. */
 const pickMix = (m: Factory, cu: Cust): Belt | null => {
   const c = m.cust,
     ent = Object.entries(cu.mix);
@@ -61,7 +55,6 @@ const pickMix = (m: Factory, cu: Cust): Belt | null => {
   return c.edgeTo.get(to) ?? null;
 };
 
-/** The Customer: requests Steady (one every 1/rate) or Random (Poisson), split by the mix. */
 const requests = (m: Factory, t0: number, t1: number): void => {
   const cu = (m.cs = custOf(m, m.s)),
     c = m.cust,
@@ -83,7 +76,6 @@ const requests = (m: Factory, t0: number, t1: number): void => {
   }
 };
 
-/** One own ticket, written into its role's backlog and announced to the floor; it draws nothing. */
 const arrive = (m: Factory, src: TicketSource, wk: number): void => {
   m.created++;
   m.wip++;
@@ -92,7 +84,6 @@ const arrive = (m: Factory, src: TicketSource, wk: number): void => {
   m.hook?.('own', src.n);
 };
 
-/** One source's own tickets up to t1, written into its role's backlog. */
 const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): void => {
   const n = src.n,
     own = ownOf(src, { s: m.s, mode: m.cs.mode }),
@@ -106,7 +97,6 @@ const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): 
   for (; src.next <= x.t1; src.next += nextGap(src, mode, rs)) arrive(m, src, Math.floor(src.next));
 };
 
-/** One own ticket now, as a scheduled one; false for no source or Service provider. Draws nothing, moves no clock. */
 export const emitOwn = (m: Factory, id: string): boolean => {
   const src = productCo(m.s) ? m.srcs.find((x) => x.n.id === id) : undefined;
   if (!src) return false;
@@ -114,13 +104,11 @@ export const emitOwn = (m: Factory, id: string): boolean => {
   return true;
 };
 
-/** Own tickets (Product company): each source at its own rate and arrivals, its own random stream. */
 const ownTickets = (m: Factory, t0: number, t1: number): void => {
   if (!productCo(m.s)) return;
   for (const src of m.srcs) tickets(m, src, { t0, t1 });
 };
 
-/** Belts: deliver what has arrived. */
 const deliveries = (m: Factory, t1: number): void => {
   for (const e of m.edges) {
     while (e.fwd.n && (e.fwd.first() as { t1: number }).t1 <= t1) {
@@ -165,7 +153,6 @@ const decayRates = (n: FactoryNode, fdec: number): void => {
   r_.out[1] *= fdec;
 };
 
-/** Busy, blocked, starved and on complaint work: each 1 or 0 this step. */
 const stateOf = (n: FactoryNode): { busy: number; blocked: number; starved: number; onBug: number } => {
   const sv = n.server as NonNullable<FactoryNode['server']>,
     mine = sv.n === n;
@@ -197,7 +184,6 @@ const decayBelts = (m: Factory, fdec: number): void => {
   for (const e of m.edges) {
     e.rate *= fdec;
     e.backRate *= fdec;
-    // a rework lane shows while work is sent back on it, with a gap so it never blinks
     if (!e.retOn && e.backRate > RET_SHOW) e.retOn = true;
     else if (e.retOn && e.backRate < RET_HIDE) e.retOn = false;
   }
@@ -217,7 +203,6 @@ const decayCustomer = (m: Factory, dt: number, fdec: number): void => {
   m.req *= fdec;
 };
 
-/** Advances the model one step of `dt` weeks. */
 export const step = (m: Factory, dt = DTW): void => {
   const t0 = m.t,
     t1 = t0 + dt,

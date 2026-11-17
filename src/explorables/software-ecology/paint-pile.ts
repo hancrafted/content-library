@@ -1,8 +1,4 @@
-/*
- * The pile-up past the rack, at the end of the busiest belt in (design-ADR 0024 §14): drawn only, the model is
- * unchanged. Three styles, heap by default; every station draws its own seeded shapes, so no two piles look alike.
- * Sprites grow with the weeks of work waiting, twelve at most. Ported from the reference build's `pileOf` and `drawPile`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { SPR } from './doc-sprites.ts';
 import type { FloorBelt, FloorStation } from './factory-model.pure.ts';
 import type { Pt } from './factory-paths.pure.ts';
@@ -29,7 +25,6 @@ export interface Pile {
   shown: number;
 }
 
-/** A station's pile, seeded by the model's seed and the station. */
 export const pileFor = (n: FloorStation, seed: number): Pile | null => {
   const e = n.ins.slice().sort((a, b) => b.rate - a.rate || a.i - b.i)[0];
   if (!e) return null;
@@ -38,7 +33,6 @@ export const pileFor = (n: FloorStation, seed: number): Pile | null => {
   return { e, lean: (r() - 0.5) * 0.5, items, shown: 0 };
 };
 
-/** The kinds of what waits past the rack, `k` at most. */
 const kindsPast = (n: FloorStation, k: number): number[] => {
   const kinds: number[] = [];
   let skip = RACK;
@@ -103,7 +97,6 @@ const heap = (a: Axis, i: number, it: Item): Place => {
 
 const STYLES: Record<PileStyle, (a: Axis, i: number, it: Item) => Place> = { heap, stack, drift };
 
-/** The belt's end and its direction into the card, from the drawn path. */
 export const beltEnd = (pts: readonly Pt[]): { end: Pt; dx: number; dy: number } => {
   const end = pts[pts.length - 1] as Pt,
     prev = pts[Math.max(0, pts.length - 6)] as Pt;
@@ -113,7 +106,6 @@ export const beltEnd = (pts: readonly Pt[]): { end: Pt; dx: number; dy: number }
   return { end, dx: dx / l, dy: dy / l };
 };
 
-/** Draws a station's pile-up; `dt` in seconds since the last frame. */
 export const drawPile = (
   f: Frame,
   n: FloorStation,

@@ -1,7 +1,4 @@
-/*
- * The traffic solve (design-ADR 0024 §4): the expected flows at given settings, the traffic equations of
- * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { DEFECTS, perKind } from './defect.pure.ts';
 import { dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
@@ -35,7 +32,6 @@ const sum = (xs: Iterable<number>): number => {
   return a;
 };
 
-/** Each defect kind's total chance that a bad release comes back; none while complaints are off. */
 const badChances = (cu: Cust, complOn: boolean): Record<Defect, number> => {
   const p = perKind();
   if (complOn) for (const k of DEFECTS) p[k] = sum(Object.values(cu.bad[k]));
@@ -119,7 +115,6 @@ const loads = (ctx: Ctx, p: Pass): { rho: Record<string, number>; persons: Recor
   return { rho, persons };
 };
 
-/** The expected flows at given settings; `worst` passes all bad work unread and rushes every center (Q114 B). */
 export const solve = (m: Factory, s: Settings, opts: { worst?: boolean; rush?: boolean } = {}): SolveResult => {
   const worst = opts.worst ?? false,
     ctx = context(m, s, { worst, rush: opts.rush ?? worst });

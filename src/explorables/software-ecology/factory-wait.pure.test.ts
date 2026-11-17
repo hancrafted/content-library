@@ -1,12 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { AMBER, RED } from './factory-dials.pure.ts';
 import { level, waitState } from './factory-wait.pure.ts';
 import type { FactoryNode } from './factory.types';
 
-/*
- * A pile's wait state (design-ADR 0024 §5): `waitState` is the one writer of a work center's waiting time and its
- * level, which the pressure it puts on its station is read from.
- */
 const LEVEL_RED = 2;
 const pile = (lvl: number): FactoryNode => ({ Ws: 0, lvl }) as unknown as FactoryNode;
 

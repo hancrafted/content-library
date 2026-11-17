@@ -1,3 +1,5 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// spec: docs/features/explorables/software-ecology.md#eval-hooks
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -8,15 +10,9 @@ import { wordsFor } from './software-ecology-data';
 const render = (props: Parameters<typeof SoftwareEcology>[0]): string =>
   renderToStaticMarkup(createElement(SoftwareEcology, props));
 
-/** A pressed step button whose text is `name`, after its number badge. */
 const pressed = (name: string): RegExp =>
   new RegExp(`aria-pressed="true"[^>]*><span[^>]*>[①②③]</span>${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`);
 
-/*
- * Eval hooks of the whole page (design-ADR 0024 §14, feature guide "Eval hooks"): every interactive control of the
- * toolbar, the closed menus, the Settings popover and the cards names itself in a unique, stable `data-control`, and the
- * cards write their read-outs as plain `data-readout-*` values.
- */
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
 

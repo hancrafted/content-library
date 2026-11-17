@@ -1,14 +1,10 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { createFactory } from './factory-model.pure.ts';
 import type { Bundle, CenterDef, RoleDef, Settings } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * Defect origin and catch (design-ADR 0024 §5, grill 11 Q200, Q201, Q210): a bad document carries the kind of its
- * first defect, `spec` (made bad at or before Analysis) or `code` (from Engineering on); a station sends back only the
- * kinds its `catch` names; a bad release comes back by its kind, a change request or a bug.
- */
 const SEED = 11;
 const WEEKS = 40;
 const MEASURES = [
@@ -20,20 +16,17 @@ const MEASURES = [
   'ops.stall',
 ];
 
-/** Tire swing with one work center's fields changed. */
 const changed = (id: string, patch: Partial<CenterDef>): Bundle => {
   const B = builtinBundle('tire');
   const centers = B.data.centers.map((c) => (c.id === id ? { ...c, ...patch } : c));
   return { ...B, data: { ...B.data, centers } };
 };
 
-/** Tire swing with one role's profile changed. */
 const withRole = (id: string, patch: Partial<RoleDef>): Bundle => {
   const B = builtinBundle('tire');
   return { ...B, roles: { ...B.roles, [id]: { ...(B.roles[id] as RoleDef), ...patch } } };
 };
 
-/** In practice with work centers' effectiveness set (and AI where `ai` says), run WEEKS: the measures read then. */
 const readAt = (B: Bundle, effective: Record<string, number>, ai: Settings['ai'] = 'off'): Record<string, number> => {
   const s: Settings = startSettings(B, B.data.presets.find((p) => p.id === 'realistic') as never);
   const over = Object.fromEntries(Object.entries(effective).map(([id, effv]) => [id, { effv }]));
@@ -41,11 +34,9 @@ const readAt = (B: Bundle, effective: Record<string, number>, ai: Settings['ai']
   f.step(WEEKS);
   return f.read({ measures: MEASURES }).measures;
 };
-/** Tire swing with Support passing the tickets it takes up on to Engineering once it drowns (grill 11 Q220, Q227), or not. */
 const escalating = (underPressure?: number): Bundle =>
   changed('support', { escalate: underPressure === undefined ? undefined : { to: 'eng', underPressure } });
 
-/** A preset's state with work centers' efficiency set, run WEEKS: the measures read then. */
 const readSlowed = (B: Bundle, x: { preset: string; eff: Record<string, number> }): Record<string, number> => {
   const s: Settings = startSettings(B, B.data.presets.find((p) => p.id === x.preset) as never);
   const over = Object.fromEntries(Object.entries(x.eff).map(([id, eff]) => [id, { eff }]));

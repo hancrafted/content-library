@@ -1,7 +1,7 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { badOut, copyKinds, kindChancesOf, kindTargets } from './defect.pure.ts';
 
-/* Defect origin (design-ADR 0024 §5): `customer.bad` read per kind, and written back as the file writes it. */
 describe('success cases', () => {
   it('reads a kinded customer.bad as one map per kind', () => {
     // ARRANGE

@@ -15,7 +15,6 @@ const measuresOf = (f: { read: (o: { measures: string[] }) => { measures: unknow
 const backlogOf = (f: Parameters<typeof measuresOf>[0], id: string): number =>
   measuresOf(f, [`${id}.backlog`])[`${id}.backlog`] as number;
 
-/** Where the work waits longest `weeks` after Realistic's loaded start, once `set` is applied. */
 const afterSet = (x: {
   B: Bundle;
   at: string;
@@ -135,7 +134,7 @@ describe('success cases', () => {
     { name: 'AI at the platform', set: { ai: ['plat'] } },
     { name: 'the platform at twice the efficiency', set: { dials: { plat: { efficiency: 200 } } } },
   ] as const)('at Two teams, clears the shared platform with $name and moves the largest backlog off it', (c) => {
-    // ARRANGE: the platform is the last work center, so downstream is the Customer, who holds no backlog
+    // ARRANGE
     const B = builtinBundle('teams'),
       weeks = 3,
       pile = 2,

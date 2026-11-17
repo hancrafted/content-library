@@ -7,7 +7,6 @@ import type { Bundle, Preset } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/** Tire swing with one more state: from day 0, at 20×, as a scenario may start. */
 const withClearFast = (): Bundle => {
   const B = builtinBundle('tire');
   const p: Preset = { id: 'clear-fast', view: 'factory', reality: 100, start: 'clear', speed: 20 };

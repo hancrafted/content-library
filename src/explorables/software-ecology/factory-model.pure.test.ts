@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { buildFactory, createFactory, type Audit, type FactoryHandle } from './factory-model.pure.ts';
 import { RHO_BN, RHO_OTHER, stability } from './factory-sizing.pure.ts';
@@ -7,10 +8,6 @@ import type { Bundle, Settings } from './software-ecology.types';
 import { realisticSettings, startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * Characterisation of the factory model (design-ADR 0024 §12). Expected values are the reference build's own, from
- * its headless run (docs/episodes/software-ecology/prototype/source/checks7c.out.txt, model checks 92–134).
- */
 const settingsOf = (B: Bundle, preset: string): Settings =>
   startSettings(B, B.data.presets.find((p) => p.id === preset) as Bundle['data']['presets'][number]);
 
@@ -19,14 +16,12 @@ const realistic = (seed?: number) => {
   return createFactory(B, settingsOf(B, 'realistic'), seed);
 };
 
-/** Conservation as a read of the handle gives it, without the hash. */
 const conservation = (f: FactoryHandle): Omit<Audit, 'hash'> => {
   const a = f.read({ audit: true }).audit as Audit;
   return { created: a.created, consumed: a.consumed, backlog: a.backlog, transit: a.transit, work: a.work, gap: a.gap };
 };
 const stateHash = (f: FactoryHandle): string => (f.read({ audit: true }).audit as Audit).hash;
 
-/** A preset's settings with every `set` of its tour folded in: the scenario's end state. */
 const endState = (B: Bundle, preset: string): Settings => {
   const p = B.data.presets.find((x) => x.id === preset) as Bundle['data']['presets'][number],
     s = startSettings(B, p);
@@ -34,7 +29,6 @@ const endState = (B: Bundle, preset: string): Settings => {
   return s;
 };
 
-/** The work center with the most weeks of work waiting, and how many. */
 const worst = (f: FactoryHandle): { id: string; weeks: string } => {
   const n = Object.values(f.read().stations).reduce((a, x) => (x.weeks > a.weeks ? x : a));
   return { id: n.id, weeks: n.weeks.toFixed(1) };
@@ -106,7 +100,7 @@ describe('success cases', () => {
   });
 
   it('moves the bottleneck downstream when tire in practice, AI at Engineering, raises quality assurance to 1000 %', () => {
-    // ARRANGE: after the raise its flood's bugs drown Support, which passes some on to Engineering (grill 11 Q227)
+    // ARRANGE
     const B = builtinBundle('tire');
     const f = createFactory(B, { ...endState(B, 'realistic'), ai: ['eng'], over: { eng: { aiExtra: 2 } } });
     const expected = { before: { id: 'qa', weeks: '16.9' }, after: { id: 'ops', weeks: '43.7' }, qa: '0.0' };

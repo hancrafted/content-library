@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { placeTour } from './tour-placement.pure.ts';
 
-/* Where the tour caption sits, as the reference build's `placeTour` puts it: below its card, else above. */
-
 const WRAP = { left: 100, top: 50, width: 1200, height: 700 };
 
 describe('success cases', () => {

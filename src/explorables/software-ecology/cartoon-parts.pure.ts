@@ -1,7 +1,3 @@
-/*
- * The roles state in words, once a run: every node's card that has a grid cell (the tire swing's cartoon order; Quality assurance has none) (the cartoon panel, caption, job and
- * artefacts) and the tiles that fill the empty cells. The grid itself is `factory-grid.pure.ts`.
- */
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { panelById, panelFor, type CartoonPanel } from './cartoon-panels.pure.ts';
 import { gridOf, tilesOf, type Cell } from './factory-grid.pure.ts';
@@ -49,7 +45,6 @@ const cardOf = (x: { topo: Topology; w: WordsIn; words: CartoonWords; id: string
   };
 };
 
-/** Every node in flow order, the Customer first, as a roles-state card. */
 export const cartoonCardsOf = (m: Topology, w: WordsIn, words: CartoonWords): CartoonCardPart[] => {
   const g = gridOf(m);
   return m.order
@@ -61,7 +56,6 @@ export const cartoonCardsOf = (m: Topology, w: WordsIn, words: CartoonWords): Ca
     }));
 };
 
-/** The tiles: Documentation, Billing and what the customer really needed. */
 export const tilePartsOf = (m: Topology, x: { w: WordsIn; words: CartoonWords }): TilePart[] =>
   tilesOf(m).map((t) => {
     const real = panelById(t.id) as CartoonPanel;

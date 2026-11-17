@@ -1,10 +1,4 @@
-/*
- * One pass of the traffic equations (design-ADR 0024 §4), which factory-solve.pure.ts iterates to a fixed point. A flow
- * cell holds documents a week by a bad document's defect kind (spec or code; a good one counts as spec), quality (bad 0, good 1),
- * failure demand (0, 1), times sent back (0..2) and what the document carries (0 nothing, 1 a customer request, 2 an own
- * ticket). The loops run in the reference build's order, kind outermost, so a run without bad work adds in the same order
- * and the numbers match to the last bit.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { DEFECTS } from './defect.pure.ts';
 import { catchOf, srcRate } from './factory-dials.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, TicketSource } from './factory.types';
@@ -20,7 +14,6 @@ const REDO = [0, 1].flatMap((f) =>
 const REQUEST = fi({ q: 1, f: 0, b: 0, mn: 1 });
 const COMPLAINT = fi({ q: 1, f: 1, b: 0, mn: 1 });
 
-/** What a pass reads: the model, each center's dials, the Customer, the mechanics' strengths. */
 export interface Ctx {
   readonly m: Factory;
   readonly s: Settings;
@@ -29,11 +22,9 @@ export interface Ctx {
   readonly churn: number;
   readonly complOn: boolean;
   readonly mixW: number;
-  /** The chance a bad release brings a complaint, per defect kind. */
   readonly badP: Readonly<Record<Defect, number>>;
   readonly srcs: readonly Pick<TicketSource, 'n' | 'rate'>[];
   readonly worst: boolean;
-  /** The file's constants (design-ADR 0024 §5). */
   readonly consts: {
     readonly redo: number;
     readonly keepExtra: number;
@@ -41,7 +32,6 @@ export interface Ctx {
   };
 }
 
-/** One pass: the flows it reads (F) and writes (NF), redo jobs per belt (R), each node's load and jobs. */
 export interface Pass {
   F: Float64Array[];
   NF: Float64Array[];
@@ -52,7 +42,6 @@ export interface Pass {
   own: number;
   relG: number;
   relB: number;
-  /** Bad releases per defect kind. */
   relBK: Record<Defect, number>;
   fu: number;
 }
@@ -65,13 +54,11 @@ interface Flow {
   readonly f: number;
   readonly mn: number;
   readonly mult: number;
-  /** The defect kind of the bad documents it hands on. */
   readonly kind: Defect;
 }
 
 const dialsOf = (ctx: Ctx, n: FactoryNode): Dials => ctx.D[n.idx] as Dials;
 
-/** A fulfilled request counts as output; an own ticket apart. */
 const addFulfilled = (p: Pass, mn: number, r: number): void => {
   if (mn === 1) p.out += r;
   else p.own += r;
@@ -89,7 +76,6 @@ const received = (p: Pass, x: { e: Belt; c: Indexed; r: number }): void => {
   }
 };
 
-/** What reached the Customer: fulfilled requests, own tickets, good and bad releases. */
 const customerIn = (ctx: Ctx, p: Pass): void => {
   for (const e of ctx.m.cust.ins)
     for (const c of CARRYING) {
@@ -98,7 +84,6 @@ const customerIn = (ctx: Ctx, p: Pass): void => {
     }
 };
 
-/** The Customer's new requests, and follow-ups from the releases it received. */
 const customerOut = (ctx: Ctx, p: Pass): void => {
   const { cu, m } = ctx,
     belt = (to: string) => p.NF[(m.cust.edgeTo.get(to) as Belt).i];
@@ -115,7 +100,6 @@ const customerOut = (ctx: Ctx, p: Pass): void => {
     }
 };
 
-/** Where one spawn rule sends a node's work: [belt index, share, whether it is a choice]. */
 const targets = (sp: FactoryNode['spawns'][number]): [number, number, boolean][] =>
   sp.choose
     ? sp.choose.map((c) => [c.e.i, c.w / (sp.W as number), true])
@@ -142,7 +126,6 @@ const spawnOut = (p: Pass, w: Flow): void => {
   });
 };
 
-/** Own tickets: written at the role itself, then handed on like a request. */
 const ownTickets = (ctx: Ctx, p: Pass): void => {
   for (const src of ctx.srcs) {
     const n = src.n,
@@ -163,14 +146,12 @@ interface Arrival {
   readonly r: number;
 }
 
-/** The share of bad documents arriving on a belt that are sent back: the station's catch of their kind. */
 const backShare = (ctx: Ctx, a: Arrival): number => {
   if (!(a.e.returns && a.c.b < ctx.consts.maxBounces)) return 0;
   if (a.n.def.inspection && ctx.worst) return 0;
   return catchOf(ctx.s, { n: a.n, d: a.d }, a.c.kind);
 };
 
-/** Bad documents arriving: some sent back, the rest kept and worked on longer (an inspection: as long as good ones). */
 const arriveBad = (ctx: Ctx, p: Pass, a: Arrival): void => {
   const { n, d, e, sz, c, r } = a,
     Bk = r * backShare(ctx, a),
@@ -199,7 +180,6 @@ const beltIn = (ctx: Ctx, p: Pass, x: { n: FactoryNode; e: Belt }): void => {
   }
 };
 
-/** Redo jobs: the sender does the work again and hands on the same document, rolled afresh. */
 const redoFlows = (ctx: Ctx, p: Pass): void => {
   for (const e of ctx.m.edges)
     for (const c of REDO) {
@@ -214,7 +194,6 @@ const redoFlows = (ctx: Ctx, p: Pass): void => {
     }
 };
 
-/** One pass of the traffic equations, reading p.F and writing everything else in p. */
 export const trafficPass = (ctx: Ctx, p: Pass): void => {
   customerIn(ctx, p);
   customerOut(ctx, p);

@@ -1,5 +1,5 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId } from 'react';
 import type { CustomerDashboard as Readout } from './dashboard-readouts.pure.ts';
@@ -8,12 +8,6 @@ import type { CustomerChange } from './factory-settings.pure.ts';
 import type { CustDashWords, DashWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Defect } from './software-ecology.types';
-
-/*
- * The Customer's dashboard (design-ADR 0024 §2): how many requests a week, steady or random, where they go, and the
- * chance a good release, or a bad one by its defect kind, brings a new request at once. Every change goes up through
- * `onChange`.
- */
 
 export interface CustomerDashboardProps {
   readonly title: string;
@@ -28,10 +22,8 @@ export interface CustomerDashboardProps {
   readonly onClose?: () => void;
 }
 
-/** A row's list: the mix, a good release's follow-ups, or a bad release's of one defect kind. */
 type Kind = 'mix' | 'good' | Defect;
 
-/** Per row kind: the chances it shows, the change a slider sends up and the slider's eval hook. */
 interface RowKind {
   readonly list: (c: Readout['cust']) => Readonly<Record<string, number>>;
   readonly change: (to: string, v: number) => CustomerChange;
@@ -61,7 +53,6 @@ interface ChanceRow {
   readonly step: number;
 }
 
-/** A mix weight shows its share; a follow-up its chance, capped so the chances never pass 95 %. */
 const chanceRow = (p: CustomerDashboardProps, kind: Kind, to: string): ChanceRow => {
   const c = p.r.cust,
     v = ROWS[kind].list(c)[to] ?? 0,

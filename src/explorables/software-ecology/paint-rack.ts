@@ -1,15 +1,10 @@
-/*
- * The rack and the document in work, on the canvas (design-ADR 0024 §14): six slots at the card's full height,
- * filling from the bottom; past six the top slot turns red. The document in work fills from the bottom and is stamped
- * good or bad as it ends; it never restarts within a job. Ported from the reference build's `drawRack` and `drawWork`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { drawDoc, label, SPR } from './doc-sprites.ts';
 import type { FloorStation, FloorWork } from './factory-model.pure.ts';
 import type { Frame } from './paint-belts.ts';
 import { RACK_W, rackX, SLOT, slotY, type Sprite, type StationVis } from './paint-station.ts';
 import { RACK } from './stage-readouts.pure.ts';
 
-/** Below this many real seconds a job, the station shows a steady document in work: no blinking. */
 const STEADY_SECS = 0.25;
 const STEADY_FILL = 0.6;
 const STAMP_FROM = 0.78;
@@ -50,7 +45,6 @@ const frame = (f: Frame, n: FloorStation, over: boolean) => {
   c.strokeRect(x - hw, top, RACK_W, SLOT);
 };
 
-/** The rack: its slots, the ones leaving and the ones waiting. */
 export const drawRack = (f: Frame, n: FloorStation, v: StationVis) => {
   frame(f, n, n.waiting > RACK);
   for (const g of v.ghosts) blit(f, g, Math.max(0, g.life));
@@ -58,7 +52,6 @@ export const drawRack = (f: Frame, n: FloorStation, v: StationVis) => {
   f.c.globalAlpha = 1;
 };
 
-/** How far a job is done, 0 to 1, at model time `t`. */
 export const progressOf = (sv: Pick<FloorWork, 'busy' | 'blocked' | 'start' | 'end'>, t: number): number => {
   if (!sv.busy) return sv.blocked ? 1 : 0;
   const p = (t - sv.start) / Math.max(1e-9, sv.end - sv.start);
@@ -93,15 +86,12 @@ const stamp = (f: Frame, w: Sprite, x: { good: boolean; p: number }) => {
   c.restore();
 };
 
-/** What the painter needs beyond the frame to draw a document in work. */
 export interface WorkAt {
   readonly ai: boolean;
-  /** Real seconds a model week takes at the current speed; 0 when paused. */
   readonly secsPerWeek: number;
   readonly blocked: string;
 }
 
-/** The document in work: a request straight from the Customer or a complaint is drawn good until it is stamped. */
 const kindOfJob = (sv: FloorWork, ai: boolean) => ({
   q: sv.doc.complaint || sv.doc.fromCustomer || sv.doc.good ? 1 : 0,
   ai,
@@ -112,7 +102,6 @@ const kindOfJob = (sv: FloorWork, ai: boolean) => ({
 const steadyFill = (sv: FloorWork, secsPerWeek: number): boolean =>
   secsPerWeek > 0 && (sv.end - sv.start) * secsPerWeek < STEADY_SECS;
 
-/** The document in work: filling, stamped as it ends, or held with "blocked". */
 export const drawWork = (f: Frame, n: FloorStation, x: { v: StationVis; at: WorkAt }) => {
   const sv = n.work,
     w = x.v.work;

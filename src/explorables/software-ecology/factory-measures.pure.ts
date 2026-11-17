@@ -1,8 +1,4 @@
-/*
- * The measures a scenario's `expect:` names (design-ADR 0024 §10): `customer.<measure>` or `<center>.<measure>`,
- * read from the network. Model-side: the Snapshot reads them for `read({ measures })`; the file checks only ask
- * whether a key names one.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import {
   CENTER_MEASURES,
   CUSTOMER_MEASURES,
@@ -11,7 +7,6 @@ import {
 } from './factory-readouts.pure.ts';
 import type { Factory } from './factory.types';
 
-/** The value of one measure, `customer.output` or `qa.weeksWaiting`. */
 export const metric = (m: Factory, key: string): number => {
   const [who, what] = key.split('.');
   if (who === 'customer') {
@@ -25,7 +20,6 @@ export const metric = (m: Factory, key: string): number => {
   return f(n, m);
 };
 
-/** A key names a measure: `customer.<measure>`, or a work center of `centerIds` and its measure. */
 export const validKey = (key: string, centerIds: ReadonlySet<string>): boolean => {
   const [who, what] = String(key).split('.');
   return who === 'customer'

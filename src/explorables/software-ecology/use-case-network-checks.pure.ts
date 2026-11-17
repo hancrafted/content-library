@@ -1,7 +1,3 @@
-/*
- * What a use-case file's work centers, spawns, routes, sources and mechanics must hold (schema
- * software-ecology-factory/5), ported from the reference build's validate(), messages and order unchanged.
- */
 import { MECH_KEYS, MECH_RANGE } from './mechanics.pure.ts';
 import { OWN_RATE_MAX } from './own-work.types.ts';
 import type { MechKey } from './software-ecology.types';
@@ -128,7 +124,6 @@ const sourceProblems = (doc: Map_, ids: Set<string>, E: Sink): void => {
   }
 };
 
-/** Everything but the presets and the saved state; returns the work center ids the rest checks against. */
 export const dataProblems = (doc: Map_, x: { E: Sink; catalog: readonly string[] }): Set<string> => {
   const E = x.E;
   apply(TOP, doc, E);

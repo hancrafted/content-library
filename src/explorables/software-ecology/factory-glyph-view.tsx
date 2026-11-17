@@ -1,6 +1,5 @@
 import { GLYPH, ICON } from './factory-glyphs.pure.ts';
 
-/** One glyph or icon in a 24-unit box, stroked in the current colour; decorative. */
 export function Glyph({ name, className }: { readonly name: string; readonly className?: string }) {
   return (
     <svg

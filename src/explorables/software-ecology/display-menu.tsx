@@ -1,11 +1,7 @@
+// spec: docs/features/explorables/software-ecology.md#interaction
 import type { PileStyle } from './paint-pile.ts';
 import { Field, Segmented, SwitchField } from './settings-field.client';
 import type { DisplayWords } from './software-ecology-words.types';
-
-/*
- * The Settings popover's Display column (feature guide, Interaction 3): how the factory is drawn, never what it
- * computes. Belt motion and the pile-up style past the rack, as form fields; the theme follows the site header's switch.
- */
 
 export interface DisplayMenuProps {
   readonly words: DisplayWords;

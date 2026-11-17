@@ -1,3 +1,5 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// spec: docs/features/explorables/software-ecology.md#eval-hooks
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -6,15 +8,8 @@ import { scenarioLastStep } from './scenario-last-step';
 import { wordsFor } from './software-ecology-data';
 import { WorkCenterDashboard } from './work-center-dashboard.client';
 
-/*
- * Eval hooks of a work center's dashboard (design-ADR 0024 §14, feature guide "Eval hooks"): every control names
- * itself `node.<id>.<field>` in the popover and `compare.<id>.<field>` in a compare column, so each hook is on the page
- * once even when a popover and a compare column show the same center.
- */
-
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
-/** The stills' state: In practice, then AI at Engineering writing twice the work, run to week 20. */
 const STILL = 'still';
 const noop = () => undefined;
 

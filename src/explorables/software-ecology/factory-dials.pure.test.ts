@@ -1,18 +1,13 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { catches, passShareOf, pressureOf, RED } from './factory-dials.pure.ts';
 import type { FactoryNode } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 import type { CenterDef, Settings } from './software-ecology.types';
 
-/*
- * How a filling backlog bites (design-ADR 0024 §5): an inspection passes more unread as its pile fills, and a station
- * with `escalate` passes tickets on only once it is drowning, its pile red (grill 11 Q227).
- */
 const S = { strength: { rework: 0.4 }, consts: {} } as unknown as Settings;
-/** `mechanics.pressure` at its default. */
 const PRESSURE = constOf(S, 'pressure');
 
-/** A station with `weeks` of work waiting, its pressure read from `Ws`. */
 const station = (weeks: number, def: Partial<CenterDef> = {}): FactoryNode => ({ Ws: weeks, def }) as never;
 
 describe('success cases', () => {

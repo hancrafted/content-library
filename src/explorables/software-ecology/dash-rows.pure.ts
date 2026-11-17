@@ -1,8 +1,4 @@
-/*
- * A dashboard's Settings rows (design-ADR 0024 §3): each enabled dial as a slider showing what is set and, while AI
- * changes it, what is in effect ("100 % → 250 % with AI"). Ported from the reference build's `cardDashboard` rows and
- * `syncDashboard` values.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { effToPos } from './dashboard-readouts.pure.ts';
 import type { Dials } from './software-ecology.types';
@@ -14,18 +10,14 @@ export interface DialRow {
   readonly min: number;
   readonly max: number;
   readonly step: number;
-  /** The slider's position: efficiency on its log scale, the rest as set. */
   readonly pos: number;
   readonly text: string;
-  /** An AI row: shown only while AI is on. */
   readonly ai: boolean;
 }
 
-/** One number as the dashboards print it: whole from 10, one decimal below. */
 export const num = (x: number): string => (x >= 10 ? Math.round(x).toString() : x.toFixed(1));
 export const pct = (x: number): string => `${Math.round(x * 100)} %`;
 
-/** "set" or, while AI changes it, "set → effective with AI". */
 const withAi = (d: Dials, x: { set: number; eff: number; unit: string; tpl: string }): string =>
   d.ai && x.eff !== x.set
     ? fillTemplate(x.tpl, { set: `${x.set}${x.unit}`, eff: `${x.eff}${x.unit}` })
@@ -39,7 +31,6 @@ export const rowTexts = (d: Dials, tpl: string): Readonly<Record<DialKey, string
   aiExtra: `${d.aiExtra}×`,
 });
 
-/** The enabled dials as rows, in the reference build's order. */
 export const dialRowsOf = (d: Dials, tpl: string): DialRow[] => {
   const t = rowTexts(d, tpl),
     on = (k: string) => d.en.includes(k);

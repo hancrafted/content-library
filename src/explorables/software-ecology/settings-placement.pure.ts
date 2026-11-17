@@ -1,17 +1,10 @@
-/*
- * Where the Settings popover opens (feature guide, Interaction 3; feedback 08): under the Settings button, its right
- * edge on the button's, up to 760 px wide and kept 8 px inside the window on every side, so it never runs out of view
- * as the old Model menu did. When the room under the button is short, it rises so at least 420 px stay to scroll in.
- * Boxes are viewport coordinates; no DOM.
- */
+// spec: docs/features/explorables/software-ecology.md#interaction
 import type { Rect } from './dash-placement.pure.ts';
 
 export interface SettingsPlace {
-  /** Viewport coordinates of the popover's top-left corner. */
   readonly x: number;
   readonly y: number;
   readonly width: number;
-  /** It scrolls inside past this. */
   readonly maxHeight: number;
 }
 

@@ -1,10 +1,4 @@
-/*
- * The compare stream's live parts, drawn every frame outside React (design-ADR 0024 §14), as the reference build's
- * `frameCompare` draws them: each column's progress ring and the document in work, and the documents riding the belt
- * between neighbouring columns, one chip per token, at most 24. The chips are the canvas's documents as images, so
- * both themes follow the tokens. It reads the handle's Floor only. Reached only from the Explorable's client parent,
- * through `useFactory`'s `onDraw`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { drawDoc, readColors, type Colors } from './doc-sprites.ts';
 import type { Floor, FloorDoc, FloorList, FloorStation, FloorWork } from './factory-model.pure.ts';
 import { SPEED_1X } from './factory-run.pure.ts';
@@ -32,7 +26,6 @@ const colorsOf = (doc: Document): Colors => {
   return colors.C;
 };
 
-/** One document as an image URL, drawn as the canvas draws it. */
 export const chipURL = (doc: Document, d: ChipKind): string => {
   const C = colorsOf(doc),
     k = `${d.good ? 1 : 0}|${d.ai ? 1 : 0}|${d.warn ? 1 : 0}`;
@@ -56,11 +49,9 @@ const setBg = (el: HTMLElement, url: string) => {
   if (el.style.backgroundImage !== v) el.style.backgroundImage = v;
 };
 
-/** The ring's fill: the job's progress, or 0.6 for a job too short to watch. */
 const ringOf = (sv: FloorWork, x: { t: number; speed: number }): string =>
   (sv.end - sv.start) / Math.max(1e-6, x.speed * SPEED_1X) < FAST_SECS ? '0.6' : progressOf(sv, x.t).toFixed(2);
 
-/** A column's ring and document in work, while its own server works on it. */
 const drawColumn = (col: HTMLElement, x: { n: FloorStation; t: number; speed: number }) => {
   const ring = col.querySelector<HTMLElement>('[data-r="ring"]'),
     work = col.querySelector<HTMLElement>('[data-r="work"]'),
@@ -74,14 +65,12 @@ const drawColumn = (col: HTMLElement, x: { n: FloorStation; t: number; speed: nu
   setBg(work, chipURL(col.ownerDocument, { good: sv.doc.complaint || sv.doc.good, ai, warn: sv.bounce }));
 };
 
-/** The newest documents on a belt, at most 24. */
 const ridersOf = (fwd: FloorList<FloorDoc>): FloorDoc[] => {
   const list: FloorDoc[] = [];
   for (let i = fwd.n - 1; i >= 0 && list.length < BELT_CHIPS; i--) list.push(fwd.at(i));
   return list;
 };
 
-/** The live flow on the belt between two neighbouring columns. */
 const drawBelt = (belt: HTMLElement, x: { tokens: FloorDoc[]; t: number }) => {
   const kids = belt.children;
   while (kids.length < x.tokens.length) belt.append(belt.ownerDocument.createElement('i'));
@@ -99,7 +88,6 @@ const drawBeltOf = (belt: HTMLElement, floor: Floor) => {
   if (e) drawBelt(belt, { tokens: ridersOf(e.fwd), t: floor.t });
 };
 
-/** Draws one frame of the stream under `root`; nothing while it is not shown. */
 export const drawCompare = (root: HTMLElement | null, floor: Floor, speed: number) => {
   if (!root) return;
   for (const col of root.querySelectorAll<HTMLElement>('[data-col]')) {

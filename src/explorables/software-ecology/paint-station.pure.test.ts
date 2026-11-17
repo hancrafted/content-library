@@ -1,12 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import type { FloorBelt, FloorDoc, FloorStation } from './factory-model.pure.ts';
 import { ScreenTimes } from './paint-belts.ts';
 import { glyphAt, OWN_DROP_SECS, rackX, settle, slotY, Stations } from './paint-station.ts';
 
-/*
- * What the station painter does for the feedback 10 documents (design-ADR 0024 §14, §15): an own ticket drops from the
- * station's glyph into its slot in 0.4 s; a release lands at the Customer in 1.2 s, an answer in 0.6 s.
- */
 const doc = (o: Partial<FloorDoc> = {}): FloorDoc => ({
   c: 1,
   t0: 0,

@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { RefObject } from 'react';
 import { CompareStream } from './compare-stream.client';
 import type { CompareWidgetProps } from './compare-widget';
@@ -9,12 +10,6 @@ import type { CompareActions } from './use-compare.ts';
 import type { DashboardState } from './use-dashboard.ts';
 import type { FactoryView } from './use-factory.ts';
 
-/*
- * The compare set wired into the client parent (design-ADR 0024 §17): the card click that picks, the widget's props,
- * the dashboards the readouts cover and the stream on the stage. The parent owns the state; these are its slices.
- */
-
-/** What of the parent's parts compare reads. */
 export interface CompareParts {
   readonly view: ViewId;
   readonly dash: DashboardState;
@@ -22,7 +17,6 @@ export interface CompareParts {
   readonly streamRoot: RefObject<HTMLElement | null>;
 }
 
-/** The compare widget on the toolbar's second row: its picks as slots. */
 export const compareWidgetOf = (x: {
   words: Words;
   compare: CompareActions;
@@ -46,7 +40,6 @@ export const compareWidgetOf = (x: {
   };
 };
 
-/** In compare mode, or with shift, a click on a work center picks it; picking closes the open dashboard. */
 const picks = (x: CompareParts, f: FactoryView, x2: { id: string; shift: boolean }): boolean => {
   const c = x.compare,
     picking = c.state.picking;
@@ -56,10 +49,6 @@ const picks = (x: CompareParts, f: FactoryView, x2: { id: string; shift: boolean
   return true;
 };
 
-/**
- * A card click in the factory, as the reference build's `cardClick`: a pick (see `picks`), else, outside compare mode,
- * its dashboard opens or closes. The roles state's cards are not clickable (feedback 09).
- */
 export const cardClick =
   (x: CompareParts, x2: { f: FactoryView }) =>
   (id: string, shift: boolean): void => {
@@ -67,7 +56,6 @@ export const cardClick =
     if (!picks(x, x2.f, { id, shift }) && !x.compare.state.picking) x.dash.toggle(id);
   };
 
-/** The compare stream while it is shown: its columns' stations and dashboards; Exit returns to the factory. */
 export function Stream({ words, x, f, w }: { words: Words; x: CompareParts; f: FactoryView; w: WordsIn }) {
   return (
     <CompareStream

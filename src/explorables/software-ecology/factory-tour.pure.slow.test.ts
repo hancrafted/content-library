@@ -1,12 +1,10 @@
+// decision: ARCH-003 §4
+// decision: ARCH-003 §4.4
 import { describe, expect, it } from 'vitest';
 import { headless, shown } from './factory-tour.fixture.ts';
 import { startTour } from './factory-tour.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * The slow half of factory-tour.pure.test.ts: tire swing's shipped tours, each played frame by frame to its end
- * (seconds a tour). They run in the slow lane, `npm run test:slow` (ARCH-003-testing §4).
- */
 const B = builtinBundle('tire');
 const TOURS = B.data.presets.filter((p) => p.tour).map((p) => p.id);
 

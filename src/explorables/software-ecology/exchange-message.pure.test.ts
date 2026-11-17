@@ -5,7 +5,6 @@ import { wordsFor } from './software-ecology-data.ts';
 
 const W = wordsFor('en').exchange;
 
-/** A loaded upload as the message reads it; the bundle and page play no part in the words. */
 const loaded = (warn: { rush: string[]; worst: string[] }) =>
   ({ kind: 'loaded', centers: 7, belts: 12, warn }) as unknown as Upload;
 

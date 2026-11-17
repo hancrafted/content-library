@@ -1,18 +1,13 @@
-/** What a document icon shows (design-ADR 0024 §15): its quality, a complaint or rework mark, and whether AI made it. */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export interface DocIconProps {
   readonly quality: 'good' | 'bad';
-  /** A complaint or rework: a red warning. */
   readonly mark?: 'warn';
-  /** AI-made: an orange border, a light orange fill and a dot. */
   readonly ai?: boolean;
-  /** Top-left corner, in the parent SVG's units. */
   readonly x: number;
   readonly y: number;
-  /** 1 is a document on a belt (12 wide); a document in work is drawn larger. */
   readonly scale?: number;
 }
 
-/** The sheet itself: plain, or orange with a thicker border when AI made it. */
 function Sheet({ ai }: { ai: boolean }) {
   return (
     <path
@@ -24,11 +19,6 @@ function Sheet({ ai }: { ai: boolean }) {
   );
 }
 
-/**
- * One document of the software ecology factory, as SVG inside the caller's `<svg>`: plain is good, a red minus marks
- * bad, a red warning marks a complaint or rework, and AI-made is orange; the marks combine. Server-rendered and
- * decorative, so the caller names the picture. The Explorable's DOM legend and the Title slide's preview share it.
- */
 export function DocIcon({ quality, mark, ai = false, x, y, scale = 1 }: DocIconProps) {
   return (
     <g transform={`translate(${x} ${y}) scale(${scale})`}>

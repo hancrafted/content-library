@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stillOf } from './stills.pure';
 
-/*
- * The stills read the Explorable's own model through the use case's `still` state: week 20 of In practice with AI at
- * Engineering (tire.yml, grill 11 Q215, Q216). The expected values are what that state reads on the shipped seed, tuned
- * by the eval so its check holds (the Customer below 0.5 satisfied, quality assurance far past its rack), so the stills
- * can never show a state the Explorable does not reach.
- */
 describe('success cases', () => {
   it('stands on week 20 of In practice with AI at the engineer only', () => {
     // ARRANGE
