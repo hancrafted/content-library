@@ -65,7 +65,6 @@ export const AGENTS: readonly Agent[] = [
 export const DEFAULT_OS = 'mac';
 export const DEFAULT_AGENT = 'claude-code';
 
-/** The option a pick's value names; a value no option has reads as `fallback`, which must be one of `options`. */
 export function pickOf<T extends PickOption>(options: readonly T[], value: string, fallback: string): T {
   const found = options.find((option) => option.id === value) ?? options.find((option) => option.id === fallback);
   if (found === undefined) throw new Error(`No pick option "${fallback}" to fall back to.`);
