@@ -15,8 +15,8 @@ export const pidFile = (root: string, slug: string, port: number): string =>
 function killGroup(pid: number): void {
   try {
     process.kill(-pid, 'SIGTERM');
-  } catch {
-    // already stopped
+  } catch (groupAlreadyStopped) {
+    if ((groupAlreadyStopped as NodeJS.ErrnoException).code !== 'ESRCH') throw groupAlreadyStopped;
   }
 }
 
