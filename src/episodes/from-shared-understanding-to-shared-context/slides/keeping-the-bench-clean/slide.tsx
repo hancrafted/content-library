@@ -16,7 +16,6 @@ const ANTHROPIC = {
   url: 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
 };
 
-/** The four fixes in Slide 11's column order, each from its mess to its clean state. */
 const FIXES = [
   { key: 'validate', before: 'wrong-screw', after: 'checked-sheet' },
   { key: 'compact', before: 'binder', after: 'one-page' },
@@ -24,11 +23,6 @@ const FIXES = [
   { key: 'prune', before: 'two-sheets', after: 'one-sheet' },
 ] as const;
 
-/**
- * "Keeping the bench clean" (Spec Option 12a): each mess from the rot grid, dulled, turns into its clean state through
- * one verb pill, four columns in Slide 11's order, with the fresh chat as a dark band underneath. Overrules
- * `grid-2x2` so each mess carries across; keeps `motion: none`. Hovering a column dims the others.
- */
 export const keepingTheBenchClean = slide({
   slug: 'keeping-the-bench-clean',
   messages: { en, de },

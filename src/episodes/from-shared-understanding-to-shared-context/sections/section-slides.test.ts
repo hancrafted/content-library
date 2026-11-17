@@ -8,17 +8,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fromSharedUnderstandingToSharedContext } from '../episode';
 
-/*
- * The section slides of "From shared understanding to shared context", as the approved Spec gives them: one per Section,
- * in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one echo of the
- * dartboard (picked Title-slide Option 0c). The Spec gives these Slides no Speaker notes.
- */
-
 const SECTIONS = fromSharedUnderstandingToSharedContext.sections;
 const OPENERS = SECTIONS.map(([opener]) => opener as Slide);
 const PLACED = placeSections<Slide>(SECTIONS.map(([opener]) => [opener as Slide])).flat();
 
-/** A section slide's Scene as the page renders it under the shared Slide header. */
 function sceneOf(slug: string, locale: Locale = 'en') {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No section slide "${slug}".`);
@@ -32,7 +25,6 @@ function sceneOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
 }
 
-/** A section slide's title and Voice script segment titles in one locale. */
 function scriptOf(slide: Slide, locale: Locale) {
   const messages = slide.messages[locale] as {
     title: string;
@@ -45,9 +37,8 @@ function scriptOf(slide: Slide, locale: Locale) {
 }
 
 describe('success cases', () => {
-  it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it', () => {
+  it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it, the Section 2 opener’s first segment calling the pain old because the Section is about before AI', () => {
     // ARRANGE
-    // Han's proofread renames the Section 2 opener's first segment: the pain is old, since the Section is about before AI.
     const expected = [
       { title: 'A thought experiment', segments: ['Imagine your organization as a line', 'Where this is going'] },
       {
@@ -77,9 +68,8 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales', () => {
+  it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales, Section 2 not using “precise” and “accurate” before the Section defines them', () => {
     // ARRANGE
-    // Han's proofread rewrites the Section 2 caption: it no longer uses "precise" and "accurate" before the Section defines them.
     const expected = {
       en: {
         'every-product-is-a-translation':

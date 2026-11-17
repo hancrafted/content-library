@@ -5,20 +5,16 @@ import { Pin } from '@/episodes/components/slide-shared/pin/pin';
 import { cn } from '@/shared/lib/utils';
 import { Fragment } from 'react';
 
-/** One note of the lean board: the task, who does it, the contract under it and the pins of the tips it shows. */
 export interface LeanNote {
   readonly slug: string;
   readonly text: string;
   readonly doer: 'ai' | 'human';
   readonly doerLabel: string;
   readonly contract: ContractNoteProps;
-  /** The pin on the note itself. */
   readonly pin?: 1 | 2 | 3;
-  /** The pin on the note's contract. */
   readonly contractPin?: 1 | 2 | 3;
 }
 
-/** The arrow from one note to the next, drawn only where the notes stand in one row. */
 function Arrow() {
   return (
     <svg viewBox="0 0 24 24" className="mt-6 hidden size-6 shrink-0 @5xl:block" aria-hidden="true">
@@ -53,7 +49,6 @@ function Note({ note, at }: { note: LeanNote; at: number }) {
   );
 }
 
-/** The goal at the right edge: the dashed primary note, its pin and the measurable outcome under it. */
 function Goal({ label, text, outcome, pin }: { label: string; text: string; outcome: string; pin: 1 | 2 | 3 }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -66,11 +61,6 @@ function Goal({ label, text, outcome, pin }: { label: string; text: string; outc
   );
 }
 
-/**
- * The board redrawn from the goal: five notes chained left to right towards the goal at the right edge, a contract
- * card under each, and the tips' pins where they act. Below the widest container the notes wrap into a grid and the
- * arrows drop out.
- */
 export function LeanBoard(props: {
   notes: readonly LeanNote[];
   goalLabel: string;

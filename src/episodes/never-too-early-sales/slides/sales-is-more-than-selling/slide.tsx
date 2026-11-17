@@ -7,7 +7,6 @@ import { Chips, Exchange, RepeatPath } from './insight-parts';
 import { Note } from './note';
 import { CheckedChips, SignalBars, Stamp } from './trust-parts';
 
-/** The share of 885 VCs citing each factor, most cited first (Gompers et al., NBER w22587). */
 const VC_FACTORS = [
   { slug: 'team', percent: 95 },
   { slug: 'model', percent: 83 },
@@ -15,18 +14,12 @@ const VC_FACTORS = [
   { slug: 'market', percent: 68 },
 ] as const;
 
-/** A Context marker on the `primary` trust note takes the note's own foreground. */
 const ON_PRIMARY = 'text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground';
 
 const MARKET = 'market';
 const INTERNAL = 'internal';
 const TRUST = 'trust';
 
-/**
- * Sales is more than selling: a sum on a planning board. Market insight plus internal insight equals trust, three taped
- * notes read left to right in the order the voice speaks, with trust in `primary` (Spec Option 2c). Pointing at a note
- * dims the other two; the VC shares show when the bars are pointed at.
- */
 export const salesIsMoreThanSelling = slide({
   slug: 'sales-is-more-than-selling',
   messages: { en, de },

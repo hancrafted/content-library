@@ -6,7 +6,6 @@ import type { Trust } from './trust.pure';
 
 const STEPS: readonly Trust[] = [1, 2, 3];
 
-/** The "trust needed" meter: three squares, filled up to the task's risk. `value` reads out what the squares show. */
 export function RiskMeter({
   label,
   value,
@@ -34,17 +33,12 @@ export function RiskMeter({
   );
 }
 
-/** One square of the trust-earned meter: filled when earned, dashed while still short of the need, else empty. */
 function trustSquare(step: Trust, earned: Trust, needed: Trust): string {
   if (step <= earned) return 'size-3 rounded-sm bg-foreground';
   if (step <= needed) return 'size-3 rounded-sm border border-dashed border-muted-foreground';
   return 'size-3 rounded-sm border border-foreground';
 }
 
-/**
- * The "trust earned" meter: three squares, filled up to what the task's check has proved. Squares still short of the
- * trust needed are dashed, the gap its check has yet to close. `was` is the value before the check, when it changed.
- */
 export function TrustMeter({
   label,
   value,
@@ -74,7 +68,6 @@ export function TrustMeter({
   );
 }
 
-/** A muted caption line of a note, left out when the note has none. */
 function Aside({ text }: { text: string | undefined }) {
   return text === undefined ? null : <p className="text-caption text-muted-foreground">{text}</p>;
 }
@@ -82,25 +75,17 @@ function Aside({ text }: { text: string | undefined }) {
 export interface TaskNoteProps {
   readonly label: string;
   readonly fact: string;
-  /** What the task was before it got its check, under the fact. */
   readonly was?: string;
-  /** The trust-needed meter, set by risk. */
   readonly risk: ReactNode;
-  /** The trust-earned meter, set by the check. */
   readonly trust: ReactNode;
   readonly ifWrong: string;
   readonly checkedBy?: string;
-  /** The task's level: its oversight pill, or the move of its pill. */
   readonly level: ReactNode;
   readonly agent: string;
   readonly className?: string;
   readonly targetProps?: TargetProps;
 }
 
-/**
- * One party task as an agent's note on the board: its card, what it delivers, what a wrong result can do and what
- * checks it, then the level its risk and its check allow.
- */
 export function TaskNote(props: TaskNoteProps) {
   const { label, fact, was, risk, trust, ifWrong, checkedBy, level, agent, className, targetProps } = props;
   return (
@@ -124,7 +109,6 @@ export function TaskNote(props: TaskNoteProps) {
   );
 }
 
-/** A labelled handoff between two notes: what crosses, over an arrow, pointing down where the board stacks. */
 export function Handoff({ label, className }: { label: string; className?: string }) {
   return (
     <div className={cn('flex shrink-0 flex-col items-center text-center @4xl:pt-10', className)}>
@@ -138,7 +122,6 @@ export function Handoff({ label, className }: { label: string; className?: strin
   );
 }
 
-/** One check a task can pass, with an optional Context marker after it. */
 export interface Check {
   readonly text: string;
   readonly marker?: ReactNode;
@@ -147,15 +130,12 @@ export interface Check {
 export interface CheckCardProps {
   readonly heading: string;
   readonly checks: readonly Check[];
-  /** One line saying what a check is. */
   readonly meaning: string;
-  /** The callout on the heading strip. */
   readonly callout?: ReactNode;
   readonly className?: string;
   readonly targetProps?: TargetProps;
 }
 
-/** One check: an empty box, its text and its marker. The boxes stay empty: the `success` tick is reserved. */
 function CheckItem({ text, marker }: Check) {
   return (
     <li className="flex items-center gap-2">
@@ -166,7 +146,6 @@ function CheckItem({ text, marker }: Check) {
   );
 }
 
-/** The check pinned to a task: its heading strip, the Slide's one `primary` fill, over empty boxes it can pass. */
 export function CheckCard({ heading, checks, meaning, callout, className, targetProps }: CheckCardProps) {
   return (
     <div

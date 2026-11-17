@@ -1,9 +1,5 @@
 import type { ReactNode } from 'react';
 
-/**
- * The two forces across the levels as opposing wedges: risk of a wrong result widest at in, on the left, and speed
- * widest at out, on the right. Shades of `foreground`, no status colours.
- */
 export function ForceWedges({
   risk,
   speed,
@@ -11,7 +7,6 @@ export function ForceWedges({
 }: {
   risk: { label: string; hint: string };
   speed: { label: string; hint: string };
-  /** A Context marker beside the speed label. */
   marker?: ReactNode;
 }) {
   return (

@@ -11,17 +11,11 @@ const ANTHROPIC = {
 
 const MOVES: readonly MoveSlug[] = ['break', 'requirements', 'interview', 'evaluate', 'fresh'];
 
-/** The moves today's session shows (R, I and F); B and E stay on the rail and read "not today". */
 const TODAY = ['requirements', 'interview', 'fresh'] as const;
 type TodaySlug = (typeof TODAY)[number];
 
 const isToday = (slug: MoveSlug): slug is TodaySlug => (TODAY as readonly MoveSlug[]).includes(slug);
 
-/**
- * "BRIEF" (Spec Option 15a): the callback to the freelancer Episode, its five moves on one rail, each mapped to a step of
- * today's session, with F, the fresh chat and the second actionable, lit in `primary`. Keeps `horizontal-rail` (a copy
- * cut to five stops) and `motion: none`; the cards raise on hover and dim the others.
- */
 export const brief = slide({
   slug: 'brief',
   messages: { en, de },

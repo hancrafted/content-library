@@ -1,12 +1,6 @@
 import { episodeChecks } from '@/episodes/lib/episode-checks';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The Episode-level checks on this folder alone (ARCH-003 §4.7, `src/episodes/lib/episode-checks.ts`). The globs put
- * every Slide and the composition here in this test's import graph, so `vitest --changed` runs it when one changes.
- * A page folder gets this file with its copy of `src/episodes/templates/episode-template/` or of an Episode.
- */
-
 const PAGE = import.meta.glob('./episode.ts');
 const CHECKS = episodeChecks(import.meta.dirname, import.meta.glob('./slides/*/slide.tsx'), PAGE);
 

@@ -11,11 +11,6 @@ const CONTEXT_WINDOWS = {
   url: 'https://platform.claude.com/docs/en/build-with-claude/context-windows',
 };
 
-/**
- * "The context window" (Spec Option 3a): the reveal. The live cornerstone in its Slide 3 Preset (conversation, timeline
- * and context, the budget message pinned, no Technical toggle) and three definition cards under it, the limit lit.
- * Keeps `basic-page` and `motion: local`: the cornerstone's own step motion is the only motion.
- */
 export const theContextWindow = slide({
   slug: 'the-context-window',
   messages: { en, de },

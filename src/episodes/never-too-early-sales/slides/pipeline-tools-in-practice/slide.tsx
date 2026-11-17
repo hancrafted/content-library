@@ -12,7 +12,6 @@ const GTM_BENCHMARKS = {
 
 const LANES = 'lanes';
 
-/** The Monday board: five stages, each deal's value in euros; names are invented. */
 const BOARD = [
   {
     slug: 'leadIn',
@@ -52,11 +51,6 @@ const BOARD = [
   },
 ] as const;
 
-/**
- * Our own deal board (Spec Option 4a): five stages as lanes, each with its total and count, the deals as paper notes,
- * the open pipeline pinned over the board, and the Proposal made lane ringed as where the week goes, under its
- * annotation.
- */
 export const pipelineToolsInPractice = slide({
   slug: 'pipeline-tools-in-practice',
   messages: { en, de },

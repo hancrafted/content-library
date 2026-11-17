@@ -8,12 +8,10 @@ export interface FixColumnProps {
   readonly how: string;
   readonly before: { readonly id: MessId; readonly label: string };
   readonly after: { readonly id: CleanId; readonly label: string };
-  /** A Context marker beside the verb pill. */
   readonly marker?: ReactNode;
   readonly target?: { 'data-target': string };
 }
 
-/** One fix: the mess dulled, the verb pill in `primary` pointing down, and the clean state the fix leaves. */
 export function FixColumn({ fix, mess, verb, how, before, after, marker, target }: FixColumnProps) {
   return (
     <div {...target} data-fix={fix} className="focus-group__item flex flex-col gap-3 rounded-xl bg-muted p-4">

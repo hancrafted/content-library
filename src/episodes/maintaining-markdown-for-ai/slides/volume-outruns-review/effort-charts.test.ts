@@ -9,7 +9,6 @@ const CHARTS: [string, FunctionComponent][] = [
   ['corpus chart', EffortCorpusChart as FunctionComponent],
 ];
 
-/** Every `id="..."` in rendered markup, in document order. */
 function idsOf(html: string): string[] {
   return [...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => id);
 }

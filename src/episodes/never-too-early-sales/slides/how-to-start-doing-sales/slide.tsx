@@ -4,8 +4,6 @@ import { DealEcho } from '@/episodes/components/slide-shared/deal-board/deal-ech
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "How to start doing sales": the Hero motif's board filling, four leads in the ringed first
-// lane and two moved on, the payment lane still a dashed slot.
 export const howToStartDoingSales = slide({
   slug: 'how-to-start-doing-sales',
   messages: { en, de },

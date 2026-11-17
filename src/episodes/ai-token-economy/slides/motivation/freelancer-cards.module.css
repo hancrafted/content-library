@@ -1,8 +1,4 @@
-/*
- * The motivation Slide's freelancer cards: each card's motif plays only while it is hovered, and none plays under
- * reduced motion. Moved from globals.css (FE-002 Decision 7): the module scopes every class to this Slide.
- */
-
+/* decision: FE-002 §7 */
 .card {
   position: relative;
   overflow: hidden;
@@ -274,7 +270,6 @@
   }
 }
 
-/* Status colour local to this Slide, not a global token. Light value on the scene, dark value under .dark. */
 .scene {
   --success: oklch(0.5 0.13 150);
 }

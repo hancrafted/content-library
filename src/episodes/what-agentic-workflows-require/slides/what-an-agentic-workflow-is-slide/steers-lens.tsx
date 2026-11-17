@@ -12,7 +12,6 @@ const LOOP = (
   </svg>
 );
 
-/** The steps the agent picks for itself, in `ai`, then the loop it runs until it thinks it is done. */
 function Steps({ steps, done }: { readonly steps: readonly string[]; readonly done: string }) {
   return (
     <ol className="flex flex-wrap items-center gap-2">
@@ -39,7 +38,6 @@ function Steps({ steps, done }: { readonly steps: readonly string[]; readonly do
   );
 }
 
-/** Dashed zoom lines from the Research column down to the lens, where the stages sit side by side. */
 const ZOOM = (
   <svg
     viewBox="0 0 300 50"
@@ -57,7 +55,6 @@ const ZOOM = (
   </svg>
 );
 
-/** The lens's head: who steers, the agent dot in `ai`, and the Context marker. */
 function LensHead({
   label,
   agent,
@@ -84,10 +81,6 @@ function LensHead({
   );
 }
 
-/**
- * The second level, zoomed out of the Research rounds: the task you set the agent, then the steps it picks for itself,
- * looping until it thinks it is done.
- */
 export function SteersLens(props: {
   readonly label: string;
   readonly agent: string;

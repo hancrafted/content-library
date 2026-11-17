@@ -7,10 +7,6 @@ export interface FreshBenchProps {
   readonly fresh: { readonly caption: string; readonly bars: ReactNode };
 }
 
-/**
- * The fresh chat as a dark band: the cleanest fix on the left, the long chat's bar against the fresh one's on the
- * right. The bars are the Context window Explorable's own, drawn on a card so they keep their contrast on the band.
- */
 export function FreshBench({ label, text, old, fresh }: FreshBenchProps) {
   return (
     <div className="grid items-center gap-6 rounded-xl bg-foreground p-5 text-background @3xl:grid-cols-12">

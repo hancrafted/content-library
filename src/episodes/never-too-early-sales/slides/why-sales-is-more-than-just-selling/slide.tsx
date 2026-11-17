@@ -4,8 +4,6 @@ import { DealEcho } from '@/episodes/components/slide-shared/deal-board/deal-ech
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Why sales is more than just selling": the Hero motif's board with a payout in each of the
-// first three lanes, Insight, Trust and Process, while the payment lane still waits on its dashed slot.
 export const whySalesIsMoreThanJustSelling = slide({
   slug: 'why-sales-is-more-than-just-selling',
   messages: { en, de },

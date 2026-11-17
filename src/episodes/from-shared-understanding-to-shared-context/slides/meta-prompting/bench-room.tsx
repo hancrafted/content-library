@@ -6,14 +6,9 @@ export interface BenchRoomProps {
   readonly label: string;
   readonly drawing: string;
   readonly worker: string;
-  /** The work order that crossed from the office. */
   readonly children: ReactNode;
 }
 
-/**
- * The line's room: the bike bench with only its work order lit, the one page that crossed, and the AI worker who
- * starts from it.
- */
 export function BenchRoom({ label, drawing, worker, children }: BenchRoomProps) {
   return (
     <section data-room="bench" className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-sm">

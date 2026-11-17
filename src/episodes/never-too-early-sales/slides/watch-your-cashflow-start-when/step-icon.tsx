@@ -1,4 +1,3 @@
-/** Cash running down month by month to a zero dot. */
 function CashRunDown() {
   return (
     <>
@@ -18,7 +17,6 @@ function CashRunDown() {
   );
 }
 
-/** A checklist of leads, the last one still to research. */
 function Checklist() {
   return (
     <>
@@ -47,7 +45,6 @@ function Checklist() {
   );
 }
 
-/** A dashed call path from you to a prospect. */
 function CallPath() {
   return (
     <>
@@ -71,9 +68,7 @@ function CallPath() {
   );
 }
 
-/** The pipeline's three stages, by their left edge. */
 const STAGES = [4, 43, 82] as const;
-/** The deal cards in the first two stages, by their top-left corner. */
 const DEALS = [
   [10, 10],
   [10, 24],
@@ -82,7 +77,6 @@ const DEALS = [
   [49, 24],
 ] as const;
 
-/** A three-stage pipeline thinning to one revenue card. */
 function MiniPipeline() {
   return (
     <>
@@ -114,10 +108,8 @@ function MiniPipeline() {
 
 const DRAWINGS = { s1: CashRunDown, s2: Checklist, s3: CallPath, s4: MiniPipeline } as const;
 
-/** A step's slug, the key of its drawing and of its words. */
 export type StepSlug = keyof typeof DRAWINGS;
 
-/** A small drawing of one step, by its slug. */
 export function StepIcon({ slug }: { slug: StepSlug }) {
   const Drawing = DRAWINGS[slug];
   return (

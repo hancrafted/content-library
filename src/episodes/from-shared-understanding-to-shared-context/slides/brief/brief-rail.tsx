@@ -7,13 +7,9 @@ export interface BriefMove {
   readonly slug: MoveSlug;
   readonly letter: string;
   readonly move: string;
-  /** Today's step with its "Today:" label in place, or "not today" for a move today's session leaves out. */
   readonly today: ReactNode;
-  /** Whether today's session shows this move. */
   readonly isToday: boolean;
-  /** The one lit move, in `primary`. */
   readonly focus: boolean;
-  /** A Context marker beside the letter, where a Speaker note points at the move. */
   readonly marker?: ReactNode;
   readonly target?: { readonly 'data-target': string };
 }
@@ -24,7 +20,6 @@ export interface BriefRailProps {
   readonly moves: readonly BriefMove[];
 }
 
-/** This stop's share of the rail: down the left edge while the moves stack, across once they sit in a row. */
 function Segment() {
   return (
     <span
@@ -93,12 +88,6 @@ function Stop({ move }: { move: BriefMove }) {
   );
 }
 
-/**
- * BRIEF on one rail: the five moves from the freelancer Episode as stops, each card with today's step under its letter,
- * the closing move lit. A copy of the `horizontal-rail` Master slide cut to five stops with every label below its dot,
- * without the rail's draw-in entrance or toggletips: the mapping is the claim and shows at rest. Hovering a card dims
- * the others.
- */
 export function BriefRail({ callback, label, moves }: BriefRailProps) {
   return (
     <div className="flex flex-col gap-6 rounded-xl bg-muted p-5 @xl:p-8">

@@ -1,9 +1,3 @@
-/*
- * The stages of a sale: four lanes in a row of equal columns once the Scene is wide enough, the brackets and the axis
- * labels on the same columns. Narrower, the lanes stack, each arrow turns down under its lane and the brackets drop.
- * The cash note's tint mixes the global warning colour into the card colour, so it follows the theme on its own.
- */
-
 .stages {
   --note-cash: color-mix(in oklch, var(--warning) 25%, var(--card));
   --note-cash-top: color-mix(in oklch, var(--warning) 40%, var(--card));
@@ -25,7 +19,6 @@
   padding-top: 1.5rem;
 }
 
-/* Stacked, the arrow points down out of the bottom of its lane. */
 .next {
   position: absolute;
   top: 100%;

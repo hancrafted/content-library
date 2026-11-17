@@ -8,13 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { contextIsTheRequirementSection } from './context-is-the-requirement';
 
-/*
- * Section 3 of "From shared understanding to shared context", "Context is the requirement", as the approved Spec
- * gives it: Slides 7 to 12 in Spec order, each with the Spec's Voice script, Speaker notes and sources, a Context
- * marker wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the one
- * interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const ANTHROPIC = 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents';
 const OSMANI = 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding';
 const IBM = 'https://www.youtube.com/watch?v=BwXremQ-i6I';
@@ -37,7 +30,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** The notes a Slide's Context markers open, in document order; a note may carry several markers. */
 function markersOf(slug: string) {
   const $ = sceneOf(slug);
   return $('[data-context-ref]')
@@ -45,7 +37,6 @@ function markersOf(slug: string) {
     .map((marker) => $(marker).attr('data-context-ref'));
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
   'what-the-ai-actually-sees',
   'context-engineering-is-requirements-engineering-for-agents',
@@ -89,9 +80,8 @@ describe('success cases', () => {
     expect(titles).toEqual(expected);
   });
 
-  it('speaks the Spec Voice script word for word', () => {
+  it('speaks the Spec Voice script word for word, Slide 7’s callback saying the window is a desk that fills up with every message and holds what the AI knows about the task, not everything it works from', () => {
     // ARRANGE
-    // Han's proofread changes Slide 7's callback: the window is a desk that fills up with every message, and it holds what the AI knows about your task, not everything it works from.
     const expected = {
       callback:
         'If you saw the context window Episode, you have met the context window before. What the AI knows about your task is what sits in the window, and that window is like a desk that fills up with every message.',
@@ -112,7 +102,6 @@ describe('success cases', () => {
     const expected = [
       ['The window has an attention budget'],
       [
-        // Han's feedback adds Google's definition as the caption's note, ahead of the Spec's four.
         'Google’s definition',
         'The definition',
         'Input quality tracks output quality',
@@ -162,9 +151,8 @@ describe('success cases', () => {
     // ASSERT
     expect(markers).toEqual(expected);
   });
-  it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales', () => {
+  it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales, the German caption in German and marked as a translation while the English quote stays in the Speaker note', () => {
     // ARRANGE
-    // Han's proofread shows the German caption in German, marked as a translation; the English quote stays in the Speaker note.
     const quote =
       'the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.';
     const german =
@@ -225,7 +213,6 @@ describe('failure cases', () => {
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      // A caption note's marker sits in the shared header, outside the Scene.
       return localized(slug).notes.map(({ target }) =>
         target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
       );
@@ -306,9 +293,8 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('names the third rot column for what does not belong, and the bench fix that fits it, in both locales', () => {
+  it('names the third rot column for what does not belong, and the bench fix that fits it, in both locales; “Too much history” did not fit a binder of every bike model', () => {
     // ARRANGE
-    // Han's proofread: the old "Too much history" did not fit "a binder of every bike model"; the column and its fix now say what does not belong.
     const expected = {
       en: { column: 'Too much that does not belong', compact: 'Too much that does not belong' },
       de: { column: 'Zu viel, was nicht hierher gehört', compact: 'Zu viel, was nicht hierher gehört' },

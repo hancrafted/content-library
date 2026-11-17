@@ -1,7 +1,3 @@
-/**
- * The three model tiers and what one fix costs on each, for the compounding cost curve.
- */
-
 export interface ModelPricing {
   readonly name: string;
   readonly provider: string;

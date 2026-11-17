@@ -7,10 +7,6 @@ import en from './i18n/en.json';
 const DORA_2025 = { slug: 'dora-2025-overview', url: 'https://dora.dev/research/2025/dora-report/' };
 const OUT_OF_BALANCE = 'why-the-line-gets-out-of-balance';
 
-/**
- * What the customer really wanted: the software ecology Explorable, which opens on the tire swing cartoon and plays
- * the factory line live. The Speaker note on why the line gets out of balance sits on its belts.
- */
 export const whatTheCustomerReallyWanted = slide({
   slug: 'what-the-customer-really-wanted',
   messages: { en, de },

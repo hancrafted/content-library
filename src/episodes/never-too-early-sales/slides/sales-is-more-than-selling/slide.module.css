@@ -1,5 +1,3 @@
-/* A factor's bar: as wide as its share. */
-
 .bar {
   width: var(--bar);
 }
