@@ -88,7 +88,6 @@ function useLearnMenu() {
   };
   const click = (event: React.MouseEvent) => {
     if (value === 'learn' && !pinned.current) {
-      // A click after hover pins the panel instead of toggling it closed.
       event.preventDefault();
       pinned.current = true;
     } else {

@@ -6,7 +6,6 @@ import { HeaderProfileLink } from '@/shared/page-chrome/header/header-profile-li
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
-/** lucide-react ships no brand marks, so these are small inline paths (24px grid, filled). */
 const MARKS: Record<SocialId, ReactNode> = {
   youtube: (
     <path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2C.5 9.1.5 12 .5 12s0 2.9.5 4.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-4.8.5-4.8s0-2.9-.5-4.8ZM9.8 15.2V8.8l5.9 3.2-5.9 3.2Z" />

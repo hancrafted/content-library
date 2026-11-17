@@ -113,7 +113,6 @@ function MenuUtilities({ open, ...props }: HeaderMenuProps & { open: boolean }) 
 
 function dismissOnEscape(event: KeyboardEvent<HTMLDialogElement>) {
   if (event.key !== 'Escape' || event.currentTarget.querySelector('[role="tooltip"]')) return;
-  // The force-mounted navigation layer would otherwise consume Escape before the native dialog.
   event.preventDefault();
   event.stopPropagation();
   event.currentTarget.close();
