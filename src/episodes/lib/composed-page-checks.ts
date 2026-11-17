@@ -11,14 +11,7 @@ import { placeSections, sectionOf } from './episode.pure';
 import { anchorTitleAt, type PageSummary } from './page-summary.pure';
 import { publishedAnchorFindings, type PublishedSnapshot } from './published-anchors';
 
-/*
- * The Episode-level checks that judge a page's composition (ARCH-003 §4.7): its slug, summary, published anchors, DOM
- * ids, Section markers, own text, header, Sections, the Playlist anchors into it and what the container keeps of it.
- * They judge the composition against the page's context and do no I/O. `composed-page-context.ts` reads the context
- * for a page folder; a test hands one in by hand. Like the composition registries, this module sits above the Episodes
- * it checks: it renders Slides through `composed-page-render.ts`.
- */
-
+// decision: ARCH-003 §4.7
 export interface SectionMarker {
   readonly name: string;
   readonly exports: readonly unknown[];
@@ -34,17 +27,15 @@ export interface PageContext {
   readonly summary: PageSummary | undefined;
   readonly playlistAnchors: readonly PlaylistAnchor[];
   readonly published: PublishedSnapshot;
-  /** Its Section markers in `sections/`, in name order; none when it keeps no `sections/` folder. */
   readonly markers: readonly SectionMarker[] | undefined;
 }
 
-/** A page's composition with its context, read once however many checks judge it. */
 export interface CheckedPage {
   readonly composition: EpisodeComposition;
   readonly context: PageContext;
 }
 
-/** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included (design-ADR-0012). */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
 export const MARKERS_DIR = 'sections';
@@ -89,7 +80,6 @@ function missingOwnText({ messages }: EpisodeComposition): string[] {
   );
 }
 
-/** A header mode that disagrees with the list of Episodes built before the shared Slide header. */
 function headerDrift(page: ComposedPage, composition: EpisodeComposition): string[] {
   const authored = headerModeOf(composition) === 'authored';
   if (authored === AUTHORED_HEADERS.includes(page.slug)) return [];
@@ -100,13 +90,11 @@ function headerDrift(page: ComposedPage, composition: EpisodeComposition): strin
   ];
 }
 
-/** AUTHORED_HEADERS names no Episode folder in `folders` holds: the half of {@link headerDrift} no page folder sees. */
 export function authoredHeaderStrays(folders: readonly string[]): string[] {
   const strays = AUTHORED_HEADERS.filter((slug) => !folders.includes(slug));
   return strays.map((slug) => `AUTHORED_HEADERS names ${slug}, which no Episode folder holds: remove it`);
 }
 
-/** No Section, an empty one, or a Slide that opens two. */
 function sectionFindings({ sections }: EpisodeComposition): string[] {
   const openers = sections.map(([opener]) => opener?.slug);
   return [
@@ -127,7 +115,6 @@ function markerFindings({ name, exports }: SectionMarker, sections: EpisodeCompo
   ];
 }
 
-/** A page folder's Section markers against its record: one per Section, named after its section slide, none astray. */
 function placementMarkerFindings({ sections }: EpisodeComposition, { markers }: PageContext): string[] {
   if (markers === undefined) return [];
   const openers = sections.map(([opener]) => opener.slug);
@@ -139,7 +126,6 @@ function placementMarkerFindings({ sections }: EpisodeComposition, { markers }: 
   return [...missing, ...strays, ...markers.flatMap((marker) => markerFindings(marker, sections))];
 }
 
-/** A Playlist anchor into this Episode that opens no Section, or whose Section its summary names otherwise. */
 function playlistAnchorFindings({ sections }: EpisodeComposition, { playlistAnchors, summary }: PageContext): string[] {
   return playlistAnchors.flatMap(({ event, anchor }) => {
     const section = sectionOf(sections, anchor);
@@ -191,10 +177,6 @@ function composedChecks(page: ComposedPage, read: Read): NamedCheck[] {
   ];
 }
 
-/**
- * The checks an Episode's or a Template's page holds: no DOM id repeated, and its Section markers in step. An Explorable
- * page or a Guide renders its Slides under its own route and keeps no markers.
- */
 function slideDeckChecks(page: ComposedPage, read: Read): NamedCheck[] {
   return [
     check(
@@ -210,7 +192,6 @@ function slideDeckChecks(page: ComposedPage, read: Read): NamedCheck[] {
   ];
 }
 
-/** The composition checks of `page`, judging the composition and context `read` returns, read once on first use. */
 export function composedPageChecks(page: ComposedPage, read: Read): NamedCheck[] {
   let checked: Promise<CheckedPage> | undefined;
   const once = () => (checked ??= read());

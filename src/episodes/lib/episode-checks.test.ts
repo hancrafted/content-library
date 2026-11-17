@@ -5,13 +5,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-checks';
 
-/*
- * The Episode-level checks on a fixture Episode folder built per test: Slide folders under `slides/`, and the server
- * entries handed over as `import.meta.glob` would, a loader per `slide.tsx`. Each check reports findings, never throws,
- * so a broken Episode names what broke.
- */
-
-/** The page glob of a fixture folder, which holds Slide folders but no `episode.ts`. */
 const NO_PAGE: GlobEntries = {};
 
 const made: string[] = [];
@@ -20,7 +13,6 @@ afterEach(() => {
   for (const dir of made.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-/** A fixture page folder holding `folders` (relative paths), as an Episode's own test sees it. */
 function fixture(folders: readonly string[]): string {
   const dir = mkdtempSync(path.join(tmpdir(), 'episode-checks-'));
   made.push(dir);

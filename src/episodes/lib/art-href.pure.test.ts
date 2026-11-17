@@ -10,7 +10,6 @@ function use(attributes: Record<string, string>) {
   };
 }
 
-/** A Scene root holding the given `<use>` elements; it answers only the selector the loader asks. */
 function root(uses: readonly ReturnType<typeof use>[]) {
   const asked: string[] = [];
   return { asked, querySelectorAll: (selector: string) => (asked.push(selector), uses) };

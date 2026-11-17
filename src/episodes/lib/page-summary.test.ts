@@ -3,12 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { summaryOf } from './page-summary';
 import { anchorTitleAt } from './page-summary.pure';
 
-/*
- * The light summary (FE-004 §4): what a page says of itself, read without importing its Slides. That it says exactly
- * what its composition says, for every composed page, and names a Playlist anchor as the composition does, is an
- * Episode-level check (`composed-page-checks.ts`), run by each page folder's own `episode-checks.test.ts`.
- */
-
+// decision: FE-004 §4
 describe('success cases', () => {
   it("reads an Episode's German title without its Slides", () => {
     // ARRANGE

@@ -11,14 +11,6 @@ import { entryOf, type ComposedPage } from './composed-page';
 import summaries from './page-summaries.generated.json';
 import { summaryOf } from './page-summary';
 
-/*
- * The cross-Episode half of the composition lookup (FE-002): the invariants that span pages, read from the page
- * catalogue and the generated summaries `npm run registry` writes beside the registry, never from a composition. What a
- * page's own composition holds (its slug, its own text, its Sections, its header mode, the Playlist anchors into it, its
- * summary in step with it) is an Episode-level check (`composed-page-checks.ts`), run by each page folder's own
- * `episode-checks.test.ts`, so this test imports no Episode.
- */
-
 const CATALOGUE: readonly ComposedPage[] = [
   ...EPISODE_IDS.map((id) => episodeRefOf(id)),
   ...TEMPLATE_SLUGS.map((slug) => templateRef(slug)),

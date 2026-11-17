@@ -11,13 +11,7 @@ import {
   type PageFolder,
 } from './episode-folders';
 
-/*
- * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every templates
- * page beside them. The registry generator and every test that reads the Episode folders take their list from it, so
- * each case below walks a throwaway Episodes folder, never the repo's: adding an Episode breaks no test here.
- */
-
-/** A throwaway Episodes folder, one entry per relative path: a folder ending in `/`, else a file. */
+// decision: docs/adr/0016-content-data-model.md
 function tree(entries: readonly string[]): string {
   const root = mkdtempSync(path.join(tmpdir(), 'episode-folders-'));
   const episodes = path.join(root, 'src/episodes');

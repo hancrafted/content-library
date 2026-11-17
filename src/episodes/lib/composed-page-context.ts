@@ -13,13 +13,6 @@ import {
 import { summaryOf } from './page-summary';
 import { producedAnchors, readPublishedSnapshot, type MissingSnapshot } from './published-anchors';
 
-/*
- * The production reader of a page folder's context for its composition checks (`composed-page-checks.ts`): every read
- * a page is judged against, in one place. It reads the store, the generated summaries and the page folder `dir` on
- * disk, so the published snapshot and the Section markers are the ones in `dir`. `episode-checks.ts` calls it for a
- * page folder whose test hands over its `episode.ts`.
- */
-
 export function exportsCarrying<T extends object>(module: unknown, keys: readonly (keyof T & string)[]): T[] {
   return Object.values(module as object).filter(
     (value): value is T => typeof value === 'object' && value !== null && keys.every((key) => key in value),

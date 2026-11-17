@@ -5,13 +5,7 @@ import type { ComposedPage } from './composed-page';
 import { placeSections, type SectionList, type SlideOutline } from './episode.pure';
 import { formatAsRepo } from './oxfmt-format.ts';
 
-/*
- * Published anchors (FE-002 §5.2): every Slide anchor a page has ever put in a URL stays reachable.
- * `<page>/published-anchors.json` snapshots them; a Slide may be added freely, but an anchor in the snapshot MUST still
- * be produced by the walk (`placeSections`). A page folder's composition checks read its snapshot once
- * (`readPublishedSnapshot`, from `composed-page-context.ts`) and judge it (`publishedAnchorFindings`).
- */
-
+// decision: FE-002 §5.2
 const SNAPSHOT_FILE = 'published-anchors.json';
 
 export interface MissingSnapshot {
@@ -40,7 +34,6 @@ export async function readPublishedSnapshot(dir: string, produced: readonly stri
   return { missing: { file, contents: await formatAsRepo(file, JSON.stringify([...new Set(produced)].sort())) } };
 }
 
-/** One message per published anchor the walk no longer produces. */
 function lostAnchors(id: string, published: readonly string[], produced: readonly string[]): string[] {
   return published
     .filter((anchor) => !produced.includes(anchor))
@@ -50,18 +43,12 @@ function lostAnchors(id: string, published: readonly string[], produced: readonl
     );
 }
 
-/** Whether a snapshot is sorted with no anchor twice, as the file to paste writes it. */
 const sortedAndUnique = (anchors: readonly string[]): boolean => anchors.join() === [...new Set(anchors)].sort().join();
 
-/**
- * Whether a page's anchors are bound: an Episode's once it is no longer upcoming, whose anchors bind when it is published
- * (docs/features/episode-publishing.md); a Template's, an Explorable page's and a Guide's always, having no status.
- */
 function isBound(page: ComposedPage, status: EpisodeStatus | undefined): boolean {
   return page.kind === 'standalone' || page.kind === 'event-copy' ? status !== 'upcoming' : true;
 }
 
-/** A bound page's published anchors it no longer produces, a snapshot out of order, or the snapshot it lacks. */
 export function publishedAnchorFindings(
   page: ComposedPage,
   { status, published: snapshot }: PublishedContext,

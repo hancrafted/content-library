@@ -1,11 +1,3 @@
-/*
- * Arrow-key navigation between Slides (the Episode page container's duty): a
- * pure decision, like the drawer's key action. ArrowLeft and ArrowRight step to
- * the previous or next Slide, never wrapping; every other key, any modifier
- * and any focus inside a control that owns the arrows is not ours, so the
- * answer is `null` and the browser keeps the key.
- */
-
 export interface SlideKeyEvent {
   readonly key: string;
   readonly altKey: boolean;
@@ -34,7 +26,6 @@ export function inExcludedRegion(element: { closest(selector: string): unknown }
   return element !== null && element.closest(SLIDE_KEY_EXCLUDED_SELECTOR) !== null;
 }
 
-/** Where the reader is: every Slide id in page order, and the active one (`null` until known). */
 export interface SlidePlace {
   readonly ids: readonly string[];
   readonly active: string | null;
@@ -49,7 +40,6 @@ function isBare(event: SlideKeyEvent): boolean {
   return !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey);
 }
 
-/** The Slide id an arrow press goes to, or `null` when the press is not ours or there is nowhere to go. */
 export function slideKeyTarget(event: SlideKeyEvent, excluded: boolean, place: SlidePlace): string | null {
   const step = STEPS.get(event.key);
   const at = place.active === null ? -1 : place.ids.indexOf(place.active);

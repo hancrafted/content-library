@@ -10,7 +10,6 @@ const EPISODE_MODULE = {
 
 const folders: string[] = [];
 
-/** A fresh page folder in the system's temp directory, removed after the test. */
 function pageFolder(): string {
   const dir = mkdtempSync(path.join(tmpdir(), 'composed-page-context-'));
   folders.push(dir);

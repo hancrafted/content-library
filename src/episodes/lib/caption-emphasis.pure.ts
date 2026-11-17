@@ -1,19 +1,12 @@
-/*
- * Emphasis in a Slide header's caption (design-ADR-0012): the `<b>` runs a caption's message marks, as plain text plus the
- * ranges they cover, so the header can type the caption character by character and still set those characters off.
- * `t.markup` wraps each `<b>` chunk in the two marks below; they never occur in written text.
- */
-
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export const EMPHASIS_OPEN = '\u0001';
 export const EMPHASIS_CLOSE = '\u0002';
 
-/** An emphasised run of a text: from `start`, up to but excluding `end`, in UTF-16 indices. */
 export interface TextRange {
   readonly start: number;
   readonly end: number;
 }
 
-/** A marked caption as its plain text and its emphasised ranges; throws on a mark left open or closed twice. */
 export function splitEmphasis(marked: string): { text: string; emphasis: TextRange[] } {
   const emphasis: TextRange[] = [];
   let text = '';

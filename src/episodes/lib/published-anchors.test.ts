@@ -4,7 +4,6 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { publishedAnchorFindings, readPublishedSnapshot } from './published-anchors';
 
-/** A folder no page lives in, so it holds no snapshot. */
 const NO_SNAPSHOT = path.join(import.meta.dirname, 'no-such-episode');
 
 const NO_SNAPSHOT_FILE = path.join(NO_SNAPSHOT, 'published-anchors.json');

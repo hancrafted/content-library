@@ -9,11 +9,6 @@ import { authoredHeaderStrays, composedPageChecks, type PageContext } from './co
 import { withoutSectionSlide } from './episode.pure';
 import type { LocaleSummary } from './page-summary.pure';
 
-/*
- * The composition checks judge a page's composition against its context, handed in here by hand: no store, no
- * generated summary and no folder on disk. Each check gets a failure planted through the context or the composition.
- */
-
 function slideOf(slug: string, title: string | undefined, scene: () => ReactNode = () => null): Slide {
   const messages = title === undefined ? {} : { title };
   return { slug, messages: { en: messages, de: messages }, notes: [], segments: [], content: scene };
@@ -23,7 +18,6 @@ const INTRO = [slideOf('intro', 'Intro'), slideOf('detail', 'Detail')] as unknow
 
 const OWN_TEXT = { title: 'Demo', caption: 'A demo', description: 'A demo page' };
 
-/** The composition of `page`, named after its folder, with one Section, `intro`, unless `fields` says otherwise. */
 function compositionOf(page: ComposedPage, fields: Partial<EpisodeComposition> = {}): EpisodeComposition {
   return { slug: page.slug, messages: { en: OWN_TEXT, de: OWN_TEXT }, sections: [INTRO], ...fields };
 }
@@ -36,7 +30,6 @@ const SUMMARY: LocaleSummary = {
   ],
 };
 
-/** A context that agrees with `compositionOf(page)`, unless `fields` says otherwise. */
 function contextOf(fields: Partial<PageContext> = {}): PageContext {
   return {
     status: 'published',

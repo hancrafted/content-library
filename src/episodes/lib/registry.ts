@@ -12,13 +12,8 @@ const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<st
   guide: GUIDES,
 };
 
-/**
- * The Slides a page renders and its own text (FE-002), from the generated registry: an Episode's, public or unlisted,
- * by its EpisodeRef, or a Template's (design-ADR 0019), by its ref. It imports every composition, so no Episode page,
- * landing or listing page reaches it: an Episode's route hands in its own composition, and a listing reads `summaryOf`
- * (FE-004 §4). The Template, Explorable page and Guide pages, the summaries and the tests read it. A ref the registry
- * does not hold is a bug, so it throws.
- */
+// decision: FE-004 §4
+// decision: docs/adr/0019-resources-overview.md
 export function compositionOf(page: ComposedPage): EpisodeComposition {
   return entryOf(REGISTRY_BY_KIND, page, 'composition');
 }

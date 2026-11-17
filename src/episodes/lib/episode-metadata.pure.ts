@@ -2,12 +2,7 @@ import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { Episode, PublishedEpisode } from '@/content-store/schemas/episode.schema';
 import type { TagId } from '@/content-store/schemas/fields';
 
-/*
- * How the Episode browser reads what an Episode declares about itself: its lead Tag, which gives its card's look,
- * and the browser's order. The record and its type live in the content store's schema (FE-013); values arrive as
- * arguments. No React (FE-007 §3).
- */
-
+// decision: FE-007 §3
 export function leadTagOf(episode: Pick<Episode, 'tags'>): TagId {
   return episode.tags[0];
 }
@@ -16,12 +11,7 @@ function isPublished<E extends Episode>(episode: E): episode is E & PublishedEpi
   return episode.status === 'published';
 }
 
-/**
- * The browser's order of the Episodes the site's own lists show (`listedEpisodes` of the page catalogue: never an
- * unlisted one, design-ADR 0016): the Featured Episodes as listed, then every other published one newest first (ties
- * by Episode id), then the upcoming ones in the order given. Featured names Episodes by id, since an Event's copy
- * shares its original's slug; one that names no published Episode is skipped.
- */
+// decision: docs/adr/0016-content-data-model.md
 export function overviewOrder<E extends Episode & { readonly ref: EpisodeRef }>(
   episodes: readonly E[],
   featured: readonly string[],
