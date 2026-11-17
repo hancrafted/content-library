@@ -1,4 +1,3 @@
-/** The success tick a step shows beside "it worked", in the `success` colour. */
 export function DoneMark() {
   return (
     <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true">

@@ -60,7 +60,6 @@ function useGallerySettle(ref: RefObject<HTMLDivElement | null>, { active, repla
   return settled;
 }
 
-/** Template-only controls; replay and pause are transient, and never change the page's active Slide. */
 export function GalleryMotion({ labels, children }: GalleryMotionProps) {
   const [paused, setPaused] = useState(false);
   const [replay, setReplay] = useState(0);

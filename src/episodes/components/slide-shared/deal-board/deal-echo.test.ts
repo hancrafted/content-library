@@ -7,7 +7,6 @@ function echo(props: DealEchoProps): string {
   return renderToStaticMarkup(createElement(DealEcho, props));
 }
 
-/** The visible text of rendered markup, tags dropped and whitespace collapsed. */
 function textOf(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')

@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { docsHref, installCommand, launchCommand, PAIRS } from './agent-commands.pure';
 import { AGENTS } from './picks.pure';
 
-/*
- * The lines a first-timer copies: every AI agent on every operating system has an install line, every AI agent a
- * docs link and a launch command. The lines themselves are the vendors' (Han's handoff, 2026-10-30).
- */
-
 describe('success cases', () => {
   it('has an install line for every AI agent on every operating system', () => {
     // ARRANGE

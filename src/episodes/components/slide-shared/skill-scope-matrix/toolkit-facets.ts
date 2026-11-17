@@ -1,8 +1,3 @@
-/*
- * The card box in the captain's colour, paper cards with coloured tabs standing in it and a label on its face,
- * beside the pinned dive plan, before the faceted wall.
- * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
- */
 import type { SquareFacets } from './square-facet';
 
 export const TOOLKIT: SquareFacets = {

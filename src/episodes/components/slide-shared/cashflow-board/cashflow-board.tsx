@@ -6,19 +6,9 @@ import type { CashflowBoardProps } from './cashflow-board.types';
 import { Lane } from './lane';
 import { Annotation, Arrow, Stamp } from './overlays';
 
-// The part's public names; the remaining prop types (`Note`, `BoardCell`, `CashflowAnnotation`, …) are in
-// `cashflow-board.types.ts` and `cashflow-board.pure.ts`.
 export { cashLeft } from './cashflow-board.pure';
 export type { CashflowBoardProps, CashflowColumn } from './cashflow-board.types';
 
-/**
- * The cashflow board (Slides 1, 6 and 10 of "Why it's never too early to start with sales"): month lanes under dark
- * pills on a dotted card, up to three square paper notes per lane tinted as cash, cost or revenue, the lanes only as
- * tall as the lowest note, stamp or arrow label reaches (`slotRows`); a lane may hold a Context marker in its corner
- * and a footer under it. An optional stamp, arrow, ringed column and a row of call-outs and brackets are all placed on
- * the lanes' grid by column and slot. All lanes stand side by side when the board is wide enough, two by two when it
- * is not; pointing at one dims the others.
- */
 export function CashflowBoard(props: CashflowBoardProps) {
   const { columns, labels, locale, stamp, arrow, highlight, annotations = [] } = props;
   checkBoard({ ...props, count: columns.length });
@@ -47,7 +37,6 @@ export function CashflowBoard(props: CashflowBoardProps) {
   );
 }
 
-/** A column's footer: a thin rule, the label in small mono on the left, the balance on the right, red when negative. */
 export function CashLeft({
   label,
   amount,
@@ -58,9 +47,7 @@ export function CashLeft({
   label: string;
   amount: number;
   locale: string;
-  /** The Context drawer target the line carries, the value a Slide kit's `target(…)` names. */
   target?: string;
-  /** A Context marker beside the label. */
   marker?: ReactNode;
 }) {
   return (

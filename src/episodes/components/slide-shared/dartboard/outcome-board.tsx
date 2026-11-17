@@ -1,16 +1,8 @@
 import { Dartboard } from './dartboard';
 import { Darts, type DartTone, type Point } from './darts';
 
-/**
- * The four outcomes of precision and accuracy: precise or not (a tight or loose cluster), accurate or not (on the bull
- * or off it).
- */
 export type PrecisionOutcome = 'precise-accurate' | 'precise-off' | 'accurate-scattered' | 'neither';
 
-/**
- * Where each outcome's four darts land on the 120 by 120 board, and the one colour it throws in: on the bull in
- * `primary`, off target in `warning`, a loose cluster around the bull dulled toward `muted-foreground`, never a hue.
- */
 const THROWS: Record<PrecisionOutcome, { readonly darts: readonly Point[]; readonly tone: DartTone }> = {
   'precise-accurate': {
     darts: [
@@ -50,11 +42,7 @@ const THROWS: Record<PrecisionOutcome, { readonly darts: readonly Point[]; reado
   },
 };
 
-/**
- * One outcome as a dartboard: the hero board with a dulled bull, so darts in `primary` still read on it, and the
- * outcome's four darts on a `card` edge. Shared because the precision and accuracy Slide and the requirements
- * engineering Slide both draw the four outcomes (FE-007); the Slide sizes it through `className`.
- */
+// decision: FE-007 §5
 export function OutcomeBoard({ outcome, className }: { outcome: PrecisionOutcome; className?: string }) {
   const { darts, tone } = THROWS[outcome];
   return (

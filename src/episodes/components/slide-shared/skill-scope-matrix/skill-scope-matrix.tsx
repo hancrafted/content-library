@@ -11,7 +11,6 @@ export type Care = 1 | 2 | 3 | 4;
 export interface Axis {
   readonly label: ReactNode;
   readonly hint: string;
-  /** The `data-target` a note explains this head by, when one does. */
   readonly target?: { readonly 'data-target': string };
 }
 
@@ -23,9 +22,7 @@ export interface Square {
   readonly sub: string;
   readonly coding: { readonly head: ReactNode; readonly sub: ReactNode };
   readonly picture: PictureKind;
-  /** The white label naming the picture's story object, in each view. */
   readonly label: ViewWords;
-  /** What else sits on the picture: the trip's label, the scribbled card, the owner tag. */
   readonly extras?: ReactNode;
   readonly focus?: boolean;
   readonly target?: { readonly 'data-target': string };
@@ -34,11 +31,8 @@ export interface Square {
 export interface SkillScopeMatrixProps {
   readonly label: string;
   readonly care: string;
-  /** Who uses the skill: the rows, personal then shared. */
   readonly who: readonly [Axis, Axis];
-  /** Where it is used: the columns, project-specific then general. */
   readonly where: readonly [Axis, Axis];
-  /** The four squares, each placed in its row and column by its id. */
   readonly squares: readonly Square[];
 }
 
@@ -70,7 +64,6 @@ function CareDots({ care, word, label }: { readonly care: Care; readonly word: s
   );
 }
 
-/** A square's words: where its details live, in the Chat app view, or where the skill is stored, in Coding agent. */
 function SquareWords({ square }: { readonly square: Square }) {
   return (
     <div className="flex min-h-16 flex-col gap-1">
@@ -116,7 +109,6 @@ function SquareCard({ square, care }: { readonly square: Square; readonly care: 
   );
 }
 
-/** The card's one trip, from the notebook into the fleet manual; decoration, its meaning in the labels. */
 function Trip() {
   return (
     <svg
@@ -135,12 +127,6 @@ function Trip() {
   );
 }
 
-/**
- * The skill scope matrix of Option 18a: who uses a skill down the side, where across the top, each square leading
- * with where its details live, a small project picture beneath, and a primary tint that steps with care so the
- * diagonal reads before any word. The squares are a focus group, so the presenter can point at one. The words and
- * the pictures' extras come from the Slide that shows it; `SkillScopeSquare` shows one square of it on a later Slide.
- */
 export function SkillScopeMatrix({ label, care, who, where, squares }: SkillScopeMatrixProps) {
   const square = (id: SquareId) => {
     const found = squares.find((candidate) => candidate.id === id);
@@ -167,10 +153,8 @@ export function SkillScopeMatrix({ label, care, who, where, squares }: SkillScop
   );
 }
 
-/** The matrix's squares, row by row: personal on top, shared below; project-specific left, general right. */
 const ORDER: readonly SquareId[] = ['pp', 'pg', 'sp', 'sg'];
 
-/** The 2×2 locator: where the shown square sits on the matrix, the other three dimmed. */
 function Locator({ at, label }: { readonly at: SquareId; readonly label: string }) {
   return (
     <span role="img" aria-label={label} className="grid size-8 shrink-0 grid-cols-2 gap-0.5">
@@ -187,22 +171,14 @@ function Locator({ at, label }: { readonly at: SquareId; readonly label: string 
 }
 
 export interface SkillScopeSquareProps {
-  /** The line leading back to the Slide that shows the whole matrix. */
   readonly back: string;
-  /** The locator's words for assistive tech: which square of the matrix this is. */
   readonly locator: string;
   readonly care: string;
-  /** The square's row and column, as the matrix's heads name them. */
   readonly axes: { readonly who: string; readonly where: string };
   readonly square: Square;
   readonly className?: string;
 }
 
-/**
- * One square of the skill scope matrix, cropped out for a later Slide that comes back to it: the same square card, a
- * 2×2 locator naming where it sits, and its row and column above it, on a plate of the card's paper so they read on
- * any zone's water, as the square does.
- */
 export function SkillScopeSquare({ back, locator, care, axes, square, className }: SkillScopeSquareProps) {
   return (
     <div data-matrix className={cn('flex flex-col gap-3', className)}>

@@ -2,34 +2,23 @@ import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { ExternalLink } from 'lucide-react';
 import { DoneStrip } from '../guide-step/guide-step';
 
-/** Where a hands-on step's instructions live: a page the viewer opens, and the Workflow to pick there. */
 export interface HandsOnWorkflowLink {
-  /** The locale-neutral path of the page holding the Workflow: `/explorables/human-in-the-loop`. */
   readonly path: string;
-  /** The anchor on that page to land on: `play`, the Explorable's play area. */
   readonly fragment?: string;
   readonly locale: Locale;
-  /** The link's own words: "Open the quiz Workflow". */
   readonly label: string;
-  /** What to pick on that page: "Pick “Turn a source into a quiz”, then …". */
   readonly pick: string;
-  /** The screen-reader hint that the link opens a new tab. */
   readonly newTab: string;
 }
 
 export interface HandsOnStepProps {
-  /** The kicker above the steps: "Stage 1 · Requirements". */
   readonly stage: string;
-  /** The time box: "20 minutes". */
   readonly timebox: string;
-  /** What to do, in order, one plain sentence each. */
   readonly steps: readonly string[];
   readonly workflow: HandsOnWorkflowLink;
-  /** What done looks like: its label and the result. */
   readonly done: { readonly label: string; readonly text: string };
 }
 
-/** The steps card: the stage and its time box, the steps in order, and what done looks like. */
 function StepsCard({ stage, timebox, steps, done }: Omit<HandsOnStepProps, 'workflow'>) {
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-border bg-card p-8 shadow-md md:col-span-8">
@@ -52,7 +41,6 @@ function StepsCard({ stage, timebox, steps, done }: Omit<HandsOnStepProps, 'work
   );
 }
 
-/** The way to the Workflow: a link opening the page in a new tab, and what to pick there. */
 function WorkflowCard({ workflow }: { readonly workflow: HandsOnWorkflowLink }) {
   return (
     <div className="flex flex-col justify-center gap-4 rounded-xl bg-primary p-8 text-primary-foreground shadow-md md:col-span-4">
@@ -71,10 +59,6 @@ function WorkflowCard({ workflow }: { readonly workflow: HandsOnWorkflowLink }) 
   );
 }
 
-/**
- * One hands-on step of a workshop: the stage and its time box, the steps in order, what done looks like, and beside
- * them the way to the Workflow that holds the full instructions. The Slide only points; the Workflow teaches.
- */
 export function HandsOnStep({ workflow, ...steps }: HandsOnStepProps) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-12">

@@ -1,10 +1,4 @@
-/*
- * The control-room console's facet tones, light from the upper left. No raw colour lives outside a Slide folder
- * (FE-011), so every tone is mixed from global tokens that carry no meaning: `--on-brand-accent` as white and
- * `--overlay` as black (both fixed across themes), `--info` for the blue machinery and the screen glow, `--bulb` to warm
- * the mugs, `--brand-accent` for the coffee. Dark mode only retunes the mixes. `--machine` stays the robot's meaning.
- */
-
+/* decision: FE-011 §4 */
 .console {
   --console-machine-glint: color-mix(in oklab, var(--info) 45%, var(--on-brand-accent));
   --console-machine-lit: color-mix(in oklab, var(--info) 78%, var(--on-brand-accent));

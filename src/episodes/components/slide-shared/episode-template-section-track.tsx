@@ -1,17 +1,11 @@
 import { cn } from '@/shared/lib/utils';
 
-/**
- * episode-template's Hero motif (a Hero motif is authored per Episode): its Sections as stops on one track. The Title
- * slide shows every stop open; each section slide fills the stops up to its own. Decorative: the header says the words.
- */
 export function SectionTrack({
   sections,
   reached = 0,
   className,
 }: {
-  /** How many Sections the Episode has: one stop each. */
   sections: number;
-  /** The Section the Slide opens, 1-based; 0 on the Title slide, where nothing is reached yet. */
   reached?: number;
   className?: string;
 }) {

@@ -1,12 +1,4 @@
-/*
- * The facet shape every low-poly scenery drawing paints, and the seabed's precomputed facets (the Spec's `parts.py`,
- * seed 25), so every render draws the same facets and no Python runs in the build. Each Fable element (the iceberg,
- * the clouds, the sea life) keeps its own facets in its own file, beside its drawing.
- */
-
-/** One tone of a low-poly part: every facet painted in that tone, as one path. */
 export interface FacetLayer {
-  /** Names a colour in the part's CSS module, which maps `[data-tone]` to its fill. */
   readonly tone: string;
   readonly d: string;
 }

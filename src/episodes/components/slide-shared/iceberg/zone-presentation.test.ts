@@ -5,14 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { zonePresentation, zoneTitlePresentation } from './zone-presentation';
 import type { Zone } from './zones.pure';
 
-/** The top of the Surface sky, as `sky.pure.ts` mixes it: what a Surface title and its incoming wave fill with. */
 const SKY_TOP = 'color-mix(in oklab, var(--zone-surface) 64%, var(--info))';
-/*
- * The `presentation` a Slide takes from the Section it names (design guide, Iceberg): the bubbles into a section
- * slide and the slim rail, which a section slide shows on phones only. Zone backgrounds by Slide kind (Han,
- * 2026-11-14): the Title slide and every section slide fill with their zone's colour, its text dark or light by zone
- * in both themes, and land with that colour under the page header; a page Slide keeps the page's own background.
- */
 
 const SECTIONS: readonly Zone[] = [
   'surface',
@@ -25,7 +18,6 @@ const SECTIONS: readonly Zone[] = [
   'abyss',
 ];
 
-/** The rail a presentation draws behind its Slide, read as the page renders it. */
 const railOf = (rear: Parameters<typeof renderToStaticMarkup>[0]) => {
   const $ = load(renderToStaticMarkup(createElement('div', null, rear)));
   return {

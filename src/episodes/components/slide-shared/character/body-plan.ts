@@ -1,9 +1,3 @@
-/**
- * The head of the one human body plan, as facet tables: skull and face, a face per mood, hair, headwear, and the
- * legs and chair below the hips. Drawn from the Spec's low-poly woman captain (`woman.py`) and its seated pilot
- * (`parts.py` `pilot_seated`); `poses.pure.ts` places them. Frame: facing right, `(0, 0)` the floor between the feet.
- * A facet's points are flat `x, y` pairs.
- */
 import type { Mood } from './actor';
 import type { Preset } from './preset';
 
@@ -38,11 +32,9 @@ export type Tone =
   | 'screen'
   | 'screen-glow';
 
-/** Paint order, back to front. `head-back` and `head` turn together; `front-arm` carries the prop. */
 export const GROUPS = ['chair', 'head-back', 'back-arm', 'legs', 'body', 'front-arm', 'head'] as const;
 export type Group = (typeof GROUPS)[number];
 
-/** One facet: its group, the body part it belongs to, its tone and its points as flat `x, y` pairs. */
 export type FacetSpec = readonly [Group, string, Tone, readonly number[]];
 
 export const SKULL_AND_FACE: readonly FacetSpec[] = [
@@ -61,7 +53,6 @@ export const SKULL_AND_FACE: readonly FacetSpec[] = [
 const CALM_GLINT: FacetSpec = ['head', 'eye-glint', 'glint', [7.4, -86.6, 8.4, -86.6, 8.1, -85.9]];
 const CALM_EYE: FacetSpec = ['head', 'eye', 'dark', [5.5, -86.6, 8.5, -86.8, 8, -85.4, 6, -85.4]];
 
-/** Brow, eye, its glint and the mouth, per mood; `calm` when the figure shows none. */
 export const FACES: Readonly<Record<Mood | 'calm', readonly FacetSpec[]>> = {
   calm: [
     ['head', 'brow', 'hair-shade', [4, -88.5, 9, -89, 9, -88, 4, -87.6]],
@@ -147,7 +138,6 @@ export const HEADWEAR: Readonly<Record<NonNullable<Preset['headwear']>, readonly
   ],
 };
 
-/** The top of the head, where the emote sits: the highest point of whatever the head wears. */
 export function anchorY(preset: Preset): number {
   if (preset.headwear) return { 'captain-cap': -106, cap: -102 }[preset.headwear];
   return { long: -101, short: -101, bun: -101.5, none: -99.5 }[preset.hair];

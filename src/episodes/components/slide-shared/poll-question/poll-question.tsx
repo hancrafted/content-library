@@ -1,24 +1,17 @@
-/** The colour a question takes: colour by question, structure only (FE-011). */
+// decision: FE-011 §4
 export type PollTone = 'info' | 'accent';
 
-/** What `PollQuestion` takes: its number, its words, and its tone. */
 export interface PollQuestionProps {
-  /** The number on the disc: the question's place on its Slide. */
   marker: number;
   question: string;
-  /** Under the question, for a question that takes several answers: "tick all that apply". */
   hint?: string;
-  /** The answers in the order the poll lists them. */
   answers: readonly string[];
-  /** Votes per answer, in the order of `answers`: a played Event's result, printed on each chip. */
   votes?: readonly number[];
   tone: PollTone;
 }
 
-/** Splits a poll answer: its tag before ` – `, the words the result screen keeps, and the explanation after it. */
 const TAG_SEPARATOR = ' – ';
 
-/** The tag of a `tag – explanation` answer, the whole answer when it has none. */
 function tagOf(answer: string): string {
   return answer.split(TAG_SEPARATOR)[0];
 }
@@ -28,10 +21,6 @@ const LOOK: Record<PollTone, { disc: string; chip: string }> = {
   accent: { disc: 'bg-brand-accent text-primary-foreground', chip: 'bg-brand-accent/10' },
 };
 
-/**
- * One poll question printed on a Slide (a server part, an `<li>` for an ordered list): a numbered disc, the question,
- * its hint, and the tag of each answer as a chip (the whole answer as its title): the phone shows the whole answer, the Slide only what to look for.
- */
 export function PollQuestion({ marker, question, hint, answers, votes, tone }: PollQuestionProps) {
   const look = LOOK[tone];
   return (
@@ -56,7 +45,6 @@ export function PollQuestion({ marker, question, hint, answers, votes, tone }: P
   );
 }
 
-/** Each answer as a chip showing its tag, the whole answer as its title, and its vote count when the question has votes. */
 function AnswerChips({
   answers,
   votes,

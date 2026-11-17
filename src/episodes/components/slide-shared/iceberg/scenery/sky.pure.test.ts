@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SKY_TONES, skyColour, skyFacets, skyTop } from './sky.pure';
 
-/*
- * The Surface sky (feedback 3, decision 41; the Spec's Option 0a): a few large, soft, low-contrast facets in three
- * bands, light towards the horizon, each band in two neighbouring tones; the top tone is what a Surface title's
- * transition wave takes, so wave and sky read as one.
- */
-
 describe('success cases', () => {
   it('cuts the sky into a few large facets, longer than tall, in three bands of two neighbouring tones each', () => {
     // ARRANGE

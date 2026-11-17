@@ -1,11 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/**
- * Title-slide Option 0b's terminal window: the one dark-on-card window the Title slide and the Guide's section slides
- * share. Softly rounded, a three-dot title bar, monospace lines. The window the AI agent runs in carries the `ai` edge
- * (Accent: the `ai` colour marks the AI agent itself, never decoration). Decorative only: lines are the Scene's words.
- */
 export function TitleTerminal({
   title,
   ai = false,
@@ -31,7 +26,6 @@ export function TitleTerminal({
   );
 }
 
-/** One prompt line: the prompt in muted text, the typed command in `primary`, or a still cursor when nothing is typed. */
 export function TermLine({ prompt, command }: { prompt: string; command?: string }) {
   return (
     <span className="block">
@@ -45,7 +39,6 @@ export function TermLine({ prompt, command }: { prompt: string; command?: string
   );
 }
 
-/** The AI agent's ready block, edged in the `ai` colour: a headline line and a quieter line under it. */
 export function AgentReady({ ready, hint }: { ready: string; hint: string }) {
   return (
     <span className="block rounded-lg border border-ai/40 px-3 py-2 ring-4 ring-ai/15">
@@ -55,7 +48,6 @@ export function AgentReady({ ready, hint }: { ready: string; hint: string }) {
   );
 }
 
-/** The permission question a skill run ends in, with Yes chosen. */
 export function PermissionAsk({ question, yes }: { question: string; yes: string }) {
   return (
     <span className="block text-caption text-muted-foreground">
@@ -64,7 +56,6 @@ export function PermissionAsk({ question, yes }: { question: string; yes: string
   );
 }
 
-/** A small label naming what a line is, set apart from the terminal's own words. */
 export function LineTag({ children, ai = false }: { children: ReactNode; ai?: boolean }) {
   return (
     <span
@@ -78,7 +69,6 @@ export function LineTag({ children, ai = false }: { children: ReactNode; ai?: bo
   );
 }
 
-/** The window's title bar: three dots and a name. */
 function TitleBar({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-3 border-b border-border px-4 py-2.5" aria-hidden="true">
@@ -92,7 +82,6 @@ function TitleBar({ title }: { title: string }) {
   );
 }
 
-/** The window's body: monospace lines, a size larger on the Title slide than on a section slide. */
 function TermBody({ size, children }: { size: 'hero' | 'section'; children: ReactNode }) {
   return (
     <div

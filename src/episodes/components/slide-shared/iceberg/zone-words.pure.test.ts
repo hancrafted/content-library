@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { zoneWordsFrom, type ZoneWordKey } from './zone-words.pure';
 
-/*
- * The zone words a Slide hands the depth gauge and the zone label: read key by key from the Slide's own `i18n/`, through
- * its `t`, so no Slide reads its Translation file raw.
- */
-
 const DICTIONARY: Readonly<Record<string, string>> = {
   'zones.surface.name': 'Surface',
   'zones.surface.metres': '0 m, the waterline',

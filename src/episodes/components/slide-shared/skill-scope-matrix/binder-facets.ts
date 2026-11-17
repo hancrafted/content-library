@@ -1,8 +1,3 @@
-/*
- * The faceted sky with its cloud over the Surface sea and the lit waterline; the green project binder with its
- * tabbed sheets and label in front of the ship.
- * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
- */
 import type { SquareFacets } from './square-facet';
 
 export const BINDER: SquareFacets = {

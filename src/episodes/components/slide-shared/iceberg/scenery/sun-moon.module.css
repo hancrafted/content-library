@@ -1,5 +1,4 @@
-/* The sun-moon drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in sun-moon.tsx. */
-
+/* decision: FE-011 §4 */
 .sunMoon {
   --sky-sun: color-mix(in oklab, var(--bulb) 89%, var(--on-brand-accent));
   --sky-sun-glow: color-mix(in oklab, color-mix(in oklab, var(--bulb) 44%, var(--on-brand-accent)) 35%, transparent);
@@ -55,7 +54,6 @@
   stroke-linejoin: round;
 }
 
-/* The sun by day, the crescent moon by night, swapped by the theme alone (the landing window's pattern). */
 .sunMoon [data-sky-night] {
   display: none;
 }

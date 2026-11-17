@@ -8,7 +8,6 @@ import { slotOutline } from './deal-slot';
 
 const TILT = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2'] as const;
 
-/** A note's tilt, cycled by its place in the lane. */
 function tiltOf(index: number) {
   return TILT[index % TILT.length];
 }
@@ -20,7 +19,6 @@ interface DealNoteProps {
   locale: string;
 }
 
-/** A note that stands for any deal: its mono tag over the company, ringed in `primary` when the board points at it. */
 function TaggedNote({ deal, tilt }: { deal: Deal & { tag: string }; tilt: string }) {
   return (
     <li
@@ -38,10 +36,6 @@ function TaggedNote({ deal, tilt }: { deal: Deal & { tag: string }; tilt: string
   );
 }
 
-/**
- * One deal as a paper note: company and contact over its value, or on the compact board the company alone; a tagged
- * deal is a `TaggedNote`.
- */
 function DealNote({ deal, index, compact, locale }: DealNoteProps) {
   const tilt = tiltOf(index);
   if (deal.tag !== undefined) return <TaggedNote deal={{ ...deal, tag: deal.tag }} tilt={tilt} />;
@@ -63,7 +57,6 @@ function DealNote({ deal, index, compact, locale }: DealNoteProps) {
   );
 }
 
-/** A note a customer put in: its tag in `primary` mono over its line. */
 function Incoming({ note, index }: { note: IncomingNote; index: number }) {
   return (
     <li data-deal="note" className={`${tiltOf(index)} bg-card p-2 shadow-md`}>
@@ -80,7 +73,6 @@ interface LaneHeadProps {
   countLabel: (count: number) => string;
 }
 
-/** A lane's head under its pill: its total, in `primary` on the emphasised lane, and its deal count. */
 function LaneHead({ lane, emphasised, locale, countLabel }: LaneHeadProps) {
   const colour = emphasised ? 'text-primary' : 'text-foreground';
   return (
@@ -98,7 +90,6 @@ export interface LaneProps {
   board: DealBoardProps;
 }
 
-/** The lane's box: pale, ringed in `primary` when emphasised, tighter on the compact board. */
 function laneClass(compact: boolean, emphasised: boolean): string {
   return cn(
     styles.lane,
@@ -109,7 +100,6 @@ function laneClass(compact: boolean, emphasised: boolean): string {
   );
 }
 
-/** The dashed slot closing a lane, a payment slot's text centred in it. */
 function Slot({ slot, compact }: { slot: DealSlot; compact: boolean }) {
   return (
     <li
@@ -126,7 +116,6 @@ function Slot({ slot, compact }: { slot: DealSlot; compact: boolean }) {
   );
 }
 
-/** The lane's notes: the incoming notes first when it is the emphasised lane, then its deals, then its slot. */
 function LaneNotes({ lane, emphasised, board }: LaneProps) {
   const { compact = false, locale } = board;
   const incoming = emphasised ? (board.incoming ?? []) : [];
@@ -143,7 +132,6 @@ function LaneNotes({ lane, emphasised, board }: LaneProps) {
   );
 }
 
-/** One stage: a pale lane under a dark pill, its head on the full board, then its notes. */
 export function Lane(props: LaneProps) {
   const { lane, number, emphasised, board } = props;
   const compact = board.compact === true;

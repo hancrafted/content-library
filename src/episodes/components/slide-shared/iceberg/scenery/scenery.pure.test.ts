@@ -9,11 +9,6 @@ import {
   sunFacets,
 } from './scenery.pure';
 
-/*
- * The scenery's geometry: which layers each part of the iceberg draws, how far its keel reaches, and the seeded scatter
- * that places a school of fish or a column of bubbles the same way on every render.
- */
-
 describe('success cases', () => {
   it('draws the tip, the keel and the waterline glow for the whole iceberg', () => {
     // ARRANGE

@@ -4,7 +4,6 @@ import type { Area } from './drift.pure';
 
 const AREA: Area = { x: 100, y: 100, w: 400, h: 500, compact: false };
 
-/** A stand-in pen that counts the strokes and fills it is asked for. */
 function recorder() {
   const log = { strokes: 0, fills: 0, alphas: [] as number[] };
   const pen: Pen = {

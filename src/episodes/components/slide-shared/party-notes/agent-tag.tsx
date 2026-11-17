@@ -1,4 +1,3 @@
-/** The tag on a party note an agent works: "Agent" in the meaning colour `ai`, on the note's top-right edge. */
 export function AgentTag({ label }: { label: string }) {
   return (
     <span

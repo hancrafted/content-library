@@ -1,11 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { onceAnimations, sceneMotionIn } from './scene-motion.pure';
 
-/*
- * When a Scene reports `data-motion="settled"`: browser checks wait on it (ARCH-003-testing §5), so it must come once
- * every once-animation of the Scene has ended, never wait on an ambient loop, and start over on re-entry.
- */
-
+// decision: ARCH-003 §5
 describe('success cases', () => {
   it('plays on the active Slide and rests idle elsewhere, so a re-entry plays again', () => {
     // ARRANGE
