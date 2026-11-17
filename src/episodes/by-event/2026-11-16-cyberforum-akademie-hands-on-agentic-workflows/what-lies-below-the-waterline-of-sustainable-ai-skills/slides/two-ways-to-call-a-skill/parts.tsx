@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 import { at, INDEX, wide } from './control-room-art';
 import styles from './slide.module.css';
 
-/** The three skills of the index, by folder name: code, never translated. */
 export const SLUGS = ['collect-sediment-sample', 'measure-water-column', 'run-camera-survey'] as const;
 
 export function WayLabel({ x, y, children }: { readonly x: number; readonly y: number; readonly children: ReactNode }) {

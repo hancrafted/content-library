@@ -181,7 +181,6 @@
   }
 }
 
-/* The line fades in already lit, and the scan line fades in after it: opacity alone (decision 19). */
 @keyframes highlight-lands {
   from {
     opacity: 0;
