@@ -6,15 +6,7 @@ import { FAIL_CHIP, type SeamSumProps } from './types';
 
 export type { Half, SeamSumCard } from './types';
 
-/*
- * The party board as a sum: four cards, each ticked against its own goal, add up plus by plus to the party, which
- * fails. Each card carries its failure at a seam: the fact, a chip naming the other card and what it held, the result
- * and the half of the goal it breaks. Takes every word from its Scene. `compact` is the narrow form: the own goal
- * shortens to the Scene's "met" line, a stamp may sit beside it, and the result line drops. Shared because the
- * person board and its agent replay draw the same sum (FE-007 §5). Four across once the board is wide enough (the
- * compact form sooner), else stacked, plus signs between.
- */
-
+// decision: FE-007 §5
 const SIGN = 'self-center text-subheading font-semibold text-muted-foreground';
 
 function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'> & { compact: boolean }) {
