@@ -4,8 +4,8 @@ id: GEN-006
 title: 'Comments'
 domain: general
 rules: true
-files: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables,episodes}}/**/*', '.archgate/adrs/*.rules*']
-paths: ['{tests,tools,skills/*/scripts,src/{app,page-assembly,events,content-store,pipeline,shared,explorables,episodes}}/**/*', '.archgate/adrs/*.rules*']
+files: ['{src,tests,tools}/**/*', 'skills/*/scripts/**/*', '.archgate/adrs/*.rules*.ts']
+paths: ['{src,tests,tools}/**/*', 'skills/*/scripts/**/*', '.archgate/adrs/*.rules*.ts']
 description: 'Governed code carries no prose comment, JSDoc included: a reason moves down a fixed ladder into a name, a type, a test, a pointer marker or the commit body, and only machine-read markers survive.'
 ---
 
@@ -17,9 +17,9 @@ Agents read a comment as current truth, but nothing checks it against the code b
 
 Every comment restates or explains something a checked place can hold: a name, a type, a test, an ADR, a doc, the commit body. Four kinds of why resist names — public-API contracts, rejected alternatives, coupling warnings, cited facts — so the ban comes with a ladder and a pointer marker that says at the line that a reason exists, and where.
 
-This record took over the lint-directive ban from the Codebase Hygiene ADR, which keeps it for `src/` until the last sweep retires it.
+This record absorbed the lint-directive ban (§6) from the retired Codebase Hygiene ADR, which held it for `src/` alone; §6 now covers every governed file.
 
-Existing comments retire in sweeps, one folder at a time; each sweep widens `files:`.
+Existing comments retired in sweeps, one folder at a time; every authored code file is now governed.
 
 ## Decision
 

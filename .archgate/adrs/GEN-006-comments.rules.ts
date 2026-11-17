@@ -80,15 +80,15 @@ const HELP = {
   ],
   body: [
     'In-body comment',
-    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body.',
+    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body. A catch that only swallows an error becomes a small named function (`matchesUnlessSelectorUnreadable`) when the lint rejects an unused binding; around `process.kill` only ESRCH is safe to ignore. A unit or a sum of measured parts in it is a full-word suffix on the name, the sum computed from named parts; a script that deletes comments must skip string literals and pointer markers, and a rename must leave public names and contract strings alone.',
   ],
   header: [
     'File header comment',
-    'Delete it, or add a pointer marker; a module says what it is through its name and its doc. Each ADR section it cites becomes one `// decision:` pointer above the first import, or above the first declaration in a file with none, as in a rules file; what a test file pins belongs in its it and describe names.',
+    'Delete it, or add a pointer marker; a module says what it is through its name and its doc. Each ADR section it cites becomes one `// decision:` pointer above the first import, or above the first declaration in a file with none, as in a rules file; an ADR cited without a section is resolved to one by reading it first. A pointer sits directly above code: no blank line under it, and a file opening with the `use client` directive puts its pointers on the lines under it. A `spec:` pointer takes the full `docs/features/` path and a heading anchor; a bare path, a bold lead-in, a Spec Option, a Slide number or an external URL has no target and goes to the commit body, or an `evidence:` pointer to a research doc. What a test file pins belongs in its it and describe names.',
   ],
   trailing: [
     'Marker with trailing text',
-    'Strip the text after the marker; move the text down the ladder. In a test the text goes into the it name; `// ARRANGE / ACT` is two markers short, so write each marker bare on its own line.',
+    'Strip the text after the marker; move the text down the ladder. In a test the text goes into the it name; `// ARRANGE / ACT` is two markers short, so write each marker bare on its own line; a `@ts-expect-error` keeps the marker bare and its reason goes to the it name.',
   ],
   directive: [
     'Lint directive',
@@ -98,7 +98,10 @@ const HELP = {
     'CSS comment',
     'Turn the value into a named design token (FE-011), or add a `/* decision: … */` pointer marker above it.',
   ],
-  jsx: ['JSX comment', 'Delete it, or extract a component named for it.'],
+  jsx: [
+    'JSX comment',
+    'Delete it, or extract a component named for it (`HeaderSpacer`, `CrossCenteredInCircle`) and pin the reason in a test name.',
+  ],
   catch: [
     'Comment in an empty catch',
     'Why is there a try? Remove it if nothing throws, or handle the error explicitly, in a fix: commit of its own with a test first.',
