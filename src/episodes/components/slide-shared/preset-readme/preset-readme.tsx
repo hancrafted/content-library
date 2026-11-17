@@ -10,7 +10,6 @@ export interface PresetReadmeProps {
   readonly heading: string;
   readonly preset?: string;
   readonly items: readonly PresetReadmeItem[];
-  /** Folds the items under the heading, closed, for a page whose visual must fit the first screen. */
   readonly collapsed?: boolean;
   readonly className?: string;
 }
