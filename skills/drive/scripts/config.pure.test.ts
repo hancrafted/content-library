@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULTS, parseConfig } from './config.pure.ts';
+import { DEFAULTS, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
 
 describe('parseConfig', () => {
   describe('success cases', () => {
@@ -17,6 +17,8 @@ describe('parseConfig', () => {
         '  beforeRemove: [stop]',
         '  afterMerge: [report]',
         '  afterRemove: [tidy]',
+        'parallel: { default: 2, harnessCap: 8 }',
+        'decisionDocs: [docs/words.md]',
       ].join('\n');
       // ACT
       const config = parseConfig(text);
@@ -34,6 +36,8 @@ describe('parseConfig', () => {
           afterMerge: ['report'],
           afterRemove: ['tidy'],
         },
+        parallel: { default: 2, harnessCap: 8 },
+        decisionDocs: ['docs/words.md'],
       });
     });
 
@@ -43,14 +47,23 @@ describe('parseConfig', () => {
       // ACT
       const configs = texts.map(parseConfig);
       // ASSERT
-      expect(configs).toEqual(texts.map(() => ({ worktree: DEFAULTS })));
+      expect(configs).toEqual(texts.map(() => ({ worktree: DEFAULTS, parallel: PARALLEL_DEFAULTS, decisionDocs: [] })));
     });
   });
 
   describe('failure cases', () => {
     it('names the key that has the wrong type or is unknown', () => {
       // ARRANGE
-      const texts = ['worktree:\n  install: setup', 'worktree:\n  dir: 3', 'worktree:\n  instal: []', '- a', 'a: ['];
+      const texts = [
+        'worktree:\n  install: setup',
+        'worktree:\n  dir: 3',
+        'worktree:\n  instal: []',
+        '- a',
+        'a: [',
+        'parallel: { default: 0 }',
+        'parallel: { cap: 3 }',
+        'decisionDocs: x',
+      ];
       // ACT
       const errors = texts.map((text) => parseConfig(text));
       // ASSERT
@@ -61,6 +74,9 @@ describe('parseConfig', () => {
         "unknown worktree key 'instal'; expected dir, baseBranch, remote, invoke, install, preflight, lock, beforeRemove, afterMerge, afterRemove",
         'docs/drive/project.yml must be a mapping',
         expect.stringContaining('not valid YAML'),
+        'parallel.default must be a whole number of at least 1',
+        "unknown parallel key 'cap'; expected default, harnessCap",
+        'decisionDocs must be a list of paths',
       ]);
     });
   });
