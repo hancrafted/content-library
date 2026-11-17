@@ -65,7 +65,7 @@ export const COMMIT_PLAN: Plan = {
   phases: [
     [PREFLIGHT, script('events', 'check:events')],
     [script('lint-staged')],
-    [{ name: 'archgate', command: 'archgate check' }, BOUNDARIES, TYPECHECK, TEST_CHANGED],
+    [{ name: 'archgate', command: 'archgate check --staged' }, BOUNDARIES, TYPECHECK, TEST_CHANGED],
   ],
 };
 
