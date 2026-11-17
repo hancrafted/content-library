@@ -15,8 +15,6 @@ if (!Number.isFinite(hours) || hours <= 0) {
 const until = new Date();
 const window = { since: new Date(until.getTime() - hours * 3_600_000), until };
 
-// Every worktree shares the main checkout's git directory; Claude Code names a project's log folder after its path,
-// each character but a letter or digit turned into `-`, so a worktree's folder starts with the main checkout's name.
 const commonDir = execFileSync('git', ['rev-parse', '--path-format=absolute', '--git-common-dir'], {
   encoding: 'utf8',
 });
@@ -30,7 +28,6 @@ const logs: SessionLog[] = readdirSync(projects)
       .filter((file) => file.endsWith('.jsonl'))
       .map((file) => path.join(projects, folder, file)),
   )
-  // A log last written before the window holds no line inside it.
   .filter((file) => statSync(file).mtime >= window.since)
   .map((file) => ({
     subagent: file.split(path.sep).includes('subagents'),
