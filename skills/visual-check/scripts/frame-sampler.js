@@ -4,7 +4,7 @@
 // with no imports, so it runs pasted as is. See ../SKILL.md, "Frame time".
 
 /** A frame slower than this was dropped: at 60 fps it took two vsyncs or more. Jitter around 16.7 ms is not. */
-const DROPPED_MS = 25;
+const DROPPED_MILLISECONDS = 25;
 
 /**
  * Frame statistics from rAF deltas in milliseconds: how many frames, how many were dropped (over `threshold`), their
@@ -12,7 +12,7 @@ const DROPPED_MS = 25;
  * @param {readonly number[]} deltas
  * @param {number} [threshold]
  */
-function frameStats(deltas, threshold = DROPPED_MS) {
+function frameStats(deltas, threshold = DROPPED_MILLISECONDS) {
   if (deltas.length === 0) return { frames: 0, droppedFrames: 0, droppedShare: 0, p95: 0 };
   const sorted = [...deltas].sort((a, b) => a - b);
   const droppedFrames = deltas.filter((delta) => delta > threshold).length;

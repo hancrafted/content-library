@@ -24,7 +24,7 @@ import { agentModel } from './agent-definition.ts';
 import { findRun } from './run-root.ts';
 
 /** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */
-const POINT_LOCK_WAIT_MS = 2_000;
+const POINT_LOCK_WAIT_MILLISECONDS = 2_000;
 const LOCK_WAIT_FLAG = '--lock-wait-ms=';
 type PointMode = 'skill' | 'read' | 'instructions';
 type Mode = PointMode | 'start' | 'stop';
@@ -63,14 +63,18 @@ function resolvedUnder(repoRoot: string, file: string | undefined): string | nul
 }
 
 /** Skill, Read or InstructionsLoaded: one `event` line on the span that made the call, when there is one. */
-function pointFact(mode: PointMode, payload: ToolHookPayload & InstructionsHookPayload, lockWaitMs: number): void {
+function pointFact(
+  mode: PointMode,
+  payload: ToolHookPayload & InstructionsHookPayload,
+  lockWaitMilliseconds: number,
+): void {
   const run = runOf(payload);
   if (run === null) return;
   const { root, marker } = run;
   const input = { payload, marker: run.text, log: readLog(marker.log, root).lines };
   const repoRoot = repoRootOf(payload.cwd ?? root);
   const line = POINT_HANDLERS[mode]({ ...input, repoRoot, resolvedPath: resolvedUnder(repoRoot, payload.file_path) });
-  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMs });
+  if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMilliseconds });
 }
 
 function subagent(event: 'start' | 'stop', payload: HookPayload): void {
@@ -94,7 +98,7 @@ function subagent(event: 'start' | 'stop', payload: HookPayload): void {
 /** A point-fact hook's lock wait: `--lock-wait-ms=<ms>` among `args` when it is a positive whole number, else 2 s. */
 function pointLockWait(args: readonly string[]): number {
   const ms = Number(args.find((arg) => arg.startsWith(LOCK_WAIT_FLAG))?.slice(LOCK_WAIT_FLAG.length));
-  return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MS;
+  return Number.isInteger(ms) && ms > 0 ? ms : POINT_LOCK_WAIT_MILLISECONDS;
 }
 
 function isPointMode(value: string | undefined): value is PointMode {

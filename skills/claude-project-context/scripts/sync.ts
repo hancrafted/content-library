@@ -11,7 +11,7 @@ const LIST = 'skills/claude-project-context/assets/files.md';
 // Where the list lived before authored skills moved to skills/; refs older than that move still have it here.
 const OLD_LIST = '.agents/skills/claude-project-context/assets/files.md';
 const STAMP = '.synced';
-const FIRST_LOOKBACK_MS = 7 * 24 * 60 * 60 * 1000;
+const FIRST_LOOKBACK_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
 
 const git = (args: string[], cwd?: string): string =>
   execFileSync('git', args, { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
@@ -55,7 +55,9 @@ function readFolder(folder: string): Map<string, string> {
 
 function lastSync(folder: string): Date {
   const stamp = path.join(folder, STAMP);
-  return existsSync(stamp) ? new Date(readFileSync(stamp, 'utf8').trim()) : new Date(Date.now() - FIRST_LOOKBACK_MS);
+  return existsSync(stamp)
+    ? new Date(readFileSync(stamp, 'utf8').trim())
+    : new Date(Date.now() - FIRST_LOOKBACK_MILLISECONDS);
 }
 
 const EDITING_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);

@@ -1,5 +1,5 @@
 // The shared chrome-headless-shell: install, start once (even across parallel
-// callers), find again, stop, and end after IDLE_MS without a call.
+// callers), find again, stop, and end after IDLE_MILLISECONDS without a call.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -90,7 +90,7 @@ export function stopBrowser(): boolean {
   return true;
 }
 
-/** The watchdog process body: stops the browser once no call has touched LAST_USE for IDLE_MS. */
+/** The watchdog process body: stops the browser once no call has touched LAST_USE for IDLE_MILLISECONDS. */
 export async function watch(browserPid: number): Promise<void> {
   let idle = false;
   while (alive(browserPid) && !idle) {

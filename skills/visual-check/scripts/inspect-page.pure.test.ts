@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  IDLE_MS,
+  IDLE_MILLISECONDS,
   chromeFlags,
   expandJobs,
   fitScale,
@@ -61,8 +61,8 @@ describe('parseEndpoint', () => {
 
 describe('isIdle', () => {
   it('is idle only after ten minutes without a call', () => {
-    expect(isIdle(0, IDLE_MS - 1)).toBe(false);
-    expect(isIdle(0, IDLE_MS)).toBe(true);
+    expect(isIdle(0, IDLE_MILLISECONDS - 1)).toBe(false);
+    expect(isIdle(0, IDLE_MILLISECONDS)).toBe(true);
   });
 });
 
