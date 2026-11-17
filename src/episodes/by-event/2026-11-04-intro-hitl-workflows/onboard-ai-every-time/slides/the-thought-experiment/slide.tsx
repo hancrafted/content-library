@@ -7,7 +7,6 @@ import en from './i18n/en.json';
 
 const QUESTIONS = ['budget', 'signOff', 'lastTime'] as const;
 
-// The section slide of "The thought experiment": the Hero motif's badge pinned on you, neutral because this Section
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },
