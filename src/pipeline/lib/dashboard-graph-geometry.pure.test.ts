@@ -125,14 +125,13 @@ describe('edge cases', () => {
   it('puts the scrubber on a Stage centre when replay reaches that Stage, and back', () => {
     // ARRANGE
     const geometry = graphGeometry(EMPTY_STAGES, true);
-    // The third of four Stage rail places; its centre 222 is 192 along the 268 from the first centre to the Run end.
-    const stage = 2 / 3;
+    const thirdOfFourStageRailPlaces = 2 / 3;
     const expected = 192 / 268;
     // ACT
-    const visual = geometry.rail.screenOf(stage);
+    const visual = geometry.rail.screenOf(thirdOfFourStageRailPlaces);
     const structural = geometry.rail.placeOf(expected);
     // ASSERT
     expect(visual).toBeCloseTo(expected);
-    expect(structural).toBeCloseTo(stage);
+    expect(structural).toBeCloseTo(thirdOfFourStageRailPlaces);
   });
 });

@@ -34,7 +34,6 @@
   text-align: center;
 }
 
-/* One tone per state, shared by a stage node and a Job: its border, icon and status text read it. */
 .node,
 .job {
   --node-tone: var(--muted-foreground);

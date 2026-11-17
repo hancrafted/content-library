@@ -4,8 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 
-// A real loopback socket on port 0, against ARCH-003 §1.1: the spec (#211) asks for the POST → file round trip end to end.
-
+// decision: ARCH-003 §1.1
 const NOW = new Date('2026-10-15T10:40:05Z');
 const SPEC = `<!doctype html>
 <html lang="en"><head><title>Spec · Budget</title><link rel="stylesheet" href="design.css" /></head>
@@ -149,9 +148,9 @@ describe('success cases', () => {
     };
     // ACT
     new Function(...Object.keys(page), script)(...Object.values(page));
-    await tick(); // sees version a
-    onEdit?.(); // the user ticks a pick
-    await tick(); // version b arrives
+    await tick();
+    onEdit?.();
+    await tick();
     // ASSERT
     expect(reloads).toBe(0);
     expect(notices.join(' ')).toMatch(asksToSave);

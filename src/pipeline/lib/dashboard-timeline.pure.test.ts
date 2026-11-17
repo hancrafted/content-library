@@ -253,7 +253,6 @@ describe('success cases', () => {
   it('maps a cutoff to its place on the Stage rail and the place back to the cutoff', async () => {
     // ARRANGE
     const timeline = dashboardTimeline(await polled(RUN, at(40)));
-    // Four of draft's nine minutes into the first of three stages.
     const expectedRail = 4 / 27;
     const expectedCutoff = at(5);
     const digits = { rail: 10, milliseconds: 0 };
@@ -345,7 +344,6 @@ describe('edge cases', () => {
   it('snaps a place just past a Stage onto it, the latest moment the rail rests there', async () => {
     // ARRANGE
     const timeline = dashboardTimeline(await polled(RUN, at(40)));
-    // Draft, the whole first of three stages, ends at minute 10; the rail rests at 1/3 until research starts at 11.
     const nearSecondStage = 1 / 3 + 0.002;
     const expected = at(11);
     // ACT

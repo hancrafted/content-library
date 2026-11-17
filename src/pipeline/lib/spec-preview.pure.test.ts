@@ -180,8 +180,8 @@ describe('success cases', () => {
       expect(mobile).toMatchObject(narrow);
     });
 
-    it('scales a preset with a fixed design size to the room below the toolbar, from the template toolbar numbers', () => {
-      // ARRANGE: a laptop window 900 px tall, less the 50 px toolbar and a 10 px margin above and below
+    it('scales a preset with a fixed design size to the room below the toolbar of a 900 px laptop window, less the 50 px toolbar and a 10 px margin above and below, from the template toolbar numbers', () => {
+      // ARRANGE
       const expected = {
         'data-preset': 'shorts',
         'data-preview-fixed': '',
@@ -196,8 +196,8 @@ describe('success cases', () => {
       expect(desktop?.style).not.toContain('--preview-scale');
     });
 
-    it('scales into the least room the toolbar numbers name when the window leaves less', () => {
-      // ARRANGE: 900 px less the bar and margins is 830 px, below a room minimum of 900 px
+    it('scales into the least room the toolbar numbers name when the window leaves less: 900 px less the bar and margins is 830 px, below a room minimum of 900 px', () => {
+      // ARRANGE
       const template = TEMPLATE.replace('"fitRoomMin":300', '"fitRoomMin":900');
       const expectedScale = '--preview-scale: 0.4688';
       // ACT
