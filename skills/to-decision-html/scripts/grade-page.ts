@@ -18,8 +18,8 @@ function parsed() {
 let target: ReturnType<typeof parsed> = null;
 try {
   target = parsed();
-} catch {
-  // An unknown option: the usage below says what is accepted.
+} catch (error) {
+  console.error((error as Error).message);
 }
 if (target === null) {
   console.error(USAGE);
