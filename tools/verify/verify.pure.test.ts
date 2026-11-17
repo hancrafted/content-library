@@ -130,12 +130,13 @@ describe('runPlan', () => {
 
     it('quick plan runs whole-repo lint and format, typecheck and the tests of uncommitted changes', () => {
       // ARRANGE
+      const expectedLabel = 'verify:quick';
       const expectedSteps = ['lint', 'format', 'typecheck', 'test'];
       const expectedTest = 'vitest run --changed';
       // ACT
       const steps = QUICK_PLAN.phases.flat().map((step) => step.name);
       // ASSERT
-      expect(QUICK_PLAN.label).toBe('verify:quick');
+      expect(QUICK_PLAN.label).toBe(expectedLabel);
       expect(steps).toEqual(expectedSteps);
       expect(commandOf(QUICK_PLAN, 'test')).toBe(expectedTest);
       expect(commandOf(QUICK_PLAN, 'lint')).toBe(commandOf(VERIFY_PLAN, 'lint'));
@@ -192,6 +193,7 @@ describe('pushPlan', () => {
     it('runs the verify plan, then the slow lane for what changed since the merge-base, then the build for an export change', () => {
       // ARRANGE
       const facts = { refs: pushed('feat/x', 'feat/x'), mergeBase: MERGE_BASE, changedPaths: ['src/app/page.tsx'] };
+      const expectedLabel = 'verify:push';
       const expectedTail = [
         ['slow: npm run -s test:slow -- --changed abc1234 --passWithNoTests [test lock]'],
         ['build: npm run -s build'],
@@ -201,7 +203,7 @@ describe('pushPlan', () => {
       // ACT
       const { plan, notes } = pushPlan(facts);
       // ASSERT
-      expect(plan.label).toBe('verify:push');
+      expect(plan.label).toBe(expectedLabel);
       expect(plan.phases.slice(0, VERIFY_PLAN.phases.length)).toEqual(VERIFY_PLAN.phases);
       expect(tail(plan)).toEqual(expectedTail);
       expect(notes).toEqual(expectedNotes);
@@ -218,9 +220,7 @@ describe('pushPlan', () => {
       expect(tail(plan).slice(1)).toEqual(expectedBuild);
       expect(notes).toEqual(expectedNotes);
     });
-  });
 
-  describe('failure cases', () => {
     it('skips the build for a docs-only branch, and still runs the slow lane for what it changed', () => {
       // ARRANGE
       const facts = { refs: pushed('docs/x', 'docs/x'), mergeBase: MERGE_BASE, changedPaths: ['docs/a.md'] };
@@ -243,7 +243,10 @@ describe('pushPlan', () => {
         ['build: npm run -s build'],
         ['test:build: npm run -s test:build'],
       ];
-      const expectedNotes = ['no merge-base with origin/main: running the whole slow lane and building'];
+      const expectedNotes = [
+        'no merge-base with origin/main: running the whole slow lane',
+        'no merge-base with origin/main: building',
+      ];
       // ACT
       const { plan, notes } = pushPlan(facts);
       // ASSERT
@@ -314,14 +317,16 @@ describe('holdAcrossLockedSteps', () => {
       // ARRANGE
       const { exec: inner, log } = fakeExec({ lint: 1 });
       const { exec, release } = holdAcrossLockedSteps(LOCKED_PLAN, inner, fakeHold(log));
+      const expectedBefore: string[] = [];
+      const expectedAfter = ['release'];
       // ACT
       await runPlan(LOCKED_PLAN, exec, () => undefined);
       const beforeRelease = log.filter((entry) => entry === 'release');
       await release();
       const afterRelease = log.filter((entry) => entry === 'release');
       // ASSERT
-      expect(beforeRelease).toEqual([]);
-      expect(afterRelease).toEqual(['release']);
+      expect(beforeRelease).toEqual(expectedBefore);
+      expect(afterRelease).toEqual(expectedAfter);
     });
 
     it('fails a locked step that cannot take the lock, naming why, without running it', async () => {
@@ -331,12 +336,13 @@ describe('holdAcrossLockedSteps', () => {
       const { exec, release } = holdAcrossLockedSteps(LOCKED_PLAN, inner, fakeHold(log, reason));
       const printed: string[] = [];
       const expectedBlock = `✖ test (0.0s)\n${reason}\n`;
+      const neverStarted = 'start test';
       // ACT
       const passed = await runPlan(LOCKED_PLAN, exec, (text) => printed.push(text));
       await release();
       // ASSERT
       expect(passed).toBe(false);
-      expect(log).not.toContain('start test');
+      expect(log).not.toContain(neverStarted);
       expect(printed).toContain(expectedBlock);
     });
   });
@@ -346,11 +352,12 @@ describe('holdAcrossLockedSteps', () => {
       // ARRANGE
       const { exec: inner, log } = fakeExec();
       const { exec, release } = holdAcrossLockedSteps(QUICK_PLAN, inner, fakeHold(log));
+      const taken = 'take';
       // ACT
       await runPlan(QUICK_PLAN, exec, () => undefined);
       await release();
       // ASSERT
-      expect(log).not.toContain('take');
+      expect(log).not.toContain(taken);
     });
   });
 });

@@ -86,7 +86,7 @@ const BUILD_PHASES: readonly (readonly Step[])[] = [[script('build')], [script('
 function buildReason({ refs, mergeBase, changedPaths }: PushFacts): string | null {
   const remoteRefs = refs.split('\n').map((line) => line.trim().split(/\s+/)[2]);
   if (remoteRefs.includes('refs/heads/main')) return 'push to main: building';
-  if (mergeBase === null) return 'no merge-base with origin/main: running the whole slow lane and building';
+  if (mergeBase === null) return 'no merge-base with origin/main: building';
   if (needsBuild(changedPaths)) return `an export input changed since ${mergeBase}: building`;
   return null;
 }
@@ -95,14 +95,15 @@ function buildReason({ refs, mergeBase, changedPaths }: PushFacts): string | nul
  * `npm run verify:push`, run by `.husky/pre-push`: the verify plan, then the slow lane for what the branch changed
  * since its merge-base with main (all of it without one), then `build` and `test:build` when the push is to main,
  * has no merge-base, or changed an export input (`needsBuild`). The fast suite and the slow lane hold the test lock;
- * the build does not. `notes` say why it builds or not.
+ * the build does not. `notes` say why the slow lane runs whole, and why it builds or not.
  */
 export function pushPlan(facts: PushFacts): { plan: Plan; notes: string[] } {
   const { mergeBase } = facts;
   const slowArgs = mergeBase === null ? '' : ` -- --changed ${mergeBase} --passWithNoTests`;
   const slow: Step = { name: 'slow', command: `npm run -s test:slow${slowArgs}`, testLock: true };
+  const slowNotes = mergeBase === null ? ['no merge-base with origin/main: running the whole slow lane'] : [];
   const reason = buildReason(facts);
-  const notes = [reason ?? `no export input changed since ${mergeBase}: skipping the build`];
+  const notes = [...slowNotes, reason ?? `no export input changed since ${mergeBase}: skipping the build`];
   const phases = [...VERIFY_PLAN.phases, [slow], ...(reason === null ? [] : BUILD_PHASES)];
   return { plan: { label: 'verify:push', phases }, notes };
 }
