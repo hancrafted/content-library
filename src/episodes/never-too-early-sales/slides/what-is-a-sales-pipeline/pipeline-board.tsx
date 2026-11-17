@@ -36,7 +36,6 @@ const SPAN: Record<Stage['span'], string> = {
   3: '@2xl:col-span-3',
 };
 
-/** Paper tilt alternates note by note, so the board reads as hand-pinned. */
 const TILT = ['-rotate-1', 'rotate-1', 'rotate-1', '-rotate-2', '-rotate-1', 'rotate-2'];
 
 const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background';
