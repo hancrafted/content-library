@@ -1,30 +1,23 @@
 import {
-  explorablePageRef,
   folderOf,
-  guideRef,
-  templateRef,
   type EpisodeRef,
   type ExplorablePageRef,
   type GuideRef,
   type TemplateRef,
 } from '@/content-store/catalogue/episode-id.pure';
-import {
-  EXPLORABLE_PAGE_SLUGS,
-  GUIDE_SLUGS,
-  hasPage,
-  type TemplateSlug,
-} from '@/content-store/catalogue/record-routes';
+import { hasPage } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
+import { placeSections, type SectionList, type SlideOutline } from './episode.pure';
 import { formatAsRepo } from './oxfmt-format.ts';
 
 /*
  * Published anchors (FE-002 §5.2): every Slide anchor a page has ever put in a URL stays reachable.
  * `<page>/published-anchors.json` snapshots them; a Slide may be added freely, but an anchor in the snapshot MUST still
  * be produced by the walk (`placeSections`). Each page folder's Episode-level checks hold its own snapshot
- * (`composed-page-checks.ts`); these are the parts they read.
+ * (`composed-page-checks.ts`) with `publishedAnchorFindings`.
  */
 
 /** A page whose anchors may be bound: an Episode, a Template, an Explorable page or a Guide. */
@@ -75,16 +68,32 @@ export function isBound(page: Page, status: EpisodeStatus | undefined): boolean 
   return page.kind === 'standalone' || page.kind === 'event-copy' ? status !== 'upcoming' && hasPage(page) : true;
 }
 
-/** The pages whose anchors are bound, from the Episodes with their status and the Templates. */
-export function boundPages(
-  episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
-  tooling: readonly TemplateSlug[],
-): ComposedPage[] {
-  const bound = episodes.flatMap(({ ref, status }) => (isBound(ref, status) && hasPage(ref) ? [ref] : []));
-  return [
-    ...tooling.map(templateRef),
-    ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef),
-    ...GUIDE_SLUGS.map(guideRef),
-    ...bound,
-  ];
+/** What the published-anchor check reads of a page's composition: its Sections of Slides. */
+interface ComposedSections {
+  readonly sections: readonly SectionList<SlideOutline>[];
+}
+
+/** The anchors the walk produces for a page, as the Episode page does: its record's Section lists. */
+function producedAnchors({ sections }: ComposedSections): string[] {
+  return placeSections(sections).flatMap((section) => section.map(({ id }) => id));
+}
+
+/** Whether a snapshot is sorted with no anchor twice, as the file to paste writes it. */
+const sortedAndUnique = (anchors: readonly string[]): boolean => anchors.join() === [...new Set(anchors)].sort().join();
+
+/** A bound page's published anchors it no longer produces, a snapshot out of order, or the snapshot it lacks. */
+export async function publishedAnchorFindings(
+  page: ComposedPage,
+  status: EpisodeStatus | undefined,
+  composition: ComposedSections,
+): Promise<string[]> {
+  if (!isBound(page, status)) return [];
+  const produced = producedAnchors(composition);
+  try {
+    const published = await publishedAnchorsOf(page, produced);
+    const order = sortedAndUnique(published) ? [] : ['published-anchors.json is not sorted and unique'];
+    return [...lostAnchors({ slug: page.id, published, produced }), ...order];
+  } catch (error) {
+    return [(error as Error).message];
+  }
 }

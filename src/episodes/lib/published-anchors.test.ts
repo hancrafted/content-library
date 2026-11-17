@@ -1,9 +1,7 @@
-import { episodeRef, guideRef, templateRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
-import { EXPLORABLE_PAGE_SLUGS, GUIDE_SLUGS } from '@/content-store/catalogue/record-routes';
-import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
+import { episodeRef, guideRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { boundPages, isBound, lostAnchors, publishedAnchorsOf } from './published-anchors';
+import { isBound, lostAnchors, publishedAnchorsOf } from './published-anchors';
 
 /*
  * Published anchors (FE-002): the parts each page folder's Episode-level checks read to hold its snapshot. Whether
@@ -55,17 +53,14 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('skips an upcoming Episode with a page and binds a published one', () => {
+  it('leaves an upcoming Episode unbound, so its anchors may still move', () => {
     // ARRANGE
-    const episodes: { ref: EpisodeRef; status: EpisodeStatus }[] = [
-      { ref: episodeRef('maintaining-markdown-for-ai'), status: 'published' },
-      { ref: episodeRef('ai-token-economy'), status: 'upcoming' },
-    ];
-    const expected = ['episode-template', ...EXPLORABLE_PAGE_SLUGS, ...GUIDE_SLUGS, 'maintaining-markdown-for-ai'];
+    const upcoming = episodeRef('ai-token-economy');
+    const expected = false;
     // ACT
-    const bound = boundPages(episodes, ['episode-template']).map(({ id }) => id);
+    const bound = isBound(upcoming, 'upcoming');
     // ASSERT
-    expect(bound).toEqual(expected);
+    expect(bound).toBe(expected);
   });
 
   it('allows a new anchor the snapshot does not list', () => {

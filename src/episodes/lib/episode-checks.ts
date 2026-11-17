@@ -1,6 +1,9 @@
+import type { GlobEntries, NamedCheck } from '@/shared/lib/folder-check';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
-import { composedPageChecks, type GlobEntries, type NamedCheck } from './composed-page-checks';
+import type { ComposedPage } from './composed-page';
+import { composedPageChecks } from './composed-page-checks';
+import { pageFolders } from './episode-folders';
 
 /*
  * The Episode-level checks (ARCH-003 §4.7): every invariant that holds inside one page folder, run on that folder
@@ -25,8 +28,8 @@ export interface EpisodeChecks {
 
 const ENTRY = 'slide.tsx';
 const SLIDES_DIR = 'slides';
-/** A page folder's composition: the record that orders its Sections of Slides. */
-const PAGE_ENTRY = 'episode.ts';
+/** The repository root, from this module's own place in it: where the folder walker looks for page folders. */
+const ROOT = path.resolve(import.meta.dirname, '../../..');
 /** Folders an Episode MUST NOT keep beside its Slides: Slide code lives only in its Slide folder (FE-004 §3). */
 const EPISODE_CODE_FOLDERS = ['parts', 'client'];
 
@@ -103,25 +106,32 @@ function slideFolderChecks(slidesDir: string, prefix: string, entries: GlobEntri
   return { slides, folder: [entryCheck] };
 }
 
+/** The composition checks of the page folder `dir`, found by the one folder walker, never by reading its path. */
+function pageChecks(dir: string, page: GlobEntries): NamedCheck[] {
+  if (Object.keys(page).length === 0) return [];
+  const found = pageFolders(ROOT).find((folder) => folder.dir === path.resolve(dir));
+  if (found !== undefined) return composedPageChecks(dir, found as ComposedPage, page);
+  return [
+    {
+      name: 'sits where the folder walker finds a page folder, so its composition is checked',
+      findings: async () => [`${dir} is no page folder under ${path.join(ROOT, 'src/episodes')}`],
+    },
+  ];
+}
+
 /**
  * The checks of one page folder (an Episode, an Event's copy, a Template, an Explorable page or a Guide): `dir` is the
  * folder, `entries` its `import.meta.glob('./slides/*\/slide.tsx')`, which puts every Slide in the test's import graph,
  * and `page` its `import.meta.glob('./episode.ts')`, which puts its composition there: Sections, markers and own text.
+ * A folder with no page, such as a test's fixture, hands `{}`.
  */
-export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntries = {}): EpisodeChecks {
+export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntries): EpisodeChecks {
   const { slides, folder } = slideFolderChecks(path.join(dir, SLIDES_DIR), `${SLIDES_DIR}/`, entries);
   const codeFolders: NamedCheck = {
     name: 'keeps no Episode-level parts/ or client/ folder: Slide code lives only in its Slide folder',
     findings: async () => EPISODE_CODE_FOLDERS.filter((kind) => existsSync(path.join(dir, kind))),
   };
-  const handedOver: NamedCheck = {
-    name: `hands its ${PAGE_ENTRY} to the checks, so none of its composition goes unchecked`,
-    findings: async () =>
-      existsSync(path.join(dir, PAGE_ENTRY)) && Object.keys(page).length === 0
-        ? [`pass import.meta.glob('./${PAGE_ENTRY}') to episodeChecks`]
-        : [],
-  };
-  return { slides, folder: [...folder, codeFolders, handedOver, ...composedPageChecks(dir, page)] };
+  return { slides, folder: [...folder, codeFolders, ...pageChecks(dir, page)] };
 }
 
 /** The checks of the Slide pool, whose Slide folders sit directly in `dir`: `entries` is `import.meta.glob('./*\/slide.tsx')`. */

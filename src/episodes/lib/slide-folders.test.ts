@@ -1,4 +1,5 @@
 import { pageFolders, slideFolders } from '@/episodes/lib/episode-folders';
+import { EPISODE_CHECKS_TEST as CHECKS_TEST } from '@/shared/lib/folder-check';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -13,7 +14,6 @@ import { describe, expect, it } from 'vitest';
  */
 
 const ROOT = process.cwd();
-const CHECKS_TEST = 'episode-checks.test.ts';
 const SLIDE_POOL = path.join(ROOT, 'src/episodes/slide-pool');
 
 describe('success cases', () => {

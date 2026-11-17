@@ -1,30 +1,19 @@
-import {
-  EVENT_COPIES_FOLDER,
-  EXPLORABLE_PAGES_FOLDER,
-  episodeRef,
-  explorablePageRef,
-  guideRef,
-  GUIDES_FOLDER,
-  templateRef,
-  TEMPLATES_FOLDER,
-  type EpisodeRef,
-  type ExplorablePageRef,
-  type GuideRef,
-  type TemplateRef,
-} from '@/content-store/catalogue/episode-id.pure';
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { listEpisodes, listEvents } from '@/content-store/store';
 import { tocSectionsOf } from '@/episodes/components/episode-page/episode-page-container.pure';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { localizeSlideOutline } from '@/episodes/components/slide-master/slide-outline';
+import type { GlobEntries, NamedCheck } from '@/shared/lib/folder-check';
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
+import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
-import { placementMarkerFindings, publishedAnchorFindings } from './composed-page-files';
 import { containerLosses, repeatedIds } from './composed-page-render';
 import { placeSections, sectionOf } from './episode.pure';
 import { summaryOf } from './page-summary';
 import { anchorTitleAt } from './page-summary.pure';
+import { publishedAnchorFindings } from './published-anchors';
 
 /*
  * The Episode-level checks that read a page's composition (ARCH-003 §4.7): what the registry, summary, DOM-id,
@@ -35,28 +24,8 @@ import { anchorTitleAt } from './page-summary.pure';
  * `composed-page-render.ts`.
  */
 
-/** Modules as `import.meta.glob` returns them, lazy, by path: a page's `./episode.ts`, or its Slides' entries. */
-export type GlobEntries = Readonly<Record<string, () => Promise<unknown>>>;
-
-/** One check: the test name it runs under, and its findings, empty when it holds. Run checks share the shape. */
-export interface NamedCheck {
-  readonly name: string;
-  readonly findings: () => Promise<readonly string[]>;
-}
-
 /** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included (design-ADR-0012). */
-export const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
-
-/** The page a folder under `src/episodes/` holds, by the ref the store serves it with. */
-export function pageRefOf(dir: string): EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef {
-  const [first, second, third] =
-    dir.split(`${path.sep}src${path.sep}episodes${path.sep}`).at(-1)?.split(path.sep) ?? [];
-  if (first === TEMPLATES_FOLDER) return templateRef(second);
-  if (first === EXPLORABLE_PAGES_FOLDER) return explorablePageRef(second);
-  if (first === GUIDES_FOLDER) return guideRef(second);
-  if (first === EVENT_COPIES_FOLDER) return episodeRef(third, second);
-  return episodeRef(first);
-}
+const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
 /** The composition an `episode.ts` module exports: its one value carrying Sections and own text. */
 function compositionIn(module: unknown): EpisodeComposition {
@@ -134,6 +103,42 @@ function sectionFindings({ sections }: EpisodeComposition): string[] {
     ...sections.flatMap((section, index) => (section.length === 0 ? [`Section ${index} is empty`] : [])),
     ...openers.filter((slug, index) => openers.indexOf(slug) !== index).map((slug) => `${slug} opens two Sections`),
   ];
+}
+
+const MARKERS_DIR = 'sections';
+
+/** The marker module names of a page folder, without the extension. */
+function markerNames(dir: string): string[] {
+  return readdirSync(path.join(dir, MARKERS_DIR))
+    .filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'))
+    .map((file) => file.slice(0, -'.ts'.length))
+    .sort();
+}
+
+/** One marker against its Section: it exports exactly one Slide list, its section slide first, and that list is the Section. */
+async function markerFindings(dir: string, name: string, sections: EpisodeComposition['sections']): Promise<string[]> {
+  const exported: unknown[] = Object.values(await import(path.join(dir, MARKERS_DIR, `${name}.ts`)));
+  const firsts = (exported.filter(Array.isArray) as { slug: string }[][]).map(([first]) => first?.slug).join(', ');
+  const section = sections.find(([opener]) => opener.slug === name);
+  return [
+    ...(firsts === name ? [] : [`${MARKERS_DIR}/${name}.ts exports lists opening ${firsts}`]),
+    ...(section === undefined || exported.includes(section)
+      ? []
+      : [`Section ${name} is not the list ${MARKERS_DIR}/${name}.ts exports`]),
+  ];
+}
+
+/** A page folder's Section markers against its record: one per Section, named after its section slide, none astray. */
+async function placementMarkerFindings(dir: string, { sections }: EpisodeComposition): Promise<string[]> {
+  if (!existsSync(path.join(dir, MARKERS_DIR))) return [];
+  const openers = sections.map(([opener]) => opener.slug);
+  const names = markerNames(dir);
+  const missing = openers.filter((slug) => !names.includes(slug)).map((slug) => `no marker for Section ${slug}`);
+  const strays = names
+    .filter((name) => !openers.includes(name))
+    .map((name) => `${MARKERS_DIR}/${name}.ts names no Section of the record`);
+  const lists = await Promise.all(names.map((name) => markerFindings(dir, name, sections)));
+  return [...missing, ...strays, ...lists.flat()];
 }
 
 /** Every Playlist entry that opens this Episode at an anchor, with the Event presenting it. */
@@ -218,11 +223,10 @@ function slideDeckChecks(dir: string, page: ComposedPage, load: Load): NamedChec
   ];
 }
 
-/** The composition checks of the page folder `dir`, from its `episode.ts` entry; none when it has no page. */
-export function composedPageChecks(dir: string, entry: GlobEntries): NamedCheck[] {
+/** The composition checks of `page`, held in the page folder `dir`, from its `episode.ts` entry; none when it has none. */
+export function composedPageChecks(dir: string, page: ComposedPage, entry: GlobEntries): NamedCheck[] {
   const load = Object.values(entry)[0];
   if (load === undefined) return [];
-  const page = pageRefOf(dir) as ComposedPage;
   let composition: Promise<EpisodeComposition> | undefined;
   const loaded = () => (composition ??= load().then(compositionIn));
   const episode = page.kind === 'standalone' || page.kind === 'event-copy';
