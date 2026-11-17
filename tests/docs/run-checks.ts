@@ -37,14 +37,16 @@ const wikiResearchFolders = (): string[] =>
     .flatMap(subfolders)
     .map((folder) => path.relative(ROOT, folder));
 
+export const isPlannedResearchOutput = (output: string): boolean =>
+  output.endsWith('/research.md') && !output.includes('*');
+
 export function researchFoldersOfRun(
   onDisk: readonly string[],
   pipeline: string | undefined,
   wiki: readonly string[],
 ): string[] {
   const planned = (pipeline === undefined ? [] : outputsOf([pipeline]))
-    // A draft keeps write-research's foreach glob; only a named folder is a planned one.
-    .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
+    .filter(isPlannedResearchOutput)
     .map((output) => path.posix.dirname(output));
   const promoted = new Set(wiki.map((folder) => path.posix.basename(folder)));
   return [...new Set([...onDisk, ...planned.filter((folder) => !promoted.has(path.posix.basename(folder)))])];
@@ -67,9 +69,10 @@ export function researchIdFindings(
   elsewhere: readonly string[],
   categories: readonly string[],
 ): string[] {
-  // Every folder elsewhere is checked by its own Run or the template test: report only findings that name this Run's.
+  const namesThisRunsFolder = ({ message }: { message: string }): boolean =>
+    own.some((folder) => message.includes(folder));
   return checkResearchFolders([...own, ...elsewhere], categories)
-    .filter(({ message }) => own.some((folder) => message.includes(folder)))
+    .filter(namesThisRunsFolder)
     .map(({ message }) => message);
 }
 
@@ -88,8 +91,8 @@ function pipelineFindings(run: Run): string[] {
 
 function researchJobFindings(run: Run): string[] {
   const yaml = run.files['pipeline.yml'];
-  // A branch in flight keeps its run-log.md, whose Research jobs list stands in for the plan.
-  const plan = run.files['research-plan.md'] ?? run.files['run-log.md'];
+  const runLogOfBranchInFlight = run.files['run-log.md'];
+  const plan = run.files['research-plan.md'] ?? runLogOfBranchInFlight;
   return yaml === undefined ? [] : shown(run.staging, checkResearchJobs(pipelineOf(run), yaml, plan));
 }
 

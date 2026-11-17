@@ -10,13 +10,14 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   EPISODES,
+  isRunLogOfBranchInFlightThatNoRuleGoverns,
   knownVisuals,
   LLM_WIKI,
   llmWikiResearch,
   PENDING,
   pipelineContext,
   readFolder,
-  researchFoldersOnDisk,
+  researchFolderNamesAcrossRuns,
   ROOT,
   rubricsWithoutHeading,
   RUNS_CSV,
@@ -143,7 +144,7 @@ describe('success cases', () => {
     // ARRANGE
     const categories = researchCategories(readFileSync(path.join(ROOT, 'GLOSSARY.md'), 'utf8'));
     // ACT
-    const findings = checkResearchFolders(researchFoldersOnDisk(), categories);
+    const findings = checkResearchFolders(researchFolderNamesAcrossRuns(), categories);
     // ASSERT
     expect(categories.length).toBeGreaterThan(0);
     expect(findings).toEqual([]);
@@ -205,6 +206,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("excuses only a branch in flight's run-log.md that is on disk, never another file or a missing one", () => {
+    // ARRANGE
+    const paths = ['docs/episodes/no-such-run/run-log.md', 'docs/episodes/runs.csv'];
+    const expected = [false, false];
+    // ACT
+    const excused = paths.map(isRunLogOfBranchInFlightThatNoRuleGoverns);
+    // ASSERT
+    expect(excused).toEqual(expected);
+  });
+
   it('keeps the pending list to files that are still missing', () => {
     // ARRANGE
     const pending = PENDING;

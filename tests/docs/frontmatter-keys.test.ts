@@ -10,8 +10,7 @@ const ROOT = path.join(__dirname, '../..');
 const MH = path.join(ROOT, 'node_modules/.bin/mh');
 const CONFIG = path.join(ROOT, 'markdown-harness.config.yaml');
 
-/** Every markdown file the `feature-guide`, `agent-guide` and `glossary` rules govern, as a repo path. */
-function guides(): string[] {
+function filesTheGuideAndGlossaryRulesGovern(): string[] {
   const folders = ['docs/features', 'docs/design', 'docs/agents'];
   return [
     ...folders.flatMap((folder) =>
@@ -38,7 +37,7 @@ function checkGuide(markdown: string): { status: number | null; violations: numb
 describe('success cases', () => {
   it('finds every guide and the glossary titled as its h1', () => {
     // ARRANGE
-    const files = guides();
+    const files = filesTheGuideAndGlossaryRulesGovern();
     // ACT
     const findings = files.flatMap((file) => checkTitleMatchesH1(file, readFileSync(path.join(ROOT, file), 'utf8')));
     // ASSERT

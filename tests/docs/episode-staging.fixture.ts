@@ -16,10 +16,8 @@ export const SKILL_FOLDER = 'skills/new-episode';
 export const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
 
 export const PENDING: readonly string[] = [];
-/** Files a frozen per-run pipeline may still name: of retired jobs (scaffold-pipeline, #229) or replaced assets. */
-export const RETIRED: readonly string[] = [
+export const READS_A_FROZEN_PER_RUN_PIPELINE_KEEPS: readonly string[] = [
   `${SKILL_FOLDER}/references/scaffold-pipeline.md`,
-  // The Spec template replaced these two assets (#562); an approved per-run pipeline keeps the reads it was approved with.
   `${SKILL_FOLDER}/assets/spec-frame.html`,
   `${SKILL_FOLDER}/assets/spec-review.html`,
 ];
@@ -71,12 +69,7 @@ export function llmWikiResearch(): Record<string, string> {
   );
 }
 
-/**
- * Every research folder on disk, as a repo path: each Run's under `docs/episodes/<slug>/research/` and each llm-wiki
- * category's. It reads folder names only, never a Run's files: the cross-Run half of the research-folder check, while
- * each Run checks its own and the folders its pipeline will write (`run-checks.ts`).
- */
-export function researchFoldersOnDisk(): string[] {
+export function researchFolderNamesAcrossRuns(): string[] {
   const runs = subfolders(EPISODES).flatMap((run) => subfolders(path.join(run, 'research')));
   const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
   return [...runs, ...llmWiki].map((folder) => path.relative(ROOT, folder));
@@ -84,26 +77,27 @@ export function researchFoldersOnDisk(): string[] {
 
 export const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 
-/** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
-export const governance = new Map<string, boolean>();
+export const mhQueryAnswerCacheByPath = new Map<string, boolean>();
 
 export const outputsOf = (yamls: readonly string[]): string[] =>
   yamls.flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs.flatMap((job) => job.outputs ?? []));
 
-/**
- * Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. A
- * lookup outside the cache batches every markdown output `yamls` name, so one pipeline's outputs cost one spawn.
- */
-export function governed(file: string, yamls: readonly string[]): boolean {
-  if (governance.has(file)) return governance.get(file) === true;
+export function governedByBatchedMhQuery(file: string, yamls: readonly string[]): boolean {
+  if (mhQueryAnswerCacheByPath.has(file)) return mhQueryAnswerCacheByPath.get(file) === true;
   const files = [
-    ...new Set([file, ...outputsOf(yamls).filter((output) => output.endsWith('.md') && !governance.has(output))]),
+    ...new Set([
+      file,
+      ...outputsOf(yamls).filter((output) => output.endsWith('.md') && !mhQueryAnswerCacheByPath.has(output)),
+    ]),
   ];
   const answer = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', '--batch', ...files], { cwd: ROOT });
   const { results } = (JSON.parse(String(answer)) as { result: { results: { governance: string }[] } }).result;
-  files.forEach((each, at) => governance.set(each, results[at].governance === 'governed'));
-  return governance.get(file) === true;
+  files.forEach((each, at) => mhQueryAnswerCacheByPath.set(each, results[at].governance === 'governed'));
+  return mhQueryAnswerCacheByPath.get(file) === true;
 }
+
+export const isRunLogOfBranchInFlightThatNoRuleGoverns = (file: string): boolean =>
+  file.endsWith('/run-log.md') && existsSync(path.join(ROOT, file));
 
 export function pipelineContext(
   pending: readonly string[],
@@ -129,10 +123,9 @@ export function pipelineContext(
     exists,
     staging,
     perRun: staging !== TEMPLATE_STAGING,
-    // A branch in flight keeps writing its run-log.md, which no rule governs any more.
-    governs: (file) => (file.endsWith('/run-log.md') && exists(file)) || governed(file, yamls),
+    governs: (file) => isRunLogOfBranchInFlightThatNoRuleGoverns(file) || governedByBatchedMhQuery(file, yamls),
     pending,
-    retired: RETIRED,
+    retired: READS_A_FROZEN_PER_RUN_PIPELINE_KEEPS,
   };
 }
 
