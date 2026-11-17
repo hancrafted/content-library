@@ -45,8 +45,9 @@ function tryLock(lockFile: string, token: string): boolean {
 function breakStaleLock(lockFile: string): void {
   try {
     if (Date.now() - statSync(lockFile).mtimeMs > STALE_LOCK_MILLISECONDS) unlinkSync(lockFile);
-  } catch {
-    // the holder released it between our checks
+  } catch (holderReleasedItBetweenOurChecks) {
+    if ((holderReleasedItBetweenOurChecks as NodeJS.ErrnoException).code !== 'ENOENT')
+      throw holderReleasedItBetweenOurChecks;
   }
 }
 

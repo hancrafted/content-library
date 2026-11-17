@@ -1,5 +1,14 @@
 import { fork } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  unlinkSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -162,6 +171,21 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
       const seqs = written(root).map((l) => l.seq as number);
       expect(seqs).toHaveLength(expectedLength);
       expect(new Set(seqs).size).toBe(expected);
+    });
+  });
+
+  describe('lock failures', () => {
+    it('surfaces a stale lock it cannot remove instead of waiting out the lock timeout', () => {
+      // ARRANGE
+      const root = worktree();
+      const lock = path.join(root, `${FILE}.lock`);
+      mkdirSync(lock);
+      const longAgo = new Date(Date.now() - 60_000);
+      utimesSync(lock, longAgo, longAgo);
+      // ACT
+      const append = () => appendEvent(at(root), START, { ...deps(), lockWaitMilliseconds: 500 });
+      // ASSERT
+      expect(append).toThrow(/EISDIR|EPERM/);
     });
   });
 
