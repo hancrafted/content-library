@@ -1,6 +1,3 @@
-// The worktree lifecycle: `new <branch>` makes a checkout that passes preflight,
-// `done <branch> [--kill]` removes it and fast-forwards local main, `sync` merges origin/main into the current branch. With `--base <branch>`
-// both work against that branch instead of main, and `done` merges into it first. See ../SKILL.md.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
@@ -12,10 +9,8 @@ import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from 
 import { removeWorktree } from './worktree-remove.ts';
 import { signalProcess } from './worktree-signal.ts';
 
-/** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
   execFileSync(cmd, args, { cwd, encoding: 'utf8' }).trim();
-/** Runs a command with its output streamed to the terminal. */
 const stream = (cmd: string, args: string[], cwd?: string) => execFileSync(cmd, args, { cwd, stdio: 'inherit' });
 
 function fail(message: string): never {
@@ -23,7 +18,6 @@ function fail(message: string): never {
   process.exit(1);
 }
 
-/** The main checkout, wherever this runs from: worktrees share its git dir. */
 function mainRoot(): string {
   return path.dirname(path.resolve(capture('git', ['rev-parse', '--git-common-dir'])));
 }
@@ -32,33 +26,29 @@ function worktreePath(branch: string): string {
   return path.join(mainRoot(), '.worktrees', branch.replaceAll('/', '-'));
 }
 
-/** The branch's Claude Desktop folder; skills/claude-project-context/scripts/sync.ts names it by the same slug. */
-function removeContextFolder(branch: string): void {
+function removeClaudeDesktopContextFolder(branch: string): void {
   const folder = path.join(mainRoot(), 'docs', 'claude-project-context', branch.replaceAll('/', '-'));
   rmSync(folder, { recursive: true, force: true });
 }
 
 function create(branch: string, base: string | null): void {
   const target = worktreePath(branch);
-  // A local base (an Episode's integration branch) may not be pushed yet, so only main is fetched.
-  if (base === null) stream('git', ['fetch', 'origin']);
+  const branchesFromMain = base === null;
+  if (branchesFromMain) stream('git', ['fetch', 'origin']);
   stream('git', ['worktree', 'add', target, '-b', branch, base ?? 'origin/main']);
-  // A real install, never a symlink: Turbopack, mh check and husky all need it.
-  stream('npm', ['ci'], target);
+  const installNodeModulesForRealNeverSymlinked = () => stream('npm', ['ci'], target);
+  installNodeModulesForRealNeverSymlinked();
   stream('npx', ['husky'], target);
   console.log(`✔ worktree ready: ${target}\n  next: cd ${target}`);
 }
 
-/** Processes whose cwd sits inside the worktree. */
 function processesIn(target: string): Proc[] {
-  // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
-  const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], {
+  const { stdout: lsofStdoutWhateverItsExitCode } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], {
     encoding: 'utf8',
   });
-  return parseLsof(stdout, target);
+  return parseLsof(lsofStdoutWhateverItsExitCode, target);
 }
 
-/** This process and its ancestors (the agent's shell among them), which --kill never touches. */
 function protectedPids(): Set<number> {
   const parentOf = new Map<number, number>();
   for (const line of capture('ps', ['-axo', 'pid=,ppid=']).split('\n')) {
@@ -78,7 +68,6 @@ const isAlive = (pid: number): boolean => {
   }
 };
 
-/** SIGTERM, a short wait, then SIGKILL for whatever is left. */
 function killProcesses(procs: Proc[]): void {
   for (const proc of procs) signalProcess(proc.pid, 'SIGTERM');
   const deadline = Date.now() + 3000;
@@ -92,8 +81,7 @@ function refuseInsideWorktree(target: string): void {
     fail(`run this from the main checkout, not from inside ${target}`);
 }
 
-/** Refuses while something still runs in the worktree; with `kill`, stops it first. Run last, once every other guard passed. */
-function refuseWhileBusy(target: string, kill: boolean): void {
+function refuseWhileBusyLastBeforeRemoval(target: string, kill: boolean): void {
   let busy = processesIn(target);
   if (kill && busy.length > 0) {
     killProcesses(killable(busy, protectedPids()));
@@ -116,8 +104,7 @@ function deleteBranch(branch: string): void {
   }
 }
 
-/** Checked before anything is removed, so a refusal leaves the worktree intact. */
-function refuseUnpushedMain(): void {
+function refuseUnpushedMainBeforeAnyRemoval(): void {
   stream('git', ['fetch', 'origin']);
   const unpushed = capture('git', ['log', '--oneline', 'origin/main..main']);
   if (unpushed) fail(`local main holds unpushed commits; push or move them, then rerun:\n${unpushed}`);
@@ -130,14 +117,12 @@ function syncMain(root: string): void {
   console.log('✔ local main fast-forwarded to origin/main');
 }
 
-/** The branch is merged into its base by now, so it goes. */
-function deleteMerged(branch: string, base: string): void {
+function forceDeleteMergedBranch(branch: string, base: string): void {
   capture('git', ['branch', '-D', branch]);
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
 }
 
 async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
-  // Read before the merge, which moves the merge-base up to the branch tip.
   const forked = forkDateBeforeMerge(branch, base, mainRoot());
   const note = `since it branched off ${base}`;
   const slowTests = forked === null ? [] : slowTestReport({ cwd: mainRoot(), branch, since: forked, note });
@@ -166,47 +151,39 @@ function removeCheckout(target: string, branch: string): void {
 async function finish(branch: string, base: string | null, kill: boolean): Promise<void> {
   const target = worktreePath(branch);
   refuseInsideWorktree(target);
-  if (base === null) refuseUnpushedMain();
-  // Merged before anything is removed, so a failure leaves the worktree and branch intact.
+  if (base === null) refuseUnpushedMainBeforeAnyRemoval();
   else await mergeBeforeRemoval(branch, base);
-  // Every refusing guard has passed; stopping processes comes last, just before removal.
-  // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
-  for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
-  refuseWhileBusy(target, kill);
+  const portsOfTheRunsOwnServers = stopServers(target);
+  for (const port of portsOfTheRunsOwnServers) console.log(`✔ stopped the Run's server on :${port}`);
+  refuseWhileBusyLastBeforeRemoval(target, kill);
   removeCheckout(target, branch);
-  removeContextFolder(branch);
+  removeClaudeDesktopContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
-  // Every finish keeps the slow-tests log to its last 30 days, with or without a base.
   trimSlowTests({ cwd: mainRoot(), now: new Date() });
   if (base !== null) {
-    deleteMerged(branch, base);
+    forceDeleteMergedBranch(branch, base);
     return;
   }
   deleteBranch(branch);
   syncMain(mainRoot());
 }
 
-/**
- * Fetches origin, then merges origin/main (or the base) into the current worktree's branch, holding that branch's
- * merge lock, so a `wt:done --base` into this branch waits instead of merging alongside.
- */
 async function sync(base: string | null): Promise<void> {
   const branch = capture('git', ['branch', '--show-current']);
   const dirty = capture('git', ['status', '--porcelain']) !== '';
   const plan = planSync({ branch, base, dirty });
   if ('error' in plan) fail(plan.error);
   stream('git', ['fetch', 'origin']);
-  // Fails only once the lock is released: process.exit inside it would skip the release.
-  const merged = await withMergeLock(
+  const mergedReportedAfterLockRelease = await withMergeLock(
     branch,
     { cwd: process.cwd(), log: console.log },
     () => spawnSync('git', ['merge', plan.target], { stdio: 'inherit' }).status === 0,
   );
-  if (!merged) fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
+  if (!mergedReportedAfterLockRelease)
+    fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
   console.log(`✔ ${branch} merged with ${plan.target}`);
 }
 
-/** Whether a local branch of that name exists. */
 function localBranchExists(branch: string): boolean {
   return spawnSync('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).status === 0;
 }
