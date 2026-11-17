@@ -32,6 +32,7 @@ const RECORDINGS = [
   { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
   { slug: 'maintaining-markdown-for-ai', en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
   { slug: 'never-too-early-sales', en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
+  { slug: 'from-shared-understanding-to-shared-context', en: 'ybDzHMJ_1e0', de: 'ybDzHMJ_1e0' },
 ] as const;
 function without<T extends object>(record: T, key: keyof T): Partial<T> {
   const copy: Partial<T> = { ...record };
