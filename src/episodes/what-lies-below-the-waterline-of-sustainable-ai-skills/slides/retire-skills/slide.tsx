@@ -20,10 +20,6 @@ const ENTERPRISE = {
   url: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/enterprise',
 };
 
-/**
- * Slide 9's index lines in its order, each by its skill folder (code, never translated) and its uses this season; 0
- * is unused. The counts are the scene's, not data.
- */
 const BEFORE = [
   ['rinse-camera-dome', 2],
   ['sample-old', 0],

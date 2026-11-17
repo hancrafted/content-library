@@ -228,11 +228,7 @@
   color: var(--primary-foreground);
 }
 
-/*
- * The one emphasis motion, once on entry: the unused lines grey out, the retired cards drop into the crate, the index
- * closes up into the short card and the needed line lights. The base rules are the end state, as reduced motion and a
- * still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .greyOut {
     animation: grey-out 600ms ease-out 300ms both;

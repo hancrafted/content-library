@@ -50,7 +50,6 @@ export interface BeforeLine {
   readonly usesLabel: string;
 }
 
-/** One line of the index before: its name and uses, struck through and greyed out when no task used it. */
 function BeforeLineItem({ line: { folder, label, uses, usesLabel } }: { readonly line: BeforeLine }) {
   const unused = uses === 0;
   return (
@@ -70,7 +69,6 @@ function BeforeLineItem({ line: { folder, label, uses, usesLabel } }: { readonly
   );
 }
 
-/** The index before (Option 25b): Slide 9's lines at full ink, each kept name with its uses; the unused grey out. */
 export function BeforeIndex(props: {
   readonly heading: ByView;
   readonly count: ByView;

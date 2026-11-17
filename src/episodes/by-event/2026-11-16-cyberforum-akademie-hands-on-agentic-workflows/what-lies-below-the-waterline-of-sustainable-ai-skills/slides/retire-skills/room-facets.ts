@@ -15,7 +15,6 @@ export const NIGHT: readonly Facet[] = [
   ],
 ];
 
-/** The index before, on its clipboard: paper from 22, 30 to 318, 630. */
 export const BEFORE_PAPER: readonly Facet[] = [
   ['paper-lit', 'M136.6 30L139.3 123L22 30ZM22 285.8L203.1 238L125.6 325.5Z'],
   ['paper-shade', 'M203.1 238L318 144.9L318 283.4ZM318 144.9L203.1 238L139.3 123ZM211.9 474.8L230.2 630L150 568.5Z'],
@@ -59,7 +58,6 @@ export const LOG_PAPER: readonly Facet[] = [
 ];
 export const LOG_BOX = '336 40 212 320';
 
-/** The index after, pinned to the wall: paper from 676, 30 to 976, 432. */
 export const AFTER_PAPER: readonly Facet[] = [
   ['paper', 'M905.6 105.7L755.5 30L874.6 30Z'],
   ['paper-lit', 'M905.6 105.7L874.6 30L976 30Z'],
@@ -83,7 +81,6 @@ export const AFTER_PAPER: readonly Facet[] = [
 ];
 export const AFTER_BOX = '676 30 300 402';
 
-/** The clipboard's clip, the before sheet's, which the log's repeats: its box is 136, 10 to 204, 50. */
 export const CLIP: readonly Facet[] = [
   ['clip-shade', 'M136 28L204 28L200 50L140 50Z'],
   ['clip-lit', 'M136 28L174 28L162 50L140 50Z'],
@@ -91,7 +88,6 @@ export const CLIP: readonly Facet[] = [
 ];
 export const CLIP_BOX = '136 10 68 40';
 
-/** The red pin holding the index after, with its glint: its box is 819, 33 to 833, 47. */
 export const PIN: readonly Facet[] = [
   ['pin', 'M819 40L826 33L833 40L826 47Z'],
   ['glint', 'M819 40L826 33L826 40Z'],
