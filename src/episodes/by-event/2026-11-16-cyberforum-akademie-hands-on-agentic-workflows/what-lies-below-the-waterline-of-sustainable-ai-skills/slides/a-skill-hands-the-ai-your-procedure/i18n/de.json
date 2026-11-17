@@ -68,7 +68,7 @@
       "the-answer": {
         "title": "Die Antwort",
         "keywords": "",
-        "script": "Die meisten kommen innerhalb einer Minute auf dieselbe Idee: aufschreiben. Schreib das Vorgehen einmal auf, leg es dorthin, wo das Modell es findet, und lass das Modell es lesen, wenn die Aufgabe ansteht, statt es jeden Morgen neu zu erklären. Das ist ein Skill, und in unserem Bild ist er eine Ablaufkarte im Tauchhandbuch an der Konsole. Im Rest dieser Episode geht es darum, das gut zu machen."
+        "script": "Wie die Grafik schon andeutet, könnten wir die Anweisung, die wir jeden Tag übergeben, einfach aufschreiben. Dann müssen wir sie nicht mehr jeden Tag wiederholen, sondern geben dem Piloten jeden Tag dieselbe Anweisung, und er kann sie ausführen. So können wir uns einen Skill vorstellen: ein Prozess, eine Befähigung für einen bereits sehr befähigten Agenten. Er ist in seinem Fach gebildet, aber er kennt den genauen Kontext nicht: was im Projekt los ist, welche Rahmenbedingungen gelten und was die Aufgabe für diese Session ist. Prompts und Abläufe, die wir häufiger anwenden, schreiben wir einmal auf und übergeben sie über einen Coding-Agenten oder einen KI-Aufruf, zum Beispiel mit einem Slash-Command, bei Codex mit dem Dollarzeichen. Das ist ein Skill, nicht mehr und nicht weniger."
       },
       "three-things-to-remember": {
         "title": "Drei Dinge zum Merken",

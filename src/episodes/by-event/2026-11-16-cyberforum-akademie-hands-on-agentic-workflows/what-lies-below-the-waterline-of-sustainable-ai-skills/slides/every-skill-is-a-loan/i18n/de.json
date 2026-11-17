@@ -32,10 +32,18 @@
     }
   },
   "coding": {
-    "written": { "lead": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt." },
-    "sites": { "lead": "collect-sediment-sample/SKILL.md, Schritt 1" },
-    "arm": { "lead": "collect-sediment-sample/SKILL.md, Schritt 3" },
-    "overlap": { "lead": "zwei Beschreibungen, zwischen denen der Agent wählt" }
+    "written": {
+      "lead": "Fünf Minuten, aus einem guten Lauf. Das ist der Kredit: Du bekommst das Tempo jetzt."
+    },
+    "sites": {
+      "lead": "collect-sediment-sample/SKILL.md, Schritt 1"
+    },
+    "arm": {
+      "lead": "collect-sediment-sample/SKILL.md, Schritt 3"
+    },
+    "overlap": {
+      "lead": "zwei Beschreibungen, zwischen denen der Agent wählt"
+    }
   },
   "next": {
     "label": "Nächste Korrektur · …",
@@ -75,7 +83,9 @@
       "header": "Skill-Pflege als technische Schuld: Cunninghams Worte",
       "description": "„Shipping first time code is like going into debt. A little debt speeds development so long as it is paid back promptly with a rewrite.“ „Every minute spent on not-quite-right code counts as interest on that debt.“ [1] Den Fehler nennt er „the failure to consolidate“. Die Übertragung auf Skills ist eine Schlussfolgerung, nicht seine Aussage.",
       "sources": {
-        "cunningham-wycash": { "title": "Cunningham, The WyCash Portfolio Management System" }
+        "cunningham-wycash": {
+          "title": "Cunningham, The WyCash Portfolio Management System"
+        }
       }
     }
   },
@@ -84,12 +94,12 @@
       "quick-to-write": {
         "title": "Schnell geschrieben",
         "keywords": "",
-        "script": "Einen Skill schreibst Du in fünf Minuten. Das ist der Kredit: Du bekommst das Tempo jetzt."
+        "script": "Es ist sehr billig, einen Skill zu schreiben, genau wie es billig ist, Code zu produzieren."
       },
       "a-running-tab": {
         "title": "Eine laufende Rechnung",
         "keywords": "",
-        "script": "Dann kommen die Auszüge, eine Zeile nach der anderen. Die Projektdetails haben sich geändert, ein neues Werkzeug kam dazu, und eine Beschreibung überschneidet sich jetzt mit der eines anderen Skills. Nichts davon ist eine Katastrophe, und jedes ist ein kleiner Betrag, der sich aufhäuft. Ingenieure nennen das technische Schuld, nach Ward Cunningham."
+        "script": "Aber damit der Skill über einen längeren Zeitraum nicht zu Schulden wird, nicht zu Debt, braucht es Gedanken dazu, wie wir mit diesen Schulden umgehen, quasi wie auch bei Software."
       },
       "owning-thirty": {
         "title": "Dreißig besitzen",

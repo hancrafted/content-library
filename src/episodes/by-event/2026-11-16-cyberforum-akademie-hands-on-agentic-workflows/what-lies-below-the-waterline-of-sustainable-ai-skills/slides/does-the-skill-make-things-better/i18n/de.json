@@ -139,12 +139,12 @@
       "same-task-twice": {
         "title": "Dieselbe Aufgabe zweimal",
         "keywords": "",
-        "script": "Woher weißt du, dass ein Skill hilft? Lass dieselbe Aufgabe zweimal laufen, einmal ohne den Skill und einmal mit ihm, und vergleiche die Ergebnisse, wie zwei Testtauchgänge im flachen Wasser. Verlass dich nicht auf dein Gefühl, denn sich nützlich anfühlen und nützlich sein ist nicht dasselbe."
+        "script": "Und letztlich gibt es die Frage: Bringt der Skill überhaupt etwas? Wie kann ich diesen Skill evaluieren, damit er wirklich das macht, was er tun soll?"
       },
       "the-callout": {
         "title": "Der Hinweis",
         "keywords": "",
-        "script": "(Pause) Und dieser Test ist wichtiger, als er klingt, denn ein Skill ist nicht automatisch ein Gewinn. Ein schlechter Skill kann das Modell schlechter dastehen lassen als gar kein Skill, und genau deshalb gibt es den Vergleich."
+        "script": "Mit jedem Modell-Update werden die Modelle besser und schlauer. Es kann sein, dass ich den Skill vorher gebraucht habe und danach nicht mehr. Also muss ich dafür sorgen, dass diese Skills regelmäßig evaluiert werden, damit sie auch das tun, was sie tun sollen."
       },
       "test-the-label": {
         "title": "Teste das Etikett",

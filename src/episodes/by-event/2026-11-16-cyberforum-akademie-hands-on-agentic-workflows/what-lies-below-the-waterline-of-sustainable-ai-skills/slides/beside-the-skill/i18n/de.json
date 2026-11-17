@@ -73,12 +73,12 @@
       "the-card-points": {
         "title": "Die Karte verweist",
         "keywords": "",
-        "script": "Hier ist der Fehler von vorhin, behoben. Der Skill sagt nicht mehr 40 Meter. Sein Schritt sagt „tauche auf die Tiefe aus dem heutigen Tauchplan“, und dieser Tauchplan ist eine Projektdatei, die der Skill liest, wenn der Schritt läuft: Standort 4, 40 Meter, Standort 7, 120 Meter."
+        "script": "Was genau bedeutet das? Wir hatten vorhin das Beispiel, in dem wir 40 Meter in der Skill.md als Anweisung übergeben haben. Stattdessen geben wir im Skill nicht die spezifischen Meter an, sondern sagen: Lies die Tauchtiefe aus dem heutigen Projektplan. Das ist die Anweisung. Wir haben also verallgemeinert: Statt zu sagen, tauche für dieses Projekt 40 Meter tief, schau heute in meine Projektdatei, zum Beispiel meine Agents.md oder meinen Projektordner, was die Aufgabe ist. Damit habe ich eine Stufe abstrahiert und mache den Skill wiederverwendbarer. Das ist das allgemeine Konzept davon, welchen Kontext ich neben den Skill platzieren sollte."
       },
       "same-card-any-site": {
         "title": "Dieselbe Karte, jeder Standort",
         "keywords": "",
-        "script": "Spiel Standort 7 noch einmal ab. Es ist derselbe Skill, ohne Änderung, und diesmal erreicht der Roboter den Meeresboden bei 120 Metern. Die Anleitung ist geblieben, und die Details des Standorts lagen in der Projektdatei. Das ist dein dritter Schritt im Kleinen: Entscheide, wo die Projektdetails liegen."
+        "script": "Damit erlaube ich es, dass der Skill beim nächsten Aufruf die Information richtig herausliest und die Aufgabe im jeweiligen Projektkontext richtig ausführt. Das ist die Idee von „neben dem Skill“."
       },
       "for-developers": {
         "title": "Für Entwickler",

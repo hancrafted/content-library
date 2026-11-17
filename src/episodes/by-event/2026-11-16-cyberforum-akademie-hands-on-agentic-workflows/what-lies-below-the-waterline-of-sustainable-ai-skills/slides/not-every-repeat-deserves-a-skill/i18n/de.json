@@ -14,23 +14,57 @@
       "coding": "47 Ordner"
     },
     "entries": {
-      "rinseCameraDome": { "label": "Kuppel abspülen" },
-      "sampleOld": { "label": "Probe (alt)" },
-      "takeSampleV2": { "label": "Probe nehmen v2" },
-      "namePhotoFolders": { "label": "Fotoordner benennen" },
-      "sedimentQuick": { "label": "Sediment, Schnellversion" },
-      "sampleLikeAna": { "label": "Probe, wie Ana es macht" },
-      "collectSedimentSample": { "label": "Sedimentprobe an neuem Standort nehmen" },
-      "sampleButFaster": { "label": "Probe, aber schneller" },
-      "tuesdayWeatherNote": { "label": "Wetternotiz für Dienstag" },
-      "cleanArmMaybe": { "label": "Arm reinigen (vielleicht)" },
-      "collectSedimentSampleCopy": { "label": "Sedimentprobe nehmen (Kopie)" },
-      "logDepthDraft": { "label": "Tiefe protokollieren (Entwurf)" },
-      "crewCoffeeOrder": { "label": "Kaffeebestellung der Crew" },
-      "checkWinchAgain": { "label": "Winde prüfen, nochmal" },
-      "sampleV3": { "label": "Probe v3 (probier das)" },
-      "labelCoresAlt": { "label": "Kerne beschriften, alt" },
-      "diveLogShort": { "label": "Tauchlog, Kurzform" }
+      "rinseCameraDome": {
+        "label": "Kuppel abspülen"
+      },
+      "sampleOld": {
+        "label": "Probe (alt)"
+      },
+      "takeSampleV2": {
+        "label": "Probe nehmen v2"
+      },
+      "namePhotoFolders": {
+        "label": "Fotoordner benennen"
+      },
+      "sedimentQuick": {
+        "label": "Sediment, Schnellversion"
+      },
+      "sampleLikeAna": {
+        "label": "Probe, wie Ana es macht"
+      },
+      "collectSedimentSample": {
+        "label": "Sedimentprobe an neuem Standort nehmen"
+      },
+      "sampleButFaster": {
+        "label": "Probe, aber schneller"
+      },
+      "tuesdayWeatherNote": {
+        "label": "Wetternotiz für Dienstag"
+      },
+      "cleanArmMaybe": {
+        "label": "Arm reinigen (vielleicht)"
+      },
+      "collectSedimentSampleCopy": {
+        "label": "Sedimentprobe nehmen (Kopie)"
+      },
+      "logDepthDraft": {
+        "label": "Tiefe protokollieren (Entwurf)"
+      },
+      "crewCoffeeOrder": {
+        "label": "Kaffeebestellung der Crew"
+      },
+      "checkWinchAgain": {
+        "label": "Winde prüfen, nochmal"
+      },
+      "sampleV3": {
+        "label": "Probe v3 (probier das)"
+      },
+      "labelCoresAlt": {
+        "label": "Kerne beschriften, alt"
+      },
+      "diveLogShort": {
+        "label": "Tauchlog, Kurzform"
+      }
     }
   },
   "stamp": "nie getestet",
@@ -100,17 +134,17 @@
       "too-early": {
         "title": "Zu früh",
         "keywords": "",
-        "script": "Jetzt die umgekehrte Gefahr. Wenn Du den Skill nach dem ersten Durchlauf schreibst, frierst Du eine Vermutung ein, und ein Verfahren, das niemand erprobt hat, trägt plötzlich die Autorität eines Skills."
+        "script": "Die Warnung lautet: nicht zu früh einen Skill schreiben. Man kann sich überlegen, einen Skill zu schreiben, weil es in dem Moment sinnvoll erscheint und man das Gefühl hat, ihn in Zukunft häufiger zu verwenden. In der Programmierwelt kennt man das: Wir fangen zu früh an, Dinge zu optimieren, obwohl es dafür gar keinen Bedarf gibt. Aus eigener Befriedigung wollen wir alles schön und sauber haben, wir wollen diesen Dopamin-Schuss vom Gehirn."
       },
       "a-thin-card-has-a-price": {
         "title": "Eine dünne Karte hat ihren Preis",
         "keywords": "",
-        "script": "Und jeder schnelle Skill hat einen Preis. Er ist eine Sache mehr, die stimmen muss, und eine Zeile mehr in einem Verzeichnis, das nur wächst. Stell Dir ein Handbuch voller dünner Karten vor, mehrere davon nie getestet, bis die eine, die Du brauchst, irgendwo in der Mitte vergraben ist."
+        "script": "Das führt oft dazu, dass Menschen zu früh optimieren und sofort anfangen, Skills zu schreiben, weil sie denken, sie brauchen sie später. Damit müllen wir unseren Skill-Ordner mit Skills zu, die wir potenziell nie wieder verwenden oder nie getestet haben."
       },
       "three-questions": {
         "title": "Drei Fragen",
         "keywords": "",
-        "script": "Bevor Du also einen Skill schreibst, stell drei Fragen. Wiederholt sich die Aufgabe, hat sie Regeln, und kostet ein Fehler etwas? Wenn die Antwort dreimal nein ist, lass es im Chat. Diese Prüfung ist meine eigene, ein praktischer Filter, den ich nutze, kein veröffentlichter Test."
+        "script": "Deshalb meine klare Empfehlung: Erstelle nicht beim ersten Anlauf einen Skill, sondern überleg Dir, wann der nächste Anwendungsfall ist. Weißt Du es nicht, mach keinen Skill daraus. Weißt Du es schon, kannst Du diese Session abspeichern, beim nächsten Mal aufrufen und darauf aufbauen. Das ist schon der erste Entscheidungsfaden dafür, ob Du einen Skill brauchst oder nicht. Mach das erst, wenn Du weißt, wann Du die Aufgabe das nächste Mal erledigen wirst, und prüf dann, ob Du den Skill brauchst."
       }
     }
   }

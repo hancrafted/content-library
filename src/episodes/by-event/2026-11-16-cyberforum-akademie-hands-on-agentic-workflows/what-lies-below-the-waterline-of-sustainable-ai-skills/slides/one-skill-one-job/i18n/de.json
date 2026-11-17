@@ -62,12 +62,12 @@
       "scribbled-in": {
         "title": "Hineingekritzelt",
         "keywords": "",
-        "script": "Nimm einen Skill zur Probenahme, in den ein Projektdetail geschrieben ist: „auf 40 Meter abtauchen“, richtig an Platz 4. An Platz 7 liegt der Meeresboden bei 120, und der Roboter hängt nutzlos bei 40, während das Modell dem Skill perfekt folgt. (Pause) Der Skill wurde aufs Wort befolgt, und der Tauchgang ist trotzdem gescheitert."
+        "script": "Überleg Dir das Szenario: Wir haben alle diesen Skill geschrieben, weil wir gern Sediment, also Schlamm, vom Meeresboden sammeln möchten. In diesem Skill steht spezifisch, dass wir 40 Meter in die Tiefe tauchen sollen, weil der Meeresboden für das aktuelle Projekt, zu dem wir angereist sind, nun mal 40 Meter tief ist."
       },
       "coupling": {
         "title": "Kopplung",
         "keywords": "",
-        "script": "Ingenieure haben ein Wort für diesen Fehler: Kopplung. Die 40 Meter im Skill binden ihn an einen Ort. Für einen Skill heißt das: Halte Projektdetails heraus, damit der Skill an kein einzelnes Projekt gebunden ist."
+        "script": "Steckt diese Information im Skill selbst, haben wir eine sehr präzise Anweisung, die der KI-Agent ausführen kann. Gleichzeitig haben wir aber dafür gesorgt, dass dieser Skill beim nächsten Mal potenziell nicht mehr funktioniert: In der Anweisung stand 40 Meter, aber beim nächsten Mal ist der Meeresboden vielleicht 120 Meter tief. Das ist die Aussage dazu, was eigentlich in einen Skill gehört."
       }
     }
   }

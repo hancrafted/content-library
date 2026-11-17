@@ -38,12 +38,12 @@
       "the-label-decides": {
         "title": "Das Etikett entscheidet",
         "keywords": "",
-        "script": "Wir sind noch im Sonnenlicht, und das ist der Teil, den die meisten überspringen. Ein Skill, den das Modell nie auswählt, hilft niemandem. Deshalb zählt die Beschreibung mehr als die Anweisungen."
+        "script": "Ein zweites Thema, ein bisschen unter der Oberfläche: die Description eines Skills."
       },
       "name-description": {
         "title": "Name, Beschreibung",
         "keywords": "",
-        "script": "Bevor das Modell einen Skill öffnet, sieht es zwei Zeilen: den Namen und die Beschreibung. Mehr steht nicht im Register, und mehr hat das Modell nicht, um zu entscheiden."
+        "script": "Wie schon erwähnt, lädt die KI bei jeder Konversation einen Index, der sich aus allen Skills aufbaut, aus dem Namen und der Description."
       }
     }
   }

@@ -41,12 +41,12 @@
       "twilight": {
         "title": "Dämmerung",
         "keywords": "",
-        "script": "Jetzt tiefer, in die Dämmerzone, wo das Licht schwach wird. Der Skill ist geschrieben und beschrieben, und die Frage ist, welcher Kontext hineingehört und welcher daneben bleibt."
+        "script": "Als Nächstes gehen wir in die Twilight Zone, wo weniger Licht durchscheint. Es geht um Kontext, und zwar vor allem darum: Was gehört an Kontext in einen Skill, und was gehört neben einen Skill?"
       },
       "a-decision-not-a-law": {
         "title": "Eine Entscheidung, kein Gesetz",
         "keywords": "",
-        "script": "Mit dem Wort Regel bin ich hier vorsichtig. Das Vorgehen von den Projektdetails zu trennen, ist eine Designentscheidung mit Vor- und Nachteilen auf beiden Seiten. Ich zeige Dir die Abwägungen, und Du entscheidest."
+        "script": "Hier ist wichtig zu sagen: Es gibt kein Richtig und Falsch, es ist immer anwendungsspezifisch zu überlegen. Du hast mehrere Möglichkeiten. In diesem Kapitel geht es zunächst darum, was in einen Skill hineingehören könnte, und im nächsten besprechen wir kurz, was wir neben einen Skill legen können und wie der Agent trotzdem auf die relevanten Informationen zugreifen kann."
       }
     }
   }
