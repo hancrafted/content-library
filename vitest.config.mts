@@ -2,7 +2,7 @@ import path from 'node:path';
 import { configDefaults, defineConfig } from 'vitest/config';
 import { rawTextFiles } from './raw-text-files.mts';
 import { SlowTestsLog } from './tools/load/slow-tests.mts';
-import { currentLoad } from './tools/load/workers.mts';
+import { currentLoad } from './tools/load/workers.ts';
 
 const ROOT = import.meta.dirname;
 
@@ -71,7 +71,7 @@ const TRIGGERS = [
 ];
 
 // Workers and the test timeout both follow the load measured now: 5 s idle, up to 20 s on a loaded machine, 5 s on
-// CI (tools/load/workers.mts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
+// CI (tools/load/workers.ts). Printed so a run slowed by load reads differently from a regression. stderr keeps a JSON
 // reporter's stdout clean.
 const load = await currentLoad();
 console.error(

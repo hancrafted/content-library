@@ -8,7 +8,7 @@
 // which runs the command holding the lock and exits as it did: with its exit code, or by the signal that killed it.
 // A SIGINT or SIGTERM is passed on to the command, and the lock released once the command has exited. Build, test:build and pre-commit never take
 // it, and CI never does: a runner runs one job alone. Inside the lock the load-aware workers and timeout still apply
-// (workers.mts), as a fallback for load the lock does not see.
+// (workers.ts), as a fallback for load the lock does not see.
 import { type ChildProcess, spawn } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import type { Holder } from './lock-owner.ts';

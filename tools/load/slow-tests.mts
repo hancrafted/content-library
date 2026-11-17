@@ -19,7 +19,7 @@ const KEEP_DAYS = 30;
 
 /**
  * One logged test: its full name, its file relative to the repo root, how long it ran, the load factor the run
- * measured (tools/load/workers.mts; absent in entries logged before it was recorded), where and when.
+ * measured (tools/load/workers.ts; absent in entries logged before it was recorded), where and when.
  */
 export type SlowTest = { test: string; file: string; ms: number; loadFactor?: number; branch: string; at: string };
 
