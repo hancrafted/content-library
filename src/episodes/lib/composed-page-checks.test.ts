@@ -82,11 +82,10 @@ describe('success cases', () => {
 
   it('lists only Episodes whose folders still exist among those that author their own header', () => {
     // ARRANGE
-    // The generated id list is the Episode folders' names (`npm run registry`): no Episode is imported to read it.
-    const folders = EPISODE_IDS.map((id) => episodeRefOf(id).slug);
+    const generatedIdFolderNames = EPISODE_IDS.map((id) => episodeRefOf(id).slug);
     const expected: string[] = [];
     // ACT
-    const strays = authoredHeaderStrays(folders);
+    const strays = authoredHeaderStrays(generatedIdFolderNames);
     // ASSERT
     expect(strays).toEqual(expected);
   });
