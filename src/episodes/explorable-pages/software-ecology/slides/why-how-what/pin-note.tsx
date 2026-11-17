@@ -3,7 +3,6 @@ import { useId, type ReactNode } from 'react';
 import { PinNumber } from './pin-number';
 
 export interface PinNoteProps {
-  /** The pin's number; a note that points at no part of the still has none. */
   readonly n?: number;
   readonly slug: 'why' | 'how' | 'what';
   readonly word: string;

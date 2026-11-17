@@ -11,11 +11,6 @@ const CHECKED = 2;
 
 const STAGES = ['interview', 'plan', 'epics', 'tickets', 'execute', 'report'] as const;
 
-/**
- * The Title slide's hero Scene for the Human in the loop page (the record's `title`): its own headline and lede, the
- * Explorable hero over a drift of bubbles in which one stops on a checkpoint, gains an orange check and moves on, and a
- * preview of the six stages and the prompt of the current one.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

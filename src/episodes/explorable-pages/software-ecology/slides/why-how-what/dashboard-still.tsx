@@ -4,7 +4,6 @@ import type { FactoryStillState } from '@/explorables/software-ecology/stills.pu
 import { fillTemplate } from '@/shared/lib/template.pure';
 
 export interface DashboardStillWords {
-  /** "· AI leaves it", after the effectiveness the AI switch does not change. */
   readonly aiLeavesIt: string;
   readonly people: string;
   readonly tools: string;
@@ -58,7 +57,6 @@ function List({ items, dot }: { items: readonly string[]; dot: string }) {
   );
 }
 
-/** The traffic light and the AI switch, off: AI works at Engineering only. */
 function Status({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   return (
     <div className="flex items-center gap-2">
@@ -100,7 +98,6 @@ function Head({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   );
 }
 
-/** Output and outcome, each with its trend; outcome is the dial AI leaves alone, so it carries the focus. */
 function Tiles({ d, w, number }: { d: Dashboard; w: DashWords; number: Intl.NumberFormat }) {
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">

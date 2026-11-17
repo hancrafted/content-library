@@ -58,7 +58,6 @@ function Readouts({ state, f, x, w, y }: { state: FactoryStillState; f: Formats;
   ));
 }
 
-/** The Customer card, the still's focal point: its releases, output relative to ideal and the readouts under them. */
 export function CustomerStill({ state, f }: { state: FactoryStillState; f: Formats }) {
   const c = state.customer,
     [x, y, w, h] = c.box;

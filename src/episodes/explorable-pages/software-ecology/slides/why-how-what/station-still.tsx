@@ -107,7 +107,6 @@ export function Turbo({ s, label }: { s: StillStation; label: string }) {
 
 const PILE = { max: 10, per: 20, rows: [4, 3, 2, 1] };
 
-/** The surplus a full rack cannot hold, heaped at the end of the belt into it, AI-made as the work that fills it. */
 export function Pile({ end, surplus }: { end: readonly [number, number]; surplus: number }) {
   const n = Math.min(PILE.max, Math.ceil(surplus / PILE.per));
   const docs: StillDoc[] = PILE.rows

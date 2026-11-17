@@ -1,9 +1,4 @@
-/*
- * The hero preview's readings of the factory's steady frame: how a work center's rack shows its waiting work, and how
- * the Customer's last releases read as satisfaction. Pure, so the picture's numbers test without rendering.
- */
-
-/** A rack's slots for waiting work (design-ADR 0024 §14): past six, the top slot turns red with "+n" beside it. */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export const RACK_SLOTS = 6;
 
 export type Release = 'good' | 'bad';
@@ -22,7 +17,6 @@ export function rackOf(waiting: number): Rack {
   return { filled, full: filled === RACK_SLOTS, overflow: waiting - filled };
 }
 
-/** The share of good releases, to whole percent; no releases yet reads as fully satisfied. */
 export function satisfactionOf(releases: readonly Release[]): number {
   if (releases.length === 0) return 1;
   const good = releases.filter((release) => release === 'good').length;

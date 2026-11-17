@@ -14,12 +14,6 @@ import { rackOf, type Release } from './factory-preview.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The model's readouts of the `still` state (In practice, then AI at Engineering to week 20), read from the same headless run the Why How What
- * stills draw (`stillOf`), so the hero never claims what the model does not show: an illustrative model, not
- * measured, and labelled so on the preview.
- */
-
 const CENTERS = [
   { key: 'sales', id: 'sales' },
   { key: 'product', id: 'pm' },
@@ -43,11 +37,6 @@ function readoutsOf() {
   return { customer, releases, station };
 }
 
-/**
- * The Title slide's hero Scene for the Software ecology page (the record's `title`): its own headline and lede, the
- * Explorable hero over the two glow layers alone (no drift story: the motif lives in the preview), and a static preview
- * of the factory with AI at the engineer flooding quality assurance.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
