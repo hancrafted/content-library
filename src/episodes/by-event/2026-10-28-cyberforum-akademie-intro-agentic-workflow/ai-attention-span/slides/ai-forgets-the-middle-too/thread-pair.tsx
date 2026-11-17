@@ -154,10 +154,6 @@ function assertBands(copy: ThreadPairCopy) {
   }
 }
 
-/**
- * The sister thread and the summer-party chat side by side in one frame, aligned on three shared bands (Spec Option
- * 2a), so the same lighting visibly lands on both. Everything shows at rest and enters with the Slide; nothing steps in. Pointing at a line dims the others on both sides. Below a wide frame the pill sits above its two threads.
- */
 export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
   assertBands(copy);
   return (
