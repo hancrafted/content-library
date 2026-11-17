@@ -47,8 +47,7 @@ export const LAMP_ORIGIN = { x: 32, y: 30 } as const;
 
 const HEAD = { x: 19, y: 2 } as const;
 
-/** Beam angles in radians below the horizon, as `parts.py` `beam(down=…)` takes them. */
-const AIM_DOWN: Record<RobotAim, number> = { ahead: 0.45, down: 0.95 };
+const AIM_RADIANS_BELOW_HORIZON: Record<RobotAim, number> = { ahead: 0.45, down: 0.95 };
 const CONE = { length: 120, spread: 0.5 } as const;
 const CORE = { length: 108, spread: 0.24 } as const;
 
@@ -66,10 +65,6 @@ export interface RobotLook {
 
 const BEAM_MOTIONS: readonly RobotMotion[] = ['beam-on', 'scan'];
 
-/**
- * What the robot shows for a motion and a lamp setting. The lamp is on unless switched off. A beam motion with the
- * lamp off is refused: its end state, a lit beam, would differ from the rest state.
- */
 export function robotLook({ motion, lamp = true }: RobotLookInput): RobotLook {
   const beamMotion = motion !== undefined && BEAM_MOTIONS.includes(motion);
   if (beamMotion && !lamp) {
@@ -87,7 +82,7 @@ const fan = (down: number, length: number, spread: number) =>
     .join(' ');
 
 export function beamPoints(aim: RobotAim): { readonly cone: string; readonly core: string } {
-  const down = AIM_DOWN[aim];
+  const down = AIM_RADIANS_BELOW_HORIZON[aim];
   return {
     cone: `0,-2 ${fan(down, CONE.length, CONE.spread)} 0,3`,
     core: `0,-1 ${fan(down, CORE.length, CORE.spread)} 0,2`,

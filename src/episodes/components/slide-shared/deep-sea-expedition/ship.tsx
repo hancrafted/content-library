@@ -40,20 +40,6 @@ function Pennant({ flip, wind }: { readonly flip: boolean; readonly wind: boolea
 
 const ROCKING = { 'data-motion': 'ambient', className: styles.rock } as const;
 
-/**
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `ship.test.ts`, `ship.pure.test.ts` and the scenery's
- * `fable-elements.slow.test.ts`). A Fable redraw changes only the facet rows in `ship-facets.pure.ts` and
- * `ship.module.css`, keeping `DECK`, `WINDOW`, `MASTHEAD` and the A-frame tip where the anchors put them.
- *
- * - Props: `flip`, `transform`, `bridge`, `deck`, `rock`, as typed in `ShipProps`.
- * - Box: (0, 0) is the waterline amidships; the ship stays within x -190 to 190, y -185 to 30.
- * - Anchors: `shipAnchors()` (bridge seats, deck, robot cradle, A-frame tip, masthead), mirrored when flipped.
- * - Hooks: root `data-ship`; paint layers `data-layer` = `hull`, `superstructure`, `rail`; slots `data-slot` =
- *   `bridge`, `deck`; `data-pennant` at the masthead.
- * - Tokens it mixes from: `--info`, `--brand-accent`, `--bulb`, `--on-brand-accent`, `--overlay`.
- * - Motion: with `rock` only, the rock and the pennant's flutter, each `data-motion="ambient"`, under
- *   `[data-zone='active']` only and never under reduced motion; transform and opacity only (decision 19).
- */
 // decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function Ship({ flip = false, transform, bridge, deck, rock = false }: ShipProps) {
   const layers = shipLayers(flip);

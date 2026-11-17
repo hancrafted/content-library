@@ -61,10 +61,6 @@ export function shipLayers(flip = false): ShipLayers {
   };
 }
 
-/**
- * The deck's top edge at `x` (the ship's units, unflipped): where a figure on deck stands. Throws off the deck, where
- * a figure would float over the water.
- */
 export function deckY(x: number): number {
   const spec = x + MIDSHIP;
   if (spec < DECK.from[0] || spec > DECK.to[0]) {
