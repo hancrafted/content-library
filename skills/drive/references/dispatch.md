@@ -6,12 +6,23 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 
 1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: tell the Operator before dispatching.
 2. **Ownership.** Give each concurrent ticket the paths it owns, and name the paths it must leave alone. Two tickets that need one file run one after the other.
-3. **Model.** Pass the model explicitly on every dispatch: the phase's `model` from `binding.yml` (implementation and fixes run on `implement`'s, a decision page on `reason`'s, except Fortify's, which runs on `evolve`'s, log mining and review support on `verify`'s, Fortify evidence on `evolve`'s), or the Operator's override for this session. An inherited model is a bug.
+3. **Model.** Pass the model explicitly on every dispatch, from `binding.yml`; an inherited model is a bug. The Operator's override for this session wins.
+
+   | Work                       | Model of the phase |
+   | -------------------------- | ------------------ |
+   | implementation, fixes      | `implement`        |
+   | decision page              | `reason`           |
+   | Fortify's decision page    | `evolve`           |
+   | log mining, review support | `verify`           |
+   | Fortify evidence           | `evolve`           |
+
 4. **Agent type.** Start every Subagent as `agentType` from `binding.yml`.
 5. **Cap.** Run at most the lower of `parallel.default` and `parallel.harnessCap` from `project.yml` at once; queue the rest and start the next the moment one finishes.
 6. **Worktree.** Create the Task branch's worktree yourself, in the background: `drive worktree new <Task branch> --base <Integration branch>`.
 
 Dispatch a ticket the moment its last blocker is merged and checked.
+
+A Subagent's report with no **Merge** line means it stopped early: resume that Subagent (`SendMessage`, or the provider's equivalent) with only its remaining steps, and leave its finished work alone.
 
 ## The shared brief
 
