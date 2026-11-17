@@ -1,7 +1,4 @@
-/*
- * Where a finished job's spawns go (design-ADR 0024 §3): Ideal routes steadily (a chance spawn every so often, a choice
- * in turn), Realistic rolls the dice; how many documents each hands on; and whether a ticket is passed on under pressure.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { passShareOf } from './factory-dials.pure.ts';
 import type { Belt, ChooseRule, FactoryNode, SpawnRule } from './factory.types';
 import { firstSpawn } from './first-spawn.pure.ts';
@@ -12,7 +9,6 @@ export interface Pick {
   readonly base: number;
 }
 
-/** Smooth weighted round robin: the choices in strict turns. */
 const inTurn = (ch: ChooseRule[], W: number): number => {
   let i = 0,
     best = -Infinity;
@@ -39,7 +35,6 @@ const chooseBelt = (n: FactoryNode, sp: SpawnRule, steady: boolean): Pick => {
   return { e: ch[steady ? inTurn(ch, W) : byWeight(ch, n.rr() * W)].e, base: 1 };
 };
 
-/** A chance spawn in Ideal: carried over until it adds up to one document (every other one for p 0.5). */
 const everyOther = (sp: SpawnRule): number => {
   sp.acc = (sp.acc || 0) + (sp.p as number);
   if (sp.acc < 1 - 1e-9) return 0;
@@ -47,7 +42,6 @@ const everyOther = (sp: SpawnRule): number => {
   return 1;
 };
 
-/** Ideal routes steadily (every other one for p 0.5, in turn for choose); Realistic rolls the dice. */
 export const pickBelt = (n: FactoryNode, sp: SpawnRule, steady: boolean): Pick => {
   if (sp.choose) return chooseBelt(n, sp, steady);
   const e = sp.e as Belt;
@@ -55,10 +49,6 @@ export const pickBelt = (n: FactoryNode, sp: SpawnRule, steady: boolean): Pick =
   return { e, base: steady ? everyOther(sp) : n.rr() < (sp.p as number) ? 1 : 0 };
 };
 
-/**
- * Whether one ticket is passed on, at a share from 0 to 1: Ideal takes turns (carried over until it adds up to one),
- * Realistic rolls. A share of 0 draws nothing and carries nothing over.
- */
 const passByShare = (n: FactoryNode, sp: SpawnRule, x: { share: number; steady: boolean }): boolean => {
   if (x.share <= 0) return false;
   if (!x.steady) return n.rr() < x.share;
@@ -68,18 +58,12 @@ const passByShare = (n: FactoryNode, sp: SpawnRule, x: { share: number; steady: 
   return true;
 };
 
-/**
- * Pass-on under pressure (design-ADR 0024 §5, grill 11 Q220, Q227): whether a station with `escalate` passes the ticket
- * it takes up on to `escalate.to` unanswered, at the share `passShareOf` gives: none until its pile turns red, then
- * rising with its pressure up to all of them. Below the mark nothing is drawn, so its routing is unchanged there.
- */
 export const passesOn = (s: Settings, n: FactoryNode): boolean => {
   const sp = firstSpawn(n.spawns);
   if (!sp?.pass) return false;
   return passByShare(n, sp, { share: passShareOf(s, n, sp.pass.under), steady: s.reality === 0 });
 };
 
-/** How many documents a spawn hands on: whole ones, and a fraction carried over (Ideal) or rolled (Realistic). */
 export const countOf = (n: FactoryNode, sp: SpawnRule, x: { f: number; steady: boolean }): number => {
   let k = Math.floor(x.f);
   if (x.f <= k) return k;

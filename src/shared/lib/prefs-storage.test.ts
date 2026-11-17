@@ -1,8 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { readProgress, removeProgress, writeProgress } from './prefs-storage';
+import { readPrefs, readProgress, removeProgress, writePrefs, writeProgress } from './prefs-storage';
 import { PROGRESS_KEY } from './progress.pure';
 
-/** A hand-written Storage over a map; `full` makes every write throw as a full quota does. */
 function fakeStorage(items: Record<string, string> = {}, full = false) {
   return {
     items,
@@ -18,7 +17,6 @@ const install = (storage: object) => Object.assign(globalThis, { window: { local
 const entry = { hash: 'h', demo: true, results: { 'a.b': 'text' } };
 const KEY = 'human-in-the-loop/x';
 
-/** What `window` was before any test: put back after each, so no test leaks an ambient `window` into the next. */
 const ambient = Object.getOwnPropertyDescriptor(globalThis, 'window');
 
 afterEach(() => {
@@ -50,9 +48,28 @@ describe('success cases', () => {
     expect(readProgress(KEY)).toBeUndefined();
     expect(readProgress('other')).toEqual(entry);
   });
+
+  it('reads back a preference write that storage took', () => {
+    // ARRANGE
+    install(fakeStorage());
+    // ACT
+    writePrefs({ theme: 'dark' });
+    // ASSERT
+    expect(readPrefs()).toEqual({ theme: 'dark' });
+  });
 });
 
 describe('failure cases', () => {
+  it('lets a preference that storage refuses last for this page only', () => {
+    // ARRANGE
+    install(fakeStorage({}, true));
+    // ACT
+    const write = () => writePrefs({ theme: 'dark' });
+    // ASSERT
+    expect(write).not.toThrow();
+    expect(readPrefs()).toEqual({});
+  });
+
   it('reports a write that storage refuses, so the viewer can be told to download', () => {
     // ARRANGE
     install(fakeStorage({}, true));

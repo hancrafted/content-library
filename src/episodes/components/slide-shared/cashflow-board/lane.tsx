@@ -6,16 +6,13 @@ import { StickyNote } from './sticky-note';
 
 interface LaneProps {
   column: CashflowColumn;
-  /** The column's number, counted from 1. */
   number: number;
   highlighted: boolean;
   labels: BoardLabels;
   locale: string;
-  /** How many note rows every lane of the board draws. */
   slots: number;
 }
 
-/** The lane's note slots, top to bottom; an empty slot keeps its row and says nothing. */
 function Slots({ column, number, labels, locale, slots }: LaneProps) {
   return (
     <ul role="list" className={styles.slots}>
@@ -29,7 +26,6 @@ function Slots({ column, number, labels, locale, slots }: LaneProps) {
   );
 }
 
-/** One column of the board: a pale lane under a dark pill label, its marker in the corner, its notes, and its footer. */
 export function Lane(props: LaneProps) {
   const { column, number, highlighted } = props;
   return (

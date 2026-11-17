@@ -40,10 +40,6 @@ interface DeployJob {
 
 const read = (file: string): Workflow =>
   parse(readFileSync(path.join(import.meta.dirname, '../..', file), 'utf8')) as Workflow;
-/**
- * Evaluates the one expression shape this workflow uses, `${{ <ref> ==|!= '<literal>' && '<a>' || '<b>' }}`, the way
- * Actions does: `&&`/`||` return an operand, and an empty string is falsy, so `x && '' || 'true'` is always 'true'.
- */
 function evaluate(expression: string | undefined, context: Record<string, string>): string {
   const match = /^\$\{\{ (\S+) (==|!=) '([^']*)' && '([^']*)' \|\| '([^']*)' \}\}$/.exec(expression ?? '');
   if (!match) throw new Error(`unsupported expression: ${expression}`);
@@ -171,7 +167,7 @@ describe('the Cloudflare deploy workflow', () => {
     // ACT
     const listed = (job: typeof build, ref: string) =>
       evaluate(job?.env?.LIST_UPCOMING_EPISODES, { 'github.ref': ref });
-    // ASSERT: the app lists Upcoming Episodes only when the variable is exactly 'true'
+    // ASSERT
     for (const job of [build, buildTest]) {
       expect(listed(job, 'refs/heads/main')).not.toBe('true');
       expect(listed(job, 'refs/heads/feat/x')).toBe('true');

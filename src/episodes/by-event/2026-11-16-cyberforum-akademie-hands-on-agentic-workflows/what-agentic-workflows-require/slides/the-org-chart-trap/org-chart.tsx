@@ -1,22 +1,18 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** One role of the committee: its label, how many people fill it and the words that say so. */
 export interface Role {
   readonly slug: string;
   readonly label: string;
   readonly people: number;
   readonly count: string;
-  /** The role the Scene leads the eye to: a primary outline and count. */
   readonly focus?: boolean;
 }
 
-/** A person as a small disc in the meaning colour `human`. */
 function Person() {
   return <span data-person className="size-5 rounded-full border-2 border-human bg-human/15" />;
 }
 
-/** The connector from the lead down to each role, stretched to the chart's width. */
 function Connector() {
   return (
     <svg viewBox="0 0 300 40" preserveAspectRatio="none" className="h-8 w-full" aria-hidden="true">
@@ -30,7 +26,6 @@ function Connector() {
   );
 }
 
-/** One role as a box: its label, a disc per person and its headcount in words. */
 function RoleBox({ role }: { role: Role }) {
   const focus = role.focus === true;
   return (
@@ -56,10 +51,6 @@ function RoleBox({ role }: { role: Role }) {
   );
 }
 
-/**
- * The party committee as an org chart: its lead over three roles, each drawn with one disc per person, so the venue
- * scouts' ten read against the caterer's and the travel planner's one.
- */
 export function OrgChart({ label, lead, roles }: { label: ReactNode; lead: string; roles: readonly Role[] }) {
   return (
     <div className="flex min-w-0 flex-col gap-3">

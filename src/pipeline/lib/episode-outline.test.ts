@@ -4,7 +4,6 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episodeOutline } from './episode-outline.ts';
 
-/** Writes an Episode folder from `files` (path → source) into a fresh temp folder and returns its path. */
 function episodeFolder(slug: string, files: Record<string, string>): string {
   const folder = path.join(mkdtempSync(path.join(tmpdir(), 'episode-outline-')), slug);
   for (const [file, source] of Object.entries(files)) {
@@ -14,8 +13,7 @@ function episodeFolder(slug: string, files: Record<string, string>): string {
   return folder;
 }
 
-// The marker shape `implement-section` writes (never-too-early-sales, onboard-ai-every-time).
-const WITH_MARKERS = {
+const IMPLEMENT_SECTION_MARKER_SHAPE = {
   'episode.ts': `import { episode } from '@/episodes/components/slide-master/slide';
 import { howToStartSection } from './sections/how-to-start';
 import { whyCashSection } from './sections/why-cash';
@@ -46,8 +44,7 @@ export const howToStartSection: Section = [
 `,
 };
 
-// The inline shape of the hand-built Episodes (ai-token-economy, maintaining-markdown-for-ai).
-const INLINE = {
+const HAND_BUILT_INLINE_SHAPE = {
   'episode.ts': `import { episode } from '@/episodes/components/slide-master/slide';
 import { motivation } from './slides/motivation/slide';
 import { toolsAndTips } from './slides/tools-and-tips/slide';
@@ -67,7 +64,7 @@ describe('success cases', () => {
     it('names a Slide-pool Slide by its pool folder, in Section order beside the Episode own Slides', () => {
       // ARRANGE
       const folder = episodeFolder('cash-first', {
-        ...WITH_MARKERS,
+        ...IMPLEMENT_SECTION_MARKER_SHAPE,
         'sections/why-cash.ts': `import { onePrompt } from '@/episodes/slide-pool/one-prompt/slide';
 import { watchCash } from '../slides/watch-cash/slide';
 
@@ -85,7 +82,7 @@ export const whyCashSection: Section = [onePrompt, watchCash];
 
     it('reads the Title slide and each Section placement marker, Slides in marker order, not import order', () => {
       // ARRANGE
-      const folder = episodeFolder('cash-first', WITH_MARKERS);
+      const folder = episodeFolder('cash-first', IMPLEMENT_SECTION_MARKER_SHAPE);
       const expected = {
         title: 'hero',
         sections: [
@@ -103,7 +100,7 @@ export const whyCashSection: Section = [onePrompt, watchCash];
 
     it('reads Sections written inline as arrays, in an Episode with no Title slide', () => {
       // ARRANGE
-      const folder = episodeFolder('token-talk', INLINE);
+      const folder = episodeFolder('token-talk', HAND_BUILT_INLINE_SHAPE);
       const expected = { sections: [['motivation', 'what-is-a-token'], ['tools-and-tips']] };
 
       // ACT
@@ -132,7 +129,7 @@ describe('failure cases', () => {
     it('refuses a Section entry not imported from a Slide folder', () => {
       // ARRANGE
       const folder = episodeFolder('cash-first', {
-        ...WITH_MARKERS,
+        ...IMPLEMENT_SECTION_MARKER_SHAPE,
         'sections/why-cash.ts': `import { whyCash } from '../parts/why-cash';
 
 export const whyCashSection: Section = [whyCash];
@@ -153,7 +150,7 @@ describe('edge cases', () => {
   describe('episodeOutline', () => {
     it('reads a Section marker written on one line', () => {
       // ARRANGE
-      const folder = episodeFolder('cash-first', WITH_MARKERS);
+      const folder = episodeFolder('cash-first', IMPLEMENT_SECTION_MARKER_SHAPE);
       const firstSection = ['why-cash', 'watch-cash'];
 
       // ACT

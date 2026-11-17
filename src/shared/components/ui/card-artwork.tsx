@@ -83,7 +83,6 @@ const ARTWORK = {
 
 export type CardArtworkName = keyof typeof ARTWORK;
 
-/** Named, domain-free signal diagrams. The caller supplies the Tag's accent through currentColor. */
 export function CardArtwork({ name }: { name: CardArtworkName }) {
   const wide = name in WIDE_CARD_ARTWORK;
   return (

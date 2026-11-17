@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { FactoryLine, type FactoryLineProps, type Station } from './factory-line';
 
-/*
- * The factory line the Episode redraws on every Slide it fits: stations joined by belts, documents riding the belts,
- * queues piling up in front of a station that cannot keep pace, and the customer at both ends when the Slide has room.
- */
-
 const STATIONS: readonly Station[] = [
   { id: 'sales', label: 'Sales', queue: 0, state: 'ok' },
   { id: 'design', label: 'Design', queue: 4, state: 'jam' },

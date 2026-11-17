@@ -4,7 +4,7 @@ import { AiCapability } from '@/explorables/ai-capability/ai-capability';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The sources behind the four notes, read and dated in research LLM-0018 (docs/llm-wiki/research/LLM/). */
+// evidence: docs/llm-wiki/research/LLM/LLM-0018__ai-layers-model-to-factory/research.md
 const CHATGPT = { slug: 'openai-introducing-chatgpt', url: 'https://openai.com/index/chatgpt/' };
 const PROMPTING = {
   slug: 'openai-prompt-engineering',
@@ -22,12 +22,6 @@ const FIVE_LEVELS = {
 };
 const STRONGDM = { slug: 'strongdm-software-factory', url: 'https://factory.strongdm.ai/' };
 
-/**
- * The grounding of the evening: the disciplines timeline (Explorable `ai-capability`, Preset `timeline`).
- * Prompting, agents, workflows and the factory as stages on one language model, each with what it is comparable to and
- * the interface it reaches the model through. One Speaker note per stage dates it (LLM-0018 findings 4 and 10 to 13);
- * its marker sits on the stage's card, and hovering the note lights the column.
- */
 export const grounding = slide({
   slug: 'grounding',
   messages: { en, de },

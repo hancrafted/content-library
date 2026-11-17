@@ -3,14 +3,20 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The set-aside items, as keys of `items`, with the tilt that makes each note sit in the tray: add or drop one in both Translation files. */
 const ITEMS = [
   { key: 'first', tilt: '-rotate-1' },
   { key: 'second', tilt: 'rotate-1' },
   { key: 'third', tilt: '-rotate-1' },
 ] as const;
 
-// What the session leaves out: a dark "set aside" panel beside a tray of tilted notes, so the list reads as handled, not forbidden. The Slide header shows the title and caption; the Scene holds the panel and the tray.
+function DrawnCross() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5">
+      <path d="M6 6l12 12M18 6L6 18" className="fill-none stroke-current" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export const outOfScope = slide({
   slug: 'out-of-scope',
   messages: { en, de },
@@ -46,15 +52,7 @@ export const outOfScope = slide({
                 aria-hidden="true"
                 className="flex size-12 flex-none items-center justify-center rounded-full bg-(--warning) text-warning-foreground"
               >
-                {/* A drawn cross, not the × glyph: a glyph sits on the font's baseline, never in the circle's middle. */}
-                <svg viewBox="0 0 24 24" className="size-5">
-                  <path
-                    d="M6 6l12 12M18 6L6 18"
-                    className="fill-none stroke-current"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <DrawnCross />
               </span>
               <div>
                 <p className="text-subheading font-semibold">{t(`items.${key}.title`)}</p>

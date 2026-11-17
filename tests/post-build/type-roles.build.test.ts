@@ -1,8 +1,4 @@
-// FE-011 / #52 Seam 3 post-build check: the type roles reach the exported HTML.
-// Every Episode's h1 is in the hero role, a section slide's title in the heading
-// role, a page slide's title in the subheading role; and no stylesheet styles
-// by Episode (`[data-episode=…]`), since roles are the only way a size differs.
-
+// decision: FE-011 §3.1
 import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -11,12 +7,11 @@ import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 
-/** Episodes whose files predate the token rules (FE-011 §6): their own `[data-episode=…]` palette is exempt until migrated. */
+// decision: FE-011 §6.1
 const LEGACY_EPISODES = legacy.globs.flatMap(
   (glob) => /^src\/episodes\/(?!components\/)([^/*]+)\//.exec(glob)?.[1] ?? [],
 );
 
-/** Every `[data-episode=…]` selector a stylesheet holds, as its Episode slug. */
 function episodeSelectors(css: string): string[] {
   return [...css.replace(/["']/g, '').matchAll(/\[data-episode=([^\]]+)\]/g)].map((match) => match[1]);
 }
@@ -29,7 +24,6 @@ function classesOf($: CheerioAPI, elements: readonly unknown[]): string[][] {
   return elements.map((element) => ($(element as never).attr('class') ?? '').split(/\s+/));
 }
 
-/** The class lists of every `tag` heading in the Slides of one kind: a Section's own (first) Slide, or a page Slide (the rest). */
 function titleClasses($: CheerioAPI, kind: 'section' | 'page', tag: 'h2' | 'h3'): string[][] {
   const headings = $('[data-slot="slides"] > section[data-section]')
     .toArray()
@@ -46,7 +40,6 @@ describe('type roles in the export', () => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
-    // A walk over zero pages passes silently, so the count is printed as a diagnostic.
     console.info(`type roles: walking ${EPISODE_PAGES.length} Episode pages`);
   });
 

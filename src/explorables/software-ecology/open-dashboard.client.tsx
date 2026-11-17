@@ -13,18 +13,12 @@ import type { FactoryView } from './use-factory.ts';
 import { WorkCenterCard } from './work-center-card';
 import type { WorkCenterDashboardProps } from './work-center-dashboard.client';
 
-/*
- * The open dashboard in its popover: a work center's, or the Customer's. Every dial writes the run's settings
- * through `setSettings`; the readouts come from the snapshot, which covers the open card while it is open.
- */
-
 export interface OpenDashboardProps {
   readonly f: FactoryView;
   readonly dash: DashboardState;
   readonly words: Words;
   readonly w: WordsIn;
   readonly wrap: RefObject<HTMLElement | null>;
-  /** A Slide's Context markers by spot; a work center's `<id>:card` sits on its dashboard. */
   readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
 }
 
@@ -80,7 +74,6 @@ const centerDash = (p: CenterIn, x: { n: TopoNode; r: DashboardReadout }): WorkC
   };
 };
 
-/** A work center's dashboard: in the popover with its close button, in a compare column without (`closable` false). */
 export function CenterPanel(p: CenterIn) {
   const r = p.f.snap.dashboards[p.id],
     n = p.f.run.topology.nodes.get(p.id);
@@ -88,7 +81,6 @@ export function CenterPanel(p: CenterIn) {
   return <WorkCenterCard cardView="dashboard" kind="role" dashboard={centerDash(p, { n, r })} />;
 }
 
-/** Nothing while no dashboard is open, or until the snapshot first covers it. */
 export function OpenDashboard(p: OpenDashboardProps) {
   const titleId = useId(),
     id = p.dash.open;

@@ -4,7 +4,6 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './slide.module.css';
 
-/** A pill naming which copy of the skill this is. */
 function CopyPill({ children, dark }: { readonly children: string; readonly dark?: boolean }) {
   return (
     <span
@@ -18,7 +17,6 @@ function CopyPill({ children, dark }: { readonly children: string; readonly dark
   );
 }
 
-/** Your notebook copy: no header at all, only you run it. */
 export function PersonalCopy({
   pill,
   sub,
@@ -39,7 +37,6 @@ export function PersonalCopy({
 export interface ControlField {
   readonly key: string;
   readonly value: string;
-  /** The field's `metadata` key in the Coding agent view; code, not translated. */
   readonly codingKey: string;
 }
 
@@ -48,12 +45,10 @@ export interface SharedCopyProps {
   readonly heading: string;
   readonly fields: readonly ControlField[];
   readonly skill: { readonly name: string; readonly description: string; readonly step: string };
-  /** The skill's folder name, for the front matter in the Coding agent view; code, not translated. */
   readonly slug: string;
   readonly className?: string;
 }
 
-/** The control block: owner, version and next review, or the `metadata` lines in the Coding agent view. */
 function ControlBlock({ heading, fields }: Pick<SharedCopyProps, 'heading' | 'fields'>) {
   const metadata = [
     'metadata:',
@@ -85,7 +80,6 @@ function ControlBlock({ heading, fields }: Pick<SharedCopyProps, 'heading' | 'fi
   );
 }
 
-/** The skill itself under the control block: its card, or its front matter in the Coding agent view. */
 function SkillCard({ skill, slug }: Pick<SharedCopyProps, 'skill' | 'slug'>) {
   return (
     <>
@@ -103,11 +97,6 @@ function SkillCard({ skill, slug }: Pick<SharedCopyProps, 'skill' | 'slug'>) {
   );
 }
 
-/**
- * The same card in the fleet manual, with the control block stamped on top: owner, version, next review. On a wide
- * Slide it lies on the manual's faceted page in the room drawing, so its card goes clear; narrower, it is a card of its
- * own under the drawing. In the Coding agent view the page is the `SKILL.md` front matter and the control block its `metadata` lines.
- */
 export function SharedCopy({ pill, heading, fields, skill, slug, className }: SharedCopyProps) {
   return (
     <div data-copy="shared" className={cn('flex flex-col items-start gap-2 @5xl:items-center @5xl:gap-3', className)}>
@@ -120,7 +109,6 @@ export function SharedCopy({ pill, heading, fields, skill, slug, className }: Sh
   );
 }
 
-/** A version reads as a string in front matter, so YAML keeps `1.3` from becoming a number. */
 const quoted = (key: string, value: string) => (key === 'version' ? `"${value}"` : value);
 
 export interface ReaderLabel {
@@ -129,10 +117,8 @@ export interface ReaderLabel {
   readonly version: string;
 }
 
-/** Where each label sits over the room on a wide Slide: beside its console, as the room's desk rows place them. */
 const READER_TOPS = ['30.4%', '51.1%', '71.8%'] as const;
 
-/** One AI's label: who it is, and the version it runs. */
 function Reader({ who, runs, version, top }: ReaderLabel & { readonly top: string }) {
   return (
     <li
@@ -155,10 +141,6 @@ function Reader({ who, runs, version, top }: ReaderLabel & { readonly top: strin
   );
 }
 
-/**
- * The three AIs the shared skill reaches, each running the same version. On a wide Slide each label sits over the room
- * beside its console; narrower, they flow as a list under the drawing.
- */
 export function Readers({
   readers,
   className,

@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { RoleCardView, rowsAt, type CartoonCardProps } from './cartoon-card-view';
 import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
@@ -6,20 +7,11 @@ import styles from './software-ecology.module.css';
 import { StationCardView, type StationCardProps } from './station-card-view';
 import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-center-dashboard.client';
 
-/*
- * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the role with its
- * cartoon panel (`role`, not clickable since feedback 09), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
- * and the compare stream's columns show. Every floor view keeps the card's id on its root, so a view change keeps one
- * card's identity.
- */
-
 type CardView = 'role' | 'station' | 'dashboard';
 
 interface Opens {
   readonly id: string;
-  /** "{title}: open its dashboard", the card's name as a button. */
   readonly label: string;
-  /** A click or Enter/Space on the card; `shift` for a compare pick. */
   readonly onOpen?: (id: string, shift: boolean) => void;
 }
 
@@ -29,9 +21,7 @@ export type WorkCenterCardProps =
       readonly id: string;
       readonly kind: 'role' | 'customer';
       readonly cell: readonly [number, number];
-      /** A Slide's Context target on the card. */
       readonly target?: TargetProps;
-      /** Targets the station places on its rack or a sign; here they cover the card, so a note still lights it. */
       readonly stationTargets?: readonly TargetProps[];
       readonly cartoon: CartoonCardProps;
     }
@@ -42,7 +32,6 @@ export type WorkCenterCardProps =
 
 type PanelProps = Extract<WorkCenterCardProps, { cardView: Exclude<CardView, 'role'> }>;
 
-/** The views that are not on the cartoon grid: the station on the line and the dashboard. */
 function Panel(p: PanelProps) {
   if (p.cardView === 'dashboard')
     return p.kind === 'customer' ? <CustomerDashboard {...p.dashboard} /> : <WorkCenterDashboard {...p.dashboard} />;

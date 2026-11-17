@@ -2,7 +2,6 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The plain-word card: one line in the chat, the whole file read behind it. */
 export function JumpCard({
   title,
   lead,
@@ -26,7 +25,6 @@ export function JumpCard({
   );
 }
 
-/** What a bar means, and so its colour: something you typed, the AI wrote, it searched, or the file it read. */
 export type BarTone = 'you' | 'ai' | 'searched' | 'read';
 
 const TONE: Readonly<Record<BarTone, string>> = {
@@ -36,8 +34,7 @@ const TONE: Readonly<Record<BarTone, string>> = {
   read: 'fill-(--success)',
 };
 
-/** The narrowest bar drawn, in percent, so 15 tokens beside 55,000 still shows as a sliver. */
-const SLIVER = 0.6;
+const MINIMUM_SLIVER_PERCENT = 0.6;
 
 export interface SizeBarRow {
   readonly key: string;
@@ -47,7 +44,6 @@ export interface SizeBarRow {
   readonly tone: BarTone;
 }
 
-/** One labelled bar: its name and size above, its length below. */
 function SizeBarItem({ row }: { row: SizeBarRow }) {
   return (
     <li className="flex flex-col gap-1">
@@ -57,13 +53,19 @@ function SizeBarItem({ row }: { row: SizeBarRow }) {
       </span>
       <svg viewBox="0 0 100 6" preserveAspectRatio="none" className="h-2 w-full" aria-hidden="true">
         <rect x="0" y="0" width="100" height="6" rx="1" className="fill-card" />
-        <rect x="0" y="0" width={Math.max(row.percent, SLIVER)} height="6" rx="1" className={cn(TONE[row.tone])} />
+        <rect
+          x="0"
+          y="0"
+          width={Math.max(row.percent, MINIMUM_SLIVER_PERCENT)}
+          height="6"
+          rx="1"
+          className={cn(TONE[row.tone])}
+        />
       </svg>
     </li>
   );
 }
 
-/** Bars on one scale: what was asked and answered set against what was read to answer it. */
 export function SizeBars({
   heading,
   label,

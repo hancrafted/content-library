@@ -1,6 +1,3 @@
-// `npm run episode:text -- <slug> [--locale de]`: prints an Episode's words as markdown, read from its Slides'
-// `i18n/` in Section order. The reading copy for an agent or a human; never commit its output.
-
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { episodeOutline } from '../../../src/pipeline/lib/episode-outline.ts';

@@ -11,8 +11,6 @@ interface BannerProps {
   caption: string;
 }
 
-// One full-width banner row, list-card style: index and title on the left, caption on the right (stacked below md).
-// Hover tints the row and slides the arrow in from the left. CSS only, so no client widget.
 function Banner({ index, title, caption }: BannerProps) {
   const id = `grid-2x1-${useId()}`;
   return (
@@ -43,7 +41,6 @@ function Banner({ index, title, caption }: BannerProps) {
   );
 }
 
-// Two stacked banner rows across the Foreground, read top to bottom like an editorial list.
 export const grid2x1 = slide({
   slug: 'grid-2x1',
   messages: { en, de },

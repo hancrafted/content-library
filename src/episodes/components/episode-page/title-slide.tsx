@@ -10,14 +10,12 @@ import { TalkLauncher, type RecordingLanguage, type TalkPlayerLabels } from './t
 import { TitleInk } from './title-ink.client';
 import { TitleTone } from './title-tone.client';
 
-/** The elements of the Title slide a Speaker note can target. */
 export type TitleTarget = 'title' | 'caption';
 
 export function isTitleTarget(name: string): name is TitleTarget {
   return name === 'title' || name === 'caption';
 }
 
-/** The shared glow behind a Title slide with no authored hero Scene. */
 function HeroGlow() {
   return (
     <SlideBackdrop mobile>
@@ -33,24 +31,17 @@ export interface TitleSlideProps {
   geometricTone?: boolean;
   title: string;
   caption?: string;
-  /** Who renders the header: on `shared` the Title slide types its `h1` and caption in with `entrance`. */
   mode: HeaderMode;
   entrance: SlideEntrance;
-  /** The record's authored hero Scene (`title`); absent, the shared glow. */
   hero?: ReactNode;
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
-  /** An unlisted Episode's Event recording: the language spoken in it, labelled on the launcher before play. */
   recording?: RecordingLanguage;
-  /** On an Event-scoped Episode page, the Event's time as the venue writes it, "17:00–19:00 CET"; it follows the title. */
   time?: string;
-  /** An Event notice above the title, inside the Title slide. */
   notice?: ReactNode;
-  /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
 
-/** The Event's time, under the title and caption; nothing off an Event or when the Event has none. */
 function EventTime({ time }: { time: string | undefined }) {
   if (time === undefined) return null;
   return (
@@ -60,17 +51,14 @@ function EventTime({ time }: { time: string | undefined }) {
   );
 }
 
-/** Title-only navigation policy, independent of configured surface sampling. */
 function ToneMark({ appearance, geometricTone }: Pick<TitleSlideProps, 'appearance' | 'geometricTone'>) {
   return appearance.tone === 'inverse' ? <TitleTone tone={appearance.tone} geometricTone={geometricTone} /> : null;
 }
 
-/** Marks a Title that fills the floating header's band, so its words start below the header (`data-header-band`). */
 function headerBandOf(appearance: TitleAppearance) {
   return fillsHeaderBand(appearance) ? '' : undefined;
 }
 
-/** The ink transition into the first page Slide, which a toned Title slide ends in. */
 function ToneInk({ target }: { target: string | undefined }) {
   return target ? <TitleInk targetId={target} /> : null;
 }
@@ -100,7 +88,7 @@ function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
   );
 }
 
-/** The shared header the Title slide hands its wrapper: it types in like every Slide header (design-ADR-0012). */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
   const { hero, entrance } = props;
   return {
@@ -110,7 +98,6 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
     caption: props.caption,
     leading: props.notice,
     entrance,
-    // Without a hero Scene the header sits centred over the glow; with one, header and hero sit together, centred.
     className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',
     children: (
       <>
@@ -121,16 +108,8 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
   };
 }
 
-/**
- * The Episode's opening slide and the page's only `h1` (FE-002). Rendered by
- * `EpisodePageContainer`, never by a page file, and not listed in the table
- * of contents. Its wrapper carries the reserved id `top`, which the table of
- * contents heading links to. The Episode's recording joins it when youtubeId is provided, labelled with its
- * language when it is an Event recording.
- *
- * On the shared header it types in like every Slide header on page load
- * (design-ADR-0012), over the record's hero Scene or, without one, the shared glow.
- */
+// decision: FE-002 §1
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function TitleSlide(props: TitleSlideProps) {
   const { youtubeId, talkLabels, recording, hero, title } = props;
   const launcher = youtubeId && talkLabels && (

@@ -28,19 +28,10 @@ const SOURCES = {
   atil: { slug: 'atil-llm-stability', url: 'https://arxiv.org/abs/2408.04667' },
 } as const;
 
-/** The disclosure, one step per click (Option 1a): the upper layers at rest, then each step the Voice script names. */
 const STEP = { farmingPeople: 2, steamPeople: 3, computerPeople: 4, steamFork: 5, aiMachine: 6, aiPeople: 7 } as const;
 const STEPS = 7;
-/** A fork hangs on a card plaque: on the muted wall its muted lines fall under 4.5:1, on the card they meet it. */
 const FORK_PLAQUE = 'flex flex-col gap-2 bg-card p-3';
 
-/**
- * Every revolution, one card (Option 1a, the hairline frame): a gallery wall of exhibits read left to right in time,
- * farming, the steam engine and the computer, then AI twice as wide as the lead exhibit. Each exhibit shows what the
- * machine took over on top and where people moved up below; the steam engine's fork shows people going two ways
- * without judgment, and AI's fork is left open. The presenter reveals the climb step by step; without script, in
- * print and under reduced motion the finished wall shows. Overrules `master: grid-bento`, keeps `motion: local`.
- */
 export const everyRevolutionOneCard = slide({
   slug: 'every-revolution-one-card',
   messages: { en, de },
@@ -63,7 +54,6 @@ export const everyRevolutionOneCard = slide({
   ],
   content: ({ t, Marker }) => {
     const layers = { machine: t('layers.machine'), people: t('layers.people') };
-    // On the lead exhibit's tinted layers muted grey falls under 4.5:1, so its asides read in the text colour.
     const aside = 'flex items-center gap-1 text-caption text-foreground';
     return (
       <SlideFrame className="mt-10">

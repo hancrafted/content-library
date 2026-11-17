@@ -23,53 +23,34 @@ import {
   subfolders,
 } from './episode-staging.fixture.ts';
 
-/*
- * The Run-level checks (ARCH-003 §4.7): every staging check that holds inside one Run's staging folder,
- * `docs/episodes/<slug>/`, run on that folder alone. Each Run carries a `run-checks.test.ts` (copied from
- * `skills/new-episode/assets/run-checks.test.ts.txt` by begin-run) that hands its folder here and globs its text files
- * into its import graph, so `vitest --changed` runs only the checks of the Run an edit touched, and each test's cost stays one Run. The template's
- * and the sample Episode's checks, and the invariants that span Runs, stay in `episode-staging.test.ts`.
- *
- * A check returns findings and never throws, so a broken Run's test names what broke. Add a new Run-level check here:
- * every Run's test runs it without being edited.
- */
-
+// decision: ARCH-003 §4.7
 const shown = (staging: string, findings: readonly Finding[]): string[] =>
   findings.map(({ file, message }) => `${staging}/${file}: ${message}`);
 
-/** The Run's files by their path inside its folder, `/`-separated, its checks test left out. */
 function contentsOf(dir: string): Record<string, string> {
   return Object.fromEntries(Object.entries(readFolder(dir)).filter(([file]) => file !== RUN_CHECKS_TEST));
 }
 
-/** The llm-wiki's research folders, as repo paths. */
 const wikiResearchFolders = (): string[] =>
   subfolders(path.join(LLM_WIKI, 'research'))
     .flatMap(subfolders)
     .map((folder) => path.relative(ROOT, folder));
 
-/**
- * A Run's research folders, as repo paths: those on disk, and those its pipeline plans, so two Runs planning one ID
- * clash before either writes its folder. A planned folder that Promotion already moved into the llm-wiki, under the
- * same name, is that wiki folder.
- */
+export const isPlannedResearchOutput = (output: string): boolean =>
+  output.endsWith('/research.md') && !output.includes('*');
+
 export function researchFoldersOfRun(
   onDisk: readonly string[],
   pipeline: string | undefined,
   wiki: readonly string[],
 ): string[] {
   const planned = (pipeline === undefined ? [] : outputsOf([pipeline]))
-    // A draft keeps write-research's foreach glob; only a named folder is a planned one.
-    .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
+    .filter(isPlannedResearchOutput)
     .map((output) => path.posix.dirname(output));
   const promoted = new Set(wiki.map((folder) => path.posix.basename(folder)));
   return [...new Set([...onDisk, ...planned.filter((folder) => !promoted.has(path.posix.basename(folder)))])];
 }
 
-/**
- * Every research folder of the llm-wiki and of every Run but this one, each Run read from disk and its pipeline. Those
- * reads sit outside this Run's glob; `--changed` still catches a clash, because the edited Run's own test reads this one.
- */
 function researchFoldersElsewhere(staging: string, wiki: readonly string[]): string[] {
   const runs = subfolders(path.join(ROOT, 'docs/episodes'))
     .map((run) => path.relative(ROOT, run).split(path.sep).join('/'))
@@ -82,19 +63,18 @@ function researchFoldersElsewhere(staging: string, wiki: readonly string[]): str
   return [...runs, ...wiki];
 }
 
-/** This Run's research folders against every folder elsewhere: each name, each ID used once, reported for this Run's. */
 export function researchIdFindings(
   own: readonly string[],
   elsewhere: readonly string[],
   categories: readonly string[],
 ): string[] {
-  // Every folder elsewhere is checked by its own Run or the template test: report only findings that name this Run's.
+  const namesThisRunsFolder = ({ message }: { message: string }): boolean =>
+    own.some((folder) => message.includes(folder));
   return checkResearchFolders([...own, ...elsewhere], categories)
-    .filter(({ message }) => own.some((folder) => message.includes(folder)))
+    .filter(namesThisRunsFolder)
     .map(({ message }) => message);
 }
 
-/** One Run's staging folder, repo-relative, and its files by their path inside it. */
 interface Run {
   readonly staging: string;
   readonly files: Readonly<Record<string, string>>;
@@ -110,8 +90,8 @@ function pipelineFindings(run: Run): string[] {
 
 function researchJobFindings(run: Run): string[] {
   const yaml = run.files['pipeline.yml'];
-  // A branch in flight keeps its run-log.md, whose Research jobs list stands in for the plan.
-  const plan = run.files['research-plan.md'] ?? run.files['run-log.md'];
+  const runLogOfBranchInFlight = run.files['run-log.md'];
+  const plan = run.files['research-plan.md'] ?? runLogOfBranchInFlight;
   return yaml === undefined ? [] : shown(run.staging, checkResearchJobs(pipelineOf(run), yaml, plan));
 }
 
@@ -152,7 +132,6 @@ function voiceScriptFindings({ staging }: Run): string[] {
   return pair === undefined ? [] : shown(staging, checkVoiceScriptDiff(pair.draft, pair.voiced));
 }
 
-/** Every Run-level check, by the test name it runs under. */
 const CHECKS: readonly (readonly [string, (run: Run) => readonly string[]])[] = [
   [
     'finds no disagreement between the files of this staging folder',
@@ -177,10 +156,7 @@ const CHECKS: readonly (readonly [string, (run: Run) => readonly string[]])[] = 
   ],
 ];
 
-/**
- * The checks of the Run whose staging folder is `dir`, read from disk as the staging checks always read it. The Run's
- * test globs its text files only to put them in its import graph, which `--changed` follows.
- */
+// decision: ARCH-003 §4.6
 export function runChecks(dir: string): NamedCheck[] {
   const staging = path.relative(ROOT, dir).split(path.sep).join('/');
   return CHECKS.map(([name, findings]) => ({

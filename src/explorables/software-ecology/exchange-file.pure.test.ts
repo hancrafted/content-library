@@ -6,7 +6,6 @@ import { builtinBundle } from './use-case-data.ts';
 
 const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };
 
-/** The page as the reference build shows it after loading: Tire swing at Ideal, the factory view, 5×. */
 const idealPage = (): PageState => {
   const B = builtinBundle('tire');
   const p = B.data.presets.find((x) => x.id === 'ideal');
@@ -25,7 +24,7 @@ const idealPage = (): PageState => {
 
 describe('success cases', () => {
   it('writes the reference build’s state block for Tire swing at Ideal', () => {
-    // ARRANGE: the lines flow.html's Download YAML writes right after it loads
+    // ARRANGE
     const expected = [
       '# What the page shows right now. speed: 0 pause, 1, 2, 5, 10 or 20. beltMotion, pile: how the factory is drawn now. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
       'state:',

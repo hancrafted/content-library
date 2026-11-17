@@ -1,7 +1,5 @@
-/*
- * The factory's stage, cards, toolbar and readouts, ported from the reference build's stylesheet (design-ADR 0024).
- * Colours are tokens and mixes of tokens; sizes and weights come from the type roles in the markup (FE-011).
- */
+/* decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md */
+/* decision: FE-011 §3 */
 .root {
   --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);
   --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
@@ -11,7 +9,6 @@
   --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--card));
   --rail: color-mix(in oklab, var(--foreground) 22%, var(--muted));
   --belt: color-mix(in oklab, var(--foreground) 6%, var(--card));
-  /* quiet ink for small text on a muted fill: muted-foreground alone falls below 4.5:1 on --muted and --fg-8 */
   --ink-quiet: color-mix(in oklab, var(--muted-foreground) 65%, var(--foreground));
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   display: flex;
@@ -25,7 +22,6 @@
   --belt: color-mix(in oklab, var(--foreground) 10%, var(--card));
 }
 
-/* ---------- toolbar: one row at laptop width (feedback 08), wrapping below it ---------- */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -34,9 +30,7 @@
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
-/* sticky under the site header, as the reference build's toolbar is under the page top; below the header (z 50) and
-   the Context drawer (z 40), which both draw over it, and above the tour caption box (z 30), so a toolbar menu opens
-   over the caption. A phone keeps it in the flow: wrapped, it is taller than half the screen. */
+/* decision: FE-009 §8 */
 @media (min-width: 768px) {
   .toolbar {
     position: sticky;
@@ -51,7 +45,6 @@
   align-items: center;
   gap: 6px;
 }
-/* the three steps, Who does what, In theory and In practice, as one segmented group */
 .stateSeg {
   display: inline-flex;
   align-items: center;
@@ -62,7 +55,6 @@
   background: var(--card);
 }
 @media (max-width: 480px) {
-  /* a long step name wraps the steps inside their frame rather than running off a phone */
   .stateSeg {
     flex-wrap: wrap;
     max-width: 100%;
@@ -76,11 +68,9 @@
   background: transparent;
   white-space: nowrap;
 }
-/* the step's number, a circled digit before its name */
 .stepNo {
   margin-right: 4px;
 }
-/* a dial was turned after picking the state */
 .modDot {
   display: inline-block;
   width: 7px;
@@ -94,7 +84,6 @@
   display: inline-flex;
   align-items: center;
 }
-/* the use case and Settings keep to the row's end */
 .tbEnd {
   display: inline-flex;
   align-items: center;
@@ -194,12 +183,10 @@
   padding: 4px 8px;
   font-variant-numeric: tabular-nums;
 }
-/* the time controls sit close together: one row at laptop width */
 .tgroup .tbtn {
   min-width: 32px;
   padding: 4px 6px;
 }
-/* a lone toolbar button with its own frame: Settings, and the file buttons */
 .tbtnLine {
   border: 1px solid var(--border);
   background: var(--card);
@@ -224,14 +211,12 @@
   flex: none;
 }
 
-/* ---------- the floor ---------- */
 .viewWrap {
   position: relative;
   border-radius: 16px;
   background: var(--muted);
   padding: 28px 12px 12px;
 }
-/* the factory fills the viewport below the toolbar: about 80vh, the layout scaled to fit */
 .viewWrap[data-view='factory'] {
   height: 80vh;
   min-height: 460px;
@@ -285,14 +270,11 @@
   pointer-events: none;
   z-index: 2;
 }
-/* The roles state: the factory's grid, the Customer in the first column */
 .view:not([data-view='factory']) .floor {
   position: relative;
   pointer-events: auto;
   display: grid;
   grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
-  /* three lines per card row (head, panel, artefacts), in the one proportion for every row: all ten cards share one
-     height, each panel starts at one y and the artefacts sit at the bottom. Each card is a subgrid over its lines. */
   grid-template-rows: repeat(var(--rows, 2), minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 0.9fr));
   column-gap: 14px;
   row-gap: 0;
@@ -363,7 +345,6 @@
   fill: var(--muted-foreground);
 }
 
-/* ---------- work center cards ---------- */
 .card {
   box-sizing: border-box;
   position: absolute;
@@ -519,7 +500,6 @@
   }
 }
 
-/* the Customer card */
 .card[data-kind='customer'] {
   background: color-mix(in oklab, var(--success) 8%, var(--card));
 }
@@ -604,7 +584,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- below the stage ---------- */
 .foot {
   display: flex;
   flex-wrap: wrap;
@@ -731,7 +710,6 @@
   }
 }
 
-/* the legend's documents: the canvas's colours (doc-sprites.ts) */
 .root {
   --doc-paper: var(--card);
   --doc-edge: color-mix(in oklab, var(--foreground) 45%, var(--card));
@@ -762,7 +740,6 @@
   fill: var(--ai);
 }
 
-/* tooltips: hover or keyboard focus, as the reference build shows them */
 .root [data-tip] {
   position: relative;
 }
@@ -790,7 +767,6 @@
   bottom: calc(100% + 6px);
 }
 
-/* Context spots a Slide may mark: the rack's place on a card, a sign, a belt's label */
 .rackSpot {
   position: absolute;
   left: 0;
@@ -811,7 +787,6 @@
   outline-offset: 2px;
 }
 
-/* ---------- The roles state: the cartoon cards and tiles ---------- */
 .cartoon {
   position: relative;
   box-sizing: border-box;
@@ -826,7 +801,6 @@
   transform-origin: 0 0;
   transition: opacity 260ms var(--ease);
 }
-/* in the roles grid a card spans three lines of the floor and lays its head, panel and artefacts on them */
 .view:not([data-view='factory']) .floor > .cartoon {
   display: grid;
   grid-template-rows: subgrid;
@@ -837,7 +811,6 @@
 .artSlot {
   align-self: end;
 }
-/* a station's rack or sign target, spread over its cartoon card */
 .spotFill {
   position: absolute;
   inset: 0;
@@ -870,7 +843,6 @@
 .art [data-art='muted'] {
   fill: var(--muted);
 }
-/* the panel and the cartoon's quote under it */
 .panelFig {
   display: flex;
   flex-direction: column;
@@ -912,7 +884,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* a department's name wraps on its roles-state card rather than losing its end */
 .cartoon .cardTitle {
   white-space: normal;
 }
@@ -961,7 +932,6 @@
   }
 }
 
-/* ---------- #542: open cards, mechanics, belt motion ---------- */
 .card[role='button'] {
   cursor: pointer;
 }
@@ -994,7 +964,6 @@
   }
 }
 
-/* ---------- the popover and the toolbar menus: they share the factory's tints, and the popover lives outside .root ---------- */
 .root,
 .popover,
 .menu {
@@ -1057,7 +1026,6 @@
   border-right: 0;
   border-bottom: 0;
 }
-/* tooltips inside the popover: it is portaled outside .root */
 .popover [data-tip] {
   position: relative;
 }
@@ -1103,13 +1071,11 @@
 .menu[hidden] {
   display: none;
 }
-/* the speed menu: four choices, each with how long a working day takes */
 .speedMenu {
   width: min(300px, 92vw);
   gap: 2px;
   padding: 6px;
 }
-/* the Settings popover: fixed to the window and placed by settings-placement.pure.ts, so it stays inside it */
 .menuSettings {
   position: fixed;
   display: flex;
@@ -1117,7 +1083,6 @@
   overflow: hidden;
   z-index: 45;
 }
-/* the Settings popover (feedback 09): a header, two columns of form fields, and the foot */
 .menuSettings {
   padding: 0;
   gap: 0;
@@ -1130,7 +1095,6 @@
   padding: 4px 8px 4px 16px;
   border-bottom: 1px solid var(--border);
 }
-/* only the body scrolls: the header and the foot stay in view */
 .setCols {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1176,7 +1140,6 @@
   flex-wrap: wrap;
   gap: 6px;
 }
-/* below 800 px the columns stack, one rule between them */
 @media (max-width: 800px) {
   .setCols {
     grid-template-columns: minmax(0, 1fr);
@@ -1187,7 +1150,6 @@
   }
 }
 
-/* one form field: the label and its (?) help on a line, the control full width beneath */
 .field {
   display: flex;
   flex-direction: column;
@@ -1480,7 +1442,6 @@
   translate: 14px 0;
 }
 
-/* ---------- a dashboard: a monitor ---------- */
 .dash {
   display: flex;
   flex-direction: column;
@@ -1749,7 +1710,6 @@
 .utilLegend [data-u='busy'] {
   background: var(--foreground);
 }
-/* blocked reads warning, not destructive: red is kept for two weeks of work waiting (the Spec's token rule) */
 .util [data-u='blocked'],
 .utilLegend [data-u='blocked'] {
   background: var(--warning);
@@ -1835,7 +1795,6 @@
   }
 }
 
-/* ---------- the Scenarios menu, the Tour button and the guided tour (design-ADR 0024 §10; reference build Q107, Q111) ---------- */
 .stateMenu[aria-pressed='true'] {
   background: var(--foreground);
   color: var(--background);
@@ -1968,7 +1927,6 @@
   cursor: not-allowed;
 }
 
-/* ---------- #544: compare mode and the compare stream, as the reference build's `.slots` and `.compare` ---------- */
 .card[data-picked='true'] {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--fg-25);
@@ -2004,13 +1962,11 @@
 .cmpNote:empty {
   display: none;
 }
-/* the stream replaces the floor in the same fixed stage (80vh, as the reference build's); what is taller scrolls inside */
 .viewWrap[data-compare='true'] > .compare {
   flex: 1;
   min-height: 0;
   overflow: auto;
 }
-/* in the fixed stage the stream's parts keep their own heights (the strip its 170px) and the stream scrolls instead */
 .viewWrap[data-compare='true'] > .compare > * {
   flex-shrink: 0;
 }
@@ -2225,7 +2181,6 @@
   }
 }
 
-/* ---------- Download YAML and Upload: the message under the toolbar, the drop hint over the stage ---------- */
 .ioMsg {
   border: 1px solid var(--border);
   border-left: 3px solid var(--success);
@@ -2258,10 +2213,6 @@
   background: color-mix(in oklab, var(--background) 85%, transparent);
 }
 
-/*
- * A phone shrinks the roles state's cells below one long word ("Documentation", "acceptance"): the words then break
- * inside their card instead of pushing the page wider than the viewport. At desktop widths every word fits, unchanged.
- */
 .cartoon :is(.tag, .chip, .cardTitle, .job, .cap),
 .cartoon :is(.headLg, .headText) {
   min-width: 0;

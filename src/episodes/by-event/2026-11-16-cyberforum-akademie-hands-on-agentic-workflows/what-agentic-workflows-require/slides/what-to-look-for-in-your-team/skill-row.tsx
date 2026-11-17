@@ -2,14 +2,12 @@ import { BoardNote } from '@/episodes/components/slide-shared/party-board/sticky
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** A failure from the board, now fixed: what it was and what fixes it. */
 export interface Fixed {
   readonly slug: string;
   readonly was: string;
   readonly now: string;
 }
 
-/** The arrow from a skill to the failures it fixed: across where they sit side by side, down where they stack. */
 function Arrow() {
   return (
     <svg viewBox="0 0 24 24" className="mx-auto size-6 rotate-90 @md:col-span-1 @md:rotate-0" aria-hidden="true">
@@ -24,7 +22,6 @@ function Arrow() {
   );
 }
 
-/** The failures a skill fixed, each the board's same note now marked fixed. */
 function FixedList({ fixed, label }: { fixed: readonly Fixed[]; label: string }) {
   return (
     <div className="flex flex-col gap-2 @md:col-span-5">
@@ -42,10 +39,6 @@ function FixedList({ fixed, label }: { fixed: readonly Fixed[]; label: string })
   );
 }
 
-/**
- * One skill to build in each person, as a note pointing at the failures it would have fixed, each the board's same
- * note now marked fixed.
- */
 export function SkillRow(props: {
   slug: string;
   skill: ReactNode;

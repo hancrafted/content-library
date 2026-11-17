@@ -11,11 +11,6 @@ import { beltsOf, cardsOf, rateText } from './stage-parts.pure.ts';
 import type { WordsIn } from './use-case-words.pure.ts';
 import type { FactoryView } from './use-factory.ts';
 
-/*
- * The stage: the belts and their labels, the canvas the painter draws on, the floor of cards and, over it, the tour's
- * caption box; while the compare stream is shown, the stream in place of the floor. Rendered by the client parent.
- */
-
 function useStageParts(f: FactoryView, x: { w: WordsIn; words: Words }) {
   const { run, layout, snap } = f;
   const cards = useMemo(() => cardsOf(run.topology, x.w), [run, x.w]);
@@ -44,17 +39,12 @@ export interface StageProps {
   readonly open: string | null;
   readonly beltMotion: boolean;
   readonly onCard: (id: string, shift: boolean) => void;
-  /** The card a tour caption points at. */
   readonly toured?: string;
-  /** The work centers picked for the compare stream. */
   readonly picked?: readonly string[];
-  /** The compare stream; while it is shown, the floor is hidden. */
   readonly stream?: ReactNode;
-  /** The tour's caption box, on the stage. */
   readonly overlay?: ReactNode;
 }
 
-/** Back from the compare stream, the hidden floor is placed and painted at once, also while the run is paused. */
 function useRepaintOnReturn(comparing: boolean, repaint: () => void) {
   const was = useRef(comparing);
   useLayoutEffect(() => {

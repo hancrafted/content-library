@@ -1,7 +1,3 @@
-// `npm run episode:harvest -- docs/episodes/<staging>`: renders `<staging>/harvest.json` into `<staging>/harvest.html`
-// through the template in `assets/harvest-report.html`, and opens it. Exits 1 listing every problem the page would
-// draw wrong. The page is Promotion's gate: the user keeps or strikes each card and pastes the decisions back.
-
 import { execFile } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -21,7 +17,6 @@ const out = path.join(staging, 'harvest.html');
 try {
   const harvest = JSON.parse(readFileSync(source, 'utf8')) as Harvest;
   const page = harvestReport(readFileSync(TEMPLATE, 'utf8'), harvest);
-  // Formatted like every committed file, so the Staging commit that carries the page passes the format gate.
   writeFileSync(out, await formatAsRepo(out, page));
   writeFileSync(source, await formatAsRepo(source, JSON.stringify(harvest)));
 } catch (error) {

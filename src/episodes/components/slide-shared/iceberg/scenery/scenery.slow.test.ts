@@ -7,13 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { Bubbles } from './bubbles';
 import { LightRays, Seabed } from './seabed';
 
-/*
- * The slow half of scenery.test.ts: every tone the scenery parts that are no Fable element paint (the bubbles, the
- * seabed, the rays), checked against scenery.module.css read from disk. Each Fable element's own palette is checked in
- * fable-elements.slow.test.ts. It reads the file rather than importing it, so the slow lane names it as a rerun
- * trigger (vitest.slow.config.mts, ARCH-003-testing §4).
- */
-
+// decision: ARCH-003 §4
 const SCENERY_CSS_FILE = path.join(import.meta.dirname, 'scenery.module.css');
 
 describe('edge cases', () => {

@@ -18,13 +18,8 @@ import { partOf, useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
 
-/* The attention part: the 100 units of attention over the steps in the window, as a list, with the first and last
- * three pinned, or compressed to one bar per share that the pointer magnifies like the Mac dock. */
-
-/** Rows pinned at each end of the `pinned` layout. */
 const PINNED = 3;
 
-/** Where a row sticks in the pinned layout: its side and its slot from that edge, or none for the rows between. */
 interface Pin {
   readonly side: 'top' | 'bottom';
   readonly slot: number;
@@ -34,20 +29,18 @@ interface RowProps {
   readonly say: Say;
   readonly step: Step;
   readonly units: number;
-  /** The axis maximum in percent: the bar's full track stands for this much attention. */
-  readonly max: number;
+  readonly axisMaximumPercent: number;
   readonly on: boolean;
   readonly pin: Pin | null;
-  /** The curve bucket the row falls in, a stable hook for a Slide that marks the middle (`data-attention-bucket`). */
   readonly bucket: string;
 }
 
 const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars({ '--slot': pin.slot }) } : {});
 
-const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin, bucket }: RowProps) {
+const AttentionRow = memo(function AttentionRow({ say, step, units, axisMaximumPercent, on, pin, bucket }: RowProps) {
   const name = nameOf(say, step);
   const colour = colourOf(stepCat(step), say.tech ? 'technical' : 'simple');
-  const motion = useMotion(`${units}|${max}|${on}|${pin?.side}${pin?.slot}`);
+  const motion = useMotion(`${units}|${axisMaximumPercent}|${on}|${pin?.side}${pin?.slot}`);
   return (
     <div
       {...motion}
@@ -62,10 +55,9 @@ const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin
         {name}
       </button>
       <div className={styles.attBar}>
-        <i style={tint(colour, { '--w': Math.min(1, units / max) })} />
+        <i style={tint(colour, { '--w': Math.min(1, units / axisMaximumPercent) })} />
       </div>
       <span className={styles.attNum} />
-      {/* The percentage shows on hover or focus only, in both render modes: a resting number clips on thin rows. */}
       <span className={`${styles.attPct} text-caption font-mono`} data-pct="" aria-hidden="true">{`${units}%`}</span>
     </div>
   );
@@ -77,7 +69,6 @@ function pinOf(layout: AttentionLayout, index: number, count: number): Pin | nul
   return index >= count - PINNED ? { side: 'bottom', slot: count - 1 - index } : null;
 }
 
-/** Hovering a row also brings its chat message into view; once per row, not on every move inside it. */
 function useReveal({ onReveal, onLight, onPin }: AttentionProps) {
   const handlers = useLighting({ onLight, onPin });
   const last = useRef<string | null>(null);
@@ -94,7 +85,6 @@ function useReveal({ onReveal, onLight, onPin }: AttentionProps) {
       handlers.onPointerLeave(event);
       last.current = null;
     },
-    // Keyboard focus on a row lights its message as hovering does.
     onFocus: (event: FocusEvent<HTMLElement>) => onLight(partOf(event.target)),
     onBlur: () => onLight(null),
   };
@@ -109,12 +99,20 @@ function Rows({ p, say, max }: { readonly p: AttentionProps; readonly say: Say; 
     const pin = pinOf(p.layout, i, p.attention.length);
     const bucket = bucketOf(i, p.attention.length);
     return (
-      <AttentionRow key={a.id} say={say} step={step} units={a.units} max={max} on={on} pin={pin} bucket={bucket} />
+      <AttentionRow
+        key={a.id}
+        say={say}
+        step={step}
+        units={a.units}
+        axisMaximumPercent={max}
+        on={on}
+        pin={pin}
+        bucket={bucket}
+      />
     );
   });
 }
 
-/** The current axis maximum, standing over the line at the right end of the bar tracks. */
 function AxisLabel({ max }: { readonly max: number }) {
   return (
     <div className={`${styles.attAxis} text-caption font-mono`} data-axis-max={max} aria-hidden="true">

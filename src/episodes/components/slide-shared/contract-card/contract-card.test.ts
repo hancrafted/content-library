@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { ContractCard, type ContractCardProps } from './contract-card';
 
-/*
- * The contract card: what a task receives, what it delivers and how someone else checks the result, its words all
- * from the Slide that draws it. Read through its rendered markup, the way a Scene shows it.
- */
-
 const TERMS = { receives: 'Receives', delivers: 'Delivers', checkedBy: 'Checked by' };
 const MARKS = { passed: 'Passed', failed: 'Failed' };
 

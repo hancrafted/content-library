@@ -2,13 +2,10 @@ import type { ReactNode } from 'react';
 
 export interface GrillRound {
   readonly slug: string;
-  /** The round's label, a Context marker beside it where the Slide gives one. */
   readonly label: ReactNode;
   readonly questions: readonly string[];
   readonly answer: string;
-  /** A collapsed round shows its label, its question and its answer on one compact line, not as a bubble each. */
   readonly collapsed: boolean;
-  /** The `data-target` the round's questions carry, where a Speaker note points at them. */
   readonly target?: { readonly 'data-target': string };
 }
 
@@ -17,7 +14,6 @@ export interface GrillChatProps {
   readonly roleSwitch: string;
   readonly rounds: readonly GrillRound[];
   readonly closing: string;
-  /** "in rounds, not one by one", its Context marker beside it; it closes the collapsed round's line. */
   readonly roundsNote: ReactNode;
 }
 
@@ -59,10 +55,6 @@ function CollapsedRound({ round, note }: { round: GrillRound; note: ReactNode })
   );
 }
 
-/**
- * The interview as a real chat: the role switch in the loudest pill, then rounds of numbered questions in `ai`, each
- * with one answer in `human`, the last round collapsed to its answer, and the AI's closing line.
- */
 export function GrillChat({ task, roleSwitch, rounds, closing, roundsNote }: GrillChatProps) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-sm">

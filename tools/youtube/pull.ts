@@ -1,7 +1,4 @@
-// `npm run youtube:pull -- <episode folder | page url> [--lang en|de]`: prints how the video's live description and
-// pinned comment differ from `recording/youtube.<lang>.md`, as a word diff. Writes nothing: the diff is input for the
-// Learn branch of /episode-author-youtube-metadata, and the repo stays the source (design-ADR 0020). Pure half:
-// `pull.pure.ts`.
+// decision: docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -33,7 +30,6 @@ const snippet = await client.readSnippet(video.videoId);
 const comment = file.commentId === '' ? undefined : await client.readComment(file.commentId);
 const comparison = comparePull(file, { description: snippet.description, comment });
 
-/** The word diff of one part, repo copy against YouTube, through git's own differ. */
 function wordDiff(label: string, part: PartComparison, verdict: string): void {
   if (!part.edited) {
     console.log(`${label}: same on YouTube and in the repo`);

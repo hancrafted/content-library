@@ -10,12 +10,6 @@ import {
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * The Title slide's hero Scene (the record's `title`), Option 0b: one terminal window previewing what the Guide ends
- * in. The terminal opens, the AI agent starts in the folder and a skill runs once it is approved. A calm hero: the
- * Slide header holds the title and the Hook, the Scene one pill and one window. The empty Backdrop is the Title
- * slide's one Backdrop, holding no glow: the Studio style stays quiet.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

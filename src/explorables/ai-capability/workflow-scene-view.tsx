@@ -2,7 +2,6 @@ import styles from './ai-capability.module.css';
 import type { SceneWords } from './ai-capability.types';
 import { NODES, type Frame, type Node, type NodeState } from './scene-frames.pure';
 
-/** Where each agent sits in the graph: one, a fan-out of three, one. */
 const AT: Record<Node, readonly [number, number]> = {
   a: [30, 88],
   b1: [110, 34],
@@ -24,22 +23,19 @@ const BOX: Record<NodeState, string> = {
   done: 'fill-(--success) stroke-(--success)',
 };
 
-/** The node label drawn smaller than the caption role, by scaling the text: it must fit a node 44 units wide. */
-const LABEL_SCALE = 0.6;
+const FITS_44_UNIT_NODE_LABEL_SCALE_RATIO = 0.6;
 
-/** One agent of the graph: idle, active with its loading bar, or done with a tick. */
 function AgentNode({ node, state, label }: { readonly node: Node; readonly state: NodeState; readonly label: string }) {
   const [x, y] = AT[node];
   return (
     <g data-node={node} data-state={state} transform={`translate(${x - 22},${y - 14})`}>
-      {/* An opaque card under the box, so the edges never show through an active agent's translucent tone. */}
       <rect width="44" height="28" rx="6" className="fill-card" />
       <rect width="44" height="28" rx="6" strokeWidth="1.5" className={`transition-colors ${BOX[state]}`} />
       {state === 'done' ? (
         <path d="M15 14l5 5 9-10" className="fill-none stroke-background" strokeWidth="2.5" />
       ) : (
         <text
-          transform={`translate(22 14) scale(${LABEL_SCALE})`}
+          transform={`translate(22 14) scale(${FITS_44_UNIT_NODE_LABEL_SCALE_RATIO})`}
           textAnchor="middle"
           dominantBaseline="central"
           className="fill-foreground text-caption font-semibold"
@@ -54,10 +50,6 @@ function AgentNode({ node, state, label }: { readonly node: Node; readonly state
   );
 }
 
-/**
- * The workflow's graph (a pure view): agents fan out from one to three and back into one. An active agent shows a
- * loading bar while it calls the model; a done one turns green with a tick.
- */
 export function WorkflowSceneView({ frame, words }: { readonly frame: Frame; readonly words: SceneWords }) {
   return (
     <svg viewBox="0 0 220 176" className="absolute inset-2 h-[calc(100%-1rem)] w-[calc(100%-1rem)]" aria-hidden="true">

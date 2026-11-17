@@ -5,7 +5,6 @@ export interface SpecCardProps {
   readonly rows: readonly { readonly slug: string; readonly term: string; readonly value: string }[];
 }
 
-/** The spec the interview ends in, a one-page work order: the card in `primary`, its icon in `machine`. */
 export function SpecCard({ title, rows }: SpecCardProps) {
   return (
     <article

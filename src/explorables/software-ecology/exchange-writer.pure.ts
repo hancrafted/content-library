@@ -1,10 +1,4 @@
-/*
- * The exchange file's writer (design-ADR 0024 §11): the reference build's `YAML.stringify`, line for line, so a
- * Download reads as flow.html's does: short maps and lists inline, a note as a comment above its key (`#path`) or
- * beside it (`path`), numbers to four decimals, a string quoted only when plain YAML would misread it. It writes; the
- * one YAML reader stays `use-case-file.ts`.
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 type Value = unknown;
 type Notes = Readonly<Record<string, string>>;
 
@@ -37,7 +31,6 @@ const flat = (v: Value): boolean =>
   isSc(v) || (Array.isArray(v) ? v : Object.values(v as object)).every((x) => isSc(x) || scList(x));
 const empty = (x: object): boolean => (Array.isArray(x) ? !x.length : !Object.keys(x).length);
 
-/** A map or list under a key goes on the key's line when empty, or flat and short. */
 const oneLine = (x: Value, used: number): boolean => empty(x as object) || (flat(x) && inline(x).length + used < 110);
 
 interface At {
@@ -75,6 +68,5 @@ function emit(v: Value, at: At): string[] {
   return Object.entries(v as object).flatMap(([k, x]) => emitEntry(k, x, at));
 }
 
-/** One YAML document, its notes as comments keyed by path: `#path` above the key, `path` beside it. */
 export const stringifyExchange = (doc: Readonly<Record<string, unknown>>, notes: Notes = {}): string =>
   `${emit(doc, { ind: 0, notes, path: '' }).join('\n')}\n`;

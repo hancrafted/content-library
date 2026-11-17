@@ -11,7 +11,6 @@ import {
   type Plan,
 } from './verify.pure.ts';
 
-/** A stand-in for the process adapter: each step exits with the code `codes` names (0 by default) and logs its run. */
 function fakeExec(codes: Readonly<Record<string, number>> = {}, outputs: Readonly<Record<string, string>> = {}) {
   const log: string[] = [];
   const exec: Exec = async (step) => {
@@ -152,6 +151,18 @@ describe('runPlan', () => {
       expect(command).toBe(expectedTest);
     });
 
+    it('commit plan checks only the staged files against the ADRs, while the verify plan checks the whole repo', () => {
+      // ARRANGE
+      const expectedCommitArchgate = 'archgate check --staged';
+      const expectedVerifyArchgate = 'npm run -s archgate:full';
+      // ACT
+      const commitArchgate = commandOf(COMMIT_PLAN, 'archgate');
+      const verifyArchgate = commandOf(VERIFY_PLAN, 'archgate');
+      // ASSERT
+      expect(commitArchgate).toBe(expectedCommitArchgate);
+      expect(verifyArchgate).toBe(expectedVerifyArchgate);
+    });
+
     it('only the full fast suite of the verify plan queues on the test lock', () => {
       // ARRANGE
       const expectedLocked = [{ plan: 'verify', step: 'test' }];
@@ -177,12 +188,10 @@ describe('runPlan', () => {
   });
 });
 
-/** What git hands pre-push on stdin for a push of `local` to `remote`. */
 const pushed = (local: string, remote: string) => `refs/heads/${local} 1111111 refs/heads/${remote} 2222222\n`;
 
 const MERGE_BASE = 'abc1234';
 
-/** The plan's steps after the verify plan's own, as `name: command`, with the test lock marked. */
 const tail = (plan: Plan) =>
   plan.phases
     .slice(VERIFY_PLAN.phases.length)
@@ -266,7 +275,6 @@ describe('pushPlan', () => {
   });
 });
 
-/** A stand-in for the test lock: logs when it is taken and released, and fails to take it when `refuse` says so. */
 function fakeHold(log: string[], refuse?: string): Hold {
   return async (fn) => {
     if (refuse !== undefined) throw new Error(refuse);

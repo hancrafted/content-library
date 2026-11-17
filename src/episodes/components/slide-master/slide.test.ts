@@ -2,12 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { episode, headerModeOf, slide, type OwnSlideKit, type Section } from './slide';
 import type { RuntimeKit } from './slide-base';
 
-/*
- * The Slide's typing is its contract: each `@ts-expect-error`
- * below is a proof `npm run typecheck` holds — if the line stopped failing, tsc
- * reports the unused directive. The messages stand in for a Slide's own
- * `i18n/en.json` and `i18n/de.json`, typed as a JSON import types them.
- */
 const EN = {
   title: 'Why every Episode starts from a copy',
   prose: 'A <ref>reference Episode</ref> keeps the shape.',
@@ -24,7 +18,6 @@ const DE: typeof EN = {
 };
 const UNTITLED = { en: { statement: 'Now replace the words.' }, de: { statement: 'Jetzt die Wörter ersetzen.' } };
 
-/** A kit that records what a Slide asked for, standing in for the container's. */
 function recordingKit(): { kit: RuntimeKit; calls: string[] } {
   const calls: string[] = [];
   const t = Object.assign((key: string) => (calls.push(`t:${key}`), key), {
@@ -125,41 +118,41 @@ describe('failure cases', () => {
         messages: { en: EN, de: DE },
         notes: [{ slug: 'reference-episode', target: 'prose' }],
         content: ({ t, ref, marker, Marker, target, template }) => {
-          // @ts-expect-error -- a key outside this Slide's own file
+          // @ts-expect-error
           t('statement');
-          // @ts-expect-error -- a subtree, not a string leaf
+          // @ts-expect-error
           template('spine');
-          // @ts-expect-error -- a note this Slide does not declare
+          // @ts-expect-error
           ref('no-such-note');
-          // @ts-expect-error -- a marker for a note this Slide does not declare
+          // @ts-expect-error
           marker('no-such-note');
-          // @ts-expect-error -- an element marker for a note this Slide does not declare
+          // @ts-expect-error
           Marker({ note: 'no-such-note' });
-          // @ts-expect-error -- a target no note of this Slide names
+          // @ts-expect-error
           target('caption');
           return null;
         },
       }),
       slide({
         slug: 'why-a-template',
-        // @ts-expect-error -- German lacks a key English has: untranslated text never ships
+        // @ts-expect-error
         messages: { en: EN, de: { ...DE, title: undefined } },
         content: () => null,
       }),
       slide({
         slug: 'why-a-template',
-        // @ts-expect-error -- German lacks the whole `spine` subtree
+        // @ts-expect-error
         messages: { en: EN, de: { title: DE.title, prose: DE.prose, notes: DE.notes, voiceScript: DE.voiceScript } },
         content: () => null,
       }),
       slide({
         slug: 'what-comes-next',
         messages: UNTITLED,
-        // @ts-expect-error -- `statement` alone translates no notes
+        // @ts-expect-error
         notes: [{ slug: 'x', target: 'title' }],
         content: () => null,
       }),
-      // @ts-expect-error -- a segment the Slide's own Voice script does not translate
+      // @ts-expect-error
       slide({ slug: 'why-a-template', messages: { en: EN, de: DE }, segments: [{ slug: 'two' }], content: () => null }),
     ];
     // ACT
@@ -171,7 +164,7 @@ describe('failure cases', () => {
   it('lets only a Slide whose own file holds a title open a Section', () => {
     // ARRANGE
     const untitled = slide({ slug: 'what-comes-next', messages: UNTITLED, content: () => null });
-    // @ts-expect-error -- an untitled Slide cannot name a Section
+    // @ts-expect-error
     const sections: Section[] = [[untitled]];
     // ACT
     const opener = sections[0][0].slug;

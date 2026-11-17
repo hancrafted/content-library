@@ -3,11 +3,6 @@ import { WallLabel } from '@/episodes/components/slide-shared/exhibition/wall-la
 import { cn } from '@/shared/lib/utils';
 import { RoomArt, type RoomSlug } from './room-art';
 
-/**
- * A room on the wall, framed as an exhibit: its picture and its claim inside the frame, its full wall label (title,
- * room, one line) centred under it. Both rooms' pictures and both labels sit on one floor height, so the two frames
- * and the two labels are each one height whatever the gap between them does.
- */
 export function Room({
   slug,
   claim,

@@ -47,7 +47,12 @@ describe('lineage', () => {
 describe('planSync', () => {
   it('merges origin/main by default and the base when given', () => {
     // ARRANGE
-    const clean = { branch: 'feat/x', dirty: false, baseBranch: 'main', remote: 'origin' };
+    const clean = {
+      branch: 'feat/x',
+      dirty: false,
+      baseBranch: 'main',
+      remote: 'origin',
+    };
     // ACT
     const plans = [planSync({ ...clean, base: null }), planSync({ ...clean, base: 'episode/y' })];
     // ASSERT

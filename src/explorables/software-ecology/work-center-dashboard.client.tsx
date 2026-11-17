@@ -1,5 +1,5 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, type ReactNode } from 'react';
 import { dialRowsOf, num, type DialKey, type DialRow } from './dash-rows.pure.ts';
@@ -11,17 +11,8 @@ import type { DashWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { OwnSet, RoleWords } from './software-ecology.types';
 
-/*
- * A work center's dashboard (design-ADR 0024 §17): a monitor with its traffic light, signals and three trends; only
- * the AI switch sits on it, the dials fold away in Settings, the queueing measures in "How it flows", and the role's
- * artefacts, tasks and what AI does there close it. `WorkCenterCard`'s `dashboard` view; the popover and the compare
- * stream's columns show it. Every change goes up through a callback.
- */
-
 export interface WorkCenterDashboardProps {
-  /** The work center's id. */
   readonly id: string;
-  /** The eval hooks' root: `node` in the popover, `compare` in a compare column, so each hook is on the page once (design-ADR 0024 §14). */
   readonly scope?: 'node' | 'compare';
   readonly title: string;
   readonly icon: string;
@@ -29,29 +20,22 @@ export interface WorkCenterDashboardProps {
   readonly r: DashboardReadout;
   readonly help: boolean;
   readonly words: DashWords;
-  /** The title's id, which names the dialog. */
   readonly titleId?: string;
   readonly onDial: (k: DialKey, v: number) => void;
   readonly onAi: (on: boolean) => void;
-  /** One own-work source changed: its tickets a week or its arrivals. */
   readonly onOwn: (id: string, patch: OwnSet) => void;
-  /** Emit one own ticket at this work center now. */
   readonly onEmit: () => void;
   readonly onHelp: () => void;
-  /** A close button, in the popover. */
   readonly onClose?: () => void;
-  /** A Slide's Context marker for this work center: the station card carries none, so it sits here. */
   readonly marker?: ReactNode;
 }
 
-/** The eval hooks' prefix of this dashboard: `<scope>.<id>`. */
 const hookOf = (p: Pick<WorkCenterDashboardProps, 'id' | 'scope'>) => `${p.scope ?? 'node'}.${p.id}`;
 
 const signalText = (s: Signal, w: DashWords) => fillTemplate(w.signals[s.kind], { n: s.n.toFixed(1) });
 
 const SIGN_ICON = { green: 'ok', red: 'complaint', amber: 'dot' } as const;
 
-/** The role's job, with a Slide's Context marker at the end of the line: the station card carries none. */
 function Job(p: { readonly role: RoleWords; readonly marker?: ReactNode }) {
   return (
     <p className={`${styles.dashJob} m-0 text-caption text-muted-foreground`}>
@@ -167,7 +151,6 @@ function Drain({ r, words: w }: Pick<WorkCenterDashboardProps, 'r' | 'words'>) {
   return <p className={`${styles.drain} text-caption text-muted-foreground`}>{text}</p>;
 }
 
-/** The eval hook's field name of each dial: `node.<id>.efficiency`, `.effectiveness`, `.fanout`, `.ai-speed`, `.ai-extra`. */
 const CONTROL: Record<DialKey, string> = {
   eff: 'efficiency',
   effv: 'effectiveness',

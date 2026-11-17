@@ -29,7 +29,6 @@ export interface SurfaceSnapshot {
   readonly tone: SurfaceTone;
   readonly edges: readonly SurfaceEdge[];
 }
-/** Presentation consumes correlation/status only, never target or active identity. */
 export interface SurfaceNavigation {
   readonly id: number;
   readonly status: 'navigating' | 'settled' | 'interrupted' | 'timed-out' | 'superseded';
@@ -58,7 +57,6 @@ function edgesOf(input: SurfaceGeometry): SurfaceEdge[] {
   });
 }
 
-/** First item strictly above a document coordinate, in a sorted numeric index. */
 function upperBound<T>(items: readonly T[], position: number, valueOf: (item: T) => number) {
   let low = 0;
   let high = items.length;
@@ -176,7 +174,6 @@ class PageSurfaceClock {
   }
 }
 
-/** Transient, DOM-independent presentation. It owns neither navigation nor active identity. */
 export function createSurfaceClock(refresh?: () => void) {
   return new PageSurfaceClock(refresh);
 }

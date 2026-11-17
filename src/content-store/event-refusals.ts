@@ -1,6 +1,6 @@
 import type { Event } from './schemas/event.schema';
 
-/** The Event's slug starts with its date: `<date>-<name>`, the date being the day it takes place (design-ADR 0016 decision 8). */
+// decision: docs/adr/0016-content-data-model.md
 const EVENT_SLUG = /^(\d{4}-\d{2}-\d{2})-[a-z0-9]/;
 
 export function eventRefusals(event: Event): string[] {

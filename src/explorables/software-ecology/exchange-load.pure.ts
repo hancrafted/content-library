@@ -1,8 +1,4 @@
-/*
- * Loading an exchange file the schema accepted (design-ADR 0024 §4, §11), as the reference build's `importText`: check
- * stability for each company the file can run as, refuse it with the path to fix, or turn it into a bundle and the page
- * state it was saved from. The rushing and worst-case warnings come back for Upload to show (Q122).
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { displayOf } from './display-defaults.pure.ts';
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
@@ -28,7 +24,6 @@ import type {
 } from './software-ecology.types';
 import { startSettings } from './start-settings.pure.ts';
 
-/** What an exchange file's `state` may hold; the schema checked each value it holds. */
 export interface SavedState {
   readonly preset?: string;
   readonly view?: ViewId;
@@ -60,10 +55,8 @@ export type Upload =
       readonly kind: 'loaded';
       readonly bundle: Bundle;
       readonly page: PageState;
-      /** Work centers and belts, for "Loaded …: 7 work centers and the Customer, 12 belts". */
       readonly centers: number;
       readonly belts: number;
-      /** The work centers over capacity while every center rushes, and in the worst case. */
       readonly warn: { readonly rush: readonly string[]; readonly worst: readonly string[] };
     };
 
@@ -76,7 +69,6 @@ const bundleOf = (ex: ExchangeIn, x: { name: string; catalog: Readonly<Record<st
   return { data, roles, words: ex.words, source: x.name };
 };
 
-/** The companies a file can run as: both when it has own tickets, since the Model's toggle resizes the line. */
 const companiesOf = (data: UseCaseData): Company[] =>
   data.sources?.length ? ['service', 'product'] : [data.company ?? 'service'];
 
@@ -106,7 +98,6 @@ const checked = (B: Bundle) => {
 
 const who = (list: readonly string[]): string[] => [...new Set(list.map((x) => x.split(':')[0] ?? ''))];
 
-/** The saved Customer over the preset's: each value the file holds replaces it. */
 const custFrom = (base: Cust, c: CustomerPatch = {}): Cust => ({
   rate: c.rate ?? base.rate,
   mode: c.arrivals || base.mode,
@@ -128,7 +119,6 @@ const ownFrom = (sources: SavedState['sources']): Settings['own'] =>
     Object.entries(sources ?? {}).map(([id, o]) => [id, defined({ rate: o.rate, arrivals: o.arrivals }) as OwnSet]),
   );
 
-/** The settings the file was saved at, over its preset's (the first one when it names none). */
 const settingsOf = (B: Bundle, st: SavedState): Settings => {
   const s = startSettings(B, presetOf(B, st.preset ?? (B.data.presets[0] as Preset).id));
   const kept = {
@@ -146,7 +136,6 @@ const settingsOf = (B: Bundle, st: SavedState): Settings => {
   };
 };
 
-/** Only the keys whose value is set. */
 const defined = (o: Readonly<Record<string, unknown>>) =>
   Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
 
@@ -166,7 +155,6 @@ const pageOf = (B: Bundle, st: SavedState): PageState => {
   };
 };
 
-/** Checks a schema-valid exchange file for stability, then loads it or refuses it with the path to fix. */
 export const loadExchange = (
   ex: ExchangeIn,
   x: { name: string; catalog: Readonly<Record<string, RoleDef>> },

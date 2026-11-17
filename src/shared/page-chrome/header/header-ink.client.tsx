@@ -5,7 +5,6 @@ import { useLayoutEffect, useRef } from 'react';
 import { mountHeaderInk } from './header-ink';
 import styles from './header.module.css';
 
-/** Decorative ink only; route selection and link semantics remain with the navigation. */
 export function HeaderInk() {
   const layer = useRef<HTMLSpanElement>(null);
   const pathname = usePathname();

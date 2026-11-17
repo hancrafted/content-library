@@ -1,6 +1,5 @@
 import type { EpisodeInput } from '@/content-store/schemas/episode.schema';
 
-/** The CyberForum Akademie hands-on workshop's opening Episode, adapted from the 2026-10-28 webinar's intro to the day's agenda: only under its Event; its title and caption are its own `i18n/`. */
 export const episodeMetadata = {
   slug: 'intro',
   status: 'published',

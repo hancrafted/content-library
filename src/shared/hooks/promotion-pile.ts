@@ -9,12 +9,10 @@ import {
 } from '@/shared/lib/paper-pile.pure';
 import gsap from 'gsap';
 
-/** The window light throws the pile's shadow across the desk; it lengthens as the sheets stack up. */
 function drawShadow(shadow: Element | null, count: number) {
   shadow?.setAttribute('d', pileShadowPath(count));
 }
 
-/** Whole sheets only: redrawing a blurred shadow every frame costs more than it shows. */
 function followPile(shadow: Element | null, before: number, after: number) {
   if (Math.ceil(after) !== Math.ceil(before)) drawShadow(shadow, Math.ceil(after));
 }
@@ -58,7 +56,6 @@ interface PileScene {
   flights: ReturnType<typeof createPaperFlights>;
 }
 
-/** Until the promise is readable the reader cannot act on it, so the pile only grows. */
 function currentPull(state: PileState): PilePull {
   if (!state.ready) return 'none';
   return state.draining === 'none' ? state.proximity : state.draining;

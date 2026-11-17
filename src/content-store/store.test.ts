@@ -2,13 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { episodeRef } from './catalogue/episode-id.pure';
 import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
-/*
- * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
- * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them; an
- * Episode enters with the id its folder gives it, as the generated Episode registry hands it in, and is served with its
- * EpisodeRef.
- */
-
+// decision: FE-013 §3
+// decision: docs/adr/0016-content-data-model.md
 const AXEL = '2026-10-23-axel-agentic-workflow';
 const EPISODE = {
   slug: 'alpha',
@@ -18,7 +13,6 @@ const EPISODE = {
   tags: ['agentic-workflow'],
   publishedOn: '2026-10-20',
 } as const;
-/** The AXEL seminar's unlisted copy of alpha, in its Event's folder `by-event/<event>/alpha/`. */
 const UNLISTED = { ...EPISODE, visibility: 'unlisted' } as const;
 const COPY_ID = episodeRef('alpha', AXEL).id;
 const PLAYLIST = { id: 'axel', visibility: 'public', episodes: ['alpha'] } as const;
@@ -33,25 +27,20 @@ const EVENT = {
   platform: 'zoom',
   playlist: 'axel',
 } as const;
-/** The same Event held at a venue, as an onsite Event's file writes it. */
 const ONSITE = { ...without(EVENT, 'platform'), format: 'onsite', venue: 'AXEL, Karlsruhe' } as const;
-/** The Episodes recorded so far, each with its video per locale. */
 const RECORDINGS = [
   { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
   { slug: 'maintaining-markdown-for-ai', en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
   { slug: 'never-too-early-sales', en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
 ] as const;
-/** The record with one field left out, as a file that forgot it would hold it. */
 function without<T extends object>(record: T, key: keyof T): Partial<T> {
   const copy: Partial<T> = { ...record };
   delete copy[key];
   return copy;
 }
-/** An Episode no Event owns, entered under its folder's id, its slug. */
 function own(record: Readonly<Record<string, unknown>>, id = String(record.slug)): { id: string; record: unknown } {
   return { id, record };
 }
-/** An Event's copy, entered under the id its folder `by-event/<event-slug>/<slug>/` gives it. */
 function copy(record: Readonly<Record<string, unknown>>, event: string = AXEL): { id: string; record: unknown } {
   return { id: episodeRef(String(record.slug), event).id, record };
 }
@@ -897,7 +886,6 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it("lets an event Playlist, public or not, list its own Event's unlisted copies, each served with its ref", () => {
     // ARRANGE
-    // A registered copy, so its entry has a page: its ref is the page's.
     const attention = { ...UNLISTED, slug: 'ai-attention-span' };
     const copyId = episodeRef('ai-attention-span', AXEL).id;
     const atAxel = { ...PLAYLIST, episodes: [copyId] };
@@ -1015,9 +1003,6 @@ describe('edge cases', () => {
   });
 });
 
-/*
- * Templates (design-ADR 0019): a record and its composition folder go together, and the load throws on either one
- * alone.
- */
+// decision: docs/adr/0019-resources-overview.md
 const TEMPLATE = { slug: 'grids', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 const TEMPLATE_RECORDS = { ...SOUND, templates: [TEMPLATE] };

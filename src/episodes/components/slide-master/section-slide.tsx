@@ -2,11 +2,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { SlideCaption, SlideFrame } from './slide-master';
 
-/**
- * A Section's own slide: its heading and an optional caption, vertically
- * centred, or with children below. Pass the kit's `<Title>` as `title`; the
- * caption is the `caption` target.
- */
 export function SectionSlide({
   title,
   caption,

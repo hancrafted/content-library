@@ -1,5 +1,5 @@
 import type { TextRange } from '@/episodes/lib/caption-emphasis.pure';
-import { ENTRANCE_MS, typewriterSchedule } from '@/episodes/lib/typewriter.pure';
+import { ENTRANCE_MILLISECONDS, typewriterSchedule } from '@/episodes/lib/typewriter.pure';
 import { cn } from '@/shared/lib/utils';
 import { Fragment, type ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
@@ -9,36 +9,30 @@ import type { CaptionNote } from './slide-header-text';
 import { HeroTitle, SlideTitle } from './slide-master';
 import { typedLength, TypedText } from './typed-text';
 
-/** Each part's delays (Eyebrow, title, caption), and when the part after each one starts typing. */
 function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly number[]) {
-  if (entrance !== 'typewriter') return { delays: lengths.map(() => undefined), ends: lengths.map(() => ENTRANCE_MS) };
+  if (entrance !== 'typewriter')
+    return { delays: lengths.map(() => undefined), ends: lengths.map(() => ENTRANCE_MILLISECONDS) };
   const delays = typewriterSchedule(lengths, seed);
-  const ends = delays.map((_, index) => delays.slice(index + 1).find((part) => part.length > 0)?.[0] ?? ENTRANCE_MS);
+  const ends = delays.map(
+    (_, index) => delays.slice(index + 1).find((part) => part.length > 0)?.[0] ?? ENTRANCE_MILLISECONDS,
+  );
   return { delays, ends };
 }
 
 export interface SlideHeaderProps {
-  /** The Slide's id: seeds the typing pace, so it is the same on every load. */
   readonly seed: string;
-  /** The heading level the Slide's position gives it (FE-002 §4); `h1` is the Title slide's. */
+  // decision: FE-002 §4
   readonly level: 'h1' | 'h2' | 'h3';
   readonly title: string;
   readonly caption?: string;
-  /** The caption's `<b>` runs, set off in `primary` semibold. */
   readonly captionEmphasis?: readonly TextRange[];
-  /** A Context marker after the caption, to the Speaker note that explains a term in it. */
   readonly captionNote?: CaptionNote;
-  /** Several Context markers after the caption, in order, when it rests on several Speaker notes. */
   readonly captionNotes?: readonly CaptionNote[];
-  /** Page Slides only; a section slide and the Title slide have none. */
   readonly eyebrow?: EyebrowText;
-  /** A Slide's header action (a Help button and its panel), right-aligned in the title row; its panel wraps full width under it. */
   readonly action?: ReactNode;
   readonly entrance?: SlideEntrance;
   readonly className?: string;
-  /** Content above the title, within the Slide header. */
   readonly leading?: ReactNode;
-  /** Rendered after the caption, e.g. the Title slide's talk launcher. */
   readonly children?: ReactNode;
 }
 
@@ -59,7 +53,6 @@ interface TitleGroupProps extends Pick<
   readonly ends: readonly number[];
 }
 
-/** The Context markers the caption ends on, one per Speaker note, after a non-breaking space so the first keeps to its word. */
 function CaptionMarkers({ markers }: { readonly markers: readonly CaptionNote[] }) {
   return markers.map((marker, index) => (
     <Fragment key={`${marker.note}-${index}`}>
@@ -69,7 +62,6 @@ function CaptionMarkers({ markers }: { readonly markers: readonly CaptionNote[] 
   ));
 }
 
-/** The title and its caption, half a gap apart so they read as one; the Slide's action sits at the row's right end. */
 function TitleGroup({
   level,
   title,
@@ -84,11 +76,16 @@ function TitleGroup({
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-(--space-header-tight)">
       <Heading level={level}>
-        <TypedText text={title} delays={delays[1]} next={ends[1]} />
+        <TypedText text={title} delaysMilliseconds={delays[1]} caretMovesOnAtMilliseconds={ends[1]} />
       </Heading>
       {caption && (
         <p data-target="caption" className="text-body text-muted-foreground">
-          <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
+          <TypedText
+            text={caption}
+            delaysMilliseconds={delays[2]}
+            caretMovesOnAtMilliseconds={ends[2]}
+            emphasis={captionEmphasis}
+          />
           <CaptionMarkers markers={markers} />
         </p>
       )}
@@ -96,7 +93,6 @@ function TitleGroup({
   );
 }
 
-/** The title group, and beside it the Slide's action (a Help button; its panel wraps full width under the row). */
 function TitleRow({ action, children }: { action: ReactNode; children: ReactNode }) {
   if (!action) return children;
   return (
@@ -107,13 +103,7 @@ function TitleRow({ action, children }: { action: ReactNode; children: ReactNode
   );
 }
 
-/**
- * The Slide header (design-ADR-0012): Eyebrow, title and caption, rendered by the
- * Slide wrapper above the Scene. A server component: the typewriter is CSS
- * over the spans split here, so no client code runs for it. A flex column on
- * two spacing tokens: the Eyebrow, the title group and what follows sit a
- * full gap apart, the title and its caption half that, so they read as one.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function SlideHeader({
   seed,
   level,

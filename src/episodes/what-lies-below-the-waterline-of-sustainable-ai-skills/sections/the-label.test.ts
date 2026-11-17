@@ -9,13 +9,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { theLabelSection } from './the-label';
 
-/*
- * Section 4 of "What lies below the waterline of sustainable AI skills", "The label" (its h2 "The description"), as the
- * approved Spec gives it: Slides 11 to 13 in Spec order, each with the Spec's Voice script, Speaker notes and sources,
- * a Context marker wherever its picked Option's mock shows one, and the Scene facts the Option draws. Read through the
- * one interface the page reads a Slide by: localized on the shared Slide header.
- */
-
 const OPTIMIZING = 'https://agentskills.io/skill-creation/optimizing-descriptions';
 const PIROLLI = 'https://doi.org/10.1037/0033-295X.106.4.643';
 const SPECIFICATION = 'https://agentskills.io/specification';
@@ -43,7 +36,6 @@ function localized(slug: string, locale: Locale = 'en'): LocalizedSlide {
 const sceneOf = (slug: string, locale: Locale = 'en') =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(slug, locale).content)));
 
-/** A Slide as the page shows it: the shared Slide header above its Scene, as the Slide wrapper renders the two. */
 function pageOf(slug: string, locale: Locale = 'en') {
   const { id, level, header, content } = localized(slug, locale);
   if (header === undefined) throw new Error(`Slide "${slug}" has no shared header.`);
@@ -51,7 +43,6 @@ function pageOf(slug: string, locale: Locale = 'en') {
   return load(renderToStaticMarkup(createElement(Fragment, null, heading, content)));
 }
 
-/** The page Slides of the Section, the section slide left out. */
 const PAGE_SLIDES = [
   'the-description-is-all-the-ai-sees',
   'name-the-moment-not-the-content',
@@ -171,7 +162,6 @@ describe('success cases', () => {
 
   it('places a Context marker for each note wherever the picked Options show one, in reading order', () => {
     // ARRANGE
-    // The caption's marker sits in the shared header, outside the Scene; the Scene holds the rest.
     const expected = [
       ['descriptions-and-information-scent', 'description-carries-the-whole-burden'],
       [

@@ -20,10 +20,6 @@ const ENTERPRISE = {
   url: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/enterprise',
 };
 
-/**
- * Slide 9's index lines in its order, each by its skill folder (code, never translated) and its uses this season; 0
- * is unused. The counts are the scene's, not data.
- */
 const BEFORE = [
   ['rinse-camera-dome', 2],
   ['sample-old', 0],
@@ -44,7 +40,6 @@ const BEFORE = [
   ['dive-log-short', 5],
 ] as const;
 const NEEDED = 'collect-sediment-sample';
-/** The season's tasks the log shows, each with the skill it used. */
 const LOG = [
   ['k4', 'collect-sediment-sample'],
   ['photos', 'name-photo-folders'],
@@ -52,11 +47,6 @@ const LOG = [
   ['m5', 'collect-sediment-sample'],
 ] as const;
 
-/**
- * "Retire skills" (Spec Option 25b): the control room at night, the skill index read against the season's task log,
- * the unused skills into a dated archive crate and the short index left behind, the one you need back in view.
- * Overrules `grid-1x2` for one flow across the room; keeps `motion: local`, the index closing up once on entry.
- */
 export const retireSkills = slide({
   slug: 'retire-skills',
   messages: { en, de },

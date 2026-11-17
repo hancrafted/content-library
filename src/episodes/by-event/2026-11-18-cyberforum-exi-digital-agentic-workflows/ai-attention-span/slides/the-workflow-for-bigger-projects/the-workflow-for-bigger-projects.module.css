@@ -1,0 +1,41 @@
+@keyframes fade-a {
+  from {
+    background-color: var(--card);
+  }
+}
+
+@keyframes fade-b {
+  from {
+    background-color: var(--card);
+  }
+}
+
+@keyframes light-a {
+  from {
+    border-color: var(--border);
+  }
+}
+
+@keyframes light-b {
+  from {
+    border-color: var(--border);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .compare[data-play='a'] .before {
+    animation: fade-a 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='b'] .before {
+    animation: fade-b 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='a'] .after {
+    animation: light-a 900ms ease-out 200ms backwards;
+  }
+
+  .compare[data-play='b'] .after {
+    animation: light-b 900ms ease-out 200ms backwards;
+  }
+}

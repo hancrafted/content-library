@@ -8,12 +8,7 @@ export interface TabSpec<T extends string> {
   readonly label: string;
 }
 
-/**
- * `transition-colors` replaces the Button's `transition-all`: that one also
- * transitions the inherited `visibility`, so on open the tab stays `hidden` for
- * its first frames and the drawer's focus move on open is dropped (FE-010 §5).
- */
-/** Dressed like the site header's nav links: a ghost button, the selected one on `accent`. */
+// decision: FE-010 §5
 function TabButton<T extends string>(props: {
   tab: TabSpec<T>;
   selected: boolean;
@@ -45,7 +40,6 @@ function TabButton<T extends string>(props: {
   );
 }
 
-/** Arrow, Home and End keys move selection and focus together (automatic activation). */
 function tabKeyHandler<T extends string>(props: {
   tabs: readonly TabSpec<T>[];
   selected: T;
@@ -62,11 +56,6 @@ function tabKeyHandler<T extends string>(props: {
   };
 }
 
-/**
- * APG tabs with automatic activation: arrows wrap, Home and End jump, only the
- * selected tab sits in the tab order. `selectedRef` lets the drawer move focus
- * to the selected tab when it opens.
- */
 export function DrawerTabs<T extends string>(props: {
   tabs: readonly TabSpec<T>[];
   selected: T;

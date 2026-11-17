@@ -14,7 +14,6 @@ function release(
   keys.clear();
 }
 
-/** Ownership is claimed even for an unchanged value; stale cleanup cannot erase a successor's signals. */
 export function ownSignals(element: HTMLElement) {
   const owner = {};
   const claimed = new Set<string>();

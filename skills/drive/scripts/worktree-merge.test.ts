@@ -4,10 +4,12 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { withLock } from './lock.fixture.ts';
-import { forkDate, mergeIntoBase, type Timing, withMergeLock } from './worktree-merge.ts';
+import { forkDateBeforeMerge, mergeIntoBase, type Timing, withMergeLock } from './worktree-merge.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+function dropGitVariablesACommitHookExports(): void {
+  for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+}
+dropGitVariablesACommitHookExports();
 
 const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
@@ -15,14 +17,16 @@ const git = (cwd: string, ...args: string[]): string =>
     encoding: 'utf8',
   }).trim();
 
-/** A repo with `base` checked out in a worktree and `work` holding one extra commit in its own worktree. */
+function giveRepositoryItsOwnIdentity(repository: string): void {
+  git(repository, 'config', 'user.name', 't');
+  git(repository, 'config', 'user.email', 't@t');
+}
+
 function fixture() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'wt-merge-')));
   const main = path.join(root, 'main');
   git(root, 'init', '-q', '-b', 'main', main);
-  // mergeIntoBase runs git without -c, so the repo carries its own identity: CI has no global one.
-  git(main, 'config', 'user.name', 't');
-  git(main, 'config', 'user.email', 't@t');
+  giveRepositoryItsOwnIdentity(main);
   writeFileSync(path.join(main, 'a.txt'), 'a');
   git(main, 'add', '.');
   git(main, 'commit', '-qm', 'init');
@@ -37,7 +41,6 @@ function fixture() {
   return { root, main, baseTree, workTree };
 }
 
-/** A second branch, `other`, off `base` with its own commit in its own worktree. */
 function addOtherBranch(root: string, main: string): void {
   const otherTree = path.join(root, 'other-tree');
   git(main, 'worktree', 'add', '-q', otherTree, '-b', 'other', 'base');
@@ -46,7 +49,6 @@ function addOtherBranch(root: string, main: string): void {
   git(otherTree, 'commit', '-qm', 'other');
 }
 
-/** Commits a different `a.txt` on `work` and on `base`, so merging them conflicts. */
 function conflictOnA(baseTree: string, workTree: string): void {
   writeFileSync(path.join(workTree, 'a.txt'), 'from work');
   git(workTree, 'commit', '-aqm', 'edit a');
@@ -54,7 +56,6 @@ function conflictOnA(baseTree: string, workTree: string): void {
   git(baseTree, 'commit', '-aqm', 'edit a on base');
 }
 
-/** Every byte a merge could touch in a worktree: its files, its index and its branch tip. */
 function snapshot(tree: string): Record<string, string> {
   const files: Record<string, string> = {};
   for (const name of readdirSync(tree, { recursive: true, encoding: 'utf8' })) {
@@ -66,10 +67,6 @@ function snapshot(tree: string): Record<string, string> {
   return files;
 }
 
-/**
- * Leaves `base` mid-merge in its worktree, as an orchestrator resolving a conflict by hand would: `side` and `base`
- * both edit `a.txt`, `side` is merged into `base`, and `a.txt` is resolved by hand but not yet added.
- */
 function midMerge(main: string, baseTree: string): void {
   const sideTree = path.join(path.dirname(baseTree), 'side-tree');
   git(main, 'worktree', 'add', '-q', sideTree, '-b', 'side', 'base');
@@ -81,20 +78,19 @@ function midMerge(main: string, baseTree: string): void {
   writeFileSync(path.join(baseTree, 'a.txt'), 'resolved by hand');
 }
 
-/** Whether `name` (MERGE_HEAD, rebase-merge, …) exists in the worktree's git dir. */
 const inGitDir = (tree: string, name: string) =>
   existsSync(git(tree, 'rev-parse', '--path-format=absolute', '--git-path', name));
 
-/** Short waits, so a test of a busy base takes well under a second. */
-const FAST: Timing = { pollMs: 50, timeoutMs: 4000 };
+const SHORT_WAITS_FOR_A_BUSY_BASE: Timing = {
+  pollMilliseconds: 50,
+  timeoutMilliseconds: 4000,
+};
 
-/** Where a merge runs, with a log sink that keeps every line the merge logs. */
 function merging(cwd: string) {
   const lines: string[] = [];
   return { cwd, lines, withLock, log: (line: string) => void lines.push(line) };
 }
 
-/** Resolves once the merge has logged into `lines` that the base is busy. */
 async function waitingOnBusyBase(lines: string[]): Promise<void> {
   await vi.waitFor(() => expect(lines.join('\n')).toMatch(/busy/));
 }
@@ -102,7 +98,6 @@ async function waitingOnBusyBase(lines: string[]): Promise<void> {
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
 const LOCK = path.join(import.meta.dirname, 'lock.fixture.ts');
 
-/** Runs mergeIntoBase in its own process, as a second `done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
   const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; import { withLock } from ${JSON.stringify(LOCK)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log, withLock }));`;
   return new Promise((resolve) => {
@@ -141,7 +136,7 @@ describe('mergeIntoBase', () => {
       expect(git(baseTree, 'rev-parse', 'HEAD')).toBe(head);
     });
 
-    it('merges two branches finishing at once one after the other, both into the base', async () => {
+    it('merges two branches finishing at once one after the other, the newer merge on top of the older, both into the base', async () => {
       // ARRANGE
       const { root, main } = fixture();
       addOtherBranch(root, main);
@@ -152,7 +147,6 @@ describe('mergeIntoBase', () => {
         results.map((r) => r.code),
         results.map((r) => r.output).join('\n'),
       ).toEqual([0, 0]);
-      // One merge on top of the other: the newer one's first parent is the older one.
       expect(git(main, 'rev-list', '--merges', '--first-parent', 'base').split('\n')).toHaveLength(2);
       expect(() => git(main, 'merge-base', '--is-ancestor', 'work', 'base')).not.toThrow();
       expect(() => git(main, 'merge-base', '--is-ancestor', 'other', 'base')).not.toThrow();
@@ -209,8 +203,8 @@ describe('mergeIntoBase', () => {
       // ACT
       const run = mergeIntoBase('work', 'base', {
         ...merging(main),
-        pollMs: 50,
-        timeoutMs: 300,
+        pollMilliseconds: 50,
+        timeoutMilliseconds: 300,
       });
       // ASSERT
       await expect(run).rejects.toThrow(/rebase/);
@@ -240,7 +234,10 @@ describe('mergeIntoBase', () => {
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
       const context = merging(main);
-      const run = mergeIntoBase('work', 'base', { ...context, ...FAST });
+      const run = mergeIntoBase('work', 'base', {
+        ...context,
+        ...SHORT_WAITS_FOR_A_BUSY_BASE,
+      });
       await waitingOnBusyBase(context.lines);
       expect(readFileSync(path.join(baseTree, 'a.txt'), 'utf8')).toBe('resolved by hand');
       expect(inGitDir(baseTree, 'MERGE_HEAD')).toBe(true);
@@ -258,7 +255,10 @@ describe('mergeIntoBase', () => {
       const { main, baseTree } = fixture();
       midMerge(main, baseTree);
       const context = merging(main);
-      const run = mergeIntoBase('work', 'base', { ...context, ...FAST });
+      const run = mergeIntoBase('work', 'base', {
+        ...context,
+        ...SHORT_WAITS_FOR_A_BUSY_BASE,
+      });
       await waitingOnBusyBase(context.lines);
       // ACT
       git(baseTree, 'merge', '--abort');
@@ -274,7 +274,7 @@ describe('mergeIntoBase', () => {
   });
 });
 
-describe('forkDate', () => {
+describe('forkDateBeforeMerge', () => {
   describe('success cases', () => {
     it("gives the committer date of the branch's merge-base with its base", () => {
       // ARRANGE
@@ -282,7 +282,7 @@ describe('forkDate', () => {
       const forkCommit = git(main, 'rev-parse', 'base');
       const expected = new Date(git(main, 'show', '-s', '--format=%cI', forkCommit));
       // ACT
-      const forked = forkDate('work', 'base', main);
+      const forked = forkDateBeforeMerge('work', 'base', main);
       // ASSERT
       expect(forked).toEqual(expected);
     });
@@ -295,7 +295,7 @@ describe('forkDate', () => {
       git(main, 'checkout', '-q', '--orphan', 'unrelated');
       git(main, 'commit', '-q', '--allow-empty', '-m', 'unrelated root');
       // ACT
-      const forked = forkDate('unrelated', 'base', main);
+      const forked = forkDateBeforeMerge('unrelated', 'base', main);
       // ASSERT
       expect(forked).toBeNull();
     });

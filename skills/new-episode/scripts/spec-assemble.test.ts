@@ -7,9 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 import { readSpec } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
 
-// A real subprocess (ARCH-003 §1.1): the ticket (#228) asks for the command's page, exit code and refusal end to end.
-/* `npm run episode:spec-assemble` on a temp Episode folder: reads what exists and writes `spec/spec.html`. */
-
+// decision: ARCH-003 §1.1
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const SCRIPT = path.join(ROOT, 'skills/new-episode/scripts/spec-assemble.ts');
 
@@ -36,7 +34,6 @@ afterEach(() => {
   for (const folder of folders.splice(0)) rmSync(folder, { recursive: true, force: true });
 });
 
-/** A designer's fragment, written where the assembler reads it: `.scratch/<slug>/spec/`. */
 function fragment(folder: string, html: string): void {
   const scratch = path.join(ROOT, '.scratch', path.basename(folder));
   folders.push(scratch);
@@ -81,9 +78,8 @@ describe('success cases', () => {
     expect(stage).toBe(expected);
   });
 
-  it('compiles design.css with the classes the assembled Options use, even when the Spec contract fails', () => {
-    // ARRANGE: a design.css compiled before any Option existed, as a Spec server started at the Brief stage leaves it,
-    // and one lone Option, which the contract refuses
+  it('compiles design.css with the classes the assembled Options use over a Brief-stage design.css, even when one lone Option fails the Spec contract', () => {
+    // ARRANGE
     const folder = episode({ 'brief.md': BRIEF, 'spec/design.css': '/* Brief stage */' });
     fragment(
       folder,

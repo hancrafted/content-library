@@ -1,7 +1,4 @@
-// Post-build check of the Templates (design-ADR 0019): five public, indexed pages in both locales, each an Episode-shaped
-// page; the overview that lists them and the nav that leads there; no Episode list shows one; the old tooling URLs
-// are gone or redirected; `slide-layouts` stays deleted.
-
+// decision: docs/adr/0019-resources-overview.md
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -15,7 +12,7 @@ import { exportedFile, exportedPage, OUT_DIR, redirectRules, resolveBasePath } f
 
 const basePath = resolveBasePath();
 
-/** The five Templates and their URLs, written out: the handoff's table is the expectation. */
+// decision: ARCH-003 §1.2
 const TEMPLATES: readonly { slug: TemplateSlug; type: TemplateType; path: string }[] = [
   { slug: 'episode-template', type: 'episode-template', path: '/episode-templates/episode-template' },
   { slug: 'workshop-template', type: 'episode-template', path: '/episode-templates/workshop-template' },
@@ -28,7 +25,6 @@ const PAGES = TEMPLATES.flatMap((template) =>
   LOCALES.map((locale) => ({ ...template, locale, url: localizePath(template.path, locale) })),
 );
 
-/** Every exported HTML file, relative to `out/`. */
 function htmlFiles(dir = OUT_DIR): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
@@ -69,7 +65,6 @@ describe.each(PAGES)('the Template page $url', ({ type, slug, path, url }) => {
   });
 });
 
-/** Every Resource kind with a listed page: a Guide's only once the first Guide exists (design-ADR 0019, #450). */
 const KINDS = RESOURCE_KINDS.filter(
   (kind) => kind !== 'guide' || CATALOGUE.some(({ page, treatment }) => page.kind === 'guide' && treatment.listed),
 );

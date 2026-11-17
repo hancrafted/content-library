@@ -5,7 +5,6 @@ const POPOVER_DELAY = 180;
 
 const closing = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
 
-/** Native top-layer disclosure does not reserve blank graph space or get clipped by its scroll container. */
 export function openGraphPopover(anchor: HTMLElement) {
   clearTimeout(closing.get(anchor));
   const popover = anchor.querySelector<HTMLElement>('[popover]');

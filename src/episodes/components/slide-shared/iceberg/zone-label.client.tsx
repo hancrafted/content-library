@@ -10,7 +10,6 @@ const SLOT = 'zone-label-popover';
 
 const RULES: PopoverRules = { maxWidth: 256, gap: 8, minRoom: 96 };
 
-/** Why the popover is open: a press keeps it until the next press or Esc; hover and focus only while they last. */
 type OpenBy = 'press' | 'hover' | 'focus';
 
 function ZonePopover({
@@ -41,11 +40,8 @@ function ZonePopover({
   );
 }
 
-/**
- * The zone label's button and popover (design-ADR 0025, Interaction 2): the plain zone name stays visible, and the
- * depth in metres and the scientific name open on hover, focus or tap, portaled into the Episode portal root so no
- * Slide wrapper traps it under the chrome (FE-009 §8). Open state is transient, in memory.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: FE-009 §8
 export function ZoneLabelButton({ words, className }: { readonly words: ZoneLabelWords; readonly className?: string }) {
   const id = useId();
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);

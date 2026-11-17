@@ -4,11 +4,7 @@ import { bodyLines, headingsOf } from './staging-markdown.pure';
 
 const SLUG_SUFFIX = / \{#[a-z0-9-]+\}$/;
 
-/**
- * A governed file's frontmatter `title` equals its h1, a Dossier's without the `{#slug}`
- * (design-ADR 0005). A file without a `title` yields no finding here: markdown-harness requires
- * the key and already reports it.
- */
+// decision: docs/adr/0005-frontmatter-follows-okf.md
 export function checkTitleMatchesH1(file: string, markdown: string): Finding[] {
   const title = frontmatterField(markdown, 'title');
   if (title === null) return [];

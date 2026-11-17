@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { GuideHelp, type HelpWords } from './guide-help';
 
-/*
- * A Slide's Help as the static export renders it: the button, and the panel closed until it is pressed. The prompt
- * wrapping is `help-prompt.pure.ts`'s; opening and copying need a browser.
- */
-
 const WORDS: HelpWords = {
   button: 'Help',
   label: 'Your question, or the error you see',

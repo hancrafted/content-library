@@ -4,7 +4,6 @@ import type { PageSummary } from './page-summary.pure';
 
 type Summaries = Readonly<Record<string, PageSummary>>;
 
-/** The generated summaries each kind of composed page is read from; an Episode's two kinds of ref share the Episodes'. */
 const SUMMARIES_BY_KIND: Readonly<Record<ComposedPage['kind'], Summaries>> = {
   standalone: summaries.episodes,
   'event-copy': summaries.episodes,
@@ -13,12 +12,7 @@ const SUMMARIES_BY_KIND: Readonly<Record<ComposedPage['kind'], Summaries>> = {
   guide: summaries.guides,
 };
 
-/**
- * What a composed page says of itself, by its ref, without its Slides (FE-004 §4): the summary `npm run registry`
- * wrote from its composition to `page-summaries.generated.json`. Cards, overviews, an Event's navigation and the page
- * metadata read it, so a page never imports the Slides of a page it only lists. A ref the summaries do not hold is a
- * bug, so it throws.
- */
+// decision: FE-004 §4
 export function summaryOf(page: ComposedPage): PageSummary {
   return entryOf(SUMMARIES_BY_KIND, page, 'summary');
 }

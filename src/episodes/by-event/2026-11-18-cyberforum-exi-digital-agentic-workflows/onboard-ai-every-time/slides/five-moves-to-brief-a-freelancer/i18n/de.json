@@ -1,0 +1,24 @@
+{
+  "title": "Wie arbeiten wir mit diesem Freelancer?",
+  "aiBadge": {
+    "job": "KI",
+    "day": "Tag 1"
+  },
+  "movesLabel": "Das Briefing, an den Ausweis geklemmt",
+  "moves": {
+    "break": "<initial>B</initial>rich es auf",
+    "requirements": "<initial>R</initial>equirements zuerst",
+    "interview": "<initial>I</initial>nterviewe Dich mit KI",
+    "evaluate": "<initial>E</initial>valuiere jeden Schritt",
+    "fresh": "<initial>F</initial>rischer Start"
+  },
+  "voiceScript": {
+    "segments": {
+      "answer-to-the-traits": {
+        "title": "Die Antwort auf die Eigenschaften",
+        "keywords": "",
+        "script": "Was können wir also tun? Ich habe fünf Gewohnheiten aufgelistet, mit denen wir den fünf Eigenschaften dieses Freelancers etwas entgegensetzen. Wir brechen Aufgaben auf. Wir sorgen dafür, dass die Anforderungen sicher sind, bevor die KI anfängt zu arbeiten. Wir nutzen die KI im Interview-Stil, um die Anforderungen und das Aufbrechen voranzutreiben, damit wir uns nicht alles selbst ausdenken müssen. Wir prüfen das Ergebnis jedes Schritts, und das fällt leichter, wenn die Aufgabe aufgebrochen ist. Und entscheidend: Wir starten für jede neue Aufgabe einen neuen Chat. Das sind die fünf Schritte, die ich vorschlage und auf die ich heute genauer eingehe."
+      }
+    }
+  }
+}

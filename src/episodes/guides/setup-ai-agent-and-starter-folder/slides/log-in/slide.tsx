@@ -18,11 +18,6 @@ import { PickOptions } from './pick-options';
 import { RoundTrip } from './round-trip';
 import { SignInCard } from './sign-in-card';
 
-/*
- * Step 3, last Slide: the AI agent already runs inside the starter folder (the Slide before started it there), and
- * asks the first-timer to sign in. The login as a round trip, terminal to browser and back; GitHub Copilot's /login is
- * the only line to copy. The official login link is outlined.
- */
 export const logIn = slide({
   slug: 'log-in',
   messages: { en, de },

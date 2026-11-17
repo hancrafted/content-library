@@ -1,24 +1,15 @@
-/*
- * Centre spine: the scroll-linked progress only, the spine filling and each node and date lighting as the reader
- * scrolls. Layout and hover live in the Slide's Tailwind classes. Without scroll-driven animation support, or under
- * reduced motion, none of this applies and the Scene rests in its final state: spine filled, every node lit.
- */
-
 .track {
   view-timeline: --centre-spine block;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    /* The fill's tip follows the middle of the viewport: it starts as the list's top reaches the middle and ends as
-       its bottom does. */
     .fill {
       animation: spine-fill linear both;
       animation-timeline: --centre-spine;
       animation-range: cover 50vh cover calc(100% - 50vh);
     }
 
-    /* A node and its date light as their centre crosses the middle of the viewport, just as the fill's tip arrives. */
     .node {
       animation: node-light linear both;
       animation-timeline: view();

@@ -1,0 +1,38 @@
+{
+  "caption": "It knows every trade and forgets you every time, so <b>every job starts from day one</b>.",
+  "badgeRow": "Three visitor badges, one per job, each on day one",
+  "badges": {
+    "monday": {
+      "job": "Job 1",
+      "weekday": "Mon",
+      "day": "Day 1",
+      "task": "Invitations for 200"
+    },
+    "tuesday": {
+      "job": "Job 2",
+      "weekday": "Tue",
+      "day": "Day 1",
+      "task": "An email to suppliers"
+    },
+    "wednesday": {
+      "job": "Freelancer · AI",
+      "weekday": "Wed",
+      "day": "Day 1"
+    }
+  },
+  "badgeFacts": {
+    "trades": {
+      "term": "Knows",
+      "value": "every trade"
+    },
+    "company": {
+      "term": "Knows your company",
+      "value": "nothing"
+    },
+    "tuesday": {
+      "term": "Remembers Tuesday",
+      "value": "nothing"
+    }
+  },
+  "sideNote": "Three jobs, three badges, and every badge says <day>Day 1</day>. Nothing from Monday reaches Wednesday."
+}

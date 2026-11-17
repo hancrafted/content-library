@@ -1,10 +1,4 @@
-/*
- * The factory's canvas (design-ADR 0024 §14): documents on belts, racks, pile-ups and the document in work, in one
- * canvas over the SVG belts. The floor fits the stage (contain), centred; the canvas runs at up to twice the device
- * pixels. Colours are read from the tokens and re-read when the theme changes. It reads the model only through the
- * handle's Floor and hears it through `listen`; it never writes into the model. Ported from the reference build's
- * `measure` and `draw`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { label, makeSheet, readColors, type Colors, type Ctx } from './doc-sprites.ts';
 import type { BeltLayout, FactoryLayout, Pt } from './factory-layout.pure.ts';
 import type { Floor, FloorBelt, FloorListener, FloorStation } from './factory-model.pure.ts';
@@ -13,20 +7,17 @@ import { drawPile, pileFor, type Pile, type PileStyle } from './paint-pile.ts';
 import { drawRack, drawWork } from './paint-rack.ts';
 import { settle, Stations, type Landing } from './paint-station.ts';
 
-/** Where the floor sits in the stage: scale and offset, in CSS pixels. */
 export interface Fit {
   readonly k: number;
   readonly ox: number;
   readonly oy: number;
 }
 
-/** The floor's fit into a stage of `w` × `h` CSS pixels. */
 export const fitOf = (layout: Pick<FactoryLayout, 'width' | 'height' | 'top'>, w: number, h: number): Fit => {
   const k = Math.min(w / layout.width, h / layout.height);
   return { k, ox: (w - layout.width * k) / 2, oy: (h - layout.height * k) / 2 - layout.top * k };
 };
 
-/** What a frame draws beyond the model: the time, the speed, the words. */
 export interface DrawIn {
   readonly now: number;
   readonly reduced: boolean;
@@ -36,7 +27,7 @@ export interface DrawIn {
   readonly pile: PileStyle;
 }
 
-const SHEET_PX = 15 * 2;
+const SHEET_PIXELS = 15 * 2;
 const EASE_SECS = 0.07;
 
 const lanesFor = (e: FloorBelt, b: BeltLayout): readonly [Lane, Lane] => {
@@ -86,17 +77,14 @@ export class FactoryPainter {
     for (const e of floor.belts) this.lanes.set(e.key, lanesFor(e, layout.belts[e.key] as BeltLayout));
   }
 
-  /** What the painter hears from the floor once the line is warm: documents land from then on. */
   get listener(): FloorListener {
     return this.stations.hear;
   }
 
-  /** Re-reads the colours, for a theme change. */
   recolor() {
     this.C = null;
   }
 
-  /** Sizes the canvas to its stage; returns the fit for the card floor, or null when the stage has no size. */
   measure(canvas: HTMLCanvasElement, rect: { width: number; height: number }, dpr: number): Fit | null {
     if (!rect.width || !rect.height) return null;
     this.dpr = Math.min(2, dpr || 1);
@@ -115,7 +103,7 @@ export class FactoryPainter {
       this.C = readColors(c.canvas.ownerDocument);
       this.sheet = null;
     }
-    const px = Math.max(8, Math.round(SHEET_PX * this.fit.k * this.dpr));
+    const px = Math.max(8, Math.round(SHEET_PIXELS * this.fit.k * this.dpr));
     if (!this.sheet || this.px !== px) {
       this.px = px;
       this.sheet = makeSheet(c.canvas.ownerDocument, this.C, px);
@@ -166,7 +154,6 @@ export class FactoryPainter {
     label(c, this.C as Colors, { text, x: 16, y: 22, color: (this.C as Colors).dull, size: 12, align: 'left' });
   }
 
-  /** One frame. */
   draw(c: Ctx, at: DrawIn) {
     this.ensure(c);
     const dt = this.last ? Math.min(0.1, (at.now - this.last) / 1000) : 0.016;

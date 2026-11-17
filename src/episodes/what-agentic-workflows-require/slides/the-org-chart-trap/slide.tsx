@@ -13,14 +13,12 @@ const COLFER_BALDWIN = {
   url: 'https://dash.harvard.edu/server/api/core/bitstreams/7312037e-28a6-6bd4-e053-0100007fdf3b/content',
 };
 
-/** The committee's three roles, the venue scouts the one the Scene leads the eye to, with their headcounts. */
 const ROLES = [
   { slug: 'venue', people: 10, focus: true },
   { slug: 'catering', people: 1 },
   { slug: 'travel', people: 1 },
 ] as const;
 
-/** The venue column's fourteen steps, in the order the committee drew them. */
 const VENUE_STEPS = [
   'brief',
   'regions',
@@ -38,7 +36,6 @@ const VENUE_STEPS = [
   'book',
 ] as const;
 
-/** The "copies" arrow from the org chart to the draft it shaped. */
 function Copies({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 text-center text-caption text-muted-foreground">
@@ -56,12 +53,6 @@ function Copies({ label }: { label: string }) {
   );
 }
 
-/**
- * "The org chart trap" (Spec Option 10a): the party committee's org chart beside the draft AI workflow it drew, on the
- * board. Ten venue scouts become fourteen venue steps, the caterer and the travel planner one each, and the goal note
- * at the right edge gets none; Conway's law in his words and its hedges sit below. Keeps `basic-page` and
- * `motion: none`; the role boxes outline on hover and the fourteen steps dim the others.
- */
 export const theOrgChartTrap = slide({
   slug: 'the-org-chart-trap',
   messages: { en, de },

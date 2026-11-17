@@ -18,16 +18,8 @@ const CLAUDE_CHAT_MEMORY = source(
 const GEMINI_MEMORY = source('google-gemini-memory', 'https://support.google.com/gemini/answer/16598625');
 const CHATGPT_MEMORY = source('openai-chatgpt-memory', 'https://help.openai.com/en/articles/8590148-memory-faq');
 
-/** The parts the Slide names without explaining, in the order the dashed box lists them. */
 const NAMED = ['files', 'web', 'tools', 'reminders'] as const;
 
-/**
- * "What's really in the context window" (Spec Option 7a, Han's batch-2 item 8): the cornerstone on its Slide 7 parts
- * Preset, Simple at rest, without chat or timeline: the context window, the context category and the details, the
- * starting instructions pinned, the window and the category each with their own local </>; under it two plain-word cards for the only parts explained,
- * starting instructions and memory, and a dashed box naming the rest. Keeps `basic-page` and `motion: local`: the
- * component lights its own parts, the cards only raise on hover.
- */
 export const whatsReallyInTheWindow = slide({
   slug: 'whats-really-in-the-window',
   messages: { en, de },

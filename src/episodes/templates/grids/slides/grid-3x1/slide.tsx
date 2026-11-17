@@ -11,8 +11,6 @@ interface AgendaRowProps {
   caption: string;
 }
 
-// One agenda row: a large ordinal, the title and the caption share one baseline (stacked below md), ruled by hairlines.
-// Hover indents the row and colours its ordinal. CSS only, so no client widget; under reduced motion it jumps.
 function AgendaRow({ index, hover, title, caption }: AgendaRowProps) {
   const id = `grid-3x1-${useId()}`;
   return (
@@ -33,7 +31,6 @@ function AgendaRow({ index, hover, title, caption }: AgendaRowProps) {
   );
 }
 
-// Three full-width rows read like an editorial agenda: numbered top to bottom, separated by hairlines.
 export const grid3x1 = slide({
   slug: 'grid-3x1',
   messages: { en, de },

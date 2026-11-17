@@ -2,7 +2,6 @@ import type { ContextDrawerLabels, ContextItem } from './context-drawer-input';
 import { SlideNotes } from './slide-notes';
 import { SlideScript } from './slide-script';
 
-/** One item's pre-rendered panels, handed to the client drawer, which only picks which to show. */
 export interface ContextEntry {
   readonly id: string;
   readonly title?: string;

@@ -1,3 +1,5 @@
+// decision: FE-012 §1.3
+// decision: FE-012 §1
 import { describe, expect, it } from 'vitest';
 import { parse, stringify } from 'yaml';
 import gateWordsDe from './gate.words.de.yml';
@@ -18,7 +20,6 @@ import { exchangeSchema, readExchange, readUseCase, useCaseSchema } from './use-
 
 const ROLES = Object.keys(CATALOG);
 const SHIPPED = { tire, gate, teams };
-/** Each words pair, English then German (FE-012-explorables §1.3). */
 const PAIRS = [
   ['tire', tireWords, tireWordsDe],
   ['gate', gateWords, gateWordsDe],
@@ -27,7 +28,6 @@ const PAIRS = [
   ['config', configEn, configDe],
 ] as const;
 
-/** Every key path of a parsed document, list items by index. */
 const paths = (v: unknown, at = ''): string[] =>
   v && typeof v === 'object' ? Object.entries(v).flatMap(([k, x]) => [`${at}${k}`, ...paths(x, `${at}${k}.`)]) : [];
 

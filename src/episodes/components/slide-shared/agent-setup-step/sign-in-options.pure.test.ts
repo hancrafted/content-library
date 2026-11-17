@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { AGENTS } from './picks.pure';
 import { signInOptions } from './sign-in-options.pure';
 
-/*
- * The sign-in choices per AI agent: every agent has at least one recommended option, and Codex lists the vendor's
- * three labels in the vendor's order.
- */
-
 describe('success cases', () => {
   it('lists the three Codex sign-in labels in the order the vendor shows them', () => {
     // ARRANGE

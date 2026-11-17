@@ -17,11 +17,6 @@ const GLOAGUEN = { slug: 'gloaguen-evaluating-agents-md', url: 'https://arxiv.or
 const PILL =
   'absolute top-[83%] -translate-x-1/2 rounded-full px-3 py-1 text-caption font-medium whitespace-nowrap shadow-md';
 
-/**
- * "You run the bench" (Spec Option 10a): the bench with you in front, handing a part to the AI worker beside you over
- * the hand-over arc in `primary`, what you put on the bench and held back under it, and your two jobs beside it.
- * Keeps `basic-page` and `motion: none`; the stat card reveals its detail on hover.
- */
 export const youRunTheBench = slide({
   slug: 'you-run-the-bench',
   messages: { en, de },

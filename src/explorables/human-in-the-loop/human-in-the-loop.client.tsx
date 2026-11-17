@@ -15,17 +15,11 @@ import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
 import { createState, reduce, type View, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-/*
- * The visual's one client parent: it owns the state and hands each part its slice and callbacks (FE-012 §4). A part
- * never gets `state` or `dispatch`. Filling a part means editing its own file, never this contract.
- */
-
-/** The note for a status that needs the viewer; the download holds the entry `kept`. */
+// decision: FE-012 §4
 function noteFor(status: ProgressStatus, handlers: Omit<ProgressNote, 'kind'>): ProgressNote | null {
   return status === 'stale' || status === 'unsaved' ? { kind: status, ...handlers } : null;
 }
 
-/** Save and load of the run of the shown authored Workflow; none for an uploaded one. */
 function actionsOf(
   data: HumanInTheLoopData,
   state: WorkflowState,
@@ -41,10 +35,6 @@ function actionsOf(
   };
 }
 
-/**
- * Saves the run of an authored Workflow and resumes it, and offers it as a YAML file to save and load. An uploaded
- * Workflow's run is not kept, so it has neither (decision of #382: no hash can vouch for a file the site does not hold).
- */
 function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispatch: Dispatch<WorkflowEvent>) {
   const target = progressTarget(data, state);
   const { slotValues: results, demo, prompts } = state;
@@ -57,7 +47,6 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
   return { note: noteFor(status, { onDownload, onDiscard: discard }), actions, resetSaved: reset };
 }
 
-/** The shown Workflow with its run, view and rounds, computed once per change of what they read. */
 function useShown(data: HumanInTheLoopData, state: WorkflowState) {
   const { workflowId, uploaded, level, demo, slotValues } = state;
   return useMemo(() => {
@@ -66,7 +55,6 @@ function useShown(data: HumanInTheLoopData, state: WorkflowState) {
   }, [data, workflowId, uploaded, level, demo, slotValues]);
 }
 
-/** The callbacks over one dispatch, with what the parent does besides: Reset empties storage, a view change starts the crossfade. */
 function useCallbacksOf(dispatch: Dispatch<WorkflowEvent>, resetSaved: () => void) {
   const [viewChanged, setViewChanged] = useState(false);
   const on = useMemo(() => {

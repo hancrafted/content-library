@@ -1,10 +1,4 @@
-/*
- * Where a dashboard popover sits beside its card (design-ADR 0024 §17), as the reference build's `placePopover` puts
- * it: a speech bubble to the card's left, else its right when the left has no room, else above, else below, kept 8 px
- * inside the stage, its tail pointing at the card's middle. The popover is fixed to the window, so given the window it
- * also stays 8 px inside that. Boxes are viewport coordinates; no DOM.
- */
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export interface Rect {
   readonly left: number;
   readonly top: number;
@@ -16,23 +10,19 @@ export type DashSide = 'left' | 'right' | 'above' | 'below';
 
 export interface DashPlace {
   readonly side: DashSide;
-  /** Viewport coordinates of the popover's top-left corner. */
   readonly x: number;
   readonly y: number;
   readonly width: number;
-  /** The tail's offset along the popover's edge facing the card. */
   readonly tail: number;
 }
 
-/** The widest a dashboard grows. */
-export const DASH_MAX = 540;
+export const DASH_MAX_WIDTH_PIXELS = 540;
 const GAP = 16;
 const EDGE = 8;
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
-/** The popover's width inside `stage`: at most 540, 24 narrower than the stage. */
-export const dashWidth = (stage: Rect): number => Math.min(DASH_MAX, stage.width - 24);
+export const dashWidth = (stage: Rect): number => Math.min(DASH_MAX_WIDTH_PIXELS, stage.width - 24);
 
 const inView = (y: number, h: number, view: Rect | undefined) =>
   view ? clamp(y, view.top + EDGE, view.top + view.height - h - EDGE) : y;

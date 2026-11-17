@@ -5,12 +5,9 @@ import { Note } from '@/episodes/components/slide-shared/party-board/note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Where the contract card's terms and their values start, in board units. */
 const TERM_X = 22;
 const VALUE_X = 128;
 
-// The section slide of "What it requires of each person", echoing the Hero motif (picked Title-slide Option 0b): the
-// seam's contract card filled with the definition of vegetarian and ticked, the seam now holding.
 export const whatItRequiresOfEachPerson = slide({
   slug: 'what-it-requires-of-each-person',
   messages: { en, de },

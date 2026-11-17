@@ -12,22 +12,14 @@ const LATE_PAYMENT_DIRECTIVE = {
 
 const AFTER_SALE = 'after-sale';
 
-/** The invented lead list, shared by name with Slide 4's deal board. */
 const LEAD_LIST = ['brightfield', 'kestrel', 'orbit'] as const;
 
-/** The opportunity work, one strip each. */
 const WORK = ['followUp', 'material', 'meetings', 'negotiation'] as const;
 
-/** What follows the signature before the cash, one dashed strip each. */
 const AFTER = ['production', 'delivery', 'success'] as const;
 
 const CHIPS = ['coldCall', 'inbound', 'network'] as const;
 
-/**
- * The stages of a sale as board lanes (Spec Option 3a): Leads, ringed as the part in your hands, then Opportunities,
- * Closing and a faint After-sale lane that ends in the cash note, under two brackets and over a time axis. Read, not
- * built: no motion.
- */
 export const stagesOfSale = slide({
   slug: 'stages-of-sale',
   messages: { en, de },

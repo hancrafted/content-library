@@ -1,31 +1,19 @@
-/*
- * The maths of the Explorable hero's Message drift: a field of faint bubbles and, every few seconds, one subject beat in
- * the accent colour. Pure, so the timeline, the end state and the layout test without a canvas.
- */
-
-/** Which Explorable's story the beat tells. */
 export type Story = 'context-window' | 'human-in-the-loop' | 'ai-capability';
 
-/** One ambient cycle, the gap between subject beats and a beat's length, in seconds. */
 export const LOOP_SECONDS = 18;
 export const BEAT_EVERY_SECONDS = 6;
 export const BEAT_SECONDS = 1.5;
-/** Foreground ink's composite opacity for the ambient field: never above 12%. */
 export const FIELD_INK = 0.12;
-/** The beat's progress when it has run its course: the composed end state under reduced motion. */
 export const END_PROGRESS = 1;
-/** Where in the loop the static frame of reduced motion sits. */
 export const STATIC_SECONDS = LOOP_SECONDS * 0.28;
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
-/** Smoothstep: no snapping growth, no bounce. */
 export const ease = (value: number) => {
   const p = clamp(value);
   return p * p * (3 - 2 * p);
 };
 export const mix = (a: number, b: number, p: number) => a + (b - a) * p;
 
-/** Where the loop's subject beat is at `seconds`: how far it has run (0 to 1) and how strongly it shows. */
 export function beatOf(seconds: number): { progress: number; strength: number } {
   const beatTime = (seconds + BEAT_EVERY_SECONDS - 2) % BEAT_EVERY_SECONDS;
   return {
@@ -34,12 +22,10 @@ export function beatOf(seconds: number): { progress: number; strength: number } 
   };
 }
 
-/** Ambient bubbles, in proportion to the hero's area, five to twelve. */
 export function bubbleCountOf(width: number, height: number): number {
   return Math.max(5, Math.min(12, Math.round((width * height) / 100000)));
 }
 
-/** A rectangle in hero coordinates. */
 export interface Box {
   readonly x: number;
   readonly y: number;
@@ -47,7 +33,6 @@ export interface Box {
   readonly height: number;
 }
 
-/** Where the art lives: beside the copy, or in the space above it (`compact`). */
 export interface Area {
   readonly x: number;
   readonly y: number;
@@ -56,10 +41,6 @@ export interface Area {
   readonly compact: boolean;
 }
 
-/**
- * The art's area from the hero's height, the headline and lede boxes, and `right`, the left edge of the pause button,
- * which sits at the Foreground's right inset and so clears an open drawer: beside the copy when 220px is left, else above.
- */
 export function areaOf(hero: {
   width: number;
   height: number;
@@ -76,16 +57,13 @@ export function areaOf(hero: {
   return { x: 24, y: top, w: right - 12 - 24, h: Math.max(24, copyTop - top - 20), compact: true };
 }
 
-/** The ambient field's area: the art area half as wide again, extending left under the headline, within the hero. */
 export function fieldAreaOf(area: Area): Area {
   const x = Math.max(0, area.x - area.w * 0.5);
   return { ...area, x, w: area.x + area.w - x };
 }
 
-/** What the page lets the background do now. */
 export type Motion = 'running' | 'reduced' | 'paused' | 'hidden' | 'offscreen';
 
-/** The loop runs only when motion is allowed, not paused, the tab is visible and the Slide is active. */
 export function motionOf(state: { reduced: boolean; paused: boolean; hidden: boolean; active: boolean }): Motion {
   if (state.reduced) return 'reduced';
   if (state.paused) return 'paused';
@@ -93,7 +71,6 @@ export function motionOf(state: { reduced: boolean; paused: boolean; hidden: boo
   return state.active ? 'running' : 'offscreen';
 }
 
-/** A timeline that counts only the time it runs: `stop` forgets the last frame, so a resume does not jump. */
 export function createClock(): { tick: (now: number) => number; stop: () => void } {
   let elapsed = 0;
   let last: number | null = null;
@@ -109,26 +86,20 @@ export function createClock(): { tick: (now: number) => number; stop: () => void
   };
 }
 
-/** Where the subject bubble is at beat `progress`, and what it carries; `alpha` is before the beat's strength. */
 export interface Pose {
   readonly x: number;
   readonly y: number;
   readonly width: number;
   readonly alpha: number;
-  /** How much of the orange check is drawn, 0 to 1. */
   readonly check: number;
-  /** Attached chips, 0 to 4, the last one easing in. */
   readonly chips: number;
-  /** Blur in pixels. */
   readonly blur: number;
 }
 
 const CHECKPOINT = 0.49;
 
-/** The y of the Human bubble's checkpoint line. */
 export const checkpointOf = (area: Area) => area.y + area.h * CHECKPOINT;
 
-/** What a story's beat is drawn in: its progress, the art's area and the bubble's height. */
 export interface Scene {
   readonly story: Story;
   readonly progress: number;
@@ -140,7 +111,6 @@ type Placed = Omit<Pose, 'x' | 'width'>;
 
 const NONE = { check: 0, chips: 0, blur: 0 } as const;
 
-/** The Context bubble rises into the middle, blurs and dims until it is gone: forgotten. */
 function contextBeat({ progress, area }: Scene): Placed {
   const middle = ease(progress);
   return {
@@ -151,7 +121,6 @@ function contextBeat({ progress, area }: Scene): Placed {
   };
 }
 
-/** The Human bubble rises to the checkpoint, holds while its check draws on, then continues upward. */
 function humanBeat({ progress, area }: Scene): Placed {
   const checkpoint = checkpointOf(area);
   let y = mix(checkpoint, area.y + area.h * 0.14, ease((progress - 0.66) / 0.34));
@@ -160,7 +129,6 @@ function humanBeat({ progress, area }: Scene): Placed {
   return { ...NONE, y, alpha: 0.6, check: ease((progress - 0.38) / 0.22) };
 }
 
-/** The Disciplines bubble climbs one tier per quarter of the beat and gains a chip as it settles on each. */
 function capabilityBeat({ progress, area }: Scene): Placed {
   const step = Math.min(3, Math.floor(progress * 4));
   const local = ease(Math.min(1, (progress * 4 - step) / 0.65));
@@ -175,7 +143,6 @@ function capabilityBeat({ progress, area }: Scene): Placed {
 
 const BEATS = { 'context-window': contextBeat, 'human-in-the-loop': humanBeat, 'ai-capability': capabilityBeat };
 
-/** The subject bubble of one story at beat `progress`. Nothing visible once the Context bubble has dissolved. */
 export function beatPoseOf(scene: Scene): Pose {
   const placed = BEATS[scene.story](scene);
   const grown = scene.story === 'ai-capability' ? placed.chips * scene.size * 0.12 : 0;

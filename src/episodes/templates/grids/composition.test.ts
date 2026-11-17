@@ -2,12 +2,6 @@ import { idsOf, renderedSlides, twiceRendered } from '@/episodes/lib/composed-pa
 import { describe, expect, it } from 'vitest';
 import { grids } from './episode';
 
-/*
- * A copied Slide must never break `aria-labelledby` (#51): the same layout may sit twice on one page, so every DOM id
- * a Slide renders comes from `useId`. The Episode-level checks (`episode-checks.test.ts`) hold that no id repeats; this
- * holds that the grid's labels still point into their own copy, and that the Master slide renders every grid layout.
- */
-
 describe('success cases', () => {
   it('points every aria-labelledby of a twice-rendered grid Slide at an id in its own copy', () => {
     // ARRANGE

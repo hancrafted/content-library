@@ -16,23 +16,16 @@ import {
 
 const QUARTERS = [1, 2, 3, 4] as const;
 
-/** Each lane's grid row: the axis takes row 1, so lanes start at 2 and a lane's name and track share its row. */
 const LANE_ROW: Record<GanttLane, string> = { a: 'row-start-2', b: 'row-start-3', c: 'row-start-4' };
 
 const TODAY_LEFT = `${(TODAY / AXIS_MONTHS) * 100}%`;
 
 interface Open {
   item: GanttItem;
-  /** A click pins the tooltip; a hover or focus only previews it. */
   pinned: boolean;
   anchor: HTMLElement;
 }
 
-/**
- * Which bar's tooltip is open: hover and focus preview, a click pins or
- * unpins, leaving or blurring drops a preview. Each handler reads
- * `currentTarget` at once: React clears it before a state updater runs.
- */
 function useTooltip() {
   const [open, setOpen] = useState<Open | null>(null);
   const close = useCallback(() => setOpen(null), []);
@@ -61,7 +54,6 @@ interface GanttProps {
   items: Record<GanttItem, BarCopy>;
 }
 
-/** A year of phases in three lanes: bars on a quarter axis, a "today" line through them, each bar's caption a tooltip. */
 export function HorizontalGantt({ label, lanes, items }: GanttProps) {
   const baseId = useId();
   const { open, close, handlersFor } = useTooltip();
@@ -84,7 +76,6 @@ interface LanesProps extends Omit<GanttProps, 'label'> {
   handlersFor: (item: GanttItem) => BarHandlers;
 }
 
-/** The three lanes, each holding its bars; every bar but the open one dims while a tooltip shows. */
 function GanttLanes({ lanes, items, open, baseId, handlersFor }: LanesProps) {
   return GANTT_LANES.map((lane) => (
     <GanttLaneRow key={lane} lane={lane} name={lanes[lane]} laneId={`${baseId}-${lane}`}>
@@ -110,7 +101,6 @@ interface OpenTooltipProps extends Omit<GanttProps, 'label'> {
   onClose: () => void;
 }
 
-/** The open bar's tooltip, with its lane's name and colour. */
 function OpenTooltip({ id, open, items, lanes, onClose }: OpenTooltipProps) {
   const { lane } = GANTT_BARS[open.item];
   return (
@@ -125,7 +115,6 @@ function OpenTooltip({ id, open, items, lanes, onClose }: OpenTooltipProps) {
   );
 }
 
-/** Every other quarter shaded, behind the lanes, so a bar's quarters read without gridlines. */
 function QuarterBands() {
   return (
     <div aria-hidden="true" className="pointer-events-none col-start-2 row-span-4 row-start-1 grid grid-cols-4">
@@ -136,7 +125,6 @@ function QuarterBands() {
   );
 }
 
-/** The quarter numbers along the top; the bars' own date ranges carry the words. */
 function QuarterAxis() {
   return (
     <div aria-hidden="true" className="col-start-2 row-start-1 grid grid-cols-4 border-b border-border pb-2">
@@ -149,7 +137,6 @@ function QuarterAxis() {
   );
 }
 
-/** The "today" line, drawn over the bars through every lane, with a notch on the axis. */
 function TodayLine() {
   return (
     <div aria-hidden="true" className="pointer-events-none relative col-start-2 row-span-4 row-start-1">
@@ -169,7 +156,6 @@ interface LaneProps {
   children: ReactNode;
 }
 
-/** One lane: its name in the left column, kept in view while the chart scrolls sideways, and its track of bars. */
 function GanttLaneRow({ lane, name, laneId, children }: LaneProps) {
   return (
     <>

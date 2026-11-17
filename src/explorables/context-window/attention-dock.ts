@@ -10,16 +10,9 @@ import {
 import { anchorIndex, dockHeights, restHeights } from './attention-dock.pure';
 import type { Attention } from './context-usage.pure';
 
-/*
- * The compressed Attention list's pointer magnification. Row heights are written to the DOM straight from one
- * animation frame per pointer move, so React never redraws the rows for it; the stylesheet snaps them under reduced
- * motion. Rows are the list's `[data-row]` children, in the order of the units.
- */
-
 const rows = (list: HTMLElement) => Array.from(list.querySelectorAll<HTMLElement>('[data-row]'));
 
-/** A row under this share of a full row cannot show its name without being cut through: the name hides. */
-const TIGHT = 0.9;
+const NAME_HIDDEN_BELOW_FULL_ROW_RATIO = 0.9;
 
 function apply(list: HTMLElement, heights: readonly number[]) {
   const full = fullRow(list);
@@ -27,7 +20,7 @@ function apply(list: HTMLElement, heights: readonly number[]) {
     const h = heights[i];
     if (h === undefined) return;
     row.style.height = `${h}px`;
-    if (h < full * TIGHT) row.setAttribute('data-tight', '');
+    if (h < full * NAME_HIDDEN_BELOW_FULL_ROW_RATIO) row.setAttribute('data-tight', '');
     else row.removeAttribute('data-tight');
   });
 }
@@ -40,13 +33,10 @@ const clear = (list: HTMLElement | null) => {
   });
 };
 
-/** The height a row has at full size: one line of the list's own text. */
 const fullRow = (list: HTMLElement) => parseFloat(getComputedStyle(list).fontSize) * 1.7;
 
-/** The height the list fills: what the card leaves it (the list is a flex child that takes the rest of the card). */
 const maxHeight = (list: HTMLElement) => list.clientHeight;
 
-/** The resting heights, fitted to the list's maximum height and refitted when it resizes or the shares change. */
 function useRest(list: RefObject<HTMLElement | null>, shares: readonly Attention[], edge: number | null) {
   const enabled = edge !== null;
   const rest = useRef<number[]>([]);
@@ -73,7 +63,6 @@ function useRest(list: RefObject<HTMLElement | null>, shares: readonly Attention
   return rest;
 }
 
-/** Keyboard focus on a row expands it as hovering does, so a focused 4px row is visible: the dock sits on that row. */
 function useFocusDock(list: RefObject<HTMLElement | null>, enabled: boolean, rest: RefObject<number[]>) {
   const onFocus = (event: FocusEvent<HTMLElement>) => {
     const el = list.current;
@@ -89,7 +78,6 @@ function useFocusDock(list: RefObject<HTMLElement | null>, enabled: boolean, res
   return { onFocus, onBlur };
 }
 
-/** The pointer handlers of the list; `shares` are its rows' shares of the attention, and a new array refits the heights. */
 export function useDock(list: RefObject<HTMLElement | null>, shares: readonly Attention[], edge: number | null) {
   const enabled = edge !== null;
   const rest = useRest(list, shares, edge);

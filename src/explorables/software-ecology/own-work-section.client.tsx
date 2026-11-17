@@ -1,5 +1,5 @@
 'use client';
-
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { Lightbulb } from 'lucide-react';
 import { Fragment, useId } from 'react';
@@ -9,24 +9,15 @@ import { Field, HelpNameProvider, HelpTip, Segmented, SliderControl, Value } fro
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * A work center's own work (design-ADR 0024 §2, §17; feedback 10): for a node the file gives a source, the tickets it
- * writes itself a week and whether they come Steady or Random, in the Settings form-field pattern. It shows only under
- * Product company: the readout holds no sources under Service provider. Every change goes up through `onChange`.
- */
-
 export interface OwnWorkSectionProps {
-  /** The dashboard's eval hook prefix (`node.<id>` or `compare.<id>`), for `<prefix>.own.*`. */
   readonly node: string;
   readonly own: readonly OwnReadout[];
   readonly words: OwnWorkWords;
   readonly onChange: (id: string, patch: OwnSet) => void;
-  /** Emit one own ticket at this work center now. */
   readonly onEmit: () => void;
 }
 
 interface SourceProps {
-  /** The dashboard's eval hook prefix (`node.<id>` or `compare.<id>`), for `<prefix>.own.*`. */
   readonly node: string;
   readonly x: OwnReadout;
   readonly words: OwnWorkWords;
@@ -79,7 +70,6 @@ function ArrivalsField(p: SourceProps) {
   );
 }
 
-/** One own ticket now, like a scheduled arrival: an action, not a setting. */
 function EmitButton(p: { readonly node: string; readonly words: OwnWorkWords; readonly onEmit: () => void }) {
   return (
     <ToolTip tip={p.words.emitTip}>

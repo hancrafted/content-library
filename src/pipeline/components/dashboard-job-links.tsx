@@ -15,10 +15,7 @@ import { DashboardMoment } from './dashboard-moment';
 const LINK =
   'inline-flex min-w-0 items-center gap-2 rounded-md text-caption font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
-/**
- * A Build Job's dev server on its pipeline port, shown while `previewPort` says it is meant to answer. A
- * button, not a link: FE-003 admits no `http:` href, and the dev server is plain http on localhost.
- */
+// decision: FE-003 §2
 export function PreviewButton({
   job,
   copy,
@@ -49,7 +46,6 @@ export function PreviewButton({
   );
 }
 
-/** The Run's Spec server on its pipeline `spec_port`; a button for the same reason as the Preview. */
 export function SpecButton({ port, copy }: { port: number; copy: DashboardCopy }) {
   const url = previewHref(port);
   return (
@@ -92,10 +88,6 @@ function OutputItem({ output, outputs, copy }: { output: string; outputs: Episod
   );
 }
 
-/**
- * A Job's output files, each opened read-only as plain text in a new tab once written, and its preview link. While
- * replaying, a Job not started by the cutoff lists no outputs: the files on disk are today's.
- */
 export function JobLinks({ job, outputs, copy }: { job: DashboardJob; outputs: EpisodeOutputs; copy: DashboardCopy }) {
   const { replaying } = useContext(DashboardMoment);
   const files = replaying && job.span === undefined ? [] : job.outputs;

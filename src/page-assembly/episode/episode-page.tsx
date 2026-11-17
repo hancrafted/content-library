@@ -28,29 +28,19 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { episodeContextOf, eventNavigationOf } from './event-navigation.pure';
 
-/**
- * Every page the Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, and an
- * Episode as an Event presents it under `/events/<event>/episodes/`, carrying the Episode it presents there. A
- * Template page renders through the same container, from its own page template (`../template/`).
- */
 export type EpisodePageRef = EpisodesPathPage | EventEpisodePage;
 
-/** The page the page catalogue builds at `/episodes/<episode>/`: an Episode's own; else the 404. */
 export function episodesPathPageOf(params: RouteParams<EpisodesPathParams>): EpisodesPathPage {
   return episodesPathPageAt(params) ?? notFound();
 }
 
-/** The page the page catalogue builds at `/events/<event>/episodes/<episode>/`, with its Episode; else the 404. */
 export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): EventEpisodePage {
   return eventEpisodePageAt(params) ?? notFound();
 }
 
-/**
- * Every Episode-shaped page (FE-007 §1), rendered through the one container (FE-002): an Episode's own page with its
- * structured data once published, and an Episode under its Event framed by the Event. Its route, generated one per
- * page, hands in the page's own composition, so the page imports no other Episode's Slides (FE-007 §1.3); a
- * composition of another Episode is a bug in the generator, so it throws.
- */
+// decision: FE-007 §1
+// decision: FE-007 §1.3
+// decision: FE-002 §1
 export async function EpisodePage({
   page,
   composition,
@@ -74,7 +64,6 @@ export async function EpisodePage({
   });
 }
 
-/** An Episode's own page: the container, with its recording, and its structured data once published. */
 function OwnEpisodePage({
   episode,
   composition,
@@ -106,11 +95,7 @@ function OwnEpisodePage({
   );
 }
 
-/**
- * An Episode as an Event presents it (design-ADR 0016, Routes and visibility): the Episode's own page through the
- * container, framed by the Event's past notice above the Title slide's title,
- * and the Playlist walk after the last Slide. Its structured data stays on the Episode's own page.
- */
+// decision: docs/adr/0016-content-data-model.md
 function EpisodeUnderEvent({
   page,
   composition,
@@ -139,10 +124,7 @@ function EpisodeUnderEvent({
   );
 }
 
-/**
- * An Episode-shaped page's title, description, treatment and release date, for `pageMetadata` (FE-008): an Episode's,
- * under `/episodes/` or its Event, read from its summary and the content store. The treatment, which decides robots and canonical, is the page catalogue's.
- */
+// decision: FE-008 §1
 export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy {
   const treatment = treatmentOf(page);
   const episodeOf = ({ episode }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
@@ -150,8 +132,5 @@ export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy 
     const publishedOn = episodePublishedOn(episode);
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };
-  return matchPage<EpisodePageRef, PageCopy>(page, {
-    episode: episodeOf,
-    'event-episode': episodeOf,
-  });
+  return matchPage<EpisodePageRef, PageCopy>(page, { episode: episodeOf, 'event-episode': episodeOf });
 }

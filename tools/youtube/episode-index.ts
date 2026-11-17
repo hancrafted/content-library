@@ -1,5 +1,4 @@
-// The disk half of the Episode resolver: lists every Episode folder with the videos its metadata declares, for
-// `resolveEpisode`. Loads each `episode-metadata.ts` by a computed import (a static one is forbidden to tools by FE-007 §2).
+// decision: FE-007 §2
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { episodeFolders } from '../../src/episodes/lib/episode-folders.ts';
@@ -7,7 +6,6 @@ import { videoIdsOf, videosByLanguageOf, type EpisodeEntry, type YoutubeMetadata
 
 const METADATA_FILE = 'episode-metadata.ts';
 
-/** Every Episode under `root`, standalone and Event copy, with the video IDs it declares. */
 export async function loadEpisodeEntries(root: string): Promise<EpisodeEntry[]> {
   return Promise.all(
     episodeFolders(root).map(async (page) => {

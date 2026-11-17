@@ -40,7 +40,7 @@ describe('success cases', () => {
     // ARRANGE
     const log = createLogFold();
     const attrs = { ...end, kind: 'attrs', seq: 5, t: '2026-10-14T10:00:20Z', ticket: 174 } as RunLogLine;
-    const expected = { status: 'error', end_t: end.t, duration_ms: 10000, ticket: 174 };
+    const expected = { status: 'error', end_t: end.t, 'duration_ms': 10000, ticket: 174 };
     // ACT
     log.append([run, job, attempt, end]);
     log.append([attrs]);
@@ -54,7 +54,7 @@ describe('success cases', () => {
     const log = createLogFold();
     const measured = { ...end, source: 'measured', 'gen_ai.usage.input_tokens': 123 } as RunLogLine;
     const terminal = { ...end, seq: 9, t: '2026-10-14T10:00:20Z', status: 'ok' } as RunLogLine;
-    const expected = { status: 'ok', duration_ms: 20000, source: 'measured', 'gen_ai.usage.input_tokens': 123 };
+    const expected = { status: 'ok', 'duration_ms': 20000, source: 'measured', 'gen_ai.usage.input_tokens': 123 };
     // ACT
     log.append([run, job, attempt, measured]);
     log.append([terminal]);
@@ -145,7 +145,7 @@ describe('edge cases', () => {
     const latest = { ...end, seq: 10, t: '2026-10-14T10:00:30Z', status: 'ok' } as RunLogLine;
     const early = { ...end, seq: 8, t: '2026-10-14T10:00:20Z', 'gen_ai.usage.output_tokens': 100 } as RunLogLine;
     const middle = { ...end, seq: 9, t: '2026-10-14T10:00:25Z', 'gen_ai.usage.output_tokens': 200 } as RunLogLine;
-    const expected = { status: 'ok', duration_ms: 30000, 'gen_ai.usage.output_tokens': 200 };
+    const expected = { status: 'ok', 'duration_ms': 30000, 'gen_ai.usage.output_tokens': 200 };
     // ACT
     log.append([run, job, attempt, latest]);
     log.append([early]);
@@ -173,7 +173,7 @@ describe('edge cases', () => {
     // ARRANGE
     const log = createLogFold();
     const latest = { ...end, t: '2026-10-14T10:00:20Z', seq: 8, status: 'ok' } as RunLogLine;
-    const expected = { status: 'ok', duration_ms: 20000 };
+    const expected = { status: 'ok', 'duration_ms': 20000 };
     // ACT
     log.append([latest]);
     log.append([run, job, attempt]);

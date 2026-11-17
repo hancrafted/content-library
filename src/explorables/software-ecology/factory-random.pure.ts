@@ -1,10 +1,5 @@
-/*
- * Randomness and storage for the factory model (design-ADR 0024 §1): seeded streams per node, so one setting never
- * reshuffles another's draws, and a deque with O(1) at both ends. Ported unchanged from the reference build, so the
- * same seed draws the same numbers.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 export type Rand = () => number;
-/** The four random streams of one node: arrivals, service, routing, quality. */
 export type Streams = Readonly<Record<'ra' | 'rs' | 'rr' | 'rq', Rand>>;
 
 export const mulberry =
@@ -25,7 +20,6 @@ export const mix = (a: number, b: number): number => {
   return (h ^ (h >>> 13)) >>> 0;
 };
 
-/** The four streams of node `i`: arrivals, service, routing, quality. */
 export const streams = (seed: number, i: number): Streams => ({
   ra: mulberry(mix(seed, i * 8 + 1)),
   rs: mulberry(mix(seed, i * 8 + 2)),
@@ -41,7 +35,6 @@ export const normal = (r: Rand): number => {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 };
 
-/** k documents, each good with chance p: exact up to 64, a normal approximation above (a big batch costs one draw). */
 export const binom = (r: Rand, k: number, p: number): number => {
   if (p <= 0 || k <= 0) return 0;
   if (p >= 1) return k;
@@ -53,7 +46,6 @@ export const binom = (r: Rand, k: number, p: number): number => {
   return Math.max(0, Math.min(k, Math.round(k * p + normal(r) * Math.sqrt(k * p * (1 - p)))));
 };
 
-/** A deque with O(1) at both ends. */
 export class Ring<T> {
   private a: (T | undefined)[] = new Array<T | undefined>(16);
   private h = 0;

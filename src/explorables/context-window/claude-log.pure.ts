@@ -1,3 +1,4 @@
+// spec: docs/features/explorables/context-window.md#the-log-subset
 import {
   LogReader,
   blockOf,
@@ -15,15 +16,6 @@ import {
 import type { Chat } from './context.types';
 
 export type { LogOptions } from './claude-log-reader.pure';
-
-/*
- * Reads a chat from a Claude Code session log (`~/.claude/projects/<project>/<session>.jsonl`), lifted from the
- * prototype's cornerstone-log block; claude-log-writer.pure.ts writes one. The log records the exact context of every
- * request (input plus cache read plus cache write) and of every compaction, but not how a request splits into parts.
- * So each measured growth goes first to the reply before it (its `output_tokens`), then to reminders and memory (by
- * text length, or the configured memory size), and what is left to the messages that arrived since, by their length.
- * docs/features/explorables/context-window.md lists the subset of the log this reads.
- */
 
 function readUserPart(reader: LogReader, line: Json, part: Json) {
   if (part.type === 'tool_result') return reader.toolResult(str(part.tool_use_id), part.content);
@@ -78,7 +70,6 @@ const LINES: Readonly<Record<string, (reader: LogReader, line: Json) => void>> =
   system: (reader, line) => SYSTEM[str(line.subtype)]?.(reader, line),
 };
 
-/** Reads a Claude Code session log into a chat. Lines it does not know, and side chains, are skipped. */
 export function fromClaudeLog(log: string, options: LogOptions): Chat {
   const reader = new LogReader(options);
   for (const line of parseLines(log)) if (line.isSidechain !== true) LINES[str(line.type)]?.(reader, line);

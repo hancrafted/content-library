@@ -49,20 +49,17 @@ function Panel({ stage, run, jobId, round, slots, level, onLevel, debug, ...chro
   );
 }
 
-/** The title takes the first focus, so no control (and no tooltip) greets the viewer. */
 function focusTitle(event: Event) {
   event.preventDefault();
   document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
 }
 
-/** What opened the modal: a stage's name, and the job whose card was pressed in the Jobs view. */
 interface Opener {
   readonly stage: string;
   readonly jobId: string | null;
   readonly round: number | null;
 }
 
-/** Closing returns focus to the stage's Practice it button, found by its name: the column re-renders while open. */
 function focusOpener(event: Event, opener: Opener | null) {
   if (!opener) return;
   const job = opener.jobId === null ? '' : `[data-try-job="${opener.jobId}"]`;
@@ -75,11 +72,6 @@ function focusOpener(event: Event, opener: Opener | null) {
   button.focus();
 }
 
-/**
- * The stage modal part: a shadcn Dialog (Radix) open while a stage is open, so it gives the top layer, Escape, the
- * focus trap and a close on the overlay. The title takes the first focus, so no control greets the viewer; closing
- * returns focus to the opener. A copy announces `words.copied` in a polite live region.
- */
 export function ModalPart({ stage, run, jobId, round, slotValues, onSlots, onClose, ...rest }: ModalProps) {
   const opener = useRef<Opener | null>(null);
   useEffect(() => {

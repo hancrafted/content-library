@@ -9,20 +9,14 @@ import { ControlIcon, IconButton } from './control-icons';
 import { Moves } from './moves.client';
 import { useChipDrag } from './window-chip-drag';
 
-/* The one toolbar: the controls the registry places there, in registry order: parts, Technical, the log. */
-
-/** What the toolbar shows and the events it sends up: the parent owns the state. */
 export interface ToolbarProps {
   readonly words: ContextWords;
   readonly preset: Preset;
   readonly chat: Chat;
   readonly parts: Readonly<Record<Part, boolean>>;
-  /** The parts in the order the chips list them. */
   readonly order: readonly Part[];
-  /** What a toggle shows and flips, by the registry's `flips`. */
   readonly flip: (flips: Flips) => Flip;
   readonly onPart: (part: Part) => void;
-  /** A chip was dragged past another: the part takes that one's place. */
   readonly onReorder: (part: Part, before: Part) => void;
   readonly onOpen: (text: string) => void;
 }
@@ -115,7 +109,6 @@ function Control({ v, def }: { readonly v: ToolbarProps; readonly def: ControlDe
   );
 }
 
-/** The toolbar a Preset allows; a Preset that shows none of its controls draws none of it. */
 export function Toolbar(v: ToolbarProps) {
   const shown = CONTROLS.filter((def) => def.placement === 'toolbar')
     .map((def) => controlOf(v.preset, def.id))

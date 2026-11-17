@@ -4,7 +4,6 @@ import styles from './emote.module.css';
 import { SaysFit } from './says-fit.client';
 import { SAYS_FRAME as BUBBLE, saysPlace } from './says.pure';
 
-/** The cartoon mark each mood shows above the head. */
 const MARK: Record<Mood, string> = {
   confused: 'question',
   surprised: 'exclamation',
@@ -13,7 +12,6 @@ const MARK: Record<Mood, string> = {
   blank: 'thought-empty',
 };
 
-/** A lumpy, faceted thought cloud around (18, -22): twelve points alternating between two radii. */
 const CLOUD = Array.from({ length: 12 }, (_, index) => {
   const angle = (index / 12) * Math.PI * 2;
   const bulge = index % 2 === 0 ? 1 : 0.8;
@@ -78,7 +76,6 @@ function Sparkle() {
   );
 }
 
-/** A thought bubble rising from the head: three dots while thinking, empty when the mind is blank. */
 function Thought({ dots }: { readonly dots: boolean }) {
   return (
     <>
@@ -101,7 +98,6 @@ const MARKS: Record<Mood, () => React.ReactElement> = {
 type Side = 1 | -1;
 const sideOf = (facing: EmoteProps['facing']): Side => (facing === 'left' ? -1 : 1);
 
-/** The words, bottom-aligned in the bubble's box and hugging the head's side of it. */
 function Words({ words, side, width }: { readonly words: string; readonly side: Side; readonly width: number }) {
   return (
     <foreignObject
@@ -130,7 +126,6 @@ interface BubbleProps {
   readonly place?: EmoteProps['bubble'];
 }
 
-/** What the actor says, wrapped inside a bubble on the side it faces, its tail pointing at the head. */
 function SpeechBubble({ words, mood, facing, place }: BubbleProps) {
   const side = sideOf(facing);
   const { x, bottom: foot, tip, base } = saysPlace(mood);
@@ -154,7 +149,6 @@ function SpeechBubble({ words, mood, facing, place }: BubbleProps) {
   );
 }
 
-/** The mood's mark, turned to the side the figure faces; the question mark reads the same either way. */
 function EmoteMark({ mood, facing }: { readonly mood: Mood; readonly facing: EmoteProps['facing'] }) {
   const mirror = sideOf(facing) === -1 && mood !== 'confused';
   return (
@@ -164,17 +158,7 @@ function EmoteMark({ mood, facing }: { readonly mood: Mood; readonly facing: Emo
   );
 }
 
-/**
- * The emote an actor shows at its head anchor (design-ADR 0025, "Scene figures are deep modules"): one cartoon mark per
- * mood (`confused` a question mark, `surprised` an exclamation mark, `happy` a sparkle, `thinking` a thought bubble with
- * dots, `blank` an empty thought bubble, the amnesiac AI), and `says` as a speech bubble whose text wraps inside it.
- *
- * `at` is the top of the head in the figure's own units; the mark sits just above it and the bubble rises on the side
- * the figure is `facing` (past the thought cloud when it thinks, so they never overlap). The question mark never
- * mirrors; the words never do. The words draw at the figure's scale and never below their caption size
- * (`says.pure.ts`, decision 53), so a phone-wide picture turns its bubble up. Both pop in once when the Slide's mount turns `[data-zone="active"]`, after the delay the figure sets in
- * `--emote-delay` (its own motion's length), and stay visible at rest; reduced motion shows them at rest at once.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function Emote({ mood, says, at, facing, bubble }: EmoteProps) {
   const words = (says ?? '').trim();
   if (!mood && !words) return null;

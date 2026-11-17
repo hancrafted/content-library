@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { specSlides } from './grill-spec.pure';
 
-/*
- * When the spec card slides from the chat onto the bench (Spec Option 14a, `motion: local`): once from the Slide's
- * first entry, and again on every replay; never on a return.
- */
-
 describe('success cases', () => {
   it('slides once the Slide first enters', () => {
     // ARRANGE

@@ -1,23 +1,14 @@
 import type { StepKind } from './workflow-prompts.pure.ts';
 import type { Level } from './workflow-state.pure';
 
-/*
- * Debug mode (decided with Han): when on, the two copy buttons append one instruction block that has the AI end every
- * reply with a one-line footer naming where the prompt came from, so feedback pastes straight back with its context.
- * The field values stay untranslated ids (greppable); only the instruction around the footer is a word of the locale.
- */
-
-/** What every prompt of the shown Workflow shares. */
 export interface DebugBase {
   readonly workflow: { readonly id: string; readonly title: string };
   readonly level: Level;
   readonly demo: boolean;
   readonly locale: string;
-  /** The short hash of the Workflow's source pair, or `uploaded` for a Workflow the viewer uploaded. */
   readonly source: string;
 }
 
-/** Where one item of the stepper sits: the base plus its stage, its job and, in a repeated stage, its round. */
 export interface DebugScope extends DebugBase {
   readonly stage: { readonly id: string; readonly name: string };
   readonly job: { readonly id: string; readonly title: string };
@@ -28,31 +19,24 @@ export function scopeOf(base: DebugBase, at: Pick<DebugScope, 'stage' | 'job' | 
   return { ...base, ...at };
 }
 
-/** Which prompt is copied: the prompt itself, or the prompt wrapped in the request to explain it. */
 export interface DebugPrompt {
   readonly prompt: 'copy' | 'explain';
   readonly step: StepKind;
-  /** The chat of a fan-out or of a round. */
   readonly chat?: number;
 }
 
-/** A footer's step word back to a step; an unknown word is the do step. */
 const stepOf = (word: string | undefined): DebugPrompt['step'] => (word === 'review' || word === 'then' ? word : 'do');
 
 const LEVELS: Record<Level, string> = { simple: 'chat', technical: 'cli' };
 
-/** Each footer level name back to its level: `chat` is Simple, `cli` Technical. */
 export const LEVEL_OF: Readonly<Record<string, Level>> = Object.fromEntries(
   Object.entries(LEVELS).map(([level, name]) => [name, level as Level]),
 );
 
-/** How many hex characters of the source pair's hash a footer carries. */
 export const SOURCE_CHARS = 8;
 
-/** A name on one line, its quotes softened, so the footer stays one greppable line. */
 const named = (id: string, name: string): string => `${id} "${name.replace(/\s+/g, ' ').replace(/"/g, "'").trim()}"`;
 
-/** The one-line footer the AI is told to end its replies with. */
 export function debugFooter(scope: DebugScope, { prompt, step, chat }: DebugPrompt): string {
   const fields = [
     `workflow=${named(scope.workflow.id, scope.workflow.title)}`,
@@ -70,13 +54,11 @@ export function debugFooter(scope: DebugScope, { prompt, step, chat }: DebugProm
   return `[hitl-debug] ${fields.join(' · ')}`;
 }
 
-/** The copied text with the debug instruction after it; without a footer (debug off) the text itself. */
 export function withDebug(text: string, instruction: string, footer: string | null): string {
   if (footer === null) return text;
   return `${text}\n\n${instruction.replace('{footer}', () => footer)}`;
 }
 
-/** Whether the toggle shows: in development, or on a page whose URL carries `?debug`. Never for a workshop viewer. */
 export function debugAvailable({
   env,
   search,
@@ -90,18 +72,15 @@ export function debugAvailable({
 const MARK = '[hitl-debug] ';
 const REQUIRED = ['workflow', 'stage', 'job', 'prompt', 'step', 'level', 'demo', 'locale', 'source'] as const;
 
-/** What a reply's footer says: the scope and the prompt it was written from, or why it can't be read. */
 export type ReadFooter =
   | { readonly scope: DebugScope; readonly prompt: DebugPrompt }
   | { readonly problems: readonly string[] };
 
-/** `id "name"` back into its id and name. */
 const fromNamed = (value: string): { id: string; title: string } => {
   const at = value.indexOf(' "');
   return at < 0 ? { id: value, title: '' } : { id: value.slice(0, at), title: value.slice(at + 2, -1) };
 };
 
-/** The fields of the last footer line in a reply, by key; none when the reply has no footer. */
 function fieldsOf(reply: string): Map<string, string> | undefined {
   const at = reply.lastIndexOf(MARK);
   if (at < 0) return undefined;
@@ -116,7 +95,6 @@ function fieldsOf(reply: string): Map<string, string> | undefined {
 
 type Fields = ReadonlyMap<string, string>;
 
-/** The scope a footer names; a round only when it has one. */
 function scopeFrom(fields: Fields): DebugScope {
   const get = (key: string): string => fields.get(key) ?? '';
   const stage = fromNamed(get('stage'));
@@ -133,7 +111,6 @@ function scopeFrom(fields: Fields): DebugScope {
   };
 }
 
-/** The prompt a footer names; a chat only when it has one. */
 function promptFrom(fields: Fields): DebugPrompt {
   const chat = fields.get('chat');
   return {
@@ -143,7 +120,6 @@ function promptFrom(fields: Fields): DebugPrompt {
   };
 }
 
-/** The footer `debugFooter` wrote, read back from a pasted reply: the last one, if the AI repeated it. */
 export function parseDebugFooter(reply: string): ReadFooter {
   const fields = fieldsOf(reply);
   if (fields === undefined) return { problems: [`The reply has no ${MARK.trim()} line.`] };

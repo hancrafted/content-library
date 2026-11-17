@@ -1,16 +1,8 @@
-/*
- * The Episode folder the dashboard reads: `docs/episodes/<slug>`, addressed by paths inside it ('/'-separated).
- * Read-only and small on purpose — the poll step and the output probe need text, bytes from an offset, size and
- * modification time, and whether a file is there. Two adapters: the browser's File System Access handle (under
- * src/shared/hooks/, it touches the DOM) and the in-memory folder below, which tests and stand-ins drive.
- */
-
 export interface FileStat {
   size: number;
   lastModified: number;
 }
 
-/** Every read of a missing file rejects with an Error named `NotFoundError`, as the browser's handles do. */
 export interface EpisodeFolder {
   readonly name: string;
   stat(path: string): Promise<FileStat>;
@@ -24,7 +16,6 @@ function notFound(path: string): Error {
 }
 
 export interface MemoryFolder extends EpisodeFolder {
-  /** Writes a file; without a modification time a rewrite counts as one modification later. */
   write(path: string, content: string, lastModified?: number): void;
   remove(path: string): void;
 }

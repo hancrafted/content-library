@@ -1,8 +1,5 @@
-/*
- * The compare set the client parent owns (design-ADR 0024 §17), as the reference build keeps `S.compare`: compare
- * mode picks up to three work centers, Show opens the stream, a slot removes its pick, Exit and the Compare toggle
- * close it, and Escape leaves compare mode while no stream is shown. Transient state (FE-001 §1).
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: FE-001 §1
 import { useEffect, useMemo, useState } from 'react';
 import {
   closedCompare,
@@ -17,21 +14,17 @@ import type { DashboardState } from './use-dashboard.ts';
 
 export interface CompareActions {
   readonly state: CompareState;
-  /** The work centers in the stream while it is shown, else none. */
   readonly stream: readonly string[];
   pick(id: string): void;
-  /** The Compare button: picking on or off, or Exit while the stream is shown. */
   toggle(): void;
   remove(id: string): void;
   show(): void;
   exit(): void;
-  /** A new state: its `compare` opens the stream directly. */
   reset(ids: readonly string[] | undefined): void;
 }
 
 const NONE: readonly string[] = [];
 
-/** Escape leaves compare mode while picking; a menu, a tour or a dashboard hears it first. */
 function useEscape(on: boolean, leave: () => void) {
   useEffect(() => {
     if (!on) return;
@@ -64,7 +57,6 @@ export function useCompare(initial: readonly string[] | undefined): CompareActio
   };
 }
 
-/** The dashboards on show: the open popover's, and the compare stream's columns. */
 export function useWatch(dash: DashboardState, compare: CompareActions): readonly string[] {
   const { watch } = dash,
     { stream } = compare;

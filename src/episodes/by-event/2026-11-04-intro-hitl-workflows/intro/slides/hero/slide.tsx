@@ -3,11 +3,6 @@ import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/sl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * The Title slide's hero Scene (the record's `title`): the Event's location and date, nothing else, so the title is
- * the one thing to read. The frame grows into the free space below, keeping the title high instead of centring it
- * in the viewport. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

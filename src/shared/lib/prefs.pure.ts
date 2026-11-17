@@ -1,13 +1,11 @@
 import { isLocale, type Locale } from './locale.pure';
 
-/** The one localStorage key every client-side preference lives under. */
 export const PREFS_KEY = 'hancrafted:prefs';
 
 export const THEMES = ['light', 'dark', 'system'] as const;
 
 export type Theme = (typeof THEMES)[number];
 
-/** How the Context drawer sits from `md`: beside the Slides (they make room) or over them. */
 export const DRAWER_MODES = ['beside', 'over'] as const;
 
 export type DrawerMode = (typeof DRAWER_MODES)[number];
@@ -42,7 +40,6 @@ const FIELD_GUARDS: { [K in keyof Prefs]-?: (value: unknown) => value is NonNull
   drawerMode: isDrawerMode,
 };
 
-/** Reads a stored prefs value, keeping only fields that are valid; anything malformed yields `{}`. */
 export function parsePrefs(raw: string | null): Prefs {
   const value = raw === null ? undefined : parseJson(raw);
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return {};
@@ -54,7 +51,6 @@ export function parsePrefs(raw: string | null): Prefs {
   return prefs as Prefs;
 }
 
-/** The serialized prefs after applying `patch` over whatever `raw` holds. */
 export function mergePrefs(raw: string | null, patch: Prefs): string {
   return JSON.stringify({ ...parsePrefs(raw), ...patch });
 }

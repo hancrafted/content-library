@@ -1,11 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import type { Bundle, Preset } from './software-ecology.types';
 import { custOf, idealSettings, presetSettings, realisticSettings, startSettings } from './start-settings.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
-/*
- * The settings a run starts from (design-ADR 0024 §3): Ideal, Realistic, a preset's own, and the Customer at them.
- */
 const B: Bundle = builtinBundle('tire');
 const presetOf = (id: string): Preset => B.data.presets.find((p) => p.id === id) as Preset;
 

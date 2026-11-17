@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
 
-/** The fragment the reader is at, read at click time: the toggle sits outside the Episode page and its service. */
 function currentFragment(): string | undefined {
   return window.location.hash.slice(1) || undefined;
 }
@@ -46,13 +45,6 @@ function LocaleOption({ option, locale, pathname }: { option: Locale; locale: Lo
   );
 }
 
-/**
- * Links to the same logical page in each locale, derived from the current
- * pathname. A plain click carries the reader's Slide (the URL fragment) across,
- * so the other locale opens on the same Slide; the link itself stays a plain
- * path, which is what a new tab or a crawler follows. It offers only the locales the current page is exported in,
- * from `localesByRoute`, which the layout reads from the page catalogue.
- */
 export function LocaleToggle({
   locale,
   label,

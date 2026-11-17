@@ -4,8 +4,6 @@ import { Grid2x3 } from './grid-2x3.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Six filled tonal cards in 2 rows × 3 columns, M3-style: icon chip over title and caption, gap equal to padding.
-// The client widget lifts a card on hover.
 export const grid2x3 = slide({
   slug: 'grid-2x3',
   messages: { en, de },

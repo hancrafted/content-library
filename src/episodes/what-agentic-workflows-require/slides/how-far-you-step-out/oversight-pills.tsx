@@ -1,11 +1,9 @@
-/** How far a person steps out of the loop for a task. */
 type Oversight = 'in' | 'on' | 'out';
 
 const LEVELS: readonly Oversight[] = ['in', 'on', 'out'];
 const WIDTH = 48;
 const GAP = 8;
 
-/** One oversight tag: an outline pill, filled when selected. */
 function Pill({ x, y, label, selected }: { x: number; y: number; label: string; selected: boolean }) {
   return (
     <g data-pill data-selected={selected || undefined}>
@@ -30,7 +28,6 @@ function Pill({ x, y, label, selected }: { x: number; y: number; label: string; 
   );
 }
 
-/** The three oversight tags, in, on and out, the same outline pills wherever they appear, centred on `cx`. */
 export function OversightPills({
   cx,
   y,

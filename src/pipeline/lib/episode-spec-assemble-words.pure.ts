@@ -1,14 +1,9 @@
-/*
- * The Spec's words as markup (design-ADR 0011): the Dossier's Voice script, Speaker notes with their citations in
- * full and Visual idea, and the collapsibles that hold them in a Slide's rail. Escapes everything it prints.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { type Item } from './episode-spec-source.pure.ts';
 
 export const escape = (text: string): string =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Inline markdown the Dossier uses: bold, code and emphasis. */
 export function inline(text: string): string {
   return escape(text)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -63,7 +58,6 @@ const PANELS = [
   ['speaker-notes', 'Speaker notes'],
 ] as const;
 
-/** A Slide's words as collapsibles, closed by default, each only when its words exist. */
 export function wordPanels(panels: Record<(typeof PANELS)[number][0], string>): string {
   const shown = PANELS.filter(([name]) => panels[name] !== '');
   if (shown.length === 0) return '';
@@ -74,7 +68,6 @@ export function wordPanels(panels: Record<(typeof PANELS)[number][0], string>): 
   return `<div class="spec-words">\n${details.join('\n')}\n</div>`;
 }
 
-/** A context card's content as a collapsible, closed by default: its heading is the summary, `body` the rest. */
 export function collapsible(heading: string, body: string): string {
   return `<details>\n<summary><h2>${heading}</h2></summary>\n<div class="spec-card-body">\n${body}\n</div>\n</details>`;
 }

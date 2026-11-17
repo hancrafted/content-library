@@ -1,17 +1,11 @@
-/*
- * What a use-case file must hold (schema software-ecology-factory/5, design-ADR 0024 §8–§11): each problem one line,
- * naming the path and what belongs there. Ported from the reference build's validate(), messages and order unchanged;
- * the presets and the saved state are checked in use-case-preset-checks.pure.ts.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { firstSpawn } from './first-spawn.pure.ts';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';
-/** The glyphs a role may name. */
 export const ICONS = ['customer', 'sales', 'pm', 'ba', 'doc', 'eng', 'ops', 'billing', 'support', 'lead', 'qa'];
 
 export type Map_ = Record<string, unknown>;
 export type Sink = (problem: string) => void;
-/** A rule: the problem it finds, or false when there is none. */
 export type Rule<T> = (x: T) => string | false;
 
 export const isNum = (v: unknown, lo = -Infinity, hi = Infinity): v is number =>
@@ -20,12 +14,9 @@ export const isXY = (v: unknown): boolean => Array.isArray(v) && v.length === 2 
 export const isMap = (v: unknown): v is Map_ => !!v && typeof v === 'object' && !Array.isArray(v);
 export const isWord = (v: unknown): v is string => typeof v === 'string' && /^[\w-]+$/.test(v);
 export const mapOf = (v: unknown): Map_ => (isMap(v) ? v : {});
-/** A list in the file, or none: what to walk when a key may be missing or not a list. */
 export const itemsOf = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 export const oneOf = (v: unknown, allowed: readonly string[]): boolean => allowed.includes(v as string);
-/** Whether a value is left out, or else passes the test. */
 export const absentOr = (v: unknown, ok: (v: unknown) => boolean): boolean => v === undefined || ok(v);
-/** Runs every rule in order and hands each problem found to the sink. */
 export const apply = <T>(rules: readonly Rule<T>[], x: T, E: Sink): void => {
   for (const rule of rules) {
     const problem = rule(x);
@@ -33,7 +24,6 @@ export const apply = <T>(rules: readonly Rule<T>[], x: T, E: Sink): void => {
   }
 };
 
-/** The ids of the work centers, in file order. */
 export const centerIdsOf = (doc: Map_, E: Sink): Set<string> => {
   const ids = new Set(['customer']),
     centerIds = new Set<string>();
@@ -51,7 +41,6 @@ export const centerIdsOf = (doc: Map_, E: Sink): Set<string> => {
 
 const PILES = ['heap', 'stack', 'drift'];
 
-/** A map of work center id to weeks of work waiting at the start (0 to 12), as `backlog` holds it. */
 export const backlogProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink): void => {
   if (v === undefined) return;
   if (!isMap(v)) return E(`${at.p}: a map { <center id>: weeks of work waiting, 0 to 12 }`);
@@ -61,7 +50,6 @@ export const backlogProblems = (v: unknown, at: { p: string; ids: Set<string> },
   }
 };
 
-/** A `display` map: the pile-up style and belt motion a state starts with. */
 export const displayProblems = (v: unknown, p: string, E: Sink): void => {
   if (v === undefined) return;
   if (!isMap(v)) return E(`${p}: a map { pile, beltMotion }`);
@@ -102,7 +90,6 @@ export const ROLE: readonly Rule<RoleAt>[] = [
   },
 ];
 
-/** Where the Customer's checks run: the map, its path, the work centers, whether every field is required. */
 export interface CustAt {
   readonly cu: Map_;
   readonly p: string;
@@ -135,7 +122,6 @@ const chanceProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink
 const DEFECT_KEYS: readonly string[] = ['spec', 'code'];
 const isKinded = (v: unknown): v is Map_ => isMap(v) && Object.keys(v).some((k) => DEFECT_KEYS.includes(k));
 
-/** `customer.bad`: one map of chances for every defect kind, or one per kind, `{ spec: {…}, code: {…} }`. */
 const badProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink): void => {
   if (!isKinded(v)) return chanceProblems(v, at, E);
   for (const [k, c] of Object.entries(v))
@@ -143,7 +129,6 @@ const badProblems = (v: unknown, at: { p: string; ids: Set<string> }, E: Sink): 
     else E(`${at.p}.${k}: spec or code, the defect kind a bad release comes back by`);
 };
 
-/** A station's `catch`: per defect kind, the chance it sends a bad input back. */
 const catchOk = (v: unknown): boolean =>
   isMap(v) && Object.entries(v).every(([k, c]) => DEFECT_KEYS.includes(k) && isNum(c, 0, 1));
 
@@ -155,7 +140,6 @@ const CUSTOMER: readonly Rule<CustAt>[] = [
 
 const releasesOk = (v: unknown, ids: Set<string>): boolean => Array.isArray(v) && v.every((r) => ids.has(r as string));
 
-/** The Customer: its values in the file (`full`), or a preset's overrides of them. */
 export const customerProblems = (cu: unknown, at: Omit<CustAt, 'cu'>, E: Sink): void => {
   if (!isMap(cu)) return E(`${at.p}: a map`);
   const x = { ...at, cu };
@@ -183,7 +167,6 @@ export interface CenterAt {
 const realisticOk = (re: unknown): boolean =>
   Array.isArray(re) && re.length === 2 && isNum(re[0], 10, 1000) && isNum(re[1], 5, 100);
 
-/** The work centers a center's spawns hand work to (the Customer left out). */
 const handsTo = (c: Map_): string[] =>
   itemsOf(c.spawns).flatMap((sp) => {
     const m = mapOf(sp);

@@ -1,10 +1,5 @@
 import styles from './software-ecology.module.css';
 
-/*
- * A document as the canvas draws it (doc-sprites.ts `drawDoc`), in SVG for the DOM legend: the sheet with a folded
- * corner, a red minus when bad, a red warning for a complaint or rework, and an AI-made one tinted with a star.
- */
-
 const DW = 9,
   DH = 11.5,
   DF = 3;
@@ -40,7 +35,6 @@ export interface DocGlyphProps {
   readonly warn?: boolean;
 }
 
-/** One legend document, 18 by 21 CSS pixels; decorative. */
 export function DocGlyph({ good, ai = false, warn = false }: DocGlyphProps) {
   return (
     <svg className={styles.docicon} viewBox="0 0 20 23" aria-hidden="true">

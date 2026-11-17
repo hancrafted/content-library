@@ -1,11 +1,4 @@
-/**
- * The body plan every `Character` shares, as geometry: preset × pose × mood → the faceted parts to draw, the head anchor
- * the emote sits at, and the pivots the motions turn on (design-ADR 0025, "Scene figures are deep modules").
- *
- * Frame: the figure faces right (+x), `(0, 0)` is the floor between the feet, the crown of a bare head sits near
- * `y = -100`. Light comes from the upper left: each surface has a lit, a mid and a shaded tone. The fixed parts are
- * tables (`body-plan.ts`, `outfits.ts`, `props.ts`); this module poses the arms and places everything.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 import { MOODS, type HeadAnchor, type Mood } from './actor';
 import {
   anchorY,
@@ -34,7 +27,6 @@ export type Motion = (typeof MOTIONS)[number];
 export type Point = readonly [number, number];
 
 export interface Facet {
-  /** The body part it belongs to (`torso`, `front-hand`, `prop` …); several facets share one id. */
   readonly id: string;
   readonly tone: Tone;
   readonly points: readonly Point[];
@@ -42,12 +34,9 @@ export interface Facet {
 
 export interface FigureDrawing {
   readonly groups: Readonly<Record<Group, readonly Facet[]>>;
-  /** The top of the head, where `Emote` attaches. */
   readonly anchor: HeadAnchor;
-  /** Where the motions turn: the neck for `nod` and `turn-to`, the front shoulder for `wave`. */
   readonly pivots: { readonly neck: Point; readonly shoulder: Point };
-  /** How far `wave` lifts the front arm from this pose, in degrees (negative lifts it forward and up). */
-  readonly waveLift: number;
+  readonly waveLiftDegrees: number;
 }
 
 interface Arm {
@@ -56,15 +45,13 @@ interface Arm {
 }
 
 interface Stance {
-  /** Moves everything above the hips: the seated torso sits a little lower and forward. */
   readonly upper: Point;
   readonly seated: boolean;
   readonly front: Arm;
   readonly back: Arm;
-  /** The prop shows only where a hand is free to carry it. */
   readonly prop: 'side' | 'forward' | 'away';
   readonly finger: boolean;
-  readonly waveLift: number;
+  readonly waveLiftDegrees: number;
 }
 
 const HANGING_FRONT: Arm = { elbow: [13, -56], wrist: [13, -45] };
@@ -72,15 +59,21 @@ const HANGING_BACK: Arm = { elbow: [-14, -56], wrist: [-14, -45] };
 const STANDING = { upper: [0, 0], seated: false, back: HANGING_BACK, finger: false } as const;
 
 const STANCES: Readonly<Record<Pose, Stance>> = {
-  stand: { ...STANDING, front: HANGING_FRONT, prop: 'side', waveLift: -150 },
-  point: { ...STANDING, front: { elbow: [19, -54], wrist: [30, -57] }, prop: 'away', finger: true, waveLift: -70 },
-  hold: { ...STANDING, front: { elbow: [13, -55], wrist: [25, -54] }, prop: 'forward', waveLift: -60 },
+  stand: { ...STANDING, front: HANGING_FRONT, prop: 'side', waveLiftDegrees: -150 },
+  point: {
+    ...STANDING,
+    front: { elbow: [19, -54], wrist: [30, -57] },
+    prop: 'away',
+    finger: true,
+    waveLiftDegrees: -70,
+  },
+  hold: { ...STANDING, front: { elbow: [13, -55], wrist: [25, -54] }, prop: 'forward', waveLiftDegrees: -60 },
   steer: {
     ...STANDING,
     front: { elbow: [18, -56], wrist: [27, -63] },
     back: { elbow: [-5, -54], wrist: [22, -55] },
     prop: 'away',
-    waveLift: -60,
+    waveLiftDegrees: -60,
   },
   sit: {
     upper: [2, 2],
@@ -89,7 +82,7 @@ const STANCES: Readonly<Record<Pose, Stance>> = {
     back: { elbow: [-6, -51], wrist: [27, -49] },
     prop: 'away',
     finger: false,
-    waveLift: -80,
+    waveLiftDegrees: -80,
   },
 };
 
@@ -98,9 +91,6 @@ const pairs = (flat: readonly number[]): Point[] =>
   Array.from({ length: flat.length / 2 }, (_, i): Point => [flat[2 * i], flat[2 * i + 1]]);
 const flatten = (points: readonly Point[]): number[] => points.flat();
 
-// ---------------------------------------------------------------- arms
-
-/** A tapered quad from `a` to `b`, `widths[0]` wide at `a` and `widths[1]` at `b`. */
 function limb(a: Point, b: Point, [wa, wb]: readonly [number, number]): Point[] {
   const length = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
   const [nx, ny] = [-(b[1] - a[1]) / length, (b[0] - a[0]) / length];
@@ -112,7 +102,6 @@ function limb(a: Point, b: Point, [wa, wb]: readonly [number, number]): Point[] 
   ];
 }
 
-/** The hand continuing the forearm from the wrist: a faceted mitten, its fingertip and the forearm's direction. */
 function hand({ elbow, wrist }: Arm) {
   const size = Math.hypot(wrist[0] - elbow[0], wrist[1] - elbow[1]) || 1;
   const [ux, uy] = [(wrist[0] - elbow[0]) / size, (wrist[1] - elbow[1]) / size];
@@ -154,7 +143,6 @@ function armFacets({ side, shoulder, joints, finger }: ArmPlacement, preset: Pre
   return facets;
 }
 
-/** The front arm with whatever it carries; the hand paints last, closed over the handle or edge. */
 function frontArm(stance: Stance, preset: Preset, shoulder: Point): FacetSpec[] {
   const facets = armFacets({ side: 'front', shoulder, joints: stance.front, finger: stance.finger }, preset);
   if (!preset.prop || stance.prop === 'away') return facets;
@@ -169,8 +157,6 @@ function frontArm(stance: Stance, preset: Preset, shoulder: Point): FacetSpec[] 
   const isHand = ([, id]: FacetSpec) => id === 'front-hand';
   return [...facets.filter((f) => !isHand(f)), ...prop, ...facets.filter(isHand)];
 }
-
-// ---------------------------------------------------------------- the figure
 
 function check(pose: Pose, mood: Mood | undefined): Stance {
   const stance = STANCES[pose] as Stance | undefined;
@@ -190,7 +176,6 @@ function sort(specs: readonly FacetSpec[], upper: Point): Record<Group, Facet[]>
   return groups;
 }
 
-/** Draws a preset in a pose with a mood: every facet in paint order, the head anchor, the motion pivots. */
 export function drawFigure(preset: Preset, pose: Pose, mood?: Mood): FigureDrawing {
   const stance = check(pose, mood);
   const b = BUILD_WIDTH[preset.build];
@@ -210,21 +195,18 @@ export function drawFigure(preset: Preset, pose: Pose, mood?: Mood): FigureDrawi
     groups: sort(specs, stance.upper),
     anchor: { x: 1 + ux, y: anchorY(preset) + uy },
     pivots: { neck: [0.5 + ux, -74 + uy], shoulder: [shoulder[0] + ux, shoulder[1] + uy] },
-    waveLift: stance.waveLift,
+    waveLiftDegrees: stance.waveLiftDegrees,
   };
 }
 
-/** Every facet of a drawing in paint order. */
 export function facetsOf(drawing: FigureDrawing): readonly Facet[] {
   return GROUPS.flatMap((group) => drawing.groups[group]);
 }
 
-/** The distinct part ids a drawing shows, for tests and the cast gallery. */
 export function partIds(drawing: FigureDrawing): string[] {
   return [...new Set(facetsOf(drawing).map((facet) => facet.id))];
 }
 
-/** An SVG path `d` for a facet. */
 export function facetPath(facet: Facet): string {
   return `M${facet.points.map(([x, y]) => `${x} ${y}`).join('L')}Z`;
 }

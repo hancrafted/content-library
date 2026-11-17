@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkResearchFolders, researchCategories } from './research-folder.pure';
 
-/*
- * Research folder names, `<category>-<####>__<question-slug>`, against the
- * categories GLOSSARY.md lists: a valid set, then one broken rule per test.
- */
-
 const GLOSSARY = `# Content library
 
 ## Research categories

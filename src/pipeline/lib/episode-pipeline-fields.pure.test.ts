@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { agentFields, JOB_FIELDS, LEGACY_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { checkMapping } from './mapping-fields.pure';
 
-/*
- * The pipeline vocabulary through checkMapping, the one way the pipeline
- * check and the dashboard read it: a valid agent and job, then the values each list refuses.
- */
-
 const AGENT = { type: 'reviewer', skills: [], references: [], rubric: 'references/x.md#rubric', model: 'opus' };
 
 describe('success cases', () => {

@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { helpPrompt } from './help-prompt.pure';
 
-/*
- * The Help panel's prompt (Visual language "Help"): the viewer's pasted error, wrapped
- * with the picked operating system, AI agent and step, ready to paste into free ChatGPT.
- */
-
 const TEMPLATE = 'Computer: {os}. AI agent: {agent}. Step: {step}.\n\nError:\n{error}';
 const NO_ERROR = '(no error pasted)';
 

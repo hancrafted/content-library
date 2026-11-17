@@ -2,7 +2,6 @@
   position: relative;
   display: inline-flex;
 }
-/* The bubble hangs flush from the control (the padding bridges the gap), so the pointer can move onto it. */
 .tip {
   position: absolute;
   z-index: 20;

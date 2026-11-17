@@ -6,13 +6,10 @@ import type { DashWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { RoleWords } from './software-ecology.types';
 
-/* The dashboard's read-only sections: three trends, "How it flows" and the role's highlights. Props only. */
-
 interface TrendProps {
   readonly k: 'out' | 'good' | 'wait';
   readonly value: string;
   readonly paths: TrendPaths;
-  /** Weeks waiting: amber from one week, red from two; the other trends stay plain. */
   readonly level?: number;
   readonly words: DashWords;
 }

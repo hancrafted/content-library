@@ -5,14 +5,7 @@ import { fiveMovesToBriefAFreelancerSection } from './sections/five-moves-to-bri
 import { theThoughtExperimentSection } from './sections/the-thought-experiment';
 import { hero } from './slides/hero/slide';
 
-/*
- * The unlisted copy of `onboard-ai-every-time` the Intro HITL Workflows Event (Event 2026-11-04-intro-hitl-workflows) presents: its Slides,
- * Sections and copy taken with `cp -r`, Slide slugs kept, so the composition can drift from the public Episode
- * without touching it (vision rule 4). It lives only under its Event (design-ADR 0016).
- *
- * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
- * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.
- */
+// decision: docs/adr/0016-content-data-model.md
 export const introHitlOnboardAiEveryTime = episode({
   slug: 'onboard-ai-every-time',
   messages: { en, de },

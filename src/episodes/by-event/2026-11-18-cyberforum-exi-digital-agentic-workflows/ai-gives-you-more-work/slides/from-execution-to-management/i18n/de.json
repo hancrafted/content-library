@@ -1,0 +1,23 @@
+{
+  "title": "Von der Ausführung zum Management",
+  "caption": "Die Arbeit schrumpft nicht. Sie verändert sich, und Du steigst auf.",
+  "voiceScript": {
+    "segments": {
+      "the-question": {
+        "title": "Die Frage",
+        "keywords": "",
+        "script": "Stell Dir vor, eine Kollegin fragt Dich beim Kaffee: Nimmt mir KI Arbeit ab? Geht dann alles schneller, sodass ich nächstes Jahr weniger zu tun habe? Die Frage ist berechtigt, und fast jeder, der mit KI anfängt, stellt sie."
+      },
+      "the-reframe": {
+        "title": "Der Perspektivwechsel",
+        "keywords": "",
+        "script": "Nur steckt in der Frage eine falsche Annahme: dass die Aufgaben gleich groß bleiben. Das tun sie nicht. Mit KI kannst Du jetzt weit komplexere Aufgaben übernehmen als allein, und diese Aufgaben zu managen ist die Arbeit, die KI hinzufügt."
+      },
+      "the-payoff": {
+        "title": "Der Gewinn",
+        "keywords": "",
+        "script": "Die bessere Frage ist also, was Du jetzt alles kannst. Du erreichst viel mehr, wenn Du bereit bist, dazuzulernen und KI wie ein Team zu managen, und heute ist die Gelegenheit, Dich in diese Richtung zu bewegen."
+      }
+    }
+  }
+}

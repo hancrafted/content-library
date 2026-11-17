@@ -1,24 +1,9 @@
 /// <reference path="../rules.d.ts" />
 
-// ARCH-003 — Testing. The two shape Disciplines under src/ that no eslint
-// selector expresses cheaply, matched by scanning lines (the formatter fixes the
-// layout these patterns rely on: a top-level describe starts at column 0).
-//
-// `suite-three-blocks` — the file's top-level describe blocks are exactly
-// `success cases`, `failure cases` and `edge cases`, once each (§2.1).
-// `test-body-aaa` — every it/test body carries `// ARRANGE`, `// ACT` and
-// `// ASSERT`, uppercase, once each, in that order, one marker per comment
-// (§3.1). A body runs from its `it(`/`test(` line to the next test or describe
-// line, so markers in a helper between tests count toward the test above it.
-// `assert-no-magic` — the `// ASSERT` block holds no number literal other than
-// `0`, `1`, `-1` (§3.2). String literals are NOT flagged: a string expected
-// value (`toBe('far')`, `toContain('grid')`) is the hand-written expected value
-// ARCH-003 §1.2 asks for, and a scan cannot tell it from a magic string, so the
-// string half of §3.2 stays a review duty. The block runs from `// ASSERT` to the test's closing line, the
-// first line at or left of the test's own indent that opens with `}`.
-// Self-contained: archgate forbids imports
-// between rules files.
-// Unit and browser tests under src/, plus the browser tests outside it (§2, §3). Post-build tests stay free-form.
+// decision: ARCH-003 §1.2
+// decision: ARCH-003 §2.1
+// decision: ARCH-003 §3.1
+// decision: ARCH-003 §3.2
 const TEST_GLOBS = ['src/**/*.test.ts', 'tests/browser/**/*.browser.test.ts', 'skills/**/*.browser.test.ts'];
 
 async function testFiles(ctx: RuleContext): Promise<string[]> {
@@ -27,7 +12,6 @@ async function testFiles(ctx: RuleContext): Promise<string[]> {
 }
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];
 
-/** The other half of a subject split across lanes: `x.pure.slow.test.ts` ↔ `x.pure.test.ts`. */
 function laneSibling(file: string): string {
   return file.endsWith('.slow.test.ts')
     ? file.replace(/\.slow\.test\.ts$/, '.test.ts')
@@ -35,14 +19,11 @@ function laneSibling(file: string): string {
 }
 const MARKERS = ['ARRANGE', 'ACT', 'ASSERT'];
 
-// Playwright spells a block `test.describe(` and a hook `test.beforeEach(`: a block, and no test.
-const TOP_DESCRIBE_RE = /^(?:test\.)?describe(?:\.\w+)*\(\s*(['"`])(.*?)\1/;
-const TEST_START_RE =
+const COLUMN_ZERO_DESCRIBE_RE = /^(?:test\.)?describe(?:\.\w+)*\(\s*(['"`])(.*?)\1/;
+const NON_PLAYWRIGHT_BLOCK_TEST_START_RE =
   /^\s*(?:it|test)(?!\.(?:describe|beforeEach|afterEach|beforeAll|afterAll|use|extend)\b)(?:\.\w+)*(?:\([\s\S]*?\))?\s*\(/;
 const BLOCK_START_RE = /^\s*(?:test\.)?describe(?:\.\w+)*\(/;
-// Any comment naming a marker word, in any case — so `// Arrange` and
-// `// ARRANGE / ACT` are seen and judged rather than skipped.
-const MARKER_COMMENT_RE = /^\s*\/\/\s*(arrange|act|assert)\b(.*)$/i;
+const ANY_CASE_MARKER_COMMENT_RE = /^\s*\/\/\s*(arrange|act|assert)\b(.*)$/i;
 const SECOND_MARKER_RE = /\b(arrange|act|assert)\b/i;
 
 interface Body {
@@ -55,7 +36,7 @@ function testBodies(lines: string[]): Body[] {
   const bodies: Body[] = [];
   let current: Body | null = null;
   lines.forEach((text, index) => {
-    if (TEST_START_RE.test(text)) {
+    if (NON_PLAYWRIGHT_BLOCK_TEST_START_RE.test(text)) {
       current = { line: index + 1, markers: [], malformed: [] };
       bodies.push(current);
       return;
@@ -64,7 +45,7 @@ function testBodies(lines: string[]): Body[] {
       current = null;
       return;
     }
-    const marker = MARKER_COMMENT_RE.exec(text);
+    const marker = ANY_CASE_MARKER_COMMENT_RE.exec(text);
     if (current === null || marker === null) return;
     const word = marker[1];
     if (word !== word.toUpperCase() || SECOND_MARKER_RE.test(marker[2])) current.malformed.push(text.trim());
@@ -83,8 +64,6 @@ interface Magic {
   literal: string;
 }
 
-// Scan one ASSERT block's text for number literals, skipping strings,
-// comments, regex literals and identifiers that merely contain digits.
 function magicIn(text: string, firstLine: number): Magic[] {
   const found: Magic[] = [];
   let line = firstLine;
@@ -160,9 +139,9 @@ function assertBlocks(lines: string[]): { start: number; text: string }[] {
     buffer = [];
   };
   lines.forEach((text, index) => {
-    if (TEST_START_RE.test(text) || BLOCK_START_RE.test(text)) {
+    if (NON_PLAYWRIGHT_BLOCK_TEST_START_RE.test(text) || BLOCK_START_RE.test(text)) {
       flush();
-      testIndent = TEST_START_RE.test(text) ? INDENT_RE.exec(text)![0].length : -1;
+      testIndent = NON_PLAYWRIGHT_BLOCK_TEST_START_RE.test(text) ? INDENT_RE.exec(text)![0].length : -1;
       return;
     }
     if (ASSERT_MARKER_RE.test(text)) {
@@ -193,7 +172,7 @@ export default {
           const seen: string[] = [];
           blocksOf.set(file, seen);
           lines.forEach((text, index) => {
-            const m = TOP_DESCRIBE_RE.exec(text);
+            const m = COLUMN_ZERO_DESCRIBE_RE.exec(text);
             if (m === null) return;
             const name = m[2];
             if (!BLOCKS.includes(name)) {
@@ -213,9 +192,12 @@ export default {
           });
         }
         for (const file of files) {
-          // A slow file and its fast sibling test one subject: the pair holds the three blocks between them (§2.1).
-          const held = [...(blocksOf.get(file) ?? []), ...(blocksOf.get(laneSibling(file)) ?? [])];
-          const missing = BLOCKS.filter((name) => !held.includes(name));
+          // decision: ARCH-003 §2.1
+          const blocksHeldByFileAndItsLaneSibling = [
+            ...(blocksOf.get(file) ?? []),
+            ...(blocksOf.get(laneSibling(file)) ?? []),
+          ];
+          const missing = BLOCKS.filter((name) => !blocksHeldByFileAndItsLaneSibling.includes(name));
           if (missing.length > 0) {
             ctx.report.violation({
               message: `Test file has no top-level describe '${missing.join("', '")}' — every suite splits into success cases, failure cases and edge cases (ARCH-003 [suite-three-blocks]).`,

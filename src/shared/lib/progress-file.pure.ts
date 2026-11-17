@@ -1,14 +1,8 @@
 import { Document, isMap, isScalar, parse, Scalar } from 'yaml';
 import { isEntry, isRecord, isText, normalizedEntry, type ProgressEntry } from './progress.pure';
 
-/*
- * The YAML half of hands-on progress: the file a viewer downloads to keep a run and uploads to resume it. The stored
- * entry, its key and its hash verdict stay in `progress.pure.ts`.
- */
-
 const FILE_TYPE = 'application/x-yaml';
 
-/** Block-literal style for every result and prompt edit, so a pasted Markdown result reads as it is. */
 function blockTexts(doc: Document, field: 'results' | 'prompts'): void {
   const texts = doc.get(field, true);
   if (!isMap(texts)) return;
@@ -17,14 +11,12 @@ function blockTexts(doc: Document, field: 'results' | 'prompts'): void {
   }
 }
 
-/** The document with every result and every prompt edit in block-literal style. */
 function withBlockLiterals(doc: Document): Document {
   blockTexts(doc, 'results');
   blockTexts(doc, 'prompts');
   return doc;
 }
 
-/** The file a viewer downloads to keep a run: the Workflow, its hash, the demo flag, the results and any prompt edits, as YAML. */
 export function progressFile(workflowId: string, entry: ProgressEntry): { name: string; text: string; type: string } {
   const slug = workflowId.replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '') || 'workflow';
   const { prompts } = normalizedEntry(entry);
@@ -38,7 +30,6 @@ export function progressFile(workflowId: string, entry: ProgressEntry): { name: 
   return { name: `${slug}-progress.yml`, text: withBlockLiterals(doc).toString(), type: FILE_TYPE };
 }
 
-/** Why an uploaded progress file is not taken: it is no progress file, it is of another Workflow, or of an edited one. */
 export type Refusal = 'unreadable' | 'other-workflow' | 'changed';
 
 function parseYaml(text: string): unknown {
@@ -49,7 +40,6 @@ function parseYaml(text: string): unknown {
   }
 }
 
-/** What an uploaded file holds for the Workflow shown now: its run, or the reason it is refused. */
 export function readProgressFile(
   text: string,
   shown: { readonly workflow: string; readonly hash: string },

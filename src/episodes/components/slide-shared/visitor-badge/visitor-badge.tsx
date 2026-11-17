@@ -1,6 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 
-/** One row of a badge's facts, a term and its value. */
 export interface BadgeFact {
   readonly slug: string;
   readonly term: string;
@@ -8,27 +7,17 @@ export interface BadgeFact {
 }
 
 export interface VisitorBadgeProps {
-  /** Who wears it, top left: "Job 1", "Freelancer · AI", "New hire · You". */
   readonly job: string;
-  /** The weekday, top right; a compact badge leaves it out. */
   readonly weekday?: string;
-  /** The day the badge says, always "Day 1". */
   readonly day: string;
-  /** What the job was, under a rule. */
   readonly task?: string;
-  /** The front badge's facts. */
   readonly facts?: readonly BadgeFact[];
-  /** Worn by AI: the `ai` ring and edge. A badge no AI wears stays neutral. */
   readonly ai: boolean;
-  /** The one focal badge: raised, focusable, its day the `primary` pill. */
   readonly focus?: boolean;
-  /** The section slide echo: no lanyard, no weekday, a smaller card. */
   readonly compact?: boolean;
-  /** Placement only (width, rotation, opacity), set by the Scene. */
   readonly className?: string;
 }
 
-/** The lanyard over a full badge: in `foreground` on the front badge, in `border` behind it. */
 function Lanyard({ focus }: { focus: boolean }) {
   return (
     <svg viewBox="0 0 160 56" className={focus ? 'w-32' : 'w-24'} aria-hidden="true">
@@ -50,7 +39,6 @@ function Lanyard({ focus }: { focus: boolean }) {
   );
 }
 
-/** The card's top edge: the `ai` gradient on a badge AI wears, `foreground` on a neutral one. */
 function Edge({ ai, focus }: { ai: boolean; focus: boolean }) {
   return (
     <div
@@ -63,7 +51,6 @@ function Edge({ ai, focus }: { ai: boolean; focus: boolean }) {
   );
 }
 
-/** How a badge is drawn: the echo, the focal front badge, or one behind it. */
 type Look = 'compact' | 'focus' | 'back';
 
 function lookOf(focus: boolean, compact: boolean): Look {
@@ -78,7 +65,6 @@ const CARD: Record<Look, string> = {
 };
 const BODY: Record<Look, string> = { compact: 'gap-1 p-3', focus: 'gap-4 p-6', back: 'gap-2 p-4' };
 
-/** The day the badge says: the `primary` pill on the focal badge, plain type on the rest. */
 function Day({ look, day }: { look: Look; day: string }) {
   if (look === 'focus') {
     return (
@@ -96,7 +82,6 @@ function Day({ look, day }: { look: Look; day: string }) {
   );
 }
 
-/** The front badge's facts, each a term and its value under a rule. */
 function Facts({ facts }: { facts: readonly BadgeFact[] }) {
   if (facts.length === 0) return null;
   return (
@@ -111,7 +96,6 @@ function Facts({ facts }: { facts: readonly BadgeFact[] }) {
   );
 }
 
-/** The card itself: edge, job and weekday, the day, then the task or the facts. */
 function Card({ look, ...badge }: Omit<VisitorBadgeProps, 'focus' | 'compact' | 'className'> & { look: Look }) {
   return (
     <div
@@ -136,11 +120,6 @@ function Card({ look, ...badge }: Omit<VisitorBadgeProps, 'focus' | 'compact' | 
   );
 }
 
-/**
- * The visitor badge (the Hero motif of onboard-ai-every-time): every badge says
- * Day 1, so it carries the person, the amnesia and "every time" at once. Plain
- * props, no kit: the Title slide wears three, two section slides one each.
- */
 export function VisitorBadge({ focus = false, compact = false, className, ...badge }: VisitorBadgeProps) {
   const look = lookOf(focus, compact);
   if (look === 'compact') {

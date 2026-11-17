@@ -1,15 +1,12 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-005 — Static Export Contract. The parts of the contract that sit in
-// source text and that an import-based lint rule cannot see: per-segment
-// exports, next.config keys, directives, segment exports, file names and
-// folder names. Banned module imports live in the lint config instead.
-// Matched textually. Self-contained by design:
-// archgate forbids imports between rules files.
+// decision: FE-005 §1
+// decision: FE-005 §2
+// decision: FE-005 §3
+// decision: FE-005 §4
 const SRC_GLOB = 'src/**/*';
 const ROOT_GLOB = '*';
-// Next.js accepts any of these names; a legal rename must not crash the rule.
-const NEXT_CONFIG_RE = /^next\.config\.(ts|js|mjs)$/;
+const ANY_NEXT_ACCEPTED_CONFIG_NAME_RE = /^next\.config\.(ts|js|mjs)$/;
 
 const CODE_FILE_RE = /\.(ts|tsx|js|jsx|mjs)$/;
 const SEGMENT_FILE_RE = /^src\/app\/(.+\/)?(page|layout)\.(tsx|ts|jsx|js)$/;
@@ -146,7 +143,7 @@ export default {
         "next.config.{ts,js,mjs} exists, keeps output: 'export' and images.unoptimized: true, and declares no rewrites, redirects or headers.",
       severity: 'error',
       async check(ctx) {
-        const configFile = (await ctx.glob(ROOT_GLOB)).find((file) => NEXT_CONFIG_RE.test(file));
+        const configFile = (await ctx.glob(ROOT_GLOB)).find((file) => ANY_NEXT_ACCEPTED_CONFIG_NAME_RE.test(file));
         if (configFile === undefined) {
           ctx.report.violation({
             message:

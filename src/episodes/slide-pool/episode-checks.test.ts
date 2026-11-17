@@ -1,11 +1,7 @@
 import { slidePoolChecks } from '@/episodes/lib/episode-checks';
 import { describe, expect, it } from 'vitest';
 
-/*
- * The Episode-level checks on the Slide pool's folders (ARCH-003 §4.7, `src/episodes/lib/episode-checks.ts`). The glob puts
- * every pool Slide in this test's import graph, so `vitest --changed` runs it when one of them changes.
- */
-
+// decision: ARCH-003 §4.7
 const CHECKS = slidePoolChecks(import.meta.dirname, import.meta.glob('./*/slide.tsx'));
 
 describe('success cases', () => {

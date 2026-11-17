@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-008-page-metadata.rules.ts — pass and fail path for each
-// rule, plus the boundaries each is easy to get wrong: the function and const
-// forms of generateMetadata, files that are neither page nor layout, and a
-// comment that merely names a banned field.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-008-page-metadata.rules';
 
@@ -14,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. The rules
-// glob only `src/app/**/*`, so the double serves that one shape.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {

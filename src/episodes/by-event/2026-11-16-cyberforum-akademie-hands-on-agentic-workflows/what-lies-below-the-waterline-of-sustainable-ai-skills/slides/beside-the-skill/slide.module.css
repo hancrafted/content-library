@@ -1,11 +1,5 @@
-/*
- * Slide token file of "Beside the skill" (FE-011 §2): the control-room wall, floor and sheets, and site 7's water and
- * seabed, in the approved Spec Option 17a's own tones (feedback 3, decision 46), then the one emphasis motion. Dark
- * values are the Spec's; dark mode is tuned later (decision 32). `--primary` marks the one line and today's row.
- * The scenery several Slides share (sky, sea, seabed, room wall, floor and window) comes from the global `--scenery-*`
- * tokens (design-ADR 0025, Colour tokens).
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §2 */
 .art {
   --paper-lit: oklch(0.995 0.004 90);
   --paper: oklch(0.965 0.01 88);
@@ -34,7 +28,6 @@
   --glow-soft: oklch(0.75 0.1 205 / 0.45);
 }
 
-/* Each opaque facet strokes in its own fill, so neighbours meet without a hairline seam, as the Spec draws them. */
 .art [data-tone] {
   stroke-width: 0.6;
   stroke-linejoin: round;
@@ -125,7 +118,6 @@
   stroke: var(--glow);
 }
 
-/* The see-through tones, unstroked: the tape, the sheets' flat drop, the sun's shafts and the waterline's halo. */
 .art [data-tone='tape'] {
   fill: var(--tape);
   stroke: none;
@@ -143,7 +135,6 @@
   stroke: none;
 }
 
-/* The dive plan's ruled lines, under its heading and between the sites. */
 .rule {
   border-color: var(--plan-rule);
 }
@@ -171,12 +162,7 @@
   stroke: color-mix(in oklab, var(--foreground) 70%, var(--overlay));
 }
 
-/*
- * The one emphasis motion, once on entry: the line draws from step 2 to the Site 7 row, the row fades in already
- * filled primary (opacity only: its words turn light with the fill, so no fill can fade in under them), then the
- * robot descends (`Travel`) and the check pops in at the seabed. The base rules are the end state, which reduced
- * motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .link {
     transform-origin: left center;

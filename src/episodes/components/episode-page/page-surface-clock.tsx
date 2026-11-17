@@ -2,14 +2,12 @@ import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { EpisodeContent } from './record-content';
 import { SurfaceClockAttachment } from './surface-clock.client';
 
-/** Composition opts into one geometry authority, including explicit entrance policy without an effect. */
 export function usesSurfaceClock(content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance'>) {
   return Boolean(
     content.tocEntrance || content.titleAppearance.presentation || content.slides.some((slide) => slide.presentation),
   );
 }
 
-/** Entrance policy depends on composition, never the active Slide or sampled tone. */
 export function tocEntranceOf(
   content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance' | 'agentView'>,
 ) {
@@ -17,7 +15,6 @@ export function tocEntranceOf(
   return content.tocEntrance ?? (usesSurfaceClock(content) ? 'title-departure' : 'legacy');
 }
 
-/** Server composition supplies only stable ids and semantic tones to the browser. */
 export function PageSurfaceClock({ content, samplingLine }: { content: EpisodeContent; samplingLine?: number }) {
   if (!usesSurfaceClock(content)) return null;
   return <SurfaceClockAttachment surfaces={surfacesOf(content)} samplingLine={samplingLine} />;

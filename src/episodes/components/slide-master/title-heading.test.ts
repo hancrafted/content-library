@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { slide } from './slide';
 import { titleLinesOf } from './title-lines';
 
-/** A hero Scene whose own messages may carry a `heading`, the way a Slide's on-screen title does. */
 function hero(en: Record<string, string>, de: Record<string, string>) {
   return slide({ slug: 'hero', messages: { en, de } as never, content: () => null });
 }

@@ -4,10 +4,8 @@ import type { ReactNode } from 'react';
 import { at, INDEX, wide } from './control-room-art';
 import styles from './slide.module.css';
 
-/** The three skills of the index, by folder name: code, never translated. */
 export const SLUGS = ['collect-sediment-sample', 'measure-water-column', 'run-camera-survey'] as const;
 
-/** A label heading one half of the drawing: the way's AI term, then who chooses. */
 export function WayLabel({ x, y, children }: { readonly x: number; readonly y: number; readonly children: ReactNode }) {
   return (
     <p
@@ -19,7 +17,6 @@ export function WayLabel({ x, y, children }: { readonly x: number; readonly y: n
   );
 }
 
-/** A row of an app and how it calls a skill by name. */
 export function SyntaxRow({ app, syntax }: { readonly app: string; readonly syntax: string }) {
   return (
     <li className="flex flex-wrap justify-between gap-x-3">
@@ -29,14 +26,12 @@ export function SyntaxRow({ app, syntax }: { readonly app: string; readonly synt
   );
 }
 
-/** One line of the index: the skill's name, or its folder in the Coding agent view, and its use-when line. */
 interface IndexEntry {
   readonly slug: string;
   readonly name: string;
   readonly useWhen: string;
 }
 
-/** One line of the index; `hit` is the line the highlight lands on. */
 function IndexLine({ entry, hit }: { readonly entry: IndexEntry; readonly hit: boolean }) {
   return (
     <li
@@ -55,7 +50,6 @@ function IndexLine({ entry, hit }: { readonly entry: IndexEntry; readonly hit: b
   );
 }
 
-/** The manual's index on the wall, its words over the drawn sheet; the highlight lands on the first line. */
 export function IndexBoard(props: {
   readonly title: string;
   readonly subtitle: string;

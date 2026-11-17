@@ -1,12 +1,6 @@
-// The Guide record registry (GLOSSARY): what `npm run registry` writes from the Guide files. A Guide's record is its
-// file, `src/content-store/guides/<slug>.ts`; its composition is the folder `src/episodes/guides/<slug>/`, which the
-// Episode registry lists as `GUIDE_SLUGS`. The generated map is typed against that list, so a record without a
-// composition, or a composition without a record, fails `tsc`; the store refuses both again at load (design-ADR 0019,
-// #450). The file is checked in, and a fast test fails when it is stale. The disk side lives in registry.ts.
-
+// decision: docs/adr/0019-resources-overview.md
 import type { RegistryFile } from './episode-registry.pure.ts';
 
-/** Where the Guide registry lives. */
 export const GUIDE_REGISTRY_PATH = 'src/content-store/guide-registry.generated.ts';
 
 const HEADER = [
@@ -14,16 +8,13 @@ const HEADER = [
   '// `src/content-store/guides/<slug>.ts` is a Guide record, named after its slug.',
 ].join('\n');
 
-/** A slug as a record's `slug` field allows: lowercase words joined by hyphens. */
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The identifier a slug is imported under: `setup-ai-agent-and-starter-folder` -> `setupAiAgentAndStarterFolder`. */
 function identifierOf(slug: string): string {
   const camel = slug.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
   return /^[0-9]/.test(camel) ? `_${camel}` : camel;
 }
 
-/** The Guide slugs the files name, in code-point order, so the registry is the same on every machine. */
 function slugsOf(files: readonly string[]): string[] {
   const records = files.filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'));
   const misnamed = records.filter((file) => !SLUG.test(file.slice(0, -'.ts'.length)));
@@ -32,7 +23,6 @@ function slugsOf(files: readonly string[]): string[] {
   return records.map((file) => file.slice(0, -'.ts'.length)).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
-/** The Guide registry for the given entries of `src/content-store/guides/`: an empty map while no Guide exists. */
 export function guideRegistryFile(files: readonly string[]): RegistryFile {
   const slugs = slugsOf(files);
   const imports = slugs.map((slug) => `import { guide as ${identifierOf(slug)} } from './guides/${slug}';`);

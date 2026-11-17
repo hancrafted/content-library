@@ -8,7 +8,6 @@ function press(overrides: Partial<SlideKeyEvent>): SlideKeyEvent {
   return { key: 'ArrowRight', altKey: false, ctrlKey: false, metaKey: false, shiftKey: false, ...overrides };
 }
 
-/** A real parsed element for `html`'s `#focus`, shaped as `inExcludedRegion` reads it. */
 function focused(html: string) {
   const $ = cheerio.load(`<body>${html}</body>`);
   const element = $('#focus');

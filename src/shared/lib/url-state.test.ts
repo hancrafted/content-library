@@ -3,15 +3,14 @@ import { createSurfaceClock } from './surface-clock';
 import { driveSurfaceClock } from './surface-clock-driver';
 import {
   createUrlState,
-  NAVIGATION_TIMEOUT_MS,
-  WRITE_INTERVAL_MS,
+  NAVIGATION_TIMEOUT_MILLISECONDS,
+  WRITE_INTERVAL_MILLISECONDS,
   type SlideNavigation,
   type UrlLink,
   type UrlWindow,
 } from './url-state';
 import { createUrlNavigationBrowser } from './url-state-browser';
 
-/** Only the service's ports: a URL, recorded history writes, and events. */
 function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];
@@ -380,7 +379,7 @@ describe('success cases', () => {
       // ARRANGE
       const { state } = setup();
       state.navigateTo('outro');
-      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS);
       // ACT
       state.reportReading('outro--end');
       // ASSERT
@@ -413,7 +412,7 @@ describe('success cases', () => {
       // ACT
       for (const id of ['a', 'b', 'c', 'd']) state.reportReading(id);
       const early = [...writes];
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       // ASSERT
       expect([seen, early, writes]).toEqual([['a', 'b', 'c', 'd'], ['#a'], ['#a', '#d']]);
     });
@@ -438,7 +437,7 @@ describe('success cases', () => {
       win.location.hash = '#earlier';
       // ACT
       fire('popstate');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS * 2);
       // ASSERT
       expect([writes, win.location.hash]).toEqual([['#a'], '#earlier']);
     });
@@ -517,7 +516,7 @@ describe('success cases', () => {
       state.reportReading('b');
       // ACT
       state.dispose();
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS * 2);
       // ASSERT
       expect(writes).toEqual(['#a']);
     });
@@ -594,7 +593,7 @@ describe('failure cases', () => {
       state.navigateTo('outro');
       fire(event);
       state.reportReading(expectedReading);
-      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS);
       // ASSERT
       expect(state.getNavigation()).toEqual(expected);
       expect(state.getSlide()).toBe(expectedReading);
@@ -611,7 +610,7 @@ describe('failure cases', () => {
     state.navigateTo('outro');
     fire('scrollend');
     const during = state.getNavigation();
-    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS);
     state.reportReading(expectedReading);
     // ASSERT
     expect(during?.status).toBe(expectedInFlightStatus);
@@ -620,7 +619,7 @@ describe('failure cases', () => {
   });
 
   describe('reportReading', () => {
-    it('keeps subscribers correct when the browser refuses the write', () => {
+    it('keeps subscribers correct while the URL lags when WebKit throws SecurityError past its history-write limit', () => {
       // ARRANGE
       const { state, win, seen } = setup();
       win.failWrites = true;
@@ -631,17 +630,31 @@ describe('failure cases', () => {
     });
   });
 
+  describe('a history write that fails for another reason than the WebKit limit', () => {
+    it('is not swallowed', () => {
+      // ARRANGE
+      const { state, win } = setup();
+      win.history.replaceState = () => {
+        throw new TypeError('not a URL');
+      };
+      // ACT
+      const reading = () => state.reportReading('a');
+      // ASSERT
+      expect(reading).toThrow(TypeError);
+    });
+  });
+
   describe('a page that is no longer on screen', () => {
     it('neither adopts the hash nor writes when Back lands on another path', () => {
       // ARRANGE
       const { state, win, seen, writes, fire } = setup('#a');
       state.reportReading('b');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       win.location.pathname = '/episodes/other';
       win.location.hash = '#foreign';
       // ACT
       fire('popstate');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS * 2);
       // ASSERT
       expect([state.getSlide(), seen, writes, win.location.hash]).toEqual(['b', ['b'], ['#b'], '#foreign']);
     });
@@ -654,7 +667,7 @@ describe('failure cases', () => {
       win.location.pathname = '/episodes/other';
       // ACT
       fire('popstate');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS * 2);
       // ASSERT
       expect(writes).toEqual(['#a']);
     });
@@ -666,7 +679,7 @@ describe('failure cases', () => {
       state.reportReading('b');
       win.location.pathname = '/episodes/other';
       // ACT
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS * 2);
       // ASSERT
       expect(writes).toEqual(['#a']);
     });
@@ -720,7 +733,7 @@ describe('edge cases', () => {
     });
     // ACT
     state.navigateTo('outro');
-    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
     // ASSERT
     expect(writes).toEqual(expectedWrites);
     expect(scrolls).toEqual(expectedScrolls);
@@ -807,7 +820,7 @@ describe('edge cases', () => {
     fire('hashchange');
     win.location.hash = `#${expectedSlide}`;
     fire('hashchange');
-    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS);
     // ASSERT
     expect(initial).toBe(null);
     expect(seen).toEqual(expected);
@@ -831,7 +844,7 @@ describe('edge cases', () => {
       fire(event);
       const immediateSlide = state.getSlide();
       state.reportReading('intermediate');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       // ASSERT
       expect(immediateSlide).toBe(expected.target);
       expect(state.getSlide()).toBe(expected.target);
@@ -842,7 +855,7 @@ describe('edge cases', () => {
     },
   );
 
-  it.each([0, WRITE_INTERVAL_MS])(
+  it.each([0, WRITE_INTERVAL_MILLISECONDS])(
     'preserves newer intent through paired traversal events after %s ms since the last write',
     (elapsed) => {
       // ARRANGE
@@ -866,7 +879,7 @@ describe('edge cases', () => {
       fire('hashchange', pairedHash);
       const afterPair = state.getNavigation();
       state.reportReading('intermediate');
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       // ASSERT
       expect(afterPair).toEqual(expected);
       expect(state.getNavigation()).toEqual(expected);
@@ -904,7 +917,7 @@ describe('edge cases', () => {
     fire('hashchange', pairedHash);
     const afterPair = state.getNavigation();
     const pendingHref = win.location.href;
-    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
     // ASSERT
     expect(afterPair).toEqual(expected);
     expect(pendingHref).toBe(href);
@@ -934,7 +947,7 @@ describe('edge cases', () => {
     fire('popstate');
     win.location.hash = `#${expectedSlide}`;
     fire('hashchange', manual);
-    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
     // ASSERT
     expect(state.getNavigation()).toEqual(expected);
     expect(state.getSlide()).toBe(expectedSlide);
@@ -959,7 +972,7 @@ describe('edge cases', () => {
     win.location.hash = `#${expectedSlide}`;
     // ACT
     fire('popstate');
-    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
     win.location.hash = `#${expectedSlide}`;
     fire('hashchange', manual);
     // ASSERT
@@ -1035,7 +1048,7 @@ describe('edge cases', () => {
       // ARRANGE
       const { state } = setup();
       state.navigateTo('outro');
-      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS - 1);
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS - 1);
       // ACT
       state.reportReading('outro--end');
       // ASSERT
@@ -1046,9 +1059,9 @@ describe('edge cases', () => {
       // ARRANGE
       const { state } = setup();
       state.navigateTo('a');
-      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS - 1);
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS - 1);
       state.navigateTo('b');
-      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS - 1);
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MILLISECONDS - 1);
       // ACT
       state.reportReading('c');
       // ASSERT
@@ -1060,15 +1073,17 @@ describe('edge cases', () => {
     it('never writes more than once per interval over a long fling', () => {
       // ARRANGE
       const { state, writes } = setup();
-      const flingMs = 10_000;
-      // ACT: a new Slide every 10 ms for 10 s
-      for (let tick = 0; tick < 1000; tick++) {
+      const slideEveryMilliseconds = 10;
+      const ticks = 1000;
+      const flingMilliseconds = ticks * slideEveryMilliseconds;
+      // ACT
+      for (let tick = 0; tick < ticks; tick++) {
         state.reportReading(`slide-${tick}`);
-        vi.advanceTimersByTime(10);
+        vi.advanceTimersByTime(slideEveryMilliseconds);
       }
-      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       // ASSERT
-      expect(writes.length).toBeLessThanOrEqual(Math.ceil(flingMs / WRITE_INTERVAL_MS) + 1);
+      expect(writes.length).toBeLessThanOrEqual(Math.ceil(flingMilliseconds / WRITE_INTERVAL_MILLISECONDS) + 1);
       expect(writes.at(-1)).toBe('#slide-999');
     });
   });

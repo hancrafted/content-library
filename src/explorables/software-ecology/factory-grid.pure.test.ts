@@ -11,7 +11,7 @@ const factoryOf = (id: string) => {
 
 describe('success cases', () => {
   it('lays the tire swing out as ten cards in two rows of five, in the cartoon order, the Customer first', () => {
-    // ARRANGE (the cartoon: Customer, Product management, Analysis, Engineering, Sales / Documentation, Operations, Billing, Support, what the customer needed)
+    // ARRANGE
     const m = factoryOf('tire');
     const size = { cols: 5, rows: 2 };
     const cells = {

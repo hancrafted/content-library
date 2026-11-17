@@ -36,7 +36,6 @@ const FILES: Readonly<Record<Extra, string>> = {
 };
 const STEP_KEYS = ['0', '1', '2', '3', '4', '5'] as const;
 
-/** A numbered heading over one of the two previews on the right. */
 function PreviewHeading({ n, children }: { readonly n: number; readonly children: ReactNode }) {
   return (
     <p className="flex items-center gap-2 text-caption font-semibold text-muted-foreground uppercase">
@@ -46,7 +45,6 @@ function PreviewHeading({ n, children }: { readonly n: number; readonly children
   );
 }
 
-/** One part of SKILL.md in the Chat app view: its AI term first, the card's word beneath. */
 function PartLabel(props: {
   readonly n: number;
   readonly term: string;
@@ -71,7 +69,6 @@ function PartLabel(props: {
   );
 }
 
-/** The Coding agent view of SKILL.md: the file itself, its frontmatter and its body each tagged. */
 function SkillMdPanel(props: {
   readonly oneFile: string;
   readonly frontmatter: string;
@@ -103,13 +100,6 @@ function SkillMdPanel(props: {
   );
 }
 
-/**
- * "A skill is a folder of instructions" (Spec Option 3a): Anthropic's definition as the caption, then two visuals.
- * Left, `SKILL.md` alone as one continuous clipboard on the control-room wall: the procedure card in its clear sleeve,
- * head, body and the pocket of extras. Right, the two parts of the file named by their AI terms (or the file itself
- * in the Coding agent view), then the folder of optional supporting files beside it. Overrules `grid-1x1` for
- * `grid-1x2`; `motion: none`, since Round 5's two visuals keep no leaders to draw.
- */
 export const aSkillIsAWrittenProcedure = slide({
   slug: 'a-skill-is-a-written-procedure',
   messages: { en, de },

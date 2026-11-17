@@ -1,7 +1,4 @@
-/*
- * The shipped use cases of the software ecology Explorable, imported statically (FE-012-explorables §1): each one's
- * master data, its words in both locales, and the role catalog they share.
- */
+// decision: FE-012 §1
 import gateWordsDe from './gate.words.de.yml';
 import gateWords from './gate.words.yml';
 import gate from './gate.yml';
@@ -27,7 +24,6 @@ const SOURCES: Readonly<Record<BuiltinId, UseCaseTexts>> = {
 
 export const CATALOG: Readonly<Record<string, RoleDef>> = readCatalog(roles);
 
-/** Everything one shipped use case needs: master data, the roles it uses, and its words per locale. */
 export const builtinBundle = (id: string): Bundle => {
   const src = SOURCES[id as BuiltinId];
   if (!src) throw new Error(`no built-in use case ${id}`);

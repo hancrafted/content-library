@@ -21,7 +21,6 @@ export function episodeContextOf(
   };
 }
 
-/** The Event's page-bearing Episodes, in Playlist order, projected for domain-free page chrome. */
 export function eventNavigationOf(event: ServedEvent, locale: Locale): TocCollection {
   return {
     title: eventCopy(event.slug, locale).title,

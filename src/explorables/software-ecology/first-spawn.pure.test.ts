@@ -1,7 +1,6 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { firstSpawn } from './first-spawn.pure.ts';
-
-/* The first spawn (design-ADR 0024 §3, §5): the one that carries the request on and that `escalate` rides on. */
 
 describe('success cases', () => {
   it('picks the spawn the file lists first, whatever comes after it', () => {

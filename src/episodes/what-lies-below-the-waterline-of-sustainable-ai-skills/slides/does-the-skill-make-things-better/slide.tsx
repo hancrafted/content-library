@@ -25,10 +25,6 @@ const BEST_PRACTICES = {
 };
 const GOOGLE = { slug: 'google-agent-skills-whitepaper', url: 'https://www.kaggle.com/whitepaper-agent-skills' };
 
-/**
- * The checks of `collect-sediment-sample`, and which each run passed: an illustration of the viewer's own test, not a
- * measured result. The skill has no step for core length, so the with-skill run misses that one alone.
- */
 const CHECKS = [
   { slug: 'hold', without: false, with: true },
   { slug: 'camera', without: false, with: true },
@@ -37,7 +33,6 @@ const CHECKS = [
 ] as const;
 const RUNS = ['without', 'with'] as const;
 const SHOULD = ['siteSample', 'seabedSample', 'newSite'] as const;
-/** The requests that should not trigger the skill; the last sounds like it and needs something else. */
 const SHOULD_NOT = [
   { key: 'filmSeabed', nearMiss: false },
   { key: 'logDive', nearMiss: false },
@@ -45,11 +40,6 @@ const SHOULD_NOT = [
 ] as const;
 const SKILL = 'collect-sediment-sample';
 
-/**
- * "Does the skill make things better?" (Spec Option 22a): two test dives of the same task side by side, without the
- * skill and with it, each scored, then the description test and the SkillsBench callout. Keeps `grid-1x2` for the two
- * runs with a row beneath; keeps `motion: local`, the two scores filling in, left then right, once on entry.
- */
 export const doesTheSkillMakeThingsBetter = slide({
   slug: 'does-the-skill-make-things-better',
   messages: { en, de },

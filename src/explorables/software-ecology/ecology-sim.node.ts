@@ -1,9 +1,5 @@
-/*
- * The node entry of the software ecology Explorable (FE-007 §2.8): the one module of it that skills and tools may
- * import. It runs under plain node, no DOM and no rendering: it reads a shipped use case through the reader it is handed and
- * judges a scenario's beats across seeds with the judge the tests use (design-ADR 0024 §12, §20). `npm run
- * ecology:sim` (tools/ecology/sim.ts) is its shell.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: FE-007 §2.8
 import {
   judgeScenario,
   SEEDS,
@@ -17,7 +13,6 @@ import { bundleOf, readCatalog, readConfig } from './use-case-file.ts';
 import { mapTexts, textFileNames, type UseCaseTexts } from './use-case-texts.pure.ts';
 import { presetName, scenarioWords, type WordsIn } from './use-case-words.pure.ts';
 
-/** What to run: a use case, one of its scenarios, and one seed or a number of seeds in a row from the shipped one. */
 export interface SimOptions {
   readonly useCase: string;
   readonly scenario: string;
@@ -26,7 +21,6 @@ export interface SimOptions {
   readonly json?: boolean;
 }
 
-/** A judged run: the scenario's name and each beat's claim in English, and the verdict. */
 export interface SimRun {
   readonly useCase: string;
   readonly scenario: string;
@@ -37,7 +31,6 @@ export interface SimRun {
 
 const USAGE = 'usage: npm run ecology:sim -- <use-case> <scenario> [--seed n | --seeds n] [--json]';
 
-/** Reads a file of this Explorable's folder by name (`tire.yml`); the shell hands it in, reading from disk. */
 export type ReadFile = (name: string) => string;
 
 const fileOf = (read: ReadFile, name: string): string => {
@@ -48,13 +41,11 @@ const fileOf = (read: ReadFile, name: string): string => {
   }
 };
 
-/** A shipped use case's texts, its files read by `read`. */
 export const readTexts = (id: string, read: ReadFile): UseCaseTexts => {
   if (!/^[\w-]+$/.test(id)) throw new Error(`no use case ${id}`);
   return mapTexts((name) => fileOf(read, name), textFileNames(id));
 };
 
-/** A shipped use case, its files read by `read`. */
 export const loadUseCase = (id: string, read: ReadFile): Bundle =>
   bundleOf(readTexts(id, read), readCatalog(fileOf(read, 'roles.yml')));
 
@@ -63,10 +54,8 @@ const count = (flag: string, v: string | undefined): number => {
   return Number(v);
 };
 
-/** The seeds a flag picks: one seed, or a number of them in a row. */
 type SeedPick = { seed: number } | { seeds: number };
 
-/** One flag of the rest of the arguments: what it sets, and how many arguments it took. */
 const flagOf = (a: string | undefined, v: string | undefined): { json?: true; pick?: SeedPick; took: number } => {
   if (a === '--json') return { json: true, took: 1 };
   if (a === '--seed') return { pick: { seed: count(a, v) }, took: 2 };
@@ -76,7 +65,6 @@ const flagOf = (a: string | undefined, v: string | undefined): { json?: true; pi
 
 const usable = (x: string | undefined): x is string => !!x && !x.startsWith('-');
 
-/** The shell arguments as options; throws the usage on anything else. */
 export const parseSimArgs = (argv: readonly string[]): SimOptions => {
   const [useCase, scenario, ...rest] = argv;
   if (!usable(useCase) || !usable(scenario)) throw new Error(USAGE);
@@ -92,7 +80,6 @@ export const parseSimArgs = (argv: readonly string[]): SimOptions => {
 const seedsOf = (o: SimOptions): readonly number[] =>
   o.seed !== undefined ? [o.seed] : o.seeds !== undefined ? seedsFrom(o.seeds) : SEEDS;
 
-/** Judges the scenario on its seeds, the use case's files read by `read`; names and claims go through the page's words module. */
 export const simulate = (o: SimOptions, read: ReadFile): SimRun => {
   const B = loadUseCase(o.useCase, read),
     words: WordsIn = {
@@ -130,7 +117,6 @@ const beatLines = (b: BeatVerdict, claim: string | null): string[] => [
   `  ${b.ok ? 'PASS' : 'FAIL'} ${b.passed} of ${b.of} seeds`,
 ];
 
-/** The run as text: a header, then each beat's claim, checks, per-seed readings and verdict. */
 export const formatVerdict = (run: SimRun): string => {
   const v = run.verdict;
   return [

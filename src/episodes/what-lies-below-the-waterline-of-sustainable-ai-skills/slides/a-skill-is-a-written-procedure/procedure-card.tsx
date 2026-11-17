@@ -1,7 +1,6 @@
 import { InView } from '@/episodes/components/slide-shared/agent-view/in-view';
 import { CardArt, type CardPart } from './card-art';
 
-/** The three extras the sleeve's pocket carries, each with the folder it sits in on disk. */
 export type Extra = 'guide' | 'label' | 'preset';
 export const EXTRAS: readonly Extra[] = ['guide', 'label', 'preset'];
 export const EXTRA_FOLDER: Readonly<Record<Extra, string>> = {
@@ -20,10 +19,8 @@ export interface ProcedureCardProps {
   readonly extras: Readonly<Record<Extra, string>>;
 }
 
-/** The drawing each extra carries in the pocket: the species guide with its fish, the label tag on its string, the arm preset with its lights. */
 const EXTRA_ART: Readonly<Record<Extra, CardPart>> = { guide: 'guide', label: 'label', preset: 'preset' };
 
-/** The sleeve's pocket: the three extras, each with its folder in the Coding agent view. */
 function Pocket({ extras }: Pick<ProcedureCardProps, 'extras'>) {
   return (
     <ul
@@ -44,11 +41,6 @@ function Pocket({ extras }: Pick<ProcedureCardProps, 'extras'>) {
   );
 }
 
-/**
- * The procedure card in its clear sleeve, clipped to the clipboard: the head with its title and use-when line, the body
- * with its numbered steps, and the pocket with the three extras. One continuous drawing; pointing at a part dims the
- * other two. In the Coding agent view each extra carries the folder it sits in.
- */
 export function ProcedureCard({ label, title, useWhenLead, useWhen, backLabel, steps, extras }: ProcedureCardProps) {
   return (
     <div className="@container relative mx-auto w-full max-w-md pt-5">

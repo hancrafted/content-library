@@ -11,21 +11,18 @@ export interface PriceTrait {
   readonly slug: string;
   readonly initial: string;
   readonly name: string;
-  /** The German word beside the English name, as the pay-the-price slide sets it; empty where there is none. */
   readonly gloss: string;
 }
 
 interface ManagerStackProps {
   readonly task: { readonly label: string; readonly text: string };
   readonly freelancers: { readonly label: string; readonly cards: readonly Freelancer[] };
-  /** The five traits: their letters sit on every card, their names once in the legend. */
   readonly price: { readonly label: string; readonly traits: readonly PriceTrait[] };
   readonly rule: string;
   readonly goal: { readonly label: string; readonly text: string };
   readonly manager: { readonly label: string; readonly question: string };
 }
 
-/** The five PRICE letters of one freelancer, named for assistive technology. */
 function PriceChips({ price }: Pick<ManagerStackProps, 'price'>) {
   return (
     <ul aria-label={price.label} className="flex gap-1">
@@ -44,7 +41,6 @@ function PriceChips({ price }: Pick<ManagerStackProps, 'price'>) {
   );
 }
 
-/** One line of the stack: a small caps label, then its text. */
 function LabelledLine({ label, children, className }: { label: string; children: string; className?: string }) {
   return (
     <p className={cn('flex flex-wrap items-baseline gap-x-3 gap-y-1 text-body', className)}>
@@ -54,7 +50,6 @@ function LabelledLine({ label, children, className }: { label: string; children:
   );
 }
 
-/** One freelancer: the name pill and the five PRICE letters; nothing is done yet, so no badge. */
 function FreelancerCard(props: { freelancer: Freelancer; index: number; price: ManagerStackProps['price'] }) {
   const { freelancer, index, price } = props;
   return (
@@ -68,7 +63,6 @@ function FreelancerCard(props: { freelancer: Freelancer; index: number; price: M
   );
 }
 
-/** The four freelancer cards and the PRICE legend beneath them, on the muted board. */
 function Freelancers({ freelancers, price }: Pick<ManagerStackProps, 'freelancers' | 'price'>) {
   return (
     <section aria-label={freelancers.label} className="flex flex-col gap-4 rounded-2xl bg-muted p-5 shadow-inner">
@@ -89,7 +83,6 @@ function Freelancers({ freelancers, price }: Pick<ManagerStackProps, 'freelancer
   );
 }
 
-/** The one dark band: the role named, then the question that waits for the room. */
 function ManagerBand({ manager }: Pick<ManagerStackProps, 'manager'>) {
   return (
     <section
@@ -104,11 +97,6 @@ function ManagerBand({ manager }: Pick<ManagerStackProps, 'manager'>) {
   );
 }
 
-/**
- * The manager's stack (Spec Option A): one tall stack like "You're the new hire". The task, four freelancers each
- * carrying the five PRICE letters with their names once beneath, the rule that they talk to no one, the goal, then
- * the one dark band where the role is named and the closing question waits for the room.
- */
 export function ManagerStack({ task, freelancers, price, rule, goal, manager }: ManagerStackProps) {
   return (
     <div data-manager-stack className="@container flex flex-col gap-5">

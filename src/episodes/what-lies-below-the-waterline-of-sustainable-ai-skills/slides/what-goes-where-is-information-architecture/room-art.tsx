@@ -1,24 +1,13 @@
 import styles from './where.module.css';
 
-/*
- * The control room's wall and floor, lifted from Spec Option 14a (feedback 3, decision 46): the faceted wall lit from
- * the upper left, the skirting, and the faceted floor. The Option draws them in a 1200 by 520 box; here they fill the
- * part of `ZoneScene`'s 1200 by 800 space a 2:1 box shows, from y = 200 down, so the floor meets the crew's feet at
- * `FLOOR_Y`. Tones live in the Slide token file.
- */
-
-/** The Option's box height, and where its floor starts. */
 const SPEC_HEIGHT = 520;
 const SPEC_FLOOR = 452;
-/** The top of the part of the Scene a 2:1 box shows. */
 export const VIEW_TOP = 200;
 const SCALE_Y = (800 - VIEW_TOP) / SPEC_HEIGHT;
-/** Where the floor starts in the Scene's units: the crew stand and the console rests here. */
 export const FLOOR_Y = VIEW_TOP + SPEC_FLOOR * SCALE_Y;
 
 type Tone = 'room' | 'room-lit' | 'room-shade' | 'floor' | 'floor-lit';
 
-/** The Option's facets, merged per tone and drawn in this order: wall, its lit and shaded planes, the skirting, the floor. */
 const FACETS: readonly (readonly [Tone, string])[] = [
   [
     'room',
@@ -42,7 +31,6 @@ const FACETS: readonly (readonly [Tone, string])[] = [
   ],
 ];
 
-/** The room behind the crew, as the first child of the control room. */
 export function RoomArt() {
   return (
     <g data-room-art className={styles.facets}>

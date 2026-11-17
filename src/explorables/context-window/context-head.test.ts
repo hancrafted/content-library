@@ -6,8 +6,6 @@ import { Context } from './context';
 import { contextData, type ContextPresetId } from './context-data';
 import { createState, reduce } from './context-state.pure';
 
-/* The context-window head: `Context window (64%)   128K of [200K | 1M] · eye · side column · </>`. */
-
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
 const head = ($: ReturnType<typeof render>) => $('section[aria-label="Context window"] > div').first();

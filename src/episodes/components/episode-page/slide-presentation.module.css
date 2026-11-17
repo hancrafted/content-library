@@ -1,4 +1,3 @@
-/* The last Slide's surface reaches down through the Content area's end space (`--slide-surface-reach`), so no band. */
 .surface {
   position: absolute;
   inset: 0 0 calc(-1 * var(--slide-surface-reach, 0px));
@@ -37,7 +36,6 @@
   transform: scaleY(0);
 }
 
-/* The `bubbles` water rises by translation, so its crest keeps its shape: it waits wholly below the host. */
 .edge [data-ink-scale][data-wave-front] {
   transform: translateY(100%);
 }
@@ -68,8 +66,6 @@
   --slide-space-after: 0px;
 }
 
-/* `--slide-anchor-offset`: where the Slide lands under a link to it, the wrapper's own `scroll-mt-24` by default; a
-   Slide whose surface fills the floating header's band lands at `0px`, its words cleared by its reading space. */
 .configured {
   --slide-space-total: calc(max(0px, var(--slide-space-before)) + max(0px, var(--slide-space-after)));
 
@@ -132,7 +128,6 @@
   min-height: 100svh;
 }
 
-/* A Title that fills the floating header's band (inverse, or with its own surface) starts its words below the header. */
 .configured[data-slot='title-slide'][data-header-band] > .primary {
   padding-top: var(--slide-title-top-space, calc(var(--header-block) + 1rem));
 }

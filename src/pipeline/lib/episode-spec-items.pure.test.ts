@@ -2,12 +2,6 @@ import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { itemMarkup, optionsMarkup, type Item } from './episode-spec-items.pure.ts';
 
-/*
- * The Spec's items and Options at their seam: a template and the content in, the cloned markup out. The items fill
- * the item and Option `<template>`s of the Spec template, and a slot the template names that the assembler does not
- * know throws.
- */
-
 const ITEM_TEMPLATE = `<article data-spec="slide" data-fidelity data-depth="simple">
   <h3 data-slot="title"></h3>
   <span data-slot="number"></span>

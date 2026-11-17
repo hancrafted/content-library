@@ -10,22 +10,17 @@ import { atSpec, SHALLOWS, SHALLOWS_ASPECT, ShallowsArt } from './shallows-art';
 import { BUBBLES, CARD, NO_CARD, SHALLOWS_FACETS, SILT } from './shallows-facets';
 import styles from './slide.module.css';
 
-/** The ship's size, and its A-frame over the Spec's cable, where the robot of Option 22a hangs. */
 const SHIP_SCALE = 1.5;
 const TIP = shipAnchors().aFrameTip;
 const CABLE_X = atSpec(214, 0).x;
 const SHIP_X = CABLE_X - TIP.x * SHIP_SCALE;
 const CABLE_TOP = SHALLOWS.waterline + TIP.y * SHIP_SCALE;
 const ROBOT_SCALE = 2;
-/** The robot's drawn height at its scale: from its bail to the claw. */
 const ROBOT_HEIGHT = 116;
 const BED = SHALLOWS.bed;
-/** Two metres above the seabed, drawn: where the with-skill run holds the robot, the Spec's claw at 236 over 280. */
 const HOVER = BED - atSpec(0, 236).y;
-/** The gauge stands beside the hovering robot, where the Spec draws it. */
 const GAUGE_X = atSpec(288, 0).x;
 
-/** Two metres above the seabed, measured: the line beside the hovering robot. */
 function Gauge({ label, top }: { readonly label: string; readonly top: number }) {
   return (
     <g aria-hidden className={styles.gauge}>
@@ -41,16 +36,13 @@ function Gauge({ label, top }: { readonly label: string; readonly top: number })
 
 export interface TestDiveProps {
   readonly run: 'without' | 'with';
-  /** Words for the drawing. */
   readonly label: string;
   readonly gauge: string;
-  /** The pills over the drawing: the card or its absence, and what the run stirred up. */
   readonly pills: { readonly card: { readonly chat: string; readonly coding: string }; readonly silt?: string };
 }
 
 const PILL = 'absolute rounded-full bg-card px-2.5 py-0.5 text-caption font-semibold text-card-foreground shadow-md';
 
-/** The pills over the drawing: the card or its absence at the upper left, and the stirred-up silt. */
 function DivePills({ pills }: Pick<TestDiveProps, 'pills'>) {
   return (
     <>
@@ -65,12 +57,7 @@ function DivePills({ pills }: Pick<TestDiveProps, 'pills'>) {
   );
 }
 
-/**
- * One test dive in shallow water (Option 22a): the ship with the robot on its cable over the same site, in the Spec's
- * faceted sky, water and seabed (`shallows-art.tsx`). Without the skill the robot settles into the seabed and stirs up
- * the sediment, the card's place empty; with it the robot holds 2 m above the site, bubbles rising, and the written
- * procedure card sits at the upper left. The ship and robot are the shared cast (design-ADR 0025).
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
   const withSkill = run === 'with';
   const robotTop = withSkill ? BED - HOVER - ROBOT_HEIGHT : BED - ROBOT_HEIGHT + 16;
@@ -99,7 +86,6 @@ export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
   );
 }
 
-/** The two runs' card frame: label and sub-line, then the dive, then the score. */
 export function runClass(focal: boolean) {
   return cn(
     'card-hover card-hover--raise flex flex-col gap-3 rounded-xl p-4 shadow-md',

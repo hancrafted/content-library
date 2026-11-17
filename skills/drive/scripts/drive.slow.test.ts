@@ -4,8 +4,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+function dropGitVariablesACommitHookExports(): void {
+  for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+}
+dropGitVariablesACommitHookExports();
 
 const CLI = path.join(import.meta.dirname, 'drive.ts');
 const LOCK = path.join(import.meta.dirname, 'lock.fixture.ts');
@@ -16,7 +18,6 @@ const git = (cwd: string, ...args: string[]): string =>
     encoding: 'utf8',
   }).trim();
 
-/** Runs `drive worktree <args>` in `cwd`. */
 const drive = (cwd: string, ...args: string[]) =>
   spawnSync(process.execPath, [CLI, 'worktree', ...args], {
     cwd,
@@ -46,7 +47,6 @@ const CONFIG = (lock: string) =>
     '  afterRemove: ["echo after > $DRIVE_ROOT/after.txt"]',
   ].join('\n');
 
-/** A repo `main` with a bare `origin`, a project config, and a branch `feat/x` checked out in its own worktree. */
 function fixture(lock = LOCK) {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-cli-')));
   const origin = path.join(root, 'origin.git');
@@ -65,7 +65,6 @@ function fixture(lock = LOCK) {
   return { root, main, trees: path.join(main, '.trees') };
 }
 
-/** Makes `branch` through the CLI and commits one file on it. */
 function task(main: string, branch: string, base: string | null): string {
   const file = `${branch.replaceAll('/', '-')}.txt`;
   const result = drive(main, 'new', branch, ...(base === null ? [] : ['--base', base]));
@@ -120,11 +119,13 @@ describe('drive worktree', () => {
     });
 
     it('done removes the folder when Finder drops a .DS_Store into it during teardown', () => {
-      // ARRANGE: a git that, as `worktree remove` runs, leaves the folder behind holding only a .DS_Store
+      // ARRANGE
       const { main, root } = fixture();
       drive(main, 'new', 'feat/x');
       const tree = task(main, 'feat/x--1-task', 'feat/x');
-      const realGit = execFileSync('which', ['git'], { encoding: 'utf8' }).trim();
+      const realGit = execFileSync('which', ['git'], {
+        encoding: 'utf8',
+      }).trim();
       const shim = path.join(root, 'bin', 'git');
       mkdirSync(path.dirname(shim), { recursive: true });
       writeFileSync(
@@ -144,7 +145,10 @@ describe('drive worktree', () => {
       const result = spawnSync(process.execPath, [CLI, 'worktree', 'done', 'feat/x--1-task', '--base', 'feat/x'], {
         cwd: main,
         encoding: 'utf8',
-        env: { ...process.env, PATH: `${path.dirname(shim)}${path.delimiter}${process.env.PATH}` },
+        env: {
+          ...process.env,
+          PATH: `${path.dirname(shim)}${path.delimiter}${process.env.PATH}`,
+        },
       });
       // ASSERT
       expect(result.status, result.stderr).toBe(0);

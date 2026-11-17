@@ -1,64 +1,43 @@
-/**
- * Pure logic behind the table of contents: which
- * sections are open, how much reading time is left. No DOM, no React.
- */
-
-/** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
 export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
 
 export type TocScope = 'page' | 'collection';
 
-/** Initial scope only; a visitor's override is transient, never a stored preference. */
 export const TOC_DEFAULT_SCOPE: TocScope = 'page';
 
-/** One link; `id` equals the target's data-attribute value and URL fragment. */
 export interface TocItem {
   id: string;
   title: string;
-  /** Reading time of the target slide, in minutes. */
-  /** Total reading time this entry stands for: its own Slide plus every Slide in `unlisted`. */
   minutes: number;
-  /** Untitled Slides folded into this entry, in page order: listed nowhere, but this entry stays current while they are. */
   unlisted?: readonly UnlistedSlide[];
 }
 
-/** An untitled Slide: its id and its own reading time. */
 export interface UnlistedSlide {
   id: string;
   minutes: number;
 }
 
-/** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
 }
 
-/** A page's outline, ready for navigation without loading its content into the browser. */
 export interface TocPage {
   readonly route: string;
   readonly title: string;
   readonly sections: readonly TocSection[];
 }
 
-/** Related pages in navigation order; page chrome knows only their titles, routes and outlines. */
 export interface TocCollection {
   readonly title: string;
   readonly route: string;
   readonly pages: readonly TocPage[];
 }
 
-/** Context of the page displaying the outline, supplied by its caller rather than inferred from routes. */
 export interface TocPageContext {
   readonly title: string;
   readonly route: string;
   readonly back?: { readonly label: string; readonly route: string };
 }
 
-/**
- * Every Slide in page order with its own minutes (an entry's total minus what
- * it owns for its unlisted Slides), plus which entry each unlisted Slide
- * belongs to. One honest sequence for reading time, one lookup for highlights.
- */
 export function readingOrder(sections: readonly TocSection[]): {
   ids: string[];
   minutes: number[];
@@ -78,11 +57,6 @@ export function readingOrder(sections: readonly TocSection[]): {
   return order;
 }
 
-/**
- * The entry to highlight for the active Slide. None on the Title slide (`top`)
- * and while the Slide is unknown (`null`, before the client has read the URL);
- * an untitled Slide has no entry of its own, so its owning entry stays current.
- */
 export function activeEntry(
   owners: Readonly<Record<string, string>>,
   slide: string | null,
@@ -92,20 +66,14 @@ export function activeEntry(
   return owners[slide] ?? slide;
 }
 
-/** The id of the section that is the active entry or holds it. */
 export function ownerOf(sections: readonly TocSection[], active: string | null): string | undefined {
   return sections.find((section) => section.id === active || section.items.some((item) => item.id === active))?.id;
 }
 
-/** `1`, `2`, … — numbering lives in the table of contents only. */
 export function sectionNumber(index: number): string {
   return String(index + 1);
 }
 
-/**
- * The Section the reader is in, numbered, for the narrow-screen pill; `null`
- * while no entry is active. Chevron toggles do not move it.
- */
 export function whereAt(
   sections: readonly TocSection[],
   active: string | null,
@@ -115,10 +83,6 @@ export function whereAt(
   return index < 0 ? null : { number: sectionNumber(index), title: sections[index].title };
 }
 
-/**
- * Open sections, in page order: the one owning the active entry, flipped for
- * every section whose chevron the reader toggled.
- */
 export function openSectionIds(
   sections: readonly TocSection[],
   active: string | null,
@@ -140,14 +104,6 @@ function compareSectionOrder(allSections: readonly TocSection[], ownerId: string
   return null;
 }
 
-/**
- * Progress of the active Slide through a section's items (excluding the section title).
- * Returns `null` if the section does not have multiple slides (items.length <= 1).
- * When active is in a later section, progress is 1 (completed).
- * When active is in an earlier section or top, progress is 0.
- * When active is the section title, progress is 0 ("section title does not count").
- * When active is item k (0-indexed) of N items, progress is (k + 1) / N.
- */
 export function sectionProgress(
   section: TocSection,
   active: string | null,
@@ -168,18 +124,9 @@ export function sectionProgress(
 export interface ReadingTime {
   total: number;
   remaining: number;
-  /** Elapsed share, 0 to 1: time-weighted, or equally weighted by Slide when no reading time exists. */
   progress: number;
 }
 
-/**
- * Reading time over slides' `minutes` in page order, against the Episode's `total` as
- * the page was given it (the landing card quotes the same number). The active
- * slide counts as read up to `fraction` (clamped to 0–1); `activeIndex` -1
- * means nothing is read yet. Time outside the outline (the Title slide) has
- * elapsed once a body Slide is active. Without reading time, each outlined Slide
- * has equal weight; its progress never invents a duration.
- */
 export function readingTime(
   { minutes, total }: { readonly minutes: readonly number[]; readonly total: number },
   activeIndex: number,

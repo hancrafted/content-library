@@ -15,12 +15,6 @@ import type { ClockAt } from './time-controls.client';
 import type { Display } from './use-display.ts';
 import type { FactoryView } from './use-factory.ts';
 
-/*
- * The toolbar wired to the run: the state row, compare mode, speed, the use case and the Settings popover (its Model,
- * Mechanics and Display columns and the file). Every setting goes through the run's controls; the display choices
- * through `Display`.
- */
-
 export interface ControlsProps {
   readonly B: Bundle;
   readonly f: FactoryView;
@@ -33,18 +27,14 @@ export interface ControlsProps {
   readonly display: Display;
   readonly onUseCase: (id: string) => void;
   readonly onPreset: (id: string) => void;
-  /** Reset to default: the active state as its use-case file defines it. */
   readonly onReset: () => void;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
   readonly scenarios: readonly ScenarioChoice[];
   readonly scenarioMarkers?: Readonly<Partial<Record<string, ReactNode>>>;
   readonly tour: { readonly can: boolean; readonly on: boolean; readonly start: () => void };
-  /** While a tour runs, its clock ("Week 8 · Day 1") in place of the day. */
   readonly tourClock?: string;
-  /** The same clock as numbers, for the eval read-outs. */
   readonly tourClockAt?: ClockAt;
-  /** Clear ends a tour first. */
   readonly onClear: () => void;
   readonly compare: CompareWidgetProps;
   readonly exchange: ExchangeButtonsProps;
@@ -80,7 +70,6 @@ const mechanicsOf = (p: ControlsProps): MechanicsMenuProps => ({
   onSettings: p.f.controls.setSettings,
 });
 
-/** The state row's Scenarios menu, Tour and the modified dot. */
 const stateRowOf = (p: ControlsProps) => ({
   scenarios: p.scenarios,
   scenarioMarkers: p.scenarioMarkers,

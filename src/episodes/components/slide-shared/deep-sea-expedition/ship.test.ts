@@ -4,12 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Ship, type ShipProps } from './ship';
 
-/*
- * The research ship: an SVG group a Scene places in its own `<svg>`. It draws no people; the Scene passes them in as
- * bridge and deck figures, painted between the ship's layers. Its rock is opt-in: a Surface Slide asks for it, so a
- * ship placed anywhere else stays still.
- */
-
 const draw = (props: ShipProps) => load(renderToStaticMarkup(createElement('svg', null, createElement(Ship, props))));
 
 const paintOrder = (props: ShipProps) => {

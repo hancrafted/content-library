@@ -8,24 +8,18 @@ import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
-/** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
   if (entry.status !== 'published' || !hasPage(entry.ref)) return undefined;
   const total = summaryOf(entry.ref)[locale].minutes;
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
-/** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string } {
   if (!hasPage(entry.ref)) return {};
   const id = episodeVideo(entry.ref, locale)?.id;
   return id === undefined ? {} : { youtubeId: id };
 }
 
-/**
- * An Episode with a page (published, or upcoming with its id registered) with its title and caption from its summary,
- * by its ref; a page-less upcoming one has no record, and a page-less published one is a bug, so it throws.
- */
 function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
   const { ref } = entry;
   if (hasPage(ref)) {
@@ -36,7 +30,6 @@ function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
   throw new Error(`The published Episode "${ref.id}" has no page to read its title and caption from`);
 }
 
-/** The Episode's Featured slot, 1 first; none when it holds no slot. */
 function featuredRankOf(id: string): { featuredRank?: number } {
   const slot = (featuredIds() as readonly string[]).indexOf(id);
   return slot === -1 ? {} : { featuredRank: slot + 1 };
@@ -47,12 +40,7 @@ export interface EpisodeCardsOptions {
   readonly linkDrafts?: boolean;
 }
 
-/**
- * Every public Episode the read API lists, as a localized card (FE-006 §4: plain
- * data, safe to hand to a client leaf), in overview order: Featured first,
- * then the other published ones newest first, then the upcoming ones. An
- * unlisted Episode is never among them; it lives only under its Event.
- */
+// decision: FE-006 §4
 export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
   const listed = listedEpisodes();
   const shown = (options?.includeDrafts ?? true) ? listed : listed.filter(({ status }) => status === 'published');
@@ -61,11 +49,6 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
   return entries.map((entry) => makeCard(entry));
 }
 
-/**
- * The card of a Playlist entry that opens its Episode at an anchor: the title the anchor opens at (its Section's, or one Slide's), and
- * nothing else of the Episode's (no caption, Tags, date, video or reading time), since it is a step inside one. An
- * anchor the Episode does not have is a bug, so it throws.
- */
 function atSection(
   card: EpisodeCard,
   { entry, anchor }: { entry: LoadedEpisode; anchor: string },
@@ -77,11 +60,6 @@ function atSection(
   return { slug, route, href, status, title, caption: '', leadTag, format, tags: [], featuredRank };
 }
 
-/**
- * The card maker of one locale: each Episode it is handed as a localized card. The Event page hands it each entry its
- * Playlist lists, public or unlisted, through `eventPlaylistCards`, which opens each linked card under the Event; an
- * entry at an anchor gets that Section's card.
- */
 export async function episodeCardMaker(
   locale: Locale,
   options?: EpisodeCardsOptions,

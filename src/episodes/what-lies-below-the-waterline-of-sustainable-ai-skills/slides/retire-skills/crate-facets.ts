@@ -1,14 +1,7 @@
 import type { Facet } from './room-facets';
 
-/*
- * The archive crate and the porthole as the approved Spec drew them (Option 25b, feedback 3, decision 46), in its 1000
- * by 590 space.
- */
-
-/** The crate's back rim, behind the retired cards. */
 export const CRATE_BACK: readonly Facet[] = [['crate-dark', 'M350 414L366 403L616 403L600 414Z']];
 
-/** The retired cards standing in the crate, each its paper and its tab, left to right. */
 export const RETIRED_CARDS: readonly (readonly Facet[])[] = [
   [
     ['retired', 'M358 416L389 416L394 378L363 378Z'],
@@ -56,7 +49,6 @@ export const RETIRED_CARDS: readonly (readonly Facet[])[] = [
   ],
 ];
 
-/** The crate's faceted planks, slats and rims in front of the cards, and the label's paper. */
 export const CRATE_FRONT: readonly Facet[] = [
   ['crate-shade', 'M480 506L438 468L494 453Z'],
   ['crate', 'M600 469L556 414L600 414Z'],
@@ -82,7 +74,6 @@ export const CRATE_FRONT: readonly Facet[] = [
 ];
 export const CRATE_BOX = '350 365 266 147';
 
-/** What the porthole shows: the Midnight water over the Abyss and the seabed, and the pane's glint, in the circle at 610, 92. */
 export const PORT_SEA: readonly Facet[] = [
   ['sea-midnight', 'M644 59L634 77L615 70Z'],
   ['sea-midnight-lit', 'M605 46L624 47L615 70ZM624 47L644 59L615 70Z'],
@@ -139,7 +130,6 @@ export const PORT_SEA: readonly Facet[] = [
   ['pane-glint', 'M582 72L596 58L602 61L586 80Z'],
 ];
 
-/** The porthole's faceted brass rim, lit at the upper left, and its rivets. */
 export const PORT_RIM: readonly Facet[] = [
   [
     'frame-shade',

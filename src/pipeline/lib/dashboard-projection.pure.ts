@@ -17,7 +17,6 @@ export interface DashboardPipeline extends Pipeline {
   status: string;
 }
 
-/** The dashboard reads a Run scaffolded before the stages layer by the Pipeline definition's legacy fields. */
 function jobErrors(job: unknown, at: number): string[] {
   const where = `Job ${at + 1}`;
   if (!isMapping(job)) return [`${where} must be a mapping.`];
@@ -32,7 +31,6 @@ function jobErrors(job: unknown, at: number): string[] {
   ];
 }
 
-/** The Jobs in needs order by the Pipeline definition's graph rules, throwing at the first rule broken. */
 function orderedJobs(jobs: Job[]): Job[] {
   const graph = jobGraph(jobs);
   if (graph.duplicates.length > 0) throw new Error('The pipeline has duplicate Job ids.');
@@ -45,7 +43,6 @@ function orderedJobs(jobs: Job[]): Job[] {
   return graph.ordered!;
 }
 
-/** Reads the local pipeline's display configuration through the Pipeline definition reader, offline. */
 export function parseDashboardPipeline(text: string): DashboardPipeline {
   const parsed = parsePipeline(text);
   if ('error' in parsed) throw new Error(parsed.error);
@@ -72,19 +69,14 @@ export interface DashboardJob extends Omit<Job, 'agents'> {
   agents: Span[];
   gates: Span[];
   scores: Score[];
-  /** The Job's notes in the current Run that block on Han: `needs-human` and `blocked`. Drives the "needs Han" badge. */
   needsHan: number;
-  /** Why the Job's latest span errored, and which Jobs went on without it; null unless it errored. */
   failure: JobFailure | null;
-  /** Every skill and check the Job's pipeline entry names, with what the current Run's latest Attempt shows of each. */
   chips: JobChips;
 }
 
 export interface JobFailure {
   summary: string | null;
-  /** The text of the Job's `blocked` and `needs-human` notes. */
   notes: string[];
-  /** Jobs that only want this one and started after it errored: wants never block, so the Run went on. */
   continuedWith: string[];
 }
 
@@ -102,7 +94,6 @@ function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefine
 
 interface ProjectionContext {
   folded: Folded;
-  /** The trace of the latest Run: only its notes can still need Han. */
   currentTrace: string | undefined;
   owners: ReadonlyMap<string, string | undefined>;
   latest: ReadonlyMap<string, Span>;
@@ -111,20 +102,17 @@ interface ProjectionContext {
 
 const NEEDS_HAN: readonly string[] = ['needs-human', 'blocked'];
 
-/** The text of a span's `needs-human` and `blocked` notes. */
 function needsHanNotes(span: Span): string[] {
   return (span.events ?? []).flatMap((event) =>
     event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']) ? [event.attributes['note.text']] : [],
   );
 }
 
-/** The Job's `needs-human` and `blocked` notes, counted only while its latest span belongs to the latest Run. */
 function needsHanCount(span: Span | undefined, currentTrace: string | undefined): number {
   if (span === undefined || span.trace_id !== currentTrace) return 0;
   return needsHanNotes(span).length;
 }
 
-/** What an errored Job said about itself, and the Jobs that started after it ended anyway; null for any other state. */
 function jobFailure(
   job: Omit<DashboardJob, 'failure'>,
   jobs: readonly Omit<DashboardJob, 'failure'>[],
@@ -144,7 +132,6 @@ function jobFailure(
   };
 }
 
-/** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
 function jobView({ agents: config, ...job }: Job, context: ProjectionContext): Omit<DashboardJob, 'failure'> {
   const { folded, owners, latest, openGates, currentTrace } = context;
   const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
@@ -173,7 +160,6 @@ function jobView({ agents: config, ...job }: Job, context: ProjectionContext): O
   };
 }
 
-/** Raw terminal states and evidence; no CLI readiness vocabulary or inferred approval of staging files. */
 export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
   const byId = new Map(folded.spans.map((span) => [span.span_id, span]));
   const latest = latestJobSpans(folded.spans);

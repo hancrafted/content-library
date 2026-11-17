@@ -36,7 +36,6 @@ const MEMORY_TOOL = source(
   'https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool',
 );
 
-/** The Speaker note each row's AI cell opens, by trait. */
 const ROW_NOTE = {
   probabilistic: 'probable-not-random',
   relentless: 'right-or-not-the-output-looks-finished',
@@ -45,12 +44,6 @@ const ROW_NOTE = {
   'every-word-billed': 'the-bill-covers-the-whole-chat',
 } as const;
 
-/**
- * "Five traits, or you pay the price" (Spec Option 2a), the cornerstone: a brilliant freelancer with amnesia, every
- * time. Overrules `three-column` for a Scene, since its columns cannot line rows up; keeps `motion: local` as the
- * trait flip. At rest the chips spell PRICE; each chip brings in its row, the freelancer and the AI; the closing line
- * shows every row and wipes it to day one.
- */
 export const payThePrice = slide({
   slug: 'pay-the-price',
   messages: { en, de },

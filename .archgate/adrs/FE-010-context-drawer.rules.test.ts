@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-010-context-drawer.rules.ts — pass and fail path for each
-// rule, plus the edges: a print block that does not name the slot, a slot named
-// only outside print, a commented-out block, nested braces, and a drawer
-// comment that merely names a banned call.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-010-context-drawer.rules';
 
@@ -14,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. Globs resolve
-// by exact path or by the `dir/**/*` prefix form the rules use.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {

@@ -1,5 +1,3 @@
-// `node skills/pipeline-feedback/scripts/scope.ts [<commit>]`: exits 1 and names each file of the commit
-// (default HEAD) that is an Episode file, the frozen pipeline template, or lies outside skills/new-episode/, src/pipeline/, docs/ and GLOSSARY.md.
 import { execFileSync } from 'node:child_process';
 import { checkScope } from './scope.pure.ts';
 

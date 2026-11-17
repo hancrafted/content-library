@@ -4,13 +4,11 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ExhibitIcon, type ExhibitSlug } from './exhibit-icon';
 
-/** One layer of an exhibit: its label line (with an optional Context marker), its claim and any further lines. */
 interface Layer {
   readonly label: string;
   readonly text: string;
   readonly marker?: ReactNode;
   readonly extra?: ReactNode;
-  /** The disclosure step it shows from; absent, it shows at rest. */
   readonly reveal?: number;
   readonly target?: string;
 }
@@ -21,12 +19,9 @@ export interface ExhibitProps {
   readonly era: string;
   readonly line: string;
   readonly size: 'standard' | 'lead';
-  /** The upper layer: what the machine took over. */
   readonly machine: Layer;
-  /** The lower layer: where people moved up. */
   readonly people: Layer;
   readonly target?: string;
-  /** What hangs under the label, e.g. a fork. */
   readonly children?: ReactNode;
 }
 
@@ -75,12 +70,6 @@ function PeopleLayer({ lead, layer }: { lead: boolean; layer: Layer }) {
   );
 }
 
-/**
- * One exhibit on the wall: a framed card, the machine's work on top and where people moved up below, its wall label
- * centred under it and whatever hangs beneath. A standard exhibit spans four shared rows of the wall (machine layer,
- * people layer, label, under-label) from the width its three columns fit, so the three frames are one height and their
- * seams line up; the lead exhibit, AI, stands apart and is taller by design.
- */
 export function Exhibit({ slug, title, era, line, size, machine, people, target, children }: ExhibitProps) {
   const lead = size === 'lead';
   const subgrid = '@min-[40rem]:grid @min-[40rem]:grid-rows-subgrid';

@@ -1,26 +1,14 @@
 import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import styles from './one-job.module.css';
 
-/*
- * The water column under the two ships, lifted from Spec Option 15b (feedback 3, decision 46): faceted water that
- * darkens from the Surface's blue through Sunlit to Twilight as it deepens, four shafts of light, the rock shelf under
- * site 4 falling away into the deep seabed under site 7, and the glow along the waterline. The Option draws the water
- * from y = 200 to 560 of an 800 by 560 box; here it fills `ZoneScene`'s Surface water, from the waterline to the
- * bottom of the 1200 by 800 space, over the Scene's flat water. Below 0 m the water is Sunlit by depth, so it keeps
- * its facets (feedback 2, decision 8). Tones live in the Slide token file.
- */
-
 const SPEC_WIDTH = 800;
 const SPEC_WATERLINE = 200;
 const SPEC_HEIGHT = 560;
-/** The Option's units per metre: 0 m at its waterline, 120 m at y = 522. */
 const SPEC_PER_METRE = (522 - SPEC_WATERLINE) / 120;
 const SCALE_X = 1200 / SPEC_WIDTH;
 const SCALE_Y = (800 - SURFACE_WATERLINE) / (SPEC_HEIGHT - SPEC_WATERLINE);
 
-/** Where a depth lies in the Scene's units, on the same scale as the drawing. */
 export const depthY = (metres: number) => SURFACE_WATERLINE + metres * SPEC_PER_METRE * SCALE_Y;
-/** Where an x of the Option lies in the Scene's units. */
 export const sceneX = (specX: number) => specX * SCALE_X;
 
 type Tone =
@@ -35,7 +23,6 @@ type Tone =
   | 'bed-lit'
   | 'bed-shade';
 
-/** The Option's water, light shafts, shelf and seabed facets, merged per tone and drawn in this order. */
 const FACETS: readonly (readonly [Tone, string])[] = [
   [
     'sea-surface',
@@ -79,7 +66,6 @@ const FACETS: readonly (readonly [Tone, string])[] = [
   ],
 ];
 
-/** The water column, its rock and the lit waterline, as the first child of the Surface `ZoneScene`. */
 export function WaterColumnArt() {
   return (
     <g data-water-column className={styles.facets}>

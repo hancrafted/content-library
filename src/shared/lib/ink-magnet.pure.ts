@@ -14,17 +14,14 @@ interface InkCircle {
   r: number;
 }
 
-/** What the pointer draws out of the button: `strength` 0 far to 1 over it. */
 export interface InkField {
   strength: number;
   fill: InkCircle;
   droplets: InkCircle[];
 }
 
-// Within this gap the ink stops reaching out and starts flowing into the button instead.
 const FILL_REACH = 96;
 const MAX_STRETCH = 80;
-// Droplets along the stretch, from the anchored bead to a tip that pulls free once the stretch is long.
 const BEADS = [
   { along: 0, size: 1 },
   { along: 0.42, size: 0.7 },
@@ -32,12 +29,10 @@ const BEADS = [
   { along: 1.1, size: 0.42 },
 ];
 
-/** How many droplets the field draws; the markup renders this many. */
 export const INK_DROPLETS = BEADS.length;
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
-/** The nearest point on the pill's edge, the outward direction toward the pointer and the gap to it. */
 function pillContact({ width, height }: Size, point: Point) {
   const radius = height / 2;
   const spine = { x: Math.max(radius, Math.min(width - radius, point.x)), y: radius };
@@ -54,11 +49,6 @@ function farthestCorner({ width, height }: Size, point: Point) {
   return Math.hypot(Math.max(point.x, width - point.x), Math.max(point.y, height - point.y));
 }
 
-/**
- * The ink the pointer pulls on, in the button's own pixels (origin top-left). From `reach` away a
- * bead swells on the nearest edge and stretches toward the pointer; within FILL_REACH the ink flows
- * in from that edge; over the button it floods outward from the pointer.
- */
 export function inkMagnet(size: Size, point: Point, reach: number): InkField {
   if (!(reach > 0)) throw new RangeError('Reach must be a positive distance.');
   if (!(size.width > 0 && size.height > 0)) throw new RangeError('Button must have a positive width and height.');
@@ -69,7 +59,6 @@ export function inkMagnet(size: Size, point: Point, reach: number): InkField {
   return inkAtContact(contact, strength, size.height);
 }
 
-/** The reusable geometry for an outside rounded-surface contact; the caller owns the surface shape. */
 export function inkAtContact(
   contact: { x: number; y: number; nx: number; ny: number; gap: number },
   strength: number,

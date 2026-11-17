@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DocumentIcon, type DocumentTone } from './icons';
 
-/*
- * The document that moves down the line, in each of its looks: what its page is drawn in, and whether its outline is
- * dashed. Quality is a weight (crisp or dulled), never a hue; a hue marks only who handled it or that it missed.
- */
-
 const pageOf = (tone: DocumentTone) => {
   const $ = load(renderToStaticMarkup(createElement(DocumentIcon, { tone })));
   const page = $('path').first();

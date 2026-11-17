@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/utils';
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import {
   CYCLE_ITEMS,
-  HAND_TURN_S,
+  HAND_TURN_SECONDS,
   phaseArc,
   polarPoint,
   POP_DISTANCE,
@@ -16,10 +16,8 @@ import {
   type CycleItem,
 } from './radial-cycle.pure';
 
-/** One tick per month: the face is a year. */
 const MONTHS = 12;
 
-/** Rotations in CSS turn around the face's centre, not the element's own box. */
 const ABOUT_CENTRE = '[transform-box:view-box] origin-center';
 
 export interface PhaseCopy {
@@ -28,13 +26,11 @@ export interface PhaseCopy {
   caption: string;
 }
 
-/** What a phase does when a pointer or the keyboard reaches it. */
 export interface PhaseHandlers {
   onSelect: (item: CycleItem) => void;
   onPreview: (item: CycleItem | null) => void;
 }
 
-/** The faint month ticks outside the ring and the track the phases sit on. */
 function Dial() {
   return (
     <g aria-hidden="true">
@@ -61,7 +57,6 @@ interface PhaseProps {
   handlers: PhaseHandlers;
 }
 
-/** Focus or a click selects the phase, Enter or Space too; a hover only previews it. */
 function phaseEvents(item: CycleItem, { onSelect, onPreview }: PhaseHandlers) {
   return {
     onFocus: () => onSelect(item),
@@ -76,7 +71,6 @@ function phaseEvents(item: CycleItem, { onSelect, onPreview }: PhaseHandlers) {
   };
 }
 
-/** One phase: a focusable arc that pops outward while shown, its date laid along it. */
 function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
   const arc = phaseArc(index, CYCLE_ITEMS.length);
   const pop = popOffset(index, CYCLE_ITEMS.length, POP_DISTANCE);
@@ -92,7 +86,7 @@ function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
       className="group cursor-pointer outline-none transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none"
     >
       <PhaseArc path={arc.path} shown={shown} />
-      <PhaseLabel at={arc.labelAt} turnDeg={arc.labelTurnDeg} shown={shown}>
+      <PhaseLabel at={arc.labelAt} turnDegrees={arc.labelTurnDegrees} shown={shown}>
         {copy.date}
       </PhaseLabel>
     </g>
@@ -101,20 +95,19 @@ function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
 
 interface PhaseLabelProps {
   at: { x: number; y: number };
-  turnDeg: number;
+  turnDegrees: number;
   shown: boolean;
   children: string;
 }
 
-/** The phase's date, turned to follow the ring. */
-function PhaseLabel({ at, turnDeg, shown, children }: PhaseLabelProps) {
+function PhaseLabel({ at, turnDegrees, shown, children }: PhaseLabelProps) {
   return (
     <text
       x={at.x}
       y={at.y}
       dy="0.35em"
       textAnchor="middle"
-      transform={`rotate(${turnDeg} ${at.x} ${at.y})`}
+      transform={`rotate(${turnDegrees} ${at.x} ${at.y})`}
       className={cn(
         'pointer-events-none font-mono text-body font-semibold tracking-[0.12em] uppercase transition-[fill] duration-500',
         shown ? 'fill-foreground dark:fill-background' : 'fill-foreground',
@@ -125,7 +118,6 @@ function PhaseLabel({ at, turnDeg, shown, children }: PhaseLabelProps) {
   );
 }
 
-/** The arc's stroke: the accent while shown, a faint track otherwise. */
 function PhaseArc({ path, shown }: { path: string; shown: boolean }) {
   return (
     <>
@@ -140,7 +132,6 @@ function PhaseArc({ path, shown }: { path: string; shown: boolean }) {
   );
 }
 
-/** A wider band behind the arc, shown only while the keyboard focuses it. */
 function FocusHalo({ path }: { path: string }) {
   return (
     <path
@@ -153,7 +144,6 @@ function FocusHalo({ path }: { path: string }) {
   );
 }
 
-/** The phases in order around the face. */
 export function PhaseRing({
   items,
   shown,
@@ -173,7 +163,7 @@ export function PhaseRing({
   );
 }
 
-/** Turns the hand once every `HAND_TURN_S`, only while the Slide is `active` and motion is welcome (FE-009 §6). */
+// decision: FE-009 §6
 function useTurning(zone: SlideZone) {
   const hand = useRef<SVGGElement>(null);
   const turn = useRef<Animation | null>(null);
@@ -181,7 +171,7 @@ function useTurning(zone: SlideZone) {
     const element = hand.current;
     if (element === null || prefersReducedMotion()) return;
     turn.current ??= element.animate([{ rotate: '0deg' }, { rotate: '360deg' }], {
-      duration: HAND_TURN_S * 1000,
+      duration: HAND_TURN_SECONDS * 1000,
       iterations: Number.POSITIVE_INFINITY,
     });
     if (zone === 'active') turn.current.play();
@@ -190,7 +180,6 @@ function useTurning(zone: SlideZone) {
   return hand;
 }
 
-/** A slow "now" hand sweeping the face; it rests at 12 o'clock under reduced motion. */
 export function NowHand({ zone }: { zone: SlideZone }) {
   const hand = useTurning(zone);
   const tip = polarPoint(0, RING.radius + RING.stroke / 2 + 18);

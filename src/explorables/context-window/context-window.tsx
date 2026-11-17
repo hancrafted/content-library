@@ -16,9 +16,6 @@ import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
 
-/* The context window part: the meter, the window switch, a fixed-height bar (Simple) or the /context grid (Technical). */
-
-/** Every block of the chat at the place it first lands, so a block not in the window yet waits where it will land. */
 function firstPlaces(frames: readonly Frame[]): ReadonlyMap<string, PlacedBlock> {
   const places = new Map<string, PlacedBlock>();
   for (const frame of frames)
@@ -76,7 +73,6 @@ const BlockButton = memo(function BlockButton(props: BlockProps) {
 
 interface BlocksProps extends Part {
   readonly places: ReadonlyMap<string, PlacedBlock>;
-  /** The block under the pointer while the loupe is open: it grows a little, by transform only. */
   readonly hot: string;
 }
 
@@ -101,7 +97,6 @@ function Blocks({ p, say, places, hot }: BlocksProps) {
   ));
 }
 
-/** One outline round a lit step's blocks, or a dashed empty one where a pinned step will land. */
 function outlined(p: ContextWindowProps, places: ReadonlyMap<string, PlacedBlock>): readonly PlacedBlock[] {
   if (p.ghost) return [...places.values()].filter((b) => b.id === p.ghost);
   if (!p.lit || p.lit.includes(':')) return [];
@@ -159,7 +154,6 @@ interface BarLayerProps {
   readonly bar: RefObject<HTMLDivElement | null>;
 }
 
-/** The bar's own layers: blocks, the buffer, the lit outline, the lens and the smart-zone lines. */
 function BarLayers({ p, say, hot, at, bar }: Part & BarLayerProps) {
   const places = useMemo(() => firstPlaces(p.frames), [p.frames]);
   return (

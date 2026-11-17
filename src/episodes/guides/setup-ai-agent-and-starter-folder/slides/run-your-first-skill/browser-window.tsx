@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { WindowDots } from './permission-prompt';
 
-/** The viewer's default browser: a title bar with its address pill, and the page it shows. */
 export function BrowserWindow({ address, children }: { address: string; children: ReactNode }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -24,10 +23,7 @@ interface HomepageProps {
   readonly cta: string;
 }
 
-/**
- * A static drawing of the hancrafted landing hero, its words copied as plain strings from the landing page's
- * Translation files (FE-007 §5: a Slide imports nothing from page assembly). Nothing in it is a link.
- */
+// decision: FE-007 §5
 export function Homepage({ nav, eyebrow, headline, caption, cta }: HomepageProps) {
   return (
     <div className="flex flex-col gap-5 p-5 @3xl:p-6">

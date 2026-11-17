@@ -5,12 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { TAG_IDS } from './schemas/fields';
 import { TAG_ICONS } from './schemas/tag-looks';
 
-/*
- * Each Tag's look (design-ADR Tags replace Topics): an icon by name beside the vocabulary, and one colour token per
- * theme in globals.css, `--tag-<id>`, which the token editor adjusts. The colour is the card's ink, so it reads 4.5:1
- * or better on the page in both themes.
- */
-
+// decision: docs/adr/0015-tags-replace-topics.md
 const css = readFileSync(join(__dirname, '../app/globals.css'), 'utf8');
 const THEMES = [':root', '.dark'] as const;
 const READABLE = 4.5;

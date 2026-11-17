@@ -1,12 +1,9 @@
-// The verify runner's process adapter: runs one step's shell command and buffers everything it prints, so steps
-// running side by side never interleave their output.
 import { spawn } from 'node:child_process';
 import type { Step, StepRun } from './verify.pure.ts';
 
 export function runCommand(step: Step): Promise<StepRun> {
   const started = performance.now();
   return new Promise((resolve, reject) => {
-    // stdin closed: archgate reads a non-TTY stdin as its file list, and verify:push's stdin holds the pushed refs.
     const child = spawn(step.command, { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const chunks: Buffer[] = [];
     child.stdout.on('data', (chunk: Buffer) => chunks.push(chunk));

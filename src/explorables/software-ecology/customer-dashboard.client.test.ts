@@ -1,3 +1,4 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -7,11 +8,8 @@ import { scenarioLastStep } from './scenario-last-step';
 import { catalogWordsFor, wordsFor } from './software-ecology-data';
 import { titlesOf } from './use-case-words.pure.ts';
 
-/* Eval hooks of the Customer's dashboard (design-ADR 0024 §14): every control names itself `customer.<field>`. */
-
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
-/** The stills' state: In practice, then AI at Engineering writing twice the work, run to week 20. */
 const STILL = 'still';
 const noop = () => undefined;
 

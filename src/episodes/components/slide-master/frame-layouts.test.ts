@@ -5,13 +5,7 @@ import { BasicPageSlide } from './basic-page-slide';
 import { SectionSlide } from './section-slide';
 import { ThreeColumnSlide } from './three-column-slide';
 
-/*
- * The frame layouts (design-ADR 0016 decision 13): with the `slide-layouts` gallery deleted, the section slide, basic
- * page and three-column frames live here, and this pins the note targets each marks
- * (docs/features/episode-chrome.md, "Which targets exist").
- */
-
-/** The `data-target` values a rendered frame carries, in document order. */
+// decision: docs/adr/0016-content-data-model.md
 function targetsOf(html: string): string[] {
   return [...html.matchAll(/data-target="([^"]*)"/g)].map(([, target]) => target);
 }

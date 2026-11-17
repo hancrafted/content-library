@@ -1,6 +1,5 @@
 import { OversightPill } from '@/episodes/components/slide-shared/oversight-pill/oversight-pill';
 
-/** What the organisation gives: a title and either a line of words or the oversight pills. */
 export function Provision(props: { slug: string; title: string; text?: string; pills?: readonly string[] }) {
   return (
     <li data-provision={props.slug} className="focus-group__item rounded-lg border border-border bg-card p-4 shadow-md">

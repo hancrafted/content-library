@@ -2,11 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { drawFigure, partIds, POSES } from '../character/poses.pure';
 import { captain, pilot } from './cast';
 
-/*
- * The expedition's crew as Character presets: the captain and the pilot take every pose of the shared body plan, keep
- * their look in each, and neither wears the `ai` tag, because on this Episode's Slides the robot is the AI.
- */
-
 describe('success cases', () => {
   it('draws the captain and the pilot in every pose', () => {
     // ARRANGE
@@ -24,7 +19,7 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('pins no ai tag on either crew member', () => {
+  it("pins no ai tag on either crew member, since on this Episode's Slides the robot is the AI", () => {
     // ARRANGE
     const tag = 'ai-tag';
     // ACT

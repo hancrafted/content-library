@@ -5,12 +5,6 @@ import { checkSpec } from './episode-spec.pure';
 import { type Finding } from './finding.pure';
 import { appendMetaVerified } from './staging-file.pure';
 
-/*
- * In-memory staging folders: a Dossier of one Section with two Slides and a
- * Spec page that agrees with it, then one change per test that breaks exactly
- * one rule of the Spec contract.
- */
-
 const DOSSIER = `---
 type: dossier
 ---
@@ -50,15 +44,12 @@ function meta({ verified }: Meta = {}): string {
 
 interface OptionShape {
   recommended?: boolean;
-  /** `data-recommended` as the generated template writes it, `"true"` or `"false"`, not the bare attribute. */
   explicitMark?: boolean;
   picked?: boolean;
-  /** Whether the pick checkbox carries `checked`; a picked Option's does, and so does a recommended one's, the default pick. */
   checked?: boolean;
   mock?: string;
   caption?: string | null;
   notes?: string | null;
-  /** Markup after the mock, where a Title-slide Option shows its section slides. */
   after?: string;
 }
 
@@ -71,7 +62,6 @@ const OPTION_DEFAULTS = {
   after: '',
 };
 
-/** The `data-recommended` attribute of an Option: bare, or `"true"`/`"false"` when the shape asks for the explicit form. */
 function recommendedMark(recommended: boolean, explicit: boolean | undefined): string {
   if (explicit === true) return ` data-recommended="${recommended}"`;
   return recommended ? ' data-recommended' : '';
@@ -124,12 +114,10 @@ function slide(slug: string, number: number, shape: SlideShape = {}): string {
 </article>`;
 }
 
-/** A Context marker in a mock, naming the Speaker note it opens by its title. */
 function marker(note: string): string {
   return `<p>Fact <span data-spec="context-marker" data-note="${note}" role="img" aria-label="Speaker note: ${note}"><svg viewBox="0 0 16 16" class="size-4"><path d="M2 3h12v8H6l-4 3z" class="fill-muted-foreground" /></svg></span></p>`;
 }
 
-/** A Title-slide Option's section slides: one per Section slug, in order. */
 function echoes(sections: readonly string[], mock = 'bg-muted'): string {
   const items = sections.map(
     (section) => `<li data-spec="echo" data-section="${section}"><div data-spec="mock" class="${mock}"></div></li>`,
@@ -189,7 +177,6 @@ function folder(files: Record<string, string> = {}): Record<string, string> {
   return { 'dossier.md': DOSSIER, 'spec/spec.html': spec(), ...files };
 }
 
-/** The Spec contract's findings on a staging folder, as the staging check runs it: none before a Spec exists. */
 function check(files: Readonly<Record<string, string>>, stage?: SpecStage): Finding[] {
   const spec = readSpec(files);
   return spec === undefined ? [] : checkSpec(spec, files['dossier.md'], stage);
@@ -199,10 +186,6 @@ function messages(findings: readonly { message: string }[]): string[] {
   return findings.map(({ message }) => message);
 }
 
-/**
- * A Spec split as issue #669 will split it, which `readSpec` cannot read yet: `main` is the main page, and each of
- * `sections` a further page holding Sections, read in that order after it.
- */
 function splitSpec(main: string, ...sections: readonly string[]): Spec {
   const whole = readSpec({ 'spec/spec.html': main });
   const extra = sections.map((html, at) => ({
@@ -216,14 +199,12 @@ function splitSpec(main: string, ...sections: readonly string[]): Spec {
   };
 }
 
-/** The Title slide of a Spec with Sections `why` and `fix`, each Option showing both section slides. */
 const TWO_SECTION_TITLE = titleSlide([
   titleOption('0a', { recommended: true, after: echoes(['why', 'fix']) }),
   titleOption('0b', { after: echoes(['why', 'fix']) }),
   titleOption('0c', { after: echoes(['why', 'fix']) }),
 ]);
 
-/** A further Spec page holding the Section `fix` and its one Slide, `trim`, numbered `number`. */
 const fixPage = (number: number): string =>
   `<!doctype html><html><body><section data-spec="section" id="fix"><h2>Fix</h2>${slide('trim', number)}</section></body></html>`;
 
@@ -259,7 +240,6 @@ const APPROVED = meta({ verified: [{ by: 'human:han', at: HAN_AT }] });
 const NO_TITLE_SLIDE =
   'The Spec has no Title slide: an <article data-spec="title-slide" id="top"> before the first Section, its three Options each the Title slide and a section slide per Section.';
 
-/** The default Title slide with its recommended Option picked and ticked, as a locked Title slide. */
 const PICKED_TITLE = titleSlide([
   titleOption('0a', { recommended: true, picked: true }),
   titleOption('0b'),

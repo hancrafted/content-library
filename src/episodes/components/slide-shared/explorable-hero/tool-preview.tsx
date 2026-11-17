@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** The preview's title, with an optional `note` beside it, such as a model's "Illustrative model, not measured". */
 function Heading({ title, note }: { title: string; note?: string }) {
   if (!note) return <b className="font-semibold">{title}</b>;
   return (
@@ -11,11 +10,6 @@ function Heading({ title, note }: { title: string; note?: string }) {
   );
 }
 
-/**
- * The lightweight stand-in for an Explorable that peeks up from the hero's bottom edge: a card with a title row and
- * whatever the Slide draws in it. Decorative, so it is one image to assistive technology, named by `label`; it owns no
- * words.
- */
 export function ToolPreview({
   label,
   title,

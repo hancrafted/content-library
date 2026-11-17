@@ -10,11 +10,6 @@ import {
 } from './dashboard-outputs.pure';
 import { createMemoryFolder } from './episode-folder.pure';
 
-/*
- * A Job's output path read against the Episode folder the dashboard was given, `docs/episodes/<slug>`, and a Build
- * Job's dev-server port as the link the dashboard shows.
- */
-
 const FOLDER = 'never-too-early';
 
 describe('success cases', () => {

@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ROOM, roomFacets, windowAt } from './control-room.pure';
 
-/*
- * The control room's geometry: the faceted wall and floor the comic panels draw, at any room size, and where its
- * window hangs. The 300-unit room is the drawing the Slides copied before it was promoted.
- */
-
 describe('success cases', () => {
   it('draws the comic panels’ 300-unit room as it was drawn: six wall planes, the floor, its lit patch', () => {
     // ARRANGE

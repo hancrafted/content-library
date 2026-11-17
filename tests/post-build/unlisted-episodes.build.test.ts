@@ -1,8 +1,4 @@
-// Unlisted Episodes (design-ADR 0016, Routes and visibility): an Episode made for one Event lives only under that
-// Event. It is never in the sitemap, the Episode browser or an Upcoming list, has no /episodes/ page, and its page
-// under the Event tells search engines not to index it. Once its recording is uploaded, an unlisted Episode plays it
-// on both locale pages, labelled with the language spoken. Every unlisted Episode an Event's Playlist lists is checked.
-
+// decision: docs/adr/0016-content-data-model.md
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -20,26 +16,19 @@ import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const AXEL = '2026-10-23-axel-agentic-workflow' satisfies EventSlug;
-/** The slug each of the AXEL seminar's unlisted copies carries, its folder name, in the order it taught them. Written out: the store is not the oracle. */
+// decision: ARCH-003 §1.2
 const AXEL_UNLISTED_SLUGS = ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'] as const;
-/** The AXEL seminar's unlisted copies, each the Event's own. */
 const AXEL_UNLISTED = AXEL_UNLISTED_SLUGS.map((slug) => episodeRef(slug, AXEL));
-/**
- * Every unlisted Episode with each Event that presents it, read from the store so a new one is never skipped; the
- * store's refusals decide which Episodes may be unlisted, and this file checks their pages.
- */
 const PRESENTED = listEvents().flatMap((event) =>
   event.playlist.episodes
     .flatMap(({ episode, page }) => (episode.visibility === 'unlisted' && page !== undefined ? [page] : []))
     .map((episode) => ({ event: event.slug, episode })),
 );
-/** Each unlisted Episode's page under its Event, in each locale: the URLs no list may name. */
 const UNLISTED_URLS: readonly string[] = PRESENTED.flatMap(({ event, episode }) =>
   LOCALES.map((locale) => `${localizePath(eventEpisodeRoute(event, episode), locale)}/`),
 );
 const PER_LOCALE = PRESENTED.flatMap((presented) => LOCALES.map((locale) => ({ ...presented, locale })));
 
-/** Where each Episode card on a page links, wherever it shows them. A copy shares its slug, so the link names it. */
 function cardLinks(url: string): string[] {
   const $ = exportedPage(url);
   return $('[data-episode-card] a[data-card-link]')
@@ -115,13 +104,12 @@ describe('unlisted Episode pages under their Event', () => {
   });
 });
 
-/** How each locale page names the language a recording was made in. Written out: the Translation files are not the oracle. */
+// decision: ARCH-003 §1.2
 const RECORDED_IN: Record<Locale, Record<Locale, string>> = {
   en: { en: 'Recorded in English', de: 'Recorded in German' },
   de: { en: 'Aufgezeichnet auf Englisch', de: 'Aufgezeichnet auf Deutsch' },
 };
 
-/** The one recording an unlisted Episode carries once Han uploads it (`episode-add-youtube`); none before. */
 function recordingOf(episode: EpisodeRef): { id: string; language: Locale } | undefined {
   const video = listEpisodes().find(({ ref }) => ref.id === episode.id)?.youtube;
   return video !== undefined && 'language' in video ? { id: video.id, language: video.language as Locale } : undefined;

@@ -1,44 +1,32 @@
-/*
- * The Context drawer's content shapes and pure logic (FE-010). The shapes are
- * content, never design: no field carries layout, style, placement or markup.
- */
-
+// decision: FE-010 §3
 import type { DrawerMode } from './prefs.pure';
 
-/** One source of a note: a stable slug, an `https` URL and its localized, human title. */
 export interface NoteSource {
   readonly slug: string;
   readonly url: string;
   readonly title: string;
 }
 
-/** One talking point (a Speaker note item), pointing at the Slide element it explains. */
 export interface SpeakerNoteItem {
-  /** Stable key identity for the Translation file; never a position. */
   readonly slug: string;
   readonly header: string;
   readonly description: string;
-  /** Further reading, numbered in this order: `[n]` in `description` cites source n. */
   readonly sources?: readonly NoteSource[];
   readonly image?: { readonly src: string; readonly alt: string };
-  /** The short name of the element it explains, marked `data-target` inside its Slide (FE-010 §4). */
+  // decision: FE-010 §4
   readonly target: string;
 }
 
-/** One timed passage of a Voice script. */
 export interface VoiceScriptSegment {
   readonly slug: string;
-  /** Start and end, in minutes into the Slide. */
   readonly from: number;
   readonly to: number;
   readonly title: string;
   readonly keywords: readonly string[];
   readonly script: string;
-  /** How this segment closes and hands to the next Section. */
   readonly bridge?: string;
 }
 
-/** The slice of a `KeyboardEvent` the drawer reads. */
 export interface KeyEventLike {
   readonly code: string;
   readonly altKey: boolean;
@@ -48,27 +36,22 @@ export interface KeyEventLike {
   readonly repeat: boolean;
 }
 
-/** The two tabs, defined once: the type, the tab order and every element id derive from this. */
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
-/** Whether the card sits beside the Slides, widening the Foreground's right inset, which changes at once rather than animating. */
 export function sitsBeside(mode: DrawerMode, open: boolean): boolean {
   return open && mode === 'beside';
 }
 
-/** The attribute the drawer sets on the Episode page while its card sits beside the Slides; the page's right inset widens on it (FE-009 §2). */
+// decision: FE-009 §2
 export const DRAWER_BESIDE_ATTR = 'data-drawer-beside';
 
-/** The drawer panel's element id; the trigger's `aria-controls` points at it. */
 export const DRAWER_PANEL_ID = 'context-panel';
 
-/** Element ids of one tab and its tab panel, derived from the tab id. */
 export function drawerIds(tab: DrawerTab): { tab: string; panel: string } {
   return { tab: `context-tab-${tab}`, panel: `${DRAWER_PANEL_ID}-${tab}` };
 }
 
-/** Shown on the trigger (from `md`); matched on `event.code` so a layout cannot move it. */
 export const SHORTCUT_LABEL = 'Alt+N';
 
 export function matchesShortcut(event: KeyEventLike): boolean {
@@ -81,7 +64,6 @@ export function drawerKeyAction(event: KeyEventLike, open: boolean): 'toggle' | 
   return open && event.code === 'Escape' ? 'close' : null;
 }
 
-/** The drawer's heading: the current item's title, or the fallback while none is current. */
 export function titleOfItem(
   id: string | null,
   items: readonly { readonly id: string; readonly title?: string }[],
@@ -90,24 +72,20 @@ export function titleOfItem(
   return items.find((item) => item.id === id)?.title ?? fallback;
 }
 
-/** The item to show: the observed one if the drawer holds it, else the first; none when empty. */
 export function currentItemId(observed: string | null, ids: readonly string[]): string | null {
   if (observed !== null && ids.includes(observed)) return observed;
   return ids[0] ?? null;
 }
 
-/** Minutes as `m:ss`, e.g. 0.75 gives `0:45`. */
 export function formatMark(minutes: number): string {
   const total = Math.round(minutes * 60);
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
 }
 
-/** One piece of a description: plain text, or a citation marker pointing at source `cite` (1-based). */
 export type DescriptionPart = string | { readonly cite: number };
 
 const CITATION_RE = /\[([1-9]\d*)\]/g;
 
-/** Splits `text [1] more [2]` into text and citation markers, in order; other brackets stay text. */
 export function splitCitations(text: string): DescriptionPart[] {
   const parts: DescriptionPart[] = [];
   let from = 0;
@@ -120,22 +98,17 @@ export function splitCitations(text: string): DescriptionPart[] {
   return parts;
 }
 
-/** A source's host as muted meta: `https://www.anthropic.com/x` gives `anthropic.com`. */
 export function sourceDomain(url: string): string {
   return new URL(url).hostname.replace(/^www\./, '');
 }
 
-/** Where a revealed note sits in the drawer's scroll container, measured in its content box. */
 export interface RevealLayout {
-  /** The note's top, from the top of the scrolled content. */
   readonly offset: number;
-  /** The container's top padding: the note stops this far below the edge. */
   readonly inset: number;
   readonly scrollHeight: number;
   readonly clientHeight: number;
 }
 
-/** The `scrollTop` that brings a revealed note as near the top of the drawer as the content allows. */
 export function revealScrollTop(layout: RevealLayout): number {
   const furthest = Math.max(0, layout.scrollHeight - layout.clientHeight);
   return Math.min(furthest, Math.max(0, layout.offset - layout.inset));

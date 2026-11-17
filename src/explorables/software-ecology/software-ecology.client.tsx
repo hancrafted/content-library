@@ -28,11 +28,6 @@ import type { ExchangeActions } from './use-exchange.ts';
 import { useFactory, type FactoryView } from './use-factory.ts';
 import { useTour, useTourState, type TourActions } from './use-tour.ts';
 
-/**
- * Context targets and markers a Slide places, by spot: `<id>:card`, `<id>:rack` and `<id>:<sign kind>` on a work
- * center, `customer`, `belts` (the whole belt layer, targets only), `belt:<key>` (a marker on that belt's label place),
- * `states` (the state row) and `scenario:<id>` (that scenario's name and a marker on the state row).
- */
 export type { Spots };
 
 export interface SoftwareEcologyClientProps {
@@ -41,16 +36,13 @@ export interface SoftwareEcologyClientProps {
   readonly preset: string;
   readonly locale: Locale;
   readonly words: Words;
-  /** The role catalog's words in both locales: the page's own, and every language the exchange file carries. */
   readonly catalogs: Readonly<Record<Locale, CatalogWords>>;
   readonly targets?: Spots<TargetProps>;
   readonly markers?: Spots<ReactNode>;
 }
 
-/** A preset's view. */
 const viewOf = (B: Bundle, preset: string): ViewId => presetOf(B, preset).view ?? 'factory';
 
-/** The cross-fade from one view into the next: the old fades out, the new fades in, no card flies. */
 function useShow(x: {
   view: ViewId;
   f: FactoryView;
@@ -65,7 +57,6 @@ function useShow(x: {
 
 type Parts = ReturnType<typeof useParts>;
 
-/** The markers a Slide places beside Scenarios menu entries, by scenario id. */
 const scenarioSpots = (markers: Spots<ReactNode> | undefined): Spots<ReactNode> =>
   Object.fromEntries(
     Object.entries(markers ?? {})
@@ -75,7 +66,6 @@ const scenarioSpots = (markers: Spots<ReactNode> | undefined): Spots<ReactNode> 
 
 type Handlers = ReturnType<typeof useHandlers>;
 
-/** What the toolbar is wired to: the parent's parts, the run, the choices, the tour, the handlers and the exchange file. */
 interface ToolbarIn {
   readonly p: SoftwareEcologyClientProps;
   readonly x: Parts;
@@ -86,7 +76,6 @@ interface ToolbarIn {
   readonly io: ExchangeActions;
 }
 
-/** The state row's Scenarios menu and Tour, and the tour's clock. */
 const tourRowOf = (t: ToolbarIn) => {
   const preset = t.f.controls.preset;
   return {
@@ -158,13 +147,10 @@ const stageOf = (x: Parts) => ({
   beltMotion: x.display.beltMotion,
 });
 
-/** What the toolbar and the cards do: a state, a tour, a use case, Clear and a card click. */
 function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
   const { B, dash, view, compare } = x;
   const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
-  // a state applies its own `compare`: a preset like AI compare opens the stream directly
   const apply = (bundle: typeof B, id: string) => compare.reset(presetOf(bundle, id).compare);
-  // entering a state: its own view, then its own compare mode
   const enter = (bundle: typeof B, id: string) => (show(viewOf(bundle, id)), apply(bundle, id));
   return {
     onPreset: (id: string) => {
@@ -189,7 +175,6 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
   };
 }
 
-/** The factory's run and its tour, in step: the tour pauses the run's frames on each step's week. */
 function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices) {
   const ts = useTourState(),
     root = x.streamRoot;
@@ -208,7 +193,6 @@ function useFactoryTour(p: SoftwareEcologyClientProps, x: Parts, words: Choices)
   return { f, tour: useTour(x.B, f, ts) };
 }
 
-/** The software ecology factory with its toolbar, stage, dashboards, tour, status line, legend and At the Customer panel. */
 export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
   const x = useParts(p),
     words = useChoices({ ...p, bundles: x.uploads.bundles, catalog: p.catalogs[p.locale] }, x.B);

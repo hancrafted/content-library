@@ -1,6 +1,3 @@
-// `npm run youtube:chapters -- <episode folder | page url | video id> [--lang de]`: derives the YouTube chapters (one
-// per Section, plus the extra chapters) from the Slide starts and writes them into `recording/youtube.<lang>.md` between the chapter markers,
-// creating the file if missing and rewriting only the block if not. Pure halves: `chapters.pure.ts`, `youtube-file.pure.ts`.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import {

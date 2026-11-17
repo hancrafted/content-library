@@ -1,8 +1,4 @@
-/*
- * The marks beyond a plain document (design-ADR 0024 §15), drawn on the canvas in sprite units: the AI star, the
- * lightbulb of own work, and the gift box of a release with the red bug of a bad one. Colours come from the painter's
- * token palette; `doc-sprites.ts` draws them into the sprite sheet.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Colors, Ctx, DocKind } from './doc-types.ts';
 
 export const star = (c: Ctx, at: { x: number; y: number; r: number }, color: string) => {
@@ -17,7 +13,6 @@ export const star = (c: Ctx, at: { x: number; y: number; r: number }, color: str
   c.fill();
 };
 
-/** The lightbulb of own work: a yellow bulb with a darker outline on a small base; the glyph spans y -2.3 to 3.9 around (x, y). */
 export const bulb = (c: Ctx, C: Colors, at: { x: number; y: number }) => {
   c.save();
   c.translate(at.x, at.y);
@@ -34,7 +29,6 @@ export const bulb = (c: Ctx, C: Colors, at: { x: number; y: number }) => {
   c.restore();
 };
 
-/** A small red bug: body, head, legs and feelers, centred at (x, y). */
 const bug = (c: Ctx, C: Colors, at: { x: number; y: number }) => {
   c.save();
   c.translate(at.x, at.y);
@@ -63,7 +57,6 @@ const bug = (c: Ctx, C: Colors, at: { x: number; y: number }) => {
   c.restore();
 };
 
-/** A gift box's lid, body and ribbon with a bow: the AI tint and border as on a document. */
 const giftBody = (c: Ctx, C: Colors, d: DocKind) => {
   c.fillStyle = d.ai ? C.aiFill : C.paper;
   c.strokeStyle = d.ai ? C.ai : C.edge;
@@ -88,7 +81,6 @@ const giftBody = (c: Ctx, C: Colors, d: DocKind) => {
   c.stroke();
 };
 
-/** A gift box: a red bug when bad, a lightbulb when it carries own work, the AI star when AI made it. */
 export const giftBox = (c: Ctx, C: Colors, d: DocKind) => {
   giftBody(c, C, d);
   if (!d.q) bug(c, C, { x: 2.6, y: 2.6 });

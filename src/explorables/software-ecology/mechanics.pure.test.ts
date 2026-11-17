@@ -1,9 +1,9 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { constOf, fileMechanics, MECH_KEYS, strengthDefault } from './mechanics.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
-/* A use-case file's `mechanics` (design-ADR 0024 §5): strengths and constants, each in its own settings field. */
 const withMechanics = (mechanics: Bundle['data']['mechanics']): Bundle => {
   const B = builtinBundle('tire');
   return { ...B, data: { ...B.data, mechanics } };

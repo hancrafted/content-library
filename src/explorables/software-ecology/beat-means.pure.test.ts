@@ -1,27 +1,22 @@
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { createSampler, stepsTo } from './beat-means.pure.ts';
-import { DTW } from './factory-dials.pure.ts';
+import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 
-/*
- * A beat's reading (design-ADR 0024 §12, grill 11 Q224): the Sampler reads a model on the steps the headless judge
- * and the page's tour both read on, and takes the mean they both take of them.
- */
 const WEEK = stepsTo(1);
 const EIGHTH = WEEK / 8;
 const keys = ['x.step'];
 
-/** A stand-in model: its clock in steps, and one measure that reads the step it stands on. */
 const clockModel = () => {
   const m = {
     k: 0,
     step: (weeks: number) => {
-      m.k += Math.round(weeks / DTW);
+      m.k += Math.round(weeks / WEEKS_PER_STEP);
     },
     read: () => ({ measures: { 'x.step': m.k } }),
   };
   return m;
 };
-/** A stand-in model that reads the next of the given values on each read. */
 const scriptedModel = (reads: Record<string, number>[]) => {
   const left = [...reads];
   return { step: () => undefined, read: () => ({ measures: left.shift() ?? {} }) };

@@ -1,11 +1,4 @@
-/*
- * A per-run pipeline writes research only where retrieval asked for it: retrieval decides per research question
- * whether the llm-wiki answers it (reuse, no job), answers it but is stale (a refresh job) or does not (a new job),
- * and lists each question needing a job under `## Research jobs` in `research-plan.md`, one item per job naming its
- * research folder. customize-pipeline expands the template's `write-research` into one job per item (design-ADR-0008).
- * This keeps the two in step: every listed folder has a job writing it, and every job writes a listed folder.
- */
-
+// decision: docs/adr/0008-pipeline-jobs-belong-to-stages.md
 import { readPipeline } from './episode-pipeline-definition.pure';
 import type { Finding } from './finding.pure';
 
@@ -14,7 +7,6 @@ const RESEARCH_JOB = `${TEMPLATE_JOB}-`;
 const HEADING = /^#{2,3} Research jobs$/;
 const FOLDER = /[A-Z]+-\d{4}__[a-z0-9]+(?:-[a-z0-9]+)*/;
 
-/** The research folders the `## Research jobs` list of the research plan names (a run log's `### Research jobs` on a branch in flight), one per item. */
 function listedFolders(plan: string): string[] {
   const lines = plan.split('\n');
   const start = lines.map((line) => HEADING.test(line.trim())).lastIndexOf(true);
@@ -26,16 +18,10 @@ function listedFolders(plan: string): string[] {
     .flatMap((line) => FOLDER.exec(line)?.[0] ?? []);
 }
 
-/** The research folder a job's output names, `research/<folder>/research.md`, if any. */
 function folderOf(outputs: readonly string[]): string | undefined {
   return outputs.map((output) => /\/research\/([^/]+)\/research\.md$/.exec(output)?.[1]).find(Boolean);
 }
 
-/**
- * Checks one per-run pipeline against its research plan, `undefined` before retrieval writes it. A pipeline that does not
- * parse is the schema check's finding, and a scaffold that still holds the template's `write-research` job is not
- * expanded yet, so neither has findings here.
- */
 export function checkResearchJobs(file: string, yaml: string, researchPlan: string | undefined): Finding[] {
   const pipeline = readPipeline(yaml);
   if (pipeline === null || pipeline.jobs.some(({ id }) => id === TEMPLATE_JOB)) return [];

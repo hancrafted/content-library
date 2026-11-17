@@ -7,16 +7,9 @@ import type { ContextDrawerLabels } from './context-drawer-input';
 import { DrawerExplainer } from './drawer-explainer';
 import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
-/*
- * A citation marker, the only superscript in the drawer: a small, tabular
- * number in the body font. A button defaults to the system font, so `font:
- * inherit` hands it the body's. The hit area grows by a pseudo-element, which
- * takes no layout space; the ring shows on keyboard focus only.
- */
 const CITATION =
   "relative inline-block cursor-pointer rounded-sm px-px [font:inherit] text-foreground after:absolute after:-inset-1.5 after:content-[''] hover:bg-accent focus-visible:outline-2 print:cursor-auto print:hover:bg-transparent";
 
-/** A citation marker: a superscript button the drawer's delegated click turns into "open source n". Plain text in print. */
 function Citation({ number, labels }: { number: number; labels: ContextDrawerLabels }) {
   return (
     <sup className="mx-px align-super text-[0.7em] leading-none tabular-nums">
@@ -27,7 +20,6 @@ function Citation({ number, labels }: { number: number; labels: ContextDrawerLab
   );
 }
 
-/** The description with its `[n]` markers turned into citation buttons. */
 function Description({ text, labels }: { text: string; labels: ContextDrawerLabels }) {
   return (
     <p className="text-body leading-relaxed text-muted-foreground">
@@ -56,11 +48,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
   );
 }
 
-/**
- * Closed by default: sources are reference, not reading. A native `<details>`
- * keeps the text in the HTML; the drawer opens them for print (FE-010 §2). The
- * numbered list is what a description's `[n]` markers point into.
- */
+// decision: FE-010 §2
 function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: ContextDrawerLabels }) {
   return (
     <details className="group text-body text-muted-foreground">
@@ -101,7 +89,7 @@ function Note({ note, labels }: { note: SpeakerNoteItem; labels: ContextDrawerLa
   );
 }
 
-/** One Slide's Speaker notes, its explainer, or the empty state. Server-rendered into the page (FE-010 §2). */
+// decision: FE-010 §2
 export function SlideNotes({
   notes,
   labels,

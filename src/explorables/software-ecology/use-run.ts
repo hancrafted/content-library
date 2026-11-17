@@ -1,9 +1,5 @@
-/*
- * The run the factory shows and the controls that change it (design-ADR 0024 §1, §14): a state, Clear and a new use
- * case build a new run; a dial, the Model or the Customer write new settings the running model reads on its next step.
- * A new company resizes the line, so it builds a new run, as does any change under reduced motion, where the still
- * frame must show the settled model. Reached only through `useFactory`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { useState } from 'react';
 import { FactoryRun, presetOf, startSpeedOf } from './factory-run.pure.ts';
 import { pageSettings, useCaseSettings } from './factory-settings.pure.ts';
@@ -12,22 +8,15 @@ import type { Bundle, Settings } from './software-ecology.types';
 export interface FactoryControls {
   readonly preset: string;
   readonly speed: number;
-  /** The settings the run reads now. */
   readonly settings: Settings;
   setPreset(id: string): void;
   setSpeed(n: number): void;
-  /** A live change: the run reads `next` from its next step on. */
   setSettings(next: Settings): void;
-  /** Emits one own ticket at a work center now: an action, so it neither marks the state modified nor is saved. */
   emit(id: string): void;
   clear(): void;
-  /** Reset to default: the settings and speed the use-case file defines for the active state; the modified dot goes. */
   reset(d: { readonly s: Settings; readonly speed: number }): void;
-  /** A dial was turned since the state was picked (feature guide, Interaction 1). */
   readonly modified: boolean;
-  /** Shows a run made elsewhere: a tour's start, or its Back. */
   adopt(run: FactoryRun): void;
-  /** A new run from an uploaded file: its use case, its state, the settings and speed it was saved at. */
   load(B: Bundle, x: { readonly preset: string; readonly s: Settings; readonly speed: number }): void;
 }
 
@@ -41,7 +30,6 @@ const fresh = (B: Bundle, preset: string, o: { s: Settings; clear?: boolean }): 
   run: new FactoryRun({ B, preset, now: false, clear: o.clear ?? false, s: o.s }),
 });
 
-/** On a new use case: the same state if it has one, its own company and strengths. */
 const forUseCase = (B: Bundle, was: RunState): RunState => {
   const p = presetOf(B, was.run.preset.id);
   return fresh(B, p.id, { s: useCaseSettings(B, p, was.run.settings) });
@@ -56,7 +44,6 @@ interface Setters {
   readonly reduced: boolean;
 }
 
-/** A run from an uploaded file, at the speed it was saved at. */
 const loadWith =
   (x: Setters): FactoryControls['load'] =>
   (B, o) => {
@@ -65,7 +52,6 @@ const loadWith =
     x.setSt(fresh(B, o.preset, { s: o.s }));
   };
 
-/** Reset to default: the file's settings and speed for the active state; the modified dot goes. */
 const resetWith =
   (x: Setters, at: { B: Bundle; id: string }): FactoryControls['reset'] =>
   (d) => {

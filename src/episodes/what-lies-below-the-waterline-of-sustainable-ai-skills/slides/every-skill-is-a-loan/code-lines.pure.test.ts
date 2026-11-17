@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keyedLines } from './code-lines.pure';
 
-/*
- * The file lines an entry shows in the Coding agent view, each with a React key of its own. A SKILL.md opens and closes
- * its front matter with the same `---` line, so the line's text alone is not a key: two equal lines once logged
- * React's duplicate-key error on this Slide.
- */
-
 describe('success cases', () => {
   it('keeps every line and its order', () => {
     // ARRANGE

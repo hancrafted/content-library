@@ -1,7 +1,4 @@
-/*
- * The Floor over a network (design-ADR 0024 §14): one Station per work center, reading the network live; a document's
- * marks are named fields of the model's own documents. Model-internal: `createFactory` builds it once per model.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { dials } from './factory-dials.pure.ts';
 import { Q } from './factory-docs.pure.ts';
 import type { Floor, FloorBelt, FloorList, FloorRun, FloorStation, FloorWork, TopoNode } from './factory-reads.types';
@@ -9,7 +6,6 @@ import type { Factory, FactoryNode, Server } from './factory.types';
 
 const workOf = (sv: Server): FloorWork['doc'] => sv.J;
 
-/** A work center on the floor, over its node: the reads follow the model, one reused object for the work. */
 class Station implements FloorStation {
   private readonly w: FloorWork = {
     busy: false,

@@ -8,10 +8,6 @@ import en from './i18n/en.json';
 
 type Outcome = 'both' | 'precise' | 'accurate' | 'neither';
 
-/**
- * The four classic boards: where each cluster lands, relative to its board's centre, and how it is drawn. On the bull
- * is `ai` on a `card` edge, a tight cluster off target is `warning`, a loose one is dulled toward `muted-foreground`.
- */
 const BOARDS: readonly { outcome: Outcome; cx: number; darts: readonly Point[]; tone: DartTone; edge?: boolean }[] = [
   {
     outcome: 'both',
@@ -57,8 +53,6 @@ const BOARDS: readonly { outcome: Outcome; cx: number; darts: readonly Point[]; 
 ];
 const CY = 62;
 
-// The section slide of "Every product is a translation", echoing the Hero motif: the four classic dartboards,
-// precise and accurate, precise only, accurate only, neither. Slide 6 defines both words; this board only names them.
 export const everyProductIsATranslation = slide({
   slug: 'every-product-is-a-translation',
   messages: { en, de },
@@ -74,7 +68,6 @@ export const everyProductIsATranslation = slide({
   segments: [{ slug: 'a-new-pain' }, { slug: 'where-the-section-goes' }],
   content: ({ t }) => (
     <SlideFrame>
-      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
       <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 20 300 104" className="w-full" role="img" aria-label={t('label')}>
           {BOARDS.map(({ outcome, cx, darts, tone, edge }) => (

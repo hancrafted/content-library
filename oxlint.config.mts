@@ -15,6 +15,7 @@ const RESTRICTED_SYNTAX = 'eslint-js/no-restricted-syntax';
 const restrict = (...selectors: { selector: string; message: string }[]): ['error', ...typeof selectors] => [
   'error',
   ...selectors,
+  ...C.UNIT_SUFFIXES,
 ];
 const classes = (patterns: { pattern: string; message: string }[]): RuleMap => ({
   'better-tailwindcss/no-restricted-classes': ['error', { restrict: patterns }],
@@ -64,6 +65,7 @@ export default defineConfig({
   settings: { 'better-tailwindcss': { entryPoint: C.TAILWIND_ENTRY } },
   overrides: [
     { files: ['**/*.{ts,tsx}'], plugins: ['typescript'], rules: NATIVE_RULES },
+    { files: C.NAMING_FILES, rules: { [RESTRICTED_SYNTAX]: restrict() } },
     {
       files: SRC,
       rules: {

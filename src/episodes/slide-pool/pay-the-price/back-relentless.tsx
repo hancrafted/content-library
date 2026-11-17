@@ -1,7 +1,6 @@
 import { BackSvg, beat, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** A clock whose hand turns twice a pass, centred on `x`. */
 function Clock({ x, ink }: { x: number; ink: string }) {
   return (
     <g transform={`translate(${x} 36)`}>
@@ -16,7 +15,6 @@ function Clock({ x, ink }: { x: number; ink: string }) {
   );
 }
 
-/** Food, drink, sleep and toilet: what the freelancer goes without, banned one after another. */
 const NEEDS = [
   { slug: 'food', x: 0, y: 22, d: 'M-4 -6v5a2 2 0 0 0 4 0v-5M-2 -6v12M3 -6c2 0 2 4 2 6h-2v6' },
   { slug: 'drink', x: 28, y: 22, d: 'M-5 -5h9l-1 11h-7zM4 -2h2a2 2 0 0 1 0 4h-2' },
@@ -26,7 +24,6 @@ const NEEDS = [
 
 const PAGES = 10;
 
-/** Each need with its ban landing over it, one after another; the first column centred on `x`. */
 function Bans({ x }: { x: number }) {
   return (
     <>
@@ -49,7 +46,6 @@ function Bans({ x }: { x: number }) {
   );
 }
 
-/** The pile of pages growing throughout, its left edge at `x`. */
 function Pile({ ai, x }: BackProps & { x: number }) {
   const page = ai ? 'fill-ai/20 stroke-ai' : 'fill-card stroke-foreground';
   return (
@@ -71,10 +67,6 @@ function Pile({ ai, x }: BackProps & { x: number }) {
   );
 }
 
-/**
- * Relentless: a clock turns, food, drink, sleep and toilet are banned one after another, and a pile of pages grows
- * throughout. Read from the chip outwards: the clock, the bans, the pile; the AI side has the clock and the pile only.
- */
 export function RelentlessBack({ ai }: BackProps) {
   return ai ? (
     <BackSvg width={104}>

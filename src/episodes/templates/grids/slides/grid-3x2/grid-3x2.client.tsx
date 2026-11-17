@@ -6,7 +6,6 @@ import { cellNumber, GRID_3X2_CELLS, spotlightPoint, type Grid3x2Cell } from './
 
 type Grid3x2Copy = Record<Grid3x2Cell, { title: string; caption: string }>;
 
-/** Moves the card's spotlight to the pointer through two CSS variables; under reduced motion the light stays put. */
 function trackSpotlight(event: PointerEvent<HTMLElement>) {
   const card = event.currentTarget;
   if (prefersReducedMotion()) return;
@@ -15,7 +14,6 @@ function trackSpotlight(event: PointerEvent<HTMLElement>) {
   card.style.setProperty('--grid-3x2-y', `${point.y}px`);
 }
 
-/** The light: a 1px ring masked out of a radial gradient centred on the pointer, plus a faint wash inside. */
 function Spotlight() {
   return (
     <>
@@ -31,7 +29,6 @@ function Spotlight() {
   );
 }
 
-/** One outlined card: decorative index, title, caption. It reacts to the pointer but is not a control. */
 function Card({ index, title, caption }: { index: number; title: string; caption: string }) {
   const id = `grid-3x2-${useId()}`;
   return (
@@ -54,10 +51,6 @@ function Card({ index, title, caption }: { index: number; title: string; caption
   );
 }
 
-/**
- * Six outlined cards in 3 rows × 2 columns (one column on phones) on a dotted surface.
- * A spotlight follows the pointer along each card's border; under reduced motion it rests at the top edge.
- */
 export function Grid3x2({ copy }: { copy: Grid3x2Copy }) {
   return (
     <div className="rounded-2xl border border-dashed border-border bg-muted/60 bg-[radial-gradient(var(--color-border)_1px,transparent_1.5px)] bg-size-[18px_18px] p-3 sm:p-6 md:p-8">

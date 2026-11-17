@@ -1,10 +1,3 @@
-// `npm run verify`, `verify:quick`, `verify:commit` and `verify:push`: runs the plan verify.pure.ts names, one phase
-// at a time, and exits 1 naming the failed steps. `node tools/verify/verify.ts` runs the full plan, what CI will say;
-// `commit` the commit plan; `quick` the agent-loop plan; `push` the pre-push plan, planned from the pushed refs on
-// stdin and git's answer to what changed since main (push-facts.ts). A push that cannot be planned fails, naming why.
-// The plan's `testLock` steps run inside one hold of the test lock (tools/load/test-lock.ts). The full and push
-// plans then print the tests their run wrote to the slow-tests log (tools/load/slow-tests.mts), with the load factor,
-// and still pass: CI's 3 s budget is the only gate.
 import { currentBranch } from '../load/git.ts';
 import { slowTestReport } from '../load/slow-tests.mts';
 import { withTestLock } from '../load/test-lock.ts';
@@ -44,14 +37,12 @@ async function choosePlan(planName: string | undefined): Promise<Plan> {
   }
 }
 
-/** Everything on stdin: the refs git hands pre-push. */
 async function readStdin(): Promise<string> {
   const chunks: Buffer[] = [];
   for await (const chunk of process.stdin) chunks.push(chunk as Buffer);
   return Buffer.concat(chunks).toString('utf8');
 }
 
-/** The fast-suite tests this run wrote to the slow-tests log on this branch; nothing when there are none. */
 function printSlowTests(since: Date): void {
   const cwd = process.cwd();
   const report = slowTestReport({ cwd, branch: currentBranch(cwd), since, note: 'CI fails at 3 s' });

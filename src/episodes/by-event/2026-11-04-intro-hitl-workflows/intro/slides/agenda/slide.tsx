@@ -5,10 +5,6 @@ import en from './i18n/en.json';
 
 type Kind = 'start' | 'theory' | 'demo' | 'close';
 
-/**
- * The session's blocks in order, as keys of `blocks` and the kind each is: the kind picks its colour. Add
- * or drop a block here and in both Translation files; `n` numbers an Episode's block ("Episode 1").
- */
 const BLOCKS: readonly {
   key: 'welcome' | 'first' | 'grill' | 'second' | 'workflow' | 'third' | 'qa';
   kind: Kind;
@@ -23,10 +19,6 @@ const BLOCKS: readonly {
   { key: 'qa', kind: 'close' },
 ];
 
-/**
- * What a kind looks like: its disc on the rail and its label, in one of three colours (theory blue, demo orange,
- * start and wrap-up grey); every other text is the foreground colour.
- */
 const LOOK: Record<Kind, { disc: string; label: string }> = {
   start: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
   close: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
@@ -34,10 +26,8 @@ const LOOK: Record<Kind, { disc: string; label: string }> = {
   demo: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
 };
 
-/** One line of the rail beside a disc: as tall as the disc at least, its text centred on the disc's middle. */
 const BESIDE_DISC = 'flex min-h-12 items-center';
 
-// The session plan as a numbered vertical rail: per line a disc, the block and its kind.
 export const agenda = slide({
   slug: 'agenda',
   messages: { en, de },

@@ -5,10 +5,6 @@ import en from './i18n/en.json';
 
 type Kind = 'start' | 'theory' | 'handsOn' | 'break' | 'close';
 
-/**
- * The workshop's blocks in the order they run, each at its start from 0:00 (the clock time differs per Event), as keys of `blocks` and the kind each is: the kind picks its colour. Add
- * or drop a block here and in both Translation files; `n` numbers an Episode's block ("Episode 1").
- */
 const BLOCKS: readonly {
   key: 'welcome' | 'first' | 'break1' | 'grill' | 'second' | 'quiz' | 'third' | 'break2' | 'skill' | 'qa';
   kind: Kind;
@@ -26,10 +22,6 @@ const BLOCKS: readonly {
   { key: 'qa', kind: 'close' },
 ];
 
-/**
- * What a kind looks like: its disc on the rail and its label, in one of three colours (theory blue, hands-on orange,
- * start, breaks and wrap-up grey); every other text is the foreground colour.
- */
 const MUTED = { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' };
 const LOOK: Record<Kind, { disc: string; label: string }> = {
   start: MUTED,
@@ -39,10 +31,8 @@ const LOOK: Record<Kind, { disc: string; label: string }> = {
   handsOn: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
 };
 
-/** One line of the rail beside a disc: as tall as the disc at least, its text centred on the disc's middle. */
 const BESIDE_DISC = 'flex min-h-10 items-center';
 
-// The workshop plan as a numbered vertical rail: per line a disc, the start time, the block and its kind, the disc and the kind in the kind's colour. The Slide header shows the title and caption; the Scene holds the rail.
 export const agenda = slide({
   slug: 'agenda',
   messages: { en, de },

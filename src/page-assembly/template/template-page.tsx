@@ -7,19 +7,14 @@ import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
-/** A Template's page (design-ADR 0019): the page reference carrying its type and its composition's ref. */
+// decision: docs/adr/0019-resources-overview.md
 export type TemplatePageRef = PageOf<'template'>;
 
-/** The page the page catalogue builds at `/<type plural>/<template>/`, else the 404: a slug of another type has none. */
 export function templatePageOf(type: TemplateType, params: RouteParams<TemplateParams>): TemplatePageRef {
   return templatePageAt(type, params) ?? notFound();
 }
 
-/**
- * A Template page (FE-007 §1): an `episode()` composition rendered through the one Episode container, so it has the
- * table of contents and the Context drawer, but it is no Episode: no video, no structured data, never in an Episode
- * list. Its route comes from its type, so the page hands it to the container.
- */
+// decision: FE-007 §1
 export function TemplatePage({ page, locale }: { page: TemplatePageRef; locale: Locale }) {
   const { template } = page;
   return (
@@ -32,7 +27,7 @@ export function TemplatePage({ page, locale }: { page: TemplatePageRef; locale: 
   );
 }
 
-/** A Template page's title, description and treatment for `pageMetadata` (FE-008): its words are its composition's. */
+// decision: FE-008 §1
 export function templatePageCopy(page: TemplatePageRef, locale: Locale): PageCopy {
   const { title, description } = compositionOf(page.template).messages[locale];
   return { title, description, treatment: treatmentOf(page) };

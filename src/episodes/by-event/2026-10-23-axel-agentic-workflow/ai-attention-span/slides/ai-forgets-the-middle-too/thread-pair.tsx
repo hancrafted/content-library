@@ -7,20 +7,15 @@ import { Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
-/** The three bands both threads share, in reading order. */
 export type Band = 'start' | 'middle' | 'end';
 
 const BANDS: readonly Band[] = ['start', 'middle', 'end'];
 
 export interface BandCopy {
   readonly pill: string;
-  /** The pill's Context marker, or `null` where the band has none. */
   readonly marker: ReactNode;
-  /** The note target the pill carries, where a note explains the band. */
   readonly target?: TargetProps;
-  /** The sister thread's lines in this band, in order. */
   readonly left: readonly ReactNode[];
-  /** The AI thread's lines in this band, in order. */
   readonly right: readonly ReactNode[];
 }
 
@@ -38,7 +33,6 @@ interface Line {
 
 const line = (who: CallWho, light: CallLight): Line => ({ who, light });
 
-/** Who speaks each line of each band and how it reads at rest: the sister thread left, the summer-party chat right. */
 const THREADS: Readonly<Record<Band, { readonly left: readonly Line[]; readonly right: readonly Line[] }>> = {
   start: {
     left: [line('you', 'lit'), line('sister', 'lit')],
@@ -68,7 +62,6 @@ function ToolIcon() {
   );
 }
 
-/** One line of a thread in the cornerstone's Simple-view look. */
 function ThreadLine({ spec, children }: { spec: Line; children: ReactNode }) {
   return (
     <li data-who={spec.who} data-light={spec.light} className={callBubbleClass(spec.who, spec.light)}>
@@ -161,10 +154,6 @@ function assertBands(copy: ThreadPairCopy) {
   }
 }
 
-/**
- * The sister thread and the summer-party chat side by side in one frame, aligned on three shared bands (Spec Option
- * 2a), so the same lighting visibly lands on both. Everything shows at rest and enters with the Slide; nothing steps in. Pointing at a line dims the others on both sides. Below a wide frame the pill sits above its two threads.
- */
 export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
   assertBands(copy);
   return (

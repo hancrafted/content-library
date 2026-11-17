@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cycleBar, formatEuro, PIPELINE, totalConversion, type PipelineStage } from './count-board.pure';
 
-/** Intl separates a German amount from its symbol with a no-break space. */
 const NBSP = '\u00a0';
 
 describe('success cases', () => {

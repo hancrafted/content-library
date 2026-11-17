@@ -51,15 +51,21 @@ describe('parseConfig', () => {
       const config = parseConfig(text, ENTRY);
       // ASSERT
       expect(config).toMatchObject({
-        models: { claude: { mid: 'sonnet', top: 'opus' }, gemini: { mid: 'flash', top: 'pro' } },
+        models: {
+          claude: { mid: 'sonnet', top: 'opus' },
+          gemini: { mid: 'flash', top: 'pro' },
+        },
       });
     });
 
     it('defaults invoke to a command that runs the CLI at the entry it is given', () => {
-      // ARRANGE / ACT
+      // ARRANGE
+      // ACT
       const config = parseConfig('', 'tools/drive/scripts/drive.ts');
       // ASSERT
-      expect(config).toMatchObject({ worktree: { invoke: 'node tools/drive/scripts/drive.ts worktree' } });
+      expect(config).toMatchObject({
+        worktree: { invoke: 'node tools/drive/scripts/drive.ts worktree' },
+      });
     });
 
     it('fills the defaults for an empty file, a missing section and missing keys', () => {
@@ -69,7 +75,12 @@ describe('parseConfig', () => {
       const configs = texts.map((text) => parseConfig(text, ENTRY));
       // ASSERT
       expect(configs).toEqual(
-        texts.map(() => ({ worktree: defaultsFor(ENTRY), parallel: PARALLEL_DEFAULTS, models: {}, decisionDocs: [] })),
+        texts.map(() => ({
+          worktree: defaultsFor(ENTRY),
+          parallel: PARALLEL_DEFAULTS,
+          models: {},
+          decisionDocs: [],
+        })),
       );
     });
   });

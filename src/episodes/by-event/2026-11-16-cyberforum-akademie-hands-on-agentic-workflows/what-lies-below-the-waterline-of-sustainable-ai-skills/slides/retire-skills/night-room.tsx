@@ -9,14 +9,11 @@ import { PORTHOLE } from './crate-facets';
 import styles from './retire.module.css';
 import { NightWall, PortholeArt } from './room-art';
 
-/** Low in the wall between the sheets, where the cards leave it in view, in the Scene's 1200 by 800 units. */
 const PORTHOLE_AT = { x: 600, y: 735, r: 50 } as const;
-/** The Spec's porthole, 40 across its glass, moved and scaled to its place in this room. */
 const PORTHOLE_PLACE = `translate(${PORTHOLE_AT.x} ${PORTHOLE_AT.y}) scale(${PORTHOLE_AT.r / PORTHOLE.r}) translate(${-PORTHOLE.x} ${-PORTHOLE.y})`;
 const CONSOLE_WIDTH = 120;
 const SEAT = consoleLayout({ width: CONSOLE_WIDTH }).seat;
 
-/** The robot hanging in the porthole's water on its cable, lamp on, in the Spec's porthole units. */
 function PortholeRobot() {
   return (
     <g>
@@ -34,11 +31,7 @@ function PortholeRobot() {
   );
 }
 
-/**
- * The control room at night (Option 25b): the Spec's faceted night wall, the porthole onto the Abyss with its brass
- * rim, the robot hanging inside on its cable with its lamp on, and the pilot at the console. The wall and porthole are
- * lifted from the Spec (`room-art.tsx`); the figures are the shared cast (design-ADR 0025).
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function NightRoom() {
   const clip = useId();
   return (

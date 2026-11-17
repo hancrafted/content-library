@@ -1,5 +1,3 @@
-// `fold`: turns run-log lines into spans and scores. `parseLog`: reads events.jsonl text into lines.
-
 import type {
   Folded,
   FoldOptions,
@@ -13,7 +11,6 @@ import type {
   Status,
 } from './run-log.schema.pure.ts';
 
-/** Oldest first by time, ties by sequence number. */
 export function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
   return Date.parse(a.t) - Date.parse(b.t) || a.seq - b.seq;
 }
@@ -22,7 +19,6 @@ function chronological(lines: readonly RunLogLine[]): RunLogLine[] {
   return [...lines].sort(order);
 }
 
-/** Line keys a reader may display and never derives span state from. */
 const DISPLAY_ONLY = new Set(['payload', 'payload_truncated']);
 
 function openSpan(entry: RunLogLine, open: SpanStatus): Span {
@@ -42,7 +38,7 @@ function openSpan(entry: RunLogLine, open: SpanStatus): Span {
     status: open,
     start_t: t,
     end_t: null,
-    duration_ms: null,
+    'duration_ms': null,
     summary: null,
     seq,
   } as Span;
@@ -54,7 +50,6 @@ function scoreOf(entry: RunLogLine): Score {
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 
-/** Line keys that are not span attributes. A payload is display-only, so it never becomes one either. */
 const NOT_ATTRIBUTES = new Set([
   'kind',
   't',
@@ -69,11 +64,6 @@ const NOT_ATTRIBUTES = new Set([
   'payload_truncated',
 ]);
 
-/**
- * Closes a span with an end line. The span keeps its own `source`; the end line's fills it in only when the start gave none.
- * An end line may carry start facts the start could not measure: `start_t` replaces the stamped launch time, and
- * `gen_ai.input.messages` fills the prompt the start lacked.
- */
 function closeSpan(span: Span, entry: RunLogLine): void {
   const attributes = Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key));
   if (entry.start_t !== undefined) span.start_t = entry.start_t;
@@ -81,13 +71,12 @@ function closeSpan(span: Span, entry: RunLogLine): void {
     status: entry.status as Status,
     summary: entry.summary ?? null,
     end_t: entry.t,
-    duration_ms: Date.parse(entry.t) - Date.parse(span.start_t),
+    'duration_ms': Date.parse(entry.t) - Date.parse(span.start_t),
   };
   Object.assign(span, Object.fromEntries(attributes), end);
   span.source ??= entry.source;
 }
 
-/** An attrs line: facts laid over a span, leaving how it ended as it was. Its `source` fills in only when the span has none. */
 function applyAttributes(span: Span, entry: RunLogLine): void {
   Object.assign(span, Object.fromEntries(Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key))));
   span.source ??= entry.source;
@@ -120,7 +109,6 @@ function rebuildSpan(id: string, entry: RunLogLine, acc: Accumulator): void {
   acc.orphans = acc.orphans.filter((orphan) => orphan.span_id !== id);
 }
 
-/** An event line joins its span's events; until that span has started it waits among the orphans. */
 function placeEvent(id: string, entry: RunLogLine & { kind: 'event' }, acc: Accumulator): void {
   const { name, t, seq, attributes } = entry;
   acc.events.set(id, [...(acc.events.get(id) ?? []), { name, t, seq, attributes } as SpanEvent]);
@@ -162,14 +150,12 @@ function rememberEnd(id: string, entry: RunLogLine, acc: Accumulator): void {
   acc.endFacts.set(id, facts);
 }
 
-/** The skills a span invoked so far, oldest first: its `skill.invoke` events. */
 export function skillUses(span: Pick<Span, 'events'>): SkillUse[] {
   return (span.events ?? []).flatMap((event) =>
     event.name === 'skill.invoke' ? [{ name: event.attributes['skill.name'], t: event.t, seq: event.seq }] : [],
   );
 }
 
-/** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`; every start is placed before any end or score, so an end links to its start by `span_id` even when its `t` is earlier. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
   const log = createLogFold(options);
   log.append(lines);
@@ -199,7 +185,6 @@ function snapshot(acc: Accumulator): Folded {
   };
 }
 
-/** An append-only fold. Appending applies only the supplied lines; snapshots never replay log history. */
 export function createLogFold(options: FoldOptions = {}) {
   const acc: Accumulator = {
     live: options.live,
@@ -230,7 +215,6 @@ function parseLine(raw: string): RunLogLine | null {
   }
 }
 
-/** Parses events.jsonl text. A line that is not a JSON object is reported with its 1-based line number, never dropped silently. */
 export function parseLog(text: string): { lines: RunLogLine[]; errors: string[] } {
   const lines: RunLogLine[] = [];
   const errors: string[] = [];

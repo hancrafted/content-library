@@ -4,36 +4,14 @@ import { Facets } from './facets';
 import styles from './iceberg.module.css';
 import { icebergLayers, type IcebergPart } from './scenery.pure';
 
-/**
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the facets below and `iceberg.module.css`.
- *
- * - Props: `part`, `x`, `waterline`, `scale`, `depthScale`, as typed here.
- * - Box: at scale 1 the drawing stays within x -190 to 190, y -168 (tip) to 200 × `depthScale` (keel point), with
- *   (0, 0) on the waterline at the berg's centre (`KEEL_DEPTH`, `TIP_HEIGHT`, `ICEBERG_HALF_WIDTH` in
- *   `iceberg-placement.pure.ts`). Scenes place it only through `placeIceberg`.
- * - Hooks: root `data-iceberg="<part>"`; `data-iceberg-tip`, `data-iceberg-keel` (stretched by `depthScale` alone),
- *   `data-iceberg-glow`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`, with `transparent`.
- * - Motion: none; the iceberg never moves, so no `data-motion`.
- */
 export interface IcebergProps {
-  /** `whole` on the Surface, `tip` where only the visible part matters, `keel` once the Scene is below the waterline. */
   readonly part?: IcebergPart;
-  /** The centre of the iceberg, across. */
   readonly x: number;
-  /** Where the waterline crosses the Scene; the tip stands on it and the keel hangs from it. */
   readonly waterline: number;
   readonly scale?: number;
-  /** Stretches the keel downward only, so its point lands where `placeIceberg` puts it. */
   readonly depthScale?: number;
 }
 
-/**
- * The iceberg, the frame of the Iceberg style: a jagged, triangular low-poly berg, white-lit facets above the
- * waterline and white to deep blue below, its keel stepping in to one point. It never moves; `ZoneScene` shows the
- * part its zone needs. An SVG group for a Scene's own `<svg>`.
- */
 export function Iceberg({ part = 'whole', x, waterline, scale = 1, depthScale = 1 }: IcebergProps) {
   const layers = icebergLayers(part);
   return (
@@ -63,7 +41,6 @@ export function Iceberg({ part = 'whole', x, waterline, scale = 1, depthScale = 
   );
 }
 
-// The drawing: precomputed facets from the Spec's `parts.py` (seed 25), the keel's outline cut by hand (Spec review).
 const ICEBERG_TIP: readonly FacetLayer[] = [
   {
     tone: 'berg-mid',

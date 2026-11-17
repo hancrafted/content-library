@@ -1,8 +1,5 @@
-/*
- * Download YAML and Upload (design-ADR 0024 §11), as the reference build's `wireIo`: Download saves the page's state
- * as one file; Upload, or a file dropped anywhere on the page, is read, checked and handed to `onLoad`, or refused. The
- * message after either, and whether a file is held over the page, are transient (FE-001 §1).
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: FE-001 §1
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { exchangeName, exportExchange, type PageState } from './exchange-file.pure.ts';
 import type { Upload } from './exchange-load.pure.ts';
@@ -14,7 +11,6 @@ export type Loaded = Extract<Upload, { kind: 'loaded' }>;
 
 export interface ExchangeActions {
   readonly message: ExchangeMessage | null;
-  /** A file is held over the page: the drop hint shows. */
   readonly dropping: boolean;
   download(): void;
   upload(file: File): void;
@@ -23,12 +19,11 @@ export interface ExchangeActions {
 export interface ExchangeIn {
   readonly words: ExchangeWords;
   readonly catalogs: Readonly<Record<Locale, CatalogWords>>;
-  /** The use case on show, its name, and the page state Download saves. */
   readonly current: () => { readonly B: Bundle; readonly name: string; readonly page: PageState };
   readonly onLoad: (up: Loaded) => void;
 }
 
-const REVOKE_MS = 1000;
+const REVOKE_MILLISECONDS = 1000;
 
 const save = (text: string, file: string) => {
   const a = document.createElement('a');
@@ -37,12 +32,11 @@ const save = (text: string, file: string) => {
   document.body.append(a);
   a.click();
   a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), REVOKE_MS);
+  setTimeout(() => URL.revokeObjectURL(a.href), REVOKE_MILLISECONDS);
 };
 
 const hasFiles = (e: DragEvent) => [...(e.dataTransfer?.types ?? [])].includes('Files');
 
-/** Files dragged over the page: the hint shows while one is held; a drop hands the file on. */
 function useDrop(onFile: (f: File) => void, setDropping: (on: boolean) => void) {
   useEffect(() => {
     let depth = 0;
@@ -77,7 +71,6 @@ export function useExchange(x: ExchangeIn): ExchangeActions {
   const [message, setMessage] = useState<ExchangeMessage | null>(null);
   const [dropping, setDropping] = useState(false);
   const upload = async (f: File) => {
-    // the YAML reader and the schema load only when a file arrives
     const [{ uploadExchange }, text] = await Promise.all([import('./exchange-upload.ts'), f.text()]);
     const up = uploadExchange(text, f.name);
     setMessage(uploadMessage(x.words, { file: f.name, up }));
@@ -98,7 +91,6 @@ export function useExchange(x: ExchangeIn): ExchangeActions {
   };
 }
 
-/** A stable function that always calls the latest `fn`, so the document listeners stay put. */
 function useLatest<A>(fn: (a: A) => void): (a: A) => void {
   const ref = useRef(fn);
   useEffect(() => {

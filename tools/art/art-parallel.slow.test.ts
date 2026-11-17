@@ -1,10 +1,10 @@
+// decision: ARCH-003 §4.4
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 
-// Rerun triggers (ARCH-003-testing §4.4): see TRIGGERS in vitest.slow.config.mts.
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const PAGES = '2026-11-16-cyberforum-akademie-hands-on';
 const SEVERAL_WORKERS = '4';
@@ -13,7 +13,6 @@ afterAll(() => rmSync(scratch, { recursive: true, force: true }));
 
 const baked = new Map<string, Record<string, string>>();
 
-/** Bakes the fixed pages with a worker count into a fresh folder, and reads back every file it wrote. */
 function bake(workers: string) {
   const done = baked.get(workers);
   if (done !== undefined) return done;
@@ -31,8 +30,7 @@ function bake(workers: string) {
   return files;
 }
 
-// Each bake is seconds of real work; the lane's 60 s test timeout is too short for two in a row.
-const TIMEOUT = 180_000;
+const TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS = 180_000;
 
 describe('success cases', () => {
   it(
@@ -48,7 +46,7 @@ describe('success cases', () => {
       expect(Object.keys(one).length).toBeGreaterThan(1);
       expect(several).toEqual(one);
     },
-    TIMEOUT,
+    TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS,
   );
 });
 
@@ -60,7 +58,8 @@ describe('failure cases', () => {
         cwd: ROOT,
         stdio: 'pipe',
       });
-    // ACT / ASSERT
+    // ACT
+    // ASSERT
     expect(run).toThrow(/--workers/);
   });
 });
@@ -77,6 +76,6 @@ describe('edge cases', () => {
       // ASSERT
       expect(oversized).toEqual(one);
     },
-    TIMEOUT,
+    TWO_BAKES_IN_A_ROW_TIMEOUT_MILLISECONDS,
   );
 });

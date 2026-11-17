@@ -4,11 +4,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { readEpisodeStatus } from './episode-status.ts';
 
-/*
- * The run status reader against a real temp worktree: the Episode's job states from pipeline.yml,
- * events.jsonl and the gates, and the SessionStart summary of them.
- */
-
 const SLUG = 'ep';
 const NOW = '2026-10-14T10:00:00Z';
 const TRACE = 'a'.repeat(32);

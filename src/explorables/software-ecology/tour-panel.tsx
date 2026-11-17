@@ -9,8 +9,6 @@ import { checkText } from './tour-checks.pure.ts';
 import { beatCaption, presetName, type WordsIn } from './use-case-words.pure.ts';
 import type { TourActions } from './use-tour.ts';
 
-/* The tour's words for its caption box and the clock, from the tour on show and its run. */
-
 export interface TourPanelProps {
   readonly tour: TourActions;
   readonly words: Words;
@@ -19,7 +17,6 @@ export interface TourPanelProps {
   readonly locale: Locale;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly wrap: RefObject<HTMLElement | null>;
-  /** The compare stream's columns, while it is shown. */
   readonly stream?: string;
 }
 
@@ -29,13 +26,11 @@ const runningText = (run: FactoryRun, t: Tour, words: Words): string | null => {
   return fillTemplate(words.tour.running, { w: tourWeekOf(t), n: Math.floor(tourWeeks(run, t)) });
 };
 
-/** The clock while a tour runs: "Week 8 · Day 1"; undefined while the line warms or no tour runs. */
 export const tourClockText = (tour: TourActions, words: Words): string | undefined => {
   const c = tourClockAt(tour);
   return c ? fillTemplate(words.toolbar.week, { w: c.week, d: c.day }) : undefined;
 };
 
-/** The tour's clock as numbers, for the eval read-outs `data-readout-week` and `-day`. */
 export const tourClockAt = (tour: TourActions): { week: number; day: number } | undefined => {
   const c = tour.tour && tour.run ? tourClock(tour.run, tour.tour) : null;
   return c ?? undefined;

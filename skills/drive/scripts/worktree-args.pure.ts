@@ -1,11 +1,5 @@
-// The worktree command's arguments: `new|done <branch> [--base <branch>] [--kill]` and
-// `sync [--base <branch>]`. Without --base a worktree branches from the config's remote base branch
-// and finishing it syncs the local one; with it, both work against that branch instead.
-// --kill (done only) stops the processes that hold the worktree.
-
 import type { WorktreeConfig } from './config.pure.ts';
 
-/** The commands that take no branch: they work on the current worktree. */
 const BRANCHLESS = ['sync'] as const;
 const COMMANDS = ['new', 'done', ...BRANCHLESS] as const;
 type Command = (typeof COMMANDS)[number];
@@ -15,15 +9,10 @@ const isBranchless = (command: Command): boolean => (BRANCHLESS as readonly stri
 
 export interface WorktreeArgs {
   command: Command;
-  /** Empty for `sync`, which works on the current worktree. */
   branch: string;
-  /** The branch to start from and merge into, or null for the config's remote base branch. */
   base: string | null;
-  /** `done` only: stop the processes that block removal. */
   kill: boolean;
-  /** A subagent branch's parent, everything before its first `--`; null for an orchestrator branch. */
   parent: string | null;
-  /** The ticket in `<parent>--<issue>-<task>`; null without one. The cleanup skill matches branches to issues by it. */
   issue: number | null;
 }
 
@@ -32,7 +21,6 @@ interface Owner {
   issue: number | null;
 }
 
-/** Reads who owns a branch: `<type>/<slug>` is an orchestrator's, `<parent>--[<issue>-]<task>` a subagent's. */
 function readOwner(branch: string): Owner | { error: string } {
   const split = branch.indexOf('--');
   if (split === -1) return { parent: null, issue: null };
@@ -48,13 +36,11 @@ function readOwner(branch: string): Owner | { error: string } {
   };
 }
 
-/** What the config says about the command line: how a hint names the CLI, and the branch worktrees start from. */
 export type Naming = Pick<WorktreeConfig, 'invoke' | 'baseBranch'>;
 
 const usage = (invoke: string) =>
   `usage: ${invoke} new <branch> [--base <branch>]  |  ${invoke} done <branch> [--base <branch>] [--kill]  |  ${invoke} sync [--base <branch>]`;
 
-/** A branch name, not a missing argument or a flag in its place. */
 function isBranch(value: string | undefined): value is string {
   return value !== undefined && value !== '' && !value.startsWith('--');
 }
@@ -65,7 +51,6 @@ interface Flags {
   kill: boolean;
 }
 
-/** Splits the tokens after the command into flags and positional words. */
 function readFlags(tokens: readonly string[]): Flags | { error: string } {
   const flags: Flags = { positional: [], base: null, kill: false };
   for (let i = 0; i < tokens.length; i++) {
@@ -110,10 +95,6 @@ export function parseArgs(argv: readonly string[], invoke: string): WorktreeArgs
   };
 }
 
-/**
- * Why `new` refuses this branch, or null. A subagent branch starts from its parent:
- * the parent must exist, must not be the base branch, and must be the --base. Each refusal names the fix.
- */
 export function refuseNewBranch(
   args: WorktreeArgs,
   branchExists: (branch: string) => boolean,

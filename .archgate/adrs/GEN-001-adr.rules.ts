@@ -1,12 +1,6 @@
 /// <reference path="../rules.d.ts" />
 
-// GEN-001 — ADR Contract: the meta-rules governing ADR markdown files under
-// .archgate/adrs/ and their companion .rules.ts files — frontmatter bundle and
-// order, the six canonical sections, the size budget, the shape grammar, and
-// the rules-file duties. The .claude/rules runtime-loading channel is GEN-002's.
-// All rules run at error (§5.3); there is no migration epoch — an ADR
-// conforms fully or the build fails. Further rules or a tier change land only by
-// deliberate ADR amendment.
+// decision: GEN-001 §5.3
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const RULES_GLOB = '.archgate/adrs/*.rules.ts';
 const ADRS_DIR = '.archgate/adrs/';
@@ -14,14 +8,10 @@ const ADR_BASENAME_RE = /^([A-Z]+-\d{3})-.+\.md$/;
 const RULES_BASENAME_RE = /^[A-Z]+-\d{3}-.+\.rules\.ts$/;
 const RULES_TEST_BASENAME_RE = /^[A-Z]+-\d{3}-.+\.rules\.test\.ts$/;
 const BUILTIN_DOMAINS = ['architecture', 'backend', 'data', 'frontend', 'general'];
-// `description` is required here and not upstream: it is the text `.archgate/INDEX.md`
-// carries for each ADR, so an absent one silently empties an index entry.
 const REQUIRED_KEYS = ['type', 'id', 'title', 'domain', 'rules', 'files', 'description'];
-// The two glob-valued keys adr-glob-inline governs; both must be flow lists.
 const GLOB_KEYS = ['files', 'paths'];
-// GEN-001 §4.1 — Windsurf's published cap, the strictest hard limit among the
-// five vendors that publish one. Counted in code points, matching `wc -m`.
-const MAX_ADR_CHARS = 12_000;
+// decision: GEN-001 §4.2
+const WINDSURF_PUBLISHED_CAP_IN_CODE_POINTS = 12_000;
 const REQUIRED_SECTIONS = [
   '## Context',
   '## Decision',
@@ -30,11 +20,18 @@ const REQUIRED_SECTIONS = [
   '## Compliance and Enforcement',
   '## References',
 ];
-// Subsection headings inside ## Do's and Don'ts — the structural break that
-// makes the Don'ts ordered list restart at 1 when rendered; bare adjacent
-// ordered lists merge and the Don'ts number on from the Do's.
-const DOS_HEADING_RE = /^### Do's[ \t]*$/;
+// decision: GEN-001 §4.3
+const DOS_SUBHEADING_THAT_RESTARTS_DONTS_NUMBERING_RE = /^### Do's[ \t]*$/;
 const DONTS_HEADING_RE = /^### Don'ts[ \t]*$/;
+
+async function registeredDomainsOrBuiltInsWhenConfigIsMissing(ctx: RuleContext): Promise<string[]> {
+  try {
+    const cfg = (await ctx.readJSON('.archgate/config.json')) as { domains?: Record<string, string> };
+    return [...BUILTIN_DOMAINS, ...Object.keys(cfg?.domains ?? {})];
+  } catch {
+    return BUILTIN_DOMAINS;
+  }
+}
 
 function basename(p: string): string {
   return p.split('/').pop() ?? p;
@@ -81,7 +78,6 @@ function stripFences(content: string): string {
     .join('\n');
 }
 
-// Section body from `## <name>` to the next `## ` heading (fences stripped).
 function getSection(content: string, heading: string): string | null {
   const lines = stripFences(content).split('\n');
   const esc = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -97,14 +93,10 @@ function getSection(content: string, heading: string): string | null {
   return lines.slice(start + 1, end).join('\n');
 }
 
-// Decision-side marker: (📜 Rule: `<id>`) — anchored to the enclosing numbered
-// ### anchor (or top-level ordered item in a list-form Decision). Do's/Don'ts-side
-// marker: (Decision <N>, 📜 Rule: `<id>`) — N back-references the Decision anchor
-// that carries the rule's Decision-side marker.
+// decision: GEN-001 §4.4
 const DECISION_MARKER_RE = /\(📜 Rule: `([a-z0-9-]+)`\)/g;
 const DD_MARKER_RE = /\(Decision (\d+), 📜 Rule: `([a-z0-9-]+)`\)/g;
 
-// Map ruleId → anchor numbers where its Decision-side marker appears.
 function decisionMarkers(section: string): Map<string, number[]> {
   const found = new Map<string, number[]>();
   const lines = section.split('\n');
@@ -122,7 +114,6 @@ function decisionMarkers(section: string): Map<string, number[]> {
   return found;
 }
 
-// Map ruleId → back-referenced Decision numbers from Do's/Don'ts markers.
 function ddMarkers(section: string): Map<string, number[]> {
   const found = new Map<string, number[]>();
   for (const m of section.matchAll(DD_MARKER_RE)) {
@@ -133,7 +124,6 @@ function ddMarkers(section: string): Map<string, number[]> {
   return found;
 }
 
-// Rule keys declared in a companion .rules.ts source — the `'<id>': {` entries.
 function ruleKeysOf(rulesSource: string): string[] {
   const keys: string[] = [];
   const re = /["']([a-z0-9-]+)["'][ \t]*:[ \t]*\{/g;
@@ -142,12 +132,10 @@ function ruleKeysOf(rulesSource: string): string[] {
   return keys;
 }
 
-// Quoted entries of an inline flow list body — `'a', "b"` → ['a', 'b'].
 function flowListEntries(body: string): string[] {
   return [...body.matchAll(/(["'])(.*?)\1/g)].map((m) => m[2]).filter((e) => e.length > 0);
 }
 
-// Sequentiality helper: numbers must read 1, 2, 3, … with no gap or restart.
 function checkSequential(nums: number[]): boolean {
   return nums.every((n, i) => n === i + 1);
 }
@@ -168,7 +156,6 @@ function checkDecisionNumbering(section: string): DecisionFindings {
       else nums.push(Number(m[1]));
     }
     if (!checkSequential(nums)) messages.push(`Decision anchors are not sequential from 1 (found ${nums.join(',')})`);
-    // First-level items inside anchors: unordered bullets flagged; ordered lists restart at 1 per anchor.
     let seq: number[] = [];
     let seenAnchor = false;
     for (const line of lines) {
@@ -209,13 +196,7 @@ export default {
         'ADR frontmatter: type/id/title/domain/rules/files/description present non-empty, type: adr leads, id matches filename prefix, domain registered, rules:true ⇔ sibling .rules.ts.',
       severity: 'error',
       async check(ctx) {
-        let registered = BUILTIN_DOMAINS;
-        try {
-          const cfg = (await ctx.readJSON('.archgate/config.json')) as { domains?: Record<string, string> };
-          registered = [...BUILTIN_DOMAINS, ...Object.keys(cfg?.domains ?? {})];
-        } catch {
-          // config.json optional — built-ins only
-        }
+        const registered = await registeredDomainsOrBuiltInsWhenConfigIsMissing(ctx);
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         const allRules = await ctx.glob(RULES_GLOB);
         for (const file of files) {
@@ -312,12 +293,10 @@ export default {
       async check(ctx) {
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         for (const file of files) {
-          // Code points, not UTF-16 units: the 📜 rule markers are astral and
-          // would otherwise each count twice against the budget.
-          const size = [...(await ctx.readFile(file))].length;
-          if (size > MAX_ADR_CHARS) {
+          const sizeInCodePointsNotUtf16Units = [...(await ctx.readFile(file))].length;
+          if (sizeInCodePointsNotUtf16Units > WINDSURF_PUBLISHED_CAP_IN_CODE_POINTS) {
             ctx.report.violation({
-              message: `ADR is ${size} characters, over the ${MAX_ADR_CHARS}-character budget — split Disciplines by glob into a second ADR, or compress prose to one-line imperatives (GEN-001 [adr-size-budget]).`,
+              message: `ADR is ${sizeInCodePointsNotUtf16Units} characters, over the ${WINDSURF_PUBLISHED_CAP_IN_CODE_POINTS}-character budget — split Disciplines by glob into a second ADR, or compress prose to one-line imperatives (GEN-001 [adr-size-budget]).`,
               file,
             });
           }
@@ -337,8 +316,6 @@ export default {
           const content = await ctx.readFile(file);
           const dMarks = decisionMarkers(getSection(content, '## Decision') ?? '');
           const ddMarks = ddMarkers(getSection(content, "## Do's and Don'ts") ?? '');
-          // No rules file: no keys to require markers for, but any marker present
-          // is a phantom — it states a rule nothing enforces.
           const declared = source === null ? [] : ruleKeysOf(source);
           const declaredSet = new Set(declared);
           for (const [ruleId] of dMarks) {
@@ -391,7 +368,8 @@ export default {
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         for (const file of files) {
           const decision = getSection(await ctx.readFile(file), '## Decision');
-          if (decision === null) continue; // adr-required-sections owns the missing-section finding
+          const missingDecisionIsReportedByAdrRequiredSections = decision === null;
+          if (missingDecisionIsReportedByAdrRequiredSections) continue;
           for (const msg of checkDecisionNumbering(decision).messages) {
             ctx.report.violation({ message: `${msg} (GEN-001 [adr-numbered-decision]).`, file });
           }
@@ -409,7 +387,7 @@ export default {
           const section = getSection(await ctx.readFile(file), "## Do's and Don'ts");
           if (section === null) continue;
           const lines = section.split('\n');
-          const dosAt = lines.flatMap((l, i) => (DOS_HEADING_RE.test(l) ? [i] : []));
+          const dosAt = lines.flatMap((l, i) => (DOS_SUBHEADING_THAT_RESTARTS_DONTS_NUMBERING_RE.test(l) ? [i] : []));
           const dontsAt = lines.flatMap((l, i) => (DONTS_HEADING_RE.test(l) ? [i] : []));
           let headingsOk = true;
           if (dosAt.length !== 1) {
@@ -439,7 +417,11 @@ export default {
           let bad = false;
           for (const line of lines) {
             if (/^###\s/.test(line)) {
-              zone = DOS_HEADING_RE.test(line) ? 'dos' : DONTS_HEADING_RE.test(line) ? 'donts' : 'other';
+              zone = DOS_SUBHEADING_THAT_RESTARTS_DONTS_NUMBERING_RE.test(line)
+                ? 'dos'
+                : DONTS_HEADING_RE.test(line)
+                  ? 'donts'
+                  : 'other';
               continue;
             }
             if (/^[-*+]\s+\*\*(DO|DON'T)\*\*/.test(line)) {
@@ -528,7 +510,8 @@ export default {
         const present = new Set(entries);
         for (const entry of entries) {
           const base = basename(entry);
-          if (base.startsWith('.')) continue; // editor/OS droppings — not governance surface
+          const isEditorOrOsDropping = base.startsWith('.');
+          if (isEditorOrOsDropping) continue;
           if (entry.slice(ADRS_DIR.length).includes('/')) {
             ctx.report.violation({
               message: `'${entry}' sits in a subdirectory — .archgate/adrs/ is flat; the contract's rules do not reach nested files (GEN-001 [adr-governed-files]).`,
@@ -564,7 +547,8 @@ export default {
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         for (const file of files) {
           const fm = extractFrontmatter(await ctx.readFile(file));
-          if (fm === null) continue; // adr-frontmatter owns the missing-frontmatter finding
+          const missingFrontmatterIsReportedByAdrFrontmatter = fm === null;
+          if (missingFrontmatterIsReportedByAdrFrontmatter) continue;
           for (const key of GLOB_KEYS) {
             const m = fm.match(new RegExp(`^${key}[ \\t]*:[ \\t]*(.*)$`, 'm'));
             if (m && !/^\[.*\]$/.test(m[1].trim())) {
@@ -586,10 +570,12 @@ export default {
         const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
         for (const file of files) {
           const fm = extractFrontmatter(await ctx.readFile(file));
-          if (fm === null) continue; // adr-frontmatter owns the missing-frontmatter finding
+          const missingFrontmatterIsReportedByAdrFrontmatter = fm === null;
+          if (missingFrontmatterIsReportedByAdrFrontmatter) continue;
           for (const key of GLOB_KEYS) {
             const list = fm.match(new RegExp(`^${key}[ \\t]*:[ \\t]*\\[(.*)\\][ \\t]*$`, 'm'));
-            if (!list) continue; // adr-glob-inline owns a non-flow-list value
+            const nonFlowListIsReportedByAdrGlobInline = !list;
+            if (nonFlowListIsReportedByAdrGlobInline) continue;
             for (const entry of flowListEntries(list[1])) {
               if ((await ctx.glob(entry)).length > 0) continue;
               ctx.report.violation({

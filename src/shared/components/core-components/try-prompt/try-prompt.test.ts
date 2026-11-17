@@ -10,7 +10,6 @@ import {
   type TryPromptWords,
 } from './try-prompt.client';
 
-/** Any link: the prompt row offers none, so no prompt ever travels in a URL; the caller adds its chat buttons. */
 const LINK = 'href=';
 const PREFILL = '?q=';
 const WORDS: TryPromptWords = {
@@ -49,7 +48,6 @@ function render(props: {
   return renderToStaticMarkup(createElement(TryPrompt, { prompt, kit: KIT, values }));
 }
 
-/** The prompt as it is copied, carried on the body. */
 function shown(html: string): string {
   const match = /data-prompt-text="([^"]*)"/.exec(html);
   return (match?.[1] ?? '').replaceAll('&quot;', '"').replaceAll('&#x27;', "'").replaceAll('&amp;', '&');

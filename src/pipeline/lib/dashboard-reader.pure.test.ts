@@ -6,13 +6,11 @@ import { createMemoryFolder, type EpisodeFolder } from './episode-folder.pure';
 const fixture = (name: string) =>
   readFileSync(new URL(`../../../tests/fixtures/pipeline-dashboard/${name}`, import.meta.url), 'utf8');
 
-/** A clock that ticks one second per reading, from a fixed instant. */
 function clockFrom(start: number) {
   let now = start - 1000;
   return () => (now += 1000);
 }
 
-/** The in-memory folder with one file's reads refused, as a revoked browser permission refuses them. */
 function refusing(folder: EpisodeFolder, refused: { path?: string }): EpisodeFolder {
   const guard = (path: string) => {
     if (path === refused.path) throw Object.assign(new Error('Read access denied'), { name: 'NotAllowedError' });

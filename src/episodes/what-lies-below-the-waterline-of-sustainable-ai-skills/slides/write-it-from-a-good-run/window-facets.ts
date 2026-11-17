@@ -1,10 +1,3 @@
-/*
- * The control room's window in "Write it from a good run", lifted facet by facet from Spec Option 10b (feedback 3,
- * decision 46), in the Spec's 300 by 236 panel units: afternoon sky with a cloud, a dusk sunset (the window on the
- * left wall) and a low morning sun, each over the sea.
- */
-
-/** A tone of the drawing; `day-art.module.css` gives each its fill. */
 export type ArtTone =
   | 'frame-lit'
   | 'frame-shade'
@@ -28,10 +21,8 @@ export type ArtTone =
   | 'sun'
   | 'sun-lit';
 
-/** One facet: its tone and its SVG path. */
 export type ArtFacet = readonly [tone: ArtTone, d: string];
 
-/** Panel 2: the window at the right, afternoon sky, a cloud and the sea. */
 export const AFTERNOON_WINDOW: readonly ArtFacet[] = [
   ['frame-lit', 'M143 15L291 15L284 22L150 22ZM143 15L150 22L150 104L143 111Z'],
   ['frame-shade', 'M291 15L291 111L284 104L284 22ZM143 111L150 104L284 104L291 111Z'],
@@ -91,7 +82,6 @@ export const AFTERNOON_WINDOW: readonly ArtFacet[] = [
   ['pane-glint', 'M154 22L176 22L154 44Z'],
 ];
 
-/** Panel 3: the window at the left, a dusk sky with the sun setting into the sea. */
 export const DUSK_WINDOW: readonly ArtFacet[] = [
   ['frame-lit', 'M11 15L177 15L170 22L18 22ZM11 15L18 22L18 104L11 111Z'],
   ['frame-shade', 'M177 15L177 111L170 104L170 22ZM11 111L18 104L170 104L177 111Z'],
@@ -141,7 +131,6 @@ export const DUSK_WINDOW: readonly ArtFacet[] = [
   ['pane-glint', 'M22 22L44 22L22 44Z'],
 ];
 
-/** Panel 4: the window at the right, a low morning sun over the sea. */
 export const DAWN_WINDOW: readonly ArtFacet[] = [
   ['frame-lit', 'M143 15L291 15L284 22L150 22ZM143 15L150 22L150 104L143 111Z'],
   ['frame-shade', 'M291 15L291 111L284 104L284 22ZM143 111L150 104L284 104L291 111Z'],

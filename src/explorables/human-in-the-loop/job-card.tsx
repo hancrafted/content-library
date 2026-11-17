@@ -9,24 +9,14 @@ import { StateMark } from './state-mark';
 import type { JobState } from './workflow-run.pure';
 import type { Job, Stage } from './workflow.types';
 
-/*
- * The job card of the Jobs view: the job's title, its one-line summary, a labelled check mark where the job is
- * reviewed. The Slide's `diagram.jobs` slot lays in its own detail, marker, popover and what hangs after the card.
- * Where the Scene can try, the whole card presses open the stage's modal at this job.
- */
-
 interface JobCardProps {
   readonly stage: Stage;
   readonly job: Job;
   readonly slot: JobSlot;
   readonly words: UiWords;
-  /** A card after the first: an arrow comes down into it from the card above. */
   readonly joined: boolean;
-  /** Where the run says the job stands, drawn as a mark once the run has work; none before. */
   readonly state?: JobState;
-  /** The round of a repeated stage this card sits in: the modal opens at it. */
   readonly round?: number;
-  /** Opens the modal at this job; none where a readonly Preset tries nothing. */
   readonly onOpen: (() => void) | undefined;
 }
 
@@ -61,7 +51,6 @@ function Detail({ detail }: { readonly detail: ReactNode }) {
   );
 }
 
-/** Where the run has work, the card says where the job stands; before that it only says that a job is reviewed. */
 function Mark({ state, reviewed, words }: { state?: JobState; reviewed: boolean; words: UiWords }) {
   if (state) return <StateMark state={state} words={words} />;
   return reviewed ? <CheckedMark word={words.checked} /> : null;

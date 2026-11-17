@@ -9,7 +9,6 @@ const ICEBERG = {
 const EVENT = '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows';
 const EVENT_COPY = { event: EVENT, slug: 'intro', folder: `by-event/${EVENT}/intro`, exported: 'cyberforumIntro' };
 
-/** The text of one generated file. */
 function fileAt(routes: Parameters<typeof episodeRouteFiles>[0], path: string): string {
   return episodeRouteFiles(routes).find((file) => file.path === path)?.text ?? '';
 }
@@ -81,6 +80,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('writes every route without a header comment, so the registry staleness test is its only guard', () => {
+    // ARRANGE
+    const files = episodeRouteFiles([ICEBERG, EVENT_COPY]);
+    // ACT
+    const commented = files.filter(({ text }) => /^\s*\/[/*]/m.test(text));
+    // ASSERT
+    expect(commented).toEqual([]);
+  });
+
   it('knows every route it writes for a generated one, so `npm run registry` can remove it once its page is gone', () => {
     // ARRANGE
     const files = episodeRouteFiles([ICEBERG, EVENT_COPY]);

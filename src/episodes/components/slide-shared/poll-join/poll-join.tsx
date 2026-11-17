@@ -2,32 +2,22 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import { ExternalLink } from 'lucide-react';
 import { isPlaceholderPollUrl, qrModules } from './qr-modules.pure';
 
-/** What `PollJoin` takes: the Vote link and the words around its code. */
 export interface PollJoinProps {
-  /** The directpoll Vote link; the QR is drawn from it at build time. */
   voteUrl: string;
-  /** The caption under the code: "Scan to vote". */
   label: string;
-  /** The accessible name of the code. */
   qrLabel: string;
-  /** Shown instead of a code while `voteUrl` is a placeholder: "Create your poll at directpoll.com". */
   note: string;
-  /** The button opening the Vote page, for people on a laptop: "Vote in the browser". */
   openLabel: string;
-  /** Read after the button's label by a screen reader: "opens in a new tab". */
   newTab: string;
 }
 
-/** The longest link a person types from a screen without giving up; a directpoll token link is far longer. */
 const TYPEABLE_LENGTH = 40;
 
-/** The link as people read it aloud or type it: no scheme; none when it is too long to type, so only the code shows. */
 function shortLink(url: string): string | undefined {
   const short = url.replace(/^https?:\/\//, '');
   return short.length <= TYPEABLE_LENGTH ? short : undefined;
 }
 
-/** Shown while the Vote link is a placeholder: the note, on the panel the code would sit on. */
 function Placeholder({ note }: { note: string }) {
   return (
     <p
@@ -39,7 +29,6 @@ function Placeholder({ note }: { note: string }) {
   );
 }
 
-/** The QR on its tile, as an inline SVG with its accessible name: dark modules on a light tile in both themes, since many phone cameras cannot read an inverted code. */
 function QrTile({ voteUrl, qrLabel }: Pick<PollJoinProps, 'voteUrl' | 'qrLabel'>) {
   const { size, path } = qrModules(voteUrl);
   return (
@@ -57,7 +46,6 @@ function QrTile({ voteUrl, qrLabel }: Pick<PollJoinProps, 'voteUrl' | 'qrLabel'>
   );
 }
 
-/** The Vote page as a button, for people on a laptop who cannot scan their own screen; it opens in a new tab. */
 function VoteLink({ voteUrl, openLabel, newTab }: Pick<PollJoinProps, 'voteUrl' | 'openLabel' | 'newTab'>) {
   return (
     <a
@@ -74,12 +62,6 @@ function VoteLink({ voteUrl, openLabel, newTab }: Pick<PollJoinProps, 'voteUrl' 
   );
 }
 
-/**
- * The way into a poll (a server part): a QR drawn at build time as an inline SVG from the Vote link, on a light tile so
- * it scans in both themes, the caption, when short enough to type the link under it, and a button opening the Vote page
- * for people on a laptop. A placeholder link shows the note instead, so a
- * template copy never prints a code that scans to nothing. No request leaves the page.
- */
 export function PollJoin({ voteUrl, label, qrLabel, note, openLabel, newTab }: PollJoinProps) {
   if (isPlaceholderPollUrl(voteUrl)) return <Placeholder note={note} />;
   const link = shortLink(voteUrl);

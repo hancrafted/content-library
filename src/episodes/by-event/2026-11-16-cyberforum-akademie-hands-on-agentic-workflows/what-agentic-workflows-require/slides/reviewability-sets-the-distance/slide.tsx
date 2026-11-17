@@ -31,14 +31,11 @@ const DESIGN_CHOICE = 'level-is-a-design-choice';
 const TOOL_RATING = 'risk-as-a-tool-rating';
 const ONE_INPUT = 'risk-is-one-input-not-the-rule';
 
-/** Each task's trust: what a wrong result needs (set by risk) and what its check has proved. */
 const GUEST_LIST = { needed: 1, earned: 1 } as const;
 const VENUE = { needed: 3, earned: 3 } as const;
-/** The activity before its check card (trustLevel: in, a person stayed in) and after it. */
 const ACTIVITY_BEFORE = { needed: 3, earned: 1 } as const;
 const ACTIVITY = { needed: 3, earned: 3 } as const;
 
-/** The primary arrow of the activity's move, from its former level to its new one. */
 function MoveArrow() {
   return (
     <svg viewBox="0 0 40 16" className="w-8 shrink-0" aria-hidden="true">
@@ -47,16 +44,6 @@ function MoveArrow() {
   );
 }
 
-/**
- * "Trust lets you step out; review builds the trust" (Spec Option 6b, redesigned from the decision page of 2026-11-16):
- * a chain of three linked boxes, engineer for review, earned trust, step out, over the party board in workflow order.
- * Each note shows the trust it needs (set by what a wrong result can do) beside the trust it has earned (set by its
- * check), and its level follows from the two (`trustLevel`). The activity needed 3 and had 1, so a person stayed in;
- * its check card is pinned to it, the trust is earned, and its pill slides from in to on on the Slide's first `active`
- * and on hover or focus. Numbered callouts 1 to 3 join the chain to the check card, the earned-trust meter and the
- * moving pill. Keeps `basic-page` and the slug, so the published anchor holds. The check boxes stay empty: the
- * `success` tick is reserved for a later Slide.
- */
 export const reviewabilitySetsTheDistance = slide({
   slug: 'reviewability-sets-the-distance',
   messages: { en, de },

@@ -1,10 +1,4 @@
-/*
- * The Surface's sky and water: the sky's four facet tones by day come from `sky.pure.ts` as `--sky-<n>-day` (the one
- * place they are mixed, which a Surface title's transition wave reads too); by night a sky mixed from `--info` and
- * `--overlay` with stars. The Surface water's flat steps of `--water`, and a lit waterline in both themes. Colours
- * mixed from global tokens only (FE-011); each facet carries a same-colour hairline that closes anti-aliasing seams.
- */
-
+/* decision: FE-011 §4 */
 .sky {
   --sky-1: var(--sky-1-day);
   --sky-2: var(--sky-2-day);

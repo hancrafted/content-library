@@ -1,5 +1,3 @@
-// `drive setup`: detects the project's skills and Enforcers and writes or refreshes `docs/drive/`. Re-running keeps
-// every edit the Operator made: the Binding and the config gain only what is new, the stubs are never rewritten.
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
@@ -48,7 +46,6 @@ const subfolders = (dir: string): string[] => {
   }
 };
 
-/** The lockfile's skills as installed, or none without a lockfile; throws when it is not JSON. */
 function lockedSkills(root: string): DetectedSkill[] {
   const lock = read(path.join(root, LOCKFILE));
   if (lock === null) return [];
@@ -65,7 +62,6 @@ function lockedSkills(root: string): DetectedSkill[] {
   }));
 }
 
-/** Skills from the lockfile and the skill folders (`skills/`, `.agents/skills/`, `.claude/skills/`); an authored skill is one with a SKILL.md under `skills/`. */
 export function detectSkills(root: string): DetectedSkill[] {
   const authored = subfolders(path.join(root, AUTHORED_DIR))
     .filter((name) => existsSync(path.join(root, AUTHORED_DIR, name, 'SKILL.md')))
@@ -75,22 +71,21 @@ export function detectSkills(root: string): DetectedSkill[] {
     origin: 'installed',
     source: null,
   }));
-  // The first sighting wins: an authored skill, then the lockfile's source, then a bare installed folder.
-  return mergeDetected([authored, lockedSkills(root), folders], SELF);
+  const firstSightingWins = [authored, lockedSkills(root), folders];
+  return mergeDetected(firstSightingWins, SELF);
+}
+
+function scriptsOfPackageJson(root: string): Record<string, string> {
+  try {
+    const manifest = JSON.parse(read(path.join(root, 'package.json')) ?? '{}') as { scripts?: Record<string, string> };
+    return manifest.scripts ?? {};
+  } catch {
+    return {};
+  }
 }
 
 function enforcerFacts(root: string): EnforcerFacts {
-  let scripts: Record<string, string> = {};
-  try {
-    scripts =
-      (
-        JSON.parse(read(path.join(root, 'package.json')) ?? '{}') as {
-          scripts?: Record<string, string>;
-        }
-      ).scripts ?? {};
-  } catch {
-    // An unreadable package.json shows no scripts.
-  }
+  const scripts = scriptsOfPackageJson(root);
   const hooks = ['.husky', '.githooks'].flatMap((dir) => {
     try {
       return readdirSync(path.join(root, dir), { withFileTypes: true })
@@ -108,7 +103,6 @@ function enforcerFacts(root: string): EnforcerFacts {
   };
 }
 
-/** Whether a glossary file exists at most four folders deep, skipping dot folders and dependencies. */
 function hasGlossary(dir: string, depth = 0): boolean {
   if (depth > 4) return false;
   return readdirSync(dir, { withFileTypes: true }).some((entry) => {
@@ -139,13 +133,10 @@ function projectFacts(root: string, entry: string): ProjectFacts {
 }
 
 export interface SetupResult {
-  /** The files it created or changed, relative to the root. */
   written: string[];
-  /** What the Operator still has to do by hand. */
   notes: string[];
 }
 
-/** Writes `docs/drive/` under `root`. `scriptsDir` is where the CLI runs from; tests move it to place the skill. */
 export function setup(root: string, options: SeedOptions = {}, scriptsDir: string = import.meta.dirname): SetupResult {
   const written: string[] = [];
   const notes: string[] = [];
@@ -177,11 +168,6 @@ export function setup(root: string, options: SeedOptions = {}, scriptsDir: strin
 
 const HOOK = '.husky/pre-commit';
 
-/**
- * Wires the Decision-doc guard into a husky pre-commit hook and returns null. It returns the line to add by hand
- * instead, and writes nothing, when there is no husky hook (the line is for CI) or the skill sits outside the repo
- * (a path written into the repo would leave it). Only husky is wired; other hook managers get the printed line.
- */
 function wireGuard(
   root: string,
   { entry, baseBranch }: { entry: string; baseBranch: string },
@@ -202,7 +188,6 @@ const isFolder = (dir: string): boolean => {
   }
 };
 
-/** `drive setup [--agent-type <type>] [--tier mid|top]`: the two flags seed a new Binding only. */
 export function runSetup(args: readonly string[]): void {
   const options = parseSetupArgs(args);
   if ('error' in options) fail(options.error);

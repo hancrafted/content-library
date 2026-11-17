@@ -31,7 +31,6 @@ export function ChooseFolder({
   );
 }
 
-/** Replays the recorded Run under public/dashboard-demo/; it needs no folder access, so every browser can open it. */
 export function OpenDemo({ open, choosing, copy }: { open: () => void; choosing: boolean; copy: DashboardCopy }) {
   return (
     <Button
@@ -47,7 +46,6 @@ export function OpenDemo({ open, choosing, copy }: { open: () => void; choosing:
   );
 }
 
-/** Marks a replayed recording as a demo wherever its Run shows, so nobody reads it as live. */
 export function DemoNotice({ copy }: { copy: DashboardCopy }) {
   return (
     <p

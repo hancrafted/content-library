@@ -1,11 +1,6 @@
-/*
- * One run of the factory in time (design-ADR 0024 §14): a model built from a use case and a preset, warmed 60 weeks
- * in chunks behind "Warming up" unless the preset starts clear, then driven by real time at the chosen speed. A late
- * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
- * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
- */
+// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
 import { type Sampler, type Values } from './beat-means.pure.ts';
-import { DAYS, DTW, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DAYS, WEEKS_PER_STEP, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
   DEFAULT_SEED,
@@ -21,41 +16,31 @@ import { startBacklogOf } from './start-backlog.pure.ts';
 import { startSettings } from './start-settings.pure.ts';
 import { unretired } from './use-case-preset-checks.pure.ts';
 
-/** Weeks a real second at 1×; 10× plays a working day in about 0.6 s. */
-export const SPEED_1X = 1 / 32;
-/** The page starts at 1× (feedback 08); a tour runs at 20× between its steps. */
+export const WEEKS_PER_REAL_SECOND_AT_1X = 1 / 32;
 export const DEFAULT_SPEED = 1;
-/** Model steps a frame at most; beyond that the frame drops time. */
-export const MAX_STEPS = 40;
-/** Warm-up steps a frame. */
-export const WARM_CHUNK = 2000;
-const WARM_STEPS = Math.round(WARM_WEEKS / DTW);
+export const MAX_STEPS_PER_FRAME = 40;
+export const WARM_STEPS_PER_FRAME = 2000;
+const WARM_STEPS = Math.round(WARM_WEEKS / WEEKS_PER_STEP);
 
 export const presetOf = (B: Bundle, wanted: string): Preset => {
   const ps = B.data.presets;
-  // a link or a Slide still naming the retired swing opens the roles state
   const id = unretired(wanted);
   const p = ps.find((x) => x.id === id) ?? ps.find((x) => x.view === 'factory') ?? ps[0];
   if (!p) throw new Error(`use case ${B.data.id} has no presets`);
   return p;
 };
 
-/** The speed a state starts at: its own, else the page's 1×. */
 export const startSpeedOf = (B: Bundle, id: string): number => presetOf(B, id).speed ?? DEFAULT_SPEED;
 
 export interface RunOptions {
   readonly B: Bundle;
   readonly preset: string;
-  /** Warm-up at once (reduced motion, a hidden page) instead of across frames. */
   readonly now: boolean;
-  /** Clear: an empty factory at day 0, no warm-up. */
   readonly clear?: boolean;
   readonly seed?: number;
-  /** The settings it starts from; the preset's own by default. */
   readonly s?: Settings;
 }
 
-/** Where a tour step aims the run: the model step it stops on, and the Sampler that reads its sample steps (the judge's). */
 export interface Aim {
   readonly at: number;
   readonly sampling: Sampler | null;
@@ -79,7 +64,6 @@ export class FactoryRun {
     if (o.now) this.finishWarm();
   }
 
-  /** The warm-up is over: a state that starts loaded gets its backlogs now, so the first frame shows them. */
   private loaded() {
     this.f.pile(startBacklogOf(this.bundle, this.preset, this.f.settings.reality));
   }
@@ -88,65 +72,50 @@ export class FactoryRun {
     return this.warmLeft > 0;
   }
 
-  /** The network's fixed shape, for the layout and the cards. */
   get topology(): Topology {
     return this.f.topology;
   }
 
-  /** The documents on the floor, for the painter. */
   get floor(): Floor {
     return this.f.floor;
   }
 
-  /** The settings the model reads now. */
   get settings(): Settings {
     return this.f.settings;
   }
 
-  /** Model time, in weeks. */
   get weeks(): number {
     return this.f.weeks;
   }
 
-  /** Model steps run so far. */
   get k(): number {
-    return Math.round(this.f.weeks / DTW);
+    return Math.round(this.f.weeks / WEEKS_PER_STEP);
   }
 
-  /**
-   * Aims the run at a tour step: time never runs past `at` (the page and the headless runner stop on the same step) and
-   * stops on each sample step to read it, as the headless judge does; null frees the run.
-   */
   aim(to: Aim | null) {
     this.aimed = to;
   }
 
-  /** The tour step's model step, or null while the run runs free. */
   get stopAt(): number | null {
     return this.aimed?.at ?? null;
   }
 
-  /** The readings taken on the tour step's sample steps so far. */
   get sampled(): readonly Values[] {
     return this.aimed?.sampling?.readings ?? [];
   }
 
-  /** The mean of the readings taken on the tour step's sample steps so far. */
   sampledMean(): Values {
     return this.aimed?.sampling?.mean() ?? {};
   }
 
-  /** The run stands on its tour step. */
   get arrived(): boolean {
     return this.stopAt !== null && !this.warming && this.k >= this.stopAt;
   }
 
-  /** New settings, read from the next step on. */
   set(s: Settings) {
     this.f.set(s);
   }
 
-  /** One own ticket arrives now at the work center; false when it has no source or the company is a Service provider. */
   emit(id: string): boolean {
     return this.f.emit(id);
   }
@@ -155,12 +124,10 @@ export class FactoryRun {
     this.f.listen(fn);
   }
 
-  /** Warm-up progress in days, or null once the line runs. */
   get warmProgress(): Snapshot['warming'] {
     return this.warming ? { day: Math.floor(this.f.weeks * DAYS), of: WARM_WEEKS * DAYS } : null;
   }
 
-  /** The Snapshot, with the run's warm-up and lag for the status line. */
   read(o: ReadOptions = {}): Snapshot {
     return this.f.read({ ...o, warming: this.warmProgress, dropped: this.dropped });
   }
@@ -169,10 +136,9 @@ export class FactoryRun {
     const k = this.k,
       s = this.aimed?.sampling;
     if (s) s.run(this.f, { k, n });
-    else if (n > 0) this.f.step(n * DTW);
+    else if (n > 0) this.f.step(n * WEEKS_PER_STEP);
   }
 
-  /** Warms the rest at once. */
   finishWarm() {
     if (!this.warming) return;
     this.steps(this.warmLeft);
@@ -181,39 +147,36 @@ export class FactoryRun {
   }
 
   private warmChunk() {
-    const n = Math.min(WARM_CHUNK, this.warmLeft);
+    const n = Math.min(WARM_STEPS_PER_FRAME, this.warmLeft);
     this.steps(n);
     this.warmLeft -= n;
     this.acc = 0;
     if (!this.warming) this.loaded();
   }
 
-  /** Runs the steps the accumulated time allows, at most MAX_STEPS, never past `stopAt`. */
   private stepDue() {
     const stop = this.stopAt ?? Infinity,
       room = stop - this.k;
     let n = 0;
-    for (; this.acc >= DTW && n < MAX_STEPS && n < room; n++) this.acc -= DTW;
+    for (; this.acc >= WEEKS_PER_STEP && n < MAX_STEPS_PER_FRAME && n < room; n++) this.acc -= WEEKS_PER_STEP;
     this.steps(n);
     if (this.k >= stop) this.acc = 0;
   }
 
-  /** Runs at once to model step `k`: a tour's Back, or a tour step under reduced motion. */
   runTo(k: number) {
     this.finishWarm();
     this.steps(k - this.k);
     this.acc = 0;
   }
 
-  /** Advances by `dt` real seconds at `speed`; returns true when warm-up just ended. */
   advance(dt: number, speed: number): boolean {
     if (this.warming) {
       this.warmChunk();
       return !this.warming;
     }
-    this.acc += dt * speed * SPEED_1X;
+    this.acc += dt * speed * WEEKS_PER_REAL_SECOND_AT_1X;
     this.stepDue();
-    if (this.acc >= DTW) {
+    if (this.acc >= WEEKS_PER_STEP) {
       this.dropped = Math.min(5, this.dropped + 1);
       this.acc = 0;
     } else if (this.dropped) this.dropped *= 0.995;

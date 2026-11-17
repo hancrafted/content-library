@@ -122,7 +122,6 @@ function Introduction({ t, name, locale }: { t: AboutT; name: string; locale: Lo
   );
 }
 
-/** Outcomes stay in each summary; native disclosure reveals the process and its scope. */
 export async function AboutSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.about' });
   const { name } = PAGE_WORDS[locale].person;

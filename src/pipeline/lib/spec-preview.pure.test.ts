@@ -14,14 +14,6 @@ import {
   type Shot,
 } from './spec-preview.pure.ts';
 
-/*
- * What `npm run episode:spec-preview` renders and reports for a fragment: the page at each preset, built from the Spec
- * template; then, given what each render came to, the Spec contract violations, an overflow line per Option and
- * preset (a failure at the presets the calibration marks `fails`, a note elsewhere), one screenshot line per rendered
- * Option and preset, and whether it fails. The presets come from the Spec calibration's table.
- * A hand-written renderer stands in for the browser. The checked-in calibration is read in `spec-preview.pure.slow.test.ts`.
- */
-
 const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
 <figure data-spec="option" data-option="${id}"${id.endsWith('a') ? ' data-recommended' : ''}>
   <div data-spec="mock" class="bg-card p-4">${body}</div>
@@ -31,8 +23,7 @@ const option = (id: string, body = '<p class="text-body">A mock.</p>') => `
 const CLEAN = `<!-- slide: spent -->${option('1a')}${option('1b')}`;
 const TITLE = `<!-- slide: top -->${option('0a')}${option('0b')}${option('0c')}`;
 
-/** The numbers of the toolbar asset, as the template carries them; these differ from the asset's, to show they are read. */
-const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, fitRoomMin: 300 };
+const CONFIG = { navOpenWidth: 1600, toolbarHeight: 50, fitMargin: 10, 'fitRoomMin': 300 };
 
 const DESKTOP: Preset = { name: 'desktop', width: 1920, height: 800, blocking: true };
 const MOBILE: Preset = { name: 'mobile', width: 390, height: 800, blocking: false };
@@ -40,7 +31,6 @@ const SHORTS: Preset = { name: 'shorts', width: 1080, height: 1920, blocking: fa
 const WIDE: Preset = { name: 'wide', width: 1700, height: 800, blocking: false };
 const PRESETS = [DESKTOP, MOBILE];
 
-/** A Spec template in the shape the preview reads: a frame with the slots, a toolbar and review form, two templates. */
 const TEMPLATE = `<!doctype html>
 <html lang="en" data-mode="decide">
   <head>
@@ -87,7 +77,6 @@ const TEMPLATE = `<!doctype html>
 
 const STAGE = '.spec-stage[data-option]';
 
-/** A renderer that overflows the given `<id>@<preset>` pairs by the given counts and shoots to `/shots/<name>.png`. */
 const rendering =
   (overflow: Record<string, number> = {}) =>
   (shot: Shot): Rendered => ({
@@ -95,7 +84,6 @@ const rendering =
     overflow: overflow[`${shot.id}@${shot.preset.name}`] ?? 0,
   });
 
-/** What rendering every Shot of a fragment came to, a renderer that throws giving that Shot's error. */
 const outcomesOf = (fragment: string, presets: readonly Preset[], render: (shot: Shot) => Rendered): Outcome[] =>
   shotsOf(fragment, presets).map((shot) => {
     try {
@@ -192,8 +180,8 @@ describe('success cases', () => {
       expect(mobile).toMatchObject(narrow);
     });
 
-    it('scales a preset with a fixed design size to the room below the toolbar, from the template toolbar numbers', () => {
-      // ARRANGE: a laptop window 900 px tall, less the 50 px toolbar and a 10 px margin above and below
+    it('scales a preset with a fixed design size to the room below the toolbar of a 900 px laptop window, less the 50 px toolbar and a 10 px margin above and below, from the template toolbar numbers', () => {
+      // ARRANGE
       const expected = {
         'data-preset': 'shorts',
         'data-preview-fixed': '',
@@ -208,8 +196,8 @@ describe('success cases', () => {
       expect(desktop?.style).not.toContain('--preview-scale');
     });
 
-    it('scales into the least room the toolbar numbers name when the window leaves less', () => {
-      // ARRANGE: 900 px less the bar and margins is 830 px, below a room minimum of 900 px
+    it('scales into the least room the toolbar numbers name when the window leaves less: 900 px less the bar and margins is 830 px, below a room minimum of 900 px', () => {
+      // ARRANGE
       const template = TEMPLATE.replace('"fitRoomMin":300', '"fitRoomMin":900');
       const expectedScale = '--preview-scale: 0.4688';
       // ACT

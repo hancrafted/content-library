@@ -1,0 +1,38 @@
+{
+  "title": "Rapid evolution of AI disciplines",
+  "caption": "Every stage runs on the same language model; what changes is how we reach it, and how much work it takes on.",
+  "notes": {
+    "prompting": {
+      "header": "Prompting, 2022–23",
+      "description": "ChatGPT launched on 30 November 2022 as a model that talks in a conversation [1]. Prompting means writing instructions so the model reliably gives you what you need [2]. That it became a discipline in 2022–23 is my reading of those dates.",
+      "sources": {
+        "openai-introducing-chatgpt": { "title": "OpenAI, Introducing ChatGPT" },
+        "openai-prompt-engineering": { "title": "OpenAI, Prompt engineering guide" }
+      }
+    },
+    "agents": {
+      "header": "Agents, 2024–25",
+      "description": "Anthropic defined agents in December 2024 as language models that direct their own tool use [1], and launched Claude Code in February 2025 as its first agentic coding tool [2]. Models used tools from late 2022 on in research; 2024–25 is when agents became everyday tools.",
+      "sources": {
+        "anthropic-effective-agents": { "title": "Anthropic, Building effective agents" },
+        "anthropic-claude-code": { "title": "Anthropic, Claude 3.7 Sonnet and Claude Code" }
+      }
+    },
+    "workflows": {
+      "header": "Workflows, 2024–25",
+      "description": "LangGraph shipped in January 2024 to build agent steps as a graph whose structure people still decide [1]. In December 2024 Anthropic named this a workflow: model and tool steps along a path fixed in advance [2].",
+      "sources": {
+        "langchain-langgraph": { "title": "LangChain, LangGraph" },
+        "anthropic-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    },
+    "factory": {
+      "header": "Factory, from 2026",
+      "description": "Dan Shapiro described the \"dark factory\" in January 2026: a black box that turns specifications into software [1]. In February 2026 StrongDM published its Software Factory, where no person writes or reviews the code [2]. The term is young and not yet settled.",
+      "sources": {
+        "shapiro-five-levels": { "title": "Shapiro, The Five Levels: from Spicy Autocomplete to the Dark Factory" },
+        "strongdm-software-factory": { "title": "StrongDM, Software Factory" }
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ import {
 } from './magnetic-ink-geometry.pure';
 import type { InkHost, InkInput, InkPoint, InkRect, InkShape, InkState, InkView } from './magnetic-ink.types';
 
-const CARD_TRAVEL_MS = 300;
+const CARD_TRAVEL_MILLISECONDS = 300;
 
 export function newInkState(host: InkHost): InkState {
   return {
@@ -63,7 +63,7 @@ const overInk = (rect: InkRect | undefined, pointer: InkPoint | null) =>
   Boolean(rect && pointer && inkDistance(rect, pointer) <= 0);
 const isTravelling = (state: InkState) => state.inside && state.host.primary !== undefined && state.flight < 1;
 const advanceFlight = (current: number, delta: number) => {
-  const progress = current + delta / CARD_TRAVEL_MS;
+  const progress = current + delta / CARD_TRAVEL_MILLISECONDS;
   return progress >= 1 - Number.EPSILON * 8 ? 1 : progress;
 };
 
@@ -121,7 +121,6 @@ export function inkFrame(state: InkState, input: InkInput, neighbours: InkHost[]
 
 function positionFlight(state: InkState, shapes: InkShape[], goals: InkShape[]) {
   if (!state.inside || !state.host.primary) return;
-  // The trajectory owns position; a second easing pass would delay arrival beyond the travel duration.
   shapes.forEach((shape, index) => {
     const goal = goals[index];
     if (!goal) return;

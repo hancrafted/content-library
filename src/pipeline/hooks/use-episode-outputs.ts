@@ -3,21 +3,16 @@ import type { EpisodeRead } from '@/pipeline/lib/dashboard-reader.pure';
 import type { EpisodeFolder } from '@/pipeline/lib/episode-folder.pure';
 import { useEffect, useState } from 'react';
 
-/** How long a new tab has to load an output before its object URL is revoked. */
-const REVOKE_AFTER_MS = 60_000;
+const REVOKE_AFTER_MILLISECONDS = 60_000;
 
 function openAsText(text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
   window.open(url, '_blank', 'noopener');
-  setTimeout(() => URL.revokeObjectURL(url), REVOKE_AFTER_MS);
+  setTimeout(() => URL.revokeObjectURL(url), REVOKE_AFTER_MILLISECONDS);
 }
 
 const sameSet = (a: ReadonlySet<string>, b: ReadonlySet<string>) => a.size === b.size && [...a].every((x) => b.has(x));
 
-/**
- * Probes each output of the pipeline after every poll, so a file an agent writes turns into a link, and opens one
- * read-only in a new tab as plain text. Reads only; the folder never leaves page memory.
- */
 export function useEpisodeOutputs(folder: EpisodeFolder | undefined, read: EpisodeRead | undefined): EpisodeOutputs {
   const [written, setWritten] = useState<ReadonlySet<string>>(() => new Set());
   useEffect(() => {

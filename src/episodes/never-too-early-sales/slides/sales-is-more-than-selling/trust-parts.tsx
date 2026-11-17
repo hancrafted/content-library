@@ -7,7 +7,6 @@ interface BarRow {
   percent: number;
 }
 
-/** One factor as one `dt` + `dd` group: its label and share on a line, the share shown on hover, its bar below. */
 function Bar({ row, lead, format }: { row: BarRow; lead: boolean; format: Intl.NumberFormat }) {
   return (
     <div className={cn('grid grid-cols-[1fr_auto] gap-x-2', lead ? 'font-semibold' : 'text-primary-foreground/70')}>
@@ -33,15 +32,12 @@ interface SignalBarsProps {
   heading: string;
   rows: BarRow[];
   locale: string;
-  /** A Context marker in the card's top-right corner. */
   marker?: ReactNode;
 }
 
-/** What investors weigh, as bars; the first row leads, the rest recede. The shares show on hover or keyboard focus. */
 export function SignalBars({ heading, rows, locale, marker }: SignalBarsProps) {
   const format = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
   const headingId = useId();
-  // Focusable and named by its heading, so keyboard focus reveals the shares as hover does.
   return (
     <div
       role="group"
@@ -62,7 +58,6 @@ export function SignalBars({ heading, rows, locale, marker }: SignalBarsProps) {
   );
 }
 
-/** The payoffs trust earns, as checked chips on the `primary` note. */
 export function CheckedChips({ items }: { items: string[] }) {
   return (
     <ul className="mt-6 flex flex-wrap gap-2 text-caption">
@@ -84,7 +79,6 @@ export function CheckedChips({ items }: { items: string[] }) {
   );
 }
 
-/** The "Before revenue" stamp over the trust note's corner. */
 export function Stamp({ label }: { label: string }) {
   return (
     <p className="absolute -top-5 -right-4 rotate-6 rounded-md border-2 border-primary bg-card px-3 py-1 font-mono text-caption font-semibold tracking-widest text-primary uppercase shadow-md">

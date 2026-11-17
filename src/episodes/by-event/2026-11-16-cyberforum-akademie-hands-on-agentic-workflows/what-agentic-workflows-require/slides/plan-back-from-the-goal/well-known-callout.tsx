@@ -5,10 +5,6 @@ export interface WellKnownCalloutProps {
   readonly items: readonly { readonly slug: string; readonly lead: string; readonly text: ReactNode }[];
 }
 
-/**
- * The call-out naming the method as well known: a card note with a `primary` left edge and an outline pill, adding no
- * fill, so the goal note stays the Scene's only `bg-primary`.
- */
 export function WellKnownCallout({ label, items }: WellKnownCalloutProps) {
   return (
     <aside

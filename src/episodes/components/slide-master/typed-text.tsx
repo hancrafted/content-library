@@ -1,35 +1,26 @@
 import { isEmphasised, runsOf, type TextRange } from '@/episodes/lib/caption-emphasis.pure';
 import type { CSSProperties } from 'react';
 
-/** How an emphasised run of header text is set off: semibold, in `primary`. */
 const EMPHASIS_CLASS = 'font-semibold text-primary';
 
-/** Characters typed one by one: whitespace takes no turn. */
 export function typedLength(text: string): number {
   return Array.from(text.replace(/\s+/g, '')).length;
 }
 
-/** A typed character's custom properties: when it appears (`--d`) and how long the caret sits on it (`--h`). */
-function charStyle(delay: number, hold: number): CSSProperties {
-  return { '--d': `${delay.toFixed(1)}ms`, '--h': `${Math.max(hold, 0).toFixed(1)}ms` } as CSSProperties;
+function charStyle(delayMilliseconds: number, holdMilliseconds: number): CSSProperties {
+  return {
+    '--d': `${delayMilliseconds.toFixed(1)}ms`,
+    '--h': `${Math.max(holdMilliseconds, 0).toFixed(1)}ms`,
+  } as CSSProperties;
 }
 
 interface TypedProps {
   readonly text: string;
-  /** One delay per typed character, in milliseconds. */
-  readonly delays: readonly number[];
-  /** When the character after this text's last one appears, so the caret moves on then. */
-  readonly next: number;
-  /** The runs of `text` to set off. */
+  readonly delaysMilliseconds: readonly number[];
+  readonly caretMovesOnAtMilliseconds: number;
   readonly emphasis?: readonly TextRange[];
 }
 
-/**
- * `text` split into `aria-hidden` character spans, grouped per word so a line
- * wraps only between words. CSS (`globals.css`, the typewriter) reveals each
- * at its `--d` and shows the caret on it for `--h`.
- */
-/** The text's words and the whitespace between them, each with the index of its first character in the text. */
 function partsOf(text: string): { part: string; offset: number }[] {
   let offset = 0;
   return text
@@ -42,7 +33,6 @@ function partsOf(text: string): { part: string; offset: number }[] {
     });
 }
 
-/** One typed character's span, set off when it lies in an emphasised run. */
 function TypedCharacter({
   character,
   style,
@@ -64,13 +54,23 @@ function TypedCharacter({
   );
 }
 
-function TypedCharacters({ text, delays, next, emphasis = [] }: TypedProps) {
+function holdMilliseconds(delaysMilliseconds: readonly number[], at: number, caretMovesOnAtMilliseconds: number) {
+  return (delaysMilliseconds[at + 1] ?? caretMovesOnAtMilliseconds) - delaysMilliseconds[at];
+}
+
+function TypedCharacters({ text, delaysMilliseconds, caretMovesOnAtMilliseconds, emphasis = [] }: TypedProps) {
   let index = 0;
   const spanOf = (character: string, offset: number, key: number) => {
     const at = index++;
-    const hold = (delays[at + 1] ?? next) - delays[at];
     const set = isEmphasised(offset, emphasis);
-    return <TypedCharacter key={key} character={character} style={charStyle(delays[at], hold)} emphasised={set} />;
+    return (
+      <TypedCharacter
+        key={key}
+        character={character}
+        style={charStyle(delaysMilliseconds[at], holdMilliseconds(delaysMilliseconds, at, caretMovesOnAtMilliseconds))}
+        emphasised={set}
+      />
+    );
   };
   return (
     <span aria-hidden="true" data-typed="">
@@ -89,7 +89,6 @@ function TypedCharacters({ text, delays, next, emphasis = [] }: TypedProps) {
   );
 }
 
-/** Untyped text, its emphasised runs set off. */
 function PlainText({ text, emphasis = [] }: { text: string; emphasis?: readonly TextRange[] }) {
   return runsOf(text, emphasis).map((run, key) =>
     run.emphasis ? (
@@ -102,22 +101,22 @@ function PlainText({ text, emphasis = [] }: { text: string; emphasis?: readonly 
   );
 }
 
-/**
- * Header text as the reader sees it: whole without `delays`; with them, one
- * visually hidden copy for assistive tech and the typed characters beside it.
- * Either way its `emphasis` runs are set off in `primary` semibold.
- */
 export function TypedText({
   text,
-  delays,
-  next,
+  delaysMilliseconds,
+  caretMovesOnAtMilliseconds,
   emphasis,
-}: Omit<TypedProps, 'delays'> & { readonly delays?: readonly number[] }) {
-  if (delays === undefined) return <PlainText text={text} emphasis={emphasis} />;
+}: Omit<TypedProps, 'delaysMilliseconds'> & { readonly delaysMilliseconds?: readonly number[] }) {
+  if (delaysMilliseconds === undefined) return <PlainText text={text} emphasis={emphasis} />;
   return (
     <>
       <span className="sr-only">{text}</span>
-      <TypedCharacters text={text} delays={delays} next={next} emphasis={emphasis} />
+      <TypedCharacters
+        text={text}
+        delaysMilliseconds={delaysMilliseconds}
+        caretMovesOnAtMilliseconds={caretMovesOnAtMilliseconds}
+        emphasis={emphasis}
+      />
     </>
   );
 }

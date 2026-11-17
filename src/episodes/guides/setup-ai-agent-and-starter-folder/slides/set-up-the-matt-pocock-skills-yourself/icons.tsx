@@ -1,9 +1,3 @@
-/*
- * The Slide's small marks, drawn as in Option 8a's mock: plain SVG, no client code, so both the server parts and the
- * client widgets of this folder can draw them.
- */
-
-/** A box with an arrow leaving it: a link to a vendor's own page. */
 export function ExternalIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true">
@@ -18,7 +12,6 @@ export function ExternalIcon() {
   );
 }
 
-/** An arrow onto a line: a download. */
 export function DownloadIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true">
@@ -33,7 +26,6 @@ export function DownloadIcon() {
   );
 }
 
-/** The installer's checkbox: ticked in `primary`, or an empty hairline box. */
 export function CheckboxIcon({ ticked }: { ticked: boolean }) {
   return (
     <svg viewBox="0 0 16 16" className="size-4 shrink-0" aria-hidden="true">
@@ -63,7 +55,6 @@ export function CheckboxIcon({ ticked }: { ticked: boolean }) {
   );
 }
 
-/** A long arrow pointing right: what the check leads to. */
 export function ArrowIcon() {
   return (
     <svg viewBox="0 0 40 16" className="h-4 w-10 shrink-0" aria-hidden="true">

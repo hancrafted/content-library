@@ -6,7 +6,6 @@ import { CATALOG, PHASE_TIERS, readBinding } from './binding.pure.ts';
 import { harnessCapFrom, parseConfig } from './config.pure.ts';
 import { detectSkills, setup } from './setup.ts';
 
-/** Writes `files` (path to text) into a fresh folder, which is not a git repo. */
 function repo(files: Record<string, string>): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-setup-')));
   for (const [file, text] of Object.entries(files)) {
@@ -23,7 +22,6 @@ const LOCK = (skills: Record<string, string>) =>
       Object.entries(skills).map(([name, source]) => [name, { source, sourceType: 'github' }]),
     ),
   });
-/** Where the skill sits in a repo that holds it, so the guard may be wired with a path inside the repo. */
 const INSIDE = (root: string) => path.join(root, 'skills', 'drive', 'scripts');
 const ENTRY = 'skills/drive/scripts/drive.ts';
 const SKILL = '---\nname: x\ndescription: x\n---\n';
@@ -40,13 +38,23 @@ describe('drive setup', () => {
   describe('with a skills lockfile', () => {
     it('binds the vendor skills the lockfile lists and leaves the other phases inline', () => {
       // ARRANGE
-      const root = repo({ 'skills-lock.json': LOCK({ tdd: VENDOR, 'code-review': VENDOR, other: 'someone/else' }) });
+      const root = repo({
+        'skills-lock.json': LOCK({
+          tdd: VENDOR,
+          'code-review': VENDOR,
+          other: 'someone/else',
+        }),
+      });
       // ACT
       setup(root, { agentType: 'team:dev' });
       // ASSERT
       const result = binding(root);
       expect(result.agentType).toBe('team:dev');
-      expect(result.phases.implement).toEqual({ model: PHASE_TIERS.implement, skills: ['tdd'], inline: false });
+      expect(result.phases.implement).toEqual({
+        model: PHASE_TIERS.implement,
+        skills: ['tdd'],
+        inline: false,
+      });
       expect(result.phases.verify.skills).toEqual(['code-review']);
       expect(result.phases.define.inline).toBe(true);
       expect(result.phases.evolve.inline).toBe(true);
@@ -56,7 +64,10 @@ describe('drive setup', () => {
   describe('without a skills lockfile', () => {
     it('detects authored skills but binds no phase, so the Orchestrator does every phase inline', () => {
       // ARRANGE
-      const root = repo({ 'skills/mine/SKILL.md': SKILL, 'skills/not-a-skill/notes.md': 'x' });
+      const root = repo({
+        'skills/mine/SKILL.md': SKILL,
+        'skills/not-a-skill/notes.md': 'x',
+      });
       // ACT
       setup(root);
       // ASSERT
@@ -109,7 +120,10 @@ describe('drive setup', () => {
   describe('enforcers', () => {
     it('runs the scripts with the package manager its lockfile implies', () => {
       // ARRANGE
-      const root = repo({ 'package.json': JSON.stringify({ scripts: { lint: 'eslint .' } }), 'pnpm-lock.yaml': '' });
+      const root = repo({
+        'package.json': JSON.stringify({ scripts: { lint: 'eslint .' } }),
+        'pnpm-lock.yaml': '',
+      });
       // ACT
       setup(root);
       // ASSERT
@@ -119,7 +133,9 @@ describe('drive setup', () => {
     it('lists the checks the repo runs for Fortify to choose from', () => {
       // ARRANGE
       const root = repo({
-        'package.json': JSON.stringify({ scripts: { lint: 'eslint .', test: 'vitest run', build: 'bundle' } }),
+        'package.json': JSON.stringify({
+          scripts: { lint: 'eslint .', test: 'vitest run', build: 'bundle' },
+        }),
         '.husky/pre-commit': 'npm test',
         '.archgate/adrs/one.md': '# a',
       });
@@ -180,7 +196,8 @@ describe('drive setup', () => {
     it('names a lockfile that is not JSON', () => {
       // ARRANGE
       const root = repo({ 'skills-lock.json': '{' });
-      // ACT / ASSERT
+      // ACT
+      // ASSERT
       expect(() => setup(root)).toThrow('skills-lock.json is not valid JSON');
     });
   });
@@ -211,7 +228,10 @@ describe('drive setup', () => {
 
     it('writes no workflow without husky and hands back the one CI line instead', () => {
       // ARRANGE
-      const root = repo({ '.github/workflows/ci.yml': 'name: ci\n', 'package-lock.json': '{}' });
+      const root = repo({
+        '.github/workflows/ci.yml': 'name: ci\n',
+        'package-lock.json': '{}',
+      });
       // ACT
       const { written, notes } = setup(root, {}, INSIDE(root));
       // ASSERT

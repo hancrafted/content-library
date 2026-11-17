@@ -4,9 +4,6 @@ import { SectionTrack } from '@/episodes/components/slide-shared/episode-templat
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The Title slide's hero Scene (the record's `title`): the visual only, since the container renders the Episode's
-// `h1` and caption above it. It sets the Hero motif, every Section a stop on one track, and each section slide echoes
-// it. Its notes and Voice script, if any, stay on the record.
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },

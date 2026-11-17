@@ -1,3 +1,4 @@
+// spec: docs/features/explorables/software-ecology.md#interaction
 import { fillTemplate } from '@/shared/lib/template.pure';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { Glyph } from './factory-glyph-view';
@@ -6,25 +7,16 @@ import styles from './software-ecology.module.css';
 import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
-/*
- * The Scenarios menu's entries (feature guide, Interaction 2), as the reference build's `renderStates` lists them:
- * every state off the toolbar's row, each with its name, its "what to watch" line and, with a tour, its length. Arrow
- * keys move between the entries. Beside it, the Tour button and, for each Context marker a Slide places on a scenario
- * (spot `scenario:<id>`), the marker alone, its tooltip naming the scenario (feedback 08).
- */
-
 export interface ScenarioChoice {
   readonly id: string;
   readonly name: string;
   readonly watch: string;
-  /** Its tour's steps; 0 without a tour. */
   readonly steps: number;
 }
 
 export interface ScenarioMenuProps {
   readonly scenarios: readonly ScenarioChoice[];
   readonly preset: string;
-  /** "{n}-step tour" */
   readonly tourSteps: string;
   readonly onPick: (id: string) => void;
 }
@@ -67,7 +59,6 @@ export function ScenarioMenu(p: ScenarioMenuProps) {
   );
 }
 
-/** The Scenarios button on the state row and its menu; pressed while one of its states is on. */
 export function ScenariosMenu(
   p: Omit<ScenarioMenuProps, 'tourSteps'> & {
     readonly words: ToolbarWords;
@@ -98,7 +89,6 @@ export function ScenariosMenu(
   );
 }
 
-/** Each Context marker a Slide places on a scenario, an icon beside the Tour button, its tooltip the scenario's name. */
 export function ScenarioNotes(p: {
   readonly scenarios: readonly ScenarioChoice[];
   readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
@@ -114,7 +104,6 @@ export function ScenarioNotes(p: {
   );
 }
 
-/** Tour: a guided tour of the current state, when it has one; pressed while it runs. */
 export function TourButton(p: {
   readonly words: ToolbarWords;
   readonly canTour: boolean;

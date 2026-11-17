@@ -9,7 +9,6 @@ import { builtinBundle } from './use-case-data.ts';
 
 const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };
 
-/** Tire swing in practice, AI at Engineering, dials turned and two work centers in the stream: something in every key. */
 const busyPage = (): PageState => {
   const B = builtinBundle('tire');
   const p = B.data.presets.find((x) => x.id === 'realistic');
@@ -29,7 +28,6 @@ const busyPage = (): PageState => {
 
 const tireText = () => exportExchange(builtinBundle('tire'), busyPage(), CATALOGS);
 
-/** The exchange file with one change to its parsed document. */
 const edited = (change: (doc: Record<string, unknown>) => void): string => {
   const doc = parse(tireText()) as Record<string, unknown>;
   change(doc);
