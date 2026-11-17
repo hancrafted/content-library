@@ -1,5 +1,6 @@
+import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
-import { readSpec, type SpecStage } from './episode-spec-page.pure';
+import { readSpec, type Spec, type SpecStage } from './episode-spec-page.pure';
 import { checkSpec } from './episode-spec.pure';
 import { type Finding } from './finding.pure';
 import { appendMetaVerified } from './staging-file.pure';
@@ -198,12 +199,49 @@ function messages(findings: readonly { message: string }[]): string[] {
   return findings.map(({ message }) => message);
 }
 
+/**
+ * A Spec split as issue #669 will split it, which `readSpec` cannot read yet: `main` is the main page, and each of
+ * `sections` a further page holding Sections, read in that order after it.
+ */
+function splitSpec(main: string, ...sections: readonly string[]): Spec {
+  const whole = readSpec({ 'spec/spec.html': main });
+  const extra = sections.map((html, at) => ({
+    page: { file: `spec/sections/${at + 1}.html`, $: load(html) },
+    slides: readSpec({ 'spec/spec.html': html }).slides,
+  }));
+  return {
+    ...whole,
+    pages: [whole.main, ...extra.map(({ page }) => page)],
+    slides: [...whole.slides, ...extra.flatMap(({ slides }) => slides)],
+  };
+}
+
+/** The Title slide of a Spec with Sections `why` and `fix`, each Option showing both section slides. */
+const TWO_SECTION_TITLE = titleSlide([
+  titleOption('0a', { recommended: true, after: echoes(['why', 'fix']) }),
+  titleOption('0b', { after: echoes(['why', 'fix']) }),
+  titleOption('0c', { after: echoes(['why', 'fix']) }),
+]);
+
+/** A further Spec page holding the Section `fix` and its one Slide, `trim`, numbered `number`. */
+const fixPage = (number: number): string =>
+  `<!doctype html><html><body><section data-spec="section" id="fix"><h2>Fix</h2>${slide('trim', number)}</section></body></html>`;
+
 describe('success cases', () => {
   it('finds nothing in a Spec that agrees with its Dossier and keeps the contract', () => {
     // ARRANGE
     const files = folder();
     // ACT
     const findings = check(files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('holds the whole-Spec rules once across a Spec of two pages, and numbers its Slides across them', () => {
+    // ARRANGE
+    const split = splitSpec(spec({ title: TWO_SECTION_TITLE }), fixPage(3));
+    // ACT
+    const findings = checkSpec(split, undefined);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -241,9 +279,9 @@ describe('failure cases', () => {
       'The Dossier Slide {#middle} has no Slide in the Spec: give it an <article data-spec="slide" id="middle">.',
     ],
     [
-      'Slides not numbered 1, 2, … in page order',
+      'Slides not numbered 1, 2, … in Spec order',
       { slides: [slide('spent', 1), slide('middle', 3)] },
-      'The Slide {#middle} is numbered 3, but it is Slide 2 in page order.',
+      'The Slide {#middle} is numbered 3, but it is Slide 2 in Spec order.',
     ],
     [
       'a Slide with one Option',
@@ -548,7 +586,7 @@ describe('failure cases', () => {
     [
       'a Title-slide Option whose section slides skip a Section',
       { title: titleSlide([TITLE_OPTIONS[0], titleOption('0b', { after: echoes([]) }), TITLE_OPTIONS[2]]) },
-      'Option 0b of {#top} shows the section slides [], not one per Section in page order: [why].',
+      'Option 0b of {#top} shows the section slides [], not one per Section in Spec order: [why].',
     ],
     [
       'a Title-slide Option with no Title-slide mock',
@@ -671,6 +709,22 @@ describe('failure cases', () => {
     const found = messages(check(files));
     // ASSERT
     expect(found).toEqual(expected);
+  });
+
+  it('names a Slide on a later page numbered in its own page order, not in Spec order', () => {
+    // ARRANGE
+    const split = splitSpec(spec({ title: TWO_SECTION_TITLE }), fixPage(1));
+    const expected = [
+      {
+        kind: 'spec',
+        file: 'spec/sections/1.html',
+        message: 'The Slide {#trim} is numbered 1, but it is Slide 3 in Spec order.',
+      },
+    ];
+    // ACT
+    const findings = checkSpec(split, undefined);
+    // ASSERT
+    expect(findings).toEqual(expected);
   });
 
   it('names the Spec file and the spec kind in every finding', () => {

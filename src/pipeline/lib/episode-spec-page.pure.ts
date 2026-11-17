@@ -38,8 +38,8 @@ export interface SpecPage {
 /** A Spec: its pages, main page first, and the facts of the whole Spec. */
 export interface Spec {
   readonly pages: readonly SpecPage[];
-  /** The main page's text. */
-  readonly text: string;
+  /** The page the meta block, the Title slide, the Visual language and the Brief card live on: `pages[0]`. */
+  readonly main: SpecPage;
   /** The JSON text of the main page's meta block, or `undefined` when it has none. */
   readonly meta: string | undefined;
   /** Whether Han approved the Spec, read from the meta block's `verified` list. */
@@ -92,15 +92,18 @@ export function readSpec(files: Readonly<Record<string, string>>): Spec | undefi
 export function readSpec(files: Readonly<Record<string, string>>): Spec | undefined {
   const text = files[SPEC_FILE];
   if (text === undefined) return undefined;
-  const pages = [specPage(SPEC_FILE, text)];
+  const main = specPage(SPEC_FILE, text);
+  const pages = [main];
+  let stage: SpecStage | undefined;
   let slides: readonly SpecSlide[] | undefined;
   return {
     pages,
-    text,
+    main,
     meta: metaBlockText(text),
     approved: metaGateTier(text) === 'approved',
     get stage() {
-      return pagesStage(pages);
+      stage ??= pagesStage(pages);
+      return stage;
     },
     get slides() {
       slides ??= pages.flatMap(pageSlides);
@@ -125,7 +128,7 @@ export function specSectionSlugs(spec: Spec): string[] {
 
 /** The Option ids of the Spec's Title slide, on its main page, in page order, or `undefined` when the Spec has none. */
 export function specTitleSlideOptions(spec: Spec): string[] | undefined {
-  const { $ } = spec.pages[0];
+  const { $ } = spec.main;
   const article = $(`${TITLE_SLIDE}#${TITLE_ANCHOR}`).first();
   if (article.length === 0) return undefined;
   return article
@@ -136,7 +139,7 @@ export function specTitleSlideOptions(spec: Spec): string[] | undefined {
 
 /** The Brief card's note keys on the Spec's main page, `brief--<heading-slug>` in page order; none once the card is read-only. */
 export function specBriefKeys(spec: Spec): string[] {
-  const { $ } = spec.pages[0];
+  const { $ } = spec.main;
   return $('[data-spec="brief-card"] textarea')
     .toArray()
     .map((field) => ($(field).attr('name') ?? '').replace(/^note:/, ''));

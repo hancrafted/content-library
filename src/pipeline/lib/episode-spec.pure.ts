@@ -33,7 +33,8 @@ import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts'
 import { unless, type Finding } from './finding.pure.ts';
 import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
-const DOSSIER_FILE = 'dossier.md';
+/** The Dossier, relative to the Episode's staging folder. */
+export const DOSSIER_FILE = 'dossier.md';
 const META_FIELDS = ['type', 'title', 'status', 'generated', 'locale', 'brief'];
 
 function checkMeta(text: string | undefined): string[] {
@@ -87,21 +88,38 @@ function checkAgainstDossier(spec: Spec, dossier: string): string[] {
   ];
 }
 
-/** The Title slide, every Slide, the review fields and the words of one page; `approved` is the whole Spec's. */
-function checkSlides(page: SpecPage, approved: boolean): string[] {
-  const { $ } = page;
+/** The rules held once for the whole Spec: its Title slide and its Visual language, both on its main page. */
+function checkWholeSpec(spec: Spec): string[] {
   return [
-    ...checkTitleSlide(page, approved),
-    ...$(SLIDE)
-      .toArray()
-      .flatMap((element, at) => checkSlide(page, approved, { element, at })),
+    ...checkTitleSlide(spec),
     ...unless(
-      $(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
+      spec.main.$(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
       `The Visual language has no <textarea form="${FORM}" name="note:visual-language">.`,
     ),
+  ];
+}
+
+/** The Slides and the words of one page, its first Slide the `first`-th in Spec order. */
+function checkPage(page: SpecPage, approved: boolean, first: number): string[] {
+  const { $ } = page;
+  return [
+    ...$(SLIDE)
+      .toArray()
+      .flatMap((element, at) => checkSlide(page, approved, { element, at: first + at })),
     ...checkVoiceScripts($),
     ...checkCitations($),
   ];
+}
+
+/** Each page's findings, its Slides numbered on from the pages before it. */
+function checkPages(spec: Spec): { file: string; messages: string[] }[] {
+  const firsts = spec.pages.map((_, index) =>
+    spec.pages.slice(0, index).reduce((count, { $ }) => count + $(SLIDE).length, 0),
+  );
+  return spec.pages.map((page, index) => ({
+    file: page.file,
+    messages: checkPage(page, spec.approved, firsts[index]),
+  }));
 }
 
 /** The Dossier left beside an approved Spec, which the approval commit deletes. */
@@ -114,11 +132,11 @@ function staleDossier(isApproved: boolean, dossier: string | undefined): string[
 
 /**
  * Checks a Spec against the Spec contract, and against the Dossier while one exists (`dossier`, its text). The stage
- * is the Spec's own; Spec assembly passes the stage it assembled to instead. Meta findings name the main page, Slide
- * findings the page they sit on.
+ * is the Spec's own; Spec assembly passes the stage it assembled to instead. Whole-Spec findings name the main page,
+ * Slide and word findings the page they sit on.
  */
 export function checkSpec(spec: Spec, dossier: string | undefined, stage: SpecStage = spec.stage): Finding[] {
-  const main = spec.pages[0].file;
+  const main = spec.main.file;
   const finding =
     (file: string) =>
     (message: string): Finding => ({ kind: 'spec', file, message });
@@ -127,7 +145,10 @@ export function checkSpec(spec: Spec, dossier: string | undefined, stage: SpecSt
     ...(dossier === undefined || spec.approved ? [] : checkAgainstDossier(spec, dossier)).map(finding(main)),
     ...(stage === 'early'
       ? []
-      : spec.pages.flatMap((page) => checkSlides(page, spec.approved).map(finding(page.file)))),
+      : [
+          ...checkWholeSpec(spec).map(finding(main)),
+          ...checkPages(spec).flatMap(({ file, messages }) => messages.map(finding(file))),
+        ]),
     ...staleDossier(spec.approved, dossier).map(finding(DOSSIER_FILE)),
   ];
 }

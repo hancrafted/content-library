@@ -189,7 +189,7 @@ function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: Episo
 
 export function designArchive(input: ArchiveInput): Archive {
   const spec = readSpec({ [SPEC_FILE]: input.spec });
-  const { $ } = spec.pages[0];
+  const { $ } = spec.main;
   const heading = $('h1[id]').first();
   const episode = heading.attr('id');
   if (!episode) throw new Error('the Spec has no <h1 id> naming its Episode slug');
