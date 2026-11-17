@@ -163,9 +163,8 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('asks in three rounds, the last collapsed, then writes a five-row spec', () => {
+  it('asks in three rounds, the last collapsed, then writes a five-row spec, the done-when question in round 3 so the open rounds list two questions each and the collapsed one its own line', () => {
     // ARRANGE
-    // Han's proofread moves the done-when question from round 1 to round 3: the open rounds list 2 and 2 questions, the collapsed one its own line.
     const expected = { rounds: 3, collapsed: 1, questions: 4, specRows: 5, orderRows: 4 };
     // ACT
     const grill = sceneOf('grill-me');
@@ -180,9 +179,8 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('asks the done-when question in round 3, not in round 1', () => {
+  it('asks the done-when question in round 3, not in round 1, which drops “What would make the week a success?”', () => {
     // ARRANGE
-    // Han's proofread: round 1 drops "What would make the week a success?" and round 3, the "done when" round, asks how we will know.
     const expected = {
       en: { round3: 'How will we know it’s done?', round1: 2 },
       de: { round3: 'Woran erkennen wir, dass es fertig ist?', round1: 2 },
@@ -200,9 +198,8 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('shows three of the five BRIEF moves today (R, I and F); B and E read "not today"', () => {
+  it('shows three of the five BRIEF moves today (R, I and F); B and E read "not today", because “today’s session runs all five” overclaimed', () => {
     // ARRANGE
-    // Han's proofread: "today's session runs all five" overclaimed, so only R, I and F carry the Today column.
     const expected = {
       en: { shown: ['R', 'I', 'F'], notToday: ['B', 'E'], label: 'Not today' },
       de: { shown: ['R', 'I', 'F'], notToday: ['B', 'E'], label: 'Nicht heute' },

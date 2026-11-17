@@ -37,9 +37,8 @@ function scriptOf(slide: Slide, locale: Locale) {
 }
 
 describe('success cases', () => {
-  it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it', () => {
+  it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it, the Section 2 opener’s first segment calling the pain old because the Section is about before AI', () => {
     // ARRANGE
-    // Han's proofread renames the Section 2 opener's first segment: the pain is old, since the Section is about before AI.
     const expected = [
       { title: 'A thought experiment', segments: ['Imagine your organization as a line', 'Where this is going'] },
       {
@@ -69,9 +68,8 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales', () => {
+  it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales, Section 2 not using “precise” and “accurate” before the Section defines them', () => {
     // ARRANGE
-    // Han's proofread rewrites the Section 2 caption: it no longer uses "precise" and "accurate" before the Section defines them.
     const expected = {
       en: {
         'every-product-is-a-translation':

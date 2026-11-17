@@ -80,9 +80,8 @@ describe('success cases', () => {
     expect(titles).toEqual(expected);
   });
 
-  it('speaks the Spec Voice script word for word', () => {
+  it('speaks the Spec Voice script word for word, Slide 7’s callback saying the window is a desk that fills up with every message and holds what the AI knows about the task, not everything it works from', () => {
     // ARRANGE
-    // Han's proofread changes Slide 7's callback: the window is a desk that fills up with every message, and it holds what the AI knows about your task, not everything it works from.
     const expected = {
       callback:
         'If you saw the context window Episode, you have met the context window before. What the AI knows about your task is what sits in the window, and that window is like a desk that fills up with every message.',
@@ -152,9 +151,8 @@ describe('success cases', () => {
     // ASSERT
     expect(markers).toEqual(expected);
   });
-  it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales', () => {
+  it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales, the German caption in German and marked as a translation while the English quote stays in the Speaker note', () => {
     // ARRANGE
-    // Han's proofread shows the German caption in German, marked as a translation; the English quote stays in the Speaker note.
     const quote =
       'the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.';
     const german =
@@ -295,9 +293,8 @@ describe('edge cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('names the third rot column for what does not belong, and the bench fix that fits it, in both locales', () => {
+  it('names the third rot column for what does not belong, and the bench fix that fits it, in both locales; “Too much history” did not fit a binder of every bike model', () => {
     // ARRANGE
-    // Han's proofread: the old "Too much history" did not fit "a binder of every bike model"; the column and its fix now say what does not belong.
     const expected = {
       en: { column: 'Too much that does not belong', compact: 'Too much that does not belong' },
       de: { column: 'Zu viel, was nicht hierher gehört', compact: 'Zu viel, was nicht hierher gehört' },

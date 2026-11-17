@@ -71,9 +71,8 @@ describe('success cases', () => {
     expect(titles).toEqual(expected);
   });
 
-  it('speaks the Spec Voice script word for word', () => {
+  it('speaks the Spec Voice script word for word, Slide 4’s second segment picturing the commuter the Slide shows, not a restaurant', () => {
     // ARRANGE
-    // Han's proofread replaces the restaurant picture in Slide 4's second segment with the commuter the Slide shows.
     const expected = {
       layer:
         'Take the commuter. His wish is “don’t arrive sweaty.” Someone has to turn that wish into a bike with a motor, or a lease with a shower at the office, or a talk on cycling to work in a suit. That turning is the work. The hard part is deciding what to build, not building it. That is my hypothesis from experience, not a measurement.',
@@ -163,9 +162,8 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('maps the Frame, Assemble and Test ride stations onto the line, so defining is Sales and Design and building is Build to Delivery', () => {
+  it('maps the Frame, Assemble and Test ride stations onto the line, so defining is Sales and Design and building is Build to Delivery, saying once how Slide 5’s new stations sit on the line Section 1 drew', () => {
     // ARRANGE
-    // Han's proofread: Slide 5 names new stations, so it says once how they sit on the line Section 1 drew.
     const expected = {
       en: 'Defining is Sales and Design, building is Build to Delivery.',
       de: 'Festlegen ist Vertrieb und Entwurf, Bauen ist Bau bis Versand.',
