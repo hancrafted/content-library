@@ -620,7 +620,7 @@ describe('failure cases', () => {
   });
 
   describe('reportReading', () => {
-    it('keeps subscribers correct when the browser refuses the write', () => {
+    it('keeps subscribers correct while the URL lags when WebKit throws SecurityError past its history-write limit', () => {
       // ARRANGE
       const { state, win, seen } = setup();
       win.failWrites = true;

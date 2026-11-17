@@ -35,7 +35,6 @@ class UrlStateStore implements UrlState {
   private detachLinks: (() => void) | null = null;
   private attached = false;
   private detachRestoration: (() => void) | null = null;
-  /** The path this page lives at, taken on first subscription: a router writes the URL after the first render. */
   private ownPath: string | null = null;
 
   constructor(
@@ -174,7 +173,6 @@ class UrlStateStore implements UrlState {
     return this.ownPath !== null && this.win.location.pathname !== this.ownPath;
   }
 
-  /** Adopts the hash the URL carries now, notifying only when it differs. */
   private resync() {
     if (this.isForeign() || this.pending !== null) return;
     const hash = hashOf(this.win);
@@ -208,7 +206,6 @@ class UrlStateStore implements UrlState {
     this.publishNavigation({ ...this.navigation, status });
   }
 
-  /** Writes now when the interval allows, else keeps only the latest value for a trailing flush. */
   private schedule(id: string) {
     this.pending = id;
     if (this.trailing !== null) return;
@@ -224,14 +221,18 @@ class UrlStateStore implements UrlState {
     this.pending = null;
     if (this.isForeign()) return;
     this.lastWrite = Date.now();
-    try {
-      this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
-    } catch {
-      // WebKit throws SecurityError past its history-write limit; subscribers stay correct while the URL lags.
-    }
+    this.replaceUrlUnlessHistoryLimitReached(id);
   };
 
-  /** The Title slide is the bare path: no `#`, query kept. */
+  private replaceUrlUnlessHistoryLimitReached(id: string): boolean {
+    try {
+      this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   private urlOf(id: string): string {
     if (id === TITLE_ANCHOR) return `${this.win.location.pathname}${this.win.location.search}`;
     return `#${encodeURIComponent(id)}`;
