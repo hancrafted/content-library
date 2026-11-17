@@ -80,11 +80,11 @@ const HELP = {
   ],
   body: [
     'In-body comment',
-    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding; in a test, fold it into the it or describe name.',
+    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body.',
   ],
   header: [
     'File header comment',
-    'Delete it, or add a pointer marker; a module says what it is through its name and its doc. Each ADR section it cites becomes one `// decision:` pointer above the first import; what a test file pins belongs in its it and describe names.',
+    'Delete it, or add a pointer marker; a module says what it is through its name and its doc. Each ADR section it cites becomes one `// decision:` pointer above the first import, or above the first declaration in a file with none, as in a rules file; what a test file pins belongs in its it and describe names.',
   ],
   trailing: [
     'Marker with trailing text',
