@@ -2,18 +2,14 @@ import { largestRemainder } from './context-usage.pure';
 import { isMessage } from './context.pure';
 import type { Block, Category, Reminder, Step, ToolCall } from './context.types';
 
-/* The state a Claude Code log is read into, line by line; claude-log.pure.ts drives it. */
-
 export interface LogOptions {
   readonly id: string;
-  /** The starting instructions: the log never holds them, so their split comes from the config. */
   readonly start: { readonly id: string; readonly blocks: readonly Block[] };
-  /** The size of each memory file; without it, a memory file is sized by its text. */
-  readonly memory?: number;
+  readonly memorySizeTokens?: number;
 }
 
-/** A token estimate from text length, about four characters a token, and the unrounded share weight. */
-export const weight = (text: string): number => text.length / 4;
+const CHARACTERS_PER_TOKEN = 4;
+export const weight = (text: string): number => text.length / CHARACTERS_PER_TOKEN;
 export const estimate = (text: string): number => Math.max(1, Math.round(weight(text)));
 
 const HIDDEN_USER = /^\s*<(?:command-|local-command|system-reminder|task-notification|bash-)/;
@@ -53,7 +49,6 @@ interface Sized {
   cat: Category;
   tokens: number;
 }
-/** A step under construction: blocks and calls stay mutable until the log is read. */
 interface Draft {
   id: string;
   kind: Step['kind'];
@@ -102,7 +97,7 @@ export class LogReader {
   private readonly tools = new Map<string, Draft>();
 
   constructor(options: LogOptions) {
-    this.memorySize = options.memory;
+    this.memorySize = options.memorySizeTokens;
     const blocks = options.start.blocks.map((b) => ({ ...b }));
     this.steps.push({ id: options.start.id, kind: 'start', blocks, fields: {} });
     this.last = blocks.reduce((sum, b) => sum + b.tokens, 0);
@@ -117,7 +112,6 @@ export class LogReader {
     return step;
   }
 
-  /** Closes the open request: its reply is sized by `output_tokens`, by length when thinking hides the split. */
   private closeRequest() {
     const request = this.request;
     this.request = null;
@@ -130,7 +124,6 @@ export class LogReader {
     }
   }
 
-  /** A measured context size: what is not yet explained is shared over the messages since the last measurement. */
   measure(context: number) {
     this.closeRequest();
     const left = context - this.last - this.known + this.carry;
@@ -142,12 +135,10 @@ export class LogReader {
     this.last = context;
   }
 
-  /** A message block whose size the next measurement settles, shared by its estimate `est`. */
   unknown(block: Sized, est: number) {
     this.open.push({ block, est });
   }
 
-  /** A block of the open request's reply, sized by its `output_tokens`. */
   reply(block: Sized, est: number) {
     const request = this.request;
     if (request) request.parts.set(block, (request.parts.get(block) ?? 0) + est);

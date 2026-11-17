@@ -1,11 +1,9 @@
+// decision: FE-001 §1
 import { normalizeCurve, setShare, type Curve, type CurveKey } from './attention-curve.pure';
 import { controlOf, modeControlOf, offers, type ControlId, type ModePart } from './context-controls.pure';
 import type { AttentionMenuModel } from './context-parts.types';
 import { isMessage, simpleOf } from './context.pure';
 import type { AttentionLayout, Category, Chat, Depth, Part, PartId, Preset, RenderMode } from './context.types';
-
-/* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
- * returns to the Preset, which is the Slide's own state. */
 
 export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'category', 'panel', 'attention'];
 export const ATTENTION_LAYOUTS: readonly AttentionLayout[] = ['list', 'pinned', 'compressed'];
@@ -15,21 +13,14 @@ export interface ViewState {
   readonly previewStep: number | null;
   readonly hover: string | null;
   readonly pinned: string | null;
-  /** The global renderMode: what the toolbar's Technical sets for every part. */
   readonly depth: Depth;
-  /** A part's own renderMode, set after the global one; the latest action wins. */
   readonly renderModes: Readonly<Partial<Record<PartId, RenderMode>>>;
   readonly parts: Readonly<Record<Part, boolean>>;
-  /** The parts in the order the toolbar's chips and the grid list them; the reader reorders it, a reload resets it. */
   readonly order: readonly Part[];
-  /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
   readonly zone: boolean;
-  /** The window size shown, an index into the Preset's windows. */
   readonly window: number;
   readonly hintSeen: boolean;
-  /** The Attention part's distribution, as the reader's sliders set it; the Preset's until moved, never stored. */
   readonly curve: Curve;
-  /** The Attention part's layout, as the reader's menu sets it; the Preset's until changed, never stored. */
   readonly layout: AttentionLayout;
 }
 
@@ -49,7 +40,6 @@ export type ViewEvent =
   | { readonly type: 'REORDER'; readonly part: Part; readonly before: Part }
   | { readonly type: 'TOGGLE_ZONE' }
   | { readonly type: 'SET_CURVE'; readonly key: CurveKey; readonly value: number }
-  /** The typed shares of the menu's edit mode, in any state: normalised to 100 here. */
   | { readonly type: 'SET_CURVES'; readonly value: Readonly<Record<CurveKey, number>> }
   | { readonly type: 'SET_LAYOUT'; readonly value: AttentionLayout };
 
@@ -73,7 +63,6 @@ export function createState(preset: Preset): ViewState {
 
 const isTimeline = (event: ViewEvent) => event.type === 'PREVIEW' || event.type === 'COMMIT';
 
-/** Why an event does nothing under a Preset, or null when it is allowed. Lighting is never locked. */
 export function blockedBy(preset: Preset, event: ViewEvent): string | null {
   if (isTimeline(event) && preset.timelineLocked) return 'timeline locked';
   if (event.type === 'REORDER' && controlOf(preset, 'parts').reorder === false) return 'reorder off';
@@ -94,14 +83,12 @@ const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
   SET_LAYOUT: ['attentionMenu'],
 };
 
-/** The controls that may send an event: any one of them is enough. */
 function controlFor(event: ViewEvent): readonly ControlId[] | null {
   if (event.type === 'SET_PART_MODE') return [isModePart(event.part) ? modeControlOf(event.part) : 'technical'];
   if (event.type === 'REORDER') return ['parts'];
   return CONTROL_FOR[event.type] ?? null;
 }
 
-/** The order with one part moved to the slot of another: it takes that slot and the ones between shift by one. */
 export function moveTo(order: readonly Part[], part: Part, target: Part): readonly Part[] {
   const from = order.indexOf(part);
   const to = order.indexOf(target);
@@ -115,7 +102,6 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 
 interface Context {
   readonly preset: Preset;
-  /** The chat's length in steps. */
   readonly steps: number;
 }
 
@@ -150,20 +136,17 @@ const HANDLERS: Handlers = {
   TOGGLE_ZONE: (s) => ({ ...s, hintSeen: true, zone: !s.zone }),
 };
 
-/** The next state after an event; an event the Preset blocks returns the same state. */
 export function reduce(state: ViewState, event: ViewEvent, context: Context): ViewState {
   if (blockedBy(context.preset, event)) return state;
   const handler = HANDLERS[event.type] as (s: ViewState, e: ViewEvent, c: Context) => ViewState;
   return handler(state, event, context);
 }
 
-/** A part's renderMode: its own override when one was set after the global value, else the global one. */
 export const renderModeOf = (state: ViewState, part: PartId): RenderMode => state.renderModes[part] ?? state.depth;
 
 export const visibleStep = (state: ViewState): number => state.previewStep ?? state.step;
 export const litKey = (state: ViewState): string | null => state.hover ?? state.pinned;
 
-/** Whether a block lights for a lit key: a step id, a block (`id@cat`), a category (`cat:`, `scat:`) or the group. */
 export function matcher(key: string | null): (id: string, cat: Category) => boolean {
   if (!key) return () => false;
   if (key.startsWith('cat:')) return (_id, cat) => cat === key.slice(4);
@@ -174,11 +157,9 @@ export function matcher(key: string | null): (id: string, cat: Category) => bool
   return (id) => id === key;
 }
 
-/** The step id a key names, or null for a category key. */
 export const stepOfKey = (key: string | null): string | null =>
   key && !key.includes(':') ? (key.split('@')[0] ?? null) : null;
 
-/** A pinned step not yet in the window at the visible step: drawn as a dashed empty outline. */
 export function ghostOf(chat: Chat, state: ViewState): string | null {
   const id = stepOfKey(state.pinned);
   if (!id) return null;
@@ -186,23 +167,14 @@ export function ghostOf(chat: Chat, state: ViewState): string | null {
   return index >= visibleStep(state) ? id : null;
 }
 
-/**
- * A new key replays the detail card's entrance when what it explains changes: the lit key, the ghost or the
- * renderMode. The Attention part keeps its own key, so hovering a row restyles it and never remounts the list.
- */
 export const panelKey = (view: {
   readonly depth: Depth;
   readonly lit: string | null;
   readonly ghost: string | null;
 }): string => [view.depth, view.lit, view.ghost].join('|');
 
-/** What the menu offers: nothing, only the layout (an explicit split rules the curve), or both. */
 export const menuOffer = (on: boolean, overridden: boolean) => (on ? (overridden ? 'layout' : 'full') : 'off');
 
-/**
- * What the Attention head's menu needs: the layout always, the curve only while it rules (`full`), each change sent
- * up as an event; nothing when the control is off.
- */
 export function attentionMenu(
   state: Pick<ViewState, 'curve' | 'layout'>,
   send: (event: ViewEvent) => void,

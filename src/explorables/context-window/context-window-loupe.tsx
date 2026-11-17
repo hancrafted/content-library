@@ -9,18 +9,10 @@ import { loupeFrame, loupePlacement, loupeRows } from './loupe.pure';
 import { Moves } from './moves.client';
 import { tint, vars } from './window-bits';
 
-/*
- * The loupe: while a mouse is over the bar, the blocks around it as rows big enough to hover and click. The bar
- * stays true to scale (a 28-token message is 0.003% of 1M); the loupe is the way in. A tail on its near edge, at the
- * pointer's height, bridges the gap to the bar and is part of the loupe, so the pointer never leaves it on the way.
- */
-
-// Long enough to cross the tail's bridge from the bar at a slow pace.
-const LEAVE_MILLISECONDS = 400;
+const LEAVE_DELAY_TO_CROSS_TAIL_BRIDGE_MILLISECONDS = 400;
 
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
 
-/** Where the pointer is on the bar, 0 to 1, or null when the loupe is closed. */
 export function useLoupe(bar: RefObject<HTMLDivElement | null>, enabled: boolean) {
   const [at, setAt] = useState<number | null>(null);
   const timer = useRef(0);
@@ -38,7 +30,7 @@ export function useLoupe(bar: RefObject<HTMLDivElement | null>, enabled: boolean
   };
   const leave = () => {
     clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setAt(null), LEAVE_MILLISECONDS);
+    timer.current = window.setTimeout(() => setAt(null), LEAVE_DELAY_TO_CROSS_TAIL_BRIDGE_MILLISECONDS);
   };
   const stay = () => clearTimeout(timer.current);
   return { at: enabled ? at : null, handlers: { onPointerMove, onPointerLeave: leave }, leave, stay };
@@ -89,7 +81,6 @@ interface ListProps {
   readonly cursor: string;
 }
 
-/** The loupe's title and its rows: each row's `on` comes from the lit key, and is all a hover changes. */
 function LoupeList({ p, say, rows, cursor }: ListProps) {
   const match = useMemo(() => matcher(p.lit), [p.lit]);
   const total = rows.reduce((sum, b) => sum + b.tokens, 0);
@@ -135,7 +126,6 @@ export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
   );
 }
 
-/** The frame on the bar round exactly the blocks the loupe shows. */
 export function Lens({
   p,
   at,

@@ -7,8 +7,6 @@ import type { AttentionMenuModel } from './context-parts.types';
 import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 
-/* The Attention menu's distribution section: four sliders, or, after the pen, four number inputs the check saves. */
-
 type Shares = Readonly<Record<CurveKey, number>>;
 type Curves = NonNullable<AttentionMenuModel['curve']>;
 
@@ -45,7 +43,6 @@ function Slider({ name, label, value, onChange }: SliderProps) {
   );
 }
 
-/** The edit mode's number inputs: free text while typing, nothing validated until the check saves. */
 function Fields({
   words,
   draft,
@@ -82,7 +79,6 @@ type Draft = Readonly<Record<CurveKey, string>>;
 const draftOf = (shares: Shares): Draft =>
   Object.fromEntries(CURVE_KEYS.map((key) => [key, String(shares[key])])) as Draft;
 
-/** Typed text as a number; empty or unreadable text is NaN, which the normaliser counts as 0. */
 const sharesOf = (draft: Draft): Shares =>
   Object.fromEntries(
     CURVE_KEYS.map((key) => [key, Number(draft[key].trim() === '' ? Number.NaN : draft[key])]),
@@ -94,12 +90,10 @@ interface PenProps {
   readonly onClick: () => void;
 }
 
-/** The pen that starts typing the shares, which becomes the check that saves them (and says it normalises). */
 function Pen({ words, editing, onClick }: PenProps) {
   const label = editing ? words.attentionSave : words.attentionEdit;
   const tip = editing ? words.attentionSaveTip : words.attentionEdit;
   const tipId = useId();
-  // One tooltip: the CSS one from data-tip, opening leftwards so the popover's edge never clips it. No native title.
   return (
     <>
       <button

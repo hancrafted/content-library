@@ -1,8 +1,3 @@
-/*
- * The AI's speech bubble: a card, a bubble with a tail toward the avatar, and The bubble pops in once when the Slide
- * mounts; reduced motion shows it at rest. Tokens only.
- */
-
 .card {
   display: flex;
   width: 100%;
@@ -30,7 +25,6 @@
   transform-origin: 0 0;
 }
 
-/* A rotated square on the bubble's left edge, pointing at the avatar. */
 .tail {
   position: absolute;
   top: 0.9rem;
@@ -56,7 +50,6 @@
   }
 }
 
-/* The faces are drawn at the heading role, shown at half size (zoom keeps the type role); the number and the label carry the meaning. */
 .emoji {
   zoom: 0.5;
 }

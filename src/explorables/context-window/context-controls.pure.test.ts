@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CONTROL_IDS, controlOf, controlProblems, mergeControls, offers } from './context-controls.pure';
 
-/* The control registry: one typed definition per control, the Preset's `controls` map overrides it key by key. */
-
 describe('success cases', () => {
   it('gives every control its registry default when the Preset says nothing', () => {
     // ARRANGE
@@ -33,7 +31,7 @@ describe('success cases', () => {
     expect(controlOf({ controls: merged }, 'parts')).toMatchObject(expected);
   });
 
-  it("lets '*' set show for every control, and an explicit control beat it", () => {
+  it("lets '*' set show for every control except the meter, a readout and no button, and an explicit control beat it", () => {
     // ARRANGE
     const controls = mergeControls(
       { parts: { show: true }, technical: { show: true } },
@@ -42,7 +40,6 @@ describe('success cases', () => {
         window: { show: true },
       },
     );
-    // the meter is a readout, not a button: '*' leaves it alone
     const expected = ['meter', 'window'];
     // ACT
     const shown = CONTROL_IDS.filter((id) => offers({ controls }, id));

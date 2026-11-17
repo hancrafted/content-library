@@ -3,27 +3,18 @@ import type { BarBlock } from './context-bars.pure';
 import styles from './context.module.css';
 import { tint, vars } from './window-bits';
 
-/*
- * The context window's bar as a pure view: blocks, the autocompact buffer and the smart-zone lines drawn from plain
- * props. No hooks, no handlers, no 'use client' (a lint rule holds that for every `*-view.tsx`), so a Slide renders
- * it from the server as static HTML, and the interactive part reuses its buffer and lines inside its own bar.
- */
-
 export type BarOrientation = 'vertical' | 'horizontal';
 
-/** A smart-zone line across the bar: where it sits as a share of the window, and whether the fill has crossed it. */
 export interface BarLine {
   readonly id: string;
   readonly at: number;
   readonly crossed: boolean;
 }
 
-/** The autocompact buffer kept free at the end of the window, as a share of it. */
 export function BarBuffer({ size, total }: { readonly size: number; readonly total: number }) {
   return <div className={styles.buffer} aria-hidden="true" style={vars({ '--z': (size / total) * 100 })} />;
 }
 
-/** The smart-zone lines. */
 export function BarLines({ lines }: { readonly lines: readonly BarLine[] }) {
   return lines.map((line) => (
     <div
@@ -38,35 +29,21 @@ export function BarLines({ lines }: { readonly lines: readonly BarLine[] }) {
 
 export interface ContextBarViewProps {
   readonly orientation: BarOrientation;
-  /** The scale the blocks sit on: the window's tokens, or the minutes of a call. */
   readonly total: number;
   readonly blocks: readonly BarBlock[];
-  /** The buffer kept free, in the unit of `total`. */
   readonly buffer?: number;
   readonly lines?: readonly BarLine[];
-  /** What the bar shows, for assistive technology. */
   readonly label: string;
-  /**
-   * A Slide's words for each block, in block order. Given, the bar is a list read top to bottom: each block a row that
-   * holds its words, sized from its share but never smaller than its words, then a row for the free space.
-   */
   readonly labels?: readonly ReactNode[];
-  /** The free-space row's words, drawn only with `labels`. */
   readonly free?: ReactNode;
-  /**
-   * How a labelled bar splits, top to bottom: each part holds its next `rows` blocks, a line runs between two parts,
-   * and a part's `aside` stands beside exactly its rows. Left out, the bar is one part with no aside.
-   */
   readonly parts?: readonly BarPart[];
 }
 
-/** One part of a labelled bar: how many of its blocks it holds, and what stands beside them. */
 export interface BarPart {
   readonly rows: number;
   readonly aside?: ReactNode;
 }
 
-/** One block at its place on the scale, holding a Slide's words when the bar is a list. */
 function Block({
   block,
   total,
@@ -92,20 +69,17 @@ function Block({
   );
 }
 
-/** One row of the labelled list, top to bottom: a block, the line before part `part`, or the free space. */
 type ListRow =
   | { readonly kind: 'block'; readonly block: BarBlock; readonly words: ReactNode }
   | { readonly kind: 'split'; readonly part: number }
   | { readonly kind: 'free' };
 
-/** An aside and the grid lines it runs between: its part's first row to past its last. */
 interface AsideSpan {
   readonly aside: ReactNode;
   readonly from: number;
   readonly to: number;
 }
 
-/** The labelled list's rows and its asides' spans, from the parts; parts must hold every block. */
 function listLayout(
   blocks: readonly BarBlock[],
   labels: readonly ReactNode[],
@@ -130,7 +104,6 @@ function listLayout(
   return { rows, spans };
 }
 
-/** A grid track per row: a block or the free space grows by its share of the window, never below its words. */
 const track = (row: ListRow, total: number, free: number): string => {
   if (row.kind === 'split') return 'auto';
   const share = row.kind === 'block' ? row.block.size / total : free / total;
@@ -156,7 +129,6 @@ function ListRowView({
   return <Block block={row.block} total={total} words={row.words} listed />;
 }
 
-/** Each aside beside its part's rows. */
 function Asides({ spans }: { readonly spans: readonly AsideSpan[] }) {
   return spans.map(({ aside, from, to }) => (
     <div key={from} className={styles.aside} data-aside="" style={vars({ '--from': from, '--to': to })}>
@@ -168,10 +140,6 @@ function Asides({ spans }: { readonly spans: readonly AsideSpan[] }) {
 const rowKey = (row: ListRow): string =>
   row.kind === 'block' ? row.block.key : row.kind === 'split' ? `split-${row.part}` : 'free';
 
-/**
- * The labelled bar: a list of rows on a grid whose tracks its asides share, so each aside spans exactly its part's
- * rows. Shares are fractions of one, so a grid with no height to share keeps every row at its words' height.
- */
 function ListedBar(props: Omit<ContextBarViewProps, 'labels'> & { readonly labels: readonly ReactNode[] }) {
   const { orientation, total, blocks, lines = [], label, labels, parts = [{ rows: blocks.length }] } = props;
   const { rows, spans } = listLayout(blocks, labels, parts);
@@ -200,7 +168,6 @@ function ListedBar(props: Omit<ContextBarViewProps, 'labels'> & { readonly label
   );
 }
 
-/** A static bar: one block per `blocks` entry at its place on the scale; a list of rows when given `labels`. */
 export function ContextBarView(props: ContextBarViewProps) {
   const { orientation, total, blocks, buffer = 0, lines = [], label, labels } = props;
   if (labels !== undefined) return <ListedBar {...props} labels={labels} />;

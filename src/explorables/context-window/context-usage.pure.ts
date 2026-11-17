@@ -2,8 +2,6 @@ import { curveWeights, DEFAULT_CURVE, type Curve, type Falloff } from './attenti
 import { CATEGORIES, SIMPLE_CATEGORIES, simpleOf, type Frame } from './context.pure';
 import type { Category, Chat, Depth, Line, SimpleCategory, StepNotes, WindowSize } from './context.types';
 
-/* What the window holds at a step, as the cornerstone reports it: usage rows, /context boxes, attention, readout. */
-
 export type UsageRow =
   | {
       readonly kind: 'cat';
@@ -20,7 +18,6 @@ const TOP: readonly Category[] = ['sysprompt', 'systools', 'mcp', 'skills', 'mem
 const MESSAGES: readonly Category[] = ['user', 'assistant', 'tool_use', 'tool_result', 'reminder', 'summary'];
 const ALWAYS = new Set<Category>(['user', 'assistant', 'tool_use', 'tool_result']);
 
-/** Free space and the autocompact buffer; a fill inside the buffer eats it. */
 function tailRows(frame: Frame, window: WindowSize): UsageRow[] {
   const free = Math.max(0, window.tokens - frame.used - window.bufferTokens);
   const buffer = Math.max(0, Math.min(window.bufferTokens, window.tokens - frame.used));
@@ -52,7 +49,6 @@ function simpleRows(frame: Frame, present: ReadonlySet<Category>): UsageRow[] {
   );
 }
 
-/** Usage by category at a depth: always the same rows for one chat (`present`), so nothing reflows while it steps. */
 export function usageRows(
   frame: Frame,
   depth: Depth,
@@ -75,11 +71,6 @@ function boxCounts(sums: readonly number[], box: number, total: number): number[
   return counts;
 }
 
-/**
- * Claude Code's /context grid: 100 boxes grouped by category. Each category present gets at least one box, the rest by
- * its share; inside a category each box belongs to the block at its midpoint. The used boxes then follow the window's
- * order, the order the messages appear in the chat, so a category's boxes can sit apart. The buffer's boxes close the grid.
- */
 export function gridBoxes(frame: Frame, window: WindowSize, total = 100): readonly GridBox[] {
   const box = window.tokens / total;
   const cats = CATEGORIES.map(({ cat }) => cat).filter((cat) => (frame.byCategory[cat] ?? 0) > 0);
@@ -106,7 +97,6 @@ export function gridBoxes(frame: Frame, window: WindowSize, total = 100): readon
   return out;
 }
 
-/** Shares `total` whole units by weight, the leftover to the largest remainders. */
 export function largestRemainder(weights: readonly number[], total: number): number[] {
   const sum = weights.reduce((a, b) => a + b, 0);
   const exact = weights.map((w) => (sum > 0 ? (w / sum) * total : total / weights.length));
@@ -130,18 +120,11 @@ export interface AttentionInput {
   readonly step: number;
   readonly windowTokens: number;
   readonly notes: Readonly<Record<string, StepNotes>>;
-  /** Units per step id, the Brief's split; wins when it names this step. */
   readonly override?: Readonly<Record<string, number>>;
-  /** The curve's shares per bucket; the default curve when absent. */
   readonly curve?: Curve;
-  /** The start and newest buckets' splits over their rows; the default falloff when absent. */
   readonly falloff?: Falloff;
 }
 
-/**
- * 100 illustrative units of attention over the steps in the window, split by the curve: the start and the newest stay
- * strong, the recent get a lesser share, and the middle is thin with a few seeded peaks (attention-curve.pure.ts).
- */
 export function attentionAt(chat: Chat, frames: readonly Frame[], input: AttentionInput): readonly Attention[] {
   const frame = frames[input.step - 1];
   const steps = chat.steps.slice(0, input.step).filter((s) => frame?.inWindow.includes(s.id));
@@ -166,9 +149,7 @@ export interface Readout {
   readonly steps: number;
   readonly delta: number;
   readonly used: number;
-  /** Percent of the window used. */
   readonly percent: number;
-  /** The highest smart-zone line the fill has crossed. */
   readonly crossed: Line | null;
 }
 

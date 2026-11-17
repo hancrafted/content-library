@@ -2,10 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { Step } from './context.types';
 import { blocksChat } from './mini-chat.pure';
 
-/** The shared starting instructions a mini chat opens with, unless it leaves them out. */
 const START: Step = { id: 'start', kind: 'start', blocks: [{ cat: 'sysprompt', tokens: 100 }] };
 
-/** A step as the bar reads it: its id, its kind and its blocks' categories. */
 const shape = (steps: readonly Step[]) =>
   steps.map((step) => ({ id: step.id, kind: step.kind, cats: step.blocks.map((block) => block.cat) }));
 
