@@ -13,7 +13,6 @@ export interface Rect {
 
 /** The docked card's width: the table of contents' width, so the two stack in one column. */
 export const DOCK_WIDTH_REM = 17;
-/** The opaque header above the 16:9 frame. */
 export const HEADER_REM = 2;
 /** Room the card keeps from the viewport's left and bottom edges. */
 export const DOCK_GAP_REM = 1;
@@ -21,7 +20,6 @@ export const DOCK_GAP_REM = 1;
 /** Set on the Episode page while the card is docked, so the table of contents can leave it room. */
 export const TALK_DOCKED_ATTR = 'data-talk-docked';
 
-/** What the table of contents gives up while the card is docked: its height plus the gap above it. */
 export function tocReserveRem(): number {
   return dockedHeightRem() + DOCK_GAP_REM;
 }
@@ -33,7 +31,6 @@ export const GLIDE_EASING = 'ease-out';
 const PX_PER_REM = 16;
 const FRAME_RATIO = 9 / 16;
 
-/** The docked card's height: its header plus the 16:9 frame. */
 export function dockedHeightRem(): number {
   return HEADER_REM + DOCK_WIDTH_REM * FRAME_RATIO;
 }

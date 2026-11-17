@@ -19,27 +19,20 @@ import { publishedAnchorFindings, type PublishedSnapshot } from './published-anc
  * it checks: it renders Slides through `composed-page-render.ts`.
  */
 
-/** A Section marker, `sections/<name>.ts`: its name and the values it exports. */
 export interface SectionMarker {
   readonly name: string;
   readonly exports: readonly unknown[];
 }
 
-/** A Playlist entry that opens the page at an anchor, with the Event presenting it. */
 export interface PlaylistAnchor {
   readonly event: string;
   readonly anchor: string;
 }
 
-/** What a page's composition is judged against, beside its ref. */
 export interface PageContext {
-  /** Its status in the store; none for a Template, an Explorable page or a Guide. */
   readonly status: EpisodeStatus | undefined;
-  /** Its summary in every locale as `npm run registry` wrote it; none when the index lacks it. */
   readonly summary: PageSummary | undefined;
-  /** Every Playlist entry that opens it at an anchor. */
   readonly playlistAnchors: readonly PlaylistAnchor[];
-  /** Its `published-anchors.json`, or the file to create. */
   readonly published: PublishedSnapshot;
   /** Its Section markers in `sections/`, in name order; none when it keeps no `sections/` folder. */
   readonly markers: readonly SectionMarker[] | undefined;
@@ -54,12 +47,10 @@ export interface CheckedPage {
 /** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included (design-ADR-0012). */
 const AUTHORED_HEADERS: readonly string[] = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
-/** The folder of a page's Section markers, beside its `episode.ts`. */
 export const MARKERS_DIR = 'sections';
 
 type Read = () => Promise<CheckedPage>;
 
-/** A check that judges the composition against its context. */
 const check = (
   name: string,
   judge: (composition: EpisodeComposition, context: PageContext) => readonly string[] | Promise<readonly string[]>,
@@ -72,7 +63,6 @@ const check = (
   },
 });
 
-/** The summary `npm run registry` wrote for a page, field by field, as a composition says it in one locale. */
 function localeSummaryOf(composition: EpisodeComposition, locale: Locale) {
   const { title, caption, description } = composition.messages[locale];
   const sections = tocSectionsOf(
@@ -83,7 +73,6 @@ function localeSummaryOf(composition: EpisodeComposition, locale: Locale) {
   return JSON.stringify({ title, caption, description, minutes: episodeMinutes(composition, locale), sections });
 }
 
-/** The locales whose generated summary says other than the composition, or the summary the index lacks. */
 function staleSummaries(page: ComposedPage, composition: EpisodeComposition, { summary }: PageContext): string[] {
   if (summary === undefined) return [`No summary is registered for "${page.id}": run \`npm run registry\``];
   return LOCALES.filter((locale) => {
@@ -92,7 +81,6 @@ function staleSummaries(page: ComposedPage, composition: EpisodeComposition, { s
   }).map((locale) => `its ${locale} summary is stale: run \`npm run registry\``);
 }
 
-/** An own text the Episode leaves empty or missing, per locale. */
 function missingOwnText({ messages }: EpisodeComposition): string[] {
   return (['en', 'de'] as const).flatMap((locale) =>
     (['title', 'caption', 'description'] as const)
@@ -128,7 +116,6 @@ function sectionFindings({ sections }: EpisodeComposition): string[] {
   ];
 }
 
-/** One marker against its Section: it exports exactly one Slide list, its section slide first, and that list is the Section. */
 function markerFindings({ name, exports }: SectionMarker, sections: EpisodeComposition['sections']): string[] {
   const firsts = (exports.filter(Array.isArray) as { slug: string }[][]).map(([first]) => first?.slug).join(', ');
   const section = sections.find(([opener]) => opener.slug === name);
@@ -167,7 +154,6 @@ function playlistAnchorFindings({ sections }: EpisodeComposition, { playlistAnch
   });
 }
 
-/** The checks every Episode's composition holds: its own text, header, Sections and the Playlist anchors into it. */
 function episodeOnlyChecks(page: ComposedPage, read: Read): NamedCheck[] {
   return [
     check('gives the Episode its own title, caption and description in en and de', missingOwnText, read),
@@ -185,7 +171,6 @@ function episodeOnlyChecks(page: ComposedPage, read: Read): NamedCheck[] {
   ];
 }
 
-/** The checks every composed page holds: its slug, summary and published anchors. */
 function composedChecks(page: ComposedPage, read: Read): NamedCheck[] {
   return [
     check(

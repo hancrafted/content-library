@@ -1,9 +1,7 @@
 import { createContext, useContext } from 'react';
 
-/** The page-wide toolbar picks a Guide's Slides share: its operating system and its AI agent. */
 export type PickName = 'os' | 'agent';
 
-/** What the page's provider hands its Slides: the picks so far, and the call that sets one for the whole page. */
 export interface PagePicks {
   readonly picks: Readonly<Partial<Record<PickName, string>>>;
   readonly setPick: (name: PickName, value: string) => void;

@@ -23,7 +23,6 @@
   }
 }
 
-/* The typed command is ten characters, "echo hello"; the width is what the typing grows. */
 .command {
   width: 10ch;
 }

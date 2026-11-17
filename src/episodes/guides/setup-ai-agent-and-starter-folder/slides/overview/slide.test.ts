@@ -64,7 +64,6 @@ const card = (route: string, title: string) => ({
 });
 const WATCH = [card('/episode/a', 'Titel A'), card('/episode/b', 'Titel B')];
 
-/** The view body as the client part hands it the view read from a query string. */
 function viewOf(search: string, onReopen?: () => void) {
   const html = renderToStaticMarkup(
     createElement(ViewBody, {

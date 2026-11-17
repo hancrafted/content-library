@@ -12,7 +12,7 @@ import { createContext, useContext, useEffect, useSyncExternalStore } from 'reac
 /** The page's zone store, provided once per Episode page by `SlideZones` (FE-009 §5). */
 export const ZoneStoreContext = createContext<ZoneStore | null>(null);
 
-/** The id of the Slide a `SlideMount` wraps, provided to its subtree (FE-009 §4). */
+// decision: FE-009 §4
 export const SlideIdContext = createContext<string | null>(null);
 
 const OUTSIDE_PAGE: ZoneStore = createZoneStore();
@@ -80,7 +80,6 @@ export function useArtLoadsOf(id: string | null): boolean {
   );
 }
 
-/** Whether the Scene art of the Slide this component sits in loads, as `useArtLoadsOf` reads it. */
 export function useArtLoads(): boolean {
   return useArtLoadsOf(useContext(SlideIdContext));
 }

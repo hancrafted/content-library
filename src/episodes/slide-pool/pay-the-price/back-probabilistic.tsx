@@ -1,12 +1,10 @@
 import { BackSvg, beat, Label, Who, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** The column the source and its two receivers share, the middle the copies split from, and the two rows. */
 const COLUMN = 14;
 const MIDDLE = 37;
 const ROWS = [14, 60] as const;
 
-/** The source the brief comes from: a document for the freelancer, a box reading "prompt" for the AI. */
 function Source({ ai }: BackProps) {
   return ai ? (
     <rect x="-17" y="-10" width="34" height="20" rx="5" className="fill-ai/10 stroke-ai" strokeWidth="1.4" />
@@ -15,7 +13,6 @@ function Source({ ai }: BackProps) {
   );
 }
 
-/** The source, fading as its two copies leave: the document with its lines, or the box reading "prompt". */
 function Original({ ai, prompt }: BackProps & { prompt: string }) {
   return (
     <g className={styles.out} style={beat({ d: 0.45 })}>
@@ -32,7 +29,6 @@ function Original({ ai, prompt }: BackProps & { prompt: string }) {
   );
 }
 
-/** What the two receivers produce at the same moment: a circle from one, a triangle from the other. */
 function Results({ ai }: BackProps) {
   const ink = ai ? 'stroke-ai' : 'stroke-foreground';
   return (
@@ -69,10 +65,6 @@ function Arrows({ ai }: BackProps) {
   );
 }
 
-/**
- * Probabilistic: one document (or the prompt) splits up and down into two copies that shrink into two freelancers
- * (or two AI chats), stacked in two rows; at the same moment one points to a circle, the other to a triangle.
- */
 export function ProbabilisticBack({ ai, prompt }: BackProps & { prompt: string }) {
   return (
     <BackSvg width={86}>

@@ -1,15 +1,10 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 
-/** The least a Slide record carries to be placed: its stable slug. */
 export interface SlideOutline {
   readonly slug: string;
 }
 
-/**
- * A Section as an Episode record lists it: an ordered list of Slides whose
- * first is the section slide. Its slug is the Section's slug and its title
- * names the Section (FE-002).
- */
+// decision: FE-002 §2
 export type SectionList<S extends SlideOutline = SlideOutline> = readonly [S, ...S[]] & {
   /** `false`: the Section declares no section slide; its first page Slide stands in for it (FE-002). Absent: it has one. */
   readonly sectionSlide?: false;
@@ -25,10 +20,9 @@ export function withoutSectionSlide<T extends readonly [SlideOutline, ...SlideOu
   return Object.assign([...section] as unknown as T, { sectionSlide: false as const });
 }
 
-/** Heading level by position (FE-002 §4): `h2` for a section slide, `h3` for a page Slide. */
+// decision: FE-002 §4
 export type SlideLevel = 'h2' | 'h3';
 
-/** One Slide of a Section list, placed: its wrapper id, its Section's slug and its heading level. */
 export interface PlacedListSlide<S> {
   readonly id: string;
   readonly slide: S;
@@ -64,7 +58,6 @@ export function placeSections<S extends SlideOutline>(
   return placed;
 }
 
-/** One Section's Slides placed: a section slide stands first, or, when the Section declares none, its first page Slide. */
 function placeList<S extends SlideOutline>(list: SectionList<S>): PlacedListSlide<S>[] {
   const [head, ...pages] = list;
   const section = checkedSlug(head.slug);

@@ -4,12 +4,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { missingPublishedSnapshot } from './composed-page-context';
 
-/*
- * The `published-anchors.json` a page folder lacks, for the composition its `episode.ts` exports: what
- * `copy-to-event.ts` writes into an Event's copy of an Episode, from the same reader the composition checks use.
- */
-
-/** An `episode.ts` module exporting one composition: Section `foundations` with page Slides `why` and `how`. */
 const EPISODE_MODULE = {
   episode: { sections: [[{ slug: 'foundations' }, { slug: 'why' }, { slug: 'how' }]], messages: {} },
 };

@@ -16,7 +16,6 @@ import {
   type CycleItem,
 } from './radial-cycle.pure';
 
-/** One tick per month: the face is a year. */
 const MONTHS = 12;
 
 /** Rotations in CSS turn around the face's centre, not the element's own box. */
@@ -28,13 +27,11 @@ export interface PhaseCopy {
   caption: string;
 }
 
-/** What a phase does when a pointer or the keyboard reaches it. */
 export interface PhaseHandlers {
   onSelect: (item: CycleItem) => void;
   onPreview: (item: CycleItem | null) => void;
 }
 
-/** The faint month ticks outside the ring and the track the phases sit on. */
 function Dial() {
   return (
     <g aria-hidden="true">
@@ -76,7 +73,6 @@ function phaseEvents(item: CycleItem, { onSelect, onPreview }: PhaseHandlers) {
   };
 }
 
-/** One phase: a focusable arc that pops outward while shown, its date laid along it. */
 function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
   const arc = phaseArc(index, CYCLE_ITEMS.length);
   const pop = popOffset(index, CYCLE_ITEMS.length, POP_DISTANCE);
@@ -106,7 +102,6 @@ interface PhaseLabelProps {
   children: string;
 }
 
-/** The phase's date, turned to follow the ring. */
 function PhaseLabel({ at, turnDegrees, shown, children }: PhaseLabelProps) {
   return (
     <text
@@ -153,7 +148,6 @@ function FocusHalo({ path }: { path: string }) {
   );
 }
 
-/** The phases in order around the face. */
 export function PhaseRing({
   items,
   shown,

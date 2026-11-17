@@ -1,7 +1,6 @@
 import { BackSvg, beat, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** A clock whose hand turns twice a pass, centred on `x`. */
 function Clock({ x, ink }: { x: number; ink: string }) {
   return (
     <g transform={`translate(${x} 36)`}>
@@ -49,7 +48,6 @@ function Bans({ x }: { x: number }) {
   );
 }
 
-/** The pile of pages growing throughout, its left edge at `x`. */
 function Pile({ ai, x }: BackProps & { x: number }) {
   const page = ai ? 'fill-ai/20 stroke-ai' : 'fill-card stroke-foreground';
   return (

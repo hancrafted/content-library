@@ -47,7 +47,6 @@ function Items({ items }: { items: readonly string[] }) {
   ));
 }
 
-/** The item to click: filled `primary` with the terminal mark when it is the last click, a tint when it opens more. */
 function Pick({ children, last }: { children: ReactNode; last: boolean }) {
   return (
     <li
@@ -63,7 +62,6 @@ function Pick({ children, last }: { children: ReactNode; last: boolean }) {
   );
 }
 
-/** Mac: Finder's menu on the folder, Services, and its submenu with "New Terminal at Folder". */
 export function MacMenu({ label, folder, items, services, pick, other }: MacMenuProps) {
   return (
     <div aria-label={label} role="img" className="grid grid-cols-12 items-start gap-3 rounded-2xl bg-muted p-4 sm:p-5">

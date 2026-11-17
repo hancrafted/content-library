@@ -18,7 +18,6 @@ import { UnzipView } from './unzip-view.client';
  */
 const ZIP = 'hancrafted-workshop-starter.zip';
 const FOLDER = 'hancrafted-workshop-starter';
-/** One file for both locales, so its URL is the default locale's bare path. */
 const ZIP_PATH = `/${ZIP}`;
 
 function DownloadIcon() {
@@ -66,7 +65,6 @@ function HalfIndex({ index, accent, children }: { index: string; accent: string;
   );
 }
 
-/** A row of the unzipped folder: its file name, bold for the skills folder, and what it is for. */
 function FolderRow({ name, note, folder = false }: { name: string; note?: string; folder?: boolean }) {
   return (
     <li className="flex items-center gap-3 rounded-lg px-3 py-2">

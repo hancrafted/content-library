@@ -17,7 +17,6 @@ interface TraitFlipProps {
   labels: BackLabels;
 }
 
-/** The flip's state, with the one timer its rules name: the pointed row's next replay, or the wipe's blank. */
 function useFlip() {
   const [state, dispatch] = useReducer(flip, CLOSED);
   const { open, blank } = state;

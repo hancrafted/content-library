@@ -29,7 +29,6 @@
 .card.isShown:hover {
   transform: translateY(-3px);
 }
-/* The card's whole face turns it; the drawing and text let the click through, the text's Context marker excepted. */
 .turn {
   position: absolute;
   inset: 0;
@@ -62,7 +61,6 @@
 .isTurned .flip {
   transform: rotateY(180deg);
 }
-/* The wipe: a blank card laid over whichever face shows, inside the border. */
 .card::after {
   content: '';
   position: absolute;
@@ -119,7 +117,6 @@
   transform: scaleX(0);
 }
 
-/* end states */
 .out,
 .fly,
 .scan,
@@ -644,7 +641,6 @@
   }
 }
 
-/* Print: every card with its text, and every arrow. */
 @media print {
   .card,
   .card .flip,

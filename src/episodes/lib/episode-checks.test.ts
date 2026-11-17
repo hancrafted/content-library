@@ -28,20 +28,17 @@ function fixture(folders: readonly string[]): string {
   return dir;
 }
 
-/** A Slide record as a server entry exports it: its slug, its declared notes, its messages per locale. */
 function slide(slug: string, notes: readonly string[] = [], noteKeys: readonly string[] = notes) {
   const strings = { notes: Object.fromEntries(noteKeys.map((key) => [key, { text: key }])) };
   return { slug, notes: notes.map((note) => ({ slug: note })), messages: { en: strings, de: strings } };
 }
 
-/** Server entries keyed as `import.meta.glob('./slides/*\/slide.tsx')` keys them. */
 function entries(modules: Record<string, object>, prefix = './slides/'): GlobEntries {
   return Object.fromEntries(
     Object.entries(modules).map(([folder, module]) => [`${prefix}${folder}/slide.tsx`, async () => module]),
   );
 }
 
-/** Every finding of every check, Slide checks first. */
 async function findingsOf(checks: EpisodeChecks): Promise<string[]> {
   const all = await Promise.all([...checks.slides, ...checks.folder].map(({ findings }) => findings()));
   return all.flat();

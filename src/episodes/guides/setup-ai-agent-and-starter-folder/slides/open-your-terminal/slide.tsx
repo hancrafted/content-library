@@ -16,7 +16,6 @@ const VORONKOV = { slug: 'voronkov-sysadmins-cli', url: 'https://arxiv.org/abs/1
 const WILSON = { slug: 'wilson-software-carpentry', url: 'https://doi.org/10.12688/f1000research.3-62.v2' };
 const BERRY = { slug: 'berry-shellonyou', url: 'https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf' };
 
-/** The three reassurance lines, each with the target it lights and the Speaker note its Context marker opens. */
 const REASSURANCE = [
   { key: 'normal', target: 'normal', note: 'hesitation-is-normal' },
   { key: 'noClicking', target: 'no-clicking', note: 'why-the-command-line-feels-scary' },

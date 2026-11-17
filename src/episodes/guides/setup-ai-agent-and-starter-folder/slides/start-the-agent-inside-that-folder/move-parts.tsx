@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 
-/* Step 3's own small parts: the icons, a move's text column and the AI agent's trust question. */
-
 export function ExternalIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-4 shrink-0" aria-hidden="true">
@@ -25,7 +23,6 @@ export function InfoIcon() {
   );
 }
 
-/** One move's left column: its number, title and lines, under the number's indent. */
 export function MoveText({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-3 md:col-span-4 md:pt-2">
@@ -43,7 +40,6 @@ export function MoveText({ n, title, children }: { n: number; title: string; chi
   );
 }
 
-/** The trust question as the AI agent asks it; the wording is Claude Code's, illustrative (the Spec's build notes). */
 export function TrustBox({ question, path, yes, no }: { question: string; path: ReactNode; yes: string; no: string }) {
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-ai/40 bg-linear-to-br from-ai/10 to-transparent p-4 text-caption">

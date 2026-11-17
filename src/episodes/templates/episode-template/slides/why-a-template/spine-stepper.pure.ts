@@ -1,4 +1,3 @@
-/** The three levels of an Episode's spine, outermost first. */
 export const SPINE_LEVELS = ['episode', 'section', 'slide'] as const;
 
 export type SpineLevel = (typeof SPINE_LEVELS)[number];

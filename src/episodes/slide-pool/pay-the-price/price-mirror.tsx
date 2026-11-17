@@ -10,7 +10,6 @@ interface PriceMirrorProps {
   labels: BackLabels;
 }
 
-/** The column heads: the freelancer on a neutral pill, the AI on the one `ai` pill, the five traits between them. */
 function ColumnHeads({ columns }: Pick<PriceMirrorProps, 'columns'>) {
   return (
     <div className="flex gap-3">

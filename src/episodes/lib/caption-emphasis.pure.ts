@@ -33,12 +33,10 @@ export function splitEmphasis(marked: string): { text: string; emphasis: TextRan
   return { text, emphasis };
 }
 
-/** Whether the character at `index` of the text lies in an emphasised range. */
 export function isEmphasised(index: number, ranges: readonly TextRange[]): boolean {
   return ranges.some(({ start, end }) => index >= start && index < end);
 }
 
-/** The text cut into runs at every range edge, each emphasised or not, in order; empty runs dropped. */
 export function runsOf(text: string, ranges: readonly TextRange[]): { text: string; emphasis: boolean }[] {
   const edges = [...new Set([0, ...ranges.flatMap(({ start, end }) => [start, end]), text.length])].sort(
     (a, b) => a - b,

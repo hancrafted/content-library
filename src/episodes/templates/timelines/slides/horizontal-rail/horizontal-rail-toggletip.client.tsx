@@ -14,7 +14,6 @@ export interface ToggletipCopy {
   caption: string;
 }
 
-/** Points from the toggletip's edge at the label's centre. */
 function ToggletipArrow({ side, x }: { side: RailSide; x: number }) {
   return (
     <span

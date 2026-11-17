@@ -9,15 +9,12 @@ interface QuadrantCopy {
   index: string;
   title: string;
   caption: string;
-  /** Where the title sits: the quadrant's outer corner. */
   place: string;
-  /** Where the faint index sits: the inner corner by the origin. */
   indexPlace: string;
   tint: string;
   dot: string;
 }
 
-// One quadrant of the matrix; the id labels it.
 function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
   const id = `grid-2x2-${useId()}`;
   return (
@@ -93,7 +90,6 @@ export const grid2x2 = slide({
         dot: 'bg-foreground',
       },
     ];
-    // Each arm of the axis cross lights in the colour of whichever neighbouring quadrant is hovered.
     const arm =
       'pointer-events-none absolute hidden bg-foreground/15 transition-colors duration-300 motion-reduce:transition-none sm:block';
     return (

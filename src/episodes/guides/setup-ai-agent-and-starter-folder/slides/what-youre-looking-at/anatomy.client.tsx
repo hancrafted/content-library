@@ -8,7 +8,6 @@ import styles from './what-youre-looking-at.module.css';
 
 export interface AnatomyWords {
   readonly parts: Readonly<Record<Part, { readonly name: string; readonly explanation: string }>>;
-  /** The prompt each system shows, by the toolbar's system value (`mac`, `windows`, `linux`). */
   readonly prompts: Readonly<Record<string, string>>;
   readonly command: string;
   readonly output: string;
@@ -27,7 +26,6 @@ interface HotspotProps {
   readonly children: ReactNode;
 }
 
-/** A part drawn in the window: a button that lights when it is the active part and takes hover, focus and tap. */
 function Hotspot({ part, active, name, onActive, className, children }: HotspotProps) {
   const on = part === active;
   const pick = () => onActive(part);
@@ -52,7 +50,6 @@ function Hotspot({ part, active, name, onActive, className, children }: HotspotP
   );
 }
 
-/** A callout: its dotted line from the window to its label. Decoration, named by the part's own button. */
 function Callout({ part, active, name }: { part: Part; active: Part; name: string }) {
   const on = part === active;
   return (
@@ -70,7 +67,6 @@ interface DrawingProps {
   readonly onActive: (part: Part) => void;
 }
 
-/** The callout column: one cell per window row, the last row holding two. */
 function Callouts({ words, active }: Pick<DrawingProps, 'words' | 'active'>) {
   const callout = (part: Part) => <Callout part={part} active={active} name={words.parts[part].name} />;
   return (
@@ -86,7 +82,6 @@ function Callouts({ words, active }: Pick<DrawingProps, 'words' | 'active'>) {
   );
 }
 
-/** The two grey dots beside the close one. */
 const Dots = () => (
   <>
     <span className="size-3 shrink-0 rounded-full bg-border" />
@@ -94,7 +89,6 @@ const Dots = () => (
   </>
 );
 
-/** The title bar: the close button first, two grey dots, the window's name. */
 function TitleBar({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex items-center gap-2 border-b border-border bg-muted px-4 py-2.5">
@@ -105,7 +99,6 @@ function TitleBar({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** The window itself: four rows, each a row of the grid the callouts share. */
 function Window({ words, active, prompt, onActive }: DrawingProps) {
   const hotspot = (part: Part, className: string | undefined, children: ReactNode) => (
     <Hotspot part={part} active={active} name={words.parts[part].name} onActive={onActive} className={className}>
@@ -136,7 +129,6 @@ function Window({ words, active, prompt, onActive }: DrawingProps) {
   );
 }
 
-/** The window with the callouts in the column beside its rows. */
 function Drawing(props: DrawingProps) {
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2">
@@ -148,7 +140,6 @@ function Drawing(props: DrawingProps) {
 
 const STEP_BUTTON = 'min-h-9 rounded-full px-4 text-caption font-semibold disabled:opacity-40';
 
-/** The active part's explanation, with Previous and Next for a keyboard or a touch screen. */
 function Explanation({ words, active, onActive }: Pick<DrawingProps, 'words' | 'active' | 'onActive'>) {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-muted p-4">

@@ -30,7 +30,6 @@ export interface EpisodeChecks {
 
 const ENTRY = 'slide.tsx';
 const SLIDES_DIR = 'slides';
-/** The repository root, from this module's own place in it: where the folder walker looks for page folders. */
 const ROOT = path.resolve(import.meta.dirname, '../../..');
 /** Folders an Episode MUST NOT keep beside its Slides: Slide code lives only in its Slide folder (FE-004 §3). */
 const EPISODE_CODE_FOLDERS = ['parts', 'client'];
@@ -49,7 +48,6 @@ function subfolders(dir: string): string[] {
     .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
-/** The Slides an entry module exports: each carries its slug and its own messages. */
 function slidesOf(module: unknown): { slug: string; messages: unknown }[] {
   return exportsCarrying(module, ['slug', 'messages']);
 }
@@ -85,7 +83,6 @@ function notesCheck(shown: string, load: () => Promise<unknown>): NamedCheck {
   };
 }
 
-/** The checks over Slide folders sitting in `slidesDir`, shown by `prefix` + slug. */
 function slideFolderChecks(slidesDir: string, prefix: string, entries: GlobEntries): EpisodeChecks {
   const loaders = new Map(Object.entries(entries).map(([key, load]) => [path.basename(path.dirname(key)), load]));
   const folders = subfolders(slidesDir);
@@ -135,7 +132,6 @@ export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntri
   return { slides, folder: [...folder, codeFolders, ...pageChecks(dir, page)] };
 }
 
-/** The checks of the Slide pool, whose Slide folders sit directly in `dir`: `entries` is `import.meta.glob('./*\/slide.tsx')`. */
 export function slidePoolChecks(dir: string, entries: GlobEntries): EpisodeChecks {
   return slideFolderChecks(dir, '', entries);
 }

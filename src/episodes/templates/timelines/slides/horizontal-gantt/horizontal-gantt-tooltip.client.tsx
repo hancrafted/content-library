@@ -19,7 +19,6 @@ interface TooltipProps {
   anchor: HTMLElement;
   copy: BarCopy;
   lane: string;
-  /** The class that sets the lane's colour as the `--lane` custom property. */
   laneClass: string;
   onClose: () => void;
 }

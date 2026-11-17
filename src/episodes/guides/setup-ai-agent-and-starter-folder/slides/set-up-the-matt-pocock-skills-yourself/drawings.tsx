@@ -5,11 +5,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ArrowIcon, CheckboxIcon, DownloadIcon, ExternalIcon } from './icons';
 
-/*
- * The static drawings of Option 8a: the vendor link, the installer's question, the setup
- * skill's four answers, the check bundle and the homepage strip. Each takes its words as props.
- */
-
 /** A labelled pill to a vendor's own page, with the external-link mark: never a pasted URL (Visual language). */
 export function OfficialLink({ url, newTab, children }: { url: string; newTab: string; children: ReactNode }) {
   return (
@@ -33,7 +28,6 @@ export interface PickerGroup {
   readonly picked: boolean;
 }
 
-/** One line of the installer's list: the checkbox, the group's name and what it holds. */
 function PickerLine({ group }: { group: PickerGroup }) {
   return (
     <p
@@ -65,13 +59,11 @@ export function SkillPicker({ question, groups }: { question: string; groups: re
   );
 }
 
-/** One question the setup skill asks, and the answer to give. */
 export interface SetupAnswer {
   readonly question: string;
   readonly answer: ReactNode;
 }
 
-/** The setup skill's answers as a 2 × 2 hairline card (one column on a narrow container). */
 export function SetupAnswers({ answers }: { answers: readonly SetupAnswer[] }) {
   return (
     <dl className="grid gap-px overflow-hidden rounded-lg border border-border bg-border text-caption @md:grid-cols-2">
@@ -85,14 +77,12 @@ export function SetupAnswers({ answers }: { answers: readonly SetupAnswer[] }) {
   );
 }
 
-/** The words of the check bundle: the download pill's name and size, and the entry block's label. */
 export interface BundleWords {
   readonly link: string;
   readonly size: string;
   readonly entryLabel: string;
 }
 
-/** The hancrafted entry to paste into `GLOSSARY.md`: its term, its line, and its copy button. */
 function GlossaryEntry({ label, entry, words }: { label: string; entry: string; words: CopyWords }) {
   const [term, ...rest] = entry.split('\n');
   return (
@@ -141,7 +131,6 @@ export function CheckBundle({
   );
 }
 
-/** The proof: an arrow onto a small browser bar on hancrafted.net, and the success tick. */
 export function HomepageResult({ site, name, opens }: { site: string; name: string; opens: string }) {
   return (
     <div className="flex flex-wrap items-center gap-3">

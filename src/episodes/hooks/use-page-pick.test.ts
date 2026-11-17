@@ -9,7 +9,6 @@ import { PagePicksContext, usePagePick, type PagePicks, type PickName } from './
  * React state; these tests hand the context a value directly, since the suite renders without a DOM.
  */
 
-/** A Slide part that prints the pick it reads. */
 function Probe({ name, fallback }: { name: PickName; fallback: string }) {
   const [value] = usePagePick(name, fallback);
   return createElement('output', null, value);

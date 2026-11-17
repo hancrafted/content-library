@@ -8,7 +8,6 @@ import { BENTO_TILES, type GridBentoCell } from './grid-bento.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Literal span classes per tile, so Tailwind sees them; the footprints themselves live in `BENTO_TILES`.
 const SPAN: Record<GridBentoCell, string> = {
   c1: 'sm:col-span-2 sm:row-span-2',
   c2: 'sm:col-span-2',

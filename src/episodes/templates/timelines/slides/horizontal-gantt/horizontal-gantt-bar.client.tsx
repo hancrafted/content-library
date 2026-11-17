@@ -12,7 +12,6 @@ export const LANE_CLASS: Record<GanttLane, string> = {
   c: '[--lane:var(--muted-foreground)]',
 };
 
-/** The bar's still-planned part: a hatch in its lane colour, so progress reads by texture as well as tint. */
 const HATCH =
   'bg-[repeating-linear-gradient(135deg,color-mix(in_oklch,var(--lane)_22%,transparent)_0_6px,color-mix(in_oklch,var(--lane)_8%,transparent)_6px_12px)]';
 
@@ -27,14 +26,12 @@ export interface BarHandlers {
 interface BarProps {
   item: GanttItem;
   copy: BarCopy;
-  /** Set while this bar's tooltip is open. */
   expanded: boolean;
   dimmed: boolean;
   tipId: string;
   handlers: BarHandlers;
 }
 
-/** One phase: a pill from its start to its end, filled up to today and hatched beyond. */
 export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarProps) {
   const bar = GANTT_BARS[item];
   const { leftPercent, widthPercent } = barBox(bar);
@@ -60,7 +57,6 @@ export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarP
   );
 }
 
-/** The pill itself: the lane's hatch, the share of the phase already passed, the lane dot and the title. */
 function BarFace({ item, title }: { item: GanttItem; title: string }) {
   const bar = GANTT_BARS[item];
   return (

@@ -16,8 +16,6 @@ interface TileProps {
   caption: string;
 }
 
-// One 4:3 dashboard tile: a mono row·column coordinate top-left, a small title and a two-line caption at the bottom.
-// Tiles alternate background and muted like a checkerboard; `card-hover--raise` lifts the tile above its neighbours.
 function Tile({ row, col, title, caption }: TileProps) {
   const id = `grid-3x3-${useId()}`;
   const tone = (row + col) % 2 === 0 ? 'bg-background' : 'bg-muted dark:bg-muted/50';

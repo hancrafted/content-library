@@ -48,7 +48,7 @@ describe('failure cases', () => {
     // ARRANGE
     const unregistered = 'non-existent-episode';
     // ACT
-    // @ts-expect-error -- an Episode the registry does not hold has no summary
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRef(unregistered));
     // ASSERT
     expect(lookup).toThrow(unregistered);
@@ -94,7 +94,7 @@ describe('edge cases', () => {
     // ARRANGE
     const template = 'workshop-template';
     // ACT
-    // @ts-expect-error -- a Template's slug names no Episode
+    // @ts-expect-error
     const lookup = () => summaryOf(episodeRef(template));
     // ASSERT
     expect(lookup).toThrow(template);

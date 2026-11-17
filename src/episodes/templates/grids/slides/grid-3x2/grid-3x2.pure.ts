@@ -1,4 +1,3 @@
-/** The six cells of the Grid 3 × 2 Slide, in reading order: row 1 left to right, then rows 2 and 3. */
 export const GRID_3X2_CELLS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'] as const;
 
 export type Grid3x2Cell = (typeof GRID_3X2_CELLS)[number];
@@ -29,7 +28,6 @@ export function spotlightPoint(pointer: PointerPoint, box: CardBox): PointerPoin
   return { x: clamp(pointer.x - box.left, box.width), y: clamp(pointer.y - box.top, box.height) };
 }
 
-/** The decorative two-digit index shown on the cell at `index` (0-based, reading order). */
 export function cellNumber(index: number): string {
   if (!Number.isInteger(index) || index < 0) throw new Error(`"${index}" is not a cell index.`);
   return String(index + 1).padStart(2, '0');

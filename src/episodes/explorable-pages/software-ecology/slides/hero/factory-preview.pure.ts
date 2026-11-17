@@ -6,17 +6,14 @@
 /** A rack's slots for waiting work (design-ADR 0024 §14): past six, the top slot turns red with "+n" beside it. */
 export const RACK_SLOTS = 6;
 
-/** A release the Customer received: good, or bad. */
 export type Release = 'good' | 'bad';
 
-/** A rack as drawn: the slots filled from the bottom, whether it is full, and how many documents wait past it. */
 export interface Rack {
   readonly filled: number;
   readonly full: boolean;
   readonly overflow: number;
 }
 
-/** The rack of a work center with `waiting` documents in its backlog. */
 export function rackOf(waiting: number): Rack {
   if (!Number.isInteger(waiting) || waiting < 0) {
     throw new Error(`A backlog is a whole number of documents, not ${waiting}.`);

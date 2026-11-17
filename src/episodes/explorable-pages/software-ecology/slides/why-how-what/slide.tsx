@@ -17,7 +17,6 @@ const BROOKS_NO_SILVER_BULLET = {
 };
 const BENDER_TIPPING_POINT = { slug: 'bender-tipping-point', url: 'https://www.youtube.com/watch?v=2n41YjR5QfU' };
 
-/** The still's frame (Spec Option 2b): a muted card with a soft shadow. */
 const FRAME = 'flex flex-col gap-3 rounded-xl border border-border bg-muted p-4 shadow-md';
 
 /**

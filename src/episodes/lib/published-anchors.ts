@@ -14,35 +14,26 @@ import { formatAsRepo } from './oxfmt-format.ts';
 
 const SNAPSHOT_FILE = 'published-anchors.json';
 
-/** The snapshot a page folder lacks: the file to create and its content, ready to paste. */
 export interface MissingSnapshot {
   readonly file: string;
   readonly contents: string;
 }
 
-/** A page folder's snapshot: its anchors, or, when it has none, the one to create. */
 export type PublishedSnapshot = { readonly anchors: readonly string[] } | { readonly missing: MissingSnapshot };
 
-/** What the published-anchor check reads of a page's context: its status and its snapshot. */
 interface PublishedContext {
   readonly status: EpisodeStatus | undefined;
   readonly published: PublishedSnapshot;
 }
 
-/** What the published-anchor check reads of a page's composition: its Sections of Slides. */
 interface ComposedSections {
   readonly sections: readonly SectionList<SlideOutline>[];
 }
 
-/** The anchors the walk produces for a page, as the Episode page does: its record's Section lists. */
 export function producedAnchors({ sections }: ComposedSections): string[] {
   return placeSections(sections).flatMap((section) => section.map(({ id }) => id));
 }
 
-/**
- * The snapshot in the page folder `dir`. When it has none, the file to paste for the anchors it produces: sorted, and
- * formatted with the repo's oxfmt config so `format:check` accepts it.
- */
 export async function readPublishedSnapshot(dir: string, produced: readonly string[]): Promise<PublishedSnapshot> {
   const file = path.join(dir, SNAPSHOT_FILE);
   if (existsSync(file)) return { anchors: JSON.parse(readFileSync(file, 'utf8')) as string[] };

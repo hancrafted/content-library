@@ -11,7 +11,6 @@ const NONAKA = {
 const SZULANSKI = { slug: 'szulanski-internal-stickiness', url: 'https://doi.org/10.1002/smj.4250171105' };
 const GOURLAY = { slug: 'gourlay-critique-of-nonaka', url: 'https://doi.org/10.1111/j.1467-6486.2006.00637.x' };
 
-/** The two elements the Speaker notes explain: the unwritten zone and the hand-off card. */
 const HIDDEN = 'hidden';
 const HANDOVER = 'handover';
 

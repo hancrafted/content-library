@@ -8,7 +8,6 @@ import type { TagId } from '@/content-store/schemas/fields';
  * arguments. No React (FE-007 §3).
  */
 
-/** The Episode's lead Tag: its first, which fixes the look of its card. */
 export function leadTagOf(episode: Pick<Episode, 'tags'>): TagId {
   return episode.tags[0];
 }

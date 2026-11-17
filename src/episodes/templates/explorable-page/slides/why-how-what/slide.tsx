@@ -5,7 +5,6 @@ import { useId, type ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Replace with the high-trust Source each claim rests on; cite a Research question first (vision rule 3). */
 const SOURCE = { slug: 'replace-with-a-source', url: 'https://example.com/replace-with-a-source' };
 
 interface ColumnCopy {

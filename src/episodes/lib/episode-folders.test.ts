@@ -32,7 +32,6 @@ function tree(entries: readonly string[]): string {
   return root;
 }
 
-/** An Event's copy among the page folders. */
 type CopyFolder = Extract<PageFolder, { readonly kind: 'event-copy' }>;
 
 describe('success cases', () => {

@@ -10,37 +10,26 @@ import { RelentlessBack } from './back-relentless';
 import styles from './trait-flip.module.css';
 import type { FlipEvent, Side, Trait } from './trait-flip.pure';
 
-/* A row's card: its beat face, the text behind it, and the button that turns one to the other. */
-
-/** One row of the mirror: its trait, the two fronts, and the strings its chip and backs show. */
 export interface FlipRow {
   slug: Trait;
-  /** The letter on the chip: the acronym's, so German still spells PRICE. */
   initial: string;
   name: string;
-  /** The name in the viewer's language under an English name; empty where the name already is. */
   gloss: string;
-  /** The short line both backs show beside their beat. */
   back: string;
-  /** The trait's aside in plain words, the chip's accessible description. */
   aside: string;
   freelancer: ReactNode;
   ai: ReactNode;
 }
 
-/** The words the backs draw: the prompt box, the handbook's title, the bill and the token count; and a card's turn. */
 export interface BackLabels {
   prompt: string;
   handbook: string;
   bill: string;
   tokens: string;
-  /** The words the redacted handbook still shows. */
   handbookWords: HandbookWords;
-  /** The accessible name of the button that turns a card to its text and back. */
   turn: string;
 }
 
-/** Both backs of a row, drawn by its trait. */
 function Back({ slug, ai, labels }: { slug: Trait; ai: boolean; labels: BackLabels }) {
   switch (slug) {
     case 'probabilistic':
@@ -72,7 +61,6 @@ interface CardProps {
   className: string;
 }
 
-/** The card's whole face as one button that turns it to its text and back. */
 function TurnButton({ row, side, turned, labels, dispatch }: CardProps) {
   return (
     <button
@@ -104,10 +92,6 @@ function BeatFace({ row, side, labels }: CardProps) {
   );
 }
 
-/**
- * One side of a row: the beat face, remounted by a new pass to replay it, and behind it the text a click turns to.
- * Hidden and inert until its row is first shown.
- */
 export function Card(props: CardProps) {
   const { row, side, shown, turned, pass, className } = props;
   const ai = side === 'ai';

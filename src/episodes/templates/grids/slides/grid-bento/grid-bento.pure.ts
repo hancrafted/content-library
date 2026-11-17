@@ -1,22 +1,15 @@
 import { isPlaying, type SlideZone } from '@/episodes/lib/slide-zone.pure';
 
-/** The six cells of the Bento grid Slide, in reading order: the lead first, then the five supporting tiles. */
 export type GridBentoCell = 'c1' | 'c2' | 'c3' | 'c4' | 'c5' | 'c6';
 
-/** One tile's footprint on the wide grid, in columns and rows. */
 export interface BentoTile {
   readonly cell: GridBentoCell;
   readonly cols: number;
   readonly rows: number;
 }
 
-/** Columns per breakpoint: one below `sm`, two from `sm`, four from `md`. */
 export const BENTO_COLUMNS = { base: 1, sm: 2, md: 4 } as const;
 
-/**
- * The tiles in source order. Auto-placed on four columns they fill three rows exactly:
- * the 2×2 lead on the left, a wide tile over a square and a tall tile on the right, then a square and a wide tile below.
- */
 export const BENTO_TILES: readonly BentoTile[] = [
   { cell: 'c1', cols: 2, rows: 2 },
   { cell: 'c2', cols: 2, rows: 1 },
@@ -26,13 +19,11 @@ export const BENTO_TILES: readonly BentoTile[] = [
   { cell: 'c6', cols: 2, rows: 1 },
 ];
 
-/** The cells taken so far on a grid of `columns` columns, keyed `row:column`. */
 interface Board {
   readonly columns: number;
   readonly taken: Set<string>;
 }
 
-/** Every `row:column` key `tile` covers when its top-left corner sits at `slot` (reading-order index). */
 function cellsAt(board: Board, tile: BentoTile, slot: number): string[] {
   const row = Math.floor(slot / board.columns);
   const col = slot % board.columns;
@@ -41,7 +32,6 @@ function cellsAt(board: Board, tile: BentoTile, slot: number): string[] {
   return keys;
 }
 
-/** The first slot from `cursor` where `tile` fits, as CSS grid's sparse auto-placement finds it. */
 function place(board: Board, tile: BentoTile, cursor: number): number {
   let slot = cursor;
   const fits = (at: number) =>

@@ -12,7 +12,6 @@ export interface PinNoteProps {
   readonly targetProps?: TargetProps;
 }
 
-/** One numbered answer beside the still: its pin's number and word, the claim, then the caption with its markers. */
 export function PinNote({ n, slug, word, title, caption, targetProps }: PinNoteProps) {
   const id = `pin-note-${useId()}`;
   return (

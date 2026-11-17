@@ -36,7 +36,6 @@ const MEMORY_TOOL = source(
   'https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool',
 );
 
-/** The Speaker note each row's AI cell opens, by trait. */
 const ROW_NOTE = {
   probabilistic: 'probable-not-random',
   relentless: 'right-or-not-the-output-looks-finished',

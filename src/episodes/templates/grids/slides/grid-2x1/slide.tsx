@@ -43,7 +43,6 @@ function Banner({ index, title, caption }: BannerProps) {
   );
 }
 
-// Two stacked banner rows across the Foreground, read top to bottom like an editorial list.
 export const grid2x1 = slide({
   slug: 'grid-2x1',
   messages: { en, de },

@@ -5,7 +5,6 @@ import type { ReactNode } from 'react';
 import { osOf, type Os } from './picks.pure';
 import { unzipGesture } from './unzip.pure';
 
-/** What the Downloads window and the unzip gesture say, in the viewer's language. */
 export interface UnzipWords {
   readonly downloads: string;
   readonly zip: string;
@@ -13,7 +12,6 @@ export interface UnzipWords {
   readonly older: string;
   readonly lastWeek: string;
   readonly menuLabel: string;
-  /** The gesture's label per OS: "Double-click" on Mac, the menu action on Windows and Linux. */
   readonly action: Readonly<Record<Os, string>>;
   /** The menu items around the action, before and after it, per OS that unzips from a menu. */
   readonly menu: Readonly<Record<'windows' | 'linux', { before: readonly string[]; after: readonly string[] }>>;
@@ -56,7 +54,6 @@ interface UnzipMenuProps {
   readonly after: readonly string[];
 }
 
-/** The drawn right-click menu on the zip, its action in `primary`: the one thing to click. */
 function UnzipMenu({ label, before, action, after }: UnzipMenuProps) {
   return (
     <ul
@@ -89,7 +86,6 @@ function DoubleClick({ label }: { label: string }) {
   );
 }
 
-/** The Downloads folder's list: the zip just landed, highlighted, above an older file. */
 function DownloadsList({ words }: { words: UnzipWords }) {
   return (
     <ul className="flex flex-col gap-1 p-3 pb-52 text-caption">

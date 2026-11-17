@@ -33,7 +33,6 @@ function summariesOf(registry: Readonly<Record<string, EpisodeComposition>>): Re
   );
 }
 
-/** Every composed page's summary, by kind and then by id, in the registries' order. */
 export interface CompositionSummaries {
   readonly episodes: Record<string, PageSummary>;
   readonly templates: Record<string, PageSummary>;

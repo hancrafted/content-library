@@ -22,7 +22,6 @@ function place(host: HTMLElement, slot: HTMLElement | null, docked: boolean): Re
   return boxOf(host);
 }
 
-/** Where the talk host stands: the element, the slot it follows while undocked, and whether it is docked. */
 interface Target {
   host: HTMLElement | null;
   slot: HTMLElement | null;
@@ -85,7 +84,6 @@ export function useTalkHostPlacement(target: Target) {
       return;
     }
     gliding?.cancel();
-    // FLIP: the old viewport box, then the switch of position, then the new box.
     const first = wasDocked.current === null ? null : boxOf(host);
     const last = place(host, slot, docked);
     if (switched(wasDocked.current, docked)) glide(host, first, last);

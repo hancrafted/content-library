@@ -6,7 +6,6 @@ import { explorablePageTemplate } from './episode';
  * (`episode-checks.test.ts`) cannot know, so it is written out here, beside the page.
  */
 
-/** The page's Sections as the slugs of their Slides, section slide first. */
 const SECTIONS = explorablePageTemplate.sections.map((section) => section.map(({ slug }) => slug));
 
 describe('success cases', () => {

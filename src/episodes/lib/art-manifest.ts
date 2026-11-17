@@ -7,7 +7,6 @@ import path from 'node:path';
  */
 export type ArtManifest = Readonly<Record<string, string | null>>;
 
-/** How `<Art>` draws: a `<use>` from the manifest, marked inline for the art build, or plainly inline. */
 export type ArtMode = { readonly mode: 'use'; readonly manifest: ArtManifest } | { readonly mode: 'mark' | 'inline' };
 
 const MANIFEST = path.join(process.cwd(), 'public/art/manifest.json');

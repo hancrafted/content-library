@@ -3,7 +3,6 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, type FormatConfig } from 'oxfmt';
 
-/** The repository's oxfmt config: the one file `oxfmt` reads for `npm run format`. */
 const CONFIG_PATH = path.resolve(import.meta.dirname, '../../../.oxfmtrc.jsonc');
 
 let config: FormatConfig | undefined;

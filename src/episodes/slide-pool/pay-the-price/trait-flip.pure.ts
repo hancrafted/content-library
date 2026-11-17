@@ -4,24 +4,17 @@
  * timer `nextTimer` names.
  */
 
-/** The five PRICE traits, in letter order. */
 export const TRAITS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 export type Trait = (typeof TRAITS)[number];
 
-/** A row's two cards: the freelancer's on the left, the AI's on the right. */
 export type Side = 'freelancer' | 'ai';
 
-/** What a control opens: one trait's row, or the closing line's wipe over every row. */
 export type FlipTarget = Trait | 'closing';
 
 export interface FlipState {
-  /** The control pointed at or focused now. */
   readonly open: FlipTarget | null;
-  /** Each row's passes so far: 0 until its chip is first entered; every entry and every loop starts one more. */
   readonly passes: Readonly<Record<Trait, number>>;
-  /** The cards clicked round to their text, as `trait:side`. */
   readonly turned: readonly `${Trait}:${Side}`[];
-  /** Whether the open wipe has blanked the rows. */
   readonly blank: boolean;
 }
 
@@ -32,11 +25,6 @@ export const CLOSED: FlipState = {
   blank: false,
 };
 
-/**
- * `open`: a chip or the closing line is pointed at, focused or tapped. `leave`: the pointer leaves it or it blurs.
- * `dismiss`: a tap elsewhere or Escape. `reset`: the Slide leaving `active`, back to rest. `replay` and `blank`: the
- * timer firing. `turn`: a shown card is clicked.
- */
 export type FlipEvent =
   | { readonly type: 'open'; readonly target: FlipTarget }
   | { readonly type: 'leave'; readonly target: FlipTarget }
@@ -103,7 +91,6 @@ export function rowAt(state: FlipState, trait: Trait) {
 /** How long a back holds its last frame before it replays. */
 export const HOLD_MILLISECONDS = 1500;
 
-/** Each back's beat, from the prototype (`build2.py`); Every word billed is its five-item scan schedule's length. */
 export const BEAT_MILLISECONDS: Readonly<Record<Trait, number>> = {
   probabilistic: 2600,
   relentless: 3600,

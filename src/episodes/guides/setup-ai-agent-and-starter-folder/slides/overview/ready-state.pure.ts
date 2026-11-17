@@ -2,7 +2,6 @@ import { isReady, type ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure'
 
 export type MissingPiece = 'skills' | 'localSetup';
 
-/** What the Overview shows: the plain checklist, the ready card, or the card naming what is still missing. */
 export type OverviewView =
   | { readonly kind: 'normal' }
   | { readonly kind: 'ready' }

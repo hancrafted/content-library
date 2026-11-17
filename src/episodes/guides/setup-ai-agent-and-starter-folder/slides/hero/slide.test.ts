@@ -7,10 +7,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { hero } from './slide';
 
-/*
- * The Slide in Title-slide Option 0b's terminal theme, read through the interface the page reads a Slide by.
- */
-
 const SECTION = slide({
   slug: 'your-terminal',
   messages: { en: { title: 'Your terminal' }, de: { title: 'Dein Terminal' } },

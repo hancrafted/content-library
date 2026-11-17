@@ -5,7 +5,6 @@ import { useCallback, useId, useState, type FocusEvent, type MouseEvent } from '
 import { RailToggletip, type ToggletipCopy } from './horizontal-rail-toggletip.client';
 import { RAIL_ITEMS, railSide, type RailItem, type RailSide } from './horizontal-rail.pure';
 
-/** From `md` the rail runs across and labels alternate; below it the rail runs down and every label sits beside its dot. */
 const ACROSS = '(min-width: 48rem)';
 
 interface Open {
@@ -28,7 +27,6 @@ function openFor(
   return { item, pinned, anchor, side };
 }
 
-/** Which dot's toggletip is open: hover and focus preview, a click pins or unpins, leaving or blurring drops a preview. */
 function useToggletip() {
   const [open, setOpen] = useState<Open | null>(null);
   const close = useCallback(() => setOpen(null), []);
@@ -51,7 +49,6 @@ function useToggletip() {
   return { open, close, handlersFor };
 }
 
-/** The six milestones on one hairline; each dot opens its caption as a toggletip. */
 export function HorizontalRail({ label, items }: { label: string; items: Record<RailItem, ToggletipCopy> }) {
   const baseId = useId();
   const { open, close, handlersFor } = useToggletip();
@@ -80,7 +77,6 @@ export function HorizontalRail({ label, items }: { label: string; items: Record<
 interface StopProps {
   index: number;
   copy: ToggletipCopy;
-  /** Set while this stop's toggletip is open. */
   open: Open | null;
   onClose: () => void;
   tipId: string;
@@ -108,7 +104,6 @@ function RailStop({ index, copy, open, onClose, tipId, handlers }: StopProps) {
   );
 }
 
-/** This column's share of the line: down the left edge below `md`, across from `md`. */
 function RailSegment() {
   return (
     <span

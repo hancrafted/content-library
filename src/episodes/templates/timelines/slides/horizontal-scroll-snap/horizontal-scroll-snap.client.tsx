@@ -89,10 +89,6 @@ interface HorizontalScrollSnapProps {
   controls: { previous: string; next: string };
 }
 
-/**
- * A row of tall cards wider than the Slide that snaps card by card under native scroll and swipe. The progress bar
- * and the active card follow the scroll position; previous and next scroll by one card.
- */
 export function HorizontalScrollSnap({ label, cards, controls }: HorizontalScrollSnapProps) {
   const trackId = useId();
   const trackRef = useRef<HTMLDivElement>(null);

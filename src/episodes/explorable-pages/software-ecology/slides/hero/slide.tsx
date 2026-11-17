@@ -20,7 +20,6 @@ import en from './i18n/en.json';
  * measured, and labelled so on the preview.
  */
 
-/** The main path a request rides, left to right: the preview's key, the work center's id and what marks it. */
 const CENTERS = [
   { key: 'sales', id: 'sales' },
   { key: 'product', id: 'pm' },
@@ -31,10 +30,8 @@ const CENTERS = [
 ] as const;
 
 const USE_CASE = 'tire';
-/** What the hero shows, as the Why How What stills do: the use case's `still` state (tire.yml, grill 11 Q215). */
 const STILL = 'still';
 
-/** The readings at that step: the Customer, each station by id, and the Customer's releases oldest first. */
 function readoutsOf() {
   const snap = scenarioLastStep(USE_CASE, STILL).f.read({});
   const customer: CustomerReadout = snap.customer;

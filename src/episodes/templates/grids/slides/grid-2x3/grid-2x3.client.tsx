@@ -47,7 +47,6 @@ function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; capt
   );
 }
 
-/** Six filled tonal cards in 2 rows × 3 columns (2 then 1 column on narrower screens), one gap token for gap and padding. */
 export function Grid2x3({ copy }: { copy: Grid2x3Copy }) {
   return (
     <ul className="grid grid-cols-1 gap-(--grid-2x3-gap) [--grid-2x3-gap:--spacing(5)] sm:grid-cols-2 md:[--grid-2x3-gap:--spacing(6)] lg:grid-cols-3">

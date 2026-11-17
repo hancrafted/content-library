@@ -4,7 +4,6 @@ import { EPISODES, EXPLORABLE_PAGES, GUIDES, TEMPLATE_PAGES } from './episode-re
 
 export type { ComposedPage } from './composed-page';
 
-/** The generated registry each kind of page is composed in: the one place a new kind of composed page is added; an Episode's two kinds of ref share the Episodes' registry. */
 const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<string, EpisodeComposition>>>> = {
   standalone: EPISODES,
   'event-copy': EPISODES,

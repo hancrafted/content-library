@@ -16,7 +16,6 @@ import {
 
 const QUARTERS = [1, 2, 3, 4] as const;
 
-/** Each lane's grid row: the axis takes row 1, so lanes start at 2 and a lane's name and track share its row. */
 const LANE_ROW: Record<GanttLane, string> = { a: 'row-start-2', b: 'row-start-3', c: 'row-start-4' };
 
 const TODAY_LEFT = `${(TODAY / AXIS_MONTHS) * 100}%`;
@@ -61,7 +60,6 @@ interface GanttProps {
   items: Record<GanttItem, BarCopy>;
 }
 
-/** A year of phases in three lanes: bars on a quarter axis, a "today" line through them, each bar's caption a tooltip. */
 export function HorizontalGantt({ label, lanes, items }: GanttProps) {
   const baseId = useId();
   const { open, close, handlersFor } = useTooltip();
@@ -110,7 +108,6 @@ interface OpenTooltipProps extends Omit<GanttProps, 'label'> {
   onClose: () => void;
 }
 
-/** The open bar's tooltip, with its lane's name and colour. */
 function OpenTooltip({ id, open, items, lanes, onClose }: OpenTooltipProps) {
   const { lane } = GANTT_BARS[open.item];
   return (
@@ -136,7 +133,6 @@ function QuarterBands() {
   );
 }
 
-/** The quarter numbers along the top; the bars' own date ranges carry the words. */
 function QuarterAxis() {
   return (
     <div aria-hidden="true" className="col-start-2 row-start-1 grid grid-cols-4 border-b border-border pb-2">
@@ -149,7 +145,6 @@ function QuarterAxis() {
   );
 }
 
-/** The "today" line, drawn over the bars through every lane, with a notch on the axis. */
 function TodayLine() {
   return (
     <div aria-hidden="true" className="pointer-events-none relative col-start-2 row-span-4 row-start-1">
@@ -169,7 +164,6 @@ interface LaneProps {
   children: ReactNode;
 }
 
-/** One lane: its name in the left column, kept in view while the chart scrolls sideways, and its track of bars. */
 function GanttLaneRow({ lane, name, laneId, children }: LaneProps) {
   return (
     <>

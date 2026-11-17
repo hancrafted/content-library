@@ -14,7 +14,6 @@ import type { LocaleSummary } from './page-summary.pure';
  * generated summary and no folder on disk. Each check gets a failure planted through the context or the composition.
  */
 
-/** A Slide with its title in both locales, or none, and a Scene that renders `scene`. */
 function slideOf(slug: string, title: string | undefined, scene: () => ReactNode = () => null): Slide {
   const messages = title === undefined ? {} : { title };
   return { slug, messages: { en: messages, de: messages }, notes: [], segments: [], content: scene };
@@ -29,7 +28,6 @@ function compositionOf(page: ComposedPage, fields: Partial<EpisodeComposition> =
   return { slug: page.slug, messages: { en: OWN_TEXT, de: OWN_TEXT }, sections: [INTRO], ...fields };
 }
 
-/** The summary `npm run registry` writes for `compositionOf(page)` in one locale, by hand. */
 const SUMMARY: LocaleSummary = {
   ...OWN_TEXT,
   minutes: 0,
@@ -54,19 +52,16 @@ const EPISODE = episodeRef('ai-attention-span');
 const TEMPLATE = templateRef('grids');
 const EXPLORABLE = explorablePageRef('context-window');
 
-/** The checks of `page`, judging `composition` against `context`. */
 function checksOf(page: ComposedPage, composition: EpisodeComposition, context: PageContext): NamedCheck[] {
   return composedPageChecks(page, async () => ({ composition, context }));
 }
 
-/** The findings of the one check whose name starts with `name`. */
 async function findingsOf(checks: readonly NamedCheck[], name: string): Promise<readonly string[]> {
   const found = checks.find((check) => check.name.startsWith(name));
   if (found === undefined) throw new Error(`No check named "${name}…" among ${checks.map((check) => check.name)}`);
   return found.findings();
 }
 
-/** Every finding of every check. */
 async function allFindingsOf(checks: readonly NamedCheck[]): Promise<string[]> {
   return (await Promise.all(checks.map(({ findings }) => findings()))).flat();
 }

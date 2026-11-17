@@ -7,10 +7,8 @@ import { Check } from 'lucide-react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** How many of the six stages a person has already checked; the next one is the current stage. */
 const CHECKED = 2;
 
-/** The six stages, in order; their words are the Slide's own. */
 const STAGES = ['interview', 'plan', 'epics', 'tickets', 'execute', 'report'] as const;
 
 /**

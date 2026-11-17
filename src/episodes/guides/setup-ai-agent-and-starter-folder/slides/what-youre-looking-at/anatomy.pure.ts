@@ -13,7 +13,6 @@ export const FIRST_PART: Part = PARTS[0];
 export const partOf = (value: string): Part =>
   (PARTS as readonly string[]).includes(value) ? (value as Part) : FIRST_PART;
 
-/** The part one step from `active` (`1` next, `-1` previous), stopping at both ends of the tour. */
 export function stepPart(active: Part, direction: 1 | -1): Part {
   const index = PARTS.indexOf(active) + direction;
   return PARTS[Math.min(PARTS.length - 1, Math.max(0, index))] ?? FIRST_PART;

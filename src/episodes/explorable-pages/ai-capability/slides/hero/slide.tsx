@@ -6,7 +6,6 @@ import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The four Levels, in time order; their words are the Slide's own. */
 const DISCIPLINES = ['prompting', 'agents', 'workflows', 'factory'] as const;
 
 /**

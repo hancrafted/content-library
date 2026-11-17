@@ -33,7 +33,6 @@ function AgendaRow({ index, hover, title, caption }: AgendaRowProps) {
   );
 }
 
-// Three full-width rows read like an editorial agenda: numbered top to bottom, separated by hairlines.
 export const grid3x1 = slide({
   slug: 'grid-3x1',
   messages: { en, de },

@@ -1,11 +1,9 @@
-/** Where a scrolling track stands: its scroll position, how far it can scroll, and each card's snap position. */
 export interface TrackGeometry {
   scrollLeft: number;
   maxScroll: number;
   offsets: readonly number[];
 }
 
-/** What the controls show for a track: progress 0 to 1, the active card's index, and whether either end is reached. */
 export interface TrackReading {
   progress: number;
   active: number;

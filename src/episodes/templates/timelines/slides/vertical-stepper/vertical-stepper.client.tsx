@@ -19,7 +19,6 @@ export interface StepCopy {
   caption: string;
 }
 
-/** The accordion's state plus the arrow-key handler that moves focus between headers. */
 function useStepper() {
   const [state, setState] = useState(FIRST_STATE);
   const headers = useRef<(HTMLButtonElement | null)[]>([]);
@@ -40,7 +39,6 @@ interface StepperProps {
   states: Record<StepStatus, string>;
 }
 
-/** A numbered process on one spine: each step is a disclosure, one open at a time, and opening one makes it current. */
 export function VerticalStepper({ label, items, states }: StepperProps) {
   const baseId = useId();
   const { state, headers, toggle, onKeyDown } = useStepper();

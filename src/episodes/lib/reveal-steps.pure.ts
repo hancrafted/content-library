@@ -4,7 +4,6 @@
  * finished frame, which is also what shows without script, in print and under reduced motion.
  */
 
-/** The keys a presenter's press is read from: the key and its modifiers. */
 export interface RevealKey {
   readonly key: string;
   readonly altKey: boolean;
@@ -28,7 +27,6 @@ export function revealedSteps(step: number): string {
   return Array.from({ length: step }, (_, at) => at + 1).join(' ');
 }
 
-/** Whether a key press advances the disclosure: a bare right arrow; with a modifier it belongs to the browser. */
 export function advanceKey(press: RevealKey): boolean {
   return press.key === 'ArrowRight' && !press.altKey && !press.ctrlKey && !press.metaKey && !press.shiftKey;
 }

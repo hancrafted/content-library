@@ -40,7 +40,6 @@ function render(locale: Locale, picks: Record<string, string> = {}): string {
   return renderToStaticMarkup(withPagePicks(content, picks));
 }
 
-/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
 const scene = (locale: Locale, picks: Record<string, string> = {}) => load(render(locale, picks));
 
 /*

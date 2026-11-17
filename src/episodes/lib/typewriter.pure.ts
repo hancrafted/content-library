@@ -9,20 +9,17 @@
 /** Milliseconds per character before jitter: the Eyebrow quick, the title deliberate, the caption fast. */
 const NOMINAL_MILLISECONDS = [22, 45, 10] as const;
 
-/** The breath between one typed part and the next. */
 const PAUSE_MILLISECONDS = 120;
 
 /** Every character starts within this; the caret's last blink fills the rest of the 1.5s entrance. */
 export const TYPE_BUDGET_MILLISECONDS = 1200;
 
-/** The whole header settled, caret gone: when the Slide's entrance is done. */
 export const ENTRANCE_MILLISECONDS = 1500;
 
 /** The jitter's spread: a character's weight lies between these before normalising. */
 const WEIGHT_MINIMUM = 0.45;
 const WEIGHT_SPREAD = 1.1;
 
-/** FNV-1a: a string to a 32-bit seed. */
 function hash(seed: string): number {
   let value = 0x811c9dc5;
   for (let index = 0; index < seed.length; index += 1) {
@@ -32,7 +29,6 @@ function hash(seed: string): number {
   return value >>> 0;
 }
 
-/** mulberry32: a small seeded generator of numbers in [0, 1). */
 function generator(seed: number): () => number {
   let state = seed;
   return () => {

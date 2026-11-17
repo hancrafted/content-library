@@ -12,7 +12,7 @@ import { watchFor } from './watch.pure';
 const MINIMAL_MANUAL = { slug: 'lazonder-minimal-manual', url: 'https://doi.org/10.1006/imms.1993.1081' };
 const EXPERTISE_REVERSAL = { slug: 'kalyuga-expertise-reversal', url: 'https://doi.org/10.1207/S15326985EP3801_4' };
 
-/** A Slide link split into the path and anchor that `localizePath` takes, the one `href` FE-003 allows. */
+// decision: FE-003 §2
 function linkParts(link: string): LinkParts {
   const [path = '', anchor] = link.split('#');
   return { path, anchor };

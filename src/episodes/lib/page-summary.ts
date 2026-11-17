@@ -4,7 +4,6 @@ import type { PageSummary } from './page-summary.pure';
 
 type Summaries = Readonly<Record<string, PageSummary>>;
 
-/** The generated summaries each kind of composed page is read from; an Episode's two kinds of ref share the Episodes'. */
 const SUMMARIES_BY_KIND: Readonly<Record<ComposedPage['kind'], Summaries>> = {
   standalone: summaries.episodes,
   'event-copy': summaries.episodes,

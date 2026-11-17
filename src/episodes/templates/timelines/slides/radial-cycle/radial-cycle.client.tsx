@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { NowHand, PhaseRing, type PhaseCopy, type PhaseHandlers } from './radial-cycle-ring.client';
 import { CYCLE_ITEMS, RING, type CycleItem } from './radial-cycle.pure';
 
-/** The centre disc's width as a share of the face: it fills the ring's hole. */
 const DISC_SHARE = `${((2 * (RING.radius - RING.stroke / 2) - 16) / RING.size) * 100}%`;
 
 /** A click or focus selects a phase; a hover previews another without losing the selection. */
@@ -15,7 +14,6 @@ function useShownPhase(): { shown: CycleItem; handlers: PhaseHandlers } {
   return { shown: preview ?? selected, handlers: { onSelect: setSelected, onPreview: setPreview } };
 }
 
-/** The shown phase's number, title and caption, inside the ring. */
 function CentreDisc({ index, copy }: { index: number; copy: PhaseCopy }) {
   return (
     <div
@@ -38,7 +36,6 @@ function CentreDisc({ index, copy }: { index: number; copy: PhaseCopy }) {
   );
 }
 
-/** The same phases as plain text for screen readers. */
 function PhaseList({ label, items }: { label: string; items: Record<CycleItem, PhaseCopy> }) {
   return (
     <ol aria-label={label} className="sr-only">
@@ -51,7 +48,6 @@ function PhaseList({ label, items }: { label: string; items: Record<CycleItem, P
   );
 }
 
-/** Six phases of a repeating cycle around a clock face; the shown phase pops out and fills the centre. */
 export function RadialCycle({ label, items }: { label: string; items: Record<CycleItem, PhaseCopy> }) {
   const zone = useSlideZone();
   const { shown, handlers } = useShownPhase();

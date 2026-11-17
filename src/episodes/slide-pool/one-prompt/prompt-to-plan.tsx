@@ -1,16 +1,12 @@
 import type { ReactNode } from 'react';
 
-/** The five PRICE traits, in letter order. */
 export const TRAITS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 type Trait = (typeof TRAITS)[number];
 
-/** One trait's crack: its name, why it cracked the plan, and what it left in the documents. */
 export interface Crack {
   slug: Trait;
-  /** The letter on the chip: the acronym's, so German still spells PRICE. */
   initial: string;
   trait: string;
-  /** The name in the viewer's language under an English name; empty where the name already is. */
   gloss: string;
   why: string;
   produced: string;
@@ -24,7 +20,6 @@ interface PromptToPlanProps {
   callout: ReactNode;
 }
 
-/** The four columns at width: the traits, right-aligned to their chips in the middle, the connectors, the pile. */
 const COLUMNS = '@3xl:grid-cols-[minmax(0,1fr)_auto_4rem_minmax(0,1fr)]';
 
 /** The pages with no mark of their own, scattered under the five marked ones. */
@@ -47,7 +42,6 @@ const SCATTER = [
   { turn: -1.5, shift: 6 },
 ] as const;
 
-/** The trait's letter on a chip, the PRICE chip in miniature. */
 function Letter({ initial }: { initial: string }) {
   return (
     <span
@@ -61,7 +55,6 @@ function Letter({ initial }: { initial: string }) {
   );
 }
 
-/** The prompt as a chat input over the traits and chips, an arrow out to the pile's label. */
 function PromptRow({ prompt, stackLabel }: Pick<PromptToPlanProps, 'prompt' | 'stackLabel'>) {
   return (
     <div className={`grid items-center gap-3 @3xl:gap-0 ${COLUMNS}`}>
@@ -75,7 +68,6 @@ function PromptRow({ prompt, stackLabel }: Pick<PromptToPlanProps, 'prompt' | 's
   );
 }
 
-/** A hairline from a chip out to its document, ending in an arrowhead. */
 function Connector() {
   return (
     <svg viewBox="0 0 64 12" preserveAspectRatio="none" className="hidden h-3 w-full @3xl:block" aria-hidden="true">
@@ -91,7 +83,6 @@ function Connector() {
   );
 }
 
-/** The seven unmarked documents, scattered behind the marked ones. */
 function LoosePages() {
   return (
     <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 @3xl:block" aria-hidden="true">
@@ -106,7 +97,6 @@ function LoosePages() {
   );
 }
 
-/** One marked document: two ruled lines of filler, then what the trait left in it, underlined as a fault. */
 function Page({ produced, place }: { produced: string; place: (typeof SCATTER)[number] }) {
   return (
     <p
@@ -119,7 +109,6 @@ function Page({ produced, place }: { produced: string; place: (typeof SCATTER)[n
   );
 }
 
-/** One trait's row: its name and why, right-aligned to its chip; the connector; the document it marked. */
 function CrackRow({ crack, place }: { crack: Crack; place: (typeof SCATTER)[number] }) {
   return (
     <li className="focus-group__item flex flex-wrap items-center gap-3 @3xl:col-span-4 @3xl:grid @3xl:grid-cols-subgrid @3xl:gap-0">
@@ -143,7 +132,6 @@ function CrackRow({ crack, place }: { crack: Crack; place: (typeof SCATTER)[numb
   );
 }
 
-/** What the pile costs you, across the whole Scene. */
 function Callout({ children }: { children: ReactNode }) {
   return (
     <p className="flex items-center justify-center gap-3 rounded-2xl border border-destructive/40 bg-destructive/5 px-6 py-4 text-body">

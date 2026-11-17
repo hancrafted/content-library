@@ -11,10 +11,8 @@ const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
 const RESEARCH = 'research';
 const PAGE = 'page';
-/** The caption's "One fresh chat per step": the claim the fresh-session note backs. */
 const CAPTION = 'caption';
 
-/** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
 const GRILLING = {
   command: '/grilling',
   url: 'https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling',
@@ -33,10 +31,6 @@ const SKILLS: Partial<Record<Reply, typeof GRILLING>> = { start: GRILLING, spec:
 /** The question you had not thought of. */
 const FORGOTTEN: Asked = 'q3';
 
-/**
- * The worked chat in order: you start a grilling, the AI asks one numbered question at a time, you ask for an analogy
- * when a question is jargon (meta-prompting), the last question is the one you forgot, and you end with a spec.
- */
 const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'start'],
   ['question', 'q1'],
@@ -50,7 +44,6 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-/** The stages the Slide words a popover for: the keys of its own `stages` messages. */
 type StageId = keyof typeof en.stages;
 
 /**

@@ -13,12 +13,10 @@ function isOneOf<T extends string>(values: readonly T[], value: string): value i
   return (values as readonly string[]).includes(value);
 }
 
-/** The page's OS pick as one this Slide draws; anything else reads as the page default, Mac. */
 export function osOf(pick: string): Os {
   return isOneOf(OPERATING_SYSTEMS, pick) ? pick : 'mac';
 }
 
-/** The page's AI-agent pick as one this Slide draws; anything else reads as the page default, Claude Code. */
 export function agentOf(pick: string): AiAgent {
   return isOneOf(AI_AGENTS, pick) ? pick : 'claude-code';
 }

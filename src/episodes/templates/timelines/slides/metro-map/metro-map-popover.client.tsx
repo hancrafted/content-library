@@ -9,7 +9,6 @@ import { POPOVER_RULES, type Lane } from './metro-map.pure';
 
 const SLOT = 'metro-popover';
 
-/** The lanes stopping here, as coloured ticks with their names: the popover says which lines change here. */
 function LaneTicks({ lanes, names }: { lanes: readonly Lane[]; names: Record<Lane, string> }) {
   return (
     <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-3 text-body text-muted-foreground">

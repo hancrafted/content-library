@@ -1,14 +1,12 @@
 import { AiIcon, BackSvg, beat, Label, Person, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** The words a redacted handbook still shows: the first of line one, one on line two, a small one on the last. */
 export interface HandbookWords {
   first: string;
   second: string;
   last: string;
 }
 
-/** The handbook's lines: the word left showing, if any, its baseline and size, and where the redaction starts. */
 const LINES = [
   { word: 'first', y: 30, size: 9, from: 28 },
   { word: 'second', y: 42, size: 9, from: 48 },
@@ -75,7 +73,6 @@ function Handbook({ title, words, x }: { title: string; words: HandbookWords; x:
   );
 }
 
-/** The trades the freelancer knows: code, maths, money, law. */
 const DIPLOMAS = [
   { slug: 'code', x: 4, y: 6, glyph: '</>' },
   { slug: 'maths', x: 28, y: 2, glyph: '∑' },
@@ -83,7 +80,6 @@ const DIPLOMAS = [
   { slug: 'law', x: 54, y: 32, glyph: '§' },
 ] as const;
 
-/** The documents a globe feeds into the AI, each from its offset on the globe. */
 const DOCUMENTS = [
   [-6, -10],
   [6, -6],
@@ -92,7 +88,6 @@ const DOCUMENTS = [
   [0, -2],
 ] as const;
 
-/** Beat 1, the freelancer: diplomas light up around them, the group's left edge at `x`. */
 function Diplomas({ x }: { x: number }) {
   return (
     <g transform={`translate(${x} 0)`}>
@@ -114,7 +109,6 @@ function Diplomas({ x }: { x: number }) {
 const GLOBE = 17;
 const AI_ICON = 58;
 
-/** Beat 1, the AI: a globe feeds documents into it, both there from the start. */
 function Globe() {
   return (
     <>
@@ -138,11 +132,6 @@ function Globe() {
   );
 }
 
-/**
- * Informed: diplomas light up around the freelancer, or a globe feeds documents into the AI; then the
- * "How we work here" handbook arrives and is mostly blacked out. Read from the chip outwards: who knows, then the
- * handbook.
- */
 export function InformedBack({ ai, handbook, words }: BackProps & { handbook: string; words: HandbookWords }) {
   return ai ? (
     <BackSvg width={182}>

@@ -8,16 +8,13 @@ import { CheckBundle, HomepageResult, OfficialLink, SetupAnswers, SkillPicker } 
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The Node.js project's own download page: the install instructions stay there (Visual language, "Official links"). */
 const NODE_DOWNLOAD = 'https://nodejs.org/en/download';
 /** The exact lines to type: never translated. */
 const ADD_SKILLS = 'npx skills@latest add mattpocock/skills';
 const SETUP_SKILL = '/setup-matt-pocock-skills';
 const CHECK_SKILL = '/hancrafted-check-setup';
-/** The installer's main group, by the name `mattpocock/skills` gives it in `.claude-plugin/plugin.json`. */
 const MAIN_GROUP = 'mattpocock-skills';
 const OTHER_GROUP = 'Other';
-/** The hancrafted entry to paste into GLOSSARY.md; a placeholder until the base zip's GLOSSARY.md settles it. */
 const GLOSSARY_ENTRY = "**hancrafted**:\nHan's workshop homepage, https://hancrafted.net";
 
 /*

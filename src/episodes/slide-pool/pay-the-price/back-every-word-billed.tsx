@@ -8,7 +8,6 @@ const ARRIVALS = [0.2, 1.24, 2.71, 4.62, 6.96];
 /** The count after each item the line crosses: 0, then one more for each of its fifteen crossings (1 + 2 + 3 + 4 + 5). */
 const CROSSINGS = 15;
 
-/** The count's step classes, one per value; the last is the end state. */
 const STEPS = [
   styles.v0,
   styles.v1,
@@ -28,13 +27,11 @@ const STEPS = [
   styles.v15,
 ];
 
-/** An item's box, bottom first: the freelancer's own pages, or the chat's prompts (left) and its answers (indented right). */
 function itemBox(ai: boolean, index: number): { x: number; y: number; width: number } {
   if (ai) return { x: index % 2 === 0 ? 12 : 36, y: 56 - 13 * index, width: 46 };
   return { x: 10, y: 56 - 13 * index, width: 70 };
 }
 
-/** The stack: five items landing one per pass, and the scan line sweeping over them; shifted right by `x`. */
 function Stack({ ai, x }: BackProps & { x: number }) {
   const item = ai ? 'fill-ai/20 stroke-ai' : 'fill-card stroke-foreground';
   return (
@@ -82,11 +79,6 @@ function Count({ ai, unit, x }: BackProps & { unit: string; x: number }) {
   );
 }
 
-/**
- * Every word billed: a line sweeps up and down a stack that gains an item each pass; every item it passes
- * raises the bill (€) or the token count. The freelancer's stack is their own pages; the AI's is the chat, prompts
- * left, its own answers indented right. Read from the chip outwards: the stack, then the count.
- */
 export function EveryWordBilledBack({ ai, unit }: BackProps & { unit: string }) {
   return ai ? (
     <BackSvg width={148}>

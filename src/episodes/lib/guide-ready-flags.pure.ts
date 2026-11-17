@@ -1,4 +1,3 @@
-/** The two readiness flags the check skill puts on the Guide link: `?skills=true&local-setup=true`. */
 export interface ReadyFlags {
   readonly skills: boolean | undefined;
   readonly localSetup: boolean | undefined;
@@ -17,7 +16,6 @@ export function parseReadyFlags(search: string): ReadyFlags {
   return { skills: flag(params.get('skills')), localSetup: flag(params.get('local-setup')) };
 }
 
-/** Whether the check skill reported the whole setup as working: both flags true. */
 export function isReady(flags: ReadyFlags): boolean {
   return flags.skills === true && flags.localSetup === true;
 }

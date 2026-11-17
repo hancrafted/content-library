@@ -1,11 +1,9 @@
-/** One changelog entry as the Slide reads it from its Translation keys. */
 export interface YearEntry {
   date: string;
   title: string;
   caption: string;
 }
 
-/** The chip tones, decorative neutrals, none a meaning colour; a chip cycles through them with its glyph. */
 export type ChipTone = 'primary' | 'foreground' | 'muted-foreground';
 
 /** Category glyphs a chip carries. Placeholder categories: the timeline has no category keys, so place picks one. */
@@ -13,14 +11,12 @@ export const CHIP_GLYPHS = ['◆', '●', '▲', '■', '✦', '◐'] as const;
 
 const CHIP_TONES: readonly ChipTone[] = ['primary', 'foreground', 'muted-foreground'];
 
-/** An entry placed in the whole timeline: its index in page order and the chip that index picks. */
 export interface PlacedEntry extends YearEntry {
   index: number;
   glyph: (typeof CHIP_GLYPHS)[number];
   tone: ChipTone;
 }
 
-/** A run of entries sharing one year: the year pins while they scroll past. */
 export interface YearGroup {
   year: string;
   entries: PlacedEntry[];

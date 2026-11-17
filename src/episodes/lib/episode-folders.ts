@@ -26,10 +26,8 @@ import {
  * checks reach a pool Slide. Reads the disk, so only Node code (the generator, tests) imports it.
  */
 
-/** The Episodes folder, from the repository root. */
 export const EPISODES_DIR = 'src/episodes';
 
-/** The file that makes a page folder an Episode: its metadata record. */
 export const METADATA_FILE = 'episode-metadata.ts';
 /** The test every page folder and the Slide pool carries, running `episode-checks.ts` on it (ARCH-003 §4.7). */
 export const EPISODE_CHECKS_TEST = 'episode-checks.test.ts';
@@ -42,13 +40,9 @@ export const EPISODE_CHECKS_TEST = 'episode-checks.test.ts';
  */
 export { episodeRef, EXPLORABLE_PAGES_FOLDER, GUIDES_FOLDER, TEMPLATES_FOLDER };
 
-/** One page folder: the Episode it holds, as code passes an Episode, or a Template; where it sits; what it holds. */
 export type PageFolder = (EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef) & {
-  /** Its path under the Episodes folder: `<slug>`, `by-event/<event>/<slug>`, or `templates/<slug>` for a Template. */
   readonly folder: string;
-  /** Its absolute path. */
   readonly dir: string;
-  /** Its entries, by name. */
   readonly files: readonly string[];
 };
 
@@ -60,7 +54,6 @@ function subfolders(dir: string): string[] {
     .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
-/** The page folder of an Episode, a Template's, at the folder its ref names (`folderOf`). */
 function atFolder(episodesDir: string, page: EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef): PageFolder {
   const folder = folderOf(page);
   const dir = path.join(episodesDir, folder);
@@ -104,25 +97,18 @@ export function pageFolders(root: string): PageFolder[] {
   return [...own, ...copies, ...templateFolders(root), ...explorablePageFolders(root), ...guideFolders(root)];
 }
 
-/** Every Episode folder, standalone and Event copy alike: a page folder holding its metadata record. */
 export function episodeFolders(root: string): PageFolder[] {
   return pageFolders(root).filter(({ files }) => files.includes(METADATA_FILE));
 }
 
 const SLIDES_DIR = 'slides';
 
-/** One Slide folder: who owns it, its slug (the folder's name) and its absolute path. */
 export interface SlideFolder {
-  /** The page that owns it, by Episode id (a Template's slug), or `slide-pool` for a pool Slide. */
   readonly owner: string;
   readonly slug: string;
   readonly dir: string;
 }
 
-/**
- * Every Slide folder under `<root>/src/episodes/`: each page's `slides/<slide>/`, page by page, then each
- * Slide of the Slide pool, `slide-pool/<slide>/`, owned by the pool.
- */
 export function slideFolders(root: string): SlideFolder[] {
   const own = pageFolders(root).flatMap(({ id: owner, dir }) =>
     subfolders(path.join(dir, SLIDES_DIR)).map((slug) => ({ owner, slug, dir: path.join(dir, SLIDES_DIR, slug) })),

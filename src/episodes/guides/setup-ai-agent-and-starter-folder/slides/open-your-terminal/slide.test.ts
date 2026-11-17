@@ -34,11 +34,9 @@ function localized(locale: Locale): LocalizedSlide {
   });
 }
 
-/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
 const scene = (locale: Locale, picks: Record<string, string> = {}) =>
   load(renderToStaticMarkup(withPagePicks(createElement(Fragment, null, localized(locale).content), picks)));
 
-/** The Help button and panel the Slide gives the header, as the header renders them. */
 const help = (locale: Locale) =>
   load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).header?.action)));
 

@@ -21,7 +21,6 @@ export function renderedSlides(composition: EpisodeComposition): Slide[] {
   return composition.sections.flat().filter((slide) => rendered.some((entry) => entry.slide === slide));
 }
 
-/** A Slide's Scene as its page renders it in English, rendered twice into one page, each copy with its own kit. */
 export function twiceRendered(id: ComposedId, composition: EpisodeComposition, slide: Slide): string {
   const placed = placeSections<Slide>(composition.sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
@@ -47,7 +46,6 @@ function repeated(ids: readonly string[]): string[] {
   return [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
 }
 
-/** Every DOM id a rendered Slide repeats when it sits twice on one page. */
 export function repeatedIds(page: ComposedPage, composition: EpisodeComposition): string[] {
   return renderedSlides(composition).flatMap((slide) =>
     repeated(idsOf(twiceRendered(page.id, composition, slide))).map((id) => `${slide.slug}: id "${id}" repeats`),
@@ -60,7 +58,6 @@ async function labelOnly() {
   return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
 }
 
-/** A Section an Explorable page loses through the container: its table-of-contents entry, or its no-section-slide flag. */
 export async function containerLosses(page: ComposedPage, composition: EpisodeComposition): Promise<string[]> {
   const declared = composition.sections.filter((section) => section.sectionSlide === false).length;
   const content = await recordContent(composition, 'en', {

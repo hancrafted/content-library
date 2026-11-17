@@ -3,7 +3,6 @@ import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/sl
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The three steps, as keys of `flow.steps`: add or drop one in both Translation files. */
 const STEPS = ['first', 'second', 'third'] as const;
 
 /**

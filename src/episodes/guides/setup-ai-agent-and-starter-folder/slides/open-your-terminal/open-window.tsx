@@ -5,7 +5,6 @@ export interface OpenWindowProps {
   /** What the terminal prints before it waits; none when it prints nothing. */
   readonly lines: readonly string[];
   readonly prompt: string;
-  /** The Context marker in the window's corner. */
   readonly marker?: ReactNode;
   readonly target?: { readonly 'data-target'?: string };
 }

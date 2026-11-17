@@ -6,7 +6,6 @@ import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The window bar's parts, widest last: the share of the window each takes and how strongly `foreground` shows. */
 const PARTS = [
   { key: 'system', share: 7, tone: 'bg-foreground/80' },
   { key: 'memory', share: 5, tone: 'bg-foreground/60' },
@@ -15,7 +14,6 @@ const PARTS = [
   { key: 'rest', share: 18, tone: 'bg-foreground/45' },
 ] as const;
 
-/** Attention per message: high at both ends, a dip in the middle. */
 const ATTENTION = [
   100, 83, 69, 59, 51, 44, 39, 36, 33, 30, 28, 27, 26, 25, 24, 24, 24, 25, 26, 27, 30, 33, 37, 43, 51, 62, 78, 100,
 ];

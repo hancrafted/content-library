@@ -13,7 +13,6 @@ export function ByOs({ variants }: { variants: Readonly<Record<Os, ReactNode>> }
   return variants[osOf(pick)];
 }
 
-/** Shows the variant of a part for the page's AI-agent pick, rendered by the server as `ByOs`'s are. */
 export function ByAgent({ variants }: { variants: Readonly<Record<AiAgent, ReactNode>> }) {
   const [pick] = usePagePick('agent', 'claude-code');
   return variants[agentOf(pick)];

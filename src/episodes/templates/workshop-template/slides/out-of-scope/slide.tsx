@@ -3,7 +3,6 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The set-aside items, as keys of `items`, with the tilt that makes each note sit in the tray: add or drop one in both Translation files. */
 const ITEMS = [
   { key: 'first', tilt: '-rotate-1' },
   { key: 'second', tilt: 'rotate-1' },

@@ -1,20 +1,14 @@
+// decision: FE-002 §5
 import { episodeRef, guideRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { publishedAnchorFindings, readPublishedSnapshot } from './published-anchors';
 
-/*
- * Published anchors (FE-002): reading a page folder's snapshot, and judging it against the anchors a composition
- * produces. Each page folder's composition checks run both for its own folder (`composed-page-checks.ts`).
- */
-
 /** A folder no page lives in, so it holds no snapshot. */
 const NO_SNAPSHOT = path.join(import.meta.dirname, 'no-such-episode');
 
-/** Where that folder's snapshot would be written. */
 const NO_SNAPSHOT_FILE = path.join(NO_SNAPSHOT, 'published-anchors.json');
 
-/** A composition of one Section, `foundations`, with one page Slide, `why`. */
 const COMPOSITION = { sections: [[{ slug: 'foundations' }, { slug: 'why' }] as const] };
 
 describe('success cases', () => {

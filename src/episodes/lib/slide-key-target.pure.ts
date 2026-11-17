@@ -6,7 +6,6 @@
  * answer is `null` and the browser keeps the key.
  */
 
-/** The slice of a `KeyboardEvent` the Slide key action reads. */
 export interface SlideKeyEvent {
   readonly key: string;
   readonly altKey: boolean;
@@ -15,11 +14,6 @@ export interface SlideKeyEvent {
   readonly shiftKey: boolean;
 }
 
-/**
- * Regions where the arrows belong to something else: text entry, the widgets
- * that roving focus or a value drives, the Context drawer, an open modal and
- * iframes (the talk player).
- */
 export const SLIDE_KEY_EXCLUDED_SELECTOR = [
   'input',
   'textarea',
@@ -36,7 +30,6 @@ export const SLIDE_KEY_EXCLUDED_SELECTOR = [
   'dialog[open]',
 ].join(', ');
 
-/** Whether an element (usually the focused one) sits in an excluded region. */
 export function inExcludedRegion(element: { closest(selector: string): unknown } | null): boolean {
   return element !== null && element.closest(SLIDE_KEY_EXCLUDED_SELECTOR) !== null;
 }

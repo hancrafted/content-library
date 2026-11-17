@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { setArtHrefs } from './art-href.pure';
 
-/** A hand-written `<use>`: its attributes, as the DOM would hold them. */
 function use(attributes: Record<string, string>) {
   const held = new Map(Object.entries(attributes));
   return {

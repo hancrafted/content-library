@@ -16,13 +16,11 @@ export interface ZoneState {
 /** `rootMargin` growing the viewport one screen above and below, so content is ready before it arrives. */
 export const APPROACH_ROOT_MARGIN = '100% 0px 100% 0px';
 
-/** Active wins, then near; anything else is far. */
 export function zoneOf({ isNear, isActive }: ZoneState): SlideZone {
   if (isActive) return 'active';
   return isNear ? 'near' : 'far';
 }
 
-/** Content stays in the DOM outside `far`. */
 export function isMounted(zone: SlideZone): boolean {
   return zone !== 'far';
 }
@@ -62,7 +60,6 @@ export interface ZoneStore {
   setNear(id: string, isNear: boolean): void;
   setActive(id: string | null): void;
   getEntry(id: string): SlideEntry;
-  /** Ends an `entering` Slide's entrance; does nothing to a `pending` or `done` one. */
   finishEntry(id: string): void;
 }
 
@@ -80,7 +77,6 @@ export function artLoadsIn(store: Pick<ZoneStore, 'getZone' | 'isSeen'>, id: str
   return id === null || (store.isSeen(id) && isMounted(store.getZone(id)));
 }
 
-/** The page's entrances: a Slide starts entering on its first `active` and is then done for good. */
 function createEntries(notify: () => void) {
   const entries = new Map<string, SlideEntry>();
   return {

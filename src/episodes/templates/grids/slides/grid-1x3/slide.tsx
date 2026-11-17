@@ -12,7 +12,6 @@ interface ColumnCopy {
   caption: string;
 }
 
-// One column: its accent stub on the hairline, the numeral, then title and caption; the id labels the column.
 function Column({ cell }: { cell: ColumnCopy }) {
   const id = `grid-1x3-${useId()}`;
   return (
