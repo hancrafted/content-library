@@ -32,10 +32,6 @@ export interface SlideKitInput {
   readonly titleTaken?: string;
 }
 
-/**
- * The Slide's translator with `t.rich` knowing the default tags; a tag the Slide passes wins.
- * Every other member is copied from next-intl's translator as it is, so one it adds later arrives too.
- */
 function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   const rich = (key: string, values?: object, ...rest: unknown[]) =>
     t.rich(key, { ...DEFAULT_RICH_TAGS, ...values }, ...rest);
@@ -58,13 +54,8 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
   };
 }
 
-/**
- * The kit's Context references to one of the Slide's notes (FE-010 §4, design-ADR-0013):
- * `ref` underlines a phrase, `marker` follows one with a Context marker and
- * `Marker` places a marker on an element. Each throws for a note the Slide
- * does not declare. A marker is named after its note's header, read from the
- * Slide's own file.
- */
+// decision: FE-010 §4
+// decision: docs/adr/0013-context-markers.md
 function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<RuntimeKit, 'ref' | 'marker' | 'Marker'> {
   const declared = (note: string) => {
     if (!slide.notes.includes(note)) {
@@ -83,7 +74,6 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
     },
     marker: (note, className) => {
       const label = labelOf(note);
-      // A no-break space keeps the marker on the line of the phrase it follows.
       return (chunks) => (
         <>
           {chunks}
@@ -96,12 +86,6 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
   };
 }
 
-/**
- * The kit's `Title`: the Slide's heading at its level, marked as the `title`
- * target. An optional `heading` key in the Slide's messages is the on-screen
- * title; the table of contents keeps `title`. Throws `titleTaken` when the
- * Slide header renders the heading instead.
- */
 function titleOf({ t, level, titleTaken }: SlideKitInput): RuntimeKit['Title'] {
   const heading = t.has(ON_SCREEN_TITLE_KEY) ? t(ON_SCREEN_TITLE_KEY) : undefined;
   return function Title({ children }: { children: ReactNode }) {
@@ -114,18 +98,7 @@ function titleOf({ t, level, titleTaken }: SlideKitInput): RuntimeKit['Title'] {
   };
 }
 
-/**
- * The kit a Slide's `content` receives (FE-002 §3). `Title` is the Slide's
- * heading at the level its position gives it, marked as the `title` target,
- * showing the optional `heading` message when the Slide has one;
- * `ref` wraps a phrase as a Context reference to one of the Slide's notes;
- * `marker` follows a phrase with a Context marker and `Marker` places one on
- * an element;
- * `target` marks the element a note explains; `slideHref` links to another
- * Slide of the Episode; `template` hands a client component a raw string to
- * fill. The types already confine every name; the kit checks again at
- * render, so a cast in a Slide still fails the build.
- */
+// decision: FE-002 §3
 export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): RuntimeKit {
   const { slideId } = slide;
   const Title = titleOf(slide);

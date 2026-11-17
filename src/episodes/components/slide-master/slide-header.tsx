@@ -20,7 +20,6 @@ function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly num
 }
 
 export interface SlideHeaderProps {
-  /** The Slide's id: seeds the typing pace, so it is the same on every load. */
   readonly seed: string;
   // decision: FE-002 §4
   readonly level: 'h1' | 'h2' | 'h3';
@@ -54,7 +53,6 @@ interface TitleGroupProps extends Pick<
   readonly ends: readonly number[];
 }
 
-/** The Context markers the caption ends on, one per Speaker note, after a non-breaking space so the first keeps to its word. */
 function CaptionMarkers({ markers }: { readonly markers: readonly CaptionNote[] }) {
   return markers.map((marker, index) => (
     <Fragment key={`${marker.note}-${index}`}>
@@ -78,11 +76,16 @@ function TitleGroup({
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-(--space-header-tight)">
       <Heading level={level}>
-        <TypedText text={title} delays={delays[1]} next={ends[1]} />
+        <TypedText text={title} delaysMilliseconds={delays[1]} caretMovesOnAtMilliseconds={ends[1]} />
       </Heading>
       {caption && (
         <p data-target="caption" className="text-body text-muted-foreground">
-          <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
+          <TypedText
+            text={caption}
+            delaysMilliseconds={delays[2]}
+            caretMovesOnAtMilliseconds={ends[2]}
+            emphasis={captionEmphasis}
+          />
           <CaptionMarkers markers={markers} />
         </p>
       )}
@@ -100,13 +103,7 @@ function TitleRow({ action, children }: { action: ReactNode; children: ReactNode
   );
 }
 
-/**
- * The Slide header (design-ADR-0012): Eyebrow, title and caption, rendered by the
- * Slide wrapper above the Scene. A server component: the typewriter is CSS
- * over the spans split here, so no client code runs for it. A flex column on
- * two spacing tokens: the Eyebrow, the title group and what follows sit a
- * full gap apart, the title and its caption half that, so they read as one.
- */
+// decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function SlideHeader({
   seed,
   level,

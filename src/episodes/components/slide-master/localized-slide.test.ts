@@ -8,14 +8,6 @@ import { episodeMinutes, localizeSlide, type EpisodeContext, type LocalizedSlide
 import { episode, slide, withoutSectionSlide, type Slide } from './slide';
 import type { RuntimeKit } from './slide-base';
 
-/*
- * The Localized Slide is the one interface that turns a Slide and a locale
- * into what the page renders: these tests read it with real Slides and
- * next-intl's real translator, never the translator, kit or context reader
- * behind it.
- */
-
-// "Copy it once, so the next Episode starts from a working example." is 12 words; the German line is 10.
 const WHY = {
   en: {
     title: 'Why every Episode starts from a copy',
@@ -304,7 +296,7 @@ describe('success cases', () => {
 
   it("times a Slide from its own Voice script's words, script and bridge, in the page's locale", () => {
     // ARRANGE
-    const expected = { en: 13 / 140, de: 11 / 120 };
+    const expected = { en: (12 + 1) / 140, de: (10 + 1) / 120 };
     // ACT
     const minutes = { en: localized('en')[1].minutes, de: localized('de')[1].minutes };
     // ASSERT

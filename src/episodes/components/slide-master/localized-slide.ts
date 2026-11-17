@@ -11,17 +11,9 @@ import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } fr
 import { slideKit, type ReferenceLabels } from './slide-kit';
 import type { SlidePresentation } from './slide-presentation';
 
-/*
- * The Localized Slide: one Slide in one locale, as the page renders it
- * (docs/adr/0001-the-slide-is-a-self-contained-folder.md). It hides the Slide's translator over its
- * own messages, its kit and the reading of its title, Speaker notes and Voice
- * script, so the container and an Episode test ask one interface, and it
- * totals an Episode's reading time for the landing card and the table of
- * contents alike. Translation keys follow FE-010 §6; each segment's span is
- * counted from its translated words (docs/adr/0002), so a locale's times
- * follow its own Voice script.
- */
-
+// decision: docs/adr/0001-the-slide-is-a-self-contained-folder.md
+// decision: FE-010 §6
+// decision: docs/adr/0002-reading-time-from-voice-script.md
 interface SlideText {
   readonly presentation?: SlidePresentation;
   readonly slug: string;
@@ -58,11 +50,6 @@ export interface EpisodeContext {
   readonly header: HeaderMode;
 }
 
-/**
- * next-intl's `createTranslator` over the Slide's own messages. Like the
- * site-wide config (`src/page-assembly/i18n-request.ts`), any missing message or formatting
- * error throws, so untranslated text fails the build instead of shipping.
- */
 export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
   const t = createTranslator({
     locale,
@@ -71,10 +58,6 @@ export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeT
       throw error;
     },
   });
-  // `messages` is a runtime record, so next-intl types `t` over unknown keys and
-  // its overloads don't line up with RuntimeTranslator's open signature. The
-  // members are the same at runtime; each Slide's typed translator is checked
-  // against its own JSON at the Slide (the type tests in slide.test.ts).
   return t as unknown as RuntimeTranslator;
 }
 
@@ -140,11 +123,7 @@ export function slideTextOf(slide: Slide, t: RuntimeTranslator, locale: Locale):
   };
 }
 
-/**
- * The Title slide's own Speaker notes and Voice script, read from the
- * Episode's text like a Slide's from its own (FE-004 §6). Both are empty for
- * an Episode that declares none, and then the drawer shows its explainer.
- */
+// decision: FE-004 §6
 export function titleContext(
   record: EpisodeComposition,
   locale: Locale,
@@ -153,11 +132,7 @@ export function titleContext(
   return contextOf(specs, ownTranslator({ ...record.messages[locale] }, locale), locale);
 }
 
-/**
- * An Episode's reading time in `locale`: every Slide's minutes, listed in the
- * table of contents or not (docs/adr/0002). The landing card and the table of
- * contents both quote this one sum. Renders no Scene.
- */
+// decision: docs/adr/0002-reading-time-from-voice-script.md
 export function episodeMinutes(record: EpisodeComposition, locale: Locale): number {
   return record.sections
     .flat()
@@ -167,12 +142,6 @@ export function episodeMinutes(record: EpisodeComposition, locale: Locale): numb
     );
 }
 
-/**
- * The record's authored Title slide Scene (`title`), rendered with a kit over
- * its own messages. The container renders the Title slide's `h1` and caption,
- * so its `Title` throws; its notes and Voice script belong on the record, so
- * declaring either fails the build.
- */
 export function localizeTitleScene(slide: Slide, episode: EpisodeContext): ReactNode {
   if (slide.notes.length > 0 || slide.segments.length > 0) {
     throw new Error(`Title slide Scene "${slide.slug}" declares notes or a Voice script: put them on the record.`);
@@ -194,12 +163,7 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
 const sectionTitleOf = (namer: Slide, locale: Locale) =>
   requireTitle(namer.slug, slideTextOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
 
-/**
- * One placed Slide of an Episode, localized: its text, and its Scene rendered
- * with the kit (FE-002 §3). Throws on a missing message, a bad `ref`,
- * `slideHref` or `template`, or a section slide without a title, so a broken
- * Episode fails `next dev` and the static build alike.
- */
+// decision: FE-002 §3
 export function localizeSlide(
   { id, slide, section, level, standsInFor }: PlacedListSlide<Slide>,
   episode: EpisodeContext,

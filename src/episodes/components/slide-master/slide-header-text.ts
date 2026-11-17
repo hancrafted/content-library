@@ -51,10 +51,6 @@ export interface TitleLines {
   readonly caption?: string;
 }
 
-/**
- * The `h1` and caption a Title slide Scene gives in its own messages, as plain text; each undefined when it gives none.
- * An empty `caption` shows the title alone on screen, while the Episode's own caption stays its page description.
- */
 export function titleLinesOf(t: RuntimeTranslator): TitleLines {
   return {
     ...(t.has(ON_SCREEN_TITLE_KEY) && { heading: plain(t, ON_SCREEN_TITLE_KEY) }),

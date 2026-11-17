@@ -1,11 +1,6 @@
 import type { RichTag } from './slide-base';
 
-/**
- * The tags every Slide's `t.rich` knows without passing them (FE-002 §3): a
- * Translation string may write `<em>`, `<b>` or `<code>` and the kit renders
- * it. A Slide passes a tag of the same name only to style it differently.
- * Styled with site tokens, so both themes hold.
- */
+// decision: FE-002 §3
 export const DEFAULT_RICH_TAGS: Readonly<Record<'em' | 'b' | 'code', RichTag>> = {
   em: (chunks) => <em className="text-secondary not-italic">{chunks}</em>,
   b: (chunks) => <b className="font-semibold text-foreground">{chunks}</b>,

@@ -10,12 +10,7 @@ export interface SourceSpec {
   readonly url: string;
 }
 
-/**
- * A Speaker note item as a Slide declares it. `target` is the short name of
- * the Scene element it explains (`title`, `prose`, a column slug, or one the
- * Scene marks with the kit's `target`); the drawer finds it inside the Slide
- * (FE-010).
- */
+// decision: FE-010 §4
 export interface NoteSpec<N extends string = string> {
   readonly slug: N;
   readonly target: string;
@@ -38,10 +33,6 @@ export type MarkerComponent<N extends string = string> = (props: {
 
 export type RichTag = (chunks: ReactNode) => ReactNode;
 
-/**
- * A translator read by runtime key: what the container hands every Slide. Its
- * arguments are left open, so it stands in for any Slide's typed translator.
- */
 export interface RuntimeTranslator {
   (key: string, ...args: unknown[]): string;
   rich(key: string, ...args: unknown[]): ReactNode;

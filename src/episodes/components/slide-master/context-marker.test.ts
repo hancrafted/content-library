@@ -72,7 +72,7 @@ describe('edge cases', () => {
   });
 
   it('keeps its hit area on itself when a caller sets it static, so it never covers the Slide around it', () => {
-    // ARRANGE: the hit area is an absolute pseudo-element, so a static button would let it span the nearest positioned ancestor.
+    // ARRANGE
     const positioned = 'relative';
     const spacing = 'ml-1';
     const unpositioned = 'static';
