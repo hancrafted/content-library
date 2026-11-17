@@ -1,14 +1,5 @@
-// The Explorable page record registry (GLOSSARY): what `npm run registry` writes from the Explorable page files and the
-// Explorable folders. An Explorable page's record is its file, `src/content-store/explorable-pages/<slug>.ts`; its
-// composition is the folder `src/episodes/explorable-pages/<slug>/`, which the Episode registry lists as
-// `EXPLORABLE_PAGE_SLUGS`. The generated map is typed against that list, so a record without a composition, or a
-// composition without a record, fails `tsc`; the store refuses both again at load. The registry also lists the
-// Explorables, the folders `src/explorables/<slug>/`, so the store can refuse a page whose slug names none. The file is
-// checked in, and a fast test fails when it is stale. The disk side lives in registry.ts.
-
 import type { RegistryFile } from './episode-registry.pure.ts';
 
-/** Where the Explorable page registry lives. */
 export const EXPLORABLE_PAGE_REGISTRY_PATH = 'src/content-store/explorable-page-registry.generated.ts';
 
 const HEADER = [
@@ -17,10 +8,8 @@ const HEADER = [
   '// after its slug; a folder `src/explorables/<slug>/` is an Explorable.',
 ].join('\n');
 
-/** A slug as a record's `slug` field allows: lowercase words joined by hyphens. */
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The identifier a slug is imported under: `context-window` -> `contextWindow`. */
 function identifierOf(slug: string): string {
   const camel = slug.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
   return /^[0-9]/.test(camel) ? `_${camel}` : camel;
@@ -28,7 +17,6 @@ function identifierOf(slug: string): string {
 
 const byCodePoint = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
-/** The Explorable page slugs the files name, in code-point order, so the registry is the same on every machine. */
 function slugsOf(files: readonly string[]): string[] {
   const records = files.filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'));
   const misnamed = records.filter((file) => !SLUG.test(file.slice(0, -'.ts'.length)));
@@ -37,7 +25,6 @@ function slugsOf(files: readonly string[]): string[] {
   return records.map((file) => file.slice(0, -'.ts'.length)).sort(byCodePoint);
 }
 
-/** The Explorable page registry for the given entries of `src/content-store/explorable-pages/` and `src/explorables/`. */
 export function explorablePageRegistryFile(files: readonly string[], explorables: readonly string[]): RegistryFile {
   const slugs = slugsOf(files);
   const imports = slugs.map(

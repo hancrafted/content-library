@@ -1,32 +1,22 @@
-// The Episode routes (FE-007 §1.3, FE-005 §1): one route folder per Episode page, written by `npm run registry` from
-// the page catalogue's own param lists, each importing only its own Episode record. Turbopack ships every client
-// component a route's server graph reaches, dynamic imports included, so one shared `[episode]` route shipped every
-// Episode's JS and CSS on each Episode page; one route per page keeps each page to its own. An Episode's own page sits
-// at `/episodes/<slug>/`, an Episode under its Event at `/events/<event>/episodes/<slug>/`, each in the default locale
-// and under `[locale]` for the prefixed ones.
+// decision: FE-007 §1.3
+// decision: FE-005 §1
 import type { RegistryFile } from './episode-registry.pure.ts';
 
-/** One Episode page: the Event it sits under, if any, its URL slug, its Episode's folder and the record it exports. */
 export interface EpisodeRoute {
   readonly event?: string;
   readonly slug: string;
-  /** The Episode's folder under `src/episodes/`: `<slug>`, or `by-event/<event>/<slug>` for an Event's copy. */
   readonly folder: string;
-  /** The one name its `episode.ts` exports the Episode record under. */
   readonly exported: string;
 }
 
 const GENERATED_ROUTE_SHAPE = /<EpisodePage page=\{\w+\(PAGE_PARAMS\)\} composition=\{episode\}/;
 
-/** The folders generated Episode routes sit in, under each locale's route group: an Event's are one level deeper. */
 export const ROUTE_GROUPS = ['src/app/(en)', 'src/app/[locale]'] as const;
 
-/** Whether a route file's text is one `npm run registry` wrote, so it may rewrite or remove it. */
 export function isGeneratedRoute(text: string): boolean {
   return GENERATED_ROUTE_SHAPE.test(text);
 }
 
-/** The route's URL below its locale: `episodes/<slug>` or `events/<event>/episodes/<slug>`. */
 function urlOf({ event, slug }: EpisodeRoute): string {
   return `${event === undefined ? '' : `events/${event}/`}episodes/${slug}`;
 }
@@ -83,7 +73,6 @@ export default async function Page({ params }: LocaleParams) {
 `;
 }
 
-/** Both locales' route files of every Episode page, in URL order; two Episodes at one URL is a bug, so it throws. */
 export function episodeRouteFiles(routes: readonly EpisodeRoute[]): RegistryFile[] {
   const urls = routes.map(urlOf);
   const repeated = urls.find((url, index) => urls.indexOf(url) !== index);

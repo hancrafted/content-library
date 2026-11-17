@@ -11,7 +11,6 @@ import {
   type Plan,
 } from './verify.pure.ts';
 
-/** A stand-in for the process adapter: each step exits with the code `codes` names (0 by default) and logs its run. */
 function fakeExec(codes: Readonly<Record<string, number>> = {}, outputs: Readonly<Record<string, string>> = {}) {
   const log: string[] = [];
   const exec: Exec = async (step) => {
@@ -189,12 +188,10 @@ describe('runPlan', () => {
   });
 });
 
-/** What git hands pre-push on stdin for a push of `local` to `remote`. */
 const pushed = (local: string, remote: string) => `refs/heads/${local} 1111111 refs/heads/${remote} 2222222\n`;
 
 const MERGE_BASE = 'abc1234';
 
-/** The plan's steps after the verify plan's own, as `name: command`, with the test lock marked. */
 const tail = (plan: Plan) =>
   plan.phases
     .slice(VERIFY_PLAN.phases.length)
@@ -278,7 +275,6 @@ describe('pushPlan', () => {
   });
 });
 
-/** A stand-in for the test lock: logs when it is taken and released, and fails to take it when `refuse` says so. */
 function fakeHold(log: string[], refuse?: string): Hold {
   return async (fn) => {
     if (refuse !== undefined) throw new Error(refuse);

@@ -3,15 +3,14 @@ import { mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from '../load/git-environment.fixture.ts';
 import { changesSinceMain } from './push-facts.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+dropGitEnvironment(process.env);
 
 const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
 
-/** A repo on branch `work`, one commit past `origin/main`, which it last fetched at `init`. */
 function repo() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'push-facts-')));
   git(root, 'init', '-q', '-b', 'main');
@@ -24,7 +23,6 @@ function repo() {
   return { root, fetched };
 }
 
-/** Commits `files` on the branch checked out at `root`. */
 function commit(root: string, files: string[]): void {
   for (const file of files) writeFileSync(path.join(root, file), file);
   git(root, 'add', '.');

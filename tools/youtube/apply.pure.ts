@@ -1,6 +1,4 @@
-// The pure half of `npm run youtube:apply`: what to write to a video given the local `youtube.<lang>.md` and the
-// remote description, the `.env` safety rule, and the credentials in `.env`. The shell is `apply.ts`, the
-// YouTube client `youtube-client.ts`. Rationale: docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md.
+// decision: docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md
 import { createHash } from 'node:crypto';
 import { publishedDescription, type YoutubeFile } from './youtube-file.pure.ts';
 
@@ -17,12 +15,10 @@ export interface ApplyPlan {
   readonly comment: CommentPlan;
 }
 
-/** A description as YouTube compares it: line endings unified, outer whitespace dropped. */
 export function normalized(text: string): string {
   return text.replace(/\r\n/g, '\n').trim();
 }
 
-/** The fingerprint apply stores of a description it sent, so a later run sees whether YouTube still shows it. */
 export function descriptionFingerprint(description: string): string {
   return createHash('sha256').update(normalized(description)).digest('hex').slice(0, 16);
 }
@@ -39,10 +35,6 @@ function descriptionPlan(file: YoutubeFile, remote: string, force: boolean): Des
   return edited && !force ? { action: 'refuse', reason: EDITED_ON_YOUTUBE } : { action: 'update', text: local };
 }
 
-/**
- * The writes that bring the video to the local copy: the description when it differs, the comment when not yet posted.
- * A description edited on YouTube since the last apply is refused unless `force`: the edit is input for Learn first.
- */
 export function planApply(file: YoutubeFile, remoteDescription: string, options: { force?: boolean } = {}): ApplyPlan {
   const description = descriptionPlan(file, remoteDescription, options.force ?? false);
   const comment: CommentPlan =
@@ -54,14 +46,12 @@ export function planApply(file: YoutubeFile, remoteDescription: string, options:
   return { description, comment };
 }
 
-/** What git and the disk say about the `.env` file. */
 export interface EnvState {
   readonly exists: boolean;
   readonly tracked: boolean;
   readonly ignored: boolean;
 }
 
-/** Why the `.env` may not be used, or undefined when it is safe. */
 export function envProblem(state: EnvState): string | undefined {
   if (!state.exists) return '.env is missing; see tools/youtube/AGENTS.md for the OAuth setup';
   if (state.tracked) return '.env is tracked by git; untrack it (git rm --cached .env) and rotate the credentials';
@@ -81,7 +71,6 @@ const CREDENTIAL_KEYS = {
   refreshToken: 'YOUTUBE_REFRESH_TOKEN',
 } as const;
 
-/** The credentials in `.env` text, or the names (never values) of the missing ones. */
 export function parseCredentials(text: string): { value: Credentials } | { missing: string[] } {
   const entries = new Map<string, string>();
   for (const line of text.replace(/\r\n/g, '\n').split('\n')) {

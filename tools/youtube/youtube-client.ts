@@ -1,11 +1,8 @@
-// The thin YouTube Data API adapter of `youtube:apply` and `youtube:pull`: refresh the access token, read a video's
-// snippet, update its description, insert a top-level comment, read a comment's text. No logic beyond the HTTP calls; the decisions are in `apply.pure.ts`.
 import type { Credentials } from './apply.pure.ts';
 
 const API = 'https://www.googleapis.com/youtube/v3';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
-/** The writable snippet fields; `videos.update` replaces the snippet, so all of it is sent back. */
 export type Snippet = Record<string, unknown> & { description: string };
 
 async function call(url: string, init: RequestInit): Promise<Record<string, unknown>> {
@@ -23,7 +20,6 @@ export interface YoutubeClient {
   readSnippet(videoId: string): Promise<Snippet>;
   updateDescription(videoId: string, snippet: Snippet, description: string): Promise<void>;
   postComment(videoId: string, text: string): Promise<string>;
-  /** The comment thread's top-level text, or undefined when it is gone. */
   readComment(threadId: string): Promise<string | undefined>;
 }
 
@@ -41,7 +37,6 @@ async function accessToken(credentials: Credentials): Promise<string> {
   return String(token.access_token);
 }
 
-/** A client authorised with a refresh token. */
 export async function connect(credentials: Credentials): Promise<YoutubeClient> {
   const headers = { authorization: `Bearer ${await accessToken(credentials)}`, 'content-type': 'application/json' };
   return {

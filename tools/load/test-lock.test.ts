@@ -3,14 +3,13 @@ import { mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { dropGitEnvironment } from './git-environment.fixture.ts';
 import { gate } from './lock.fixture.ts';
 import { withLock } from './lock.ts';
 import { TEST_LOCK } from './test-lock.ts';
 
-// A commit hook exports GIT_DIR and friends, and CI sets CI: either would change what these runs see.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_') || name === 'CI') delete process.env[name];
+dropGitEnvironment(process.env, ['CI']);
 
-/** A fresh repository on branch `work`, where each run appends to `order.txt`. */
 function repo() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'test-lock-')));
   execFileSync('git', ['init', '-q', '-b', 'work', root]);
@@ -22,10 +21,6 @@ function repo() {
 
 const MODULE = path.join(import.meta.dirname, 'test-lock.ts');
 
-/**
- * Runs withTestLock in its own Node process in `cwd`, as another worktree's `verify` would, with short timings: its
- * run marks its start in `order.txt`, says `started`, holds on for `holdMilliseconds`, then marks its end.
- */
 function taker(
   cwd: string,
   id: string,
@@ -56,7 +51,6 @@ function taker(
   return { pid: proc.pid, runStarted, waiting, done };
 }
 
-/** Holds the test lock in this process until the returned `release` is called. */
 async function holdTestLock(root: string) {
   const released = gate();
   const holding = gate();
