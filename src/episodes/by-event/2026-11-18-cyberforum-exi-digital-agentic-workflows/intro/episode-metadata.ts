@@ -1,6 +1,5 @@
 import type { EpisodeInput } from '@/content-store/schemas/episode.schema';
 
-/** The CyberForum EXI Digital workshop's opening Episode, copied from the Workshop template: only under its Event; its title and caption are its own `i18n/`. */
 export const episodeMetadata = {
   slug: 'intro',
   status: 'published',
