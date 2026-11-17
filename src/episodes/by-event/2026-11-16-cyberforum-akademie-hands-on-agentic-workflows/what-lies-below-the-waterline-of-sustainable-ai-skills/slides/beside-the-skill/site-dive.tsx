@@ -20,7 +20,6 @@ const SHIP_SCALE = 1.3;
 const ROBOT_SCALE = 1.6;
 const ROBOT_HEIGHT = 59;
 const ROBOT_HALF_WIDTH = 40;
-/** The descent: it starts once the line on the wall has drawn, and settles before the check appears. */
 const DESCENT = { delay: 1200, duration: 2200 } as const;
 
 const depthY = (metres: number) => SURFACE_WATERLINE + metres * UNITS_PER_METRE;

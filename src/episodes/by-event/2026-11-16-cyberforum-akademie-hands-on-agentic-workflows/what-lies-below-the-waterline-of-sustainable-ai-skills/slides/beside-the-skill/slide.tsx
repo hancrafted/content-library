@@ -14,7 +14,6 @@ const BEST_PRACTICES = {
 const CLAUDE_SKILLS = { slug: 'claude-code-skills', url: 'https://code.claude.com/docs/en/skills' };
 const NOTE = 'a-skill-teaches-the-class-of-problem';
 
-/** Paths and variables are code: the same in every locale, never translated. */
 const SKILL_PATH = 'collect-sediment-sample/SKILL.md';
 const PROJECT_FILE = 'CONTEXT.md';
 const PROJECT_DIR = '${CLAUDE_PROJECT_DIR}';

@@ -162,12 +162,7 @@
   stroke: color-mix(in oklab, var(--foreground) 70%, var(--overlay));
 }
 
-/*
- * The one emphasis motion, once on entry: the line draws from step 2 to the Site 7 row, the row fades in already
- * filled primary (opacity only: its words turn light with the fill, so no fill can fade in under them), then the
- * robot descends (`Travel`) and the check pops in at the seabed. The base rules are the end state, which reduced
- * motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .link {
     transform-origin: left center;
