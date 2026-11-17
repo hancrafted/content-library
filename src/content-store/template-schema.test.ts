@@ -2,21 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { TEMPLATE_TYPES } from './schemas/fields';
 import { templateSchema } from './schemas/template.schema';
 
-/*
- * The Template record (design-ADR 0019): a slug, a closed type, Tags with a lead Tag and a visibility. Its route and its
- * words are not fields.
- */
-
+// decision: docs/adr/0019-resources-overview.md
 const TEMPLATE = { slug: 'timelines', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 
-/** The record with one field left out, as a file that forgot it would hold it. */
 function withoutKey(record: Record<string, unknown>, key: string): Record<string, unknown> {
   const copy = { ...record };
   delete copy[key];
   return copy;
 }
 
-/** The first sentence the schema refuses a record with, or undefined when it is sound. */
 function refusal(record: unknown): string | undefined {
   const result = templateSchema.safeParse(record);
   return result.success ? undefined : `${result.error.issues[0].path.join('.')} ${result.error.issues[0].message}`;

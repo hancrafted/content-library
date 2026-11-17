@@ -1,13 +1,6 @@
 import { z } from 'zod';
 import { slug, tags, visibility, YOUTUBE_ID } from './fields';
 
-/*
- * An Explorable page: an Episode-shaped page about one primary Explorable (GLOSSARY). Its slug is that Explorable's
- * folder slug and also names its composition folder `episodes/explorable-pages/<slug>/`, which holds its title, caption
- * and description in its own Translation files. It uses the Episode's field types: slug, Tags, visibility and the
- * optional `youtube`. Its route is worked out from its slug, never stored.
- */
-
 export const explorablePageSchema = z
   .object({
     slug: slug.describe(
@@ -28,8 +21,6 @@ export const explorablePageSchema = z
   })
   .describe('An Explorable page: its slug names its primary Explorable and gives its URL');
 
-/** An Explorable page record, as the store loads it. */
 export type ExplorablePage = z.infer<typeof explorablePageSchema>;
 
-/** An Explorable page record as its file writes it, before the store parses it. */
 export type ExplorablePageInput = z.input<typeof explorablePageSchema>;

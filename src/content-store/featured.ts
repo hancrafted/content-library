@@ -2,23 +2,15 @@ import type { EpisodeId } from './catalogue/record-routes';
 import { duplicates } from './duplicates';
 import type { LoadedEpisode } from './episode-refusals';
 
-/*
- * The Featured slots (design-ADR 0016): the three Episodes the landing page and the Episode overview lead with, lead
- * first. Re-ranking is this one edit. The store refuses slots that are not three distinct published public Episodes,
- * so a slot never names an upcoming, unlisted or missing one.
- */
-
-/** The Featured slots, lead first. */
+// decision: docs/adr/0016-content-data-model.md
 export const FEATURED = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
 ] as const satisfies readonly [EpisodeId, EpisodeId, EpisodeId];
 
-/** How many slots Featured fills: the tuple's length, which the type above fixes. */
 const SLOTS = FEATURED.length;
 
-/** Why one slot cannot be Featured, or nothing: it names a published public Episode. */
 function slotRefusal(id: string, episodes: ReadonlyMap<string, LoadedEpisode>): string | undefined {
   const episode = episodes.get(id);
   if (episode === undefined) return `slot "${id}" names no Episode`;
@@ -27,7 +19,6 @@ function slotRefusal(id: string, episodes: ReadonlyMap<string, LoadedEpisode>): 
   return undefined;
 }
 
-/** Every refusal of the Featured slots: not three, one named twice, or one that is no published public Episode. */
 export function featuredRefusals(featured: readonly string[], episodes: ReadonlyMap<string, LoadedEpisode>): string[] {
   return [
     ...(featured.length === SLOTS ? [] : [`names ${featured.length} slots, but Featured fills ${SLOTS}`]),
