@@ -43,13 +43,6 @@ function TranslationArrow() {
   );
 }
 
-/**
- * "Value was always translation" (Spec Option 4b): a copy of the `grid-1x2` Master slide's facing halves, hairline and
- * mono index, each half's title and caption replaced by a picture. One customer's intent on the left, the product,
- * service and lecture it was translated into on the right, and the round `primary` arrow on the hairline as the
- * translation. Keeps `motion: none`; the result cards dim each other on hover. The caption's last Context marker is
- * the header's; the first sits beside the translated half's label, since the shared header ends a caption on one.
- */
 export const valueWasAlwaysTranslation = slide({
   slug: 'value-was-always-translation',
   messages: { en, de },
