@@ -14,10 +14,6 @@ interface TagTogglesProps {
   onChange: (selected: string[]) => void;
 }
 
-/**
- * A multi-select filter: one toggle per option with its count, wrapping on a narrow screen; none on shows everything.
- * Built on the shadcn toggle group, which gives it roving focus and each toggle its pressed state.
- */
 export function TagToggles({ options, selected, label, onChange }: TagTogglesProps) {
   return (
     <ToggleGroup type="multiple" aria-label={label} value={[...selected]} onValueChange={onChange}>

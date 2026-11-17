@@ -3,7 +3,6 @@ interface StructuredData {
   readonly '@context': string;
 }
 
-/** Renders structured data as a `<script type="application/ld+json">`. `<` is escaped so no string can close the tag. */
 export function JsonLdScript({ data }: { data: StructuredData }) {
   return (
     <script

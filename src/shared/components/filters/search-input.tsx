@@ -8,7 +8,6 @@ interface SearchInputProps {
   placeholder: string;
   onChange: (query: string) => void;
   inputRef?: Ref<HTMLInputElement>;
-  /** The field's own data attribute, so each browser keeps its hook (`data-episode-search`, `data-event-search`). */
   data: Record<`data-${string}`, string>;
 }
 

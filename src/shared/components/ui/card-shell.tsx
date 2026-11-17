@@ -9,15 +9,8 @@ import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure
 import { CardPicture, CardVisual, type CardVisualPosition } from './card-visual';
 import visualStyles from './card-visual.module.css';
 
-/* One native frame and stretched title link; visual panels, static media and corner art share it. */
-
 export type AccentToken = `--${string}`;
 
-/**
- * The accent drawn from the card's own `--card-accent`, which the shell sets to the token it is given: whole class
- * strings Tailwind can see, so any token colours a card and none is named here. The ink is the token itself, which
- * reads 4.5:1 on the page in both themes; the wash and the edge are tints of it.
- */
 export const ACCENT = {
   ink: 'text-(--card-accent)',
   wash: 'from-(--card-accent)/15',
@@ -33,7 +26,6 @@ interface VariantClasses {
   readonly cue: string;
 }
 
-/** Whole class strings, so Tailwind can see each one. */
 export const VARIANTS: Record<CardVariant, VariantClasses> = {
   lead: {
     frame: 'rounded-3xl p-7 sm:p-10 lg:min-h-[22rem]',
@@ -71,13 +63,7 @@ interface ShellProps {
   linked: boolean;
   accent: AccentToken;
   icon: LucideIcon;
-  /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
   data: Record<`data-${string}`, string | undefined>;
-  /**
-   * A decorative picture for a dark strip across the card's top, in place of the corner wash and faded icon: static
-   * by contract (a grid of cards runs no loops). The strip is dark in both themes (ink on `--primary`, or on `--background`
-   * in the dark theme), so the picture draws in `currentColor`.
-   */
   media?: ReactNode;
   className?: string;
   children: ReactNode;
@@ -143,7 +129,6 @@ interface TitleProps {
   graphic?: boolean;
 }
 
-/** The title as the one link on a linked card, stretched over the whole card so the card is the target and its name is just the title. */
 export function CardTitle({ variant, title, route, locale, level, graphic = false }: TitleProps) {
   const Heading = `h${level}` as const;
   const classes = `text-foreground ${graphic ? 'text-body font-semibold' : VARIANTS[variant].title}`;
@@ -176,7 +161,6 @@ export function CardCaption({
 const BUTTON =
   'inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-body font-semibold text-background transition-[gap] duration-200 group-hover:gap-3 motion-reduce:transition-none motion-reduce:group-hover:gap-2';
 
-/** Hidden until the card is hovered or its link focused; a touch screen has no hover, so it stays shown there. */
 const ARROW =
   'ml-auto size-4 text-foreground opacity-0 transition-[opacity,translate] duration-200 group-hover:opacity-100 group-has-[[data-card-link]:focus-visible]:opacity-100 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5 [@media(hover:none)]:opacity-100 motion-reduce:transition-none';
 
