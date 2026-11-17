@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULTS, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
+import { DEFAULTS, harnessCapFrom, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
 
 describe('parseConfig', () => {
   describe('success cases', () => {
@@ -79,5 +79,17 @@ describe('parseConfig', () => {
         'decisionDocs must be a list of paths',
       ]);
     });
+  });
+});
+
+describe('harnessCapFrom', () => {
+  it('reads the harness cap from its environment variable, else the default', () => {
+    // ARRANGE
+    const set = { CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS: '6' };
+    const bad = { CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS: 'many' };
+    // ACT
+    const caps = [set, bad, {}].map(harnessCapFrom);
+    // ASSERT
+    expect(caps).toEqual([6, PARALLEL_DEFAULTS.harnessCap, PARALLEL_DEFAULTS.harnessCap]);
   });
 });

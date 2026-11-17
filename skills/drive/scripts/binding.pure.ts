@@ -1,12 +1,20 @@
 // The Binding (design-ADR 0027): the DRIVE phases bound to a project's skills, n:m, each phase with the model its
 // Subagents run on, and the one agent type every agent uses. Pure: text in, text or a validated Binding out.
-import { Document, isMap, isSeq, parseDocument, type YAMLMap, type YAMLSeq } from 'yaml';
+import { type Document, isMap, isSeq, parseDocument, type YAMLMap, type YAMLSeq } from 'yaml';
+import catalogData from '../catalog/catalog.json' with { type: 'json' };
+import { isRecord, isText, openMapping } from './yaml.pure.ts';
 
 export const PHASES = ['define', 'reason', 'implement', 'verify', 'evolve'] as const;
 export type Phase = (typeof PHASES)[number];
 
-/** The model a phase's Subagents run on when nothing else says so. */
-export const DEFAULT_MODEL = 'sonnet';
+/** The model each phase's Subagents run on when nothing else says so: reasoning and verifying take the stronger one. */
+export const PHASE_MODELS: Readonly<Record<Phase, string>> = {
+  define: 'sonnet',
+  reason: 'opus',
+  implement: 'sonnet',
+  verify: 'opus',
+  evolve: 'sonnet',
+};
 export const DEFAULT_AGENT_TYPE = 'general-purpose';
 
 /** Where the lockfile or a skill folder found a skill. `source` is the lockfile's source, null when it names none. */
@@ -16,42 +24,25 @@ export interface DetectedSkill {
   source: string | null;
 }
 
-/** Which phases a known skill from a known source serves. The one place the skill names a vendor, as data. */
-interface CatalogEntry {
-  source: string;
-  phases: readonly Phase[];
-}
-
-const MATT = 'mattpocock/skills';
-const entry = (phases: readonly Phase[]): CatalogEntry => ({ source: MATT, phases });
-
-export const CATALOG: Readonly<Record<string, CatalogEntry>> = {
-  grilling: entry(['define']),
-  'grill-me': entry(['define']),
-  'grill-with-docs': entry(['define', 'reason']),
-  research: entry(['define']),
-  'domain-modeling': entry(['reason']),
-  'codebase-design': entry(['reason']),
-  prototype: entry(['reason']),
-  'to-spec': entry(['reason']),
-  'to-tickets': entry(['reason']),
-  wayfinder: entry(['reason']),
-  handoff: entry(['reason']),
-  'improve-codebase-architecture': entry(['reason', 'verify', 'evolve']),
-  tdd: entry(['implement']),
-  implement: entry(['implement']),
-  'implement-spec': entry(['implement']),
-  'diagnosing-bugs': entry(['implement']),
-  'code-review': entry(['verify']),
-  pr: entry(['verify']),
-  retro: entry(['evolve']),
-  'writing-for-agents': entry(['evolve']),
+/** The vendor catalog, as data: which phases each skill of the vendor's source serves, and where decision docs live. */
+export const CATALOG = {
+  source: catalogData.source,
+  skills: catalogData.skills as Readonly<Record<string, readonly Phase[]>>,
+  decisionFolders: catalogData.decisionFolders as readonly string[],
 };
 
-/** The phases a detected skill serves by the catalog; none for an authored skill or an unknown one. */
+/** The phases a detected skill serves by the catalog; none for an authored skill or an unknown one. A skill found only
+ * by folder names no source, so it is matched by name. */
 export function phasesOf(skill: DetectedSkill): readonly Phase[] {
-  const known = CATALOG[skill.name];
-  return skill.origin === 'installed' && known !== undefined && known.source === skill.source ? known.phases : [];
+  if (skill.origin !== 'installed' || (skill.source !== null && skill.source !== CATALOG.source)) return [];
+  return Object.hasOwn(CATALOG.skills, skill.name) ? (CATALOG.skills[skill.name] ?? []) : [];
+}
+
+/** One list of detected skills from the groups, the first sighting of a name winning, minus `exclude`, sorted by name. */
+export function mergeDetected(groups: readonly (readonly DetectedSkill[])[], exclude: string): DetectedSkill[] {
+  const found = new Map<string, DetectedSkill>();
+  for (const skill of groups.flat()) if (skill.name !== exclude && !found.has(skill.name)) found.set(skill.name, skill);
+  return [...found.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export interface PhaseBinding {
@@ -81,9 +72,6 @@ const HEADER = [
 /** Written beside an empty `skills` list; removed again once a skill is bound. */
 export const INLINE_NOTE = ' none bound: the Orchestrator does this phase inline';
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-
 function mapAt(parent: YAMLMap, key: string, doc: Document): YAMLMap {
   const found = parent.get(key, true);
   if (isMap(found)) return found;
@@ -102,23 +90,13 @@ function seqAt(parent: YAMLMap, key: string, doc: Document): YAMLSeq {
 
 const names = (seq: YAMLSeq): string[] => seq.items.map((item) => String((item as { value?: unknown }).value ?? item));
 
-/** The document of an existing binding, or a new one; throws a message when the text is not a mapping. */
-function openBinding(existing: string | null): { doc: Document; root: YAMLMap } {
-  const doc = existing === null ? new Document({}) : parseDocument(existing);
-  if (doc.errors.length > 0) throw new Error(`binding is not valid YAML: ${doc.errors[0]?.message}`);
-  if (doc.contents === null) doc.contents = doc.createNode({}) as YAMLMap;
-  if (!isMap(doc.contents)) throw new Error('binding must be a mapping');
-  if (existing === null) doc.commentBefore = HEADER;
-  return { doc, root: doc.contents };
-}
-
 /** Fills what the file lacks: the agent type, and a model and a skills list for every phase. */
 function seedMissing(doc: Document, root: YAMLMap, seed: SeedOptions): void {
   if (!root.has('agentType')) root.set('agentType', seed.agentType ?? DEFAULT_AGENT_TYPE);
   const phases = mapAt(root, 'phases', doc);
   for (const phase of PHASES) {
     const node = mapAt(phases, phase, doc);
-    if (!node.has('model')) node.set('model', seed.model ?? DEFAULT_MODEL);
+    if (!node.has('model')) node.set('model', seed.model ?? PHASE_MODELS[phase]);
     seqAt(node, 'skills', doc);
   }
 }
@@ -155,15 +133,14 @@ export function updateBinding(
   detected: readonly DetectedSkill[],
   seed: SeedOptions = {},
 ): string {
-  const { doc, root } = openBinding(existing);
+  const { doc, root } = openMapping(existing, 'binding');
+  if (existing === null) doc.commentBefore = HEADER;
   seedMissing(doc, root, seed);
   offerNewSkills(doc, root, detected);
   const phases = mapAt(root, 'phases', doc);
   for (const phase of PHASES) settleInlineNote(seqAt(mapAt(phases, phase, doc), 'skills', doc));
   return doc.toString();
 }
-
-const isText = (value: unknown): value is string => typeof value === 'string' && value !== '';
 
 /** One phase's binding from its parsed value, or what is wrong with it. */
 function readPhase(phase: Phase, value: unknown): PhaseBinding | { error: string } {

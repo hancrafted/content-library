@@ -18,9 +18,6 @@ enforcers:
     name: check:sources
     command: npm run check:sources
   - kind: formatter
-    name: format
-    command: npm run format
-  - kind: formatter
     name: format:check
     command: npm run format:check
   - kind: linter

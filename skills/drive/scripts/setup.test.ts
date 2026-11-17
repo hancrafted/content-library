@@ -2,8 +2,8 @@ import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } fro
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { readBinding } from './binding.pure.ts';
-import { parseConfig } from './config.pure.ts';
+import { CATALOG, PHASE_MODELS, readBinding } from './binding.pure.ts';
+import { harnessCapFrom, parseConfig } from './config.pure.ts';
 import { detectSkills, setup } from './setup.ts';
 
 /** Writes `files` (path to text) into a fresh folder, which is not a git repo. */
@@ -24,7 +24,7 @@ const LOCK = (skills: Record<string, string>) =>
     ),
   });
 const SKILL = '---\nname: x\ndescription: x\n---\n';
-const VENDOR = 'mattpocock/skills';
+const VENDOR = CATALOG.source;
 
 const text = (root: string, file: string) => readFileSync(path.join(root, file), 'utf8');
 const binding = (root: string) => {
@@ -43,7 +43,7 @@ describe('drive setup', () => {
       // ASSERT
       const result = binding(root);
       expect(result.agentType).toBe('team:dev');
-      expect(result.phases.implement).toEqual({ model: 'sonnet', skills: ['tdd'], inline: false });
+      expect(result.phases.implement).toEqual({ model: PHASE_MODELS.implement, skills: ['tdd'], inline: false });
       expect(result.phases.verify.skills).toEqual(['code-review']);
       expect(result.phases.define.inline).toBe(true);
       expect(result.phases.evolve.inline).toBe(true);
@@ -63,6 +63,15 @@ describe('drive setup', () => {
       expect(result.agentType).toBe('general-purpose');
     });
 
+    it('matches a skill found only in the installed folder to the catalog by name', () => {
+      // ARRANGE
+      const root = repo({ '.agents/skills/tdd/SKILL.md': SKILL });
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(binding(root).phases.implement.skills).toEqual(['tdd']);
+    });
+
     it('writes a complete folder in an empty repo', () => {
       // ARRANGE
       const root = repo({});
@@ -77,7 +86,7 @@ describe('drive setup', () => {
         'docs/drive/project.yml',
       ]);
       expect(parseConfig(text(root, 'docs/drive/project.yml'))).toMatchObject({
-        parallel: { default: 3, harnessCap: 20 },
+        parallel: { default: 3, harnessCap: harnessCapFrom(process.env) },
         worktree: { baseBranch: 'main' },
       });
     });
@@ -89,7 +98,7 @@ describe('drive setup', () => {
       const root = repo({
         'package.json': JSON.stringify({ scripts: { lint: 'eslint .', test: 'vitest run', build: 'bundle' } }),
         '.husky/pre-commit': 'npm test',
-        '.archgate/adrs/A-001.md': '# a',
+        '.archgate/adrs/one.md': '# a',
       });
       // ACT
       setup(root);
@@ -154,25 +163,15 @@ describe('drive setup', () => {
       expect(hook.at(-2)).toBe('npm run verify:commit');
     });
 
-    it('writes a pull-request workflow when there is no husky hook but there are workflows', () => {
+    it('writes no workflow without husky and hands back the one CI line instead', () => {
       // ARRANGE
       const root = repo({ '.github/workflows/ci.yml': 'name: ci\n', 'package-lock.json': '{}' });
+      const notes: string[] = [];
       // ACT
-      setup(root);
-      // ASSERT
-      const workflow = text(root, '.github/workflows/drive-guard.yml');
-      expect(workflow).toContain('on: pull_request');
-      expect(workflow).toContain('npm ci');
-      expect(workflow).toMatch(/drive\.ts guard --against origin\/main/);
-    });
-
-    it('wires nothing when the repo has neither husky nor workflows', () => {
-      // ARRANGE
-      const root = repo({ 'README.md': 'x' });
-      // ACT
-      const written = setup(root);
+      const written = setup(root, {}, notes);
       // ASSERT
       expect(written.filter((file) => file.startsWith('.husky') || file.startsWith('.github'))).toEqual([]);
+      expect(notes.join('\n')).toMatch(/drive\.ts guard --against origin\/main/);
     });
   });
 });

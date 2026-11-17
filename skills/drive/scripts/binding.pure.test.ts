@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { type DetectedSkill, INLINE_NOTE, PHASES, readBinding, updateBinding } from './binding.pure.ts';
+import {
+  CATALOG,
+  type DetectedSkill,
+  INLINE_NOTE,
+  mergeDetected,
+  PHASE_MODELS,
+  PHASES,
+  readBinding,
+  updateBinding,
+} from './binding.pure.ts';
 
-const installed = (name: string, source = 'vendor/skills'): DetectedSkill => ({ name, origin: 'installed', source });
+const installed = (name: string, source = 'other/skills'): DetectedSkill => ({ name, origin: 'installed', source });
 const authored = (name: string): DetectedSkill => ({ name, origin: 'authored', source: null });
 
-/** The catalog is keyed by a real vendor source; fixtures use it to exercise the mapping without naming skills' repos. */
-const known = (name: string) => installed(name, 'mattpocock/skills');
+/** A skill from the catalog's own source, whatever it is. */
+const known = (name: string) => installed(name, CATALOG.source);
 
 const binding = (text: string) => {
   const read = readBinding(text);
@@ -48,15 +57,24 @@ describe('updateBinding', () => {
       expect(PHASES.every((phase) => result.phases[phase].inline)).toBe(true);
     });
 
-    it('seeds the agent type and one model per phase, from the options or the defaults', () => {
+    it('seeds the agent type, and one model per phase from the options or the per-phase presets', () => {
       // ARRANGE / ACT
-      const seeded = binding(updateBinding(null, [], { agentType: 'team:dev', model: 'opus' }));
+      const seeded = binding(updateBinding(null, [], { agentType: 'team:dev', model: 'haiku' }));
       const defaults = binding(updateBinding(null, []));
       // ASSERT
       expect(seeded.agentType).toBe('team:dev');
-      expect(PHASES.map((phase) => seeded.phases[phase].model)).toEqual(PHASES.map(() => 'opus'));
+      expect(PHASES.map((phase) => seeded.phases[phase].model)).toEqual(PHASES.map(() => 'haiku'));
       expect(defaults.agentType).toBe('general-purpose');
-      expect(defaults.phases.define.model).toBe('sonnet');
+      expect(PHASES.map((phase) => defaults.phases[phase].model)).toEqual(PHASES.map((phase) => PHASE_MODELS[phase]));
+    });
+
+    it('matches a skill found only by folder, which names no source, to the catalog by name', () => {
+      // ARRANGE
+      const byFolder: DetectedSkill = { name: 'tdd', origin: 'installed', source: null };
+      // ACT
+      const result = binding(updateBinding(null, [byFolder]));
+      // ASSERT
+      expect(result.phases.implement.skills).toEqual(['tdd']);
     });
   });
 
@@ -66,14 +84,14 @@ describe('updateBinding', () => {
       const first = updateBinding(null, [known('tdd')]);
       const edited = first
         .replace('agentType: general-purpose', 'agentType: team:dev # mine')
-        .replace(/(implement:\n\s+model: )sonnet/, '$1opus');
+        .replace(/(implement:\n\s+model: )\w+/, '$1haiku');
       // ACT
       const second = updateBinding(edited, [known('tdd'), known('code-review')]);
       // ASSERT
       const result = binding(second);
       expect(second).toContain('# mine');
       expect(result.agentType).toBe('team:dev');
-      expect(result.phases.implement.model).toBe('opus');
+      expect(result.phases.implement.model).toBe('haiku');
       expect(result.phases.verify.skills).toEqual(['code-review']);
       expect(result.phases.verify.inline).toBe(false);
     });
@@ -87,7 +105,7 @@ describe('updateBinding', () => {
       const bound = updateBinding(removed, [known('tdd'), known('pr')]);
       // ASSERT
       expect(same.phases.implement.skills).toEqual([]);
-      expect(bound).toContain('verify:\n    model: sonnet\n    skills:\n      - pr');
+      expect(bound).toContain(`verify:\n    model: ${PHASE_MODELS.verify}\n    skills:\n      - pr`);
       expect(bound.match(/none bound/g)).toHaveLength(4);
       expect(binding(bound).phases.verify.skills).toEqual(['pr']);
     });
@@ -106,6 +124,21 @@ describe('updateBinding', () => {
       expect(() => updateBinding('a: [', [])).toThrow('not valid YAML');
       expect(() => updateBinding('- a', [])).toThrow('must be a mapping');
     });
+  });
+});
+
+describe('mergeDetected', () => {
+  it('keeps the first sighting of a name, drops the excluded one and sorts by name', () => {
+    // ARRANGE
+    const groups = [[authored('b')], [known('b'), known('a'), known('self')], [installed('c')]];
+    // ACT
+    const merged = mergeDetected(groups, 'self');
+    // ASSERT
+    expect(merged.map((skill) => `${skill.name}:${skill.origin}`)).toEqual([
+      'a:installed',
+      'b:authored',
+      'c:installed',
+    ]);
   });
 });
 

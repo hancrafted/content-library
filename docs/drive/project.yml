@@ -31,6 +31,5 @@ parallel:
 # Decision docs: paths and globs that change only on a `decisions/*` branch.
 decisionDocs:
   - docs/adr/**
-  - docs/design/**
   - docs/features/**
   - '**/GLOSSARY*.md'
