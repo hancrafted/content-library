@@ -15,7 +15,7 @@ describe('Intro Human in the Loop Workflow', () => {
     expect(episode('h1 .sr-only').text()).toBe(expected);
   });
 
-  it('shows the selected poll questions without another Event’s results', () => {
+  it('shows the selected poll questions with this Event’s own results', () => {
     // ARRANGE
     const url = '/events/2026-11-04-intro-hitl-workflows/episodes/intro';
     const included = ['What is AI most like for you?', 'Has your picture of AI changed today?'];
@@ -24,9 +24,10 @@ describe('Intro Human in the Loop Workflow', () => {
     const page = exportedPage(url);
     const text = page('body').text();
     const printedVotes = page('[data-poll-votes]').length;
+    const answersWithVotes = 44;
     // ASSERT
     for (const question of included) expect(text).toContain(question);
     for (const question of excluded) expect(text).not.toContain(question);
-    expect(printedVotes).toBe(0);
+    expect(printedVotes).toBe(answersWithVotes);
   });
 });
