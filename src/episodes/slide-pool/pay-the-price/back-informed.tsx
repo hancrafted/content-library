@@ -17,7 +17,6 @@ const LINES = [
 const PAGE_WIDTH = 100;
 const LINE_END = PAGE_WIDTH - 7;
 
-/** One handbook line: its word, if one is left showing, the words after it, and the bar that blacks them out. */
 function HandbookLine({ line, word, redacts }: { line: (typeof LINES)[number]; word: string | null; redacts: number }) {
   const height = line.size * 0.7;
   return (
@@ -46,10 +45,6 @@ function HandbookLine({ line, word, redacts }: { line: (typeof LINES)[number]; w
   );
 }
 
-/**
- * Beat 2: the "How we work here" handbook arrives as lines of words, then most of them are blacked out, line by
- * line; a word or two is left showing, so the rest reads as withheld.
- */
 function Handbook({ title, words, x }: { title: string; words: HandbookWords; x: number }) {
   const arrives = 1.6;
   return (

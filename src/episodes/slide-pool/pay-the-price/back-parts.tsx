@@ -2,17 +2,10 @@ import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './trait-flip.module.css';
 
-/*
- * What every back shares, from the prototype (`build2.py`): the 200 × 72 canvas, the freelancer, the AI chat icon with
- * its star, and a label sized from a type role. An element the beat moves sits inside its own `<g>`, never on a
- * `transform` attribute, so the CSS animation never replaces where the element is placed.
- */
-
 export interface BackProps {
   ai: boolean;
 }
 
-/** The beat's timing variables: `d` the delay in seconds, `tx`/`ty`/`fx` offsets in px, `s` an end scale, `t` a duration. */
 export function beat(vars: {
   d?: number;
   tx?: number;
@@ -44,7 +37,6 @@ export function BackSvg({ width, children }: { width: number; children: ReactNod
   );
 }
 
-/** The caption role's size, in px; a label's size in user units scales it, so no font size is written here. */
 const CAPTION_PIXELS = 14;
 
 export function Label({

@@ -18,12 +18,6 @@ const OBVIOUS = ['budget', 'stay', 'signoff'] as const;
 const RIDERS = ['dietary', 'accessibility'] as const;
 const UNWRITTEN = ['lastTime', 'unwrittenRules', 'suppliers'] as const;
 
-/**
- * "You're the new hire" (Spec Option 1a): the summer party for 200 across Europe as one tall stack, no AI on it so it
- * stays reusable. The obvious questions, the ones nobody thinks to ask, then a full-width band where the rail turns
- * and the roles switch: you now hand the party over, in the one dark card. Keeps `basic-page` for its header only and
- * `motion: none`; the question lists dim their siblings on hover.
- */
 export const youAreTheNewHire = slide({
   slug: 'you-are-the-new-hire',
   messages: { en, de },

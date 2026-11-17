@@ -16,7 +16,6 @@ export interface ChatTurnCopy {
   skill?: ChatSkill;
   options?: readonly string[];
   recommended?: string;
-  /** The question you had not thought of. */
   forgotten?: boolean;
 }
 
@@ -33,12 +32,7 @@ export interface InterviewChatCopy {
   turns: readonly ChatTurnCopy[];
 }
 
-/**
- * "See the chat" opens the Interview's worked chat in a native `<dialog>` via `showModal()`: the top layer, so no
- * z-index and no Slide wrapper's `isolate` traps it under the chrome (FE-009 §8). The browser gives Escape, the focus
- * trap and the inert page; a press on the backdrop closes it. Bubbles are tool-neutral: the AI left, you right. The
- * chat scrolls inside the card, so a long chat never runs past the viewport.
- */
+// decision: FE-009 §8
 export function InterviewChat({ copy }: { copy: InterviewChatCopy }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const close = () => dialog.current?.close();
@@ -175,7 +169,6 @@ function ChatTurn({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy 
   );
 }
 
-/** What a turn says: its text, after the skill command it invokes, then a question's options. */
 function TurnBody({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy }) {
   return (
     <>

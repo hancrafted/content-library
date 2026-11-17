@@ -1,9 +1,3 @@
-/*
- * The trait flip's rules (.scratch/price-progressive-disclosure/handoff.md): which rows are shown, which pass each
- * plays, which cards are turned to their text, and the closing line's wipe. Pure, so the client part only keeps the
- * timer `nextTimer` names.
- */
-
 export const TRAITS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 export type Trait = (typeof TRAITS)[number];
 
@@ -68,12 +62,10 @@ const ON: Handlers = {
   turn: (state, { target, side }) => turn(state, target, side),
 };
 
-/** One control open at a time; entering a row starts a new pass; leaving closes only what it opened, shown rows stay. */
 export function flip(state: FlipState, event: FlipEvent): FlipState {
   return (ON[event.type] as (state: FlipState, event: FlipEvent) => FlipState)(state, event);
 }
 
-/** One row as drawn: shown once entered or while wiped, the pass its backs play, and which cards show their text. */
 export function rowAt(state: FlipState, trait: Trait) {
   const wiping = state.open === 'closing';
   return {
@@ -88,7 +80,6 @@ export function rowAt(state: FlipState, trait: Trait) {
   };
 }
 
-/** How long a back holds its last frame before it replays. */
 export const HOLD_MILLISECONDS = 1500;
 
 export const BEAT_MILLISECONDS: Readonly<Record<Trait, number>> = {
@@ -99,12 +90,14 @@ export const BEAT_MILLISECONDS: Readonly<Record<Trait, number>> = {
   'every-word-billed': 9900,
 };
 
-/** When the wipe blanks the rows, after every row has shown. */
 const BLANK_MILLISECONDS = 900;
 
-/** The next event the clock fires and in how many ms: the pointed row's replay, or the wipe's blank; `null` at rest. */
-export function nextTimer(state: Pick<FlipState, 'open' | 'blank'>): { ms: number; event: FlipEvent } | null {
+export function nextTimer(state: Pick<FlipState, 'open' | 'blank'>): { milliseconds: number; event: FlipEvent } | null {
   if (state.open === null) return null;
-  if (state.open === 'closing') return state.blank ? null : { ms: BLANK_MILLISECONDS, event: { type: 'blank' } };
-  return { ms: BEAT_MILLISECONDS[state.open] + HOLD_MILLISECONDS, event: { type: 'replay', target: state.open } };
+  if (state.open === 'closing')
+    return state.blank ? null : { milliseconds: BLANK_MILLISECONDS, event: { type: 'blank' } };
+  return {
+    milliseconds: BEAT_MILLISECONDS[state.open] + HOLD_MILLISECONDS,
+    event: { type: 'replay', target: state.open },
+  };
 }

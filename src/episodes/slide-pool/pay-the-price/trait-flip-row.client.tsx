@@ -74,7 +74,6 @@ function Chip({ row, expanded, handlers }: ChipProps) {
   );
 }
 
-/** The centre track: the chip between its two arrows, drawn once its cards show. */
 function ChipTrack({ row, expanded, dispatch }: { row: FlipRow; expanded: boolean; dispatch: Dispatch<FlipEvent> }) {
   return (
     <div className="flex items-center justify-center gap-1 @3xl:order-2 @3xl:w-60 @3xl:shrink-0">

@@ -38,7 +38,10 @@ describe('success cases', () => {
     // ARRANGE
     const open = run([{ type: 'open', target: 'probabilistic' }]);
     const replayEvery = 4100;
-    const expected = { timer: { ms: replayEvery, event: { type: 'replay', target: 'probabilistic' } }, pass: 2 };
+    const expected = {
+      timer: { milliseconds: replayEvery, event: { type: 'replay', target: 'probabilistic' } },
+      pass: 2,
+    };
     // ACT
     const timer = nextTimer(open);
     const pass = rowAt(flip(open, timer!.event), 'probabilistic').pass;
@@ -54,7 +57,7 @@ describe('success cases', () => {
     ]);
     const blankAfter = 900;
     const expected = {
-      timer: { ms: blankAfter, event: { type: 'blank' } },
+      timer: { milliseconds: blankAfter, event: { type: 'blank' } },
       wiping: [
         { shown: true, blank: false },
         { shown: true, blank: false },

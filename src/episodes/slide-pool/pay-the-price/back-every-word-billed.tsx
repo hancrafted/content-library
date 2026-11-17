@@ -2,10 +2,8 @@ import { cn } from '@/shared/lib/utils';
 import { BackSvg, beat, Label, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** When each of the five items lands, in seconds: one per pass of the scan line (its schedule in the CSS module). */
 const ARRIVALS = [0.2, 1.24, 2.71, 4.62, 6.96];
 
-/** The count after each item the line crosses: 0, then one more for each of its fifteen crossings (1 + 2 + 3 + 4 + 5). */
 const CROSSINGS = 15;
 
 const STEPS = [
@@ -60,7 +58,6 @@ function Stack({ ai, x }: BackProps & { x: number }) {
   );
 }
 
-/** The bill (€) or the token count, one value per crossing, centred on `x`; only the last shows at rest. */
 function Count({ ai, unit, x }: BackProps & { unit: string; x: number }) {
   const ink = ai ? 'fill-ai' : 'fill-foreground';
   return (

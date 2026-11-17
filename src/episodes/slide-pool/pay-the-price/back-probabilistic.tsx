@@ -43,7 +43,6 @@ function Results({ ai }: BackProps) {
   );
 }
 
-/** An arrow from each receiver to what it produced, drawn just before the shapes land. */
 function Arrows({ ai }: BackProps) {
   const ink = ai ? 'stroke-ai' : 'stroke-foreground';
   return (

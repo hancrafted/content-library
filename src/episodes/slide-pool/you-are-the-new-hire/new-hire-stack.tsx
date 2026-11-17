@@ -35,7 +35,6 @@ interface NewHireStackProps {
   targets: { hidden: string; handover: string };
 }
 
-/** A rail label on the left track: a pill, neutral while you ask, primary once you are asked. */
 function RailPill({ children, asked = false }: { children: ReactNode; asked?: boolean }) {
   return (
     <span
@@ -180,11 +179,6 @@ function RailArrow() {
   );
 }
 
-/**
- * The new hire's stack (Spec Option 1a): a tall stack read top to bottom, with no AI on it. Above the band you ask:
- * the obvious questions, then the ones nobody thinks to ask. In the band the rail turns, carrying "You ask" round to
- * "You are asked": the roles switch, and below it the one dark card echoes every question back.
- */
 export function NewHireStack(props: NewHireStackProps) {
   const { rail, switchLabel, handover, targets } = props;
   return (

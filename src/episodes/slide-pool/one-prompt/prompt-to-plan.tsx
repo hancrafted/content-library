@@ -22,7 +22,6 @@ interface PromptToPlanProps {
 
 const COLUMNS = '@3xl:grid-cols-[minmax(0,1fr)_auto_4rem_minmax(0,1fr)]';
 
-/** The pages with no mark of their own, scattered under the five marked ones. */
 const LOOSE = [
   { top: '2%', left: '6%', turn: -6 },
   { top: '14%', left: '22%', turn: 4 },
@@ -33,7 +32,6 @@ const LOOSE = [
   { top: '80%', left: '4%', turn: 5 },
 ] as const;
 
-/** Each marked document's place in the pile: a small turn and shift, so the five read as thrown down, not filed. */
 const SCATTER = [
   { turn: -2, shift: 0 },
   { turn: 1.5, shift: 14 },
@@ -149,12 +147,6 @@ function Callout({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * One prompt, one polished plan: the prompt on top with an arrow out to twelve documents. Down the middle the five
- * PRICE chips in letter order, each trait's name and why right-aligned beside it, and a hairline out to the document
- * it marked in a scattered pile; the mark is a wavy underline beside its row, so it never rests on colour alone.
- * Pointing at a row dims the others. The callout closes it across the whole Scene.
- */
 export function PromptToPlan({ prompt, stackLabel, traitsLabel, cracks, callout }: PromptToPlanProps) {
   return (
     <div className="@container flex flex-col gap-8">

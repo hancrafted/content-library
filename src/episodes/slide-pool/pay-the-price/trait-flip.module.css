@@ -1,10 +1,3 @@
-/*
- * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css) and made a progressive
- * disclosure (.scratch/price-progressive-disclosure/handoff.md); the scan schedule is regrown for five items.
- * At rest only the chips show; a row's cards come in under `.isShown`, its beat runs under `.isPlayed`, once per
- * pass, and a pass that is left simply runs out. The static rules are each beat's last frame, so a row the wipe shows
- * unplayed, print and reduced motion show the end state. A click turns a card (`.isTurned`) to its text.
- */
 .card {
   position: relative;
   perspective: 1400px;
@@ -152,7 +145,6 @@
   transform-origin: 0 0;
 }
 
-/* The played beat: set on from a row's first entry, replayed by remounting its face, running once per pass. */
 .isPlayed .spin {
   animation: spin 2s linear 2;
 }
@@ -270,8 +262,6 @@
   }
 }
 
-/* Every word billed: the scan line's schedule, 9.9 s for 5 items, and the bill or token count stepping per item it crosses */
-/* One pass per item at 30 px/s, each 0.35 s after its item lands, 0.64 s apart; a value per item centre crossed. */
 @keyframes scan {
   0% {
     opacity: 0;

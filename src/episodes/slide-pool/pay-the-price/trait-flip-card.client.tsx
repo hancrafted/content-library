@@ -76,7 +76,6 @@ function TurnButton({ row, side, turned, labels, dispatch }: CardProps) {
   );
 }
 
-/** The beat face, mirrored so the drawing sits next to the chip. */
 function BeatFace({ row, side, labels }: CardProps) {
   const ai = side === 'ai';
   return (

@@ -34,7 +34,6 @@ interface CounterMatrixProps {
 
 type Acronym = 'data-move-initial' | 'data-trait-initial';
 
-/** A word with its first letter set off, so the five spell an acronym in every locale. */
 function Initialled(props: { initial: string; rest: string; acronym: Acronym; className?: string }) {
   const { initial, rest, acronym, className } = props;
   return (
@@ -62,7 +61,6 @@ function Tick({ label }: { label: string }) {
   );
 }
 
-/** No tick: a dashed ring, so the empty cell still reads as part of the grid. */
 function Empty() {
   return (
     <svg viewBox="0 0 24 24" className="mx-auto size-7" aria-hidden="true">
@@ -71,11 +69,6 @@ function Empty() {
   );
 }
 
-/**
- * The corner header, then one column header per trait, plain text like the move titles, since nothing in the head is a
- * control. Each takes two lines' height, so a name that wraps by word still lines up with the rest; the move column
- * takes a third, so on a wide board every name keeps one line.
- */
 function MatrixHead({ traits, corner }: { traits: readonly MatrixTrait[]; corner: ReactNode }) {
   return (
     <thead>
@@ -135,12 +128,6 @@ function MatrixFoot({ moves, traits, labels }: CounterMatrixProps) {
   );
 }
 
-/**
- * The checklist board (Option 3c): the five BRIEF moves as rows, each title over its sentence, the five PRICE traits
- * as column headers, a tick wherever a move counters a trait, and a footer counting the moves per trait.
- * A real table with row and column headers, so it reads the same in print and to a screen reader. Pointing at a row
- * dims the others and outlines its ticks. Below `md` the board scrolls inside itself. A server part with plain props.
- */
 export function CounterMatrix({ moves, traits, labels }: CounterMatrixProps) {
   return (
     <div className={cn('rounded-xl border border-border bg-muted p-4 md:p-8', styles.board)}>

@@ -25,10 +25,8 @@ const TO_SPEC = {
 type Reply = 'start' | 'a1' | 'reframe' | 'a2' | 'a3' | 'spec';
 type Asked = 'q1' | 'q2' | 'q2Analogy' | 'q3';
 
-/** The replies that invoke a skill; the questions sit apart, since each has two options and a recommendation. */
 const SKILLS: Partial<Record<Reply, typeof GRILLING>> = { start: GRILLING, spec: TO_SPEC };
 
-/** The question you had not thought of. */
 const FORGOTTEN: Asked = 'q3';
 
 const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
@@ -46,12 +44,6 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
 
 type StageId = keyof typeof en.stages;
 
-/**
- * Your first human-in-the-loop agentic workflow: the whole summer party walked through BRIEF as the `summer-party`
- * Workflow, opening in the Stages view. Four stage cards carry their BRIEF letters, the worked Interview chat of the Plan
- * stage opens from under the diagram (a `<dialog>` cannot sit in a stage title), Requirements is the gate you sign off before research, Research is one fresh chat per ticket, and
- * Page is the second gate. Every stage name opens a two-line popover. The markup reads as an ordered list of stages.
- */
 export const firstHumanInTheLoopAgenticWorkflow = slide({
   slug: 'first-human-in-the-loop-agentic-workflow',
   messages: { en, de },
