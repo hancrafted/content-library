@@ -23,10 +23,6 @@ const BLOCKS: readonly {
   { key: 'qa', kind: 'close' },
 ];
 
-/**
- * What a kind looks like: its disc on the rail and its label, in one of three colours (theory blue, demo orange,
- * start and wrap-up grey); every other text is the foreground colour.
- */
 const LOOK: Record<Kind, { disc: string; label: string }> = {
   start: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
   close: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
@@ -34,10 +30,8 @@ const LOOK: Record<Kind, { disc: string; label: string }> = {
   demo: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
 };
 
-/** One line of the rail beside a disc: as tall as the disc at least, its text centred on the disc's middle. */
 const BESIDE_DISC = 'flex min-h-12 items-center';
 
-// The session plan as a numbered vertical rail: per line a disc, the start time, the block and its kind, the disc and the kind in the kind's colour. The Slide header shows the title and caption; the Scene holds the rail.
 export const agenda = slide({
   slug: 'agenda',
   messages: { en, de },

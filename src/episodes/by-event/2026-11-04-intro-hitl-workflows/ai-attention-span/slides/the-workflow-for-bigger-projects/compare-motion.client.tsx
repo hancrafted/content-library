@@ -32,7 +32,6 @@ export function CompareMotion({
   children: ReactNode;
 }) {
   const { play, replay } = useComparePlay();
-  // A click focuses the trigger after the pointer has already entered it: only keyboard focus replays.
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget && event.currentTarget.matches(':focus-visible')) replay();
   };

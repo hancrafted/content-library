@@ -5,7 +5,6 @@ import { BOOKING_URL } from '@/shared/lib/contact';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The stages oldest first, each with the year it began; their words are in `i18n/`. AI enablement, last, leads. */
 const STAGES = [
   { slug: 'sales', year: '2012' },
   { slug: 'build', year: '2018' },

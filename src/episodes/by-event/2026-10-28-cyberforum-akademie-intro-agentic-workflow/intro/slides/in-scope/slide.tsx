@@ -22,7 +22,6 @@ const LOOK: Record<Tone, { arrow: string; card: string }> = {
   demo: { arrow: 'stroke-brand-accent', card: 'border-brand-accent/60 border-l-brand-accent bg-brand-accent/15' },
 };
 
-/** One small drawing per pair, in its tone: a network (the mental model), a play button, three linked steps. */
 const ICONS: Record<(typeof PAIRS)[number]['key'], ReactNode> = {
   first: (
     <svg viewBox="0 0 32 32" className="size-10 flex-none" aria-hidden="true">
@@ -74,7 +73,6 @@ const ICONS: Record<(typeof PAIRS)[number]['key'], ReactNode> = {
   ),
 };
 
-// What the session covers, as a mapping read left to right: each announced term against where it lands. The Slide header shows the title and caption; the Scene holds the mapping.
 export const inScope = slide({
   slug: 'in-scope',
   messages: { en, de },

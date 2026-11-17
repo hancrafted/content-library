@@ -19,7 +19,6 @@ const CONTEXT_WINDOWS = source(
 );
 const OPENAI_COMPACTION = source('openai-compaction', 'https://developers.openai.com/api/docs/guides/compaction');
 
-/** A Context marker on the primary callout: muted on primary at rest, the marker's own hover colours after. */
 const ON_PRIMARY = 'text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground';
 
 /**

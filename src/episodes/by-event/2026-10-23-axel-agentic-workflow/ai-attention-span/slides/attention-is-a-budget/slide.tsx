@@ -14,15 +14,8 @@ const LOST_IN_THE_MIDDLE = { slug: 'liu-lost-in-the-middle', url: 'https://arxiv
 const ATTENTION_SINKS = { slug: 'xiao-attention-sinks', url: 'https://arxiv.org/abs/2309.17453' };
 const NOLIMA = { slug: 'modarressi-nolima', url: 'https://arxiv.org/abs/2502.05167' };
 
-/** The marker colour on the primary callout, where the muted default would not read. */
 const ON_PRIMARY = 'text-primary-foreground hover:text-primary-foreground focus-visible:text-primary-foreground';
 
-/**
- * "Attention is a budget" (Spec Option 5a, simplified by Han's batch-2 feedback): the live cornerstone in its Slide 5
- * Preset, with the timeline left, the window as a Simple bar with its 200K | 1M switch and smart zone, and the
- * attention on the right. The "Lost in the middle" card sits right of the attention card, level with its middle rows and marked by a curly bracket (no arrow); below, the caveat that the line differs per model. Keeps `basic-page`,
- * `motion: none`.
- */
 export const attentionIsABudget = slide({
   slug: 'attention-is-a-budget',
   messages: { en, de },
@@ -46,7 +39,6 @@ export const attentionIsABudget = slide({
         <div className="@3xl:pr-[17rem]">
           <Context preset="slide-5" locale={locale} />
         </div>
-        {/* Right of the attention card, level with its middle rows; below the card on a narrow slide. */}
         <div {...target('lost')} data-lost-label="" className="@3xl:absolute @3xl:inset-y-0 @3xl:right-0 @3xl:w-64">
           <LostBracket>
             <div className="w-full rounded-xl bg-primary p-4 text-primary-foreground shadow-md">

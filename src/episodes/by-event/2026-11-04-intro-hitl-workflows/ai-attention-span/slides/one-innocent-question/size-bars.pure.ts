@@ -1,6 +1,5 @@
 import type { Category, Chat } from '@/explorables/context-window/context.types';
 
-/** One size bar: a key for its label, and the block of one chat step it measures. */
 export interface SizeRow<K extends string = string> {
   readonly key: K;
   readonly step: string;
@@ -28,7 +27,6 @@ export const SIZE_ROWS = [
 
 const roundTo = (value: number, places: number): number => Math.round(value * 10 ** places) / 10 ** places;
 
-/** Each row's tokens, read from its step's block of its category, on one scale whose largest row is full width. */
 export function sizeBars<K extends string>(chat: Chat, rows: readonly SizeRow<K>[]): SizeBar<K>[] {
   const measured = rows.map((row) => {
     const step = chat.steps.find(({ id }) => id === row.step);

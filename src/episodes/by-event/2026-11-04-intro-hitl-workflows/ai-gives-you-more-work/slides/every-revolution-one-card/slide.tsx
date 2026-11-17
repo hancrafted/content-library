@@ -28,7 +28,6 @@ const SOURCES = {
   atil: { slug: 'atil-llm-stability', url: 'https://arxiv.org/abs/2408.04667' },
 } as const;
 
-/** The disclosure, one step per click (Option 1a): the upper layers at rest, then each step the Voice script names. */
 const STEP = { farmingPeople: 2, steamPeople: 3, computerPeople: 4, steamFork: 5, aiMachine: 6, aiPeople: 7 } as const;
 const STEPS = 7;
 /** A fork hangs on a card plaque: on the muted wall its muted lines fall under 4.5:1, on the card they meet it. */

@@ -6,7 +6,6 @@ import { PairArt, type PairSlug } from './pair-art';
 interface Side {
   readonly title: string;
   readonly detail: string;
-  /** A Context marker after the title. */
   readonly marker?: ReactNode;
 }
 
@@ -15,9 +14,7 @@ export interface MirroredExhibitProps {
   readonly label: { title: string; era: string; line: string };
   readonly work: Side;
   readonly ai: Side;
-  /** The side labels and the line between them. */
   readonly words: { work: string; ai: string; sameMove: string };
-  /** The disclosure step the AI half shows from. */
   readonly reveal: number;
   readonly target?: string;
 }

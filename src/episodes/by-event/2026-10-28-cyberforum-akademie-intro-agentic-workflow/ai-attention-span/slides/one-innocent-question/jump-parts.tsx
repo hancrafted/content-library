@@ -2,7 +2,6 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The plain-word card: one line in the chat, the whole file read behind it. */
 export function JumpCard({
   title,
   lead,
@@ -47,7 +46,6 @@ export interface SizeBarRow {
   readonly tone: BarTone;
 }
 
-/** One labelled bar: its name and size above, its length below. */
 function SizeBarItem({ row }: { row: SizeBarRow }) {
   return (
     <li className="flex flex-col gap-1">
@@ -63,7 +61,6 @@ function SizeBarItem({ row }: { row: SizeBarRow }) {
   );
 }
 
-/** Bars on one scale: what was asked and answered set against what was read to answer it. */
 export function SizeBars({
   heading,
   label,

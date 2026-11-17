@@ -10,7 +10,6 @@ const ITEMS = [
   { key: 'third', tilt: '-rotate-1' },
 ] as const;
 
-// What the session leaves out: a dark "set aside" panel beside a tray of tilted notes, so the list reads as handled, not forbidden. The Slide header shows the title and caption; the Scene holds the panel and the tray.
 export const outOfScope = slide({
   slug: 'out-of-scope',
   messages: { en, de },

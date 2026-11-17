@@ -1,10 +1,8 @@
 import { cn } from '@/shared/lib/utils';
 
-/** One step of the climb: its rank is a relative height, not data, and the axis says so. */
 export interface StaircaseStep {
   readonly label: string;
   readonly rank: 1 | 2 | 3 | 4;
-  /** `machine`: a revolution whose machine took over the lower work; `ai`: the tallest step, the one to look at. */
   readonly tone: 'machine' | 'ai';
   readonly note?: string;
 }
@@ -72,7 +70,6 @@ function AiStep({ step, goal }: { step: StaircaseStep; goal: string }) {
   );
 }
 
-/** One column of the row: the AI step under its goal pill, the step the figure stands on, or a plain step. */
 function StepColumn({ step, standing, goal }: { step: StaircaseStep; standing: boolean; goal: string }) {
   if (step.tone === 'ai') return <AiStep step={step} goal={goal} />;
   if (!standing) return <MachineStep step={step} />;
@@ -85,11 +82,6 @@ function StepColumn({ step, standing, goal }: { step: StaircaseStep; standing: b
   );
 }
 
-/**
- * The Hero motif: a wall relief of steps, one per revolution, each as high as how complex a task one person takes
- * on, with the person standing on `standOn` facing the tallest step, AI, under its `goal` pill. One `role="img"`
- * row on an axis; only the figure and the dashed climb are SVG, and they carry no text.
- */
 export function Staircase(props: {
   steps: readonly StaircaseStep[];
   standOn: number;

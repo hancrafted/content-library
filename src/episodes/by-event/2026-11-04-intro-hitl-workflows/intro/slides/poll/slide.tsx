@@ -6,7 +6,6 @@ import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Questions and answer keys in poll order. */
 const QUESTIONS = [
   {
     key: 'model',
@@ -52,7 +51,6 @@ const QUESTIONS = [
   tone: PollTone;
 }[];
 
-// A live poll on directpoll: the QR (drawn at build time from `poll.voteUrl`) on a filled panel with the anonymity notice, the baseline questions printed as text beside it, and a button that loads the Result page only after the click. The Slide header shows the title and caption; the Scene holds the poll.
 export const poll = slide({
   slug: 'poll',
   messages: { en, de },

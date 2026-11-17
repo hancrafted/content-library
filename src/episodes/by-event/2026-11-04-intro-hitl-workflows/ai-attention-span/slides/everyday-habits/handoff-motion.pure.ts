@@ -1,11 +1,9 @@
 import type { SlideEntry } from '@/episodes/lib/slide-zone.pure';
 
-/** What decides whether the handoff card lights: the Slide's entrance when the card mounted, now, and the replays. */
 export interface HandoffMotionState {
   /** The Slide's entrance when the card mounted: `done` means the Slide entered before, so it does not light again. */
   readonly entryAtMount: SlideEntry;
   readonly entry: SlideEntry;
-  /** How many times the pointer or keyboard focus has entered the bars. */
   readonly replays: number;
 }
 

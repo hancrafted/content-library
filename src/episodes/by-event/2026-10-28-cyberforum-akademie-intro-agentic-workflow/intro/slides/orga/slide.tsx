@@ -3,7 +3,6 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The raised hand, drawn once: the first step of a question, and the Questions card's icon. */
 function HandIcon({ className }: { className: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">

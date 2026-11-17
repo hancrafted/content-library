@@ -4,13 +4,11 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ExhibitIcon, type ExhibitSlug } from './exhibit-icon';
 
-/** One layer of an exhibit: its label line (with an optional Context marker), its claim and any further lines. */
 interface Layer {
   readonly label: string;
   readonly text: string;
   readonly marker?: ReactNode;
   readonly extra?: ReactNode;
-  /** The disclosure step it shows from; absent, it shows at rest. */
   readonly reveal?: number;
   readonly target?: string;
 }
@@ -21,12 +19,9 @@ export interface ExhibitProps {
   readonly era: string;
   readonly line: string;
   readonly size: 'standard' | 'lead';
-  /** The upper layer: what the machine took over. */
   readonly machine: Layer;
-  /** The lower layer: where people moved up. */
   readonly people: Layer;
   readonly target?: string;
-  /** What hangs under the label, e.g. a fork. */
   readonly children?: ReactNode;
 }
 

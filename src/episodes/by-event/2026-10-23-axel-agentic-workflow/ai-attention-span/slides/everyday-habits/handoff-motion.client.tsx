@@ -6,7 +6,6 @@ import { handoffLights } from './handoff-motion.pure';
 
 const TRIGGER = 'rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring';
 
-/** Whether the card lights, how often it has been replayed, and the replay itself. */
 function useHandoffLight() {
   const entry = useSlideEntry();
   const [entryAtMount] = useState(entry);
@@ -33,7 +32,6 @@ interface HandoffMotionProps {
  */
 export function HandoffMotion({ label, className, before, card, after }: HandoffMotionProps) {
   const { lights, replays, replay } = useHandoffLight();
-  // A click focuses the trigger after the pointer has already entered it: only keyboard focus replays.
   const onFocus = (event: FocusEvent<HTMLDivElement>) => {
     if (event.currentTarget.matches(':focus-visible')) replay();
   };

@@ -16,13 +16,6 @@ const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://ar
 const AFTER = 'after';
 const NOTE = 'after-note';
 
-/**
- * The workflow for bigger projects (Spec Option 11c): before and after. On the left the one long summer-party chat as
- * the cornerstone's mini bar, past the smart zone, on a muted panel; on the right the workflow, the planner and its
- * worker chats as the cornerstone's mini bars on the accent-bordered panel, with the three small results they hand
- * back. The left panel fades as the right lights, on the Slide's first `active` and on every mouse enter and keyboard
- * focus.
- */
 export const theWorkflowForBiggerProjects = slide({
   slug: 'the-workflow-for-bigger-projects',
   messages: { en, de },

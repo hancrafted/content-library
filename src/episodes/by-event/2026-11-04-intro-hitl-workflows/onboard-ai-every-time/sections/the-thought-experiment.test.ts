@@ -16,7 +16,6 @@ import { theThoughtExperimentSection } from './the-thought-experiment';
 
 const PLACED = placeSections<Slide>([theThoughtExperimentSection]).flat();
 
-/** A Slide's Scene as the page renders it, with the shared Slide header. */
 function sceneOf(slug: string, locale: Locale) {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);

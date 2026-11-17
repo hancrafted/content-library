@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-/** A standing figure, head and shoulders, at `x`, `y` (the head's centre). */
 function Figure({ x, y }: { x: number; y: number }) {
   return (
     <>
@@ -43,7 +42,6 @@ function SteamFork({ stayed, rose }: { stayed: ReactNode; rose: ReactNode }) {
   );
 }
 
-/** The fork under AI, left open: a group at the split, two dashed `stroke-ai` branches with empty ends. */
 function OpenFork({ title, beside, manage }: { title: string; beside: string; manage: string }) {
   return (
     <>
@@ -76,7 +74,6 @@ type ForkProps =
   | { open: false; stayed: ReactNode; rose: ReactNode }
   | { open: true; title: string; beside: string; manage: string };
 
-/** The fork under an exhibit: the steam engine's, where people went two ways, or AI's, still open. */
 export function Fork(props: ForkProps) {
   return props.open ? <OpenFork {...props} /> : <SteamFork {...props} />;
 }

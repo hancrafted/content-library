@@ -16,7 +16,6 @@ import { fiveMovesToBriefAFreelancerSection } from './five-moves-to-brief-a-free
 
 const PLACED = placeSections<Slide>([fiveMovesToBriefAFreelancerSection]).flat();
 
-/** A Slide's Scene as the page renders it, with the shared Slide header. */
 function localizedOf(slug: string, locale: Locale) {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
@@ -32,7 +31,6 @@ function localizedOf(slug: string, locale: Locale) {
 
 const sceneOf = (slug: string, locale: Locale) => load(renderToStaticMarkup(localizedOf(slug, locale).content));
 
-/** The letters a Scene sets off as an acronym, in reading order. */
 const initialsOf = ($: ReturnType<typeof sceneOf>, attribute: string): string =>
   $(`[${attribute}]`)
     .map((_, letter) => $(letter).text())

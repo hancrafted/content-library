@@ -38,7 +38,6 @@ const QUESTIONS = [
   tone: PollTone;
 }[];
 
-// A check-in after the Episode ai-attention-span: the way back into the poll (QR from `poll.voteUrl`) on a filled panel for anyone whose phone closed the tab, the questions printed as text beside it, and the Result page loaded only after the click. The Slide header shows the title and caption; the Scene holds the check-in.
 export const checkIn2 = slide({
   slug: 'check-in-2',
   messages: { en, de },

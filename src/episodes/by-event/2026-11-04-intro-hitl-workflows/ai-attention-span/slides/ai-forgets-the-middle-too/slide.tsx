@@ -7,17 +7,14 @@ import { ThreadPair, type Band, type BandCopy } from './thread-pair';
 
 const LIU = { slug: 'liu-lost-in-the-middle', url: 'https://arxiv.org/abs/2307.03172' };
 
-/** The Speaker note each band's pill opens. */
 const BAND_NOTES = {
   start: 'a-built-in-pull-to-the-start',
   middle: 'measured-even-for-long-input-models',
   end: 'two-position-effects',
 } as const satisfies Record<Band, string>;
 
-/** The pill's Context marker on its dark pill. */
 const ON_PILL = 'text-background/70 hover:text-foreground focus-visible:text-foreground';
 
-/** The budget in the Episode's one budget tint. */
 const budget = (chunks: ReactNode) => (
   <span data-budget className="rounded-md bg-(--warning)/25 px-1 font-semibold whitespace-nowrap">
     {chunks}
