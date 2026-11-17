@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { firstSpawn } from './first-spawn.pure.ts';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';

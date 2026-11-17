@@ -5,7 +5,7 @@ import { aboutSection } from './sections/about';
 import { playSection } from './sections/play';
 import { hero } from './slides/hero/slide';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const contextWindow = episode({
   slug: 'context-window',
   messages: { en, de },

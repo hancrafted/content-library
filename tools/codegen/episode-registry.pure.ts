@@ -93,13 +93,13 @@ function idsFile({ episodes, templates, explorablePages, guides }: Registered): 
 /** Every Episode with a page, public or unlisted, by Episode id: \`<slug>\`, or \`<event-slug>__<slug>\` for an Event's copy. */
 export const EPISODE_IDS = [${ids}] as const;
 
-/** Every Template, by slug: an authoring bench served at \`/episodes/<slug>/\`, no Episode (design-ADR 0019). */
+/** Every Template, by slug: an authoring bench served at \`/episodes/<slug>/\`, no Episode (Decision record 0019). */
 export const TEMPLATE_SLUGS = [${slugs}] as const;
 
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at \`/explorables/<slug>/\`. */
 export const EXPLORABLE_PAGE_SLUGS = [${pageSlugs}] as const;
 
-/** Every Guide, by slug: a step-by-step page served at \`/guides/<slug>/\`, no Episode (design-ADR 0019, #450). */
+/** Every Guide, by slug: a step-by-step page served at \`/guides/<slug>/\`, no Episode (Decision record 0019, #450). */
 export const GUIDE_SLUGS = [${guideSlugs}] as const;
 `;
 }

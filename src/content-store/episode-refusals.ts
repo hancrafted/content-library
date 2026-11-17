@@ -9,7 +9,7 @@ import { duplicates } from './duplicates';
 import type { Episode } from './schemas/episode.schema';
 
 // decision: FE-013 §3
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export type LoadedEpisode = Episode & { readonly ref: EpisodeRef };
 
 const LOCALE_LIST: readonly string[] = LOCALES;

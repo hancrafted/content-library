@@ -6,8 +6,8 @@ import { labelled, skillWarningsOf, type SkillWarning } from './status-skills.pu
 
 export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 export function outputApproved(file: string, text: string): boolean {
   if (file.endsWith('.md')) return gateTier(text) === 'approved';
   if (file.endsWith('.html')) return metaGateTier(text) === 'approved';

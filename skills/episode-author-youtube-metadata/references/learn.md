@@ -1,6 +1,6 @@
 # Learn from an edit on YouTube
 
-Han changed a description or pinned comment in YouTube Studio. His edits are the signal of what the copy should have been, so each one comes back into the repo and, where it generalises, becomes a rule. The repo stays the source (design-ADR 0020): YouTube is read, never trusted as a second copy.
+Han changed a description or pinned comment in YouTube Studio. His edits are the signal of what the copy should have been, so each one comes back into the repo and, where it generalises, becomes a rule. The repo stays the source (Decision record 0020): YouTube is read, never trusted as a second copy.
 
 ## Steps
 

@@ -1,5 +1,5 @@
 // decision: FE-009 §4
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const UNLOADED = 'use[data-art]:not([href])';
 
 interface ArtUse {

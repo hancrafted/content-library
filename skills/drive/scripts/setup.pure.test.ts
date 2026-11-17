@@ -15,7 +15,7 @@ const FACTS = {
   harnessCap: 20,
   install: ['npm ci'],
   driveEntry: 'skills/drive/scripts/drive.ts',
-  decisionDocs: ['docs/adr/**'],
+  decisionDocs: ['docs/decision-records/**'],
 };
 
 describe('detectEnforcers', () => {
@@ -79,7 +79,7 @@ describe('installCommands and decisionDocGlobs', () => {
     expect(installCommands(['package-lock.json', 'yarn.lock'])).toEqual(['npm ci']);
     expect(installCommands(['pnpm-lock.yaml'])).toEqual(['pnpm install --frozen-lockfile']);
     expect(installCommands(['README.md'])).toEqual([]);
-    expect(decisionDocGlobs(['docs/adr'], true)).toEqual(['docs/adr/**', '**/GLOSSARY*.md']);
+    expect(decisionDocGlobs(['docs/decision-records'], true)).toEqual(['docs/decision-records/**', '**/GLOSSARY*.md']);
     expect(decisionDocGlobs([], false)).toEqual([]);
   });
 });
@@ -154,7 +154,7 @@ describe('updateProjectConfig', () => {
     expect(config).toMatchObject({
       worktree: { baseBranch: 'trunk', install: ['npm ci'] },
       parallel: { default: 3, harnessCap: 20 },
-      decisionDocs: ['docs/adr/**'],
+      decisionDocs: ['docs/decision-records/**'],
     });
     expect(text).toContain('never writes harness settings');
   });
@@ -198,7 +198,7 @@ describe('updateProjectConfig', () => {
     expect(parseConfig(text, FACTS.driveEntry)).toMatchObject({
       worktree: { baseBranch: 'dev', install: [] },
       parallel: { default: 5 },
-      decisionDocs: ['docs/adr/**'],
+      decisionDocs: ['docs/decision-records/**'],
     });
     expect(updateProjectConfig(text, FACTS)).toBe(text);
   });

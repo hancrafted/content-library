@@ -4,7 +4,7 @@ import type { Slide } from './slide';
 import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { ON_SCREEN_TITLE_KEY } from './slide-kit';
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export interface SlideHeaderText {
   readonly title: string;
   readonly caption?: string;

@@ -11,7 +11,7 @@ export interface TravelProps {
 
 const DEFAULT_DURATION_MILLISECONDS = 1600;
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Travel({
   from,
   to = '0 0',

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { copyKinds, kindChancesOf } from './defect.pure.ts';
 import { firstOf } from './factory-dials.pure.ts';
 import type { Factory } from './factory.types';

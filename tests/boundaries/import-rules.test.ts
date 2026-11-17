@@ -332,7 +332,7 @@ const SLIDE_POOL: Readonly<Record<string, Probe>> = {
   [`${POOL_EPISODE}/episode.ts`]: [POOLED],
 };
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const EXPLORABLES: Readonly<Record<string, Probe>> = {
   'src/episodes/components/slide-shared/statement.tsx': [],
   'src/shared/components/ui/button.tsx': [],

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { TEMPLATE_TYPES, slug, tags, visibility } from './fields';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const type = z.enum(TEMPLATE_TYPES, {
   error: (issue) =>
     issue.input === undefined

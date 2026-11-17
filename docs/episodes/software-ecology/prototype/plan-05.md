@@ -1,6 +1,6 @@
 # Plan, prototype round 5: a queueing-network engine
 
-Inputs: `feedback-05.md` (Han's notes, verbatim), `grill-05.md` (Q46–Q66 settled), design-ADR `docs/adr/0024-software-ecology-flow-model-and-use-case-files.md`, current prototype `flow.html` built from `proto3/src/*.js` (scratchpad, `node build.mjs`).
+Inputs: `feedback-05.md` (Han's notes, verbatim), `grill-05.md` (Q46–Q66 settled), Decision record `docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md`, current prototype `flow.html` built from `proto3/src/*.js` (scratchpad, `node build.mjs`).
 
 Goal: a model whose behaviour a viewer can predict from queueing intuition (the bottleneck has a growing backlog; relieve it and the backlog drains and the bottleneck moves), presented without queueing vocabulary up front, at 60 fps under every dial setting.
 
@@ -71,4 +71,4 @@ Overrides the sections above where they differ.
 9. **Readouts.** Primary: "weeks of work waiting" = L/μ_eff. Little's W only in "How it flows", shown only when the backlog trend is flat.
 10. **Speed and drain.** Default 5×, presets warm up 60 weeks. The hint text says the honest drain time and names raising the bottleneck's efficiency as the fast remedy.
 11. **Checks** (replace section 5's 2, 4 and 7): Realistic stable by batch means (5 batches of 40 weeks, the last batch mean within the 95 % band of the first four, over 20 seeds); congestion case drains to ≤ 1 week of work within 30 weeks after Ideal; ρᵢ < 1 for all four use cases; conservation (in = out + backlog + in transit) across a mid-run dial change; Clear starts empty at week 0; preset bands of point 3.
-12. **Design-ADR.** Supersede decisions 4 (bounded queues), 5 (return belts as the rework sign), 7 (bands relative to balance), 8 (belts in the file) and 10 (preset names).
+12. **Decision record.** Supersede decisions 4 (bounded queues), 5 (return belts as the rework sign), 7 (bands relative to balance), 8 (belts in the file) and 10 (preset names).

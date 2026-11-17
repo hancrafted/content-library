@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { label, makeSheet, readColors, type Colors, type Ctx } from './doc-sprites.ts';
 import type { BeltLayout, FactoryLayout, Pt } from './factory-layout.pure.ts';
 import type { Floor, FloorBelt, FloorListener, FloorStation } from './factory-model.pure.ts';

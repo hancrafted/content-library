@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { RefObject } from 'react';
 import { CompareStream } from './compare-stream.client';
 import type { CompareWidgetProps } from './compare-widget';

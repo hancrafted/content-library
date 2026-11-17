@@ -1,4 +1,4 @@
-// decision: docs/adr/0008-pipeline-jobs-belong-to-stages.md
+// decision: docs/decision-records/0008-pipeline-jobs-belong-to-stages.md
 import type { Job } from './episode-pipeline-definition.pure';
 import { repeated } from './finding.pure';
 

@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 .stage {
   --ink: oklch(0.975 0.01 230);
   --ink-soft: color-mix(in oklab, oklch(0.975 0.01 230) 70%, transparent);

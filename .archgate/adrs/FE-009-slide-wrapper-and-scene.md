@@ -15,7 +15,7 @@ description: 'Wrapper owns mechanics, stable geometry and local presentation hos
 
 Navigation needs stable, measurable Slide boxes; visualisations need freedom inside them. Wrapper mechanics and Scene creativity have separate owners.
 
-**The split:** the server wrapper owns anchors, sizing, mount boundary, stacking, geometry and local presentation hosts. It renders the header and entrance governed by design-ADR-0012. The Scene stays free: full-bleed **Backdrop**, inset **Foreground**. Headings are never anchors or measurement targets. An outgoing edge host stays available for its geometric interval inside its wrapper, independently of Scene mounting.
+**The split:** the server wrapper owns anchors, sizing, mount boundary, stacking, geometry and local presentation hosts. It renders the header and entrance governed by Decision record 0012. The Scene stays free: full-bleed **Backdrop**, inset **Foreground**. Headings are never anchors or measurement targets. An outgoing edge host stays available for its geometric interval inside its wrapper, independently of Scene mounting.
 
 **Two Scene layers:** chrome floats over full-width Slides. Content-area insets keep the Foreground clear; Backdrops stay full-bleed. The beside drawer widens only the right Foreground inset.
 
@@ -56,7 +56,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 ### 1. The split
 
 1. The server wrapper MUST own stable geometry, local presentation hosts and mechanics: anchor, width, min-height, mount boundary, stacking, zone.
-2. The Scene's shape MUST stay ungoverned; only token values, §6–§8 and design-ADR-0012 apply.
+2. The Scene's shape MUST stay ungoverned; only token values, §6–§8 and Decision record 0012 apply.
 
 ### 2. Content area
 
@@ -75,7 +75,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 
 1. `SlideMount` MUST be a client leaf inside the wrapper, rendering removable Scene content only outside `far` with height kept. Surface/effect lifetime MUST be independent.
 2. It MUST provide its Slide id for `useSlideZone()`.
-3. Scene art (`<Art>`, design-ADR 0025) MUST get its `<use>` `href` once its Slide is seen outside `far`, set by the mount or a Backdrop Scene's root, not per `<use>`; a Title slide MAY load it while parsing.
+3. Scene art (`<Art>`, Decision record 0025) MUST get its `<use>` `href` once its Slide is seen outside `far`, set by the mount or a Backdrop Scene's root, not per `<use>`; a Title slide MAY load it while parsing.
 
 ### 5. One observer
 
@@ -119,7 +119,7 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 3. **DON'T** create another `IntersectionObserver`, or use the reveal hook inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
-6. **DON'T** govern Scene shape beyond tokens, §6–§8 and design-ADR-0012. (Decision 1)
+6. **DON'T** govern Scene shape beyond tokens, §6–§8 and Decision record 0012. (Decision 1)
 7. **DON'T** pad, transition or margin wrapper insets; Content area applies `--inset-l`/`--inset-r`. (Decision 2)
 8. **DON'T** put reader-needed content, links or text in a Backdrop. (Decision 7)
 9. **DON'T** render a popover inside a Scene's own subtree. (Decision 8)
@@ -164,15 +164,15 @@ The five local layers stay ordered inside their isolating wrapper below chrome. 
 
 **Exception (§5.1):** the landing About-card reveal hook observes once, then disconnects; no page-service report or zone write.
 
-**Review:** pause duties (§6); no Episode reveal hook (§5); unclipped wrappers; container-only mount/observer reach (§4, §5); free Scenes except tokens, §6–§8 and design-ADR-0012; ordered local layers (§8); full-interval Scene-independent hosts (§3, §4, §7); one tone/cleanup adapter, preserved active-Slide authority (§6). **Browser:** far Scenes absent without height jumps, loops pause/resume, separate simultaneous edge hosts.
+**Review:** pause duties (§6); no Episode reveal hook (§5); unclipped wrappers; container-only mount/observer reach (§4, §5); free Scenes except tokens, §6–§8 and Decision record 0012; ordered local layers (§8); full-interval Scene-independent hosts (§3, §4, §7); one tone/cleanup adapter, preserved active-Slide authority (§6). **Browser:** far Scenes absent without height jumps, loops pause/resume, separate simultaneous edge hosts.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [Presentation boundary](../../docs/adr/0022-slide-presentation-and-transition-clock.md) — accepted contracts.
+- [Presentation boundary](../../docs/decision-records/0022-slide-presentation-and-transition-clock.md).
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Scene layers and chrome.
-- [design-ADR-0012](../../docs/adr/0012-slide-header-and-play-once-motion.md) — the Slide header, the play-once entrance, the hover vocabulary.
+- [Decision record 0012](../../docs/decision-records/0012-slide-header-and-play-once-motion.md) — header, entrance, hover.
 - [MDN IntersectionObserver `rootMargin`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [MDN `display: contents`](https://developer.mozilla.org/en-US/docs/Web/CSS/display#contents).
 
 ### Terms

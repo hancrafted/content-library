@@ -15,7 +15,7 @@ export function eyebrowLength(eyebrow: EyebrowText): number {
   return typedLength(`${eyebrow.section}${counterOf(eyebrow)}`);
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function SlideEyebrow({
   eyebrow,
   delays,

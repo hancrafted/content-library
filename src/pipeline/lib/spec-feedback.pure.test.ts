@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { SpecSlide } from './episode-spec-page.pure.ts';
 import { nextRound, reviewToFeedback } from './spec-feedback.pure.ts';
 
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const SLIDES: readonly SpecSlide[] = [
   { section: 'why', slug: 'spent', options: ['1a', '1b'] },
   { section: 'why', slug: 'quiet', options: ['2a', '2b', '2c'] },

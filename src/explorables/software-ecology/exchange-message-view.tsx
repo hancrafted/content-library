@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { ExchangeMessage } from './exchange-message.pure.ts';
 import styles from './software-ecology.module.css';
 

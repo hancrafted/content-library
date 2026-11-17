@@ -1,4 +1,4 @@
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 import { checkResearchFolders, INDEX_ENTRY, researchCategoryNames } from './research-folder.pure.ts';
 import { frontmatterField } from './staging-file.pure.ts';
 

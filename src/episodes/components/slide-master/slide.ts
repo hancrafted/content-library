@@ -15,7 +15,7 @@ import type {
 import type { SlidePresentation } from './slide-presentation';
 
 // decision: FE-002 §2
-// decision: docs/adr/0001-the-slide-is-a-self-contained-folder.md
+// decision: docs/decision-records/0001-the-slide-is-a-self-contained-folder.md
 export type SlideMessages = Readonly<Record<string, unknown>>;
 
 type KeysOf<T> = T extends object ? keyof T & string : never;

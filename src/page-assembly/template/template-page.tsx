@@ -7,7 +7,7 @@ import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export type TemplatePageRef = PageOf<'template'>;
 
 export function templatePageOf(type: TemplateType, params: RouteParams<TemplateParams>): TemplatePageRef {

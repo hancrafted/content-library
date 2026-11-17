@@ -114,5 +114,5 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 - [Next.js — Metadata and `generateMetadata`](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) — `metadataBase`, `alternates`, `title.template`, inheritance.
 - [Google Search — Localized versions of your pages](https://developers.google.com/search/docs/specialty/international/localized-versions) — reciprocal `hreflang` and `x-default`.
-- [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the visibility table `pageTreatment` implements (§5.1).
+- [`docs/decision-records/0016-content-data-model.md`](../../docs/decision-records/0016-content-data-model.md) — the visibility table `pageTreatment` implements (§5.1).
 - [actions/configure-pages](https://github.com/actions/configure-pages) — the `base_url` output.

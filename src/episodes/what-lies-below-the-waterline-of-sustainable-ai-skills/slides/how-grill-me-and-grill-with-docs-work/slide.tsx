@@ -27,7 +27,7 @@ const PATHS = {
   grilling: 'grilling/SKILL.md',
   domain: 'domain-modeling/SKILL.md',
   glossary: 'GLOSSARY.md',
-  decisions: 'docs/adr/',
+  decisions: 'docs/decision-records/',
   command: '/grill-with-docs',
 } as const;
 const DECISIONS = [

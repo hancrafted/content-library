@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Job, Run, Token } from './factory-docs.pure.ts';
 import type { Ring, Streams } from './factory-random.pure.ts';
 import type { Arrivals, Bundle, CenterDef, Cust, Defect, Dials, RoleDef, Settings } from './software-ecology.types';

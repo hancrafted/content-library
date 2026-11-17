@@ -6,7 +6,7 @@ import { shipAnchors } from '@/episodes/components/slide-shared/deep-sea-expedit
 import { SURFACE_WATERLINE } from '@/episodes/components/slide-shared/iceberg/zone-scene';
 import { robotAt } from '@/episodes/components/slide-shared/waterline-echo/robot-story.pure';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const SHIP_X = 600;
 const SHIP_SCALE = 2.9;
 const CREW_SCALE = 0.72;

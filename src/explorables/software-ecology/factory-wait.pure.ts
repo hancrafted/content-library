@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { AMBER_WEEKS_WAITING, RED_WEEKS_WAITING } from './factory-dials.pure.ts';
 import type { FactoryNode } from './factory.types';
 

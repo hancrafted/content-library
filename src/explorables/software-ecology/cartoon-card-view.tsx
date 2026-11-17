@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { ReactNode } from 'react';
 import { panelArt, type CartoonPanel } from './cartoon-panels.pure.ts';
 import { Glyph } from './factory-glyph-view';

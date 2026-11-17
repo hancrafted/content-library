@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Shared Anchor geometry and composed Title selection
 status: accepted
 ---

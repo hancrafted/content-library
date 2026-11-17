@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { eventTagChoices, groupEventsByMonth, matchingEvents } from './events-overview.pure';
 
-// decision: docs/adr/0018-events-overview.md
+// decision: docs/decision-records/0018-events-overview.md
 const BUILD_DAY = '2026-10-27';
 const card = (slug: string, date: string) => ({ slug, date });
 

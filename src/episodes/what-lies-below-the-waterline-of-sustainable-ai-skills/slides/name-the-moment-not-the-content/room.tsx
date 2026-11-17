@@ -16,7 +16,7 @@ export interface Request {
   readonly coding: string;
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ControlRoom({ request }: { readonly request: Request }) {
   return (
     <g>

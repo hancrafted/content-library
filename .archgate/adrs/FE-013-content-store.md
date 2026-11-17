@@ -5,9 +5,9 @@ title: 'Content Store'
 domain: frontend
 rules: true
 # oxfmt-ignore
-files: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
+files: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/decision-records/0016-content-data-model.md']
 # oxfmt-ignore
-paths: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
+paths: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/decision-records/0016-content-data-model.md']
 description: 'Every record enters the site through one content store that parses it with a Zod schema whose inferred type is its only type, every field described, and refuses a bad record at build time, naming it.'
 ---
 
@@ -30,7 +30,7 @@ Options:
 - **A CMS or database:** a backend before the platform horizon is a stated non-goal.
 - **Zod schemas in one store (chosen):** one parse at build time, the type inferred from the schema, `.describe()` as the field reference.
 
-For this project the reasons and the model — which entities are records, how they relate, which cross-record refusals hold — live in `docs/adr/0016-content-data-model.md`. This record holds the discipline that keeps code and that model in step.
+For this project the reasons and the model — which entities are records, how they relate, which cross-record refusals hold — live in `docs/decision-records/0016-content-data-model.md`. This record holds the discipline that keeps code and that model in step.
 
 ## Decision
 
@@ -108,5 +108,5 @@ For this project the reasons and the model — which entities are records, how t
 
 ## References
 
-- `docs/adr/0016-content-data-model.md` — the model, the `%% store:` list, the refusals and why.
+- `docs/decision-records/0016-content-data-model.md` — the model, the `%% store:` list, the refusals and why.
 - [Zod — basics and `.describe()`](https://zod.dev/) — schemas, `z.infer`, metadata.

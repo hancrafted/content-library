@@ -1,5 +1,5 @@
 'use client';
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 // decision: FE-009 §8
 import { useEpisodePortalRoot } from '@/shared/hooks/use-episode-portal-root';
 import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';

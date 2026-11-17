@@ -1,13 +1,13 @@
 ---
-type: design-adr
+type: decision-record
 status: proposed
 ---
 
 # Skill invocations are logged as point records
 
-The dashboard shows, per Job, a chip for every skill and check `pipeline.yml` names. Checks already reach the log as `score` lines with `source: check:<name>`; skills reached it only as `skills_invoked` on an agent's end line, known once the agent stopped. So a running agent's skills could not be watched, and an orchestrator-session Job's only once `end-job` measured its window. Every Skill tool call is now logged as it happens, one line each, extending the vocabulary of design-ADR-0007. Issue #186.
+The dashboard shows, per Job, a chip for every skill and check `pipeline.yml` names. Checks already reach the log as `score` lines with `source: check:<name>`; skills reached it only as `skills_invoked` on an agent's end line, known once the agent stopped. So a running agent's skills could not be watched, and an orchestrator-session Job's only once `end-job` measured its window. Every Skill tool call is now logged as it happens, one line each, extending the vocabulary of Decision record 0007. Issue #186.
 
-**Superseded in part by design-ADR-0010** for the record shape: the `skill` line of decisions 1 and 2 is an `event` line named `skill.invoke` with attribute `skill.name`, and the fold attaches it to `span.events`, read back as skills by `skillUses()`. Decisions 3 to 6 and the consequences stand, with "`skill` line" read as that event.
+**Superseded in part by Decision record 0010** for the record shape: the `skill` line of decisions 1 and 2 is an `event` line named `skill.invoke` with attribute `skill.name`, and the fold attaches it to `span.events`, read back as skills by `skillUses()`. Decisions 3 to 6 and the consequences stand, with "`skill` line" read as that event.
 
 ## Decisions
 

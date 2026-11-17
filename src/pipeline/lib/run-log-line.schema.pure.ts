@@ -1,5 +1,5 @@
-// decision: docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
-// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
+// decision: docs/decision-records/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
+// decision: docs/decision-records/0010-run-log-lines-are-a-typed-union-with-point-events.md
 export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score', 'event'] as const;
 export type Kind = (typeof KINDS)[number];
 

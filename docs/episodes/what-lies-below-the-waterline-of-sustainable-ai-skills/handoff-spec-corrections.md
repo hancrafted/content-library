@@ -23,7 +23,7 @@
    | 11, 14 | 2        | 22    | 5        |
    | 12     | 4        | 23    | 1        |
    | 13     | 2, 5     | 24    | 1, 9     |
-5. **Review form incomplete.** Only `note:visual-language` exists. Each Slide (and the Title slide) needs its `pick:<slide-slug>` checkboxes per Option and its `note:<slide-slug>` textarea, as the form comment and design-ADR 0011 require.
+5. **Review form incomplete.** Only `note:visual-language` exists. Each Slide (and the Title slide) needs its `pick:<slide-slug>` checkboxes per Option and its `note:<slide-slug>` textarea, as the form comment and Decision record 0011 require.
 
 ## 2. Missing from the Brief card
 

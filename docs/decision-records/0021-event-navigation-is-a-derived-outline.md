@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Event navigation is a derived outline
 status: accepted
 ---

@@ -31,7 +31,11 @@ const put = (root: string, file: string, text: string) => {
 function repo(): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-guard-')));
   git(root, 'init', '-q', '-b', 'main');
-  put(root, 'docs/drive/project.yml', "decisionDocs:\n  - docs/features/**\n  - docs/adr/**\n  - '**/GLOSSARY*.md'\n");
+  put(
+    root,
+    'docs/drive/project.yml',
+    "decisionDocs:\n  - docs/features/**\n  - docs/decision-records/**\n  - '**/GLOSSARY*.md'\n",
+  );
   put(root, 'GLOSSARY.md', 'one');
   put(root, 'src/a.ts', 'a');
   git(root, 'add', '.');
@@ -109,16 +113,16 @@ describe('drive guard', () => {
     expect(branch.stderr).toContain('GLOSSARY.md');
   });
 
-  it('fails a staged design-ADR change off decisions/*', () => {
+  it('fails a staged Decision record change off decisions/*', () => {
     // ARRANGE
     const root = repo();
     git(root, 'checkout', '-q', '-b', 'feat/x');
-    stage(root, 'docs/adr/0001-choice.md');
+    stage(root, 'docs/decision-records/0001-choice.md');
     // ACT
     const result = guard(root);
     // ASSERT
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain('docs/adr/0001-choice.md');
+    expect(result.stderr).toContain('docs/decision-records/0001-choice.md');
   });
 
   it("skips a merge in progress, whose staged files are the other side's change", () => {

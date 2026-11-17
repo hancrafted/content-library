@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 // decision: FE-006 §4
 import type { BadChances, Catch, Defect, KindChances } from './defect.types';
 import type { Arrivals, OwnSet, Source } from './own-work.types';

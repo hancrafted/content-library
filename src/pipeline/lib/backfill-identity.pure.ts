@@ -1,4 +1,4 @@
-// decision: docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
+// decision: docs/decision-records/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
 import { identityFact } from './claude-adapter.pure.ts';
 import { currentRun, fold, type LogEvent, type RunLogLine } from './run-log.pure.ts';
 

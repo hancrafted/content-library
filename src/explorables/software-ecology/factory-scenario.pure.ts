@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { createSampler, stepsTo, type Values, WINDOW_WEEKS } from './beat-means.pure.ts';
 import { type Beat, beatsOf, beatsOfSteps, stepsOf } from './factory-beats.pure.ts';
 import { WEEKS_PER_STEP, WARM_WEEKS } from './factory-dials.pure.ts';

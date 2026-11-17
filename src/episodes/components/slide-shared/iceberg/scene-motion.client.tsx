@@ -51,7 +51,7 @@ function useDocumentHidden() {
   return hidden;
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 // decision: FE-009 §4
 export function SceneMotionRoot({ className, zone, style, children }: SceneMotionProps) {
   const scene = useRef<HTMLDivElement>(null);

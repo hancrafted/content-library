@@ -69,7 +69,7 @@ describe('field-described through the archgate CLI', () => {
     ].join('\n');
     // ACT
     const violations = checkFE013ThroughCliInFixtureRoot({
-      'docs/adr/0016-content-data-model.md': '# M\n\n```mermaid\nerDiagram\n    %% store: EVENT\n```\n',
+      'docs/decision-records/0016-content-data-model.md': '# M\n\n```mermaid\nerDiagram\n    %% store: EVENT\n```\n',
       'src/content-store/store.ts': "import './schemas/event.schema';\n",
       [schemaFile]: source,
     });

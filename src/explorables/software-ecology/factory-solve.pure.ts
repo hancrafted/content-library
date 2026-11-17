@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { DEFECTS, perKind } from './defect.pure.ts';
 import { dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';

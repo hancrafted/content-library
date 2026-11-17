@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { loadExchange, type SavedState, type Upload } from './exchange-load.pure.ts';
 import { CATALOG } from './use-case-data.ts';
 import { readExchange } from './use-case-file.ts';

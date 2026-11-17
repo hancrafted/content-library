@@ -47,7 +47,7 @@ function Pilot({ day, says }: { readonly day: Day; readonly says: Says }) {
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function MorningScene({ day, label, says }: MorningSceneProps) {
   return (
     <svg

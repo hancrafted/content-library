@@ -25,5 +25,5 @@ Facts from Chrome before the round: Han's congestion case drains (eng 462 → 28
 - Q87 Gatekeeper and Two teams move to one Customer, fixed travel time and a compact layout by the same rules. — ok
 - Q88 Designer's round-5 changes accepted: Ideal routes chances in strict turns; gate AI pull requests 1.5× review time; AI balanced efficiencies 115–160 % where needed; rework 0.4, churn 1.2, complaints 0.2; bottleneck-shift check from AI unbalanced. — ok
 - Q89 Cartoons: A, hand-built coloured SVG, own drawing, in a separate pass after this round, as Spec Options. — "a, as close to the original as possible" (the closer the redraw, the more the licence check on the PR checklist matters)
-- Q90 Tender to acceptance removed from prototype, guide and design-ADR; kept in the guide's "Later" list as a hypothesis. — ok
+- Q90 Tender to acceptance removed from prototype, guide and Decision record; kept in the guide's "Later" list as a hypothesis. — ok
 - Q91 Record, commit, designer round 6, verify in Chrome, report; cartoons as their own pass. — ok

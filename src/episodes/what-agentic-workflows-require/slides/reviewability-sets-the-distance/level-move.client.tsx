@@ -27,7 +27,7 @@ interface LevelMoveProps {
   readonly to: ReactNode;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function LevelMove({ label, callout, from, arrow, to }: LevelMoveProps) {
   const { plays, replays, replay, onFocus } = useLevelMove();
   return (

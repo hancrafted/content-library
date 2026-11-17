@@ -55,7 +55,7 @@ flowchart LR
 
 **The kit** gives a Slide `t` (built from the Slide's own messages; its `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
 
-**Reference implementation: `src/episodes/resources/episode-template/`** is the copy source; the frame layouts are in `src/episodes/components/slide-master/`, and the Master slides (`resources/timelines/`, `resources/grids/`) show the rest. All are Resources, not Episodes (design-ADR 0019). How to write a Slide lives there and in the feature guides.
+**Reference implementation: `src/episodes/resources/episode-template/`** is the copy source; the frame layouts are in `src/episodes/components/slide-master/`, and the Master slides (`resources/timelines/`, `resources/grids/`) show the rest. All are Resources, not Episodes (Decision record 0019). How to write a Slide lives there and in the feature guides.
 
 ## Decision
 
@@ -102,7 +102,7 @@ flowchart LR
 1. **DO** start an Episode by copying `episode-template/`: rename the slug; add `episode-metadata.ts` and run `npm run registry`; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
-4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)
+4. **DO** build a one-off Scene from `SlideFrame`; heading per Decision record 0012. (Decisions 3 and 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
 6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour _only_ a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
@@ -158,8 +158,8 @@ flowchart LR
 - [`GLOSSARY.md`](../../GLOSSARY.md#episode-structure) — Episode structure: Section, Slide, Scene, Voice script.
 - [`docs/features/episode-translation-keys.md`](../../docs/features/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — converting a prototype into an Episode, step by step.
-- [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
-- [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
+- [`docs/decision-records/0001-the-slide-is-a-self-contained-folder.md`](../../docs/decision-records/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
+- [`docs/decision-records/0008-pipeline-jobs-belong-to-stages.md`](../../docs/decision-records/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [`docs/features/episode-chrome.md`](../../docs/features/episode-chrome.md) — table of contents placement, corner allocation, reserved places.
 
 ### Terms

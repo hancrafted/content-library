@@ -8,7 +8,7 @@ import { yourFolderSection } from './sections/your-folder';
 import { yourTerminalSection } from './sections/your-terminal';
 import { hero } from './slides/hero/slide';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const setupAiAgentAndStarterFolder = episode({
   slug: 'setup-ai-agent-and-starter-folder',
   messages: { en, de },

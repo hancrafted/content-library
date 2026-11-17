@@ -15,7 +15,7 @@ description: 'Who imports whom: thin routes, five layers importing only downward
 
 Under the App Router the directory **is** the URL: `src/app/[locale]/events/[event]/page.tsx` sits where it sits because `/de/events/<slug>` exists. So `src/app/` is the **framework zone**: the router owns position, and this record governs only what a file there contains. Everywhere else position is chosen, so the folder carries the law.
 
-The tree follows the product, so an agent learns what the product is before its plumbing (design-ADR `docs/adr/0017-source-tree-follows-the-product.md` holds the reasoning and the rejected layouts). Five layers:
+The tree follows the product, so an agent learns what the product is before its plumbing (Decision record `docs/decision-records/0017-source-tree-follows-the-product.md` holds the reasoning and the rejected layouts). Five layers:
 
 1. **Routes**, `src/app/`: bind a URL to a template.
 2. **Page assembly**, `src/page-assembly/`: one folder per page template (landing, Events overview, Event, Episode overview, Episode, Resources overview, Resource, dashboard, sitemap), plus `lib/` (page metadata, structured data) and the root Translation merge. A part one template uses sits beside it.
@@ -138,6 +138,6 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ## References
 
-- `docs/adr/0017-source-tree-follows-the-product.md` — why the tree follows the product, and the layouts rejected.
+- `docs/decision-records/0017-source-tree-follows-the-product.md` — why the tree follows the product, and the layouts rejected.
 - [Next.js — Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) — folder-as-route.
 - [dependency-cruiser — rules reference](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md) — `forbidden`, `required`, `circular`.

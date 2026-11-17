@@ -28,7 +28,7 @@ import {
   TEMPLATE_STAGING,
 } from './episode-staging.fixture.ts';
 
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 const TEMPLATE_YAML = readFileSync(TEMPLATE, 'utf8');
 
 it('reads the history in full, so the Voice script check never passes on a shallow clone', () => {

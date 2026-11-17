@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 /* decision: FE-011 §2 */
 .art {
   --art-glow-soft: oklch(0.95 0.07 205 / 0.55);

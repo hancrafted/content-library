@@ -18,7 +18,7 @@ function useFlowPlay() {
   return { plays: flowPlays({ entryAtMount, entry, replays }), replays, replay, onFocus };
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function FlowMotion({
   label,
   className,

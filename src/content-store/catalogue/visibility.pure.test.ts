@@ -3,7 +3,7 @@ import { episodeRef, templateRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const EVENT = '2026-10-23-axel-agentic-workflow';
 
 const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };

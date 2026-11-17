@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { WEEKS_PER_STEP } from './factory-dials.pure.ts';
 
 export const WINDOW_WEEKS = 2;

@@ -13,7 +13,7 @@ const CONSOLE = { x: 96, width: 140 } as const;
 const BINDER = { x: 168, scale: 0.6 } as const;
 const PILOT_REACH = 24;
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ConsoleCorner({ label }: { readonly label: string }) {
   const { seat } = consoleLayout({ width: CONSOLE.width, screens: 1 });
   const deskTop = FLOOR - CONSOLE_DESK_HEIGHT;

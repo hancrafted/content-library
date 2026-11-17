@@ -77,7 +77,7 @@ frontmatter:
         title: *title
         stale_after: { presence: required, format: datetime }
     # OKF §8: an index file carries no frontmatter except `okf_version`, which declares the folder an OKF
-    # bundle (design-ADR 0005). Not governed by a `type` or a `title`, so it is its own rule.
+    # bundle (Decision record 0005). Not governed by a `type` or a `title`, so it is its own rule.
     - ruleId: llm-wiki-index
       folders: [docs/llm-wiki/]
       fileNames: [index.md]
@@ -89,7 +89,7 @@ frontmatter:
           allowed:
             - {
                 value: '0.2',
-                intent: 'The OKF revision every file in docs/llm-wiki/ follows, pinned by design-ADR 0005.',
+                intent: 'The OKF revision every file in docs/llm-wiki/ follows, pinned by Decision record 0005.',
               }
     - ruleId: staging-brief
       fileNames: [brief.md]
@@ -101,7 +101,7 @@ frontmatter:
           allowed:
             - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
         title: *title
-        # A Brief outlives Staging: Promotion moves it beside its Episode and removes the status line (design-ADR 0004).
+        # A Brief outlives Staging: Promotion moves it beside its Episode and removes the status line (Decision record 0004).
         status:
           presence: optional
           allowed:

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 export interface TourCheckWords {
   readonly check: string;
   readonly customer: Readonly<Record<string, string>>;

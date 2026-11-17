@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { spriteIdx } from './doc-sprites.ts';
 import { BOT, HALF, HEAD, TOP, workAt, type FactoryLayout } from './factory-layout.pure.ts';
 import type {

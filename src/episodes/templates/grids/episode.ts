@@ -13,7 +13,7 @@ import { grid3x3 } from './slides/grid-3x3/slide';
 import { gridBento } from './slides/grid-bento/slide';
 import { grids as gridsSection } from './slides/grids/slide';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const grids = episode({
   slug: 'grids',
   messages: { en, de },

@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 /* decision: FE-011 §2 */
 .closeUp {
   --house-lit: oklch(0.985 0.005 90);

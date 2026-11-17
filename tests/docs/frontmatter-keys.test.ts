@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 const ROOT = path.join(__dirname, '../..');
 const MH = path.join(ROOT, 'node_modules/.bin/mh');
 const CONFIG = path.join(ROOT, 'markdown-harness.config.yaml');

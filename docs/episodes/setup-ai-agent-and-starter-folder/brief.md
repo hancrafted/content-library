@@ -16,7 +16,7 @@ verified:
 
 ## Format
 
-Not an Episode: a new Resource type "guide" at `/guides/<slug>`, built through the Episode pipeline. Not Foundations, Teardown or Short. Eight steps, about 20 minutes for a first-timer. The guide type is recorded by amending the Resources overview design-ADR before write-spec; until then the Run goes on through research.
+Not an Episode: a new Resource type "guide" at `/guides/<slug>`, built through the Episode pipeline. Not Foundations, Teardown or Short. Eight steps, about 20 minutes for a first-timer. The guide type is recorded by amending the Resources overview Decision record before write-spec; until then the Run goes on through research.
 
 ## Audience
 

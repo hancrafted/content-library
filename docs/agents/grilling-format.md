@@ -16,7 +16,7 @@ A session usually starts on a GitHub issue, and the user is not carrying what th
 Two lines, no more:
 
 1. **The purpose** — what the issue exists to settle, named by title.
-2. **The end result** — what the user is holding when the session closes: a design-ADR on disk, a rewritten doc, a set of filed issues.
+2. **The end result** — what the user is holding when the session closes: a Decision record on disk, a rewritten doc, a set of filed issues.
 
 The orientation is not a question and takes no answer. Write it, then ask Q1.
 
@@ -27,7 +27,7 @@ The user's attention belongs on contracts and architecture. Classify every candi
 | Bucket         | The answer changes                                                                                                                     |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `contract`     | everything at a seam or boundary: URLs and routes, the Episode format, what is stored in the browser, or the `npm run` command surface |
-| `architecture` | software architecture, design pattern, communication pattern, an Archgate ADR or a design-ADR, or needs a new one                      |
+| `architecture` | software architecture, design pattern, communication pattern, an Archgate ADR or a Decision record, or needs a new one                 |
 | `workflow`     | what a future agent session does — an agent-guide, a skill, `AGENTS.md`                                                                |
 | `neither`      | none of the above: every reasonable answer leaves them as they were                                                                    |
 
@@ -67,14 +67,14 @@ Coin nothing silently. Where a concept genuinely has no name yet, say so in the 
 No bare id ever reaches the user. Every id-like handle travels with its name or slug:
 
 - `FE-003-localization`, never `FE-003`.
-- A design-ADR by its title, never `design-ADR-0007`.
+- A Decision record by its title, never `Decision record 0007`.
 - Issues by their title, never `#12`.
 
 The id alone is unreadable; the name carries the meaning while the id keeps the trail.
 
 ## A round in this format
 
-Opening: _Where Episode files live_. This issue settles which directory owns the Episode files, one per Locale. You leave with one design-ADR on disk. The example is illustrative, not a decision.
+Opening: _Where Episode files live_. This issue settles which directory owns the Episode files, one per Locale. You leave with one Decision record on disk. The example is illustrative, not a decision.
 
 ---
 
@@ -119,7 +119,7 @@ src/shared/lib/
 
 The round above shows the question shape; this one shows classification, in this repo's buckets. The issue _Decide what an unknown locale prefix returns_ listed four decisions, one of them compound. Classified, they become two asked questions and two decided lines. The example is illustrative, not a decision.
 
-Opening: _Decide what an unknown locale prefix returns_. This issue settles what a visitor gets at a path like `/fr/episode/episode-template`. You leave with a design-ADR on disk.
+Opening: _Decide what an unknown locale prefix returns_. This issue settles what a visitor gets at a path like `/fr/episode/episode-template`. You leave with a Decision record on disk.
 
 ---
 

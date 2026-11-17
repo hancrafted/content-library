@@ -417,7 +417,7 @@ describe('edge cases', () => {
   });
 });
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const SIX = {
   'episode-template': 'episode-template',
   'workshop-template': 'episode-template',
@@ -446,7 +446,7 @@ const WITH_TEMPLATES = {
   explorables: [...THREE_EXPLORABLE_PAGES, 'speech-bubble'],
 };
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const GUIDE = {
   slug: 'setup-ai-agent-and-starter-folder' as GuideSlug,
   tags: ['agentic-workflow'],

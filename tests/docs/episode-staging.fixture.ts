@@ -10,7 +10,7 @@ export const EPISODES = path.join(ROOT, 'docs/episodes');
 export const SAMPLE = path.join(ROOT, 'skills/new-episode/assets/sample-episode');
 export const LLM_WIKI = path.join(ROOT, 'docs/llm-wiki');
 export const RUNS_CSV = path.join(EPISODES, 'runs.csv');
-// decision: docs/adr/0006-skills-follow-agentskills.md
+// decision: docs/decision-records/0006-skills-follow-agentskills.md
 export const SKILL_FOLDERS = [path.join(ROOT, '.agents/skills'), path.join(ROOT, 'skills')];
 export const SKILL_FOLDER = 'skills/new-episode';
 export const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');

@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { SECTION, SLIDE, type Spec, type SpecPage, type SpecStage } from './episode-spec-page.pure.ts';
 import { checkSlide, FORM } from './episode-spec-slide.pure.ts';
 import { checkTitleSlide } from './episode-spec-title.pure.ts';

@@ -50,9 +50,9 @@ const REGEX_AFTER_WORDS = new Set([
 
 const TARGETS = {
   decision: {
-    grammar: /(?:([A-Z]+-\d{3}) §(\d+)(?:\.(\d+))?|(docs\/adr\/\d{4}-[a-z0-9-]+\.md))/,
+    grammar: /(?:([A-Z]+-\d{3}) §(\d+)(?:\.(\d+))?|(docs\/decision-records\/\d{4}-[a-z0-9-]+\.md))/,
     takes:
-      'an Archgate ADR section, `decision: FE-009 §4.3`, or a design-ADR path, `decision: docs/adr/0017-source-tree-follows-the-product.md`',
+      'an Archgate ADR section, `decision: FE-009 §4.3`, or a Decision record path, `decision: docs/decision-records/0017-source-tree-follows-the-product.md`',
   },
   spec: {
     grammar: /(docs\/features\/[^\s#]+\.md)#(\S+)/,
@@ -78,7 +78,7 @@ const HELP = {
   ],
   localDoc: [
     'Non-exported declaration JSDoc',
-    'Delete it if it restates the code; otherwise rename so the name says it. A reason a test already names needs no move: cite that test in the commit body and delete the comment. An ADR it cites becomes a `// decision: <ID> §<n>` pointer, a design-ADR a `// decision: docs/adr/<file>.md` pointer; an issue number moves to the commit body. A Slide or component doc that narrates its Scene restates the code and just goes.',
+    'Delete it if it restates the code; otherwise rename so the name says it. A reason a test already names needs no move: cite that test in the commit body and delete the comment. An ADR it cites becomes a `// decision: <ID> §<n>` pointer, a Decision record a `// decision: docs/decision-records/<file>.md` pointer; an issue number moves to the commit body. A Slide or component doc that narrates its Scene restates the code and just goes.',
   ],
   body: [
     'In-body comment',

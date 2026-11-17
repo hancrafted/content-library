@@ -22,7 +22,7 @@ Facts found in Chrome before the grill: Messy is unstable (support arrivals 20.7
 - Q63 Backlog: stack of ≤5 docs + "+n" chip, amber > ~2 weeks of work, red > 4, lead time on hover. — ok
 - Q64 Dashboard unchanged on top; collapsed "How it flows" holds the queueing metrics with plain-word lines. — ok
 - Q65 Floor fills the viewport below a sticky toolbar (~80vh); scales below ~1100 px. — ok
-- Q66 Record in design-ADR and guide, designer round 5, I check in Chrome (layout 1440/1100, MutationObserver blink count, the four model cases), report. — ok, "before we start, create a plan and let a adversiral agent review it"
+- Q66 Record in Decision record and guide, designer round 5, I check in Chrome (layout 1440/1100, MutationObserver blink count, the four model cases), report. — ok, "before we start, create a plan and let a adversiral agent review it"
 
 ## After the adversarial review (plan-05-review.md)
 
@@ -30,6 +30,6 @@ Facts found in Chrome before the grill: Messy is unstable (support arrivals 20.7
 - Q68 Realistic: A busy but coping (stable ρ≈0.9, amber at 1 week of work, red at 2) vs B slowly sinking. — explained in plain words, then "ok" (A)
 - Q69 Default speed 5×, warm-up 60 weeks, honest drain times, hint to raise the bottleneck's efficiency. — ok
 - Q70 `choose: [{ to, w }]` exclusive split; a shared person serves the center with the most waiting work. — ok
-- Q71 Update plan and design-ADR (supersede 4, 5, 7, 8), commit, designer round 5, verify in Chrome. — ok
+- Q71 Update plan and Decision record (supersede 4, 5, 7, 8), commit, designer round 5, verify in Chrome. — ok
 - Q72 — "AI everywhere => AI, unbalanced the use case where for example only engineers use it to produce code, which does not increase overall output but causes bottlenecks"
   Read as: the preset row becomes Swing, Roles, Ideal, Realistic, AI unbalanced (AI at engineering only: dock output ≈1×, Operations becomes the bottleneck), AI compare (same, in the compare stream), AI balanced (AI on wherever needed, capacities matched: dock 2–3× at 95 % ± 5 satisfied). "AI everywhere" as its own preset goes; per-role AI fan-out is tuned so these bands hold, pinned by tests.

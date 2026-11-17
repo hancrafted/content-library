@@ -159,7 +159,7 @@ The Global tab lists the global tokens in designer order, each in a group under 
 
 The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/shared/hooks/use-dev-slide.ts`. The editor's hook is `src/shared/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/shared/lib/page-tokens.ts`.
 
-Each row has an experimental **Find usage** button that lists the elements in view using the token; it lives in one folder, `design-system-token-editor/token-usage/`, behind one `rowAddon` prop, and its limits are in `docs/adr/0003-token-usage-lookup-is-experimental.md`.
+Each row has an experimental **Find usage** button that lists the elements in view using the token; it lives in one folder, `design-system-token-editor/token-usage/`, behind one `rowAddon` prop, and its limits are in `docs/decision-records/0003-token-usage-lookup-is-experimental.md`.
 
 Edits are not saved. **Copy changed** exports only the tokens you changed, as a prompt to paste to an agent, which then adopts them into source. Saving edits as a user preference is a later feature.
 
@@ -203,7 +203,7 @@ A Slide stands on its own at rest, so the final state of a motion must carry the
 
 ### Hover vocabulary
 
-A Scene draws the audience's focus while the presenter points with the mouse, and discloses detail progressively, through shared BEM classes in `globals.css` `@layer components` ([design-ADR-0012](../adr/0012-slide-header-and-play-once-motion.md) §8). Each state also applies on `:focus-visible` and `:focus-within`, so a keyboard reader gets the same emphasis; under reduced motion it applies at once. A pattern the catalogue lacks is added here and in `globals.css` first, then used.
+A Scene draws the audience's focus while the presenter points with the mouse, and discloses detail progressively, through shared BEM classes in `globals.css` `@layer components` ([Decision record 0012](../adr/0012-slide-header-and-play-once-motion.md) §8). Each state also applies on `:focus-visible` and `:focus-within`, so a keyboard reader gets the same emphasis; under reduced motion it applies at once. A pattern the catalogue lacks is added here and in `globals.css` first, then used.
 
 | Class                                                       | Effect                                                            | Use when                                                                        |
 | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
@@ -216,7 +216,7 @@ Details stay in the DOM and in print, and show on devices without hover.
 
 ### Emphasis motion
 
-**Emphasis motion: replay on `mouseenter`/`focus`.** A Scene may carry one motion that carries the Slide's message rather than decorating it: a funnel whose dots arrive while everything else is already at rest. It is the one exception to "no entrance in a Scene" ([design-ADR-0012](../adr/0012-slide-header-and-play-once-motion.md) §9).
+**Emphasis motion: replay on `mouseenter`/`focus`.** A Scene may carry one motion that carries the Slide's message rather than decorating it: a funnel whose dots arrive while everything else is already at rest. It is the one exception to "no entrance in a Scene" ([Decision record 0012](../adr/0012-slide-header-and-play-once-motion.md) §9).
 
 | When it plays                | How                                                                                                        |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { drawDoc, readColors, type Colors } from './doc-sprites.ts';
 import type { Floor, FloorDoc, FloorList, FloorStation, FloorWork } from './factory-model.pure.ts';
 import { WEEKS_PER_REAL_SECOND_AT_1X } from './factory-run.pure.ts';

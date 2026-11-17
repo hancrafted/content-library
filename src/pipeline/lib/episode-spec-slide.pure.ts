@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { type Cheerio, type CheerioAPI } from 'cheerio';
 import { OPTION, type SpecPage } from './episode-spec-page.pure.ts';
 import { unless } from './finding.pure.ts';

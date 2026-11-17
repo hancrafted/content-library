@@ -1,6 +1,6 @@
 import type { Event } from './schemas/event.schema';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const EVENT_SLUG = /^(\d{4}-\d{2}-\d{2})-[a-z0-9]/;
 
 export function eventRefusals(event: Event): string[] {

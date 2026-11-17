@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 status: proposed
 ---
 

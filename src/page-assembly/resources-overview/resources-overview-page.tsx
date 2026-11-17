@@ -54,7 +54,7 @@ function browserLabels(t: OverviewT): ResourceBrowserLabels {
   };
 }
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export async function ResourcesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'resourcesOverview' });
   return (

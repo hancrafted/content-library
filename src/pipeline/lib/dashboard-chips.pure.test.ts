@@ -3,7 +3,7 @@ import { parseDashboardPipeline, projectDashboard } from './dashboard-projection
 import { fold } from './run-log.pure';
 import type { RunLogLine } from './run-log.schema.pure';
 
-// decision: docs/adr/0009-skill-invocations-are-logged-as-point-records.md
+// decision: docs/decision-records/0009-skill-invocations-are-logged-as-point-records.md
 const RUN_START = Date.parse('2026-10-14T10:00:00Z');
 const minute = (count: number) => new Date(RUN_START + count * 60_000).toISOString();
 

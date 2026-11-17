@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { Defect } from './defect.types';
 import { MAX_TOKENS, RATE_AVERAGING_WEEKS, CUSTOMER_AVERAGING_WEEKS } from './factory-dials.pure.ts';
 import { COMPL, FAIL, FROM_SRC, kindOf, MAIN, OWN, Q, REDO, Run, SENT, Token } from './factory-docs.pure.ts';

@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 status: accepted
 ---
 
@@ -12,7 +12,7 @@ status: accepted
 1. **Five phases, by verb.** Define (_clarify_), Reason (_specify_), Implement (_codify_), Verify (_verify_), Evolve (_fortify_). Grilling is a mode used inside the first two, not a phase. A phase with no bound skill is done inline by the Orchestrator, so a sparse repo still runs the Workflow.
 2. **The Binding is n:m.** One skill may serve several phases (`/improve-codebase-architecture` serves Reason, Verify and Evolve) and one phase several skills. Each phase also carries the model its Subagents run on, and the Binding names the agent type every agent uses.
 3. **Setup detects, the Operator owns.** Setup reads the skills lockfile and the skill folders, seeds the Binding and the per-phase model presets the skill ships, and lists the project's Enforcers. Re-running setup adds what is newly installed and keeps every hand edit.
-4. **Project state lives beside the docs, not in the skill.** The Binding, the project config, the Profile extension and the learnings file live in `docs/drive/`, mirroring the skill's name. An installed skill stays read-only (design-ADR 0006), so everything a project changes lives in its own docs.
+4. **Project state lives beside the docs, not in the skill.** The Binding, the project config, the Profile extension and the learnings file live in `docs/drive/`, mirroring the skill's name. An installed skill stays read-only (Decision record 0006), so everything a project changes lives in its own docs.
 5. **Words travel with the skill.** The Drive glossary ships inside the skill folder and `GLOSSARY-MAP.md` lists it as its own context, so a repo that installs `/drive` gets its words with it.
 
 ## Considered options

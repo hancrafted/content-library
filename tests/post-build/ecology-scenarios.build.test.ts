@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadUseCase, simulate } from '../../src/explorables/software-ecology/ecology-sim.node';

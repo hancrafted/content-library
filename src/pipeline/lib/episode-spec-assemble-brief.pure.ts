@@ -1,4 +1,4 @@
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { collapsible, escape, inline } from './episode-spec-assemble-words.pure.ts';
 import { briefCard, type BriefCardEntry } from './episode-spec-brief.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';

@@ -14,8 +14,8 @@ import { playlistSchema, type Playlist } from './schemas/playlist.schema';
 import { templateSchema } from './schemas/template.schema';
 import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
 // decision: FE-013 §3
-// decision: docs/adr/0016-content-data-model.md
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0016-content-data-model.md
+// decision: docs/decision-records/0019-resources-overview.md
 import { slugKindRefusals } from './slug-kind-refusals';
 export type { Content, ContentInput, ParsedContent } from './content-shapes';
 

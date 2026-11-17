@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 status: proposed
 ---
 
@@ -9,7 +9,7 @@ A new Episode's text starts as markdown in a staging folder, `docs/episodes/<slu
 
 ## Why the Slide's `i18n/` and not a `slide.md`
 
-This record first planned to move each Slide's words into a `slides/<slug>/slide.md` at Promotion, with a parity test holding `i18n/en.json` equal to it. By the time the first Episode was ready, `i18n/en.json` already held every word that file would carry: the title and caption, the Voice script as `voiceScript.segments`, and each Speaker note with its header, description and sources, with German beside it in `de.json`. A `slide.md` would have been a second copy kept equal by a test, the failure this record names for the Manuscript below. One owner per Slide still holds, and the text still travels with the Slide folder (design-ADR _The Slide is a self-contained folder_). An agent reads an Episode's words as markdown with `npm run episode:text`, a reading copy generated on demand and never committed.
+This record first planned to move each Slide's words into a `slides/<slug>/slide.md` at Promotion, with a parity test holding `i18n/en.json` equal to it. By the time the first Episode was ready, `i18n/en.json` already held every word that file would carry: the title and caption, the Voice script as `voiceScript.segments`, and each Speaker note with its header, description and sources, with German beside it in `de.json`. A `slide.md` would have been a second copy kept equal by a test, the failure this record names for the Manuscript below. One owner per Slide still holds, and the text still travels with the Slide folder (Decision record _The Slide is a self-contained folder_). An agent reads an Episode's words as markdown with `npm run episode:text`, a reading copy generated on demand and never committed.
 
 ## Why one Dossier, not a Dossier and a Manuscript
 
@@ -21,7 +21,7 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
 
 ## Decisions
 
-1. **Staging holds the work in progress.** `docs/episodes/<slug>/` holds `brief.md`, `research/*.md`, `reference/*/design-reference.md` with its page images, `dossier.md` until the Spec Gate, `spec/spec.html` (the Spec, design-ADR-0011, which replaces design-ADR-0008's `spec/spec.md` and `spec/design-spec.md`), `research-plan.md` and `feedback/NN/feedback.md` (an Episode branch begun earlier keeps its `run-log.md`). Content changes from the feedback loop land in the Spec first, then in the implementation: from the Spec Gate on, the Spec is the only source and the Dossier is deleted (amended by design-ADR-0011; before, they landed in the Dossier). A `verified` entry `{ by: human:han, at }` at or after `generated.at` means Han accepted the file at its gate (see design-ADR-0005); every staging file carries `status: draft`, and Promotion is marked by the file's location.
+1. **Staging holds the work in progress.** `docs/episodes/<slug>/` holds `brief.md`, `research/*.md`, `reference/*/design-reference.md` with its page images, `dossier.md` until the Spec Gate, `spec/spec.html` (the Spec, Decision record 0011, which replaces Decision record 0008's `spec/spec.md` and `spec/design-spec.md`), `research-plan.md` and `feedback/NN/feedback.md` (an Episode branch begun earlier keeps its `run-log.md`). Content changes from the feedback loop land in the Spec first, then in the implementation: from the Spec Gate on, the Spec is the only source and the Dossier is deleted (amended by Decision record 0011; before, they landed in the Dossier). A `verified` entry `{ by: human:han, at }` at or after `generated.at` means Han accepted the file at its gate (see Decision record 0005); every staging file carries `status: draft`, and Promotion is marked by the file's location.
 2. **Promotion happens when the Episode is final**, in any order with German translation and publishing. The `episode-promote` skill runs it, and no words move:
    - The run log and its `pipeline.yml` are archived to `.logs/new-episode/<slug>/`, a folder the dashboard opens, with the Brief and the Spec as the Run left them: a record of the Run, never a source.
    - The Spec's Options, with each Slide's Visual idea, feedback, designer prompts and cited design references, are filed into `design-archive/<slug>/`.
@@ -38,7 +38,7 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
 - **Move each Slide's words into `slide.md`, with a parity test against `en.json`.** The first version of this record. Rejected for the duplication above.
 - **A guide file (`AGENTS.md`) per Slide or per Episode**, recording its purpose and design decisions. Rejected for now: the Design archive and the Brief carry the decisions, and its map of the code would drift unchecked. Added when agents are seen to misread a Slide.
 - **Keep the Spec whole** beside the code, or in `docs/`. Rejected: a 500K page of mostly rejected mocks in the code folder, where the Design archive keeps what is reused from it. A copy stays in `.logs/` as the Run's record, beside its log, which nothing builds from.
-- **Generate `i18n/*.json` or `episode.ts` from markdown.** Rejected: it ties the app to a document format that is not stable, and design-ADR _The Slide is a self-contained folder_ already rejected a generator.
+- **Generate `i18n/*.json` or `episode.ts` from markdown.** Rejected: it ties the app to a document format that is not stable, and Decision record _The Slide is a self-contained folder_ already rejected a generator.
 
 ## Consequences
 
