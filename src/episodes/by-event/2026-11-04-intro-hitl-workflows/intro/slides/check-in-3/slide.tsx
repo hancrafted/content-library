@@ -6,9 +6,12 @@ import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
+const NOT_ASKED_AT_EVENT_VOTES = undefined;
+
 const QUESTIONS = [
   {
     key: 'seen',
+    votes: [5, 26, 7, 0, 0],
     answers: [
       'questions.seen.answers.often',
       'questions.seen.answers.sometimes',
@@ -20,17 +23,20 @@ const QUESTIONS = [
   },
   {
     key: 'known',
+    votes: NOT_ASKED_AT_EVENT_VOTES,
     answers: ['questions.known.answers.practice', 'questions.known.answers.heard', 'questions.known.answers.new'],
     tone: 'accent',
   },
   {
     key: 'shift',
+    votes: [1, 8, 22],
     answers: ['questions.shift.answers.no', 'questions.shift.answers.somewhat', 'questions.shift.answers.clearly'],
     tone: 'accent',
   },
 ] as const satisfies readonly {
   key: 'seen' | 'known' | 'shift';
   answers: readonly string[];
+  votes?: readonly number[];
   tone: PollTone;
 }[];
 
@@ -58,12 +64,13 @@ export const checkIn3 = slide({
         </div>
         <div className="flex flex-col gap-4 md:col-span-8">
           <ol {...target('questions')} className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-            {QUESTIONS.map(({ key, answers, tone }, index) => (
+            {QUESTIONS.map(({ key, answers, votes, tone }, index) => (
               <PollQuestion
                 key={key}
                 marker={index + 1}
                 question={t(`questions.${key}.question`)}
                 answers={answers.map((answer) => t(answer))}
+                votes={votes}
                 tone={tone}
               />
             ))}
