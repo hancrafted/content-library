@@ -156,8 +156,8 @@ const startOf = (input: AdapterInput, marker: Marker, files: { transcript: strin
 function stopEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
   const started = startOf(input, marker, files);
   if (started?.span_id === undefined) return null;
-  // A repeated delivery of the same stop must not append a second completion.
-  if (input.log.some((l) => l.kind === 'end' && l.span_id === started.span_id)) return null;
+  const stopAlreadyDelivered = input.log.some((l) => l.kind === 'end' && l.span_id === started.span_id);
+  if (stopAlreadyDelivered) return null;
   const all = entries(input.transcript);
   return definedOnly({
     kind: 'end',
@@ -180,10 +180,12 @@ export function adaptSubagent(input: AdapterInput): LogEvent | null {
   const marker = parseMarker(input.marker);
   if (marker === null) return null;
   const files = subagentFiles(input.payload);
-  // A start only from the current session; a stop from any session of the Run (S2).
-  if (input.event === 'start')
-    return marker.session_id === input.payload.session_id ? startEvent(input, marker, files) : null;
-  return sessionsOf(marker).includes(input.payload.session_id) ? stopEvent(input, marker, files) : null;
+  if (input.event === 'start') {
+    const fromCurrentSession = marker.session_id === input.payload.session_id;
+    return fromCurrentSession ? startEvent(input, marker, files) : null;
+  }
+  const fromAnySessionOfRun = sessionsOf(marker).includes(input.payload.session_id);
+  return fromAnySessionOfRun ? stopEvent(input, marker, files) : null;
 }
 
 export function runUsageEvent(
