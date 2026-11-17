@@ -29,7 +29,6 @@ phases:
     skills:
       - diagnosing-bugs
       - implement
-      - implement-spec
       - tdd
   verify:
     model: sonnet

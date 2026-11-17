@@ -147,7 +147,7 @@ Pass paths and refs as literal arguments. Auxiliary context folders require exac
 ownership, disposability evidence, and authorization like the worktree's files.
 Continue independently eligible items after failures; record partial outcomes.
 
-For existing teardown context, consult [worktrees](../../docs/agents/worktrees.md).
+For existing teardown context, consult the `drive` skill's [worktrees reference](../drive/references/worktrees.md).
 Its low-level `wt:done` has different process and update guards; use the targeted
 operations above for this workflow.
 
