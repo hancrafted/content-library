@@ -1,9 +1,4 @@
 /* decision: FE-011 §4 */
-/*
- * A picture's labels sit at their corners while the matrix has its axis column (Tailwind `@2xl`, 42rem). Narrower, a
- * picture is about 130 px wide, too small for two corner labels: they stack in flow over the drawing, which grows to
- * hold them, so none is clipped and none covers another. The dashed trip is hidden at that width too.
- */
 @container (width < 42rem) {
   .onPicture {
     display: flex;
