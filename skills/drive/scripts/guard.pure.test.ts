@@ -6,7 +6,7 @@ const GLOBS = ['docs/adr/**', 'docs/features/**', '**/GLOSSARY*.md'];
 describe('success cases', () => {
   it('passes a glossary change on a decisions/* branch', () => {
     // ARRANGE
-    const changed = ['skills/drive/GLOSSARY.md'];
+    const changed = ['docs/GLOSSARY.md'];
     // ACT
     const violations = guardViolations('decisions/drive', changed, GLOBS);
     // ASSERT
@@ -56,7 +56,7 @@ describe('edge cases', () => {
   });
 });
 
-describe('error cases', () => {
+describe('failure cases', () => {
   it('reads --against with a ref and rejects anything else', () => {
     // ARRANGE
     const argvs = [[], ['--against', 'origin/main'], ['--against'], ['--against', '--x'], ['origin/main']];

@@ -24,7 +24,7 @@ const put = (root: string, file: string, text: string) => {
 function repo(): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-guard-')));
   git(root, 'init', '-q', '-b', 'main');
-  put(root, 'docs/drive/project.yml', "decisionDocs:\n  - docs/features/**\n  - '**/GLOSSARY*.md'\n");
+  put(root, 'docs/drive/project.yml', "decisionDocs:\n  - docs/features/**\n  - docs/adr/**\n  - '**/GLOSSARY*.md'\n");
   put(root, 'GLOSSARY.md', 'one');
   put(root, 'src/a.ts', 'a');
   git(root, 'add', '.');
@@ -32,8 +32,10 @@ function repo(): string {
   return root;
 }
 
+let edits = 0;
 const stage = (root: string, file: string) => {
-  put(root, file, `changed ${Math.random()}`);
+  edits += 1;
+  put(root, file, `changed ${edits}`);
   git(root, 'add', file);
 };
 
@@ -98,6 +100,41 @@ describe('drive guard', () => {
     expect(staged.status).toBe(0);
     expect(branch.status).toBe(1);
     expect(branch.stderr).toContain('GLOSSARY.md');
+  });
+
+  it('fails a staged design-ADR change off decisions/*', () => {
+    // ARRANGE
+    const root = repo();
+    git(root, 'checkout', '-q', '-b', 'feat/x');
+    stage(root, 'docs/adr/0001-choice.md');
+    // ACT
+    const result = guard(root);
+    // ASSERT
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('docs/adr/0001-choice.md');
+  });
+
+  it("skips a merge in progress, whose staged files are the other side's change", () => {
+    // ARRANGE
+    const root = repo();
+    git(root, 'checkout', '-q', '-b', 'feat/x');
+    put(root, 'src/a.ts', 'branch');
+    git(root, 'commit', '-qam', 'branch edit');
+    git(root, 'checkout', '-q', 'main');
+    put(root, 'src/a.ts', 'main');
+    put(root, 'GLOSSARY.md', 'main glossary');
+    git(root, 'commit', '-qam', 'main edit');
+    git(root, 'checkout', '-q', 'feat/x');
+    spawnSync('git', ['merge', 'main'], { cwd: root });
+    put(root, 'src/a.ts', 'resolved');
+    git(root, 'add', 'src/a.ts');
+    // ACT
+    const merging = guard(root);
+    const checked = guard(root, '--against', 'main');
+    // ASSERT
+    expect(git(root, 'status', '--porcelain')).toContain('GLOSSARY.md');
+    expect(merging.status).toBe(0);
+    expect(checked.status).toBe(0);
   });
 
   it('rejects an unknown argument with the usage', () => {

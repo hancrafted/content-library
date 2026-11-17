@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { parseConfig } from './config.pure.ts';
 import { decisionDocGlobs, detectEnforcers, installCommands, updateProjectConfig } from './setup.pure.ts';
 
-const FACTS = { baseBranch: 'trunk', install: ['npm ci'], decisionDocs: ['docs/adr/**'] };
+const FACTS = { baseBranch: 'trunk', harnessCap: 20, install: ['npm ci'], decisionDocs: ['docs/adr/**'] };
 
 describe('detectEnforcers', () => {
-  it('lists an ADR checker, scripts by what they run, and hooks, and skips builds and staged-file runners', () => {
+  it('lists an ADR checker, scripts by what they run, and hooks, and skips builds, staged-file runners and rewriting formatters', () => {
     // ARRANGE
     const facts = {
       scripts: {
@@ -16,6 +16,7 @@ describe('detectEnforcers', () => {
         test: 'vitest run',
         'test:slow': 'run-slow',
         format: 'oxfmt',
+        'format:check': 'oxfmt --check',
         'check:docs': 'mh check',
         'check:skills': 'run --test-files',
         'test:watch': 'vitest watch',
@@ -30,7 +31,7 @@ describe('detectEnforcers', () => {
       'adr-checker:archgate',
       'check:check:docs',
       'check:check:skills',
-      'formatter:format',
+      'formatter:format:check',
       'linter:lint',
       'test-runner:test',
       'test-runner:test:slow',
@@ -52,7 +53,10 @@ describe('installCommands and decisionDocGlobs', () => {
     expect(installCommands(['package-lock.json', 'yarn.lock'])).toEqual(['npm ci']);
     expect(installCommands(['pnpm-lock.yaml'])).toEqual(['pnpm install --frozen-lockfile']);
     expect(installCommands(['README.md'])).toEqual([]);
-    expect(decisionDocGlobs(['docs/adr', 'src'], ['GLOSSARY.md'])).toEqual(['docs/adr/**', '**/GLOSSARY*.md']);
+    expect(decisionDocGlobs(['docs/adr', 'docs/design', 'src'], ['GLOSSARY.md'])).toEqual([
+      'docs/adr/**',
+      '**/GLOSSARY*.md',
+    ]);
     expect(decisionDocGlobs([], [])).toEqual([]);
   });
 });
@@ -69,6 +73,13 @@ describe('updateProjectConfig', () => {
       decisionDocs: ['docs/adr/**'],
     });
     expect(text).toContain('never writes harness settings');
+  });
+
+  it('records the harness cap it is given beside the default', () => {
+    // ARRANGE / ACT
+    const config = parseConfig(updateProjectConfig(null, { ...FACTS, harnessCap: 7 }));
+    // ASSERT
+    expect(config).toMatchObject({ parallel: { default: 3, harnessCap: 7 } });
   });
 
   it('keeps what the file has, comments included, and adds only the sections it lacks', () => {

@@ -2,24 +2,22 @@
 // every edit the Operator made: the Binding and the config gain only what is new, the stubs are never rewritten.
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { type DetectedSkill, updateBinding } from './binding.pure.ts';
-import { CONFIG_PATH } from './config.pure.ts';
+import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
+import { CONFIG_PATH, harnessCapFrom } from './config.pure.ts';
 import { run } from './git.ts';
 import { fail } from './project.ts';
 import {
   addGuardToHook,
   decisionDocGlobs,
-  DOC_FOLDERS,
   detectEnforcers,
   guardCommand,
-  guardWorkflow,
+  guardCiLine,
   installCommands,
   LEARNINGS_STUB,
   parseSetupArgs,
+  type ProjectFacts,
   PROFILES_STUB,
   renderEnforcers,
-  runsGuard,
-  type SetupOptions,
   updateProjectConfig,
 } from './setup.pure.ts';
 
@@ -76,10 +74,7 @@ export function detectSkills(root: string): DetectedSkill[] {
     source: null,
   }));
   // The first sighting wins: an authored skill, then the lockfile's source, then a bare installed folder.
-  const found = new Map<string, DetectedSkill>();
-  for (const skill of [...authored, ...lockedSkills(root), ...folders])
-    if (skill.name !== SELF && !found.has(skill.name)) found.set(skill.name, skill);
-  return [...found.values()].sort((a, b) => a.name.localeCompare(b.name));
+  return mergeDetected([authored, lockedSkills(root), folders], SELF);
 }
 
 function enforcerFacts(root: string) {
@@ -119,8 +114,18 @@ function baseBranch(root: string): string {
   return head.status === 0 ? head.stdout.trim().replace(/^origin\//, '') : 'main';
 }
 
+function projectFacts(root: string): ProjectFacts {
+  const folders = CATALOG.decisionFolders.filter((folder) => isFolder(path.join(root, folder)));
+  return {
+    baseBranch: baseBranch(root),
+    harnessCap: harnessCapFrom(process.env),
+    install: installCommands(readdirSync(root)),
+    decisionDocs: decisionDocGlobs(folders, findGlossaries(root)),
+  };
+}
+
 /** Writes `docs/drive/` under `root`; returns the files it created or changed, relative to `root`. */
-export function setup(root: string, options: SetupOptions = {}): string[] {
+export function setup(root: string, options: SeedOptions = {}, notes: string[] = []): string[] {
   const written: string[] = [];
   const write = (relative: string, text: string) => {
     const file = path.join(root, relative);
@@ -132,47 +137,39 @@ export function setup(root: string, options: SetupOptions = {}): string[] {
   const createdOnly = (relative: string, text: string) => {
     if (!existsSync(path.join(root, relative))) write(relative, text);
   };
-  const enforcers = detectEnforcers(enforcerFacts(root));
-  const folders = DOC_FOLDERS.filter((folder) => isFolder(path.join(root, folder)));
-  const facts = {
-    baseBranch: baseBranch(root),
-    install: installCommands(readdirSync(root)),
-    decisionDocs: decisionDocGlobs(folders, findGlossaries(root)),
-  };
+  const facts = projectFacts(root);
   write(
     `${DRIVE_DIR}/binding.yml`,
     updateBinding(read(path.join(root, DRIVE_DIR, 'binding.yml')), detectSkills(root), options),
   );
   write(CONFIG_PATH, updateProjectConfig(read(path.join(root, CONFIG_PATH)), facts));
-  write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(enforcers));
-  wireGuard(root, facts, write);
+  write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
+  const note = wireGuard(root, facts, write);
+  if (note !== null) notes.push(note);
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
   createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
   return written;
 }
 
 const HOOK = '.husky/pre-commit';
-const WORKFLOW = '.github/workflows/drive-guard.yml';
 
 /**
- * Wires the Decision-doc guard where the project already runs checks: a husky pre-commit hook gets the guard line;
- * without husky, a pull-request workflow runs it when the repo has workflows. Otherwise nothing is written.
+ * Wires the Decision-doc guard into a husky pre-commit hook and returns null. Without husky nothing is written: it
+ * returns the one line to add to the project's CI instead.
  */
 function wireGuard(
   root: string,
-  facts: { baseBranch: string; install: readonly string[] },
+  facts: Pick<ProjectFacts, 'baseBranch'>,
   write: (relative: string, text: string) => void,
-): void {
+): string | null {
   const entry = path
     .relative(root, path.join(import.meta.dirname, 'drive.ts'))
     .split(path.sep)
     .join('/');
   const hook = read(path.join(root, HOOK));
-  if (hook !== null) return write(HOOK, addGuardToHook(hook, guardCommand(entry)));
-  if (!isFolder(path.join(root, '.github', 'workflows'))) return;
-  const workflow = read(path.join(root, WORKFLOW));
-  if (workflow !== null && runsGuard(workflow)) return;
-  write(WORKFLOW, guardWorkflow(guardCommand(entry, `origin/${facts.baseBranch}`), facts.install));
+  if (hook === null) return guardCiLine(guardCommand(entry, `origin/${facts.baseBranch}`));
+  write(HOOK, addGuardToHook(hook, guardCommand(entry)));
+  return null;
 }
 
 const isFolder = (dir: string): boolean => {
@@ -189,12 +186,14 @@ export function runSetup(args: readonly string[]): void {
   if ('error' in options) fail(options.error);
   const root = path.resolve(run('git', ['rev-parse', '--show-toplevel']).stdout.trim() || process.cwd());
   let written: string[] = [];
+  const notes: string[] = [];
   try {
-    written = setup(root, options);
+    written = setup(root, options, notes);
   } catch (error) {
     fail((error as Error).message);
   }
   console.log(
     written.length === 0 ? `✔ ${DRIVE_DIR}/ is up to date` : written.map((file) => `✔ wrote ${file}`).join('\n'),
   );
+  for (const note of notes) console.log(note);
 }
