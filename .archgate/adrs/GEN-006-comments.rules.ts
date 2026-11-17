@@ -76,7 +76,7 @@ const HELP = {
   ],
   localDoc: [
     'Non-exported declaration JSDoc',
-    'Delete it if it restates the code; otherwise rename so the name says it. An ADR it cites becomes a `// decision: <ID> §<n>` pointer; an issue number moves to the commit body.',
+    'Delete it if it restates the code; otherwise rename so the name says it. A reason a test already names needs no move: cite that test in the commit body and delete the comment. An ADR it cites becomes a `// decision: <ID> §<n>` pointer; an issue number moves to the commit body.',
   ],
   body: [
     'In-body comment',

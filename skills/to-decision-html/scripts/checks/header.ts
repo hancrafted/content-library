@@ -1,11 +1,8 @@
-// The page opens with a banner header: the <h1> and a sentence saying what the page is for. A <header> inside
-// sectioning content belongs to that section, so it is no banner.
 import { load, type CheerioAPI } from 'cheerio';
 import type { Check } from '../grader/check.ts';
 
 const NOT_BANNER = 'article, aside, main, nav, section';
-/** The fewest words that read as a sentence of purpose rather than a label. */
-const PURPOSE_WORDS = 4;
+const FEWEST_PURPOSE_SENTENCE_WORDS = 4;
 
 function banner($: CheerioAPI) {
   const role = $('[role="banner"]').first();
@@ -28,7 +25,7 @@ export const check: Check<string> = {
     const purpose = header.clone();
     purpose.find('h1, h2, h3, h4, h5, h6, script, style').remove();
     const words = purpose.text().split(/\s+/).filter(Boolean).length;
-    return words >= PURPOSE_WORDS
+    return words >= FEWEST_PURPOSE_SENTENCE_WORDS
       ? []
       : ['the header states no purpose; add a sentence beside the <h1> saying what the page is for'];
   },

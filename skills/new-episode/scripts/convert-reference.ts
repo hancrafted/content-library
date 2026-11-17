@@ -1,8 +1,3 @@
-// `npm run convert-reference -- <pdf> <out-dir> --title <title>`: converts a PDF brought in as an Episode design reference
-// into <out-dir>/design-reference.md, with every page rendered whole to pages/ and marker's larger cut-outs to
-// crops/, each at most 1568 px on its longer edge. Text comes from marker (`marker_single`), which OCRs
-// image-only pages through surya: by default on a llama.cpp `llama-server` marker starts itself; with
-// SURYA_INFERENCE_URL set, on that server instead (see references/convert-references.md for oMLX).
 import { execFileSync, spawnSync } from 'node:child_process';
 import {
   copyFileSync,
@@ -48,7 +43,6 @@ function which(tool: string): string | null {
   return found.status === 0 ? found.stdout.trim() : null;
 }
 
-/** marker's version from the dist-info beside its executable, as an OKF actor. */
 function markerActor(binary: string): string {
   const root = path.resolve(path.dirname(realpathSync(binary)), '..', 'lib');
   const python = existsSync(root) ? readdirSync(root).find((name) => name.startsWith('python')) : undefined;

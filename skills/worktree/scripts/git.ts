@@ -1,6 +1,6 @@
-// The worktree scripts' one way to run git: never throws, so each caller reads `status` and decides.
 import { spawnSync } from 'node:child_process';
 
-/** Runs `git <args>` in `cwd`, with `input` on stdin; a large buffer, since `ls-files` output can be long. */
+const LS_FILES_OUTPUT_CAN_BE_LONG_BYTES = 256 * 1024 * 1024;
+
 export const git = (cwd: string, args: readonly string[], input?: string) =>
-  spawnSync('git', args, { cwd, encoding: 'utf8', input, maxBuffer: 256 * 1024 * 1024 });
+  spawnSync('git', args, { cwd, encoding: 'utf8', input, maxBuffer: LS_FILES_OUTPUT_CAN_BE_LONG_BYTES });

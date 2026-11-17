@@ -210,7 +210,7 @@ describe('no-comments', () => {
         'Non-exported declaration JSDoc',
         TS,
         'export const a = 1;\n\n/** The answer. */\nconst b = 2;\n',
-        'An ADR it cites becomes a `// decision: <ID> §<n>` pointer; an issue number moves to the commit body',
+        'A reason a test already names needs no move: cite that test in the commit body and delete the comment',
       ],
       [
         'In-body comment',

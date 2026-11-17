@@ -1,6 +1,3 @@
-// The preflight's judgement: observed facts about a checkout in, violations out.
-// Gathering the facts is preflight.ts's job, so this stays deterministic.
-
 export interface CheckoutFacts {
   nodeModules: 'directory' | 'symlink' | 'missing';
   hooksInstalled: boolean;
