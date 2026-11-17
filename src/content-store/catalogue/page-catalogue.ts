@@ -49,16 +49,16 @@ function ownPageOf({ ref }: LoadedEpisode): PageOf<'episode'>[] {
   });
 }
 
-function pageOfExplorablePage({ slug }: ExplorablePage): PageOf<'explorable-page'> {
-  return { kind: 'explorable-page', explorablePage: explorablePageRef(slug as ExplorablePageSlug) };
+function pageOfExplorablePage({ slug: slugKeyedByRegistryEntry }: ExplorablePage): PageOf<'explorable-page'> {
+  return { kind: 'explorable-page', explorablePage: explorablePageRef(slugKeyedByRegistryEntry as ExplorablePageSlug) };
 }
 
-function pageOfGuide({ slug }: Guide): PageOf<'guide'> {
-  return { kind: 'guide', guide: guideRef(slug as GuideSlug) };
+function pageOfGuide({ slug: slugKeyedByRegistryEntry }: Guide): PageOf<'guide'> {
+  return { kind: 'guide', guide: guideRef(slugKeyedByRegistryEntry as GuideSlug) };
 }
 
-function pageOfTemplate({ type, slug }: Template): PageOf<'template'> {
-  return { kind: 'template', type, template: templateRef(slug as TemplateSlug) };
+function pageOfTemplate({ type, slug: slugKeyedByRegistryEntry }: Template): PageOf<'template'> {
+  return { kind: 'template', type, template: templateRef(slugKeyedByRegistryEntry as TemplateSlug) };
 }
 
 function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
