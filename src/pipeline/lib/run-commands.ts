@@ -6,6 +6,7 @@
 // clock, ids, git and the transcript lookup are injectable.
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
+import { RUN_CHECKS_TEST } from '../../shared/lib/folder-check.ts';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
 import { beginAgent, endAgent } from './run-agent-commands.ts';
@@ -24,8 +25,7 @@ export type CommandResult = { ok: true; output: string } | { ok: false; error: s
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
 
-/** The test each Run's staging folder carries, so its staging checks run on that folder alone (ARCH-003 §4.7). */
-const RUN_CHECKS_TEST = 'run-checks.test.ts';
+/** The skill's copy of the test each Run's staging folder carries (ARCH-003 §4.7). */
 const RUN_CHECKS_ASSET = `skills/new-episode/assets/${RUN_CHECKS_TEST}.txt`;
 
 /** Copies the skill's Run checks test into the staging folder, keeping one the Run already has. */
