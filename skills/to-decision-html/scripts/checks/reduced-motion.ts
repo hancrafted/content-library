@@ -1,6 +1,3 @@
-// prefers-reduced-motion honoured: reloaded with `reduce`, the page runs no animation, transitions no movement
-// (transform, position, margin or `all`), scrolls without smoothing, and its screen holds still after loading,
-// which also catches script-driven motion such as GSAP. Anything of a millisecond or less counts as instant.
 import type { Page } from '@playwright/test';
 import type { Check } from '../grader/check.ts';
 import { describeElement, type ElementFacts } from '../grader/element.pure.ts';
@@ -19,8 +16,7 @@ interface Observation {
 }
 
 const INSTANT_MILLISECONDS = 1;
-// A fixed interval, not a wait: motion is change over time, so holding still is measured across it.
-const STILLNESS_MILLISECONDS = 500;
+const SCREENSHOT_INTERVAL_MILLISECONDS = 500;
 const REDUCE = 'under prefers-reduced-motion: reduce';
 
 function runningAnimations(kit: Kit): Observation['animations'] {
@@ -55,9 +51,9 @@ function motionTransitions(kit: Kit): Observation['transitions'] {
 const smoothScroll = (): boolean =>
   [document.documentElement, document.body].some((element) => getComputedStyle(element).scrollBehavior === 'smooth');
 
-async function moving(page: Page): Promise<boolean> {
+async function screenStillMovesAfterLoad(page: Page): Promise<boolean> {
   const first = await page.screenshot();
-  await page.waitForTimeout(STILLNESS_MILLISECONDS);
+  await page.waitForTimeout(SCREENSHOT_INTERVAL_MILLISECONDS);
   return !first.equals(await page.screenshot());
 }
 
@@ -71,7 +67,7 @@ export const check: Check<Observation> = {
       animations: await inPage(page, runningAnimations, null),
       transitions: await inPage(page, motionTransitions, null),
       smoothScroll: await page.evaluate(smoothScroll),
-      moving: await moving(page),
+      moving: await screenStillMovesAfterLoad(page),
     };
   },
   judge: ({ animations, transitions, smoothScroll, moving: screenMoves }) => [
