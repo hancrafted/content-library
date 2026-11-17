@@ -86,8 +86,8 @@ export function runStatus(
   const stateOf = (id: string): JobState => {
     const known = states.get(id);
     if (known !== undefined) return known;
-    // Seeded before recursing, so a cycle the pipeline check would refuse reads as waiting, not a stack overflow.
-    states.set(id, 'waiting');
+    const seedWaitingSoACycleIsNotAStackOverflow = (): void => void states.set(id, 'waiting');
+    seedWaitingSoACycleIsNotAStackOverflow();
     const job = jobs.find((candidate) => candidate.id === id);
     const fromLog = logged(latest.get(id));
     const state =

@@ -40,6 +40,21 @@ const withReaders = (pipeline: string, folded: Folded, readers: GateReaders) =>
 const states = (folded: Folded, pipeline = PIPELINE) =>
   runStatus(pipeline, folded, { now: NOW }).jobs.map(({ state }) => state);
 describe('success cases', () => {
+  it('reads every job of a needs cycle as waiting instead of overflowing the stack', () => {
+    // ARRANGE
+    const cycle = `status: approved
+jobs:
+  - { id: first, needs: [second] }
+  - { id: second, needs: [first] }
+`;
+    const folded = live(log());
+    const expected = ['waiting', 'waiting'];
+    // ACT
+    const result = states(folded, cycle);
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
   it('marks jobs whose span ended ok done, jobs whose needs are done ready, and the rest waiting', () => {
     // ARRANGE
     const folded = live(log(...job('brief-grill', 0, 'ok'), ...job('retrieval', 10, 'ok')));

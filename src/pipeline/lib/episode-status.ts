@@ -40,13 +40,15 @@ function gateReaders(slug: string, read: (file: string) => string | null): GateR
 
 export function readEpisodeStatus(root: string, slug: string, { now }: { now: string }): EpisodeStatus {
   const read = (relative: string): string | null => readOrNull(path.join(root, relative));
-  // Before begin-run copies the template into the Episode, the template's jobs are the declared ones.
-  const { file } = declaredJobs(root, slug);
-  const pipeline = read(file);
-  if (pipeline === null) return { kind: 'no-pipeline', file };
-  if (readPipeline(pipeline) === null) return { kind: 'no-jobs', file };
+  const { file: declaredPipelineFile } = declaredJobs(root, slug);
+  const pipeline = read(declaredPipelineFile);
+  if (pipeline === null) return { kind: 'no-pipeline', file: declaredPipelineFile };
+  if (readPipeline(pipeline) === null) return { kind: 'no-jobs', file: declaredPipelineFile };
   const { folded, errors, current } = readEpisodeLog(slug, root);
-  // The current Run: the live marker's, else the latest. Earlier Runs make no job done; `reuse` brings one over.
-  const trace = readMarker(root)?.trace_id ?? current?.trace_id;
-  return { kind: 'ok', status: runStatus(pipeline, folded, { ...gateReaders(slug, read), now, trace }), errors };
+  const currentRunTrace = readMarker(root)?.trace_id ?? current?.trace_id;
+  return {
+    kind: 'ok',
+    status: runStatus(pipeline, folded, { ...gateReaders(slug, read), now, trace: currentRunTrace }),
+    errors,
+  };
 }

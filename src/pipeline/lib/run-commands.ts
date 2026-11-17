@@ -78,8 +78,8 @@ function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): strin
   if (openSpan(spans, 'attempt', { job }) !== undefined)
     refuse(`${job} has an open Attempt; run end-attempt ${job} first`);
   const ended = write(ctx, endEvent('end', open.span_id, p));
-  // A Job that ran in the orchestrator's own session has no agent spans: its cost is the session's usage in its window.
-  const warning = declaredJobs(ctx.root, ctx.slug).orchestrator.includes(job) ? recordJobUsage(ctx, open, ended) : '';
+  const ranInOrchestratorSessionWithoutAgentSpans = declaredJobs(ctx.root, ctx.slug).orchestrator.includes(job);
+  const warning = ranInOrchestratorSessionWithoutAgentSpans ? recordJobUsage(ctx, open, ended) : '';
   const marker = readMarker(ctx.root);
   if (marker !== null && marker.job_span_id === open.span_id)
     pointAt(ctx, run, { jobSpanId: run.span_id, sessionId: marker.session_id });
@@ -220,8 +220,8 @@ export function runCommand(ctx: RunContext, argv: readonly string[]): CommandRes
     const spec = COMMANDS[name];
     if (spec === undefined) return failure(USAGE);
     const { values, positionals } = parseRunArgs(rest);
-    // begin-run creates the staging folder with the log; every other command needs a Run already begun.
-    if (name !== 'begin-run' && !existsSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug)))))
+    const createsStagingFolderWithLog = name === 'begin-run';
+    if (!createsStagingFolderWithLog && !existsSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug)))))
       refuse(`docs/episodes/${ctx.slug} does not exist; run this from the Episode's worktree root.`);
     const named = Object.fromEntries(spec.params.map((param, i) => [param, positionals[i]]));
     return success(spec.run(ctx, named, values));
