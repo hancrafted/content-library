@@ -13,11 +13,10 @@ function useLevelMove() {
   const [entryAtMount] = useState(entry);
   const [replays, setReplays] = useState(0);
   const replay = () => setReplays((count) => count + 1);
-  // A click focuses the trigger after the pointer has already entered it: only keyboard focus replays.
-  const onFocus = (event: FocusEvent<HTMLDivElement>) => {
+  const replayOnKeyboardFocusOnly = (event: FocusEvent<HTMLDivElement>) => {
     if (event.currentTarget.matches(':focus-visible')) replay();
   };
-  return { plays: levelMovePlays({ entryAtMount, entry, replays }), replays, replay, onFocus };
+  return { plays: levelMovePlays({ entryAtMount, entry, replays }), replays, replay, replayOnKeyboardFocusOnly };
 }
 
 interface LevelMoveProps {
@@ -30,14 +29,14 @@ interface LevelMoveProps {
 
 // decision: docs/adr/0012-slide-header-and-play-once-motion.md
 export function LevelMove({ label, callout, from, arrow, to }: LevelMoveProps) {
-  const { plays, replays, replay, onFocus } = useLevelMove();
+  const { plays, replays, replay, replayOnKeyboardFocusOnly } = useLevelMove();
   return (
     <div
       role="group"
       aria-label={label}
       tabIndex={0}
       onMouseEnter={replay}
-      onFocus={onFocus}
+      onFocus={replayOnKeyboardFocusOnly}
       data-level-move
       data-play={plays ? '' : undefined}
       className={`${styles.move} ${TRIGGER}`}
