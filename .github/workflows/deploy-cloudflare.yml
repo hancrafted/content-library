@@ -1,10 +1,15 @@
 name: Deploy to Cloudflare Pages
 
-# Production: every push to main publishes out/ to https://hancrafted.net. Preview: every same-repo pull request
-# gets its own *.hancrafted.pages.dev URL. The build runs here, not in Cloudflare's Git build, so Cloudflare's build
+# Production: each CI run that succeeds on main publishes out/ of the commit it tested to https://hancrafted.net, so
+# nothing CI has not passed reaches production. Preview: every same-repo pull request gets its own
+# *.hancrafted.pages.dev URL. The build runs here, not in Cloudflare's Git build, so Cloudflare's build
 # limits never apply. One-time setup (project, domain, www redirect): docs/features/hosting.md.
 on:
-  push:
+  # GitHub runs this trigger from the workflow file on main, whatever branch CI ran on; the branch filter and the job
+  # `if` below keep it to a successful CI run on main.
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
   # A pull request gets a preview only when it changes what the export is built from; a docs- or tooling-only pull
   # request skips it. Keep this list in step with the build's inputs: docs/features/hosting.md.
@@ -39,15 +44,23 @@ jobs:
   build:
     name: build, post-build tests
     runs-on: ubuntu-latest
-    # A fork's or Dependabot's pull request has no access to the Cloudflare secrets, so it gets CI but no preview.
-    if: github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]')
+    # Production builds only after a CI run that succeeded; a failed or cancelled one deploys nothing. A fork's or
+    # Dependabot's pull request has no access to the Cloudflare secrets, so it gets CI but no preview.
+    if: >-
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]')
     env:
       # Served from the domain root: no base path.
       NEXT_PUBLIC_BASE_PATH: ''
       # A pull request's preview lists and links Upcoming Episodes on /episodes, so a draft can be reviewed there; production never does.
       LIST_UPCOMING_EPISODES: ${{ github.event_name == 'pull_request' && 'true' || '' }}
     steps:
+      # After CI: the commit CI tested, since main may have moved on. Otherwise empty, so checkout takes the event's
+      # own ref: the pull request's merge commit, or the branch a manual run picked.
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: 24
