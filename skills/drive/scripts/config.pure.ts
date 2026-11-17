@@ -1,6 +1,7 @@
 // The project config the `drive` CLI reads from its config file (design-ADR 0027): every repo-specific value
 // the worktree commands would otherwise hard-code. Pure: text in, a validated config or an error out.
 import { parse } from 'yaml';
+import { isRecord, isText } from './yaml.pure.ts';
 
 /** Where a project's config lives, relative to its checkout. */
 export const CONFIG_PATH = 'docs/drive/project.yml';
@@ -43,6 +44,12 @@ export interface DriveConfig {
 
 export const PARALLEL_DEFAULTS: ParallelConfig = { default: 3, harnessCap: 20 };
 
+/** The harness cap to record: the harness's own `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` when set to a count, else the default. */
+export function harnessCapFrom(env: Readonly<Record<string, string | undefined>>): number {
+  const count = Number(env.CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS);
+  return Number.isInteger(count) && count >= 1 ? count : PARALLEL_DEFAULTS.harnessCap;
+}
+
 export const DEFAULTS: WorktreeConfig = {
   dir: '.worktrees',
   baseBranch: 'main',
@@ -56,12 +63,8 @@ export const DEFAULTS: WorktreeConfig = {
   afterRemove: [],
 };
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-
-const isCommandList = (value: unknown): boolean =>
+const isTextList = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === 'string');
-const isText = (value: unknown): boolean => typeof value === 'string' && value !== '';
 
 const KEYS = Object.keys(DEFAULTS) as (keyof WorktreeConfig)[];
 
@@ -69,7 +72,7 @@ const KEYS = Object.keys(DEFAULTS) as (keyof WorktreeConfig)[];
 function problem(key: keyof WorktreeConfig, value: unknown): string | null {
   if (value === undefined || value === null) return null;
   if (Array.isArray(DEFAULTS[key]))
-    return isCommandList(value) ? null : `worktree.${key} must be a list of shell commands`;
+    return isTextList(value) ? null : `worktree.${key} must be a list of shell commands`;
   return isText(value) ? null : `worktree.${key} must be a non-empty string`;
 }
 
@@ -112,16 +115,16 @@ function readProject(root: Record<string, unknown>): DriveConfig | { error: stri
   const parallel = readParallel(root.parallel);
   if ('error' in parallel) return parallel;
   const docs = root.decisionDocs ?? [];
-  if (!isCommandList(docs)) return { error: 'decisionDocs must be a list of paths' };
-  return { worktree, parallel, decisionDocs: docs as string[] };
+  if (!isTextList(docs)) return { error: 'decisionDocs must be a list of paths' };
+  return { worktree, parallel, decisionDocs: docs };
 }
 
 const isCount = (value: unknown): value is number => Number.isInteger(value) && (value as number) >= 1;
 
 /** The `parallel` section with its defaults filled, or the first thing wrong with it. */
 function readParallel(section: unknown): ParallelConfig | { error: string } {
-  if (section === undefined || section === null) return PARALLEL_DEFAULTS;
-  if (!isRecord(section)) return { error: 'parallel in ' + CONFIG_PATH + ' must be a mapping' };
+  if (section === undefined || section === null) return { ...PARALLEL_DEFAULTS };
+  if (!isRecord(section)) return { error: `parallel in ${CONFIG_PATH} must be a mapping` };
   const unknown = Object.keys(section).find((key) => key !== 'default' && key !== 'harnessCap');
   if (unknown !== undefined) return { error: `unknown parallel key '${unknown}'; expected default, harnessCap` };
   const merged = { ...PARALLEL_DEFAULTS, ...Object.fromEntries(Object.entries(section).filter(([, v]) => v != null)) };

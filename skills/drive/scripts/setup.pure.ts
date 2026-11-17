@@ -1,7 +1,9 @@
 // What `drive setup` writes besides the Binding: the project config's missing sections, the list of detected
 // Enforcers and the two stub documents. Pure: facts in, file text out.
-import { Document, isMap, parseDocument, type YAMLMap } from 'yaml';
+import { Document, type YAMLMap } from 'yaml';
+import { CATALOG, type SeedOptions } from './binding.pure.ts';
 import { DEFAULTS, PARALLEL_DEFAULTS } from './config.pure.ts';
+import { openMapping } from './yaml.pure.ts';
 
 export type EnforcerKind = 'adr-checker' | 'linter' | 'type-checker' | 'test-runner' | 'formatter' | 'check' | 'hook';
 
@@ -19,7 +21,8 @@ export interface EnforcerFacts {
   adrChecker: boolean;
 }
 
-/** The first kind whose pattern matches; most specific first. A script's name is read before its command. */
+/** The first kind whose pattern matches; most specific first. A script's name is read before its command. Only tools
+ * that check count: a formatter counts in its check mode, never as the rewriter. */
 const SCRIPT_KINDS: readonly (readonly [EnforcerKind, RegExp])[] = [
   ['type-checker', /\b(tsc|typecheck|type-check|mypy|pyright)\b/],
   ['formatter', /\b(format|prettier|oxfmt)\b/],
@@ -28,9 +31,12 @@ const SCRIPT_KINDS: readonly (readonly [EnforcerKind, RegExp])[] = [
   ['check', /^check\b/],
 ];
 
+/** A script that rewrites files rather than checking them; `--check` or a `:check` name makes it a check again. */
+const REWRITERS = /^(?!.*(--check|:check|-check\b))(?=.*\b(format|prettier|oxfmt)\b)/;
+
 /** The kind of one package script, or null when it is no check: a staged-files runner or a watch mode. */
 function classifyScript(name: string, body: string): EnforcerKind | null {
-  if (name.startsWith('lint-staged') || name.endsWith(':watch')) return null;
+  if (name.startsWith('lint-staged') || name.endsWith(':watch') || REWRITERS.test(`${name} ${body}`)) return null;
   const byName = SCRIPT_KINDS.find(([, pattern]) => pattern.test(name));
   return (byName ?? SCRIPT_KINDS.find(([, pattern]) => pattern.test(body)))?.[0] ?? null;
 }
@@ -66,16 +72,16 @@ export function installCommands(files: readonly string[]): string[] {
   return [];
 }
 
-export const DOC_FOLDERS = ['docs/adr', 'docs/adrs', 'docs/decisions', 'docs/design', 'docs/features'];
-
 /** Globs for the Decision docs this repo has: its decision and feature folders, and glossary files anywhere. */
 export function decisionDocGlobs(folders: readonly string[], glossaries: readonly string[]): string[] {
-  const globs = DOC_FOLDERS.filter((folder) => folders.includes(folder)).map((folder) => `${folder}/**`);
+  const globs = CATALOG.decisionFolders.filter((folder) => folders.includes(folder)).map((folder) => `${folder}/**`);
   return glossaries.length > 0 ? [...globs, '**/GLOSSARY*.md'] : globs;
 }
 
 export interface ProjectFacts {
   baseBranch: string;
+  /** The agent harness's own limit on Subagents, recorded beside the project's default. */
+  harnessCap: number;
   install: readonly string[];
   decisionDocs: readonly string[];
 }
@@ -104,29 +110,21 @@ const DECISION_DOCS_NOTE = ' Decision docs: paths and globs that change only on 
  * only gains the sections it lacks. Throws a message when the existing text is not a mapping.
  */
 export function updateProjectConfig(existing: string | null, facts: ProjectFacts): string {
-  const doc = existing === null ? new Document({}) : parseDocument(existing);
-  if (doc.errors.length > 0) throw new Error(`project config is not valid YAML: ${doc.errors[0]?.message}`);
-  if (doc.contents === null) doc.contents = doc.createNode({}) as YAMLMap;
-  if (!isMap(doc.contents)) throw new Error('project config must be a mapping');
-  const { baseBranch, install, decisionDocs } = facts;
+  const { doc, root } = openMapping(existing, 'project config');
+  const { baseBranch, harnessCap, install, decisionDocs } = facts;
   const worktree = { ...DEFAULTS, baseBranch, install };
   const seeded = { dir: worktree.dir, baseBranch, remote: worktree.remote, invoke: worktree.invoke, install };
-  if (!doc.contents.has('worktree')) doc.contents.set('worktree', doc.createNode(seeded));
-  addSection(doc, doc.contents, { key: 'parallel', value: { ...PARALLEL_DEFAULTS }, comment: PARALLEL_NOTE });
-  addSection(doc, doc.contents, { key: 'decisionDocs', value: [...decisionDocs], comment: DECISION_DOCS_NOTE });
+  if (!root.has('worktree')) root.set('worktree', doc.createNode(seeded));
+  addSection(doc, root, { key: 'parallel', value: { ...PARALLEL_DEFAULTS, harnessCap }, comment: PARALLEL_NOTE });
+  addSection(doc, root, { key: 'decisionDocs', value: [...decisionDocs], comment: DECISION_DOCS_NOTE });
   return doc.toString();
 }
 
-export interface SetupOptions {
-  agentType?: string;
-  model?: string;
-}
-
 /** The options of `drive setup [--agent-type <type>] [--model <model>]`, or a usage error. */
-export function parseSetupArgs(args: readonly string[]): SetupOptions | { error: string } {
+export function parseSetupArgs(args: readonly string[]): SeedOptions | { error: string } {
   const usage = { error: 'usage: drive setup [--agent-type <type>] [--model <model>]' };
-  const options: SetupOptions = {};
-  const keys: Record<string, keyof SetupOptions> = { '--agent-type': 'agentType', '--model': 'model' };
+  const options: SeedOptions = {};
+  const keys: Record<string, keyof SeedOptions> = { '--agent-type': 'agentType', '--model': 'model' };
   for (let i = 0; i < args.length; i += 2) {
     const key = keys[args[i] ?? ''];
     const value = args[i + 1];
@@ -140,7 +138,7 @@ export function parseSetupArgs(args: readonly string[]): SetupOptions | { error:
 export const guardCommand = (driveEntry: string, against: string | null = null): string =>
   `node ${driveEntry} guard${against === null ? '' : ` --against ${against}`}`;
 
-/** True when a hook or workflow text already runs the guard. */
+/** True when a hook text already runs the guard. */
 export const runsGuard = (text: string): boolean => /drive\.ts guard\b/.test(text);
 
 /** A commit hook with the guard line added before its other commands; the text itself when it already runs it. */
@@ -152,23 +150,9 @@ export function addGuardToHook(hook: string, command: string): string {
   return lines.join('\n').replace(/\n*$/, '\n');
 }
 
-/** A CI workflow that runs the guard against the base branch of a pull request. */
-export function guardWorkflow(command: string, install: readonly string[]): string {
-  return `# Written by \`drive setup\`: Decision docs change only on a decisions/* branch.
-name: Decision docs
-on: pull_request
-jobs:
-  guard:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-${[...install, command].map((step) => `      - run: ${step}\n`).join('')}`;
-}
+/** What setup prints when the repo has no husky hook: the one line for the project's CI to run. */
+export const guardCiLine = (command: string): string =>
+  `! no .husky/pre-commit: add this line to your CI so Decision docs change only on a decisions/* branch:\n    ${command}`;
 
 export const PROFILES_STUB = `# Drive profiles
 
