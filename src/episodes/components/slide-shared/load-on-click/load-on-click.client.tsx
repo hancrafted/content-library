@@ -7,7 +7,6 @@ export interface LoadOnClickProps {
   src: string;
   buttonLabel: string;
   hint: string;
-  /** The link's text once the page is shown, for a page that refuses framing: "Results in the second tab". */
   fallbackNote: string;
   newTabHint: string;
   title: string;
@@ -36,7 +35,6 @@ function Gate({ onLoad, buttonLabel, hint }: { onLoad: () => void; buttonLabel: 
   );
 }
 
-/** After the click: the framed page, and a link to it in a tab for a page that refuses framing. */
 function Frame({ src, fallbackNote, newTabHint, title }: Omit<LoadOnClickProps, 'buttonLabel' | 'hint'>) {
   return (
     <div className="flex flex-col gap-2">
@@ -60,11 +58,6 @@ function Frame({ src, fallbackNote, newTabHint, title }: Omit<LoadOnClickProps, 
   );
 }
 
-/**
- * Loads a third-party page only after a click (a client leaf): until then the markup holds a button and a hint, no
- * frame and no address, so a viewer's browser sends nothing to the third party and needs no consent first. After
- * the click the page is framed, with a link opening it in a tab for a page that refuses framing.
- */
 export function LoadOnClick({ buttonLabel, hint, ...frame }: LoadOnClickProps) {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) return <Gate onLoad={() => setLoaded(true)} buttonLabel={buttonLabel} hint={hint} />;
