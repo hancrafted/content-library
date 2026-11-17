@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { OutcomeBoard, type PrecisionOutcome } from './outcome-board';
 
-/*
- * One of the four precision-and-accuracy outcomes as a dartboard: tight or loose darts, on the bull or off it, each
- * outcome in one dart colour wherever a Slide draws it.
- */
-
 const throwOf = (outcome: PrecisionOutcome) => {
   const $ = load(renderToStaticMarkup(createElement(OutcomeBoard, { outcome })));
   const darts = $('[data-dart]').toArray();

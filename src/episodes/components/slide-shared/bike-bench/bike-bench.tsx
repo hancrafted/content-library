@@ -1,31 +1,22 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** What is set up on the bench before the shift. */
 const BEFORE = ['tool-wall', 'instruction-sheet', 'work-order', 'parts-box', 'bench', 'bike'] as const;
-/** What lands on the bench during the shift. */
 const DURING = ['folder', 'belt', 'note', 'phone', 'crate'] as const;
 
-/** One thing the bench draws, by name, so a Slide can light it. */
 export type BenchItem = (typeof BEFORE)[number] | (typeof DURING)[number];
 
 export interface BikeBenchProps {
-  /** The drawing's accessible name. */
   readonly label: string;
-  /** Draws what lands during the shift: the folder, the belt with its boxes, the note, the phone and the crate. */
   readonly arrivals?: boolean;
-  /** `human-and-ai` stands the person in front of the bench, handing the AI worker beside them a part. */
   readonly worker?: 'none' | 'human-and-ai';
-  /** Items drawn at full strength while every other item dims; none given, nothing dims. */
   readonly highlight?: readonly BenchItem[];
-  /** Extra SVG a Slide draws over the bench, in the drawing's 1000 by 440 units. */
   readonly layer?: ReactNode;
   readonly className?: string;
 }
 
 const LINE = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
 
-/** A sheet line, the stroke a document's text is drawn with. */
 function Rule({ x1, x2, y, strong = false }: { x1: number; x2: number; y: number; strong?: boolean }) {
   return (
     <line
@@ -144,7 +135,6 @@ const DRAWINGS: Record<BenchItem, ReactNode> = {
   ),
 };
 
-/** The person in `human`, holding a part, and the AI worker in `ai`, joined by the hand-over arc in `primary`. */
 function Workers() {
   return (
     <>
@@ -167,14 +157,7 @@ function Workers() {
   );
 }
 
-/**
- * The bike assembly bench, the reference drawing of "From shared understanding to shared context", seen from the
- * front: what was set up before the shift on its left (the tool wall, the pinned instruction sheet, the work order,
- * the parts box) and, with `arrivals`, what lands during it on its right (the folder, the belt with its boxes, a
- * colleague's note, the phone, the crate of parts). The objects are `machine`, what the AI reads. A server SVG with
- * one `data-bench-item` group per item; `highlight` lights some and dims the rest. Shared because Slides 9 to 12 draw
- * it, and Slides 6 and 13 reuse it (FE-007).
- */
+// decision: FE-007 §5
 export function BikeBench({ label, arrivals = false, worker = 'none', highlight, layer, className }: BikeBenchProps) {
   const items: readonly BenchItem[] = arrivals ? [...BEFORE, ...DURING] : BEFORE;
   const missing = highlight?.find((item) => !items.includes(item));

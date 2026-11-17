@@ -1,7 +1,3 @@
-/**
- * The one prop a preset carries, as facet tables relative to the hand's grip (see `body-plan.ts`): at the side when the
- * figure stands, held forward when it holds.
- */
 import type { FacetSpec } from './body-plan';
 import type { Preset } from './preset';
 

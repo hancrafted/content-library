@@ -3,20 +3,16 @@ import styles from './clouds.module.css';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
 
-/** How far off a cloud drifts: the far layer slowest, the near layer fastest (decision 9 of feedback 2). */
 export type CloudLayer = 'far' | 'mid' | 'near';
 
-/** One cloud: its base centre in the Scene, its size against the drawn shape, which of the two shapes, its layer. */
 export interface CloudAt {
   readonly x: number;
   readonly y: number;
   readonly scale: number;
   readonly shape: 0 | 1;
-  /** Without one, the cloud's size picks it: 0.8 and over near, 0.55 and over mid, smaller far. */
   readonly layer?: CloudLayer;
 }
 
-/** The Surface sky's three layers over a 1200-wide Scene with the waterline at 400. */
 const SURFACE_CLOUDS: readonly CloudAt[] = [
   { x: 430, y: 70, scale: 0.42, shape: 1, layer: 'far' },
   { x: 700, y: 175, scale: 0.38, shape: 0, layer: 'far' },
@@ -26,7 +22,6 @@ const SURFACE_CLOUDS: readonly CloudAt[] = [
   { x: 150, y: 352, scale: 0.95, shape: 0, layer: 'near' },
 ];
 
-/** A cloud's layer: its own, or the one its size suggests. */
 export function cloudLayer({ scale, layer }: Pick<CloudAt, 'scale' | 'layer'>): CloudLayer {
   if (layer !== undefined) return layer;
   return scale >= 0.8 ? 'near' : scale >= 0.55 ? 'mid' : 'far';
@@ -34,21 +29,6 @@ export function cloudLayer({ scale, layer }: Pick<CloudAt, 'scale' | 'layer'>): 
 
 const WIND_STAGGER_SECONDS = 11;
 
-/**
- * Faceted cumulus clouds in three layers, lit crowns to the upper left; the Surface zone's wind drifts each layer at
- * its own speed.
- *
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the `CLOUDS` facets below and `clouds.module.css`.
- *
- * - Props: `at`, a list of `CloudAt` (`x`, `y`, `scale`, `shape` 0 or 1, `layer`); six clouds in three layers by
- *   default.
- * - Box: each shape at scale 1 stays within x -130 to 130, y -90 to 20 about its base centre.
- * - Hooks: root `data-clouds`; each cloud `data-cloud` with `data-cloud-layer` = `far`, `mid` or `near`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`.
- * - Motion: each cloud is `data-motion="ambient"`, the Surface's wind, under `[data-zone='active']` only and never
- *   under reduced motion; transform and opacity only (decision 19), each layer at its own speed.
- */
 export function Clouds({ at = SURFACE_CLOUDS }: { readonly at?: readonly CloudAt[] }) {
   return (
     <g className={styles.clouds} data-clouds>
@@ -71,7 +51,6 @@ export function Clouds({ at = SURFACE_CLOUDS }: { readonly at?: readonly CloudAt
   );
 }
 
-// The drawing: two cumulus shapes from the Spec's `parts.py` (seed 25), lit crowns to the upper left.
 const CLOUDS: readonly (readonly FacetLayer[])[] = [
   [
     {

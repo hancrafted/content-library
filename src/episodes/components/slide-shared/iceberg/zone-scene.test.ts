@@ -6,11 +6,7 @@ import { Travel } from './travel';
 import { WholeDepthScene } from './whole-depth-scene';
 import { ZoneScene } from './zone-scene';
 
-/*
- * `ZoneScene` as a Slide's server render draws it (design-ADR 0025): one `zone` prop picks the scenery the scenery
- * parts draw, the Slide's figures sit inside its SVG, and the Scene reports its motion for browser checks.
- */
-
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const render = (props: Parameters<typeof ZoneScene>[0]) => load(renderToStaticMarkup(createElement(ZoneScene, props)));
 
 const SCENE = '[data-scene]';

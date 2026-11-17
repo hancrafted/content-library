@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { ControlRoom, type ControlRoomProps } from './control-room';
 
-/*
- * The control room the pilot's console stands in: scenery only, an SVG group a Scene places in its own `<svg>`, with
- * the cast and the console as children standing on its floor line.
- */
-
 const draw = (props: ControlRoomProps) =>
   load(renderToStaticMarkup(createElement('svg', null, createElement(ControlRoom, props))), { xml: true });
 

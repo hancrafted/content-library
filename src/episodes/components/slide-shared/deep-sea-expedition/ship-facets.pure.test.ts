@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MASTHEAD, PENNANT_ROWS, RAIL_ROWS, specDeckY } from './ship-facets.pure';
 
-/*
- * The research ship's facet table in the Spec's own units (stern at x = 0, waterline at y = 0, bow to the right): the
- * deck line every figure stands on, the rails along it, and the pennant flying from the masthead above the radar,
- * streaming aft in the wind.
- */
-
-/** The flat `x, y, x, y, …` list of a facet row as points. */
 const pointsOf = (flat: readonly number[]) =>
   Array.from({ length: flat.length / 2 }, (_, index) => ({ x: flat[2 * index]!, y: flat[2 * index + 1]! }));
 

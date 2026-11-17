@@ -1,5 +1,4 @@
-/* The iceberg drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in iceberg.tsx. */
-
+/* decision: FE-011 §4 */
 .iceberg {
   --berg-deep: color-mix(in oklab, var(--info) 83%, color-mix(in oklab, var(--on-brand-accent) 8%, var(--overlay)));
   --berg-glint: color-mix(in oklab, var(--info) 3%, var(--on-brand-accent));

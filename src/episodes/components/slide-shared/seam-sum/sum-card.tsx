@@ -9,7 +9,6 @@ interface CardProps {
   readonly compact: boolean;
 }
 
-/** The card's own goal, ticked; in the compact form the "met" line with its stamp. */
 function OwnGoal({ card, words, compact }: CardProps) {
   return (
     <div className={cn('flex gap-1.5', compact ? 'flex-wrap items-center pr-1' : 'items-start')}>
@@ -30,7 +29,6 @@ function OwnGoal({ card, words, compact }: CardProps) {
   );
 }
 
-/** The failure at the card's seam: the fact, what the other card held, the result and the half it breaks. */
 function Failure({ card, words, compact }: CardProps) {
   const { fact, seam, result, breaks } = card.failure;
   return (
@@ -60,7 +58,6 @@ function Failure({ card, words, compact }: CardProps) {
   );
 }
 
-/** One card of the sum: its name pill and who did it, the ticked own goal, and its failure at the seam. */
 export function SumCard({ tilt, ...props }: CardProps & { readonly tilt: string }) {
   const { card, words, compact } = props;
   return (

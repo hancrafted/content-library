@@ -13,7 +13,6 @@ import {
   type Story,
 } from './drift.pure';
 
-/** The slice of a 2D canvas context the drawing uses, so a test can hand in a recording stand-in. */
 export interface Pen {
   globalAlpha: number;
   lineWidth: number;
@@ -26,7 +25,6 @@ export interface Pen {
   fill(): void;
 }
 
-/** How far into the window's middle a bubble is drawn on the blurred pen. */
 const SOFT_FROM = 0.3;
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
@@ -42,7 +40,6 @@ function line(g: Pen, stroke: { from: Point; to: Point; alpha: number; thickness
   g.stroke();
 }
 
-/** A rounded bubble with two skeleton lines and, along its foot, `chips` small squares. */
 function bubble(g: Pen, at: { x: number; y: number; w: number; h: number; alpha: number; chips?: number }) {
   const { x, y, w, h, alpha, chips = 0 } = at;
   g.globalAlpha = clamp(alpha);
@@ -61,7 +58,6 @@ function bubble(g: Pen, at: { x: number; y: number; w: number; h: number; alpha:
   }
 }
 
-/** An orange check at `at`, drawn on as `p` runs from 0 to 1. */
 function check(g: Pen, mark: { at: Point; size: number; p: number; alpha: number }) {
   const [x, y] = mark.at;
   const { size } = mark;
@@ -86,11 +82,9 @@ interface Placed {
   x: number;
   y: number;
   alpha: number;
-  /** How far into the window's blurred middle the bubble is, 0 to 1. */
   middle: number;
 }
 
-/** Where bubble `i` of `count` sits at time `t`, in the story's own motion. */
 function placeOf(story: Story, at: { i: number; count: number; t: number; a: Area; size: number }): Placed {
   const { i, count, t, a, size } = at;
   const phase = (i / count + t / LOOP_SECONDS) % 1;
@@ -111,18 +105,12 @@ function placeOf(story: Story, at: { i: number; count: number; t: number; a: Are
   };
 }
 
-/** The pen a bubble draws on: the blurred one in the middle of the window, else `g` (blurred by its own filter when no soft pen exists). */
 function penFor(g: Pen, at: { soft: Pen | undefined; middle: number; compact: boolean }): Pen {
   if (at.soft) return at.middle > SOFT_FROM ? at.soft : g;
   if (at.middle > 0) g.filter = `blur(${at.middle * (at.compact ? 0.8 : 2.5)}px)`;
   return g;
 }
 
-/**
- * The ambient field: faint bubbles in ink, shaped by the story, plus the Human checkpoint line. The Context window's
- * middle blurs: a canvas `filter` blurs on the CPU every frame, so a hero given a `soft` pen (a canvas the page blurs
- * once, in CSS) draws those bubbles there instead.
- */
 export function paintField(
   g: Pen,
   scene: { story: Story; area: Area; width: number; height: number; t: number; soft?: Pen },
@@ -141,7 +129,6 @@ export function paintField(
   }
 }
 
-/** The subject beat, in the accent colour: the pose at `progress`, shown at `strength`. */
 export function paintBeat(g: Pen, scene: { story: Story; area: Area; progress: number; strength: number }) {
   const { story, area, progress, strength } = scene;
   if (!strength) return;
@@ -156,7 +143,6 @@ export function paintBeat(g: Pen, scene: { story: Story; area: Area; progress: n
   }
 }
 
-/** The moment drawn: a point on the loop's timeline, or under reduced motion the composed end state. */
 export function momentOf(seconds: number, staticFrame: boolean) {
   if (staticFrame) return { t: STATIC_SECONDS, progress: 1, strength: 0.55 };
   return { t: seconds, ...beatOf(seconds) };

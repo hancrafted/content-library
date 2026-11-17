@@ -4,15 +4,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { BenchVignette, CLEAN_IDS, MESS_IDS, type VignetteId } from './bench-vignette';
 
-/*
- * The bench vignettes: small scenes cropped from the bike bench, one per mess and one per cleaned-up state, read
- * through their rendered SVG.
- */
-
 const render = (id: VignetteId) =>
   load(renderToStaticMarkup(createElement(BenchVignette, { id, label: `Vignette ${id}` })));
 
-/** How many marks of a vignette are drawn in `warning`, the colour of trouble. */
 const warningMarks = (id: VignetteId) => render(id)('[class*="warning"]').length;
 
 describe('success cases', () => {

@@ -1,24 +1,12 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/*
- * The factory line's everyday shapes: the document that moves down the line, each station's tool, the AI badge and the
- * person. All decorative: the words beside them carry the meaning.
- */
-
-/**
- * A document's look: `crisp` a clear one, `vague` one that leaves most open, dashed and dulled toward
- * `muted-foreground` (quality is never a hue of its own), `queued` one waiting in a pile-up, in `warning`, `miss` a
- * clear one that misses its target, in `warning`, `ai` one an AI station turns out, and `machine` one the AI reads,
- * such as a work order.
- */
 export type DocumentTone = 'crisp' | 'vague' | 'queued' | 'miss' | 'ai' | 'machine';
 
 interface DocumentLook {
   readonly page: string;
   readonly fold: string;
   readonly lines: string;
-  /** Dashes the outline and the text lines: a sheet with gaps in it. */
   readonly dashed?: boolean;
 }
 
@@ -40,7 +28,6 @@ const DOCUMENT: Record<DocumentTone, DocumentLook> = {
   machine: { page: 'fill-machine/15 stroke-machine', fold: 'stroke-machine', lines: 'stroke-machine/50' },
 };
 
-/** The unit that moves down the line: a sheet with a folded corner and three lines of text; a vague one has two, dashed. */
 export function DocumentIcon({ tone, className }: { tone: DocumentTone; className?: string }) {
   const look = DOCUMENT[tone];
   const dash = look.dashed ? '2 1.5' : undefined;
@@ -71,10 +58,8 @@ export function DocumentIcon({ tone, className }: { tone: DocumentTone; classNam
   );
 }
 
-/** The work centres of the swing maker's line, left to right. */
 export type StationId = 'sales' | 'design' | 'build' | 'review' | 'delivery';
 
-/** Each station's tool: a speech bubble, a pencil, a wrench, a magnifier, a truck. */
 const TOOL: Record<StationId, ReactNode> = {
   sales: <path d="M4 6h16v10H9l-5 4z" strokeLinejoin="round" />,
   design: (
@@ -99,7 +84,6 @@ const TOOL: Record<StationId, ReactNode> = {
   ),
 };
 
-/** A station's tool, drawn in `foreground`, or in `ai` when AI runs the station. */
 export function StationIcon({ id, ai = false, className }: { id: StationId; ai?: boolean; className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={cn('size-7 shrink-0', className)} aria-hidden="true">
@@ -110,7 +94,6 @@ export function StationIcon({ id, ai = false, className }: { id: StationId; ai?:
   );
 }
 
-/** The AI badge: a small robot head in `ai`, its eyes in the text colour around it. */
 export function AiIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" className={cn('size-4 shrink-0', className)} aria-hidden="true">
@@ -122,7 +105,6 @@ export function AiIcon({ className }: { className?: string }) {
   );
 }
 
-/** A person in `human`: the customer at the line's ends, or the reviewer at a bench. */
 export function PersonIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={cn('size-7 shrink-0', className)} aria-hidden="true">

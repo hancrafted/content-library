@@ -12,13 +12,6 @@ import { LightRays } from './seabed';
 import { SunMoon } from './sun-moon';
 import { Whale } from './whale';
 
-/*
- * The scenery parts `ZoneScene` draws: the iceberg by part, the sea life with its one ambient loop each, the sky's
- * clouds and its sun and moon, the seabed and the light rays. Rendered to static markup, as a Scene's server render
- * does, and read by their `data-*` hooks. That every tone they paint has a colour is checked against the CSS on disk,
- * in scenery.slow.test.ts and fable-elements.slow.test.ts.
- */
-
 const render = (element: ReactElement) => load(renderToStaticMarkup(createElement('svg', null, element)));
 
 const TIP = '[data-iceberg-tip]';

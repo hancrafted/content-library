@@ -7,11 +7,9 @@ import { SQUARE_FACETS } from './square-facets';
 
 export type PictureKind = keyof typeof SQUARE_FACETS;
 
-/** The picture's drawing space, the Spec's: wide and low, a strip under the square's words. */
 const WIDTH = 380;
 const HEIGHT = 145;
 
-/** The shared ships on each sea, where the Spec draws its own: centre at the waterline, and scale. */
 const SHIPS: Record<PictureKind, readonly { x: number; y: number; scale: number }[]> = {
   notebook: [],
   toolkit: [],
@@ -28,14 +26,9 @@ const Facets = ({ facets }: { readonly facets: readonly SquareFacet[] }) =>
 
 export interface SquarePictureProps {
   readonly kind: PictureKind;
-  /** The HTML on the drawing: its labels, the scribbled card, the owner tag. */
   readonly children?: ReactNode;
 }
 
-/**
- * The small project picture under a square's words (Option 18a): one faceted drawing per square, its labels over it.
- * Too narrow for its labels' corners, the picture stacks them in flow over the drawing instead (its CSS module).
- */
 export function SquarePicture({ kind, children }: SquarePictureProps) {
   const { back, front } = SQUARE_FACETS[kind];
   return (

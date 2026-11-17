@@ -72,7 +72,7 @@ const LABELS = Object.keys(TARGETS) as Label[];
 const HELP = {
   exportDoc: [
     'Exported declaration JSDoc',
-    'Move the contract into the type and a test named for it, then delete the comment; a doc that restates the name just goes.',
+    'Move the contract into the type and a test named for it, then delete the comment; a doc that restates the name just goes; a unit in it becomes a full-word suffix of the name (GEN-007), and a frozen interface (box, hooks, motion names) that a test already pins needs no move: cite that test in the commit body.',
   ],
   localDoc: [
     'Non-exported declaration JSDoc',

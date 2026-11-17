@@ -1,14 +1,3 @@
-/*
- * The factory line's layout and flow. On a narrow column the line runs top to bottom: each station a row, each belt a
- * short vertical track with its documents and queue beside it. Once its column is wide enough it runs left to right,
- * as the Spec draws it: the compact preset from 34rem, the line with customer ends from 46rem. Colours and type come
- * from tokens in the markup; nothing here sets a colour, size or weight.
- *
- * The flow plays under any `[data-play]` ancestor (`FlowMotion`): documents ride in along the belts, then the queued
- * ones arrive and stack, after an optional `--flow-delay`. Nothing loops; the base rules are the end state, which is
- * also what reduced motion shows.
- */
-
 .frame {
   container-type: inline-size;
 }
@@ -59,7 +48,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* Room above the label for the AI chip, which sits astride the card's top edge. */
   padding: 1rem 0.75rem 0.5rem;
   margin-top: 0.5rem;
 }

@@ -9,7 +9,6 @@ import {
   type NoteSlots,
 } from './cashflow-board.pure';
 
-/** Slide 1's board: the million lands in April, one month after March's cost hits an empty account. */
 const SLIDE_1: readonly NoteSlots[] = [
   {
     notes: [

@@ -1,13 +1,6 @@
 import type { CheerioAPI } from 'cheerio';
 
-/*
- * Test support for the Fable elements' frozen interfaces (decisions 15–17 and 19 of feedback 2): the box a drawing
- * covers, read from its static markup, and what a CSS module reads and animates. The box follows `translate` and
- * `scale` transforms down the tree and reads polygon points, path coordinates and rect, circle and line geometry, so
- * a test can pin the anchor box a redraw must keep.
- */
-
-type Matrix = readonly [number, number, number, number]; // sx, sy, tx, ty
+type Matrix = readonly [scaleX: number, scaleY: number, translateX: number, translateY: number];
 
 const IDENTITY: Matrix = [1, 1, 0, 0];
 
@@ -38,7 +31,6 @@ type Attr = (name: string) => string | undefined;
 
 const numbersOf = (text: string | undefined) => text?.match(/-?\d*\.?\d+(?:e-?\d+)?/g)?.map(Number) ?? [];
 
-/** Each shape's own points, by tag: the corners of its outline, or of its bounding box. */
 const POINTS: Readonly<Record<string, (attr: Attr) => (readonly [number, number])[]>> = {
   polygon: (attr) => pairs(numbersOf(attr('points'))),
   polyline: (attr) => pairs(numbersOf(attr('points'))),
@@ -62,7 +54,6 @@ const POINTS: Readonly<Record<string, (attr: Attr) => (readonly [number, number]
 
 const ownPoints = (tag: string, attr: Attr) => POINTS[tag]?.(attr) ?? [];
 
-/** The box a drawing covers, rounded to one decimal, from the markup's root `<svg>` down. */
 export interface Box {
   readonly left: number;
   readonly top: number;
@@ -95,7 +86,6 @@ export function drawnBox($: CheerioAPI): Box {
   };
 }
 
-/** The global tokens a CSS module reads: every `var(--name)` it does not declare itself. */
 export function globalsRead(css: string): readonly string[] {
   const own = new Set([...css.matchAll(/(--[a-z-]+)\s*:/g)].map(([, name]) => name));
   return [...new Set([...css.matchAll(/var\((--[a-z-]+)\)/g)].map(([, name]) => name!))].filter(
@@ -103,14 +93,12 @@ export function globalsRead(css: string): readonly string[] {
   );
 }
 
-/** The properties every `@keyframes` block of a CSS module sets. */
 export function animatedProperties(css: string): readonly string[] {
   return [...css.matchAll(/@keyframes[^{]+\{([\s\S]*?)\n\}/g)].flatMap(([, body]) =>
     [...body!.matchAll(/([a-z-]+)\s*:/g)].map(([, property]) => property!),
   );
 }
 
-/** Every blur, filter or shadow a CSS module sets, comments aside (decision 19 bans them all). */
 export function blursAndShadows(css: string): readonly string[] {
   const banned = /\b(filter|backdrop-filter|box-shadow|text-shadow|drop-shadow|blur)\b/g;
   return [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(banned)].map(([word]) => word);
