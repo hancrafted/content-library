@@ -9,7 +9,6 @@ export interface Stone {
   readonly target?: string;
 }
 
-/** Each stone's lift, so the four read as a path across, not a list. */
 const LIFT = ['@min-[56rem]:mt-10', '@min-[56rem]:mt-4', '@min-[56rem]:mt-0', '@min-[56rem]:mt-6'];
 
 function Arc() {
@@ -48,10 +47,6 @@ function StoneCard({ stone, index, reveal }: { stone: Stone; index: number; reve
   );
 }
 
-/**
- * The gap's `primary` label, at full strength from rest and ringed on its step, over the line its step brings up. The
- * line sits on a card plaque, since on the muted wall its muted grey falls under 4.5:1.
- */
 function GapHead({ label, many, step }: { label: string; many: ReactNode; step: number }) {
   return (
     <div className="flex flex-col items-center gap-2 text-center">
@@ -71,12 +66,6 @@ function GapHead({ label, many, step }: { label: string; many: ReactNode; step: 
   );
 }
 
-/**
- * The gap between the rooms: its `primary` label, the one thing to look at, the line on who still sits in execution,
- * and the four stepping stones across a dashed gulf. The label states the Slide's claim, so it shows at full strength
- * from rest and only gains emphasis on its step; the presenter brings up the line and the gulf, then the stones one by
- * one, from `reveal` on.
- */
 export function Gap(props: {
   label: string;
   many: ReactNode;
